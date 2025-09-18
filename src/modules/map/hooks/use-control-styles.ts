@@ -2,21 +2,10 @@ import {useThemeContext} from '@atb/theme';
 import {useMemo} from 'react';
 import {ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {useBottomNavigationStyles} from '@atb/utils/navigation';
 
-export function useControlPositionsStyle(
-  extraPaddingBottom = false,
-  bottomTabBarHeight = 0,
-) {
+export function useControlPositionsStyle(extraPaddingBottom = false) {
   const {top, bottom} = useSafeAreaInsets();
   const {theme} = useThemeContext();
-  const {height: bottomSheetHeight} = useBottomSheetContext();
-  const {minHeight} = useBottomNavigationStyles();
-
-  const bottomPaddingIfBottomSheetIsOpen = bottomSheetHeight
-    ? bottomSheetHeight - minHeight + bottomTabBarHeight
-    : 0;
 
   return useMemo<{
     [key in
@@ -41,10 +30,7 @@ export function useControlPositionsStyle(
 
       mapButtonsContainer: {
         position: 'absolute',
-        bottom:
-          (extraPaddingBottom ? bottom : 0) +
-          bottomPaddingIfBottomSheetIsOpen +
-          theme.spacing.medium,
+        bottom: (extraPaddingBottom ? bottom : 0) + theme.spacing.medium,
       },
 
       mapButtonsContainerLeft: {
@@ -61,12 +47,6 @@ export function useControlPositionsStyle(
         width: '100%',
       },
     }),
-    [
-      top,
-      theme.spacing.medium,
-      extraPaddingBottom,
-      bottom,
-      bottomPaddingIfBottomSheetIsOpen,
-    ],
+    [top, theme.spacing.medium, extraPaddingBottom, bottom],
   );
 }

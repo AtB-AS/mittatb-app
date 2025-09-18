@@ -15,8 +15,6 @@ import {Feature} from 'geojson';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig} from './MapConfig';
-import {PositionArrow} from './components/PositionArrow';
-import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {
   CameraFocusModeType,
   GeofencingZoneCustomProps,
@@ -37,18 +35,15 @@ import {
   isStopPlace,
 } from './utils';
 import {
-  BottomSheetType,
   GeofencingZones,
+  MapBottomSheetType,
   MapStateActionType,
   useGeofencingZoneTextContent,
   useMapViewConfig,
 } from '@atb/modules/map';
-import {ExternalRealtimeMapButton} from './components/external-realtime-map/ExternalRealtimeMapButton';
 import {
   isBicycleV2,
   isScooterV2,
-  useInitShmoBookingMutationStatus,
-  MapFilter,
   useVehicleQuery,
   isStationV2,
   isCarStationV2,
@@ -56,7 +51,6 @@ import {
 } from '@atb/modules/mobility';
 
 import {Snackbar, useSnackbar, useStableValue} from '@atb/components/snackbar';
-import {ScanButton} from './components/ScanButton';
 import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
 import {useMapContext} from '@atb/modules/map';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -71,6 +65,7 @@ import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {MapBottomSheets} from './MapBottomSheets';
 import {useTriggerCameraMoveEffect} from './hooks/use-trigger-camera-move-effect';
 import {getFocusMode} from './hooks/use-decide-camera-focus-mode';
+import {MapButtons} from './components/MapButtons';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -83,17 +78,10 @@ export const MapV2 = (props: MapProps) => {
 
   const [cameraFocusMode, setCameraFocusMode] = useState<CameraFocusModeType>();
 
-  const {mapFilter, mapFilterIsOpen, mapSelectionState, mapSelectionDispatch} =
-    useMapContext();
-
-  const showMapFilterButton =
-    mapSelectionState.mapState === BottomSheetType.None; // hide filter button when a bottom sheet is open
+  const {mapFilter, mapState, dispatchMapState} = useMapContext();
 
   const tabBarHeight = useBottomTabBarHeight();
-  const controlStyles = useControlPositionsStyle(false, tabBarHeight);
   const isFocused = useIsFocused();
-  const {isMutating: initShmoOneStopBookingIsMutating} =
-    useInitShmoBookingMutationStatus();
 
   const startingCoordinates = useMemo(
     () =>
@@ -112,37 +100,23 @@ export const MapV2 = (props: MapProps) => {
     isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
   const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
 
-  const selectedFeature = mapSelectionState.feature;
+  const selectedFeature = mapState.feature;
 
   const selectedFeatureIsAVehicle =
     isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
 
-  const {
-    isGeofencingZonesEnabled,
-    isShmoDeepIntegrationEnabled,
-    isMapV2Enabled,
-  } = useFeatureTogglesContext();
+  const {isGeofencingZonesEnabled} = useFeatureTogglesContext();
 
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
-  const {data: activeShmoBooking, isLoading: activeShmoBookingIsLoading} =
-    useActiveShmoBookingQuery();
+  const {data: activeShmoBooking} = useActiveShmoBookingQuery();
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&
     (selectedFeatureIsAVehicle ||
       (activeShmoBooking?.bookingId !== undefined &&
         activeShmoBooking.state === ShmoBookingState.IN_USE));
-
-  const showScanButton =
-    isShmoDeepIntegrationEnabled &&
-    isMapV2Enabled &&
-    !activeShmoBooking &&
-    !activeShmoBookingIsLoading &&
-    (!selectedFeature || selectedFeatureIsAVehicle) &&
-    !initShmoOneStopBookingIsMutating &&
-    !mapFilterIsOpen;
 
   const {
     data: vehicle,
@@ -188,6 +162,26 @@ export const MapV2 = (props: MapProps) => {
     tabBarHeight,
   );
 
+  const locationArrowOnClick = async () => {
+    const coordinates = await getCurrentCoordinates(true);
+    if (
+      activeShmoBooking &&
+      activeShmoBooking.state === ShmoBookingState.IN_USE
+    ) {
+      setFollowUserLocation(true);
+    } else {
+      if (coordinates) {
+        flyToLocation({
+          coordinates,
+          padding: !selectedFeature ? undefined : getMapPadding(tabBarHeight),
+          mapCameraRef,
+          mapViewRef,
+          zoomLevel: DEFAULT_ZOOM_LEVEL + 2.5,
+        });
+      }
+    }
+  };
+
   /**
    * As setting onPress on the GeofencingZones ShapeSource prevents MapView's onPress
    * from being triggered, the onPress logic is handled here instead.
@@ -196,6 +190,7 @@ export const MapV2 = (props: MapProps) => {
    * Step 2: decide feature to select
    * Step 3: selected the feature
    */
+
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
       const isActiveTrip =
@@ -299,43 +294,38 @@ export const MapV2 = (props: MapProps) => {
         if (isQuayFeature(featureToSelect)) return;
 
         if (isScooterV2(featureToSelect)) {
-          mapSelectionDispatch({
+          dispatchMapState({
             type: MapStateActionType.Scooter,
-            assetId: featureToSelect.properties.id,
             feature: featureToSelect,
           });
         } else if (isBicycleV2(featureToSelect)) {
-          mapSelectionDispatch({
+          dispatchMapState({
             type: MapStateActionType.Bicycle,
-            assetId: featureToSelect.properties.id,
             feature: featureToSelect,
           });
         } else if (isCarStationV2(featureToSelect)) {
-          mapSelectionDispatch({
+          dispatchMapState({
             type: MapStateActionType.CarStation,
-            assetId: featureToSelect.properties.id,
             feature: featureToSelect,
           });
         } else if (isParkAndRide(featureToSelect)) {
-          mapSelectionDispatch({
+          dispatchMapState({
             type: MapStateActionType.ParkAndRideStation,
             feature: featureToSelect,
           });
         } else if (isStopPlace(featureToSelect)) {
-          mapSelectionDispatch({
+          dispatchMapState({
             type: MapStateActionType.StopPlace,
             feature: featureToSelect,
           });
         } else if (isBikeStationV2(featureToSelect)) {
-          mapSelectionDispatch({
+          dispatchMapState({
             type: MapStateActionType.BikeStation,
-            assetId: featureToSelect.properties.id,
             feature: featureToSelect,
           });
         } else if (isStationV2(featureToSelect)) {
-          mapSelectionDispatch({
+          dispatchMapState({
             type: MapStateActionType.Station,
-            assetId: featureToSelect.properties.id,
             feature: featureToSelect,
           });
         }
@@ -352,7 +342,7 @@ export const MapV2 = (props: MapProps) => {
     [
       activeShmoBooking?.state,
       currentLocation?.coordinates,
-      mapSelectionDispatch,
+      dispatchMapState,
       tabBarHeight,
     ],
   );
@@ -439,74 +429,16 @@ export const MapV2 = (props: MapProps) => {
             />
           )}
         </MapView>
-        <View
-          style={[
-            controlStyles.mapButtonsContainer,
-            controlStyles.mapButtonsContainerRight,
-            mapFilterIsOpen && {bottom: 0},
-          ]}
-        >
-          <ExternalRealtimeMapButton
-            onMapClick={(res) => {
-              if (res.source === 'external-map-button') {
-                mapSelectionDispatch({
-                  type: MapStateActionType.ExternalMap,
-                  url: res.url,
-                });
-              }
-            }}
-          />
-
-          {showMapFilterButton && (
-            <MapFilter
-              onPress={() =>
-                mapSelectionDispatch({
-                  type: MapStateActionType.Filter,
-                })
-              }
-              isLoading={false}
-            />
-          )}
-
-          <PositionArrow
-            onPress={async () => {
-              const coordinates = await getCurrentCoordinates(true);
-              if (
-                activeShmoBooking &&
-                activeShmoBooking.state === ShmoBookingState.IN_USE
-              ) {
-                setFollowUserLocation(true);
-              } else {
-                if (coordinates) {
-                  flyToLocation({
-                    coordinates,
-                    padding: !selectedFeature
-                      ? undefined
-                      : getMapPadding(tabBarHeight),
-                    mapCameraRef,
-                    mapViewRef,
-                    zoomLevel: DEFAULT_ZOOM_LEVEL + 2.5,
-                  });
-                }
-              }
-            }}
-          />
-        </View>
-        {showScanButton && (
-          <ScanButton
-            onPressCallback={() => {
-              mapSelectionDispatch({type: MapStateActionType.None});
-            }}
-            tabBarHeight={tabBarHeight}
-          />
+        {mapState.bottomSheetType === MapBottomSheetType.None && (
+          <MapButtons positionArrowCallback={locationArrowOnClick} />
         )}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
       <MapBottomSheets
         mapCameraRef={mapCameraRef}
         mapViewRef={mapViewRef}
-        tabBarHeight={tabBarHeight}
         mapProps={props}
+        positionArrowCallback={locationArrowOnClick}
       />
     </View>
   );

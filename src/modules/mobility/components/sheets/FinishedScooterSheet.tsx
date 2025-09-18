@@ -21,12 +21,14 @@ type Props = {
   onClose: () => void;
   navigateSupportCallback: (operatorId: string, bookingId: string) => void;
   bookingId: string;
+  positionArrowCallback: () => void;
 };
 
 export const FinishedScooterSheet = ({
   onClose,
   navigateSupportCallback,
   bookingId,
+  positionArrowCallback,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -47,6 +49,7 @@ export const FinishedScooterSheet = ({
       heading={t(MobilityTexts.formFactor(FormFactor.Scooter))}
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
+      positionArrowCallback={positionArrowCallback}
     >
       {isShmoDeepIntegrationEnabled && (
         <>

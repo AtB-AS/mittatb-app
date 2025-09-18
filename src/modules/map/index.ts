@@ -26,7 +26,7 @@ export {
   SLIGHTLY_RAISED_MAP_PADDING,
 } from './MapConfig';
 export {
-  BottomSheetType,
+  MapBottomSheetType,
   MapContextProvider,
   useMapContext,
 } from './MapContext.tsx';
@@ -69,3 +69,4 @@ export {
 } from './utils';
 export {MapStateActionType} from './mapStateReducer.ts';
 export {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics.tsx';
+export {MapButtons} from './components/MapButtons.tsx';

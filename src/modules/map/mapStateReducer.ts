@@ -1,5 +1,5 @@
 import {Feature, Point} from 'geojson';
-import {BottomSheetType} from './MapContext';
+import {MapBottomSheetType} from './MapContext';
 
 export enum MapStateActionType {
   Scooter = 'SCOOTER',
@@ -16,58 +16,55 @@ export enum MapStateActionType {
   ExternalMap = 'EXTERNAL_MAP',
   FinishedBooking = 'FINISHED_BOOKING',
   Station = 'STATION',
-  AutoDispatchOnMapFocus = 'AUTO_DISPATCH_ON_MAP_FOCUS',
+  //AutoDispatchOnMapFocus = 'AUTO_DISPATCH_ON_MAP_FOCUS',
   None = 'NONE',
 }
 
 export type ReducerMapState = {
-  mapState: BottomSheetType;
-  assetId?: string | number;
+  bottomSheetType: MapBottomSheetType;
+  assetIsScanned?: boolean;
+  assetId?: string;
   feature?: Feature<Point>;
   url?: string;
   eventToDispatch?: ReducerMapStateAction;
+  bookingId?: string;
 };
 
 export type ReducerMapStateAction =
   | {
       type: MapStateActionType.Scooter;
-      assetId: string | number;
       feature: Feature<Point>;
     }
   | {
       type: MapStateActionType.ScooterScanned;
-      assetId: string | number;
+      assetId: string;
     }
   | {
       type: MapStateActionType.Bicycle;
-      assetId: string | number;
       feature: Feature<Point>;
     }
   | {
       type: MapStateActionType.BicycleScanned;
-      assetId: string | number;
+      assetId: string;
     }
   | {
       type: MapStateActionType.BikeStation;
-      assetId: string | number;
       feature: Feature<Point>;
     }
   | {
       type: MapStateActionType.BikeStationScanned;
-      assetId: string | number;
+      assetId: string;
     }
   | {
       type: MapStateActionType.CarStation;
-      assetId: string | number;
       feature: Feature<Point>;
     }
   | {
       type: MapStateActionType.CarStationScanned;
-      assetId: string | number;
+      assetId: string;
     }
   | {
       type: MapStateActionType.Station;
-      assetId: string | number;
       feature: Feature<Point>;
     }
   | {
@@ -91,7 +88,7 @@ export type ReducerMapStateAction =
     }*/
   | {
       type: MapStateActionType.FinishedBooking;
-      assetId: string | number;
+      bookingId: string;
     }
   | {type: MapStateActionType.None};
 
@@ -102,52 +99,51 @@ export const mapStateReducer = (
   switch (action.type) {
     case MapStateActionType.Scooter:
       return {
-        mapState: BottomSheetType.Scooter,
-        assetId: action.assetId,
+        bottomSheetType: MapBottomSheetType.Scooter,
         feature: action.feature,
       };
     case MapStateActionType.ScooterScanned:
       return {
-        mapState: BottomSheetType.Scooter,
+        bottomSheetType: MapBottomSheetType.Scooter,
         assetId: action.assetId,
+        assetIsScanned: true,
       };
     case MapStateActionType.Bicycle:
       return {
-        mapState: BottomSheetType.Bicycle,
-        assetId: action.assetId,
+        bottomSheetType: MapBottomSheetType.Bicycle,
         feature: action.feature,
       };
     case MapStateActionType.BicycleScanned:
       return {
-        mapState: BottomSheetType.Bicycle,
+        bottomSheetType: MapBottomSheetType.Bicycle,
         assetId: action.assetId,
+        assetIsScanned: true,
       };
     case MapStateActionType.BikeStation:
       return {
-        mapState: BottomSheetType.BikeStation,
+        bottomSheetType: MapBottomSheetType.BikeStation,
         feature: action.feature,
-        assetId: action.assetId,
       };
     case MapStateActionType.BikeStationScanned:
       return {
-        mapState: BottomSheetType.BikeStation,
+        bottomSheetType: MapBottomSheetType.BikeStation,
         assetId: action.assetId,
+        assetIsScanned: true,
       };
     case MapStateActionType.CarStation:
       return {
-        mapState: BottomSheetType.CarStation,
-        assetId: action.assetId,
+        bottomSheetType: MapBottomSheetType.CarStation,
         feature: action.feature,
       };
     case MapStateActionType.CarStationScanned:
       return {
-        mapState: BottomSheetType.CarStation,
+        bottomSheetType: MapBottomSheetType.CarStation,
         assetId: action.assetId,
+        assetIsScanned: true,
       };
     case MapStateActionType.Station:
       return {
-        mapState: BottomSheetType.Station,
-        assetId: action.assetId,
+        bottomSheetType: MapBottomSheetType.Station,
         feature: action.feature,
       };
     /*case MapStateActionType.AutoDispatchOnMapFocus:
@@ -159,30 +155,30 @@ export const mapStateReducer = (
       };*/
     case MapStateActionType.ExternalMap:
       return {
-        mapState: BottomSheetType.ExternalMap,
+        bottomSheetType: MapBottomSheetType.ExternalMap,
         url: action.url,
       };
     case MapStateActionType.Filter:
       return {
-        mapState: BottomSheetType.Filter,
+        bottomSheetType: MapBottomSheetType.Filter,
       };
     case MapStateActionType.StopPlace:
       return {
-        mapState: BottomSheetType.StopPlace,
+        bottomSheetType: MapBottomSheetType.StopPlace,
         feature: action.feature,
       };
     case MapStateActionType.ParkAndRideStation:
       return {
-        mapState: BottomSheetType.ParkAndRideStation,
+        bottomSheetType: MapBottomSheetType.ParkAndRideStation,
         feature: action.feature,
       };
     case MapStateActionType.FinishedBooking:
       return {
-        mapState: BottomSheetType.FinishedBooking,
-        assetId: action.assetId,
+        bottomSheetType: MapBottomSheetType.FinishedBooking,
+        bookingId: action.bookingId,
       };
     case MapStateActionType.None:
-      return {mapState: BottomSheetType.None};
+      return {bottomSheetType: MapBottomSheetType.None};
     default:
       return mapState;
   }

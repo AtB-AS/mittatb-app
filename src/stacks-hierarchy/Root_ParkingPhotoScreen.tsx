@@ -22,7 +22,7 @@ export const Root_ParkingPhotoScreen = ({
 }: ParkingPhotoScreenProps) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {mapSelectionDispatch} = useMapContext();
+  const {dispatchMapState} = useMapContext();
 
   const {mutateAsync: sendShmoBookingEvent, isLoading} =
     useSendShmoBookingEventMutation();
@@ -61,9 +61,9 @@ export const Root_ParkingPhotoScreen = ({
     // Remove metadata
     const base64data = base64Image.split(',').pop();
 
-    mapSelectionDispatch({
+    dispatchMapState({
       type: MapStateActionType.FinishedBooking,
-      assetId: route.params.bookingId,
+      bookingId: route.params.bookingId,
     });
     if (base64data) {
       await onEndTrip(route.params.bookingId, base64data);

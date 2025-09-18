@@ -17,7 +17,7 @@ import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useNavigation} from '@react-navigation/native';
 import React, {RefObject, useCallback, useEffect, useState} from 'react';
 import {useEnterPaymentMethods} from './hooks/use-enter-payment-methods';
-import {BottomSheetType, useMapContext} from './MapContext';
+import {MapBottomSheetType, useMapContext} from './MapContext';
 import {InteractionManager} from 'react-native';
 import {flyToLocation, getFeatureFromScan, getMapPadding} from './utils';
 import MapboxGL from '@rnmapbox/maps';
@@ -35,26 +35,27 @@ import {DeparturesDialogSheet} from './components/DeparturesDialogSheet';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics';
 import {MapStateActionType} from './mapStateReducer';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 
 type MapBottomSheetsProps = {
   mapCameraRef: RefObject<MapboxGL.Camera | null>;
   mapViewRef: RefObject<MapboxGL.MapView | null>;
-  tabBarHeight?: number;
   mapProps: MapProps;
+  positionArrowCallback: () => void;
 };
 
 export const MapBottomSheets = ({
   mapCameraRef,
   mapViewRef,
-  tabBarHeight,
   mapProps,
+  positionArrowCallback,
 }: MapBottomSheetsProps) => {
   const [openPaymentType, setOpenPaymentType] = useState<boolean>(false);
   const navigateToPaymentMethods = useEnterPaymentMethods();
-  const {mapSelectionState, mapSelectionDispatch, setMapFilterIsOpen} =
-    useMapContext();
+  const {mapState, dispatchMapState} = useMapContext();
   const {getCurrentCoordinates} = useGeolocationContext();
   const {data: activeBooking} = useActiveShmoBookingQuery();
+  const tabBarHeight = useBottomTabBarHeight();
 
   const analytics = useAnalyticsContext();
   const mapAnalytics = useMapSelectionAnalytics();
@@ -108,48 +109,43 @@ export const MapBottomSheets = ({
   }
 
   const handleCloseSheet = useCallback(() => {
-    mapSelectionDispatch({type: MapStateActionType.None});
-  }, [mapSelectionDispatch]);
+    dispatchMapState({type: MapStateActionType.None});
+  }, [dispatchMapState]);
 
   useEffect(() => {
-    if (mapSelectionState.feature) {
-      mapAnalytics.logMapSelection(mapSelectionState.feature);
+    if (mapState.feature) {
+      mapAnalytics.logMapSelection(mapState.feature);
     }
-    if (mapSelectionState.mapState === BottomSheetType.Filter) {
-      setMapFilterIsOpen(true);
-    }
-  }, [
-    mapAnalytics,
-    mapSelectionState.feature,
-    mapSelectionState.mapState,
-    setMapFilterIsOpen,
-  ]);
+  }, [mapAnalytics, mapState.feature, mapState.bottomSheetType]);
 
   return (
     <>
-      {mapSelectionState.mapState === BottomSheetType.Scooter &&
+      {mapState.bottomSheetType === MapBottomSheetType.Scooter &&
         !openPaymentType &&
         !activeBooking?.bookingId && (
           <ScooterSheet
             onVehicleReceived={(item) => {
-              const feature: Feature<Point, GeoJsonProperties> =
-                getFeatureFromScan(item, mapSelectionState);
-
-              mapSelectionDispatch({
-                type: MapStateActionType.Scooter,
-                assetId: feature.properties?.id as string,
-                feature: feature,
-              });
-              flyToMapItemLocation(item);
+              if (mapState.assetIsScanned) {
+                const feature: Feature<Point, GeoJsonProperties> =
+                  getFeatureFromScan(item, mapState.bottomSheetType);
+                dispatchMapState({
+                  type: MapStateActionType.Scooter,
+                  feature: feature,
+                });
+                flyToMapItemLocation(item);
+              }
             }}
             selectPaymentMethod={selectPaymentMethod}
-            vehicleId={(mapSelectionState.assetId as string) ?? ''}
+            vehicleId={
+              mapState.feature?.properties?.id ?? mapState.assetId ?? ''
+            }
             onClose={handleCloseSheet}
             onReportParkingViolation={onReportParkingViolation}
             navigation={navigation}
             startOnboardingCallback={() => {
               navigation.navigate('Root_ShmoOnboardingScreen');
             }}
+            positionArrowCallback={positionArrowCallback}
           />
         )}
 
@@ -165,6 +161,7 @@ export const MapBottomSheets = ({
             setOpenPaymentType(false);
             navigateToPaymentMethods();
           }}
+          positionArrowCallback={positionArrowCallback}
         />
       )}
 
@@ -185,6 +182,7 @@ export const MapBottomSheets = ({
               bookingId: activeBooking.bookingId,
             });
           }}
+          positionArrowCallback={positionArrowCallback}
         />
       )}
       {activeBooking?.state === ShmoBookingState.FINISHING && (
@@ -196,12 +194,13 @@ export const MapBottomSheets = ({
               bookingId: activeBooking.bookingId,
             });
           }}
+          positionArrowCallback={positionArrowCallback}
         />
       )}
-      {mapSelectionState.mapState === BottomSheetType.FinishedBooking &&
-        !!mapSelectionState?.assetId && (
+      {mapState.bottomSheetType === MapBottomSheetType.FinishedBooking &&
+        mapState.bookingId && (
           <FinishedScooterSheet
-            bookingId={mapSelectionState.assetId as string}
+            bookingId={mapState.bookingId}
             onClose={handleCloseSheet}
             navigateSupportCallback={(operatorId, bookingId) => {
               handleCloseSheet();
@@ -210,64 +209,72 @@ export const MapBottomSheets = ({
                 bookingId,
               });
             }}
+            positionArrowCallback={positionArrowCallback}
           />
         )}
-      {mapSelectionState.mapState === BottomSheetType.Bicycle && (
+      {mapState.bottomSheetType === MapBottomSheetType.Bicycle && (
         <BicycleSheet
-          vehicleId={mapSelectionState.assetId as string}
+          vehicleId={mapState.feature?.properties?.id ?? mapState.assetId ?? ''}
           onClose={handleCloseSheet}
           onVehicleReceived={(item) => {
-            const feature: Feature<Point, GeoJsonProperties> =
-              getFeatureFromScan(item, mapSelectionState);
+            if (mapState.assetIsScanned) {
+              const feature: Feature<Point, GeoJsonProperties> =
+                getFeatureFromScan(item, mapState.bottomSheetType);
 
-            mapSelectionDispatch({
-              type: MapStateActionType.Bicycle,
-              assetId: feature.properties?.id as string,
-              feature: feature,
-            });
-            flyToMapItemLocation(item);
+              dispatchMapState({
+                type: MapStateActionType.Bicycle,
+                feature: feature,
+              });
+              flyToMapItemLocation(item);
+            }
           }}
+          positionArrowCallback={positionArrowCallback}
         />
       )}
 
-      {mapSelectionState.mapState === BottomSheetType.BikeStation && (
+      {mapState.bottomSheetType === MapBottomSheetType.BikeStation && (
         <BikeStationBottomSheet
-          stationId={mapSelectionState.assetId as string}
+          stationId={mapState.feature?.properties?.id ?? mapState.assetId ?? ''}
           distance={undefined}
           onClose={handleCloseSheet}
           onStationReceived={(item) => {
-            const feature: Feature<Point, GeoJsonProperties> =
-              getFeatureFromScan(item, mapSelectionState);
+            if (mapState.assetIsScanned) {
+              const feature: Feature<Point, GeoJsonProperties> =
+                getFeatureFromScan(item, mapState.bottomSheetType);
 
-            mapSelectionDispatch({
-              type: MapStateActionType.BikeStation,
-              assetId: feature.properties?.id as string,
-              feature: feature,
-            });
-            flyToMapItemLocation(item);
+              dispatchMapState({
+                type: MapStateActionType.BikeStation,
+                feature: feature,
+              });
+              flyToMapItemLocation(item);
+            }
           }}
+          positionArrowCallback={positionArrowCallback}
         />
       )}
-      {mapSelectionState.mapState === BottomSheetType.CarStation && (
+      {mapState.bottomSheetType === MapBottomSheetType.CarStation && (
         <CarSharingStationBottomSheet
-          stationId={mapSelectionState.assetId as string}
+          stationId={mapState.feature?.properties?.id ?? mapState.assetId ?? ''}
           distance={undefined}
           onClose={handleCloseSheet}
           onStationReceived={(item) => {
-            const feature: Feature<Point, GeoJsonProperties> =
-              getFeatureFromScan(item, mapSelectionState);
+            if (mapState.assetIsScanned) {
+              const feature: Feature<Point, GeoJsonProperties> =
+                getFeatureFromScan(item, mapState.bottomSheetType);
 
-            mapSelectionDispatch({
-              type: MapStateActionType.CarStation,
-              assetId: feature.properties?.id as string,
-              feature: feature,
-            });
-            flyToMapItemLocation(item);
+              dispatchMapState({
+                type: MapStateActionType.CarStation,
+
+                feature: feature,
+              });
+              flyToMapItemLocation(item);
+            }
           }}
+          positionArrowCallback={positionArrowCallback}
         />
       )}
 
-      {mapSelectionState.mapState === BottomSheetType.Filter && (
+      {mapState.bottomSheetType === MapBottomSheetType.Filter && (
         <MapFilterSheet
           onFilterChanged={(filter: MapFilterType) => {
             analytics.logEvent('Map', 'Filter changed', {filter});
@@ -276,23 +283,24 @@ export const MapBottomSheets = ({
           }}
           onClose={() => {
             handleCloseSheet();
-            setMapFilterIsOpen(false);
           }}
+          positionArrowCallback={positionArrowCallback}
         />
       )}
-      {mapSelectionState.mapState === BottomSheetType.ExternalMap && (
+      {mapState.bottomSheetType === MapBottomSheetType.ExternalMap && (
         <ExternalRealtimeMapSheet
           onClose={handleCloseSheet}
-          url={mapSelectionState.url!}
+          url={mapState.url!}
+          positionArrowCallback={positionArrowCallback}
         />
       )}
-      {mapSelectionState?.mapState === BottomSheetType.StopPlace &&
-        !!mapSelectionState.feature && (
+      {mapState?.bottomSheetType === MapBottomSheetType.StopPlace &&
+        !!mapState.feature && (
           <DeparturesDialogSheet
             tabBarHeight={tabBarHeight}
             onClose={handleCloseSheet}
             distance={undefined}
-            stopPlaceFeature={mapSelectionState.feature}
+            stopPlaceFeature={mapState.feature}
             navigateToDetails={(...params) => {
               handleCloseSheet();
               mapProps.navigateToDetails(...params);
@@ -305,22 +313,22 @@ export const MapBottomSheets = ({
               handleCloseSheet();
               mapProps.navigateToTripSearch(...params);
             }}
+            positionArrowCallback={positionArrowCallback}
           />
         )}
-      {mapSelectionState.mapState === BottomSheetType.ParkAndRideStation && (
+      {mapState.bottomSheetType === MapBottomSheetType.ParkAndRideStation && (
         <ParkAndRideBottomSheet
-          name={mapSelectionState.feature?.properties?.name}
-          capacity={mapSelectionState.feature?.properties?.totalCapacity}
-          parkingFor={
-            mapSelectionState.feature?.properties?.parkingVehicleTypes
-          }
-          feature={mapSelectionState.feature as Feature<Point, ParkingType>}
+          name={mapState.feature?.properties?.name}
+          capacity={mapState.feature?.properties?.totalCapacity}
+          parkingFor={mapState.feature?.properties?.parkingVehicleTypes}
+          feature={mapState.feature as Feature<Point, ParkingType>}
           distance={undefined}
           onClose={handleCloseSheet}
           navigateToTripSearch={(...params) => {
             handleCloseSheet();
             mapProps.navigateToTripSearch(...params);
           }}
+          positionArrowCallback={positionArrowCallback}
         />
       )}
     </>

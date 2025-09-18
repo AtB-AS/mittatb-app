@@ -48,7 +48,6 @@ export const ShmoTripCard = ({shmoBooking}: ShmoTripCardProps) => {
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     lineWrapper: {
-      marginHorizontal: -theme.spacing.medium + theme.spacing.medium,
       borderTopRightRadius: theme.border.radius.regular,
       borderTopLeftRadius: theme.border.radius.regular,
       overflow: 'hidden',

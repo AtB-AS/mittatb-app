@@ -34,6 +34,7 @@ type Props = {
   photoNavigation: (bookingId: string) => void;
   onForceClose: () => void;
   mapViewRef: RefObject<MapView | null>;
+  positionArrowCallback: () => void;
 };
 
 export const ActiveScooterSheet = ({
@@ -42,6 +43,7 @@ export const ActiveScooterSheet = ({
   photoNavigation,
   onForceClose,
   mapViewRef,
+  positionArrowCallback,
 }: Props) => {
   useKeepAwake();
   const {
@@ -130,6 +132,7 @@ export const ActiveScooterSheet = ({
       enableDynamicSizing={true}
       heading={activeBooking?.asset.operator.name}
       enablePanDownToClose={false}
+      positionArrowCallback={positionArrowCallback}
     >
       {isShmoDeepIntegrationEnabled && (
         <>

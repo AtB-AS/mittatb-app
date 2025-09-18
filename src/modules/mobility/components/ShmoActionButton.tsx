@@ -93,7 +93,6 @@ export const ShmoActionButton = ({
   ]);
 
   const loginCallback = useCallback(() => {
-    //unSelectMapItem();
     if (hasReservationOrAvailableFareContract) {
       navigation.navigate('Root_LoginAvailableFareContractWarningScreen', {});
     } else if (enable_vipps_login) {

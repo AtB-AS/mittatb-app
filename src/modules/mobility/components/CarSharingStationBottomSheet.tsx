@@ -39,6 +39,7 @@ type Props = {
   distance: number | undefined;
   onClose: () => void;
   onStationReceived?: (station: CarStationFragment) => void;
+  positionArrowCallback: () => void;
 };
 
 export const CarSharingStationBottomSheet = ({
@@ -46,6 +47,7 @@ export const CarSharingStationBottomSheet = ({
   distance,
   onClose,
   onStationReceived,
+  positionArrowCallback,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -88,6 +90,7 @@ export const CarSharingStationBottomSheet = ({
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
       logoUrl={brandLogoUrl}
+      positionArrowCallback={positionArrowCallback}
     >
       <>
         {isLoading && (

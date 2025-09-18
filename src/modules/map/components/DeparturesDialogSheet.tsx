@@ -31,6 +31,7 @@ type DeparturesDialogSheetProps = {
   ) => void;
   navigateToTripSearch: NavigateToTripSearchCallback;
   tabBarHeight: number | undefined;
+  positionArrowCallback: () => void;
 };
 
 export const DeparturesDialogSheet = ({
@@ -41,6 +42,7 @@ export const DeparturesDialogSheet = ({
   navigateToQuay,
   navigateToTripSearch,
   tabBarHeight,
+  positionArrowCallback,
 }: DeparturesDialogSheetProps) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -143,6 +145,7 @@ export const DeparturesDialogSheet = ({
       }
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
+      positionArrowCallback={positionArrowCallback}
     >
       <View style={styles.listWrapper}>
         <StopPlaceViewOrError />

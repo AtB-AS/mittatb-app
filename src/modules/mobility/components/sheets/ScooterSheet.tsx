@@ -41,6 +41,7 @@ type Props = {
   onVehicleReceived?: (vehicle: VehicleExtendedFragment) => void;
   startOnboardingCallback: () => void;
   navigation: RootNavigationProps;
+  positionArrowCallback: () => void;
 };
 
 export const ScooterSheet = ({
@@ -51,6 +52,7 @@ export const ScooterSheet = ({
   onVehicleReceived,
   startOnboardingCallback,
   navigation,
+  positionArrowCallback,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -95,6 +97,7 @@ export const ScooterSheet = ({
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
       logoUrl={brandLogoUrl}
+      positionArrowCallback={positionArrowCallback}
     >
       {(isLoading || shmoReqIsLoading) && (
         <View

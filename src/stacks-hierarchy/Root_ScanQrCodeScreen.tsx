@@ -27,7 +27,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   const {t} = useTranslation();
 
   const isFocused = useIsFocusedAndActive();
-  const {mapSelectionDispatch} = useMapContext();
+  const {dispatchMapState} = useMapContext();
   const [hasCapturedQr, setHasCapturedQr] = useState(false);
   const analytics = useMapSelectionAnalytics();
 
@@ -38,7 +38,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   } = useGetAssetFromQrCodeMutation();
 
   const clearStateAndAlertResultError = useCallback(() => {
-    mapSelectionDispatch({
+    dispatchMapState({
       type: MapStateActionType.None,
     });
     Alert.alert(
@@ -52,7 +52,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
         },
       ],
     );
-  }, [mapSelectionDispatch, navigation.goBack]);
+  }, [dispatchMapState, navigation.goBack]);
 
   const assetFromQrCodeReceivedHandler = useCallback(
     (assetFromQrCode: AssetFromQrCodeResponse) => {
@@ -91,7 +91,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
       }
 
       if (!!type && !!id) {
-        mapSelectionDispatch({
+        dispatchMapState({
           type: type,
           assetId: id,
         });
@@ -105,12 +105,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
 
       navigation.goBack();
     },
-    [
-      analytics,
-      clearStateAndAlertResultError,
-      mapSelectionDispatch,
-      navigation,
-    ],
+    [analytics, clearStateAndAlertResultError, dispatchMapState, navigation],
   );
 
   const onQrCodeScanned = useCallback(

@@ -34,8 +34,10 @@ import {
 } from '@atb/modules/mobility';
 import {SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import {mapAutoSelectableBottomSheetTypeToFormFactor} from './MapContext';
-import {ReducerMapState} from './mapStateReducer';
+import {
+  mapAutoSelectableBottomSheetTypeToFormFactor,
+  MapBottomSheetType,
+} from './MapContext';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
@@ -160,7 +162,7 @@ export const getFeaturesAtPoint = async (
 
 export const getFeatureFromScan = (
   mapItem: AutoSelectableMapItem,
-  mapSelectionState: ReducerMapState,
+  mapBottomSheetType: MapBottomSheetType,
 ): Feature<Point, GeoJsonProperties> => {
   const feature: Feature<Point, GeoJsonProperties> = {
     type: 'Feature',
@@ -173,9 +175,8 @@ export const getFeatureFromScan = (
       id: mapItem.id,
       system_id: mapItem?.system.id,
       count: 1,
-      vehicle_type_form_factor: mapAutoSelectableBottomSheetTypeToFormFactor(
-        mapSelectionState.mapState,
-      ),
+      vehicle_type_form_factor:
+        mapAutoSelectableBottomSheetTypeToFormFactor(mapBottomSheetType),
     },
   };
 

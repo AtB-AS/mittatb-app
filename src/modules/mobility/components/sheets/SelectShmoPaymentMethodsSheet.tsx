@@ -24,12 +24,14 @@ type Props = {
   recurringPaymentMethods?: PaymentMethod[];
   onClose?: () => void;
   onGoToPaymentPage: () => void;
+  positionArrowCallback: () => void;
 };
 
 export const SelectShmoPaymentMethodSheet = ({
   onSelect,
   onClose,
   onGoToPaymentPage,
+  positionArrowCallback,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -59,6 +61,7 @@ export const SelectShmoPaymentMethodSheet = ({
       enableDynamicSizing={true}
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
+      positionArrowCallback={positionArrowCallback}
     >
       <ScrollView>
         <View style={{flex: 1}}>

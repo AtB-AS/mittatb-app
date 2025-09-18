@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, PropsWithChildren, useRef} from 'react';
+import React, {useCallback, PropsWithChildren, useRef} from 'react';
 import BottomSheetGor, {
   BottomSheetView,
   BottomSheetBackdrop,
@@ -10,6 +10,12 @@ import {SvgProps} from 'react-native-svg';
 import {ThemeText} from '../text';
 import {ThemeIcon} from '../theme-icon';
 import {SvgCssUri} from 'react-native-svg/css';
+import {MapButtons} from '@atb/modules/map';
+import {BottomSheetTopPositionBridge} from './BottomSheetTopPositionBridge';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 export type BottomSheetProps = PropsWithChildren<{
   snapPoints?: Array<string | number>;
@@ -25,6 +31,7 @@ export type BottomSheetProps = PropsWithChildren<{
   rightIcon?: (props: SvgProps) => React.JSX.Element;
   rightIconText?: string;
   enablePanDownToClose?: boolean;
+  positionArrowCallback: () => void;
 }>;
 
 const LOGO_SIZE = 20;
@@ -44,17 +51,13 @@ export const BottomSheetMap = ({
   rightIcon,
   rightIconText,
   enablePanDownToClose = true,
+  positionArrowCallback,
 }: BottomSheetProps) => {
   const styles = useStyles();
-  const ref = useRef<BottomSheetGor>(null);
+  const bottomSheetGorRef = useRef<BottomSheetGor>(null);
   const {theme} = useThemeContext();
   const isSvg = (url: string) => url.endsWith('.svg');
-
-  const computedSnapPoints = useMemo(() => {
-    if (enableDynamicSizing && (!snapPoints || snapPoints.length === 0))
-      return undefined; // dynamic
-    return snapPoints ?? ['25%', '50%', '90%'];
-  }, [enableDynamicSizing, snapPoints]);
+  const sheetTopPosition = useSharedValue(0);
 
   const renderBackdrop = useCallback(
     (props: any) => (
@@ -76,81 +79,111 @@ export const BottomSheetMap = ({
     [allowBackgroundTouch, backdropPressBehavior, closeOnBackdropPress],
   );
 
+  const HeaderOverlay = () => {
+    const aStyle = useAnimatedStyle(() => {
+      return {
+        transform: [{translateY: sheetTopPosition.value}],
+      };
+    });
+
+    return (
+      <Animated.View
+        pointerEvents="box-none"
+        style={[
+          {
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            zIndex: 1000,
+            elevation: 1000,
+          },
+          aStyle,
+        ]}
+      >
+        <MapButtons positionArrowCallback={positionArrowCallback} />
+      </Animated.View>
+    );
+  };
+
   return (
-    <BottomSheetGor
-      ref={ref}
-      handleIndicatorStyle={styles.handleIndicatorStyle}
-      handleStyle={styles.handleStyle}
-      snapPoints={computedSnapPoints}
-      enableDynamicSizing={enableDynamicSizing}
-      backdropComponent={allowBackgroundTouch ? undefined : renderBackdrop}
-      enablePanDownToClose={enablePanDownToClose}
-      keyboardBehavior={keyboardBehavior}
-      keyboardBlurBehavior="restore"
-      backgroundStyle={styles.sheet}
-      onAnimate={(from, to) => {
-        if (to === -1) {
-          closeCallback?.();
-        }
-      }}
-      accessible={false}
-    >
-      <BottomSheetView style={styles.contentContainer}>
-        {(heading || rightIconText) && (
-          <View style={styles.headerContainer}>
-            {heading && (
-              <View style={styles.headerLeft}>
-                {logoUrl ? (
-                  isSvg(logoUrl) ? (
-                    <SvgCssUri
-                      style={styles.logo}
-                      height={LOGO_SIZE}
-                      width={LOGO_SIZE}
-                      uri={logoUrl}
-                    />
-                  ) : (
-                    <Image
-                      source={{uri: logoUrl}}
-                      width={LOGO_SIZE}
-                      height={LOGO_SIZE}
-                      style={styles.logo as ImageStyle}
-                      resizeMode="contain"
-                    />
-                  )
-                ) : null}
-                <View style={styles.headingWrapper}>
-                  {heading && (
-                    <ThemeText typography="heading--big">{heading}</ThemeText>
-                  )}
-                  {subText && (
-                    <ThemeText
-                      typography="body__secondary"
-                      color={theme.color.foreground.dynamic.secondary}
-                    >
-                      {subText}
-                    </ThemeText>
-                  )}
+    <>
+      <HeaderOverlay />
+      <BottomSheetGor
+        ref={bottomSheetGorRef}
+        handleIndicatorStyle={styles.handleIndicatorStyle}
+        handleStyle={styles.handleStyle}
+        snapPoints={snapPoints}
+        enableDynamicSizing={enableDynamicSizing}
+        backdropComponent={allowBackgroundTouch ? undefined : renderBackdrop}
+        enablePanDownToClose={enablePanDownToClose}
+        keyboardBehavior={keyboardBehavior}
+        keyboardBlurBehavior="restore"
+        backgroundStyle={styles.sheet}
+        onAnimate={(_from, to) => {
+          if (to === -1) {
+            closeCallback?.();
+          }
+        }}
+        accessible={false}
+      >
+        <BottomSheetTopPositionBridge sheetTopPosition={sheetTopPosition} />
+        <BottomSheetView style={styles.contentContainer}>
+          {(heading || rightIconText) && (
+            <View style={styles.headerContainer}>
+              {heading && (
+                <View style={styles.headerLeft}>
+                  {logoUrl ? (
+                    isSvg(logoUrl) ? (
+                      <SvgCssUri
+                        style={styles.logo}
+                        height={LOGO_SIZE}
+                        width={LOGO_SIZE}
+                        uri={logoUrl}
+                      />
+                    ) : (
+                      <Image
+                        source={{uri: logoUrl}}
+                        width={LOGO_SIZE}
+                        height={LOGO_SIZE}
+                        style={styles.logo as ImageStyle}
+                        resizeMode="contain"
+                      />
+                    )
+                  ) : null}
+                  <View style={styles.headingWrapper}>
+                    {heading && (
+                      <ThemeText typography="heading--big">{heading}</ThemeText>
+                    )}
+                    {subText && (
+                      <ThemeText
+                        typography="body__secondary"
+                        color={theme.color.foreground.dynamic.secondary}
+                      >
+                        {subText}
+                      </ThemeText>
+                    )}
+                  </View>
                 </View>
-              </View>
-            )}
+              )}
 
-            {rightIconText && rightIcon && (
-              <PressableOpacity
-                style={styles.headerRight}
-                onPress={() => ref.current?.close()}
-              >
-                <ThemeText typography="body__secondary--bold">
-                  {rightIconText}
-                </ThemeText>
-                <ThemeIcon svg={rightIcon} />
-              </PressableOpacity>
-            )}
-          </View>
-        )}
+              {rightIconText && rightIcon && (
+                <PressableOpacity
+                  style={styles.headerRight}
+                  onPress={() => bottomSheetGorRef.current?.close()}
+                >
+                  <ThemeText typography="body__secondary--bold">
+                    {rightIconText}
+                  </ThemeText>
+                  <ThemeIcon svg={rightIcon} />
+                </PressableOpacity>
+              )}
+            </View>
+          )}
 
-        {children}
-      </BottomSheetView>
-    </BottomSheetGor>
+          {children}
+        </BottomSheetView>
+      </BottomSheetGor>
+    </>
   );
 };
 

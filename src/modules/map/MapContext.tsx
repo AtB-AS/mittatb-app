@@ -1,6 +1,5 @@
-import React, {createContext, useContext, useReducer, useState} from 'react';
+import React, {createContext, useContext, useReducer} from 'react';
 import {MapFilterType} from '@atb/modules/map';
-import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useUserMapFilters} from './hooks/use-map-filter';
 import {
   mapStateReducer,
@@ -12,15 +11,13 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 type MapContextState = {
   mapFilter?: MapFilterType;
   setMapFilter: (mapFilter: MapFilterType) => void;
-  mapFilterIsOpen: boolean;
-  setMapFilterIsOpen: (mapFilterIsOpen: boolean) => void;
-  mapSelectionState: ReducerMapState;
-  mapSelectionDispatch: React.Dispatch<ReducerMapStateAction>;
+  mapState: ReducerMapState;
+  dispatchMapState: React.Dispatch<ReducerMapStateAction>;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
 
-export enum BottomSheetType {
+export enum MapBottomSheetType {
   Scooter = 'SCOOTER',
   Bicycle = 'BICYCLE',
   BikeStation = 'BIKE_STATION',
@@ -35,36 +32,24 @@ export enum BottomSheetType {
   None = 'NONE',
 }
 
-export type AutoSelectableBottomSheet = {
-  type: BottomSheetType;
-  id: string;
-  shmoBookingState?: ShmoBookingState;
-};
-
 type Props = {
   children: React.ReactNode;
 };
 
 export const MapContextProvider = ({children}: Props) => {
-  const [mapSelectionState, mapSelectionDispatch] = useReducer(
-    mapStateReducer,
-    {
-      mapState: BottomSheetType.None,
-    },
-  );
+  const [mapState, dispatchMapState] = useReducer(mapStateReducer, {
+    bottomSheetType: MapBottomSheetType.None,
+  });
 
   const {mapFilter, setMapFilter} = useUserMapFilters();
-  const [mapFilterIsOpen, setMapFilterIsOpen] = useState(false);
 
   return (
     <MapContext.Provider
       value={{
         mapFilter,
         setMapFilter,
-        mapFilterIsOpen,
-        setMapFilterIsOpen,
-        mapSelectionState,
-        mapSelectionDispatch,
+        mapState,
+        dispatchMapState,
       }}
     >
       {children}
@@ -94,16 +79,16 @@ export function useMapContext() {
 }
 
 export function mapAutoSelectableBottomSheetTypeToFormFactor(
-  autoSelectableBottomSheetType?: BottomSheetType,
+  autoSelectableBottomSheetType?: MapBottomSheetType,
 ): FormFactor | undefined {
   switch (autoSelectableBottomSheetType) {
-    case BottomSheetType.Bicycle:
+    case MapBottomSheetType.Bicycle:
       return FormFactor.Bicycle;
-    case BottomSheetType.Scooter:
+    case MapBottomSheetType.Scooter:
       return FormFactor.Scooter;
-    case BottomSheetType.BikeStation:
+    case MapBottomSheetType.BikeStation:
       return FormFactor.Bicycle;
-    case BottomSheetType.CarStation:
+    case MapBottomSheetType.CarStation:
       return FormFactor.Car;
     default:
       return undefined;
