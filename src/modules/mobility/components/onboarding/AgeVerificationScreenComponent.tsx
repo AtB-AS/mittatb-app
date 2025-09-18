@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {dictionary, LoginTexts, useTranslation} from '@atb/translations';
-import {ThemedTokenPhone} from '@atb/theme/ThemedAssets';
+import {ThemedBabyOnScooter} from '@atb/theme/ThemedAssets';
 import {Linking} from 'react-native';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {VIPPS_CALLBACK_URL} from '@atb/api/identity';
@@ -86,7 +86,7 @@ export const AgeVerificationScreenComponent = () => {
 
   return (
     <OnboardingScreenComponent
-      illustration={<ThemedTokenPhone height={220} />}
+      illustration={<ThemedBabyOnScooter height={220} />}
       title={t(MobilityTexts.shmoRequirements.ageVerification.title)}
       description={t(
         MobilityTexts.shmoRequirements.ageVerification.description,

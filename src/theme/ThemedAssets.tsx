@@ -47,6 +47,7 @@ import {
   BundlingCityBikeActive as BundlingCityBikeActiveDark,
   CityBike as CityBikeDark,
   ParkAndRide as ParkAndRideDark,
+  BabyOnScooter as BabyOnScooterDark,
 } from '@atb/assets/svg/color/images/mobility/dark';
 import {
   BundlingCarSharing as BundlingCarSharingLight,
@@ -54,6 +55,7 @@ import {
   BundlingCityBikeActive as BundlingCityBikeActiveLight,
   CityBike as CityBikeLight,
   ParkAndRide as ParkAndRideLight,
+  BabyOnScooter as BabyOnScooterLight,
 } from '@atb/assets/svg/color/images/mobility/light';
 import {
   BonusBag as BonusBagLight,
@@ -107,6 +109,10 @@ export const ThemedNoFavouriteDepartureImage = getThemedAsset(
 );
 export const ThemedOnBehalfOf = getThemedAsset(OnBehalfOfLight, OnBehalfOfDark);
 export const ThemedCityBike = getThemedAsset(CityBikeLight, CityBikeDark);
+export const ThemedBabyOnScooter = getThemedAsset(
+  BabyOnScooterLight,
+  BabyOnScooterDark,
+);
 export const ThemedParkAndRide = getThemedAsset(
   ParkAndRideLight,
   ParkAndRideDark,
