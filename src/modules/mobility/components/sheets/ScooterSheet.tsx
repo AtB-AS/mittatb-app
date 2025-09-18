@@ -30,7 +30,7 @@ import {
   PaymentSelectionSectionItem,
   useSelectedShmoPaymentMethod,
 } from '@atb/modules/payment';
-import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type Props = {
@@ -86,7 +86,7 @@ export const ScooterSheet = ({
   } = useFeatureTogglesContext();
 
   return (
-    <BottomSheetMap
+    <MapBottomSheet
       snapPoints={['80%']}
       closeCallback={onClose}
       closeOnBackdropPress={false}
@@ -201,7 +201,7 @@ export const ScooterSheet = ({
           />
         </View>
       )}
-    </BottomSheetMap>
+    </MapBottomSheet>
   );
 };
 

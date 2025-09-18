@@ -21,7 +21,7 @@ import {MobilityStats} from './MobilityStats';
 import {MobilityStat} from './MobilityStat';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
 import {ThemedParkAndRide} from '@atb/theme/ThemedAssets';
-import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type Props = {
@@ -61,7 +61,7 @@ export const ParkAndRideBottomSheet = ({
   };
 
   return (
-    <BottomSheetMap
+    <MapBottomSheet
       snapPoints={['80%']}
       closeCallback={onClose}
       closeOnBackdropPress={false}
@@ -131,7 +131,7 @@ export const ParkAndRideBottomSheet = ({
           </Section>
         </ScrollView>
       </ScrollView>
-    </BottomSheetMap>
+    </MapBottomSheet>
   );
 };
 

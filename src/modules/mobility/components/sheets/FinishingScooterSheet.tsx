@@ -12,7 +12,7 @@ import {useActiveShmoBookingQuery} from '../../queries/use-active-shmo-booking-q
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {ThemeText} from '@atb/components/text';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
-import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
@@ -59,7 +59,7 @@ export const FinishingScooterSheet = ({
   ]);
 
   return (
-    <BottomSheetMap
+    <MapBottomSheet
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
@@ -103,7 +103,7 @@ export const FinishingScooterSheet = ({
           />
         </View>
       )}
-    </BottomSheetMap>
+    </MapBottomSheet>
   );
 };
 

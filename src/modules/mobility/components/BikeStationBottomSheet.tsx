@@ -30,7 +30,7 @@ import {
   PayWithBonusPointsCheckbox,
   findRelevantBonusProduct,
 } from '@atb/modules/bonus';
-import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
@@ -77,7 +77,7 @@ export const BikeStationBottomSheet = ({
   useDoOnceOnItemReceived(onStationReceived, station);
 
   return (
-    <BottomSheetMap
+    <MapBottomSheet
       snapPoints={['80%']}
       closeCallback={onClose}
       closeOnBackdropPress={false}
@@ -200,7 +200,7 @@ export const BikeStationBottomSheet = ({
           </View>
         )}
       </>
-    </BottomSheetMap>
+    </MapBottomSheet>
   );
 };
 

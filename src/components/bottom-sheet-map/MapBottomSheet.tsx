@@ -36,7 +36,7 @@ export type BottomSheetProps = PropsWithChildren<{
 
 const LOGO_SIZE = 20;
 
-export const BottomSheetMap = ({
+export const MapBottomSheet = ({
   snapPoints,
   enableDynamicSizing = true,
   closeOnBackdropPress = true,
@@ -71,8 +71,8 @@ export const BottomSheetMap = ({
           (allowBackgroundTouch
             ? 'none'
             : closeOnBackdropPress
-            ? 'close'
-            : 'none')
+              ? 'close'
+              : 'none')
         }
       />
     ),

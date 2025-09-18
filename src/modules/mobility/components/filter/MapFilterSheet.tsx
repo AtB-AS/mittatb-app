@@ -17,7 +17,7 @@ import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import {Close, Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {MobilityFilters} from './MobilityFilters';
-import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 
 type MapFilterSheetProps = {
   onClose: () => void;
@@ -51,7 +51,7 @@ export const MapFilterSheet = ({
   };
 
   return (
-    <BottomSheetMap
+    <MapBottomSheet
       closeCallback={onClose}
       allowBackgroundTouch={false}
       enableDynamicSizing={true}
@@ -79,7 +79,7 @@ export const MapFilterSheet = ({
           testID="confirmFilters"
         />
       </FullScreenFooter>
-    </BottomSheetMap>
+    </MapBottomSheet>
   );
 };
 

@@ -14,7 +14,7 @@ import {ShmoTripDetailsSectionItem} from '../ShmoTripDetailsSectionItem';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {useShmoBookingQuery} from '../../queries/use-shmo-booking-query';
-import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type Props = {
@@ -41,7 +41,7 @@ export const FinishedScooterSheet = ({
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
   return (
-    <BottomSheetMap
+    <MapBottomSheet
       closeCallback={onClose}
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
@@ -114,7 +114,7 @@ export const FinishedScooterSheet = ({
           )}
         </>
       )}
-    </BottomSheetMap>
+    </MapBottomSheet>
   );
 };
 

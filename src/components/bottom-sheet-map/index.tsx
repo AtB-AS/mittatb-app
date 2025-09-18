@@ -1,1 +1,1 @@
-export {BottomSheetMap} from './BottomSheetMap';
+export {MapBottomSheet} from './MapBottomSheet';

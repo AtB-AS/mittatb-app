@@ -17,7 +17,7 @@ import {
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
 import {useMutation} from '@tanstack/react-query';
-import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 
 type Props = {
   onSelect: () => void;
@@ -56,7 +56,7 @@ export const SelectShmoPaymentMethodSheet = ({
   }, [defaultPaymentMethod]);
 
   return (
-    <BottomSheetMap
+    <MapBottomSheet
       closeCallback={onClose}
       enableDynamicSizing={true}
       rightIconText={t(dictionary.appNavigation.close.text)}
@@ -125,7 +125,7 @@ export const SelectShmoPaymentMethodSheet = ({
           </FullScreenFooter>
         </View>
       </ScrollView>
-    </BottomSheetMap>
+    </MapBottomSheet>
   );
 };
 

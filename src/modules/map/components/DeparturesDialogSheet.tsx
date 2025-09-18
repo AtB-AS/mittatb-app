@@ -14,7 +14,7 @@ import {
   useStopsDetailsDataQuery,
 } from '@atb/screen-components/place-screen';
 import type {DepartureSearchTime} from '@atb/components/date-selection';
-import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type DeparturesDialogSheetProps = {
@@ -134,7 +134,7 @@ export const DeparturesDialogSheet = ({
     undefined;
 
   return (
-    <BottomSheetMap
+    <MapBottomSheet
       snapPoints={['60%']}
       closeCallback={onClose}
       enableDynamicSizing={false}
@@ -150,7 +150,7 @@ export const DeparturesDialogSheet = ({
       <View style={styles.listWrapper}>
         <StopPlaceViewOrError />
       </View>
-    </BottomSheetMap>
+    </MapBottomSheet>
   );
 };
 

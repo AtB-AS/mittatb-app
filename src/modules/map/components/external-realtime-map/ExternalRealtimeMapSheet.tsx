@@ -7,7 +7,7 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import {ScrollView} from 'react-native-gesture-handler';
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type ExternalRealtimeMapLinkSheetProps = {
@@ -24,7 +24,7 @@ export const ExternalRealtimeMapSheet = ({
   const style = useStyle();
 
   return (
-    <BottomSheetMap
+    <MapBottomSheet
       closeCallback={onClose}
       allowBackgroundTouch={false}
       heading={t(MapTexts.externalRealtimeMap.bottomSheet.heading)}
@@ -53,7 +53,7 @@ export const ExternalRealtimeMapSheet = ({
           rightIcon={{svg: ExternalLink}}
         />
       </ScrollView>
-    </BottomSheetMap>
+    </MapBottomSheet>
   );
 };
 

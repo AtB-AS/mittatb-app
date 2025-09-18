@@ -25,7 +25,7 @@ import {MapView} from '@rnmapbox/maps';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useShmoWarnings} from '@atb/modules/map';
 import {useKeepAwake} from '@sayem314/react-native-keep-awake';
-import {BottomSheetMap} from '@atb/components/bottom-sheet-map';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
@@ -126,7 +126,7 @@ export const ActiveScooterSheet = ({
   };
 
   return (
-    <BottomSheetMap
+    <MapBottomSheet
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
@@ -215,7 +215,7 @@ export const ActiveScooterSheet = ({
           )}
         </>
       )}
-    </BottomSheetMap>
+    </MapBottomSheet>
   );
 };
 
