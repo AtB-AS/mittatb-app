@@ -135,10 +135,10 @@ export const DeparturesDialogSheet = ({
 
   return (
     <BottomSheetMap
-      snapPoints={['80%']}
+      snapPoints={['60%']}
       closeCallback={onClose}
-      allowBackgroundTouch={false}
       enableDynamicSizing={false}
+      allowBackgroundTouch={true}
       heading={
         stopPlaceFeature.properties?.name ??
         stopDetailsData?.stopPlaces[0]?.name
