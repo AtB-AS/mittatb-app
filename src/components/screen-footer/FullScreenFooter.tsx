@@ -27,10 +27,10 @@ export function FullScreenFooter({
 }
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => {
-  const {bottom} = useSafeAreaInsets();
+  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   return {
     container: {
-      paddingBottom: Math.max(bottom, theme.spacing.medium),
+      paddingBottom: bottomSafeAreaInset + theme.spacing.medium,
       paddingHorizontal: theme.spacing.medium,
     },
   };

@@ -110,11 +110,11 @@ export const Root_TicketInformationScreen = (props: Props) => {
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
+  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   return {
     container: {
       marginHorizontal: theme.spacing.medium,
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: bottomSafeAreaInset + theme.spacing.medium,
       rowGap: theme.spacing.small,
     },
     descriptionContainer: {
