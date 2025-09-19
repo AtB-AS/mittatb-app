@@ -34,10 +34,8 @@ import {
 } from '@atb/modules/mobility';
 import {SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import {
-  mapAutoSelectableBottomSheetTypeToFormFactor,
-  MapBottomSheetType,
-} from './MapContext';
+import {MapBottomSheetType} from './MapContext';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
@@ -160,6 +158,23 @@ export const getFeaturesAtPoint = async (
   return featuresAtPoint?.features;
 };
 
+function mapBottomSheetTypeToFormFactor(
+  mapBottomSheetType?: MapBottomSheetType,
+): FormFactor | undefined {
+  switch (mapBottomSheetType) {
+    case MapBottomSheetType.Bicycle:
+      return FormFactor.Bicycle;
+    case MapBottomSheetType.Scooter:
+      return FormFactor.Scooter;
+    case MapBottomSheetType.BikeStation:
+      return FormFactor.Bicycle;
+    case MapBottomSheetType.CarStation:
+      return FormFactor.Car;
+    default:
+      return undefined;
+  }
+}
+
 export const getFeatureFromScan = (
   mapItem: AutoSelectableMapItem,
   mapBottomSheetType: MapBottomSheetType,
@@ -176,7 +191,7 @@ export const getFeatureFromScan = (
       system_id: mapItem?.system.id,
       count: 1,
       vehicle_type_form_factor:
-        mapAutoSelectableBottomSheetTypeToFormFactor(mapBottomSheetType),
+        mapBottomSheetTypeToFormFactor(mapBottomSheetType),
     },
   };
 

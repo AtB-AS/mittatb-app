@@ -6,7 +6,6 @@ import {
   ReducerMapState,
   ReducerMapStateAction,
 } from './mapStateReducer';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type MapContextState = {
   mapFilter?: MapFilterType;
@@ -76,21 +75,4 @@ export function useMapContext() {
     throw new Error('useMapState must be used within a MapContextProvider');
   }
   return context;
-}
-
-export function mapAutoSelectableBottomSheetTypeToFormFactor(
-  autoSelectableBottomSheetType?: MapBottomSheetType,
-): FormFactor | undefined {
-  switch (autoSelectableBottomSheetType) {
-    case MapBottomSheetType.Bicycle:
-      return FormFactor.Bicycle;
-    case MapBottomSheetType.Scooter:
-      return FormFactor.Scooter;
-    case MapBottomSheetType.BikeStation:
-      return FormFactor.Bicycle;
-    case MapBottomSheetType.CarStation:
-      return FormFactor.Car;
-    default:
-      return undefined;
-  }
 }

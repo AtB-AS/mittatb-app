@@ -22,12 +22,12 @@ import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 type MapFilterSheetProps = {
   onClose: () => void;
   onFilterChanged: (filter: MapFilterType) => void;
-  positionArrowCallback: () => void;
+  locationArrowOnPress: () => void;
 };
 export const MapFilterSheet = ({
   onClose,
   onFilterChanged,
-  positionArrowCallback,
+  locationArrowOnPress,
 }: MapFilterSheetProps) => {
   const {t} = useTranslation();
   const style = useStyle();
@@ -58,7 +58,7 @@ export const MapFilterSheet = ({
       heading={t(MapTexts.filters.bottomSheet.heading)}
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
-      positionArrowCallback={positionArrowCallback}
+      locationArrowOnPress={locationArrowOnPress}
     >
       <ScrollView style={style.container}>
         <MobilityFilters

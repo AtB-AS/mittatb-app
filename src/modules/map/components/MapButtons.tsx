@@ -9,18 +9,15 @@ import {
   useActiveShmoBookingQuery,
   useInitShmoBookingMutationStatus,
 } from '@atb/modules/mobility';
-import {PositionArrow} from './PositionArrow';
+import {LocationArrow} from './LocationArrow';
 import {ScanButton} from './ScanButton';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {View} from 'react-native';
-//import {useThemeContext} from '@atb/theme';
-
-/** LEGGE TIL OVER BOTTOMSHEETEN OGSÅ, FJERN FORSØK PÅ ANIMASJON */
 
 export const MapButtons = ({
-  positionArrowCallback,
+  locationArrowOnPress,
 }: {
-  positionArrowCallback: () => void;
+  locationArrowOnPress: () => void;
 }) => {
   const controlStyles = useControlPositionsStyle(false);
   const {mapState} = useMapContext();
@@ -64,7 +61,7 @@ export const MapButtons = ({
 
         {showMapFilterButton && <MapFilter isLoading={false} />}
 
-        <PositionArrow onPress={positionArrowCallback} />
+        <LocationArrow onPress={locationArrowOnPress} />
       </View>
       {showScanButton && <ScanButton />}
     </>

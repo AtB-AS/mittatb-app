@@ -10,7 +10,7 @@ import {
   hitboxCoveringIconOnly,
   MapCameraConfig,
   NationalStopRegistryFeatures,
-  PositionArrow,
+  LocationArrow,
   useMapViewConfig,
 } from '@atb/modules/map';
 import hexToRgba from 'hex-to-rgba';
@@ -205,7 +205,7 @@ const FareZonesSelectorMap = ({
             {location && (
               <View>
                 <View style={styles.mapControls}>
-                  <PositionArrow
+                  <LocationArrow
                     onPress={() =>
                       flyToLocation({
                         coordinates: location?.coordinates,

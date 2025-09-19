@@ -2,7 +2,7 @@ export {BackArrow} from './components/BackArrow';
 export {GeofencingZones, Stations} from './components/mobility';
 export {VehiclesAndStations} from './components/mobility/VehiclesAndStations.tsx';
 export {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
-export {PositionArrow} from './components/PositionArrow';
+export {LocationArrow} from './components/LocationArrow.tsx';
 export {SelectionPin} from './components/SelectionPin';
 export {shadows} from './components/shadows';
 export {ExploreLocationMap} from './ExploreLocationMap';

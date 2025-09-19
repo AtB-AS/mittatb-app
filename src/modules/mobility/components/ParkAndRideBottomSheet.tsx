@@ -32,7 +32,7 @@ type Props = {
   feature: Feature<Point, ParkingType>;
   onClose: () => void;
   navigateToTripSearch: NavigateToTripSearchCallback;
-  positionArrowCallback: () => void;
+  locationArrowOnPress: () => void;
 };
 export const ParkAndRideBottomSheet = ({
   name,
@@ -42,7 +42,7 @@ export const ParkAndRideBottomSheet = ({
   distance,
   onClose,
   navigateToTripSearch,
-  positionArrowCallback,
+  locationArrowOnPress,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -70,7 +70,7 @@ export const ParkAndRideBottomSheet = ({
       heading={t(ParkAndRideTexts.title)}
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
-      positionArrowCallback={positionArrowCallback}
+      locationArrowOnPress={locationArrowOnPress}
     >
       <ScrollView>
         <View style={styles.buttonsContainer}>

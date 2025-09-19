@@ -162,7 +162,7 @@ export const MapV2 = (props: MapProps) => {
     tabBarHeight,
   );
 
-  const locationArrowOnClick = async () => {
+  const locationArrowOnPress = async () => {
     const coordinates = await getCurrentCoordinates(true);
     if (
       activeShmoBooking &&
@@ -430,7 +430,7 @@ export const MapV2 = (props: MapProps) => {
           )}
         </MapView>
         {mapState.bottomSheetType === MapBottomSheetType.None && (
-          <MapButtons positionArrowCallback={locationArrowOnClick} />
+          <MapButtons locationArrowOnPress={locationArrowOnPress} />
         )}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
@@ -438,7 +438,7 @@ export const MapV2 = (props: MapProps) => {
         mapCameraRef={mapCameraRef}
         mapViewRef={mapViewRef}
         mapProps={props}
-        positionArrowCallback={locationArrowOnClick}
+        locationArrowOnPress={locationArrowOnPress}
       />
     </View>
   );

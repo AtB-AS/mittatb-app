@@ -13,12 +13,12 @@ import {Close} from '@atb/assets/svg/mono-icons/actions';
 type ExternalRealtimeMapLinkSheetProps = {
   onClose: () => void;
   url: string;
-  positionArrowCallback: () => void;
+  locationArrowOnPress: () => void;
 };
 export const ExternalRealtimeMapSheet = ({
   onClose,
   url,
-  positionArrowCallback,
+  locationArrowOnPress,
 }: ExternalRealtimeMapLinkSheetProps) => {
   const {t} = useTranslation();
   const style = useStyle();
@@ -30,7 +30,7 @@ export const ExternalRealtimeMapSheet = ({
       heading={t(MapTexts.externalRealtimeMap.bottomSheet.heading)}
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
-      positionArrowCallback={positionArrowCallback}
+      locationArrowOnPress={locationArrowOnPress}
     >
       <ScrollView
         style={style.container}

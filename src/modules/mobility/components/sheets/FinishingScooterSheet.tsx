@@ -18,13 +18,13 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 type Props = {
   photoNavigation: () => void;
   onForceClose: () => void;
-  positionArrowCallback: () => void;
+  locationArrowOnPress: () => void;
 };
 
 export const FinishingScooterSheet = ({
   onForceClose,
   photoNavigation,
-  positionArrowCallback,
+  locationArrowOnPress,
 }: Props) => {
   const {
     data: activeBooking,
@@ -64,7 +64,7 @@ export const FinishingScooterSheet = ({
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
       enablePanDownToClose={false}
-      positionArrowCallback={positionArrowCallback}
+      locationArrowOnPress={locationArrowOnPress}
     >
       {isLoading && (
         <View style={styles.activityIndicator}>

@@ -35,13 +35,13 @@ type Props = {
   vehicleId: VehicleId;
   onClose: () => void;
   onVehicleReceived?: (vehicle: VehicleExtendedFragment) => void;
-  positionArrowCallback: () => void;
+  locationArrowOnPress: () => void;
 };
 export const BicycleSheet = ({
   vehicleId: id,
   onClose,
   onVehicleReceived,
-  positionArrowCallback,
+  locationArrowOnPress,
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useSheetStyle();
@@ -71,7 +71,7 @@ export const BicycleSheet = ({
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
       logoUrl={brandLogoUrl}
-      positionArrowCallback={positionArrowCallback}
+      locationArrowOnPress={locationArrowOnPress}
     >
       <>
         {isLoading && (

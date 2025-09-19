@@ -41,14 +41,14 @@ type MapBottomSheetsProps = {
   mapCameraRef: RefObject<MapboxGL.Camera | null>;
   mapViewRef: RefObject<MapboxGL.MapView | null>;
   mapProps: MapProps;
-  positionArrowCallback: () => void;
+  locationArrowOnPress: () => void;
 };
 
 export const MapBottomSheets = ({
   mapCameraRef,
   mapViewRef,
   mapProps,
-  positionArrowCallback,
+  locationArrowOnPress,
 }: MapBottomSheetsProps) => {
   const [openPaymentType, setOpenPaymentType] = useState<boolean>(false);
   const navigateToPaymentMethods = useEnterPaymentMethods();
@@ -145,7 +145,7 @@ export const MapBottomSheets = ({
             startOnboardingCallback={() => {
               navigation.navigate('Root_ShmoOnboardingScreen');
             }}
-            positionArrowCallback={positionArrowCallback}
+            locationArrowOnPress={locationArrowOnPress}
           />
         )}
 
@@ -161,7 +161,7 @@ export const MapBottomSheets = ({
             setOpenPaymentType(false);
             navigateToPaymentMethods();
           }}
-          positionArrowCallback={positionArrowCallback}
+          locationArrowOnPress={locationArrowOnPress}
         />
       )}
 
@@ -182,7 +182,7 @@ export const MapBottomSheets = ({
               bookingId: activeBooking.bookingId,
             });
           }}
-          positionArrowCallback={positionArrowCallback}
+          locationArrowOnPress={locationArrowOnPress}
         />
       )}
       {activeBooking?.state === ShmoBookingState.FINISHING && (
@@ -194,7 +194,7 @@ export const MapBottomSheets = ({
               bookingId: activeBooking.bookingId,
             });
           }}
-          positionArrowCallback={positionArrowCallback}
+          locationArrowOnPress={locationArrowOnPress}
         />
       )}
       {mapState.bottomSheetType === MapBottomSheetType.FinishedBooking &&
@@ -209,7 +209,7 @@ export const MapBottomSheets = ({
                 bookingId,
               });
             }}
-            positionArrowCallback={positionArrowCallback}
+            locationArrowOnPress={locationArrowOnPress}
           />
         )}
       {mapState.bottomSheetType === MapBottomSheetType.Bicycle && (
@@ -228,7 +228,7 @@ export const MapBottomSheets = ({
               flyToMapItemLocation(item);
             }
           }}
-          positionArrowCallback={positionArrowCallback}
+          locationArrowOnPress={locationArrowOnPress}
         />
       )}
 
@@ -249,7 +249,7 @@ export const MapBottomSheets = ({
               flyToMapItemLocation(item);
             }
           }}
-          positionArrowCallback={positionArrowCallback}
+          locationArrowOnPress={locationArrowOnPress}
         />
       )}
       {mapState.bottomSheetType === MapBottomSheetType.CarStation && (
@@ -270,7 +270,7 @@ export const MapBottomSheets = ({
               flyToMapItemLocation(item);
             }
           }}
-          positionArrowCallback={positionArrowCallback}
+          locationArrowOnPress={locationArrowOnPress}
         />
       )}
 
@@ -284,7 +284,7 @@ export const MapBottomSheets = ({
           onClose={() => {
             handleCloseSheet();
           }}
-          positionArrowCallback={positionArrowCallback}
+          locationArrowOnPress={locationArrowOnPress}
         />
       )}
       {mapState.bottomSheetType === MapBottomSheetType.ExternalMap &&
@@ -292,7 +292,7 @@ export const MapBottomSheets = ({
           <ExternalRealtimeMapSheet
             onClose={handleCloseSheet}
             url={mapState.url}
-            positionArrowCallback={positionArrowCallback}
+            locationArrowOnPress={locationArrowOnPress}
           />
         )}
       {mapState?.bottomSheetType === MapBottomSheetType.StopPlace &&
@@ -314,7 +314,7 @@ export const MapBottomSheets = ({
               handleCloseSheet();
               mapProps.navigateToTripSearch(...params);
             }}
-            positionArrowCallback={positionArrowCallback}
+            locationArrowOnPress={locationArrowOnPress}
           />
         )}
       {mapState.bottomSheetType === MapBottomSheetType.ParkAndRideStation &&
@@ -331,7 +331,7 @@ export const MapBottomSheets = ({
               handleCloseSheet();
               mapProps.navigateToTripSearch(...params);
             }}
-            positionArrowCallback={positionArrowCallback}
+            locationArrowOnPress={locationArrowOnPress}
           />
         )}
     </>

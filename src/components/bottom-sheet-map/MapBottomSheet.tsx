@@ -31,7 +31,7 @@ export type BottomSheetProps = PropsWithChildren<{
   rightIcon?: (props: SvgProps) => React.JSX.Element;
   rightIconText?: string;
   enablePanDownToClose?: boolean;
-  positionArrowCallback: () => void;
+  locationArrowOnPress: () => void;
 }>;
 
 export const MapBottomSheet = ({
@@ -49,7 +49,7 @@ export const MapBottomSheet = ({
   rightIcon,
   rightIconText,
   enablePanDownToClose = true,
-  positionArrowCallback,
+  locationArrowOnPress,
 }: BottomSheetProps) => {
   const styles = useStyles();
   const bottomSheetGorRef = useRef<BottomSheetGor>(null);
@@ -97,10 +97,10 @@ export const MapBottomSheet = ({
           aStyle,
         ]}
       >
-        <MapButtons positionArrowCallback={positionArrowCallback} />
+        <MapButtons locationArrowOnPress={locationArrowOnPress} />
       </Animated.View>
     );
-  }, [aStyle, positionArrowCallback]);
+  }, [aStyle, locationArrowOnPress]);
 
   return (
     <>
