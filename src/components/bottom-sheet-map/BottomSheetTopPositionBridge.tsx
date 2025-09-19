@@ -10,7 +10,9 @@ export function BottomSheetTopPositionBridge({
   // Where 0 is the top of the screen and positive values move downwards.
   const {animatedPosition} = useBottomSheet();
   useDerivedValue(() => {
-    sheetTopPosition.value = animatedPosition.value;
+    if (sheetTopPosition.value !== animatedPosition.value) {
+      sheetTopPosition.value = animatedPosition.value;
+    }
   });
   return null;
 }

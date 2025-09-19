@@ -39,9 +39,9 @@ export const useSendShmoBookingEventMutation = () => {
             getShmoBookingQueryKey(data.bookingId, acceptLanguage),
             data,
           );
-          queryClient.invalidateQueries(
-            getActiveShmoBookingQueryKey(acceptLanguage),
-          );
+          queryClient.invalidateQueries({
+            queryKey: getActiveShmoBookingQueryKey(acceptLanguage),
+          });
           break;
         default:
           break;

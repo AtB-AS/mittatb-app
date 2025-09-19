@@ -48,7 +48,8 @@ export const MapButtons = ({
     !initShmoOneStopBookingIsMutating &&
     !mapFilterIsOpen;
 
-  const showMapFilterButton = !sheetSelected;
+  const showMapFilterButton =
+    !sheetSelected && !activeShmoBooking && !activeShmoBookingIsLoading;
 
   return (
     <>

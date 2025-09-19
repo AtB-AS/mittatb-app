@@ -38,7 +38,7 @@ export const Root_ParkingPhotoScreen = ({
         fileData: fileData,
       };
       logEvent('Mobility', 'Shmo booking finished', {
-        bookingId: route.params.bookingId,
+        bookingId: bookingId,
       });
       return await sendShmoBookingEvent({
         bookingId: bookingId,
@@ -61,13 +61,15 @@ export const Root_ParkingPhotoScreen = ({
     // Remove metadata
     const base64data = base64Image.split(',').pop();
 
+    if (base64data) {
+      await onEndTrip(route.params.bookingId, base64data);
+    }
+
     dispatchMapState({
       type: MapStateActionType.FinishedBooking,
       bookingId: route.params.bookingId,
     });
-    if (base64data) {
-      await onEndTrip(route.params.bookingId, base64data);
-    }
+
     navigation.goBack();
   };
 
