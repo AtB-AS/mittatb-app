@@ -1,15 +1,6 @@
-import {MessageInfoBox} from '@atb/components/message-info-box';
-import {FareContractTexts, useTranslation} from '@atb/translations';
-import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
+import {useTranslation} from '@atb/translations';
 import {useAuthContext} from '@atb/modules/auth';
-import {
-  useGetPhoneByAccountIdQuery,
-  useFetchOnBehalfOfAccountsQuery,
-} from '@atb/modules/on-behalf-of';
-import {
-  isSentOrReceivedFareContract,
-  useGetFareProductsQuery,
-} from '@atb/modules/ticketing';
+import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 import {getAccesses, type FareContractType} from '@atb-as/utils';
 import {View} from 'react-native';
 import {FareContractFromTo} from './FareContractFromTo';
@@ -33,6 +24,7 @@ import {
   MAX_ACCESSES_FOR_CARNET_FOOTER,
 } from '../carnet/CarnetFooter';
 import {isDefined} from '@atb/utils/presence';
+import {SentToMessageBox} from './SentToMessageBox';
 
 type Props = {fc: FareContractType};
 
@@ -110,7 +102,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
         )}
       </View>
 
-      <SentToPhoneNumberMessageBox fc={fc} />
+      <SentToMessageBox fc={fc} />
 
       {shouldShowCarnetFooter && (
         <CarnetFooter
@@ -120,37 +112,6 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
         />
       )}
     </View>
-  );
-};
-
-const SentToPhoneNumberMessageBox = ({fc}: {fc: FareContractType}) => {
-  const {abtCustomerId: currentUserId} = useAuthContext();
-  const {t} = useTranslation();
-  const isSent =
-    isSentOrReceivedFareContract(fc) && fc.customerAccountId !== currentUserId;
-  const {data: phoneNumber} = useGetPhoneByAccountIdQuery(
-    isSent ? fc.customerAccountId : undefined,
-  );
-  const {data: onBehalfOfAccounts} = useFetchOnBehalfOfAccountsQuery({
-    enabled: !!phoneNumber,
-  });
-
-  if (!isSent) return null;
-  if (!phoneNumber) return null;
-
-  const recipientName = onBehalfOfAccounts?.find(
-    (a) => a.phoneNumber === phoneNumber,
-  )?.name;
-
-  return (
-    <MessageInfoBox
-      type="warning"
-      message={t(
-        FareContractTexts.details.sentTo(
-          recipientName || formatPhoneNumber(phoneNumber),
-        ),
-      )}
-    />
   );
 };
 
