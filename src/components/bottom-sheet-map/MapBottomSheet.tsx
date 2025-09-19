@@ -193,6 +193,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   sheet: {
     backgroundColor: theme.color.background.neutral[1].background,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: -4},
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    // Android
+    elevation: 10,
   },
   headerContainer: {
     flexDirection: 'row',
