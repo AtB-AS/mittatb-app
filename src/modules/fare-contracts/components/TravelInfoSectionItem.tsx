@@ -24,7 +24,7 @@ import {
   MAX_ACCESSES_FOR_CARNET_FOOTER,
 } from '../carnet/CarnetFooter';
 import {isDefined} from '@atb/utils/presence';
-import {SentToPhoneNumberMessageBox} from './SentToMessageBox';
+import {SentToMessageBox} from './SentToMessageBox';
 
 type Props = {fc: FareContractType};
 
@@ -102,7 +102,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
         )}
       </View>
 
-      <SentToPhoneNumberMessageBox fc={fc} />
+      <SentToMessageBox fc={fc} />
 
       {shouldShowCarnetFooter && (
         <CarnetFooter

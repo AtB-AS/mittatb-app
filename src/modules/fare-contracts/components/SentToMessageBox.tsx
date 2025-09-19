@@ -9,7 +9,7 @@ import {
 import {isSentOrReceivedFareContract} from '@atb/modules/ticketing';
 import type {FareContractType} from '@atb-as/utils';
 
-export const SentToPhoneNumberMessageBox = ({fc}: {fc: FareContractType}) => {
+export const SentToMessageBox = ({fc}: {fc: FareContractType}) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
   const {t} = useTranslation();
   const isSent =
@@ -21,8 +21,7 @@ export const SentToPhoneNumberMessageBox = ({fc}: {fc: FareContractType}) => {
     enabled: !!phoneNumber,
   });
 
-  if (!isSent) return null;
-  if (!phoneNumber) return null;
+  if (!isSent || !phoneNumber) return null;
 
   const recipientName = onBehalfOfAccounts?.find(
     (a) => a.phoneNumber === phoneNumber,
