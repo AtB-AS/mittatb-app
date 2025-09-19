@@ -9,7 +9,7 @@ import {PressableOpacity} from '../pressable-opacity';
 import {SvgProps} from 'react-native-svg';
 import {ThemeText} from '../text';
 import {ThemeIcon} from '../theme-icon';
-import {MapButtons} from '@atb/modules/map';
+import {MapButtons, shadows} from '@atb/modules/map';
 import {BottomSheetTopPositionBridge} from './BottomSheetTopPositionBridge';
 import Animated, {
   useAnimatedStyle,
@@ -173,12 +173,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   sheet: {
     backgroundColor: theme.color.background.neutral[1].background,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: -4},
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    // Android
-    elevation: 10,
+    ...shadows,
   },
   headerContainer: {
     flexDirection: 'row',
