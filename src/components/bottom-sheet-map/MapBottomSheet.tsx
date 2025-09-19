@@ -3,19 +3,19 @@ import BottomSheetGor, {
   BottomSheetView,
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
-import {Platform, View, Image, ImageStyle} from 'react-native';
+import {Platform, View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PressableOpacity} from '../pressable-opacity';
 import {SvgProps} from 'react-native-svg';
 import {ThemeText} from '../text';
 import {ThemeIcon} from '../theme-icon';
-import {SvgCssUri} from 'react-native-svg/css';
 import {MapButtons} from '@atb/modules/map';
 import {BottomSheetTopPositionBridge} from './BottomSheetTopPositionBridge';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
+import {BrandingImage} from '@atb/modules/mobility';
 
 export type BottomSheetProps = PropsWithChildren<{
   snapPoints?: Array<string | number>;
@@ -33,8 +33,6 @@ export type BottomSheetProps = PropsWithChildren<{
   enablePanDownToClose?: boolean;
   positionArrowCallback: () => void;
 }>;
-
-const LOGO_SIZE = 20;
 
 export const MapBottomSheet = ({
   snapPoints,
@@ -56,7 +54,6 @@ export const MapBottomSheet = ({
   const styles = useStyles();
   const bottomSheetGorRef = useRef<BottomSheetGor>(null);
   const {theme} = useThemeContext();
-  const isSvg = (url: string) => url.endsWith('.svg');
   const sheetTopPosition = useSharedValue(0);
 
   const aStyle = useAnimatedStyle(() => {
@@ -132,24 +129,7 @@ export const MapBottomSheet = ({
             <View style={styles.headerContainer}>
               {heading && (
                 <View style={styles.headerLeft}>
-                  {logoUrl ? (
-                    isSvg(logoUrl) ? (
-                      <SvgCssUri
-                        style={styles.logo}
-                        height={LOGO_SIZE}
-                        width={LOGO_SIZE}
-                        uri={logoUrl}
-                      />
-                    ) : (
-                      <Image
-                        source={{uri: logoUrl}}
-                        width={LOGO_SIZE}
-                        height={LOGO_SIZE}
-                        style={styles.logo as ImageStyle}
-                        resizeMode="contain"
-                      />
-                    )
-                  ) : null}
+                  {logoUrl && <BrandingImage logoUrl={logoUrl} logoSize={20} />}
                   <View style={styles.headingWrapper}>
                     <ThemeText typography="heading--big">{heading}</ThemeText>
                     {subText && (
