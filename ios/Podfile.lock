@@ -1206,7 +1206,7 @@ PODS:
     - React-Core
   - BVLinearGradient (2.8.3):
     - React-Core
-  - DevicePpi (1.2.21)
+  - DevicePpi (1.2.24)
   - DoubleConversion (1.1.6)
   - fast_float (8.0.0)
   - FBLazyVector (0.81.4)
@@ -4585,12 +4585,12 @@ SPEC CHECKSUMS:
   AbtProtobufTokenIosStubs: 86af181460c7b57fff72374506c4b96f18965e3b
   ApiLogiOSLib: bfb1f1ff6fcb32b2fc9490e34a605b0ccf2facc0
   BarcodeiOSLib: 4bfec9495f803e8255f69aa7e7a74a9dd5ff9405
-  boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
+  boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   BoringSSL-GRPC: dded2a44897e45f28f08ae87a55ee4bcd19bc508
   BugsnagReactNative: f2731e875074768796910d51fab561dfde4a20be
   BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
-  DevicePpi: 7f5b711e0a482584edbc1c0cdd24c7cfb46056e5
-  DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
+  DevicePpi: c25a1f180fba317379a32de32b89cc09e337b55e
+  DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
   FBLazyVector: 941bef1c8eeabd9fe1f501e30a5220beee913886
   Firebase: 26f6f8d460603af3df970ad505b16b15f5e2e9a1
@@ -4610,7 +4610,7 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfigInterop: 0896fd52ab72586a355c8f389ff85aaa9e5375e1
   FirebaseSharedSwift: 52d868d4c269fcb4e4e1310c548435a9c1f46e25
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
-  glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
+  glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
   GoogleAppMeasurement: 09f341dfa8527d1612a09cbfe809a242c0b737af
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
@@ -4726,7 +4726,7 @@ SPEC CHECKSUMS:
   SwiftProtobuf: 4dbaffec76a39a8dc5da23b40af1a5dc01a4c02d
   TimeApiiOSLib: 59b914855fe3abc93d34670061450422aee2ea7b
   TokenCore: 10f20eb282693b9b6ee15e38dae3b9f1a64b372b
-  TokenStateReactNativeLib: 100e93add1c37165379339721ad43dd41e19a09c
+  TokenStateReactNativeLib: 151ed8d99370823185a4339099f3f65ab5ec6f26
   Turf: c9eb11a65d96af58cac523460fd40fec5061b081
   VisualCodeModeliOSLib: fde1749faebf9266352736a1260bdbed1c9a06b1
   VisualCodeViewiOSLib: 2c79d22b46584eea81e7638ac19817e9a9e6abac
