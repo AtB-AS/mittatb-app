@@ -1,4 +1,4 @@
-import React, {useCallback, PropsWithChildren, useRef} from 'react';
+import React, {useCallback, PropsWithChildren, useRef, useMemo} from 'react';
 import BottomSheetGor, {
   BottomSheetView,
   BottomSheetBackdrop,
@@ -59,6 +59,12 @@ export const MapBottomSheet = ({
   const isSvg = (url: string) => url.endsWith('.svg');
   const sheetTopPosition = useSharedValue(0);
 
+  const aStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{translateY: sheetTopPosition.value}],
+    };
+  });
+
   const renderBackdrop = useCallback(
     (props: any) => (
       <BottomSheetBackdrop
@@ -79,13 +85,7 @@ export const MapBottomSheet = ({
     [allowBackgroundTouch, backdropPressBehavior, closeOnBackdropPress],
   );
 
-  const HeaderOverlay = () => {
-    const aStyle = useAnimatedStyle(() => {
-      return {
-        transform: [{translateY: sheetTopPosition.value}],
-      };
-    });
-
+  const HeaderOverlay = useMemo(() => {
     return (
       <Animated.View
         pointerEvents="box-none"
@@ -103,11 +103,11 @@ export const MapBottomSheet = ({
         <MapButtons positionArrowCallback={positionArrowCallback} />
       </Animated.View>
     );
-  };
+  }, [aStyle, positionArrowCallback]);
 
   return (
     <>
-      <HeaderOverlay />
+      {HeaderOverlay}
       <BottomSheetGor
         ref={bottomSheetGorRef}
         handleIndicatorStyle={styles.handleIndicatorStyle}
@@ -151,9 +151,7 @@ export const MapBottomSheet = ({
                     )
                   ) : null}
                   <View style={styles.headingWrapper}>
-                    {heading && (
-                      <ThemeText typography="heading--big">{heading}</ThemeText>
-                    )}
+                    <ThemeText typography="heading--big">{heading}</ThemeText>
                     {subText && (
                       <ThemeText
                         typography="body__secondary"
@@ -166,15 +164,17 @@ export const MapBottomSheet = ({
                 </View>
               )}
 
-              {rightIconText && rightIcon && (
+              {(rightIconText || rightIcon) && (
                 <PressableOpacity
                   style={styles.headerRight}
                   onPress={() => bottomSheetGorRef.current?.close()}
                 >
-                  <ThemeText typography="body__secondary--bold">
-                    {rightIconText}
-                  </ThemeText>
-                  <ThemeIcon svg={rightIcon} />
+                  {rightIconText && (
+                    <ThemeText typography="body__secondary--bold">
+                      {rightIconText}
+                    </ThemeText>
+                  )}
+                  {rightIcon && <ThemeIcon svg={rightIcon} />}
                 </PressableOpacity>
               )}
             </View>
