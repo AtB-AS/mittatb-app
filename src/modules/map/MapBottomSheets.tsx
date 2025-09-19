@@ -19,16 +19,16 @@ import React, {RefObject, useCallback, useEffect, useState} from 'react';
 import {useEnterPaymentMethods} from './hooks/use-enter-payment-methods';
 import {MapBottomSheetType, useMapContext} from './MapContext';
 import {InteractionManager} from 'react-native';
-import {flyToLocation, getFeatureFromScan, getMapPadding} from './utils';
+import {
+  flyToLocation,
+  getFeatureFromScan,
+  getMapPadding,
+  isParkAndRide,
+} from './utils';
 import MapboxGL from '@rnmapbox/maps';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useGeolocationContext} from '@atb/modules/geolocation';
-import {
-  AutoSelectableMapItem,
-  MapFilterType,
-  MapProps,
-  ParkingType,
-} from './types';
+import {AutoSelectableMapItem, MapFilterType, MapProps} from './types';
 import {ExternalRealtimeMapSheet} from './components/external-realtime-map/ExternalRealtimeMapSheet';
 import {DeparturesDialogSheet} from './components/DeparturesDialogSheet';
 
@@ -198,7 +198,7 @@ export const MapBottomSheets = ({
         />
       )}
       {mapState.bottomSheetType === MapBottomSheetType.FinishedBooking &&
-        mapState.bookingId && (
+        mapState?.bookingId !== undefined && (
           <FinishedScooterSheet
             bookingId={mapState.bookingId}
             onClose={handleCloseSheet}
@@ -287,13 +287,14 @@ export const MapBottomSheets = ({
           positionArrowCallback={positionArrowCallback}
         />
       )}
-      {mapState.bottomSheetType === MapBottomSheetType.ExternalMap && (
-        <ExternalRealtimeMapSheet
-          onClose={handleCloseSheet}
-          url={mapState.url!}
-          positionArrowCallback={positionArrowCallback}
-        />
-      )}
+      {mapState.bottomSheetType === MapBottomSheetType.ExternalMap &&
+        mapState?.url !== undefined && (
+          <ExternalRealtimeMapSheet
+            onClose={handleCloseSheet}
+            url={mapState.url}
+            positionArrowCallback={positionArrowCallback}
+          />
+        )}
       {mapState?.bottomSheetType === MapBottomSheetType.StopPlace &&
         !!mapState.feature && (
           <DeparturesDialogSheet
@@ -316,21 +317,23 @@ export const MapBottomSheets = ({
             positionArrowCallback={positionArrowCallback}
           />
         )}
-      {mapState.bottomSheetType === MapBottomSheetType.ParkAndRideStation && (
-        <ParkAndRideBottomSheet
-          name={mapState.feature?.properties?.name}
-          capacity={mapState.feature?.properties?.totalCapacity}
-          parkingFor={mapState.feature?.properties?.parkingVehicleTypes}
-          feature={mapState.feature as Feature<Point, ParkingType>}
-          distance={undefined}
-          onClose={handleCloseSheet}
-          navigateToTripSearch={(...params) => {
-            handleCloseSheet();
-            mapProps.navigateToTripSearch(...params);
-          }}
-          positionArrowCallback={positionArrowCallback}
-        />
-      )}
+      {mapState.bottomSheetType === MapBottomSheetType.ParkAndRideStation &&
+        mapState?.feature !== undefined &&
+        isParkAndRide(mapState.feature) && (
+          <ParkAndRideBottomSheet
+            name={mapState.feature?.properties?.name}
+            capacity={mapState.feature?.properties?.totalCapacity}
+            parkingFor={mapState.feature?.properties?.parkingVehicleTypes}
+            feature={mapState.feature}
+            distance={undefined}
+            onClose={handleCloseSheet}
+            navigateToTripSearch={(...params) => {
+              handleCloseSheet();
+              mapProps.navigateToTripSearch(...params);
+            }}
+            positionArrowCallback={positionArrowCallback}
+          />
+        )}
     </>
   );
 };
