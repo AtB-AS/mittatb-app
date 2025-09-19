@@ -10,11 +10,8 @@ export function useControlPositionsStyle(extraPaddingBottom = false) {
   return useMemo<{
     [key in
       | 'backArrowContainer'
-      | 'positionArrowContainer'
       | 'mapButtonsContainer'
-      | 'mapButtonsContainerLeft'
-      | 'mapButtonsContainerRight'
-      | 'locationContainer']: ViewStyle;
+      | 'mapButtonsContainerRight']: ViewStyle;
   }>(
     () => ({
       backArrowContainer: {
@@ -22,29 +19,14 @@ export function useControlPositionsStyle(extraPaddingBottom = false) {
         top: top + theme.spacing.medium,
         left: theme.spacing.medium,
       },
-      positionArrowContainer: {
-        position: 'absolute',
-        top: top + theme.spacing.medium,
-        right: theme.spacing.medium,
-      },
 
       mapButtonsContainer: {
         position: 'absolute',
         bottom: (extraPaddingBottom ? bottom : 0) + theme.spacing.medium,
       },
 
-      mapButtonsContainerLeft: {
-        left: theme.spacing.medium,
-      },
-
       mapButtonsContainerRight: {
         right: theme.spacing.medium,
-      },
-      locationContainer: {
-        position: 'absolute',
-        top: top + theme.spacing.medium + 28 + theme.spacing.medium,
-        paddingHorizontal: theme.spacing.medium,
-        width: '100%',
       },
     }),
     [top, theme.spacing.medium, extraPaddingBottom, bottom],
