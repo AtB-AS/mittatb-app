@@ -105,7 +105,7 @@ describe('Visual tests', () => {
       );
 
       // Open details
-      await TravelsearchOverviewPage.openFirstSearchResult();
+      await TravelsearchOverviewPage.openSearchResult();
 
       // Test: travel search details
       await VisualHelper.visualTestScreen(

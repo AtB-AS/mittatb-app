@@ -90,6 +90,7 @@ const InspectableContent = ({
           backgroundColor: shouldFill ? themeColor.background : undefined,
         },
       ]}
+      testID="inspectableIcon"
     >
       <ThemeIcon
         svg={InspectionSvg}
@@ -104,7 +105,7 @@ const NotInspectableContent = () => {
   const {t} = useTranslation();
   const styles = useStyles();
   return (
-    <View style={styles.symbolContent}>
+    <View style={styles.symbolContent} testID="notInspectableIcon">
       <ThemeText
         typography="body__tertiary"
         style={{

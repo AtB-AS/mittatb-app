@@ -3,14 +3,6 @@ import AppHelper from '../utils/app.helper.js';
 
 class TravelSearchOverviewPage {
   /**
-   * Get the first travel suggestion
-   */
-  get firstTripResult() {
-    const reqId = `//*[@resource-id="tripSearchSearchResult0"]`;
-    return $(reqId);
-  }
-
-  /**
    * Get the travel suggestion - for bike
    */
   get bikeResult() {
@@ -46,11 +38,22 @@ class TravelSearchOverviewPage {
   }
 
   /**
-   * Open the first travel suggestion
+   * Get a travel suggestion
+   * @param index suggestion to return (default: 0, i.e. the first)
    */
-  async openFirstSearchResult() {
-    await ElementHelper.waitForElement('id', `tripSearchSearchResult0`);
-    await this.firstTripResult.click();
+  async tripResult(index: number = 0) {
+    const reqId = `//*[@resource-id="tripSearchSearchResult${index}"]`;
+    return $(reqId);
+  }
+
+  /**
+   * Open a travel suggestion
+   * @param index which suggestion to open (default: 0, i.e. the first)
+   */
+  async openSearchResult(index: number = 0) {
+    await ElementHelper.waitForElement('id', `tripSearchSearchResult${index}`);
+    const tripResult = await this.tripResult(index)
+    await tripResult.click();
     await ElementHelper.waitForElement('id', `tripDetailsContentView`);
     await ElementHelper.waitForElement('id', `legContainer0`);
   }
