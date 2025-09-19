@@ -158,7 +158,7 @@ export const getFeaturesAtPoint = async (
   return featuresAtPoint?.features;
 };
 
-function mapBottomSheetTypeToFormFactor(
+function mapMapBottomSheetTypeToFormFactor(
   mapBottomSheetType?: MapBottomSheetType,
 ): FormFactor | undefined {
   switch (mapBottomSheetType) {
@@ -191,7 +191,7 @@ export const getFeatureFromScan = (
       system_id: mapItem?.system.id,
       count: 1,
       vehicle_type_form_factor:
-        mapBottomSheetTypeToFormFactor(mapBottomSheetType),
+        mapMapBottomSheetTypeToFormFactor(mapBottomSheetType),
     },
   };
 
