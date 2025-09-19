@@ -1,9 +1,5 @@
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
-import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
 import {
@@ -34,12 +30,16 @@ import {
   findRelevantBonusProduct,
   PayWithBonusPointsCheckbox,
 } from '@atb/modules/bonus';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   stationId: string;
   distance: number | undefined;
   onClose: () => void;
   onStationReceived?: (station: CarStationFragment) => void;
+  locationArrowOnPress: () => void;
 };
 
 export const CarSharingStationBottomSheet = ({
@@ -47,6 +47,7 @@ export const CarSharingStationBottomSheet = ({
   distance,
   onClose,
   onStationReceived,
+  locationArrowOnPress,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -72,16 +73,24 @@ export const CarSharingStationBottomSheet = ({
     FormFactor.Car,
   );
 
-  const {logEvent} = useBottomSheetContext();
+  const {logEvent} = useAnalyticsContext();
 
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
   useDoOnceOnItemReceived(onStationReceived, station);
 
   return (
-    <BottomSheetContainer
-      title={t(MobilityTexts.formFactor(FormFactor.Car))}
-      onClose={onClose}
-      maxHeightValue={0.5}
+    <MapBottomSheet
+      snapPoints={['80%']}
+      closeCallback={onClose}
+      closeOnBackdropPress={false}
+      allowBackgroundTouch={true}
+      enableDynamicSizing={true}
+      heading={operatorName}
+      subText={t(MobilityTexts.formFactor(FormFactor.Car))}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      logoUrl={brandLogoUrl}
+      locationArrowOnPress={locationArrowOnPress}
     >
       <>
         {isLoading && (
@@ -180,7 +189,7 @@ export const CarSharingStationBottomSheet = ({
           </View>
         )}
       </>
-    </BottomSheetContainer>
+    </MapBottomSheet>
   );
 };
 

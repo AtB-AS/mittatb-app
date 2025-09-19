@@ -3,6 +3,7 @@ import {MAPBOX_STOP_PLACES_STYLE_URL} from '@env';
 import {Platform} from 'react-native';
 import {useMapboxJsonStyle} from './use-mapbox-json-style';
 import {useThemeContext} from '@atb/theme';
+import {useMemo} from 'react';
 
 const MapViewStaticConfig = {
   compassEnabled: true,
@@ -33,16 +34,25 @@ export const useMapViewConfig = (
   const {themeName} = useThemeContext();
   const {isMapV2Enabled} = useFeatureTogglesContext();
   const mapboxJsonStyle = useMapboxJsonStyle(shouldShowVehiclesAndStations);
-  const configMapV1 = {
-    styleURL:
-      useDarkModeForV1 && themeName === 'dark'
-        ? 'mapbox://styles/mapbox/dark-v10'
-        : MAPBOX_STOP_PLACES_STYLE_URL,
-  };
-  const configMapV2 = {styleJSON: mapboxJsonStyle};
+  const configMapV1 = useMemo(
+    () => ({
+      styleURL:
+        useDarkModeForV1 && themeName === 'dark'
+          ? 'mapbox://styles/mapbox/dark-v10'
+          : MAPBOX_STOP_PLACES_STYLE_URL,
+    }),
+    [useDarkModeForV1, themeName],
+  );
+  const configMapV2 = useMemo(
+    () => ({styleJSON: mapboxJsonStyle}),
+    [mapboxJsonStyle],
+  );
 
-  return {
-    ...MapViewStaticConfig,
-    ...(isMapV2Enabled ? configMapV2 : configMapV1),
-  };
+  return useMemo(
+    () => ({
+      ...MapViewStaticConfig,
+      ...(isMapV2Enabled ? configMapV2 : configMapV1),
+    }),
+    [configMapV1, configMapV2, isMapV2Enabled],
+  );
 };

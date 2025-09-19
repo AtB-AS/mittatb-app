@@ -1,9 +1,5 @@
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
-import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
 import {
@@ -34,12 +30,16 @@ import {
   PayWithBonusPointsCheckbox,
   findRelevantBonusProduct,
 } from '@atb/modules/bonus';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   stationId: string;
   distance: number | undefined;
   onClose: () => void;
   onStationReceived?: (station: BikeStationFragment) => void;
+  locationArrowOnPress: () => void;
 };
 
 export const BikeStationBottomSheet = ({
@@ -47,6 +47,7 @@ export const BikeStationBottomSheet = ({
   distance,
   onClose,
   onStationReceived,
+  locationArrowOnPress,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -70,16 +71,24 @@ export const BikeStationBottomSheet = ({
     operatorId,
     FormFactor.Bicycle,
   );
-  const {logEvent} = useBottomSheetContext();
+  const {logEvent} = useAnalyticsContext();
 
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
   useDoOnceOnItemReceived(onStationReceived, station);
 
   return (
-    <BottomSheetContainer
-      maxHeightValue={0.6}
-      title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
-      onClose={onClose}
+    <MapBottomSheet
+      snapPoints={['80%']}
+      closeCallback={onClose}
+      closeOnBackdropPress={false}
+      allowBackgroundTouch={true}
+      enableDynamicSizing={true}
+      heading={operatorName}
+      subText={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      logoUrl={brandLogoUrl}
+      locationArrowOnPress={locationArrowOnPress}
     >
       <>
         {isLoading && (
@@ -191,7 +200,7 @@ export const BikeStationBottomSheet = ({
           </View>
         )}
       </>
-    </BottomSheetContainer>
+    </MapBottomSheet>
   );
 };
 

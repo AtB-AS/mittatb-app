@@ -12,7 +12,7 @@ import {
   MapFilterType,
   MapLeg,
   NationalStopRegistryFeatures,
-  PositionArrow,
+  LocationArrow,
   useControlPositionsStyle,
   useMapViewConfig,
 } from '@atb/modules/map';
@@ -207,7 +207,7 @@ export const TravelDetailsMapScreenComponent = ({
           controlStyles.mapButtonsContainerRight,
         ]}
       >
-        <PositionArrow
+        <LocationArrow
           onPress={() => {
             setShouldTrack(false);
             flyToLocation({

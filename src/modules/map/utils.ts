@@ -17,6 +17,7 @@ import {
   ParkingType,
   GeofencingZoneCustomProps,
   Cluster,
+  AutoSelectableMapItem,
 } from './types';
 import {
   ClusterOfVehiclesProperties,
@@ -33,6 +34,8 @@ import {
 } from '@atb/modules/mobility';
 import {SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import {MapBottomSheetType} from './MapContext';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
@@ -153,6 +156,46 @@ export const getFeaturesAtPoint = async (
   );
 
   return featuresAtPoint?.features;
+};
+
+function mapMapBottomSheetTypeToFormFactor(
+  mapBottomSheetType?: MapBottomSheetType,
+): FormFactor | undefined {
+  switch (mapBottomSheetType) {
+    case MapBottomSheetType.Bicycle:
+      return FormFactor.Bicycle;
+    case MapBottomSheetType.Scooter:
+      return FormFactor.Scooter;
+    case MapBottomSheetType.BikeStation:
+      return FormFactor.Bicycle;
+    case MapBottomSheetType.CarStation:
+      return FormFactor.Car;
+    default:
+      return undefined;
+  }
+}
+
+export const getFeatureFromScan = (
+  mapItem: AutoSelectableMapItem,
+  mapBottomSheetType: MapBottomSheetType,
+): Feature<Point, GeoJsonProperties> => {
+  const feature: Feature<Point, GeoJsonProperties> = {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [mapItem?.lon, mapItem?.lat],
+    },
+    // properties should match the one received from the map onPressEvent
+    properties: {
+      id: mapItem.id,
+      system_id: mapItem?.system.id,
+      count: 1,
+      vehicle_type_form_factor:
+        mapMapBottomSheetTypeToFormFactor(mapBottomSheetType),
+    },
+  };
+
+  return feature;
 };
 
 /**

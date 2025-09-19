@@ -1,8 +1,4 @@
 import React, {useCallback, useEffect} from 'react';
-import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -16,22 +12,26 @@ import {useActiveShmoBookingQuery} from '../../queries/use-active-shmo-booking-q
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {ThemeText} from '@atb/components/text';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   photoNavigation: () => void;
   onForceClose: () => void;
+  locationArrowOnPress: () => void;
 };
 
 export const FinishingScooterSheet = ({
   onForceClose,
   photoNavigation,
+  locationArrowOnPress,
 }: Props) => {
   const {
     data: activeBooking,
     isLoading,
     isError,
   } = useActiveShmoBookingQuery(ONE_SECOND_MS * 10);
-  const {logEvent} = useBottomSheetContext();
+  const {logEvent} = useAnalyticsContext();
 
   const {t} = useTranslation();
   const styles = useStyles();
@@ -59,7 +59,13 @@ export const FinishingScooterSheet = ({
   ]);
 
   return (
-    <BottomSheetContainer maxHeightValue={0.7} disableHeader={true}>
+    <MapBottomSheet
+      closeOnBackdropPress={false}
+      allowBackgroundTouch={true}
+      enableDynamicSizing={true}
+      enablePanDownToClose={false}
+      locationArrowOnPress={locationArrowOnPress}
+    >
       {isLoading && (
         <View style={styles.activityIndicator}>
           <ActivityIndicator size="large" />
@@ -97,7 +103,7 @@ export const FinishingScooterSheet = ({
           />
         </View>
       )}
-    </BottomSheetContainer>
+    </MapBottomSheet>
   );
 };
 

@@ -1,7 +1,6 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -15,6 +14,8 @@ import {
   useStopsDetailsDataQuery,
 } from '@atb/screen-components/place-screen';
 import type {DepartureSearchTime} from '@atb/components/date-selection';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type DeparturesDialogSheetProps = {
   onClose: () => void;
@@ -29,6 +30,8 @@ type DeparturesDialogSheetProps = {
     isTripCancelled?: boolean,
   ) => void;
   navigateToTripSearch: NavigateToTripSearchCallback;
+  tabBarHeight: number | undefined;
+  locationArrowOnPress: () => void;
 };
 
 export const DeparturesDialogSheet = ({
@@ -38,10 +41,12 @@ export const DeparturesDialogSheet = ({
   navigateToDetails,
   navigateToQuay,
   navigateToTripSearch,
+  tabBarHeight,
+  locationArrowOnPress,
 }: DeparturesDialogSheetProps) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const styles = useBottomSheetStyles();
+  const styles = useBottomSheetStyles(tabBarHeight ?? 0)();
   const [searchTime, setSearchTime] = useState<DepartureSearchTime>({
     option: 'now',
     date: new Date().toISOString(),
@@ -129,19 +134,23 @@ export const DeparturesDialogSheet = ({
     undefined;
 
   return (
-    <BottomSheetContainer
-      title={
+    <MapBottomSheet
+      snapPoints={['60%']}
+      closeCallback={onClose}
+      enableDynamicSizing={false}
+      allowBackgroundTouch={true}
+      heading={
         stopPlaceFeature.properties?.name ??
         stopDetailsData?.stopPlaces[0]?.name
       }
-      maxHeightValue={0.5}
-      onClose={onClose}
-      fullHeight
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      locationArrowOnPress={locationArrowOnPress}
     >
-      <View style={styles.departuresContainer}>
+      <View style={styles.listWrapper}>
         <StopPlaceViewOrError />
       </View>
-    </BottomSheetContainer>
+    </MapBottomSheet>
   );
 };
 
@@ -158,11 +167,12 @@ const getStopPlaceIds = (feature: Feature<Point>): string[] => {
   return [stopPlaceId, ...adjacentSiteIds].filter(isDefined);
 };
 
-const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
-  departuresContainer: {
-    flex: 1,
-  },
-  paddingHorizontal: {
-    paddingHorizontal: theme.spacing.medium,
-  },
-}));
+const useBottomSheetStyles = (tabBarHeight: number) =>
+  StyleSheet.createThemeHook((theme) => ({
+    paddingHorizontal: {
+      paddingHorizontal: theme.spacing.medium,
+    },
+    listWrapper: {
+      paddingBottom: tabBarHeight,
+    },
+  }));

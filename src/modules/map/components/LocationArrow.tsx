@@ -5,7 +5,7 @@ import React from 'react';
 import {AccessibilityProps} from 'react-native';
 import {Button} from '@atb/components/button';
 
-export const PositionArrow: React.FC<
+export const LocationArrow: React.FC<
   {onPress(): void} & AccessibilityProps
 > = ({onPress}) => {
   const styles = useStyles();

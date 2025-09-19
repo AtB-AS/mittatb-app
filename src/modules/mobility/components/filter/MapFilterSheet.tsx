@@ -1,8 +1,9 @@
 import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
-import {MapTexts, TripSearchTexts, useTranslation} from '@atb/translations';
+  dictionary,
+  MapTexts,
+  TripSearchTexts,
+  useTranslation,
+} from '@atb/translations';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import React, {useRef, useState} from 'react';
 
@@ -14,23 +15,25 @@ import {
 import {StyleSheet} from '@atb/theme';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {Close, Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {MobilityFilters} from './MobilityFilters';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 
 type MapFilterSheetProps = {
   onClose: () => void;
   onFilterChanged: (filter: MapFilterType) => void;
+  locationArrowOnPress: () => void;
 };
 export const MapFilterSheet = ({
   onClose,
   onFilterChanged,
+  locationArrowOnPress,
 }: MapFilterSheetProps) => {
   const {t} = useTranslation();
   const style = useStyle();
   const {mapFilter, setMapFilter} = useMapContext();
   const initialFilterRef = useRef(mapFilter);
   const [filter, setFilter] = useState<MapFilterType | undefined>(mapFilter);
-  const {close: closeBottomSheet} = useBottomSheetContext();
 
   if (!initialFilterRef.current || !filter) {
     return (
@@ -48,10 +51,14 @@ export const MapFilterSheet = ({
   };
 
   return (
-    <BottomSheetContainer
-      title={t(MapTexts.filters.bottomSheet.heading)}
-      onClose={onClose}
-      maxHeightValue={0.9}
+    <MapBottomSheet
+      closeCallback={onClose}
+      allowBackgroundTouch={false}
+      enableDynamicSizing={true}
+      heading={t(MapTexts.filters.bottomSheet.heading)}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      locationArrowOnPress={locationArrowOnPress}
     >
       <ScrollView style={style.container}>
         <MobilityFilters
@@ -67,13 +74,12 @@ export const MapFilterSheet = ({
             setMapFilter(filter);
             onFilterChanged(filter);
             onClose();
-            closeBottomSheet();
           }}
           rightIcon={{svg: Confirm}}
           testID="confirmFilters"
         />
       </FullScreenFooter>
-    </BottomSheetContainer>
+    </MapBottomSheet>
   );
 };
 

@@ -13,6 +13,7 @@ import {
 } from '../utils';
 import {CameraFocusModeType, MapPadding} from '../types';
 import {Dimensions, Platform, StatusBar} from 'react-native';
+import {useMapContext} from '../MapContext';
 
 type BoundingBox = {
   xMin: number;
@@ -36,8 +37,8 @@ export const useTriggerCameraMoveEffect = (
   mapViewRef: RefObject<MapboxGL.MapView | null>,
   tabBarHeight?: number,
 ) => {
-  const {height: bottomSheetHeight} = useBottomSheetContext();
   const padding = useCalculatePaddings();
+  const {mapState} = useMapContext();
 
   useEffect(() => {
     if (cameraFocusMode?.mode === 'coordinates') {
@@ -57,7 +58,7 @@ export const useTriggerCameraMoveEffect = (
    * padding.
    */
   useEffect(() => {
-    if (!bottomSheetHeight) return;
+    if (mapState.bottomSheetType === 'NONE') return;
     if (cameraFocusMode?.mode === 'map-lines') {
       moveCameraToMapLines(cameraFocusMode.mapLines, padding, mapCameraRef);
     } else if (cameraFocusMode?.mode === 'entity') {
@@ -70,7 +71,7 @@ export const useTriggerCameraMoveEffect = (
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bottomSheetHeight, cameraFocusMode, mapCameraRef]);
+  }, [cameraFocusMode, mapCameraRef]);
 };
 
 const moveCameraToMapLines = (
