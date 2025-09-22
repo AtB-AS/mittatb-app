@@ -18,7 +18,7 @@ export const ExtendedOnboarding_GoodToKnowScreen = () => {
 
   return (
     <OnboardingScreenComponent
-      illustration={<Onboarding4 height={170} />}
+      illustration={<Onboarding4 height={200} />}
       title={t(ExtendedOnboardingTexts.goodToKnow.title)}
       description={t(ExtendedOnboardingTexts.goodToKnow.description)}
       footerButton={{
