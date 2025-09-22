@@ -4,4 +4,7 @@ export type {
   OnboardingCarouselConfigId,
 } from './types';
 export {useNavigateToNextOnboardingCarouselScreen} from './use-navigate-to-next-onboarding-screen';
-export type {OnboardingCarouselScreenProps} from './navigation-types';
+export type {
+  OnboardingCarouselScreenProps,
+  OnboardingCarouselStackParams,
+} from './navigation-types';

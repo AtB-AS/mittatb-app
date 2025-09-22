@@ -1,10 +1,12 @@
 import {Onboarding4} from '@atb/assets/svg/color/images';
-import {useNavigateToNextOnboardingCarouselScreen} from '@atb/modules/onboarding-carousel';
 import {ExtendedOnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {extendedOnboardingId} from '.';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {OnboardingScreenComponent} from '..';
+import {
+  OnboardingScreenComponent,
+  useNavigateToNextOnboardingCarouselScreen,
+} from '..';
 
 export const ExtendedOnboarding_GoodToKnowScreen = () => {
   const {t} = useTranslation();

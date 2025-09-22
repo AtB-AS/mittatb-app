@@ -1,14 +1,13 @@
 import {
   bonusPilotEnrollmentId,
   BonusPilotEnrollmentScreenNames,
-} from '../bonus';
+} from '@atb/modules/bonus';
 import {extendedOnboardingId} from '../extended-onboarding';
 import {ExtendedOnboardingScreenNames} from '../extended-onboarding';
-
 import {
   sparPilotEnrollmentId,
   SparPilotEnrollmentScreenNames,
-} from '../smart-park-and-ride';
+} from '@atb/modules/smart-park-and-ride';
 
 export type OnboardingCarouselScreenName =
   | BonusPilotEnrollmentScreenNames

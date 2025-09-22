@@ -8,9 +8,11 @@ import React from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {Theme} from '@atb/theme/colors';
-import {OnboardingCarouselStackParams} from '../../modules/onboarding-carousel/navigation-types';
-import {onboardingCarouselConfig} from '@atb/modules/onboarding-carousel';
 import {RootStackScreenProps} from '../navigation-types';
+import {
+  onboardingCarouselConfig,
+  OnboardingCarouselStackParams,
+} from '@atb/modules/onboarding';
 
 const Tab = createMaterialTopTabNavigator<OnboardingCarouselStackParams>();
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];

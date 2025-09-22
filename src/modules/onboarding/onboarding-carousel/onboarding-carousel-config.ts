@@ -1,7 +1,7 @@
-import {bonusEnrollmentConfig} from '../bonus';
+import {bonusEnrollmentConfig} from '@atb/modules/bonus';
 import {extendedOnboardingConfig} from '../extended-onboarding';
-import {sparEnrollmentConfig} from '../smart-park-and-ride';
 import {OnboardingCarouselConfig} from './types';
+import {sparEnrollmentConfig} from '@atb/modules/smart-park-and-ride';
 
 export const onboardingCarouselConfig: OnboardingCarouselConfig[] = [
   bonusEnrollmentConfig,

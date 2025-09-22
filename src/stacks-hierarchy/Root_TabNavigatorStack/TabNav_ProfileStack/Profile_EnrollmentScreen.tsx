@@ -19,7 +19,7 @@ import {ThemeText} from '@atb/components/text';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
-import {onboardingCarouselConfig} from '@atb/modules/onboarding-carousel';
+import {onboardingCarouselConfig} from '@atb/modules/onboarding';
 
 export const Profile_EnrollmentScreen = () => {
   const styles = useStyles();

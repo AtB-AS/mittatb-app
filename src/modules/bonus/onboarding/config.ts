@@ -1,4 +1,4 @@
-import {OnboardingCarouselConfig} from '@atb/modules/onboarding-carousel';
+import {OnboardingCarouselConfig} from '@atb/modules/onboarding';
 import {BonusOnboarding_BuyTicketsScreen} from './BonusOnboarding_BuyTickets';
 import {BonusOnboarding_DownloadScreen} from './BonusOnboarding_Download';
 import {BonusOnboarding_MoreTravelMethodsScreen} from './BonusOnboarding_MoreTravelMethods';
