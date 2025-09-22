@@ -15,4 +15,4 @@ export {
   bonusEnrollmentConfig,
   bonusPilotEnrollmentId,
   type BonusPilotEnrollmentScreenNames,
-} from './enrollment';
+} from './onboarding';

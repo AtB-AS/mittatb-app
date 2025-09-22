@@ -118,7 +118,7 @@ export const Profile_SmartParkAndRideScreen = () => {
         <HowItWorksSection
           onPress={() => {
             navigation.navigate({
-              name: 'Root_EnrollmentOnboardingStack',
+              name: 'Root_OnboardingCarouselStack',
               params: {configId: 'spar-pilot'},
             });
           }}

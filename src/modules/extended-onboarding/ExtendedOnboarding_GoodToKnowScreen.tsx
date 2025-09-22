@@ -1,26 +1,27 @@
 import {Onboarding4} from '@atb/assets/svg/color/images';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
+import {useNavigateToNextOnboardingCarouselScreen} from '@atb/modules/onboarding-carousel';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ExtendedOnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, useWindowDimensions, View} from 'react-native';
-import {ExtendedOnboardingScreenProps} from './navigation-types';
+import {extendedOnboardingId} from '.';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
-export type GoodToKnowScreenProps =
-  ExtendedOnboardingScreenProps<'ExtendedOnboarding_GoodToKnowScreen'>;
-
-export const ExtendedOnboarding_GoodToKnowScreen = ({
-  navigation,
-}: GoodToKnowScreenProps) => {
+export const ExtendedOnboarding_GoodToKnowScreen = () => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const interactiveColor = theme.color.interactive[0];
   const styles = useThemeStyles();
   const {width: windowWidth} = useWindowDimensions();
+
+  const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
+    extendedOnboardingId,
+    'ExtendedOnboarding_GoodToKnowScreen',
+  );
 
   return (
     <ScrollView
@@ -44,9 +45,7 @@ export const ExtendedOnboarding_GoodToKnowScreen = ({
         <Button
           expanded={true}
           interactiveColor={interactiveColor}
-          onPress={() =>
-            navigation.navigate('ExtendedOnboarding_AlsoGoodToKnowScreen')
-          }
+          onPress={navigateToNextScreen}
           text={t(ExtendedOnboardingTexts.goodToKnow.mainButton)}
           testID="nextButtonGoodToKnowOnboarding"
         />

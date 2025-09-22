@@ -165,7 +165,7 @@ export const Profile_BonusScreen = () => {
           <LinkSectionItem
             text={t(BonusProgramTexts.bonusProfile.readMore.button)}
             onPress={() => {
-              navigation.navigate('Root_EnrollmentOnboardingStack', {
+              navigation.navigate('Root_OnboardingCarouselStack', {
                 configId: bonusPilotEnrollmentId,
               });
             }}

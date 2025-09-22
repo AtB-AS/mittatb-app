@@ -1,4 +1,4 @@
-import {EnrollmentOnboardingConfig} from '@atb/modules/enrollment-onboarding';
+import {OnboardingCarouselConfig} from '@atb/modules/onboarding-carousel';
 import {SmartParkAndRideOnboarding_InformationScreen} from './SmartParkAndRideOnboarding_InformationScreen';
 import {SmartParkAndRideOnboarding_AutomaticRegistrationScreen} from './SmartParkAndRideOnboarding_AutomaticRegistrationScreen';
 import {SmartParkAndRideOnboarding_AddScreen} from './SmartParkAndRideOnboarding_AddScreen';
@@ -10,9 +10,8 @@ export type SparPilotEnrollmentScreenNames =
   | 'SmartParkAndRideOnboarding_AutomaticRegistrationScreen'
   | 'SmartParkAndRideOnboarding_AddScreen';
 
-export const sparEnrollmentConfig: EnrollmentOnboardingConfig = {
+export const sparEnrollmentConfig: OnboardingCarouselConfig = {
   id: sparPilotEnrollmentId,
-  // enrollmentIds: ['spar-pilot'],
   onboardingScreens: [
     {
       name: 'SmartParkAndRideOnboarding_InformationScreen',

@@ -1,5 +1,4 @@
 import {trackNavigation} from '@atb/modules/diagnostics';
-import {Root_ExtendedOnboardingStack} from './Root_ExtendedOnboardingStack';
 import {useThemeContext} from '@atb/theme';
 import {APP_SCHEME, APP_VERSION} from '@env';
 import {
@@ -79,7 +78,7 @@ import {
   Root_SmartParkAndRideAddScreen,
   Root_SmartParkAndRideEditScreen,
 } from './Root_SmartParkAndRide';
-import {Root_EnrollmentOnboardingStack} from './Root_EntrollmentOnboradingStack';
+import {Root_OnboardingCarouselStack as Root_OnboardingCarouselStack} from './Root_OnboardingCarouselStack';
 import {getActiveRouteName} from '@atb/utils/navigation';
 
 type ResultState = PartialState<NavigationState> & {
@@ -308,10 +307,6 @@ export const RootStack = () => {
                 component={Root_TabNavigatorStack}
               />
               <Stack.Screen
-                name="Root_ExtendedOnboardingStack"
-                component={Root_ExtendedOnboardingStack}
-              />
-              <Stack.Screen
                 name="Root_ConsiderTravelTokenChangeScreen"
                 component={Root_ConsiderTravelTokenChangeScreen}
               />
@@ -474,8 +469,8 @@ export const RootStack = () => {
                 component={Root_SmartParkAndRideEditScreen}
               />
               <Stack.Screen
-                name="Root_EnrollmentOnboardingStack"
-                component={Root_EnrollmentOnboardingStack}
+                name="Root_OnboardingCarouselStack"
+                component={Root_OnboardingCarouselStack}
               />
             </Stack.Navigator>
           </AnalyticsContextProvider>

@@ -1,19 +1,19 @@
 import {BonusProgramTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {EnrollmentOnboardingScreenProps} from '../../enrollment-onboarding/navigation-types';
+import {OnboardingCarouselScreenProps} from '../../onboarding-carousel/navigation-types';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {ThemedBundlingCityBikeActive} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useNavigateToNextEnrollmentOnboardingScreen} from '@atb/modules/enrollment-onboarding';
+import {useNavigateToNextOnboardingCarouselScreen} from '@atb/modules/onboarding-carousel';
 import {bonusPilotEnrollmentId} from './config';
 
 export type MoreTravelMethodsScreenProps =
-  EnrollmentOnboardingScreenProps<'BonusOnboarding_MoreTravelMethodsScreen'>;
+  OnboardingCarouselScreenProps<'BonusOnboarding_MoreTravelMethodsScreen'>;
 
 export const BonusOnboarding_MoreTravelMethodsScreen =
   ({}: MoreTravelMethodsScreenProps) => {
     const {t} = useTranslation();
-    const navigateToNextScreen = useNavigateToNextEnrollmentOnboardingScreen(
+    const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
       bonusPilotEnrollmentId,
       'BonusOnboarding_MoreTravelMethodsScreen',
     );

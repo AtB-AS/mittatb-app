@@ -41,6 +41,7 @@ export const ExtendedOnboarding_AlsoGoodToKnowScreen = () => {
         <Button
           expanded={true}
           interactiveColor={interactiveColor}
+          //onPress={navigateToNextScreen}
           onPress={() => continueFromOnboardingSection('extendedOnboarding')}
           text={t(ExtendedOnboardingTexts.alsoGoodToKnow.mainButton)}
           testID="nextButtonAlsoGoodToKnowOnboarding"

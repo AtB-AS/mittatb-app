@@ -1,19 +1,19 @@
 import {BonusProgramTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {EnrollmentOnboardingScreenProps} from '../../enrollment-onboarding/navigation-types';
+import {OnboardingCarouselScreenProps} from '../../onboarding-carousel/navigation-types';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {ThemedBonusTransaction} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useNavigateToNextEnrollmentOnboardingScreen} from '@atb/modules/enrollment-onboarding';
+import {useNavigateToNextOnboardingCarouselScreen} from '@atb/modules/onboarding-carousel';
 import {bonusPilotEnrollmentId} from './config';
 
 export type BuyTicketsScreenProps =
-  EnrollmentOnboardingScreenProps<'BonusOnboarding_BuyTicketsScreen'>;
+  OnboardingCarouselScreenProps<'BonusOnboarding_BuyTicketsScreen'>;
 
 export const BonusOnboarding_BuyTicketsScreen = ({}: BuyTicketsScreenProps) => {
   const {t} = useTranslation();
 
-  const navigateToNextScreen = useNavigateToNextEnrollmentOnboardingScreen(
+  const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
     bonusPilotEnrollmentId,
     'BonusOnboarding_BuyTicketsScreen',
   );

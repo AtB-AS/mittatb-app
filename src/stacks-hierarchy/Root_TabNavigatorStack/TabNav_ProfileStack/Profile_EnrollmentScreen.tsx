@@ -19,7 +19,7 @@ import {ThemeText} from '@atb/components/text';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
-import {enrollmentOnboardingConfig} from '@atb/modules/enrollment-onboarding';
+import {onboardingCarouselConfig} from '@atb/modules/onboarding-carousel';
 
 export const Profile_EnrollmentScreen = () => {
   const styles = useStyles();
@@ -115,12 +115,12 @@ const useEnroll = () => {
           clearKey();
 
           if (enrollment.enrollmentId) {
-            const onboardingConfig = enrollmentOnboardingConfig.find((config) =>
+            const onboardingConfig = onboardingCarouselConfig.find((config) =>
               config?.enrollmentIds?.includes(enrollment.enrollmentId),
             );
 
             if (onboardingConfig) {
-              navigation.navigate('Root_EnrollmentOnboardingStack', {
+              navigation.navigate('Root_OnboardingCarouselStack', {
                 configId: onboardingConfig.id,
               });
             }

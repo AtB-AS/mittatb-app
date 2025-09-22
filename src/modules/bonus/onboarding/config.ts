@@ -1,4 +1,4 @@
-import {EnrollmentOnboardingConfig} from '@atb/modules/enrollment-onboarding';
+import {OnboardingCarouselConfig} from '@atb/modules/onboarding-carousel';
 import {BonusOnboarding_BuyTicketsScreen} from './BonusOnboarding_BuyTickets';
 import {BonusOnboarding_DownloadScreen} from './BonusOnboarding_Download';
 import {BonusOnboarding_MoreTravelMethodsScreen} from './BonusOnboarding_MoreTravelMethods';
@@ -12,7 +12,7 @@ export type BonusPilotEnrollmentScreenNames =
   | 'BonusOnboarding_MoreTravelMethodsScreen'
   | 'BonusOnboarding_DownloadScreen';
 
-export const bonusEnrollmentConfig: EnrollmentOnboardingConfig = {
+export const bonusEnrollmentConfig: OnboardingCarouselConfig = {
   id: bonusPilotEnrollmentId,
   enrollmentIds: ['bonus-pilot-a', 'bonus-pilot-b'],
   onboardingScreens: [

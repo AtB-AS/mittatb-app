@@ -1,6 +1,6 @@
 import {BonusProgramTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {EnrollmentOnboardingScreenProps} from '../../enrollment-onboarding/navigation-types';
+import {OnboardingCarouselScreenProps} from '../../onboarding-carousel/navigation-types';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {ThemedPushNotification} from '@atb/theme/ThemedAssets';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
@@ -10,15 +10,15 @@ import {ThemeText} from '@atb/components/text';
 import {Linking, Platform, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useNavigateToNextEnrollmentOnboardingScreen} from '@atb/modules/enrollment-onboarding';
+import {useNavigateToNextOnboardingCarouselScreen} from '@atb/modules/onboarding-carousel';
 import {bonusPilotEnrollmentId} from './config';
 
 export type DownloadScreenProps =
-  EnrollmentOnboardingScreenProps<'BonusOnboarding_DownloadScreen'>;
+  OnboardingCarouselScreenProps<'BonusOnboarding_DownloadScreen'>;
 
 export const BonusOnboarding_DownloadScreen = ({}: DownloadScreenProps) => {
   const {t} = useTranslation();
-  const navigateToNextScreen = useNavigateToNextEnrollmentOnboardingScreen(
+  const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
     bonusPilotEnrollmentId,
     'BonusOnboarding_DownloadScreen',
   );
