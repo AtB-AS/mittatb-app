@@ -44,3 +44,21 @@ export const getStopPlaceConnections = async (
 
   return result.data;
 };
+
+export const getStopPlaceDistances = async (
+  fromStopPlaceId: string,
+  opts?: AxiosRequestConfig,
+): Promise<StopPlaceFragment[]> => {
+  const url = '/bff/v2/stop-places/distances';
+  const query = qs.stringify({
+    authorities: AUTHORITY,
+    fromStopPlaceId,
+    transportModes: [TransportMode.Water],
+  });
+  const result = await client.get<StopPlaceFragment[]>(
+    stringifyUrl(url, query),
+    opts,
+  );
+
+  return result.data;
+};
