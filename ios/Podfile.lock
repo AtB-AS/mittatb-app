@@ -1188,12 +1188,12 @@ PODS:
     - abseil/meta/type_traits
     - abseil/xcprivacy
   - abseil/xcprivacy (1.20240722.0)
-  - AbtCommoniOSLib (3.3.14-hotfix1):
+  - AbtCommoniOSLib (3.3.14-hotfix2):
     - DevicePpi (~> 1.2.20)
   - AbtProtobufTokenIosStubs (2.913.0):
     - SwiftProtobuf (~> 1.28.2)
-  - ApiLogiOSLib (3.3.14-hotfix1)
-  - BarcodeiOSLib (3.3.14-hotfix1):
+  - ApiLogiOSLib (3.3.14-hotfix2)
+  - BarcodeiOSLib (3.3.14-hotfix2):
     - AbtCommoniOSLib
   - boost (1.84.0)
   - BoringSSL-GRPC (0.0.37):
@@ -4157,13 +4157,13 @@ PODS:
     - React-Core
   - SocketRocket (0.7.1)
   - SwiftProtobuf (1.28.2)
-  - TimeApiiOSLib (3.3.14-hotfix1)
-  - TokenCore (3.3.14-hotfix1):
+  - TimeApiiOSLib (3.3.14-hotfix2)
+  - TokenCore (3.3.14-hotfix2):
     - AbtProtobufTokenIosStubs
     - ApiLogiOSLib
     - SwiftProtobuf (~> 1.28.2)
     - TimeApiiOSLib
-  - TokenStateReactNativeLib (3.3.14-hotfix1):
+  - TokenStateReactNativeLib (3.3.14-hotfix2):
     - AbtCommoniOSLib
     - AbtProtobufTokenIosStubs
     - ApiLogiOSLib
@@ -4174,9 +4174,9 @@ PODS:
     - VisualCodeModeliOSLib
     - VisualCodeViewiOSLib
   - Turf (4.0.0)
-  - VisualCodeModeliOSLib (3.3.14-hotfix1):
+  - VisualCodeModeliOSLib (3.3.14-hotfix2):
     - AbtCommoniOSLib
-  - VisualCodeViewiOSLib (3.3.14-hotfix1):
+  - VisualCodeViewiOSLib (3.3.14-hotfix2):
     - AbtCommoniOSLib
     - VisualCodeModeliOSLib
   - Yoga (0.0.0)
@@ -4581,10 +4581,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   abseil: a05cc83bf02079535e17169a73c5be5ba47f714b
-  AbtCommoniOSLib: b56a629cddf3564835e89b969e3ad1e3f8eea895
+  AbtCommoniOSLib: 3a6f7a689122504da2979c24f3f7807a42fed9e6
   AbtProtobufTokenIosStubs: 86af181460c7b57fff72374506c4b96f18965e3b
-  ApiLogiOSLib: bfb1f1ff6fcb32b2fc9490e34a605b0ccf2facc0
-  BarcodeiOSLib: 4bfec9495f803e8255f69aa7e7a74a9dd5ff9405
+  ApiLogiOSLib: c0f5b98b8f3acb3abf58b149bd59ff1bc60c20db
+  BarcodeiOSLib: 056cd6e483d4273ec7621c46b8fcd0af1bb35ea6
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   BoringSSL-GRPC: dded2a44897e45f28f08ae87a55ee4bcd19bc508
   BugsnagReactNative: f2731e875074768796910d51fab561dfde4a20be
@@ -4724,9 +4724,9 @@ SPEC CHECKSUMS:
   RNSVG: e0293d50d2cc0c7b8259fc66faa292378a04ba9a
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   SwiftProtobuf: 4dbaffec76a39a8dc5da23b40af1a5dc01a4c02d
-  TimeApiiOSLib: 59b914855fe3abc93d34670061450422aee2ea7b
-  TokenCore: 10f20eb282693b9b6ee15e38dae3b9f1a64b372b
-  TokenStateReactNativeLib: 151ed8d99370823185a4339099f3f65ab5ec6f26
+  TimeApiiOSLib: 8289d67019d958c29676dfb9e38ffdcefbcdb9bd
+  TokenCore: cdce158c4f5331f81f35e34f3b708b6582c0d569
+  TokenStateReactNativeLib: 8f344d2ec6341b27567958eb0f6dd3f5254eaf20
   Turf: c9eb11a65d96af58cac523460fd40fec5061b081
   VisualCodeModeliOSLib: fde1749faebf9266352736a1260bdbed1c9a06b1
   VisualCodeViewiOSLib: 2c79d22b46584eea81e7638ac19817e9a9e6abac
