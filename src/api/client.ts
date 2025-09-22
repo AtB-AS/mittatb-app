@@ -55,6 +55,12 @@ export function createClient(baseUrl: string | undefined) {
   client.interceptors.request.use(requestIdTokenHandler);
   client.interceptors.response.use(undefined, responseIdTokenHandler);
   client.interceptors.response.use(undefined, responseErrorHandler);
+  client.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+    if (config.url?.startsWith('/bff/')) {
+      config.baseURL = 'http://localhost:8080/';
+    }
+    return config;
+  });
   return client;
 }
 

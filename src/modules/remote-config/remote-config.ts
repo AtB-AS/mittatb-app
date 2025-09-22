@@ -68,6 +68,7 @@ export type RemoteConfig = {
   enable_in_app_review: boolean;
   enable_in_app_review_for_announcements: boolean;
   enable_smart_park_and_ride: boolean;
+  enable_harbor_distances_api: boolean;
   favourite_departures_poll_interval: number;
   feedback_questions: string;
   fetch_id_token_retry_count: number;
@@ -151,6 +152,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_in_app_review: false,
   enable_in_app_review_for_announcements: false,
   enable_smart_park_and_ride: false,
+  enable_harbor_distances_api: false,
   favourite_departures_poll_interval: 30000,
   feedback_questions: '',
   fetch_id_token_retry_count: 3,
@@ -328,6 +330,9 @@ export function getConfig(): RemoteConfig {
   const enable_smart_park_and_ride =
     values['enable_smart_park_and_ride']?.asBoolean() ??
     defaultRemoteConfig.enable_smart_park_and_ride;
+  const enable_harbor_distances_api =
+    values['enable_harbor_distances_api']?.asBoolean() ??
+    defaultRemoteConfig.enable_harbor_distances_api;
   const favourite_departures_poll_interval =
     values['favourite_departures_poll_interval']?.asNumber() ??
     defaultRemoteConfig.favourite_departures_poll_interval;
@@ -445,6 +450,7 @@ export function getConfig(): RemoteConfig {
     enable_in_app_review,
     enable_in_app_review_for_announcements,
     enable_smart_park_and_ride,
+    enable_harbor_distances_api,
     favourite_departures_poll_interval,
     feedback_questions,
     fetch_id_token_retry_count,
