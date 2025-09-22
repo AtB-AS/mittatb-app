@@ -1,6 +1,6 @@
 import {OnboardingSectionConfig} from '@atb/modules/onboarding';
 import {Platform} from 'react-native';
-import {extendedOnboardingId} from '../extended-onboarding';
+import {extendedOnboardingId} from './extended-onboarding';
 import {sparPilotEnrollmentId} from '../smart-park-and-ride';
 
 export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] = [

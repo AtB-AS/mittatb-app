@@ -5,7 +5,7 @@ import {StackParams} from '@atb/stacks-hierarchy';
 import {OnboardingCarouselScreenName} from './types';
 
 export type OnboardingCarouselStackParams = StackParams<{
-  [K in OnboardingCarouselScreenName]: undefined;
+  [K in OnboardingCarouselScreenName]: never;
 }>;
 
 export type OnboardingCarouselNavigationProps =

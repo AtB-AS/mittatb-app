@@ -1,7 +1,10 @@
 import {BonusProgramTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {OnboardingCarouselScreenProps} from '../../onboarding-carousel/navigation-types';
-import {OnboardingScreenComponent} from '@atb/modules/onboarding';
+import {
+  OnboardingCarouselScreenProps,
+  OnboardingScreenComponent,
+  useNavigateToNextOnboardingCarouselScreen,
+} from '@atb/modules/onboarding';
 import {ThemedPushNotification} from '@atb/theme/ThemedAssets';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {BrandingImage, findOperatorBrandImageUrl} from '@atb/modules/mobility';
@@ -10,7 +13,6 @@ import {ThemeText} from '@atb/components/text';
 import {Linking, Platform, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useNavigateToNextOnboardingCarouselScreen} from '@atb/modules/onboarding-carousel';
 import {bonusPilotEnrollmentId} from './config';
 
 export type DownloadScreenProps =

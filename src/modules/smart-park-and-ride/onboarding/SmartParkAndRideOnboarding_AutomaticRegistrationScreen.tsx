@@ -7,7 +7,7 @@ import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 
 import {Linking} from 'react-native';
 import {sparPilotEnrollmentId} from './config';
-import {useNavigateToNextOnboardingCarouselScreen} from '@atb/modules/onboarding-carousel';
+import {useNavigateToNextOnboardingCarouselScreen} from '@atb/modules/onboarding';
 
 export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
   const {t} = useTranslation();

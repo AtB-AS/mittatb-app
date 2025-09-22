@@ -1,4 +1,4 @@
-import {OnboardingCarouselConfig} from '@atb/modules/onboarding-carousel';
+import {OnboardingCarouselConfig} from '@atb/modules/onboarding';
 import {SmartParkAndRideOnboarding_InformationScreen} from './SmartParkAndRideOnboarding_InformationScreen';
 import {SmartParkAndRideOnboarding_AutomaticRegistrationScreen} from './SmartParkAndRideOnboarding_AutomaticRegistrationScreen';
 import {SmartParkAndRideOnboarding_AddScreen} from './SmartParkAndRideOnboarding_AddScreen';

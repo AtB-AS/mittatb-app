@@ -1,6 +1,6 @@
-import {OnboardingCarouselConfig} from '@atb/modules/onboarding-carousel';
 import {ExtendedOnboarding_GoodToKnowScreen} from './ExtendedOnboarding_GoodToKnowScreen';
 import {ExtendedOnboarding_AlsoGoodToKnowScreen} from './ExtendedOnboarding_AlsoGoodToKnowScreen';
+import {OnboardingCarouselConfig} from '../onboarding-carousel';
 
 export const extendedOnboardingId = 'extended-onboarding';
 
