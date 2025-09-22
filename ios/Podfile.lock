@@ -1452,7 +1452,7 @@ PODS:
   - intercom-react-native (8.8.0):
     - Intercom (~> 18.7.3)
     - React-Core
-  - KettleKit (1.3.1)
+  - KettleKit (1.5.1)
   - leveldb-library (1.22.6)
   - MapboxCommon (24.13.5):
     - Turf (= 4.0.0)
@@ -3274,14 +3274,14 @@ PODS:
     - React-Core
   - react-native-keep-awake (1.3.1):
     - React-Core
-  - react-native-kettle-module (1.2.0):
+  - react-native-kettle-module (1.4.0):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
-    - KettleKit (= 1.3.1)
+    - KettleKit (= 1.5.1)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -4620,7 +4620,7 @@ SPEC CHECKSUMS:
   hermes-engine: 35c763d57c9832d0eef764316ca1c4d043581394
   Intercom: 93c6f5d9815b34bf2a7e5f03bcf7b6e08c1a4788
   intercom-react-native: d496047d19b9f2e45c97feb5897d82b53036fc1b
-  KettleKit: 607b72ed627477a08450e5e5762c21dba1f461e3
+  KettleKit: a35575997fe055d1f2a8f41ecb98e566a8034a3f
   leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
   MapboxCommon: f38b69d24b1bb648629f001a6160bfaa3d8dd2b4
   MapboxCoreMaps: 90c838346286fc2136450443bfeb88194815d39b
@@ -4667,7 +4667,7 @@ SPEC CHECKSUMS:
   react-native-get-random-values: d16467cf726c618e9c7a8c3c39c31faa2244bbba
   react-native-in-app-review: 1516ba69d60d58053b7eb3aaaf8d2a5a74af8b57
   react-native-keep-awake: 03b74eebe4f2bb5e8478fc8f420651a92463b6f8
-  react-native-kettle-module: 65bb12c6832b91bffb8da9415f9967bcbe345a54
+  react-native-kettle-module: 498cd7dbb1cb9141e855fd7de58e9a28bea34453
   react-native-pager-view: 3d6161515c4f121854b8c82278007892ddb77b5d
   react-native-safe-area-context: 2243039f43d10cb1ea30ec5ac57fc6d1448413f4
   react-native-slider: 1603d9b8db9f5fa29d27f6f89be8e90c612c1311
