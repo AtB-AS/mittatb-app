@@ -6,14 +6,14 @@ import {ThemedCarRegister} from '@atb/theme/ThemedAssets';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 
 import {Linking} from 'react-native';
-import {sparPilotEnrollmentId} from './config';
+import {sparOnboardingId} from './config';
 import {useNavigateToNextOnboardingCarouselScreen} from '@atb/modules/onboarding';
 
 export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
   const {t} = useTranslation();
 
   const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
-    sparPilotEnrollmentId,
+    sparOnboardingId,
     'SmartParkAndRideOnboarding_AutomaticRegistrationScreen',
   );
 

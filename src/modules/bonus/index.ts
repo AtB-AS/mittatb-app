@@ -12,7 +12,7 @@ export {
   getBonusAmountEarnedQueryKey,
 } from './queries';
 export {
-  bonusEnrollmentConfig,
-  bonusPilotEnrollmentId,
-  type BonusPilotEnrollmentScreenNames,
+  bonusOnboardingCarouselConfig,
+  bonusOnboardingId,
+  type BonusOnboardingScreenNames,
 } from './onboarding';

@@ -7,7 +7,7 @@ import {
 } from '@atb/modules/onboarding';
 import {ThemedBundlingCityBikeActive} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {bonusPilotEnrollmentId} from './config';
+import {bonusOnboardingId} from './config';
 
 export type MoreTravelMethodsScreenProps =
   OnboardingCarouselScreenProps<'BonusOnboarding_MoreTravelMethodsScreen'>;
@@ -16,7 +16,7 @@ export const BonusOnboarding_MoreTravelMethodsScreen =
   ({}: MoreTravelMethodsScreenProps) => {
     const {t} = useTranslation();
     const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
-      bonusPilotEnrollmentId,
+      bonusOnboardingId,
       'BonusOnboarding_MoreTravelMethodsScreen',
     );
 

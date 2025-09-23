@@ -1,27 +1,26 @@
 import {
-  bonusPilotEnrollmentId,
-  BonusPilotEnrollmentScreenNames,
+  bonusOnboardingId,
+  BonusOnboardingScreenNames,
 } from '@atb/modules/bonus';
 import {extendedOnboardingId} from '../extended-onboarding';
 import {ExtendedOnboardingScreenNames} from '../extended-onboarding';
 import {
-  sparPilotEnrollmentId,
-  SparPilotEnrollmentScreenNames,
+  sparOnboardingId,
+  SparPilotOnboardingScreenNames,
 } from '@atb/modules/smart-park-and-ride';
 
 export type OnboardingCarouselScreenName =
-  | BonusPilotEnrollmentScreenNames
+  | BonusOnboardingScreenNames
   | ExtendedOnboardingScreenNames
-  | SparPilotEnrollmentScreenNames;
+  | SparPilotOnboardingScreenNames;
 
 export type OnboardingCarouselConfigId =
-  | typeof bonusPilotEnrollmentId
+  | typeof bonusOnboardingId
   | typeof extendedOnboardingId
-  | typeof sparPilotEnrollmentId;
+  | typeof sparOnboardingId;
 
 export type OnboardingCarouselConfig = {
   id: OnboardingCarouselConfigId;
-  enrollmentIds?: string[]; // TODO: remove?
   onboardingScreens: {
     name: OnboardingCarouselScreenName;
     component: React.ComponentType<any>;

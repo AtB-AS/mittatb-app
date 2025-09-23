@@ -7,7 +7,7 @@ import {
 } from '@atb/modules/onboarding';
 import {ThemedContact} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {bonusPilotEnrollmentId} from './config';
+import {bonusOnboardingId} from './config';
 
 export type WelcomeScreenProps =
   OnboardingCarouselScreenProps<'BonusOnboarding_WelcomeScreen'>;
@@ -16,7 +16,7 @@ export const BonusOnboarding_WelcomeScreen = ({}: WelcomeScreenProps) => {
   const {t} = useTranslation();
 
   const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
-    bonusPilotEnrollmentId,
+    bonusOnboardingId,
     'BonusOnboarding_WelcomeScreen',
   );
 

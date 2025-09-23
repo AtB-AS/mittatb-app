@@ -13,7 +13,7 @@ import {ThemeText} from '@atb/components/text';
 import {Linking, Platform, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {bonusPilotEnrollmentId} from './config';
+import {bonusOnboardingId} from './config';
 
 export type DownloadScreenProps =
   OnboardingCarouselScreenProps<'BonusOnboarding_DownloadScreen'>;
@@ -21,7 +21,7 @@ export type DownloadScreenProps =
 export const BonusOnboarding_DownloadScreen = ({}: DownloadScreenProps) => {
   const {t} = useTranslation();
   const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
-    bonusPilotEnrollmentId,
+    bonusOnboardingId,
     'BonusOnboarding_DownloadScreen',
   );
 

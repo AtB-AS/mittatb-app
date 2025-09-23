@@ -22,7 +22,7 @@ import {ContentHeading} from '@atb/components/heading';
 import {
   BonusPriceTag,
   UserBonusBalance,
-  bonusPilotEnrollmentId,
+  bonusOnboardingId,
   isActive,
   useBonusBalanceQuery,
 } from '@atb/modules/bonus';
@@ -166,7 +166,7 @@ export const Profile_BonusScreen = () => {
             text={t(BonusProgramTexts.bonusProfile.readMore.button)}
             onPress={() => {
               navigation.navigate('Root_OnboardingCarouselStack', {
-                configId: bonusPilotEnrollmentId,
+                configId: bonusOnboardingId,
               });
             }}
           />

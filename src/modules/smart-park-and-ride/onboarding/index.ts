@@ -1,5 +1,5 @@
 export {
-  sparEnrollmentConfig,
-  sparPilotEnrollmentId,
-  type SparPilotEnrollmentScreenNames,
+  sparOnboardingCarouselConfig,
+  sparOnboardingId,
+  type SparPilotOnboardingScreenNames,
 } from './config';

@@ -1,7 +1,7 @@
 import {OnboardingSectionConfig} from '@atb/modules/onboarding';
 import {Platform} from 'react-native';
 import {extendedOnboardingId} from './extended-onboarding';
-import {sparPilotEnrollmentId} from '../smart-park-and-ride';
+import {sparOnboardingId} from '../smart-park-and-ride';
 
 export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] = [
   {
@@ -12,7 +12,10 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] = [
       params: {configId: extendedOnboardingId},
     },
     shouldShowBeforeUserCreated: true,
-    shouldShowPredicate: () => true, // !userCreationIsOnboarded for backward compatibility,
+    shouldShowPredicate: ({
+      extendedOnboardingEnabled,
+      userCreationIsOnboarded,
+    }) => extendedOnboardingEnabled && !userCreationIsOnboarded, // !userCreationIsOnboarded for backward compatibility,
   },
   {
     isOnboardedStoreKey: '@ATB_onboarded', // variable renamed, but keep old isOnboardedStoreKey
@@ -101,7 +104,7 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] = [
     onboardingSectionId: 'smartParkAndRide',
     initialScreen: {
       name: 'Root_OnboardingCarouselStack',
-      params: {configId: sparPilotEnrollmentId},
+      params: {configId: sparOnboardingId},
     },
     customEntryPointRouteName: 'Profile_SmartParkAndRideScreen',
     shouldShowPredicate: ({currentRouteName, hasVehicleRegistrations}) =>

@@ -3,15 +3,15 @@ import {SmartParkAndRideOnboarding_InformationScreen} from './SmartParkAndRideOn
 import {SmartParkAndRideOnboarding_AutomaticRegistrationScreen} from './SmartParkAndRideOnboarding_AutomaticRegistrationScreen';
 import {SmartParkAndRideOnboarding_AddScreen} from './SmartParkAndRideOnboarding_AddScreen';
 
-export const sparPilotEnrollmentId = 'spar-pilot';
+export const sparOnboardingId = 'spar-pilot';
 
-export type SparPilotEnrollmentScreenNames =
+export type SparPilotOnboardingScreenNames =
   | 'SmartParkAndRideOnboarding_InformationScreen'
   | 'SmartParkAndRideOnboarding_AutomaticRegistrationScreen'
   | 'SmartParkAndRideOnboarding_AddScreen';
 
-export const sparEnrollmentConfig: OnboardingCarouselConfig = {
-  id: sparPilotEnrollmentId,
+export const sparOnboardingCarouselConfig: OnboardingCarouselConfig = {
+  id: sparOnboardingId,
   onboardingScreens: [
     {
       name: 'SmartParkAndRideOnboarding_InformationScreen',

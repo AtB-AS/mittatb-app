@@ -4,17 +4,16 @@ import {BonusOnboarding_DownloadScreen} from './BonusOnboarding_Download';
 import {BonusOnboarding_MoreTravelMethodsScreen} from './BonusOnboarding_MoreTravelMethods';
 import {BonusOnboarding_WelcomeScreen} from './BonusOnboarding_WelcomeScreen';
 
-export const bonusPilotEnrollmentId = 'bonus-pilot';
+export const bonusOnboardingId = 'bonus-pilot';
 
-export type BonusPilotEnrollmentScreenNames =
+export type BonusOnboardingScreenNames =
   | 'BonusOnboarding_WelcomeScreen'
   | 'BonusOnboarding_BuyTicketsScreen'
   | 'BonusOnboarding_MoreTravelMethodsScreen'
   | 'BonusOnboarding_DownloadScreen';
 
-export const bonusEnrollmentConfig: OnboardingCarouselConfig = {
-  id: bonusPilotEnrollmentId,
-  enrollmentIds: ['bonus-pilot-a', 'bonus-pilot-b'],
+export const bonusOnboardingCarouselConfig: OnboardingCarouselConfig = {
+  id: bonusOnboardingId,
   onboardingScreens: [
     {
       name: 'BonusOnboarding_WelcomeScreen',

@@ -10,7 +10,7 @@ export {SmartParkAndRideOnboarding_InformationScreen} from './onboarding/SmartPa
 export {SmartParkAndRideOnboarding_AutomaticRegistrationScreen} from './onboarding/SmartParkAndRideOnboarding_AutomaticRegistrationScreen';
 
 export {
-  sparEnrollmentConfig,
-  sparPilotEnrollmentId,
-  type SparPilotEnrollmentScreenNames,
+  sparOnboardingCarouselConfig,
+  sparOnboardingId,
+  type SparPilotOnboardingScreenNames,
 } from './onboarding';

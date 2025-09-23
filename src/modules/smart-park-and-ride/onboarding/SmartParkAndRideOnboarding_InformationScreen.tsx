@@ -6,13 +6,13 @@ import {ThemedCarValidTicket} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import {useNavigateToNextOnboardingCarouselScreen} from '@atb/modules/onboarding';
-import {sparPilotEnrollmentId} from './config';
+import {sparOnboardingId} from './config';
 
 export const SmartParkAndRideOnboarding_InformationScreen = () => {
   const {t} = useTranslation();
 
   const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
-    sparPilotEnrollmentId,
+    sparOnboardingId,
     'SmartParkAndRideOnboarding_InformationScreen',
   );
 

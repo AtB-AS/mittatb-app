@@ -8,7 +8,7 @@ import {
 } from '@atb/modules/onboarding';
 import {ThemedBonusTransaction} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {bonusPilotEnrollmentId} from './config';
+import {bonusOnboardingId} from './config';
 
 export type BuyTicketsScreenProps =
   OnboardingCarouselScreenProps<'BonusOnboarding_BuyTicketsScreen'>;
@@ -17,7 +17,7 @@ export const BonusOnboarding_BuyTicketsScreen = ({}: BuyTicketsScreenProps) => {
   const {t} = useTranslation();
 
   const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
-    bonusPilotEnrollmentId,
+    bonusOnboardingId,
     'BonusOnboarding_BuyTicketsScreen',
   );
 
