@@ -121,6 +121,28 @@ const SmartParkAndRideTexts = {
       ),
     },
   },
+  errors: {
+    invalidLicensePlate: _(
+      'Ugyldig skiltnummer. Skiltnummeret må ha 2-14 tegn.',
+      'Invalid license plate. The license plate must have 2-14 characters.',
+      'Ugyldig skiltnummer. Skiltnummeret må ha 2-14 teikn.',
+    ),
+    vehicleAlreadyAdded: _(
+      'Dette kjøretøyet er allerede lagt til.',
+      'This vehicle has already been added.',
+      'Dette køyretøyet er allereie lagt til.',
+    ),
+    maximumNumberOfVehiclesReached: _(
+      'Du kan ikke legge til flere kjøretøy. Du kan legge til maks to kjøretøy.',
+      'You cannot add more vehicles. You can add a maximum of two vehicles.',
+      'Du kan ikkje leggje til fleire køyretøy. Du kan leggje til maks to køyretøy.',
+    ),
+    unknown: _(
+      'Noe gikk galt. Prøv igjen.',
+      'Something went wrong. Please try again.',
+      'Noko gjekk gale. Prøv igjen.',
+    ),
+  },
   a11y: {
     carIcon: _('Bilikon', 'Car icon', 'Bilikon'),
     button: _(

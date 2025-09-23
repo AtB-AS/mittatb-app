@@ -11,7 +11,7 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Alert} from 'react-native';
 
 import {
-  AutoSelectableBottomSheetType,
+  MapStateActionType,
   useMapContext,
   useMapSelectionAnalytics,
 } from '@atb/modules/map';
@@ -27,8 +27,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   const {t} = useTranslation();
 
   const isFocused = useIsFocusedAndActive();
-  const {setBottomSheetToAutoSelect, setBottomSheetCurrentlyAutoSelected} =
-    useMapContext();
+  const {dispatchMapState} = useMapContext();
   const [hasCapturedQr, setHasCapturedQr] = useState(false);
   const analytics = useMapSelectionAnalytics();
 
@@ -39,8 +38,9 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   } = useGetAssetFromQrCodeMutation();
 
   const clearStateAndAlertResultError = useCallback(() => {
-    setBottomSheetToAutoSelect(undefined);
-    setBottomSheetCurrentlyAutoSelected(undefined);
+    dispatchMapState({
+      type: MapStateActionType.None,
+    });
     Alert.alert(
       tGlobal(MapTexts.qr.notFound.title),
       tGlobal(MapTexts.qr.notFound.description),
@@ -52,15 +52,11 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
         },
       ],
     );
-  }, [
-    navigation.goBack,
-    setBottomSheetCurrentlyAutoSelected,
-    setBottomSheetToAutoSelect,
-  ]);
+  }, [dispatchMapState, navigation.goBack]);
 
   const assetFromQrCodeReceivedHandler = useCallback(
     (assetFromQrCode: AssetFromQrCodeResponse) => {
-      let type: AutoSelectableBottomSheetType | undefined = undefined;
+      let type: MapStateActionType | undefined = undefined;
       let id: string | undefined = undefined;
       if (assetFromQrCode.formFactor) {
         if (assetFromQrCode.id) {
@@ -72,13 +68,13 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
               FormFactor.ScooterStanding,
             ].includes(assetFromQrCode.formFactor)
           ) {
-            type = AutoSelectableBottomSheetType.Scooter;
+            type = MapStateActionType.ScooterScanned;
           } else if (
             [FormFactor.Bicycle, FormFactor.CargoBicycle].includes(
               assetFromQrCode.formFactor,
             )
           ) {
-            type = AutoSelectableBottomSheetType.Bicycle;
+            type = MapStateActionType.BicycleScanned;
           }
         } else if (assetFromQrCode.stationId) {
           id = assetFromQrCode.stationId;
@@ -87,15 +83,18 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
               assetFromQrCode.formFactor,
             )
           ) {
-            type = AutoSelectableBottomSheetType.BikeStation;
+            type = MapStateActionType.BikeStationScanned;
           } else if ([FormFactor.Car].includes(assetFromQrCode.formFactor)) {
-            type = AutoSelectableBottomSheetType.CarStation;
+            type = MapStateActionType.CarStationScanned;
           }
         }
       }
 
       if (!!type && !!id) {
-        setBottomSheetToAutoSelect({type, id});
+        dispatchMapState({
+          type: type,
+          assetId: id,
+        });
         analytics.logEvent('Map', 'Scooter selected', {
           id,
         });
@@ -106,12 +105,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
 
       navigation.goBack();
     },
-    [
-      analytics,
-      clearStateAndAlertResultError,
-      navigation,
-      setBottomSheetToAutoSelect,
-    ],
+    [analytics, clearStateAndAlertResultError, dispatchMapState, navigation],
   );
 
   const onQrCodeScanned = useCallback(

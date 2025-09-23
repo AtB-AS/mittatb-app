@@ -13,7 +13,6 @@ import {
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React, {useCallback} from 'react';
 import {StatusBar} from 'react-native';
-import {Host} from 'react-native-portalize';
 import {Root_TabNavigatorStack} from './Root_TabNavigatorStack';
 import {RootStackParamList} from './navigation-types';
 import {useTestIds} from './use-test-ids';
@@ -202,28 +201,27 @@ export const RootStack = () => {
         translucent={true}
         backgroundColor={statusBarColor}
       />
-      <Host>
-        <LoadingScreenBoundary>
-          <NavigationContainer<RootStackParamList>
-            onStateChange={onNavigationStateChange}
-            initialState={getInitialNavigationContainerState()}
-            ref={navRef}
-            theme={ReactNavigationTheme}
-            fallback={<LoadingScreen />}
-            linking={{
-              prefixes: [`${APP_SCHEME}://`],
-              config: {
-                screens: {
-                  Root_TabNavigatorStack: {
-                    screens: {
-                      TabNav_ProfileStack: 'profile',
-                      TabNav_TicketingStack: {
-                        screens: {
-                          Ticketing_RootScreen: {
-                            screens: {
-                              TicketTabNav_AvailableFareContractsTabScreen:
-                                'ticketing',
-                            },
+      <LoadingScreenBoundary>
+        <NavigationContainer<RootStackParamList>
+          navigationInChildEnabled // This is needed for react-navigation v7 and higher, will be removed in the future and we will have to fix nested navigation
+          onStateChange={onNavigationStateChange}
+          initialState={getInitialNavigationContainerState()}
+          ref={navRef}
+          theme={ReactNavigationTheme}
+          fallback={<LoadingScreen />}
+          linking={{
+            prefixes: [`${APP_SCHEME}://`],
+            config: {
+              screens: {
+                Root_TabNavigatorStack: {
+                  screens: {
+                    TabNav_ProfileStack: 'profile',
+                    TabNav_TicketingStack: {
+                      screens: {
+                        Ticketing_RootScreen: {
+                          screens: {
+                            TicketTabNav_AvailableFareContractsTabScreen:
+                              'ticketing',
                           },
                         },
                       },
@@ -231,258 +229,258 @@ export const RootStack = () => {
                   },
                 },
               },
-              getStateFromPath(path, config) {
-                if (path.includes('privacy')) {
-                  return {
-                    routes: [
-                      {
-                        name: 'Root_TabNavigatorStack',
-                        state: {
-                          routes: [
-                            {
-                              name: 'TabNav_ProfileStack',
-                              state: {
-                                routes: [
-                                  {name: 'Profile_RootScreen'},
-                                  {
-                                    name: 'Profile_PrivacyScreen',
-                                  },
-                                ],
-                              },
+            },
+            getStateFromPath(path, config) {
+              if (path.includes('privacy')) {
+                return {
+                  routes: [
+                    {
+                      name: 'Root_TabNavigatorStack',
+                      state: {
+                        routes: [
+                          {
+                            name: 'TabNav_ProfileStack',
+                            state: {
+                              routes: [
+                                {name: 'Profile_RootScreen'},
+                                {
+                                  name: 'Profile_PrivacyScreen',
+                                },
+                              ],
                             },
-                          ],
-                        },
+                          },
+                        ],
                       },
-                    ],
-                  } as ResultState;
-                }
+                    },
+                  ],
+                } as ResultState;
+              }
 
-                // If the path is not from the widget, behave as usual
-                if (!path.includes('widget')) {
-                  return getStateFromPath(path, config);
-                }
+              // If the path is not from the widget, behave as usual
+              if (!path.includes('widget')) {
+                return getStateFromPath(path, config);
+              }
 
-                // User get redirected to add new favorite departure
-                if (path.includes('addFavoriteDeparture')) {
-                  return {
-                    routes: [
-                      {
-                        name: 'Root_TabNavigatorStack',
-                        state: {
-                          routes: [
-                            {
-                              name: 'TabNav_DashboardStack',
-                              state: {
-                                routes: [
-                                  {name: 'Dashboard_RootScreen', index: 0},
-                                  {
-                                    name: 'Dashboard_NearbyStopPlacesScreen',
-                                    params: {mode: 'Favourite'},
-                                  },
-                                ],
-                              },
+              // User get redirected to add new favorite departure
+              if (path.includes('addFavoriteDeparture')) {
+                return {
+                  routes: [
+                    {
+                      name: 'Root_TabNavigatorStack',
+                      state: {
+                        routes: [
+                          {
+                            name: 'TabNav_DashboardStack',
+                            state: {
+                              routes: [
+                                {name: 'Dashboard_RootScreen', index: 0},
+                                {
+                                  name: 'Dashboard_NearbyStopPlacesScreen',
+                                  params: {mode: 'Favourite'},
+                                },
+                              ],
                             },
-                          ],
-                        },
+                          },
+                        ],
                       },
-                    ],
-                  } as ResultState;
-                }
+                    },
+                  ],
+                } as ResultState;
+              }
 
-                // Get redirected to the preferred departures view
-                return getResultStateFromPath(path);
-              },
-            }}
-          >
-            <AnalyticsContextProvider>
-              <Stack.Navigator
-                screenOptions={screenOptions(
-                  TransitionPresets.ModalSlideFromBottomIOS,
-                  {
-                    headerShown: false,
-                    presentation: 'modal',
-                  },
-                )}
-              >
-                <Stack.Screen
-                  name="Root_TabNavigatorStack"
-                  component={Root_TabNavigatorStack}
-                />
-                <Stack.Screen
-                  name="Root_ExtendedOnboardingStack"
-                  component={Root_ExtendedOnboardingStack}
-                />
-                <Stack.Screen
-                  name="Root_ConsiderTravelTokenChangeScreen"
-                  component={Root_ConsiderTravelTokenChangeScreen}
-                />
-                <Stack.Screen
-                  name="Root_SelectTravelTokenScreen"
-                  component={Root_SelectTravelTokenScreen}
-                />
-                <Stack.Screen
-                  name="Root_LocationSearchByTextScreen"
-                  component={Root_LocationSearchByTextScreen}
-                />
-                <Stack.Screen
-                  name="Root_LocationSearchByMapScreen"
-                  component={Root_LocationSearchByMapScreen}
-                  options={screenOptions(TransitionPresets.SlideFromRightIOS)}
-                />
-                <Stack.Screen
-                  name="Root_ScanQrCodeScreen"
-                  component={Root_ScanQrCodeScreen}
-                />
-                <Stack.Screen
-                  name="Root_PurchaseOverviewScreen"
-                  component={Root_PurchaseOverviewScreen}
-                />
-                <Stack.Screen
-                  name="Root_PurchaseConfirmationScreen"
-                  component={Root_PurchaseConfirmationScreen}
-                  options={screenOptions(TransitionPresets.SlideFromRightIOS)}
-                />
-                <Stack.Screen
-                  name="Root_PurchaseFareZonesSearchByMapScreen"
-                  component={Root_PurchaseFareZonesSearchByMapScreen}
-                  options={screenOptions(TransitionPresets.SlideFromRightIOS)}
-                />
-                <Stack.Screen
-                  name="Root_PurchaseFareZonesSearchByTextScreen"
-                  component={Root_PurchaseFareZonesSearchByTextScreen}
-                  options={screenOptions(TransitionPresets.SlideFromRightIOS)}
-                />
-                <Stack.Screen
-                  name="Root_PurchaseHarborSearchScreen"
-                  component={Root_PurchaseHarborSearchScreen}
-                  options={screenOptions(TransitionPresets.SlideFromRightIOS)}
-                />
-                <Stack.Screen
-                  name="Root_TripSelectionScreen"
-                  component={Root_TripSelectionScreen}
-                  options={screenOptions(TransitionPresets.SlideFromRightIOS)}
-                />
-                <Stack.Screen
-                  name="Root_PurchaseAsAnonymousConsequencesScreen"
-                  component={Root_PurchaseAsAnonymousConsequencesScreen}
-                  options={screenOptions(TransitionPresets.SlideFromRightIOS)}
-                />
-                <Stack.Screen
-                  name="Root_FareContractDetailsScreen"
-                  component={Root_FareContractDetailsScreen}
-                />
-                <Stack.Screen
-                  name="Root_TicketInformationScreen"
-                  component={Root_TicketInformationScreen}
-                />
-                <Stack.Screen
-                  name="Root_ReceiptScreen"
-                  component={Root_ReceiptScreen}
-                />
-                <Stack.Screen
-                  name="Root_AddEditFavoritePlaceScreen"
-                  component={Root_AddEditFavoritePlaceScreen}
-                />
-                <Stack.Screen
-                  name="Root_SearchFavoritePlaceScreen"
-                  component={Root_SearchFavoritePlaceScreen}
-                />
-                <Stack.Screen
-                  name="Root_ShareTravelHabitsScreen"
-                  component={Root_ShareTravelHabitsScreen}
-                />
-                <Stack.Screen
-                  name="Root_LoginAvailableFareContractWarningScreen"
-                  component={Root_LoginAvailableFareContractWarningScreen}
-                />
-                <Stack.Screen
-                  name="Root_LoginOptionsScreen"
-                  component={Root_LoginOptionsScreen}
-                />
-                <Stack.Screen
-                  name="Root_LoginPhoneInputScreen"
-                  component={Root_LoginPhoneInputScreen}
-                  options={screenOptions(TransitionPresets.SlideFromRightIOS)}
-                />
-                <Stack.Screen
-                  name="Root_LoginConfirmCodeScreen"
-                  component={Root_LoginConfirmCodeScreen}
-                  options={screenOptions(TransitionPresets.SlideFromRightIOS)}
-                />
-                <Stack.Screen
-                  name="Root_LoginRequiredForFareProductScreen"
-                  component={Root_LoginRequiredForFareProductScreen}
-                />
-                <Stack.Screen
-                  name="Root_ConfirmationScreen"
-                  component={Root_ConfirmationScreen}
-                />
-                <Stack.Screen
-                  name="Root_ScooterHelpScreen"
-                  component={Root_ScooterHelpScreen}
-                />
-                <Stack.Screen
-                  name="Root_ShmoOnboardingScreen"
-                  component={Root_ShmoOnboardingScreen}
-                />
-                <Stack.Screen
-                  name="Root_ContactScooterOperatorScreen"
-                  component={Root_ContactScooterOperatorScreen}
-                />
-                <Stack.Screen
-                  name="Root_ContactScooterOperatorConfirmationScreen"
-                  component={Root_ContactScooterOperatorConfirmationScreen}
-                />
-                <Stack.Screen
-                  name="Root_ParkingViolationsSelectScreen"
-                  component={Root_ParkingViolationsSelectScreen}
-                />
-                <Stack.Screen
-                  name="Root_ParkingViolationsPhotoScreen"
-                  component={Root_ParkingViolationsPhotoScreen}
-                />
-                <Stack.Screen
-                  name="Root_ParkingViolationsQrScreen"
-                  component={Root_ParkingViolationsQrScreen}
-                />
-                <Stack.Screen
-                  name="Root_ParkingViolationsConfirmationScreen"
-                  component={Root_ParkingViolationsConfirmationScreen}
-                />
-                <Stack.Screen
-                  name="Root_NotificationPermissionScreen"
-                  component={Root_NotificationPermissionScreen}
-                />
-                <Stack.Screen
-                  name="Root_LocationWhenInUsePermissionScreen"
-                  component={Root_LocationWhenInUsePermissionScreen}
-                />
-                <Stack.Screen
-                  name="Root_ChooseTicketRecipientScreen"
-                  component={Root_ChooseTicketRecipientScreen}
-                  options={screenOptions(TransitionPresets.SlideFromRightIOS)}
-                />
-                <Stack.Screen
-                  name="Root_ParkingPhotoScreen"
-                  component={Root_ParkingPhotoScreen}
-                />
-                <Stack.Screen
-                  name="Root_SmartParkAndRideAddScreen"
-                  component={Root_SmartParkAndRideAddScreen}
-                />
-                <Stack.Screen
-                  name="Root_SmartParkAndRideEditScreen"
-                  component={Root_SmartParkAndRideEditScreen}
-                />
-                <Stack.Screen
-                  name="Root_EnrollmentOnboardingStack"
-                  component={Root_EnrollmentOnboardingStack}
-                />
-              </Stack.Navigator>
-            </AnalyticsContextProvider>
-          </NavigationContainer>
-        </LoadingScreenBoundary>
-      </Host>
+              // Get redirected to the preferred departures view
+              return getResultStateFromPath(path);
+            },
+          }}
+        >
+          <AnalyticsContextProvider>
+            <Stack.Navigator
+              screenOptions={screenOptions(
+                TransitionPresets.ModalSlideFromBottomIOS,
+                {
+                  headerShown: false,
+                  presentation: 'modal',
+                },
+              )}
+            >
+              <Stack.Screen
+                name="Root_TabNavigatorStack"
+                component={Root_TabNavigatorStack}
+              />
+              <Stack.Screen
+                name="Root_ExtendedOnboardingStack"
+                component={Root_ExtendedOnboardingStack}
+              />
+              <Stack.Screen
+                name="Root_ConsiderTravelTokenChangeScreen"
+                component={Root_ConsiderTravelTokenChangeScreen}
+              />
+              <Stack.Screen
+                name="Root_SelectTravelTokenScreen"
+                component={Root_SelectTravelTokenScreen}
+              />
+              <Stack.Screen
+                name="Root_LocationSearchByTextScreen"
+                component={Root_LocationSearchByTextScreen}
+              />
+              <Stack.Screen
+                name="Root_LocationSearchByMapScreen"
+                component={Root_LocationSearchByMapScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
+                name="Root_ScanQrCodeScreen"
+                component={Root_ScanQrCodeScreen}
+              />
+              <Stack.Screen
+                name="Root_PurchaseOverviewScreen"
+                component={Root_PurchaseOverviewScreen}
+              />
+              <Stack.Screen
+                name="Root_PurchaseConfirmationScreen"
+                component={Root_PurchaseConfirmationScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
+                name="Root_PurchaseFareZonesSearchByMapScreen"
+                component={Root_PurchaseFareZonesSearchByMapScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
+                name="Root_PurchaseFareZonesSearchByTextScreen"
+                component={Root_PurchaseFareZonesSearchByTextScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
+                name="Root_PurchaseHarborSearchScreen"
+                component={Root_PurchaseHarborSearchScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
+                name="Root_TripSelectionScreen"
+                component={Root_TripSelectionScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
+                name="Root_PurchaseAsAnonymousConsequencesScreen"
+                component={Root_PurchaseAsAnonymousConsequencesScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
+                name="Root_FareContractDetailsScreen"
+                component={Root_FareContractDetailsScreen}
+              />
+              <Stack.Screen
+                name="Root_TicketInformationScreen"
+                component={Root_TicketInformationScreen}
+              />
+              <Stack.Screen
+                name="Root_ReceiptScreen"
+                component={Root_ReceiptScreen}
+              />
+              <Stack.Screen
+                name="Root_AddEditFavoritePlaceScreen"
+                component={Root_AddEditFavoritePlaceScreen}
+              />
+              <Stack.Screen
+                name="Root_SearchFavoritePlaceScreen"
+                component={Root_SearchFavoritePlaceScreen}
+              />
+              <Stack.Screen
+                name="Root_ShareTravelHabitsScreen"
+                component={Root_ShareTravelHabitsScreen}
+              />
+              <Stack.Screen
+                name="Root_LoginAvailableFareContractWarningScreen"
+                component={Root_LoginAvailableFareContractWarningScreen}
+              />
+              <Stack.Screen
+                name="Root_LoginOptionsScreen"
+                component={Root_LoginOptionsScreen}
+              />
+              <Stack.Screen
+                name="Root_LoginPhoneInputScreen"
+                component={Root_LoginPhoneInputScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
+                name="Root_LoginConfirmCodeScreen"
+                component={Root_LoginConfirmCodeScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
+                name="Root_LoginRequiredForFareProductScreen"
+                component={Root_LoginRequiredForFareProductScreen}
+              />
+              <Stack.Screen
+                name="Root_ConfirmationScreen"
+                component={Root_ConfirmationScreen}
+              />
+              <Stack.Screen
+                name="Root_ScooterHelpScreen"
+                component={Root_ScooterHelpScreen}
+              />
+              <Stack.Screen
+                name="Root_ShmoOnboardingScreen"
+                component={Root_ShmoOnboardingScreen}
+              />
+              <Stack.Screen
+                name="Root_ContactScooterOperatorScreen"
+                component={Root_ContactScooterOperatorScreen}
+              />
+              <Stack.Screen
+                name="Root_ContactScooterOperatorConfirmationScreen"
+                component={Root_ContactScooterOperatorConfirmationScreen}
+              />
+              <Stack.Screen
+                name="Root_ParkingViolationsSelectScreen"
+                component={Root_ParkingViolationsSelectScreen}
+              />
+              <Stack.Screen
+                name="Root_ParkingViolationsPhotoScreen"
+                component={Root_ParkingViolationsPhotoScreen}
+              />
+              <Stack.Screen
+                name="Root_ParkingViolationsQrScreen"
+                component={Root_ParkingViolationsQrScreen}
+              />
+              <Stack.Screen
+                name="Root_ParkingViolationsConfirmationScreen"
+                component={Root_ParkingViolationsConfirmationScreen}
+              />
+              <Stack.Screen
+                name="Root_NotificationPermissionScreen"
+                component={Root_NotificationPermissionScreen}
+              />
+              <Stack.Screen
+                name="Root_LocationWhenInUsePermissionScreen"
+                component={Root_LocationWhenInUsePermissionScreen}
+              />
+              <Stack.Screen
+                name="Root_ChooseTicketRecipientScreen"
+                component={Root_ChooseTicketRecipientScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
+                name="Root_ParkingPhotoScreen"
+                component={Root_ParkingPhotoScreen}
+              />
+              <Stack.Screen
+                name="Root_SmartParkAndRideAddScreen"
+                component={Root_SmartParkAndRideAddScreen}
+              />
+              <Stack.Screen
+                name="Root_SmartParkAndRideEditScreen"
+                component={Root_SmartParkAndRideEditScreen}
+              />
+              <Stack.Screen
+                name="Root_EnrollmentOnboardingStack"
+                component={Root_EnrollmentOnboardingStack}
+              />
+            </Stack.Navigator>
+          </AnalyticsContextProvider>
+        </NavigationContainer>
+      </LoadingScreenBoundary>
     </>
   );
 };

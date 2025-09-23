@@ -2,10 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
-import {useTranslation} from '@atb/translations';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {dictionary, useTranslation} from '@atb/translations';
+import {Close, Confirm} from '@atb/assets/svg/mono-icons/actions';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
@@ -18,18 +17,21 @@ import {
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
 import {useMutation} from '@tanstack/react-query';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 
 type Props = {
   onSelect: () => void;
   recurringPaymentMethods?: PaymentMethod[];
   onClose?: () => void;
   onGoToPaymentPage: () => void;
+  locationArrowOnPress: () => void;
 };
 
 export const SelectShmoPaymentMethodSheet = ({
   onSelect,
   onClose,
   onGoToPaymentPage,
+  locationArrowOnPress,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -54,9 +56,12 @@ export const SelectShmoPaymentMethodSheet = ({
   }, [defaultPaymentMethod]);
 
   return (
-    <BottomSheetContainer
-      title={t(SelectPaymentMethodTexts.header.text)}
-      onClose={onClose}
+    <MapBottomSheet
+      closeCallback={onClose}
+      enableDynamicSizing={true}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      locationArrowOnPress={locationArrowOnPress}
     >
       <ScrollView>
         <View style={{flex: 1}}>
@@ -120,7 +125,7 @@ export const SelectShmoPaymentMethodSheet = ({
           </FullScreenFooter>
         </View>
       </ScrollView>
-    </BottomSheetContainer>
+    </MapBottomSheet>
   );
 };
 

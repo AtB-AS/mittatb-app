@@ -40,7 +40,7 @@ type ticketingTileIllustrationsProps = {
 export const TicketingTileIllustration = ({
   illustrationName,
   ...props
-}: ticketingTileIllustrationsProps): JSX.Element => {
+}: ticketingTileIllustrationsProps): React.JSX.Element => {
   const illustrationFileName = getIllustrationFileName(illustrationName);
   const Illustration = ticketingTileIllustrations[illustrationFileName];
   return <Illustration {...props} />;

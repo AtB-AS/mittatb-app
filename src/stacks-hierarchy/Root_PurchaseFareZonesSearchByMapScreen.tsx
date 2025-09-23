@@ -75,8 +75,8 @@ export const Root_PurchaseFareZonesSearchByMapScreen = ({
             isApplicableOnSingleZoneOnly
               ? 'from'
               : prev === 'from'
-              ? 'to'
-              : 'from',
+                ? 'to'
+                : 'from',
           );
         }}
         onSave={onSave}

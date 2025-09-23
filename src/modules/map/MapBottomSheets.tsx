@@ -1,0 +1,339 @@
+import {useAnalyticsContext} from '@atb/modules/analytics';
+import {
+  ActiveScooterSheet,
+  BicycleSheet,
+  BikeStationBottomSheet,
+  CarSharingStationBottomSheet,
+  FinishedScooterSheet,
+  FinishingScooterSheet,
+  MapFilterSheet,
+  ParkAndRideBottomSheet,
+  ScooterSheet,
+  SelectShmoPaymentMethodSheet,
+  useActiveShmoBookingQuery,
+} from '@atb/modules/mobility';
+
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {useNavigation} from '@react-navigation/native';
+import React, {RefObject, useCallback, useEffect, useState} from 'react';
+import {useEnterPaymentMethods} from './hooks/use-enter-payment-methods';
+import {MapBottomSheetType, useMapContext} from './MapContext';
+import {InteractionManager} from 'react-native';
+import {
+  flyToLocation,
+  getFeatureFromScan,
+  getMapPadding,
+  isParkAndRide,
+} from './utils';
+import MapboxGL from '@rnmapbox/maps';
+import {ShmoBookingState} from '@atb/api/types/mobility';
+import {useGeolocationContext} from '@atb/modules/geolocation';
+import {AutoSelectableMapItem, MapFilterType, MapProps} from './types';
+import {ExternalRealtimeMapSheet} from './components/external-realtime-map/ExternalRealtimeMapSheet';
+import {DeparturesDialogSheet} from './components/DeparturesDialogSheet';
+
+import {Feature, GeoJsonProperties, Point} from 'geojson';
+import {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics';
+import {MapStateActionType} from './mapStateReducer';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+
+type MapBottomSheetsProps = {
+  mapCameraRef: RefObject<MapboxGL.Camera | null>;
+  mapViewRef: RefObject<MapboxGL.MapView | null>;
+  mapProps: MapProps;
+  locationArrowOnPress: () => void;
+};
+
+export const MapBottomSheets = ({
+  mapCameraRef,
+  mapViewRef,
+  mapProps,
+  locationArrowOnPress,
+}: MapBottomSheetsProps) => {
+  const [openPaymentType, setOpenPaymentType] = useState<boolean>(false);
+  const navigateToPaymentMethods = useEnterPaymentMethods();
+  const {mapState, dispatchMapState} = useMapContext();
+  const {getCurrentCoordinates} = useGeolocationContext();
+  const {data: activeBooking} = useActiveShmoBookingQuery();
+  const tabBarHeight = useBottomTabBarHeight();
+
+  const analytics = useAnalyticsContext();
+  const mapAnalytics = useMapSelectionAnalytics();
+  const navigation = useNavigation<RootNavigationProps>();
+
+  const onReportParkingViolation = useCallback(() => {
+    analytics.logEvent('Mobility', 'Report parking violation clicked');
+    navigation.navigate('Root_ParkingViolationsSelectScreen');
+  }, [analytics, navigation]);
+
+  const flyToMapItemLocation = useCallback(
+    (mapItem: AutoSelectableMapItem) => {
+      InteractionManager.runAfterInteractions(() => {
+        /*
+            When an item has already been loaded, onMapItemReceived will be called immediately, in which case flyToLocation won't work.
+            This is why runAfterInteractions is used here. We may find that a setTimeout is needed as well.
+          */
+        mapCameraRef &&
+          flyToLocation({
+            coordinates: {
+              latitude: mapItem.lat,
+              longitude: mapItem.lon,
+            },
+            padding: getMapPadding(tabBarHeight),
+            mapCameraRef,
+            mapViewRef,
+            zoomLevel: 19, // no clustering at this zoom level
+          });
+      });
+    },
+    [mapCameraRef, mapViewRef, tabBarHeight],
+  );
+
+  const flyToUserLocation = useCallback(async () => {
+    const coordinates = await getCurrentCoordinates();
+    mapCameraRef &&
+      flyToLocation({
+        coordinates: {
+          latitude: coordinates?.latitude ?? 0,
+          longitude: coordinates?.longitude ?? 0,
+        },
+        padding: getMapPadding(tabBarHeight),
+        mapCameraRef,
+        mapViewRef,
+        zoomLevel: 15,
+      });
+  }, [getCurrentCoordinates, mapCameraRef, mapViewRef, tabBarHeight]);
+
+  async function selectPaymentMethod() {
+    setOpenPaymentType(true);
+  }
+
+  const handleCloseSheet = useCallback(() => {
+    dispatchMapState({type: MapStateActionType.None});
+  }, [dispatchMapState]);
+
+  useEffect(() => {
+    if (mapState.feature) {
+      mapAnalytics.logMapSelection(mapState.feature);
+    }
+  }, [mapAnalytics, mapState.feature, mapState.bottomSheetType]);
+
+  return (
+    <>
+      {mapState.bottomSheetType === MapBottomSheetType.Scooter &&
+        !openPaymentType &&
+        !activeBooking?.bookingId && (
+          <ScooterSheet
+            onVehicleReceived={(item) => {
+              if (mapState.assetIsScanned) {
+                const feature: Feature<Point, GeoJsonProperties> =
+                  getFeatureFromScan(item, mapState.bottomSheetType);
+                dispatchMapState({
+                  type: MapStateActionType.Scooter,
+                  feature: feature,
+                });
+                flyToMapItemLocation(item);
+              }
+            }}
+            selectPaymentMethod={selectPaymentMethod}
+            vehicleId={
+              mapState.feature?.properties?.id ?? mapState.assetId ?? ''
+            }
+            onClose={handleCloseSheet}
+            onReportParkingViolation={onReportParkingViolation}
+            navigation={navigation}
+            startOnboardingCallback={() => {
+              navigation.navigate('Root_ShmoOnboardingScreen');
+            }}
+            locationArrowOnPress={locationArrowOnPress}
+          />
+        )}
+
+      {openPaymentType && (
+        <SelectShmoPaymentMethodSheet
+          onSelect={() => {
+            setOpenPaymentType(false);
+          }}
+          onClose={() => {
+            setOpenPaymentType(false);
+          }}
+          onGoToPaymentPage={() => {
+            setOpenPaymentType(false);
+            navigateToPaymentMethods();
+          }}
+          locationArrowOnPress={locationArrowOnPress}
+        />
+      )}
+
+      {activeBooking?.state === ShmoBookingState.IN_USE && (
+        <ActiveScooterSheet
+          mapViewRef={mapViewRef}
+          onForceClose={handleCloseSheet}
+          onActiveBookingReceived={flyToUserLocation}
+          navigateSupportCallback={() => {
+            navigation.navigate('Root_ScooterHelpScreen', {
+              operatorId: activeBooking.asset.operator.id,
+              bookingId: activeBooking.bookingId,
+            });
+          }}
+          photoNavigation={() => {
+            handleCloseSheet();
+            navigation.navigate('Root_ParkingPhotoScreen', {
+              bookingId: activeBooking.bookingId,
+            });
+          }}
+          locationArrowOnPress={locationArrowOnPress}
+        />
+      )}
+      {activeBooking?.state === ShmoBookingState.FINISHING && (
+        <FinishingScooterSheet
+          onForceClose={handleCloseSheet}
+          photoNavigation={() => {
+            handleCloseSheet();
+            navigation.navigate('Root_ParkingPhotoScreen', {
+              bookingId: activeBooking.bookingId,
+            });
+          }}
+          locationArrowOnPress={locationArrowOnPress}
+        />
+      )}
+      {mapState.bottomSheetType === MapBottomSheetType.FinishedBooking &&
+        mapState?.bookingId !== undefined && (
+          <FinishedScooterSheet
+            bookingId={mapState.bookingId}
+            onClose={handleCloseSheet}
+            navigateSupportCallback={(operatorId, bookingId) => {
+              handleCloseSheet();
+              navigation.navigate('Root_ScooterHelpScreen', {
+                operatorId,
+                bookingId,
+              });
+            }}
+            locationArrowOnPress={locationArrowOnPress}
+          />
+        )}
+      {mapState.bottomSheetType === MapBottomSheetType.Bicycle && (
+        <BicycleSheet
+          vehicleId={mapState.feature?.properties?.id ?? mapState.assetId ?? ''}
+          onClose={handleCloseSheet}
+          onVehicleReceived={(item) => {
+            if (mapState.assetIsScanned) {
+              const feature: Feature<Point, GeoJsonProperties> =
+                getFeatureFromScan(item, mapState.bottomSheetType);
+
+              dispatchMapState({
+                type: MapStateActionType.Bicycle,
+                feature: feature,
+              });
+              flyToMapItemLocation(item);
+            }
+          }}
+          locationArrowOnPress={locationArrowOnPress}
+        />
+      )}
+
+      {mapState.bottomSheetType === MapBottomSheetType.BikeStation && (
+        <BikeStationBottomSheet
+          stationId={mapState.feature?.properties?.id ?? mapState.assetId ?? ''}
+          distance={undefined}
+          onClose={handleCloseSheet}
+          onStationReceived={(item) => {
+            if (mapState.assetIsScanned) {
+              const feature: Feature<Point, GeoJsonProperties> =
+                getFeatureFromScan(item, mapState.bottomSheetType);
+
+              dispatchMapState({
+                type: MapStateActionType.BikeStation,
+                feature: feature,
+              });
+              flyToMapItemLocation(item);
+            }
+          }}
+          locationArrowOnPress={locationArrowOnPress}
+        />
+      )}
+      {mapState.bottomSheetType === MapBottomSheetType.CarStation && (
+        <CarSharingStationBottomSheet
+          stationId={mapState.feature?.properties?.id ?? mapState.assetId ?? ''}
+          distance={undefined}
+          onClose={handleCloseSheet}
+          onStationReceived={(item) => {
+            if (mapState.assetIsScanned) {
+              const feature: Feature<Point, GeoJsonProperties> =
+                getFeatureFromScan(item, mapState.bottomSheetType);
+
+              dispatchMapState({
+                type: MapStateActionType.CarStation,
+
+                feature: feature,
+              });
+              flyToMapItemLocation(item);
+            }
+          }}
+          locationArrowOnPress={locationArrowOnPress}
+        />
+      )}
+
+      {mapState.bottomSheetType === MapBottomSheetType.Filter && (
+        <MapFilterSheet
+          onFilterChanged={(filter: MapFilterType) => {
+            analytics.logEvent('Map', 'Filter changed', {filter});
+            mapProps.vehicles?.onFilterChange(filter.mobility);
+            mapProps.stations?.onFilterChange(filter.mobility);
+          }}
+          onClose={() => {
+            handleCloseSheet();
+          }}
+          locationArrowOnPress={locationArrowOnPress}
+        />
+      )}
+      {mapState.bottomSheetType === MapBottomSheetType.ExternalMap &&
+        mapState?.url !== undefined && (
+          <ExternalRealtimeMapSheet
+            onClose={handleCloseSheet}
+            url={mapState.url}
+            locationArrowOnPress={locationArrowOnPress}
+          />
+        )}
+      {mapState?.bottomSheetType === MapBottomSheetType.StopPlace &&
+        !!mapState.feature && (
+          <DeparturesDialogSheet
+            tabBarHeight={tabBarHeight}
+            onClose={handleCloseSheet}
+            distance={undefined}
+            stopPlaceFeature={mapState.feature}
+            navigateToDetails={(...params) => {
+              handleCloseSheet();
+              mapProps.navigateToDetails(...params);
+            }}
+            navigateToQuay={(...params) => {
+              handleCloseSheet();
+              mapProps.navigateToQuay(...params);
+            }}
+            navigateToTripSearch={(...params) => {
+              handleCloseSheet();
+              mapProps.navigateToTripSearch(...params);
+            }}
+            locationArrowOnPress={locationArrowOnPress}
+          />
+        )}
+      {mapState.bottomSheetType === MapBottomSheetType.ParkAndRideStation &&
+        mapState?.feature !== undefined &&
+        isParkAndRide(mapState.feature) && (
+          <ParkAndRideBottomSheet
+            name={mapState.feature?.properties?.name}
+            capacity={mapState.feature?.properties?.totalCapacity}
+            parkingFor={mapState.feature?.properties?.parkingVehicleTypes}
+            feature={mapState.feature}
+            distance={undefined}
+            onClose={handleCloseSheet}
+            navigateToTripSearch={(...params) => {
+              handleCloseSheet();
+              mapProps.navigateToTripSearch(...params);
+            }}
+            locationArrowOnPress={locationArrowOnPress}
+          />
+        )}
+    </>
+  );
+};

@@ -16,7 +16,7 @@ export function NoTravelTokenInfo({
   onPressFooterButton,
 }: {
   onPressFooterButton: () => void;
-}): JSX.Element {
+}): React.JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();

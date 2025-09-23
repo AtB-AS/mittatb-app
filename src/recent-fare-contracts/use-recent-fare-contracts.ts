@@ -207,7 +207,7 @@ export const useRecentFareContracts = () => {
     try {
       const recentFareContracts = await listRecentFareContracts();
       dispatch({type: 'SUCCESS', data: recentFareContracts});
-    } catch (e) {
+    } catch {
       dispatch({type: 'ERROR'});
     }
   };

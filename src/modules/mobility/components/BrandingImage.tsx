@@ -8,7 +8,7 @@ const DEFAULT_LOGO_SIZE = 50;
 
 type BrandingImageProps = {
   logoUrl: string | undefined;
-  fallback?: JSX.Element;
+  fallback?: React.JSX.Element;
   style?: StyleProp<ViewStyle>;
   logoSize?: number;
 };

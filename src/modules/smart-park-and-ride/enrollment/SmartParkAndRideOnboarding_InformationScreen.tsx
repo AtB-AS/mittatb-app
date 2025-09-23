@@ -2,7 +2,7 @@ import {useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import React from 'react';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
-import {ThemedParkAndRide} from '@atb/theme/ThemedAssets';
+import {ThemedCarValidTicket} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import {useNavigateToNextEnrollmentOnboardingScreen} from '@atb/modules/enrollment-onboarding';
@@ -18,7 +18,7 @@ export const SmartParkAndRideOnboarding_InformationScreen = () => {
 
   return (
     <OnboardingScreenComponent
-      illustration={<ThemedParkAndRide height={170} />}
+      illustration={<ThemedCarValidTicket height={170} />}
       title={t(SmartParkAndRideTexts.onboarding.information.title)}
       description={t(SmartParkAndRideTexts.onboarding.information.description)}
       contentNode={<PenaltyNoticeText />}

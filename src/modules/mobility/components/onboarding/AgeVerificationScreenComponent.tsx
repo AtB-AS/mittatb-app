@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {dictionary, LoginTexts, useTranslation} from '@atb/translations';
-import {ThemedTokenPhone} from '@atb/theme/ThemedAssets';
+import {ThemedBabyOnScooter} from '@atb/theme/ThemedAssets';
 import {Linking} from 'react-native';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {VIPPS_CALLBACK_URL} from '@atb/api/identity';
@@ -14,13 +14,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
 import {useInitAgeVerificationMutation} from '../../index';
 
-export type AgeVerificationScreenComponentProps = {
-  legalAge: number;
-};
-
-export const AgeVerificationScreenComponent = ({
-  legalAge,
-}: AgeVerificationScreenComponentProps) => {
+export const AgeVerificationScreenComponent = () => {
   const {t} = useTranslation();
   const appStatus = useAppStateStatus();
   const [error, setError] = useState<VippsSignInErrorCode>();
@@ -30,7 +24,7 @@ export const AgeVerificationScreenComponent = ({
     mutateAsync: completeAgeVerification,
     isLoading: isCompleting,
     error: completeError,
-  } = useCompleteAgeVerificationMutation(legalAge);
+  } = useCompleteAgeVerificationMutation();
 
   const {
     mutateAsync: initAgeVerification,
@@ -65,7 +59,7 @@ export const AgeVerificationScreenComponent = ({
               completeAgeVerification(code);
               await storage.set('vipps_state', '');
               await storage.set('vipps_nonce', '');
-            } catch (err) {
+            } catch {
               setError('unknown_error');
             }
           }
@@ -92,7 +86,7 @@ export const AgeVerificationScreenComponent = ({
 
   return (
     <OnboardingScreenComponent
-      illustration={<ThemedTokenPhone height={220} />}
+      illustration={<ThemedBabyOnScooter height={220} />}
       title={t(MobilityTexts.shmoRequirements.ageVerification.title)}
       description={t(
         MobilityTexts.shmoRequirements.ageVerification.description,

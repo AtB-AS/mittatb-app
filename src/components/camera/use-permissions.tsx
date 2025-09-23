@@ -1,50 +1,39 @@
 import {useCallback, useEffect, useState} from 'react';
-import {PermissionsAndroid, Platform, NativeModules} from 'react-native';
+import {Platform} from 'react-native';
 import CameraTexts from '@atb/translations/components/Camera';
 import {useTranslation} from '@atb/translations';
-const {CKCameraManager} = NativeModules;
+import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
+
+const CAMERA_PERMISSION = Platform.select({
+  android: PERMISSIONS.ANDROID.CAMERA,
+  ios: PERMISSIONS.IOS.CAMERA,
+});
 
 export const usePermissions = () => {
   const {t} = useTranslation();
   const [isAuthorized, setIsAuthorized] = useState<boolean>();
 
-  const requestCameraPermissionAndroid = useCallback(async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        {
-          title: t(CameraTexts.permissionsDialog.title),
-          message: t(CameraTexts.permissionsDialog.message),
-          buttonPositive: t(CameraTexts.permissionsDialog.action),
-        },
-      );
-      // If CAMERA Permission is granted
-      return granted === PermissionsAndroid.RESULTS.GRANTED;
-    } catch (err) {
-      console.warn(err);
-      return false;
+  const requestCameraPermission = useCallback(async () => {
+    if (!CAMERA_PERMISSION) {
+      return RESULTS.UNAVAILABLE;
     }
+    const granted = await check(CAMERA_PERMISSION);
+    if (granted === RESULTS.GRANTED) {
+      return granted;
+    }
+    return await request(CAMERA_PERMISSION, {
+      title: t(CameraTexts.permissionsDialog.title),
+      message: t(CameraTexts.permissionsDialog.message),
+      buttonPositive: t(CameraTexts.permissionsDialog.action),
+    });
   }, [t]);
-
-  const requestCameraPermissionIOS = async () => {
-    let authStatus =
-      await CKCameraManager.checkDeviceCameraAuthorizationStatus();
-    // -1 means 'undetermined'
-    if (authStatus === -1) {
-      authStatus = await CKCameraManager.requestDeviceCameraAuthorization();
-    }
-    return authStatus;
-  };
 
   useEffect(() => {
     (async () => {
-      const authStatus =
-        Platform.OS === 'android'
-          ? await requestCameraPermissionAndroid()
-          : await requestCameraPermissionIOS();
-      setIsAuthorized(authStatus);
+      const authStatus = await requestCameraPermission();
+      setIsAuthorized(authStatus === RESULTS.GRANTED);
     })();
-  }, [requestCameraPermissionAndroid]);
+  }, [requestCameraPermission]);
 
   return {isAuthorized};
 };

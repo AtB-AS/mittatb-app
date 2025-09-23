@@ -18,7 +18,7 @@ let config = {};
 config = mergeConfig(defaultConfig, config);
 config = withStorybook(config, {
   enabled: true,
-  configPath: path.resolve(__dirname, './.storybook'),
+  configPath: path.resolve(__dirname, './.rnstorybook'),
 });
 config = wrapWithReanimatedMetroConfig(config);
 

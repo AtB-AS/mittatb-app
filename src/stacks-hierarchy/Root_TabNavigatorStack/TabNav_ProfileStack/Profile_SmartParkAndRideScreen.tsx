@@ -1,6 +1,6 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TranslateFunction, useTranslation} from '@atb/translations';
-import {View} from 'react-native';
+import {RefreshControl, View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {
@@ -22,7 +22,7 @@ import {
 } from '@atb/modules/smart-park-and-ride';
 import {spellOut} from '@atb/utils/accessibility';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
-import {ThemedBundlingCarSharing} from '@atb/theme/ThemedAssets';
+import {ThemedCarRegister} from '@atb/theme/ThemedAssets';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
 
@@ -33,7 +33,11 @@ export const Profile_SmartParkAndRideScreen = () => {
   const {themeName} = useThemeContext();
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProps>();
-  const {data: vehicleRegistrations} = useVehicleRegistrationsQuery();
+  const {
+    data: vehicleRegistrations,
+    refetch: refetchVehicleRegistrations,
+    isFetching: vehicleRegistrationsIsFetching,
+  } = useVehicleRegistrationsQuery();
   const {authenticationType} = useAuthContext();
 
   const canAddVehicleRegistrations =
@@ -45,6 +49,12 @@ export const Profile_SmartParkAndRideScreen = () => {
         title: t(SmartParkAndRideTexts.header.title),
         leftButton: {type: 'back', withIcon: true},
       }}
+      refreshControl={
+        <RefreshControl
+          refreshing={vehicleRegistrationsIsFetching}
+          onRefresh={refetchVehicleRegistrations}
+        />
+      }
     >
       <View style={styles.container}>
         <ContentHeading text={t(SmartParkAndRideTexts.content.heading)} />
@@ -132,9 +142,9 @@ const HowItWorksSection = ({onPress}: HowItWorksSectionProps) => {
       <Section>
         <GenericSectionItem>
           <View style={styles.horizontalContainer}>
-            <ThemedBundlingCarSharing
-              height={61}
-              width={61}
+            <ThemedCarRegister
+              height={63}
+              width={63}
               style={{
                 alignSelf: 'flex-start',
               }}

@@ -1,5 +1,7 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json",
+  "extends": "@react-native/typescript-config",
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["**/node_modules", "**/Pods", "e2e"],
 
   "compilerOptions": {
     "baseUrl": ".",
@@ -14,7 +16,4 @@
     "@wdio/mocha-framework",
     "@wdio/appium-service"
   ],
-  "exclude": [
-    "e2e"
-  ]
 }

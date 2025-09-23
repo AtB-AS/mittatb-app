@@ -3,16 +3,17 @@ import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Filter} from '@atb/assets/svg/mono-icons/actions';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {MapStateActionType, useMapContext} from '@atb/modules/map';
 
 type MapFilterProps = {
-  onPress: () => void;
   isLoading: boolean;
 };
-export const MapFilter = ({onPress, isLoading}: MapFilterProps) => {
+export const MapFilter = ({isLoading}: MapFilterProps) => {
   const style = useStyle();
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
   const analytics = useAnalyticsContext();
+  const {dispatchMapState} = useMapContext();
 
   return (
     <Button
@@ -22,7 +23,9 @@ export const MapFilter = ({onPress, isLoading}: MapFilterProps) => {
       accessibilityRole="button"
       onPress={() => {
         analytics.logEvent('Map', 'Filter button clicked');
-        onPress();
+        dispatchMapState({
+          type: MapStateActionType.Filter,
+        });
       }}
       loading={isLoading}
       rightIcon={{svg: Filter}}

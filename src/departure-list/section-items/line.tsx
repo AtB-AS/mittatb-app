@@ -185,16 +185,16 @@ function getAccessibilityTextFirstDeparture(
           ),
         )
       : firstResult.realtime
-      ? t(
-          DeparturesTexts.results.departure.upcomingRealtimeAccessibilityLabel(
-            firstResultScreenReaderTimeText,
-          ),
-        )
-      : t(
-          DeparturesTexts.results.departure.upcomingAccessibilityLabel(
-            firstResultScreenReaderTimeText,
-          ),
-        )) +
+        ? t(
+            DeparturesTexts.results.departure.upcomingRealtimeAccessibilityLabel(
+              firstResultScreenReaderTimeText,
+            ),
+          )
+        : t(
+            DeparturesTexts.results.departure.upcomingAccessibilityLabel(
+              firstResultScreenReaderTimeText,
+            ),
+          )) +
     (firstResult.cancellation ? t(CancelledDepartureTexts.cancelled) : '');
 
   const nextLabel = secondResult

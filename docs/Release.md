@@ -10,7 +10,7 @@ Skip the first two steps of creating release-branch and bumping version number o
 
 ### Create release branch
 
-Branch out from master to a new branch with prefix `release/`, like `release/1.30`.
+Branch out from master to a new branch with prefix `release/`, like `release/1.30`, and push it to GitHub.
 
 ### On master: Bump version number
 
@@ -47,7 +47,7 @@ This will create a draft release in GitHub.
 - Make sure you've checked out the release branch from which you want to make the release.
 - Make sure you're authenticated with the GitHub CLI (`gh auth status`).
 - `yarn release-draft` to create a tag for the new release.
-- You are asked to specify version. This should be the major-version with a release candidate version suffix, for example `v1.16-rc2`.
+  - You are asked to specify version. This should be the major-version with a release candidate version suffix, for example `v1.16-rc2`.
   - If this is the first release for the current major version use `rc1` as suffix like this: `v1.16-rc1`.
   - If a release candidate already exists, increment the suffix number. If `v1.16-rc2` exists, the next version should be `v1.16-rc3`.
 

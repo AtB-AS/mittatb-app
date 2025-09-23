@@ -1,15 +1,11 @@
 import React, {RefObject, useCallback, useEffect} from 'react';
-import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {ActivityIndicator, Alert, ScrollView, View} from 'react-native';
+import {ActivityIndicator, Alert, View, ScrollView} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
@@ -29,6 +25,8 @@ import {MapView} from '@rnmapbox/maps';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useShmoWarnings} from '@atb/modules/map';
 import {useKeepAwake} from '@sayem314/react-native-keep-awake';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   onActiveBookingReceived?: () => void;
@@ -36,6 +34,7 @@ type Props = {
   photoNavigation: (bookingId: string) => void;
   onForceClose: () => void;
   mapViewRef: RefObject<MapView | null>;
+  locationArrowOnPress: () => void;
 };
 
 export const ActiveScooterSheet = ({
@@ -44,6 +43,7 @@ export const ActiveScooterSheet = ({
   photoNavigation,
   onForceClose,
   mapViewRef,
+  locationArrowOnPress,
 }: Props) => {
   useKeepAwake();
   const {
@@ -51,7 +51,7 @@ export const ActiveScooterSheet = ({
     isLoading,
     isError,
   } = useActiveShmoBookingQuery(ONE_SECOND_MS * 10);
-  const {logEvent} = useBottomSheetContext();
+  const {logEvent} = useAnalyticsContext();
 
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -126,7 +126,14 @@ export const ActiveScooterSheet = ({
   };
 
   return (
-    <BottomSheetContainer maxHeightValue={0.7} disableHeader={true}>
+    <MapBottomSheet
+      closeOnBackdropPress={false}
+      allowBackgroundTouch={true}
+      enableDynamicSizing={true}
+      heading={activeBooking?.asset.operator.name}
+      enablePanDownToClose={false}
+      locationArrowOnPress={locationArrowOnPress}
+    >
       {isShmoDeepIntegrationEnabled && (
         <>
           {isLoading && (
@@ -137,7 +144,10 @@ export const ActiveScooterSheet = ({
           {!isLoading && !isError && activeBooking && (
             <>
               <ScrollView style={styles.container}>
-                <ShmoTripCard shmoBooking={activeBooking} />
+                <View style={styles.tripWrapper}>
+                  <ShmoTripCard shmoBooking={activeBooking} />
+                </View>
+
                 <VehicleCard
                   pricingPlan={activeBooking.pricingPlan}
                   currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
@@ -146,7 +156,6 @@ export const ActiveScooterSheet = ({
                       ? activeBooking.asset.currentRangeKm * 1000
                       : 0
                   }
-                  operatorName={activeBooking.asset.operator.name}
                 />
               </ScrollView>
               <View style={styles.footer}>
@@ -206,7 +215,7 @@ export const ActiveScooterSheet = ({
           )}
         </>
       )}
-    </BottomSheetContainer>
+    </MapBottomSheet>
   );
 };
 
@@ -220,6 +229,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     container: {
       gap: theme.spacing.medium,
+      paddingHorizontal: theme.spacing.medium,
+      marginBottom: theme.spacing.medium,
     },
     footer: {
       marginBottom: theme.spacing.medium,
@@ -228,6 +239,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     endTripWrapper: {
       gap: theme.spacing.medium,
+    },
+    tripWrapper: {
+      marginBottom: theme.spacing.medium,
     },
   };
 });

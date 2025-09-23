@@ -2,21 +2,20 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "35.0.0"
+        buildToolsVersion = "36.0.0"
         minSdkVersion = 24
-        compileSdkVersion = 35
-        targetSdkVersion = 35
+        compileSdkVersion = 36
+        targetSdkVersion = 36
         // Setting androidXBrowser to avoid react-native-reborn picking newest alpha requiring SDK 33
         androidXBrowser = "1.7.0"
         RNMapboxMapsImpl = "mapbox"
-        RNMapboxMapsVersion = '11.11.0'
+        RNMapboxMapsVersion = '11.13.4'
 
         // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
-        ndkVersion = "26.1.10909125"
-        kotlin_version = "1.9.25"
+        ndkVersion = "27.1.12297006"
         // Required for react-native-camera
         // https://github.com/teslamotors/react-native-camera-kit/blob/master/example/android/build.gradle
-        kotlinVersion = "1.9.24"
+        kotlinVersion = "${KOTLIN_VERSION}"
         googlePlayServicesIidVersion = "17.0.0"
     }
     repositories {
@@ -38,6 +37,8 @@ buildscript {
 allprojects {
     repositories {
         def netRcFile = new File('../.netrc').exists() ? new File('../.netrc') : new File('.netrc')
+
+        mavenCentral()
 
         // For more details, see the requirements setting for Kettle at https://developer.kogenta.com/docs/react-native/add-kettle#declare-repository-manually
         maven { url "https://artifacts.kogenta.com/release" }

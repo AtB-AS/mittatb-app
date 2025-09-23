@@ -114,13 +114,13 @@ function getPaymentSelection(
           shouldSavePaymentMethod: shouldSave,
         }
       : paymentMethod.recurringPayment
-      ? {
-          paymentType: paymentMethod.paymentType,
-          recurringPayment: paymentMethod.recurringPayment,
-        }
-      : {
-          paymentType: paymentMethod.paymentType,
-        };
+        ? {
+            paymentType: paymentMethod.paymentType,
+            recurringPayment: paymentMethod.recurringPayment,
+          }
+        : {
+            paymentType: paymentMethod.paymentType,
+          };
   return paymentSelection;
 }
 

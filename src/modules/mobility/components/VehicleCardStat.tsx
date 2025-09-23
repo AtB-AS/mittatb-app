@@ -6,7 +6,7 @@ import {ThemeText} from '@atb/components/text';
 import {SvgProps} from 'react-native-svg';
 
 type Props = {
-  icon: (SvgProps: SvgProps) => JSX.Element;
+  icon: (SvgProps: SvgProps) => React.JSX.Element;
   stat: string;
   description: string;
 };

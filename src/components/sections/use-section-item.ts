@@ -45,8 +45,8 @@ export function useSectionItem({
     borderColor: active
       ? interactiveColor.outline.background
       : transparent
-      ? 'transparent'
-      : interactiveColor.default.background,
+        ? 'transparent'
+        : interactiveColor.default.background,
     borderWidth: theme.border.width.slim,
   };
   const contentContainer: ViewStyle = {

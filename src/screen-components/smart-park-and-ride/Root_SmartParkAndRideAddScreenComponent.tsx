@@ -6,8 +6,8 @@ import {ThemeText} from '@atb/components/text';
 import {useAddVehicleRegistrationMutation} from '@atb/modules/smart-park-and-ride';
 import {LicensePlateSection} from '@atb/modules/smart-park-and-ride';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {ThemedBundlingCarSharing} from '@atb/theme/ThemedAssets';
-import {useTranslation} from '@atb/translations';
+import {ThemedCarFront} from '@atb/theme/ThemedAssets';
+import {TranslateFunction, useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {useState} from 'react';
 import {View, ScrollView} from 'react-native';
@@ -37,15 +37,17 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
 
   const navigateBack = () => continueFromOnboardingSection('smartParkAndRide');
 
-  const {mutateAsync: handleAddVehicleRegistration} =
-    useAddVehicleRegistrationMutation(licensePlate, nickname, navigateBack);
+  const {
+    mutateAsync: handleAddVehicleRegistration,
+    error: addVehicleRegistrationError,
+  } = useAddVehicleRegistrationMutation(licensePlate, nickname, navigateBack);
 
   const themeColor = theme.color.background.accent[0];
 
   const contentNode = (
     <View style={styles.container}>
       <View style={styles.content}>
-        <ThemedBundlingCarSharing style={styles.illustration} width={150} />
+        <ThemedCarFront style={styles.illustration} width={170} />
         <View ref={focusRef} accessible={true} accessibilityRole="header">
           <ThemeText typography="body__primary--big--bold">
             {t(SmartParkAndRideTexts.add.content.title)}
@@ -84,6 +86,15 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
 
   const footerNode = (
     <View style={styles.footer}>
+      {addVehicleRegistrationError && (
+        <MessageInfoBox
+          type="error"
+          message={getErrorMessageTranslation(
+            addVehicleRegistrationError?.kind,
+            t,
+          )}
+        />
+      )}
       <Button
         expanded={true}
         onPress={() => handleAddVehicleRegistration()}
@@ -171,3 +182,19 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
   };
 });
+
+function getErrorMessageTranslation(
+  kind: string | undefined,
+  t: TranslateFunction,
+) {
+  switch (kind) {
+    case 'INVALID_LICENSE_PLATE':
+      return t(SmartParkAndRideTexts.errors.invalidLicensePlate);
+    case 'VEHICLE_REGISTRATION_ALREADY_EXISTS':
+      return t(SmartParkAndRideTexts.errors.vehicleAlreadyAdded);
+    case 'MAXIMUM_NUMBER_OF_VEHICLE_REGISTRATIONS_REACHED':
+      return t(SmartParkAndRideTexts.errors.maximumNumberOfVehiclesReached);
+    default:
+      return t(SmartParkAndRideTexts.errors.unknown);
+  }
+}

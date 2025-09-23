@@ -89,8 +89,8 @@ export function TravelTokenBox({
                   isTravelCard
                     ? TravelTokenBoxTexts.tcardName
                     : inspectableToken.isThisDevice
-                    ? TravelTokenBoxTexts.thisDeviceSuffix
-                    : TravelTokenBoxTexts.otherDeviceSuffix,
+                      ? TravelTokenBoxTexts.thisDeviceSuffix
+                      : TravelTokenBoxTexts.otherDeviceSuffix,
                 )}
             </ThemeText>
 

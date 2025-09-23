@@ -16,7 +16,7 @@ export function ContentHeading({
   color = 'secondary',
   accessibilityLabel,
   style,
-}: ContentHeadingProps): JSX.Element {
+}: ContentHeadingProps): React.JSX.Element {
   const styles = useStyles();
 
   return (

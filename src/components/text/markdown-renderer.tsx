@@ -1,5 +1,5 @@
 import React from 'react';
-import {marked} from 'marked';
+import {marked, Token, Tokens} from 'marked';
 import {Linking, Text, View} from 'react-native';
 import {textTypeStyles} from '@atb/theme/colors';
 import Bugsnag from '@bugsnag/react-native';
@@ -16,12 +16,12 @@ export function renderMarkdown(
   markdown: string,
   props: MarkdownRendererProps,
 ): React.ReactElement[] {
-  const tree = marked.lexer(markdown, {smartypants: true});
+  const tree = marked.lexer(markdown);
   return tree.map((token, index) => renderToken(token, index, props));
 }
 
 function renderToken(
-  token: marked.Token,
+  token: Token,
   index: number,
   props: MarkdownRendererProps,
 ): React.ReactElement {
@@ -57,7 +57,7 @@ function renderToken(
     case 'paragraph':
       return (
         <Text key={index} {...props.textProps}>
-          {token.tokens.map((t, i) => renderToken(t, i, props))}
+          {token.tokens?.map((t, i) => renderToken(t, i, props))}
         </Text>
       );
 
@@ -94,7 +94,7 @@ function renderToken(
     case 'list':
       return (
         <React.Fragment key={index}>
-          {token.items.map((item, itemIndex) => (
+          {token.items?.map((item: Tokens.ListItem, itemIndex: number) => (
             <View
               key={itemIndex}
               style={{

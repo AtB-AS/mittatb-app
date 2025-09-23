@@ -32,7 +32,7 @@ export const DateSelection = ({
   searchTime,
   setSearchTime,
   backgroundColor,
-}: DateSelectionProps): JSX.Element => {
+}: DateSelectionProps): React.JSX.Element => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const disablePreviousDayNavigation = isToday(

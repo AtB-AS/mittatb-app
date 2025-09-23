@@ -22,8 +22,8 @@ export const useUserMapFilters = () => {
         .get(MAP_FILTER_STORAGE_KEY)
         .then((storedFilters) =>
           storedFilters
-            ? parse(storedFilters) ?? fallback
-            : parse(default_map_filter) ?? fallback,
+            ? (parse(storedFilters) ?? fallback)
+            : (parse(default_map_filter) ?? fallback),
         ),
     [default_map_filter],
   );

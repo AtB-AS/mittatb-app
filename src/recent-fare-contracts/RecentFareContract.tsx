@@ -56,9 +56,7 @@ export const RecentFareContract = ({
     (c) => c.type === recentFareContract.preassignedFareProduct.type,
   );
 
-  const harborsQuery = useHarborsQuery({
-    transportModes: fareProductTypeConfig?.transportModes,
-  });
+  const harborsQuery = useHarborsQuery(fareProductTypeConfig?.transportModes);
 
   const productName = getReferenceDataName(preassignedFareProduct, language);
 

@@ -17,24 +17,28 @@ import {useShmoWarnings} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {AgeVerificationEnum} from '../queries/use-get-age-verification-query';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 
 type ShmoActionButtonProps = {
-  onLogin: () => void;
   onStartOnboarding: () => void;
   vehicleId: string;
   operatorId: string;
   paymentMethod: PaymentMethod | undefined;
+  navigation: RootNavigationProps;
 };
 
 export const ShmoActionButton = ({
-  onLogin,
   onStartOnboarding,
   vehicleId,
   operatorId,
   paymentMethod,
+  navigation,
 }: ShmoActionButtonProps) => {
   const {authenticationType, userId} = useAuthContext();
-  const {hasBlockers, numberOfBlockers} = useShmoRequirements();
+  const {hasBlockers, numberOfBlockers, ageVerification, operatorAgeLimit} =
+    useShmoRequirements(operatorId);
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
@@ -42,14 +46,16 @@ export const ShmoActionButton = ({
   const {warningMessage} = useShmoWarnings(vehicleId);
   const {logEvent} = useBottomSheetContext();
 
+  const {enable_vipps_login} = useRemoteConfigContext();
+  const hasReservationOrAvailableFareContract =
+    useHasReservationOrAvailableFareContract();
+
   const {
     mutateAsync: initShmoOneStopBooking,
     isLoading: initShmoOneStopBookingIsLoading,
     isError: initShmoOneStopBookingIsError,
     error: initShmoOneStopBookingError,
   } = useInitShmoOneStopBookingMutation();
-
-  const {ageVerification, legalAge} = useShmoRequirements();
 
   const initShmoBooking = useCallback(async () => {
     const initReqBody: InitShmoOneStopBookingRequestBody = {
@@ -85,10 +91,23 @@ export const ShmoActionButton = ({
     userId,
   ]);
 
+  const loginCallback = useCallback(() => {
+    if (hasReservationOrAvailableFareContract) {
+      navigation.navigate('Root_LoginAvailableFareContractWarningScreen', {});
+    } else if (enable_vipps_login) {
+      navigation.navigate('Root_LoginOptionsScreen', {
+        showGoBack: true,
+        transitionOverride: 'slide-from-bottom',
+      });
+    } else {
+      navigation.navigate('Root_LoginPhoneInputScreen', {});
+    }
+  }, [enable_vipps_login, hasReservationOrAvailableFareContract, navigation]);
+
   if (authenticationType != 'phone') {
     return (
       <ButtonInfoTextCombo
-        onPress={onLogin}
+        onPress={loginCallback}
         buttonText={t(MobilityTexts.shmoRequirements.loginBlocker)}
         message={t(MobilityTexts.shmoRequirements.loginBlockerInfoMessage)}
       />
@@ -126,7 +145,9 @@ export const ShmoActionButton = ({
       {ageVerification === AgeVerificationEnum.UnderAge && (
         <MessageInfoBox
           type="warning"
-          message={t(MobilityTexts.shmoRequirements.underAgeWarning(legalAge))}
+          message={t(
+            MobilityTexts.shmoRequirements.underAgeWarning(operatorAgeLimit),
+          )}
         />
       )}
       <Button

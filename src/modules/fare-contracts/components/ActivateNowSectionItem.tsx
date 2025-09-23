@@ -4,6 +4,7 @@ import {LinkSectionItem, SectionItemProps} from '@atb/components/sections';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React, {RefObject, useRef} from 'react';
 import {ActivateNowBottomSheet} from './ActivateNowBottomSheet';
+import {useThemeContext} from '@atb/theme';
 
 type ActivateNowSectionItemProps = SectionItemProps<{
   fareContractId: string;
@@ -14,8 +15,9 @@ export function ActivateNowSectionItem({
   fareContractId,
   fareProductType,
   ...sectionProps
-}: ActivateNowSectionItemProps): JSX.Element {
+}: ActivateNowSectionItemProps): React.JSX.Element {
   const {t} = useTranslation();
+  const {theme} = useThemeContext();
   const {open} = useBottomSheetContext();
   const onCloseFocusRef = useRef<RefObject<any>>(null);
 
@@ -35,7 +37,8 @@ export function ActivateNowSectionItem({
     <LinkSectionItem
       text={t(FareContractTexts.activateNow.startNow)}
       onPress={onPress}
-      rightIcon={{svg: TicketValid}}
+      interactiveColor={theme.color.interactive[0]}
+      rightIcon={{svg: TicketValid, color: theme.color.interactive[0].default}}
       ref={onCloseFocusRef}
       {...sectionProps}
     />

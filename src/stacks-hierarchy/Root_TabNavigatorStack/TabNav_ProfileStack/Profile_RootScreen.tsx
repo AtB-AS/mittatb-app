@@ -36,8 +36,7 @@ import {UserInfo} from './components/UserInfo';
 import {Button} from '@atb/components/button';
 import {Card, Receipt} from '@atb/assets/svg/mono-icons/ticketing';
 import {Star} from '@atb/assets/svg/mono-icons/bonus';
-import {Favorite} from '@atb/assets/svg/mono-icons/places';
-import {Car} from '@atb/assets/svg/mono-icons/transportation';
+import {Favorite, Parking} from '@atb/assets/svg/mono-icons/places';
 import {Info, Unknown} from '@atb/assets/svg/mono-icons/status';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {useChatUnreadCount} from '@atb/modules/chat';
@@ -168,20 +167,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               onPress={() => navigation.navigate('Profile_FavoriteScreen')}
               testID="favoriteButton"
             />
-            {isSmartParkAndRideEnabled && (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.account.linkSectionItems
-                    .smartParkAndRide.label,
-                )}
-                leftIcon={{svg: Car}}
-                onPress={() =>
-                  navigation.navigate('Profile_SmartParkAndRideScreen')
-                }
-                label="new"
-                testID="smartParkAndRideButton"
-              />
-            )}
           </Section>
 
           <ContentHeading text={t(ProfileTexts.sections.newFeatures.heading)} />
@@ -195,6 +180,20 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               onPress={() => navigation.navigate('Profile_EnrollmentScreen')}
               testID="invitationCodeButton"
             />
+            {isSmartParkAndRideEnabled && (
+              <LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.account.linkSectionItems
+                    .smartParkAndRide.label,
+                )}
+                leftIcon={{svg: Parking}}
+                onPress={() =>
+                  navigation.navigate('Profile_SmartParkAndRideScreen')
+                }
+                label="new"
+                testID="smartParkAndRideButton"
+              />
+            )}
           </Section>
           {enable_ticketing && (
             <>

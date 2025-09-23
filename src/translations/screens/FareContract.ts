@@ -96,15 +96,15 @@ const FareContractTexts = {
       ),
     sentTo: (phoneNumber: string) =>
       _(
-        `Denne billetten ble sendt til ${phoneNumber}`,
-        `This ticket was sent to ${phoneNumber}`,
-        `Denne billetten vart sendt til ${phoneNumber}`,
+        `Sendt til ${phoneNumber}`,
+        `Sent to ${phoneNumber}`,
+        `Sendt til ${phoneNumber}`,
       ),
     purchasedBy: (phoneNumber: string) =>
       _(
-        `Denne billetten ble kjøpt av ${phoneNumber}`,
-        `This ticket was purchased by ${phoneNumber}`,
-        `Denne billetten vart kjøpt av ${phoneNumber}`,
+        `Kjøpt av ${phoneNumber}`,
+        `Purchased by ${phoneNumber}`,
+        `Kjøpt av ${phoneNumber}`,
       ),
     totalPrice: (priceString: string) =>
       _(
@@ -196,18 +196,18 @@ const FareContractTexts = {
     usedAccesses: _('Brukte billetter', 'Used tickets', 'Brukte billettar'),
   },
   activateNow: {
-    startNow: _('Start billett nå', 'Start ticket now', 'Start billett no'),
+    startNow: _('Bruk billett nå', 'Use ticket now', 'Bruk billett no'),
     bottomSheetTitle: _(
-      'Vil du starte billetten?',
-      'Do you want to start the ticket?',
-      'Vil du starte billetten?',
+      'Bruk billett før planlagt tid?',
+      'Use ticket before scheduled time?',
+      'Bruk billett før planlagt tid?',
     ),
     bottomSheetDescription: _(
-      'Billetten starter med en gang du bekrefter. Dette valget kan ikke angres.',
-      'The ticket will start as soon as you confirm. This choice cannot be undone.',
-      'Billetten startar med ein gong du bekreftar. Dette valet kan ikkje gjerast om på.',
+      'Dette valget kan ikke angres. Billetten starter med en gang.',
+      'This action cannot be undone. The ticket will start immediately.',
+      'Dette valet kan ikkje angrast. Billetten startar med ein gong.',
     ),
-    confirm: _('Bekreft og start', 'Confirm and start', 'Bekreft og start'),
+    confirm: _('Bruk billett', 'Use ticket', 'Bruk billett'),
     genericError: _(
       'En feil har oppstått under aktivering av billetten. Vennligst prøv igjen.',
       'An error occurred while activating the ticket. Please try again.',

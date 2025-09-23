@@ -11,7 +11,7 @@ import {View} from 'react-native';
 import {MapCameraConfig} from './MapConfig';
 import {SelectionPin} from './components/SelectionPin';
 import {LocationBar} from './components/LocationBar';
-import {PositionArrow} from './components/PositionArrow';
+import {LocationArrow} from './components/LocationArrow';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {SelectionLocationCallback} from './types';
 
@@ -50,14 +50,14 @@ export const ExploreLocationMap = ({
   const onFeatureClick = useCallback(async (feature: Feature) => {
     if (!isFeaturePoint(feature)) return;
 
-    const {coordinates: positionClicked} = feature.geometry;
+    const {coordinates: locationClicked} = feature.geometry;
     setSelectedCoordinates({
-      longitude: positionClicked[0],
-      latitude: positionClicked[1],
+      longitude: locationClicked[0],
+      latitude: locationClicked[1],
     });
   }, []);
 
-  const onPositionArrowClick = async () => {
+  const onLocationArrowOnPress = async () => {
     const coordinates = await getCurrentCoordinates(true);
     if (coordinates) {
       mapCameraRef.current?.flyTo(
@@ -113,7 +113,7 @@ export const ExploreLocationMap = ({
             controlStyles.mapButtonsContainerRight,
           ]}
         >
-          <PositionArrow onPress={onPositionArrowClick} />
+          <LocationArrow onPress={onLocationArrowOnPress} />
         </View>
       </View>
     </View>
