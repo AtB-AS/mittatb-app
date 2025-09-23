@@ -11,7 +11,7 @@ import AuthenticationPage from '../pageobjects/authentication.page.js';
 import {formatPhoneNumber} from '../utils/utils.js';
 import Config from '../conf/config.js';
 
-describe('Auth', () => {
+describe('Auth Buy Ticket', () => {
   const phoneNumber = Config.phoneNumber();
   let authorized = false;
 
@@ -21,19 +21,10 @@ describe('Auth', () => {
 
   it('should login', async () => {
     try {
-      /*
-      // Log in through my profile
-      await NavigationHelper.tapMenu('profile');
-      await NavigationHelper.tapMenu('profile');
-      await ElementHelper.waitForElement('text', 'Profile');
-      await MyProfilePage.login.click();
-      await AuthenticationPage.loginWithPhone(phoneNumber)
-      await ElementHelper.waitForElement('text', 'Travel search');
-       */
-
       // Log in through the onboarding
       await AuthenticationPage.loginWithPhone(phoneNumber);
       await OnboardingPage.denyLocationInOnboarding();
+      await OnboardingPage.waitOnTokenOnboarding(false);
       await ElementHelper.waitForElement('text', 'Travel search');
       await AppHelper.pause(2000);
 
@@ -52,7 +43,7 @@ describe('Auth', () => {
   });
 
   /*
-    Purchase a ticket. Checking afterward is in 'auth.2.e2e.ts' since the change to in-app browser
+    Purchase a ticket. Checking afterward is in 'auth.2.ticket.e2e.ts' since the change to in-app browser
     messes up the sessions.
    */
   it('should buy a ticket', async () => {
@@ -67,6 +58,10 @@ describe('Auth', () => {
           'Single ticket, bus and tram',
         );
         await AppHelper.removeGlobalMessages();
+        await AppHelper.scrollDownUntilId(
+          'purchaseOverviewScrollView',
+          'goToPaymentButton',
+        );
 
         const hasOffer: boolean = await PurchaseOverviewPage.hasOffer();
         if (hasOffer) {
