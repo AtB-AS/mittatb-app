@@ -18,9 +18,9 @@ import {
   useParkingViolations,
 } from '@atb/modules/parking-violations-reporting';
 import {useAuthContext} from '@atb/modules/auth';
-import {Image} from 'react-native-compressor';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {compressImage} from '@atb/utils/image';
 
 export type QrScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsQrScreen'>;
@@ -61,19 +61,21 @@ export const Root_ParkingViolationsQrScreen = ({
     setIsLoading(true);
     closeBottomSheet();
 
-    const compressed = await Image.compress(params.photo, {
-      maxHeight: 2048,
-      maxWidth: 2048,
-    });
-    const image = await fetch(compressed);
+    const compressed = await compressImage(params.photo, 2048, 2048);
+    if (!compressed) {
+      setIsError(true);
+      return;
+    }
+
+    const image = await fetch(compressed.path);
     const imageBlob = await image.blob();
     const base64Image = await blobToBase64(imageBlob);
-    // Remove metadata, e.g. 'data:image/png;base64',
-    // and keep just the base64 encoded part of the image
-    // Nivel does not accept the metadata being a part of the image.
+
+    // Remove metadata, e.g. 'data:image/png;base64', and keep just the base64
+    // encoded part of the image.
     const base64data = base64Image.split(',').pop();
-    // Nivel use the file name suffix as imageType.
-    // (omg, why not just accept the base64 metadata, or at least a mime type as imageType?)
+
+    // Nivel uses the file name suffix as imageType.
     const imageType = params.photo.split('.').pop();
 
     sendViolationsReport({

@@ -9,9 +9,9 @@ import {ActivityIndicator, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MapStateActionType, useMapContext} from '@atb/modules/map';
-import {Image} from 'react-native-compressor';
 import {blobToBase64} from '@atb/modules/parking-violations-reporting';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
+import {compressImage} from '@atb/utils/image';
 
 export type ParkingPhotoScreenProps =
   RootStackScreenProps<'Root_ParkingPhotoScreen'>;
@@ -48,14 +48,11 @@ export const Root_ParkingPhotoScreen = ({
   };
 
   const onConfirmImage = async (photo: PhotoFile) => {
-    const compressed = await Image.compress(photo.path, {
-      maxHeight: 1024,
-      maxWidth: 1024,
-      quality: 0.7,
-    });
+    const compressed = await compressImage(photo.path, 1024, 1024);
+    if (!compressed) return;
 
     // Convert to Base64
-    const image = await fetch(compressed);
+    const image = await fetch(compressed.path);
     const imageBlob = await image.blob();
     const base64Image = await blobToBase64(imageBlob);
     // Remove metadata
