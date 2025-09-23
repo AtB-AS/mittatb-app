@@ -12,6 +12,10 @@ import {useTimeContext} from '@atb/modules/time';
 import {useFareContracts} from '@atb/modules/ticketing';
 import {ContentHeading} from '@atb/components/heading';
 import {useOnboardingSectionIsOnboarded} from '@atb/modules/onboarding';
+import {useGeolocationContext} from '@atb/modules/geolocation';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {useFindZoneInLocation} from '@atb/utils/use-find-zone-in-location';
+import {useDebounce} from '@atb/utils/use-debounce';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -37,10 +41,24 @@ export const Announcements = ({style}: Props) => {
   const styles = useStyle();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
+  const {location} = useGeolocationContext();
+  const debouncedLocation = useDebounce(location, 5000) ?? undefined;
+  const {carPoolingZones, fareZones, cityZones} =
+    useFirestoreConfigurationContext();
+  const carPoolingZone = useFindZoneInLocation(
+    debouncedLocation,
+    carPoolingZones,
+  );
+  const fareZone = useFindZoneInLocation(debouncedLocation, fareZones);
+  const cityZone = useFindZoneInLocation(debouncedLocation, cityZones);
+
   const ruleVariables = {
     isBeaconsConsentGranted: isConsentGranted ?? false,
     shareTravelHabitsIsOnboarded,
     hasValidFareContract,
+    fareZoneId: fareZone?.id ?? null,
+    cityZoneId: cityZone?.id ?? null,
+    carPoolingZoneId: carPoolingZone?.id ?? null,
   };
 
   const filteredAnnouncements = findAnnouncements(ruleVariables).filter((a) =>

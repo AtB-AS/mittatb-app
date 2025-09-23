@@ -18,6 +18,7 @@ import {
   HarborConnectionOverrideType,
   TravelSearchFiltersType,
   CityZone,
+  CarPoolingZone,
   PreassignedFareProduct,
   FareZone,
   UserProfile,
@@ -67,6 +68,7 @@ type ConfigurationContextState = {
   fareProductGroups: FareProductGroupType[];
   fareZones: FareZone[];
   cityZones: CityZone[];
+  carPoolingZones: CarPoolingZone[];
   userProfiles: UserProfile[];
   modesWeSellTicketsFor: string[];
   paymentTypes: PaymentType[];
@@ -103,6 +105,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
   >([]);
   const [fareZones, setFareZones] = useState<FareZone[]>([]);
   const [cityZones, setCityZones] = useState<CityZone[]>([]);
+  const [carPoolingZones, setCarPoolingZones] = useState<CarPoolingZone[]>([]);
   const [userProfiles, setUserProfiles] = useState<UserProfile[]>([]);
   const [modesWeSellTicketsFor, setModesWeSellTicketsFor] = useState<string[]>(
     [],
@@ -165,6 +168,11 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
           const cityZones = getCityZonesFromSnapshot(snapshot);
           if (cityZones) {
             setCityZones(cityZones);
+          }
+
+          const carPoolingZones = getCarPoolingZonesFromSnapshot(snapshot);
+          if (carPoolingZones) {
+            setCarPoolingZones(carPoolingZones);
           }
 
           const userProfiles = getUserProfilesFromSnapshot(snapshot);
@@ -282,6 +290,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     setPreassignedFareProducts([]);
     setFareZones([]);
     setCityZones([]);
+    setCarPoolingZones([]);
     setUserProfiles([]);
     setModesWeSellTicketsFor([]);
     setPaymentTypes([]);
@@ -313,6 +322,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
       fareProductGroups,
       fareZones,
       cityZones,
+      carPoolingZones,
       userProfiles,
       modesWeSellTicketsFor,
       paymentTypes,
@@ -338,6 +348,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     fareProductGroups,
     fareZones,
     cityZones,
+    carPoolingZones,
     userProfiles,
     modesWeSellTicketsFor,
     paymentTypes,
@@ -432,6 +443,23 @@ function getCityZonesFromSnapshot(
     Bugsnag.notify(error);
   }
 
+  return undefined;
+}
+
+function getCarPoolingZonesFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): CarPoolingZone[] | undefined {
+  const carPoolingZonesFromFirestore = snapshot.docs
+    .find((doc) => doc.id == 'referenceData')
+    ?.get<string>('carPoolingZones');
+
+  try {
+    if (carPoolingZonesFromFirestore) {
+      return JSON.parse(carPoolingZonesFromFirestore) as CarPoolingZone[];
+    }
+  } catch (error: any) {
+    Bugsnag.notify(error);
+  }
   return undefined;
 }
 
