@@ -32,7 +32,7 @@
     "@atb-as/config-specs": "^7.5.0",
     "@atb-as/generate-assets": "^18.5.0",
     "@atb-as/theme": "^14.1.0",
-    "@atb-as/utils": "^4.3.0",
+    "@atb-as/utils": "^5.0.0",
     "@babel/plugin-transform-export-namespace-from": "^7.27.1",
     "@bugsnag/react-native": "^8.4.0",
     "@bugsnag/source-maps": "^2.3.3",
@@ -120,7 +120,7 @@
     "string.fromcodepoint": "^1.0.3",
     "use-reducer-with-side-effects": "^2.2.0",
     "uuid": "^11.1.0",
-    "zod": "3.24.1"
+    "zod": "4.1.11"
   },
   "devDependencies": {
     "@babel/core": "^7.28.4",
@@ -202,6 +202,6 @@
     "node": ">=22"
   },
   "resolutions": {
-    "zod": "3.24.1"
+    "zod": "4.1.11"
   }
 }

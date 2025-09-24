@@ -35,7 +35,6 @@
     glob "^9.3.2"
     js-yaml "^4.1.0"
     yargs "^17.7.1"
-    zod "^3.24.4"
     zod-to-json-schema "^3.24.5"
 
 "@atb-as/generate-assets@^18.5.0":
@@ -68,13 +67,12 @@
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
 
-"@atb-as/utils@^4.3.0":
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/utils/-/utils-4.3.0.tgz#7a225c818e8f8ec005cabe5f8a1d104becb85e1e"
-  integrity sha512-Qusgnp7yshISqaZLh23cTb+BjKZlZLxTrWcZsSi0eRapYsv5/JuxghOPQUYZIxYFGoXDvjqPzg3Mi5ADd8kz2g==
+"@atb-as/utils@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/utils/-/utils-5.0.0.tgz#9af96bfc8a6d6f8dc7c86ab9f341f4c8a981b028"
+  integrity sha512-Mf2rLb4lvjEjI+DoCs+qp/nVukKYI5cDeJwuK0MW+rQ3SkBGHTP0sq4sfTnyXIN4nAiu2MluXVQuMCyhaOISww==
   dependencies:
     lodash "^4.17.21"
-    zod "^3.24.1"
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.22.13", "@babel/code-frame@^7.24.7", "@babel/code-frame@^7.26.2":
   version "7.26.2"
@@ -12326,7 +12324,7 @@ zod-to-json-schema@^3.24.5:
   resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.24.6.tgz#5920f020c4d2647edfbb954fa036082b92c9e12d"
   integrity sha512-h/z3PKvcTcTetyjl1fkj79MHNEjm+HpD6NXheWjzOekY7kV+lwDYnHw+ivHkijnCSMz1yJaWBD9vu/Fcmk+vEg==
 
-zod@3.24.1, zod@^3.24.1, zod@^3.24.4:
-  version "3.24.1"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.24.1.tgz#27445c912738c8ad1e9de1bea0359fa44d9d35ee"
-  integrity sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==
+zod@4.1.11:
+  version "4.1.11"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-4.1.11.tgz#4aab62f76cfd45e6c6166519ba31b2ea019f75f5"
+  integrity sha512-WPsqwxITS2tzx1bzhIKsEs19ABD5vmCVa4xBo2tq/SrV4RNZtfws1EnCWQXM6yh8bD08a1idvkB5MZSBiZsjwg==
