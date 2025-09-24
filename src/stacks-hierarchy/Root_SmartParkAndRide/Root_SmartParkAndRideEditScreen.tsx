@@ -15,6 +15,7 @@ import {
   LicensePlateSection,
 } from '@atb/modules/smart-park-and-ride';
 import {MessageInfoBox} from '@atb/components/message-info-box';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = RootStackScreenProps<'Root_SmartParkAndRideEditScreen'>;
 
@@ -31,6 +32,7 @@ export const Root_SmartParkAndRideEditScreen = ({
     params.vehicleRegistration.licensePlate,
   );
   const {theme} = useThemeContext();
+  const analytics = useAnalyticsContext();
 
   const onSuccess = () => navigation.goBack();
 
@@ -53,6 +55,9 @@ export const Root_SmartParkAndRideEditScreen = ({
   );
 
   const showDeleteConfirmation = () => {
+    analytics.logEvent('Smart Park & Ride', 'Delete vehicle clicked', {
+      vehicleId: params.vehicleRegistration.id,
+    });
     Alert.alert(
       t(SmartParkAndRideTexts.edit.delete.confirmation.title),
       t(SmartParkAndRideTexts.edit.delete.confirmation.message),
@@ -60,11 +65,23 @@ export const Root_SmartParkAndRideEditScreen = ({
         {
           text: t(SmartParkAndRideTexts.edit.delete.confirmation.cancel),
           style: 'cancel',
+          onPress: () => {
+            analytics.logEvent('Smart Park & Ride', 'Delete vehicle cancelled');
+          },
         },
         {
           text: t(SmartParkAndRideTexts.edit.delete.confirmation.confirm),
           style: 'destructive',
-          onPress: () => deleteVehicleRegistrationMutate(),
+          onPress: () => {
+            analytics.logEvent(
+              'Smart Park & Ride',
+              'Delete vehicle confirmed',
+              {
+                vehicleId: params.vehicleRegistration.id,
+              },
+            );
+            deleteVehicleRegistrationMutate();
+          },
         },
       ],
     );
@@ -87,7 +104,20 @@ export const Root_SmartParkAndRideEditScreen = ({
         <View style={styles.footer}>
           <Button
             expanded={true}
-            onPress={() => editVehicleRegistrationMutate()}
+            onPress={() => {
+              analytics.logEvent(
+                'Smart Park & Ride',
+                'Save vehicle changes clicked',
+                {
+                  vehicleId: params.vehicleRegistration.id,
+                  hasNicknameChange:
+                    nickname !== (params.vehicleRegistration.nickname || ''),
+                  hasLicensePlateChange:
+                    licensePlate !== params.vehicleRegistration.licensePlate,
+                },
+              );
+              editVehicleRegistrationMutate();
+            }}
             text={t(SmartParkAndRideTexts.edit.button)}
             rightIcon={{svg: Confirm}}
             mode="primary"

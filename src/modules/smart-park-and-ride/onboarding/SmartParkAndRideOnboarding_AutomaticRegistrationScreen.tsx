@@ -8,9 +8,11 @@ import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {Linking} from 'react-native';
 import {sparOnboardingId} from './config';
 import {useNavigateToNextOnboardingCarouselScreen} from '@atb/modules/onboarding';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
   const {t} = useTranslation();
+  const analytics = useAnalyticsContext();
 
   const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
     sparOnboardingId,
@@ -34,11 +36,24 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
             .a11yHint,
         ),
         onPress: () => {
+          analytics.logEvent(
+            'Smart Park & Ride',
+            'Onboarding external link clicked',
+            {
+              url: 'https://www.atb.no/RanheimFabrikker',
+            },
+          );
           Linking.openURL('https://www.atb.no/RanheimFabrikker'); // TODO: This link should be configurable, and updated.
         },
       }}
       footerButton={{
-        onPress: navigateToNextScreen,
+        onPress: () => {
+          analytics.logEvent(
+            'Smart Park & Ride',
+            'Onboarding automatic registration continue clicked',
+          );
+          navigateToNextScreen();
+        },
         text: t(
           SmartParkAndRideTexts.onboarding.automaticRegistration.buttonText,
         ),

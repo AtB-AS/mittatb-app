@@ -7,9 +7,11 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import {useNavigateToNextOnboardingCarouselScreen} from '@atb/modules/onboarding';
 import {sparOnboardingId} from './config';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 export const SmartParkAndRideOnboarding_InformationScreen = () => {
   const {t} = useTranslation();
+  const analytics = useAnalyticsContext();
 
   const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
     sparOnboardingId,
@@ -23,7 +25,13 @@ export const SmartParkAndRideOnboarding_InformationScreen = () => {
       description={t(SmartParkAndRideTexts.onboarding.information.description)}
       contentNode={<PenaltyNoticeText />}
       footerButton={{
-        onPress: navigateToNextScreen,
+        onPress: () => {
+          analytics.logEvent(
+            'Smart Park & Ride',
+            'Onboarding information continue clicked',
+          );
+          navigateToNextScreen();
+        },
         text: t(SmartParkAndRideTexts.onboarding.information.buttonText),
         expanded: true,
         rightIcon: {svg: ArrowRight},
