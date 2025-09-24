@@ -38,7 +38,10 @@ export const mapToAnnouncement = (
   if (parseResult.success) {
     return parseResult.data;
   } else {
-    console.warn(parseResult.error);
+    console.warn(
+      `Announcement with id ${snapshot?.id} failed safeParsing:\n`,
+      parseResult.error,
+    );
   }
 };
 
