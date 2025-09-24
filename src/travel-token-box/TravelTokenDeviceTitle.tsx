@@ -57,7 +57,9 @@ export const TravelTokenDeviceTitle = ({
         typography="body__secondary"
         color={themeTextColor}
         style={styles.tokenName}
-        testID="mobileTokenName"
+        testID={
+          inspectableToken.isThisDevice ? 'thisDeviceName' : 'otherDeviceName'
+        }
       >
         {inspectableToken?.name ||
           t(TravelTokenTexts.toggleToken.unnamedDevice)}

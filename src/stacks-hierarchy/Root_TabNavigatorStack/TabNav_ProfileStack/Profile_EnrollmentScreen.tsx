@@ -19,7 +19,14 @@ import {ThemeText} from '@atb/components/text';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
-import {enrollmentOnboardingConfig} from '@atb/modules/enrollment-onboarding';
+import {OnboardingCarouselConfigId} from '@atb/modules/onboarding';
+import {bonusOnboardingId} from '@atb/modules/bonus';
+
+// Mapping of enrollment IDs to onboarding carousel config IDs for enrollments with onboarding
+const enrollmentOnboardingConfig: Record<string, OnboardingCarouselConfigId> = {
+  'bonus-pilot-a': bonusOnboardingId,
+  'bonus-pilot-b': bonusOnboardingId,
+};
 
 export const Profile_EnrollmentScreen = () => {
   const styles = useStyles();
@@ -115,13 +122,11 @@ const useEnroll = () => {
           clearKey();
 
           if (enrollment.enrollmentId) {
-            const onboardingConfig = enrollmentOnboardingConfig.find((config) =>
-              config?.enrollmentIds?.includes(enrollment.enrollmentId),
-            );
-
-            if (onboardingConfig) {
-              navigation.navigate('Root_EnrollmentOnboardingStack', {
-                configId: onboardingConfig.id,
+            const onboardingConfigId =
+              enrollmentOnboardingConfig[enrollment.enrollmentId];
+            if (onboardingConfigId) {
+              navigation.navigate('Root_OnboardingCarouselStack', {
+                configId: onboardingConfigId,
               });
             }
           }

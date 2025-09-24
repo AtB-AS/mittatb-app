@@ -161,6 +161,10 @@ export const toggleSpecifications = [
     name: 'isSmartParkAndRideEnabled',
     remoteConfigKey: 'enable_smart_park_and_ride',
   },
+  {
+    name: 'isHarborDistancesApiEnabled',
+    remoteConfigKey: 'enable_harbor_distances_api',
+  },
 ] as const satisfies readonly FeatureToggleSpecification[];
 
 /**
