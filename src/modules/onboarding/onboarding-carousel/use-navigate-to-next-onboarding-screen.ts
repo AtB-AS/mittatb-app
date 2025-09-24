@@ -1,17 +1,17 @@
 import {useNavigation} from '@react-navigation/native';
 import {useCallback} from 'react';
-import {EnrollmentOnboardingNavigationProps} from './navigation-types';
-import {enrollmentOnboardingConfig} from './enrollment-onboarding-config';
-import {EnrollmentOnboardingScreenName} from './types';
+import {OnboardingCarouselNavigationProps} from './navigation-types';
+import {onboardingCarouselConfigs} from './onboarding-carousel-config';
+import {OnboardingCarouselScreenName} from './types';
 
-export function useNavigateToNextEnrollmentOnboardingScreen(
+export function useNavigateToNextOnboardingCarouselScreen(
   configId: string,
   currentScreenName: string,
 ) {
-  const navigation = useNavigation<EnrollmentOnboardingNavigationProps>();
+  const navigation = useNavigation<OnboardingCarouselNavigationProps>();
 
   return useCallback(() => {
-    const nextScreenName = getNextEnrollmentOnboardingScreenName(
+    const nextScreenName = getNextOnboardingCarouselScreenName(
       configId,
       currentScreenName,
     );
@@ -23,11 +23,11 @@ export function useNavigateToNextEnrollmentOnboardingScreen(
   }, [configId, currentScreenName, navigation]);
 }
 
-export function getNextEnrollmentOnboardingScreenName(
+export function getNextOnboardingCarouselScreenName(
   configId: string,
   currentScreenName: string,
-): EnrollmentOnboardingScreenName | undefined {
-  const config = enrollmentOnboardingConfig.find((c) => c.id === configId);
+): OnboardingCarouselScreenName | undefined {
+  const config = onboardingCarouselConfigs.find((c) => c.id === configId);
   if (!config) return undefined;
 
   const currentIndex = config.onboardingScreens.findIndex(

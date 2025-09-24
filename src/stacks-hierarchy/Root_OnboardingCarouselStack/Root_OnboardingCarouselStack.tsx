@@ -8,19 +8,21 @@ import React from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {Theme} from '@atb/theme/colors';
-import {EnrollmentOnboardingStackParams} from '../../modules/enrollment-onboarding/navigation-types';
-import {enrollmentOnboardingConfig} from '@atb/modules/enrollment-onboarding';
 import {RootStackScreenProps} from '../navigation-types';
+import {
+  onboardingCarouselConfigs,
+  OnboardingCarouselStackParams,
+} from '@atb/modules/onboarding';
 
-const Tab = createMaterialTopTabNavigator<EnrollmentOnboardingStackParams>();
+const Tab = createMaterialTopTabNavigator<OnboardingCarouselStackParams>();
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
-type Props = RootStackScreenProps<'Root_EnrollmentOnboardingStack'>;
+type Props = RootStackScreenProps<'Root_OnboardingCarouselStack'>;
 
-export const Root_EnrollmentOnboardingStack = ({route}: Props) => {
+export const Root_OnboardingCarouselStack = ({route}: Props) => {
   const styles = useStyles();
   const {configId} = route.params;
-  const config = enrollmentOnboardingConfig.find(
+  const config = onboardingCarouselConfigs.find(
     (onboardingConfig) => onboardingConfig.id === configId,
   );
   return (
