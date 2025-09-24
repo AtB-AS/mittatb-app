@@ -238,7 +238,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.core:core-splashscreen:1.0.0"
 
-    implementation 'com.kogenta.kettle:kettle-sdk:1.2.6'
+    implementation 'com.kogenta.kettle:kettle-sdk:1.4.3'
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
