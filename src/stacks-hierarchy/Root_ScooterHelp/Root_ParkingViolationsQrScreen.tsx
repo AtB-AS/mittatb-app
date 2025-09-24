@@ -61,15 +61,13 @@ export const Root_ParkingViolationsQrScreen = ({
     setIsLoading(true);
     closeBottomSheet();
 
-    const compressed = await compressImage(params.photo, 2048, 2048);
-    if (!compressed) {
+    const compressedBlob = await compressImage(params.photo, 2048, 2048);
+    if (!compressedBlob) {
       setIsError(true);
       return;
     }
 
-    const image = await fetch(compressed.path);
-    const imageBlob = await image.blob();
-    const base64Image = await blobToBase64(imageBlob);
+    const base64Image = await blobToBase64(compressedBlob);
 
     // Remove metadata, e.g. 'data:image/png;base64', and keep just the base64
     // encoded part of the image.

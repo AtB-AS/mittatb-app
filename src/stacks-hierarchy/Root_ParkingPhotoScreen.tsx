@@ -48,13 +48,12 @@ export const Root_ParkingPhotoScreen = ({
   };
 
   const onConfirmImage = async (photo: PhotoFile) => {
-    const compressed = await compressImage(photo.path, 1024, 1024);
-    if (!compressed) return;
+    const compressedBlob = await compressImage(photo.path, 1024, 1024);
+    if (!compressedBlob) return;
 
     // Convert to Base64
-    const image = await fetch(compressed.path);
-    const imageBlob = await image.blob();
-    const base64Image = await blobToBase64(imageBlob);
+    const base64Image = await blobToBase64(compressedBlob);
+
     // Remove metadata
     const base64data = base64Image.split(',').pop();
 
