@@ -306,9 +306,6 @@ export const getVisibleRange = (visibleBounds: Position[]) => {
   return distance([lonSW, latSW], [lonSW, latNE], {units: 'meters'});
 };
 
-export const shouldZoomToFeature = (entityFeature: Feature<Point>) =>
-  isStation(entityFeature) || isStopPlace(entityFeature);
-
 export function getFeatureToSelect(
   featuresAtClick: Feature<Geometry, GeoJsonProperties>[],
   positionClicked: Position, // [lon, lat]
