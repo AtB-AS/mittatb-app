@@ -187,14 +187,14 @@ const SmartParkAndRideTexts = {
       ),
       descriptionLink: {
         text: _(
-          'Les mer på atb.no/RanheimFabrikker',
-          'Read more at atb.no/RanheimFabrikker',
-          'Les meir på atb.no/RanheimFabrikker',
+          'Les mer på atb.no',
+          'Read more at atb.no',
+          'Les meir på atb.no',
         ),
         a11yHint: _(
-          'Les mer på atb.no/RanheimFabrikker',
-          'Read more at atb.no/RanheimFabrikker',
-          'Les meir på atb.no/RanheimFabrikker',
+          'Les mer på atb.no',
+          'Read more at atb.no',
+          'Les meir på atb.no',
         ),
       },
       buttonText: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
