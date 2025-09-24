@@ -187,9 +187,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                     .smartParkAndRide.label,
                 )}
                 leftIcon={{svg: Parking}}
-                onPress={() =>
-                  navigation.navigate('Profile_SmartParkAndRideScreen')
-                }
+                onPress={() => {
+                  analytics.logEvent(
+                    'Smart Park & Ride',
+                    'Profile button clicked',
+                  );
+                  navigation.navigate('Profile_SmartParkAndRideScreen');
+                }}
                 label="new"
                 testID="smartParkAndRideButton"
               />

@@ -18,6 +18,7 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useAuthContext} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   showHeader?: boolean;
@@ -34,13 +35,23 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
   const {continueFromOnboardingSection} = useOnboardingNavigation();
   const focusRef = useFocusOnLoad(true);
   const {authenticationType} = useAuthContext();
+  const analytics = useAnalyticsContext();
 
-  const navigateBack = () => continueFromOnboardingSection('smartParkAndRide');
+  const navigateBack = () => {
+    analytics.logEvent('Smart Park & Ride', 'Do it later clicked');
+    continueFromOnboardingSection('smartParkAndRide');
+  };
 
   const {
     mutateAsync: handleAddVehicleRegistration,
     error: addVehicleRegistrationError,
-  } = useAddVehicleRegistrationMutation(licensePlate, nickname, navigateBack);
+  } = useAddVehicleRegistrationMutation(licensePlate, nickname, () => {
+    analytics.logEvent('Smart Park & Ride', 'Onboarding completed', {
+      hasNickname: nickname.length > 0,
+      licensePlate,
+    });
+    continueFromOnboardingSection('smartParkAndRide');
+  });
 
   const themeColor = theme.color.background.accent[0];
 
@@ -97,7 +108,10 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
       )}
       <Button
         expanded={true}
-        onPress={() => handleAddVehicleRegistration()}
+        onPress={() => {
+          analytics.logEvent('Smart Park & Ride', 'Add vehicle clicked');
+          handleAddVehicleRegistration();
+        }}
         text={t(SmartParkAndRideTexts.add.footer.add)}
         rightIcon={{svg: Confirm}}
       />

@@ -25,6 +25,8 @@ import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {ThemedCarRegister} from '@atb/theme/ThemedAssets';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
+import {useAnalyticsContext} from '@atb/modules/analytics';
+import {useState} from 'react';
 
 const MAX_VEHICLE_REGISTRATIONS = 2;
 
@@ -39,6 +41,10 @@ export const Profile_SmartParkAndRideScreen = () => {
     isFetching: vehicleRegistrationsIsFetching,
   } = useVehicleRegistrationsQuery();
   const {authenticationType} = useAuthContext();
+  const analytics = useAnalyticsContext();
+  const [showNotLoggedInWarning, setShowNotLoggedInWarning] = useState(
+    authenticationType !== 'phone',
+  );
 
   const canAddVehicleRegistrations =
     (vehicleRegistrations?.length ?? 0) < MAX_VEHICLE_REGISTRATIONS;
@@ -77,12 +83,20 @@ export const Profile_SmartParkAndRideScreen = () => {
                   t,
                 ),
               }}
-              onPress={() =>
+              onPress={() => {
+                analytics.logEvent(
+                  'Smart Park & Ride',
+                  'Edit vehicle clicked',
+                  {
+                    vehicleId: vehicleRegistration.id,
+                    hasNickname: !!vehicleRegistration.nickname,
+                  },
+                );
                 navigation.navigate('Root_SmartParkAndRideEditScreen', {
                   transitionOverride: 'slide-from-right',
                   vehicleRegistration,
-                })
-              }
+                });
+              }}
               onPressIcon={Edit}
             />
           ))}
@@ -90,21 +104,32 @@ export const Profile_SmartParkAndRideScreen = () => {
           {canAddVehicleRegistrations && (
             <LinkSectionItem
               text={t(SmartParkAndRideTexts.content.addVehicle)}
-              onPress={() =>
+              onPress={() => {
+                analytics.logEvent(
+                  'Smart Park & Ride',
+                  'Add vehicle from main screen clicked',
+                );
                 navigation.navigate('Root_SmartParkAndRideAddScreen', {
                   transitionOverride: 'slide-from-right',
-                })
-              }
+                });
+              }}
               rightIcon={{svg: Add}}
             />
           )}
         </Section>
 
-        {authenticationType !== 'phone' && (
+        {showNotLoggedInWarning && (
           <MessageInfoBox
             type="warning"
             title={t(SmartParkAndRideTexts.notLoggedIn.title)}
             message={t(SmartParkAndRideTexts.notLoggedIn.message)}
+            onDismiss={() => {
+              analytics.logEvent(
+                'Smart Park & Ride',
+                'Not logged in message dismissed',
+              );
+              setShowNotLoggedInWarning(false);
+            }}
           />
         )}
 
@@ -117,6 +142,7 @@ export const Profile_SmartParkAndRideScreen = () => {
 
         <HowItWorksSection
           onPress={() => {
+            analytics.logEvent('Smart Park & Ride', 'How it works clicked');
             navigation.navigate({
               name: 'Root_OnboardingCarouselStack',
               params: {configId: 'spar-pilot'},
