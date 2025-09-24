@@ -121,13 +121,11 @@ export const MapBottomSheet = ({
         keyboardBlurBehavior="restore"
         backgroundStyle={styles.sheet}
         onAnimate={(_fromIndex, toIndex, _fromPosition, toPosition) => {
-          if (toIndex !== -1) {
-            setPaddingBottomMap(screenHeight - toPosition + tabBarMinHeight);
-          }
-
           if (toIndex === -1) {
             closeCallback?.();
             setPaddingBottomMap(0);
+          } else {
+            setPaddingBottomMap(screenHeight - toPosition + tabBarMinHeight);
           }
         }}
         accessible={false}
