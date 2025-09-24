@@ -22,6 +22,7 @@ import {
   getFeatureFromScan,
   isParkAndRide,
   mapPositionToCoordinates,
+  CUSTOM_SCAN_ZOOM_LEVEL,
 } from './utils';
 import MapboxGL from '@rnmapbox/maps';
 import {ShmoBookingState} from '@atb/api/types/mobility';
@@ -112,7 +113,7 @@ export const MapBottomSheets = ({
                 dispatchMapState({
                   type: MapStateActionType.Scooter,
                   feature: feature,
-                  customZoomLevel: 17,
+                  customZoomLevel: CUSTOM_SCAN_ZOOM_LEVEL,
                 });
               }
             }}
@@ -204,7 +205,7 @@ export const MapBottomSheets = ({
               dispatchMapState({
                 type: MapStateActionType.Bicycle,
                 feature: feature,
-                customZoomLevel: 17,
+                customZoomLevel: CUSTOM_SCAN_ZOOM_LEVEL,
               });
             }
           }}
@@ -225,7 +226,7 @@ export const MapBottomSheets = ({
               dispatchMapState({
                 type: MapStateActionType.BikeStation,
                 feature: feature,
-                customZoomLevel: 17,
+                customZoomLevel: CUSTOM_SCAN_ZOOM_LEVEL,
               });
             }
           }}
@@ -245,7 +246,7 @@ export const MapBottomSheets = ({
               dispatchMapState({
                 type: MapStateActionType.CarStation,
                 feature: feature,
-                customZoomLevel: 17,
+                customZoomLevel: CUSTOM_SCAN_ZOOM_LEVEL,
               });
             }
           }}

@@ -28,7 +28,6 @@ import {
   isBicycleV2,
   isCarStationV2,
   isScooterV2,
-  isStation,
   isStationV2,
   isVehiclesClusteredFeature,
 } from '@atb/modules/mobility';
@@ -37,6 +36,8 @@ import {MapBottomSheetType} from './MapContext';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
+
+export const CUSTOM_SCAN_ZOOM_LEVEL = 17;
 
 export async function zoomIn(
   mapViewRef: RefObject<MapboxGL.MapView>,

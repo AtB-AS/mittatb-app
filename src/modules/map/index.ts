@@ -66,6 +66,7 @@ export {
   getFeaturesAtClick,
   isFeatureGeofencingZone,
   mapPositionToCoordinates,
+  CUSTOM_SCAN_ZOOM_LEVEL,
 } from './utils';
 export {MapStateActionType} from './mapStateReducer.ts';
 export {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics.tsx';
