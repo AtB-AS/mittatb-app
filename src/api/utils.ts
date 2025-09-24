@@ -9,14 +9,17 @@ const HttpError = z.object({
 });
 type HttpError = z.infer<typeof HttpError>;
 
-/** https://github.com/AtB-AS/amp-rs/blob/main/amp-http/src/lib.rs */
 export const ErrorResponse = z.object({
-  http: HttpError,
   kind: z.string(),
   message: z.string().nullish(),
   details: z.array(z.unknown()).nullish(),
 });
 export type ErrorResponse = z.infer<typeof ErrorResponse>;
+/** https://github.com/AtB-AS/amp-rs/blob/main/amp-http/src/lib.rs */
+export const HttpErrorResponse = ErrorResponse.extend({
+  http: HttpError,
+});
+export type HttpErrorResponse = z.infer<typeof HttpErrorResponse>;
 
 type ErrorType = 'unknown' | 'default' | 'network-error' | 'timeout' | 'cancel';
 
@@ -83,6 +86,20 @@ export const getErrorResponse = (
   error: AxiosError,
 ): ErrorResponse | undefined => {
   return ErrorResponse.safeParse(error?.response?.data).data;
+};
+
+export const getHttpErrorResponse = (
+  error: AxiosError,
+): HttpErrorResponse | undefined => {
+  return HttpErrorResponse.safeParse(error?.response?.data).data;
+};
+
+export const isErrorResponse = (error: any): error is ErrorResponse => {
+  return ErrorResponse.safeParse(error).success;
+};
+
+export const isHttpErrorResponse = (error: any): error is HttpErrorResponse => {
+  return HttpErrorResponse.safeParse(error).success;
 };
 
 export const errorDetailsToResponseData = (

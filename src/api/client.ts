@@ -5,7 +5,7 @@ import {
   ErrorResponse,
   getAxiosErrorMetadata,
   getAxiosErrorType,
-  getErrorResponse,
+  HttpErrorResponse,
 } from './utils';
 import Bugsnag from '@bugsnag/react-native';
 import {
@@ -93,61 +93,13 @@ async function requestIdTokenHandler(config: InternalAxiosRequestConfig) {
   return config;
 }
 
-function responseErrorHandler(error: AxiosError) {
-  const status = error.response?.status ?? error.status;
+function responseErrorHandler(
+  error: AxiosError,
+): Promise<ErrorResponse | HttpErrorResponse> {
+  const errorResponse = parseErrorResponse(error);
 
-  const errorResponse: ErrorResponse = getErrorResponse(error) ?? {
-    http: {
-      code: status ?? -1, // TODO: What is best to default here?
-      message: error.code ?? 'UNKNOWN',
-    },
-    message: error.message,
-    kind: 'UNKNOWN',
-    details: [
-      {
-        responseData: error.response?.data,
-      },
-    ],
-  };
-
-  if (shouldSkipLogging(error)) {
-    return Promise.reject(errorResponse);
-  }
-
-  const idTokenMetadata = {
-    idToken: getIdTokenGlobal(),
-    idTokenValidityStatus: getIdTokenValidityStatus(
-      getIdTokenExpirationTimeGlobal(),
-    ),
-  };
-
-  // ID token breadcrumb logging on API error
-  Bugsnag.leaveBreadcrumb('ID Token', idTokenMetadata);
-
-  const errorType = getAxiosErrorType(error);
-
-  switch (errorType) {
-    case 'default':
-      const errorMetadata = getAxiosErrorMetadata(error);
-      Bugsnag.notify(error, (event) => {
-        event.addMetadata('api', {...errorMetadata});
-        // ID token metadata on API error
-        event.addMetadata('ID Token', idTokenMetadata);
-      });
-      break;
-    case 'unknown':
-      Bugsnag.notify(error);
-      errorResponse.kind = 'AXIOS_UNKNOWN';
-      break;
-    case 'network-error':
-      errorResponse.kind = 'AXIOS_NETWORK_ERROR';
-      break;
-    case 'timeout':
-      errorResponse.kind = 'AXIOS_TIMEOUT';
-      break;
-    case 'cancel':
-      errorResponse.kind = 'AXIOS_CANCEL';
-      break;
+  if (!shouldSkipLogging(error)) {
+    notifyError(error);
   }
 
   return Promise.reject(errorResponse);
@@ -185,4 +137,85 @@ export const useTimeoutRequest = (): TimeoutRequest => {
     },
     abort: () => controller.abort(),
   };
+};
+
+const parseErrorResponse = (
+  error: AxiosError,
+): ErrorResponse | HttpErrorResponse => {
+  const errorType = getAxiosErrorType(error);
+
+  switch (errorType) {
+    case 'default':
+      if (error.response) {
+        const parsed = HttpErrorResponse.safeParse(error.response.data);
+
+        if (parsed.success) {
+          return parsed.data;
+        }
+
+        return {
+          http: {
+            code: error.response.status,
+            message: error.code ?? 'UNKNOWN',
+          },
+          message: error.message,
+          kind: 'UNKNOWN',
+          details: [
+            {
+              responseData: error.response.data,
+            },
+          ],
+        };
+      }
+
+      return {
+        message: error.message,
+        kind: 'UNKNOWN',
+        details: [],
+      };
+    case 'unknown':
+      return {
+        message: error.message,
+        kind: 'AXIOS_UNKNOWN',
+        details: [],
+      };
+    case 'network-error':
+      return {
+        message: error.message,
+        kind: 'AXIOS_NETWORK_ERROR',
+        details: [],
+      };
+    case 'timeout':
+      return {
+        message: error.message,
+        kind: 'AXIOS_TIMEOUT',
+        details: [],
+      };
+    case 'cancel':
+      return {
+        message: error.message,
+        kind: 'AXIOS_CANCEL',
+        details: [],
+      };
+  }
+};
+
+const notifyError = (axiosError: AxiosError) => {
+  const idTokenMetadata = {
+    idToken: getIdTokenGlobal(),
+    idTokenValidityStatus: getIdTokenValidityStatus(
+      getIdTokenExpirationTimeGlobal(),
+    ),
+  };
+
+  // ID token breadcrumb logging on API error
+  Bugsnag.leaveBreadcrumb('ID Token', idTokenMetadata);
+
+  const errorMetadata = getAxiosErrorMetadata(axiosError);
+
+  Bugsnag.notify(axiosError, (event) => {
+    event.addMetadata('api', {...errorMetadata});
+    // ID token metadata on API error
+    event.addMetadata('ID Token', idTokenMetadata);
+  });
 };
