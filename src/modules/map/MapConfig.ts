@@ -12,9 +12,11 @@ export const SCOOTERS_CLUSTER_RADIUS = 40;
 const {height: screenHeight} = Dimensions.get('screen');
 const basePadding = screenHeight * 0.2;
 
-export const SLIGHTLY_RAISED_MAP_PADDING = {
-  paddingTop: basePadding,
-  paddingBottom: 2 * basePadding,
-  paddingLeft: basePadding,
-  paddingRight: basePadding,
+export const getSlightlyRaisedMapPadding = (bottomPadding?: number) => {
+  return {
+    paddingTop: basePadding,
+    paddingBottom: bottomPadding ? bottomPadding : 2 * basePadding,
+    paddingLeft: basePadding,
+    paddingRight: basePadding,
+  };
 };

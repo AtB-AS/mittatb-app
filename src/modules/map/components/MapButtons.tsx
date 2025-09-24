@@ -59,7 +59,7 @@ export const MapButtons = ({
       >
         <ExternalRealtimeMapButton />
 
-        {showMapFilterButton && <MapFilter isLoading={false} />}
+        {showMapFilterButton && <MapFilter />}
 
         <LocationArrow onPress={locationArrowOnPress} />
       </View>

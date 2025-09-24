@@ -8,7 +8,6 @@ import {
 import {ActivityIndicator, Alert, View, ScrollView} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
-import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {VehicleCard} from '../VehicleCard';
 import {useActiveShmoBookingQuery} from '../../queries/use-active-shmo-booking-query';
@@ -29,7 +28,6 @@ import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
-  onActiveBookingReceived?: () => void;
   navigateSupportCallback: () => void;
   photoNavigation: (bookingId: string) => void;
   onForceClose: () => void;
@@ -38,7 +36,6 @@ type Props = {
 };
 
 export const ActiveScooterSheet = ({
-  onActiveBookingReceived,
   navigateSupportCallback,
   photoNavigation,
   onForceClose,
@@ -60,8 +57,6 @@ export const ActiveScooterSheet = ({
     activeBooking?.asset.id ?? '',
     mapViewRef,
   );
-
-  useDoOnceOnItemReceived(onActiveBookingReceived, activeBooking);
 
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
