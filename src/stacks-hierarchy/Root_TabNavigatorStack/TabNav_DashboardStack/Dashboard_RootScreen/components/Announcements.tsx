@@ -42,19 +42,7 @@ export const Announcements = ({style}: Props) => {
   const styles = useStyle();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
-  const {location} = useGeolocationContext();
-  const debouncedLocation = useDebounce(location, 5000) ?? undefined;
-  const {carPoolingZones, fareZones, cityZones} =
-    useFirestoreConfigurationContext();
-  const {carPoolingZone, fareZone, cityZone} = useMemo(() => {
-    const carPoolingZone = findZoneInLocation(
-      debouncedLocation,
-      carPoolingZones,
-    );
-    const fareZone = findZoneInLocation(debouncedLocation, fareZones);
-    const cityZone = findZoneInLocation(debouncedLocation, cityZones);
-    return {carPoolingZone, fareZone, cityZone};
-  }, [debouncedLocation, carPoolingZones, fareZones, cityZones]);
+  const {fareZone, cityZone, carPoolingZone} = useZones();
 
   const ruleVariables = {
     isBeaconsConsentGranted: isConsentGranted ?? false,
@@ -116,3 +104,21 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     width: Dimensions.get('window').width * 0.9 - 2 * theme.spacing.medium,
   },
 }));
+
+const useZones = () => {
+  const {location} = useGeolocationContext();
+  const debouncedLocation = useDebounce(location, 5000) ?? undefined;
+  const {carPoolingZones, fareZones, cityZones} =
+    useFirestoreConfigurationContext();
+  const {carPoolingZone, fareZone, cityZone} = useMemo(() => {
+    const carPoolingZone = findZoneInLocation(
+      debouncedLocation,
+      carPoolingZones,
+    );
+    const fareZone = findZoneInLocation(debouncedLocation, fareZones);
+    const cityZone = findZoneInLocation(debouncedLocation, cityZones);
+    return {carPoolingZone, fareZone, cityZone};
+  }, [debouncedLocation, carPoolingZones, fareZones, cityZones]);
+
+  return {carPoolingZone, fareZone, cityZone};
+};
