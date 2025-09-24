@@ -5,7 +5,7 @@ import {SmartParkAndRideOnboarding_AddScreen} from './SmartParkAndRideOnboarding
 
 export const sparOnboardingId = 'spar-pilot';
 
-export type SparPilotOnboardingScreenNames =
+export type SparPilotOnboardingScreenName =
   | 'SmartParkAndRideOnboarding_InformationScreen'
   | 'SmartParkAndRideOnboarding_AutomaticRegistrationScreen'
   | 'SmartParkAndRideOnboarding_AddScreen';

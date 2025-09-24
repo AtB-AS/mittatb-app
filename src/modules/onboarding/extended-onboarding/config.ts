@@ -4,11 +4,11 @@ import {OnboardingCarouselConfig} from '../onboarding-carousel';
 
 export const extendedOnboardingId = 'extended-onboarding';
 
-export type ExtendedOnboardingScreenNames =
+export type ExtendedOnboardingScreenName =
   | 'ExtendedOnboarding_GoodToKnowScreen'
   | 'ExtendedOnboarding_AlsoGoodToKnowScreen';
 
-export const extendedOnboardingConfig: OnboardingCarouselConfig = {
+export const extendedOnboardingCarouselConfig: OnboardingCarouselConfig = {
   id: extendedOnboardingId,
   onboardingScreens: [
     {

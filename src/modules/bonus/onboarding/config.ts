@@ -6,7 +6,7 @@ import {BonusOnboarding_WelcomeScreen} from './BonusOnboarding_WelcomeScreen';
 
 export const bonusOnboardingId = 'bonus-pilot';
 
-export type BonusOnboardingScreenNames =
+export type BonusOnboardingScreenName =
   | 'BonusOnboarding_WelcomeScreen'
   | 'BonusOnboarding_BuyTicketsScreen'
   | 'BonusOnboarding_MoreTravelMethodsScreen'

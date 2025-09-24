@@ -10,7 +10,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Theme} from '@atb/theme/colors';
 import {RootStackScreenProps} from '../navigation-types';
 import {
-  onboardingCarouselConfig,
+  onboardingCarouselConfigs,
   OnboardingCarouselStackParams,
 } from '@atb/modules/onboarding';
 
@@ -22,7 +22,7 @@ type Props = RootStackScreenProps<'Root_OnboardingCarouselStack'>;
 export const Root_OnboardingCarouselStack = ({route}: Props) => {
   const styles = useStyles();
   const {configId} = route.params;
-  const config = onboardingCarouselConfig.find(
+  const config = onboardingCarouselConfigs.find(
     (onboardingConfig) => onboardingConfig.id === configId,
   );
   return (

@@ -78,7 +78,7 @@ import {
   Root_SmartParkAndRideAddScreen,
   Root_SmartParkAndRideEditScreen,
 } from './Root_SmartParkAndRide';
-import {Root_OnboardingCarouselStack as Root_OnboardingCarouselStack} from './Root_OnboardingCarouselStack';
+import {Root_OnboardingCarouselStack} from './Root_OnboardingCarouselStack';
 import {getActiveRouteName} from '@atb/utils/navigation';
 
 type ResultState = PartialState<NavigationState> & {

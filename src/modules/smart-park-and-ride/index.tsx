@@ -12,5 +12,5 @@ export {SmartParkAndRideOnboarding_AutomaticRegistrationScreen} from './onboardi
 export {
   sparOnboardingCarouselConfig,
   sparOnboardingId,
-  type SparPilotOnboardingScreenNames,
+  type SparPilotOnboardingScreenName,
 } from './onboarding';

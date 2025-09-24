@@ -1,5 +1,5 @@
 export {
-  extendedOnboardingConfig,
+  extendedOnboardingCarouselConfig,
   extendedOnboardingId,
-  type ExtendedOnboardingScreenNames,
+  type ExtendedOnboardingScreenName,
 } from './config';

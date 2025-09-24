@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import {useCallback} from 'react';
 import {OnboardingCarouselNavigationProps} from './navigation-types';
-import {onboardingCarouselConfig} from './onboarding-carousel-config';
+import {onboardingCarouselConfigs} from './onboarding-carousel-config';
 import {OnboardingCarouselScreenName} from './types';
 
 export function useNavigateToNextOnboardingCarouselScreen(
@@ -27,7 +27,7 @@ export function getNextOnboardingCarouselScreenName(
   configId: string,
   currentScreenName: string,
 ): OnboardingCarouselScreenName | undefined {
-  const config = onboardingCarouselConfig.find((c) => c.id === configId);
+  const config = onboardingCarouselConfigs.find((c) => c.id === configId);
   if (!config) return undefined;
 
   const currentIndex = config.onboardingScreens.findIndex(

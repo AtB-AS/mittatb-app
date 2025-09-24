@@ -1,5 +1,5 @@
 export {
   sparOnboardingCarouselConfig,
   sparOnboardingId,
-  type SparPilotOnboardingScreenNames,
+  type SparPilotOnboardingScreenName,
 } from './config';

@@ -1,4 +1,4 @@
-export {onboardingCarouselConfig} from './onboarding-carousel-config';
+export {onboardingCarouselConfigs} from './onboarding-carousel-config';
 export type {
   OnboardingCarouselConfig,
   OnboardingCarouselConfigId,
