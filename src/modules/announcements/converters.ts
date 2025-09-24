@@ -38,6 +38,7 @@ export const mapToAnnouncement = (
   if (parseResult.success) {
     return parseResult.data;
   } else {
+    console.log('Announcement failed safeParse check:');
     console.warn(parseResult.error);
   }
 };
