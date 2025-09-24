@@ -41,7 +41,7 @@ export const Vehicles = ({
 
       flyToLocation({
         coordinates: mapPositionToCoordinates(feature.geometry.coordinates),
-        padding: SLIGHTLY_RAISED_MAP_PADDING,
+        padding: SLIGHTLY_RAISED_MAP_PADDING(),
         mapCameraRef,
         mapViewRef,
         zoomLevel: toZoomLevel,
