@@ -4,7 +4,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {AuthReducerAction, ConfirmationErrorCode} from './types';
 import {authenticateWithSms, verifySms} from '@atb/api/identity';
 import {Language} from '@atb/translations';
-import {ErrorResponse, errorDetailsToResponseData} from '@atb/api/utils';
+import {HttpErrorResponse, errorDetailsToResponseData} from '@atb/api/utils';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 const ERROR_INVALID_PHONE_NUMBER = 'auth/invalid-phone-number';
@@ -41,7 +41,7 @@ export const authSignInWithPhoneNumber = async (
     await authenticateWithSms(phoneNumberWithPrefix, language);
     dispatch({type: 'SIGN_IN_INITIATED', phoneNumber: phoneNumberWithPrefix});
   } catch (e: any) {
-    const error = e as ErrorResponse;
+    const error = e as HttpErrorResponse;
     if (error.http.code === 400) {
       const errorData = errorDetailsToResponseData(error);
       if (errorData?.error_code === 'BAD_REQUEST') {
@@ -85,7 +85,7 @@ export const authConfirmCode = async (
     const token = await verifySms(phoneNumber, code);
     return await authSignInWithCustomToken(token);
   } catch (e) {
-    const error = e as ErrorResponse;
+    const error = e as HttpErrorResponse;
     const status = error.http.code;
     switch (status) {
       case 400:
