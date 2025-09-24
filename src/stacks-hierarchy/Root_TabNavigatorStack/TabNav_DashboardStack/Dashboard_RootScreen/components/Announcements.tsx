@@ -14,8 +14,9 @@ import {ContentHeading} from '@atb/components/heading';
 import {useOnboardingSectionIsOnboarded} from '@atb/modules/onboarding';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {useFindZoneInLocation} from '@atb/utils/use-find-zone-in-location';
+import {findZoneInLocation} from '@atb/utils/use-find-zone-in-location';
 import {useDebounce} from '@atb/utils/use-debounce';
+import {useMemo} from 'react';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -45,12 +46,15 @@ export const Announcements = ({style}: Props) => {
   const debouncedLocation = useDebounce(location, 5000) ?? undefined;
   const {carPoolingZones, fareZones, cityZones} =
     useFirestoreConfigurationContext();
-  const carPoolingZone = useFindZoneInLocation(
-    debouncedLocation,
-    carPoolingZones,
-  );
-  const fareZone = useFindZoneInLocation(debouncedLocation, fareZones);
-  const cityZone = useFindZoneInLocation(debouncedLocation, cityZones);
+  const {carPoolingZone, fareZone, cityZone} = useMemo(() => {
+    const carPoolingZone = findZoneInLocation(
+      debouncedLocation,
+      carPoolingZones,
+    );
+    const fareZone = findZoneInLocation(debouncedLocation, fareZones);
+    const cityZone = findZoneInLocation(debouncedLocation, cityZones);
+    return {carPoolingZone, fareZone, cityZone};
+  }, [debouncedLocation, carPoolingZones, fareZones, cityZones]);
 
   const ruleVariables = {
     isBeaconsConsentGranted: isConsentGranted ?? false,

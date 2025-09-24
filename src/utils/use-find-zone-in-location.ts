@@ -10,13 +10,27 @@ export const useFindZoneInLocation = <T extends Zone>(
   zones?: T[],
 ) => {
   return useMemo(() => {
-    if (location?.coordinates.latitude && zones) {
-      return zones.find(({geometry}) =>
-        turfBooleanPointInPolygon(
-          [location?.coordinates.longitude, location?.coordinates.latitude],
-          geometry,
-        ),
-      );
+    if (location && zones) {
+      return findZoneInLocation(location, zones);
     }
-  }, [zones, location?.coordinates.longitude, location?.coordinates.latitude]);
+  }, [zones, location]);
+};
+
+export const findZoneInLocation = <T extends Zone>(
+  location: Location | undefined,
+  zones?: T[],
+) => {
+  if (
+    !location?.coordinates.longitude ||
+    !location?.coordinates.latitude ||
+    !zones
+  ) {
+    return undefined;
+  }
+  return zones.find(({geometry}) =>
+    turfBooleanPointInPolygon<Polygon>(
+      [location.coordinates.longitude, location.coordinates.latitude],
+      geometry,
+    ),
+  );
 };
