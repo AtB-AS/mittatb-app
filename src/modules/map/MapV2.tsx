@@ -14,7 +14,7 @@ import {
 import {Feature} from 'geojson';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
-import {MapCameraConfig, SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
+import {MapCameraConfig, getSlightlyRaisedMapPadding} from './MapConfig';
 import {GeofencingZoneCustomProps, MapProps} from './types';
 import {
   isFeaturePoint,
@@ -157,7 +157,7 @@ export const MapV2 = (props: MapProps) => {
           coordinates,
           padding: !selectedFeature
             ? undefined
-            : SLIGHTLY_RAISED_MAP_PADDING(paddingBottomMap),
+            : getSlightlyRaisedMapPadding(paddingBottomMap),
           mapCameraRef,
           mapViewRef,
           zoomLevel: DEFAULT_ZOOM_LEVEL + 2.5,
@@ -247,7 +247,7 @@ export const MapV2 = (props: MapProps) => {
           coordinates: mapPositionToCoordinates(
             featureToSelect.geometry.coordinates,
           ),
-          padding: SLIGHTLY_RAISED_MAP_PADDING(paddingBottomMap),
+          padding: getSlightlyRaisedMapPadding(paddingBottomMap),
           mapCameraRef,
           mapViewRef,
           zoomLevel: toZoomLevel,
@@ -333,7 +333,7 @@ export const MapV2 = (props: MapProps) => {
             }
             padding={
               activeShmoBooking?.bookingId
-                ? SLIGHTLY_RAISED_MAP_PADDING(paddingBottomMap)
+                ? getSlightlyRaisedMapPadding(paddingBottomMap)
                 : undefined
             }
             {...MapCameraConfig}
@@ -343,7 +343,7 @@ export const MapV2 = (props: MapProps) => {
               followUserLocation
             }
             followUserMode={UserTrackingMode.FollowWithHeading}
-            followPadding={SLIGHTLY_RAISED_MAP_PADDING(paddingBottomMap)}
+            followPadding={getSlightlyRaisedMapPadding(paddingBottomMap)}
           />
           {showGeofencingZones && !vehicleError && !vehicleIsLoading && (
             <GeofencingZones

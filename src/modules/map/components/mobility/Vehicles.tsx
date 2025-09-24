@@ -7,7 +7,7 @@ import {Bicycles} from './Bicycles';
 import {
   flyToLocation,
   isClusterFeature,
-  SLIGHTLY_RAISED_MAP_PADDING,
+  getSlightlyRaisedMapPadding,
 } from '@atb/modules/map';
 import {mapPositionToCoordinates} from '../../utils';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
@@ -41,7 +41,7 @@ export const Vehicles = ({
 
       flyToLocation({
         coordinates: mapPositionToCoordinates(feature.geometry.coordinates),
-        padding: SLIGHTLY_RAISED_MAP_PADDING(),
+        padding: getSlightlyRaisedMapPadding(),
         mapCameraRef,
         mapViewRef,
         zoomLevel: toZoomLevel,

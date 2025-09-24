@@ -23,7 +23,7 @@ export {
   SCOOTERS_CLUSTER_RADIUS,
   SCOOTERS_MAX_CLUSTER_LEVEL,
   SCOOTERS_MAX_ZOOM_LEVEL,
-  SLIGHTLY_RAISED_MAP_PADDING,
+  getSlightlyRaisedMapPadding,
 } from './MapConfig';
 export {
   MapBottomSheetType,

@@ -33,7 +33,7 @@ import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics';
 import {MapStateActionType} from './mapStateReducer';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
-import {SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
+import {getSlightlyRaisedMapPadding} from './MapConfig';
 import {MapBottomSheetType, useMapContext} from './MapContext';
 
 type MapBottomSheetsProps = {
@@ -70,7 +70,7 @@ export const MapBottomSheets = ({
         coordinates: mapPositionToCoordinates(
           mapState.feature.geometry.coordinates,
         ),
-        padding: SLIGHTLY_RAISED_MAP_PADDING(paddingBottomMap),
+        padding: getSlightlyRaisedMapPadding(paddingBottomMap),
         mapCameraRef,
         mapViewRef,
         animationMode: 'easeTo',
