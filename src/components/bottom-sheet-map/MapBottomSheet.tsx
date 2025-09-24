@@ -120,12 +120,12 @@ export const MapBottomSheet = ({
         keyboardBehavior={keyboardBehavior}
         keyboardBlurBehavior="restore"
         backgroundStyle={styles.sheet}
-        onAnimate={(_fromI, toI, _fromP, toP) => {
-          if (toI !== -1) {
-            setPaddingBottomMap(screenHeight - toP + tabBarMinHeight);
+        onAnimate={(_fromIndex, toIndex, _fromPosition, toPosition) => {
+          if (toIndex !== -1) {
+            setPaddingBottomMap(screenHeight - toPosition + tabBarMinHeight);
           }
 
-          if (toI === -1) {
+          if (toIndex === -1) {
             closeCallback?.();
             setPaddingBottomMap(0);
           }
