@@ -28,12 +28,14 @@ export type ReducerMapState = {
   url?: string;
   eventToDispatch?: ReducerMapStateAction;
   bookingId?: string;
+  customZoomLevel?: number;
 };
 
 export type ReducerMapStateAction =
   | {
       type: MapStateActionType.Scooter;
       feature: Feature<Point>;
+      customZoomLevel?: number;
     }
   | {
       type: MapStateActionType.ScooterScanned;
@@ -42,6 +44,7 @@ export type ReducerMapStateAction =
   | {
       type: MapStateActionType.Bicycle;
       feature: Feature<Point>;
+      customZoomLevel?: number;
     }
   | {
       type: MapStateActionType.BicycleScanned;
@@ -50,6 +53,7 @@ export type ReducerMapStateAction =
   | {
       type: MapStateActionType.BikeStation;
       feature: Feature<Point>;
+      customZoomLevel?: number;
     }
   | {
       type: MapStateActionType.BikeStationScanned;
@@ -58,6 +62,7 @@ export type ReducerMapStateAction =
   | {
       type: MapStateActionType.CarStation;
       feature: Feature<Point>;
+      customZoomLevel?: number;
     }
   | {
       type: MapStateActionType.CarStationScanned;
@@ -101,6 +106,7 @@ export const mapStateReducer = (
       return {
         bottomSheetType: MapBottomSheetType.Scooter,
         feature: action.feature,
+        customZoomLevel: action?.customZoomLevel,
       };
     case MapStateActionType.ScooterScanned:
       return {
@@ -112,6 +118,7 @@ export const mapStateReducer = (
       return {
         bottomSheetType: MapBottomSheetType.Bicycle,
         feature: action.feature,
+        customZoomLevel: action?.customZoomLevel,
       };
     case MapStateActionType.BicycleScanned:
       return {
@@ -123,6 +130,7 @@ export const mapStateReducer = (
       return {
         bottomSheetType: MapBottomSheetType.BikeStation,
         feature: action.feature,
+        customZoomLevel: action?.customZoomLevel,
       };
     case MapStateActionType.BikeStationScanned:
       return {
@@ -134,6 +142,7 @@ export const mapStateReducer = (
       return {
         bottomSheetType: MapBottomSheetType.CarStation,
         feature: action.feature,
+        customZoomLevel: action?.customZoomLevel,
       };
     case MapStateActionType.CarStationScanned:
       return {

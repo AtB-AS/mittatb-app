@@ -74,9 +74,16 @@ export const MapBottomSheets = ({
         mapCameraRef,
         mapViewRef,
         animationMode: 'easeTo',
+        zoomLevel: mapState?.customZoomLevel,
       });
     }
-  }, [mapCameraRef, mapState.feature, mapViewRef, paddingBottomMap]);
+  }, [
+    mapCameraRef,
+    mapState?.customZoomLevel,
+    mapState.feature,
+    mapViewRef,
+    paddingBottomMap,
+  ]);
 
   async function selectPaymentMethod() {
     setOpenPaymentType(true);
@@ -105,6 +112,7 @@ export const MapBottomSheets = ({
                 dispatchMapState({
                   type: MapStateActionType.Scooter,
                   feature: feature,
+                  customZoomLevel: 17,
                 });
               }
             }}
@@ -196,6 +204,7 @@ export const MapBottomSheets = ({
               dispatchMapState({
                 type: MapStateActionType.Bicycle,
                 feature: feature,
+                customZoomLevel: 17,
               });
             }
           }}
@@ -216,6 +225,7 @@ export const MapBottomSheets = ({
               dispatchMapState({
                 type: MapStateActionType.BikeStation,
                 feature: feature,
+                customZoomLevel: 17,
               });
             }
           }}
@@ -234,8 +244,8 @@ export const MapBottomSheets = ({
 
               dispatchMapState({
                 type: MapStateActionType.CarStation,
-
                 feature: feature,
+                customZoomLevel: 17,
               });
             }
           }}
