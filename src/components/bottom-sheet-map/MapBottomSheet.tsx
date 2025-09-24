@@ -3,19 +3,20 @@ import BottomSheetGor, {
   BottomSheetView,
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
-import {Platform, View} from 'react-native';
+import {Dimensions, Platform, View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PressableOpacity} from '../pressable-opacity';
 import {SvgProps} from 'react-native-svg';
 import {ThemeText} from '../text';
 import {ThemeIcon} from '../theme-icon';
-import {MapButtons, shadows} from '@atb/modules/map';
+import {MapButtons, shadows, useMapContext} from '@atb/modules/map';
 import {BottomSheetTopPositionBridge} from './BottomSheetTopPositionBridge';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
 import {BrandingImage} from '@atb/modules/mobility';
+import {useBottomNavigationStyles} from '@atb/utils/navigation';
 
 export type BottomSheetProps = PropsWithChildren<{
   snapPoints?: Array<string | number>;
@@ -55,6 +56,9 @@ export const MapBottomSheet = ({
   const bottomSheetGorRef = useRef<BottomSheetGor>(null);
   const {theme} = useThemeContext();
   const sheetTopPosition = useSharedValue(0);
+  const {setPaddingBottomMap} = useMapContext();
+  const {height: screenHeight} = Dimensions.get('screen');
+  const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
 
   const aStyle = useAnimatedStyle(() => {
     return {
@@ -116,9 +120,14 @@ export const MapBottomSheet = ({
         keyboardBehavior={keyboardBehavior}
         keyboardBlurBehavior="restore"
         backgroundStyle={styles.sheet}
-        onAnimate={(_from, to) => {
-          if (to === -1) {
+        onAnimate={(_fromI, toI, _fromP, toP) => {
+          if (toI !== -1) {
+            setPaddingBottomMap(screenHeight - toP + tabBarMinHeight);
+          }
+
+          if (toI === -1) {
             closeCallback?.();
+            setPaddingBottomMap(0);
           }
         }}
         accessible={false}

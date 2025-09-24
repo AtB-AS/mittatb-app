@@ -32,7 +32,6 @@ import {
   isStationV2,
   isVehiclesClusteredFeature,
 } from '@atb/modules/mobility';
-import {SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {MapBottomSheetType} from './MapContext';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
@@ -269,17 +268,6 @@ export function flyToLocation({
   });
 }
 
-export function getMapPadding(tabBarHeight: number | undefined) {
-  if (tabBarHeight) {
-    return {
-      ...SLIGHTLY_RAISED_MAP_PADDING,
-      paddingBottom: SLIGHTLY_RAISED_MAP_PADDING.paddingBottom + tabBarHeight,
-    };
-  } else {
-    return SLIGHTLY_RAISED_MAP_PADDING;
-  }
-}
-
 export const toFeaturePoint = <
   T extends {id?: string; lat: number; lon: number},
 >(
@@ -317,9 +305,6 @@ export const getVisibleRange = (visibleBounds: Position[]) => {
   const [[_, latNE], [lonSW, latSW]] = visibleBounds;
   return distance([lonSW, latSW], [lonSW, latNE], {units: 'meters'});
 };
-
-export const shouldShowMapLines = (entityFeature: Feature<Point>) =>
-  isStation(entityFeature) || isStopPlace(entityFeature);
 
 export const shouldZoomToFeature = (entityFeature: Feature<Point>) =>
   isStation(entityFeature) || isStopPlace(entityFeature);

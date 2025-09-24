@@ -39,7 +39,6 @@ export type {
   MapLeg,
   MapLine,
   MapRegion,
-  MapSelectionActionType,
   MobilityMapFilterType,
   NavigateToTripSearchCallback,
   ParkingType,
@@ -66,6 +65,7 @@ export {
   getFeatureToSelect,
   getFeaturesAtClick,
   isFeatureGeofencingZone,
+  mapPositionToCoordinates,
 } from './utils';
 export {MapStateActionType} from './mapStateReducer.ts';
 export {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics.tsx';

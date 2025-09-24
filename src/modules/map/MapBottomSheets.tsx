@@ -17,18 +17,15 @@ import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useNavigation} from '@react-navigation/native';
 import React, {RefObject, useCallback, useEffect, useState} from 'react';
 import {useEnterPaymentMethods} from './hooks/use-enter-payment-methods';
-import {MapBottomSheetType, useMapContext} from './MapContext';
-import {InteractionManager} from 'react-native';
 import {
   flyToLocation,
   getFeatureFromScan,
-  getMapPadding,
   isParkAndRide,
+  mapPositionToCoordinates,
 } from './utils';
 import MapboxGL from '@rnmapbox/maps';
 import {ShmoBookingState} from '@atb/api/types/mobility';
-import {useGeolocationContext} from '@atb/modules/geolocation';
-import {AutoSelectableMapItem, MapFilterType, MapProps} from './types';
+import {MapFilterType, MapProps} from './types';
 import {ExternalRealtimeMapSheet} from './components/external-realtime-map/ExternalRealtimeMapSheet';
 import {DeparturesDialogSheet} from './components/DeparturesDialogSheet';
 
@@ -36,6 +33,8 @@ import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics';
 import {MapStateActionType} from './mapStateReducer';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import {SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
+import {MapBottomSheetType, useMapContext} from './MapContext';
 
 type MapBottomSheetsProps = {
   mapCameraRef: RefObject<MapboxGL.Camera | null>;
@@ -52,8 +51,7 @@ export const MapBottomSheets = ({
 }: MapBottomSheetsProps) => {
   const [openPaymentType, setOpenPaymentType] = useState<boolean>(false);
   const navigateToPaymentMethods = useEnterPaymentMethods();
-  const {mapState, dispatchMapState} = useMapContext();
-  const {getCurrentCoordinates} = useGeolocationContext();
+  const {mapState, dispatchMapState, paddingBottomMap} = useMapContext();
   const {data: activeBooking} = useActiveShmoBookingQuery();
   const tabBarHeight = useBottomTabBarHeight();
 
@@ -66,43 +64,19 @@ export const MapBottomSheets = ({
     navigation.navigate('Root_ParkingViolationsSelectScreen');
   }, [analytics, navigation]);
 
-  const flyToMapItemLocation = useCallback(
-    (mapItem: AutoSelectableMapItem) => {
-      InteractionManager.runAfterInteractions(() => {
-        /*
-            When an item has already been loaded, onMapItemReceived will be called immediately, in which case flyToLocation won't work.
-            This is why runAfterInteractions is used here. We may find that a setTimeout is needed as well.
-          */
-        mapCameraRef &&
-          flyToLocation({
-            coordinates: {
-              latitude: mapItem.lat,
-              longitude: mapItem.lon,
-            },
-            padding: getMapPadding(tabBarHeight),
-            mapCameraRef,
-            mapViewRef,
-            zoomLevel: 19, // no clustering at this zoom level
-          });
-      });
-    },
-    [mapCameraRef, mapViewRef, tabBarHeight],
-  );
-
-  const flyToUserLocation = useCallback(async () => {
-    const coordinates = await getCurrentCoordinates();
-    mapCameraRef &&
+  useEffect(() => {
+    if (mapState.feature && paddingBottomMap > 0) {
       flyToLocation({
-        coordinates: {
-          latitude: coordinates?.latitude ?? 0,
-          longitude: coordinates?.longitude ?? 0,
-        },
-        padding: getMapPadding(tabBarHeight),
+        coordinates: mapPositionToCoordinates(
+          mapState.feature.geometry.coordinates,
+        ),
+        padding: SLIGHTLY_RAISED_MAP_PADDING(paddingBottomMap),
         mapCameraRef,
         mapViewRef,
-        zoomLevel: 15,
+        animationMode: 'easeTo',
       });
-  }, [getCurrentCoordinates, mapCameraRef, mapViewRef, tabBarHeight]);
+    }
+  }, [mapCameraRef, mapState.feature, mapViewRef, paddingBottomMap]);
 
   async function selectPaymentMethod() {
     setOpenPaymentType(true);
@@ -132,7 +106,6 @@ export const MapBottomSheets = ({
                   type: MapStateActionType.Scooter,
                   feature: feature,
                 });
-                flyToMapItemLocation(item);
               }
             }}
             selectPaymentMethod={selectPaymentMethod}
@@ -169,7 +142,6 @@ export const MapBottomSheets = ({
         <ActiveScooterSheet
           mapViewRef={mapViewRef}
           onForceClose={handleCloseSheet}
-          onActiveBookingReceived={flyToUserLocation}
           navigateSupportCallback={() => {
             navigation.navigate('Root_ScooterHelpScreen', {
               operatorId: activeBooking.asset.operator.id,
@@ -225,7 +197,6 @@ export const MapBottomSheets = ({
                 type: MapStateActionType.Bicycle,
                 feature: feature,
               });
-              flyToMapItemLocation(item);
             }
           }}
           locationArrowOnPress={locationArrowOnPress}
@@ -246,7 +217,6 @@ export const MapBottomSheets = ({
                 type: MapStateActionType.BikeStation,
                 feature: feature,
               });
-              flyToMapItemLocation(item);
             }
           }}
           locationArrowOnPress={locationArrowOnPress}
@@ -267,7 +237,6 @@ export const MapBottomSheets = ({
 
                 feature: feature,
               });
-              flyToMapItemLocation(item);
             }
           }}
           locationArrowOnPress={locationArrowOnPress}
