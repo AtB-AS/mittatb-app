@@ -6,7 +6,6 @@ import {
 } from '@atb/translations';
 import {Linking, View} from 'react-native';
 import {Location} from '@atb/modules/favorites';
-import {useFindCityZoneInLocation} from '../hooks';
 import {SvgProps} from 'react-native-svg';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemeText} from '@atb/components/text';
@@ -23,6 +22,7 @@ import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {CityZone} from '@atb/modules/configuration';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {useFindZoneInLocation} from '@atb/utils/use-find-zone-in-location';
 
 type ActionButton = {
   id: string;
@@ -48,8 +48,8 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
   const {t} = useTranslation();
   const {cityZones} = useFirestoreConfigurationContext();
   const enabledCityZones = cityZones.filter((cityZone) => cityZone.enabled);
-  const fromCityZone = useFindCityZoneInLocation(from, enabledCityZones);
-  const toCityZone = useFindCityZoneInLocation(to, enabledCityZones);
+  const fromCityZone = useFindZoneInLocation(from, enabledCityZones);
+  const toCityZone = useFindZoneInLocation(to, enabledCityZones);
   const actionButtons = useActionButtons(fromCityZone);
 
   if (!fromCityZone || !toCityZone) {
