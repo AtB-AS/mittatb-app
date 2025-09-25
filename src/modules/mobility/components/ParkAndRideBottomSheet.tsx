@@ -4,7 +4,7 @@ import {WalkingDistance} from '@atb/components/walking-distance';
 import {StyleSheet} from '@atb/theme';
 import {BicycleFill, CarFill} from '@atb/assets/svg/mono-icons/transportation';
 import {ParkAndRideTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {ScrollView, View} from 'react-native';
+import {View} from 'react-native';
 import {
   NavigateToTripSearchCallback,
   ParkingType,
@@ -62,7 +62,9 @@ export const ParkAndRideBottomSheet = ({
 
   return (
     <MapBottomSheet
-      snapPoints={['80%']}
+      snapPoints={['15%']}
+      canMinimize={true}
+      enablePanDownToClose={false}
       closeCallback={onClose}
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
@@ -72,65 +74,63 @@ export const ParkAndRideBottomSheet = ({
       rightIcon={Close}
       locationArrowOnPress={locationArrowOnPress}
     >
-      <ScrollView>
-        <View style={styles.buttonsContainer}>
-          <Button
-            expanded={true}
-            text={t(DeparturesDialogSheetTexts.travelFrom.title)}
-            onPress={() => navigateToTripSearch(searchLocation, 'fromLocation')}
-            mode="primary"
-            style={styles.travelButton}
-          />
-          <Button
-            expanded={true}
-            text={t(DeparturesDialogSheetTexts.travelTo.title)}
-            onPress={() => navigateToTripSearch(searchLocation, 'toLocation')}
-            mode="primary"
-            style={styles.travelButton}
-          />
-        </View>
-        <ScrollView style={styles.container}>
-          <Section>
-            <GenericSectionItem>
-              <View style={styles.parkingName}>
-                <ThemeText typography="body__secondary" color="secondary">
-                  {heading}
-                </ThemeText>
-                <WalkingDistance distance={distance} />
-              </View>
-            </GenericSectionItem>
-            <GenericSectionItem>
-              <View style={styles.mobilityStatContainer}>
-                <MobilityStats
-                  first={
-                    <MobilityStat
-                      svg={parkingFor === 'pedalCycle' ? BicycleFill : CarFill}
-                      primaryStat={t(ParkAndRideTexts.parkingFor(parkingFor))}
-                    />
-                  }
-                  second={
-                    <MobilityStat
-                      svg={Parking}
-                      primaryStat={capacity ?? ''}
-                      secondaryStat={
-                        capacity
-                          ? t(ParkAndRideTexts.capacity)
-                          : t(ParkAndRideTexts.unknownCapacity)
-                      }
-                    />
-                  }
-                />
-                <ThemedParkAndRide />
-              </View>
-              <MessageInfoBox
-                style={styles.disclaimer}
-                type="info"
-                message={t(ParkAndRideTexts.disclaimer)}
+      <View style={styles.buttonsContainer}>
+        <Button
+          expanded={true}
+          text={t(DeparturesDialogSheetTexts.travelFrom.title)}
+          onPress={() => navigateToTripSearch(searchLocation, 'fromLocation')}
+          mode="primary"
+          style={styles.travelButton}
+        />
+        <Button
+          expanded={true}
+          text={t(DeparturesDialogSheetTexts.travelTo.title)}
+          onPress={() => navigateToTripSearch(searchLocation, 'toLocation')}
+          mode="primary"
+          style={styles.travelButton}
+        />
+      </View>
+      <View style={styles.container}>
+        <Section>
+          <GenericSectionItem>
+            <View style={styles.parkingName}>
+              <ThemeText typography="body__secondary" color="secondary">
+                {heading}
+              </ThemeText>
+              <WalkingDistance distance={distance} />
+            </View>
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <View style={styles.mobilityStatContainer}>
+              <MobilityStats
+                first={
+                  <MobilityStat
+                    svg={parkingFor === 'pedalCycle' ? BicycleFill : CarFill}
+                    primaryStat={t(ParkAndRideTexts.parkingFor(parkingFor))}
+                  />
+                }
+                second={
+                  <MobilityStat
+                    svg={Parking}
+                    primaryStat={capacity ?? ''}
+                    secondaryStat={
+                      capacity
+                        ? t(ParkAndRideTexts.capacity)
+                        : t(ParkAndRideTexts.unknownCapacity)
+                    }
+                  />
+                }
               />
-            </GenericSectionItem>
-          </Section>
-        </ScrollView>
-      </ScrollView>
+              <ThemedParkAndRide />
+            </View>
+            <MessageInfoBox
+              style={styles.disclaimer}
+              type="info"
+              message={t(ParkAndRideTexts.disclaimer)}
+            />
+          </GenericSectionItem>
+        </Section>
+      </View>
     </MapBottomSheet>
   );
 };

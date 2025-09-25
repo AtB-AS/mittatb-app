@@ -33,6 +33,7 @@ export type BottomSheetProps = PropsWithChildren<{
   rightIconText?: string;
   enablePanDownToClose?: boolean;
   locationArrowOnPress: () => void;
+  canMinimize?: boolean;
 }>;
 
 export const MapBottomSheet = ({
@@ -51,6 +52,7 @@ export const MapBottomSheet = ({
   rightIconText,
   enablePanDownToClose = true,
   locationArrowOnPress,
+  canMinimize = false,
 }: BottomSheetProps) => {
   const styles = useStyles();
   const bottomSheetGorRef = useRef<BottomSheetGor>(null);
@@ -110,22 +112,24 @@ export const MapBottomSheet = ({
     return (
       (heading || rightIconText) && (
         <View style={styles.headerContainer}>
-          {heading && (
-            <View style={styles.headerLeft}>
-              {logoUrl && <BrandingImage logoUrl={logoUrl} logoSize={28} />}
-              <View style={styles.headingWrapper}>
-                <ThemeText typography="heading--big">{heading}</ThemeText>
-                {subText && (
-                  <ThemeText
-                    typography="body__secondary"
-                    color={theme.color.foreground.dynamic.secondary}
-                  >
-                    {subText}
-                  </ThemeText>
-                )}
-              </View>
-            </View>
-          )}
+          <View style={styles.headerLeft}>
+            {heading && (
+              <>
+                {logoUrl && <BrandingImage logoUrl={logoUrl} logoSize={28} />}
+                <View style={styles.headingWrapper}>
+                  <ThemeText typography="heading--big">{heading}</ThemeText>
+                  {subText && (
+                    <ThemeText
+                      typography="body__secondary"
+                      color={theme.color.foreground.dynamic.secondary}
+                    >
+                      {subText}
+                    </ThemeText>
+                  )}
+                </View>
+              </>
+            )}
+          </View>
 
           {(rightIconText || rightIcon) && (
             <PressableOpacity
@@ -168,6 +172,8 @@ export const MapBottomSheet = ({
           }
         }}
         accessible={false}
+        maxDynamicContentSize={screenHeight - tabBarMinHeight}
+        index={canMinimize ? 1 : 0}
       >
         <BottomSheetTopPositionBridge sheetTopPosition={sheetTopPosition} />
         {enableDynamicSizing ? (
