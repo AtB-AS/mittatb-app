@@ -1,4 +1,4 @@
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
@@ -10,7 +10,7 @@ import {NavigateToTripSearchCallback} from '../types';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {isDefined} from '@atb/utils/presence';
 import {
-  StopPlacesView,
+  StopPlacesSheetView,
   useStopsDetailsDataQuery,
 } from '@atb/screen-components/place-screen';
 import type {DepartureSearchTime} from '@atb/components/date-selection';
@@ -41,13 +41,11 @@ export const DeparturesDialogSheet = ({
   navigateToDetails,
   navigateToQuay,
   navigateToTripSearch,
-  tabBarHeight,
   locationArrowOnPress,
 }: DeparturesDialogSheetProps) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
-  const styles = useBottomSheetStyles(tabBarHeight ?? 0)();
-  const [searchTime, setSearchTime] = useState<DepartureSearchTime>({
+  const styles = useBottomSheetStyles();
+  const [searchTime, _setSearchTime] = useState<DepartureSearchTime>({
     option: 'now',
     date: new Date().toISOString(),
   });
@@ -70,14 +68,13 @@ export const DeparturesDialogSheet = ({
     if (stopDetailsStatus === 'success') {
       if (thereIsSomeQuays) {
         return (
-          <StopPlacesView
+          <StopPlacesSheetView
             stopPlaces={stopDetailsData?.stopPlaces}
             showTimeNavigation={false}
             navigateToDetails={navigateToDetails}
             navigateToQuay={navigateToQuay}
             isFocused={appStateStatus === 'active'}
             searchTime={searchTime}
-            setSearchTime={setSearchTime}
             showOnlyFavorites={false}
             setShowOnlyFavorites={(_) => {}}
             testID="departuresContentView"
@@ -87,7 +84,6 @@ export const DeparturesDialogSheet = ({
               stopPlaceGeoLocation &&
                 navigateToTripSearch(stopPlaceGeoLocation, target);
             }}
-            backgroundColor={theme.color.background.neutral[1]}
           />
         );
       }
@@ -135,9 +131,9 @@ export const DeparturesDialogSheet = ({
 
   return (
     <MapBottomSheet
-      snapPoints={['60%']}
-      closeCallback={onClose}
+      snapPoints={['50%', '90%']}
       enableDynamicSizing={false}
+      closeCallback={onClose}
       allowBackgroundTouch={true}
       heading={
         stopPlaceFeature.properties?.name ??
@@ -147,9 +143,7 @@ export const DeparturesDialogSheet = ({
       rightIcon={Close}
       locationArrowOnPress={locationArrowOnPress}
     >
-      <View style={styles.listWrapper}>
-        <StopPlaceViewOrError />
-      </View>
+      <StopPlaceViewOrError />
     </MapBottomSheet>
   );
 };
@@ -167,12 +161,8 @@ const getStopPlaceIds = (feature: Feature<Point>): string[] => {
   return [stopPlaceId, ...adjacentSiteIds].filter(isDefined);
 };
 
-const useBottomSheetStyles = (tabBarHeight: number) =>
-  StyleSheet.createThemeHook((theme) => ({
-    paddingHorizontal: {
-      paddingHorizontal: theme.spacing.medium,
-    },
-    listWrapper: {
-      paddingBottom: tabBarHeight,
-    },
-  }));
+const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
+  paddingHorizontal: {
+    paddingHorizontal: theme.spacing.medium,
+  },
+}));

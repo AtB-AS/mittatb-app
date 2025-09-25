@@ -1,28 +1,24 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
-import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
-import {QuaySection} from './QuaySection';
-import {FavoriteToggle} from './FavoriteToggle';
+import {RefreshControl, SectionListData, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
-import {useDeparturesData} from '../hooks/use-departures-data';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import type {ContrastColor} from '@atb-as/theme';
-import {
-  DateSelection,
-  type DepartureSearchTime,
-} from '@atb/components/date-selection';
+import {type DepartureSearchTime} from '@atb/components/date-selection';
 import type {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
+import {useFavoritesContext} from '@atb/modules/favorites';
 import {
-  useFavoritesContext,
-  type UserFavoriteDepartures,
-} from '@atb/modules/favorites';
-import type {StopPlaceAndQuay} from '@atb/screen-components/place-screen';
+  QuaySection,
+  useDeparturesData,
+  type StopPlaceAndQuay,
+} from '@atb/screen-components/place-screen';
+import {BottomSheetSectionList} from '@gorhom/bottom-sheet';
+import {hasFavorites, publicCodeCompare} from './StopPlacesView';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 const NUMBER_OF_DEPARTURES_IN_BUFFER = 5;
@@ -38,43 +34,31 @@ type Props = {
     fromStopPosition: number,
   ) => void;
   searchTime: DepartureSearchTime;
-  setSearchTime: (searchTime: DepartureSearchTime) => void;
   showOnlyFavorites: boolean;
   setShowOnlyFavorites: (enabled: boolean) => void;
   isFocused: boolean;
   testID?: string;
   addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
-  backgroundColor: ContrastColor;
-} & (
-  | {
-      mode: 'Map';
-      setTravelTarget?: (target: string) => void;
-      distance?: number | undefined;
-    }
-  | {
-      mode: 'Departure';
-    }
-  | {
-      mode: 'Favourite';
-    }
-);
+  setTravelTarget?: (target: string) => void;
+  distance?: number | undefined;
+};
 
-export const StopPlacesView = (props: Props) => {
+export const StopPlacesSheetView = (props: Props) => {
   const {
     stopPlaces,
     showTimeNavigation = true,
     navigateToQuay,
     navigateToDetails,
     searchTime,
-    setSearchTime,
     showOnlyFavorites,
     setShowOnlyFavorites,
     isFocused,
     testID,
     mode,
     addedFavoritesVisibleOnDashboard,
-    backgroundColor,
+    setTravelTarget,
+    distance,
   } = props;
   const styles = useStyles();
   const {favoriteDepartures} = useFavoritesContext();
@@ -124,7 +108,9 @@ export const StopPlacesView = (props: Props) => {
   }, [placeHasFavorites, setShowOnlyFavorites]);
 
   return (
-    <SectionList
+    <BottomSheetSectionList
+      style={{flex: 1}}
+      nestedScrollEnabled
       ListHeaderComponent={
         <>
           {didLoadingDataFail && (
@@ -144,80 +130,49 @@ export const StopPlacesView = (props: Props) => {
               />
             </View>
           )}
-          {mode === 'Map' ? (
-            <>
-              <WalkingDistance
-                distance={props.distance}
-                style={styles.walkingDistance}
+
+          <WalkingDistance distance={distance} style={styles.walkingDistance} />
+          <View style={styles.buttonsContainer}>
+            <View style={styles.travelButton}>
+              <Button
+                expanded={true}
+                text={t(DeparturesDialogSheetTexts.travelFrom.title)}
+                onPress={() => {
+                  analytics.logEvent(
+                    'Map',
+                    'Stop place travelFrom button clicked',
+                    {id: stopPlaces[0].id},
+                  );
+                  setTravelTarget && setTravelTarget('fromLocation');
+                }}
+                mode="primary"
+                style={styles.travelFromButtonPadding}
               />
-              <View style={styles.buttonsContainer}>
-                <View style={styles.travelButton}>
-                  <Button
-                    expanded={true}
-                    text={t(DeparturesDialogSheetTexts.travelFrom.title)}
-                    onPress={() => {
-                      analytics.logEvent(
-                        'Map',
-                        'Stop place travelFrom button clicked',
-                        {id: stopPlaces[0].id},
-                      );
-                      props.setTravelTarget &&
-                        props.setTravelTarget('fromLocation');
-                    }}
-                    mode="primary"
-                    style={styles.travelFromButtonPadding}
-                  />
-                </View>
-                <View style={styles.travelButton}>
-                  <Button
-                    expanded={true}
-                    text={t(DeparturesDialogSheetTexts.travelTo.title)}
-                    onPress={() => {
-                      analytics.logEvent(
-                        'Map',
-                        'Stop place travelTo button clicked',
-                        {id: stopPlaces[0].id},
-                      );
-                      props.setTravelTarget &&
-                        props.setTravelTarget('toLocation');
-                    }}
-                    mode="primary"
-                    style={styles.travelToButtonPadding}
-                  />
-                </View>
-              </View>
-              <ThemeText
-                typography="body__secondary"
-                color="secondary"
-                style={styles.title}
-              >
-                {t(DeparturesTexts.header.title)}
-              </ThemeText>
-            </>
-          ) : undefined}
-          {mode === 'Departure' ? (
-            <View
-              style={
-                showTimeNavigation
-                  ? styles.headerWithNavigation
-                  : styles.headerWithoutNavigation
-              }
-            >
-              {placeHasFavorites && (
-                <FavoriteToggle
-                  enabled={showOnlyFavorites}
-                  setEnabled={setShowOnlyFavorites}
-                />
-              )}
-              {showTimeNavigation && (
-                <DateSelection
-                  searchTime={searchTime}
-                  setSearchTime={setSearchTime}
-                  backgroundColor={backgroundColor}
-                />
-              )}
             </View>
-          ) : null}
+            <View style={styles.travelButton}>
+              <Button
+                expanded={true}
+                text={t(DeparturesDialogSheetTexts.travelTo.title)}
+                onPress={() => {
+                  analytics.logEvent(
+                    'Map',
+                    'Stop place travelTo button clicked',
+                    {id: stopPlaces[0].id},
+                  );
+                  setTravelTarget && setTravelTarget('toLocation');
+                }}
+                mode="primary"
+                style={styles.travelToButtonPadding}
+              />
+            </View>
+          </View>
+          <ThemeText
+            typography="body__secondary"
+            color="secondary"
+            style={styles.title}
+          >
+            {t(DeparturesTexts.header.title)}
+          </ThemeText>
         </>
       }
       refreshControl={
@@ -246,35 +201,7 @@ export const StopPlacesView = (props: Props) => {
   );
 };
 
-export function hasFavorites(
-  favorites: UserFavoriteDepartures,
-  quayIds?: string[],
-) {
-  return favorites.some((favorite) =>
-    quayIds?.find((quayId) => favorite.quayId === quayId),
-  );
-}
-
-export function publicCodeCompare(a?: string, b?: string): number {
-  // Show quays with no public code last
-  if (!a) return 1;
-  if (!b) return -1;
-  // If both public codes are numbers, compare as numbers (e.g. 2 < 10)
-  if (parseInt(a) && parseInt(b)) {
-    return parseInt(a) - parseInt(b);
-  }
-  // Otherwise compare as strings (e.g. K1 < K2)
-  return a.localeCompare(b);
-}
-
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  headerWithNavigation: {
-    paddingTop: theme.spacing.medium,
-    marginHorizontal: theme.spacing.medium,
-  },
-  headerWithoutNavigation: {
-    marginHorizontal: theme.spacing.medium,
-  },
   messageBox: {
     marginHorizontal: theme.spacing.medium,
   },
@@ -293,9 +220,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   travelToButtonPadding: {
     marginLeft: theme.spacing.medium / 2,
-  },
-  loadingIndicator: {
-    padding: theme.spacing.medium,
   },
   title: {
     marginTop: theme.spacing.medium,
