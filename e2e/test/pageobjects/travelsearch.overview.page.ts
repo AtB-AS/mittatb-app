@@ -52,7 +52,7 @@ class TravelSearchOverviewPage {
    */
   async openSearchResult(index: number = 0) {
     await ElementHelper.waitForElement('id', `tripSearchSearchResult${index}`);
-    const tripResult = await this.tripResult(index)
+    const tripResult = await this.tripResult(index);
     await tripResult.click();
     await ElementHelper.waitForElement('id', `tripDetailsContentView`);
     await ElementHelper.waitForElement('id', `legContainer0`);

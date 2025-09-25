@@ -2,18 +2,12 @@ import AppHelper from '../utils/app.helper.ts';
 import OnboardingPage from '../pageobjects/onboarding.page.ts';
 import NavigationHelper from '../utils/navigation.helper.ts';
 import ElementHelper from '../utils/element.helper.ts';
-import TicketActivePage from '../pageobjects/ticket.active.page.js';
-import TicketDetailsPage from '../pageobjects/ticket.details.page.js';
 import MyProfilePage from '../pageobjects/profile.page.js';
 import AuthenticationPage from '../pageobjects/authentication.page.js';
 import {formatPhoneNumber} from '../utils/utils.js';
 import ProfilePage from '../pageobjects/profile.page.js';
-import TokenPage from '../pageobjects/token.page.js';
 import DebugPage from '../pageobjects/debug.page.js';
 import Config from '../conf/config.js';
-import {performancetotal} from 'wdio-performancetotal-service';
-import {$} from '@wdio/globals';
-import AlertHelper from '../utils/alert.helper.js';
 
 describe('Auth Cleanup', () => {
   const phoneNumber = Config.phoneNumber();
@@ -31,7 +25,7 @@ describe('Auth Cleanup', () => {
       await ElementHelper.waitForElement('text', 'Profile');
       await MyProfilePage.login.click();
       await AuthenticationPage.loginWithPhone(phoneNumber)
-      await ElementHelper.waitForElement('text', 'Travel search');
+      await ElementHelper.waitForElement('text', 'Find journey');
       await AppHelper.pause(2000);
        */
 
@@ -39,7 +33,7 @@ describe('Auth Cleanup', () => {
       await AuthenticationPage.loginWithPhone(phoneNumber);
       await OnboardingPage.denyLocationInOnboarding();
       await OnboardingPage.waitOnTokenOnboarding(false);
-      await ElementHelper.waitForElement('text', 'Travel search');
+      await ElementHelper.waitForElement('text', 'Find journey');
       await AppHelper.pause(2000);
 
       // Verify

@@ -12,7 +12,7 @@ import {stringToNumArray} from '../utils/utils.js';
 import TimePickerPage from '../pageobjects/time.picker.page.js';
 import {performancetotal} from 'wdio-performancetotal-service';
 
-describe('Travel search', () => {
+describe('Find journey', () => {
   before(async () => {
     await AppHelper.waitOnLoadingScreen();
     await OnboardingPage.skipOnboarding('travelsearch');
