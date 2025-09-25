@@ -2,8 +2,6 @@ import AppHelper from '../utils/app.helper.ts';
 import OnboardingPage from '../pageobjects/onboarding.page.ts';
 import NavigationHelper from '../utils/navigation.helper.ts';
 import ElementHelper from '../utils/element.helper.ts';
-import TicketActivePage from '../pageobjects/ticket.active.page.js';
-import TicketDetailsPage from '../pageobjects/ticket.details.page.js';
 import MyProfilePage from '../pageobjects/profile.page.js';
 import AuthenticationPage from '../pageobjects/authentication.page.js';
 import {formatPhoneNumber} from '../utils/utils.js';
@@ -11,7 +9,6 @@ import ProfilePage from '../pageobjects/profile.page.js';
 import TokenPage from '../pageobjects/token.page.js';
 import DebugPage from '../pageobjects/debug.page.js';
 import Config from '../conf/config.js';
-import {performancetotal} from 'wdio-performancetotal-service';
 
 describe('Auth Mobile Token', () => {
   const phoneNumber = Config.phoneNumber();
@@ -29,7 +26,7 @@ describe('Auth Mobile Token', () => {
       await AuthenticationPage.loginWithPhone(phoneNumber);
       await OnboardingPage.denyLocationInOnboarding();
       await OnboardingPage.waitOnTokenOnboarding(false);
-      await ElementHelper.waitForElement('text', 'Travel search');
+      await ElementHelper.waitForElement('text', 'Find journey');
       await AppHelper.pause(2000);
 
       // Verify
