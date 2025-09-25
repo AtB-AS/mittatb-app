@@ -136,7 +136,7 @@ export const MapBottomSheet = ({
             <View style={styles.headerContainer}>
               {heading && (
                 <View style={styles.headerLeft}>
-                  {logoUrl && <BrandingImage logoUrl={logoUrl} logoSize={20} />}
+                  {logoUrl && <BrandingImage logoUrl={logoUrl} logoSize={28} />}
                   <View style={styles.headingWrapper}>
                     <ThemeText typography="heading--big">{heading}</ThemeText>
                     {subText && (
@@ -184,8 +184,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   headerContainer: {
     flexDirection: 'row',
-    paddingHorizontal: theme.spacing.medium,
     paddingBottom: theme.spacing.medium,
+    paddingRight: theme.spacing.medium,
     gap: theme.spacing.small,
   },
   headerLeft: {
@@ -193,11 +193,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.medium,
+    paddingLeft: theme.spacing.large,
   },
   headingWrapper: {
     gap: theme.spacing.xSmall,
   },
-
   headerRight: {
     flexDirection: 'row',
     gap: theme.spacing.xSmall,

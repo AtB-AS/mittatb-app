@@ -21,12 +21,19 @@ export const BrandingImage = ({
 }: BrandingImageProps) => {
   const styles = useSheetStyle();
   const {enable_vehicle_operator_logo} = useRemoteConfigContext();
-  const isSvg = (url: string) => url.endsWith('.svg');
+  function isSvgUrl(url: string) {
+    try {
+      const u = new URL(url);
+      return u.pathname.toLowerCase().endsWith('.svg');
+    } catch {
+      return false;
+    }
+  }
 
   return (
     <View style={style}>
       {logoUrl && enable_vehicle_operator_logo ? (
-        isSvg(logoUrl) ? (
+        isSvgUrl(logoUrl) ? (
           <SvgCssUri
             style={styles.logo}
             height={logoSize}
@@ -48,10 +55,9 @@ export const BrandingImage = ({
   );
 };
 
-const useSheetStyle = StyleSheet.createThemeHook((theme) => {
+const useSheetStyle = StyleSheet.createThemeHook(() => {
   return {
     logo: {
-      marginEnd: theme.spacing.small,
       overflow: 'hidden',
     },
   };
