@@ -1,7 +1,7 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {StyleSheet} from '@atb/theme';
-import React, {useEffect, useMemo} from 'react';
-import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
+import React from 'react';
+import {RefreshControl, SectionList, View} from 'react-native';
 import {QuaySection} from './QuaySection';
 import {FavoriteToggle} from './FavoriteToggle';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -9,7 +9,6 @@ import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
-import {useDeparturesData} from '../hooks/use-departures-data';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import type {ContrastColor} from '@atb-as/theme';
@@ -19,13 +18,9 @@ import {
 } from '@atb/components/date-selection';
 import type {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {
-  useFavoritesContext,
-  type UserFavoriteDepartures,
-} from '@atb/modules/favorites';
-import type {StopPlaceAndQuay} from '@atb/screen-components/place-screen';
-
-const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
-const NUMBER_OF_DEPARTURES_IN_BUFFER = 5;
+  NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
+  useStopPlaceData,
+} from '../hooks/use-stop-places-data';
 
 type Props = {
   stopPlaces: StopPlace[];
@@ -77,51 +72,23 @@ export const StopPlacesView = (props: Props) => {
     backgroundColor,
   } = props;
   const styles = useStyles();
-  const {favoriteDepartures} = useFavoritesContext();
   const {t} = useTranslation();
   const analytics = useAnalyticsContext();
-  const searchStartTime =
-    searchTime?.option !== 'now' ? searchTime.date : undefined;
-
-  const stopPlaceAndQuays: StopPlaceAndQuay[] = useMemo(
-    () =>
-      stopPlaces
-        .flatMap(
-          (sp) => sp.quays?.map((quay) => ({stopPlace: sp, quay: quay})) || [],
-        )
-        .sort((a, b) =>
-          publicCodeCompare(a.quay.publicCode, b.quay.publicCode),
-        ),
-    [stopPlaces],
-  );
-
-  const quays: Quay[] = stopPlaceAndQuays.map(({quay}) => quay);
-
-  const {state, forceRefresh} = useDeparturesData(
-    quays.map((q) => q.id),
-    NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW + NUMBER_OF_DEPARTURES_IN_BUFFER,
-    showOnlyFavorites,
-    isFocused,
-    mode,
+  const {
+    didLoadingDataFail,
+    forceRefresh,
+    state,
+    quayListData,
     searchStartTime,
-  );
-  const didLoadingDataFail = !!state.error;
-
-  const quayListData: SectionListData<StopPlaceAndQuay>[] =
-    stopPlaceAndQuays.length ? [{data: stopPlaceAndQuays}] : [];
-
-  const placeHasFavorites = stopPlaces.some((sp) =>
-    hasFavorites(
-      favoriteDepartures,
-      sp.quays?.map((q) => q.id),
-    ),
-  );
-
-  // If all favorites are removed while setShowOnlyFavorites is true, reset the
-  // value to false
-  useEffect(() => {
-    if (!placeHasFavorites) setShowOnlyFavorites(false);
-  }, [placeHasFavorites, setShowOnlyFavorites]);
+    placeHasFavorites,
+  } = useStopPlaceData({
+    mode,
+    searchTime,
+    stopPlaces,
+    setShowOnlyFavorites,
+    isFocused,
+    showOnlyFavorites,
+  });
 
   return (
     <SectionList
@@ -245,27 +212,6 @@ export const StopPlacesView = (props: Props) => {
     />
   );
 };
-
-export function hasFavorites(
-  favorites: UserFavoriteDepartures,
-  quayIds?: string[],
-) {
-  return favorites.some((favorite) =>
-    quayIds?.find((quayId) => favorite.quayId === quayId),
-  );
-}
-
-export function publicCodeCompare(a?: string, b?: string): number {
-  // Show quays with no public code last
-  if (!a) return 1;
-  if (!b) return -1;
-  // If both public codes are numbers, compare as numbers (e.g. 2 < 10)
-  if (parseInt(a) && parseInt(b)) {
-    return parseInt(a) - parseInt(b);
-  }
-  // Otherwise compare as strings (e.g. K1 < K2)
-  return a.localeCompare(b);
-}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   headerWithNavigation: {

@@ -1,3 +1,4 @@
+import {UserFavoriteDepartures} from '@atb/modules/favorites';
 import {StopPlacesMode} from '../nearby-stop-places';
 import {addDays, differenceInSeconds, parseISO} from 'date-fns';
 
@@ -33,4 +34,25 @@ function getSecondsUntilMidnightOrMinimum(
     parseISO(isoTime),
   );
   return Math.round(Math.max(timeUntilMidnight, minimumSeconds));
+}
+
+export function hasFavorites(
+  favorites: UserFavoriteDepartures,
+  quayIds?: string[],
+) {
+  return favorites.some((favorite) =>
+    quayIds?.find((quayId) => favorite.quayId === quayId),
+  );
+}
+
+export function publicCodeCompare(a?: string, b?: string): number {
+  // Show quays with no public code last
+  if (!a) return 1;
+  if (!b) return -1;
+  // If both public codes are numbers, compare as numbers (e.g. 2 < 10)
+  if (parseInt(a) && parseInt(b)) {
+    return parseInt(a) - parseInt(b);
+  }
+  // Otherwise compare as strings (e.g. K1 < K2)
+  return a.localeCompare(b);
 }

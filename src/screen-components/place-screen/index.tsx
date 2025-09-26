@@ -6,3 +6,4 @@ export type {StopPlaceAndQuay} from './types';
 export {QuaySection} from './components/QuaySection';
 export {useDeparturesData} from './hooks/use-departures-data';
 export {StopPlacesSheetView} from './components/StopPlacesSheetView';
+export {hasFavorites, publicCodeCompare} from './utils';
