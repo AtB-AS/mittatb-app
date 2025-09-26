@@ -73,12 +73,12 @@ export function RadioSectionItem({
     <View style={[style.spaceBetween, topContainer]}>
       <PressableOpacity
         onPress={() => {
-          onPress(!selected);
           // Talkback doesn't read out the updated state automatically, so we
           // trigger it manually instead.
           if (Platform.OS === 'android' && !selected) {
             AccessibilityInfo.announceForAccessibility(t(dictionary.selected));
           }
+          onPress(!selected);
         }}
         style={styles.mainContent}
         testID={testID}
