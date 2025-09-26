@@ -105,7 +105,7 @@ export const StopPlacesView = (props: Props) => {
     mode,
     searchStartTime,
   );
-  const didLoadingDataFail = !!state.error;
+  const didLoadingDataFail = !!state.isError;
 
   const quayListData: SectionListData<StopPlaceAndQuay>[] =
     stopPlaceAndQuays.length ? [{data: stopPlaceAndQuays}] : [];

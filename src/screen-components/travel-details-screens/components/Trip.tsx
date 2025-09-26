@@ -5,7 +5,6 @@ import {
   isWithinSameDate,
   secondsBetween,
 } from '@atb/utils/date';
-import {AxiosError} from 'axios';
 import React, {useCallback, useRef} from 'react';
 import {View} from 'react-native';
 import {getPlaceName, InterchangeDetails, TripSection} from './TripSection';
@@ -44,7 +43,6 @@ import {hasLegsWeCantSellTicketsFor} from '@atb/modules/operator-config';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
-import {getAxiosErrorType} from '@atb/api/utils';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {isDefined} from '@atb/utils/presence';
 import {
@@ -53,10 +51,11 @@ import {
 } from '@atb/utils/use-in-app-review';
 import {useFocusEffect} from '@react-navigation/native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {ErrorResponse} from '@atb-as/utils';
 
 export type TripProps = {
   tripPattern: TripPattern;
-  error?: AxiosError;
+  error?: ErrorResponse;
   onPressDetailsMap: (params: TravelDetailsMapScreenParams) => void;
   onPressDeparture: (
     items: ServiceJourneyDeparture[],
@@ -286,11 +285,10 @@ function getInterchangeDetails(
   return undefined;
 }
 
-function translatedError(error: AxiosError, t: TranslateFunction): string {
-  const errorType = getAxiosErrorType(error);
-  switch (errorType) {
-    case 'network-error':
-    case 'timeout':
+function translatedError(error: ErrorResponse, t: TranslateFunction): string {
+  switch (error.kind) {
+    case 'AXIOS_NETWORK_ERROR':
+    case 'AXIOS_TIMEOUT':
       return t(TripDetailsTexts.messages.errorNetwork);
     default:
       return t(TripDetailsTexts.messages.errorDefault);

@@ -68,7 +68,7 @@ export function QuayView({
   );
 
   const quayListData: SectionListData<Quay>[] = [{data: [quay]}];
-  const didLoadingDataFail = !!state.error;
+  const didLoadingDataFail = !!state.isError;
 
   const placeHasFavorites = hasFavorites(
     favoriteDepartures,
