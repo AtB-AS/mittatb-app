@@ -3,6 +3,7 @@ import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {Image, StyleProp, View, ViewStyle} from 'react-native';
 import {SvgCssUri} from 'react-native-svg/css';
+import {isSvgUrl} from '../utils';
 
 const DEFAULT_LOGO_SIZE = 50;
 
@@ -21,14 +22,6 @@ export const BrandingImage = ({
 }: BrandingImageProps) => {
   const styles = useSheetStyle();
   const {enable_vehicle_operator_logo} = useRemoteConfigContext();
-  function isSvgUrl(url: string) {
-    try {
-      const u = new URL(url);
-      return u.pathname.toLowerCase().endsWith('.svg');
-    } catch {
-      return false;
-    }
-  }
 
   return (
     <View style={style}>
