@@ -1,9 +1,9 @@
+import {formatNumberToString} from '@atb-as/utils';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import {formatNumberToString} from '@atb/utils/numbers';
 import React from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
 

@@ -7,10 +7,10 @@ import {
 } from '@atb/modules/configuration';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
-import {formatNumberToString} from '@atb/utils/numbers';
 import React from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
 import {UserProfileWithCountAndOffer} from '../../Root_PurchaseOverviewScreen/use-offer-state';
+import {formatNumberToString} from '@atb-as/utils';
 
 type Props = {
   fareProductTypeConfig: FareProductTypeConfig;
