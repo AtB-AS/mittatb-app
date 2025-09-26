@@ -4,13 +4,6 @@ import React from 'react';
 import {RefreshControl, SectionList, View} from 'react-native';
 import {QuaySection} from './QuaySection';
 import {FavoriteToggle} from './FavoriteToggle';
-import {MessageInfoBox} from '@atb/components/message-info-box';
-import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
-import {Button} from '@atb/components/button';
-import {ThemeText} from '@atb/components/text';
-import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
-import {WalkingDistance} from '@atb/components/walking-distance';
-import {useAnalyticsContext} from '@atb/modules/analytics';
 import type {ContrastColor} from '@atb-as/theme';
 import {
   DateSelection,
@@ -19,8 +12,9 @@ import {
 import type {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {
   NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
-  useStopPlaceData,
+  useStopPlacesData,
 } from '../hooks/use-stop-places-data';
+import {StopPlacesError} from './StopPlacesError';
 
 type Props = {
   stopPlaces: StopPlace[];
@@ -71,9 +65,8 @@ export const StopPlacesView = (props: Props) => {
     addedFavoritesVisibleOnDashboard,
     backgroundColor,
   } = props;
+
   const styles = useStyles();
-  const {t} = useTranslation();
-  const analytics = useAnalyticsContext();
   const {
     didLoadingDataFail,
     forceRefresh,
@@ -81,7 +74,7 @@ export const StopPlacesView = (props: Props) => {
     quayListData,
     searchStartTime,
     placeHasFavorites,
-  } = useStopPlaceData({
+  } = useStopPlacesData({
     mode,
     searchTime,
     stopPlaces,
@@ -95,73 +88,11 @@ export const StopPlacesView = (props: Props) => {
       ListHeaderComponent={
         <>
           {didLoadingDataFail && (
-            <View
-              style={[
-                styles.messageBox,
-                !showTimeNavigation ? styles.marginBottom : undefined,
-              ]}
-            >
-              <MessageInfoBox
-                type="error"
-                message={t(DeparturesTexts.message.resultFailed)}
-                onPressConfig={{
-                  action: forceRefresh,
-                  text: t(dictionary.retry),
-                }}
-              />
-            </View>
+            <StopPlacesError
+              showTimeNavigation={showTimeNavigation}
+              forceRefresh={forceRefresh}
+            />
           )}
-          {mode === 'Map' ? (
-            <>
-              <WalkingDistance
-                distance={props.distance}
-                style={styles.walkingDistance}
-              />
-              <View style={styles.buttonsContainer}>
-                <View style={styles.travelButton}>
-                  <Button
-                    expanded={true}
-                    text={t(DeparturesDialogSheetTexts.travelFrom.title)}
-                    onPress={() => {
-                      analytics.logEvent(
-                        'Map',
-                        'Stop place travelFrom button clicked',
-                        {id: stopPlaces[0].id},
-                      );
-                      props.setTravelTarget &&
-                        props.setTravelTarget('fromLocation');
-                    }}
-                    mode="primary"
-                    style={styles.travelFromButtonPadding}
-                  />
-                </View>
-                <View style={styles.travelButton}>
-                  <Button
-                    expanded={true}
-                    text={t(DeparturesDialogSheetTexts.travelTo.title)}
-                    onPress={() => {
-                      analytics.logEvent(
-                        'Map',
-                        'Stop place travelTo button clicked',
-                        {id: stopPlaces[0].id},
-                      );
-                      props.setTravelTarget &&
-                        props.setTravelTarget('toLocation');
-                    }}
-                    mode="primary"
-                    style={styles.travelToButtonPadding}
-                  />
-                </View>
-              </View>
-              <ThemeText
-                typography="body__secondary"
-                color="secondary"
-                style={styles.title}
-              >
-                {t(DeparturesTexts.header.title)}
-              </ThemeText>
-            </>
-          ) : undefined}
           {mode === 'Departure' ? (
             <View
               style={
@@ -220,34 +151,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   headerWithoutNavigation: {
     marginHorizontal: theme.spacing.medium,
-  },
-  messageBox: {
-    marginHorizontal: theme.spacing.medium,
-  },
-  marginBottom: {
-    marginBottom: theme.spacing.medium,
-  },
-  buttonsContainer: {
-    padding: theme.spacing.medium,
-    flexDirection: 'row',
-  },
-  travelButton: {
-    flex: 1,
-  },
-  travelFromButtonPadding: {
-    marginRight: theme.spacing.medium / 2,
-  },
-  travelToButtonPadding: {
-    marginLeft: theme.spacing.medium / 2,
-  },
-  loadingIndicator: {
-    padding: theme.spacing.medium,
-  },
-  title: {
-    marginTop: theme.spacing.medium,
-    marginHorizontal: theme.spacing.medium,
-  },
-  walkingDistance: {
-    paddingBottom: theme.spacing.medium,
   },
 }));

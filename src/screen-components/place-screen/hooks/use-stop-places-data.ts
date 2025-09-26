@@ -20,7 +20,7 @@ type Props = {
 export const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 export const NUMBER_OF_DEPARTURES_IN_BUFFER = 5;
 
-export const useStopPlaceData = ({
+export const useStopPlacesData = ({
   searchTime,
   stopPlaces,
   setShowOnlyFavorites,
