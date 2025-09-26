@@ -358,7 +358,7 @@ export const validateSchema = (body: SendSupportRequestBodyInput) => {
   return {
     isCommentValid: !formattedErrors?.comment?._errors?.length,
     isPhoneNumberValid:
-      !formattedErrors?.contactInformationEndUser?.phoneNumber?._errors?.length,
+      !formattedErrors?.contactInformationEndUser?.phone?._errors?.length,
     isEmailValid:
       !formattedErrors?.contactInformationEndUser?.email?._errors?.length,
     isContactInfoPresent:

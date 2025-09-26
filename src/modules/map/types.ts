@@ -129,8 +129,8 @@ const FormFactorFilter = z.object({
 });
 export type FormFactorFilterType = z.infer<typeof FormFactorFilter>;
 
-const MobilityMapFilter = z.record(
-  z.nativeEnum(MobilityAPI_FormFactor),
+const MobilityMapFilter = z.partialRecord(
+  z.enum(Object.values(MobilityAPI_FormFactor)),
   FormFactorFilter,
 );
 export type MobilityMapFilterType = z.infer<typeof MobilityMapFilter>;
