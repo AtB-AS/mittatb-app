@@ -1,7 +1,7 @@
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {Camera} from '@atb/components/camera';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {RefObject, useEffect, useMemo, useRef, useState} from 'react';
@@ -31,8 +31,7 @@ export const Root_ParkingViolationsQrScreen = ({
 }: QrScreenProps) => {
   const {t} = useTranslation();
   const style = useStyles();
-  const {theme} = useThemeContext();
-  const themeColor = getThemeColor(theme);
+  const themeColor = getThemeColor('dark');
   const isFocused = useIsFocusedAndActive();
   const [capturedQr, setCapturedQr] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
@@ -161,6 +160,7 @@ export const Root_ParkingViolationsQrScreen = ({
 
   return (
     <ScreenContainer
+      overrideThemeName="dark"
       title={t(ParkingViolationTexts.qr.title)}
       secondaryText={t(ParkingViolationTexts.qr.instructions)}
       leftHeaderButton={isLoading ? undefined : {type: 'back', withIcon: true}}

@@ -49,14 +49,14 @@ export const MobilityTexts = {
   },
   photo: {
     header: _(
-      'Ta bilde av el-sparkesykkelen',
-      'Take a photo of the escooter',
-      'Ta eit bilde av el-sparkesykkelen',
+      'Ta bilde av elsparkesykkelen',
+      'Take a photo of the e-scooter',
+      'Ta bilete av elsparkesykkelen',
     ),
     subHeader: _(
       'Hold ca. 5 meter avstand. Unngå folk i bildet',
-      'Keep a distence of 5 meters. Avoid capturing people in the photo',
-      'Hold ca. 5 meter avstand. Unngå folk i bildet',
+      'Stand approximately 5 meters away. Avoid people in the frame',
+      'Hald ein avstand på ca. 5 meter. Unngå folk i biletet',
     ),
   },
   shmoRequirements: {
