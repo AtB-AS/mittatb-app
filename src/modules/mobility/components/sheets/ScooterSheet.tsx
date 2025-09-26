@@ -10,7 +10,7 @@ import {
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useVehicle} from '../../use-vehicle';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -89,8 +89,10 @@ export const ScooterSheet = ({
 
   return (
     <MapBottomSheet
-      snapPoints={['80%']}
+      snapPoints={['10%']}
+      canMinimize={true}
       closeCallback={onClose}
+      enablePanDownToClose={false}
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
@@ -112,7 +114,7 @@ export const ScooterSheet = ({
       )}
       {!isLoading && !shmoReqIsLoading && !isError && vehicle && (
         <>
-          <ScrollView style={styles.container}>
+          <View style={styles.container}>
             {operatorBenefit && (
               <OperatorBenefit
                 benefit={operatorBenefit}
@@ -140,7 +142,7 @@ export const ScooterSheet = ({
                   />
                 </Section>
               )}
-          </ScrollView>
+          </View>
           <View style={styles.footer}>
             {isShmoDeepIntegrationEnabled &&
             isMapV2Enabled &&
@@ -219,7 +221,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacing.medium,
     },
     container: {
-      gap: theme.spacing.medium,
       paddingHorizontal: theme.spacing.medium,
     },
     actionWrapper: {

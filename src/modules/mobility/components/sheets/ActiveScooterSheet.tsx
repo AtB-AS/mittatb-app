@@ -5,7 +5,7 @@ import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {ActivityIndicator, Alert, View, ScrollView} from 'react-native';
+import {ActivityIndicator, Alert, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -122,6 +122,8 @@ export const ActiveScooterSheet = ({
 
   return (
     <MapBottomSheet
+      snapPoints={['16%']}
+      canMinimize={true}
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
@@ -138,7 +140,7 @@ export const ActiveScooterSheet = ({
           )}
           {!isLoading && !isError && activeBooking && (
             <>
-              <ScrollView style={styles.container}>
+              <View style={styles.container}>
                 <View style={styles.tripWrapper}>
                   <ShmoTripCard shmoBooking={activeBooking} />
                 </View>
@@ -152,7 +154,7 @@ export const ActiveScooterSheet = ({
                       : 0
                   }
                 />
-              </ScrollView>
+              </View>
               <View style={styles.footer}>
                 <View style={styles.endTripWrapper}>
                   {geofencingZoneMessage && (
@@ -223,7 +225,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacing.medium,
     },
     container: {
-      gap: theme.spacing.medium,
       paddingHorizontal: theme.spacing.medium,
       marginBottom: theme.spacing.medium,
     },
