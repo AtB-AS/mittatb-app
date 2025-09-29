@@ -1,8 +1,13 @@
 import {
   ActionType,
   Announcement,
+  BottomSheetAnnouncement,
+  LinkAnnouncement,
+  isBottomSheetAnnouncement,
+  isLinkAnnouncement,
   useAnnouncementsContext,
 } from '@atb/modules/announcements';
+import {useCallback} from 'react';
 import {ThemeText} from '@atb/components/text';
 import {
   DashboardTexts,
@@ -40,8 +45,6 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
   const {theme} = useThemeContext();
   const analytics = useAnalyticsContext();
   const {dismissAnnouncement} = useAnnouncementsContext();
-  const {open: openBottomSheet} = useBottomSheetContext();
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const handleDismiss = () => {
     animateNextChange();
@@ -96,59 +99,97 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
           </View>
         </View>
       </GenericSectionItem>
-      {announcement.actionButton?.actionType && (
-        <LinkSectionItem
-          text={
-            getTextForLanguage(announcement.actionButton.label, language) ??
-            t(
-              DashboardTexts.announcements.buttonAction.defaultLabel(
-                summaryTitle,
-              ),
-            )
-          }
-          textType="body__secondary"
-          rightIcon={
-            announcement.actionButton?.actionType === ActionType.external
-              ? {svg: ExternalLink}
-              : {svg: ArrowRight}
-          }
-          accessibility={{
-            accessibilityHint: t(
-              DashboardTexts.announcements.buttonAction.a11yHint[
-                announcement.actionButton.actionType
-              ],
-            ),
-            accessibilityRole:
-              announcement.actionButton.actionType === ActionType.bottom_sheet
-                ? 'button'
-                : 'link',
-          }}
-          ref={onCloseFocusRef}
-          onPress={async () => {
-            analytics.logEvent('Dashboard', 'Announcement pressed', {
-              id: announcement.id,
-            });
-            if (
-              announcement.actionButton?.actionType === ActionType.bottom_sheet
-            ) {
-              openBottomSheet(
-                () => <AnnouncementSheet announcement={announcement} />,
-                onCloseFocusRef,
-              );
-            } else {
-              const actionButtonURL = announcement.actionButton?.url;
-              try {
-                actionButtonURL && (await Linking.openURL(actionButtonURL));
-              } catch (err: any) {
-                Bugsnag.notify(err);
-              }
-            }
-          }}
-        />
+      {(isBottomSheetAnnouncement(announcement) ||
+        isLinkAnnouncement(announcement)) && (
+        <AnnouncementActionButton announcement={announcement} />
       )}
     </Section>
   );
 };
+
+function AnnouncementActionButton({
+  announcement,
+}: {
+  announcement: BottomSheetAnnouncement | LinkAnnouncement;
+}) {
+  const {t} = useTranslation();
+  const {language} = useTranslation();
+  const analytics = useAnalyticsContext();
+  const {open: openBottomSheet} = useBottomSheetContext();
+  const onCloseFocusRef = useRef<RefObject<any>>(null);
+
+  const summaryTitle = getTextForLanguage(
+    announcement.summaryTitle ?? announcement.fullTitle,
+    language,
+  );
+
+  const buttonText =
+    getTextForLanguage(announcement.actionButton.label, language) ??
+    t(DashboardTexts.announcements.buttonAction.defaultLabel(summaryTitle));
+
+  const accessibilityHint = t(
+    DashboardTexts.announcements.buttonAction.a11yHint[
+      announcement.actionButton.actionType
+    ],
+  );
+
+  const logPress = useCallback(() => {
+    analytics.logEvent('Dashboard', 'Announcement pressed', {
+      id: announcement.id,
+    });
+  }, [analytics, announcement.id]);
+
+  if (isBottomSheetAnnouncement(announcement)) {
+    return (
+      <LinkSectionItem
+        text={buttonText}
+        textType="body__secondary"
+        rightIcon={{svg: ArrowRight}}
+        accessibility={{
+          accessibilityHint,
+          accessibilityRole: 'button',
+        }}
+        ref={onCloseFocusRef}
+        onPress={async () => {
+          logPress();
+
+          openBottomSheet(
+            () => <AnnouncementSheet announcement={announcement} />,
+            onCloseFocusRef,
+          );
+        }}
+      />
+    );
+  }
+
+  if (isLinkAnnouncement(announcement)) {
+    return (
+      <LinkSectionItem
+        text={buttonText}
+        textType="body__secondary"
+        rightIcon={
+          announcement.actionButton.actionType === ActionType.external
+            ? {svg: ExternalLink}
+            : {svg: ArrowRight}
+        }
+        accessibility={{
+          accessibilityHint,
+          accessibilityRole: 'link',
+        }}
+        onPress={async () => {
+          logPress();
+
+          const actionButtonURL = announcement.actionButton.url;
+          try {
+            actionButtonURL && (await Linking.openURL(actionButtonURL));
+          } catch (err: any) {
+            Bugsnag.notify(err);
+          }
+        }}
+      />
+    );
+  }
+}
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   sectionItem: {

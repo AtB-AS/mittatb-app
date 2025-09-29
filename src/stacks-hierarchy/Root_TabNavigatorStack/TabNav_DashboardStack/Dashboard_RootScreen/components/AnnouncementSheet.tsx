@@ -1,6 +1,7 @@
-import React from 'react';
-import {Announcement} from '@atb/modules/announcements';
+import React, {useCallback} from 'react';
+import {ActionType, BottomSheetAnnouncement} from '@atb/modules/announcements';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -8,7 +9,7 @@ import {
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
-import {Image, View} from 'react-native';
+import {Image, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
@@ -16,9 +17,12 @@ import {
   useInAppReviewFlow,
 } from '@atb/utils/use-in-app-review';
 import {GenericSectionItem, Section} from '@atb/components/sections';
+import {useAnalyticsContext} from '@atb/modules/analytics';
+import Bugsnag from '@bugsnag/react-native';
+import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 
 type Props = {
-  announcement: Announcement;
+  announcement: BottomSheetAnnouncement;
 };
 
 export const AnnouncementSheet = ({announcement}: Props) => {
@@ -26,6 +30,20 @@ export const AnnouncementSheet = ({announcement}: Props) => {
   const style = useStyle();
   const {requestReview} = useInAppReviewFlow();
   const {t} = useTranslation();
+  const analytics = useAnalyticsContext();
+
+  const sheetActionButton = announcement.actionButton.sheetActionButton;
+
+  const summaryTitle = getTextForLanguage(
+    announcement.summaryTitle ?? announcement.fullTitle,
+    language,
+  );
+
+  const logPress = useCallback(() => {
+    analytics.logEvent('AnnouncementSheet', 'Sheet action button pressed', {
+      id: announcement.id,
+    });
+  }, [analytics, announcement.id]);
 
   return (
     <BottomSheetContainer
@@ -53,6 +71,41 @@ export const AnnouncementSheet = ({announcement}: Props) => {
             </ThemeText>
           </GenericSectionItem>
         </Section>
+        {sheetActionButton && (
+          <Button
+            expanded={true}
+            rightIcon={
+              sheetActionButton.actionType === ActionType.external
+                ? {svg: ExternalLink}
+                : {svg: ArrowRight}
+            }
+            mode="primary"
+            text={
+              getTextForLanguage(sheetActionButton.label, language) ??
+              t(
+                DashboardTexts.announcements.buttonAction.defaultLabel(
+                  summaryTitle,
+                ),
+              )
+            }
+            accessibilityHint={t(
+              DashboardTexts.announcements.buttonAction.a11yHint[
+                sheetActionButton.actionType
+              ],
+            )}
+            accessibilityRole="link"
+            onPress={async () => {
+              logPress();
+
+              const actionButtonURL = sheetActionButton.url;
+              try {
+                actionButtonURL && (await Linking.openURL(actionButtonURL));
+              } catch (err: any) {
+                Bugsnag.notify(err);
+              }
+            }}
+          />
+        )}
       </ScrollView>
     </BottomSheetContainer>
   );

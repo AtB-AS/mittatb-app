@@ -20,4 +20,5 @@ export type AnalyticsEventContext =
   | 'Trip search'
   | 'In App Review'
   | 'Bonus'
-  | 'Smart Park & Ride';
+  | 'Smart Park & Ride'
+  | 'AnnouncementSheet';
