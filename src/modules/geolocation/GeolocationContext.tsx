@@ -4,7 +4,7 @@ import React, {
   useContext,
   useEffect,
   useReducer,
-  useRef,
+  useState,
 } from 'react';
 import {Alert, Linking, Platform} from 'react-native';
 import {isLocationEnabled} from 'react-native-device-info';
@@ -386,26 +386,29 @@ export function useStableLocation(
   thresholdMeters: number = 150,
 ): GeoLocation | undefined {
   const {location} = useGeolocationContext();
-  const lastUsedLocationRef = useRef<GeoLocation | undefined>(undefined);
-
-  if (!location) return lastUsedLocationRef.current;
-
-  if (!lastUsedLocationRef.current) {
-    lastUsedLocationRef.current = location;
-    return location;
-  }
-
-  const distance = coordinatesDistanceInMetres(
-    lastUsedLocationRef.current.coordinates,
-    location.coordinates,
+  const [stableLocation, setStableLocation] = useState<GeoLocation | undefined>(
+    undefined,
   );
 
-  if (distance > thresholdMeters) {
-    lastUsedLocationRef.current = location;
-    return location;
-  }
+  useEffect(() => {
+    if (!location) return;
 
-  return lastUsedLocationRef.current;
+    if (!stableLocation) {
+      setStableLocation(location);
+      return;
+    }
+
+    const distance = coordinatesDistanceInMetres(
+      stableLocation.coordinates,
+      location.coordinates,
+    );
+
+    if (distance > thresholdMeters) {
+      setStableLocation(location);
+    }
+  }, [location, stableLocation, thresholdMeters]);
+
+  return stableLocation || location || undefined;
 }
 
 export async function checkGeolocationPermission(
