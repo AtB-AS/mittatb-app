@@ -23,7 +23,6 @@ export const MapButtons = ({
   const {mapState} = useMapContext();
   const mapFilterIsOpen =
     mapState.bottomSheetType === MapBottomSheetType.Filter;
-  const sheetSelected = mapState.bottomSheetType !== MapBottomSheetType.None;
   const selectedFeature = mapState.feature;
   const selectedFeatureIsAVehicle =
     isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
@@ -46,7 +45,7 @@ export const MapButtons = ({
     !mapFilterIsOpen;
 
   const showMapFilterButton =
-    !sheetSelected && !activeShmoBooking && !activeShmoBookingIsLoading;
+    mapState.bottomSheetType === MapBottomSheetType.None;
 
   return (
     <>
@@ -59,7 +58,7 @@ export const MapButtons = ({
       >
         <ExternalRealtimeMapButton />
 
-        {showMapFilterButton && <MapFilter isLoading={false} />}
+        {showMapFilterButton && <MapFilter />}
 
         <LocationArrow onPress={locationArrowOnPress} />
       </View>

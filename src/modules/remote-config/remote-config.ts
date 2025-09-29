@@ -109,7 +109,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   disable_travelcard: false,
   enable_activate_ticket_now: false,
   enable_auto_sale: false,
-  enable_backend_sms_auth: false,
+  enable_backend_sms_auth: true,
   enable_beacons: false,
   enable_bonus_program: false,
   enable_car_sharing_in_map: false,

@@ -8,7 +8,6 @@ import {
   Point,
   Position,
 } from 'geojson';
-import {Coordinates} from '@atb/utils/coordinates';
 import {
   PointsOnLink,
   TransportSubmode,
@@ -38,7 +37,6 @@ import {Line} from '@atb/api/types/trips';
 import {TranslatedString} from '@atb/translations';
 import {GeofencingZoneKeys, GeofencingZoneStyle} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
-import {ClusterOfVehiclesProperties} from '@atb/api/types/mobility';
 
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
@@ -110,52 +108,6 @@ export type Cluster = {
   point_count_abbreviated: string;
   point_count: number;
 };
-
-export type MapSelectionActionType =
-  | {
-      source: 'map-click';
-      feature: Feature<Point>;
-    }
-  | {
-      source: 'map-item';
-      feature: Feature<Point>;
-    }
-  | {
-      source: 'cluster-click';
-      feature: Feature<Point, Cluster>;
-    }
-  | {
-      source: 'cluster-click-v2';
-      feature: Feature<Point, ClusterOfVehiclesProperties>;
-    }
-  | {
-      source: 'my-position';
-      coords: Coordinates;
-    }
-  | {source: 'filters-button'}
-  | {source: 'external-map-button'; url: string};
-
-export type CameraFocusModeType =
-  | {
-      mode: 'map-lines';
-      mapLines: MapLine[];
-      distance: number;
-    }
-  | {
-      mode: 'entity';
-      entityFeature: Feature<Point>;
-      mapLines?: MapLine[];
-      distance?: number;
-      zoomTo?: boolean;
-    }
-  | {
-      mode: 'coordinates';
-      coordinates: Coordinates;
-    }
-  | {
-      mode: 'my-position';
-      coordinates: Coordinates;
-    };
 
 export type MapLeg = {
   mode?: AnyMode;

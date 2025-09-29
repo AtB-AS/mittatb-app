@@ -11,6 +11,7 @@ import {
   getScore,
 } from '@perf-profiler/reporter';
 import fs from 'fs';
+// @ts-ignore
 import performanceMeasures from './performance_measures.json';
 
 const testedVersion: string = process.env.TESTED_VERSION;
@@ -71,9 +72,11 @@ const getAvgProcessCPU = (processName: string): number => {
     performanceMeasures.iterations.map((iteration) =>
       getAverageCpuUsagePerProcess(iteration.measures),
     );
-  const cpuUsage: number[] = cpuPerProcess.map(
-    (iter) =>
-      iter.filter((process) => process.processName === processName)[0].cpuUsage,
+  const cpuUsage: number[] = cpuPerProcess.map((iter) =>
+    iter.filter((process) => process.processName === processName).length > 0
+      ? iter.filter((process) => process.processName === processName)[0]
+          .cpuUsage
+      : 0,
   );
   return average(cpuUsage);
 };

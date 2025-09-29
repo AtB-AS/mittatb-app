@@ -23,7 +23,7 @@ export {
   SCOOTERS_CLUSTER_RADIUS,
   SCOOTERS_MAX_CLUSTER_LEVEL,
   SCOOTERS_MAX_ZOOM_LEVEL,
-  SLIGHTLY_RAISED_MAP_PADDING,
+  getSlightlyRaisedMapPadding,
 } from './MapConfig';
 export {
   MapBottomSheetType,
@@ -39,7 +39,6 @@ export type {
   MapLeg,
   MapLine,
   MapRegion,
-  MapSelectionActionType,
   MobilityMapFilterType,
   NavigateToTripSearchCallback,
   ParkingType,
@@ -66,6 +65,8 @@ export {
   getFeatureToSelect,
   getFeaturesAtClick,
   isFeatureGeofencingZone,
+  mapPositionToCoordinates,
+  CUSTOM_SCAN_ZOOM_LEVEL,
 } from './utils';
 export {MapStateActionType} from './mapStateReducer.ts';
 export {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics.tsx';

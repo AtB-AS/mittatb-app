@@ -375,3 +375,12 @@ export const getModeAndSubModeFromFormFactor = (
       return {mode: 'unknown'};
   }
 };
+
+export function isSvgUrl(url: string) {
+  try {
+    const u = new URL(url);
+    return u.pathname.toLowerCase().endsWith('.svg');
+  } catch {
+    return false;
+  }
+}

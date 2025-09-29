@@ -24,6 +24,8 @@ export const useActiveShmoBookingQuery = (
     staleTime: ONE_MINUTE_MS,
     cacheTime: ONE_MINUTE_MS,
     refetchInterval,
+    refetchOnWindowFocus: 'always',
+    refetchOnReconnect: true,
   });
 
   useEffect(() => {

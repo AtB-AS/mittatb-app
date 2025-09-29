@@ -3,19 +3,20 @@ import BottomSheetGor, {
   BottomSheetView,
   BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
-import {Platform, View} from 'react-native';
+import {Dimensions, Platform, View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PressableOpacity} from '../pressable-opacity';
 import {SvgProps} from 'react-native-svg';
 import {ThemeText} from '../text';
 import {ThemeIcon} from '../theme-icon';
-import {MapButtons, shadows} from '@atb/modules/map';
+import {MapButtons, shadows, useMapContext} from '@atb/modules/map';
 import {BottomSheetTopPositionBridge} from './BottomSheetTopPositionBridge';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
 import {BrandingImage} from '@atb/modules/mobility';
+import {useBottomNavigationStyles} from '@atb/utils/navigation';
 
 export type BottomSheetProps = PropsWithChildren<{
   snapPoints?: Array<string | number>;
@@ -32,6 +33,7 @@ export type BottomSheetProps = PropsWithChildren<{
   rightIconText?: string;
   enablePanDownToClose?: boolean;
   locationArrowOnPress: () => void;
+  canMinimize?: boolean;
 }>;
 
 export const MapBottomSheet = ({
@@ -50,11 +52,15 @@ export const MapBottomSheet = ({
   rightIconText,
   enablePanDownToClose = true,
   locationArrowOnPress,
+  canMinimize = false,
 }: BottomSheetProps) => {
   const styles = useStyles();
   const bottomSheetGorRef = useRef<BottomSheetGor>(null);
   const {theme} = useThemeContext();
   const sheetTopPosition = useSharedValue(0);
+  const {setPaddingBottomMap} = useMapContext();
+  const {height: screenHeight} = Dimensions.get('screen');
+  const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
 
   const aStyle = useAnimatedStyle(() => {
     return {
@@ -102,6 +108,47 @@ export const MapBottomSheet = ({
     );
   }, [aStyle, locationArrowOnPress]);
 
+  const HeaderComp = () => {
+    return (
+      (heading || rightIconText) && (
+        <View style={styles.headerContainer}>
+          <View style={styles.headerLeft}>
+            {heading && (
+              <>
+                {logoUrl && <BrandingImage logoUrl={logoUrl} logoSize={28} />}
+                <View style={styles.headingWrapper}>
+                  <ThemeText typography="heading--big">{heading}</ThemeText>
+                  {subText && (
+                    <ThemeText
+                      typography="body__secondary"
+                      color={theme.color.foreground.dynamic.secondary}
+                    >
+                      {subText}
+                    </ThemeText>
+                  )}
+                </View>
+              </>
+            )}
+          </View>
+
+          {(rightIconText || rightIcon) && (
+            <PressableOpacity
+              style={styles.headerRight}
+              onPress={() => bottomSheetGorRef.current?.close()}
+            >
+              {rightIconText && (
+                <ThemeText typography="body__secondary--bold">
+                  {rightIconText}
+                </ThemeText>
+              )}
+              {rightIcon && <ThemeIcon svg={rightIcon} />}
+            </PressableOpacity>
+          )}
+        </View>
+      )
+    );
+  };
+
   return (
     <>
       {HeaderOverlay}
@@ -116,52 +163,30 @@ export const MapBottomSheet = ({
         keyboardBehavior={keyboardBehavior}
         keyboardBlurBehavior="restore"
         backgroundStyle={styles.sheet}
-        onAnimate={(_from, to) => {
-          if (to === -1) {
+        onAnimate={(_fromIndex, toIndex, _fromPosition, toPosition) => {
+          if (toIndex === -1) {
             closeCallback?.();
+            setPaddingBottomMap(0);
+          } else {
+            setPaddingBottomMap(screenHeight - toPosition + tabBarMinHeight);
           }
         }}
         accessible={false}
+        maxDynamicContentSize={screenHeight - tabBarMinHeight}
+        index={canMinimize ? 1 : 0}
       >
         <BottomSheetTopPositionBridge sheetTopPosition={sheetTopPosition} />
-        <BottomSheetView style={styles.contentContainer}>
-          {(heading || rightIconText) && (
-            <View style={styles.headerContainer}>
-              {heading && (
-                <View style={styles.headerLeft}>
-                  {logoUrl && <BrandingImage logoUrl={logoUrl} logoSize={20} />}
-                  <View style={styles.headingWrapper}>
-                    <ThemeText typography="heading--big">{heading}</ThemeText>
-                    {subText && (
-                      <ThemeText
-                        typography="body__secondary"
-                        color={theme.color.foreground.dynamic.secondary}
-                      >
-                        {subText}
-                      </ThemeText>
-                    )}
-                  </View>
-                </View>
-              )}
-
-              {(rightIconText || rightIcon) && (
-                <PressableOpacity
-                  style={styles.headerRight}
-                  onPress={() => bottomSheetGorRef.current?.close()}
-                >
-                  {rightIconText && (
-                    <ThemeText typography="body__secondary--bold">
-                      {rightIconText}
-                    </ThemeText>
-                  )}
-                  {rightIcon && <ThemeIcon svg={rightIcon} />}
-                </PressableOpacity>
-              )}
-            </View>
-          )}
-
-          {children}
-        </BottomSheetView>
+        {enableDynamicSizing ? (
+          <BottomSheetView style={styles.contentContainer}>
+            <HeaderComp />
+            {children}
+          </BottomSheetView>
+        ) : (
+          <>
+            <HeaderComp />
+            {children}
+          </>
+        )}
       </BottomSheetGor>
     </>
   );
@@ -177,8 +202,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   headerContainer: {
     flexDirection: 'row',
-    paddingHorizontal: theme.spacing.medium,
     paddingBottom: theme.spacing.medium,
+    paddingRight: theme.spacing.medium,
     gap: theme.spacing.small,
   },
   headerLeft: {
@@ -186,11 +211,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.medium,
+    paddingLeft: theme.spacing.large,
   },
   headingWrapper: {
     gap: theme.spacing.xSmall,
   },
-
   headerRight: {
     flexDirection: 'row',
     gap: theme.spacing.xSmall,

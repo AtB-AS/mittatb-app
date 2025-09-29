@@ -1,17 +1,9 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {StyleSheet} from '@atb/theme';
-import React, {useEffect, useMemo} from 'react';
-import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
+import React from 'react';
+import {RefreshControl, SectionList, View} from 'react-native';
 import {QuaySection} from './QuaySection';
 import {FavoriteToggle} from './FavoriteToggle';
-import {MessageInfoBox} from '@atb/components/message-info-box';
-import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
-import {Button} from '@atb/components/button';
-import {ThemeText} from '@atb/components/text';
-import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
-import {useDeparturesData} from '../hooks/use-departures-data';
-import {WalkingDistance} from '@atb/components/walking-distance';
-import {useAnalyticsContext} from '@atb/modules/analytics';
 import type {ContrastColor} from '@atb-as/theme';
 import {
   DateSelection,
@@ -19,13 +11,10 @@ import {
 } from '@atb/components/date-selection';
 import type {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {
-  useFavoritesContext,
-  type UserFavoriteDepartures,
-} from '@atb/modules/favorites';
-import type {StopPlaceAndQuay} from '@atb/screen-components/place-screen';
-
-const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
-const NUMBER_OF_DEPARTURES_IN_BUFFER = 5;
+  NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
+  useStopPlacesData,
+} from '../hooks/use-stop-places-data';
+import {StopPlacesError} from './StopPlacesError';
 
 type Props = {
   stopPlaces: StopPlace[];
@@ -76,125 +65,34 @@ export const StopPlacesView = (props: Props) => {
     addedFavoritesVisibleOnDashboard,
     backgroundColor,
   } = props;
+
   const styles = useStyles();
-  const {favoriteDepartures} = useFavoritesContext();
-  const {t} = useTranslation();
-  const analytics = useAnalyticsContext();
-  const searchStartTime =
-    searchTime?.option !== 'now' ? searchTime.date : undefined;
-
-  const stopPlaceAndQuays: StopPlaceAndQuay[] = useMemo(
-    () =>
-      stopPlaces
-        .flatMap(
-          (sp) => sp.quays?.map((quay) => ({stopPlace: sp, quay: quay})) || [],
-        )
-        .sort((a, b) =>
-          publicCodeCompare(a.quay.publicCode, b.quay.publicCode),
-        ),
-    [stopPlaces],
-  );
-
-  const quays: Quay[] = stopPlaceAndQuays.map(({quay}) => quay);
-
-  const {state, forceRefresh} = useDeparturesData(
-    quays.map((q) => q.id),
-    NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW + NUMBER_OF_DEPARTURES_IN_BUFFER,
-    showOnlyFavorites,
-    isFocused,
-    mode,
+  const {
+    didLoadingDataFail,
+    forceRefresh,
+    state,
+    quayListData,
     searchStartTime,
-  );
-  const didLoadingDataFail = !!state.error;
-
-  const quayListData: SectionListData<StopPlaceAndQuay>[] =
-    stopPlaceAndQuays.length ? [{data: stopPlaceAndQuays}] : [];
-
-  const placeHasFavorites = stopPlaces.some((sp) =>
-    hasFavorites(
-      favoriteDepartures,
-      sp.quays?.map((q) => q.id),
-    ),
-  );
-
-  // If all favorites are removed while setShowOnlyFavorites is true, reset the
-  // value to false
-  useEffect(() => {
-    if (!placeHasFavorites) setShowOnlyFavorites(false);
-  }, [placeHasFavorites, setShowOnlyFavorites]);
+    placeHasFavorites,
+  } = useStopPlacesData({
+    mode,
+    searchTime,
+    stopPlaces,
+    setShowOnlyFavorites,
+    isFocused,
+    showOnlyFavorites,
+  });
 
   return (
     <SectionList
       ListHeaderComponent={
         <>
           {didLoadingDataFail && (
-            <View
-              style={[
-                styles.messageBox,
-                !showTimeNavigation ? styles.marginBottom : undefined,
-              ]}
-            >
-              <MessageInfoBox
-                type="error"
-                message={t(DeparturesTexts.message.resultFailed)}
-                onPressConfig={{
-                  action: forceRefresh,
-                  text: t(dictionary.retry),
-                }}
-              />
-            </View>
+            <StopPlacesError
+              showTimeNavigation={showTimeNavigation}
+              forceRefresh={forceRefresh}
+            />
           )}
-          {mode === 'Map' ? (
-            <>
-              <WalkingDistance
-                distance={props.distance}
-                style={styles.walkingDistance}
-              />
-              <View style={styles.buttonsContainer}>
-                <View style={styles.travelButton}>
-                  <Button
-                    expanded={true}
-                    text={t(DeparturesDialogSheetTexts.travelFrom.title)}
-                    onPress={() => {
-                      analytics.logEvent(
-                        'Map',
-                        'Stop place travelFrom button clicked',
-                        {id: stopPlaces[0].id},
-                      );
-                      props.setTravelTarget &&
-                        props.setTravelTarget('fromLocation');
-                    }}
-                    mode="primary"
-                    style={styles.travelFromButtonPadding}
-                  />
-                </View>
-                <View style={styles.travelButton}>
-                  <Button
-                    expanded={true}
-                    text={t(DeparturesDialogSheetTexts.travelTo.title)}
-                    onPress={() => {
-                      analytics.logEvent(
-                        'Map',
-                        'Stop place travelTo button clicked',
-                        {id: stopPlaces[0].id},
-                      );
-                      props.setTravelTarget &&
-                        props.setTravelTarget('toLocation');
-                    }}
-                    mode="primary"
-                    style={styles.travelToButtonPadding}
-                  />
-                </View>
-              </View>
-              <ThemeText
-                typography="body__secondary"
-                color="secondary"
-                style={styles.title}
-              >
-                {t(DeparturesTexts.header.title)}
-              </ThemeText>
-            </>
-          ) : undefined}
           {mode === 'Departure' ? (
             <View
               style={
@@ -246,27 +144,6 @@ export const StopPlacesView = (props: Props) => {
   );
 };
 
-export function hasFavorites(
-  favorites: UserFavoriteDepartures,
-  quayIds?: string[],
-) {
-  return favorites.some((favorite) =>
-    quayIds?.find((quayId) => favorite.quayId === quayId),
-  );
-}
-
-function publicCodeCompare(a?: string, b?: string): number {
-  // Show quays with no public code last
-  if (!a) return 1;
-  if (!b) return -1;
-  // If both public codes are numbers, compare as numbers (e.g. 2 < 10)
-  if (parseInt(a) && parseInt(b)) {
-    return parseInt(a) - parseInt(b);
-  }
-  // Otherwise compare as strings (e.g. K1 < K2)
-  return a.localeCompare(b);
-}
-
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   headerWithNavigation: {
     paddingTop: theme.spacing.medium,
@@ -274,34 +151,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   headerWithoutNavigation: {
     marginHorizontal: theme.spacing.medium,
-  },
-  messageBox: {
-    marginHorizontal: theme.spacing.medium,
-  },
-  marginBottom: {
-    marginBottom: theme.spacing.medium,
-  },
-  buttonsContainer: {
-    padding: theme.spacing.medium,
-    flexDirection: 'row',
-  },
-  travelButton: {
-    flex: 1,
-  },
-  travelFromButtonPadding: {
-    marginRight: theme.spacing.medium / 2,
-  },
-  travelToButtonPadding: {
-    marginLeft: theme.spacing.medium / 2,
-  },
-  loadingIndicator: {
-    padding: theme.spacing.medium,
-  },
-  title: {
-    marginTop: theme.spacing.medium,
-    marginHorizontal: theme.spacing.medium,
-  },
-  walkingDistance: {
-    paddingBottom: theme.spacing.medium,
   },
 }));

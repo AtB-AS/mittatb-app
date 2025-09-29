@@ -5,10 +5,7 @@ import {Filter} from '@atb/assets/svg/mono-icons/actions';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {MapStateActionType, useMapContext} from '@atb/modules/map';
 
-type MapFilterProps = {
-  isLoading: boolean;
-};
-export const MapFilter = ({isLoading}: MapFilterProps) => {
+export const MapFilter = () => {
   const style = useStyle();
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
@@ -27,7 +24,6 @@ export const MapFilter = ({isLoading}: MapFilterProps) => {
           type: MapStateActionType.Filter,
         });
       }}
-      loading={isLoading}
       rightIcon={{svg: Filter}}
       hasShadow={true}
       testID="mapFilter"

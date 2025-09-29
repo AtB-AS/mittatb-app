@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useReducer} from 'react';
+import React, {createContext, useContext, useReducer, useState} from 'react';
 import {MapFilterType} from '@atb/modules/map';
 import {useUserMapFilters} from './hooks/use-map-filter';
 import {
@@ -12,6 +12,8 @@ type MapContextState = {
   setMapFilter: (mapFilter: MapFilterType) => void;
   mapState: ReducerMapState;
   dispatchMapState: React.Dispatch<ReducerMapStateAction>;
+  paddingBottomMap: number;
+  setPaddingBottomMap: (value: number) => void;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
@@ -42,6 +44,8 @@ export const MapContextProvider = ({children}: Props) => {
 
   const {mapFilter, setMapFilter} = useUserMapFilters();
 
+  const [paddingBottomMap, setPaddingBottomMap] = useState(0);
+
   return (
     <MapContext.Provider
       value={{
@@ -49,6 +53,8 @@ export const MapContextProvider = ({children}: Props) => {
         setMapFilter,
         mapState,
         dispatchMapState,
+        paddingBottomMap,
+        setPaddingBottomMap,
       }}
     >
       {children}

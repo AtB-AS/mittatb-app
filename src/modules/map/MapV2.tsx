@@ -14,12 +14,8 @@ import {
 import {Feature} from 'geojson';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
-import {MapCameraConfig} from './MapConfig';
-import {
-  CameraFocusModeType,
-  GeofencingZoneCustomProps,
-  MapProps,
-} from './types';
+import {MapCameraConfig, getSlightlyRaisedMapPadding} from './MapConfig';
+import {GeofencingZoneCustomProps, MapProps} from './types';
 import {
   isFeaturePoint,
   getFeaturesAtClick,
@@ -28,9 +24,7 @@ import {
   isQuayFeature,
   mapPositionToCoordinates,
   flyToLocation,
-  getMapPadding,
   getFeatureToSelect,
-  findEntityAtClick,
   isParkAndRide,
   isStopPlace,
 } from './utils';
@@ -60,11 +54,9 @@ import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
 import {useIsFocused} from '@react-navigation/native';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {ShmoBookingState} from '@atb/api/types/mobility';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {MapBottomSheets} from './MapBottomSheets';
-import {useTriggerCameraMoveEffect} from './hooks/use-trigger-camera-move-effect';
-import {getFocusMode} from './hooks/use-decide-camera-focus-mode';
+
 import {MapButtons} from './components/MapButtons';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
@@ -74,13 +66,10 @@ export const MapV2 = (props: MapProps) => {
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<Camera>(null);
   const mapViewRef = useRef<MapView>(null);
-  const {location: currentLocation} = useGeolocationContext();
 
-  const [cameraFocusMode, setCameraFocusMode] = useState<CameraFocusModeType>();
+  const {mapFilter, mapState, dispatchMapState, paddingBottomMap} =
+    useMapContext();
 
-  const {mapFilter, mapState, dispatchMapState} = useMapContext();
-
-  const tabBarHeight = useBottomTabBarHeight();
   const isFocused = useIsFocused();
 
   const startingCoordinates = useMemo(
@@ -155,13 +144,6 @@ export const MapV2 = (props: MapProps) => {
     [showSnackbar, getGeofencingZoneTextContent],
   );
 
-  useTriggerCameraMoveEffect(
-    cameraFocusMode,
-    mapCameraRef,
-    mapViewRef,
-    tabBarHeight,
-  );
-
   const locationArrowOnPress = async () => {
     const coordinates = await getCurrentCoordinates(true);
     if (
@@ -173,7 +155,9 @@ export const MapV2 = (props: MapProps) => {
       if (coordinates) {
         flyToLocation({
           coordinates,
-          padding: !selectedFeature ? undefined : getMapPadding(tabBarHeight),
+          padding: !selectedFeature
+            ? undefined
+            : getSlightlyRaisedMapPadding(paddingBottomMap),
           mapCameraRef,
           mapViewRef,
           zoomLevel: DEFAULT_ZOOM_LEVEL + 2.5,
@@ -197,16 +181,7 @@ export const MapV2 = (props: MapProps) => {
         activeShmoBooking?.state === ShmoBookingState.IN_USE ||
         activeShmoBooking?.state === ShmoBookingState.FINISHING;
       if (!isFeaturePoint(feature)) return;
-
-      if (!showGeofencingZones && !isActiveTrip) {
-        const entity = await findEntityAtClick(feature, mapViewRef);
-
-        setCameraFocusMode(
-          await getFocusMode(entity, currentLocation?.coordinates, true, true),
-        );
-
-        return;
-      }
+      if (!showGeofencingZones && !isActiveTrip) return;
 
       const {coordinates: positionClicked} = feature.geometry;
 
@@ -233,28 +208,15 @@ export const MapV2 = (props: MapProps) => {
         geofencingZoneOnPress(
           featureToSelect?.properties?.geofencingZoneCustomProps,
         );
-      } else {
-        if (isFeaturePoint(featureToSelect) && !isActiveTrip) {
-          const entity = await findEntityAtClick(featureToSelect, mapViewRef);
-          setCameraFocusMode(
-            await getFocusMode(
-              entity,
-              currentLocation?.coordinates,
-              true,
-              true,
-            ),
-          );
-        } else if (isScooterV2(selectedFeature) && !isActiveTrip) {
-          // outside of operational area, rules unspecified
-          geofencingZoneOnPress(undefined);
-        }
+      } else if (isScooterV2(selectedFeature) && !isActiveTrip) {
+        // outside of operational area, rules unspecified
+        geofencingZoneOnPress(undefined);
       }
     },
     [
       activeShmoBooking?.state,
       showGeofencingZones,
       hideSnackbar,
-      currentLocation?.coordinates,
       geofencingZoneOnPress,
       selectedFeature,
     ],
@@ -285,7 +247,7 @@ export const MapV2 = (props: MapProps) => {
           coordinates: mapPositionToCoordinates(
             featureToSelect.geometry.coordinates,
           ),
-          padding: getMapPadding(tabBarHeight),
+          padding: getSlightlyRaisedMapPadding(paddingBottomMap),
           mapCameraRef,
           mapViewRef,
           zoomLevel: toZoomLevel,
@@ -329,22 +291,9 @@ export const MapV2 = (props: MapProps) => {
             feature: featureToSelect,
           });
         }
-        setCameraFocusMode(
-          await getFocusMode(
-            featureToSelect,
-            currentLocation?.coordinates,
-            true,
-            true,
-          ),
-        );
       }
     },
-    [
-      activeShmoBooking?.state,
-      currentLocation?.coordinates,
-      dispatchMapState,
-      tabBarHeight,
-    ],
+    [activeShmoBooking?.state, paddingBottomMap, dispatchMapState],
   );
 
   return (
@@ -384,7 +333,7 @@ export const MapV2 = (props: MapProps) => {
             }
             padding={
               activeShmoBooking?.bookingId
-                ? getMapPadding(tabBarHeight)
+                ? getSlightlyRaisedMapPadding(paddingBottomMap)
                 : undefined
             }
             {...MapCameraConfig}
@@ -394,7 +343,7 @@ export const MapV2 = (props: MapProps) => {
               followUserLocation
             }
             followUserMode={UserTrackingMode.FollowWithHeading}
-            followPadding={getMapPadding(tabBarHeight)}
+            followPadding={getSlightlyRaisedMapPadding(paddingBottomMap)}
           />
           {showGeofencingZones && !vehicleError && !vehicleIsLoading && (
             <GeofencingZones

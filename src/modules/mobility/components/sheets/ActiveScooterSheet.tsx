@@ -5,10 +5,9 @@ import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {ActivityIndicator, Alert, View, ScrollView} from 'react-native';
+import {ActivityIndicator, Alert, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
-import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {VehicleCard} from '../VehicleCard';
 import {useActiveShmoBookingQuery} from '../../queries/use-active-shmo-booking-query';
@@ -29,7 +28,6 @@ import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
-  onActiveBookingReceived?: () => void;
   navigateSupportCallback: () => void;
   photoNavigation: (bookingId: string) => void;
   onForceClose: () => void;
@@ -38,7 +36,6 @@ type Props = {
 };
 
 export const ActiveScooterSheet = ({
-  onActiveBookingReceived,
   navigateSupportCallback,
   photoNavigation,
   onForceClose,
@@ -60,8 +57,6 @@ export const ActiveScooterSheet = ({
     activeBooking?.asset.id ?? '',
     mapViewRef,
   );
-
-  useDoOnceOnItemReceived(onActiveBookingReceived, activeBooking);
 
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
@@ -127,6 +122,8 @@ export const ActiveScooterSheet = ({
 
   return (
     <MapBottomSheet
+      snapPoints={['16%']}
+      canMinimize={true}
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
@@ -143,7 +140,7 @@ export const ActiveScooterSheet = ({
           )}
           {!isLoading && !isError && activeBooking && (
             <>
-              <ScrollView style={styles.container}>
+              <View style={styles.container}>
                 <View style={styles.tripWrapper}>
                   <ShmoTripCard shmoBooking={activeBooking} />
                 </View>
@@ -157,7 +154,7 @@ export const ActiveScooterSheet = ({
                       : 0
                   }
                 />
-              </ScrollView>
+              </View>
               <View style={styles.footer}>
                 <View style={styles.endTripWrapper}>
                   {geofencingZoneMessage && (
@@ -228,7 +225,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacing.medium,
     },
     container: {
-      gap: theme.spacing.medium,
       paddingHorizontal: theme.spacing.medium,
       marginBottom: theme.spacing.medium,
     },
