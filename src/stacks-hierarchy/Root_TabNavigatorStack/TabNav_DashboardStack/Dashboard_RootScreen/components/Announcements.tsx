@@ -12,6 +12,10 @@ import {useTimeContext} from '@atb/modules/time';
 import {useFareContracts} from '@atb/modules/ticketing';
 import {ContentHeading} from '@atb/components/heading';
 import {useOnboardingSectionIsOnboarded} from '@atb/modules/onboarding';
+import {useStableLocation} from '@atb/modules/geolocation';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {findZoneInLocation} from '@atb/utils/use-find-zone-in-location';
+import {useMemo} from 'react';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -37,10 +41,15 @@ export const Announcements = ({style}: Props) => {
   const styles = useStyle();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
+  const {fareZone, cityZone, carPoolingZone} = useZones();
+
   const ruleVariables = {
     isBeaconsConsentGranted: isConsentGranted ?? false,
     shareTravelHabitsIsOnboarded,
     hasValidFareContract,
+    fareZoneId: fareZone?.id ?? null,
+    cityZoneId: cityZone?.id ?? null,
+    carPoolingZoneId: carPoolingZone?.id ?? null,
   };
 
   const filteredAnnouncements = findAnnouncements(ruleVariables).filter((a) =>
@@ -94,3 +103,19 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     width: Dimensions.get('window').width * 0.9 - 2 * theme.spacing.medium,
   },
 }));
+
+const useZones = () => {
+  const location = useStableLocation();
+
+  const {carPoolingZones, fareZones, cityZones} =
+    useFirestoreConfigurationContext();
+
+  const {carPoolingZone, fareZone, cityZone} = useMemo(() => {
+    const carPoolingZone = findZoneInLocation(location, carPoolingZones);
+    const fareZone = findZoneInLocation(location, fareZones);
+    const cityZone = findZoneInLocation(location, cityZones);
+    return {carPoolingZone, fareZone, cityZone};
+  }, [location, carPoolingZones, fareZones, cityZones]);
+
+  return {carPoolingZone, fareZone, cityZone};
+};
