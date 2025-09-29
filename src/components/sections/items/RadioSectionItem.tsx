@@ -22,7 +22,6 @@ import {dictionary, useTranslation} from '@atb/translations';
 type Props = SectionItemProps<{
   text: string;
   subtext?: string;
-  hideSubtext?: boolean;
   onPress(checked: boolean): void;
   leftIcon?: (props: SvgProps) => React.JSX.Element;
   selected: boolean;
@@ -38,7 +37,6 @@ type Props = SectionItemProps<{
 export function RadioSectionItem({
   text,
   subtext,
-  hideSubtext,
   onPress,
   leftIcon,
   selected,
@@ -65,7 +63,7 @@ export function RadioSectionItem({
   const selectedRadioColor = color.outline.background;
 
   const a11yLabel =
-    (accessibilityLabel || `${text}, ${hideSubtext ? '' : subtext}`) +
+    (accessibilityLabel || `${text}, ${subtext || ''}`) +
     screenReaderPause +
     t(selected ? dictionary.selected : dictionary.unselected);
 
@@ -98,7 +96,7 @@ export function RadioSectionItem({
           >
             {text}
           </ThemeText>
-          {subtext && !hideSubtext && (
+          {subtext && (
             <ThemeText
               typography="body__secondary"
               color="secondary"
