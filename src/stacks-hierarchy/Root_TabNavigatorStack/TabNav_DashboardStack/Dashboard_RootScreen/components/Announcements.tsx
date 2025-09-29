@@ -12,10 +12,9 @@ import {useTimeContext} from '@atb/modules/time';
 import {useFareContracts} from '@atb/modules/ticketing';
 import {ContentHeading} from '@atb/components/heading';
 import {useOnboardingSectionIsOnboarded} from '@atb/modules/onboarding';
-import {useGeolocationContext} from '@atb/modules/geolocation';
+import {useStableLocation} from '@atb/modules/geolocation';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {findZoneInLocation} from '@atb/utils/use-find-zone-in-location';
-import {useDebounce} from '@atb/utils/use-debounce';
 import {useMemo} from 'react';
 
 type Props = {
@@ -106,19 +105,17 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
 }));
 
 const useZones = () => {
-  const {location} = useGeolocationContext();
-  const debouncedLocation = useDebounce(location, 5000) ?? undefined;
+  const location = useStableLocation();
+
   const {carPoolingZones, fareZones, cityZones} =
     useFirestoreConfigurationContext();
+
   const {carPoolingZone, fareZone, cityZone} = useMemo(() => {
-    const carPoolingZone = findZoneInLocation(
-      debouncedLocation,
-      carPoolingZones,
-    );
-    const fareZone = findZoneInLocation(debouncedLocation, fareZones);
-    const cityZone = findZoneInLocation(debouncedLocation, cityZones);
+    const carPoolingZone = findZoneInLocation(location, carPoolingZones);
+    const fareZone = findZoneInLocation(location, fareZones);
+    const cityZone = findZoneInLocation(location, cityZones);
     return {carPoolingZone, fareZone, cityZone};
-  }, [debouncedLocation, carPoolingZones, fareZones, cityZones]);
+  }, [location, carPoolingZones, fareZones, cityZones]);
 
   return {carPoolingZone, fareZone, cityZone};
 };
