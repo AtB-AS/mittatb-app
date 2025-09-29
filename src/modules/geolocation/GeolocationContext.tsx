@@ -374,7 +374,7 @@ export function useGeolocationContext() {
 }
 
 /**
- * Custom hook to return a stable location. 
+ * Custom hook to return a stable location.
  * - The location is considered stable if the distance between the current location and the last used location is less than the threshold.
  * - If threshold is exceeded, the location is updated.
  * NOTE: If the location is currently not available (undefined), the last used location is returned.
