@@ -45,7 +45,7 @@ const DashboardTexts = {
               `Read more about ${announcementTitle}`,
               `Les meir om ${announcementTitle}`,
             )
-          : _('Les mer', 'Read mre', 'Les meir'),
+          : _('Les mer', 'Read more', 'Les meir'),
     },
   },
 };

@@ -3,8 +3,6 @@ import {
   Announcement,
   BottomSheetAnnouncement,
   LinkAnnouncement,
-  isBottomSheetAnnouncement,
-  isLinkAnnouncement,
   useAnnouncementsContext,
 } from '@atb/modules/announcements';
 import {useCallback} from 'react';
@@ -54,22 +52,15 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
     });
   };
 
-  const summaryTitle = getTextForLanguage(
-    announcement.summaryTitle ?? announcement.fullTitle,
-    language,
-  );
+  const {title, body, image} = announcement.card;
 
   return (
     <Section style={style} key={announcement.id} testID="announcement">
       <GenericSectionItem style={styles.sectionItem}>
         <View style={styles.content}>
-          {announcement.summaryImage && (
+          {image && (
             <View style={styles.imageContainer}>
-              <Image
-                height={50}
-                width={50}
-                source={{uri: announcement.summaryImage}}
-              />
+              <Image height={50} width={50} source={{uri: image}} />
             </View>
           )}
           <View style={styles.textContainer}>
@@ -78,7 +69,7 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
                 style={styles.summaryTitleText}
                 typography="body__primary--bold"
               >
-                {summaryTitle}
+                {getTextForLanguage(title, language)}
               </ThemeText>
               <PressableOpacity
                 style={styles.close}
@@ -94,13 +85,12 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
               </PressableOpacity>
             </View>
             <ThemeText style={styles.summary}>
-              {getTextForLanguage(announcement.summary, language)}
+              {getTextForLanguage(body, language)}
             </ThemeText>
           </View>
         </View>
       </GenericSectionItem>
-      {(isBottomSheetAnnouncement(announcement) ||
-        isLinkAnnouncement(announcement)) && (
+      {announcement.cardActionType && (
         <AnnouncementActionButton announcement={announcement} />
       )}
     </Section>
@@ -118,19 +108,16 @@ function AnnouncementActionButton({
   const {open: openBottomSheet} = useBottomSheetContext();
   const onCloseFocusRef = useRef<RefObject<any>>(null);
 
-  const summaryTitle = getTextForLanguage(
-    announcement.summaryTitle ?? announcement.fullTitle,
-    language,
-  );
+  const {cardActionType} = announcement;
+
+  const summaryTitle = getTextForLanguage(announcement.card.title, language);
 
   const buttonText =
-    getTextForLanguage(announcement.actionButton.label, language) ??
+    getTextForLanguage(announcement.cardActionButton.label, language) ??
     t(DashboardTexts.announcements.buttonAction.defaultLabel(summaryTitle));
 
   const accessibilityHint = t(
-    DashboardTexts.announcements.buttonAction.a11yHint[
-      announcement.actionButton.actionType
-    ],
+    DashboardTexts.announcements.buttonAction.a11yHint[cardActionType],
   );
 
   const logPress = useCallback(() => {
@@ -139,7 +126,7 @@ function AnnouncementActionButton({
     });
   }, [analytics, announcement.id]);
 
-  if (isBottomSheetAnnouncement(announcement)) {
+  if (cardActionType === ActionType.bottom_sheet) {
     return (
       <LinkSectionItem
         text={buttonText}
@@ -154,7 +141,12 @@ function AnnouncementActionButton({
           logPress();
 
           openBottomSheet(
-            () => <AnnouncementSheet announcement={announcement} />,
+            () => (
+              <AnnouncementSheet
+                announcementId={announcement.id}
+                content={announcement.bottomSheet}
+              />
+            ),
             onCloseFocusRef,
           );
         }}
@@ -162,13 +154,16 @@ function AnnouncementActionButton({
     );
   }
 
-  if (isLinkAnnouncement(announcement)) {
+  if (
+    cardActionType === ActionType.external ||
+    cardActionType === ActionType.deeplink
+  ) {
     return (
       <LinkSectionItem
         text={buttonText}
         textType="body__secondary"
         rightIcon={
-          announcement.actionButton.actionType === ActionType.external
+          cardActionType === ActionType.external
             ? {svg: ExternalLink}
             : {svg: ArrowRight}
         }
@@ -179,7 +174,7 @@ function AnnouncementActionButton({
         onPress={async () => {
           logPress();
 
-          const actionButtonURL = announcement.actionButton.url;
+          const actionButtonURL = announcement.cardActionButton.url;
           try {
             actionButtonURL && (await Linking.openURL(actionButtonURL));
           } catch (err: any) {

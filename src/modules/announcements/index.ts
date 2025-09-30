@@ -5,8 +5,8 @@ export {
 export {ActionType} from './types';
 export type {
   Announcement,
+  GenericAnnouncement,
   BottomSheetAnnouncement,
+  BottomSheetAnnouncementContent,
   LinkAnnouncement,
 } from './types';
-
-export {isBottomSheetAnnouncement, isLinkAnnouncement} from './types';

@@ -3,6 +3,7 @@ import {LanguageAndTextTypeArray} from '@atb/modules/configuration';
 import {AppPlatform} from '@atb/modules/global-messages';
 import {Timestamp} from '@react-native-firebase/firestore';
 import {Rule} from '@atb/modules/rule-engine';
+import {Announcement as OldAnnouncement} from './deprecated-types';
 
 const TimestampSchema = z
   .custom<Timestamp>((value) => value instanceof Timestamp)
@@ -36,78 +37,131 @@ export enum ActionType {
 }
 
 const UrlActionButton = z.object({
-  label: LanguageAndTextTypeArray.optional(),
-  url: z.string().url(),
   actionType: z.union([
     z.literal(ActionType.external),
     z.literal(ActionType.deeplink),
   ]),
+  label: LanguageAndTextTypeArray.optional(),
+  url: z.string().url(),
 });
 
 const BottomSheetActionButton = z.object({
-  label: LanguageAndTextTypeArray.optional(),
   actionType: z.literal(ActionType.bottom_sheet),
-  /** Action button for bottom sheet, only shown in bottom sheet, only used for deeplinks or external links */
-  sheetPrimaryButton: UrlActionButton.optional(),
+  label: LanguageAndTextTypeArray.optional(),
 });
 
-const AnnouncementBase = z.object({
-  id: z.string(),
+export const AnnouncementConfiguration = z.object({
   active: z.boolean(),
-
-  /** Announcement card title */
-  summaryTitle: LanguageAndTextTypeArray.optional(),
-  /** Announcement card summary */
-  summary: LanguageAndTextTypeArray,
-  /** Announcement card image */
-  summaryImage: Base64ImageSchema.optional(),
-
-  /** Announcement bottom sheet title, also used as card title if no summaryTitle is provided */
-  fullTitle: LanguageAndTextTypeArray,
-
   appPlatforms: z.array(AppPlatform).optional(),
   appVersionMin: z.string().optional(),
   appVersionMax: z.string().optional(),
   startDate: TimestampSchema.optional(),
   endDate: TimestampSchema.optional(),
   rules: z.array(Rule).optional(),
-  actionButton: z.union([UrlActionButton, BottomSheetActionButton]).optional(),
 });
 
-export const LinkAnnouncement = AnnouncementBase.extend({
-  actionButton: UrlActionButton,
-});
-
-export const BottomSheetAnnouncement = AnnouncementBase.extend({
-  /** Announcement bottom sheet body */
+export const AnnouncementCardContent = z.object({
+  title: LanguageAndTextTypeArray,
   body: LanguageAndTextTypeArray,
-  /** Announcement bottom sheet image */
-  mainImage: Base64ImageSchema.optional(),
-
-  actionButton: BottomSheetActionButton,
+  image: Base64ImageSchema.optional(),
 });
 
-export const Announcement = z.union([
-  AnnouncementBase,
+export const BottomSheetAnnouncementContent = z.object({
+  title: LanguageAndTextTypeArray,
+  body: LanguageAndTextTypeArray,
+  image: Base64ImageSchema.optional(),
+  primaryButton: UrlActionButton.optional(),
+});
+
+export const GenericAnnouncement = z.object({
+  id: z.string(),
+  cardActionType: z.undefined(),
+  card: AnnouncementCardContent,
+  config: AnnouncementConfiguration,
+});
+
+export const LinkAnnouncement = GenericAnnouncement.extend({
+  cardActionType: z.union([
+    z.literal(ActionType.external),
+    z.literal(ActionType.deeplink),
+  ]),
+  cardActionButton: UrlActionButton,
+});
+
+export const BottomSheetAnnouncement = GenericAnnouncement.extend({
+  cardActionType: z.literal(ActionType.bottom_sheet),
+  cardActionButton: BottomSheetActionButton,
+  bottomSheet: BottomSheetAnnouncementContent,
+});
+
+export const Announcement = z.discriminatedUnion('cardActionType', [
+  GenericAnnouncement,
   LinkAnnouncement,
   BottomSheetAnnouncement,
 ]);
 
+export type GenericAnnouncement = z.infer<typeof GenericAnnouncement>;
 export type LinkAnnouncement = z.infer<typeof LinkAnnouncement>;
 export type BottomSheetAnnouncement = z.infer<typeof BottomSheetAnnouncement>;
 export type Announcement = z.infer<typeof Announcement>;
 
-export function isBottomSheetAnnouncement(
-  announcement: Announcement,
-): announcement is BottomSheetAnnouncement {
-  return announcement.actionButton?.actionType === ActionType.bottom_sheet;
-}
+export type BottomSheetAnnouncementContent = z.infer<
+  typeof BottomSheetAnnouncementContent
+>;
 
-export function isLinkAnnouncement(
-  announcement: Announcement,
-): announcement is LinkAnnouncement {
-  return (
-    announcement.actionButton?.actionType === ActionType.external ||
-    announcement.actionButton?.actionType === ActionType.deeplink
-  );
-}
+/**
+ * Transformer that converts OldAnnouncement to new Announcement format
+ */
+export const OldAnnouncementToNewTransformer = OldAnnouncement.transform(
+  (oldAnnouncement: OldAnnouncement): Announcement => {
+    const announcement: GenericAnnouncement = {
+      id: oldAnnouncement.id,
+      card: {
+        title: oldAnnouncement.summaryTitle || oldAnnouncement.fullTitle,
+        body: oldAnnouncement.summary,
+        image: oldAnnouncement.summaryImage,
+      },
+      config: {
+        active: oldAnnouncement.active,
+        appPlatforms: oldAnnouncement.appPlatforms,
+        appVersionMin: oldAnnouncement.appVersionMin,
+        appVersionMax: oldAnnouncement.appVersionMax,
+        startDate: oldAnnouncement.startDate,
+        endDate: oldAnnouncement.endDate,
+        rules: oldAnnouncement.rules,
+      },
+    };
+
+    if (!oldAnnouncement.actionButton) {
+      return announcement;
+    }
+
+    const {actionType, label} = oldAnnouncement.actionButton;
+
+    if (actionType === ActionType.bottom_sheet) {
+      return {
+        ...announcement,
+        cardActionType: actionType,
+        cardActionButton: {
+          actionType,
+          label,
+        },
+        bottomSheet: {
+          title: oldAnnouncement.fullTitle,
+          body: oldAnnouncement.body,
+          image: oldAnnouncement.mainImage,
+        },
+      };
+    } else {
+      return {
+        ...announcement,
+        cardActionType: actionType,
+        cardActionButton: {
+          actionType,
+          label,
+          url: oldAnnouncement.actionButton.url,
+        },
+      };
+    }
+  },
+).pipe(Announcement);

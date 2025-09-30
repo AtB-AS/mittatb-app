@@ -1,5 +1,8 @@
 import React, {useCallback} from 'react';
-import {ActionType, BottomSheetAnnouncement} from '@atb/modules/announcements';
+import {
+  ActionType,
+  BottomSheetAnnouncementContent,
+} from '@atb/modules/announcements';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
@@ -22,28 +25,24 @@ import Bugsnag from '@bugsnag/react-native';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 
 type Props = {
-  announcement: BottomSheetAnnouncement;
+  announcementId: string;
+  content: BottomSheetAnnouncementContent;
 };
 
-export const AnnouncementSheet = ({announcement}: Props) => {
+export const AnnouncementSheet = ({announcementId, content}: Props) => {
   const {language} = useTranslation();
   const style = useStyle();
   const {requestReview} = useInAppReviewFlow();
   const {t} = useTranslation();
   const analytics = useAnalyticsContext();
 
-  const primaryButton = announcement.actionButton.sheetPrimaryButton;
-
-  const summaryTitle = getTextForLanguage(
-    announcement.summaryTitle ?? announcement.fullTitle,
-    language,
-  );
+  const {title, body, image, primaryButton} = content;
 
   const logPress = useCallback(() => {
     analytics.logEvent('AnnouncementSheet', 'Sheet action button pressed', {
-      id: announcement.id,
+      id: announcementId,
     });
-  }, [analytics, announcement.id]);
+  }, [analytics, announcementId]);
 
   return (
     <BottomSheetContainer
@@ -53,21 +52,21 @@ export const AnnouncementSheet = ({announcement}: Props) => {
       }}
     >
       <ScrollView contentContainerStyle={style.container}>
-        {announcement.mainImage && (
+        {content.image && (
           <View style={style.imageContainer}>
             <Image
               style={{height: '100%', width: '100%', resizeMode: 'cover'}}
-              source={{uri: announcement.mainImage}}
+              source={{uri: image}}
             />
           </View>
         )}
         <Section>
           <GenericSectionItem type="spacious" style={style.articleContainer}>
             <ThemeText typography="heading--big">
-              {getTextForLanguage(announcement.fullTitle, language)}
+              {getTextForLanguage(title, language)}
             </ThemeText>
             <ThemeText isMarkdown={true}>
-              {getTextForLanguage(announcement.body, language)}
+              {getTextForLanguage(body, language)}
             </ThemeText>
           </GenericSectionItem>
         </Section>
@@ -84,7 +83,7 @@ export const AnnouncementSheet = ({announcement}: Props) => {
               getTextForLanguage(primaryButton.label, language) ??
               t(
                 DashboardTexts.announcements.buttonAction.defaultLabel(
-                  summaryTitle,
+                  getTextForLanguage(title, language),
                 ),
               )
             }

@@ -70,8 +70,11 @@ const AnnouncementsContextProvider = ({children}: Props) => {
   const findAnnouncements = useCallback(
     (ruleVariables: RuleVariables = {}) => {
       return announcements.filter((announcement) => {
-        if (announcement.rules?.length) {
-          const passRules = checkRules(announcement.rules, ruleVariables);
+        if (announcement.config.rules?.length) {
+          const passRules = checkRules(
+            announcement.config.rules,
+            ruleVariables,
+          );
           if (!passRules) return false;
         }
 
