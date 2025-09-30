@@ -19,11 +19,11 @@ export const mapToAnnouncements = (
 
   const applicableAnnouncements = announcements.filter(
     (announcement) =>
-      announcement.config.active &&
-      appliesToAppPlaform(announcement.config.appPlatforms) &&
+      announcement.active &&
+      appliesToAppPlaform(announcement.config?.appPlatforms) &&
       appliesToAppVersion(
-        announcement.config.appVersionMin,
-        announcement.config.appVersionMax,
+        announcement.config?.appVersionMin,
+        announcement.config?.appVersionMax,
       ),
   );
   return applicableAnnouncements;
@@ -63,6 +63,7 @@ const parseOldAnnouncementToNew = (
   });
 
   if (parseResult.success) {
+    console.log('parseResult', parseResult.data);
     // Transform the old announcement to the new format using Zod transformer
     return OldAnnouncementToNewTransformer.safeParse(parseResult.data);
   }

@@ -70,7 +70,7 @@ const AnnouncementsContextProvider = ({children}: Props) => {
   const findAnnouncements = useCallback(
     (ruleVariables: RuleVariables = {}) => {
       return announcements.filter((announcement) => {
-        if (announcement.config.rules?.length) {
+        if (announcement.config?.rules?.length) {
           const passRules = checkRules(
             announcement.config.rules,
             ruleVariables,

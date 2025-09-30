@@ -51,7 +51,6 @@ const BottomSheetActionButton = z.object({
 });
 
 export const AnnouncementConfiguration = z.object({
-  active: z.boolean(),
   appPlatforms: z.array(AppPlatform).optional(),
   appVersionMin: z.string().optional(),
   appVersionMax: z.string().optional(),
@@ -75,9 +74,10 @@ export const BottomSheetAnnouncementContent = z.object({
 
 export const GenericAnnouncement = z.object({
   id: z.string(),
+  active: z.boolean(),
   cardActionType: z.undefined(),
   card: AnnouncementCardContent,
-  config: AnnouncementConfiguration,
+  config: AnnouncementConfiguration.optional(),
 });
 
 export const LinkAnnouncement = GenericAnnouncement.extend({
@@ -116,13 +116,13 @@ export const OldAnnouncementToNewTransformer = OldAnnouncement.transform(
   (oldAnnouncement: OldAnnouncement): Announcement => {
     const announcement: GenericAnnouncement = {
       id: oldAnnouncement.id,
+      active: oldAnnouncement.active,
       card: {
         title: oldAnnouncement.summaryTitle || oldAnnouncement.fullTitle,
         body: oldAnnouncement.summary,
         image: oldAnnouncement.summaryImage,
       },
       config: {
-        active: oldAnnouncement.active,
         appPlatforms: oldAnnouncement.appPlatforms,
         appVersionMin: oldAnnouncement.appVersionMin,
         appVersionMax: oldAnnouncement.appVersionMax,
