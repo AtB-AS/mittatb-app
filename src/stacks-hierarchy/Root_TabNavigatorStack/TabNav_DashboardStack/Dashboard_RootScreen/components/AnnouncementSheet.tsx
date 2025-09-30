@@ -32,7 +32,7 @@ export const AnnouncementSheet = ({announcement}: Props) => {
   const {t} = useTranslation();
   const analytics = useAnalyticsContext();
 
-  const sheetActionButton = announcement.actionButton.sheetActionButton;
+  const primaryButton = announcement.actionButton.sheetPrimaryButton;
 
   const summaryTitle = getTextForLanguage(
     announcement.summaryTitle ?? announcement.fullTitle,
@@ -71,17 +71,17 @@ export const AnnouncementSheet = ({announcement}: Props) => {
             </ThemeText>
           </GenericSectionItem>
         </Section>
-        {sheetActionButton && (
+        {primaryButton && (
           <Button
             expanded={true}
             rightIcon={
-              sheetActionButton.actionType === ActionType.external
+              primaryButton.actionType === ActionType.external
                 ? {svg: ExternalLink}
                 : {svg: ArrowRight}
             }
             mode="primary"
             text={
-              getTextForLanguage(sheetActionButton.label, language) ??
+              getTextForLanguage(primaryButton.label, language) ??
               t(
                 DashboardTexts.announcements.buttonAction.defaultLabel(
                   summaryTitle,
@@ -90,14 +90,14 @@ export const AnnouncementSheet = ({announcement}: Props) => {
             }
             accessibilityHint={t(
               DashboardTexts.announcements.buttonAction.a11yHint[
-                sheetActionButton.actionType
+                primaryButton.actionType
               ],
             )}
             accessibilityRole="link"
             onPress={async () => {
               logPress();
 
-              const actionButtonURL = sheetActionButton.url;
+              const actionButtonURL = primaryButton.url;
               try {
                 actionButtonURL && (await Linking.openURL(actionButtonURL));
               } catch (err: any) {

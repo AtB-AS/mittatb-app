@@ -48,7 +48,7 @@ const BottomSheetActionButton = z.object({
   label: LanguageAndTextTypeArray.optional(),
   actionType: z.literal(ActionType.bottom_sheet),
   /** Action button for bottom sheet, only shown in bottom sheet, only used for deeplinks or external links */
-  sheetActionButton: UrlActionButton.optional(),
+  sheetPrimaryButton: UrlActionButton.optional(),
 });
 
 const AnnouncementBase = z.object({
