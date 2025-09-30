@@ -94,10 +94,10 @@ export const BottomSheetAnnouncement = GenericAnnouncement.extend({
   bottomSheet: BottomSheetAnnouncementContent,
 });
 
-export const Announcement = z.discriminatedUnion('cardActionType', [
-  GenericAnnouncement,
+export const Announcement = z.union([
   LinkAnnouncement,
   BottomSheetAnnouncement,
+  GenericAnnouncement,
 ]);
 
 export type GenericAnnouncement = z.infer<typeof GenericAnnouncement>;
