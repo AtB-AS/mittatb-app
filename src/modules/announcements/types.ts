@@ -36,18 +36,12 @@ export enum ActionType {
   bottom_sheet = 'bottom_sheet',
 }
 
-const UrlActionButton = z.object({
-  actionType: z.union([
-    z.literal(ActionType.external),
-    z.literal(ActionType.deeplink),
-  ]),
+const ActionButton = z.object({
   label: LanguageAndTextTypeArray.optional(),
-  url: z.string().url(),
 });
 
-const BottomSheetActionButton = z.object({
-  actionType: z.literal(ActionType.bottom_sheet),
-  label: LanguageAndTextTypeArray.optional(),
+const UrlActionButton = ActionButton.extend({
+  url: z.string().url(),
 });
 
 export const AnnouncementConfiguration = z.object({
@@ -69,7 +63,12 @@ export const BottomSheetAnnouncementContent = z.object({
   title: LanguageAndTextTypeArray,
   body: LanguageAndTextTypeArray,
   image: Base64ImageSchema.optional(),
-  primaryButton: UrlActionButton.optional(),
+  primaryButton: UrlActionButton.extend({
+    actionType: z.union([
+      z.literal(ActionType.external),
+      z.literal(ActionType.deeplink),
+    ]),
+  }).optional(),
 });
 
 export const GenericAnnouncement = z.object({
@@ -90,7 +89,7 @@ export const LinkAnnouncement = GenericAnnouncement.extend({
 
 export const BottomSheetAnnouncement = GenericAnnouncement.extend({
   cardActionType: z.literal(ActionType.bottom_sheet),
-  cardActionButton: BottomSheetActionButton,
+  cardActionButton: ActionButton,
   bottomSheet: BottomSheetAnnouncementContent,
 });
 
@@ -143,7 +142,6 @@ export const OldAnnouncementToNewTransformer = OldAnnouncement.transform(
         ...announcement,
         cardActionType: actionType,
         cardActionButton: {
-          actionType,
           label,
         },
         bottomSheet: {
@@ -157,7 +155,6 @@ export const OldAnnouncementToNewTransformer = OldAnnouncement.transform(
         ...announcement,
         cardActionType: actionType,
         cardActionButton: {
-          actionType,
           label,
           url: oldAnnouncement.actionButton.url,
         },
