@@ -1,9 +1,15 @@
-import React, {useCallback, PropsWithChildren, useRef, useMemo} from 'react';
+import React, {
+  useCallback,
+  PropsWithChildren,
+  useRef,
+  useMemo,
+  useState,
+} from 'react';
 import BottomSheetGor, {
-  BottomSheetView,
   BottomSheetBackdrop,
+  BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
-import {Dimensions, Platform, View} from 'react-native';
+import {Platform, useWindowDimensions, View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PressableOpacity} from '../pressable-opacity';
 import {SvgProps} from 'react-native-svg';
@@ -62,9 +68,10 @@ export const MapBottomSheet = ({
   const {theme} = useThemeContext();
   const sheetTopPosition = useSharedValue(0);
   const {setPaddingBottomMap} = useMapContext();
-  const {height: screenHeight} = Dimensions.get('screen');
+  const {height: screenHeight} = useWindowDimensions();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   const {top: safeAreaTop} = useSafeAreaInsets();
+  const [headerHeight, setHeaderHeight] = useState(0);
 
   const aStyle = useAnimatedStyle(() => {
     return {
@@ -176,21 +183,19 @@ export const MapBottomSheet = ({
           }
         }}
         accessible={false}
-        maxDynamicContentSize={screenHeight - tabBarMinHeight - safeAreaTop}
+        maxDynamicContentSize={screenHeight - safeAreaTop - headerHeight}
         index={canMinimize ? 1 : 0}
       >
         <BottomSheetTopPositionBridge sheetTopPosition={sheetTopPosition} />
-        {enableDynamicSizing ? (
-          <BottomSheetView style={styles.contentContainer}>
+        <BottomSheetScrollView
+          style={styles.contentContainer}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}>
             <HeaderComp />
-            {children}
-          </BottomSheetView>
-        ) : (
-          <>
-            <HeaderComp />
-            {children}
-          </>
-        )}
+          </View>
+          {children}
+        </BottomSheetScrollView>
       </BottomSheetGor>
     </>
   );
