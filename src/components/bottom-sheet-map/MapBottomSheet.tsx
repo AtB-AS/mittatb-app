@@ -187,15 +187,24 @@ export const MapBottomSheet = ({
         index={canMinimize ? 1 : 0}
       >
         <BottomSheetTopPositionBridge sheetTopPosition={sheetTopPosition} />
-        <BottomSheetScrollView
-          style={styles.contentContainer}
-          keyboardShouldPersistTaps="handled"
-        >
-          <View onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}>
+        {enableDynamicSizing ? (
+          <BottomSheetScrollView
+            style={styles.contentContainer}
+            keyboardShouldPersistTaps="handled"
+          >
+            <View
+              onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}
+            >
+              <HeaderComp />
+            </View>
+            {children}
+          </BottomSheetScrollView>
+        ) : (
+          <>
             <HeaderComp />
-          </View>
-          {children}
-        </BottomSheetScrollView>
+            {children}
+          </>
+        )}
       </BottomSheetGor>
     </>
   );
