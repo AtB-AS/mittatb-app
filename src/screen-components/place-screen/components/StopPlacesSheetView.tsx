@@ -1,6 +1,5 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import React from 'react';
-import {RefreshControl} from 'react-native';
 import {type DepartureSearchTime} from '@atb/components/date-selection';
 import {QuaySection} from '@atb/screen-components/place-screen';
 import {BottomSheetSectionList} from '@gorhom/bottom-sheet';
@@ -79,13 +78,8 @@ export const StopPlacesSheetView = (props: Props) => {
             distance={distance}
             showTimeNavigation={showTimeNavigation}
             stopPlaces={stopPlaces}
-            didLoadingDataFail={didLoadingDataFail}
-            forceRefresh={forceRefresh}
           />
         </>
-      }
-      refreshControl={
-        <RefreshControl refreshing={state.isLoading} onRefresh={forceRefresh} />
       }
       sections={quayListData}
       testID={testID}
