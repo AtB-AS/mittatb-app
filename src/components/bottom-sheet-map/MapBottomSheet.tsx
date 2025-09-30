@@ -17,6 +17,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {BrandingImage} from '@atb/modules/mobility';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export type BottomSheetProps = PropsWithChildren<{
   snapPoints?: Array<string | number>;
@@ -35,6 +36,8 @@ export type BottomSheetProps = PropsWithChildren<{
   locationArrowOnPress: () => void;
   canMinimize?: boolean;
 }>;
+
+const isOldAndroid = Platform.OS === 'android' && Platform.Version <= 28;
 
 export const MapBottomSheet = ({
   snapPoints,
@@ -61,6 +64,7 @@ export const MapBottomSheet = ({
   const {setPaddingBottomMap} = useMapContext();
   const {height: screenHeight} = Dimensions.get('screen');
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
+  const {top: safeAreaTop} = useSafeAreaInsets();
 
   const aStyle = useAnimatedStyle(() => {
     return {
@@ -172,7 +176,7 @@ export const MapBottomSheet = ({
           }
         }}
         accessible={false}
-        maxDynamicContentSize={screenHeight - tabBarMinHeight}
+        maxDynamicContentSize={screenHeight - tabBarMinHeight - safeAreaTop}
         index={canMinimize ? 1 : 0}
       >
         <BottomSheetTopPositionBridge sheetTopPosition={sheetTopPosition} />
@@ -198,7 +202,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   sheet: {
     backgroundColor: theme.color.background.neutral[1].background,
-    ...shadows,
+    ...(isOldAndroid ? {...shadows, elevation: 0} : shadows),
   },
   headerContainer: {
     flexDirection: 'row',
