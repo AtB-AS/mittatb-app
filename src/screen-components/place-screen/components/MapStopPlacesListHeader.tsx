@@ -12,8 +12,6 @@ type Props = {
   setTravelTarget?: (target: string) => void;
   distance?: number | undefined;
   showTimeNavigation?: boolean;
-  didLoadingDataFail: boolean;
-  forceRefresh: () => void;
   stopPlaces: StopPlace[];
 };
 
