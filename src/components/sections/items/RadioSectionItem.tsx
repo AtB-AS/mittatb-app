@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
-import {screenReaderPause, ThemeText} from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
@@ -62,10 +62,7 @@ export function RadioSectionItem({
 
   const selectedRadioColor = color.outline.background;
 
-  const a11yLabel =
-    (accessibilityLabel || `${text}, ${subtext || ''}`) +
-    screenReaderPause +
-    t(selected ? dictionary.selected : dictionary.unselected);
+  const a11yLabel = accessibilityLabel || `${text}, ${subtext || ''}`;
 
   return (
     <View style={[style.spaceBetween, topContainer]}>
@@ -80,7 +77,8 @@ export function RadioSectionItem({
         }}
         style={styles.mainContent}
         testID={testID}
-        accessibilityRole="button"
+        accessibilityRole="radio"
+        accessibilityState={{selected: !!selected}}
         accessibilityLabel={a11yLabel}
         accessibilityHint={accessibilityHint}
       >
