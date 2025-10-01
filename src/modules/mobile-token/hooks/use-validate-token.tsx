@@ -89,7 +89,7 @@ export const useValidateToken = (
           await wipeToken([token.tokenId], traceId);
           logToBugsnag(`Token wiped`);
           logToBugsnag(`Resetting queries to restart token process`);
-          queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]);
+          queryClient.resetQueries({queryKey: [MOBILE_TOKEN_QUERY_KEY]});
         } else {
           notifyBugsnag(error, {
             errorGroupHash: 'token',

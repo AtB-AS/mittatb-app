@@ -17,6 +17,6 @@ export const useConnectionsQuery = (fromHarborId?: string) => {
     enabled: !!fromHarborId,
     queryFn: () => (!!fromHarborId ? queryFn(fromHarborId) : []),
     staleTime: ONE_HOUR_MS,
-    cacheTime: ONE_HOUR_MS,
+    gcTime: ONE_HOUR_MS,
   });
 };

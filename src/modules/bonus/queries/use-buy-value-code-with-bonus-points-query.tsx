@@ -15,8 +15,8 @@ export const useBuyValueCodeWithBonusPointsMutation = (
     mutationKey: ['bonusValueCode', userId, bonusProductId],
     mutationFn: () => buyValueCodeWithBonusPoints(bonusProductId),
     onSuccess: () =>
-      queryClient.invalidateQueries(
-        getBonusBalanceQueryKey(userId, isLoggedIn),
-      ),
+      queryClient.invalidateQueries({
+        queryKey: getBonusBalanceQueryKey(userId, isLoggedIn),
+      }),
   });
 };

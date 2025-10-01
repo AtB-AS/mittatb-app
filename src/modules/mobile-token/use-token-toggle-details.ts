@@ -34,7 +34,7 @@ const useTokenToggleDetailsQuery = () => {
       return {toggleLimit, maxToggleLimit};
     },
     staleTime: ONE_MINUTE_MS,
-    cacheTime: ONE_MINUTE_MS,
+    gcTime: ONE_MINUTE_MS,
   });
 };
 

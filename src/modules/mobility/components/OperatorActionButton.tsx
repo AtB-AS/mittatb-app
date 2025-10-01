@@ -45,13 +45,13 @@ export const OperatorActionButton = ({
 
   const {
     mutateAsync: fetchValueCode,
-    isLoading: isFetchingValueCode,
+    isPending: isFetchingValueCode,
     isError: isFetchingValueCodeError,
   } = useValueCodeMutation(operatorId);
 
   const {
     mutateAsync: buyBonusProduct,
-    isLoading: isBuyingValueCode,
+    isPending: isBuyingValueCode,
     isError: isBuyingValueCodeError,
   } = useBuyValueCodeWithBonusPointsMutation(bonusProductId);
 

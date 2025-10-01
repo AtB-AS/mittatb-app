@@ -52,7 +52,7 @@ export const ShmoActionButton = ({
 
   const {
     mutateAsync: initShmoOneStopBooking,
-    isLoading: initShmoOneStopBookingIsLoading,
+    isPending: initShmoOneStopBookingIsLoading,
     isError: initShmoOneStopBookingIsError,
     error: initShmoOneStopBookingError,
   } = useInitShmoOneStopBookingMutation();

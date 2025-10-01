@@ -29,10 +29,9 @@ export const useToggleTokenMutation = () => {
         ],
         tokens,
       );
-      queryClient.invalidateQueries([
-        MOBILE_TOKEN_QUERY_KEY,
-        GET_TOKEN_TOGGLE_DETAILS_QUERY_KEY,
-      ]);
+      queryClient.invalidateQueries({
+        queryKey: [MOBILE_TOKEN_QUERY_KEY, GET_TOKEN_TOGGLE_DETAILS_QUERY_KEY],
+      });
     },
   });
 };

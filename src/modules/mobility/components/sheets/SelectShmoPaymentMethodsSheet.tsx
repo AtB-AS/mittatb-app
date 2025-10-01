@@ -43,7 +43,7 @@ export const SelectShmoPaymentMethodSheet = ({
     PaymentMethod | undefined
   >();
 
-  const {mutate: savePrevPaymentMethod, isLoading} = useMutation({
+  const {mutate: savePrevPaymentMethod, isPending} = useMutation({
     mutationFn: (params: {userId: string; paymentMethod: PaymentMethod}) =>
       savePreviousPaymentMethodByUser(params.userId, params.paymentMethod),
     onSuccess: onSelect,
@@ -117,7 +117,7 @@ export const SelectShmoPaymentMethodSheet = ({
             }
           }}
           disabled={!selectedPaymentMethod}
-          loading={isLoading}
+          loading={isPending}
           rightIcon={{svg: Confirm}}
           testID="confirmButton"
         />

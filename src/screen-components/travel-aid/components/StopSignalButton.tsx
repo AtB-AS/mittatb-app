@@ -72,7 +72,7 @@ export const StopSignalButton = ({
               serviceJourneyDate: selectedCall.date,
             });
           }}
-          loading={status === 'loading'}
+          loading={status === 'pending'}
           disabled={isDisabled}
         />
       )}

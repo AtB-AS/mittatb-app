@@ -50,9 +50,9 @@ export const Root_ChooseTicketRecipientScreen = ({
           refreshControl={
             <RefreshControl
               onRefresh={() =>
-                queryClient.resetQueries([
-                  FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY,
-                ])
+                queryClient.resetQueries({
+                  queryKey: [FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY],
+                })
               }
               refreshing={false}
               tintColor={themeColor.foreground.primary}

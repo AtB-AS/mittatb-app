@@ -48,7 +48,9 @@ export const useReserveOfferMutation = ({
     },
     onSuccess: (data) => {
       if (recipient?.name) {
-        queryClient.invalidateQueries([FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY]);
+        queryClient.invalidateQueries({
+          queryKey: [FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY],
+        });
       }
       onSuccess?.(data);
     },

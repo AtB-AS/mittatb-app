@@ -36,7 +36,7 @@ export const Profile_EditProfileScreen = ({
   } = useAuthContext();
   const {
     mutate: updateProfile,
-    isLoading: isLoadingUpdateProfile,
+    isPending: isLoadingUpdateProfile,
     isError: isErrorUpdateProfile,
     isSuccess: isSuccessUpdateProfile,
     error: errorUpdate,

@@ -22,7 +22,7 @@ export const useActiveShmoBookingQuery = (
     queryKey: getActiveShmoBookingQueryKey(acceptLanguage),
     queryFn: ({signal}) => getActiveShmoBooking(acceptLanguage, {signal}),
     staleTime: ONE_MINUTE_MS,
-    cacheTime: ONE_MINUTE_MS,
+    gcTime: ONE_MINUTE_MS,
     refetchInterval,
     refetchOnWindowFocus: 'always',
     refetchOnReconnect: true,

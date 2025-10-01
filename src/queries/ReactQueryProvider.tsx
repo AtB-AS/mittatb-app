@@ -38,7 +38,7 @@ export const ReactQueryProvider = ({children}: {children: ReactNode}) => (
           // rehydrating. It's equivalent to `JSON.parse(JSON.stringify(data))`.
           return query.meta?.persistInAsyncStorage === true;
         },
-        dehydrateMutations: false, // Do not persist mutations
+        shouldDehydrateMutation: () => false, // Do not persist mutations
       },
     }}
   >

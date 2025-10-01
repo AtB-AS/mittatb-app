@@ -24,7 +24,7 @@ export const Root_ParkingPhotoScreen = ({
   const styles = useStyles();
   const {dispatchMapState} = useMapContext();
 
-  const {mutateAsync: sendShmoBookingEvent, isLoading} =
+  const {mutateAsync: sendShmoBookingEvent, isPending} =
     useSendShmoBookingEventMutation();
 
   const {logEvent} = useBottomSheetContext();
@@ -69,7 +69,7 @@ export const Root_ParkingPhotoScreen = ({
     navigation.goBack();
   };
 
-  if (isLoading) {
+  if (isPending) {
     return (
       <View style={styles.activityIndicator}>
         <ActivityIndicator size="large" />
