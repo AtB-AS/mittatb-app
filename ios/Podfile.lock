@@ -1448,10 +1448,36 @@ PODS:
   - hermes-engine (0.81.4):
     - hermes-engine/Pre-built (= 0.81.4)
   - hermes-engine/Pre-built (0.81.4)
-  - Intercom (18.7.3)
-  - intercom-react-native (8.8.0):
-    - Intercom (~> 18.7.3)
+  - Intercom (19.2.1)
+  - intercom-react-native (9.1.2):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - Intercom (~> 19.2.1)
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
     - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - KettleKit (1.5.1)
   - leveldb-library (1.22.6)
   - MapboxCommon (24.13.5):
@@ -4592,8 +4618,8 @@ SPEC CHECKSUMS:
   gRPC-Core: 860978b7db482de8b4f5e10677216309b5ff6330
   GTMSessionFetcher: 02d6e866e90bc236f48a703a041dfe43e6221a29
   hermes-engine: 35c763d57c9832d0eef764316ca1c4d043581394
-  Intercom: 93c6f5d9815b34bf2a7e5f03bcf7b6e08c1a4788
-  intercom-react-native: d496047d19b9f2e45c97feb5897d82b53036fc1b
+  Intercom: 6922723f79e2a2fb2e48b35837b56785214cf526
+  intercom-react-native: e5639fa95d55e944c5687e8b9e633fedf943354f
   KettleKit: a35575997fe055d1f2a8f41ecb98e566a8034a3f
   leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
   MapboxCommon: f38b69d24b1bb648629f001a6160bfaa3d8dd2b4
