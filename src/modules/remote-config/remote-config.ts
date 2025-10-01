@@ -3,15 +3,16 @@ import {ENABLE_TICKETING, PRIVACY_POLICY_URL, CUSTOMER_SERVICE_URL} from '@env';
 
 export type RemoteConfig = {
   /**
-   * Some code readers are sensitive to code size.
+   * Some code readers are sensitive to padding around code.
    * Configurable parameter allows quick response to reading issues.
    */
   aztec_code_padding: number;
   /**
-   * Some code readers are sensitive to padding around code.
+   * Some code readers are sensitive to code size.
    * Configurable parameter allows quick response to reading issues.
    */
   aztec_code_max_height: number;
+  aztec_code_size_in_cm: number;
   customer_feedback_url: string;
   customer_service_url: string;
   default_map_filter: string;
@@ -43,6 +44,8 @@ export type RemoteConfig = {
   enable_map_v2: boolean;
   enable_non_transit_trip_search: boolean;
   enable_nynorsk: boolean;
+  enable_new_token_barcode: boolean;
+  enable_new_token_barcode_base64: boolean;
   enable_on_behalf_of: boolean;
   enable_onboarding_login: boolean;
   enable_only_stop_places_checkbox: boolean;
@@ -95,6 +98,7 @@ export type RemoteConfig = {
 export const defaultRemoteConfig: RemoteConfig = {
   aztec_code_max_height: 275,
   aztec_code_padding: 20,
+  aztec_code_size_in_cm: 3.5,
   customer_feedback_url: '',
   customer_service_url: CUSTOMER_SERVICE_URL,
   default_map_filter: JSON.stringify({
@@ -124,6 +128,8 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_loading_screen: true,
   enable_map_v2: true,
   enable_non_transit_trip_search: true,
+  enable_new_token_barcode: false,
+  enable_new_token_barcode_base64: false,
   enable_nynorsk: true,
   enable_on_behalf_of: false,
   enable_onboarding_login: true,
@@ -187,6 +193,9 @@ export function getConfig(): RemoteConfig {
   const aztec_code_padding =
     values['aztec_code_padding']?.asNumber() ??
     defaultRemoteConfig.aztec_code_padding;
+  const aztec_code_size_in_cm =
+    values['aztec_code_size_in_cm']?.asNumber() ??
+    defaultRemoteConfig.aztec_code_size_in_cm;
   const customer_feedback_url =
     values['customer_feedback_url']?.asString() ??
     defaultRemoteConfig.customer_feedback_url;
@@ -257,6 +266,12 @@ export function getConfig(): RemoteConfig {
   const enable_non_transit_trip_search =
     values['enable_non_transit_trip_search']?.asBoolean() ??
     defaultRemoteConfig.enable_non_transit_trip_search;
+  const enable_new_token_barcode =
+    values['enable_new_token_barcode']?.asBoolean() ??
+    defaultRemoteConfig.enable_new_token_barcode;
+  const enable_new_token_barcode_base64 =
+    values['enable_new_token_barcode_base64']?.asBoolean() ??
+    defaultRemoteConfig.enable_new_token_barcode_base64;
   const enable_nynorsk =
     values['enable_nynorsk']?.asBoolean() ?? defaultRemoteConfig.enable_nynorsk;
   const enable_on_behalf_of =
@@ -399,6 +414,7 @@ export function getConfig(): RemoteConfig {
   return {
     aztec_code_max_height,
     aztec_code_padding,
+    aztec_code_size_in_cm,
     customer_feedback_url,
     customer_service_url,
     default_map_filter,
@@ -424,6 +440,8 @@ export function getConfig(): RemoteConfig {
     enable_loading_screen,
     enable_map_v2,
     enable_non_transit_trip_search,
+    enable_new_token_barcode,
+    enable_new_token_barcode_base64,
     enable_nynorsk,
     enable_on_behalf_of,
     enable_onboarding_login,

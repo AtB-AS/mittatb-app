@@ -20,6 +20,13 @@ import {SvgXml} from 'react-native-svg';
 import {GenericSectionItem} from '@atb/components/sections';
 import {useGetSignedTokenQuery} from '@atb/modules/mobile-token';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {
+  beginInspection,
+  endInspection,
+  RNBarcodeInspectionView,
+} from '@entur-private/abt-token-state-react-native-lib';
+import {CONTEXT_ID} from '@atb/modules/mobile-token';
+import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -28,6 +35,7 @@ type Props = {
 
 export function Barcode({validityStatus, fc}: Props): React.JSX.Element | null {
   const {mobileTokenStatus} = useMobileTokenContext();
+  const {enable_new_token_barcode} = useRemoteConfigContext();
   useScreenBrightnessIncrease();
   if (validityStatus !== 'valid') return null;
 
@@ -39,7 +47,11 @@ export function Barcode({validityStatus, fc}: Props): React.JSX.Element | null {
     case 'staticQr':
       return <StaticQrCode fc={fc} />;
     case 'success-and-inspectable':
-      return <MobileTokenAztec fc={fc} />;
+      if (enable_new_token_barcode) {
+        return <BarcodeInspectionView />;
+      } else {
+        return <MobileTokenAztec fc={fc} />;
+      }
     case 'success-not-inspectable':
       return <DeviceNotInspectable />;
     case 'error':
@@ -80,9 +92,53 @@ function useScreenBrightnessIncrease() {
   );
 }
 
+const BarcodeInspectionView = () => {
+  const styles = useStyles();
+  const {
+    aztec_code_size_in_cm,
+    aztec_code_padding,
+    enable_new_token_barcode_base64,
+  } = useRemoteConfigContext();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        // Prepare data for RNBarcodeInspectionView
+        await beginInspection(CONTEXT_ID, {
+          visualInspectionNonces: undefined,
+          includeCertificate: false,
+          deviceDetails: {
+            application: false,
+            os: false,
+            network: false,
+            bluetooth: true,
+          },
+          base64EncodedBarcode: enable_new_token_barcode_base64,
+        });
+      } catch (error) {
+        notifyBugsnag('Error beginning inspection', {metadata: {error}});
+      }
+    })();
+    return () => {
+      // Stop updating data for RNBarcodeInspectionView on unmount
+      endInspection();
+    };
+  }, [enable_new_token_barcode_base64]);
+
+  return (
+    <View style={styles.barcodeInspectionContainer}>
+      <View style={[styles.barcodeInspection, {padding: aztec_code_padding}]}>
+        <RNBarcodeInspectionView sizeInCm={aztec_code_size_in_cm} />
+      </View>
+    </View>
+  );
+};
+
 /**
  * Show aztec code for mobile token. This can also fall back to static aztec if
  * anything goes wrong when getting the signed mobile token.
+ *
+ * @deprecated Use BarcodeInspectionView instead
  */
 const MobileTokenAztec = ({fc}: {fc: FareContractType}) => {
   const styles = useStyles();
@@ -271,6 +327,13 @@ const useStyles = StyleSheet.createThemeHook(() => ({
     width: '100%',
     aspectRatio: 1,
     backgroundColor: '#FFFFFF',
+  },
+  barcodeInspection: {
+    backgroundColor: 'white',
+  },
+  barcodeInspectionContainer: {
+    flex: 1,
+    alignItems: 'center',
   },
   staticBottomContainer: {
     flex: 1,
