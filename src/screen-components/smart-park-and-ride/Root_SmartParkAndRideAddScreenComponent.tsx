@@ -46,9 +46,8 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
     mutateAsync: handleAddVehicleRegistration,
     error: addVehicleRegistrationError,
   } = useAddVehicleRegistrationMutation(licensePlate, nickname, () => {
-    analytics.logEvent('Smart Park & Ride', 'Onboarding completed', {
+    analytics.logEvent('Smart Park & Ride', 'Vehicle added', {
       hasNickname: nickname.length > 0,
-      licensePlate,
     });
     continueFromOnboardingSection('smartParkAndRide');
   });

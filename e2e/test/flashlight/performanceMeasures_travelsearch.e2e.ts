@@ -28,7 +28,6 @@ describe('Travel search performance with flashlight', () => {
 
     try {
       await NavigationHelper.tapMenu('assistant');
-      await NavigationHelper.tapMenu('assistant');
 
       await ElementHelper.waitForElement('id', 'searchFromButton');
       await FrontPagePage.searchFrom.click();
@@ -41,7 +40,10 @@ describe('Travel search performance with flashlight', () => {
       await TravelsearchOverviewPage.waitForTravelSearchResults();
 
       // ** Details **
-      await TravelsearchOverviewPage.openFirstSearchResult();
+      await TravelsearchOverviewPage.openSearchResult(0);
+      await AppHelper.pause(waitingTime);
+      await NavigationHelper.back();
+      await TravelsearchOverviewPage.openSearchResult(1);
       await AppHelper.pause(waitingTime);
     } catch (errMsg) {
       await AppHelper.screenshot('error_should_do_a_travel_search');

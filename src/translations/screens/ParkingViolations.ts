@@ -36,14 +36,14 @@ export const ParkingViolationTexts = {
   },
   photo: {
     title: _(
-      'Ta bilde av sykkelen',
-      'Take a photo of the bike',
-      'Ta bilete av sykkelen',
+      'Ta bilde av elsparkesykkelen',
+      'Take a photo of the e-scooter',
+      'Ta bilete av elsparkesykkelen',
     ),
     instruction: _(
-      'Hold ca. 5 meter avstand. Unngå folk i bildet.',
+      'Hold ca. 5 meter avstand. Unngå folk i bildet',
       'Stand approximately 5 meters away. Avoid people in the frame',
-      '"Hald ein avstand på omtrent 5 meter. Unngå folk i biletet',
+      'Hald ein avstand på ca. 5 meter. Unngå folk i biletet',
     ),
   },
   imageConfirmation: {

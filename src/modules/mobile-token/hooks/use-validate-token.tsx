@@ -15,7 +15,6 @@ import {LOAD_NATIVE_TOKEN_QUERY_KEY} from './use-load-native-token-query';
 import {useAuthContext} from '@atb/modules/auth';
 
 const RETRY_MAX_COUNT = 3;
-const MOBILE_TOKEN_LIBRARY_VERSION = '3.3.14-hotfix1';
 
 /**
  * This hook is used to check if the token needs renewal/reset.
@@ -118,9 +117,6 @@ export const useValidateToken = (
       const isAppVersionCodeSame =
         remoteToken.appVersionCode === DeviceInfo.getBuildNumber();
       const isDeviceIdSame = remoteToken.deviceId === uniqueId;
-      // match the library version here with the package.json version;
-      const isLibraryVersionSame =
-        remoteToken.libraryVersion === MOBILE_TOKEN_LIBRARY_VERSION;
 
       logToBugsnag(
         `Checking token details to see if we should renew the token`,
@@ -151,17 +147,12 @@ export const useValidateToken = (
         device: uniqueId,
       });
 
-      logToBugsnag(`Library version`, {
-        token: remoteToken.libraryVersion,
-        device: MOBILE_TOKEN_LIBRARY_VERSION,
-      });
       return !(
         isOsVersionSame &&
         isOsApiLevelSame &&
         isAppVersionSame &&
         isAppVersionCodeSame &&
-        isDeviceIdSame &&
-        isLibraryVersionSame
+        isDeviceIdSame
       );
     };
 

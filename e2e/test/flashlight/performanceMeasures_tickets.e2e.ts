@@ -2,16 +2,21 @@ import AppHelper from '../utils/app.helper.ts';
 import OnboardingPage from '../pageobjects/onboarding.page.ts';
 import NavigationHelper from '../utils/navigation.helper.ts';
 import ElementHelper from '../utils/element.helper.ts';
-import MyProfilePage from '../pageobjects/profile.page.js';
+import TicketPage from '../pageobjects/ticket.buy.page.js';
 import AuthenticationPage from '../pageobjects/authentication.page.js';
+import MyProfilePage from '../pageobjects/profile.page.js';
 import {formatPhoneNumber} from '../utils/utils.js';
-import ProfilePage from '../pageobjects/profile.page.js';
-import DebugPage from '../pageobjects/debug.page.js';
 import Config from '../conf/config.js';
+import ProfilePage from '../pageobjects/profile.page.js';
 
-describe('Auth Cleanup', () => {
-  const phoneNumber = Config.phoneNumber();
+/**
+ * Travel search interactions. Used together with '$ flashlight measure/test' to get performance metrics
+ */
+describe('Travel search performance with flashlight', () => {
+  // Waiting time between actions in ms
+  const waitingTime = 5000;
   let authorized = false;
+  const phoneNumber = Config.phoneNumber();
 
   before(async () => {
     await AppHelper.waitOnLoadingScreen();
@@ -19,16 +24,6 @@ describe('Auth Cleanup', () => {
 
   it('should login', async () => {
     try {
-      /*
-      // Log in through my profile
-      await NavigationHelper.tapMenu('profile');
-      await ElementHelper.waitForElement('text', 'Profile');
-      await MyProfilePage.login.click();
-      await AuthenticationPage.loginWithPhone(phoneNumber)
-      await ElementHelper.waitForElement('text', 'Find journey');
-      await AppHelper.pause(2000);
-       */
-
       // Log in through the onboarding
       await AuthenticationPage.loginWithPhone(phoneNumber);
       await OnboardingPage.denyLocationInOnboarding();
@@ -49,26 +44,26 @@ describe('Auth Cleanup', () => {
     }
   });
 
-  it('should cleanup remote tokens', async () => {
+  /**
+   * Tickets: open active tickets including expired tickets
+   */
+  it('should show tickets', async () => {
     if (authorized) {
       try {
-        // Open mobile token section in the debug menu
-        await NavigationHelper.tapMenu('profile');
-        await AppHelper.scrollDownUntilId(
-          'profileHomeScrollView',
-          'debugButton',
-        );
-        await ProfilePage.open('debug');
-        await DebugPage.scrollToMobileToken();
-        await DebugPage.open('mobileToken');
+        await NavigationHelper.tapMenu('tickets');
+        await NavigationHelper.tapTicketTab('activeTickets');
+        await AppHelper.pause(waitingTime);
 
-        // Remove all remote tokens
-        await DebugPage.showRemoteTokens();
-        await DebugPage.removeAllRemoteTokens();
+        // Open expired tickets
+        await TicketPage.openExpiredTickets();
+        for (let i = 0; i < 3; i++) {
+          await AppHelper.scrollDown('ticketHistoryScrollView');
+        }
+        await AppHelper.pause(waitingTime);
 
-        await NavigationHelper.tapMenu('profile');
+        await NavigationHelper.back();
       } catch (errMsg) {
-        await AppHelper.screenshot('error_auth_remove_mobToken');
+        await AppHelper.screenshot('error_should_show_tickets');
         throw errMsg;
       }
     }

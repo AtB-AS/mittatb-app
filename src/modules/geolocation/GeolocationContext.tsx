@@ -4,6 +4,7 @@ import React, {
   useContext,
   useEffect,
   useReducer,
+  useState,
 } from 'react';
 import {Alert, Linking, Platform} from 'react-native';
 import {isLocationEnabled} from 'react-native-device-info';
@@ -26,6 +27,7 @@ import {GeoLocation} from '@atb/modules/favorites';
 import {dictionary, GeoLocationTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
 import {tGlobal} from '@atb/modules/locale';
+import {coordinatesDistanceInMetres} from '@atb/utils/location';
 
 const config: GeolocationOptions = {
   enableHighAccuracy: true,
@@ -369,6 +371,44 @@ export function useGeolocationContext() {
     );
   }
   return context;
+}
+
+/**
+ * Custom hook to return a stable location.
+ * - The location is considered stable if the distance between the current location and the last used location is less than the threshold.
+ * - If threshold is exceeded, the location is updated.
+ * NOTE: If the location is currently not available (undefined), the last used location is returned.
+ *
+ * @param {number} thresholdMeters - The threshold in meters to consider the location stable.
+ * @returns {GeoLocation | undefined} - The stable location.
+ */
+export function useStableLocation(
+  thresholdMeters: number = 150,
+): GeoLocation | undefined {
+  const {location} = useGeolocationContext();
+  const [stableLocation, setStableLocation] = useState<GeoLocation | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    if (!location) return;
+
+    if (!stableLocation) {
+      setStableLocation(location);
+      return;
+    }
+
+    const distance = coordinatesDistanceInMetres(
+      stableLocation.coordinates,
+      location.coordinates,
+    );
+
+    if (distance > thresholdMeters) {
+      setStableLocation(location);
+    }
+  }, [location, stableLocation, thresholdMeters]);
+
+  return stableLocation || location || undefined;
 }
 
 export async function checkGeolocationPermission(

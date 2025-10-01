@@ -1,19 +1,14 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
-import {StyleSheet} from '@atb/theme';
 import React from 'react';
-import {RefreshControl, SectionList, View} from 'react-native';
-import {QuaySection} from './QuaySection';
-import {FavoriteToggle} from './FavoriteToggle';
-import type {ContrastColor} from '@atb-as/theme';
-import {
-  DateSelection,
-  type DepartureSearchTime,
-} from '@atb/components/date-selection';
-import type {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
+import {RefreshControl} from 'react-native';
+import {type DepartureSearchTime} from '@atb/components/date-selection';
+import {QuaySection} from '@atb/screen-components/place-screen';
+import {BottomSheetSectionList} from '@gorhom/bottom-sheet';
 import {
   NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
   useStopPlacesData,
 } from '../hooks/use-stop-places-data';
+import {MapStopPlacesListHeader} from './MapStopPlacesListHeader';
 import {StopPlacesError} from './StopPlacesError';
 
 type Props = {
@@ -27,55 +22,39 @@ type Props = {
     fromStopPosition: number,
   ) => void;
   searchTime: DepartureSearchTime;
-  setSearchTime: (searchTime: DepartureSearchTime) => void;
   showOnlyFavorites: boolean;
   setShowOnlyFavorites: (enabled: boolean) => void;
   isFocused: boolean;
   testID?: string;
   addedFavoritesVisibleOnDashboard?: boolean;
-  mode: StopPlacesMode;
-  backgroundColor: ContrastColor;
-} & (
-  | {
-      mode: 'Map';
-      setTravelTarget?: (target: string) => void;
-      distance?: number | undefined;
-    }
-  | {
-      mode: 'Departure';
-    }
-  | {
-      mode: 'Favourite';
-    }
-);
+  setTravelTarget?: (target: string) => void;
+  distance?: number | undefined;
+};
 
-export const StopPlacesView = (props: Props) => {
+export const StopPlacesSheetView = (props: Props) => {
   const {
     stopPlaces,
     showTimeNavigation = true,
     navigateToQuay,
     navigateToDetails,
     searchTime,
-    setSearchTime,
     showOnlyFavorites,
     setShowOnlyFavorites,
     isFocused,
     testID,
-    mode,
     addedFavoritesVisibleOnDashboard,
-    backgroundColor,
+    setTravelTarget,
+    distance,
   } = props;
 
-  const styles = useStyles();
   const {
     didLoadingDataFail,
     forceRefresh,
     state,
     quayListData,
     searchStartTime,
-    placeHasFavorites,
   } = useStopPlacesData({
-    mode,
+    mode: 'Map',
     searchTime,
     stopPlaces,
     setShowOnlyFavorites,
@@ -84,7 +63,9 @@ export const StopPlacesView = (props: Props) => {
   });
 
   return (
-    <SectionList
+    <BottomSheetSectionList
+      style={{flex: 1}}
+      nestedScrollEnabled
       ListHeaderComponent={
         <>
           {didLoadingDataFail && (
@@ -93,29 +74,14 @@ export const StopPlacesView = (props: Props) => {
               forceRefresh={forceRefresh}
             />
           )}
-          {mode === 'Departure' ? (
-            <View
-              style={
-                showTimeNavigation
-                  ? styles.headerWithNavigation
-                  : styles.headerWithoutNavigation
-              }
-            >
-              {placeHasFavorites && (
-                <FavoriteToggle
-                  enabled={showOnlyFavorites}
-                  setEnabled={setShowOnlyFavorites}
-                />
-              )}
-              {showTimeNavigation && (
-                <DateSelection
-                  searchTime={searchTime}
-                  setSearchTime={setSearchTime}
-                  backgroundColor={backgroundColor}
-                />
-              )}
-            </View>
-          ) : null}
+          <MapStopPlacesListHeader
+            setTravelTarget={setTravelTarget}
+            distance={distance}
+            showTimeNavigation={showTimeNavigation}
+            stopPlaces={stopPlaces}
+            didLoadingDataFail={didLoadingDataFail}
+            forceRefresh={forceRefresh}
+          />
         </>
       }
       refreshControl={
@@ -137,19 +103,9 @@ export const StopPlacesView = (props: Props) => {
           showOnlyFavorites={showOnlyFavorites}
           addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
           searchDate={searchStartTime}
-          mode={mode}
+          mode="Map"
         />
       )}
     />
   );
 };
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  headerWithNavigation: {
-    paddingTop: theme.spacing.medium,
-    marginHorizontal: theme.spacing.medium,
-  },
-  headerWithoutNavigation: {
-    marginHorizontal: theme.spacing.medium,
-  },
-}));

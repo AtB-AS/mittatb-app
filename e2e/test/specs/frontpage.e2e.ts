@@ -169,7 +169,7 @@ describe('Frontpage', () => {
   it('should open tickets tab', async () => {
     try {
       await ElementHelper.waitForElement('id', 'dashboardScrollView');
-      await ElementHelper.expectText('Travel search');
+      await ElementHelper.expectText('Find journey');
 
       await FrontPagePage.buyTickets.click();
       await ElementHelper.waitForElement('id', 'purchaseTab');

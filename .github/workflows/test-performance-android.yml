@@ -129,7 +129,7 @@ jobs:
         env:
           APP_PATH: ${{ github.workspace }}
           IS_CI: "true"
-          TESTED_VERSION: ${{ steps.get-appdistribution-apk.outputs.TESTED_VERSION }}
+          TESTED_VERSION: ${{ env.TESTED_VERSION }}
 
       # Results
       #- name: Check for performance report
