@@ -14,7 +14,7 @@ import {
   isCanBeActivatedNowFareContract,
   useGetFareProductsQuery,
 } from '@atb/modules/ticketing';
-import {FareContractType} from '@atb-as/utils';
+import {FareContractType, getAccesses} from '@atb-as/utils';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
@@ -33,6 +33,10 @@ import {
 } from '../bonus';
 import {useFareContractLegs} from './use-fare-contract-legs';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
+import {
+  CarnetFooter,
+  MAX_ACCESSES_FOR_CARNET_FOOTER,
+} from './carnet/CarnetFooter';
 
 type Props = {
   now: number;
@@ -56,11 +60,8 @@ export const FareContractView: React.FC<Props> = ({
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {validityStatus} = getFareContractInfo(
-    now,
-    fareContract,
-    currentUserId,
-  );
+  const {validityStatus, maximumNumberOfAccesses, numberOfUsedAccesses} =
+    getFareContractInfo(now, fareContract, currentUserId);
 
   const firstTravelRight = fareContract.travelRights[0];
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
@@ -87,6 +88,11 @@ export const FareContractView: React.FC<Props> = ({
     !shouldShowBonusAmountEarned,
   );
 
+  const accesses = getAccesses(fareContract);
+  const shouldShowCarnetFooter =
+    accesses &&
+    accesses.maximumNumberOfAccesses <= MAX_ACCESSES_FOR_CARNET_FOOTER;
+
   return (
     <Section testID={testID}>
       {hasShmoBookingId(fareContract) ? (
@@ -111,6 +117,17 @@ export const FareContractView: React.FC<Props> = ({
       ) : (
         <TravelInfoSectionItem fc={fareContract} />
       )}
+
+      {shouldShowCarnetFooter && (
+        <GenericSectionItem>
+          <CarnetFooter
+            active={validityStatus === 'valid'}
+            maximumNumberOfAccesses={maximumNumberOfAccesses!}
+            numberOfUsedAccesses={numberOfUsedAccesses!}
+          />
+        </GenericSectionItem>
+      )}
+
       {shouldShowBundlingInfo && (
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
       )}
