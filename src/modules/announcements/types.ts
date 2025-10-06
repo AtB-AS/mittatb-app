@@ -88,9 +88,9 @@ export const BottomSheetAnnouncement = AnnouncementBase.extend({
 });
 
 export const Announcement = z.union([
-  AnnouncementBase,
-  LinkAnnouncement,
   BottomSheetAnnouncement,
+  LinkAnnouncement,
+  AnnouncementBase,
 ]);
 
 export type LinkAnnouncement = z.infer<typeof LinkAnnouncement>;
