@@ -83,8 +83,9 @@ export function ProductSelectionByProducts({
             items={selectableProducts}
             keyExtractor={(u) => u.productAliasId ?? u.id}
             itemToText={(fp) => productDisplayName(fp)}
-            hideSubtext={hideProductDescriptions}
-            itemToSubtext={(fp) => subText(fp)}
+            itemToSubtext={
+              hideProductDescriptions ? undefined : (fp) => subText(fp)
+            }
             selected={selection.preassignedFareProduct}
             onSelect={(p) => {
               const newSelection = selectionBuilder
