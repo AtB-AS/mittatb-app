@@ -107,11 +107,11 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
   );
 };
 
-function AnnouncementActionButton({
+const AnnouncementActionButton = ({
   announcement,
 }: {
   announcement: BottomSheetAnnouncement | LinkAnnouncement;
-}) {
+}) => {
   const {t} = useTranslation();
   const {language} = useTranslation();
   const analytics = useAnalyticsContext();
@@ -189,7 +189,7 @@ function AnnouncementActionButton({
       />
     );
   }
-}
+};
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   sectionItem: {
