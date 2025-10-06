@@ -125,7 +125,11 @@ export const MapBottomSheets = ({
             onReportParkingViolation={onReportParkingViolation}
             navigation={navigation}
             startOnboardingCallback={() => {
-              navigation.navigate('Root_ShmoOnboardingScreen');
+              navigation.navigate('Root_ShmoOnboardingScreen', {
+                assetId:
+                  mapState.feature?.properties?.id ?? mapState.assetId ?? '',
+              });
+              dispatchMapState({type: MapStateActionType.None});
             }}
             locationArrowOnPress={locationArrowOnPress}
           />

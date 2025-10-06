@@ -16,10 +16,10 @@ import {PaymentMethod, savePreviousPayment} from '@atb/modules/payment';
 import {useShmoWarnings} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {AgeVerificationEnum} from '../queries/use-get-age-verification-query';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type ShmoActionButtonProps = {
   onStartOnboarding: () => void;
@@ -44,7 +44,7 @@ export const ShmoActionButton = ({
   const styles = useStyles();
   const coordinates = getCurrentCoordinatesGlobal();
   const {warningMessage} = useShmoWarnings(vehicleId);
-  const {logEvent} = useBottomSheetContext();
+  const {logEvent} = useAnalyticsContext();
 
   const {enable_vipps_login} = useRemoteConfigContext();
   const hasReservationOrAvailableFareContract =

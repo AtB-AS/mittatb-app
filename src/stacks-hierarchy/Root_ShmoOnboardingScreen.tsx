@@ -8,17 +8,23 @@ import {PaymentScreenComponent} from '@atb/modules/mobility';
 import {ShmoRequirementEnum} from '@atb/modules/mobility';
 import {useShmoRequirements} from '@atb/modules/mobility';
 import {RootStackScreenProps} from './navigation-types';
+import {MapStateActionType, useMapContext} from '@atb/modules/map';
 
 type Props = RootStackScreenProps<'Root_ShmoOnboardingScreen'>;
 
-export const Root_ShmoOnboardingScreen = ({navigation}: Props) => {
+export const Root_ShmoOnboardingScreen = ({navigation, route}: Props) => {
   const {requirements, hasBlockers, setGivenConsent} = useShmoRequirements();
+  const {dispatchMapState} = useMapContext();
 
   useEffect(() => {
     if (!hasBlockers) {
+      dispatchMapState({
+        type: MapStateActionType.ScooterScanned,
+        assetId: route.params.assetId,
+      });
       navigation.goBack();
     }
-  }, [hasBlockers, navigation]);
+  }, [dispatchMapState, hasBlockers, navigation, route.params.assetId]);
 
   if (
     requirements.find(
