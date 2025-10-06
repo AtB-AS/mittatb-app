@@ -1,9 +1,14 @@
 import {UserFavoriteDepartures} from '@atb/modules/favorites';
 import {StopPlacesMode} from '../nearby-stop-places';
 import {addDays, differenceInSeconds, parseISO} from 'date-fns';
+import {StopPlaceAndQuay} from './types';
+import {StopPlace} from '@atb/api/types/departures';
 
 const MIN_TIME_RANGE = 3 * 60 * 60; // Three hours
 const ONE_WEEK_TIME_RANGE = 7 * 24 * 60 * 60;
+
+export const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
+export const NUMBER_OF_DEPARTURES_IN_BUFFER = 5;
 
 export const DateOptions = ['now', 'departure'] as const;
 export type DateOptionType = (typeof DateOptions)[number];
@@ -55,4 +60,14 @@ export function publicCodeCompare(a?: string, b?: string): number {
   }
   // Otherwise compare as strings (e.g. K1 < K2)
   return a.localeCompare(b);
+}
+
+export function getStopPlaceAndQuays(
+  stopPlaces: StopPlace[],
+): StopPlaceAndQuay[] {
+  return stopPlaces
+    .flatMap(
+      (sp) => sp.quays?.map((quay) => ({stopPlace: sp, quay: quay})) || [],
+    )
+    .sort((a, b) => publicCodeCompare(a.quay.publicCode, b.quay.publicCode));
 }

@@ -1,7 +1,7 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {StyleSheet} from '@atb/theme';
-import React from 'react';
-import {RefreshControl, SectionList, View} from 'react-native';
+import React, {useEffect, useMemo} from 'react';
+import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import {QuaySection} from './QuaySection';
 import {FavoriteToggle} from './FavoriteToggle';
 import type {ContrastColor} from '@atb-as/theme';
@@ -10,11 +10,16 @@ import {
   type DepartureSearchTime,
 } from '@atb/components/date-selection';
 import type {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
-import {
-  NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
-  useStopPlacesData,
-} from '../hooks/use-stop-places-data';
 import {StopPlacesError} from './StopPlacesError';
+import {useDeparturesData} from '../hooks/use-departures-data';
+import {useFavoritesContext} from '@atb/modules/favorites';
+import {StopPlaceAndQuay} from '../types';
+import {
+  getStopPlaceAndQuays,
+  hasFavorites,
+  NUMBER_OF_DEPARTURES_IN_BUFFER,
+  NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
+} from '../utils';
 
 type Props = {
   stopPlaces: StopPlace[];
@@ -67,21 +72,46 @@ export const StopPlacesView = (props: Props) => {
   } = props;
 
   const styles = useStyles();
-  const {
-    didLoadingDataFail,
-    forceRefresh,
-    state,
-    quayListData,
-    searchStartTime,
-    placeHasFavorites,
-  } = useStopPlacesData({
-    mode,
-    searchTime,
-    stopPlaces,
-    setShowOnlyFavorites,
-    isFocused,
+  const {favoriteDepartures} = useFavoritesContext();
+  const searchStartTime =
+    searchTime?.option !== 'now' ? searchTime.date : undefined;
+
+  const stopPlaceAndQuays: StopPlaceAndQuay[] = useMemo(
+    () => getStopPlaceAndQuays(stopPlaces),
+    [stopPlaces],
+  );
+
+  const quays: Quay[] = useMemo(
+    () => stopPlaceAndQuays.map(({quay}) => quay),
+    [stopPlaceAndQuays],
+  );
+
+  const quayListData: SectionListData<StopPlaceAndQuay>[] =
+    stopPlaceAndQuays.length ? [{data: stopPlaceAndQuays}] : [];
+
+  const placeHasFavorites = stopPlaces.some((sp) =>
+    hasFavorites(
+      favoriteDepartures,
+      sp.quays?.map((q) => q.id),
+    ),
+  );
+
+  const {state, forceRefresh} = useDeparturesData(
+    quays.map((q) => q.id),
+    NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW + NUMBER_OF_DEPARTURES_IN_BUFFER,
     showOnlyFavorites,
-  });
+    isFocused,
+    mode,
+    searchStartTime,
+  );
+
+  // If all favorites are removed while setShowOnlyFavorites is true, reset the
+  // value to false
+  useEffect(() => {
+    if (!placeHasFavorites) setShowOnlyFavorites(false);
+  }, [placeHasFavorites, setShowOnlyFavorites]);
+
+  const didLoadingDataFail = !!state.error;
 
   return (
     <SectionList
