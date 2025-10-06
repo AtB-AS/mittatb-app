@@ -1,4 +1,4 @@
-import {EstimatedCall, Quay, StopPlace} from '@atb/api/types/departures';
+import {Quay, StopPlace} from '@atb/api/types/departures';
 import React, {useMemo} from 'react';
 import {
   QuaySection,
@@ -7,7 +7,7 @@ import {
 import {BottomSheetSectionList} from '@gorhom/bottom-sheet';
 import {MapStopPlacesListHeader} from './MapStopPlacesListHeader';
 import {StopPlacesError} from './StopPlacesError';
-import {useGetDeparturesQuery} from '../hooks/use-get-departures-query';
+import {useDeparturesQuery} from '../hooks/use-departures-query';
 import {DeparturesVariables} from '@atb/api/bff/departures';
 import {
   getStopPlaceAndQuays,
@@ -78,21 +78,21 @@ export const StopPlacesSheetView = (props: Props) => {
   );
 
   const {
-    data: stopDetailsData,
-    isLoading: stateIsLoading,
-    isError: didLoadingDataFail,
-    refetch: refetchStopDetails,
-  } = useGetDeparturesQuery({query});
+    data: departuresData,
+    isLoading: departuresDataLoading,
+    isError: departuresDataIsError,
+    refetch: refetchDeparturesData,
+  } = useDeparturesQuery({query});
 
   return (
     <BottomSheetSectionList
       nestedScrollEnabled
       ListHeaderComponent={
         <>
-          {didLoadingDataFail && (
+          {departuresDataIsError && (
             <StopPlacesError
               showTimeNavigation={showTimeNavigation}
-              forceRefresh={refetchStopDetails}
+              forceRefresh={refetchDeparturesData}
             />
           )}
           <MapStopPlacesListHeader
@@ -108,17 +108,14 @@ export const StopPlacesSheetView = (props: Props) => {
       renderItem={({item, index}) => (
         <QuaySection
           quay={item.quay}
-          isLoading={stateIsLoading}
+          isLoading={departuresDataLoading}
           departuresPerQuay={NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW}
           data={
-            stopDetailsData
-              ? (flatMap(
-                  stopDetailsData?.quays,
-                  (q) => q.estimatedCalls,
-                ) as EstimatedCall[])
+            departuresData
+              ? flatMap(departuresData?.quays, (q) => q.estimatedCalls)
               : []
           }
-          didLoadingDataFail={didLoadingDataFail}
+          didLoadingDataFail={departuresDataIsError}
           navigateToDetails={navigateToDetails}
           navigateToQuay={(quay) => navigateToQuay(item.stopPlace, quay)}
           testID={'quaySection' + index}

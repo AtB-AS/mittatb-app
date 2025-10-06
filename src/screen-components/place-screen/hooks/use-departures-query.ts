@@ -6,7 +6,7 @@ type UseGetDeparturesQueryProps = {
   query: DeparturesVariables;
 };
 
-export const useGetDeparturesQuery = ({query}: UseGetDeparturesQueryProps) => {
+export const useDeparturesQuery = ({query}: UseGetDeparturesQueryProps) => {
   return useQuery({
     queryKey: ['departureData', query],
     queryFn: () => getDepartures(query),
