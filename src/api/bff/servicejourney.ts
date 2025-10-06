@@ -49,7 +49,7 @@ export async function getDatedServiceJourney(
   id?: string,
   opts?: AxiosRequestConfig,
 ) {
-  if (!id) return undefined;
+  if (!id) return null;
   const url = `bff/v2/servicejourney/datedservicejourney/${id}`;
   return await client.get<DatedServiceJourney>(url, opts);
 }
