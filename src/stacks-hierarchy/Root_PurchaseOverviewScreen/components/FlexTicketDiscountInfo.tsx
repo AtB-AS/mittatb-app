@@ -11,7 +11,6 @@ import {
   getReferenceDataName,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
-import {formatNumberToString} from '@atb/utils/numbers';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {
@@ -23,6 +22,7 @@ import {
 import {ContentHeading} from '@atb/components/heading';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {formatNumberToString} from '@atb-as/utils';
 
 type Props = {
   userProfiles: UserProfileWithCountAndOffer[];

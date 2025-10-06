@@ -22,7 +22,6 @@ import {
   VehicleTypeAvailabilityBasicFragment,
 } from '@atb/api/types/generated/fragments/stations';
 import {dictionary, Language} from '@atb/translations';
-import {formatNumberToString} from '@atb/utils/numbers';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
 import {
@@ -44,6 +43,7 @@ import {
 } from '@atb/api/types/mobility';
 import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {TFunc} from '@leile/lobo-t';
+import {formatNumberToString} from '@atb-as/utils';
 
 export const isVehiclesClusteredFeature = (
   feature: Feature<Point> | undefined,
