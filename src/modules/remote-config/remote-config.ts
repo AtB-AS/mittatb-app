@@ -12,6 +12,11 @@ export type RemoteConfig = {
    * Configurable parameter allows quick response to reading issues.
    */
   aztec_code_max_height: number;
+  /**
+   * Some code readers are sensitive to code size. Configurable parameter allows
+   * quick response to reading issues. This field is used instead of
+   * aztec_code_max_height when enable_new_token_barcode is true.
+   */
   aztec_code_size_in_cm: number;
   customer_feedback_url: string;
   customer_service_url: string;
