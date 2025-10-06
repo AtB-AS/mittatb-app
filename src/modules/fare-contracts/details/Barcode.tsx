@@ -101,24 +101,20 @@ const BarcodeInspectionView = () => {
   } = useRemoteConfigContext();
 
   useEffect(() => {
-    (async () => {
-      try {
-        // Prepare data for RNBarcodeInspectionView
-        await beginInspection(CONTEXT_ID, {
-          visualInspectionNonces: undefined,
-          includeCertificate: false,
-          deviceDetails: {
-            application: false,
-            os: false,
-            network: false,
-            bluetooth: true,
-          },
-          base64EncodedBarcode: enable_new_token_barcode_base64,
-        });
-      } catch (error) {
-        notifyBugsnag('Error beginning inspection', {metadata: {error}});
-      }
-    })();
+    // Prepare data for RNBarcodeInspectionView
+    beginInspection(CONTEXT_ID, {
+      visualInspectionNonces: undefined,
+      includeCertificate: false,
+      deviceDetails: {
+        application: false,
+        os: false,
+        network: false,
+        bluetooth: true,
+      },
+      base64EncodedBarcode: enable_new_token_barcode_base64,
+    }).catch((error) => {
+      notifyBugsnag('Error beginning inspection', {metadata: {error}});
+    });
     return () => {
       // Stop updating data for RNBarcodeInspectionView on unmount
       endInspection();
