@@ -29,10 +29,10 @@
   },
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
-    "@atb-as/config-specs": "^7.5.0",
+    "@atb-as/config-specs": "^8.0.0",
     "@atb-as/generate-assets": "^18.5.0",
     "@atb-as/theme": "^14.1.0",
-    "@atb-as/utils": "^4.3.0",
+    "@atb-as/utils": "^5.1.1",
     "@babel/plugin-transform-export-namespace-from": "^7.27.1",
     "@bam.tech/react-native-image-resizer": "^3.0.11",
     "@bugsnag/react-native": "^8.6.0",
@@ -120,7 +120,7 @@
     "string.fromcodepoint": "^1.0.3",
     "use-reducer-with-side-effects": "^2.2.0",
     "uuid": "^13.0.0",
-    "zod": "3.24.1"
+    "zod": "4.1.11"
   },
   "devDependencies": {
     "@babel/core": "^7.28.4",
@@ -200,8 +200,5 @@
   },
   "engines": {
     "node": ">=22"
-  },
-  "resolutions": {
-    "zod": "3.24.1"
   }
 }

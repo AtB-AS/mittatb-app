@@ -25,18 +25,16 @@
     "@jridgewell/gen-mapping" "^0.3.5"
     "@jridgewell/trace-mapping" "^0.3.24"
 
-"@atb-as/config-specs@^7.5.0":
-  version "7.5.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-7.5.0.tgz#4847f5cedaa3a34712ce8a327cf45e96bf805801"
-  integrity sha512-q30hG6e7FhQeGtLwnN40BT4EvugThLo7E9JvpYpK2iFU6ID44F9WdWuhP/Rm9TqaOhoR8GOqoufkm3nPyseRtg==
+"@atb-as/config-specs@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-8.0.0.tgz#0b38f5843da2a95924aee1190b9d34f863fe138a"
+  integrity sha512-W6/247SC9FRqUQYeFJvvlr8c+K0aON5VGxb+jVYVvV5hAmRMuG+xAUmYY9z8PtSMqka4ltAfdw0bTn4BgB9/lw==
   dependencies:
-    ajv "^8.12.0"
-    ajv-formats "^2.1.1"
+    ajv "^8.17.1"
+    ajv-formats "^3.0.1"
     glob "^9.3.2"
     js-yaml "^4.1.0"
     yargs "^17.7.1"
-    zod "^3.24.4"
-    zod-to-json-schema "^3.24.5"
 
 "@atb-as/generate-assets@^18.5.0":
   version "18.5.0"
@@ -68,13 +66,12 @@
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
 
-"@atb-as/utils@^4.3.0":
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/utils/-/utils-4.3.0.tgz#7a225c818e8f8ec005cabe5f8a1d104becb85e1e"
-  integrity sha512-Qusgnp7yshISqaZLh23cTb+BjKZlZLxTrWcZsSi0eRapYsv5/JuxghOPQUYZIxYFGoXDvjqPzg3Mi5ADd8kz2g==
+"@atb-as/utils@^5.1.1":
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/utils/-/utils-5.1.1.tgz#b860fdd80a62811acd999b79036176b5c98302a3"
+  integrity sha512-R54mo0VfcmTH5ZMVKuuFG+McEqfbcq8VSOkMDT6USktc0xfRw9waJOYa80D1Z0DKhT+7wqhyOvffDoQXGUPEaw==
   dependencies:
     lodash "^4.17.21"
-    zod "^3.24.1"
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.22.13", "@babel/code-frame@^7.24.7", "@babel/code-frame@^7.26.2":
   version "7.26.2"
@@ -4669,10 +4666,10 @@ agent-base@^7.1.2:
   resolved "https://registry.yarnpkg.com/agent-base/-/agent-base-7.1.4.tgz#e3cd76d4c548ee895d3c3fd8dc1f6c5b9032e7a8"
   integrity sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==
 
-ajv-formats@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/ajv-formats/-/ajv-formats-2.1.1.tgz#6e669400659eb74973bbf2e33327180a0996b520"
-  integrity sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==
+ajv-formats@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/ajv-formats/-/ajv-formats-3.0.1.tgz#3d5dc762bca17679c3c2ea7e90ad6b7532309578"
+  integrity sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==
   dependencies:
     ajv "^8.0.0"
 
@@ -4686,7 +4683,7 @@ ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-ajv@^8.0.0, ajv@^8.12.0:
+ajv@^8.0.0, ajv@^8.17.1:
   version "8.17.1"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.17.1.tgz#37d9a5c776af6bc92d7f4f9510eba4c0a60d11a6"
   integrity sha512-B/gBuNg5SiMTrPkC+A2+cW0RszwxYmn6VYxB/inlBStS5nx6xHIt/ehKRhIMhqusl7a8LjQoZnjCs5vhwxOQ1g==
@@ -12359,12 +12356,7 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zod-to-json-schema@^3.24.5:
-  version "3.24.6"
-  resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.24.6.tgz#5920f020c4d2647edfbb954fa036082b92c9e12d"
-  integrity sha512-h/z3PKvcTcTetyjl1fkj79MHNEjm+HpD6NXheWjzOekY7kV+lwDYnHw+ivHkijnCSMz1yJaWBD9vu/Fcmk+vEg==
-
-zod@3.24.1, zod@^3.24.1, zod@^3.24.4:
-  version "3.24.1"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.24.1.tgz#27445c912738c8ad1e9de1bea0359fa44d9d35ee"
-  integrity sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==
+zod@4.1.11:
+  version "4.1.11"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-4.1.11.tgz#4aab62f76cfd45e6c6166519ba31b2ea019f75f5"
+  integrity sha512-WPsqwxITS2tzx1bzhIKsEs19ABD5vmCVa4xBo2tq/SrV4RNZtfws1EnCWQXM6yh8bD08a1idvkB5MZSBiZsjwg==
