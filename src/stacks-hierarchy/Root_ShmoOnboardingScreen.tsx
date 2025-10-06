@@ -12,7 +12,8 @@ import {RootStackScreenProps} from './navigation-types';
 type Props = RootStackScreenProps<'Root_ShmoOnboardingScreen'>;
 
 export const Root_ShmoOnboardingScreen = ({navigation}: Props) => {
-  const {requirements, hasBlockers, setGivenConsent} = useShmoRequirements();
+  const {requirements, hasBlockers, setGivenShmoConsent} =
+    useShmoRequirements();
 
   useEffect(() => {
     if (!hasBlockers) {
@@ -33,7 +34,7 @@ export const Root_ShmoOnboardingScreen = ({navigation}: Props) => {
       (e) => e.requirementCode === ShmoRequirementEnum.TERMS_AND_CONDITIONS,
     )?.isBlocking
   ) {
-    return <RulesScreenComponent onGiveConsent={setGivenConsent} />;
+    return <RulesScreenComponent onGiveConsent={setGivenShmoConsent} />;
   }
 
   if (
