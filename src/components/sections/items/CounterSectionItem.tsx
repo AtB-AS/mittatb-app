@@ -20,7 +20,6 @@ type Props = SectionItemProps<{
   count: number;
   addCount: () => void;
   removeCount: () => void;
-  hideSubtext?: boolean;
   testID?: string;
 }>;
 
@@ -31,7 +30,6 @@ export function CounterSectionItem({
   count,
   addCount,
   removeCount,
-  hideSubtext,
   testID,
   ...props
 }: Props) {
@@ -52,12 +50,10 @@ export function CounterSectionItem({
           counterStyles.infoContainer,
         ]}
         accessible={true}
-        accessibilityLabel={`${count} ${text}, ${
-          (!hideSubtext && subtext) || ''
-        }`}
+        accessibilityLabel={`${count} ${text}, ${subtext || ''}`}
       >
         <ThemeText>{text}</ThemeText>
-        {subtext && !hideSubtext && (
+        {subtext && (
           <ThemeText
             typography="body__secondary"
             color="secondary"
