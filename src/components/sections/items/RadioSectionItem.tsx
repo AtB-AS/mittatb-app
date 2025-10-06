@@ -77,7 +77,10 @@ export function RadioSectionItem({
         }}
         style={styles.mainContent}
         testID={testID}
-        accessibilityRole="radio"
+        // There is a bug in React Native where `accessibilityRole="radio"`
+        // doesn't work consistently with VoiceOver. Using "button" until it's
+        // fixed: https://github.com/facebook/react-native/issues/43266
+        accessibilityRole="button"
         accessibilityState={{selected: !!selected}}
         accessibilityLabel={a11yLabel}
         accessibilityHint={accessibilityHint}
