@@ -17,7 +17,9 @@ export const useAddVehicleRegistrationMutation = (
     mutationFn: () => addVehicleRegistration(licensePlate, nickname),
     onSuccess: () => {
       onSuccess();
-      queryClient.invalidateQueries(getVehicleRegistrationsQueryKey(userId));
+      queryClient.invalidateQueries({
+        queryKey: getVehicleRegistrationsQueryKey(userId),
+      });
     },
   });
 };

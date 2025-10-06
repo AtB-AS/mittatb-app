@@ -234,7 +234,7 @@ export const Root_ContactScooterOperatorScreen = ({
                 />
               )}
             <Button
-              loading={supportRequestStatus === 'loading'}
+              loading={supportRequestStatus === 'pending'}
               expanded={true}
               mode="primary"
               text={t(ContactScooterOperatorTexts.submitButton)}

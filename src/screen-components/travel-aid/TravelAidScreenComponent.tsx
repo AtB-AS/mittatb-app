@@ -103,7 +103,7 @@ export const TravelAidScreenComponent = ({
         testID="closeJourneyAidButton"
       />
       <ScrollView contentContainerStyle={styles.scrollView}>
-        {status === 'loading' && (
+        {status === 'pending' && (
           <ActivityIndicator size="large" ref={focusRef} />
         )}
         {status === 'error' && (

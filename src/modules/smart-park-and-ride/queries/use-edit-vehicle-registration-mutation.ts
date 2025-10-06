@@ -18,7 +18,9 @@ export const useEditVehicleRegistrationMutation = (
     mutationFn: () => editVehicleRegistration(id, licensePlate, nickname),
     onSuccess: () => {
       onSuccess();
-      queryClient.invalidateQueries(getVehicleRegistrationsQueryKey(userId));
+      queryClient.invalidateQueries({
+        queryKey: getVehicleRegistrationsQueryKey(userId),
+      });
     },
   });
 };

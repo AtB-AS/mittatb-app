@@ -106,23 +106,23 @@ export const getStations = (
 export const getBikeStation = (
   id: string,
   opts?: AxiosRequestConfig,
-): Promise<BikeStationFragment | undefined> => {
+): Promise<BikeStationFragment | null> => {
   const url = '/bff/v2/mobility/station/bike';
   const query = qs.stringify({ids: id});
   return client
     .get<GetBikeStationQuery>(stringifyUrl(url, query), opts)
-    .then((res) => res.data.stations?.[0]);
+    .then((res) => res.data.stations?.[0] ?? null);
 };
 
 export const getCarStation = (
   id: string,
   opts?: AxiosRequestConfig,
-): Promise<CarStationFragment | undefined> => {
+): Promise<CarStationFragment | null> => {
   const url = '/bff/v2/mobility/station/car';
   const query = qs.stringify({ids: id});
   return client
     .get<GetCarStationQuery>(stringifyUrl(url, query), opts)
-    .then((res) => res.data.stations?.[0]);
+    .then((res) => res.data.stations?.[0] ?? null);
 };
 
 export const getGeofencingZones = (

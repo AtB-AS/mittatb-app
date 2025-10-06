@@ -18,7 +18,7 @@ export const useGetSignedTokenQuery = () => {
   return useQuery({
     queryKey: [MOBILE_TOKEN_QUERY_KEY, GET_SIGNED_TOKEN_QUERY_KEY, nativeToken],
     queryFn: async () => {
-      if (!nativeToken) return undefined;
+      if (!nativeToken) return null;
       try {
         return await mobileTokenClient.encode(nativeToken);
       } catch (err: any) {
@@ -29,7 +29,7 @@ export const useGetSignedTokenQuery = () => {
             description: 'Error encoding signed token',
           },
         });
-        return undefined;
+        return null;
       }
     },
     refetchInterval: TEN_SECONDS_MS,

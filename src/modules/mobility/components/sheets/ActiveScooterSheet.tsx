@@ -68,7 +68,7 @@ export const ActiveScooterSheet = ({
 
   const {
     mutateAsync: sendShmoBookingEvent,
-    isLoading: sendShmoBookingEventIsLoading,
+    isPending: sendShmoBookingEventIsLoading,
     isError: sendShmoBookingEventIsError,
     error: sendShmoBookingEventError,
   } = useSendShmoBookingEventMutation();

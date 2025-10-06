@@ -73,19 +73,19 @@ export const ShmoTesting = ({
 
   const {
     mutateAsync: getAssetFromQrCode,
-    isLoading: getAssetFromQrCodeIsLoading,
+    isPending: getAssetFromQrCodeIsLoading,
     isError: getAssetFromQrCodeIsError,
   } = useGetAssetFromQrCodeMutation();
 
   const {
     mutateAsync: initShmoOneStopBooking,
-    isLoading: initShmoOneStopBookingIsLoading,
+    isPending: initShmoOneStopBookingIsLoading,
     isError: initShmoOneStopBookingIsError,
   } = useInitShmoOneStopBookingMutation();
 
   const {
     mutateAsync: sendShmoBookingEvent,
-    isLoading: sendShmoBookingEventIsLoading,
+    isPending: sendShmoBookingEventIsLoading,
     isError: sendShmoBookingEventIsError,
   } = useSendShmoBookingEventMutation();
 

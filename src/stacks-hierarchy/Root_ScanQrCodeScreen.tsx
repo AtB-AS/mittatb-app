@@ -33,7 +33,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
 
   const {
     mutateAsync: getAssetFromQrCode,
-    isLoading: getAssetFromQrCodeIsLoading,
+    isPending: getAssetFromQrCodeIsLoading,
     isError: getAssetFromQrCodeIsError,
   } = useGetAssetFromQrCodeMutation();
 

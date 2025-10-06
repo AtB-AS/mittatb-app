@@ -8,5 +8,5 @@ export const useStopsDetailsDataQuery = (ids: string[]) =>
     queryKey: ['stopDetailsData', ids],
     queryFn: () => getStopsDetails({ids}),
     staleTime: ONE_HOUR_MS,
-    cacheTime: ONE_HOUR_MS,
+    gcTime: ONE_HOUR_MS,
   });

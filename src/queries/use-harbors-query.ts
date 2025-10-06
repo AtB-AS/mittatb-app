@@ -35,7 +35,7 @@ export const useHarborsQuery = (
     queryKey: ['harbors', uniqueModes, uniqueSubmodes],
     queryFn: () => getStopPlacesByMode(uniqueModes, uniqueSubmodes),
     staleTime: ONE_HOUR_MS,
-    cacheTime: ONE_HOUR_MS,
+    gcTime: ONE_HOUR_MS,
   });
 };
 

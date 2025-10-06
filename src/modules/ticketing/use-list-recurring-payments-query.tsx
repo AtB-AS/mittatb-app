@@ -20,6 +20,6 @@ export const useListRecurringPaymentsQuery = () => {
       }
       return [];
     },
-    cacheTime: ONE_HOUR_MS,
+    gcTime: ONE_HOUR_MS,
   });
 };

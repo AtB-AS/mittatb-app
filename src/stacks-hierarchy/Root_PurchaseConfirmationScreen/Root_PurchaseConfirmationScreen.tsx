@@ -449,7 +449,7 @@ const PaymentButton = ({
         );
         onGoToPayment();
       }}
-      loading={reserveStatus === 'loading'}
+      loading={reserveStatus === 'pending'}
       testID="confirmPaymentButton"
     />
   );
