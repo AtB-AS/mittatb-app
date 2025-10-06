@@ -19,7 +19,7 @@ export const useEditVehicleRegistrationMutation = (
     onSuccess: () => {
       onSuccess();
       queryClient.invalidateQueries({
-        queryKey: [getVehicleRegistrationsQueryKey(userId)],
+        queryKey: getVehicleRegistrationsQueryKey(userId),
       });
     },
   });

@@ -16,7 +16,7 @@ export const useDeleteVehicleRegistrationMutation = (
     onSuccess: () => {
       onSuccess();
       queryClient.invalidateQueries({
-        queryKey: [getVehicleRegistrationsQueryKey(userId)],
+        queryKey: getVehicleRegistrationsQueryKey(userId),
       });
     },
   });
