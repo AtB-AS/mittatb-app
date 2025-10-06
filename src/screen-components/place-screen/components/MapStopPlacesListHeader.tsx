@@ -11,9 +11,6 @@ import {StopPlace} from '@atb/api/types/departures';
 type Props = {
   setTravelTarget?: (target: string) => void;
   distance?: number | undefined;
-  showTimeNavigation?: boolean;
-  didLoadingDataFail: boolean;
-  forceRefresh: () => void;
   stopPlaces: StopPlace[];
 };
 
