@@ -200,8 +200,5 @@
   },
   "engines": {
     "node": ">=22"
-  },
-  "resolutions": {
-    "zod": "4.1.11"
   }
 }
