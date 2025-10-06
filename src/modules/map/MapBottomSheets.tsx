@@ -283,15 +283,12 @@ export const MapBottomSheets = ({
             distance={undefined}
             stopPlaceFeature={mapState.feature}
             navigateToDetails={(...params) => {
-              handleCloseSheet();
               mapProps.navigateToDetails(...params);
             }}
             navigateToQuay={(...params) => {
-              handleCloseSheet();
               mapProps.navigateToQuay(...params);
             }}
             navigateToTripSearch={(...params) => {
-              handleCloseSheet();
               mapProps.navigateToTripSearch(...params);
             }}
             locationArrowOnPress={locationArrowOnPress}
