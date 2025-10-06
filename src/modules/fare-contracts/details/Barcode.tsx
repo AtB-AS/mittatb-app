@@ -105,13 +105,14 @@ const BarcodeInspectionView = () => {
     beginInspection(CONTEXT_ID, {
       visualInspectionNonces: undefined,
       includeCertificate: false,
+      base64EncodedBarcode: enable_new_token_barcode_base64,
+
+      // Exclude some data to make the barcode more readable for scanners. This
+      // is the same configuration as in the Entur app as of October 2025.
       deviceDetails: {
         application: false,
         os: false,
-        network: false,
-        bluetooth: true,
       },
-      base64EncodedBarcode: enable_new_token_barcode_base64,
     }).catch((error) => {
       notifyBugsnag('Error beginning inspection', {metadata: {error}});
     });
