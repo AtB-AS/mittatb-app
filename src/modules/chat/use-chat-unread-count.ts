@@ -1,6 +1,7 @@
 import Intercom, {IntercomEvents} from '@intercom/intercom-react-native';
 import {useEffect, useState} from 'react';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {NativeEventEmitter, NativeModules} from 'react-native';
 
 export function useChatUnreadCount() {
   const [count, setCount] = useState(0);
@@ -20,9 +21,15 @@ export function useChatUnreadCount() {
 
     getInitialUnreadCount();
 
-    const countListener = Intercom.addEventListener(
+    const cleanupIntercomEventListeners = Intercom.bootstrapEventListeners();
+
+    const eventEmitter = new NativeEventEmitter(
+      NativeModules.IntercomEventEmitter,
+    );
+
+    const countListener = eventEmitter.addListener(
       IntercomEvents.IntercomUnreadCountDidChange,
-      (response) => {
+      (response: any) => {
         setCount(response.count as number);
       },
     );
@@ -30,6 +37,7 @@ export function useChatUnreadCount() {
     return () => {
       mounted = false;
       countListener.remove();
+      cleanupIntercomEventListeners();
     };
   }, [enable_intercom]);
 
