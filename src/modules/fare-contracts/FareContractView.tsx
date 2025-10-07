@@ -124,6 +124,7 @@ export const FareContractView: React.FC<Props> = ({
             active={validityStatus === 'valid'}
             maximumNumberOfAccesses={maximumNumberOfAccesses!}
             numberOfUsedAccesses={numberOfUsedAccesses!}
+            fareContract={fareContract}
           />
         </GenericSectionItem>
       )}

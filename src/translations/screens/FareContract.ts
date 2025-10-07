@@ -281,6 +281,11 @@ const FareContractTexts = {
       'An error occurred while activating the ticket. Please try again.',
       'Ein feil har oppstått under aktivering av billetten. Ver venleg og prøv igjen.',
     ),
+    consumableInformationError: _(
+      'Klarte ikke å hente billettene dine.',
+      'Could not fetch your tickets.',
+      'Klarte ikkje å hente billettane dine.',
+    ),
   },
   school: {
     home: _('Hjem', 'Home', 'Heim'),
