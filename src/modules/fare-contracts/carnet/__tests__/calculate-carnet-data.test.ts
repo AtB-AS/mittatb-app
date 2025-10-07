@@ -100,6 +100,17 @@ describe('Carnet footer: Padded when not divisible by 10', () => {
   });
 });
 
+// School ticket
+describe('Carnet footer: School tickets', () => {
+  it('2 tickets, 1 used, not active.', async () => {
+    const carnetData = calculateCarnetData(false, 2, 1);
+    expect(carnetData.accessesRemaining).toEqual(1);
+    expect(carnetData.unusedArray.length).toEqual(1);
+    expect(carnetData.usedArray.length).toEqual(1);
+    expect(carnetData.multiCarnetArray.length).toEqual(0);
+  });
+});
+
 // These states are invalid, but we shouldn't crash if it happends. Make sure we
 // handle it gracefully.
 describe('Carnet footer: Invalid state', () => {

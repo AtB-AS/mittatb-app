@@ -1,9 +1,12 @@
 import React from 'react';
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {calculateCarnetData} from './calculate-carnet-data';
+import {useConsumableInfoQuery} from '@atb/modules/ticketing';
+import {FareContractType} from '@atb-as/utils';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 export const MAX_ACCESSES_FOR_CARNET_FOOTER = 50;
 
@@ -11,18 +14,42 @@ type Props = {
   active: boolean;
   maximumNumberOfAccesses: number;
   numberOfUsedAccesses: number;
+  fareContract: FareContractType;
 };
 
 export const CarnetFooter: React.FC<Props> = ({
   active,
-  maximumNumberOfAccesses,
+  maximumNumberOfAccesses: fcMaximumNumberOfAccesses,
   numberOfUsedAccesses,
+  fareContract,
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
 
+  const {
+    data: consumableInfo,
+    isError: isConsumableInfoError,
+    isFetching: isConsumableInfoFetching,
+  } = useConsumableInfoQuery(fareContract);
+
+  const maximumNumberOfAccesses =
+    consumableInfo?.maximumNumberOfAccesses ?? fcMaximumNumberOfAccesses;
+
   const {accessesRemaining, multiCarnetArray, unusedArray, usedArray} =
-    calculateCarnetData(active, maximumNumberOfAccesses, numberOfUsedAccesses);
+    calculateCarnetData(
+      active,
+      maximumNumberOfAccesses,
+      consumableInfo?.numberOfUsedAccesses ?? numberOfUsedAccesses,
+    );
+
+  if (isConsumableInfoFetching) return <ActivityIndicator />;
+  if (isConsumableInfoError)
+    return (
+      <MessageInfoBox
+        type="error"
+        message={t(FareContractTexts.carnet.consumableInformationError)}
+      />
+    );
 
   return (
     <View
@@ -89,7 +116,9 @@ function MultiCarnet({count}: {count: number}) {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+    gap: theme.spacing.large,
+    flexWrap: 'wrap',
     flexDirection: 'row',
     marginTop: theme.spacing.medium,
   },

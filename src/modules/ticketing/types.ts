@@ -159,3 +159,15 @@ export type AddPaymentMethodResponse = {
 export type RefundOptions = {
   isRefundable: boolean;
 };
+
+/**
+ * Defined by ConsumableSchoolCarnetResponse in
+ * https://github.com/AtB-AS/ticket/blob/main/ticket-service/src/handlers.rs#L280
+ *
+ * @todo Use zod instead
+ */
+export type ConsumableSchoolCarnetResponse = {
+  nextConsumptionDay?: string | null;
+  maxConsumptionsPerDay: number;
+  consumptionsLeftForToday: number;
+};

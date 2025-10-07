@@ -129,9 +129,7 @@ export const DetailsContent: React.FC<Props> = ({
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
   const accesses = getAccesses(fc);
-  const shouldShowCarnetFooter =
-    accesses &&
-    accesses.maximumNumberOfAccesses <= MAX_ACCESSES_FOR_CARNET_FOOTER;
+  const shouldShowCarnetFooter = accesses;
 
   const shouldShowLegs =
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;
@@ -179,6 +177,7 @@ export const DetailsContent: React.FC<Props> = ({
             active={validityStatus === 'valid'}
             maximumNumberOfAccesses={maximumNumberOfAccesses!}
             numberOfUsedAccesses={numberOfUsedAccesses!}
+            fareContract={fc}
           />
         </GenericSectionItem>
       )}
