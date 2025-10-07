@@ -34,10 +34,7 @@ export enum ActionType {
   deeplink = 'deeplink',
   bottom_sheet = 'bottom_sheet',
 }
-const BottomSheetActionButton = z.object({
-  label: LanguageAndTextTypeArray.optional(),
-  actionType: z.literal(ActionType.bottom_sheet),
-});
+
 const UrlActionButton = z.object({
   label: LanguageAndTextTypeArray.optional(),
   url: z.string().url(),
@@ -46,23 +43,75 @@ const UrlActionButton = z.object({
     z.literal(ActionType.deeplink),
   ]),
 });
-const ActionButton = z.union([BottomSheetActionButton, UrlActionButton]);
 
-export const Announcement = z.object({
+export type UrlActionButton = z.infer<typeof UrlActionButton>;
+
+const BottomSheetActionButton = z.object({
+  label: LanguageAndTextTypeArray.optional(),
+  actionType: z.literal(ActionType.bottom_sheet),
+  /** Action button for bottom sheet, only shown in bottom sheet, only used for deeplinks or external links */
+  sheetPrimaryButton: UrlActionButton.optional(),
+});
+
+export type BottomSheetActionButton = z.infer<typeof BottomSheetActionButton>;
+
+const AnnouncementBase = z.object({
   id: z.string(),
   active: z.boolean(),
+
+  /** Announcement card title */
   summaryTitle: LanguageAndTextTypeArray.optional(),
+  /** Announcement card summary */
   summary: LanguageAndTextTypeArray,
+  /** Announcement card image */
   summaryImage: Base64ImageSchema.optional(),
+
+  /** Announcement bottom sheet title, also used as card title if no summaryTitle is provided */
   fullTitle: LanguageAndTextTypeArray,
-  body: LanguageAndTextTypeArray,
-  mainImage: Base64ImageSchema.optional(),
+
   appPlatforms: z.array(AppPlatform).optional(),
   appVersionMin: z.string().optional(),
   appVersionMax: z.string().optional(),
   startDate: TimestampSchema.optional(),
   endDate: TimestampSchema.optional(),
   rules: z.array(Rule).optional(),
-  actionButton: ActionButton.optional(),
+  actionButton: z.union([UrlActionButton, BottomSheetActionButton]).optional(),
 });
+
+export const LinkAnnouncement = AnnouncementBase.extend({
+  actionButton: UrlActionButton,
+});
+
+export const BottomSheetAnnouncement = AnnouncementBase.extend({
+  /** Announcement bottom sheet body */
+  body: LanguageAndTextTypeArray,
+  /** Announcement bottom sheet image */
+  mainImage: Base64ImageSchema.optional(),
+
+  actionButton: BottomSheetActionButton,
+});
+
+export const Announcement = z.union([
+  BottomSheetAnnouncement,
+  LinkAnnouncement,
+  AnnouncementBase,
+]);
+
+export type LinkAnnouncement = z.infer<typeof LinkAnnouncement>;
+export type BottomSheetAnnouncement = z.infer<typeof BottomSheetAnnouncement>;
 export type Announcement = z.infer<typeof Announcement>;
+
+export function isBottomSheetAnnouncement(
+  announcement: Announcement,
+): announcement is BottomSheetAnnouncement {
+  return announcement.actionButton?.actionType === ActionType.bottom_sheet;
+}
+
+export function isLinkAnnouncement(
+  announcement: Announcement,
+): announcement is LinkAnnouncement {
+  return (
+    announcement.actionButton?.actionType === ActionType.external ||
+    announcement.actionButton?.actionType === ActionType.deeplink
+  );
+}
