@@ -11,7 +11,7 @@ export const useDeparturesQuery = ({query}: UseGetDeparturesQueryProps) => {
     queryKey: ['departureData', query],
     queryFn: () => getDepartures(query),
     staleTime: ONE_HOUR_MS,
-    cacheTime: ONE_HOUR_MS,
+    gcTime: ONE_HOUR_MS,
     refetchInterval: ONE_MINUTE_MS / 2,
   });
 };
