@@ -1,20 +1,14 @@
 import {
-  ActionType,
   Announcement,
-  BottomSheetAnnouncement,
-  LinkAnnouncement,
-  isBottomSheetAnnouncement,
-  isLinkAnnouncement,
   useAnnouncementsContext,
 } from '@atb/modules/announcements';
-import {useCallback} from 'react';
 import {ThemeText} from '@atb/components/text';
 import {
   DashboardTexts,
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
-import {Image, Linking, StyleProp, View, ViewStyle} from 'react-native';
+import {Image, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
@@ -25,13 +19,9 @@ import {
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
-import {AnnouncementSheet} from './AnnouncementSheet';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {animateNextChange} from '@atb/utils/animation';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import Bugsnag from '@bugsnag/react-native';
-import {RefObject, useRef} from 'react';
-import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {useActionButtonProps} from './hooks';
 
 type Props = {
   announcement: Announcement;
@@ -45,6 +35,11 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
   const {theme} = useThemeContext();
   const analytics = useAnalyticsContext();
   const {dismissAnnouncement} = useAnnouncementsContext();
+  const actionButtonProps = useActionButtonProps(
+    announcement,
+    announcement.actionButton,
+    'Dashboard',
+  );
 
   const handleDismiss = () => {
     animateNextChange();
@@ -99,96 +94,18 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
           </View>
         </View>
       </GenericSectionItem>
-      {(isBottomSheetAnnouncement(announcement) ||
-        isLinkAnnouncement(announcement)) && (
-        <AnnouncementActionButton announcement={announcement} />
+      {actionButtonProps && (
+        <LinkSectionItem
+          {...actionButtonProps}
+          textType="body__secondary"
+          accessibility={{
+            accessibilityHint: actionButtonProps.accessibilityHint,
+            accessibilityRole: actionButtonProps.accessibilityRole,
+          }}
+        />
       )}
     </Section>
   );
-};
-
-const AnnouncementActionButton = ({
-  announcement,
-}: {
-  announcement: BottomSheetAnnouncement | LinkAnnouncement;
-}) => {
-  const {t} = useTranslation();
-  const {language} = useTranslation();
-  const analytics = useAnalyticsContext();
-  const {open: openBottomSheet} = useBottomSheetContext();
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
-
-  const summaryTitle = getTextForLanguage(
-    announcement.summaryTitle ?? announcement.fullTitle,
-    language,
-  );
-
-  const buttonText =
-    getTextForLanguage(announcement.actionButton.label, language) ??
-    t(DashboardTexts.announcements.buttonAction.defaultLabel(summaryTitle));
-
-  const accessibilityHint = t(
-    DashboardTexts.announcements.buttonAction.a11yHint[
-      announcement.actionButton.actionType
-    ],
-  );
-
-  const logPress = useCallback(() => {
-    analytics.logEvent('Dashboard', 'Announcement pressed', {
-      id: announcement.id,
-    });
-  }, [analytics, announcement.id]);
-
-  if (isBottomSheetAnnouncement(announcement)) {
-    return (
-      <LinkSectionItem
-        text={buttonText}
-        textType="body__secondary"
-        rightIcon={{svg: ArrowRight}}
-        accessibility={{
-          accessibilityHint,
-          accessibilityRole: 'button',
-        }}
-        ref={onCloseFocusRef}
-        onPress={async () => {
-          logPress();
-
-          openBottomSheet(
-            () => <AnnouncementSheet announcement={announcement} />,
-            onCloseFocusRef,
-          );
-        }}
-      />
-    );
-  }
-
-  if (isLinkAnnouncement(announcement)) {
-    return (
-      <LinkSectionItem
-        text={buttonText}
-        textType="body__secondary"
-        rightIcon={
-          announcement.actionButton.actionType === ActionType.external
-            ? {svg: ExternalLink}
-            : {svg: ArrowRight}
-        }
-        accessibility={{
-          accessibilityHint,
-          accessibilityRole: 'link',
-        }}
-        onPress={async () => {
-          logPress();
-
-          const actionButtonURL = announcement.actionButton.url;
-          try {
-            actionButtonURL && (await Linking.openURL(actionButtonURL));
-          } catch (err: any) {
-            Bugsnag.notify(err);
-          }
-        }}
-      />
-    );
-  }
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
