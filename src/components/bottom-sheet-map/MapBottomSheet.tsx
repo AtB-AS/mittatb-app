@@ -18,6 +18,7 @@ import {ThemeIcon} from '../theme-icon';
 import {MapButtons, shadows, useMapContext} from '@atb/modules/map';
 import {BottomSheetTopPositionBridge} from './BottomSheetTopPositionBridge';
 import Animated, {
+  ReduceMotion,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
@@ -185,6 +186,7 @@ export const MapBottomSheet = ({
         accessible={false}
         maxDynamicContentSize={screenHeight - safeAreaTop - headerHeight}
         index={canMinimize ? 1 : 0}
+        overrideReduceMotion={ReduceMotion.Never}
       >
         <BottomSheetTopPositionBridge sheetTopPosition={sheetTopPosition} />
         {enableDynamicSizing ? (
