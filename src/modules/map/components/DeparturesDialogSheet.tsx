@@ -110,7 +110,7 @@ export const DeparturesDialogSheet = ({
           />
         </View>
       );
-    } else if (stopDetailsStatus === 'pending') {
+    } else if (stopDetailsStatus === 'loading') {
       StopPlaceViewOrError = (
         <View style={styles.paddingHorizontal}>
           <ActivityIndicator size="large" />
