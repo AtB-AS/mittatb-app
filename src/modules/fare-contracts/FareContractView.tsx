@@ -89,9 +89,6 @@ export const FareContractView: React.FC<Props> = ({
   );
 
   const accesses = getAccesses(fareContract);
-  const shouldShowCarnetFooter =
-    accesses &&
-    accesses.maximumNumberOfAccesses <= MAX_ACCESSES_FOR_CARNET_FOOTER;
 
   return (
     <Section testID={testID}>
@@ -118,7 +115,7 @@ export const FareContractView: React.FC<Props> = ({
         <TravelInfoSectionItem fc={fareContract} />
       )}
 
-      {shouldShowCarnetFooter && (
+      {accesses && (
         <GenericSectionItem>
           <CarnetFooter
             active={validityStatus === 'valid'}

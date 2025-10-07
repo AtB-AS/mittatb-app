@@ -129,7 +129,6 @@ export const DetailsContent: React.FC<Props> = ({
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
   const accesses = getAccesses(fc);
-  const shouldShowCarnetFooter = accesses;
 
   const shouldShowLegs =
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;
@@ -171,7 +170,7 @@ export const DetailsContent: React.FC<Props> = ({
           <Barcode validityStatus={validityStatus} fc={fc} />
         </GenericSectionItem>
       )}
-      {shouldShowCarnetFooter && (
+      {accesses && (
         <GenericSectionItem>
           <CarnetFooter
             active={validityStatus === 'valid'}
