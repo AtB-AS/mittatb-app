@@ -246,11 +246,17 @@ const FareContractTexts = {
   },
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>
-      _(
-        `${count} enkeltbilletter gjenstår`,
-        `${count} single ticket(s) left`,
-        `${count} enkeltbillettar att`,
-      ),
+      count === 1
+        ? _(
+            `${count} enkeltbillett gjenstår`,
+            `${count} single ticket left`,
+            `${count} enkeltbillett att`,
+          )
+        : _(
+            `${count} enkeltbilletter gjenstår`,
+            `${count} single tickets left`,
+            `${count} enkeltbillettar att`,
+          ),
     activateCarnet: _(
       'Aktiver enkeltbillett',
       'Activate single ticket',
