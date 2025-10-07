@@ -6,11 +6,7 @@ import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {getIdTokenGlobal, useAuthContext} from '@atb/modules/auth';
-import {
-  KeyValuePair,
-  storage,
-  StorageModelKeysEnum,
-} from '@atb/modules/storage';
+import {KeyValuePair, storage} from '@atb/modules/storage';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {usePreferencesContext, UserPreferences} from '@atb/modules/preferences';
 import {get, keys} from 'lodash';
@@ -49,6 +45,7 @@ import {
   DebugSabotage,
   DebugTokenServerAddress,
 } from '@atb/modules/mobile-token';
+import {useMapContext} from '@atb/modules/map';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -112,7 +109,7 @@ export const Profile_DebugInfoScreen = () => {
   } = useMobileTokenContext();
   const {serverNow} = useTimeContext();
   const serverTimeOffset = useMemo(() => Date.now() - serverNow, [serverNow]);
-
+  const {setGivenShmoConsent} = useMapContext();
   const {
     fcmToken,
     permissionStatus: pushNotificationPermissionStatus,
@@ -271,7 +268,7 @@ export const Profile_DebugInfoScreen = () => {
           />
           <LinkSectionItem
             text="Reset scooter consent"
-            onPress={() => storage.remove(StorageModelKeysEnum.ScooterConsent)}
+            onPress={() => setGivenShmoConsent(false)}
           />
         </Section>
         <Section style={styles.section}>
