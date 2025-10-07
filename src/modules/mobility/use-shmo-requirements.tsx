@@ -12,7 +12,7 @@ import {useMapContext} from '../map';
 
 export const useShmoRequirements = (operatorId?: string) => {
   const {mobilityOperators} = useOperators();
-  const {givenShmoConsent, setGivenShmoConsent} = useMapContext();
+  const {givenShmoConsent} = useMapContext();
   const operator = mobilityOperators?.find((op) => op.id === operatorId);
   const operatorAgeLimit = operator?.ageLimit ?? 0;
 
@@ -67,7 +67,6 @@ export const useShmoRequirements = (operatorId?: string) => {
     requirements,
     hasBlockers,
     numberOfBlockers,
-    setGivenShmoConsent,
     isLoading,
     operatorAgeLimit,
     ageVerification,
