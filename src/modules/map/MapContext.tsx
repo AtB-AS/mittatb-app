@@ -6,6 +6,8 @@ import {
   ReducerMapState,
   ReducerMapStateAction,
 } from './mapStateReducer';
+import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
+import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
 
 type MapContextState = {
   mapFilter?: MapFilterType;
@@ -14,6 +16,8 @@ type MapContextState = {
   dispatchMapState: React.Dispatch<ReducerMapStateAction>;
   paddingBottomMap: number;
   setPaddingBottomMap: (value: number) => void;
+  givenShmoConsent: boolean;
+  setGivenShmoConsent: (value: boolean) => void;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
@@ -42,6 +46,12 @@ export const MapContextProvider = ({children}: Props) => {
     bottomSheetType: MapBottomSheetType.None,
   });
 
+  const [givenShmoConsent, setGivenShmoConsent] = usePersistedBoolState(
+    storage,
+    StorageModelKeysEnum.ScooterConsent,
+    false,
+  );
+
   const {mapFilter, setMapFilter} = useUserMapFilters();
 
   const [paddingBottomMap, setPaddingBottomMap] = useState(0);
@@ -55,6 +65,8 @@ export const MapContextProvider = ({children}: Props) => {
         dispatchMapState,
         paddingBottomMap,
         setPaddingBottomMap,
+        givenShmoConsent,
+        setGivenShmoConsent,
       }}
     >
       {children}
