@@ -52,6 +52,9 @@ export const useActionButtonProps = (
     language,
   );
 
+  const accessibilityRole: AccessibilityRole =
+    button.actionType === ActionType.bottom_sheet ? 'button' : 'link';
+
   return {
     rightIcon:
       button.actionType === ActionType.external
@@ -65,10 +68,7 @@ export const useActionButtonProps = (
         button.actionType as ActionType
       ],
     ),
-    accessibilityRole:
-      button.actionType === ActionType.bottom_sheet
-        ? ('button' as AccessibilityRole)
-        : ('link' as AccessibilityRole),
+    accessibilityRole,
     onPress: async () => {
       logPress();
       if (
