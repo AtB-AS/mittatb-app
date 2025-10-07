@@ -8,12 +8,13 @@ import {PaymentScreenComponent} from '@atb/modules/mobility';
 import {ShmoRequirementEnum} from '@atb/modules/mobility';
 import {useShmoRequirements} from '@atb/modules/mobility';
 import {RootStackScreenProps} from './navigation-types';
+import {useMapContext} from '@atb/modules/map';
 
 type Props = RootStackScreenProps<'Root_ShmoOnboardingScreen'>;
 
 export const Root_ShmoOnboardingScreen = ({navigation}: Props) => {
-  const {requirements, hasBlockers, setGivenShmoConsent} =
-    useShmoRequirements();
+  const {requirements, hasBlockers} = useShmoRequirements();
+  const {setGivenShmoConsent} = useMapContext();
 
   useEffect(() => {
     if (!hasBlockers) {
