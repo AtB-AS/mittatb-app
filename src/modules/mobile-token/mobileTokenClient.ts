@@ -12,7 +12,7 @@ import {localLogger, remoteLogger} from './abtClientLogger';
 import {tokenService} from './tokenService';
 import {HALF_DAY_MS} from '@atb/utils/durations';
 import {Platform} from 'react-native';
-const CONTEXT_ID = 'main';
+export const CONTEXT_ID = 'main';
 
 /**
  * Decides which error handling strategy should use the SDK-suggested solution)
