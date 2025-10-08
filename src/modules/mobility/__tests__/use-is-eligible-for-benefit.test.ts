@@ -8,19 +8,19 @@ let mockBenefits = DEFAULT_MOCK_BENEFITS;
 
 const periodicTicketBenefits: UserBenefitsType[] = [
   {
-    operator: 'YTR:Operator:trondheimbysykkel',
-    benefitIds: ['free-unlock'],
+    operator_id: 'YTR:Operator:trondheimbysykkel',
+    benefit_types: ['free-unlock'],
   },
   {
-    operator: 'HYR:Operator:Hyre',
-    benefitIds: ['single-unlock'],
+    operator_id: 'HYR:Operator:Hyre',
+    benefit_types: ['single-unlock'],
   },
 ];
 
 const freeUseBenefits: UserBenefitsType[] = [
   {
-    operator: 'YTR:Operator:trondheimbysykkel',
-    benefitIds: ['free-use'],
+    operator_id: 'YTR:Operator:trondheimbysykkel',
+    benefit_types: ['free-use'],
   },
 ];
 
