@@ -76,7 +76,7 @@ export const MapV2 = (props: MapProps) => {
     () =>
       initialLocation && initialLocation?.resultType !== 'geolocation'
         ? initialLocation.coordinates
-        : getCurrentCoordinatesGlobal() || FOCUS_ORIGIN,
+        : FOCUS_ORIGIN || FOCUS_ORIGIN,
     [initialLocation],
   );
 

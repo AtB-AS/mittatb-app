@@ -13,11 +13,11 @@ export const useIsEligibleForBenefit = (
     isError,
   } = useUserBenefitsQuery(!!operatorBenefit);
 
-  const userBenefitIds =
-    userBenefits?.flatMap((b) => b.benefitIds).filter(isDefined) || [];
+  const userBenefitTypes =
+    userBenefits?.flatMap((b) => b.benefit_types).filter(isDefined) || [];
 
   const isUserEligibleForBenefit =
-    operatorBenefit && userBenefitIds.includes(operatorBenefit.id);
+    operatorBenefit && userBenefitTypes.includes(operatorBenefit.id);
 
   const benefitRequiresValueCodeToUnlock =
     operatorBenefit &&
