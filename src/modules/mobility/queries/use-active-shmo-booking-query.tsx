@@ -14,7 +14,8 @@ export const useActiveShmoBookingQuery = (
 ) => {
   const acceptLanguage = useAcceptLanguage();
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
-  const res = useQuery({
+
+  return useQuery({
     enabled: isShmoDeepIntegrationEnabled,
     queryKey: getActiveShmoBookingQueryKey(acceptLanguage),
     queryFn: ({signal}) => getActiveShmoBooking(acceptLanguage, {signal}),
@@ -24,6 +25,4 @@ export const useActiveShmoBookingQuery = (
     refetchOnWindowFocus: 'always',
     refetchOnReconnect: true,
   });
-
-  return res;
 };
