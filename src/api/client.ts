@@ -99,7 +99,11 @@ function responseErrorHandler(
   const errorResponse = parseErrorResponse(error);
 
   if (!shouldSkipLogging(error)) {
-    notifyError(error);
+    const errorType = getAxiosErrorType(error);
+    // Only notify for default and unknown errors (matching previous behavior)
+    if (errorType === 'default' || errorType === 'unknown') {
+      notifyError(error);
+    }
   }
 
   return Promise.reject(errorResponse);
