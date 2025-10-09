@@ -408,6 +408,18 @@ export function formatToSimpleDate(date: Date | string, language: Language) {
   });
 }
 
+/** "Monday January 1st" in English and "mandag 1. januar" in Bokmål */
+export function formatToDateWithDayOfWeek(
+  date: Date | string,
+  language: Language,
+) {
+  const formatString =
+    language === Language.English ? 'EEEE MMMM do' : 'EEEE do MMMM';
+  return format(parseIfNeeded(date), formatString, {
+    locale: languageToLocale(language),
+  });
+}
+
 export function formatToVerboseFullDate(
   date: Date | string,
   language: Language,

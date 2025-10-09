@@ -109,6 +109,14 @@ describe('Carnet footer: School tickets', () => {
     expect(carnetData.usedArray.length).toEqual(1);
     expect(carnetData.multiCarnetArray.length).toEqual(0);
   });
+
+  it('2 tickets, 2 used, active.', async () => {
+    const carnetData = calculateCarnetData(true, 2, 2);
+    expect(carnetData.accessesRemaining).toEqual(0);
+    expect(carnetData.unusedArray.length).toEqual(0);
+    expect(carnetData.usedArray.length).toEqual(1);
+    expect(carnetData.multiCarnetArray.length).toEqual(0);
+  });
 });
 
 // These states are invalid, but we shouldn't crash if it happends. Make sure we
