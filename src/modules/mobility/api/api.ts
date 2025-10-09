@@ -4,21 +4,16 @@ import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {z} from 'zod';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 
-const UserBenefits = z
-  .object({
-    operator: z.string(),
-    benefits: OperatorBenefitId.array(),
-  })
-  .transform((it) => ({
-    operator: it.operator,
-    benefitIds: it.benefits,
-  }));
+const UserBenefits = z.object({
+  operator_id: z.string(),
+  benefit_types: OperatorBenefitId.array(),
+});
 
 export type UserBenefitsType = z.infer<typeof UserBenefits>;
 
 export const getBenefitsForUser = (): Promise<UserBenefitsType[]> => {
   return client
-    .get('/mobility/benefits', {
+    .get('/benefit/v1/voucher/customer-benefits', {
       authWithIdToken: true,
       skipErrorLogging: (error) => error.response?.status === 404,
     })
@@ -35,7 +30,7 @@ export const getValueCode = (
   if (!operatorId) return Promise.resolve(null);
   return client
     .post(
-      `/mobility/code/${operatorId}`,
+      `/benefit/v1/voucher/claim/${operatorId}`,
       {},
       {
         authWithIdToken: true,
@@ -46,8 +41,8 @@ export const getValueCode = (
 };
 
 const FareProductBenefitMapping = z.object({
-  operator: z.string(),
-  benefits: OperatorBenefitId.array(),
+  operator_id: z.string(),
+  benefit_types: OperatorBenefitId.array(),
 });
 
 type FareProductBenefitMappingType = z.infer<typeof FareProductBenefitMapping>;
@@ -56,10 +51,13 @@ export const getFareProductBenefits = (
   productId: PreassignedFareProduct['id'],
 ): Promise<FareProductBenefitMappingType[]> => {
   return client
-    .get(`/mobility/v1/benefits/${productId}`, {
+    .get(`/benefit/v1/voucher/${productId}`, {
       authWithIdToken: true,
     })
-    .then((response) =>
-      FareProductBenefitMapping.array().parse(response.data ?? []),
-    );
+    .then((response) => {
+      const result = FareProductBenefitMapping.array().parse(
+        response.data ?? [],
+      );
+      return result;
+    });
 };
