@@ -7,6 +7,7 @@ import {calculateCarnetData} from './calculate-carnet-data';
 import {useConsumableInfoQuery} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import {MessageInfoBox} from '@atb/components/message-info-box';
+import {formatToDateWithDayOfWeek} from '@atb/utils/date';
 
 export const MAX_ACCESSES_FOR_CARNET_FOOTER = 50;
 
@@ -24,7 +25,7 @@ export const CarnetFooter: React.FC<Props> = ({
   fareContract,
 }) => {
   const styles = useStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const {
     data: consumableInfo,
@@ -53,10 +54,7 @@ export const CarnetFooter: React.FC<Props> = ({
 
   return (
     <View
-      style={{
-        flexDirection: 'column',
-        flex: 1,
-      }}
+      style={styles.container}
       accessible={true}
       accessibilityLabel={t(
         FareContractTexts.carnet.numberOfUsedAccessesRemaining(
@@ -73,7 +71,7 @@ export const CarnetFooter: React.FC<Props> = ({
           )}
         </ThemeText>
       </View>
-      <View style={styles.container}>
+      <View style={styles.dotContainer}>
         {multiCarnetArray.map((count, idx) => (
           <MultiCarnet key={idx} count={count} />
         ))}
@@ -91,6 +89,19 @@ export const CarnetFooter: React.FC<Props> = ({
           <View key={idx} style={[styles.dot, styles.dot__unused]} />
         ))}
       </View>
+      {consumableInfo?.nextConsumptionDay && (
+        <MessageInfoBox
+          type="info"
+          message={t(
+            FareContractTexts.carnet.nextConsumptionDayMessage(
+              formatToDateWithDayOfWeek(
+                consumableInfo.nextConsumptionDay,
+                language,
+              ),
+            ),
+          )}
+        />
+      )}
     </View>
   );
 };
@@ -115,12 +126,16 @@ function MultiCarnet({count}: {count: number}) {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
+    flexDirection: 'column',
+    flex: 1,
+    gap: theme.spacing.medium,
+  },
+  dotContainer: {
     flex: 1,
     justifyContent: 'flex-start',
     gap: theme.spacing.large,
     flexWrap: 'wrap',
     flexDirection: 'row',
-    marginTop: theme.spacing.medium,
   },
   triangle: {
     width: 0,
