@@ -10,7 +10,7 @@ import useReducerWithSideEffects, {
 import {getStopPlaceGroupRealtime} from '@atb/api/bff/departures';
 
 import {DepartureGroupMetadata} from '@atb/api/bff/types';
-import {AxiosErrorKind} from '@atb/api/utils';
+import {toAxiosErrorKind, AxiosErrorKind} from '@atb/api/utils';
 import {useFavoritesContext} from '@atb/modules/favorites';
 import {UserFavoriteDepartures} from '@atb/modules/favorites';
 import {DeparturesRealtimeData} from '@atb/api/bff/departures';
@@ -146,7 +146,7 @@ const reducer: ReducerWithSideEffects<
             dispatch({
               type: 'SET_ERROR',
               loadType: 'initial',
-              error: error.kind as AxiosErrorKind,
+              error: toAxiosErrorKind(error.kind),
             });
           } finally {
             dispatch({type: 'STOP_LOADER'});

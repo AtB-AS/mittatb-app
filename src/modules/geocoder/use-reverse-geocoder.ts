@@ -3,7 +3,7 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {reverse} from '@atb/api';
 import {mapFeatureToLocation} from './utils';
 import {useGeocoderReducer, GeocoderState} from './use-geocoder-reducer';
-import {AxiosErrorKind} from '@atb/api/utils';
+import {toAxiosErrorKind} from '@atb/api/utils';
 import {SearchLocation} from '@atb/modules/favorites';
 import {useTimeoutRequest} from '@atb/api/client';
 import {ErrorResponse} from '@atb-as/utils';
@@ -37,7 +37,7 @@ export function useReverseGeocoder(
           const error = err as ErrorResponse;
           dispatch({
             type: 'SET_ERROR',
-            error: error.kind as AxiosErrorKind,
+            error: toAxiosErrorKind(error.kind),
           });
         }
       } else {

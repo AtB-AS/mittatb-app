@@ -19,6 +19,19 @@ export type AxiosErrorKind =
   | 'AXIOS_CANCEL'
   | 'UNKNOWN';
 
+export const toAxiosErrorKind = (kind: string | undefined): AxiosErrorKind => {
+  switch (kind) {
+    case 'AXIOS_UNKNOWN':
+    case 'AXIOS_NETWORK_ERROR':
+    case 'AXIOS_TIMEOUT':
+    case 'AXIOS_CANCEL':
+    case 'UNKNOWN':
+      return kind;
+    default:
+      return 'UNKNOWN';
+  }
+};
+
 export const getAxiosErrorType = (
   error: AxiosError | Cancel | unknown,
   didTimeOut: boolean = false,

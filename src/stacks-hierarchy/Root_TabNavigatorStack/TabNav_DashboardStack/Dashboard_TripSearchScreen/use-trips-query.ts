@@ -2,7 +2,7 @@ import {CancelToken, isCancel} from '@atb/api';
 import {tripsSearch} from '@atb/api/bff/trips';
 import {Modes} from '@atb/api/types/generated/journey_planner_v3_types';
 import {TripPattern} from '@atb/api/types/trips';
-import {AxiosErrorKind} from '@atb/api/utils';
+import {toAxiosErrorKind, AxiosErrorKind} from '@atb/api/utils';
 import {ErrorResponse} from '@atb-as/utils';
 import {Location} from '@atb/modules/favorites';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
@@ -156,7 +156,7 @@ export function useTripsQuery(
             setPageCursor(undefined);
             if (!isCancel(e)) {
               setSearchState('search-empty-result');
-              setErrorType(error.kind as AxiosErrorKind);
+              setErrorType(toAxiosErrorKind(error.kind));
               console.warn(e);
             }
           }

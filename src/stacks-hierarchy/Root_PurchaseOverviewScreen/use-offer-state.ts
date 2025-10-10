@@ -1,5 +1,5 @@
 import {CancelToken as CancelTokenStatic} from '@atb/api';
-import {AxiosErrorKind} from '@atb/api/utils';
+import {toAxiosErrorKind, AxiosErrorKind} from '@atb/api/utils';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {FlexDiscountLadder, searchOffers} from '@atb/modules/ticketing';
 import {CancelToken} from 'axios';
@@ -248,16 +248,16 @@ export function useOfferState(
           }
         } catch (err: any) {
           const error = err as ErrorResponse;
-          const errorType = isNotAvailableError(error)
+          const errorKind = isNotAvailableError(error)
             ? 'not-available'
-            : error.kind;
+            : toAxiosErrorKind(error.kind);
 
-          if (errorType !== 'AXIOS_CANCEL') {
+          if (errorKind !== 'AXIOS_CANCEL') {
             console.warn(err);
             dispatch({
               type: 'SET_ERROR',
               error: {
-                type: errorType as AxiosErrorKind | 'not-available',
+                type: errorKind,
               },
             });
           }
