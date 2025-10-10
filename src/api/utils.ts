@@ -1,25 +1,14 @@
 import axios, {AxiosError, Cancel} from 'axios';
 import {FirebaseAuthIdHeaderName, RequestIdHeaderName} from './headers';
-import {z} from 'zod';
+import {ErrorResponse} from '@atb-as/utils';
+import {PartialField} from '@atb/utils/object';
 
-/** https://github.com/AtB-AS/amp-rs/blob/main/amp-http/src/lib.rs */
-const HttpError = z.object({
-  code: z.number(),
-  message: z.string(),
-});
-type HttpError = z.infer<typeof HttpError>;
-
-export const ErrorResponse = z.object({
-  kind: z.string(),
-  message: z.string().nullish(),
-  details: z.array(z.unknown()).nullish(),
-});
-export type ErrorResponse = z.infer<typeof ErrorResponse>;
-/** https://github.com/AtB-AS/amp-rs/blob/main/amp-http/src/lib.rs */
-export const HttpErrorResponse = ErrorResponse.extend({
-  http: HttpError,
-});
-export type HttpErrorResponse = z.infer<typeof HttpErrorResponse>;
+/**
+ * Error from API requests or Axios client errors.
+ * The `http` field may be undefined for network errors, timeouts, or cancellations.
+ * For errors with guaranteed `http` field, use `ErrorResponse` from '@atb-as/utils'.
+ */
+export type RequestError = PartialField<ErrorResponse, 'http'>;
 
 type ErrorType = 'unknown' | 'default' | 'network-error' | 'timeout' | 'cancel';
 
@@ -84,26 +73,16 @@ export const getAxiosErrorMetadata = (error: AxiosError): ErrorMetadata => ({
 
 export const getErrorResponse = (
   error: AxiosError,
-): ErrorResponse | undefined => {
+): RequestError | undefined => {
   return ErrorResponse.safeParse(error?.response?.data).data;
-};
-
-export const getHttpErrorResponse = (
-  error: AxiosError,
-): HttpErrorResponse | undefined => {
-  return HttpErrorResponse.safeParse(error?.response?.data).data;
 };
 
 export const isErrorResponse = (error: any): error is ErrorResponse => {
   return ErrorResponse.safeParse(error).success;
 };
 
-export const isHttpErrorResponse = (error: any): error is HttpErrorResponse => {
-  return HttpErrorResponse.safeParse(error).success;
-};
-
 export const errorDetailsToResponseData = (
-  error: ErrorResponse,
+  error: RequestError,
 ): any | undefined => {
   return (error.details?.find((d: any) => 'responseData' in d) as any)
     .responseData;

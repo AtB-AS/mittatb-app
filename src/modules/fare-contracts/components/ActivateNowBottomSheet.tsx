@@ -14,7 +14,7 @@ import Bugsnag from '@bugsnag/react-native';
 import React, {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {ErrorResponse} from '@atb-as/utils';
+import {RequestError} from '@atb/api/utils';
 
 type Props = {
   fareContractId: string;
@@ -43,9 +43,10 @@ export const ActivateNowBottomSheet = ({
       });
       close();
     } catch (e: any) {
-      const error = e as ErrorResponse;
+      const error = e as RequestError;
+      const httpCode = error.http?.code ?? 'UNKNOWN';
       Bugsnag.notify({
-        name: `${error.http.code} error when activating fare contract ahead of time`,
+        name: `${httpCode} error when activating fare contract ahead of time`,
         message: `Error: ${JSON.stringify(error)}`,
       });
       setError(true);

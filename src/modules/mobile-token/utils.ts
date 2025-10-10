@@ -19,7 +19,7 @@ import {
   TokenReattestationRemoteTokenStateError,
 } from '@entur-private/abt-token-server-javascript-interface';
 import Bugsnag from '@bugsnag/react-native';
-import {ErrorResponse} from '@atb/api/utils';
+import {ErrorResponse} from '@atb-as/utils';
 import {tokenService} from './tokenService';
 import {mobileTokenClient} from './mobileTokenClient';
 import {

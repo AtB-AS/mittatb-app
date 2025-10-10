@@ -1,12 +1,8 @@
 import axios, {AxiosError, InternalAxiosRequestConfig} from 'axios';
 import {v4 as uuid} from 'uuid';
 import {API_BASE_URL, APP_VERSION, IOS_BUNDLE_IDENTIFIER} from '@env';
-import {
-  ErrorResponse,
-  getAxiosErrorMetadata,
-  getAxiosErrorType,
-  HttpErrorResponse,
-} from './utils';
+import {RequestError, getAxiosErrorMetadata, getAxiosErrorType} from './utils';
+import {ErrorResponse} from '@atb-as/utils';
 import Bugsnag from '@bugsnag/react-native';
 import {
   AppIdentifierHeaderName,
@@ -93,9 +89,7 @@ async function requestIdTokenHandler(config: InternalAxiosRequestConfig) {
   return config;
 }
 
-function responseErrorHandler(
-  error: AxiosError,
-): Promise<ErrorResponse | HttpErrorResponse> {
+function responseErrorHandler(error: AxiosError): Promise<RequestError> {
   const errorResponse = parseErrorResponse(error);
 
   if (!shouldSkipLogging(error)) {
@@ -143,15 +137,13 @@ export const useTimeoutRequest = (): TimeoutRequest => {
   };
 };
 
-const parseErrorResponse = (
-  error: AxiosError,
-): ErrorResponse | HttpErrorResponse => {
+const parseErrorResponse = (error: AxiosError): RequestError => {
   const errorType = getAxiosErrorType(error);
 
   switch (errorType) {
     case 'default':
       if (error.response) {
-        const parsed = HttpErrorResponse.safeParse(error.response.data);
+        const parsed = ErrorResponse.safeParse(error.response.data);
 
         if (parsed.success) {
           return parsed.data;
