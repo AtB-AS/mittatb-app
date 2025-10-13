@@ -18,6 +18,11 @@ import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {MobilitySingleBenefitInfoSectionItem} from '@atb/modules/mobility';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import {FlexTicketDiscountInfo} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FlexTicketDiscountInfo';
+import React from 'react';
+import {useParamAsState} from '@atb/utils/use-param-as-state';
+import {useOfferState} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-state';
+import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 
 type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;
 
@@ -28,17 +33,23 @@ export const Root_TicketInformationScreen = (props: Props) => {
   const themeColor = theme.color.background.accent[0];
   const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const [selection] = useParamAsState(props.route.params.selection);
+  const preassignedFareProductAlternatives = useProductAlternatives(selection);
+  const {userProfilesWithCountAndOffer} = useOfferState(
+    selection,
+    preassignedFareProductAlternatives,
+  );
 
   const {isTipsAndInformationEnabled} = useFeatureTogglesContext();
   const {benefits} = useOperatorBenefitsForFareProduct(
-    props.route.params.preassignedFareProductId,
+    selection.preassignedFareProduct.id,
   );
 
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (f) => f.type === props.route.params.fareProductTypeConfigType,
   );
   const preassignedFareProduct = preassignedFareProducts.find(
-    (p) => p.id === props.route.params.preassignedFareProductId,
+    (p) => p.id === selection.preassignedFareProduct.id,
   );
 
   return (
@@ -92,6 +103,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
             </Section>
           </>
         )}
+        <FlexTicketDiscountInfo userProfiles={userProfilesWithCountAndOffer} />
         {isTipsAndInformationEnabled && (
           <>
             <ContentHeading

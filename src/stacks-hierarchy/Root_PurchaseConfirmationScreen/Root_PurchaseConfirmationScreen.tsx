@@ -179,7 +179,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     setVippsNotInstalledError(false);
     const offerExpirationTime =
       offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
-    if (offerExpirationTime && totalPrice > 0) {
+    if (offerExpirationTime /*&& totalPrice > 0*/) {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
       } else {
@@ -399,6 +399,7 @@ const PaymentButton = ({
           PurchaseConfirmationTexts.choosePaymentMethod.a11yHint,
         )}
         onPress={() => {
+          console.log('Selecting payment method');
           analytics.logEvent('Ticketing', 'Confirm purchase clicked', {
             mode: mode,
           });
@@ -424,7 +425,10 @@ const PaymentButton = ({
           mode="primary"
           rightIcon={{svg: SvgClose}}
           interactiveColor={theme.color.interactive.destructive}
-          onPress={onCancelPayment}
+          onPress={() => {
+            console.log('Cancelling payment');
+            onCancelPayment();
+          }}
           accessibilityHint={t(
             PurchaseConfirmationTexts.changePaymentMethod.a11yHint,
           )}
@@ -439,6 +443,7 @@ const PaymentButton = ({
       interactiveColor={theme.color.interactive[0]}
       disabled={!!isOfferError || reserveStatus === 'success'}
       onPress={() => {
+        console.log('Going to payment');
         analytics.logEvent(
           'Ticketing',
           'Pay with previous payment method clicked',

@@ -14,7 +14,6 @@ import {StartTimeSelection} from './components/StartTimeSelection';
 import {Summary} from './components/Summary';
 import {TravellerSelection} from './components/TravellerSelection';
 import {type OfferError, useOfferState} from './use-offer-state';
-import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
@@ -99,7 +98,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const handleTicketInfoButtonPress = () => {
     const parameters = {
       fareProductTypeConfigType: selection.fareProductTypeConfig.type,
-      preassignedFareProductId: preassignedFareProduct.id,
+      selection,
     };
     analytics.logEvent(
       'Ticketing',
@@ -201,7 +200,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           ref={params.onFocusElement ? undefined : focusRef}
           style={styles.header}
           fareProductTypeConfig={selection.fareProductTypeConfig}
-          preassignedFareProduct={preassignedFareProduct}
           onTicketInfoButtonPress={handleTicketInfoButtonPress}
         />
       )}
@@ -305,11 +303,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           <StartTimeSelection
             selection={selection}
             setSelection={setSelection}
-            style={styles.selectionComponent}
-          />
-
-          <FlexTicketDiscountInfo
-            userProfiles={userProfilesWithCountAndOffer}
             style={styles.selectionComponent}
           />
 

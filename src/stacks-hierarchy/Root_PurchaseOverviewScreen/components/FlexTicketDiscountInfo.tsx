@@ -26,7 +26,7 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 
 type Props = {
   userProfiles: UserProfileWithCountAndOffer[];
-  style: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
 };
 
 export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
