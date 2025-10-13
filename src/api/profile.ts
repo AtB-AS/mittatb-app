@@ -6,7 +6,7 @@ import {
 import Bugsnag from '@bugsnag/react-native';
 import {AxiosRequestConfig} from 'axios';
 import {client} from './client';
-import {getAxiosErrorMetadata} from './utils';
+import {isErrorResponse, RequestError} from './utils';
 
 export const getProfile = async () => {
   const response = await client.get<CustomerProfile>('/profile/v1', {
@@ -64,10 +64,11 @@ export const getCustomerAccountId = async (
       },
     )
     .then((response) => response.data.customerAccountId as string)
-    .catch((error) => {
-      const metadata = getAxiosErrorMetadata(error);
-      const responseStatus = metadata.responseStatus;
-      if (responseStatus === 404 || responseStatus === 400) {
+    .catch((error: RequestError) => {
+      if (
+        isErrorResponse(error) &&
+        (error.http.code === 404 || error.http.code === 400)
+      ) {
         return undefined;
       }
       throw error;

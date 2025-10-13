@@ -4,7 +4,6 @@ import {
 } from '@atb/api/bff/departures';
 import {DeparturesVariables, getDepartures} from '@atb/api/bff/departures';
 import {EstimatedCall} from '@atb/api/types/departures';
-import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {
   useFavoritesContext,
   UserFavoriteDepartures,
@@ -33,6 +32,7 @@ import {getLimitOfDeparturesPerLineByMode, getTimeRangeByMode} from '../utils';
 import {TimeoutRequest, useTimeoutRequest} from '@atb/api/client';
 import {AxiosRequestConfig} from 'axios';
 import {flatMap} from '@atb/utils/array';
+import {ErrorResponse} from '@atb-as/utils';
 
 // Used to re-trigger full refresh after N minutes.
 // To repopulate the view when we get fewer departures.
@@ -41,14 +41,14 @@ const HARD_REFRESH_LIMIT_IN_MINUTES = 10;
 export type DepartureDataState = {
   data: EstimatedCall[] | null;
   tick?: Date;
-  error?: {type: ErrorType};
+  isError?: boolean;
   locationId?: string[];
   isLoading: boolean;
 };
 
 const initialState: DepartureDataState = {
   data: null,
-  error: undefined,
+  isError: false,
   locationId: undefined,
   isLoading: false,
 
@@ -91,7 +91,7 @@ type DepartureDataActions =
     }
   | {
       type: 'SET_ERROR';
-      error: ErrorType;
+      isError: boolean;
       reset?: boolean;
     }
   | {
@@ -124,7 +124,7 @@ const reducer: ReducerWithSideEffects<
         {
           ...state,
           isLoading: true,
-          error: undefined,
+          isError: false,
         },
         async (_, dispatch) => {
           try {
@@ -146,13 +146,13 @@ const reducer: ReducerWithSideEffects<
               result: result,
             });
           } catch (e) {
-            const errorType = getAxiosErrorType(e, action.timeout.didTimeout);
+            const error = e as ErrorResponse;
             // Not show error msg if the request was cancelled by a new search
-            if (errorType === 'cancel') return;
+            if (error.kind === 'AXIOS_CANCEL') return;
             dispatch({
               type: 'SET_ERROR',
               reset: false,
-              error: errorType,
+              isError: true,
             });
           } finally {
             dispatch({type: 'STOP_LOADER'});
@@ -225,9 +225,7 @@ const reducer: ReducerWithSideEffects<
     case 'SET_ERROR': {
       return Update<DepartureDataState>({
         ...state,
-        error: {
-          type: action.error,
-        },
+        isError: action.isError,
         data: action.reset ? null : state.data,
       });
     }

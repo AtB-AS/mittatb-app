@@ -1,5 +1,5 @@
 import {CancelToken as CancelTokenStatic} from '@atb/api';
-import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
+import {toAxiosErrorKind, AxiosErrorKind} from '@atb/api/utils';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {FlexDiscountLadder, searchOffers} from '@atb/modules/ticketing';
 import {CancelToken} from 'axios';
@@ -8,7 +8,7 @@ import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
 import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {fetchOfferFromLegs} from '@atb/api/sales';
-import type {SearchOfferPrice, TicketOffer} from '@atb-as/utils';
+import type {ErrorResponse, SearchOfferPrice, TicketOffer} from '@atb-as/utils';
 import {mapToSalesTripPatternLegs} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/utils';
 import {useTranslation} from '@atb/translations';
 
@@ -17,7 +17,7 @@ export type UserProfileWithCountAndOffer = UserProfileWithCount & {
 };
 
 export type OfferError = {
-  type: ErrorType | 'empty-offers' | 'not-available';
+  type: AxiosErrorKind | 'empty-offers' | 'not-available';
 };
 
 type OfferState = {
@@ -247,15 +247,17 @@ export function useOfferState(
             });
           }
         } catch (err: any) {
-          const errorType = isNotAvailableError(err)
+          const error = err as ErrorResponse;
+          const errorKind = isNotAvailableError(error)
             ? 'not-available'
-            : getAxiosErrorType(err);
-          if (errorType !== 'cancel') {
+            : toAxiosErrorKind(error.kind);
+
+          if (errorKind !== 'AXIOS_CANCEL') {
             console.warn(err);
             dispatch({
               type: 'SET_ERROR',
               error: {
-                type: errorType,
+                type: errorKind,
               },
             });
           }

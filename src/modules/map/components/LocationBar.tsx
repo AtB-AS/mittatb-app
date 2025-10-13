@@ -6,7 +6,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import React, {useMemo} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {ErrorType} from '@atb/api/utils';
+import {AxiosErrorKind} from '@atb/api/utils';
 import {GeoLocation, Location, SearchLocation} from '@atb/modules/favorites';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
@@ -109,7 +109,7 @@ const Icon: React.FC<{
 
 const LocationText: React.FC<{
   location?: Location;
-  error?: ErrorType;
+  error?: AxiosErrorKind;
 }> = ({location, error}) => {
   const {t} = useTranslation();
   const {title, subtitle} = getLocationText(t, location, error);
@@ -126,7 +126,7 @@ const LocationText: React.FC<{
 function getLocationText(
   t: TranslateFunction,
   location?: Location,
-  error?: ErrorType,
+  error?: AxiosErrorKind,
 ): {title: string; subtitle?: string} {
   if (location) {
     return {
@@ -141,8 +141,8 @@ function getLocationText(
 
   if (error) {
     switch (error) {
-      case 'network-error':
-      case 'timeout':
+      case 'AXIOS_NETWORK_ERROR':
+      case 'AXIOS_TIMEOUT':
         return {
           title: t(
             LocationSearchTexts.mapSelection.messages.networkError.title,
