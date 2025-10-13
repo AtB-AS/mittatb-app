@@ -1,5 +1,9 @@
 import {Language, useTranslation} from './commons';
-import {LanguageAndTextLanguagesEnum, LanguageAndTextType} from './types';
+import {
+  LanguageAndTextLanguagesEnum,
+  LanguageAndTextType,
+  LanguageKeyVariants,
+} from './types';
 
 /**
  * Get the text in the requested language. If the requested translation isn't
@@ -10,31 +14,21 @@ export const getTextForLanguage = (
   texts: LanguageAndTextType[] | undefined,
   language: Language,
 ): string | undefined => {
-  if (language === Language.English) {
-    const englishText = texts?.find(
-      (t) =>
-        getLanguage(t) === LanguageAndTextLanguagesEnum.eng ||
-        getLanguage(t) === LanguageAndTextLanguagesEnum.en,
-    );
-    if (englishText?.value) return englishText.value;
-  }
-  if (language === Language.Nynorsk) {
-    const nynorskText = texts?.find(
-      (t) =>
-        getLanguage(t) === LanguageAndTextLanguagesEnum.nno ||
-        getLanguage(t) === LanguageAndTextLanguagesEnum.nn,
-    );
-    if (nynorskText?.value) return nynorskText.value;
-  }
-  const norwegianText = texts?.find(
-    (t) =>
-      getLanguage(t) === LanguageAndTextLanguagesEnum.nor ||
-      getLanguage(t) === LanguageAndTextLanguagesEnum.nob ||
-      getLanguage(t) === LanguageAndTextLanguagesEnum.no,
-  );
-  if (norwegianText?.value) return norwegianText.value;
+  if (!texts || texts.length === 0) return undefined;
 
-  return texts?.[0]?.value;
+  const _lookupLanguage = (_language: Language): string | undefined => {
+    const languageKeyVariants = LanguageKeyVariants[_language];
+    return texts?.find((t) => {
+      const lang = getLanguage(t);
+      return !!(lang && languageKeyVariants.includes(lang));
+    })?.value;
+  };
+
+  return (
+    _lookupLanguage(language) ??
+    _lookupLanguage(Language.Norwegian) ??
+    texts[0].value
+  );
 };
 
 /**
