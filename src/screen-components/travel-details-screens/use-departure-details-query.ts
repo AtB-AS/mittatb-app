@@ -3,8 +3,6 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {usePollableResource} from '@atb/utils/use-pollable-resource';
-import {useCallback} from 'react';
 import {ServiceJourneyDeparture} from './types';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
@@ -12,6 +10,7 @@ import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {formatDestinationDisplay, getNoticesForServiceJourney} from './utils';
 import {useTranslation} from '@atb/translations';
 import type {LineFragment} from '@atb/api/types/generated/fragments/lines';
+import {useQuery} from '@tanstack/react-query';
 
 export type DepartureData = {
   estimatedCallsWithMetadata: EstimatedCallWithMetadata[];
@@ -36,13 +35,15 @@ export type EstimatedCallWithMetadata = EstimatedCallWithQuayFragment & {
   metadata: EstimatedCallMetadata;
 };
 
-export function useDepartureData(
-  activeItem: ServiceJourneyDeparture,
-  pollingTimeInSeconds: number = 0,
-): [DepartureData, boolean] {
+export function useDepartureDetailsQuery(activeItem: ServiceJourneyDeparture) {
   const {t} = useTranslation();
-  const getService = useCallback(
-    async function (): Promise<DepartureData> {
+  return useQuery<DepartureData>({
+    queryKey: [
+      'departureData',
+      activeItem.serviceJourneyId,
+      activeItem.serviceDate,
+    ],
+    queryFn: async () => {
       const serviceJourney = await getServiceJourneyWithEstimatedCalls(
         activeItem.serviceJourneyId,
         activeItem.serviceDate,
@@ -83,21 +84,15 @@ export function useDepartureData(
         line: serviceJourney.line,
       };
     },
-    [activeItem, t],
-  );
-
-  const [data, , isLoading] = usePollableResource<DepartureData>(getService, {
-    initialValue: {
+    enabled: !!activeItem,
+    refetchInterval: 20000,
+    refetchOnWindowFocus: true,
+    initialData: {
       estimatedCallsWithMetadata: [],
       situations: [],
       notices: [],
     },
-    pollingTimeInSeconds,
-    disabled: !activeItem,
-    pollOnFocus: true,
   });
-
-  return [data, isLoading];
 }
 
 function addMetadataToEstimatedCalls(

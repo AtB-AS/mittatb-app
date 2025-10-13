@@ -1,5 +1,5 @@
 import {getShouldShowLiveVehicle} from '../utils';
-import {EstimatedCallWithMetadata} from '../use-departure-data';
+import {EstimatedCallWithMetadata} from '../use-departure-details-query';
 
 const estimatedCallsWhichDepartInGivenMinutes = (
   minutesToDeparture: number,
