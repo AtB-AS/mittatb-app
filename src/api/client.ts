@@ -94,7 +94,6 @@ function responseErrorHandler(error: AxiosError): Promise<RequestError> {
 
   if (!shouldSkipLogging(error)) {
     const errorType = getAxiosErrorType(error);
-    // Only notify for default and unknown errors (matching previous behavior)
     if (errorType === 'default' || errorType === 'unknown') {
       notifyError(error);
     }
