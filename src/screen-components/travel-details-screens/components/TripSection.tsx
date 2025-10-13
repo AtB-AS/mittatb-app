@@ -45,7 +45,7 @@ import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/ligh
 import {TripProps} from './Trip';
 import {Button} from '@atb/components/button';
 import {Map} from '@atb/assets/svg/mono-icons/map';
-import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
+import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
 import {useMapData} from '../use-map-data';
 import {useRealtimeText} from '../use-realtime-text';
 import {useNow} from '@atb/utils/use-now';
@@ -69,7 +69,7 @@ type TripSectionProps = {
   interchangeDetails?: InterchangeDetails;
   leg: Leg;
   testID?: string;
-  onPressShowLive?(mapData: ServiceJourneyMapInfoData_v3): void;
+  onPressShowLive?(mapData: ServiceJourneyPolylines): void;
   onPressDeparture: TripProps['onPressDeparture'];
   onPressQuay: TripProps['onPressQuay'];
 };

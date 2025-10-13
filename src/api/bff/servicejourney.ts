@@ -1,7 +1,7 @@
 import {client} from '../client';
 import qs from 'query-string';
 import {stringifyUrl} from '../utils';
-import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
+import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 import {AxiosRequestConfig} from 'axios';
 import type {DatedServiceJourney} from '@atb/api/types/generated/journey_planner_v3_types';
@@ -26,7 +26,7 @@ export async function getServiceJourneyMapLegs(
   id: string,
   fromQuayId: string,
   toQuayId?: string,
-): Promise<ServiceJourneyMapInfoData_v3> {
+): Promise<ServiceJourneyPolylines> {
   const url = `bff/v2/servicejourney/${encodeURIComponent(id)}/polyline`;
   const query = qs.stringify(
     {
@@ -35,7 +35,7 @@ export async function getServiceJourneyMapLegs(
     },
     {skipNull: true},
   );
-  const response = await client.get<ServiceJourneyMapInfoData_v3>(
+  const response = await client.get<ServiceJourneyPolylines>(
     stringifyUrl(url, query),
   );
   return (
