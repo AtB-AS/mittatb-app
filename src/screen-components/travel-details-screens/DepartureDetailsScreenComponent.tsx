@@ -42,10 +42,7 @@ import {Time} from './components/Time';
 import {TripLegDecoration} from './components/TripLegDecoration';
 import {TripRow} from './components/TripRow';
 import {ServiceJourneyDeparture} from './types';
-import {
-  EstimatedCallWithMetadata,
-  useDepartureDetailsQuery,
-} from './use-departure-details-query';
+import {useDepartureDetailsQuery} from './use-departure-details-query';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {PaginatedDetailsHeader} from './components/PaginatedDetailsHeader';
 import {useRealtimeText} from './use-realtime-text';
@@ -62,8 +59,10 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {canSellTicketsForSubMode} from '@atb/modules/operator-config';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
+  formatDestinationDisplay,
   getBookingStatus,
   getLineAndTimeA11yLabel,
+  getNoticesForServiceJourney,
   getShouldShowLiveVehicle,
 } from './utils';
 import {BookingOptions} from './components/BookingOptions';
@@ -82,6 +81,7 @@ import {
   useInAppReviewFlow,
 } from '@atb/utils/use-in-app-review';
 import {useFocusEffect} from '@react-navigation/native';
+import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -120,19 +120,25 @@ export const DepartureDetailsScreenComponent = ({
 
   const {requestReview} = useInAppReviewFlow();
 
-  const {
-    data: {
-      estimatedCallsWithMetadata,
-      title,
-      publicCode,
-      mode,
-      subMode,
-      situations,
-      notices,
-      line,
-    },
-    isLoading,
-  } = useDepartureDetailsQuery(activeItem);
+  const {data: serviceJourney, isLoading} =
+    useDepartureDetailsQuery(activeItem);
+  const notices = serviceJourney
+    ? getNoticesForServiceJourney(serviceJourney, activeItem.fromStopPosition)
+    : [];
+  const publicCode =
+    serviceJourney?.publicCode || serviceJourney?.line?.publicCode;
+  const estimatedCallsWithMetadata = addMetadataToEstimatedCalls(
+    serviceJourney?.estimatedCalls || [],
+    activeItem.fromStopPosition,
+    activeItem.toStopPosition,
+  );
+  const focusedEstimatedCall = estimatedCallsWithMetadata.find(
+    (e) => e.metadata.group === 'trip',
+  );
+  const situations =
+    focusedEstimatedCall?.situations.sort((n1, n2) =>
+      n1.id.localeCompare(n2.id),
+    ) ?? [];
 
   const fromCall = estimatedCallsWithMetadata.find(
     (c) => c.stopPositionInPattern === activeItem.fromStopPosition,
@@ -168,7 +174,9 @@ export const DepartureDetailsScreenComponent = ({
     shouldShowLive,
   );
 
-  const translatedModeName = getTranslatedModeName(mode);
+  const translatedModeName = getTranslatedModeName(
+    serviceJourney?.transportMode,
+  );
 
   const vehiclePosition = vehiclePositions?.find(
     (s) => s.serviceJourney?.id === activeItem.serviceJourneyId,
@@ -184,7 +192,7 @@ export const DepartureDetailsScreenComponent = ({
     (fromCall && !isInThePast(fromCall.expectedDepartureTime)) || false;
 
   const canSellTicketsForDeparture = canSellTicketsForSubMode(
-    subMode,
+    serviceJourney?.transportSubmode,
     modesWeSellTicketsFor,
   );
 
@@ -204,7 +212,7 @@ export const DepartureDetailsScreenComponent = ({
     !isLoading &&
     estimatedCallsWithMetadata.length > 0 &&
     !isJourneyFinished;
-  const shouldShowFavoriteButton = !!fromCall && !!line;
+  const shouldShowFavoriteButton = !!fromCall && !!serviceJourney?.line;
   const shouldShowButtonsRow = shouldShowMapButton || shouldShowFavoriteButton;
 
   const a11yLabel =
@@ -213,8 +221,8 @@ export const DepartureDetailsScreenComponent = ({
       : undefined;
   const lineChipServiceJourney = {
     line: {publicCode},
-    transportMode: mode,
-    transportSubmode: subMode,
+    transportMode: serviceJourney?.transportMode,
+    transportSubmode: serviceJourney?.transportSubmode,
   };
 
   const handleTravelAidPress = () => {
@@ -232,8 +240,8 @@ export const DepartureDetailsScreenComponent = ({
       analytics.logEvent('Departure details', 'See live bus clicked', {
         fromPlace: serviceJourneyPolyline.start,
         toPlace: serviceJourneyPolyline.stop,
-        mode: mode,
-        subMode: subMode,
+        mode: serviceJourney?.transportMode,
+        subMode: serviceJourney?.transportSubmode,
       });
     }
     shouldShowRequestReview.current = true;
@@ -242,8 +250,8 @@ export const DepartureDetailsScreenComponent = ({
       fromPlace: serviceJourneyPolyline.start,
       toPlace: serviceJourneyPolyline.stop,
       vehicleWithPosition: vehiclePosition,
-      mode: mode,
-      subMode: subMode,
+      mode: serviceJourney?.transportMode,
+      subMode: serviceJourney?.transportSubmode,
     });
   };
 
@@ -278,7 +286,10 @@ export const DepartureDetailsScreenComponent = ({
                 style={styles.headerTitle}
                 testID="lineName"
               >
-                {title ?? t(DepartureDetailsTexts.header.notFound)}
+                {formatDestinationDisplay(
+                  t,
+                  focusedEstimatedCall?.destinationDisplay,
+                ) ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
               {fromCall && shouldShowDepartureTime && (
                 <DepartureTime departure={fromCall} color={themeColor} />
@@ -297,7 +308,10 @@ export const DepartureDetailsScreenComponent = ({
             {shouldShowButtonsRow && (
               <View style={styles.actionButtons}>
                 {shouldShowFavoriteButton && (
-                  <FavoriteButton fromCall={fromCall} line={line} />
+                  <FavoriteButton
+                    fromCall={fromCall}
+                    line={serviceJourney.line}
+                  />
                 )}
                 {shouldShowMapButton && (
                   <View style={{flex: 1}}>
@@ -357,7 +371,8 @@ export const DepartureDetailsScreenComponent = ({
             </>
           ) : null}
 
-          {subMode === TransportSubmode.RailReplacementBus && (
+          {serviceJourney?.transportSubmode ===
+            TransportSubmode.RailReplacementBus && (
             <MessageInfoBox
               type="warning"
               message={t(
@@ -407,8 +422,8 @@ export const DepartureDetailsScreenComponent = ({
             ruleVariables={{
               ticketingEnabled: enable_ticketing,
               canSellTicketsForDeparture: canSellTicketsForDeparture,
-              mode: mode || null,
-              subMode: subMode || null,
+              mode: serviceJourney?.transportMode || null,
+              subMode: serviceJourney?.transportSubmode || null,
               fromZones:
                 fromCall?.quay?.tariffZones.map((zone) => zone.id) || null,
               toZones: toCall?.quay?.tariffZones.map((zone) => zone.id) || null,
@@ -420,8 +435,8 @@ export const DepartureDetailsScreenComponent = ({
 
           <EstimatedCallRows
             calls={estimatedCallsWithMetadata}
-            mode={mode}
-            subMode={subMode}
+            mode={serviceJourney?.transportMode}
+            subMode={serviceJourney?.transportSubmode}
             toStopPosition={activeItem.toStopPosition}
             alreadyShownSituationNumbers={alreadyShownSituationNumbers}
             onPressQuay={onPressQuay}
@@ -779,6 +794,50 @@ const FavoriteButton = ({
     />
   );
 };
+
+type EstimatedCallMetadata = {
+  group: 'passed' | 'trip' | 'after';
+  isStartOfServiceJourney: boolean;
+  isEndOfServiceJourney: boolean;
+  isStartOfGroup: boolean;
+  isEndOfGroup: boolean;
+};
+type EstimatedCallWithMetadata = EstimatedCallWithQuayFragment & {
+  metadata: EstimatedCallMetadata;
+};
+function addMetadataToEstimatedCalls(
+  estimatedCalls: EstimatedCallWithQuayFragment[],
+  fromStopPosition: number,
+  toStopPosition?: number,
+): EstimatedCallWithMetadata[] {
+  let currentGroup: EstimatedCallMetadata['group'] = 'passed';
+
+  return estimatedCalls.reduce<EstimatedCallWithMetadata[]>(
+    (calls, currentCall, index) => {
+      const previousCall = calls[calls.length - 1];
+      if (currentCall.stopPositionInPattern === fromStopPosition) {
+        if (previousCall) previousCall.metadata.isEndOfGroup = true;
+        currentGroup = 'trip';
+      }
+
+      const metadata: EstimatedCallMetadata = {
+        group: currentGroup,
+        isStartOfServiceJourney: index === 0,
+        isStartOfGroup: currentGroup !== previousCall?.metadata.group,
+        isEndOfServiceJourney: index === estimatedCalls.length - 1,
+        isEndOfGroup: index === estimatedCalls.length - 1,
+      };
+
+      if (currentCall.stopPositionInPattern === toStopPosition) {
+        metadata.isEndOfGroup = true;
+        currentGroup = 'after';
+      }
+
+      return [...calls, {...currentCall, metadata}];
+    },
+    [],
+  );
+}
 
 const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
