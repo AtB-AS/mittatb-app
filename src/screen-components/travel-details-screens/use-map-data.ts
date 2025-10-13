@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
+import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
 import {getServiceJourneyMapLegs} from '@atb/api/bff/servicejourney';
 
 export function useMapData(
@@ -7,7 +7,7 @@ export function useMapData(
   fromQuayId?: string,
   toQuayId?: string,
 ) {
-  const [mapData, setMapData] = useState<ServiceJourneyMapInfoData_v3>();
+  const [mapData, setMapData] = useState<ServiceJourneyPolylines>();
   useEffect(() => {
     const getData = async () => {
       if (!serviceJourneyId || !fromQuayId) {

@@ -1,18 +1,14 @@
-import * as Types_v3 from './generated/journey_planner_v3_types';
-import type {DatedServiceJourneyQuery} from '@atb/api/types/generated/DatedServiceJourneyQuery';
+import * as Types from './generated/journey_planner_v3_types';
 
-export type ServiceJourneyMapInfoData_v3 = {
-  mapLegs: MapLeg_v3[];
-  start?: Types_v3.Scalars['Coordinates']['output'];
-  stop?: Types_v3.Scalars['Coordinates']['output'];
+export type ServiceJourneyPolylines = {
+  mapLegs: ServiceJourneyPolyline[];
+  start?: Types.Scalars['Coordinates']['output'];
+  stop?: Types.Scalars['Coordinates']['output'];
 };
 
-export type MapLeg_v3 = {
-  mode?: Types_v3.Mode;
+type ServiceJourneyPolyline = {
+  mode?: Types.Mode;
   faded: boolean;
-  transportSubmode?: Types_v3.TransportSubmode;
-  pointsOnLink: Types_v3.PointsOnLink;
+  transportSubmode?: Types.TransportSubmode;
+  pointsOnLink: Types.PointsOnLink;
 };
-
-export type DatedServiceJourney =
-  DatedServiceJourneyQuery['datedServiceJourney'];
