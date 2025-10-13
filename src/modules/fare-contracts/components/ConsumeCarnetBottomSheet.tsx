@@ -1,4 +1,4 @@
-import {isErrorResponse, RequestError} from '@atb/api/utils';
+import {RequestError} from '@atb/api/utils';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {
   BottomSheetContainer,
