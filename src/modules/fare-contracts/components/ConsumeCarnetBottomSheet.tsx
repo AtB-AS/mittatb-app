@@ -1,4 +1,4 @@
-import {isErrorResponse} from '@atb/api/utils';
+import {isErrorResponse, RequestError} from '@atb/api/utils';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {
   BottomSheetContainer,
@@ -45,13 +45,12 @@ export const ConsumeCarnetBottomSheet = ({
       });
       close();
     } catch (e: any) {
-      if (isErrorResponse(e)) {
-        notifyBugsnag('Error when consuming carnet', {metadata: e});
-        if (e.kind === 'SCHOOL_CARNET_IS_NOT_CONSUMABLE') {
-          setSchoolError(true);
-        } else {
-          setError(true);
-        }
+      const error = e as RequestError;
+      notifyBugsnag('Error when consuming carnet', {metadata: e});
+      if (error.kind === 'SCHOOL_CARNET_IS_NOT_CONSUMABLE') {
+        setSchoolError(true);
+      } else {
+        setError(true);
       }
     }
     setIsLoading(false);
