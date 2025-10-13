@@ -50,7 +50,7 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 import {PaginatedDetailsHeader} from './components/PaginatedDetailsHeader';
 import {useRealtimeText} from './use-realtime-text';
 import {Divider} from '@atb/components/divider';
-import {useMapData} from './use-map-data';
+import {useServiceJourneyPolylineQuery} from './use-service-journey-polyline-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
 import {
@@ -141,7 +141,7 @@ export const DepartureDetailsScreenComponent = ({
     (c) => c.stopPositionInPattern === activeItem.toStopPosition,
   );
 
-  const mapData = useMapData(
+  const {data: serviceJourneyPolyline} = useServiceJourneyPolylineQuery(
     activeItem.serviceJourneyId,
     fromCall?.quay.id,
     toCall?.quay.id,
@@ -198,8 +198,8 @@ export const DepartureDetailsScreenComponent = ({
     .filter((s): s is string => !!s);
 
   const shouldShowMapButton =
-    mapData &&
-    mapData.mapLegs.length > 0 &&
+    serviceJourneyPolyline &&
+    serviceJourneyPolyline.mapLegs.length > 0 &&
     !screenReaderEnabled &&
     !isLoading &&
     estimatedCallsWithMetadata.length > 0 &&
@@ -227,20 +227,20 @@ export const DepartureDetailsScreenComponent = ({
   const shouldShowRequestReview = useRef(false);
 
   const handleMapButtonPress = () => {
-    if (!mapData) return;
+    if (!serviceJourneyPolyline) return;
     if (vehiclePosition) {
       analytics.logEvent('Departure details', 'See live bus clicked', {
-        fromPlace: mapData.start,
-        toPlace: mapData?.stop,
+        fromPlace: serviceJourneyPolyline.start,
+        toPlace: serviceJourneyPolyline.stop,
         mode: mode,
         subMode: subMode,
       });
     }
     shouldShowRequestReview.current = true;
     onPressDetailsMap({
-      legs: mapData.mapLegs,
-      fromPlace: mapData.start,
-      toPlace: mapData.stop,
+      legs: serviceJourneyPolyline.mapLegs,
+      fromPlace: serviceJourneyPolyline.start,
+      toPlace: serviceJourneyPolyline.stop,
       vehicleWithPosition: vehiclePosition,
       mode: mode,
       subMode: subMode,

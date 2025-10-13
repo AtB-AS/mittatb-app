@@ -22,27 +22,18 @@ export async function getServiceJourneyWithEstimatedCalls(
   return response.data.value;
 }
 
-export async function getServiceJourneyMapLegs(
+export async function getServiceJourneyPolyline(
   id: string,
   fromQuayId: string,
   toQuayId?: string,
 ): Promise<ServiceJourneyPolylines> {
-  const url = `bff/v2/servicejourney/${encodeURIComponent(id)}/polyline`;
-  const query = qs.stringify(
-    {
-      fromQuayId,
-      toQuayId,
-    },
-    {skipNull: true},
+  const query = qs.stringify({fromQuayId, toQuayId}, {skipNull: true});
+  const url = stringifyUrl(
+    `bff/v2/servicejourney/${encodeURIComponent(id)}/polyline`,
+    query,
   );
-  const response = await client.get<ServiceJourneyPolylines>(
-    stringifyUrl(url, query),
-  );
-  return (
-    response.data ?? {
-      mapLegs: [],
-    }
-  );
+  const response = await client.get<ServiceJourneyPolylines>(url);
+  return response.data;
 }
 
 export async function getDatedServiceJourney(
