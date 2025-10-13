@@ -85,7 +85,6 @@ export const StopPlacesView = (props: Props) => {
     () => stopPlaceAndQuays.map(({quay}) => quay),
     [stopPlaceAndQuays],
   );
-  const didLoadingDataFail = !!state.isError;
 
   const quayListData: SectionListData<StopPlaceAndQuay>[] =
     stopPlaceAndQuays.length ? [{data: stopPlaceAndQuays}] : [];
@@ -112,7 +111,7 @@ export const StopPlacesView = (props: Props) => {
     if (!placeHasFavorites) setShowOnlyFavorites(false);
   }, [placeHasFavorites, setShowOnlyFavorites]);
 
-  const didLoadingDataFail = !!state.error;
+  const didLoadingDataFail = !!state.isError;
 
   return (
     <SectionList
