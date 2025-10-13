@@ -44,8 +44,8 @@ import {TripRow} from './components/TripRow';
 import {ServiceJourneyDeparture} from './types';
 import {
   EstimatedCallWithMetadata,
-  useDepartureData,
-} from './use-departure-data';
+  useDepartureDetailsQuery,
+} from './use-departure-details-query';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {PaginatedDetailsHeader} from './components/PaginatedDetailsHeader';
 import {useRealtimeText} from './use-realtime-text';
@@ -120,8 +120,8 @@ export const DepartureDetailsScreenComponent = ({
 
   const {requestReview} = useInAppReviewFlow();
 
-  const [
-    {
+  const {
+    data: {
       estimatedCallsWithMetadata,
       title,
       publicCode,
@@ -132,7 +132,7 @@ export const DepartureDetailsScreenComponent = ({
       line,
     },
     isLoading,
-  ] = useDepartureData(activeItem, 20);
+  } = useDepartureDetailsQuery(activeItem);
 
   const fromCall = estimatedCallsWithMetadata.find(
     (c) => c.stopPositionInPattern === activeItem.fromStopPosition,

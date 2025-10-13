@@ -25,7 +25,7 @@ import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/boo
 import {BookingStatus, TripPatternBookingStatus} from './types';
 import {Statuses} from '@atb/theme';
 import {isDefined} from '@atb/utils/presence';
-import {EstimatedCallWithMetadata} from './use-departure-data';
+import {EstimatedCallWithMetadata} from './use-departure-details-query';
 
 export const getNoticesForLeg = (leg: Leg) =>
   filterNotices([
