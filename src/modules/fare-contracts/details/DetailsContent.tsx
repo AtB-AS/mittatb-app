@@ -34,10 +34,7 @@ import {MapFilterType} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/modules/on-behalf-of';
 import {useAuthContext} from '@atb/modules/auth';
-import {
-  CarnetFooter,
-  MAX_ACCESSES_FOR_CARNET_FOOTER,
-} from '../carnet/CarnetFooter';
+import {CarnetFooter} from '../carnet/CarnetFooter';
 import {MobilityBenefitsActionSectionItem} from '@atb/modules/mobility';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';

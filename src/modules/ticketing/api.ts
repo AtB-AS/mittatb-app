@@ -96,16 +96,7 @@ export async function getSchoolCarnetInfo(fareContractId: string) {
   const response = await client.get<ConsumableSchoolCarnetResponse>(url, {
     authWithIdToken: true,
   });
-
-  const transformedResponse = {
-    maximumNumberOfAccesses: response.data.maxConsumptionsPerDay,
-    numberOfUsedAccesses:
-      response.data.maxConsumptionsPerDay -
-      response.data.consumptionsLeftForToday,
-    nextConsumptionDay: response.data.nextConsumptionDay,
-  };
-
-  return transformedResponse;
+  return response.data;
 }
 
 export async function activateFareContractNow(fareContractId: string) {

@@ -33,10 +33,7 @@ import {
 } from '../bonus';
 import {useFareContractLegs} from './use-fare-contract-legs';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
-import {
-  CarnetFooter,
-  MAX_ACCESSES_FOR_CARNET_FOOTER,
-} from './carnet/CarnetFooter';
+import {CarnetFooter} from './carnet/CarnetFooter';
 
 type Props = {
   now: number;

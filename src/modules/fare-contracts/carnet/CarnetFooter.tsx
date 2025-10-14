@@ -4,12 +4,10 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {calculateCarnetData} from './calculate-carnet-data';
-import {useConsumableInfoQuery} from '@atb/modules/ticketing';
+import {useSchoolCarnetInfoQuery} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {formatToDateWithDayOfWeek} from '@atb/utils/date';
-
-export const MAX_ACCESSES_FOR_CARNET_FOOTER = 50;
 
 type Props = {
   active: boolean;
@@ -31,16 +29,16 @@ export const CarnetFooter: React.FC<Props> = ({
     data: consumableInfo,
     isError: isConsumableInfoError,
     isFetching: isConsumableInfoFetching,
-  } = useConsumableInfoQuery(fareContract);
+  } = useSchoolCarnetInfoQuery(fareContract);
 
   const maximumNumberOfAccesses =
-    consumableInfo?.maximumNumberOfAccesses ?? fcMaximumNumberOfAccesses;
+    consumableInfo?.maximumNumberOfAccessesPerDay ?? fcMaximumNumberOfAccesses;
 
   const {accessesRemaining, multiCarnetArray, unusedArray, usedArray} =
     calculateCarnetData(
       active,
       maximumNumberOfAccesses,
-      consumableInfo?.numberOfUsedAccesses ?? numberOfUsedAccesses,
+      consumableInfo?.numberOfUsedAccessesPerDay ?? numberOfUsedAccesses,
     );
 
   if (isConsumableInfoFetching) return <ActivityIndicator />;
@@ -89,15 +87,12 @@ export const CarnetFooter: React.FC<Props> = ({
           <View key={idx} style={[styles.dot, styles.dot__unused]} />
         ))}
       </View>
-      {consumableInfo?.nextConsumptionDay && (
+      {consumableInfo?.consumableAt && (
         <MessageInfoBox
           type="info"
           message={t(
             FareContractTexts.carnet.nextConsumptionDayMessage(
-              formatToDateWithDayOfWeek(
-                consumableInfo.nextConsumptionDay,
-                language,
-              ),
+              formatToDateWithDayOfWeek(consumableInfo.consumableAt, language),
             ),
           )}
         />
