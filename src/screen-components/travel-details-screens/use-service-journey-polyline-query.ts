@@ -19,5 +19,6 @@ export function useServiceJourneyPolylineQuery(
       return getServiceJourneyPolyline(serviceJourneyId, fromQuayId, toQuayId);
     },
     staleTime: ONE_HOUR_MS,
+    gcTime: ONE_HOUR_MS,
   });
 }
