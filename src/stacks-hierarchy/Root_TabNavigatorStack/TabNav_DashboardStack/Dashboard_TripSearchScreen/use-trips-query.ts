@@ -1,4 +1,4 @@
-import {CancelToken, isCancel} from '@atb/api';
+import {CancelToken} from '@atb/api';
 import {tripsSearch} from '@atb/api/bff/trips';
 import {Modes} from '@atb/api/types/generated/journey_planner_v3_types';
 import {TripPattern} from '@atb/api/types/trips';
@@ -154,7 +154,7 @@ export function useTripsQuery(
             const error = e as ErrorResponse;
             setTripPatterns([]);
             setPageCursor(undefined);
-            if (!isCancel(e)) {
+            if (error.kind !== 'AXIOS_CANCEL') {
               setSearchState('search-empty-result');
               setErrorType(toAxiosErrorKind(error.kind));
               console.warn(e);

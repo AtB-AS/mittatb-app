@@ -57,7 +57,6 @@ export function setInstallId(installId: string) {
 }
 
 export const CancelToken = axios.CancelToken;
-export const isCancel = axios.isCancel;
 
 function requestHandler(
   config: InternalAxiosRequestConfig,
