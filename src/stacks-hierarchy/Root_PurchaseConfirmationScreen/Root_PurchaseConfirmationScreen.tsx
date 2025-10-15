@@ -179,7 +179,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     setVippsNotInstalledError(false);
     const offerExpirationTime =
       offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
-    if (offerExpirationTime /*&& totalPrice > 0*/) {
+    if (offerExpirationTime && totalPrice > 0) {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
       } else {
