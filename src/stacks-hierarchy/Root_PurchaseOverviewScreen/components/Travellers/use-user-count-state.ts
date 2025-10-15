@@ -1,6 +1,6 @@
 import {useCallback, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
-import {UserCountState} from './types';
+import {type SupplementaryProductState, UserCountState} from './types';
 import {
   useSelectableUserProfiles,
   type PurchaseSelectionType,
@@ -84,4 +84,8 @@ export function useUserCountState(
     addCount,
     removeCount,
   };
+}
+
+export function useSupplementaryProductCountState(): SupplementaryProductState {
+  const selectableSupplementaryProducts = []; // useSelectableSupplementaryProducts();
 }

@@ -221,6 +221,7 @@ export function useOfferState(
               products: preassignedFareProductAlternatives.map((p) => p.id),
               travelDate: selection?.travelDate,
             };
+            console.log('Searching offers with params:', params);
 
             const offerEndpoint = selection?.stopPlaces
               ? 'stop-places'
