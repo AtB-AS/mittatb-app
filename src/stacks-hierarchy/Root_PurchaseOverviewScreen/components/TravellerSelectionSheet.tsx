@@ -13,6 +13,7 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
+import {useSupplementCountProductState} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-supplement-product-count-state';
 
 type TravellerSelectionSheetProps = {
   selection: PurchaseSelectionType;
@@ -30,10 +31,13 @@ export const TravellerSelectionSheet = ({
     selection.fareProductTypeConfig.configuration.travellerSelectionMode;
 
   const userCountState = useUserCountState(selection);
+  const supplementProductCountState = useSupplementCountProductState(selection);
 
-  const noProfilesSelected = userCountState.userProfilesWithCount.every(
-    (u) => !u.count,
-  );
+  const nothingSelected =
+    userCountState.userProfilesWithCount.every((u) => !u.count) &&
+    supplementProductCountState.supplementProductsWithCount.every(
+      (sp) => !sp.count,
+    );
 
   return (
     <BottomSheetContainer
@@ -42,7 +46,10 @@ export const TravellerSelectionSheet = ({
     >
       <ScrollView style={styles.container}>
         {selectionMode === 'multiple' ? (
-          <MultipleTravellersSelection {...userCountState} />
+          <MultipleTravellersSelection
+            userCountState={userCountState}
+            supplementProductCountState={supplementProductCountState}
+          />
         ) : (
           <SingleTravellerSelection {...userCountState} />
         )}
@@ -51,10 +58,13 @@ export const TravellerSelectionSheet = ({
         <Button
           expanded={true}
           text={t(PurchaseOverviewTexts.travellerSelectionSheet.confirm)}
-          disabled={noProfilesSelected}
+          disabled={nothingSelected}
           onPress={() => {
             const newSelection = selectionBuilder
               .fromSelection(selection)
+              .supplementProducts(
+                supplementProductCountState.supplementProductsWithCount,
+              )
               .userProfiles(userCountState.userProfilesWithCount)
               .build();
             onSave(newSelection);

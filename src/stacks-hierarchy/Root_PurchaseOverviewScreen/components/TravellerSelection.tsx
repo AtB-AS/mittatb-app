@@ -68,9 +68,14 @@ export function TravellerSelection({
 
   const travellersDetailsText =
     selectionMode == 'single'
-      ? getReferenceDataName(selection.userProfilesWithCount?.[0], language)
+      ? [getReferenceDataName(selection.userProfilesWithCount?.[0], language)]
       : selection.userProfilesWithCount
           .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
+          .concat(
+            selection.supplementProductsWithCount.map(
+              (s) => `${s.count} ${getReferenceDataName(s, language)}`,
+            ),
+          )
           .join(', ');
 
   const travellerInfo = !canSelectUserProfile

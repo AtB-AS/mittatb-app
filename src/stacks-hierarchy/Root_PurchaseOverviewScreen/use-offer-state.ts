@@ -4,7 +4,10 @@ import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {FlexDiscountLadder, searchOffers} from '@atb/modules/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
-import {UserProfileWithCount} from '@atb/modules/fare-contracts';
+import {
+  type SupplementProductWithCount,
+  UserProfileWithCount,
+} from '@atb/modules/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
 import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {fetchOfferFromLegs} from '@atb/api/sales';
@@ -74,14 +77,27 @@ const getOfferForTraveller = (
 const calculateTotalPrice = (
   userProfileWithCounts: UserProfileWithCount[],
   offers: TicketOffer[],
-) =>
-  userProfileWithCounts.reduce((total, traveller) => {
+  supplementProductsWithCount: SupplementProductWithCount[],
+) => {
+  return userProfileWithCounts.reduce((total, traveller) => {
     const offer = getOfferForTraveller(offers, traveller.userTypeString);
+    const supplementProductPrice =
+      offer?.supplementProducts?.reduce(
+        (suppTotal, suppProduct) =>
+          suppTotal + getCurrencyAsFloat(suppProduct.price, 'NOK'),
+        0,
+      ) ?? 0;
     const price = offer
       ? getCurrencyAsFloat(offer.price, 'NOK') * traveller.count
       : 0;
-    return total + price;
+    console.log(
+      `Adding total (${total}) + price (${price}) + supplementProductPrice (${supplementProductPrice}) for traveller ${traveller.userTypeString}`,
+    );
+    const newTotal = total + price + supplementProductPrice;
+    console.log('Returning new total:', newTotal);
+    return newTotal;
   }, 0);
+};
 
 const calculateOriginalPrice = (
   userProfileWithCounts: UserProfileWithCount[],
@@ -188,7 +204,30 @@ export function useOfferState(
             count: t.count,
           })) ?? [];
 
-      const isTravellersValid = offerTravellers?.length ?? 0 > 0;
+      console.log(
+        'Supplement products with count:',
+        selection?.supplementProductsWithCount,
+      );
+      const supplementProductTravellers =
+        selection?.supplementProductsWithCount
+          .filter((sp) => sp.count)
+          .map((sp) => ({
+            id: 'ADULT',
+            userType: 'ADULT',
+            baggageTypes: ['BICYCLE'],
+            count: sp.count,
+          })) ?? [];
+      console.log(
+        'Supplement product travellers:',
+        supplementProductTravellers,
+      );
+
+      const allTravellers = [
+        ...offerTravellers,
+        ...supplementProductTravellers,
+      ];
+
+      const isTravellersValid = allTravellers.length > 0;
       const isStopPlacesValid = selection?.stopPlaces
         ? selection.stopPlaces.from && selection.stopPlaces.to
         : true;
@@ -205,7 +244,7 @@ export function useOfferState(
             const response = await fetchOfferFromLegs(
               new Date(selection.legs[0].expectedStartTime),
               mapToSalesTripPatternLegs(t, selection.legs),
-              offerTravellers,
+              allTravellers,
               preassignedFareProductAlternatives.map((p) => p.id),
             );
             offers = response.offers;
@@ -217,8 +256,13 @@ export function useOfferState(
               from: selection?.stopPlaces?.from!.id,
               to: selection?.stopPlaces?.to!.id,
               isOnBehalfOf: selection?.isOnBehalfOf ?? false,
-              travellers: offerTravellers,
-              products: preassignedFareProductAlternatives.map((p) => p.id),
+              travellers: allTravellers,
+              products: offerTravellers.length
+                ? preassignedFareProductAlternatives.map((p) => p.id)
+                : [],
+              supplementProducts: selection?.supplementProductsWithCount.map(
+                (sp) => sp.id,
+              ),
               travelDate: selection?.travelDate,
             };
 
@@ -228,6 +272,7 @@ export function useOfferState(
                 ? 'zones'
                 : 'authority';
 
+            console.log('Searching offers with params: ', params);
             offers = await searchOffers(offerEndpoint, params, {
               cancelToken,
               authWithIdToken: true,
@@ -238,6 +283,7 @@ export function useOfferState(
           }
 
           if (offers.length) {
+            console.log('Offers found:', offers);
             dispatch({type: 'SET_OFFER', offers});
           } else {
             dispatch({

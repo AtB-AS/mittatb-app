@@ -3,6 +3,7 @@ import {
   PreassignedFareProduct,
   FareZone,
   UserProfile,
+  type SupplementProduct,
 } from '@atb-as/config-specs';
 import type {
   PurchaseSelectionBuilderInput,
@@ -66,6 +67,13 @@ export const TEST_USER_PROFILE: UserProfile = {
   userTypeString: 'ADULT',
 };
 
+export const TEST_SUPPLEMENT_PRODUCT: SupplementProduct = {
+  id: 'S1',
+  name: {lang: 'no', value: 'Sykkel'},
+  version: 'v1',
+  distributionChannel: ['app'],
+};
+
 export const TEST_INPUT: PurchaseSelectionBuilderInput = {
   fareProductTypeConfigs: [TEST_TYPE_CONFIG],
   preassignedFareProducts: [TEST_PRODUCT],
@@ -86,6 +94,7 @@ export const TEST_SELECTION: PurchaseSelectionType = {
   },
   stopPlaces: undefined,
   userProfilesWithCount: [{...TEST_USER_PROFILE, count: 1}],
+  supplementProductsWithCount: [],
   travelDate: undefined,
   legs: [],
   isOnBehalfOf: false,

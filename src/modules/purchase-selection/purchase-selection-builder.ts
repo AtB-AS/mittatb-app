@@ -12,11 +12,13 @@ import {
   getDefaultZones,
   isSelectableProduct,
   isSelectableProfile,
+  isSelectableSupplementProduct,
   isSelectableZone,
   isValidSelection,
 } from './utils';
 import {isValidDateString} from '@atb/utils/date';
 import {isSameDay} from 'date-fns';
+import type {SupplementProductWithCount} from '@atb/modules/fare-contracts';
 
 export const createEmptyBuilder = (
   input: PurchaseSelectionBuilderInput,
@@ -100,16 +102,46 @@ const createBuilder = (
       return builder;
     },
     userProfiles: (userProfilesWithCount) => {
-      const onlyWithActualCount = userProfilesWithCount.filter((u) => u.count);
+      const onlyProfilesWithActualCount = userProfilesWithCount.filter(
+        (u) => u.count,
+      );
       if (
-        onlyWithActualCount.length &&
-        onlyWithActualCount.every((p) =>
+        !onlyProfilesWithActualCount.length &&
+        !currentSelection.supplementProductsWithCount.filter((s) => s.count)
+          .length
+      ) {
+        return builder;
+      }
+      if (
+        /*
+         * .every() will return true for an empty array, which will happen when
+         * selecting only supplement products with count and no user profiles.
+         * That means that supplementProducts can be selected alone.
+         */
+        onlyProfilesWithActualCount.every((p) =>
           isSelectableProfile(currentSelection.preassignedFareProduct, p),
         )
       ) {
         currentSelection = {
           ...currentSelection,
-          userProfilesWithCount: onlyWithActualCount,
+          userProfilesWithCount: onlyProfilesWithActualCount,
+        };
+      }
+      return builder;
+    },
+    supplementProducts: (supplementProductsWithCount) => {
+      const productsWithCount = supplementProductsWithCount.filter(
+        (s) => s.count,
+      );
+      if (
+        productsWithCount.length &&
+        productsWithCount.every((sp) =>
+          isSelectableSupplementProduct(currentSelection, sp),
+        )
+      ) {
+        currentSelection = {
+          ...currentSelection,
+          supplementProductsWithCount: productsWithCount,
         };
       }
       return builder;
@@ -172,6 +204,7 @@ const createSelectionForType = (
     input,
     preassignedFareProduct,
   );
+  const supplementProductsWithCount: SupplementProductWithCount[] = [];
 
   return {
     fareProductTypeConfig,
@@ -179,6 +212,7 @@ const createSelectionForType = (
     zones,
     stopPlaces,
     userProfilesWithCount,
+    supplementProductsWithCount,
     travelDate: undefined,
     legs: [],
     isOnBehalfOf: false,

@@ -30,6 +30,7 @@ import {
   BonusProductType,
   BonusTextsType,
   ScooterConsentLineType,
+  SupplementProduct,
 } from './types';
 import {
   mapLanguageAndTextType,
@@ -47,6 +48,7 @@ import {
   mapToTravelSearchPreferences,
   mapToStopSignalButtonConfig,
   mapToScooterConsentLines,
+  mapToSupplementProduct,
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
@@ -89,6 +91,7 @@ type ConfigurationContextState = {
   notificationConfig: NotificationConfigType | undefined;
   stopSignalButtonConfig: StopSignalButtonConfigType;
   resubscribeFirestoreConfig: () => void;
+  supplementProducts: SupplementProduct[];
 };
 
 const FirestoreConfigurationContext = createContext<
@@ -148,6 +151,9 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
   const [firestoreConfigStatus, setFirestoreConfigStatus] =
     useState<FirestoreConfigStatus>('loading');
   const {resubscribe, resubscribeToggle} = useResubscribeToggle();
+  const [supplementProducts, setSupplementProducts] = useState<
+    SupplementProduct[]
+  >([]);
 
   const subscribeFirestore = useCallback(() => {
     return firestore()
@@ -275,6 +281,12 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
           const stopSignalButtonConfig =
             getStopSignalButtonConfigFromSnapshot(snapshot);
           setStopSignalButtonConfig(stopSignalButtonConfig);
+
+          const supplementProducts =
+            getSupplementProductsFromSnapshot(snapshot);
+          if (supplementProducts?.length) {
+            setSupplementProducts(supplementProducts);
+          }
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -306,6 +318,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     setHarborConnectionOverrides([]);
     setNotificationConfig(undefined);
     setStopSignalButtonConfig(defaultStopSignalButtonConfig);
+    setSupplementProducts([]);
   };
 
   useEffect(() => {
@@ -342,6 +355,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
       notificationConfig,
       stopSignalButtonConfig,
       firestoreConfigStatus,
+      supplementProducts,
     };
   }, [
     preassignedFareProducts,
@@ -368,6 +382,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     notificationConfig,
     stopSignalButtonConfig,
     firestoreConfigStatus,
+    supplementProducts,
   ]);
 
   return (
@@ -738,4 +753,13 @@ function getStopSignalButtonConfigFromSnapshot(
     (doc) => doc.id == 'stopSignalButtonConfig',
   );
   return mapToStopSignalButtonConfig(config?.data());
+}
+
+function getSupplementProductsFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): SupplementProduct[] | undefined {
+  const supplementProductsFromFirestore = snapshot.docs
+    .find((doc) => doc.id == 'referenceData')
+    ?.get('supplementProducts');
+  return mapToSupplementProduct(supplementProductsFromFirestore);
 }

@@ -9,15 +9,17 @@ import {
 import {getReferenceDataName} from '@atb/modules/configuration';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {CounterSectionItem, Section} from '@atb/components/sections';
-import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {useThemeContext} from '@atb/theme';
-import type {UserCountState} from './types';
+import type {SupplementProductState, UserCountState} from './types';
+import type {UserProfileWithCount} from '@atb/modules/fare-contracts';
+import {View} from 'react-native';
 
-export function MultipleTravellersSelection({
-  userProfilesWithCount,
-  addCount,
-  removeCount,
-}: UserCountState) {
+type Props = {
+  userCountState: UserCountState;
+  supplementProductCountState: SupplementProductState;
+};
+
+export function MultipleTravellersSelection(props: Props) {
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
 
@@ -25,34 +27,67 @@ export function MultipleTravellersSelection({
 
   const addTraveller = (userTypeString: string) => {
     travellersModified.current = true;
-    addCount(userTypeString);
+    props.userCountState.increment(userTypeString);
   };
 
   const removeTraveller = (userTypeString: string) => {
     travellersModified.current = true;
-    removeCount(userTypeString);
+    props.userCountState.decrement(userTypeString);
+  };
+
+  const addSupplementProduct = (supplementProductString: string) => {
+    travellersModified.current = true;
+    props.supplementProductCountState.increment(supplementProductString);
+  };
+
+  const removeSupplementProduct = (supplementProductString: string) => {
+    travellersModified.current = true;
+    props.supplementProductCountState.decrement(supplementProductString);
   };
 
   useScreenReaderAnnouncement(
-    createTravellersText(userProfilesWithCount, false, true, t, language),
+    createTravellersText(
+      props.userCountState.userProfilesWithCount,
+      false,
+      true,
+      t,
+      language,
+    ),
     travellersModified.current,
   );
 
   return (
-    <Section>
-      {userProfilesWithCount.map((u) => (
-        <CounterSectionItem
-          key={u.userTypeString}
-          text={getReferenceDataName(u, language)}
-          count={u.count}
-          addCount={() => addTraveller(u.userTypeString)}
-          removeCount={() => removeTraveller(u.userTypeString)}
-          testID={'counterInput_' + u.userTypeString.toLowerCase()}
-          color={theme.color.interactive[2]}
-          subtext={getTextForLanguage(u.alternativeDescriptions, language)}
-        />
-      ))}
-    </Section>
+    <View style={{rowGap: theme.spacing.medium}}>
+      <Section>
+        {props.userCountState.userProfilesWithCount.map((u) => (
+          <CounterSectionItem
+            key={u.userTypeString}
+            text={getReferenceDataName(u, language)}
+            count={u.count}
+            addCount={() => addTraveller(u.userTypeString)}
+            removeCount={() => removeTraveller(u.userTypeString)}
+            testID={'counterInput_' + u.userTypeString.toLowerCase()}
+            color={theme.color.interactive[2]}
+            subtext={getTextForLanguage(u.alternativeDescriptions, language)}
+          />
+        ))}
+      </Section>
+      <Section>
+        {props.supplementProductCountState.supplementProductsWithCount.map(
+          (s) => (
+            <CounterSectionItem
+              key={s.id}
+              text={getReferenceDataName(s, language)}
+              count={s.count}
+              addCount={() => addSupplementProduct(s.id)}
+              removeCount={() => removeSupplementProduct(s.id)}
+              subtext={getTextForLanguage(s.description, language)}
+              illustrationName={s.illustration}
+            />
+          ),
+        )}
+      </Section>
+    </View>
   );
 }
 

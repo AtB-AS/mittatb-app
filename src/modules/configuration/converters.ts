@@ -21,6 +21,7 @@ import {
   NotificationConfig,
   StopSignalButtonConfig,
   type StopSignalButtonConfigType,
+  SupplementProduct,
   TransportModeFilterOption,
   TravelSearchPreference,
 } from '@atb-as/config-specs';
@@ -246,3 +247,24 @@ export const mapToStopSignalButtonConfig = (
     ? parseResult.data
     : StopSignalButtonConfig.parse({});
 };
+
+export function mapToSupplementProduct(
+  productsFromFirestore?: any,
+): SupplementProduct[] {
+  if (!productsFromFirestore) return [];
+  try {
+    const arr = JSON.parse(productsFromFirestore);
+    return arr
+      .map((product: any) => {
+        const parseResult = SupplementProduct.safeParse(product);
+        if (!parseResult.success) {
+          return;
+        }
+        return parseResult.data;
+      })
+      .filter(isDefined);
+  } catch (e) {
+    console.error('Error parsing supplement products JSON:', e);
+    return [];
+  }
+}
