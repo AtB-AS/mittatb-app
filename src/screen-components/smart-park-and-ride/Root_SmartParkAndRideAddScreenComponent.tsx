@@ -12,7 +12,6 @@ import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartPar
 import {useState} from 'react';
 import {View, ScrollView} from 'react-native';
 
-import {FullScreenFooter} from '@atb/components/screen-footer';
 import {useOnboardingNavigation} from '@atb/modules/onboarding';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useAuthContext} from '@atb/modules/auth';
