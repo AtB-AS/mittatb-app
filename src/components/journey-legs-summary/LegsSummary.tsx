@@ -1,12 +1,22 @@
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  PurchaseConfirmationTexts,
+  useTranslation,
+} from '@atb/translations';
 import {AnyMode, TransportationIconBox} from '@atb/components/icon-box';
 import {formatLocaleTime} from '@atb/utils/date';
 import SharedTexts from '@atb/translations/shared';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import type {Leg} from '@atb/api/types/trips';
+import {MessageInfoText} from '@atb/components/message-info-text';
+import {
+  findAllNoticesFromLeg,
+  findAllSituationsFromLeg,
+  getMessageTypeForSituation,
+} from '@atb/modules/situations';
 
 export function LegsSummary({
   legs,
@@ -18,6 +28,11 @@ export function LegsSummary({
   const styles = useStyles();
   const {t, language} = useTranslation();
   if (!legs || legs.length === 0) return null;
+  const legsAndMessages = legs.map((leg) => ({
+    leg,
+    situations: findAllSituationsFromLeg(leg),
+    notices: findAllNoticesFromLeg(leg),
+  }));
 
   return (
     <View style={styles.legSection}>
@@ -26,102 +41,104 @@ export function LegsSummary({
           {t(PurchaseConfirmationTexts.confirmations.onlyValidDeparture)}
         </ThemeText>
       )}
-      {legs.map(
-        (
-          {
-            fromPlace,
-            toPlace,
-            expectedStartTime,
-            expectedEndTime,
-            line,
-            mode,
-            transportSubmode,
-          },
-          i,
-        ) => (
-          <View
-            accessible={true}
-            style={styles.legSection}
-            id={line?.publicCode}
-            key={`leg-${i}`}
-          >
-            <View style={styles.legSectionItem}>
-              <TransportationIconBox
-                style={[styles.sectionItemSpacing, styles.centered]}
-                type="standard"
-                mode={mode as AnyMode}
-                subMode={transportSubmode}
-                lineNumber={line?.publicCode}
-              />
-              <ThemeText
-                typography="body__primary"
-                style={[styles.legName, styles.centered]}
-              >
-                {line?.name}
-              </ThemeText>
-              <ThemeText
-                typography="body__primary--bold"
-                style={[styles.legSectionItemTime, styles.centered]}
-              >
-                {!!expectedStartTime &&
-                  formatLocaleTime(expectedStartTime, language)}
-              </ThemeText>
-            </View>
-            {!compact && (
-              <View>
-                <View style={styles.legSectionItem}>
-                  <ThemeText
-                    typography="body__secondary"
-                    color="secondary"
-                    style={styles.legLabel}
-                  >
-                    {t(SharedTexts.from)}:
-                  </ThemeText>
-                  <ThemeText
-                    typography="body__secondary"
-                    color="secondary"
-                    style={styles.legName}
-                  >
-                    {fromPlace.quay?.stopPlace?.name}
-                  </ThemeText>
-                  <ThemeText
-                    typography="body__secondary"
-                    color="secondary"
-                    style={styles.legSectionItemTime}
-                  >
-                    {!!expectedStartTime &&
-                      formatLocaleTime(expectedStartTime, language)}
-                  </ThemeText>
-                </View>
-                <View style={styles.legSectionItem}>
-                  <ThemeText
-                    typography="body__secondary"
-                    color="secondary"
-                    style={styles.legLabel}
-                  >
-                    {t(SharedTexts.to)}:
-                  </ThemeText>
-                  <ThemeText
-                    typography="body__secondary"
-                    color="secondary"
-                    style={styles.legName}
-                  >
-                    {toPlace.quay?.stopPlace?.name}
-                  </ThemeText>
-                  <ThemeText
-                    typography="body__secondary"
-                    color="secondary"
-                    style={styles.legSectionItemTime}
-                  >
-                    {!!expectedEndTime &&
-                      formatLocaleTime(expectedEndTime, language)}
-                  </ThemeText>
-                </View>
-              </View>
-            )}
+      {legsAndMessages.map(({leg, situations, notices}, i) => (
+        <View
+          accessible={true}
+          style={styles.legSection}
+          id={leg.line?.publicCode}
+          key={`leg-${i}`}
+        >
+          <View style={styles.legSectionItem}>
+            <TransportationIconBox
+              style={[styles.sectionItemSpacing, styles.centered]}
+              type="standard"
+              mode={leg.mode as AnyMode}
+              subMode={leg.transportSubmode}
+              lineNumber={leg.line?.publicCode}
+            />
+            <ThemeText
+              typography="body__primary"
+              style={[styles.legName, styles.centered]}
+            >
+              {leg.line?.name}
+            </ThemeText>
+            <ThemeText
+              typography="body__primary--bold"
+              style={[styles.legSectionItemTime, styles.centered]}
+            >
+              {!!leg.expectedStartTime &&
+                formatLocaleTime(leg.expectedStartTime, language)}
+            </ThemeText>
           </View>
-        ),
-      )}
+          {!compact && (
+            <View>
+              <View style={styles.legSectionItem}>
+                <ThemeText
+                  typography="body__secondary"
+                  color="secondary"
+                  style={styles.legLabel}
+                >
+                  {t(SharedTexts.from)}:
+                </ThemeText>
+                <ThemeText
+                  typography="body__secondary"
+                  color="secondary"
+                  style={styles.legName}
+                >
+                  {leg.fromPlace.quay?.stopPlace?.name}
+                </ThemeText>
+                <ThemeText
+                  typography="body__secondary"
+                  color="secondary"
+                  style={styles.legSectionItemTime}
+                >
+                  {!!leg.expectedStartTime &&
+                    formatLocaleTime(leg.expectedStartTime, language)}
+                </ThemeText>
+              </View>
+              <View style={styles.legSectionItem}>
+                <ThemeText
+                  typography="body__secondary"
+                  color="secondary"
+                  style={styles.legLabel}
+                >
+                  {t(SharedTexts.to)}:
+                </ThemeText>
+                <ThemeText
+                  typography="body__secondary"
+                  color="secondary"
+                  style={styles.legName}
+                >
+                  {leg.toPlace.quay?.stopPlace?.name}
+                </ThemeText>
+                <ThemeText
+                  typography="body__secondary"
+                  color="secondary"
+                  style={styles.legSectionItemTime}
+                >
+                  {!!leg.expectedEndTime &&
+                    formatLocaleTime(leg.expectedEndTime, language)}
+                </ThemeText>
+              </View>
+            </View>
+          )}
+          {situations.map((situation) => (
+            <MessageInfoText
+              type={getMessageTypeForSituation(situation)}
+              message={
+                getTextForLanguage(situation.description, language) ?? ''
+              }
+            />
+          ))}
+          {notices.map((notice) => (
+            <MessageInfoText
+              type="info"
+              message={notice.text ?? ''}
+              key={notice.id}
+            />
+          ))}
+        </View>
+      ))}
     </View>
   );
 }
