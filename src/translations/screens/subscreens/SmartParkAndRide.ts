@@ -2,14 +2,15 @@ import {translation as _} from '../../commons';
 
 const SmartParkAndRideTexts = {
   header: {
-    title: _(
-      'Innfartsparkering', 
-      'Park and Ride',
-      'Innfartsparkering',
-    ),
+    title: _('Innfartsparkering', 'Park and Ride', 'Innfartsparkering'),
   },
   content: {
-    heading: _('Dine kjøretøy', 'Your vehicles', 'Dine køyretøy'),
+    heading: (num: number) =>
+      _(
+        `Dine kjøretøy (${num}/2)`,
+        `Your vehicles (${num}/2)`,
+        `Dine køyretøy (${num}/2)`,
+      ),
     addVehicle: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
   },
   howItWorks: {
