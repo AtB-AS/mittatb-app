@@ -59,6 +59,7 @@ export const LicensePlateSection = ({
           autoCapitalize="characters"
           inlineLabel={false}
           maxLength={14}
+          returnKeyType="done"
           {...textInputSectionItemProps}
         />
       </Section>
