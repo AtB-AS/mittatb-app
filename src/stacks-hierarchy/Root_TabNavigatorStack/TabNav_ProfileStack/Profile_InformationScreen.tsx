@@ -22,12 +22,10 @@ export const Profile_InformationScreen = () => {
   const ticketingInfo = configurableLinks?.ticketingInfo;
   const termsInfo = configurableLinks?.termsInfo;
   const inspectionInfo = configurableLinks?.inspectionInfo;
-  const refundInfo = configurableLinks?.refundInfo;
   const a11yStatement = configurableLinks?.appA11yStatement;
   const ticketingInfoUrl = getTextForLanguage(ticketingInfo, language);
   const termsInfoUrl = getTextForLanguage(termsInfo, language);
   const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
-  const refundInfoUrl = getTextForLanguage(refundInfo, language);
   const a11yStatementUrl = getTextForLanguage(a11yStatement, language);
 
   return (
@@ -122,23 +120,6 @@ export const Profile_InformationScreen = () => {
             />
           )}
 
-          {refundInfoUrl && (
-            <LinkSectionItem
-              rightIcon={{svg: ExternalLink}}
-              text={t(
-                ProfileTexts.sections.information.linkSectionItems.refund.label,
-              )}
-              testID="refundInfoButton"
-              onPress={() => Linking.openURL(refundInfoUrl)}
-              accessibility={{
-                accessibilityHint: t(
-                  ProfileTexts.sections.information.linkSectionItems.refund
-                    .a11yLabel,
-                ),
-                accessibilityRole: 'link',
-              }}
-            />
-          )}
           {a11yStatementUrl && (
             <LinkSectionItem
               rightIcon={{svg: ExternalLink}}
