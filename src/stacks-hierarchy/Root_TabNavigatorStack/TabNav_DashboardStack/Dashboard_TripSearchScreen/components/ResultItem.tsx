@@ -372,6 +372,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     marginTop: theme.spacing.xSmall,
+    marginHorizontal: theme.spacing.xSmall,
   },
   scheduledTime: {
     marginLeft: theme.spacing.xSmall,
