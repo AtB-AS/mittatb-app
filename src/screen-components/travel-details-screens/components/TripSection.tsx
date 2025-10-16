@@ -150,6 +150,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const showInterchangeSection =
     leg.interchangeTo?.guaranteed && interchangeDetails && leg.line;
 
+  const showQuayDescription =
+    !!leg.fromPlace.quay?.description && !isWalkSection && !isBikeSection;
+
   const sectionOutput = (
     <>
       <View style={style.tripSection} testID={testID}>
@@ -192,6 +195,16 @@ export const TripSection: React.FC<TripSectionProps> = ({
           >
             <ThemeText testID="fromPlaceName">
               {getPlaceName(leg.fromPlace)}
+              {showQuayDescription && (
+                <ThemeText
+                  testID="fromPlaceQuayDescription"
+                  typography="body__secondary"
+                  color="secondary"
+                >
+                  {'\n'}
+                  {leg.fromPlace.quay?.description}
+                </ThemeText>
+              )}
             </ThemeText>
           </TripRow>
         )}

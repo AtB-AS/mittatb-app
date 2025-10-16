@@ -53,6 +53,7 @@ export type TripPatternFragment = {
         name: string;
         longitude?: number;
         latitude?: number;
+        description?: string;
         stopPlace?: {
           id: string;
           longitude?: number;
@@ -73,6 +74,7 @@ export type TripPatternFragment = {
         name: string;
         longitude?: number;
         latitude?: number;
+        description?: string;
         stopPlace?: {
           id: string;
           longitude?: number;

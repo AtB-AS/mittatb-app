@@ -608,7 +608,20 @@ function EstimatedCallRow({
         onPress={() => handleQuayPress(call.quay)}
         testID={'legType_' + group}
       >
-        <ThemeText testID="quayName">{getQuayName(call.quay)}</ThemeText>
+        <ThemeText testID="quayName">
+          {getQuayName(call.quay)}
+          {isStartOfGroup && !!call.quay.description && (
+            <ThemeText
+              testID="quayDescription"
+              typography="body__secondary"
+              color="secondary"
+            >
+              {'\n'}
+              {call.quay.description}
+            </ThemeText>
+          )}
+        </ThemeText>
+
         {!call.forAlighting && !call.metadata.isStartOfServiceJourney && (
           <AccessibleText
             typography="body__secondary"

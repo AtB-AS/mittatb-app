@@ -8,6 +8,7 @@ export type QuayFragment = {
   publicCode?: string;
   stopPlace?: StopPlaceFragment;
   tariffZones: Array<TariffZoneFragment>;
+  description?: string;
 };
 
 export type QuayWithSituationsFragment = {
