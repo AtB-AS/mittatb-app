@@ -180,9 +180,6 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     return previousLeg && previousLeg.interchangeTo?.staySeated === true;
   };
 
-  const displayLegDash = (idx: number): boolean =>
-    idx < expandedLegs.length - 1 && !staySeated(idx + 1);
-
   return (
     <Animated.View
       style={[{opacity: fadeInValueRef.current}, styles.container]}
@@ -301,16 +298,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
     flexGrow: 1,
   },
-  legLine: {
-    backgroundColor: theme.color.background.neutral[3].background,
-    flexDirection: 'row',
-    borderRadius: theme.border.radius.regular,
-    width: 5,
-  },
-  leftLegLine: {
-    marginLeft: theme.spacing.xSmall,
-    marginRight: 2,
-  },
   rightLegLine: {
     marginRight: theme.spacing.xSmall,
   },
@@ -419,22 +406,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-const LegDash = () => {
-  const styles = useThemeStyles();
-  const {theme} = useThemeContext();
-  const fontScale = useFontScale();
-  const lineHeight = {height: (theme.spacing.xSmall / 2) * fontScale};
-  return (
-    <>
-      <View style={styles.lineContainer}>
-        <View style={[styles.legLine, styles.leftLegLine, lineHeight]} />
-      </View>
-      <View style={styles.lineContainer}>
-        <View style={[styles.legLine, styles.rightLegLine, lineHeight]} />
-      </View>
-    </>
-  );
-};
 const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   const styles = useThemeStyles();
   const showWaitTime = Boolean(nextLeg);
