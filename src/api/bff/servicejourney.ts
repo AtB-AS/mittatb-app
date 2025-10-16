@@ -22,7 +22,7 @@ export async function getServiceJourneyWithEstimatedCalls(
   return response.data.value;
 }
 
-export async function getServiceJourneyPolyline(
+export async function getServiceJourneyPolylines(
   id: string,
   fromQuayId: string,
   toQuayId?: string,
