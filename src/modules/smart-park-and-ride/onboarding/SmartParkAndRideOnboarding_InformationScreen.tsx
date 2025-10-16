@@ -23,7 +23,6 @@ export const SmartParkAndRideOnboarding_InformationScreen = () => {
       illustration={<ThemedCarValidTicket height={170} />}
       title={t(SmartParkAndRideTexts.onboarding.information.title)}
       description={t(SmartParkAndRideTexts.onboarding.information.description)}
-      contentNode={<PenaltyNoticeText />}
       footerButton={{
         onPress: () => {
           analytics.logEvent(
@@ -38,14 +37,5 @@ export const SmartParkAndRideOnboarding_InformationScreen = () => {
       }}
       testID="smartParkAndRideOnboardingInformation"
     />
-  );
-};
-
-const PenaltyNoticeText = () => {
-  const {t} = useTranslation();
-  return (
-    <ThemeText typography="body__primary--bold" style={{textAlign: 'center'}}>
-      {t(SmartParkAndRideTexts.onboarding.information.penaltyNotice)}
-    </ThemeText>
   );
 };

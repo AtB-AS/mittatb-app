@@ -154,19 +154,14 @@ const SmartParkAndRideTexts = {
   onboarding: {
     information: {
       title: _(
-        'Billett gir gratis parkering',
-        'Ticket gives free parking',
-        'Billett gir gratis parkering',
+        'Bussbillett gir gratis parkering',
+        'Bus ticket gives free parking',
+        'Bussbillett gir gratis parkering',
       ),
       description: _(
-        'Stå gratis på Ranheim Fabrikker i 48 timer, uansett hvilken AtB-billett du har. Billetten må være aktiv senest 30 minutter etter innkjøring.',
-        'Park for free at Ranheim Fabrikker for 48 hours, regardless of which AtB ticket you have. The ticket must be active at least 30 minutes after entering.',
-        'Stå gratis på Ranheim Fabrikker i 48 timar, uansett kva AtB-billett du har. Billetten må vere aktiv seinast 30 minutt etter innkjøring.',
-      ),
-      penaltyNotice: _(
-        'Uten billett er det fast pris på 400 kr.',
-        'Without a ticket, there is a fixed price of 400 NOK.',
-        'Utan billett er det fast pris på 400 kr.',
+        'Nå kan du parkere gratis på Ranheim Fabrikker i opptil 48 timer med en gyldig bussbillett i AtB-appen. Billetten må ha vært aktiv i løpet av tiden du har stått parkert.',
+        'Now you can park for free at Ranheim Fabrikker for up to 48 hours with a valid bus ticket in the AtB app. The ticket must have been active during the time you were parked.',
+        'No kan du parkere gratis på Ranheim Fabrikker i opptil 48 timar med ein gyldig bussbillett i AtB-appen. Billetten må ha vore aktiv i løpet av tida du har stått parkert.',
       ),
       buttonText: _(
         'Hvordan gjør vi det?',
