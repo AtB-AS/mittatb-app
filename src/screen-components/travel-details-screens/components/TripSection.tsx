@@ -177,7 +177,10 @@ export const TripSection: React.FC<TripSectionProps> = ({
             alignChildren="flex-start"
             accessibilityLabel={getStopRowA11yTranslated(
               'start',
-              getPlaceName(leg.fromPlace),
+              getPlaceName(leg.fromPlace) +
+                (showQuayDescription
+                  ? ` ${leg.fromPlace.quay?.description}`
+                  : ''),
               startTimes,
               timesAreApproximations,
               language,
@@ -195,17 +198,16 @@ export const TripSection: React.FC<TripSectionProps> = ({
           >
             <ThemeText testID="fromPlaceName">
               {getPlaceName(leg.fromPlace)}
-              {showQuayDescription && (
-                <ThemeText
-                  testID="fromPlaceQuayDescription"
-                  typography="body__secondary"
-                  color="secondary"
-                >
-                  {'\n'}
-                  {leg.fromPlace.quay?.description}
-                </ThemeText>
-              )}
             </ThemeText>
+            {showQuayDescription && (
+              <ThemeText
+                testID="fromPlaceQuayDescription"
+                typography="body__secondary"
+                color="secondary"
+              >
+                {leg.fromPlace.quay?.description}
+              </ThemeText>
+            )}
           </TripRow>
         )}
         {isWalkSection ? (
