@@ -3,9 +3,9 @@ import {translation as _} from '../../commons';
 const SmartParkAndRideTexts = {
   header: {
     title: _(
-      'Parkering på Ranheim',
-      'Parking at Ranheim',
-      'Parkering på Ranheim',
+      'Innfartsparkering', 
+      'Park and Ride',
+      'Innfartsparkering',
     ),
   },
   content: {
@@ -35,9 +35,9 @@ const SmartParkAndRideTexts = {
       ),
     },
     max: _(
-      'Du kan legge til maks to kjøretøy',
-      'You can add a maximum of two vehicles',
-      'Du kan leggje til maks to køyretøy',
+      'Du kan legge til maks to kjøretøy.',
+      'You can add a maximum of two vehicles.',
+      'Du kan leggje til maks to køyretøy.',
     ),
     inputs: {
       nickname: {
