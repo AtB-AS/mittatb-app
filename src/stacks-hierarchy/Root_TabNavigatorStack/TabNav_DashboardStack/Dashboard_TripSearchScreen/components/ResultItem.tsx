@@ -223,9 +223,10 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                       />
                     )}
                     <View style={styles.departureTimes}>
-                      {staySeated(i) ? null : (
+                      {staySeated(i) ||
+                      (leg.mode === 'foot' && i !== 0) ? null : (
                         <ThemeText
-                          typography="body__tertiary"
+                          typography="body__tertiary--bold"
                           color="primary"
                           testID={'schTime' + i}
                         >
@@ -251,19 +252,9 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                       )}
                     </View>
                   </View>
-                  {displayLegDash(i) ? (
-                    <View style={[styles.dashContainer, iconHeight]}>
-                      <LegDash />
-                    </View>
-                  ) : null}
                 </View>
               ))}
             </View>
-            {collapsedLegs.length ? (
-              <View style={[styles.dashContainer, iconHeight]}>
-                <LegDash />
-              </View>
-            ) : null}
             <CounterIconBox
               count={collapsedLegs.length}
               spacing="standard"
@@ -347,7 +338,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.color.background.neutral[2].background,
     paddingVertical: theme.spacing.small,
     paddingHorizontal: theme.spacing.small,
-    borderRadius: theme.border.radius.small,
+    borderRadius: theme.border.radius.regular,
     alignItems: 'center',
   },
   walkContainer: {
@@ -356,7 +347,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacing.small,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    borderRadius: theme.border.radius.small,
+    borderRadius: theme.border.radius.regular,
   },
   walkDuration: {
     fontSize: 10,
@@ -371,6 +362,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   row: {
     flexDirection: 'row',
     alignItems: 'flex-start',
+    gap: theme.spacing.small,
   },
   flexRow: {
     flex: 1,
@@ -386,6 +378,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   legOutput: {
     flexDirection: 'row',
+    gap: theme.spacing.small,
   },
   legAndDash: {flexDirection: 'row'},
   departureTimes: {
