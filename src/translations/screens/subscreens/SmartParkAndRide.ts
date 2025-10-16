@@ -29,9 +29,9 @@ const SmartParkAndRideTexts = {
     content: {
       title: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
       text: _(
-        'Skriv inn skiltnummer og valgfritt navn. Du kan legge til maks to kjøretøy.',
+        'Skriv inn registreringsnummer og valgfritt navn. Du kan legge til maks to kjøretøy.',
         'Enter license plate and optional name. You can add a maximum of two vehicles.',
-        'Skriv inn skiltnummer og valfritt namn. Du kan leggje til maks to køyretøy.',
+        'Skriv inn registreringsnummer og valfritt namn. Du kan leggje til maks to køyretøy.',
       ),
     },
     max: _(
@@ -49,22 +49,22 @@ const SmartParkAndRideTexts = {
         ),
       },
       licensePlate: {
-        label: _('Skiltnummer', 'License plate', 'Skiltnummer'),
+        label: _('Registreringsnummer', 'License plate', 'Registreringsnummer'),
         placeholder: _(
-          'Skriv inn skiltnummer',
+          'Skriv inn registreringsnummer',
           'Enter license plate',
-          'Skriv inn skiltnummer',
+          'Skriv inn registreringsnummer',
         ),
         vehicleNotFound: {
           title: _(
-            'Vi finner ikke skiltnummeret',
-            'We cannot find the license plate',
-            'Vi finn ikkje skiltnummeret',
+            'Ingen treff på registreringsnummer',
+            'No vehicle found for license plate',
+            'Ingen treff på registreringsnummer',
           ),
           message: _(
-            'Hvis du har utenlandske skilter kan du legge det til likevel.',
-            'If you have foreign license plates, you can add it anyway.',
-            'Om du har utanlandske skilt kan du leggje det til likevel.',
+            'Dette kan skyldes utenlandsk registreringsnummer. Du kan legge til kjøretøyet likevel.',
+            'This may be due to a foreign license plate. You can add the vehicle anyway.',
+            'Dette kan skuldast utanlandsk registreringsnummer. Du kan leggje til køyretøyet likevel.',
           ),
         },
       },
@@ -88,11 +88,11 @@ const SmartParkAndRideTexts = {
         ),
       },
       licensePlate: {
-        label: _('Skiltnummer', 'License plate', 'Skiltnummer'),
+        label: _('Registreringsnummer', 'License plate', 'Registreringsnummer'),
         placeholder: _(
-          'Skriv inn skiltnummer',
+          'Skriv inn registreringsnummer',
           'Enter license plate',
-          'Skriv inn skiltnummer',
+          'Skriv inn registreringsnummer',
         ),
       },
     },
@@ -123,9 +123,9 @@ const SmartParkAndRideTexts = {
   },
   errors: {
     invalidLicensePlate: _(
-      'Ugyldig skiltnummer. Skiltnummeret må ha 2-14 tegn.',
+      'Ugyldig registreringsnummer. Registreringsnummeret må ha 2-14 tegn.',
       'Invalid license plate. The license plate must have 2-14 characters.',
-      'Ugyldig skiltnummer. Skiltnummeret må ha 2-14 teikn.',
+      'Ugyldig registreringsnummer. Registreringsnummeret må ha 2-14 teikn.',
     ),
     vehicleAlreadyAdded: _(
       'Dette kjøretøyet er allerede lagt til.',

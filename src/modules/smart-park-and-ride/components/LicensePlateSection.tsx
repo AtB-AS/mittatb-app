@@ -73,7 +73,7 @@ export const LicensePlateSection = ({
       )}
       {!!showErrorMessage && (
         <MessageInfoBox
-          type="warning"
+          type="info"
           title={t(
             SmartParkAndRideTexts.add.inputs.licensePlate.vehicleNotFound.title,
           )}
