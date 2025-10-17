@@ -7,7 +7,7 @@ import {calculateCarnetData} from './calculate-carnet-data';
 import {useSchoolCarnetInfoQuery} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {formatToDateWithDayOfWeek} from '@atb/utils/date';
+import {formatToClock, formatToDateWithDayOfWeek} from '@atb/utils/date';
 
 type Props = {
   active: boolean;
@@ -38,7 +38,7 @@ export const CarnetFooter: React.FC<Props> = ({
     calculateCarnetData(
       active,
       maximumNumberOfAccesses,
-      consumableInfo?.numberOfUsedAccessesPerDay ?? numberOfUsedAccesses,
+      consumableInfo?.numberOfUsedAccessesForToday ?? numberOfUsedAccesses,
     );
 
   if (isConsumableInfoFetching) return <ActivityIndicator />;
@@ -87,12 +87,21 @@ export const CarnetFooter: React.FC<Props> = ({
           <View key={idx} style={[styles.dot, styles.dot__unused]} />
         ))}
       </View>
-      {consumableInfo?.consumableAt && (
+      {consumableInfo?.nextConsumableDateTime && (
         <MessageInfoBox
           type="info"
           message={t(
             FareContractTexts.carnet.nextConsumptionDayMessage(
-              formatToDateWithDayOfWeek(consumableInfo.consumableAt, language),
+              formatToDateWithDayOfWeek(
+                consumableInfo.nextConsumableDateTime,
+                language,
+              ),
+              formatToClock(
+                consumableInfo.nextConsumableDateTime,
+                language,
+                'trunc',
+                false,
+              ),
             ),
           )}
         />

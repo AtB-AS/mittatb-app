@@ -167,7 +167,7 @@ export type RefundOptions = {
  * @todo Use zod instead
  */
 export type ConsumableSchoolCarnetResponse = {
-  consumableAt?: string | null;
+  nextConsumableDateTime?: string | null;
   maximumNumberOfAccessesPerDay: number;
-  numberOfUsedAccessesPerDay: number;
+  numberOfUsedAccessesForToday: number;
 };

@@ -287,11 +287,11 @@ const FareContractTexts = {
       'An error occurred while activating the ticket. Please try again.',
       'Ein feil har oppstått under aktivering av billetten. Ver venleg og prøv igjen.',
     ),
-    nextConsumptionDayMessage: (date: string) =>
+    nextConsumptionDayMessage: (date: string, clock: string) =>
       _(
-        `Du får nye billetter ${date}`,
-        `You will get new tickets on ${date}`,
-        `Du får nye billettar ${date}`,
+        `Du får nye billetter ${date}, kl. ${clock}`,
+        `You will get new tickets on ${date}, at ${clock}`,
+        `Du får nye billettar ${date}, kl. ${clock}`,
       ),
     consumableInformationError: _(
       'Klarte ikke å hente billettene dine.',
