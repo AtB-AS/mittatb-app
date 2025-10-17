@@ -122,7 +122,6 @@ export const ActiveScooterSheet = ({
 
   return (
     <MapBottomSheet
-      snapPoints={['16%']}
       canMinimize={true}
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}

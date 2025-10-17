@@ -25,6 +25,7 @@ import Animated, {
 import {BrandingImage} from '@atb/modules/mobility';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {toNum} from './utils';
 
 export type BottomSheetProps = PropsWithChildren<{
   snapPoints?: Array<string | number>;
@@ -161,6 +162,28 @@ export const MapBottomSheet = ({
     );
   };
 
+  const computedSnapPoints = useMemo(() => {
+    if (!canMinimize) return snapPoints;
+
+    const prevSnapPoints = snapPoints ? snapPoints : [];
+
+    const handleV =
+      toNum(styles.handleIndicatorStyle?.height) +
+      toNum(styles.handleStyle?.paddingTop) +
+      toNum(styles.handleStyle?.paddingBottom);
+
+    const minSnap = Math.max(headerHeight + handleV);
+
+    return [minSnap, ...prevSnapPoints];
+  }, [
+    canMinimize,
+    headerHeight,
+    snapPoints,
+    styles.handleIndicatorStyle?.height,
+    styles.handleStyle?.paddingBottom,
+    styles.handleStyle?.paddingTop,
+  ]);
+
   return (
     <>
       {HeaderOverlay}
@@ -168,7 +191,7 @@ export const MapBottomSheet = ({
         ref={bottomSheetGorRef}
         handleIndicatorStyle={styles.handleIndicatorStyle}
         handleStyle={styles.handleStyle}
-        snapPoints={snapPoints}
+        snapPoints={computedSnapPoints}
         enableDynamicSizing={enableDynamicSizing}
         backdropComponent={allowBackgroundTouch ? undefined : renderBackdrop}
         enablePanDownToClose={enablePanDownToClose}
@@ -203,7 +226,11 @@ export const MapBottomSheet = ({
           </BottomSheetScrollView>
         ) : (
           <>
-            <HeaderComp />
+            <View
+              onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}
+            >
+              <HeaderComp />
+            </View>
             {children}
           </>
         )}
@@ -239,6 +266,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   headerRight: {
     flexDirection: 'row',
     gap: theme.spacing.xSmall,
+    paddingRight: theme.spacing.medium,
   },
   logo: {
     marginEnd: theme.spacing.small,
@@ -246,10 +274,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   handleIndicatorStyle: {
     backgroundColor: theme.color.foreground.inverse.secondary,
     width: 75,
-    height: 8,
+    height: 6,
   },
   handleStyle: {
-    paddingBottom: theme.spacing.medium,
-    paddingTop: theme.spacing.xSmall,
+    paddingTop: theme.spacing.small,
   },
 }));
