@@ -168,7 +168,7 @@ export const DetailsContent: React.FC<Props> = ({
       )}
       {accesses && (
         <GenericSectionItem>
-          <CarnetFooter active={validityStatus === 'valid'} fareContract={fc} />
+          <CarnetFooter validityStatus={validityStatus} fareContract={fc} />
         </GenericSectionItem>
       )}
       {globalMessageCount > 0 && (

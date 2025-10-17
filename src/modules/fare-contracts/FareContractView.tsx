@@ -118,7 +118,7 @@ export const FareContractView: React.FC<Props> = ({
       {accesses && (
         <GenericSectionItem>
           <CarnetFooter
-            active={validityStatus === 'valid'}
+            validityStatus={validityStatus}
             fareContract={fareContract}
           />
         </GenericSectionItem>

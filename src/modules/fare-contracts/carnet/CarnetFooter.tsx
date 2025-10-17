@@ -8,13 +8,17 @@ import {useSchoolCarnetInfoQuery} from '@atb/modules/ticketing';
 import {FareContractType, getAccesses} from '@atb-as/utils';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {formatToClock, formatToDateWithDayOfWeek} from '@atb/utils/date';
+import {ValidityStatus} from '../utils';
 
 type Props = {
-  active: boolean;
+  validityStatus: ValidityStatus;
   fareContract: FareContractType;
 };
 
-export const CarnetFooter: React.FC<Props> = ({active, fareContract}) => {
+export const CarnetFooter: React.FC<Props> = ({
+  validityStatus,
+  fareContract,
+}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
@@ -22,7 +26,7 @@ export const CarnetFooter: React.FC<Props> = ({active, fareContract}) => {
     data: schoolCarnetInfo,
     isError: isSchoolCarnetInfoError,
     isFetching: isSchoolCarnetInfoFetching,
-  } = useSchoolCarnetInfoQuery(fareContract);
+  } = useSchoolCarnetInfoQuery(fareContract, validityStatus);
 
   const accessInfo = getAccesses(fareContract);
   if (!accessInfo) return null;
@@ -36,7 +40,11 @@ export const CarnetFooter: React.FC<Props> = ({active, fareContract}) => {
     accessInfo.numberOfUsedAccesses;
 
   const {accessesRemaining, multiCarnetArray, unusedArray, usedArray} =
-    calculateCarnetData(active, maximumNumberOfAccesses, numberOfUsedAccesses);
+    calculateCarnetData(
+      validityStatus === 'valid',
+      maximumNumberOfAccesses,
+      numberOfUsedAccesses,
+    );
 
   if (isSchoolCarnetInfoFetching) return <ActivityIndicator />;
   if (isSchoolCarnetInfoError)
@@ -73,7 +81,7 @@ export const CarnetFooter: React.FC<Props> = ({active, fareContract}) => {
         {unusedArray.map((_, idx) => (
           <View key={idx} style={styles.dot} />
         ))}
-        {active && (
+        {validityStatus === 'valid' && (
           <View style={styles.dot}>
             <View style={styles.dotFill__activeViewBox}>
               <View style={styles.dotFill__activeFill} />
@@ -84,25 +92,26 @@ export const CarnetFooter: React.FC<Props> = ({active, fareContract}) => {
           <View key={idx} style={[styles.dot, styles.dot__unused]} />
         ))}
       </View>
-      {schoolCarnetInfo?.nextConsumableDateTime && (
-        <MessageInfoBox
-          type="info"
-          message={t(
-            FareContractTexts.carnet.nextConsumptionDayMessage(
-              formatToDateWithDayOfWeek(
-                schoolCarnetInfo.nextConsumableDateTime,
-                language,
+      {schoolCarnetInfo?.nextConsumableDateTime &&
+        validityStatus !== 'valid' && (
+          <MessageInfoBox
+            type="info"
+            message={t(
+              FareContractTexts.carnet.nextConsumptionDayMessage(
+                formatToDateWithDayOfWeek(
+                  schoolCarnetInfo.nextConsumableDateTime,
+                  language,
+                ),
+                formatToClock(
+                  schoolCarnetInfo.nextConsumableDateTime,
+                  language,
+                  'trunc',
+                  false,
+                ),
               ),
-              formatToClock(
-                schoolCarnetInfo.nextConsumableDateTime,
-                language,
-                'trunc',
-                false,
-              ),
-            ),
-          )}
-        />
-      )}
+            )}
+          />
+        )}
     </View>
   );
 };
