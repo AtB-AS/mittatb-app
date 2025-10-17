@@ -16,8 +16,8 @@ import {SvgProps} from 'react-native-svg';
 import {ThemeText} from '../text';
 import {ThemeIcon} from '../theme-icon';
 import {
-  MapBottomSheetType,
   MapButtons,
+  MapStateActionType,
   shadows,
   useMapContext,
 } from '@atb/modules/map';
@@ -73,8 +73,7 @@ export const MapBottomSheet = ({
   const bottomSheetGorRef = useRef<BottomSheetGor>(null);
   const {theme} = useThemeContext();
   const sheetTopPosition = useSharedValue(0);
-  const {setPaddingBottomMap, setHasBottomSheetFullyOpened, mapState} =
-    useMapContext();
+  const {setPaddingBottomMap, dispatchMapState} = useMapContext();
   const {height: screenHeight} = useWindowDimensions();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   const {top: safeAreaTop} = useSafeAreaInsets();
@@ -185,10 +184,8 @@ export const MapBottomSheet = ({
           if (toIndex === -1) {
             closeCallback?.();
             setPaddingBottomMap(0);
-            setHasBottomSheetFullyOpened({
-              isOpen: false,
-              bottomSheetType: MapBottomSheetType.None,
-              feature: null,
+            dispatchMapState({
+              type: MapStateActionType.None,
             });
           } else {
             setPaddingBottomMap(screenHeight - toPosition + tabBarMinHeight);
@@ -196,10 +193,9 @@ export const MapBottomSheet = ({
         }}
         onChange={(index) => {
           if (index !== -1) {
-            setHasBottomSheetFullyOpened({
-              isOpen: true,
-              bottomSheetType: mapState.bottomSheetType,
-              feature: mapState.feature ?? null,
+            dispatchMapState({
+              type: MapStateActionType.SetSheetFullyOpened,
+              isFullyOpened: true,
             });
           }
         }}

@@ -88,6 +88,7 @@ export const MapBottomSheets = ({
                   type: MapStateActionType.Scooter,
                   feature: feature,
                   customZoomLevel: CUSTOM_SCAN_ZOOM_LEVEL,
+                  isFullyOpened: false,
                 });
               }
             }}
@@ -180,6 +181,7 @@ export const MapBottomSheets = ({
                 type: MapStateActionType.Bicycle,
                 feature: feature,
                 customZoomLevel: CUSTOM_SCAN_ZOOM_LEVEL,
+                isFullyOpened: false,
               });
             }
           }}
@@ -201,6 +203,7 @@ export const MapBottomSheets = ({
                 type: MapStateActionType.BikeStation,
                 feature: feature,
                 customZoomLevel: CUSTOM_SCAN_ZOOM_LEVEL,
+                isFullyOpened: false,
               });
             }
           }}
@@ -221,6 +224,7 @@ export const MapBottomSheets = ({
                 type: MapStateActionType.CarStation,
                 feature: feature,
                 customZoomLevel: CUSTOM_SCAN_ZOOM_LEVEL,
+                isFullyOpened: false,
               });
             }
           }}

@@ -8,7 +8,6 @@ import {
 } from './mapStateReducer';
 import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
 import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
-import {Feature, GeoJsonProperties, Point} from 'geojson';
 
 type MapContextState = {
   mapFilter?: MapFilterType;
@@ -19,16 +18,6 @@ type MapContextState = {
   setPaddingBottomMap: (value: number) => void;
   givenShmoConsent: boolean;
   setGivenShmoConsent: (value: boolean) => void;
-  hasBottomSheetFullyOpened: {
-    isOpen: boolean;
-    bottomSheetType: MapBottomSheetType;
-    feature: Feature<Point, GeoJsonProperties> | null;
-  };
-  setHasBottomSheetFullyOpened: (value: {
-    isOpen: boolean;
-    bottomSheetType: MapBottomSheetType;
-    feature: Feature<Point, GeoJsonProperties> | null;
-  }) => void;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
@@ -65,12 +54,6 @@ export const MapContextProvider = ({children}: Props) => {
 
   const {mapFilter, setMapFilter} = useUserMapFilters();
 
-  const [hasBottomSheetFullyOpened, setHasBottomSheetFullyOpened] = useState<{
-    isOpen: boolean;
-    bottomSheetType: MapBottomSheetType;
-    feature: Feature<Point, GeoJsonProperties> | null;
-  }>({isOpen: false, bottomSheetType: MapBottomSheetType.None, feature: null});
-
   const [paddingBottomMap, setPaddingBottomMap] = useState(0);
 
   return (
@@ -84,8 +67,6 @@ export const MapContextProvider = ({children}: Props) => {
         setPaddingBottomMap,
         givenShmoConsent,
         setGivenShmoConsent,
-        hasBottomSheetFullyOpened,
-        setHasBottomSheetFullyOpened,
       }}
     >
       {children}
