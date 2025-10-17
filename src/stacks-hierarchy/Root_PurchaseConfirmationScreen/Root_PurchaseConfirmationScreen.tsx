@@ -94,7 +94,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
-  } = useOfferState(selection, preassignedFareProductAlternatives);
+  } = useOfferState(preassignedFareProductAlternatives, selection);
 
   const offers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
     ({count, offer: {offerId}}) => ({
@@ -424,7 +424,9 @@ const PaymentButton = ({
           mode="primary"
           rightIcon={{svg: SvgClose}}
           interactiveColor={theme.color.interactive.destructive}
-          onPress={onCancelPayment}
+          onPress={() => {
+            onCancelPayment();
+          }}
           accessibilityHint={t(
             PurchaseConfirmationTexts.changePaymentMethod.a11yHint,
           )}
