@@ -43,6 +43,7 @@ export type BottomSheetProps = PropsWithChildren<{
   enablePanDownToClose?: boolean;
   locationArrowOnPress: () => void;
   canMinimize?: boolean;
+  headerNode?: React.ReactNode;
 }>;
 
 const isOldAndroid = Platform.OS === 'android' && Platform.Version <= 28;
@@ -64,6 +65,7 @@ export const MapBottomSheet = ({
   enablePanDownToClose = true,
   locationArrowOnPress,
   canMinimize = false,
+  headerNode,
 }: BottomSheetProps) => {
   const styles = useStyles();
   const bottomSheetGorRef = useRef<BottomSheetGor>(null);
@@ -125,37 +127,42 @@ export const MapBottomSheet = ({
     return (
       (heading || rightIconText) && (
         <View style={styles.headerContainer}>
-          <View style={styles.headerLeft}>
-            {heading && (
-              <>
-                {logoUrl && <BrandingImage logoUrl={logoUrl} logoSize={28} />}
-                <View style={styles.headingWrapper}>
-                  <ThemeText typography="heading--big">{heading}</ThemeText>
-                  {subText && (
-                    <ThemeText
-                      typography="body__secondary"
-                      color={theme.color.foreground.dynamic.secondary}
-                    >
-                      {subText}
-                    </ThemeText>
-                  )}
-                </View>
-              </>
+          <View style={styles.headerContent}>
+            <View style={styles.headerLeft}>
+              {heading && (
+                <>
+                  {logoUrl && <BrandingImage logoUrl={logoUrl} logoSize={28} />}
+                  <View style={styles.headingWrapper}>
+                    <ThemeText typography="heading--big">{heading}</ThemeText>
+                    {subText && (
+                      <ThemeText
+                        typography="body__secondary"
+                        color={theme.color.foreground.dynamic.secondary}
+                      >
+                        {subText}
+                      </ThemeText>
+                    )}
+                  </View>
+                </>
+              )}
+            </View>
+
+            {(rightIconText || rightIcon) && (
+              <PressableOpacity
+                style={styles.headerRight}
+                onPress={() => bottomSheetGorRef.current?.close()}
+              >
+                {rightIconText && (
+                  <ThemeText typography="body__secondary--bold">
+                    {rightIconText}
+                  </ThemeText>
+                )}
+                {rightIcon && <ThemeIcon svg={rightIcon} />}
+              </PressableOpacity>
             )}
           </View>
-
-          {(rightIconText || rightIcon) && (
-            <PressableOpacity
-              style={styles.headerRight}
-              onPress={() => bottomSheetGorRef.current?.close()}
-            >
-              {rightIconText && (
-                <ThemeText typography="body__secondary--bold">
-                  {rightIconText}
-                </ThemeText>
-              )}
-              {rightIcon && <ThemeIcon svg={rightIcon} />}
-            </PressableOpacity>
+          {!!headerNode && (
+            <View style={styles.headerNodeContainer}>{headerNode}</View>
           )}
         </View>
       )
@@ -248,10 +255,19 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     ...(isOldAndroid ? {...shadows, elevation: 0} : shadows),
   },
   headerContainer: {
+    flexDirection: 'column',
+  },
+  headerContent: {
     flexDirection: 'row',
+    gap: theme.spacing.small,
     paddingBottom: theme.spacing.medium,
     paddingRight: theme.spacing.medium,
-    gap: theme.spacing.small,
+  },
+  headerNodeContainer: {
+    flex: 1,
+    paddingLeft: theme.spacing.medium,
+    paddingRight: theme.spacing.medium,
+    paddingBottom: theme.spacing.medium,
   },
   headerLeft: {
     flex: 1,

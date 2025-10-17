@@ -129,6 +129,9 @@ export const ActiveScooterSheet = ({
       heading={activeBooking?.asset.operator.name}
       enablePanDownToClose={false}
       locationArrowOnPress={locationArrowOnPress}
+      headerNode={
+        activeBooking ? <ShmoTripCard shmoBooking={activeBooking} /> : null
+      }
     >
       {isShmoDeepIntegrationEnabled && (
         <>
@@ -140,10 +143,6 @@ export const ActiveScooterSheet = ({
           {!isLoading && !isError && activeBooking && (
             <>
               <View style={styles.container}>
-                <View style={styles.tripWrapper}>
-                  <ShmoTripCard shmoBooking={activeBooking} />
-                </View>
-
                 <VehicleCard
                   pricingPlan={activeBooking.pricingPlan}
                   currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
