@@ -81,12 +81,11 @@ export const DetailsContent: React.FC<Props> = ({
   const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
   const {data: refundOptions} = useRefundOptionsQuery(fc.orderId, fc.state);
 
-  const {
-    validityStatus,
-    usedAccesses,
-    maximumNumberOfAccesses,
-    numberOfUsedAccesses,
-  } = getFareContractInfo(now, fc, currentUserId);
+  const {validityStatus, usedAccesses} = getFareContractInfo(
+    now,
+    fc,
+    currentUserId,
+  );
 
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
   const isReceived = isSentOrReceived && fc.purchasedBy != currentUserId;
@@ -169,12 +168,7 @@ export const DetailsContent: React.FC<Props> = ({
       )}
       {accesses && (
         <GenericSectionItem>
-          <CarnetFooter
-            active={validityStatus === 'valid'}
-            maximumNumberOfAccesses={maximumNumberOfAccesses!}
-            numberOfUsedAccesses={numberOfUsedAccesses!}
-            fareContract={fc}
-          />
+          <CarnetFooter active={validityStatus === 'valid'} fareContract={fc} />
         </GenericSectionItem>
       )}
       {globalMessageCount > 0 && (

@@ -57,8 +57,11 @@ export const FareContractView: React.FC<Props> = ({
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {validityStatus, maximumNumberOfAccesses, numberOfUsedAccesses} =
-    getFareContractInfo(now, fareContract, currentUserId);
+  const {validityStatus} = getFareContractInfo(
+    now,
+    fareContract,
+    currentUserId,
+  );
 
   const firstTravelRight = fareContract.travelRights[0];
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
@@ -116,8 +119,6 @@ export const FareContractView: React.FC<Props> = ({
         <GenericSectionItem>
           <CarnetFooter
             active={validityStatus === 'valid'}
-            maximumNumberOfAccesses={maximumNumberOfAccesses!}
-            numberOfUsedAccesses={numberOfUsedAccesses!}
             fareContract={fareContract}
           />
         </GenericSectionItem>

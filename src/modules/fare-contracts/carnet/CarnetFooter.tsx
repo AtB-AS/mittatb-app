@@ -5,44 +5,41 @@ import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {calculateCarnetData} from './calculate-carnet-data';
 import {useSchoolCarnetInfoQuery} from '@atb/modules/ticketing';
-import {FareContractType} from '@atb-as/utils';
+import {FareContractType, getAccesses} from '@atb-as/utils';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {formatToClock, formatToDateWithDayOfWeek} from '@atb/utils/date';
 
 type Props = {
   active: boolean;
-  maximumNumberOfAccesses: number;
-  numberOfUsedAccesses: number;
   fareContract: FareContractType;
 };
 
-export const CarnetFooter: React.FC<Props> = ({
-  active,
-  maximumNumberOfAccesses: fcMaximumNumberOfAccesses,
-  numberOfUsedAccesses,
-  fareContract,
-}) => {
+export const CarnetFooter: React.FC<Props> = ({active, fareContract}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
   const {
-    data: consumableInfo,
-    isError: isConsumableInfoError,
-    isFetching: isConsumableInfoFetching,
+    data: schoolCarnetInfo,
+    isError: isSchoolCarnetInfoError,
+    isFetching: isSchoolCarnetInfoFetching,
   } = useSchoolCarnetInfoQuery(fareContract);
 
+  const accessInfo = getAccesses(fareContract);
+  if (!accessInfo) return null;
+
   const maximumNumberOfAccesses =
-    consumableInfo?.maximumNumberOfAccessesPerDay ?? fcMaximumNumberOfAccesses;
+    schoolCarnetInfo?.maximumNumberOfAccessesPerDay ??
+    accessInfo.maximumNumberOfAccesses;
+
+  const numberOfUsedAccesses =
+    schoolCarnetInfo?.numberOfUsedAccessesForToday ??
+    accessInfo.numberOfUsedAccesses;
 
   const {accessesRemaining, multiCarnetArray, unusedArray, usedArray} =
-    calculateCarnetData(
-      active,
-      maximumNumberOfAccesses,
-      consumableInfo?.numberOfUsedAccessesForToday ?? numberOfUsedAccesses,
-    );
+    calculateCarnetData(active, maximumNumberOfAccesses, numberOfUsedAccesses);
 
-  if (isConsumableInfoFetching) return <ActivityIndicator />;
-  if (isConsumableInfoError)
+  if (isSchoolCarnetInfoFetching) return <ActivityIndicator />;
+  if (isSchoolCarnetInfoError)
     return (
       <MessageInfoBox
         type="error"
@@ -87,17 +84,17 @@ export const CarnetFooter: React.FC<Props> = ({
           <View key={idx} style={[styles.dot, styles.dot__unused]} />
         ))}
       </View>
-      {consumableInfo?.nextConsumableDateTime && (
+      {schoolCarnetInfo?.nextConsumableDateTime && (
         <MessageInfoBox
           type="info"
           message={t(
             FareContractTexts.carnet.nextConsumptionDayMessage(
               formatToDateWithDayOfWeek(
-                consumableInfo.nextConsumableDateTime,
+                schoolCarnetInfo.nextConsumableDateTime,
                 language,
               ),
               formatToClock(
-                consumableInfo.nextConsumableDateTime,
+                schoolCarnetInfo.nextConsumableDateTime,
                 language,
                 'trunc',
                 false,
