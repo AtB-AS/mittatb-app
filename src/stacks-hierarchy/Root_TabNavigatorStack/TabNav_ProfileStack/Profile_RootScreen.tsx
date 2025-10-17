@@ -22,7 +22,7 @@ import {View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
-import {ContentHeading} from '@atb/components/heading';
+import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -71,7 +71,15 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
       <FullScreenView
         headerProps={{
           title: t(ProfileTexts.header.title),
+          color: theme.color.background.neutral[1],
         }}
+        parallaxContent={(focusRef) => (
+          <ScreenHeading
+            ref={focusRef}
+            text={t(ProfileTexts.header.title)}
+            isLarge={true}
+          />
+        )}
       >
         <View
           testID="profileHomeScrollView"
