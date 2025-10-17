@@ -221,7 +221,7 @@ const PurchaseOverviewTexts = {
       ),
   },
   flexDiscount: {
-    heading: _('Pris', 'Price', 'Pris'),
+    heading: _('Rabatt', 'Discount', 'Rabatt'),
     expandableLabel: _('Min pris', 'My price', 'Min pris'),
     description: _(
       'Min pris på enkeltbillett voksen baseres på antall kjøpte billetter de siste 14 dagene. Etter tre kjøpte billetter får du en litt lavere pris.',
