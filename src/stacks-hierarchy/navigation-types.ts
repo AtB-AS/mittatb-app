@@ -43,7 +43,7 @@ type FareContractDetailsRouteParams = {
 
 type TicketInformationScreenParams = {
   fareProductTypeConfigType: string;
-  selection: PurchaseSelectionType;
+  selection?: PurchaseSelectionType;
 };
 
 export type Root_LoginOptionsScreenParams = {

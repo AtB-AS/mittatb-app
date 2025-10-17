@@ -94,7 +94,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
-  } = useOfferState(selection, preassignedFareProductAlternatives);
+  } = useOfferState(preassignedFareProductAlternatives, selection);
 
   const offers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
     ({count, offer: {offerId}}) => ({
@@ -399,7 +399,6 @@ const PaymentButton = ({
           PurchaseConfirmationTexts.choosePaymentMethod.a11yHint,
         )}
         onPress={() => {
-          console.log('Selecting payment method');
           analytics.logEvent('Ticketing', 'Confirm purchase clicked', {
             mode: mode,
           });
@@ -426,7 +425,6 @@ const PaymentButton = ({
           rightIcon={{svg: SvgClose}}
           interactiveColor={theme.color.interactive.destructive}
           onPress={() => {
-            console.log('Cancelling payment');
             onCancelPayment();
           }}
           accessibilityHint={t(
@@ -443,7 +441,6 @@ const PaymentButton = ({
       interactiveColor={theme.color.interactive[0]}
       disabled={!!isOfferError || reserveStatus === 'success'}
       onPress={() => {
-        console.log('Going to payment');
         analytics.logEvent(
           'Ticketing',
           'Pay with previous payment method clicked',

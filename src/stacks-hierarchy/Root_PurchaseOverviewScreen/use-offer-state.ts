@@ -165,30 +165,31 @@ const initialState: OfferState = {
 };
 
 export function useOfferState(
-  selection: PurchaseSelectionType,
   preassignedFareProductAlternatives: PreassignedFareProduct[],
+  selection?: PurchaseSelectionType,
 ) {
-  const offerReducer = getOfferReducer(selection.userProfilesWithCount);
+  const offerReducer = getOfferReducer(selection?.userProfilesWithCount ?? []);
   const [state, dispatch] = useReducer(offerReducer, initialState);
   const {t} = useTranslation();
 
   const updateOffer = useCallback(
     async function (cancelToken?: CancelToken) {
-      if (selection.stopPlaces?.to?.isFree) {
+      if (selection?.stopPlaces?.to?.isFree) {
         dispatch({type: 'CLEAR_OFFER'});
         return;
       }
 
-      const offerTravellers = selection.userProfilesWithCount
-        .filter((t) => t.count)
-        .map((t) => ({
-          id: t.userTypeString,
-          userType: t.userTypeString,
-          count: t.count,
-        }));
+      const offerTravellers =
+        selection?.userProfilesWithCount
+          .filter((t) => t.count)
+          .map((t) => ({
+            id: t.userTypeString,
+            userType: t.userTypeString,
+            count: t.count,
+          })) ?? [];
 
-      const isTravellersValid = offerTravellers.length > 0;
-      const isStopPlacesValid = selection.stopPlaces
+      const isTravellersValid = offerTravellers?.length ?? 0 > 0;
+      const isStopPlacesValid = selection?.stopPlaces
         ? selection.stopPlaces.from && selection.stopPlaces.to
         : true;
       const isSelectionValid = isTravellersValid && isStopPlacesValid;
@@ -200,7 +201,7 @@ export function useOfferState(
           dispatch({type: 'SEARCHING_OFFER'});
           let offers: TicketOffer[];
 
-          if (selection.legs.length) {
+          if (selection?.legs.length) {
             const response = await fetchOfferFromLegs(
               new Date(selection.legs[0].expectedStartTime),
               mapToSalesTripPatternLegs(t, selection.legs),
@@ -210,20 +211,20 @@ export function useOfferState(
             offers = response.offers;
           } else {
             const params = {
-              zones: selection.zones && [
+              zones: selection?.zones && [
                 ...new Set([selection.zones.from.id, selection.zones.to.id]),
               ],
-              from: selection.stopPlaces?.from!.id,
-              to: selection.stopPlaces?.to!.id,
-              isOnBehalfOf: selection.isOnBehalfOf,
+              from: selection?.stopPlaces?.from!.id,
+              to: selection?.stopPlaces?.to!.id,
+              isOnBehalfOf: selection?.isOnBehalfOf ?? false,
               travellers: offerTravellers,
               products: preassignedFareProductAlternatives.map((p) => p.id),
-              travelDate: selection.travelDate,
+              travelDate: selection?.travelDate,
             };
 
-            const offerEndpoint = selection.stopPlaces
+            const offerEndpoint = selection?.stopPlaces
               ? 'stop-places'
-              : selection.zones
+              : selection?.zones
                 ? 'zones'
                 : 'authority';
 

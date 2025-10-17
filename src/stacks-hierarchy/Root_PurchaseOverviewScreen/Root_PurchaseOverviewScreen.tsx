@@ -74,7 +74,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
-  } = useOfferState(selection, preassignedFareProductAlternatives);
+  } = useOfferState(preassignedFareProductAlternatives, selection);
 
   const preassignedFareProduct =
     preassignedFareProductAlternatives.find(

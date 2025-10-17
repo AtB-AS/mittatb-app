@@ -36,20 +36,20 @@ export const Root_TicketInformationScreen = (props: Props) => {
   const [selection] = useParamAsState(props.route.params.selection);
   const preassignedFareProductAlternatives = useProductAlternatives(selection);
   const {userProfilesWithCountAndOffer} = useOfferState(
-    selection,
     preassignedFareProductAlternatives,
+    selection,
   );
 
   const {isTipsAndInformationEnabled} = useFeatureTogglesContext();
   const {benefits} = useOperatorBenefitsForFareProduct(
-    selection.preassignedFareProduct.id,
+    selection?.preassignedFareProduct.id,
   );
 
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (f) => f.type === props.route.params.fareProductTypeConfigType,
   );
   const preassignedFareProduct = preassignedFareProducts.find(
-    (p) => p.id === selection.preassignedFareProduct.id,
+    (p) => p.id === selection?.preassignedFareProduct.id,
   );
 
   return (
