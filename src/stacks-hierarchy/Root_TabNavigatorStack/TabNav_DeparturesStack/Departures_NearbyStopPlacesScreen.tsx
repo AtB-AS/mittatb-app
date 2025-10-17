@@ -6,6 +6,7 @@ import {DeparturesStackProps} from './navigation-types';
 import {NearbyStopPlacesScreenComponent} from '@atb/screen-components/nearby-stop-places';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import SharedTexts from '@atb/translations/shared';
+import { useThemeContext } from '@atb/theme';
 
 type Props = DeparturesStackProps<'Departures_NearbyStopPlacesScreen'>;
 
@@ -15,6 +16,7 @@ export const Departures_NearbyStopPlacesScreen = ({
 }: Props) => {
   const fromLocation = useOnlySingleLocation<typeof route>('location');
   const {t} = useTranslation();
+  const {theme} = useThemeContext();
 
   return (
     <NearbyStopPlacesScreenComponent
@@ -23,6 +25,7 @@ export const Departures_NearbyStopPlacesScreen = ({
       headerProps={{
         title: t(DeparturesTexts.header.title),
         globalMessageContext: GlobalMessageContextEnum.appDepartures,
+        color: theme.color.background.neutral[1],
       }}
       onPressLocationSearch={(location) =>
         navigation.navigate('Root_LocationSearchByTextScreen', {
