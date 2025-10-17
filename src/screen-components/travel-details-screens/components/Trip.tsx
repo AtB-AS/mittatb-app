@@ -33,7 +33,7 @@ import {
 } from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
-import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
+import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
 import {
   GlobalMessage,
   GlobalMessageContextEnum,
@@ -199,7 +199,7 @@ export const Trip: React.FC<TripProps> = ({
                 testID={'legContainer' + index}
                 onPressShowLive={
                   legVehiclePosition
-                    ? (mapData: ServiceJourneyMapInfoData_v3) => {
+                    ? (mapData: ServiceJourneyPolylines) => {
                         shouldShowRequestReview.current = true;
                         onPressDetailsMap({
                           legs: mapData.mapLegs,

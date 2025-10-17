@@ -25,7 +25,7 @@ import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/boo
 import {BookingStatus, TripPatternBookingStatus} from './types';
 import {Statuses} from '@atb/theme';
 import {isDefined} from '@atb/utils/presence';
-import {EstimatedCallWithMetadata} from './use-departure-data';
+import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 
 export const getNoticesForLeg = (leg: Leg) =>
   filterNotices([
@@ -451,7 +451,7 @@ export const getShouldShowLiveVehicle = (
 };
 
 export function getLineAndTimeA11yLabel(
-  estimatedCall: EstimatedCallWithMetadata,
+  estimatedCall: EstimatedCallWithQuayFragment,
   publicCode: string,
   t: TranslateFunction,
   language: Language,
