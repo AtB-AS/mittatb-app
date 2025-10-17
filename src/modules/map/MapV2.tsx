@@ -10,7 +10,7 @@ import {
   Camera,
   MapView,
 } from '@rnmapbox/maps';
-import {Feature, Point, GeoJsonProperties} from 'geojson';
+import {Feature} from 'geojson';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, getSlightlyRaisedMapPadding} from './MapConfig';
@@ -329,101 +329,62 @@ export const MapV2 = (props: MapProps) => {
       } else if (isFeaturePoint(featureToSelect)) {
         if (isQuayFeature(featureToSelect)) return;
 
-        // Helper: Map feature predicates to BottomSheet type (accept only Point features)
-        const deriveBottomSheetTypeForFeature = (
-          feature: Feature<Point, GeoJsonProperties>,
-        ): MapBottomSheetType | null => {
-          if (isScooterV2(feature)) return MapBottomSheetType.Scooter;
-          if (isBicycleV2(feature)) return MapBottomSheetType.Bicycle;
-          if (isCarStationV2(feature)) return MapBottomSheetType.CarStation;
-          if (isParkAndRide(feature)) return MapBottomSheetType.ParkAndRideStation;
-          if (isStopPlace(feature)) return MapBottomSheetType.StopPlace;
-          if (isBikeStationV2(feature)) return MapBottomSheetType.BikeStation;
-          if (isStationV2(feature)) return MapBottomSheetType.Station;
-          return null;
-        };
-
-        const toMapStateActionType = (sheetType: MapBottomSheetType): MapStateActionType | null => {
-          switch (sheetType) {
-            case MapBottomSheetType.Scooter:
-              return MapStateActionType.Scooter;
-            case MapBottomSheetType.Bicycle:
-              return MapStateActionType.Bicycle;
-            case MapBottomSheetType.CarStation:
-              return MapStateActionType.CarStation;
-            case MapBottomSheetType.ParkAndRideStation:
-              return MapStateActionType.ParkAndRideStation;
-            case MapBottomSheetType.StopPlace:
-              return MapStateActionType.StopPlace;
-            case MapBottomSheetType.BikeStation:
-              return MapStateActionType.BikeStation;
-            case MapBottomSheetType.Station:
-              return MapStateActionType.Station;
-            default:
-              return null;
-          }
-        };
-
-        const bottomSheetTypeForFeature = deriveBottomSheetTypeForFeature(
-          featureToSelect as Feature<Point, GeoJsonProperties>,
-        );
-        if (!bottomSheetTypeForFeature) return; // unsupported feature type
-        const actionType = toMapStateActionType(bottomSheetTypeForFeature);
-        if (!actionType) return;
-        const isSameSheet = mapState.bottomSheetType === bottomSheetTypeForFeature;
-        // Dispatch with precise action shape per discriminated union
-        switch (actionType) {
-          case MapStateActionType.Scooter:
-            dispatchMapState({
-              type: MapStateActionType.Scooter,
-              feature: featureToSelect as Feature<Point, GeoJsonProperties>,
-              isFullyOpened: isSameSheet,
-            });
-            break;
-          case MapStateActionType.Bicycle:
-            dispatchMapState({
-              type: MapStateActionType.Bicycle,
-              feature: featureToSelect as Feature<Point, GeoJsonProperties>,
-              isFullyOpened: isSameSheet,
-            });
-            break;
-          case MapStateActionType.CarStation:
-            dispatchMapState({
-              type: MapStateActionType.CarStation,
-              feature: featureToSelect as Feature<Point, GeoJsonProperties>,
-              isFullyOpened: isSameSheet,
-            });
-            break;
-          case MapStateActionType.ParkAndRideStation:
-            dispatchMapState({
-              type: MapStateActionType.ParkAndRideStation,
-              feature: featureToSelect as Feature<Point, GeoJsonProperties>,
-              isFullyOpened: isSameSheet,
-            });
-            break;
-          case MapStateActionType.StopPlace:
-            dispatchMapState({
-              type: MapStateActionType.StopPlace,
-              feature: featureToSelect as Feature<Point, GeoJsonProperties>,
-              isFullyOpened: isSameSheet,
-            });
-            break;
-          case MapStateActionType.BikeStation:
-            dispatchMapState({
-              type: MapStateActionType.BikeStation,
-              feature: featureToSelect as Feature<Point, GeoJsonProperties>,
-              isFullyOpened: isSameSheet,
-            });
-            break;
-          case MapStateActionType.Station:
-            dispatchMapState({
-              type: MapStateActionType.Station,
-              feature: featureToSelect as Feature<Point, GeoJsonProperties>,
-              isFullyOpened: isSameSheet,
-            });
-            break;
-          default:
-            return;
+        if (isScooterV2(featureToSelect)) {
+          const isSameSheet =
+            mapState.bottomSheetType === MapBottomSheetType.Scooter;
+          dispatchMapState({
+            type: MapStateActionType.Scooter,
+            feature: featureToSelect,
+            isFullyOpened: isSameSheet ? true : false,
+          });
+        } else if (isBicycleV2(featureToSelect)) {
+          const isSameSheet =
+            mapState.bottomSheetType === MapBottomSheetType.Bicycle;
+          dispatchMapState({
+            type: MapStateActionType.Bicycle,
+            feature: featureToSelect,
+            isFullyOpened: isSameSheet ? true : false,
+          });
+        } else if (isCarStationV2(featureToSelect)) {
+          const isSameSheet =
+            mapState.bottomSheetType === MapBottomSheetType.CarStation;
+          dispatchMapState({
+            type: MapStateActionType.CarStation,
+            feature: featureToSelect,
+            isFullyOpened: isSameSheet ? true : false,
+          });
+        } else if (isParkAndRide(featureToSelect)) {
+          const isSameSheet =
+            mapState.bottomSheetType === MapBottomSheetType.ParkAndRideStation;
+          dispatchMapState({
+            type: MapStateActionType.ParkAndRideStation,
+            feature: featureToSelect,
+            isFullyOpened: isSameSheet ? true : false,
+          });
+        } else if (isStopPlace(featureToSelect)) {
+          const isSameSheet =
+            mapState.bottomSheetType === MapBottomSheetType.StopPlace;
+          dispatchMapState({
+            type: MapStateActionType.StopPlace,
+            feature: featureToSelect,
+            isFullyOpened: isSameSheet ? true : false,
+          });
+        } else if (isBikeStationV2(featureToSelect)) {
+          const isSameSheet =
+            mapState.bottomSheetType === MapBottomSheetType.BikeStation;
+          dispatchMapState({
+            type: MapStateActionType.BikeStation,
+            feature: featureToSelect,
+            isFullyOpened: isSameSheet ? true : false,
+          });
+        } else if (isStationV2(featureToSelect)) {
+          const isSameSheet =
+            mapState.bottomSheetType === MapBottomSheetType.Station;
+          dispatchMapState({
+            type: MapStateActionType.Station,
+            feature: featureToSelect,
+            isFullyOpened: isSameSheet ? true : false,
+          });
         }
       }
     },
