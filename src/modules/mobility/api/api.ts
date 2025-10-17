@@ -54,10 +54,7 @@ export const getFareProductBenefits = (
     .get(`/benefit/v1/voucher/${productId}`, {
       authWithIdToken: true,
     })
-    .then((response) => {
-      const result = FareProductBenefitMapping.array().parse(
-        response.data ?? [],
-      );
-      return result;
-    });
+    .then((response) =>
+      FareProductBenefitMapping.array().parse(response.data ?? []),
+    );
 };
