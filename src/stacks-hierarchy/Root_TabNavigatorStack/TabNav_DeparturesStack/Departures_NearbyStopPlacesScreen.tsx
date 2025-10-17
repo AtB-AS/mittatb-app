@@ -6,7 +6,7 @@ import {DeparturesStackProps} from './navigation-types';
 import {NearbyStopPlacesScreenComponent} from '@atb/screen-components/nearby-stop-places';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import SharedTexts from '@atb/translations/shared';
-import { useThemeContext } from '@atb/theme';
+import {useThemeContext} from '@atb/theme';
 
 type Props = DeparturesStackProps<'Departures_NearbyStopPlacesScreen'>;
 
