@@ -1,4 +1,4 @@
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {Add} from '@atb/assets/svg/mono-icons/actions';
 import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
@@ -12,7 +12,6 @@ import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartPar
 import {useState} from 'react';
 import {View, ScrollView} from 'react-native';
 
-import {FullScreenFooter} from '@atb/components/screen-footer';
 import {useOnboardingNavigation} from '@atb/modules/onboarding';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useAuthContext} from '@atb/modules/auth';
@@ -112,15 +111,17 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
           handleAddVehicleRegistration();
         }}
         text={t(SmartParkAndRideTexts.add.footer.add)}
-        rightIcon={{svg: Confirm}}
+        rightIcon={{svg: Add}}
       />
-      <Button
-        expanded={true}
-        onPress={navigateBack}
-        text={t(SmartParkAndRideTexts.add.footer.later)}
-        mode="secondary"
-        backgroundColor={theme.color.background.neutral[1]}
-      />
+      {!showHeader && (
+        <Button
+          expanded={true}
+          onPress={navigateBack}
+          text={t(SmartParkAndRideTexts.add.footer.later)}
+          mode="secondary"
+          backgroundColor={theme.color.background.neutral[1]}
+        />
+      )}
     </View>
   );
 
@@ -133,9 +134,9 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
         }}
         contentColor={themeColor}
         avoidKeyboard={true}
-        footer={footerNode}
       >
         {contentNode}
+        {footerNode}
       </FullScreenView>
     );
   } else {
@@ -148,10 +149,8 @@ export const Root_SmartParkAndRideAddScreenComponent = ({
           automaticallyAdjustKeyboardInsets={true}
         >
           {contentNode}
-        </ScrollView>
-        <FullScreenFooter footerColor={themeColor.background}>
           {footerNode}
-        </FullScreenFooter>
+        </ScrollView>
       </View>
     );
   }
@@ -180,6 +179,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     footer: {
       display: 'flex',
       gap: theme.spacing.medium,
+      padding: theme.spacing.large,
       paddingTop: theme.spacing.medium,
     },
     hideHeaderContainer: {

@@ -59,6 +59,7 @@ export const LicensePlateSection = ({
           autoCapitalize="characters"
           inlineLabel={false}
           maxLength={14}
+          returnKeyType="done"
           {...textInputSectionItemProps}
         />
       </Section>
@@ -73,7 +74,7 @@ export const LicensePlateSection = ({
       )}
       {!!showErrorMessage && (
         <MessageInfoBox
-          type="warning"
+          type="info"
           title={t(
             SmartParkAndRideTexts.add.inputs.licensePlate.vehicleNotFound.title,
           )}

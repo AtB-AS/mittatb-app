@@ -2,14 +2,15 @@ import {translation as _} from '../../commons';
 
 const SmartParkAndRideTexts = {
   header: {
-    title: _(
-      'Parkering på Ranheim',
-      'Parking at Ranheim',
-      'Parkering på Ranheim',
-    ),
+    title: _('Innfartsparkering', 'Park and Ride', 'Innfartsparkering'),
   },
   content: {
-    heading: _('Dine kjøretøy', 'Your vehicles', 'Dine køyretøy'),
+    heading: (num: number) =>
+      _(
+        `Dine kjøretøy (${num}/2)`,
+        `Your vehicles (${num}/2)`,
+        `Dine køyretøy (${num}/2)`,
+      ),
     addVehicle: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
   },
   howItWorks: {
@@ -29,15 +30,15 @@ const SmartParkAndRideTexts = {
     content: {
       title: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
       text: _(
-        'Skriv inn skiltnummer og valgfritt navn. Du kan legge til maks to kjøretøy.',
+        'Skriv inn registreringsnummer og valgfritt navn. Du kan legge til maks to kjøretøy.',
         'Enter license plate and optional name. You can add a maximum of two vehicles.',
-        'Skriv inn skiltnummer og valfritt namn. Du kan leggje til maks to køyretøy.',
+        'Skriv inn registreringsnummer og valfritt namn. Du kan leggje til maks to køyretøy.',
       ),
     },
     max: _(
-      'Du kan legge til maks to kjøretøy',
-      'You can add a maximum of two vehicles',
-      'Du kan leggje til maks to køyretøy',
+      'Du kan legge til maks to kjøretøy.',
+      'You can add a maximum of two vehicles.',
+      'Du kan leggje til maks to køyretøy.',
     ),
     inputs: {
       nickname: {
@@ -49,22 +50,22 @@ const SmartParkAndRideTexts = {
         ),
       },
       licensePlate: {
-        label: _('Skiltnummer', 'License plate', 'Skiltnummer'),
+        label: _('Registreringsnummer', 'License plate', 'Registreringsnummer'),
         placeholder: _(
-          'Skriv inn skiltnummer',
+          'Skriv inn registreringsnummer',
           'Enter license plate',
-          'Skriv inn skiltnummer',
+          'Skriv inn registreringsnummer',
         ),
         vehicleNotFound: {
           title: _(
-            'Vi finner ikke skiltnummeret',
-            'We cannot find the license plate',
-            'Vi finn ikkje skiltnummeret',
+            'Ingen treff på registreringsnummer',
+            'No vehicle found for license plate',
+            'Ingen treff på registreringsnummer',
           ),
           message: _(
-            'Hvis du har utenlandske skilter kan du legge det til likevel.',
-            'If you have foreign license plates, you can add it anyway.',
-            'Om du har utanlandske skilt kan du leggje det til likevel.',
+            'Dette kan skyldes utenlandsk registreringsnummer. Du kan legge til kjøretøyet likevel.',
+            'This may be due to a foreign license plate. You can add the vehicle anyway.',
+            'Dette kan skuldast utanlandsk registreringsnummer. Du kan leggje til køyretøyet likevel.',
           ),
         },
       },
@@ -88,11 +89,11 @@ const SmartParkAndRideTexts = {
         ),
       },
       licensePlate: {
-        label: _('Skiltnummer', 'License plate', 'Skiltnummer'),
+        label: _('Registreringsnummer', 'License plate', 'Registreringsnummer'),
         placeholder: _(
-          'Skriv inn skiltnummer',
+          'Skriv inn registreringsnummer',
           'Enter license plate',
-          'Skriv inn skiltnummer',
+          'Skriv inn registreringsnummer',
         ),
       },
     },
@@ -123,9 +124,9 @@ const SmartParkAndRideTexts = {
   },
   errors: {
     invalidLicensePlate: _(
-      'Ugyldig skiltnummer. Skiltnummeret må ha 2-14 tegn.',
+      'Ugyldig registreringsnummer. Registreringsnummeret må ha 2-14 tegn.',
       'Invalid license plate. The license plate must have 2-14 characters.',
-      'Ugyldig skiltnummer. Skiltnummeret må ha 2-14 teikn.',
+      'Ugyldig registreringsnummer. Registreringsnummeret må ha 2-14 teikn.',
     ),
     vehicleAlreadyAdded: _(
       'Dette kjøretøyet er allerede lagt til.',
@@ -154,19 +155,14 @@ const SmartParkAndRideTexts = {
   onboarding: {
     information: {
       title: _(
-        'Billett gir gratis parkering',
-        'Ticket gives free parking',
-        'Billett gir gratis parkering',
+        'Bussbillett gir gratis parkering',
+        'Bus ticket gives free parking',
+        'Bussbillett gir gratis parkering',
       ),
       description: _(
-        'Stå gratis på Ranheim Fabrikker i 48 timer, uansett hvilken AtB-billett du har. Billetten må være aktiv senest 30 minutter etter innkjøring.',
-        'Park for free at Ranheim Fabrikker for 48 hours, regardless of which AtB ticket you have. The ticket must be active at least 30 minutes after entering.',
-        'Stå gratis på Ranheim Fabrikker i 48 timar, uansett kva AtB-billett du har. Billetten må vere aktiv seinast 30 minutt etter innkjøring.',
-      ),
-      penaltyNotice: _(
-        'Uten billett er det fast pris på 400 kr.',
-        'Without a ticket, there is a fixed price of 400 NOK.',
-        'Utan billett er det fast pris på 400 kr.',
+        'Nå kan du parkere gratis på Ranheim Fabrikker i opptil 48 timer med en gyldig bussbillett i AtB-appen. Billetten må ha vært aktiv i løpet av tiden du har stått parkert.',
+        'Now you can park for free at Ranheim Fabrikker for up to 48 hours with a valid bus ticket in the AtB app. The ticket must have been active during the time you were parked.',
+        'No kan du parkere gratis på Ranheim Fabrikker i opptil 48 timar med ein gyldig bussbillett i AtB-appen. Billetten må ha vore aktiv i løpet av tida du har stått parkert.',
       ),
       buttonText: _(
         'Hvordan gjør vi det?',
