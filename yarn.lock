@@ -10310,10 +10310,10 @@ react-native-is-edge-to-edge@^1.2.1:
   resolved "https://registry.yarnpkg.com/react-native-is-edge-to-edge/-/react-native-is-edge-to-edge-1.2.1.tgz#64e10851abd9d176cbf2b40562f751622bde3358"
   integrity sha512-FLbPWl/MyYQWz+KwqOZsSyj2JmLKglHatd3xLZWskXOpRaio4LfEDEz8E/A6uD8QoTHW6Aobw1jbEwK7KMgR7Q==
 
-react-native-kettle-module@1.4.4:
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/react-native-kettle-module/-/react-native-kettle-module-1.4.4.tgz#80bff2941bc48d56e0edad2c0481532e76939fa0"
-  integrity sha512-SXMED5kUitR03rovja90Hr0BEf3ezppKW6PIQ93FgP2xbt6H/LZgpjTmGOce0iBy7LVaB+Po76s48uBKcRQ5Og==
+react-native-kettle-module@1.4.5:
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/react-native-kettle-module/-/react-native-kettle-module-1.4.5.tgz#9e133abc6bf012c07310a64fdd8a752bfd438515"
+  integrity sha512-yXv0dkeTtHyYDX0rfhcAqvh1Hnwvi5tfuZA/68fsahNypdIBT22NsUSUs7WdhTQSysQOWmuNfOrEBt74z4s6hw==
 
 react-native-linear-gradient@^2.8.3:
   version "2.8.3"
