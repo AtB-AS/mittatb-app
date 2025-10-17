@@ -121,7 +121,7 @@ export const DeparturesDialogSheet = ({
 
   return (
     <MapBottomSheet
-      snapPoints={['16%', '50%', '90%']}
+      snapPoints={['50%', '90%']}
       canMinimize={true}
       enablePanDownToClose={false}
       enableDynamicSizing={false}

@@ -62,7 +62,6 @@ export const ParkAndRideBottomSheet = ({
 
   return (
     <MapBottomSheet
-      snapPoints={['15%']}
       canMinimize={true}
       enablePanDownToClose={false}
       closeCallback={onClose}
