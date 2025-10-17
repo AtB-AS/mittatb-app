@@ -1,7 +1,7 @@
 import {useTranslation} from '@atb/translations';
 import {useAuthContext} from '@atb/modules/auth';
 import {useGetFareProductsQuery} from '@atb/modules/ticketing';
-import {getAccesses, type FareContractType} from '@atb-as/utils';
+import {type FareContractType} from '@atb-as/utils';
 import {View} from 'react-native';
 import {FareContractFromTo} from './FareContractFromTo';
 import {FareContractDetailItem} from './FareContractDetailItem';
@@ -19,10 +19,6 @@ import {
 } from '@atb/modules/configuration';
 import {useTimeContext} from '@atb/modules/time';
 import {useSectionItem} from '@atb/components/sections';
-import {
-  CarnetFooter,
-  MAX_ACCESSES_FOR_CARNET_FOOTER,
-} from '../carnet/CarnetFooter';
 import {isDefined} from '@atb/utils/presence';
 import {SentToMessageBox} from './SentToMessageBox';
 
@@ -33,8 +29,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   const {serverNow} = useTimeContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
 
-  const {validityStatus, numberOfUsedAccesses, maximumNumberOfAccesses} =
-    getFareContractInfo(serverNow, fc, currentUserId);
+  const {validityStatus} = getFareContractInfo(serverNow, fc, currentUserId);
   const firstTravelRight = fc.travelRights[0];
   const {userProfiles, fareProductTypeConfigs} =
     useFirestoreConfigurationContext();
@@ -55,11 +50,6 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {topContainer} = useSectionItem({});
-
-  const accesses = getAccesses(fc);
-  const shouldShowCarnetFooter =
-    accesses &&
-    accesses.maximumNumberOfAccesses <= MAX_ACCESSES_FOR_CARNET_FOOTER;
 
   return (
     <View
@@ -103,14 +93,6 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
       </View>
 
       <SentToMessageBox fc={fc} />
-
-      {shouldShowCarnetFooter && (
-        <CarnetFooter
-          active={validityStatus === 'valid'}
-          maximumNumberOfAccesses={maximumNumberOfAccesses!}
-          numberOfUsedAccesses={numberOfUsedAccesses!}
-        />
-      )}
     </View>
   );
 };

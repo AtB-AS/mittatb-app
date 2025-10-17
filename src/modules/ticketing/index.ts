@@ -11,6 +11,7 @@ export {useGetFareProductsQuery} from './use-get-fare-products-query';
 export {useDeleteRecurringPaymentMutation} from './use-delete-recurring-payment-mutation';
 export {useCancelRecurringPaymentMutation} from './use-cancel-recurring-payment-mutation';
 export {useRecurringPayment} from './use-recurring-payment';
+export {useSchoolCarnetInfoQuery} from './use-school-carnet-info-query';
 
 export * from './api';
 export * from './types';
