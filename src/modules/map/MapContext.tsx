@@ -19,13 +19,13 @@ type MapContextState = {
   setPaddingBottomMap: (value: number) => void;
   givenShmoConsent: boolean;
   setGivenShmoConsent: (value: boolean) => void;
-  hasBottomSheetFullyOpened: {
-    isOpen: boolean;
+  currentBottomSheet: {
+    isFullyOpen: boolean;
     bottomSheetType: MapBottomSheetType;
     feature: Feature<Point, GeoJsonProperties> | null;
   };
-  setHasBottomSheetFullyOpened: (value: {
-    isOpen: boolean;
+  setCurrentBottomSheet: (value: {
+    isFullyOpen: boolean;
     bottomSheetType: MapBottomSheetType;
     feature: Feature<Point, GeoJsonProperties> | null;
   }) => void;
@@ -65,11 +65,15 @@ export const MapContextProvider = ({children}: Props) => {
 
   const {mapFilter, setMapFilter} = useUserMapFilters();
 
-  const [hasBottomSheetFullyOpened, setHasBottomSheetFullyOpened] = useState<{
-    isOpen: boolean;
+  const [currentBottomSheet, setCurrentBottomSheet] = useState<{
+    isFullyOpen: boolean;
     bottomSheetType: MapBottomSheetType;
     feature: Feature<Point, GeoJsonProperties> | null;
-  }>({isOpen: false, bottomSheetType: MapBottomSheetType.None, feature: null});
+  }>({
+    isFullyOpen: false,
+    bottomSheetType: MapBottomSheetType.None,
+    feature: null,
+  });
 
   const [paddingBottomMap, setPaddingBottomMap] = useState(0);
 
@@ -84,8 +88,8 @@ export const MapContextProvider = ({children}: Props) => {
         setPaddingBottomMap,
         givenShmoConsent,
         setGivenShmoConsent,
-        hasBottomSheetFullyOpened,
-        setHasBottomSheetFullyOpened,
+        currentBottomSheet,
+        setCurrentBottomSheet,
       }}
     >
       {children}

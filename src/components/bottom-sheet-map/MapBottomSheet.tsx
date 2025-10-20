@@ -76,7 +76,7 @@ export const MapBottomSheet = ({
   const bottomSheetGorRef = useRef<BottomSheetGor>(null);
   const {theme} = useThemeContext();
   const sheetTopPosition = useSharedValue(0);
-  const {setPaddingBottomMap, setHasBottomSheetFullyOpened, mapState} =
+  const {setPaddingBottomMap, setCurrentBottomSheet, mapState} =
     useMapContext();
   const {height: screenHeight} = useWindowDimensions();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
@@ -218,8 +218,8 @@ export const MapBottomSheet = ({
           if (toIndex === -1) {
             closeCallback?.();
             setPaddingBottomMap(0);
-            setHasBottomSheetFullyOpened({
-              isOpen: false,
+            setCurrentBottomSheet({
+              isFullyOpen: false,
               bottomSheetType: MapBottomSheetType.None,
               feature: null,
             });
@@ -229,8 +229,8 @@ export const MapBottomSheet = ({
         }}
         onChange={(index) => {
           if (index !== -1) {
-            setHasBottomSheetFullyOpened({
-              isOpen: true,
+            setCurrentBottomSheet({
+              isFullyOpen: true,
               bottomSheetType: mapState.bottomSheetType,
               feature: mapState.feature ?? null,
             });

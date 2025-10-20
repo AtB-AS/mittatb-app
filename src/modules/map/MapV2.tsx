@@ -14,7 +14,7 @@ import {Feature} from 'geojson';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, getSlightlyRaisedMapPadding} from './MapConfig';
-import {GeofencingZoneCustomProps, MapProps} from './types';
+import {GeofencingZoneCustomProps, MapPropertiesType, MapProps} from './types';
 import {
   isFeaturePoint,
   getFeaturesAtClick,
@@ -57,6 +57,7 @@ import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {MapBottomSheets} from './MapBottomSheets';
 
 import {MapButtons} from './components/MapButtons';
+import {useFlyToSelectedMapItemWithPadding} from './hooks/use-fly-to-selected-map-item-with-padding';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -67,17 +68,13 @@ export const MapV2 = (props: MapProps) => {
   const mapViewRef = useRef<MapView>(null);
   const [initMapLoaded, setInitMapLoaded] = useState(false);
 
-  const {
-    mapFilter,
-    mapState,
-    dispatchMapState,
-    paddingBottomMap,
-    hasBottomSheetFullyOpened,
-    setHasBottomSheetFullyOpened,
-  } = useMapContext();
+  const {mapFilter, mapState, dispatchMapState, paddingBottomMap} =
+    useMapContext();
 
   const [stalePaddingBottomMap, setStalePaddingBottomMap] =
     useState(paddingBottomMap);
+
+  useFlyToSelectedMapItemWithPadding(mapCameraRef, mapViewRef);
 
   const isFocused = useIsFocused();
 
@@ -117,16 +114,9 @@ export const MapV2 = (props: MapProps) => {
   } = useVehicleQuery(selectedFeature?.properties?.id);
 
   const [followUserLocation, setFollowUserLocation] = useState(false);
-  const mapStateRef = useRef<{
-    properties: {
-      center: GeoJSON.Position;
-      zoom: number;
-    };
-  } | null>({
-    properties: {
-      center: [startingCoordinates.longitude, startingCoordinates.latitude],
-      zoom: mapState.customZoomLevel ?? DEFAULT_ZOOM_LEVEL,
-    },
+  const mapPropertiesRef = useRef<MapPropertiesType | null>({
+    center: [startingCoordinates.longitude, startingCoordinates.latitude],
+    zoom: mapState.customZoomLevel ?? DEFAULT_ZOOM_LEVEL,
   });
 
   useEffect(() => {
@@ -188,71 +178,6 @@ export const MapV2 = (props: MapProps) => {
     activeShmoBooking,
     selectedFeature,
     paddingBottomMap,
-  ]);
-
-  const flyToWithPadding = useCallback(() => {
-    if (mapState.feature) {
-      flyToLocation({
-        coordinates: mapPositionToCoordinates(
-          mapState.feature.geometry.coordinates,
-        ),
-        padding: getSlightlyRaisedMapPadding(paddingBottomMap),
-        mapCameraRef,
-        mapViewRef,
-        animationMode: 'easeTo',
-        zoomLevel: mapState?.customZoomLevel,
-      });
-    }
-  }, [mapState.feature, mapState?.customZoomLevel, paddingBottomMap]);
-
-  useEffect(() => {
-    if (activeShmoBooking !== null || !mapState.feature) {
-      return;
-    }
-
-    const sheetIsOpen = hasBottomSheetFullyOpened.isOpen;
-
-    const sheetTypeMatches =
-      sheetIsOpen &&
-      hasBottomSheetFullyOpened.bottomSheetType === mapState.bottomSheetType;
-
-    const featureChanged =
-      sheetTypeMatches &&
-      hasBottomSheetFullyOpened.feature !== mapState.feature;
-
-    const sheetTypeChanged =
-      sheetIsOpen &&
-      hasBottomSheetFullyOpened.bottomSheetType !== mapState.bottomSheetType;
-
-    if (!sheetIsOpen) {
-      flyToWithPadding();
-      return;
-    }
-
-    if (featureChanged) {
-      flyToWithPadding();
-      setHasBottomSheetFullyOpened({
-        isOpen: true,
-        bottomSheetType: mapState.bottomSheetType,
-        feature: mapState.feature,
-      });
-      return;
-    }
-
-    if (sheetTypeChanged) {
-      setHasBottomSheetFullyOpened({
-        isOpen: false,
-        bottomSheetType: MapBottomSheetType.None,
-        feature: null,
-      });
-    }
-  }, [
-    activeShmoBooking,
-    flyToWithPadding,
-    hasBottomSheetFullyOpened,
-    mapState.bottomSheetType,
-    mapState.feature,
-    setHasBottomSheetFullyOpened,
   ]);
 
   /**
@@ -403,7 +328,7 @@ export const MapV2 = (props: MapProps) => {
           testID="mapView"
           onCameraChanged={(state) => {
             if (followUserLocation && activeShmoBooking?.bookingId) {
-              mapStateRef.current = {properties: state.properties};
+              mapPropertiesRef.current = {...state.properties};
             }
           }}
           {...mapViewConfig}
@@ -422,13 +347,11 @@ export const MapV2 = (props: MapProps) => {
             ref={mapCameraRef}
             zoomLevel={
               !initMapLoaded
-                ? (mapStateRef.current?.properties.zoom ?? DEFAULT_ZOOM_LEVEL)
+                ? (mapPropertiesRef.current?.zoom ?? DEFAULT_ZOOM_LEVEL)
                 : undefined
             }
             centerCoordinate={
-              !initMapLoaded
-                ? mapStateRef.current?.properties.center
-                : undefined
+              !initMapLoaded ? mapPropertiesRef.current?.center : undefined
             }
             padding={
               activeShmoBooking?.bookingId
