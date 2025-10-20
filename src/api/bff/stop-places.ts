@@ -2,12 +2,13 @@ import {client} from '@atb/api/index';
 import {stringifyUrl} from '@atb/api/utils';
 import qs from 'query-string';
 import {AxiosRequestConfig} from 'axios';
-import {AUTHORITY} from '@env';
+import {APP_ORG, AUTHORITY} from '@env';
 import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {EnturOrgIDs} from '../../../types/app-orgs';
 
 export const getStopPlacesByMode = async (
   transportModes: TransportMode[],
@@ -50,10 +51,12 @@ export const getStopPlaceDistances = async (
   opts?: AxiosRequestConfig,
 ): Promise<StopPlaceFragment[]> => {
   const url = '/bff/v2/stop-places/distances';
+  const enturOrgId = EnturOrgIDs[APP_ORG];
   const query = qs.stringify({
     authorities: AUTHORITY,
     fromStopPlaceId,
     transportModes: [TransportMode.Water],
+    orgId: enturOrgId,
   });
   const result = await client.get<StopPlaceFragment[]>(
     stringifyUrl(url, query),
