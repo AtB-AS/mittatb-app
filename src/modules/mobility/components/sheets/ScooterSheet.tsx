@@ -32,6 +32,7 @@ import {
 } from '@atb/modules/payment';
 import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {buildFullRentalAppUri} from '../../utils';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -69,9 +70,11 @@ export const ScooterSheet = ({
   } = useVehicle(id);
 
   const {mobilityOperators} = useOperators();
-  const operatorIsIntegrationEnabled = mobilityOperators?.find(
-    (e) => e.id === operatorId,
-  )?.isDeepIntegrationEnabled;
+
+  const mobilityOperator = mobilityOperators?.find((e) => e.id === operatorId);
+
+  const operatorIsIntegrationEnabled =
+    mobilityOperator?.isDeepIntegrationEnabled;
 
   const {isLoading: shmoReqIsLoading, hasBlockers} =
     useShmoRequirements(operatorId);
@@ -178,7 +181,10 @@ export const ScooterSheet = ({
                     operatorName={operatorName}
                     benefit={operatorBenefit}
                     appStoreUri={appStoreUri}
-                    rentalAppUri={rentalAppUri}
+                    rentalAppUri={buildFullRentalAppUri(
+                      rentalAppUri,
+                      mobilityOperator?.rentalAppUriQueryParams,
+                    )}
                   />
                 )}
                 {isParkingViolationsReportingEnabled && (
