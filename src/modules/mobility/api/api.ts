@@ -1,8 +1,8 @@
 import {client} from '@atb/api';
 import {OperatorBenefitId} from '@atb-as/config-specs/lib/mobility';
-import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {z} from 'zod';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
+import {RequestError, isErrorResponse} from '@atb/api/utils';
 
 const UserBenefits = z
   .object({
@@ -23,8 +23,10 @@ export const getBenefitsForUser = (): Promise<UserBenefitsType[]> => {
       skipErrorLogging: (error) => error.response?.status === 404,
     })
     .then((response) => UserBenefits.array().parse(response.data ?? []))
-    .catch((error) => {
-      if (getAxiosErrorMetadata(error).responseStatus === 404) return [];
+    .catch((e) => {
+      const error = e as RequestError;
+
+      if (isErrorResponse(error) && error.http.code === 404) return [];
       throw error;
     });
 };

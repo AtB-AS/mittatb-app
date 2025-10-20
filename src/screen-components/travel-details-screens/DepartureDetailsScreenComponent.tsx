@@ -609,6 +609,16 @@ function EstimatedCallRow({
         testID={'legType_' + group}
       >
         <ThemeText testID="quayName">{getQuayName(call.quay)}</ThemeText>
+        {isStartOfGroup && !!call.quay.description && (
+          <ThemeText
+            testID="quayDescription"
+            typography="body__secondary"
+            color="secondary"
+          >
+            {call.quay.description}
+          </ThemeText>
+        )}
+
         {!call.forAlighting && !call.metadata.isStartOfServiceJourney && (
           <AccessibleText
             typography="body__secondary"

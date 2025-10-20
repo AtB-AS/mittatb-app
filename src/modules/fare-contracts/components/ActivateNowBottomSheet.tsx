@@ -1,4 +1,3 @@
-import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {
   BottomSheetContainer,
@@ -15,6 +14,7 @@ import Bugsnag from '@bugsnag/react-native';
 import React, {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {RequestError} from '@atb/api/utils';
 
 type Props = {
   fareContractId: string;
@@ -43,10 +43,11 @@ export const ActivateNowBottomSheet = ({
       });
       close();
     } catch (e: any) {
-      const errorData = getAxiosErrorMetadata(e);
+      const error = e as RequestError;
+      const httpCode = error.http?.code ?? 'UNKNOWN';
       Bugsnag.notify({
-        name: `${errorData.responseStatus} error when activating fare contract ahead of time`,
-        message: `Error: ${JSON.stringify(errorData)}`,
+        name: `${httpCode} error when activating fare contract ahead of time`,
+        message: `Error: ${JSON.stringify(error)}`,
       });
       setError(true);
     }

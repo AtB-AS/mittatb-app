@@ -1,8 +1,9 @@
-import {CancelToken, isCancel} from '@atb/api';
+import {CancelToken} from '@atb/api';
 import {tripsSearch} from '@atb/api/bff/trips';
 import {Modes} from '@atb/api/types/generated/journey_planner_v3_types';
 import {TripPattern} from '@atb/api/types/trips';
-import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
+import {toAxiosErrorKind, AxiosErrorKind} from '@atb/api/utils';
+import {ErrorResponse} from '@atb-as/utils';
 import {Location} from '@atb/modules/favorites';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useSearchHistoryContext} from '@atb/modules/search-history';
@@ -33,7 +34,7 @@ export function useTripsQuery(
   loadMore: (() => void) | undefined;
   clear: () => void;
   searchState: SearchStateType;
-  error?: ErrorType;
+  error?: AxiosErrorKind;
   enabled?: boolean;
 } {
   const [timeOfSearch, setTimeOfSearch] = useState<string>(
@@ -42,7 +43,7 @@ export function useTripsQuery(
 
   const [tripPatterns, setTripPatterns] = useState<TripPatternWithKey[]>([]);
   const [pageCursor, setPageCursor] = useState<string>();
-  const [errorType, setErrorType] = useState<ErrorType>();
+  const [errorType, setErrorType] = useState<AxiosErrorKind>();
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
   const cancelTokenRef = useRef<CancelTokenSource>(undefined);
   const {addJourneySearchEntry} = useSearchHistoryContext();
@@ -150,11 +151,12 @@ export function useTripsQuery(
               numberOfHits: allTripPatterns.length,
             });
           } catch (e) {
+            const error = e as ErrorResponse;
             setTripPatterns([]);
             setPageCursor(undefined);
-            if (!isCancel(e)) {
+            if (error.kind !== 'AXIOS_CANCEL') {
               setSearchState('search-empty-result');
-              setErrorType(getAxiosErrorType(e));
+              setErrorType(toAxiosErrorKind(error.kind));
               console.warn(e);
             }
           }

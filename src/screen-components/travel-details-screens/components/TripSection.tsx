@@ -150,6 +150,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const showInterchangeSection =
     leg.interchangeTo?.guaranteed && interchangeDetails && leg.line;
 
+  const showQuayDescription =
+    !!leg.fromPlace.quay?.description && !isWalkSection && !isBikeSection;
+
   const sectionOutput = (
     <>
       <View style={style.tripSection} testID={testID}>
@@ -174,7 +177,10 @@ export const TripSection: React.FC<TripSectionProps> = ({
             alignChildren="flex-start"
             accessibilityLabel={getStopRowA11yTranslated(
               'start',
-              getPlaceName(leg.fromPlace),
+              getPlaceName(leg.fromPlace) +
+                (showQuayDescription
+                  ? ` ${leg.fromPlace.quay?.description}`
+                  : ''),
               startTimes,
               timesAreApproximations,
               language,
@@ -193,6 +199,15 @@ export const TripSection: React.FC<TripSectionProps> = ({
             <ThemeText testID="fromPlaceName">
               {getPlaceName(leg.fromPlace)}
             </ThemeText>
+            {showQuayDescription && (
+              <ThemeText
+                testID="fromPlaceQuayDescription"
+                typography="body__secondary"
+                color="secondary"
+              >
+                {leg.fromPlace.quay?.description}
+              </ThemeText>
+            )}
           </TripRow>
         )}
         {isWalkSection ? (

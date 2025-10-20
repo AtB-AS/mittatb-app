@@ -4,7 +4,6 @@ import React from 'react';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {ThemedCarValidTicket} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {ThemeText} from '@atb/components/text';
 import {useNavigateToNextOnboardingCarouselScreen} from '@atb/modules/onboarding';
 import {sparOnboardingId} from './config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
@@ -23,7 +22,6 @@ export const SmartParkAndRideOnboarding_InformationScreen = () => {
       illustration={<ThemedCarValidTicket height={170} />}
       title={t(SmartParkAndRideTexts.onboarding.information.title)}
       description={t(SmartParkAndRideTexts.onboarding.information.description)}
-      contentNode={<PenaltyNoticeText />}
       footerButton={{
         onPress: () => {
           analytics.logEvent(
@@ -38,14 +36,5 @@ export const SmartParkAndRideOnboarding_InformationScreen = () => {
       }}
       testID="smartParkAndRideOnboardingInformation"
     />
-  );
-};
-
-const PenaltyNoticeText = () => {
-  const {t} = useTranslation();
-  return (
-    <ThemeText typography="body__primary--bold" style={{textAlign: 'center'}}>
-      {t(SmartParkAndRideTexts.onboarding.information.penaltyNotice)}
-    </ThemeText>
   );
 };

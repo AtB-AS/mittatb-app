@@ -63,7 +63,13 @@ export const Profile_SmartParkAndRideScreen = () => {
       }
     >
       <View style={styles.container}>
-        <ContentHeading text={t(SmartParkAndRideTexts.content.heading)} />
+        <ContentHeading
+          text={t(
+            SmartParkAndRideTexts.content.heading(
+              vehicleRegistrations?.length ?? 0,
+            ),
+          )}
+        />
         <Section>
           {vehicleRegistrations?.map((vehicleRegistration) => (
             <SelectionInlineSectionItem

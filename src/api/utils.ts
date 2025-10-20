@@ -1,29 +1,36 @@
 import axios, {AxiosError, Cancel} from 'axios';
 import {FirebaseAuthIdHeaderName, RequestIdHeaderName} from './headers';
-import {z} from 'zod';
+import {ErrorResponse} from '@atb-as/utils';
+import {PartialField} from '@atb/utils/object';
 
-/** https://github.com/AtB-AS/amp-rs/blob/main/amp-http/src/lib.rs */
-const HttpError = z.object({
-  code: z.number(),
-  message: z.string(),
-});
-type HttpError = z.infer<typeof HttpError>;
+/**
+ * Error from API requests or Axios client errors.
+ * The `http` field may be undefined for network errors, timeouts, or cancellations.
+ * For errors with guaranteed `http` field, use `ErrorResponse` from '@atb-as/utils'.
+ */
+export type RequestError = PartialField<ErrorResponse, 'http'>;
 
-/** https://github.com/AtB-AS/amp-rs/blob/main/amp-http/src/lib.rs */
-export const ErrorResponse = z.object({
-  http: HttpError,
-  kind: z.string(),
-  message: z.string().nullish(),
-  details: z.array(z.unknown()).nullish(),
-});
-export type ErrorResponse = z.infer<typeof ErrorResponse>;
+type ErrorType = 'unknown' | 'default' | 'network-error' | 'timeout' | 'cancel';
 
-export type ErrorType =
-  | 'unknown'
-  | 'default'
-  | 'network-error'
-  | 'timeout'
-  | 'cancel';
+export type AxiosErrorKind =
+  | 'AXIOS_UNKNOWN'
+  | 'AXIOS_NETWORK_ERROR'
+  | 'AXIOS_TIMEOUT'
+  | 'AXIOS_CANCEL'
+  | 'UNKNOWN';
+
+export const toAxiosErrorKind = (kind: string | undefined): AxiosErrorKind => {
+  switch (kind) {
+    case 'AXIOS_UNKNOWN':
+    case 'AXIOS_NETWORK_ERROR':
+    case 'AXIOS_TIMEOUT':
+    case 'AXIOS_CANCEL':
+    case 'UNKNOWN':
+      return kind;
+    default:
+      return 'UNKNOWN';
+  }
+};
 
 export const getAxiosErrorType = (
   error: AxiosError | Cancel | unknown,
@@ -79,8 +86,19 @@ export const getAxiosErrorMetadata = (error: AxiosError): ErrorMetadata => ({
 
 export const getErrorResponse = (
   error: AxiosError,
-): ErrorResponse | undefined => {
+): RequestError | undefined => {
   return ErrorResponse.safeParse(error?.response?.data).data;
+};
+
+export const isErrorResponse = (error: any): error is ErrorResponse => {
+  return ErrorResponse.safeParse(error).success;
+};
+
+export const errorDetailsToResponseData = (
+  error: RequestError,
+): any | undefined => {
+  return (error.details?.find((d: any) => 'responseData' in d) as any)
+    .responseData;
 };
 
 export const stringifyUrl = (url: string, query: string) => `${url}?${query}`;

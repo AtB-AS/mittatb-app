@@ -80,7 +80,6 @@ export const CarSharingStationBottomSheet = ({
 
   return (
     <MapBottomSheet
-      snapPoints={['10%']}
       canMinimize={true}
       enablePanDownToClose={false}
       closeCallback={onClose}
