@@ -174,12 +174,14 @@ export const MapBottomSheet = ({
 
     const prevSnapPoints = snapPoints ? snapPoints : [];
 
-    const handleV =
+    const handleVerticalSize =
       toNum(styles.handleIndicatorStyle?.height) +
       toNum(styles.handleStyle?.paddingTop) +
       toNum(styles.handleStyle?.paddingBottom);
 
-    const minSnap = Math.max(headerHeight + handleV);
+    const minSnap = Math.max(
+      headerHeight + handleVerticalSize + theme.spacing.xSmall,
+    );
 
     return [minSnap, ...prevSnapPoints];
   }, [
@@ -189,6 +191,7 @@ export const MapBottomSheet = ({
     styles.handleIndicatorStyle?.height,
     styles.handleStyle?.paddingBottom,
     styles.handleStyle?.paddingTop,
+    theme.spacing.xSmall,
   ]);
 
   return (
