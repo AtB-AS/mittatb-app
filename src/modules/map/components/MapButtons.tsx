@@ -29,15 +29,13 @@ export const MapButtons = ({
 
   const {data: activeShmoBooking, isLoading: activeShmoBookingIsLoading} =
     useActiveShmoBookingQuery();
-  const {isShmoDeepIntegrationEnabled, isMapV2Enabled} =
-    useFeatureTogglesContext();
+  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
   const {isMutating: initShmoOneStopBookingIsMutating} =
     useInitShmoBookingMutationStatus();
 
   const showScanButton =
     isShmoDeepIntegrationEnabled &&
-    isMapV2Enabled &&
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle) &&

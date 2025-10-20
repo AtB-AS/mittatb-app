@@ -17,7 +17,6 @@ import {SelectionLocationCallback} from './types';
 
 import {isFeaturePoint} from './utils';
 import {Location} from '@atb/modules/favorites';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
 import {useMapViewConfig} from './hooks/use-map-view-config';
 
@@ -30,7 +29,6 @@ export const ExploreLocationMap = ({
   initialLocation,
   onLocationSelect,
 }: ExploreLocationMapProps) => {
-  const {isMapV2Enabled} = useFeatureTogglesContext();
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const styles = useMapStyles();
@@ -95,12 +93,10 @@ export const ExploreLocationMap = ({
             {...MapCameraConfig}
           />
 
-          {isMapV2Enabled && (
-            <NationalStopRegistryFeatures
-              selectedFeaturePropertyId={undefined}
-              onMapItemClick={undefined}
-            />
-          )}
+          <NationalStopRegistryFeatures
+            selectedFeaturePropertyId={undefined}
+            onMapItemClick={undefined}
+          />
 
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {selectedCoordinates && (
