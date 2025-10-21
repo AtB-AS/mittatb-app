@@ -17,6 +17,7 @@ import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {ThemedTicketTilted} from '@atb/theme/ThemedAssets';
 import {useQueryClient} from '@tanstack/react-query';
+import {SCHOOL_CARNET_QUERY_KEY} from '@atb/modules/ticketing';
 
 type Props =
   TicketTabNavScreenProps<'TicketTabNav_AvailableFareContractsTabScreen'>;
@@ -60,7 +61,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
               refetchAvailableFareContracts();
               refetchPreassignedFareProducts();
               queryClient.invalidateQueries({
-                queryKey: ['getSchoolCarnetInfo'],
+                queryKey: [SCHOOL_CARNET_QUERY_KEY],
               });
               analytics.logEvent('Ticketing', 'Pull to refresh tickets', {
                 reservationsCount: reservations.length,
