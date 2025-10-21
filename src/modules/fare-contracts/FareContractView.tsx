@@ -14,7 +14,7 @@ import {
   isCanBeActivatedNowFareContract,
   useGetFareProductsQuery,
 } from '@atb/modules/ticketing';
-import {FareContractType} from '@atb-as/utils';
+import {FareContractType, getAccesses} from '@atb-as/utils';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
@@ -33,6 +33,7 @@ import {
 } from '../bonus';
 import {useFareContractLegs} from './use-fare-contract-legs';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
+import {CarnetFooter} from './carnet/CarnetFooter';
 
 type Props = {
   now: number;
@@ -87,6 +88,8 @@ export const FareContractView: React.FC<Props> = ({
     !shouldShowBonusAmountEarned,
   );
 
+  const accesses = getAccesses(fareContract);
+
   return (
     <Section testID={testID}>
       {hasShmoBookingId(fareContract) ? (
@@ -111,6 +114,16 @@ export const FareContractView: React.FC<Props> = ({
       ) : (
         <TravelInfoSectionItem fc={fareContract} />
       )}
+
+      {accesses && (
+        <GenericSectionItem>
+          <CarnetFooter
+            validityStatus={validityStatus}
+            fareContract={fareContract}
+          />
+        </GenericSectionItem>
+      )}
+
       {shouldShowBundlingInfo && (
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
       )}
