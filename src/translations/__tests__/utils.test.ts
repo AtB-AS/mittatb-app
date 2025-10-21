@@ -1,3 +1,4 @@
+/* eslint-disable rulesdir/translations-warning */
 import {
   LanguageAndTextLanguagesEnum,
   type LanguageAndTextType,

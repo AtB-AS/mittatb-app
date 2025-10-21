@@ -14,19 +14,17 @@ export const getTextForLanguage = (
   texts: LanguageAndTextType[] | undefined,
   language: Language,
 ): string | undefined => {
-  if (!texts || texts.length === 0) return undefined;
+  if (!texts?.length) return undefined;
 
-  const _lookupLanguage = (_language: Language): string | undefined => {
-    const languageKeyVariants = LanguageKeyVariants[_language];
-    return texts?.find((t) => {
+  const findTextInLanguage = (language: Language) =>
+    texts?.find((t) => {
       const lang = getLanguage(t);
-      return !!(lang && languageKeyVariants.includes(lang));
+      return lang && LanguageKeyVariants[language].includes(lang);
     })?.value;
-  };
 
   return (
-    _lookupLanguage(language) ??
-    _lookupLanguage(Language.Norwegian) ??
+    findTextInLanguage(language) ??
+    findTextInLanguage(Language.Norwegian) ??
     texts[0].value
   );
 };
