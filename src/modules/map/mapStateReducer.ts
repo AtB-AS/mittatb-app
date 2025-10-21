@@ -16,6 +16,7 @@ export enum MapStateActionType {
   ExternalMap = 'EXTERNAL_MAP',
   FinishedBooking = 'FINISHED_BOOKING',
   Station = 'STATION',
+  SetSheetFullyOpened = 'SET_SHEET_FULLY_OPENED',
   //AutoDispatchOnMapFocus = 'AUTO_DISPATCH_ON_MAP_FOCUS',
   None = 'NONE',
 }
@@ -29,6 +30,7 @@ export type ReducerMapState = {
   eventToDispatch?: ReducerMapStateAction;
   bookingId?: string;
   customZoomLevel?: number;
+  isFullyOpened?: boolean;
 };
 
 export type ReducerMapStateAction =
@@ -36,6 +38,7 @@ export type ReducerMapStateAction =
       type: MapStateActionType.Scooter;
       feature: Feature<Point>;
       customZoomLevel?: number;
+      isFullyOpened: boolean;
     }
   | {
       type: MapStateActionType.ScooterScanned;
@@ -45,6 +48,7 @@ export type ReducerMapStateAction =
       type: MapStateActionType.Bicycle;
       feature: Feature<Point>;
       customZoomLevel?: number;
+      isFullyOpened: boolean;
     }
   | {
       type: MapStateActionType.BicycleScanned;
@@ -54,6 +58,7 @@ export type ReducerMapStateAction =
       type: MapStateActionType.BikeStation;
       feature: Feature<Point>;
       customZoomLevel?: number;
+      isFullyOpened: boolean;
     }
   | {
       type: MapStateActionType.BikeStationScanned;
@@ -63,6 +68,7 @@ export type ReducerMapStateAction =
       type: MapStateActionType.CarStation;
       feature: Feature<Point>;
       customZoomLevel?: number;
+      isFullyOpened: boolean;
     }
   | {
       type: MapStateActionType.CarStationScanned;
@@ -71,6 +77,7 @@ export type ReducerMapStateAction =
   | {
       type: MapStateActionType.Station;
       feature: Feature<Point>;
+      isFullyOpened: boolean;
     }
   | {
       type: MapStateActionType.ExternalMap;
@@ -82,10 +89,12 @@ export type ReducerMapStateAction =
   | {
       type: MapStateActionType.StopPlace;
       feature: Feature<Point>;
+      isFullyOpened: boolean;
     }
   | {
       type: MapStateActionType.ParkAndRideStation;
       feature: Feature<Point>;
+      isFullyOpened: boolean;
     }
   /*| {
       type: MapStateActionType.AutoDispatchOnMapFocus;
@@ -95,6 +104,7 @@ export type ReducerMapStateAction =
       type: MapStateActionType.FinishedBooking;
       bookingId: string;
     }
+  | {type: MapStateActionType.SetSheetFullyOpened; isFullyOpened: boolean}
   | {type: MapStateActionType.None};
 
 export const mapStateReducer = (
@@ -107,6 +117,7 @@ export const mapStateReducer = (
         bottomSheetType: MapBottomSheetType.Scooter,
         feature: action.feature,
         customZoomLevel: action?.customZoomLevel,
+        isFullyOpened: action.isFullyOpened,
       };
     case MapStateActionType.ScooterScanned:
       return {
@@ -119,6 +130,7 @@ export const mapStateReducer = (
         bottomSheetType: MapBottomSheetType.Bicycle,
         feature: action.feature,
         customZoomLevel: action?.customZoomLevel,
+        isFullyOpened: action.isFullyOpened,
       };
     case MapStateActionType.BicycleScanned:
       return {
@@ -131,6 +143,7 @@ export const mapStateReducer = (
         bottomSheetType: MapBottomSheetType.BikeStation,
         feature: action.feature,
         customZoomLevel: action?.customZoomLevel,
+        isFullyOpened: action.isFullyOpened,
       };
     case MapStateActionType.BikeStationScanned:
       return {
@@ -143,6 +156,7 @@ export const mapStateReducer = (
         bottomSheetType: MapBottomSheetType.CarStation,
         feature: action.feature,
         customZoomLevel: action?.customZoomLevel,
+        isFullyOpened: action.isFullyOpened,
       };
     case MapStateActionType.CarStationScanned:
       return {
@@ -154,6 +168,7 @@ export const mapStateReducer = (
       return {
         bottomSheetType: MapBottomSheetType.Station,
         feature: action.feature,
+        isFullyOpened: action.isFullyOpened,
       };
     /*case MapStateActionType.AutoDispatchOnMapFocus:
       return {
@@ -175,17 +190,21 @@ export const mapStateReducer = (
       return {
         bottomSheetType: MapBottomSheetType.StopPlace,
         feature: action.feature,
+        isFullyOpened: action.isFullyOpened,
       };
     case MapStateActionType.ParkAndRideStation:
       return {
         bottomSheetType: MapBottomSheetType.ParkAndRideStation,
         feature: action.feature,
+        isFullyOpened: action.isFullyOpened,
       };
     case MapStateActionType.FinishedBooking:
       return {
         bottomSheetType: MapBottomSheetType.FinishedBooking,
         bookingId: action.bookingId,
       };
+    case MapStateActionType.SetSheetFullyOpened:
+      return {...mapState, isFullyOpened: action.isFullyOpened};
     case MapStateActionType.None:
       return {bottomSheetType: MapBottomSheetType.None};
     default:
