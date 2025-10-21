@@ -1,8 +1,10 @@
 import {View} from 'react-native';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {
+  dictionary,
   getTextForLanguage,
   PurchaseConfirmationTexts,
+  type TranslateFunction,
   useTranslation,
 } from '@atb/translations';
 import {AnyMode, TransportationIconBox} from '@atb/components/icon-box';
@@ -17,6 +19,9 @@ import {
   findAllSituationsFromLeg,
   getMessageTypeForSituation,
 } from '@atb/modules/situations';
+import type {SituationFragment} from '@atb/api/types/generated/fragments/situations';
+import {isDefined} from '@atb/utils/presence';
+import type {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 
 export function LegsSummary({
   legs,
@@ -128,6 +133,7 @@ export function LegsSummary({
               message={
                 getTextForLanguage(situation.description, language) ?? ''
               }
+              a11yLabel={getA11yLabelForSituation(situation, t)}
             />
           ))}
           {notices.map((notice) => (
@@ -135,6 +141,7 @@ export function LegsSummary({
               type="info"
               message={notice.text ?? ''}
               key={notice.id}
+              a11yLabel={getA11yLabelForNotice(notice, t)}
             />
           ))}
         </View>
@@ -183,3 +190,25 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexWrap: 'wrap',
   },
 }));
+
+function getA11yLabelForSituation(
+  situation: SituationFragment,
+  t: TranslateFunction,
+) {
+  const messageType = getMessageTypeForSituation(situation);
+  const criticalityPrefix = t(dictionary.messageTypes[messageType]);
+  return [
+    criticalityPrefix,
+    situation.summary,
+    situation.description,
+    situation.advice,
+  ]
+    .filter(isDefined)
+    .join(screenReaderPause);
+}
+
+function getA11yLabelForNotice(notice: NoticeFragment, t: TranslateFunction) {
+  return [t(dictionary.messageTypes.info), notice.text]
+    .filter(isDefined)
+    .join(screenReaderPause);
+}
