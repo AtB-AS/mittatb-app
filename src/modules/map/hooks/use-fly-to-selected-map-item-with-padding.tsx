@@ -10,7 +10,6 @@ import {MapView} from '@rnmapbox/maps';
  * When you select an item in the map that opens a bottomsheet, we want to center the icon to the middle of the screen.
  * In order to do that we need to take into account the bottomsheet height, which can vary depending on content rendered.
  * So this hook reacts to changes in the bottomsheet state and height and then flies to the selected map item.
- * @returns
  */
 
 export const useFlyToSelectedMapItemWithPadding = (
