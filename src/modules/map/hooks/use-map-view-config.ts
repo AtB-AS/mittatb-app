@@ -1,8 +1,5 @@
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {MAPBOX_STOP_PLACES_STYLE_URL} from '@env';
 import {Platform} from 'react-native';
 import {useMapboxJsonStyle} from './use-mapbox-json-style';
-import {useThemeContext} from '@atb/theme';
 import {useMemo} from 'react';
 
 const MapViewStaticConfig = {
@@ -22,28 +19,14 @@ const MapViewStaticConfig = {
 
 type MapViewConfigOptions = {
   shouldShowVehiclesAndStations?: boolean;
-  useDarkModeForV1?: boolean;
 };
 
 export const useMapViewConfig = (
   mapViewConfigOptions?: MapViewConfigOptions,
 ) => {
-  const {shouldShowVehiclesAndStations = false, useDarkModeForV1 = false} =
-    mapViewConfigOptions || {};
-
-  const {themeName} = useThemeContext();
-  const {isMapV2Enabled} = useFeatureTogglesContext();
+  const {shouldShowVehiclesAndStations = false} = mapViewConfigOptions || {};
   const mapboxJsonStyle = useMapboxJsonStyle(shouldShowVehiclesAndStations);
-  const configMapV1 = useMemo(
-    () => ({
-      styleURL:
-        useDarkModeForV1 && themeName === 'dark'
-          ? 'mapbox://styles/mapbox/dark-v10'
-          : MAPBOX_STOP_PLACES_STYLE_URL,
-    }),
-    [useDarkModeForV1, themeName],
-  );
-  const configMapV2 = useMemo(
+  const configMap = useMemo(
     () => ({styleJSON: mapboxJsonStyle}),
     [mapboxJsonStyle],
   );
@@ -51,8 +34,8 @@ export const useMapViewConfig = (
   return useMemo(
     () => ({
       ...MapViewStaticConfig,
-      ...(isMapV2Enabled ? configMapV2 : configMapV1),
+      ...configMap,
     }),
-    [configMapV1, configMapV2, isMapV2Enabled],
+    [configMap],
   );
 };
