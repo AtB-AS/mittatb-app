@@ -32,7 +32,6 @@ import {
 } from '@atb/modules/payment';
 import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {buildFullRentalAppUri} from '../../utils';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -213,6 +212,16 @@ export const ScooterSheet = ({
       )}
     </MapBottomSheet>
   );
+};
+
+const buildFullRentalAppUri = (
+  baseUri: string,
+  queryParams?: string,
+): string => {
+  if (!queryParams) return baseUri;
+
+  const separator = baseUri.includes('?') ? '&' : '?';
+  return `${baseUri}${separator}${queryParams}`;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {

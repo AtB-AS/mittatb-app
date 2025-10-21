@@ -384,13 +384,3 @@ export function isSvgUrl(url: string) {
     return false;
   }
 }
-
-export const buildFullRentalAppUri = (
-  baseUri: string,
-  queryParams?: string,
-): string => {
-  if (!queryParams) return baseUri;
-
-  const separator = baseUri.includes('?') ? '&' : '?';
-  return `${baseUri}${separator}${queryParams}`;
-};
