@@ -252,8 +252,6 @@ type FareContractInfoProps = {
   validFrom: number;
   validTo: number;
   usedAccesses?: UsedAccessType[];
-  maximumNumberOfAccesses?: number;
-  numberOfUsedAccesses?: number;
 };
 
 export function getFareContractInfo(
@@ -286,17 +284,12 @@ export function getFareContractInfo(
     : fareContractValidTo;
 
   const usedAccesses = carnetTravelRightAccesses?.usedAccesses;
-  const maximumNumberOfAccesses =
-    carnetTravelRightAccesses?.maximumNumberOfAccesses;
-  const numberOfUsedAccesses = carnetTravelRightAccesses?.numberOfUsedAccesses;
 
   return {
     validityStatus,
     validFrom,
     validTo,
     usedAccesses,
-    maximumNumberOfAccesses,
-    numberOfUsedAccesses,
   };
 }
 

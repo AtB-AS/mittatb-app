@@ -23,6 +23,7 @@ import {
 import {ContentHeading} from '@atb/components/heading';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   userProfiles: UserProfileWithCountAndOffer[];
@@ -36,6 +37,12 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
   const styles = useStyles();
   const {appTexts} = useFirestoreConfigurationContext();
   const {flex_ticket_url} = useRemoteConfigContext();
+  const analytics = useAnalyticsContext();
+
+  const onPress = () => {
+    analytics.logEvent('Ticketing', 'Expand flex discount info');
+    setExpanded(!expanded);
+  };
 
   if (!userProfiles.some((u) => u.offer.flexDiscountLadder)) return null;
 
@@ -51,7 +58,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
           text={t(PurchaseOverviewTexts.flexDiscount.expandableLabel)}
           textType="heading__component"
           expanded={expanded}
-          onPress={setExpanded}
+          onPress={onPress}
           testID="flexDiscountExpandable"
         />
         {expanded && (

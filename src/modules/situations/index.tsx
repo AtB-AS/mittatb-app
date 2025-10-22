@@ -8,6 +8,8 @@ export {
   getMsgTypeForMostCriticalSituationOrNotice,
   toMostCriticalStatus,
   getMessageTypeForSituation,
+  findAllNoticesFromLeg,
   findAllNotices,
+  findAllSituationsFromLeg,
   findAllSituations,
 } from './utils';

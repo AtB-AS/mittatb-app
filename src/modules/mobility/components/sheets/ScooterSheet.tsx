@@ -89,7 +89,6 @@ export const ScooterSheet = ({
 
   return (
     <MapBottomSheet
-      snapPoints={['10%']}
       canMinimize={true}
       closeCallback={onClose}
       enablePanDownToClose={false}

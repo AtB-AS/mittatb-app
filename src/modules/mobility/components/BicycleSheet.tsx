@@ -61,7 +61,6 @@ export const BicycleSheet = ({
 
   return (
     <MapBottomSheet
-      snapPoints={['10%']}
       canMinimize={true}
       enablePanDownToClose={false}
       closeCallback={onClose}
