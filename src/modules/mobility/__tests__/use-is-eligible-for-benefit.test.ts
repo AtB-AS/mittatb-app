@@ -1,26 +1,26 @@
 import {renderHook} from '@testing-library/react-native';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';
-import {UserBenefitsType} from '../api/api';
+import {VoucherBenefitType} from '../api/api';
 import {useIsEligibleForBenefit} from '../use-is-eligible-for-benefit';
 
-const DEFAULT_MOCK_BENEFITS: UserBenefitsType[] = [];
+const DEFAULT_MOCK_BENEFITS: VoucherBenefitType[] = [];
 let mockBenefits = DEFAULT_MOCK_BENEFITS;
 
-const periodicTicketBenefits: UserBenefitsType[] = [
+const periodicTicketBenefits: VoucherBenefitType[] = [
   {
-    operator_id: 'YTR:Operator:trondheimbysykkel',
-    benefit_types: ['free-unlock'],
+    operatorId: 'YTR:Operator:trondheimbysykkel',
+    benefitTypes: ['free-unlock'],
   },
   {
-    operator_id: 'HYR:Operator:Hyre',
-    benefit_types: ['single-unlock'],
+    operatorId: 'HYR:Operator:Hyre',
+    benefitTypes: ['single-unlock'],
   },
 ];
 
-const freeUseBenefits: UserBenefitsType[] = [
+const freeUseBenefits: VoucherBenefitType[] = [
   {
-    operator_id: 'YTR:Operator:trondheimbysykkel',
-    benefit_types: ['free-use'],
+    operatorId: 'YTR:Operator:trondheimbysykkel',
+    benefitTypes: ['free-use'],
   },
 ];
 
