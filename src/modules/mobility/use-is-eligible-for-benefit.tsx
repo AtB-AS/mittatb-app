@@ -14,7 +14,7 @@ export const useIsEligibleForBenefit = (
   } = useUserBenefitsQuery(!!operatorBenefit);
 
   const userBenefitTypes =
-    userBenefits?.flatMap((b) => b.benefit_types).filter(isDefined) || [];
+    userBenefits?.flatMap((b) => b.benefitTypes).filter(isDefined) || [];
 
   const isUserEligibleForBenefit =
     operatorBenefit && userBenefitTypes.includes(operatorBenefit.id);

@@ -4,20 +4,19 @@ import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {z} from 'zod';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 
-const UserBenefits = z.object({
-  operator_id: z.string(),
-  benefit_types: OperatorBenefitId.array(),
+const VoucherBenefit = z.object({
+  operatorId: z.string(),
+  benefitTypes: OperatorBenefitId.array(),
 });
+export type VoucherBenefitType = z.infer<typeof VoucherBenefit>;
 
-export type UserBenefitsType = z.infer<typeof UserBenefits>;
-
-export const getBenefitsForUser = (): Promise<UserBenefitsType[]> => {
+export const getBenefitsForUser = (): Promise<VoucherBenefitType[]> => {
   return client
     .get('/benefit/v1/voucher/customer-benefits', {
       authWithIdToken: true,
       skipErrorLogging: (error) => error.response?.status === 404,
     })
-    .then((response) => UserBenefits.array().parse(response.data ?? []))
+    .then((response) => VoucherBenefit.array().parse(response.data ?? []))
     .catch((error) => {
       if (getAxiosErrorMetadata(error).responseStatus === 404) return [];
       throw error;
@@ -40,21 +39,12 @@ export const getValueCode = (
     .then((response) => String(response.data.code));
 };
 
-const FareProductBenefitMapping = z.object({
-  operator_id: z.string(),
-  benefit_types: OperatorBenefitId.array(),
-});
-
-type FareProductBenefitMappingType = z.infer<typeof FareProductBenefitMapping>;
-
 export const getFareProductBenefits = (
   productId: PreassignedFareProduct['id'],
-): Promise<FareProductBenefitMappingType[]> => {
+): Promise<VoucherBenefitType[]> => {
   return client
     .get(`/benefit/v1/voucher/${productId}`, {
       authWithIdToken: true,
     })
-    .then((response) =>
-      FareProductBenefitMapping.array().parse(response.data ?? []),
-    );
+    .then((response) => VoucherBenefit.array().parse(response.data ?? []));
 };
