@@ -30,15 +30,15 @@ export const useOperatorBenefitsForFareProduct = (
     ?.map((fareProductBenefit) => {
       const operator = mobilityOperators?.find(
         (mobilityOperator) =>
-          mobilityOperator.id === fareProductBenefit.operator,
+          mobilityOperator.id === fareProductBenefit.operatorId,
       );
       const operatorBenefits = operator?.benefits.find((mobilityBenefit) =>
-        fareProductBenefit.benefits.includes(mobilityBenefit.id),
+        fareProductBenefit.benefitTypes.includes(mobilityBenefit.id),
       );
       if (!operatorBenefits) return;
       return {
         ...operatorBenefits,
-        operatorId: fareProductBenefit.operator,
+        operatorId: fareProductBenefit.operatorId,
       };
     })
     .filter(isDefined);
