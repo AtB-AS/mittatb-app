@@ -46,6 +46,7 @@ import {
   DebugTokenServerAddress,
 } from '@atb/modules/mobile-token';
 import {useMapContext} from '@atb/modules/map';
+import {DebugServerOverrides} from '@atb/modules/debug/DebugServerOverrides';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -134,6 +135,7 @@ export const Profile_DebugInfoScreen = () => {
         `https://console.firebase.google.com/u/1/project/atb-mobility-platform-staging/firestore/data/~2Fcustomers~2F${userId}`,
       );
   }
+
   function copyIdToken() {
     const idToken = getIdTokenGlobal();
     if (idToken) setClipboard(idToken);
@@ -637,6 +639,12 @@ export const Profile_DebugInfoScreen = () => {
             />
           </Section>
         )}
+        <Section style={styles.section}>
+          <ExpandableSectionItem
+            text="Server overrides"
+            expandContent={<DebugServerOverrides />}
+          />
+        </Section>
       </ScrollView>
     </View>
   );
