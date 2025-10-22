@@ -1,12 +1,9 @@
-import {API_BASE_URL} from '@env';
-import {createClient} from '@atb/api/client';
+import {client} from '@atb/api/client';
 import type {
   SalesTripPatternLeg,
   OfferFromLegsResponse,
   Traveller,
 } from './types/sales';
-
-export const client = createClient(API_BASE_URL);
 
 export async function fetchOfferFromLegs(
   travelDate: Date,
