@@ -148,7 +148,7 @@ export const MapV2 = (props: MapProps) => {
       const textContent = getGeofencingZoneTextContent(
         geofencingZoneCustomProps,
       );
-      showSnackbar({textContent, position: 'top'});
+      showSnackbar({content: textContent, position: 'top'});
     },
     [showSnackbar, getGeofencingZoneTextContent],
   );
