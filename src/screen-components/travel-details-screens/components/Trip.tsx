@@ -199,12 +199,13 @@ export const Trip: React.FC<TripProps> = ({
                 testID={'legContainer' + index}
                 onPressShowLive={
                   legVehiclePosition
-                    ? (mapData: ServiceJourneyPolylines) => {
+                    ? (serviceJourneyPolylines: ServiceJourneyPolylines) => {
                         shouldShowRequestReview.current = true;
                         onPressDetailsMap({
-                          legs: mapData.mapLegs,
-                          fromPlace: mapData.start,
-                          toPlace: mapData.stop,
+                          serviceJourneyPolylines:
+                            serviceJourneyPolylines.mapLegs,
+                          fromPlace: serviceJourneyPolylines.start,
+                          toPlace: serviceJourneyPolylines.stop,
                           vehicleWithPosition: legVehiclePosition,
                           mode: leg.mode,
                           subMode: leg.transportSubmode,
@@ -221,13 +222,13 @@ export const Trip: React.FC<TripProps> = ({
       <Divider />
       {tripPatternLegs && (
         <CompactTravelDetailsMap
-          mapLegs={tripPatternLegs}
+          serviceJourneyPolylines={tripPatternLegs}
           fromPlace={tripPatternLegs[0]?.fromPlace}
           toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
           buttonText={t(TripDetailsTexts.trip.summary.showTripInMap.label)}
           onExpand={() => {
             onPressDetailsMap({
-              legs: tripPatternLegs,
+              serviceJourneyPolylines: tripPatternLegs,
               fromPlace: tripPatternLegs[0]?.fromPlace,
               toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
               mapFilter,

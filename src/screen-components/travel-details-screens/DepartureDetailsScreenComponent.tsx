@@ -246,7 +246,7 @@ export const DepartureDetailsScreenComponent = ({
     }
     shouldShowRequestReview.current = true;
     onPressDetailsMap({
-      legs: serviceJourneyPolyline.mapLegs,
+      serviceJourneyPolylines: serviceJourneyPolyline.mapLegs,
       fromPlace: serviceJourneyPolyline.start,
       toPlace: serviceJourneyPolyline.stop,
       vehicleWithPosition: vehiclePosition,
