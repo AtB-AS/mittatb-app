@@ -16,12 +16,13 @@ export function useGeocoderQuery(
       onlyLocalTariffZoneAuthority,
       onlyStopPlaces,
     ],
-    queryFn: () =>
+    queryFn: ({signal}) =>
       autocomplete(
         text ?? '',
         coords,
         onlyLocalTariffZoneAuthority,
         onlyStopPlaces,
+        {signal},
       ),
     enabled: !!text,
   });
