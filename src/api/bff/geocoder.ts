@@ -5,6 +5,8 @@ import qs from 'query-string';
 import {stringifyUrl} from '../utils';
 import {AxiosRequestConfig} from 'axios';
 import {Feature} from './types';
+import {mapFeatureToLocation} from '@atb/modules/geocoder/utils';
+import {SearchLocation} from '@atb/modules/favorites';
 
 export const FOCUS_ORIGIN: Coordinates = {
   latitude: parseFloat(FOCUS_LATITUDE),
@@ -39,15 +41,17 @@ export async function autocomplete(
 
 export async function reverse(
   coordinates: Coordinates | null,
-  layers?: string[],
   config?: AxiosRequestConfig,
-) {
+): Promise<SearchLocation[]> {
   const url = 'bff/v1/geocoder/reverse';
   const query = qs.stringify({
     lat: coordinates?.latitude,
     lon: coordinates?.longitude,
-    layers: layers,
   });
 
-  return await client.get<Feature[]>(stringifyUrl(url, query), config);
+  const response = await client.get<Feature[]>(
+    stringifyUrl(url, query),
+    config,
+  );
+  return response.data.map(mapFeatureToLocation);
 }
