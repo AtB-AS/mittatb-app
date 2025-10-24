@@ -14,14 +14,13 @@ import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {Platform, RefreshControl, ScrollView, View} from 'react-native';
 import {StopPlacesMode} from './types';
-import {
-  FullScreenHeader,
-  ScreenHeaderProps,
-} from '@atb/components/screen-header';
+import {ScreenHeaderProps} from '@atb/components/screen-header';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 import {EmptyState} from '@atb/components/empty-state';
 import SharedTexts from '@atb/translations/shared';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ScreenHeading} from '@atb/components/heading';
 
 export type NearbyStopPlacesScreenParams = {
   location: Location | undefined;
@@ -158,32 +157,41 @@ export const NearbyStopPlacesScreenComponent = ({
   const isFocused = useIsFocusedAndActive();
 
   return (
-    <>
-      <FullScreenHeader {...headerProps} />
-      <Header
-        fromLocation={location}
-        updatingLocation={updatingLocation}
-        openLocationSearch={openLocationSearch}
-        setCurrentLocationOrRequest={setCurrentLocationOrRequest}
-        setLocation={(location: Location) => {
-          location.resultType === 'search' && location.layer === 'venue'
-            ? onSelectStopPlace(location)
-            : onUpdateLocation(location);
-        }}
-        mode={mode}
-        onAddFavoritePlace={onAddFavoritePlace}
-      />
-      <ScrollView
-        refreshControl={
-          // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
-          isFocused || Platform.OS === 'android' ? (
-            <RefreshControl
-              refreshing={Platform.OS === 'ios' ? false : isLoading}
-              onRefresh={refresh}
-            />
-          ) : undefined
-        }
-      >
+    <FullScreenView
+      headerProps={{...headerProps}}
+      parallaxContent={(focusRef) => (
+        <>
+          <ScreenHeading
+            ref={focusRef}
+            text={headerProps.title ?? ''}
+            isLarge={true}
+          />
+          <Header
+            fromLocation={location}
+            updatingLocation={updatingLocation}
+            openLocationSearch={openLocationSearch}
+            setCurrentLocationOrRequest={setCurrentLocationOrRequest}
+            setLocation={(location: Location) => {
+              location.resultType === 'search' && location.layer === 'venue'
+                ? onSelectStopPlace(location)
+                : onUpdateLocation(location);
+            }}
+            mode={mode}
+            onAddFavoritePlace={onAddFavoritePlace}
+          />
+        </>
+      )}
+      refreshControl={
+        // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
+        isFocused || Platform.OS === 'android' ? (
+          <RefreshControl
+            refreshing={Platform.OS === 'ios' ? false : isLoading}
+            onRefresh={refresh}
+          />
+        ) : undefined
+      }
+    >
+      <ScrollView>
         <ScreenReaderAnnouncement message={loadAnnouncement} />
         {locationIsAvailable || !!location ? (
           <StopPlaces
@@ -212,7 +220,7 @@ export const NearbyStopPlacesScreenComponent = ({
           />
         )}
       </ScrollView>
-    </>
+    </FullScreenView>
   );
 };
 
@@ -290,8 +298,9 @@ function sortAndFilterStopPlaces(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
-    backgroundColor: theme.color.background.accent[0].background,
+    backgroundColor: theme.color.background.neutral[1].background,
     paddingBottom: theme.spacing.medium,
+    paddingTop: theme.spacing.medium,
   },
   locationInputSection: {
     marginHorizontal: theme.spacing.medium,
