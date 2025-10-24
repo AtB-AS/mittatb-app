@@ -5,6 +5,7 @@ import qs from 'query-string';
 import {stringifyUrl} from '../utils';
 import {AxiosRequestConfig} from 'axios';
 import {Feature} from './types';
+import {SearchLocation} from '@atb/modules/favorites';
 
 export const FOCUS_ORIGIN: Coordinates = {
   latitude: parseFloat(FOCUS_LATITUDE),
@@ -17,7 +18,7 @@ export async function autocomplete(
   onlyLocalFareZoneAuthority: boolean = false,
   onlyStopPlaces: boolean = false,
   config?: AxiosRequestConfig,
-) {
+): Promise<SearchLocation[]> {
   const url = 'bff/v1/geocoder/features';
   const query = qs.stringify(
     {
@@ -34,20 +35,42 @@ export async function autocomplete(
     {skipNull: true},
   );
 
-  return await client.get<Feature[]>(stringifyUrl(url, query), config);
+  const response = await client.get<Feature[]>(
+    stringifyUrl(url, query),
+    config,
+  );
+  const data = response.data.map(mapFeatureToSearchLocation);
+  return data;
 }
 
 export async function reverse(
   coordinates: Coordinates | null,
-  layers?: string[],
   config?: AxiosRequestConfig,
-) {
+): Promise<SearchLocation[]> {
   const url = 'bff/v1/geocoder/reverse';
   const query = qs.stringify({
     lat: coordinates?.latitude,
     lon: coordinates?.longitude,
-    layers: layers,
   });
 
-  return await client.get<Feature[]>(stringifyUrl(url, query), config);
+  const response = await client.get<Feature[]>(
+    stringifyUrl(url, query),
+    config,
+  );
+  return response.data.map(mapFeatureToSearchLocation);
 }
+
+/**
+ * Feature coordinate-array from geocoder is [long, lat]. This maps to lat/long
+ * object for less bugs downstream.
+ */
+const mapFeatureToSearchLocation = ({
+  geometry: {
+    coordinates: [longitude, latitude],
+  },
+  properties,
+}: Feature): SearchLocation => ({
+  ...properties,
+  coordinates: {latitude, longitude},
+  resultType: 'search',
+});

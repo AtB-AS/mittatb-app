@@ -85,6 +85,9 @@ const LocationSearchTexts = {
       title: _('Søk', 'Search', 'Søk'),
     },
     messages: {
+      loading: {
+        title: _('Laster…', 'Loading…', 'Lastar…'),
+      },
       noResult: {
         title: _(
           'Akkurat her finner vi ikke noe reisetilbud.',

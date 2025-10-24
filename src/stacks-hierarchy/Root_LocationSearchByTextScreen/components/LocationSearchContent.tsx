@@ -3,14 +3,13 @@ import {
   JourneySearchHistoryEntry,
 } from '@atb/modules/search-history';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useDebounce} from '@atb/utils/use-debounce';
 import {filterPreviousLocations} from '../utils';
 import {useGeolocationContext} from '@atb/modules/geolocation';
-import {useGeocoder} from '@atb/modules/geocoder';
 import {LocationSearchResultType, SelectableLocationType} from '../types';
 import {useAccessibilityContext} from '@atb/modules/accessibility';
-import {Keyboard, View} from 'react-native';
+import {ActivityIndicator, Keyboard, View} from 'react-native';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {
@@ -30,6 +29,8 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {storage} from '@atb/modules/storage';
 import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
+import {useGeocoderQuery} from '@atb/modules/geocoder';
+import {RequestError, toAxiosErrorKind} from '@atb/api/utils';
 
 type LocationSearchContentProps = {
   label: string;
@@ -70,7 +71,6 @@ export function LocationSearchContent({
   const [text, setText] = useState<string>(defaultText ?? '');
   const debouncedText = useDebounce(text, 200);
 
-  const [errorMessage, setErrorMessage] = useState<string>('');
   const previousLocations = filterPreviousLocations(
     debouncedText,
     history,
@@ -87,12 +87,17 @@ export function LocationSearchContent({
 
   const {location: geolocation} = useGeolocationContext();
 
-  const {locations, error, isSearching} = useGeocoder(
+  const {
+    data: locations,
+    error: queryError,
+    isLoading,
+  } = useGeocoderQuery(
     debouncedText,
     geolocation?.coordinates ?? null,
     onlyLocalFareZoneAuthority,
     onlyStopPlaces,
   );
+  const error = queryError as RequestError | null;
 
   const locationSearchResults: LocationSearchResultType[] =
     locations?.map((location) => ({location})) ?? [];
@@ -120,11 +125,9 @@ export function LocationSearchContent({
 
   const a11yContext = useAccessibilityContext();
 
-  useEffect(() => {
-    if (error) {
-      setErrorMessage(translateErrorType(error, t));
-    }
-  }, [error, t]);
+  const errorMessage = error
+    ? translateErrorType(toAxiosErrorKind(error.kind), t)
+    : undefined;
 
   const hasPreviousResults = !!previousLocations.length;
   const hasResults = !!locationSearchResults.length;
@@ -184,7 +187,7 @@ export function LocationSearchContent({
           />
         )}
       </View>
-      {error && (
+      {errorMessage && (
         <View style={styles.withMargin}>
           <MessageInfoBox type="warning" message={errorMessage} />
         </View>
@@ -196,6 +199,7 @@ export function LocationSearchContent({
         onScrollBeginDrag={() => Keyboard.dismiss()}
         testID="historyAndResultsScrollView"
       >
+        {isLoading && <ActivityIndicator />}
         {searchBarIsEmpty ? (
           <>
             {includeJourneyHistory && (
@@ -223,10 +227,8 @@ export function LocationSearchContent({
                 testIDItemPrefix="locationSearchItem"
               />
             ) : (
-              !error &&
               !!text &&
-              locations != null &&
-              !isSearching && (
+              locations?.length === 0 && (
                 <View style={[styles.contentBlock, styles.marginTop]}>
                   <MessageInfoBox
                     type="info"
