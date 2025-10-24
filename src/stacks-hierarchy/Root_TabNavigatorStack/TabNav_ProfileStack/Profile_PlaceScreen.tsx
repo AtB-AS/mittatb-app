@@ -6,7 +6,7 @@ type Props = ProfileScreenProps<'Profile_PlaceScreen'>;
 export const Profile_PlaceScreen = ({navigation, route}: Props) => (
   <PlaceScreenComponent
     {...route.params}
-    onPressClose={() => navigation.navigate('Profile_FavoriteDeparturesScreen')}
+    onPressClose={() => navigation.popTo('Profile_FavoriteDeparturesScreen')}
     onPressQuay={(stopPlace, quayId, onlyReplaceParam) =>
       onlyReplaceParam
         ? navigation.setParams({selectedQuayId: quayId})

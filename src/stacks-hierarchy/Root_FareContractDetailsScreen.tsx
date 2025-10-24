@@ -48,7 +48,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
     }
   };
   const onNavigateToMap = async (initialFilters: MapFilterType) => {
-    navigation.navigate('Root_TabNavigatorStack', {
+    navigation.popTo('Root_TabNavigatorStack', {
       screen: 'TabNav_MapStack',
       params: {
         screen: 'Map_RootScreen',
