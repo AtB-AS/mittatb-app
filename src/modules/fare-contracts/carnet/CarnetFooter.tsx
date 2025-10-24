@@ -56,16 +56,15 @@ export const CarnetFooter: React.FC<Props> = ({
     );
 
   return (
-    <View
-      style={styles.container}
-      accessible={true}
-      accessibilityLabel={t(
-        FareContractTexts.carnet.numberOfUsedAccessesRemaining(
-          accessesRemaining,
-        ),
-      )}
-    >
-      <View>
+    <View style={styles.container}>
+      <View
+        accessible={true}
+        accessibilityLabel={t(
+          FareContractTexts.carnet.numberOfUsedAccessesRemaining(
+            accessesRemaining,
+          ),
+        )}
+      >
         <ThemeText typography="body__secondary">
           {t(
             FareContractTexts.carnet.numberOfUsedAccessesRemaining(
