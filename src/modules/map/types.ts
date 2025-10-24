@@ -8,10 +8,7 @@ import {
   Point,
   Position,
 } from 'geojson';
-import {
-  PointsOnLink,
-  TransportSubmode,
-} from '@atb/api/types/generated/journey_planner_v3_types';
+import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {AnyMode} from '@atb/components/icon-box';
 import {
   BikeStationFragment,
@@ -33,7 +30,6 @@ import {
   FeatureCollection as MobilityAPI_FeatureCollection,
 } from '@atb/api/types/generated/mobility-types_v2';
 
-import {Line} from '@atb/api/types/trips';
 import {TranslatedString} from '@atb/translations';
 import {GeofencingZoneKeys, GeofencingZoneStyle} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
@@ -107,14 +103,6 @@ export type Cluster = {
   cluster: boolean;
   point_count_abbreviated: string;
   point_count: number;
-};
-
-export type MapLeg = {
-  mode?: AnyMode;
-  faded?: boolean;
-  transportSubmode?: TransportSubmode;
-  pointsOnLink?: PointsOnLink;
-  line?: Line;
 };
 
 export interface MapLine extends Feature<LineString> {

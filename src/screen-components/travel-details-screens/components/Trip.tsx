@@ -33,7 +33,7 @@ import {
 } from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
-import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
+import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
 import {
   GlobalMessage,
   GlobalMessageContextEnum,
@@ -199,12 +199,13 @@ export const Trip: React.FC<TripProps> = ({
                 testID={'legContainer' + index}
                 onPressShowLive={
                   legVehiclePosition
-                    ? (mapData: ServiceJourneyMapInfoData_v3) => {
+                    ? (serviceJourneyPolylines: ServiceJourneyPolylines) => {
                         shouldShowRequestReview.current = true;
                         onPressDetailsMap({
-                          legs: mapData.mapLegs,
-                          fromPlace: mapData.start,
-                          toPlace: mapData.stop,
+                          serviceJourneyPolylines:
+                            serviceJourneyPolylines.mapLegs,
+                          fromPlace: serviceJourneyPolylines.start,
+                          toPlace: serviceJourneyPolylines.stop,
                           vehicleWithPosition: legVehiclePosition,
                           mode: leg.mode,
                           subMode: leg.transportSubmode,
@@ -221,13 +222,13 @@ export const Trip: React.FC<TripProps> = ({
       <Divider />
       {tripPatternLegs && (
         <CompactTravelDetailsMap
-          mapLegs={tripPatternLegs}
+          serviceJourneyPolylines={tripPatternLegs}
           fromPlace={tripPatternLegs[0]?.fromPlace}
           toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
           buttonText={t(TripDetailsTexts.trip.summary.showTripInMap.label)}
           onExpand={() => {
             onPressDetailsMap({
-              legs: tripPatternLegs,
+              serviceJourneyPolylines: tripPatternLegs,
               fromPlace: tripPatternLegs[0]?.fromPlace,
               toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
               mapFilter,

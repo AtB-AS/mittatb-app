@@ -1,9 +1,9 @@
+import {EstimatedCall} from '@atb/api/types/departures';
 import {getShouldShowLiveVehicle} from '../utils';
-import {EstimatedCallWithMetadata} from '../use-departure-data';
 
 const estimatedCallsWhichDepartInGivenMinutes = (
   minutesToDeparture: number,
-): EstimatedCallWithMetadata[] => {
+): Pick<EstimatedCall, 'aimedDepartureTime'>[] => {
   const date = new Date();
   date.setMinutes(date.getMinutes() + minutesToDeparture);
   return [{aimedDepartureTime: date.toISOString()} as any];
