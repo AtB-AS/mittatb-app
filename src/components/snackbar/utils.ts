@@ -1,5 +1,5 @@
-import {SnackbarTextContent} from '@atb/components/snackbar';
+import {SnackbarContent} from '@atb/components/snackbar';
 
 export const getSnackbarHasTextContent = (
-  textContent?: SnackbarTextContent,
+  textContent?: SnackbarContent,
 ): boolean => !!(textContent?.title || textContent?.description);

@@ -1,7 +1,7 @@
 export {Snackbar} from './Snackbar';
 export type {
   SnackbarPosition,
-  SnackbarTextContent,
+  SnackbarContent,
   SnackbarProps,
 } from './Snackbar';
 export {useSnackbar} from './use-snackbar';

@@ -1,21 +1,21 @@
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {useRef, useEffect} from 'react';
 import {
-  SnackbarTextContent,
+  SnackbarContent,
   getSnackbarHasTextContent,
 } from '@atb/components/snackbar';
 
 export const useSnackbarScreenReaderFocus = (
   isDisabled: boolean,
-  stableTextContent?: SnackbarTextContent,
+  stableContent?: SnackbarContent,
 ) => {
   const focusRef = useRef(null);
 
   useEffect(() => {
-    if (getSnackbarHasTextContent(stableTextContent) && !isDisabled) {
+    if (getSnackbarHasTextContent(stableContent) && !isDisabled) {
       setTimeout(() => giveFocus(focusRef), 50);
     }
-  }, [stableTextContent, focusRef, isDisabled]);
+  }, [stableContent, focusRef, isDisabled]);
 
   return focusRef;
 };
