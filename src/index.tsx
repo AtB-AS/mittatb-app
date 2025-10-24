@@ -54,7 +54,11 @@ MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
 trackAppState();
 
-LogBox.ignoreLogs(['new NativeEventEmitter', 'Could not find Fiber with id']);
+LogBox.ignoreLogs([
+  'new NativeEventEmitter',
+  'Could not find Fiber with id',
+  'Open debugger to view warnings.',
+]);
 
 if (Platform.OS === 'android') {
   // Default seems to be True in later React Native versions,
