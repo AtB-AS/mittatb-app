@@ -26,7 +26,7 @@ export const Dashboard_PlaceScreen = ({navigation, route}: Props) => (
     }
     onPressClose={
       route.params.onCloseRoute
-        ? () => navigation.navigate(route.params.onCloseRoute as any)
+        ? () => navigation.popTo(route.params.onCloseRoute as any)
         : undefined
     }
   />

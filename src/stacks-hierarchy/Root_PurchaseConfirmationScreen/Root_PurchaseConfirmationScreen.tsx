@@ -150,7 +150,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       reserveMutation.data?.recurringPaymentId,
     );
     closeInAppBrowseriOS();
-    navigation.navigate('Root_TabNavigatorStack', {
+    navigation.popTo('Root_TabNavigatorStack', {
       screen: 'TabNav_TicketingStack',
       params: {
         screen: 'Ticketing_RootScreen',
