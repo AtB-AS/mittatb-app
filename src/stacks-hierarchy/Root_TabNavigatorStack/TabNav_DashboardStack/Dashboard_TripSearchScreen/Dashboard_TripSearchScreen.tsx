@@ -263,6 +263,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   return (
     <View style={styles.container}>
       <FullScreenView
+        titleAlwaysVisible={true}
         headerProps={{
           title: t(TripSearchTexts.header.title),
           leftButton: {
