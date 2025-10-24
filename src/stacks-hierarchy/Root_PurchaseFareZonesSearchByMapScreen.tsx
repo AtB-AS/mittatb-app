@@ -32,7 +32,7 @@ export const Root_PurchaseFareZonesSearchByMapScreen = ({
   );
 
   const onSave = () =>
-    navigation.navigate('Root_PurchaseOverviewScreen', {
+    navigation.popTo('Root_PurchaseOverviewScreen', {
       mode: 'Ticket',
       selection,
       onFocusElement: 'zones',
