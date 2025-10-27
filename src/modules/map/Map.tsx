@@ -61,8 +61,9 @@ import {useFlyToSelectedMapItemWithPadding} from './hooks/use-fly-to-selected-ma
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
-export const MapV2 = (props: MapProps) => {
+export const Map = (props: MapProps) => {
   const {includeSnackbar} = props;
+
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<Camera>(null);
   const mapViewRef = useRef<MapView>(null);

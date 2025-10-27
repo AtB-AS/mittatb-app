@@ -29,7 +29,6 @@ import {
   usePurchaseSelectionBuilder,
   useSelectableFareZones,
 } from '@atb/modules/purchase-selection';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type Props = {
   selection: PurchaseSelectionType;
@@ -91,7 +90,6 @@ const FareZonesSelectorMap = ({
   };
 
   const mapViewConfig = useMapViewConfig();
-  const {isMapV2Enabled} = useFeatureTogglesContext();
 
   return (
     <>
@@ -135,12 +133,11 @@ const FareZonesSelectorMap = ({
             }}
             {...mapViewConfig}
           >
-            {isMapV2Enabled && (
-              <NationalStopRegistryFeatures
-                selectedFeaturePropertyId={undefined}
-                onMapItemClick={undefined}
-              />
-            )}
+            <NationalStopRegistryFeatures
+              selectedFeaturePropertyId={undefined}
+              onMapItemClick={undefined}
+            />
+
             <MapboxGL.ShapeSource
               id="tariffZonesShape"
               shape={featureCollection}

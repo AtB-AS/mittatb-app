@@ -30,7 +30,7 @@ export {
   MapContextProvider,
   useMapContext,
 } from './MapContext.tsx';
-export {MapV2} from './MapV2';
+export {Map} from './Map.tsx';
 export type {
   FormFactorFilterType,
   GeofencingZoneCustomProps,

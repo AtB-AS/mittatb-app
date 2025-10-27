@@ -1,6 +1,6 @@
 import React from 'react';
 import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
-import {Map_RootScreenV2} from './Map_RootScreenV2';
+import {Map_RootScreen} from './Map_RootScreen';
 import {Map_DepartureDetailsScreen} from './Map_DepartureDetailsScreen';
 import {Map_TravelAidScreen} from './Map_TravelAidScreen';
 import {Map_TravelDetailsMapScreen} from './Map_TravelDetailsMapScreen';
@@ -18,7 +18,7 @@ export const TabNav_MapStack = () => {
         headerShown: false,
       })}
     >
-      <Stack.Screen name="Map_RootScreen" component={Map_RootScreenV2} />
+      <Stack.Screen name="Map_RootScreen" component={Map_RootScreen} />
       <Stack.Screen name="Map_PlaceScreen" component={Map_PlaceScreen} />
       <Stack.Screen
         name="Map_DepartureDetailsScreen"
