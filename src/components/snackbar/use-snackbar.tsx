@@ -12,23 +12,23 @@ export const useSnackbar = () => {
   }, []);
   const hideSnackbar = useCallback(() => setSnackbarProps(undefined), []);
 
-  const snackbarTextContent = useMemo(
+  const snackbarContent = useMemo(
     () =>
-      getSnackbarHasTextContent(snackbarProps?.textContent)
+      getSnackbarHasTextContent(snackbarProps?.content)
         ? {
-            ...snackbarProps?.textContent,
+            ...snackbarProps?.content,
             messageKey, // add unique key to each message
           }
         : undefined,
-    [messageKey, snackbarProps?.textContent],
+    [messageKey, snackbarProps?.content],
   );
 
-  const snackbarPropsWithTextContent = useMemo(
-    () => ({...snackbarProps, snackbarTextContent}),
-    [snackbarProps, snackbarTextContent],
+  const snackbarPropsWithContent = useMemo(
+    () => ({...snackbarProps, snackbarContent: snackbarContent}),
+    [snackbarProps, snackbarContent],
   );
   return {
-    snackbarProps: snackbarPropsWithTextContent,
+    snackbarProps: snackbarPropsWithContent,
     showSnackbar,
     hideSnackbar,
   };
