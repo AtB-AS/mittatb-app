@@ -4,47 +4,27 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {StyleProp, View, ViewStyle} from 'react-native';
-import {
-  FareProductTypeConfig,
-  PreassignedFareProduct,
-} from '@atb/modules/configuration';
+import {FareProductTypeConfig} from '@atb/modules/configuration';
 import React, {forwardRef} from 'react';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {Button} from '@atb/components/button';
 import {Info} from '@atb/assets/svg/mono-icons/status';
-import {stripMarkdown} from '@atb/components/text';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type Props = {
   fareProductTypeConfig: FareProductTypeConfig;
-  preassignedFareProduct: PreassignedFareProduct;
   onTicketInfoButtonPress: () => void;
   style?: StyleProp<ViewStyle>;
 };
 export const FareProductHeader = forwardRef<View, Props>(
-  (
-    {
-      fareProductTypeConfig,
-      preassignedFareProduct,
-      onTicketInfoButtonPress,
-      style,
-    }: Props,
-    ref,
-  ) => {
+  ({fareProductTypeConfig, onTicketInfoButtonPress, style}: Props, ref) => {
     const {t, language} = useTranslation();
     const {theme} = useThemeContext();
     const themeColor = theme.color.background.accent[0];
     const styles = useStyle();
     const {isTicketInformationEnabled} = useFeatureTogglesContext();
-
-    const productDescription = stripMarkdown(
-      getTextForLanguage(
-        preassignedFareProduct.productDescription ?? [],
-        language,
-      ) ?? '',
-    );
 
     return (
       <View style={style}>
@@ -63,22 +43,16 @@ export const FareProductHeader = forwardRef<View, Props>(
         </View>
         {isTicketInformationEnabled && (
           <View style={styles.headerSubSection}>
-            <ThemeText
-              typography="body__secondary"
-              color={themeColor}
-              style={styles.ticketDescription}
-              numberOfLines={1}
-            >
-              {productDescription}
-            </ThemeText>
             <Button
               expanded={false}
               type="small"
+              mode="secondary"
               leftIcon={{svg: Info}}
-              interactiveColor={theme.color.interactive[1]}
+              interactiveColor={theme.color.interactive[0]}
               text={t(PurchaseOverviewTexts.ticketInformation.button)}
               onPress={onTicketInfoButtonPress}
               testID="ticketInformationButton"
+              backgroundColor={themeColor}
             />
           </View>
         )}
