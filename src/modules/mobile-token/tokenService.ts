@@ -36,11 +36,7 @@ export type TokenService = RemoteTokenService & {
     secureContainer: string | undefined,
     traceId: string,
   ) => Promise<RemoteToken[]>;
-  toggle: (
-    tokenId: string,
-    traceId: string,
-    bypassRestrictions: boolean,
-  ) => Promise<RemoteToken[]>;
+  toggle: (tokenId: string, traceId: string) => Promise<RemoteToken[]>;
   getTokenToggleDetails: () => Promise<TokenLimitResponse>;
   postTokenStatus: (
     tokenId: string | undefined,
@@ -210,15 +206,11 @@ export const tokenService: TokenService = {
       })
       .then((res) => res.data.tokens)
       .catch(handleError),
-  toggle: async (
-    tokenId: string,
-    traceId: string,
-    bypassRestrictions: boolean,
-  ) =>
+  toggle: async (tokenId: string, traceId: string) =>
     client
       .post<ToggleResponse>(
         '/token/v1/toggle',
-        {tokenId, bypassRestrictions},
+        {tokenId},
         {
           headers: {
             [CorrelationIdHeaderName]: traceId,
