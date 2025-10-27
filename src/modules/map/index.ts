@@ -36,7 +36,6 @@ export type {
   GeofencingZoneCustomProps,
   GeofencingZoneExplanationsType,
   MapFilterType,
-  MapLeg,
   MapLine,
   MapRegion,
   MobilityMapFilterType,
