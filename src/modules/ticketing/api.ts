@@ -12,6 +12,7 @@ import {
   ReserveOffer,
   SendReceiptResponse,
   TicketRecipientType,
+  ConsumableSchoolCarnetResponse,
 } from './types';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {convertIsoStringFieldsToDate} from '@atb/utils/date';
@@ -87,6 +88,14 @@ export async function consumeCarnet(fareContractId: string) {
     },
     {authWithIdToken: true},
   );
+  return response.data;
+}
+
+export async function getSchoolCarnetInfo(fareContractId: string) {
+  const url = `ticket/v4/consumable/school-carnet/${fareContractId}`;
+  const response = await client.get<ConsumableSchoolCarnetResponse>(url, {
+    authWithIdToken: true,
+  });
   return response.data;
 }
 

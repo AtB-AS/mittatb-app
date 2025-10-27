@@ -45,7 +45,7 @@ export function Summary({
     <View style={style}>
       {!!formattedPrice ? (
         <ThemeText
-          typography="body__primary--bold"
+          typography="heading--big"
           style={styles.price}
           testID="offerTotalPriceText"
         >

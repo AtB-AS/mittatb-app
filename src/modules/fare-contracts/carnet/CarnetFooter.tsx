@@ -1,43 +1,70 @@
 import React from 'react';
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {calculateCarnetData} from './calculate-carnet-data';
-
-export const MAX_ACCESSES_FOR_CARNET_FOOTER = 50;
+import {useSchoolCarnetInfoQuery} from '@atb/modules/ticketing';
+import {FareContractType, getAccesses} from '@atb-as/utils';
+import {MessageInfoBox} from '@atb/components/message-info-box';
+import {formatToClock, formatToDateWithDayOfWeek} from '@atb/utils/date';
+import {ValidityStatus} from '../utils';
 
 type Props = {
-  active: boolean;
-  maximumNumberOfAccesses: number;
-  numberOfUsedAccesses: number;
+  validityStatus: ValidityStatus;
+  fareContract: FareContractType;
 };
 
 export const CarnetFooter: React.FC<Props> = ({
-  active,
-  maximumNumberOfAccesses,
-  numberOfUsedAccesses,
+  validityStatus,
+  fareContract,
 }) => {
   const styles = useStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
+
+  const {
+    data: schoolCarnetInfo,
+    isError: isSchoolCarnetInfoError,
+    isFetching: isSchoolCarnetInfoFetching,
+  } = useSchoolCarnetInfoQuery(fareContract, validityStatus);
+
+  const accessInfo = getAccesses(fareContract);
+  if (!accessInfo) return null;
+
+  const maximumNumberOfAccesses =
+    schoolCarnetInfo?.maximumNumberOfAccessesPerDay ??
+    accessInfo.maximumNumberOfAccesses;
+
+  const numberOfUsedAccesses =
+    schoolCarnetInfo?.numberOfUsedAccessesForToday ??
+    accessInfo.numberOfUsedAccesses;
 
   const {accessesRemaining, multiCarnetArray, unusedArray, usedArray} =
-    calculateCarnetData(active, maximumNumberOfAccesses, numberOfUsedAccesses);
+    calculateCarnetData(
+      validityStatus === 'valid',
+      maximumNumberOfAccesses,
+      numberOfUsedAccesses,
+    );
+
+  if (isSchoolCarnetInfoFetching) return <ActivityIndicator />;
+  if (isSchoolCarnetInfoError)
+    return (
+      <MessageInfoBox
+        type="error"
+        message={t(FareContractTexts.carnet.consumableInformationError)}
+      />
+    );
 
   return (
-    <View
-      style={{
-        flexDirection: 'column',
-        flex: 1,
-      }}
-      accessible={true}
-      accessibilityLabel={t(
-        FareContractTexts.carnet.numberOfUsedAccessesRemaining(
-          accessesRemaining,
-        ),
-      )}
-    >
-      <View>
+    <View style={styles.container}>
+      <View
+        accessible={true}
+        accessibilityLabel={t(
+          FareContractTexts.carnet.numberOfUsedAccessesRemaining(
+            accessesRemaining,
+          ),
+        )}
+      >
         <ThemeText typography="body__secondary">
           {t(
             FareContractTexts.carnet.numberOfUsedAccessesRemaining(
@@ -46,14 +73,14 @@ export const CarnetFooter: React.FC<Props> = ({
           )}
         </ThemeText>
       </View>
-      <View style={styles.container}>
+      <View style={styles.dotContainer}>
         {multiCarnetArray.map((count, idx) => (
           <MultiCarnet key={idx} count={count} />
         ))}
         {unusedArray.map((_, idx) => (
           <View key={idx} style={styles.dot} />
         ))}
-        {active && (
+        {validityStatus === 'valid' && (
           <View style={styles.dot}>
             <View style={styles.dotFill__activeViewBox}>
               <View style={styles.dotFill__activeFill} />
@@ -64,6 +91,26 @@ export const CarnetFooter: React.FC<Props> = ({
           <View key={idx} style={[styles.dot, styles.dot__unused]} />
         ))}
       </View>
+      {schoolCarnetInfo?.nextConsumableDateTime &&
+        validityStatus !== 'valid' && (
+          <MessageInfoBox
+            type="info"
+            message={t(
+              FareContractTexts.carnet.nextConsumptionDayMessage(
+                formatToDateWithDayOfWeek(
+                  schoolCarnetInfo.nextConsumableDateTime,
+                  language,
+                ),
+                formatToClock(
+                  schoolCarnetInfo.nextConsumableDateTime,
+                  language,
+                  'trunc',
+                  false,
+                ),
+              ),
+            )}
+          />
+        )}
     </View>
   );
 };
@@ -88,10 +135,16 @@ function MultiCarnet({count}: {count: number}) {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
+    flexDirection: 'column',
     flex: 1,
-    justifyContent: 'space-between',
+    gap: theme.spacing.medium,
+  },
+  dotContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    gap: theme.spacing.large,
+    flexWrap: 'wrap',
     flexDirection: 'row',
-    marginTop: theme.spacing.medium,
   },
   triangle: {
     width: 0,

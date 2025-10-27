@@ -15,7 +15,12 @@ import {PressableOpacity} from '../pressable-opacity';
 import {SvgProps} from 'react-native-svg';
 import {ThemeText} from '../text';
 import {ThemeIcon} from '../theme-icon';
-import {MapButtons, shadows, useMapContext} from '@atb/modules/map';
+import {
+  MapBottomSheetType,
+  MapButtons,
+  shadows,
+  useMapContext,
+} from '@atb/modules/map';
 import {BottomSheetTopPositionBridge} from './BottomSheetTopPositionBridge';
 import Animated, {
   ReduceMotion,
@@ -71,7 +76,8 @@ export const MapBottomSheet = ({
   const bottomSheetGorRef = useRef<BottomSheetGor>(null);
   const {theme} = useThemeContext();
   const sheetTopPosition = useSharedValue(0);
-  const {setPaddingBottomMap} = useMapContext();
+  const {setPaddingBottomMap, setCurrentBottomSheet, mapState} =
+    useMapContext();
   const {height: screenHeight} = useWindowDimensions();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   const {top: safeAreaTop} = useSafeAreaInsets();
@@ -212,8 +218,22 @@ export const MapBottomSheet = ({
           if (toIndex === -1) {
             closeCallback?.();
             setPaddingBottomMap(0);
+            setCurrentBottomSheet({
+              isFullyOpen: false,
+              bottomSheetType: MapBottomSheetType.None,
+              feature: null,
+            });
           } else {
             setPaddingBottomMap(screenHeight - toPosition + tabBarMinHeight);
+          }
+        }}
+        onChange={(index) => {
+          if (index !== -1) {
+            setCurrentBottomSheet({
+              isFullyOpen: true,
+              bottomSheetType: mapState.bottomSheetType,
+              feature: mapState.feature ?? null,
+            });
           }
         }}
         accessible={false}

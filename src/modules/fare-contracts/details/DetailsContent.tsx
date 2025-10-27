@@ -34,10 +34,7 @@ import {MapFilterType} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/modules/on-behalf-of';
 import {useAuthContext} from '@atb/modules/auth';
-import {
-  CarnetFooter,
-  MAX_ACCESSES_FOR_CARNET_FOOTER,
-} from '../carnet/CarnetFooter';
+import {CarnetFooter} from '../carnet/CarnetFooter';
 import {MobilityBenefitsActionSectionItem} from '@atb/modules/mobility';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
@@ -84,12 +81,11 @@ export const DetailsContent: React.FC<Props> = ({
   const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
   const {data: refundOptions} = useRefundOptionsQuery(fc.orderId, fc.state);
 
-  const {
-    validityStatus,
-    usedAccesses,
-    maximumNumberOfAccesses,
-    numberOfUsedAccesses,
-  } = getFareContractInfo(now, fc, currentUserId);
+  const {validityStatus, usedAccesses} = getFareContractInfo(
+    now,
+    fc,
+    currentUserId,
+  );
 
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
   const isReceived = isSentOrReceived && fc.purchasedBy != currentUserId;
@@ -129,9 +125,6 @@ export const DetailsContent: React.FC<Props> = ({
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
   const accesses = getAccesses(fc);
-  const shouldShowCarnetFooter =
-    accesses &&
-    accesses.maximumNumberOfAccesses <= MAX_ACCESSES_FOR_CARNET_FOOTER;
 
   const shouldShowLegs =
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;
@@ -173,13 +166,9 @@ export const DetailsContent: React.FC<Props> = ({
           <Barcode validityStatus={validityStatus} fc={fc} />
         </GenericSectionItem>
       )}
-      {shouldShowCarnetFooter && (
+      {accesses && (
         <GenericSectionItem>
-          <CarnetFooter
-            active={validityStatus === 'valid'}
-            maximumNumberOfAccesses={maximumNumberOfAccesses!}
-            numberOfUsedAccesses={numberOfUsedAccesses!}
-          />
+          <CarnetFooter validityStatus={validityStatus} fareContract={fc} />
         </GenericSectionItem>
       )}
       {globalMessageCount > 0 && (

@@ -205,3 +205,8 @@ export type AutoSelectableMapItem =
   | VehicleExtendedFragment
   | BikeStationFragment
   | CarStationFragment;
+
+export type MapPropertiesType = {
+  center: GeoJSON.Position;
+  zoom: number;
+};
