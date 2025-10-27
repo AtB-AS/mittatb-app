@@ -1,5 +1,5 @@
 export {BackArrow} from './components/BackArrow';
-export {GeofencingZones, Stations} from './components/mobility';
+export {GeofencingZones} from './components/mobility';
 export {VehiclesAndStations} from './components/mobility/VehiclesAndStations.tsx';
 export {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
 export {LocationArrow} from './components/LocationArrow.tsx';

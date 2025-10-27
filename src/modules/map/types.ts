@@ -94,8 +94,6 @@ export type NavigateToDetailsCallback = (
 
 export type MapProps = {
   initialLocation?: Location;
-  vehicles?: VehiclesState; // V1 only
-  stations?: StationsState; // V1 only
   includeSnackbar?: boolean;
   navigateToQuay: NavigateToQuayCallback;
   navigateToDetails: NavigateToDetailsCallback;
