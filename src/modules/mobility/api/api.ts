@@ -30,7 +30,7 @@ export const getValueCode = (
 ): Promise<string | null> => {
   if (!operatorId) return Promise.resolve(null);
   return client
-    .post(
+    .put(
       `/benefit/v1/voucher/claim/${operatorId}`,
       {},
       {

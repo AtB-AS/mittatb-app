@@ -96,7 +96,7 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
 
   return (
     <PressableOpacity
-      disabled={tripPattern.booking.availability !== 'available'}
+      disabled={!isAvailable}
       onPress={onPress}
       style={[
         styles.container,

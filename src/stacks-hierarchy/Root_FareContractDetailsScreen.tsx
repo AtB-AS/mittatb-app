@@ -28,8 +28,9 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const {serverNow} = useTimeContext();
   const analytics = useAnalyticsContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
-  const {ticketInfoParams, fareContract, preassignedFareProduct} =
-    useTicketInfo(route.params.fareContractId);
+  const {fareContract, preassignedFareProduct} = useTicketInfo(
+    route.params.fareContractId,
+  );
 
   const isSentFareContract =
     fareContract?.customerAccountId !== fareContract?.purchasedBy &&
@@ -38,17 +39,17 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   useApplePassPresentationSuppression();
 
   const navigateToTicketInfoScreen = () => {
-    if (ticketInfoParams) {
-      analytics.logEvent(
-        'Ticketing',
-        'Ticket information button clicked',
-        ticketInfoParams,
-      );
-      navigation.navigate('Root_TicketInformationScreen', ticketInfoParams);
+    if (preassignedFareProduct) {
+      analytics.logEvent('Ticketing', 'Ticket information button clicked', {
+        fareProductTypeConfigType: preassignedFareProduct?.type,
+      });
+      navigation.navigate('Root_TicketInformationScreen', {
+        fareProductTypeConfigType: preassignedFareProduct?.type,
+      });
     }
   };
   const onNavigateToMap = async (initialFilters: MapFilterType) => {
-    navigation.navigate('Root_TabNavigatorStack', {
+    navigation.popTo('Root_TabNavigatorStack', {
       screen: 'TabNav_MapStack',
       params: {
         screen: 'Map_RootScreen',

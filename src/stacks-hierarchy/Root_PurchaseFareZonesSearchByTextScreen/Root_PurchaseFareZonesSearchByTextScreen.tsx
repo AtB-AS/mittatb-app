@@ -88,7 +88,7 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
     }
     const newSelection = builder.build();
 
-    navigation.navigate('Root_PurchaseFareZonesSearchByMapScreen', {
+    navigation.popTo('Root_PurchaseFareZonesSearchByMapScreen', {
       selection: newSelection,
     });
   };

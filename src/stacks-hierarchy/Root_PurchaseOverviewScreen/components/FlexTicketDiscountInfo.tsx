@@ -27,7 +27,7 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   userProfiles: UserProfileWithCountAndOffer[];
-  style: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
 };
 
 export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
