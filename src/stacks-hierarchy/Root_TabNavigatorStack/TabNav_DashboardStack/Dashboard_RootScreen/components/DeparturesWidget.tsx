@@ -1,6 +1,5 @@
 import {Add, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {StopPlaceInfo} from '@atb/api/bff/types';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {
@@ -28,6 +27,7 @@ import {
   Section,
 } from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 type Props = {
   onEditFavouriteDeparture: () => void;
@@ -50,19 +50,12 @@ export const DeparturesWidget = ({
   const {location} = useGeolocationContext();
   const {state, loadInitialDepartures, searchDate} = useFavoriteDepartureData();
   const onCloseFocusRef = React.useRef(null);
+  const bottomSheetRef = React.useRef<BottomSheetModal>(null);
 
   useEffect(() => loadInitialDepartures(), [loadInitialDepartures]);
 
-  const {open: openBottomSheet} = useBottomSheetContext();
-
   async function openFrontpageFavouritesBottomSheet() {
-    openBottomSheet(() => {
-      return (
-        <SelectFavouritesBottomSheet
-          onEditFavouriteDeparture={onEditFavouriteDeparture}
-        />
-      );
-    }, onCloseFocusRef);
+    bottomSheetRef.current?.present();
   }
 
   const sortedStopPlaceGroups = location
@@ -104,11 +97,9 @@ export const DeparturesWidget = ({
           />
         </Section>
       )}
-
       {state.isLoading && (
         <ActivityIndicator size="large" style={styles.activityIndicator} />
       )}
-
       {sortedStopPlaceGroups?.map((stopPlaceGroup) => (
         <View key={stopPlaceGroup.stopPlace.id} testID="favoriteDepartures">
           {stopPlaceGroup.quays.map((quay) => (
@@ -123,7 +114,6 @@ export const DeparturesWidget = ({
           ))}
         </View>
       ))}
-
       {!!favoriteDepartures.length && (
         <Button
           expanded={true}
@@ -136,6 +126,10 @@ export const DeparturesWidget = ({
           testID="selectFavoriteDepartures"
         />
       )}
+      <SelectFavouritesBottomSheet
+        onEditFavouriteDeparture={onEditFavouriteDeparture}
+        BottomSheetModalRef={bottomSheetRef}
+      />
     </View>
   );
 };
