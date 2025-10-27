@@ -1,2 +1,2 @@
-export {useGeocoder} from './use-geocoder';
-export {useReverseGeocoder} from './use-reverse-geocoder';
+export {useGeocoderQuery} from './use-geocoder-query';
+export {useReverseGeocoderQuery} from './use-reverse-geocoder-query';
