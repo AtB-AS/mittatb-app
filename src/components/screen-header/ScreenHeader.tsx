@@ -141,7 +141,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacing.medium,
     paddingTop: theme.spacing.medium,
-    borderBottomWidth: 2,
+    borderBottomWidth: theme.border.width.slim,
     borderBottomColor: 'transparent',
   },
   headerTitle: {alignItems: 'center'},

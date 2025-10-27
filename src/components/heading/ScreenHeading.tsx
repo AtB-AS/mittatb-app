@@ -19,7 +19,10 @@ export const ScreenHeading = forwardRef<any, ScreenHeadingProps>(
 
     return (
       <View
-        style={{...styles.container, paddingLeft: isLarge ? 12 : 0}}
+        style={{
+          ...styles.container,
+          paddingLeft: isLarge ? theme.spacing.medium : 0,
+        }}
         ref={ref}
         accessible
         role="heading"
