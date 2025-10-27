@@ -30,7 +30,7 @@ import {
   PayWithBonusPointsCheckbox,
   findRelevantBonusProduct,
 } from '@atb/modules/bonus';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
