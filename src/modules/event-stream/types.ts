@@ -36,3 +36,9 @@ export const StreamEventSchema = z.discriminatedUnion('event', [
 ]);
 
 export type StreamEvent = z.infer<typeof StreamEventSchema>;
+
+export type StreamEventLog = Array<{
+  date: Date;
+  streamEvent?: StreamEvent;
+  meta?: string;
+}>;
