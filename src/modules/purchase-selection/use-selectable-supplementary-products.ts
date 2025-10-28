@@ -1,9 +1,11 @@
-import type {PreassignedFareProduct} from '@atb-as/config-specs';
-import type {SupplementaryProduct} from '@atb/modules/fare-contracts';
+import type {
+  PreassignedFareProduct,
+  SupplementProduct,
+} from '@atb-as/config-specs';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 
 export function useSelectableSupplementaryProducts(
   product: PreassignedFareProduct,
-): SupplementaryProduct[] {
-  const {} = useFirestoreConfigurationContext();
+): SupplementProduct[] {
+  const {supplementProducts} = useFirestoreConfigurationContext();
 }
