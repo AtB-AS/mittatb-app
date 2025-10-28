@@ -31,7 +31,7 @@ import {
   GeofencingZones,
   MapBottomSheetType,
   MapStateActionType,
-  useGeofencingZoneTextContent,
+  useGeofencingZoneContent,
   useMapViewConfig,
 } from '@atb/modules/map';
 import {
@@ -96,7 +96,7 @@ export const MapV2 = (props: MapProps) => {
 
   const {isGeofencingZonesEnabled} = useFeatureTogglesContext();
 
-  const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
+  const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
   const {data: activeShmoBooking} = useActiveShmoBookingQuery();
@@ -145,12 +145,12 @@ export const MapV2 = (props: MapProps) => {
 
   const geofencingZoneOnPress = useCallback(
     (geofencingZoneCustomProps?: GeofencingZoneCustomProps) => {
-      const textContent = getGeofencingZoneTextContent(
+      const geofencingZoneContent = getGeofencingZoneContent(
         geofencingZoneCustomProps,
       );
-      showSnackbar({content: textContent, position: 'top'});
+      showSnackbar({content: geofencingZoneContent, position: 'top'});
     },
-    [showSnackbar, getGeofencingZoneTextContent],
+    [showSnackbar, getGeofencingZoneContent],
   );
 
   const locationArrowOnPress = useCallback(async () => {

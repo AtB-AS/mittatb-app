@@ -14,6 +14,7 @@ import {
 import {Meta} from '@storybook/react';
 import {ThemeText} from '@atb/components/text';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import {ThemeIcon} from '@atb/components/theme-icon/ThemeIcon';
 
 type MetaPropsInputLayer = SnackbarContent & {
   actionButtonText: string;
@@ -62,7 +63,7 @@ const SnackbarMeta: Meta<SnackbarMetaProps> = {
             ...args,
             ...{
               content: {
-                icon: args.icon,
+                iconNode: args.iconNode,
                 title: args.title,
                 description: args.description,
               },
@@ -106,7 +107,7 @@ export const Minimal = {
 
 export const Medium = {
   args: {
-    icon: {svg: Chat},
+    iconNode: <ThemeIcon svg={Chat} />,
     title: undefined,
     description: 'Some medium long description describing something here',
     isDismissable: true,
@@ -115,7 +116,7 @@ export const Medium = {
 
 export const Maximal = {
   args: {
-    icon: {svg: Chat},
+    iconNode: <ThemeIcon svg={Chat} />,
     title: 'The Title',
     description: 'Some rather long and detailed description right here',
     isDismissable: true,

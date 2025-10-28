@@ -1,3 +1,4 @@
+import {ContrastColor, GeofencingZoneKeys} from '@atb-as/theme';
 import {AnyMode, AnySubMode} from './types';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {
@@ -15,6 +16,9 @@ import {
   ScooterFill,
   MetroFill,
 } from '@atb/assets/svg/mono-icons/transportation';
+import {Check} from '@atb/assets/svg/mono-icons/status';
+import {useThemeContext} from '@atb/theme';
+import {NoEntry, NoParking} from '@atb/assets/svg/mono-icons/mobility';
 
 const TRANSPORT_SUB_MODES_BOAT: AnySubMode[] = [
   TransportSubmode.HighSpeedPassengerService,
@@ -57,3 +61,32 @@ export function getTransportModeSvg(mode?: AnyMode, subMode?: AnySubMode) {
       return {svg: UnknownFill, name: 'Unknown'};
   }
 }
+
+export const getGeofencingZoneKeySvg = (key: GeofencingZoneKeys) => {
+  switch (key) {
+    case 'allowed':
+      return {svg: Check};
+    case 'slow':
+      return {svg: WalkFill};
+    case 'noEntry':
+      return {svg: NoEntry};
+    case 'noParking':
+      return {svg: NoParking};
+  }
+};
+
+export const getGeofencingZoneKeyIconColor = (
+  key: GeofencingZoneKeys,
+): ContrastColor => {
+  const {theme} = useThemeContext();
+  switch (key) {
+    case 'allowed':
+      return theme.color.status.valid.primary;
+    case 'slow':
+      return theme.color.geofencingZone.slow.color;
+    case 'noEntry':
+      return theme.color.geofencingZone.noEntry.color;
+    case 'noParking':
+      return theme.color.geofencingZone.noParking.color;
+  }
+};
