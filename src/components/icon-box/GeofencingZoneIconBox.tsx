@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {getGeofencingZoneKeyIconColor, getGeofencingZoneKeySvg} from './utils';
 import {GeofencingZoneKeys} from '@atb-as/theme';
@@ -17,7 +17,8 @@ export const GeofencingZoneIconBox: React.FC<GeofencingZoneIconBoxProps> = ({
   size = 'small',
   style,
 }) => {
-  const iconColor = getGeofencingZoneKeyIconColor(geofencingZoneKey);
+  const {theme} = useThemeContext();
+  const iconColor = getGeofencingZoneKeyIconColor(geofencingZoneKey, theme);
   const {svg} = getGeofencingZoneKeySvg(geofencingZoneKey);
   const styles = useStyles();
 

@@ -4,7 +4,7 @@ import {Animated, View, ViewStyle} from 'react-native';
 import {StyleSheet, type Theme, useThemeContext} from '@atb/theme';
 import {Button, ButtonProps} from '@atb/components/button';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   useSnackbarVerticalPositionAnimation,
   useSnackbarIsVisible,

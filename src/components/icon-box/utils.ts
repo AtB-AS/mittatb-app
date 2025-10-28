@@ -17,7 +17,7 @@ import {
   MetroFill,
 } from '@atb/assets/svg/mono-icons/transportation';
 import {Check} from '@atb/assets/svg/mono-icons/status';
-import {useThemeContext} from '@atb/theme';
+import {Theme} from '@atb/theme';
 import {NoEntry, NoParking} from '@atb/assets/svg/mono-icons/mobility';
 
 const TRANSPORT_SUB_MODES_BOAT: AnySubMode[] = [
@@ -77,8 +77,8 @@ export const getGeofencingZoneKeySvg = (key: GeofencingZoneKeys) => {
 
 export const getGeofencingZoneKeyIconColor = (
   key: GeofencingZoneKeys,
+  theme: Theme,
 ): ContrastColor => {
-  const {theme} = useThemeContext();
   switch (key) {
     case 'allowed':
       return theme.color.status.valid.primary;

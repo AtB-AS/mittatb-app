@@ -14,7 +14,7 @@ import {
 import {Meta} from '@storybook/react';
 import {ThemeText} from '@atb/components/text';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
-import {ThemeIcon} from '@atb/components/theme-icon/ThemeIcon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 type MetaPropsInputLayer = SnackbarContent & {
   actionButtonText: string;
