@@ -46,7 +46,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
   );
 
   const fareProductTypeConfig = fareProductTypeConfigs.find(
-    (f) => f.type === props.route.params.fareProductTypeConfigType,
+    (f) => f.type === selection?.fareProductTypeConfig.type,
   );
   const preassignedFareProduct = preassignedFareProducts.find(
     (p) => p.id === selection?.preassignedFareProduct.id,
@@ -63,7 +63,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
       contentColor={themeColor}
     >
       <ScrollView contentContainerStyle={styles.container}>
-        {preassignedFareProduct?.productDescription && (
+        {preassignedFareProduct && (
           <>
             <ContentHeading
               color={themeColor}
@@ -103,7 +103,10 @@ export const Root_TicketInformationScreen = (props: Props) => {
             </Section>
           </>
         )}
-        <FlexTicketDiscountInfo userProfiles={userProfilesWithCountAndOffer} />
+        <FlexTicketDiscountInfo
+          userProfiles={userProfilesWithCountAndOffer}
+          style={styles.flexTicketDiscountInfo}
+        />
         {isTipsAndInformationEnabled && (
           <>
             <ContentHeading
@@ -137,6 +140,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
       alignItems: 'center',
       marginBottom: theme.spacing.small,
       flexShrink: 1,
+    },
+    flexTicketDiscountInfo: {
+      rowGap: theme.spacing.small,
     },
   };
 });

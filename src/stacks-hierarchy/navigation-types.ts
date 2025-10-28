@@ -42,7 +42,6 @@ type FareContractDetailsRouteParams = {
 };
 
 type TicketInformationScreenParams = {
-  fareProductTypeConfigType: string;
   selection?: PurchaseSelectionType;
 };
 
