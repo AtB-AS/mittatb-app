@@ -18,7 +18,8 @@ import {
 } from '@atb/assets/svg/mono-icons/transportation';
 import {Check} from '@atb/assets/svg/mono-icons/status';
 import {Theme} from '@atb/theme';
-import {NoEntry, NoParking} from '@atb/assets/svg/mono-icons/mobility';
+import {NoParking} from '@atb/assets/svg/mono-icons/mobility';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 const TRANSPORT_SUB_MODES_BOAT: AnySubMode[] = [
   TransportSubmode.HighSpeedPassengerService,
@@ -69,7 +70,7 @@ export const getGeofencingZoneKeySvg = (key: GeofencingZoneKeys) => {
     case 'slow':
       return {svg: WalkFill};
     case 'noEntry':
-      return {svg: NoEntry};
+      return {svg: Close};
     case 'noParking':
       return {svg: NoParking};
   }
