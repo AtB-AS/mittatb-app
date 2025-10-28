@@ -58,9 +58,9 @@ export const useSetupEventStream = () => {
     [addToEventLog],
   );
 
-  const onError = useCallback(
+  const onClose = useCallback(
     (event: WebSocketCloseEvent) => {
-      addToEventLog({meta: `ERROR: ${event.code} ${event.message}`});
+      addToEventLog({meta: `CLOSE: ${event.code} ${event.message}`});
     },
     [addToEventLog],
   );
@@ -71,7 +71,7 @@ export const useSetupEventStream = () => {
     enabled: isEventStreamEnabled && isValidIdToken,
     onMessage,
     onOpen,
-    onError,
+    onClose,
   });
 
   return {eventLog};
