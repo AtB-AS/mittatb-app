@@ -133,7 +133,13 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         >
           <InternalTextInput
             ref={combinedRef}
-            style={[styles.input, style]}
+            style={[
+              styles.input,
+              style,
+              props.multiline && {
+                minHeight: theme.typography.body__primary.lineHeight * 3,
+              },
+            ]}
             placeholderTextColor={theme.color.foreground.dynamic.secondary}
             onFocus={onFocusEvent}
             onBlur={onBlurEvent}

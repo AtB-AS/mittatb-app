@@ -123,6 +123,8 @@ export const Root_ContactScooterOperatorScreen = ({
                 label={t(ContactScooterOperatorTexts.comment.label)}
                 placeholder={t(ContactScooterOperatorTexts.comment.placeholder)}
                 inlineLabel={false}
+                multiline={true}
+                scrollEnabled={false}
                 autoCapitalize="sentences"
                 errorText={
                   !isCommentValid && showError
