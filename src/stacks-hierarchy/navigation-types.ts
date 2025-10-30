@@ -43,6 +43,7 @@ type FareContractDetailsRouteParams = {
 
 type TicketInformationScreenParams = {
   selection?: PurchaseSelectionType;
+  shouldShowFlexTicketDiscountInfo?: boolean;
 };
 
 export type Root_LoginOptionsScreenParams = {
