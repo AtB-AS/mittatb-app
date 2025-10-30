@@ -35,7 +35,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   children,
   ...props
 }) => {
-  const {theme, androidSystemFont} = useThemeContext();
+  const {theme} = useThemeContext();
   const textColor = useColor(color, type);
 
   const typeStyle = {
@@ -45,14 +45,6 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
 
   let textStyle: TextStyle = typeStyle;
 
-  if (Platform.OS === 'android' && !androidSystemFont) {
-    textStyle = {
-      ...typeStyle,
-      fontFamily:
-        typeStyle.fontWeight === 'bold' ? 'Roboto-Bold' : 'Roboto-Regular',
-      fontWeight: 'normal',
-    };
-  }
   // Set specific letter spacing for android phones, as 0.4 leads to errors on newer pixel phones
   // https://github.com/facebook/react-native/issues/35039
   if (
