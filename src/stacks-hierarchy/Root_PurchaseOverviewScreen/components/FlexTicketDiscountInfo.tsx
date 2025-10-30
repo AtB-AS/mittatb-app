@@ -33,7 +33,6 @@ type Props = {
 export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
-  const themeColor = theme.color.background.accent[0];
   const [expanded, setExpanded] = useState(false);
   const styles = useStyles();
   const {appTexts} = useFirestoreConfigurationContext();
@@ -53,10 +52,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
 
   return (
     <View style={style}>
-      <ContentHeading
-        text={t(PurchaseOverviewTexts.flexDiscount.heading)}
-        color={themeColor}
-      />
+      <ContentHeading text={t(PurchaseOverviewTexts.flexDiscount.heading)} />
       <Section>
         <ExpandableSectionItem
           text={t(PurchaseOverviewTexts.flexDiscount.expandableLabel)}

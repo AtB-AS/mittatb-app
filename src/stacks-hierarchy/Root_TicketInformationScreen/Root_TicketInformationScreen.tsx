@@ -66,7 +66,6 @@ export const Root_TicketInformationScreen = (props: Props) => {
         {preassignedFareProduct && (
           <>
             <ContentHeading
-              color={themeColor}
               text={t(
                 PurchaseOverviewTexts.ticketInformation.informationDetails
                   .descriptionHeading,
@@ -110,7 +109,6 @@ export const Root_TicketInformationScreen = (props: Props) => {
         {isTipsAndInformationEnabled && (
           <>
             <ContentHeading
-              color={themeColor}
               text={t(
                 PurchaseOverviewTexts.ticketInformation.informationDetails
                   .tipsInformation,
