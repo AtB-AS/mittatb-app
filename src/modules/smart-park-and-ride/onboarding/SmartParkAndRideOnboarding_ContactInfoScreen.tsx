@@ -1,13 +1,15 @@
 import {useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import React from 'react';
-import {OnboardingScreenComponent} from '@atb/modules/onboarding';
+import {
+  OnboardingScreenComponent,
+  useOnboardingCarouselNavigation,
+} from '@atb/modules/onboarding';
 import {ThemedContact} from '@atb/theme/ThemedAssets';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 import {Linking, View} from 'react-native';
 import {sparOnboardingId} from './config';
-import {useNavigateToNextOnboardingCarouselScreen} from '@atb/modules/onboarding';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemeText} from '@atb/components/text';
 import {GenericSectionItem, Section} from '@atb/components/sections';
@@ -21,7 +23,11 @@ export const SmartParkAndRideOnboarding_ContactInfoScreen = () => {
   const {t} = useTranslation();
   const analytics = useAnalyticsContext();
 
-  const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
+  const {
+    navigateToNextScreen,
+    navigateToPreviousScreen,
+    closeOnboardingCarousel,
+  } = useOnboardingCarouselNavigation(
     sparOnboardingId,
     'SmartParkAndRideOnboarding_ContactInfoScreen',
   );
@@ -29,6 +35,18 @@ export const SmartParkAndRideOnboarding_ContactInfoScreen = () => {
   return (
     <OnboardingScreenComponent
       illustration={<ThemedContact height={170} />}
+      headerProps={{
+        leftButton: {
+          type: 'back',
+          withIcon: true,
+          onPress:  navigateToPreviousScreen,
+        },
+        rightButton: {
+          type: 'close',
+          withIcon: true,
+          onPress: closeOnboardingCarousel,
+        },
+      }}
       title={t(SmartParkAndRideTexts.onboarding.contactInfo.title)}
       contentNode={<ContactInfoContent />}
       footerButton={{

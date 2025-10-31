@@ -4,7 +4,7 @@ import React from 'react';
 import {
   OnboardingCarouselScreenProps,
   OnboardingScreenComponent,
-  useNavigateToNextOnboardingCarouselScreen,
+  useOnboardingCarouselNavigation,
 } from '@atb/modules/onboarding';
 import {ThemedBonusTransaction} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -16,7 +16,7 @@ export type BuyTicketsScreenProps =
 export const BonusOnboarding_BuyTicketsScreen = ({}: BuyTicketsScreenProps) => {
   const {t} = useTranslation();
 
-  const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
+  const {navigateToNextScreen} = useOnboardingCarouselNavigation(
     bonusOnboardingId,
     'BonusOnboarding_BuyTicketsScreen',
   );

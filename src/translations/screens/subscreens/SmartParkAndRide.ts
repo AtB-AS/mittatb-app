@@ -165,21 +165,21 @@ const SmartParkAndRideTexts = {
         'No kan du parkere gratis på Ranheim Fabrikker i opptil 48 timar med ein gyldig bussbillett i AtB-appen. Billetten må ha vore aktiv i løpet av tida du har stått parkert.',
       ),
       buttonText: _(
-        'Hvordan gjør vi det?',
-        'How do we do it?',
-        'Korleis gjer vi det?',
+        'Registrering av kjøretøy i appen',
+        'Registering vehicles in the app',
+        'Registrering av køyretøy i appen',
       ),
     },
     automaticRegistration: {
       title: _(
-        'Automatisk registrering',
-        'Automatic registration',
-        'Automatisk registrering',
+        'Registrering av kjøretøy i appen',
+        'Registering vehicles in the app',
+        'Registrering av køyretøy i appen',
       ),
       description: _(
-        'Kjøretøyet registrer seg automatisk ved inn- og utkjøring, og vi sjekker i appen om du har billett. Legg til kjøretøyet ditt for å knytte billetten til parkeringen.',
-        'The vehicle automatically registers upon entering and exiting, and we check the app for your ticket. Add your vehicle to link the ticket to the parking.',
-        'Køyretøyet registrer seg automatisk ved inn- og utkjøring, og vi sjekker i appen om du har billett. Legg til køyretøyet ditt for å knytte billetten til parkeringen.',
+        'Du trenger bare å registrere kjøretøyet én gang i AtB-appen. Når det er gjort, blir kjøretøyet knyttet til profilen din. Du kan ha opptil to kjøretøy registrert per profil.',
+        'You only need to register the vehicle once in the AtB app. Once done, the vehicle will be linked to your profile. You can have up to two vehicles registered per profile.',
+        'Du treng berre å registrere køyretøyet éin gong i AtB-appen. Når det er gjort, blir køyretøyet knytt til profilen din. Du kan ha opptil to køyretøy registrert per profil.',
       ),
       descriptionLink: {
         text: _(
