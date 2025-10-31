@@ -4,12 +4,13 @@ import {
   GeofencingZoneExtraExplanations,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {GeofencingZoneCustomProps} from '../types';
+import {GeofencingZoneIconBox} from '@atb/components/icon-box';
 import {useCallback} from 'react';
 
-export const useGeofencingZoneTextContent = () => {
+export const useGeofencingZoneContent = () => {
   const {t} = useTranslation();
 
-  const getGeofencingZoneTextContent = useCallback(
+  const getGeofencingZoneContent = useCallback(
     (geofencingZoneCustomProps?: GeofencingZoneCustomProps) => {
       const title = t(
         GeofencingZoneExplanations[
@@ -29,15 +30,22 @@ export const useGeofencingZoneTextContent = () => {
           ].description,
         ) + isStationParkingPostfix;
 
+      const iconNode = geofencingZoneCustomProps?.code ? (
+        <GeofencingZoneIconBox
+          geofencingZoneKey={geofencingZoneCustomProps?.code}
+        />
+      ) : null;
+
       return {
         title,
         description,
+        iconNode,
       };
     },
     [t],
   );
 
   return {
-    getGeofencingZoneTextContent,
+    getGeofencingZoneContent,
   };
 };
