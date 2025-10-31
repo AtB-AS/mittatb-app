@@ -201,7 +201,7 @@ export enum SupportType {
   OTHER = 'OTHER',
 }
 
-export const MAX_SUPPORT_COMMENT_LENGTH = 1000;
+export const MAX_SUPPORT_COMMENT_LENGTH = 400;
 
 export const SendSupportRequestBodySchema = z.object({
   bookingId: z.string().uuid().nullish(),
