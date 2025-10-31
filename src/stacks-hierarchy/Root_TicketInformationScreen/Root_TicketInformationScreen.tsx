@@ -102,7 +102,11 @@ export const Root_TicketInformationScreen = (props: Props) => {
             </Section>
           </>
         )}
-        <FlexTicketDiscountInfo userProfiles={userProfilesWithCountAndOffer} />
+        {props.route.params.shouldShowFlexTicketDiscountInfo && (
+          <FlexTicketDiscountInfo
+            userProfiles={userProfilesWithCountAndOffer}
+          />
+        )}
         {isTipsAndInformationEnabled && (
           <>
             <ContentHeading
