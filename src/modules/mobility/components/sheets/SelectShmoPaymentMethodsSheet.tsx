@@ -16,7 +16,7 @@ import {
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
 import {useMutation} from '@tanstack/react-query';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
 import {BottomSheetScrollView} from '@gorhom/bottom-sheet';
 
 type Props = {
