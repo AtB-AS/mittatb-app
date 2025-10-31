@@ -128,7 +128,7 @@ export const DeparturesWidget = ({
       )}
       <SelectFavouritesBottomSheet
         onEditFavouriteDeparture={onEditFavouriteDeparture}
-        BottomSheetModalRef={bottomSheetRef}
+        bottomSheetModalRef={bottomSheetRef}
       />
     </View>
   );

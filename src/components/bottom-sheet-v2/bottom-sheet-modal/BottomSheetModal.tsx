@@ -2,19 +2,27 @@ import React, {PropsWithChildren, useCallback, useState} from 'react';
 import {
   BottomSheetModal as GorhomBottomSheetModal,
   BottomSheetBackdrop,
-  BottomSheetFooter,
   BottomSheetScrollView,
+  BottomSheetFooter as GorhamBottomSheetFooter,
+  type BottomSheetFooterProps,
 } from '@gorhom/bottom-sheet';
 import {BottomSheetHeader} from '../BottomSheetHeader';
 import {SvgProps} from 'react-native-svg';
-import {Platform, useWindowDimensions, View} from 'react-native';
+import {
+  AccessibilityInfo,
+  findNodeHandle,
+  Platform,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import {useBottomSheetStyles} from '../use-bottom-sheet-styles';
 import {ReduceMotion} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useThemeContext} from '@atb/theme';
+//import {BottomSheetFooter} from './BottomSheetFooter';
 
 type BottomSheetModalProps = PropsWithChildren<{
-  BottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
   heading?: string;
   subText?: string;
   logoUrl?: string;
@@ -25,11 +33,11 @@ type BottomSheetModalProps = PropsWithChildren<{
   enableDynamicSizing?: boolean;
   keyboardBehavior?: 'extend' | 'interactive' | 'fillParent';
   closeCallback?: () => void;
-  footer?: React.ReactNode;
+  Footer?: React.FC;
 }>;
 export const BottomSheetModal = ({
   children,
-  BottomSheetModalRef,
+  bottomSheetModalRef,
   heading,
   subText,
   logoUrl,
@@ -40,18 +48,27 @@ export const BottomSheetModal = ({
   enableDynamicSizing = true,
   keyboardBehavior = Platform.OS === 'ios' ? 'interactive' : 'extend',
   closeCallback,
-  footer,
+  Footer,
 }: BottomSheetModalProps) => {
   const styles = useBottomSheetStyles();
   const {height: screenHeight} = useWindowDimensions();
   const {top: safeAreaTop, bottom: safeAreaBottom} = useSafeAreaInsets();
   const [footerHeight, setFooterHeight] = useState(0);
   const {theme} = useThemeContext();
+  const headerRef = React.useRef<View>(null);
+
+  function focusSheetHeader() {
+    const node = findNodeHandle(headerRef.current);
+    if (node) AccessibilityInfo.setAccessibilityFocus(node);
+  }
 
   const renderBackdrop = useCallback(
     (props: any) => (
       <BottomSheetBackdrop
         {...props}
+        accessible={false}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
         appearsOnIndex={0}
         disappearsOnIndex={-1}
         pressBehavior="close"
@@ -61,51 +78,66 @@ export const BottomSheetModal = ({
   );
 
   const renderFooter = useCallback(
-    (props: any) =>
-      footer ? (
-        <BottomSheetFooter
+    (props: BottomSheetFooterProps) =>
+      Footer && (
+        <GorhamBottomSheetFooter
           {...props}
           style={{
             backgroundColor: theme.color.background.neutral[1].background,
             paddingTop: theme.spacing.medium,
           }}
         >
-          <View
-            onLayout={(event) => {
-              const {height} = event.nativeEvent.layout;
-              setFooterHeight(height);
-            }}
-          >
-            {footer}
+          <View onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}>
+            {Footer && <Footer />}
           </View>
-        </BottomSheetFooter>
-      ) : null,
-    [footer, theme.color.background.neutral, theme.spacing.medium],
+        </GorhamBottomSheetFooter>
+      ),
+    [Footer, theme.color.background.neutral, theme.spacing.medium],
+  );
+
+  const renderHandle = useCallback(
+    () => (
+      <BottomSheetHeader
+        focusRef={headerRef}
+        heading={heading}
+        subText={subText}
+        logoUrl={logoUrl}
+        rightIcon={rightIcon}
+        rightIconText={rightIconText}
+        bottomSheetRef={bottomSheetModalRef}
+        headerNode={headerNode}
+      />
+    ),
+    [
+      bottomSheetModalRef,
+      headerNode,
+      heading,
+      logoUrl,
+      rightIcon,
+      rightIconText,
+      subText,
+    ],
   );
 
   return (
     <GorhomBottomSheetModal
-      ref={BottomSheetModalRef}
-      handleComponent={() => (
-        <BottomSheetHeader
-          heading={heading}
-          subText={subText}
-          logoUrl={logoUrl}
-          rightIcon={rightIcon}
-          rightIconText={rightIconText}
-          bottomSheetRef={BottomSheetModalRef}
-          headerNode={headerNode}
-        />
-      )}
+      ref={bottomSheetModalRef}
+      accessibilityViewIsModal
+      importantForAccessibility="yes"
+      handleComponent={renderHandle}
       backgroundStyle={styles.sheet}
       snapPoints={snapPoints}
       enableDynamicSizing={enableDynamicSizing}
       enableDismissOnClose={true}
       backdropComponent={renderBackdrop}
       keyboardBehavior={keyboardBehavior}
-      onAnimate={(_fromIndex, toIndex, _fromPosition, _toPosition) => {
+      onAnimate={(fromIndex, toIndex, _fromPosition, _toPosition) => {
         if (toIndex === -1) {
           closeCallback?.();
+        }
+        if (fromIndex === -1) {
+          //set accessibility focus when open
+          focusSheetHeader();
         }
       }}
       accessible={false}

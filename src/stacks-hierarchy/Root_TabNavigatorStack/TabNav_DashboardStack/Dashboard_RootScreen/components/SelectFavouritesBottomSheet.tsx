@@ -1,11 +1,10 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {View} from 'react-native';
-import {Button} from '@atb/components/button';
 import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
 
 import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {StyleSheet, type Theme, useThemeContext} from '@atb/theme';
+import {StyleSheet, useThemeContext, type Theme} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
 import {TransportationIconBox} from '@atb/components/icon-box';
@@ -16,12 +15,13 @@ import {
 import {SectionSeparator} from '@atb/components/sections';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
-import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
 import {FullScreenFooter} from '@atb/components/screen-footer';
+import {Button} from '@atb/components/button';
+import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
 
 type SelectableFavouriteDepartureData = {
   handleSwitchFlip: (favouriteId: string, active: boolean) => void;
@@ -93,12 +93,12 @@ const SelectableFavouriteDeparture = ({
 
 type SelectFavouritesBottomSheetProps = {
   onEditFavouriteDeparture: () => void;
-  BottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
 };
 
 export const SelectFavouritesBottomSheet = ({
   onEditFavouriteDeparture,
-  BottomSheetModalRef,
+  bottomSheetModalRef,
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -115,9 +115,9 @@ export const SelectFavouritesBottomSheet = ({
     );
   };
 
-  const footer = (
-    <FullScreenFooter>
-      <View style={styles.buttonContainer}>
+  const footer = useCallback(
+    () => (
+      <FullScreenFooter>
         <Button
           expanded={true}
           text={t(SelectFavouriteDeparturesText.edit_button.text)}
@@ -126,24 +126,25 @@ export const SelectFavouritesBottomSheet = ({
           )}
           onPress={() => {
             onEditFavouriteDeparture();
-            BottomSheetModalRef.current?.dismiss();
+            bottomSheetModalRef.current?.dismiss();
           }}
           rightIcon={{svg: SvgArrowRight}}
           testID="editButton"
           mode="secondary"
           backgroundColor={themeColor}
         />
-      </View>
-    </FullScreenFooter>
+      </FullScreenFooter>
+    ),
+    [bottomSheetModalRef, onEditFavouriteDeparture, t, themeColor],
   );
 
   return (
     <BottomSheetModal
-      BottomSheetModalRef={BottomSheetModalRef}
+      bottomSheetModalRef={bottomSheetModalRef}
       heading={t(SelectFavouriteDeparturesText.header.text)}
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
-      footer={footer}
+      Footer={footer}
     >
       <View style={styles.flatListArea}>
         {favoriteDepartures.length > 0 && (

@@ -15,6 +15,7 @@ type BottomSheetHeaderProps = {
   rightIconText?: string;
   bottomSheetRef: React.RefObject<BottomSheetModal | BottomSheet | null>;
   headerNode?: React.ReactNode;
+  focusRef?: React.RefObject<View | null>;
 };
 
 export const BottomSheetHeader = ({
@@ -25,13 +26,14 @@ export const BottomSheetHeader = ({
   rightIconText,
   bottomSheetRef,
   headerNode,
+  focusRef,
 }: BottomSheetHeaderProps) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   return (
-    <View style={styles.handleStyle}>
+    <View ref={focusRef} accessibilityRole="header">
       <View style={styles.handleIndicatorStyle} />
-      {(heading || rightIconText) && (
+      {(heading || rightIconText || rightIcon) && (
         <View style={styles.headerContainer}>
           <View style={styles.headerContent}>
             <View style={styles.headerLeft}>
@@ -114,8 +116,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'center',
     borderRadius: theme.border.radius.regular,
     marginBottom: theme.spacing.medium,
-  },
-  handleStyle: {
-    paddingTop: theme.spacing.small,
+    marginTop: theme.spacing.small,
   },
 }));
