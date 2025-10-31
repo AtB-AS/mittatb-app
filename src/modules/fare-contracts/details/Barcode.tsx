@@ -124,7 +124,10 @@ const BarcodeInspectionView = () => {
 
   return (
     <View style={styles.barcodeInspectionContainer}>
-      <View style={[styles.barcodeInspection, {padding: aztec_code_padding}]}>
+      <View
+        style={[styles.barcodeInspection, {padding: aztec_code_padding}]}
+        testID="mobileTokenBarcode"
+      >
         <RNBarcodeInspectionView sizeInCm={aztec_code_size_in_cm} />
       </View>
     </View>
