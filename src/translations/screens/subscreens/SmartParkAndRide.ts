@@ -195,6 +195,37 @@ const SmartParkAndRideTexts = {
       },
       buttonText: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
     },
+    contactInfo: {
+      title: _('Spørsmål?', 'Questions?', 'Spørsmål?'),
+      telephone: (tel: string) =>
+        _(`tlf. ${tel}`, `tel. ${tel}`, `tlf. ${tel}`),
+      parking: {
+        heading: _('Om parkeringen', 'About the parking', 'Om parkeringa'),
+        subheading: _(
+          'Kontakt Trondheim Parkering',
+          'Contact Trondheim Parking',
+          'Kontakt Trondheim Parkering',
+        ),
+      },
+      project: {
+        heading: _('Om prosjektet', 'About the project', 'Om prosjektet'),
+        subheading: _(
+          'Kontakt Trøndelag fylkeskommune',
+          'Contact Trøndelag County Municipality',
+          'Kontakt Trøndelag fylkeskommune',
+        ),
+        tel: _('74 17 40 00', '74 17 40 00', '74 17 40 00'),
+      },
+      about: {
+        heading: _(
+          'Om AtB-appen og billetter',
+          'About the AtB app and tickets',
+          'Om AtB-appen og billettar',
+        ),
+        link: _('atb.no/kontakt', 'atb.no/kontakt', 'atb.no/kontakt'),
+      },
+      buttonText: _('Lukk', 'Close', 'Lukk'),
+    },
   },
   notLoggedIn: {
     title: _(
