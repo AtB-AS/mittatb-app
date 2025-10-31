@@ -59,6 +59,6 @@ export const CounterIconBox = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   counterContainer: {
     backgroundColor: getTransportColor(theme).primary.background,
-    borderRadius: theme.border.radius.small,
+    borderRadius: theme.border.radius.regular,
   },
 }));
