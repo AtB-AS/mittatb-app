@@ -1,14 +1,14 @@
 import {OnboardingCarouselConfig} from '@atb/modules/onboarding';
 import {SmartParkAndRideOnboarding_InformationScreen} from './SmartParkAndRideOnboarding_InformationScreen';
 import {SmartParkAndRideOnboarding_AutomaticRegistrationScreen} from './SmartParkAndRideOnboarding_AutomaticRegistrationScreen';
-import {SmartParkAndRideOnboarding_AddScreen} from './SmartParkAndRideOnboarding_AddScreen';
+import {SmartParkAndRideOnboarding_ContactInfoScreen} from './SmartParkAndRideOnboarding_ContactInfoScreen';
 
 export const sparOnboardingId = 'spar-pilot';
 
 export type SparPilotOnboardingScreenName =
   | 'SmartParkAndRideOnboarding_InformationScreen'
   | 'SmartParkAndRideOnboarding_AutomaticRegistrationScreen'
-  | 'SmartParkAndRideOnboarding_AddScreen';
+  | 'SmartParkAndRideOnboarding_ContactInfoScreen';
 
 export const sparOnboardingCarouselConfig: OnboardingCarouselConfig = {
   id: sparOnboardingId,
@@ -21,9 +21,10 @@ export const sparOnboardingCarouselConfig: OnboardingCarouselConfig = {
       name: 'SmartParkAndRideOnboarding_AutomaticRegistrationScreen',
       component: SmartParkAndRideOnboarding_AutomaticRegistrationScreen,
     },
+
     {
-      name: 'SmartParkAndRideOnboarding_AddScreen',
-      component: SmartParkAndRideOnboarding_AddScreen,
+      name: 'SmartParkAndRideOnboarding_ContactInfoScreen',
+      component: SmartParkAndRideOnboarding_ContactInfoScreen,
     },
   ],
 };
