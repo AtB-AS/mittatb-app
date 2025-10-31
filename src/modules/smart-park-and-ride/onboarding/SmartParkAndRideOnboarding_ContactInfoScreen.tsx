@@ -39,7 +39,7 @@ export const SmartParkAndRideOnboarding_ContactInfoScreen = () => {
         leftButton: {
           type: 'back',
           withIcon: true,
-          onPress:  navigateToPreviousScreen,
+          onPress: navigateToPreviousScreen,
         },
         rightButton: {
           type: 'close',

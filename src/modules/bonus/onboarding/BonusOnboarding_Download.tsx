@@ -20,7 +20,7 @@ export type DownloadScreenProps =
 
 export const BonusOnboarding_DownloadScreen = ({}: DownloadScreenProps) => {
   const {t} = useTranslation();
-  const { navigateToNextScreen } = useOnboardingCarouselNavigation(
+  const {navigateToNextScreen} = useOnboardingCarouselNavigation(
     bonusOnboardingId,
     'BonusOnboarding_DownloadScreen',
   );
