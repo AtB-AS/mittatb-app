@@ -19,6 +19,7 @@ type OperatorActionButtonProps = {
   benefit: OperatorBenefitType | undefined;
   appStoreUri: string | undefined;
   rentalAppUri: string;
+  rentalAppUriQueryParams?: string;
   isBonusPayment?: boolean;
   setIsBonusPayment?: (isBonusPayment: boolean) => void;
   bonusProductId?: string;
@@ -29,6 +30,7 @@ export const OperatorActionButton = ({
   benefit,
   appStoreUri,
   rentalAppUri,
+  rentalAppUriQueryParams,
   isBonusPayment,
   setIsBonusPayment,
   bonusProductId,
@@ -36,6 +38,10 @@ export const OperatorActionButton = ({
   const {logEvent} = useBottomSheetContext();
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
+  const combinedRentalAppUri = buildFullRentalAppUri(
+    rentalAppUri,
+    rentalAppUriQueryParams,
+  );
 
   const {
     isUserEligibleForBenefit,
@@ -98,11 +104,11 @@ export const OperatorActionButton = ({
 
   const buildUrlWithValueCode = useCallback(
     (valueCode?: string) => {
-      let url = rentalAppUri;
+      let url = combinedRentalAppUri;
       if (benefit?.callToAction.url) {
         // Benefit urls can contain variables to be re replaced runtime, e.g. '{APP_URL}?voucherCode={VOUCHER_CODE}'
         url = replaceTokens(benefit.callToAction.url, {
-          APP_URL: rentalAppUri,
+          APP_URL: combinedRentalAppUri,
           VALUE_CODE: valueCode,
         });
         // If callToAction.url is e.g. '{APP_URL}?voucherCode={VOUCHER_CODE}' the APP_URL token will now
@@ -114,7 +120,7 @@ export const OperatorActionButton = ({
 
       return url;
     },
-    [rentalAppUri, benefit],
+    [combinedRentalAppUri, benefit],
   );
 
   const buttonOnPress = useCallback(async () => {
@@ -130,7 +136,7 @@ export const OperatorActionButton = ({
         setIsBonusPayment && setIsBonusPayment(false);
       }
     } else {
-      await openAppURL(rentalAppUri);
+      await openAppURL(combinedRentalAppUri);
     }
   }, [
     needsValueCode,
@@ -139,7 +145,7 @@ export const OperatorActionButton = ({
     fetchValueCode,
     buildUrlWithValueCode,
     openAppURL,
-    rentalAppUri,
+    combinedRentalAppUri,
     setIsBonusPayment,
   ]);
 
@@ -201,3 +207,14 @@ function replaceAllButFirstOccurrence(
     }
   });
 }
+
+const buildFullRentalAppUri = (
+  baseUri: string,
+  queryParams?: string,
+): string => {
+  if (!queryParams) return baseUri;
+  const rawUri = `${baseUri}?${queryParams}`;
+
+  // Ensure only the first '?' remains '?', others become '&'
+  return replaceAllButFirstOccurrence(rawUri, /\?/, '&');
+};

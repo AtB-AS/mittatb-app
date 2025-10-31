@@ -78,7 +78,7 @@ export const MapV2 = (props: MapProps) => {
 
   const isFocused = useIsFocused();
 
-  const startingCoordinates = getCurrentCoordinatesGlobal() || FOCUS_ORIGIN;
+  const startingCoordinates = FOCUS_ORIGIN || FOCUS_ORIGIN;
 
   const showVehicles = mapFilter?.mobility.SCOOTER?.showAll ?? false;
   const showStations =
