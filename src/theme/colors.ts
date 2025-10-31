@@ -42,23 +42,8 @@ const appOrgToThemeVariant = (appOrg: AppOrgs): ThemeVariant => {
 
 const mainThemes = createThemesFor(appOrgToThemeVariant(APP_ORG));
 
-// Override semibold with bold to avoid Android Roboto bold bug.
-// See https://github.com/facebook/react-native/issues/25696
-const fontWeightFix = {
-  fontWeight: Platform.select({
-    android: 'bold',
-    default: '600',
-  }) as 'bold' | '600',
-};
-
 const androidOrIos = Platform.OS === 'android' ? 'android' : 'ios';
-export const textTypeStyles = createTextTypeStyles(androidOrIos, {
-  'body__primary--bold': fontWeightFix,
-  'body__secondary--bold': fontWeightFix,
-  heading__component: fontWeightFix,
-  heading__paragraph: fontWeightFix,
-  heading__title: fontWeightFix,
-});
+export const textTypeStyles = createTextTypeStyles(androidOrIos);
 
 const tripLegDetail = {
   labelWidth: 80,
