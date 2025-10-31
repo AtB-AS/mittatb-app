@@ -130,6 +130,14 @@ jobs:
           IS_CI: 'true'
 
       # Results
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: ./e2e/results/results-mochawesome.json
+          retention-days: 3
+
       - name: Upload performance measures
         if: always()
         uses: actions/upload-artifact@v4
