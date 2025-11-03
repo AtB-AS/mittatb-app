@@ -17,6 +17,7 @@ import {
 } from './utils';
 import {isValidDateString} from '@atb/utils/date';
 import {isSameDay} from 'date-fns';
+import type {SupplementProductWithCount} from '@atb/modules/fare-contracts';
 
 export const createEmptyBuilder = (
   input: PurchaseSelectionBuilderInput,
@@ -114,6 +115,18 @@ const createBuilder = (
       }
       return builder;
     },
+    supplementProducts: (supplementProductsWithCount) => {
+      const productsWithCount = supplementProductsWithCount.filter(
+        (s) => s.count,
+      );
+      if (productsWithCount.length) {
+        currentSelection = {
+          ...currentSelection,
+          supplementProductsWithCount: productsWithCount,
+        };
+      }
+      return builder;
+    },
     date: (travelDate) => {
       if (!travelDate || isValidDateString(travelDate)) {
         currentSelection = {...currentSelection, travelDate};
@@ -172,6 +185,7 @@ const createSelectionForType = (
     input,
     preassignedFareProduct,
   );
+  const supplementProductsWithCount: SupplementProductWithCount[] = [];
 
   return {
     fareProductTypeConfig,
@@ -179,6 +193,7 @@ const createSelectionForType = (
     zones,
     stopPlaces,
     userProfilesWithCount,
+    supplementProductsWithCount,
     travelDate: undefined,
     legs: [],
     isOnBehalfOf: false,

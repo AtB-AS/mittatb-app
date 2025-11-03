@@ -12,6 +12,7 @@ import {CounterSectionItem, Section} from '@atb/components/sections';
 import {useThemeContext} from '@atb/theme';
 import type {SupplementProductState, UserCountState} from './types';
 import type {UserProfileWithCount} from '@atb/modules/fare-contracts';
+import {View} from 'react-native';
 
 type Props = {
   userCountState: UserCountState;
@@ -56,30 +57,35 @@ export function MultipleTravellersSelection(props: Props) {
   );
 
   return (
-    <Section>
-      {props.userCountState.userProfilesWithCount.map((u) => (
-        <CounterSectionItem
-          key={u.userTypeString}
-          text={getReferenceDataName(u, language)}
-          count={u.count}
-          addCount={() => addTraveller(u.userTypeString)}
-          removeCount={() => removeTraveller(u.userTypeString)}
-          testID={'counterInput_' + u.userTypeString.toLowerCase()}
-          color={theme.color.interactive[2]}
-          subtext={getTextForLanguage(u.alternativeDescriptions, language)}
-        />
-      ))}
-      {Object.values(
-        props.supplementProductCountState.supplementProductsWithCount,
-      ).map((s) => (
-        <CounterSectionItem
-          text={getReferenceDataName(s, language)}
-          count={s.count}
-          addCount={() => addSupplementProduct(s.id)}
-          removeCount={() => removeSupplementProduct(s.id)}
-        />
-      ))}
-    </Section>
+    <View style={{rowGap: theme.spacing.medium}}>
+      <Section>
+        {props.userCountState.userProfilesWithCount.map((u) => (
+          <CounterSectionItem
+            key={u.userTypeString}
+            text={getReferenceDataName(u, language)}
+            count={u.count}
+            addCount={() => addTraveller(u.userTypeString)}
+            removeCount={() => removeTraveller(u.userTypeString)}
+            testID={'counterInput_' + u.userTypeString.toLowerCase()}
+            color={theme.color.interactive[2]}
+            subtext={getTextForLanguage(u.alternativeDescriptions, language)}
+          />
+        ))}
+      </Section>
+      <Section>
+        {props.supplementProductCountState.supplementProductsWithCount.map(
+          (s) => (
+            <CounterSectionItem
+              text={getReferenceDataName(s, language)}
+              count={s.count}
+              addCount={() => addSupplementProduct(s.id)}
+              removeCount={() => removeSupplementProduct(s.id)}
+              subtext={getTextForLanguage(s.description, language)}
+            />
+          ),
+        )}
+      </Section>
+    </View>
   );
 }
 

@@ -1,33 +1,39 @@
 import {useState} from 'react';
-import type {SupplementProductsWithCount} from '@atb/modules/fare-contracts';
-import {useSelectableSupplementProducts} from '@atb/modules/purchase-selection';
+import type {SupplementProductWithCount} from '@atb/modules/fare-contracts';
+import {
+  type PurchaseSelectionType,
+  useSelectableSupplementProducts,
+} from '@atb/modules/purchase-selection';
 import type {SupplementProduct} from '@atb-as/config-specs';
 import type {SupplementProductState} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/types';
 
-export function useSupplementCountProductState(): SupplementProductState {
-  const initialSupplementProducts = useSelectableSupplementProducts();
-  const [state, setState] = useState<SupplementProductsWithCount>(
-    mapToInitialSupplementProductsWithCount(initialSupplementProducts),
+export function useSupplementCountProductState(
+  selection: PurchaseSelectionType,
+): SupplementProductState {
+  const selectableSupplementProducts = useSelectableSupplementProducts();
+  const [state, setState] = useState<SupplementProductWithCount[]>(
+    mapToInitialSupplementProductsWithCount(
+      selectableSupplementProducts,
+      selection.supplementProductsWithCount,
+    ),
   );
 
   const increment = (id: string) => {
-    setState((prevState) => ({
-      ...prevState,
-      [id]: {
-        ...prevState[id],
-        count: (prevState[id]?.count ?? 0) + 1,
-      },
-    }));
+    setState((prevState) =>
+      prevState.map((item) =>
+        item.id === id ? {...item, count: (item.count ?? 0) + 1} : item,
+      ),
+    );
   };
 
   const decrement = (id: string) => {
-    setState((prevState) => ({
-      ...prevState,
-      [id]: {
-        ...prevState[id],
-        count: Math.max((prevState[id]?.count ?? 0) - 1, 0),
-      },
-    }));
+    setState((prevState) =>
+      prevState.map((item) =>
+        item.id === id
+          ? {...item, count: Math.max((item.count ?? 0) - 1, 0)}
+          : item,
+      ),
+    );
   };
 
   return {
@@ -38,10 +44,15 @@ export function useSupplementCountProductState(): SupplementProductState {
 }
 
 function mapToInitialSupplementProductsWithCount(
-  supplementProducts: SupplementProduct[],
-): SupplementProductsWithCount {
-  return supplementProducts.reduce((acc, product) => {
-    acc[product.id] = {...product, count: 0};
-    return acc;
-  }, {} as SupplementProductsWithCount);
+  selectable: SupplementProduct[],
+  selectedProducts: SupplementProductWithCount[] = [],
+): SupplementProductWithCount[] {
+  return selectable.map((selectableProduct) => {
+    return {
+      ...selectableProduct,
+      count:
+        selectedProducts.find((sp) => sp.id === selectableProduct.id)?.count ??
+        0,
+    };
+  });
 }

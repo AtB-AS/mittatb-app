@@ -24,7 +24,6 @@ import {
   type PurchaseSelectionType,
   useSelectableUserProfiles,
 } from '@atb/modules/purchase-selection';
-import {useSelectableSupplementProducts} from '@atb/modules/purchase-selection/use-selectable-supplement-products';
 
 type TravellerSelectionProps = {
   selection: PurchaseSelectionType;
@@ -50,7 +49,6 @@ export function TravellerSelection({
   const selectableUserProfiles = useSelectableUserProfiles(
     selection.preassignedFareProduct,
   );
-  const selectableSupplementProducts = useSelectableSupplementProducts();
 
   const canSelectUserProfile = isUserProfileSelectable(
     selectionMode,
@@ -70,9 +68,14 @@ export function TravellerSelection({
 
   const travellersDetailsText =
     selectionMode == 'single'
-      ? getReferenceDataName(selection.userProfilesWithCount?.[0], language)
+      ? [getReferenceDataName(selection.userProfilesWithCount?.[0], language)]
       : selection.userProfilesWithCount
           .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
+          .concat(
+            selection.supplementProductsWithCount.map(
+              (s) => `${s.count} ${getReferenceDataName(s, language)}`,
+            ),
+          )
           .join(', ');
 
   const travellerInfo = !canSelectUserProfile

@@ -248,16 +248,23 @@ export const mapToStopSignalButtonConfig = (
     : StopSignalButtonConfig.parse({});
 };
 
-export function mapToSupplementProduct(config?: any): SupplementProduct[] {
-  if (!config) return [];
-  if (!isArray(config)) return [];
-  return config
-    .map((product) => {
-      const parseResult = SupplementProduct.safeParse(product);
-      if (!parseResult.success) {
-        return;
-      }
-      return parseResult.data;
-    })
-    .filter(isDefined);
+export function mapToSupplementProduct(
+  productsFromFirestore?: any,
+): SupplementProduct[] {
+  if (!productsFromFirestore) return [];
+  try {
+    const arr = JSON.parse(productsFromFirestore);
+    return arr
+      .map((product: any) => {
+        const parseResult = SupplementProduct.safeParse(product);
+        if (!parseResult.success) {
+          return;
+        }
+        return parseResult.data;
+      })
+      .filter(isDefined);
+  } catch (e) {
+    console.error('Error parsing supplement products JSON:', e);
+    return [];
+  }
 }

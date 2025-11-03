@@ -760,6 +760,7 @@ function getSupplementProductsFromSnapshot(
 ): SupplementProduct[] | undefined {
   const supplementProductsFromFirestore = snapshot.docs
     .find((doc) => doc.id == 'referenceData')
-    ?.get<string>('supplementProducts');
+    ?.get('supplementProducts');
+  console.log(supplementProductsFromFirestore);
   return mapToSupplementProduct(supplementProductsFromFirestore);
 }

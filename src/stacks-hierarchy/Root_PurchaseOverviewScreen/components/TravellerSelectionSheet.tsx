@@ -31,7 +31,7 @@ export const TravellerSelectionSheet = ({
     selection.fareProductTypeConfig.configuration.travellerSelectionMode;
 
   const userCountState = useUserCountState(selection);
-  const supplementProductCountState = useSupplementCountProductState();
+  const supplementProductCountState = useSupplementCountProductState(selection);
 
   const noProfilesSelected = userCountState.userProfilesWithCount.every(
     (u) => !u.count,
@@ -61,6 +61,9 @@ export const TravellerSelectionSheet = ({
             const newSelection = selectionBuilder
               .fromSelection(selection)
               .userProfiles(userCountState.userProfilesWithCount)
+              .supplementProducts(
+                supplementProductCountState.supplementProductsWithCount,
+              )
               .build();
             onSave(newSelection);
           }}
