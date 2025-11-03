@@ -3,15 +3,12 @@ import {ExtendedOnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {extendedOnboardingId} from '.';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {
-  OnboardingScreenComponent,
-  useNavigateToNextOnboardingCarouselScreen,
-} from '..';
+import {OnboardingScreenComponent, useOnboardingCarouselNavigation} from '..';
 
 export const ExtendedOnboarding_GoodToKnowScreen = () => {
   const {t} = useTranslation();
 
-  const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
+  const {navigateToNextScreen} = useOnboardingCarouselNavigation(
     extendedOnboardingId,
     'ExtendedOnboarding_GoodToKnowScreen',
   );

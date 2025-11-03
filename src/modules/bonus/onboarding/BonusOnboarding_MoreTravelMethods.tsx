@@ -3,7 +3,7 @@ import React from 'react';
 import {
   OnboardingCarouselScreenProps,
   OnboardingScreenComponent,
-  useNavigateToNextOnboardingCarouselScreen,
+  useOnboardingCarouselNavigation,
 } from '@atb/modules/onboarding';
 import {ThemedBundlingCityBikeActive} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -15,7 +15,7 @@ export type MoreTravelMethodsScreenProps =
 export const BonusOnboarding_MoreTravelMethodsScreen =
   ({}: MoreTravelMethodsScreenProps) => {
     const {t} = useTranslation();
-    const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
+    const {navigateToNextScreen} = useOnboardingCarouselNavigation(
       bonusOnboardingId,
       'BonusOnboarding_MoreTravelMethodsScreen',
     );
