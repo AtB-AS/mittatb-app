@@ -30,6 +30,7 @@ import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
 import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {useOperators} from '../use-operators';
 
 type Props = {
   vehicleId: VehicleId;
@@ -58,6 +59,8 @@ export const BicycleSheet = ({
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
+
+  const operator = useOperators().byId(operatorId);
 
   return (
     <MapBottomSheet
@@ -150,6 +153,7 @@ export const BicycleSheet = ({
                   benefit={operatorBenefit}
                   appStoreUri={appStoreUri}
                   rentalAppUri={rentalAppUri}
+                  rentalAppUriQueryParams={operator?.rentalAppUriQueryParams}
                 />
               </View>
             )}

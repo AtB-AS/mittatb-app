@@ -68,12 +68,9 @@ export const ScooterSheet = ({
     appStoreUri,
   } = useVehicle(id);
 
-  const {mobilityOperators} = useOperators();
+  const operator = useOperators().byId(operatorId);
 
-  const mobilityOperator = mobilityOperators?.find((e) => e.id === operatorId);
-
-  const operatorIsIntegrationEnabled =
-    mobilityOperator?.isDeepIntegrationEnabled;
+  const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
 
   const {isLoading: shmoReqIsLoading, hasBlockers} =
     useShmoRequirements(operatorId);
@@ -180,10 +177,8 @@ export const ScooterSheet = ({
                     operatorName={operatorName}
                     benefit={operatorBenefit}
                     appStoreUri={appStoreUri}
-                    rentalAppUri={buildFullRentalAppUri(
-                      rentalAppUri,
-                      mobilityOperator?.rentalAppUriQueryParams,
-                    )}
+                    rentalAppUri={rentalAppUri}
+                    rentalAppUriQueryParams={operator?.rentalAppUriQueryParams}
                   />
                 )}
                 {isParkingViolationsReportingEnabled && (
@@ -212,16 +207,6 @@ export const ScooterSheet = ({
       )}
     </MapBottomSheet>
   );
-};
-
-const buildFullRentalAppUri = (
-  baseUri: string,
-  queryParams?: string,
-): string => {
-  if (!queryParams) return baseUri;
-
-  const separator = baseUri.includes('?') ? '&' : '?';
-  return `${baseUri}${separator}${queryParams}`;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {

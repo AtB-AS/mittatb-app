@@ -33,6 +33,7 @@ import {
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {useOperators} from '../use-operators';
 
 type Props = {
   stationId: string;
@@ -64,6 +65,7 @@ export const CarSharingStationBottomSheet = ({
     stationName,
   } = useCarSharingStation(stationId);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
+  const operator = useOperators().byId(operatorId);
 
   const {isBonusProgramEnabled} = useFeatureTogglesContext();
   const {bonusProducts} = useFirestoreConfigurationContext();
@@ -174,6 +176,7 @@ export const CarSharingStationBottomSheet = ({
                   operatorName={operatorName}
                   appStoreUri={appStoreUri}
                   rentalAppUri={rentalAppUri}
+                  rentalAppUriQueryParams={operator?.rentalAppUriQueryParams}
                   isBonusPayment={payWithBonusPoints}
                   setIsBonusPayment={setPayWithBonusPoints}
                   bonusProductId={bonusProduct?.id}
