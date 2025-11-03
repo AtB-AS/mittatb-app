@@ -13,7 +13,6 @@ import {sparOnboardingId} from './config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemeText} from '@atb/components/text';
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import Bugsnag from '@bugsnag/react-native';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -100,7 +99,9 @@ const ContactInfoContent = () => {
 
         <GenericSectionItem>
           <PressableOpacity
-            onPress={async () => openLink(`tel:${telephoneNumbers['parking']}`)}
+            onPress={async () =>
+              Linking.openURL(`tel:${telephoneNumbers['parking']}`)
+            }
             accessibilityRole="link"
           >
             <ThemeText
@@ -137,7 +138,9 @@ const ContactInfoContent = () => {
         </GenericSectionItem>
         <GenericSectionItem>
           <PressableOpacity
-            onPress={async () => openLink(`tel:${telephoneNumbers['project']}`)}
+            onPress={async () =>
+              Linking.openURL(`tel:${telephoneNumbers['project']}`)
+            }
             accessibilityRole="link"
           >
             <ThemeText
@@ -166,7 +169,7 @@ const ContactInfoContent = () => {
         </GenericSectionItem>
         <GenericSectionItem>
           <PressableOpacity
-            onPress={async () => openLink(`atb.no/kontakt`)}
+            onPress={async () => Linking.openURL(`atb.no/kontakt`)}
             accessibilityRole="link"
             style={style.linkItem}
           >
@@ -186,14 +189,6 @@ const ContactInfoContent = () => {
       </Section>
     </View>
   );
-};
-
-const openLink = async (url: string) => {
-  if (await Linking.canOpenURL(url)) {
-    Linking.openURL(url);
-  } else {
-    Bugsnag.notify(new Error(`Could not open URL: ${url}`));
-  }
 };
 
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
