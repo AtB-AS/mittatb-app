@@ -2,10 +2,13 @@ import {useNavigation} from '@react-navigation/native';
 import {useCallback} from 'react';
 import {OnboardingCarouselNavigationProps} from './navigation-types';
 import {onboardingCarouselConfigs} from './onboarding-carousel-config';
-import {OnboardingCarouselScreenName} from './types';
+import {
+  OnboardingCarouselConfigId,
+  OnboardingCarouselScreenName,
+} from './types';
 
 function getAdjacentOnboardingCarouselScreenName(
-  configId: string,
+  configId: OnboardingCarouselConfigId,
   currentScreenName: string,
   offset: number,
 ): OnboardingCarouselScreenName | undefined {
@@ -23,7 +26,7 @@ function getAdjacentOnboardingCarouselScreenName(
 }
 
 function useNavigateToAdjacentOnboardingCarouselScreen(
-  configId: string,
+  configId: OnboardingCarouselConfigId,
   currentScreenName: string,
   offset: number,
 ) {
@@ -44,7 +47,7 @@ function useNavigateToAdjacentOnboardingCarouselScreen(
 }
 
 export function useOnboardingCarouselNavigation(
-  configId: string,
+  configId: OnboardingCarouselConfigId,
   currentScreenName: string,
 ) {
   const navigateToNextScreen = useNavigateToAdjacentOnboardingCarouselScreen(
@@ -60,9 +63,9 @@ export function useOnboardingCarouselNavigation(
     );
 
   const navigation = useNavigation<OnboardingCarouselNavigationProps>();
-  const closeOnboardingCarousel = () => {
+  const closeOnboardingCarousel = useCallback(() => {
     navigation.getParent()?.goBack();
-  };
+  }, [navigation]);
 
   return {
     navigateToNextScreen,
