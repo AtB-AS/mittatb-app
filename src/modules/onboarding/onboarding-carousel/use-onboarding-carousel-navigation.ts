@@ -6,6 +6,8 @@ import {
   OnboardingCarouselConfigId,
   OnboardingCarouselScreenName,
 } from './types';
+import {OnboardingSectionId} from '../types';
+import {useOnboardingNavigation} from '../use-onboarding-navigation';
 
 function getAdjacentOnboardingCarouselScreenName(
   configId: OnboardingCarouselConfigId,
@@ -62,10 +64,16 @@ export function useOnboardingCarouselNavigation(
       -1,
     );
 
+  const {continueFromOnboardingSection} = useOnboardingNavigation();
   const navigation = useNavigation<OnboardingCarouselNavigationProps>();
-  const closeOnboardingCarousel = useCallback(() => {
-    navigation.getParent()?.goBack();
-  }, [navigation]);
+
+  const closeOnboardingCarousel = useCallback(
+    (comingFromOnboardingSectionId: OnboardingSectionId) => {
+      navigation.getParent()?.goBack();
+      continueFromOnboardingSection(comingFromOnboardingSectionId);
+    },
+    [navigation, continueFromOnboardingSection],
+  );
 
   return {
     navigateToNextScreen,
