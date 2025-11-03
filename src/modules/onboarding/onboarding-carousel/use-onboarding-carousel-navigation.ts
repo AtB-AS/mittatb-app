@@ -20,10 +20,13 @@ function getAdjacentOnboardingCarouselScreenName(
     (s) => s.name === currentScreenName,
   );
 
-  if (currentIndex < 0 || currentIndex >= config.onboardingScreens.length)
-    return undefined;
+  const index = currentIndex + offset;
 
-  return config.onboardingScreens[currentIndex + offset]?.name;
+  if (index < 0 || index >= config.onboardingScreens.length) {
+    return undefined;
+  }
+
+  return config.onboardingScreens[index]?.name;
 }
 
 function useNavigateToAdjacentOnboardingCarouselScreen(
