@@ -223,7 +223,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                       {staySeated(i) ||
                       (leg.mode === 'foot' && i !== 0) ? null : (
                         <ThemeText
-                          typography="body__tertiary--bold"
+                          typography="body__tertiary"
                           color="primary"
                           testID={'schTime' + i}
                         >
