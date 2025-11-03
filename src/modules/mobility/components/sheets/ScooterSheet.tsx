@@ -69,7 +69,6 @@ export const ScooterSheet = ({
   } = useVehicle(id);
 
   const operator = useOperators().byId(operatorId);
-
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
 
   const {isLoading: shmoReqIsLoading, hasBlockers} =
@@ -175,10 +174,8 @@ export const ScooterSheet = ({
                   <OperatorActionButton
                     operatorId={operatorId}
                     operatorName={operatorName}
-                    benefit={operatorBenefit}
                     appStoreUri={appStoreUri}
                     rentalAppUri={rentalAppUri}
-                    rentalAppUriQueryParams={operator?.rentalAppUriQueryParams}
                   />
                 )}
                 {isParkingViolationsReportingEnabled && (

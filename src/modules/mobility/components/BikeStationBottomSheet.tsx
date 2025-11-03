@@ -33,7 +33,6 @@ import {
 import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useOperators} from '../use-operators';
 
 type Props = {
   stationId: string;
@@ -73,7 +72,6 @@ export const BikeStationBottomSheet = ({
     FormFactor.Bicycle,
   );
   const {logEvent} = useAnalyticsContext();
-  const operator = useOperators().byId(operatorId);
 
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
   useDoOnceOnItemReceived(onStationReceived, station);
@@ -184,10 +182,8 @@ export const BikeStationBottomSheet = ({
                 <OperatorActionButton
                   operatorId={operatorId}
                   operatorName={operatorName}
-                  benefit={operatorBenefit}
                   appStoreUri={appStoreUri}
                   rentalAppUri={rentalAppUri}
-                  rentalAppUriQueryParams={operator?.rentalAppUriQueryParams}
                   isBonusPayment={payWithBonusPoints}
                   setIsBonusPayment={setPayWithBonusPoints}
                   bonusProductId={bonusProduct?.id}
