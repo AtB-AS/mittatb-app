@@ -6,12 +6,12 @@ import {
   useOnboardingCarouselNavigation,
 } from '@atb/modules/onboarding';
 import {ThemedCarRegister} from '@atb/theme/ThemedAssets';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 
 import {Linking} from 'react-native';
 import {sparOnboardingId} from './config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
 export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
   const {t, language} = useTranslation();
@@ -79,7 +79,7 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
           SmartParkAndRideTexts.onboarding.automaticRegistration.buttonText,
         ),
         expanded: true,
-        rightIcon: {svg: Confirm},
+        rightIcon: {svg: ArrowRight},
       }}
       testID="smartParkAndRideOnboardingAutomaticRegistration"
     />
