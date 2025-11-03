@@ -3,7 +3,7 @@ export type {
   OnboardingCarouselConfig,
   OnboardingCarouselConfigId,
 } from './types';
-export {useOnboardingCarouselNavigation} from './use-navigation';
+export {useOnboardingCarouselNavigation} from './use-onboarding-carousel-navigation';
 export type {
   OnboardingCarouselScreenProps,
   OnboardingCarouselStackParams,

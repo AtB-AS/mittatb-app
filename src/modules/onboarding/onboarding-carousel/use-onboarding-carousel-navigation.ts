@@ -15,7 +15,9 @@ function getAdjacentOnboardingCarouselScreenName(
   const currentIndex = config.onboardingScreens.findIndex(
     (s) => s.name === currentScreenName,
   );
-  if (currentIndex === -1) return undefined;
+
+  if (currentIndex < 0 || currentIndex >= config.onboardingScreens.length)
+    return undefined;
 
   return config.onboardingScreens[currentIndex + offset]?.name;
 }
