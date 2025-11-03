@@ -12,7 +12,7 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {InteractiveColor, textNames, TextNames} from '@atb/theme/colors';
 import React, {useState} from 'react';
-import {Alert, View} from 'react-native';
+import {Alert, Platform, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {dictionary, useTranslation} from '@atb/translations';
 import {BusFill} from '@atb/assets/svg/mono-icons/transportation';
@@ -1181,6 +1181,37 @@ export const Profile_DesignSystemScreen = ({
               );
             })}
           </GenericSectionItem>
+          {Platform.OS === 'android' && (
+            <GenericSectionItem>
+              <Text
+                style={{
+                  fontFamily: 'Roboto-Regular',
+                  fontSize: 24,
+                  color: theme.color.background.neutral[0].foreground.primary,
+                }}
+              >
+                Roboto Regular
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'Roboto-Medium',
+                  fontSize: 24,
+                  color: theme.color.background.neutral[0].foreground.primary,
+                }}
+              >
+                Roboto Medium
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'Roboto-SemiBold',
+                  fontSize: 24,
+                  color: theme.color.background.neutral[0].foreground.primary,
+                }}
+              >
+                Roboto SemiBold
+              </Text>
+            </GenericSectionItem>
+          )}
         </Section>
 
         <Section style={styles.section}>
