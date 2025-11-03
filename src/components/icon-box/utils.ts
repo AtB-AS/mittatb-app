@@ -1,4 +1,4 @@
-import {ContrastColor, GeofencingZoneKeys} from '@atb-as/theme';
+import {ContrastColor, GeofencingZoneCode} from '@atb-as/theme';
 import {AnyMode, AnySubMode} from './types';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {
@@ -63,7 +63,7 @@ export function getTransportModeSvg(mode?: AnyMode, subMode?: AnySubMode) {
   }
 }
 
-export const getGeofencingZoneKeySvg = (key: GeofencingZoneKeys) => {
+export const getGeofencingZoneCodeSvg = (key: GeofencingZoneCode) => {
   switch (key) {
     case 'allowed':
       return {svg: Check};
@@ -76,8 +76,8 @@ export const getGeofencingZoneKeySvg = (key: GeofencingZoneKeys) => {
   }
 };
 
-export const getGeofencingZoneKeyIconColor = (
-  key: GeofencingZoneKeys,
+export const getGeofencingZoneCodeIconColor = (
+  key: GeofencingZoneCode,
   theme: Theme,
 ): ContrastColor => {
   switch (key) {

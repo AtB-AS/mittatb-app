@@ -32,7 +32,7 @@ export const useGeofencingZoneContent = () => {
 
       const iconNode = geofencingZoneCustomProps?.code ? (
         <GeofencingZoneIconBox
-          geofencingZoneKey={geofencingZoneCustomProps?.code}
+          geofencingZoneCode={geofencingZoneCustomProps?.code}
         />
       ) : null;
 

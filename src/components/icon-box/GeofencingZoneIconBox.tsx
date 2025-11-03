@@ -3,23 +3,26 @@ import {StyleProp, View, ViewStyle} from 'react-native';
 
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {getGeofencingZoneKeyIconColor, getGeofencingZoneKeySvg} from './utils';
-import {GeofencingZoneKeys} from '@atb-as/theme';
+import {
+  getGeofencingZoneCodeIconColor,
+  getGeofencingZoneCodeSvg,
+} from './utils';
+import {GeofencingZoneCode} from '@atb-as/theme';
 
 export type GeofencingZoneIconBoxProps = {
-  geofencingZoneKey: GeofencingZoneKeys;
+  geofencingZoneCode: GeofencingZoneCode;
   size?: keyof Theme['icon']['size'];
   style?: StyleProp<ViewStyle>;
 };
 
 export const GeofencingZoneIconBox: React.FC<GeofencingZoneIconBoxProps> = ({
-  geofencingZoneKey,
+  geofencingZoneCode,
   size = 'small',
   style,
 }) => {
   const {theme} = useThemeContext();
-  const iconColor = getGeofencingZoneKeyIconColor(geofencingZoneKey, theme);
-  const {svg} = getGeofencingZoneKeySvg(geofencingZoneKey);
+  const iconColor = getGeofencingZoneCodeIconColor(geofencingZoneCode, theme);
+  const {svg} = getGeofencingZoneCodeSvg(geofencingZoneCode);
   const styles = useStyles();
 
   return (
