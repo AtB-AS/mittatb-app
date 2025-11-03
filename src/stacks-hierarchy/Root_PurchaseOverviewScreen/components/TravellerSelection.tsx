@@ -24,6 +24,7 @@ import {
   type PurchaseSelectionType,
   useSelectableUserProfiles,
 } from '@atb/modules/purchase-selection';
+import {useSelectableSupplementProducts} from '@atb/modules/purchase-selection/use-selectable-supplement-products';
 
 type TravellerSelectionProps = {
   selection: PurchaseSelectionType;
@@ -49,6 +50,7 @@ export function TravellerSelection({
   const selectableUserProfiles = useSelectableUserProfiles(
     selection.preassignedFareProduct,
   );
+  const selectableSupplementProducts = useSelectableSupplementProducts();
 
   const canSelectUserProfile = isUserProfileSelectable(
     selectionMode,

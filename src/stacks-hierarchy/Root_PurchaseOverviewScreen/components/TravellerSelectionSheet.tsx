@@ -13,6 +13,7 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
+import {useSupplementCountProductState} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-supplement-product-count-state';
 
 type TravellerSelectionSheetProps = {
   selection: PurchaseSelectionType;
@@ -30,6 +31,7 @@ export const TravellerSelectionSheet = ({
     selection.fareProductTypeConfig.configuration.travellerSelectionMode;
 
   const userCountState = useUserCountState(selection);
+  const supplementProductCountState = useSupplementCountProductState();
 
   const noProfilesSelected = userCountState.userProfilesWithCount.every(
     (u) => !u.count,
@@ -42,7 +44,10 @@ export const TravellerSelectionSheet = ({
     >
       <ScrollView style={styles.container}>
         {selectionMode === 'multiple' ? (
-          <MultipleTravellersSelection {...userCountState} />
+          <MultipleTravellersSelection
+            userCountState={userCountState}
+            supplementProductCountState={supplementProductCountState}
+          />
         ) : (
           <SingleTravellerSelection {...userCountState} />
         )}

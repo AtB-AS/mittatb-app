@@ -7,7 +7,7 @@ export {
   useOtherDeviceIsInspectableWarning,
   hasShmoBookingId,
 } from './utils';
-export type {UserProfileWithCount, SupplementaryProduct} from './types';
+export type {UserProfileWithCount, SupplementProductsWithCount} from './types';
 export {FareContractOrReservation} from './FareContractOrReservation';
 export {
   sortFcOrReservationByCreation,
