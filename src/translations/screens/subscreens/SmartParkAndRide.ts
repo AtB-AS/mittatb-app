@@ -214,7 +214,6 @@ const SmartParkAndRideTexts = {
           'Contact Trøndelag County Municipality',
           'Kontakt Trøndelag fylkeskommune',
         ),
-        tel: _('74 17 40 00', '74 17 40 00', '74 17 40 00'),
       },
       about: {
         heading: _(
@@ -225,6 +224,7 @@ const SmartParkAndRideTexts = {
         link: _('atb.no/kontakt', 'atb.no/kontakt', 'atb.no/kontakt'),
       },
       buttonText: _('Lukk', 'Close', 'Lukk'),
+      close: _('Ferdig', 'Done', 'Ferdig'),
     },
   },
   notLoggedIn: {
