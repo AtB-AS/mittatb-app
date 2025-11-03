@@ -19,7 +19,6 @@ import {useBottomSheetStyles} from '../use-bottom-sheet-styles';
 import {ReduceMotion} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useThemeContext} from '@atb/theme';
-//import {BottomSheetFooter} from './BottomSheetFooter';
 
 type BottomSheetModalProps = PropsWithChildren<{
   bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
