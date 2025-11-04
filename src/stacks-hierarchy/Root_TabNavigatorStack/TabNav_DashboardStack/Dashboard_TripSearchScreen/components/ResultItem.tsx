@@ -180,6 +180,10 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     return previousLeg && previousLeg.interchangeTo?.staySeated === true;
   };
 
+  const isIntermediateFootLeg = (leg: Leg, index: number): boolean => {
+    return leg.mode === 'foot' && index !== 0;
+  };
+
   return (
     <Animated.View
       style={[{opacity: fadeInValueRef.current}, styles.container]}
@@ -220,8 +224,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                       />
                     )}
                     <View style={styles.departureTimes}>
-                      {staySeated(i) ||
-                      (leg.mode === 'foot' && i !== 0) ? null : (
+                      {staySeated(i) || isIntermediateFootLeg(leg, i) ? null : (
                         <ThemeText
                           typography="body__tertiary"
                           color="primary"
