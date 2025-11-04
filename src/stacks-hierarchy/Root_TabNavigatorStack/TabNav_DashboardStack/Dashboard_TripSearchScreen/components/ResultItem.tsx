@@ -180,8 +180,9 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     return previousLeg && previousLeg.interchangeTo?.staySeated === true;
   };
 
-  const displayLegDash = (idx: number): boolean =>
-    idx < expandedLegs.length - 1 && !staySeated(idx + 1);
+  const isIntermediateFootLeg = (leg: Leg, index: number): boolean => {
+    return leg.mode === 'foot' && index !== 0;
+  };
 
   return (
     <Animated.View
@@ -223,7 +224,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                       />
                     )}
                     <View style={styles.departureTimes}>
-                      {staySeated(i) ? null : (
+                      {staySeated(i) || isIntermediateFootLeg(leg, i) ? null : (
                         <ThemeText
                           typography="body__tertiary"
                           color="primary"
@@ -251,19 +252,9 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                       )}
                     </View>
                   </View>
-                  {displayLegDash(i) ? (
-                    <View style={[styles.dashContainer, iconHeight]}>
-                      <LegDash />
-                    </View>
-                  ) : null}
                 </View>
               ))}
             </View>
-            {collapsedLegs.length ? (
-              <View style={[styles.dashContainer, iconHeight]}>
-                <LegDash />
-              </View>
-            ) : null}
             <CounterIconBox
               count={collapsedLegs.length}
               spacing="standard"
@@ -310,16 +301,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
     flexGrow: 1,
   },
-  legLine: {
-    backgroundColor: theme.color.background.neutral[3].background,
-    flexDirection: 'row',
-    borderRadius: theme.border.radius.regular,
-    width: 5,
-  },
-  leftLegLine: {
-    marginLeft: theme.spacing.xSmall,
-    marginRight: 2,
-  },
   rightLegLine: {
     marginRight: theme.spacing.xSmall,
   },
@@ -347,7 +328,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.color.background.neutral[2].background,
     paddingVertical: theme.spacing.small,
     paddingHorizontal: theme.spacing.small,
-    borderRadius: theme.border.radius.small,
+    borderRadius: theme.border.radius.regular,
     alignItems: 'center',
   },
   walkContainer: {
@@ -356,7 +337,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacing.small,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    borderRadius: theme.border.radius.small,
+    borderRadius: theme.border.radius.regular,
   },
   walkDuration: {
     fontSize: 10,
@@ -371,6 +352,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   row: {
     flexDirection: 'row',
     alignItems: 'flex-start',
+    gap: theme.spacing.small,
   },
   flexRow: {
     flex: 1,
@@ -386,12 +368,14 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   legOutput: {
     flexDirection: 'row',
+    gap: theme.spacing.small,
   },
   legAndDash: {flexDirection: 'row'},
   departureTimes: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     marginTop: theme.spacing.xSmall,
+    marginHorizontal: theme.spacing.xSmall,
   },
   scheduledTime: {
     marginLeft: theme.spacing.xSmall,
@@ -426,22 +410,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-const LegDash = () => {
-  const styles = useThemeStyles();
-  const {theme} = useThemeContext();
-  const fontScale = useFontScale();
-  const lineHeight = {height: (theme.spacing.xSmall / 2) * fontScale};
-  return (
-    <>
-      <View style={styles.lineContainer}>
-        <View style={[styles.legLine, styles.leftLegLine, lineHeight]} />
-      </View>
-      <View style={styles.lineContainer}>
-        <View style={[styles.legLine, styles.rightLegLine, lineHeight]} />
-      </View>
-    </>
-  );
-};
 const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   const styles = useThemeStyles();
   const showWaitTime = Boolean(nextLeg);
