@@ -26,6 +26,7 @@ import {useShmoWarnings} from '@atb/modules/map';
 import {useKeepAwake} from '@sayem314/react-native-keep-awake';
 import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {ThemeText} from '@atb/components/text';
 
 type Props = {
   navigateSupportCallback: () => void;
@@ -53,7 +54,7 @@ export const ActiveScooterSheet = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
-  const {geofencingZoneMessage, warningMessage} = useShmoWarnings(
+  const {geofencingZoneWarning, warningMessage} = useShmoWarnings(
     activeBooking?.asset.id ?? '',
     mapViewRef,
   );
@@ -155,11 +156,15 @@ export const ActiveScooterSheet = ({
               </View>
               <View style={styles.footer}>
                 <View style={styles.endTripWrapper}>
-                  {geofencingZoneMessage && (
-                    <MessageInfoText
-                      type="warning"
-                      message={geofencingZoneMessage}
-                    />
+                  {geofencingZoneWarning && (
+                    <View style={styles.geofencingZoneWarning}>
+                      {geofencingZoneWarning.iconNode}
+                      <View style={styles.geofencingZoneWarningText}>
+                        <ThemeText typography="body__secondary">
+                          {geofencingZoneWarning.description}
+                        </ThemeText>
+                      </View>
+                    </View>
                   )}
                   {warningMessage && (
                     <MessageInfoText type="warning" message={warningMessage} />
@@ -236,6 +241,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     tripWrapper: {
       marginBottom: theme.spacing.medium,
+    },
+    geofencingZoneWarning: {
+      flexDirection: 'row',
+      gap: theme.spacing.small,
+      alignItems: 'center',
+    },
+    geofencingZoneWarningText: {
+      flex: 1,
     },
   };
 });
