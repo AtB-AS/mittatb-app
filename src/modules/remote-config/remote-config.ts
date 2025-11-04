@@ -1,5 +1,10 @@
 import remoteConfig from '@react-native-firebase/remote-config';
 import {ENABLE_TICKETING, PRIVACY_POLICY_URL, CUSTOMER_SERVICE_URL} from '@env';
+import {
+  MAPBOX_NSR_SOURCE_LAYER_ID,
+  MAPBOX_NSR_TILESET_ID,
+  MAPBOX_USER_NAME,
+} from '@env';
 
 export type RemoteConfig = {
   /**
@@ -84,6 +89,9 @@ export type RemoteConfig = {
   flex_ticket_url: string;
   live_vehicle_stale_threshold: number;
   loading_screen_delay_ms: number;
+  mapboxNsrSourceLayerId: string;
+  mapboxNsrTilesetId: string;
+  mapboxUserName: string;
   minimum_app_version: string;
   must_upgrade_ticketing: boolean;
   new_favourites_info_url: string;
@@ -171,6 +179,9 @@ export const defaultRemoteConfig: RemoteConfig = {
   flex_ticket_url: '',
   live_vehicle_stale_threshold: 15,
   loading_screen_delay_ms: 200,
+  mapboxNsrSourceLayerId: MAPBOX_NSR_SOURCE_LAYER_ID,
+  mapboxNsrTilesetId: MAPBOX_NSR_TILESET_ID,
+  mapboxUserName: MAPBOX_USER_NAME,
   minimum_app_version: '',
   must_upgrade_ticketing: false,
   new_favourites_info_url: '',
@@ -374,6 +385,14 @@ export function getConfig(): RemoteConfig {
   const loading_screen_delay_ms =
     values['loading_screen_delay_ms']?.asNumber() ??
     defaultRemoteConfig.loading_screen_delay_ms;
+  const mapboxNsrSourceLayerId =
+    values['mapboxNsrSourceLayerId']?.asString() ??
+    defaultRemoteConfig.mapboxNsrSourceLayerId;
+  const mapboxNsrTilesetId =
+    values['mapboxNsrTilesetId']?.asString() ??
+    defaultRemoteConfig.mapboxNsrTilesetId;
+  const mapboxUserName =
+    values['mapboxUserName']?.asString() ?? defaultRemoteConfig.mapboxUserName;
   const minimum_app_version =
     values['minimum_app_version']?.asString() ??
     defaultRemoteConfig.minimum_app_version;
@@ -481,6 +500,9 @@ export function getConfig(): RemoteConfig {
     flex_ticket_url,
     live_vehicle_stale_threshold,
     loading_screen_delay_ms,
+    mapboxNsrSourceLayerId,
+    mapboxNsrTilesetId,
+    mapboxUserName,
     minimum_app_version,
     must_upgrade_ticketing,
     new_favourites_info_url,
