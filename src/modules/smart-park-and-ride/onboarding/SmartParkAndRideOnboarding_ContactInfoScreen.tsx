@@ -82,12 +82,12 @@ const ContactInfoContent = () => {
         <GenericSectionItem>
           <View>
             <View>
-              <ThemeText typography="body__primary--bold">
+              <ThemeText typography="body__m__strong">
                 {t(
                   SmartParkAndRideTexts.onboarding.contactInfo.parking.heading,
                 )}
               </ThemeText>
-              <ThemeText typography="body__secondary" color="secondary">
+              <ThemeText typography="body__s" color="secondary">
                 {t(
                   SmartParkAndRideTexts.onboarding.contactInfo.parking
                     .subheading,
@@ -105,7 +105,7 @@ const ContactInfoContent = () => {
             accessibilityRole="link"
           >
             <ThemeText
-              typography="body__primary--underline"
+              typography="body__m__underline"
               color={theme.color.interactive[0].default.background}
             >
               {t(
@@ -122,12 +122,12 @@ const ContactInfoContent = () => {
         <GenericSectionItem>
           <View>
             <View>
-              <ThemeText typography="body__primary--bold">
+              <ThemeText typography="body__m__strong">
                 {t(
                   SmartParkAndRideTexts.onboarding.contactInfo.project.heading,
                 )}
               </ThemeText>
-              <ThemeText typography="body__secondary" color="secondary">
+              <ThemeText typography="body__s" color="secondary">
                 {t(
                   SmartParkAndRideTexts.onboarding.contactInfo.project
                     .subheading,
@@ -144,7 +144,7 @@ const ContactInfoContent = () => {
             accessibilityRole="link"
           >
             <ThemeText
-              typography="body__primary--underline"
+              typography="body__m__underline"
               color={theme.color.interactive[0].default.background}
             >
               {t(
@@ -161,7 +161,7 @@ const ContactInfoContent = () => {
         <GenericSectionItem>
           <View>
             <View>
-              <ThemeText typography="body__primary--bold">
+              <ThemeText typography="body__m__strong">
                 {t(SmartParkAndRideTexts.onboarding.contactInfo.about.heading)}
               </ThemeText>
             </View>
@@ -174,7 +174,7 @@ const ContactInfoContent = () => {
             style={style.linkItem}
           >
             <ThemeText
-              typography="body__primary--underline"
+              typography="body__m__underline"
               color={theme.color.interactive[0].default.background}
             >
               {t(SmartParkAndRideTexts.onboarding.contactInfo.about.link)}

@@ -58,11 +58,7 @@ export function MapStopPlacesListHeader({
           />
         </View>
       </View>
-      <ThemeText
-        typography="body__secondary"
-        color="secondary"
-        style={styles.title}
-      >
+      <ThemeText typography="body__s" color="secondary" style={styles.title}>
         {t(DeparturesTexts.header.title)}
       </ThemeText>
     </>

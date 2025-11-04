@@ -196,14 +196,14 @@ export const Profile_FareContractsScreen = () => {
         style={styles.content}
         contentContainerStyle={styles.contentContainer}
       >
-        <ThemeText typography="heading--jumbo">Reservation</ThemeText>
+        <ThemeText typography="heading__2xl">Reservation</ThemeText>
         <FareContractOrReservation
           index={0}
           onPressFareContract={() => {}}
           fcOrReservation={RESERVATION}
           now={Date.now()}
         />
-        <ThemeText typography="heading--jumbo">Fare Contracts</ThemeText>
+        <ThemeText typography="heading__2xl">Fare Contracts</ThemeText>
         {fareContracts.map((fc, i) => (
           <FareContractOrReservation
             key={i}
@@ -213,7 +213,7 @@ export const Profile_FareContractsScreen = () => {
             onPressFareContract={() => {}}
           />
         ))}
-        <ThemeText typography="heading--jumbo">Fare contract details</ThemeText>
+        <ThemeText typography="heading__2xl">Fare contract details</ThemeText>
         {fareContracts.map((fc, i) => (
           <DetailsContent
             key={i}

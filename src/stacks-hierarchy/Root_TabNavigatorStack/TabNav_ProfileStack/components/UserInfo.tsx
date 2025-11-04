@@ -98,13 +98,13 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
         <View style={[styles.sectionItemContainer, topContainer]}>
           <ThemedProfileCardLoggedIn width={66} height={52} />
           <View style={styles.infoContainer}>
-            <ThemeText typography="body__primary--bold">
+            <ThemeText typography="body__m__strong">
               {t(ProfileTexts.sections.account.infoItems.heading)}
             </ThemeText>
             <View>
               {formattedPhoneNumber && (
                 <ThemeText
-                  typography="body__secondary"
+                  typography="body__s"
                   color="secondary"
                   testID="loggedInWith"
                 >
@@ -116,7 +116,7 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
                 </ThemeText>
               )}
               {customerNumber !== undefined && (
-                <ThemeText typography="body__secondary" color="secondary">
+                <ThemeText typography="body__s" color="secondary">
                   {t(
                     ProfileTexts.sections.account.infoItems.customerNumber(
                       customerNumber,
@@ -142,11 +142,11 @@ const LoggedOutInfoSectionItem = ({...props}) => {
   return (
     <View style={[styles.sectionItemContainer, topContainer]}>
       <View style={styles.infoContainer}>
-        <ThemeText typography="body__primary--bold">
+        <ThemeText typography="body__m__strong">
           {t(ProfileTexts.sections.account.infoItems.notLoggedInHeading)}
         </ThemeText>
         {customerNumber !== undefined && (
-          <ThemeText typography="body__secondary" color="secondary">
+          <ThemeText typography="body__s" color="secondary">
             {t(
               ProfileTexts.sections.account.infoItems.customerNumber(
                 customerNumber,

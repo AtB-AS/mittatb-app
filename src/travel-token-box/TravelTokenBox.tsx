@@ -81,7 +81,7 @@ export function TravelTokenBox({
           )}
           <View style={styles.activeTravelTokenInfo}>
             <ThemeText
-              typography="body__primary--bold"
+              typography="body__m__strong"
               color={interactiveColor.default}
             >
               {t(TravelTokenBoxTexts.title) +

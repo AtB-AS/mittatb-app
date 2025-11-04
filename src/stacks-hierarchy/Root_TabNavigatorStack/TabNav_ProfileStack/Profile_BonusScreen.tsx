@@ -109,7 +109,7 @@ export const Profile_BonusScreen = () => {
                         bonusProduct.operatorId,
                         mobilityOperators,
                       )}
-                      logoSize={theme.typography['heading--big'].fontSize}
+                      logoSize={theme.typography['heading__xl'].fontSize}
                       style={styles.logo}
                     />
                   }
@@ -119,7 +119,7 @@ export const Profile_BonusScreen = () => {
                   expandContent={
                     <ThemeText
                       isMarkdown={true}
-                      typography="body__secondary"
+                      typography="body__s"
                       color="secondary"
                     >
                       {getTextForLanguage(
@@ -147,13 +147,13 @@ export const Profile_BonusScreen = () => {
                 }}
               />
               <View style={styles.bonusProgramDescription}>
-                <ThemeText typography="body__primary--bold">
+                <ThemeText typography="body__m__strong">
                   {getTextForLanguage(
                     bonusTexts?.howBonusWorks.title,
                     language,
                   ) ?? ''}
                 </ThemeText>
-                <ThemeText typography="body__secondary" color="secondary">
+                <ThemeText typography="body__s" color="secondary">
                   {getTextForLanguage(
                     bonusTexts?.howBonusWorks.description,
                     language,
@@ -205,7 +205,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.medium,
-    minHeight: theme.typography['body__primary--jumbo'].lineHeight,
+    minHeight: theme.typography['heading__xl'].lineHeight,
   },
   noAccount: {marginTop: theme.spacing.xSmall},
   bonusProductsContainer: {
@@ -250,7 +250,7 @@ function UserBonusBalanceSection(): React.JSX.Element {
           >
             <View style={styles.currentBalanceDisplay}>
               <UserBonusBalance
-                typography="body__primary--jumbo--bold"
+                typography="heading__3xl"
                 color={theme.color.foreground.dynamic.primary}
               />
               <ThemeIcon
@@ -260,7 +260,7 @@ function UserBonusBalanceSection(): React.JSX.Element {
               />
             </View>
 
-            <ThemeText typography="body__secondary" color="secondary">
+            <ThemeText typography="body__s" color="secondary">
               {t(BonusProgramTexts.bonusProfile.yourBonusPoints)}
             </ThemeText>
           </View>

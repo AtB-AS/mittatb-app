@@ -53,10 +53,10 @@ export const PriceSummary = ({
       <GenericSectionItem>
         <View style={styles.totalPaymentContainer} accessible={true}>
           <View style={styles.totalContainerHeadings}>
-            <ThemeText typography="body__primary">
+            <ThemeText typography="body__m">
               {t(PurchaseConfirmationTexts.totalCost.title)}
             </ThemeText>
-            <ThemeText typography="body__tertiary" color="secondary">
+            <ThemeText typography="body__xs" color="secondary">
               {t(
                 PurchaseConfirmationTexts.totalCost.label(
                   vatPercentString,
@@ -67,7 +67,7 @@ export const PriceSummary = ({
           </View>
 
           {!isSearchingOffer ? (
-            <ThemeText typography="body__primary--jumbo" testID="totalPrice">
+            <ThemeText typography="heading__xl" testID="totalPrice">
               {totalPriceString} kr
             </ThemeText>
           ) : (
@@ -126,7 +126,7 @@ const PricePerUserProfile = ({
       <ThemeText
         style={styles.userProfileCountAndName}
         color="secondary"
-        typography="body__secondary"
+        typography="body__s"
         testID="userProfileCountAndName"
       >
         {count} {userProfileName}
@@ -134,14 +134,14 @@ const PricePerUserProfile = ({
       <View style={styles.userProfilePrice}>
         {hasFlexDiscount && (
           <ThemeText
-            typography="body__tertiary"
+            typography="body__xs"
             color="secondary"
             style={styles.userProfileOriginalPriceAmount}
           >
             {originalPriceString} kr
           </ThemeText>
         )}
-        <ThemeText color="secondary" typography="body__secondary">
+        <ThemeText color="secondary" typography="body__s">
           {priceString} kr
         </ThemeText>
       </View>

@@ -47,11 +47,11 @@ export const Root_SmartParkAndRideAddScreen = () => {
         <View style={styles.content}>
           <ThemedCarFront style={styles.illustration} width={170} />
           <View ref={focusRef} accessible={true} accessibilityRole="header">
-            <ThemeText typography="body__primary--big--bold">
+            <ThemeText typography="body__m__strong">
               {t(SmartParkAndRideTexts.add.content.title)}
             </ThemeText>
           </View>
-          <ThemeText typography="body__primary" style={styles.descriptionText}>
+          <ThemeText typography="body__m" style={styles.descriptionText}>
             {t(SmartParkAndRideTexts.add.content.text)}
           </ThemeText>
         </View>

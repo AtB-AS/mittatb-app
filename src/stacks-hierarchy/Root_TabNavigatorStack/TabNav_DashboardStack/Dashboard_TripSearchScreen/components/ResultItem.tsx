@@ -71,7 +71,7 @@ const ResultItemHeader: React.FC<{
     <View style={styles.resultHeader}>
       <ThemeText
         style={styles.fromPlaceText}
-        typography="body__secondary--bold"
+        typography="body__s__strong"
         testID="resultDeparturePlace"
       >
         {startName
@@ -91,7 +91,7 @@ const ResultItemHeader: React.FC<{
       </ThemeText>
       <View style={styles.durationContainer}>
         <AccessibleText
-          typography="body__secondary"
+          typography="body__s"
           color="secondary"
           testID="resultDuration"
           prefix={t(TripSearchTexts.results.resultItem.header.totalDuration)}
@@ -226,7 +226,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                     <View style={styles.departureTimes}>
                       {staySeated(i) || isIntermediateFootLeg(leg, i) ? null : (
                         <ThemeText
-                          typography="body__tertiary"
+                          typography="body__xs"
                           color="primary"
                           testID={'schTime' + i}
                         >
@@ -243,7 +243,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                       {isSignificantDifference(leg) && (
                         <ThemeText
                           style={styles.scheduledTime}
-                          typography="body__tertiary--strike"
+                          typography="body__xs__strike"
                           color="secondary"
                           testID={'aimTime' + i}
                         >
@@ -258,7 +258,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
             <CounterIconBox
               count={collapsedLegs.length}
               spacing="standard"
-              textType="body__primary--bold"
+              textType="body__m__strong"
             />
           </View>
           <View style={[styles.destinationLineContainer_grow, iconHeight]}>
@@ -271,11 +271,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         <View>
           <DestinationIcon style={styles.iconContainer} />
           <View style={styles.departureTimes}>
-            <ThemeText
-              typography="body__tertiary"
-              color="primary"
-              testID="endTime"
-            >
+            <ThemeText typography="body__xs" color="primary" testID="endTime">
               {(lastLegIsFlexible ? t(dictionary.missingRealTimePrefix) : '') +
                 formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
             </ThemeText>

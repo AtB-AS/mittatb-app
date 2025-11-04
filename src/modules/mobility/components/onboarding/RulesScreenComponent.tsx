@@ -96,7 +96,7 @@ const ListElement = ({
         <View style={styles.row} key={line.id}>
           <ThemeIcon svg={getIcon(line.illustration)} size="large" />
 
-          <ThemeText style={styles.rowText} typography="body__primary">
+          <ThemeText style={styles.rowText} typography="body__m">
             {getTextForLanguage(line.description, language)}
           </ThemeText>
         </View>

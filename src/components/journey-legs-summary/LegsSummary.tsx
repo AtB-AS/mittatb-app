@@ -42,7 +42,7 @@ export function LegsSummary({
   return (
     <View style={styles.legSection}>
       {!compact && (
-        <ThemeText typography="body__primary" color="secondary">
+        <ThemeText typography="body__m" color="secondary">
           {t(PurchaseConfirmationTexts.confirmations.onlyValidDeparture)}
         </ThemeText>
       )}
@@ -62,13 +62,13 @@ export function LegsSummary({
               lineNumber={leg.line?.publicCode}
             />
             <ThemeText
-              typography="body__primary"
+              typography="body__m"
               style={[styles.legName, styles.centered]}
             >
               {leg.line?.name}
             </ThemeText>
             <ThemeText
-              typography="body__primary--bold"
+              typography="body__m__strong"
               style={[styles.legSectionItemTime, styles.centered]}
             >
               {!!leg.expectedStartTime &&
@@ -79,21 +79,21 @@ export function LegsSummary({
             <View>
               <View style={styles.legSectionItem}>
                 <ThemeText
-                  typography="body__secondary"
+                  typography="body__s"
                   color="secondary"
                   style={styles.legLabel}
                 >
                   {t(SharedTexts.from)}:
                 </ThemeText>
                 <ThemeText
-                  typography="body__secondary"
+                  typography="body__s"
                   color="secondary"
                   style={styles.legName}
                 >
                   {leg.fromPlace.quay?.stopPlace?.name}
                 </ThemeText>
                 <ThemeText
-                  typography="body__secondary"
+                  typography="body__s"
                   color="secondary"
                   style={styles.legSectionItemTime}
                 >
@@ -103,21 +103,21 @@ export function LegsSummary({
               </View>
               <View style={styles.legSectionItem}>
                 <ThemeText
-                  typography="body__secondary"
+                  typography="body__s"
                   color="secondary"
                   style={styles.legLabel}
                 >
                   {t(SharedTexts.to)}:
                 </ThemeText>
                 <ThemeText
-                  typography="body__secondary"
+                  typography="body__s"
                   color="secondary"
                   style={styles.legName}
                 >
                   {leg.toPlace.quay?.stopPlace?.name}
                 </ThemeText>
                 <ThemeText
-                  typography="body__secondary"
+                  typography="body__s"
                   color="secondary"
                   style={styles.legSectionItemTime}
                 >

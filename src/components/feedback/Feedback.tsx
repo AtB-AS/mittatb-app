@@ -329,7 +329,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
     padding: theme.spacing.xLarge,
   },
-  infoBoxText: theme.typography.body__primary,
+  infoBoxText: theme.typography.body__m,
   centerText: {
     textAlign: 'center',
   },

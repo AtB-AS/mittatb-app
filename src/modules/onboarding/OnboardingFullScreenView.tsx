@@ -50,7 +50,7 @@ export const OnboardingFullScreenView = ({
           {footerDescription && (
             <ScrollView style={styles.footerScrollView}>
               <ThemeText
-                typography="body__tertiary"
+                typography="body__xs"
                 color={themeColor}
                 style={styles.footerDescription}
               >

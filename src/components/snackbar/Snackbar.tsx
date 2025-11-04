@@ -112,7 +112,7 @@ const SnackbarInstance = ({
           <View style={styles.snackbarTexts} ref={focusRef} accessible={true}>
             {activeContent?.title && (
               <ThemeText
-                typography="body__primary--bold"
+                typography="body__m__strong"
                 color="primary"
                 numberOfLines={4} // max limit, should normally not come into play
               >
@@ -121,7 +121,7 @@ const SnackbarInstance = ({
             )}
             {activeContent?.description && (
               <ThemeText
-                typography="body__primary"
+                typography="body__m"
                 color={activeContent?.title ? 'secondary' : 'primary'}
                 numberOfLines={7} // max limit, should normally not come into play
               >

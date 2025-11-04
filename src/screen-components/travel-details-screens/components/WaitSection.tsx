@@ -44,7 +44,7 @@ export const WaitSection: React.FC<WaitDetails> = (wait) => {
           <ThemeIcon svg={Time} color={legColor.secondary.background} />
         }
       >
-        <ThemeText typography="body__secondary" color="secondary">
+        <ThemeText typography="body__s" color="secondary">
           {t(TripDetailsTexts.trip.leg.wait.label(waitTime))}
         </ThemeText>
       </TripRow>

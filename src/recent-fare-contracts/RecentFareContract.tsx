@@ -141,7 +141,7 @@ export const RecentFareContract = ({
     >
       <View style={styles.productName} testID={testID + 'Title'}>
         <ThemeText
-          typography="body__primary--bold"
+          typography="body__m__strong"
           color={interactiveColor.default}
         >
           {productName}
@@ -180,7 +180,7 @@ export const RecentFareContract = ({
               ]}
             />
             <ThemeText
-              typography="body__tertiary"
+              typography="body__xs"
               testID={`${testID}TravellersOthers`}
               color={interactiveColor.default}
               style={styles.additionalCategories}

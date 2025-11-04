@@ -82,14 +82,14 @@ export const PayWithBonusPointsCheckbox = ({
                 ) ?? ''}
               </ThemeText>
               <View style={styles.currentPointsRow}>
-                <ThemeText typography="body__secondary" color="secondary">
+                <ThemeText typography="body__s" color="secondary">
                   {t(BonusProgramTexts.youHave)}
                 </ThemeText>
                 <UserBonusBalance
-                  typography="body__secondary"
+                  typography="body__s"
                   color={theme.color.foreground.dynamic.secondary}
                 />
-                <ThemeText typography="body__secondary" color="secondary">
+                <ThemeText typography="body__s" color="secondary">
                   {t(BonusProgramTexts.points)}
                 </ThemeText>
               </View>

@@ -67,7 +67,7 @@ export const LicensePlateSection = ({
       {!!showSuccessMessage && (
         <View style={styles.successRow}>
           <ThemeIcon svg={statusTypeToIcon('valid', true, themeName)} />
-          <ThemeText typography="body__secondary">
+          <ThemeText typography="body__s">
             {`${svvVehicleInfo.color} ${svvVehicleInfo.make} ${svvVehicleInfo.model}`}
           </ThemeText>
         </View>

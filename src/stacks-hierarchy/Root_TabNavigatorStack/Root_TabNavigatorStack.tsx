@@ -49,7 +49,7 @@ export const Root_TabNavigatorStack = () => {
   const interactiveColor = theme.color.interactive[2];
   const {t} = useTranslation();
   const {startScreen} = usePreferencesContext().preferences;
-  const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
+  const lineHeight = theme.typography.body__s.fontSize.valueOf();
 
   useOnPushNotificationOpened();
 
@@ -200,7 +200,7 @@ function tabSettings(
   return {
     tabBarLabel: ({color}) => (
       <ThemeText
-        typography="body__secondary"
+        typography="body__s"
         style={{
           color,
           textAlign: 'center',

@@ -45,7 +45,7 @@ export function Summary({
     <View style={style}>
       {!!formattedPrice ? (
         <ThemeText
-          typography="heading--big"
+          typography="heading__xl"
           style={styles.price}
           testID="offerTotalPriceText"
         >
@@ -56,7 +56,7 @@ export function Summary({
       ) : null}
       {!isLoading && !!formattedPrice && originalPrice !== price && (
         <ThemeText
-          typography="body__tertiary--strike"
+          typography="body__xs__strike"
           style={styles.originalPrice}
           testID="offerTotalPriceText"
           accessibilityLabel={t(

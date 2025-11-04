@@ -15,9 +15,7 @@ export const DebugOverride = ({name, overrideVal, setOverride}: Props) => {
 
   return (
     <View style={{flex: 1}}>
-      <ThemeText typography="heading__component">
-        {cleanUpDescription(name)}
-      </ThemeText>
+      <ThemeText typography="heading__m">{cleanUpDescription(name)}</ThemeText>
       <RadioSegments
         activeIndex={overrideVal ? 2 : overrideVal === undefined ? 1 : 0}
         color={theme.color.interactive[3]}

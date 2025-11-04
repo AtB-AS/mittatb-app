@@ -129,7 +129,7 @@ export const Profile_EditProfileScreen = ({
       parallaxContent={(focusRef) => (
         <View style={styles.parallaxContent} ref={focusRef} accessible={true}>
           <ThemeText
-            typography="heading--medium"
+            typography="heading__l"
             color={themeColor}
             style={{flexShrink: 1}}
           >
@@ -201,7 +201,7 @@ export const Profile_EditProfileScreen = ({
                   <ThemeText>
                     {t(EditProfileTexts.personalDetails.email.label)}
                   </ThemeText>
-                  <ThemeText typography="body__secondary" color="secondary">
+                  <ThemeText typography="body__s" color="secondary">
                     {t(
                       EditProfileTexts.personalDetails.email
                         .disabledWithRemoteConfig,
@@ -232,10 +232,10 @@ export const Profile_EditProfileScreen = ({
               )}
               {phoneNumber && (
                 <View style={styles.phone}>
-                  <ThemeText typography="body__secondary">
+                  <ThemeText typography="body__s">
                     {t(EditProfileTexts.personalDetails.phone.header)}
                   </ThemeText>
-                  <ThemeText typography="body__secondary" color="secondary">
+                  <ThemeText typography="body__s" color="secondary">
                     {t(
                       EditProfileTexts.personalDetails.phone.loggedIn(
                         phoneNumber,
@@ -247,7 +247,7 @@ export const Profile_EditProfileScreen = ({
 
               {!!birthdateRes?.birthdate && !isErrorGetBirthdate && (
                 <View style={styles.birthdateWrapper}>
-                  <ThemeText typography="body__secondary">
+                  <ThemeText typography="body__s">
                     {t(EditProfileTexts.personalDetails.birthdate.header)}
                   </ThemeText>
                   <ThemeText style={styles.birthdate}>
@@ -257,7 +257,7 @@ export const Profile_EditProfileScreen = ({
                       year: 'numeric',
                     }).format(new Date(birthdateRes.birthdate))}
                   </ThemeText>
-                  <ThemeText typography="body__secondary" color="secondary">
+                  <ThemeText typography="body__s" color="secondary">
                     {t(EditProfileTexts.personalDetails.birthdate.info)}
                   </ThemeText>
 
@@ -269,7 +269,7 @@ export const Profile_EditProfileScreen = ({
                     )}
                     style={styles.vippsLink}
                   >
-                    <ThemeText typography="body__primary--underline">
+                    <ThemeText typography="body__m__underline">
                       {t(EditProfileTexts.personalDetails.birthdate.link)}
                     </ThemeText>
                     <ThemeIcon svg={ExternalLink} />
@@ -313,7 +313,7 @@ export const Profile_EditProfileScreen = ({
             </ThemeText>
             {phoneNumber && (
               <ThemeText
-                typography="body__secondary"
+                typography="body__s"
                 color="secondary"
                 style={styles.profileItem}
               >
@@ -326,7 +326,7 @@ export const Profile_EditProfileScreen = ({
                   {t(EditProfileTexts.profileInfo.customerNumber)}
                 </ThemeText>
                 <ThemeText
-                  typography="body__secondary"
+                  typography="body__s"
                   color="secondary"
                   accessibilityLabel={numberToAccessibilityString(
                     customerNumber,

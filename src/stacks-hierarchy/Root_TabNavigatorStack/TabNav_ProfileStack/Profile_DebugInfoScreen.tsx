@@ -432,7 +432,7 @@ export const Profile_DebugInfoScreen = () => {
             expandContent={
               preferences && (
                 <View>
-                  <ThemeText typography="body__secondary">
+                  <ThemeText typography="body__s">
                     Press a line to reset to undefined {'\n'}
                   </ThemeText>
                   {Object.keys(preferences).map((key) => (
@@ -719,7 +719,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
           style={{flexDirection: 'row'}}
           onPress={() => setIsExpanded(!isExpanded)}
         >
-          <ThemeText typography="heading__title" color="secondary">
+          <ThemeText typography="heading__m" color="secondary">
             {title}
           </ThemeText>
           <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
@@ -739,11 +739,11 @@ function MapEntry({title, value}: {title: string; value: any}) {
             style={{flexDirection: 'row'}}
             onPress={() => setIsExpanded(!isExpanded)}
           >
-            <ThemeText typography="body__primary--bold">{title}: </ThemeText>
+            <ThemeText typography="body__m__strong">{title}: </ThemeText>
             <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
           </PressableOpacity>
         ) : (
-          <ThemeText typography="body__primary--bold">{title}: </ThemeText>
+          <ThemeText typography="body__m__strong">{title}: </ThemeText>
         )}
         {isExpanded && <MapValue value={value} />}
       </View>

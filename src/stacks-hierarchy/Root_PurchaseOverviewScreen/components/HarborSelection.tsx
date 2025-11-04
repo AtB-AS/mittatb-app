@@ -110,7 +110,7 @@ const HarborSelectionItem = forwardRef<
       <View style={styles.sectionContent}>
         <ThemeText
           color={disabled ? 'disabled' : 'secondary'}
-          typography="body__secondary"
+          typography="body__s"
           style={styles.toFromLabel}
         >
           {t(PurchaseOverviewTexts.fromToLabel[fromOrTo])}
@@ -131,7 +131,7 @@ const HarborLabel = ({
   const harborName = harbor?.name;
   const {t} = useTranslation();
   return harborName ? (
-    <ThemeText typography="body__primary--bold">{harborName}</ThemeText>
+    <ThemeText typography="body__m__strong">{harborName}</ThemeText>
   ) : (
     <ThemeText
       style={{flexShrink: 1}}

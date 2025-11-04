@@ -91,7 +91,7 @@ export function RadioSectionItem({
         {leftIcon && <ThemeIcon svg={leftIcon} style={styles.leftIcon} />}
         <View style={styles.textContainer}>
           <ThemeText
-            typography="body__primary"
+            typography="body__m"
             style={[contentContainer, {color: textColor}]}
             testID={`${testID}Text`}
           >
@@ -99,7 +99,7 @@ export function RadioSectionItem({
           </ThemeText>
           {subtext && (
             <ThemeText
-              typography="body__secondary"
+              typography="body__s"
               color="secondary"
               style={{marginTop: theme.spacing.small}}
               testID={`${testID}SubText`}

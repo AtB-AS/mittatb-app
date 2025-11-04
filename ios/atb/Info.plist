@@ -99,10 +99,7 @@
 	<key>RCTNewArchEnabled</key>
 	<false/>
 	<key>UIAppFonts</key>
-	<array>
-		<string>Roboto-Bold.ttf</string>
-		<string>Roboto-Regular.ttf</string>
-	</array>
+	<array/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>

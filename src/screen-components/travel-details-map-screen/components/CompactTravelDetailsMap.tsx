@@ -98,7 +98,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
         onPress={onExpand}
         accessibilityRole="button"
       >
-        <ThemeText typography="body__secondary--bold" color="primary">
+        <ThemeText typography="body__s__strong" color="primary">
           {buttonText}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} />
