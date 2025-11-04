@@ -8,17 +8,13 @@ import {
 } from '@gorhom/bottom-sheet';
 import {BottomSheetHeader} from '../BottomSheetHeader';
 import {SvgProps} from 'react-native-svg';
-import {
-  AccessibilityInfo,
-  findNodeHandle,
-  Platform,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import {Platform, useWindowDimensions, View} from 'react-native';
 import {useBottomSheetStyles} from '../use-bottom-sheet-styles';
 import {ReduceMotion} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useThemeContext} from '@atb/theme';
+import {useBottomSheetV2Context} from '../BottomSheetV2Context';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 type BottomSheetModalProps = PropsWithChildren<{
   bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
@@ -55,25 +51,36 @@ export const BottomSheetModal = ({
   const [footerHeight, setFooterHeight] = useState(0);
   const {theme} = useThemeContext();
   const headerRef = React.useRef<View>(null);
-
-  function focusSheetHeader() {
-    const node = findNodeHandle(headerRef.current);
-    if (node) AccessibilityInfo.setAccessibilityFocus(node);
-  }
+  const {setIsOpen} = useBottomSheetV2Context();
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        accessible={false}
-        accessibilityElementsHidden
-        importantForAccessibility="no-hide-descendants"
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        pressBehavior="close"
-      />
-    ),
-    [],
+    (props: any) => {
+      return isScreenReaderEnabled ? (
+        <View
+          pointerEvents="none"
+          style={[props.style, {backgroundColor: 'rgba(0,0,0,0.5)'}]}
+          accessible={false}
+          focusable={false}
+          importantForAccessibility="no-hide-descendants"
+          accessibilityElementsHidden
+        />
+      ) : (
+        <BottomSheetBackdrop
+          {...props}
+          appearsOnIndex={0}
+          disappearsOnIndex={-1}
+          pressBehavior="none"
+          aria-disabled="true"
+          accessible={false}
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+          onPress={undefined}
+        />
+      );
+    },
+
+    [isScreenReaderEnabled],
   );
 
   const renderFooter = useCallback(
@@ -134,10 +141,12 @@ export const BottomSheetModal = ({
         if (toIndex === -1) {
           closeCallback?.();
         }
-        if (fromIndex === -1) {
-          //set accessibility focus when open
-          focusSheetHeader();
-        }
+      }}
+      onChange={(index) => {
+        setIsOpen(index >= 0);
+      }}
+      onDismiss={() => {
+        setIsOpen(false);
       }}
       accessible={false}
       overrideReduceMotion={ReduceMotion.Never}

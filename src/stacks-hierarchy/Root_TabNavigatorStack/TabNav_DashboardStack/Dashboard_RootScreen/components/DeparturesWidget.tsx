@@ -17,7 +17,7 @@ import {
 } from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
 import haversineDistance from 'haversine-distance';
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
 import {useFavoriteDepartureData} from '../use-favorite-departure-data';
 import {ThemedNoFavouriteDepartureImage} from '@atb/theme/ThemedAssets';
@@ -49,8 +49,8 @@ export const DeparturesWidget = ({
   const {favoriteDepartures} = useFavoritesContext();
   const {location} = useGeolocationContext();
   const {state, loadInitialDepartures, searchDate} = useFavoriteDepartureData();
-  const onCloseFocusRef = React.useRef(null);
-  const bottomSheetRef = React.useRef<BottomSheetModal>(null);
+  const onCloseFocusRef = useRef(null);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   useEffect(() => loadInitialDepartures(), [loadInitialDepartures]);
 

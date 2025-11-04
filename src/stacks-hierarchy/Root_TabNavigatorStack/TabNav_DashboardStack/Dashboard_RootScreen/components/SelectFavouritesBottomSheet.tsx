@@ -61,7 +61,7 @@ const SelectableFavouriteDeparture = ({
       accessibilityActions={[{name: 'activate'}]}
       onAccessibilityAction={() => handleSwitchFlip(favorite.id, !active)}
       accessibilityHint={t(SelectFavouriteDeparturesText.switch.a11yhint)}
-      accessibilityState={{checked: active}}
+      accessibilityState={{checked: !active}}
     >
       <TransportationIconBox
         style={styles.lineModeIcon}
