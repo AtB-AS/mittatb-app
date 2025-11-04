@@ -169,7 +169,7 @@ const ContactInfoContent = () => {
         </GenericSectionItem>
         <GenericSectionItem>
           <PressableOpacity
-            onPress={async () => Linking.openURL(`atb.no/kontakt`)}
+            onPress={async () => Linking.openURL('https://atb.no/kontakt')}
             accessibilityRole="link"
             style={style.linkItem}
           >

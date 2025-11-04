@@ -21,7 +21,7 @@ const SmartParkAndRideTexts = {
       'With a valid ticket from AtB, you can park for free at Ranheim Fabrikker for 48 hours.',
       'Med gyldig billett frå AtB kan du stå gratis på Ranheim Fabrikker i 48 timar.',
     ),
-    link: _('Sånn funker det', 'How it works', 'Slik fungerer det'),
+    link: _('Les mer', 'Read more', 'Les meir'),
   },
   add: {
     header: {
