@@ -9,15 +9,13 @@ import {useMobileTokenContext} from '../MobileTokenContext';
 
 type Args = {
   tokenId: string;
-  bypassRestrictions: boolean;
 };
 export const useToggleTokenMutation = () => {
   const queryClient = useQueryClient();
   const {userId} = useAuthContext();
   const {nativeToken, secureContainer} = useMobileTokenContext();
   return useMutation({
-    mutationFn: ({tokenId, bypassRestrictions}: Args) =>
-      tokenService.toggle(tokenId, uuid(), bypassRestrictions),
+    mutationFn: ({tokenId}: Args) => tokenService.toggle(tokenId, uuid()),
     onSuccess: (tokens) => {
       queryClient.setQueryData(
         [

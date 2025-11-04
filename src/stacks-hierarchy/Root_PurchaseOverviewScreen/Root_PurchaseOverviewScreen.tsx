@@ -14,7 +14,10 @@ import {StartTimeSelection} from './components/StartTimeSelection';
 import {Summary} from './components/Summary';
 import {TravellerSelection} from './components/TravellerSelection';
 import {type OfferError, useOfferState} from './use-offer-state';
-import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {
+  type RootStackParamList,
+  RootStackScreenProps,
+} from '@atb/stacks-hierarchy';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
 import {
@@ -96,9 +99,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   );
 
   const handleTicketInfoButtonPress = () => {
-    const parameters = {
-      fareProductTypeConfigType: selection.fareProductTypeConfig.type,
+    const parameters: RootStackParamList['Root_TicketInformationScreen'] = {
       selection,
+      shouldShowFlexTicketDiscountInfo: true,
     };
     analytics.logEvent(
       'Ticketing',

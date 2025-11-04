@@ -46,6 +46,8 @@ import {
   DebugTokenServerAddress,
 } from '@atb/modules/mobile-token';
 import {useMapContext} from '@atb/modules/map';
+import {useEventStreamContext} from '@atb/modules/event-stream';
+import {format} from 'date-fns';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -85,6 +87,8 @@ export const Profile_DebugInfoScreen = () => {
   } = useFeatureTogglesContext();
 
   const {resetDismissedAnnouncements} = useAnnouncementsContext();
+
+  const {eventLog} = useEventStreamContext();
 
   const {
     tokens,
@@ -341,6 +345,24 @@ export const Profile_DebugInfoScreen = () => {
                   ))}
                 </View>
               )
+            }
+          />
+        </Section>
+
+        <Section style={styles.section}>
+          <ExpandableSectionItem
+            text="Event stream log"
+            showIconText={true}
+            expandContent={
+              <View>
+                {eventLog.map((event) => (
+                  <MapEntry
+                    key={event.date.toISOString()}
+                    title={format(event.date, 'HH:mm:ss.SSS')}
+                    value={{streamEvent: event.streamEvent, meta: event.meta}}
+                  />
+                ))}
+              </View>
             }
           />
         </Section>
@@ -688,6 +710,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
   const isLongString =
     !!value && typeof value === 'string' && value.length > 300;
   const [isExpanded, setIsExpanded] = useState<boolean>(!isLongString);
+  if (value === undefined) return null;
 
   if (!!value && typeof value === 'object') {
     return (
@@ -752,7 +775,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   objectEntry: {
     flexDirection: 'column',
-    marginVertical: 12,
+    marginVertical: 8,
     borderLeftColor: theme.color.foreground.dynamic.secondary,
     borderLeftWidth: 1,
     paddingLeft: 4,

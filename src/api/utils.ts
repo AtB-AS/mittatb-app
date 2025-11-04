@@ -101,4 +101,7 @@ export const errorDetailsToResponseData = (
     .responseData;
 };
 
-export const stringifyUrl = (url: string, query: string) => `${url}?${query}`;
+export const stringifyUrl = (url: string, query: string | undefined) => {
+  if (!query) return url;
+  return url.includes('?') ? `${url}&${query}` : `${url}?${query}`;
+};

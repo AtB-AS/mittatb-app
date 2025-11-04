@@ -10,7 +10,6 @@ import {
   flyToLocation,
   MapCameraConfig,
   MapFilterType,
-  MapLeg,
   NationalStopRegistryFeatures,
   LocationArrow,
   useControlPositionsStyle,
@@ -39,9 +38,10 @@ import {
   MapState,
   RegionPayload,
 } from '@rnmapbox/maps/lib/typescript/src/components/MapView';
+import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
 
 export type TravelDetailsMapScreenParams = {
-  legs: MapLeg[];
+  serviceJourneyPolylines: ServiceJourneyPolyline[];
   vehicleWithPosition?: VehicleWithPosition;
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
@@ -59,7 +59,7 @@ const FOLLOW_MIN_ZOOM_LEVEL = 8;
 const FOLLOW_ANIMATION_DURATION = 500;
 
 export const TravelDetailsMapScreenComponent = ({
-  legs,
+  serviceJourneyPolylines,
   vehicleWithPosition,
   toPlace,
   fromPlace,
@@ -75,7 +75,10 @@ export const TravelDetailsMapScreenComponent = ({
 
   const mapViewConfig = useMapViewConfig();
 
-  const features = useMemo(() => createMapLines(legs), [legs]);
+  const features = useMemo(
+    () => createMapLines(serviceJourneyPolylines),
+    [serviceJourneyPolylines],
+  );
   const bounds = !vehicleWithPosition ? getMapBounds(features) : undefined;
   const centerPosition = vehicleWithPosition?.location
     ? [

@@ -4,7 +4,7 @@ import React from 'react';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {ThemedCarValidTicket} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useNavigateToNextOnboardingCarouselScreen} from '@atb/modules/onboarding';
+import {useOnboardingCarouselNavigation} from '@atb/modules/onboarding';
 import {sparOnboardingId} from './config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
@@ -12,14 +12,22 @@ export const SmartParkAndRideOnboarding_InformationScreen = () => {
   const {t} = useTranslation();
   const analytics = useAnalyticsContext();
 
-  const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
-    sparOnboardingId,
-    'SmartParkAndRideOnboarding_InformationScreen',
-  );
+  const {navigateToNextScreen, closeOnboardingCarousel} =
+    useOnboardingCarouselNavigation(
+      sparOnboardingId,
+      'SmartParkAndRideOnboarding_InformationScreen',
+    );
 
   return (
     <OnboardingScreenComponent
       illustration={<ThemedCarValidTicket height={170} />}
+      headerProps={{
+        rightButton: {
+          type: 'close',
+          withIcon: true,
+          onPress: () => closeOnboardingCarousel('smartParkAndRide'),
+        },
+      }}
       title={t(SmartParkAndRideTexts.onboarding.information.title)}
       description={t(SmartParkAndRideTexts.onboarding.information.description)}
       footerButton={{

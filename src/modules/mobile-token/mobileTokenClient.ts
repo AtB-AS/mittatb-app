@@ -72,7 +72,10 @@ export const mobileTokenClient = {
       CONTEXT_ID,
       token.tokenId,
       [],
-      tokenActions ?? [TokenAction.TOKEN_ACTION_TICKET_INSPECTION],
+      tokenActions ?? [
+        TokenAction.TOKEN_ACTION_TICKET_INSPECTION,
+        TokenAction.TOKEN_ACTION_IDENTIFICATION,
+      ],
       false,
     ),
   clear: () => abtClient.clearToken(CONTEXT_ID),

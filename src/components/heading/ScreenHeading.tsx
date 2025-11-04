@@ -8,18 +8,27 @@ type ScreenHeadingProps = {
   text: string;
   color?: TextColor | ContrastColor;
   accessibilityLabel?: string;
+  isLarge?: boolean;
 };
 
 export const ScreenHeading = forwardRef<any, ScreenHeadingProps>(
-  ({text, color, accessibilityLabel}: ScreenHeadingProps, ref) => {
+  ({text, color, accessibilityLabel, isLarge}: ScreenHeadingProps, ref) => {
     const styles = useStyles();
     const {theme} = useThemeContext();
     color = color ?? theme.color.background.accent[0];
 
     return (
-      <View style={styles.container} ref={ref} accessible role="heading">
+      <View
+        style={{
+          ...styles.container,
+          paddingLeft: isLarge ? theme.spacing.medium : 0,
+        }}
+        ref={ref}
+        accessible
+        role="heading"
+      >
         <ThemeText
-          typography="heading--medium"
+          typography={isLarge ? 'heading--jumbo' : 'heading--medium'}
           color={color}
           accessibilityLabel={accessibilityLabel}
         >

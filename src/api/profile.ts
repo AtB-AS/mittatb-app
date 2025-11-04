@@ -3,7 +3,6 @@ import {
   CustomerProfileUpdate,
   OnBehalfOfAccountsResponse,
 } from '@atb/api/types/profile';
-import Bugsnag from '@bugsnag/react-native';
 import {AxiosRequestConfig} from 'axios';
 import {client} from './client';
 import {isErrorResponse, RequestError} from './utils';
@@ -24,21 +23,12 @@ export const updateProfile = async (profile: CustomerProfileUpdate) => {
 
 export async function deleteProfile(opts?: AxiosRequestConfig) {
   const query = {expirationDate: new Date().toISOString()};
-  const deleteOK = await client
-    .delete('/profile/v1', {
-      ...opts,
-      authWithIdToken: true,
-      data: query,
-    })
-    .then(() => {
-      return true;
-    })
-    .catch((error) => {
-      Bugsnag.notify(error);
-      return false;
-    });
-
-  return deleteOK;
+  const deleteOK = await client.delete('/profile/v1', {
+    ...opts,
+    authWithIdToken: true,
+    data: query,
+  });
+  return deleteOK.data;
 }
 
 /**

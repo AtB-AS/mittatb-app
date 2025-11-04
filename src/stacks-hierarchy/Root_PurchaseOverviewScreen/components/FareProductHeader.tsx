@@ -69,9 +69,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     flexShrink: 1,
   },
   headerSubSection: {
-    marginTop: theme.spacing.medium,
-    borderTopWidth: theme.border.width.slim,
-    borderTopColor: theme.color.background.neutral[0].background,
     paddingTop: theme.spacing.medium,
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -67,7 +67,6 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
       }
       toggleMutation.mutate({
         tokenId: selectedToken.id,
-        bypassRestrictions: false,
       });
     }
   }, [selectedToken, toggleMutation, onAfterSave]);

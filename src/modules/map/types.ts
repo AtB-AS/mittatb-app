@@ -8,10 +8,7 @@ import {
   Point,
   Position,
 } from 'geojson';
-import {
-  PointsOnLink,
-  TransportSubmode,
-} from '@atb/api/types/generated/journey_planner_v3_types';
+import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {AnyMode} from '@atb/components/icon-box';
 import {
   BikeStationFragment,
@@ -33,9 +30,8 @@ import {
   FeatureCollection as MobilityAPI_FeatureCollection,
 } from '@atb/api/types/generated/mobility-types_v2';
 
-import {Line} from '@atb/api/types/trips';
 import {TranslatedString} from '@atb/translations';
-import {GeofencingZoneKeys, GeofencingZoneStyle} from '@atb-as/theme';
+import {GeofencingZoneCode, GeofencingZoneStyle} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
 
 export type SelectionLocationCallback = (
@@ -107,14 +103,6 @@ export type Cluster = {
   point_count: number;
 };
 
-export type MapLeg = {
-  mode?: AnyMode;
-  faded?: boolean;
-  transportSubmode?: TransportSubmode;
-  pointsOnLink?: PointsOnLink;
-  line?: Line;
-};
-
 export interface MapLine extends Feature<LineString> {
   travelType?: AnyMode;
   subMode?: TransportSubmode;
@@ -150,13 +138,13 @@ export type ParkingType = {
 
 export type PolylineEncodedMultiPolygon = String[][];
 
-type GeofencingZoneProps<GZKey extends GeofencingZoneKeys> =
+type GeofencingZoneProps<GZCode extends GeofencingZoneCode> =
   GeofencingZoneStyle<ContrastColor> & {
-    code: GZKey;
+    code: GZCode;
     isStationParking?: boolean;
   };
 
-export type GeofencingZoneCustomProps = GeofencingZoneProps<GeofencingZoneKeys>;
+export type GeofencingZoneCustomProps = GeofencingZoneProps<GeofencingZoneCode>;
 
 // two things differ PreProcessed vs not:
 // 1. geofencingZoneCustomProps on GeofencingZoneProperties
@@ -188,7 +176,7 @@ type GeofencingZoneExplanationType = {
 };
 
 export type GeofencingZoneExplanationsType = {
-  [GZKey in GeofencingZoneKeys | 'unspecified']: GeofencingZoneExplanationType;
+  [GZCode in GeofencingZoneCode | 'unspecified']: GeofencingZoneExplanationType;
 };
 
 export type SelectedMapItemProperties = GeoJsonProperties & {

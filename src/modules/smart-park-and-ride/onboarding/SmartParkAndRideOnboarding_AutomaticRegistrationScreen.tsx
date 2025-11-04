@@ -1,22 +1,28 @@
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import React from 'react';
-import {OnboardingScreenComponent} from '@atb/modules/onboarding';
+import {
+  OnboardingScreenComponent,
+  useOnboardingCarouselNavigation,
+} from '@atb/modules/onboarding';
 import {ThemedCarRegister} from '@atb/theme/ThemedAssets';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 
 import {Linking} from 'react-native';
 import {sparOnboardingId} from './config';
-import {useNavigateToNextOnboardingCarouselScreen} from '@atb/modules/onboarding';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
 export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
   const {t, language} = useTranslation();
   const analytics = useAnalyticsContext();
   const {configurableLinks} = useFirestoreConfigurationContext();
 
-  const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
+  const {
+    navigateToNextScreen,
+    navigateToPreviousScreen,
+    closeOnboardingCarousel,
+  } = useOnboardingCarouselNavigation(
     sparOnboardingId,
     'SmartParkAndRideOnboarding_AutomaticRegistrationScreen',
   );
@@ -24,6 +30,18 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
   return (
     <OnboardingScreenComponent
       illustration={<ThemedCarRegister height={170} />}
+      headerProps={{
+        leftButton: {
+          type: 'back',
+          withIcon: true,
+          onPress: navigateToPreviousScreen,
+        },
+        rightButton: {
+          type: 'close',
+          withIcon: true,
+          onPress: () => closeOnboardingCarousel('smartParkAndRide'),
+        },
+      }}
       title={t(SmartParkAndRideTexts.onboarding.automaticRegistration.title)}
       description={t(
         SmartParkAndRideTexts.onboarding.automaticRegistration.description,
@@ -61,7 +79,7 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
           SmartParkAndRideTexts.onboarding.automaticRegistration.buttonText,
         ),
         expanded: true,
-        rightIcon: {svg: Confirm},
+        rightIcon: {svg: ArrowRight},
       }}
       testID="smartParkAndRideOnboardingAutomaticRegistration"
     />

@@ -45,8 +45,8 @@ import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/ligh
 import {TripProps} from './Trip';
 import {Button} from '@atb/components/button';
 import {Map} from '@atb/assets/svg/mono-icons/map';
-import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
-import {useMapData} from '../use-map-data';
+import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
+import {useServiceJourneyPolylineQuery} from '../use-service-journey-polyline-query';
 import {useRealtimeText} from '../use-realtime-text';
 import {useNow} from '@atb/utils/use-now';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
@@ -69,7 +69,7 @@ type TripSectionProps = {
   interchangeDetails?: InterchangeDetails;
   leg: Leg;
   testID?: string;
-  onPressShowLive?(mapData: ServiceJourneyMapInfoData_v3): void;
+  onPressShowLive?(serviceJourneyPolylines: ServiceJourneyPolylines): void;
   onPressDeparture: TripProps['onPressDeparture'];
   onPressQuay: TripProps['onPressQuay'];
 };
@@ -115,7 +115,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const realtimeText = useRealtimeText(leg.serviceJourneyEstimatedCalls);
 
-  const mapData = useMapData(
+  const {data: serviceJourneyPolyline} = useServiceJourneyPolylineQuery(
     leg.serviceJourney?.id,
     leg.fromPlace.quay?.id,
     leg.toPlace.quay?.id,
@@ -313,7 +313,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {leg.authority && <AuthorityRow {...leg.authority} />}
-        {onPressShowLive && mapData ? (
+        {onPressShowLive && serviceJourneyPolyline ? (
           <TripRow>
             <Button
               type="small"
@@ -321,7 +321,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               leftIcon={{svg: Map}}
               text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
               interactiveColor={theme.color.interactive[3]}
-              onPress={() => onPressShowLive(mapData)}
+              onPress={() => onPressShowLive(serviceJourneyPolyline)}
             />
           </TripRow>
         ) : null}

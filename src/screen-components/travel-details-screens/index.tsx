@@ -26,4 +26,3 @@ export type {
   TripPatternBookingStatus,
   TripPatternWithKey,
 } from './types';
-export type {EstimatedCallWithMetadata} from './use-departure-data';

@@ -21,6 +21,12 @@ type Props = {
    * disappear with a parallax effect when scrolling.
    */
   parallaxContent?: (focusRef?: Ref<any>) => React.ReactNode;
+  /**
+   * When `parallaxContent` is set, the header text will appear gradually as the
+   * user scrolls. If `titleAlwaysVisible` is true, it will make the header text
+   * always visible instead.
+   */
+  titleAlwaysVisible?: boolean;
   handleScroll?: (scrollPercentage: number) => void;
   children?: React.ReactNode;
   footer?: React.ReactNode;
@@ -38,9 +44,14 @@ export function FullScreenView(props: Props) {
   const themeColor =
     props.headerProps.color ?? theme.color.background.accent[0];
   const backgroundColor = themeColor.background;
-  const [opacity, setOpacity] = useState(props.parallaxContent ? 0 : 1);
+
+  const titleShouldAnimate = props.titleAlwaysVisible
+    ? false
+    : !!props.parallaxContent;
+  const [opacity, setOpacity] = useState(titleShouldAnimate ? 0 : 1);
 
   const handleScroll = (scrollPercentage: number) => {
+    if (!titleShouldAnimate) return;
     if (scrollPercentage < 50) {
       setOpacity(0);
     } else {
@@ -70,7 +81,7 @@ export function FullScreenView(props: Props) {
           {...props.headerProps}
           textOpacity={opacity}
           setFocusOnLoad={
-            props.parallaxContent ? false : props.headerProps.setFocusOnLoad
+            titleShouldAnimate ? false : props.headerProps.setFocusOnLoad
           }
         />
       </View>
@@ -100,6 +111,7 @@ const ChildrenWithParallaxScrollContent = ({
   children,
   headerColor,
   handleScroll,
+  titleAlwaysVisible,
 }: PropsWithParallaxContent & {headerColor: string}) => {
   const focusRef = useFocusOnLoad();
   const styles = useStyles();
@@ -109,7 +121,7 @@ const ChildrenWithParallaxScrollContent = ({
         header={
           <View style={{backgroundColor: headerColor}}>
             <View style={styles.childrenContainer}>
-              {parallaxContent(focusRef)}
+              {parallaxContent(!titleAlwaysVisible ? focusRef : undefined)}
             </View>
           </View>
         }

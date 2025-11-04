@@ -378,19 +378,19 @@ export const ParkAndRideTexts = {
 
 export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
   allowed: {
-    title: _('Tillatt område', 'Allowed Area', 'Tillatt område'),
+    title: _('Tillatt sone', 'Allowed Area', 'Tillatt sone'),
     description: _(
-      'Her kan du både kjøre og parkere',
-      'Here you can both drive and park',
-      'Her kan du både køyre og parkere',
+      'Her kan du kjøre el-sparkesykkelen',
+      'You can ride the e-scooter here',
+      'Her kan du køyre el-sparkesykkelen',
     ),
   },
   slow: {
     title: _('Saktesone', 'Slow Zone', 'Saktesone'),
     description: _(
-      'Farten blir redusert i dette området',
-      'The speed will be reduced in this area',
-      'Farta vert redusert i dette området',
+      'Farten blir redusert her',
+      'The speed will be reduced here',
+      'Farta blir redusert her',
     ),
   },
 
@@ -418,23 +418,19 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
   // },
 
   noParking: {
-    title: _(
-      'Parkering forbudt-sone',
-      'No Parking Zone',
-      'Parkering forboden-sone',
-    ),
+    title: _('Parkering forbudt', 'No Parking', 'Parkering forboden'),
     description: _(
-      'Du kan ikke parkere i dette området',
-      'You cannot park in this area',
-      'Du kan ikkje parkere i dette området',
+      'Du kan ikke parkere her',
+      'You cannot park here',
+      'Du kan ikkje parkere her',
     ),
   },
   noEntry: {
     title: _('Kjøring forbudt', 'No Riding', 'Køyring forboden'),
     description: _(
-      'Du kan ikke kjøre inn i dette området',
-      'You cannot ride in this area',
-      'Du kan ikkje køyre inn i dette området',
+      'Du kan ikke kjøre eller parkere her',
+      'You cannot ride or park here',
+      'Du kan ikkje køyre eller parkere her',
     ),
   },
   unspecified: {
@@ -451,7 +447,7 @@ export const GeofencingZoneExtraExplanations = {
   isStationParking: _(
     'Se etter parkeringssoner i kartet.',
     'Look for parking zones on the map.',
-    'Se etter parkeringssoner i kartet.',
+    'Sjå etter parkeringssoner i kartet.',
   ),
 };
 

@@ -3,7 +3,7 @@ import React from 'react';
 import {
   OnboardingCarouselScreenProps,
   OnboardingScreenComponent,
-  useNavigateToNextOnboardingCarouselScreen,
+  useOnboardingCarouselNavigation,
 } from '@atb/modules/onboarding';
 import {ThemedContact} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -15,7 +15,7 @@ export type WelcomeScreenProps =
 export const BonusOnboarding_WelcomeScreen = ({}: WelcomeScreenProps) => {
   const {t} = useTranslation();
 
-  const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
+  const {navigateToNextScreen} = useOnboardingCarouselNavigation(
     bonusOnboardingId,
     'BonusOnboarding_WelcomeScreen',
   );
