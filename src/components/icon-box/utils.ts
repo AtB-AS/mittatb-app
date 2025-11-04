@@ -63,8 +63,8 @@ export function getTransportModeSvg(mode?: AnyMode, subMode?: AnySubMode) {
   }
 }
 
-export const getGeofencingZoneCodeSvg = (key: GeofencingZoneCode) => {
-  switch (key) {
+export const getGeofencingZoneCodeSvg = (code: GeofencingZoneCode) => {
+  switch (code) {
     case 'allowed':
       return {svg: Check};
     case 'slow':
@@ -77,10 +77,10 @@ export const getGeofencingZoneCodeSvg = (key: GeofencingZoneCode) => {
 };
 
 export const getGeofencingZoneCodeIconColor = (
-  key: GeofencingZoneCode,
+  code: GeofencingZoneCode,
   theme: Theme,
 ): ContrastColor => {
-  switch (key) {
+  switch (code) {
     case 'allowed':
       return theme.color.status.valid.primary;
     case 'slow':

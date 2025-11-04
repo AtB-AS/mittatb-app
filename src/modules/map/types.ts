@@ -140,9 +140,9 @@ export type ParkingType = {
 
 export type PolylineEncodedMultiPolygon = String[][];
 
-type GeofencingZoneProps<GZKey extends GeofencingZoneCode> =
+type GeofencingZoneProps<GZCode extends GeofencingZoneCode> =
   GeofencingZoneStyle<ContrastColor> & {
-    code: GZKey;
+    code: GZCode;
     isStationParking?: boolean;
   };
 
@@ -178,7 +178,7 @@ type GeofencingZoneExplanationType = {
 };
 
 export type GeofencingZoneExplanationsType = {
-  [GZKey in GeofencingZoneCode | 'unspecified']: GeofencingZoneExplanationType;
+  [GZCode in GeofencingZoneCode | 'unspecified']: GeofencingZoneExplanationType;
 };
 
 export type SelectedMapItemProperties = GeoJsonProperties & {
