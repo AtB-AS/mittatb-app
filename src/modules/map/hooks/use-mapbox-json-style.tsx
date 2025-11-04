@@ -1,7 +1,7 @@
 import {useThemeContext} from '@atb/theme';
 import {useMemo} from 'react';
-import {getMapboxLightStyle} from '../mapbox-styles/mapbox-light-style';
-import {getMapboxDarkStyle} from '../mapbox-styles/mapbox-dark-style';
+import {getMapboxLightStyle} from '../mapbox-styles/get-mapbox-light-style';
+import {getMapboxDarkStyle} from '../mapbox-styles/get-mapbox-dark-style';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
