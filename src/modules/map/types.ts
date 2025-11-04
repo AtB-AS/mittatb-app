@@ -1,24 +1,13 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {GeoLocation, Location, SearchLocation} from '@atb/modules/favorites';
-import {
-  Feature,
-  FeatureCollection,
-  GeoJsonProperties,
-  LineString,
-  Point,
-  Position,
-} from 'geojson';
+import {Feature, GeoJsonProperties, LineString, Position} from 'geojson';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {AnyMode} from '@atb/components/icon-box';
 import {
   BikeStationFragment,
   CarStationFragment,
-  StationBasicFragment,
 } from '@atb/api/types/generated/fragments/stations';
-import {
-  VehicleBasicFragment,
-  VehicleExtendedFragment,
-} from '@atb/api/types/generated/fragments/vehicles';
+import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {z} from 'zod';
 
 // prefixes added to distinguish between geojson types and generated mobility api types, as they are not exact matches
@@ -50,30 +39,6 @@ export type MapPadding =
   | [number, number]
   | [number, number, number, number];
 
-export type VehicleFeatures = {
-  bicycles: FeatureCollection<Point, VehicleBasicFragment>;
-  scooters: FeatureCollection<Point, VehicleBasicFragment>;
-};
-
-export type VehiclesState = {
-  vehicles: VehicleFeatures;
-  updateRegion: (region: MapRegion) => void;
-  isLoading: boolean;
-  onFilterChange: (filter: MobilityMapFilterType) => void;
-};
-
-export type StationFeatures = {
-  bicycles: FeatureCollection<Point, StationBasicFragment>;
-  cars: FeatureCollection<Point, StationBasicFragment>;
-};
-
-export type StationsState = {
-  stations: StationFeatures;
-  updateRegion: (region: MapRegion) => void;
-  isLoading: boolean;
-  onFilterChange: (filter: MobilityMapFilterType) => void;
-};
-
 export type NavigateToTripSearchCallback = (
   location: GeoLocation | SearchLocation,
   destination: string,
@@ -90,8 +55,6 @@ export type NavigateToDetailsCallback = (
 
 export type MapProps = {
   initialLocation?: Location;
-  vehicles?: VehiclesState; // V1 only
-  stations?: StationsState; // V1 only
   includeSnackbar?: boolean;
   navigateToQuay: NavigateToQuayCallback;
   navigateToDetails: NavigateToDetailsCallback;

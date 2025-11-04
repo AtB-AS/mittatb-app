@@ -1,5 +1,5 @@
 export {BackArrow} from './components/BackArrow';
-export {GeofencingZones, Stations} from './components/mobility';
+export {GeofencingZones} from './components/mobility';
 export {VehiclesAndStations} from './components/mobility/VehiclesAndStations.tsx';
 export {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
 export {LocationArrow} from './components/LocationArrow.tsx';
@@ -30,7 +30,7 @@ export {
   MapContextProvider,
   useMapContext,
 } from './MapContext.tsx';
-export {MapV2} from './MapV2';
+export {Map} from './Map.tsx';
 export type {
   FormFactorFilterType,
   GeofencingZoneCustomProps,
@@ -44,22 +44,15 @@ export type {
   ParkingVehicleTypes,
   PolylineEncodedMultiPolygon,
   PreProcessedGeofencingZones,
-  StationFeatures,
-  StationsState,
-  VehicleFeatures,
-  VehiclesState,
 } from './types';
 export {
   flyToLocation,
   getVisibleRange,
   hitboxCoveringIconOnly,
-  isClusterFeature,
   isFeaturePoint,
   toFeatureCollection,
   toFeaturePoint,
   toFeaturePoints,
-  zoomIn,
-  zoomOut,
   getFeatureWeight,
   getFeatureToSelect,
   getFeaturesAtClick,

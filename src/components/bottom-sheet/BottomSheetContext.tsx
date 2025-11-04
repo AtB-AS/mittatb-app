@@ -37,7 +37,7 @@ type BottomSheetState = {
     useBackdrop?: boolean,
     /**
      * Make sure if you use this prop in a tabscreen, that you handle navigating away by closing the bottomsheet.
-     * Example in Map_RootScreenV2 useEffect
+     * Example in Map_RootScreen useEffect
      */
     tabBarHeight?: number,
   ) => void;

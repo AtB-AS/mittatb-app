@@ -79,11 +79,8 @@ export const ScooterSheet = ({
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
-  const {
-    isParkingViolationsReportingEnabled,
-    isShmoDeepIntegrationEnabled,
-    isMapV2Enabled,
-  } = useFeatureTogglesContext();
+  const {isParkingViolationsReportingEnabled, isShmoDeepIntegrationEnabled} =
+    useFeatureTogglesContext();
 
   return (
     <MapBottomSheet
@@ -129,7 +126,6 @@ export const ScooterSheet = ({
 
             {selectedPaymentMethod &&
               isShmoDeepIntegrationEnabled &&
-              isMapV2Enabled &&
               !hasBlockers &&
               operatorIsIntegrationEnabled && (
                 <Section style={styles.paymentWrapper}>
@@ -142,7 +138,6 @@ export const ScooterSheet = ({
           </View>
           <View style={styles.footer}>
             {isShmoDeepIntegrationEnabled &&
-            isMapV2Enabled &&
             operatorId &&
             operatorIsIntegrationEnabled ? (
               <View style={styles.actionWrapper}>

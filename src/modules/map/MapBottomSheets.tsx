@@ -232,8 +232,6 @@ export const MapBottomSheets = ({
         <MapFilterSheet
           onFilterChanged={(filter: MapFilterType) => {
             analytics.logEvent('Map', 'Filter changed', {filter});
-            mapProps.vehicles?.onFilterChange(filter.mobility);
-            mapProps.stations?.onFilterChange(filter.mobility);
           }}
           onClose={() => {
             handleCloseSheet();

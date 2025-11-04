@@ -34,22 +34,15 @@ export {ShmoRequirementEnum} from './types';
 export {useOperatorBenefitsForFareProduct} from './use-operator-benefits-for-fare-product';
 export {useOperators} from './use-operators';
 export {useShmoRequirements} from './use-shmo-requirements';
-export {useStations} from './use-stations';
 export {useVehicle} from './use-vehicle';
-export {useVehicles} from './use-vehicles';
 export {useDeleteAgeVerificationMutation} from './queries/use-remove-age-verification-mutation';
 export {
   findOperatorBrandImageUrl,
   getAvailableVehicles,
-  isBicycle,
   isBicycleV2,
-  isBikeStation,
   isBikeStationV2,
-  isCarStation,
   isCarStationV2,
-  isScooter,
   isScooterV2,
-  isStation,
   isStationV2,
   isVehicleFeature,
   isVehiclesClusteredFeature,
