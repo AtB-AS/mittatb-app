@@ -181,7 +181,6 @@ export const BikeStationBottomSheet = ({
                 <OperatorActionButton
                   operatorId={operatorId}
                   operatorName={operatorName}
-                  benefit={operatorBenefit}
                   appStoreUri={appStoreUri}
                   rentalAppUri={rentalAppUri}
                   isBonusPayment={payWithBonusPoints}

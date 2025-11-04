@@ -70,6 +70,9 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();
 
   const backgroundColor = themeColor.background;
+  const borderBottomColor = !!textOpacity
+    ? theme.color.background.neutral[2].background
+    : 'transparent';
 
   const leftIcon = leftButton ? (
     <HeaderButton color={themeColor} {...leftButton} testID="lhb" />
@@ -83,7 +86,9 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   );
 
   return (
-    <View style={[styles.container, style, {backgroundColor}]}>
+    <View
+      style={[styles.container, style, {backgroundColor, borderBottomColor}]}
+    >
       <View
         accessibilityLabel={titleA11yLabel}
         accessible={!!title && !!textOpacity}
@@ -136,6 +141,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacing.medium,
     paddingTop: theme.spacing.medium,
+    borderBottomWidth: theme.border.width.slim,
+    borderBottomColor: 'transparent',
   },
   headerTitle: {alignItems: 'center'},
   buttons: {

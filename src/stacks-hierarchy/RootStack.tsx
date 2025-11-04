@@ -72,7 +72,6 @@ import {parseParamAsInt} from './utils';
 import {AnalyticsContextProvider} from '@atb/modules/analytics';
 import {Root_ParkingPhotoScreen} from './Root_ParkingPhotoScreen';
 import {Root_TripSelectionScreen} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/Root_TripSelectionScreen';
-import {useSetupEventStream} from '@atb/modules/event-stream';
 import {useSetupReactQueryWindowFocus} from '@atb/queries';
 import {
   Root_SmartParkAndRideAddScreen,
@@ -107,7 +106,6 @@ export const RootStack = () => {
   useBeaconsContext();
   useTestIds();
   useSetupReactQueryWindowFocus();
-  useSetupEventStream();
 
   // init Intercom user
   useRegisterIntercomUser();

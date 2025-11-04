@@ -4,7 +4,6 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {screenReaderPause} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -21,7 +20,7 @@ import {
   useLocationSearchValue,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {SearchForLocations} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   DashboardTexts,
   TripSearchTexts,
@@ -39,19 +38,20 @@ import {CompactFareContracts} from './components/CompactFareContracts';
 import {DeparturesWidget} from './components/DeparturesWidget';
 import {Announcements} from './components/Announcements';
 import SharedTexts from '@atb/translations/shared';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ScreenHeading} from '@atb/components/heading';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
 
 type RootProps = DashboardScreenProps<'Dashboard_RootScreen'>;
 
-const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
-
 export const Dashboard_RootScreen: React.FC<RootProps> = ({
   navigation,
   route,
 }) => {
   const style = useStyle();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const {enable_ticketing} = useRemoteConfigContext();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
@@ -168,12 +168,20 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
   }
 
   return (
-    <View style={style.container}>
-      <FullScreenHeader
-        title={t(DashboardTexts.header.title)}
-        globalMessageContext={GlobalMessageContextEnum.appAssistant}
-      />
-
+    <FullScreenView
+      headerProps={{
+        title: t(DashboardTexts.header.title),
+        globalMessageContext: GlobalMessageContextEnum.appAssistant,
+        color: theme.color.background.neutral[1],
+      }}
+      parallaxContent={(focusRef) => (
+        <ScreenHeading
+          ref={focusRef}
+          text={t(DashboardTexts.header.title)}
+          isLarge={true}
+        />
+      )}
+    >
       <View style={style.backdrop}>
         <DashboardBackground width="100%" height="100%" />
       </View>
@@ -248,7 +256,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
             }
           />
         </View>
-
         <Announcements
           style={[style.contentSection, style.contentSection__horizontalScroll]}
         />
@@ -295,7 +302,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
           }
         />
       </ScrollView>
-    </View>
+    </FullScreenView>
   );
 };
 
@@ -399,10 +406,6 @@ function translateLocation(location: Location | undefined): string {
 }
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    backgroundColor: getThemeColor(theme).background,
-    flex: 1,
-  },
   scrollView: {
     paddingBottom: theme.spacing.medium,
     backgroundColor: 'transparent',
@@ -432,7 +435,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   searchHeader: {
     marginTop: 0,
-    backgroundColor: getThemeColor(theme).background,
+    paddingBottom: theme.spacing.medium,
   },
   dashboardGlobalmessages: {
     marginBottom: theme.spacing.medium,

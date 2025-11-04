@@ -74,7 +74,7 @@ export const useLiveVehicleSubscription = ({
     [setLiveVehicle, setIsConnected],
   );
 
-  const onErrorHandler = useCallback(
+  const onCloseHandler = useCallback(
     () => setIsConnected(true),
     [setIsConnected],
   );
@@ -82,7 +82,7 @@ export const useLiveVehicleSubscription = ({
   useSubscription({
     url: serviceJourneyId ? url : null,
     onMessage: onMessageHandler,
-    onError: onErrorHandler,
+    onClose: onCloseHandler,
     enabled,
   });
 

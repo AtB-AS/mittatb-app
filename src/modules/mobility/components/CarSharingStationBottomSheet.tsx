@@ -169,7 +169,6 @@ export const CarSharingStationBottomSheet = ({
               <View style={styles.footer}>
                 <OperatorActionButton
                   operatorId={operatorId}
-                  benefit={operatorBenefit}
                   operatorName={operatorName}
                   appStoreUri={appStoreUri}
                   rentalAppUri={rentalAppUri}

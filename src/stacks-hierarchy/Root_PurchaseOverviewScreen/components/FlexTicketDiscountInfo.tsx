@@ -51,7 +51,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
     t(PurchaseOverviewTexts.flexDiscount.description);
 
   return (
-    <View style={style}>
+    <View style={[styles.container, style]}>
       <ContentHeading text={t(PurchaseOverviewTexts.flexDiscount.heading)} />
       <Section>
         <ExpandableSectionItem
@@ -143,6 +143,9 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    rowGap: theme.spacing.small,
+  },
   userProfileDiscountInfo: {
     flex: 1,
     flexWrap: 'wrap',

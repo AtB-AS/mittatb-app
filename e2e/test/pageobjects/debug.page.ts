@@ -25,6 +25,7 @@ class DebugPage {
    */
   async showRemoteTokens() {
     await AppHelper.scrollDown('debugInfoScrollView');
+    await AppHelper.scrollDown('debugInfoScrollView');
     const reqId = `//*[@resource-id="remoteTokenExpandable"]`;
     await $(reqId).click();
   }

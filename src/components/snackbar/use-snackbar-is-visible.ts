@@ -1,7 +1,7 @@
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {useState, useEffect, useRef} from 'react';
 import {
-  SnackbarTextContent,
+  SnackbarContent,
   getSnackbarHasTextContent,
 } from '@atb/components/snackbar';
 import {snackbarAnimationDurationMS} from './use-snackbar-vertical-position-animation';
@@ -9,12 +9,12 @@ import {snackbarAnimationDurationMS} from './use-snackbar-vertical-position-anim
 export const useSnackbarIsVisible = (
   isDisabled: boolean,
   /** Must be stable to avoid triggering the useEffect at wrong times */
-  stableTextContent?: SnackbarTextContent,
+  stableContent?: SnackbarContent,
   customVisibleDurationMS?: number,
 ): {snackbarIsVisible: boolean; hideSnackbar: () => void} => {
   const totalNumberOfTextCharacters =
-    (stableTextContent?.title?.length || 0) +
-    (stableTextContent?.description?.length || 0);
+    (stableContent?.title?.length || 0) +
+    (stableContent?.description?.length || 0);
 
   const estimatedTimeRequiredToReadTextMS = totalNumberOfTextCharacters * 100; // 0.1 seconds per character
   const minimumVisibleTimeMS = 5000; // 5 seconds
@@ -23,7 +23,7 @@ export const useSnackbarIsVisible = (
     customVisibleDurationMS ||
     Math.max(minimumVisibleTimeMS, estimatedTimeRequiredToReadTextMS);
 
-  const shouldShowSnackbar = getSnackbarHasTextContent(stableTextContent); // if there is new textContent to show, it should be shown
+  const shouldShowSnackbar = getSnackbarHasTextContent(stableContent); // if there is new textContent to show, it should be shown
 
   const [snackbarIsVisible, setSnackbarIsVisible] =
     useState(shouldShowSnackbar);
@@ -46,7 +46,7 @@ export const useSnackbarIsVisible = (
     }
     return clearCurrentTimeout; // clear timeout when the component is unmounted
   }, [
-    stableTextContent,
+    stableContent,
     visibleDurationMS,
     isScreenReaderEnabled,
     shouldShowSnackbar,

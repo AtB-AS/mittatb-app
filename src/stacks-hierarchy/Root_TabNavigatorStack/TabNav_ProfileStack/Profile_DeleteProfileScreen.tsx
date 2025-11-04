@@ -15,6 +15,7 @@ import {useTimeContext} from '@atb/modules/time';
 import {useBeaconsContext} from '@atb/modules/beacons';
 import {tGlobal} from '@atb/modules/locale';
 import {useDeleteAgeVerificationMutation} from '@atb/modules/mobility';
+import {useMutation} from '@tanstack/react-query';
 
 export const Profile_DeleteProfileScreen = () => {
   const styles = useStyles();
@@ -32,19 +33,24 @@ export const Profile_DeleteProfileScreen = () => {
   const {mutateAsync: deleteAgeVerification} =
     useDeleteAgeVerificationMutation();
 
-  const handleDeleteProfile = async () => {
+  const onDeleteProfileMutate = async () => {
     await deleteAgeVerification();
-    const isProfileDeleted = await deleteProfile();
-    if (isProfileDeleted) {
-      await deleteCollectedData();
-      await signOut();
-    } else {
-      Alert.alert(
-        tGlobal(DeleteProfileTexts.deleteError.title),
-        tGlobal(DeleteProfileTexts.deleteError.message),
-      );
-    }
+    await deleteCollectedData();
   };
+  const onDeleteProfileSuccess = async () => {
+    await signOut();
+  };
+  const onDeleteProfileError = () => {
+    Alert.alert(
+      tGlobal(DeleteProfileTexts.deleteError.title),
+      tGlobal(DeleteProfileTexts.deleteError.message),
+    );
+  };
+  const {mutateAsync: deleteProfile} = useDeleteProfileMutation({
+    onMutate: onDeleteProfileMutate,
+    onSuccess: onDeleteProfileSuccess,
+    onError: onDeleteProfileError,
+  });
 
   const showDeleteAlert = async () => {
     Alert.alert(
@@ -58,7 +64,7 @@ export const Profile_DeleteProfileScreen = () => {
         {
           text: t(DeleteProfileTexts.deleteConfirmation.confirm),
           style: 'destructive',
-          onPress: handleDeleteProfile,
+          onPress: () => deleteProfile(),
         },
       ],
     );
@@ -119,6 +125,24 @@ export const Profile_DeleteProfileScreen = () => {
       </Section>
     </FullScreenView>
   );
+};
+
+const useDeleteProfileMutation = ({
+  onMutate,
+  onSuccess,
+  onError,
+}: {
+  onMutate: () => void;
+  onSuccess: () => void;
+  onError: () => void;
+}) => {
+  return useMutation({
+    mutationKey: ['deleteProfile'],
+    mutationFn: () => deleteProfile(),
+    onMutate,
+    onSuccess,
+    onError,
+  });
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

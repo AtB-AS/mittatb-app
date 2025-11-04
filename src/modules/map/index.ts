@@ -13,7 +13,7 @@ export {
   sortFeaturesByLayerIndexWeight,
 } from './geofencing-zone-utils';
 export {useControlPositionsStyle} from './hooks/use-control-styles';
-export {useGeofencingZoneTextContent} from './hooks/use-geofencing-zone-text-content';
+export {useGeofencingZoneContent} from './hooks/use-geofencing-zone-content.tsx';
 export {useMapSymbolStyles} from './hooks/use-map-symbol-styles';
 export {useMapViewConfig} from './hooks/use-map-view-config.ts';
 export {usePreProcessedGeofencingZones} from './hooks/use-pre-processed-geofencing-zones';
@@ -36,7 +36,6 @@ export type {
   GeofencingZoneCustomProps,
   GeofencingZoneExplanationsType,
   MapFilterType,
-  MapLeg,
   MapLine,
   MapRegion,
   MobilityMapFilterType,

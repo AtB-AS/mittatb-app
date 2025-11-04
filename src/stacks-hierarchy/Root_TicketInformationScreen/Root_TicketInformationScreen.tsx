@@ -46,7 +46,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
   );
 
   const fareProductTypeConfig = fareProductTypeConfigs.find(
-    (f) => f.type === props.route.params.fareProductTypeConfigType,
+    (f) => f.type === selection?.fareProductTypeConfig.type,
   );
   const preassignedFareProduct = preassignedFareProducts.find(
     (p) => p.id === selection?.preassignedFareProduct.id,
@@ -63,10 +63,9 @@ export const Root_TicketInformationScreen = (props: Props) => {
       contentColor={themeColor}
     >
       <ScrollView contentContainerStyle={styles.container}>
-        {preassignedFareProduct?.productDescription && (
+        {preassignedFareProduct && (
           <>
             <ContentHeading
-              color={themeColor}
               text={t(
                 PurchaseOverviewTexts.ticketInformation.informationDetails
                   .descriptionHeading,
@@ -103,11 +102,14 @@ export const Root_TicketInformationScreen = (props: Props) => {
             </Section>
           </>
         )}
-        <FlexTicketDiscountInfo userProfiles={userProfilesWithCountAndOffer} />
+        {props.route.params.shouldShowFlexTicketDiscountInfo && (
+          <FlexTicketDiscountInfo
+            userProfiles={userProfilesWithCountAndOffer}
+          />
+        )}
         {isTipsAndInformationEnabled && (
           <>
             <ContentHeading
-              color={themeColor}
               text={t(
                 PurchaseOverviewTexts.ticketInformation.informationDetails
                   .tipsInformation,
