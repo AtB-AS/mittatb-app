@@ -13,10 +13,8 @@ import {
   Position,
 } from 'geojson';
 import {
-  MapPadding,
   ParkingType,
   GeofencingZoneCustomProps,
-  Cluster,
   AutoSelectableMapItem,
 } from './types';
 import {
@@ -39,48 +37,6 @@ export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
 export const CUSTOM_SCAN_ZOOM_LEVEL = 17;
 
-export async function zoomIn(
-  mapViewRef: RefObject<MapboxGL.MapView>,
-  mapCameraRef: RefObject<MapboxGL.Camera>,
-) {
-  const currentZoom = await mapViewRef.current?.getZoom();
-  mapCameraRef.current?.zoomTo((currentZoom ?? 10) + 1, 200);
-}
-
-export async function zoomOut(
-  mapViewRef: RefObject<MapboxGL.MapView>,
-  mapCameraRef: RefObject<MapboxGL.Camera>,
-) {
-  const currentZoom = await mapViewRef.current?.getZoom();
-  mapCameraRef.current?.zoomTo((currentZoom ?? 10) - 1, 200);
-}
-
-export function fitBounds(
-  fromCoordinates: Coordinates,
-  toCoordinates: Coordinates,
-  mapCameraRef: RefObject<MapboxGL.Camera | null>,
-  padding: MapPadding = [100, 100],
-) {
-  mapCameraRef.current?.fitBounds(
-    [fromCoordinates.longitude, fromCoordinates.latitude],
-    [toCoordinates.longitude, toCoordinates.latitude],
-    padding,
-    1000,
-  );
-}
-
-export const findEntityAtClick = async (
-  clickedFeature: Feature<Point>,
-  mapViewRef: RefObject<MapboxGL.MapView | null>,
-) => {
-  const renderedFeatures = await getFeaturesAtClick(
-    clickedFeature,
-    mapViewRef,
-    ['==', ['geometry-type'], 'Point'],
-  );
-  return renderedFeatures?.filter(isFeaturePoint)?.filter(hasProperties)[0];
-};
-
 export const isFeaturePoint = (f: Feature): f is Feature<Point> =>
   f.geometry.type === 'Point';
 
@@ -101,9 +57,6 @@ export const isFeaturePolylineEncodedMultiPolygon = (f: Feature): boolean =>
   (isFeatureMultiPolygon(f) || isFeaturePolygon(f)) &&
   !!f.properties?.polylineEncodedMultiPolygon;
 
-export const hasProperties = (f: Feature) =>
-  Object.keys(f.properties || {}).length > 0;
-
 export const hasGeofencingZoneCustomProps = (f: Feature) =>
   Object.keys(f.properties?.geofencingZoneCustomProps || {}).length > 0;
 
@@ -113,11 +66,6 @@ export const isFeatureGeofencingZone = (
   MultiPolygon,
   {geofencingZoneCustomProps: GeofencingZoneCustomProps}
 > => isFeaturePolylineEncodedMultiPolygon(f) && hasGeofencingZoneCustomProps(f);
-
-export const isClusterFeature = (
-  feature: Feature,
-): feature is Feature<Point, Cluster> =>
-  isFeaturePoint(feature) && feature.properties?.cluster;
 
 export const isClusterFeatureV2 = (
   feature: Feature,
