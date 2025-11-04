@@ -40,7 +40,7 @@ export const BorderedFromToBox = ({
     if (!toText)
       return (
         <View style={styles.smallContent}>
-          <ThemeText color={backgroundColor} typography="body__tertiary">
+          <ThemeText color={backgroundColor} typography="body__xs">
             {fromText}
           </ThemeText>
         </View>
@@ -53,10 +53,10 @@ export const BorderedFromToBox = ({
           size="small"
         />
         <View style={styles.smallContentText}>
-          <ThemeText color={backgroundColor} typography="body__tertiary">
+          <ThemeText color={backgroundColor} typography="body__xs">
             {fromText}
           </ThemeText>
-          <ThemeText color={backgroundColor} typography="body__tertiary">
+          <ThemeText color={backgroundColor} typography="body__xs">
             {toText}
           </ThemeText>
         </View>
@@ -66,7 +66,7 @@ export const BorderedFromToBox = ({
 
   const largeLayout = () => (
     <View style={styles.largeContent}>
-      <ThemeText color={backgroundColor} typography="body__primary--bold">
+      <ThemeText color={backgroundColor} typography="body__m__strong">
         {fromText}
       </ThemeText>
       {toText && (
@@ -78,7 +78,7 @@ export const BorderedFromToBox = ({
             }
             size="normal"
           />
-          <ThemeText color={backgroundColor} typography="body__primary--bold">
+          <ThemeText color={backgroundColor} typography="body__m__strong">
             {toText}
           </ThemeText>
         </>

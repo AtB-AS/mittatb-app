@@ -26,7 +26,7 @@ export const MobilityBenefitsActionSectionItem = ({
 
   return (
     <View style={[topContainer, styles.benefitSection]}>
-      <ThemeText typography="body__secondary" color="secondary">
+      <ThemeText typography="body__s" color="secondary">
         {t(FareContractTexts.label.includedBenefits)}
       </ThemeText>
       <BenefitTiles

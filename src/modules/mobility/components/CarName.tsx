@@ -9,14 +9,14 @@ export const CarName = ({vehicleType}: Props) => {
 
   if (vehicleType.make && vehicleType.model) {
     return (
-      <ThemeText typography="body__primary--bold">
+      <ThemeText typography="body__m__strong">
         {vehicleType.make} {vehicleType.model}
       </ThemeText>
     );
   }
 
   return (
-    <ThemeText typography="body__primary--bold">
+    <ThemeText typography="body__m__strong">
       {vehicleType.name &&
         getTextForLanguage(vehicleType.name.translation, language)}
     </ThemeText>

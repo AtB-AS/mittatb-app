@@ -52,7 +52,7 @@ export const AnnouncementSheet = ({announcement}: Props) => {
         )}
         <Section>
           <GenericSectionItem type="spacious" style={style.articleContainer}>
-            <ThemeText typography="heading--big">
+            <ThemeText typography="heading__xl">
               {getTextForLanguage(announcement.fullTitle, language)}
             </ThemeText>
             <ThemeText isMarkdown={true}>

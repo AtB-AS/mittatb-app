@@ -31,7 +31,7 @@ export const GoodOrBadQuestion = ({
 
   return (
     <>
-      <ThemeText typography="heading__component" style={styles.questionText}>
+      <ThemeText typography="heading__m" style={styles.questionText}>
         {category.introText[language]}
       </ThemeText>
 

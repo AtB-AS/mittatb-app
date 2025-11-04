@@ -30,7 +30,7 @@ const ResultItemFooter: React.FC<{
         <InfoTag bookingStatus={bookingStatus} isInPast={isInPast} />
       </View>
       <View style={styles.detailsTextWrapper}>
-        <ThemeText typography="body__secondary">
+        <ThemeText typography="body__s">
           {t(TripSearchTexts.results.resultItem.footer.detailsLabel)}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} />

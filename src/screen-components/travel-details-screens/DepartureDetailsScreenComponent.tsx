@@ -281,7 +281,7 @@ export const DepartureDetailsScreenComponent = ({
             >
               <LineChip serviceJourney={lineChipServiceJourney} />
               <ThemeText
-                typography="heading__title"
+                typography="heading__m"
                 color={themeColor}
                 style={styles.headerTitle}
                 testID="lineName"
@@ -363,7 +363,7 @@ export const DepartureDetailsScreenComponent = ({
           ) : !isWithinSameDate(new Date(), activeItem.date) ? (
             <>
               <View style={styles.date}>
-                <ThemeText typography="body__primary" color="secondary">
+                <ThemeText typography="body__m" color="secondary">
                   {formatToVerboseFullDate(activeItem.date, language)}
                 </ThemeText>
               </View>
@@ -456,7 +456,7 @@ function LastPassedStop({realtimeText}: {realtimeText: string}) {
   return (
     <View style={styles.passedSection}>
       <ThemeText
-        typography="body__secondary"
+        typography="body__s"
         color={themeColor}
         style={styles.passedText}
       >
@@ -627,7 +627,7 @@ function EstimatedCallRow({
         {isStartOfGroup && !!call.quay.description && (
           <ThemeText
             testID="quayDescription"
-            typography="body__secondary"
+            typography="body__s"
             color="secondary"
           >
             {call.quay.description}
@@ -636,7 +636,7 @@ function EstimatedCallRow({
 
         {!call.forAlighting && !call.metadata.isStartOfServiceJourney && (
           <AccessibleText
-            typography="body__secondary"
+            typography="body__s"
             color="secondary"
             style={styles.boardingInfo}
             pause="before"
@@ -646,7 +646,7 @@ function EstimatedCallRow({
         )}
         {!call.forBoarding && !call.metadata.isEndOfServiceJourney && (
           <AccessibleText
-            typography="body__secondary"
+            typography="body__s"
             color="secondary"
             style={styles.boardingInfo}
             pause="before"

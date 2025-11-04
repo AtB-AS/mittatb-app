@@ -432,7 +432,7 @@ export const Profile_DesignSystemScreen = ({
           <ExpandableSectionItem
             text="Tag"
             showIconText={false}
-            textType="heading__title"
+            textType="heading__m"
             label="new"
             expandContent={
               <>
@@ -495,12 +495,12 @@ export const Profile_DesignSystemScreen = ({
           <ExpandableSectionItem
             text="Buttons"
             showIconText={false}
-            textType="heading__title"
+            textType="heading__m"
             expandContent={
               <View>
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   Primary - block - interactive/0
                 </ThemeText>
@@ -532,7 +532,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   Primary - block - interactive/1
                 </ThemeText>
@@ -564,7 +564,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   Primary - block - interactive/2
                 </ThemeText>
@@ -596,7 +596,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   Primary - block - interactive/destructive
                 </ThemeText>
@@ -628,7 +628,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   Secondary - block
                 </ThemeText>
@@ -660,7 +660,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   tertiary - block
                 </ThemeText>
@@ -692,7 +692,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   Medium button examples (interactive_0)
                 </ThemeText>
@@ -761,7 +761,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   Pill button examples (interactive_0)
                 </ThemeText>
@@ -837,7 +837,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   With icons examples (interactive_0)
                 </ThemeText>

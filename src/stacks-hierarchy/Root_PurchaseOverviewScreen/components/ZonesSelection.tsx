@@ -78,7 +78,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
               <View style={styles.fromZone}>
                 <ThemeText
                   color="secondary"
-                  typography="body__secondary"
+                  typography="body__s"
                   style={styles.toFromLabel}
                 >
                   {t(PurchaseOverviewTexts.fromToLabel.from)}
@@ -88,7 +88,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
               <View style={styles.toZone}>
                 <ThemeText
                   color="secondary"
-                  typography="body__secondary"
+                  typography="body__s"
                   style={styles.toFromLabel}
                 >
                   {t(PurchaseOverviewTexts.fromToLabel.to)}
@@ -141,13 +141,13 @@ const ZoneLabel = ({fareZone}: {fareZone: FareZoneWithMetadata}) => {
 
   return fareZone.venueName ? (
     <ThemeText style={{flexShrink: 1}} testID="selectedStationAndZone">
-      <ThemeText typography="body__primary--bold" testID="selectedStation">
+      <ThemeText typography="body__m__strong" testID="selectedStation">
         {fareZone.venueName + ' '}
       </ThemeText>
       ({zoneLabel})
     </ThemeText>
   ) : (
-    <ThemeText typography="body__primary--bold" testID="selectedZone">
+    <ThemeText typography="body__m__strong" testID="selectedZone">
       {zoneLabel}
     </ThemeText>
   );

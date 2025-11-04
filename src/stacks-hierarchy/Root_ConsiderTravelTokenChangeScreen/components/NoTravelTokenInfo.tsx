@@ -33,7 +33,7 @@ export function NoTravelTokenInfo({
       }}
     >
       <ThemeText
-        typography="heading--big"
+        typography="heading__xl"
         style={styles.header}
         color={themeColor}
       >

@@ -84,7 +84,7 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
             <ExpandableSectionItem
               key={item.id}
               text={getTextForLanguage(item.title, language) ?? ''}
-              textType="body__primary--bold"
+              textType="body__m__strong"
               showIconText={false}
               expanded={currentlyOpenFaqIndex === index}
               onPress={() => {

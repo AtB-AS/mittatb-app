@@ -71,7 +71,7 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
             <View style={styles.summaryTitle}>
               <ThemeText
                 style={styles.summaryTitleText}
-                typography="body__primary--bold"
+                typography="body__m__strong"
               >
                 {summaryTitle}
               </ThemeText>
@@ -97,7 +97,7 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
       {actionButtonProps && (
         <LinkSectionItem
           {...actionButtonProps}
-          textType="body__secondary"
+          textType="body__s"
           accessibility={{
             accessibilityHint: actionButtonProps.accessibilityHint,
             accessibilityRole: actionButtonProps.accessibilityRole,

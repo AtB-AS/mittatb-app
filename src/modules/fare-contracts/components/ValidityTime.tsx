@@ -47,7 +47,7 @@ export const ValidityTime = ({fc}: Props) => {
     <View>
       <ThemeText
         style={styles.validityText}
-        typography="heading--medium"
+        typography="heading__l"
         accessibilityLabel={
           !isInspectable
             ? label +

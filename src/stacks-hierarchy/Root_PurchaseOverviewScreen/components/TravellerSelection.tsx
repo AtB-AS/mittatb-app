@@ -121,7 +121,7 @@ export function TravellerSelection({
   const content = (
     <View style={styles.sectionContentContainer}>
       <View style={{flex: 1}}>
-        <ThemeText typography="body__primary--bold" testID="selectedTravellers">
+        <ThemeText typography="body__m__strong" testID="selectedTravellers">
           {multipleTravellerCategoriesSelectedFrom
             ? t(
                 PurchaseOverviewTexts.travellerSelection.travellers_title(
@@ -131,14 +131,14 @@ export function TravellerSelection({
             : travellersDetailsText}
         </ThemeText>
         {!canSelectUserProfile && (
-          <ThemeText typography="body__secondary" color="secondary">
+          <ThemeText typography="body__s" color="secondary">
             {travellerInfo}
           </ThemeText>
         )}
 
         {multipleTravellerCategoriesSelectedFrom && (
           <ThemeText
-            typography="body__secondary"
+            typography="body__s"
             color="secondary"
             style={styles.multipleTravellersDetails}
             testID="selectedTravellers"

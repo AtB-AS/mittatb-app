@@ -35,9 +35,7 @@ export const DepartureTime = ({departure, color}: DepartureTimeProps) => {
         )}
         <ThemeText
           typography={
-            departure.cancellation
-              ? 'body__primary--strike'
-              : 'body__primary--bold'
+            departure.cancellation ? 'body__m__strike' : 'body__m__strong'
           }
           color={color}
           type={departure.cancellation ? 'secondary' : 'primary'}
@@ -51,7 +49,7 @@ export const DepartureTime = ({departure, color}: DepartureTimeProps) => {
       </View>
       {isMoreThanOneMinuteDelayed(departure) && (
         <ThemeText
-          typography="body__tertiary--strike"
+          typography="body__xs__strike"
           color={color}
           type="secondary"
           style={styles.aimedTime}

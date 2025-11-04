@@ -28,7 +28,7 @@ export const ScreenHeading = forwardRef<any, ScreenHeadingProps>(
         role="heading"
       >
         <ThemeText
-          typography={isLarge ? 'heading--jumbo' : 'heading--medium'}
+          typography={isLarge ? 'heading__2xl' : 'heading__l'}
           color={color}
           accessibilityLabel={accessibilityLabel}
         >

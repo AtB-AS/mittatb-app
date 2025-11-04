@@ -57,9 +57,7 @@ export const TransportationIconBoxList = ({
           count={numberOfModes - numberOfModesToDisplay}
           style={styles.icon}
           size={iconSize}
-          textType={
-            iconSize === 'xSmall' ? 'label__uppercase' : 'body__secondary'
-          }
+          textType={iconSize === 'xSmall' ? 'heading__xs' : 'body__s'}
         />
       )}
     </View>

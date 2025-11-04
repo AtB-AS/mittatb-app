@@ -215,10 +215,10 @@ export const Root_ContactScooterOperatorScreen = ({
               />
             </Section>
             <View style={styles.description}>
-              <ThemeText typography="body__secondary">
+              <ThemeText typography="body__s">
                 {t(ContactScooterOperatorTexts.location.header)}
               </ThemeText>
-              <ThemeText typography="body__tertiary">
+              <ThemeText typography="body__xs">
                 {t(
                   ContactScooterOperatorTexts.location.description(
                     operatorName ?? '',

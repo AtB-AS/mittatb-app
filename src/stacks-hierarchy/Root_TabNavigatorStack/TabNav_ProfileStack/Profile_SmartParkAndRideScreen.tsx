@@ -182,10 +182,10 @@ const HowItWorksSection = ({onPress}: HowItWorksSectionProps) => {
               }}
             />
             <View style={styles.howItWorks}>
-              <ThemeText typography="body__primary--bold">
+              <ThemeText typography="body__m__strong">
                 {t(SmartParkAndRideTexts.howItWorks.title)}
               </ThemeText>
-              <ThemeText typography="body__secondary" color="secondary">
+              <ThemeText typography="body__s" color="secondary">
                 {t(SmartParkAndRideTexts.howItWorks.description)}
               </ThemeText>
             </View>

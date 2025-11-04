@@ -43,7 +43,7 @@ export const ProductAliasChip = ({color, text, selected, onPress}: Props) => {
     >
       <ThemeText
         color={currentColor}
-        typography={selected ? 'body__secondary--bold' : 'body__secondary'}
+        typography={selected ? 'body__s__strong' : 'body__s'}
       >
         {text}
       </ThemeText>

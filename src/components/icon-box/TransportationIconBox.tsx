@@ -44,7 +44,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
 
   const lineNumberElement = lineNumber ? (
     <ThemeText
-      typography="body__primary--bold"
+      typography="body__m__strong"
       color={transportationColor}
       style={styles.lineNumberText}
       testID="lineNumber"

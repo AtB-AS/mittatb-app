@@ -34,7 +34,7 @@ export const FareProductHeader = forwardRef<View, Props>(
             iconSize="normal"
           />
           <ThemeText
-            typography="heading--medium"
+            typography="heading__l"
             color={themeColor}
             style={styles.headerText}
           >

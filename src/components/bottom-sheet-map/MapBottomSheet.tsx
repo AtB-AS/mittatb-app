@@ -139,10 +139,10 @@ export const MapBottomSheet = ({
                 <>
                   {logoUrl && <BrandingImage logoUrl={logoUrl} logoSize={28} />}
                   <View style={styles.headingWrapper}>
-                    <ThemeText typography="heading--big">{heading}</ThemeText>
+                    <ThemeText typography="heading__xl">{heading}</ThemeText>
                     {subText && (
                       <ThemeText
-                        typography="body__secondary"
+                        typography="body__s"
                         color={theme.color.foreground.dynamic.secondary}
                       >
                         {subText}
@@ -159,7 +159,7 @@ export const MapBottomSheet = ({
                 onPress={() => bottomSheetGorRef.current?.close()}
               >
                 {rightIconText && (
-                  <ThemeText typography="body__secondary--bold">
+                  <ThemeText typography="body__s__strong">
                     {rightIconText}
                   </ThemeText>
                 )}

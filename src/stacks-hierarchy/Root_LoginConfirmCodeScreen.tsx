@@ -91,7 +91,7 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
         >
           <View accessible={true} accessibilityRole="header" ref={focusRef}>
             <ThemeText
-              typography="body__primary--jumbo--bold"
+              typography="heading__3xl"
               style={styles.title}
               color={themeColor}
             >
@@ -158,7 +158,7 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
                 >
                   <ThemeText
                     style={styles.resendButtonText}
-                    typography="body__primary--underline"
+                    typography="body__m__underline"
                     color={themeColor}
                   >
                     {t(LoginTexts.confirmCode.resendButton)}

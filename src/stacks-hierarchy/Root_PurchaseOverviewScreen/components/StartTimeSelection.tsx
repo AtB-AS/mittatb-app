@@ -57,7 +57,7 @@ export function StartTimeSelection({
           testID="startTimeButton"
         >
           <View style={styles.sectionContent}>
-            <ThemeText typography="body__primary--bold">
+            <ThemeText typography="body__m__strong">
               {selection.travelDate
                 ? t(
                     PurchaseOverviewTexts.startTime.laterTime(

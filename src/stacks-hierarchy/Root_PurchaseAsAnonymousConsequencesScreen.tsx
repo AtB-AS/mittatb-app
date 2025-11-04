@@ -103,7 +103,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
     >
       <View ref={focusRef} accessible>
         <ThemeText
-          typography="heading--big"
+          typography="heading__xl"
           color={themeColor}
           style={styles.header}
         >

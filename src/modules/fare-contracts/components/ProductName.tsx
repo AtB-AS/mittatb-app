@@ -29,7 +29,7 @@ export const ProductName = ({fc}: Props) => {
     : undefined;
   return (
     <ThemeText
-      typography="body__secondary--bold"
+      typography="body__s__strong"
       accessibilityLabel={productName + screenReaderPause}
       testID="productName"
       color={theme.color.foreground.dynamic.secondary}

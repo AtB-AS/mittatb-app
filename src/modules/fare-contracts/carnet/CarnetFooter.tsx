@@ -65,7 +65,7 @@ export const CarnetFooter: React.FC<Props> = ({
           ),
         )}
       >
-        <ThemeText typography="body__secondary">
+        <ThemeText typography="body__s">
           {t(
             FareContractTexts.carnet.numberOfUsedAccessesRemaining(
               accessesRemaining,
@@ -127,7 +127,7 @@ function MultiCarnet({count}: {count: number}) {
         <View style={styles.triangle} />
       </View>
       <View style={styles.count}>
-        <ThemeText typography="body__tertiary">{count}</ThemeText>
+        <ThemeText typography="body__xs">{count}</ThemeText>
       </View>
     </View>
   );
