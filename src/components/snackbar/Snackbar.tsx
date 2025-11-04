@@ -4,7 +4,7 @@ import {Animated, View, ViewStyle} from 'react-native';
 import {StyleSheet, type Theme, useThemeContext} from '@atb/theme';
 import {Button, ButtonProps} from '@atb/components/button';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   useSnackbarVerticalPositionAnimation,
   useSnackbarIsVisible,
@@ -17,12 +17,13 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 import SnackbarTexts from '@atb/translations/components/Snackbar';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {PressableOpacity} from '../pressable-opacity';
+import {ReactNode} from 'react';
 
 export type SnackbarPosition = 'top' | 'bottom';
 const SNACKBAR_POSITIONS: SnackbarPosition[] = ['top', 'bottom'];
 
 export type SnackbarContent = {
-  icon?: ThemeIconProps;
+  iconNode?: ReactNode;
   title?: string;
   description?: string;
   /** Unique key for the message. Makes it possible to re-show the exact same message */
@@ -107,7 +108,7 @@ const SnackbarInstance = ({
         onLayout={animatedViewOnLayout}
       >
         <View style={styles.snackbar}>
-          {content?.icon && <ThemeIcon {...content.icon} />}
+          {content?.iconNode ?? null}
           <View style={styles.snackbarTexts} ref={focusRef} accessible={true}>
             {activeContent?.title && (
               <ThemeText

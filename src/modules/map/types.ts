@@ -31,7 +31,7 @@ import {
 } from '@atb/api/types/generated/mobility-types_v2';
 
 import {TranslatedString} from '@atb/translations';
-import {GeofencingZoneKeys, GeofencingZoneStyle} from '@atb-as/theme';
+import {GeofencingZoneCode, GeofencingZoneStyle} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
 
 export type SelectionLocationCallback = (
@@ -140,13 +140,13 @@ export type ParkingType = {
 
 export type PolylineEncodedMultiPolygon = String[][];
 
-type GeofencingZoneProps<GZKey extends GeofencingZoneKeys> =
+type GeofencingZoneProps<GZCode extends GeofencingZoneCode> =
   GeofencingZoneStyle<ContrastColor> & {
-    code: GZKey;
+    code: GZCode;
     isStationParking?: boolean;
   };
 
-export type GeofencingZoneCustomProps = GeofencingZoneProps<GeofencingZoneKeys>;
+export type GeofencingZoneCustomProps = GeofencingZoneProps<GeofencingZoneCode>;
 
 // two things differ PreProcessed vs not:
 // 1. geofencingZoneCustomProps on GeofencingZoneProperties
@@ -178,7 +178,7 @@ type GeofencingZoneExplanationType = {
 };
 
 export type GeofencingZoneExplanationsType = {
-  [GZKey in GeofencingZoneKeys | 'unspecified']: GeofencingZoneExplanationType;
+  [GZCode in GeofencingZoneCode | 'unspecified']: GeofencingZoneExplanationType;
 };
 
 export type SelectedMapItemProperties = GeoJsonProperties & {

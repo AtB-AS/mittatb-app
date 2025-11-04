@@ -6,7 +6,7 @@ import {
   getFeatureToSelect,
   isFeatureGeofencingZone,
 } from '../utils';
-import {useGeofencingZoneTextContent} from './use-geofencing-zone-text-content';
+import {useGeofencingZoneContent} from './use-geofencing-zone-content';
 import {ShmoWarnings} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useTranslation} from '@atb/translations';
 import {useVehicle} from '@atb/modules/mobility';
@@ -22,7 +22,7 @@ export const useShmoWarnings = (
   const [geofencingZoneMessage, setGeofencingZoneMessage] = useState<
     string | null
   >(null);
-  const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
+  const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {location} = useGeolocationContext();
 
   const {vehicle} = useVehicle(vehicleId);
@@ -81,10 +81,10 @@ export const useShmoWarnings = (
         featureToSelect?.properties?.geofencingZoneCustomProps?.code !==
         'allowed'
       ) {
-        const textContent = getGeofencingZoneTextContent(
+        const geofencingZoneContent = getGeofencingZoneContent(
           featureToSelect?.properties?.geofencingZoneCustomProps,
         );
-        setGeofencingZoneMessage(textContent.description);
+        setGeofencingZoneMessage(geofencingZoneContent.description);
       } else {
         setGeofencingZoneMessage(null);
       }
