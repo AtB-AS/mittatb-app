@@ -108,7 +108,7 @@ export function QuaySection({
           <View style={styles.stopPlaceHeader} testID={testID + 'HideAction'}>
             <View style={styles.stopPlaceHeaderText}>
               <ThemeText
-                typography="body__secondary--bold"
+                typography="body__s__strong"
                 color="secondary"
                 style={styles.rightMargin}
                 testID={testID + 'Name'}
@@ -120,7 +120,7 @@ export function QuaySection({
               {!!quay.description && (
                 <ThemeText
                   style={styles.rightMargin}
-                  typography="body__secondary"
+                  typography="body__s"
                   color="secondary"
                   testID={testID + 'Description'}
                 >
@@ -154,7 +154,7 @@ export function QuaySection({
         {!isMinimized && didLoadingDataFail && !isLoading && (
           <GenericSectionItem>
             <View style={styles.messageBox}>
-              <ThemeText typography="body__secondary" color="secondary">
+              <ThemeText typography="body__s" color="secondary">
                 {t(DeparturesTexts.message.noData)}
               </ThemeText>
             </View>
@@ -170,7 +170,7 @@ export function QuaySection({
         {shouldShowMoreItemsLink && (
           <LinkSectionItem
             text={t(DeparturesTexts.quaySection.moreDepartures)}
-            textType="body__primary--bold"
+            textType="body__m__strong"
             onPress={() => navigateToQuay(quay)}
             accessibility={{
               accessibilityHint: t(DeparturesTexts.quaySection.a11yToQuayHint),

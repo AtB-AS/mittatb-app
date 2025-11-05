@@ -81,16 +81,14 @@ export function RadioSegments({
             testID={`${option.text.toLowerCase().replace(' ', '')}Button`}
           >
             <ThemeText
-              typography={
-                selected ? 'body__secondary--bold' : 'body__secondary'
-              }
+              typography={selected ? 'body__s__strong' : 'body__s'}
               style={[styles.optionText, {color: textColor}]}
             >
               {option.text}
             </ThemeText>
             {option.subtext && (
               <ThemeText
-                typography="body__secondary"
+                typography="body__s"
                 style={[styles.optionText, {color: textColor}]}
               >
                 {option.subtext}

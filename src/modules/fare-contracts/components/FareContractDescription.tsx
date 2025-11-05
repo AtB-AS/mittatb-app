@@ -27,7 +27,7 @@ export const Description = ({fc}: Props) => {
   if (!description) return null;
   return (
     <ThemeText
-      typography="body__secondary"
+      typography="body__s"
       accessibilityLabel={description + screenReaderPause}
       color={theme.color.foreground.dynamic.secondary}
       style={styles.text}

@@ -38,7 +38,7 @@ export const ForceUpdateScreen = () => {
             />
           </View>
           <ThemeText
-            typography="body__primary--big--bold"
+            typography="heading__xl"
             style={styles.title}
             color={themeColor}
           >

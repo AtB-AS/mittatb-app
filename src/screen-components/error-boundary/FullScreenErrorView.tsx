@@ -20,7 +20,7 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
     <SafeAreaView style={styles.safearea}>
       <View style={styles.svgContainer}>
         <ThemedCrashSmall height={200} style={styles.svg} />
-        <ThemeText typography="body__primary--bold" style={styles.title}>
+        <ThemeText typography="body__m__strong" style={styles.title}>
           Teknisk trøbbel!
         </ThemeText>
         <ThemeText style={styles.message}>

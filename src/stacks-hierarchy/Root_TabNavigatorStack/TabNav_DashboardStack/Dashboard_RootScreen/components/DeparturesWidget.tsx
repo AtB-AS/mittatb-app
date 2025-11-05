@@ -78,7 +78,7 @@ export const DeparturesWidget = ({
               <ThemedNoFavouriteDepartureImage height={64} width={64} />
               <View style={styles.noFavouritesTextContainer}>
                 <ThemeText
-                  typography="body__secondary"
+                  typography="body__s"
                   color="secondary"
                   style={styles.noFavouritesText}
                   testID="noFavoriteWidget"
@@ -89,7 +89,7 @@ export const DeparturesWidget = ({
             </View>
           </GenericSectionItem>
           <LinkSectionItem
-            textType="body__secondary"
+            textType="body__s"
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={onAddFavouriteDeparture}
             rightIcon={{svg: Add}}

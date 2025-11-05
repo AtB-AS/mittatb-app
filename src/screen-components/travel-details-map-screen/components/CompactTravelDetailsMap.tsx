@@ -39,7 +39,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   );
   const bounds = useMemo(() => getMapBounds(features), [features]);
 
-  const mapViewConfig = useMapViewConfig({useDarkModeForV1: true});
+  const mapViewConfig = useMapViewConfig();
 
   /*
    * Workaround for iOS as setting default bounds on camera is not working fully
@@ -98,7 +98,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
         onPress={onExpand}
         accessibilityRole="button"
       >
-        <ThemeText typography="body__secondary--bold" color="primary">
+        <ThemeText typography="body__s__strong" color="primary">
           {buttonText}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} />

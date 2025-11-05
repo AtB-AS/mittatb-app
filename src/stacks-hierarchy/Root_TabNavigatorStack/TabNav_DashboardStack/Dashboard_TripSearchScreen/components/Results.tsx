@@ -150,7 +150,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   errorContainer: {
     paddingBottom: theme.spacing.medium,
   },
-  infoBoxText: theme.typography.body__primary,
+  infoBoxText: theme.typography.body__m,
   messageBoxContainer: {
     marginHorizontal: theme.spacing.medium,
     marginTop: theme.spacing.medium,

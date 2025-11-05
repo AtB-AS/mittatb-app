@@ -128,7 +128,7 @@ export const EstimatedCallList = ({
             >
               <ThemeText
                 color="secondary"
-                typography="body__secondary"
+                typography="body__s"
                 style={{textAlign: 'center', width: '100%'}}
               >
                 {showOnlyFavorites

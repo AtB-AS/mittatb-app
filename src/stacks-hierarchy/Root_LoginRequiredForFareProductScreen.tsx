@@ -51,7 +51,7 @@ export const Root_LoginRequiredForFareProductScreen = ({navigation}: Props) => {
         <ThemedTicket style={styles.illustration} width={100} height={87} />
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
           <ThemeText
-            typography="body__primary--jumbo--bold"
+            typography="heading__3xl"
             style={styles.title}
             color={themeColor}
           >

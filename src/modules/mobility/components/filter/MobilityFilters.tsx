@@ -1,9 +1,7 @@
-import {FormFactorFilter} from './FormFactorFilter';
 import React, {useState} from 'react';
 import {StyleSheet} from '@atb/theme';
 import {FormFactorFilterType, MobilityMapFilterType} from '@atb/modules/map';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {View} from 'react-native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {Section} from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
@@ -23,7 +21,6 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
     isCarSharingInMapEnabled,
     isCityBikesInMapEnabled,
     isVehiclesInMapEnabled,
-    isMapV2Enabled,
   } = useFeatureTogglesContext();
   const [mobilityFilter, setMobilityFilter] =
     useState<MobilityMapFilterType>(filter);
@@ -55,7 +52,7 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
     .filter((f) => f.shouldShow)
     .map((f) => f.formFactor);
 
-  return isMapV2Enabled ? (
+  return (
     <>
       <ContentHeading
         text={t(MobilityTexts.filter.sectionTitle.sharedMobility)}
@@ -72,17 +69,6 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
         ))}
       </Section>
     </>
-  ) : (
-    <View style={styles.container}>
-      {listedFormFactors.map((formFactor) => (
-        <FormFactorFilter
-          key={formFactor}
-          formFactor={formFactor}
-          initialFilter={filter[formFactor]}
-          onFilterChange={onFormFactorFilterChanged(formFactor)}
-        />
-      ))}
-    </View>
   );
 };
 

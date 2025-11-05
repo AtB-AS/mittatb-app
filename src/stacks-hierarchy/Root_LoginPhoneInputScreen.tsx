@@ -104,7 +104,7 @@ export const Root_LoginPhoneInputScreen = ({
         >
           <View accessible={true} accessibilityRole="header" ref={focusRef}>
             <ThemeText
-              typography="body__primary--jumbo--bold"
+              typography="heading__3xl"
               style={styles.title}
               color={themeColor}
             >

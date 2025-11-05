@@ -56,14 +56,14 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
       <Section>
         <ExpandableSectionItem
           text={t(PurchaseOverviewTexts.flexDiscount.expandableLabel)}
-          textType="heading__component"
+          textType="heading__m"
           expanded={expanded}
           onPress={onPress}
           testID="flexDiscountExpandable"
         />
         {expanded && (
           <GenericSectionItem accessibility={{accessible: true}}>
-            <ThemeText typography="body__secondary" color="secondary">
+            <ThemeText typography="body__s" color="secondary">
               {description}
             </ThemeText>
           </GenericSectionItem>
@@ -98,7 +98,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                 key={u.id}
               >
                 <View style={styles.userProfileDiscountInfo}>
-                  <ThemeText typography="body__secondary" color="secondary">
+                  <ThemeText typography="body__s" color="secondary">
                     {t(
                       PurchaseOverviewTexts.flexDiscount.per(
                         userProfileName.toLowerCase(),
@@ -116,7 +116,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                     )}
                     <ThemeText
                       style={styles.priceInfo}
-                      typography="body__tertiary"
+                      typography="body__xs"
                       color="primary"
                     >
                       {priceText}

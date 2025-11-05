@@ -11,21 +11,21 @@ import {TranslateFunction, useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {useState} from 'react';
 import {View} from 'react-native';
-import {useOnboardingNavigation} from '@atb/modules/onboarding';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useAuthContext} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {RootStackScreenProps} from '../navigation-types';
 
-export const Root_SmartParkAndRideAddScreen = () => {
+type Props = RootStackScreenProps<'Root_SmartParkAndRideAddScreen'>;
+export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
   {
     const {t} = useTranslation();
     const styles = useStyles();
     const [nickname, setNickname] = useState('');
     const [licensePlate, setLicensePlate] = useState('');
     const {theme} = useThemeContext();
-    const {continueFromOnboardingSection} = useOnboardingNavigation();
     const focusRef = useFocusOnLoad(true);
     const {authenticationType} = useAuthContext();
     const analytics = useAnalyticsContext();
@@ -37,7 +37,13 @@ export const Root_SmartParkAndRideAddScreen = () => {
       analytics.logEvent('Smart Park & Ride', 'Vehicle added', {
         hasNickname: nickname.length > 0,
       });
-      continueFromOnboardingSection('smartParkAndRide');
+      navigation.popTo('Root_TabNavigatorStack', {
+        screen: 'TabNav_ProfileStack',
+        params: {
+          screen: 'Profile_SmartParkAndRideScreen',
+          params: {toast: 'vehicleAdded'},
+        },
+      });
     });
 
     const themeColor = theme.color.background.accent[0];
@@ -47,11 +53,11 @@ export const Root_SmartParkAndRideAddScreen = () => {
         <View style={styles.content}>
           <ThemedCarFront style={styles.illustration} width={170} />
           <View ref={focusRef} accessible={true} accessibilityRole="header">
-            <ThemeText typography="body__primary--big--bold">
+            <ThemeText typography="body__m__strong">
               {t(SmartParkAndRideTexts.add.content.title)}
             </ThemeText>
           </View>
-          <ThemeText typography="body__primary" style={styles.descriptionText}>
+          <ThemeText typography="body__m" style={styles.descriptionText}>
             {t(SmartParkAndRideTexts.add.content.text)}
           </ThemeText>
         </View>

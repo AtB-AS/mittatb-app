@@ -107,7 +107,7 @@ const NotInspectableContent = () => {
   return (
     <View style={styles.symbolContent} testID="notInspectableIcon">
       <ThemeText
-        typography="body__tertiary"
+        typography="body__xs"
         style={{
           textAlign: 'center',
         }}

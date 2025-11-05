@@ -17,14 +17,14 @@ export function ProductDescriptionToggle({title}: {title: string}) {
   return (
     <View style={styles.container}>
       <View style={{flexShrink: 1}}>
-        <ThemeText typography="body__secondary" color="secondary">
+        <ThemeText typography="body__s" color="secondary">
           {title}
         </ThemeText>
       </View>
 
       <View style={styles.switchAndLabel}>
         <ThemeText
-          typography="body__secondary"
+          typography="body__s"
           accessible={false}
           importantForAccessibility="no"
           style={styles.label}

@@ -68,7 +68,7 @@ export function RadioBox({
       testID={testID}
     >
       <ThemeText
-        typography="heading__title"
+        typography="heading__m"
         color={themeColor}
         style={{...styles.title, marginBottom: spacing}}
       >
@@ -76,7 +76,7 @@ export function RadioBox({
       </ThemeText>
       <View style={{...styles.icon, marginBottom: spacing}}>{icon}</View>
       <ThemeText
-        typography="body__secondary"
+        typography="body__s"
         color={themeColor}
         style={{...styles.description, marginBottom: spacing}}
         accessible={false}

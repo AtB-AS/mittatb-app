@@ -61,7 +61,7 @@ export const Profile_EnrollmentScreen = () => {
                   }}
                 />
                 <View style={styles.headerTextContainer}>
-                  <ThemeText typography="body__secondary" color="secondary">
+                  <ThemeText typography="body__s" color="secondary">
                     {t(EnrollmentTexts.info)}
                   </ThemeText>
                 </View>

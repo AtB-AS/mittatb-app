@@ -38,7 +38,7 @@ export const TipsAndInformation = () => {
         return (
           <ExpandableSectionItem
             key={title + description}
-            textType="body__primary--bold"
+            textType="body__m__strong"
             text={title}
             showIconText={false}
             expanded={currentlyOpen === index}
@@ -47,7 +47,7 @@ export const TipsAndInformation = () => {
             }}
             expandContent={
               <ThemeText
-                typography="body__secondary"
+                typography="body__s"
                 color="secondary"
                 isMarkdown={true}
               >

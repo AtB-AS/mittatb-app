@@ -34,14 +34,14 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
     >
       <View style={styles.emptyStateIllustration}>{illustrationComponent}</View>
       <ThemeText
-        typography="body__primary--bold"
+        typography="body__m__strong"
         color="secondary"
         style={styles.emptyStateTitle}
       >
         {title}
       </ThemeText>
       <ThemeText
-        typography="body__secondary"
+        typography="body__s"
         color="secondary"
         style={styles.emptyStateDetails}
       >

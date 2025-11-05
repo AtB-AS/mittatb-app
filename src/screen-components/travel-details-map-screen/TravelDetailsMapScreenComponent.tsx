@@ -38,7 +38,6 @@ import {
   MapState,
   RegionPayload,
 } from '@rnmapbox/maps/lib/typescript/src/components/MapView';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
 
 export type TravelDetailsMapScreenParams = {
@@ -74,7 +73,6 @@ export const TravelDetailsMapScreenComponent = ({
   const isFocusedAndActive = useIsFocusedAndActive();
   const [loadedMap, setLoadedMap] = useState(false);
 
-  const {isMapV2Enabled} = useFeatureTogglesContext();
   const mapViewConfig = useMapViewConfig();
 
   const features = useMemo(
@@ -161,12 +159,11 @@ export const TravelDetailsMapScreenComponent = ({
           centerCoordinate={vehicleWithPosition ? centerPosition : undefined}
           animationDuration={0}
         />
-        {isMapV2Enabled && (
-          <NationalStopRegistryFeatures
-            selectedFeaturePropertyId={undefined}
-            onMapItemClick={undefined}
-          />
-        )}
+        <NationalStopRegistryFeatures
+          selectedFeaturePropertyId={undefined}
+          onMapItemClick={undefined}
+        />
+
         <MapboxGL.UserLocation
           showsUserHeadingIndicator
           renderMode={UserLocationRenderMode.Native}

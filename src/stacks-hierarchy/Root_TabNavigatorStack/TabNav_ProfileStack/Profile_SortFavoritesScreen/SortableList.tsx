@@ -90,7 +90,7 @@ function Item(props: ItemProps) {
       <View importantForAccessibility="no-hide-descendants">
         <FavoriteIcon favorite={item} />
       </View>
-      <ThemeText typography="body__primary" style={contentContainer}>
+      <ThemeText typography="body__m" style={contentContainer}>
         {name(item)}
       </ThemeText>
       <MoveIcon direction="up" {...props} />

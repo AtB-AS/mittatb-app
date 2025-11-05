@@ -74,7 +74,7 @@ export const FinishingScooterSheet = ({
       {!isLoading && !isError && activeBooking && (
         <View style={styles.container}>
           <View style={styles.contentWrapper}>
-            <ThemeText typography="heading--big">
+            <ThemeText typography="heading__xl">
               {t(MobilityTexts.finishing.header)}
             </ThemeText>
             <View style={styles.illustrationWrapper}>

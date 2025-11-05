@@ -79,10 +79,7 @@ export const DownloadButtons = () => {
               logoSize={50}
               style={styles.logo}
             />
-            <ThemeText
-              style={styles.operatorText}
-              typography="body__secondary--bold"
-            >
+            <ThemeText style={styles.operatorText} typography="body__s__strong">
               {mobilityOperators?.find((op) => op.id === operatorId)?.name}
             </ThemeText>
           </PressableOpacity>

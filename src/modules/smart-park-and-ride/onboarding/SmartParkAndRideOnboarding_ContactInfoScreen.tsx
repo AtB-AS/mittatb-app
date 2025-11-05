@@ -6,7 +6,7 @@ import {
   useOnboardingCarouselNavigation,
 } from '@atb/modules/onboarding';
 import {ThemedContact} from '@atb/theme/ThemedAssets';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 
 import {Linking, View} from 'react-native';
 import {sparOnboardingId} from './config';
@@ -41,8 +41,7 @@ export const SmartParkAndRideOnboarding_ContactInfoScreen = () => {
           onPress: navigateToPreviousScreen,
         },
         rightButton: {
-          type: 'custom',
-          text: t(SmartParkAndRideTexts.onboarding.contactInfo.close),
+          type: 'close',
           withIcon: true,
           onPress: () => closeOnboardingCarousel('smartParkAndRide'),
         },
@@ -53,13 +52,13 @@ export const SmartParkAndRideOnboarding_ContactInfoScreen = () => {
         onPress: () => {
           analytics.logEvent(
             'Smart Park & Ride',
-            'Onboarding contact info close clicked',
+            'Onboarding contact info done clicked',
           );
           navigateToNextScreen();
         },
         text: t(SmartParkAndRideTexts.onboarding.contactInfo.buttonText),
         expanded: true,
-        rightIcon: {svg: Close},
+        rightIcon: {svg: Confirm},
       }}
       testID="smartParkAndRideOnboardingContactInfo"
     />
@@ -82,12 +81,12 @@ const ContactInfoContent = () => {
         <GenericSectionItem>
           <View>
             <View>
-              <ThemeText typography="body__primary--bold">
+              <ThemeText typography="body__m__strong">
                 {t(
                   SmartParkAndRideTexts.onboarding.contactInfo.parking.heading,
                 )}
               </ThemeText>
-              <ThemeText typography="body__secondary" color="secondary">
+              <ThemeText typography="body__s" color="secondary">
                 {t(
                   SmartParkAndRideTexts.onboarding.contactInfo.parking
                     .subheading,
@@ -105,7 +104,7 @@ const ContactInfoContent = () => {
             accessibilityRole="link"
           >
             <ThemeText
-              typography="body__primary--underline"
+              typography="body__m__underline"
               color={theme.color.interactive[0].default.background}
             >
               {t(
@@ -122,12 +121,12 @@ const ContactInfoContent = () => {
         <GenericSectionItem>
           <View>
             <View>
-              <ThemeText typography="body__primary--bold">
+              <ThemeText typography="body__m__strong">
                 {t(
                   SmartParkAndRideTexts.onboarding.contactInfo.project.heading,
                 )}
               </ThemeText>
-              <ThemeText typography="body__secondary" color="secondary">
+              <ThemeText typography="body__s" color="secondary">
                 {t(
                   SmartParkAndRideTexts.onboarding.contactInfo.project
                     .subheading,
@@ -144,7 +143,7 @@ const ContactInfoContent = () => {
             accessibilityRole="link"
           >
             <ThemeText
-              typography="body__primary--underline"
+              typography="body__m__underline"
               color={theme.color.interactive[0].default.background}
             >
               {t(
@@ -161,7 +160,7 @@ const ContactInfoContent = () => {
         <GenericSectionItem>
           <View>
             <View>
-              <ThemeText typography="body__primary--bold">
+              <ThemeText typography="body__m__strong">
                 {t(SmartParkAndRideTexts.onboarding.contactInfo.about.heading)}
               </ThemeText>
             </View>
@@ -169,12 +168,12 @@ const ContactInfoContent = () => {
         </GenericSectionItem>
         <GenericSectionItem>
           <PressableOpacity
-            onPress={async () => Linking.openURL(`atb.no/kontakt`)}
+            onPress={async () => Linking.openURL('https://atb.no/kontakt')}
             accessibilityRole="link"
             style={style.linkItem}
           >
             <ThemeText
-              typography="body__primary--underline"
+              typography="body__m__underline"
               color={theme.color.interactive[0].default.background}
             >
               {t(SmartParkAndRideTexts.onboarding.contactInfo.about.link)}

@@ -71,7 +71,7 @@ const ContentBody = ({
       <View style={style.content}>
         <View style={style.header}>
           <View ref={focusRef} accessible>
-            <ThemeText color={themeColor} typography="heading--medium">
+            <ThemeText color={themeColor} typography="heading__l">
               {title}
             </ThemeText>
           </View>

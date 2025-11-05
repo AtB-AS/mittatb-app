@@ -59,7 +59,7 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
               testID={'journeyHistoryItem' + idx}
             >
               <GenericSectionItem transparent>
-                <ThemeText typography="body__primary--bold">
+                <ThemeText typography="body__m__strong">
                   {searchResult.text}
                 </ThemeText>
               </GenericSectionItem>

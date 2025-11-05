@@ -13,8 +13,6 @@ import {Add, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ContentHeading} from '@atb/components/heading';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemeText} from '@atb/components/text';
-import {useNavigation} from '@react-navigation/native';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {CarFill} from '@atb/assets/svg/mono-icons/transportation';
 import {
   useVehicleRegistrationsQuery,
@@ -27,14 +25,24 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useState} from 'react';
+import {ProfileScreenProps} from './navigation-types';
 
 const MAX_VEHICLE_REGISTRATIONS = 2;
 
-export const Profile_SmartParkAndRideScreen = () => {
+type SmartParkAndRideToastType =
+  | 'vehicleAdded'
+  | 'vehicleUpdated'
+  | 'vehicleDeleted';
+
+export type SmartParkAndRideScreenParams = {
+  toast?: SmartParkAndRideToastType;
+};
+
+type Props = ProfileScreenProps<'Profile_SmartParkAndRideScreen'>;
+export const Profile_SmartParkAndRideScreen = ({route, navigation}: Props) => {
   const {t} = useTranslation();
   const {themeName} = useThemeContext();
   const styles = useStyles();
-  const navigation = useNavigation<RootNavigationProps>();
   const {
     data: vehicleRegistrations,
     refetch: refetchVehicleRegistrations,
@@ -48,6 +56,18 @@ export const Profile_SmartParkAndRideScreen = () => {
 
   const canAddVehicleRegistrations =
     (vehicleRegistrations?.length ?? 0) < MAX_VEHICLE_REGISTRATIONS;
+  const toast = route.params?.toast;
+
+  const getToastMessage = (type: SmartParkAndRideToastType) => {
+    switch (type) {
+      case 'vehicleAdded':
+        return t(SmartParkAndRideTexts.success.vehicleAdded);
+      case 'vehicleUpdated':
+        return t(SmartParkAndRideTexts.success.vehicleUpdated);
+      case 'vehicleDeleted':
+        return t(SmartParkAndRideTexts.success.vehicleDeleted);
+    }
+  };
 
   return (
     <FullScreenView
@@ -124,6 +144,14 @@ export const Profile_SmartParkAndRideScreen = () => {
           )}
         </Section>
 
+        {!!toast && (
+          <MessageInfoBox
+            type="valid"
+            message={getToastMessage(toast)}
+            style={styles.successBox}
+          />
+        )}
+
         {showNotLoggedInWarning && (
           <MessageInfoBox
             type="warning"
@@ -139,7 +167,7 @@ export const Profile_SmartParkAndRideScreen = () => {
           />
         )}
 
-        {!canAddVehicleRegistrations && (
+        {!canAddVehicleRegistrations && !toast && (
           <View style={styles.maxVehiclesInfo}>
             <ThemeIcon svg={statusTypeToIcon('info', true, themeName)} />
             <ThemeText>{t(SmartParkAndRideTexts.add.max)}</ThemeText>
@@ -182,10 +210,10 @@ const HowItWorksSection = ({onPress}: HowItWorksSectionProps) => {
               }}
             />
             <View style={styles.howItWorks}>
-              <ThemeText typography="body__primary--bold">
+              <ThemeText typography="body__m__strong">
                 {t(SmartParkAndRideTexts.howItWorks.title)}
               </ThemeText>
-              <ThemeText typography="body__secondary" color="secondary">
+              <ThemeText typography="body__s" color="secondary">
                 {t(SmartParkAndRideTexts.howItWorks.description)}
               </ThemeText>
             </View>
@@ -228,6 +256,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   text: {
     textAlign: 'center',
+  },
+  successBox: {
+    marginTop: theme.spacing.xSmall,
   },
   maxVehiclesInfo: {
     flexDirection: 'row',

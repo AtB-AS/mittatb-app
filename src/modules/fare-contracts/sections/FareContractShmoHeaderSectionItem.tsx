@@ -38,7 +38,7 @@ export const FareContractShmoHeaderSectionItem = ({
       <ProductName fc={fc} />
       <ThemeText
         style={styles.validityText}
-        typography="heading--medium"
+        typography="heading__l"
         accessibilityLabel={
           !isInspectable
             ? label +

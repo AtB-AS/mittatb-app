@@ -21,7 +21,7 @@ const SmartParkAndRideTexts = {
       'With a valid ticket from AtB, you can park for free at Ranheim Fabrikker for 48 hours.',
       'Med gyldig billett frå AtB kan du stå gratis på Ranheim Fabrikker i 48 timar.',
     ),
-    link: _('Sånn funker det', 'How it works', 'Slik fungerer det'),
+    link: _('Les mer', 'Read more', 'Les meir'),
   },
   add: {
     header: {
@@ -72,7 +72,6 @@ const SmartParkAndRideTexts = {
     },
     footer: {
       add: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
-      later: _('Gjør det senere', 'Do it later', 'Gjer det seinare'),
     },
   },
   edit: {
@@ -144,6 +143,23 @@ const SmartParkAndRideTexts = {
       'Noko gjekk gale. Prøv igjen.',
     ),
   },
+  success: {
+    vehicleAdded: _(
+      'Kjøretøyet ble lagt til.',
+      'Vehicle added.',
+      'Køyretøyet blei lagt til.',
+    ),
+    vehicleUpdated: _(
+      'Endringene ble lagret.',
+      'Changes saved.',
+      'Endringane blei lagra.',
+    ),
+    vehicleDeleted: _(
+      'Kjøretøyet ble fjernet',
+      'Vehicle deleted',
+      'Køyretøyet blei fjerna',
+    ),
+  },
   a11y: {
     carIcon: _('Bilikon', 'Car icon', 'Bilikon'),
     button: _(
@@ -193,7 +209,7 @@ const SmartParkAndRideTexts = {
           'Les meir på atb.no',
         ),
       },
-      buttonText: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
+      buttonText: _('Hjelp og kontakt', 'Help and contact', 'Hjelp og kontakt'),
     },
     contactInfo: {
       title: _('Spørsmål?', 'Questions?', 'Spørsmål?'),
@@ -223,8 +239,7 @@ const SmartParkAndRideTexts = {
         ),
         link: _('atb.no/kontakt', 'atb.no/kontakt', 'atb.no/kontakt'),
       },
-      buttonText: _('Lukk', 'Close', 'Lukk'),
-      close: _('Ferdig', 'Done', 'Ferdig'),
+      buttonText: _('Ferdig', 'Done', 'Ferdig'),
     },
   },
   notLoggedIn: {

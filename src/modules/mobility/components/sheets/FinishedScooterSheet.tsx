@@ -64,7 +64,7 @@ export const FinishedScooterSheet = ({
                 <View style={styles.container}>
                   <Section>
                     <GenericSectionItem style={styles.finishingHeader}>
-                      <ThemeText typography="body__primary--big--bold">
+                      <ThemeText typography="heading__xl">
                         {t(FareContractTexts.shmoDetails.tripEnded())}
                       </ThemeText>
                     </GenericSectionItem>

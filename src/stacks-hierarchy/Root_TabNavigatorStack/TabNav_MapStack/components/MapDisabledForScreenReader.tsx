@@ -23,7 +23,7 @@ export const MapDisabledForScreenReader = () => {
           t(MapTexts.disabledForScreenReader.description)
         }
       >
-        <ThemeText typography="body__primary--bold" style={styles.header}>
+        <ThemeText typography="body__m__strong" style={styles.header}>
           {t(MapTexts.disabledForScreenReader.title)}
         </ThemeText>
         <ThemeText style={styles.description}>
