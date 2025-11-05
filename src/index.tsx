@@ -20,8 +20,6 @@ import {AuthContextProvider} from '@atb/modules/auth';
 import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {PreferencesContextProvider} from '@atb/modules/preferences';
 import {AccessibilityContextProvider} from '@atb/modules/accessibility';
-import {MAPBOX_API_TOKEN} from '@env';
-import MapboxGL from '@rnmapbox/maps';
 import {AppLanguageContextProvider} from '@atb/translations/LanguageContext';
 import {BottomSheetContextProvider} from '@atb/components/bottom-sheet';
 import {LocaleContextProvider} from '@atb/modules/locale';
@@ -50,8 +48,6 @@ configureAndStartBugsnag();
 configureReanimatedLogger({
   strict: false,
 });
-
-MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
 trackAppState();
 
