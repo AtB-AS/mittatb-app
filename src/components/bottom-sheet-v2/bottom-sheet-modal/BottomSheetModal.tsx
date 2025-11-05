@@ -102,7 +102,7 @@ export const BottomSheetModal = ({
           {...props}
           style={{
             backgroundColor: theme.color.background.neutral[1].background,
-            paddingTop: theme.spacing.medium,
+            paddingTop: theme.spacing.large,
           }}
         >
           <View onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}>
@@ -110,7 +110,7 @@ export const BottomSheetModal = ({
           </View>
         </GorhomBottomSheetFooter>
       ),
-    [Footer, theme.color.background.neutral, theme.spacing.medium],
+    [Footer, theme.color.background.neutral, theme.spacing.large],
   );
 
   const renderHandle = useCallback(
@@ -169,7 +169,8 @@ export const BottomSheetModal = ({
         keyboardShouldPersistTaps="handled"
         alwaysBounceVertical={false}
         contentContainerStyle={{
-          paddingBottom: Math.max(footerHeight, safeAreaBottom) + 16,
+          paddingBottom:
+            Math.max(footerHeight, safeAreaBottom) + theme.spacing.large,
         }}
       >
         {children}

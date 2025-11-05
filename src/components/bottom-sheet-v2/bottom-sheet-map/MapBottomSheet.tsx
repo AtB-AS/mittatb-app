@@ -189,7 +189,7 @@ export const MapBottomSheet = ({
             {children}
           </BottomSheetScrollView>
         ) : (
-          <>{children}</>
+          children
         )}
       </BottomSheetGor>
     </>
