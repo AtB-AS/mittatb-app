@@ -6,7 +6,6 @@ declare module '@env' {
   export const PRIVACY_POLICY_URL: string;
   export const CUSTOMER_SERVICE_URL: string;
   export const MAPBOX_API_TOKEN: string;
-  export const MAPBOX_STOP_PLACES_STYLE_URL: string;
   export const MAPBOX_USER_NAME: string;
   export const MAPBOX_NSR_TILESET_ID: string; // copy tileset id from data manager in mapbox studio
   export const MAPBOX_NSR_SOURCE_LAYER_ID: string; // the name given to the tileset in data manager in mapbox studio
