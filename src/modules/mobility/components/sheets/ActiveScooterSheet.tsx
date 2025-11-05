@@ -5,7 +5,7 @@ import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {ActivityIndicator, Alert, View, ScrollView} from 'react-native';
+import {ActivityIndicator, Alert, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -68,7 +68,7 @@ export const ActiveScooterSheet = ({
 
   const {
     mutateAsync: sendShmoBookingEvent,
-    isLoading: sendShmoBookingEventIsLoading,
+    isPending: sendShmoBookingEventIsLoading,
     isError: sendShmoBookingEventIsError,
     error: sendShmoBookingEventError,
   } = useSendShmoBookingEventMutation();
@@ -122,12 +122,16 @@ export const ActiveScooterSheet = ({
 
   return (
     <MapBottomSheet
+      canMinimize={true}
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
       heading={activeBooking?.asset.operator.name}
       enablePanDownToClose={false}
       locationArrowOnPress={locationArrowOnPress}
+      headerNode={
+        activeBooking ? <ShmoTripCard shmoBooking={activeBooking} /> : null
+      }
     >
       {isShmoDeepIntegrationEnabled && (
         <>
@@ -138,11 +142,7 @@ export const ActiveScooterSheet = ({
           )}
           {!isLoading && !isError && activeBooking && (
             <>
-              <ScrollView style={styles.container}>
-                <View style={styles.tripWrapper}>
-                  <ShmoTripCard shmoBooking={activeBooking} />
-                </View>
-
+              <View style={styles.container}>
                 <VehicleCard
                   pricingPlan={activeBooking.pricingPlan}
                   currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
@@ -152,7 +152,7 @@ export const ActiveScooterSheet = ({
                       : 0
                   }
                 />
-              </ScrollView>
+              </View>
               <View style={styles.footer}>
                 <View style={styles.endTripWrapper}>
                   {geofencingZoneMessage && (
@@ -223,7 +223,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacing.medium,
     },
     container: {
-      gap: theme.spacing.medium,
       paddingHorizontal: theme.spacing.medium,
       marginBottom: theme.spacing.medium,
     },

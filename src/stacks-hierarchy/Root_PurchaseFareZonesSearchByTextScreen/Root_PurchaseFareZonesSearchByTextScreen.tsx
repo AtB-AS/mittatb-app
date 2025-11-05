@@ -3,7 +3,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {TextInputSectionItem} from '@atb/components/sections';
 import {FareZone} from '@atb/modules/configuration';
 import {SearchLocation} from '@atb/modules/favorites';
-import {useGeocoder} from '@atb/modules/geocoder';
+import {useGeocoderQuery} from '@atb/modules/geocoder';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -30,6 +30,7 @@ import {
   useSelectableFareZones,
 } from '@atb/modules/purchase-selection';
 import type {FareZoneWithMetadata} from '@atb/fare-zones-selector';
+import {RequestError, toAxiosErrorKind} from '@atb/api/utils';
 
 type Props = RootStackScreenProps<'Root_PurchaseFareZonesSearchByTextScreen'>;
 
@@ -39,16 +40,14 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
     params: {selection, fromOrTo},
   },
 }) => {
+  const {t} = useTranslation();
   const styles = useThemeStyles();
   const selectionBuilder = usePurchaseSelectionBuilder();
 
   const [text, setText] = useState('');
-
   const debouncedText = useDebounce(text, 200);
-  const {t} = useTranslation();
 
   const fareZones = useSelectableFareZones(selection.preassignedFareProduct);
-
   const getMatchingFareZone = useCallback(
     (location: SearchLocation) =>
       fareZones.find((fareZone) =>
@@ -88,7 +87,7 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
     }
     const newSelection = builder.build();
 
-    navigation.navigate('Root_PurchaseFareZonesSearchByMapScreen', {
+    navigation.popTo('Root_PurchaseFareZonesSearchByMapScreen', {
       selection: newSelection,
     });
   };
@@ -107,10 +106,16 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
 
   const {location: geolocation} = useGeolocationContext();
 
-  const {locations, isSearching, error} =
-    useGeocoder(debouncedText, geolocation?.coordinates ?? null, true) ?? [];
+  const {
+    data: locations,
+    isLoading,
+    error: queryError,
+  } = useGeocoderQuery(debouncedText, geolocation?.coordinates ?? null, true);
+  const error = queryError as RequestError | null;
 
-  const errorMessage = error ? translateErrorType(error, t) : undefined;
+  const errorMessage = error
+    ? translateErrorType(toAxiosErrorKind(error.kind), t)
+    : undefined;
 
   const locationsAndFareZones: LocationAndFareZone[] = useMemo(
     () =>
@@ -127,11 +132,10 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
     [locations, getMatchingFareZone],
   );
 
-  const showActivityIndicator = isSearching && !locationsAndFareZones.length;
-  const showFareZones = !debouncedText && !isSearching;
+  const showFareZones = !debouncedText && !isLoading;
   const showVenueResults = !!locationsAndFareZones.length;
   const showEmptyResultText =
-    !locationsAndFareZones.length && !!debouncedText && !isSearching;
+    !locationsAndFareZones.length && !!debouncedText && !isLoading;
 
   return (
     <View style={styles.container}>
@@ -173,7 +177,7 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
             <MessageInfoBox type="warning" message={errorMessage} />
           </View>
         )}
-        {showActivityIndicator && <ActivityIndicator />}
+        {isLoading && <ActivityIndicator />}
         {showFareZones && (
           <FareZoneResults fareZones={fareZones} onSelect={onSelectZone} />
         )}

@@ -17,11 +17,13 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 import SnackbarTexts from '@atb/translations/components/Snackbar';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {PressableOpacity} from '../pressable-opacity';
+import {ReactNode} from 'react';
 
 export type SnackbarPosition = 'top' | 'bottom';
 const SNACKBAR_POSITIONS: SnackbarPosition[] = ['top', 'bottom'];
 
-export type SnackbarTextContent = {
+export type SnackbarContent = {
+  iconNode?: ReactNode;
   title?: string;
   description?: string;
   /** Unique key for the message. Makes it possible to re-show the exact same message */
@@ -29,7 +31,7 @@ export type SnackbarTextContent = {
 };
 
 export type SnackbarProps = {
-  textContent?: SnackbarTextContent;
+  content?: SnackbarContent;
   position?: SnackbarPosition;
   /** Optional action button, only shown if this is provided */
   actionButton?: ButtonProps;
@@ -62,7 +64,7 @@ type SnackbarInstanceProps = SnackbarProps & {
 };
 
 const SnackbarInstance = ({
-  textContent,
+  content,
   position = 'top',
   actionButton,
   isDismissable,
@@ -74,25 +76,25 @@ const SnackbarInstance = ({
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
 
-  const stableTextContent = useStableValue(textContent, isDisabled); // avoid triggering useEffects if no text has been changed
+  const stableContent = useStableValue(content, isDisabled); // avoid triggering useEffects if no text has been changed
 
   const {snackbarIsVisible, hideSnackbar} = useSnackbarIsVisible(
     isDisabled,
-    stableTextContent,
+    stableContent,
     customVisibleDurationMS,
   );
 
   const {verticalPositionStyle, animatedViewOnLayout, parentMeasurerOnLayout} =
     useSnackbarVerticalPositionAnimation(position, snackbarIsVisible);
 
-  // to show the correct textContent during exit animation, keep track of the previous value
-  const stablePreviousTextContent = useStablePreviousValue(stableTextContent);
-  const activeTextContent =
-    !snackbarIsVisible && !stableTextContent && stablePreviousTextContent
-      ? stablePreviousTextContent
-      : stableTextContent;
+  // to show the correct content during exit animation, keep track of the previous value
+  const stablePreviousContent = useStablePreviousValue(stableContent);
+  const activeContent =
+    !snackbarIsVisible && !stableContent && stablePreviousContent
+      ? stablePreviousContent
+      : stableContent;
 
-  const focusRef = useSnackbarScreenReaderFocus(isDisabled, activeTextContent);
+  const focusRef = useSnackbarScreenReaderFocus(isDisabled, activeContent);
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   if (!snackbarIsVisible && isScreenReaderEnabled) {
@@ -106,23 +108,24 @@ const SnackbarInstance = ({
         onLayout={animatedViewOnLayout}
       >
         <View style={styles.snackbar}>
+          {content?.iconNode ?? null}
           <View style={styles.snackbarTexts} ref={focusRef} accessible={true}>
-            {activeTextContent?.title && (
+            {activeContent?.title && (
               <ThemeText
-                typography="body__primary--bold"
+                typography="body__m__strong"
                 color="primary"
                 numberOfLines={4} // max limit, should normally not come into play
               >
-                {activeTextContent?.title}
+                {activeContent?.title}
               </ThemeText>
             )}
-            {activeTextContent?.description && (
+            {activeContent?.description && (
               <ThemeText
-                typography="body__primary"
-                color={activeTextContent?.title ? 'secondary' : 'primary'}
+                typography="body__m"
+                color={activeContent?.title ? 'secondary' : 'primary'}
                 numberOfLines={7} // max limit, should normally not come into play
               >
-                {activeTextContent?.description}
+                {activeContent?.description}
               </ThemeText>
             )}
           </View>
@@ -130,7 +133,8 @@ const SnackbarInstance = ({
           <View style={styles.snackbarButtons}>
             {actionButton && (
               <Button
-                mode="tertiary"
+                mode="secondary"
+                type="small"
                 {...actionButton}
                 onPress={() => {
                   if (snackbarIsVisible) {
@@ -145,7 +149,6 @@ const SnackbarInstance = ({
             {(isDismissable || isScreenReaderEnabled) && (
               <PressableOpacity
                 onPress={hideSnackbar}
-                style={styles.closeButton}
                 accessible={true}
                 accessibilityLabel={t(SnackbarTexts.closeButton.a11yLabel)}
                 accessibilityHint={t(SnackbarTexts.closeButton.a11yHint)}
@@ -163,10 +166,10 @@ const SnackbarInstance = ({
   );
 };
 
-const flowHorizontallyAndCenterAlignVertically: ViewStyle = {
+const flowHorizontallyAndTopAlignVertically: ViewStyle = {
   display: 'flex',
   flexDirection: 'row',
-  alignItems: 'center',
+  alignItems: 'flex-start',
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
@@ -179,24 +182,20 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   snackbar: {
     ...shadows,
-    ...flowHorizontallyAndCenterAlignVertically,
+    ...flowHorizontallyAndTopAlignVertically,
     backgroundColor: getThemeColor(theme).background,
     width: '88%',
-    paddingLeft: theme.spacing.large,
-    paddingRight: theme.spacing.xSmall,
+    padding: theme.spacing.medium,
     borderRadius: theme.border.radius.regular,
+    gap: theme.spacing.small,
   },
   snackbarTexts: {
     flex: 1,
-    paddingVertical: theme.spacing.medium,
-    marginRight: theme.spacing.medium,
     rowGap: theme.spacing.xSmall,
   },
   snackbarButtons: {
-    ...flowHorizontallyAndCenterAlignVertically,
-  },
-  closeButton: {
-    padding: theme.spacing.medium,
+    ...flowHorizontallyAndTopAlignVertically,
+    gap: theme.spacing.small,
   },
   parentMeasurer: {
     position: 'absolute',

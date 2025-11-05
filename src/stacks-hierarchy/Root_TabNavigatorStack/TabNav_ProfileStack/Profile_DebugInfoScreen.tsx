@@ -6,11 +6,7 @@ import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {getIdTokenGlobal, useAuthContext} from '@atb/modules/auth';
-import {
-  KeyValuePair,
-  storage,
-  StorageModelKeysEnum,
-} from '@atb/modules/storage';
+import {KeyValuePair, storage} from '@atb/modules/storage';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {usePreferencesContext, UserPreferences} from '@atb/modules/preferences';
 import {get, keys} from 'lodash';
@@ -49,6 +45,9 @@ import {
   DebugSabotage,
   DebugTokenServerAddress,
 } from '@atb/modules/mobile-token';
+import {useMapContext} from '@atb/modules/map';
+import {useEventStreamContext} from '@atb/modules/event-stream';
+import {format} from 'date-fns';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -89,6 +88,8 @@ export const Profile_DebugInfoScreen = () => {
 
   const {resetDismissedAnnouncements} = useAnnouncementsContext();
 
+  const {eventLog} = useEventStreamContext();
+
   const {
     tokens,
     retry,
@@ -112,7 +113,7 @@ export const Profile_DebugInfoScreen = () => {
   } = useMobileTokenContext();
   const {serverNow} = useTimeContext();
   const serverTimeOffset = useMemo(() => Date.now() - serverNow, [serverNow]);
-
+  const {setGivenShmoConsent} = useMapContext();
   const {
     fcmToken,
     permissionStatus: pushNotificationPermissionStatus,
@@ -271,7 +272,7 @@ export const Profile_DebugInfoScreen = () => {
           />
           <LinkSectionItem
             text="Reset scooter consent"
-            onPress={() => storage.remove(StorageModelKeysEnum.ScooterConsent)}
+            onPress={() => setGivenShmoConsent(false)}
           />
         </Section>
         <Section style={styles.section}>
@@ -350,6 +351,24 @@ export const Profile_DebugInfoScreen = () => {
 
         <Section style={styles.section}>
           <ExpandableSectionItem
+            text="Event stream log"
+            showIconText={true}
+            expandContent={
+              <View>
+                {eventLog.map((event) => (
+                  <MapEntry
+                    key={event.date.toISOString()}
+                    title={format(event.date, 'HH:mm:ss.SSS')}
+                    value={{streamEvent: event.streamEvent, meta: event.meta}}
+                  />
+                ))}
+              </View>
+            }
+          />
+        </Section>
+
+        <Section style={styles.section}>
+          <ExpandableSectionItem
             text="Notifications"
             showIconText={true}
             expandContent={
@@ -413,7 +432,7 @@ export const Profile_DebugInfoScreen = () => {
             expandContent={
               preferences && (
                 <View>
-                  <ThemeText typography="body__secondary">
+                  <ThemeText typography="body__s">
                     Press a line to reset to undefined {'\n'}
                   </ThemeText>
                   {Object.keys(preferences).map((key) => (
@@ -691,6 +710,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
   const isLongString =
     !!value && typeof value === 'string' && value.length > 300;
   const [isExpanded, setIsExpanded] = useState<boolean>(!isLongString);
+  if (value === undefined) return null;
 
   if (!!value && typeof value === 'object') {
     return (
@@ -699,7 +719,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
           style={{flexDirection: 'row'}}
           onPress={() => setIsExpanded(!isExpanded)}
         >
-          <ThemeText typography="heading__title" color="secondary">
+          <ThemeText typography="heading__m" color="secondary">
             {title}
           </ThemeText>
           <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
@@ -719,11 +739,11 @@ function MapEntry({title, value}: {title: string; value: any}) {
             style={{flexDirection: 'row'}}
             onPress={() => setIsExpanded(!isExpanded)}
           >
-            <ThemeText typography="body__primary--bold">{title}: </ThemeText>
+            <ThemeText typography="body__m__strong">{title}: </ThemeText>
             <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
           </PressableOpacity>
         ) : (
-          <ThemeText typography="body__primary--bold">{title}: </ThemeText>
+          <ThemeText typography="body__m__strong">{title}: </ThemeText>
         )}
         {isExpanded && <MapValue value={value} />}
       </View>
@@ -755,7 +775,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   objectEntry: {
     flexDirection: 'column',
-    marginVertical: 12,
+    marginVertical: 8,
     borderLeftColor: theme.color.foreground.dynamic.secondary,
     borderLeftWidth: 1,
     paddingLeft: 4,

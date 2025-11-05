@@ -22,7 +22,7 @@ import {View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
-import {ContentHeading} from '@atb/components/heading';
+import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -71,7 +71,15 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
       <FullScreenView
         headerProps={{
           title: t(ProfileTexts.header.title),
+          color: theme.color.background.neutral[1],
         }}
+        parallaxContent={(focusRef) => (
+          <ScreenHeading
+            ref={focusRef}
+            text={t(ProfileTexts.header.title)}
+            isLarge={true}
+          />
+        )}
       >
         <View
           testID="profileHomeScrollView"
@@ -192,7 +200,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                     'Smart Park & Ride',
                     'Profile button clicked',
                   );
-                  navigation.navigate('Profile_SmartParkAndRideScreen');
+                  navigation.navigate('Profile_SmartParkAndRideScreen', {});
                 }}
                 label="new"
                 testID="smartParkAndRideButton"
@@ -323,7 +331,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             />
           )}
           <View style={style.debugInfoContainer}>
-            <ThemeText typography="body__secondary" color="secondary">
+            <ThemeText typography="body__s" color="secondary">
               v{version} ({buildNumber})
             </ThemeText>
             {config?.installId && (
@@ -333,7 +341,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                     <ScreenReaderAnnouncement
                       message={t(ProfileTexts.installId.wasCopiedAlert)}
                     />
-                    <ThemeText typography="body__secondary" color="secondary">
+                    <ThemeText typography="body__s" color="secondary">
                       ✅ {t(ProfileTexts.installId.wasCopiedAlert)}
                     </ThemeText>
                   </>
@@ -344,13 +352,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 )}
                 accessibilityHint={t(ProfileTexts.installId.a11yHint)}
               >
-                <ThemeText typography="body__secondary" color="secondary">
+                <ThemeText typography="body__s" color="secondary">
                   {t(ProfileTexts.installId.label(config.installId))}
                 </ThemeText>
               </ClickableCopy>
             )}
             <ThemeText
-              typography="body__secondary"
+              typography="body__s"
               color="secondary"
               accessibilityLabel={t(
                 ProfileTexts.orgNumberA11yLabel(APP_ORG_NUMBER),

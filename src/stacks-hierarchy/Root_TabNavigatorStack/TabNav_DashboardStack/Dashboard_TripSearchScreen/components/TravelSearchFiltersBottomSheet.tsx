@@ -77,7 +77,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
         ref={focusRef}
         testID="filterView"
       >
-        <ThemeText style={styles.headingText} typography="body__secondary">
+        <ThemeText style={styles.headingText} typography="body__s">
           {t(TripSearchTexts.filters.bottomSheet.heading)}
         </ThemeText>
         <Section>

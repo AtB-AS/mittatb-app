@@ -94,7 +94,7 @@ export function Root_ReceiptScreen({route}: Props) {
           />
         </View>
         <Section style={styles.section}>
-          {profileStatus === 'loading' ? (
+          {profileStatus === 'pending' ? (
             <ActivityIndicator />
           ) : (
             <TextInputSectionItem

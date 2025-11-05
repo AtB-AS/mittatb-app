@@ -33,7 +33,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
 
   const {
     mutateAsync: getAssetFromQrCode,
-    isLoading: getAssetFromQrCodeIsLoading,
+    isPending: getAssetFromQrCodeIsLoading,
     isError: getAssetFromQrCodeIsError,
   } = useGetAssetFromQrCodeMutation();
 
@@ -134,6 +134,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <ScreenContainer
+      overrideThemeName="dark"
       title={t(ParkingViolationTexts.qr.title)}
       leftHeaderButton={
         getAssetFromQrCodeIsLoading

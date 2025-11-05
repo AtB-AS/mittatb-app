@@ -6,7 +6,6 @@ import {
 import {
   FormFactorFilterType,
   getVisibleRange,
-  MapRegion,
   MobilityMapFilterType,
   toFeaturePoint,
 } from '@atb/modules/map';
@@ -17,10 +16,7 @@ import {featureCollection} from '@turf/helpers';
 import {Platform} from 'react-native';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {AnyMode, AnySubMode} from '@atb/components/icon-box';
-import {
-  StationBasicFragment,
-  VehicleTypeAvailabilityBasicFragment,
-} from '@atb/api/types/generated/fragments/stations';
+import {VehicleTypeAvailabilityBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {dictionary, Language} from '@atb/translations';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
@@ -41,7 +37,6 @@ import {
   VehiclesClusteredFeature,
   VehiclesClusteredFeatureSchema,
 } from '@atb/api/types/mobility';
-import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {TFunc} from '@leile/lobo-t';
 import {formatNumberToString} from '@atb-as/utils';
 
@@ -53,12 +48,6 @@ export const isVehiclesClusteredFeature = (
 export const isVehicleFeature = (
   feature: Feature<Point> | undefined,
 ): feature is VehicleFeature => VehicleFeatureSchema.safeParse(feature).success;
-
-export const isScooter = (
-  feature: Feature<Point> | undefined,
-): feature is Feature<Point, VehicleBasicFragment> =>
-  feature?.properties?.vehicleType?.formFactor === FormFactor.Scooter ||
-  feature?.properties?.vehicleType?.formFactor === FormFactor.ScooterStanding;
 
 export const isScooterV2 = (
   feature: Feature<Point> | undefined,
@@ -72,12 +61,6 @@ export const isScooterV2 = (
     feature?.properties?.vehicle_type_form_factor ===
       FormFactor.ScooterStanding);
 
-export const isBicycle = (
-  feature: Feature<Point> | undefined,
-): feature is Feature<Point, VehicleBasicFragment> =>
-  feature?.properties?.vehicleType?.formFactor === FormFactor.Bicycle &&
-  !isStation(feature);
-
 export const isBicycleV2 = (
   feature: Feature<Point> | undefined,
 ): feature is VehicleFeature & {
@@ -87,23 +70,9 @@ export const isBicycleV2 = (
   feature?.properties?.vehicle_type_form_factor === FormFactor.Bicycle &&
   !isStationV2(feature);
 
-export const isStation = (
-  feature: Feature<Point> | undefined,
-): feature is Feature<Point, StationBasicFragment> =>
-  feature?.properties?.__typename === 'Station';
-
 export const isStationV2 = (
   feature: Feature<Point> | undefined,
 ): feature is StationFeature => StationFeatureSchema.safeParse(feature).success;
-
-export const isBikeStation = (
-  feature: Feature<Point> | undefined,
-): feature is Feature<Point, StationBasicFragment> =>
-  (isStation(feature) &&
-    feature.properties?.vehicleTypesAvailable?.some(
-      (types) => types.vehicleType.formFactor === FormFactor.Bicycle,
-    )) ??
-  false;
 
 export const isBikeStationV2 = (
   feature: Feature<Point> | undefined,
@@ -112,15 +81,6 @@ export const isBikeStationV2 = (
 } =>
   isStationV2(feature) &&
   feature.properties?.vehicle_type_form_factor === FormFactor.Bicycle;
-
-export const isCarStation = (
-  feature: Feature<Point> | undefined,
-): feature is Feature<Point, StationBasicFragment> =>
-  (isStation(feature) &&
-    feature.properties?.vehicleTypesAvailable?.some(
-      (types) => types.vehicleType.formFactor === FormFactor.Car,
-    )) ??
-  false;
 
 export const isCarStationV2 = (
   feature: Feature<Point> | undefined,
@@ -190,30 +150,6 @@ export type AreaState = {
   lat: number;
   lon: number;
   range: number;
-};
-
-export const updateAreaState = (
-  region: MapRegion,
-  bufferDistance: number,
-  minZoomLevel: number,
-) => {
-  return (prevArea: AreaState | undefined): AreaState | undefined => {
-    if (region.zoomLevel < minZoomLevel) return undefined;
-
-    const shownArea = mapRegionToArea(region, 0);
-    return needsReload(prevArea, shownArea)
-      ? mapRegionToArea(region, bufferDistance)
-      : prevArea;
-  };
-};
-
-const mapRegionToArea = (
-  region: MapRegion,
-  bufferDistance: number,
-): AreaState => {
-  const [lon, lat] = region.center;
-  const range = getRadius(region.visibleBounds, bufferDistance);
-  return {lat, lon, range};
 };
 
 export const getRentalAppUri = <T extends {rentalUris?: RentalUrisFragment}>(
@@ -375,3 +311,12 @@ export const getModeAndSubModeFromFormFactor = (
       return {mode: 'unknown'};
   }
 };
+
+export function isSvgUrl(url: string) {
+  try {
+    const u = new URL(url);
+    return u.pathname.toLowerCase().endsWith('.svg');
+  } catch {
+    return false;
+  }
+}

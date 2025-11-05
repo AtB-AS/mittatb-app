@@ -17,7 +17,7 @@ import {PricingPlan} from './PricingPlan';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
 import {formatRange} from '../utils';
 import {useVehicle} from '../use-vehicle';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useOperatorBenefit} from '../use-operator-benefit';
 import {OperatorActionButton} from './OperatorActionButton';
@@ -61,7 +61,8 @@ export const BicycleSheet = ({
 
   return (
     <MapBottomSheet
-      snapPoints={['80%']}
+      canMinimize={true}
+      enablePanDownToClose={false}
       closeCallback={onClose}
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
@@ -81,7 +82,7 @@ export const BicycleSheet = ({
         )}
         {!isLoading && !isError && vehicle && (
           <>
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
@@ -139,13 +140,12 @@ export const BicycleSheet = ({
                   </View>
                 </GenericSectionItem>
               </Section>
-            </ScrollView>
+            </View>
             {rentalAppUri && (
               <View style={styles.footer}>
                 <OperatorActionButton
                   operatorId={operatorId}
                   operatorName={operatorName}
-                  benefit={operatorBenefit}
                   appStoreUri={appStoreUri}
                   rentalAppUri={rentalAppUri}
                 />

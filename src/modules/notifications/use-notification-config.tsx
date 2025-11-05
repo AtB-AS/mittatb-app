@@ -20,7 +20,8 @@ export const useNotificationConfig = () => {
   const mutation = useMutation({
     mutationFn: (update: NotificationConfigUpdate) =>
       updateNotificationConfig(update),
-    onSuccess: () => queryClient.invalidateQueries([QUERY_PARENT_KEY]),
+    onSuccess: () =>
+      queryClient.invalidateQueries({queryKey: [QUERY_PARENT_KEY]}),
   });
 
   return {query, mutation};

@@ -1,7 +1,7 @@
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {StyleSheet, useThemeContext, themes, Themes} from '@atb/theme';
 import {PropsWithChildren, ReactNode} from 'react';
 import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -9,9 +9,11 @@ import {Processing} from '@atb/components/loading';
 import {dictionary, useTranslation} from '@atb/translations';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
-export const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+export const getThemeColor = (themeName: keyof Themes) =>
+  themes[themeName]?.color?.background?.accent?.[0];
 
 type Props = PropsWithChildren<{
+  overrideThemeName?: keyof Themes;
   title?: string;
   titleA11yLabel?: string;
   secondaryText?: string;
@@ -22,8 +24,9 @@ type Props = PropsWithChildren<{
 }>;
 
 export const ScreenContainer = (props: Props) => {
-  const {theme} = useThemeContext();
-  const themeColor = getThemeColor(theme);
+  const {themeName: contextThemeName} = useThemeContext();
+  const themeName = props.overrideThemeName ?? contextThemeName;
+  const themeColor = getThemeColor(themeName);
 
   return (
     <FullScreenView
@@ -51,17 +54,24 @@ const LoadingBody = () => {
   );
 };
 
-const ContentBody = ({title, secondaryText, buttons, children}: Props) => {
+const ContentBody = ({
+  overrideThemeName,
+  title,
+  secondaryText,
+  buttons,
+  children,
+}: Props) => {
   const style = useStyles();
-  const {theme} = useThemeContext();
-  const themeColor = getThemeColor(theme);
+  const {themeName: contextThemeName} = useThemeContext();
+  const themeName = overrideThemeName ?? contextThemeName;
+  const themeColor = getThemeColor(themeName);
   const focusRef = useFocusOnLoad();
   return (
     <>
       <View style={style.content}>
         <View style={style.header}>
           <View ref={focusRef} accessible>
-            <ThemeText color={themeColor} typography="heading--medium">
+            <ThemeText color={themeColor} typography="heading__l">
               {title}
             </ThemeText>
           </View>

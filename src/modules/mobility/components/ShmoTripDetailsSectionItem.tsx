@@ -43,7 +43,7 @@ export const ShmoTripDetailsSectionItem = ({
       >
         {withHeader && (
           <ThemeText
-            typography="body__secondary"
+            typography="body__s"
             color="secondary"
             accessibilityRole="header"
           >
@@ -52,7 +52,7 @@ export const ShmoTripDetailsSectionItem = ({
         )}
         <View style={styles.timeWrapper}>
           <ThemeIcon svg={Duration} color="primary" size="large" />
-          <ThemeText typography="body__primary--big">{timeUsed}</ThemeText>
+          <ThemeText typography="heading__xl">{timeUsed}</ThemeText>
         </View>
       </View>
 
@@ -65,14 +65,14 @@ export const ShmoTripDetailsSectionItem = ({
       >
         {withHeader && (
           <ThemeText
-            typography="body__secondary"
+            typography="body__s"
             color="secondary"
             accessibilityRole="header"
           >
             {t(MobilityTexts.totalCost)}
           </ThemeText>
         )}
-        <ThemeText typography="body__primary--big">
+        <ThemeText typography="heading__xl">
           {formattedTotalAmount} {t(dictionary.currency.nok.short)}
         </ThemeText>
       </View>

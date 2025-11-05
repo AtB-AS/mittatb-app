@@ -1,5 +1,5 @@
 import {CancelToken as CancelTokenStatic} from '@atb/api';
-import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
+import {toAxiosErrorKind, AxiosErrorKind} from '@atb/api/utils';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {FlexDiscountLadder, searchOffers} from '@atb/modules/ticketing';
 import {CancelToken} from 'axios';
@@ -8,7 +8,7 @@ import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
 import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {fetchOfferFromLegs} from '@atb/api/sales';
-import type {SearchOfferPrice, TicketOffer} from '@atb-as/utils';
+import type {ErrorResponse, SearchOfferPrice, TicketOffer} from '@atb-as/utils';
 import {mapToSalesTripPatternLegs} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/utils';
 import {useTranslation} from '@atb/translations';
 
@@ -17,7 +17,7 @@ export type UserProfileWithCountAndOffer = UserProfileWithCount & {
 };
 
 export type OfferError = {
-  type: ErrorType | 'empty-offers' | 'not-available';
+  type: AxiosErrorKind | 'empty-offers' | 'not-available';
 };
 
 type OfferState = {
@@ -165,30 +165,31 @@ const initialState: OfferState = {
 };
 
 export function useOfferState(
-  selection: PurchaseSelectionType,
   preassignedFareProductAlternatives: PreassignedFareProduct[],
+  selection?: PurchaseSelectionType,
 ) {
-  const offerReducer = getOfferReducer(selection.userProfilesWithCount);
+  const offerReducer = getOfferReducer(selection?.userProfilesWithCount ?? []);
   const [state, dispatch] = useReducer(offerReducer, initialState);
   const {t} = useTranslation();
 
   const updateOffer = useCallback(
     async function (cancelToken?: CancelToken) {
-      if (selection.stopPlaces?.to?.isFree) {
+      if (selection?.stopPlaces?.to?.isFree) {
         dispatch({type: 'CLEAR_OFFER'});
         return;
       }
 
-      const offerTravellers = selection.userProfilesWithCount
-        .filter((t) => t.count)
-        .map((t) => ({
-          id: t.userTypeString,
-          userType: t.userTypeString,
-          count: t.count,
-        }));
+      const offerTravellers =
+        selection?.userProfilesWithCount
+          .filter((t) => t.count)
+          .map((t) => ({
+            id: t.userTypeString,
+            userType: t.userTypeString,
+            count: t.count,
+          })) ?? [];
 
-      const isTravellersValid = offerTravellers.length > 0;
-      const isStopPlacesValid = selection.stopPlaces
+      const isTravellersValid = offerTravellers?.length ?? 0 > 0;
+      const isStopPlacesValid = selection?.stopPlaces
         ? selection.stopPlaces.from && selection.stopPlaces.to
         : true;
       const isSelectionValid = isTravellersValid && isStopPlacesValid;
@@ -200,7 +201,7 @@ export function useOfferState(
           dispatch({type: 'SEARCHING_OFFER'});
           let offers: TicketOffer[];
 
-          if (selection.legs.length) {
+          if (selection?.legs.length) {
             const response = await fetchOfferFromLegs(
               new Date(selection.legs[0].expectedStartTime),
               mapToSalesTripPatternLegs(t, selection.legs),
@@ -210,20 +211,20 @@ export function useOfferState(
             offers = response.offers;
           } else {
             const params = {
-              zones: selection.zones && [
+              zones: selection?.zones && [
                 ...new Set([selection.zones.from.id, selection.zones.to.id]),
               ],
-              from: selection.stopPlaces?.from!.id,
-              to: selection.stopPlaces?.to!.id,
-              isOnBehalfOf: selection.isOnBehalfOf,
+              from: selection?.stopPlaces?.from!.id,
+              to: selection?.stopPlaces?.to!.id,
+              isOnBehalfOf: selection?.isOnBehalfOf ?? false,
               travellers: offerTravellers,
               products: preassignedFareProductAlternatives.map((p) => p.id),
-              travelDate: selection.travelDate,
+              travelDate: selection?.travelDate,
             };
 
-            const offerEndpoint = selection.stopPlaces
+            const offerEndpoint = selection?.stopPlaces
               ? 'stop-places'
-              : selection.zones
+              : selection?.zones
                 ? 'zones'
                 : 'authority';
 
@@ -247,15 +248,17 @@ export function useOfferState(
             });
           }
         } catch (err: any) {
-          const errorType = isNotAvailableError(err)
+          const error = err as ErrorResponse;
+          const errorKind = isNotAvailableError(error)
             ? 'not-available'
-            : getAxiosErrorType(err);
-          if (errorType !== 'cancel') {
+            : toAxiosErrorKind(error.kind);
+
+          if (errorKind !== 'AXIOS_CANCEL') {
             console.warn(err);
             dispatch({
               type: 'SET_ERROR',
               error: {
-                type: errorType,
+                type: errorKind,
               },
             });
           }

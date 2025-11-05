@@ -63,7 +63,7 @@ export function TileWithButton({
       >
         <ThemeText
           style={styles.buttonText}
-          typography={mode === 'spacious' ? 'body__primary' : 'body__tertiary'}
+          typography={mode === 'spacious' ? 'body__m' : 'body__xs'}
         >
           {buttonText}
         </ThemeText>

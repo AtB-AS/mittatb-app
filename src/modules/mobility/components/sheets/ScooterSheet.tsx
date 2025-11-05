@@ -10,7 +10,7 @@ import {
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useVehicle} from '../../use-vehicle';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -68,10 +68,8 @@ export const ScooterSheet = ({
     appStoreUri,
   } = useVehicle(id);
 
-  const {mobilityOperators} = useOperators();
-  const operatorIsIntegrationEnabled = mobilityOperators?.find(
-    (e) => e.id === operatorId,
-  )?.isDeepIntegrationEnabled;
+  const operator = useOperators().byId(operatorId);
+  const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
 
   const {isLoading: shmoReqIsLoading, hasBlockers} =
     useShmoRequirements(operatorId);
@@ -81,16 +79,14 @@ export const ScooterSheet = ({
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
-  const {
-    isParkingViolationsReportingEnabled,
-    isShmoDeepIntegrationEnabled,
-    isMapV2Enabled,
-  } = useFeatureTogglesContext();
+  const {isParkingViolationsReportingEnabled, isShmoDeepIntegrationEnabled} =
+    useFeatureTogglesContext();
 
   return (
     <MapBottomSheet
-      snapPoints={['80%']}
+      canMinimize={true}
       closeCallback={onClose}
+      enablePanDownToClose={false}
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
@@ -112,7 +108,7 @@ export const ScooterSheet = ({
       )}
       {!isLoading && !shmoReqIsLoading && !isError && vehicle && (
         <>
-          <ScrollView style={styles.container}>
+          <View style={styles.container}>
             {operatorBenefit && (
               <OperatorBenefit
                 benefit={operatorBenefit}
@@ -130,7 +126,6 @@ export const ScooterSheet = ({
 
             {selectedPaymentMethod &&
               isShmoDeepIntegrationEnabled &&
-              isMapV2Enabled &&
               !hasBlockers &&
               operatorIsIntegrationEnabled && (
                 <Section style={styles.paymentWrapper}>
@@ -140,10 +135,9 @@ export const ScooterSheet = ({
                   />
                 </Section>
               )}
-          </ScrollView>
+          </View>
           <View style={styles.footer}>
             {isShmoDeepIntegrationEnabled &&
-            isMapV2Enabled &&
             operatorId &&
             operatorIsIntegrationEnabled ? (
               <View style={styles.actionWrapper}>
@@ -174,7 +168,6 @@ export const ScooterSheet = ({
                   <OperatorActionButton
                     operatorId={operatorId}
                     operatorName={operatorName}
-                    benefit={operatorBenefit}
                     appStoreUri={appStoreUri}
                     rentalAppUri={rentalAppUri}
                   />
@@ -219,7 +212,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacing.medium,
     },
     container: {
-      gap: theme.spacing.medium,
       paddingHorizontal: theme.spacing.medium,
     },
     actionWrapper: {

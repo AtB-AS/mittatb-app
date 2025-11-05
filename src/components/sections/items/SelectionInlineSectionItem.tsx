@@ -58,15 +58,15 @@ export function SelectionInlineSectionItem({
       {icon && <ThemeIcon svg={icon} {...iconAccessibility} />}
 
       <View style={[contentContainer, styles.labelValueContainer]}>
-        <ThemeText typography="body__primary--bold">{label}</ThemeText>
-        <ThemeText typography="body__secondary" color="secondary">
+        <ThemeText typography="body__m__strong">{label}</ThemeText>
+        <ThemeText typography="body__s" color="secondary">
           {value}
         </ThemeText>
       </View>
 
       <View style={styles.onPressContainer}>
         {onPressLabel && (
-          <ThemeText typography="body__secondary" accessible={false}>
+          <ThemeText typography="body__s" accessible={false}>
             {onPressLabel}
           </ThemeText>
         )}

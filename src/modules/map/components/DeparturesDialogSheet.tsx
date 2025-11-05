@@ -1,5 +1,5 @@
-import {StyleSheet, useThemeContext} from '@atb/theme';
-import React, {useState} from 'react';
+import {StyleSheet} from '@atb/theme';
+import React, {JSX, useRef} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {Quay, StopPlace} from '@atb/api/types/departures';
@@ -7,13 +7,11 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Feature, Point} from 'geojson';
 import {Location, SearchLocation} from '@atb/modules/favorites';
 import {NavigateToTripSearchCallback} from '../types';
-import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {isDefined} from '@atb/utils/presence';
 import {
-  StopPlacesView,
+  StopPlacesSheetView,
   useStopsDetailsDataQuery,
 } from '@atb/screen-components/place-screen';
-import type {DepartureSearchTime} from '@atb/components/date-selection';
 import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 
@@ -41,18 +39,12 @@ export const DeparturesDialogSheet = ({
   navigateToDetails,
   navigateToQuay,
   navigateToTripSearch,
-  tabBarHeight,
   locationArrowOnPress,
 }: DeparturesDialogSheetProps) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
-  const styles = useBottomSheetStyles(tabBarHeight ?? 0)();
-  const [searchTime, setSearchTime] = useState<DepartureSearchTime>({
-    option: 'now',
-    date: new Date().toISOString(),
-  });
+  const styles = useBottomSheetStyles();
+  const searchDateRef = useRef(new Date().toISOString());
   const [longitude, latitude] = stopPlaceFeature.geometry.coordinates;
-  const appStateStatus = useAppStateStatus();
 
   const stopPlaceIds = getStopPlaceIds(stopPlaceFeature);
 
@@ -66,44 +58,47 @@ export const DeparturesDialogSheet = ({
     (sp) => sp.quays?.length,
   );
 
-  const StopPlaceViewOrError = () => {
+  const stopPlaceGeoLocation: Location | undefined =
+    (stopPlaceFeature.properties && {
+      ...(stopPlaceFeature.properties as SearchLocation),
+      label: stopPlaceFeature.properties.name,
+      coordinates: {latitude, longitude},
+      resultType: 'search',
+    }) ||
+    undefined;
+
+  let StopPlaceViewOrError: JSX.Element = <></>;
+
+  {
     if (stopDetailsStatus === 'success') {
       if (thereIsSomeQuays) {
-        return (
-          <StopPlacesView
+        StopPlaceViewOrError = (
+          <StopPlacesSheetView
             stopPlaces={stopDetailsData?.stopPlaces}
             showTimeNavigation={false}
             navigateToDetails={navigateToDetails}
             navigateToQuay={navigateToQuay}
-            isFocused={appStateStatus === 'active'}
-            searchTime={searchTime}
-            setSearchTime={setSearchTime}
-            showOnlyFavorites={false}
-            setShowOnlyFavorites={(_) => {}}
+            searchTime={searchDateRef.current}
             testID="departuresContentView"
-            mode="Map"
             distance={distance}
             setTravelTarget={(target) => {
               stopPlaceGeoLocation &&
                 navigateToTripSearch(stopPlaceGeoLocation, target);
             }}
-            backgroundColor={theme.color.background.neutral[1]}
           />
         );
+      } else {
+        StopPlaceViewOrError = (
+          <View style={styles.paddingHorizontal}>
+            <MessageInfoBox
+              type="info"
+              message={t(DeparturesTexts.message.emptyResult)}
+            />
+          </View>
+        );
       }
-
-      return (
-        <View style={styles.paddingHorizontal}>
-          <MessageInfoBox
-            type="info"
-            message={t(DeparturesTexts.message.emptyResult)}
-          />
-        </View>
-      );
-    }
-
-    if (stopDetailsStatus === 'error') {
-      return (
+    } else if (stopDetailsStatus === 'error') {
+      StopPlaceViewOrError = (
         <View style={styles.paddingHorizontal}>
           <MessageInfoBox
             type="error"
@@ -115,29 +110,22 @@ export const DeparturesDialogSheet = ({
           />
         </View>
       );
+    } else if (stopDetailsStatus === 'pending') {
+      StopPlaceViewOrError = (
+        <View style={styles.paddingHorizontal}>
+          <ActivityIndicator size="large" />
+        </View>
+      );
     }
-
-    return (
-      <View style={styles.paddingHorizontal}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  };
-
-  const stopPlaceGeoLocation: Location | undefined =
-    (stopPlaceFeature.properties && {
-      ...(stopPlaceFeature.properties as SearchLocation),
-      label: stopPlaceFeature.properties.name,
-      coordinates: {latitude, longitude},
-      resultType: 'search',
-    }) ||
-    undefined;
+  }
 
   return (
     <MapBottomSheet
-      snapPoints={['60%']}
-      closeCallback={onClose}
+      snapPoints={['50%', '90%']}
+      canMinimize={true}
+      enablePanDownToClose={false}
       enableDynamicSizing={false}
+      closeCallback={onClose}
       allowBackgroundTouch={true}
       heading={
         stopPlaceFeature.properties?.name ??
@@ -147,9 +135,7 @@ export const DeparturesDialogSheet = ({
       rightIcon={Close}
       locationArrowOnPress={locationArrowOnPress}
     >
-      <View style={styles.listWrapper}>
-        <StopPlaceViewOrError />
-      </View>
+      {StopPlaceViewOrError}
     </MapBottomSheet>
   );
 };
@@ -167,12 +153,8 @@ const getStopPlaceIds = (feature: Feature<Point>): string[] => {
   return [stopPlaceId, ...adjacentSiteIds].filter(isDefined);
 };
 
-const useBottomSheetStyles = (tabBarHeight: number) =>
-  StyleSheet.createThemeHook((theme) => ({
-    paddingHorizontal: {
-      paddingHorizontal: theme.spacing.medium,
-    },
-    listWrapper: {
-      paddingBottom: tabBarHeight,
-    },
-  }));
+const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
+  paddingHorizontal: {
+    paddingHorizontal: theme.spacing.medium,
+  },
+}));

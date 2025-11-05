@@ -1,6 +1,7 @@
 import React from 'react';
-import {Announcement} from '@atb/modules/announcements';
+import {BottomSheetAnnouncement} from '@atb/modules/announcements';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -16,16 +17,22 @@ import {
   useInAppReviewFlow,
 } from '@atb/utils/use-in-app-review';
 import {GenericSectionItem, Section} from '@atb/components/sections';
+import {useActionButtonProps} from './hooks';
 
 type Props = {
-  announcement: Announcement;
+  announcement: BottomSheetAnnouncement;
 };
 
 export const AnnouncementSheet = ({announcement}: Props) => {
-  const {language} = useTranslation();
+  const {language, t} = useTranslation();
   const style = useStyle();
   const {requestReview} = useInAppReviewFlow();
-  const {t} = useTranslation();
+
+  const primaryButtonProps = useActionButtonProps(
+    announcement,
+    announcement.actionButton.sheetPrimaryButton,
+    'AnnouncementSheet',
+  );
 
   return (
     <BottomSheetContainer
@@ -45,7 +52,7 @@ export const AnnouncementSheet = ({announcement}: Props) => {
         )}
         <Section>
           <GenericSectionItem type="spacious" style={style.articleContainer}>
-            <ThemeText typography="heading--big">
+            <ThemeText typography="heading__xl">
               {getTextForLanguage(announcement.fullTitle, language)}
             </ThemeText>
             <ThemeText isMarkdown={true}>
@@ -53,6 +60,9 @@ export const AnnouncementSheet = ({announcement}: Props) => {
             </ThemeText>
           </GenericSectionItem>
         </Section>
+        {primaryButtonProps && (
+          <Button expanded={true} mode="primary" {...primaryButtonProps} />
+        )}
       </ScrollView>
     </BottomSheetContainer>
   );

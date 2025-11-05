@@ -67,7 +67,6 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
       }
       toggleMutation.mutate({
         tokenId: selectedToken.id,
-        bypassRestrictions: false,
       });
     }
   }, [selectedToken, toggleMutation, onAfterSave]);
@@ -176,7 +175,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         {data?.toggleLimit !== undefined && (
           <TokenToggleInfo textColor={theme.color.background.accent[0]} />
         )}
-        {toggleMutation.isLoading ? (
+        {toggleMutation.isPending ? (
           <ActivityIndicator size="large" />
         ) : (
           <Button

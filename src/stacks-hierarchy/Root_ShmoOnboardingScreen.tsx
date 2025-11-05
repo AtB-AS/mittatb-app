@@ -8,11 +8,13 @@ import {PaymentScreenComponent} from '@atb/modules/mobility';
 import {ShmoRequirementEnum} from '@atb/modules/mobility';
 import {useShmoRequirements} from '@atb/modules/mobility';
 import {RootStackScreenProps} from './navigation-types';
+import {useMapContext} from '@atb/modules/map';
 
 type Props = RootStackScreenProps<'Root_ShmoOnboardingScreen'>;
 
 export const Root_ShmoOnboardingScreen = ({navigation}: Props) => {
-  const {requirements, hasBlockers, setGivenConsent} = useShmoRequirements();
+  const {requirements, hasBlockers} = useShmoRequirements();
+  const {setGivenShmoConsent} = useMapContext();
 
   useEffect(() => {
     if (!hasBlockers) {
@@ -33,7 +35,7 @@ export const Root_ShmoOnboardingScreen = ({navigation}: Props) => {
       (e) => e.requirementCode === ShmoRequirementEnum.TERMS_AND_CONDITIONS,
     )?.isBlocking
   ) {
-    return <RulesScreenComponent onGiveConsent={setGivenConsent} />;
+    return <RulesScreenComponent onGiveConsent={setGivenShmoConsent} />;
   }
 
   if (

@@ -16,7 +16,7 @@ export const useVehicleRegistrationsQuery = (disabled: boolean = false) => {
     queryKey: getVehicleRegistrationsQueryKey(userId),
     queryFn: getVehicleRegistrations,
     retry: 3,
-    cacheTime: ONE_HOUR_MS,
+    gcTime: ONE_HOUR_MS,
     staleTime: ONE_HOUR_MS,
     enabled: isSmartParkAndRideEnabled && !disabled,
   });

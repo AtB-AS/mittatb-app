@@ -1,7 +1,7 @@
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {Camera} from '@atb/components/camera';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {RefObject, useEffect, useMemo, useRef, useState} from 'react';
@@ -18,9 +18,9 @@ import {
   useParkingViolations,
 } from '@atb/modules/parking-violations-reporting';
 import {useAuthContext} from '@atb/modules/auth';
-import {Image} from 'react-native-compressor';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {compressImage} from '@atb/utils/image';
 
 export type QrScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsQrScreen'>;
@@ -31,8 +31,7 @@ export const Root_ParkingViolationsQrScreen = ({
 }: QrScreenProps) => {
   const {t} = useTranslation();
   const style = useStyles();
-  const {theme} = useThemeContext();
-  const themeColor = getThemeColor(theme);
+  const themeColor = getThemeColor('dark');
   const isFocused = useIsFocusedAndActive();
   const [capturedQr, setCapturedQr] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
@@ -61,19 +60,19 @@ export const Root_ParkingViolationsQrScreen = ({
     setIsLoading(true);
     closeBottomSheet();
 
-    const compressed = await Image.compress(params.photo, {
-      maxHeight: 2048,
-      maxWidth: 2048,
-    });
-    const image = await fetch(compressed);
-    const imageBlob = await image.blob();
-    const base64Image = await blobToBase64(imageBlob);
-    // Remove metadata, e.g. 'data:image/png;base64',
-    // and keep just the base64 encoded part of the image
-    // Nivel does not accept the metadata being a part of the image.
+    const compressedBlob = await compressImage(params.photo, 2048, 2048);
+    if (!compressedBlob) {
+      setIsError(true);
+      return;
+    }
+
+    const base64Image = await blobToBase64(compressedBlob);
+
+    // Remove metadata, e.g. 'data:image/png;base64', and keep just the base64
+    // encoded part of the image.
     const base64data = base64Image.split(',').pop();
-    // Nivel use the file name suffix as imageType.
-    // (omg, why not just accept the base64 metadata, or at least a mime type as imageType?)
+
+    // Nivel uses the file name suffix as imageType.
     const imageType = params.photo.split('.').pop();
 
     sendViolationsReport({
@@ -161,6 +160,7 @@ export const Root_ParkingViolationsQrScreen = ({
 
   return (
     <ScreenContainer
+      overrideThemeName="dark"
       title={t(ParkingViolationTexts.qr.title)}
       secondaryText={t(ParkingViolationTexts.qr.instructions)}
       leftHeaderButton={isLoading ? undefined : {type: 'back', withIcon: true}}

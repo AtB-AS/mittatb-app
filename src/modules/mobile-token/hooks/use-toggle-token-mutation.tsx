@@ -9,15 +9,13 @@ import {useMobileTokenContext} from '../MobileTokenContext';
 
 type Args = {
   tokenId: string;
-  bypassRestrictions: boolean;
 };
 export const useToggleTokenMutation = () => {
   const queryClient = useQueryClient();
   const {userId} = useAuthContext();
   const {nativeToken, secureContainer} = useMobileTokenContext();
   return useMutation({
-    mutationFn: ({tokenId, bypassRestrictions}: Args) =>
-      tokenService.toggle(tokenId, uuid(), bypassRestrictions),
+    mutationFn: ({tokenId}: Args) => tokenService.toggle(tokenId, uuid()),
     onSuccess: (tokens) => {
       queryClient.setQueryData(
         [
@@ -29,10 +27,9 @@ export const useToggleTokenMutation = () => {
         ],
         tokens,
       );
-      queryClient.invalidateQueries([
-        MOBILE_TOKEN_QUERY_KEY,
-        GET_TOKEN_TOGGLE_DETAILS_QUERY_KEY,
-      ]);
+      queryClient.invalidateQueries({
+        queryKey: [MOBILE_TOKEN_QUERY_KEY, GET_TOKEN_TOGGLE_DETAILS_QUERY_KEY],
+      });
     },
   });
 };

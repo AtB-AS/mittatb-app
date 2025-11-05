@@ -45,8 +45,8 @@ import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/ligh
 import {TripProps} from './Trip';
 import {Button} from '@atb/components/button';
 import {Map} from '@atb/assets/svg/mono-icons/map';
-import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
-import {useMapData} from '../use-map-data';
+import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
+import {useServiceJourneyPolylineQuery} from '../use-service-journey-polyline-query';
 import {useRealtimeText} from '../use-realtime-text';
 import {useNow} from '@atb/utils/use-now';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
@@ -69,7 +69,7 @@ type TripSectionProps = {
   interchangeDetails?: InterchangeDetails;
   leg: Leg;
   testID?: string;
-  onPressShowLive?(mapData: ServiceJourneyMapInfoData_v3): void;
+  onPressShowLive?(serviceJourneyPolylines: ServiceJourneyPolylines): void;
   onPressDeparture: TripProps['onPressDeparture'];
   onPressQuay: TripProps['onPressQuay'];
 };
@@ -115,7 +115,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const realtimeText = useRealtimeText(leg.serviceJourneyEstimatedCalls);
 
-  const mapData = useMapData(
+  const {data: serviceJourneyPolyline} = useServiceJourneyPolylineQuery(
     leg.serviceJourney?.id,
     leg.fromPlace.quay?.id,
     leg.toPlace.quay?.id,
@@ -150,6 +150,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const showInterchangeSection =
     leg.interchangeTo?.guaranteed && interchangeDetails && leg.line;
 
+  const showQuayDescription =
+    !!leg.fromPlace.quay?.description && !isWalkSection && !isBikeSection;
+
   const sectionOutput = (
     <>
       <View style={style.tripSection} testID={testID}>
@@ -174,7 +177,10 @@ export const TripSection: React.FC<TripSectionProps> = ({
             alignChildren="flex-start"
             accessibilityLabel={getStopRowA11yTranslated(
               'start',
-              getPlaceName(leg.fromPlace),
+              getPlaceName(leg.fromPlace) +
+                (showQuayDescription
+                  ? ` ${leg.fromPlace.quay?.description}`
+                  : ''),
               startTimes,
               timesAreApproximations,
               language,
@@ -193,6 +199,15 @@ export const TripSection: React.FC<TripSectionProps> = ({
             <ThemeText testID="fromPlaceName">
               {getPlaceName(leg.fromPlace)}
             </ThemeText>
+            {showQuayDescription && (
+              <ThemeText
+                testID="fromPlaceQuayDescription"
+                typography="body__s"
+                color="secondary"
+              >
+                {leg.fromPlace.quay?.description}
+              </ThemeText>
+            )}
           </TripRow>
         )}
         {isWalkSection ? (
@@ -227,7 +242,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             {leg.transportSubmode === TransportSubmode.NightBus && (
               <ThemeText
                 color="secondary"
-                typography="body__secondary"
+                typography="body__s"
                 style={style.secondaryTransportLabel}
               >
                 {t(getTranslatedModeName(leg.mode, leg.line?.transportSubmode))}
@@ -239,7 +254,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             {isFlexible && (
               <ThemeText
                 color="secondary"
-                typography="body__secondary"
+                typography="body__s"
                 style={style.onDemandTransportLabel}
               >
                 {t(TripDetailsTexts.flexibleTransport.onDemandTransportLabel)}
@@ -298,7 +313,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {leg.authority && <AuthorityRow {...leg.authority} />}
-        {onPressShowLive && mapData ? (
+        {onPressShowLive && serviceJourneyPolyline ? (
           <TripRow>
             <Button
               type="small"
@@ -306,7 +321,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               leftIcon={{svg: Map}}
               text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
               interactiveColor={theme.color.interactive[3]}
-              onPress={() => onPressShowLive(mapData)}
+              onPress={() => onPressShowLive(serviceJourneyPolyline)}
             />
           </TripRow>
         ) : null}
@@ -320,7 +335,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               />
               <ThemeText
                 style={style.realtimeText}
-                typography="body__secondary"
+                typography="body__s"
                 color="secondary"
               >
                 {realtimeText}
@@ -426,7 +441,7 @@ const IntermediateInfo = ({
         TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
       )}
     >
-      <ThemeText typography="body__secondary" color="secondary">
+      <ThemeText typography="body__s" color="secondary">
         {t(
           TripDetailsTexts.trip.leg.intermediateStops.label(
             numberOfIntermediateCalls,
@@ -451,7 +466,7 @@ const WalkSection = (leg: Leg) => {
       }
       testID="footLeg"
     >
-      <ThemeText typography="body__secondary" color="secondary">
+      <ThemeText typography="body__s" color="secondary">
         {isWalkTimeOfSignificance
           ? t(
               TripDetailsTexts.trip.leg.walk.label(
@@ -476,7 +491,7 @@ const BikeSection = (leg: Leg) => {
       }
       testID="bikeLeg"
     >
-      <ThemeText typography="body__secondary" color="secondary">
+      <ThemeText typography="body__s" color="secondary">
         {t(
           TripDetailsTexts.trip.leg.bicycle.label(
             secondsToDuration(leg.duration ?? 0, language),
@@ -498,7 +513,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
     return (
       <TripRow>
         <View style={style.authoritySection}>
-          <ThemeText typography="body__secondary" color="secondary">
+          <ThemeText typography="body__s" color="secondary">
             {t(TripDetailsTexts.trip.leg.buyTicketFrom) + ' ' + name}
           </ThemeText>
         </View>
@@ -508,11 +523,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   return (
     <TripRow accessible={false}>
       <View style={style.authoritySection}>
-        <ThemeText
-          typography="body__secondary"
-          color="secondary"
-          accessible={false}
-        >
+        <ThemeText typography="body__s" color="secondary" accessible={false}>
           {t(TripDetailsTexts.trip.leg.buyTicketFrom)}
         </ThemeText>
         <Button

@@ -73,7 +73,7 @@ export const PreassignedFareContractSummary = ({
     return (
       <ThemeText
         style={styles.smallTopMargin}
-        typography="body__secondary"
+        typography="body__s"
         color="secondary"
         testID="summaryText"
       >
@@ -124,7 +124,7 @@ export const PreassignedFareContractSummary = ({
           </ThemeText>
           {recipient && (
             <ThemeText
-              typography="body__secondary"
+              typography="body__s"
               color="secondary"
               style={styles.sendingToText}
               testID="onBehalfOfText"

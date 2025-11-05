@@ -44,7 +44,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
 
   const lineNumberElement = lineNumber ? (
     <ThemeText
-      typography="body__primary--bold"
+      typography="body__m__strong"
       color={transportationColor}
       style={styles.lineNumberText}
       testID="lineNumber"
@@ -58,6 +58,9 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
       style={[
         styles.transportationIconBox,
         type === 'standard' && styles.standardTransportationIconBox,
+        size === 'large' || size === 'normal'
+          ? styles.regularBorderRadius
+          : styles.smallBorderRadius,
         style,
         {
           backgroundColor,
@@ -81,7 +84,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     padding: theme.spacing.xSmall,
+  },
+  smallBorderRadius: {
     borderRadius: theme.border.radius.small,
+  },
+  regularBorderRadius: {
+    borderRadius: theme.border.radius.regular,
   },
   standardTransportationIconBox: {
     padding: theme.spacing.small,

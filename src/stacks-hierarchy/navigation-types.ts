@@ -42,8 +42,8 @@ type FareContractDetailsRouteParams = {
 };
 
 type TicketInformationScreenParams = {
-  fareProductTypeConfigType: string;
-  preassignedFareProductId: string | undefined;
+  selection?: PurchaseSelectionType;
+  shouldShowFlexTicketDiscountInfo?: boolean;
 };
 
 export type Root_LoginOptionsScreenParams = {

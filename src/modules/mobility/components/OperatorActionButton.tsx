@@ -3,7 +3,6 @@ import {showAppMissingAlert} from '../show-app-missing-alert';
 import React, {useCallback} from 'react';
 import {Button} from '@atb/components/button';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {ActivityIndicator, Linking} from 'react-native';
 import {useValueCodeMutation} from '../queries/use-value-code-mutation';
@@ -12,11 +11,13 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useThemeContext} from '@atb/theme';
 import {useBuyValueCodeWithBonusPointsMutation} from '@atb/modules/bonus';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
+import {stringifyUrl} from '@atb/api/utils';
+import {useOperators} from '../use-operators';
+import {useOperatorBenefit} from '../use-operator-benefit';
 
 type OperatorActionButtonProps = {
   operatorId: string | undefined;
   operatorName: string;
-  benefit: OperatorBenefitType | undefined;
   appStoreUri: string | undefined;
   rentalAppUri: string;
   isBonusPayment?: boolean;
@@ -26,7 +27,6 @@ type OperatorActionButtonProps = {
 export const OperatorActionButton = ({
   operatorId,
   operatorName,
-  benefit,
   appStoreUri,
   rentalAppUri,
   isBonusPayment,
@@ -36,22 +36,28 @@ export const OperatorActionButton = ({
   const {logEvent} = useBottomSheetContext();
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
+  const operator = useOperators().byId(operatorId);
+  const {operatorBenefit} = useOperatorBenefit(operatorId);
+  const extendedRentalAppUri = stringifyUrl(
+    rentalAppUri,
+    operator?.rentalAppUriQueryParams,
+  );
 
   const {
     isUserEligibleForBenefit,
     benefitRequiresValueCodeToUnlock,
     isLoading: isLoadingEligible,
-  } = useIsEligibleForBenefit(benefit);
+  } = useIsEligibleForBenefit(operatorBenefit);
 
   const {
     mutateAsync: fetchValueCode,
-    isLoading: isFetchingValueCode,
+    isPending: isFetchingValueCode,
     isError: isFetchingValueCodeError,
   } = useValueCodeMutation(operatorId);
 
   const {
     mutateAsync: buyBonusProduct,
-    isLoading: isBuyingValueCode,
+    isPending: isBuyingValueCode,
     isError: isBuyingValueCodeError,
   } = useBuyValueCodeWithBonusPointsMutation(bonusProductId);
 
@@ -67,8 +73,8 @@ export const OperatorActionButton = ({
     (isBonusPayment ? isBuyingValueCodeError : isFetchingValueCodeError);
 
   const buttonText =
-    isUserEligibleForBenefit && benefit?.callToAction?.name
-      ? (getTextForLanguage(benefit.callToAction.name, language) ??
+    isUserEligibleForBenefit && operatorBenefit?.callToAction?.name
+      ? (getTextForLanguage(operatorBenefit.callToAction.name, language) ??
         t(MobilityTexts.operatorAppSwitchButton(operatorName)))
       : t(MobilityTexts.operatorAppSwitchButton(operatorName));
 
@@ -76,7 +82,7 @@ export const OperatorActionButton = ({
     async (url: string, valueCode?: string) => {
       logEvent('Mobility', 'Open operator app', {
         operatorName,
-        benefit,
+        operatorBenefit,
         isUserEligibleForBenefit,
         valueCode,
         isBonusPayment,
@@ -89,7 +95,7 @@ export const OperatorActionButton = ({
     [
       logEvent,
       operatorName,
-      benefit,
+      operatorBenefit,
       isUserEligibleForBenefit,
       appStoreUri,
       isBonusPayment,
@@ -98,11 +104,11 @@ export const OperatorActionButton = ({
 
   const buildUrlWithValueCode = useCallback(
     (valueCode?: string) => {
-      let url = rentalAppUri;
-      if (benefit?.callToAction.url) {
+      let url = extendedRentalAppUri;
+      if (operatorBenefit?.callToAction.url) {
         // Benefit urls can contain variables to be re replaced runtime, e.g. '{APP_URL}?voucherCode={VOUCHER_CODE}'
-        url = replaceTokens(benefit.callToAction.url, {
-          APP_URL: rentalAppUri,
+        url = replaceTokens(operatorBenefit.callToAction.url, {
+          APP_URL: extendedRentalAppUri,
           VALUE_CODE: valueCode,
         });
         // If callToAction.url is e.g. '{APP_URL}?voucherCode={VOUCHER_CODE}' the APP_URL token will now
@@ -114,7 +120,7 @@ export const OperatorActionButton = ({
 
       return url;
     },
-    [rentalAppUri, benefit],
+    [extendedRentalAppUri, operatorBenefit],
   );
 
   const buttonOnPress = useCallback(async () => {
@@ -130,7 +136,7 @@ export const OperatorActionButton = ({
         setIsBonusPayment && setIsBonusPayment(false);
       }
     } else {
-      await openAppURL(rentalAppUri);
+      await openAppURL(extendedRentalAppUri);
     }
   }, [
     needsValueCode,
@@ -139,7 +145,7 @@ export const OperatorActionButton = ({
     fetchValueCode,
     buildUrlWithValueCode,
     openAppURL,
-    rentalAppUri,
+    extendedRentalAppUri,
     setIsBonusPayment,
   ]);
 

@@ -1,22 +1,36 @@
-import React, {useCallback, PropsWithChildren, useRef, useMemo} from 'react';
+import React, {
+  useCallback,
+  PropsWithChildren,
+  useRef,
+  useMemo,
+  useState,
+} from 'react';
 import BottomSheetGor, {
-  BottomSheetView,
   BottomSheetBackdrop,
+  BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
-import {Dimensions, Platform, View} from 'react-native';
+import {Platform, useWindowDimensions, View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PressableOpacity} from '../pressable-opacity';
 import {SvgProps} from 'react-native-svg';
 import {ThemeText} from '../text';
 import {ThemeIcon} from '../theme-icon';
-import {MapButtons, shadows, useMapContext} from '@atb/modules/map';
+import {
+  MapBottomSheetType,
+  MapButtons,
+  shadows,
+  useMapContext,
+} from '@atb/modules/map';
 import {BottomSheetTopPositionBridge} from './BottomSheetTopPositionBridge';
 import Animated, {
+  ReduceMotion,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
 import {BrandingImage} from '@atb/modules/mobility';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {toNum} from './utils';
 
 export type BottomSheetProps = PropsWithChildren<{
   snapPoints?: Array<string | number>;
@@ -33,7 +47,11 @@ export type BottomSheetProps = PropsWithChildren<{
   rightIconText?: string;
   enablePanDownToClose?: boolean;
   locationArrowOnPress: () => void;
+  canMinimize?: boolean;
+  headerNode?: React.ReactNode;
 }>;
+
+const isOldAndroid = Platform.OS === 'android' && Platform.Version <= 28;
 
 export const MapBottomSheet = ({
   snapPoints,
@@ -51,14 +69,19 @@ export const MapBottomSheet = ({
   rightIconText,
   enablePanDownToClose = true,
   locationArrowOnPress,
+  canMinimize = false,
+  headerNode,
 }: BottomSheetProps) => {
   const styles = useStyles();
   const bottomSheetGorRef = useRef<BottomSheetGor>(null);
   const {theme} = useThemeContext();
   const sheetTopPosition = useSharedValue(0);
-  const {setPaddingBottomMap} = useMapContext();
-  const {height: screenHeight} = Dimensions.get('screen');
+  const {setPaddingBottomMap, setCurrentBottomSheet, mapState} =
+    useMapContext();
+  const {height: screenHeight} = useWindowDimensions();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
+  const {top: safeAreaTop} = useSafeAreaInsets();
+  const [headerHeight, setHeaderHeight] = useState(0);
 
   const aStyle = useAnimatedStyle(() => {
     return {
@@ -106,6 +129,77 @@ export const MapBottomSheet = ({
     );
   }, [aStyle, locationArrowOnPress]);
 
+  const HeaderComp = () => {
+    return (
+      (heading || rightIconText) && (
+        <View style={styles.headerContainer}>
+          <View style={styles.headerContent}>
+            <View style={styles.headerLeft}>
+              {heading && (
+                <>
+                  {logoUrl && <BrandingImage logoUrl={logoUrl} logoSize={28} />}
+                  <View style={styles.headingWrapper}>
+                    <ThemeText typography="heading__xl">{heading}</ThemeText>
+                    {subText && (
+                      <ThemeText
+                        typography="body__s"
+                        color={theme.color.foreground.dynamic.secondary}
+                      >
+                        {subText}
+                      </ThemeText>
+                    )}
+                  </View>
+                </>
+              )}
+            </View>
+
+            {(rightIconText || rightIcon) && (
+              <PressableOpacity
+                style={styles.headerRight}
+                onPress={() => bottomSheetGorRef.current?.close()}
+              >
+                {rightIconText && (
+                  <ThemeText typography="body__s__strong">
+                    {rightIconText}
+                  </ThemeText>
+                )}
+                {rightIcon && <ThemeIcon svg={rightIcon} />}
+              </PressableOpacity>
+            )}
+          </View>
+          {!!headerNode && (
+            <View style={styles.headerNodeContainer}>{headerNode}</View>
+          )}
+        </View>
+      )
+    );
+  };
+
+  const computedSnapPoints = useMemo(() => {
+    if (!canMinimize) return snapPoints;
+
+    const prevSnapPoints = snapPoints ? snapPoints : [];
+
+    const handleVerticalSize =
+      toNum(styles.handleIndicatorStyle?.height) +
+      toNum(styles.handleStyle?.paddingTop) +
+      toNum(styles.handleStyle?.paddingBottom);
+
+    const minSnap = Math.max(
+      headerHeight + handleVerticalSize + theme.spacing.xSmall,
+    );
+
+    return [minSnap, ...prevSnapPoints];
+  }, [
+    canMinimize,
+    headerHeight,
+    snapPoints,
+    styles.handleIndicatorStyle?.height,
+    styles.handleStyle?.paddingBottom,
+    styles.handleStyle?.paddingTop,
+    theme.spacing.xSmall,
+  ]);
+
   return (
     <>
       {HeaderOverlay}
@@ -113,7 +207,7 @@ export const MapBottomSheet = ({
         ref={bottomSheetGorRef}
         handleIndicatorStyle={styles.handleIndicatorStyle}
         handleStyle={styles.handleStyle}
-        snapPoints={snapPoints}
+        snapPoints={computedSnapPoints}
         enableDynamicSizing={enableDynamicSizing}
         backdropComponent={allowBackgroundTouch ? undefined : renderBackdrop}
         enablePanDownToClose={enablePanDownToClose}
@@ -124,51 +218,52 @@ export const MapBottomSheet = ({
           if (toIndex === -1) {
             closeCallback?.();
             setPaddingBottomMap(0);
+            setCurrentBottomSheet({
+              isFullyOpen: false,
+              bottomSheetType: MapBottomSheetType.None,
+              feature: null,
+            });
           } else {
             setPaddingBottomMap(screenHeight - toPosition + tabBarMinHeight);
           }
         }}
+        onChange={(index) => {
+          if (index !== -1) {
+            setCurrentBottomSheet({
+              isFullyOpen: true,
+              bottomSheetType: mapState.bottomSheetType,
+              feature: mapState.feature ?? null,
+            });
+          }
+        }}
         accessible={false}
+        maxDynamicContentSize={screenHeight - safeAreaTop - headerHeight}
+        index={canMinimize ? 1 : 0}
+        overrideReduceMotion={ReduceMotion.Never}
       >
         <BottomSheetTopPositionBridge sheetTopPosition={sheetTopPosition} />
-        <BottomSheetView style={styles.contentContainer}>
-          {(heading || rightIconText) && (
-            <View style={styles.headerContainer}>
-              {heading && (
-                <View style={styles.headerLeft}>
-                  {logoUrl && <BrandingImage logoUrl={logoUrl} logoSize={20} />}
-                  <View style={styles.headingWrapper}>
-                    <ThemeText typography="heading--big">{heading}</ThemeText>
-                    {subText && (
-                      <ThemeText
-                        typography="body__secondary"
-                        color={theme.color.foreground.dynamic.secondary}
-                      >
-                        {subText}
-                      </ThemeText>
-                    )}
-                  </View>
-                </View>
-              )}
-
-              {(rightIconText || rightIcon) && (
-                <PressableOpacity
-                  style={styles.headerRight}
-                  onPress={() => bottomSheetGorRef.current?.close()}
-                >
-                  {rightIconText && (
-                    <ThemeText typography="body__secondary--bold">
-                      {rightIconText}
-                    </ThemeText>
-                  )}
-                  {rightIcon && <ThemeIcon svg={rightIcon} />}
-                </PressableOpacity>
-              )}
+        {enableDynamicSizing ? (
+          <BottomSheetScrollView
+            style={styles.contentContainer}
+            keyboardShouldPersistTaps="handled"
+          >
+            <View
+              onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}
+            >
+              <HeaderComp />
             </View>
-          )}
-
-          {children}
-        </BottomSheetView>
+            {children}
+          </BottomSheetScrollView>
+        ) : (
+          <>
+            <View
+              onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}
+            >
+              <HeaderComp />
+            </View>
+            {children}
+          </>
+        )}
       </BottomSheetGor>
     </>
   );
@@ -180,27 +275,37 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   sheet: {
     backgroundColor: theme.color.background.neutral[1].background,
-    ...shadows,
+    ...(isOldAndroid ? {...shadows, elevation: 0} : shadows),
   },
   headerContainer: {
+    flexDirection: 'column',
+  },
+  headerContent: {
     flexDirection: 'row',
-    paddingHorizontal: theme.spacing.medium,
-    paddingBottom: theme.spacing.medium,
     gap: theme.spacing.small,
+    paddingBottom: theme.spacing.medium,
+    paddingRight: theme.spacing.medium,
+  },
+  headerNodeContainer: {
+    flex: 1,
+    paddingLeft: theme.spacing.medium,
+    paddingRight: theme.spacing.medium,
+    paddingBottom: theme.spacing.medium,
   },
   headerLeft: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.medium,
+    paddingLeft: theme.spacing.large,
   },
   headingWrapper: {
     gap: theme.spacing.xSmall,
   },
-
   headerRight: {
     flexDirection: 'row',
     gap: theme.spacing.xSmall,
+    paddingRight: theme.spacing.medium,
   },
   logo: {
     marginEnd: theme.spacing.small,
@@ -208,10 +313,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   handleIndicatorStyle: {
     backgroundColor: theme.color.foreground.inverse.secondary,
     width: 75,
-    height: 8,
+    height: 6,
   },
   handleStyle: {
-    paddingBottom: theme.spacing.medium,
-    paddingTop: theme.spacing.xSmall,
+    paddingTop: theme.spacing.small,
   },
 }));

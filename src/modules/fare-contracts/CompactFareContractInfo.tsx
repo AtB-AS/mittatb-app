@@ -82,31 +82,27 @@ const CompactFareContractInfoTexts = (
 
   return (
     <View style={styles.textsContainer}>
-      <ThemeText typography="body__primary--bold" style={styles.expireTime}>
+      <ThemeText typography="body__m__strong" style={styles.expireTime}>
         {timeUntilExpire}
       </ThemeText>
       {firstTravelRight.travelerName ? (
-        <ThemeText typography="body__secondary" color="secondary">
+        <ThemeText typography="body__s" color="secondary">
           {firstTravelRight.travelerName}
         </ThemeText>
       ) : (
         userProfilesWithCount.map((u) => (
-          <ThemeText key={u.id} typography="body__secondary" color="secondary">
+          <ThemeText key={u.id} typography="body__s" color="secondary">
             {userProfileCountAndName(u, language)}
           </ThemeText>
         ))
       )}
       {productName && (
-        <ThemeText
-          typography="body__secondary"
-          color="secondary"
-          testID="productName"
-        >
+        <ThemeText typography="body__s" color="secondary" testID="productName">
           {productName}
         </ThemeText>
       )}
       {fareZoneSummary && (
-        <ThemeText typography="body__secondary" color="secondary">
+        <ThemeText typography="body__s" color="secondary">
           {fareZoneSummary}
         </ThemeText>
       )}

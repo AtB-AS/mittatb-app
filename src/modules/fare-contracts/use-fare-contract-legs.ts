@@ -23,7 +23,7 @@ export function useFareContractLegs(
     queryFn: async () =>
       getDatedServiceJourney(dsjRefs?.datedServiceJourneyRef),
     staleTime: ONE_MINUTE_MS,
-    cacheTime: 30 * ONE_SECOND_MS,
+    gcTime: 30 * ONE_SECOND_MS,
     refetchOnMount: 'always',
     retry: 3,
     enabled: !!dsjRefs,

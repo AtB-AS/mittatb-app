@@ -1,7 +1,13 @@
 import React from 'react';
-import {AccessibilityProps, ActivityIndicator, View} from 'react-native';
+import {
+  AccessibilityInfo,
+  AccessibilityProps,
+  ActivityIndicator,
+  Platform,
+  View,
+} from 'react-native';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
-import {screenReaderPause, ThemeText} from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
@@ -16,7 +22,6 @@ import {dictionary, useTranslation} from '@atb/translations';
 type Props = SectionItemProps<{
   text: string;
   subtext?: string;
-  hideSubtext?: boolean;
   onPress(checked: boolean): void;
   leftIcon?: (props: SvgProps) => React.JSX.Element;
   selected: boolean;
@@ -32,7 +37,6 @@ type Props = SectionItemProps<{
 export function RadioSectionItem({
   text,
   subtext,
-  hideSubtext,
   onPress,
   leftIcon,
   selected,
@@ -58,18 +62,26 @@ export function RadioSectionItem({
 
   const selectedRadioColor = color.outline.background;
 
-  const a11yLabel =
-    (accessibilityLabel || `${text}, ${hideSubtext ? '' : subtext}`) +
-    screenReaderPause +
-    t(selected ? dictionary.selected : dictionary.unselected);
+  const a11yLabel = accessibilityLabel || `${text}, ${subtext || ''}`;
 
   return (
     <View style={[style.spaceBetween, topContainer]}>
       <PressableOpacity
-        onPress={() => onPress(!selected)}
+        onPress={() => {
+          // Talkback doesn't read out the updated state automatically, so we
+          // trigger it manually instead.
+          if (Platform.OS === 'android' && !selected) {
+            AccessibilityInfo.announceForAccessibility(t(dictionary.selected));
+          }
+          onPress(!selected);
+        }}
         style={styles.mainContent}
         testID={testID}
+        // There is a bug in React Native where `accessibilityRole="radio"`
+        // doesn't work consistently with VoiceOver. Using "button" until it's
+        // fixed: https://github.com/facebook/react-native/issues/43266
         accessibilityRole="button"
+        accessibilityState={{selected: !!selected}}
         accessibilityLabel={a11yLabel}
         accessibilityHint={accessibilityHint}
       >
@@ -79,15 +91,15 @@ export function RadioSectionItem({
         {leftIcon && <ThemeIcon svg={leftIcon} style={styles.leftIcon} />}
         <View style={styles.textContainer}>
           <ThemeText
-            typography="body__primary"
+            typography="body__m"
             style={[contentContainer, {color: textColor}]}
             testID={`${testID}Text`}
           >
             {text}
           </ThemeText>
-          {subtext && !hideSubtext && (
+          {subtext && (
             <ThemeText
-              typography="body__secondary"
+              typography="body__s"
               color="secondary"
               style={{marginTop: theme.spacing.small}}
               testID={`${testID}SubText`}

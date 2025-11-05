@@ -19,7 +19,7 @@ export const IconText = ({svg, text}: Props) => {
           svg={svg}
         />
       )}
-      <ThemeText typography="body__primary--bold">{text}</ThemeText>
+      <ThemeText typography="body__m__strong">{text}</ThemeText>
     </View>
   );
 };

@@ -22,15 +22,11 @@ export const UsedAccessesSectionItem = ({usedAccesses}: Props) => {
 
   return (
     <View style={topContainer} accessible={true}>
-      <ThemeText typography="body__secondary">
+      <ThemeText typography="body__s">
         {t(FareContractTexts.details.usedAccesses)}
       </ThemeText>
       {dateStrings.map((dateString) => (
-        <ThemeText
-          key={dateString}
-          typography="body__secondary"
-          color="secondary"
-        >
+        <ThemeText key={dateString} typography="body__s" color="secondary">
           {dateString}
         </ThemeText>
       ))}

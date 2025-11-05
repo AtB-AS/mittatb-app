@@ -23,22 +23,19 @@ export const MapButtons = ({
   const {mapState} = useMapContext();
   const mapFilterIsOpen =
     mapState.bottomSheetType === MapBottomSheetType.Filter;
-  const sheetSelected = mapState.bottomSheetType !== MapBottomSheetType.None;
   const selectedFeature = mapState.feature;
   const selectedFeatureIsAVehicle =
     isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
 
   const {data: activeShmoBooking, isLoading: activeShmoBookingIsLoading} =
     useActiveShmoBookingQuery();
-  const {isShmoDeepIntegrationEnabled, isMapV2Enabled} =
-    useFeatureTogglesContext();
+  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
   const {isMutating: initShmoOneStopBookingIsMutating} =
     useInitShmoBookingMutationStatus();
 
   const showScanButton =
     isShmoDeepIntegrationEnabled &&
-    isMapV2Enabled &&
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle) &&
@@ -46,7 +43,7 @@ export const MapButtons = ({
     !mapFilterIsOpen;
 
   const showMapFilterButton =
-    !sheetSelected && !activeShmoBooking && !activeShmoBookingIsLoading;
+    mapState.bottomSheetType === MapBottomSheetType.None;
 
   return (
     <>

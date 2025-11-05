@@ -12,7 +12,7 @@ import {localLogger, remoteLogger} from './abtClientLogger';
 import {tokenService} from './tokenService';
 import {HALF_DAY_MS} from '@atb/utils/durations';
 import {Platform} from 'react-native';
-const CONTEXT_ID = 'main';
+export const CONTEXT_ID = 'main';
 
 /**
  * Decides which error handling strategy should use the SDK-suggested solution)
@@ -72,7 +72,10 @@ export const mobileTokenClient = {
       CONTEXT_ID,
       token.tokenId,
       [],
-      tokenActions ?? [TokenAction.TOKEN_ACTION_TICKET_INSPECTION],
+      tokenActions ?? [
+        TokenAction.TOKEN_ACTION_TICKET_INSPECTION,
+        TokenAction.TOKEN_ACTION_IDENTIFICATION,
+      ],
       false,
     ),
   clear: () => abtClient.clearToken(CONTEXT_ID),

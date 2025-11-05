@@ -162,7 +162,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
             style={styles.inputMainContent}
           >
             {label && (
-              <ThemeText typography="body__secondary" style={styles.label}>
+              <ThemeText typography="body__s" style={styles.label}>
                 {label}
               </ThemeText>
             )}
@@ -279,7 +279,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   },
   inputPhoneNumber: {
     color: theme.color.foreground.dynamic.primary,
-    fontSize: theme.typography.body__primary.fontSize,
+    fontSize: theme.typography.body__m.fontSize,
     flex: 1,
   },
   expandIcon: {

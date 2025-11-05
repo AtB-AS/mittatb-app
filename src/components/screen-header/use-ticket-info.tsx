@@ -8,13 +8,7 @@ import {
 } from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 
-type TicketInfoParams = {
-  fareProductTypeConfigType: string;
-  preassignedFareProductId: string;
-};
-
 type TicketInfo = {
-  ticketInfoParams: TicketInfoParams | undefined;
   fareContract: FareContractType | undefined;
   preassignedFareProduct: PreassignedFareProduct | undefined;
 };
@@ -30,13 +24,7 @@ export const useTicketInfo = (fareContractId: string): TicketInfo => {
     firstTravelRight?.fareProductRef || '',
   );
 
-  const ticketInfoParams = preassignedFareProduct && {
-    fareProductTypeConfigType: preassignedFareProduct?.type,
-    preassignedFareProductId: preassignedFareProduct?.id,
-  };
-
   return {
-    ticketInfoParams,
     fareContract,
     preassignedFareProduct,
   };

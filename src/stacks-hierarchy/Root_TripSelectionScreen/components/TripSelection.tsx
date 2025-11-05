@@ -96,7 +96,7 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
 
   return (
     <PressableOpacity
-      disabled={tripPattern.booking.availability !== 'available'}
+      disabled={!isAvailable}
       onPress={onPress}
       style={[
         styles.container,
@@ -168,13 +168,13 @@ function EmptyState() {
     <View style={{justifyContent: 'center', alignItems: 'center'}}>
       <ThemedOnBehalfOf />
       <ThemeText
-        typography="body__primary--bold"
+        typography="body__m__strong"
         color={theme.color.foreground.dynamic.secondary}
       >
         {t(TicketingTexts.booking.cannotFindDepartures)}
       </ThemeText>
       <ThemeText
-        typography="body__secondary"
+        typography="body__s"
         color={theme.color.foreground.dynamic.secondary}
       >
         {t(TicketingTexts.booking.adjustTime)}

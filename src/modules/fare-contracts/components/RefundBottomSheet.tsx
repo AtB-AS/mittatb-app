@@ -82,7 +82,7 @@ export const RefundBottomSheet = ({orderId, fareProductType, state}: Props) => {
           text={t(FareContractTexts.refund.confirm)}
           disabled={!refundOptions?.isRefundable}
           loading={
-            refundStatus === 'loading' || refundOptionsStatus === 'loading'
+            refundStatus === 'pending' || refundOptionsStatus === 'pending'
           }
           interactiveColor={theme.color.interactive.destructive}
         />

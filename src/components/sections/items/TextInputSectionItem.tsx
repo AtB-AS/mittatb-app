@@ -122,7 +122,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         ]}
         onAccessibilityEscape={accessibilityEscapeKeyboard}
       >
-        <ThemeText typography="body__secondary" style={styles.label}>
+        <ThemeText typography="body__s" style={styles.label}>
           {label}
         </ThemeText>
         <View
@@ -133,7 +133,13 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         >
           <InternalTextInput
             ref={combinedRef}
-            style={[styles.input, style]}
+            style={[
+              styles.input,
+              style,
+              props.multiline && {
+                minHeight: theme.typography.body__m.lineHeight * 3,
+              },
+            ]}
             placeholderTextColor={theme.color.foreground.dynamic.secondary}
             onFocus={onFocusEvent}
             onBlur={onBlurEvent}
@@ -177,8 +183,8 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     color: theme.color.foreground.dynamic.primary,
     paddingRight: 40,
     paddingVertical: 0,
-
-    fontSize: theme.typography.body__primary.fontSize,
+    textAlignVertical: 'top',
+    fontSize: theme.typography.body__m.fontSize,
   },
   container: {
     backgroundColor: theme.color.background.neutral[0].background,

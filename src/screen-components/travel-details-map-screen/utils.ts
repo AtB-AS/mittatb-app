@@ -6,7 +6,7 @@ import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {MapLeg} from '@atb/modules/map';
+import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
 import {Coordinates} from '@atb/utils/coordinates';
 import {CameraBounds} from '@rnmapbox/maps';
 import {AnyMode} from '@atb/components/icon-box';
@@ -49,8 +49,10 @@ export function getMapBounds(features: MapLine[]): CameraBounds {
   };
 }
 
-export function createMapLines(legs: MapLeg[]): MapLine[] {
-  return legs
+export function createMapLines(
+  serviceJourneyPolylines: ServiceJourneyPolyline[],
+): MapLine[] {
+  return serviceJourneyPolylines
     .filter((leg) => leg.pointsOnLink?.points?.trim()?.length) // only include legs with line geometry
     .map((leg) => {
       const line = polyline.toGeoJSON(leg.pointsOnLink!.points!);

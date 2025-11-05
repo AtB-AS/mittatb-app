@@ -5,7 +5,7 @@ import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
@@ -61,10 +61,10 @@ export const FinishedScooterSheet = ({
           {!isLoading && !isError && shmoBooking && (
             <>
               <View style={styles.footer}>
-                <ScrollView style={styles.container}>
+                <View style={styles.container}>
                   <Section>
                     <GenericSectionItem style={styles.finishingHeader}>
-                      <ThemeText typography="body__primary--big--bold">
+                      <ThemeText typography="heading__xl">
                         {t(FareContractTexts.shmoDetails.tripEnded())}
                       </ThemeText>
                     </GenericSectionItem>
@@ -78,7 +78,7 @@ export const FinishedScooterSheet = ({
                       withHeader={true}
                     />
                   </Section>
-                </ScrollView>
+                </View>
                 <Button
                   mode="primary"
                   active={false}

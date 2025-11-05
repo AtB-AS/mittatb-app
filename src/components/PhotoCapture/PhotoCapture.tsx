@@ -51,6 +51,7 @@ export const PhotoCapture = ({
 
   return (
     <ScreenContainer
+      overrideThemeName="dark"
       leftHeaderButton={{type: 'back', withIcon: true}}
       title={title}
       secondaryText={secondaryText}

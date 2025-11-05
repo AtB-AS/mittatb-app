@@ -246,11 +246,17 @@ const FareContractTexts = {
   },
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>
-      _(
-        `${count} enkeltbilletter gjenstår`,
-        `${count} single ticket(s) left`,
-        `${count} enkeltbillettar att`,
-      ),
+      count === 1
+        ? _(
+            `${count} enkeltbillett gjenstår`,
+            `${count} single ticket left`,
+            `${count} enkeltbillett att`,
+          )
+        : _(
+            `${count} enkeltbilletter gjenstår`,
+            `${count} single tickets left`,
+            `${count} enkeltbillettar att`,
+          ),
     activateCarnet: _(
       'Aktiver enkeltbillett',
       'Activate single ticket',
@@ -280,6 +286,17 @@ const FareContractTexts = {
       'En feil har oppstått under aktivering av billetten. Vennligst prøv igjen.',
       'An error occurred while activating the ticket. Please try again.',
       'Ein feil har oppstått under aktivering av billetten. Ver venleg og prøv igjen.',
+    ),
+    nextConsumptionDayMessage: (date: string, clock: string) =>
+      _(
+        `Du får nye billetter ${date}, kl. ${clock}`,
+        `You will get new tickets on ${date}, at ${clock}`,
+        `Du får nye billettar ${date}, kl. ${clock}`,
+      ),
+    consumableInformationError: _(
+      'Klarte ikke å hente billettene dine.',
+      'Could not fetch your tickets.',
+      'Klarte ikkje å hente billettane dine.',
     ),
   },
   school: {

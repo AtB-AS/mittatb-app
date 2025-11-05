@@ -21,7 +21,7 @@ export function FareContractDetailItem({
   return (
     <View style={styles.container}>
       {header && (
-        <ThemeText typography="body__secondary" color={textColor}>
+        <ThemeText typography="body__s" color={textColor}>
           {header}
         </ThemeText>
       )}

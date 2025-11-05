@@ -27,7 +27,7 @@ const ThemeTextMeta: Meta<ThemeTextMetaProps> = {
     ...themedStoryControls,
   },
   args: {
-    typography: 'body__primary',
+    typography: 'body__m',
     isMarkdown: false,
     type: 'primary',
     children: 'Hello world',

@@ -18,6 +18,11 @@ import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {MobilitySingleBenefitInfoSectionItem} from '@atb/modules/mobility';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import {FlexTicketDiscountInfo} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FlexTicketDiscountInfo';
+import React from 'react';
+import {useParamAsState} from '@atb/utils/use-param-as-state';
+import {useOfferState} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-state';
+import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 
 type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;
 
@@ -28,17 +33,23 @@ export const Root_TicketInformationScreen = (props: Props) => {
   const themeColor = theme.color.background.accent[0];
   const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const [selection] = useParamAsState(props.route.params.selection);
+  const preassignedFareProductAlternatives = useProductAlternatives(selection);
+  const {userProfilesWithCountAndOffer} = useOfferState(
+    preassignedFareProductAlternatives,
+    selection,
+  );
 
   const {isTipsAndInformationEnabled} = useFeatureTogglesContext();
   const {benefits} = useOperatorBenefitsForFareProduct(
-    props.route.params.preassignedFareProductId,
+    selection?.preassignedFareProduct.id,
   );
 
   const fareProductTypeConfig = fareProductTypeConfigs.find(
-    (f) => f.type === props.route.params.fareProductTypeConfigType,
+    (f) => f.type === selection?.fareProductTypeConfig.type,
   );
   const preassignedFareProduct = preassignedFareProducts.find(
-    (p) => p.id === props.route.params.preassignedFareProductId,
+    (p) => p.id === selection?.preassignedFareProduct.id,
   );
 
   return (
@@ -52,10 +63,9 @@ export const Root_TicketInformationScreen = (props: Props) => {
       contentColor={themeColor}
     >
       <ScrollView contentContainerStyle={styles.container}>
-        {preassignedFareProduct?.productDescription && (
+        {preassignedFareProduct && (
           <>
             <ContentHeading
-              color={themeColor}
               text={t(
                 PurchaseOverviewTexts.ticketInformation.informationDetails
                   .descriptionHeading,
@@ -70,7 +80,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
                         iconSize="xSmall"
                         modes={fareProductTypeConfig?.transportModes}
                       />
-                      <ThemeText typography="body__primary--bold">
+                      <ThemeText typography="body__m__strong">
                         {getTextForLanguage(
                           fareProductTypeConfig.name,
                           language,
@@ -78,7 +88,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
                       </ThemeText>
                     </View>
                   )}
-                  <ThemeText typography="body__secondary" isMarkdown={true}>
+                  <ThemeText typography="body__s" isMarkdown={true}>
                     {getTextForLanguage(
                       preassignedFareProduct.productDescription,
                       language,
@@ -92,10 +102,14 @@ export const Root_TicketInformationScreen = (props: Props) => {
             </Section>
           </>
         )}
+        {props.route.params.shouldShowFlexTicketDiscountInfo && (
+          <FlexTicketDiscountInfo
+            userProfiles={userProfilesWithCountAndOffer}
+          />
+        )}
         {isTipsAndInformationEnabled && (
           <>
             <ContentHeading
-              color={themeColor}
               text={t(
                 PurchaseOverviewTexts.ticketInformation.informationDetails
                   .tipsInformation,

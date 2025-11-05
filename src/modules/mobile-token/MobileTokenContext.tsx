@@ -195,13 +195,15 @@ export const MobileTokenContextProvider = ({children}: Props) => {
     logToBugsnag('Invalidating list tokens query after token change', {
       tokenId: nativeToken?.tokenId,
     });
-    queryClient.invalidateQueries([
-      MOBILE_TOKEN_QUERY_KEY,
-      LIST_REMOTE_TOKENS_QUERY_KEY,
-      userId,
-      nativeToken?.tokenId,
-      secureContainer,
-    ]);
+    queryClient.invalidateQueries({
+      queryKey: [
+        MOBILE_TOKEN_QUERY_KEY,
+        LIST_REMOTE_TOKENS_QUERY_KEY,
+        userId,
+        nativeToken?.tokenId,
+        secureContainer,
+      ],
+    });
   }, [queryClient, userId, nativeToken?.tokenId, secureContainer]);
 
   /**
@@ -218,7 +220,7 @@ export const MobileTokenContextProvider = ({children}: Props) => {
    * - `token_timeout_in_seconds`: Timeout duration from remote config.
    */
   useEffect(() => {
-    if (nativeTokenStatus === 'loading') {
+    if (nativeTokenStatus === 'pending') {
       cancelTimeoutHandler = timeoutHandler(() => {
         // When timeout has occured, we notify errors in Bugsnag
         // and set state that indicates timeout.
@@ -287,14 +289,16 @@ export const MobileTokenContextProvider = ({children}: Props) => {
         isInspectable,
         retry: useCallback(() => {
           Bugsnag.leaveBreadcrumb('Retrying mobile token load');
-          queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]);
+          queryClient.resetQueries({queryKey: [MOBILE_TOKEN_QUERY_KEY]});
         }, [queryClient]),
         clearTokenAtLogout: useCallback(() => {
           setIsLoggingOut(true);
           return wipeToken(
             nativeToken ? [nativeToken.tokenId] : [],
             uuid(),
-          ).then(() => queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]));
+          ).then(() =>
+            queryClient.resetQueries({queryKey: [MOBILE_TOKEN_QUERY_KEY]}),
+          );
         }, [queryClient, nativeToken]),
         getTokenToggleDetails,
         nativeToken,
@@ -324,7 +328,10 @@ export const MobileTokenContextProvider = ({children}: Props) => {
           wipeToken: useCallback(
             () =>
               wipeToken(nativeToken ? [nativeToken.tokenId] : [], uuid()).then(
-                () => queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]),
+                () =>
+                  queryClient.resetQueries({
+                    queryKey: [MOBILE_TOKEN_QUERY_KEY],
+                  }),
               ),
             [queryClient, nativeToken],
           ),
@@ -428,13 +435,13 @@ const useMobileTokenStatus = (
   if (isRenewingOrResetting) return 'loading';
 
   switch (loadNativeTokenStatus) {
-    case 'loading':
+    case 'pending':
       return 'loading';
     case 'error':
       return enable_token_fallback ? fallbackStatus : 'error';
     case 'success':
       switch (remoteTokensStatus) {
-        case 'loading':
+        case 'pending':
           return 'loading';
         case 'error':
           return enable_token_fallback ? fallbackStatus : 'error';

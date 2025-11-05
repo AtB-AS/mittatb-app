@@ -67,7 +67,7 @@ export const SituationBottomSheet = forwardRef<View, Props>(
                       style={styles.summaryIcon}
                     />
                     <ThemeText
-                      typography="heading__title"
+                      typography="heading__m"
                       style={styles.summaryText}
                     >
                       {summary || description}
@@ -97,7 +97,7 @@ export const SituationBottomSheet = forwardRef<View, Props>(
                       style={styles.validityIcon}
                     />
                     <ThemeText
-                      typography="body__secondary"
+                      typography="body__s"
                       color="secondary"
                       style={styles.validityText}
                     >
@@ -179,7 +179,7 @@ const InfoLink = ({infoLink}: {infoLink: InfoLinkFragment}) => {
       accessibilityRole="link"
       style={styles.infoLink}
     >
-      <ThemeText typography="body__primary--underline" color="secondary">
+      <ThemeText typography="body__m__underline" color="secondary">
         {infoLink.label || t(dictionary.readMore)}
       </ThemeText>
     </PressableOpacity>

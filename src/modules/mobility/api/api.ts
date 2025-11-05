@@ -1,30 +1,26 @@
 import {client} from '@atb/api';
 import {OperatorBenefitId} from '@atb-as/config-specs/lib/mobility';
-import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {z} from 'zod';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
+import {RequestError, isErrorResponse} from '@atb/api/utils';
 
-const UserBenefits = z
-  .object({
-    operator: z.string(),
-    benefits: OperatorBenefitId.array(),
-  })
-  .transform((it) => ({
-    operator: it.operator,
-    benefitIds: it.benefits,
-  }));
+const VoucherBenefit = z.object({
+  operatorId: z.string(),
+  benefitTypes: OperatorBenefitId.array(),
+});
+export type VoucherBenefitType = z.infer<typeof VoucherBenefit>;
 
-export type UserBenefitsType = z.infer<typeof UserBenefits>;
-
-export const getBenefitsForUser = (): Promise<UserBenefitsType[]> => {
+export const getBenefitsForUser = (): Promise<VoucherBenefitType[]> => {
   return client
-    .get('/mobility/benefits', {
+    .get('/benefit/v1/voucher/customer-benefits', {
       authWithIdToken: true,
       skipErrorLogging: (error) => error.response?.status === 404,
     })
-    .then((response) => UserBenefits.array().parse(response.data ?? []))
-    .catch((error) => {
-      if (getAxiosErrorMetadata(error).responseStatus === 404) return [];
+    .then((response) => VoucherBenefit.array().parse(response.data ?? []))
+    .catch((e) => {
+      const error = e as RequestError;
+
+      if (isErrorResponse(error) && error.http.code === 404) return [];
       throw error;
     });
 };
@@ -34,8 +30,8 @@ export const getValueCode = (
 ): Promise<string | null> => {
   if (!operatorId) return Promise.resolve(null);
   return client
-    .post(
-      `/mobility/code/${operatorId}`,
+    .put(
+      `/benefit/v1/voucher/claim/${operatorId}`,
       {},
       {
         authWithIdToken: true,
@@ -45,21 +41,12 @@ export const getValueCode = (
     .then((response) => String(response.data.code));
 };
 
-const FareProductBenefitMapping = z.object({
-  operator: z.string(),
-  benefits: OperatorBenefitId.array(),
-});
-
-type FareProductBenefitMappingType = z.infer<typeof FareProductBenefitMapping>;
-
 export const getFareProductBenefits = (
   productId: PreassignedFareProduct['id'],
-): Promise<FareProductBenefitMappingType[]> => {
+): Promise<VoucherBenefitType[]> => {
   return client
-    .get(`/mobility/v1/benefits/${productId}`, {
+    .get(`/benefit/v1/voucher/${productId}`, {
       authWithIdToken: true,
     })
-    .then((response) =>
-      FareProductBenefitMapping.array().parse(response.data ?? []),
-    );
+    .then((response) => VoucherBenefit.array().parse(response.data ?? []));
 };

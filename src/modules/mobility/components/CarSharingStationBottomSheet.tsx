@@ -7,7 +7,7 @@ import {
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet} from '@atb/theme';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useCarSharingStation} from '../use-car-sharing-station';
 import {ThemeText} from '@atb/components/text';
@@ -80,7 +80,8 @@ export const CarSharingStationBottomSheet = ({
 
   return (
     <MapBottomSheet
-      snapPoints={['80%']}
+      canMinimize={true}
+      enablePanDownToClose={false}
       closeCallback={onClose}
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
@@ -100,7 +101,7 @@ export const CarSharingStationBottomSheet = ({
         )}
         {!isLoading && !isError && station && (
           <>
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
@@ -116,7 +117,7 @@ export const CarSharingStationBottomSheet = ({
                     style={styles.operatorNameAndLogo}
                   />
                   <View style={styles.stationText}>
-                    <ThemeText typography="body__secondary" color="secondary">
+                    <ThemeText typography="body__s" color="secondary">
                       {stationName}
                     </ThemeText>
                     <WalkingDistance distance={distance} />
@@ -163,12 +164,11 @@ export const CarSharingStationBottomSheet = ({
                   style={styles.payWithBonusPointsSection}
                 />
               )}
-            </ScrollView>
+            </View>
             {rentalAppUri && (
               <View style={styles.footer}>
                 <OperatorActionButton
                   operatorId={operatorId}
-                  benefit={operatorBenefit}
                   operatorName={operatorName}
                   appStoreUri={appStoreUri}
                   rentalAppUri={rentalAppUri}

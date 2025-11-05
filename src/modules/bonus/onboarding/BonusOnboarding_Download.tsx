@@ -3,7 +3,7 @@ import React from 'react';
 import {
   OnboardingCarouselScreenProps,
   OnboardingScreenComponent,
-  useNavigateToNextOnboardingCarouselScreen,
+  useOnboardingCarouselNavigation,
 } from '@atb/modules/onboarding';
 import {ThemedPushNotification} from '@atb/theme/ThemedAssets';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
@@ -20,7 +20,7 @@ export type DownloadScreenProps =
 
 export const BonusOnboarding_DownloadScreen = ({}: DownloadScreenProps) => {
   const {t} = useTranslation();
-  const navigateToNextScreen = useNavigateToNextOnboardingCarouselScreen(
+  const {navigateToNextScreen} = useOnboardingCarouselNavigation(
     bonusOnboardingId,
     'BonusOnboarding_DownloadScreen',
   );
@@ -79,10 +79,7 @@ export const DownloadButtons = () => {
               logoSize={50}
               style={styles.logo}
             />
-            <ThemeText
-              style={styles.operatorText}
-              typography="body__secondary--bold"
-            >
+            <ThemeText style={styles.operatorText} typography="body__s__strong">
               {mobilityOperators?.find((op) => op.id === operatorId)?.name}
             </ThemeText>
           </PressableOpacity>

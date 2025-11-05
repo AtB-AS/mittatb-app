@@ -17,7 +17,7 @@ export const useFetchOnBehalfOfAccountsQuery = ({enabled}: Params) => {
     queryFn: fetchOnBehalfOfAccounts,
     retry: 0,
     staleTime: HALF_DAY_MS,
-    cacheTime: HALF_DAY_MS,
+    gcTime: HALF_DAY_MS,
     enabled,
     select: (data) =>
       data.map(

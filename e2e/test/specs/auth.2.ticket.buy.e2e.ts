@@ -25,7 +25,7 @@ describe('Auth Buy Ticket', () => {
       await AuthenticationPage.loginWithPhone(phoneNumber);
       await OnboardingPage.denyLocationInOnboarding();
       await OnboardingPage.waitOnTokenOnboarding(false);
-      await ElementHelper.waitForElement('text', 'Travel search');
+      await ElementHelper.waitForElement('text', 'Find journey');
       await AppHelper.pause(2000);
 
       // Verify

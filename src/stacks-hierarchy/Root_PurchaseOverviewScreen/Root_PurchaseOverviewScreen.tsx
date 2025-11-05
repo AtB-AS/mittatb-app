@@ -14,8 +14,10 @@ import {StartTimeSelection} from './components/StartTimeSelection';
 import {Summary} from './components/Summary';
 import {TravellerSelection} from './components/TravellerSelection';
 import {type OfferError, useOfferState} from './use-offer-state';
-import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
-import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {
+  type RootStackParamList,
+  RootStackScreenProps,
+} from '@atb/stacks-hierarchy';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
 import {
@@ -75,7 +77,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
-  } = useOfferState(selection, preassignedFareProductAlternatives);
+  } = useOfferState(preassignedFareProductAlternatives, selection);
 
   const preassignedFareProduct =
     preassignedFareProductAlternatives.find(
@@ -97,9 +99,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   );
 
   const handleTicketInfoButtonPress = () => {
-    const parameters = {
-      fareProductTypeConfigType: selection.fareProductTypeConfig.type,
-      preassignedFareProductId: preassignedFareProduct.id,
+    const parameters: RootStackParamList['Root_TicketInformationScreen'] = {
+      selection,
+      shouldShowFlexTicketDiscountInfo: true,
     };
     analytics.logEvent(
       'Ticketing',
@@ -201,7 +203,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           ref={params.onFocusElement ? undefined : focusRef}
           style={styles.header}
           fareProductTypeConfig={selection.fareProductTypeConfig}
-          preassignedFareProduct={preassignedFareProduct}
           onTicketInfoButtonPress={handleTicketInfoButtonPress}
         />
       )}
@@ -305,11 +306,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           <StartTimeSelection
             selection={selection}
             setSelection={setSelection}
-            style={styles.selectionComponent}
-          />
-
-          <FlexTicketDiscountInfo
-            userProfiles={userProfilesWithCountAndOffer}
             style={styles.selectionComponent}
           />
 

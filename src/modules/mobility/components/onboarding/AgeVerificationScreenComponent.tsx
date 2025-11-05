@@ -22,13 +22,13 @@ export const AgeVerificationScreenComponent = () => {
 
   const {
     mutateAsync: completeAgeVerification,
-    isLoading: isCompleting,
+    isPending: isCompleting,
     error: completeError,
   } = useCompleteAgeVerificationMutation();
 
   const {
     mutateAsync: initAgeVerification,
-    isLoading: isInitting,
+    isPending: isInitting,
     error: initError,
   } = useInitAgeVerificationMutation();
 

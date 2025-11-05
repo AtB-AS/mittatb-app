@@ -10,7 +10,7 @@ export const useGetFareProductsQuery = () => {
     initialDataUpdatedAt: 0,
     queryKey: ['getProducts', userId],
     queryFn: getFareProducts,
-    cacheTime: ONE_WEEK_MS,
+    gcTime: ONE_WEEK_MS,
     staleTime: ONE_HOUR_MS,
     enabled: authStatus === 'authenticated',
     meta: {

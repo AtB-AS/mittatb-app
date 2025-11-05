@@ -63,7 +63,7 @@ export const Profile_TravelAidScreen = () => {
             testID="toggleTravelAid"
           />
           <GenericSectionItem>
-            <ThemeText isMarkdown={true} typography="body__secondary">
+            <ThemeText isMarkdown={true} typography="body__s">
               {t(TravelAidSettingsTexts.toggle.subText)}
             </ThemeText>
           </GenericSectionItem>

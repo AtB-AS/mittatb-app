@@ -71,7 +71,7 @@ export const ExistingRecipientsList = ({
 
   return (
     <>
-      {recipientsQuery.status === 'loading' && (
+      {recipientsQuery.status === 'pending' && (
         <ActivityIndicator
           style={styles.loadingSpinner}
           size="large"

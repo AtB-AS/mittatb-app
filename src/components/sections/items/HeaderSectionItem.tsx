@@ -24,9 +24,7 @@ export function HeaderSectionItem({
     <View style={topContainer}>
       <ThemeText
         style={contentContainer}
-        typography={
-          mode === 'heading' ? 'body__primary--bold' : 'body__secondary'
-        }
+        typography={mode === 'heading' ? 'body__m__strong' : 'body__s'}
       >
         {text}
       </ThemeText>
@@ -34,7 +32,7 @@ export function HeaderSectionItem({
         <ThemeText
           style={[styles.subtitle, contentContainer]}
           color="secondary"
-          typography={mode === 'heading' ? 'body__secondary' : 'body__tertiary'}
+          typography={mode === 'heading' ? 'body__s' : 'body__xs'}
         >
           {subtitle}
         </ThemeText>

@@ -59,6 +59,7 @@ export const LicensePlateSection = ({
           autoCapitalize="characters"
           inlineLabel={false}
           maxLength={14}
+          returnKeyType="done"
           {...textInputSectionItemProps}
         />
       </Section>
@@ -66,14 +67,14 @@ export const LicensePlateSection = ({
       {!!showSuccessMessage && (
         <View style={styles.successRow}>
           <ThemeIcon svg={statusTypeToIcon('valid', true, themeName)} />
-          <ThemeText typography="body__secondary">
+          <ThemeText typography="body__s">
             {`${svvVehicleInfo.color} ${svvVehicleInfo.make} ${svvVehicleInfo.model}`}
           </ThemeText>
         </View>
       )}
       {!!showErrorMessage && (
         <MessageInfoBox
-          type="warning"
+          type="info"
           title={t(
             SmartParkAndRideTexts.add.inputs.licensePlate.vehicleNotFound.title,
           )}

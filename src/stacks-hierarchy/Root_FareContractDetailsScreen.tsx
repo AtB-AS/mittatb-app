@@ -17,6 +17,7 @@ import {MapFilterType} from '@atb/modules/map';
 import {useAuthContext} from '@atb/modules/auth';
 import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {hasShmoBookingId} from '@atb/modules/fare-contracts';
+import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -28,8 +29,10 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const {serverNow} = useTimeContext();
   const analytics = useAnalyticsContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
-  const {ticketInfoParams, fareContract, preassignedFareProduct} =
-    useTicketInfo(route.params.fareContractId);
+  const {fareContract, preassignedFareProduct} = useTicketInfo(
+    route.params.fareContractId,
+  );
+  const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
 
   const isSentFareContract =
     fareContract?.customerAccountId !== fareContract?.purchasedBy &&
@@ -38,17 +41,22 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   useApplePassPresentationSuppression();
 
   const navigateToTicketInfoScreen = () => {
-    if (ticketInfoParams) {
-      analytics.logEvent(
-        'Ticketing',
-        'Ticket information button clicked',
-        ticketInfoParams,
-      );
-      navigation.navigate('Root_TicketInformationScreen', ticketInfoParams);
+    if (preassignedFareProduct) {
+      const selection = purchaseSelectionBuilder
+        .forType(preassignedFareProduct?.type)
+        .product(preassignedFareProduct)
+        .build();
+
+      analytics.logEvent('Ticketing', 'Ticket information button clicked', {
+        selection,
+      });
+      navigation.navigate('Root_TicketInformationScreen', {
+        selection,
+      });
     }
   };
   const onNavigateToMap = async (initialFilters: MapFilterType) => {
-    navigation.navigate('Root_TabNavigatorStack', {
+    navigation.popTo('Root_TabNavigatorStack', {
       screen: 'TabNav_MapStack',
       params: {
         screen: 'Map_RootScreen',

@@ -7,7 +7,7 @@ import {
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet} from '@atb/theme';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {useBikeStation} from '../use-bike-station';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useOperatorBenefit} from '../use-operator-benefit';
@@ -78,7 +78,8 @@ export const BikeStationBottomSheet = ({
 
   return (
     <MapBottomSheet
-      snapPoints={['80%']}
+      canMinimize={true}
+      enablePanDownToClose={false}
       closeCallback={onClose}
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
@@ -98,7 +99,7 @@ export const BikeStationBottomSheet = ({
         )}
         {!isLoading && !isError && station && (
           <>
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
@@ -114,7 +115,7 @@ export const BikeStationBottomSheet = ({
                     style={styles.operatorNameAndLogo}
                   />
                   <View style={styles.stationText}>
-                    <ThemeText typography="body__secondary" color="secondary">
+                    <ThemeText typography="body__s" color="secondary">
                       {stationName}
                     </ThemeText>
                     <WalkingDistance distance={distance} />
@@ -174,13 +175,12 @@ export const BikeStationBottomSheet = ({
                   style={styles.payWithBonusPointsSection}
                 />
               )}
-            </ScrollView>
+            </View>
             {rentalAppUri && (
               <View style={styles.footer}>
                 <OperatorActionButton
                   operatorId={operatorId}
                   operatorName={operatorName}
-                  benefit={operatorBenefit}
                   appStoreUri={appStoreUri}
                   rentalAppUri={rentalAppUri}
                   isBonusPayment={payWithBonusPoints}

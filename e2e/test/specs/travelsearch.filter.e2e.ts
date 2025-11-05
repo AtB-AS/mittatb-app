@@ -115,7 +115,7 @@ describe('Travel search filter', () => {
 
       await NavigationHelper.tapMenu('assistant');
       await NavigationHelper.tapMenu('assistant');
-      await ElementHelper.expectText('Travel search');
+      await ElementHelper.expectText('Find journey');
 
       // New search
       await ElementHelper.waitForElement('id', 'searchFromButton');
@@ -170,7 +170,7 @@ describe('Travel search filter', () => {
 
       await NavigationHelper.tapMenu('assistant');
       await NavigationHelper.tapMenu('assistant');
-      await ElementHelper.expectText('Travel search');
+      await ElementHelper.expectText('Find journey');
 
       // New search
       await ElementHelper.waitForElement('id', 'searchFromButton');

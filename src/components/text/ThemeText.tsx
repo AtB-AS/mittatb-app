@@ -27,7 +27,7 @@ export type ThemeTextProps = TextProps & {
 };
 
 export const ThemeText: React.FC<ThemeTextProps> = ({
-  typography: fontType = 'body__primary',
+  typography: fontType = 'body__m',
   type = 'primary',
   color,
   isMarkdown = false,
@@ -48,8 +48,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   if (Platform.OS === 'android' && !androidSystemFont) {
     textStyle = {
       ...typeStyle,
-      fontFamily:
-        typeStyle.fontWeight === 'bold' ? 'Roboto-Bold' : 'Roboto-Regular',
+      fontFamily: fontWeightToRobotoFamily(typeStyle.fontWeight),
       fontWeight: 'normal',
     };
   }
@@ -101,5 +100,19 @@ function useColor(
     return theme.color.foreground.dynamic[color ?? 'primary'];
   } else {
     return color;
+  }
+}
+
+function fontWeightToRobotoFamily(weight?: string) {
+  switch (weight) {
+    case '400':
+      return 'Roboto-Regular';
+    case '500':
+      return 'Roboto-Medium';
+    case '600':
+    case 'bold':
+      return 'Roboto-SemiBold';
+    default:
+      return 'Roboto-Regular';
   }
 }

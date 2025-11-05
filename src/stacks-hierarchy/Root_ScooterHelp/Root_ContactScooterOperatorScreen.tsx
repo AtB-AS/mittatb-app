@@ -123,6 +123,9 @@ export const Root_ContactScooterOperatorScreen = ({
                 label={t(ContactScooterOperatorTexts.comment.label)}
                 placeholder={t(ContactScooterOperatorTexts.comment.placeholder)}
                 inlineLabel={false}
+                multiline={true}
+                maxLength={MAX_SUPPORT_COMMENT_LENGTH}
+                scrollEnabled={false}
                 autoCapitalize="sentences"
                 errorText={
                   !isCommentValid && showError
@@ -212,10 +215,10 @@ export const Root_ContactScooterOperatorScreen = ({
               />
             </Section>
             <View style={styles.description}>
-              <ThemeText typography="body__secondary">
+              <ThemeText typography="body__s">
                 {t(ContactScooterOperatorTexts.location.header)}
               </ThemeText>
-              <ThemeText typography="body__tertiary">
+              <ThemeText typography="body__xs">
                 {t(
                   ContactScooterOperatorTexts.location.description(
                     operatorName ?? '',
@@ -234,7 +237,7 @@ export const Root_ContactScooterOperatorScreen = ({
                 />
               )}
             <Button
-              loading={supportRequestStatus === 'loading'}
+              loading={supportRequestStatus === 'pending'}
               expanded={true}
               mode="primary"
               text={t(ContactScooterOperatorTexts.submitButton)}
@@ -358,7 +361,7 @@ export const validateSchema = (body: SendSupportRequestBodyInput) => {
   return {
     isCommentValid: !formattedErrors?.comment?._errors?.length,
     isPhoneNumberValid:
-      !formattedErrors?.contactInformationEndUser?.phoneNumber?._errors?.length,
+      !formattedErrors?.contactInformationEndUser?.phone?._errors?.length,
     isEmailValid:
       !formattedErrors?.contactInformationEndUser?.email?._errors?.length,
     isContactInfoPresent:

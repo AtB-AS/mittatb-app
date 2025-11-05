@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {
   MapFilterType,
-  MapV2,
+  Map,
   NavigateToTripSearchCallback as TravelFromAndToLocationsCallback,
 } from '@atb/modules/map';
 import {MapScreenProps} from './navigation-types';
@@ -15,7 +15,7 @@ export type MapScreenParams = {
   initialFilters?: MapFilterType;
 };
 
-export const Map_RootScreenV2 = ({
+export const Map_RootScreen = ({
   navigation,
 }: MapScreenProps<'Map_RootScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
@@ -83,7 +83,7 @@ export const Map_RootScreenV2 = ({
   if (isScreenReaderEnabled) return <MapDisabledForScreenReader />;
 
   return (
-    <MapV2
+    <Map
       navigateToQuay={navigateToQuay}
       navigateToDetails={navigateToDetails}
       navigateToTripSearch={navigateToTripSearch}

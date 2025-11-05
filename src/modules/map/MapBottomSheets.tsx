@@ -18,10 +18,8 @@ import {useNavigation} from '@react-navigation/native';
 import React, {RefObject, useCallback, useEffect, useState} from 'react';
 import {useEnterPaymentMethods} from './hooks/use-enter-payment-methods';
 import {
-  flyToLocation,
   getFeatureFromScan,
   isParkAndRide,
-  mapPositionToCoordinates,
   CUSTOM_SCAN_ZOOM_LEVEL,
 } from './utils';
 import MapboxGL from '@rnmapbox/maps';
@@ -34,25 +32,22 @@ import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics';
 import {MapStateActionType} from './mapStateReducer';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
-import {getSlightlyRaisedMapPadding} from './MapConfig';
 import {MapBottomSheetType, useMapContext} from './MapContext';
 
 type MapBottomSheetsProps = {
-  mapCameraRef: RefObject<MapboxGL.Camera | null>;
   mapViewRef: RefObject<MapboxGL.MapView | null>;
   mapProps: MapProps;
   locationArrowOnPress: () => void;
 };
 
 export const MapBottomSheets = ({
-  mapCameraRef,
   mapViewRef,
   mapProps,
   locationArrowOnPress,
 }: MapBottomSheetsProps) => {
   const [openPaymentType, setOpenPaymentType] = useState<boolean>(false);
   const navigateToPaymentMethods = useEnterPaymentMethods();
-  const {mapState, dispatchMapState, paddingBottomMap} = useMapContext();
+  const {mapState, dispatchMapState} = useMapContext();
   const {data: activeBooking} = useActiveShmoBookingQuery();
   const tabBarHeight = useBottomTabBarHeight();
 
@@ -64,27 +59,6 @@ export const MapBottomSheets = ({
     analytics.logEvent('Mobility', 'Report parking violation clicked');
     navigation.navigate('Root_ParkingViolationsSelectScreen');
   }, [analytics, navigation]);
-
-  useEffect(() => {
-    if (mapState.feature && paddingBottomMap > 0) {
-      flyToLocation({
-        coordinates: mapPositionToCoordinates(
-          mapState.feature.geometry.coordinates,
-        ),
-        padding: getSlightlyRaisedMapPadding(paddingBottomMap),
-        mapCameraRef,
-        mapViewRef,
-        animationMode: 'easeTo',
-        zoomLevel: mapState?.customZoomLevel,
-      });
-    }
-  }, [
-    mapCameraRef,
-    mapState?.customZoomLevel,
-    mapState.feature,
-    mapViewRef,
-    paddingBottomMap,
-  ]);
 
   async function selectPaymentMethod() {
     setOpenPaymentType(true);
@@ -98,7 +72,7 @@ export const MapBottomSheets = ({
     if (mapState.feature) {
       mapAnalytics.logMapSelection(mapState.feature);
     }
-  }, [mapAnalytics, mapState.feature, mapState.bottomSheetType]);
+  }, [mapAnalytics, mapState.feature]);
 
   return (
     <>
@@ -258,8 +232,6 @@ export const MapBottomSheets = ({
         <MapFilterSheet
           onFilterChanged={(filter: MapFilterType) => {
             analytics.logEvent('Map', 'Filter changed', {filter});
-            mapProps.vehicles?.onFilterChange(filter.mobility);
-            mapProps.stations?.onFilterChange(filter.mobility);
           }}
           onClose={() => {
             handleCloseSheet();
@@ -283,15 +255,12 @@ export const MapBottomSheets = ({
             distance={undefined}
             stopPlaceFeature={mapState.feature}
             navigateToDetails={(...params) => {
-              handleCloseSheet();
               mapProps.navigateToDetails(...params);
             }}
             navigateToQuay={(...params) => {
-              handleCloseSheet();
               mapProps.navigateToQuay(...params);
             }}
             navigateToTripSearch={(...params) => {
-              handleCloseSheet();
               mapProps.navigateToTripSearch(...params);
             }}
             locationArrowOnPress={locationArrowOnPress}

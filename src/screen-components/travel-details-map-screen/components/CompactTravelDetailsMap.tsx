@@ -1,4 +1,4 @@
-import {MapCameraConfig, MapLeg, useMapViewConfig} from '@atb/modules/map';
+import {MapCameraConfig, useMapViewConfig} from '@atb/modules/map';
 import {StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import MapboxGL from '@rnmapbox/maps';
@@ -13,9 +13,10 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
 
 export type MapProps = {
-  mapLegs: MapLeg[];
+  serviceJourneyPolylines: ServiceJourneyPolyline[];
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
   buttonText: string;
@@ -23,7 +24,7 @@ export type MapProps = {
 };
 
 export const CompactTravelDetailsMap: React.FC<MapProps> = ({
-  mapLegs,
+  serviceJourneyPolylines,
   fromPlace,
   toPlace,
   buttonText,
@@ -32,10 +33,13 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   const {t} = useTranslation();
   const cameraRef = useRef<MapboxGL.Camera>(null);
 
-  const features = useMemo(() => createMapLines(mapLegs), [mapLegs]);
+  const features = useMemo(
+    () => createMapLines(serviceJourneyPolylines),
+    [serviceJourneyPolylines],
+  );
   const bounds = useMemo(() => getMapBounds(features), [features]);
 
-  const mapViewConfig = useMapViewConfig({useDarkModeForV1: true});
+  const mapViewConfig = useMapViewConfig();
 
   /*
    * Workaround for iOS as setting default bounds on camera is not working fully
@@ -94,7 +98,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
         onPress={onExpand}
         accessibilityRole="button"
       >
-        <ThemeText typography="body__secondary--bold" color="primary">
+        <ThemeText typography="body__s__strong" color="primary">
           {buttonText}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} />

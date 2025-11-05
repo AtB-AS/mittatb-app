@@ -97,7 +97,7 @@ const PrimaryTag: React.FC<BaseTagProps> = ({
       {labels.map((content) => (
         <ThemeText
           color={theme.color.foreground.light.primary}
-          typography="body__tertiary"
+          typography="body__xs"
           style={commonStyles.text}
           key={content}
         >
@@ -143,7 +143,7 @@ const SecondaryTag: React.FC<
       {labels.map((content) => (
         <ThemeText
           color={theme.color.foreground.dynamic.primary}
-          typography="body__tertiary"
+          typography="body__xs"
           key={content}
           style={commonStyles.text}
         >
@@ -191,7 +191,7 @@ const SemanticTag: React.FC<
       {labels.map((content) => (
         <ThemeText
           color={theme.color.foreground.dynamic.primary}
-          typography="body__tertiary"
+          typography="body__xs"
           key={content}
           style={commonStyles.text}
         >
