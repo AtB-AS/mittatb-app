@@ -7,7 +7,7 @@ import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {NearbyStopPlacesScreenParams} from '@atb/screen-components/nearby-stop-places';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
 import {TicketHistoryScreenParams} from '@atb/screen-components/ticket-history';
-import { SmartParkAndRideScreenParams } from './Profile_SmartParkAndRideScreen';
+import {SmartParkAndRideScreenParams} from './Profile_SmartParkAndRideScreen';
 
 export type ProfileStackParams = StackParams<{
   Profile_RootScreen: undefined;
@@ -53,4 +53,3 @@ export type ProfileScreenProps<T extends keyof ProfileStackParams> =
     >,
     StackScreenProps<RootStackParamList>
   >;
-
