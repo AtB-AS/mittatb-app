@@ -41,6 +41,7 @@ import {BeaconsContextProvider} from '@atb/modules/beacons';
 import {FeatureTogglesContextProvider} from '@atb/modules/feature-toggles';
 import {configureReanimatedLogger} from 'react-native-reanimated';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+import {BottomSheetV2ContextProvider} from './components/bottom-sheet-v2/BottomSheetV2Context';
 import {EventStreamContextProvider} from './modules/event-stream/EventStreamContext';
 
 // https://rnfirebase.io/migrating-to-v22
@@ -116,13 +117,15 @@ export const App = () => {
                                                       <NotificationContextProvider>
                                                         <BottomSheetContextProvider>
                                                           <BottomSheetModalProvider>
-                                                            <FeedbackQuestionsContextProvider>
-                                                              <BeaconsContextProvider>
-                                                                <OnboardingContextProvider>
-                                                                  <RootStack />
-                                                                </OnboardingContextProvider>
-                                                              </BeaconsContextProvider>
-                                                            </FeedbackQuestionsContextProvider>
+                                                            <BottomSheetV2ContextProvider>
+                                                              <FeedbackQuestionsContextProvider>
+                                                                <BeaconsContextProvider>
+                                                                  <OnboardingContextProvider>
+                                                                    <RootStack />
+                                                                  </OnboardingContextProvider>
+                                                                </BeaconsContextProvider>
+                                                              </FeedbackQuestionsContextProvider>
+                                                            </BottomSheetV2ContextProvider>
                                                           </BottomSheetModalProvider>
                                                         </BottomSheetContextProvider>
                                                       </NotificationContextProvider>

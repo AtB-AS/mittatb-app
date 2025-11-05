@@ -12,8 +12,8 @@ import {
   StopPlacesSheetView,
   useStopsDetailsDataQuery,
 } from '@atb/screen-components/place-screen';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
 
 type DeparturesDialogSheetProps = {
   onClose: () => void;

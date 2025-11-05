@@ -1,16 +1,11 @@
-import React, {useState} from 'react';
-import {ScrollView, View} from 'react-native';
-import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
-import {Button} from '@atb/components/button';
+import React, {RefObject, useCallback} from 'react';
+import {View} from 'react-native';
 import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
-import {FullScreenFooter} from '@atb/components/screen-footer';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {StyleSheet, type Theme, useThemeContext} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {StyleSheet, useThemeContext, type Theme} from '@atb/theme';
+import {dictionary, useTranslation} from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {
@@ -20,9 +15,14 @@ import {
 import {SectionSeparator} from '@atb/components/sections';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
-import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {FullScreenFooter} from '@atb/components/screen-footer';
+import {Button} from '@atb/components/button';
+import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type SelectableFavouriteDepartureData = {
   handleSwitchFlip: (favouriteId: string, active: boolean) => void;
@@ -62,7 +62,7 @@ const SelectableFavouriteDeparture = ({
       accessibilityActions={[{name: 'activate'}]}
       onAccessibilityAction={() => handleSwitchFlip(favorite.id, !active)}
       accessibilityHint={t(SelectFavouriteDeparturesText.switch.a11yhint)}
-      accessibilityState={{checked: active}}
+      accessibilityState={{checked: !active}}
     >
       <TransportationIconBox
         style={styles.lineModeIcon}
@@ -94,10 +94,14 @@ const SelectableFavouriteDeparture = ({
 
 type SelectFavouritesBottomSheetProps = {
   onEditFavouriteDeparture: () => void;
+  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  onCloseFocusRef: RefObject<View | null>;
 };
 
 export const SelectFavouritesBottomSheet = ({
   onEditFavouriteDeparture,
+  bottomSheetModalRef,
+  onCloseFocusRef,
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -105,28 +109,48 @@ export const SelectFavouritesBottomSheet = ({
   const themeColor = getThemeColor(theme);
   const {favoriteDepartures, setFavoriteDepartures} = useFavoritesContext();
   const favouriteItems = favoriteDepartures ?? [];
-  const [updatedFavorites, setUpdatedFavorites] = useState(favoriteDepartures);
-  const {close} = useBottomSheetContext();
 
   const handleSwitchFlip = (id: string, active: boolean) => {
-    setUpdatedFavorites(
-      updatedFavorites.map((f) =>
+    setFavoriteDepartures(
+      favoriteDepartures.map((f) =>
         f.id == id ? {...f, visibleOnDashboard: active} : f,
       ),
     );
   };
 
-  const saveAndExit = () => {
-    setFavoriteDepartures(updatedFavorites);
-    close();
-  };
+  const footer = useCallback(
+    () => (
+      <FullScreenFooter>
+        <Button
+          expanded={true}
+          text={t(SelectFavouriteDeparturesText.edit_button.text)}
+          accessibilityHint={t(
+            SelectFavouriteDeparturesText.edit_button.a11yhint,
+          )}
+          onPress={() => {
+            onEditFavouriteDeparture();
+            bottomSheetModalRef.current?.dismiss();
+          }}
+          rightIcon={{svg: SvgArrowRight}}
+          testID="editButton"
+          mode="secondary"
+          backgroundColor={themeColor}
+        />
+      </FullScreenFooter>
+    ),
+    [bottomSheetModalRef, onEditFavouriteDeparture, t, themeColor],
+  );
 
   return (
-    <BottomSheetContainer
-      title={t(SelectFavouriteDeparturesText.header.text)}
-      testID="selectFavoriteBottomSheet"
+    <BottomSheetModal
+      bottomSheetModalRef={bottomSheetModalRef}
+      heading={t(SelectFavouriteDeparturesText.header.text)}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      Footer={footer}
+      closeCallback={() => giveFocus(onCloseFocusRef)}
     >
-      <ScrollView style={styles.flatListArea}>
+      <View style={styles.flatListArea}>
         {favoriteDepartures.length > 0 && (
           <>
             <ThemeText style={styles.questionText} typography="heading__m">
@@ -134,8 +158,8 @@ export const SelectFavouritesBottomSheet = ({
             </ThemeText>
 
             <View>
-              {updatedFavorites &&
-                updatedFavorites.map((favorite, i) => (
+              {favoriteDepartures &&
+                favoriteDepartures.map((favorite, i) => (
                   <View key={favorite.id}>
                     <SectionSeparator />
                     <SelectableFavouriteDeparture
@@ -154,48 +178,13 @@ export const SelectFavouritesBottomSheet = ({
             message={t(SelectFavouriteDeparturesText.noFavourites.text)}
           />
         )}
-      </ScrollView>
-
-      <FullScreenFooter>
-        <View style={styles.buttonContainer}>
-          <Button
-            expanded={true}
-            interactiveColor={theme.color.interactive[0]}
-            text={t(SelectFavouriteDeparturesText.confirm_button.text)}
-            accessibilityHint={t(
-              SelectFavouriteDeparturesText.confirm_button.a11yhint,
-            )}
-            onPress={saveAndExit}
-            disabled={false}
-            rightIcon={{svg: Confirm}}
-            testID="confirmButton"
-          />
-          <Button
-            expanded={true}
-            text={t(SelectFavouriteDeparturesText.edit_button.text)}
-            accessibilityHint={t(
-              SelectFavouriteDeparturesText.edit_button.a11yhint,
-            )}
-            onPress={() => {
-              close();
-              onEditFavouriteDeparture();
-            }}
-            rightIcon={{svg: SvgArrowRight}}
-            testID="editButton"
-            mode="secondary"
-            backgroundColor={themeColor}
-          />
-        </View>
-      </FullScreenFooter>
-    </BottomSheetContainer>
+      </View>
+    </BottomSheetModal>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
-    container: {
-      flex: 1,
-    },
     buttonContainer: {
       gap: theme.spacing.small,
     },
@@ -204,8 +193,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     flatListArea: {
       backgroundColor: getThemeColor(theme).background,
-      margin: theme.spacing.medium,
-      marginBottom: theme.spacing.xLarge,
+      marginHorizontal: theme.spacing.medium,
       borderRadius: theme.border.radius.regular,
     },
     selectableDeparture: {
