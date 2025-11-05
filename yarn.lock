@@ -12,10 +12,10 @@
   resolved "https://registry.yarnpkg.com/@adrianso/react-native-device-brightness/-/react-native-device-brightness-1.2.7.tgz#46905d0358c4f6dce5c88eb51882f528cc716f60"
   integrity sha512-q3OTFGohAh04R8cBka7/eNXaeSD8bAZocMsifLIR3oDF5N9cNH2UVEjzJaFXW8DHFEsODpljpT+eyGWIhKlkow==
 
-"@atb-as/config-specs@8.2.1":
-  version "8.2.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-8.2.1.tgz#1e729c4bad0ee920dc6d08e3ab6bf9c50254ca09"
-  integrity sha512-3Q4D4NGlkH7URlyFVwuWBkZKcdMOB6owBbBMlimawQfXcqKWVA5jtX48d+6KGMnLlbZssLCWNiQ2ckmvAdzMwA==
+"@atb-as/config-specs@8.3.0":
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-8.3.0.tgz#b5bba4c3802b707eaba41a15d1544d47f6d1318a"
+  integrity sha512-gu+p4AnkMs5WkK6Uu1V6OQKza72cpVkNAJPhkxULZnsxzWA+W3URuAxR/uE1lq65KmlFLslc5F6xQAG45pGwtQ==
   dependencies:
     ajv "^8.17.1"
     ajv-formats "^3.0.1"

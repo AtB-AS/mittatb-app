@@ -76,11 +76,13 @@ export function MultipleTravellersSelection(props: Props) {
         {props.supplementProductCountState.supplementProductsWithCount.map(
           (s) => (
             <CounterSectionItem
+              key={s.id}
               text={getReferenceDataName(s, language)}
               count={s.count}
               addCount={() => addSupplementProduct(s.id)}
               removeCount={() => removeSupplementProduct(s.id)}
               subtext={getTextForLanguage(s.description, language)}
+              illustrationName={s.illustration}
             />
           ),
         )}
