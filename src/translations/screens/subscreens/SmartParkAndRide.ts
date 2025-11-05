@@ -181,9 +181,9 @@ const SmartParkAndRideTexts = {
         'No kan du parkere gratis på Ranheim Fabrikker i opptil 48 timar med ein gyldig bussbillett i AtB-appen. Billetten må ha vore aktiv i løpet av tida du har stått parkert.',
       ),
       buttonText: _(
-        'Registrering av kjøretøy i appen',
-        'Registering vehicles in the app',
-        'Registrering av køyretøy i appen',
+        'Info om registrering',
+        'Info about registration',
+        'Info om registrering',
       ),
     },
     automaticRegistration: {
