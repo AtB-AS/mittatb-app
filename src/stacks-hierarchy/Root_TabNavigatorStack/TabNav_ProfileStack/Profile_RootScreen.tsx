@@ -200,7 +200,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                     'Smart Park & Ride',
                     'Profile button clicked',
                   );
-                  navigation.navigate('Profile_SmartParkAndRideScreen');
+                  navigation.navigate('Profile_SmartParkAndRideScreen', {});
                 }}
                 label="new"
                 testID="smartParkAndRideButton"
