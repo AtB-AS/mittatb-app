@@ -5,6 +5,7 @@ import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import {NearbyStopPlacesScreenComponent} from '@atb/screen-components/nearby-stop-places';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import SharedTexts from '@atb/translations/shared';
+import {useThemeContext} from '@atb/theme';
 
 type Props = DashboardScreenProps<'Dashboard_NearbyStopPlacesScreen'>;
 
@@ -14,6 +15,7 @@ export const Dashboard_NearbyStopPlacesScreen = ({
 }: Props) => {
   const fromLocation = useOnlySingleLocation<typeof route>('location');
   const {t} = useTranslation();
+  const {theme} = useThemeContext();
 
   return (
     <NearbyStopPlacesScreenComponent
@@ -22,6 +24,7 @@ export const Dashboard_NearbyStopPlacesScreen = ({
       headerProps={{
         title: t(FavoriteDeparturesTexts.favoriteItemAdd.label),
         leftButton: {type: 'close'},
+        color: theme.color.background.neutral[1],
       }}
       onPressLocationSearch={(location) =>
         navigation.navigate('Root_LocationSearchByTextScreen', {

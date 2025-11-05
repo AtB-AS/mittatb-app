@@ -299,7 +299,6 @@ function sortAndFilterStopPlaces(
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
     backgroundColor: theme.color.background.neutral[1].background,
-    paddingBottom: theme.spacing.medium,
     paddingTop: theme.spacing.medium,
   },
   locationInputSection: {

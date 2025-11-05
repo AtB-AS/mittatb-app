@@ -61,6 +61,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     rowGap: theme.spacing.small,
     margin: theme.spacing.medium,
+    marginTop: 0,
   },
   noStopMessage: {
     marginHorizontal: theme.spacing.large,
