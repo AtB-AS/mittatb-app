@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {RefObject, useCallback} from 'react';
 import {View} from 'react-native';
 import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
@@ -22,6 +22,7 @@ import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type SelectableFavouriteDepartureData = {
   handleSwitchFlip: (favouriteId: string, active: boolean) => void;
@@ -94,11 +95,13 @@ const SelectableFavouriteDeparture = ({
 type SelectFavouritesBottomSheetProps = {
   onEditFavouriteDeparture: () => void;
   bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  onCloseFocusRef: RefObject<View | null>;
 };
 
 export const SelectFavouritesBottomSheet = ({
   onEditFavouriteDeparture,
   bottomSheetModalRef,
+  onCloseFocusRef,
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -145,6 +148,7 @@ export const SelectFavouritesBottomSheet = ({
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
       Footer={footer}
+      closeCallback={() => giveFocus(onCloseFocusRef)}
     >
       <View style={styles.flatListArea}>
         {favoriteDepartures.length > 0 && (

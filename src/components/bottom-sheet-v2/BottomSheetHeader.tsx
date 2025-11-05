@@ -6,6 +6,7 @@ import {ThemeIcon} from '../theme-icon';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import BottomSheet, {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {BrandingImage} from '@atb/modules/mobility';
+import {Ref} from 'react';
 
 type BottomSheetHeaderProps = {
   heading?: string;
@@ -15,7 +16,7 @@ type BottomSheetHeaderProps = {
   rightIconText?: string;
   bottomSheetRef: React.RefObject<BottomSheetModal | BottomSheet | null>;
   headerNode?: React.ReactNode;
-  focusRef?: React.RefObject<View | null>;
+  focusRef?: Ref<any>;
 };
 
 export const BottomSheetHeader = ({
@@ -31,7 +32,7 @@ export const BottomSheetHeader = ({
   const styles = useStyles();
   const {theme} = useThemeContext();
   return (
-    <View ref={focusRef} accessibilityRole="header">
+    <View accessibilityRole="header">
       <View style={styles.handleIndicatorStyle} />
       {(heading || rightIconText || rightIcon) && (
         <View style={styles.headerContainer}>
@@ -40,7 +41,7 @@ export const BottomSheetHeader = ({
               {heading && (
                 <>
                   {logoUrl && <BrandingImage logoUrl={logoUrl} logoSize={28} />}
-                  <View style={styles.headingWrapper}>
+                  <View style={styles.headingWrapper} accessible ref={focusRef}>
                     <ThemeText typography="heading--big">{heading}</ThemeText>
                     {subText && (
                       <ThemeText

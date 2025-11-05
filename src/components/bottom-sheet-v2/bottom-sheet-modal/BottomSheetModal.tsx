@@ -1,9 +1,14 @@
-import React, {PropsWithChildren, useCallback, useState} from 'react';
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import {
   BottomSheetModal as GorhomBottomSheetModal,
   BottomSheetBackdrop,
   BottomSheetScrollView,
-  BottomSheetFooter as GorhamBottomSheetFooter,
+  BottomSheetFooter as GorhomBottomSheetFooter,
   type BottomSheetFooterProps,
 } from '@gorhom/bottom-sheet';
 import {BottomSheetHeader} from '../BottomSheetHeader';
@@ -15,6 +20,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useThemeContext} from '@atb/theme';
 import {useBottomSheetV2Context} from '../BottomSheetV2Context';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type BottomSheetModalProps = PropsWithChildren<{
   bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
@@ -50,9 +56,15 @@ export const BottomSheetModal = ({
   const {top: safeAreaTop, bottom: safeAreaBottom} = useSafeAreaInsets();
   const [footerHeight, setFooterHeight] = useState(0);
   const {theme} = useThemeContext();
-  const headerRef = React.useRef<View>(null);
-  const {setIsOpen} = useBottomSheetV2Context();
+  const focusRef = React.useRef<View>(null);
+  const {setIsOpen, isOpen} = useBottomSheetV2Context();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
+
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => giveFocus(focusRef), 700);
+    }
+  }, [isOpen]);
 
   const renderBackdrop = useCallback(
     (props: any) => {
@@ -86,7 +98,7 @@ export const BottomSheetModal = ({
   const renderFooter = useCallback(
     (props: BottomSheetFooterProps) =>
       Footer && (
-        <GorhamBottomSheetFooter
+        <GorhomBottomSheetFooter
           {...props}
           style={{
             backgroundColor: theme.color.background.neutral[1].background,
@@ -96,7 +108,7 @@ export const BottomSheetModal = ({
           <View onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}>
             {Footer && <Footer />}
           </View>
-        </GorhamBottomSheetFooter>
+        </GorhomBottomSheetFooter>
       ),
     [Footer, theme.color.background.neutral, theme.spacing.medium],
   );
@@ -104,7 +116,7 @@ export const BottomSheetModal = ({
   const renderHandle = useCallback(
     () => (
       <BottomSheetHeader
-        focusRef={headerRef}
+        focusRef={focusRef}
         heading={heading}
         subText={subText}
         logoUrl={logoUrl}
@@ -137,7 +149,7 @@ export const BottomSheetModal = ({
       enableDismissOnClose={true}
       backdropComponent={renderBackdrop}
       keyboardBehavior={keyboardBehavior}
-      onAnimate={(fromIndex, toIndex, _fromPosition, _toPosition) => {
+      onAnimate={(_fromIndex, toIndex, _fromPosition, _toPosition) => {
         if (toIndex === -1) {
           closeCallback?.();
         }

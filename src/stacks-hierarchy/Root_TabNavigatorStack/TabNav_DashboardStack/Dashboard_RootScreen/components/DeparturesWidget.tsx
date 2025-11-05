@@ -49,7 +49,7 @@ export const DeparturesWidget = ({
   const {favoriteDepartures} = useFavoritesContext();
   const {location} = useGeolocationContext();
   const {state, loadInitialDepartures, searchDate} = useFavoriteDepartureData();
-  const onCloseFocusRef = useRef(null);
+  const onCloseFocusRef = useRef<View>(null);
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   useEffect(() => loadInitialDepartures(), [loadInitialDepartures]);
@@ -129,6 +129,7 @@ export const DeparturesWidget = ({
       <SelectFavouritesBottomSheet
         onEditFavouriteDeparture={onEditFavouriteDeparture}
         bottomSheetModalRef={bottomSheetRef}
+        onCloseFocusRef={onCloseFocusRef}
       />
     </View>
   );
