@@ -34,7 +34,25 @@ export const Root_SmartParkAndRideEditScreen = ({
   const {theme} = useThemeContext();
   const analytics = useAnalyticsContext();
 
-  const onSuccess = () => navigation.goBack();
+  const onUpdateSuccess = () => {
+    navigation.popTo('Root_TabNavigatorStack', {
+      screen: 'TabNav_ProfileStack',
+      params: {
+        screen: 'Profile_SmartParkAndRideScreen',
+        params: {toast: 'vehicleUpdated'},
+      },
+    });
+  };
+
+  const onDeleteSuccess = () => {
+    navigation.popTo('Root_TabNavigatorStack', {
+      screen: 'TabNav_ProfileStack',
+      params: {
+        screen: 'Profile_SmartParkAndRideScreen',
+        params: {toast: 'vehicleDeleted'},
+      },
+    });
+  };
 
   const {
     mutate: editVehicleRegistrationMutate,
@@ -43,7 +61,7 @@ export const Root_SmartParkAndRideEditScreen = ({
     params.vehicleRegistration.id,
     licensePlate,
     nickname,
-    onSuccess,
+    onUpdateSuccess,
   );
 
   const {
@@ -51,7 +69,7 @@ export const Root_SmartParkAndRideEditScreen = ({
     isError: deleteVehicleRegistrationIsError,
   } = useDeleteVehicleRegistrationMutation(
     params.vehicleRegistration.id,
-    onSuccess,
+    onDeleteSuccess,
   );
 
   const showDeleteConfirmation = () => {

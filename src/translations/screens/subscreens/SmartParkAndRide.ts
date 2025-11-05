@@ -144,6 +144,23 @@ const SmartParkAndRideTexts = {
       'Noko gjekk gale. Prøv igjen.',
     ),
   },
+  success: {
+    vehicleAdded: _(
+      'Kjøretøyet ble lagt til.',
+      'Vehicle added.',
+      'Køyretøyet blei lagt til.',
+    ),
+    vehicleUpdated: _(
+      'Endringene ble lagret.',
+      'Changes saved.',
+      'Endringane blei lagra.',
+    ),
+    vehicleDeleted: _(
+      'Kjøretøyet ble fjernet',
+      'Vehicle deleted',
+      'Køyretøyet blei fjerna',
+    ),
+  },
   a11y: {
     carIcon: _('Bilikon', 'Car icon', 'Bilikon'),
     button: _(
