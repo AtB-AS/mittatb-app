@@ -13,7 +13,6 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {hasShmoBookingId} from '../utils';
-import {isDefined} from '@atb/utils/presence';
 
 type OrderDetailsSectionItemProps = {
   fareContract: FareContractType;
