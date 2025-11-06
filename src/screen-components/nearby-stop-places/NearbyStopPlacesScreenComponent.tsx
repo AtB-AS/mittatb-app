@@ -33,6 +33,7 @@ type Props = NearbyStopPlacesScreenParams & {
   onSelectStopPlace: (place: StopPlace) => void;
   onUpdateLocation: (location?: Location) => void;
   onAddFavoritePlace: () => void;
+  useLargeTitle?: boolean;
 };
 
 export const NearbyStopPlacesScreenComponent = ({
@@ -43,6 +44,7 @@ export const NearbyStopPlacesScreenComponent = ({
   onSelectStopPlace,
   onUpdateLocation,
   onAddFavoritePlace,
+  useLargeTitle = true,
 }: Props) => {
   const {
     locationIsAvailable,
@@ -156,31 +158,39 @@ export const NearbyStopPlacesScreenComponent = ({
 
   const isFocused = useIsFocusedAndActive();
 
+  const headerContent = (
+    <Header
+      fromLocation={location}
+      updatingLocation={updatingLocation}
+      openLocationSearch={openLocationSearch}
+      setCurrentLocationOrRequest={setCurrentLocationOrRequest}
+      setLocation={(location: Location) => {
+        location.resultType === 'search' && location.layer === 'venue'
+          ? onSelectStopPlace(location)
+          : onUpdateLocation(location);
+      }}
+      mode={mode}
+      onAddFavoritePlace={onAddFavoritePlace}
+    />
+  );
+
   return (
     <FullScreenView
       headerProps={{...headerProps}}
-      parallaxContent={(focusRef) => (
-        <>
-          <ScreenHeading
-            ref={focusRef}
-            text={headerProps.title ?? ''}
-            isLarge={true}
-          />
-          <Header
-            fromLocation={location}
-            updatingLocation={updatingLocation}
-            openLocationSearch={openLocationSearch}
-            setCurrentLocationOrRequest={setCurrentLocationOrRequest}
-            setLocation={(location: Location) => {
-              location.resultType === 'search' && location.layer === 'venue'
-                ? onSelectStopPlace(location)
-                : onUpdateLocation(location);
-            }}
-            mode={mode}
-            onAddFavoritePlace={onAddFavoritePlace}
-          />
-        </>
-      )}
+      parallaxContent={
+        useLargeTitle
+          ? (focusRef) => (
+              <>
+                <ScreenHeading
+                  ref={focusRef}
+                  text={headerProps.title ?? ''}
+                  isLarge={true}
+                />
+                {headerContent}
+              </>
+            )
+          : undefined
+      }
       refreshControl={
         // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
         isFocused || Platform.OS === 'android' ? (
@@ -193,6 +203,7 @@ export const NearbyStopPlacesScreenComponent = ({
     >
       <ScrollView>
         <ScreenReaderAnnouncement message={loadAnnouncement} />
+        {!useLargeTitle && headerContent}
         {locationIsAvailable || !!location ? (
           <StopPlaces
             headerText={getListDescription()}
