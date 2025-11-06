@@ -90,10 +90,10 @@ export type RemoteConfig = {
   flex_ticket_url: string;
   live_vehicle_stale_threshold: number;
   loading_screen_delay_ms: number;
-  mapboxApiToken: string;
-  mapboxNsrSourceLayerId: string;
-  mapboxNsrTilesetId: string;
-  mapboxUserName: string;
+  mapbox_api_token: string;
+  mapbox_nsr_source_layer_id: string;
+  mapbox_nsr_tileset_id: string;
+  mapbox_user_name: string;
   minimum_app_version: string;
   must_upgrade_ticketing: boolean;
   new_favourites_info_url: string;
@@ -181,10 +181,10 @@ export const defaultRemoteConfig: RemoteConfig = {
   flex_ticket_url: '',
   live_vehicle_stale_threshold: 15,
   loading_screen_delay_ms: 200,
-  mapboxApiToken: MAPBOX_API_TOKEN,
-  mapboxNsrSourceLayerId: MAPBOX_NSR_SOURCE_LAYER_ID,
-  mapboxNsrTilesetId: MAPBOX_NSR_TILESET_ID,
-  mapboxUserName: MAPBOX_USER_NAME,
+  mapbox_api_token: MAPBOX_API_TOKEN,
+  mapbox_nsr_source_layer_id: MAPBOX_NSR_SOURCE_LAYER_ID,
+  mapbox_nsr_tileset_id: MAPBOX_NSR_TILESET_ID,
+  mapbox_user_name: MAPBOX_USER_NAME,
   minimum_app_version: '',
   must_upgrade_ticketing: false,
   new_favourites_info_url: '',
@@ -388,16 +388,18 @@ export function getConfig(): RemoteConfig {
   const loading_screen_delay_ms =
     values['loading_screen_delay_ms']?.asNumber() ??
     defaultRemoteConfig.loading_screen_delay_ms;
-  const mapboxApiToken =
-    values['mapboxApiToken']?.asString() ?? defaultRemoteConfig.mapboxApiToken;
-  const mapboxNsrSourceLayerId =
-    values['mapboxNsrSourceLayerId']?.asString() ??
-    defaultRemoteConfig.mapboxNsrSourceLayerId;
-  const mapboxNsrTilesetId =
-    values['mapboxNsrTilesetId']?.asString() ??
-    defaultRemoteConfig.mapboxNsrTilesetId;
-  const mapboxUserName =
-    values['mapboxUserName']?.asString() ?? defaultRemoteConfig.mapboxUserName;
+  const mapbox_api_token =
+    values['mapbox_api_token']?.asString() ??
+    defaultRemoteConfig.mapbox_api_token;
+  const mapbox_nsr_source_layer_id =
+    values['mapbox_nsr_source_layer_id']?.asString() ??
+    defaultRemoteConfig.mapbox_nsr_source_layer_id;
+  const mapbox_nsr_tileset_id =
+    values['mapbox_nsr_tileset_id']?.asString() ??
+    defaultRemoteConfig.mapbox_nsr_tileset_id;
+  const mapbox_user_name =
+    values['mapbox_user_name']?.asString() ??
+    defaultRemoteConfig.mapbox_user_name;
   const minimum_app_version =
     values['minimum_app_version']?.asString() ??
     defaultRemoteConfig.minimum_app_version;
@@ -505,10 +507,10 @@ export function getConfig(): RemoteConfig {
     flex_ticket_url,
     live_vehicle_stale_threshold,
     loading_screen_delay_ms,
-    mapboxApiToken,
-    mapboxNsrSourceLayerId,
-    mapboxNsrTilesetId,
-    mapboxUserName,
+    mapbox_api_token,
+    mapbox_nsr_source_layer_id,
+    mapbox_nsr_tileset_id,
+    mapbox_user_name,
     minimum_app_version,
     must_upgrade_ticketing,
     new_favourites_info_url,
