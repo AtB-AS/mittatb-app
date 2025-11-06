@@ -183,20 +183,19 @@ export const NearbyStopPlacesScreenComponent = ({
   return (
     <FullScreenView
       headerProps={{...headerProps}}
-      parallaxContent={
-        useLargeTitle
-          ? (focusRef) => (
-              <>
-                <ScreenHeading
-                  ref={focusRef}
-                  text={headerProps.title ?? ''}
-                  isLarge={true}
-                />
-                {headerContent}
-              </>
-            )
-          : undefined
-      }
+      parallaxContent={(focusRef) => (
+        <>
+          {useLargeTitle && (
+            <ScreenHeading
+              ref={focusRef}
+              text={headerProps.title ?? ''}
+              isLarge={true}
+            />
+          )}
+          {headerContent}
+        </>
+      )}
+      titleAlwaysVisible={!useLargeTitle}
       refreshControl={
         // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
         isFocused || Platform.OS === 'android' ? (
@@ -209,7 +208,6 @@ export const NearbyStopPlacesScreenComponent = ({
     >
       <ScrollView>
         <ScreenReaderAnnouncement message={loadAnnouncement} />
-        {!useLargeTitle && headerContent}
         {locationIsAvailable || !!location ? (
           <StopPlaces
             headerText={getListDescription()}
