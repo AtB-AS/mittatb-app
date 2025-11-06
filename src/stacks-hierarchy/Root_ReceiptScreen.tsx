@@ -19,6 +19,7 @@ import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useProfileQuery} from '@atb/queries';
+import {useLocaleContext} from '@atb/modules/locale';
 
 type Props = RootStackScreenProps<'Root_ReceiptScreen'>;
 
@@ -40,6 +41,7 @@ export function Root_ReceiptScreen({route}: Props) {
   const {theme} = useThemeContext();
   const a11yContext = useAccessibilityContext();
   const analytics = useAnalyticsContext();
+  const {language} = useLocaleContext();
 
   useEffect(() => {
     if (profileStatus === 'success') {
@@ -56,6 +58,7 @@ export function Root_ReceiptScreen({route}: Props) {
           orderId,
           parseInt(orderVersion, 10),
           email,
+          language,
         );
         analytics.logEvent('Receipt', 'Email sent');
         if (!response.reference) throw new Error('No response reference');
