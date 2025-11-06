@@ -155,7 +155,9 @@ export async function sendReceipt(
   return response.data;
 }
 
-function mapToReceiptLanguage(language: Language): string {
+type ReceiptLanguage = 'nob' | 'eng';
+
+function mapToReceiptLanguage(language: Language): ReceiptLanguage {
   switch (language) {
     case Language.English:
       return 'eng';
