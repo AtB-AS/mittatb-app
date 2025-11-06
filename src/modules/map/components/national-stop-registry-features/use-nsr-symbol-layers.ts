@@ -16,7 +16,7 @@ export const useNsrSymbolLayers = (
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'],
 ): SymbolLayerProps[] => {
   const {theme, themeName} = useThemeContext();
-  const {mapboxNsrSourceLayerId} = useRemoteConfigContext();
+  const {mapbox_nsr_source_layer_id} = useRemoteConfigContext();
 
   return useMemo(
     () =>
@@ -29,7 +29,7 @@ export const useNsrSymbolLayers = (
           reachFullScaleAtZoomLevel,
         } = nsrSymbolLayer;
         const nsrSymbolLayerSourceProps = getNsrLayerSourceProps(
-          mapboxNsrSourceLayerId,
+          mapbox_nsr_source_layer_id,
           id,
         );
 
@@ -123,7 +123,7 @@ export const useNsrSymbolLayers = (
         };
       }),
     [
-      mapboxNsrSourceLayerId,
+      mapbox_nsr_source_layer_id,
       selectedFeaturePropertyId,
       theme.color.foreground.dynamic.primary,
       theme.color.foreground.inverse.primary,
