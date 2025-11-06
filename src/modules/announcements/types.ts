@@ -59,6 +59,9 @@ const AnnouncementBase = z.object({
   id: z.string(),
   active: z.boolean(),
 
+  /** Index used to sort by. The lower the integer, the earlier in the list it will be. Undefined values default to last. */
+  sortByIndex: z.number().int().default(Infinity),
+
   /** Announcement card title */
   summaryTitle: LanguageAndTextTypeArray.optional(),
   /** Announcement card summary */
