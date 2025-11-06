@@ -61,10 +61,10 @@ type Props = {
 };
 
 export const MapContextProvider = ({children}: Props) => {
-  const {mapboxApiToken} = useRemoteConfigContext();
+  const {mapbox_api_token} = useRemoteConfigContext();
   useEffect(() => {
-    MapboxGL.setAccessToken(mapboxApiToken);
-  }, [mapboxApiToken]);
+    MapboxGL.setAccessToken(mapbox_api_token);
+  }, [mapbox_api_token]);
 
   const [mapState, dispatchMapState] = useReducer(mapStateReducer, {
     bottomSheetType: MapBottomSheetType.None,
