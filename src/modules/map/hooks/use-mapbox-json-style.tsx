@@ -1,10 +1,11 @@
 import {useThemeContext} from '@atb/theme';
 import {useMemo} from 'react';
-import {mapboxLightStyle} from '../mapbox-styles/mapbox-light-style';
-import {mapboxDarkStyle} from '../mapbox-styles/mapbox-dark-style';
+import {getMapboxLightStyle} from '../mapbox-styles/get-mapbox-light-style';
+import {getMapboxDarkStyle} from '../mapbox-styles/get-mapbox-dark-style';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
@@ -40,6 +41,7 @@ export const useMapboxJsonStyle: (
 ) => string | undefined = (includeVehiclesAndStationsVectorSource) => {
   const {themeName} = useThemeContext();
   const {language} = useTranslation();
+  const {mapboxUserName, mapboxNsrTilesetId} = useRemoteConfigContext();
 
   const {configurableLinks} = useFirestoreConfigurationContext();
   const mapboxSpriteUrl =
@@ -52,7 +54,9 @@ export const useMapboxJsonStyle: (
 
   const themedStyleWithExtendedSourcesAndSlotLayers = useMemo(() => {
     const themedStyle =
-      themeName === 'dark' ? mapboxDarkStyle : mapboxLightStyle;
+      themeName === 'dark'
+        ? getMapboxDarkStyle(mapboxUserName, mapboxNsrTilesetId)
+        : getMapboxLightStyle(mapboxUserName, mapboxNsrTilesetId);
 
     const extendedSources: StyleJsonVectorSourcesObj = {
       ...themedStyle.sources,
@@ -73,8 +77,10 @@ export const useMapboxJsonStyle: (
       layers: layersWithSlots,
     };
   }, [
-    includeVehiclesAndStationsVectorSource,
     themeName,
+    mapboxUserName,
+    mapboxNsrTilesetId,
+    includeVehiclesAndStationsVectorSource,
     vehiclesAndStationsVectorSourceId,
     vehiclesAndStationsVectorSource,
   ]);
