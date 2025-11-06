@@ -82,12 +82,7 @@ export const BottomSheetModal = ({
           {...props}
           appearsOnIndex={0}
           disappearsOnIndex={-1}
-          pressBehavior="none"
-          aria-disabled="true"
-          accessible={false}
-          accessibilityElementsHidden
-          importantForAccessibility="no-hide-descendants"
-          onPress={undefined}
+          pressBehavior="close"
         />
       );
     },

@@ -1,6 +1,7 @@
 import {
   Announcement,
   useAnnouncementsContext,
+  isBottomSheetAnnouncement,
 } from '@atb/modules/announcements';
 import {ThemeText} from '@atb/components/text';
 import {
@@ -22,6 +23,9 @@ import {
 import {animateNextChange} from '@atb/utils/animation';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useActionButtonProps} from './hooks';
+import {useRef} from 'react';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {AnnouncementSheet} from './AnnouncementSheet';
 
 type Props = {
   announcement: Announcement;
@@ -35,11 +39,16 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
   const {theme} = useThemeContext();
   const analytics = useAnalyticsContext();
   const {dismissAnnouncement} = useAnnouncementsContext();
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+
   const actionButtonProps = useActionButtonProps(
     announcement,
     announcement.actionButton,
     'Dashboard',
+    bottomSheetModalRef,
   );
+
+  const onCloseFocusRef = useRef<View | null>(null);
 
   const handleDismiss = () => {
     animateNextChange();
@@ -96,12 +105,20 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
       </GenericSectionItem>
       {actionButtonProps && (
         <LinkSectionItem
+          ref={onCloseFocusRef}
           {...actionButtonProps}
           textType="body__s"
           accessibility={{
             accessibilityHint: actionButtonProps.accessibilityHint,
             accessibilityRole: actionButtonProps.accessibilityRole,
           }}
+        />
+      )}
+      {isBottomSheetAnnouncement(announcement) && (
+        <AnnouncementSheet
+          bottomSheetModalRef={bottomSheetModalRef}
+          onCloseFocusRef={onCloseFocusRef}
+          announcement={announcement}
         />
       )}
     </Section>
