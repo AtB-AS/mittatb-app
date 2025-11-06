@@ -1,3 +1,5 @@
+import {ConsumableSchoolCarnetResponse} from '@atb/modules/ticketing';
+
 /**
  * The number of accesses that should be displayed in a single row. To display
  * the correct amount of consumed carnets, maximumNumberOfAccesses should be
@@ -18,26 +20,39 @@ export function calculateCarnetData(
   active: boolean,
   maximumNumberOfAccesses: number,
   numberOfUsedAccesses: number,
+  schoolCarnetInfo?: ConsumableSchoolCarnetResponse,
 ) {
+  const totalNumberOfAccesses =
+    schoolCarnetInfo?.maximumNumberOfAccessesPerDay ?? maximumNumberOfAccesses;
+
+  let totalNumberOfUsedAccesses =
+    schoolCarnetInfo?.numberOfUsedAccessesForToday ?? numberOfUsedAccesses;
+
+  // When `nextConsumableDateTime` is set, we should show 0 remaining accesses
+  // for today even if the user has used none.
+  if (schoolCarnetInfo?.nextConsumableDateTime) {
+    totalNumberOfUsedAccesses = totalNumberOfAccesses;
+  }
+
   const carnetDivider =
-    maximumNumberOfAccesses < CARNET_DIVIDER
-      ? maximumNumberOfAccesses
+    totalNumberOfAccesses < CARNET_DIVIDER
+      ? totalNumberOfAccesses
       : CARNET_DIVIDER;
 
   // If the ticket status is active, it should be considered into calculation.
   const activeAccess = active ? 1 : 0;
 
   // Total number of remaining accesses, including multicarnets
-  const accessesRemaining = maximumNumberOfAccesses - numberOfUsedAccesses;
+  const accessesRemaining = totalNumberOfAccesses - totalNumberOfUsedAccesses;
 
-  // If `maximumNumberOfAccesses` are not divisible by `CARNET_DIVIDER`, we need
+  // If `totalNumberOfAccesses` are not divisible by `CARNET_DIVIDER`, we need
   // to add some extra dots, in order to not break the active dot position.
   const padding =
-    Math.abs(carnetDivider - maximumNumberOfAccesses) % carnetDivider;
+    Math.abs(carnetDivider - totalNumberOfAccesses) % carnetDivider;
 
   // Number of additional dots that should be added when the padding is there.
   const numberOfAdditionalDots =
-    maximumNumberOfAccesses > carnetDivider ? carnetDivider - padding : padding;
+    totalNumberOfAccesses > carnetDivider ? carnetDivider - padding : padding;
 
   // Determines whether we should add an extra multicarnet, due to the active
   // carnet being the last one in the current set.
@@ -62,7 +77,7 @@ export function calculateCarnetData(
   const numberOfUsedDots =
     accessesRemaining === 0
       ? carnetDivider - activeAccess
-      : (numberOfUsedAccesses + numberOfAdditionalDots - activeAccess) %
+      : (totalNumberOfUsedAccesses + numberOfAdditionalDots - activeAccess) %
         carnetDivider;
 
   // Calculates the amount of dots showing for the unused part

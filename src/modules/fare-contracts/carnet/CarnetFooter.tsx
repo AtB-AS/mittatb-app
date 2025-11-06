@@ -31,19 +31,12 @@ export const CarnetFooter: React.FC<Props> = ({
   const accessInfo = getAccesses(fareContract);
   if (!accessInfo) return null;
 
-  const maximumNumberOfAccesses =
-    schoolCarnetInfo?.maximumNumberOfAccessesPerDay ??
-    accessInfo.maximumNumberOfAccesses;
-
-  const numberOfUsedAccesses =
-    schoolCarnetInfo?.numberOfUsedAccessesForToday ??
-    accessInfo.numberOfUsedAccesses;
-
   const {accessesRemaining, multiCarnetArray, unusedArray, usedArray} =
     calculateCarnetData(
       validityStatus === 'valid',
-      maximumNumberOfAccesses,
-      numberOfUsedAccesses,
+      accessInfo.maximumNumberOfAccesses,
+      accessInfo.numberOfUsedAccesses,
+      schoolCarnetInfo,
     );
 
   if (isSchoolCarnetInfoFetching) return <ActivityIndicator />;
