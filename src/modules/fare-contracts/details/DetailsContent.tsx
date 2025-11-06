@@ -235,8 +235,9 @@ export const DetailsContent: React.FC<Props> = ({
       )}
       {isCanBeConsumedNowFareContract(fc, now, currentUserId) && (
         <ConsumeCarnetSectionItem
-          fareContractId={fc.id}
+          fareContract={fc}
           fareProductType={preassignedFareProduct?.type}
+          validityStatus={validityStatus}
         />
       )}
       {isActivateTicketNowEnabled &&
