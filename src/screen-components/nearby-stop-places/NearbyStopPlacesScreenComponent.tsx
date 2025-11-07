@@ -8,7 +8,7 @@ import {useGeolocationContext} from '@atb/modules/geolocation';
 import {StopPlaces} from './components/StopPlaces';
 import {useNearestStopsData} from './use-nearest-stops-data';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
@@ -57,7 +57,6 @@ export const NearbyStopPlacesScreenComponent = ({
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
 
   const styles = useStyles();
-  const {theme} = useThemeContext();
 
   const {t} = useTranslation();
 
@@ -183,11 +182,6 @@ export const NearbyStopPlacesScreenComponent = ({
             }}
             mode={mode}
             onAddFavoritePlace={onAddFavoritePlace}
-            backgroundColor={
-              isLargeTitle
-                ? theme.color.background.neutral[1].background
-                : theme.color.background.neutral[2].background
-            }
           />
         </>
       )}
@@ -243,7 +237,6 @@ type HeaderProps = {
   setLocation: (location: Location) => void;
   mode: StopPlacesMode;
   onAddFavoritePlace: Props['onAddFavoritePlace'];
-  backgroundColor: string;
 };
 
 const Header = React.memo(function Header({
@@ -254,13 +247,12 @@ const Header = React.memo(function Header({
   setLocation,
   mode,
   onAddFavoritePlace,
-  backgroundColor,
 }: HeaderProps) {
   const {t} = useTranslation();
   const styles = useStyles();
 
   return (
-    <View style={[styles.header, {backgroundColor}]}>
+    <View style={styles.header}>
       <Section style={styles.locationInputSection}>
         <LocationInputSectionItem
           label={t(SharedTexts.from)}
@@ -312,7 +304,6 @@ function sortAndFilterStopPlaces(
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
     paddingTop: theme.spacing.medium,
-    paddingBottom: theme.spacing.medium,
   },
   locationInputSection: {
     marginHorizontal: theme.spacing.medium,
