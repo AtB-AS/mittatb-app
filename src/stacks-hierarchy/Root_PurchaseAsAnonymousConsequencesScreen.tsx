@@ -161,7 +161,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   header: {
     margin: theme.spacing.xLarge,
     textAlign: 'center',
-    fontWeight: '700',
   },
   button: {
     marginHorizontal: theme.spacing.medium,

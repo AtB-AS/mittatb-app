@@ -31,6 +31,7 @@ import {storage} from '@atb/modules/storage';
 import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
 import {useGeocoderQuery} from '@atb/modules/geocoder';
 import {RequestError, toAxiosErrorKind} from '@atb/api/utils';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type LocationSearchContentProps = {
   label: string;
@@ -67,6 +68,7 @@ export function LocationSearchContent({
   const {t} = useTranslation();
   const analytics = useAnalyticsContext();
   const {theme} = useThemeContext();
+  const {bottom} = useSafeAreaInsets();
 
   const [text, setText] = useState<string>(defaultText ?? '');
   const debouncedText = useDebounce(text, 200);
@@ -194,7 +196,7 @@ export function LocationSearchContent({
       )}
       <ScrollView
         style={{...styles.fullFlex}}
-        contentContainerStyle={styles.contentBlock}
+        contentContainerStyle={[styles.contentBlock, {paddingBottom: bottom}]}
         keyboardShouldPersistTaps="handled"
         onScrollBeginDrag={() => Keyboard.dismiss()}
         testID="historyAndResultsScrollView"

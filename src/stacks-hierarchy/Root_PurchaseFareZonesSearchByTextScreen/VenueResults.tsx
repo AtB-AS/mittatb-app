@@ -101,15 +101,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   nameContainer: {
-    marginLeft: 16,
-  },
-  nameText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  zoneText: {
-    fontSize: 14,
-    marginTop: 2,
+    marginLeft: theme.spacing.medium,
   },
   locationIcon: {
     backgroundColor: theme.color.foreground.dynamic.primary,

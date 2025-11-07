@@ -84,7 +84,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   header: {
     margin: theme.spacing.xLarge,
     textAlign: 'center',
-    fontWeight: '700',
   },
   description: {
     textAlign: 'center',

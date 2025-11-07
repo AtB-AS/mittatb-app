@@ -71,12 +71,12 @@ export const LocationResults: React.FC<Props> = ({
                 </View>
                 <View style={styles.locationTextContainer}>
                   <ThemeText
-                    style={styles.locationName}
+                    typography="body__m__strong"
                     testID={testIDItemPrefix + idx + 'Name'}
                   >
                     {searchResult.text}
                   </ThemeText>
-                  <ThemeText style={styles.locality}>
+                  <ThemeText typography="body__xs" style={styles.locality}>
                     {searchResult.subtext}
                   </ThemeText>
                 </View>
@@ -134,12 +134,6 @@ const getLocationIconAccessibilityLabel = (
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   subHeader: {
     padding: theme.spacing.medium,
-    margin: 0,
-  },
-  subLabel: {
-    color: theme.color.foreground.dynamic.secondary,
-    fontSize: 12,
-    marginRight: 12,
   },
   rowContainer: {
     flexDirection: 'row',
@@ -147,24 +141,18 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
   },
   locationButtonContainer: {
-    padding: 12,
+    padding: theme.spacing.medium,
     flex: 1,
-    minHeight: 84,
   },
   locationButton: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   locationTextContainer: {
-    marginLeft: 16,
-  },
-  locationName: {
-    fontSize: 16,
-    fontWeight: '600',
+    marginLeft: theme.spacing.medium,
   },
   locality: {
-    fontSize: 12,
-    marginTop: 4,
+    marginTop: theme.spacing.xSmall,
   },
   locationIcon: {
     backgroundColor: theme.color.foreground.dynamic.primary,
