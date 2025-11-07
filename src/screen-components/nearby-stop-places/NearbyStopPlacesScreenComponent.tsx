@@ -159,27 +159,6 @@ export const NearbyStopPlacesScreenComponent = ({
 
   const isFocused = useIsFocusedAndActive();
 
-  const headerContent = (
-    <Header
-      fromLocation={location}
-      updatingLocation={updatingLocation}
-      openLocationSearch={openLocationSearch}
-      setCurrentLocationOrRequest={setCurrentLocationOrRequest}
-      setLocation={(location: Location) => {
-        location.resultType === 'search' && location.layer === 'venue'
-          ? onSelectStopPlace(location)
-          : onUpdateLocation(location);
-      }}
-      mode={mode}
-      onAddFavoritePlace={onAddFavoritePlace}
-      backgroundColor={
-        useLargeTitle
-          ? theme.color.background.neutral[1].background
-          : theme.color.background.neutral[2].background
-      }
-    />
-  );
-
   return (
     <FullScreenView
       headerProps={{...headerProps}}
@@ -192,7 +171,24 @@ export const NearbyStopPlacesScreenComponent = ({
               isLarge={true}
             />
           )}
-          {headerContent}
+          <Header
+            fromLocation={location}
+            updatingLocation={updatingLocation}
+            openLocationSearch={openLocationSearch}
+            setCurrentLocationOrRequest={setCurrentLocationOrRequest}
+            setLocation={(location: Location) => {
+              location.resultType === 'search' && location.layer === 'venue'
+                ? onSelectStopPlace(location)
+                : onUpdateLocation(location);
+            }}
+            mode={mode}
+            onAddFavoritePlace={onAddFavoritePlace}
+            backgroundColor={
+              useLargeTitle
+                ? theme.color.background.neutral[1].background
+                : theme.color.background.neutral[2].background
+            }
+          />
         </>
       )}
       titleAlwaysVisible={!useLargeTitle}
