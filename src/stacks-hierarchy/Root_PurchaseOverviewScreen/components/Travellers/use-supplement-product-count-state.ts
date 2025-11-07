@@ -10,7 +10,8 @@ import type {SupplementProductState} from '@atb/stacks-hierarchy/Root_PurchaseOv
 export function useSupplementCountProductState(
   selection: PurchaseSelectionType,
 ): SupplementProductState {
-  const selectableSupplementProducts = useSelectableSupplementProducts();
+  const selectableSupplementProducts =
+    useSelectableSupplementProducts(selection);
   const [state, setState] = useState<SupplementProductWithCount[]>(
     mapToInitialSupplementProductsWithCount(
       selectableSupplementProducts,

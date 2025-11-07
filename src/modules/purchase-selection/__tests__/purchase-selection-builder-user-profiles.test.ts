@@ -3,6 +3,7 @@ import {
   TEST_INPUT,
   TEST_PRODUCT,
   TEST_SELECTION,
+  TEST_SUPPLEMENT_PRODUCT,
   TEST_USER_PROFILE,
 } from './test-utils';
 import {PurchaseSelectionType} from '../types';
@@ -82,4 +83,87 @@ describe('purchaseSelectionBuilder - userProfiles', () => {
 
     expect(selection).toBe(originalSelection);
   });
+});
+
+it('Should not apply supplement products with zero count', () => {
+  const selection = createEmptyBuilder(TEST_INPUT)
+    .fromSelection(TEST_SELECTION)
+    .supplementProducts([
+      {...TEST_SUPPLEMENT_PRODUCT, id: 'SP1', count: 0},
+      {...TEST_SUPPLEMENT_PRODUCT, id: 'SP2', count: 3},
+      {...TEST_SUPPLEMENT_PRODUCT, id: 'SP3', count: 0},
+    ])
+    .build();
+
+  expect(selection.supplementProductsWithCount).toHaveLength(1);
+  expect(selection.supplementProductsWithCount[0].id).toBe('SP2');
+  expect(selection.supplementProductsWithCount[0].count).toBe(3);
+});
+
+it('Should not apply any user profiles or supplement products if all have zero count', () => {
+  const selection = createEmptyBuilder(TEST_INPUT)
+    .fromSelection(TEST_SELECTION)
+    .userProfiles([
+      {...TEST_USER_PROFILE, id: 'UP2', count: 0},
+      {...TEST_USER_PROFILE, id: 'UP3', count: 0},
+    ])
+    .supplementProducts([
+      {...TEST_SUPPLEMENT_PRODUCT, id: 'SP1', count: 0},
+      {...TEST_SUPPLEMENT_PRODUCT, id: 'SP2', count: 0},
+    ])
+    .build();
+
+  expect(selection.userProfilesWithCount).toHaveLength(1);
+  expect(selection.supplementProductsWithCount).toHaveLength(0);
+  expect(selection).toBe(TEST_SELECTION);
+});
+
+it('Should apply both user profiles and supplement products with positive count', () => {
+  const selection = createEmptyBuilder(TEST_INPUT)
+    .fromSelection(TEST_SELECTION)
+    .userProfiles([
+      {...TEST_USER_PROFILE, id: 'UP2', count: 1},
+      {...TEST_USER_PROFILE, id: 'UP3', count: 2},
+    ])
+    .supplementProducts([
+      {...TEST_SUPPLEMENT_PRODUCT, id: 'SP1', count: 2},
+      {...TEST_SUPPLEMENT_PRODUCT, id: 'SP2', count: 1},
+    ])
+    .build();
+
+  expect(selection.userProfilesWithCount).toHaveLength(2);
+  expect(selection.supplementProductsWithCount).toHaveLength(2);
+});
+
+it('Should apply zero count user profile with existing supplement product', () => {
+  const selection = createEmptyBuilder(TEST_INPUT)
+    .fromSelection(TEST_SELECTION)
+    .supplementProducts([{...TEST_SUPPLEMENT_PRODUCT, id: 'SP1', count: 2}])
+    .userProfiles([{...TEST_USER_PROFILE, id: 'UP2', count: 0}])
+    .build();
+
+  expect(selection.userProfilesWithCount).toHaveLength(0);
+  expect(selection.supplementProductsWithCount).toHaveLength(1);
+  expect(selection.supplementProductsWithCount[0].id).toBe('SP1');
+  expect(selection.supplementProductsWithCount[0].count).toBe(2);
+});
+
+it('Should apply zero count user profile with multiple supplement products', () => {
+  const selection = createEmptyBuilder(TEST_INPUT)
+    .fromSelection(TEST_SELECTION)
+    .supplementProducts([
+      {...TEST_SUPPLEMENT_PRODUCT, id: 'SP1', count: 2},
+      {...TEST_SUPPLEMENT_PRODUCT, id: 'SP2', count: 1},
+    ])
+    .userProfiles([{...TEST_USER_PROFILE, id: 'UP2', count: 0}])
+    .build();
+
+  expect(selection.userProfilesWithCount).toHaveLength(0);
+  expect(selection.supplementProductsWithCount).toHaveLength(2);
+  expect(
+    selection.supplementProductsWithCount.find((s) => s.id === 'SP1')?.count,
+  ).toBe(2);
+  expect(
+    selection.supplementProductsWithCount.find((s) => s.id === 'SP2')?.count,
+  ).toBe(1);
 });

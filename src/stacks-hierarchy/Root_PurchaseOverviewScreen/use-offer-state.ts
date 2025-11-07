@@ -219,9 +219,11 @@ export function useOfferState(
               isOnBehalfOf: selection?.isOnBehalfOf ?? false,
               travellers: offerTravellers,
               products: preassignedFareProductAlternatives.map((p) => p.id),
+              supplementProducts: selection?.supplementProductsWithCount.map(
+                (sp) => sp.id,
+              ),
               travelDate: selection?.travelDate,
             };
-            console.log('Searching offers with params:', params);
 
             const offerEndpoint = selection?.stopPlaces
               ? 'stop-places'

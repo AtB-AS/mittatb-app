@@ -33,9 +33,11 @@ export const TravellerSelectionSheet = ({
   const userCountState = useUserCountState(selection);
   const supplementProductCountState = useSupplementCountProductState(selection);
 
-  const noProfilesSelected = userCountState.userProfilesWithCount.every(
-    (u) => !u.count,
-  );
+  const nothingSelected =
+    userCountState.userProfilesWithCount.every((u) => !u.count) &&
+    supplementProductCountState.supplementProductsWithCount.every(
+      (sp) => !sp.count,
+    );
 
   return (
     <BottomSheetContainer
@@ -56,14 +58,14 @@ export const TravellerSelectionSheet = ({
         <Button
           expanded={true}
           text={t(PurchaseOverviewTexts.travellerSelectionSheet.confirm)}
-          disabled={noProfilesSelected}
+          disabled={nothingSelected}
           onPress={() => {
             const newSelection = selectionBuilder
               .fromSelection(selection)
-              .userProfiles(userCountState.userProfilesWithCount)
               .supplementProducts(
                 supplementProductCountState.supplementProductsWithCount,
               )
+              .userProfiles(userCountState.userProfilesWithCount)
               .build();
             onSave(newSelection);
           }}
