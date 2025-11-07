@@ -7,6 +7,7 @@ import {
   TEST_USER_PROFILE,
 } from './test-utils';
 import {PurchaseSelectionType} from '../types';
+import {isSelectableSupplementProduct} from '../utils';
 
 describe('purchaseSelectionBuilder - userProfiles', () => {
   it('Should apply valid user profiles', () => {
@@ -82,6 +83,59 @@ describe('purchaseSelectionBuilder - userProfiles', () => {
       .build();
 
     expect(selection).toBe(originalSelection);
+  });
+});
+
+describe('isSelectableSupplementProduct', () => {
+  it('returns true if supplement product is allowed by limitations', () => {
+    const selection: PurchaseSelectionType = {
+      ...TEST_SELECTION,
+      preassignedFareProduct: {
+        ...TEST_PRODUCT,
+        limitations: {
+          ...TEST_PRODUCT.limitations,
+          supplementProductRefs: ['SP1', 'SP2'],
+        },
+      },
+    };
+    const supplementProduct = {...TEST_SUPPLEMENT_PRODUCT, id: 'SP1'};
+    expect(isSelectableSupplementProduct(selection, supplementProduct)).toBe(
+      true,
+    );
+  });
+
+  it('returns false if supplement product is not allowed by limitations', () => {
+    const selection: PurchaseSelectionType = {
+      ...TEST_SELECTION,
+      preassignedFareProduct: {
+        ...TEST_PRODUCT,
+        limitations: {
+          ...TEST_PRODUCT.limitations,
+          supplementProductRefs: ['SP1', 'SP2'],
+        },
+      },
+    };
+    const supplementProduct = {...TEST_SUPPLEMENT_PRODUCT, id: 'SP3'};
+    expect(isSelectableSupplementProduct(selection, supplementProduct)).toBe(
+      false,
+    );
+  });
+
+  it('returns true if supplementProductRefs is empty (no limitations)', () => {
+    const selection: PurchaseSelectionType = {
+      ...TEST_SELECTION,
+      preassignedFareProduct: {
+        ...TEST_PRODUCT,
+        limitations: {
+          ...TEST_PRODUCT.limitations,
+          supplementProductRefs: [],
+        },
+      },
+    };
+    const supplementProduct = {...TEST_SUPPLEMENT_PRODUCT, id: 'SP3'};
+    expect(isSelectableSupplementProduct(selection, supplementProduct)).toBe(
+      true,
+    );
   });
 });
 

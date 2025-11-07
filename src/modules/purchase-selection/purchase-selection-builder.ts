@@ -12,6 +12,7 @@ import {
   getDefaultZones,
   isSelectableProduct,
   isSelectableProfile,
+  isSelectableSupplementProduct,
   isSelectableZone,
   isValidSelection,
 } from './utils';
@@ -132,7 +133,12 @@ const createBuilder = (
       const productsWithCount = supplementProductsWithCount.filter(
         (s) => s.count,
       );
-      if (productsWithCount.length) {
+      if (
+        productsWithCount.length &&
+        productsWithCount.every((sp) =>
+          isSelectableSupplementProduct(currentSelection, sp),
+        )
+      ) {
         currentSelection = {
           ...currentSelection,
           supplementProductsWithCount: productsWithCount,
