@@ -33,6 +33,7 @@ type Props = NearbyStopPlacesScreenParams & {
   onSelectStopPlace: (place: StopPlace) => void;
   onUpdateLocation: (location?: Location) => void;
   onAddFavoritePlace: () => void;
+  isLargeTitle?: boolean;
 };
 
 export const NearbyStopPlacesScreenComponent = ({
@@ -43,6 +44,7 @@ export const NearbyStopPlacesScreenComponent = ({
   onSelectStopPlace,
   onUpdateLocation,
   onAddFavoritePlace,
+  isLargeTitle = true,
 }: Props) => {
   const {
     locationIsAvailable,
@@ -161,11 +163,13 @@ export const NearbyStopPlacesScreenComponent = ({
       headerProps={{...headerProps}}
       parallaxContent={(focusRef) => (
         <>
-          <ScreenHeading
-            ref={focusRef}
-            text={headerProps.title ?? ''}
-            isLarge={true}
-          />
+          {isLargeTitle && (
+            <ScreenHeading
+              ref={focusRef}
+              text={headerProps.title ?? ''}
+              isLarge={true}
+            />
+          )}
           <Header
             fromLocation={location}
             updatingLocation={updatingLocation}
@@ -181,6 +185,7 @@ export const NearbyStopPlacesScreenComponent = ({
           />
         </>
       )}
+      titleAlwaysVisible={!isLargeTitle}
       refreshControl={
         // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
         isFocused || Platform.OS === 'android' ? (
@@ -298,8 +303,6 @@ function sortAndFilterStopPlaces(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
-    backgroundColor: theme.color.background.neutral[1].background,
-    paddingBottom: theme.spacing.medium,
     paddingTop: theme.spacing.medium,
   },
   locationInputSection: {
