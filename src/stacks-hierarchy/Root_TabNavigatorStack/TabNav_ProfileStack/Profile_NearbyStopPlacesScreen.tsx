@@ -21,7 +21,7 @@ export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
         title: t(FavoriteDeparturesTexts.favoriteItemAdd.label),
         leftButton: {type: 'close'},
       }}
-      useLargeTitle={false}
+      isLargeTitle={false}
       onPressLocationSearch={(location) =>
         navigation.navigate('Root_LocationSearchByTextScreen', {
           label: t(SharedTexts.from),

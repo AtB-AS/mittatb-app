@@ -33,7 +33,7 @@ type Props = NearbyStopPlacesScreenParams & {
   onSelectStopPlace: (place: StopPlace) => void;
   onUpdateLocation: (location?: Location) => void;
   onAddFavoritePlace: () => void;
-  useLargeTitle?: boolean;
+  isLargeTitle?: boolean;
 };
 
 export const NearbyStopPlacesScreenComponent = ({
@@ -44,7 +44,7 @@ export const NearbyStopPlacesScreenComponent = ({
   onSelectStopPlace,
   onUpdateLocation,
   onAddFavoritePlace,
-  useLargeTitle = true,
+  isLargeTitle = true,
 }: Props) => {
   const {
     locationIsAvailable,
@@ -164,7 +164,7 @@ export const NearbyStopPlacesScreenComponent = ({
       headerProps={{...headerProps}}
       parallaxContent={(focusRef) => (
         <>
-          {useLargeTitle && (
+          {isLargeTitle && (
             <ScreenHeading
               ref={focusRef}
               text={headerProps.title ?? ''}
@@ -184,14 +184,14 @@ export const NearbyStopPlacesScreenComponent = ({
             mode={mode}
             onAddFavoritePlace={onAddFavoritePlace}
             backgroundColor={
-              useLargeTitle
+              isLargeTitle
                 ? theme.color.background.neutral[1].background
                 : theme.color.background.neutral[2].background
             }
           />
         </>
       )}
-      titleAlwaysVisible={!useLargeTitle}
+      titleAlwaysVisible={!isLargeTitle}
       refreshControl={
         // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
         isFocused || Platform.OS === 'android' ? (
