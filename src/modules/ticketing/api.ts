@@ -42,6 +42,7 @@ export type OfferSearchParams = {
 type Traveller = {
   id: string;
   userType: string;
+  baggageTypes?: string[];
   count: number;
 };
 
