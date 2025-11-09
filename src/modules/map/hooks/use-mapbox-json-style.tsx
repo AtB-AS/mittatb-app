@@ -10,7 +10,10 @@ import {useGeofencingZonesVectorSource} from '../components/mobility/GeofencingZ
 
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
-  GeofencingZones = 'geofencingZones',
+  GeofencingZones_allowed = 'geofencingZones_allowed',
+  GeofencingZones_slow = 'geofencingZones_slow',
+  GeofencingZones_noParking = 'geofencingZones_noParking',
+  GeofencingZones_noEntry = 'geofencingZones_noEntry',
   Vehicles = 'vehicles',
   Stations = 'stations',
   NSRItems = 'nsrItems',
@@ -25,7 +28,10 @@ const slotSource: StyleJsonVectorSourcesObj = {
 
 // the order of this list, determines which layers render on top. Last is on top.
 const slotLayerIds: MapSlotLayerId[] = [
-  MapSlotLayerId.GeofencingZones,
+  MapSlotLayerId.GeofencingZones_allowed,
+  MapSlotLayerId.GeofencingZones_slow,
+  MapSlotLayerId.GeofencingZones_noParking,
+  MapSlotLayerId.GeofencingZones_noEntry,
   MapSlotLayerId.Vehicles,
   MapSlotLayerId.Stations,
   MapSlotLayerId.NSRItems,

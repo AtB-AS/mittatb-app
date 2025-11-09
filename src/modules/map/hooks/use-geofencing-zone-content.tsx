@@ -1,39 +1,29 @@
 import {useTranslation} from '@atb/translations';
-import {
-  GeofencingZoneExplanations,
-  GeofencingZoneExtraExplanations,
-} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {GeofencingZoneCustomProps} from '../types';
+import {GeofencingZoneExplanations} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {GeofencingZoneIconBox} from '@atb/components/icon-box';
 import {useCallback} from 'react';
+import {GeofencingZoneCode} from '@atb-as/theme';
 
 export const useGeofencingZoneContent = () => {
   const {t} = useTranslation();
 
   const getGeofencingZoneContent = useCallback(
-    (geofencingZoneCustomProps?: GeofencingZoneCustomProps) => {
+    (gfzCode?: GeofencingZoneCode) => {
       const title = t(
-        GeofencingZoneExplanations[
-          geofencingZoneCustomProps?.code || 'unspecified'
-        ].title,
+        GeofencingZoneExplanations[gfzCode || 'unspecified'].title,
       );
 
-      const isStationParkingPostfix =
-        geofencingZoneCustomProps?.isStationParking
-          ? '. ' + t(GeofencingZoneExtraExplanations.isStationParking)
-          : '';
+      const isStationParkingPostfix = ''; // todo: fix
+      // geofencingZoneCustomProps?.isStationParking
+      //   ? '. ' + t(GeofencingZoneExtraExplanations.isStationParking)
+      //   : '';
 
       const description =
-        t(
-          GeofencingZoneExplanations[
-            geofencingZoneCustomProps?.code || 'unspecified'
-          ].description,
-        ) + isStationParkingPostfix;
+        t(GeofencingZoneExplanations[gfzCode || 'unspecified'].description) +
+        isStationParkingPostfix;
 
-      const iconNode = geofencingZoneCustomProps?.code ? (
-        <GeofencingZoneIconBox
-          geofencingZoneCode={geofencingZoneCustomProps?.code}
-        />
+      const iconNode = gfzCode ? (
+        <GeofencingZoneIconBox geofencingZoneCode={gfzCode} />
       ) : null;
 
       return {

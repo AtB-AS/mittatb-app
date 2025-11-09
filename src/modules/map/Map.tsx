@@ -14,7 +14,7 @@ import {Feature} from 'geojson';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, getSlightlyRaisedMapPadding} from './MapConfig';
-import {GeofencingZoneCustomProps, MapPropertiesType, MapProps} from './types';
+import {MapPropertiesType, MapProps} from './types';
 import {
   isFeaturePoint,
   getFeaturesAtClick,
@@ -58,6 +58,7 @@ import {MapBottomSheets} from './MapBottomSheets';
 
 import {MapButtons} from './components/MapButtons';
 import {useFlyToSelectedMapItemWithPadding} from './hooks/use-fly-to-selected-map-item-with-padding';
+import {GeofencingZoneCode} from '@atb-as/theme';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -149,10 +150,9 @@ export const Map = (props: MapProps) => {
   }, [selectedFeature, hideSnackbar]);
 
   const geofencingZoneOnPress = useCallback(
-    (geofencingZoneCustomProps?: GeofencingZoneCustomProps) => {
-      const geofencingZoneContent = getGeofencingZoneContent(
-        geofencingZoneCustomProps,
-      );
+    (gfzCode?: GeofencingZoneCode) => {
+      console.log('geofencingZoneOnPress, gfzCode', gfzCode);
+      const geofencingZoneContent = getGeofencingZoneContent(gfzCode);
       showSnackbar({content: geofencingZoneContent, position: 'top'});
     },
     [showSnackbar, getGeofencingZoneContent],
@@ -202,14 +202,9 @@ export const Map = (props: MapProps) => {
       if (!isFeaturePoint(feature)) return;
       if (!showGeofencingZones && !isActiveTrip) return;
 
-      const {coordinates: positionClicked} = feature.geometry;
-
       const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
       if (!featuresAtClick || featuresAtClick.length === 0) return;
-      const featureToSelect = getFeatureToSelect(
-        featuresAtClick,
-        positionClicked,
-      );
+      const featureToSelect = getFeatureToSelect(featuresAtClick);
 
       /**
        * this hides the Snackbar when a feature is clicked,
@@ -224,9 +219,10 @@ export const Map = (props: MapProps) => {
         // - have a bottom sheet with departures just for the clicked quay
         return; // currently - do nothing
       } else if (isFeatureGeofencingZone(featureToSelect)) {
-        geofencingZoneOnPress(
-          featureToSelect?.properties?.geofencingZoneCustomProps,
-        );
+        // geofencingZoneOnPress(
+        //   featureToSelect?.properties?.geofencingZoneCustomProps,
+        // );
+        return; // fix?
       } else if (isScooterV2(selectedFeature) && !isActiveTrip) {
         // outside of operational area, rules unspecified
         geofencingZoneOnPress(undefined);
@@ -241,9 +237,22 @@ export const Map = (props: MapProps) => {
     ],
   );
 
+  const onGfzClick = useCallback(
+    (e: OnPressEvent) => {
+      console.log('click');
+      const featuresAtClick = e.features;
+      if (!featuresAtClick || featuresAtClick.length === 0) return;
+      const featureToSelect = featuresAtClick[0]; // todo fix?
+      console.log('featureToSelect', featureToSelect);
+      geofencingZoneOnPress(
+        featureToSelect?.properties?.['*'], // todo fix
+      );
+    },
+    [geofencingZoneOnPress],
+  );
+
   const onMapItemClick = useCallback(
     async (e: OnPressEvent) => {
-      const positionClicked = [e.coordinates.longitude, e.coordinates.latitude];
       const featuresAtClick = e.features;
       if (
         !featuresAtClick ||
@@ -253,10 +262,7 @@ export const Map = (props: MapProps) => {
       )
         return;
 
-      const featureToSelect = getFeatureToSelect(
-        featuresAtClick,
-        positionClicked,
-      );
+      const featureToSelect = getFeatureToSelect(featuresAtClick);
 
       if (isClusterFeatureV2(featureToSelect)) {
         const fromZoomLevel = (await mapViewRef.current?.getZoom()) ?? 0;
@@ -386,6 +392,7 @@ export const Map = (props: MapProps) => {
                 activeShmoBooking?.asset.vehicleTypeId ??
                 null
               }
+              geofencingZoneOnPress={onGfzClick}
             />
           )}
 
@@ -412,7 +419,18 @@ export const Map = (props: MapProps) => {
         {mapState.bottomSheetType === MapBottomSheetType.None && (
           <MapButtons locationArrowOnPress={locationArrowOnPress} />
         )}
-        {includeSnackbar && <Snackbar {...snackbarProps} />}
+        {includeSnackbar &&
+          ((snackbarProps.content?.messageKey || 0) % 2 === 0 ? (
+            <Snackbar
+              key={snackbarProps.content?.messageKey + 'a'}
+              {...snackbarProps}
+            />
+          ) : (
+            <Snackbar
+              key={snackbarProps.content?.messageKey + 'b'}
+              {...snackbarProps}
+            />
+          ))}
       </View>
       <MapBottomSheets
         mapViewRef={mapViewRef}

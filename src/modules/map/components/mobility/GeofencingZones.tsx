@@ -11,27 +11,48 @@ import {
   useTileUrlTemplate,
 } from '../../hooks/use-tile-url-template';
 import {useThemeContext} from '@atb/theme';
+import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
+import {GeofencingZoneCode} from '@atb-as/theme';
 
 const geofencingZonesVectorSourceId = 'geofencing-zones-source';
 const sourceLayerId = 'geofencing_zones_features';
 const minZoomLevel = 9;
+const gfzCodes: GeofencingZoneCode[] = [
+  'allowed',
+  'slow',
+  'noParking',
+  'noEntry',
+];
 
 type GeofencingZonesProps = {
   systemId: string | null;
   vehicleTypeId: string | null;
+  geofencingZoneOnPress: (e: OnPressEvent) => void;
 };
 export const GeofencingZones = ({
   systemId,
   vehicleTypeId,
+  geofencingZoneOnPress,
 }: GeofencingZonesProps) => {
   if (!systemId || !vehicleTypeId) {
     return <></>;
   }
   return (
-    <GeofencingZonesForVehicle
-      systemId={systemId}
-      vehicleTypeId={vehicleTypeId}
-    />
+    <MapboxGL.VectorSource
+      id={geofencingZonesVectorSourceId}
+      existing={true}
+      hitbox={hitboxCoveringIconOnly} // to not be able to hit multiple zones with one click
+      onPress={geofencingZoneOnPress}
+    >
+      {gfzCodes.map((gfzCode) => (
+        <GeofencingZonesForVehicle
+          key={gfzCode}
+          // systemId={systemId}
+          // vehicleTypeId={vehicleTypeId}
+          gfzCode={gfzCode}
+        />
+      ))}
+    </MapboxGL.VectorSource>
   );
 };
 
@@ -51,26 +72,25 @@ const useGeofencingZoneStyle = () => {
 };
 
 const GeofencingZonesForVehicle = ({
-  systemId,
-  vehicleTypeId,
+  // systemId,
+  // vehicleTypeId,
+  gfzCode,
 }: {
-  systemId: string;
-  vehicleTypeId: string;
+  // systemId: string;
+  // vehicleTypeId: string;
+  gfzCode: GeofencingZoneCode;
 }) => {
   const geofencingZoneStyle = useGeofencingZoneStyle();
 
   const bgColor = ['get', 'background', ['get', 'color', geofencingZoneStyle]];
   const fillOpacity = ['get', 'fillOpacity', geofencingZoneStyle];
 
+  const code = ['get', '*']; // 'fix';
+
   return (
-    <MapboxGL.VectorSource
-      id={geofencingZonesVectorSourceId}
-      existing={true}
-      hitbox={hitboxCoveringIconOnly} // to not be able to hit multiple zones with one click
-      //onPress={}
-    >
+    <>
       <MapboxGL.FillLayer
-        id="geofencingZoneFill"
+        id={'geofencingZoneFill' + gfzCode}
         sourceID={geofencingZonesVectorSourceId}
         sourceLayerID={sourceLayerId}
         minZoomLevel={minZoomLevel}
@@ -79,7 +99,8 @@ const GeofencingZonesForVehicle = ({
           fillColor: bgColor,
           fillOpacity,
         }}
-        aboveLayerID={MapSlotLayerId.GeofencingZones}
+        aboveLayerID={MapSlotLayerId[`GeofencingZones_${gfzCode}`]}
+        filter={['==', code, gfzCode]}
       />
 
       {/*
@@ -87,13 +108,19 @@ const GeofencingZonesForVehicle = ({
         lineDasharray: ['get', 'lineDasharray'],
         a hard coded style must be used for that style prop.
       */}
-      <GfzLineLayer isDashed={true} />
-      <GfzLineLayer isDashed={false} />
-    </MapboxGL.VectorSource>
+      <GfzLineLayer gfzCode={gfzCode} isDashed={true} />
+      <GfzLineLayer gfzCode={gfzCode} isDashed={false} />
+    </>
   );
 };
 
-const GfzLineLayer = ({isDashed}: {isDashed: boolean}) => {
+const GfzLineLayer = ({
+  isDashed,
+  gfzCode,
+}: {
+  isDashed: boolean;
+  gfzCode: GeofencingZoneCode;
+}) => {
   const geofencingZoneStyle = useGeofencingZoneStyle();
   const lineOpacity = ['get', 'strokeOpacity', geofencingZoneStyle];
   const lineStyle = ['get', 'lineStyle', geofencingZoneStyle];
@@ -113,7 +140,7 @@ const GfzLineLayer = ({isDashed}: {isDashed: boolean}) => {
 
   return (
     <MapboxGL.LineLayer
-      id={`geofencingZone${isDashed ? 'Dashed' : ''}Line`}
+      id={`geofencingZone${isDashed ? 'Dashed' : ''}Line_${gfzCode}`}
       sourceID={geofencingZonesVectorSourceId}
       sourceLayerID={sourceLayerId}
       minZoomLevel={minZoomLevel}
@@ -122,7 +149,7 @@ const GfzLineLayer = ({isDashed}: {isDashed: boolean}) => {
         ...lineLayerStyle,
         lineDasharray: isDashed ? [2, 2] : undefined,
       }}
-      aboveLayerID={MapSlotLayerId.GeofencingZones}
+      aboveLayerID={MapSlotLayerId[`GeofencingZones_${gfzCode}`]}
     />
   );
 };

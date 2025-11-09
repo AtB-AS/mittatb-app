@@ -32,6 +32,8 @@ import {
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {MapBottomSheetType} from './MapContext';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {GeofencingZoneCode} from '@atb-as/theme';
+import z from 'zod';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
@@ -60,12 +62,22 @@ export const isFeaturePolylineEncodedMultiPolygon = (f: Feature): boolean =>
 export const hasGeofencingZoneCustomProps = (f: Feature) =>
   Object.keys(f.properties?.geofencingZoneCustomProps || {}).length > 0;
 
+// export const isFeatureGeofencingZone = (
+//   f: Feature,
+// ): f is Feature<
+//   MultiPolygon,
+//   {geofencingZoneCustomProps: GeofencingZoneCustomProps}
+// > => isFeaturePolylineEncodedMultiPolygon(f) && hasGeofencingZoneCustomProps(f);
+
+const GeofencingZonePropsSchema = z.object({
+  ['*']: z.enum(['allowed', 'slow', 'noParking', 'noEntry']), // hmm todo fix
+  systemId: z.string(),
+});
+export type GeofencingZoneProps = z.infer<typeof GeofencingZonePropsSchema>;
 export const isFeatureGeofencingZone = (
-  f: Feature,
-): f is Feature<
-  MultiPolygon,
-  {geofencingZoneCustomProps: GeofencingZoneCustomProps}
-> => isFeaturePolylineEncodedMultiPolygon(f) && hasGeofencingZoneCustomProps(f);
+  feature: Feature,
+): feature is Feature<Point, GeofencingZoneProps> =>
+  GeofencingZonePropsSchema.safeParse(feature.properties).success;
 
 export const isClusterFeatureV2 = (
   feature: Feature,
@@ -257,11 +269,9 @@ export const getVisibleRange = (visibleBounds: Position[]) => {
 
 export function getFeatureToSelect(
   featuresAtClick: Feature<Geometry, GeoJsonProperties>[],
-  positionClicked: Position, // [lon, lat]
 ) {
   const featureToSelect = featuresAtClick.reduce((selected, currentFeature) =>
-    getFeatureWeight(currentFeature, positionClicked) >
-    getFeatureWeight(selected, positionClicked)
+    getFeatureWeight(currentFeature) > getFeatureWeight(selected)
       ? currentFeature
       : selected,
   );
@@ -270,7 +280,7 @@ export function getFeatureToSelect(
 
 export function getFeatureWeight(
   feature: Feature,
-  positionClicked: Position,
+  // positionClicked: Position,
 ): number {
   if (isFeaturePoint(feature)) {
     return isStopPlace(feature) ||
@@ -283,11 +293,12 @@ export function getFeatureWeight(
       ? 3
       : 1;
   } else if (isFeatureGeofencingZone(feature)) {
-    const positionClickedIsInsideGeofencingZone = turfBooleanPointInPolygon(
-      positionClicked,
-      feature.geometry,
-    );
-    return positionClickedIsInsideGeofencingZone ? 2 : 0;
+    return 0; // should no longer happen
+    // const positionClickedIsInsideGeofencingZone = turfBooleanPointInPolygon(
+    //   positionClicked,
+    //   feature.geometry,
+    // );
+    // return positionClickedIsInsideGeofencingZone ? 2 : 0;
   } else {
     return 0;
   }
