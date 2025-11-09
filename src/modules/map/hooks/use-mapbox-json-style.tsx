@@ -6,6 +6,7 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {useGeofencingZonesVectorSource} from '../components/mobility/GeofencingZones';
 
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
@@ -38,7 +39,11 @@ const slotLayers = slotLayerIds.map((slotLayerId) => ({
 
 export const useMapboxJsonStyle: (
   includeVehiclesAndStationsVectorSource: boolean,
-) => string | undefined = (includeVehiclesAndStationsVectorSource) => {
+  includeGeofencingZonesVectorSource: boolean,
+) => string | undefined = (
+  includeVehiclesAndStationsVectorSource,
+  includeGeofencingZonesVectorSource,
+) => {
   const {themeName} = useThemeContext();
   const {language} = useTranslation();
   const {mapbox_user_name, mapbox_nsr_tileset_id} = useRemoteConfigContext();
@@ -51,6 +56,11 @@ export const useMapboxJsonStyle: (
     id: vehiclesAndStationsVectorSourceId,
     source: vehiclesAndStationsVectorSource,
   } = useVehiclesAndStationsVectorSource();
+
+  const {
+    id: geofencingZonesVectorSourceId,
+    source: geofencingZonesVectorSource,
+  } = useGeofencingZonesVectorSource();
 
   const themedStyleWithExtendedSourcesAndSlotLayers = useMemo(() => {
     const themedStyle =
@@ -65,6 +75,11 @@ export const useMapboxJsonStyle: (
         ? {
             [vehiclesAndStationsVectorSourceId]:
               vehiclesAndStationsVectorSource,
+          }
+        : undefined),
+      ...(includeGeofencingZonesVectorSource
+        ? {
+            [geofencingZonesVectorSourceId]: geofencingZonesVectorSource,
           }
         : undefined),
     };
@@ -83,6 +98,9 @@ export const useMapboxJsonStyle: (
     includeVehiclesAndStationsVectorSource,
     vehiclesAndStationsVectorSourceId,
     vehiclesAndStationsVectorSource,
+    includeGeofencingZonesVectorSource,
+    geofencingZonesVectorSourceId,
+    geofencingZonesVectorSource,
   ]);
 
   const mapboxJsonStyle = useMemo(

@@ -5,7 +5,10 @@ import {useTranslation, getTextForLanguage} from '@atb/translations';
 /**
  * Layers supported by the tile server.
  */
-export type TileLayerName = 'vehicles_clustered' | 'stations';
+export type TileLayerName =
+  | 'vehicles_clustered'
+  | 'stations'
+  | 'geofencing_zones_features';
 
 /**
  * Returns a tile URL template for fetching map tiles or undefined if unavailable.

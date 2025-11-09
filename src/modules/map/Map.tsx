@@ -88,7 +88,6 @@ export const Map = (props: MapProps) => {
     false;
   const shouldShowVehiclesAndStations =
     isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
-  const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
 
   const selectedFeature = mapState.feature;
 
@@ -107,6 +106,11 @@ export const Map = (props: MapProps) => {
     (selectedFeatureIsAVehicle ||
       (activeShmoBooking?.bookingId !== undefined &&
         activeShmoBooking.state === ShmoBookingState.IN_USE));
+
+  const mapViewConfig = useMapViewConfig({
+    shouldShowVehiclesAndStations,
+    shouldShowGeofencingZones: true, // showGeofencingZones, seems to be smoother and unproblematic with always true
+  });
 
   const {
     data: vehicle,
