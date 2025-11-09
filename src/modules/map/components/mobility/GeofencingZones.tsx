@@ -138,13 +138,19 @@ const GfzLineLayer = ({
     lineJoin: 'round',
   };
 
+  const code = ['get', '*']; // 'fix';
+
   return (
     <MapboxGL.LineLayer
       id={`geofencingZone${isDashed ? 'Dashed' : ''}Line_${gfzCode}`}
       sourceID={geofencingZonesVectorSourceId}
       sourceLayerID={sourceLayerId}
       minZoomLevel={minZoomLevel}
-      filter={[isDashed ? '==' : '!=', lineStyle, 'dashed']}
+      filter={[
+        'all',
+        [isDashed ? '==' : '!=', lineStyle, 'dashed'],
+        ['==', code, gfzCode],
+      ]}
       style={{
         ...lineLayerStyle,
         lineDasharray: isDashed ? [2, 2] : undefined,
