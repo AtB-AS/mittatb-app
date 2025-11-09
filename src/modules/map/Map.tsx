@@ -151,11 +151,22 @@ export const Map = (props: MapProps) => {
 
   const geofencingZoneOnPress = useCallback(
     (gfzCode?: GeofencingZoneCode) => {
-      console.log('geofencingZoneOnPress, gfzCode', gfzCode);
       const geofencingZoneContent = getGeofencingZoneContent(gfzCode);
       showSnackbar({content: geofencingZoneContent, position: 'top'});
     },
     [showSnackbar, getGeofencingZoneContent],
+  );
+
+  const onGfzClick = useCallback(
+    (e: OnPressEvent) => {
+      const featuresAtClick = e.features;
+      if (!featuresAtClick || featuresAtClick.length === 0) return;
+      const featureToSelect = featuresAtClick[0]; // currently ignore the ones behind
+      geofencingZoneOnPress(
+        featureToSelect?.properties?.['*'], // todo fix
+      );
+    },
+    [geofencingZoneOnPress],
   );
 
   const locationArrowOnPress = useCallback(async () => {
@@ -235,20 +246,6 @@ export const Map = (props: MapProps) => {
       geofencingZoneOnPress,
       selectedFeature,
     ],
-  );
-
-  const onGfzClick = useCallback(
-    (e: OnPressEvent) => {
-      console.log('click');
-      const featuresAtClick = e.features;
-      if (!featuresAtClick || featuresAtClick.length === 0) return;
-      const featureToSelect = featuresAtClick[0]; // todo fix?
-      console.log('featureToSelect', featureToSelect);
-      geofencingZoneOnPress(
-        featureToSelect?.properties?.['*'], // todo fix
-      );
-    },
-    [geofencingZoneOnPress],
   );
 
   const onMapItemClick = useCallback(
