@@ -168,14 +168,14 @@ const GfzLineLayer = ({
  * then access this source with existing=true and the same source id.
  * @returns {id: string, source: StyleJsonVectorSource}
  */
-export const useGeofencingZonesVectorSource: () => {
+export const useGeofencingZonesVectorSource: (systemId: string) => {
   id: string;
   source: StyleJsonVectorSource;
-} = () => {
+} = (systemId) => {
   // Could consider adding the sources only if shown.
   // The reason not to, is to simplify potential cache tile hotloading on the server.
   const tileLayerNames: TileLayerName[] = ['geofencing_zones_features'];
-  const tileUrlTemplate = useTileUrlTemplate(tileLayerNames);
+  const tileUrlTemplate = useTileUrlTemplate(tileLayerNames, {systemId});
 
   return useMemo(
     () => ({

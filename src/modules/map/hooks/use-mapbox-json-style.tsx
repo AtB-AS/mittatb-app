@@ -46,9 +46,11 @@ const slotLayers = slotLayerIds.map((slotLayerId) => ({
 export const useMapboxJsonStyle: (
   includeVehiclesAndStationsVectorSource: boolean,
   includeGeofencingZonesVectorSource: boolean,
+  systemId?: string,
 ) => string | undefined = (
   includeVehiclesAndStationsVectorSource,
   includeGeofencingZonesVectorSource,
+  systemId,
 ) => {
   const {themeName} = useThemeContext();
   const {language} = useTranslation();
@@ -66,7 +68,7 @@ export const useMapboxJsonStyle: (
   const {
     id: geofencingZonesVectorSourceId,
     source: geofencingZonesVectorSource,
-  } = useGeofencingZonesVectorSource();
+  } = useGeofencingZonesVectorSource(systemId ?? '');
 
   const themedStyleWithExtendedSourcesAndSlotLayers = useMemo(() => {
     const themedStyle =

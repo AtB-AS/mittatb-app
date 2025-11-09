@@ -18,12 +18,16 @@ export type TileLayerName =
  */
 export const useTileUrlTemplate = (
   tileLayerNames: TileLayerName[],
+  params?: Record<string, string>,
 ): string | undefined => {
   const {language} = useTranslation();
   const {configurableLinks} = useFirestoreConfigurationContext();
   const {userId} = useAuthContext();
   const userIdParam = !userId ? '' : '?userId=' + userId;
   const tileServerBaseUrl = getTextForLanguage(
+  const customParams = Object.entries(params ?? {})
+    .map(([key, value]) => `${key}=${value}`)
+    .join('&');
     configurableLinks?.tileServerBaseUrl,
     language,
   );
@@ -35,7 +39,9 @@ export const useTileUrlTemplate = (
       tileServerBaseUrl +
       tileLayerNames.join(',') +
       '/{z}/{x}/{y}' +
-      userIdParam
+      userIdParam +
+      (customParams.length > 0 ? '&' : '') +
+      customParams
     );
   }
 };

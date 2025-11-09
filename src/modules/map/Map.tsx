@@ -108,16 +108,22 @@ export const Map = (props: MapProps) => {
       (activeShmoBooking?.bookingId !== undefined &&
         activeShmoBooking.state === ShmoBookingState.IN_USE));
 
-  const mapViewConfig = useMapViewConfig({
-    shouldShowVehiclesAndStations,
-    shouldShowGeofencingZones: true, // showGeofencingZones, seems to be smoother and unproblematic with always true
-  });
-
   const {
     data: vehicle,
     isLoading: vehicleIsLoading,
     isError: vehicleError,
   } = useVehicleQuery(selectedFeature?.properties?.id);
+
+  const systemId =
+    vehicle?.system.id ?? activeShmoBooking?.asset.systemId ?? null;
+  const vehicleTypeId =
+    vehicle?.vehicleType.id ?? activeShmoBooking?.asset.vehicleTypeId ?? null;
+
+  const mapViewConfig = useMapViewConfig({
+    shouldShowVehiclesAndStations,
+    shouldShowGeofencingZones: true, // showGeofencingZones, seems to be smoother and unproblematic with always true
+    systemId: systemId ?? '',
+  });
 
   const [followUserLocation, setFollowUserLocation] = useState(false);
   const mapPropertiesRef = useRef<MapPropertiesType | null>({
@@ -381,14 +387,8 @@ export const Map = (props: MapProps) => {
           />
           {showGeofencingZones && !vehicleError && !vehicleIsLoading && (
             <GeofencingZones
-              systemId={
-                vehicle?.system.id ?? activeShmoBooking?.asset.systemId ?? null
-              }
-              vehicleTypeId={
-                vehicle?.vehicleType.id ??
-                activeShmoBooking?.asset.vehicleTypeId ??
-                null
-              }
+              systemId={systemId}
+              vehicleTypeId={vehicleTypeId}
               geofencingZoneOnPress={onGfzClick}
             />
           )}
