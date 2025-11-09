@@ -419,18 +419,7 @@ export const Map = (props: MapProps) => {
         {mapState.bottomSheetType === MapBottomSheetType.None && (
           <MapButtons locationArrowOnPress={locationArrowOnPress} />
         )}
-        {includeSnackbar &&
-          ((snackbarProps.content?.messageKey || 0) % 2 === 0 ? (
-            <Snackbar
-              key={snackbarProps.content?.messageKey + 'a'}
-              {...snackbarProps}
-            />
-          ) : (
-            <Snackbar
-              key={snackbarProps.content?.messageKey + 'b'}
-              {...snackbarProps}
-            />
-          ))}
+        {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
       <MapBottomSheets
         mapViewRef={mapViewRef}
