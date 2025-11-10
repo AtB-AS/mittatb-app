@@ -13,6 +13,7 @@ import {
 import {useThemeContext} from '@atb/theme';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {GeofencingZoneCode} from '@atb-as/theme';
+import {Expression} from '@rnmapbox/maps/src/utils/MapboxStyles';
 
 const geofencingZonesVectorSourceId = 'geofencing-zones-source';
 const sourceLayerId = 'geofencing_zones_features';
@@ -47,8 +48,7 @@ export const GeofencingZones = ({
       {gfzCodes.map((gfzCode) => (
         <GeofencingZonesForVehicle
           key={gfzCode}
-          // systemId={systemId}
-          // vehicleTypeId={vehicleTypeId}
+          vehicleTypeId={vehicleTypeId}
           gfzCode={gfzCode}
         />
       ))}
@@ -56,36 +56,34 @@ export const GeofencingZones = ({
   );
 };
 
-const useGeofencingZoneStyle = () => {
+const useGeofencingZoneProps = (vehicleTypeId: string) => {
   const {theme} = useThemeContext();
-  // todo: fix source
-  // const code_per_vehicle_type_id = ['get', 'code_per_vehicle_type_id'];
-  // const code: Expression = [
-  //   'coalesce',
-  //   ['get', vehicleTypeId, code_per_vehicle_type_id],
-  //   ['get', '*', code_per_vehicle_type_id],
-  //   'allowed',
-  // ];
-  const code = ['get', '*']; // 'allowed';
+  // would be better to have these props on code_per_vehicle_type_id as in the database
+  const code: Expression = [
+    'coalesce',
+    ['get', vehicleTypeId],
+    ['get', '*'],
+    'allowed',
+  ];
   const geofencingZoneStyles = ['literal', theme.color.geofencingZone];
-  return ['get', code, geofencingZoneStyles];
+  const geofencingZoneStyle = ['get', code, geofencingZoneStyles];
+  return {
+    geofencingZoneStyle,
+    code,
+  };
 };
 
 const GeofencingZonesForVehicle = ({
-  // systemId,
-  // vehicleTypeId,
+  vehicleTypeId,
   gfzCode,
 }: {
-  // systemId: string;
-  // vehicleTypeId: string;
+  vehicleTypeId: string;
   gfzCode: GeofencingZoneCode;
 }) => {
-  const geofencingZoneStyle = useGeofencingZoneStyle();
+  const {geofencingZoneStyle, code} = useGeofencingZoneProps(vehicleTypeId);
 
   const bgColor = ['get', 'background', ['get', 'color', geofencingZoneStyle]];
   const fillOpacity = ['get', 'fillOpacity', geofencingZoneStyle];
-
-  const code = ['get', '*']; // 'fix';
 
   return (
     <>
@@ -108,8 +106,16 @@ const GeofencingZonesForVehicle = ({
         lineDasharray: ['get', 'lineDasharray'],
         a hard coded style must be used for that style prop.
       */}
-      <GfzLineLayer gfzCode={gfzCode} isDashed={true} />
-      <GfzLineLayer gfzCode={gfzCode} isDashed={false} />
+      <GfzLineLayer
+        gfzCode={gfzCode}
+        isDashed={true}
+        vehicleTypeId={vehicleTypeId}
+      />
+      <GfzLineLayer
+        gfzCode={gfzCode}
+        isDashed={false}
+        vehicleTypeId={vehicleTypeId}
+      />
     </>
   );
 };
@@ -117,11 +123,13 @@ const GeofencingZonesForVehicle = ({
 const GfzLineLayer = ({
   isDashed,
   gfzCode,
+  vehicleTypeId,
 }: {
   isDashed: boolean;
   gfzCode: GeofencingZoneCode;
+  vehicleTypeId: string;
 }) => {
-  const geofencingZoneStyle = useGeofencingZoneStyle();
+  const {geofencingZoneStyle, code} = useGeofencingZoneProps(vehicleTypeId);
   const lineOpacity = ['get', 'strokeOpacity', geofencingZoneStyle];
   const lineStyle = ['get', 'lineStyle', geofencingZoneStyle];
   const lineColor = [
@@ -137,8 +145,6 @@ const GfzLineLayer = ({
     lineCap: 'round',
     lineJoin: 'round',
   };
-
-  const code = ['get', '*']; // 'fix';
 
   return (
     <MapboxGL.LineLayer
