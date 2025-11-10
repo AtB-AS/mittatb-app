@@ -297,3 +297,13 @@ export function getFeatureWeight(
     return 0;
   }
 }
+
+export function getPropByVehicleTypeId(
+  propName: string,
+  vehicleTypeId?: string | null,
+  feature?: Feature,
+) {
+  const properties = feature?.properties;
+  const prefix = propName + '_per_vehicle_type_id.';
+  return properties?.[prefix + vehicleTypeId] ?? properties?.[prefix + '*'];
+}

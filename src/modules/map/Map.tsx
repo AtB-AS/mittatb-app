@@ -18,7 +18,6 @@ import {MapPropertiesType, MapProps} from './types';
 import {
   isFeaturePoint,
   getFeaturesAtClick,
-  isFeatureGeofencingZone,
   isClusterFeatureV2,
   isQuayFeature,
   mapPositionToCoordinates,
@@ -26,6 +25,7 @@ import {
   getFeatureToSelect,
   isParkAndRide,
   isStopPlace,
+  getPropByVehicleTypeId,
 } from './utils';
 import {
   GeofencingZones,
@@ -166,22 +166,23 @@ export const Map = (props: MapProps) => {
     [showSnackbar, getGeofencingZoneContent],
   );
 
+  // todo fix name
   const onGfzClick = useCallback(
     (e: OnPressEvent) => {
       const featuresAtClick = e.features;
       if (!featuresAtClick || featuresAtClick.length === 0) return;
       const featureToSelect = featuresAtClick[0]; // currently ignore the ones behind
-      const properties = featureToSelect?.properties;
-      const codePrefix = 'code_per_vehicle_type_id.';
+
       const code =
-        properties?.[codePrefix + vehicleTypeId] ??
-        properties?.[codePrefix + '*'] ??
+        getPropByVehicleTypeId('code', vehicleTypeId, featureToSelect) ??
         'allowed';
-      const stationPrefix = 'station_parking_per_vehicle_type_id.';
+
       const stationParking =
-        properties?.[stationPrefix + vehicleTypeId] ??
-        properties?.[stationPrefix + '*'] ??
-        'allowed';
+        getPropByVehicleTypeId(
+          'station_parking',
+          vehicleTypeId,
+          featureToSelect,
+        ) ?? false;
 
       geofencingZoneOnPress(code, stationParking);
     },
@@ -236,11 +237,6 @@ export const Map = (props: MapProps) => {
       if (!featuresAtClick || featuresAtClick.length === 0) return;
       const featureToSelect = getFeatureToSelect(featuresAtClick);
 
-      /**
-       * this hides the Snackbar when a feature is clicked,
-       * unless the feature is a geofencingZone, in which case
-       * geofencingZoneOnPress will be called which sets it visible again
-       */
       hideSnackbar();
 
       if (isQuayFeature(featureToSelect) && !isActiveTrip) {
@@ -248,11 +244,6 @@ export const Map = (props: MapProps) => {
         // - select a stop place with the clicked quay sorted on top
         // - have a bottom sheet with departures just for the clicked quay
         return; // currently - do nothing
-      } else if (isFeatureGeofencingZone(featureToSelect)) {
-        // geofencingZoneOnPress(
-        //   featureToSelect?.properties?.geofencingZoneCustomProps,
-        // );
-        return; // fix?
       } else if (isScooterV2(selectedFeature) && !isActiveTrip) {
         // outside of operational area, rules unspecified
         geofencingZoneOnPress(undefined);
@@ -429,7 +420,9 @@ export const Map = (props: MapProps) => {
         {mapState.bottomSheetType === MapBottomSheetType.None && (
           <MapButtons locationArrowOnPress={locationArrowOnPress} />
         )}
-        {includeSnackbar && <Snackbar {...snackbarProps} />}
+        {includeSnackbar && (
+          <Snackbar {...snackbarProps} onHideSnackbar={hideSnackbar} />
+        )}
       </View>
       <MapBottomSheets
         mapViewRef={mapViewRef}

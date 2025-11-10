@@ -71,7 +71,7 @@ const GeofencingZonesForVehicle = ({
   return (
     <>
       <MapboxGL.FillLayer
-        id={'geofencingZoneFill' + geofencingZoneCode}
+        id={'geofencingZoneFill_' + geofencingZoneCode}
         sourceID={geofencingZonesVectorSourceId}
         sourceLayerID={sourceLayerId}
         minZoomLevel={minZoomLevel}
