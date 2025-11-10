@@ -4,6 +4,7 @@ import {
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
   useRefundOptionsQuery,
+  useSchoolCarnetInfoQuery,
 } from '@atb/modules/ticketing';
 import {FareContractType, getAccesses} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
@@ -130,6 +131,7 @@ export const DetailsContent: React.FC<Props> = ({
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;
 
   const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(fc.id);
+  const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(fc, validityStatus);
 
   return (
     <Section style={styles.section}>
@@ -233,11 +235,15 @@ export const DetailsContent: React.FC<Props> = ({
           state={fc.state}
         />
       )}
-      {isCanBeConsumedNowFareContract(fc, now, currentUserId) && (
+      {isCanBeConsumedNowFareContract(
+        fc,
+        now,
+        currentUserId,
+        schoolCarnetInfo,
+      ) && (
         <ConsumeCarnetSectionItem
-          fareContract={fc}
+          fareContractId={fc.id}
           fareProductType={preassignedFareProduct?.type}
-          validityStatus={validityStatus}
         />
       )}
       {isActivateTicketNowEnabled &&
