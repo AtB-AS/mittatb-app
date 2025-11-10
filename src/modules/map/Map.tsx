@@ -156,8 +156,11 @@ export const Map = (props: MapProps) => {
   }, [selectedFeature, hideSnackbar]);
 
   const geofencingZoneOnPress = useCallback(
-    (gfzCode?: GeofencingZoneCode) => {
-      const geofencingZoneContent = getGeofencingZoneContent(gfzCode);
+    (gfzCode?: GeofencingZoneCode, isStationParking?: boolean) => {
+      const geofencingZoneContent = getGeofencingZoneContent(
+        gfzCode,
+        isStationParking,
+      );
       showSnackbar({content: geofencingZoneContent, position: 'top'});
     },
     [showSnackbar, getGeofencingZoneContent],
@@ -168,11 +171,21 @@ export const Map = (props: MapProps) => {
       const featuresAtClick = e.features;
       if (!featuresAtClick || featuresAtClick.length === 0) return;
       const featureToSelect = featuresAtClick[0]; // currently ignore the ones behind
-      geofencingZoneOnPress(
-        featureToSelect?.properties?.['*'], // todo fix
-      );
+      const properties = featureToSelect?.properties;
+      const codePrefix = 'code_per_vehicle_type_id.';
+      const code =
+        properties?.[codePrefix + vehicleTypeId] ??
+        properties?.[codePrefix + '*'] ??
+        'allowed';
+      const stationPrefix = 'station_parking_per_vehicle_type_id.';
+      const stationParking =
+        properties?.[stationPrefix + vehicleTypeId] ??
+        properties?.[stationPrefix + '*'] ??
+        'allowed';
+
+      geofencingZoneOnPress(code, stationParking);
     },
-    [geofencingZoneOnPress],
+    [geofencingZoneOnPress, vehicleTypeId],
   );
 
   const locationArrowOnPress = useCallback(async () => {

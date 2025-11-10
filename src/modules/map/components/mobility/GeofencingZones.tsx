@@ -56,23 +56,6 @@ export const GeofencingZones = ({
   );
 };
 
-const useGeofencingZoneProps = (vehicleTypeId: string) => {
-  const {theme} = useThemeContext();
-  // would be better to have these props on code_per_vehicle_type_id as in the database
-  const code: Expression = [
-    'coalesce',
-    ['get', vehicleTypeId],
-    ['get', '*'],
-    'allowed',
-  ];
-  const geofencingZoneStyles = ['literal', theme.color.geofencingZone];
-  const geofencingZoneStyle = ['get', code, geofencingZoneStyles];
-  return {
-    geofencingZoneStyle,
-    code,
-  };
-};
-
 const GeofencingZonesForVehicle = ({
   vehicleTypeId,
   gfzCode,
@@ -164,6 +147,23 @@ const GfzLineLayer = ({
       aboveLayerID={MapSlotLayerId[`GeofencingZones_${gfzCode}`]}
     />
   );
+};
+
+const useGeofencingZoneProps = (vehicleTypeId: string) => {
+  const {theme} = useThemeContext();
+  const codePrefix = 'code_per_vehicle_type_id.';
+  const code: Expression = [
+    'coalesce',
+    ['get', ['concat', codePrefix, vehicleTypeId]],
+    ['get', ['concat', codePrefix, '*']],
+    'allowed',
+  ];
+  const geofencingZoneStyles = ['literal', theme.color.geofencingZone];
+  const geofencingZoneStyle = ['get', code, geofencingZoneStyles];
+  return {
+    geofencingZoneStyle,
+    code,
+  };
 };
 
 /**
