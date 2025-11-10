@@ -18,7 +18,7 @@ import {Expression} from '@rnmapbox/maps/src/utils/MapboxStyles';
 const geofencingZonesVectorSourceId = 'geofencing-zones-source';
 const sourceLayerId = 'geofencing_zones_features';
 const minZoomLevel = 9;
-const gfzCodes: GeofencingZoneCode[] = [
+const geofencingZoneCodes: GeofencingZoneCode[] = [
   'allowed',
   'slow',
   'noParking',
@@ -45,11 +45,11 @@ export const GeofencingZones = ({
       hitbox={hitboxCoveringIconOnly} // to not be able to hit multiple zones with one click
       onPress={geofencingZoneOnPress}
     >
-      {gfzCodes.map((gfzCode) => (
+      {geofencingZoneCodes.map((geofencingZoneCode) => (
         <GeofencingZonesForVehicle
-          key={gfzCode}
+          key={geofencingZoneCode}
           vehicleTypeId={vehicleTypeId}
-          gfzCode={gfzCode}
+          geofencingZoneCode={geofencingZoneCode}
         />
       ))}
     </MapboxGL.VectorSource>
@@ -58,10 +58,10 @@ export const GeofencingZones = ({
 
 const GeofencingZonesForVehicle = ({
   vehicleTypeId,
-  gfzCode,
+  geofencingZoneCode,
 }: {
   vehicleTypeId: string;
-  gfzCode: GeofencingZoneCode;
+  geofencingZoneCode: GeofencingZoneCode;
 }) => {
   const {geofencingZoneStyle, code} = useGeofencingZoneProps(vehicleTypeId);
 
@@ -71,7 +71,7 @@ const GeofencingZonesForVehicle = ({
   return (
     <>
       <MapboxGL.FillLayer
-        id={'geofencingZoneFill' + gfzCode}
+        id={'geofencingZoneFill' + geofencingZoneCode}
         sourceID={geofencingZonesVectorSourceId}
         sourceLayerID={sourceLayerId}
         minZoomLevel={minZoomLevel}
@@ -80,8 +80,8 @@ const GeofencingZonesForVehicle = ({
           fillColor: bgColor,
           fillOpacity,
         }}
-        aboveLayerID={MapSlotLayerId[`GeofencingZones_${gfzCode}`]}
-        filter={['==', code, gfzCode]}
+        aboveLayerID={MapSlotLayerId[`GeofencingZones_${geofencingZoneCode}`]}
+        filter={['==', code, geofencingZoneCode]}
       />
 
       {/*
@@ -90,12 +90,12 @@ const GeofencingZonesForVehicle = ({
         a hard coded style must be used for that style prop.
       */}
       <GfzLineLayer
-        gfzCode={gfzCode}
+        geofencingZoneCode={geofencingZoneCode}
         isDashed={true}
         vehicleTypeId={vehicleTypeId}
       />
       <GfzLineLayer
-        gfzCode={gfzCode}
+        geofencingZoneCode={geofencingZoneCode}
         isDashed={false}
         vehicleTypeId={vehicleTypeId}
       />
@@ -105,11 +105,11 @@ const GeofencingZonesForVehicle = ({
 
 const GfzLineLayer = ({
   isDashed,
-  gfzCode,
+  geofencingZoneCode,
   vehicleTypeId,
 }: {
   isDashed: boolean;
-  gfzCode: GeofencingZoneCode;
+  geofencingZoneCode: GeofencingZoneCode;
   vehicleTypeId: string;
 }) => {
   const {geofencingZoneStyle, code} = useGeofencingZoneProps(vehicleTypeId);
@@ -131,20 +131,20 @@ const GfzLineLayer = ({
 
   return (
     <MapboxGL.LineLayer
-      id={`geofencingZone${isDashed ? 'Dashed' : ''}Line_${gfzCode}`}
+      id={`geofencingZone${isDashed ? 'Dashed' : ''}Line_${geofencingZoneCode}`}
       sourceID={geofencingZonesVectorSourceId}
       sourceLayerID={sourceLayerId}
       minZoomLevel={minZoomLevel}
       filter={[
         'all',
         [isDashed ? '==' : '!=', lineStyle, 'dashed'],
-        ['==', code, gfzCode],
+        ['==', code, geofencingZoneCode],
       ]}
       style={{
         ...lineLayerStyle,
         lineDasharray: isDashed ? [2, 2] : undefined,
       }}
-      aboveLayerID={MapSlotLayerId[`GeofencingZones_${gfzCode}`]}
+      aboveLayerID={MapSlotLayerId[`GeofencingZones_${geofencingZoneCode}`]}
     />
   );
 };
@@ -191,7 +191,7 @@ export const useGeofencingZonesVectorSource: (systemId: string) => {
         tiles: [tileUrlTemplate || ''],
         minzoom: minZoomLevel,
         maxzoom: minZoomLevel,
-        volatile: true, // hmmmm true?
+        volatile: false, // hmmmm true?
       },
     }),
     [tileUrlTemplate],
