@@ -12,11 +12,7 @@ import {
   Polygon,
   Position,
 } from 'geojson';
-import {
-  ParkingType,
-  GeofencingZoneCustomProps,
-  AutoSelectableMapItem,
-} from './types';
+import {ParkingType, AutoSelectableMapItem} from './types';
 import {
   ClusterOfVehiclesProperties,
   ClusterOfVehiclesPropertiesSchema,
@@ -29,10 +25,8 @@ import {
   isStationV2,
   isVehiclesClusteredFeature,
 } from '@atb/modules/mobility';
-import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {MapBottomSheetType} from './MapContext';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {GeofencingZoneCode} from '@atb-as/theme';
 import z from 'zod';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
