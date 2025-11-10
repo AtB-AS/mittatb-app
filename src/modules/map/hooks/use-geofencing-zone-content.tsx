@@ -8,9 +8,9 @@ export const useGeofencingZoneContent = () => {
   const {t} = useTranslation();
 
   const getGeofencingZoneContent = useCallback(
-    (gfzCode?: GeofencingZoneCode) => {
+    (geofencingZoneCode?: GeofencingZoneCode) => {
       const title = t(
-        GeofencingZoneExplanations[gfzCode || 'unspecified'].title,
+        GeofencingZoneExplanations[geofencingZoneCode || 'unspecified'].title,
       );
 
       const isStationParkingPostfix = ''; // todo: fix
@@ -19,11 +19,13 @@ export const useGeofencingZoneContent = () => {
       //   : '';
 
       const description =
-        t(GeofencingZoneExplanations[gfzCode || 'unspecified'].description) +
-        isStationParkingPostfix;
+        t(
+          GeofencingZoneExplanations[geofencingZoneCode || 'unspecified']
+            .description,
+        ) + isStationParkingPostfix;
 
-      const iconNode = gfzCode ? (
-        <GeofencingZoneIconBox geofencingZoneCode={gfzCode} />
+      const iconNode = geofencingZoneCode ? (
+        <GeofencingZoneIconBox geofencingZoneCode={geofencingZoneCode} />
       ) : null;
 
       return {
