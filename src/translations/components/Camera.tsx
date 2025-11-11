@@ -24,6 +24,7 @@ const CameraTexts = {
     ),
     action: _('Godta', 'Accept', 'Godta'),
   },
+  flashlight: _('Lys', 'Flashlight', 'Lys'),
 };
 
 export default CameraTexts;

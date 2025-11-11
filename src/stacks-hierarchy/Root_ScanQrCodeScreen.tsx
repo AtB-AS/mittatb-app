@@ -1,10 +1,9 @@
 import {StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import React, {useCallback, useEffect, useState} from 'react';
-import {Camera} from '@atb/components/camera';
+import {Camera, CameraScreenContainer} from '@atb/components/camera';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {ScreenContainer} from '../components/PhotoCapture/ScreenContainer';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useGetAssetFromQrCodeMutation} from '@atb/modules/mobility';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
@@ -133,14 +132,9 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   }, [clearStateAndAlertResultError, getAssetFromQrCodeIsError]);
 
   return (
-    <ScreenContainer
-      overrideThemeName="dark"
+    <CameraScreenContainer
       title={t(ParkingViolationTexts.qr.title)}
-      leftHeaderButton={
-        getAssetFromQrCodeIsLoading
-          ? undefined
-          : {type: 'close', withIcon: true}
-      }
+      secondaryText={t(ParkingViolationTexts.qr.instructions)}
       isLoading={getAssetFromQrCodeIsLoading}
     >
       {isFocused &&
@@ -149,12 +143,11 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
         !hasCapturedQr && (
           <Camera mode="qr" style={styles.camera} onCapture={onQrCodeScanned} />
         )}
-    </ScreenContainer>
+    </CameraScreenContainer>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1},
   camera: {
     flexGrow: 1,
   },

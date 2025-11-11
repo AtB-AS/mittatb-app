@@ -30,7 +30,7 @@
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
     "@atb-as/config-specs": "^8.2.1",
-    "@atb-as/generate-assets": "^18.5.0",
+    "@atb-as/generate-assets": "^18.6.0",
     "@atb-as/theme": "^15.0.0",
     "@atb-as/utils": "^5.1.1",
     "@babel/plugin-transform-export-namespace-from": "^7.27.1",
@@ -116,6 +116,7 @@
     "react-native-screens": "^4.16.0",
     "react-native-svg": "^15.13.0",
     "react-native-tab-view": "^4.1.3",
+    "react-native-vision-camera": "^4.7.2",
     "search-params": "^4.0.1",
     "string.fromcodepoint": "^1.0.3",
     "use-reducer-with-side-effects": "^2.2.0",
