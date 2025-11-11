@@ -62,7 +62,7 @@ export const useSetupEventStream = () => {
   const onOpen = useCallback(
     (ws: WebSocket) => {
       addToEventLog({meta: 'OPEN'});
-      ws.send(`AUTH ${getIdTokenGlobal()}`);
+      authWhenReady(ws, addToEventLog);
     },
     [addToEventLog],
   );
@@ -84,3 +84,21 @@ export const useSetupEventStream = () => {
 
   return {eventLog};
 };
+
+/**
+ * Before sending the AUTH message, ensure we have a valid ID token. If not,
+ * wait and try again in 1 second.
+ */
+function authWhenReady(
+  ws: WebSocket,
+  addToEventLog: ({meta}: {meta?: string | undefined}) => void,
+) {
+  if (ws.readyState !== WebSocket.OPEN) return;
+  const token = getIdTokenGlobal();
+  if (token) {
+    addToEventLog({meta: 'AUTH'});
+    ws.send(`AUTH ${token}`);
+  } else {
+    setTimeout(() => authWhenReady(ws, addToEventLog), 1000);
+  }
+}
