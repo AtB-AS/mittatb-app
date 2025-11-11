@@ -71,7 +71,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
   const {top: safeTopInset} = useSafeAreaInsets();
   return {
     container: {
-      flex: 1,
+      ...StyleSheet.absoluteFillObject,
       gap: theme.spacing.medium,
       backgroundColor: 'black',
       paddingTop: safeTopInset + theme.spacing.medium,

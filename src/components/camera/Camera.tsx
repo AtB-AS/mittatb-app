@@ -115,11 +115,12 @@ export const Camera = ({
             mode="primary"
             onPress={() => setTorch(torch === 'on' ? 'off' : 'on')}
             style={[styles.flashlightButton, {marginBottom: footerHeight}]}
-            text={t(CameraTexts.flashlight)}
+            text={t(CameraTexts.flashlight.default)}
             expanded={false}
             active={torch === 'on'}
             interactiveColor={theme.color.interactive[2]}
             rightIcon={torch === 'on' ? {svg: Flash} : {svg: NoFlash}}
+            accessibilityLabel={t(CameraTexts.flashlight[torch])}
           />
           {mode !== 'qr' || bottomButtonNode ? (
             <View
