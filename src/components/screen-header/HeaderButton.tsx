@@ -16,13 +16,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {Info} from '@atb/assets/svg/mono-icons/status';
 import {ContrastColor} from '@atb/theme/colors';
 
-export type ButtonModes =
-  | 'back'
-  | 'cancel'
-  | 'close'
-  | 'skip'
-  | 'info'
-  | 'custom';
+export type ButtonModes = 'back' | 'cancel' | 'close' | 'info' | 'custom';
 export type HeaderButtonProps = {
   type: ButtonModes;
   onPress?: () => void;
@@ -82,7 +76,6 @@ const useHeaderButton = (
   switch (buttonProps.type) {
     case 'back':
     case 'cancel':
-    case 'skip':
     case 'close': {
       const {type, color, onPress, ...accessibilityProps} = buttonProps;
       return {

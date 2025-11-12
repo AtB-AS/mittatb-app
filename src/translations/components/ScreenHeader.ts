@@ -26,14 +26,6 @@ const ScreenHeaderTexts = {
         'Aktivér for å lukke',
       ),
     },
-    skip: {
-      text: _('Hopp over', 'Skip', 'Hopp over'),
-      a11yHint: _(
-        'Aktivér for å hoppe over',
-        'Activate to skip',
-        'Aktivér for å hoppe over',
-      ),
-    },
     info: {
       text: _('Info', 'Info', 'Info'),
     },
