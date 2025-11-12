@@ -58,7 +58,7 @@ export const TicketHistoryScreenComponent = ({
     <View style={styles.container}>
       <FullScreenHeader
         title={t(TicketHistoryModeTexts[mode].title)}
-        leftButton={{type: 'back', withIcon: true}}
+        leftButton={{type: 'back'}}
       />
       <FlatList
         data={sortedItems}

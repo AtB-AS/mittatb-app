@@ -163,7 +163,7 @@ export const Root_ParkingViolationsQrScreen = ({
       overrideThemeName="dark"
       title={t(ParkingViolationTexts.qr.title)}
       secondaryText={t(ParkingViolationTexts.qr.instructions)}
-      leftHeaderButton={isLoading ? undefined : {type: 'back', withIcon: true}}
+      leftHeaderButton={isLoading ? undefined : {type: 'back'}}
       buttons={
         <Button
           expanded={true}

@@ -38,7 +38,7 @@ export const Profile_PaymentMethodsScreen = () => {
     <FullScreenView
       headerProps={{
         title: t(PaymentMethodsTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       refreshControl={
         <RefreshControl

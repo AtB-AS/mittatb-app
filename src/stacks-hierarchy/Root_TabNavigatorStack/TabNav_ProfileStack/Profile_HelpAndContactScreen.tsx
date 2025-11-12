@@ -49,7 +49,7 @@ export const Profile_HelpAndContactScreen = () => {
       <FullScreenView
         headerProps={{
           title: t(ProfileTexts.sections.contact.heading),
-          leftButton: {type: 'back', withIcon: true},
+          leftButton: {type: 'back'},
         }}
         parallaxContent={(focusRef) => (
           <ScreenHeading

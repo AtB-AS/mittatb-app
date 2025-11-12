@@ -77,7 +77,7 @@ export const Profile_DeleteProfileScreen = () => {
     <FullScreenView
       headerProps={{
         title: t(DeleteProfileTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <View

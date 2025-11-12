@@ -22,7 +22,7 @@ export const PaymentScreenComponent = ({}: PaymentScreenComponentProps) => {
         expanded: true,
       }}
       headerProps={{
-        rightButton: {type: 'close', withIcon: true},
+        rightButton: {type: 'close'},
       }}
     />
   );

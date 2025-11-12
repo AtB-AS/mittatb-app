@@ -68,7 +68,7 @@ export const Profile_PrivacyScreen = () => {
     <FullScreenView
       headerProps={{
         title: t(ProfileTexts.sections.privacy.heading),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading

@@ -24,7 +24,6 @@ export const SmartParkAndRideOnboarding_InformationScreen = () => {
       headerProps={{
         rightButton: {
           type: 'close',
-          withIcon: true,
           onPress: () => closeOnboardingCarousel('smartParkAndRide'),
         },
       }}

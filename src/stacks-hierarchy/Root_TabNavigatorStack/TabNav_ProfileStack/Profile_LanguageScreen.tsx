@@ -43,7 +43,7 @@ export const Profile_LanguageScreen = () => {
     <FullScreenView
       headerProps={{
         title: t(LanguageSettingsTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading

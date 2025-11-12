@@ -89,7 +89,7 @@ export const Profile_NotificationsScreen = ({
   return (
     <FullScreenView
       headerProps={{
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
         title: t(
           ProfileTexts.sections.settings.linkSectionItems.notifications.heading,
         ),

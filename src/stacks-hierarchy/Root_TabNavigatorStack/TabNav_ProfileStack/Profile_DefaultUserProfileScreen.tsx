@@ -36,7 +36,7 @@ export const Profile_DefaultUserProfileScreen = () => {
     <FullScreenView
       headerProps={{
         title: t(UserProfileSettingsTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading

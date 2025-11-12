@@ -124,7 +124,7 @@ export const Profile_EditProfileScreen = ({
     <FullScreenView
       headerProps={{
         title: t(EditProfileTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <View style={styles.parallaxContent} ref={focusRef} accessible={true}>

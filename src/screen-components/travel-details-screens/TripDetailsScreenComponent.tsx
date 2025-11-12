@@ -69,7 +69,7 @@ export const TripDetailsScreenComponent = ({
     <View style={styles.container}>
       <FullScreenView
         headerProps={{
-          leftButton: {type: 'back', withIcon: true},
+          leftButton: {type: 'back'},
           title: t(TripDetailsTexts.header.title),
           color: themeColor,
         }}

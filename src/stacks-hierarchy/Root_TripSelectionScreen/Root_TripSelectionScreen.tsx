@@ -47,7 +47,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
     <FullScreenView
       headerProps={{
         title: t(TripSelectionTexts.header),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={
         screenHeaderTitle

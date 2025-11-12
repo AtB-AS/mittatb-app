@@ -76,7 +76,7 @@ export const Root_ContactScooterOperatorScreen = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        leftButton={{type: 'back', withIcon: true}}
+        leftButton={{type: 'back'}}
         setFocusOnLoad={false}
         title={t(ContactScooterOperatorTexts.title(operatorName ?? ''))}
       />

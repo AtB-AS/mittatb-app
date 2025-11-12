@@ -107,7 +107,7 @@ export const AgeVerificationScreenComponent = () => {
         ) : undefined
       }
       headerProps={{
-        rightButton: {type: 'close', withIcon: true},
+        rightButton: {type: 'close'},
       }}
     />
   );
