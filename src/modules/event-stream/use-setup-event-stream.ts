@@ -8,10 +8,12 @@ import {handleStreamEvent} from './handle-stream-event';
 import {StreamEventLog, StreamEvent, StreamEventSchema} from './types';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {jsonStringToObject} from '@atb/utils/object';
+import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 
 export const useSetupEventStream = () => {
   const queryClient = useQueryClient();
-  const {userId, isValidIdToken} = useAuthContext();
+  const {userId, authStatus} = useAuthContext();
+  const appState = useAppStateStatus();
   const {isEventStreamEnabled, isEventStreamFareContractsEnabled} =
     useFeatureTogglesContext();
 
@@ -26,6 +28,13 @@ export const useSetupEventStream = () => {
   );
 
   const url = `${WS_API_BASE_URL}stream/v1`;
+
+  // Similar to what's done in `useRefreshIdTokenWhenNecessary`, to ensure the id
+  // token is kept up to date.
+  const enabled =
+    isEventStreamEnabled &&
+    appState === 'active' &&
+    authStatus === 'authenticated';
 
   const onMessage = useCallback(
     (event: WebSocketMessageEvent) => {
@@ -53,7 +62,7 @@ export const useSetupEventStream = () => {
   const onOpen = useCallback(
     (ws: WebSocket) => {
       addToEventLog({meta: 'OPEN'});
-      ws.send(`AUTH ${getIdTokenGlobal()}`);
+      authWhenReady(ws, addToEventLog);
     },
     [addToEventLog],
   );
@@ -67,8 +76,7 @@ export const useSetupEventStream = () => {
 
   useSubscription({
     url,
-    // When id token is valid, we connect to the stream
-    enabled: isEventStreamEnabled && isValidIdToken,
+    enabled,
     onMessage,
     onOpen,
     onClose,
@@ -76,3 +84,21 @@ export const useSetupEventStream = () => {
 
   return {eventLog};
 };
+
+/**
+ * Before sending the AUTH message, ensure we have a valid ID token. If not,
+ * wait and try again in 1 second.
+ */
+function authWhenReady(
+  ws: WebSocket,
+  addToEventLog: ({meta}: {meta?: string | undefined}) => void,
+) {
+  if (ws.readyState !== WebSocket.OPEN) return;
+  const token = getIdTokenGlobal();
+  if (token) {
+    addToEventLog({meta: 'AUTH'});
+    ws.send(`AUTH ${token}`);
+  } else {
+    setTimeout(() => authWhenReady(ws, addToEventLog), 1000);
+  }
+}
