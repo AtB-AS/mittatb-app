@@ -170,6 +170,7 @@ export function LocationSearchContent({
             chipTypes={favoriteChipTypes}
             style={styles.chipBox}
             onAddFavoritePlace={onAddFavoritePlace}
+            backgroundColor={theme.color.background.neutral[2]}
           />
         )}
         {isOnlyStopPlacesCheckboxEnabled && (

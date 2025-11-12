@@ -249,6 +249,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
             onAddFavoritePlace={() =>
               navigation.navigate('Root_SearchFavoritePlaceScreen')
             }
+            backgroundColor={theme.color.background.neutral[1]}
           />
         </View>
         <Announcements

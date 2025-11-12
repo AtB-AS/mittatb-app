@@ -4,7 +4,7 @@ import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/text';
 import {Button, ButtonProps} from '@atb/components/button';
 import {useGeolocationContext} from '@atb/modules/geolocation';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {ContrastColor, StyleSheet} from '@atb/theme';
 import {FavoriteTexts, useTranslation} from '@atb/translations';
 import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import React, {useCallback, useEffect, useState} from 'react';
@@ -25,6 +25,7 @@ type Props = {
   chipTypes?: ChipTypeGroup[];
   chipActionHint?: string;
   onAddFavoritePlace: () => void;
+  backgroundColor: ContrastColor;
 };
 
 export const FavoriteChips: React.FC<Props> = ({
@@ -34,12 +35,10 @@ export const FavoriteChips: React.FC<Props> = ({
   chipTypes = ['favorites', 'location', 'map'],
   chipActionHint,
   onAddFavoritePlace,
+  backgroundColor,
 }) => {
   const {favorites} = useFavoritesContext();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
-  const themeColor = theme.color.background.neutral[1];
-
   const {onCurrentLocation} = useCurrentLocationChip(onSelectLocation);
   const disableMap = useDisableMapCheck();
   const styles = useStyles();
@@ -56,7 +55,7 @@ export const FavoriteChips: React.FC<Props> = ({
         {activeType('location') && (
           <FavoriteChip
             expanded={false}
-            backgroundColor={themeColor}
+            backgroundColor={backgroundColor}
             mode="secondary"
             text={t(FavoriteTexts.chips.currentLocation)}
             accessibilityRole="button"
@@ -73,7 +72,7 @@ export const FavoriteChips: React.FC<Props> = ({
             accessibilityRole="button"
             leftIcon={{svg: Pin}}
             onPress={onMapSelection}
-            backgroundColor={themeColor}
+            backgroundColor={backgroundColor}
             mode="secondary"
             testID="mapLocationChip"
           />
@@ -104,7 +103,7 @@ export const FavoriteChips: React.FC<Props> = ({
         {activeType('add-favorite') && (
           <FavoriteChip
             expanded={false}
-            backgroundColor={themeColor}
+            backgroundColor={backgroundColor}
             mode="secondary"
             text={t(FavoriteTexts.chips.addFavorite)}
             accessibilityRole="button"
