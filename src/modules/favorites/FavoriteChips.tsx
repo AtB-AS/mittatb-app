@@ -38,7 +38,7 @@ export const FavoriteChips: React.FC<Props> = ({
   const {favorites} = useFavoritesContext();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const themeColor = theme.color.background.accent[0];
+  const themeColor = theme.color.background.neutral[1];
 
   const {onCurrentLocation} = useCurrentLocationChip(onSelectLocation);
   const disableMap = useDisableMapCheck();
