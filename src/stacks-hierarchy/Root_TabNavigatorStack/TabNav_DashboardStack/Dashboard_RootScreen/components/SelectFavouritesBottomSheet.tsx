@@ -106,7 +106,6 @@ export const SelectFavouritesBottomSheet = ({
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const themeColor = getThemeColor(theme);
   const {favoriteDepartures, setFavoriteDepartures} = useFavoritesContext();
   const favouriteItems = favoriteDepartures ?? [];
 
@@ -134,11 +133,11 @@ export const SelectFavouritesBottomSheet = ({
           rightIcon={{svg: SvgArrowRight}}
           testID="editButton"
           mode="secondary"
-          backgroundColor={themeColor}
+          backgroundColor={theme.color.background.neutral[1]}
         />
       </FullScreenFooter>
     ),
-    [bottomSheetModalRef, onEditFavouriteDeparture, t, themeColor],
+    [bottomSheetModalRef, onEditFavouriteDeparture, t, theme],
   );
 
   return (
