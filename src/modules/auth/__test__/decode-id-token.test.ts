@@ -1,3 +1,4 @@
+import {isInThePast} from '@atb/utils/date';
 import {decodeIdToken} from '../id-token';
 
 describe('decodeIdToken', () => {
@@ -9,10 +10,17 @@ describe('decodeIdToken', () => {
     expect(decoded).toHaveProperty('customer_number');
     expect(decoded).toHaveProperty('exp');
     expect(decoded?.firebase?.sign_in_provider).toBe('anonymous');
+    expect(isInThePast(decoded?.exp!)).toBe(true);
   });
 
   it('should return undefined for an invalid ID token', () => {
     const idToken = 'invalid.token.string';
+    expect(decodeIdToken(idToken)).toBeUndefined();
+  });
+
+  it('should return undefined for invalid payload data', () => {
+    const idToken =
+      'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFt.JkKWCY39IdWEQttmdqR7VdsvT-_QxheW_eb0S5wr_j83ltux_JDUIXs7a3Dtn3xuqzuhetiuJrWIvy5TzimeCg';
     expect(decodeIdToken(idToken)).toBeUndefined();
   });
 });
