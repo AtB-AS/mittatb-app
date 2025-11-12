@@ -83,7 +83,10 @@ function requestHandler(
 
 async function requestIdTokenHandler(config: InternalAxiosRequestConfig) {
   if (config.authWithIdToken) {
-    config.headers[Authorization] = 'Bearer ' + getIdTokenGlobal();
+    const idToken = getIdTokenGlobal();
+    if (idToken) {
+      config.headers[Authorization] = 'Bearer ' + idToken;
+    }
   }
   return config;
 }
