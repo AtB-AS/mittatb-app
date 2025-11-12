@@ -11,17 +11,17 @@ import type {UserCountState} from './types';
 
 export function SingleTravellerSelection({
   userProfilesWithCount,
-  addCount,
-  removeCount,
+  increment,
+  decrement,
 }: UserCountState) {
   const {t, language} = useTranslation();
   const selectedProfile = userProfilesWithCount.find((u) => u.count);
 
   const select = (u: UserProfileWithCount) => {
     if (selectedProfile) {
-      removeCount(selectedProfile.userTypeString);
+      decrement(selectedProfile.userTypeString);
     }
-    addCount(u.userTypeString);
+    increment(u.userTypeString);
   };
 
   return (

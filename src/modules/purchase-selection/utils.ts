@@ -10,6 +10,7 @@ import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {
   type FareProductTypeConfig,
   FareZone,
+  type SupplementProduct,
   UserProfile,
 } from '@atb-as/config-specs';
 import {isValidDateString} from '@atb/utils/date';
@@ -123,6 +124,22 @@ export const isSelectableProfile = (
   );
 };
 
+export const isSelectableSupplementProduct = (
+  currentSelection: PurchaseSelectionType,
+  supplementProduct: SupplementProduct,
+) => {
+  const supplementProductLimitations =
+    currentSelection.preassignedFareProduct.limitations.supplementProductRefs;
+  const emptySupplementProducts = !supplementProductLimitations?.length;
+  return (
+    emptySupplementProducts ||
+    supplementProductLimitations.some(
+      (allowedSupplementProductId) =>
+        supplementProduct.id === allowedSupplementProductId,
+    )
+  );
+};
+
 export const isSelectableZone = (
   product: PreassignedFareProduct,
   zone: FareZone,
@@ -150,6 +167,12 @@ export const isValidSelection = (
     isSelectableProfile(selection.preassignedFareProduct, p),
   );
   if (!areProfilesValid) return false;
+
+  const areSupplementProductsValid =
+    selection.supplementProductsWithCount.every((sp) =>
+      isSelectableSupplementProduct(selection, sp),
+    );
+  if (!areSupplementProductsValid) return false;
 
   const isFromZoneValid = selection.zones
     ? isSelectableZone(selection.preassignedFareProduct, selection.zones.from)
@@ -201,6 +224,10 @@ export const applyProductChange = (
   const userCount = currentSelection.userProfilesWithCount.filter((up) =>
     isSelectableProfile(product, up),
   );
+  const supplementProductCount =
+    currentSelection.supplementProductsWithCount.filter((sp) =>
+      isSelectableSupplementProduct(currentSelection, sp),
+    );
 
   const isFromZoneValid =
     !currentSelection.zones ||
@@ -215,12 +242,15 @@ export const applyProductChange = (
     ? undefined
     : getDefaultZones(input, currentSelection.fareProductTypeConfig, product);
 
+  const userProfiles =
+    !userCount.length && !supplementProductCount.length
+      ? getDefaultUserProfiles(input, product)
+      : userCount;
+
   return {
     ...currentSelection,
     preassignedFareProduct: product,
-    userProfilesWithCount: userCount.length
-      ? userCount
-      : getDefaultUserProfiles(input, product),
+    userProfilesWithCount: userProfiles,
     zones: newZones ?? currentSelection.zones,
   };
 };

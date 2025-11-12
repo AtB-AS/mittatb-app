@@ -12,6 +12,7 @@ import {SectionTexts, useTranslation} from '@atb/translations';
 import {InteractiveColor} from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
 
 type Props = SectionItemProps<{
   text: string;
@@ -21,6 +22,7 @@ type Props = SectionItemProps<{
   addCount: () => void;
   removeCount: () => void;
   testID?: string;
+  illustrationName?: string;
 }>;
 
 export function CounterSectionItem({
@@ -31,6 +33,7 @@ export function CounterSectionItem({
   addCount,
   removeCount,
   testID,
+  illustrationName,
   ...props
 }: Props) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -40,9 +43,11 @@ export function CounterSectionItem({
   const {theme} = useThemeContext();
   const removeButtonDisabled = count === 0;
   const activeColor = count > 0 && color ? color.active : undefined;
+  const illustration = mapIllustrationNameToSvg(illustrationName);
 
   return (
     <View style={[topContainer, counterStyles.countContainer]} testID={testID}>
+      {illustration && <ThemeIcon svg={illustration} />}
       <View
         style={[
           style.spaceBetween,
@@ -148,7 +153,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     countContainer: {
       flex: 1,
       flexDirection: 'row',
-      alignItems: 'center',
+      columnGap: theme.spacing.medium,
     },
     countActions: {
       flexDirection: 'row',
@@ -173,3 +178,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
   };
 });
+
+function mapIllustrationNameToSvg(name?: string) {
+  switch (name) {
+    case 'BicycleFill':
+      return BicycleFill;
+    default:
+      return;
+  }
+}

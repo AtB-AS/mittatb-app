@@ -81,7 +81,7 @@ export function useUserCountState(
 
   return {
     ...userCountState,
-    addCount,
-    removeCount,
+    increment: addCount,
+    decrement: removeCount,
   };
 }

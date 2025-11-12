@@ -1,7 +1,16 @@
-import {UserProfileWithCount} from '@atb/modules/fare-contracts';
+import type {
+  SupplementProductWithCount,
+  UserProfileWithCount,
+} from '@atb/modules/fare-contracts';
 
 export type UserCountState = {
   userProfilesWithCount: UserProfileWithCount[];
-  addCount: (userTypeString: string) => void;
-  removeCount: (userTypeString: string) => void;
+  increment: (userTypeString: string) => void;
+  decrement: (userTypeString: string) => void;
+};
+
+export type SupplementProductState = {
+  supplementProductsWithCount: SupplementProductWithCount[];
+  increment: (supplementProductId: string) => void;
+  decrement: (supplementProductId: string) => void;
 };
