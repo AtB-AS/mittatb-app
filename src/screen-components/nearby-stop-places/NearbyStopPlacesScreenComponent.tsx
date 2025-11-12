@@ -8,7 +8,7 @@ import {useGeolocationContext} from '@atb/modules/geolocation';
 import {StopPlaces} from './components/StopPlaces';
 import {useNearestStopsData} from './use-nearest-stops-data';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
@@ -250,6 +250,7 @@ const Header = React.memo(function Header({
 }: HeaderProps) {
   const {t} = useTranslation();
   const styles = useStyles();
+  const {theme} = useThemeContext();
 
   return (
     <View style={styles.header}>
@@ -279,6 +280,7 @@ const Header = React.memo(function Header({
           chipTypes={['favorites', 'add-favorite']}
           style={styles.favoriteChips}
           onAddFavoritePlace={onAddFavoritePlace}
+          backgroundColor={theme.color.background.neutral[1]}
         />
       )}
     </View>
