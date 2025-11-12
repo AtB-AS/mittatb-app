@@ -62,7 +62,7 @@ export const RulesScreenComponent = ({
       }}
       contentNode={<ListElement scooterConsentLines={scooterConsentLines} />}
       headerProps={{
-        rightButton: {type: 'close', withIcon: true},
+        rightButton: {type: 'close'},
       }}
     />
   );

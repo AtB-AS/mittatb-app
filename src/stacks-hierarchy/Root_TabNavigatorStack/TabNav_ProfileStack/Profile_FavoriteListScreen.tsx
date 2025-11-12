@@ -39,7 +39,7 @@ export const Profile_FavoriteListScreen = ({navigation}: Props) => {
     <FullScreenView
       headerProps={{
         title: t(FavoriteListTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading

@@ -29,7 +29,6 @@ export type HeaderButtonProps = {
   color?: ContrastColor;
   text?: string;
   testID?: string;
-  withIcon?: boolean;
   /**
    * The context for the analytics event that will be logged when the button is
    * pressed. If no context provided, then no analytics event will be logged.
@@ -38,7 +37,7 @@ export type HeaderButtonProps = {
   focusRef?: RefObject<any>;
 } & AccessibilityProps;
 
-export type IconButtonProps = Omit<HeaderButtonProps, 'type' | 'withIcon'> & {
+export type IconButtonProps = Omit<HeaderButtonProps, 'type'> & {
   children: React.ReactNode;
 };
 
@@ -85,12 +84,11 @@ const useHeaderButton = (
     case 'cancel':
     case 'skip':
     case 'close': {
-      const {type, color, onPress, withIcon, ...accessibilityProps} =
-        buttonProps;
+      const {type, color, onPress, ...accessibilityProps} = buttonProps;
       return {
         children: (
           <View style={{flexDirection: 'row'}}>
-            {withIcon ? <HeaderButtonIcon mode={type} color={color} /> : null}
+            <HeaderButtonIcon mode={type} color={color} />
             <ThemeText color={color}>
               {t(ScreenHeaderTexts.headerButton[type].text)}
             </ThemeText>
