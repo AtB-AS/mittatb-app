@@ -149,8 +149,16 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
             ? t(AddEditFavoriteTexts.header.titleEdit)
             : t(AddEditFavoriteTexts.header.title)
         }
-        rightButton={!!editItem ? {type: 'close'} : undefined}
-        leftButton={!editItem ? {type: 'back'} : undefined}
+        rightButton={
+          route.params.transitionOverride !== 'slide-from-right'
+            ? {type: 'close'}
+            : undefined
+        }
+        leftButton={
+          route.params.transitionOverride === 'slide-from-right'
+            ? {type: 'back'}
+            : undefined
+        }
       />
 
       <ScrollView style={styles.innerContainer}>

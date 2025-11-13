@@ -102,6 +102,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     const parameters: RootStackParamList['Root_TicketInformationScreen'] = {
       preassignedFareProductId: preassignedFareProduct.id,
       userProfilesWithCountAndOffer: userProfilesWithCountAndOffer,
+      transitionOverride: 'slide-from-right',
     };
     analytics.logEvent(
       'Ticketing',
@@ -191,8 +192,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           selection.fareProductTypeConfig.name,
           language,
         ),
-        rightButton: {
-          type: 'cancel',
+        leftButton: {
+          type: 'back',
           onPress: closeModal,
         },
         setFocusOnLoad: false,
