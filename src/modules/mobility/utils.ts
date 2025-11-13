@@ -39,6 +39,8 @@ import {
   VehiclesClusteredFeatureSchema,
 } from '@atb/api/types/mobility';
 import {TFunc} from '@leile/lobo-t';
+import {ErrorResponse} from '@atb-as/utils';
+import {errorDetailsToResponseData} from '@atb/api/utils';
 
 export const isVehiclesClusteredFeature = (
   feature: Feature<Point> | undefined,
@@ -272,13 +274,26 @@ export const getNewFilterState = (
 };
 
 export const formatFriendlyShmoErrorMessage = (
-  errorResponse: any,
+  errorResponse: ErrorResponse,
   t: TFunc<typeof Language>,
 ) => {
-  return (
-    errorResponse?.response?.data?.userFriendlyErrorMessage ??
-    t(dictionary.genericErrorMsg)
-  );
+  try {
+    const responseData = errorDetailsToResponseData(errorResponse);
+    if (!responseData) return t(dictionary.genericErrorMsg);
+
+    const friendlyMessage = responseData?.userFriendlyErrorMessage;
+
+    return typeof friendlyMessage === 'string' &&
+      friendlyMessage.trim().length > 0
+      ? friendlyMessage.trim()
+      : t(dictionary.genericErrorMsg);
+  } catch (error) {
+    console.warn(
+      'Error parsing friendly message from Shmo error response ',
+      error,
+    );
+    return t(dictionary.genericErrorMsg);
+  }
 };
 
 /**
