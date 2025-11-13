@@ -104,10 +104,13 @@ describe('Frontpage', () => {
 
       // Toggle out
       await FrontPagePage.selectFavoriteDeparture.click();
-      await ElementHelper.waitForElement('id', 'selectFavoriteBottomSheet');
+      await ElementHelper.waitForElement(
+        'id',
+        'selectFavoriteBottomSheetHeader',
+      );
       await FavoritePage.toggleVisibility.click();
       await AppHelper.pause(200);
-      await FavoritePage.confirm.click();
+      await NavigationHelper.closeBottomSheet();
 
       // Verify
       await AppHelper.pause(1000);
@@ -116,10 +119,13 @@ describe('Frontpage', () => {
 
       // Toggle in
       await FrontPagePage.selectFavoriteDeparture.click();
-      await ElementHelper.waitForElement('id', 'selectFavoriteBottomSheet');
+      await ElementHelper.waitForElement(
+        'id',
+        'selectFavoriteBottomSheetHeader',
+      );
       await FavoritePage.toggleVisibility.click();
       await AppHelper.pause(200);
-      await FavoritePage.confirm.click();
+      await NavigationHelper.closeBottomSheet();
 
       // Verify
       await AppHelper.pause(1000);
@@ -142,7 +148,10 @@ describe('Frontpage', () => {
       expect(await FrontPagePage.favoriteDepartures).toExist();
       expect(await FrontPagePage.noFavoriteInfo).not.toExist();
       await FrontPagePage.selectFavoriteDeparture.click();
-      await ElementHelper.waitForElement('id', 'selectFavoriteBottomSheet');
+      await ElementHelper.waitForElement(
+        'id',
+        'selectFavoriteBottomSheetHeader',
+      );
 
       // Delete
       await FavoritePage.editFavorites.click();
