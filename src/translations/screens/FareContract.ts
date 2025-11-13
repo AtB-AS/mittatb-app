@@ -66,6 +66,7 @@ const FareContractTexts = {
   details: {
     header: {
       title: _('Billettdetaljer', 'Ticket details', 'Billettdetaljar'),
+      ticketInformation: _('Om billetten', 'About the ticket', 'Om billetten'),
     },
     paymentMethod: _(
       'Betalingsmetode: ',
