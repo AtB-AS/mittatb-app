@@ -6,7 +6,6 @@ import sortBy from 'lodash.sortby';
 import {toGeoJSON} from '@mapbox/polyline';
 import {
   Feature,
-  FeatureCollection,
   GeofencingZoneRule,
   GeofencingZones,
 } from '@atb/api/types/generated/mobility-types_v2';
@@ -107,10 +106,9 @@ export function decodePolylineEncodedMultiPolygons(
 export function getIconFeatures(
   geofencingZones: GeofencingZones[],
 ): PointFeatureCollection[] {
-  console.log('geofencingZones: ', geofencingZones);
   return geofencingZones?.map((geofencingZone, geofencingZoneIndex) => {
     const iconFeatures: PointFeature[] = [];
-    geofencingZone?.geojson?.features?.forEach((feature, index) => {
+    geofencingZone?.geojson?.features?.forEach((feature) => {
       feature.geometry?.coordinates?.forEach((polygon) => {
         if (isPolygonLarge(polygon)) {
           // No icon for large polygons, long processing time and not useful
@@ -129,8 +127,6 @@ export function getIconFeatures(
         }
       });
     });
-
-    console.log('iconFeatures: ', iconFeatures);
 
     return {
       type: 'FeatureCollection',
