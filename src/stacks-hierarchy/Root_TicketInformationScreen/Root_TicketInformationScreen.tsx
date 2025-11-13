@@ -58,7 +58,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
         title: t(
           PurchaseOverviewTexts.ticketInformation.informationDetails.title,
         ),
-        rightButton: {type: 'close'},
+        leftButton: {type: 'back'},
       }}
       contentColor={themeColor}
     >

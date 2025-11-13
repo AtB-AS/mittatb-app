@@ -17,6 +17,7 @@ export const Root_SearchFavoritePlaceScreen = ({navigation}: Props) => {
     Keyboard.dismiss();
     navigation.navigate('Root_AddEditFavoritePlaceScreen', {
       searchLocation: location,
+      transitionOverride: 'slide-from-right',
     });
   };
 

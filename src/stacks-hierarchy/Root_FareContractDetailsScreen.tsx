@@ -52,6 +52,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       });
       navigation.navigate('Root_TicketInformationScreen', {
         selection,
+        transitionOverride: 'slide-from-right',
       });
     }
   };
@@ -69,6 +70,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
     navigation.push('Root_ReceiptScreen', {
       orderId: fareContract.orderId,
       orderVersion: fareContract.version,
+      transitionOverride: 'slide-from-right',
     });
 
   return (

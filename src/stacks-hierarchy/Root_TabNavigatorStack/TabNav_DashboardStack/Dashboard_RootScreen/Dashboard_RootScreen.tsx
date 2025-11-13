@@ -264,6 +264,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
                 name: 'Root_FareContractDetailsScreen',
                 params: {
                   fareContractId: fareContractId,
+                  transitionOverride: 'slide-from-right',
                 },
               });
             }}

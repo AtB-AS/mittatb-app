@@ -65,6 +65,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
     navigation.navigate('Root_PurchaseOverviewScreen', {
       selection,
+      transitionOverride: 'slide-from-right',
       mode: 'Ticket',
     });
   };
