@@ -111,11 +111,11 @@ export function getIconFeatures(
   return geofencingZones?.map((geofencingZone, geofencingZoneIndex) => {
     const iconFeatures: PointFeature[] = [];
     geofencingZone?.geojson?.features?.forEach((feature, index) => {
-      // Remove icon for the last feature, as it is likely the outer polygon which may be very large which takes time to process
-      if (geofencingZone?.geojson?.features?.length === index + 1) {
-        return;
-      }
       feature.geometry?.coordinates?.forEach((polygon) => {
+        if (isPolygonLarge(polygon)) {
+          // No icon for large polygons, long processing time and not useful
+          return;
+        }
         const iconCoordinate = polylabel(polygon, 0.0001);
         if (iconCoordinate) {
           iconFeatures.push({
@@ -138,6 +138,31 @@ export function getIconFeatures(
       renderKey: geofencingZoneIndex.toString(),
     };
   });
+}
+
+function boundingBox(exteriorRing: number[][]) {
+  let minLon = Infinity,
+    minLat = Infinity;
+  let maxLon = -Infinity,
+    maxLat = -Infinity;
+
+  for (const [lon, lat] of exteriorRing) {
+    if (lon < minLon) minLon = lon;
+    if (lon > maxLon) maxLon = lon;
+    if (lat < minLat) minLat = lat;
+    if (lat > maxLat) maxLat = lat;
+  }
+
+  return {
+    width: maxLon - minLon,
+    height: maxLat - minLat,
+  };
+}
+
+function isPolygonLarge(polygon: number[][][]): boolean {
+  const {width, height} = boundingBox(polygon[0]);
+
+  return width > 1 || height > 1;
 }
 
 export function addGeofencingZoneCustomProps(
