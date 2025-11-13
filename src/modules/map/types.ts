@@ -161,3 +161,20 @@ export type MapPropertiesType = {
   center: GeoJSON.Position;
   zoom: number;
 };
+
+export type Point = {
+  type: 'Point';
+  coordinates: Position;
+};
+
+export type PointFeature = {
+  geometry?: Point;
+  properties?: MobilityAPI_GeofencingZoneProperties;
+  type?: 'Feature';
+};
+
+export interface PointFeatureCollection {
+  type?: 'FeatureCollection';
+  renderKey?: string;
+  features?: Array<PointFeature>;
+}

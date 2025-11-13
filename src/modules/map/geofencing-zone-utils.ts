@@ -6,11 +6,14 @@ import sortBy from 'lodash.sortby';
 import {toGeoJSON} from '@mapbox/polyline';
 import {
   Feature,
+  FeatureCollection,
   GeofencingZoneRule,
   GeofencingZones,
 } from '@atb/api/types/generated/mobility-types_v2';
 import {GeofencingZoneStyles} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
+import polylabel from 'polylabel';
+import {PointFeature, PointFeatureCollection} from './types';
 
 function getApplicableGeofencingZoneRules(
   feature: Feature,
@@ -98,6 +101,42 @@ export function decodePolylineEncodedMultiPolygons(
     });
     const geojson = {...geofencingZone.geojson, features};
     return {...geofencingZone, geojson};
+  });
+}
+
+export function getIconFeatures(
+  geofencingZones: GeofencingZones[],
+): PointFeatureCollection[] {
+  console.log('geofencingZones: ', geofencingZones);
+  return geofencingZones?.map((geofencingZone, geofencingZoneIndex) => {
+    const iconFeatures: PointFeature[] = [];
+    geofencingZone?.geojson?.features?.forEach((feature, index) => {
+      // Remove icon for the last feature, as it is likely the outer polygon which may be very large which takes time to process
+      if (geofencingZone?.geojson?.features?.length === index + 1) {
+        return;
+      }
+      feature.geometry?.coordinates?.forEach((polygon) => {
+        const iconCoordinate = polylabel(polygon, 0.0001);
+        if (iconCoordinate) {
+          iconFeatures.push({
+            type: 'Feature',
+            properties: feature.properties,
+            geometry: {
+              type: 'Point',
+              coordinates: iconCoordinate,
+            },
+          });
+        }
+      });
+    });
+
+    console.log('iconFeatures: ', iconFeatures);
+
+    return {
+      type: 'FeatureCollection',
+      features: iconFeatures,
+      renderKey: geofencingZoneIndex.toString(),
+    };
   });
 }
 
