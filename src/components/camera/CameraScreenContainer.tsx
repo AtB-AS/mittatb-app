@@ -33,36 +33,41 @@ export const CameraScreenContainer = ({
   }
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      <PressableOpacity
-        style={styles.header}
-        onPress={() => navigation.goBack()}
-      >
-        <ThemeIcon svg={SvgChevronLeft} color="white" />
-        <ThemeText
-          typography="body__s__strong"
-          accessibilityHint={t(ScreenHeaderTexts.headerButton.back.a11yHint)}
-          color="white"
-        >
-          {t(ScreenHeaderTexts.headerButton.back.text)}
-        </ThemeText>
-      </PressableOpacity>
-
-      <View style={styles.content}>
-        <View ref={focusRef} accessible>
-          <ThemeText typography="heading__l" color="white">
-            {title}
-          </ThemeText>
-        </View>
-        {secondaryText && (
-          <ThemeText typography="body__s" color="white">
-            {secondaryText}
-          </ThemeText>
-        )}
+    <View style={styles.root}>
+      <View style={StyleSheet.absoluteFill} pointerEvents="auto">
+        {children}
       </View>
 
-      {children}
+      <View style={styles.overlay} pointerEvents="box-none">
+        <View style={styles.container}>
+          <StatusBar
+            barStyle="light-content"
+            translucent
+            backgroundColor="transparent"
+          />
+          <View style={styles.header} ref={focusRef}>
+            <PressableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.back}
+            >
+              <ThemeIcon svg={SvgChevronLeft} color="white" />
+              <ThemeText typography="body__s__strong" color="white">
+                {t(ScreenHeaderTexts.headerButton.back.text)}
+              </ThemeText>
+            </PressableOpacity>
+          </View>
+          <View style={styles.content}>
+            <ThemeText typography="heading__l" color="white">
+              {title}
+            </ThemeText>
+            {!!secondaryText && (
+              <ThemeText typography="body__s" color="white">
+                {secondaryText}
+              </ThemeText>
+            )}
+          </View>
+        </View>
+      </View>
     </View>
   );
 };
@@ -70,11 +75,18 @@ export const CameraScreenContainer = ({
 const useStyles = StyleSheet.createThemeHook((theme) => {
   const {top: safeTopInset} = useSafeAreaInsets();
   return {
-    container: {
+    root: {
+      flex: 1,
+      backgroundColor: 'black',
+    },
+    overlay: {
       ...StyleSheet.absoluteFillObject,
+    },
+    container: {
       gap: theme.spacing.medium,
       backgroundColor: 'black',
       paddingTop: safeTopInset + theme.spacing.medium,
+      paddingBottom: theme.spacing.medium,
     },
     header: {
       flexDirection: 'row',
@@ -84,6 +96,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     content: {
       paddingHorizontal: theme.spacing.medium,
       gap: theme.spacing.medium,
+    },
+    back: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
     },
   };
 });

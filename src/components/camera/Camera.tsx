@@ -1,6 +1,6 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {RefObject, useRef, useState} from 'react';
-import {Linking, Platform, StyleProp, View, ViewStyle} from 'react-native';
+import {RefObject, useCallback, useRef, useState} from 'react';
+import {Linking, Platform, View} from 'react-native';
 import {Processing} from '../loading';
 import {MessageInfoBox} from '../message-info-box';
 import {CaptureButton} from './CaptureButton';
@@ -17,6 +17,8 @@ import {
 } from 'react-native-vision-camera';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Flash, NoFlash} from '@atb/assets/svg/mono-icons/miscellaneous';
+import {SCREEN_HEIGHT} from '@gorhom/bottom-sheet';
+import {useFocusEffect} from '@react-navigation/native';
 
 type PhotoProps = {
   mode: 'photo';
@@ -28,13 +30,11 @@ type QrProps = {
 };
 
 type Props = {
-  style?: StyleProp<ViewStyle>;
   focusRef?: RefObject<any>;
   bottomButtonNode?: React.ReactNode;
 } & (PhotoProps | QrProps);
 
 export const Camera = ({
-  style = {},
   mode,
   onCapture,
   focusRef,
@@ -49,6 +49,14 @@ export const Camera = ({
   const device = useCameraDevice('back');
   const [footerHeight, setFooterHeight] = useState(0);
   const {bottom: safeBottomInset} = useSafeAreaInsets();
+  const [isActive, setActive] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      setActive(true);
+      return () => setActive(false);
+    }, []),
+  );
 
   const handleCapture = async () => {
     if (mode === 'photo') {
@@ -87,58 +95,59 @@ export const Camera = ({
 
   if (isAuthorized) {
     return (
-      <View style={style}>
+      <>
         {device && (
-          <VisionCamera
-            ref={camera}
-            style={StyleSheet.absoluteFill}
-            enableZoomGesture={true}
-            device={device}
-            isActive
-            photo={mode === 'photo'}
-            torch={torch}
-            resizeMode="cover"
-            codeScanner={mode === 'qr' ? codeScanner : undefined}
-          />
+          <View style={styles.container}>
+            <VisionCamera
+              ref={camera}
+              style={StyleSheet.absoluteFill}
+              enableZoomGesture={true}
+              device={device}
+              isActive={isActive}
+              resizeMode="cover"
+              photo={mode === 'photo'}
+              torch={device?.hasTorch ? torch : undefined}
+              codeScanner={mode === 'qr' ? codeScanner : undefined}
+            />
+
+            {mode === 'qr' && (
+              <View pointerEvents="none" style={styles.qrFrame} />
+            )}
+            <Button
+              mode="primary"
+              onPress={() => setTorch(torch === 'on' ? 'off' : 'on')}
+              style={[
+                styles.flashlightButton,
+                footerHeight > 0
+                  ? {paddingBottom: theme.spacing.medium + footerHeight}
+                  : {paddingBottom: safeBottomInset + theme.spacing.medium},
+              ]}
+              text={t(CameraTexts.flashlight.default)}
+              expanded={false}
+              active={torch === 'on'}
+              interactiveColor={theme.color.interactive[2]}
+              rightIcon={torch === 'on' ? {svg: Flash} : {svg: NoFlash}}
+              accessibilityLabel={t(CameraTexts.flashlight[torch])}
+            />
+
+            {mode !== 'qr' || bottomButtonNode ? (
+              <View
+                style={styles.footerWrapper}
+                onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
+              >
+                {mode !== 'qr' && (
+                  <CaptureButton
+                    style={styles.captureButton}
+                    onCapture={handleCapture}
+                    focusRef={focusRef}
+                  />
+                )}
+                {bottomButtonNode}
+              </View>
+            ) : null}
+          </View>
         )}
-        {mode === 'qr' && <View pointerEvents="none" style={styles.qrFrame} />}
-        <View
-          pointerEvents="box-none"
-          style={[
-            styles.cameraButtonsWrapper,
-            footerHeight > 0
-              ? {paddingBottom: theme.spacing.medium}
-              : {paddingBottom: safeBottomInset + theme.spacing.medium},
-          ]}
-        >
-          <Button
-            mode="primary"
-            onPress={() => setTorch(torch === 'on' ? 'off' : 'on')}
-            style={[styles.flashlightButton, {marginBottom: footerHeight}]}
-            text={t(CameraTexts.flashlight.default)}
-            expanded={false}
-            active={torch === 'on'}
-            interactiveColor={theme.color.interactive[2]}
-            rightIcon={torch === 'on' ? {svg: Flash} : {svg: NoFlash}}
-            accessibilityLabel={t(CameraTexts.flashlight[torch])}
-          />
-          {mode !== 'qr' || bottomButtonNode ? (
-            <View
-              style={styles.footerWrapper}
-              onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
-            >
-              {mode !== 'qr' && (
-                <CaptureButton
-                  style={styles.captureButton}
-                  onCapture={handleCapture}
-                  focusRef={focusRef}
-                />
-              )}
-              {bottomButtonNode}
-            </View>
-          ) : null}
-        </View>
-      </View>
+      </>
     );
   } else {
     return (
@@ -159,7 +168,11 @@ export const Camera = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   const {bottom: safeBottomInset} = useSafeAreaInsets();
+
   return {
+    container: {
+      flex: 1,
+    },
     loadingIndicator: {
       flex: 1,
       justifyContent: 'center',
@@ -168,26 +181,21 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     qrFrame: {
       position: 'absolute',
       alignSelf: 'center',
-      top: '25%',
+      bottom: SCREEN_HEIGHT / 2,
+      transform: [{translateY: 100}],
       width: 200,
       height: 200,
       borderColor: 'white',
       borderWidth: 2,
-    },
-    cameraButtonsWrapper: {
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      bottom: 0,
-      gap: theme.spacing.large,
     },
     captureButton: {
       marginTop: theme.spacing.medium,
       alignItems: 'center',
     },
     flashlightButton: {
+      position: 'absolute',
+      bottom: 0,
       alignSelf: 'center',
-      gap: theme.spacing.large,
     },
     footerWrapper: {
       position: 'absolute',

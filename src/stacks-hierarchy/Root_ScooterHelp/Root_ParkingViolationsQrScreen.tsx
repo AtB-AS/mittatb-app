@@ -173,7 +173,6 @@ export const Root_ParkingViolationsQrScreen = ({
       {isFocused && !isLoading && !isError && !capturedQr && (
         <Camera
           mode="qr"
-          style={style.camera}
           onCapture={handlePhotoCapture}
           bottomButtonNode={
             <Button
@@ -194,9 +193,6 @@ export const Root_ParkingViolationsQrScreen = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  camera: {
-    flexGrow: 1,
-  },
   error: {
     margin: theme.spacing.medium,
   },

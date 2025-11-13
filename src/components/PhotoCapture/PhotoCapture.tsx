@@ -1,6 +1,5 @@
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Camera, CameraScreenContainer, PhotoFile} from '@atb/components/camera';
-import {StyleSheet} from '@atb/theme';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {RefObject, useRef} from 'react';
 import {ImageConfirmationBottomSheet} from './ImageConfirmationBottomSheet';
@@ -23,7 +22,6 @@ export const PhotoCapture = ({
   isLoading = false,
 }: PhotoCaptureProps) => {
   const isFocused = useIsFocusedAndActive();
-  const style = useStyles();
 
   const {open: openBottomSheet, close: closeBottomSheet} =
     useBottomSheetContext();
@@ -57,7 +55,6 @@ export const PhotoCapture = ({
         <>
           <Camera
             mode="photo"
-            style={style.camera}
             onCapture={handlePhotoCapture}
             focusRef={onCloseFocusRef}
           />
@@ -66,9 +63,3 @@ export const PhotoCapture = ({
     </CameraScreenContainer>
   );
 };
-
-const useStyles = StyleSheet.createThemeHook(() => ({
-  camera: {
-    flexGrow: 1,
-  },
-}));

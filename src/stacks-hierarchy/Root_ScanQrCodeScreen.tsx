@@ -1,4 +1,3 @@
-import {StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import React, {useCallback, useEffect, useState} from 'react';
 import {Camera, CameraScreenContainer} from '@atb/components/camera';
@@ -22,7 +21,6 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 export type Props = RootStackScreenProps<'Root_ScanQrCodeScreen'>;
 
 export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
-  const styles = useStyles();
   const {t} = useTranslation();
 
   const isFocused = useIsFocusedAndActive();
@@ -140,18 +138,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
       {isFocused &&
         !getAssetFromQrCodeIsLoading &&
         !getAssetFromQrCodeIsError &&
-        !hasCapturedQr && (
-          <Camera mode="qr" style={styles.camera} onCapture={onQrCodeScanned} />
-        )}
+        !hasCapturedQr && <Camera mode="qr" onCapture={onQrCodeScanned} />}
     </CameraScreenContainer>
   );
 };
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  camera: {
-    flexGrow: 1,
-  },
-  error: {
-    margin: theme.spacing.medium,
-  },
-}));
