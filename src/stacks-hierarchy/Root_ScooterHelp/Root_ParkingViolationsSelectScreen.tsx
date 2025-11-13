@@ -35,7 +35,7 @@ export const Root_ParkingViolationsSelectScreen = ({
 
   return (
     <ScreenContainer
-      leftHeaderButton={{type: 'close'}}
+      rightHeaderButton={{type: 'close'}}
       title={t(ParkingViolationTexts.selectViolation.title)}
       buttons={
         <Button

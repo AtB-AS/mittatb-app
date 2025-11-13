@@ -191,7 +191,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           selection.fareProductTypeConfig.name,
           language,
         ),
-        leftButton: {
+        rightButton: {
           type: 'cancel',
           onPress: closeModal,
         },

@@ -148,11 +148,13 @@ export const Root_LoginOptionsScreen = ({
       <FullScreenHeader
         setFocusOnLoad={false}
         leftButton={
-          showGoBack
-            ? {
-                type:
-                  transitionPreset === 'slide-from-bottom' ? 'close' : 'back',
-              }
+          showGoBack && transitionPreset !== 'slide-from-bottom'
+            ? {type: 'back'}
+            : undefined
+        }
+        rightButton={
+          showGoBack && transitionPreset === 'slide-from-bottom'
+            ? {type: 'close'}
             : undefined
         }
         color={themeColor}

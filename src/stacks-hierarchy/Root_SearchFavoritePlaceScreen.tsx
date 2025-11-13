@@ -24,7 +24,7 @@ export const Root_SearchFavoritePlaceScreen = ({navigation}: Props) => {
     <View style={styles.container}>
       <FullScreenHeader
         title={t(AddEditFavoriteTexts.header.title)}
-        leftButton={{type: 'close'}}
+        rightButton={{type: 'close'}}
       />
 
       <LocationSearchContent

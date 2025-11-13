@@ -55,7 +55,7 @@ export const Root_LocationSearchByTextScreen = ({
     <View style={styles.container}>
       <FullScreenHeader
         title={t(LocationSearchTexts.header.title)}
-        leftButton={{type: 'close'}}
+        rightButton={{type: 'close'}}
         setFocusOnLoad={a11yContext.isScreenReaderEnabled}
       />
 
