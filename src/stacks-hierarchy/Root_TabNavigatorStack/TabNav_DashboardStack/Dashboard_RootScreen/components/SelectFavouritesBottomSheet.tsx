@@ -80,12 +80,11 @@ const SelectableFavouriteDeparture = ({
         </ThemeText>
       </View>
 
-      <View>
+      <View testID={testID}>
         <Toggle
           importantForAccessibility="no"
           value={active}
           onValueChange={(value) => handleSwitchFlip(favorite.id, value)}
-          testID={testID}
         />
       </View>
     </View>
@@ -148,6 +147,7 @@ export const SelectFavouritesBottomSheet = ({
       rightIcon={Close}
       Footer={footer}
       closeCallback={() => giveFocus(onCloseFocusRef)}
+      testID="selectFavorite"
     >
       <View style={styles.flatListArea}>
         {favoriteDepartures.length > 0 && (
@@ -164,7 +164,7 @@ export const SelectFavouritesBottomSheet = ({
                     <SelectableFavouriteDeparture
                       handleSwitchFlip={handleSwitchFlip}
                       favorite={favorite}
-                      testID={'selectFavoriteToggle' + i}
+                      testID={`selectFavoriteToggle${i}`}
                     />
                   </View>
                 ))}

@@ -35,6 +35,7 @@ type BottomSheetModalProps = PropsWithChildren<{
   keyboardBehavior?: 'extend' | 'interactive' | 'fillParent';
   closeCallback?: () => void;
   Footer?: React.FC;
+  testID?: string;
 }>;
 export const BottomSheetModal = ({
   children,
@@ -50,6 +51,7 @@ export const BottomSheetModal = ({
   keyboardBehavior = Platform.OS === 'ios' ? 'interactive' : 'extend',
   closeCallback,
   Footer,
+  testID,
 }: BottomSheetModalProps) => {
   const styles = useBottomSheetStyles();
   const {height: screenHeight} = useWindowDimensions();
@@ -119,6 +121,7 @@ export const BottomSheetModal = ({
         rightIconText={rightIconText}
         bottomSheetRef={bottomSheetModalRef}
         headerNode={headerNode}
+        testID={testID}
       />
     ),
     [
@@ -129,6 +132,7 @@ export const BottomSheetModal = ({
       rightIcon,
       rightIconText,
       subText,
+      testID,
     ],
   );
 
