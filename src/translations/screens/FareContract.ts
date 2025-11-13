@@ -66,6 +66,12 @@ const FareContractTexts = {
   details: {
     header: {
       title: _('Billettdetaljer', 'Ticket details', 'Billettdetaljar'),
+      ticketInformation: _('Om', 'About', 'Om'),
+      infoButtonA11yHint: _(
+        'Aktivér for å gå til billettinformasjon',
+        'Activate to go to ticket information',
+        'Aktivér for å gå til billetinformasjon',
+      ),
     },
     paymentMethod: _(
       'Betalingsmetode: ',
@@ -188,11 +194,6 @@ const FareContractTexts = {
           ),
     validIn: (zone: string) =>
       _(`Gyldig i ${zone}`, `Valid in ${zone}`, `Gyldig i ${zone}`),
-    infoButtonA11yHint: _(
-      'Aktivér for å gå til billettinformasjon',
-      'Activate to go to ticket information',
-      'Aktivér for å gå til billetinformasjon',
-    ),
     usedAccesses: _('Brukte billetter', 'Used tickets', 'Brukte billettar'),
   },
   activateNow: {

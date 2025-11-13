@@ -36,6 +36,7 @@ export type RightButtonProps =
       type: 'custom';
       onPress: () => void;
       text: string;
+      svg: ({fill}: {fill: string}) => React.JSX.Element;
     });
 
 export type ScreenHeaderProps = {
