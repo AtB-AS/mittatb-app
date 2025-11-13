@@ -67,7 +67,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        leftButton={{type: 'close'}}
+        leftButton={{type: 'back'}}
         rightButton={
           enable_ticket_information && !hasShmoBookingId(fareContract)
             ? {

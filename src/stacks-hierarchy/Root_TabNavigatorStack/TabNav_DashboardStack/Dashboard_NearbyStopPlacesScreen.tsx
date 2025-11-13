@@ -21,7 +21,7 @@ export const Dashboard_NearbyStopPlacesScreen = ({
       mode={route.params.mode}
       headerProps={{
         title: t(FavoriteDeparturesTexts.favoriteItemAdd.label),
-        leftButton: {type: 'close'},
+        rightButton: {type: 'close'},
       }}
       isLargeTitle={false}
       onPressLocationSearch={(location) =>

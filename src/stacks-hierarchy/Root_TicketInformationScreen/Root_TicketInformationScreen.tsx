@@ -52,7 +52,7 @@ export const Root_TicketInformationScreen = ({route}: Props) => {
         title: t(
           PurchaseOverviewTexts.ticketInformation.informationDetails.title,
         ),
-        leftButton: {type: 'close'},
+        rightButton: {type: 'close'},
       }}
       contentColor={themeColor}
     >

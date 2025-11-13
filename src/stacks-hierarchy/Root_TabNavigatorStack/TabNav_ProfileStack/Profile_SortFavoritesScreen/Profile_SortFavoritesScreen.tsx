@@ -35,7 +35,7 @@ export const Profile_SortFavoritesScreen = ({navigation}: Props) => {
     <View style={style.container}>
       <FullScreenHeader
         title={t(FavoriteListTexts.sortableScreen.title)}
-        leftButton={{type: 'cancel'}}
+        rightButton={{type: 'cancel'}}
       />
 
       {error && (

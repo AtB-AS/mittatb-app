@@ -149,7 +149,8 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
             ? t(AddEditFavoriteTexts.header.titleEdit)
             : t(AddEditFavoriteTexts.header.title)
         }
-        leftButton={{type: !!editItem ? 'close' : 'back'}}
+        rightButton={!!editItem ? {type: 'close'} : undefined}
+        leftButton={!editItem ? {type: 'back'} : undefined}
       />
 
       <ScrollView style={styles.innerContainer}>
