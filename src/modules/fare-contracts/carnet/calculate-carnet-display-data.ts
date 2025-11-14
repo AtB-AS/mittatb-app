@@ -16,7 +16,7 @@ export const CARNET_DIVIDER = 10;
  * @param numberOfUsedAccesses total amount of used access that the carnet has.
  * @returns values to display the carnet footer, it will be displayed in this order :
  */
-export function calculateCarnetData(
+export function calculateCarnetDisplayData(
   active: boolean,
   maximumNumberOfAccesses: number,
   numberOfUsedAccesses: number,
