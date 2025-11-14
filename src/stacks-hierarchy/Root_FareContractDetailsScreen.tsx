@@ -17,7 +17,6 @@ import {MapFilterType} from '@atb/modules/map';
 import {useAuthContext} from '@atb/modules/auth';
 import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {hasShmoBookingId} from '@atb/modules/fare-contracts';
-import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -32,7 +31,6 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const {fareContract, preassignedFareProduct} = useTicketInfo(
     route.params.fareContractId,
   );
-  const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
 
   const isSentFareContract =
     fareContract?.customerAccountId !== fareContract?.purchasedBy &&
@@ -42,16 +40,11 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
 
   const navigateToTicketInfoScreen = () => {
     if (preassignedFareProduct) {
-      const selection = purchaseSelectionBuilder
-        .forType(preassignedFareProduct?.type)
-        .product(preassignedFareProduct)
-        .build();
-
       analytics.logEvent('Ticketing', 'Ticket information button clicked', {
-        selection,
+        fareProductTypeConfigType: preassignedFareProduct.type,
       });
       navigation.navigate('Root_TicketInformationScreen', {
-        selection,
+        preassignedFareProductId: preassignedFareProduct.id,
       });
     }
   };
