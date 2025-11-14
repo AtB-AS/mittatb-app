@@ -156,11 +156,11 @@ export const ActiveScooterSheet = ({
               </View>
               <View style={styles.footer}>
                 <View style={styles.endTripWrapper}>
-                  {geofencingZoneWarning && (
+                  {geofencingZoneWarning !== null && (
                     <View style={styles.geofencingZoneWarning}>
                       {geofencingZoneWarning.iconNode}
                       <View style={styles.geofencingZoneWarningText}>
-                        <ThemeText typography="body__secondary">
+                        <ThemeText typography="body__s">
                           {geofencingZoneWarning.description}
                         </ThemeText>
                       </View>
