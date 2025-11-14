@@ -16,7 +16,9 @@ export type GeofencingZoneContent = {
 export const useGeofencingZoneContent = () => {
   const {t} = useTranslation();
 
-  const getGeofencingZoneContent = useCallback(
+  const getGeofencingZoneContent: (
+    geofencingZoneCustomProps?: GeofencingZoneCustomProps,
+  ) => GeofencingZoneContent = useCallback(
     (geofencingZoneCustomProps?: GeofencingZoneCustomProps) => {
       const title = t(
         GeofencingZoneExplanations[
