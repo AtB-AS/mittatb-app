@@ -160,7 +160,7 @@ export const ActiveScooterSheet = ({
                     <View style={styles.geofencingZoneWarning}>
                       {geofencingZoneWarning.iconNode}
                       <View style={styles.geofencingZoneWarningText}>
-                        <ThemeText typography="body__secondary">
+                        <ThemeText typography="body__s">
                           {geofencingZoneWarning.description}
                         </ThemeText>
                       </View>
