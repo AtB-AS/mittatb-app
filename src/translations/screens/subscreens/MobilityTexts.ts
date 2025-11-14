@@ -8,7 +8,7 @@ import {
   GeofencingZoneExplanationsType,
   ParkingVehicleTypes,
 } from '@atb/modules/map';
-import {formatNumberToString} from '@atb/utils/numbers';
+import {formatNumberToString} from '@atb-as/utils';
 
 export const MobilityTexts = {
   formFactor: (formFactor: FormFactor, isPlural: boolean = false) => {

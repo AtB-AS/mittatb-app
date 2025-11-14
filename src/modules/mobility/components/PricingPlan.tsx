@@ -6,11 +6,11 @@ import {
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {MobilityStat} from './MobilityStat';
 import {useTranslation} from '@atb/translations';
-import {formatNumberToString} from '@atb/utils/numbers';
 import {hasMultiplePricingPlans} from '../utils';
 import {OperatorBenefitIdType} from '@atb/modules/configuration';
 import {useIsEligibleForBenefit} from '../use-is-eligible-for-benefit';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';
+import {formatNumberToString} from '@atb-as/utils';
 
 type PricingPlanProps = {
   operator: string;
