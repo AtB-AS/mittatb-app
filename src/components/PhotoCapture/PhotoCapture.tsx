@@ -1,9 +1,7 @@
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {Camera, PhotoFile} from '@atb/components/camera';
-import {StyleSheet} from '@atb/theme';
+import {Camera, CameraScreenContainer, PhotoFile} from '@atb/components/camera';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {RefObject, useRef} from 'react';
-import {ScreenContainer} from './ScreenContainer';
 import {ImageConfirmationBottomSheet} from './ImageConfirmationBottomSheet';
 import {Coordinates} from '@atb/utils/coordinates';
 import {useGeolocationContext} from '@atb/modules/geolocation';
@@ -24,7 +22,6 @@ export const PhotoCapture = ({
   isLoading = false,
 }: PhotoCaptureProps) => {
   const isFocused = useIsFocusedAndActive();
-  const style = useStyles();
 
   const {open: openBottomSheet, close: closeBottomSheet} =
     useBottomSheetContext();
@@ -48,30 +45,21 @@ export const PhotoCapture = ({
       onCloseFocusRef,
     );
   };
-
   return (
-    <ScreenContainer
-      overrideThemeName="dark"
-      leftHeaderButton={{type: 'back', withIcon: true}}
+    <CameraScreenContainer
       title={title}
       secondaryText={secondaryText}
       isLoading={isLoading}
     >
       {isFocused && (
-        <Camera
-          mode="photo"
-          style={style.camera}
-          onCapture={handlePhotoCapture}
-          focusRef={onCloseFocusRef}
-          zoom={0.75}
-        />
+        <>
+          <Camera
+            mode="photo"
+            onCapture={handlePhotoCapture}
+            focusRef={onCloseFocusRef}
+          />
+        </>
       )}
-    </ScreenContainer>
+    </CameraScreenContainer>
   );
 };
-
-const useStyles = StyleSheet.createThemeHook(() => ({
-  camera: {
-    flexGrow: 1,
-  },
-}));
