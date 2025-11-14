@@ -19,13 +19,23 @@ const MapViewStaticConfig = {
 
 type MapViewConfigOptions = {
   shouldShowVehiclesAndStations?: boolean;
+  shouldShowGeofencingZones?: boolean;
+  systemId?: string;
 };
 
 export const useMapViewConfig = (
   mapViewConfigOptions?: MapViewConfigOptions,
 ) => {
-  const {shouldShowVehiclesAndStations = false} = mapViewConfigOptions || {};
-  const mapboxJsonStyle = useMapboxJsonStyle(shouldShowVehiclesAndStations);
+  const {
+    shouldShowVehiclesAndStations = false,
+    shouldShowGeofencingZones = false,
+    systemId = '',
+  } = mapViewConfigOptions || {};
+  const mapboxJsonStyle = useMapboxJsonStyle(
+    shouldShowVehiclesAndStations,
+    shouldShowGeofencingZones,
+    systemId,
+  );
   const configMap = useMemo(
     () => ({styleJSON: mapboxJsonStyle}),
     [mapboxJsonStyle],

@@ -6,10 +6,14 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {useGeofencingZonesVectorSource} from '../components/mobility/GeofencingZones';
 
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
-  GeofencingZones = 'geofencingZones',
+  GeofencingZones_allowed = 'geofencingZones_allowed',
+  GeofencingZones_slow = 'geofencingZones_slow',
+  GeofencingZones_noParking = 'geofencingZones_noParking',
+  GeofencingZones_noEntry = 'geofencingZones_noEntry',
   Vehicles = 'vehicles',
   Stations = 'stations',
   NSRItems = 'nsrItems',
@@ -24,7 +28,10 @@ const slotSource: StyleJsonVectorSourcesObj = {
 
 // the order of this list, determines which layers render on top. Last is on top.
 const slotLayerIds: MapSlotLayerId[] = [
-  MapSlotLayerId.GeofencingZones,
+  MapSlotLayerId.GeofencingZones_allowed,
+  MapSlotLayerId.GeofencingZones_slow,
+  MapSlotLayerId.GeofencingZones_noParking,
+  MapSlotLayerId.GeofencingZones_noEntry,
   MapSlotLayerId.Vehicles,
   MapSlotLayerId.Stations,
   MapSlotLayerId.NSRItems,
@@ -38,7 +45,13 @@ const slotLayers = slotLayerIds.map((slotLayerId) => ({
 
 export const useMapboxJsonStyle: (
   includeVehiclesAndStationsVectorSource: boolean,
-) => string | undefined = (includeVehiclesAndStationsVectorSource) => {
+  includeGeofencingZonesVectorSource: boolean,
+  systemId?: string,
+) => string | undefined = (
+  includeVehiclesAndStationsVectorSource,
+  includeGeofencingZonesVectorSource,
+  systemId,
+) => {
   const {themeName} = useThemeContext();
   const {language} = useTranslation();
   const {mapbox_user_name, mapbox_nsr_tileset_id} = useRemoteConfigContext();
@@ -51,6 +64,11 @@ export const useMapboxJsonStyle: (
     id: vehiclesAndStationsVectorSourceId,
     source: vehiclesAndStationsVectorSource,
   } = useVehiclesAndStationsVectorSource();
+
+  const {
+    id: geofencingZonesVectorSourceId,
+    source: geofencingZonesVectorSource,
+  } = useGeofencingZonesVectorSource(systemId ?? '');
 
   const themedStyleWithExtendedSourcesAndSlotLayers = useMemo(() => {
     const themedStyle =
@@ -65,6 +83,11 @@ export const useMapboxJsonStyle: (
         ? {
             [vehiclesAndStationsVectorSourceId]:
               vehiclesAndStationsVectorSource,
+          }
+        : undefined),
+      ...(includeGeofencingZonesVectorSource
+        ? {
+            [geofencingZonesVectorSourceId]: geofencingZonesVectorSource,
           }
         : undefined),
     };
@@ -83,6 +106,9 @@ export const useMapboxJsonStyle: (
     includeVehiclesAndStationsVectorSource,
     vehiclesAndStationsVectorSourceId,
     vehiclesAndStationsVectorSource,
+    includeGeofencingZonesVectorSource,
+    geofencingZonesVectorSourceId,
+    geofencingZonesVectorSource,
   ]);
 
   const mapboxJsonStyle = useMemo(
