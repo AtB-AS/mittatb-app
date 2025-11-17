@@ -9,8 +9,8 @@ import {VehicleCardStat} from './VehicleCardStat';
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {formatPricePerUnit, formatRange, getBatteryLevelIcon} from '../utils';
 import {PricingPlanFragment} from '@atb/api/types/generated/fragments/mobility-shared';
-import {formatNumberToString} from '@atb/utils/numbers';
 import {ShmoPricingPlan} from '@atb/api/types/mobility';
+import {formatNumberToString} from '@atb-as/utils';
 
 type Props = {
   pricingPlan: PricingPlanFragment | ShmoPricingPlan;
