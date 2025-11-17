@@ -8,6 +8,7 @@ import {
 } from '@atb/api/types/mobility';
 import {getShmoBookingQueryKey} from './use-shmo-booking-query';
 import {useAcceptLanguage} from '@atb/api/use-accept-language';
+import {ErrorResponse} from '@atb-as/utils';
 
 type BookingEventArgs = {
   bookingId: ShmoBooking['bookingId'];
@@ -18,7 +19,7 @@ export const useSendShmoBookingEventMutation = () => {
   const queryClient = useQueryClient();
   const acceptLanguage = useAcceptLanguage();
 
-  return useMutation({
+  return useMutation<ShmoBooking, ErrorResponse, BookingEventArgs>({
     mutationFn: ({bookingId, shmoBookingEvent}: BookingEventArgs) =>
       sendShmoBookingEvent(bookingId, shmoBookingEvent, acceptLanguage),
 
