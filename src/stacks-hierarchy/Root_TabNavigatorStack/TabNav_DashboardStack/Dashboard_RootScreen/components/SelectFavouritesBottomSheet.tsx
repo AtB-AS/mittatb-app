@@ -50,26 +50,13 @@ const SelectableFavouriteDeparture = ({
     t(SelectFavouriteDeparturesText.departures.allVariations);
 
   return (
-    <View
-      style={styles.selectableDeparture}
-      accessible={true}
-      accessibilityLabel={`${t(
-        getTranslatedModeName(lineTransportationMode),
-      )} ${lineIdentifier} ${lineName}, ${t(
-        SelectFavouriteDeparturesText.accessibleText.from,
-      )} ${favorite.quayName} ${departureQuay && departureQuay}`}
-      accessibilityRole="switch"
-      accessibilityActions={[{name: 'activate'}]}
-      onAccessibilityAction={() => handleSwitchFlip(favorite.id, !active)}
-      accessibilityHint={t(SelectFavouriteDeparturesText.switch.a11yhint)}
-      accessibilityState={{checked: !active}}
-    >
+    <View style={styles.selectableDeparture} accessible={false}>
       <TransportationIconBox
         style={styles.lineModeIcon}
         mode={lineTransportationMode}
         subMode={favorite.lineTransportationSubMode}
       />
-      <View style={styles.selectableDepartureTextView}>
+      <View style={styles.selectableDepartureTextView} accessible>
         <ThemeText typography="body__m" style={styles.lineIdentifierText}>
           {lineIdentifier} {lineName}
         </ThemeText>
@@ -82,9 +69,10 @@ const SelectableFavouriteDeparture = ({
 
       <View testID={testID}>
         <Toggle
-          importantForAccessibility="no"
           value={active}
           onValueChange={(value) => handleSwitchFlip(favorite.id, value)}
+          accessibilityLabel={`${t(getTranslatedModeName(lineTransportationMode))} ${lineIdentifier} ${lineName}, ${t(SelectFavouriteDeparturesText.accessibleText.from)} ${favorite.quayName} ${departureQuay ?? ''}`}
+          accessibilityHint={t(SelectFavouriteDeparturesText.switch.a11yhint)}
         />
       </View>
     </View>
