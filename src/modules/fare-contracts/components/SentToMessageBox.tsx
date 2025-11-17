@@ -6,14 +6,12 @@ import {
   useGetPhoneByAccountIdQuery,
   useFetchOnBehalfOfAccountsQuery,
 } from '@atb/modules/on-behalf-of';
-import {isSentOrReceivedFareContract} from '@atb/modules/ticketing';
-import type {FareContractType} from '@atb-as/utils';
+import {FareContractInfo} from '../use-fare-contract-info';
 
-export const SentToMessageBox = ({fc}: {fc: FareContractType}) => {
+export const SentToMessageBox = ({fc}: {fc: FareContractInfo}) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
   const {t} = useTranslation();
-  const isSent =
-    isSentOrReceivedFareContract(fc) && fc.customerAccountId !== currentUserId;
+  const isSent = fc.isSentOrReceived && fc.customerAccountId !== currentUserId;
   const {data: phoneNumber} = useGetPhoneByAccountIdQuery(
     isSent ? fc.customerAccountId : undefined,
   );

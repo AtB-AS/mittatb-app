@@ -7,11 +7,11 @@ import {getSortedFareContractsAndReservations} from './sort-fc-or-reservation';
 import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
 import type {EmptyStateProps} from '@atb/components/empty-state';
-import {FareContractType} from '@atb-as/utils';
+import {FareContractInfo} from './use-fare-contract-info';
 
 type Props = {
   reservations: Reservation[];
-  fareContracts: FareContractType[];
+  fareContracts: FareContractInfo[];
   now: number;
   onPressFareContract: (orderId: string) => void;
   emptyStateConfig: Pick<

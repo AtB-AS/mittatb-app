@@ -1,23 +1,11 @@
-import {
-  getLastUsedAccess,
-  isSentOrReceivedFareContract,
-  Reservation,
-} from '@atb/modules/ticketing';
-import {
-  FareContractState,
-  FareContractType,
-  getAccesses,
-  type UsedAccessType,
-} from '@atb-as/utils';
+import {getLastUsedAccess, Reservation} from '@atb/modules/ticketing';
+import {FareContractState, FareContractType, getAccesses} from '@atb-as/utils';
 import {
   FareZone,
-  findReferenceDataById,
   getReferenceDataName,
   PreassignedFareProduct,
   useFirestoreConfigurationContext,
-  UserProfile,
 } from '@atb/modules/configuration';
-import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {
   FareContractTexts,
   FareZonesTexts,
@@ -52,11 +40,6 @@ export function getRelativeValidity(
   return 'valid';
 }
 
-export const userProfileCountAndName = (
-  u: UserProfileWithCount,
-  language: Language,
-) => `${u.count} ${getReferenceDataName(u, language)}`;
-
 export function getValidityStatus(
   now: number,
   fc: FareContractType,
@@ -79,7 +62,7 @@ export function getValidityStatus(
   }
 }
 
-export const hasShmoBookingId = (fc?: FareContractType) => !!fc?.bookingId;
+export const hasShmoBookingId = (fc?: {bookingId?: string}) => !!fc?.bookingId;
 
 export const useSortFcOrReservationByValidityAndCreation = (
   now: number,
@@ -118,39 +101,6 @@ export const useSortFcOrReservationByValidityAndCreation = (
     });
   }, [fcOrReservations, getFcOrReservationOrder]);
 };
-
-export const mapToUserProfilesWithCount = (
-  userProfileRefs: string[],
-  userProfiles: UserProfile[],
-): UserProfileWithCount[] =>
-  userProfileRefs
-    .reduce(
-      (groupedById, userProfileRef) => {
-        const existing = groupedById.find(
-          (r) => r.userProfileRef === userProfileRef,
-        );
-        if (existing) {
-          existing.count += 1;
-          return groupedById;
-        }
-        return [...groupedById, {userProfileRef, count: 1}];
-      },
-      [] as {userProfileRef: string; count: number}[],
-    )
-    .map((refAndCount) => {
-      const userProfile = findReferenceDataById(
-        userProfiles,
-        refAndCount.userProfileRef,
-      );
-      return {
-        ...userProfile,
-        count: refAndCount.count,
-      };
-    })
-    .filter(
-      (userProfileWithCount): userProfileWithCount is UserProfileWithCount =>
-        'id' in userProfileWithCount,
-    );
 
 export const useNonInspectableTokenWarning = () => {
   const {t} = useTranslation();
@@ -245,52 +195,6 @@ export function fareZonesSummary(
       ),
     );
   }
-}
-
-type FareContractInfoProps = {
-  validityStatus: ValidityStatus;
-  validFrom: number;
-  validTo: number;
-  usedAccesses?: UsedAccessType[];
-};
-
-export function getFareContractInfo(
-  now: number,
-  fc: FareContractType,
-  currentUserId?: string,
-): FareContractInfoProps {
-  const isSentOrReceived = isSentOrReceivedFareContract(fc);
-  const isSent = isSentOrReceived && fc.customerAccountId !== currentUserId;
-
-  const travelRights = fc.travelRights;
-  const firstTravelRight = travelRights[0];
-
-  const fareContractValidFrom = firstTravelRight.startDateTime.getTime();
-  const fareContractValidTo = firstTravelRight.endDateTime.getTime();
-
-  const validityStatus = getValidityStatus(now, fc, isSent);
-
-  const carnetTravelRightAccesses = getAccesses(fc);
-
-  const lastUsedAccess =
-    carnetTravelRightAccesses &&
-    getLastUsedAccess(now, carnetTravelRightAccesses.usedAccesses);
-
-  const validFrom = lastUsedAccess?.validFrom
-    ? lastUsedAccess.validFrom
-    : fareContractValidFrom;
-  const validTo = lastUsedAccess?.validTo
-    ? lastUsedAccess.validTo
-    : fareContractValidTo;
-
-  const usedAccesses = carnetTravelRightAccesses?.usedAccesses;
-
-  return {
-    validityStatus,
-    validFrom,
-    validTo,
-    usedAccesses,
-  };
 }
 
 /**

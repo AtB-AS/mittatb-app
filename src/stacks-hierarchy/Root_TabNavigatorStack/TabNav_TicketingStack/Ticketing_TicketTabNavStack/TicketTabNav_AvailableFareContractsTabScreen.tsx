@@ -50,6 +50,8 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
 
   const sentFareContractRef = useRef<View>(null);
 
+  const fareContractInfos = useFareContractInfos(availableFareContracts);
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -75,7 +77,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
         <TravelTokenBox showIfThisDevice={false} alwaysShowErrors={false} />
         <FareContractAndReservationsList
           reservations={reservations}
-          fareContracts={availableFareContracts}
+          fareContracts={fareContractInfos}
           now={serverNow}
           onPressFareContract={(fareContractId) =>
             navigation.navigate('Root_FareContractDetailsScreen', {

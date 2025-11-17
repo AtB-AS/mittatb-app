@@ -1,5 +1,5 @@
 import {humanizePaymentTypeString} from '@atb/modules/ticketing';
-import {FareContractType, FareContractState} from '@atb-as/utils';
+import {FareContractState} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
@@ -10,9 +10,10 @@ import {StyleSheet} from '@atb/theme';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {formatNumberToString} from '@atb/utils/numbers';
 import {hasShmoBookingId} from '../utils';
+import {FareContractInfo} from '../use-fare-contract-info';
 
 type OrderDetailsSectionItemProps = {
-  fareContract: FareContractType;
+  fareContract: FareContractInfo;
 };
 
 export const OrderDetailsSectionItem = ({
@@ -21,7 +22,7 @@ export const OrderDetailsSectionItem = ({
 }: SectionItemProps<OrderDetailsSectionItemProps>) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const firstTravelRight = fareContract.travelRights[0];
+  const {startDateTime, endDateTime} = fareContract.mostSignificantTicket;
   const priceString = !!fareContract.totalAmount
     ? formatNumberToString(parseFloat(fareContract.totalAmount), language)
     : undefined;
@@ -46,12 +47,12 @@ export const OrderDetailsSectionItem = ({
         {hasShmoBookingId(fareContract)
           ? t(
               FareContractTexts.shmoDetails.tripStarted(
-                fullDateTime(firstTravelRight.startDateTime, language),
+                fullDateTime(startDateTime, language),
               ),
             )
           : t(
               FareContractTexts.details.validFrom(
-                fullDateTime(firstTravelRight.startDateTime, language),
+                fullDateTime(startDateTime, language),
               ),
             )}
       </ThemeText>
@@ -60,12 +61,12 @@ export const OrderDetailsSectionItem = ({
         {hasShmoBookingId(fareContract)
           ? t(
               FareContractTexts.shmoDetails.tripEnded(
-                fullDateTime(firstTravelRight.endDateTime, language),
+                fullDateTime(endDateTime, language),
               ),
             )
           : t(
               FareContractTexts.details.validTo(
-                fullDateTime(firstTravelRight.endDateTime, language),
+                fullDateTime(endDateTime, language),
               ),
             )}
       </ThemeText>

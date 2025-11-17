@@ -1,32 +1,21 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import React from 'react';
-import {type FareContractType} from '@atb-as/utils';
-import {
-  findReferenceDataById,
-  getReferenceDataName,
-} from '@atb/modules/configuration';
+import {getReferenceDataName} from '@atb/modules/configuration';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import {FareContractInfo} from '../use-fare-contract-info';
 
 type Props = {
-  fc: FareContractType;
+  fc: FareContractInfo;
 };
 
 export const ProductName = ({fc}: Props) => {
-  const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {language} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
 
-  const travelRight = fc.travelRights[0];
-  const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
-    travelRight.fareProductRef,
-  );
-  const productName = preassignedFareProduct
-    ? getReferenceDataName(preassignedFareProduct, language)
-    : undefined;
+  const nameInfo = fc.mostSignificantTicket;
+  const productName = getReferenceDataName(nameInfo, language);
   return (
     <ThemeText
       typography="body__s__strong"

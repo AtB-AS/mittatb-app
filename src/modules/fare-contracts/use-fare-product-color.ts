@@ -1,16 +1,13 @@
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {ContrastColor, useThemeContext} from '@atb/theme';
 import {useTransportColor} from '@atb/utils/use-transport-color';
+import {TransportMode} from '@atb/modules/fare-contracts';
 
-export function useFareProductColor(fareProductType?: string): ContrastColor {
+export function useFareProductColor(
+  transportModes?: TransportMode[],
+): ContrastColor {
   const {theme} = useThemeContext();
 
-  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
-  const fareProductTypeConfig = fareProductTypeConfigs.find(
-    (c) => c.type === fareProductType,
-  );
-
-  const {mode, subMode} = fareProductTypeConfig?.transportModes?.[0] || {};
+  const {mode, subMode} = transportModes?.[0] ?? {};
   const transportColor = useTransportColor(mode, subMode);
 
   if (!mode) {

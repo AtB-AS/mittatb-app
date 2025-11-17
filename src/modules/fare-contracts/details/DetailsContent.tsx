@@ -2,17 +2,11 @@ import React from 'react';
 import {
   isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
-  isSentOrReceivedFareContract,
   useRefundOptionsQuery,
 } from '@atb/modules/ticketing';
-import {FareContractType, getAccesses} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {FareContractInfoDetailsSectionItem} from '../sections/FareContractInfoDetailsSectionItem';
-import {
-  getFareContractInfo,
-  hasShmoBookingId,
-  mapToUserProfilesWithCount,
-} from '../utils';
+import {hasShmoBookingId} from '../utils';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {OrderDetailsSectionItem} from '../sections/OrderDetailsSectionItem';
 import {
@@ -27,8 +21,6 @@ import {
 } from '@atb/modules/global-messages';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {Barcode} from './Barcode';
 import {MapFilterType} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
@@ -45,7 +37,6 @@ import {UsedAccessesSectionItem} from './UsedAccessesSectionItem';
 import {ShmoTripDetailsSectionItem} from '@atb/modules/mobility';
 import {FareContractHeaderSectionItem} from '../sections/FareContractHeaderSectionItem';
 import {FareContractShmoHeaderSectionItem} from '../sections/FareContractShmoHeaderSectionItem';
-import {isDefined} from '@atb/utils/presence';
 import {RefundSectionItem} from '../components/RefundSectionItem';
 import {
   EarnedBonusPointsSectionItem,
@@ -54,10 +45,11 @@ import {
 import {useFareContractLegs} from '@atb/modules/fare-contracts';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {FareContractInfo} from '@atb/modules/fare-contracts';
+import {arrayMapUniqueWithCount} from '@atb/utils/array-map-unique-with-count';
 
 type Props = {
-  fareContract: FareContractType;
-  preassignedFareProduct?: PreassignedFareProduct;
+  fc: FareContractInfo;
   now: number;
   onReceiptNavigate: () => void;
   onNavigateToMap: (initialFilters: MapFilterType) => void;
@@ -66,8 +58,7 @@ type Props = {
 };
 
 export const DetailsContent: React.FC<Props> = ({
-  fareContract: fc,
-  preassignedFareProduct,
+  fc,
   now,
   onReceiptNavigate,
   onNavigateToMap,
@@ -81,22 +72,23 @@ export const DetailsContent: React.FC<Props> = ({
   const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
   const {data: refundOptions} = useRefundOptionsQuery(fc.orderId, fc.state);
 
-  const {validityStatus, usedAccesses} = getFareContractInfo(
-    now,
-    fc,
-    currentUserId,
-  );
+  const mostSignificantTicket = fc.mostSignificantTicket;
 
-  const isSentOrReceived = isSentOrReceivedFareContract(fc);
-  const isReceived = isSentOrReceived && fc.purchasedBy != currentUserId;
+  const {validityStatus, usedAccesses} = fc.getValidityInfo(now, currentUserId);
 
-  const firstTravelRight = fc.travelRights[0];
-  const {userProfiles} = useFirestoreConfigurationContext();
+  const isReceived = fc.isSentOrReceived && fc.purchasedBy != currentUserId;
+
   const {isInspectable, mobileTokenStatus} = useMobileTokenContext();
   const {benefits} = useOperatorBenefitsForFareProduct(
-    preassignedFareProduct?.id,
+    mostSignificantTicket.fareProductRef,
   );
-  const legs = useFareContractLegs(firstTravelRight.datedServiceJourneys?.[0]);
+
+  const datedServiceJourney = fc.tickets.find(
+    (t) =>
+      t.datedServiceJourneys != undefined && t.datedServiceJourneys.length > 0,
+  )?.datedServiceJourneys?.[0];
+
+  const legs = useFareContractLegs(datedServiceJourney);
 
   // If the ticket is received, get the sender account ID to look up for phone number.
   const senderAccountId = isReceived ? fc.purchasedBy : undefined;
@@ -104,17 +96,17 @@ export const DetailsContent: React.FC<Props> = ({
   const {data: purchaserPhoneNumber} =
     useGetPhoneByAccountIdQuery(senderAccountId);
 
-  const userProfilesWithCount = mapToUserProfilesWithCount(
-    fc.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
-    userProfiles,
+  const userProfilesWithCount = arrayMapUniqueWithCount(
+    fc.allUserProfiles,
+    (a, b) => a.id === b.id,
   );
 
   const globalMessageRuleVariables = {
-    fareProductType: preassignedFareProduct?.type ?? 'unknown',
+    fareProductType: fc.tickets[0].type,
     validityStatus: validityStatus,
-    fareZones: firstTravelRight.fareZoneRefs ?? [],
-    numberOfZones: firstTravelRight.fareZoneRefs?.length ?? 0,
-    numberOfTravelRights: fc.travelRights.length,
+    fareZones: fc.allFareZones.map((fz) => fz.id),
+    numberOfZones: fc.allFareZones.length,
+    numberOfTravelRights: fc.tickets.length,
   };
   const globalMessageCount = findGlobalMessages(
     GlobalMessageContextEnum.appFareContractDetails,
@@ -124,25 +116,26 @@ export const DetailsContent: React.FC<Props> = ({
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
-  const accesses = getAccesses(fc);
+  const accesses = fc.accesses;
 
-  const shouldShowLegs =
-    preassignedFareProduct?.isBookingEnabled && !!legs?.length;
+  const isBookingEnabled = fc.tickets.some((t) => t.isBookingEnabled);
+
+  const shouldShowLegs = isBookingEnabled && !!legs?.length;
 
   const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(fc.id);
 
   return (
     <Section style={styles.section}>
       {hasShmoBookingId(fc) ? (
-        <FareContractShmoHeaderSectionItem fareContract={fc} />
+        <FareContractShmoHeaderSectionItem fc={fc} />
       ) : (
-        <FareContractHeaderSectionItem fareContract={fc} />
+        <FareContractHeaderSectionItem fc={fc} />
       )}
 
       {hasShmoBookingId(fc) ? (
         <ShmoTripDetailsSectionItem
-          startDateTime={fc.travelRights[0].startDateTime}
-          endDateTime={fc.travelRights[0].endDateTime}
+          startDateTime={fc.mostSignificantTicket.startDateTime}
+          endDateTime={fc.mostSignificantTicket.endDateTime}
           totalAmount={fc.totalAmount}
           withHeader={true}
         />
@@ -151,7 +144,6 @@ export const DetailsContent: React.FC<Props> = ({
           fareContract={fc}
           userProfilesWithCount={userProfilesWithCount}
           status={validityStatus}
-          preassignedFareProduct={preassignedFareProduct}
         />
       )}
 
@@ -163,7 +155,7 @@ export const DetailsContent: React.FC<Props> = ({
               : undefined
           }
         >
-          <Barcode validityStatus={validityStatus} fc={fc} />
+          <Barcode validityStatus={validityStatus} qrCode={fc.qrCode} />
         </GenericSectionItem>
       )}
       {accesses && (
@@ -229,26 +221,21 @@ export const DetailsContent: React.FC<Props> = ({
       {refundOptions?.isRefundable && (
         <RefundSectionItem
           orderId={fc.orderId}
-          fareProductType={preassignedFareProduct?.type}
+          fareProductType={mostSignificantTicket.type}
           state={fc.state}
         />
       )}
       {isCanBeConsumedNowFareContract(fc, now, currentUserId) && (
         <ConsumeCarnetSectionItem
           fareContractId={fc.id}
-          fareProductType={preassignedFareProduct?.type}
+          fareProductType={mostSignificantTicket.type}
         />
       )}
       {isActivateTicketNowEnabled &&
-        isCanBeActivatedNowFareContract(
-          fc,
-          now,
-          currentUserId,
-          preassignedFareProduct?.isBookingEnabled,
-        ) && (
+        isCanBeActivatedNowFareContract(fc, now, currentUserId) && (
           <ActivateNowSectionItem
             fareContractId={fc.id}
-            fareProductType={preassignedFareProduct?.type}
+            fareProductType={mostSignificantTicket.type}
           />
         )}
     </Section>

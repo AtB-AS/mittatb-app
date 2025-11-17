@@ -7,7 +7,6 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ValidityStatus} from '../utils';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {FareContractType} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import Bugsnag from '@bugsnag/react-native';
@@ -30,10 +29,13 @@ import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 type Props = {
   validityStatus: ValidityStatus;
-  fc: FareContractType;
+  qrCode?: string;
 };
 
-export function Barcode({validityStatus, fc}: Props): React.JSX.Element | null {
+export function Barcode({
+  validityStatus,
+  qrCode,
+}: Props): React.JSX.Element | null {
   const {mobileTokenStatus} = useMobileTokenContext();
   const {enable_new_token_barcode} = useRemoteConfigContext();
   useScreenBrightnessIncrease();
@@ -43,14 +45,14 @@ export function Barcode({validityStatus, fc}: Props): React.JSX.Element | null {
     case 'loading':
       return <LoadingBarcode />;
     case 'fallback':
-      return <StaticAztec fc={fc} />;
+      return <StaticAztec qrCode={qrCode} />;
     case 'staticQr':
-      return <StaticQrCode fc={fc} />;
+      return <StaticQrCode qrCode={qrCode} />;
     case 'success-and-inspectable':
       if (enable_new_token_barcode) {
         return <BarcodeInspectionView />;
       } else {
-        return <MobileTokenAztec fc={fc} />;
+        return <MobileTokenAztec qrCode={qrCode} />;
       }
     case 'success-not-inspectable':
       return <DeviceNotInspectable />;
@@ -140,7 +142,7 @@ const BarcodeInspectionView = () => {
  *
  * @deprecated Use BarcodeInspectionView instead
  */
-const MobileTokenAztec = ({fc}: {fc: FareContractType}) => {
+const MobileTokenAztec = ({qrCode}: {qrCode?: string}) => {
   const styles = useStyles();
   const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
@@ -158,7 +160,7 @@ const MobileTokenAztec = ({fc}: {fc: FareContractType}) => {
   }, [signedToken]);
 
   if (aztecCodeError) {
-    return <StaticAztec fc={fc} />;
+    return <StaticAztec qrCode={qrCode} />;
   } else if (!aztecXml) {
     return <LoadingBarcode />;
   }
@@ -238,7 +240,7 @@ const LoadingBarcode = () => {
   );
 };
 
-const StaticAztec = ({fc}: {fc: FareContractType}) => {
+const StaticAztec = ({qrCode}: {qrCode?: string}) => {
   const styles = useStyles();
   const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
@@ -250,10 +252,10 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
   );
 
   useEffect(() => {
-    if (fc.qrCode) {
-      setAztecXml(renderAztec(fc.qrCode));
+    if (qrCode) {
+      setAztecXml(renderAztec(qrCode));
     }
-  }, [fc.qrCode, setAztecXml]);
+  }, [qrCode, setAztecXml]);
 
   if (!aztecXml) return null;
 
@@ -279,7 +281,7 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
   );
 };
 
-const StaticQrCode = ({fc}: {fc: FareContractType}) => {
+const StaticQrCode = ({qrCode}: {qrCode?: string}) => {
   const styles = useStyles();
   const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
@@ -291,10 +293,10 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
   );
 
   useEffect(() => {
-    if (fc.qrCode) {
-      QRCode.toString(fc.qrCode, {type: 'svg'}).then(setQrCodeSvg);
+    if (qrCode) {
+      QRCode.toString(qrCode, {type: 'svg'}).then(setQrCodeSvg);
     }
-  }, [fc.qrCode, setQrCodeSvg]);
+  }, [qrCode, setQrCodeSvg]);
 
   if (!qrCodeSvg) return null;
 

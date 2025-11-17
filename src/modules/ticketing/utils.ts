@@ -1,41 +1,36 @@
 import {startCase} from 'lodash';
 import {LastUsedAccessState, UsedAccessStatus, PaymentType} from './types';
-import {FareContractType, TravelRightType, UsedAccessType} from '@atb-as/utils';
-import {getAvailabilityStatus} from '@atb-as/utils';
-
-export function isSentOrReceivedFareContract(fc: FareContractType) {
-  return fc.customerAccountId !== fc.purchasedBy;
-}
+import {TravelRightType, UsedAccessType} from '@atb-as/utils';
+import {FareContractInfo} from '../fare-contracts/use-fare-contract-info';
 
 export function isCanBeConsumedNowFareContract(
-  f: FareContractType,
+  f: FareContractInfo,
   now: number,
   currentUserId: string | undefined,
 ) {
   if (f.customerAccountId !== currentUserId) return false;
 
   // Fare contracts without accesses cannot be consumed
-  if (!hasTravelRightAccesses(f.travelRights)) return false;
+  if (!f.hasTravelRightAccesses) return false;
 
-  return getAvailabilityStatus(f, now).status === 'upcoming';
+  return f.getAvailabilityStatus(now).status === 'upcoming';
 }
 
 export function isCanBeActivatedNowFareContract(
-  f: FareContractType,
+  f: FareContractInfo,
   now: number,
   currentUserId: string | undefined,
-  isBooking: boolean = false,
 ) {
   if (f.customerAccountId !== currentUserId) return false;
 
   // You cannot activate a booking fare contract early
-  if (isBooking) return false;
+  if (f.mostSignificantTicket.isBookingEnabled) return false;
 
   // A fare contract with accesses (carnets) cannot be activated by itself. It
   // is instead "consumed" to activate an access
-  if (hasTravelRightAccesses(f.travelRights)) return false;
+  if (f.hasTravelRightAccesses) return false;
 
-  return getAvailabilityStatus(f, now).status === 'upcoming';
+  return f.getAvailabilityStatus(now).status === 'upcoming';
 }
 
 export function getLastUsedAccess(

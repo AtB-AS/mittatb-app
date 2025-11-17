@@ -1,6 +1,6 @@
 import {ContrastColor} from '@atb-as/theme';
 import {type RecentFareContractType} from '@atb/recent-fare-contracts';
-import {FareContractType, TravelRightDirection} from '@atb-as/utils';
+import {TravelRightDirection} from '@atb-as/utils';
 import {ZonesFromTo} from './ZonesFromTo';
 import {HarborsFromTo} from './HarborsFromTo';
 import {SchoolFromTo} from './SchoolFromTo';
@@ -9,6 +9,7 @@ import {
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
 import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import {FareContractInfo} from '../use-fare-contract-info';
 
 type FareContractFromToBaseProps = {
   backgroundColor: ContrastColor;
@@ -16,7 +17,7 @@ type FareContractFromToBaseProps = {
 };
 
 export type FareContractPropsSub = {
-  fc: FareContractType;
+  fc: FareContractInfo;
 };
 
 export type RecentFareContractPropsSub = {
@@ -93,17 +94,17 @@ type FareContractFromToControllerDataType =
   | undefined;
 
 function useFareContractFromToController(
-  fcOrRfc: FareContractType | RecentFareContractType,
+  fcOrRfc: FareContractInfo | RecentFareContractType,
 ): FareContractFromToControllerDataType {
   const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
 
   if (isFareContract(fcOrRfc)) {
-    const firstTravelRight = fcOrRfc.travelRights.at(0);
-    if (firstTravelRight?.schoolName) {
+    const mostSignificantTicket = fcOrRfc.mostSignificantTicket;
+    if (mostSignificantTicket?.schoolName) {
       return {
         mode: FareContractFromToMode.School,
-        schoolName: firstTravelRight.schoolName,
+        schoolName: mostSignificantTicket.schoolName,
       };
     }
   }
@@ -193,13 +194,13 @@ function useFareContractFromToController(
 }
 
 function isFareContract(
-  fcOrRfc: FareContractType | RecentFareContractType,
-): fcOrRfc is FareContractType {
-  return 'travelRights' in fcOrRfc;
+  fcOrRfc: FareContractInfo | RecentFareContractType,
+): fcOrRfc is FareContractInfo {
+  return 'tickets' in fcOrRfc;
 }
 
 function isRecentFareContract(
-  fcOrRfc: FareContractType | RecentFareContractType,
+  fcOrRfc: FareContractInfo | RecentFareContractType,
 ): fcOrRfc is RecentFareContractType {
   return 'fromFareZone' in fcOrRfc;
 }

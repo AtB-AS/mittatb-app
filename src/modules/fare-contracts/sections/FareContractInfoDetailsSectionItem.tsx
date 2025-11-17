@@ -1,5 +1,4 @@
 import {
-  findReferenceDataById,
   PreassignedFareProduct,
   FareZone,
   useFirestoreConfigurationContext,
@@ -7,25 +6,24 @@ import {
 } from '@atb/modules/configuration';
 import {StyleSheet} from '@atb/theme';
 import {getLastUsedAccess} from '@atb/modules/ticketing';
-import {FareContractType} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import {
-  getValidityStatus,
   isValidFareContract,
-  mapToUserProfilesWithCount,
-  userProfileCountAndName,
   useFareZoneSummary,
   ValidityStatus,
 } from '../utils';
 import {FareContractDetailItem} from '../components/FareContractDetailItem';
 import {InspectionSymbol} from '../components/InspectionSymbol';
-import {UserProfileWithCount} from '../types';
 import {getTransportModeText} from '@atb/components/transportation-modes';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
-import {getAccesses} from '@atb-as/utils';
-import {isDefined} from '@atb/utils/presence';
+import {
+  arrayMapUniqueWithCount,
+  toCountAndName,
+  UniqueWithCount,
+} from '@atb/utils/array-map-unique-with-count';
+import {FareContractInfo} from '../use-fare-contract-info';
 
 export type FareContractInfoProps = {
   status: ValidityStatus;
@@ -35,11 +33,11 @@ export type FareContractInfoProps = {
 };
 
 export type FareContractInfoDetailsProps = {
-  fareContract: FareContractType;
+  fareContract: FareContractInfo;
   preassignedFareProduct?: PreassignedFareProduct;
   fromFareZone?: FareZone;
   toFareZone?: FareZone;
-  userProfilesWithCount: UserProfileWithCount[];
+  userProfilesWithCount: UniqueWithCount<UserProfile>[];
   status: FareContractInfoProps['status'];
   testID?: string;
   now?: number;
@@ -71,7 +69,7 @@ export const FareContractInfoDetailsSectionItem = ({
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === preassignedFareProduct?.type,
   );
-  const firstTravelRight = fareContract.travelRights[0];
+  const firstTravelRight = fareContract.mostSignificantTicket;
 
   const isStatusSent = status === 'sent';
 
@@ -99,7 +97,7 @@ export const FareContractInfoDetailsSectionItem = ({
             <FareContractDetailItem
               header={t(FareContractTexts.label.travellers)}
               content={userProfilesWithCount.map((u) =>
-                userProfileCountAndName(u, language),
+                toCountAndName(u, language),
               )}
             />
           )}
@@ -112,7 +110,7 @@ export const FareContractInfoDetailsSectionItem = ({
         </View>
         {isValidOrSentFareContract && (
           <InspectionSymbol
-            preassignedFareProduct={preassignedFareProduct}
+            fareContractInfo={fareContract}
             sentTicket={isStatusSent}
           />
         )}
@@ -122,52 +120,35 @@ export const FareContractInfoDetailsSectionItem = ({
 };
 
 export const getFareContractInfoDetails = (
-  fareContract: FareContractType,
+  fareContract: FareContractInfo,
   now: number,
-  fareZones: FareZone[],
-  userProfiles: UserProfile[],
-  preassignedFareProducts: PreassignedFareProduct[],
 ): FareContractInfoDetailsProps => {
-  const {
-    endDateTime,
-    fareProductRef: productRef,
-    fareZoneRefs,
-  } = fareContract.travelRights[0];
-  let validTo = endDateTime.getTime();
-  const validityStatus = getValidityStatus(now, fareContract);
+  const {validityStatus, validTo} = fareContract.getValidityInfo(now);
 
-  const firstZone = fareZoneRefs?.[0];
-  const lastZone = fareZoneRefs?.slice(-1)?.[0];
-  const fromFareZone = firstZone
-    ? findReferenceDataById(fareZones, firstZone)
-    : undefined;
-  const toFareZone = lastZone
-    ? findReferenceDataById(fareZones, lastZone)
-    : undefined;
-  const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
-    productRef,
-  );
-  const userProfilesWithCount = mapToUserProfilesWithCount(
-    fareContract.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
-    userProfiles,
+  let validToComputed = validTo;
+
+  const fromFareZone = fareContract.allFareZones?.[0];
+  const toFareZone = fareContract.allFareZones?.slice(-1)?.[0];
+
+  const userProfilesWithCount = arrayMapUniqueWithCount(
+    fareContract.allUserProfiles,
+    (a, b) => a.id === b.id,
   );
 
-  const flattenedAccesses = getAccesses(fareContract);
+  const flattenedAccesses = fareContract.accesses;
   if (flattenedAccesses) {
     const {usedAccesses} = flattenedAccesses;
     const {validTo: usedAccessValidTo} = getLastUsedAccess(now, usedAccesses);
-    if (usedAccessValidTo) validTo = usedAccessValidTo;
+    if (usedAccessValidTo) validToComputed = usedAccessValidTo;
   }
 
   return {
-    preassignedFareProduct: preassignedFareProduct,
     fromFareZone: fromFareZone,
     toFareZone: toFareZone,
     userProfilesWithCount: userProfilesWithCount,
     status: validityStatus,
     now: now,
-    validTo: validTo,
+    validTo: validToComputed,
     fareContract,
   };
 };

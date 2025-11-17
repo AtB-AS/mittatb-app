@@ -1,5 +1,4 @@
 import React from 'react';
-import {FareContractType} from '@atb-as/utils';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
@@ -10,15 +9,15 @@ import {useTimeContext} from '@atb/modules/time';
 import {useAuthContext} from '@atb/modules/auth';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {toDate} from 'date-fns';
-import {getFareContractInfo} from '../utils';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
+import {FareContractInfo} from '../use-fare-contract-info';
 
 type Props = {
-  fareContract: FareContractType;
+  fc: FareContractInfo;
 };
 
 export const FareContractShmoHeaderSectionItem = ({
-  fareContract: fc,
+  fc,
   ...props
 }: SectionItemProps<Props>) => {
   const {topContainer} = useSectionItem(props);
@@ -29,7 +28,7 @@ export const FareContractShmoHeaderSectionItem = ({
   const {abtCustomerId: currentUserId} = useAuthContext();
   const {isInspectable} = useMobileTokenContext();
 
-  const {validTo} = getFareContractInfo(serverNow, fc, currentUserId);
+  const {validTo} = fc.getValidityInfo(serverNow, currentUserId);
   const dateTime = formatToLongDateTime(toDate(validTo), language);
   const label = t(FareContractTexts.shmoDetails.tripEnded(dateTime));
 

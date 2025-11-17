@@ -4,11 +4,12 @@ import {ValidityStatus} from '../utils';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {LineWithVerticalBars} from '@atb/components/line-with-vertical-bars';
 import {useFareProductColor} from '../use-fare-product-color';
+import {TransportMode} from '@atb/modules/fare-contracts';
 
 type Props =
   | {
       status: 'valid';
-      fareProductType?: string;
+      transportModes: TransportMode[];
       animate?: boolean;
     }
   | {status: Exclude<ValidityStatus, 'valid'>};
@@ -18,7 +19,7 @@ export const ValidityLine = (props: Props): ReactElement => {
 
   const {theme} = useThemeContext();
   const fareProductColor = useFareProductColor(
-    status === 'valid' ? props.fareProductType : undefined,
+    status === 'valid' ? props.transportModes : undefined,
   );
   const {isInspectable} = useMobileTokenContext();
 

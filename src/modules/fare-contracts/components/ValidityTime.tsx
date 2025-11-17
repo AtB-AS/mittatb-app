@@ -10,15 +10,15 @@ import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {toDate} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
-import {getFareContractInfo, ValidityStatus} from '../utils';
+import {ValidityStatus} from '../utils';
 import {fareContractValidityUnits} from '../fare-contract-validity-units';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useTimeContext} from '@atb/modules/time';
 import {useAuthContext} from '@atb/modules/auth';
-import type {FareContractType} from '@atb-as/utils';
+import {FareContractInfo} from '../use-fare-contract-info';
 
 type Props = {
-  fc: FareContractType;
+  fc: FareContractInfo;
 };
 
 export const ValidityTime = ({fc}: Props) => {
@@ -28,11 +28,11 @@ export const ValidityTime = ({fc}: Props) => {
   const {serverNow} = useTimeContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
 
-  const {validityStatus, validFrom, validTo} = getFareContractInfo(
+  const {validityStatus, validFrom, validTo} = fc.getValidityInfo(
     serverNow,
-    fc,
     currentUserId,
   );
+
   const label: string = validityTimeText(
     validityStatus,
     serverNow,

@@ -1,0 +1,12 @@
+diff --git a/node_modules/@atb-as/config-specs/lib/reference-data.d.ts b/node_modules/@atb-as/config-specs/lib/reference-data.d.ts
+index 1587f7b..1bdf2e6 100644
+--- a/node_modules/@atb-as/config-specs/lib/reference-data.d.ts
++++ b/node_modules/@atb-as/config-specs/lib/reference-data.d.ts
+@@ -23,6 +23,7 @@ export declare const PreassignedFareProduct: z.ZodObject<{
+     isBookingEnabled: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>, z.ZodTransform<boolean | undefined, boolean | null | undefined>>>;
+     isEnabledForTripSearchOffer: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>, z.ZodTransform<boolean | undefined, boolean | null | undefined>>>;
+     isDefault: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>, z.ZodTransform<boolean | undefined, boolean | null | undefined>>>;
++    isBaggageProduct: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>, z.ZodTransform<boolean | undefined, boolean | null | undefined>>>;
+     alternativeNames: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodUnion<readonly [z.ZodObject<{
+         lang: z.ZodString;
+         value: z.ZodString;

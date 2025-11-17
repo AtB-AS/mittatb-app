@@ -4,32 +4,29 @@ import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {
-  PreassignedFareProduct,
-  ProductTypeTransportModes,
-  FareZone,
-  useFirestoreConfigurationContext,
-} from '@atb/modules/configuration';
 import {Moon, Student, Youth} from '@atb/assets/svg/mono-icons/ticketing';
 import {ContrastColor} from '@atb/theme/colors';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {SvgProps} from 'react-native-svg';
 import {useFareProductColor} from '../use-fare-product-color';
+import {FareContractInfo, TransportMode} from '@atb/modules/fare-contracts';
 
 export type InspectionSymbolProps = {
-  preassignedFareProduct?: PreassignedFareProduct;
+  fareContractInfo: FareContractInfo;
   sentTicket?: boolean;
 };
 
 export const InspectionSymbol = ({
-  preassignedFareProduct,
+  fareContractInfo,
   sentTicket,
 }: InspectionSymbolProps) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
 
-  const fareProductColor = useFareProductColor(preassignedFareProduct?.type);
+  const fareProductColor = useFareProductColor(
+    fareContractInfo.allTransportModes,
+  );
   const {isInspectable, mobileTokenStatus} = useMobileTokenContext();
   const themeColor = isInspectable
     ? fareProductColor
@@ -45,7 +42,11 @@ export const InspectionSymbol = ({
     >
       {isInspectable && !sentTicket ? (
         <InspectableContent
-          preassignedFareProduct={preassignedFareProduct}
+          illustration={
+            fareContractInfo.tickets.find((t) => t.illustration !== undefined)
+              ?.illustration
+          }
+          transportModes={fareContractInfo.allTransportModes}
           themeColor={themeColor}
         />
       ) : (
@@ -56,31 +57,23 @@ export const InspectionSymbol = ({
 };
 
 const InspectableContent = ({
-  preassignedFareProduct,
+  illustration,
+  transportModes,
   themeColor,
 }: {
-  preassignedFareProduct?: PreassignedFareProduct;
-  fromFareZone?: FareZone;
-  toFareZone?: FareZone;
+  illustration?: string;
+  transportModes?: TransportMode[];
   themeColor: ContrastColor;
 }) => {
   const styles = useStyles();
 
-  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
-  const fareProductTypeConfig = fareProductTypeConfigs.find(
-    (c) => c.type === preassignedFareProduct?.type,
-  );
-
   const shouldFill =
-    fareProductTypeConfig?.illustration?.includes('period') ||
-    fareProductTypeConfig?.illustration === 'hour24' ||
-    fareProductTypeConfig?.illustration === 'youth' ||
-    fareProductTypeConfig?.illustration === 'city';
+    illustration?.includes('period') ||
+    illustration === 'hour24' ||
+    illustration === 'youth' ||
+    illustration === 'city';
 
-  const InspectionSvg = getInspectionSvg(
-    fareProductTypeConfig?.illustration,
-    fareProductTypeConfig?.transportModes,
-  );
+  const InspectionSvg = getInspectionSvg(illustration, transportModes);
 
   return (
     <View
@@ -123,7 +116,7 @@ const NotInspectableContent = () => {
 
 const getInspectionSvg = (
   illustration: string | undefined,
-  transportModes: ProductTypeTransportModes[] | undefined,
+  transportModes: TransportMode[] | undefined,
 ): ((props: SvgProps) => React.JSX.Element) => {
   if (illustration === 'night') return Moon;
   if (illustration === 'youth') return Youth;

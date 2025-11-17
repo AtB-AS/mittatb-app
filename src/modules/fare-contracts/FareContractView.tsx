@@ -1,4 +1,4 @@
-import {getFareContractInfo, hasShmoBookingId} from './utils';
+import {hasShmoBookingId} from './utils';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -12,9 +12,7 @@ import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {
   isCanBeConsumedNowFareContract,
   isCanBeActivatedNowFareContract,
-  useGetFareProductsQuery,
 } from '@atb/modules/ticketing';
-import {FareContractType, getAccesses} from '@atb-as/utils';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
@@ -26,7 +24,6 @@ import {TravelInfoSectionItem} from './components/TravelInfoSectionItem';
 import {ValidityTime} from './components/ValidityTime';
 import {FareContractShmoHeaderSectionItem} from './sections/FareContractShmoHeaderSectionItem';
 import {ShmoTripDetailsSectionItem} from '@atb/modules/mobility';
-import {findReferenceDataById} from '@atb/modules/configuration';
 import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
@@ -34,10 +31,11 @@ import {
 import {useFareContractLegs} from './use-fare-contract-legs';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {CarnetFooter} from './carnet/CarnetFooter';
+import {FareContractInfo} from './use-fare-contract-info';
 
 type Props = {
   now: number;
-  fareContract: FareContractType;
+  fareContract: FareContractInfo;
   isStatic?: boolean;
   onPressDetails?: () => void;
   testID?: string;
@@ -57,22 +55,14 @@ export const FareContractView: React.FC<Props> = ({
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {validityStatus} = getFareContractInfo(
-    now,
-    fareContract,
-    currentUserId,
-  );
+  const {validityStatus} = fareContract.getValidityInfo(now, currentUserId);
 
-  const firstTravelRight = fareContract.travelRights[0];
-  const {data: preassignedFareProducts} = useGetFareProductsQuery();
-  const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
-    firstTravelRight.fareProductRef,
-  );
   const {benefits} = useOperatorBenefitsForFareProduct(
-    firstTravelRight.fareProductRef,
+    fareContract.mostSignificantTicket.fareProductRef,
   );
-  const legs = useFareContractLegs(firstTravelRight?.datedServiceJourneys?.[0]);
+  const legs = useFareContractLegs(
+    fareContract.mostSignificantTicket.datedServiceJourneys?.[0],
+  );
 
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
@@ -81,19 +71,19 @@ export const FareContractView: React.FC<Props> = ({
     validityStatus === 'valid' || validityStatus === 'upcoming';
 
   const shouldShowLegs =
-    preassignedFareProduct?.isBookingEnabled && !!legs?.length;
+    fareContract.mostSignificantTicket.isBookingEnabled && !!legs?.length;
 
   const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(
     fareContract.id,
     !shouldShowBonusAmountEarned,
   );
 
-  const accesses = getAccesses(fareContract);
+  const accesses = fareContract.accesses;
 
   return (
     <Section testID={testID}>
       {hasShmoBookingId(fareContract) ? (
-        <FareContractShmoHeaderSectionItem fareContract={fareContract} />
+        <FareContractShmoHeaderSectionItem fc={fareContract} />
       ) : (
         <GenericSectionItem style={styles.header}>
           <WithValidityLine fc={fareContract}>
@@ -106,8 +96,8 @@ export const FareContractView: React.FC<Props> = ({
 
       {hasShmoBookingId(fareContract) ? (
         <ShmoTripDetailsSectionItem
-          startDateTime={fareContract.travelRights[0].startDateTime}
-          endDateTime={fareContract.travelRights[0].endDateTime}
+          startDateTime={fareContract.mostSignificantTicket.startDateTime}
+          endDateTime={fareContract.mostSignificantTicket.endDateTime}
           totalAmount={fareContract.totalAmount}
           withHeader={true}
         />
@@ -149,21 +139,16 @@ export const FareContractView: React.FC<Props> = ({
         />
       )}
       {isActivateTicketNowEnabled &&
-        isCanBeActivatedNowFareContract(
-          fareContract,
-          now,
-          currentUserId,
-          preassignedFareProduct?.isBookingEnabled,
-        ) && (
+        isCanBeActivatedNowFareContract(fareContract, now, currentUserId) && (
           <ActivateNowSectionItem
             fareContractId={fareContract.id}
-            fareProductType={preassignedFareProduct?.type}
+            fareProductType={fareContract.mostSignificantTicket.type}
           />
         )}
       {isCanBeConsumedNowFareContract(fareContract, now, currentUserId) && (
         <ConsumeCarnetSectionItem
           fareContractId={fareContract.id}
-          fareProductType={preassignedFareProduct?.type}
+          fareProductType={fareContract.mostSignificantTicket.type}
         />
       )}
     </Section>

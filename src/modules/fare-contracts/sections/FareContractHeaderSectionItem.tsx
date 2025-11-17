@@ -1,5 +1,4 @@
 import React from 'react';
-import {FareContractType} from '@atb-as/utils';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -10,13 +9,14 @@ import {WithValidityLine} from '../components/WithValidityLine';
 import {ProductName} from '../components/ProductName';
 import {ValidityTime} from '../components/ValidityTime';
 import {SentToMessageBox} from '../components/SentToMessageBox';
+import {FareContractInfo} from '../use-fare-contract-info';
 
 type Props = {
-  fareContract: FareContractType;
+  fc: FareContractInfo;
 };
 
 export const FareContractHeaderSectionItem = ({
-  fareContract: fc,
+  fc,
   ...props
 }: SectionItemProps<Props>) => {
   const {topContainer} = useSectionItem(props);
