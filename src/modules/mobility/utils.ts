@@ -38,8 +38,7 @@ import {
   VehiclesClusteredFeatureSchema,
 } from '@atb/api/types/mobility';
 import {TFunc} from '@leile/lobo-t';
-import {formatNumberToString} from '@atb-as/utils';
-import {ErrorResponse} from '@atb-as/utils';
+import {ErrorResponse, formatNumberToString} from '@atb-as/utils';
 
 export const isVehiclesClusteredFeature = (
   feature: Feature<Point> | undefined,
