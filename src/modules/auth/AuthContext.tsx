@@ -56,6 +56,9 @@ export const getCurrentUserIdGlobal = () => currentUserIdGlobal;
 let idTokenExpirationTimeGlobal: string | undefined = undefined;
 export const getIdTokenExpirationTimeGlobal = () => idTokenExpirationTimeGlobal;
 
+let debugUserInfoHeaderGlobal: string | undefined = undefined;
+export const getDebugUserInfoHeaderGlobal = () => debugUserInfoHeaderGlobal;
+
 const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
   switch (action.type) {
     case 'SIGN_IN_INITIATED': {
@@ -76,6 +79,8 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
         currentUserIdGlobal = action.user.uid;
         idTokenGlobal = undefined;
         idTokenExpirationTimeGlobal = undefined;
+        debugUserInfoHeaderGlobal = undefined;
+
         return {user: action.user, authStatus: 'fetching-id-token'};
       }
     }
@@ -97,13 +102,19 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
         return prevState;
       }
       const customerNumber = action.idTokenResult.claims['customer_number'];
+      const abtId = action.idTokenResult.claims['abt_id'];
       const authStatus = customerNumber ? 'authenticated' : 'creating-account';
       Bugsnag.leaveBreadcrumb('Retrieved id token', {
         customerNumber,
         authStatus,
       });
+
       idTokenGlobal = action.idTokenResult.token;
       idTokenExpirationTimeGlobal = action.idTokenResult.expirationTime;
+      debugUserInfoHeaderGlobal = btoa(
+        JSON.stringify({abt_id: abtId, customer_number: customerNumber}),
+      );
+
       return {
         ...prevState,
         idTokenResult: action.idTokenResult,

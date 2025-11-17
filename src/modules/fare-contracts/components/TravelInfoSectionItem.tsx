@@ -21,6 +21,10 @@ import {useTimeContext} from '@atb/modules/time';
 import {useSectionItem} from '@atb/components/sections';
 import {isDefined} from '@atb/utils/presence';
 import {SentToMessageBox} from './SentToMessageBox';
+import {
+  arrayMapUniqueWithCount,
+  toCountAndName,
+} from '@atb/utils/array-map-unique-with-count';
 
 type Props = {fc: FareContractType};
 
@@ -30,6 +34,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
 
   const {validityStatus} = getFareContractInfo(serverNow, fc, currentUserId);
+
   const firstTravelRight = fc.travelRights[0];
   const {userProfiles, fareProductTypeConfigs} =
     useFirestoreConfigurationContext();
@@ -45,6 +50,18 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   const userProfilesWithCount = mapToUserProfilesWithCount(
     fc.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
     userProfiles,
+  );
+
+  const baggageProducts = fc.travelRights
+    .map((tr) =>
+      findReferenceDataById(preassignedFareProducts, tr.fareProductRef),
+    )
+    .filter(isDefined)
+    .filter((p) => p.isBaggageProduct);
+
+  const baggeProductsWithCount = arrayMapUniqueWithCount(
+    baggageProducts,
+    (a, b) => a.id === b.id,
   );
 
   const styles = useStyles();
@@ -76,12 +93,20 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
           {firstTravelRight.travelerName ? (
             <FareContractDetailItem content={[firstTravelRight.travelerName]} />
           ) : (
-            userProfilesWithCount.map((u, i) => (
-              <FareContractDetailItem
-                key={`userProfile-${i}`}
-                content={[userProfileCountAndName(u, language)]}
-              />
-            ))
+            <>
+              {userProfilesWithCount.map((u, i) => (
+                <FareContractDetailItem
+                  key={`userProfile-${i}`}
+                  content={[userProfileCountAndName(u, language)]}
+                />
+              ))}
+              {baggeProductsWithCount.map((p, i) => (
+                <FareContractDetailItem
+                  key={`baggageProduct-${i}`}
+                  content={[toCountAndName(p, language)]}
+                />
+              ))}
+            </>
           )}
         </View>
         {(validityStatus === 'valid' || validityStatus === 'sent') && (

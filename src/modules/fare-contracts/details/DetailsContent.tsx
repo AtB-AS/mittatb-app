@@ -3,6 +3,7 @@ import {
   isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
+  useGetFareProductsQuery,
   useRefundOptionsQuery,
 } from '@atb/modules/ticketing';
 import {FareContractType, getAccesses} from '@atb-as/utils';
@@ -27,7 +28,10 @@ import {
 } from '@atb/modules/global-messages';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {
+  findReferenceDataById,
+  useFirestoreConfigurationContext,
+} from '@atb/modules/configuration';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {Barcode} from './Barcode';
 import {MapFilterType} from '@atb/modules/map';
@@ -54,6 +58,7 @@ import {
 import {useFareContractLegs} from '@atb/modules/fare-contracts';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {arrayMapUniqueWithCount} from '@atb/utils/array-map-unique-with-count';
 
 type Props = {
   fareContract: FareContractType;
@@ -89,6 +94,7 @@ export const DetailsContent: React.FC<Props> = ({
 
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
   const isReceived = isSentOrReceived && fc.purchasedBy != currentUserId;
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
 
   const firstTravelRight = fc.travelRights[0];
   const {userProfiles} = useFirestoreConfigurationContext();
@@ -107,6 +113,18 @@ export const DetailsContent: React.FC<Props> = ({
   const userProfilesWithCount = mapToUserProfilesWithCount(
     fc.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
     userProfiles,
+  );
+
+  const baggageProducts = fc.travelRights
+    .map((tr) =>
+      findReferenceDataById(preassignedFareProducts, tr.fareProductRef),
+    )
+    .filter(isDefined)
+    .filter((p) => p.isBaggageProduct);
+
+  const baggeProductsWithCount = arrayMapUniqueWithCount(
+    baggageProducts,
+    (a, b) => a.id === b.id,
   );
 
   const globalMessageRuleVariables = {
@@ -150,6 +168,7 @@ export const DetailsContent: React.FC<Props> = ({
         <FareContractInfoDetailsSectionItem
           fareContract={fc}
           userProfilesWithCount={userProfilesWithCount}
+          baggeProductsWithCount={baggeProductsWithCount}
           status={validityStatus}
           preassignedFareProduct={preassignedFareProduct}
         />

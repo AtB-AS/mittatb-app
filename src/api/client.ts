@@ -21,8 +21,10 @@ import {
   getCurrentUserIdGlobal,
   getIdTokenExpirationTimeGlobal,
   getIdTokenGlobal,
+  getDebugUserInfoHeaderGlobal,
   getIdTokenValidityStatus,
 } from '@atb/modules/auth';
+import {useEffect, useState} from 'react';
 
 export const client = createClient(API_BASE_URL);
 
@@ -84,6 +86,10 @@ function requestHandler(
 async function requestIdTokenHandler(config: InternalAxiosRequestConfig) {
   if (config.authWithIdToken) {
     config.headers[Authorization] = 'Bearer ' + getIdTokenGlobal();
+    if (addDebugUserInfoHeader) {
+      config.headers['X-Endpoint-API-UserInfo'] =
+        getDebugUserInfoHeaderGlobal();
+    }
   }
   return config;
 }
@@ -212,4 +218,16 @@ const notifyError = (axiosError: AxiosError) => {
     // ID token metadata on API error
     event.addMetadata('ID Token', idTokenMetadata);
   });
+};
+
+let addDebugUserInfoHeader = __DEV__;
+export const useDebugUserInfoHeader = () => {
+  const [shouldAddHeader, setShouldAddHeader] = useState(
+    addDebugUserInfoHeader,
+  );
+  useEffect(() => {
+    addDebugUserInfoHeader = shouldAddHeader;
+  }, [shouldAddHeader]);
+
+  return {shouldAddHeader, setShouldAddHeader};
 };

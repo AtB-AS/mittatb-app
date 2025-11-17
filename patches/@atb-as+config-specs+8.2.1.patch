@@ -1,0 +1,24 @@
+diff --git a/node_modules/@atb-as/config-specs/lib/reference-data.d.ts b/node_modules/@atb-as/config-specs/lib/reference-data.d.ts
+index 1587f7b..1bdf2e6 100644
+--- a/node_modules/@atb-as/config-specs/lib/reference-data.d.ts
++++ b/node_modules/@atb-as/config-specs/lib/reference-data.d.ts
+@@ -23,6 +23,7 @@ export declare const PreassignedFareProduct: z.ZodObject<{
+     isBookingEnabled: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>, z.ZodTransform<boolean | undefined, boolean | null | undefined>>>;
+     isEnabledForTripSearchOffer: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>, z.ZodTransform<boolean | undefined, boolean | null | undefined>>>;
+     isDefault: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>, z.ZodTransform<boolean | undefined, boolean | null | undefined>>>;
++    isBaggageProduct: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>, z.ZodTransform<boolean | undefined, boolean | null | undefined>>>;
+     alternativeNames: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodUnion<readonly [z.ZodObject<{
+         lang: z.ZodString;
+         value: z.ZodString;
+diff --git a/node_modules/@atb-as/config-specs/lib/reference-data.js b/node_modules/@atb-as/config-specs/lib/reference-data.js
+index fe1347d..1aec88a 100644
+--- a/node_modules/@atb-as/config-specs/lib/reference-data.js
++++ b/node_modules/@atb-as/config-specs/lib/reference-data.js
+@@ -26,6 +26,7 @@ exports.PreassignedFareProduct = zod_1.z.object({
+     isBookingEnabled: (0, nullish_1.optionalNullish)(zod_1.z.boolean()),
+     isEnabledForTripSearchOffer: (0, nullish_1.optionalNullish)(zod_1.z.boolean()),
+     isDefault: (0, nullish_1.optionalNullish)(zod_1.z.boolean()),
++    isBaggageProduct: (0, nullish_1.optionalNullish)(zod_1.z.boolean()),
+     alternativeNames: (0, nullish_1.optionalNullish)(common_1.LanguageAndTextTypeArray),
+     zoneSelectionMode: (0, nullish_1.optionalNullish)(fare_product_type_1.ZoneSelectionMode),
+     description: (0, nullish_1.optionalNullish)(common_1.LanguageAndTextTypeArray),

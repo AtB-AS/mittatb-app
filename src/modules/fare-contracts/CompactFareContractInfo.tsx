@@ -16,6 +16,7 @@ import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {InspectionSymbol} from './components/InspectionSymbol';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {secondsToDuration} from '@atb/utils/date';
+import {toCountAndName} from '@atb/utils/array-map-unique-with-count';
 
 type CompactFareContractInfoProps = FareContractInfoDetailsProps & {
   style?: StyleProp<ViewStyle>;
@@ -74,8 +75,13 @@ export const CompactFareContractInfo = (
 const CompactFareContractInfoTexts = (
   props: CompactFareContractInfoTextsProps,
 ) => {
-  const {userProfilesWithCount, productName, fareZoneSummary, timeUntilExpire} =
-    props;
+  const {
+    userProfilesWithCount,
+    baggeProductsWithCount,
+    productName,
+    fareZoneSummary,
+    timeUntilExpire,
+  } = props;
   const {language} = useTranslation();
   const styles = useStyles();
   const firstTravelRight = props.fareContract.travelRights[0];
@@ -90,11 +96,19 @@ const CompactFareContractInfoTexts = (
           {firstTravelRight.travelerName}
         </ThemeText>
       ) : (
-        userProfilesWithCount.map((u) => (
-          <ThemeText key={u.id} typography="body__s" color="secondary">
-            {userProfileCountAndName(u, language)}
-          </ThemeText>
-        ))
+        userProfilesWithCount
+          .map((u) => (
+            <ThemeText key={u.id} typography="body__s" color="secondary">
+              {userProfileCountAndName(u, language)}
+            </ThemeText>
+          ))
+          .concat(
+            baggeProductsWithCount.map((p) => (
+              <ThemeText key={p.id} typography="body__s" color="secondary">
+                {toCountAndName(p, language)}
+              </ThemeText>
+            )),
+          )
       )}
       {productName && (
         <ThemeText typography="body__s" color="secondary" testID="productName">
