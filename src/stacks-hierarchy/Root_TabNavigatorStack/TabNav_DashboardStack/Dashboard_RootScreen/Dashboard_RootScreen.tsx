@@ -289,7 +289,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
         {isBonusProgramEnabled && (
           <View style={style.contentSection}>
             <ContentHeading
-              color={theme.color.background.accent[0]}
               text={t(DashboardTexts.bonus.header)}
               style={style.heading}
             />
