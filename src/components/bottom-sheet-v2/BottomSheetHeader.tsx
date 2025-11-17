@@ -63,6 +63,7 @@ export const BottomSheetHeader = ({
                 style={styles.headerRight}
                 onPress={() => bottomSheetRef.current?.close()}
                 testID="closeBottomSheet"
+                accessibilityRole="button"
               >
                 {rightIconText && (
                   <ThemeText typography="body__s__strong">
