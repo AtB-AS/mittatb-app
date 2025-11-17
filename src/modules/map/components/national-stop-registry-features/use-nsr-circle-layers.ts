@@ -8,17 +8,22 @@ import {
 } from './nsr-utils';
 import {Props as SymbolLayerProps} from '@rnmapbox/maps/lib/typescript/src/components/SymbolLayer';
 import {useMemo} from 'react';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 export const useNsrCircleLayers = (
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'],
 ): SymbolLayerProps[] => {
   const {theme, themeName} = useThemeContext();
+  const {mapbox_nsr_source_layer_id} = useRemoteConfigContext();
 
   return useMemo(
     () =>
       nsrCircleLayers.map((nsrCircleLayer) => {
         const {id, reachFullScaleAtZoomLevel} = nsrCircleLayer;
-        const nsrLayerSourceProps = getNsrLayerSourceProps(id);
+        const nsrLayerSourceProps = getNsrLayerSourceProps(
+          mapbox_nsr_source_layer_id,
+          id,
+        );
 
         const filter = getFilterWhichAlsoHidesSelectedFeature(
           nsrCircleLayer.filter,
@@ -50,6 +55,7 @@ export const useNsrCircleLayers = (
         };
       }),
     [
+      mapbox_nsr_source_layer_id,
       selectedFeaturePropertyId,
       theme.color.transport.city.primary.background,
       themeName,

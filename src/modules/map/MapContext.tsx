@@ -1,4 +1,10 @@
-import React, {createContext, useContext, useReducer, useState} from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
 import {MapFilterType} from '@atb/modules/map';
 import {useUserMapFilters} from './hooks/use-map-filter';
 import {
@@ -9,6 +15,8 @@ import {
 import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
 import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
+import MapboxGL from '@rnmapbox/maps';
+import {useRemoteConfigContext} from '../remote-config';
 
 type MapContextState = {
   mapFilter?: MapFilterType;
@@ -53,6 +61,11 @@ type Props = {
 };
 
 export const MapContextProvider = ({children}: Props) => {
+  const {mapbox_api_token} = useRemoteConfigContext();
+  useEffect(() => {
+    MapboxGL.setAccessToken(mapbox_api_token);
+  }, [mapbox_api_token]);
+
   const [mapState, dispatchMapState] = useReducer(mapStateReducer, {
     bottomSheetType: MapBottomSheetType.None,
   });

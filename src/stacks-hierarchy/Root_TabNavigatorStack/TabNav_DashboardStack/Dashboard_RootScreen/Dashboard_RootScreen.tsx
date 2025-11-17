@@ -1,7 +1,6 @@
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
@@ -182,10 +181,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
         />
       )}
     >
-      <View style={style.backdrop}>
-        <DashboardBackground width="100%" height="100%" />
-      </View>
-
       <ScrollView
         contentContainerStyle={style.scrollView}
         testID="dashboardScrollView"
@@ -254,6 +249,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
             onAddFavoritePlace={() =>
               navigation.navigate('Root_SearchFavoritePlaceScreen')
             }
+            backgroundColor={theme.color.background.neutral[1]}
           />
         </View>
         <Announcements

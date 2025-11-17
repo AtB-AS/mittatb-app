@@ -248,7 +248,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 {t(getTranslatedModeName(leg.mode, leg.line?.transportSubmode))}
               </ThemeText>
             )}
-            <ThemeText style={style.legLineName}>
+            <ThemeText typography="body__m__strong">
               {getLineName(t, leg)}
             </ThemeText>
             {isFlexible && (
@@ -684,9 +684,6 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
     top: -theme.spacing.medium,
     left: 0,
     width: '100%',
-  },
-  legLineName: {
-    fontWeight: 'bold',
   },
   onDemandTransportLabel: {
     paddingTop: theme.spacing.xSmall,

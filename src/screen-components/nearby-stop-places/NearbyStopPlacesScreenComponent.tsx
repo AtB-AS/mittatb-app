@@ -8,7 +8,7 @@ import {useGeolocationContext} from '@atb/modules/geolocation';
 import {StopPlaces} from './components/StopPlaces';
 import {useNearestStopsData} from './use-nearest-stops-data';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
@@ -33,6 +33,7 @@ type Props = NearbyStopPlacesScreenParams & {
   onSelectStopPlace: (place: StopPlace) => void;
   onUpdateLocation: (location?: Location) => void;
   onAddFavoritePlace: () => void;
+  isLargeTitle?: boolean;
 };
 
 export const NearbyStopPlacesScreenComponent = ({
@@ -43,6 +44,7 @@ export const NearbyStopPlacesScreenComponent = ({
   onSelectStopPlace,
   onUpdateLocation,
   onAddFavoritePlace,
+  isLargeTitle = true,
 }: Props) => {
   const {
     locationIsAvailable,
@@ -161,11 +163,13 @@ export const NearbyStopPlacesScreenComponent = ({
       headerProps={{...headerProps}}
       parallaxContent={(focusRef) => (
         <>
-          <ScreenHeading
-            ref={focusRef}
-            text={headerProps.title ?? ''}
-            isLarge={true}
-          />
+          {isLargeTitle && (
+            <ScreenHeading
+              ref={focusRef}
+              text={headerProps.title ?? ''}
+              isLarge={true}
+            />
+          )}
           <Header
             fromLocation={location}
             updatingLocation={updatingLocation}
@@ -181,6 +185,7 @@ export const NearbyStopPlacesScreenComponent = ({
           />
         </>
       )}
+      titleAlwaysVisible={!isLargeTitle}
       refreshControl={
         // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
         isFocused || Platform.OS === 'android' ? (
@@ -245,6 +250,7 @@ const Header = React.memo(function Header({
 }: HeaderProps) {
   const {t} = useTranslation();
   const styles = useStyles();
+  const {theme} = useThemeContext();
 
   return (
     <View style={styles.header}>
@@ -274,6 +280,7 @@ const Header = React.memo(function Header({
           chipTypes={['favorites', 'add-favorite']}
           style={styles.favoriteChips}
           onAddFavoritePlace={onAddFavoritePlace}
+          backgroundColor={theme.color.background.neutral[1]}
         />
       )}
     </View>
@@ -298,8 +305,6 @@ function sortAndFilterStopPlaces(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
-    backgroundColor: theme.color.background.neutral[1].background,
-    paddingBottom: theme.spacing.medium,
     paddingTop: theme.spacing.medium,
   },
   locationInputSection: {

@@ -6,7 +6,7 @@ import {
   useOnboardingCarouselNavigation,
 } from '@atb/modules/onboarding';
 import {ThemedContact} from '@atb/theme/ThemedAssets';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 
 import {Linking, View} from 'react-native';
 import {sparOnboardingId} from './config';
@@ -41,8 +41,7 @@ export const SmartParkAndRideOnboarding_ContactInfoScreen = () => {
           onPress: navigateToPreviousScreen,
         },
         rightButton: {
-          type: 'custom',
-          text: t(SmartParkAndRideTexts.onboarding.contactInfo.close),
+          type: 'close',
           withIcon: true,
           onPress: () => closeOnboardingCarousel('smartParkAndRide'),
         },
@@ -53,13 +52,13 @@ export const SmartParkAndRideOnboarding_ContactInfoScreen = () => {
         onPress: () => {
           analytics.logEvent(
             'Smart Park & Ride',
-            'Onboarding contact info close clicked',
+            'Onboarding contact info done clicked',
           );
           navigateToNextScreen();
         },
         text: t(SmartParkAndRideTexts.onboarding.contactInfo.buttonText),
         expanded: true,
-        rightIcon: {svg: Close},
+        rightIcon: {svg: Confirm},
       }}
       testID="smartParkAndRideOnboardingContactInfo"
     />

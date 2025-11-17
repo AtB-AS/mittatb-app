@@ -1,4 +1,3 @@
-import {MAPBOX_NSR_SOURCE_LAYER_ID} from '@env';
 import {NsrProps} from './NationalStopRegistryFeatures';
 import {NsrLayer} from './nsr-layers';
 import {
@@ -10,12 +9,13 @@ import {SymbolLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {NsrPinIconCode, PinTheme, PinType} from '../../mapbox-styles/pin-types';
 
 export const getNsrLayerSourceProps = (
+  mapboxNsrSourceLayerId: string,
   layerId: string,
 ): Required<
   Pick<LayerPropsCommonAndStyle, 'sourceID' | 'sourceLayerID' | 'id'>
 > => ({
   sourceID: 'composite',
-  sourceLayerID: MAPBOX_NSR_SOURCE_LAYER_ID,
+  sourceLayerID: mapboxNsrSourceLayerId,
   id: layerId,
 });
 

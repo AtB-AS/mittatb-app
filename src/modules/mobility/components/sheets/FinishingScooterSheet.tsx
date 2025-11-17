@@ -12,7 +12,7 @@ import {useActiveShmoBookingQuery} from '../../queries/use-active-shmo-booking-q
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {ThemeText} from '@atb/components/text';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-map';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {

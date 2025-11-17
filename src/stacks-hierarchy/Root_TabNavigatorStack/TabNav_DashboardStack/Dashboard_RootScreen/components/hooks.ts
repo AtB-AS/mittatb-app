@@ -8,8 +8,7 @@ import {AccessibilityRole} from 'react-native';
 import {Linking} from 'react-native';
 import Bugsnag from '@bugsnag/react-native';
 import {SvgProps} from 'react-native-svg';
-import {RefObject, useCallback, useRef} from 'react';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
+import {RefObject, useCallback} from 'react';
 import {
   ActionType,
   Announcement,
@@ -19,7 +18,7 @@ import {
 } from '@atb/modules/announcements';
 import {AnalyticsEventContext} from '@atb/modules/analytics';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {AnnouncementSheet} from './AnnouncementSheet';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 type ActionButtonProps = {
   rightIcon: {svg: (props: SvgProps) => React.JSX.Element};
@@ -33,11 +32,10 @@ export const useActionButtonProps = (
   announcement: Announcement,
   button: UrlActionButton | BottomSheetActionButton | undefined,
   logContext: AnalyticsEventContext,
+  bottomSheetModalRef: RefObject<BottomSheetModal | null>,
 ): ActionButtonProps | undefined => {
   const {language, t} = useTranslation();
   const analytics = useAnalyticsContext();
-  const {open: openBottomSheet} = useBottomSheetContext();
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const logPress = useCallback(() => {
     analytics.logEvent(logContext, 'Announcement pressed', {
@@ -75,10 +73,7 @@ export const useActionButtonProps = (
         button.actionType === ActionType.bottom_sheet &&
         isBottomSheetAnnouncement(announcement)
       ) {
-        openBottomSheet(
-          () => React.createElement(AnnouncementSheet, {announcement}),
-          onCloseFocusRef,
-        );
+        bottomSheetModalRef.current?.present();
       } else if (
         button.actionType === ActionType.external ||
         button.actionType === ActionType.deeplink

@@ -10,11 +10,13 @@ import {NsrProps} from './NationalStopRegistryFeatures';
 import {SymbolLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Props as SymbolLayerProps} from '@rnmapbox/maps/lib/typescript/src/components/SymbolLayer';
 import {useMemo} from 'react';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 export const useNsrSymbolLayers = (
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'],
 ): SymbolLayerProps[] => {
   const {theme, themeName} = useThemeContext();
+  const {mapbox_nsr_source_layer_id} = useRemoteConfigContext();
 
   return useMemo(
     () =>
@@ -26,7 +28,10 @@ export const useNsrSymbolLayers = (
           textField,
           reachFullScaleAtZoomLevel,
         } = nsrSymbolLayer;
-        const nsrSymbolLayerSourceProps = getNsrLayerSourceProps(id);
+        const nsrSymbolLayerSourceProps = getNsrLayerSourceProps(
+          mapbox_nsr_source_layer_id,
+          id,
+        );
 
         const filter = getFilterWhichAlsoHidesSelectedFeature(
           nsrSymbolLayer.filter,
@@ -118,6 +123,7 @@ export const useNsrSymbolLayers = (
         };
       }),
     [
+      mapbox_nsr_source_layer_id,
       selectedFeaturePropertyId,
       theme.color.foreground.dynamic.primary,
       theme.color.foreground.inverse.primary,

@@ -1,29 +1,36 @@
 import React from 'react';
 import {BottomSheetAnnouncement} from '@atb/modules/announcements';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {
   DashboardTexts,
+  dictionary,
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
 import {Image, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
   InAppReviewContext,
   useInAppReviewFlow,
 } from '@atb/utils/use-in-app-review';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {useActionButtonProps} from './hooks';
+import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type Props = {
   announcement: BottomSheetAnnouncement;
+  bottomSheetModalRef: React.RefObject<any>;
+  onCloseFocusRef: React.RefObject<View | null>;
 };
 
-export const AnnouncementSheet = ({announcement}: Props) => {
+export const AnnouncementSheet = ({
+  announcement,
+  bottomSheetModalRef,
+  onCloseFocusRef,
+}: Props) => {
   const {language, t} = useTranslation();
   const style = useStyle();
   const {requestReview} = useInAppReviewFlow();
@@ -32,16 +39,21 @@ export const AnnouncementSheet = ({announcement}: Props) => {
     announcement,
     announcement.actionButton.sheetPrimaryButton,
     'AnnouncementSheet',
+    bottomSheetModalRef,
   );
 
   return (
-    <BottomSheetContainer
-      title={t(DashboardTexts.announcements.header)}
-      onClose={() => {
+    <BottomSheetModal
+      bottomSheetModalRef={bottomSheetModalRef}
+      heading={t(DashboardTexts.announcements.header)}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      closeCallback={() => {
         requestReview(InAppReviewContext.Announcement);
+        giveFocus(onCloseFocusRef);
       }}
     >
-      <ScrollView contentContainerStyle={style.container}>
+      <View style={style.container}>
         {announcement.mainImage && (
           <View style={style.imageContainer}>
             <Image
@@ -63,19 +75,17 @@ export const AnnouncementSheet = ({announcement}: Props) => {
         {primaryButtonProps && (
           <Button expanded={true} mode="primary" {...primaryButtonProps} />
         )}
-      </ScrollView>
-    </BottomSheetContainer>
+      </View>
+    </BottomSheetModal>
   );
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => {
-  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   return {
     container: {
       paddingHorizontal: theme.spacing.medium,
       minHeight: 350,
       gap: theme.spacing.medium,
-      paddingBottom: bottomSafeAreaInset + theme.spacing.medium,
     },
     articleContainer: {
       gap: theme.spacing.medium,

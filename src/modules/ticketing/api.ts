@@ -19,6 +19,7 @@ import {convertIsoStringFieldsToDate} from '@atb/utils/date';
 import capitalize from 'lodash/capitalize';
 import qs from 'query-string';
 import {isDefined} from '@atb/utils/presence';
+import {Language} from '@atb/translations/commons';
 
 export async function listRecentFareContracts(): Promise<RecentOrderDetails[]> {
   const url = 'sales/v1/order/recent';
@@ -140,6 +141,7 @@ export async function sendReceipt(
   orderId: string,
   orderVersion: number,
   emailAddress: string,
+  language: Language,
 ) {
   const url = 'sales/v1/receipt';
 
@@ -147,9 +149,21 @@ export async function sendReceipt(
     orderId,
     orderVersion,
     emailAddress,
+    language: mapToReceiptLanguage(language),
   });
 
   return response.data;
+}
+
+type ReceiptLanguage = 'nob' | 'eng';
+
+function mapToReceiptLanguage(language: Language): ReceiptLanguage {
+  switch (language) {
+    case Language.English:
+      return 'eng';
+    default:
+      return 'nob';
+  }
 }
 
 export async function reserveOffers({

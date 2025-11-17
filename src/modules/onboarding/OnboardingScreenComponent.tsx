@@ -9,6 +9,8 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {Theme} from '@atb/theme/colors';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
 import {ButtonProps} from '@atb/components/button';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 type DescriptionLink = {
   text: string;
@@ -31,6 +33,7 @@ type OnboardingScreenComponentParams = {
 };
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[0];
 
 export const OnboardingScreenComponent = ({
   illustration,
@@ -49,6 +52,7 @@ export const OnboardingScreenComponent = ({
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const focusRef = useFocusOnLoad();
+  const descriptionLinkColor = getInteractiveColor(theme).default.background;
 
   return (
     <OnboardingFullScreenView
@@ -85,14 +89,19 @@ export const OnboardingScreenComponent = ({
           onPress={descriptionLink.onPress}
           accessibilityRole="link"
           accessibilityHint={descriptionLink.a11yHint}
+          style={styles.descriptionLink}
         >
           <ThemeText
             typography="body__m__underline"
-            color={themeColor}
-            style={styles.descriptionLink}
+            color={descriptionLinkColor}
           >
             {descriptionLink.text}
           </ThemeText>
+          <ThemeIcon
+            svg={ExternalLink}
+            size="normal"
+            color={descriptionLinkColor}
+          />
         </PressableOpacity>
       )}
     </OnboardingFullScreenView>
@@ -112,6 +121,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
   },
   descriptionLink: {
-    textAlign: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: theme.spacing.small,
+    marginTop: theme.spacing.small,
   },
 }));

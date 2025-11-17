@@ -39,6 +39,7 @@ import {
 } from '@atb/api/types/mobility';
 import {TFunc} from '@leile/lobo-t';
 import {formatNumberToString} from '@atb-as/utils';
+import {ErrorResponse} from '@atb-as/utils';
 
 export const isVehiclesClusteredFeature = (
   feature: Feature<Point> | undefined,
@@ -272,12 +273,15 @@ export const getNewFilterState = (
 };
 
 export const formatFriendlyShmoErrorMessage = (
-  errorResponse: any,
+  errorResponse: ErrorResponse,
   t: TFunc<typeof Language>,
 ) => {
+  const detailWithMessage = errorResponse.details?.find(
+    (detail: any) => detail?.userFriendlyErrorMessage,
+  ) as {userFriendlyErrorMessage?: string} | undefined;
+
   return (
-    errorResponse?.response?.data?.userFriendlyErrorMessage ??
-    t(dictionary.genericErrorMsg)
+    detailWithMessage?.userFriendlyErrorMessage ?? t(dictionary.genericErrorMsg)
   );
 };
 

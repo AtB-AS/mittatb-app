@@ -13,7 +13,8 @@ export const mapToAnnouncements = (
 
   const announcements = snapshots
     .map((snapshot) => mapToAnnouncement(snapshot))
-    .filter(isDefined);
+    .filter(isDefined)
+    .sort((a, b) => a.sortByIndex - b.sortByIndex);
 
   const applicableAnnouncements = announcements.filter(
     (announcement) =>

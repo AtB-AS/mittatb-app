@@ -13,6 +13,7 @@ import {
   isCanBeConsumedNowFareContract,
   isCanBeActivatedNowFareContract,
   useGetFareProductsQuery,
+  useSchoolCarnetInfoQuery,
 } from '@atb/modules/ticketing';
 import {FareContractType, getAccesses} from '@atb-as/utils';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
@@ -87,6 +88,10 @@ export const FareContractView: React.FC<Props> = ({
     fareContract.id,
     !shouldShowBonusAmountEarned,
   );
+  const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(
+    fareContract,
+    validityStatus,
+  );
 
   const accesses = getAccesses(fareContract);
 
@@ -160,7 +165,12 @@ export const FareContractView: React.FC<Props> = ({
             fareProductType={preassignedFareProduct?.type}
           />
         )}
-      {isCanBeConsumedNowFareContract(fareContract, now, currentUserId) && (
+      {isCanBeConsumedNowFareContract(
+        fareContract,
+        now,
+        currentUserId,
+        schoolCarnetInfo,
+      ) && (
         <ConsumeCarnetSectionItem
           fareContractId={fareContract.id}
           fareProductType={preassignedFareProduct?.type}

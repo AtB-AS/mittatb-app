@@ -10,27 +10,18 @@ import BottomSheetGor, {
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import {Platform, useWindowDimensions, View} from 'react-native';
-import {StyleSheet, useThemeContext} from '@atb/theme';
-import {PressableOpacity} from '../pressable-opacity';
 import {SvgProps} from 'react-native-svg';
-import {ThemeText} from '../text';
-import {ThemeIcon} from '../theme-icon';
-import {
-  MapBottomSheetType,
-  MapButtons,
-  shadows,
-  useMapContext,
-} from '@atb/modules/map';
+import {MapBottomSheetType, MapButtons, useMapContext} from '@atb/modules/map';
 import {BottomSheetTopPositionBridge} from './BottomSheetTopPositionBridge';
 import Animated, {
   ReduceMotion,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
-import {BrandingImage} from '@atb/modules/mobility';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {toNum} from './utils';
+import {BottomSheetHeader} from '../BottomSheetHeader';
+import {useBottomSheetStyles} from '../use-bottom-sheet-styles';
 
 export type BottomSheetProps = PropsWithChildren<{
   snapPoints?: Array<string | number>;
@@ -51,8 +42,6 @@ export type BottomSheetProps = PropsWithChildren<{
   headerNode?: React.ReactNode;
 }>;
 
-const isOldAndroid = Platform.OS === 'android' && Platform.Version <= 28;
-
 export const MapBottomSheet = ({
   snapPoints,
   enableDynamicSizing = true,
@@ -72,9 +61,8 @@ export const MapBottomSheet = ({
   canMinimize = false,
   headerNode,
 }: BottomSheetProps) => {
-  const styles = useStyles();
+  const styles = useBottomSheetStyles();
   const bottomSheetGorRef = useRef<BottomSheetGor>(null);
-  const {theme} = useThemeContext();
   const sheetTopPosition = useSharedValue(0);
   const {setPaddingBottomMap, setCurrentBottomSheet, mapState} =
     useMapContext();
@@ -129,84 +117,34 @@ export const MapBottomSheet = ({
     );
   }, [aStyle, locationArrowOnPress]);
 
-  const HeaderComp = () => {
-    return (
-      (heading || rightIconText) && (
-        <View style={styles.headerContainer}>
-          <View style={styles.headerContent}>
-            <View style={styles.headerLeft}>
-              {heading && (
-                <>
-                  {logoUrl && <BrandingImage logoUrl={logoUrl} logoSize={28} />}
-                  <View style={styles.headingWrapper}>
-                    <ThemeText typography="heading__xl">{heading}</ThemeText>
-                    {subText && (
-                      <ThemeText
-                        typography="body__s"
-                        color={theme.color.foreground.dynamic.secondary}
-                      >
-                        {subText}
-                      </ThemeText>
-                    )}
-                  </View>
-                </>
-              )}
-            </View>
-
-            {(rightIconText || rightIcon) && (
-              <PressableOpacity
-                style={styles.headerRight}
-                onPress={() => bottomSheetGorRef.current?.close()}
-              >
-                {rightIconText && (
-                  <ThemeText typography="body__s__strong">
-                    {rightIconText}
-                  </ThemeText>
-                )}
-                {rightIcon && <ThemeIcon svg={rightIcon} />}
-              </PressableOpacity>
-            )}
-          </View>
-          {!!headerNode && (
-            <View style={styles.headerNodeContainer}>{headerNode}</View>
-          )}
-        </View>
-      )
-    );
-  };
-
   const computedSnapPoints = useMemo(() => {
     if (!canMinimize) return snapPoints;
 
-    const prevSnapPoints = snapPoints ? snapPoints : [];
+    const prevSnapPoints = snapPoints ?? [];
 
-    const handleVerticalSize =
-      toNum(styles.handleIndicatorStyle?.height) +
-      toNum(styles.handleStyle?.paddingTop) +
-      toNum(styles.handleStyle?.paddingBottom);
-
-    const minSnap = Math.max(
-      headerHeight + handleVerticalSize + theme.spacing.xSmall,
-    );
-
-    return [minSnap, ...prevSnapPoints];
-  }, [
-    canMinimize,
-    headerHeight,
-    snapPoints,
-    styles.handleIndicatorStyle?.height,
-    styles.handleStyle?.paddingBottom,
-    styles.handleStyle?.paddingTop,
-    theme.spacing.xSmall,
-  ]);
+    return headerHeight > 0
+      ? [headerHeight, ...prevSnapPoints]
+      : prevSnapPoints;
+  }, [canMinimize, headerHeight, snapPoints]);
 
   return (
     <>
       {HeaderOverlay}
       <BottomSheetGor
         ref={bottomSheetGorRef}
-        handleIndicatorStyle={styles.handleIndicatorStyle}
-        handleStyle={styles.handleStyle}
+        handleComponent={() => (
+          <View onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}>
+            <BottomSheetHeader
+              heading={heading}
+              subText={subText}
+              logoUrl={logoUrl}
+              rightIcon={rightIcon}
+              rightIconText={rightIconText}
+              bottomSheetRef={bottomSheetGorRef}
+              headerNode={headerNode}
+            />
+          </View>
+        )}
         snapPoints={computedSnapPoints}
         enableDynamicSizing={enableDynamicSizing}
         backdropComponent={allowBackgroundTouch ? undefined : renderBackdrop}
@@ -246,76 +184,14 @@ export const MapBottomSheet = ({
           <BottomSheetScrollView
             style={styles.contentContainer}
             keyboardShouldPersistTaps="handled"
+            alwaysBounceVertical={false}
           >
-            <View
-              onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}
-            >
-              <HeaderComp />
-            </View>
             {children}
           </BottomSheetScrollView>
         ) : (
-          <>
-            <View
-              onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}
-            >
-              <HeaderComp />
-            </View>
-            {children}
-          </>
+          children
         )}
       </BottomSheetGor>
     </>
   );
 };
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  contentContainer: {
-    backgroundColor: theme.color.background.neutral[1].background,
-  },
-  sheet: {
-    backgroundColor: theme.color.background.neutral[1].background,
-    ...(isOldAndroid ? {...shadows, elevation: 0} : shadows),
-  },
-  headerContainer: {
-    flexDirection: 'column',
-  },
-  headerContent: {
-    flexDirection: 'row',
-    gap: theme.spacing.small,
-    paddingBottom: theme.spacing.medium,
-    paddingRight: theme.spacing.medium,
-  },
-  headerNodeContainer: {
-    flex: 1,
-    paddingLeft: theme.spacing.medium,
-    paddingRight: theme.spacing.medium,
-    paddingBottom: theme.spacing.medium,
-  },
-  headerLeft: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.medium,
-    paddingLeft: theme.spacing.large,
-  },
-  headingWrapper: {
-    gap: theme.spacing.xSmall,
-  },
-  headerRight: {
-    flexDirection: 'row',
-    gap: theme.spacing.xSmall,
-    paddingRight: theme.spacing.medium,
-  },
-  logo: {
-    marginEnd: theme.spacing.small,
-  },
-  handleIndicatorStyle: {
-    backgroundColor: theme.color.foreground.inverse.secondary,
-    width: 75,
-    height: 6,
-  },
-  handleStyle: {
-    paddingTop: theme.spacing.small,
-  },
-}));

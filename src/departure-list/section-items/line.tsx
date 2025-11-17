@@ -257,11 +257,10 @@ function DepartureTimeItem({
       {leftIcon && <ThemeIcon svg={leftIcon} size="xSmall" />}
 
       <ThemeText
-        typography="body__m__strong"
-        style={[
-          styles.departureText,
-          departure.cancellation && styles.strikethrough,
-        ]}
+        typography={
+          departure.cancellation ? 'body__m__strike' : 'body__m__strong'
+        }
+        style={styles.departureText}
       >
         {formatTimeText(departure, searchDate, language, t)}
       </ThemeText>
@@ -313,10 +312,6 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   scrollContainer: {
     marginBottom: theme.spacing.medium,
     paddingLeft: theme.spacing.medium,
-  },
-  strikethrough: {
-    textDecorationLine: 'line-through',
-    fontWeight: 'normal',
   },
   departure: {
     padding: theme.spacing.small,

@@ -72,7 +72,6 @@ const SmartParkAndRideTexts = {
     },
     footer: {
       add: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
-      later: _('Gjør det senere', 'Do it later', 'Gjer det seinare'),
     },
   },
   edit: {
@@ -182,9 +181,9 @@ const SmartParkAndRideTexts = {
         'No kan du parkere gratis på Ranheim Fabrikker i opptil 48 timar med ein gyldig bussbillett i AtB-appen. Billetten må ha vore aktiv i løpet av tida du har stått parkert.',
       ),
       buttonText: _(
-        'Registrering av kjøretøy i appen',
-        'Registering vehicles in the app',
-        'Registrering av køyretøy i appen',
+        'Info om registrering',
+        'Info about registration',
+        'Info om registrering',
       ),
     },
     automaticRegistration: {
@@ -210,7 +209,7 @@ const SmartParkAndRideTexts = {
           'Les meir på atb.no',
         ),
       },
-      buttonText: _('Legg til kjøretøy', 'Add vehicle', 'Legg til køyretøy'),
+      buttonText: _('Hjelp og kontakt', 'Help and contact', 'Hjelp og kontakt'),
     },
     contactInfo: {
       title: _('Spørsmål?', 'Questions?', 'Spørsmål?'),
@@ -240,8 +239,7 @@ const SmartParkAndRideTexts = {
         ),
         link: _('atb.no/kontakt', 'atb.no/kontakt', 'atb.no/kontakt'),
       },
-      buttonText: _('Lukk', 'Close', 'Lukk'),
-      close: _('Ferdig', 'Done', 'Ferdig'),
+      buttonText: _('Ferdig', 'Done', 'Ferdig'),
     },
   },
   notLoggedIn: {

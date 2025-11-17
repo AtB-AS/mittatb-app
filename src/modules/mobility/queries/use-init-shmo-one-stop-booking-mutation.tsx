@@ -10,6 +10,7 @@ import {
   ShmoBooking,
 } from '@atb/api/types/mobility';
 import {useAcceptLanguage} from '@atb/api/use-accept-language';
+import {ErrorResponse} from '@atb-as/utils';
 
 export const getInitShmoBookingQueryKey = (acceptLanguage: string) => [
   'GET_INIT_SHMO_BOOKING_QUERY_KEY',
@@ -20,7 +21,11 @@ export const useInitShmoOneStopBookingMutation = () => {
   const queryClient = useQueryClient();
   const acceptLanguage = useAcceptLanguage();
 
-  return useMutation({
+  return useMutation<
+    ShmoBooking,
+    ErrorResponse,
+    InitShmoOneStopBookingRequestBody
+  >({
     mutationKey: getInitShmoBookingQueryKey(acceptLanguage),
     mutationFn: (reqBody: InitShmoOneStopBookingRequestBody) =>
       initShmoOneStopBooking(reqBody, acceptLanguage),
