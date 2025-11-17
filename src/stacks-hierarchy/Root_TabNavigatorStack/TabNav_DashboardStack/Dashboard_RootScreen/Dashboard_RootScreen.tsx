@@ -3,7 +3,12 @@ import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import {LocationInputSectionItem, Section} from '@atb/components/sections';
+import {
+  GenericSectionItem,
+  LinkSectionItem,
+  LocationInputSectionItem,
+  Section,
+} from '@atb/components/sections';
 import {screenReaderPause} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {
@@ -38,7 +43,9 @@ import {DeparturesWidget} from './components/DeparturesWidget';
 import {Announcements} from './components/Announcements';
 import SharedTexts from '@atb/translations/shared';
 import {FullScreenView} from '@atb/components/screen-view';
-import {ScreenHeading} from '@atb/components/heading';
+import {ContentHeading, ScreenHeading} from '@atb/components/heading';
+import {UserBonusBalanceContent} from '@atb/modules/bonus';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
@@ -56,6 +63,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
   const analytics = useAnalyticsContext();
 
+  const {isBonusProgramEnabled} = useFeatureTogglesContext();
   const {locationIsAvailable, location, requestLocationPermission} =
     useGeolocationContext();
 
@@ -278,6 +286,33 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
             }}
           />
         )}
+        {isBonusProgramEnabled && (
+          <View style={style.contentSection}>
+            <ContentHeading
+              color={theme.color.background.accent[0]}
+              text={t(DashboardTexts.bonus.header)}
+              style={style.heading}
+            />
+            <Section>
+              <GenericSectionItem>
+                <UserBonusBalanceContent />
+              </GenericSectionItem>
+              <LinkSectionItem
+                text={t(DashboardTexts.bonus.button)}
+                onPress={() => {
+                  analytics.logEvent(
+                    'Bonus',
+                    'Dashboard bonus info button clicked',
+                  );
+                  navigation.navigate('TabNav_ProfileStack', {
+                    screen: 'Profile_BonusScreen',
+                  });
+                }}
+              />
+            </Section>
+          </View>
+        )}
+
         <DeparturesWidget
           style={style.contentSection}
           onEditFavouriteDeparture={() =>
@@ -435,5 +470,8 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   dashboardGlobalmessages: {
     marginBottom: theme.spacing.medium,
+  },
+  heading: {
+    marginBottom: theme.spacing.small,
   },
 }));
