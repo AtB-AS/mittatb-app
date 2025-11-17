@@ -11,7 +11,10 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {ContentHeading} from '@atb/components/heading';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {
+  getReferenceDataName,
+  useFirestoreConfigurationContext,
+} from '@atb/modules/configuration';
 import {TipsAndInformation} from './tips-and-information/TipsAndInformation';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
@@ -81,10 +84,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
                         modes={fareProductTypeConfig?.transportModes}
                       />
                       <ThemeText typography="body__m__strong">
-                        {getTextForLanguage(
-                          fareProductTypeConfig.name,
-                          language,
-                        )}
+                        {getReferenceDataName(preassignedFareProduct, language)}
                       </ThemeText>
                     </View>
                   )}

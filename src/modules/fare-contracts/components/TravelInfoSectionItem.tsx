@@ -35,14 +35,19 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
 
   const {validityStatus} = getFareContractInfo(serverNow, fc, currentUserId);
 
-  const firstTravelRight = fc.travelRights[0];
   const {userProfiles, fareProductTypeConfigs} =
     useFirestoreConfigurationContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
-  const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
-    firstTravelRight.fareProductRef,
-  );
+
+  const products = fc.travelRights
+    .map((tr) =>
+      findReferenceDataById(preassignedFareProducts, tr.fareProductRef),
+    )
+    .filter(isDefined);
+
+  const firstTravelRight = fc.travelRights[0];
+  const preassignedFareProduct = products[0];
+
   const fareProductTypeConfig = fareProductTypeConfigs.find((c) => {
     return c.type === preassignedFareProduct?.type;
   });
@@ -52,12 +57,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
     userProfiles,
   );
 
-  const baggageProducts = fc.travelRights
-    .map((tr) =>
-      findReferenceDataById(preassignedFareProducts, tr.fareProductRef),
-    )
-    .filter(isDefined)
-    .filter((p) => p.isBaggageProduct);
+  const baggageProducts = products.filter((p) => p.isBaggageProduct);
 
   const baggeProductsWithCount = arrayMapUniqueWithCount(
     baggageProducts,
