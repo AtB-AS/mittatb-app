@@ -32,6 +32,7 @@ type Props = SectionItemProps<{
   disabled?: boolean;
   accessibility?: AccessibilityProps;
   textType?: TextNames;
+  isMarkdown?: boolean;
 }>;
 
 export const LinkSectionItem = forwardRef<any, Props>(
@@ -86,15 +87,18 @@ export const LinkSectionItem = forwardRef<any, Props>(
           {leftIcon && (
             <Icon icon={leftIcon} interactiveColor={interactiveColor} />
           )}
-          <ThemeText
-            style={[
-              contentContainer,
-              {color: interactiveColor.default.foreground.primary},
-            ]}
-            typography={textType}
-          >
-            {text}
-          </ThemeText>
+          <View style={linkSectionItemStyle.textContainer}>
+            <ThemeText
+              style={[
+                contentContainer,
+                {color: interactiveColor.default.foreground.primary},
+              ]}
+              typography={textType}
+              isMarkdown={props.isMarkdown}
+            >
+              {text}
+            </ThemeText>
+          </View>
           {label && (
             <Tag
               labels={[t(TagInfoTexts.labels[label].text)]}
@@ -150,4 +154,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     // to fit the tag.
     marginVertical: -theme.spacing.xSmall,
   },
+  textContainer: {flex: 1},
 }));

@@ -20,16 +20,12 @@ const BonusProgramTexts = {
   },
 
   fareContract: {
-    youEarned: {
-      intro: _('Du tjente ', 'You earned ', 'Du tente '),
-      earned: (bonusPointsEarned: number) =>
-        _(
-          `${bonusPointsEarned} poeng`,
-          `${bonusPointsEarned} point${bonusPointsEarned === 1 ? '' : 's'}`,
-          `${bonusPointsEarned} poeng`,
-        ),
-      ending: _(' på dette kjøpet!', ' on this purchase!', ' på dette kjøpet!'),
-    },
+    youEarned: (bonusPointsEarned: number) =>
+      _(
+        `Du tjente **${bonusPointsEarned} poeng**!`,
+        `You earned **${bonusPointsEarned} point${bonusPointsEarned === 1 ? '' : 's'}**!`,
+        `Du tente **${bonusPointsEarned} poeng**!`,
+      ),
   },
 
   log_in_operator_app_warning: (operatorName: string) =>
