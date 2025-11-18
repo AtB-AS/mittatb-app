@@ -1,24 +1,40 @@
 diff --git a/node_modules/@atb-as/config-specs/lib/reference-data.d.ts b/node_modules/@atb-as/config-specs/lib/reference-data.d.ts
-index 1587f7b..1bdf2e6 100644
+index 1587f7b..a373007 100644
 --- a/node_modules/@atb-as/config-specs/lib/reference-data.d.ts
 +++ b/node_modules/@atb-as/config-specs/lib/reference-data.d.ts
 @@ -23,6 +23,7 @@ export declare const PreassignedFareProduct: z.ZodObject<{
      isBookingEnabled: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>, z.ZodTransform<boolean | undefined, boolean | null | undefined>>>;
      isEnabledForTripSearchOffer: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>, z.ZodTransform<boolean | undefined, boolean | null | undefined>>>;
      isDefault: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>, z.ZodTransform<boolean | undefined, boolean | null | undefined>>>;
-+    isBaggageProduct: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>, z.ZodTransform<boolean | undefined, boolean | null | undefined>>>;
++    isSupplementProduct: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>, z.ZodTransform<boolean | undefined, boolean | null | undefined>>>;
      alternativeNames: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodUnion<readonly [z.ZodObject<{
          lang: z.ZodString;
          value: z.ZodString;
+@@ -146,6 +147,7 @@ export declare const SupplementProduct: z.ZodObject<{
+         language: z.ZodOptional<z.ZodString>;
+         value: z.ZodOptional<z.ZodString>;
+     }, z.core.$strip>]>>>;
++    illustration: z.ZodOptional<z.ZodString>;
+     limitations: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodOptional<z.ZodObject<{
+         appVersionMin: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodString>>, z.ZodTransform<string | undefined, string | null | undefined>>>;
+         appVersionMax: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodString>>, z.ZodTransform<string | undefined, string | null | undefined>>>;
 diff --git a/node_modules/@atb-as/config-specs/lib/reference-data.js b/node_modules/@atb-as/config-specs/lib/reference-data.js
-index fe1347d..1aec88a 100644
+index fe1347d..2f96c22 100644
 --- a/node_modules/@atb-as/config-specs/lib/reference-data.js
 +++ b/node_modules/@atb-as/config-specs/lib/reference-data.js
 @@ -26,6 +26,7 @@ exports.PreassignedFareProduct = zod_1.z.object({
      isBookingEnabled: (0, nullish_1.optionalNullish)(zod_1.z.boolean()),
      isEnabledForTripSearchOffer: (0, nullish_1.optionalNullish)(zod_1.z.boolean()),
      isDefault: (0, nullish_1.optionalNullish)(zod_1.z.boolean()),
-+    isBaggageProduct: (0, nullish_1.optionalNullish)(zod_1.z.boolean()),
++    isSupplementProduct: (0, nullish_1.optionalNullish)(zod_1.z.boolean()),
      alternativeNames: (0, nullish_1.optionalNullish)(common_1.LanguageAndTextTypeArray),
      zoneSelectionMode: (0, nullish_1.optionalNullish)(fare_product_type_1.ZoneSelectionMode),
      description: (0, nullish_1.optionalNullish)(common_1.LanguageAndTextTypeArray),
+@@ -41,6 +42,7 @@ exports.SupplementProduct = zod_1.z.object({
+     name: common_1.LanguageAndTextType,
+     alternativeNames: common_1.LanguageAndTextTypeArray.optional(),
+     description: common_1.LanguageAndTextTypeArray.optional(),
++    illustration: (0, nullish_1.optionalNullish)(zod_1.z.string()),
+     limitations: (0, nullish_1.optionalNullish)(zod_1.z
+         .object({
+         appVersionMin: (0, nullish_1.optionalNullish)(zod_1.z.string()),
