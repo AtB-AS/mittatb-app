@@ -1,6 +1,9 @@
 import {useTranslation} from '@atb/translations';
 import {useAuthContext} from '@atb/modules/auth';
-import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import {
+  useGetFareProductsQuery,
+  useGetSupplementProductsQuery,
+} from '@atb/modules/ticketing';
 import {type FareContractType} from '@atb-as/utils';
 import {View} from 'react-native';
 import {FareContractFromTo} from './FareContractFromTo';
@@ -25,6 +28,7 @@ import {
   arrayMapUniqueWithCount,
   toCountAndName,
 } from '@atb/utils/array-map-unique-with-count';
+import {useBaggageProducts} from '../use-baggage-products';
 
 type Props = {fc: FareContractType};
 
@@ -39,14 +43,14 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
     useFirestoreConfigurationContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
 
-  const products = fc.travelRights
+  const productsInFareContract = fc.travelRights
     .map((tr) =>
       findReferenceDataById(preassignedFareProducts, tr.fareProductRef),
     )
     .filter(isDefined);
 
   const firstTravelRight = fc.travelRights[0];
-  const preassignedFareProduct = products[0];
+  const preassignedFareProduct = productsInFareContract[0];
 
   const fareProductTypeConfig = fareProductTypeConfigs.find((c) => {
     return c.type === preassignedFareProduct?.type;
@@ -57,7 +61,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
     userProfiles,
   );
 
-  const baggageProducts = products.filter((p) => p.isBaggageProduct);
+  const baggageProducts = useBaggageProducts(productsInFareContract);
 
   const baggeProductsWithCount = arrayMapUniqueWithCount(
     baggageProducts,

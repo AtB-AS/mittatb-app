@@ -59,6 +59,7 @@ import {useFareContractLegs} from '@atb/modules/fare-contracts';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {arrayMapUniqueWithCount} from '@atb/utils/array-map-unique-with-count';
+import {useBaggageProducts} from '../use-baggage-products';
 
 type Props = {
   fareContract: FareContractType;
@@ -115,12 +116,13 @@ export const DetailsContent: React.FC<Props> = ({
     userProfiles,
   );
 
-  const baggageProducts = fc.travelRights
+  const productsInFareContract = fc.travelRights
     .map((tr) =>
       findReferenceDataById(preassignedFareProducts, tr.fareProductRef),
     )
-    .filter(isDefined)
-    .filter((p) => p.isBaggageProduct);
+    .filter(isDefined);
+
+  const baggageProducts = useBaggageProducts(productsInFareContract);
 
   const baggeProductsWithCount = arrayMapUniqueWithCount(
     baggageProducts,
@@ -168,7 +170,7 @@ export const DetailsContent: React.FC<Props> = ({
         <FareContractInfoDetailsSectionItem
           fareContract={fc}
           userProfilesWithCount={userProfilesWithCount}
-          baggeProductsWithCount={baggeProductsWithCount}
+          baggageProductsWithCount={baggeProductsWithCount}
           status={validityStatus}
           preassignedFareProduct={preassignedFareProduct}
         />

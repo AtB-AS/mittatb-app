@@ -14,7 +14,10 @@ import {
   TicketRecipientType,
   ConsumableSchoolCarnetResponse,
 } from './types';
-import {PreassignedFareProduct} from '@atb/modules/configuration';
+import {
+  PreassignedFareProduct,
+  SupplementProduct,
+} from '@atb/modules/configuration';
 import {convertIsoStringFieldsToDate} from '@atb/utils/date';
 import capitalize from 'lodash/capitalize';
 import qs from 'query-string';
@@ -213,13 +216,24 @@ export async function cancelPayment(
 }
 
 export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
-  const url = 'product/v1';
+  const url = 'http://localhost:8080/product/v1';
   const response = await client.get<PreassignedFareProduct[]>(url, {
     authWithIdToken: true,
   });
 
   return response.data
     .map((p) => PreassignedFareProduct.safeParse(p).data)
+    .filter(isDefined);
+}
+
+export async function getSupplementProducts(): Promise<SupplementProduct[]> {
+  const url = 'http://localhost:8080/product/v1/supplement';
+  const response = await client.get<SupplementProduct[]>(url, {
+    authWithIdToken: true,
+  });
+
+  return response.data
+    .map((p) => SupplementProduct.safeParse(p).data)
     .filter(isDefined);
 }
 

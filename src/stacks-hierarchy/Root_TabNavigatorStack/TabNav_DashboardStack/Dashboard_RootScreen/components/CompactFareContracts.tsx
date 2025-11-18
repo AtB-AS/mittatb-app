@@ -15,6 +15,7 @@ import {ContentHeading} from '@atb/components/heading';
 import {
   useFareContracts,
   useGetFareProductsQuery,
+  useGetSupplementProductsQuery,
 } from '@atb/modules/ticketing';
 
 type Props = {
@@ -40,6 +41,7 @@ export const CompactFareContracts: React.FC<Props> = ({
   const {theme} = useThemeContext();
   const {fareZones, userProfiles} = useFirestoreConfigurationContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const {data: supplementProducts} = useGetSupplementProductsQuery();
 
   return (
     <View style={[style, itemStyle.container]}>
@@ -63,6 +65,7 @@ export const CompactFareContracts: React.FC<Props> = ({
               fareZones,
               userProfiles,
               preassignedFareProducts,
+              supplementProducts,
             );
             return (
               <CompactFareContractInfo

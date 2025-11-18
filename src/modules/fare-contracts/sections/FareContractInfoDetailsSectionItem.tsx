@@ -1,15 +1,13 @@
 import {
   findReferenceDataById,
   PreassignedFareProduct,
+  SupplementProduct,
   FareZone,
   useFirestoreConfigurationContext,
   UserProfile,
 } from '@atb/modules/configuration';
 import {StyleSheet} from '@atb/theme';
-import {
-  getLastUsedAccess,
-  useGetFareProductsQuery,
-} from '@atb/modules/ticketing';
+import {getLastUsedAccess} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -33,6 +31,7 @@ import {
   toCountAndName,
   UniqueWithCount,
 } from '@atb/utils/array-map-unique-with-count';
+import {getBaggageProducts} from '../use-baggage-products';
 
 export type FareContractInfoProps = {
   status: ValidityStatus;
@@ -47,7 +46,7 @@ export type FareContractInfoDetailsProps = {
   fromFareZone?: FareZone;
   toFareZone?: FareZone;
   userProfilesWithCount: UniqueWithCount<UserProfile>[];
-  baggeProductsWithCount: UniqueWithCount<PreassignedFareProduct>[];
+  baggageProductsWithCount: UniqueWithCount<SupplementProduct>[];
   status: FareContractInfoProps['status'];
   testID?: string;
   now?: number;
@@ -61,6 +60,7 @@ export const FareContractInfoDetailsSectionItem = ({
   fromFareZone,
   toFareZone,
   userProfilesWithCount,
+  baggageProductsWithCount,
   status,
   ...props
 }: SectionItemProps<FareContractInfoDetailsProps>) => {
@@ -86,20 +86,6 @@ export const FareContractInfoDetailsSectionItem = ({
   const isValidOrSentFareContract: boolean =
     isValidFareContract(status) || isStatusSent;
 
-  const {data: preassignedFareProducts} = useGetFareProductsQuery();
-
-  const baggageProducts = fareContract.travelRights
-    .map((tr) =>
-      findReferenceDataById(preassignedFareProducts, tr.fareProductRef),
-    )
-    .filter(isDefined)
-    .filter((p) => p.isBaggageProduct);
-
-  const baggeProductsWithCount = arrayMapUniqueWithCount(
-    baggageProducts,
-    (a, b) => a.id === b.id,
-  );
-
   return (
     <View style={[topContainer, styles.container]} accessible={true}>
       <View style={styles.fareContractDetails}>
@@ -123,7 +109,7 @@ export const FareContractInfoDetailsSectionItem = ({
               content={userProfilesWithCount
                 .map((u) => userProfileCountAndName(u, language))
                 .concat(
-                  baggeProductsWithCount.map((p) =>
+                  baggageProductsWithCount.map((p) =>
                     toCountAndName(p, language),
                   ),
                 )}
@@ -153,6 +139,7 @@ export const getFareContractInfoDetails = (
   fareZones: FareZone[],
   userProfiles: UserProfile[],
   preassignedFareProducts: PreassignedFareProduct[],
+  supplementProducts: SupplementProduct[],
 ): FareContractInfoDetailsProps => {
   const {
     endDateTime,
@@ -179,14 +166,18 @@ export const getFareContractInfoDetails = (
     userProfiles,
   );
 
-  const baggageProducts = fareContract.travelRights
+  const productsInFareContract = fareContract.travelRights
     .map((tr) =>
       findReferenceDataById(preassignedFareProducts, tr.fareProductRef),
     )
-    .filter(isDefined)
-    .filter((p) => p.isBaggageProduct);
+    .filter(isDefined);
 
-  const baggeProductsWithCount = arrayMapUniqueWithCount(
+  const baggageProducts = getBaggageProducts(
+    productsInFareContract,
+    supplementProducts,
+  );
+
+  const baggageProductsWithCount = arrayMapUniqueWithCount(
     baggageProducts,
     (a, b) => a.id === b.id,
   );
@@ -203,7 +194,7 @@ export const getFareContractInfoDetails = (
     fromFareZone: fromFareZone,
     toFareZone: toFareZone,
     userProfilesWithCount,
-    baggeProductsWithCount,
+    baggageProductsWithCount,
     status: validityStatus,
     now: now,
     validTo: validTo,

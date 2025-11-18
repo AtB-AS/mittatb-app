@@ -77,7 +77,7 @@ const CompactFareContractInfoTexts = (
 ) => {
   const {
     userProfilesWithCount,
-    baggeProductsWithCount,
+    baggageProductsWithCount,
     productName,
     fareZoneSummary,
     timeUntilExpire,
@@ -103,7 +103,7 @@ const CompactFareContractInfoTexts = (
             </ThemeText>
           ))
           .concat(
-            baggeProductsWithCount.map((p) => (
+            baggageProductsWithCount.map((p) => (
               <ThemeText key={p.id} typography="body__s" color="secondary">
                 {toCountAndName(p, language)}
               </ThemeText>
