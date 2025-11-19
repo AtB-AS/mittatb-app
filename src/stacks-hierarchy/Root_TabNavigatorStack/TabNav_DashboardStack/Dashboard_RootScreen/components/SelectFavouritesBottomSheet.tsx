@@ -50,26 +50,13 @@ const SelectableFavouriteDeparture = ({
     t(SelectFavouriteDeparturesText.departures.allVariations);
 
   return (
-    <View
-      style={styles.selectableDeparture}
-      accessible={true}
-      accessibilityLabel={`${t(
-        getTranslatedModeName(lineTransportationMode),
-      )} ${lineIdentifier} ${lineName}, ${t(
-        SelectFavouriteDeparturesText.accessibleText.from,
-      )} ${favorite.quayName} ${departureQuay && departureQuay}`}
-      accessibilityRole="switch"
-      accessibilityActions={[{name: 'activate'}]}
-      onAccessibilityAction={() => handleSwitchFlip(favorite.id, !active)}
-      accessibilityHint={t(SelectFavouriteDeparturesText.switch.a11yhint)}
-      accessibilityState={{checked: !active}}
-    >
+    <View style={styles.selectableDeparture} accessible={false}>
       <TransportationIconBox
         style={styles.lineModeIcon}
         mode={lineTransportationMode}
         subMode={favorite.lineTransportationSubMode}
       />
-      <View style={styles.selectableDepartureTextView}>
+      <View style={styles.selectableDepartureTextView} accessible>
         <ThemeText typography="body__m" style={styles.lineIdentifierText}>
           {lineIdentifier} {lineName}
         </ThemeText>
@@ -80,12 +67,12 @@ const SelectableFavouriteDeparture = ({
         </ThemeText>
       </View>
 
-      <View>
+      <View testID={testID}>
         <Toggle
-          importantForAccessibility="no"
           value={active}
           onValueChange={(value) => handleSwitchFlip(favorite.id, value)}
-          testID={testID}
+          accessibilityLabel={`${t(getTranslatedModeName(lineTransportationMode))} ${lineIdentifier} ${lineName}, ${t(SelectFavouriteDeparturesText.accessibleText.from)} ${favorite.quayName} ${departureQuay ?? ''}`}
+          accessibilityHint={t(SelectFavouriteDeparturesText.switch.a11yhint)}
         />
       </View>
     </View>
@@ -106,7 +93,6 @@ export const SelectFavouritesBottomSheet = ({
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const themeColor = getThemeColor(theme);
   const {favoriteDepartures, setFavoriteDepartures} = useFavoritesContext();
   const favouriteItems = favoriteDepartures ?? [];
 
@@ -134,11 +120,11 @@ export const SelectFavouritesBottomSheet = ({
           rightIcon={{svg: SvgArrowRight}}
           testID="editButton"
           mode="secondary"
-          backgroundColor={themeColor}
+          backgroundColor={theme.color.background.neutral[1]}
         />
       </FullScreenFooter>
     ),
-    [bottomSheetModalRef, onEditFavouriteDeparture, t, themeColor],
+    [bottomSheetModalRef, onEditFavouriteDeparture, t, theme],
   );
 
   return (
@@ -149,6 +135,7 @@ export const SelectFavouritesBottomSheet = ({
       rightIcon={Close}
       Footer={footer}
       closeCallback={() => giveFocus(onCloseFocusRef)}
+      testID="selectFavorite"
     >
       <View style={styles.flatListArea}>
         {favoriteDepartures.length > 0 && (
@@ -165,7 +152,7 @@ export const SelectFavouritesBottomSheet = ({
                     <SelectableFavouriteDeparture
                       handleSwitchFlip={handleSwitchFlip}
                       favorite={favorite}
-                      testID={'selectFavoriteToggle' + i}
+                      testID={`selectFavoriteToggle${i}`}
                     />
                   </View>
                 ))}

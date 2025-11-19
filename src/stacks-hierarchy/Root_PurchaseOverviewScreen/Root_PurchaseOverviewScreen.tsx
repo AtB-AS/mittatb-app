@@ -100,8 +100,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const handleTicketInfoButtonPress = () => {
     const parameters: RootStackParamList['Root_TicketInformationScreen'] = {
-      selection,
-      shouldShowFlexTicketDiscountInfo: true,
+      preassignedFareProductId: preassignedFareProduct.id,
+      userProfilesWithCountAndOffer: userProfilesWithCountAndOffer,
     };
     analytics.logEvent(
       'Ticketing',

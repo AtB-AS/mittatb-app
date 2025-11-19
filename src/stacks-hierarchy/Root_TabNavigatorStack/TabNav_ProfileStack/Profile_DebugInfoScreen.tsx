@@ -383,7 +383,7 @@ export const Profile_DebugInfoScreen = () => {
               <View>
                 {eventLog.map((event) => (
                   <MapEntry
-                    key={event.date.toISOString()}
+                    key={event.date.toISOString() + event.meta}
                     title={format(event.date, 'HH:mm:ss.SSS')}
                     value={{streamEvent: event.streamEvent, meta: event.meta}}
                   />

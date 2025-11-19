@@ -64,56 +64,58 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
   );
 
   return (
-    <Section style={style} key={announcement.id} testID="announcement">
-      <GenericSectionItem style={styles.sectionItem}>
-        <View style={styles.content}>
-          {announcement.summaryImage && (
-            <View style={styles.imageContainer}>
-              <Image
-                height={50}
-                width={50}
-                source={{uri: announcement.summaryImage}}
-              />
-            </View>
-          )}
-          <View style={styles.textContainer}>
-            <View style={styles.summaryTitle}>
-              <ThemeText
-                style={styles.summaryTitleText}
-                typography="body__m__strong"
-              >
-                {summaryTitle}
+    <>
+      <Section style={style} key={announcement.id} testID="announcement">
+        <GenericSectionItem style={styles.sectionItem}>
+          <View style={styles.content}>
+            {announcement.summaryImage && (
+              <View style={styles.imageContainer}>
+                <Image
+                  height={50}
+                  width={50}
+                  source={{uri: announcement.summaryImage}}
+                />
+              </View>
+            )}
+            <View style={styles.textContainer}>
+              <View style={styles.summaryTitle}>
+                <ThemeText
+                  style={styles.summaryTitleText}
+                  typography="body__m__strong"
+                >
+                  {summaryTitle}
+                </ThemeText>
+                <PressableOpacity
+                  style={styles.close}
+                  role="button"
+                  hitSlop={insets.all(theme.spacing.medium)}
+                  accessibilityHint={t(
+                    DashboardTexts.announcements.announcement.closeA11yHint,
+                  )}
+                  onPress={() => handleDismiss()}
+                  testID="closeAnnouncement"
+                >
+                  <ThemeIcon svg={Close} />
+                </PressableOpacity>
+              </View>
+              <ThemeText style={styles.summary}>
+                {getTextForLanguage(announcement.summary, language)}
               </ThemeText>
-              <PressableOpacity
-                style={styles.close}
-                role="button"
-                hitSlop={insets.all(theme.spacing.medium)}
-                accessibilityHint={t(
-                  DashboardTexts.announcements.announcement.closeA11yHint,
-                )}
-                onPress={() => handleDismiss()}
-                testID="closeAnnouncement"
-              >
-                <ThemeIcon svg={Close} />
-              </PressableOpacity>
             </View>
-            <ThemeText style={styles.summary}>
-              {getTextForLanguage(announcement.summary, language)}
-            </ThemeText>
           </View>
-        </View>
-      </GenericSectionItem>
-      {actionButtonProps && (
-        <LinkSectionItem
-          ref={onCloseFocusRef}
-          {...actionButtonProps}
-          textType="body__s"
-          accessibility={{
-            accessibilityHint: actionButtonProps.accessibilityHint,
-            accessibilityRole: actionButtonProps.accessibilityRole,
-          }}
-        />
-      )}
+        </GenericSectionItem>
+        {actionButtonProps && (
+          <LinkSectionItem
+            ref={onCloseFocusRef}
+            {...actionButtonProps}
+            textType="body__s"
+            accessibility={{
+              accessibilityHint: actionButtonProps.accessibilityHint,
+              accessibilityRole: actionButtonProps.accessibilityRole,
+            }}
+          />
+        )}
+      </Section>
       {isBottomSheetAnnouncement(announcement) && (
         <AnnouncementSheet
           bottomSheetModalRef={bottomSheetModalRef}
@@ -121,7 +123,7 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
           announcement={announcement}
         />
       )}
-    </Section>
+    </>
   );
 };
 

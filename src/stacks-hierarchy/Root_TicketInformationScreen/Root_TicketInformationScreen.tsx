@@ -23,36 +23,30 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 import {FlexTicketDiscountInfo} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FlexTicketDiscountInfo';
 import React from 'react';
-import {useParamAsState} from '@atb/utils/use-param-as-state';
-import {useOfferState} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-state';
-import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 
 type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;
 
-export const Root_TicketInformationScreen = (props: Props) => {
+export const Root_TicketInformationScreen = ({route}: Props) => {
+  const {preassignedFareProductId, userProfilesWithCountAndOffer} =
+    route.params;
+
   const {t, language} = useTranslation();
   const styles = useStyle();
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
   const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
-  const [selection] = useParamAsState(props.route.params.selection);
-  const preassignedFareProductAlternatives = useProductAlternatives(selection);
-  const {userProfilesWithCountAndOffer} = useOfferState(
-    preassignedFareProductAlternatives,
-    selection,
-  );
 
   const {isTipsAndInformationEnabled} = useFeatureTogglesContext();
   const {benefits} = useOperatorBenefitsForFareProduct(
-    selection?.preassignedFareProduct.id,
+    preassignedFareProductId,
   );
 
-  const fareProductTypeConfig = fareProductTypeConfigs.find(
-    (f) => f.type === selection?.fareProductTypeConfig.type,
-  );
   const preassignedFareProduct = preassignedFareProducts.find(
-    (p) => p.id === selection?.preassignedFareProduct.id,
+    (p) => p.id === preassignedFareProductId,
+  );
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (f) => f.type === preassignedFareProduct?.type,
   );
 
   return (
@@ -102,7 +96,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
             </Section>
           </>
         )}
-        {props.route.params.shouldShowFlexTicketDiscountInfo && (
+        {userProfilesWithCountAndOffer && (
           <FlexTicketDiscountInfo
             userProfiles={userProfilesWithCountAndOffer}
           />

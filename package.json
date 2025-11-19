@@ -1,6 +1,6 @@
 {
   "name": "atb",
-  "version": "1.76.0",
+  "version": "1.77.0",
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
@@ -75,6 +75,7 @@
     "@turf/helpers": "^7.1.0",
     "axios": "^1.12.2",
     "axios-better-stacktrace": "^2.1.7",
+    "buffer": "^6.0.3",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.1.3",
     "emoji-datasource": "^16.0.0",

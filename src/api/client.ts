@@ -85,10 +85,13 @@ function requestHandler(
 
 async function requestIdTokenHandler(config: InternalAxiosRequestConfig) {
   if (config.authWithIdToken) {
-    config.headers[Authorization] = 'Bearer ' + getIdTokenGlobal();
-    if (addDebugUserInfoHeader) {
-      config.headers['X-Endpoint-API-UserInfo'] =
-        getDebugUserInfoHeaderGlobal();
+    const idToken = getIdTokenGlobal();
+    if (idToken) {
+      config.headers[Authorization] = 'Bearer ' + idToken;
+      if (addDebugUserInfoHeader) {
+        config.headers['X-Endpoint-API-UserInfo'] =
+          getDebugUserInfoHeaderGlobal();
+      }
     }
   }
   return config;

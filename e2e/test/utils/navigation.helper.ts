@@ -32,6 +32,15 @@ class NavigationHelper {
   }
 
   /**
+   * Close bottom sheet
+   */
+  async closeBottomSheet() {
+    const closeId = `//*[@resource-id="closeBottomSheet"]`;
+    await $(closeId).click();
+    await AppHelper.pause(1000);
+  }
+
+  /**
    * Go to the chosen tab
    * @param page tab to open
    */
