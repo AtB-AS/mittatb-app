@@ -5,7 +5,7 @@ import {AnnouncementSection} from './AnnouncementSection';
 import {DashboardTexts, useTranslation} from '@atb/translations';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {useBeaconsContext} from '@atb/modules/beacons';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {useTimeContext} from '@atb/modules/time';
@@ -24,7 +24,6 @@ type Props = {
 export const Announcements = ({style}: Props) => {
   const {findAnnouncements} = useAnnouncementsContext();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const now = useNow(10000);
   const {isConsentGranted} = useBeaconsContext();
 
@@ -67,10 +66,7 @@ export const Announcements = ({style}: Props) => {
   return (
     <View style={[style, styles.container]} testID="announcements">
       <View style={styles.headerWrapper}>
-        <ContentHeading
-          color={theme.color.background.accent[0]}
-          text={t(DashboardTexts.announcements.header)}
-        />
+        <ContentHeading text={t(DashboardTexts.announcements.header)} />
       </View>
       <ScrollView
         contentContainerStyle={styles.scrollView}

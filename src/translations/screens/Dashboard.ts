@@ -48,6 +48,10 @@ const DashboardTexts = {
           : _('Les mer', 'Read mre', 'Les meir'),
     },
   },
+  bonus: {
+    header: _('Poeng', 'Points', 'Poeng'),
+    button: _('Mer om Poeng', 'More about Points', 'Meir om Poeng'),
+  },
 };
 
 export default DashboardTexts;

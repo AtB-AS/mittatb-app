@@ -68,7 +68,6 @@ export const DeparturesWidget = ({
     <View style={style}>
       <ContentHeading
         style={styles.heading}
-        color={themeColor}
         text={t(DeparturesTexts.widget.heading)}
       />
       {!favoriteDepartures.length && (
