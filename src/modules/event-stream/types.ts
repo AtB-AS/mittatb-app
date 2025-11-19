@@ -6,6 +6,7 @@ export enum EventKind {
   Profile = 'PROFILE',
   Token = 'TOKEN',
   Vehicle = 'VEHICLE',
+  ShmoBookingUpdate = 'SHMO_BOOKING_UPDATE',
 }
 
 export const StreamEventSchema = z.discriminatedUnion('event', [
@@ -32,6 +33,11 @@ export const StreamEventSchema = z.discriminatedUnion('event', [
     vehicleId: z.number().int().nonnegative(),
     longitude: z.number(),
     latitude: z.number(),
+  }),
+
+  z.object({
+    event: z.literal(EventKind.ShmoBookingUpdate),
+    orderId: z.string(),
   }),
 ]);
 

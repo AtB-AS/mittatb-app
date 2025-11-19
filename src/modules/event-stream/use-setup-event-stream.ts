@@ -9,6 +9,7 @@ import {StreamEventLog, StreamEvent, StreamEventSchema} from './types';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {jsonStringToObject} from '@atb/utils/object';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
+import {useTranslation} from '@atb/translations';
 
 export const useSetupEventStream = () => {
   const queryClient = useQueryClient();
@@ -16,6 +17,7 @@ export const useSetupEventStream = () => {
   const appState = useAppStateStatus();
   const {isEventStreamEnabled, isEventStreamFareContractsEnabled} =
     useFeatureTogglesContext();
+  const {language: acceptLanguage} = useTranslation();
 
   // Keep a list of events to use for debugging. In memory only, so this will be
   // reset when reloading the app.
@@ -52,11 +54,23 @@ export const useSetupEventStream = () => {
         data: event.data,
       });
       addToEventLog({streamEvent});
-      handleStreamEvent(streamEvent, queryClient, userId, {
-        isEventStreamFareContractsEnabled,
-      });
+      handleStreamEvent(
+        streamEvent,
+        queryClient,
+        userId,
+        {
+          isEventStreamFareContractsEnabled,
+        },
+        acceptLanguage,
+      );
     },
-    [queryClient, isEventStreamFareContractsEnabled, userId, addToEventLog],
+    [
+      queryClient,
+      isEventStreamFareContractsEnabled,
+      userId,
+      addToEventLog,
+      acceptLanguage,
+    ],
   );
 
   const onOpen = useCallback(

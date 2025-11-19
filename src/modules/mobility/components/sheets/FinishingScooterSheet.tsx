@@ -9,7 +9,6 @@ import {ActivityIndicator, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {useActiveShmoBookingQuery} from '../../queries/use-active-shmo-booking-query';
-import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {ThemeText} from '@atb/components/text';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
 import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
@@ -26,11 +25,7 @@ export const FinishingScooterSheet = ({
   photoNavigation,
   locationArrowOnPress,
 }: Props) => {
-  const {
-    data: activeBooking,
-    isLoading,
-    isError,
-  } = useActiveShmoBookingQuery(ONE_SECOND_MS * 10);
+  const {data: activeBooking, isLoading, isError} = useActiveShmoBookingQuery();
   const {logEvent} = useAnalyticsContext();
 
   const {t} = useTranslation();
