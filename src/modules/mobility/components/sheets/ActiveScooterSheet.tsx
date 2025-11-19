@@ -19,7 +19,6 @@ import {
 import {useSendShmoBookingEventMutation} from '../../queries/use-send-shmo-booking-event-mutation';
 import {ShmoTripCard} from '../ShmoTripCard';
 import {formatFriendlyShmoErrorMessage} from '../../utils';
-import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {MapView} from '@rnmapbox/maps';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useShmoWarnings} from '@atb/modules/map';
@@ -49,11 +48,7 @@ export const ActiveScooterSheet = ({
   navigateToScanQrCode,
 }: Props) => {
   useKeepAwake();
-  const {
-    data: activeBooking,
-    isLoading,
-    isError,
-  } = useActiveShmoBookingQuery(ONE_SECOND_MS * 10);
+  const {data: activeBooking, isLoading, isError} = useActiveShmoBookingQuery();
   const {logEvent} = useAnalyticsContext();
 
   const {t} = useTranslation();

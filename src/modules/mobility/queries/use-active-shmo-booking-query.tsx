@@ -9,9 +9,7 @@ export const getActiveShmoBookingQueryKey = (acceptLanguage: string) => [
   acceptLanguage,
 ];
 
-export const useActiveShmoBookingQuery = (
-  refetchInterval: number | false = false,
-) => {
+export const useActiveShmoBookingQuery = () => {
   const acceptLanguage = useAcceptLanguage();
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
@@ -21,7 +19,6 @@ export const useActiveShmoBookingQuery = (
     queryFn: ({signal}) => getActiveShmoBooking(acceptLanguage, {signal}),
     staleTime: ONE_MINUTE_MS,
     gcTime: ONE_MINUTE_MS,
-    refetchInterval,
     refetchOnWindowFocus: 'always',
     refetchOnReconnect: true,
   });
