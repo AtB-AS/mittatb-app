@@ -33,7 +33,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {DashboardScreenProps} from '../navigation-types';
-import {CompactFareContracts} from './components/CompactFareContracts';
+import {CompactFareContracts} from '@atb/modules/fare-contracts';
 import {DeparturesWidget} from './components/DeparturesWidget';
 import {Announcements} from './components/Announcements';
 import SharedTexts from '@atb/translations/shared';
