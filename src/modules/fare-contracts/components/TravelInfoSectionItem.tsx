@@ -1,9 +1,6 @@
 import {useTranslation} from '@atb/translations';
 import {useAuthContext} from '@atb/modules/auth';
-import {
-  useGetFareProductsQuery,
-  useGetSupplementProductsQuery,
-} from '@atb/modules/ticketing';
+import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 import {type FareContractType} from '@atb-as/utils';
 import {View} from 'react-native';
 import {FareContractFromTo} from './FareContractFromTo';

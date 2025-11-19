@@ -216,7 +216,7 @@ export async function cancelPayment(
 }
 
 export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
-  const url = 'http://localhost:8080/product/v1';
+  const url = 'product/v1';
   const response = await client.get<PreassignedFareProduct[]>(url, {
     authWithIdToken: true,
   });
@@ -227,7 +227,7 @@ export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
 }
 
 export async function getSupplementProducts(): Promise<SupplementProduct[]> {
-  const url = 'http://localhost:8080/product/v1/supplement';
+  const url = 'product/v1/supplement';
   const response = await client.get<SupplementProduct[]>(url, {
     authWithIdToken: true,
   });
