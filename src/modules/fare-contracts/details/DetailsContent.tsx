@@ -4,6 +4,7 @@ import {
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
   useGetFareProductsQuery,
+  useGetSupplementProductsQuery,
   useRefundOptionsQuery,
   useSchoolCarnetInfoQuery,
 } from '@atb/modules/ticketing';
@@ -60,7 +61,7 @@ import {useFareContractLegs} from '@atb/modules/fare-contracts';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {arrayMapUniqueWithCount} from '@atb/utils/array-map-unique-with-count';
-import {useBaggageProducts} from '../use-baggage-products';
+import {getBaggageProducts} from '../get-baggage-products';
 
 type Props = {
   fareContract: FareContractType;
@@ -123,9 +124,14 @@ export const DetailsContent: React.FC<Props> = ({
     )
     .filter(isDefined);
 
-  const baggageProducts = useBaggageProducts(productsInFareContract);
+  const {data: allSupplementProducts} = useGetSupplementProductsQuery();
 
-  const baggeProductsWithCount = arrayMapUniqueWithCount(
+  const baggageProducts = getBaggageProducts(
+    productsInFareContract,
+    allSupplementProducts,
+  );
+
+  const baggageProductsWithCount = arrayMapUniqueWithCount(
     baggageProducts,
     (a, b) => a.id === b.id,
   );
@@ -172,7 +178,7 @@ export const DetailsContent: React.FC<Props> = ({
         <FareContractInfoDetailsSectionItem
           fareContract={fc}
           userProfilesWithCount={userProfilesWithCount}
-          baggageProductsWithCount={baggeProductsWithCount}
+          baggageProductsWithCount={baggageProductsWithCount}
           status={validityStatus}
           preassignedFareProduct={preassignedFareProduct}
         />

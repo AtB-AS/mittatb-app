@@ -1,16 +1,15 @@
 import {useTranslation} from '@atb/translations';
 import {useAuthContext} from '@atb/modules/auth';
-import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import {
+  useGetFareProductsQuery,
+  useGetSupplementProductsQuery,
+} from '@atb/modules/ticketing';
 import {type FareContractType} from '@atb-as/utils';
 import {View} from 'react-native';
 import {FareContractFromTo} from './FareContractFromTo';
 import {FareContractDetailItem} from './FareContractDetailItem';
 import {getTransportModeText} from '@atb/components/transportation-modes';
-import {
-  getFareContractInfo,
-  mapToUserProfilesWithCount,
-  userProfileCountAndName,
-} from '../utils';
+import {getFareContractInfo, mapToUserProfilesWithCount} from '../utils';
 import {InspectionSymbol} from './InspectionSymbol';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -25,7 +24,7 @@ import {
   arrayMapUniqueWithCount,
   toCountAndName,
 } from '@atb/utils/array-map-unique-with-count';
-import {useBaggageProducts} from '../use-baggage-products';
+import {getBaggageProducts} from '../get-baggage-products';
 
 type Props = {fc: FareContractType};
 
@@ -58,9 +57,14 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
     userProfiles,
   );
 
-  const baggageProducts = useBaggageProducts(productsInFareContract);
+  const {data: allSupplementProducts} = useGetSupplementProductsQuery();
 
-  const baggeProductsWithCount = arrayMapUniqueWithCount(
+  const baggageProducts = getBaggageProducts(
+    productsInFareContract,
+    allSupplementProducts,
+  );
+
+  const baggageProductsWithCount = arrayMapUniqueWithCount(
     baggageProducts,
     (a, b) => a.id === b.id,
   );
@@ -98,10 +102,10 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
               {userProfilesWithCount.map((u, i) => (
                 <FareContractDetailItem
                   key={`userProfile-${i}`}
-                  content={[userProfileCountAndName(u, language)]}
+                  content={[toCountAndName(u, language)]}
                 />
               ))}
-              {baggeProductsWithCount.map((p, i) => (
+              {baggageProductsWithCount.map((p, i) => (
                 <FareContractDetailItem
                   key={`baggageProduct-${i}`}
                   content={[toCountAndName(p, language)]}

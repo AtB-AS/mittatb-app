@@ -16,7 +16,6 @@ import {
   getValidityStatus,
   isValidFareContract,
   mapToUserProfilesWithCount,
-  userProfileCountAndName,
   useFareZoneSummary,
   ValidityStatus,
 } from '../utils';
@@ -31,7 +30,7 @@ import {
   toCountAndName,
   UniqueWithCount,
 } from '@atb/utils/array-map-unique-with-count';
-import {getBaggageProducts} from '../use-baggage-products';
+import {getBaggageProducts} from '../get-baggage-products';
 
 export type FareContractInfoProps = {
   status: ValidityStatus;
@@ -107,7 +106,7 @@ export const FareContractInfoDetailsSectionItem = ({
             <FareContractDetailItem
               header={t(FareContractTexts.label.travellers)}
               content={userProfilesWithCount
-                .map((u) => userProfileCountAndName(u, language))
+                .map((u) => toCountAndName(u, language))
                 .concat(
                   baggageProductsWithCount.map((p) =>
                     toCountAndName(p, language),

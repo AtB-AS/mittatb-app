@@ -7,7 +7,6 @@ import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
   isValidFareContract,
   useNonInspectableTokenWarning,
-  userProfileCountAndName,
   useFareZoneSummary,
 } from './utils';
 import {fareContractValidityUnits} from './fare-contract-validity-units';
@@ -99,7 +98,7 @@ const CompactFareContractInfoTexts = (
         userProfilesWithCount
           .map((u) => (
             <ThemeText key={u.id} typography="body__s" color="secondary">
-              {userProfileCountAndName(u, language)}
+              {toCountAndName(u, language)}
             </ThemeText>
           ))
           .concat(
@@ -183,7 +182,7 @@ export const useFareContractInfoTexts = (
   let accessibilityLabel: string = '';
   accessibilityLabel += timeUntilExpireOrWarning + screenReaderPause;
   accessibilityLabel += userProfilesWithCount.map(
-    (u) => userProfileCountAndName(u, language) + screenReaderPause,
+    (u) => toCountAndName(u, language) + screenReaderPause,
   );
   accessibilityLabel += productName + screenReaderPause;
   accessibilityLabel += fareZoneSummary + screenReaderPause;
