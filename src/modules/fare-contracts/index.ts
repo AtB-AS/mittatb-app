@@ -13,8 +13,8 @@ export {
   sortFcOrReservationByCreation,
   getSortedFareContractsAndReservations,
 } from './sort-fc-or-reservation';
-export {getFareContractInfoDetails} from './sections/FareContractInfoDetailsSectionItem';
 export {CompactFareContractInfo} from './CompactFareContractInfo';
+export {CompactFareContracts} from './CompactFareContracts';
 export {FareContractDetailItem} from './components/FareContractDetailItem';
 export {FareContractFromTo} from './components/FareContractFromTo';
 export {useFareContractLegs} from './use-fare-contract-legs';
