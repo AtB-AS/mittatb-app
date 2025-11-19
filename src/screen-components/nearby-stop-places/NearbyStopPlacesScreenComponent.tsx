@@ -229,6 +229,8 @@ const Header = React.memo(function Header({
       setLocation({...geolocation, resultType: 'geolocation'});
     } else {
       requestLocationPermission(false);
+      // The screen should detect when geolocation is available, so no need to
+      // manually call setLocation.
     }
   };
 
