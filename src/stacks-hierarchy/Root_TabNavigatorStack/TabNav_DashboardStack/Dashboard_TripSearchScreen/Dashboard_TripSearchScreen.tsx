@@ -61,6 +61,8 @@ import {onlyUniques} from '@atb/utils/only-uniques';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {DatePickerSheet} from '@atb/components/date-selection';
 import SharedTexts from '@atb/translations/shared';
+import {TravelSearchFiltersBottomSheet} from './components/TravelSearchFiltersBottomSheet';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -89,6 +91,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const isFocused = useIsFocusedAndActive();
   const filterButtonWrapperRef = useRef(null);
   const filterButtonRef = useRef(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
 
   const {location, requestLocationPermission} = useGeolocationContext();
 
@@ -96,18 +99,17 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   const {from, to} = useLocations(currentLocation);
 
-  const filtersState = useTravelSearchFiltersState({
-    onCloseFocusRef: filterButtonRef,
-  });
+  const filtersState = useTravelSearchFiltersState();
+
   const {isFlexibleTransportEnabled: isFlexibleTransportEnabledInRemoteConfig} =
     useFeatureTogglesContext();
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
-    useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);
+    useTripsQuery(from, to, searchTime, filtersState.filtersSelection);
   const {nonTransitTrips} = useNonTransitTripsQuery(
     from,
     to,
     searchTime,
-    filtersState?.filtersSelection,
+    filtersState.filtersSelection,
   );
 
   const isSearching = searchState === 'searching';
@@ -382,7 +384,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     mode="primary"
                     interactiveColor={interactiveColor}
                     type="small"
-                    onPress={filtersState.openBottomSheet}
+                    onPress={() => bottomSheetModalRef.current?.present()}
                     testID="filterButton"
                     ref={filterButtonRef}
                     rightIcon={{
@@ -536,6 +538,15 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           )}
         </View>
       </FullScreenView>
+      {filtersState.filtersSelection && (
+        <TravelSearchFiltersBottomSheet
+          ref={onOpenFocusRef}
+          filtersSelection={filtersState.filtersSelection}
+          onSave={filtersState.setFiltersSelection}
+          bottomSheetModalRef={bottomSheetModalRef}
+          onCloseFocusRef={filterButtonRef}
+        />
+      )}
     </View>
   );
 };
