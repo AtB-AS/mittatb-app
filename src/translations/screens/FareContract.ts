@@ -70,7 +70,7 @@ const FareContractTexts = {
       infoButtonA11yHint: _(
         'Aktivér for å gå til billettinformasjon',
         'Activate to go to ticket information',
-        'Aktivér for å gå til billetinformasjon',
+        'Aktivér for å gå til billettinformasjon',
       ),
     },
     paymentMethod: _(
