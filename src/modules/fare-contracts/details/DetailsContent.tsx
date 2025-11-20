@@ -3,7 +3,10 @@ import {
   isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
+  useGetFareProductsQuery,
+  useGetSupplementProductsQuery,
   useRefundOptionsQuery,
+  useSchoolCarnetInfoQuery,
 } from '@atb/modules/ticketing';
 import {FareContractType, getAccesses} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
@@ -27,7 +30,10 @@ import {
 } from '@atb/modules/global-messages';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {
+  findReferenceDataById,
+  useFirestoreConfigurationContext,
+} from '@atb/modules/configuration';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {Barcode} from './Barcode';
 import {MapFilterType} from '@atb/modules/map';
@@ -54,6 +60,8 @@ import {
 import {useFareContractLegs} from '@atb/modules/fare-contracts';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {arrayMapUniqueWithCount} from '@atb/utils/array-map-unique-with-count';
+import {getBaggageProducts} from '../get-baggage-products';
 
 type Props = {
   fareContract: FareContractType;
@@ -89,6 +97,7 @@ export const DetailsContent: React.FC<Props> = ({
 
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
   const isReceived = isSentOrReceived && fc.purchasedBy != currentUserId;
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
 
   const firstTravelRight = fc.travelRights[0];
   const {userProfiles} = useFirestoreConfigurationContext();
@@ -107,6 +116,24 @@ export const DetailsContent: React.FC<Props> = ({
   const userProfilesWithCount = mapToUserProfilesWithCount(
     fc.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
     userProfiles,
+  );
+
+  const productsInFareContract = fc.travelRights
+    .map((tr) =>
+      findReferenceDataById(preassignedFareProducts, tr.fareProductRef),
+    )
+    .filter(isDefined);
+
+  const {data: allSupplementProducts} = useGetSupplementProductsQuery();
+
+  const baggageProducts = getBaggageProducts(
+    productsInFareContract,
+    allSupplementProducts,
+  );
+
+  const baggageProductsWithCount = arrayMapUniqueWithCount(
+    baggageProducts,
+    (a, b) => a.id === b.id,
   );
 
   const globalMessageRuleVariables = {
@@ -130,6 +157,7 @@ export const DetailsContent: React.FC<Props> = ({
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;
 
   const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(fc.id);
+  const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(fc, validityStatus);
 
   return (
     <Section style={styles.section}>
@@ -150,6 +178,7 @@ export const DetailsContent: React.FC<Props> = ({
         <FareContractInfoDetailsSectionItem
           fareContract={fc}
           userProfilesWithCount={userProfilesWithCount}
+          baggageProductsWithCount={baggageProductsWithCount}
           status={validityStatus}
           preassignedFareProduct={preassignedFareProduct}
         />
@@ -233,7 +262,12 @@ export const DetailsContent: React.FC<Props> = ({
           state={fc.state}
         />
       )}
-      {isCanBeConsumedNowFareContract(fc, now, currentUserId) && (
+      {isCanBeConsumedNowFareContract(
+        fc,
+        now,
+        currentUserId,
+        schoolCarnetInfo,
+      ) && (
         <ConsumeCarnetSectionItem
           fareContractId={fc.id}
           fareProductType={preassignedFareProduct?.type}

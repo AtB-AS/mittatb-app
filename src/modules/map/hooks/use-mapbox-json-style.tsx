@@ -41,7 +41,7 @@ export const useMapboxJsonStyle: (
 ) => string | undefined = (includeVehiclesAndStationsVectorSource) => {
   const {themeName} = useThemeContext();
   const {language} = useTranslation();
-  const {mapboxUserName, mapboxNsrTilesetId} = useRemoteConfigContext();
+  const {mapbox_user_name, mapbox_nsr_tileset_id} = useRemoteConfigContext();
 
   const {configurableLinks} = useFirestoreConfigurationContext();
   const mapboxSpriteUrl =
@@ -55,8 +55,8 @@ export const useMapboxJsonStyle: (
   const themedStyleWithExtendedSourcesAndSlotLayers = useMemo(() => {
     const themedStyle =
       themeName === 'dark'
-        ? getMapboxDarkStyle(mapboxUserName, mapboxNsrTilesetId)
-        : getMapboxLightStyle(mapboxUserName, mapboxNsrTilesetId);
+        ? getMapboxDarkStyle(mapbox_user_name, mapbox_nsr_tileset_id)
+        : getMapboxLightStyle(mapbox_user_name, mapbox_nsr_tileset_id);
 
     const extendedSources: StyleJsonVectorSourcesObj = {
       ...themedStyle.sources,
@@ -78,8 +78,8 @@ export const useMapboxJsonStyle: (
     };
   }, [
     themeName,
-    mapboxUserName,
-    mapboxNsrTilesetId,
+    mapbox_user_name,
+    mapbox_nsr_tileset_id,
     includeVehiclesAndStationsVectorSource,
     vehiclesAndStationsVectorSourceId,
     vehiclesAndStationsVectorSource,

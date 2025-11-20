@@ -31,6 +31,7 @@ import {
 } from '@atb/modules/purchase-selection';
 import type {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {RequestError, toAxiosErrorKind} from '@atb/api/utils';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = RootStackScreenProps<'Root_PurchaseFareZonesSearchByTextScreen'>;
 
@@ -43,6 +44,7 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const selectionBuilder = usePurchaseSelectionBuilder();
+  const {bottom} = useSafeAreaInsets();
 
   const [text, setText] = useState('');
   const debouncedText = useDebounce(text, 200);
@@ -168,7 +170,7 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
 
       <ScrollView
         style={styles.scroll}
-        contentContainerStyle={styles.contentBlock}
+        contentContainerStyle={[styles.contentBlock, {paddingBottom: bottom}]}
         keyboardShouldPersistTaps="handled"
         onScrollBeginDrag={() => Keyboard.dismiss()}
       >

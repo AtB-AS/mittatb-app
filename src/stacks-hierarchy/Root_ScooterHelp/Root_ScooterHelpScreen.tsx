@@ -40,7 +40,7 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
     <FullScreenView
       headerProps={{
         title: t(ScooterHelpTexts.title),
-        rightButton: {type: 'close', withIcon: true},
+        rightButton: {type: 'close'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading ref={focusRef} text={t(ScooterHelpTexts.title)} />

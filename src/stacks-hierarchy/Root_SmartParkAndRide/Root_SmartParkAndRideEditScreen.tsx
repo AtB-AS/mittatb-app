@@ -109,7 +109,7 @@ export const Root_SmartParkAndRideEditScreen = ({
     <FullScreenView
       headerProps={{
         title: t(SmartParkAndRideTexts.edit.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
         color: theme.color.background.neutral[1],
       }}
       parallaxContent={(focusRef) => (

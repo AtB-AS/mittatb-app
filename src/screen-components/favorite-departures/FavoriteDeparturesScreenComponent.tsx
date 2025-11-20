@@ -47,7 +47,7 @@ export const FavoriteDeparturesScreenComponent = ({
     <FullScreenView
       headerProps={{
         title: t(FavoriteDeparturesTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading

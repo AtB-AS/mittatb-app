@@ -17,6 +17,7 @@ type BottomSheetHeaderProps = {
   bottomSheetRef: React.RefObject<BottomSheetModal | BottomSheet | null>;
   headerNode?: React.ReactNode;
   focusRef?: Ref<any>;
+  testID?: string;
 };
 
 export const BottomSheetHeader = ({
@@ -28,11 +29,12 @@ export const BottomSheetHeader = ({
   bottomSheetRef,
   headerNode,
   focusRef,
+  testID,
 }: BottomSheetHeaderProps) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   return (
-    <View accessibilityRole="header">
+    <View accessibilityRole="header" testID={`${testID}BottomSheetHeader`}>
       <View style={styles.handleIndicatorStyle} />
       {(heading || rightIconText || rightIcon) && (
         <View style={styles.headerContainer}>
@@ -60,6 +62,8 @@ export const BottomSheetHeader = ({
               <PressableOpacity
                 style={styles.headerRight}
                 onPress={() => bottomSheetRef.current?.close()}
+                testID="closeBottomSheet"
+                accessibilityRole="button"
               >
                 {rightIconText && (
                   <ThemeText typography="body__s__strong">

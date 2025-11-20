@@ -8,9 +8,8 @@ import {useGeolocationContext} from '@atb/modules/geolocation';
 import {StopPlaces} from './components/StopPlaces';
 import {useNearestStopsData} from './use-nearest-stops-data';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
-import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {Platform, RefreshControl, ScrollView, View} from 'react-native';
 import {StopPlacesMode} from './types';
@@ -33,6 +32,7 @@ type Props = NearbyStopPlacesScreenParams & {
   onSelectStopPlace: (place: StopPlace) => void;
   onUpdateLocation: (location?: Location) => void;
   onAddFavoritePlace: () => void;
+  isLargeTitle?: boolean;
 };
 
 export const NearbyStopPlacesScreenComponent = ({
@@ -43,6 +43,7 @@ export const NearbyStopPlacesScreenComponent = ({
   onSelectStopPlace,
   onUpdateLocation,
   onAddFavoritePlace,
+  isLargeTitle = true,
 }: Props) => {
   const {
     locationIsAvailable,
@@ -50,19 +51,24 @@ export const NearbyStopPlacesScreenComponent = ({
     requestLocationPermission,
   } = useGeolocationContext();
 
-  const currentLocation = geolocation || undefined;
-
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
 
   const styles = useStyles();
 
   const {t} = useTranslation();
+  const isFocused = useIsFocusedAndActive();
 
-  const screenHasFocus = useIsFocused();
-
+  // Update geolocation on screen focus if no other location is selected
   useDoOnceWhen(
-    setCurrentLocationAsFromIfEmpty,
-    Boolean(currentLocation) && screenHasFocus,
+    () => {
+      !location &&
+        geolocation &&
+        onUpdateLocation({
+          ...geolocation,
+          resultType: 'geolocation',
+        });
+    },
+    Boolean(geolocation) && isFocused,
   );
 
   const updatingLocation = !location && locationIsAvailable;
@@ -76,8 +82,6 @@ export const NearbyStopPlacesScreenComponent = ({
     [data],
   );
 
-  const openLocationSearch = () => onPressLocationSearch(location);
-
   useEffect(() => {
     if (
       (location?.resultType == 'search' ||
@@ -87,33 +91,6 @@ export const NearbyStopPlacesScreenComponent = ({
       onSelectStopPlace(location);
     }
   }, [location, onSelectStopPlace]);
-
-  function setCurrentLocationAsFrom() {
-    onUpdateLocation(
-      currentLocation && {
-        ...currentLocation,
-        resultType: 'geolocation',
-      },
-    );
-  }
-
-  function setCurrentLocationAsFromIfEmpty() {
-    if (location) {
-      return;
-    }
-    setCurrentLocationAsFrom();
-  }
-
-  async function setCurrentLocationOrRequest() {
-    if (currentLocation) {
-      setCurrentLocationAsFrom();
-    } else {
-      const status = await requestLocationPermission(false);
-      if (status === 'granted') {
-        setCurrentLocationAsFrom();
-      }
-    }
-  }
 
   const getListDescription = () => {
     if (!location) return;
@@ -148,29 +125,22 @@ export const NearbyStopPlacesScreenComponent = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updatingLocation, isLoading, t]);
 
-  function refresh() {
-    onUpdateLocation(
-      location?.resultType === 'geolocation' ? currentLocation : location,
-    );
-  }
-
-  const isFocused = useIsFocusedAndActive();
-
   return (
     <FullScreenView
       headerProps={{...headerProps}}
       parallaxContent={(focusRef) => (
         <>
-          <ScreenHeading
-            ref={focusRef}
-            text={headerProps.title ?? ''}
-            isLarge={true}
-          />
+          {isLargeTitle && (
+            <ScreenHeading
+              ref={focusRef}
+              text={headerProps.title ?? ''}
+              isLarge={true}
+            />
+          )}
           <Header
             fromLocation={location}
             updatingLocation={updatingLocation}
-            openLocationSearch={openLocationSearch}
-            setCurrentLocationOrRequest={setCurrentLocationOrRequest}
+            openLocationSearch={() => onPressLocationSearch(location)}
             setLocation={(location: Location) => {
               location.resultType === 'search' && location.layer === 'venue'
                 ? onSelectStopPlace(location)
@@ -181,12 +151,19 @@ export const NearbyStopPlacesScreenComponent = ({
           />
         </>
       )}
+      titleAlwaysVisible={!isLargeTitle}
       refreshControl={
         // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
         isFocused || Platform.OS === 'android' ? (
           <RefreshControl
             refreshing={Platform.OS === 'ios' ? false : isLoading}
-            onRefresh={refresh}
+            onRefresh={() =>
+              onUpdateLocation(
+                location?.resultType === 'geolocation'
+                  ? (geolocation ?? undefined)
+                  : location,
+              )
+            }
           />
         ) : undefined
       }
@@ -228,7 +205,6 @@ type HeaderProps = {
   updatingLocation: boolean;
   fromLocation?: Location;
   openLocationSearch: () => void;
-  setCurrentLocationOrRequest(): Promise<void>;
   setLocation: (location: Location) => void;
   mode: StopPlacesMode;
   onAddFavoritePlace: Props['onAddFavoritePlace'];
@@ -238,13 +214,25 @@ const Header = React.memo(function Header({
   updatingLocation,
   fromLocation,
   openLocationSearch,
-  setCurrentLocationOrRequest,
   setLocation,
   mode,
   onAddFavoritePlace,
 }: HeaderProps) {
   const {t} = useTranslation();
   const styles = useStyles();
+  const {theme} = useThemeContext();
+  const {location: geolocation, requestLocationPermission} =
+    useGeolocationContext();
+
+  const setCurrentLocationOrRequest = () => {
+    if (geolocation) {
+      setLocation({...geolocation, resultType: 'geolocation'});
+    } else {
+      requestLocationPermission(false);
+      // The screen should detect when geolocation is available, so no need to
+      // manually call setLocation.
+    }
+  };
 
   return (
     <View style={styles.header}>
@@ -274,6 +262,7 @@ const Header = React.memo(function Header({
           chipTypes={['favorites', 'add-favorite']}
           style={styles.favoriteChips}
           onAddFavoritePlace={onAddFavoritePlace}
+          backgroundColor={theme.color.background.neutral[1]}
         />
       )}
     </View>
@@ -298,8 +287,6 @@ function sortAndFilterStopPlaces(
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
-    backgroundColor: theme.color.background.neutral[1].background,
-    paddingBottom: theme.spacing.medium,
     paddingTop: theme.spacing.medium,
   },
   locationInputSection: {

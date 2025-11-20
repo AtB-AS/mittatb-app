@@ -14,7 +14,7 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {OnboardingFullScreenView} from '@atb/modules/onboarding';
 import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {LeftButtonProps} from '@atb/components/screen-header';
+import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import {Theme} from '@atb/theme/colors';
 
 type Props = RootStackScreenProps<'Root_PurchaseAsAnonymousConsequencesScreen'>;
@@ -47,10 +47,16 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
     <AnonymousPurchaseConsequencesScreenComponent
       onPressLogin={params.showLoginButton ? onPressLogin : undefined}
       onPressContinueWithoutLogin={completeUserCreationOnboardingAndEnterApp}
-      leftButton={{
-        type:
-          params?.transitionOverride === 'slide-from-bottom' ? 'close' : 'back',
-      }}
+      leftButton={
+        params?.transitionOverride !== 'slide-from-bottom'
+          ? {type: 'back'}
+          : undefined
+      }
+      rightButton={
+        params?.transitionOverride === 'slide-from-bottom'
+          ? {type: 'close'}
+          : undefined
+      }
     />
   );
 };
@@ -58,12 +64,14 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
 type AnonymousPurchaseConsequencesScreenComponentProps = {
   onPressContinueWithoutLogin: () => void;
   onPressLogin?: () => void;
-  leftButton: LeftButtonProps;
+  leftButton?: LeftButtonProps;
+  rightButton?: RightButtonProps;
 };
 export const AnonymousPurchaseConsequencesScreenComponent = ({
   onPressContinueWithoutLogin,
   onPressLogin,
   leftButton,
+  rightButton,
 }: AnonymousPurchaseConsequencesScreenComponentProps) => {
   const styles = useStyle();
   const {theme} = useThemeContext();
@@ -93,7 +101,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
 
   return (
     <OnboardingFullScreenView
-      fullScreenHeaderProps={{leftButton}}
+      fullScreenHeaderProps={{leftButton, rightButton}}
       footerButton={onPressLogin ? loginButton : continueWithoutLoginButton}
       secondaryFooterButton={
         onPressLogin ? continueWithoutLoginButton : undefined
@@ -161,7 +169,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   header: {
     margin: theme.spacing.xLarge,
     textAlign: 'center',
-    fontWeight: '700',
   },
   button: {
     marginHorizontal: theme.spacing.medium,

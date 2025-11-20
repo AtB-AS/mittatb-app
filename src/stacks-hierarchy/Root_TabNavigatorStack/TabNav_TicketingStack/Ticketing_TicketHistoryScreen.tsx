@@ -9,7 +9,10 @@ export const Ticketing_TicketHistoryScreen = ({route, navigation}: Props) => {
     <TicketHistoryScreenComponent
       mode={route.params.mode}
       onPressFareContract={(fareContractId) =>
-        navigation.navigate('Root_FareContractDetailsScreen', {fareContractId})
+        navigation.navigate('Root_FareContractDetailsScreen', {
+          fareContractId,
+          transitionOverride: 'slide-from-right',
+        })
       }
     />
   );

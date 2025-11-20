@@ -14,14 +14,14 @@ export const useNsrCircleLayers = (
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'],
 ): SymbolLayerProps[] => {
   const {theme, themeName} = useThemeContext();
-  const {mapboxNsrSourceLayerId} = useRemoteConfigContext();
+  const {mapbox_nsr_source_layer_id} = useRemoteConfigContext();
 
   return useMemo(
     () =>
       nsrCircleLayers.map((nsrCircleLayer) => {
         const {id, reachFullScaleAtZoomLevel} = nsrCircleLayer;
         const nsrLayerSourceProps = getNsrLayerSourceProps(
-          mapboxNsrSourceLayerId,
+          mapbox_nsr_source_layer_id,
           id,
         );
 
@@ -55,7 +55,7 @@ export const useNsrCircleLayers = (
         };
       }),
     [
-      mapboxNsrSourceLayerId,
+      mapbox_nsr_source_layer_id,
       selectedFeaturePropertyId,
       theme.color.transport.city.primary.background,
       themeName,

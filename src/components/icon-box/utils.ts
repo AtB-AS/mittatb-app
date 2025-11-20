@@ -91,3 +91,18 @@ export const getGeofencingZoneCodeIconColor = (
       return theme.color.geofencingZone.noParking.color;
   }
 };
+
+export const getIconBoxBorderRadius = (
+  size: keyof Theme['icon']['size'],
+  theme: Theme,
+): number => {
+  switch (size) {
+    case 'xSmall':
+    case 'small':
+      return theme.border.radius.small;
+    case 'normal':
+    case 'large':
+    default:
+      return theme.border.radius.regular;
+  }
+};

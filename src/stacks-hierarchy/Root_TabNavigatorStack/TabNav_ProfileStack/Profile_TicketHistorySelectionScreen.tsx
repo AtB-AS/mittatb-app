@@ -21,7 +21,7 @@ export const Profile_TicketHistorySelectionScreen = ({navigation}: Props) => {
     <FullScreenView
       headerProps={{
         title: t(Ticketing.ticketHistory.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading ref={focusRef} text={t(Ticketing.ticketHistory.title)} />
