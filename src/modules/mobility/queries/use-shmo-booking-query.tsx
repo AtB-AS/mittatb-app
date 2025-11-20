@@ -7,7 +7,7 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export const getShmoBookingQueryKey = (
   bookingId: ShmoBooking['bookingId'],
-  acceptLanguage: string,
+  acceptLanguage?: string,
 ) => ['GET_SHMO_BOOKING_QUERY_KEY', bookingId, acceptLanguage];
 
 export const useShmoBookingQuery = (

@@ -3,6 +3,7 @@ import {EventKind, StreamEvent} from './types';
 import {fareContractsQueryKey} from '../ticketing/use-fare-contracts';
 import {getBonusAmountEarnedQueryKey} from '../bonus';
 import {getActiveShmoBookingQueryKey} from '../mobility/queries/use-active-shmo-booking-query';
+import {getShmoBookingQueryKey} from '../mobility/queries/use-shmo-booking-query';
 
 export const handleStreamEvent = (
   streamEvent: StreamEvent,
@@ -29,6 +30,9 @@ export const handleStreamEvent = (
     case EventKind.ShmoBookingUpdate:
       queryClient.invalidateQueries({
         queryKey: getActiveShmoBookingQueryKey(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: getShmoBookingQueryKey(streamEvent.bookingId),
       });
       break;
   }
