@@ -16,6 +16,7 @@ import {
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 
 type Props = {
   photoNavigation: () => void;
@@ -30,7 +31,11 @@ export const FinishingScooterSheet = ({
   locationArrowOnPress,
   navigateToScanQrCode,
 }: Props) => {
-  const {data: activeBooking, isLoading, isError} = useActiveShmoBookingQuery();
+  const {
+    data: activeBooking,
+    isLoading,
+    isError,
+  } = useActiveShmoBookingQuery(ONE_SECOND_MS * 10);
   const {logEvent} = useAnalyticsContext();
 
   const {t} = useTranslation();
