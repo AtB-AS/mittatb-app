@@ -1,10 +1,8 @@
-import {StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import React, {useCallback, useEffect, useState} from 'react';
-import {Camera} from '@atb/components/camera';
+import {Camera, CameraScreenContainer} from '@atb/components/camera';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {ScreenContainer} from '../components/PhotoCapture/ScreenContainer';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useGetAssetFromQrCodeMutation} from '@atb/modules/mobility';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
@@ -23,7 +21,6 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 export type Props = RootStackScreenProps<'Root_ScanQrCodeScreen'>;
 
 export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
-  const styles = useStyles();
   const {t} = useTranslation();
 
   const isFocused = useIsFocusedAndActive();
@@ -133,30 +130,15 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   }, [clearStateAndAlertResultError, getAssetFromQrCodeIsError]);
 
   return (
-    <ScreenContainer
-      overrideThemeName="dark"
+    <CameraScreenContainer
       title={t(ParkingViolationTexts.qr.title)}
-      rightHeaderButton={
-        getAssetFromQrCodeIsLoading ? undefined : {type: 'close'}
-      }
+      secondaryText={t(ParkingViolationTexts.qr.instructions)}
       isLoading={getAssetFromQrCodeIsLoading}
     >
       {isFocused &&
         !getAssetFromQrCodeIsLoading &&
         !getAssetFromQrCodeIsError &&
-        !hasCapturedQr && (
-          <Camera mode="qr" style={styles.camera} onCapture={onQrCodeScanned} />
-        )}
-    </ScreenContainer>
+        !hasCapturedQr && <Camera mode="qr" onCapture={onQrCodeScanned} />}
+    </CameraScreenContainer>
   );
 };
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1},
-  camera: {
-    flexGrow: 1,
-  },
-  error: {
-    margin: theme.spacing.medium,
-  },
-}));
