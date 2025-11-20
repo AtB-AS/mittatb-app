@@ -4,10 +4,7 @@ import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {FlexDiscountLadder, searchOffers} from '@atb/modules/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
-import {
-  type SupplementProductWithCount,
-  UserProfileWithCount,
-} from '@atb/modules/fare-contracts';
+import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
 import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {fetchOfferFromLegs} from '@atb/api/sales';
@@ -77,7 +74,6 @@ const getOfferForTraveller = (
 const calculateTotalPrice = (
   userProfileWithCounts: UserProfileWithCount[],
   offers: TicketOffer[],
-  supplementProductsWithCount: SupplementProductWithCount[],
 ) => {
   return userProfileWithCounts.reduce((total, traveller) => {
     const offer = getOfferForTraveller(offers, traveller.userTypeString);
