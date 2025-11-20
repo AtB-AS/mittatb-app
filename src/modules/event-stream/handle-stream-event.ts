@@ -11,7 +11,6 @@ export const handleStreamEvent = (
   featureToggles: {
     isEventStreamFareContractsEnabled?: boolean;
   },
-  acceptLanguage: string,
 ) => {
   switch (streamEvent.event) {
     case EventKind.FareContract:
@@ -29,7 +28,7 @@ export const handleStreamEvent = (
       break;
     case EventKind.ShmoBookingUpdate:
       queryClient.invalidateQueries({
-        queryKey: getActiveShmoBookingQueryKey(acceptLanguage),
+        queryKey: getActiveShmoBookingQueryKey(),
       });
       break;
   }
