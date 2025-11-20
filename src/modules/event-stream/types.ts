@@ -37,6 +37,7 @@ export const StreamEventSchema = z.discriminatedUnion('event', [
 
   z.object({
     event: z.literal(EventKind.ShmoBookingUpdate),
+    bookingId: z.string(),
     orderId: z.string(),
   }),
 ]);
