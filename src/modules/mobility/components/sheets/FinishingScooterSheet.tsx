@@ -13,6 +13,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
 import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 
 type Props = {
   photoNavigation: () => void;
@@ -25,7 +26,11 @@ export const FinishingScooterSheet = ({
   photoNavigation,
   locationArrowOnPress,
 }: Props) => {
-  const {data: activeBooking, isLoading, isError} = useActiveShmoBookingQuery();
+  const {
+    data: activeBooking,
+    isLoading,
+    isError,
+  } = useActiveShmoBookingQuery(ONE_SECOND_MS * 10);
   const {logEvent} = useAnalyticsContext();
 
   const {t} = useTranslation();

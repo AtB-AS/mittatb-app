@@ -23,6 +23,7 @@ import {MapView} from '@rnmapbox/maps';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useShmoWarnings} from '@atb/modules/map';
 import {useKeepAwake} from '@sayem314/react-native-keep-awake';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemeText} from '@atb/components/text';
@@ -43,7 +44,11 @@ export const ActiveScooterSheet = ({
   locationArrowOnPress,
 }: Props) => {
   useKeepAwake();
-  const {data: activeBooking, isLoading, isError} = useActiveShmoBookingQuery();
+  const {
+    data: activeBooking,
+    isLoading,
+    isError,
+  } = useActiveShmoBookingQuery(ONE_SECOND_MS * 10);
   const {logEvent} = useAnalyticsContext();
 
   const {t} = useTranslation();
