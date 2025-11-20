@@ -32,7 +32,7 @@ export const Profile_InformationScreen = () => {
     <FullScreenView
       headerProps={{
         title: t(ProfileTexts.sections.information.heading),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading

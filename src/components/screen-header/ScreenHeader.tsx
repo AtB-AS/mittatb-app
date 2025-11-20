@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import React, {useMemo, useState} from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {ButtonModes, HeaderButton, HeaderButtonProps} from './HeaderButton';
+import {HeaderButton, HeaderButtonProps} from './HeaderButton';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {
   GlobalMessage,
@@ -18,12 +18,15 @@ import {ContrastColor} from '@atb/theme/colors';
 export {AnimatedScreenHeader} from './AnimatedScreenHeader';
 
 export type LeftButtonProps = HeaderButtonProps & {
-  type: Exclude<ButtonModes, 'skip' | 'custom'>;
+  type: 'back';
 };
 
 export type RightButtonProps =
   | (HeaderButtonProps & {
-      type: 'skip' | 'close';
+      type: 'close';
+    })
+  | (HeaderButtonProps & {
+      type: 'cancel';
     })
   | (HeaderButtonProps & {
       type: 'info';
@@ -33,6 +36,7 @@ export type RightButtonProps =
       type: 'custom';
       onPress: () => void;
       text: string;
+      svg: ({fill}: {fill: string}) => React.JSX.Element;
     });
 
 export type ScreenHeaderProps = {

@@ -136,10 +136,8 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
     <ScreenContainer
       overrideThemeName="dark"
       title={t(ParkingViolationTexts.qr.title)}
-      leftHeaderButton={
-        getAssetFromQrCodeIsLoading
-          ? undefined
-          : {type: 'close', withIcon: true}
+      rightHeaderButton={
+        getAssetFromQrCodeIsLoading ? undefined : {type: 'close'}
       }
       isLoading={getAssetFromQrCodeIsLoading}
     >
