@@ -1,0 +1,39 @@
+diff --git a/node_modules/@atb-as/utils/lib/offers/ticket-offer.d.ts b/node_modules/@atb-as/utils/lib/offers/ticket-offer.d.ts
+index 972e980..ff00aee 100644
+--- a/node_modules/@atb-as/utils/lib/offers/ticket-offer.d.ts
++++ b/node_modules/@atb-as/utils/lib/offers/ticket-offer.d.ts
+@@ -59,6 +59,18 @@ export type TicketRoute = z.infer<typeof TicketRoute>;
+ export declare const TicketOffer: z.ZodObject<{
+     offerId: z.ZodString;
+     travellerId: z.ZodString;
++    supplementProducts: z.ZodArray<z.ZodObject<{
++        id: z.ZodString;
++        price: z.ZodObject<{
++            originalAmount: z.ZodString;
++            originalAmountFloat: z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodNumber>>, z.ZodTransform<number | undefined, number | null | undefined>>;
++            amount: z.ZodString;
++            amountFloat: z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodNumber>>, z.ZodTransform<number | undefined, number | null | undefined>>;
++            currency: z.ZodString;
++            vatGroup: z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodString>>, z.ZodTransform<string | undefined, string | null | undefined>>;
++        }, z.core.$strip>;
++        selectableId: z.ZodString;
++    }, z.core.$strip>>;
+     price: z.ZodObject<{
+         originalAmount: z.ZodString;
+         originalAmountFloat: z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodNumber>>, z.ZodTransform<number | undefined, number | null | undefined>>;
+diff --git a/node_modules/@atb-as/utils/lib/offers/ticket-offer.js b/node_modules/@atb-as/utils/lib/offers/ticket-offer.js
+index 1ab7235..f3679ef 100644
+--- a/node_modules/@atb-as/utils/lib/offers/ticket-offer.js
++++ b/node_modules/@atb-as/utils/lib/offers/ticket-offer.js
+@@ -57,6 +57,11 @@ exports.TicketRoute = v4_1.z.object({
+ exports.TicketOffer = v4_1.z.object({
+     offerId: v4_1.z.string(),
+     travellerId: v4_1.z.string(),
++    supplementProducts: v4_1.z.array(v4_1.z.object({
++        id: v4_1.z.string(),
++        price: exports.SearchOfferPrice,
++        selectableId: v4_1.z.string(),
++    })),
+     price: exports.SearchOfferPrice,
+     fareProduct: v4_1.z.string(),
+     validFrom: v4_1.z.string().nullish().transform(utils_1.nullishToOptional),

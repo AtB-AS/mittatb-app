@@ -1,12 +1,12 @@
 import type {SupplementProduct} from '@atb-as/config-specs';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {useGetSupplementProductsQuery} from '../ticketing';
 
 export function useSelectableSupplementProducts(
   selection: PurchaseSelectionType,
 ): SupplementProduct[] {
-  const {supplementProducts} = useFirestoreConfigurationContext();
-  return supplementProducts.filter((sp) => {
+  const {data: allSupplementProducts} = useGetSupplementProductsQuery();
+  return allSupplementProducts.filter((sp) => {
     return selection.preassignedFareProduct.limitations.supplementProductRefs?.some(
       (ref) => ref === sp.id,
     );

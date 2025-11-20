@@ -94,7 +94,7 @@ export const TEST_SELECTION: PurchaseSelectionType = {
   },
   stopPlaces: undefined,
   userProfilesWithCount: [{...TEST_USER_PROFILE, count: 1}],
-  supplementProductsWithCount: [],
+  supplementProductsWithCount: [{...TEST_SUPPLEMENT_PRODUCT, count: 1}],
   travelDate: undefined,
   legs: [],
   isOnBehalfOf: false,
