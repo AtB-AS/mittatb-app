@@ -80,7 +80,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     <FullScreenView
       headerProps={{
         title,
-        rightButton: {type: 'close'},
+        rightButton: {type: 'cancel'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading ref={focusRef} text={title} />
