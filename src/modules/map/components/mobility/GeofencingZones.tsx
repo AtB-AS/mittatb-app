@@ -11,6 +11,7 @@ import {hitboxCoveringIconOnly} from '@atb/modules/map';
 import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
 import {useGeofencingZonesQuery} from '@atb/modules/mobility';
 import {useThemeContext} from '@atb/theme';
+import {getIconZoomTransitionStyle} from '../../utils';
 
 type GeofencingZonesProps = {
   systemId: string | null;
@@ -42,10 +43,10 @@ const GeofencingZonesForVehicle = ({
 
   return (
     <>
-      {data?.iconFeatures?.map((geofencingZoneIcon) => (
+      {data?.iconFeatures?.map((iconFeatureCollection) => (
         <GeofencingZoneIcon
-          iconFeatureCollection={geofencingZoneIcon}
-          key={`iconGeofencingZone_${geofencingZoneIcon.renderKey}`}
+          iconFeatureCollection={iconFeatureCollection}
+          key={`iconGeofencingZone_${iconFeatureCollection.renderKey}`}
         />
       ))}
       {data?.geofencingZoneFeatures?.map((geofencingZone) => (
@@ -118,6 +119,11 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
   );
 };
 
+const reachFullScaleAtZoomLevel = 15.5;
+const iconFullSize = 0.85;
+const scaleTransitionZoomRange = 1.5;
+const opacityTransitionExtraZoomRange = scaleTransitionZoomRange / 8;
+
 type GeofencingZoneIconProps = {
   iconFeatureCollection: PointFeatureCollection;
 };
@@ -131,27 +137,33 @@ export const GeofencingZoneIcon: React.FC<GeofencingZoneIconProps> = ({
   // mapbox icons names are lower cased
   const lowerCaseCode = ['downcase', code];
 
+  const iconImage = [
+    'concat',
+    'geofencingzone_',
+    lowerCaseCode,
+    '_',
+    themeName,
+  ];
+  const iconZoomTransitionStyle = getIconZoomTransitionStyle(
+    reachFullScaleAtZoomLevel,
+    iconFullSize,
+    scaleTransitionZoomRange,
+    opacityTransitionExtraZoomRange,
+  );
+
   return (
     <MapboxGL.ShapeSource
       id={`iconGeofencingZonesShapeSource_${iconFeatureCollection?.renderKey}`}
-      shape={iconFeatureCollection as FeatureCollection}
+      shape={iconFeatureCollection}
     >
       <MapboxGL.SymbolLayer
-        key="geofencingZoneIcon"
         id="geofencingZoneIcon"
-        minZoomLevel={15}
         style={{
           symbolZOrder: 'source',
           iconAllowOverlap: true,
           iconIgnorePlacement: true,
-          iconImage: [
-            'concat',
-            'geofencingzone_',
-            lowerCaseCode,
-            '_',
-            themeName,
-          ],
-          iconSize: 0.85,
+          iconImage: iconImage,
+          ...iconZoomTransitionStyle,
         }}
         aboveLayerID={MapSlotLayerId.GeofencingZones}
       />

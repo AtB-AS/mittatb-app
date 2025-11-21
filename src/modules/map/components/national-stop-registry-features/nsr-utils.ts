@@ -8,6 +8,7 @@ import {
 import {Props as LayerPropsCommonAndStyle} from '@rnmapbox/maps/lib/typescript/src/components/SymbolLayer';
 import {SymbolLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {NsrPinIconCode, PinTheme, PinType} from '../../mapbox-styles/pin-types';
+import {getIconZoomTransitionStyle} from '../../utils';
 
 export const getNsrLayerSourceProps = (
   layerId: string,
@@ -107,31 +108,19 @@ export const getLayerPropsDeterminedByZoomLevel: (
     iconImage,
   ];
 
+  const iconZoomTransitionStyle = getIconZoomTransitionStyle(
+    reachFullScaleAtZoomLevel,
+    iconFullSize,
+    scaleTransitionZoomRange,
+    opacityTransitionExtraZoomRange,
+  );
+
   // Icons and labels start small and invisible, then grow and become more visible and prominent as you zoom in.
   return {
     minZoomLevel: reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
     style: {
       iconImage: iconImageWrapped,
-      iconSize: [
-        'interpolate',
-        ['linear'],
-        ['zoom'],
-        reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
-        0.3,
-        reachFullScaleAtZoomLevel,
-        iconFullSize,
-      ],
-      iconOpacity: [
-        'interpolate',
-        ['linear'],
-        ['zoom'],
-        reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
-        0,
-        reachFullScaleAtZoomLevel -
-          scaleTransitionZoomRange +
-          opacityTransitionExtraZoomRange,
-        1,
-      ],
+      ...iconZoomTransitionStyle,
       textSize: [
         'interpolate',
         ['exponential', 1.5],

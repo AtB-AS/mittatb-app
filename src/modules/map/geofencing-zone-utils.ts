@@ -115,7 +115,7 @@ export function getIconFeatures(
           return;
         }
         const iconCoordinate = polylabel(polygon, 0.0001);
-        if (iconCoordinate) {
+        if (iconCoordinate && feature.properties) {
           iconFeatures.push({
             type: 'Feature',
             properties: feature.properties,
@@ -150,15 +150,14 @@ function boundingBox(exteriorRing: number[][]) {
   }
 
   return {
-    width: maxLon - minLon,
-    height: maxLat - minLat,
+    deltaWidth: maxLon - minLon,
+    deltaHeight: maxLat - minLat,
   };
 }
 
 function isPolygonLarge(polygon: number[][][]): boolean {
-  const {width, height} = boundingBox(polygon[0]);
-
-  return width > 1 || height > 1;
+  const {deltaWidth, deltaHeight} = boundingBox(polygon[0]);
+  return deltaWidth > 1 || deltaHeight > 1;
 }
 
 export function addGeofencingZoneCustomProps(

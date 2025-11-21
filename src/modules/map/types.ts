@@ -1,6 +1,12 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {GeoLocation, Location, SearchLocation} from '@atb/modules/favorites';
-import {Feature, GeoJsonProperties, LineString, Position} from 'geojson';
+import {
+  Feature,
+  FeatureCollection,
+  GeoJsonProperties,
+  LineString,
+  Position,
+} from 'geojson';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {AnyMode} from '@atb/components/icon-box';
 import {
@@ -167,14 +173,8 @@ export type Point = {
   coordinates: Position;
 };
 
-export type PointFeature = {
-  geometry?: Point;
-  properties?: MobilityAPI_GeofencingZoneProperties;
-  type?: 'Feature';
-};
-
-export interface PointFeatureCollection {
-  type?: 'FeatureCollection';
+export interface PointFeatureCollection
+  extends FeatureCollection<Point, GeoJsonProperties> {
   renderKey?: string;
-  features?: Array<PointFeature>;
 }
+export type PointFeature = Feature<Point, MobilityAPI_GeofencingZoneProperties>;
