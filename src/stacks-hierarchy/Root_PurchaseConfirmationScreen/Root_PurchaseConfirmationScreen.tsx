@@ -54,6 +54,7 @@ import {MutationStatus} from '@tanstack/react-query';
 import {PaymentSelectionSectionItem} from '@atb/modules/payment';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {formatNumberToString} from '@atb-as/utils';
+import {ScreenHeading} from '@atb/components/heading';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -238,6 +239,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         },
         globalMessageContext: GlobalMessageContextEnum.appTicketing,
       }}
+      parallaxContent={(focusRef) => (
+        <ScreenHeading
+          ref={focusRef}
+          text={t(PurchaseConfirmationTexts.title)}
+        />
+      )}
     >
       <View style={styles.container}>
         {offerError && (
