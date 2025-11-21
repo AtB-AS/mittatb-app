@@ -72,6 +72,7 @@ export type RecentOrderDetails = {
 export type ReserveOffer = {
   offerId: string;
   count: number;
+  selectableProductIds?: string[];
 };
 
 /**

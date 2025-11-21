@@ -9,6 +9,7 @@ import type {
   PurchaseSelectionType,
 } from '../types';
 import type {FareZoneWithMetadata} from '@atb/fare-zones-selector';
+import {BaggageProduct} from '@atb/modules/configuration';
 
 export const TEST_TYPE_CONFIG: FareProductTypeConfig = {
   type: 'single',
@@ -66,6 +67,15 @@ export const TEST_USER_PROFILE: UserProfile = {
   userTypeString: 'ADULT',
 };
 
+export const TEST_BAGGAGE_PRODUCT: BaggageProduct = {
+  id: 'S1',
+  name: {lang: 'no', value: 'Sykkel'},
+  version: 'v1',
+  distributionChannel: ['app'],
+  isBaggageProduct: true,
+  baggageType: 'BICYCLE',
+};
+
 export const TEST_INPUT: PurchaseSelectionBuilderInput = {
   fareProductTypeConfigs: [TEST_TYPE_CONFIG],
   preassignedFareProducts: [TEST_PRODUCT],
@@ -86,6 +96,7 @@ export const TEST_SELECTION: PurchaseSelectionType = {
   },
   stopPlaces: undefined,
   userProfilesWithCount: [{...TEST_USER_PROFILE, count: 1}],
+  baggageProductsWithCount: [],
   travelDate: undefined,
   legs: [],
   isOnBehalfOf: false,

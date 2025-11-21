@@ -13,6 +13,7 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
+import {useBaggageCountProductState} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-baggage-product-count-state';
 
 type TravellerSelectionSheetProps = {
   selection: PurchaseSelectionType;
@@ -30,10 +31,11 @@ export const TravellerSelectionSheet = ({
     selection.fareProductTypeConfig.configuration.travellerSelectionMode;
 
   const userCountState = useUserCountState(selection);
+  const baggageProductCountState = useBaggageCountProductState(selection);
 
-  const noProfilesSelected = userCountState.userProfilesWithCount.every(
-    (u) => !u.count,
-  );
+  const nothingSelected =
+    userCountState.userProfilesWithCount.every((u) => !u.count) &&
+    baggageProductCountState.baggageProductsWithCount.every((sp) => !sp.count);
 
   return (
     <BottomSheetContainer
@@ -42,7 +44,10 @@ export const TravellerSelectionSheet = ({
     >
       <ScrollView style={styles.container}>
         {selectionMode === 'multiple' ? (
-          <MultipleTravellersSelection {...userCountState} />
+          <MultipleTravellersSelection
+            userCountState={userCountState}
+            baggageProductCountState={baggageProductCountState}
+          />
         ) : (
           <SingleTravellerSelection {...userCountState} />
         )}
@@ -51,10 +56,13 @@ export const TravellerSelectionSheet = ({
         <Button
           expanded={true}
           text={t(PurchaseOverviewTexts.travellerSelectionSheet.confirm)}
-          disabled={noProfilesSelected}
+          disabled={nothingSelected}
           onPress={() => {
             const newSelection = selectionBuilder
               .fromSelection(selection)
+              .baggageProducts(
+                baggageProductCountState.baggageProductsWithCount,
+              )
               .userProfiles(userCountState.userProfilesWithCount)
               .build();
             onSave(newSelection);

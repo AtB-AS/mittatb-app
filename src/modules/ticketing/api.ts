@@ -45,6 +45,7 @@ export type OfferSearchParams = {
 type Traveller = {
   id: string;
   userType: string;
+  baggageTypes?: string[];
   count: number;
 };
 
@@ -230,6 +231,16 @@ export async function getSupplementProducts(): Promise<SupplementProduct[]> {
   const url = 'product/v1/supplement';
   const response = await client.get<SupplementProduct[]>(url, {
     authWithIdToken: true,
+  });
+
+  // TODO: Hack, remove this once the product api is updated to return the baggage type and illustration.
+  response.data.forEach((p) => {
+    if (p.baggageType == null) {
+      p.baggageType = 'BICYCLE';
+    }
+    if (p.illustration == null) {
+      p.illustration = 'BicycleFill';
+    }
   });
 
   return response.data
