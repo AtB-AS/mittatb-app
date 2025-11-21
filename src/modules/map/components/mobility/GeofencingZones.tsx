@@ -4,11 +4,14 @@ import {FeatureCollection} from 'geojson';
 
 import {
   PreProcessedGeofencingZones,
-  usePreProcessedGeofencingZones,
+  PointFeatureCollection,
 } from '@atb/modules/map';
 
 import {hitboxCoveringIconOnly} from '@atb/modules/map';
 import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
+import {useGeofencingZonesQuery} from '@atb/modules/mobility';
+import {useThemeContext} from '@atb/theme';
+import {getIconZoomTransitionStyle} from '../../utils';
 
 type GeofencingZonesProps = {
   systemId: string | null;
@@ -36,29 +39,32 @@ const GeofencingZonesForVehicle = ({
   systemId: string;
   vehicleTypeId: string;
 }) => {
-  const preProcessedGeofencingZones = usePreProcessedGeofencingZones(
-    systemId,
-    vehicleTypeId,
-  );
+  const {data} = useGeofencingZonesQuery(systemId, vehicleTypeId);
 
   return (
     <>
-      {preProcessedGeofencingZones.map((geofencingZone) => (
+      {data?.iconFeatureCollections?.map((iconFeatureCollection) => (
+        <GeofencingZoneIcon
+          iconFeatureCollection={iconFeatureCollection}
+          key={`iconGeofencingZone_${iconFeatureCollection.renderKey}`}
+        />
+      ))}
+      {data?.geofencingZoneFeatures?.map((geofencingZone) => (
         <GeofencingZone
           geofencingZone={geofencingZone}
-          key={geofencingZone?.renderKey}
+          key={`geofencingZone_${geofencingZone.renderKey}`}
         />
       ))}
     </>
   );
 };
 
+const getGeofencingZoneCustomProps = ['get', 'geofencingZoneCustomProps'];
+
 type GeofencingZoneProps = {
   geofencingZone: PreProcessedGeofencingZones;
 };
 const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
-  const getGeofencingZoneCustomProps = ['get', 'geofencingZoneCustomProps'];
-
   const bgColor = [
     'get',
     'background',
@@ -107,6 +113,59 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
         id="geofencingZoneDashedLine"
         filter={['==', lineStyle, 'dashed']}
         style={{...lineLayerStyle, lineDasharray: [2, 2]}}
+        aboveLayerID={MapSlotLayerId.GeofencingZones}
+      />
+    </MapboxGL.ShapeSource>
+  );
+};
+
+const reachFullScaleAtZoomLevel = 15.5;
+const iconFullSize = 0.85;
+const scaleTransitionZoomRange = 1.5;
+const opacityTransitionExtraZoomRange = scaleTransitionZoomRange / 8;
+
+type GeofencingZoneIconProps = {
+  iconFeatureCollection: PointFeatureCollection;
+};
+export const GeofencingZoneIcon: React.FC<GeofencingZoneIconProps> = ({
+  iconFeatureCollection,
+}) => {
+  const {themeName} = useThemeContext();
+
+  const code = ['get', 'code', getGeofencingZoneCustomProps];
+
+  // mapbox icons names are lower cased
+  const lowerCaseCode = ['downcase', code];
+
+  const iconImage = [
+    'concat',
+    'geofencingzone_',
+    lowerCaseCode,
+    '_',
+    themeName,
+  ];
+  const {iconOpacity, iconSize} = getIconZoomTransitionStyle(
+    reachFullScaleAtZoomLevel,
+    iconFullSize,
+    scaleTransitionZoomRange,
+    opacityTransitionExtraZoomRange,
+  );
+
+  return (
+    <MapboxGL.ShapeSource
+      id={`iconGeofencingZonesShapeSource_${iconFeatureCollection?.renderKey}`}
+      shape={iconFeatureCollection}
+    >
+      <MapboxGL.SymbolLayer
+        id="geofencingZoneIcon"
+        style={{
+          symbolZOrder: 'source',
+          iconAllowOverlap: true,
+          iconIgnorePlacement: true,
+          iconImage: iconImage,
+          iconOpacity,
+          iconSize,
+        }}
         aboveLayerID={MapSlotLayerId.GeofencingZones}
       />
     </MapboxGL.ShapeSource>

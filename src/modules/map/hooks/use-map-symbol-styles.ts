@@ -8,6 +8,7 @@ import {
 } from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {PinType} from '../mapbox-styles/pin-types';
 import {SelectedMapItemProperties} from '../types';
+import {getIconZoomTransitionStyle} from '../utils';
 
 export const scaleTransitionZoomRange = 0.4;
 const opacityTransitionExtraZoomRange = scaleTransitionZoomRange / 8;
@@ -70,15 +71,12 @@ export const useMapSymbolStyles = ({
 
   const iconFullSize: Expression = ['case', reduceIconSize, 0.855, 1];
 
-  const iconSize: Expression = [
-    'interpolate',
-    ['linear'],
-    ['zoom'],
-    reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
-    smallestAllowedSizeFactor,
+  const {iconOpacity, iconSize} = getIconZoomTransitionStyle(
     reachFullScaleAtZoomLevel,
     iconFullSize,
-  ];
+    scaleTransitionZoomRange,
+    opacityTransitionExtraZoomRange,
+  );
 
   const stopPlacesExpression: (Expression | ExpressionField)[] = nsrSymbolLayers
     .filter(
@@ -156,24 +154,12 @@ export const useMapSymbolStyles = ({
     themeName,
   ];
 
-  const fadeInOpacity: Expression = [
-    'interpolate',
-    ['linear'],
-    ['zoom'],
-    reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
-    0,
-    reachFullScaleAtZoomLevel -
-      scaleTransitionZoomRange +
-      opacityTransitionExtraZoomRange,
-    1,
-  ];
-
   const iconStyle: SymbolLayerStyleProps = {
     iconImage,
-    iconSize,
-    iconOpacity: fadeInOpacity,
     iconOffset: [0, 0],
     iconAllowOverlap: true,
+    iconOpacity,
+    iconSize,
   };
 
   const textOffsetXFactor = pinType == 'vehicle' ? 1 : 1.045;
@@ -237,7 +223,7 @@ export const useMapSymbolStyles = ({
 
   const textStyle: SymbolLayerStyleProps = {
     textField,
-    textOpacity: fadeInOpacity,
+    textOpacity: iconOpacity, // Text opacity should follow same rules as icon opacity
     textColor: isDarkMode ? '#ffffff' : '#000000',
     textSize,
     textOffset,
