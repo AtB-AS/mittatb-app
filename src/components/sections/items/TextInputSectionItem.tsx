@@ -138,6 +138,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
               style,
               props.multiline && {
                 minHeight: theme.typography.body__m.lineHeight * 3,
+                textAlignVertical: 'top',
               },
             ]}
             placeholderTextColor={theme.color.foreground.dynamic.secondary}
@@ -183,7 +184,6 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     color: theme.color.foreground.dynamic.primary,
     paddingRight: 40,
     paddingVertical: 0,
-    textAlignVertical: 'top',
     fontSize: theme.typography.body__m.fontSize,
   },
   container: {
