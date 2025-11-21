@@ -207,6 +207,7 @@ const TravelAidSection = ({
               type="warning"
               title={t(TravelAidTexts.noRealtimeError.title)}
               message={t(TravelAidTexts.noRealtimeError.message)}
+              a11yLiveRegion="polite"
             />
           )}
 
