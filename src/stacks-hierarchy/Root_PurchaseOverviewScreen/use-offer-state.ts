@@ -337,7 +337,6 @@ export function useOfferState(
                 ? 'zones'
                 : 'authority';
 
-            console.log('Searching offers with params: ', params);
             offers = await searchOffers(offerEndpoint, params, {
               cancelToken,
               authWithIdToken: true,
@@ -348,7 +347,6 @@ export function useOfferState(
           }
 
           if (offers.length) {
-            console.log('Offers found:', offers);
             dispatch({type: 'SET_OFFER', offers});
           } else {
             dispatch({
