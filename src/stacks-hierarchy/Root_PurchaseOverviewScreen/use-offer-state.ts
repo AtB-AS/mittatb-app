@@ -4,7 +4,10 @@ import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {FlexDiscountLadder, searchOffers} from '@atb/modules/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
-import {UserProfileWithCount} from '@atb/modules/fare-contracts';
+import {
+  SupplementProductWithCount,
+  UserProfileWithCount,
+} from '@atb/modules/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
 import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {fetchOfferFromLegs} from '@atb/api/sales';
@@ -12,9 +15,14 @@ import type {ErrorResponse, SearchOfferPrice, TicketOffer} from '@atb-as/utils';
 import {mapToSalesTripPatternLegs} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/utils';
 import {useTranslation} from '@atb/translations';
 
-export type UserProfileWithCountAndOffer = UserProfileWithCount & {
+type WithOffer<T> = T & {
   offer: TicketOffer;
 };
+
+export type UserProfileWithCountAndOffer = WithOffer<UserProfileWithCount>;
+
+export type BaggageProductWithCountAndOffer =
+  WithOffer<SupplementProductWithCount>;
 
 export type OfferError = {
   type: AxiosErrorKind | 'empty-offers' | 'not-available';
@@ -28,6 +36,7 @@ type OfferState = {
   totalPrice: number;
   error?: OfferError;
   userProfilesWithCountAndOffer: UserProfileWithCountAndOffer[];
+  baggageProductsWithCountAndOffer: BaggageProductWithCountAndOffer[];
   flexDiscountLadder?: FlexDiscountLadder;
 };
 
@@ -42,11 +51,17 @@ type OfferReducer = (
   action: OfferReducerAction,
 ) => OfferState;
 
-const getCurrencyAsFloat = (price: SearchOfferPrice, currency = 'NOK') =>
-  price.currency === currency ? (price.amountFloat ?? 0) : 0;
+type PriceFunction = (price: SearchOfferPrice, currency: string) => number;
 
-const getOriginalPriceAsFloat = (price: SearchOfferPrice, currency: string) =>
-  price.currency === currency ? (price.originalAmountFloat ?? 0) : 0;
+const getPriceAsFloat: PriceFunction = (
+  price: SearchOfferPrice,
+  currency = 'NOK',
+) => (price.currency === currency ? (price.amountFloat ?? 0) : 0);
+
+const getOriginalPriceAsFloat: PriceFunction = (
+  price: SearchOfferPrice,
+  currency: string,
+) => (price.currency === currency ? (price.originalAmountFloat ?? 0) : 0);
 
 const getValidDurationSeconds = (offer: TicketOffer): number | undefined =>
   offer.validFrom && offer.validTo
@@ -56,16 +71,34 @@ const getValidDurationSeconds = (offer: TicketOffer): number | undefined =>
 const getOfferForTraveller = (
   offers: TicketOffer[],
   userTypeString: string,
-) => {
+): TicketOffer => {
   const offersForTraveller = offers.filter(
-    (o) => o.travellerId === userTypeString,
+    (o) => o.travellerId === userTypeString && o.fareProduct,
   );
 
   // If there are multiple offers for the same traveller, use the cheapest one.
   // This shouldn't happen in practice, but it's a sensible fallback.
   const offersSortedByPrice = offersForTraveller.sort(
+    (a, b) => getPriceAsFloat(a.price, 'NOK') - getPriceAsFloat(b.price, 'NOK'),
+  );
+
+  return offersSortedByPrice[0];
+};
+
+const getOfferForSupplementProduct = (
+  offers: TicketOffer[],
+  supplementProductId: string,
+): TicketOffer => {
+  const offersForSupplementProduct = offers.filter((o) =>
+    o.supplementProducts.some((sp) => sp.id === supplementProductId),
+  );
+
+  // If there are multiple offers for the same supplement product, use the cheapest one.
+  // This shouldn't happen in practice, but it's a sensible fallback.
+  const offersSortedByPrice = offersForSupplementProduct.sort(
     (a, b) =>
-      getCurrencyAsFloat(a.price, 'NOK') - getCurrencyAsFloat(b.price, 'NOK'),
+      getPriceAsFloat(a.supplementProducts[0].price, 'NOK') -
+      getPriceAsFloat(b.supplementProducts[0].price, 'NOK'),
   );
 
   return offersSortedByPrice[0];
@@ -73,39 +106,60 @@ const getOfferForTraveller = (
 
 const calculateTotalPrice = (
   userProfileWithCounts: UserProfileWithCount[],
+  supplementProductsWithCount: SupplementProductWithCount[],
   offers: TicketOffer[],
 ) => {
-  return userProfileWithCounts.reduce((total, traveller) => {
-    const offer = getOfferForTraveller(offers, traveller.userTypeString);
-    const supplementProductPrice =
-      offer?.supplementProducts?.reduce(
-        (suppTotal, suppProduct) =>
-          suppTotal + getCurrencyAsFloat(suppProduct.price, 'NOK'),
-        0,
-      ) ?? 0;
-    const price = offer
-      ? getCurrencyAsFloat(offer.price, 'NOK') * traveller.count
-      : 0;
-    console.log(
-      `Adding total (${total}) + price (${price}) + supplementProductPrice (${supplementProductPrice}) for traveller ${traveller.userTypeString}`,
-    );
-    const newTotal = total + price + supplementProductPrice;
-    console.log('Returning new total:', newTotal);
-    return newTotal;
-  }, 0);
+  return calculateTotalPriceWithPriceFunction(
+    getPriceAsFloat,
+    userProfileWithCounts,
+    supplementProductsWithCount,
+    offers,
+  );
 };
 
 const calculateOriginalPrice = (
   userProfileWithCounts: UserProfileWithCount[],
+  supplementProductsWithCount: SupplementProductWithCount[],
   offers: TicketOffer[],
-) =>
-  userProfileWithCounts.reduce((total, traveller) => {
+) => {
+  return calculateTotalPriceWithPriceFunction(
+    getOriginalPriceAsFloat,
+    userProfileWithCounts,
+    supplementProductsWithCount,
+    offers,
+  );
+};
+
+const calculateTotalPriceWithPriceFunction = (
+  priceFunction: PriceFunction,
+  userProfileWithCounts: UserProfileWithCount[],
+  supplementProductsWithCount: SupplementProductWithCount[],
+  offers: TicketOffer[],
+): number => {
+  const userProfilesPrice = userProfileWithCounts.reduce((total, traveller) => {
     const offer = getOfferForTraveller(offers, traveller.userTypeString);
+
     const price = offer
-      ? getOriginalPriceAsFloat(offer.price, 'NOK') * traveller.count
+      ? priceFunction(offer.price, 'NOK') * traveller.count
       : 0;
+
     return total + price;
   }, 0);
+
+  const supplementProductsPrice = supplementProductsWithCount.reduce(
+    (total, supplementProduct) => {
+      const offer = getOfferForSupplementProduct(offers, supplementProduct.id);
+      const price = offer
+        ? priceFunction(offer.supplementProducts[0].price, 'NOK') *
+          supplementProduct.count
+        : 0;
+      return total + price;
+    },
+    0,
+  );
+
+  return userProfilesPrice + supplementProductsPrice;
+};
 
 const mapToUserProfilesWithCountAndOffer = (
   userProfileWithCounts: UserProfileWithCount[],
@@ -118,8 +172,22 @@ const mapToUserProfilesWithCountAndOffer = (
     }))
     .filter((u): u is UserProfileWithCountAndOffer => u.offer != null);
 
+const mapToSupplementProductsWithCountAndOffer = (
+  supplementProductsWithCount: SupplementProductWithCount[],
+  offers: TicketOffer[],
+): BaggageProductWithCountAndOffer[] =>
+  supplementProductsWithCount
+    .map((s) => ({
+      ...s,
+      offer: getOfferForSupplementProduct(offers, s.id),
+    }))
+    .filter((s): s is BaggageProductWithCountAndOffer => s.offer != null);
+
 const getOfferReducer =
-  (userProfilesWithCounts: UserProfileWithCount[]): OfferReducer =>
+  (
+    userProfilesWithCounts: UserProfileWithCount[],
+    supplementProductsWithCount: SupplementProductWithCount[],
+  ): OfferReducer =>
   (prevState, action): OfferState => {
     switch (action.type) {
       case 'SEARCHING_OFFER':
@@ -136,6 +204,7 @@ const getOfferReducer =
           originalPrice: 0,
           error: undefined,
           userProfilesWithCountAndOffer: [],
+          baggageProductsWithCountAndOffer: [],
         };
       case 'SET_OFFER':
         return {
@@ -145,16 +214,23 @@ const getOfferReducer =
           validDurationSeconds: getValidDurationSeconds(action.offers?.[0]),
           originalPrice: calculateOriginalPrice(
             userProfilesWithCounts,
+            supplementProductsWithCount,
             action.offers,
           ),
           totalPrice: calculateTotalPrice(
             userProfilesWithCounts,
+            supplementProductsWithCount,
             action.offers,
           ),
           userProfilesWithCountAndOffer: mapToUserProfilesWithCountAndOffer(
             userProfilesWithCounts,
             action.offers,
           ),
+          baggageProductsWithCountAndOffer:
+            mapToSupplementProductsWithCountAndOffer(
+              supplementProductsWithCount,
+              action.offers,
+            ),
           error: undefined,
         };
       case 'SET_ERROR': {
@@ -174,13 +250,17 @@ const initialState: OfferState = {
   originalPrice: 0,
   error: undefined,
   userProfilesWithCountAndOffer: [],
+  baggageProductsWithCountAndOffer: [],
 };
 
 export function useOfferState(
   preassignedFareProductAlternatives: PreassignedFareProduct[],
   selection?: PurchaseSelectionType,
 ) {
-  const offerReducer = getOfferReducer(selection?.userProfilesWithCount ?? []);
+  const offerReducer = getOfferReducer(
+    selection?.userProfilesWithCount ?? [],
+    selection?.baggageProductsWithCount ?? [],
+  );
   const [state, dispatch] = useReducer(offerReducer, initialState);
   const {t} = useTranslation();
 
@@ -200,28 +280,17 @@ export function useOfferState(
             count: t.count,
           })) ?? [];
 
-      console.log(
-        'Supplement products with count:',
-        selection?.supplementProductsWithCount,
-      );
-      const supplementProductTravellers =
-        selection?.supplementProductsWithCount
+      const baggageProductTravellers =
+        selection?.baggageProductsWithCount
           .filter((sp) => sp.count)
           .map((sp) => ({
             id: 'ADULT',
             userType: 'ADULT',
-            baggageTypes: ['BICYCLE'],
+            baggageTypes: [sp.baggageType],
             count: sp.count,
           })) ?? [];
-      console.log(
-        'Supplement product travellers:',
-        supplementProductTravellers,
-      );
 
-      const allTravellers = [
-        ...offerTravellers,
-        ...supplementProductTravellers,
-      ];
+      const allTravellers = [...offerTravellers, ...baggageProductTravellers];
 
       const isTravellersValid = allTravellers.length > 0;
       const isStopPlacesValid = selection?.stopPlaces
@@ -256,7 +325,7 @@ export function useOfferState(
               products: offerTravellers.length
                 ? preassignedFareProductAlternatives.map((p) => p.id)
                 : [],
-              supplementProducts: selection?.supplementProductsWithCount.map(
+              supplementProducts: selection?.baggageProductsWithCount.map(
                 (sp) => sp.id,
               ),
               travelDate: selection?.travelDate,

@@ -13,7 +13,7 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
-import {useSupplementCountProductState} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-supplement-product-count-state';
+import {useBaggageCountProductState} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-baggage-product-count-state';
 
 type TravellerSelectionSheetProps = {
   selection: PurchaseSelectionType;
@@ -31,13 +31,11 @@ export const TravellerSelectionSheet = ({
     selection.fareProductTypeConfig.configuration.travellerSelectionMode;
 
   const userCountState = useUserCountState(selection);
-  const supplementProductCountState = useSupplementCountProductState(selection);
+  const baggageProductCountState = useBaggageCountProductState(selection);
 
   const nothingSelected =
     userCountState.userProfilesWithCount.every((u) => !u.count) &&
-    supplementProductCountState.supplementProductsWithCount.every(
-      (sp) => !sp.count,
-    );
+    baggageProductCountState.baggageProductsWithCount.every((sp) => !sp.count);
 
   return (
     <BottomSheetContainer
@@ -48,7 +46,7 @@ export const TravellerSelectionSheet = ({
         {selectionMode === 'multiple' ? (
           <MultipleTravellersSelection
             userCountState={userCountState}
-            supplementProductCountState={supplementProductCountState}
+            baggageProductCountState={baggageProductCountState}
           />
         ) : (
           <SingleTravellerSelection {...userCountState} />
@@ -62,8 +60,8 @@ export const TravellerSelectionSheet = ({
           onPress={() => {
             const newSelection = selectionBuilder
               .fromSelection(selection)
-              .supplementProducts(
-                supplementProductCountState.supplementProductsWithCount,
+              .baggageProducts(
+                baggageProductCountState.baggageProductsWithCount,
               )
               .userProfiles(userCountState.userProfilesWithCount)
               .build();

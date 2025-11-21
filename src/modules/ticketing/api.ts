@@ -228,7 +228,7 @@ export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
 }
 
 export async function getSupplementProducts(): Promise<SupplementProduct[]> {
-  const url = 'product/v1/supplement';
+  const url = 'http://localhost:8080/product/v1/supplement';
   const response = await client.get<SupplementProduct[]>(url, {
     authWithIdToken: true,
   });

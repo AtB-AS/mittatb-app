@@ -50,7 +50,7 @@ import {useEventStreamContext} from '@atb/modules/event-stream';
 import {format} from 'date-fns';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useQueryClient} from '@tanstack/react-query';
-import {useDebugUserInfoHeader} from '@atb/api';
+import {useDebugUserInfoHeader, DebugRouteInterception} from '@atb/api';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -685,6 +685,17 @@ export const Profile_DebugInfoScreen = () => {
             />
           </Section>
         )}
+        <Section style={styles.section}>
+          <ExpandableSectionItem
+            text="Reroute API calls"
+            showIconText={true}
+            expandContent={
+              <View>
+                <DebugRouteInterception />
+              </View>
+            }
+          />
+        </Section>
       </ScrollView>
     </View>
   );

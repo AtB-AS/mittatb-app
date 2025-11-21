@@ -72,7 +72,7 @@ export function TravellerSelection({
       : selection.userProfilesWithCount
           .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
           .concat(
-            selection.supplementProductsWithCount.map(
+            selection.baggageProductsWithCount.map(
               (s) => `${s.count} ${getReferenceDataName(s, language)}`,
             ),
           )

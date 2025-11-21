@@ -107,8 +107,7 @@ const createBuilder = (
       );
       if (
         !onlyProfilesWithActualCount.length &&
-        !currentSelection.supplementProductsWithCount.filter((s) => s.count)
-          .length
+        !currentSelection.baggageProductsWithCount.filter((s) => s.count).length
       ) {
         return builder;
       }
@@ -129,10 +128,8 @@ const createBuilder = (
       }
       return builder;
     },
-    supplementProducts: (supplementProductsWithCount) => {
-      const productsWithCount = supplementProductsWithCount.filter(
-        (s) => s.count,
-      );
+    baggageProducts: (baggageProductsWithCount) => {
+      const productsWithCount = baggageProductsWithCount.filter((s) => s.count);
       if (
         productsWithCount.length &&
         productsWithCount.every((sp) =>
@@ -141,7 +138,7 @@ const createBuilder = (
       ) {
         currentSelection = {
           ...currentSelection,
-          supplementProductsWithCount: productsWithCount,
+          baggageProductsWithCount: productsWithCount,
         };
       }
       return builder;
@@ -204,7 +201,7 @@ const createSelectionForType = (
     input,
     preassignedFareProduct,
   );
-  const supplementProductsWithCount: SupplementProductWithCount[] = [];
+  const baggageProductsWithCount: SupplementProductWithCount[] = [];
 
   return {
     fareProductTypeConfig,
@@ -212,7 +209,7 @@ const createSelectionForType = (
     zones,
     stopPlaces,
     userProfilesWithCount,
-    supplementProductsWithCount,
+    baggageProductsWithCount,
     travelDate: undefined,
     legs: [],
     isOnBehalfOf: false,

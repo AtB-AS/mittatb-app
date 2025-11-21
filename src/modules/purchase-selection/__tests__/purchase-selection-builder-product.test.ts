@@ -3,7 +3,7 @@ import {
   TEST_INPUT,
   TEST_PRODUCT,
   TEST_SELECTION,
-  TEST_SUPPLEMENT_PRODUCT,
+  TEST_BAGGAGE_PRODUCT,
   TEST_USER_PROFILE,
   TEST_ZONE,
 } from './test-utils';
@@ -201,16 +201,16 @@ describe('purchaseSelectionBuilder - product', () => {
     expect(selection.zones?.to.id).toBe('T2');
   });
 
-  it('Should preserve supplement products when product is changed', () => {
-    const testSupplementProductWithCount = [
+  it('Should preserve baggage products when product is changed', () => {
+    const testBaggageProductWithCount = [
       {
-        ...TEST_SUPPLEMENT_PRODUCT,
+        ...TEST_BAGGAGE_PRODUCT,
         count: 2,
       },
     ];
     const selectionWithSupplement = {
       ...TEST_SELECTION,
-      supplementProductsWithCount: testSupplementProductWithCount,
+      baggageProductsWithCount: testBaggageProductWithCount,
     };
 
     const selection = createEmptyBuilder(TEST_INPUT)
@@ -218,8 +218,8 @@ describe('purchaseSelectionBuilder - product', () => {
       .product({...TEST_SELECTION.preassignedFareProduct, id: 'P2'})
       .build();
 
-    expect(selection.supplementProductsWithCount).toEqual(
-      testSupplementProductWithCount,
+    expect(selection.baggageProductsWithCount).toEqual(
+      testBaggageProductWithCount,
     );
     expect(selection.preassignedFareProduct.id).toBe('P2');
   });
@@ -234,9 +234,9 @@ describe('purchaseSelectionBuilder - product', () => {
       },
     };
 
-    const testSupplementProductWithCount = [
+    const testBaggageProductWithCount = [
       {
-        ...TEST_SUPPLEMENT_PRODUCT,
+        ...TEST_BAGGAGE_PRODUCT,
         id: 'SP1',
         count: 2,
       },
@@ -245,10 +245,10 @@ describe('purchaseSelectionBuilder - product', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
       .product(productWithLimitations)
-      .supplementProducts(testSupplementProductWithCount)
+      .baggageProducts(testBaggageProductWithCount)
       .build();
 
-    expect(selection.supplementProductsWithCount).toEqual([]);
+    expect(selection.baggageProductsWithCount).toEqual([]);
     expect(selection.preassignedFareProduct.id).toBe('P2');
   });
 
@@ -262,9 +262,9 @@ describe('purchaseSelectionBuilder - product', () => {
       },
     };
 
-    const testSupplementProductWithCount = [
+    const testBaggageProductWithCount = [
       {
-        ...TEST_SUPPLEMENT_PRODUCT,
+        ...TEST_BAGGAGE_PRODUCT,
         id: 'SP2',
         count: 2,
       },
@@ -273,11 +273,11 @@ describe('purchaseSelectionBuilder - product', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
       .product(productWithLimitations)
-      .supplementProducts(testSupplementProductWithCount)
+      .baggageProducts(testBaggageProductWithCount)
       .build();
 
-    expect(selection.supplementProductsWithCount).toEqual(
-      testSupplementProductWithCount,
+    expect(selection.baggageProductsWithCount).toEqual(
+      testBaggageProductWithCount,
     );
     expect(selection.preassignedFareProduct.id).toBe('P2');
   });

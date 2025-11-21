@@ -9,13 +9,17 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
-import {UserProfileWithCountAndOffer} from '../../Root_PurchaseOverviewScreen/use-offer-state';
+import {
+  BaggageProductWithCountAndOffer,
+  UserProfileWithCountAndOffer,
+} from '../../Root_PurchaseOverviewScreen/use-offer-state';
 import {formatNumberToString} from '@atb-as/utils';
 
 type Props = {
   fareProductTypeConfig: FareProductTypeConfig;
   isSearchingOffer: boolean;
   userProfilesWithCountAndOffer: UserProfileWithCountAndOffer[];
+  baggageProductsWithCountAndOffer: BaggageProductWithCountAndOffer[];
   totalPrice: number;
 };
 
@@ -23,6 +27,7 @@ export const PriceSummary = ({
   fareProductTypeConfig,
   isSearchingOffer,
   userProfilesWithCountAndOffer,
+  baggageProductsWithCountAndOffer,
   totalPrice,
 }: Props) => {
   const styles = useStyles();
@@ -45,6 +50,13 @@ export const PriceSummary = ({
             <PricePerUserProfile
               key={u.id}
               userProfile={u}
+              style={i != 0 ? styles.smallTopMargin : undefined}
+            />
+          ))}
+          {baggageProductsWithCountAndOffer.map((sp, i) => (
+            <PricePerBaggageProduct
+              key={sp.id}
+              baggageProduct={sp}
               style={i != 0 ? styles.smallTopMargin : undefined}
             />
           ))}
@@ -130,6 +142,73 @@ const PricePerUserProfile = ({
         testID="userProfileCountAndName"
       >
         {count} {userProfileName}
+      </ThemeText>
+      <View style={styles.userProfilePrice}>
+        {hasFlexDiscount && (
+          <ThemeText
+            typography="body__xs"
+            color="secondary"
+            style={styles.userProfileOriginalPriceAmount}
+          >
+            {originalPriceString} kr
+          </ThemeText>
+        )}
+        <ThemeText color="secondary" typography="body__s">
+          {priceString} kr
+        </ThemeText>
+      </View>
+    </View>
+  );
+};
+
+const PricePerBaggageProduct = ({
+  baggageProduct,
+  style,
+}: {
+  baggageProduct: BaggageProductWithCountAndOffer;
+  style: StyleProp<ViewStyle>;
+}) => {
+  const styles = useStyles();
+  const {t, language} = useTranslation();
+  const {count, offer} = baggageProduct;
+
+  const price = count * (offer.supplementProducts[0].price.amountFloat || 0);
+  const originalPrice =
+    count * (offer.supplementProducts[0].price.originalAmountFloat || 0);
+
+  const priceString = formatNumberToString(price, language);
+  const originalPriceString = originalPrice
+    ? formatNumberToString(originalPrice, language)
+    : undefined;
+
+  const hasFlexDiscount = price < originalPrice;
+
+  const baggageProductName = getReferenceDataName(baggageProduct, language);
+  const a11yLabel = [
+    `${count} ${baggageProductName}`,
+    `${priceString} kr`,
+    `${
+      hasFlexDiscount
+        ? `${t(
+            PurchaseConfirmationTexts.ordinaryPricePrefixA11yLabel,
+          )} ${originalPriceString} kr`
+        : ''
+    }`,
+  ].join(',');
+
+  return (
+    <View
+      accessible={true}
+      accessibilityLabel={a11yLabel}
+      style={[style, styles.userProfileItem]}
+    >
+      <ThemeText
+        style={styles.userProfileCountAndName}
+        color="secondary"
+        typography="body__s"
+        testID="baggageProductCountAndName"
+      >
+        {count} {baggageProductName}
       </ThemeText>
       <View style={styles.userProfilePrice}>
         {hasFlexDiscount && (

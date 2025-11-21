@@ -9,8 +9,8 @@ export type UserCountState = {
   decrement: (userTypeString: string) => void;
 };
 
-export type SupplementProductState = {
-  supplementProductsWithCount: SupplementProductWithCount[];
+export type BaggageProductState = {
+  baggageProductsWithCount: SupplementProductWithCount[];
   increment: (supplementProductId: string) => void;
   decrement: (supplementProductId: string) => void;
 };

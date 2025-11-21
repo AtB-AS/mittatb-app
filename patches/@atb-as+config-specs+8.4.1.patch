@@ -1,0 +1,24 @@
+diff --git a/node_modules/@atb-as/config-specs/lib/reference-data.d.ts b/node_modules/@atb-as/config-specs/lib/reference-data.d.ts
+index 21b7b1f..998b250 100644
+--- a/node_modules/@atb-as/config-specs/lib/reference-data.d.ts
++++ b/node_modules/@atb-as/config-specs/lib/reference-data.d.ts
+@@ -174,6 +174,7 @@ export declare const SupplementProduct: z.ZodObject<{
+         value?: string | undefined;
+     })[] | null | undefined>>>;
+     isBaggageProduct: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodBoolean>>, z.ZodTransform<boolean | undefined, boolean | null | undefined>>>;
++    baggageType: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodString>>, z.ZodTransform<string | undefined, string | null | undefined>>>;
+     limitations: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodOptional<z.ZodObject<{
+         appVersionMin: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodString>>, z.ZodTransform<string | undefined, string | null | undefined>>>;
+         appVersionMax: z.ZodOptional<z.ZodPipe<z.ZodOptional<z.ZodNullable<z.ZodString>>, z.ZodTransform<string | undefined, string | null | undefined>>>;
+diff --git a/node_modules/@atb-as/config-specs/lib/reference-data.js b/node_modules/@atb-as/config-specs/lib/reference-data.js
+index 51617c8..e6fccbf 100644
+--- a/node_modules/@atb-as/config-specs/lib/reference-data.js
++++ b/node_modules/@atb-as/config-specs/lib/reference-data.js
+@@ -45,6 +45,7 @@ exports.SupplementProduct = zod_1.z.object({
+     alternativeNames: (0, nullish_1.optionalNullish)(common_1.LanguageAndTextTypeArray),
+     description: (0, nullish_1.optionalNullish)(common_1.LanguageAndTextTypeArray),
+     isBaggageProduct: (0, nullish_1.optionalNullish)(zod_1.z.boolean()),
++    baggageType: (0, nullish_1.optionalNullish)(zod_1.z.string()),
+     limitations: (0, nullish_1.optionalNullish)(zod_1.z
+         .object({
+         appVersionMin: (0, nullish_1.optionalNullish)(zod_1.z.string()),

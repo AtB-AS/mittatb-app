@@ -18,7 +18,7 @@ export type PurchaseSelectionType = {
   fareProductTypeConfig: FareProductTypeConfig;
   preassignedFareProduct: PreassignedFareProduct;
   userProfilesWithCount: UserProfileWithCount[];
-  supplementProductsWithCount: SupplementProductWithCount[];
+  baggageProductsWithCount: SupplementProductWithCount[];
   stopPlaces:
     | {
         from: StopPlaceFragmentWithIsFree | undefined;
@@ -111,7 +111,7 @@ export type PurchaseSelectionBuilder = {
    * No checks regarding the applicability of the supplement products to the
    * other fields in the production, but such validation could be implemented.
    */
-  supplementProducts: (
+  baggageProducts: (
     sp: SupplementProductWithCount[],
   ) => PurchaseSelectionBuilder;
 

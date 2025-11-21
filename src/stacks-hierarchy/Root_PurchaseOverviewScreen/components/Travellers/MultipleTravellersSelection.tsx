@@ -10,13 +10,13 @@ import {getReferenceDataName} from '@atb/modules/configuration';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {CounterSectionItem, Section} from '@atb/components/sections';
 import {useThemeContext} from '@atb/theme';
-import type {SupplementProductState, UserCountState} from './types';
+import type {BaggageProductState, UserCountState} from './types';
 import type {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {View} from 'react-native';
 
 type Props = {
   userCountState: UserCountState;
-  supplementProductCountState: SupplementProductState;
+  baggageProductCountState: BaggageProductState;
 };
 
 export function MultipleTravellersSelection(props: Props) {
@@ -35,14 +35,14 @@ export function MultipleTravellersSelection(props: Props) {
     props.userCountState.decrement(userTypeString);
   };
 
-  const addSupplementProduct = (supplementProductString: string) => {
+  const addBaggageProduct = (supplementProductString: string) => {
     travellersModified.current = true;
-    props.supplementProductCountState.increment(supplementProductString);
+    props.baggageProductCountState.increment(supplementProductString);
   };
 
-  const removeSupplementProduct = (supplementProductString: string) => {
+  const removeBaggageProduct = (supplementProductString: string) => {
     travellersModified.current = true;
-    props.supplementProductCountState.decrement(supplementProductString);
+    props.baggageProductCountState.decrement(supplementProductString);
   };
 
   useScreenReaderAnnouncement(
@@ -73,19 +73,17 @@ export function MultipleTravellersSelection(props: Props) {
         ))}
       </Section>
       <Section>
-        {props.supplementProductCountState.supplementProductsWithCount.map(
-          (s) => (
-            <CounterSectionItem
-              key={s.id}
-              text={getReferenceDataName(s, language)}
-              count={s.count}
-              addCount={() => addSupplementProduct(s.id)}
-              removeCount={() => removeSupplementProduct(s.id)}
-              subtext={getTextForLanguage(s.description, language)}
-              illustrationName={s.illustration}
-            />
-          ),
-        )}
+        {props.baggageProductCountState.baggageProductsWithCount.map((s) => (
+          <CounterSectionItem
+            key={s.id}
+            text={getReferenceDataName(s, language)}
+            count={s.count}
+            addCount={() => addBaggageProduct(s.id)}
+            removeCount={() => removeBaggageProduct(s.id)}
+            subtext={getTextForLanguage(s.description, language)}
+            illustrationName={s.illustration}
+          />
+        ))}
       </Section>
     </View>
   );

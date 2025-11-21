@@ -67,11 +67,13 @@ export const TEST_USER_PROFILE: UserProfile = {
   userTypeString: 'ADULT',
 };
 
-export const TEST_SUPPLEMENT_PRODUCT: SupplementProduct = {
+export const TEST_BAGGAGE_PRODUCT: SupplementProduct = {
   id: 'S1',
   name: {lang: 'no', value: 'Sykkel'},
   version: 'v1',
   distributionChannel: ['app'],
+  isBaggageProduct: true,
+  baggageType: 'BICYCLE',
 };
 
 export const TEST_INPUT: PurchaseSelectionBuilderInput = {
@@ -94,7 +96,7 @@ export const TEST_SELECTION: PurchaseSelectionType = {
   },
   stopPlaces: undefined,
   userProfilesWithCount: [{...TEST_USER_PROFILE, count: 1}],
-  supplementProductsWithCount: [{...TEST_SUPPLEMENT_PRODUCT, count: 1}],
+  baggageProductsWithCount: [{...TEST_BAGGAGE_PRODUCT, count: 1}],
   travelDate: undefined,
   legs: [],
   isOnBehalfOf: false,

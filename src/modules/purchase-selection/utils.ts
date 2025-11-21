@@ -168,10 +168,9 @@ export const isValidSelection = (
   );
   if (!areProfilesValid) return false;
 
-  const areSupplementProductsValid =
-    selection.supplementProductsWithCount.every((sp) =>
-      isSelectableSupplementProduct(selection, sp),
-    );
+  const areSupplementProductsValid = selection.baggageProductsWithCount.every(
+    (sp) => isSelectableSupplementProduct(selection, sp),
+  );
   if (!areSupplementProductsValid) return false;
 
   const isFromZoneValid = selection.zones
@@ -225,7 +224,7 @@ export const applyProductChange = (
     isSelectableProfile(product, up),
   );
   const supplementProductCount =
-    currentSelection.supplementProductsWithCount.filter((sp) =>
+    currentSelection.baggageProductsWithCount.filter((sp) =>
       isSelectableSupplementProduct(currentSelection, sp),
     );
 

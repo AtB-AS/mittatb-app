@@ -2,20 +2,19 @@ import {useState} from 'react';
 import type {SupplementProductWithCount} from '@atb/modules/fare-contracts';
 import {
   type PurchaseSelectionType,
-  useSelectableSupplementProducts,
+  useSelectableBaggageProducts,
 } from '@atb/modules/purchase-selection';
 import type {SupplementProduct} from '@atb-as/config-specs';
-import type {SupplementProductState} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/types';
+import type {BaggageProductState} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/types';
 
-export function useSupplementCountProductState(
+export function useBaggageCountProductState(
   selection: PurchaseSelectionType,
-): SupplementProductState {
-  const selectableSupplementProducts =
-    useSelectableSupplementProducts(selection);
+): BaggageProductState {
+  const selectableBaggageProducts = useSelectableBaggageProducts(selection);
   const [state, setState] = useState<SupplementProductWithCount[]>(
-    mapToInitialSupplementProductsWithCount(
-      selectableSupplementProducts,
-      selection.supplementProductsWithCount,
+    mapToInitialBaggageProductsWithCount(
+      selectableBaggageProducts,
+      selection.baggageProductsWithCount,
     ),
   );
 
@@ -38,22 +37,22 @@ export function useSupplementCountProductState(
   };
 
   return {
-    supplementProductsWithCount: state,
+    baggageProductsWithCount: state,
     increment,
     decrement,
   };
 }
 
-function mapToInitialSupplementProductsWithCount(
+function mapToInitialBaggageProductsWithCount(
   selectable: SupplementProduct[],
-  selectedProducts: SupplementProductWithCount[] = [],
+  selectedBaggageProducts: SupplementProductWithCount[] = [],
 ): SupplementProductWithCount[] {
   return selectable.map((selectableProduct) => {
     return {
       ...selectableProduct,
       count:
-        selectedProducts.find((sp) => sp.id === selectableProduct.id)?.count ??
-        0,
+        selectedBaggageProducts.find((sp) => sp.id === selectableProduct.id)
+          ?.count ?? 0,
     };
   });
 }
