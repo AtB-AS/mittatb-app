@@ -3,13 +3,13 @@ import {
   PreassignedFareProduct,
   FareZone,
   UserProfile,
-  type SupplementProduct,
 } from '@atb-as/config-specs';
 import type {
   PurchaseSelectionBuilderInput,
   PurchaseSelectionType,
 } from '../types';
 import type {FareZoneWithMetadata} from '@atb/fare-zones-selector';
+import type {BaggageProduct} from '@atb/modules/fare-contracts';
 
 export const TEST_TYPE_CONFIG: FareProductTypeConfig = {
   type: 'single',
@@ -67,7 +67,7 @@ export const TEST_USER_PROFILE: UserProfile = {
   userTypeString: 'ADULT',
 };
 
-export const TEST_BAGGAGE_PRODUCT: SupplementProduct = {
+export const TEST_BAGGAGE_PRODUCT: BaggageProduct = {
   id: 'S1',
   name: {lang: 'no', value: 'Sykkel'},
   version: 'v1',

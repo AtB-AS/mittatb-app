@@ -136,10 +136,10 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
   });
 });
 
-it('Should create builder with supplement products', () => {
+it('Should create builder with baggage products', () => {
   const selectionWithSupplements = {
     ...TEST_SELECTION,
-    supplementProductsWithCount: [
+    baggageProductsWithCount: [
       {...TEST_BAGGAGE_PRODUCT, id: 'SP1', count: 2},
       {...TEST_BAGGAGE_PRODUCT, id: 'SP2', count: 1},
     ],
@@ -187,7 +187,7 @@ it('Should build the default selection when some supplement products are not all
   const TEST_SELECTION_WITH_PRODUCT_WITH_LIMITATIONS = {
     ...TEST_SELECTION,
     preassignedFareProduct: productWithLimitations,
-    supplementProductsWithCount: testSupplementProductWithCount,
+    baggageProductsWithCount: testSupplementProductWithCount,
   };
 
   const selection = createEmptyBuilder(TEST_INPUT)

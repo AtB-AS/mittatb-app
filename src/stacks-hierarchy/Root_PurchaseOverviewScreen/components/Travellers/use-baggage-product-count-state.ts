@@ -1,17 +1,19 @@
 import {useState} from 'react';
-import type {SupplementProductWithCount} from '@atb/modules/fare-contracts';
+import type {
+  BaggageProduct,
+  BaggageProductWithCount,
+} from '@atb/modules/fare-contracts';
 import {
   type PurchaseSelectionType,
   useSelectableBaggageProducts,
 } from '@atb/modules/purchase-selection';
-import type {SupplementProduct} from '@atb-as/config-specs';
 import type {BaggageProductState} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/types';
 
 export function useBaggageCountProductState(
   selection: PurchaseSelectionType,
 ): BaggageProductState {
   const selectableBaggageProducts = useSelectableBaggageProducts(selection);
-  const [state, setState] = useState<SupplementProductWithCount[]>(
+  const [state, setState] = useState<BaggageProductWithCount[]>(
     mapToInitialBaggageProductsWithCount(
       selectableBaggageProducts,
       selection.baggageProductsWithCount,
@@ -44,9 +46,9 @@ export function useBaggageCountProductState(
 }
 
 function mapToInitialBaggageProductsWithCount(
-  selectable: SupplementProduct[],
-  selectedBaggageProducts: SupplementProductWithCount[] = [],
-): SupplementProductWithCount[] {
+  selectable: BaggageProduct[],
+  selectedBaggageProducts: BaggageProductWithCount[] = [],
+): BaggageProductWithCount[] {
   return selectable.map((selectableProduct) => {
     return {
       ...selectableProduct,

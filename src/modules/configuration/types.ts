@@ -7,3 +7,13 @@ export type PointToPointValidity = {
   fromPlace: string;
   toPlace: string;
 };
+
+import type {SupplementProduct} from './types';
+// BaggageProduct is a SupplementProduct where isBaggageProduct is true and baggageType is not null.
+export type BaggageProduct = Omit<
+  SupplementProduct,
+  'isBaggageProduct' | 'baggageType'
+> & {
+  baggageType: string;
+  isBaggageProduct: true;
+};

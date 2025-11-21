@@ -18,7 +18,7 @@ import {
 } from './utils';
 import {isValidDateString} from '@atb/utils/date';
 import {isSameDay} from 'date-fns';
-import type {SupplementProductWithCount} from '@atb/modules/fare-contracts';
+import type {BaggageProductWithCount} from '@atb/modules/fare-contracts';
 
 export const createEmptyBuilder = (
   input: PurchaseSelectionBuilderInput,
@@ -201,7 +201,7 @@ const createSelectionForType = (
     input,
     preassignedFareProduct,
   );
-  const baggageProductsWithCount: SupplementProductWithCount[] = [];
+  const baggageProductsWithCount: BaggageProductWithCount[] = [];
 
   return {
     fareProductTypeConfig,

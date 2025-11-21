@@ -1,5 +1,5 @@
 import type {
-  SupplementProductWithCount,
+  BaggageProductWithCount,
   UserProfileWithCount,
 } from '@atb/modules/fare-contracts';
 
@@ -10,7 +10,7 @@ export type UserCountState = {
 };
 
 export type BaggageProductState = {
-  baggageProductsWithCount: SupplementProductWithCount[];
-  increment: (supplementProductId: string) => void;
-  decrement: (supplementProductId: string) => void;
+  baggageProductsWithCount: BaggageProductWithCount[];
+  increment: (baggageProductId: string) => void;
+  decrement: (baggageProductId: string) => void;
 };

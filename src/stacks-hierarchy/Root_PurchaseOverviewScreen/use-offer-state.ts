@@ -5,7 +5,7 @@ import {FlexDiscountLadder, searchOffers} from '@atb/modules/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
 import {
-  SupplementProductWithCount,
+  BaggageProductWithCount,
   UserProfileWithCount,
 } from '@atb/modules/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
@@ -15,14 +15,20 @@ import type {ErrorResponse, SearchOfferPrice, TicketOffer} from '@atb-as/utils';
 import {mapToSalesTripPatternLegs} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/utils';
 import {useTranslation} from '@atb/translations';
 
-type WithOffer<T> = T & {
+export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: TicketOffer;
 };
 
-export type UserProfileWithCountAndOffer = WithOffer<UserProfileWithCount>;
+type NestedSupplementProductOffer = TicketOffer['supplementProducts'][number];
 
-export type BaggageProductWithCountAndOffer =
-  WithOffer<SupplementProductWithCount>;
+// Presuppose for now that there is only one supplement product offer per baggage product offer.
+type BaggageProductOffer = Omit<TicketOffer, 'supplementProducts'> & {
+  supplementProducts: [NestedSupplementProductOffer];
+};
+
+export type BaggageProductWithCountAndOffer = BaggageProductWithCount & {
+  offer: BaggageProductOffer;
+};
 
 export type OfferError = {
   type: AxiosErrorKind | 'empty-offers' | 'not-available';
@@ -106,26 +112,26 @@ const getOfferForSupplementProduct = (
 
 const calculateTotalPrice = (
   userProfileWithCounts: UserProfileWithCount[],
-  supplementProductsWithCount: SupplementProductWithCount[],
+  baggageProductsWithCount: BaggageProductWithCount[],
   offers: TicketOffer[],
 ) => {
   return calculateTotalPriceWithPriceFunction(
     getPriceAsFloat,
     userProfileWithCounts,
-    supplementProductsWithCount,
+    baggageProductsWithCount,
     offers,
   );
 };
 
 const calculateOriginalPrice = (
   userProfileWithCounts: UserProfileWithCount[],
-  supplementProductsWithCount: SupplementProductWithCount[],
+  baggageProductsWithCount: BaggageProductWithCount[],
   offers: TicketOffer[],
 ) => {
   return calculateTotalPriceWithPriceFunction(
     getOriginalPriceAsFloat,
     userProfileWithCounts,
-    supplementProductsWithCount,
+    baggageProductsWithCount,
     offers,
   );
 };
@@ -133,7 +139,7 @@ const calculateOriginalPrice = (
 const calculateTotalPriceWithPriceFunction = (
   priceFunction: PriceFunction,
   userProfileWithCounts: UserProfileWithCount[],
-  supplementProductsWithCount: SupplementProductWithCount[],
+  baggageProductsWithCount: BaggageProductWithCount[],
   offers: TicketOffer[],
 ): number => {
   const userProfilesPrice = userProfileWithCounts.reduce((total, traveller) => {
@@ -146,19 +152,19 @@ const calculateTotalPriceWithPriceFunction = (
     return total + price;
   }, 0);
 
-  const supplementProductsPrice = supplementProductsWithCount.reduce(
-    (total, supplementProduct) => {
-      const offer = getOfferForSupplementProduct(offers, supplementProduct.id);
+  const baggageProductsPrice = baggageProductsWithCount.reduce(
+    (total, baggageProduct) => {
+      const offer = getOfferForSupplementProduct(offers, baggageProduct.id);
       const price = offer
         ? priceFunction(offer.supplementProducts[0].price, 'NOK') *
-          supplementProduct.count
+          baggageProduct.count
         : 0;
       return total + price;
     },
     0,
   );
 
-  return userProfilesPrice + supplementProductsPrice;
+  return userProfilesPrice + baggageProductsPrice;
 };
 
 const mapToUserProfilesWithCountAndOffer = (
@@ -173,7 +179,7 @@ const mapToUserProfilesWithCountAndOffer = (
     .filter((u): u is UserProfileWithCountAndOffer => u.offer != null);
 
 const mapToBaggageProductsWithCountAndOffer = (
-  baggageProductsWithCount: SupplementProductWithCount[],
+  baggageProductsWithCount: BaggageProductWithCount[],
   offers: TicketOffer[],
 ): BaggageProductWithCountAndOffer[] =>
   baggageProductsWithCount
@@ -186,7 +192,7 @@ const mapToBaggageProductsWithCountAndOffer = (
 const getOfferReducer =
   (
     userProfilesWithCounts: UserProfileWithCount[],
-    baggageProductsWithCount: SupplementProductWithCount[],
+    baggageProductsWithCount: BaggageProductWithCount[],
   ): OfferReducer =>
   (prevState, action): OfferState => {
     switch (action.type) {

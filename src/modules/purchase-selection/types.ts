@@ -5,8 +5,8 @@ import {
   FareZone,
 } from '@atb/modules/configuration';
 import {
-  type SupplementProductWithCount,
   UserProfileWithCount,
+  BaggageProductWithCount,
 } from '@atb/modules/fare-contracts';
 import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {StopPlaceFragmentWithIsFree} from '@atb/modules/harbors';
@@ -18,7 +18,7 @@ export type PurchaseSelectionType = {
   fareProductTypeConfig: FareProductTypeConfig;
   preassignedFareProduct: PreassignedFareProduct;
   userProfilesWithCount: UserProfileWithCount[];
-  baggageProductsWithCount: SupplementProductWithCount[];
+  baggageProductsWithCount: BaggageProductWithCount[];
   stopPlaces:
     | {
         from: StopPlaceFragmentWithIsFree | undefined;
@@ -111,9 +111,7 @@ export type PurchaseSelectionBuilder = {
    * No checks regarding the applicability of the supplement products to the
    * other fields in the production, but such validation could be implemented.
    */
-  baggageProducts: (
-    sp: SupplementProductWithCount[],
-  ) => PurchaseSelectionBuilder;
+  baggageProducts: (b: BaggageProductWithCount[]) => PurchaseSelectionBuilder;
 
   /**
    * Apply the given travel date to the purchase selection. If the given date is

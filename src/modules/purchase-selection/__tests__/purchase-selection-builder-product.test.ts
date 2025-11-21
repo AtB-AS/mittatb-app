@@ -224,7 +224,7 @@ describe('purchaseSelectionBuilder - product', () => {
     expect(selection.preassignedFareProduct.id).toBe('P2');
   });
 
-  it('Should not apply supplement products not allowed by product limitations', () => {
+  it('Should not apply baggage products not allowed by product limitations', () => {
     const productWithLimitations = {
       ...TEST_SELECTION.preassignedFareProduct,
       id: 'P2',
