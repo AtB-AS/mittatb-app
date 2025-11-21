@@ -172,11 +172,11 @@ const mapToUserProfilesWithCountAndOffer = (
     }))
     .filter((u): u is UserProfileWithCountAndOffer => u.offer != null);
 
-const mapToSupplementProductsWithCountAndOffer = (
-  supplementProductsWithCount: SupplementProductWithCount[],
+const mapToBaggageProductsWithCountAndOffer = (
+  baggageProductsWithCount: SupplementProductWithCount[],
   offers: TicketOffer[],
 ): BaggageProductWithCountAndOffer[] =>
-  supplementProductsWithCount
+  baggageProductsWithCount
     .map((s) => ({
       ...s,
       offer: getOfferForSupplementProduct(offers, s.id),
@@ -186,7 +186,7 @@ const mapToSupplementProductsWithCountAndOffer = (
 const getOfferReducer =
   (
     userProfilesWithCounts: UserProfileWithCount[],
-    supplementProductsWithCount: SupplementProductWithCount[],
+    baggageProductsWithCount: SupplementProductWithCount[],
   ): OfferReducer =>
   (prevState, action): OfferState => {
     switch (action.type) {
@@ -214,12 +214,12 @@ const getOfferReducer =
           validDurationSeconds: getValidDurationSeconds(action.offers?.[0]),
           originalPrice: calculateOriginalPrice(
             userProfilesWithCounts,
-            supplementProductsWithCount,
+            baggageProductsWithCount,
             action.offers,
           ),
           totalPrice: calculateTotalPrice(
             userProfilesWithCounts,
-            supplementProductsWithCount,
+            baggageProductsWithCount,
             action.offers,
           ),
           userProfilesWithCountAndOffer: mapToUserProfilesWithCountAndOffer(
@@ -227,8 +227,8 @@ const getOfferReducer =
             action.offers,
           ),
           baggageProductsWithCountAndOffer:
-            mapToSupplementProductsWithCountAndOffer(
-              supplementProductsWithCount,
+            mapToBaggageProductsWithCountAndOffer(
+              baggageProductsWithCount,
               action.offers,
             ),
           error: undefined,
