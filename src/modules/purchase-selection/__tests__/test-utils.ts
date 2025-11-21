@@ -96,7 +96,7 @@ export const TEST_SELECTION: PurchaseSelectionType = {
   },
   stopPlaces: undefined,
   userProfilesWithCount: [{...TEST_USER_PROFILE, count: 1}],
-  baggageProductsWithCount: [{...TEST_BAGGAGE_PRODUCT, count: 1}],
+  baggageProductsWithCount: [],
   travelDate: undefined,
   legs: [],
   isOnBehalfOf: false,
