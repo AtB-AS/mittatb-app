@@ -21,13 +21,23 @@ export type UserProfileWithCountAndOffer = UserProfileWithCount & {
 
 type NestedSupplementProductOffer = TicketOffer['supplementProducts'][number];
 
-// Presuppose for now that there is only one supplement product offer per baggage product offer.
-type BaggageProductOffer = Omit<TicketOffer, 'supplementProducts'> & {
+// Presuppose for now that there is only one supplement product offer per baggage product offer, and that the fare product is undefined (or null).
+type BaggageTicketOffer = Omit<
+  TicketOffer,
+  'fareProduct' | 'supplementProducts'
+> & {
+  fareProduct: undefined;
   supplementProducts: [NestedSupplementProductOffer];
 };
 
+// Check if the offer is a baggage product offer, i.e. it has no fare product and only one supplement product.
+// This is a workaround for now, and will change in the future when we support multiple elements in an offer/fare contract.
+const isBaggageTicketOffer = (o: TicketOffer): o is BaggageTicketOffer =>
+  (o.fareProduct == null || o.fareProduct == undefined) &&
+  o.supplementProducts.length === 1;
+
 export type BaggageProductWithCountAndOffer = BaggageProductWithCount & {
-  offer: BaggageProductOffer;
+  offer: BaggageTicketOffer;
 };
 
 export type OfferError = {
@@ -78,6 +88,7 @@ const getOfferForTraveller = (
   offers: TicketOffer[],
   userTypeString: string,
 ): TicketOffer => {
+  // Filter if the offer is a fare product offer (it has a fare product ref set), and if it matches the traveller id.
   const offersForTraveller = offers.filter(
     (o) => o.travellerId === userTypeString && o.fareProduct,
   );
@@ -91,17 +102,17 @@ const getOfferForTraveller = (
   return offersSortedByPrice[0];
 };
 
-const getOfferForSupplementProduct = (
+const getOfferForBaggageProduct = (
   offers: TicketOffer[],
-  supplementProductId: string,
-): TicketOffer => {
-  const offersForSupplementProduct = offers.filter((o) =>
-    o.supplementProducts.some((sp) => sp.id === supplementProductId),
-  );
+  baggageProductId: string,
+): BaggageTicketOffer => {
+  const offersForBaggageProduct: BaggageTicketOffer[] = offers
+    .filter(isBaggageTicketOffer)
+    .filter((o) => o.supplementProducts[0].id === baggageProductId);
 
   // If there are multiple offers for the same supplement product, use the cheapest one.
   // This shouldn't happen in practice, but it's a sensible fallback.
-  const offersSortedByPrice = offersForSupplementProduct.sort(
+  const offersSortedByPrice = offersForBaggageProduct.sort(
     (a, b) =>
       getPriceAsFloat(a.supplementProducts[0].price, 'NOK') -
       getPriceAsFloat(b.supplementProducts[0].price, 'NOK'),
@@ -154,7 +165,7 @@ const calculateTotalPriceWithPriceFunction = (
 
   const baggageProductsPrice = baggageProductsWithCount.reduce(
     (total, baggageProduct) => {
-      const offer = getOfferForSupplementProduct(offers, baggageProduct.id);
+      const offer = getOfferForBaggageProduct(offers, baggageProduct.id);
       const price = offer
         ? priceFunction(offer.supplementProducts[0].price, 'NOK') *
           baggageProduct.count
@@ -185,7 +196,7 @@ const mapToBaggageProductsWithCountAndOffer = (
   baggageProductsWithCount
     .map((s) => ({
       ...s,
-      offer: getOfferForSupplementProduct(offers, s.id),
+      offer: getOfferForBaggageProduct(offers, s.id),
     }))
     .filter((s): s is BaggageProductWithCountAndOffer => s.offer != null);
 
