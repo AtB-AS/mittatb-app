@@ -1,13 +1,11 @@
 import {useState} from 'react';
-import type {
-  BaggageProduct,
-  BaggageProductWithCount,
-} from '@atb/modules/fare-contracts';
+import type {BaggageProductWithCount} from '@atb/modules/fare-contracts';
 import {
   type PurchaseSelectionType,
   useSelectableBaggageProducts,
 } from '@atb/modules/purchase-selection';
 import type {BaggageProductState} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/types';
+import {BaggageProduct} from '@atb/modules/configuration';
 
 export function useBaggageCountProductState(
   selection: PurchaseSelectionType,

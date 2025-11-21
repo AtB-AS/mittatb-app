@@ -9,7 +9,7 @@ import type {
   PurchaseSelectionType,
 } from '../types';
 import type {FareZoneWithMetadata} from '@atb/fare-zones-selector';
-import type {BaggageProduct} from '@atb/modules/fare-contracts';
+import {BaggageProduct} from '@atb/modules/configuration';
 
 export const TEST_TYPE_CONFIG: FareProductTypeConfig = {
   type: 'single',

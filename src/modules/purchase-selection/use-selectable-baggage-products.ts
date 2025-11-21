@@ -1,6 +1,6 @@
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {useGetSupplementProductsQuery} from '../ticketing';
-import type {BaggageProduct} from '@atb/modules/fare-contracts';
+import {BaggageProduct} from '@atb/modules/configuration';
 
 export function useSelectableBaggageProducts(
   selection: PurchaseSelectionType,
