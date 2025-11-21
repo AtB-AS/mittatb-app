@@ -11,7 +11,7 @@ export {
   decodePolylineEncodedMultiPolygons,
   filterOutFeaturesNotApplicableForCurrentVehicle,
   sortFeaturesByLayerIndexWeight,
-  getIconFeatures,
+  getIconFeatureCollections,
 } from './geofencing-zone-utils';
 export {useControlPositionsStyle} from './hooks/use-control-styles';
 export {useGeofencingZoneContent} from './hooks/use-geofencing-zone-content.tsx';

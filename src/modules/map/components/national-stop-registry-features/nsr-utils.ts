@@ -108,7 +108,7 @@ export const getLayerPropsDeterminedByZoomLevel: (
     iconImage,
   ];
 
-  const iconZoomTransitionStyle = getIconZoomTransitionStyle(
+  const {iconOpacity, iconSize} = getIconZoomTransitionStyle(
     reachFullScaleAtZoomLevel,
     iconFullSize,
     scaleTransitionZoomRange,
@@ -120,7 +120,8 @@ export const getLayerPropsDeterminedByZoomLevel: (
     minZoomLevel: reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
     style: {
       iconImage: iconImageWrapped,
-      ...iconZoomTransitionStyle,
+      iconOpacity,
+      iconSize,
       textSize: [
         'interpolate',
         ['exponential', 1.5],

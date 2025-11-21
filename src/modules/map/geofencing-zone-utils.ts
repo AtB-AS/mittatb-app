@@ -103,7 +103,7 @@ export function decodePolylineEncodedMultiPolygons(
   });
 }
 
-export function getIconFeatures(
+export function getIconFeatureCollections(
   geofencingZones: GeofencingZones[],
 ): PointFeatureCollection[] {
   return geofencingZones?.map((geofencingZone, geofencingZoneIndex) => {

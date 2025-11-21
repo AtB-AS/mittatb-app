@@ -6,7 +6,7 @@ import {
   addGeofencingZoneCustomProps,
   decodePolylineEncodedMultiPolygons,
   sortFeaturesByLayerIndexWeight,
-  getIconFeatures,
+  getIconFeatureCollections,
 } from '@atb/modules/map';
 import {useThemeContext} from '@atb/theme';
 import {useCallback} from 'react';
@@ -37,10 +37,10 @@ export const useGeofencingZonesQuery = (
         geofencingZonesWithDecodedCoordinates,
       );
 
-      const iconFeatures = getIconFeatures(sortedFeatures);
+      const iconFeatureCollections = getIconFeatureCollections(sortedFeatures);
 
       return {
-        iconFeatures,
+        iconFeatureCollections,
         geofencingZoneFeatures: sortedFeatures,
       };
     },

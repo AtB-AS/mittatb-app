@@ -43,7 +43,7 @@ const GeofencingZonesForVehicle = ({
 
   return (
     <>
-      {data?.iconFeatures?.map((iconFeatureCollection) => (
+      {data?.iconFeatureCollections?.map((iconFeatureCollection) => (
         <GeofencingZoneIcon
           iconFeatureCollection={iconFeatureCollection}
           key={`iconGeofencingZone_${iconFeatureCollection.renderKey}`}
@@ -144,7 +144,7 @@ export const GeofencingZoneIcon: React.FC<GeofencingZoneIconProps> = ({
     '_',
     themeName,
   ];
-  const iconZoomTransitionStyle = getIconZoomTransitionStyle(
+  const {iconOpacity, iconSize} = getIconZoomTransitionStyle(
     reachFullScaleAtZoomLevel,
     iconFullSize,
     scaleTransitionZoomRange,
@@ -163,7 +163,8 @@ export const GeofencingZoneIcon: React.FC<GeofencingZoneIconProps> = ({
           iconAllowOverlap: true,
           iconIgnorePlacement: true,
           iconImage: iconImage,
-          ...iconZoomTransitionStyle,
+          iconOpacity,
+          iconSize,
         }}
         aboveLayerID={MapSlotLayerId.GeofencingZones}
       />

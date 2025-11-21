@@ -71,7 +71,7 @@ export const useMapSymbolStyles = ({
 
   const iconFullSize: Expression = ['case', reduceIconSize, 0.855, 1];
 
-  const iconZoomTransitionStyle = getIconZoomTransitionStyle(
+  const {iconOpacity, iconSize} = getIconZoomTransitionStyle(
     reachFullScaleAtZoomLevel,
     iconFullSize,
     scaleTransitionZoomRange,
@@ -158,7 +158,8 @@ export const useMapSymbolStyles = ({
     iconImage,
     iconOffset: [0, 0],
     iconAllowOverlap: true,
-    ...iconZoomTransitionStyle,
+    iconOpacity,
+    iconSize,
   };
 
   const textOffsetXFactor = pinType == 'vehicle' ? 1 : 1.045;
@@ -222,7 +223,7 @@ export const useMapSymbolStyles = ({
 
   const textStyle: SymbolLayerStyleProps = {
     textField,
-    textOpacity: iconZoomTransitionStyle.iconOpacity,
+    textOpacity: iconOpacity, // Text opacity should follow same rules as icon opacity
     textColor: isDarkMode ? '#ffffff' : '#000000',
     textSize,
     textOffset,
