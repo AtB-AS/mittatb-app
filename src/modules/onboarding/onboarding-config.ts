@@ -100,6 +100,20 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] = [
       authenticationType === 'phone',
   },
   {
+    isOnboardedStoreKey: '@ATB_travel_aid_onboarded',
+    onboardingSectionId: 'travelAid',
+    initialScreen: {
+      name: 'Root_TravelAidOnboardingScreen',
+    },
+    shouldShowPredicate: ({
+      isScreenReaderEnabled,
+      isTravelAidStopButtonEnabled,
+      fontScale,
+    }) =>
+      isTravelAidStopButtonEnabled &&
+      (isScreenReaderEnabled || fontScale > 1.5),
+  },
+  {
     isOnboardedStoreKey: '@ATB_smart_park_and_ride_onboarded',
     onboardingSectionId: 'smartParkAndRide',
     initialScreen: {

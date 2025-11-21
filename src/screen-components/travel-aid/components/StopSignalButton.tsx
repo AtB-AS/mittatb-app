@@ -2,7 +2,7 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
-import {TravelAidTexts} from '@atb/translations/screens/subscreens/TravelAid';
+import {TravelAidTexts} from '@atb/translations';
 import type {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {AUTHORITY} from '@env';
 import {addMinutes, isBetween} from '@atb/utils/date';

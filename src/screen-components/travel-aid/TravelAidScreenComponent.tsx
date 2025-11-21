@@ -12,7 +12,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {formatToClock, formatToClockOrRelativeMinutes} from '@atb/utils/date';
 import {TranslateFunction, dictionary, useTranslation} from '@atb/translations';
-import {TravelAidTexts} from '@atb/translations/screens/subscreens/TravelAid';
+import {TravelAidTexts} from '@atb/translations';
 import {
   getLineA11yLabel,
   getNoticesForServiceJourney,

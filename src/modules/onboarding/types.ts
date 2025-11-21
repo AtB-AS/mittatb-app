@@ -12,7 +12,8 @@ type IsOnboardedStoreKey =
   | '@ATB_notification_permission_onboarded'
   | '@ATB_mobile_token_onboarded'
   | '@ATB_mobile_token_without_travelcard_onboarded'
-  | '@ATB_smart_park_and_ride_onboarded';
+  | '@ATB_smart_park_and_ride_onboarded'
+  | '@ATB_travel_aid_onboarded';
 
 export type OnboardingSectionId =
   | 'extendedOnboarding'
@@ -22,7 +23,8 @@ export type OnboardingSectionId =
   | 'notificationPermission'
   | 'mobileToken'
   | 'mobileTokenWithoutTravelcard'
-  | 'smartParkAndRide';
+  | 'smartParkAndRide'
+  | 'travelAid';
 
 export type ShouldShowArgsType = {
   locationPermissionStatus: PermissionStatus | null;
@@ -38,6 +40,9 @@ export type ShouldShowArgsType = {
   shouldShowShareTravelHabitsScreen: boolean;
   currentRouteName: string;
   hasVehicleRegistrations: boolean;
+  isScreenReaderEnabled: boolean;
+  isTravelAidStopButtonEnabled: boolean;
+  fontScale: number;
 };
 
 export type OnboardingSectionConfig = {

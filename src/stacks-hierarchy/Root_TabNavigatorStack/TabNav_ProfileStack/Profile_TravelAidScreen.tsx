@@ -18,6 +18,7 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {CustomerServiceText} from '@atb/translations/screens/subscreens/CustomerService';
 import {ThemeText} from '@atb/components/text';
+import {useOnboardingContext} from '@atb/modules/onboarding';
 
 export const Profile_TravelAidScreen = () => {
   const styles = useStyles();
@@ -27,6 +28,7 @@ export const Profile_TravelAidScreen = () => {
   const {contactPhoneNumber} = useFirestoreConfigurationContext();
   const analytics = useAnalyticsContext();
   const screenReaderEnabled = useIsScreenReaderEnabled();
+  const {completeOnboardingSection} = useOnboardingContext();
 
   const backgroundColor = theme.color.background.neutral[0];
   const hasContactPhoneNumber = !!contactPhoneNumber;
@@ -58,6 +60,7 @@ export const Profile_TravelAidScreen = () => {
                   screenReaderEnabled,
                 },
               );
+              completeOnboardingSection('travelAid');
               setPreference({journeyAidEnabled: checked});
             }}
             testID="toggleTravelAid"

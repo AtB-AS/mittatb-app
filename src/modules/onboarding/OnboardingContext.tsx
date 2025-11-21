@@ -32,6 +32,8 @@ import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useOnAuthStateChanged} from '@atb/modules/auth';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useVehicleRegistrationsQuery} from '../smart-park-and-ride';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {useFontScale} from '@atb/utils/use-font-scale';
 
 export type OnboardingState = {
   isLoading: boolean;
@@ -299,11 +301,18 @@ const useShouldShowArgs = (
   loadedOnboardingSections: LoadedOnboardingSection[],
   currentRouteName: string,
 ): ShouldShowArgsType => {
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+  const fontScale = useFontScale();
+
   const hasFareContractWithActivatedNotification =
     useHasFareContractWithActivatedNotification();
 
-  const {isPushNotificationsEnabled, isOnboardingLoginEnabled} =
-    useFeatureTogglesContext();
+  const {
+    isPushNotificationsEnabled,
+    isOnboardingLoginEnabled,
+    isTravelAidStopButtonEnabled,
+  } = useFeatureTogglesContext();
+
   const {permissionStatus: pushNotificationPermissionStatus} =
     useNotificationsContext();
 
@@ -347,6 +356,9 @@ const useShouldShowArgs = (
       mobileTokenStatus,
       currentRouteName,
       hasVehicleRegistrations,
+      isScreenReaderEnabled,
+      isTravelAidStopButtonEnabled,
+      fontScale,
     }),
     [
       hasFareContractWithActivatedNotification,
@@ -362,6 +374,9 @@ const useShouldShowArgs = (
       mobileTokenStatus,
       currentRouteName,
       hasVehicleRegistrations,
+      isScreenReaderEnabled,
+      isTravelAidStopButtonEnabled,
+      fontScale,
     ],
   );
 };
