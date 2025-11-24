@@ -233,16 +233,6 @@ export async function getSupplementProducts(): Promise<SupplementProduct[]> {
     authWithIdToken: true,
   });
 
-  // TODO: Hack, remove this once the product api is updated to return the baggage type and illustration.
-  response.data.forEach((p) => {
-    if (p.baggageType == null) {
-      p.baggageType = 'BICYCLE';
-    }
-    if (p.illustration == null) {
-      p.illustration = 'BicycleFill';
-    }
-  });
-
   return response.data
     .map((p) => SupplementProduct.safeParse(p).data)
     .filter(isDefined);

@@ -1,3 +1,4 @@
+import z from 'zod';
 import {CancelToken as CancelTokenStatic} from '@atb/api';
 import {toAxiosErrorKind, AxiosErrorKind} from '@atb/api/utils';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
@@ -11,7 +12,12 @@ import {
 import {secondsBetween} from '@atb/utils/date';
 import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {fetchOfferFromLegs} from '@atb/api/sales';
-import type {ErrorResponse, SearchOfferPrice, TicketOffer} from '@atb-as/utils';
+import {
+  ErrorResponse,
+  SearchOfferPrice,
+  TicketOffer,
+  SupplementProductOffer,
+} from '@atb-as/utils';
 import {mapToSalesTripPatternLegs} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/utils';
 import {useTranslation} from '@atb/translations';
 
@@ -19,22 +25,12 @@ export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: TicketOffer;
 };
 
-type NestedSupplementProductOffer = TicketOffer['supplementProducts'][number];
-
 // Presuppose for now that there is only one supplement product offer per baggage product offer, and that the fare product is undefined (or null).
-type BaggageTicketOffer = Omit<
-  TicketOffer,
-  'fareProduct' | 'supplementProducts'
-> & {
-  fareProduct: undefined;
-  supplementProducts: [NestedSupplementProductOffer];
-};
-
-// Check if the offer is a baggage product offer, i.e. it has no fare product and only one supplement product.
-// This is a workaround for now, and will change in the future when we support multiple elements in an offer/fare contract.
-const isBaggageTicketOffer = (o: TicketOffer): o is BaggageTicketOffer =>
-  (o.fareProduct == null || o.fareProduct == undefined) &&
-  o.supplementProducts.length === 1;
+const BaggageTicketOffer = TicketOffer.extend({
+  fareProduct: z.undefined().nullish(),
+  supplementProducts: z.array(SupplementProductOffer).length(1),
+});
+type BaggageTicketOffer = z.infer<typeof BaggageTicketOffer>;
 
 export type BaggageProductWithCountAndOffer = BaggageProductWithCount & {
   offer: BaggageTicketOffer;
@@ -107,7 +103,9 @@ const getOfferForBaggageProduct = (
   baggageProductId: string,
 ): BaggageTicketOffer => {
   const offersForBaggageProduct: BaggageTicketOffer[] = offers
-    .filter(isBaggageTicketOffer)
+    .map((o) => BaggageTicketOffer.safeParse(o))
+    .filter((o) => o.success)
+    .map((o) => o.data)
     .filter((o) => o.supplementProducts[0].id === baggageProductId);
 
   // If there are multiple offers for the same supplement product, use the cheapest one.
