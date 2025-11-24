@@ -41,7 +41,7 @@ export const SmartParkAndRideOnboarding_ContactInfoScreen = () => {
         },
         rightButton: {
           type: 'close',
-          onPress: () => closeOnboardingCarousel('smartParkAndRide'),
+          onPress: closeOnboardingCarousel,
         },
       }}
       title={t(SmartParkAndRideTexts.onboarding.contactInfo.title)}

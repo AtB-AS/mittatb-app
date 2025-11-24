@@ -30,14 +30,38 @@ function getAdjacentOnboardingCarouselScreenName(
   return config.onboardingScreens[index]?.name;
 }
 
+const useCloseOnboardingCarousel = (configId: OnboardingCarouselConfigId) => {
+  const {onboardingSections} = useOnboardingContext();
+  const comingFromOnboardingSectionId = onboardingSections.find(
+    (onboardingSection) =>
+      onboardingSection.initialScreen?.params?.configId === configId,
+  )?.onboardingSectionId;
+
+  const navigation = useNavigation<OnboardingCarouselNavigationProps>();
+  const {continueFromOnboardingSection} = useOnboardingNavigation();
+
+  return useCallback(() => {
+    if (comingFromOnboardingSectionId) {
+      continueFromOnboardingSection(comingFromOnboardingSectionId);
+    } else {
+      // should never happen
+      console.error('UNKNOWN ONBOARDING SECTION');
+      navigation.getParent()?.goBack();
+    }
+  }, [
+    comingFromOnboardingSectionId,
+    continueFromOnboardingSection,
+    navigation,
+  ]);
+};
+
 function useNavigateToAdjacentOnboardingCarouselScreen(
   configId: OnboardingCarouselConfigId,
   currentScreenName: string,
   offset: number,
 ) {
   const navigation = useNavigation<OnboardingCarouselNavigationProps>();
-  const {continueFromOnboardingSection} = useOnboardingNavigation();
-  const {onboardingSections} = useOnboardingContext();
+  const closeOnboardingCarousel = useCloseOnboardingCarousel(configId);
 
   return useCallback(() => {
     const adjacentScreenName = getAdjacentOnboardingCarouselScreenName(
@@ -48,26 +72,14 @@ function useNavigateToAdjacentOnboardingCarouselScreen(
     if (adjacentScreenName) {
       navigation.navigate(adjacentScreenName);
     } else {
-      const comingFromOnboardingSectionId = onboardingSections.find(
-        (onboardingSection) =>
-          onboardingSection.initialScreen?.params?.configId === configId,
-      )?.onboardingSectionId;
-
-      if (comingFromOnboardingSectionId) {
-        continueFromOnboardingSection(comingFromOnboardingSectionId);
-      } else {
-        // should never happen
-        console.error('UNKNOWN ONBOARDING SECTION');
-        navigation.getParent()?.goBack();
-      }
+      closeOnboardingCarousel();
     }
   }, [
+    closeOnboardingCarousel,
     configId,
     currentScreenName,
-    offset,
     navigation,
-    onboardingSections,
-    continueFromOnboardingSection,
+    offset,
   ]);
 }
 
@@ -87,9 +99,7 @@ export function useOnboardingCarouselNavigation(
       -1,
     );
 
-  const {continueFromOnboardingSection} = useOnboardingNavigation();
-
-  const closeOnboardingCarousel = continueFromOnboardingSection;
+  const closeOnboardingCarousel = useCloseOnboardingCarousel(configId);
 
   return {
     navigateToNextScreen,
