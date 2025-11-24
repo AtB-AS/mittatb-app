@@ -114,8 +114,8 @@ const createBuilder = (
       if (
         /*
          * .every() will return true for an empty array, which will happen when
-         * selecting only supplement products with count and no user profiles.
-         * That means that supplementProducts can be selected alone.
+         * selecting only baggage products with count and no user profiles.
+         * That means that baggage products can be selected alone.
          */
         onlyProfilesWithActualCount.every((p) =>
           isSelectableProfile(currentSelection.preassignedFareProduct, p),
