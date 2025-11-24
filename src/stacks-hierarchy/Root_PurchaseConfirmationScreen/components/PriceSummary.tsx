@@ -160,7 +160,7 @@ const PricePerTraveller = ({style, ...props}: PricePerTravellerProps) => {
         style={styles.travellerCountAndName}
         color="secondary"
         typography="body__s"
-        testID="userProfileCountAndName"
+        testID="travellerCountAndName"
       >
         {count} {travellerName}
       </ThemeText>

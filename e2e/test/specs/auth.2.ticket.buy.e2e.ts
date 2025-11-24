@@ -73,7 +73,7 @@ describe('Auth Buy Ticket', () => {
             'Valid in zone A',
           );
           expect(
-            await PurchaseSummaryPage.userProfileCountAndName.getText(),
+            await PurchaseSummaryPage.travellerCountAndName.getText(),
           ).toContain('1 Adult');
 
           // Confirm - or choose payment and confirm

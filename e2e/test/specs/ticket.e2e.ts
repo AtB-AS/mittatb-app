@@ -93,7 +93,7 @@ describe('Ticket', () => {
           'Valid in zone B2',
         );
         expect(
-          await PurchaseSummaryPage.userProfileCountAndName.getText(),
+          await PurchaseSummaryPage.travellerCountAndName.getText(),
         ).toContain('1 Child');
         expect(await PurchaseSummaryPage.getTotalPrice()).toBe(totalPrice);
         await PurchaseSummaryPage.choosePayment.click();
