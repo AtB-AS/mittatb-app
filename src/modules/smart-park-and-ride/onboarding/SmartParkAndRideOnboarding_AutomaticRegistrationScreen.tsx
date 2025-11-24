@@ -39,7 +39,7 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
         rightButton: {
           type: 'close',
           withIcon: true,
-          onPress: () => closeOnboardingCarousel('smartParkAndRide'),
+          onPress: closeOnboardingCarousel,
         },
       }}
       title={t(SmartParkAndRideTexts.onboarding.automaticRegistration.title)}

@@ -25,7 +25,7 @@ export const SmartParkAndRideOnboarding_InformationScreen = () => {
         rightButton: {
           type: 'close',
           withIcon: true,
-          onPress: () => closeOnboardingCarousel('smartParkAndRide'),
+          onPress: closeOnboardingCarousel,
         },
       }}
       title={t(SmartParkAndRideTexts.onboarding.information.title)}
