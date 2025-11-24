@@ -28,7 +28,7 @@ describe('purchaseSelectionBuilder - userProfiles', () => {
     ).toBe(1);
   });
 
-  it('Should not apply user profiles with zero count', () => {
+  it('Should not apply user profiles with zero count if no supplement products are selected', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
       .userProfiles([
@@ -121,7 +121,7 @@ describe('isSelectableSupplementProduct', () => {
     );
   });
 
-  it('returns true if supplementProductRefs is empty (no limitations)', () => {
+  it('returns false if supplementProductRefs is empty (no limitations)', () => {
     const selection: PurchaseSelectionType = {
       ...TEST_SELECTION,
       preassignedFareProduct: {
@@ -134,7 +134,7 @@ describe('isSelectableSupplementProduct', () => {
     };
     const supplementProduct = {...TEST_BAGGAGE_PRODUCT, id: 'SP3'};
     expect(isSelectableSupplementProduct(selection, supplementProduct)).toBe(
-      true,
+      false,
     );
   });
 });

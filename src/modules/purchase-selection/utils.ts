@@ -114,13 +114,8 @@ export const isSelectableProfile = (
   product: PreassignedFareProduct,
   profile: UserProfile,
 ) => {
-  const profileLimitations = product.limitations.userProfileRefs;
-  const emptyLimitations = !profileLimitations.length;
-  return (
-    emptyLimitations ||
-    profileLimitations.some(
-      (allowedProfileId) => profile.id === allowedProfileId,
-    )
+  return !!product.limitations.userProfileRefs?.some(
+    (allowedProfileId) => profile.id === allowedProfileId,
   );
 };
 
@@ -128,15 +123,9 @@ export const isSelectableSupplementProduct = (
   currentSelection: PurchaseSelectionType,
   supplementProduct: SupplementProduct,
 ) => {
-  const supplementProductLimitations =
-    currentSelection.preassignedFareProduct.limitations.supplementProductRefs;
-  const emptySupplementProducts = !supplementProductLimitations?.length;
-  return (
-    emptySupplementProducts ||
-    supplementProductLimitations.some(
-      (allowedSupplementProductId) =>
-        supplementProduct.id === allowedSupplementProductId,
-    )
+  return !!currentSelection.preassignedFareProduct.limitations.supplementProductRefs?.some(
+    (allowedSupplementProductId) =>
+      supplementProduct.id === allowedSupplementProductId,
   );
 };
 

@@ -32,7 +32,10 @@ export const TEST_PRODUCT: PreassignedFareProduct = {
   type: 'single',
   name: {lang: 'no', value: 'Produkt1'},
   version: 'v1',
-  limitations: {userProfileRefs: []},
+  limitations: {
+    userProfileRefs: ['UP1', 'UP2', 'UP3', 'UP4', 'UP5'],
+    supplementProductRefs: ['SP1', 'SP2', 'SP3', 'SP4', 'SP5'],
+  },
   distributionChannel: ['app'],
 };
 
@@ -68,7 +71,7 @@ export const TEST_USER_PROFILE: UserProfile = {
 };
 
 export const TEST_BAGGAGE_PRODUCT: BaggageProduct = {
-  id: 'S1',
+  id: 'SP1',
   name: {lang: 'no', value: 'Sykkel'},
   version: 'v1',
   distributionChannel: ['app'],
