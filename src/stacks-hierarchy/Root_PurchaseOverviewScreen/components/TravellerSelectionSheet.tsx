@@ -9,11 +9,11 @@ import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {MultipleTravellersSelection} from './Travellers/MultipleTravellersSelection';
 import {SingleTravellerSelection} from './Travellers/SingleTravellerSelection';
 import {useUserCountState} from './Travellers/use-user-count-state';
+import {useBaggageCountState} from './Travellers/use-baggage-count-state';
 import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
-import {useBaggageCountProductState} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-baggage-product-count-state';
 
 type TravellerSelectionSheetProps = {
   selection: PurchaseSelectionType;
@@ -31,11 +31,11 @@ export const TravellerSelectionSheet = ({
     selection.fareProductTypeConfig.configuration.travellerSelectionMode;
 
   const userCountState = useUserCountState(selection);
-  const baggageProductCountState = useBaggageCountProductState(selection);
+  const baggageCountState = useBaggageCountState(selection);
 
   const nothingSelected =
     userCountState.userProfilesWithCount.every((u) => !u.count) &&
-    baggageProductCountState.baggageProductsWithCount.every((sp) => !sp.count);
+    baggageCountState.baggageProductsWithCount.every((sp) => !sp.count);
 
   return (
     <BottomSheetContainer
@@ -46,7 +46,7 @@ export const TravellerSelectionSheet = ({
         {selectionMode === 'multiple' ? (
           <MultipleTravellersSelection
             userCountState={userCountState}
-            baggageProductCountState={baggageProductCountState}
+            baggageCountState={baggageCountState}
           />
         ) : (
           <SingleTravellerSelection {...userCountState} />
@@ -60,9 +60,7 @@ export const TravellerSelectionSheet = ({
           onPress={() => {
             const newSelection = selectionBuilder
               .fromSelection(selection)
-              .baggageProducts(
-                baggageProductCountState.baggageProductsWithCount,
-              )
+              .baggageProducts(baggageCountState.baggageProductsWithCount)
               .userProfiles(userCountState.userProfilesWithCount)
               .build();
             onSave(newSelection);

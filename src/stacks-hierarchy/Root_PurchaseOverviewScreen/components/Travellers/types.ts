@@ -9,7 +9,7 @@ export type UserCountState = {
   decrement: (userTypeString: string) => void;
 };
 
-export type BaggageProductState = {
+export type BaggageCountState = {
   baggageProductsWithCount: BaggageProductWithCount[];
   increment: (baggageProductId: string) => void;
   decrement: (baggageProductId: string) => void;

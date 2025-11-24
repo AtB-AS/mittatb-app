@@ -10,13 +10,13 @@ import {getReferenceDataName} from '@atb/modules/configuration';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {CounterSectionItem, Section} from '@atb/components/sections';
 import {useThemeContext} from '@atb/theme';
-import type {BaggageProductState, UserCountState} from './types';
+import type {BaggageCountState, UserCountState} from './types';
 import type {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {View} from 'react-native';
 
 type Props = {
   userCountState: UserCountState;
-  baggageProductCountState: BaggageProductState;
+  baggageCountState: BaggageCountState;
 };
 
 export function MultipleTravellersSelection(props: Props) {
@@ -35,14 +35,14 @@ export function MultipleTravellersSelection(props: Props) {
     props.userCountState.decrement(userTypeString);
   };
 
-  const addBaggageProduct = (supplementProductString: string) => {
+  const addBaggageProduct = (baggageProductString: string) => {
     travellersModified.current = true;
-    props.baggageProductCountState.increment(supplementProductString);
+    props.baggageCountState.increment(baggageProductString);
   };
 
-  const removeBaggageProduct = (supplementProductString: string) => {
+  const removeBaggageProduct = (baggageProductString: string) => {
     travellersModified.current = true;
-    props.baggageProductCountState.decrement(supplementProductString);
+    props.baggageCountState.decrement(baggageProductString);
   };
 
   useScreenReaderAnnouncement(
@@ -73,7 +73,7 @@ export function MultipleTravellersSelection(props: Props) {
         ))}
       </Section>
       <Section>
-        {props.baggageProductCountState.baggageProductsWithCount.map((s) => (
+        {props.baggageCountState.baggageProductsWithCount.map((s) => (
           <CounterSectionItem
             key={s.id}
             text={getReferenceDataName(s, language)}

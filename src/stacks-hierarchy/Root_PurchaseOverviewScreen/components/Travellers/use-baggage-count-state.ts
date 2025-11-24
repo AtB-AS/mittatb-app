@@ -4,12 +4,12 @@ import {
   type PurchaseSelectionType,
   useSelectableBaggageProducts,
 } from '@atb/modules/purchase-selection';
-import type {BaggageProductState} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/types';
+import type {BaggageCountState} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/types';
 import {BaggageProduct} from '@atb/modules/configuration';
 
-export function useBaggageCountProductState(
+export function useBaggageCountState(
   selection: PurchaseSelectionType,
-): BaggageProductState {
+): BaggageCountState {
   const selectableBaggageProducts = useSelectableBaggageProducts(selection);
   const [state, setState] = useState<BaggageProductWithCount[]>(
     mapToInitialBaggageProductsWithCount(
