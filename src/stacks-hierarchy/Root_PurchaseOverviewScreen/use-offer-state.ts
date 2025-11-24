@@ -299,7 +299,7 @@ export function useOfferState(
         selection?.baggageProductsWithCount
           .filter((sp) => sp.count)
           .map((sp) => ({
-            id: 'ADULT',
+            id: sp.baggageType,
             userType: 'ADULT',
             baggageTypes: [sp.baggageType],
             count: sp.count,
