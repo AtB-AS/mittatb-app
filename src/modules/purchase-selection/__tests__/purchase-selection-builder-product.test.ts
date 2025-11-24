@@ -48,7 +48,7 @@ describe('purchaseSelectionBuilder - product', () => {
     expect(selection.preassignedFareProduct.id).toBe(
       TEST_SELECTION.preassignedFareProduct.id,
     );
-    expect(selection).toBe(TEST_SELECTION);
+    expect(selection).toStrictEqual(TEST_SELECTION);
   });
 
   it('Should not apply product on to low app version', () => {
@@ -67,7 +67,7 @@ describe('purchaseSelectionBuilder - product', () => {
     expect(selection.preassignedFareProduct.id).toBe(
       TEST_SELECTION.preassignedFareProduct.id,
     );
-    expect(selection).toBe(TEST_SELECTION);
+    expect(selection).toStrictEqual(TEST_SELECTION);
   });
 
   it('Should not apply product on to high app version', () => {
@@ -86,7 +86,7 @@ describe('purchaseSelectionBuilder - product', () => {
     expect(selection.preassignedFareProduct.id).toBe(
       TEST_SELECTION.preassignedFareProduct.id,
     );
-    expect(selection).toBe(TEST_SELECTION);
+    expect(selection).toStrictEqual(TEST_SELECTION);
   });
 
   it('Should not apply product without distribution channel app', () => {
@@ -102,7 +102,7 @@ describe('purchaseSelectionBuilder - product', () => {
     expect(selection.preassignedFareProduct.id).toBe(
       TEST_SELECTION.preassignedFareProduct.id,
     );
-    expect(selection).toBe(TEST_SELECTION);
+    expect(selection).toStrictEqual(TEST_SELECTION);
   });
 
   it('Should change user profile to one that is within limitations', () => {

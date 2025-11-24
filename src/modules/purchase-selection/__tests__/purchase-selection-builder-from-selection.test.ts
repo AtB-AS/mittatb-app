@@ -16,7 +16,7 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
       .fromSelection(TEST_SELECTION)
       .build();
 
-    expect(selection).toBe(TEST_SELECTION);
+    expect(selection).toStrictEqual(TEST_SELECTION);
   });
 
   it('Should return same selection unaltered, with stop places', () => {
@@ -32,7 +32,7 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
       .fromSelection(originalSelection)
       .build();
 
-    expect(selection).toBe(originalSelection);
+    expect(selection).toStrictEqual(originalSelection);
   });
 
   it('Should create new selection with defaults when input selection product is invalid', () => {

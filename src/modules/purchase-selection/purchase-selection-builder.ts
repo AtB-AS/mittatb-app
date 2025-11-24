@@ -45,6 +45,10 @@ const createBuilder = (
   selection: PurchaseSelectionType,
 ): PurchaseSelectionBuilder => {
   let currentSelection = selection;
+  let buildState = {
+    userProfilesWithCount: selection.userProfilesWithCount,
+    baggageProductsWithCount: selection.baggageProductsWithCount,
+  };
   const builder: PurchaseSelectionBuilder = {
     product: (preassignedFareProduct) => {
       if (
@@ -102,46 +106,11 @@ const createBuilder = (
       return builder;
     },
     userProfiles: (userProfilesWithCount) => {
-      const onlyProfilesWithActualCount = userProfilesWithCount.filter(
-        (u) => u.count,
-      );
-      if (
-        !onlyProfilesWithActualCount.length &&
-        !currentSelection.baggageProductsWithCount.filter((s) => s.count).length
-      ) {
-        return builder;
-      }
-      if (
-        /*
-         * .every() will return true for an empty array, which will happen when
-         * selecting only baggage products with count and no user profiles.
-         * That means that baggage products can be selected alone.
-         */
-        onlyProfilesWithActualCount.every((p) =>
-          isSelectableProfile(currentSelection.preassignedFareProduct, p),
-        )
-      ) {
-        currentSelection = {
-          ...currentSelection,
-          userProfilesWithCount: onlyProfilesWithActualCount,
-        };
-      }
+      buildState.userProfilesWithCount = userProfilesWithCount;
       return builder;
     },
     baggageProducts: (baggageProductsWithCount) => {
-      const productsWithCount = baggageProductsWithCount.filter((s) => s.count);
-      if (
-        (productsWithCount.length ||
-          currentSelection.userProfilesWithCount.length) &&
-        productsWithCount.every((sp) =>
-          isSelectableSupplementProduct(currentSelection, sp),
-        )
-      ) {
-        currentSelection = {
-          ...currentSelection,
-          baggageProductsWithCount: productsWithCount,
-        };
-      }
+      buildState.baggageProductsWithCount = baggageProductsWithCount;
       return builder;
     },
     date: (travelDate) => {
@@ -173,7 +142,33 @@ const createBuilder = (
       return builder;
     },
 
-    build: () => currentSelection,
+    build: () => {
+      const onlyProfilesWithActualCount =
+        buildState.userProfilesWithCount.filter((u) => u.count);
+      const onlyBaggageProductsWithActualCount =
+        buildState.baggageProductsWithCount.filter((s) => s.count);
+
+      const anySelection =
+        onlyProfilesWithActualCount.length ||
+        onlyBaggageProductsWithActualCount.length;
+
+      const areProfilesValid = onlyProfilesWithActualCount.every((p) =>
+        isSelectableProfile(currentSelection.preassignedFareProduct, p),
+      );
+      const areBaggageProductsValid = onlyBaggageProductsWithActualCount.every(
+        (sp) => isSelectableSupplementProduct(currentSelection, sp),
+      );
+
+      if (!anySelection || !areProfilesValid || !areBaggageProductsValid) {
+        return currentSelection;
+      }
+
+      return {
+        ...currentSelection,
+        userProfilesWithCount: onlyProfilesWithActualCount,
+        baggageProductsWithCount: onlyBaggageProductsWithActualCount,
+      };
+    },
   };
 
   return builder;
