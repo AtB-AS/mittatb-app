@@ -69,13 +69,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const unreadCount = useChatUnreadCount();
   const {theme} = useThemeContext();
   const {enable_intercom} = useRemoteConfigContext();
+  const neutralContrastColor = theme.color.background.neutral[1];
 
   return (
     <>
       <FullScreenView
         headerProps={{
           title: t(ProfileTexts.header.title),
-          color: theme.color.background.neutral[1],
+          color: neutralContrastColor,
         }}
         parallaxContent={(focusRef) => (
           <ScreenHeading
@@ -94,7 +95,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             <GlobalMessage
               style={style.globalMessage}
               globalMessageContext={GlobalMessageContextEnum.appProfile}
-              textColor="secondary"
+              textColor={neutralContrastColor}
             />
             <UserInfo
               navigateToEditProfileScreen={() =>
