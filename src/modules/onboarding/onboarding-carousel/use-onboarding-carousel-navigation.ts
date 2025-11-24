@@ -7,6 +7,7 @@ import {
   OnboardingCarouselScreenName,
 } from './types';
 import {useOnboardingNavigation} from '../use-onboarding-navigation';
+import {useOnboardingContext} from '../OnboardingContext';
 
 function getAdjacentOnboardingCarouselScreenName(
   configId: OnboardingCarouselConfigId,
@@ -35,6 +36,8 @@ function useNavigateToAdjacentOnboardingCarouselScreen(
   offset: number,
 ) {
   const navigation = useNavigation<OnboardingCarouselNavigationProps>();
+  const {continueFromOnboardingSection} = useOnboardingNavigation();
+  const {onboardingSections} = useOnboardingContext();
 
   return useCallback(() => {
     const adjacentScreenName = getAdjacentOnboardingCarouselScreenName(
@@ -45,9 +48,27 @@ function useNavigateToAdjacentOnboardingCarouselScreen(
     if (adjacentScreenName) {
       navigation.navigate(adjacentScreenName);
     } else {
-      navigation.getParent()?.goBack();
+      const comingFromOnboardingSectionId = onboardingSections.find(
+        (onboardingSection) =>
+          onboardingSection.initialScreen?.params?.configId === configId,
+      )?.onboardingSectionId;
+
+      if (comingFromOnboardingSectionId) {
+        continueFromOnboardingSection(comingFromOnboardingSectionId);
+      } else {
+        // should never happen
+        console.error('UNKNOWN ONBOARDING SECTION');
+        navigation.getParent()?.goBack();
+      }
     }
-  }, [configId, currentScreenName, offset, navigation]);
+  }, [
+    configId,
+    currentScreenName,
+    offset,
+    navigation,
+    onboardingSections,
+    continueFromOnboardingSection,
+  ]);
 }
 
 export function useOnboardingCarouselNavigation(
