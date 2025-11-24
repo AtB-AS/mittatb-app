@@ -168,10 +168,10 @@ export const isValidSelection = (
   );
   if (!areProfilesValid) return false;
 
-  const areSupplementProductsValid = selection.baggageProductsWithCount.every(
+  const areBaggageProductsValid = selection.baggageProductsWithCount.every(
     (sp) => isSelectableSupplementProduct(selection, sp),
   );
-  if (!areSupplementProductsValid) return false;
+  if (!areBaggageProductsValid) return false;
 
   const isFromZoneValid = selection.zones
     ? isSelectableZone(selection.preassignedFareProduct, selection.zones.from)
@@ -223,10 +223,9 @@ export const applyProductChange = (
   const userCount = currentSelection.userProfilesWithCount.filter((up) =>
     isSelectableProfile(product, up),
   );
-  const supplementProductCount =
-    currentSelection.baggageProductsWithCount.filter((sp) =>
-      isSelectableSupplementProduct(currentSelection, sp),
-    );
+  const baggageProductCount = currentSelection.baggageProductsWithCount.filter(
+    (sp) => isSelectableSupplementProduct(currentSelection, sp),
+  );
 
   const isFromZoneValid =
     !currentSelection.zones ||
@@ -242,7 +241,7 @@ export const applyProductChange = (
     : getDefaultZones(input, currentSelection.fareProductTypeConfig, product);
 
   const userProfiles =
-    !userCount.length && !supplementProductCount.length
+    !userCount.length && !baggageProductCount.length
       ? getDefaultUserProfiles(input, product)
       : userCount;
 
