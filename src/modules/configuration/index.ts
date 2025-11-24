@@ -30,7 +30,7 @@ export {
   LanguageAndTextTypeArray,
   PreassignedFareProduct,
   SupplementProduct,
-  type BaggageProduct,
+  BaggageProduct,
 } from './types';
 export {
   findReferenceDataById,

@@ -26,8 +26,8 @@ export const getBaggageProducts = (
     .map((p) => findReferenceDataById(allSupplementProducts, p.id))
     .filter(isDefined);
 
-  return supplementProducts.filter(
-    (p): p is BaggageProduct =>
-      p.isBaggageProduct == true && isDefined(p.baggageType),
-  );
+  return supplementProducts
+    .map((p) => BaggageProduct.safeParse(p))
+    .filter((p) => p.success)
+    .map((p) => p.data);
 };

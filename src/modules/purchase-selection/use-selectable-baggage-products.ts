@@ -7,10 +7,9 @@ export function useSelectableBaggageProducts(
 ): BaggageProduct[] {
   const {data: allSupplementProducts} = useGetSupplementProductsQuery();
   return allSupplementProducts
-    .filter(
-      (sp): sp is BaggageProduct =>
-        sp.isBaggageProduct == true && sp.baggageType != null,
-    )
+    .map((sp) => BaggageProduct.safeParse(sp))
+    .filter((sp) => sp.success)
+    .map((sp) => sp.data)
     .filter((sp) => {
       return selection.preassignedFareProduct.limitations.supplementProductRefs?.some(
         (ref) => ref === sp.id,
