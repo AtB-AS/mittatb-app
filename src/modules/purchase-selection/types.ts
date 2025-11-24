@@ -107,8 +107,8 @@ export type PurchaseSelectionBuilder = {
   userProfiles: (u: UserProfileWithCount[]) => PurchaseSelectionBuilder;
 
   /**
-   * Apply the given supplement products with count to the purchase selection.
-   * No checks regarding the applicability of the supplement products to the
+   * Apply the given baggage products with count to the purchase selection.
+   * No checks regarding the applicability of the baggage products to the
    * other fields in the production, but such validation could be implemented.
    */
   baggageProducts: (b: BaggageProductWithCount[]) => PurchaseSelectionBuilder;
