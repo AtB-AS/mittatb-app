@@ -49,14 +49,18 @@ export const PriceSummary = ({
           {userProfilesWithCountAndOffer.map((u, i) => (
             <PricePerTraveller
               key={u.id}
-              userProfileWithCountAndOffer={u}
+              name={getReferenceDataName(u, language)}
+              offerPrice={u.offer.price}
+              count={u.count}
               style={i != 0 ? styles.smallTopMargin : undefined}
             />
           ))}
           {baggageProductsWithCountAndOffer.map((sp, i) => (
             <PricePerTraveller
               key={sp.id}
-              baggageProductWithCountAndOffer={sp}
+              name={getReferenceDataName(sp, language)}
+              offerPrice={sp.offer.supplementProducts[0].price}
+              count={sp.count}
               style={i != 0 ? styles.smallTopMargin : undefined}
             />
           ))}
@@ -95,40 +99,24 @@ export const PriceSummary = ({
   );
 };
 
-type PricePerTravellerProps = {style: StyleProp<ViewStyle>} & (
-  | {
-      userProfileWithCountAndOffer: UserProfileWithCountAndOffer;
-      baggageProductWithCountAndOffer?: undefined;
-    }
-  | {
-      userProfileWithCountAndOffer?: undefined;
-      baggageProductWithCountAndOffer: BaggageProductWithCountAndOffer;
-    }
-);
+type PricePerTravellerProps = {
+  name: string;
+  offerPrice: SearchOfferPrice;
+  count: number;
+  style: StyleProp<ViewStyle>;
+};
 
-const PricePerTraveller = ({style, ...props}: PricePerTravellerProps) => {
+const PricePerTraveller = ({
+  style,
+  name,
+  offerPrice,
+  count,
+}: PricePerTravellerProps) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
-  let searchOfferPrice: SearchOfferPrice | undefined = undefined;
-  let travellerData:
-    | UserProfileWithCountAndOffer
-    | BaggageProductWithCountAndOffer
-    | undefined = undefined;
-
-  let count = 0;
-  if (props.userProfileWithCountAndOffer) {
-    travellerData = props.userProfileWithCountAndOffer;
-    count = travellerData.count;
-    searchOfferPrice = travellerData.offer.price;
-  } else {
-    travellerData = props.baggageProductWithCountAndOffer;
-    count = travellerData.count;
-    searchOfferPrice = travellerData.offer.supplementProducts[0].price;
-  }
-
-  const price = count * (searchOfferPrice.amountFloat || 0);
-  const originalPrice = count * (searchOfferPrice.originalAmountFloat || 0);
+  const price = count * (offerPrice.amountFloat || 0);
+  const originalPrice = count * (offerPrice.originalAmountFloat || 0);
 
   const priceString = formatNumberToString(price, language);
   const originalPriceString = originalPrice
@@ -137,9 +125,8 @@ const PricePerTraveller = ({style, ...props}: PricePerTravellerProps) => {
 
   const hasFlexDiscount = price < originalPrice;
 
-  const travellerName = getReferenceDataName(travellerData, language);
   const a11yLabel = [
-    `${count} ${travellerName}`,
+    `${count} ${name}`,
     `${priceString} kr`,
     `${
       hasFlexDiscount
@@ -162,7 +149,7 @@ const PricePerTraveller = ({style, ...props}: PricePerTravellerProps) => {
         typography="body__s"
         testID="travellerCountAndName"
       >
-        {count} {travellerName}
+        {count} {name}
       </ThemeText>
       <View style={styles.travellerPrice}>
         {hasFlexDiscount && (
