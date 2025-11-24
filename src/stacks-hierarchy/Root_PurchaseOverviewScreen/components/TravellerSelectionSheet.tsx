@@ -60,8 +60,8 @@ export const TravellerSelectionSheet = ({
           onPress={() => {
             const newSelection = selectionBuilder
               .fromSelection(selection)
-              .baggageProducts(baggageCountState.baggageProductsWithCount)
               .userProfiles(userCountState.userProfilesWithCount)
+              .baggageProducts(baggageCountState.baggageProductsWithCount)
               .build();
             onSave(newSelection);
           }}

@@ -33,6 +33,7 @@ export {
   BaggageProduct,
 } from './types';
 export {
+  type ReferenceDataNames,
   findReferenceDataById,
   getReferenceDataName,
   isProductSellableInApp,

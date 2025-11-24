@@ -5,7 +5,10 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import {getReferenceDataName} from '@atb/modules/configuration';
+import {
+  ReferenceDataNames,
+  getReferenceDataName,
+} from '@atb/modules/configuration';
 import {
   GenericClickableSectionItem,
   GenericSectionItem,
@@ -24,6 +27,8 @@ import {
   type PurchaseSelectionType,
   useSelectableUserProfiles,
 } from '@atb/modules/purchase-selection';
+
+type TravellerWithCount = ReferenceDataNames & {count: number};
 
 type TravellerSelectionProps = {
   selection: PurchaseSelectionType;
@@ -66,17 +71,13 @@ export function TravellerSelection({
   const multipleTravellerCategoriesSelectedFrom =
     selection.userProfilesWithCount.length > 1;
 
-  const travellersDetailsText =
-    selectionMode == 'single'
-      ? [getReferenceDataName(selection.userProfilesWithCount?.[0], language)]
-      : selection.userProfilesWithCount
-          .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
-          .concat(
-            selection.baggageProductsWithCount.map(
-              (s) => `${s.count} ${getReferenceDataName(s, language)}`,
-            ),
-          )
-          .join(', ');
+  const travellers: TravellerWithCount[] = (
+    selection.userProfilesWithCount as TravellerWithCount[]
+  ).concat(selection.baggageProductsWithCount);
+
+  const travellersDetailsText = travellers
+    .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
+    .join(', ');
 
   const travellerInfo = !canSelectUserProfile
     ? getTextForLanguage(

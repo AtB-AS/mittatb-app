@@ -1,4 +1,4 @@
-import {LanguageAndTextType} from '@atb/modules/configuration';
+import {ReferenceDataNames} from '@atb/modules/configuration';
 import {Language} from '@atb/translations';
 import {getReferenceDataName} from '@atb/modules/configuration';
 
@@ -17,12 +17,7 @@ export const arrayMapUniqueWithCount = <T>(
     return [...arr, {...value, count: 1}];
   }, [] as UniqueWithCount<T>[]);
 
-export const toCountAndName = <
-  T extends {
-    name: LanguageAndTextType;
-    alternativeNames?: LanguageAndTextType[];
-  },
->(
+export const toCountAndName = <T extends ReferenceDataNames>(
   u: UniqueWithCount<T>,
   language: Language,
 ) => `${u.count} ${getReferenceDataName(u, language)}`;

@@ -169,7 +169,7 @@ it('Should not apply any user profiles or supplement products if all have zero c
 
   expect(selection.userProfilesWithCount).toHaveLength(1);
   expect(selection.baggageProductsWithCount).toHaveLength(0);
-  expect(selection).toBe(TEST_SELECTION);
+  expect(selection).toStrictEqual(TEST_SELECTION);
 });
 
 it('Should apply both user profiles and supplement products with positive count', () => {

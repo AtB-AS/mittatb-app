@@ -131,7 +131,8 @@ const createBuilder = (
     baggageProducts: (baggageProductsWithCount) => {
       const productsWithCount = baggageProductsWithCount.filter((s) => s.count);
       if (
-        productsWithCount.length &&
+        (productsWithCount.length ||
+          currentSelection.userProfilesWithCount.length) &&
         productsWithCount.every((sp) =>
           isSelectableSupplementProduct(currentSelection, sp),
         )
