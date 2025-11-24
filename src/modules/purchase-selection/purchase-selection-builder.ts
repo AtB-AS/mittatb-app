@@ -45,7 +45,7 @@ const createBuilder = (
   selection: PurchaseSelectionType,
 ): PurchaseSelectionBuilder => {
   let currentSelection = selection;
-  let buildState = {
+  const buildState = {
     userProfilesWithCount: selection.userProfilesWithCount,
     baggageProductsWithCount: selection.baggageProductsWithCount,
   };
