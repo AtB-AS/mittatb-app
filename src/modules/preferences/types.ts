@@ -28,6 +28,7 @@ export type UserPreferences = {
   // not the entire accessibility settings
   journeyAidEnabled?: boolean;
   debugPredictionInaccurate?: boolean;
+  debugShowProgressBetweenStops?: boolean;
 };
 
 export type PreferenceItem = keyof UserPreferences;
