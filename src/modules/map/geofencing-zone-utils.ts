@@ -114,16 +114,32 @@ export function getIconFeatureCollections(
           // No icon for large polygons, long processing time and not useful
           return;
         }
-        const iconCoordinate = polylabel(polygon, 0.0001);
-        if (iconCoordinate && feature.properties) {
-          iconFeatures.push({
-            type: 'Feature',
-            properties: feature.properties,
-            geometry: {
-              type: 'Point',
-              coordinates: iconCoordinate,
-            },
-          });
+        if (polygon[0].length <= 5) {
+          const centerCoordinates = calculateCenterOfSimplePolygon(polygon[0]);
+          if (feature.properties) {
+            iconFeatures.push({
+              type: 'Feature',
+              properties: feature.properties,
+              geometry: {
+                type: 'Point',
+                coordinates: centerCoordinates,
+              },
+            });
+          }
+
+          return;
+        } else {
+          const iconCoordinate = polylabel(polygon, 0.0001);
+          if (iconCoordinate && feature.properties) {
+            iconFeatures.push({
+              type: 'Feature',
+              properties: feature.properties,
+              geometry: {
+                type: 'Point',
+                coordinates: iconCoordinate,
+              },
+            });
+          }
         }
       });
     });
@@ -134,6 +150,18 @@ export function getIconFeatureCollections(
       renderKey: geofencingZoneIndex.toString(),
     };
   });
+}
+
+function calculateCenterOfSimplePolygon(exteriorRing: number[][]) {
+  exteriorRing = exteriorRing.slice(0, -1); // Remove duplicate closing coordinate as it matches the first
+
+  const centerLon =
+    exteriorRing.reduce((sum, coord) => sum + coord[0], 0) /
+    exteriorRing.length;
+  const centerLat =
+    exteriorRing.reduce((sum, coord) => sum + coord[1], 0) /
+    exteriorRing.length;
+  return [centerLon, centerLat];
 }
 
 function boundingBox(exteriorRing: number[][]) {
