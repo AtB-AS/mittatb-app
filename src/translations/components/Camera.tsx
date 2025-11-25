@@ -25,9 +25,9 @@ const CameraTexts = {
     action: _('Godta', 'Accept', 'Godta'),
   },
   flashlight: {
-    default: _('Lys', 'Flashlight', 'Lys'),
-    on: _('Lys på', 'Flashlight on', 'Lys på'),
-    off: _('Lys av', 'Flashlight off', 'Lys av'),
+    default: _('Lommelykt', 'Flashlight', 'Lommelykt'),
+    on: _('Lommelykt på', 'Flashlight on', 'Lommelykt på'),
+    off: _('Lommelykt av', 'Flashlight off', 'Lommelykt av'),
   },
 };
 

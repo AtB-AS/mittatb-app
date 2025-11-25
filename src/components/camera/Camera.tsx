@@ -1,5 +1,5 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {RefObject, useCallback, useRef, useState} from 'react';
+import {RefObject, useRef, useState} from 'react';
 import {Linking, Platform, View} from 'react-native';
 import {Processing} from '../loading';
 import {MessageInfoBox} from '../message-info-box';
@@ -18,7 +18,8 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Flash, NoFlash} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {SCREEN_HEIGHT} from '@gorhom/bottom-sheet';
-import {useFocusEffect} from '@react-navigation/native';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {errorToMetadata, logToBugsnag} from '@atb/utils/bugsnag-utils';
 
 type PhotoProps = {
   mode: 'photo';
@@ -49,14 +50,7 @@ export const Camera = ({
   const device = useCameraDevice('back');
   const [footerHeight, setFooterHeight] = useState(0);
   const {bottom: safeBottomInset} = useSafeAreaInsets();
-  const [isActive, setActive] = useState(false);
-
-  useFocusEffect(
-    useCallback(() => {
-      setActive(true);
-      return () => setActive(false);
-    }, []),
-  );
+  const isFocused = useIsFocusedAndActive();
 
   const handleCapture = async () => {
     if (mode === 'photo') {
@@ -71,7 +65,8 @@ export const Camera = ({
           onCapture({path});
         }
       } catch (e) {
-        console.error('takePhoto error', e);
+        console.error('Capture error', e);
+        logToBugsnag(`Camera campture error ${e}`, errorToMetadata(e));
       }
     }
   };
@@ -103,7 +98,7 @@ export const Camera = ({
               style={StyleSheet.absoluteFill}
               enableZoomGesture={true}
               device={device}
-              isActive={isActive}
+              isActive={isFocused}
               resizeMode="cover"
               photo={mode === 'photo'}
               torch={device?.hasTorch ? torch : undefined}

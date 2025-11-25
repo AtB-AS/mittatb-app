@@ -100,7 +100,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     back: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 8,
+      gap: theme.spacing.small,
     },
   };
 });
