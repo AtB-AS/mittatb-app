@@ -1,21 +1,25 @@
 import {ViolationsReportingProvider} from '@atb/api/types/mobility';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ProviderLogo} from '../components/ProviderLogo';
 import {SelectGroup} from '../components/SelectGroup';
+import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {BottomSheetModal as GorhamBottomSheetModal} from '@gorhom/bottom-sheet';
 
 type Props = {
   providers: ViolationsReportingProvider[];
   onClose: () => void;
   onSelect: (provider: ViolationsReportingProvider) => void;
   qrScanFailed: boolean | undefined;
+  onCloseFocusRef: React.RefObject<View | null>;
+  bottomSheetModalRef: React.RefObject<GorhamBottomSheetModal | null>;
 };
 
 export const SelectProviderBottomSheet = ({
@@ -23,6 +27,8 @@ export const SelectProviderBottomSheet = ({
   onClose,
   onSelect,
   qrScanFailed,
+  onCloseFocusRef,
+  bottomSheetModalRef,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -31,9 +37,15 @@ export const SelectProviderBottomSheet = ({
     useState<ViolationsReportingProvider>();
 
   return (
-    <BottomSheetContainer
-      title={t(ParkingViolationTexts.selectProvider.title)}
-      onClose={onClose}
+    <BottomSheetModal
+      bottomSheetModalRef={bottomSheetModalRef}
+      heading={t(ParkingViolationTexts.selectProvider.title)}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      closeCallback={() => {
+        giveFocus(onCloseFocusRef);
+        onClose();
+      }}
     >
       <>
         <ThemeText style={styles.content}>
@@ -78,12 +90,11 @@ export const SelectProviderBottomSheet = ({
           />
         </View>
       </>
-    </BottomSheetContainer>
+    </BottomSheetModal>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
   return {
     content: {
       marginHorizontal: theme.spacing.medium,
@@ -98,7 +109,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     footer: {
       marginTop: theme.spacing.medium,
-      marginBottom: Math.max(bottom, theme.spacing.medium),
     },
   };
 });
