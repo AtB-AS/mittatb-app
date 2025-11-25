@@ -12,6 +12,7 @@ export enum GlobalMessageContextEnum {
   appAssistant = 'app-assistant',
   appDepartures = 'app-departures',
   appTicketing = 'app-ticketing',
+  appProfile = 'app-profile',
   appPurchaseOverview = 'app-purchase-overview',
   appPurchaseConfirmation = 'app-purchase-confirmation',
   appPurchaseConfirmationBottom = 'app-purchase-confirmation-bottom',

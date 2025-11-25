@@ -1,11 +1,10 @@
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {Camera, CameraScreenContainer} from '@atb/components/camera';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {RefObject, useEffect, useMemo, useRef, useState} from 'react';
 import {getThemeColor} from '../../components/PhotoCapture/ScreenContainer';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
 import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/bff/mobility';
@@ -18,6 +17,9 @@ import {useAuthContext} from '@atb/modules/auth';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {compressImage} from '@atb/utils/image';
+import {View} from 'react-native';
+import {BottomSheetModal as GorhamBottomSheetModal} from '@gorhom/bottom-sheet';
+import {ViolationsReportingProvider} from '@atb/api/types/mobility';
 
 export type QrScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsQrScreen'>;
@@ -34,11 +36,18 @@ export const Root_ParkingViolationsQrScreen = ({
   const [capturedQr, setCapturedQr] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const {open: openBottomSheet, close: closeBottomSheet} =
-    useBottomSheetContext();
   const {providers, coordinates} = useParkingViolations();
   const {userId} = useAuthContext();
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
+  const onCloseFocusRef = useRef<View | null>(null);
+  const providerAndVehicleBottomSheetModalRef =
+    useRef<GorhamBottomSheetModal | null>(null);
+  const selectProviderBottomSheetModalRef =
+    useRef<GorhamBottomSheetModal | null>(null);
+  const [providerAndVehicleId, setProviderAndVehicleId] = useState<{
+    provider: ViolationsReportingProvider;
+    vehicle_id: string | undefined;
+  } | null>(null);
+  const [qrScanFailed, setQrScanFailed] = useState(false);
 
   const providersList = useMemo(
     () => [
@@ -54,9 +63,22 @@ export const Root_ParkingViolationsQrScreen = ({
     }
   }, [isFocused]);
 
+  useEffect(() => {
+    if (providerAndVehicleId) {
+      providerAndVehicleBottomSheetModalRef?.current?.present();
+    }
+  }, [providerAndVehicleId]);
+
+  const handleFinishSubmitReport = () => {
+    enableScanning();
+    selectProviderBottomSheetModalRef?.current?.dismiss();
+    providerAndVehicleBottomSheetModalRef?.current?.dismiss();
+  };
+
   const submitReport = async (providerId?: number) => {
     setIsLoading(true);
-    closeBottomSheet();
+    selectProviderBottomSheetModalRef?.current?.dismiss();
+    providerAndVehicleBottomSheetModalRef?.current?.dismiss();
 
     const compressedBlob = await compressImage(params.photo, 2048, 2048);
     if (!compressedBlob) {
@@ -88,14 +110,12 @@ export const Root_ParkingViolationsQrScreen = ({
         navigation.navigate('Root_ParkingViolationsConfirmationScreen', {
           providerName: providers.find((p) => p.id === providerId)?.name,
         });
-        enableScanning();
-        closeBottomSheet();
+        handleFinishSubmitReport();
       })
       .catch((e) => {
         console.error(e);
         setIsError(true);
-        enableScanning();
-        closeBottomSheet();
+        handleFinishSubmitReport();
       });
   };
 
@@ -113,37 +133,16 @@ export const Root_ParkingViolationsQrScreen = ({
       disableScanning(qr);
       const providerAndVehicleId = await getProviderByQr(qr);
       if (providerAndVehicleId) {
-        openBottomSheet(
-          () => (
-            <VehicleLookupConfirmationBottomSheet
-              vehicleId={providerAndVehicleId.vehicle_id}
-              provider={providerAndVehicleId.provider}
-              onReportSubmit={submitReport}
-              onClose={enableScanning}
-            />
-          ),
-          onCloseFocusRef,
-        );
+        setProviderAndVehicleId(providerAndVehicleId);
       } else {
-        selectProvider(true);
+        setQrScanFailed(true);
+        selectProvider();
       }
     }
   };
 
-  const selectProvider = (qrScanFailed?: boolean) => {
-    openBottomSheet(
-      () => (
-        <SelectProviderBottomSheet
-          providers={providersList}
-          qrScanFailed={qrScanFailed}
-          onSelect={(provider) => {
-            submitReport(provider.id);
-          }}
-          onClose={enableScanning}
-        />
-      ),
-      onCloseFocusRef,
-    );
+  const selectProvider = () => {
+    selectProviderBottomSheetModalRef?.current?.present();
   };
 
   const disableScanning = (qr: string) => {
@@ -157,38 +156,60 @@ export const Root_ParkingViolationsQrScreen = ({
   };
 
   return (
-    <CameraScreenContainer
-      title={t(ParkingViolationTexts.qr.title)}
-      secondaryText={t(ParkingViolationTexts.qr.instructions)}
-      isLoading={isLoading}
-    >
-      {isError && (
-        <MessageInfoBox
-          style={style.error}
-          title={t(ParkingViolationTexts.issue.sendReport.title)}
-          message={t(ParkingViolationTexts.issue.sendReport.message)}
-          type="error"
+    <>
+      <CameraScreenContainer
+        title={t(ParkingViolationTexts.qr.title)}
+        secondaryText={t(ParkingViolationTexts.qr.instructions)}
+        isLoading={isLoading}
+      >
+        {isError && (
+          <MessageInfoBox
+            style={style.error}
+            title={t(ParkingViolationTexts.issue.sendReport.title)}
+            message={t(ParkingViolationTexts.issue.sendReport.message)}
+            type="error"
+          />
+        )}
+        {isFocused && !isLoading && !isError && !capturedQr && (
+          <Camera
+            mode="qr"
+            onCapture={handlePhotoCapture}
+            bottomButtonNode={
+              <Button
+                expanded={false}
+                disabled={isError}
+                mode="secondary"
+                backgroundColor={themeColor}
+                onPress={() => selectProvider()}
+                text={t(ParkingViolationTexts.qr.scanningNotPossible)}
+                ref={onCloseFocusRef}
+                interactiveColor={theme.color.interactive[2]}
+              />
+            }
+          />
+        )}
+      </CameraScreenContainer>
+      {providerAndVehicleId && (
+        <VehicleLookupConfirmationBottomSheet
+          vehicleId={providerAndVehicleId.vehicle_id}
+          provider={providerAndVehicleId.provider}
+          onReportSubmit={submitReport}
+          onClose={enableScanning}
+          onCloseFocusRef={onCloseFocusRef}
+          bottomSheetModalRef={providerAndVehicleBottomSheetModalRef}
         />
       )}
-      {isFocused && !isLoading && !isError && !capturedQr && (
-        <Camera
-          mode="qr"
-          onCapture={handlePhotoCapture}
-          bottomButtonNode={
-            <Button
-              expanded={false}
-              disabled={isError}
-              mode="secondary"
-              backgroundColor={themeColor}
-              onPress={() => selectProvider()}
-              text={t(ParkingViolationTexts.qr.scanningNotPossible)}
-              ref={onCloseFocusRef}
-              interactiveColor={theme.color.interactive[2]}
-            />
-          }
-        />
-      )}
-    </CameraScreenContainer>
+      <SelectProviderBottomSheet
+        providers={providersList}
+        qrScanFailed={qrScanFailed}
+        onSelect={(provider) => {
+          submitReport(provider.id);
+        }}
+        onClose={enableScanning}
+        onCloseFocusRef={onCloseFocusRef}
+        bottomSheetModalRef={selectProviderBottomSheetModalRef}
+      />
+    </>
   );
 };
 
