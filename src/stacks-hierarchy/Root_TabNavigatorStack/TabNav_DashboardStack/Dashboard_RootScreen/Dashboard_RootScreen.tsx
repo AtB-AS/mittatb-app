@@ -46,6 +46,7 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {UserBonusBalanceContent} from '@atb/modules/bonus';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useNavigateNestedProfileScreen} from '@atb/utils/use-navigate-to-nested-profile-screen';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
@@ -64,6 +65,9 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
   const analytics = useAnalyticsContext();
 
   const {isBonusProgramEnabled} = useFeatureTogglesContext();
+  const navigateToBonusScreen = useNavigateNestedProfileScreen(
+    'Profile_BonusScreen',
+  );
   const {locationIsAvailable, location, requestLocationPermission} =
     useGeolocationContext();
 
@@ -304,9 +308,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
                     'Bonus',
                     'Dashboard bonus info button clicked',
                   );
-                  navigation.navigate('TabNav_ProfileStack', {
-                    screen: 'Profile_BonusScreen',
-                  });
+                  navigateToBonusScreen();
                 }}
               />
             </Section>
