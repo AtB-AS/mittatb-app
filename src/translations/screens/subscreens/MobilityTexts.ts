@@ -54,9 +54,9 @@ export const MobilityTexts = {
       'Ta bilete av elsparkesykkelen',
     ),
     subHeader: _(
-      'Hold ca. 5 meter avstand. Unngå folk i bildet',
-      'Stand approximately 5 meters away. Avoid people in the frame',
-      'Hald ein avstand på ca. 5 meter. Unngå folk i biletet',
+      'Du blir ikke belastet for tiden du bruker på å ta bilde.',
+      'You will not be charged for the time you spend taking the photo.',
+      'Du blir ikkje belastet for tida du bruker på å ta bilete.',
     ),
   },
   shmoRequirements: {

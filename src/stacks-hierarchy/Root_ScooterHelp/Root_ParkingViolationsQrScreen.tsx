@@ -1,13 +1,10 @@
 import {Button} from '@atb/components/button';
-import {Camera} from '@atb/components/camera';
-import {StyleSheet} from '@atb/theme';
+import {Camera, CameraScreenContainer} from '@atb/components/camera';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
+import {getThemeColor} from '../../components/PhotoCapture/ScreenContainer';
 import {useEffect, useMemo, useRef, useState} from 'react';
-import {
-  ScreenContainer,
-  getThemeColor,
-} from '../../components/PhotoCapture/ScreenContainer';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
 import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/bff/mobility';
@@ -33,7 +30,8 @@ export const Root_ParkingViolationsQrScreen = ({
 }: QrScreenProps) => {
   const {t} = useTranslation();
   const style = useStyles();
-  const themeColor = getThemeColor('dark');
+  const {theme} = useThemeContext();
+  const themeColor = getThemeColor(theme);
   const isFocused = useIsFocusedAndActive();
   const [capturedQr, setCapturedQr] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
@@ -159,22 +157,9 @@ export const Root_ParkingViolationsQrScreen = ({
 
   return (
     <>
-      <ScreenContainer
-        overrideThemeName="dark"
+      <CameraScreenContainer
         title={t(ParkingViolationTexts.qr.title)}
         secondaryText={t(ParkingViolationTexts.qr.instructions)}
-        leftHeaderButton={isLoading ? undefined : {type: 'back'}}
-        buttons={
-          <Button
-            expanded={true}
-            disabled={isError}
-            mode="secondary"
-            backgroundColor={themeColor}
-            onPress={() => selectProvider()}
-            text={t(ParkingViolationTexts.qr.scanningNotPossible)}
-            ref={onCloseFocusRef}
-          />
-        }
         isLoading={isLoading}
       >
         {isError && (
@@ -188,11 +173,22 @@ export const Root_ParkingViolationsQrScreen = ({
         {isFocused && !isLoading && !isError && !capturedQr && (
           <Camera
             mode="qr"
-            style={style.camera}
             onCapture={handlePhotoCapture}
+            bottomButtonNode={
+              <Button
+                expanded={false}
+                disabled={isError}
+                mode="secondary"
+                backgroundColor={themeColor}
+                onPress={() => selectProvider()}
+                text={t(ParkingViolationTexts.qr.scanningNotPossible)}
+                ref={onCloseFocusRef}
+                interactiveColor={theme.color.interactive[2]}
+              />
+            }
           />
         )}
-      </ScreenContainer>
+      </CameraScreenContainer>
       {providerAndVehicleId && (
         <VehicleLookupConfirmationBottomSheet
           vehicleId={providerAndVehicleId.vehicle_id}
@@ -218,9 +214,6 @@ export const Root_ParkingViolationsQrScreen = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  camera: {
-    flexGrow: 1,
-  },
   error: {
     margin: theme.spacing.medium,
   },
