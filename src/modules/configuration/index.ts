@@ -26,7 +26,11 @@ export type {
   TravelSearchTransportModes,
   UserProfile,
 } from './types';
-export {LanguageAndTextTypeArray, PreassignedFareProduct} from './types';
+export {
+  LanguageAndTextTypeArray,
+  PreassignedFareProduct,
+  SupplementProduct,
+} from './types';
 export {
   findReferenceDataById,
   getReferenceDataName,

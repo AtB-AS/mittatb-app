@@ -42,7 +42,7 @@ export const Profile_SelectStartScreenScreen = () => {
     <FullScreenView
       headerProps={{
         title: t(SelectStartScreenTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading

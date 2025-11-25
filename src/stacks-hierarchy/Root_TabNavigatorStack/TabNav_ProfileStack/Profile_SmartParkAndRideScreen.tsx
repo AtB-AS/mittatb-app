@@ -73,7 +73,7 @@ export const Profile_SmartParkAndRideScreen = ({route, navigation}: Props) => {
     <FullScreenView
       headerProps={{
         title: t(SmartParkAndRideTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       refreshControl={
         <RefreshControl

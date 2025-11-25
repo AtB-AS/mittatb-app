@@ -43,7 +43,7 @@ export const Profile_EnrollmentScreen = () => {
       <FullScreenView
         headerProps={{
           title: t(EnrollmentTexts.header),
-          leftButton: {type: 'back', withIcon: true},
+          leftButton: {type: 'back'},
         }}
         parallaxContent={(focusRef) => (
           <ScreenHeading ref={focusRef} text={t(EnrollmentTexts.header)} />

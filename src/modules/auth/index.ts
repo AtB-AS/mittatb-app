@@ -2,6 +2,7 @@ export {
   AuthContextProvider,
   getCurrentUserIdGlobal,
   getIdTokenGlobal,
+  getDebugUserInfoHeaderGlobal,
   useAuthContext,
   getIdTokenExpirationTimeGlobal,
 } from './AuthContext';

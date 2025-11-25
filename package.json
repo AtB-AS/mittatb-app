@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
-    "@atb-as/config-specs": "^8.2.1",
+    "@atb-as/config-specs": "^8.4.1",
     "@atb-as/generate-assets": "^18.5.0",
     "@atb-as/theme": "^15.0.0",
     "@atb-as/utils": "^5.1.1",

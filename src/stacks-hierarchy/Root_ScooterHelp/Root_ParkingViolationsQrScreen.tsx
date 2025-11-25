@@ -71,6 +71,12 @@ export const Root_ParkingViolationsQrScreen = ({
     }
   }, [providerAndVehicleId]);
 
+  const handleFinishSubmitReport = () => {
+    enableScanning();
+    selectProviderBottomSheetModalRef?.current?.dismiss();
+    providerAndVehicleBottomSheetModalRef?.current?.dismiss();
+  };
+
   const submitReport = async (providerId?: number) => {
     setIsLoading(true);
     selectProviderBottomSheetModalRef?.current?.dismiss();
@@ -106,16 +112,12 @@ export const Root_ParkingViolationsQrScreen = ({
         navigation.navigate('Root_ParkingViolationsConfirmationScreen', {
           providerName: providers.find((p) => p.id === providerId)?.name,
         });
-        enableScanning();
-        selectProviderBottomSheetModalRef?.current?.dismiss();
-        providerAndVehicleBottomSheetModalRef?.current?.dismiss();
+        handleFinishSubmitReport();
       })
       .catch((e) => {
         console.error(e);
         setIsError(true);
-        enableScanning();
-        selectProviderBottomSheetModalRef?.current?.dismiss();
-        providerAndVehicleBottomSheetModalRef?.current?.dismiss();
+        handleFinishSubmitReport();
       });
   };
 
@@ -161,9 +163,7 @@ export const Root_ParkingViolationsQrScreen = ({
         overrideThemeName="dark"
         title={t(ParkingViolationTexts.qr.title)}
         secondaryText={t(ParkingViolationTexts.qr.instructions)}
-        leftHeaderButton={
-          isLoading ? undefined : {type: 'back', withIcon: true}
-        }
+        leftHeaderButton={isLoading ? undefined : {type: 'back'}}
         buttons={
           <Button
             expanded={true}
