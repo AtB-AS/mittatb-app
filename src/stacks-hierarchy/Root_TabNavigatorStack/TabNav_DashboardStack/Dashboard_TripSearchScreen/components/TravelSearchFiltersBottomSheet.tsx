@@ -23,14 +23,14 @@ import {TravelSearchPreference} from '@atb/stacks-hierarchy/Root_TabNavigatorSta
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
-import {BottomSheetModal as gorhamBottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModal as GorhamBottomSheetModal} from '@gorhom/bottom-sheet';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
   {
     filtersSelection: TravelSearchFiltersSelectionType;
     onSave: (t: TravelSearchFiltersSelectionType) => void;
-    bottomSheetModalRef: React.RefObject<gorhamBottomSheetModal | null>;
+    bottomSheetModalRef: React.RefObject<GorhamBottomSheetModal | null>;
     onCloseFocusRef: React.RefObject<View | null>;
   }
 >(
