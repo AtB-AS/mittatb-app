@@ -44,8 +44,7 @@ const useCloseOnboardingCarousel = (configId: OnboardingCarouselConfigId) => {
     if (comingFromOnboardingSectionId) {
       continueFromOnboardingSection(comingFromOnboardingSectionId);
     } else {
-      // should never happen
-      console.error('UNKNOWN ONBOARDING SECTION');
+      // onboarding carousel entered manually, not through config
       navigation.getParent()?.goBack();
     }
   }, [
