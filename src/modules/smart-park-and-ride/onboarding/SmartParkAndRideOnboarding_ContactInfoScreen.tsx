@@ -37,13 +37,11 @@ export const SmartParkAndRideOnboarding_ContactInfoScreen = () => {
       headerProps={{
         leftButton: {
           type: 'back',
-          withIcon: true,
           onPress: navigateToPreviousScreen,
         },
         rightButton: {
           type: 'close',
-          withIcon: true,
-          onPress: () => closeOnboardingCarousel('smartParkAndRide'),
+          onPress: closeOnboardingCarousel,
         },
       }}
       title={t(SmartParkAndRideTexts.onboarding.contactInfo.title)}

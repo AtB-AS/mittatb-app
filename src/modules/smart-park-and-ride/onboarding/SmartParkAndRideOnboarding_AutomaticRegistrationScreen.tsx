@@ -33,13 +33,11 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
       headerProps={{
         leftButton: {
           type: 'back',
-          withIcon: true,
           onPress: navigateToPreviousScreen,
         },
         rightButton: {
           type: 'close',
-          withIcon: true,
-          onPress: () => closeOnboardingCarousel('smartParkAndRide'),
+          onPress: closeOnboardingCarousel,
         },
       }}
       title={t(SmartParkAndRideTexts.onboarding.automaticRegistration.title)}

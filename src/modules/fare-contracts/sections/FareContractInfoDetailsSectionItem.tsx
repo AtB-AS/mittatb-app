@@ -1,31 +1,28 @@
 import {
-  findReferenceDataById,
   PreassignedFareProduct,
+  SupplementProduct,
   FareZone,
   useFirestoreConfigurationContext,
   UserProfile,
 } from '@atb/modules/configuration';
 import {StyleSheet} from '@atb/theme';
-import {getLastUsedAccess} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import {
-  getValidityStatus,
   isValidFareContract,
-  mapToUserProfilesWithCount,
-  userProfileCountAndName,
   useFareZoneSummary,
   ValidityStatus,
 } from '../utils';
 import {FareContractDetailItem} from '../components/FareContractDetailItem';
 import {InspectionSymbol} from '../components/InspectionSymbol';
-import {UserProfileWithCount} from '../types';
 import {getTransportModeText} from '@atb/components/transportation-modes';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
-import {getAccesses} from '@atb-as/utils';
-import {isDefined} from '@atb/utils/presence';
+import {
+  toCountAndName,
+  UniqueWithCount,
+} from '@atb/utils/array-map-unique-with-count';
 
 export type FareContractInfoProps = {
   status: ValidityStatus;
@@ -39,7 +36,8 @@ export type FareContractInfoDetailsProps = {
   preassignedFareProduct?: PreassignedFareProduct;
   fromFareZone?: FareZone;
   toFareZone?: FareZone;
-  userProfilesWithCount: UserProfileWithCount[];
+  userProfilesWithCount: UniqueWithCount<UserProfile>[];
+  baggageProductsWithCount: UniqueWithCount<SupplementProduct>[];
   status: FareContractInfoProps['status'];
   testID?: string;
   now?: number;
@@ -53,6 +51,7 @@ export const FareContractInfoDetailsSectionItem = ({
   fromFareZone,
   toFareZone,
   userProfilesWithCount,
+  baggageProductsWithCount,
   status,
   ...props
 }: SectionItemProps<FareContractInfoDetailsProps>) => {
@@ -98,9 +97,13 @@ export const FareContractInfoDetailsSectionItem = ({
           ) : (
             <FareContractDetailItem
               header={t(FareContractTexts.label.travellers)}
-              content={userProfilesWithCount.map((u) =>
-                userProfileCountAndName(u, language),
-              )}
+              content={userProfilesWithCount
+                .map((u) => toCountAndName(u, language))
+                .concat(
+                  baggageProductsWithCount.map((p) =>
+                    toCountAndName(p, language),
+                  ),
+                )}
             />
           )}
           {fareZoneSummary && (
@@ -119,57 +122,6 @@ export const FareContractInfoDetailsSectionItem = ({
       </View>
     </View>
   );
-};
-
-export const getFareContractInfoDetails = (
-  fareContract: FareContractType,
-  now: number,
-  fareZones: FareZone[],
-  userProfiles: UserProfile[],
-  preassignedFareProducts: PreassignedFareProduct[],
-): FareContractInfoDetailsProps => {
-  const {
-    endDateTime,
-    fareProductRef: productRef,
-    fareZoneRefs,
-  } = fareContract.travelRights[0];
-  let validTo = endDateTime.getTime();
-  const validityStatus = getValidityStatus(now, fareContract);
-
-  const firstZone = fareZoneRefs?.[0];
-  const lastZone = fareZoneRefs?.slice(-1)?.[0];
-  const fromFareZone = firstZone
-    ? findReferenceDataById(fareZones, firstZone)
-    : undefined;
-  const toFareZone = lastZone
-    ? findReferenceDataById(fareZones, lastZone)
-    : undefined;
-  const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
-    productRef,
-  );
-  const userProfilesWithCount = mapToUserProfilesWithCount(
-    fareContract.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
-    userProfiles,
-  );
-
-  const flattenedAccesses = getAccesses(fareContract);
-  if (flattenedAccesses) {
-    const {usedAccesses} = flattenedAccesses;
-    const {validTo: usedAccessValidTo} = getLastUsedAccess(now, usedAccesses);
-    if (usedAccessValidTo) validTo = usedAccessValidTo;
-  }
-
-  return {
-    preassignedFareProduct: preassignedFareProduct,
-    fromFareZone: fromFareZone,
-    toFareZone: toFareZone,
-    userProfilesWithCount: userProfilesWithCount,
-    status: validityStatus,
-    now: now,
-    validTo: validTo,
-    fareContract,
-  };
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

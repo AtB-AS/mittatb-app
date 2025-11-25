@@ -1,4 +1,9 @@
-import {PreassignedFareProduct, FareZone, UserProfile} from './types';
+import {
+  PreassignedFareProduct,
+  FareZone,
+  UserProfile,
+  SupplementProduct,
+} from './types';
 import {
   getTextForLanguage,
   Language,
@@ -29,7 +34,7 @@ export const getReferenceDataName = <
   'Unknown';
 
 export const findReferenceDataById = <
-  T extends UserProfile | PreassignedFareProduct | FareZone,
+  T extends UserProfile | PreassignedFareProduct | FareZone | SupplementProduct,
 >(
   elements: T[],
   id: string,

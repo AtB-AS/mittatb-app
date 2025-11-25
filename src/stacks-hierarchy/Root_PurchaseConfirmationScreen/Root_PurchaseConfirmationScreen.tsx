@@ -48,12 +48,13 @@ import {
 import {APP_SCHEME} from '@env';
 import {useAuthContext} from '@atb/modules/auth';
 import {Section} from '@atb/components/sections';
-import {formatNumberToString} from '@atb/utils/numbers';
 import SvgClose from '@atb/assets/svg/mono-icons/actions/Close';
 import {ThemeText} from '@atb/components/text';
 import {MutationStatus} from '@tanstack/react-query';
 import {PaymentSelectionSectionItem} from '@atb/modules/payment';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
+import {formatNumberToString} from '@atb-as/utils';
+import {ScreenHeading} from '@atb/components/heading';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -238,6 +239,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         },
         globalMessageContext: GlobalMessageContextEnum.appTicketing,
       }}
+      parallaxContent={(focusRef) => (
+        <ScreenHeading
+          ref={focusRef}
+          text={t(PurchaseConfirmationTexts.title)}
+        />
+      )}
     >
       <View style={styles.container}>
         {offerError && (

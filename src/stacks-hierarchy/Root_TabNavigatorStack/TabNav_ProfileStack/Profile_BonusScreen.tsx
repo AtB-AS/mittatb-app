@@ -60,7 +60,7 @@ export const Profile_BonusScreen = () => {
     <FullScreenView
       headerProps={{
         title: t(BonusProgramTexts.bonusProfile.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
     >
       <View style={styles.container}>
