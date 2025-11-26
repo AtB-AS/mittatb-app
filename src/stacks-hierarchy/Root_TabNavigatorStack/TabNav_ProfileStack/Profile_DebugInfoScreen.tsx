@@ -153,8 +153,12 @@ export const Profile_DebugInfoScreen = () => {
   }
 
   const {setPreference, preferences} = usePreferencesContext();
-  const {showTestIds, debugShowSeconds, debugPredictionInaccurate} =
-    preferences;
+  const {
+    showTestIds,
+    debugShowSeconds,
+    debugPredictionInaccurate,
+    debugShowProgressBetweenStops,
+  } = preferences;
 
   return (
     <View style={styles.container}>
@@ -200,6 +204,13 @@ export const Profile_DebugInfoScreen = () => {
             value={debugShowSeconds}
             onValueChange={(debugShowSeconds) => {
               setPreference({debugShowSeconds});
+            }}
+          />
+          <ToggleSectionItem
+            text="Display percentage between stops in departure details"
+            value={debugShowProgressBetweenStops}
+            onValueChange={(debugShowProgressBetweenStops) => {
+              setPreference({debugShowProgressBetweenStops});
             }}
           />
           <ToggleSectionItem
