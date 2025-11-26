@@ -3,12 +3,7 @@ import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import {
-  GenericSectionItem,
-  LinkSectionItem,
-  LocationInputSectionItem,
-  Section,
-} from '@atb/components/sections';
+import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {screenReaderPause} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {
@@ -43,10 +38,9 @@ import {DeparturesWidget} from './components/DeparturesWidget';
 import {Announcements} from './components/Announcements';
 import SharedTexts from '@atb/translations/shared';
 import {FullScreenView} from '@atb/components/screen-view';
-import {ContentHeading, ScreenHeading} from '@atb/components/heading';
-import {UserBonusBalanceContent} from '@atb/modules/bonus';
+import {ScreenHeading} from '@atb/components/heading';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {useNavigateNestedProfileScreen} from '@atb/utils/use-navigate-to-nested-profile-screen';
+import {BonusDashboard} from './components/BonusDashboard';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
@@ -65,9 +59,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
   const analytics = useAnalyticsContext();
 
   const {isBonusProgramEnabled} = useFeatureTogglesContext();
-  const navigateToBonusScreen = useNavigateNestedProfileScreen(
-    'Profile_BonusScreen',
-  );
   const {locationIsAvailable, location, requestLocationPermission} =
     useGeolocationContext();
 
@@ -291,30 +282,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
             }}
           />
         )}
-        {isBonusProgramEnabled && (
-          <View style={style.contentSection}>
-            <ContentHeading
-              text={t(DashboardTexts.bonus.header)}
-              style={style.heading}
-            />
-            <Section>
-              <GenericSectionItem>
-                <UserBonusBalanceContent />
-              </GenericSectionItem>
-              <LinkSectionItem
-                text={t(DashboardTexts.bonus.button)}
-                onPress={() => {
-                  analytics.logEvent(
-                    'Bonus',
-                    'Dashboard bonus info button clicked',
-                  );
-                  navigateToBonusScreen();
-                }}
-              />
-            </Section>
-          </View>
-        )}
-
+        {isBonusProgramEnabled && <BonusDashboard />}
         <DeparturesWidget
           style={style.contentSection}
           onEditFavouriteDeparture={() =>

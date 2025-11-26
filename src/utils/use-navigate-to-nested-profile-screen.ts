@@ -10,7 +10,7 @@ import {useCallback} from 'react';
  * @returns {Function} A function that when called, navigates to the specified profile screen
  * with the correct navigation hierarchy.
  */
-export const useNavigateNestedProfileScreen = <
+export const useNavigateToNestedProfileScreen = <
   T extends keyof ProfileStackParams,
 >(
   screenName: T,

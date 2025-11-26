@@ -32,7 +32,7 @@ import {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics';
 import {MapStateActionType} from './mapStateReducer';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {MapBottomSheetType, useMapContext} from './MapContext';
-import {useNavigateNestedProfileScreen} from '@atb/utils/use-navigate-to-nested-profile-screen';
+import {useNavigateToNestedProfileScreen} from '@atb/utils/use-navigate-to-nested-profile-screen';
 
 type MapBottomSheetsProps = {
   mapViewRef: RefObject<MapboxGL.MapView | null>;
@@ -46,7 +46,7 @@ export const MapBottomSheets = ({
   locationArrowOnPress,
 }: MapBottomSheetsProps) => {
   const [openPaymentType, setOpenPaymentType] = useState<boolean>(false);
-  const navigateToPaymentMethods = useNavigateNestedProfileScreen(
+  const navigateToPaymentMethods = useNavigateToNestedProfileScreen(
     'Profile_PaymentMethodsScreen',
   );
   const {mapState, dispatchMapState} = useMapContext();
