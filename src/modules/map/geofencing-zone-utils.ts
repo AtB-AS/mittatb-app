@@ -116,6 +116,7 @@ export function getIconFeatureCollections(
           // No icon for large polygons, long processing time and not useful
           return;
         }
+        let iconCoordinate: number[] | undefined;
         if (polygon.length === 1 && polygon[0].length <= 7) {
           // For polygons with few points, use centroid as icon position to avoid issues with polylabel
           const polyFeature: GeoJsonFeature<GeoJsonPolygon> = {
@@ -127,23 +128,19 @@ export function getIconFeatureCollections(
             },
           };
           const polygonCentroid = centroid(polyFeature);
-
-          if (feature.properties) {
-            polygonCentroid.properties = feature.properties;
-            iconFeatures.push(polygonCentroid as PointFeature);
-          }
+          iconCoordinate = polygonCentroid.geometry.coordinates;
         } else {
-          const iconCoordinate = polylabel(polygon, 0.0001);
-          if (iconCoordinate && feature.properties) {
-            iconFeatures.push({
-              type: 'Feature',
-              properties: feature.properties,
-              geometry: {
-                type: 'Point',
-                coordinates: iconCoordinate,
-              },
-            });
-          }
+          iconCoordinate = polylabel(polygon, 0.0001);
+        }
+        if (iconCoordinate && feature.properties) {
+          iconFeatures.push({
+            type: 'Feature',
+            properties: feature.properties,
+            geometry: {
+              type: 'Point',
+              coordinates: iconCoordinate,
+            },
+          });
         }
       });
     });
