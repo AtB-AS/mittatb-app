@@ -14,14 +14,11 @@ import {
 import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
-import {
-  ThemedBonusBagHug,
-  ThemedBonusTransaction,
-} from '@atb/theme/ThemedAssets';
+import {ThemedBonusTransaction} from '@atb/theme/ThemedAssets';
 import {ContentHeading} from '@atb/components/heading';
 import {
   BonusPriceTag,
-  UserBonusBalance,
+  UserBonusBalanceContent,
   bonusOnboardingId,
   isActive,
   useBonusBalanceQuery,
@@ -31,9 +28,6 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {BrandingImage, findOperatorBrandImageUrl} from '@atb/modules/mobility';
 import {isDefined} from '@atb/utils/presence';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
-import {useFontScale} from '@atb/utils/use-font-scale';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import Intercom, {Space} from '@intercom/intercom-react-native';
 import {useAnalyticsContext} from '@atb/modules/analytics';
@@ -49,6 +43,13 @@ export const Profile_BonusScreen = () => {
     useFirestoreConfigurationContext();
   const [currentlyOpenBonusProduct, setCurrentlyOpenBonusProduct] =
     useState<number>();
+  const {data: userBonusBalance, status: userBonusBalanceStatus} =
+    useBonusBalanceQuery();
+
+  const isBonusBalanceError =
+    !isDefined(userBonusBalance) ||
+    Number.isNaN(userBonusBalance) ||
+    userBonusBalanceStatus === 'error';
 
   const navigation = useNavigation<RootNavigationProps>();
 
@@ -71,7 +72,19 @@ export const Profile_BonusScreen = () => {
             />
           </View>
         )}
-        <UserBonusBalanceSection />
+
+        <Section>
+          <GenericSectionItem>
+            <UserBonusBalanceContent />
+          </GenericSectionItem>
+        </Section>
+        {isBonusBalanceError && (
+          <MessageInfoBox
+            type="error"
+            message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
+          />
+        )}
+
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.spendPoints.heading)}
         />
@@ -220,59 +233,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.xSmall,
   },
 }));
-
-function UserBonusBalanceSection(): React.JSX.Element {
-  const styles = useStyles();
-  const {theme} = useThemeContext();
-  const {t} = useTranslation();
-  const fontScale = useFontScale();
-  const {data: userBonusBalance, status: userBonusBalanceStatus} =
-    useBonusBalanceQuery();
-
-  const isError =
-    !isDefined(userBonusBalance) ||
-    Number.isNaN(userBonusBalance) ||
-    userBonusBalanceStatus === 'error';
-
-  return (
-    <>
-      <Section>
-        <GenericSectionItem style={styles.horizontalContainer}>
-          <View
-            accessible
-            accessibilityLabel={t(
-              BonusProgramTexts.yourBonusBalanceA11yLabel(
-                userBonusBalance && userBonusBalanceStatus === 'success'
-                  ? userBonusBalance
-                  : null,
-              ),
-            )}
-          >
-            <View style={styles.currentBalanceDisplay}>
-              <UserBonusBalance
-                typography="heading__3xl"
-                color={theme.color.foreground.dynamic.primary}
-              />
-              <ThemeIcon
-                color={theme.color.foreground.dynamic.primary}
-                svg={StarFill}
-                size="large"
-              />
-            </View>
-
-            <ThemeText typography="body__s" color="secondary">
-              {t(BonusProgramTexts.bonusProfile.yourBonusPoints)}
-            </ThemeText>
-          </View>
-          <ThemedBonusBagHug height={fontScale * 61} width={fontScale * 61} />
-        </GenericSectionItem>
-      </Section>
-      {isError && (
-        <MessageInfoBox
-          type="error"
-          message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
-        />
-      )}
-    </>
-  );
-}

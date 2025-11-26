@@ -39,6 +39,8 @@ import {Announcements} from './components/Announcements';
 import SharedTexts from '@atb/translations/shared';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {BonusDashboard} from './components/BonusDashboard';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
@@ -56,6 +58,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
   const analytics = useAnalyticsContext();
 
+  const {isBonusProgramEnabled} = useFeatureTogglesContext();
   const {locationIsAvailable, location, requestLocationPermission} =
     useGeolocationContext();
 
@@ -279,6 +282,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
             }}
           />
         )}
+        {isBonusProgramEnabled && <BonusDashboard />}
         <DeparturesWidget
           style={style.contentSection}
           onEditFavouriteDeparture={() =>
@@ -436,5 +440,8 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   dashboardGlobalmessages: {
     marginBottom: theme.spacing.medium,
+  },
+  heading: {
+    marginBottom: theme.spacing.small,
   },
 }));
