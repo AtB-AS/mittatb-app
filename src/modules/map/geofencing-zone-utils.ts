@@ -13,6 +13,8 @@ import {GeofencingZoneStyles} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
 import polylabel from 'polylabel';
 import {PointFeature, PointFeatureCollection} from './types';
+import centroid from '@turf/centroid';
+import {Feature as GeoJsonFeature, Polygon as GeoJsonPolygon} from 'geojson';
 
 function getApplicableGeofencingZoneRules(
   feature: Feature,
@@ -114,7 +116,22 @@ export function getIconFeatureCollections(
           // No icon for large polygons, long processing time and not useful
           return;
         }
-        const iconCoordinate = polylabel(polygon, 0.0001);
+        let iconCoordinate: number[] | undefined;
+        if (polygon.length === 1 && polygon[0].length <= 7) {
+          // For polygons with few points, use centroid as icon position to avoid issues with polylabel
+          const polyFeature: GeoJsonFeature<GeoJsonPolygon> = {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'Polygon',
+              coordinates: polygon,
+            },
+          };
+          const polygonCentroid = centroid(polyFeature);
+          iconCoordinate = polygonCentroid.geometry.coordinates;
+        } else {
+          iconCoordinate = polylabel(polygon, 0.0001);
+        }
         if (iconCoordinate && feature.properties) {
           iconFeatures.push({
             type: 'Feature',
