@@ -55,3 +55,24 @@ export type VehicleTypeFragment = {
   propulsionType: Types.PropulsionType;
   name?: TranslatedStringFragment;
 } & VehicleTypeBasicFragment;
+
+export type VehicleBasicFragment = {
+  id: string;
+  lat: number;
+  lon: number;
+  currentFuelPercent?: number;
+  currentRangeMeters: number;
+  vehicleType: VehicleTypeBasicFragment;
+};
+
+export type VehicleExtendedFragment = {
+  isReserved: boolean;
+  isDisabled: boolean;
+  availableUntil?: string;
+  pricingPlan: PricingPlanFragment;
+  system: SystemFragment;
+  rentalUris?: RentalUrisFragment;
+  vehicleType: VehicleTypeFragment;
+} & VehicleBasicFragment;
+
+export type VehicleId = string;

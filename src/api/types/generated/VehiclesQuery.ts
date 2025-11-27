@@ -2,7 +2,7 @@ import * as Types from './mobility-types_v2';
 import {
   VehicleBasicFragment,
   VehicleExtendedFragment,
-} from './fragments/vehicles';
+} from './fragments/mobility-shared';
 
 export type GetVehiclesQueryVariables = Types.Exact<{
   lat: Types.Scalars['Float'];

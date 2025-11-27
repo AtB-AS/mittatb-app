@@ -7,7 +7,7 @@ import {
 import {stringifyUrl} from '@atb/api/utils';
 import qs from 'query-string';
 import {AxiosRequestConfig} from 'axios';
-import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
+import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/mobility-shared';
 import {
   GetBikeStationQuery,
   GetCarStationQuery,

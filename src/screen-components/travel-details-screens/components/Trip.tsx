@@ -82,7 +82,7 @@ export const Trip: React.FC<TripProps> = ({
 
   const {isRealtimeMapEnabled} = useFeatureTogglesContext();
 
-  const liveVehicleIds = tripPattern.legs
+  const liveVehicleServiceJourneyIds = tripPattern.legs
     .filter((leg) =>
       getShouldShowLiveVehicle(
         leg.serviceJourneyEstimatedCalls,
@@ -91,8 +91,9 @@ export const Trip: React.FC<TripProps> = ({
     )
     .map((leg) => leg.serviceJourney?.id)
     .filter(isDefined);
-  const {data: vehiclePositions} =
-    useGetServiceJourneyVehiclesQuery(liveVehicleIds);
+  const {data: vehicles} = useGetServiceJourneyVehiclesQuery(
+    liveVehicleServiceJourneyIds,
+  );
 
   const tripPatternLegs = tripPattern?.legs;
 
@@ -175,7 +176,7 @@ export const Trip: React.FC<TripProps> = ({
       <View style={styles.trip}>
         {tripPattern &&
           filteredLegs.map((leg, index) => {
-            const legVehiclePosition = vehiclePositions?.find(
+            const vehicle = vehicles?.find(
               (vehicle) =>
                 vehicle.serviceJourney?.id === leg.serviceJourney?.id,
             );
@@ -194,7 +195,7 @@ export const Trip: React.FC<TripProps> = ({
                 leg={leg}
                 testID={'legContainer' + index}
                 onPressShowLive={
-                  legVehiclePosition
+                  vehicle
                     ? (serviceJourneyPolylines: ServiceJourneyPolylines) => {
                         shouldShowRequestReview.current = true;
                         onPressDetailsMap({
@@ -202,7 +203,7 @@ export const Trip: React.FC<TripProps> = ({
                             serviceJourneyPolylines.mapLegs,
                           fromPlace: serviceJourneyPolylines.start,
                           toPlace: serviceJourneyPolylines.stop,
-                          vehicleWithPosition: legVehiclePosition,
+                          vehicle,
                           mode: leg.mode,
                           subMode: leg.transportSubmode,
                         });

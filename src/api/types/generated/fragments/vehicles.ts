@@ -1,28 +1,12 @@
-import {
-  PricingPlanFragment,
-  RentalUrisFragment,
-  SystemFragment,
-  VehicleTypeBasicFragment,
-  VehicleTypeFragment,
-} from './mobility-shared';
+import * as Types from '../vehicles-types_v2';
 
-export type VehicleBasicFragment = {
-  id: string;
-  lat: number;
-  lon: number;
-  currentFuelPercent?: number;
-  currentRangeMeters: number;
-  vehicleType: VehicleTypeBasicFragment;
+export type VehicleFragment = {
+  mode?: Types.VehicleModeEnumeration;
+  lastUpdated?: any;
+  vehicleStatus?: Types.VehicleStatusEnumeration;
+  bearing?: number;
+  serviceJourney?: {id: string};
+  location?: {latitude: number; longitude: number};
+  progressBetweenStops?: {percentage?: number; linkDistance?: number};
+  monitoredCall?: {stopPointRef?: string; vehicleAtStop?: boolean};
 };
-
-export type VehicleExtendedFragment = {
-  isReserved: boolean;
-  isDisabled: boolean;
-  availableUntil?: string;
-  pricingPlan: PricingPlanFragment;
-  system: SystemFragment;
-  rentalUris?: RentalUrisFragment;
-  vehicleType: VehicleTypeFragment;
-} & VehicleBasicFragment;
-
-export type VehicleId = string;

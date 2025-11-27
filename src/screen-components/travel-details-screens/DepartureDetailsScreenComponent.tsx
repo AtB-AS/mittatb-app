@@ -49,7 +49,7 @@ import {useRealtimeText} from './use-realtime-text';
 import {Divider} from '@atb/components/divider';
 import {useServiceJourneyPolylineQuery} from './use-service-journey-polyline-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
+import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v2';
 import {
   GlobalMessage,
   GlobalMessageContextEnum,
@@ -173,7 +173,7 @@ export const DepartureDetailsScreenComponent = ({
     isRealtimeMapEnabled,
   );
 
-  const {data: vehiclePositions} = useGetServiceJourneyVehiclesQuery(
+  const {data: vehicles} = useGetServiceJourneyVehiclesQuery(
     [activeItem.serviceJourneyId],
     shouldShowLive,
   );
@@ -182,14 +182,14 @@ export const DepartureDetailsScreenComponent = ({
     serviceJourney?.transportMode,
   );
 
-  const vehiclePosition = vehiclePositions?.find(
+  const vehicle = vehicles?.find(
     (s) => s.serviceJourney?.id === activeItem.serviceJourneyId,
   );
 
   const realtimeText = useRealtimeText(estimatedCallsWithMetadata);
 
   const isJourneyFinished =
-    vehiclePosition?.vehicleStatus === VehicleStatusEnumeration.Completed ||
+    vehicle?.vehicleStatus === VehicleStatusEnumeration.Completed ||
     estimatedCallsWithMetadata.every((e) => e.actualArrivalTime);
 
   const shouldShowDepartureTime =
@@ -240,7 +240,7 @@ export const DepartureDetailsScreenComponent = ({
 
   const handleMapButtonPress = () => {
     if (!serviceJourneyPolyline) return;
-    if (vehiclePosition) {
+    if (vehicle) {
       analytics.logEvent('Departure details', 'See live bus clicked', {
         fromPlace: serviceJourneyPolyline.start,
         toPlace: serviceJourneyPolyline.stop,
@@ -253,7 +253,7 @@ export const DepartureDetailsScreenComponent = ({
       serviceJourneyPolylines: serviceJourneyPolyline.mapLegs,
       fromPlace: serviceJourneyPolyline.start,
       toPlace: serviceJourneyPolyline.stop,
-      vehicleWithPosition: vehiclePosition,
+      vehicle,
       mode: serviceJourney?.transportMode,
       subMode: serviceJourney?.transportSubmode,
       estimatedCalls: serviceJourney?.estimatedCalls,
@@ -325,7 +325,7 @@ export const DepartureDetailsScreenComponent = ({
                       expanded={true}
                       leftIcon={{svg: Map}}
                       text={t(
-                        vehiclePosition
+                        vehicle
                           ? DepartureDetailsTexts.live(t(translatedModeName))
                           : DepartureDetailsTexts.map,
                       )}
@@ -341,10 +341,10 @@ export const DepartureDetailsScreenComponent = ({
                 <LastPassedStop realtimeText={realtimeText} />
               </View>
             )}
-            {debugShowProgressBetweenStops && vehiclePosition && (
+            {debugShowProgressBetweenStops && vehicle && (
               <ThemeText typography="body__s">
                 {debugProgressBetweenStopsText(
-                  vehiclePosition,
+                  vehicle,
                   serviceJourney?.estimatedCalls,
                 )}
               </ThemeText>

@@ -11,7 +11,7 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
     <TripDetailsScreenComponent
       {...route.params}
       onPressDetailsMap={(params) => {
-        params.vehicleWithPosition
+        params.vehicle
           ? analytics.logEvent('Trip details', 'See live bus clicked', {
               fromPlace: params.fromPlace,
               toPlace: params.toPlace,

@@ -1,4 +1,3 @@
-import {VehicleWithPosition} from '@atb/api/types/vehicles';
 import {useLiveVehicleSubscription} from '@atb/api/bff/vehicles';
 import {
   AnyMode,
@@ -43,10 +42,11 @@ import {ThemeText} from '@atb/components/text';
 import {debugProgressBetweenStopsText} from '../travel-details-screens/utils';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {usePreferencesContext} from '@atb/modules/preferences';
+import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 
 export type TravelDetailsMapScreenParams = {
   serviceJourneyPolylines: ServiceJourneyPolyline[];
-  vehicleWithPosition?: VehicleWithPosition;
+  vehicle?: VehicleFragment;
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
   mode?: AnyMode;
@@ -65,7 +65,7 @@ const FOLLOW_ANIMATION_DURATION = 500;
 
 export const TravelDetailsMapScreenComponent = ({
   serviceJourneyPolylines,
-  vehicleWithPosition,
+  vehicle,
   toPlace,
   fromPlace,
   onPressBack,
@@ -88,12 +88,9 @@ export const TravelDetailsMapScreenComponent = ({
     () => createMapLines(serviceJourneyPolylines),
     [serviceJourneyPolylines],
   );
-  const bounds = !vehicleWithPosition ? getMapBounds(features) : undefined;
-  const centerPosition = vehicleWithPosition?.location
-    ? [
-        vehicleWithPosition?.location?.longitude,
-        vehicleWithPosition?.location?.latitude,
-      ]
+  const bounds = !vehicle ? getMapBounds(features) : undefined;
+  const centerPosition = vehicle?.location
+    ? [vehicle?.location?.longitude, vehicle?.location?.latitude]
     : undefined;
 
   const {t} = useTranslation();
@@ -101,8 +98,8 @@ export const TravelDetailsMapScreenComponent = ({
   const styles = useStyles();
 
   const [liveVehicle, isLiveConnected] = useLiveVehicleSubscription({
-    serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
-    vehicleWithPosition,
+    serviceJourneyId: vehicle?.serviceJourney?.id,
+    vehicle,
     enabled: isFocusedAndActive,
   });
 
@@ -164,8 +161,8 @@ export const TravelDetailsMapScreenComponent = ({
           ref={mapCameraRef}
           bounds={bounds}
           {...MapCameraConfig}
-          zoomLevel={vehicleWithPosition ? FOLLOW_ZOOM_LEVEL : undefined}
-          centerCoordinate={vehicleWithPosition ? centerPosition : undefined}
+          zoomLevel={vehicle ? FOLLOW_ZOOM_LEVEL : undefined}
+          centerCoordinate={vehicle ? centerPosition : undefined}
           animationDuration={0}
         />
         <NationalStopRegistryFeatures
@@ -237,7 +234,7 @@ export const TravelDetailsMapScreenComponent = ({
 };
 
 type VehicleIconProps = {
-  vehicle: VehicleWithPosition;
+  vehicle: VehicleFragment;
   mode?: AnyMode;
   subMode?: AnySubMode;
   setShouldTrack: React.Dispatch<React.SetStateAction<boolean>>;

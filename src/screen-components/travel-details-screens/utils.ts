@@ -26,7 +26,7 @@ import {BookingStatus, TripPatternBookingStatus} from './types';
 import {Statuses} from '@atb/theme';
 import {isDefined} from '@atb/utils/presence';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
-import {VehicleWithPosition} from '@atb/api/types/vehicles';
+import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 
 export const getNoticesForLeg = (leg: Leg) =>
   filterNotices([
@@ -495,7 +495,7 @@ export function isFreeLeg(leg: Leg) {
 }
 
 export function debugProgressBetweenStopsText(
-  vehiclePosition: VehicleWithPosition,
+  vehiclePosition: VehicleFragment,
   estimatedCalls?: Array<EstimatedCallWithQuayFragment>,
 ): string {
   const stopPointRefName =
