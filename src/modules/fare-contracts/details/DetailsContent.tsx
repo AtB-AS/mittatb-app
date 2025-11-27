@@ -60,7 +60,7 @@ import {
 import {useFareContractLegs} from '@atb/modules/fare-contracts';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {arrayMapUniqueWithCount} from '@atb/utils/array-map-unique-with-count';
+import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
 
 type Props = {
@@ -131,7 +131,7 @@ export const DetailsContent: React.FC<Props> = ({
     allSupplementProducts,
   );
 
-  const baggageProductsWithCount = arrayMapUniqueWithCount(
+  const baggageProductsWithCount = mapUniqueWithCount(
     baggageProducts,
     (a, b) => a.id === b.id,
   );

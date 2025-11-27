@@ -15,7 +15,7 @@ import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {InspectionSymbol} from './components/InspectionSymbol';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {secondsToDuration} from '@atb/utils/date';
-import {toCountAndName} from '@atb/utils/array-map-unique-with-count';
+import {toCountAndReferenceDataName} from '@atb/utils/unique-with-count';
 
 type CompactFareContractInfoProps = FareContractInfoDetailsProps & {
   style?: StyleProp<ViewStyle>;
@@ -98,13 +98,13 @@ const CompactFareContractInfoTexts = (
         userProfilesWithCount
           .map((u) => (
             <ThemeText key={u.id} typography="body__s" color="secondary">
-              {toCountAndName(u, language)}
+              {toCountAndReferenceDataName(u, language)}
             </ThemeText>
           ))
           .concat(
             baggageProductsWithCount.map((p) => (
               <ThemeText key={p.id} typography="body__s" color="secondary">
-                {toCountAndName(p, language)}
+                {toCountAndReferenceDataName(p, language)}
               </ThemeText>
             )),
           )
@@ -182,7 +182,7 @@ export const useFareContractInfoTexts = (
   let accessibilityLabel: string = '';
   accessibilityLabel += timeUntilExpireOrWarning + screenReaderPause;
   accessibilityLabel += userProfilesWithCount.map(
-    (u) => toCountAndName(u, language) + screenReaderPause,
+    (u) => toCountAndReferenceDataName(u, language) + screenReaderPause,
   );
   accessibilityLabel += productName + screenReaderPause;
   accessibilityLabel += fareZoneSummary + screenReaderPause;

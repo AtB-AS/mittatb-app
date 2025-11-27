@@ -34,8 +34,8 @@ export const TravellerSelectionSheet = ({
   const baggageCountState = useBaggageCountState(selection);
 
   const nothingSelected =
-    userCountState.userProfilesWithCount.every((u) => !u.count) &&
-    baggageCountState.baggageProductsWithCount.every((sp) => !sp.count);
+    userCountState.state.every((u) => !u.count) &&
+    baggageCountState.state.every((sp) => !sp.count);
 
   return (
     <BottomSheetContainer
@@ -60,8 +60,8 @@ export const TravellerSelectionSheet = ({
           onPress={() => {
             const newSelection = selectionBuilder
               .fromSelection(selection)
-              .userProfiles(userCountState.userProfilesWithCount)
-              .baggageProducts(baggageCountState.baggageProductsWithCount)
+              .userProfiles(userCountState.state)
+              .baggageProducts(baggageCountState.state)
               .build();
             onSave(newSelection);
           }}

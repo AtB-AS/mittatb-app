@@ -30,7 +30,7 @@ import {FareContractInfoDetailsProps} from './sections/FareContractInfoDetailsSe
 import {FareContractType, getAccesses} from '@atb-as/utils/lib/fare-contract';
 import {isDefined} from '@atb/utils/presence';
 import {mapToUserProfilesWithCount} from './utils';
-import {arrayMapUniqueWithCount} from '@atb/utils/array-map-unique-with-count';
+import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from './get-baggage-products';
 import {getLastUsedAccess} from '@atb/modules/ticketing';
 
@@ -143,7 +143,7 @@ export const getFareContractInfoDetails = (
     supplementProducts,
   );
 
-  const baggageProductsWithCount = arrayMapUniqueWithCount(
+  const baggageProductsWithCount = mapUniqueWithCount(
     baggageProducts,
     (a, b) => a.id === b.id,
   );

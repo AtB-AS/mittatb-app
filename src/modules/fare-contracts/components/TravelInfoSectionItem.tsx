@@ -21,9 +21,9 @@ import {useSectionItem} from '@atb/components/sections';
 import {isDefined} from '@atb/utils/presence';
 import {SentToMessageBox} from './SentToMessageBox';
 import {
-  arrayMapUniqueWithCount,
-  toCountAndName,
-} from '@atb/utils/array-map-unique-with-count';
+  mapUniqueWithCount,
+  toCountAndReferenceDataName,
+} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
 
 type Props = {fc: FareContractType};
@@ -64,7 +64,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
     allSupplementProducts,
   );
 
-  const baggageProductsWithCount = arrayMapUniqueWithCount(
+  const baggageProductsWithCount = mapUniqueWithCount(
     baggageProducts,
     (a, b) => a.id === b.id,
   );
@@ -102,13 +102,13 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
               {userProfilesWithCount.map((u, i) => (
                 <FareContractDetailItem
                   key={`userProfile-${i}`}
-                  content={[toCountAndName(u, language)]}
+                  content={[toCountAndReferenceDataName(u, language)]}
                 />
               ))}
               {baggageProductsWithCount.map((p, i) => (
                 <FareContractDetailItem
                   key={`baggageProduct-${i}`}
-                  content={[toCountAndName(p, language)]}
+                  content={[toCountAndReferenceDataName(p, language)]}
                 />
               ))}
             </>

@@ -6,17 +6,21 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {getReferenceDataName} from '@atb/modules/configuration';
+import {
+  BaggageProduct,
+  getReferenceDataName,
+  UserProfile,
+} from '@atb/modules/configuration';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {CounterSectionItem, Section} from '@atb/components/sections';
 import {useThemeContext} from '@atb/theme';
-import type {BaggageCountState, UserCountState} from './types';
 import type {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {View} from 'react-native';
+import {UniqueCountState} from '@atb/utils/unique-with-count';
 
 type Props = {
-  userCountState: UserCountState;
-  baggageCountState: BaggageCountState;
+  userCountState: UniqueCountState<UserProfile>;
+  baggageCountState: UniqueCountState<BaggageProduct>;
 };
 
 export function MultipleTravellersSelection(props: Props) {
@@ -25,47 +29,41 @@ export function MultipleTravellersSelection(props: Props) {
 
   const travellersModified = useRef(false);
 
-  const addTraveller = (userTypeString: string) => {
+  const incrementTraveller = (userProfile: UserProfile) => {
     travellersModified.current = true;
-    props.userCountState.increment(userTypeString);
+    props.userCountState.increment(userProfile);
   };
 
-  const removeTraveller = (userTypeString: string) => {
+  const decrementTraveller = (userProfile: UserProfile) => {
     travellersModified.current = true;
-    props.userCountState.decrement(userTypeString);
+    props.userCountState.decrement(userProfile);
   };
 
-  const addBaggageProduct = (baggageProductString: string) => {
+  const incrementBaggage = (baggageProduct: BaggageProduct) => {
     travellersModified.current = true;
-    props.baggageCountState.increment(baggageProductString);
+    props.baggageCountState.increment(baggageProduct);
   };
 
-  const removeBaggageProduct = (baggageProductString: string) => {
+  const decrementBaggage = (baggageProduct: BaggageProduct) => {
     travellersModified.current = true;
-    props.baggageCountState.decrement(baggageProductString);
+    props.baggageCountState.decrement(baggageProduct);
   };
 
   useScreenReaderAnnouncement(
-    createTravellersText(
-      props.userCountState.userProfilesWithCount,
-      false,
-      true,
-      t,
-      language,
-    ),
+    createTravellersText(props.userCountState.state, false, true, t, language),
     travellersModified.current,
   );
 
   return (
     <View style={{rowGap: theme.spacing.medium}}>
       <Section>
-        {props.userCountState.userProfilesWithCount.map((u) => (
+        {props.userCountState.state.map((u) => (
           <CounterSectionItem
             key={u.userTypeString}
             text={getReferenceDataName(u, language)}
             count={u.count}
-            addCount={() => addTraveller(u.userTypeString)}
-            removeCount={() => removeTraveller(u.userTypeString)}
+            addCount={() => incrementTraveller(u)}
+            removeCount={() => decrementTraveller(u)}
             testID={'counterInput_' + u.userTypeString.toLowerCase()}
             color={theme.color.interactive[2]}
             subtext={getTextForLanguage(u.alternativeDescriptions, language)}
@@ -73,13 +71,13 @@ export function MultipleTravellersSelection(props: Props) {
         ))}
       </Section>
       <Section>
-        {props.baggageCountState.baggageProductsWithCount.map((s) => (
+        {props.baggageCountState.state.map((s) => (
           <CounterSectionItem
             key={s.id}
             text={getReferenceDataName(s, language)}
             count={s.count}
-            addCount={() => addBaggageProduct(s.id)}
-            removeCount={() => removeBaggageProduct(s.id)}
+            addCount={() => incrementBaggage(s)}
+            removeCount={() => decrementBaggage(s)}
             subtext={getTextForLanguage(s.description, language)}
             baggageType={s.baggageType}
           />

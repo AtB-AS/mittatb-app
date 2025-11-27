@@ -1,6 +1,6 @@
 import {UserProfile, BaggageProduct} from '@atb/modules/configuration';
 import type {Unit} from 'humanize-duration';
-import {UniqueWithCount} from '@atb/utils/array-map-unique-with-count';
+import {UniqueWithCount} from '@atb/utils/unique-with-count';
 
 export type UserProfileWithCount = UniqueWithCount<UserProfile>;
 
