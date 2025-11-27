@@ -14,6 +14,7 @@ import {
   findReferenceDataById,
   getReferenceDataName,
   PreassignedFareProduct,
+  SupplementProduct,
   useFirestoreConfigurationContext,
   UserProfile,
 } from '@atb/modules/configuration';
@@ -28,6 +29,11 @@ import {
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useAuthContext} from '@atb/modules/auth';
 import {useCallback, useMemo} from 'react';
+import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
+import {UniqueWithCount} from '@atb/utils/unique-with-count';
+import {SvgProps} from 'react-native-svg';
+import {BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
+import {TextNames} from '@atb-as/theme';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -302,5 +308,31 @@ export const getReservationStatus = (reservation: Reservation) => {
       return 'rejected';
     default:
       return 'reserving';
+  }
+};
+
+export function getTravellersIcon(
+  userProfilesWithCount: UniqueWithCount<UserProfile>[],
+  baggageProductsWithCount: UniqueWithCount<SupplementProduct>[],
+): ((props: SvgProps) => React.JSX.Element) | undefined {
+  if (userProfilesWithCount.length > 0) {
+    return Travellers;
+  }
+
+  return baggageProductsWithCount.some((p) => p.baggageType === 'BICYCLE')
+    ? BicycleFill
+    : undefined;
+}
+
+export type Size = 'small' | 'normal' | 'large';
+
+export const getContentTypography = (size: Size): TextNames => {
+  switch (size) {
+    case 'small':
+      return 'body__s';
+    case 'normal':
+      return 'body__m';
+    case 'large':
+      return 'body__m';
   }
 };

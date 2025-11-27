@@ -84,15 +84,16 @@ export const FareContractInfoDetailsSectionItem = ({
           {!!fareProductTypeConfig?.transportModes.length && (
             <FareContractDetailItem
               header={t(FareContractTexts.label.transportModes)}
-              content={[
-                getTransportModeText(fareProductTypeConfig.transportModes, t),
-              ]}
+              content={getTransportModeText(
+                fareProductTypeConfig.transportModes,
+                t,
+              )}
             />
           )}
           {firstTravelRight.travelerName ? (
             <FareContractDetailItem
               header={t(FareContractTexts.label.travellers)}
-              content={[firstTravelRight.travelerName]}
+              content={firstTravelRight.travelerName}
             />
           ) : (
             <FareContractDetailItem
@@ -103,13 +104,14 @@ export const FareContractInfoDetailsSectionItem = ({
                   baggageProductsWithCount.map((p) =>
                     toCountAndReferenceDataName(p, language),
                   ),
-                )}
+                )
+                .join(', ')}
             />
           )}
           {fareZoneSummary && (
             <FareContractDetailItem
               header={t(FareContractTexts.label.zone)}
-              content={[fareZoneSummary]}
+              content={fareZoneSummary}
             />
           )}
         </View>
