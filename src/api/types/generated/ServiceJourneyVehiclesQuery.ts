@@ -8,5 +8,7 @@ export type GetServiceJourneyVehicleQuery = {
     vehicleStatus?: Types.VehicleStatusEnumeration;
     location?: {latitude: number; longitude: number};
     serviceJourney?: {id: string};
+    progressBetweenStops?: {percentage?: number; linkDistance?: number};
+    monitoredCall?: {stopPointRef?: string; vehicleAtStop?: boolean};
   }>;
 };

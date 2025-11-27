@@ -52,11 +52,6 @@ export function getRelativeValidity(
   return 'valid';
 }
 
-export const userProfileCountAndName = (
-  u: UserProfileWithCount,
-  language: Language,
-) => `${u.count} ${getReferenceDataName(u, language)}`;
-
 export function getValidityStatus(
   now: number,
   fc: FareContractType,

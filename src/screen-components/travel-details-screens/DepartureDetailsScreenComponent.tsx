@@ -64,6 +64,7 @@ import {
   getLineAndTimeA11yLabel,
   getNoticesForServiceJourney,
   getShouldShowLiveVehicle,
+  debugProgressBetweenStopsText,
 } from './utils';
 import {BookingOptions} from './components/BookingOptions';
 import {BookingInfoBox} from './components/BookingInfoBox';
@@ -157,7 +158,10 @@ export const DepartureDetailsScreenComponent = ({
   const screenReaderEnabled = useIsScreenReaderEnabled();
 
   const {
-    preferences: {journeyAidEnabled: travelAidPreferenceEnabled},
+    preferences: {
+      journeyAidEnabled: travelAidPreferenceEnabled,
+      debugShowProgressBetweenStops,
+    },
   } = usePreferencesContext();
   const shouldShowTravelAid =
     travelAidPreferenceEnabled &&
@@ -252,6 +256,7 @@ export const DepartureDetailsScreenComponent = ({
       vehicleWithPosition: vehiclePosition,
       mode: serviceJourney?.transportMode,
       subMode: serviceJourney?.transportSubmode,
+      estimatedCalls: serviceJourney?.estimatedCalls,
     });
   };
 
@@ -268,7 +273,7 @@ export const DepartureDetailsScreenComponent = ({
     <View style={styles.container}>
       <FullScreenView
         headerProps={{
-          leftButton: {type: 'back', withIcon: true},
+          leftButton: {type: 'back'},
           title: t(DepartureDetailsTexts.header.alternateTitle),
         }}
         parallaxContent={(focusRef) => (
@@ -335,6 +340,14 @@ export const DepartureDetailsScreenComponent = ({
               <View style={styles.headerSubSection}>
                 <LastPassedStop realtimeText={realtimeText} />
               </View>
+            )}
+            {debugShowProgressBetweenStops && vehiclePosition && (
+              <ThemeText typography="body__s">
+                {debugProgressBetweenStopsText(
+                  vehiclePosition,
+                  serviceJourney?.estimatedCalls,
+                )}
+              </ThemeText>
             )}
           </View>
         )}

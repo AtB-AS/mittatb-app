@@ -80,6 +80,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
           onPressFareContract={(fareContractId) =>
             navigation.navigate('Root_FareContractDetailsScreen', {
               fareContractId,
+              transitionOverride: 'slide-from-right',
             })
           }
           emptyStateConfig={{

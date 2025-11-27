@@ -28,7 +28,7 @@ export const Profile_TravelAidInformationScreen = () => {
     <FullScreenView
       headerProps={{
         title: t(TravelAidSettingsTexts.header.howTo.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading

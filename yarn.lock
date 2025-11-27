@@ -25,10 +25,10 @@
     "@jridgewell/gen-mapping" "^0.3.5"
     "@jridgewell/trace-mapping" "^0.3.24"
 
-"@atb-as/config-specs@^8.2.1":
-  version "8.2.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-8.2.1.tgz#1e729c4bad0ee920dc6d08e3ab6bf9c50254ca09"
-  integrity sha512-3Q4D4NGlkH7URlyFVwuWBkZKcdMOB6owBbBMlimawQfXcqKWVA5jtX48d+6KGMnLlbZssLCWNiQ2ckmvAdzMwA==
+"@atb-as/config-specs@^8.4.1":
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-8.4.1.tgz#5bdb594f7faa73b777ac197a7df62cedce1e537a"
+  integrity sha512-cCXW9a1h9e8drAHPqZcwuZvQpZT0XRE0DV40SH3SdnWo8CaBC0QShX2pCa8X+BuKa7teGzWZOYlJjDuzckJ2+w==
   dependencies:
     ajv "^8.17.1"
     ajv-formats "^3.0.1"
@@ -36,10 +36,10 @@
     js-yaml "^4.1.0"
     yargs "^17.7.1"
 
-"@atb-as/generate-assets@^18.5.0":
-  version "18.5.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-18.5.0.tgz#e382f9a16f51dfd4fb88638146911015fad1f2d5"
-  integrity sha512-WtYYNCNNpt4iK8Q7Ql0PFaYrydzAhoTRcB4NU6NxaxsoDg0MQbbQGM7Srk7u1pjMOlgugVSrXp+2yIKrub0XNA==
+"@atb-as/generate-assets@^18.6.0":
+  version "18.6.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-18.6.0.tgz#a7b882a3b4e9acedecdf5054a4f035260f3fe461"
+  integrity sha512-YLcnYSBgc7py6+H0fSEwoDcWZtR2hLo42jtPY5/INeIKlQHqesN8aumNnS1O/r9rapuooz0snz1lNyw6OiE12A==
   dependencies:
     "@atb-as/theme" "14.0.1"
     commander "^9.4.0"
@@ -3451,10 +3451,10 @@
   resolved "https://registry.yarnpkg.com/@rtsao/scc/-/scc-1.1.0.tgz#927dd2fae9bc3361403ac2c7a00c32ddce9ad7e8"
   integrity sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==
 
-"@sayem314/react-native-keep-awake@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@sayem314/react-native-keep-awake/-/react-native-keep-awake-1.3.1.tgz#59cd52923ba3000adfec6918a3a935ae335575a7"
-  integrity sha512-gAqLCVQ2SgrMki9MZJzQiYn9EjOGDYze+dYKs7s7T4qfRrUxCK8Pe50mE0Y/WQqzaYY6uzdjTHzmWhACiEy5Zw==
+"@sayem314/react-native-keep-awake@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@sayem314/react-native-keep-awake/-/react-native-keep-awake-1.4.0.tgz#2f072e7866df56588ceae0c985f196f49a4176a9"
+  integrity sha512-EOg6im5sSuwPC3hamXjW2kb6KB1HuluivdGzjvIRAeeEH7cVyaBTcSaV3SZerQRImTxoaVLMnD1FOEyQQK6etg==
 
 "@seznam/compose-react-refs@^1.0.6":
   version "1.0.6"
@@ -4271,6 +4271,11 @@
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.2.tgz#5950e50960793055845e956c427fc2b0d70c5239"
   integrity sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==
+
+"@types/polylabel@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@types/polylabel/-/polylabel-1.1.3.tgz#15aba4277b03ac0ab60a0dea75a13bde45dcfc01"
+  integrity sha512-9Zw2KoDpi+T4PZz2G6pO2xArE0m/GSMTW1MIxF2s8ZY8x9XDO6fv9um0ydRGvcbkFLlaq8yNK6eZxnmMZtDgWQ==
 
 "@types/qrcode@^1.5.5":
   version "1.5.5"
@@ -9963,6 +9968,13 @@ polyclip-ts@^0.16.8:
     bignumber.js "^9.1.0"
     splaytree-ts "^1.0.2"
 
+polylabel@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/polylabel/-/polylabel-2.0.1.tgz#7c2f02b96bd50331a81990dcb9e134c05f996419"
+  integrity sha512-B6Yu+Bdl/8SGtjVhyUfZzD3DwciCS9SPVtHiNdt8idHHatvTHp5Ss8XGDRmQFtfF1ZQnfK+Cj5dXdpkUXBbXgA==
+  dependencies:
+    tinyqueue "^3.0.0"
+
 possible-typed-array-names@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/possible-typed-array-names/-/possible-typed-array-names-1.1.0.tgz#93e3582bc0e5426586d9d07b79ee40fc841de4ae"
@@ -10257,11 +10269,6 @@ react-native-bootsplash@^6.3.11:
     ts-dedent "^2.2.0"
     xml-formatter "^3.6.5"
 
-react-native-camera-kit@15.1.0:
-  version "15.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-camera-kit/-/react-native-camera-kit-15.1.0.tgz#5356f4bdfee64d4486520f68b3ad64740697eece"
-  integrity sha512-4gPOJAoWAj9WaiNxPgKFYa/+M79O/Ggvc271SGgH5TmetmtinctJFm2zxeg+bAxVS9TDIYcF3ojRD98n88+VEw==
-
 react-native-date-picker@5.0.13:
   version "5.0.13"
   resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-5.0.13.tgz#fe05f58652aaeee9e67f73cf7436c32a623ff3a4"
@@ -10404,6 +10411,11 @@ react-native-url-polyfill@2.0.0, react-native-url-polyfill@^2.0.0:
   integrity sha512-My330Do7/DvKnEvwQc0WdcBnFPploYKp9CYlefDXzIdEaA+PAhDYllkvGeEroEzvc4Kzzj2O4yVdz8v6fjRvhA==
   dependencies:
     whatwg-url-without-unicode "8.0.0-3"
+
+react-native-vision-camera@^4.7.2:
+  version "4.7.2"
+  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-4.7.2.tgz#e4bd8f3d893a3f5fa9d8224ce28b8ef00d171bc1"
+  integrity sha512-C+5PvlSunN6I4aYplSask+v3jfhgduZumIVw6H6lG+Afpf8boIcG3uFSsSfVgj+hxI7fx6qM6bsciEhzgxEUYg==
 
 react-native@0.81.4:
   version "0.81.4"
@@ -11567,6 +11579,11 @@ tinycolor2@^1.4.1:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/tinycolor2/-/tinycolor2-1.6.0.tgz#f98007460169b0263b97072c5ae92484ce02d09e"
   integrity sha512-XPaBkWQJdsf3pLKJV9p4qN/S+fm2Oj8AIPo1BTUhg5oxkvm9+SVEGFdhyOz7tTdUTfvxMiAs4sp6/eZO2Ew+pw==
+
+tinyqueue@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/tinyqueue/-/tinyqueue-3.0.0.tgz#101ea761ccc81f979e29200929e78f1556e3661e"
+  integrity sha512-gRa9gwYU3ECmQYv3lslts5hxuIa90veaEcxDYuu3QGOIAEM2mOZkVHp48ANJuu1CURtRdHKUBY5Lm1tHV+sD4g==
 
 tinyrainbow@^2.0.0:
   version "2.0.0"

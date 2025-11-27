@@ -48,6 +48,9 @@ import {
 import {useMapContext} from '@atb/modules/map';
 import {useEventStreamContext} from '@atb/modules/event-stream';
 import {format} from 'date-fns';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {useQueryClient} from '@tanstack/react-query';
+import {useDebugUserInfoHeader} from '@atb/api';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -124,6 +127,12 @@ export const Profile_DebugInfoScreen = () => {
 
   const remoteConfig = useRemoteConfigContext();
 
+  const {resubscribeFirestoreConfig} = useFirestoreConfigurationContext();
+
+  const queryClient = useQueryClient();
+
+  const {shouldAddHeader, setShouldAddHeader} = useDebugUserInfoHeader();
+
   const [storedValues, setStoredValues] = useState<
     readonly KeyValuePair[] | null
   >(null);
@@ -144,8 +153,12 @@ export const Profile_DebugInfoScreen = () => {
   }
 
   const {setPreference, preferences} = usePreferencesContext();
-  const {showTestIds, debugShowSeconds, debugPredictionInaccurate} =
-    preferences;
+  const {
+    showTestIds,
+    debugShowSeconds,
+    debugPredictionInaccurate,
+    debugShowProgressBetweenStops,
+  } = preferences;
 
   return (
     <View style={styles.container}>
@@ -191,6 +204,20 @@ export const Profile_DebugInfoScreen = () => {
             value={debugShowSeconds}
             onValueChange={(debugShowSeconds) => {
               setPreference({debugShowSeconds});
+            }}
+          />
+          <ToggleSectionItem
+            text="Display percentage between stops in departure details"
+            value={debugShowProgressBetweenStops}
+            onValueChange={(debugShowProgressBetweenStops) => {
+              setPreference({debugShowProgressBetweenStops});
+            }}
+          />
+          <ToggleSectionItem
+            text="Add debug user info header"
+            value={shouldAddHeader}
+            onValueChange={(checked) => {
+              setShouldAddHeader(checked);
             }}
           />
           <ToggleSectionItem
@@ -247,6 +274,16 @@ export const Profile_DebugInfoScreen = () => {
           <LinkSectionItem
             text="Force refresh remote config"
             onPress={remoteConfig.refresh}
+          />
+
+          <LinkSectionItem
+            text="Force refresh firestore config"
+            onPress={resubscribeFirestoreConfig}
+          />
+
+          <LinkSectionItem
+            text="Force refresh all react-query caches"
+            onPress={() => queryClient.resetQueries()}
           />
 
           <LinkSectionItem

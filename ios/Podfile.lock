@@ -3272,7 +3272,7 @@ PODS:
     - React-Core
   - react-native-in-app-review (4.4.2):
     - React-Core
-  - react-native-keep-awake (1.3.1):
+  - react-native-keep-awake (1.4.0):
     - React-Core
   - react-native-kettle-module (1.4.5):
     - boost
@@ -3866,34 +3866,6 @@ PODS:
     - React-perflogger (= 0.81.4)
     - React-utils (= 0.81.4)
     - SocketRocket
-  - ReactNativeCameraKit (15.1.0):
-    - boost
-    - DoubleConversion
-    - fast_float
-    - fmt
-    - glog
-    - hermes-engine
-    - RCT-Folly
-    - RCT-Folly/Fabric
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - SocketRocket
-    - Yoga
   - RecaptchaInterop (101.0.0)
   - RNBootSplash (6.3.11):
     - React-Core
@@ -4174,6 +4146,12 @@ PODS:
     - VisualCodeModeliOSLib
     - VisualCodeViewiOSLib
   - Turf (4.0.0)
+  - VisionCamera (4.7.2):
+    - VisionCamera/Core (= 4.7.2)
+    - VisionCamera/React (= 4.7.2)
+  - VisionCamera/Core (4.7.2)
+  - VisionCamera/React (4.7.2):
+    - React-Core
   - VisualCodeModeliOSLib (3.3.14-hotfix2):
     - AbtCommoniOSLib
   - VisualCodeViewiOSLib (3.3.14-hotfix2):
@@ -4272,7 +4250,6 @@ DEPENDENCIES:
   - ReactAppDependencyProvider (from `build/generated/ios`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - ReactNativeCameraKit (from `../node_modules/react-native-camera-kit`)
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
@@ -4296,6 +4273,7 @@ DEPENDENCIES:
   - "TimeApiiOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/time-api-ios-lib`)"
   - "TokenCore (from `../node_modules/@entur-private/abt-token-state-react-native-lib/token-core-ios-lib`)"
   - "TokenStateReactNativeLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib`)"
+  - VisionCamera (from `../node_modules/react-native-vision-camera`)
   - "VisualCodeModeliOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/visual-code-model-ios-lib`)"
   - "VisualCodeViewiOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/visual-code-view-ios-lib`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -4522,8 +4500,6 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  ReactNativeCameraKit:
-    :path: "../node_modules/react-native-camera-kit"
   RNBootSplash:
     :path: "../node_modules/react-native-bootsplash"
   RNCAsyncStorage:
@@ -4570,6 +4546,8 @@ EXTERNAL SOURCES:
     path: "../node_modules/@entur-private/abt-token-state-react-native-lib/token-core-ios-lib"
   TokenStateReactNativeLib:
     :path: "../node_modules/@entur-private/abt-token-state-react-native-lib"
+  VisionCamera:
+    :path: "../node_modules/react-native-vision-camera"
   VisualCodeModeliOSLib:
     :path: !ruby/object:Pathname
     path: "../node_modules/@entur-private/abt-token-state-react-native-lib/visual-code-model-ios-lib"
@@ -4666,7 +4644,7 @@ SPEC CHECKSUMS:
   react-native-get-random-values: d16467cf726c618e9c7a8c3c39c31faa2244bbba
   react-native-image-resizer: 24c5d06fae2176dc0caed4b6396e02befb44064a
   react-native-in-app-review: 1516ba69d60d58053b7eb3aaaf8d2a5a74af8b57
-  react-native-keep-awake: 03b74eebe4f2bb5e8478fc8f420651a92463b6f8
+  react-native-keep-awake: abdad45fbf0da6435d409fafa6a74c8a934a6f75
   react-native-kettle-module: b041ea68782309123690dc56fc09ad2d3f627efe
   react-native-pager-view: 3d6161515c4f121854b8c82278007892ddb77b5d
   react-native-safe-area-context: 2243039f43d10cb1ea30ec5ac57fc6d1448413f4
@@ -4701,7 +4679,6 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 433ddfb4536948630aadd5bd925aff8a632d2fe3
   ReactCodegen: 2cfa890e84ecf7f3a708f1ed9c0f2c0b22a23c9a
   ReactCommon: e9ab32f1d1482d207867b4fdd139361302b9dcc6
-  ReactNativeCameraKit: 2aa1486de9c2b40660cf2cb0d0e7d98c503c25e9
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
   RNBootSplash: a00f96ed8c10f0665bac10529b2a67a78b4fdcea
   RNCAsyncStorage: b44e8a4e798c3e1f56bffccd0f591f674fb9198f
@@ -4726,8 +4703,9 @@ SPEC CHECKSUMS:
   SwiftProtobuf: 4dbaffec76a39a8dc5da23b40af1a5dc01a4c02d
   TimeApiiOSLib: 8289d67019d958c29676dfb9e38ffdcefbcdb9bd
   TokenCore: cdce158c4f5331f81f35e34f3b708b6582c0d569
-  TokenStateReactNativeLib: 00fb9cd8cc92a36f350c9d216686277837d6474a
+  TokenStateReactNativeLib: 6a6f62ead3008978f2fc8048f3f9973aa6eb5926
   Turf: c9eb11a65d96af58cac523460fd40fec5061b081
+  VisionCamera: 30b358b807324c692064f78385e9a732ce1bebfe
   VisualCodeModeliOSLib: c40687c1f0bd60e672088a023d3ec0984608c118
   VisualCodeViewiOSLib: 448c13fd82ceb72aa4a12d9c69c92278d9da2989
   Yoga: 9b30b783a17681321b52ac507a37219d7d795ace

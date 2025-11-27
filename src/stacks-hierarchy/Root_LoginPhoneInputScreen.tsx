@@ -83,12 +83,16 @@ export const Root_LoginPhoneInputScreen = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        leftButton={{
-          type:
-            params?.transitionOverride === 'slide-from-bottom'
-              ? 'close'
-              : 'back',
-        }}
+        leftButton={
+          params?.transitionOverride !== 'slide-from-bottom'
+            ? {type: 'back'}
+            : undefined
+        }
+        rightButton={
+          params?.transitionOverride === 'slide-from-bottom'
+            ? {type: 'close'}
+            : undefined
+        }
         setFocusOnLoad={false}
         color={themeColor}
         title={t(LoginTexts.phoneInput.title)}

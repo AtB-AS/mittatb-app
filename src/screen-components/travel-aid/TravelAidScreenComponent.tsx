@@ -38,6 +38,7 @@ import type {SendStopSignalRequestType} from '@atb/api/stop-signal';
 import type {ContrastColor} from '@atb/theme/colors';
 import {createSentStopSignalsCache} from './sent-stop-signals-cache';
 import {LiveRegionWrapper} from '@atb/components/screen-reader-announcement';
+import {useKeepAwake} from '@sayem314/react-native-keep-awake';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -59,6 +60,8 @@ export const TravelAidScreenComponent = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const focusRef = useFocusOnLoad();
+
+  useKeepAwake();
 
   const hasSentStopSignal = sentStopSignalsCache.hasSent(
     serviceJourneyDeparture,
@@ -207,6 +210,7 @@ const TravelAidSection = ({
               type="warning"
               title={t(TravelAidTexts.noRealtimeError.title)}
               message={t(TravelAidTexts.noRealtimeError.message)}
+              a11yLiveRegion="polite"
             />
           )}
 

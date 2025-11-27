@@ -58,14 +58,14 @@ export const ParkingViolationTexts = {
   qr: {
     title: _('Skann QR-kode', 'Scan the QR code', 'Skann QR-kode'),
     instructions: _(
-      'QR-koden på sykkelstyret innholder informasjon om merke og registreringsnummer på sparkesykkelen.',
+      'QR-koden på sykkelstyret inneholder informasjon om merke og registreringsnummer på sparkesykkelen.',
       'The QR code on the handlebars contains information about brand and id of the scooter',
       'QR-koden på sykkelstyret inneheld informasjon om merke og registreringsnummer på sparkesykkelen.',
     ),
     scanningNotPossible: _(
-      'Ikke mulig å scanne',
+      'Ikke mulig å skanne',
       'Not possible to scan',
-      'Ikkje mogleg å scanne',
+      'Ikkje mogleg å skanne',
     ),
   },
   selectProvider: {

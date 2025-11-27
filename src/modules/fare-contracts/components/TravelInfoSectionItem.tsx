@@ -1,16 +1,15 @@
 import {useTranslation} from '@atb/translations';
 import {useAuthContext} from '@atb/modules/auth';
-import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import {
+  useGetFareProductsQuery,
+  useGetSupplementProductsQuery,
+} from '@atb/modules/ticketing';
 import {type FareContractType} from '@atb-as/utils';
 import {View} from 'react-native';
 import {FareContractFromTo} from './FareContractFromTo';
 import {FareContractDetailItem} from './FareContractDetailItem';
 import {getTransportModeText} from '@atb/components/transportation-modes';
-import {
-  getFareContractInfo,
-  mapToUserProfilesWithCount,
-  userProfileCountAndName,
-} from '../utils';
+import {getFareContractInfo, mapToUserProfilesWithCount} from '../utils';
 import {InspectionSymbol} from './InspectionSymbol';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -21,6 +20,11 @@ import {useTimeContext} from '@atb/modules/time';
 import {useSectionItem} from '@atb/components/sections';
 import {isDefined} from '@atb/utils/presence';
 import {SentToMessageBox} from './SentToMessageBox';
+import {
+  arrayMapUniqueWithCount,
+  toCountAndName,
+} from '@atb/utils/array-map-unique-with-count';
+import {getBaggageProducts} from '../get-baggage-products';
 
 type Props = {fc: FareContractType};
 
@@ -30,14 +34,20 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
 
   const {validityStatus} = getFareContractInfo(serverNow, fc, currentUserId);
-  const firstTravelRight = fc.travelRights[0];
+
   const {userProfiles, fareProductTypeConfigs} =
     useFirestoreConfigurationContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
-  const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
-    firstTravelRight.fareProductRef,
-  );
+
+  const productsInFareContract = fc.travelRights
+    .map((tr) =>
+      findReferenceDataById(preassignedFareProducts, tr.fareProductRef),
+    )
+    .filter(isDefined);
+
+  const firstTravelRight = fc.travelRights[0];
+  const preassignedFareProduct = productsInFareContract[0];
+
   const fareProductTypeConfig = fareProductTypeConfigs.find((c) => {
     return c.type === preassignedFareProduct?.type;
   });
@@ -45,6 +55,18 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   const userProfilesWithCount = mapToUserProfilesWithCount(
     fc.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
     userProfiles,
+  );
+
+  const {data: allSupplementProducts} = useGetSupplementProductsQuery();
+
+  const baggageProducts = getBaggageProducts(
+    productsInFareContract,
+    allSupplementProducts,
+  );
+
+  const baggageProductsWithCount = arrayMapUniqueWithCount(
+    baggageProducts,
+    (a, b) => a.id === b.id,
   );
 
   const styles = useStyles();
@@ -76,12 +98,20 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
           {firstTravelRight.travelerName ? (
             <FareContractDetailItem content={[firstTravelRight.travelerName]} />
           ) : (
-            userProfilesWithCount.map((u, i) => (
-              <FareContractDetailItem
-                key={`userProfile-${i}`}
-                content={[userProfileCountAndName(u, language)]}
-              />
-            ))
+            <>
+              {userProfilesWithCount.map((u, i) => (
+                <FareContractDetailItem
+                  key={`userProfile-${i}`}
+                  content={[toCountAndName(u, language)]}
+                />
+              ))}
+              {baggageProductsWithCount.map((p, i) => (
+                <FareContractDetailItem
+                  key={`baggageProduct-${i}`}
+                  content={[toCountAndName(p, language)]}
+                />
+              ))}
+            </>
           )}
         </View>
         {(validityStatus === 'valid' || validityStatus === 'sent') && (

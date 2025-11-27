@@ -117,7 +117,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
       <FullScreenView
         headerProps={{
           title: t(SmartParkAndRideTexts.add.header.title),
-          leftButton: {type: 'back', withIcon: true},
+          leftButton: {type: 'back'},
         }}
         contentColor={themeColor}
         avoidKeyboard={true}
