@@ -1,5 +1,4 @@
 import {dictionary, MapTexts, useTranslation} from '@atb/translations';
-import {Linking} from 'react-native';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
@@ -9,6 +8,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type ExternalRealtimeMapLinkSheetProps = {
   onClose: () => void;
@@ -47,7 +47,7 @@ export const ExternalRealtimeMapSheet = ({
           expanded={true}
           text={t(MapTexts.externalRealtimeMap.bottomSheet.button)}
           onPress={() => {
-            Linking.openURL(url);
+            openInAppBrowser(url, 'close');
             onClose();
           }}
           rightIcon={{svg: ExternalLink}}

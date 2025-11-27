@@ -17,6 +17,7 @@ import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 export const SmartParkAndRideOnboarding_ContactInfoScreen = () => {
   const {t} = useTranslation();
@@ -166,7 +167,7 @@ const ContactInfoContent = () => {
         </GenericSectionItem>
         <GenericSectionItem>
           <PressableOpacity
-            onPress={async () => Linking.openURL('https://atb.no/kontakt')}
+            onPress={() => openInAppBrowser('https://atb.no/kontakt', 'close')}
             accessibilityRole="link"
             style={style.linkItem}
           >

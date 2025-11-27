@@ -26,6 +26,7 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 export const Profile_PrivacyScreen = () => {
   const {t, language} = useTranslation();
@@ -139,7 +140,7 @@ export const Profile_PrivacyScreen = () => {
             }}
             testID="privacyButton"
             onPress={async () => {
-              await Linking.openURL(privacy_policy_url);
+              await openInAppBrowser(privacy_policy_url, 'close');
             }}
           />
         </Section>
@@ -162,7 +163,7 @@ export const Profile_PrivacyScreen = () => {
               onPress={async () => {
                 const privacyDashboardUrl = await getPrivacyDashboardUrl();
                 privacyDashboardUrl &&
-                  (await Linking.openURL(privacyDashboardUrl));
+                  (await openInAppBrowser(privacyDashboardUrl, 'close'));
               }}
             />
           </Section>
@@ -184,7 +185,7 @@ export const Profile_PrivacyScreen = () => {
               rightIcon={{svg: ExternalLink}}
               testID="dataSharingInfoButton"
               onPress={async () => {
-                Linking.openURL(dataSharingInfoUrl);
+                openInAppBrowser(dataSharingInfoUrl, 'close');
               }}
             />
           </Section>

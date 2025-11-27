@@ -13,7 +13,7 @@ import {ThemeText} from '@atb/components/text';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import React, {forwardRef} from 'react';
-import {Linking, View} from 'react-native';
+import {View} from 'react-native';
 import {InfoLinkFragment} from '@atb/api/types/generated/fragments/shared';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {SituationType} from './types';
@@ -25,6 +25,7 @@ import {screenReaderPause} from '@atb/components/text';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {getMsgTypeForMostCriticalSituationOrNotice} from './utils';
+import {openInAppBrowser} from '../in-app-browser';
 
 type Props = {
   situation: SituationType;
@@ -175,7 +176,7 @@ const InfoLink = ({infoLink}: {infoLink: InfoLinkFragment}) => {
 
   return (
     <PressableOpacity
-      onPress={() => Linking.openURL(infoLink.uri)}
+      onPress={() => openInAppBrowser(infoLink.uri, 'close')}
       accessibilityRole="link"
       style={styles.infoLink}
     >
