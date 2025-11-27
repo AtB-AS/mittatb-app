@@ -2,8 +2,7 @@ import {BonusProgramTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {LinkSectionItem, SectionItemProps} from '@atb/components/sections';
 import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
-import {useNavigation} from '@react-navigation/native';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {useNavigateToNestedProfileScreen} from '@atb/utils/use-navigate-to-nested-profile-screen';
 
 type Props = SectionItemProps<{
   amount: number;
@@ -11,7 +10,9 @@ type Props = SectionItemProps<{
 
 export const EarnedBonusPointsSectionItem = ({amount, ...props}: Props) => {
   const {t} = useTranslation();
-  const navigation = useNavigation<RootNavigationProps>();
+  const navigateToBonusScreen = useNavigateToNestedProfileScreen(
+    'Profile_BonusScreen',
+  );
 
   return (
     <LinkSectionItem
@@ -19,14 +20,7 @@ export const EarnedBonusPointsSectionItem = ({amount, ...props}: Props) => {
       isMarkdown={true}
       leftIcon={{svg: StarFill}}
       text={t(BonusProgramTexts.fareContract.youEarned(amount))}
-      onPress={() => {
-        navigation.navigate('Root_TabNavigatorStack', {
-          screen: 'TabNav_ProfileStack',
-          params: {
-            screen: 'Profile_BonusScreen',
-          },
-        });
-      }}
+      onPress={navigateToBonusScreen}
     />
   );
 };
