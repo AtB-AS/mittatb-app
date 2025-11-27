@@ -14,12 +14,12 @@ export const Root_TravelAidOnboardingScreen = () => {
   const {setPreference} = usePreferencesContext();
   const {continueFromOnboardingSection} = useOnboardingNavigation();
 
-  const onActivate = useCallback(async () => {
+  const onActivate = useCallback(() => {
     continueFromOnboardingSection('travelAid');
     setPreference({journeyAidEnabled: true});
   }, [continueFromOnboardingSection, setPreference]);
 
-  const onDismiss = useCallback(async () => {
+  const onDismiss = useCallback(() => {
     continueFromOnboardingSection('travelAid');
   }, [continueFromOnboardingSection]);
 
@@ -39,7 +39,7 @@ export const Root_TravelAidOnboardingScreen = () => {
         rightIcon: {svg: Close},
         expanded: true,
       }}
-      testID="locationWhenInUsePermission"
+      testID="travelAidOnboarding"
     />
   );
 };
