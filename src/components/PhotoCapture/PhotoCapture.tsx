@@ -1,10 +1,11 @@
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Camera, CameraScreenContainer, PhotoFile} from '@atb/components/camera';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {RefObject, useRef} from 'react';
+import {useRef, useState} from 'react';
 import {ImageConfirmationBottomSheet} from './ImageConfirmationBottomSheet';
 import {Coordinates} from '@atb/utils/coordinates';
-import {useGeolocationContext} from '@atb/modules/geolocation';
+import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
+import {View} from 'react-native';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 type PhotoCaptureProps = {
   onConfirmImage: (file: PhotoFile) => void;
@@ -23,27 +24,14 @@ export const PhotoCapture = ({
 }: PhotoCaptureProps) => {
   const isFocused = useIsFocusedAndActive();
 
-  const {open: openBottomSheet, close: closeBottomSheet} =
-    useBottomSheetContext();
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
-  const {getCurrentCoordinates} = useGeolocationContext();
+  const onCloseFocusRef = useRef<View | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const [file, setFile] = useState<PhotoFile | null>(null);
+  const userCoordinates = getCurrentCoordinatesGlobal();
 
   const handlePhotoCapture = async (file: PhotoFile) => {
-    //if there is no coordinates given, use the current user coordinates
-    const userCoordinates = await getCurrentCoordinates();
-    openBottomSheet(
-      () => (
-        <ImageConfirmationBottomSheet
-          onConfirm={() => {
-            closeBottomSheet();
-            onConfirmImage(file);
-          }}
-          coordinates={coordinates ?? userCoordinates}
-          file={file.path}
-        />
-      ),
-      onCloseFocusRef,
-    );
+    setFile(file);
+    bottomSheetModalRef.current?.present();
   };
   return (
     <CameraScreenContainer
@@ -59,6 +47,18 @@ export const PhotoCapture = ({
             focusRef={onCloseFocusRef}
           />
         </>
+      )}
+      {file && (
+        <ImageConfirmationBottomSheet
+          onConfirm={() => {
+            bottomSheetModalRef.current?.dismiss();
+            onConfirmImage(file);
+          }}
+          coordinates={coordinates ?? userCoordinates}
+          file={file.path}
+          onCloseFocusRef={onCloseFocusRef}
+          bottomSheetModalRef={bottomSheetModalRef}
+        />
       )}
     </CameraScreenContainer>
   );

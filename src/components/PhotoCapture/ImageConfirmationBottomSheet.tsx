@@ -1,37 +1,45 @@
-import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {Image, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Coordinates} from '@atb/utils/coordinates';
 import {UserCoordinatesMap} from '../../stacks-hierarchy/Root_ScooterHelp/components/UserCoordinatesMap';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
+import {BottomSheetModal} from '../bottom-sheet-v2';
+import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type Props = {
   file: string;
   coordinates: Coordinates | undefined;
   onConfirm: () => void;
+  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  onCloseFocusRef: React.RefObject<View | null>;
 };
 
 export const ImageConfirmationBottomSheet = ({
   file,
   coordinates,
   onConfirm,
+  bottomSheetModalRef,
+  onCloseFocusRef,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
-  const {close} = useBottomSheetContext();
+
   return (
-    <BottomSheetContainer
-      title={t(ParkingViolationTexts.imageConfirmation.title)}
+    <BottomSheetModal
+      bottomSheetModalRef={bottomSheetModalRef}
+      heading={t(ParkingViolationTexts.imageConfirmation.title)}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      closeCallback={() => {
+        giveFocus(onCloseFocusRef);
+      }}
     >
-      <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.container}>
         <View style={styles.imageAndPosition}>
           <View style={styles.fullHeight}>
             <Image
@@ -59,22 +67,18 @@ export const ImageConfirmationBottomSheet = ({
           expanded={true}
           style={styles.button}
           mode="secondary"
-          onPress={close}
+          onPress={() => bottomSheetModalRef.current?.dismiss()}
           text={t(ParkingViolationTexts.imageConfirmation.retryButton)}
           backgroundColor={theme.color.background.neutral[1]}
         />
-      </ScrollView>
-    </BottomSheetContainer>
+      </View>
+    </BottomSheetModal>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
   return {
     container: {
-      flexGrow: 1,
-      flexShrink: 0,
-      marginBottom: Math.max(bottom, theme.spacing.medium),
       marginHorizontal: theme.spacing.medium,
     },
     imageAndPosition: {
