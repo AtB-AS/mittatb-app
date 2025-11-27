@@ -6,6 +6,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {BookingMethod} from '@atb/api/types/generated/journey_planner_v3_types';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type Props = {
   bookingArrangements?: BookingArrangementFragment;
@@ -40,7 +41,7 @@ export const BookingOptions = ({bookingArrangements}: Props) => {
               TripDetailsTexts.flexibleTransport.bookOnlineA11yHint,
             )}
             text={t(TripDetailsTexts.flexibleTransport.bookOnline)}
-            onPress={() => Linking.openURL(bookingUrl)}
+            onPress={() => openInAppBrowser(bookingUrl, 'close')}
             mode="primary"
             type="small"
             expanded={false}

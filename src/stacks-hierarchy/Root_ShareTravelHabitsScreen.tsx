@@ -4,7 +4,6 @@ import {
   getTextForLanguage,
 } from '@atb/translations';
 import React from 'react';
-import {Linking} from 'react-native';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {
   OnboardingScreenComponent,
@@ -13,6 +12,7 @@ import {
 import {useBeaconsContext, checkPermissionStatuses} from '@atb/modules/beacons';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 export const Root_ShareTravelHabitsScreen = () => {
   const {t, language} = useTranslation();
@@ -55,7 +55,7 @@ export const Root_ShareTravelHabitsScreen = () => {
             configurableLinks?.dataSharingInfo,
             language,
           );
-          dataSharingInfoUrl && Linking.openURL(dataSharingInfoUrl);
+          dataSharingInfoUrl && openInAppBrowser(dataSharingInfoUrl, "close");
         },
       }}
       footerDescription={t(ShareTravelHabitsTexts.bluetoothInfo)}

@@ -24,7 +24,7 @@ import {
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import React from 'react';
-import {Linking, View} from 'react-native';
+import {View} from 'react-native';
 import {
   getLineName,
   getNoticesForLeg,
@@ -60,6 +60,7 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {AUTHORITY} from '@env';
 import {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
 import {getRealtimeState, type TimeValues} from '@atb/utils/realtime';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -532,7 +533,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
             TripDetailsTexts.trip.leg.buyTicketFromA11yLabel(name),
           )}
           leftIcon={{svg: ExternalLink}}
-          onPress={() => url && Linking.openURL(url)}
+          onPress={() => url && openInAppBrowser(url, 'close')}
           mode="primary"
           type="small"
           expanded={false}
