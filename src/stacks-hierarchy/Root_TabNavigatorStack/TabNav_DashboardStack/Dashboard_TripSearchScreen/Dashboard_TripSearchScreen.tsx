@@ -58,7 +58,6 @@ import {
 } from '@atb/modules/global-messages';
 import {isDefined} from '@atb/utils/presence';
 import {onlyUniques} from '@atb/utils/only-uniques';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {DatePickerSheet} from '@atb/components/date-selection';
 import SharedTexts from '@atb/translations/shared';
 import {TravelSearchFiltersBottomSheet} from './components/TravelSearchFiltersBottomSheet';
@@ -91,7 +90,9 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const isFocused = useIsFocusedAndActive();
   const filterButtonWrapperRef = useRef(null);
   const filterButtonRef = useRef(null);
-  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const travelSearchBottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const timePickerBottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const timePickerCloseRef = useRef<View | null>(null);
 
   const {location, requestLocationPermission} = useGeolocationContext();
 
@@ -221,24 +222,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     });
   }
 
-  const searchTimeButtonRef = useRef(undefined);
-  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheetContext();
   const onSearchTimePress = () => {
-    openBottomSheet(
-      () => (
-        <DatePickerSheet
-          ref={onOpenFocusRef}
-          initialDate={searchTime.date}
-          onSave={setSearchTime}
-          options={TripDateOptions.map((option) => ({
-            option,
-            text: t(TripSearchTexts.dateInput.options[option]),
-            selected: searchTime.option === option,
-          }))}
-        />
-      ),
-      searchTimeButtonRef,
-    );
+    timePickerBottomSheetModalRef.current?.present();
   };
 
   const refresh = () => {
@@ -366,7 +351,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 interactiveColor={interactiveColor}
                 type="small"
                 style={styles.searchTimeButton}
-                ref={searchTimeButtonRef}
+                ref={timePickerCloseRef}
                 onPress={onSearchTimePress}
                 testID="dashboardDateTimePicker"
                 rightIcon={{
@@ -384,7 +369,9 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     mode="primary"
                     interactiveColor={interactiveColor}
                     type="small"
-                    onPress={() => bottomSheetModalRef.current?.present()}
+                    onPress={() =>
+                      travelSearchBottomSheetModalRef.current?.present()
+                    }
                     testID="filterButton"
                     ref={filterButtonRef}
                     rightIcon={{
@@ -540,13 +527,23 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       </FullScreenView>
       {filtersState.filtersSelection && (
         <TravelSearchFiltersBottomSheet
-          ref={onOpenFocusRef}
           filtersSelection={filtersState.filtersSelection}
           onSave={filtersState.setFiltersSelection}
-          bottomSheetModalRef={bottomSheetModalRef}
+          bottomSheetModalRef={travelSearchBottomSheetModalRef}
           onCloseFocusRef={filterButtonRef}
         />
       )}
+      <DatePickerSheet
+        initialDate={searchTime.date}
+        onSave={setSearchTime}
+        options={TripDateOptions.map((option) => ({
+          option,
+          text: t(TripSearchTexts.dateInput.options[option]),
+          selected: searchTime.option === option,
+        }))}
+        onCloseFocusRef={timePickerCloseRef}
+        bottomSheetModalRef={timePickerBottomSheetModalRef}
+      />
     </View>
   );
 };

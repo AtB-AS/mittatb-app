@@ -33,165 +33,154 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
     bottomSheetModalRef: React.RefObject<GorhamBottomSheetModal | null>;
     onCloseFocusRef: React.RefObject<View | null>;
   }
->(
-  (
-    {filtersSelection, onSave, bottomSheetModalRef, onCloseFocusRef},
-    focusRef,
-  ) => {
-    const {t, language} = useTranslation();
-    const styles = useStyles();
+>(({filtersSelection, onSave, bottomSheetModalRef, onCloseFocusRef}) => {
+  const {t, language} = useTranslation();
+  const styles = useStyles();
 
-    const {setFilters} = useFiltersContext();
+  const {setFilters} = useFiltersContext();
 
-    const {isFlexibleTransportEnabled} = useFeatureTogglesContext();
+  const {isFlexibleTransportEnabled} = useFeatureTogglesContext();
 
-    const [selectedModeOptions, setSelectedModes] = useState<
-      TransportModeFilterOptionWithSelectionType[] | undefined
-    >(filtersSelection.transportModes);
+  const [selectedModeOptions, setSelectedModes] = useState<
+    TransportModeFilterOptionWithSelectionType[] | undefined
+  >(filtersSelection.transportModes);
 
-    const [
-      selectedTravelSearchPreferences,
-      setSelectedTravelSearchPreferences,
-    ] = useState<TravelSearchPreferenceWithSelectionType[]>(
+  const [selectedTravelSearchPreferences, setSelectedTravelSearchPreferences] =
+    useState<TravelSearchPreferenceWithSelectionType[]>(
       filtersSelection.travelSearchPreferences ?? [],
     );
 
-    const save = useCallback(() => {
-      const selectedFilters = {
-        transportModes: selectedModeOptions,
-        travelSearchPreferences: selectedTravelSearchPreferences,
-      };
-      onSave(selectedFilters);
+  const save = useCallback(() => {
+    const selectedFilters = {
+      transportModes: selectedModeOptions,
+      travelSearchPreferences: selectedTravelSearchPreferences,
+    };
+    onSave(selectedFilters);
 
-      // Saves only the travel search preferences in storage, while other filters
-      // are reset on the next search.
-      setFilters({
-        travelSearchPreferences: selectedTravelSearchPreferences,
-      });
+    // Saves only the travel search preferences in storage, while other filters
+    // are reset on the next search.
+    setFilters({
+      travelSearchPreferences: selectedTravelSearchPreferences,
+    });
 
-      bottomSheetModalRef?.current?.dismiss();
-    }, [
-      bottomSheetModalRef,
-      onSave,
-      selectedModeOptions,
-      selectedTravelSearchPreferences,
-      setFilters,
-    ]);
+    bottomSheetModalRef?.current?.dismiss();
+  }, [
+    bottomSheetModalRef,
+    onSave,
+    selectedModeOptions,
+    selectedTravelSearchPreferences,
+    setFilters,
+  ]);
 
-    const allModesSelected = selectedModeOptions?.every((m) => m.selected);
+  const allModesSelected = selectedModeOptions?.every((m) => m.selected);
 
-    const footer = useCallback(
-      () => (
-        <FullScreenFooter>
-          <Button
-            expanded={true}
-            text={t(TripSearchTexts.filters.bottomSheet.use)}
-            onPress={save}
-            rightIcon={{svg: Confirm}}
-            testID="confirmButton"
+  const footer = useCallback(
+    () => (
+      <FullScreenFooter>
+        <Button
+          expanded={true}
+          text={t(TripSearchTexts.filters.bottomSheet.use)}
+          onPress={save}
+          rightIcon={{svg: Confirm}}
+          testID="confirmButton"
+        />
+      </FullScreenFooter>
+    ),
+    [save, t],
+  );
+
+  return (
+    <BottomSheetModal
+      bottomSheetModalRef={bottomSheetModalRef}
+      heading={t(TripSearchTexts.filters.bottomSheet.title)}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      closeCallback={() => {
+        giveFocus(onCloseFocusRef);
+      }}
+      Footer={footer}
+    >
+      <View style={styles.filtersContainer} testID="filterView">
+        <ThemeText style={styles.headingText} typography="body__s">
+          {t(TripSearchTexts.filters.bottomSheet.heading)}
+        </ThemeText>
+        <Section>
+          <ToggleSectionItem
+            text={t(TripSearchTexts.filters.bottomSheet.modesAll)}
+            value={allModesSelected}
+            onValueChange={(checked) => {
+              setSelectedModes(
+                filtersSelection.transportModes?.map((m) => ({
+                  ...m,
+                  selected: checked,
+                })),
+              );
+            }}
+            testID="allModesToggle"
           />
-        </FullScreenFooter>
-      ),
-      [save, t],
-    );
+          {filtersSelection.transportModes
+            ?.filter(
+              ({id}) =>
+                id !== 'flexibleTransport' || isFlexibleTransportEnabled,
+            )
+            .map((option) => {
+              const text = getTextForLanguage(option.text, language);
+              const description = getTextForLanguage(
+                option.description,
+                language,
+              );
+              return text ? (
+                <ToggleSectionItem
+                  key={option.id}
+                  text={text}
+                  leftImage={
+                    <TransportationIconBox
+                      mode={option.icon?.transportMode}
+                      subMode={option.icon?.transportSubMode}
+                      isFlexible={
+                        isFlexibleTransportEnabled &&
+                        option.id === 'flexibleTransport'
+                      }
+                    />
+                  }
+                  subtext={description}
+                  value={
+                    selectedModeOptions?.find(({id}) => id === option.id)
+                      ?.selected
+                  }
+                  onValueChange={(checked) => {
+                    setSelectedModes(
+                      selectedModeOptions?.map((m) =>
+                        m.id === option.id ? {...m, selected: checked} : m,
+                      ),
+                    );
+                  }}
+                  testID={`${option.id}Toggle`}
+                />
+              ) : null;
+            })}
+        </Section>
 
-    return (
-      <BottomSheetModal
-        bottomSheetModalRef={bottomSheetModalRef}
-        heading={t(TripSearchTexts.filters.bottomSheet.title)}
-        rightIconText={t(dictionary.appNavigation.close.text)}
-        rightIcon={Close}
-        closeCallback={() => {
-          giveFocus(onCloseFocusRef);
-        }}
-        Footer={footer}
-      >
-        <View
-          style={styles.filtersContainer}
-          ref={focusRef}
-          testID="filterView"
-        >
-          <ThemeText style={styles.headingText} typography="body__s">
-            {t(TripSearchTexts.filters.bottomSheet.heading)}
-          </ThemeText>
-          <Section>
-            <ToggleSectionItem
-              text={t(TripSearchTexts.filters.bottomSheet.modesAll)}
-              value={allModesSelected}
-              onValueChange={(checked) => {
-                setSelectedModes(
-                  filtersSelection.transportModes?.map((m) => ({
-                    ...m,
-                    selected: checked,
-                  })),
-                );
-              }}
-              testID="allModesToggle"
-            />
-            {filtersSelection.transportModes
-              ?.filter(
-                ({id}) =>
-                  id !== 'flexibleTransport' || isFlexibleTransportEnabled,
+        {selectedTravelSearchPreferences.map((preference) => (
+          <TravelSearchPreference
+            key={preference.type}
+            style={styles.travelSearchPreference}
+            preference={preference}
+            onPreferenceChange={(changedPreference) =>
+              setSelectedTravelSearchPreferences((previousPreferences) =>
+                previousPreferences.map((pref) =>
+                  pref.type === changedPreference.type
+                    ? changedPreference
+                    : pref,
+                ),
               )
-              .map((option) => {
-                const text = getTextForLanguage(option.text, language);
-                const description = getTextForLanguage(
-                  option.description,
-                  language,
-                );
-                return text ? (
-                  <ToggleSectionItem
-                    key={option.id}
-                    text={text}
-                    leftImage={
-                      <TransportationIconBox
-                        mode={option.icon?.transportMode}
-                        subMode={option.icon?.transportSubMode}
-                        isFlexible={
-                          isFlexibleTransportEnabled &&
-                          option.id === 'flexibleTransport'
-                        }
-                      />
-                    }
-                    subtext={description}
-                    value={
-                      selectedModeOptions?.find(({id}) => id === option.id)
-                        ?.selected
-                    }
-                    onValueChange={(checked) => {
-                      setSelectedModes(
-                        selectedModeOptions?.map((m) =>
-                          m.id === option.id ? {...m, selected: checked} : m,
-                        ),
-                      );
-                    }}
-                    testID={`${option.id}Toggle`}
-                  />
-                ) : null;
-              })}
-          </Section>
-
-          {selectedTravelSearchPreferences.map((preference) => (
-            <TravelSearchPreference
-              key={preference.type}
-              style={styles.travelSearchPreference}
-              preference={preference}
-              onPreferenceChange={(changedPreference) =>
-                setSelectedTravelSearchPreferences((previousPreferences) =>
-                  previousPreferences.map((pref) =>
-                    pref.type === changedPreference.type
-                      ? changedPreference
-                      : pref,
-                  ),
-                )
-              }
-            />
-          ))}
-        </View>
-      </BottomSheetModal>
-    );
-  },
-);
+            }
+          />
+        ))}
+      </View>
+    </BottomSheetModal>
+  );
+});
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   filtersContainer: {

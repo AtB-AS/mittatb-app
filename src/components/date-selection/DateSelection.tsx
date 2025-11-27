@@ -1,6 +1,5 @@
 import {ArrowLeft, ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Date as DateIcon} from '@atb/assets/svg/mono-icons/time';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -16,11 +15,12 @@ import {
 } from '@atb/utils/date';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {addDays, isToday, parseISO} from 'date-fns';
-import React, {RefObject, useRef} from 'react';
+import React, {useRef} from 'react';
 import {View} from 'react-native';
 import {DatePickerSheet} from './DatePickerSheet';
 import type {ContrastColor} from '@atb-as/theme';
 import {DepartureDateOptions, type DepartureSearchTime} from './types';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 type DateSelectionProps = {
   searchTime: DepartureSearchTime;
@@ -38,7 +38,8 @@ export const DateSelection = ({
   const disablePreviousDayNavigation = isToday(
     parseISOFromCET(searchTime.date),
   );
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
+  const onCloseFocusRef = useRef<View | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
 
   const fontScale = useFontScale();
   const shouldShowNextPrevTexts = fontScale < 1.3;
@@ -59,79 +60,79 @@ export const DateSelection = ({
     setSearchTime(time);
   };
 
-  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheetContext();
   const onLaterTimePress = () => {
-    openBottomSheet(
-      () => (
-        <DatePickerSheet
-          ref={onOpenFocusRef}
-          initialDate={searchTime.date}
-          onSave={onSetSearchTime}
-          options={DepartureDateOptions.map((option) => ({
-            option,
-            text: t(DeparturesTexts.dateNavigation.options[option]),
-            selected: searchTime.option === option,
-          }))}
-        />
-      ),
-      onCloseFocusRef,
-    );
+    bottomSheetModalRef.current?.present();
   };
 
   return (
-    <View style={styles.dateNavigator}>
-      <Button
-        expanded={false}
-        onPress={() => {
-          setSearchTime(changeDay(searchTime, -1));
-        }}
-        text={
-          shouldShowNextPrevTexts
-            ? t(DeparturesTexts.dateNavigation.prevDay)
-            : undefined
-        }
-        mode="tertiary"
-        type="small"
-        leftIcon={{svg: ArrowLeft}}
-        disabled={disablePreviousDayNavigation}
-        accessibilityHint={
-          disablePreviousDayNavigation
-            ? t(DeparturesTexts.dateNavigation.a11yDisabled)
-            : t(DeparturesTexts.dateNavigation.a11yPreviousDayHint)
-        }
-        testID="previousDayButton"
-        backgroundColor={backgroundColor}
+    <>
+      <View style={styles.dateNavigator}>
+        <Button
+          expanded={false}
+          onPress={() => {
+            setSearchTime(changeDay(searchTime, -1));
+          }}
+          text={
+            shouldShowNextPrevTexts
+              ? t(DeparturesTexts.dateNavigation.prevDay)
+              : undefined
+          }
+          mode="tertiary"
+          type="small"
+          leftIcon={{svg: ArrowLeft}}
+          disabled={disablePreviousDayNavigation}
+          accessibilityHint={
+            disablePreviousDayNavigation
+              ? t(DeparturesTexts.dateNavigation.a11yDisabled)
+              : t(DeparturesTexts.dateNavigation.a11yPreviousDayHint)
+          }
+          testID="previousDayButton"
+          backgroundColor={backgroundColor}
+        />
+        <Button
+          expanded={false}
+          onPress={onLaterTimePress}
+          text={searchTimeText}
+          accessibilityHint={t(
+            DeparturesTexts.dateNavigation.a11yChangeDateHint,
+          )}
+          type="small"
+          mode="tertiary"
+          rightIcon={{svg: DateIcon}}
+          testID="setDateButton"
+          ref={onCloseFocusRef}
+          backgroundColor={backgroundColor}
+        />
+        <Button
+          expanded={false}
+          onPress={() => {
+            setSearchTime(changeDay(searchTime, 1));
+          }}
+          text={
+            shouldShowNextPrevTexts
+              ? t(DeparturesTexts.dateNavigation.nextDay)
+              : undefined
+          }
+          type="small"
+          mode="tertiary"
+          rightIcon={{svg: ArrowRight}}
+          accessibilityHint={t(DeparturesTexts.dateNavigation.a11yNextDayHint)}
+          testID="nextDayButton"
+          backgroundColor={backgroundColor}
+        />
+      </View>
+      <DatePickerSheet
+        initialDate={searchTime.date}
+        onSave={onSetSearchTime}
+        options={DepartureDateOptions.map((option) => ({
+          option,
+          text: t(DeparturesTexts.dateNavigation.options[option]),
+          selected: searchTime.option === option,
+        }))}
+        bottomSheetModalRef={bottomSheetModalRef}
+        onCloseFocusRef={onCloseFocusRef}
       />
-      <Button
-        expanded={false}
-        onPress={onLaterTimePress}
-        text={searchTimeText}
-        accessibilityHint={t(DeparturesTexts.dateNavigation.a11yChangeDateHint)}
-        type="small"
-        mode="tertiary"
-        rightIcon={{svg: DateIcon}}
-        testID="setDateButton"
-        ref={onCloseFocusRef}
-        backgroundColor={backgroundColor}
-      />
-      <Button
-        expanded={false}
-        onPress={() => {
-          setSearchTime(changeDay(searchTime, 1));
-        }}
-        text={
-          shouldShowNextPrevTexts
-            ? t(DeparturesTexts.dateNavigation.nextDay)
-            : undefined
-        }
-        type="small"
-        mode="tertiary"
-        rightIcon={{svg: ArrowRight}}
-        accessibilityHint={t(DeparturesTexts.dateNavigation.a11yNextDayHint)}
-        testID="nextDayButton"
-        backgroundColor={backgroundColor}
-      />
-    </View>
+    </>
   );
 };
 

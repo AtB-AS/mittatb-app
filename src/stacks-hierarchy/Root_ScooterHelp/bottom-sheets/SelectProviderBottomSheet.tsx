@@ -11,7 +11,7 @@ import {SelectGroup} from '../components/SelectGroup';
 import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
-import {BottomSheetModal as GorhamBottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 
 type Props = {
   providers: ViolationsReportingProvider[];
@@ -19,7 +19,7 @@ type Props = {
   onSelect: (provider: ViolationsReportingProvider) => void;
   qrScanFailed: boolean | undefined;
   onCloseFocusRef: React.RefObject<View | null>;
-  bottomSheetModalRef: React.RefObject<GorhamBottomSheetModal | null>;
+  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
 };
 
 export const SelectProviderBottomSheet = ({
