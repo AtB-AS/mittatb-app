@@ -3,6 +3,7 @@ export {
   EarnedBonusPointsSectionItem,
   PayWithBonusPointsCheckbox,
   UserBonusBalance,
+  UserBonusBalanceContent,
 } from './components';
 export {isActive, findRelevantBonusProduct} from './utils';
 export {

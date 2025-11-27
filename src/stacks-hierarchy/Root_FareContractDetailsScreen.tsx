@@ -17,6 +17,7 @@ import {MapFilterType} from '@atb/modules/map';
 import {useAuthContext} from '@atb/modules/auth';
 import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {hasShmoBookingId} from '@atb/modules/fare-contracts';
+import SvgInfo from '@atb/assets/svg/mono-icons/status/Info';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -45,6 +46,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       });
       navigation.navigate('Root_TicketInformationScreen', {
         preassignedFareProductId: preassignedFareProduct.id,
+        transitionOverride: 'slide-from-right',
       });
     }
   };
@@ -62,20 +64,23 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
     navigation.push('Root_ReceiptScreen', {
       orderId: fareContract.orderId,
       orderVersion: fareContract.version,
+      transitionOverride: 'slide-from-right',
     });
 
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        leftButton={{type: 'close'}}
+        leftButton={{type: 'back'}}
         rightButton={
           enable_ticket_information && !hasShmoBookingId(fareContract)
             ? {
-                type: 'info',
+                type: 'custom',
                 onPress: navigateToTicketInfoScreen,
                 color: theme.color.background.accent[0],
+                text: t(FareContractTexts.details.header.ticketInformation),
+                svg: SvgInfo,
                 accessibilityHint: t(
-                  FareContractTexts.details.infoButtonA11yHint,
+                  FareContractTexts.details.header.infoButtonA11yHint,
                 ),
               }
             : undefined

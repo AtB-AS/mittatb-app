@@ -16,7 +16,6 @@ import {
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useNavigation} from '@react-navigation/native';
 import React, {RefObject, useCallback, useEffect, useState} from 'react';
-import {useEnterPaymentMethods} from './hooks/use-enter-payment-methods';
 import {
   getFeatureFromScan,
   isParkAndRide,
@@ -33,6 +32,7 @@ import {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics';
 import {MapStateActionType} from './mapStateReducer';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {MapBottomSheetType, useMapContext} from './MapContext';
+import {useNavigateToNestedProfileScreen} from '@atb/utils/use-navigate-to-nested-profile-screen';
 
 type MapBottomSheetsProps = {
   mapViewRef: RefObject<MapboxGL.MapView | null>;
@@ -46,7 +46,9 @@ export const MapBottomSheets = ({
   locationArrowOnPress,
 }: MapBottomSheetsProps) => {
   const [openPaymentType, setOpenPaymentType] = useState<boolean>(false);
-  const navigateToPaymentMethods = useEnterPaymentMethods();
+  const navigateToPaymentMethods = useNavigateToNestedProfileScreen(
+    'Profile_PaymentMethodsScreen',
+  );
   const {mapState, dispatchMapState} = useMapContext();
   const {data: activeBooking} = useActiveShmoBookingQuery();
   const tabBarHeight = useBottomTabBarHeight();

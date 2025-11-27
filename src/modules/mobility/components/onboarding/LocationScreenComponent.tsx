@@ -23,7 +23,7 @@ export const LocationScreenComponent = ({}: LocationScreenComponentProps) => {
         expanded: true,
       }}
       headerProps={{
-        rightButton: {type: 'close', withIcon: true},
+        rightButton: {type: 'close'},
       }}
     />
   );

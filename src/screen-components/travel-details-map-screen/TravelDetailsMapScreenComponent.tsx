@@ -39,6 +39,10 @@ import {
   RegionPayload,
 } from '@rnmapbox/maps/lib/typescript/src/components/MapView';
 import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
+import {ThemeText} from '@atb/components/text';
+import {debugProgressBetweenStopsText} from '../travel-details-screens/utils';
+import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
+import {usePreferencesContext} from '@atb/modules/preferences';
 
 export type TravelDetailsMapScreenParams = {
   serviceJourneyPolylines: ServiceJourneyPolyline[];
@@ -48,6 +52,7 @@ export type TravelDetailsMapScreenParams = {
   mode?: AnyMode;
   subMode?: AnySubMode;
   mapFilter?: MapFilterType;
+  estimatedCalls?: Array<EstimatedCallWithQuayFragment>;
 };
 
 type Props = TravelDetailsMapScreenParams & {
@@ -66,12 +71,16 @@ export const TravelDetailsMapScreenComponent = ({
   onPressBack,
   mode,
   subMode,
+  estimatedCalls,
 }: Props) => {
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const {location: geolocation} = useGeolocationContext();
   const isFocusedAndActive = useIsFocusedAndActive();
   const [loadedMap, setLoadedMap] = useState(false);
+  const {
+    preferences: {debugShowProgressBetweenStops},
+  } = usePreferencesContext();
 
   const mapViewConfig = useMapViewConfig();
 
@@ -218,6 +227,11 @@ export const TravelDetailsMapScreenComponent = ({
           }}
         />
       </View>
+      {debugShowProgressBetweenStops && liveVehicle && (
+        <ThemeText style={{color: 'white', backgroundColor: 'black'}}>
+          {debugProgressBetweenStopsText(liveVehicle, estimatedCalls)}
+        </ThemeText>
+      )}
     </View>
   );
 };

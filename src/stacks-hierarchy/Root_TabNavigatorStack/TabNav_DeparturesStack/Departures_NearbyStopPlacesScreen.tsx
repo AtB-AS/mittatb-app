@@ -27,6 +27,7 @@ export const Departures_NearbyStopPlacesScreen = ({
         globalMessageContext: GlobalMessageContextEnum.appDepartures,
         color: theme.color.background.neutral[1],
       }}
+      isLargeTitle={true}
       onPressLocationSearch={(location) =>
         navigation.navigate('Root_LocationSearchByTextScreen', {
           label: t(SharedTexts.from),
