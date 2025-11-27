@@ -153,6 +153,7 @@ export type RootStackParamList = StackParams<{
   Root_SmartParkAndRideAddScreen: undefined;
   Root_SmartParkAndRideEditScreen: Root_SmartParkAndRideEditScreenParams;
   Root_OnboardingCarouselStack: Root_OnboardingCarouselStackParams;
+  Root_TravelAidOnboardingScreen: undefined;
 }>;
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;

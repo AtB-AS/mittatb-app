@@ -79,6 +79,7 @@ import {
 } from './Root_SmartParkAndRide';
 import {Root_OnboardingCarouselStack} from './Root_OnboardingCarouselStack';
 import {getActiveRouteName} from '@atb/utils/navigation';
+import {Root_TravelAidOnboardingScreen} from './Root_TravelAidOnboardingScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -448,6 +449,10 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_LocationWhenInUsePermissionScreen"
                 component={Root_LocationWhenInUsePermissionScreen}
+              />
+              <Stack.Screen
+                name="Root_TravelAidOnboardingScreen"
+                component={Root_TravelAidOnboardingScreen}
               />
               <Stack.Screen
                 name="Root_ChooseTicketRecipientScreen"
