@@ -675,7 +675,7 @@ export const Profile_DebugInfoScreen = () => {
                       const privacyDashboardUrl =
                         await getPrivacyDashboardUrl();
                       privacyDashboardUrl &&
-                        openInAppBrowser(privacyDashboardUrl, "close");
+                        openInAppBrowser(privacyDashboardUrl, 'close');
                     }}
                     style={styles.button}
                     disabled={!isConsentGranted}
@@ -686,7 +686,8 @@ export const Profile_DebugInfoScreen = () => {
                     interactiveColor={interactiveColor}
                     onPress={async () => {
                       const privacyTermsUrl = await getPrivacyTermsUrl();
-                      privacyTermsUrl && openInAppBrowser(privacyTermsUrl, "close");
+                      privacyTermsUrl &&
+                        openInAppBrowser(privacyTermsUrl, 'close');
                     }}
                     style={styles.button}
                     disabled={!isConsentGranted}
