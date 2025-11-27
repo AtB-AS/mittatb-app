@@ -35,7 +35,14 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import React, {RefObject, useCallback, useRef, useState} from 'react';
+import React, {
+  ReactNode,
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
@@ -83,6 +90,7 @@ import {
 } from '@atb/utils/use-in-app-review';
 import {useFocusEffect} from '@react-navigation/native';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -759,10 +767,20 @@ const FavoriteButton = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const analytics = useAnalyticsContext();
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const [bottomSheetNodeData, setBottomSheetNodeData] =
+    useState<ReactNode | null>(null);
+
+  useEffect(() => {
+    if (bottomSheetNodeData) bottomSheetModalRef.current?.present();
+  }, [bottomSheetNodeData]);
+
   const {onMarkFavourite, getExistingFavorite} = useOnMarkFavouriteDepartures(
     fromCall.quay,
+    bottomSheetModalRef,
     false,
   );
+
   const onCloseFocusRef = useRef<RefObject<any>>(null);
 
   const favouriteDepartureLine: FavouriteDepartureLine = {
@@ -775,36 +793,41 @@ const FavoriteButton = ({
   const existingFavorite = getExistingFavorite(favouriteDepartureLine);
 
   return (
-    <Button
-      type="small"
-      expanded={false}
-      leftIcon={{svg: getFavoriteIcon(existingFavorite)}}
-      text={t(FavoriteDeparturesTexts.favoriteButton)}
-      interactiveColor={theme.color.interactive['1']}
-      accessibilityLabel={
-        existingFavorite &&
-        (existingFavorite.destinationDisplay
-          ? t(DeparturesTexts.favorites.favoriteButton.oneVariation)
-          : t(DeparturesTexts.favorites.favoriteButton.allVariations))
-      }
-      accessibilityHint={
-        !!existingFavorite
-          ? t(FavoriteDeparturesTexts.favoriteItemDelete.a11yHint)
-          : t(FavoriteDeparturesTexts.favoriteItemAdd.a11yHint)
-      }
-      onPress={() => {
-        analytics.logEvent('Departure details', 'Add to Favourite clicked', {
-          line: favouriteDepartureLine?.id,
-          lineNumber: favouriteDepartureLine?.lineNumber,
-        });
-        onMarkFavourite(
-          favouriteDepartureLine,
-          existingFavorite,
-          onCloseFocusRef,
-        );
-      }}
-      ref={onCloseFocusRef}
-    />
+    <>
+      <Button
+        type="small"
+        expanded={false}
+        leftIcon={{svg: getFavoriteIcon(existingFavorite)}}
+        text={t(FavoriteDeparturesTexts.favoriteButton)}
+        interactiveColor={theme.color.interactive['1']}
+        accessibilityLabel={
+          existingFavorite &&
+          (existingFavorite.destinationDisplay
+            ? t(DeparturesTexts.favorites.favoriteButton.oneVariation)
+            : t(DeparturesTexts.favorites.favoriteButton.allVariations))
+        }
+        accessibilityHint={
+          !!existingFavorite
+            ? t(FavoriteDeparturesTexts.favoriteItemDelete.a11yHint)
+            : t(FavoriteDeparturesTexts.favoriteItemAdd.a11yHint)
+        }
+        onPress={() => {
+          analytics.logEvent('Departure details', 'Add to Favourite clicked', {
+            line: favouriteDepartureLine?.id,
+            lineNumber: favouriteDepartureLine?.lineNumber,
+          });
+
+          const bottomSheet = onMarkFavourite(
+            favouriteDepartureLine,
+            existingFavorite,
+            onCloseFocusRef,
+          );
+          setBottomSheetNodeData(bottomSheet);
+        }}
+        ref={onCloseFocusRef}
+      />
+      {bottomSheetNodeData}
+    </>
   );
 };
 

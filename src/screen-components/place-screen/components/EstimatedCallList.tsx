@@ -2,7 +2,14 @@ import {GenericSectionItem, SectionSeparator} from '@atb/components/sections';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {ThemeText} from '@atb/components/text';
 import {FlatList} from 'react-native-gesture-handler';
-import React, {RefObject, useCallback} from 'react';
+import React, {
+  ReactNode,
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {EstimatedCallItem, EstimatedCallItemProps} from './EstimatedCallItem';
 import {
@@ -11,6 +18,7 @@ import {
 } from '@atb/modules/favorites';
 import {QuaySectionProps} from './QuaySection';
 import {secondsBetween} from '@atb/utils/date';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 type EstimatedCallRenderItem = {
   item: EstimatedCallItemProps;
@@ -40,18 +48,26 @@ export const EstimatedCallList = ({
   noDeparturesToShow,
 }: Props) => {
   const {t} = useTranslation();
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
   const {onMarkFavourite, getExistingFavorite} = useOnMarkFavouriteDepartures(
     quay,
+    bottomSheetModalRef,
     addedFavoritesVisibleOnDashboard,
   );
+  const [bottomSheetNodeData, setBottomSheetNodeData] =
+    useState<ReactNode | null>(null);
+
+  useEffect(() => {
+    if (bottomSheetNodeData) bottomSheetModalRef.current?.present();
+  }, [bottomSheetNodeData]);
 
   const onPressFavorite = useCallback(
     (
       departure: EstimatedCall,
       existingFavorite: StoredFavoriteDeparture | undefined,
       onCloseRef: RefObject<any>,
-    ) =>
-      onMarkFavourite(
+    ) => {
+      const favBottomSheet = onMarkFavourite(
         {
           ...departure.serviceJourney.line,
           lineNumber: departure.serviceJourney.line.publicCode,
@@ -59,7 +75,11 @@ export const EstimatedCallList = ({
         },
         existingFavorite,
         onCloseRef,
-      ),
+      );
+      if (favBottomSheet) {
+        setBottomSheetNodeData(favBottomSheet);
+      }
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
@@ -114,31 +134,35 @@ export const EstimatedCallList = ({
   );
 
   return (
-    <FlatList
-      ItemSeparatorComponent={SectionSeparator}
-      data={listData}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-      windowSize={5}
-      ListEmptyComponent={
-        <>
-          {noDeparturesToShow && (
-            <GenericSectionItem
-              radius={!shouldShowMoreItemsLink ? 'bottom' : undefined}
-            >
-              <ThemeText
-                color="secondary"
-                typography="body__s"
-                style={{textAlign: 'center', width: '100%'}}
+    <>
+      <FlatList
+        ItemSeparatorComponent={SectionSeparator}
+        data={listData}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        windowSize={5}
+        ListEmptyComponent={
+          <>
+            {noDeparturesToShow && (
+              <GenericSectionItem
+                radius={!shouldShowMoreItemsLink ? 'bottom' : undefined}
               >
-                {showOnlyFavorites
-                  ? t(DeparturesTexts.noDeparturesForFavorites)
-                  : t(DeparturesTexts.noDepartures)}
-              </ThemeText>
-            </GenericSectionItem>
-          )}
-        </>
-      }
-    />
+                <ThemeText
+                  color="secondary"
+                  typography="body__s"
+                  style={{textAlign: 'center', width: '100%'}}
+                >
+                  {showOnlyFavorites
+                    ? t(DeparturesTexts.noDeparturesForFavorites)
+                    : t(DeparturesTexts.noDepartures)}
+                </ThemeText>
+              </GenericSectionItem>
+            )}
+          </>
+        }
+      />
+
+      {bottomSheetNodeData}
+    </>
   );
 };

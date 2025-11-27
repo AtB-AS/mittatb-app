@@ -3,7 +3,6 @@ import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {Quay} from '@atb/api/types/departures';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import React, {RefObject} from 'react';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {
   TransportSubmode,
   TransportMode,
@@ -13,6 +12,7 @@ import {animateNextChange} from '@atb/utils/animation';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 import {useFavoritesContext} from './FavoritesContext';
 import {StoredFavoriteDeparture} from './types';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 export type FavouriteDepartureLine = {
   id: string;
@@ -25,12 +25,13 @@ export type FavouriteDepartureLine = {
 
 export function useOnMarkFavouriteDepartures(
   quay: Pick<Quay, 'id' | 'name' | 'publicCode'>,
+  bottomSheetModalRef: RefObject<BottomSheetModal | null>,
   addedFavoritesVisibleOnDashboard?: boolean,
 ) {
   const {addFavoriteDeparture, removeFavoriteDeparture, getFavoriteDeparture} =
     useFavoritesContext();
   const {t} = useTranslation();
-  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheetContext();
+
   const addFavorite = async (
     line: FavouriteDepartureLine,
     forSpecificDestination: boolean,
@@ -116,21 +117,18 @@ export function useOnMarkFavouriteDepartures(
         ],
       );
     } else if (line.destinationDisplay && line.lineNumber && quay.name) {
-      openBottomSheet(() => {
-        return line.destinationDisplay && line.lineNumber ? (
-          <FavoriteDialogSheet
-            quayName={quay.name}
-            destinationDisplay={line.destinationDisplay}
-            lineNumber={line.lineNumber}
-            addFavorite={(forSpecificLineName: boolean) =>
-              addFavorite(line, forSpecificLineName)
-            }
-            ref={onOpenFocusRef}
-          />
-        ) : (
-          <></>
-        );
-      }, onCloseFocusRef);
+      return (
+        <FavoriteDialogSheet
+          quayName={quay.name}
+          destinationDisplay={line.destinationDisplay}
+          lineNumber={line.lineNumber}
+          addFavorite={(forSpecificLineName: boolean) =>
+            addFavorite(line, forSpecificLineName)
+          }
+          bottomSheetModalRef={bottomSheetModalRef}
+          onCloseFocusRef={onCloseFocusRef}
+        />
+      );
     }
   };
 
