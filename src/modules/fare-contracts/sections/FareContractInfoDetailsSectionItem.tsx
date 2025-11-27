@@ -20,9 +20,9 @@ import {InspectionSymbol} from '../components/InspectionSymbol';
 import {getTransportModeText} from '@atb/components/transportation-modes';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {
-  toCountAndName,
+  toCountAndReferenceDataName,
   UniqueWithCount,
-} from '@atb/utils/array-map-unique-with-count';
+} from '@atb/utils/unique-with-count';
 
 export type FareContractInfoProps = {
   status: ValidityStatus;
@@ -98,10 +98,10 @@ export const FareContractInfoDetailsSectionItem = ({
             <FareContractDetailItem
               header={t(FareContractTexts.label.travellers)}
               content={userProfilesWithCount
-                .map((u) => toCountAndName(u, language))
+                .map((u) => toCountAndReferenceDataName(u, language))
                 .concat(
                   baggageProductsWithCount.map((p) =>
-                    toCountAndName(p, language),
+                    toCountAndReferenceDataName(p, language),
                   ),
                 )}
             />

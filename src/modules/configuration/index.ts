@@ -30,8 +30,11 @@ export {
   LanguageAndTextTypeArray,
   PreassignedFareProduct,
   SupplementProduct,
+  BaggageProduct,
+  BaggageType,
 } from './types';
 export {
+  type ReferenceDataNames,
   findReferenceDataById,
   getReferenceDataName,
   isProductSellableInApp,

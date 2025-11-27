@@ -13,6 +13,11 @@ import {APP_VERSION} from '@env';
 import {compareVersion} from '@atb/utils/compare-version';
 import {CustomerProfile} from '@atb/modules/ticketing';
 
+export type ReferenceDataNames = {
+  name: LanguageAndTextType;
+  alternativeNames?: LanguageAndTextType[];
+};
+
 /**
  * Wrapper for getting the name of a NeTeX entity in the given language.
  *
@@ -21,12 +26,7 @@ import {CustomerProfile} from '@atb/modules/ticketing';
  * "Unknown" somewhere in the app it should be fixed by updating the reference
  * data source.
  */
-export const getReferenceDataName = <
-  T extends {
-    name: LanguageAndTextType;
-    alternativeNames?: LanguageAndTextType[];
-  },
->(
+export const getReferenceDataName = <T extends ReferenceDataNames>(
   {name, alternativeNames}: T,
   language: Language,
 ): string =>

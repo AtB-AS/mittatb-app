@@ -9,6 +9,7 @@ import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {MultipleTravellersSelection} from './Travellers/MultipleTravellersSelection';
 import {SingleTravellerSelection} from './Travellers/SingleTravellerSelection';
 import {useUserCountState} from './Travellers/use-user-count-state';
+import {useBaggageCountState} from './Travellers/use-baggage-count-state';
 import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
@@ -30,10 +31,11 @@ export const TravellerSelectionSheet = ({
     selection.fareProductTypeConfig.configuration.travellerSelectionMode;
 
   const userCountState = useUserCountState(selection);
+  const baggageCountState = useBaggageCountState(selection);
 
-  const noProfilesSelected = userCountState.userProfilesWithCount.every(
-    (u) => !u.count,
-  );
+  const nothingSelected =
+    userCountState.state.every((u) => !u.count) &&
+    baggageCountState.state.every((sp) => !sp.count);
 
   return (
     <BottomSheetContainer
@@ -42,7 +44,10 @@ export const TravellerSelectionSheet = ({
     >
       <ScrollView style={styles.container}>
         {selectionMode === 'multiple' ? (
-          <MultipleTravellersSelection {...userCountState} />
+          <MultipleTravellersSelection
+            userCountState={userCountState}
+            baggageCountState={baggageCountState}
+          />
         ) : (
           <SingleTravellerSelection {...userCountState} />
         )}
@@ -51,11 +56,12 @@ export const TravellerSelectionSheet = ({
         <Button
           expanded={true}
           text={t(PurchaseOverviewTexts.travellerSelectionSheet.confirm)}
-          disabled={noProfilesSelected}
+          disabled={nothingSelected}
           onPress={() => {
             const newSelection = selectionBuilder
               .fromSelection(selection)
-              .userProfiles(userCountState.userProfilesWithCount)
+              .userProfiles(userCountState.state)
+              .baggageProducts(baggageCountState.state)
               .build();
             onSave(newSelection);
           }}

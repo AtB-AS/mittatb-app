@@ -95,14 +95,29 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
+    baggageProductsWithCountAndOffer,
   } = useOfferState(preassignedFareProductAlternatives, selection);
 
-  const offers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
+  const userProfileOffers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
     ({count, offer: {offerId}}) => ({
       count,
       offerId,
     }),
   );
+
+  const baggageProductOffers: ReserveOffer[] =
+    baggageProductsWithCountAndOffer.map(
+      ({count, offer: {offerId, supplementProducts}}) => ({
+        count,
+        offerId,
+        selectableProductIds: [supplementProducts[0].selectableId],
+      }),
+    );
+
+  const offers: ReserveOffer[] = [
+    ...userProfileOffers,
+    ...baggageProductOffers,
+  ];
 
   const reserveMutation = useReserveOfferMutation({
     offers,
@@ -278,6 +293,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           isSearchingOffer={isSearchingOffer}
           totalPrice={totalPrice}
           userProfilesWithCountAndOffer={userProfilesWithCountAndOffer}
+          baggageProductsWithCountAndOffer={baggageProductsWithCountAndOffer}
         />
         {inspectableTokenWarningText && !recipient && (
           <MessageInfoBox

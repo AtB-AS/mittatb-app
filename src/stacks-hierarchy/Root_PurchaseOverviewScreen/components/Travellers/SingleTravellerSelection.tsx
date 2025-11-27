@@ -4,29 +4,29 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import {getReferenceDataName} from '@atb/modules/configuration';
+import {getReferenceDataName, UserProfile} from '@atb/modules/configuration';
 import {RadioGroupSection} from '@atb/components/sections';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
-import type {UserCountState} from './types';
+import {UniqueCountState} from '@atb/utils/unique-with-count';
 
 export function SingleTravellerSelection({
-  userProfilesWithCount,
-  addCount,
-  removeCount,
-}: UserCountState) {
+  state,
+  increment,
+  decrement,
+}: UniqueCountState<UserProfile>) {
   const {t, language} = useTranslation();
-  const selectedProfile = userProfilesWithCount.find((u) => u.count);
+  const selectedProfile = state.find((u) => u.count);
 
   const select = (u: UserProfileWithCount) => {
     if (selectedProfile) {
-      removeCount(selectedProfile.userTypeString);
+      decrement(selectedProfile);
     }
-    addCount(u.userTypeString);
+    increment(u);
   };
 
   return (
     <RadioGroupSection<UserProfileWithCount>
-      items={userProfilesWithCount}
+      items={state}
       keyExtractor={(u) => u.userTypeString}
       itemToText={(u) => getReferenceDataName(u, language)}
       itemToSubtext={(u) =>
