@@ -81,7 +81,7 @@ export function MultipleTravellersSelection(props: Props) {
             addCount={() => addBaggageProduct(s.id)}
             removeCount={() => removeBaggageProduct(s.id)}
             subtext={getTextForLanguage(s.description, language)}
-            illustrationName={s.illustration}
+            baggageType={s.baggageType}
           />
         ))}
       </Section>

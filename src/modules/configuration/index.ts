@@ -31,6 +31,7 @@ export {
   PreassignedFareProduct,
   SupplementProduct,
   BaggageProduct,
+  BaggageType,
 } from './types';
 export {
   type ReferenceDataNames,

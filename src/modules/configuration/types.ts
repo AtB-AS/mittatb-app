@@ -11,9 +11,12 @@ export type PointToPointValidity = {
   toPlace: string;
 };
 
+export const BaggageType = z.enum(['BICYCLE']);
+export type BaggageType = z.infer<typeof BaggageType>;
+
 // BaggageProduct is a SupplementProduct where isBaggageProduct is true and baggageType is not null.
 export const BaggageProduct = SupplementProduct.extend({
   isBaggageProduct: z.literal(true),
-  baggageType: z.string(),
+  baggageType: BaggageType,
 });
 export type BaggageProduct = z.infer<typeof BaggageProduct>;
