@@ -55,7 +55,7 @@ export const Root_ShareTravelHabitsScreen = () => {
             configurableLinks?.dataSharingInfo,
             language,
           );
-          dataSharingInfoUrl && openInAppBrowser(dataSharingInfoUrl, "close");
+          dataSharingInfoUrl && openInAppBrowser(dataSharingInfoUrl, 'close');
         },
       }}
       footerDescription={t(ShareTravelHabitsTexts.bluetoothInfo)}

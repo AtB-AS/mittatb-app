@@ -7,7 +7,7 @@ import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CUSTOMER_SERVICE_URL} from '@env';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import { openInAppBrowser } from '@atb/modules/in-app-browser';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type ErrorProps = {
   onRestartApp: () => void;
@@ -42,7 +42,7 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
           expanded={true}
           text={getContactButtonText(CUSTOMER_SERVICE_URL)}
           rightIcon={{svg: ExternalLink}}
-          onPress={() => openInAppBrowser(CUSTOMER_SERVICE_URL, "close")}
+          onPress={() => openInAppBrowser(CUSTOMER_SERVICE_URL, 'close')}
           style={styles.button}
         />
       </View>
