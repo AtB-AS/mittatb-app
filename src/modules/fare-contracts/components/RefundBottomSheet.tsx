@@ -1,9 +1,5 @@
 import {FareContractState} from '@atb-as/utils';
 import SvgExternalLink from '@atb/assets/svg/mono-icons/navigation/ExternalLink';
-import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {GenericSectionItem, Section} from '@atb/components/sections';
@@ -13,22 +9,35 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useRefundFareContractMutation} from '@atb/modules/ticketing';
 import {useRefundOptionsQuery} from '@atb/modules/ticketing';
 import {
+  dictionary,
   FareContractTexts,
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
 import React, {useEffect} from 'react';
-import {Linking} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Linking, View} from 'react-native';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {RefObject} from '@testing-library/react-native/build/types';
+import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   orderId: string;
   fareProductType: string | undefined;
   state: FareContractState;
+  bottomSheetModalRef: RefObject<GorhomBottomSheetModal | null>;
+  onCloseFocusRef: RefObject<View | null>;
 };
 
-export const RefundBottomSheet = ({orderId, fareProductType, state}: Props) => {
+export const RefundBottomSheet = ({
+  orderId,
+  fareProductType,
+  state,
+  bottomSheetModalRef,
+  onCloseFocusRef,
+}: Props) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t, language} = useTranslation();
@@ -37,10 +46,10 @@ export const RefundBottomSheet = ({orderId, fareProductType, state}: Props) => {
     configurableLinks?.refundInfo,
     language,
   );
-  const {close} = useBottomSheetContext();
+  const {logEvent} = useAnalyticsContext();
+
   const {data: refundOptions, status: refundOptionsStatus} =
     useRefundOptionsQuery(orderId, state);
-  const {logEvent} = useBottomSheetContext();
 
   const {mutate: refund, status: refundStatus} =
     useRefundFareContractMutation();
@@ -50,19 +59,19 @@ export const RefundBottomSheet = ({orderId, fareProductType, state}: Props) => {
       logEvent('Ticketing', 'Ticket refunded', {
         fareProductType,
       });
-      close();
+      bottomSheetModalRef.current?.dismiss();
     }
-  }, [refundStatus, fareProductType, close, logEvent]);
+  }, [refundStatus, fareProductType, logEvent, bottomSheetModalRef]);
 
   return (
-    <BottomSheetContainer
-      title={t(FareContractTexts.refund.bottomSheetTitle)}
-      focusTitleOnLoad={true}
+    <BottomSheetModal
+      bottomSheetModalRef={bottomSheetModalRef}
+      heading={t(FareContractTexts.refund.bottomSheetTitle)}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      closeCallback={() => giveFocus(onCloseFocusRef)}
     >
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}
-      >
+      <View style={styles.container}>
         <Section>
           <GenericSectionItem type="spacious">
             <ThemeText>
@@ -97,20 +106,16 @@ export const RefundBottomSheet = ({orderId, fareProductType, state}: Props) => {
             accessibilityLabel={t(FareContractTexts.refund.readMoreA11yLabel)}
           />
         )}
-      </ScrollView>
-    </BottomSheetContainer>
+      </View>
+    </BottomSheetModal>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   return {
     container: {
       backgroundColor: theme.color.background.neutral[1].background,
       marginHorizontal: theme.spacing.medium,
-      marginBottom: bottomSafeAreaInset + theme.spacing.medium,
-    },
-    contentContainer: {
       rowGap: theme.spacing.medium,
     },
   };
