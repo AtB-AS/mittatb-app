@@ -77,7 +77,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   content: {
     paddingVertical: theme.spacing.large,
     paddingHorizontal: theme.spacing.medium,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     rowGap: theme.spacing.small,
   },
 }));

@@ -35,7 +35,7 @@ export const FareContractHeaderSectionItem = ({
         <SentToMessageBox fc={fc} />
         <FareContractFromTo
           backgroundColor={theme.color.background.neutral['0']}
-          mode="large"
+          size="large"
           fc={fc}
         />
       </View>

@@ -1,13 +1,14 @@
 import {TravelRightDirection} from '@atb-as/utils';
 import {ContrastColor} from '@atb-as/theme';
-import {BorderedFromToBox} from './BorderedFromToBox';
+import {FromToBox} from './FromToBox';
 import {useHarbors} from '@atb/modules/harbors';
+import {Size} from '../utils';
 
 type HarborsProps = {
   startPointRef: string;
   endPointRef?: string;
   direction: TravelRightDirection;
-  mode: 'small' | 'large';
+  size: Size;
   backgroundColor: ContrastColor;
 };
 
@@ -15,7 +16,7 @@ export const HarborsFromTo = ({
   startPointRef,
   endPointRef,
   direction,
-  mode,
+  size,
   backgroundColor,
 }: HarborsProps) => {
   const constrollerData = useHarborsFromToController({
@@ -26,11 +27,11 @@ export const HarborsFromTo = ({
   const {startPointName, endPointName} = constrollerData;
 
   return (
-    <BorderedFromToBox
+    <FromToBox
       fromText={startPointName}
       toText={endPointName}
       direction={direction}
-      mode={mode}
+      size={size}
       backgroundColor={backgroundColor}
     />
   );

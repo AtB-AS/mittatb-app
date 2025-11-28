@@ -6,18 +6,19 @@ import {
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
 import {TravelRightDirection} from '@atb-as/utils';
-import {BorderedFromToBox} from './BorderedFromToBox';
+import {FromToBox} from './FromToBox';
 import dictionary from '@atb/translations/dictionary';
+import {Size} from '../utils';
 
 type ZonesFromToProps = {
   fareZoneRefs: string[];
-  mode: 'small' | 'large';
+  size: Size;
   backgroundColor: ContrastColor;
 };
 
 export const ZonesFromTo = ({
   fareZoneRefs,
-  mode,
+  size,
   backgroundColor,
 }: ZonesFromToProps) => {
   const {t} = useTranslation();
@@ -33,11 +34,11 @@ export const ZonesFromTo = ({
     : undefined;
 
   return (
-    <BorderedFromToBox
+    <FromToBox
       fromText={fromZoneText}
       toText={toZoneText}
       direction={TravelRightDirection.Both}
-      mode={mode}
+      size={size}
       backgroundColor={backgroundColor}
     />
   );
