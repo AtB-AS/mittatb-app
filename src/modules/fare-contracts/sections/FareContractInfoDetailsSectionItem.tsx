@@ -23,6 +23,7 @@ import {
   toCountAndReferenceDataName,
   UniqueWithCount,
 } from '@atb/utils/unique-with-count';
+import {formatToNonBreakingSpaces} from '@atb/utils/text';
 
 export type FareContractInfoProps = {
   status: ValidityStatus;
@@ -105,6 +106,7 @@ export const FareContractInfoDetailsSectionItem = ({
                     toCountAndReferenceDataName(p, language),
                   ),
                 )
+                .map((t) => formatToNonBreakingSpaces(t))
                 .join(', ')}
             />
           )}
