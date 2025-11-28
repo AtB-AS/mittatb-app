@@ -52,7 +52,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   contentContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.medium,
+    gap: theme.spacing.small,
   },
   contentText: {
     flexShrink: 1,

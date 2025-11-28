@@ -12,6 +12,7 @@ import {getTransportModeText} from '@atb/components/transportation-modes';
 import {
   getFareContractInfo,
   getTravellersIcon,
+  getTravellersText,
   mapToUserProfilesWithCount,
 } from '../utils';
 import {InspectionSymbol} from './InspectionSymbol';
@@ -24,14 +25,10 @@ import {useTimeContext} from '@atb/modules/time';
 import {useSectionItem} from '@atb/components/sections';
 import {isDefined} from '@atb/utils/presence';
 import {SentToMessageBox} from './SentToMessageBox';
-import {
-  mapUniqueWithCount,
-  toCountAndReferenceDataName,
-} from '@atb/utils/unique-with-count';
+import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
-import {formatToNonBreakingSpaces} from '@atb/utils/text';
 
 type Props = {fc: FareContractType};
 
@@ -81,13 +78,11 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
     baggageProductsWithCount,
   );
 
-  const travellersWithCountText = [
-    ...userProfilesWithCount,
-    ...baggageProductsWithCount,
-  ]
-    ?.map((tr) => toCountAndReferenceDataName(tr, language))
-    ?.map((tr) => formatToNonBreakingSpaces(tr))
-    ?.join(', ');
+  const travellersWithCountText = getTravellersText(
+    userProfilesWithCount,
+    baggageProductsWithCount,
+    language,
+  );
 
   const styles = useStyles();
   const {theme} = useThemeContext();

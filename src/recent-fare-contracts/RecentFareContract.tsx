@@ -19,10 +19,10 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {
   FareContractFromTo,
   getTravellersIcon,
+  getTravellersText,
 } from '@atb/modules/fare-contracts';
 import {FareContractDetailItem} from '@atb/modules/fare-contracts';
 import {getTransportModeSvg} from '@atb/components/icon-box';
-import {formatToNonBreakingSpaces} from '@atb/utils/text';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContractType;
@@ -65,10 +65,7 @@ export const RecentFareContract = ({
 
   const productName = getReferenceDataName(preassignedFareProduct, language);
 
-  const travellersText = userProfilesWithCount
-    .map((u) => u.count + ' ' + getReferenceDataName(u, language))
-    .map((t) => formatToNonBreakingSpaces(t))
-    .join(', ');
+  const travellersText = getTravellersText(userProfilesWithCount, [], language);
 
   const travellersIcon = getTravellersIcon(userProfilesWithCount, []);
 

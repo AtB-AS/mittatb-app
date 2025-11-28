@@ -131,7 +131,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.medium,
+    gap: theme.spacing.small,
   },
   smallContentText: {
     flexDirection: 'column',

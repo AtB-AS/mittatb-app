@@ -30,10 +30,14 @@ import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useAuthContext} from '@atb/modules/auth';
 import {useCallback, useMemo} from 'react';
 import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
-import {UniqueWithCount} from '@atb/utils/unique-with-count';
+import {
+  toCountAndReferenceDataName,
+  UniqueWithCount,
+} from '@atb/utils/unique-with-count';
 import {SvgProps} from 'react-native-svg';
 import {Bicycle} from '@atb/assets/svg/mono-icons/transportation';
 import {TextNames} from '@atb-as/theme';
+import {formatToNonBreakingSpaces} from '@atb/utils/text';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -310,6 +314,17 @@ export const getReservationStatus = (reservation: Reservation) => {
       return 'reserving';
   }
 };
+
+export function getTravellersText(
+  userProfilesWithCount: UniqueWithCount<UserProfile>[],
+  baggageProductsWithCount: UniqueWithCount<SupplementProduct>[],
+  language: Language,
+): string {
+  return [...userProfilesWithCount, ...baggageProductsWithCount]
+    .map((tr) => toCountAndReferenceDataName(tr, language))
+    .map((tr) => formatToNonBreakingSpaces(tr))
+    .join(', ');
+}
 
 export function getTravellersIcon(
   userProfilesWithCount: UniqueWithCount<UserProfile>[],
