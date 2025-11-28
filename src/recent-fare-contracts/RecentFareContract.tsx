@@ -170,6 +170,7 @@ export const RecentFareContract = ({
             getTransportModeSvg(
               fareProductTypeConfig.transportModes[0].mode,
               fareProductTypeConfig.transportModes[0].subMode,
+              false,
             ).svg
           }
           content={`${getTransportModeText(fareProductTypeConfig.transportModes, t)}`}
