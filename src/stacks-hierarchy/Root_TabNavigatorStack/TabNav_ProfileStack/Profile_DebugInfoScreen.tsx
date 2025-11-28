@@ -110,6 +110,8 @@ export const Profile_DebugInfoScreen = () => {
       remoteTokenError,
       setSabotage,
       sabotage,
+      setAlwaysFallback,
+      alwaysFallback,
       setAllTokenInspectable,
       allTokenInspectable,
     },
@@ -547,6 +549,13 @@ export const Profile_DebugInfoScreen = () => {
                     onPress={renewToken}
                   />
                 )}
+                <ToggleSectionItem
+                  text="Always display fallback/static token"
+                  value={alwaysFallback}
+                  onValueChange={(alwaysFallback) => {
+                    setAlwaysFallback(alwaysFallback);
+                  }}
+                />
                 <ExpandableSectionItem
                   text="Remote tokens"
                   showIconText={true}
