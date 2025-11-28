@@ -75,6 +75,8 @@ type MobileTokenContextState = {
     remoteTokenError: any;
     setSabotage: (attestationSabotage?: AttestationSabotage) => void;
     sabotage: AttestationSabotage | undefined;
+    setAlwaysFallback: (alwaysFallback: boolean) => void;
+    alwaysFallback: boolean;
     setAllTokenInspectable: (inspectable?: boolean) => void;
     allTokenInspectable: boolean | undefined;
   };
@@ -99,6 +101,7 @@ export const MobileTokenContextProvider = ({children}: Props) => {
 
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [sabotage, setSabotage] = useState<AttestationSabotage | undefined>();
+  const [alwaysFallback, setAlwaysFallback] = useState<boolean>(false);
   const [allTokenInspectable, setAllTokenInspectable] = useState<
     boolean | undefined
   >();
@@ -275,7 +278,7 @@ export const MobileTokenContextProvider = ({children}: Props) => {
     nativeToken,
     remoteTokens,
     isRenewingOrResetting,
-    isRenewOrResetError,
+    isRenewOrResetError || alwaysFallback,
     isTimeout,
   );
 
@@ -346,6 +349,10 @@ export const MobileTokenContextProvider = ({children}: Props) => {
             }
           },
           sabotage: sabotage,
+          setAlwaysFallback: (alwaysFallback: boolean) => {
+            setAlwaysFallback(alwaysFallback);
+          },
+          alwaysFallback: alwaysFallback,
           setAllTokenInspectable: (inspectable?: boolean) => {
             setAllTokenInspectable(inspectable);
           },
