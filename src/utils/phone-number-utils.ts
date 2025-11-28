@@ -1,15 +1,15 @@
 import parsePhoneNumber from 'libphonenumber-js';
+import {formatToNonBreakingSpaces} from './text';
 
 /**
  * Formats the phone number to the international standard. If the given phone
  * number could not be parsed or formatted, then the input phone number will
  * be returned unmodified.
- *
- * Uses a non-breaking space character (U+00A0) to prevent line breaks in the middle of
- * phone numbers.
  */
 export const formatPhoneNumber = (raw: string): string =>
-  parsePhoneNumber(raw)?.formatInternational().replaceAll(' ', ' ') || raw;
+  formatToNonBreakingSpaces(
+    parsePhoneNumber(raw)?.formatInternational() || raw,
+  );
 
 /**
  * Separates a phone number into prefix and number.

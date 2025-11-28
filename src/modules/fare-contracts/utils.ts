@@ -32,7 +32,7 @@ import {useCallback, useMemo} from 'react';
 import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
 import {UniqueWithCount} from '@atb/utils/unique-with-count';
 import {SvgProps} from 'react-native-svg';
-import {BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
+import {Bicycle} from '@atb/assets/svg/mono-icons/transportation';
 import {TextNames} from '@atb-as/theme';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
@@ -320,7 +320,7 @@ export function getTravellersIcon(
   }
 
   return baggageProductsWithCount.some((p) => p.baggageType === 'BICYCLE')
-    ? BicycleFill
+    ? Bicycle
     : undefined;
 }
 

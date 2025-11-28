@@ -22,6 +22,7 @@ import {
 } from '@atb/modules/fare-contracts';
 import {FareContractDetailItem} from '@atb/modules/fare-contracts';
 import {getTransportModeSvg} from '@atb/components/icon-box';
+import {formatToNonBreakingSpaces} from '@atb/utils/text';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContractType;
@@ -66,6 +67,7 @@ export const RecentFareContract = ({
 
   const travellersText = userProfilesWithCount
     .map((u) => u.count + ' ' + getReferenceDataName(u, language))
+    .map((t) => formatToNonBreakingSpaces(t))
     .join(', ');
 
   const travellersIcon = getTravellersIcon(userProfilesWithCount, []);
@@ -178,6 +180,7 @@ export const RecentFareContract = ({
           icon={travellersIcon}
           content={travellersText}
           size="small"
+          style={{maxWidth: width * 0.6}}
         />
       </View>
     </TileWithButton>

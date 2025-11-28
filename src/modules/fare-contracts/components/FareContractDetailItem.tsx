@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
@@ -12,11 +12,13 @@ export function FareContractDetailItem({
   content,
   icon,
   size = 'normal',
+  style,
 }: {
   icon?: (props: SvgProps) => React.JSX.Element;
   header?: string;
   content: string;
   size?: Size;
+  style?: StyleProp<ViewStyle>;
 }) {
   const styles = useStyles();
   const {theme} = useThemeContext();
@@ -24,7 +26,7 @@ export function FareContractDetailItem({
   const headerTextColor = theme.color.foreground.dynamic.secondary;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       {header && (
         <ThemeText typography="body__s" color={headerTextColor}>
           {header}
@@ -32,7 +34,12 @@ export function FareContractDetailItem({
       )}
       <View style={styles.contentContainer}>
         {icon && <ThemeIcon svg={icon} size={size} />}
-        <ThemeText typography={getContentTypography(size)}>{content}</ThemeText>
+        <ThemeText
+          style={styles.contentText}
+          typography={getContentTypography(size)}
+        >
+          {content}
+        </ThemeText>
       </View>
     </View>
   );
@@ -46,5 +53,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.medium,
+  },
+  contentText: {
+    flexShrink: 1,
   },
 }));

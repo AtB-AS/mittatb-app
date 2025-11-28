@@ -31,6 +31,7 @@ import {
 import {getBaggageProducts} from '../get-baggage-products';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
+import {formatToNonBreakingSpaces} from '@atb/utils/text';
 
 type Props = {fc: FareContractType};
 
@@ -85,6 +86,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
     ...baggageProductsWithCount,
   ]
     ?.map((tr) => toCountAndReferenceDataName(tr, language))
+    ?.map((tr) => formatToNonBreakingSpaces(tr))
     ?.join(', ');
 
   const styles = useStyles();
@@ -103,7 +105,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
           <FareContractFromTo
             fc={fc}
             backgroundColor={theme.color.background.neutral[0]}
-            mode="small"
+            size="normal"
           />
           {!!fareProductTypeConfig?.transportModes && (
             <FareContractDetailItem
@@ -111,6 +113,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
                 getTransportModeSvg(
                   fareProductTypeConfig.transportModes[0].mode,
                   fareProductTypeConfig.transportModes[0].subMode,
+                  false,
                 ).svg
               }
               content={getTransportModeText(
