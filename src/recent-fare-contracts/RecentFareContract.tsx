@@ -16,8 +16,13 @@ import {useHarborsQuery} from '@atb/queries';
 import {TravelRightDirection} from '@atb-as/utils';
 import {TileWithButton} from '@atb/components/tile';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {FareContractFromTo} from '@atb/modules/fare-contracts';
+import {
+  FareContractFromTo,
+  getTravellersIcon,
+  getTravellersText,
+} from '@atb/modules/fare-contracts';
 import {FareContractDetailItem} from '@atb/modules/fare-contracts';
+import {getTransportModeSvg} from '@atb/components/icon-box';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContractType;
@@ -60,6 +65,10 @@ export const RecentFareContract = ({
 
   const productName = getReferenceDataName(preassignedFareProduct, language);
 
+  const travellersText = getTravellersText(userProfilesWithCount, [], language);
+
+  const travellersIcon = getTravellersIcon(userProfilesWithCount, []);
+
   if (!fareProductTypeConfig) return null;
   const returnAccessibilityLabel = () => {
     const modeInfo = `${productName} ${t(
@@ -68,9 +77,7 @@ export const RecentFareContract = ({
 
     const travellerInfo = `${t(
       RecentFareContractsTexts.a11yPreLabels.travellers,
-    )}${userProfilesWithCount
-      .map((u) => u.count + ' ' + getReferenceDataName(u, language))
-      .join(', ')}`;
+    )}${travellersText}`;
 
     if (fareProductTypeConfig.configuration.zoneSelectionMode === 'none') {
       return `${t(
@@ -152,44 +159,27 @@ export const RecentFareContract = ({
         <FareContractFromTo
           rfc={recentFareContract}
           backgroundColor={theme.color.background.neutral[0]}
-          mode="small"
+          size="small"
         />
 
         <FareContractDetailItem
-          content={[
-            `${getTransportModeText(fareProductTypeConfig.transportModes, t)}`,
-          ]}
+          icon={
+            getTransportModeSvg(
+              fareProductTypeConfig.transportModes[0].mode,
+              fareProductTypeConfig.transportModes[0].subMode,
+              false,
+            ).svg
+          }
+          content={`${getTransportModeText(fareProductTypeConfig.transportModes, t)}`}
+          size="small"
         />
 
-        {userProfilesWithCount.length <= 2 &&
-          userProfilesWithCount.map((u) => (
-            <FareContractDetailItem
-              key={u.id}
-              content={[`${u.count} ${getReferenceDataName(u, language)}`]}
-            />
-          ))}
-
-        {userProfilesWithCount.length > 2 && (
-          <>
-            <FareContractDetailItem
-              content={[
-                `${userProfilesWithCount[0].count} ${getReferenceDataName(
-                  userProfilesWithCount[0],
-                  language,
-                )}`,
-              ]}
-            />
-            <ThemeText
-              typography="body__xs"
-              testID={`${testID}TravellersOthers`}
-              color={interactiveColor.default}
-              style={styles.additionalCategories}
-            >
-              + {userProfilesWithCount.slice(1).length}{' '}
-              {t(RecentFareContractsTexts.titles.moreTravelers)}
-            </ThemeText>
-          </>
-        )}
+        <FareContractDetailItem
+          icon={travellersIcon}
+          content={travellersText}
+          size="small"
+          style={{maxWidth: width * 0.6}}
+        />
       </View>
     </TileWithButton>
   );
@@ -209,6 +199,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   recentFareContractDetailItems: {
     flex: 1,
-    rowGap: theme.spacing.xSmall,
+    gap: theme.spacing.small,
   },
 }));
