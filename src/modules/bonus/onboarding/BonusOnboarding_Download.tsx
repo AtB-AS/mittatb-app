@@ -10,11 +10,10 @@ import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {BrandingImage, findOperatorBrandImageUrl} from '@atb/modules/mobility';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {ThemeText} from '@atb/components/text';
-import {Platform, View} from 'react-native';
+import {Linking, Platform, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {bonusOnboardingId} from './config';
-import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 export type DownloadScreenProps =
   OnboardingCarouselScreenProps<'BonusOnboarding_DownloadScreen'>;
@@ -53,7 +52,7 @@ export const DownloadButtons = () => {
   const styles = useStyles();
 
   const openAppURL = async (url: string) => {
-    await openInAppBrowser(url, 'close');
+    await Linking.openURL(url);
   };
 
   const getPlatformAppUrl = (operatorId: string) => {

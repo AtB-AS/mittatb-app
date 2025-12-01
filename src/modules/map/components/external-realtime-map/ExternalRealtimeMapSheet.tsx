@@ -8,7 +8,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {Linking} from 'react-native';
 
 type ExternalRealtimeMapLinkSheetProps = {
   onClose: () => void;
@@ -47,7 +47,7 @@ export const ExternalRealtimeMapSheet = ({
           expanded={true}
           text={t(MapTexts.externalRealtimeMap.bottomSheet.button)}
           onPress={() => {
-            openInAppBrowser(url, 'close');
+            Linking.openURL(url);
             onClose();
           }}
           rightIcon={{svg: ExternalLink}}

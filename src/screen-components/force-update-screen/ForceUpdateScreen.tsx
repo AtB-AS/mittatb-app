@@ -13,7 +13,6 @@ import {
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -66,7 +65,7 @@ export const ForceUpdateScreen = () => {
               setError(false);
               Linking.canOpenURL(link).then(
                 (supported) => {
-                  supported && openInAppBrowser(link, 'close');
+                  supported && Linking.openURL(link);
                 },
                 (err) => {
                   Bugsnag.notify(err as any);
