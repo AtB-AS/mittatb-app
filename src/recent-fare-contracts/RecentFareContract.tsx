@@ -199,6 +199,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   recentFareContractDetailItems: {
     flex: 1,
-    rowGap: theme.spacing.xSmall,
+    gap: theme.spacing.small,
   },
 }));
