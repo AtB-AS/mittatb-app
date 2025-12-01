@@ -349,9 +349,7 @@ export const MobileTokenContextProvider = ({children}: Props) => {
             }
           },
           sabotage: sabotage,
-          setAlwaysFallback: (alwaysFallback: boolean) => {
-            setAlwaysFallback(alwaysFallback);
-          },
+          setAlwaysFallback,
           alwaysFallback: alwaysFallback,
           setAllTokenInspectable: (inspectable?: boolean) => {
             setAllTokenInspectable(inspectable);
