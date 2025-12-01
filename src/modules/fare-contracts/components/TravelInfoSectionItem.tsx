@@ -152,6 +152,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   fareContractDetailItems: {
     flex: 1,
-    rowGap: theme.spacing.small,
+    gap: theme.spacing.medium,
   },
 }));
