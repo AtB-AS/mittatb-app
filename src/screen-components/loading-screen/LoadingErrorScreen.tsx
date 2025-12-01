@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, View} from 'react-native';
+import {Linking, ScrollView, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
@@ -15,7 +15,6 @@ import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {spellOut} from '@atb/utils/accessibility';
-import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -80,7 +79,7 @@ export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
                 'Loading boundary',
                 'Contact customer service clicked',
               );
-              openInAppBrowser(customer_service_url, 'close');
+              Linking.openURL(customer_service_url);
             }}
             mode="secondary"
             text={t(LoadingScreenTexts.error.contactButton.text)}

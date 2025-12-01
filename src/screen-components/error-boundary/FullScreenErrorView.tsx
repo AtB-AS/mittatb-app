@@ -3,11 +3,10 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet, themes} from '@atb/theme';
 import {ThemedCrashSmall} from '@atb/theme/ThemedAssets';
 import React from 'react';
-import {View} from 'react-native';
+import {Linking, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CUSTOMER_SERVICE_URL} from '@env';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type ErrorProps = {
   onRestartApp: () => void;
@@ -42,7 +41,7 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
           expanded={true}
           text={getContactButtonText(CUSTOMER_SERVICE_URL)}
           rightIcon={{svg: ExternalLink}}
-          onPress={() => openInAppBrowser(CUSTOMER_SERVICE_URL, 'close')}
+          onPress={() => Linking.openURL(CUSTOMER_SERVICE_URL)}
           style={styles.button}
         />
       </View>
