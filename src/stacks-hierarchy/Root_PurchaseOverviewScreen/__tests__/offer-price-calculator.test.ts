@@ -214,6 +214,36 @@ describe('offer-price-calculator', () => {
     expect(originalPrice).toBe(400);
   });
 
+  it('calculateTotalPrice should differ from calculateOriginalPrice when there is a discount', () => {
+    const testUserProfileWithCountAndOffer = {
+      ...TEST_USER_PROFILE_WITH_COUNT_AND_OFFER,
+      offer: {
+        ...TEST_TICKET_OFFER,
+        price: {
+          amount: '80',
+          amountFloat: 80,
+          currency: 'NOK',
+          originalAmount: '100',
+          originalAmountFloat: 100,
+          vatGroup: 'A',
+        },
+      },
+    };
+
+    const totalPrice = calculateTotalPrice(
+      [testUserProfileWithCountAndOffer],
+      [],
+    );
+
+    const originalPrice = calculateOriginalPrice(
+      [testUserProfileWithCountAndOffer],
+      [],
+    );
+
+    expect(totalPrice).toBe(80);
+    expect(originalPrice).toBe(100);
+  });
+
   it('getCheapestOffer with ticket offers should return the cheapest offer', () => {
     const cheapestOffer = getCheapestOffer(
       [
