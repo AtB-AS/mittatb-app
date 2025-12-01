@@ -1,5 +1,5 @@
 import React from 'react';
-import {Linking, View} from 'react-native';
+import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Theme} from '@atb/theme/colors';
 import {Button} from '@atb/components/button';
@@ -12,6 +12,7 @@ import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {FeedbackQuestionsViewContext} from './FeedbackContext';
 import {Opinions} from './Feedback';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type SubmittedComponentProps = {
   viewContext: FeedbackQuestionsViewContext;
@@ -48,7 +49,7 @@ export const SubmittedComponent = ({
       });
       Intercom.presentMessageComposer();
     } else {
-      Linking.openURL(customer_service_url);
+      openInAppBrowser(customer_service_url, 'close');
     }
   };
 

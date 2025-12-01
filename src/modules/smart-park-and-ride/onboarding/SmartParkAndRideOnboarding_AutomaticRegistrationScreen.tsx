@@ -6,12 +6,11 @@ import {
   useOnboardingCarouselNavigation,
 } from '@atb/modules/onboarding';
 import {ThemedCarRegister} from '@atb/theme/ThemedAssets';
-
-import {Linking} from 'react-native';
 import {sparOnboardingId} from './config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
   const {t, language} = useTranslation();
@@ -62,7 +61,7 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
             configurableLinks?.sparReadMoreUrl,
             language,
           );
-          externalLink && Linking.openURL(externalLink);
+          externalLink && openInAppBrowser(externalLink, 'close');
         },
       }}
       footerButton={{

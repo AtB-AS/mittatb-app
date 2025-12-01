@@ -1,9 +1,10 @@
 import React from 'react';
 import {marked, Token, Tokens} from 'marked';
-import {Linking, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {textTypeStyles} from '@atb/theme/colors';
 import Bugsnag from '@bugsnag/react-native';
 import {ThemeTextProps} from './ThemeText';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type MarkdownRendererProps = {
   // When rendering a list, this is the spacing between the list elements
@@ -76,7 +77,7 @@ function renderToken(
       const url = token.href;
       async function openLink() {
         try {
-          await Linking.openURL(url);
+          await openInAppBrowser(url, 'close');
         } catch (err: any) {
           Bugsnag.notify(err);
         }
