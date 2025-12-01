@@ -11,112 +11,6 @@ import {
   getCheapestOffer,
 } from '../offer-price-calculator';
 
-const TEST_ADULT_USER_PROFILE: UserProfile = {
-  id: 'A',
-  name: {lang: 'no', value: 'Test User'},
-  version: 'v1',
-  userType: 0,
-  userTypeString: 'ADULT',
-};
-
-const TEST_BICYCLE_PRODUCT: BaggageProduct = {
-  id: 'B',
-  name: {lang: 'no', value: 'Test Baggage'},
-  version: 'v1',
-  isBaggageProduct: true,
-  baggageType: 'BICYCLE',
-  distributionChannel: ['app'],
-  alternativeNames: [],
-  description: [],
-};
-
-const TEST_ADULT_SINGLE_TICKET_OFFER: TicketOffer = {
-  offerId: 'A',
-  available: 1,
-  shouldStartNow: false,
-  route: {
-    type: OfferValidity.Zonal,
-    from: 'A',
-    to: 'B',
-  },
-  flexDiscountLadder: {
-    current: 1,
-    steps: [
-      {
-        expires: '2021-01-01',
-        discount: 10,
-      },
-    ],
-  },
-  price: {
-    amount: '45',
-    amountFloat: 45,
-    currency: 'NOK',
-    originalAmount: '45',
-    originalAmountFloat: 45,
-    vatGroup: 'A',
-  },
-  validFrom: '2021-01-01',
-  validTo: '2021-01-01',
-  travellerId: 'A',
-  fareProduct: 'A',
-  supplementProducts: [],
-};
-
-const TEST_BICYCLE_TICKET_OFFER: BaggageTicketOffer = {
-  offerId: 'A',
-  available: 1,
-  shouldStartNow: false,
-  route: {
-    type: OfferValidity.Zonal,
-    from: 'A',
-    to: 'B',
-  },
-  flexDiscountLadder: {
-    current: 0,
-    steps: [],
-  },
-  price: {
-    amount: '0',
-    amountFloat: 0,
-    currency: 'NOK',
-    originalAmount: '0',
-    originalAmountFloat: 0,
-    vatGroup: 'A',
-  },
-  validFrom: '2021-01-01',
-  validTo: '2021-01-01',
-  travellerId: 'A',
-  fareProduct: undefined,
-  supplementProducts: [
-    {
-      id: 'A',
-      selectableId: 'A',
-      price: {
-        amount: '22',
-        amountFloat: 22,
-        currency: 'NOK',
-        originalAmount: '22',
-        originalAmountFloat: 22,
-        vatGroup: 'A',
-      },
-    },
-  ],
-};
-
-const TEST_ADULT_USER_PROFILE_WITH_COUNT_AND_OFFER: UserProfileWithCountAndOffer =
-  {
-    ...TEST_ADULT_USER_PROFILE,
-    count: 1,
-    offer: TEST_ADULT_SINGLE_TICKET_OFFER,
-  };
-
-const TEST_BICYCLE_WITH_COUNT_AND_OFFER: BaggageProductWithCountAndOffer = {
-  ...TEST_BICYCLE_PRODUCT,
-  count: 1,
-  offer: TEST_BICYCLE_TICKET_OFFER,
-};
-
 describe('offer-price-calculator', () => {
   it('calculateTotalPrice with adult + bicycle should be 67', () => {
     const totalPrice = calculateTotalPrice(
@@ -287,3 +181,109 @@ describe('offer-price-calculator', () => {
     expect(cheapestOffer).toBe(TEST_BICYCLE_TICKET_OFFER);
   });
 });
+
+const TEST_ADULT_USER_PROFILE: UserProfile = {
+  id: 'A',
+  name: {lang: 'no', value: 'Test User'},
+  version: 'v1',
+  userType: 0,
+  userTypeString: 'ADULT',
+};
+
+const TEST_BICYCLE_PRODUCT: BaggageProduct = {
+  id: 'B',
+  name: {lang: 'no', value: 'Test Baggage'},
+  version: 'v1',
+  isBaggageProduct: true,
+  baggageType: 'BICYCLE',
+  distributionChannel: ['app'],
+  alternativeNames: [],
+  description: [],
+};
+
+const TEST_ADULT_SINGLE_TICKET_OFFER: TicketOffer = {
+  offerId: 'A',
+  available: 1,
+  shouldStartNow: false,
+  route: {
+    type: OfferValidity.Zonal,
+    from: 'A',
+    to: 'B',
+  },
+  flexDiscountLadder: {
+    current: 1,
+    steps: [
+      {
+        expires: '2021-01-01',
+        discount: 10,
+      },
+    ],
+  },
+  price: {
+    amount: '45',
+    amountFloat: 45,
+    currency: 'NOK',
+    originalAmount: '45',
+    originalAmountFloat: 45,
+    vatGroup: 'A',
+  },
+  validFrom: '2021-01-01',
+  validTo: '2021-01-01',
+  travellerId: 'A',
+  fareProduct: 'A',
+  supplementProducts: [],
+};
+
+const TEST_BICYCLE_TICKET_OFFER: BaggageTicketOffer = {
+  offerId: 'A',
+  available: 1,
+  shouldStartNow: false,
+  route: {
+    type: OfferValidity.Zonal,
+    from: 'A',
+    to: 'B',
+  },
+  flexDiscountLadder: {
+    current: 0,
+    steps: [],
+  },
+  price: {
+    amount: '0',
+    amountFloat: 0,
+    currency: 'NOK',
+    originalAmount: '0',
+    originalAmountFloat: 0,
+    vatGroup: 'A',
+  },
+  validFrom: '2021-01-01',
+  validTo: '2021-01-01',
+  travellerId: 'A',
+  fareProduct: undefined,
+  supplementProducts: [
+    {
+      id: 'A',
+      selectableId: 'A',
+      price: {
+        amount: '22',
+        amountFloat: 22,
+        currency: 'NOK',
+        originalAmount: '22',
+        originalAmountFloat: 22,
+        vatGroup: 'A',
+      },
+    },
+  ],
+};
+
+const TEST_ADULT_USER_PROFILE_WITH_COUNT_AND_OFFER: UserProfileWithCountAndOffer =
+  {
+    ...TEST_ADULT_USER_PROFILE,
+    count: 1,
+    offer: TEST_ADULT_SINGLE_TICKET_OFFER,
+  };
+
+const TEST_BICYCLE_WITH_COUNT_AND_OFFER: BaggageProductWithCountAndOffer = {
+  ...TEST_BICYCLE_PRODUCT,
+  count: 1,
+  offer: TEST_BICYCLE_TICKET_OFFER,
+};
