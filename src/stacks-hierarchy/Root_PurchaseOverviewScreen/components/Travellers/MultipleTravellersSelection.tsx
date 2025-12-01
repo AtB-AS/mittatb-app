@@ -78,6 +78,7 @@ export function MultipleTravellersSelection(props: Props) {
             count={s.count}
             addCount={() => incrementBaggage(s)}
             removeCount={() => decrementBaggage(s)}
+            color={theme.color.interactive[2]}
             subtext={getTextForLanguage(s.description, language)}
             baggageType={s.baggageType}
           />
