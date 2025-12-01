@@ -9,6 +9,7 @@ export {
   getTravellersIcon,
   getTravellersText,
 } from './utils';
+export {getBaggageProducts} from './get-baggage-products';
 export type {UserProfileWithCount, BaggageProductWithCount} from './types';
 export {FareContractOrReservation} from './FareContractOrReservation';
 export {

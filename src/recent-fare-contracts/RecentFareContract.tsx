@@ -44,6 +44,7 @@ export const RecentFareContract = ({
     fromFareZone,
     toFareZone,
     userProfilesWithCount,
+    baggageProductsWithCount,
     pointToPointValidity,
     direction,
   } = recentFareContract;
@@ -65,9 +66,16 @@ export const RecentFareContract = ({
 
   const productName = getReferenceDataName(preassignedFareProduct, language);
 
-  const travellersText = getTravellersText(userProfilesWithCount, [], language);
+  const travellersText = getTravellersText(
+    userProfilesWithCount,
+    baggageProductsWithCount,
+    language,
+  );
 
-  const travellersIcon = getTravellersIcon(userProfilesWithCount, []);
+  const travellersIcon = getTravellersIcon(
+    userProfilesWithCount,
+    baggageProductsWithCount,
+  );
 
   if (!fareProductTypeConfig) return null;
   const returnAccessibilityLabel = () => {
