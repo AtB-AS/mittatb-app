@@ -78,7 +78,7 @@ describe('Auth Mobile Token', () => {
           await TokenPage.selectToken('Mobile');
           // Due to a current error, the change from travecard to mobile also changes the marked token
           //await TokenPage.confirmSelection();
-          await NavigationHelper.back();
+          await NavigationHelper.cancel();
           await ElementHelper.waitForElement('id', 'travelTokenBox');
         } else {
           const errorMessage: string = await TokenPage.tokenErrorMessage;
