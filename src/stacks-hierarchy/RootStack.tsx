@@ -31,7 +31,7 @@ import {Root_PurchaseOverviewScreen} from './Root_PurchaseOverviewScreen';
 import {Root_PurchaseConfirmationScreen} from './Root_PurchaseConfirmationScreen';
 import {Root_PurchaseFareZonesSearchByMapScreen} from '@atb/stacks-hierarchy/Root_PurchaseFareZonesSearchByMapScreen';
 import {Root_PurchaseFareZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Root_PurchaseFareZonesSearchByTextScreen';
-import {Root_PurchaseHarborSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/Root_PurchaseHarborSearchScreen';
+import {Root_PurchaseHarborSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen';
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
 import {Root_ReceiptScreen} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
