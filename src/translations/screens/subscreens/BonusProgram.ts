@@ -1,12 +1,11 @@
 import {translation as _} from '../../commons';
 const BonusProgramTexts = {
-  bonusPoints: _('bonuspoeng', 'bonus points', 'bonuspoeng'),
   points: _('poeng', 'points', 'poeng'),
   costA11yLabel: (amount: number) =>
     _(
-      `Koster ${amount} bonuspoeng`,
-      `Costs ${amount} bonus points`,
-      `Kostar ${amount} bonuspoeng`,
+      `Koster ${amount} poeng`,
+      `Costs ${amount} points`,
+      `Kostar ${amount} poeng`,
     ),
 
   youHave: _('Du har', 'You have', 'Du har'),
@@ -41,17 +40,26 @@ const BonusProgramTexts = {
 
   bonusProfile: {
     header: {
-      title: _('Bonus', 'Bonus', 'Bonus'),
+      title: _('Poeng', 'Points', 'Poeng'),
     },
-    yourBonusPoints: _('Dine poeng', 'Your points', 'Poenga dine'),
+    yourPoints: _('Dine poeng', 'Your points', 'Poenga dine'),
 
+    mapButton: _(
+      'Bruk poeng i kartet',
+      'Spend points in the map',
+      'Bruk poeng i kartet',
+    ),
     spendPoints: {
-      heading: _('Våre bonuser', 'Our bonuses', 'Bonusane våre'),
+      heading: _(
+        'Dette kan du få for poeng',
+        'This is what you can get for points',
+        'Dette kan du få for poeng',
+      ),
     },
     noData: _(
-      'Vi klarer ikke hente informasjon om Bonus. Sjekk om du har internett og prøv på nytt.',
-      'We are unable to fetch information about Bonus. Check your internet connection and try again.',
-      'Me klarar ikkje hente informasjon om Bonus. Sjekk om du har internett og prøv på nytt.',
+      'Vi klarer ikke hente informasjon om Poeng. Sjekk om du har internett og prøv på nytt.',
+      'We are unable to fetch information about Points. Check your internet connection and try again.',
+      'Me klarar ikkje hente informasjon om Poeng. Sjekk om du har internett og prøv på nytt.',
     ),
 
     noProfile: _(
@@ -70,8 +78,47 @@ const BonusProgramTexts = {
       'Me klarer ikkje visa fordelane akkurat no. Du vil framleis tene poeng som vanleg.',
     ),
     readMore: {
-      heading: _('Les mer', 'Read more', 'Les meir'),
-      button: _('Sånn funker Bonus', 'How Bonus works', 'Slik fungerer Bonus'),
+      heading: _(
+        'Slik fungerer poeng',
+        'How points work',
+        'Slik fungerer poeng',
+      ),
+      download: {
+        title: _(
+          '1. Last ned appene først',
+          '1. Download the apps first',
+          '1. Last ned appane fyrst',
+        ),
+        description: _(
+          'Du må laste ned og logge inn i appene til Hyre og Trondheim Bysykkel før du bruker Poeng.',
+          'You need to download and log in to the apps for Hyre and Trondheim City Bike before using Points.',
+          'Du må lasta ned og logga inn i appane til Hyre og Trondheim Bysykkel før du brukar Poeng.',
+        ),
+      },
+      earnPoints: {
+        title: _(
+          '2. Kjøp billett, tjen poeng',
+          '2. Buy tickets, earn points',
+          '2. Kjøp billett, tjen poeng',
+        ),
+        description: _(
+          'Du tjener poeng hver gang du kjøper enkeltbillett i sone A - for voksen eller student.',
+          'You earn points each time you buy a single ticket in Zone A - for adults or students.',
+          'Du tener poeng kvar gong du kjøper enkeltbillett i sone A - for vaksen eller student.',
+        ),
+      },
+      spendPoints: {
+        title: _(
+          '3. Bruk poeng i kartet',
+          '3. Spend points in the map',
+          '3. Bruk poeng i kartet',
+        ),
+        description: _(
+          'Du kan bruke poengene i kartet når du velger stasjoner fra Hyre eller Trondheim Bysykkel.',
+          'You can spend points in the map when selecting stations from Hyre or Trondheim City Bike.',
+          'Du kan bruke poenga i kartet når du vel å vel stasjonar frå Hyre eller Trondheim Bysykkel.',
+        ),
+      },
     },
     feedback: {
       heading: _('Chat', 'Chat', 'Chat'),

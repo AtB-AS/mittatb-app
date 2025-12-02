@@ -1,6 +1,4 @@
-import {useState} from 'react';
 import {
-  ExpandableSectionItem,
   GenericSectionItem,
   LinkSectionItem,
   Section,
@@ -11,15 +9,18 @@ import {
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
-import {View} from 'react-native';
+import {Linking, Platform, View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
-import {ThemedBonusTransaction} from '@atb/theme/ThemedAssets';
+import {
+  ThemedBonusMap,
+  ThemedBonusTransaction,
+  ThemedTokenPhone,
+} from '@atb/theme/ThemedAssets';
 import {ContentHeading} from '@atb/components/heading';
 import {
   BonusPriceTag,
   UserBonusBalanceContent,
-  bonusOnboardingId,
   isActive,
   useBonusBalanceQuery,
 } from '@atb/modules/bonus';
@@ -31,18 +32,17 @@ import {isDefined} from '@atb/utils/presence';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import Intercom, {Space} from '@intercom/intercom-react-native';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useNavigation} from '@react-navigation/native';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {Button} from '@atb/components/button';
+import {MapPin} from '@atb/assets/svg/mono-icons/tab-bar';
 
 export const Profile_BonusScreen = () => {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
-  const {bonusProducts, mobilityOperators, bonusTexts} =
-    useFirestoreConfigurationContext();
-  const [currentlyOpenBonusProduct, setCurrentlyOpenBonusProduct] =
-    useState<number>();
+  const {bonusProducts, mobilityOperators} = useFirestoreConfigurationContext();
+
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
 
@@ -50,8 +50,6 @@ export const Profile_BonusScreen = () => {
     !isDefined(userBonusBalance) ||
     Number.isNaN(userBonusBalance) ||
     userBonusBalanceStatus === 'error';
-
-  const navigation = useNavigation<RootNavigationProps>();
 
   const activeBonusProducts = bonusProducts?.filter(isActive);
   const analytics = useAnalyticsContext();
@@ -85,6 +83,14 @@ export const Profile_BonusScreen = () => {
           />
         )}
 
+        <Button
+          expanded
+          rightIcon={{svg: MapPin}}
+          text={t(BonusProgramTexts.bonusProfile.mapButton)}
+          style={styles.button}
+          onPress={() => {}}
+        />
+
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.spendPoints.heading)}
         />
@@ -99,24 +105,11 @@ export const Profile_BonusScreen = () => {
           <View style={styles.bonusProductsContainer}>
             <Section>
               {activeBonusProducts?.map((bonusProduct, index) => (
-                <ExpandableSectionItem
-                  expanded={currentlyOpenBonusProduct === index}
-                  key={bonusProduct.id}
-                  onPress={() => {
-                    analytics.logEvent('Bonus', 'Bonus product clicked', {
-                      bonusProductId: bonusProduct.id,
-                      expanded: currentlyOpenBonusProduct != index,
-                    });
-                    setCurrentlyOpenBonusProduct(index);
-                  }}
-                  text={
-                    getTextForLanguage(
-                      bonusProduct.productDescription.title,
-                      language,
-                    ) ?? ''
-                  }
-                  showIconText={false}
-                  prefixNode={
+                <GenericSectionItem
+                  key={index}
+                  style={{gap: theme.spacing.medium}}
+                >
+                  <View style={styles.horizontalContainer}>
                     <BrandingImage
                       logoUrl={findOperatorBrandImageUrl(
                         bonusProduct.operatorId,
@@ -125,65 +118,30 @@ export const Profile_BonusScreen = () => {
                       logoSize={theme.typography['heading__xl'].fontSize}
                       style={styles.logo}
                     />
-                  }
-                  suffixNode={
-                    <BonusPriceTag amount={bonusProduct.price.amount} />
-                  }
-                  expandContent={
-                    <ThemeText
-                      isMarkdown={true}
-                      typography="body__s"
-                      color="secondary"
-                    >
+                    <ThemeText style={{flex: 1}}>
                       {getTextForLanguage(
-                        bonusProduct.productDescription.description,
+                        bonusProduct.productDescription.title,
                         language,
                       ) ?? ''}
                     </ThemeText>
-                  }
-                />
+                    <BonusPriceTag amount={bonusProduct.price.amount} />
+                  </View>
+                  <ThemeText
+                    isMarkdown={true}
+                    typography="body__s"
+                    color="secondary"
+                  >
+                    {getTextForLanguage(
+                      bonusProduct.productDescription.description,
+                      language,
+                    ) ?? ''}
+                  </ThemeText>
+                </GenericSectionItem>
               ))}
             </Section>
           </View>
         )}
-        <ContentHeading
-          text={t(BonusProgramTexts.bonusProfile.readMore.heading)}
-        />
-        <Section>
-          <GenericSectionItem>
-            <View style={styles.horizontalContainer}>
-              <ThemedBonusTransaction
-                height={61}
-                width={61}
-                style={{
-                  alignSelf: 'flex-start',
-                }}
-              />
-              <View style={styles.bonusProgramDescription}>
-                <ThemeText typography="body__m__strong">
-                  {getTextForLanguage(
-                    bonusTexts?.howBonusWorks.title,
-                    language,
-                  ) ?? ''}
-                </ThemeText>
-                <ThemeText typography="body__s" color="secondary">
-                  {getTextForLanguage(
-                    bonusTexts?.howBonusWorks.description,
-                    language,
-                  ) ?? ''}
-                </ThemeText>
-              </View>
-            </View>
-          </GenericSectionItem>
-          <LinkSectionItem
-            text={t(BonusProgramTexts.bonusProfile.readMore.button)}
-            onPress={() => {
-              navigation.navigate('Root_OnboardingCarouselStack', {
-                configId: bonusOnboardingId,
-              });
-            }}
-          />
-        </Section>
+        <HowPointsWork />
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.feedback.heading)}
         />
@@ -232,4 +190,100 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     gap: theme.spacing.xSmall,
   },
+  button: {
+    marginTop: theme.spacing.small,
+  },
 }));
+
+const iconSize = 61;
+
+export function HowPointsWork(): React.JSX.Element {
+  const styles = useStyles();
+  const {t} = useTranslation();
+  const {bonusProducts, mobilityOperators} = useFirestoreConfigurationContext();
+
+  const getOperatorName = (operatorId: string) => {
+    return (
+      mobilityOperators?.find((op) => op.id === operatorId)?.name ?? operatorId
+    );
+  };
+
+  const getPlatformAppUrl = (operatorId: string) => {
+    const appUrl = mobilityOperators?.find(
+      (op) => op.id === operatorId,
+    )?.appUrl;
+    return (Platform.OS === 'ios' ? appUrl?.ios : appUrl?.android) ?? undefined;
+  };
+
+  return (
+    <>
+      <ContentHeading
+        text={t(BonusProgramTexts.bonusProfile.readMore.heading)}
+      />
+      <Section>
+        <GenericSectionItem>
+          <View style={styles.horizontalContainer}>
+            <View style={styles.bonusProgramDescription}>
+              <ThemeText typography="body__m__strong">
+                {t(BonusProgramTexts.bonusProfile.readMore.download.title)}
+              </ThemeText>
+              <ThemeText typography="body__s" color="secondary">
+                {t(
+                  BonusProgramTexts.bonusProfile.readMore.download.description,
+                )}
+              </ThemeText>
+            </View>
+            <ThemedTokenPhone height={iconSize} width={iconSize} />
+          </View>
+        </GenericSectionItem>
+
+        {bonusProducts?.map((product) => {
+          const appUrl = getPlatformAppUrl(product.operatorId);
+          if (appUrl) {
+            return (
+              <LinkSectionItem
+                key={product.operatorId}
+                rightIcon={{svg: ExternalLink}}
+                onPress={() => Linking.openURL(appUrl)}
+                text={'Last ned ' + getOperatorName(product.operatorId)}
+              />
+            );
+          }
+        })}
+
+        <GenericSectionItem>
+          <View style={styles.horizontalContainer}>
+            <View style={styles.bonusProgramDescription}>
+              <ThemeText typography="body__m__strong">
+                {t(BonusProgramTexts.bonusProfile.readMore.earnPoints.title)}
+              </ThemeText>
+              <ThemeText typography="body__s" color="secondary">
+                {t(
+                  BonusProgramTexts.bonusProfile.readMore.earnPoints
+                    .description,
+                )}
+              </ThemeText>
+            </View>
+            <ThemedBonusTransaction height={iconSize} width={iconSize} />
+          </View>
+        </GenericSectionItem>
+        <GenericSectionItem>
+          <View style={styles.horizontalContainer}>
+            <View style={styles.bonusProgramDescription}>
+              <ThemeText typography="body__m__strong">
+                {t(BonusProgramTexts.bonusProfile.readMore.spendPoints.title)}
+              </ThemeText>
+              <ThemeText typography="body__s" color="secondary">
+                {t(
+                  BonusProgramTexts.bonusProfile.readMore.spendPoints
+                    .description,
+                )}
+              </ThemeText>
+            </View>
+            <ThemedBonusMap height={iconSize} width={iconSize} />
+          </View>
+        </GenericSectionItem>
+      </Section>
+    </>
+  );
+}
