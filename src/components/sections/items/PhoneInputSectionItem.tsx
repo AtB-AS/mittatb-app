@@ -137,8 +137,11 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
       .filter((country) => {
         switch (country.country_code) {
           case '1':
-            // Filter out non-US +1 prefixes
-            return country.country_name === 'United States';
+            // Filter out non-US and Canada +1 prefixes
+            return (
+              country.country_name === 'United States' ||
+              country.country_name === 'Canada'
+            );
           default:
             return true;
         }
