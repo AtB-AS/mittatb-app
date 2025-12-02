@@ -19,7 +19,7 @@ import {EmptyState} from '@atb/components/empty-state';
 import SharedTexts from '@atb/translations/shared';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
-import {useNearestStopPlaceNodesQuery} from './use-nearest-stop-places-query';
+import {useNearestStopPlaceNodesQuery} from './use-nearest-stop-place-nodes-query';
 
 export type NearbyStopPlacesScreenParams = {
   location: Location | undefined;
@@ -76,8 +76,7 @@ export const NearbyStopPlacesScreenComponent = ({
   const {data: nearestStopPlaceNodesData, isLoading} =
     useNearestStopPlaceNodesQuery(
       location && {
-        latitude: location.coordinates.latitude,
-        longitude: location.coordinates.longitude,
+        ...location.coordinates,
         count: 10,
         distance: 3000,
       },

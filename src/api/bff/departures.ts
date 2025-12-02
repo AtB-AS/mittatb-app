@@ -96,7 +96,7 @@ export async function getNearestStopPlaces(
   const queryString = stringifyWithDate(query);
   const url = `bff/v2/departures/stops-nearest?${queryString}`;
   const response = await client.get<NearestStopPlacesQuery>(url, opts);
-  return response.data;
+  return response.data ?? null;
 }
 
 type StopsDetailsVariables = CursoredQuery<{

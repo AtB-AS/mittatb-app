@@ -1,22 +1,19 @@
 import {useQuery} from '@tanstack/react-query';
 import qs from 'query-string';
 import {NearestStopPlaceNode} from '@atb/api/types/departures';
-import {ONE_SECOND_MS} from '@atb/utils/durations';
+import {ONE_HOUR_MS} from '@atb/utils/durations';
 import {getNearestStopPlaces} from '@atb/api/bff/departures';
 import {
   NearestStopPlacesQuery,
   NearestStopPlacesQueryVariables,
 } from '@atb/api/types/generated/NearestStopPlacesQuery';
+import {useCallback} from 'react';
 
 export const useNearestStopPlaceNodesQuery = (
   queryVariables?: NearestStopPlacesQueryVariables,
 ) => {
-  return useQuery({
-    enabled: !!queryVariables,
-    queryKey: ['getNearestStopPlaceNodes', qs.stringify(queryVariables ?? {})],
-    queryFn: ({signal}) => getNearestStopPlaces(queryVariables, {signal}),
-    select: (nearestStopPlacesQuery: NearestStopPlacesQuery | null) => {
-      console.log('select!');
+  const select = useCallback(
+    (nearestStopPlacesQuery: NearestStopPlacesQuery | null) => {
       const nearestStopPlaceNodes =
         nearestStopPlacesQuery?.nearest?.edges
           // Cast to NearestStopPlaceNode, as it is the only possible type returned from bff
@@ -25,9 +22,16 @@ export const useNearestStopPlaceNodesQuery = (
 
       return sortAndFilterStopPlaces(nearestStopPlaceNodes);
     },
-    staleTime: 60 * ONE_SECOND_MS, // todo: use ONE_DAY_MS
-    gcTime: 60 * ONE_SECOND_MS, // todo: use ONE_DAY_MS
-    retry: 3,
+    [],
+  );
+
+  return useQuery({
+    enabled: !!queryVariables,
+    queryKey: ['getNearestStopPlaceNodes', qs.stringify(queryVariables ?? {})],
+    queryFn: ({signal}) => getNearestStopPlaces(queryVariables, {signal}),
+    select,
+    staleTime: 5 * ONE_HOUR_MS,
+    gcTime: 5 * ONE_HOUR_MS,
     meta: {
       persistInAsyncStorage: true,
     },
