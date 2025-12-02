@@ -18,9 +18,9 @@ import {
   useTranslation,
 } from '@atb/translations';
 import React, {useEffect} from 'react';
-import {Linking} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type Props = {
   orderId: string;
@@ -90,7 +90,7 @@ export const RefundBottomSheet = ({orderId, fareProductType, state}: Props) => {
           <Button
             mode="tertiary"
             text={t(FareContractTexts.refund.readMore)}
-            onPress={() => Linking.openURL(refundInfoUrl)}
+            onPress={() => openInAppBrowser(refundInfoUrl, 'close')}
             expanded={true}
             rightIcon={{svg: SvgExternalLink}}
             backgroundColor={theme.color.background.neutral[1]}

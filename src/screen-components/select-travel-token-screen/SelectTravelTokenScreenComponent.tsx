@@ -85,6 +85,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
       parallaxContent={(focusRef) => (
         <ScreenHeading ref={focusRef} text={title} />
       )}
+      testID="selectTravelTokenView"
     >
       <View style={styles.container}>
         <View style={styles.radioArea}>

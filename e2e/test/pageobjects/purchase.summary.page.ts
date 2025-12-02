@@ -20,8 +20,8 @@ class PurchaseSummaryPage {
   /**
    * Get user categories and their counts
    */
-  get userProfileCountAndName() {
-    const reqId = `//*[@resource-id="userProfileCountAndName"]`;
+  get travellerCountAndName() {
+    const reqId = `//*[@resource-id="travellerCountAndName"]`;
     return $(reqId);
   }
 

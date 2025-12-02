@@ -6,8 +6,11 @@ export {
   getFareContractInfo,
   useOtherDeviceIsInspectableWarning,
   hasShmoBookingId,
+  getTravellersIcon,
+  getTravellersText,
 } from './utils';
-export type {UserProfileWithCount} from './types';
+export {getBaggageProducts} from './get-baggage-products';
+export type {UserProfileWithCount, BaggageProductWithCount} from './types';
 export {FareContractOrReservation} from './FareContractOrReservation';
 export {
   sortFcOrReservationByCreation,

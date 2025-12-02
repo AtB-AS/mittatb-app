@@ -9,7 +9,12 @@ import {View} from 'react-native';
 import {FareContractFromTo} from './FareContractFromTo';
 import {FareContractDetailItem} from './FareContractDetailItem';
 import {getTransportModeText} from '@atb/components/transportation-modes';
-import {getFareContractInfo, mapToUserProfilesWithCount} from '../utils';
+import {
+  getFareContractInfo,
+  getTravellersIcon,
+  getTravellersText,
+  mapToUserProfilesWithCount,
+} from '../utils';
 import {InspectionSymbol} from './InspectionSymbol';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -20,11 +25,10 @@ import {useTimeContext} from '@atb/modules/time';
 import {useSectionItem} from '@atb/components/sections';
 import {isDefined} from '@atb/utils/presence';
 import {SentToMessageBox} from './SentToMessageBox';
-import {
-  arrayMapUniqueWithCount,
-  toCountAndName,
-} from '@atb/utils/array-map-unique-with-count';
+import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
+import {getTransportModeSvg} from '@atb/components/icon-box';
+import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
 
 type Props = {fc: FareContractType};
 
@@ -64,9 +68,20 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
     allSupplementProducts,
   );
 
-  const baggageProductsWithCount = arrayMapUniqueWithCount(
+  const baggageProductsWithCount = mapUniqueWithCount(
     baggageProducts,
     (a, b) => a.id === b.id,
+  );
+
+  const travellersIcon = getTravellersIcon(
+    userProfilesWithCount,
+    baggageProductsWithCount,
+  );
+
+  const travellersWithCountText = getTravellersText(
+    userProfilesWithCount,
+    baggageProductsWithCount,
+    language,
   );
 
   const styles = useStyles();
@@ -85,33 +100,34 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
           <FareContractFromTo
             fc={fc}
             backgroundColor={theme.color.background.neutral[0]}
-            mode="small"
+            size="normal"
           />
           {!!fareProductTypeConfig?.transportModes && (
             <FareContractDetailItem
-              content={[
-                getTransportModeText(fareProductTypeConfig.transportModes, t),
-              ]}
+              icon={
+                getTransportModeSvg(
+                  fareProductTypeConfig.transportModes[0].mode,
+                  fareProductTypeConfig.transportModes[0].subMode,
+                  false,
+                ).svg
+              }
+              content={getTransportModeText(
+                fareProductTypeConfig.transportModes,
+                t,
+              )}
             />
           )}
 
           {firstTravelRight.travelerName ? (
-            <FareContractDetailItem content={[firstTravelRight.travelerName]} />
+            <FareContractDetailItem
+              icon={Travellers}
+              content={firstTravelRight.travelerName}
+            />
           ) : (
-            <>
-              {userProfilesWithCount.map((u, i) => (
-                <FareContractDetailItem
-                  key={`userProfile-${i}`}
-                  content={[toCountAndName(u, language)]}
-                />
-              ))}
-              {baggageProductsWithCount.map((p, i) => (
-                <FareContractDetailItem
-                  key={`baggageProduct-${i}`}
-                  content={[toCountAndName(p, language)]}
-                />
-              ))}
-            </>
+            <FareContractDetailItem
+              icon={travellersIcon}
+              content={travellersWithCountText}
+            />
           )}
         </View>
         {(validityStatus === 'valid' || validityStatus === 'sent') && (
@@ -136,6 +152,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   fareContractDetailItems: {
     flex: 1,
-    rowGap: theme.spacing.xSmall,
+    gap: theme.spacing.medium,
   },
 }));

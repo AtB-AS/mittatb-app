@@ -2,7 +2,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import React, {useEffect, useMemo, useState} from 'react';
-import {Alert, Linking, View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {getIdTokenGlobal, useAuthContext} from '@atb/modules/auth';
@@ -51,6 +51,7 @@ import {format} from 'date-fns';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useQueryClient} from '@tanstack/react-query';
 import {useDebugUserInfoHeader} from '@atb/api';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -110,6 +111,8 @@ export const Profile_DebugInfoScreen = () => {
       remoteTokenError,
       setSabotage,
       sabotage,
+      setAlwaysFallback,
+      alwaysFallback,
       setAllTokenInspectable,
       allTokenInspectable,
     },
@@ -547,6 +550,13 @@ export const Profile_DebugInfoScreen = () => {
                     onPress={renewToken}
                   />
                 )}
+                <ToggleSectionItem
+                  text="Always display fallback/static token"
+                  value={alwaysFallback}
+                  onValueChange={(alwaysFallback) => {
+                    setAlwaysFallback(alwaysFallback);
+                  }}
+                />
                 <ExpandableSectionItem
                   text="Remote tokens"
                   showIconText={true}
@@ -674,7 +684,7 @@ export const Profile_DebugInfoScreen = () => {
                       const privacyDashboardUrl =
                         await getPrivacyDashboardUrl();
                       privacyDashboardUrl &&
-                        Linking.openURL(privacyDashboardUrl);
+                        openInAppBrowser(privacyDashboardUrl, 'close');
                     }}
                     style={styles.button}
                     disabled={!isConsentGranted}
@@ -685,7 +695,8 @@ export const Profile_DebugInfoScreen = () => {
                     interactiveColor={interactiveColor}
                     onPress={async () => {
                       const privacyTermsUrl = await getPrivacyTermsUrl();
-                      privacyTermsUrl && Linking.openURL(privacyTermsUrl);
+                      privacyTermsUrl &&
+                        openInAppBrowser(privacyTermsUrl, 'close');
                     }}
                     style={styles.button}
                     disabled={!isConsentGranted}

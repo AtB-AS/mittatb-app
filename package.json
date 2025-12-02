@@ -29,10 +29,10 @@
   },
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
-    "@atb-as/config-specs": "^8.4.1",
+    "@atb-as/config-specs": "^8.6.0",
     "@atb-as/generate-assets": "^18.6.0",
     "@atb-as/theme": "^15.0.0",
-    "@atb-as/utils": "^5.1.1",
+    "@atb-as/utils": "^6.0.0",
     "@babel/plugin-transform-export-namespace-from": "^7.27.1",
     "@bam.tech/react-native-image-resizer": "^3.0.11",
     "@bugsnag/react-native": "^8.6.0",

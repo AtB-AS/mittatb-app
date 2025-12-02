@@ -65,7 +65,7 @@ describe('purchaseSelectionBuilder - zones', () => {
       .fromZone({...TEST_ZONE_WITH_MD, id: 'T2'})
       .build();
 
-    expect(selection).toBe(originalSelection);
+    expect(selection).toStrictEqual(originalSelection);
   });
 
   it('Should not apply a to zone which is not in product limitations', () => {
@@ -85,6 +85,6 @@ describe('purchaseSelectionBuilder - zones', () => {
       .toZone({...TEST_ZONE_WITH_MD, id: 'T2'})
       .build();
 
-    expect(selection).toBe(originalSelection);
+    expect(selection).toStrictEqual(originalSelection);
   });
 });

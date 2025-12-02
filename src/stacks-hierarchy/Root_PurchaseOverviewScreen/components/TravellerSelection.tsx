@@ -66,12 +66,12 @@ export function TravellerSelection({
   const multipleTravellerCategoriesSelectedFrom =
     selection.userProfilesWithCount.length > 1;
 
-  const travellersDetailsText =
-    selectionMode == 'single'
-      ? getReferenceDataName(selection.userProfilesWithCount?.[0], language)
-      : selection.userProfilesWithCount
-          .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
-          .join(', ');
+  const travellersDetailsText = [
+    ...selection.userProfilesWithCount,
+    ...selection.baggageProductsWithCount,
+  ]
+    .map((t) => `${t.count} ${getReferenceDataName(t, language)}`)
+    .join(', ');
 
   const travellerInfo = !canSelectUserProfile
     ? getTextForLanguage(
