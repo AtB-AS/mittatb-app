@@ -80,20 +80,21 @@ export const EstimatedCallList = ({
         setBottomSheetNodeData(favBottomSheet);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [onMarkFavourite],
   );
 
-  const onPressDetails = useCallback((departure: EstimatedCall) => {
-    navigateToDetails?.(
-      departure.serviceJourney.id,
-      departure.date,
-      departure.aimedDepartureTime,
-      departure.stopPositionInPattern,
-      departure.cancellation,
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const onPressDetails = useCallback(
+    (departure: EstimatedCall) => {
+      navigateToDetails?.(
+        departure.serviceJourney.id,
+        departure.date,
+        departure.aimedDepartureTime,
+        departure.stopPositionInPattern,
+        departure.cancellation,
+      );
+    },
+    [navigateToDetails],
+  );
 
   const listData: EstimatedCallItemProps[] = departures.map(
     (departure, index) => {
