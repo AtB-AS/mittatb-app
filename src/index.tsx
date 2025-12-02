@@ -111,9 +111,9 @@ export const App = () => {
                                                   <GlobalMessagesContextProvider>
                                                     <AnnouncementsContextProvider>
                                                       <NotificationContextProvider>
-                                                        <BottomSheetContextProvider>
-                                                          <BottomSheetModalProvider>
-                                                            <BottomSheetV2ContextProvider>
+                                                        <BottomSheetModalProvider>
+                                                          <BottomSheetV2ContextProvider>
+                                                            <BottomSheetContextProvider>
                                                               <FeedbackQuestionsContextProvider>
                                                                 <BeaconsContextProvider>
                                                                   <OnboardingContextProvider>
@@ -121,9 +121,9 @@ export const App = () => {
                                                                   </OnboardingContextProvider>
                                                                 </BeaconsContextProvider>
                                                               </FeedbackQuestionsContextProvider>
-                                                            </BottomSheetV2ContextProvider>
-                                                          </BottomSheetModalProvider>
-                                                        </BottomSheetContextProvider>
+                                                            </BottomSheetContextProvider>
+                                                          </BottomSheetV2ContextProvider>
+                                                        </BottomSheetModalProvider>
                                                       </NotificationContextProvider>
                                                     </AnnouncementsContextProvider>
                                                   </GlobalMessagesContextProvider>
