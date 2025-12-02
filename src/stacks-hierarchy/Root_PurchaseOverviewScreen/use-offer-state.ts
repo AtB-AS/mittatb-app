@@ -14,23 +14,27 @@ import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {fetchOfferFromLegs} from '@atb/api/sales';
 import {
   ErrorResponse,
-  SearchOfferPrice,
   TicketOffer,
   SupplementProductOffer,
 } from '@atb-as/utils';
 import {mapToSalesTripPatternLegs} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/utils';
 import {useTranslation} from '@atb/translations';
+import {
+  calculateOriginalPrice,
+  calculateTotalPrice,
+  getCheapestOffer,
+} from './offer-price-calculator';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: TicketOffer;
 };
 
 // Presuppose for now that there is only one supplement product offer per baggage product offer, and that the fare product is undefined (or null).
-const BaggageTicketOffer = TicketOffer.extend({
+export const BaggageTicketOffer = TicketOffer.extend({
   fareProduct: z.undefined().nullish(),
   supplementProducts: z.array(SupplementProductOffer).length(1),
 });
-type BaggageTicketOffer = z.infer<typeof BaggageTicketOffer>;
+export type BaggageTicketOffer = z.infer<typeof BaggageTicketOffer>;
 
 export type BaggageProductWithCountAndOffer = BaggageProductWithCount & {
   offer: BaggageTicketOffer;
@@ -63,18 +67,6 @@ type OfferReducer = (
   action: OfferReducerAction,
 ) => OfferState;
 
-type PriceFunction = (price: SearchOfferPrice, currency: string) => number;
-
-const getPriceAsFloat: PriceFunction = (
-  price: SearchOfferPrice,
-  currency = 'NOK',
-) => (price.currency === currency ? (price.amountFloat ?? 0) : 0);
-
-const getOriginalPriceAsFloat: PriceFunction = (
-  price: SearchOfferPrice,
-  currency: string,
-) => (price.currency === currency ? (price.originalAmountFloat ?? 0) : 0);
-
 const getValidDurationSeconds = (offer: TicketOffer): number | undefined =>
   offer.validFrom && offer.validTo
     ? secondsBetween(offer.validFrom, offer.validTo)
@@ -91,11 +83,7 @@ const getOfferForTraveller = (
 
   // If there are multiple offers for the same traveller, use the cheapest one.
   // This shouldn't happen in practice, but it's a sensible fallback.
-  const offersSortedByPrice = offersForTraveller.sort(
-    (a, b) => getPriceAsFloat(a.price, 'NOK') - getPriceAsFloat(b.price, 'NOK'),
-  );
-
-  return offersSortedByPrice[0];
+  return getCheapestOffer(offersForTraveller, (o) => o.price);
 };
 
 const getOfferForBaggageProduct = (
@@ -110,70 +98,10 @@ const getOfferForBaggageProduct = (
 
   // If there are multiple offers for the same supplement product, use the cheapest one.
   // This shouldn't happen in practice, but it's a sensible fallback.
-  const offersSortedByPrice = offersForBaggageProduct.sort(
-    (a, b) =>
-      getPriceAsFloat(a.supplementProducts[0].price, 'NOK') -
-      getPriceAsFloat(b.supplementProducts[0].price, 'NOK'),
+  return getCheapestOffer(
+    offersForBaggageProduct,
+    (o) => o.supplementProducts[0].price,
   );
-
-  return offersSortedByPrice[0];
-};
-
-const calculateTotalPrice = (
-  userProfileWithCounts: UserProfileWithCount[],
-  baggageProductsWithCount: BaggageProductWithCount[],
-  offers: TicketOffer[],
-) => {
-  return calculateTotalPriceWithPriceFunction(
-    getPriceAsFloat,
-    userProfileWithCounts,
-    baggageProductsWithCount,
-    offers,
-  );
-};
-
-const calculateOriginalPrice = (
-  userProfileWithCounts: UserProfileWithCount[],
-  baggageProductsWithCount: BaggageProductWithCount[],
-  offers: TicketOffer[],
-) => {
-  return calculateTotalPriceWithPriceFunction(
-    getOriginalPriceAsFloat,
-    userProfileWithCounts,
-    baggageProductsWithCount,
-    offers,
-  );
-};
-
-const calculateTotalPriceWithPriceFunction = (
-  priceFunction: PriceFunction,
-  userProfileWithCounts: UserProfileWithCount[],
-  baggageProductsWithCount: BaggageProductWithCount[],
-  offers: TicketOffer[],
-): number => {
-  const userProfilesPrice = userProfileWithCounts.reduce((total, traveller) => {
-    const offer = getOfferForTraveller(offers, traveller.userTypeString);
-
-    const price = offer
-      ? priceFunction(offer.price, 'NOK') * traveller.count
-      : 0;
-
-    return total + price;
-  }, 0);
-
-  const baggageProductsPrice = baggageProductsWithCount.reduce(
-    (total, baggageProduct) => {
-      const offer = getOfferForBaggageProduct(offers, baggageProduct.id);
-      const price = offer
-        ? priceFunction(offer.supplementProducts[0].price, 'NOK') *
-          baggageProduct.count
-        : 0;
-      return total + price;
-    },
-    0,
-  );
-
-  return userProfilesPrice + baggageProductsPrice;
 };
 
 const mapToUserProfilesWithCountAndOffer = (
@@ -222,30 +150,31 @@ const getOfferReducer =
           baggageProductsWithCountAndOffer: [],
         };
       case 'SET_OFFER':
+        const userProfilesWithCountAndOffer =
+          mapToUserProfilesWithCountAndOffer(
+            userProfilesWithCounts,
+            action.offers,
+          );
+        const baggageProductsWithCountAndOffer =
+          mapToBaggageProductsWithCountAndOffer(
+            baggageProductsWithCount,
+            action.offers,
+          );
         return {
           ...prevState,
           offerSearchTime: Date.now(),
           isSearchingOffer: false,
           validDurationSeconds: getValidDurationSeconds(action.offers?.[0]),
           originalPrice: calculateOriginalPrice(
-            userProfilesWithCounts,
-            baggageProductsWithCount,
-            action.offers,
+            userProfilesWithCountAndOffer,
+            baggageProductsWithCountAndOffer,
           ),
           totalPrice: calculateTotalPrice(
-            userProfilesWithCounts,
-            baggageProductsWithCount,
-            action.offers,
+            userProfilesWithCountAndOffer,
+            baggageProductsWithCountAndOffer,
           ),
-          userProfilesWithCountAndOffer: mapToUserProfilesWithCountAndOffer(
-            userProfilesWithCounts,
-            action.offers,
-          ),
-          baggageProductsWithCountAndOffer:
-            mapToBaggageProductsWithCountAndOffer(
-              baggageProductsWithCount,
-              action.offers,
-            ),
+          userProfilesWithCountAndOffer,
+          baggageProductsWithCountAndOffer,
           error: undefined,
         };
       case 'SET_ERROR': {
