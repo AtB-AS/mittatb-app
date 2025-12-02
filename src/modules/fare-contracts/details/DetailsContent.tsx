@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {
   isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
@@ -62,6 +62,8 @@ import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {RefundBottomSheet} from '../components/RefundBottomSheet';
 
 type Props = {
   fareContract: FareContractType;
@@ -81,6 +83,8 @@ export const DetailsContent: React.FC<Props> = ({
   onNavigateToMap,
 }) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
+  const onCloseFocusRef = useRef<View | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
 
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -160,132 +164,140 @@ export const DetailsContent: React.FC<Props> = ({
   const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(fc, validityStatus);
 
   return (
-    <Section style={styles.section}>
-      {hasShmoBookingId(fc) ? (
-        <FareContractShmoHeaderSectionItem fareContract={fc} />
-      ) : (
-        <FareContractHeaderSectionItem fareContract={fc} />
-      )}
+    <>
+      <Section style={styles.section}>
+        {hasShmoBookingId(fc) ? (
+          <FareContractShmoHeaderSectionItem fareContract={fc} />
+        ) : (
+          <FareContractHeaderSectionItem fareContract={fc} />
+        )}
 
-      {hasShmoBookingId(fc) ? (
-        <ShmoTripDetailsSectionItem
-          startDateTime={fc.travelRights[0].startDateTime}
-          endDateTime={fc.travelRights[0].endDateTime}
-          totalAmount={fc.totalAmount}
-          withHeader={true}
-        />
-      ) : (
-        <FareContractInfoDetailsSectionItem
-          fareContract={fc}
-          userProfilesWithCount={userProfilesWithCount}
-          baggageProductsWithCount={baggageProductsWithCount}
-          status={validityStatus}
-          preassignedFareProduct={preassignedFareProduct}
-        />
-      )}
-
-      {isInspectable && validityStatus === 'valid' && (
-        <GenericSectionItem
-          style={
-            mobileTokenStatus === 'staticQr'
-              ? styles.enlargedWhiteBarcodePaddingView
-              : undefined
-          }
-        >
-          <Barcode validityStatus={validityStatus} fc={fc} />
-        </GenericSectionItem>
-      )}
-      {accesses && (
-        <GenericSectionItem>
-          <CarnetFooter validityStatus={validityStatus} fareContract={fc} />
-        </GenericSectionItem>
-      )}
-      {globalMessageCount > 0 && (
-        <GenericSectionItem>
-          <View style={styles.globalMessages}>
-            <GlobalMessage
-              globalMessageContext={
-                GlobalMessageContextEnum.appFareContractDetails
-              }
-              textColor={theme.color.background.neutral[0]}
-              ruleVariables={globalMessageRuleVariables}
-              style={styles.globalMessages}
-            />
-          </View>
-        </GenericSectionItem>
-      )}
-      {purchaserPhoneNumber && (
-        <GenericSectionItem>
-          <MessageInfoText
-            type="info"
-            message={t(
-              FareContractTexts.details.purchasedBy(
-                formatPhoneNumber(purchaserPhoneNumber),
-              ),
-            )}
+        {hasShmoBookingId(fc) ? (
+          <ShmoTripDetailsSectionItem
+            startDateTime={fc.travelRights[0].startDateTime}
+            endDateTime={fc.travelRights[0].endDateTime}
+            totalAmount={fc.totalAmount}
+            withHeader={true}
           />
-        </GenericSectionItem>
-      )}
+        ) : (
+          <FareContractInfoDetailsSectionItem
+            fareContract={fc}
+            userProfilesWithCount={userProfilesWithCount}
+            baggageProductsWithCount={baggageProductsWithCount}
+            status={validityStatus}
+            preassignedFareProduct={preassignedFareProduct}
+          />
+        )}
 
-      {shouldShowLegs && (
-        <GenericSectionItem>
-          <LegsSummary compact={false} legs={legs} />
-        </GenericSectionItem>
-      )}
+        {isInspectable && validityStatus === 'valid' && (
+          <GenericSectionItem
+            style={
+              mobileTokenStatus === 'staticQr'
+                ? styles.enlargedWhiteBarcodePaddingView
+                : undefined
+            }
+          >
+            <Barcode validityStatus={validityStatus} fc={fc} />
+          </GenericSectionItem>
+        )}
+        {accesses && (
+          <GenericSectionItem>
+            <CarnetFooter validityStatus={validityStatus} fareContract={fc} />
+          </GenericSectionItem>
+        )}
+        {globalMessageCount > 0 && (
+          <GenericSectionItem>
+            <View style={styles.globalMessages}>
+              <GlobalMessage
+                globalMessageContext={
+                  GlobalMessageContextEnum.appFareContractDetails
+                }
+                textColor={theme.color.background.neutral[0]}
+                ruleVariables={globalMessageRuleVariables}
+                style={styles.globalMessages}
+              />
+            </View>
+          </GenericSectionItem>
+        )}
+        {purchaserPhoneNumber && (
+          <GenericSectionItem>
+            <MessageInfoText
+              type="info"
+              message={t(
+                FareContractTexts.details.purchasedBy(
+                  formatPhoneNumber(purchaserPhoneNumber),
+                ),
+              )}
+            />
+          </GenericSectionItem>
+        )}
 
-      {shouldShowBundlingInfo && (
-        <MobilityBenefitsActionSectionItem
-          benefits={benefits}
-          onNavigateToMap={onNavigateToMap}
-        />
-      )}
-      {bonusAmountEarned != undefined && bonusAmountEarned.amount > 0 && (
-        <EarnedBonusPointsSectionItem amount={bonusAmountEarned.amount} />
-      )}
-      {!!usedAccesses?.length && (
-        <UsedAccessesSectionItem usedAccesses={usedAccesses} />
-      )}
+        {shouldShowLegs && (
+          <GenericSectionItem>
+            <LegsSummary compact={false} legs={legs} />
+          </GenericSectionItem>
+        )}
 
-      <OrderDetailsSectionItem fareContract={fc} />
+        {shouldShowBundlingInfo && (
+          <MobilityBenefitsActionSectionItem
+            benefits={benefits}
+            onNavigateToMap={onNavigateToMap}
+          />
+        )}
+        {bonusAmountEarned != undefined && bonusAmountEarned.amount > 0 && (
+          <EarnedBonusPointsSectionItem amount={bonusAmountEarned.amount} />
+        )}
+        {!!usedAccesses?.length && (
+          <UsedAccessesSectionItem usedAccesses={usedAccesses} />
+        )}
 
-      {fc.orderId && fc.version && (
-        <LinkSectionItem
-          text={t(FareContractTexts.details.askForReceipt)}
-          onPress={onReceiptNavigate}
-          testID="receiptButton"
-        />
-      )}
-      {refundOptions?.isRefundable && (
-        <RefundSectionItem
-          orderId={fc.orderId}
-          fareProductType={preassignedFareProduct?.type}
-          state={fc.state}
-        />
-      )}
-      {isCanBeConsumedNowFareContract(
-        fc,
-        now,
-        currentUserId,
-        schoolCarnetInfo,
-      ) && (
-        <ConsumeCarnetSectionItem
-          fareContractId={fc.id}
-          fareProductType={preassignedFareProduct?.type}
-        />
-      )}
-      {isActivateTicketNowEnabled &&
-        isCanBeActivatedNowFareContract(
+        <OrderDetailsSectionItem fareContract={fc} />
+
+        {fc.orderId && fc.version && (
+          <LinkSectionItem
+            text={t(FareContractTexts.details.askForReceipt)}
+            onPress={onReceiptNavigate}
+            testID="receiptButton"
+          />
+        )}
+        {refundOptions?.isRefundable && (
+          <RefundSectionItem
+            bottomSheetModalRef={bottomSheetModalRef}
+            onCloseFocusRef={onCloseFocusRef}
+          />
+        )}
+        {isCanBeConsumedNowFareContract(
           fc,
           now,
           currentUserId,
-          preassignedFareProduct?.isBookingEnabled,
+          schoolCarnetInfo,
         ) && (
-          <ActivateNowSectionItem
+          <ConsumeCarnetSectionItem
             fareContractId={fc.id}
             fareProductType={preassignedFareProduct?.type}
           />
         )}
-    </Section>
+        {isActivateTicketNowEnabled &&
+          isCanBeActivatedNowFareContract(
+            fc,
+            now,
+            currentUserId,
+            preassignedFareProduct?.isBookingEnabled,
+          ) && (
+            <ActivateNowSectionItem
+              fareContractId={fc.id}
+              fareProductType={preassignedFareProduct?.type}
+            />
+          )}
+      </Section>
+      <RefundBottomSheet
+        orderId={fc.orderId}
+        fareProductType={preassignedFareProduct?.type}
+        state={fc.state}
+        bottomSheetModalRef={bottomSheetModalRef}
+        onCloseFocusRef={onCloseFocusRef}
+      />
+    </>
   );
 };
 
