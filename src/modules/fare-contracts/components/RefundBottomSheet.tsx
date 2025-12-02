@@ -15,13 +15,14 @@ import {
   useTranslation,
 } from '@atb/translations';
 import React, {useEffect} from 'react';
-import {Linking, View} from 'react-native';
+import {View} from 'react-native';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
 import {RefObject} from '@testing-library/react-native/build/types';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type Props = {
   orderId: string;
@@ -99,7 +100,7 @@ export const RefundBottomSheet = ({
           <Button
             mode="tertiary"
             text={t(FareContractTexts.refund.readMore)}
-            onPress={() => Linking.openURL(refundInfoUrl)}
+            onPress={() => openInAppBrowser(refundInfoUrl, 'close')}
             expanded={true}
             rightIcon={{svg: SvgExternalLink}}
             backgroundColor={theme.color.background.neutral[1]}

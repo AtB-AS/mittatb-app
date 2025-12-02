@@ -33,6 +33,7 @@ type Props = {
   refreshControl?: React.ReactElement<RefreshControlProps>;
   contentColor?: ContrastColor;
   avoidKeyboard?: boolean;
+  testID?: string;
 };
 
 type PropsWithParallaxContent = Props &
@@ -76,6 +77,7 @@ export function FullScreenView(props: Props) {
           backgroundColor,
           paddingTop: top,
         }}
+        testID={props.testID ? `${props.testID}` : ''}
       >
         <ScreenHeader
           {...props.headerProps}

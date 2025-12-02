@@ -123,7 +123,7 @@ class TokenPage {
   async openTokenToggle() {
     const reqId = `//*[@resource-id="changeTravelTokenButton"]`;
     await $(reqId).click();
-    await ElementHelper.waitForElement('id', 'selectTokenScrollView');
+    await ElementHelper.waitForElement('id', 'selectTravelTokenView');
   }
 }
 

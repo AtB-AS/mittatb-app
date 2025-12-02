@@ -4,8 +4,7 @@ import {getTextForLanguage} from '@atb/translations';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {DashboardTexts} from '@atb/translations';
-import {AccessibilityRole} from 'react-native';
-import {Linking} from 'react-native';
+import {AccessibilityRole, Linking} from 'react-native';
 import Bugsnag from '@bugsnag/react-native';
 import {SvgProps} from 'react-native-svg';
 import {RefObject, useCallback} from 'react';
@@ -19,6 +18,7 @@ import {
 import {AnalyticsEventContext} from '@atb/modules/analytics';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type ActionButtonProps = {
   rightIcon: {svg: (props: SvgProps) => React.JSX.Element};
@@ -53,6 +53,15 @@ export const useActionButtonProps = (
   const accessibilityRole: AccessibilityRole =
     button.actionType === ActionType.bottom_sheet ? 'button' : 'link';
 
+  const actionHandlers = {
+    [ActionType.external]: async (url: string) => {
+      await openInAppBrowser(url, 'close');
+    },
+    [ActionType.deeplink]: async (url: string) => {
+      await Linking.openURL(url);
+    },
+  };
+
   return {
     rightIcon:
       button.actionType === ActionType.external
@@ -80,7 +89,7 @@ export const useActionButtonProps = (
       ) {
         const actionButtonURL = button.url;
         try {
-          actionButtonURL && (await Linking.openURL(actionButtonURL));
+          actionButtonURL && actionHandlers[button.actionType](actionButtonURL);
         } catch (err: any) {
           Bugsnag.notify(err);
         }

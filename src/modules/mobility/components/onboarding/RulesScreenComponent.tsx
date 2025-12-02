@@ -19,7 +19,8 @@ import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {Linking, View} from 'react-native';
+import {View} from 'react-native';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 export type RulesScreenComponentProps = {
   onGiveConsent: (given: boolean) => void;
@@ -39,7 +40,7 @@ export const RulesScreenComponent = ({
 
   const onOpenTerms = () => {
     if (mobilityTermsUrl) {
-      Linking.openURL(mobilityTermsUrl);
+      openInAppBrowser(mobilityTermsUrl, 'close');
       analytics.logEvent('Mobility', 'Open terms');
     }
   };
