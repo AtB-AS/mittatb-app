@@ -1,4 +1,4 @@
-import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
+import {StopPlace} from '@atb/api/types/departures';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
@@ -6,11 +6,10 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {FavoriteChips, Location} from '@atb/modules/favorites';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {StopPlaces} from './components/StopPlaces';
-import {useNearestStopsData} from './use-nearest-stops-data';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Platform, RefreshControl, ScrollView, View} from 'react-native';
 import {StopPlacesMode} from './types';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
@@ -20,6 +19,7 @@ import {EmptyState} from '@atb/components/empty-state';
 import SharedTexts from '@atb/translations/shared';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
+import {useNearestStopPlaceNodesQuery} from './use-nearest-stop-places-query';
 
 export type NearbyStopPlacesScreenParams = {
   location: Location | undefined;
@@ -73,14 +73,15 @@ export const NearbyStopPlacesScreenComponent = ({
 
   const updatingLocation = !location && locationIsAvailable;
 
-  const {state} = useNearestStopsData(location);
-
-  const {data, isLoading} = state;
-
-  const orderedStopPlaces = useMemo(
-    () => sortAndFilterStopPlaces(data),
-    [data],
-  );
+  const {data: nearestStopPlaceNodesData, isLoading} =
+    useNearestStopPlaceNodesQuery(
+      location && {
+        latitude: location.coordinates.latitude,
+        longitude: location.coordinates.longitude,
+        count: 10,
+        distance: 3000,
+      },
+    );
 
   useEffect(() => {
     if (
@@ -170,7 +171,7 @@ export const NearbyStopPlacesScreenComponent = ({
         {locationIsAvailable || !!location ? (
           <StopPlaces
             headerText={getListDescription()}
-            stopPlaces={orderedStopPlaces}
+            stopPlaces={nearestStopPlaceNodesData ?? []}
             navigateToPlace={onSelectStopPlace}
             testID="nearbyStopsContainerView"
             location={location}
@@ -265,22 +266,6 @@ const Header = React.memo(function Header({
     </View>
   );
 });
-
-function sortAndFilterStopPlaces(
-  data?: NearestStopPlaceNode[],
-): NearestStopPlaceNode[] {
-  if (!data) return [];
-
-  // Sort StopPlaces on distance from search location
-  const sortedNodes = data?.sort((n1, n2) => {
-    if (n1.distance === undefined) return 1;
-    if (n2.distance === undefined) return -1;
-    return n1.distance > n2.distance ? 1 : -1;
-  });
-
-  // Remove all StopPlaces without Quays
-  return sortedNodes.filter((n) => n.place?.quays?.length);
-}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {

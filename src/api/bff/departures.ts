@@ -8,7 +8,10 @@ import {client} from '../client';
 import {StopPlaceGroup} from './types';
 import {isDefined} from '@atb/utils/presence';
 import {stringifyWithDate} from '@atb/utils/querystring';
-import {NearestStopPlacesQuery} from '../types/generated/NearestStopPlacesQuery';
+import {
+  NearestStopPlacesQuery,
+  NearestStopPlacesQueryVariables,
+} from '../types/generated/NearestStopPlacesQuery';
 import {StopsDetailsQuery} from '../types/generated/StopsDetailsQuery';
 import queryString from 'query-string';
 import {DeparturesQuery} from '../types/generated/DeparturesQuery';
@@ -85,17 +88,11 @@ export async function getRealtimeDepartures(
   return response.data;
 }
 
-type StopsNearestQuery = CursoredQuery<{
-  latitude: number;
-  longitude: number;
-  count?: number;
-  distance?: number;
-  after?: string;
-}>;
-export async function getNearestStops(
-  query: StopsNearestQuery,
+export async function getNearestStopPlaces(
+  query?: NearestStopPlacesQueryVariables,
   opts?: AxiosRequestConfig,
-): Promise<NearestStopPlacesQuery> {
+): Promise<NearestStopPlacesQuery | null> {
+  if (!query) return Promise.resolve(null);
   const queryString = stringifyWithDate(query);
   const url = `bff/v2/departures/stops-nearest?${queryString}`;
   const response = await client.get<NearestStopPlacesQuery>(url, opts);

@@ -7,7 +7,7 @@ import useReducerWithSideEffects, {
 } from 'use-reducer-with-side-effects';
 import {DepartureGroupMetadata} from '@atb/api/bff/types';
 import {Location} from '@atb/modules/favorites';
-import {getNearestStops} from '@atb/api/bff/departures';
+import {getNearestStopPlaces} from '@atb/api/bff/departures';
 import {NearestStopPlaceNode} from '@atb/api/types/departures';
 import {ErrorResponse} from '@atb-as/utils';
 
@@ -66,7 +66,7 @@ const reducer: ReducerWithSideEffects<
         async (state, dispatch) => {
           if (!action.location) return;
           try {
-            const result = await getNearestStops({
+            const result = await getNearestStopPlaces({
               latitude: action.location.coordinates.latitude,
               longitude: action.location.coordinates.longitude,
               count: 10,
