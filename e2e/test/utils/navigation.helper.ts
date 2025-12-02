@@ -17,7 +17,7 @@ class NavigationHelper {
    * Cancel
    */
   async cancel() {
-    const cancelId = `//*[@resource-id="cancelButton"]`;
+    const cancelId = `//*[@resource-id="rhb"]`;
     await $(cancelId).click();
     await AppHelper.pause(2000);
   }
