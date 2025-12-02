@@ -15,6 +15,7 @@ export const useCompleteUserCreationOnboardingAndEnterApp = () => {
   const enterApp = useEnterApp();
 
   return () => {
+    console.log('useCompleteUserCreationOnboardingAndEnterApp');
     completeOnboardingSection('userCreation');
     enterApp();
   };
@@ -34,7 +35,13 @@ const useEnterApp = () => {
   const navigation = useNavigation<RootNavigationProps>();
 
   return () => {
+    console.log('enter app');
     const nextOnboardingSection = getNextOnboardingSection(undefined, true);
+    console.log('nextOnboardingSection', nextOnboardingSection);
+    console.log(
+      'nextOnboardingSection?.onboardingSectionId',
+      nextOnboardingSection?.onboardingSectionId,
+    );
 
     const routes: PartialRoute<
       Route<keyof RootStackParamList, object | undefined>
@@ -43,6 +50,12 @@ const useEnterApp = () => {
     const {name, params} = nextOnboardingSection?.initialScreen || {};
     name && routes.push({name, params});
 
+    console.log('routes', routes);
+    console.log(
+      routes
+        .map((route) => `path: ${route.path} name: ${route.name}`)
+        .join(', '),
+    );
     navigation.reset({routes});
   };
 };

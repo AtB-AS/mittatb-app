@@ -213,6 +213,16 @@ export const OnboardingContextProvider = ({children}: Props) => {
     loadedOnboardingSections,
     currentRouteName,
   );
+  console.log('shouldShowArgs', shouldShowArgs);
+  console.log(
+    'shouldShowArgs.isScreenReaderEnabled',
+    shouldShowArgs.isScreenReaderEnabled,
+  );
+  console.log(
+    'shouldShowArgs.isTravelAidStopButtonEnabled',
+    shouldShowArgs.isTravelAidStopButtonEnabled,
+  );
+  console.log('shouldShowArgs.fontScale', shouldShowArgs.fontScale);
 
   const onboardingSections = useMemo(
     () =>
@@ -221,6 +231,16 @@ export const OnboardingContextProvider = ({children}: Props) => {
         shouldShow: loadedOnboardingSection.shouldShowPredicate(shouldShowArgs),
       })),
     [loadedOnboardingSections, shouldShowArgs],
+  );
+  console.log('onboardingSections', onboardingSections);
+  console.log(
+    'onboardingSections',
+    onboardingSections
+      .map(
+        (os) =>
+          `OnboardingSectionId ${os.onboardingSectionId}, shouldShow: ${os.shouldShow}`,
+      )
+      .join(', '),
   );
 
   return (
