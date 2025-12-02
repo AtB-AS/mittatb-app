@@ -16,6 +16,7 @@ import {StopsDetailsQuery} from '../types/generated/StopsDetailsQuery';
 import queryString from 'query-string';
 import {DeparturesQuery} from '../types/generated/DeparturesQuery';
 import {DeparturesWithLineName} from './types';
+import {NearestStopPlaceNode} from '../types/departures';
 
 export type RealtimeData = {
   serviceJourneyId: string;
@@ -88,15 +89,38 @@ export async function getRealtimeDepartures(
   return response.data;
 }
 
-export async function getNearestStopPlaces(
+export async function getNearestStopPlaceNodes(
   query?: NearestStopPlacesQueryVariables,
   opts?: AxiosRequestConfig,
-): Promise<NearestStopPlacesQuery | null> {
+): Promise<NearestStopPlaceNode[] | null> {
   if (!query) return Promise.resolve(null);
   const queryString = stringifyWithDate(query);
   const url = `bff/v2/departures/stops-nearest?${queryString}`;
   const response = await client.get<NearestStopPlacesQuery>(url, opts);
-  return response.data ?? null;
+
+  const nearestStopPlaceNodes =
+    response?.data?.nearest?.edges
+      // Cast to NearestStopPlaceNode, as it is the only possible type returned from bff
+      ?.map((e) => e.node as NearestStopPlaceNode)
+      .filter((n): n is NearestStopPlaceNode => !!n) || [];
+
+  return sortAndFilterStopPlaces(nearestStopPlaceNodes);
+}
+
+function sortAndFilterStopPlaces(
+  data?: NearestStopPlaceNode[],
+): NearestStopPlaceNode[] {
+  if (!data) return [];
+
+  // Sort StopPlaces on distance from search location
+  const sortedNodes = [...data]?.sort((n1, n2) => {
+    if (n1.distance === undefined) return 1;
+    if (n2.distance === undefined) return -1;
+    return n1.distance > n2.distance ? 1 : -1;
+  });
+
+  // Remove all StopPlaces without Quays
+  return sortedNodes.filter((n) => n.place?.quays?.length);
 }
 
 type StopsDetailsVariables = CursoredQuery<{

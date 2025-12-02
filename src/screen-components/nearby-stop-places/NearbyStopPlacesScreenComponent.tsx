@@ -4,7 +4,10 @@ import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announceme
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {FavoriteChips, Location} from '@atb/modules/favorites';
-import {useGeolocationContext} from '@atb/modules/geolocation';
+import {
+  useGeolocationContext,
+  useStableLocation,
+} from '@atb/modules/geolocation';
 import {StopPlaces} from './components/StopPlaces';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -45,11 +48,9 @@ export const NearbyStopPlacesScreenComponent = ({
   onAddFavoritePlace,
   isLargeTitle,
 }: Props) => {
-  const {
-    locationIsAvailable,
-    location: geolocation,
-    requestLocationPermission,
-  } = useGeolocationContext();
+  const {locationIsAvailable, requestLocationPermission} =
+    useGeolocationContext();
+  const geolocation = useStableLocation(75);
 
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
 
