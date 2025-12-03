@@ -66,6 +66,7 @@ export const NearbyStopPlacesScreenComponent = ({
         count: 10,
         distance: 3000,
       },
+      100,
     );
 
   // Update geolocation on screen focus if no other location is selected
