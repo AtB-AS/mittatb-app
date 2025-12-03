@@ -48,7 +48,6 @@ export function CounterSectionItem({
 
   return (
     <View style={[topContainer, counterStyles.countContainer]} testID={testID}>
-      {illustration && <ThemeIcon svg={illustration} />}
       <View
         style={[
           style.spaceBetween,
@@ -58,7 +57,10 @@ export function CounterSectionItem({
         accessible={true}
         accessibilityLabel={`${count} ${text}, ${subtext || ''}`}
       >
-        <ThemeText>{text}</ThemeText>
+        <View style={counterStyles.infoTextContainer}>
+          {illustration && <ThemeIcon svg={illustration} />}
+          <ThemeText>{text}</ThemeText>
+        </View>
         {subtext && (
           <ThemeText
             typography="body__s"
@@ -146,6 +148,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     infoContainer: {
       flexDirection: 'column',
       alignItems: 'flex-start',
+      justifyContent: 'center',
       marginRight: theme.spacing.medium,
     },
     infoSubtext: {
@@ -176,6 +179,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     addCount: {
       marginLeft: theme.spacing.xLarge,
+    },
+    infoTextContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: theme.spacing.small,
     },
   };
 });
