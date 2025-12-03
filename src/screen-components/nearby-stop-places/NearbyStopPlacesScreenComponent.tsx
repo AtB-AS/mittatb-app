@@ -12,7 +12,7 @@ import {StopPlaces} from './components/StopPlaces';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Platform, RefreshControl, ScrollView, View} from 'react-native';
 import {StopPlacesMode} from './types';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
@@ -80,6 +80,16 @@ export const NearbyStopPlacesScreenComponent = ({
     },
     Boolean(geolocation) && isFocused,
   );
+
+  useEffect(() => {
+    if (
+      (location?.resultType == 'search' ||
+        location?.resultType === 'favorite') &&
+      location?.layer === 'venue'
+    ) {
+      onSelectStopPlace(location);
+    }
+  }, [location, onSelectStopPlace]);
 
   const a11yLoadingMessage = updatingLocation
     ? t(NearbyTexts.stateAnnouncements.updatingLocation)
