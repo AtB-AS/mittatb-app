@@ -11,6 +11,9 @@ export const useNearestStopPlaceNodesQuery = (
     enabled: !!queryVariables,
     queryKey: ['getNearestStopPlaceNodes', qs.stringify(queryVariables ?? {})],
     queryFn: ({signal}) => getNearestStopPlaceNodes(queryVariables, {signal}),
-    staleTime: 5 * ONE_HOUR_MS,
-    gcTime: 5 * ONE_HOUR_MS,
+    staleTime: 1 * ONE_HOUR_MS,
+    gcTime: 24 * ONE_HOUR_MS,
+    meta: {
+      persistInAsyncStorage: true,
+    },
   });
