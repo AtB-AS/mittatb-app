@@ -41,15 +41,14 @@ export const Root_PurchaseHarborSearchScreen = ({
     if (!selection.stopPlaces?.from) builder.fromStopPlace(selectedStopPlace);
     if (selection.stopPlaces?.from) builder.toStopPlace(selectedStopPlace);
     const newSelection = builder.build();
-    navigation.navigate({
-      name: 'Root_PurchaseOverviewScreen',
-      params: {
-        mode: 'Ticket',
+    navigation.popTo(
+      'Root_PurchaseOverviewScreen',
+      {
         selection: newSelection,
         onFocusElement: selection.stopPlaces?.from ? 'toHarbor' : 'fromHarbor',
       },
-      merge: true,
-    });
+      {merge: true},
+    );
   };
 
   const styles = useStyles();
