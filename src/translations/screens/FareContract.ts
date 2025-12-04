@@ -442,6 +442,41 @@ const FareContractTexts = {
     }
   },
   otherFareContracts: _('Andre billetter', 'Other tickets', 'Andre billettar'),
+  a11yTicketInfoLabels: {
+    zones: {
+      oneZone: _('i sone: ', 'in zone:', 'i sone:'),
+      multipleZones: _(
+        'mellom følgende soner:',
+        'between the following zones:',
+        'mellom følgjande soner:',
+      ),
+    },
+    transportModes: _(
+      `vil være gyldig for transportmidlene: `,
+      `will be valid for the transport modes: `,
+      `vil vere gyldig for transportmidlane: `,
+    ),
+    travellers: _(
+      'for følgende reisende: ',
+      'for the following travellers: ',
+      'for følgjande reisande: ',
+    ),
+    harbors: {
+      oneWayTrip: (from: string, to: string) =>
+        _(
+          `En vei, fra ${from}, til ${to}`,
+          `One way, from ${from}, to ${to}`,
+          `Ein veg, frå ${from}, til ${to}`,
+        ),
+      returnTrip: (from: string, to: string) =>
+        _(
+          `Tur/retur, fra ${from}, til ${to}`,
+          `Round trip, from ${from}, to ${to}`,
+          `Tur/retur, frå ${from}, til ${to}`,
+        ),
+      and: _(' og ', ' and ', ' og '),
+    },
+  },
 };
 
 export default orgSpecificTranslations(FareContractTexts, {
