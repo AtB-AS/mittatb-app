@@ -29,6 +29,7 @@ import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
+import {useTicketAccessibilityLabel} from '../use-ticket-accessibility-label';
 
 type Props = {fc: FareContractType};
 
@@ -39,7 +40,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
 
   const {validityStatus} = getFareContractInfo(serverNow, fc, currentUserId);
 
-  const {userProfiles, fareProductTypeConfigs} =
+  const {userProfiles, fareProductTypeConfigs, fareZones} =
     useFirestoreConfigurationContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
 
@@ -51,6 +52,13 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
 
   const firstTravelRight = fc.travelRights[0];
   const preassignedFareProduct = productsInFareContract[0];
+
+  const travelRightFareZones = firstTravelRight.fareZoneRefs
+    ?.map((fz) => findReferenceDataById(fareZones, fz))
+    .filter(isDefined);
+  const travelRightFromPlace = firstTravelRight.startPointRef;
+  const travelRightToPlace = firstTravelRight.endPointRef;
+  const direction = firstTravelRight.direction;
 
   const fareProductTypeConfig = fareProductTypeConfigs.find((c) => {
     return c.type === preassignedFareProduct?.type;
@@ -88,6 +96,16 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   const {theme} = useThemeContext();
   const {topContainer} = useSectionItem({});
 
+  const ticketAccessibilityLabel = useTicketAccessibilityLabel(
+    fareProductTypeConfig,
+    userProfilesWithCount,
+    baggageProductsWithCount,
+    travelRightFareZones ?? [],
+    travelRightFromPlace,
+    travelRightToPlace,
+    direction,
+  );
+
   return (
     <View
       style={[
@@ -95,8 +113,11 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
         {rowGap: theme.spacing.large, paddingVertical: theme.spacing.large},
       ]}
     >
-      <View style={styles.detailRow}>
-        <View style={styles.fareContractDetailItems}>
+      <View style={styles.detailRow} accessible={true}>
+        <View
+          style={styles.fareContractDetailItems}
+          accessibilityLabel={ticketAccessibilityLabel}
+        >
           <FareContractFromTo
             fc={fc}
             backgroundColor={theme.color.background.neutral[0]}
