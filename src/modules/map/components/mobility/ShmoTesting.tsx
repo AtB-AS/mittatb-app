@@ -22,19 +22,13 @@ import {useVehicle} from '@atb/modules/mobility';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {ToggleSectionItem} from '@atb/components/sections';
+import {useMapContext} from '../../MapContext';
 
-type ShmoTestingProps = {
-  selectedVehicleId?: string;
-  showSelectedFeature: boolean;
-  setShowSelectedFeature: (showSelectedFeature: boolean) => void;
-};
+export const ShmoTesting = () => {
+  const {mapState} = useMapContext();
+  const selectedVehicleId =
+    mapState.feature?.properties?.id ?? mapState.assetId ?? '';
 
-export const ShmoTesting = ({
-  selectedVehicleId,
-  showSelectedFeature,
-  setShowSelectedFeature,
-}: ShmoTestingProps) => {
   const [previousBookingId, setPreviousBookingId] = useState<string>();
   const [vehicleId, setVehicleId] = useState<string | undefined>(
     selectedVehicleId,
@@ -243,11 +237,6 @@ export const ShmoTesting = ({
         }}
         text="Help"
         hasShadow={true}
-      />
-      <ToggleSectionItem
-        text="Show selected map feature"
-        value={showSelectedFeature}
-        onValueChange={setShowSelectedFeature}
       />
     </View>
   );
