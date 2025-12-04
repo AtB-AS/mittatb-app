@@ -178,6 +178,7 @@ const PurchaseOverviewTexts = {
     close: _('Lukk', 'Close', 'Lukk'),
     confirm: _('Bekreft valg', 'Confirm selection', 'Bekreft valg'),
   },
+  selectAtLeastOneTraveller: _('Velg minst én reisende', 'Select at least one traveller', 'Vel minst éin reisande'),
   startTime: {
     title: _('Oppstartstidspunkt', 'Start time', 'Starttidspunkt'),
     now: _('Nå', 'Now', 'No'),

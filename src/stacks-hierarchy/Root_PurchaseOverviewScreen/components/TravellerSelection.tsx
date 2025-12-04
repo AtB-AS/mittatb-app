@@ -1,4 +1,4 @@
-import React, {RefObject, useRef} from 'react';
+import React, {useRef} from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
   getTextForLanguage,
@@ -13,7 +13,6 @@ import {
 } from '@atb/components/sections';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {TravellerSelectionSheet} from './TravellerSelectionSheet';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
@@ -24,6 +23,7 @@ import {
   type PurchaseSelectionType,
   useSelectableUserProfiles,
 } from '@atb/modules/purchase-selection';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 type TravellerSelectionProps = {
   selection: PurchaseSelectionType;
@@ -38,10 +38,8 @@ export function TravellerSelection({
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
-
-  const {open: openBottomSheet, close: closeBottomSheet} =
-    useBottomSheetContext();
+  const onCloseFocusRef = useRef<View | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
 
   const selectionMode =
     selection.fareProductTypeConfig.configuration.travellerSelectionMode;
@@ -104,18 +102,7 @@ export function TravellerSelection({
   };
 
   const travellerSelectionOnPress = () => {
-    openBottomSheet(
-      () => (
-        <TravellerSelectionSheet
-          selection={selection}
-          onSave={(selection) => {
-            onSave(selection);
-            closeBottomSheet();
-          }}
-        />
-      ),
-      onCloseFocusRef,
-    );
+    bottomSheetModalRef.current?.present();
   };
 
   const content = (
@@ -174,6 +161,15 @@ export function TravellerSelection({
           <GenericSectionItem>{content}</GenericSectionItem>
         )}
       </Section>
+      <TravellerSelectionSheet
+        selection={selection}
+        onSave={(selection) => {
+          onSave(selection);
+          bottomSheetModalRef.current?.dismiss();
+        }}
+        bottomSheetModalRef={bottomSheetModalRef}
+        onCloseFocusRef={onCloseFocusRef}
+      />
     </View>
   );
 }
