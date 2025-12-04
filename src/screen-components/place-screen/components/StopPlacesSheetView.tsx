@@ -64,18 +64,16 @@ export const StopPlacesSheetView = (props: Props) => {
   const updatedTimeRange = getTimeRangeByMode('Map', searchTime);
   const quayIds = useMemo(() => quays.map((q) => q.id), [quays]);
 
-  const query = useMemo(
-    () =>
-      ({
-        ids: quayIds,
-        numberOfDepartures:
-          NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW +
-          NUMBER_OF_DEPARTURES_IN_BUFFER,
-        startTime: searchTime,
-        timeRange: updatedTimeRange,
-      }) as DeparturesVariables,
-    [quayIds, searchTime, updatedTimeRange],
-  );
+  const query = useMemo(() => {
+    const departuresVariables: DeparturesVariables = {
+      ids: quayIds,
+      numberOfDepartures:
+        NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW + NUMBER_OF_DEPARTURES_IN_BUFFER,
+      startTime: searchTime,
+      timeRange: updatedTimeRange,
+    };
+    return departuresVariables;
+  }, [quayIds, searchTime, updatedTimeRange]);
 
   const {
     data: departuresData,
