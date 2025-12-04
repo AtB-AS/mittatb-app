@@ -13,7 +13,4 @@ export const useNearestStopPlaceNodesQuery = (
     queryFn: ({signal}) => getNearestStopPlaceNodes(queryVariables, {signal}),
     staleTime: 1 * ONE_HOUR_MS,
     gcTime: 24 * ONE_HOUR_MS,
-    meta: {
-      persistInAsyncStorage: true,
-    },
   });
