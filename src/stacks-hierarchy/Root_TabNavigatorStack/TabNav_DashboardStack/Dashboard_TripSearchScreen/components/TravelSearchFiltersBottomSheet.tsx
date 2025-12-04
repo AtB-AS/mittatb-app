@@ -1,14 +1,12 @@
 import {View} from 'react-native';
-import React, {forwardRef, useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   dictionary,
   getTextForLanguage,
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
-import {FullScreenFooter} from '@atb/components/screen-footer';
-import {Button} from '@atb/components/button';
-import {Close, Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -25,15 +23,17 @@ import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {BottomSheetModal as GorhamBottomSheetModal} from '@gorhom/bottom-sheet';
 
-export const TravelSearchFiltersBottomSheet = forwardRef<
-  any,
-  {
-    filtersSelection: TravelSearchFiltersSelectionType;
-    onSave: (t: TravelSearchFiltersSelectionType) => void;
-    bottomSheetModalRef: React.RefObject<GorhamBottomSheetModal | null>;
-    onCloseFocusRef: React.RefObject<View | null>;
-  }
->(({filtersSelection, onSave, bottomSheetModalRef, onCloseFocusRef}) => {
+export const TravelSearchFiltersBottomSheet = ({
+  filtersSelection,
+  onSave,
+  bottomSheetModalRef,
+  onCloseFocusRef,
+}: {
+  filtersSelection: TravelSearchFiltersSelectionType;
+  onSave: (t: TravelSearchFiltersSelectionType) => void;
+  bottomSheetModalRef: React.RefObject<GorhamBottomSheetModal | null>;
+  onCloseFocusRef: React.RefObject<View | null>;
+}) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
 
@@ -49,6 +49,21 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
     useState<TravelSearchPreferenceWithSelectionType[]>(
       filtersSelection.travelSearchPreferences ?? [],
     );
+
+  const changesMade =
+    filtersSelection.transportModes !== selectedModeOptions ||
+    filtersSelection.travelSearchPreferences !==
+      selectedTravelSearchPreferences;
+
+  useEffect(() => {
+    setSelectedModes(filtersSelection.transportModes);
+    setSelectedTravelSearchPreferences(
+      filtersSelection.travelSearchPreferences ?? [],
+    );
+  }, [
+    filtersSelection.transportModes,
+    filtersSelection.travelSearchPreferences,
+  ]);
 
   const save = useCallback(() => {
     const selectedFilters = {
@@ -74,7 +89,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
 
   const allModesSelected = selectedModeOptions?.every((m) => m.selected);
 
-  const footer = useCallback(
+  /*const footer = useCallback(
     () => (
       <FullScreenFooter>
         <Button
@@ -87,18 +102,20 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
       </FullScreenFooter>
     ),
     [save, t],
-  );
+  );*/
 
   return (
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(TripSearchTexts.filters.bottomSheet.title)}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      rightIconText={t(dictionary.confirm)}
+      rightIcon={Confirm}
       closeCallback={() => {
         giveFocus(onCloseFocusRef);
+        if (changesMade) {
+          save();
+        }
       }}
-      Footer={footer}
     >
       <View style={styles.filtersContainer} testID="filterView">
         <ThemeText style={styles.headingText} typography="body__s">
@@ -180,7 +197,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
       </View>
     </BottomSheetModal>
   );
-});
+};
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   filtersContainer: {
