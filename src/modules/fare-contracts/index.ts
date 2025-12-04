@@ -21,3 +21,4 @@ export {CompactFareContracts} from './CompactFareContracts';
 export {FareContractDetailItem} from './components/FareContractDetailItem';
 export {FareContractFromTo} from './components/FareContractFromTo';
 export {useFareContractLegs} from './use-fare-contract-legs';
+export {useTicketAccessibilityLabel} from './use-ticket-accessibility-label';

@@ -14,7 +14,6 @@ import {
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {getTransportModeText} from '@atb/components/transportation-modes';
 import {useHarborsQuery} from '@atb/queries';
-import {TravelRightDirection} from '@atb-as/utils';
 import {TileWithButton} from '@atb/components/tile';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {
@@ -24,7 +23,7 @@ import {
 } from '@atb/modules/fare-contracts';
 import {FareContractDetailItem} from '@atb/modules/fare-contracts';
 import {getTransportModeSvg} from '@atb/components/icon-box';
-import {useTicketAccessibilityLabel} from '@atb/modules/fare-contracts/use-ticket-accessibility-label';
+import {useTicketAccessibilityLabel} from '@atb/modules/fare-contracts';
 import {isDefined} from '@atb/utils/presence';
 
 type RecentFareContractProps = {
@@ -78,8 +77,6 @@ export const RecentFareContract = ({
     baggageProductsWithCount,
   );
 
-  if (!fareProductTypeConfig) return null;
-
   const ticketAccessibilityLabel = useTicketAccessibilityLabel(
     preassignedFareProduct,
     fareProductTypeConfig,
@@ -92,6 +89,8 @@ export const RecentFareContract = ({
   );
 
   const accessibilityLabel = `${t(RecentFareContractsTexts.repeatPurchase.label)} ${ticketAccessibilityLabel} `;
+
+  if (!fareProductTypeConfig) return null;
 
   return (
     <TileWithButton
