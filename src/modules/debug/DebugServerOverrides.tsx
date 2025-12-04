@@ -7,25 +7,33 @@ import {Button} from '@atb/components/button';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {TextInputSectionItem} from '@atb/components/sections';
 
-type ServerOverride = {
+type DebugServerOverride = {
   match: RegExp;
   newValue: string;
-  headers: AxiosRequestHeaders;
+  headers?: AxiosRequestHeaders;
 };
 
 export function DebugServerOverrides() {
-  const [overrides, setOverrides] = React.useState<ServerOverride[]>([]);
+  const [overrides, setOverrides] = React.useState<DebugServerOverride[]>([]);
   const [newHeaders, setNewHeaders] = React.useState<string>('');
   const focusRef = useRef(null);
   const {open} = useBottomSheetContext();
 
   useCallback(async () => {
     const fromStorage = await storage.get('@ATB_debug_server_overrides');
-    const overrides = JSON.parse(fromStorage || '[]') as ServerOverride[];
+    const overrides = JSON.parse(fromStorage || '[]') as DebugServerOverride[];
     setOverrides(overrides);
   }, [])();
 
-  function onAddOverride() {}
+  const addOverride = useCallback((override: DebugServerOverride) => {
+    console.log('Adding override', override);
+    const updatedOverrides = [...overrides, override];
+    setOverrides(updatedOverrides);
+    /*storage.set(
+      '@ATB_debug_server_overrides',
+      JSON.stringify(updatedOverrides),
+    );*/
+  }, []);
 
   return (
     <View style={{gap: 12}} ref={focusRef}>
@@ -44,32 +52,47 @@ export function DebugServerOverrides() {
         text="Add server override"
         expanded={true}
         onPress={() => {
-          open(DebugServerInput, focusRef);
+          open(
+            () => (
+              <DebugServerInput
+                onClose={(override: DebugServerOverride) =>
+                  addOverride(override)
+                }
+              />
+            ),
+            focusRef,
+          );
         }}
       />
     </View>
   );
 }
 
-function DebugServerInput(
-  onClose: (match: string, newBaseUrl: string) => void,
-) {
+function DebugServerInput(props: {
+  onClose: (override: DebugServerOverride) => void;
+}) {
   const [newMatch, setNewMatch] = React.useState<string>('');
   const [newValue, setNewValue] = React.useState<string>('');
   const {close} = useBottomSheetContext();
   return (
     <View style={{paddingVertical: 50}}>
-      <TextInputSectionItem label="Match" placeholder=".*\/?bff\/.*" value={} />
+      <TextInputSectionItem
+        label="Regex"
+        placeholder=".*\/?bff\/.*"
+        value={newMatch}
+        onChangeText={setNewMatch}
+      />
       <TextInputSectionItem
         label="New baseURL"
         placeholder="http://localhost:8080/"
-        onBlur={(val) => setNewValue(val)}
+        onChangeText={setNewValue}
+        autoCapitalize="none"
       />
       <Button
         text="Add Override"
         expanded={true}
         onPress={() => {
-          onClose(newMatch, newValue);
+          props.onClose({match: new RegExp(newMatch), newValue});
           close();
         }}
       />
