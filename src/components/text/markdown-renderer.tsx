@@ -42,7 +42,7 @@ function renderToken(
           {...props.textProps}
           style={{fontWeight: textTypeStyles['body__m__strong'].fontWeight}}
         >
-          {token.text}
+          {token.tokens?.map((t, i) => renderToken(t, i, props))}
         </Text>
       );
 
