@@ -103,9 +103,11 @@ export const FromToBox = ({
 
   if (size === 'large') {
     return (
-      <BorderedInfoBox backgroundColor={backgroundColor} type={size}>
-        {largeLayout()}
-      </BorderedInfoBox>
+      <View accessible accessibilityLabel={accessibilityLabel}>
+        <BorderedInfoBox backgroundColor={backgroundColor} type={size}>
+          {largeLayout()}
+        </BorderedInfoBox>
+      </View>
     );
   }
 
