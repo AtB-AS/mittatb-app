@@ -97,7 +97,6 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   const {topContainer} = useSectionItem({});
 
   const ticketAccessibilityLabel = useTicketAccessibilityLabel(
-    preassignedFareProduct,
     fareProductTypeConfig,
     userProfilesWithCount,
     baggageProductsWithCount,

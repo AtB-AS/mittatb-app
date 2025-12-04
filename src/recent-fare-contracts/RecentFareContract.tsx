@@ -78,7 +78,6 @@ export const RecentFareContract = ({
   );
 
   const ticketAccessibilityLabel = useTicketAccessibilityLabel(
-    preassignedFareProduct,
     fareProductTypeConfig,
     userProfilesWithCount,
     baggageProductsWithCount,
@@ -88,7 +87,7 @@ export const RecentFareContract = ({
     direction,
   );
 
-  const accessibilityLabel = `${t(RecentFareContractsTexts.repeatPurchase.label)} ${ticketAccessibilityLabel} `;
+  const accessibilityLabel = `${t(RecentFareContractsTexts.repeatPurchase.label)} ${productName} ${ticketAccessibilityLabel} `;
 
   if (!fareProductTypeConfig) return null;
 

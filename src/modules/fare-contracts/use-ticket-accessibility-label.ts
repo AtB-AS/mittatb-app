@@ -2,7 +2,6 @@ import {
   BaggageProduct,
   FareProductTypeConfig,
   FareZone,
-  PreassignedFareProduct,
   UserProfile,
 } from '@atb-as/config-specs';
 import {UniqueWithCount} from '@atb/utils/unique-with-count';
@@ -15,7 +14,6 @@ import {getTravellersText} from './utils';
 import {screenReaderPause} from '@atb/components/text';
 
 export function useTicketAccessibilityLabel(
-  preassignedFareProduct: PreassignedFareProduct,
   fareProductTypeConfig: FareProductTypeConfig | undefined,
   userProfilesWithCount: UniqueWithCount<UserProfile>[],
   baggageProductsWithCount: UniqueWithCount<BaggageProduct>[],
@@ -28,8 +26,6 @@ export function useTicketAccessibilityLabel(
 
   const harborsQuery = useHarborsQuery(fareProductTypeConfig?.transportModes);
 
-  const productName = getReferenceDataName(preassignedFareProduct, language);
-
   const travellersText = getTravellersText(
     userProfilesWithCount,
     baggageProductsWithCount,
@@ -38,7 +34,7 @@ export function useTicketAccessibilityLabel(
 
   const transportModes = fareProductTypeConfig?.transportModes ?? [];
 
-  const modeInfo = `${productName} ${screenReaderPause} ${t(
+  const modeInfo = `${t(
     FareContractTexts.a11yTicketInfoLabels.transportModes,
   )}${getTransportModeText(transportModes, t)}`;
 
