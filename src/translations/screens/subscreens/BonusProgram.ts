@@ -26,6 +26,13 @@ const BonusProgramTexts = {
         `You earned **${bonusPointsEarned} point${bonusPointsEarned === 1 ? '' : 's'}**!`,
         `Du tente **${bonusPointsEarned} poeng**!`,
       ),
+
+    youEarnedA11yLabel: (bonusPointsEarned: number) =>
+      _(
+        `Du tjente ${bonusPointsEarned} poeng!`,
+        `You earned ${bonusPointsEarned} points!`,
+        `Du tente ${bonusPointsEarned} poeng!`,
+      ),
   },
 
   log_in_operator_app_warning: (operatorName: string) =>
