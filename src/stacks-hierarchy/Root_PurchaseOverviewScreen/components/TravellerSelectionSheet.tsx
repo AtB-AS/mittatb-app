@@ -79,14 +79,6 @@ export const TravellerSelectionSheet = ({
       }}
     >
       <View style={styles.container}>
-        {selectionMode === 'multiple' ? (
-          <MultipleTravellersSelection
-            userCountState={userCountState}
-            baggageCountState={baggageCountState}
-          />
-        ) : (
-          <SingleTravellerSelection {...userCountState} />
-        )}
         {!!nothingSelected && showWarning && (
           <Section style={styles.messageContainer}>
             <MessageSectionItem
@@ -94,6 +86,14 @@ export const TravellerSelectionSheet = ({
               messageType="error"
             />
           </Section>
+        )}
+        {selectionMode === 'multiple' ? (
+          <MultipleTravellersSelection
+            userCountState={userCountState}
+            baggageCountState={baggageCountState}
+          />
+        ) : (
+          <SingleTravellerSelection {...userCountState} />
         )}
       </View>
     </BottomSheetModal>
@@ -106,7 +106,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginHorizontal: theme.spacing.medium,
     },
     messageContainer: {
-      marginTop: theme.spacing.medium,
+      marginBottom: theme.spacing.medium,
     },
   };
 });
