@@ -11,7 +11,7 @@ export const DEPARTURES_REALTIME_QUERY_KEY = 'DEPARTURES_REALTIME';
 const DEPARTURES_REALTIME_REFETCH_INTERVAL = 30 * ONE_SECOND_MS;
 
 type DeparturesRealtimeQueryProps = {
-  query: DepartureRealtimeQuery;
+  query?: DepartureRealtimeQuery;
   triggerImmediately: boolean;
 };
 

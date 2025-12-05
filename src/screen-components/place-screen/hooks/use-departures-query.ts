@@ -1,15 +1,28 @@
 import {DeparturesVariables, getDepartures} from '@atb/api/bff/departures';
 import {useQuery} from '@tanstack/react-query';
 import {ONE_HOUR_MS, ONE_MINUTE_MS} from '@atb/utils/durations';
+import qs from 'query-string';
+import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
+import {getLimitOfDeparturesPerLineByMode, getTimeRangeByMode} from '../utils';
 
-type DeparturesQueryProps = {
-  query: DeparturesVariables;
+export type DeparturesQueryProps = {
+  query: Omit<DeparturesVariables, 'startTime'> & {startTime?: string};
+  mode: StopPlacesMode;
 };
 
-export const useDeparturesQuery = ({query}: DeparturesQueryProps) => {
+export const useDeparturesQuery = ({query, mode}: DeparturesQueryProps) => {
   return useQuery({
-    queryKey: ['DEPARTURES', query],
-    queryFn: () => getDepartures(query),
+    queryKey: ['DEPARTURES', qs.stringify(query), mode],
+    queryFn: () => {
+      const startTime = query.startTime ?? new Date().toISOString();
+      return getDepartures({
+        ...query,
+        startTime,
+        timeRange: query.timeRange ?? getTimeRangeByMode(mode, startTime),
+        limitPerLine:
+          query.limitPerLine ?? getLimitOfDeparturesPerLineByMode(mode),
+      });
+    },
     staleTime: 10 * ONE_MINUTE_MS,
     gcTime: ONE_HOUR_MS,
     refetchOnMount: true,

@@ -7,16 +7,14 @@ import {
 import {BottomSheetSectionList} from '@gorhom/bottom-sheet';
 import {MapStopPlacesListHeader} from './MapStopPlacesListHeader';
 import {StopPlacesError} from './StopPlacesError';
-import {useDeparturesQuery} from '../hooks/use-departures-query';
-import {DeparturesVariables} from '@atb/api/bff/departures';
 import {
   getStopPlaceAndQuays,
-  getTimeRangeByMode,
   NUMBER_OF_DEPARTURES_IN_BUFFER,
   NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
 } from '../utils';
-import {flatMap} from '@atb/utils/array';
+
 import {SectionListData} from 'react-native';
+import {DeparturesProps, useDepartures} from '../hooks/use-departures';
 
 type Props = {
   stopPlaces: StopPlace[];
@@ -61,36 +59,32 @@ export const StopPlacesSheetView = (props: Props) => {
   const quayListData: SectionListData<StopPlaceAndQuay>[] =
     stopPlaceAndQuays.length ? [{data: stopPlaceAndQuays}] : [];
 
-  const updatedTimeRange = getTimeRangeByMode('Map', searchTime);
   const quayIds = useMemo(() => quays.map((q) => q.id), [quays]);
 
-  const query = useMemo(() => {
-    const departuresVariables: DeparturesVariables = {
-      ids: quayIds,
-      numberOfDepartures:
+  const departuresProps: DeparturesProps = useMemo(
+    () => ({
+      quayIds,
+      limitPerQuay:
         NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW + NUMBER_OF_DEPARTURES_IN_BUFFER,
+      showOnlyFavorites: false,
+      mode: 'Map',
       startTime: searchTime,
-      timeRange: updatedTimeRange,
-    };
-    return departuresVariables;
-  }, [quayIds, searchTime, updatedTimeRange]);
+    }),
+    [quayIds, searchTime],
+  );
 
-  const {
-    data: departuresData,
-    isLoading: departuresDataLoading,
-    isError: departuresDataIsError,
-    refetch: refetchDeparturesData,
-  } = useDeparturesQuery({query});
+  const {departures, isLoading, isError, refetch} =
+    useDepartures(departuresProps);
 
   return (
     <BottomSheetSectionList
       nestedScrollEnabled
       ListHeaderComponent={
         <>
-          {departuresDataIsError && (
+          {isError && (
             <StopPlacesError
               showTimeNavigation={showTimeNavigation}
-              forceRefresh={refetchDeparturesData}
+              forceRefresh={refetch}
             />
           )}
           <MapStopPlacesListHeader
@@ -106,14 +100,10 @@ export const StopPlacesSheetView = (props: Props) => {
       renderItem={({item, index}) => (
         <QuaySection
           quay={item.quay}
-          isLoading={departuresDataLoading}
+          isLoading={isLoading}
           departuresPerQuay={NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW}
-          data={
-            departuresData
-              ? flatMap(departuresData?.quays, (q) => q.estimatedCalls)
-              : []
-          }
-          didLoadingDataFail={departuresDataIsError}
+          data={departures}
+          didLoadingDataFail={isError}
           navigateToDetails={navigateToDetails}
           navigateToQuay={(quay) => navigateToQuay(item.stopPlace, quay)}
           testID={'quaySection' + index}
