@@ -6,6 +6,8 @@ import Bugsnag from '@bugsnag/react-native';
 import {ThemeTextProps} from './ThemeText';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
+const MAX_RECURSION_DEPTH = 20;
+
 type MarkdownRendererProps = {
   // When rendering a list, this is the spacing between the list elements
   spacingBetweenListElements?: number;
@@ -25,7 +27,22 @@ function renderToken(
   token: Token,
   index: number,
   props: MarkdownRendererProps,
+  depth = 0,
 ): React.ReactElement {
+  if (depth > MAX_RECURSION_DEPTH) {
+    console.warn(
+      `Markdown render: max recursion depth (${MAX_RECURSION_DEPTH}) exceeded.`,
+    );
+    return (
+      <Text key={index} {...props.textProps}>
+        {token.raw}
+      </Text>
+    );
+  }
+
+  const renderChildren = (tokens?: Token[]) =>
+    tokens?.map((t, i) => renderToken(t, i, props, depth + 1));
+
   switch (token.type) {
     case 'text':
       return (
@@ -42,7 +59,7 @@ function renderToken(
           {...props.textProps}
           style={{fontWeight: textTypeStyles['body__m__strong'].fontWeight}}
         >
-          {token.tokens?.map((t, i) => renderToken(t, i, props))}
+          {renderChildren(token.tokens)}
         </Text>
       );
 
@@ -58,7 +75,7 @@ function renderToken(
     case 'paragraph':
       return (
         <Text key={index} {...props.textProps}>
-          {token.tokens?.map((t, i) => renderToken(t, i, props))}
+          {renderChildren(token.tokens)}
         </Text>
       );
 
