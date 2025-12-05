@@ -73,18 +73,22 @@ export const StopPlacesSheetView = (props: Props) => {
     [quayIds, searchTime],
   );
 
-  const {departures, isLoading, isError, refetch} =
-    useDepartures(departuresProps);
+  const {
+    departures,
+    departuresIsLoading,
+    departuresIsError,
+    refetchDepartures,
+  } = useDepartures(departuresProps);
 
   return (
     <BottomSheetSectionList
       nestedScrollEnabled
       ListHeaderComponent={
         <>
-          {isError && (
+          {departuresIsError && (
             <StopPlacesError
               showTimeNavigation={showTimeNavigation}
-              forceRefresh={refetch}
+              forceRefresh={refetchDepartures}
             />
           )}
           <MapStopPlacesListHeader
@@ -100,10 +104,10 @@ export const StopPlacesSheetView = (props: Props) => {
       renderItem={({item, index}) => (
         <QuaySection
           quay={item.quay}
-          isLoading={isLoading}
+          isLoading={departuresIsLoading}
           departuresPerQuay={NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW}
           data={departures}
-          didLoadingDataFail={isError}
+          didLoadingDataFail={departuresIsError}
           navigateToDetails={navigateToDetails}
           navigateToQuay={(quay) => navigateToQuay(item.stopPlace, quay)}
           testID={'quaySection' + index}

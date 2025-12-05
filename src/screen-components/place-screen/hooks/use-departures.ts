@@ -1,21 +1,17 @@
 import {DepartureRealtimeQuery} from '@atb/api/bff/departures';
-import {
-  DEPARTURES_REALTIME_QUERY_KEY,
-  useDeparturesRealtimeQuery,
-} from './use-departures-realtime-query';
+import {useDeparturesRealtimeQuery} from './use-departures-realtime-query';
 import {
   getDeparturesAugmentedWithRealtimeData,
   isValidDepartureTime,
 } from '@atb/departure-list/utils';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {flatMap} from '@atb/utils/array';
-import {useCallback, useMemo, useState} from 'react';
+import {useMemo, useState} from 'react';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {useFavoritesContext} from '@atb/modules/favorites';
 import {DeparturesQueryProps, useDeparturesQuery} from './use-departures-query';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {useInterval} from '@atb/utils/use-interval';
-import {useQueryClient} from '@tanstack/react-query';
 
 export type DeparturesProps = {
   quayIds: string[];
@@ -34,8 +30,6 @@ export const useDepartures = ({
 }: DeparturesProps) => {
   // This is the departures array to be returned, in which the raw data is augmented with realtime data and filtered on time
   const [departures, setDepartures] = useState<EstimatedCall[]>([]);
-
-  const queryClient = useQueryClient();
 
   const {favoriteDepartures, potentiallyMigrateFavoriteDepartures} =
     useFavoritesContext();
@@ -109,25 +103,13 @@ export const useDepartures = ({
     true,
   );
 
-  // isLoading and isError for the realtime query are ignored here since departures is valid without it as well
-  const isLoading = departuresIsLoading;
-  const isError = departuresIsError;
-
-  const refetch = useCallback(() => {
-    refetchDeparturesData();
-    // remove rather than invalidate, in order to not trigger immediate refetch of realtime data
-    queryClient.removeQueries({
-      queryKey: [DEPARTURES_REALTIME_QUERY_KEY],
-    });
-  }, [refetchDeparturesData, queryClient]);
-
   return useMemo(
     () => ({
       departures,
-      isLoading,
-      isError,
-      refetch,
+      departuresIsLoading,
+      departuresIsError,
+      refetchDepartures: refetchDeparturesData,
     }),
-    [departures, isError, isLoading, refetch],
+    [departures, departuresIsLoading, departuresIsError, refetchDeparturesData],
   );
 };
