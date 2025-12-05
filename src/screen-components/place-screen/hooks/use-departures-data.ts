@@ -1,6 +1,6 @@
 import {
   DepartureRealtimeQuery,
-  getRealtimeDepartures,
+  getDeparturesRealtime,
 } from '@atb/api/bff/departures';
 import {DeparturesVariables, getDepartures} from '@atb/api/bff/departures';
 import {EstimatedCall} from '@atb/api/types/departures';
@@ -175,7 +175,7 @@ const reducer: ReducerWithSideEffects<
       return SideEffect<DepartureDataState, DepartureDataActions>(
         async (_, dispatch) => {
           try {
-            const realtimeData = await getRealtimeDepartures(queryInput);
+            const realtimeData = await getDeparturesRealtime(queryInput);
             action.lastRealtimeRefreshTime.current = new Date();
             dispatch({
               type: 'UPDATE_REALTIME',

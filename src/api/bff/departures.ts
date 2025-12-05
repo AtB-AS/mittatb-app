@@ -72,7 +72,7 @@ export type DepartureRealtimeQuery = {
   lineIds?: string[];
   timeRange?: number;
 };
-export async function getRealtimeDepartures(
+export async function getDeparturesRealtime(
   query: DepartureRealtimeQuery,
   opts?: AxiosRequestConfig,
 ): Promise<DeparturesRealtimeData> {
