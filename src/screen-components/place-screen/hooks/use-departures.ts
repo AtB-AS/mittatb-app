@@ -58,7 +58,7 @@ export const useDepartures = ({
   const departureRealtimeQuery: DepartureRealtimeQuery | undefined =
     departuresData
       ? {
-          quayIds,
+          quayIds: departuresData.query.ids,
           startTime: departuresData.query.startTime,
           limit: departuresData.query.numberOfDepartures,
           limitPerLine: departuresData.query.limitPerLine,
