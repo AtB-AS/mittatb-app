@@ -33,7 +33,7 @@ const ProfileTexts = {
           label: _('Billetthistorikk', 'Ticket history', 'Billetthistorikk'),
         },
         bonus: {
-          label: _('Bonus', 'Bonus', 'Bonus'),
+          label: _('Poeng', 'Points', 'Poeng'),
         },
         smartParkAndRide: {
           label: _('Innfartsparkering', 'Park and ride', 'Innfartsparkering'),

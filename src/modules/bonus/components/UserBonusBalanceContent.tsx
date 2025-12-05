@@ -42,7 +42,7 @@ export function UserBonusBalanceContent(): React.JSX.Element {
         </View>
 
         <ThemeText typography="body__s" color="secondary">
-          {t(BonusProgramTexts.bonusProfile.yourBonusPoints)}
+          {t(BonusProgramTexts.bonusProfile.yourPoints)}
         </ThemeText>
       </View>
       <ThemedBonusBagHug height={fontScale * 61} width={fontScale * 61} />
