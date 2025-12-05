@@ -1,17 +1,18 @@
 import {DeparturesVariables, getDepartures} from '@atb/api/bff/departures';
 import {useQuery} from '@tanstack/react-query';
-import {ONE_HOUR_MS, ONE_SECOND_MS} from '@atb/utils/durations';
+import {ONE_HOUR_MS, ONE_MINUTE_MS} from '@atb/utils/durations';
 
-type UseGetDeparturesQueryProps = {
+type DeparturesQueryProps = {
   query: DeparturesVariables;
 };
 
-export const useDeparturesQuery = ({query}: UseGetDeparturesQueryProps) => {
+export const useDeparturesQuery = ({query}: DeparturesQueryProps) => {
   return useQuery({
-    queryKey: ['departureData', query],
+    queryKey: ['DEPARTURES', query],
     queryFn: () => getDepartures(query),
-    staleTime: ONE_HOUR_MS,
+    staleTime: 10 * ONE_MINUTE_MS,
     gcTime: ONE_HOUR_MS,
-    refetchInterval: 30 * ONE_SECOND_MS,
+    refetchOnMount: true,
+    refetchOnReconnect: true,
   });
 };
