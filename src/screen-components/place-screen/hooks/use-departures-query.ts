@@ -4,24 +4,40 @@ import {ONE_HOUR_MS, ONE_MINUTE_MS} from '@atb/utils/durations';
 import qs from 'query-string';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {getLimitOfDeparturesPerLineByMode, getTimeRangeByMode} from '../utils';
+import {UserFavoriteDepartures} from '@atb/modules/favorites';
 
 export type DeparturesQueryProps = {
-  query: Omit<DeparturesVariables, 'startTime'> & {startTime?: string};
+  query: Omit<DeparturesVariables, 'startTime'> & {
+    startTime?: string;
+  };
   mode: StopPlacesMode;
+  favorites?: UserFavoriteDepartures;
 };
 
-export const useDeparturesQuery = ({query, mode}: DeparturesQueryProps) => {
+export const useDeparturesQuery = ({
+  query,
+  mode,
+  favorites,
+}: DeparturesQueryProps) => {
   return useQuery({
-    queryKey: ['DEPARTURES', qs.stringify(query), mode],
+    queryKey: [
+      'DEPARTURES',
+      qs.stringify(query),
+      mode,
+      qs.stringify(favorites ?? {}),
+    ],
     queryFn: () => {
       const startTime = query.startTime ?? new Date().toISOString();
-      return getDepartures({
-        ...query,
-        startTime,
-        timeRange: query.timeRange ?? getTimeRangeByMode(mode, startTime),
-        limitPerLine:
-          query.limitPerLine ?? getLimitOfDeparturesPerLineByMode(mode),
-      });
+      return getDepartures(
+        {
+          ...query,
+          startTime,
+          timeRange: query.timeRange ?? getTimeRangeByMode(mode, startTime),
+          limitPerLine:
+            query.limitPerLine ?? getLimitOfDeparturesPerLineByMode(mode),
+        },
+        favorites,
+      );
     },
     staleTime: 10 * ONE_MINUTE_MS,
     gcTime: ONE_HOUR_MS,

@@ -35,6 +35,11 @@ export const useDepartures = ({
   const {favoriteDepartures, potentiallyMigrateFavoriteDepartures} =
     useFavoritesContext();
 
+  const activeFavoriteDepartures = showOnlyFavorites
+    ? favoriteDepartures
+    : undefined;
+  const lineIds = activeFavoriteDepartures?.map((f) => f.lineId);
+
   const departuresQuery: DeparturesQueryProps['query'] = {
     ids: quayIds,
     numberOfDepartures: limitPerQuay,
@@ -49,12 +54,8 @@ export const useDepartures = ({
   } = useDeparturesQuery({
     query: departuresQuery,
     mode,
+    favorites: activeFavoriteDepartures,
   });
-
-  const activeFavoriteDepartures = showOnlyFavorites
-    ? favoriteDepartures
-    : undefined;
-  const lineIds = activeFavoriteDepartures?.map((f) => f.lineId);
 
   const departureRealtimeQuery: DepartureRealtimeQuery | undefined =
     departuresData
