@@ -89,21 +89,6 @@ export const TravelSearchFiltersBottomSheet = ({
 
   const allModesSelected = selectedModeOptions?.every((m) => m.selected);
 
-  /*const footer = useCallback(
-    () => (
-      <FullScreenFooter>
-        <Button
-          expanded={true}
-          text={t(TripSearchTexts.filters.bottomSheet.use)}
-          onPress={save}
-          rightIcon={{svg: Confirm}}
-          testID="confirmButton"
-        />
-      </FullScreenFooter>
-    ),
-    [save, t],
-  );*/
-
   return (
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
