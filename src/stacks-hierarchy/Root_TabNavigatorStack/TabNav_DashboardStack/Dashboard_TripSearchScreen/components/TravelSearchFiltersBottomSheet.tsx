@@ -50,11 +50,6 @@ export const TravelSearchFiltersBottomSheet = ({
       filtersSelection.travelSearchPreferences ?? [],
     );
 
-  const changesMade =
-    filtersSelection.transportModes !== selectedModeOptions ||
-    filtersSelection.travelSearchPreferences !==
-      selectedTravelSearchPreferences;
-
   useEffect(() => {
     setSelectedModes(filtersSelection.transportModes);
     setSelectedTravelSearchPreferences(
@@ -77,10 +72,7 @@ export const TravelSearchFiltersBottomSheet = ({
     setFilters({
       travelSearchPreferences: selectedTravelSearchPreferences,
     });
-
-    bottomSheetModalRef?.current?.dismiss();
   }, [
-    bottomSheetModalRef,
     onSave,
     selectedModeOptions,
     selectedTravelSearchPreferences,
@@ -97,7 +89,11 @@ export const TravelSearchFiltersBottomSheet = ({
       rightIcon={Confirm}
       closeCallback={() => {
         giveFocus(onCloseFocusRef);
-        if (changesMade) {
+        if (
+          filtersSelection.transportModes !== selectedModeOptions ||
+          filtersSelection.travelSearchPreferences !==
+            selectedTravelSearchPreferences
+        ) {
           save();
         }
       }}
