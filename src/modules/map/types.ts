@@ -13,7 +13,7 @@ import {
   BikeStationFragment,
   CarStationFragment,
 } from '@atb/api/types/generated/fragments/stations';
-import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
+import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/mobility-shared';
 import {z} from 'zod';
 
 // prefixes added to distinguish between geojson types and generated mobility api types, as they are not exact matches

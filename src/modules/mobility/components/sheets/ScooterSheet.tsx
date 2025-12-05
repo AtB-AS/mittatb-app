@@ -1,7 +1,7 @@
 import {
   VehicleExtendedFragment,
   VehicleId,
-} from '@atb/api/types/generated/fragments/vehicles';
+} from '@atb/api/types/generated/fragments/mobility-shared';
 import React from 'react';
 import {dictionary, useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';

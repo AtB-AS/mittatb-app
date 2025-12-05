@@ -1,6 +1,6 @@
 import React, {RefObject, useRef} from 'react';
 import {FeatureCollection, GeoJSON} from 'geojson';
-import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
+import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/mobility-shared';
 import MapboxGL, {ShapeSource} from '@rnmapbox/maps';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
