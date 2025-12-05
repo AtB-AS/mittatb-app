@@ -20,6 +20,11 @@ export const EarnedBonusPointsSectionItem = ({amount, ...props}: Props) => {
       isMarkdown={true}
       leftIcon={{svg: StarFill}}
       text={t(BonusProgramTexts.fareContract.youEarned(amount))}
+      accessibility={{
+        accessibilityLabel: t(
+          BonusProgramTexts.fareContract.youEarnedA11yLabel(amount),
+        ),
+      }}
       onPress={navigateToBonusScreen}
     />
   );
