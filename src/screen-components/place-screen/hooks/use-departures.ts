@@ -6,12 +6,13 @@ import {
 } from '@atb/departure-list/utils';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {flatMap} from '@atb/utils/array';
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {useFavoritesContext} from '@atb/modules/favorites';
 import {DeparturesQueryProps, useDeparturesQuery} from './use-departures-query';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {useInterval} from '@atb/utils/use-interval';
+import {animateNextChange} from '@atb/utils/animation';
 
 export type DeparturesProps = {
   quayIds: string[];
@@ -102,6 +103,10 @@ export const useDepartures = ({
     false,
     true,
   );
+
+  useEffect(() => {
+    animateNextChange();
+  }, [departures]);
 
   return useMemo(
     () => ({
