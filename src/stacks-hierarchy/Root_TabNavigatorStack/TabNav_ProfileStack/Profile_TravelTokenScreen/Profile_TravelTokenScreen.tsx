@@ -10,8 +10,11 @@ import {Section, GenericSectionItem} from '@atb/components/sections';
 import {TokenToggleInfo} from '@atb/screen-components/select-travel-token-screen';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
+import {ProfileScreenProps} from '../navigation-types';
 
-export const Profile_TravelTokenScreen = () => {
+type Props = ProfileScreenProps<'Profile_TravelTokenScreen'>;
+
+export const Profile_TravelTokenScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {disable_travelcard} = useRemoteConfigContext();
@@ -20,6 +23,9 @@ export const Profile_TravelTokenScreen = () => {
   const title = disable_travelcard
     ? t(TravelTokenTexts.travelToken.header.titleWithoutTravelcard)
     : t(TravelTokenTexts.travelToken.header.title);
+
+  const onPressChangeButton = () =>
+    navigation.navigate('Root_SelectTravelTokenScreen');
 
   return (
     <FullScreenView
@@ -32,7 +38,11 @@ export const Profile_TravelTokenScreen = () => {
       )}
     >
       <View style={styles.content}>
-        <TravelTokenBox showIfThisDevice={true} alwaysShowErrors={true} />
+        <TravelTokenBox
+          showIfThisDevice={true}
+          alwaysShowErrors={true}
+          onPressChangeButton={onPressChangeButton}
+        />
         <Section>
           {data?.toggleLimit !== undefined && (
             <GenericSectionItem>

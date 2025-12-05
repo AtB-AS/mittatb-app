@@ -4,7 +4,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {getThemeColor} from '../../components/PhotoCapture/ScreenContainer';
-import {useEffect, useMemo, useRef, useState} from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
 import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/bff/mobility';
@@ -155,12 +155,17 @@ export const Root_ParkingViolationsQrScreen = ({
     setCapturedQr(undefined);
   };
 
+  const onGoBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
   return (
     <>
       <CameraScreenContainer
         title={t(ParkingViolationTexts.qr.title)}
         secondaryText={t(ParkingViolationTexts.qr.instructions)}
         isLoading={isLoading}
+        onGoBack={onGoBack}
       >
         {isError && (
           <MessageInfoBox

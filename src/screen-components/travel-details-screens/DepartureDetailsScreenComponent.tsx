@@ -82,6 +82,7 @@ import {
   InAppReviewContext,
   useInAppReviewFlow,
 } from '@atb/utils/use-in-app-review';
+// eslint-disable-next-line rulesdir/navigation-only-in-screens
 import {useFocusEffect} from '@react-navigation/native';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
@@ -263,6 +264,7 @@ export const DepartureDetailsScreenComponent = ({
     });
   };
 
+  // eslint-disable-next-line rulesdir/navigation-only-in-screens
   useFocusEffect(
     useCallback(() => {
       if (shouldShowRequestReview.current) {

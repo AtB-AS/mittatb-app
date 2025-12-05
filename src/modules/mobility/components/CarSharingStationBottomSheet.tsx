@@ -40,6 +40,7 @@ type Props = {
   onClose: () => void;
   onStationReceived?: (station: CarStationFragment) => void;
   locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 
 export const CarSharingStationBottomSheet = ({
@@ -48,6 +49,7 @@ export const CarSharingStationBottomSheet = ({
   onClose,
   onStationReceived,
   locationArrowOnPress,
+  navigateToScanQrCode,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -92,6 +94,7 @@ export const CarSharingStationBottomSheet = ({
       rightIcon={Close}
       logoUrl={brandLogoUrl}
       locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
       <>
         {isLoading && (

@@ -1,5 +1,5 @@
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {useQuery} from '@tanstack/react-query';
 import {MOBILE_TOKEN_QUERY_KEY} from '@atb/modules/mobile-token';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
@@ -8,7 +8,7 @@ export const GET_TOKEN_TOGGLE_DETAILS_QUERY_KEY = 'getTokenToggleDetails';
 
 const useTokenToggleDetailsQuery = () => {
   const {getTokenToggleDetails, mobileTokenStatus} = useMobileTokenContext();
-  const screenHasFocus = useIsFocused();
+  const screenHasFocus = useIsFocusedAndActive();
   const shouldFetchTokenDetails =
     screenHasFocus && mobileTokenStatus !== 'loading';
   return useQuery({

@@ -1,13 +1,15 @@
-import {MaterialTopTabBarProps} from '@react-navigation/material-top-tabs';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import _ from 'lodash';
 import React from 'react';
 
-export function PageIndicator(props: MaterialTopTabBarProps) {
-  const index = props.state.index;
+type PageIndicatorProps = {
+  index: number;
+  count: number;
+};
+
+export function PageIndicator({index, count}: PageIndicatorProps) {
   const styles = useThemeStyles();
-  const count = props.state.routes.length;
   return (
     <View style={styles.pageIndicator}>
       {_.times(count, (i) => (

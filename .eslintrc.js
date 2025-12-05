@@ -153,6 +153,36 @@ module.exports = {
         TouchableOpacity: 'react-native',
       },
     ],
+
+    // Error on navigation library usage outside of Screen files
+    'rulesdir/navigation-only-in-screens': [
+      'error',
+      {
+        allowedPaths: [
+          '**/navigation-types.ts',
+          'src/stacks-hierarchy/RootStack.tsx',
+          'src/stacks-hierarchy/navigation-utils.ts',
+          'src/components/screen-header/HeaderButton.tsx',
+          'src/utils/use-focus-on-load.ts',
+          'src/utils/use-is-focused-and-active.ts',
+          'src/modules/onboarding/use-onboarding-navigation.ts',
+          'src/modules/onboarding/onboarding-carousel/use-onboarding-carousel-navigation.ts',
+        ],
+        allowedImports: [
+          'NavigationProp',
+          'NavigatorScreenParams',
+          'StackScreenProps',
+          'RouteProp',
+          'DefaultTheme',
+          'NavigationContainer',
+          'PartialRoute',
+          'Route',
+          'NavigationState',
+          'PartialState',
+          'StackActions',
+        ],
+      },
+    ],
   },
   overrides: [
     // Allow 'export default' from these paths

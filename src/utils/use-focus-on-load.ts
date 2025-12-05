@@ -4,7 +4,7 @@ import {
   findNodeHandle,
   InteractionManager,
 } from 'react-native';
-import {useNavigationSafe} from '@atb/utils/use-navigation-safe';
+import {useNavigation} from '@react-navigation/native';
 
 /**
  * Return a ref which can be set on a component to make it be focused by screen
@@ -37,6 +37,21 @@ export function useFocusOnLoad(setFocusOnLoad: boolean = true): Ref<any> {
 
   return focusCallbackRef;
 }
+
+const useNavigationSafe = () => {
+  try {
+    return useNavigation();
+  } catch {
+    /*
+    Navigation is not available as the current context is not inside a screen in
+    a navigator
+     */
+    console.error(
+      'Navigation is not available as the current context is not inside a screen in a navigator',
+    );
+    return undefined;
+  }
+};
 
 export const giveFocus = (
   focusRef?: React.RefObject<any> | null | undefined,

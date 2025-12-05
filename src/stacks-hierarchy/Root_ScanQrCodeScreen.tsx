@@ -34,6 +34,10 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
     isError: getAssetFromQrCodeIsError,
   } = useGetAssetFromQrCodeMutation();
 
+  const onGoBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
   const clearStateAndAlertResultError = useCallback(() => {
     dispatchMapState({
       type: MapStateActionType.None,
@@ -45,11 +49,11 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
         {
           text: tGlobal(MapTexts.qr.notFound.ok),
           style: 'default',
-          onPress: navigation.goBack,
+          onPress: onGoBack,
         },
       ],
     );
-  }, [dispatchMapState, navigation.goBack]);
+  }, [dispatchMapState, onGoBack]);
 
   const assetFromQrCodeReceivedHandler = useCallback(
     (assetFromQrCode: AssetFromQrCodeResponse) => {
@@ -100,9 +104,9 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
         return;
       }
 
-      navigation.goBack();
+      onGoBack();
     },
-    [analytics, clearStateAndAlertResultError, dispatchMapState, navigation],
+    [analytics, clearStateAndAlertResultError, dispatchMapState, onGoBack],
   );
 
   const onQrCodeScanned = useCallback(
@@ -134,6 +138,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
       title={t(ParkingViolationTexts.qr.title)}
       secondaryText={t(ParkingViolationTexts.qr.instructions)}
       isLoading={getAssetFromQrCodeIsLoading}
+      onGoBack={onGoBack}
     >
       {isFocused &&
         !getAssetFromQrCodeIsLoading &&

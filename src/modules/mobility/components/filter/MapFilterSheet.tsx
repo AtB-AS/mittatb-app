@@ -23,11 +23,13 @@ type MapFilterSheetProps = {
   onClose: () => void;
   onFilterChanged: (filter: MapFilterType) => void;
   locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 export const MapFilterSheet = ({
   onClose,
   onFilterChanged,
   locationArrowOnPress,
+  navigateToScanQrCode,
 }: MapFilterSheetProps) => {
   const {t} = useTranslation();
   const style = useStyle();
@@ -59,6 +61,7 @@ export const MapFilterSheet = ({
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
       locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
       <ScrollView style={style.container}>
         <MobilityFilters

@@ -19,12 +19,14 @@ type Props = {
   photoNavigation: () => void;
   onForceClose: () => void;
   locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 
 export const FinishingScooterSheet = ({
   onForceClose,
   photoNavigation,
   locationArrowOnPress,
+  navigateToScanQrCode,
 }: Props) => {
   const {
     data: activeBooking,
@@ -65,6 +67,7 @@ export const FinishingScooterSheet = ({
       enableDynamicSizing={true}
       enablePanDownToClose={false}
       locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
       {isLoading && (
         <View style={styles.activityIndicator}>

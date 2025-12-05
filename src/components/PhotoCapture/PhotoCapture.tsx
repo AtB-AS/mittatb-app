@@ -9,6 +9,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 type PhotoCaptureProps = {
   onConfirmImage: (file: PhotoFile) => void;
+  onGoBack: () => void;
   coordinates?: Coordinates;
   title: string;
   secondaryText: string;
@@ -17,6 +18,7 @@ type PhotoCaptureProps = {
 
 export const PhotoCapture = ({
   onConfirmImage,
+  onGoBack,
   coordinates,
   title,
   secondaryText,
@@ -38,6 +40,7 @@ export const PhotoCapture = ({
       title={title}
       secondaryText={secondaryText}
       isLoading={isLoading}
+      onGoBack={onGoBack}
     >
       {isFocused && (
         <>

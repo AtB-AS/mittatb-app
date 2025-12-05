@@ -50,6 +50,9 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
 
   const sentFareContractRef = useRef<View>(null);
 
+  const onPressChangeButton = () =>
+    navigation.navigate('Root_SelectTravelTokenScreen');
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -72,7 +75,11 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
         }
         testID="availableFCScrollView"
       >
-        <TravelTokenBox showIfThisDevice={false} alwaysShowErrors={false} />
+        <TravelTokenBox
+          showIfThisDevice={false}
+          alwaysShowErrors={false}
+          onPressChangeButton={onPressChangeButton}
+        />
         <FareContractAndReservationsList
           reservations={reservations}
           fareContracts={availableFareContracts}

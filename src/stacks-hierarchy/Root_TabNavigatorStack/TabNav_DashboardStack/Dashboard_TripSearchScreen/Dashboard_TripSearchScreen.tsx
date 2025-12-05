@@ -30,7 +30,7 @@ import {
 } from '@atb/utils/location';
 import Bugsnag from '@bugsnag/react-native';
 import {TFunc} from '@leile/lobo-t';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, Platform, RefreshControl, View} from 'react-native';
 import {DashboardScreenProps} from '../navigation-types';
@@ -551,6 +551,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 function useLocations(
   currentLocation: GeoLocation | undefined,
 ): SearchForLocations {
+  const route = useRoute<RootProps['route']>();
   const {favorites} = useFavoritesContext();
 
   const memoedCurrentLocation = useMemo<GeoLocation | undefined>(
@@ -562,10 +563,8 @@ function useLocations(
     ],
   );
 
-  let searchedFromLocation =
-    useLocationSearchValue<RootProps['route']>('fromLocation');
-  const searchedToLocation =
-    useLocationSearchValue<RootProps['route']>('toLocation');
+  let searchedFromLocation = useLocationSearchValue(route, 'fromLocation');
+  const searchedToLocation = useLocationSearchValue(route, 'toLocation');
 
   if (searchedToLocation && !searchedFromLocation) {
     searchedFromLocation = currentLocation;

@@ -14,7 +14,7 @@ export const Departures_NearbyStopPlacesScreen = ({
   navigation,
   route,
 }: Props) => {
-  const fromLocation = useOnlySingleLocation<typeof route>('location');
+  const fromLocation = useOnlySingleLocation(route, 'location');
   const {t} = useTranslation();
   const {theme} = useThemeContext();
 

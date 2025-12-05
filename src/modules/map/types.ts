@@ -59,12 +59,25 @@ export type NavigateToDetailsCallback = (
   isTripCancelled?: boolean,
 ) => void;
 
+export type ScooterHelpParams = {operatorId: string} & (
+  | {vehicleId: string}
+  | {bookingId: string}
+);
+
 export type MapProps = {
+  isFocused: boolean;
+  tabBarHeight: number;
   initialLocation?: Location;
   includeSnackbar?: boolean;
   navigateToQuay: NavigateToQuayCallback;
   navigateToDetails: NavigateToDetailsCallback;
   navigateToTripSearch: NavigateToTripSearchCallback;
+  navigateToScooterSupport: (params: ScooterHelpParams) => void;
+  navigateToScooterOnboarding: () => void;
+  navigateToReportParkingViolation: () => void;
+  navigateToParkingPhoto: (bookingId: string) => void;
+  navigateToScanQrCode: () => void;
+  navigateToLogin: () => void;
 };
 
 export type Cluster = {

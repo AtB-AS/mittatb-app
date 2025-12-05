@@ -9,7 +9,7 @@ import SharedTexts from '@atb/translations/shared';
 type Props = ProfileScreenProps<'Profile_NearbyStopPlacesScreen'>;
 
 export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
-  const fromLocation = useOnlySingleLocation<typeof route>('location');
+  const fromLocation = useOnlySingleLocation(route, 'location');
 
   const {t} = useTranslation();
 

@@ -1,13 +1,13 @@
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {RouteProp} from '@react-navigation/native';
 import {Location} from '@atb/modules/favorites';
 import {SelectableLocationType} from './types';
 import {useEffect, useRef, useState} from 'react';
 
 export function useLocationSearchValue<T extends RouteProp<any, any>>(
+  route: T extends RouteProp<any, any> ? T : never,
   callerRouteParam: keyof T['params'],
   defaultLocation?: Location,
 ): SelectableLocationType | undefined {
-  const route = useRoute<T>();
   const firstTimeRef = useRef(true);
   const [location, setLocation] = useState<SelectableLocationType | undefined>(
     defaultLocation,
@@ -26,10 +26,15 @@ export function useLocationSearchValue<T extends RouteProp<any, any>>(
 }
 
 export function useOnlySingleLocation<T extends RouteProp<any, any>>(
+  route: T extends RouteProp<any, any> ? T : never,
   callerRouteParam: keyof T['params'],
   defaultLocation?: Location,
 ): Location | undefined {
-  const selectable = useLocationSearchValue(callerRouteParam, defaultLocation);
+  const selectable = useLocationSearchValue(
+    route,
+    callerRouteParam,
+    defaultLocation,
+  );
 
   if (!selectable) return undefined;
   switch (selectable.resultType) {

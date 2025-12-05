@@ -4703,7 +4703,7 @@ SPEC CHECKSUMS:
   SwiftProtobuf: 4dbaffec76a39a8dc5da23b40af1a5dc01a4c02d
   TimeApiiOSLib: 8289d67019d958c29676dfb9e38ffdcefbcdb9bd
   TokenCore: cdce158c4f5331f81f35e34f3b708b6582c0d569
-  TokenStateReactNativeLib: 6a6f62ead3008978f2fc8048f3f9973aa6eb5926
+  TokenStateReactNativeLib: 00fb9cd8cc92a36f350c9d216686277837d6474a
   Turf: c9eb11a65d96af58cac523460fd40fec5061b081
   VisionCamera: 30b358b807324c692064f78385e9a732ce1bebfe
   VisualCodeModeliOSLib: c40687c1f0bd60e672088a023d3ec0984608c118

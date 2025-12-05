@@ -1,7 +1,10 @@
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import React from 'react';
-import {RootStackParamList, RootStackScreenProps} from './navigation-types';
-import {useCompleteUserCreationOnboardingAndEnterApp} from '@atb/utils/use-complete-user-creation-onboarding-and-enter-app';
+import {
+  RootNavigationProps,
+  RootStackParamList,
+  RootStackScreenProps,
+} from './navigation-types';
 import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {Support} from '@atb/assets/svg/mono-icons/actions';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
@@ -11,11 +14,16 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {OnboardingFullScreenView} from '@atb/modules/onboarding';
+import {
+  OnboardingFullScreenView,
+  useOnboardingContext,
+  useOnboardingFlow,
+} from '@atb/modules/onboarding';
 import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import {Theme} from '@atb/theme/colors';
+import {PartialRoute, Route, useNavigation} from '@react-navigation/native';
 
 type Props = RootStackScreenProps<'Root_PurchaseAsAnonymousConsequencesScreen'>;
 
@@ -151,6 +159,50 @@ export const Consequence = ({
       </ThemeText>
     </View>
   );
+};
+
+/**
+ * Hook to complete the onboarding process and correctly navigate to the next screen.
+ *
+ * @returns {Function} A function that, when called, checks if the onboarding is not completed,
+ * completes it if not, and then navigates to the next screen using enterApp.
+ */
+const useCompleteUserCreationOnboardingAndEnterApp = () => {
+  const {completeOnboardingSection} = useOnboardingContext();
+
+  const enterApp = useEnterApp();
+
+  return () => {
+    completeOnboardingSection('userCreation');
+    enterApp();
+  };
+};
+
+/**
+ * This hook provides a function to navigate directly to the next screen,
+ * with Root_TabNavigatorStack as the only screen you can go back to.
+ * It omits unwanted animations or transitions in between.
+ *
+ * @returns {Function} A function that when called, navigates to either the
+ * 'Root_TabNavigatorStack', or the next onboarding screen based on the app's
+ * current state.
+ */
+const useEnterApp = () => {
+  const {getNextOnboardingSection} = useOnboardingFlow();
+  const navigation = useNavigation<RootNavigationProps>();
+
+  return () => {
+    const nextOnboardingSection = getNextOnboardingSection(undefined, true);
+
+    const routes: PartialRoute<
+      Route<keyof RootStackParamList, object | undefined>
+    >[] = [{name: 'Root_TabNavigatorStack'}];
+
+    const {name, params} = nextOnboardingSection?.initialScreen || {};
+    name && routes.push({name, params});
+
+    navigation.reset({routes});
+  };
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({

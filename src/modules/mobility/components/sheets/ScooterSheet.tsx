@@ -24,7 +24,6 @@ import {VehicleCard} from '../VehicleCard';
 import {ShmoActionButton} from '../ShmoActionButton';
 import {useOperators} from '../../use-operators';
 import {useShmoRequirements} from '../../use-shmo-requirements';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {Section} from '@atb/components/sections';
 import {
   PaymentSelectionSectionItem,
@@ -33,6 +32,11 @@ import {
 import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 
+type ScooterHelpParams = {operatorId: string} & (
+  | {vehicleId: string}
+  | {bookingId: string}
+);
+
 type Props = {
   selectPaymentMethod: () => void;
   vehicleId: VehicleId;
@@ -40,8 +44,10 @@ type Props = {
   onReportParkingViolation: () => void;
   onVehicleReceived?: (vehicle: VehicleExtendedFragment) => void;
   startOnboardingCallback: () => void;
-  navigation: RootNavigationProps;
   locationArrowOnPress: () => void;
+  navigateToSupport: (params: ScooterHelpParams) => void;
+  navigateToLogin: () => void;
+  navigateToScanQrCode: () => void;
 };
 
 export const ScooterSheet = ({
@@ -51,8 +57,10 @@ export const ScooterSheet = ({
   onReportParkingViolation,
   onVehicleReceived,
   startOnboardingCallback,
-  navigation,
   locationArrowOnPress,
+  navigateToSupport,
+  navigateToLogin,
+  navigateToScanQrCode,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -96,6 +104,7 @@ export const ScooterSheet = ({
       rightIcon={Close}
       logoUrl={brandLogoUrl}
       locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
       {(isLoading || shmoReqIsLoading) && (
         <View
@@ -142,8 +151,8 @@ export const ScooterSheet = ({
             operatorIsIntegrationEnabled ? (
               <View style={styles.actionWrapper}>
                 <ShmoActionButton
-                  navigation={navigation}
                   onStartOnboarding={startOnboardingCallback}
+                  loginCallback={navigateToLogin}
                   vehicleId={id}
                   operatorId={operatorId}
                   paymentMethod={selectedPaymentMethod}
@@ -151,11 +160,7 @@ export const ScooterSheet = ({
                 <Button
                   expanded={true}
                   onPress={() => {
-                    //navigateSupportCallback();
-                    navigation.navigate('Root_ScooterHelpScreen', {
-                      vehicleId: id,
-                      operatorId,
-                    });
+                    navigateToSupport({vehicleId: id, operatorId});
                   }}
                   text={t(MobilityTexts.helpText)}
                   mode="secondary"
