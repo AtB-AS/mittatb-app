@@ -1,10 +1,11 @@
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import {ScrollView} from 'react-native';
-import React from 'react';
+import {
+  dictionary,
+  PurchaseOverviewTexts,
+  useTranslation,
+} from '@atb/translations';
+import {View} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet} from '@atb/theme';
-import {FullScreenFooter} from '@atb/components/screen-footer';
-import {Button} from '@atb/components/button';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {MultipleTravellersSelection} from './Travellers/MultipleTravellersSelection';
 import {SingleTravellerSelection} from './Travellers/SingleTravellerSelection';
@@ -14,18 +15,27 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {MessageSectionItem, Section} from '@atb/components/sections';
 
 type TravellerSelectionSheetProps = {
   selection: PurchaseSelectionType;
   onSave: (selection: PurchaseSelectionType) => void;
+  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  onCloseFocusRef: React.RefObject<View | null>;
 };
 export const TravellerSelectionSheet = ({
   selection,
   onSave,
+  bottomSheetModalRef,
+  onCloseFocusRef,
 }: TravellerSelectionSheetProps) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const selectionBuilder = usePurchaseSelectionBuilder();
+  const [showWarning, setShowWarning] = useState(false);
 
   const selectionMode =
     selection.fareProductTypeConfig.configuration.travellerSelectionMode;
@@ -37,12 +47,46 @@ export const TravellerSelectionSheet = ({
     userCountState.state.every((u) => !u.count) &&
     baggageCountState.state.every((sp) => !sp.count);
 
+  useEffect(() => {
+    if (!nothingSelected) {
+      setShowWarning(false);
+    }
+  }, [nothingSelected]);
+
+  const saveSelection = () => {
+    const newSelection = selectionBuilder
+      .fromSelection(selection)
+      .userProfiles(userCountState.state)
+      .baggageProducts(baggageCountState.state)
+      .build();
+    onSave(newSelection);
+  };
+
   return (
-    <BottomSheetContainer
-      title={t(PurchaseOverviewTexts.travellerSelectionSheet.title)}
-      maxHeightValue={0.9}
+    <BottomSheetModal
+      bottomSheetModalRef={bottomSheetModalRef}
+      heading={t(PurchaseOverviewTexts.travellerSelectionSheet.title)}
+      rightIconText={t(dictionary.confirm)}
+      closeOnBackdropPress={!nothingSelected}
+      enablePanDownToClose={!nothingSelected}
+      overrideCloseButton={
+        nothingSelected ? () => setShowWarning(true) : undefined
+      }
+      rightIcon={Confirm}
+      closeCallback={() => {
+        giveFocus(onCloseFocusRef);
+        saveSelection();
+      }}
     >
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
+        {!!nothingSelected && showWarning && (
+          <Section style={styles.messageContainer}>
+            <MessageSectionItem
+              message={t(PurchaseOverviewTexts.selectAtLeastOneTraveller)}
+              messageType="error"
+            />
+          </Section>
+        )}
         {selectionMode === 'multiple' ? (
           <MultipleTravellersSelection
             userCountState={userCountState}
@@ -51,25 +95,8 @@ export const TravellerSelectionSheet = ({
         ) : (
           <SingleTravellerSelection {...userCountState} />
         )}
-      </ScrollView>
-      <FullScreenFooter>
-        <Button
-          expanded={true}
-          text={t(PurchaseOverviewTexts.travellerSelectionSheet.confirm)}
-          disabled={nothingSelected}
-          onPress={() => {
-            const newSelection = selectionBuilder
-              .fromSelection(selection)
-              .userProfiles(userCountState.state)
-              .baggageProducts(baggageCountState.state)
-              .build();
-            onSave(newSelection);
-          }}
-          rightIcon={{svg: Confirm}}
-          testID="confirmButton"
-        />
-      </FullScreenFooter>
-    </BottomSheetContainer>
+      </View>
+    </BottomSheetModal>
   );
 };
 
@@ -77,10 +104,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     container: {
       marginHorizontal: theme.spacing.medium,
-      marginBottom: theme.spacing.medium,
     },
-    onBehalfOfContainer: {
-      marginTop: theme.spacing.medium,
+    messageContainer: {
+      marginBottom: theme.spacing.medium,
     },
   };
 });

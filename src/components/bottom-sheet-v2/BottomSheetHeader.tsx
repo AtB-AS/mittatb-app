@@ -18,6 +18,7 @@ type BottomSheetHeaderProps = {
   headerNode?: React.ReactNode;
   focusRef?: Ref<any>;
   testID?: string;
+  overrideCloseButton?: () => void;
 };
 
 export const BottomSheetHeader = ({
@@ -30,6 +31,7 @@ export const BottomSheetHeader = ({
   headerNode,
   focusRef,
   testID,
+  overrideCloseButton,
 }: BottomSheetHeaderProps) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
@@ -61,9 +63,11 @@ export const BottomSheetHeader = ({
             {(rightIconText || rightIcon) && (
               <PressableOpacity
                 style={styles.headerRight}
-                onPress={() => bottomSheetRef.current?.close()}
                 testID="closeBottomSheet"
                 accessibilityRole="button"
+                onPress={
+                  overrideCloseButton ?? (() => bottomSheetRef.current?.close())
+                }
               >
                 {rightIconText && (
                   <ThemeText typography="body__s__strong">
