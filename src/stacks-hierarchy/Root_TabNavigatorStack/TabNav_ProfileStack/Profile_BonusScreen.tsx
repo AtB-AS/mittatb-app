@@ -35,6 +35,8 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {MapPin} from '@atb/assets/svg/mono-icons/tab-bar';
+import {useNavigation} from '@react-navigation/native';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
 
 export const Profile_BonusScreen = () => {
   const {t, language} = useTranslation();
@@ -42,6 +44,7 @@ export const Profile_BonusScreen = () => {
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
   const {bonusProducts, mobilityOperators} = useFirestoreConfigurationContext();
+  const navigation = useNavigation<RootNavigationProps>();
 
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
@@ -88,7 +91,15 @@ export const Profile_BonusScreen = () => {
           rightIcon={{svg: MapPin}}
           text={t(BonusProgramTexts.bonusProfile.mapButton)}
           style={styles.button}
-          onPress={() => {}}
+          onPress={() => {
+            navigation.navigate('Root_TabNavigatorStack', {
+              screen: 'TabNav_MapStack',
+              params: {
+                screen: 'Map_RootScreen',
+                params: {},
+              },
+            });
+          }}
         />
 
         <ContentHeading
@@ -104,9 +115,9 @@ export const Profile_BonusScreen = () => {
         ) : (
           <View style={styles.bonusProductsContainer}>
             <Section>
-              {activeBonusProducts?.map((bonusProduct, index) => (
+              {activeBonusProducts?.map((bonusProduct) => (
                 <GenericSectionItem
-                  key={index}
+                  key={bonusProduct.id}
                   style={{gap: theme.spacing.medium}}
                 >
                   <View style={styles.horizontalContainer}>
@@ -197,8 +208,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 
 const iconSize = 61;
 
-export function HowPointsWork(): React.JSX.Element {
-  const styles = useStyles();
+const HowPointsWork = () => {
   const {t} = useTranslation();
   const {bonusProducts, mobilityOperators} = useFirestoreConfigurationContext();
 
@@ -221,21 +231,15 @@ export function HowPointsWork(): React.JSX.Element {
         text={t(BonusProgramTexts.bonusProfile.readMore.heading)}
       />
       <Section>
-        <GenericSectionItem>
-          <View style={styles.horizontalContainer}>
-            <View style={styles.bonusProgramDescription}>
-              <ThemeText typography="body__m__strong">
-                {t(BonusProgramTexts.bonusProfile.readMore.download.title)}
-              </ThemeText>
-              <ThemeText typography="body__s" color="secondary">
-                {t(
-                  BonusProgramTexts.bonusProfile.readMore.download.description,
-                )}
-              </ThemeText>
-            </View>
+        <BonusInfoSectionItem
+          title={t(BonusProgramTexts.bonusProfile.readMore.download.title)}
+          description={t(
+            BonusProgramTexts.bonusProfile.readMore.download.description,
+          )}
+          SymbolComponent={
             <ThemedTokenPhone height={iconSize} width={iconSize} />
-          </View>
-        </GenericSectionItem>
+          }
+        />
 
         {bonusProducts?.map((product) => {
           const appUrl = getPlatformAppUrl(product.operatorId);
@@ -251,39 +255,53 @@ export function HowPointsWork(): React.JSX.Element {
           }
         })}
 
-        <GenericSectionItem>
-          <View style={styles.horizontalContainer}>
-            <View style={styles.bonusProgramDescription}>
-              <ThemeText typography="body__m__strong">
-                {t(BonusProgramTexts.bonusProfile.readMore.earnPoints.title)}
-              </ThemeText>
-              <ThemeText typography="body__s" color="secondary">
-                {t(
-                  BonusProgramTexts.bonusProfile.readMore.earnPoints
-                    .description,
-                )}
-              </ThemeText>
-            </View>
+        <BonusInfoSectionItem
+          title={t(BonusProgramTexts.bonusProfile.readMore.earnPoints.title)}
+          description={t(
+            BonusProgramTexts.bonusProfile.readMore.earnPoints.description,
+          )}
+          SymbolComponent={
             <ThemedBonusTransaction height={iconSize} width={iconSize} />
-          </View>
-        </GenericSectionItem>
-        <GenericSectionItem>
-          <View style={styles.horizontalContainer}>
-            <View style={styles.bonusProgramDescription}>
-              <ThemeText typography="body__m__strong">
-                {t(BonusProgramTexts.bonusProfile.readMore.spendPoints.title)}
-              </ThemeText>
-              <ThemeText typography="body__s" color="secondary">
-                {t(
-                  BonusProgramTexts.bonusProfile.readMore.spendPoints
-                    .description,
-                )}
-              </ThemeText>
-            </View>
+          }
+        />
+        <BonusInfoSectionItem
+          title={t(BonusProgramTexts.bonusProfile.readMore.spendPoints.title)}
+          description={t(
+            BonusProgramTexts.bonusProfile.readMore.spendPoints.description,
+          )}
+          SymbolComponent={
             <ThemedBonusMap height={iconSize} width={iconSize} />
-          </View>
-        </GenericSectionItem>
+          }
+        />
       </Section>
     </>
   );
-}
+};
+
+type BonusInfoSectionItemProps = {
+  title: string;
+  description: string;
+  SymbolComponent: React.JSX.Element;
+};
+
+const BonusInfoSectionItem = ({
+  title,
+  description,
+  SymbolComponent,
+  ...sectionProps
+}: BonusInfoSectionItemProps) => {
+  const styles = useStyles();
+  return (
+    <GenericSectionItem {...sectionProps}>
+      <View style={styles.horizontalContainer}>
+        <View style={styles.bonusProgramDescription}>
+          <ThemeText typography="body__m__strong">{title}</ThemeText>
+          <ThemeText typography="body__s" color="secondary">
+            {description}
+          </ThemeText>
+        </View>
+        {SymbolComponent}
+      </View>
+    </GenericSectionItem>
+  );
+};
