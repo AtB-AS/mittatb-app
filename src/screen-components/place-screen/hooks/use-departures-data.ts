@@ -26,7 +26,7 @@ import useReducerWithSideEffects, {
   Update,
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
-import {updateDeparturesWithRealtimeV2} from '@atb/departure-list/utils';
+import {getDeparturesAugmentedWithRealtimeData} from '@atb/departure-list/utils';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {getLimitOfDeparturesPerLineByMode, getTimeRangeByMode} from '../utils';
 import {TimeoutRequest, useTimeoutRequest} from '@atb/api/client';
@@ -217,7 +217,10 @@ const reducer: ReducerWithSideEffects<
       animateNextChange();
       return Update<DepartureDataState>({
         ...state,
-        data: updateDeparturesWithRealtimeV2(state.data, action.realtimeData),
+        data: getDeparturesAugmentedWithRealtimeData(
+          state.data ?? undefined,
+          action.realtimeData,
+        ),
         tick: new Date(),
       });
     }
