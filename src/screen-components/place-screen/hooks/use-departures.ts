@@ -33,9 +33,11 @@ export type DeparturesProps = {
  * After that, data is fetched from the realtime endpoint, which is
  * more lightweight and only includes data for the updated expectedDepartureTime.
  *
- * This hook fetches and augments the data from the two.
+ * This hook fetches and conditionally augments the data from the two.
+ * The data is only augmented if the realtime query exactly matches that for departures,
+ * and if the realtime data was fetched more recently than the departures data.
  *
- * Also the departures are filtered every 10s, hiding old ones.
+ * Also the departures are filtered every 10s, hiding departures that already left at least 1 minute ago.
  *
  * When showOnlyFavorites=true, only data for favorites are requested.
  *
@@ -71,6 +73,7 @@ export const useDepartures = ({
     isLoading: departuresIsLoading,
     isError: departuresIsError,
     refetch: refetchDeparturesData,
+    dataUpdatedAt: departuresDataUpdatedAt,
   } = useDeparturesQuery({
     query: departuresQuery,
     mode,
@@ -99,7 +102,10 @@ export const useDepartures = ({
       )
     : undefined;
 
-  const {data: departuresRealtimeData} = useDeparturesRealtimeQuery({
+  const {
+    data: departuresRealtimeData,
+    dataUpdatedAt: departuresRealtimeDataUpdatedAt,
+  } = useDeparturesRealtimeQuery({
     query: departuresRealtimeQuery,
     belongsToDeparturesQueryKey: departuresQueryKey,
     triggerImmediately: false,
@@ -115,7 +121,8 @@ export const useDepartures = ({
 
     const shouldAugmentData =
       departuresRealtimeData?.belongsToDeparturesQueryKey ===
-      departuresQueryKey;
+        departuresQueryKey &&
+      departuresRealtimeDataUpdatedAt > departuresDataUpdatedAt;
 
     return shouldAugmentData
       ? getDeparturesAugmentedWithRealtimeData(
@@ -125,8 +132,10 @@ export const useDepartures = ({
       : estimatedCalls;
   }, [
     departuresData,
+    departuresDataUpdatedAt,
     departuresQueryKey,
     departuresRealtimeData,
+    departuresRealtimeDataUpdatedAt,
     potentiallyMigrateFavoriteDepartures,
   ]);
 
