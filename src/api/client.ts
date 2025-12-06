@@ -28,8 +28,6 @@ import {useEffect, useState} from 'react';
 
 export const client = createClient(API_BASE_URL);
 
-const DEFAULT_TIMEOUT = 15000;
-
 declare module 'axios' {
   export interface AxiosRequestConfig {
     // Use id token as bearer token in authorization header
@@ -112,37 +110,6 @@ function responseErrorHandler(error: AxiosError): Promise<RequestError> {
 
 const shouldSkipLogging = (error: AxiosError) =>
   error.config?.skipErrorLogging?.(error);
-
-export type TimeoutRequest = {
-  didTimeout: boolean;
-  signal: AbortSignal;
-  start(): void;
-  clear(): void;
-  abort(): void;
-};
-
-export const useTimeoutRequest = (): TimeoutRequest => {
-  const controller = new AbortController();
-  let didTimeout = false;
-  let timerId: NodeJS.Timeout | undefined;
-
-  const start = () => {
-    timerId = setTimeout(() => {
-      didTimeout = true;
-      controller.abort();
-    }, DEFAULT_TIMEOUT);
-  };
-
-  return {
-    didTimeout,
-    signal: controller.signal,
-    start,
-    clear: () => {
-      timerId && clearTimeout(timerId);
-    },
-    abort: () => controller.abort(),
-  };
-};
 
 const parseErrorResponse = (error: AxiosError): RequestError => {
   const errorType = getAxiosErrorType(error);

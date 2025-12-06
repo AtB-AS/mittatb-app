@@ -3,7 +3,6 @@ import {Button} from '@atb/components/button';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet, type Theme, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
-import {useIsFocused} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
@@ -64,8 +63,6 @@ export const PlaceScreenComponent = ({
 
   const {data: stopsDetailsData, isError: isStopsDetailsError} =
     useStopsDetailsDataQuery(place.quays === undefined ? [place.id] : []);
-
-  const isFocused = useIsFocused();
 
   let missingStopData = false;
 
@@ -152,7 +149,6 @@ export const PlaceScreenComponent = ({
         ) : (
           <StopPlacesView
             stopPlaces={[place]}
-            isFocused={isFocused}
             navigateToDetails={
               mode === 'Departure' ? navigateToDetails : undefined
             }
