@@ -9,10 +9,15 @@ import {flatMap} from '@atb/utils/array';
 import {useEffect, useMemo, useState} from 'react';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {useFavoritesContext} from '@atb/modules/favorites';
-import {DeparturesQueryProps, useDeparturesQuery} from './use-departures-query';
+import {
+  DeparturesQueryProps,
+  getDeparturesQueryKey,
+  useDeparturesQuery,
+} from './use-departures-query';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {useInterval} from '@atb/utils/use-interval';
 import {animateNextChange} from '@atb/utils/animation';
+import qs from 'query-string';
 
 export type DeparturesProps = {
   quayIds: string[];
@@ -22,6 +27,22 @@ export type DeparturesProps = {
   startTime?: string;
 };
 
+/**
+ * First a request is sent to the departures endpoint.
+ *
+ * After that, data is fetched from the realtime endpoint, which is
+ * more lightweight and only includes data for the updated expectedDepartureTime.
+ *
+ * This hook fetches and augments the data from the two.
+ *
+ * Also the departures are filtered every 10s, hiding old ones.
+ *
+ * When showOnlyFavorites=true, only data for favorites are requested.
+ *
+ * Note that all input data to the realtime query is based on departuresData.
+ * This keeps them in sync, with realtime always following departures, and knowing
+ * exactly which query is currently followed by the realtime query.
+ */
 export const useDepartures = ({
   quayIds,
   limitPerQuay,
@@ -38,7 +59,6 @@ export const useDepartures = ({
   const activeFavoriteDepartures = showOnlyFavorites
     ? favoriteDepartures
     : undefined;
-  const lineIds = activeFavoriteDepartures?.map((f) => f.lineId);
 
   const departuresQuery: DeparturesQueryProps['query'] = {
     ids: quayIds,
@@ -57,7 +77,7 @@ export const useDepartures = ({
     favorites: activeFavoriteDepartures,
   });
 
-  const departureRealtimeQuery: DepartureRealtimeQuery | undefined =
+  const departuresRealtimeQuery: DepartureRealtimeQuery | undefined =
     departuresData
       ? {
           quayIds: departuresData.query.ids,
@@ -65,28 +85,47 @@ export const useDepartures = ({
           limit: departuresData.query.numberOfDepartures,
           limitPerLine: departuresData.query.limitPerLine,
           timeRange: departuresData.query.timeRange,
-          lineIds, // only load data for favorite departures if showOnlyFavorites=true, otherwise undefined
+          lineIds: departuresData.favorites?.map((f) => f.lineId),
         }
       : undefined;
 
+  const departuresQueryKey = departuresData
+    ? qs.stringify(
+        getDeparturesQueryKey(
+          departuresData.query,
+          departuresData.mode,
+          departuresData.favorites,
+        ),
+      )
+    : undefined;
+
   const {data: departuresRealtimeData} = useDeparturesRealtimeQuery({
-    query: departureRealtimeQuery,
+    query: departuresRealtimeQuery,
+    belongsToDeparturesQueryKey: departuresQueryKey,
     triggerImmediately: false,
   });
 
   const augmentedDepartures: EstimatedCall[] = useMemo(() => {
-    const estimatedCalls =
-      departuresData && flatMap(departuresData.quays, (q) => q.estimatedCalls);
+    const estimatedCalls = departuresData
+      ? flatMap(departuresData.quays, (q) => q.estimatedCalls)
+      : [];
 
-    // this line is just updating locally stored favorites if applicable, not needed to augment data
-    estimatedCalls && potentiallyMigrateFavoriteDepartures(estimatedCalls);
+    // This line is just updating locally stored favorites if applicable, not needed to augment data
+    potentiallyMigrateFavoriteDepartures(estimatedCalls);
 
-    return getDeparturesAugmentedWithRealtimeData(
-      estimatedCalls,
-      departuresRealtimeData,
-    );
+    const shouldAugmentData =
+      departuresRealtimeData?.belongsToDeparturesQueryKey ===
+      departuresQueryKey;
+
+    return shouldAugmentData
+      ? getDeparturesAugmentedWithRealtimeData(
+          estimatedCalls,
+          departuresRealtimeData,
+        )
+      : estimatedCalls;
   }, [
     departuresData,
+    departuresQueryKey,
     departuresRealtimeData,
     potentiallyMigrateFavoriteDepartures,
   ]);

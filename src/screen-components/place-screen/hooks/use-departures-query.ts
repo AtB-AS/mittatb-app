@@ -14,18 +14,19 @@ export type DeparturesQueryProps = {
   favorites?: UserFavoriteDepartures;
 };
 
+export const getDeparturesQueryKey = (
+  query: DeparturesQueryProps['query'],
+  mode: DeparturesQueryProps['mode'],
+  favorites: DeparturesQueryProps['favorites'],
+) => ['DEPARTURES', qs.stringify(query), mode, qs.stringify(favorites ?? {})];
+
 export const useDeparturesQuery = ({
   query,
   mode,
   favorites,
 }: DeparturesQueryProps) => {
   return useQuery({
-    queryKey: [
-      'DEPARTURES',
-      qs.stringify(query),
-      mode,
-      qs.stringify(favorites ?? {}),
-    ],
+    queryKey: getDeparturesQueryKey(query, mode, favorites),
     queryFn: () => {
       const startTime = query.startTime ?? new Date().toISOString();
       return getDepartures(
@@ -36,6 +37,7 @@ export const useDeparturesQuery = ({
           limitPerLine:
             query.limitPerLine ?? getLimitOfDeparturesPerLineByMode(mode),
         },
+        mode,
         favorites,
       );
     },

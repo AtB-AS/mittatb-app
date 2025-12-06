@@ -12,27 +12,34 @@ const DEPARTURES_REALTIME_REFETCH_INTERVAL = 30 * ONE_SECOND_MS;
 
 type DeparturesRealtimeQueryProps = {
   query?: DepartureRealtimeQuery;
+  belongsToDeparturesQueryKey?: string;
   triggerImmediately: boolean;
 };
 
 export const useDeparturesRealtimeQuery = ({
   query,
+  belongsToDeparturesQueryKey,
   triggerImmediately,
 }: DeparturesRealtimeQueryProps) => {
   // Support option to not trigger immediately by disabling at first
   const [enabled, setEnabled] = useState(triggerImmediately);
   useEffect(() => {
+    setEnabled(triggerImmediately);
     const timeoutId = setTimeout(
       () => setEnabled(true),
       DEPARTURES_REALTIME_REFETCH_INTERVAL,
     );
     return () => clearTimeout(timeoutId);
-  }, []);
+  }, [belongsToDeparturesQueryKey, triggerImmediately]);
 
   return useQuery({
     enabled,
-    queryKey: [DEPARTURES_REALTIME_QUERY_KEY, qs.stringify(query ?? {})],
-    queryFn: () => getDeparturesRealtime(query),
+    queryKey: [
+      DEPARTURES_REALTIME_QUERY_KEY,
+      qs.stringify(query ?? {}),
+      belongsToDeparturesQueryKey,
+    ],
+    queryFn: () => getDeparturesRealtime(query, belongsToDeparturesQueryKey),
     staleTime: ONE_HOUR_MS,
     gcTime: ONE_HOUR_MS,
     refetchInterval: DEPARTURES_REALTIME_REFETCH_INTERVAL,
