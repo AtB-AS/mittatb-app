@@ -195,15 +195,13 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     setVippsNotInstalledError(false);
     const offerExpirationTime =
       offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
-    if (offerExpirationTime && totalPrice > 0) {
-      if (offerExpirationTime < Date.now()) {
-        refreshOffer();
-      } else {
-        analytics.logEvent('Ticketing', 'Pay with card selected', {
-          paymentMethod,
-        });
-        reserveMutation.mutate();
-      }
+    if (offerExpirationTime && offerExpirationTime < Date.now()) {
+      refreshOffer();
+    } else {
+      analytics.logEvent('Ticketing', 'Pay with card selected', {
+        paymentMethod,
+      });
+      reserveMutation.mutate();
     }
   }
 
@@ -323,7 +321,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             type="error"
           />
         )}
-        {paymentMethod && (
+        {paymentMethod && totalPrice > 0 && (
           <Section>
             <PaymentSelectionSectionItem
               paymentMethod={paymentMethod}
@@ -411,7 +409,7 @@ const PaymentButton = ({
       />
     );
 
-  if (!paymentMethod)
+  if (!paymentMethod && totalPrice > 0)
     return (
       <Button
         expanded={true}
@@ -460,7 +458,11 @@ const PaymentButton = ({
   return (
     <Button
       expanded={true}
-      text={t(PurchaseConfirmationTexts.payTotal.text(totalPriceString))}
+      text={
+        totalPrice > 0
+          ? t(PurchaseConfirmationTexts.payTotal.text(totalPriceString))
+          : t(PurchaseConfirmationTexts.complete)
+      }
       interactiveColor={theme.color.interactive[0]}
       disabled={!!isOfferError || reserveStatus === 'success'}
       onPress={() => {
