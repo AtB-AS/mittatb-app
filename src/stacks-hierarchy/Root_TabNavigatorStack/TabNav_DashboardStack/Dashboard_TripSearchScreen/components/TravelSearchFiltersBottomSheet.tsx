@@ -88,7 +88,6 @@ export const TravelSearchFiltersBottomSheet = ({
       rightIconText={t(dictionary.confirm)}
       rightIcon={Confirm}
       closeCallback={() => {
-        giveFocus(onCloseFocusRef);
         if (
           filtersSelection.transportModes !== selectedModeOptions ||
           filtersSelection.travelSearchPreferences !==
@@ -96,6 +95,7 @@ export const TravelSearchFiltersBottomSheet = ({
         ) {
           save();
         }
+        giveFocus(onCloseFocusRef);
       }}
     >
       <View
