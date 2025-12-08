@@ -17,7 +17,12 @@ const TravelAidSettingsTexts = {
       'Reisehjelp i Avgangar',
     ),
   },
-  description: _(
+  descriptionWithStopButton: _(
+    'Reisehjelp gir deg mulighet til å stoppe buss og trikk fra holdeplass. I tillegg får du sanntidsinformasjon før ankomst på valgt holdeplass og under reisen.\n\nDu finner Reisehjelp ved å velge en buss eller trikk under Avganger i hovedmenyen.',
+    'Journey Aid lets you stop buses and trams from the stop. In addition, you get real-time information before arrival at the selected stop and during the journey.\n\nYou can find Journey Aid by selecting a bus or tram under Departures in the main menu.',
+    'Reisehjelp gir deg moglegheit til å stoppe buss og trikk frå haldeplass. I tillegg får du sanntidsinformasjon før ankomst på vald haldeplass og under reisa.\n\nDu finn Reisehjelp ved å velje ein buss eller trikk under Avgangar i hovudmenyen.',
+  ),
+  descriptionWithoutStopButton: _(
     'Reisehjelp gir deg sanntidsinformasjon før ankomst på valgt holdeplass og under reisen.\n\nDu finner Reisehjelp ved å velge en buss eller trikk under Avganger i hovedmenyen. ',
     'Journey Aid provides real-time information before arrival at the selected stop and during the journey.\n\nYou can find Journey Aid by selecting a bus or tram under Departures in the main menu.',
     'Reisehjelp gir deg sanntidsinformasjon før ankomst på vald haldeplass og under reisa.\n\nDu finn Reisehjelp ved å velje ein buss eller trikk under Avgangar i hovudmenyen.',
