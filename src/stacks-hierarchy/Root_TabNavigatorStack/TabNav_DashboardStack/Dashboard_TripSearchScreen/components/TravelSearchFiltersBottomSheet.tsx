@@ -96,12 +96,28 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
       closeCallback={() => {
+        if (
+          filtersSelection.transportModes !== selectedModeOptions ||
+          filtersSelection.travelSearchPreferences !==
+            selectedTravelSearchPreferences
+        ) {
+          save();
+        }
         giveFocus(onCloseFocusRef);
       }}
       Footer={footer}
     >
-      <View style={styles.filtersContainer} testID="filterView">
-        <ThemeText style={styles.headingText} typography="body__s">
+      <View
+        style={styles.filtersContainer}
+        testID="filterView"
+        accessible={false}
+        importantForAccessibility="no"
+      >
+        <ThemeText
+          style={styles.headingText}
+          typography="body__s"
+          accessibilityRole="header"
+        >
           {t(TripSearchTexts.filters.bottomSheet.heading)}
         </ThemeText>
         <Section>
