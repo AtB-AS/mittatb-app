@@ -35,7 +35,7 @@ export const Root_TravelAidOnboardingScreen = () => {
       }}
       secondaryFooterButton={{
         onPress: onDismiss,
-        text: t(TravelAidTexts.onboarding.dismiss),
+        text: t(TravelAidTexts.onboarding.skip),
         rightIcon: {svg: Close},
         expanded: true,
       }}

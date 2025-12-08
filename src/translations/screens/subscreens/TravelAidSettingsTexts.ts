@@ -11,13 +11,17 @@ const TravelAidSettingsTexts = {
   },
 
   toggle: {
-    title: _('Reisehjelp', 'Journey Aid', 'Reisehjelp'),
-    subText: _(
-      'Reisehjelp er en forenklet visning av buss- og trikkeavganger, tilpasset for deg som trenger ekstra støtte på reisen. Den gir rask tilgang til sanntidsoppdateringer om ankomsttid og neste holdeplass.\n\n* Aktiver Reisehjelp ved å trykke på bryteren øverst til høyre.\n* Velg holdeplass under «Avganger»-fanen.\n* Velg riktig buss eller trikk fra listen.\n* Trykk på knappen for Reisehjelp øverst i visningen.\n\nVi jobber fortsatt med funksjonen, og ny funksjonalitet vil komme fortløpende. Del gjerne din tilbakemelding!',
-      'Journey Aid is a simplified view of bus and tram departures, designed for those who need extra support when traveling. It provides quick access to real-time updates on arrival times and the next stop.\n\n* Activate Journey Aid by tapping the switch at the top right.\n* Select your stop under the "Departures" tab.\n* Choose the correct bus or tram from the list.\n* Tap the Journey Aid button at the top of the screen.\n\nWe are still working on this feature, and new functionality will be added continuously. Please share your feedback with us!',
-      'Reisehjelp er ei forenkla visning av buss- og trikkeavgangar, tilpassa for deg som trenger ekstra støtte på reisa. Den gir rask tilgang til sanntidsoppdateringer om framkomsttid og neste haldeplass.\n\n* Aktivér Reisehjelp ved å trykke på brytaren øvst til høgre.\n* Velg haldeplass under «Avgangar»-fanen.\n* Velg riktig buss eller trikk frå lista.\n* Trykk på knappen for Reisehjelp øvst i visninga.\n\nVi jobbar fortsatt med funksjonen, og ny funksjonalitet vil komme fortløpande. Del gjerne din tilbakemelding!',
+    title: _(
+      'Reisehjelp i Avganger',
+      'Journey Aid in Departures',
+      'Reisehjelp i Avgangar',
     ),
   },
+  description: _(
+    'Reisehjelp gir deg sanntidsinformasjon før ankomst på valgt holdeplass og under reisen.\n\nDu finner Reisehjelp ved å velge en buss eller trikk under Avganger i hovedmenyen. ',
+    'Journey Aid provides real-time information before arrival at the selected stop and during the journey.\n\nYou can find Journey Aid by selecting a bus or tram under Departures in the main menu.',
+    'Reisehjelp gir deg sanntidsinformasjon før ankomst på vald haldeplass og under reisa.\n\nDu finn Reisehjelp ved å velje ein buss eller trikk under Avgangar i hovudmenyen.',
+  ),
 
   button: {
     importantInfo: {
