@@ -1,17 +1,17 @@
 import React from 'react';
 import {dictionary, useTranslation} from '@atb/translations';
-import {MessageSectionItem} from '@atb/components/sections';
+import {MessageSectionItem, SectionItemProps} from '@atb/components/sections';
 import {getMessageTypeForSituation, getSituationSummary} from './utils';
 import {SituationType} from './types';
 import {SituationBottomSheet} from './SituationBottomSheet';
 import {View} from 'react-native';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
-type Props = {
+type Props = SectionItemProps<{
   situation: SituationType;
-};
+}>;
 
-export const SituationSectionItem = ({situation}: Props) => {
+export const SituationSectionItem = ({situation, ...sectionProps}: Props) => {
   const {t, language} = useTranslation();
   const situationText = getSituationSummary(situation, language);
   const onCloseFocusRef = React.useRef<View | null>(null);
@@ -29,6 +29,7 @@ export const SituationSectionItem = ({situation}: Props) => {
           action: () => bottomSheetModalRef.current?.present(),
         }}
         focusRef={onCloseFocusRef}
+        {...sectionProps}
       />
       <SituationBottomSheet
         situation={situation}
