@@ -10,21 +10,24 @@ import emoji from 'emoji-datasource';
 import groupBy from 'lodash.groupby';
 import mapValues from 'lodash.mapvalues';
 import orderBy from 'lodash.orderby';
-import React, {forwardRef, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   Platform,
   ScaledSize,
-  ScrollView,
   TextStyle,
   View,
   ViewStyle,
 } from 'react-native';
 import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
-import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
+  AddEditFavoriteTexts,
+  dictionary,
+  useTranslation,
+} from '@atb/translations';
+import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 
 // Polyfill for Android
 require('string.fromcodepoint');
@@ -181,36 +184,46 @@ type Props = Omit<EmojiCategory, 'category'> & {
   clearButtonStyle?: ViewStyle;
   clearButtonText?: string;
   value: string | null;
+  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  onCloseFocusRef: React.RefObject<View | null>;
 };
-export const EmojiSheet = forwardRef<ScrollView, Props>(
-  ({value, onEmojiSelected, closeOnSelect, ...props}, focusRef) => {
-    const {t} = useTranslation();
+export const EmojiSheet = ({
+  value,
+  onEmojiSelected,
+  closeOnSelect,
+  bottomSheetModalRef,
+  onCloseFocusRef,
+  ...props
+}: Props) => {
+  const {t} = useTranslation();
 
-    const {close} = useBottomSheetContext();
-    const onClick = (emoji: string | null) => {
-      onEmojiSelected(emoji);
-      if (closeOnSelect) {
-        close();
-      }
-    };
+  const onClick = (emoji: string | null) => {
+    onEmojiSelected(emoji);
+    if (closeOnSelect) {
+      bottomSheetModalRef.current?.dismiss();
+    }
+  };
 
-    return (
-      <BottomSheetContainer title={t(AddEditFavoriteTexts.emojiSheet.title)}>
-        <ScrollView ref={focusRef}>
-          {CATEGORIES.map((category) => (
-            <EmojiCategory
-              onEmojiSelected={onClick}
-              key={category}
-              category={category}
-              value={value}
-              {...props}
-            />
-          ))}
-        </ScrollView>
-      </BottomSheetContainer>
-    );
-  },
-);
+  return (
+    <BottomSheetModal
+      bottomSheetModalRef={bottomSheetModalRef}
+      heading={t(AddEditFavoriteTexts.emojiSheet.title)}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      closeCallback={() => giveFocus(onCloseFocusRef)}
+    >
+      {CATEGORIES.map((category) => (
+        <EmojiCategory
+          onEmojiSelected={onClick}
+          key={category}
+          category={category}
+          value={value}
+          {...props}
+        />
+      ))}
+    </BottomSheetModal>
+  );
+};
 
 type CallbackType = {
   screen: ScaledSize;

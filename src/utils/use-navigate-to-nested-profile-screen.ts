@@ -20,20 +20,23 @@ export const useNavigateToNestedProfileScreen = <
 
   return useCallback(() => {
     navigation.navigate('Root_TabNavigatorStack', {
-      screen: 'TabNav_ProfileStack',
-      params: {
-        screen: 'Profile_RootScreen',
+      state: {
+        routes: [
+          {
+            name: 'TabNav_ProfileStack',
+            state: {
+              routes: [
+                {name: 'Profile_RootScreen'},
+                {
+                  name: screenName,
+                  params:
+                    screenParams as NavigatorScreenParams<ProfileStackParams>,
+                },
+              ],
+            },
+          },
+        ],
       },
     });
-
-    requestAnimationFrame(() =>
-      navigation.navigate('Root_TabNavigatorStack', {
-        screen: 'TabNav_ProfileStack',
-        params: {
-          screen: screenName,
-          params: screenParams,
-        } as NavigatorScreenParams<ProfileStackParams>,
-      }),
-    );
   }, [navigation, screenName, screenParams]);
 };

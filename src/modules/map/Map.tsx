@@ -58,11 +58,17 @@ import {MapBottomSheets} from './MapBottomSheets';
 
 import {MapButtons} from './components/MapButtons';
 import {useFlyToSelectedMapItemWithPadding} from './hooks/use-fly-to-selected-map-item-with-padding';
+import {ShmoTesting} from './components/mobility/ShmoTesting';
+import {usePreferencesContext} from '../preferences';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
 export const Map = (props: MapProps) => {
   const {includeSnackbar} = props;
+
+  const {
+    preferences: {showShmoTesting},
+  } = usePreferencesContext();
 
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<Camera>(null);
@@ -409,6 +415,7 @@ export const Map = (props: MapProps) => {
           <MapButtons locationArrowOnPress={locationArrowOnPress} />
         )}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
+        {showShmoTesting && <ShmoTesting />}
       </View>
       <MapBottomSheets
         mapViewRef={mapViewRef}

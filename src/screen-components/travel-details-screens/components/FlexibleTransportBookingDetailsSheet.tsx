@@ -1,36 +1,40 @@
 import {
+  dictionary,
   getTextForLanguage,
   TripDetailsTexts,
   useTranslation,
 } from '@atb/translations';
 import {Leg} from '@atb/api/types/trips';
-import {Dimensions, ScrollView, View} from 'react-native';
+import {Dimensions, View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-
 import {ThemeText} from '@atb/components/text';
 import {BookingOptions} from './BookingOptions';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {getBookingStatus, getPublicCodeFromLeg} from '../utils';
 import {BookingInfoBox} from './BookingInfoBox';
 import {useNow} from '@atb/utils/use-now';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import React from 'react';
 import {ThemedBestillMaxi} from '@atb/theme/ThemedAssets';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 
 const {width, height} = Dimensions.get('window');
 const isSmallScreen = width < 320 || height < 568;
 
 type FlexibleTransportBookingDetailsProps = {
   leg: Leg;
+  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  onCloseFocusRef: React.RefObject<View | null>;
 };
 
 export const FlexibleTransportBookingDetailsSheet: React.FC<
   FlexibleTransportBookingDetailsProps
-> = ({leg}) => {
+> = ({leg, bottomSheetModalRef, onCloseFocusRef}) => {
   const {t, language} = useTranslation();
   const style = useStyle();
   const {theme} = useThemeContext();
@@ -48,22 +52,20 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
     flex_booking_number_of_days_available,
   );
 
-  const {bottom: safeAreaBottom} = useSafeAreaInsets();
-  const marginBottom =
-    safeAreaBottom > 0 ? safeAreaBottom : theme.spacing.medium;
-
   return (
-    <BottomSheetContainer
-      title={t(
+    <BottomSheetModal
+      bottomSheetModalRef={bottomSheetModalRef}
+      heading={t(
         TripDetailsTexts.flexibleTransport.needsBookingWhatIsThisTitle(
           publicCode,
         ),
       )}
-      fullHeight={true}
-      maxHeightValue={0.83}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      closeCallback={() => giveFocus(onCloseFocusRef)}
     >
-      <View style={[style.scrollViewContainer, {marginBottom}]}>
-        <ScrollView contentContainerStyle={{padding: theme.spacing.xLarge}}>
+      <View style={style.container}>
+        <View style={{padding: theme.spacing.xLarge}}>
           <View style={style.messageBoxContainer}>
             <BookingInfoBox
               bookingArrangements={leg.bookingArrangements}
@@ -134,9 +136,9 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
           {bookingStatus === 'bookable' && (
             <BookingOptions bookingArrangements={leg.bookingArrangements} />
           )}
-        </ScrollView>
+        </View>
       </View>
-    </BottomSheetContainer>
+    </BottomSheetModal>
   );
 };
 
@@ -145,7 +147,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacing.small,
     paddingTop: theme.spacing.small,
   },
-  scrollViewContainer: {
+  container: {
     backgroundColor: theme.color.background.neutral[0].background,
     borderRadius: theme.spacing.medium,
     marginHorizontal: theme.spacing.medium,

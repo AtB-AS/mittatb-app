@@ -24,6 +24,7 @@ import {
   type PurchaseSelectionType,
   useSelectableUserProfiles,
 } from '@atb/modules/purchase-selection';
+import {formatToNonBreakingSpaces} from '@atb/utils/text';
 
 type TravellerSelectionProps = {
   selection: PurchaseSelectionType;
@@ -59,18 +60,12 @@ export function TravellerSelection({
     return null;
   }
 
-  const totalTravellersCount = selection.userProfilesWithCount.reduce(
-    (acc, {count}) => acc + count,
-    0,
-  );
-  const multipleTravellerCategoriesSelectedFrom =
-    selection.userProfilesWithCount.length > 1;
-
   const travellersDetailsText = [
     ...selection.userProfilesWithCount,
     ...selection.baggageProductsWithCount,
   ]
     .map((t) => `${t.count} ${getReferenceDataName(t, language)}`)
+    .map((t) => formatToNonBreakingSpaces(t))
     .join(', ');
 
   const travellerInfo = !canSelectUserProfile
@@ -122,28 +117,11 @@ export function TravellerSelection({
     <View style={styles.sectionContentContainer}>
       <View style={{flex: 1}}>
         <ThemeText typography="body__m__strong" testID="selectedTravellers">
-          {multipleTravellerCategoriesSelectedFrom
-            ? t(
-                PurchaseOverviewTexts.travellerSelection.travellers_title(
-                  totalTravellersCount,
-                ),
-              )
-            : travellersDetailsText}
+          {travellersDetailsText}
         </ThemeText>
         {!canSelectUserProfile && (
           <ThemeText typography="body__s" color="secondary">
             {travellerInfo}
-          </ThemeText>
-        )}
-
-        {multipleTravellerCategoriesSelectedFrom && (
-          <ThemeText
-            typography="body__s"
-            color="secondary"
-            style={styles.multipleTravellersDetails}
-            testID="selectedTravellers"
-          >
-            {travellersDetailsText}
           </ThemeText>
         )}
       </View>

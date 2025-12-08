@@ -134,7 +134,9 @@ export const Profile_HelpAndContactScreen = () => {
                 rightIcon={{svg: Support}}
                 accessibilityRole="button"
                 testID="contactCustomerServiceButton"
-                onPress={async () => openLink(`tel:${contactPhoneNumber}`)}
+                onPress={async () =>
+                  Linking.openURL(`tel:${contactPhoneNumber}`)
+                }
               />
             </View>
           )}
