@@ -96,13 +96,6 @@ export const TravelSearchFiltersBottomSheet = ({
           save();
         }
         giveFocus(onCloseFocusRef);
-        if (
-          filtersSelection.transportModes !== selectedModeOptions ||
-          filtersSelection.travelSearchPreferences !==
-            selectedTravelSearchPreferences
-        ) {
-          save();
-        }
       }}
     >
       <View
