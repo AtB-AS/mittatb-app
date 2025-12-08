@@ -30,7 +30,7 @@ const BonusProgramTexts = {
     youEarnedA11yLabel: (bonusPointsEarned: number) =>
       _(
         `Du tjente ${bonusPointsEarned} poeng!`,
-        `You earned ${bonusPointsEarned} points!`,
+        `You earned ${bonusPointsEarned} point${bonusPointsEarned === 1 ? '' : 's'}!`,
         `Du tente ${bonusPointsEarned} poeng!`,
       ),
   },
