@@ -1,14 +1,12 @@
 import {View} from 'react-native';
-import React, {forwardRef, useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   dictionary,
   getTextForLanguage,
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
-import {FullScreenFooter} from '@atb/components/screen-footer';
-import {Button} from '@atb/components/button';
-import {Close, Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -25,173 +23,162 @@ import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {BottomSheetModal as GorhamBottomSheetModal} from '@gorhom/bottom-sheet';
 
-export const TravelSearchFiltersBottomSheet = forwardRef<
-  any,
-  {
-    filtersSelection: TravelSearchFiltersSelectionType;
-    onSave: (t: TravelSearchFiltersSelectionType) => void;
-    bottomSheetModalRef: React.RefObject<GorhamBottomSheetModal | null>;
-    onCloseFocusRef: React.RefObject<View | null>;
-  }
->(
-  (
-    {filtersSelection, onSave, bottomSheetModalRef, onCloseFocusRef},
-    focusRef,
-  ) => {
-    const {t, language} = useTranslation();
-    const styles = useStyles();
+export const TravelSearchFiltersBottomSheet = ({
+  filtersSelection,
+  onSave,
+  bottomSheetModalRef,
+  onCloseFocusRef,
+}: {
+  filtersSelection: TravelSearchFiltersSelectionType;
+  onSave: (t: TravelSearchFiltersSelectionType) => void;
+  bottomSheetModalRef: React.RefObject<GorhamBottomSheetModal | null>;
+  onCloseFocusRef: React.RefObject<View | null>;
+}) => {
+  const {t, language} = useTranslation();
+  const styles = useStyles();
 
-    const {setFilters} = useFiltersContext();
+  const {setFilters} = useFiltersContext();
 
-    const {isFlexibleTransportEnabled} = useFeatureTogglesContext();
+  const {isFlexibleTransportEnabled} = useFeatureTogglesContext();
 
-    const [selectedModeOptions, setSelectedModes] = useState<
-      TransportModeFilterOptionWithSelectionType[] | undefined
-    >(filtersSelection.transportModes);
+  const [selectedModeOptions, setSelectedModes] = useState<
+    TransportModeFilterOptionWithSelectionType[] | undefined
+  >(filtersSelection.transportModes);
 
-    const [
-      selectedTravelSearchPreferences,
-      setSelectedTravelSearchPreferences,
-    ] = useState<TravelSearchPreferenceWithSelectionType[]>(
+  const [selectedTravelSearchPreferences, setSelectedTravelSearchPreferences] =
+    useState<TravelSearchPreferenceWithSelectionType[]>(
       filtersSelection.travelSearchPreferences ?? [],
     );
 
-    const save = useCallback(() => {
-      const selectedFilters = {
-        transportModes: selectedModeOptions,
-        travelSearchPreferences: selectedTravelSearchPreferences,
-      };
-      onSave(selectedFilters);
+  useEffect(() => {
+    setSelectedModes(filtersSelection.transportModes);
+    setSelectedTravelSearchPreferences(
+      filtersSelection.travelSearchPreferences ?? [],
+    );
+  }, [
+    filtersSelection.transportModes,
+    filtersSelection.travelSearchPreferences,
+  ]);
 
-      // Saves only the travel search preferences in storage, while other filters
-      // are reset on the next search.
-      setFilters({
-        travelSearchPreferences: selectedTravelSearchPreferences,
-      });
+  const save = useCallback(() => {
+    const selectedFilters = {
+      transportModes: selectedModeOptions,
+      travelSearchPreferences: selectedTravelSearchPreferences,
+    };
+    onSave(selectedFilters);
 
-      bottomSheetModalRef?.current?.dismiss();
-    }, [
-      bottomSheetModalRef,
-      onSave,
-      selectedModeOptions,
-      selectedTravelSearchPreferences,
-      setFilters,
-    ]);
+    // Saves only the travel search preferences in storage, while other filters
+    // are reset on the next search.
+    setFilters({
+      travelSearchPreferences: selectedTravelSearchPreferences,
+    });
+  }, [
+    onSave,
+    selectedModeOptions,
+    selectedTravelSearchPreferences,
+    setFilters,
+  ]);
 
-    const allModesSelected = selectedModeOptions?.every((m) => m.selected);
+  const allModesSelected = selectedModeOptions?.every((m) => m.selected);
 
-    const footer = useCallback(
-      () => (
-        <FullScreenFooter>
-          <Button
-            expanded={true}
-            text={t(TripSearchTexts.filters.bottomSheet.use)}
-            onPress={save}
-            rightIcon={{svg: Confirm}}
-            testID="confirmButton"
+  return (
+    <BottomSheetModal
+      bottomSheetModalRef={bottomSheetModalRef}
+      heading={t(TripSearchTexts.filters.bottomSheet.title)}
+      rightIconText={t(dictionary.confirm)}
+      rightIcon={Confirm}
+      closeCallback={() => {
+        giveFocus(onCloseFocusRef);
+        if (
+          filtersSelection.transportModes !== selectedModeOptions ||
+          filtersSelection.travelSearchPreferences !==
+            selectedTravelSearchPreferences
+        ) {
+          save();
+        }
+      }}
+    >
+      <View style={styles.filtersContainer} testID="filterView">
+        <ThemeText style={styles.headingText} typography="body__s">
+          {t(TripSearchTexts.filters.bottomSheet.heading)}
+        </ThemeText>
+        <Section>
+          <ToggleSectionItem
+            text={t(TripSearchTexts.filters.bottomSheet.modesAll)}
+            value={allModesSelected}
+            onValueChange={(checked) => {
+              setSelectedModes(
+                filtersSelection.transportModes?.map((m) => ({
+                  ...m,
+                  selected: checked,
+                })),
+              );
+            }}
+            testID="allModesToggle"
           />
-        </FullScreenFooter>
-      ),
-      [save, t],
-    );
+          {filtersSelection.transportModes
+            ?.filter(
+              ({id}) =>
+                id !== 'flexibleTransport' || isFlexibleTransportEnabled,
+            )
+            .map((option) => {
+              const text = getTextForLanguage(option.text, language);
+              const description = getTextForLanguage(
+                option.description,
+                language,
+              );
+              return text ? (
+                <ToggleSectionItem
+                  key={option.id}
+                  text={text}
+                  leftImage={
+                    <TransportationIconBox
+                      mode={option.icon?.transportMode}
+                      subMode={option.icon?.transportSubMode}
+                      isFlexible={
+                        isFlexibleTransportEnabled &&
+                        option.id === 'flexibleTransport'
+                      }
+                    />
+                  }
+                  subtext={description}
+                  value={
+                    selectedModeOptions?.find(({id}) => id === option.id)
+                      ?.selected
+                  }
+                  onValueChange={(checked) => {
+                    setSelectedModes(
+                      selectedModeOptions?.map((m) =>
+                        m.id === option.id ? {...m, selected: checked} : m,
+                      ),
+                    );
+                  }}
+                  testID={`${option.id}Toggle`}
+                />
+              ) : null;
+            })}
+        </Section>
 
-    return (
-      <BottomSheetModal
-        bottomSheetModalRef={bottomSheetModalRef}
-        heading={t(TripSearchTexts.filters.bottomSheet.title)}
-        rightIconText={t(dictionary.appNavigation.close.text)}
-        rightIcon={Close}
-        closeCallback={() => {
-          giveFocus(onCloseFocusRef);
-        }}
-        Footer={footer}
-      >
-        <View
-          style={styles.filtersContainer}
-          ref={focusRef}
-          testID="filterView"
-        >
-          <ThemeText style={styles.headingText} typography="body__s">
-            {t(TripSearchTexts.filters.bottomSheet.heading)}
-          </ThemeText>
-          <Section>
-            <ToggleSectionItem
-              text={t(TripSearchTexts.filters.bottomSheet.modesAll)}
-              value={allModesSelected}
-              onValueChange={(checked) => {
-                setSelectedModes(
-                  filtersSelection.transportModes?.map((m) => ({
-                    ...m,
-                    selected: checked,
-                  })),
-                );
-              }}
-              testID="allModesToggle"
-            />
-            {filtersSelection.transportModes
-              ?.filter(
-                ({id}) =>
-                  id !== 'flexibleTransport' || isFlexibleTransportEnabled,
+        {selectedTravelSearchPreferences.map((preference) => (
+          <TravelSearchPreference
+            key={preference.type}
+            style={styles.travelSearchPreference}
+            preference={preference}
+            onPreferenceChange={(changedPreference) =>
+              setSelectedTravelSearchPreferences((previousPreferences) =>
+                previousPreferences.map((pref) =>
+                  pref.type === changedPreference.type
+                    ? changedPreference
+                    : pref,
+                ),
               )
-              .map((option) => {
-                const text = getTextForLanguage(option.text, language);
-                const description = getTextForLanguage(
-                  option.description,
-                  language,
-                );
-                return text ? (
-                  <ToggleSectionItem
-                    key={option.id}
-                    text={text}
-                    leftImage={
-                      <TransportationIconBox
-                        mode={option.icon?.transportMode}
-                        subMode={option.icon?.transportSubMode}
-                        isFlexible={
-                          isFlexibleTransportEnabled &&
-                          option.id === 'flexibleTransport'
-                        }
-                      />
-                    }
-                    subtext={description}
-                    value={
-                      selectedModeOptions?.find(({id}) => id === option.id)
-                        ?.selected
-                    }
-                    onValueChange={(checked) => {
-                      setSelectedModes(
-                        selectedModeOptions?.map((m) =>
-                          m.id === option.id ? {...m, selected: checked} : m,
-                        ),
-                      );
-                    }}
-                    testID={`${option.id}Toggle`}
-                  />
-                ) : null;
-              })}
-          </Section>
-
-          {selectedTravelSearchPreferences.map((preference) => (
-            <TravelSearchPreference
-              key={preference.type}
-              style={styles.travelSearchPreference}
-              preference={preference}
-              onPreferenceChange={(changedPreference) =>
-                setSelectedTravelSearchPreferences((previousPreferences) =>
-                  previousPreferences.map((pref) =>
-                    pref.type === changedPreference.type
-                      ? changedPreference
-                      : pref,
-                  ),
-                )
-              }
-            />
-          ))}
-        </View>
-      </BottomSheetModal>
-    );
-  },
-);
+            }
+          />
+        ))}
+      </View>
+    </BottomSheetModal>
+  );
+};
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   filtersContainer: {

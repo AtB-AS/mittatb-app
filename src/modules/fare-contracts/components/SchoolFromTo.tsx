@@ -1,27 +1,28 @@
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import type {ContrastColor} from '@atb-as/theme';
 import {TravelRightDirection} from '@atb-as/utils';
-import {BorderedFromToBox} from './BorderedFromToBox';
+import {FromToBox} from './FromToBox';
+import {Size} from '../utils';
 
 type SchoolFromToProps = {
   schoolName: string;
-  mode: 'small' | 'large';
+  size: Size;
   backgroundColor: ContrastColor;
 };
 
 export const SchoolFromTo = ({
   schoolName,
-  mode,
+  size,
   backgroundColor,
 }: SchoolFromToProps) => {
   const {t} = useTranslation();
 
   return (
-    <BorderedFromToBox
+    <FromToBox
       fromText={t(FareContractTexts.school.home)}
       toText={schoolName}
       direction={TravelRightDirection.Both}
-      mode={mode}
+      size={size}
       backgroundColor={backgroundColor}
     />
   );

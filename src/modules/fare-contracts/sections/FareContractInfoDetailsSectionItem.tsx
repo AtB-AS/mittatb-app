@@ -11,6 +11,8 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import {
+  getTravellersIcon,
+  getTravellersText,
   isValidFareContract,
   useFareZoneSummary,
   ValidityStatus,
@@ -19,10 +21,9 @@ import {FareContractDetailItem} from '../components/FareContractDetailItem';
 import {InspectionSymbol} from '../components/InspectionSymbol';
 import {getTransportModeText} from '@atb/components/transportation-modes';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
-import {
-  toCountAndName,
-  UniqueWithCount,
-} from '@atb/utils/array-map-unique-with-count';
+import {UniqueWithCount} from '@atb/utils/unique-with-count';
+import {getTransportModeSvg} from '@atb/components/icon-box';
+import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
 
 export type FareContractInfoProps = {
   status: ValidityStatus;
@@ -77,6 +78,17 @@ export const FareContractInfoDetailsSectionItem = ({
   const isValidOrSentFareContract: boolean =
     isValidFareContract(status) || isStatusSent;
 
+  const travellersIcon = getTravellersIcon(
+    userProfilesWithCount,
+    baggageProductsWithCount,
+  );
+
+  const travellersText = getTravellersText(
+    userProfilesWithCount,
+    baggageProductsWithCount,
+    language,
+  );
+
   return (
     <View style={[topContainer, styles.container]} accessible={true}>
       <View style={styles.fareContractDetails}>
@@ -84,32 +96,36 @@ export const FareContractInfoDetailsSectionItem = ({
           {!!fareProductTypeConfig?.transportModes.length && (
             <FareContractDetailItem
               header={t(FareContractTexts.label.transportModes)}
-              content={[
-                getTransportModeText(fareProductTypeConfig.transportModes, t),
-              ]}
+              icon={
+                getTransportModeSvg(
+                  fareProductTypeConfig.transportModes[0].mode,
+                  fareProductTypeConfig.transportModes[0].subMode,
+                  false,
+                ).svg
+              }
+              content={getTransportModeText(
+                fareProductTypeConfig.transportModes,
+                t,
+              )}
             />
           )}
           {firstTravelRight.travelerName ? (
             <FareContractDetailItem
               header={t(FareContractTexts.label.travellers)}
-              content={[firstTravelRight.travelerName]}
+              icon={Travellers}
+              content={firstTravelRight.travelerName}
             />
           ) : (
             <FareContractDetailItem
               header={t(FareContractTexts.label.travellers)}
-              content={userProfilesWithCount
-                .map((u) => toCountAndName(u, language))
-                .concat(
-                  baggageProductsWithCount.map((p) =>
-                    toCountAndName(p, language),
-                  ),
-                )}
+              icon={travellersIcon}
+              content={travellersText}
             />
           )}
           {fareZoneSummary && (
             <FareContractDetailItem
               header={t(FareContractTexts.label.zone)}
-              content={[fareZoneSummary]}
+              content={fareZoneSummary}
             />
           )}
         </View>

@@ -8,7 +8,7 @@ import {View} from 'react-native';
 import {ProviderLogo} from '../components/ProviderLogo';
 import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
-import {BottomSheetModal as GorhamBottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type Props = {
@@ -17,7 +17,7 @@ type Props = {
   onReportSubmit: (providerId: number) => void;
   onClose: () => void;
   onCloseFocusRef: React.RefObject<View | null>;
-  bottomSheetModalRef: React.RefObject<GorhamBottomSheetModal | null>;
+  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
 };
 
 export const VehicleLookupConfirmationBottomSheet = ({

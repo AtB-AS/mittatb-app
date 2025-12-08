@@ -4,7 +4,10 @@ import {
   UserProfile,
   FareZone,
 } from '@atb/modules/configuration';
-import {UserProfileWithCount} from '@atb/modules/fare-contracts';
+import {
+  UserProfileWithCount,
+  BaggageProductWithCount,
+} from '@atb/modules/fare-contracts';
 import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {StopPlaceFragmentWithIsFree} from '@atb/modules/harbors';
 import {CustomerProfile} from '@atb/modules/ticketing';
@@ -15,6 +18,7 @@ export type PurchaseSelectionType = {
   fareProductTypeConfig: FareProductTypeConfig;
   preassignedFareProduct: PreassignedFareProduct;
   userProfilesWithCount: UserProfileWithCount[];
+  baggageProductsWithCount: BaggageProductWithCount[];
   stopPlaces:
     | {
         from: StopPlaceFragmentWithIsFree | undefined;
@@ -101,6 +105,11 @@ export type PurchaseSelectionBuilder = {
    * stay unmodified.
    */
   userProfiles: (u: UserProfileWithCount[]) => PurchaseSelectionBuilder;
+
+  /**
+   * Apply the given baggage products with count to the purchase selection.
+   */
+  baggageProducts: (b: BaggageProductWithCount[]) => PurchaseSelectionBuilder;
 
   /**
    * Apply the given travel date to the purchase selection. If the given date is

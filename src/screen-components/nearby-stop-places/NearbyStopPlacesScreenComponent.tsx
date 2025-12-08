@@ -1,16 +1,18 @@
-import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
+import {StopPlace} from '@atb/api/types/departures';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {FavoriteChips, Location} from '@atb/modules/favorites';
-import {useGeolocationContext} from '@atb/modules/geolocation';
+import {
+  useGeolocationContext,
+  useStableLocation,
+} from '@atb/modules/geolocation';
 import {StopPlaces} from './components/StopPlaces';
-import {useNearestStopsData} from './use-nearest-stops-data';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Platform, RefreshControl, ScrollView, View} from 'react-native';
 import {StopPlacesMode} from './types';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
@@ -20,6 +22,7 @@ import {EmptyState} from '@atb/components/empty-state';
 import SharedTexts from '@atb/translations/shared';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
+import {useNearestStopPlaceNodesQuery} from './use-nearest-stop-place-nodes-query';
 
 export type NearbyStopPlacesScreenParams = {
   location: Location | undefined;
@@ -45,18 +48,25 @@ export const NearbyStopPlacesScreenComponent = ({
   onAddFavoritePlace,
   isLargeTitle,
 }: Props) => {
-  const {
-    locationIsAvailable,
-    location: geolocation,
-    requestLocationPermission,
-  } = useGeolocationContext();
-
-  const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
+  const {locationIsAvailable, requestLocationPermission} =
+    useGeolocationContext();
+  const geolocation = useStableLocation(75);
 
   const styles = useStyles();
 
   const {t} = useTranslation();
   const isFocused = useIsFocusedAndActive();
+
+  const updatingLocation = !location && locationIsAvailable;
+
+  const {data: nearestStopPlaceNodesData, isLoading} =
+    useNearestStopPlaceNodesQuery(
+      location && {
+        ...location.coordinates,
+        count: 10,
+        distance: 3000,
+      },
+    );
 
   // Update geolocation on screen focus if no other location is selected
   useDoOnceWhen(
@@ -71,17 +81,6 @@ export const NearbyStopPlacesScreenComponent = ({
     Boolean(geolocation) && isFocused,
   );
 
-  const updatingLocation = !location && locationIsAvailable;
-
-  const {state} = useNearestStopsData(location);
-
-  const {data, isLoading} = state;
-
-  const orderedStopPlaces = useMemo(
-    () => sortAndFilterStopPlaces(data),
-    [data],
-  );
-
   useEffect(() => {
     if (
       (location?.resultType == 'search' ||
@@ -92,38 +91,25 @@ export const NearbyStopPlacesScreenComponent = ({
     }
   }, [location, onSelectStopPlace]);
 
-  const getListDescription = () => {
-    if (!location) return;
-    switch (location.resultType) {
-      case 'geolocation':
-        return t(DeparturesTexts.stopPlaceList.listDescription.geoLoc);
-      case 'search':
-      case 'favorite':
-        return (
-          t(DeparturesTexts.stopPlaceList.listDescription.address) +
-          location.name
-        );
-      case undefined:
-        return;
-    }
-  };
-
-  useEffect(() => {
-    if (updatingLocation)
-      setLoadAnnouncement(t(NearbyTexts.stateAnnouncements.updatingLocation));
-    if (isLoading && !!location) {
-      setLoadAnnouncement(
-        location?.resultType == 'geolocation'
-          ? t(NearbyTexts.stateAnnouncements.loadingFromCurrentLocation)
-          : t(
-              NearbyTexts.stateAnnouncements.loadingFromGivenLocation(
-                location.name,
-              ),
+  const a11yLoadingMessage = updatingLocation
+    ? t(NearbyTexts.stateAnnouncements.updatingLocation)
+    : isLoading && !!location
+      ? location?.resultType == 'geolocation'
+        ? t(NearbyTexts.stateAnnouncements.loadingFromCurrentLocation)
+        : t(
+            NearbyTexts.stateAnnouncements.loadingFromGivenLocation(
+              location.name,
             ),
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updatingLocation, isLoading, t]);
+          )
+      : '';
+
+  const listDescription =
+    location?.resultType === 'geolocation'
+      ? t(DeparturesTexts.stopPlaceList.listDescription.geoLoc)
+      : location?.resultType === 'search' || location?.resultType === 'favorite'
+        ? t(DeparturesTexts.stopPlaceList.listDescription.address) +
+          location.name
+        : undefined;
 
   return (
     <FullScreenView
@@ -166,11 +152,11 @@ export const NearbyStopPlacesScreenComponent = ({
       }
     >
       <ScrollView>
-        <ScreenReaderAnnouncement message={loadAnnouncement} />
+        <ScreenReaderAnnouncement message={a11yLoadingMessage} />
         {locationIsAvailable || !!location ? (
           <StopPlaces
-            headerText={getListDescription()}
-            stopPlaces={orderedStopPlaces}
+            headerText={listDescription}
+            stopPlaces={nearestStopPlaceNodesData ?? []}
             navigateToPlace={onSelectStopPlace}
             testID="nearbyStopsContainerView"
             location={location}
@@ -265,22 +251,6 @@ const Header = React.memo(function Header({
     </View>
   );
 });
-
-function sortAndFilterStopPlaces(
-  data?: NearestStopPlaceNode[],
-): NearestStopPlaceNode[] {
-  if (!data) return [];
-
-  // Sort StopPlaces on distance from search location
-  const sortedNodes = data?.sort((n1, n2) => {
-    if (n1.distance === undefined) return 1;
-    if (n2.distance === undefined) return -1;
-    return n1.distance > n2.distance ? 1 : -1;
-  });
-
-  // Remove all StopPlaces without Quays
-  return sortedNodes.filter((n) => n.place?.quays?.length);
-}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {

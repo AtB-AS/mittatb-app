@@ -3,6 +3,7 @@ import {
   TEST_INPUT,
   TEST_PRODUCT,
   TEST_SELECTION,
+  TEST_BAGGAGE_PRODUCT,
   TEST_USER_PROFILE,
   TEST_ZONE,
 } from './test-utils';
@@ -47,7 +48,7 @@ describe('purchaseSelectionBuilder - product', () => {
     expect(selection.preassignedFareProduct.id).toBe(
       TEST_SELECTION.preassignedFareProduct.id,
     );
-    expect(selection).toBe(TEST_SELECTION);
+    expect(selection).toStrictEqual(TEST_SELECTION);
   });
 
   it('Should not apply product on to low app version', () => {
@@ -66,7 +67,7 @@ describe('purchaseSelectionBuilder - product', () => {
     expect(selection.preassignedFareProduct.id).toBe(
       TEST_SELECTION.preassignedFareProduct.id,
     );
-    expect(selection).toBe(TEST_SELECTION);
+    expect(selection).toStrictEqual(TEST_SELECTION);
   });
 
   it('Should not apply product on to high app version', () => {
@@ -85,7 +86,7 @@ describe('purchaseSelectionBuilder - product', () => {
     expect(selection.preassignedFareProduct.id).toBe(
       TEST_SELECTION.preassignedFareProduct.id,
     );
-    expect(selection).toBe(TEST_SELECTION);
+    expect(selection).toStrictEqual(TEST_SELECTION);
   });
 
   it('Should not apply product without distribution channel app', () => {
@@ -101,7 +102,7 @@ describe('purchaseSelectionBuilder - product', () => {
     expect(selection.preassignedFareProduct.id).toBe(
       TEST_SELECTION.preassignedFareProduct.id,
     );
-    expect(selection).toBe(TEST_SELECTION);
+    expect(selection).toStrictEqual(TEST_SELECTION);
   });
 
   it('Should change user profile to one that is within limitations', () => {
@@ -198,5 +199,86 @@ describe('purchaseSelectionBuilder - product', () => {
     expect(selection.preassignedFareProduct.id).toBe('P2');
     expect(selection.zones?.from.id).toBe('T2');
     expect(selection.zones?.to.id).toBe('T2');
+  });
+
+  it('Should preserve baggage products when product is changed', () => {
+    const testBaggageProductWithCount = [
+      {
+        ...TEST_BAGGAGE_PRODUCT,
+        count: 2,
+      },
+    ];
+    const selectionWithSupplement = {
+      ...TEST_SELECTION,
+      baggageProductsWithCount: testBaggageProductWithCount,
+    };
+
+    const selection = createEmptyBuilder(TEST_INPUT)
+      .fromSelection(selectionWithSupplement)
+      .product({...TEST_SELECTION.preassignedFareProduct, id: 'P2'})
+      .build();
+
+    expect(selection.baggageProductsWithCount).toEqual(
+      testBaggageProductWithCount,
+    );
+    expect(selection.preassignedFareProduct.id).toBe('P2');
+  });
+
+  it('Should not apply baggage products not allowed by product limitations', () => {
+    const productWithLimitations = {
+      ...TEST_SELECTION.preassignedFareProduct,
+      id: 'P2',
+      limitations: {
+        ...TEST_SELECTION.preassignedFareProduct.limitations,
+        supplementProductRefs: ['SP2'], // Only SP2 is allowed
+      },
+    };
+
+    const testBaggageProductWithCount = [
+      {
+        ...TEST_BAGGAGE_PRODUCT,
+        id: 'SP1',
+        count: 2,
+      },
+    ];
+
+    const selection = createEmptyBuilder(TEST_INPUT)
+      .fromSelection(TEST_SELECTION)
+      .product(productWithLimitations)
+      .baggageProducts(testBaggageProductWithCount)
+      .build();
+
+    expect(selection.baggageProductsWithCount).toEqual([]);
+    expect(selection.preassignedFareProduct.id).toBe('P2');
+  });
+
+  it('Should apply supplement products allowed by product limitations', () => {
+    const productWithLimitations = {
+      ...TEST_SELECTION.preassignedFareProduct,
+      id: 'P2',
+      limitations: {
+        ...TEST_SELECTION.preassignedFareProduct.limitations,
+        supplementProductRefs: ['SP2'], // Only SP2 is allowed
+      },
+    };
+
+    const testBaggageProductWithCount = [
+      {
+        ...TEST_BAGGAGE_PRODUCT,
+        id: 'SP2',
+        count: 2,
+      },
+    ];
+
+    const selection = createEmptyBuilder(TEST_INPUT)
+      .fromSelection(TEST_SELECTION)
+      .product(productWithLimitations)
+      .baggageProducts(testBaggageProductWithCount)
+      .build();
+
+    expect(selection.baggageProductsWithCount).toEqual(
+      testBaggageProductWithCount,
+    );
+    expect(selection.preassignedFareProduct.id).toBe('P2');
   });
 });

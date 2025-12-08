@@ -39,6 +39,6 @@ export const Description = ({fc}: Props) => {
 
 const useStyles = StyleSheet.createThemeHook(() => ({
   text: {
-    textAlign: 'center',
+    textAlign: 'left',
   },
 }));

@@ -2,9 +2,11 @@ import {
   PointToPointValidity,
   PreassignedFareProduct,
   FareZone,
+  BaggageProduct,
 } from '@atb/modules/configuration';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {TravelRightDirection} from '@atb-as/utils';
+import {UniqueWithCount} from '@atb/utils/unique-with-count';
 
 export type RecentFareContractType = {
   /**
@@ -18,4 +20,5 @@ export type RecentFareContractType = {
   direction?: TravelRightDirection;
   pointToPointValidity?: PointToPointValidity;
   userProfilesWithCount: UserProfileWithCount[];
+  baggageProductsWithCount: UniqueWithCount<BaggageProduct>[];
 };

@@ -22,7 +22,6 @@ import {
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
 import {useTransportColor} from '@atb/utils/use-transport-color';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import React from 'react';
 import {Linking, View} from 'react-native';
 import {
@@ -60,6 +59,7 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {AUTHORITY} from '@env';
 import {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
 import {getRealtimeState, type TimeValues} from '@atb/utils/realtime';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -95,6 +95,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const style = useSectionStyles();
   const {theme, themeName} = useThemeContext();
   const onCloseFocusRef = React.useRef(null);
+  const bottomSheetModalRef = React.useRef<BottomSheetModal | null>(null);
 
   const isWalkSection = leg.mode === Mode.Foot;
   const isBikeSection = leg.mode === Mode.Bicycle;
@@ -136,13 +137,8 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const shouldShowButtonForOpeningFlexBottomSheet =
     isLineFlexibleTransport(leg.line) && leg.authority?.id === atbAuthorityId;
 
-  const {open: openBottomSheet} = useBottomSheetContext();
-
   function openBookingDetails() {
-    openBottomSheet(
-      () => <FlexibleTransportBookingDetailsSheet leg={leg} />,
-      onCloseFocusRef,
-    );
+    bottomSheetModalRef.current?.present();
   }
 
   const translatedModeName = getTranslatedModeName(leg.mode);
@@ -381,6 +377,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
           staySeated={leg.interchangeTo?.staySeated}
         />
       )}
+      <FlexibleTransportBookingDetailsSheet
+        leg={leg}
+        bottomSheetModalRef={bottomSheetModalRef}
+        onCloseFocusRef={onCloseFocusRef}
+      />
     </>
   );
   return (

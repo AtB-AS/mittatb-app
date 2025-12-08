@@ -1,14 +1,10 @@
 import DeviceBrightness from '@adrianso/react-native-device-brightness';
-import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ValidityStatus} from '../utils';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {FareContractType} from '@atb-as/utils';
-import {FareContractTexts, useTranslation} from '@atb/translations';
+import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import Bugsnag from '@bugsnag/react-native';
 import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
@@ -27,6 +23,10 @@ import {
 } from '@entur-private/abt-token-state-react-native-lib';
 import {CONTEXT_ID} from '@atb/modules/mobile-token';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
+import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -243,11 +243,8 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
   const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
   const [aztecXml, setAztecXml] = useState<string>();
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
-  const onOpenBarcodePress = useStaticBarcodeBottomSheet(
-    aztecXml,
-    onCloseFocusRef,
-  );
+  const onCloseFocusRef = useRef<View | null>(null);
+  const bottomSheetModalRef = useRef<GorhomBottomSheetModal | null>(null);
 
   useEffect(() => {
     if (fc.qrCode) {
@@ -258,24 +255,31 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
   if (!aztecXml) return null;
 
   return (
-    <View
-      style={[
-        styles.aztecCode,
-        {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
-      ]}
-    >
-      <PressableOpacity
-        onPress={onOpenBarcodePress}
-        accessibilityRole="button"
-        accessibilityLabel={t(
-          FareContractTexts.details.barcodeA11yLabelWithActivation,
-        )}
-        testID="staticBarcode"
-        ref={onCloseFocusRef}
+    <>
+      <View
+        style={[
+          styles.aztecCode,
+          {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
+        ]}
       >
-        <SvgXml xml={aztecXml} width="100%" height="100%" />
-      </PressableOpacity>
-    </View>
+        <PressableOpacity
+          onPress={() => bottomSheetModalRef.current?.present()}
+          accessibilityRole="button"
+          accessibilityLabel={t(
+            FareContractTexts.details.barcodeA11yLabelWithActivation,
+          )}
+          testID="staticBarcode"
+          ref={onCloseFocusRef}
+        >
+          <SvgXml xml={aztecXml} width="100%" height="100%" />
+        </PressableOpacity>
+      </View>
+      <StaticBarcodeBottomSheet
+        qrCodeSvg={aztecXml}
+        onCloseFocusRef={onCloseFocusRef}
+        bottomSheetModalRef={bottomSheetModalRef}
+      />
+    </>
   );
 };
 
@@ -284,11 +288,8 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
   const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
   const [qrCodeSvg, setQrCodeSvg] = useState<string>();
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
-  const onOpenBarcodePress = useStaticBarcodeBottomSheet(
-    qrCodeSvg,
-    onCloseFocusRef,
-  );
+  const onCloseFocusRef = useRef<View | null>(null);
+  const bottomSheetModalRef = useRef<GorhomBottomSheetModal | null>(null);
 
   useEffect(() => {
     if (fc.qrCode) {
@@ -299,26 +300,33 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
   if (!qrCodeSvg) return null;
 
   return (
-    <View
-      style={[
-        styles.aztecCode,
-        {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
-        styles.staticQrCode,
-        styles.staticQrCodeSmall,
-      ]}
-    >
-      <PressableOpacity
-        onPress={onOpenBarcodePress}
-        accessibilityRole="button"
-        accessibilityLabel={t(
-          FareContractTexts.details.barcodeA11yLabelWithActivation,
-        )}
-        testID="staticQRCode"
-        ref={onCloseFocusRef}
+    <>
+      <View
+        style={[
+          styles.aztecCode,
+          {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
+          styles.staticQrCode,
+          styles.staticQrCodeSmall,
+        ]}
       >
-        <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
-      </PressableOpacity>
-    </View>
+        <PressableOpacity
+          onPress={() => bottomSheetModalRef.current?.present()}
+          accessibilityRole="button"
+          accessibilityLabel={t(
+            FareContractTexts.details.barcodeA11yLabelWithActivation,
+          )}
+          testID="staticQRCode"
+          ref={onCloseFocusRef}
+        >
+          <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
+        </PressableOpacity>
+      </View>
+      <StaticBarcodeBottomSheet
+        qrCodeSvg={qrCodeSvg}
+        onCloseFocusRef={onCloseFocusRef}
+        bottomSheetModalRef={bottomSheetModalRef}
+      />
+    </>
   );
 };
 
@@ -350,54 +358,49 @@ const useStyles = StyleSheet.createThemeHook(() => ({
   },
 }));
 
-function useStaticBarcodeBottomSheet(
-  qrCodeSvg: string | undefined,
-  onCloseFocusRef: RefObject<any>,
-) {
+const StaticBarcodeBottomSheet = ({
+  qrCodeSvg,
+  onCloseFocusRef,
+  bottomSheetModalRef,
+}: {
+  qrCodeSvg: string | undefined;
+  onCloseFocusRef: RefObject<View | null>;
+  bottomSheetModalRef: RefObject<GorhomBottomSheetModal | null>;
+}) => {
   const styles = useStyles();
   const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
 
-  const {
-    open: openBottomSheet,
-    close: closeBottomSheet,
-    onOpenFocusRef,
-  } = useBottomSheetContext();
-
-  const onOpenBarcodePress = () => {
-    openBottomSheet(
-      () => (
-        <BottomSheetContainer
-          title={t(FareContractTexts.details.bottomSheetTitle)}
-          testID="barcodeBottomSheet"
-          fullHeight
+  return (
+    <BottomSheetModal
+      bottomSheetModalRef={bottomSheetModalRef}
+      heading={t(FareContractTexts.details.bottomSheetTitle)}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      closeCallback={() => giveFocus(onCloseFocusRef)}
+      enableDynamicSizing={false}
+      snapPoints={['80%']}
+    >
+      <View style={styles.staticBottomContainer}>
+        <View
+          style={[
+            styles.aztecCode,
+            {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
+            styles.staticQrCode,
+          ]}
         >
-          <View style={styles.staticBottomContainer}>
-            <View
-              style={[
-                styles.aztecCode,
-                {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
-                styles.staticQrCode,
-              ]}
-            >
-              <PressableOpacity
-                ref={onOpenFocusRef}
-                onPress={closeBottomSheet}
-                accessible={true}
-                accessibilityLabel={t(
-                  FareContractTexts.details.barcodeBottomSheetA11yLabel,
-                )}
-                testID="staticBigQRCode"
-              >
-                <SvgXml xml={qrCodeSvg ?? ''} width="100%" height="100%" />
-              </PressableOpacity>
-            </View>
-          </View>
-        </BottomSheetContainer>
-      ),
-      onCloseFocusRef,
-    );
-  };
-
-  return onOpenBarcodePress;
-}
+          <PressableOpacity
+            onPress={() => bottomSheetModalRef.current?.dismiss()}
+            accessible={true}
+            accessibilityLabel={t(
+              FareContractTexts.details.barcodeBottomSheetA11yLabel,
+            )}
+            testID="staticBigQRCode"
+          >
+            <SvgXml xml={qrCodeSvg ?? ''} width="100%" height="100%" />
+          </PressableOpacity>
+        </View>
+      </View>
+    </BottomSheetModal>
+  );
+};

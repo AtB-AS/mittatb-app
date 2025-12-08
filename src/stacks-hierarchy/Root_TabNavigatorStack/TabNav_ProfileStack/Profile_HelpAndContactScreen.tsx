@@ -16,6 +16,7 @@ import {Support} from '@atb/assets/svg/mono-icons/actions';
 import {CustomerServiceText} from '@atb/translations/screens/subscreens/CustomerService';
 import {ThemedContactIllustration} from '@atb/theme/ThemedAssets';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 export const Profile_HelpAndContactScreen = () => {
   const style = useStyle();
@@ -133,7 +134,9 @@ export const Profile_HelpAndContactScreen = () => {
                 rightIcon={{svg: Support}}
                 accessibilityRole="button"
                 testID="contactCustomerServiceButton"
-                onPress={async () => openLink(`tel:${contactPhoneNumber}`)}
+                onPress={async () =>
+                  Linking.openURL(`tel:${contactPhoneNumber}`)
+                }
               />
             </View>
           )}
@@ -145,7 +148,7 @@ export const Profile_HelpAndContactScreen = () => {
 
 const openLink = async (url: string) => {
   if (await Linking.canOpenURL(url)) {
-    Linking.openURL(url);
+    openInAppBrowser(url, 'close');
   } else {
     Bugsnag.notify(new Error(`Could not open URL: ${url}`));
   }

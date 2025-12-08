@@ -9,6 +9,7 @@ import type {
   PurchaseSelectionType,
 } from '../types';
 import type {FareZoneWithMetadata} from '@atb/fare-zones-selector';
+import {BaggageProduct} from '@atb/modules/configuration';
 
 export const TEST_TYPE_CONFIG: FareProductTypeConfig = {
   type: 'single',
@@ -31,7 +32,10 @@ export const TEST_PRODUCT: PreassignedFareProduct = {
   type: 'single',
   name: {lang: 'no', value: 'Produkt1'},
   version: 'v1',
-  limitations: {userProfileRefs: []},
+  limitations: {
+    userProfileRefs: ['UP1', 'UP2', 'UP3', 'UP4', 'UP5'],
+    supplementProductRefs: ['SP1', 'SP2', 'SP3', 'SP4', 'SP5'],
+  },
   distributionChannel: ['app'],
 };
 
@@ -66,6 +70,15 @@ export const TEST_USER_PROFILE: UserProfile = {
   userTypeString: 'ADULT',
 };
 
+export const TEST_BAGGAGE_PRODUCT: BaggageProduct = {
+  id: 'SP1',
+  name: {lang: 'no', value: 'Sykkel'},
+  version: 'v1',
+  distributionChannel: ['app'],
+  isBaggageProduct: true,
+  baggageType: 'BICYCLE',
+};
+
 export const TEST_INPUT: PurchaseSelectionBuilderInput = {
   fareProductTypeConfigs: [TEST_TYPE_CONFIG],
   preassignedFareProducts: [TEST_PRODUCT],
@@ -86,6 +99,7 @@ export const TEST_SELECTION: PurchaseSelectionType = {
   },
   stopPlaces: undefined,
   userProfilesWithCount: [{...TEST_USER_PROFILE, count: 1}],
+  baggageProductsWithCount: [],
   travelDate: undefined,
   legs: [],
   isOnBehalfOf: false,

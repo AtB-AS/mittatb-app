@@ -2,6 +2,7 @@ import {useGetSupplementProductsQuery} from '@atb/modules/ticketing';
 import {
   PreassignedFareProduct,
   SupplementProduct,
+  BaggageProduct,
 } from '@atb/modules/configuration';
 import {findReferenceDataById} from '@atb/modules/configuration';
 import {isDefined} from '@atb/utils/presence';
@@ -16,7 +17,7 @@ export const useBaggageProducts = (
 export const getBaggageProducts = (
   productsInFareContract: PreassignedFareProduct[],
   allSupplementProducts: SupplementProduct[],
-): SupplementProduct[] => {
+): BaggageProduct[] => {
   const supplementFareProducts = productsInFareContract.filter(
     (p) => p.isSupplementProduct,
   );
@@ -25,5 +26,8 @@ export const getBaggageProducts = (
     .map((p) => findReferenceDataById(allSupplementProducts, p.id))
     .filter(isDefined);
 
-  return supplementProducts.filter((p) => p.isBaggageProduct);
+  return supplementProducts
+    .map((p) => BaggageProduct.safeParse(p))
+    .filter((p) => p.success)
+    .map((p) => p.data);
 };

@@ -1,5 +1,4 @@
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -55,6 +54,7 @@ import {PaymentSelectionSectionItem} from '@atb/modules/payment';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {formatNumberToString} from '@atb-as/utils';
 import {ScreenHeading} from '@atb/components/heading';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -66,8 +66,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {t} = useTranslation();
   const {userId} = useAuthContext();
 
-  const {open: openBottomSheet, close: closeBottomSheet} =
-    useBottomSheetContext();
   const {previousPaymentMethod, recurringPaymentMethods} =
     usePreviousPaymentMethods();
   const analytics = useAnalyticsContext();
@@ -78,7 +76,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const [shouldSavePaymentMethod, setShouldSavePaymentMethod] = useState(false);
   const paymentMethod = selectedPaymentMethod ?? previousPaymentMethod;
   const [vippsNotInstalledError, setVippsNotInstalledError] = useState(false);
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
+  const onCloseFocusRef = useRef<View | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
 
   const {selection, recipient} = params;
 
@@ -95,14 +94,29 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
+    baggageProductsWithCountAndOffer,
   } = useOfferState(preassignedFareProductAlternatives, selection);
 
-  const offers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
+  const userProfileOffers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
     ({count, offer: {offerId}}) => ({
       count,
       offerId,
     }),
   );
+
+  const baggageProductOffers: ReserveOffer[] =
+    baggageProductsWithCountAndOffer.map(
+      ({count, offer: {offerId, supplementProducts}}) => ({
+        count,
+        offerId,
+        selectableProductIds: [supplementProducts[0].selectableId],
+      }),
+    );
+
+  const offers: ReserveOffer[] = [
+    ...userProfileOffers,
+    ...baggageProductOffers,
+  ];
 
   const reserveMutation = useReserveOfferMutation({
     offers,
@@ -193,32 +207,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   }
 
   async function selectPaymentMethod() {
-    openBottomSheet(() => {
-      return (
-        <SelectPaymentMethodSheet
-          recurringPaymentMethods={recurringPaymentMethods}
-          onSelect={(
-            paymentMethod: PaymentMethod,
-            shouldSavePaymentMethod: boolean,
-          ) => {
-            setVippsNotInstalledError(false);
-            if (reserveMutation.data) {
-              cancelPaymentMutation.mutate({
-                reserveOfferResponse: reserveMutation.data,
-                isUser: false,
-              });
-            }
-            setSelectedPaymentMethod(paymentMethod);
-            setShouldSavePaymentMethod(shouldSavePaymentMethod);
-            closeBottomSheet();
-          }}
-          currentOptions={{
-            paymentMethod,
-            shouldSavePaymentMethod,
-          }}
-        />
-      );
-    }, onCloseFocusRef);
+    bottomSheetModalRef.current?.present();
   }
 
   return (
@@ -278,6 +267,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           isSearchingOffer={isSearchingOffer}
           totalPrice={totalPrice}
           userProfilesWithCountAndOffer={userProfilesWithCountAndOffer}
+          baggageProductsWithCountAndOffer={baggageProductsWithCountAndOffer}
         />
         {inspectableTokenWarningText && !recipient && (
           <MessageInfoBox
@@ -343,6 +333,31 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           }}
         />
       </View>
+
+      <SelectPaymentMethodSheet
+        recurringPaymentMethods={recurringPaymentMethods}
+        onSelect={(
+          paymentMethod: PaymentMethod,
+          shouldSavePaymentMethod: boolean,
+        ) => {
+          setVippsNotInstalledError(false);
+          if (reserveMutation.data) {
+            cancelPaymentMutation.mutate({
+              reserveOfferResponse: reserveMutation.data,
+              isUser: false,
+            });
+          }
+          setSelectedPaymentMethod(paymentMethod);
+          setShouldSavePaymentMethod(shouldSavePaymentMethod);
+          bottomSheetModalRef.current?.dismiss();
+        }}
+        currentOptions={{
+          paymentMethod,
+          shouldSavePaymentMethod,
+        }}
+        bottomSheetModalRef={bottomSheetModalRef}
+        onCloseFocusRef={onCloseFocusRef}
+      />
     </FullScreenView>
   );
 };

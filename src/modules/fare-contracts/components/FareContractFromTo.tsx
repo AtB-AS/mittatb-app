@@ -9,10 +9,11 @@ import {
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
 import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import {Size} from '../utils';
 
 type FareContractFromToBaseProps = {
   backgroundColor: ContrastColor;
-  mode: 'small' | 'large';
+  size: Size;
 };
 
 export type FareContractPropsSub = {
@@ -38,7 +39,7 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
       return (
         <ZonesFromTo
           fareZoneRefs={controllerData.fareZoneRefs}
-          mode={props.mode}
+          size={props.size}
           backgroundColor={props.backgroundColor}
         />
       );
@@ -48,7 +49,7 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
           startPointRef={controllerData.startPointRef}
           endPointRef={controllerData.endPointRef}
           direction={controllerData.direction}
-          mode={props.mode}
+          size={props.size}
           backgroundColor={props.backgroundColor}
         />
       );
@@ -57,7 +58,7 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
         <SchoolFromTo
           schoolName={controllerData.schoolName}
           backgroundColor={props.backgroundColor}
-          mode={props.mode}
+          size={props.size}
         />
       );
   }
