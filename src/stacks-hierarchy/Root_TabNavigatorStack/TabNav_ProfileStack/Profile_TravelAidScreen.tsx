@@ -67,7 +67,7 @@ export const Profile_TravelAidScreen = () => {
           />
           <GenericSectionItem>
             <ThemeText isMarkdown={true} typography="body__s">
-              {t(TravelAidSettingsTexts.toggle.subText)}
+              {t(TravelAidSettingsTexts.description)}
             </ThemeText>
           </GenericSectionItem>
           {hasContactPhoneNumber && (

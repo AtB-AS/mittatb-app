@@ -1,4 +1,3 @@
-import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
 import {translation as _} from '../../commons';
 
 const TravelAidTexts = {
@@ -58,46 +57,18 @@ const TravelAidTexts = {
   },
   onboarding: {
     title: _(
-      'Vil du aktivere Reisehjelp?',
-      'Do you want to enable Journey Aid?',
-      'Vil du aktivere Reisehjelp?',
+      'Vil du prøve stoppknapp?',
+      'Want to try our stop button?',
+      'Vil du prøve stoppknapp?',
     ),
     description: _(
-      'Reisehjelp er en egen visning i avganger hvor du kan sende stoppsignal til AtB sine busser rett fra appen.',
-      'Journey Aid is a dedicated view in departures where you can send a stop signal to AtB buses directly from the app.',
-      'Reisehjelp er ein eigen visning i avgangar der du kan sende stopp-signal til AtB sine bussar rett frå appen.',
+      'For å få tilgang til stoppknappen i appen, må du slå på Reisehjelp her på denne siden eller i appens tilgjengelighetsinnstillinger.\n\nReisehjelp gir deg mulighet til å stoppe buss og trikk fra holdeplass. I tillegg får du sanntidsinformasjon før ankomst på valgt holdeplass og under reisen.\n\nDu finner Reisehjelp ved å velge en buss eller trikk under Avganger i hovedmenyen.',
+      "To access the stop button in the app, you need to enable Journey Aid here on this page or in the app's accessibility settings.\n\nJourney Aid lets you stop buses and trams from the stop. In addition, you get real-time information before arrival at the selected stop and during the journey.\n\nYou can find Journey Aid by selecting a bus or tram under Departures in the main menu.",
+      'For å få tilgang til stoppknappen i appen, må du slå på Reisehjelp her på denne sida eller i appens tilgjengelegheitsinnstillingar.\n\nReisehjelp gir deg moglegheit til å stoppe buss og trikk frå haldeplass. I tillegg får du sanntidsinformasjon før ankomst på vald haldeplass og under reisa.\n\nDu finn Reisehjelp ved å velje ein buss eller trikk under Avgangar i hovudmenyen.',
     ),
-    activate: _('Aktiver', 'Enable', 'Aktiver'),
-    dismiss: _('Ikke aktiver', 'Do not enable', 'Ikke aktiver'),
+    activate: _('Slå på Reisehjelp', 'Enable Journey Aid', 'Slå på Reisehjelp'),
+    skip: _('Hopp over', 'Skip', 'Hopp over'),
   },
 };
 
-export default orgSpecificTranslations(TravelAidTexts, {
-  fram: {
-    onboarding: {
-      description: _(
-        'Reisehjelp er en egen visning i avganger hvor du kan sende stoppsignal til FRAM sine busser rett fra appen.',
-        'Journey Aid is a dedicated view in departures where you can send a stop signal to FRAM buses directly from the app.',
-        'Reisehjelp er ein eigen visning i avgangar der du kan sende stopp-signal til FRAM sine bussar rett frå appen.',
-      ),
-    },
-  },
-  nfk: {
-    onboarding: {
-      description: _(
-        'Reisehjelp er en egen visning i avganger hvor du kan sende stoppsignal til Reis sine busser rett fra appen.',
-        'Journey Aid is a dedicated view in departures where you can send a stop signal to Reis buses directly from the app.',
-        'Reisehjelp er ein eigen visning i avgangar der du kan sende stopp-signal til Reis sine bussar rett frå appen.',
-      ),
-    },
-  },
-  troms: {
-    onboarding: {
-      description: _(
-        'Reisehjelp er en egen visning i avganger hvor du kan sende stoppsignal til Svipper sine busser rett fra appen.',
-        'Journey Aid is a dedicated view in departures where you can send a stop signal to Svipper buses directly from the app.',
-        'Reisehjelp er ein eigen visning i avgangar der du kan sende stopp-signal til Svipper sine bussar rett frå appen.',
-      ),
-    },
-  },
-});
+export default TravelAidTexts;
