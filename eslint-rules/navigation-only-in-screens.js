@@ -187,8 +187,6 @@ module.exports = {
             'popToTop',
             'setParams',
             'setOptions',
-            'addListener',
-            'removeListener',
           ];
 
           if (navigationMethods.includes(property.name)) {

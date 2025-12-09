@@ -7,6 +7,7 @@ import {NearbyStopPlacesScreenComponent} from '@atb/screen-components/nearby-sto
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import SharedTexts from '@atb/translations/shared';
 import {useThemeContext} from '@atb/theme';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = DeparturesStackProps<'Departures_NearbyStopPlacesScreen'>;
 
@@ -17,9 +18,11 @@ export const Departures_NearbyStopPlacesScreen = ({
   const fromLocation = useOnlySingleLocation(route, 'location');
   const {t} = useTranslation();
   const {theme} = useThemeContext();
+  const focusRef = useFocusOnLoad(navigation);
 
   return (
     <NearbyStopPlacesScreenComponent
+      focusRef={focusRef}
       location={fromLocation}
       mode={route.params.mode}
       headerProps={{

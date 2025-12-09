@@ -20,6 +20,7 @@ import {compressImage} from '@atb/utils/image';
 import {View} from 'react-native';
 import {BottomSheetModal as GorhamBottomSheetModal} from '@gorhom/bottom-sheet';
 import {ViolationsReportingProvider} from '@atb/api/types/mobility';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export type QrScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsQrScreen'>;
@@ -29,6 +30,7 @@ export const Root_ParkingViolationsQrScreen = ({
   route: {params},
 }: QrScreenProps) => {
   const {t} = useTranslation();
+  const focusRef = useFocusOnLoad(navigation);
   const style = useStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
@@ -166,6 +168,7 @@ export const Root_ParkingViolationsQrScreen = ({
         secondaryText={t(ParkingViolationTexts.qr.instructions)}
         isLoading={isLoading}
         onGoBack={onGoBack}
+        focusRef={focusRef}
       >
         {isError && (
           <MessageInfoBox

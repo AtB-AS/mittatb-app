@@ -11,10 +11,12 @@ import {TokenToggleInfo} from '@atb/screen-components/select-travel-token-screen
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {ProfileScreenProps} from '../navigation-types';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = ProfileScreenProps<'Profile_TravelTokenScreen'>;
 
 export const Profile_TravelTokenScreen = ({navigation}: Props) => {
+  const focusRef = useFocusOnLoad(navigation);
   const styles = useStyles();
   const {t} = useTranslation();
   const {disable_travelcard} = useRemoteConfigContext();
@@ -29,6 +31,7 @@ export const Profile_TravelTokenScreen = ({navigation}: Props) => {
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title,
         leftButton: {type: 'back'},

@@ -27,7 +27,7 @@ export const Root_ConsiderTravelTokenChangeScreen = ({navigation}: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
-  const focusRef = useFocusOnLoad();
+  const focusRef = useFocusOnLoad(navigation);
   const {disable_travelcard} = useRemoteConfigContext();
   const onPressChangeButton = () =>
     navigation.navigate('Root_SelectTravelTokenScreen');
@@ -43,7 +43,10 @@ export const Root_ConsiderTravelTokenChangeScreen = ({navigation}: Props) => {
   );
 
   const NoTokenView = (
-    <NoTravelTokenInfo onPressFooterButton={onPressContinue} />
+    <NoTravelTokenInfo
+      onPressFooterButton={onPressContinue}
+      focusRef={focusRef}
+    />
   );
 
   const {tokens, mobileTokenStatus} = useMobileTokenContext();
@@ -63,8 +66,9 @@ export const Root_ConsiderTravelTokenChangeScreen = ({navigation}: Props) => {
         text: t(ConsiderTravelTokenChangeTexts.nextButton),
         expanded: true,
       }}
+      focusRef={focusRef}
     >
-      <View ref={focusRef} accessible>
+      <View accessible>
         <ThemeText
           typography="heading__xl"
           color={themeColor}

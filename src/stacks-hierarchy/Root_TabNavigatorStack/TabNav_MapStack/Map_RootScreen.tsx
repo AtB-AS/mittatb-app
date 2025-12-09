@@ -14,6 +14,7 @@ import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {ScooterHelpScreenProps} from '@atb/stacks-hierarchy/Root_ScooterHelp/Root_ScooterHelpScreen';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export type MapScreenParams = {
   initialFilters?: MapFilterType;
@@ -129,7 +130,10 @@ export const Map_RootScreen = ({
     }
   }, [enable_vipps_login, hasReservationOrAvailableFareContract, navigation]);
 
-  if (isScreenReaderEnabled) return <MapDisabledForScreenReader />;
+  const focusRef = useFocusOnLoad(navigation);
+
+  if (isScreenReaderEnabled)
+    return <MapDisabledForScreenReader focusRef={focusRef} />;
 
   return (
     <Map

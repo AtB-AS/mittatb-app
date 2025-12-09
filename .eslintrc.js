@@ -163,7 +163,6 @@ module.exports = {
           'src/stacks-hierarchy/RootStack.tsx',
           'src/stacks-hierarchy/navigation-utils.ts',
           'src/components/screen-header/HeaderButton.tsx',
-          'src/utils/use-focus-on-load.ts',
           'src/utils/use-is-focused-and-active.ts',
           'src/modules/onboarding/use-onboarding-navigation.ts',
           'src/modules/onboarding/onboarding-carousel/use-onboarding-carousel-navigation.ts',

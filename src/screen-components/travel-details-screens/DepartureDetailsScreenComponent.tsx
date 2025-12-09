@@ -35,7 +35,7 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import React, {useCallback, useRef, useState} from 'react';
+import React, {Ref, useCallback, useRef, useState} from 'react';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
@@ -97,6 +97,7 @@ type Props = DepartureDetailsScreenParams & {
   onPressDetailsMap: (params: TravelDetailsMapScreenParams) => void;
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
   onPressTravelAid: () => void;
+  focusRef: Ref<any>;
 };
 
 export const DepartureDetailsScreenComponent = ({
@@ -105,6 +106,7 @@ export const DepartureDetailsScreenComponent = ({
   onPressDetailsMap,
   onPressQuay,
   onPressTravelAid,
+  focusRef,
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useThemeContext();
@@ -277,6 +279,7 @@ export const DepartureDetailsScreenComponent = ({
   return (
     <View style={styles.container}>
       <FullScreenView
+        focusRef={focusRef}
         headerProps={{
           leftButton: {type: 'back'},
           title: t(DepartureDetailsTexts.header.alternateTitle),

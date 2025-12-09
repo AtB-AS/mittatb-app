@@ -1,6 +1,6 @@
 import {Camera, CameraScreenContainer, PhotoFile} from '@atb/components/camera';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {useRef, useState} from 'react';
+import {Ref, useRef, useState} from 'react';
 import {ImageConfirmationBottomSheet} from './ImageConfirmationBottomSheet';
 import {Coordinates} from '@atb/utils/coordinates';
 import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
@@ -14,6 +14,7 @@ type PhotoCaptureProps = {
   title: string;
   secondaryText: string;
   isLoading?: boolean;
+  focusRef?: Ref<any>;
 };
 
 export const PhotoCapture = ({
@@ -23,6 +24,7 @@ export const PhotoCapture = ({
   title,
   secondaryText,
   isLoading = false,
+  focusRef,
 }: PhotoCaptureProps) => {
   const isFocused = useIsFocusedAndActive();
 
@@ -41,6 +43,7 @@ export const PhotoCapture = ({
       secondaryText={secondaryText}
       isLoading={isLoading}
       onGoBack={onGoBack}
+      focusRef={focusRef}
     >
       {isFocused && (
         <>

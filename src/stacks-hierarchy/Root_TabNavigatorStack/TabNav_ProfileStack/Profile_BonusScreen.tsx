@@ -35,16 +35,18 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {MapPin} from '@atb/assets/svg/mono-icons/tab-bar';
-import {useNavigation} from '@react-navigation/native';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_BonusScreen = () => {
+type Props = ProfileScreenProps<'Profile_BonusScreen'>;
+
+export const Profile_BonusScreen = ({navigation}: Props) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
   const {bonusProducts, mobilityOperators} = useFirestoreConfigurationContext();
-  const navigation = useNavigation<RootNavigationProps>();
 
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
@@ -53,12 +55,12 @@ export const Profile_BonusScreen = () => {
     !isDefined(userBonusBalance) ||
     Number.isNaN(userBonusBalance) ||
     userBonusBalanceStatus === 'error';
-
   const activeBonusProducts = bonusProducts?.filter(isActive);
   const analytics = useAnalyticsContext();
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(BonusProgramTexts.bonusProfile.header.title),
         leftButton: {type: 'back'},

@@ -13,6 +13,7 @@ import {blobToBase64} from '@atb/modules/parking-violations-reporting';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {compressImage} from '@atb/utils/image';
 import {useCallback} from 'react';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export type ParkingPhotoScreenProps =
   RootStackScreenProps<'Root_ParkingPhotoScreen'>;
@@ -21,6 +22,7 @@ export const Root_ParkingPhotoScreen = ({
   navigation,
   route,
 }: ParkingPhotoScreenProps) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
   const styles = useStyles();
   const {dispatchMapState} = useMapContext();
@@ -88,6 +90,7 @@ export const Root_ParkingPhotoScreen = ({
       onGoBack={onGoBack}
       title={t(MobilityTexts.photo.header)}
       secondaryText={t(MobilityTexts.photo.subHeader)}
+      focusRef={focusRef}
     />
   );
 };

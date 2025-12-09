@@ -26,7 +26,7 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
   const styles = useStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
-  const focusRef = useFocusOnLoad();
+  const focusRef = useFocusOnLoad(navigation);
   const {reservations} = useTicketingContext();
   const {serverNow} = useTimeContext();
   const {fareContracts: availableFareContracts} = useFareContracts(
@@ -50,7 +50,6 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
     <View style={styles.container}>
       <FullScreenHeader
         leftButton={{type: 'back'}}
-        setFocusOnLoad={false}
         color={themeColor}
         title={t(LoginTexts.availableFareContractPrompt.header)}
       />

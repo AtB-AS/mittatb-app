@@ -1,5 +1,5 @@
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import React from 'react';
+import React, {Ref} from 'react';
 import {
   RootNavigationProps,
   RootStackParamList,
@@ -51,6 +51,8 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
     return navigation.navigate(screen, {});
   };
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <AnonymousPurchaseConsequencesScreenComponent
       onPressLogin={params.showLoginButton ? onPressLogin : undefined}
@@ -65,6 +67,7 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
           ? {type: 'close'}
           : undefined
       }
+      focusRef={focusRef}
     />
   );
 };
@@ -74,17 +77,18 @@ type AnonymousPurchaseConsequencesScreenComponentProps = {
   onPressLogin?: () => void;
   leftButton?: LeftButtonProps;
   rightButton?: RightButtonProps;
+  focusRef: Ref<any>;
 };
 export const AnonymousPurchaseConsequencesScreenComponent = ({
   onPressContinueWithoutLogin,
   onPressLogin,
   leftButton,
   rightButton,
+  focusRef,
 }: AnonymousPurchaseConsequencesScreenComponentProps) => {
   const styles = useStyle();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const focusRef = useFocusOnLoad();
 
   const themeColor = getThemeColor(theme);
 
@@ -109,6 +113,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
 
   return (
     <OnboardingFullScreenView
+      focusRef={focusRef}
       fullScreenHeaderProps={{leftButton, rightButton}}
       footerButton={onPressLogin ? loginButton : continueWithoutLoginButton}
       secondaryFooterButton={

@@ -10,7 +10,7 @@ import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {dictionary, TravelTokenTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {Ref, useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {RadioGroupSection} from '@atb/components/sections';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
@@ -22,9 +22,12 @@ import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
 
-type Props = {onAfterSave: () => void};
+type Props = {onAfterSave: () => void; focusRef: Ref<any>};
 
-export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
+export const SelectTravelTokenScreenComponent = ({
+  onAfterSave,
+  focusRef,
+}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -78,6 +81,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title,
         rightButton: {type: 'cancel'},

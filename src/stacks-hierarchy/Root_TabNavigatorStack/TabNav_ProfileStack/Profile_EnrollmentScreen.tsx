@@ -21,6 +21,8 @@ import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {OnboardingCarouselConfigId} from '@atb/modules/onboarding';
 import {bonusOnboardingId} from '@atb/modules/bonus';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
 // Mapping of enrollment IDs to onboarding carousel config IDs for enrollments with onboarding
 const enrollmentOnboardingConfig: Record<string, OnboardingCarouselConfigId> = {
@@ -28,7 +30,9 @@ const enrollmentOnboardingConfig: Record<string, OnboardingCarouselConfigId> = {
   'bonus-pilot-b': bonusOnboardingId,
 };
 
-export const Profile_EnrollmentScreen = () => {
+type Props = ProfileScreenProps<'Profile_EnrollmentScreen'>;
+
+export const Profile_EnrollmentScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -38,9 +42,12 @@ export const Profile_EnrollmentScreen = () => {
 
   const {onEnroll, hasError, isLoading, isEnrolled} = useEnroll();
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
       <FullScreenView
+        focusRef={focusRef}
         headerProps={{
           title: t(EnrollmentTexts.header),
           leftButton: {type: 'back'},

@@ -17,12 +17,13 @@ import {AssetFromQrCodeResponse} from '@atb/api/types/mobility';
 import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {tGlobal} from '@atb/modules/locale';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export type Props = RootStackScreenProps<'Root_ScanQrCodeScreen'>;
 
 export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   const {t} = useTranslation();
-
+  const focusRef = useFocusOnLoad(navigation);
   const isFocused = useIsFocusedAndActive();
   const {dispatchMapState} = useMapContext();
   const [hasCapturedQr, setHasCapturedQr] = useState(false);
@@ -139,6 +140,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
       secondaryText={t(ParkingViolationTexts.qr.instructions)}
       isLoading={getAssetFromQrCodeIsLoading}
       onGoBack={onGoBack}
+      focusRef={focusRef}
     >
       {isFocused &&
         !getAssetFromQrCodeIsLoading &&

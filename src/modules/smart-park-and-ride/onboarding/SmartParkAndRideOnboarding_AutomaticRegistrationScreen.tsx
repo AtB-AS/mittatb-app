@@ -2,6 +2,7 @@ import {getTextForLanguage, useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import React from 'react';
 import {
+  OnboardingCarouselScreenProps,
   OnboardingScreenComponent,
   useOnboardingCarouselNavigation,
 } from '@atb/modules/onboarding';
@@ -11,8 +12,15 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
-export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
+export type AutomaticRegistrationScreenProps =
+  OnboardingCarouselScreenProps<'SmartParkAndRideOnboarding_AutomaticRegistrationScreen'>;
+
+export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = ({
+  navigation,
+}: AutomaticRegistrationScreenProps) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {t, language} = useTranslation();
   const analytics = useAnalyticsContext();
   const {configurableLinks} = useFirestoreConfigurationContext();
@@ -79,6 +87,7 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
         rightIcon: {svg: ArrowRight},
       }}
       testID="smartParkAndRideOnboardingAutomaticRegistration"
+      focusRef={focusRef}
     />
   );
 };

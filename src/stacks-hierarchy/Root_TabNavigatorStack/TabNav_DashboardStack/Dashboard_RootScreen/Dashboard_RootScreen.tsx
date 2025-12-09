@@ -41,6 +41,7 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {BonusDashboard} from './components/BonusDashboard';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
@@ -61,6 +62,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
   const {isBonusProgramEnabled} = useFeatureTogglesContext();
   const {locationIsAvailable, location, requestLocationPermission} =
     useGeolocationContext();
+  const focusRef = useFocusOnLoad(navigation);
 
   const isFocused = useIsFocused();
 
@@ -173,6 +175,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(DashboardTexts.header.title),
         globalMessageContext: GlobalMessageContextEnum.appAssistant,

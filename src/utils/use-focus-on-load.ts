@@ -4,7 +4,7 @@ import {
   findNodeHandle,
   InteractionManager,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {NavigationProp} from '@react-navigation/native';
 
 /**
  * Return a ref which can be set on a component to make it be focused by screen
@@ -13,10 +13,14 @@ import {useNavigation} from '@react-navigation/native';
  *
  * In some cases, like in a stack, it is necessary to use a timeout to let the
  * screen render complete before giving focus.
+ *
+ * If no navigation is provided, the focus will be given on mount. And will not update on navigation changes.
  */
-export function useFocusOnLoad(setFocusOnLoad: boolean = true): Ref<any> {
+export function useFocusOnLoad(
+  navigation?: NavigationProp<any>,
+  setFocusOnLoad: boolean = true,
+): Ref<any> {
   const focusRef = useRef(null);
-  const navigation = useNavigationSafe();
 
   const focusCallbackRef: RefCallback<any> = useCallback(
     (node) => {
@@ -37,21 +41,6 @@ export function useFocusOnLoad(setFocusOnLoad: boolean = true): Ref<any> {
 
   return focusCallbackRef;
 }
-
-const useNavigationSafe = () => {
-  try {
-    return useNavigation();
-  } catch {
-    /*
-    Navigation is not available as the current context is not inside a screen in
-    a navigator
-     */
-    console.error(
-      'Navigation is not available as the current context is not inside a screen in a navigator',
-    );
-    return undefined;
-  }
-};
 
 export const giveFocus = (
   focusRef?: React.RefObject<any> | null | undefined,

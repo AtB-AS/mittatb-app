@@ -8,11 +8,15 @@ import {
 import {ThemedContact} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {bonusOnboardingId} from './config';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export type WelcomeScreenProps =
   OnboardingCarouselScreenProps<'BonusOnboarding_WelcomeScreen'>;
 
-export const BonusOnboarding_WelcomeScreen = ({}: WelcomeScreenProps) => {
+export const BonusOnboarding_WelcomeScreen = ({
+  navigation,
+}: WelcomeScreenProps) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
 
   const {navigateToNextScreen} = useOnboardingCarouselNavigation(
@@ -32,6 +36,7 @@ export const BonusOnboarding_WelcomeScreen = ({}: WelcomeScreenProps) => {
         rightIcon: {svg: ArrowRight},
       }}
       testID="welcomeBonusOnboarding"
+      focusRef={focusRef}
     />
   );
 };

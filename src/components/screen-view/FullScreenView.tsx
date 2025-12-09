@@ -10,7 +10,6 @@ import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
 import * as React from 'react';
 import {Ref, useState} from 'react';
 import {ParallaxScroll} from '@atb/components/parallax-scroll';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {FullScreenFooter} from '../screen-footer';
 import {ContrastColor} from '@atb/theme/colors';
 
@@ -34,6 +33,13 @@ type Props = {
   contentColor?: ContrastColor;
   avoidKeyboard?: boolean;
   testID?: string;
+  /**
+   * The ref for the header to focus on load and navigation changes.
+   *
+   * Must explicitly be undefined if header is not going to be focused.
+   * E.g. if the header is not going to be visible, or content will be focused instead.
+   */
+  focusRef: Ref<any> | undefined;
 };
 
 type PropsWithParallaxContent = Props &
@@ -70,6 +76,8 @@ export function FullScreenView(props: Props) {
     <ChildrenInNormalScrollView {...props} contentColor={props.contentColor} />
   );
 
+  const headeFocusRef = !titleShouldAnimate ? props.focusRef : undefined;
+
   return (
     <>
       <View
@@ -82,9 +90,7 @@ export function FullScreenView(props: Props) {
         <ScreenHeader
           {...props.headerProps}
           textOpacity={opacity}
-          setFocusOnLoad={
-            titleShouldAnimate ? false : props.headerProps.setFocusOnLoad
-          }
+          focusRef={headeFocusRef}
         />
       </View>
 
@@ -114,8 +120,8 @@ const ChildrenWithParallaxScrollContent = ({
   headerColor,
   handleScroll,
   titleAlwaysVisible,
+  focusRef,
 }: PropsWithParallaxContent & {headerColor: string}) => {
-  const focusRef = useFocusOnLoad();
   const styles = useStyles();
   return (
     <View style={styles.container}>

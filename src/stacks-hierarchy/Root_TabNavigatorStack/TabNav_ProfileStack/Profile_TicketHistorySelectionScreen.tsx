@@ -8,6 +8,7 @@ import Ticketing, {
 import {ProfileScreenProps} from './navigation-types';
 import {StyleSheet} from '@atb/theme';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = ProfileScreenProps<'Profile_TicketHistorySelectionScreen'>;
 
@@ -17,8 +18,11 @@ export const Profile_TicketHistorySelectionScreen = ({navigation}: Props) => {
 
   const {isOnBehalfOfEnabled} = useFeatureTogglesContext();
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(Ticketing.ticketHistory.title),
         leftButton: {type: 'back'},

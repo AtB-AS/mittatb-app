@@ -62,6 +62,7 @@ import {DatePickerSheet} from '@atb/components/date-selection';
 import SharedTexts from '@atb/translations/shared';
 import {TravelSearchFiltersBottomSheet} from './components/TravelSearchFiltersBottomSheet';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -83,6 +84,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     option: 'now',
     date: new Date().toISOString(),
   });
+  const focusRef = useFocusOnLoad(navigation);
 
   const {language, t} = useTranslation();
   const [updatingLocation] = useState<boolean>(false);
@@ -250,6 +252,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   return (
     <View style={styles.container}>
       <FullScreenView
+        focusRef={focusRef}
         titleAlwaysVisible={true}
         headerProps={{
           title: t(TripSearchTexts.header.title),

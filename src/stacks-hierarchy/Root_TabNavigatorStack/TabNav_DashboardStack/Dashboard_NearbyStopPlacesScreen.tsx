@@ -5,6 +5,7 @@ import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import {NearbyStopPlacesScreenComponent} from '@atb/screen-components/nearby-stop-places';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import SharedTexts from '@atb/translations/shared';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = DashboardScreenProps<'Dashboard_NearbyStopPlacesScreen'>;
 
@@ -14,9 +15,11 @@ export const Dashboard_NearbyStopPlacesScreen = ({
 }: Props) => {
   const fromLocation = useOnlySingleLocation(route, 'location');
   const {t} = useTranslation();
+  const focusRef = useFocusOnLoad(navigation);
 
   return (
     <NearbyStopPlacesScreenComponent
+      focusRef={focusRef}
       location={fromLocation}
       mode={route.params.mode}
       headerProps={{
