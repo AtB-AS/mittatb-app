@@ -4,10 +4,6 @@ export const MAX_FONT_SCALE = 2;
 
 export const screenReaderPause = '\n';
 
-export function shouldUseCustomAndroidFont(androidSystemFont: boolean) {
-  return Platform.OS === 'android' && !androidSystemFont;
-}
-
 export function fontWeightToRobotoFamily(weight?: string) {
   switch (weight) {
     case '400':
@@ -27,7 +23,7 @@ export function getTextWeightStyleWithCustomAndroidHandling(
   fontWeight: TextStyle['fontWeight'],
 ): TextStyle {
   // Android custom font handling
-  if (shouldUseCustomAndroidFont(androidSystemFont)) {
+  if (Platform.OS === 'android' && !androidSystemFont) {
     return {
       fontFamily: fontWeightToRobotoFamily(fontWeight?.toString()),
       fontWeight: 'normal',
