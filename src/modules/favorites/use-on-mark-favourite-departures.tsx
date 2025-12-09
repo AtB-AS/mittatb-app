@@ -1,6 +1,6 @@
 import {AccessibilityInfo, Alert} from 'react-native';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
-import {Quay} from '@atb/api/types/departures';
+import {EstimatedCall, Quay} from '@atb/api/types/departures';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import React, {RefObject} from 'react';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
@@ -26,9 +26,17 @@ export type FavouriteDepartureLine = {
 export function useOnMarkFavouriteDepartures(
   quay: Pick<Quay, 'id' | 'name' | 'publicCode'>,
   addedFavoritesVisibleOnDashboard?: boolean,
+  serviceJourneyId?: string | undefined,
+  serviceDate?: string | undefined,
+  date?: string | undefined,
+  fromStopPosition?: number | undefined,
 ) {
-  const {addFavoriteDeparture, removeFavoriteDeparture, getFavoriteDeparture} =
-    useFavoritesContext();
+  const {
+    addFavoriteDeparture,
+    removeFavoriteDeparture,
+    getFavoriteDeparture,
+    addFavoriteJourney,
+  } = useFavoritesContext();
   const {t} = useTranslation();
   const {open: openBottomSheet, onOpenFocusRef} = useBottomSheetContext();
   const addFavorite = async (
@@ -51,6 +59,16 @@ export function useOnMarkFavouriteDepartures(
     AccessibilityInfo.announceForAccessibility(
       t(DeparturesTexts.results.lines.favorite.message.saved),
     );
+  };
+
+  const addSpecificDepartureJourneyFavorite = async () => {
+    if (!serviceJourneyId || !serviceDate || !date || !fromStopPosition) return;
+    await addFavoriteJourney({
+      serviceJourneyId: serviceJourneyId,
+      serviceDate: serviceDate,
+      date: date,
+      fromStopPosition: fromStopPosition,
+    });
   };
 
   const getExistingFavorite = (line: FavouriteDepartureLine) =>
@@ -126,6 +144,9 @@ export function useOnMarkFavouriteDepartures(
               addFavorite(line, forSpecificLineName)
             }
             ref={onOpenFocusRef}
+            addSpecificDepartureJourneyFavorite={() =>
+              addSpecificDepartureJourneyFavorite()
+            }
           />
         ) : (
           <></>

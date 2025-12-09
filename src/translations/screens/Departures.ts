@@ -298,6 +298,11 @@ const DeparturesTexts = {
         `Korleis variasjon av linje ${lineNumber} frå ${quayName} ønsker du å sette som favoritt?`,
       ),
     buttons: {
+      specificServiceJourney: _(
+        `Kun akkurat denne avgangen`,
+        `Only this departure`,
+        `Berre denne avgangen`,
+      ),
       specific: (lineNumber: string, lineName: string) =>
         _(
           `Kun '${lineNumber} ${lineName}'`,

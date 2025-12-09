@@ -14,16 +14,27 @@ import {StyleSheet} from '@atb/theme/StyleSheet';
 import {DestinationDisplay} from '@atb/api/types/generated/journey_planner_v3_types';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 import {useThemeContext} from '@atb/theme';
+import SvgTime from '@atb/assets/svg/mono-icons/time/Time';
 
 type Props = {
   lineNumber: string;
   destinationDisplay: DestinationDisplay;
   addFavorite: (forSpecificLineName: boolean) => void;
+  addSpecificDepartureJourneyFavorite: () => void;
   quayName: string;
 };
 
 export const FavoriteDialogSheet = forwardRef<View, Props>(
-  ({lineNumber, destinationDisplay, addFavorite, quayName}, focusRef) => {
+  (
+    {
+      lineNumber,
+      destinationDisplay,
+      addFavorite,
+      addSpecificDepartureJourneyFavorite,
+      quayName,
+    },
+    focusRef,
+  ) => {
     const {t} = useTranslation();
     const {theme} = useThemeContext();
     const interactiveColor = theme.color.interactive[0];
@@ -48,6 +59,22 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
         </View>
         <FullScreenFooter>
           <View style={styles.buttonContainer}>
+            {addSpecificDepartureJourneyFavorite && (
+              <Button
+                expanded={true}
+                interactiveColor={interactiveColor}
+                onPress={() => {
+                  close();
+                  addSpecificDepartureJourneyFavorite();
+                }}
+                text={t(
+                  DeparturesTexts.favoriteDialogSheet.buttons
+                    .specificServiceJourney,
+                )}
+                rightIcon={{svg: SvgTime}}
+                testID="onlySelectedServiceJourney"
+              />
+            )}
             <Button
               expanded={true}
               interactiveColor={interactiveColor}

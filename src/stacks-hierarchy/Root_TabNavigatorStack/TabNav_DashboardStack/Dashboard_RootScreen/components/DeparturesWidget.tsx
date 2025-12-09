@@ -33,6 +33,12 @@ type Props = {
   onEditFavouriteDeparture: () => void;
   onAddFavouriteDeparture: () => void;
   onPressDeparture: QuaySectionProps['onPressDeparture'];
+  onPressJourney: (
+    serviceJourneyId: string,
+    serviceDate: string,
+    date: string,
+    fromStopPosition: number,
+  ) => void;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -40,13 +46,14 @@ export const DeparturesWidget = ({
   onEditFavouriteDeparture,
   onAddFavouriteDeparture,
   onPressDeparture,
+  onPressJourney,
   style,
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.neutral[1];
-  const {favoriteDepartures} = useFavoritesContext();
+  const {favoriteDepartures, favoriteJourneys} = useFavoritesContext();
   const {location} = useGeolocationContext();
   const {state, loadInitialDepartures, searchDate} = useFavoriteDepartureData();
   const onCloseFocusRef = useRef<View>(null);
@@ -111,6 +118,23 @@ export const DeparturesWidget = ({
               testID="stopPlace"
             />
           ))}
+        </View>
+      ))}
+      <ThemeText typography="heading__m">Favorite Journeys!!!</ThemeText>
+      {favoriteJourneys.map((journey) => (
+        <View key={journey.serviceJourneyId}>
+          <ThemeText
+            onPress={() =>
+              onPressJourney(
+                journey.serviceJourneyId,
+                journey.serviceDate,
+                journey.date,
+                journey.fromStopPosition,
+              )
+            }
+          >
+            {journey.serviceJourneyId}
+          </ThemeText>
         </View>
       ))}
       {!!favoriteDepartures.length && (

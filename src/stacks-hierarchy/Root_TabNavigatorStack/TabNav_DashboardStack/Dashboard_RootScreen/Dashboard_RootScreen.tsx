@@ -301,6 +301,24 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
               activeItemIndex,
             })
           }
+          onPressJourney={(
+            serviceJourneyId: string,
+            serviceDate: string,
+            date: string,
+            fromStopPosition: number,
+          ) =>
+            navigation.navigate('Dashboard_DepartureDetailsScreen', {
+              items: [
+                {
+                  serviceJourneyId,
+                  serviceDate,
+                  date,
+                  fromStopPosition,
+                },
+              ],
+              activeItemIndex: 0,
+            })
+          }
         />
       </ScrollView>
     </FullScreenView>

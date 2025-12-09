@@ -40,10 +40,20 @@ export type LocationFavorite = {
   name?: string;
 };
 
+export type FavoriteJourney = {
+  serviceJourneyId: string;
+  serviceDate: string;
+  date: string;
+  fromStopPosition: number;
+};
+
 export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
 
 export type StoredLocationFavorite = StoredType<LocationFavorite>;
 export type UserFavorites = StoredLocationFavorite[];
+
+export type StoredFavoriteJourney = StoredType<FavoriteJourney>;
+export type UserFavoriteJourneys = StoredFavoriteJourney[];
 
 // NOTE: The iOS departure widget is dependent on this type. When changing it,
 // make sure to update the widget as well.

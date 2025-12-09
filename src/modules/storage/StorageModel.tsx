@@ -20,6 +20,7 @@ export type StorageModel = {
   '@ATB_saved_payment_methods': string;
   '@ATB_search-history': string;
   '@ATB_user_departures': string;
+  '@ATB_user_journeys': string;
   '@ATB_user_frontpage_departures': string;
   '@ATB_user_map_filters': string;
   '@ATB_user_preferences': string;

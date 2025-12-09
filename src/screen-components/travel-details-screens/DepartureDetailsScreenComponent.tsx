@@ -83,6 +83,7 @@ import {
 } from '@atb/utils/use-in-app-review';
 import {useFocusEffect} from '@react-navigation/native';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
+import {EstimatedCall} from '@atb/api/types/departures';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -315,6 +316,7 @@ export const DepartureDetailsScreenComponent = ({
                 {shouldShowFavoriteButton && (
                   <FavoriteButton
                     fromCall={fromCall}
+                    serviceJourneyId={serviceJourney.id}
                     line={serviceJourney.line}
                   />
                 )}
@@ -751,9 +753,11 @@ function CollapseButtonRow({
 
 const FavoriteButton = ({
   fromCall,
+  serviceJourneyId,
   line,
 }: {
   fromCall: EstimatedCallWithMetadata;
+  serviceJourneyId: string;
   line: LineFragment;
 }) => {
   const {t} = useTranslation();
@@ -762,6 +766,10 @@ const FavoriteButton = ({
   const {onMarkFavourite, getExistingFavorite} = useOnMarkFavouriteDepartures(
     fromCall.quay,
     false,
+    serviceJourneyId,
+    fromCall.date,
+    fromCall.aimedDepartureTime,
+    fromCall.stopPositionInPattern,
   );
   const onCloseFocusRef = useRef<RefObject<any>>(null);
 

@@ -5,14 +5,16 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import {departures, places, StoredType} from './storage';
+import {departures, journeys, places, StoredType} from './storage';
 import {
   FavoriteDeparture,
   FavoriteDepartureId,
+  FavoriteJourney,
   LocationFavorite,
   StoredFavoriteDeparture,
   StoredLocationFavorite,
   UserFavoriteDepartures,
+  UserFavoriteJourneys,
   UserFavorites,
 } from './types';
 import {refreshWidgets} from '@atb/modules/native-bridges';
@@ -27,6 +29,7 @@ import {
 type FavoriteContextState = {
   favorites: UserFavorites;
   favoriteDepartures: UserFavoriteDepartures;
+  favoriteJourneys: UserFavoriteJourneys;
   addFavoriteLocation(location: LocationFavorite): Promise<void>;
   removeFavoriteLocation(id: string): Promise<void>;
   setFavoriteDepartures(favorite: UserFavoriteDepartures): Promise<void>;
@@ -42,6 +45,7 @@ type FavoriteContextState = {
   ): StoredFavoriteDeparture | undefined;
   addFavoriteDeparture(favoriteDeparture: FavoriteDeparture): Promise<void>;
   removeFavoriteDeparture(id: string): Promise<void>;
+  addFavoriteJourney(favoriteJourney: FavoriteJourney): Promise<void>;
 };
 const FavoritesContext = createContext<FavoriteContextState | undefined>(
   undefined,
@@ -55,6 +59,8 @@ export const FavoritesContextProvider = ({children}: Props) => {
   const [favorites, setFavoritesState] = useState<UserFavorites>([]);
   const [favoriteDepartures, setFavoriteDeparturesState] =
     useState<UserFavoriteDepartures>([]);
+  const [favoriteJourneys, setFavoriteJourneysState] =
+    useState<UserFavoriteJourneys>([]);
 
   async function populateFavorites() {
     const [favorites, favoriteDepartures] = await Promise.all([
@@ -105,6 +111,7 @@ export const FavoritesContextProvider = ({children}: Props) => {
   const contextValue: FavoriteContextState = {
     favorites,
     favoriteDepartures,
+    favoriteJourneys,
     async addFavoriteLocation(favorite: LocationFavorite) {
       const newFavorites = await places.addFavorite(favorite);
       setFavoritesState(newFavorites);
@@ -121,7 +128,6 @@ export const FavoritesContextProvider = ({children}: Props) => {
       const newFavorites = await places.setFavorites(favorites);
       setFavoritesState(newFavorites);
     },
-
     /**
      * Add favorite departure. If adding a favorite for the complete line
      * number, the existing favorites for specific line names on that line
@@ -171,6 +177,10 @@ export const FavoritesContextProvider = ({children}: Props) => {
           favorite.quayId == potential.quayId
         );
       });
+    },
+    async addFavoriteJourney(favoriteJourney: FavoriteJourney) {
+      const newFavoriteJourneys = await journeys.addFavorite(favoriteJourney);
+      setFavoriteJourneysState(newFavoriteJourneys);
     },
   };
 

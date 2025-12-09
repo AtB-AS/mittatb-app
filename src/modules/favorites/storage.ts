@@ -1,5 +1,5 @@
 import {v4 as uuid} from 'uuid';
-import {FavoriteDeparture, LocationFavorite} from './types';
+import {FavoriteDeparture, FavoriteJourney, LocationFavorite} from './types';
 import {storage, StorageModelTypes} from '@atb/modules/storage';
 
 export type StoredType<T> = {
@@ -54,4 +54,7 @@ export const departures = new FavoriteStore<FavoriteDeparture>(
 );
 export const frontpageFavourites = new FavoriteStore<FavoriteDeparture>(
   '@ATB_user_frontpage_departures',
+);
+export const journeys = new FavoriteStore<FavoriteJourney>(
+  '@ATB_user_journeys',
 );
