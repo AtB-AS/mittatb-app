@@ -9,10 +9,7 @@ import {
   View,
 } from 'react-native';
 import {renderMarkdown} from './markdown-renderer';
-import {
-  getTextWeightStyleWithCustomAndroidHandling,
-  MAX_FONT_SCALE,
-} from './utils';
+import {getTextWeightStyle, MAX_FONT_SCALE} from './utils';
 import {
   ContrastColor,
   Statuses,
@@ -48,10 +45,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
 
   let textStyle: TextStyle = {
     ...typeStyle,
-    ...getTextWeightStyleWithCustomAndroidHandling(
-      androidSystemFont,
-      typeStyle.fontWeight,
-    ),
+    ...getTextWeightStyle(androidSystemFont, typeStyle.fontWeight),
   };
 
   // Set specific letter spacing for android phones, as 0.4 leads to errors on newer pixel phones

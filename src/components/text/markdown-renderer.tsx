@@ -5,7 +5,7 @@ import {textTypeStyles} from '@atb/theme/colors';
 import Bugsnag from '@bugsnag/react-native';
 import {ThemeTextProps} from './ThemeText';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
-import {getTextWeightStyleWithCustomAndroidHandling} from './utils';
+import {getTextWeightStyle} from './utils';
 
 const MAX_RECURSION_DEPTH = 20;
 
@@ -56,7 +56,7 @@ function renderToken(
     case 'heading':
     case 'strong':
       const fontWeight = textTypeStyles['body__m__strong'].fontWeight;
-      const textWeightStyle = getTextWeightStyleWithCustomAndroidHandling(
+      const textWeightStyle = getTextWeightStyle(
         props.androidSystemFont,
         fontWeight,
       );

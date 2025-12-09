@@ -18,7 +18,7 @@ export function fontWeightToRobotoFamily(weight?: string) {
   }
 }
 
-export function getTextWeightStyleWithCustomAndroidHandling(
+export function getTextWeightStyle(
   androidSystemFont: boolean,
   fontWeight: TextStyle['fontWeight'],
 ): TextStyle {
