@@ -1,11 +1,6 @@
-import {
-  dictionary,
-  MapTexts,
-  TripSearchTexts,
-  useTranslation,
-} from '@atb/translations';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
-import React, {useRef, useState} from 'react';
+import {dictionary, MapTexts, useTranslation} from '@atb/translations';
+import {ActivityIndicator, View} from 'react-native';
+import React, {useRef} from 'react';
 
 import {
   MapFilterType,
@@ -13,9 +8,7 @@ import {
   useMapContext,
 } from '@atb/modules/map';
 import {StyleSheet} from '@atb/theme';
-import {FullScreenFooter} from '@atb/components/screen-footer';
-import {Button} from '@atb/components/button';
-import {Close, Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {MobilityFilters} from './MobilityFilters';
 import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
 
@@ -33,9 +26,8 @@ export const MapFilterSheet = ({
   const style = useStyle();
   const {mapFilter, setMapFilter} = useMapContext();
   const initialFilterRef = useRef(mapFilter);
-  const [filter, setFilter] = useState<MapFilterType | undefined>(mapFilter);
 
-  if (!initialFilterRef.current || !filter) {
+  if (!initialFilterRef.current || !mapFilter) {
     return (
       <View style={style.activityIndicator}>
         <ActivityIndicator size="large" />
@@ -44,10 +36,9 @@ export const MapFilterSheet = ({
   }
 
   const onMobilityFilterChanged = (mobility: MobilityMapFilterType) => {
-    setFilter((currentFilter) => ({
-      ...currentFilter,
-      mobility,
-    }));
+    const tempFilter = {...mapFilter, mobility};
+    setMapFilter(tempFilter);
+    onFilterChanged(tempFilter);
   };
 
   return (
@@ -56,29 +47,16 @@ export const MapFilterSheet = ({
       allowBackgroundTouch={false}
       enableDynamicSizing={true}
       heading={t(MapTexts.filters.bottomSheet.heading)}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      rightIconText={t(dictionary.confirm)}
+      rightIcon={Confirm}
       locationArrowOnPress={locationArrowOnPress}
     >
-      <ScrollView style={style.container}>
+      <View style={style.container}>
         <MobilityFilters
           filter={initialFilterRef.current.mobility}
           onFilterChanged={onMobilityFilterChanged}
         />
-      </ScrollView>
-      <FullScreenFooter>
-        <Button
-          expanded={true}
-          text={t(TripSearchTexts.filters.bottomSheet.use)}
-          onPress={() => {
-            setMapFilter(filter);
-            onFilterChanged(filter);
-            onClose();
-          }}
-          rightIcon={{svg: Confirm}}
-          testID="confirmFilters"
-        />
-      </FullScreenFooter>
+      </View>
     </MapBottomSheet>
   );
 };
