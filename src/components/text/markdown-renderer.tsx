@@ -5,6 +5,7 @@ import {textTypeStyles} from '@atb/theme/colors';
 import Bugsnag from '@bugsnag/react-native';
 import {ThemeTextProps} from './ThemeText';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {getTextWeightStyle} from './utils';
 
 const MAX_RECURSION_DEPTH = 20;
 
@@ -13,6 +14,7 @@ type MarkdownRendererProps = {
   spacingBetweenListElements?: number;
   // The props to pass to the Text component
   textProps?: ThemeTextProps;
+  androidSystemFont: boolean;
 };
 
 export function renderMarkdown(
@@ -53,13 +55,18 @@ function renderToken(
 
     case 'heading':
     case 'strong':
+      const fontWeight = textTypeStyles['body__m__strong'].fontWeight;
+      const textWeightStyle = getTextWeightStyle(
+        props.androidSystemFont,
+        fontWeight,
+      );
       return (
         <Text
           key={index}
           {...props.textProps}
-          style={{fontWeight: textTypeStyles['body__m__strong'].fontWeight}}
+          style={[props.textProps?.style, textWeightStyle]}
         >
-          {renderChildren(token.tokens)}
+          {token.text}
         </Text>
       );
 
