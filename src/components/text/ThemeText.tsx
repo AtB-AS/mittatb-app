@@ -9,7 +9,10 @@ import {
   View,
 } from 'react-native';
 import {renderMarkdown} from './markdown-renderer';
-import {MAX_FONT_SCALE} from './utils';
+import {
+  getTextWeightStyleWithCustomAndroidHandling,
+  MAX_FONT_SCALE,
+} from './utils';
 import {
   ContrastColor,
   Statuses,
@@ -43,15 +46,14 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
     color: textColor,
   };
 
-  let textStyle: TextStyle = typeStyle;
+  let textStyle: TextStyle = {
+    ...typeStyle,
+    ...getTextWeightStyleWithCustomAndroidHandling(
+      androidSystemFont,
+      typeStyle.fontWeight,
+    ),
+  };
 
-  if (Platform.OS === 'android' && !androidSystemFont) {
-    textStyle = {
-      ...typeStyle,
-      fontFamily: fontWeightToRobotoFamily(typeStyle.fontWeight),
-      fontWeight: 'normal',
-    };
-  }
   // Set specific letter spacing for android phones, as 0.4 leads to errors on newer pixel phones
   // https://github.com/facebook/react-native/issues/35039
   if (
@@ -75,6 +77,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
       ? renderMarkdown(children, {
           textProps,
           spacingBetweenListElements: theme.spacing.xSmall,
+          androidSystemFont,
         })
       : children;
 
@@ -100,19 +103,5 @@ function useColor(
     return theme.color.foreground.dynamic[color ?? 'primary'];
   } else {
     return color;
-  }
-}
-
-function fontWeightToRobotoFamily(weight?: string) {
-  switch (weight) {
-    case '400':
-      return 'Roboto-Regular';
-    case '500':
-      return 'Roboto-Medium';
-    case '600':
-    case 'bold':
-      return 'Roboto-SemiBold';
-    default:
-      return 'Roboto-Regular';
   }
 }
