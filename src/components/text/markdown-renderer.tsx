@@ -66,7 +66,7 @@ function renderToken(
           {...props.textProps}
           style={[props.textProps?.style, textWeightStyle]}
         >
-          {renderChildren(token.tokens)}
+          {token.text}
         </Text>
       );
 
