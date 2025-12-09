@@ -22,6 +22,7 @@ type Props = {
   quayName: string;
   onCloseFocusRef: React.RefObject<View | null>;
   bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  onCloseCallback?: () => void;
 };
 
 export const FavoriteDialogSheet = ({
@@ -31,6 +32,7 @@ export const FavoriteDialogSheet = ({
   quayName,
   onCloseFocusRef,
   bottomSheetModalRef,
+  onCloseCallback,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -80,6 +82,7 @@ export const FavoriteDialogSheet = ({
       rightIcon={Close}
       closeCallback={() => {
         giveFocus(onCloseFocusRef);
+        onCloseCallback?.();
       }}
       Footer={Footer}
     >

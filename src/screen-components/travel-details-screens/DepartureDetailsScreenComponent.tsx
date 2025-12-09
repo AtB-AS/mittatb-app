@@ -35,14 +35,7 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import React, {
-  ReactNode,
-  RefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
@@ -80,6 +73,7 @@ import {usePreferencesContext} from '@atb/modules/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
 import {
   FavouriteDepartureLine,
+  useFavoritesContext,
   useOnMarkFavouriteDepartures,
 } from '@atb/modules/favorites';
 import {getFavoriteIcon} from '@atb/modules/favorites';
@@ -91,6 +85,7 @@ import {
 import {useFocusEffect} from '@react-navigation/native';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -768,20 +763,10 @@ const FavoriteButton = ({
   const {theme} = useThemeContext();
   const analytics = useAnalyticsContext();
   const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
-  const [bottomSheetNodeData, setBottomSheetNodeData] =
-    useState<ReactNode | null>(null);
 
-  useEffect(() => {
-    if (bottomSheetNodeData) bottomSheetModalRef.current?.present();
-  }, [bottomSheetNodeData]);
+  const {getFavoriteDeparture} = useFavoritesContext();
 
-  const {onMarkFavourite, getExistingFavorite} = useOnMarkFavouriteDepartures(
-    fromCall.quay,
-    bottomSheetModalRef,
-    false,
-  );
-
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
+  const onCloseFocusRef = useRef<View | null>(null);
 
   const favouriteDepartureLine: FavouriteDepartureLine = {
     id: line.id,
@@ -790,7 +775,19 @@ const FavoriteButton = ({
     lineNumber: line.publicCode,
     destinationDisplay: fromCall.destinationDisplay,
   };
-  const existingFavorite = getExistingFavorite(favouriteDepartureLine);
+
+  const existingFavorite = getFavoriteDeparture({
+    destinationDisplay: favouriteDepartureLine.destinationDisplay,
+    lineId: favouriteDepartureLine.id,
+    quayId: fromCall.quay.id,
+  });
+
+  const {alert, addFavorite} = useOnMarkFavouriteDepartures({
+    quay: fromCall.quay,
+    lineNumber: line.publicCode,
+    existing: existingFavorite,
+    addedFavoritesVisibleOnDashboard: false,
+  });
 
   return (
     <>
@@ -817,16 +814,33 @@ const FavoriteButton = ({
             lineNumber: favouriteDepartureLine?.lineNumber,
           });
 
-          const bottomSheet = onMarkFavourite(
-            favouriteDepartureLine,
-            existingFavorite,
-            onCloseFocusRef,
-          );
-          setBottomSheetNodeData(bottomSheet);
+          if (existingFavorite && favouriteDepartureLine.lineNumber) {
+            alert();
+          } else if (
+            favouriteDepartureLine.destinationDisplay &&
+            favouriteDepartureLine.lineNumber &&
+            fromCall.quay.name
+          ) {
+            bottomSheetModalRef.current?.present();
+          }
         }}
         ref={onCloseFocusRef}
       />
-      {bottomSheetNodeData}
+
+      {favouriteDepartureLine.destinationDisplay &&
+        favouriteDepartureLine.lineNumber &&
+        fromCall.quay.name && (
+          <FavoriteDialogSheet
+            quayName={fromCall.quay.name}
+            destinationDisplay={favouriteDepartureLine.destinationDisplay}
+            lineNumber={favouriteDepartureLine.lineNumber}
+            addFavorite={(forSpecificLineName: boolean) =>
+              addFavorite(favouriteDepartureLine, forSpecificLineName)
+            }
+            bottomSheetModalRef={bottomSheetModalRef}
+            onCloseFocusRef={onCloseFocusRef}
+          />
+        )}
     </>
   );
 };

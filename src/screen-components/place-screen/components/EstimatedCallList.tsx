@@ -1,9 +1,8 @@
-import {GenericSectionItem, SectionSeparator} from '@atb/components/sections';
 import {EstimatedCall} from '@atb/api/types/departures';
+import {GenericSectionItem, SectionSeparator} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {FlatList} from 'react-native-gesture-handler';
 import React, {
-  ReactNode,
   RefObject,
   useCallback,
   useEffect,
@@ -14,11 +13,13 @@ import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {EstimatedCallItem, EstimatedCallItemProps} from './EstimatedCallItem';
 import {
   StoredFavoriteDeparture,
+  useFavoritesContext,
   useOnMarkFavouriteDepartures,
 } from '@atb/modules/favorites';
 import {QuaySectionProps} from './QuaySection';
 import {secondsBetween} from '@atb/utils/date';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 
 type EstimatedCallRenderItem = {
   item: EstimatedCallItemProps;
@@ -49,17 +50,39 @@ export const EstimatedCallList = ({
 }: Props) => {
   const {t} = useTranslation();
   const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
-  const {onMarkFavourite, getExistingFavorite} = useOnMarkFavouriteDepartures(
+  const [selectedDeparture, setSelectedDeparture] = useState<{
+    departure: EstimatedCall;
+    existingFavorite: StoredFavoriteDeparture | undefined;
+    onCloseRef: RefObject<any>;
+  } | null>(null);
+
+  const {alert, addFavorite} = useOnMarkFavouriteDepartures({
+    ...selectedDeparture?.departure.serviceJourney.line,
     quay,
-    bottomSheetModalRef,
+    lineNumber: selectedDeparture?.departure.serviceJourney.line.publicCode,
+    existing: selectedDeparture?.existingFavorite,
     addedFavoritesVisibleOnDashboard,
-  );
-  const [bottomSheetNodeData, setBottomSheetNodeData] =
-    useState<ReactNode | null>(null);
+  });
 
   useEffect(() => {
-    if (bottomSheetNodeData) bottomSheetModalRef.current?.present();
-  }, [bottomSheetNodeData]);
+    if (selectedDeparture) {
+      if (
+        selectedDeparture.existingFavorite &&
+        selectedDeparture?.departure.serviceJourney.line.publicCode
+      ) {
+        alert();
+        setSelectedDeparture(null);
+      } else if (
+        selectedDeparture.departure.destinationDisplay &&
+        selectedDeparture.departure.serviceJourney.line.publicCode &&
+        quay.name
+      ) {
+        bottomSheetModalRef.current?.present();
+      }
+    }
+  }, [alert, quay.name, selectedDeparture]);
+
+  const {getFavoriteDeparture} = useFavoritesContext();
 
   const onPressFavorite = useCallback(
     (
@@ -67,20 +90,13 @@ export const EstimatedCallList = ({
       existingFavorite: StoredFavoriteDeparture | undefined,
       onCloseRef: RefObject<any>,
     ) => {
-      const favBottomSheet = onMarkFavourite(
-        {
-          ...departure.serviceJourney.line,
-          lineNumber: departure.serviceJourney.line.publicCode,
-          destinationDisplay: departure.destinationDisplay,
-        },
+      setSelectedDeparture({
+        departure,
         existingFavorite,
         onCloseRef,
-      );
-      if (favBottomSheet) {
-        setBottomSheetNodeData(favBottomSheet);
-      }
+      });
     },
-    [onMarkFavourite],
+    [],
   );
 
   const onPressDetails = useCallback(
@@ -98,9 +114,9 @@ export const EstimatedCallList = ({
 
   const listData: EstimatedCallItemProps[] = departures.map(
     (departure, index) => {
-      const existingFavorite = getExistingFavorite({
-        ...departure.serviceJourney.line,
-        lineNumber: departure.serviceJourney.line.publicCode,
+      const existingFavorite = getFavoriteDeparture({
+        quayId: quay.id,
+        lineId: departure.serviceJourney.line.id,
         destinationDisplay: departure.destinationDisplay,
       });
 
@@ -163,7 +179,32 @@ export const EstimatedCallList = ({
         }
       />
 
-      {bottomSheetNodeData}
+      {selectedDeparture?.departure.destinationDisplay &&
+        selectedDeparture?.departure.serviceJourney.line.publicCode &&
+        quay.name && (
+          <FavoriteDialogSheet
+            onCloseCallback={() => setSelectedDeparture(null)}
+            quayName={quay.name}
+            destinationDisplay={selectedDeparture?.departure.destinationDisplay}
+            lineNumber={
+              selectedDeparture?.departure.serviceJourney.line.publicCode
+            }
+            addFavorite={(forSpecificLineName: boolean) =>
+              addFavorite(
+                {
+                  ...selectedDeparture.departure.serviceJourney.line,
+                  lineNumber:
+                    selectedDeparture.departure.serviceJourney.line.publicCode,
+                  destinationDisplay:
+                    selectedDeparture.departure.destinationDisplay,
+                },
+                forSpecificLineName,
+              )
+            }
+            bottomSheetModalRef={bottomSheetModalRef}
+            onCloseFocusRef={selectedDeparture.onCloseRef}
+          />
+        )}
     </>
   );
 };
