@@ -12,6 +12,7 @@ export {useGetSupplementProductsQuery} from './use-get-supplement-products-query
 export {useDeleteRecurringPaymentMutation} from './use-delete-recurring-payment-mutation';
 export {useCancelRecurringPaymentMutation} from './use-cancel-recurring-payment-mutation';
 export {useRecurringPayment} from './use-recurring-payment';
+export {useProductAlternatives} from './use-product-alternatives';
 export {
   useSchoolCarnetInfoQuery,
   SCHOOL_CARNET_QUERY_KEY,
