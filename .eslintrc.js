@@ -161,7 +161,6 @@ module.exports = {
         allowedPaths: [
           '**/navigation-types.ts',
           'src/stacks-hierarchy/navigation-utils.ts',
-          'src/components/screen-header/HeaderButton.tsx',
           'src/utils/use-is-focused-and-active.ts',
           'src/modules/onboarding/use-onboarding-navigation.ts',
           'src/modules/onboarding/onboarding-carousel/use-onboarding-carousel-navigation.ts',

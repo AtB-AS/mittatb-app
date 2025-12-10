@@ -22,7 +22,7 @@ module.exports = {
       navigationHookNotAllowed:
         'Navigation hooks (like useNavigation, useIsFocused, useRoute) are only allowed in Screen or Stack files. File "{{ filename }}" does not end with "Screen" or "Stack".',
       navigationMethodNotAllowed:
-        'Navigation methods (like navigation.navigate, navigation.goBack) are only allowed in Screen or Stack files. File "{{ filename }}" does not end with "Screen" or "Stack". Pass navigation callbacks from Screen components instead.',
+        'Navigation methods (like navigation.navigate, navigation.pop) are only allowed in Screen or Stack files. File "{{ filename }}" does not end with "Screen" or "Stack". Pass navigation callbacks from Screen components instead.',
     },
     schema: [
       {
@@ -176,7 +176,6 @@ module.exports = {
         ) {
           const navigationMethods = [
             'navigate',
-            'goBack',
             'dispatch',
             'canGoBack',
             'isFocused',
