@@ -7,7 +7,7 @@ import {
   TicketingTexts,
   useTranslation,
 } from '@atb/translations';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {ScrollView, View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {useTimeContext} from '@atb/modules/time';
@@ -18,6 +18,7 @@ import {useAuthContext} from '@atb/modules/auth';
 import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {hasShmoBookingId} from '@atb/modules/fare-contracts';
 import SvgInfo from '@atb/assets/svg/mono-icons/status/Info';
+import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -67,6 +68,12 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       transitionOverride: 'slide-from-right',
     });
 
+  const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
+
+  const navigateToBonusScreen = useCallback(() => {
+    navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
+  }, [navigation, bonusScreenParams]);
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -103,6 +110,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
               isSentFareContract={isSentFareContract}
               onReceiptNavigate={onReceiptNavigate}
               onNavigateToMap={onNavigateToMap}
+              navigateToBonusScreen={navigateToBonusScreen}
             />
           </ErrorBoundary>
         )}

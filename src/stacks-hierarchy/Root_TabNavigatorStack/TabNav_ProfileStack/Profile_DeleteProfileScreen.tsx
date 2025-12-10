@@ -16,8 +16,12 @@ import {useBeaconsContext} from '@atb/modules/beacons';
 import {tGlobal} from '@atb/modules/locale';
 import {useDeleteAgeVerificationMutation} from '@atb/modules/mobility';
 import {useMutation} from '@tanstack/react-query';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_DeleteProfileScreen = () => {
+type Props = ProfileScreenProps<'Profile_DeleteProfileScreen'>;
+
+export const Profile_DeleteProfileScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {signOut, customerNumber} = useAuthContext();
@@ -73,8 +77,11 @@ export const Profile_DeleteProfileScreen = () => {
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(DeleteProfileTexts.header.title),
         leftButton: {type: 'back'},

@@ -2,17 +2,18 @@ import {BonusProgramTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {LinkSectionItem, SectionItemProps} from '@atb/components/sections';
 import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
-import {useNavigateToNestedProfileScreen} from '@atb/utils/use-navigate-to-nested-profile-screen';
 
 type Props = SectionItemProps<{
   amount: number;
+  navigateToBonusScreen: () => void;
 }>;
 
-export const EarnedBonusPointsSectionItem = ({amount, ...props}: Props) => {
+export const EarnedBonusPointsSectionItem = ({
+  amount,
+  navigateToBonusScreen,
+  ...props
+}: Props) => {
   const {t} = useTranslation();
-  const navigateToBonusScreen = useNavigateToNestedProfileScreen(
-    'Profile_BonusScreen',
-  );
 
   return (
     <LinkSectionItem

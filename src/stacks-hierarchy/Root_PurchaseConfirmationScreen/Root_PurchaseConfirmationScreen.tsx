@@ -55,6 +55,7 @@ import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {formatNumberToString} from '@atb-as/utils';
 import {ScreenHeading} from '@atb/components/heading';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -78,6 +79,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const [vippsNotInstalledError, setVippsNotInstalledError] = useState(false);
   const onCloseFocusRef = useRef<View | null>(null);
   const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const focusRef = useFocusOnLoad(navigation);
 
   const {selection, recipient} = params;
 
@@ -212,6 +214,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(PurchaseConfirmationTexts.title),
         leftButton: {

@@ -69,6 +69,7 @@ type Props = {
   now: number;
   onReceiptNavigate: () => void;
   onNavigateToMap: (initialFilters: MapFilterType) => void;
+  navigateToBonusScreen: () => void;
   hasActiveTravelCard?: boolean;
   isSentFareContract?: boolean;
 };
@@ -79,6 +80,7 @@ export const DetailsContent: React.FC<Props> = ({
   now,
   onReceiptNavigate,
   onNavigateToMap,
+  navigateToBonusScreen,
 }) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
 
@@ -240,7 +242,10 @@ export const DetailsContent: React.FC<Props> = ({
         />
       )}
       {bonusAmountEarned != undefined && bonusAmountEarned.amount > 0 && (
-        <EarnedBonusPointsSectionItem amount={bonusAmountEarned.amount} />
+        <EarnedBonusPointsSectionItem
+          amount={bonusAmountEarned.amount}
+          navigateToBonusScreen={navigateToBonusScreen}
+        />
       )}
       {!!usedAccesses?.length && (
         <UsedAccessesSectionItem usedAccesses={usedAccesses} />

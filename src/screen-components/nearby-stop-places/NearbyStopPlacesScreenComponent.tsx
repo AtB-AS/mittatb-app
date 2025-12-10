@@ -12,7 +12,7 @@ import {StopPlaces} from './components/StopPlaces';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
-import React, {useEffect} from 'react';
+import React, {Ref, useEffect} from 'react';
 import {Platform, RefreshControl, ScrollView, View} from 'react-native';
 import {StopPlacesMode} from './types';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
@@ -36,6 +36,7 @@ type Props = NearbyStopPlacesScreenParams & {
   onUpdateLocation: (location?: Location) => void;
   onAddFavoritePlace: () => void;
   isLargeTitle: boolean;
+  focusRef: Ref<any>;
 };
 
 export const NearbyStopPlacesScreenComponent = ({
@@ -47,6 +48,7 @@ export const NearbyStopPlacesScreenComponent = ({
   onUpdateLocation,
   onAddFavoritePlace,
   isLargeTitle,
+  focusRef,
 }: Props) => {
   const {locationIsAvailable, requestLocationPermission} =
     useGeolocationContext();
@@ -114,6 +116,7 @@ export const NearbyStopPlacesScreenComponent = ({
   return (
     <FullScreenView
       headerProps={{...headerProps}}
+      focusRef={focusRef}
       parallaxContent={(focusRef) => (
         <>
           <ScreenHeading

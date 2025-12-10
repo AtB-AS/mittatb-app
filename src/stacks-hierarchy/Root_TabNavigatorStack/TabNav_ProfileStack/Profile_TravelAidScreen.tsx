@@ -20,8 +20,12 @@ import {CustomerServiceText} from '@atb/translations/screens/subscreens/Customer
 import {ThemeText} from '@atb/components/text';
 import {useOnboardingContext} from '@atb/modules/onboarding';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_TravelAidScreen = () => {
+type Props = ProfileScreenProps<'Profile_TravelAidScreen'>;
+
+export const Profile_TravelAidScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -35,8 +39,11 @@ export const Profile_TravelAidScreen = () => {
   const backgroundColor = theme.color.background.neutral[0];
   const hasContactPhoneNumber = !!contactPhoneNumber;
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(TravelAidSettingsTexts.header.accessibility.title),
         leftButton: {type: 'back'},

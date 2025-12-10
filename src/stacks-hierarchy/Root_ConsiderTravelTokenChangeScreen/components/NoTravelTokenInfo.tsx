@@ -4,7 +4,7 @@ import {ThemeText} from '@atb/components/text';
 import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
 
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
-import React from 'react';
+import React, {Ref} from 'react';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 import {OnboardingFullScreenView} from '@atb/modules/onboarding';
@@ -14,8 +14,10 @@ const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 export function NoTravelTokenInfo({
   onPressFooterButton,
+  focusRef,
 }: {
   onPressFooterButton: () => void;
+  focusRef: Ref<any>;
 }): React.JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
@@ -31,6 +33,7 @@ export function NoTravelTokenInfo({
         text: t(MobileTokenOnboardingTexts.ok),
         expanded: true,
       }}
+      focusRef={focusRef}
     >
       <ThemeText
         typography="heading__xl"

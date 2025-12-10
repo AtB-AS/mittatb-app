@@ -2,7 +2,7 @@ import {useFavoritesContext} from '@atb/modules/favorites';
 import {StoredFavoriteDeparture} from '@atb/modules/favorites';
 import {StyleSheet, Theme} from '@atb/theme';
 import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
-import React from 'react';
+import React, {Ref} from 'react';
 import {Alert, View} from 'react-native';
 import {animateNextChange} from '@atb/utils/animation';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
@@ -14,10 +14,11 @@ import {
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 
-type Props = {onPressAddFavorite: () => void};
+type Props = {onPressAddFavorite: () => void; focusRef: Ref<any>};
 
 export const FavoriteDeparturesScreenComponent = ({
   onPressAddFavorite,
+  focusRef,
 }: Props) => {
   const style = useStyles();
   const {favoriteDepartures, removeFavoriteDeparture} = useFavoritesContext();
@@ -55,6 +56,7 @@ export const FavoriteDeparturesScreenComponent = ({
           text={t(FavoriteDeparturesTexts.header.title)}
         />
       )}
+      focusRef={focusRef}
     >
       <View style={style.container}>
         <Section testID="favoritesList">

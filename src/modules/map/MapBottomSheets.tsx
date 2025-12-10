@@ -13,8 +13,6 @@ import {
   useActiveShmoBookingQuery,
 } from '@atb/modules/mobility';
 
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
-import {useNavigation} from '@react-navigation/native';
 import React, {RefObject, useCallback, useEffect, useState} from 'react';
 import {
   getFeatureFromScan,
@@ -23,44 +21,53 @@ import {
 } from './utils';
 import MapboxGL from '@rnmapbox/maps';
 import {ShmoBookingState} from '@atb/api/types/mobility';
-import {MapFilterType, MapProps} from './types';
+import {MapFilterType, MapProps, ScooterHelpParams} from './types';
 import {ExternalRealtimeMapSheet} from './components/external-realtime-map/ExternalRealtimeMapSheet';
 import {DeparturesDialogSheet} from './components/DeparturesDialogSheet';
 
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics';
 import {MapStateActionType} from './mapStateReducer';
-import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {MapBottomSheetType, useMapContext} from './MapContext';
-import {useNavigateToNestedProfileScreen} from '@atb/utils/use-navigate-to-nested-profile-screen';
 
 type MapBottomSheetsProps = {
   mapViewRef: RefObject<MapboxGL.MapView | null>;
   mapProps: MapProps;
   locationArrowOnPress: () => void;
+  tabBarHeight: number;
+  navigateToScooterSupport: (params: ScooterHelpParams) => void;
+  navigateToScooterOnboarding: () => void;
+  navigateToReportParkingViolation: () => void;
+  navigateToParkingPhoto: (bookingId: string) => void;
+  navigateToScanQrCode: () => void;
+  navigateToLogin: () => void;
+  navigateToPaymentMethods: () => void;
 };
 
 export const MapBottomSheets = ({
   mapViewRef,
   mapProps,
   locationArrowOnPress,
+  tabBarHeight,
+  navigateToScooterSupport,
+  navigateToScooterOnboarding,
+  navigateToReportParkingViolation,
+  navigateToParkingPhoto,
+  navigateToScanQrCode,
+  navigateToLogin,
+  navigateToPaymentMethods,
 }: MapBottomSheetsProps) => {
   const [openPaymentType, setOpenPaymentType] = useState<boolean>(false);
-  const navigateToPaymentMethods = useNavigateToNestedProfileScreen(
-    'Profile_PaymentMethodsScreen',
-  );
   const {mapState, dispatchMapState} = useMapContext();
   const {data: activeBooking} = useActiveShmoBookingQuery();
-  const tabBarHeight = useBottomTabBarHeight();
 
   const analytics = useAnalyticsContext();
   const mapAnalytics = useMapSelectionAnalytics();
-  const navigation = useNavigation<RootNavigationProps>();
 
   const onReportParkingViolation = useCallback(() => {
     analytics.logEvent('Mobility', 'Report parking violation clicked');
-    navigation.navigate('Root_ParkingViolationsSelectScreen');
-  }, [analytics, navigation]);
+    navigateToReportParkingViolation();
+  }, [analytics, navigateToReportParkingViolation]);
 
   async function selectPaymentMethod() {
     setOpenPaymentType(true);
@@ -99,11 +106,11 @@ export const MapBottomSheets = ({
             }
             onClose={handleCloseSheet}
             onReportParkingViolation={onReportParkingViolation}
-            navigation={navigation}
-            startOnboardingCallback={() => {
-              navigation.navigate('Root_ShmoOnboardingScreen');
-            }}
+            startOnboardingCallback={navigateToScooterOnboarding}
+            navigateToSupport={navigateToScooterSupport}
+            navigateToLogin={navigateToLogin}
             locationArrowOnPress={locationArrowOnPress}
+            navigateToScanQrCode={navigateToScanQrCode}
           />
         )}
 
@@ -120,6 +127,7 @@ export const MapBottomSheets = ({
             navigateToPaymentMethods();
           }}
           locationArrowOnPress={locationArrowOnPress}
+          navigateToScanQrCode={navigateToScanQrCode}
         />
       )}
 
@@ -128,18 +136,17 @@ export const MapBottomSheets = ({
           mapViewRef={mapViewRef}
           onForceClose={handleCloseSheet}
           navigateSupportCallback={() => {
-            navigation.navigate('Root_ScooterHelpScreen', {
+            navigateToScooterSupport({
               operatorId: activeBooking.asset.operator.id,
               bookingId: activeBooking.bookingId,
             });
           }}
           photoNavigation={() => {
             handleCloseSheet();
-            navigation.navigate('Root_ParkingPhotoScreen', {
-              bookingId: activeBooking.bookingId,
-            });
+            navigateToParkingPhoto(activeBooking.bookingId);
           }}
           locationArrowOnPress={locationArrowOnPress}
+          navigateToScanQrCode={navigateToScanQrCode}
         />
       )}
       {activeBooking?.state === ShmoBookingState.FINISHING && (
@@ -147,11 +154,10 @@ export const MapBottomSheets = ({
           onForceClose={handleCloseSheet}
           photoNavigation={() => {
             handleCloseSheet();
-            navigation.navigate('Root_ParkingPhotoScreen', {
-              bookingId: activeBooking.bookingId,
-            });
+            navigateToParkingPhoto(activeBooking.bookingId);
           }}
           locationArrowOnPress={locationArrowOnPress}
+          navigateToScanQrCode={navigateToScanQrCode}
         />
       )}
       {mapState.bottomSheetType === MapBottomSheetType.FinishedBooking &&
@@ -161,12 +167,13 @@ export const MapBottomSheets = ({
             onClose={handleCloseSheet}
             navigateSupportCallback={(operatorId, bookingId) => {
               handleCloseSheet();
-              navigation.navigate('Root_ScooterHelpScreen', {
+              navigateToScooterSupport({
                 operatorId,
                 bookingId,
               });
             }}
             locationArrowOnPress={locationArrowOnPress}
+            navigateToScanQrCode={navigateToScanQrCode}
           />
         )}
       {mapState.bottomSheetType === MapBottomSheetType.Bicycle && (
@@ -186,6 +193,7 @@ export const MapBottomSheets = ({
             }
           }}
           locationArrowOnPress={locationArrowOnPress}
+          navigateToScanQrCode={navigateToScanQrCode}
         />
       )}
 
@@ -207,6 +215,7 @@ export const MapBottomSheets = ({
             }
           }}
           locationArrowOnPress={locationArrowOnPress}
+          navigateToScanQrCode={navigateToScanQrCode}
         />
       )}
       {mapState.bottomSheetType === MapBottomSheetType.CarStation && (
@@ -227,6 +236,7 @@ export const MapBottomSheets = ({
             }
           }}
           locationArrowOnPress={locationArrowOnPress}
+          navigateToScanQrCode={navigateToScanQrCode}
         />
       )}
 
@@ -239,6 +249,7 @@ export const MapBottomSheets = ({
             handleCloseSheet();
           }}
           locationArrowOnPress={locationArrowOnPress}
+          navigateToScanQrCode={navigateToScanQrCode}
         />
       )}
       {mapState.bottomSheetType === MapBottomSheetType.ExternalMap &&
@@ -247,6 +258,7 @@ export const MapBottomSheets = ({
             onClose={handleCloseSheet}
             url={mapState.url}
             locationArrowOnPress={locationArrowOnPress}
+            navigateToScanQrCode={navigateToScanQrCode}
           />
         )}
       {mapState?.bottomSheetType === MapBottomSheetType.StopPlace &&
@@ -266,6 +278,7 @@ export const MapBottomSheets = ({
               mapProps.navigateToTripSearch(...params);
             }}
             locationArrowOnPress={locationArrowOnPress}
+            navigateToScanQrCode={navigateToScanQrCode}
           />
         )}
       {mapState.bottomSheetType === MapBottomSheetType.ParkAndRideStation &&
@@ -283,6 +296,7 @@ export const MapBottomSheets = ({
               mapProps.navigateToTripSearch(...params);
             }}
             locationArrowOnPress={locationArrowOnPress}
+            navigateToScanQrCode={navigateToScanQrCode}
           />
         )}
     </>

@@ -3,7 +3,6 @@ import {Button} from '@atb/components/button';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet, type Theme, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
-import {useIsFocused} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
@@ -34,6 +33,7 @@ type Props = PlaceScreenParams & {
     activeItemIndex: number,
   ) => void;
   onPressClose?: () => void;
+  isFocused: boolean;
 };
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
@@ -47,6 +47,7 @@ export const PlaceScreenComponent = ({
   onPressQuay,
   onPressDeparture,
   onPressClose,
+  isFocused,
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -64,8 +65,6 @@ export const PlaceScreenComponent = ({
 
   const {data: stopsDetailsData, isError: isStopsDetailsError} =
     useStopsDetailsDataQuery(place.quays === undefined ? [place.id] : []);
-
-  const isFocused = useIsFocused();
 
   let missingStopData = false;
 
@@ -148,6 +147,7 @@ export const PlaceScreenComponent = ({
             stopPlace={place}
             mode={mode}
             backgroundColor={themeColor}
+            isFocused={isFocused}
           />
         ) : (
           <StopPlacesView

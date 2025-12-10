@@ -1,5 +1,6 @@
 import {DepartureDetailsScreenComponent} from '@atb/screen-components/travel-details-screens';
 import {DeparturesStackProps} from './navigation-types';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = DeparturesStackProps<'Departures_DepartureDetailsScreen'>;
 
@@ -9,9 +10,11 @@ export const Departures_DepartureDetailsScreen = ({
 }: Props) => {
   const {items, activeItemIndex} = route.params;
   const activeItem = items[activeItemIndex];
+  const focusRef = useFocusOnLoad(navigation);
 
   return (
     <DepartureDetailsScreenComponent
+      focusRef={focusRef}
       items={items}
       activeItemIndex={activeItemIndex}
       onPressDetailsMap={(params) =>

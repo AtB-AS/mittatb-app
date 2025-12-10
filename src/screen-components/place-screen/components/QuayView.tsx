@@ -12,7 +12,6 @@ import {useDeparturesData} from '../hooks/use-departures-data';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
-import {useIsFocused} from '@react-navigation/native';
 import type {ContrastColor} from '@atb-as/theme';
 import {useFavoritesContext} from '@atb/modules/favorites';
 import {hasFavorites} from '../utils';
@@ -36,6 +35,7 @@ export type QuayViewProps = {
   addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
   backgroundColor: ContrastColor;
+  isFocused: boolean;
 };
 
 export function QuayView({
@@ -50,13 +50,13 @@ export function QuayView({
   addedFavoritesVisibleOnDashboard,
   mode,
   backgroundColor,
+  isFocused,
 }: QuayViewProps) {
   const styles = useStyles();
   const {t} = useTranslation();
   const {favoriteDepartures} = useFavoritesContext();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
-  const isFocused = useIsFocused();
 
   const {state, forceRefresh} = useDeparturesData(
     [quay.id],

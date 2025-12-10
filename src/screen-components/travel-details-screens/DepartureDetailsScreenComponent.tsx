@@ -35,7 +35,7 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import React, {useCallback, useRef, useState} from 'react';
+import React, {Ref, useCallback, useRef, useState} from 'react';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
@@ -82,6 +82,7 @@ import {
   InAppReviewContext,
   useInAppReviewFlow,
 } from '@atb/utils/use-in-app-review';
+// eslint-disable-next-line rulesdir/navigation-only-in-screens
 import {useFocusEffect} from '@react-navigation/native';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
@@ -96,6 +97,7 @@ type Props = DepartureDetailsScreenParams & {
   onPressDetailsMap: (params: TravelDetailsMapScreenParams) => void;
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
   onPressTravelAid: () => void;
+  focusRef: Ref<any>;
 };
 
 export const DepartureDetailsScreenComponent = ({
@@ -104,6 +106,7 @@ export const DepartureDetailsScreenComponent = ({
   onPressDetailsMap,
   onPressQuay,
   onPressTravelAid,
+  focusRef,
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useThemeContext();
@@ -263,6 +266,7 @@ export const DepartureDetailsScreenComponent = ({
     });
   };
 
+  // eslint-disable-next-line rulesdir/navigation-only-in-screens
   useFocusEffect(
     useCallback(() => {
       if (shouldShowRequestReview.current) {
@@ -275,6 +279,7 @@ export const DepartureDetailsScreenComponent = ({
   return (
     <View style={styles.container}>
       <FullScreenView
+        focusRef={focusRef}
         headerProps={{
           leftButton: {type: 'back'},
           title: t(DepartureDetailsTexts.header.alternateTitle),

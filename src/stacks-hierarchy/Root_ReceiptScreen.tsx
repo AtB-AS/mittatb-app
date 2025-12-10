@@ -88,7 +88,6 @@ export function Root_ReceiptScreen({route}: Props) {
       <FullScreenHeader
         leftButton={{type: 'back'}}
         title={t(FareContractTexts.receipt.header.title)}
-        setFocusOnLoad={a11yContext.isScreenReaderEnabled}
       />
       <View style={styles.content}>
         <View accessibilityLiveRegion="polite">

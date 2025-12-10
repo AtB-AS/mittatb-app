@@ -10,16 +10,11 @@ import React from 'react';
 import {View} from 'react-native';
 import {ContentHeading} from '@atb/components/heading';
 import {UserBonusBalanceContent} from '@atb/modules/bonus';
-import {useNavigateToNestedProfileScreen} from '@atb/utils/use-navigate-to-nested-profile-screen';
 
-export const BonusDashboard = () => {
+export const BonusDashboard = ({onPress}: {onPress: () => void}) => {
   const style = useStyle();
   const {t} = useTranslation();
   const analytics = useAnalyticsContext();
-
-  const navigateToBonusScreen = useNavigateToNestedProfileScreen(
-    'Profile_BonusScreen',
-  );
 
   return (
     <View style={style.contentSection}>
@@ -35,7 +30,7 @@ export const BonusDashboard = () => {
           text={t(DashboardTexts.bonus.button)}
           onPress={() => {
             analytics.logEvent('Bonus', 'Dashboard bonus info button clicked');
-            navigateToBonusScreen();
+            onPress();
           }}
         />
       </Section>

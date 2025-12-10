@@ -36,12 +36,14 @@ type Props = {
   onClose: () => void;
   onVehicleReceived?: (vehicle: VehicleExtendedFragment) => void;
   locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 export const BicycleSheet = ({
   vehicleId: id,
   onClose,
   onVehicleReceived,
   locationArrowOnPress,
+  navigateToScanQrCode,
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useSheetStyle();
@@ -73,6 +75,7 @@ export const BicycleSheet = ({
       rightIcon={Close}
       logoUrl={brandLogoUrl}
       locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
       <>
         {isLoading && (

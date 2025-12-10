@@ -16,7 +16,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {Theme} from '@atb/theme/colors';
 import {SendToOtherButton} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/components/SendToOtherButton';
 import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/modules/on-behalf-of';
-import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {giveFocus, useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_ChooseTicketRecipientScreen'>;
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
@@ -25,6 +25,7 @@ export const Root_ChooseTicketRecipientScreen = ({
   navigation,
   route: {params},
 }: Props) => {
+  const focusRef = useFocusOnLoad(navigation);
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -41,7 +42,7 @@ export const Root_ChooseTicketRecipientScreen = ({
       <FullScreenHeader
         leftButton={{type: 'back'}}
         title={t(OnBehalfOfTexts.chooseReceiver.header)}
-        setFocusOnLoad={true}
+        focusRef={focusRef}
       />
       <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
         <ScrollView

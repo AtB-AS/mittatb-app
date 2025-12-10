@@ -49,6 +49,7 @@ import {
   InAppReviewContext,
   useInAppReviewFlow,
 } from '@atb/utils/use-in-app-review';
+// eslint-disable-next-line rulesdir/navigation-only-in-screens
 import {useFocusEffect} from '@react-navigation/native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {ErrorResponse} from '@atb-as/utils';
@@ -120,6 +121,7 @@ export const Trip: React.FC<TripProps> = ({
 
   const shouldShowRequestReview = useRef(false);
 
+  // eslint-disable-next-line rulesdir/navigation-only-in-screens
   useFocusEffect(
     useCallback(() => {
       if (shouldShowRequestReview.current) {

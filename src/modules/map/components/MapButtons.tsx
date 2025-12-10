@@ -15,8 +15,10 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {View} from 'react-native';
 
 export const MapButtons = ({
+  navigateToScanQrCode,
   locationArrowOnPress,
 }: {
+  navigateToScanQrCode: () => void;
   locationArrowOnPress: () => void;
 }) => {
   const controlStyles = useControlPositionsStyle(false);
@@ -60,7 +62,9 @@ export const MapButtons = ({
 
         <LocationArrow onPress={locationArrowOnPress} />
       </View>
-      {showScanButton && <ScanButton />}
+      {showScanButton && (
+        <ScanButton navigateToScanQrCode={navigateToScanQrCode} />
+      )}
     </>
   );
 };

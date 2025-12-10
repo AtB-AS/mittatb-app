@@ -34,6 +34,7 @@ type Props = {
   onForceClose: () => void;
   mapViewRef: RefObject<MapView | null>;
   locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 
 export const ActiveScooterSheet = ({
@@ -42,6 +43,7 @@ export const ActiveScooterSheet = ({
   onForceClose,
   mapViewRef,
   locationArrowOnPress,
+  navigateToScanQrCode,
 }: Props) => {
   useKeepAwake();
   const {
@@ -130,6 +132,7 @@ export const ActiveScooterSheet = ({
       heading={activeBooking?.asset.operator.name}
       enablePanDownToClose={false}
       locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
       headerNode={
         activeBooking ? <ShmoTripCard shmoBooking={activeBooking} /> : null
       }

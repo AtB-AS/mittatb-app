@@ -34,7 +34,7 @@ export const Root_LoginPhoneInputScreen = ({
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const {signInWithPhoneNumber} = useAuthContext();
-  const focusRef = useFocusOnLoad();
+  const focusRef = useFocusOnLoad(navigation, false);
   const [prefix, setPrefix] = useState('47');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -93,7 +93,7 @@ export const Root_LoginPhoneInputScreen = ({
             ? {type: 'close'}
             : undefined
         }
-        setFocusOnLoad={false}
+        focusRef={focusRef}
         color={themeColor}
         title={t(LoginTexts.phoneInput.title)}
         globalMessageContext={GlobalMessageContextEnum.appLoginPhone}

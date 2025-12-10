@@ -14,11 +14,15 @@ import {Linking, Platform, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {bonusOnboardingId} from './config';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export type DownloadScreenProps =
   OnboardingCarouselScreenProps<'BonusOnboarding_DownloadScreen'>;
 
-export const BonusOnboarding_DownloadScreen = ({}: DownloadScreenProps) => {
+export const BonusOnboarding_DownloadScreen = ({
+  navigation,
+}: DownloadScreenProps) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
   const {navigateToNextScreen} = useOnboardingCarouselNavigation(
     bonusOnboardingId,
@@ -38,6 +42,7 @@ export const BonusOnboarding_DownloadScreen = ({}: DownloadScreenProps) => {
       }}
       contentNode={<DownloadButtons />}
       testID="downloadBonusOnboarding"
+      focusRef={focusRef}
     />
   );
 };

@@ -33,6 +33,7 @@ type Props = {
   onClose: () => void;
   navigateToTripSearch: NavigateToTripSearchCallback;
   locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 export const ParkAndRideBottomSheet = ({
   name,
@@ -43,6 +44,7 @@ export const ParkAndRideBottomSheet = ({
   onClose,
   navigateToTripSearch,
   locationArrowOnPress,
+  navigateToScanQrCode,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -72,6 +74,7 @@ export const ParkAndRideBottomSheet = ({
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
       locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
       <View style={styles.buttonsContainer}>
         <Button

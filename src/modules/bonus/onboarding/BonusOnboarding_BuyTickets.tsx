@@ -9,12 +9,16 @@ import {
 import {ThemedBonusTransaction} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {bonusOnboardingId} from './config';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export type BuyTicketsScreenProps =
   OnboardingCarouselScreenProps<'BonusOnboarding_BuyTicketsScreen'>;
 
-export const BonusOnboarding_BuyTicketsScreen = ({}: BuyTicketsScreenProps) => {
+export const BonusOnboarding_BuyTicketsScreen = ({
+  navigation,
+}: BuyTicketsScreenProps) => {
   const {t} = useTranslation();
+  const focusRef = useFocusOnLoad(navigation);
 
   const {navigateToNextScreen} = useOnboardingCarouselNavigation(
     bonusOnboardingId,
@@ -33,6 +37,7 @@ export const BonusOnboarding_BuyTicketsScreen = ({}: BuyTicketsScreenProps) => {
         rightIcon: {svg: ArrowRight},
       }}
       testID="buyTicketBonusOnboarding"
+      focusRef={focusRef}
     />
   );
 };
