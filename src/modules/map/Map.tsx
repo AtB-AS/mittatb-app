@@ -342,6 +342,9 @@ export const Map = (props: MapProps) => {
           onDidFinishLoadingMap={() => {
             setInitMapLoaded(true);
           }}
+          gestureSettings={{
+            panDecelerationFactor: 0.994,
+          }}
         >
           <Viewport
             onStatusChanged={(status) => {
