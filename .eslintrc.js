@@ -160,7 +160,6 @@ module.exports = {
       {
         allowedPaths: [
           '**/navigation-types.ts',
-          'src/stacks-hierarchy/RootStack.tsx',
           'src/stacks-hierarchy/navigation-utils.ts',
           'src/components/screen-header/HeaderButton.tsx',
           'src/utils/use-is-focused-and-active.ts',
