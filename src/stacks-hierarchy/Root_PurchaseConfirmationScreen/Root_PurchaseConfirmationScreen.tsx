@@ -127,12 +127,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   });
   useDoOnceWhen(
     () => {
-      console.log('########## Starting useDoOnceWhen');
-      console.log('totalPrice:', totalPrice);
-      console.log('Data:', reserveMutation.data);
       if (reserveMutation.status !== 'success') return;
-      if (paymentMethod?.paymentType === PaymentType.Vipps) return;
       if (!reserveMutation.data.url) return;
+      if (paymentMethod?.paymentType === PaymentType.Vipps) return;
       openInAppBrowser(
         reserveMutation.data.url,
         'cancel',
