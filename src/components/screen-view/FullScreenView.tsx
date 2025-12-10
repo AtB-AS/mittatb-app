@@ -76,7 +76,7 @@ export function FullScreenView(props: Props) {
     <ChildrenInNormalScrollView {...props} contentColor={props.contentColor} />
   );
 
-  const headeFocusRef = !titleShouldAnimate ? props.focusRef : undefined;
+  const headerFocusRef = !titleShouldAnimate ? props.focusRef : undefined;
 
   return (
     <>
@@ -90,7 +90,7 @@ export function FullScreenView(props: Props) {
         <ScreenHeader
           {...props.headerProps}
           textOpacity={opacity}
-          focusRef={headeFocusRef}
+          focusRef={headerFocusRef}
         />
       </View>
 
