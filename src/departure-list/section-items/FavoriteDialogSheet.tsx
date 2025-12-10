@@ -1,92 +1,108 @@
-import {DeparturesTexts, useTranslation} from '@atb/translations';
+import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
-import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
-import React, {forwardRef} from 'react';
+import React from 'react';
 import {StyleSheet} from '@atb/theme/StyleSheet';
 import {DestinationDisplay} from '@atb/api/types/generated/journey_planner_v3_types';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 import {useThemeContext} from '@atb/theme';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 
 type Props = {
   lineNumber: string;
   destinationDisplay: DestinationDisplay;
   addFavorite: (forSpecificLineName: boolean) => void;
   quayName: string;
+  onCloseFocusRef: React.RefObject<View | null>;
+  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  onCloseCallback?: () => void;
 };
 
-export const FavoriteDialogSheet = forwardRef<View, Props>(
-  ({lineNumber, destinationDisplay, addFavorite, quayName}, focusRef) => {
-    const {t} = useTranslation();
-    const {theme} = useThemeContext();
-    const interactiveColor = theme.color.interactive[0];
-    const styles = useStyles();
-    const lineName = formatDestinationDisplay(t, destinationDisplay) || '';
-    const {close} = useBottomSheetContext();
-    return (
-      <BottomSheetContainer
-        title={t(DeparturesTexts.favoriteDialogSheet.title)}
-        testID="chooseFavoriteBottomSheet"
-        focusTitleOnLoad={false}
-      >
-        <View style={styles.text} ref={focusRef} accessible={true}>
-          <ThemeText>
-            {t(
-              DeparturesTexts.favoriteDialogSheet.description(
-                lineNumber,
-                quayName,
-              ),
-            )}
-          </ThemeText>
-        </View>
-        <FullScreenFooter>
-          <View style={styles.buttonContainer}>
-            <Button
-              expanded={true}
-              interactiveColor={interactiveColor}
-              onPress={() => {
-                close();
-                addFavorite(true);
-              }}
-              text={t(
-                DeparturesTexts.favoriteDialogSheet.buttons.specific(
-                  lineNumber,
-                  lineName,
-                ),
-              )}
-              rightIcon={{svg: SvgFavoriteSemi}}
-              testID="onlySelectedDeparture"
-            />
-            <Button
-              expanded={true}
-              interactiveColor={interactiveColor}
-              onPress={() => {
-                close();
-                addFavorite(false);
-              }}
-              text={t(
-                DeparturesTexts.favoriteDialogSheet.buttons.all(lineNumber),
-              )}
-              rightIcon={{svg: SvgFavoriteFill}}
-              testID="allVariationsOfDeparture"
-            />
-          </View>
-        </FullScreenFooter>
-      </BottomSheetContainer>
-    );
-  },
-);
+export const FavoriteDialogSheet = ({
+  lineNumber,
+  destinationDisplay,
+  addFavorite,
+  quayName,
+  onCloseFocusRef,
+  bottomSheetModalRef,
+  onCloseCallback,
+}: Props) => {
+  const {t} = useTranslation();
+  const {theme} = useThemeContext();
+  const interactiveColor = theme.color.interactive[0];
+  const styles = useStyles();
+  const lineName = formatDestinationDisplay(t, destinationDisplay) || '';
+
+  const Footer = () => (
+    <FullScreenFooter>
+      <View style={styles.buttonContainer}>
+        <Button
+          expanded={true}
+          interactiveColor={interactiveColor}
+          onPress={() => {
+            bottomSheetModalRef.current?.dismiss();
+            addFavorite(true);
+          }}
+          text={t(
+            DeparturesTexts.favoriteDialogSheet.buttons.specific(
+              lineNumber,
+              lineName,
+            ),
+          )}
+          rightIcon={{svg: SvgFavoriteSemi}}
+          testID="onlySelectedDeparture"
+        />
+        <Button
+          expanded={true}
+          interactiveColor={interactiveColor}
+          onPress={() => {
+            bottomSheetModalRef.current?.dismiss();
+            addFavorite(false);
+          }}
+          text={t(DeparturesTexts.favoriteDialogSheet.buttons.all(lineNumber))}
+          rightIcon={{svg: SvgFavoriteFill}}
+          testID="allVariationsOfDeparture"
+        />
+      </View>
+    </FullScreenFooter>
+  );
+
+  return (
+    <BottomSheetModal
+      bottomSheetModalRef={bottomSheetModalRef}
+      heading={t(DeparturesTexts.favoriteDialogSheet.title)}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      closeCallback={() => {
+        giveFocus(onCloseFocusRef);
+        onCloseCallback?.();
+      }}
+      Footer={Footer}
+    >
+      <View style={styles.text} accessible={true}>
+        <ThemeText>
+          {t(
+            DeparturesTexts.favoriteDialogSheet.description(
+              lineNumber,
+              quayName,
+            ),
+          )}
+        </ThemeText>
+      </View>
+    </BottomSheetModal>
+  );
+};
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   text: {
-    margin: theme.spacing.medium,
+    marginHorizontal: theme.spacing.medium,
   },
   buttonContainer: {
     gap: theme.spacing.small,

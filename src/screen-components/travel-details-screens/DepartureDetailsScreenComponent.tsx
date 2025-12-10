@@ -35,7 +35,7 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import React, {RefObject, useCallback, useRef, useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
@@ -73,6 +73,7 @@ import {usePreferencesContext} from '@atb/modules/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
 import {
   FavouriteDepartureLine,
+  useFavoritesContext,
   useOnMarkFavouriteDepartures,
 } from '@atb/modules/favorites';
 import {getFavoriteIcon} from '@atb/modules/favorites';
@@ -83,6 +84,8 @@ import {
 } from '@atb/utils/use-in-app-review';
 import {useFocusEffect} from '@react-navigation/native';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -759,11 +762,11 @@ const FavoriteButton = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const analytics = useAnalyticsContext();
-  const {onMarkFavourite, getExistingFavorite} = useOnMarkFavouriteDepartures(
-    fromCall.quay,
-    false,
-  );
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+
+  const {getFavoriteDeparture} = useFavoritesContext();
+
+  const onCloseFocusRef = useRef<View | null>(null);
 
   const favouriteDepartureLine: FavouriteDepartureLine = {
     id: line.id,
@@ -772,39 +775,73 @@ const FavoriteButton = ({
     lineNumber: line.publicCode,
     destinationDisplay: fromCall.destinationDisplay,
   };
-  const existingFavorite = getExistingFavorite(favouriteDepartureLine);
+
+  const existingFavorite = getFavoriteDeparture({
+    destinationDisplay: favouriteDepartureLine.destinationDisplay,
+    lineId: favouriteDepartureLine.id,
+    quayId: fromCall.quay.id,
+  });
+
+  const {alert, addFavorite} = useOnMarkFavouriteDepartures({
+    quay: fromCall.quay,
+    lineNumber: line.publicCode,
+    existing: existingFavorite,
+    addedFavoritesVisibleOnDashboard: false,
+  });
 
   return (
-    <Button
-      type="small"
-      expanded={false}
-      leftIcon={{svg: getFavoriteIcon(existingFavorite)}}
-      text={t(FavoriteDeparturesTexts.favoriteButton)}
-      interactiveColor={theme.color.interactive['1']}
-      accessibilityLabel={
-        existingFavorite &&
-        (existingFavorite.destinationDisplay
-          ? t(DeparturesTexts.favorites.favoriteButton.oneVariation)
-          : t(DeparturesTexts.favorites.favoriteButton.allVariations))
-      }
-      accessibilityHint={
-        !!existingFavorite
-          ? t(FavoriteDeparturesTexts.favoriteItemDelete.a11yHint)
-          : t(FavoriteDeparturesTexts.favoriteItemAdd.a11yHint)
-      }
-      onPress={() => {
-        analytics.logEvent('Departure details', 'Add to Favourite clicked', {
-          line: favouriteDepartureLine?.id,
-          lineNumber: favouriteDepartureLine?.lineNumber,
-        });
-        onMarkFavourite(
-          favouriteDepartureLine,
-          existingFavorite,
-          onCloseFocusRef,
-        );
-      }}
-      ref={onCloseFocusRef}
-    />
+    <>
+      <Button
+        type="small"
+        expanded={false}
+        leftIcon={{svg: getFavoriteIcon(existingFavorite)}}
+        text={t(FavoriteDeparturesTexts.favoriteButton)}
+        interactiveColor={theme.color.interactive['1']}
+        accessibilityLabel={
+          existingFavorite &&
+          (existingFavorite.destinationDisplay
+            ? t(DeparturesTexts.favorites.favoriteButton.oneVariation)
+            : t(DeparturesTexts.favorites.favoriteButton.allVariations))
+        }
+        accessibilityHint={
+          !!existingFavorite
+            ? t(FavoriteDeparturesTexts.favoriteItemDelete.a11yHint)
+            : t(FavoriteDeparturesTexts.favoriteItemAdd.a11yHint)
+        }
+        onPress={() => {
+          analytics.logEvent('Departure details', 'Add to Favourite clicked', {
+            line: favouriteDepartureLine?.id,
+            lineNumber: favouriteDepartureLine?.lineNumber,
+          });
+
+          if (existingFavorite && favouriteDepartureLine.lineNumber) {
+            alert();
+          } else if (
+            favouriteDepartureLine.destinationDisplay &&
+            favouriteDepartureLine.lineNumber &&
+            fromCall.quay.name
+          ) {
+            bottomSheetModalRef.current?.present();
+          }
+        }}
+        ref={onCloseFocusRef}
+      />
+
+      {favouriteDepartureLine.destinationDisplay &&
+        favouriteDepartureLine.lineNumber &&
+        fromCall.quay.name && (
+          <FavoriteDialogSheet
+            quayName={fromCall.quay.name}
+            destinationDisplay={favouriteDepartureLine.destinationDisplay}
+            lineNumber={favouriteDepartureLine.lineNumber}
+            addFavorite={(forSpecificLineName: boolean) =>
+              addFavorite(favouriteDepartureLine, forSpecificLineName)
+            }
+            bottomSheetModalRef={bottomSheetModalRef}
+            onCloseFocusRef={onCloseFocusRef}
+          />
+        )}
+    </>
   );
 };
 
