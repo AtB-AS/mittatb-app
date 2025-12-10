@@ -30,10 +30,18 @@ import {getBaggageProducts} from '../get-baggage-products';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
 import {useTicketAccessibilityLabel} from '../use-ticket-accessibility-label';
+import {SupplementPurchaseButton} from '@atb/modules/fare-contracts';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
-type Props = {fc: FareContractType};
+type Props = {
+  fc: FareContractType;
+  onNavigateToPurchaseFlow?: (selection: PurchaseSelectionType) => void;
+};
 
-export const TravelInfoSectionItem = ({fc}: Props) => {
+export const TravelInfoSectionItem = ({
+  fc,
+  onNavigateToPurchaseFlow,
+}: Props) => {
   const {t, language} = useTranslation();
   const {serverNow} = useTimeContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
@@ -110,7 +118,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
     <View
       style={[
         topContainer,
-        {rowGap: theme.spacing.large, paddingVertical: theme.spacing.large},
+        {rowGap: theme.spacing.large, paddingTop: theme.spacing.large},
       ]}
     >
       <View style={styles.detailRow} accessible={true}>
@@ -160,6 +168,10 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
       </View>
 
       <SentOrReceivedMessageBox fc={fc} />
+      <SupplementPurchaseButton
+        existingFareContract={fc}
+        navigateToPurchaseFlow={onNavigateToPurchaseFlow}
+      />
     </View>
   );
 };

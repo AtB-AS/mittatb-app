@@ -20,12 +20,12 @@ import {ThemeText} from '@atb/components/text';
 
 type Props = {
   onPressFareContract: (fareContractId: string) => void;
-  navigateToBonusScreen: () => void;
+  onNavigateToBonusScreen: () => void;
 };
 
 export const PurchaseHistoryScreenComponent = ({
   onPressFareContract,
-  navigateToBonusScreen,
+  onNavigateToBonusScreen,
 }: Props) => {
   const {sentFareContracts, reservations, rejectedReservations} =
     useTicketingContext();
@@ -55,7 +55,7 @@ export const PurchaseHistoryScreenComponent = ({
   const renderItem = useCallback(
     ({item, index}: {item: Reservation | FareContractType; index: number}) => (
       <FareContractOrReservation
-        navigateToBonusScreen={navigateToBonusScreen}
+        onNavigateToBonusScreen={onNavigateToBonusScreen}
         now={serverNow}
         onPressFareContract={() => {
           if ('id' in item) {
@@ -67,7 +67,7 @@ export const PurchaseHistoryScreenComponent = ({
         index={index}
       />
     ),
-    [analytics, navigateToBonusScreen, onPressFareContract, serverNow],
+    [analytics, onNavigateToBonusScreen, onPressFareContract, serverNow],
   );
 
   return (

@@ -5,18 +5,21 @@ import {FareContractType} from '@atb-as/utils';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {FareContractView} from './FareContractView';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 export function FareContractOrReservation({
   fcOrReservation,
   onPressFareContract,
-  navigateToBonusScreen,
+  onNavigateToBonusScreen,
+  onNavigateToPurchaseFlow,
   now,
   index,
   isStatic,
 }: {
   fcOrReservation: FareContractType | Reservation;
   onPressFareContract: () => void;
-  navigateToBonusScreen: () => void;
+  onNavigateToBonusScreen: () => void;
+  onNavigateToPurchaseFlow?: (newSelection: PurchaseSelectionType) => void;
   now: number;
   index: number;
   isStatic?: boolean;
@@ -42,7 +45,8 @@ export function FareContractOrReservation({
           fareContract={fcOrReservation}
           isStatic={isStatic}
           onPressDetails={onPressFareContract}
-          navigateToBonusScreen={navigateToBonusScreen}
+          onNavigateToBonusScreen={onNavigateToBonusScreen}
+          onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
           testID={'ticket' + index}
         />
       </ErrorBoundary>

@@ -10,7 +10,7 @@ import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
 import {
-  BaggageProductWithCountAndOffer,
+  type SupplementProductWithCountAndOffer,
   UserProfileWithCountAndOffer,
 } from '../../Root_PurchaseOverviewScreen/use-offer-state';
 import {formatNumberToString, SearchOfferPrice} from '@atb-as/utils';
@@ -19,7 +19,7 @@ type Props = {
   fareProductTypeConfig: FareProductTypeConfig;
   isSearchingOffer: boolean;
   userProfilesWithCountAndOffer: UserProfileWithCountAndOffer[];
-  baggageProductsWithCountAndOffer: BaggageProductWithCountAndOffer[];
+  supplementProductsWithCountAndOffer: SupplementProductWithCountAndOffer[];
   totalPrice: number;
 };
 
@@ -27,7 +27,7 @@ export const PriceSummary = ({
   fareProductTypeConfig,
   isSearchingOffer,
   userProfilesWithCountAndOffer,
-  baggageProductsWithCountAndOffer,
+  supplementProductsWithCountAndOffer,
   totalPrice,
 }: Props) => {
   const styles = useStyles();
@@ -55,7 +55,7 @@ export const PriceSummary = ({
               style={i != 0 ? styles.smallTopMargin : undefined}
             />
           ))}
-          {baggageProductsWithCountAndOffer.map((sp, i) => (
+          {supplementProductsWithCountAndOffer.map((sp, i) => (
             <PricePerTraveller
               key={sp.id}
               name={getReferenceDataName(sp, language)}
