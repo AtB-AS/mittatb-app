@@ -55,8 +55,8 @@ import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {formatNumberToString} from '@atb-as/utils';
 import {ScreenHeading} from '@atb/components/heading';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {useProductAlternatives} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
