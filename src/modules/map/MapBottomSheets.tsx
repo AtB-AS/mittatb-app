@@ -29,7 +29,6 @@ import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics';
 import {MapStateActionType} from './mapStateReducer';
 import {MapBottomSheetType, useMapContext} from './MapContext';
-import {useNavigateToNestedProfileScreen} from '@atb/utils/use-navigate-to-nested-profile-screen';
 
 type MapBottomSheetsProps = {
   mapViewRef: RefObject<MapboxGL.MapView | null>;
@@ -42,6 +41,7 @@ type MapBottomSheetsProps = {
   navigateToParkingPhoto: (bookingId: string) => void;
   navigateToScanQrCode: () => void;
   navigateToLogin: () => void;
+  navigateToPaymentMethods: () => void;
 };
 
 export const MapBottomSheets = ({
@@ -55,11 +55,9 @@ export const MapBottomSheets = ({
   navigateToParkingPhoto,
   navigateToScanQrCode,
   navigateToLogin,
+  navigateToPaymentMethods,
 }: MapBottomSheetsProps) => {
   const [openPaymentType, setOpenPaymentType] = useState<boolean>(false);
-  const navigateToPaymentMethods = useNavigateToNestedProfileScreen(
-    'Profile_PaymentMethodsScreen',
-  );
   const {mapState, dispatchMapState} = useMapContext();
   const {data: activeBooking} = useActiveShmoBookingQuery();
 

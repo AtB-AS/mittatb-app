@@ -78,6 +78,7 @@ export type MapProps = {
   navigateToParkingPhoto: (bookingId: string) => void;
   navigateToScanQrCode: () => void;
   navigateToLogin: () => void;
+  navigateToPaymentMethods: () => void;
 };
 
 export type Cluster = {

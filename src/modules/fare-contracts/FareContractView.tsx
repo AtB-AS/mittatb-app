@@ -41,6 +41,7 @@ type Props = {
   fareContract: FareContractType;
   isStatic?: boolean;
   onPressDetails?: () => void;
+  navigateToBonusScreen: () => void;
   testID?: string;
 };
 
@@ -49,6 +50,7 @@ export const FareContractView: React.FC<Props> = ({
   fareContract,
   isStatic,
   onPressDetails,
+  navigateToBonusScreen,
   testID,
 }) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
@@ -134,7 +136,10 @@ export const FareContractView: React.FC<Props> = ({
       )}
 
       {shouldShowBonusAmountEarned && !!bonusAmountEarned?.amount && (
-        <EarnedBonusPointsSectionItem amount={bonusAmountEarned.amount} />
+        <EarnedBonusPointsSectionItem
+          amount={bonusAmountEarned.amount}
+          navigateToBonusScreen={navigateToBonusScreen}
+        />
       )}
 
       {shouldShowLegs && (

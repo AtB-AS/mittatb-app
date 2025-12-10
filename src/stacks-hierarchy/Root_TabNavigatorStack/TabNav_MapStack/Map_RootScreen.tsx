@@ -15,6 +15,7 @@ import {ScooterHelpScreenProps} from '@atb/stacks-hierarchy/Root_ScooterHelp/Roo
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 
 export type MapScreenParams = {
   initialFilters?: MapFilterType;
@@ -130,6 +131,14 @@ export const Map_RootScreen = ({
     }
   }, [enable_vipps_login, hasReservationOrAvailableFareContract, navigation]);
 
+  const paymentMethodsScreenParams = useNestedProfileScreenParams(
+    'Profile_PaymentMethodsScreen',
+  );
+
+  const navigateToPaymentMethods = useCallback(() => {
+    navigation.navigate('Root_TabNavigatorStack', paymentMethodsScreenParams);
+  }, [navigation, paymentMethodsScreenParams]);
+
   const focusRef = useFocusOnLoad(navigation);
 
   if (isScreenReaderEnabled)
@@ -148,6 +157,7 @@ export const Map_RootScreen = ({
       navigateToParkingPhoto={navigateToParkingPhoto}
       navigateToScanQrCode={navigateToScanQrCode}
       navigateToLogin={navigateToLogin}
+      navigateToPaymentMethods={navigateToPaymentMethods}
       includeSnackbar={true}
     />
   );

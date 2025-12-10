@@ -63,7 +63,13 @@ module.exports = {
     ];
 
     // Check if file is a Screen or Stack file (case-insensitive)
-    const isScreenOrStackFile = /(Screen|Stack)\.(tsx?|jsx?)$/i.test(filename);
+    // Match Screen/Stack only if:
+    // 1. It's at the start of the filename (e.g., "Screen.ts", "Stack.tsx")
+    // 2. It's preceded by a capital letter (PascalCase, e.g., "ProfileScreen.ts", "MyStack.tsx")
+    // 3. It's preceded by an underscore (e.g., "Profile_Screen.ts")
+    // This prevents matching files like "use-navigate-to-nested-profile-screen.ts" where
+    // "screen" is lowercase and part of a hyphenated word.
+    const isScreenOrStackFile = /(?:^|[A-Z_])(Screen|Stack)\.(tsx?|jsx?)$/i.test(filename);
 
     // Check if file is in an allowed path
     const isAllowedPath = allowedPaths.some((pattern) => {

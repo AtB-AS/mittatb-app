@@ -73,6 +73,7 @@ export const Map = (props: MapProps) => {
     navigateToParkingPhoto,
     navigateToScanQrCode,
     navigateToLogin,
+    navigateToPaymentMethods,
   } = props;
 
   const {
@@ -439,6 +440,7 @@ export const Map = (props: MapProps) => {
         navigateToParkingPhoto={navigateToParkingPhoto}
         navigateToScanQrCode={navigateToScanQrCode}
         navigateToLogin={navigateToLogin}
+        navigateToPaymentMethods={navigateToPaymentMethods}
         locationArrowOnPress={locationArrowOnPress}
       />
     </View>

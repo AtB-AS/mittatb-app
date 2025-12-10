@@ -42,6 +42,7 @@ import {ScreenHeading} from '@atb/components/heading';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {BonusDashboard} from './components/BonusDashboard';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
@@ -173,6 +174,12 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
     }
   }
 
+  const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
+
+  const navigateToBonusScreen = useCallback(() => {
+    navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
+  }, [navigation, bonusScreenParams]);
+
   return (
     <FullScreenView
       focusRef={focusRef}
@@ -287,7 +294,9 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
             }}
           />
         )}
-        {isBonusProgramEnabled && <BonusDashboard />}
+        {isBonusProgramEnabled && (
+          <BonusDashboard onPress={navigateToBonusScreen} />
+        )}
         <DeparturesWidget
           style={style.contentSection}
           onEditFavouriteDeparture={() =>
