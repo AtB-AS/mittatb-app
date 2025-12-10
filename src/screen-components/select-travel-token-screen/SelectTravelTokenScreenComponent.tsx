@@ -22,11 +22,12 @@ import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
 
-type Props = {onAfterSave: () => void; focusRef: Ref<any>};
+type Props = {onAfterSave: () => void; focusRef: Ref<any>; isFocused: boolean};
 
 export const SelectTravelTokenScreenComponent = ({
   onAfterSave,
   focusRef,
+  isFocused,
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -37,7 +38,8 @@ export const SelectTravelTokenScreenComponent = ({
 
   const {tokens} = useMobileTokenContext();
   const toggleMutation = useToggleTokenMutation();
-  const {data} = useTokenToggleDetailsQuery();
+  const {data, isLoading} = useTokenToggleDetailsQuery(isFocused);
+  const toggleLimit = data?.toggleLimit ?? 0;
   const inspectableToken = tokens.find((t) => t.isInspectable);
 
   const [selectedType, setSelectedType] = useState<Token['type']>(
@@ -177,7 +179,11 @@ export const SelectTravelTokenScreenComponent = ({
           />
         )}
         {data?.toggleLimit !== undefined && (
-          <TokenToggleInfo textColor={theme.color.background.accent[0]} />
+          <TokenToggleInfo
+            textColor={theme.color.background.accent[0]}
+            toggleLimit={toggleLimit}
+            isLoading={isLoading}
+          />
         )}
         {toggleMutation.isPending ? (
           <ActivityIndicator size="large" />

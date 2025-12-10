@@ -12,15 +12,18 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {ProfileScreenProps} from '../navigation-types';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useIsFocused} from '@react-navigation/native';
 
 type Props = ProfileScreenProps<'Profile_TravelTokenScreen'>;
 
 export const Profile_TravelTokenScreen = ({navigation}: Props) => {
   const focusRef = useFocusOnLoad(navigation);
+  const isFocused = useIsFocused();
   const styles = useStyles();
   const {t} = useTranslation();
   const {disable_travelcard} = useRemoteConfigContext();
-  const {data} = useTokenToggleDetailsQuery();
+  const {data, isLoading} = useTokenToggleDetailsQuery(isFocused);
+  const toggleLimit = data?.toggleLimit ?? 0;
 
   const title = disable_travelcard
     ? t(TravelTokenTexts.travelToken.header.titleWithoutTravelcard)
@@ -49,7 +52,10 @@ export const Profile_TravelTokenScreen = ({navigation}: Props) => {
         <Section>
           {data?.toggleLimit !== undefined && (
             <GenericSectionItem>
-              <TokenToggleInfo />
+              <TokenToggleInfo
+                toggleLimit={toggleLimit}
+                isLoading={isLoading}
+              />
             </GenericSectionItem>
           )}
         </Section>
