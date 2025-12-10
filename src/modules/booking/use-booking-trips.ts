@@ -9,7 +9,7 @@ import {
   tripPatternAvailabilityFilter,
   tripPatternDisplayTimeFilter,
 } from './utils';
-import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
+import {useProductAlternatives} from '@atb/modules/ticketing';
 
 type BookingTripsType = {
   tripPatterns: TripPatternWithBooking[];
