@@ -4,7 +4,7 @@ import {SelectableLocationType} from './types';
 import {useEffect, useRef, useState} from 'react';
 
 export function useLocationSearchValue<T extends RouteProp<any, any>>(
-  route: T extends RouteProp<any, any> ? T : never,
+  route: T,
   callerRouteParam: keyof T['params'],
   defaultLocation?: Location,
 ): SelectableLocationType | undefined {
@@ -26,7 +26,7 @@ export function useLocationSearchValue<T extends RouteProp<any, any>>(
 }
 
 export function useOnlySingleLocation<T extends RouteProp<any, any>>(
-  route: T extends RouteProp<any, any> ? T : never,
+  route: T,
   callerRouteParam: keyof T['params'],
   defaultLocation?: Location,
 ): Location | undefined {
