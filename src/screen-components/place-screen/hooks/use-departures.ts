@@ -205,7 +205,7 @@ const useSetRealtimeFetchingEnabled = (
     shouldAugmentData,
   ]);
 
-  // toggle enabled at the right time to always ensure data is updated at interval=DEPARTURES_REALTIME_REFETCH_INTERVAL
+  // Toggle enabled at the right time to always ensure data is updated at interval=DEPARTURES_REALTIME_REFETCH_INTERVAL
   useEffect(() => {
     const timeSinceLastUpdate = Date.now() - dataLastUpdatedAtRef.current;
     const remainingTimeToNextFetch =
@@ -218,5 +218,5 @@ const useSetRealtimeFetchingEnabled = (
       ? undefined
       : setTimeout(() => setEnabled(true), remainingTimeToNextFetch);
     return () => clearTimeout(timeoutId);
-  }, [departuresQueryKey, setEnabled]);
+  }, [departuresQueryKey, setEnabled]); // Important - trigger when departuresQueryKey changes
 };
