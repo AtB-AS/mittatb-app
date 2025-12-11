@@ -15,15 +15,6 @@ type DeparturesRealtimeQueryProps = {
   enabled: boolean;
 };
 
-export const getDeparturesRealtimeQueryKey = (
-  query: DeparturesRealtimeQueryProps['query'],
-  belongsToQueryKey: DeparturesRealtimeQueryProps['belongsToQueryKey'],
-) => [
-  DEPARTURES_REALTIME_QUERY_KEY,
-  qs.stringify(query ?? {}),
-  belongsToQueryKey,
-];
-
 export const useDeparturesRealtimeQuery = ({
   query,
   belongsToQueryKey,
@@ -31,7 +22,11 @@ export const useDeparturesRealtimeQuery = ({
 }: DeparturesRealtimeQueryProps) =>
   useQuery({
     enabled,
-    queryKey: getDeparturesRealtimeQueryKey(query, belongsToQueryKey),
+    queryKey: [
+      DEPARTURES_REALTIME_QUERY_KEY,
+      qs.stringify(query ?? {}),
+      belongsToQueryKey,
+    ],
     queryFn: () => getDeparturesRealtime(query, belongsToQueryKey),
     refetchInterval: DEPARTURES_REALTIME_REFETCH_INTERVAL,
     staleTime: DEPARTURES_REALTIME_REFETCH_INTERVAL,
