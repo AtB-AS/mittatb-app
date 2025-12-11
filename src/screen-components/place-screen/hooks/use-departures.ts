@@ -1,12 +1,16 @@
 import {DepartureRealtimeQuery} from '@atb/api/bff/departures';
-import {useDeparturesRealtimeQuery} from './use-departures-realtime-query';
+import {
+  DEPARTURES_REALTIME_REFETCH_INTERVAL,
+  getDeparturesRealtimeQueryKey,
+  useDeparturesRealtimeQuery,
+} from './use-departures-realtime-query';
 import {
   getDeparturesAugmentedWithRealtimeData,
   isValidDepartureTime,
 } from '@atb/departure-list/utils';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {flatMap} from '@atb/utils/array';
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {useFavoritesContext} from '@atb/modules/favorites';
 import {
@@ -18,6 +22,7 @@ import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {useInterval} from '@atb/utils/use-interval';
 import {animateNextChange} from '@atb/utils/animation';
 import qs from 'query-string';
+import {useQueryClient} from '@tanstack/react-query';
 
 export type DeparturesProps = {
   quayIds: string[];
@@ -80,6 +85,16 @@ export const useDepartures = ({
     favorites: activeFavoriteDepartures,
   });
 
+  const departuresQueryKey = departuresData
+    ? qs.stringify(
+        getDeparturesQueryKey(
+          departuresData.query,
+          departuresData.mode,
+          departuresData.favorites,
+        ),
+      )
+    : undefined;
+
   const departuresRealtimeQuery: DepartureRealtimeQuery | undefined =
     departuresData
       ? {
@@ -92,23 +107,19 @@ export const useDepartures = ({
         }
       : undefined;
 
-  const departuresQueryKey = departuresData
-    ? qs.stringify(
-        getDeparturesQueryKey(
-          departuresData.query,
-          departuresData.mode,
-          departuresData.favorites,
-        ),
-      )
-    : undefined;
+  const realtimeFetchingEnabled = useRealtimeFetchingEnabled(
+    departuresDataUpdatedAt,
+    departuresQueryKey,
+    departuresRealtimeQuery,
+  );
 
   const {
     data: departuresRealtimeData,
     dataUpdatedAt: departuresRealtimeDataUpdatedAt,
   } = useDeparturesRealtimeQuery({
     query: departuresRealtimeQuery,
-    belongsToDeparturesQueryKey: departuresQueryKey,
-    triggerImmediately: false,
+    belongsToQueryKey: departuresQueryKey,
+    enabled: realtimeFetchingEnabled,
   });
 
   const augmentedDepartures: EstimatedCall[] = useMemo(() => {
@@ -166,4 +177,50 @@ export const useDepartures = ({
     }),
     [departures, departuresIsLoading, departuresIsError, refetchDeparturesData],
   );
+};
+
+/**
+ * At first the data from departures is already up to date, so this delays
+ * enabling by one fetch interval, unless the data was cached, in which case
+ * it ensures data must not be older than DEPARTURES_REALTIME_REFETCH_INTERVAL.
+ */
+const useRealtimeFetchingEnabled = (
+  dataUpdatedAt: number,
+  belongsToQueryKey?: string,
+  departuresRealtimeQuery?: DepartureRealtimeQuery,
+) => {
+  const queryClient = useQueryClient();
+  const queryKey = getDeparturesRealtimeQueryKey(
+    departuresRealtimeQuery,
+    belongsToQueryKey,
+  );
+
+  // Convert dataUpdatedAt to ref as it should not trigger updates
+  const dataLastUpdatedAtRef = useRef(dataUpdatedAt);
+  useEffect(() => {
+    const queryData = queryClient.getQueryState(queryKey);
+    const departuresRealtimeDataUpdatedAt = queryData?.dataUpdatedAt;
+    dataLastUpdatedAtRef.current = Math.max(
+      dataUpdatedAt,
+      departuresRealtimeDataUpdatedAt ?? 0,
+    );
+  }, [dataUpdatedAt, queryClient, queryKey]);
+
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    const timeSinceLastUpdate = Date.now() - dataLastUpdatedAtRef.current;
+    const remainingTimeToNextFetch =
+      DEPARTURES_REALTIME_REFETCH_INTERVAL -
+      (dataLastUpdatedAtRef.current ? timeSinceLastUpdate : 0);
+
+    const enableImmediately = remainingTimeToNextFetch <= 0;
+    setEnabled(enableImmediately);
+    const timeoutId = enableImmediately
+      ? undefined
+      : setTimeout(() => setEnabled(true), remainingTimeToNextFetch);
+    return () => clearTimeout(timeoutId);
+  }, [belongsToQueryKey]);
+
+  return enabled;
 };
