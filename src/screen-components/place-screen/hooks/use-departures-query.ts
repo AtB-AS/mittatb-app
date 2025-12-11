@@ -113,16 +113,15 @@ export const useDeparturesQuery = ({
     },
     staleTime: DEPARTURES_REFETCH_INTERVAL_SECONDS * ONE_SECOND_MS,
     gcTime: ONE_HOUR_MS,
-    refetchInterval: (data) => {
-      const lastUpdated = data.state.dataUpdatedAt;
+    refetchInterval: ({state: {dataUpdatedAt}}) => {
       // Skip refetchInterval until the first successful fetch
-      if (!lastUpdated) return false;
+      if (!dataUpdatedAt) return false;
 
-      const secondsSincePreviousFetch = (Date.now() - lastUpdated) / 1000;
+      const secondsSincePreviousFetch = (Date.now() - dataUpdatedAt) / 1000;
       const secondsUntilNextFetch =
         DEPARTURES_REFETCH_INTERVAL_SECONDS - secondsSincePreviousFetch;
 
-      return Math.max(secondsUntilNextFetch * ONE_SECOND_MS, 0);
+      return Math.max(secondsUntilNextFetch, 0) * ONE_SECOND_MS;
     },
   });
 };
