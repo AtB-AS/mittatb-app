@@ -198,12 +198,15 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
     if (offerExpirationTime && offerExpirationTime < Date.now()) {
       refreshOffer();
+    }
+    if (totalPrice === 0) {
+      analytics.logEvent('Ticketing', 'Complete free purchase selected');
     } else {
       analytics.logEvent('Ticketing', 'Pay with card selected', {
         paymentMethod,
       });
-      reserveMutation.mutate();
     }
+    reserveMutation.mutate();
   }
 
   async function selectPaymentMethod() {
@@ -467,14 +470,16 @@ const PaymentButton = ({
       interactiveColor={theme.color.interactive[0]}
       disabled={!!isOfferError || reserveStatus === 'success'}
       onPress={() => {
-        analytics.logEvent(
-          'Ticketing',
-          'Pay with previous payment method clicked',
-          {
-            paymentMethod: paymentMethod?.paymentType,
-            mode: mode,
-          },
-        );
+        if (paymentMethod) {
+          analytics.logEvent(
+            'Ticketing',
+            'Pay with previous payment method clicked',
+            {
+              paymentMethod: paymentMethod?.paymentType,
+              mode: mode,
+            },
+          );
+        }
         onGoToPayment();
       }}
       loading={reserveStatus === 'pending'}
