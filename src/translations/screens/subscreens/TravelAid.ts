@@ -24,9 +24,9 @@ const TravelAidTexts = {
       'Stoppet er sendt!',
     ),
     notAvailable: _(
-      'Ikke mulig å sende stopp signal nå',
+      'Ikke mulig å sende stoppsignal nå',
       'Not possible to send stop signal now',
-      'Ikke mogleg å sende stopp signal no',
+      'Ikke mogleg å sende stoppsignal no',
     ),
   },
   apiError: {
