@@ -129,9 +129,9 @@ export type TicketRecipientType = {
  */
 export type ReserveOfferResponse = {
   orderId: string;
-  paymentId: number;
-  transactionId: number;
-  url: string;
+  paymentId?: number;
+  transactionId?: number;
+  url?: string;
   recurringPaymentId?: number;
 };
 

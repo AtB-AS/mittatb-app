@@ -31,13 +31,10 @@ export const useReserveOfferMutation = ({
 
   return useMutation({
     mutationFn: async (): Promise<ReserveOfferResponse> => {
-      if (!paymentMethod) {
-        return Promise.reject(new Error('No payment method provided'));
-      }
       return reserveOffers({
         offers,
-        paymentType: paymentMethod.paymentType,
-        recurringPaymentId: paymentMethod.recurringPayment?.id,
+        paymentType: paymentMethod?.paymentType,
+        recurringPaymentId: paymentMethod?.recurringPayment?.id,
         shouldSavePaymentMethod,
         scaExemption: true,
         customerAccountId: recipient?.accountId || abtCustomerId!,
