@@ -17,10 +17,10 @@ import {flatMap} from '@atb/utils/array';
 import {getDeparturesAugmentedWithRealtimeData} from '@atb/departure-list/utils';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {useEffect} from 'react';
-import {secondsBetween} from '@atb/utils/date';
+import {minutesBetween} from '@atb/utils/date';
 
-const DEPARTURES_REALTIME_REFETCH_INTERVAL = 30 * ONE_SECOND_MS;
-const START_TIME_REFRESH_RATE_SECONDS = 10 * 60; // 10 min
+const DEPARTURES_REFETCH_INTERVAL_SECONDS = 30;
+const START_TIME_REFRESH_RATE_MINUTES = 10;
 
 type DeparturesData = {
   departures: EstimatedCall[];
@@ -39,7 +39,7 @@ export type DeparturesQueryProps = {
  * First a request is sent to the departures endpoint.
  *
  * The refetch interval ensures that the data is always updated after
- * DEPARTURES_REALTIME_REFETCH_INTERVAL has passed.
+ * DEPARTURES_REFETCH_INTERVAL_SECONDS has passed.
  *
  * When data already exists for the query key, the realtime endpoint is used instead,
  * which is more lightweight and only includes data for the updated expectedDepartureTime.
@@ -47,7 +47,7 @@ export type DeparturesQueryProps = {
  * and the original departures data.
  *
  * When startTime is not set on the query, it defaults to the time when getDepartures is called,
- * which is used until START_TIME_REFRESH_RATE_SECONDS is reached. It is then reset.
+ * which is used until START_TIME_REFRESH_RATE_MINUTES is reached. It is then reset.
  */
 export const useDeparturesQuery = ({
   query,
@@ -70,11 +70,11 @@ export const useDeparturesQuery = ({
       if (
         !existingDeparturesData ||
         (!query.startTime &&
-          secondsBetween(existingDeparturesData.startTime, new Date()) >
-            START_TIME_REFRESH_RATE_SECONDS)
+          minutesBetween(existingDeparturesData.startTime, new Date()) >
+            START_TIME_REFRESH_RATE_MINUTES)
       ) {
         const startTime = query.startTime ?? new Date().toISOString();
-        const newDeparturesQuery = await getDepartures(
+        const departuresQuery = await getDepartures(
           {
             ...query,
             startTime,
@@ -84,10 +84,10 @@ export const useDeparturesQuery = ({
           },
           favorites,
         );
-        const newDepartures = newDeparturesQuery
-          ? flatMap(newDeparturesQuery.quays, (q) => q.estimatedCalls)
+        const departures = departuresQuery
+          ? flatMap(departuresQuery.quays, (q) => q.estimatedCalls)
           : [];
-        return {departures: newDepartures, startTime};
+        return {departures, startTime};
       } else {
         const {startTime} = existingDeparturesData;
         const departuresRealtimeQuery: DepartureRealtimeQuery = {
@@ -112,18 +112,18 @@ export const useDeparturesQuery = ({
         };
       }
     },
-    staleTime: DEPARTURES_REALTIME_REFETCH_INTERVAL,
+    staleTime: DEPARTURES_REFETCH_INTERVAL_SECONDS * ONE_SECOND_MS,
     gcTime: ONE_HOUR_MS,
     refetchInterval: (data) => {
       const lastUpdated = data.state.dataUpdatedAt;
       // Skip refetchInterval until the first successful fetch
       if (!lastUpdated) return false;
 
-      const timeSinceLastUpdate = Date.now() - lastUpdated;
-      const remaining =
-        DEPARTURES_REALTIME_REFETCH_INTERVAL - timeSinceLastUpdate;
+      const secondsSincePreviousFetch = (Date.now() - lastUpdated) / 1000;
+      const secondsUntilNextFetch =
+        DEPARTURES_REFETCH_INTERVAL_SECONDS - secondsSincePreviousFetch;
 
-      return Math.max(remaining, 0);
+      return Math.max(secondsUntilNextFetch, 0);
     },
   });
 
