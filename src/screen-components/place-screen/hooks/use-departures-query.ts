@@ -16,7 +16,6 @@ import {
 import {flatMap} from '@atb/utils/array';
 import {getDeparturesAugmentedWithRealtimeData} from '@atb/departure-list/utils';
 import {EstimatedCall} from '@atb/api/types/departures';
-import {useEffect} from 'react';
 import {minutesBetween} from '@atb/utils/date';
 
 const DEPARTURES_REFETCH_INTERVAL_SECONDS = 30;
@@ -55,8 +54,7 @@ export const useDeparturesQuery = ({
   favorites,
 }: DeparturesQueryProps) => {
   const {potentiallyMigrateFavoriteDepartures} = useFavoritesContext();
-
-  const res = useQuery({
+  return useQuery({
     queryKey: [
       'DEPARTURES',
       qs.stringify(query),
@@ -87,6 +85,7 @@ export const useDeparturesQuery = ({
         const departures = departuresQuery
           ? flatMap(departuresQuery.quays, (q) => q.estimatedCalls)
           : [];
+        potentiallyMigrateFavoriteDepartures(departures);
         return {departures, startTime};
       } else {
         const {startTime} = existingDeparturesData;
@@ -126,12 +125,4 @@ export const useDeparturesQuery = ({
       return Math.max(secondsUntilNextFetch * ONE_SECOND_MS, 0);
     },
   });
-
-  useEffect(() => {
-    if (res.status === 'success') {
-      potentiallyMigrateFavoriteDepartures(res.data.departures);
-    }
-  }, [res.status, res.data, potentiallyMigrateFavoriteDepartures]);
-
-  return res;
 };
