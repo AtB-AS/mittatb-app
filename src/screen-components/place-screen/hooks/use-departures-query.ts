@@ -123,7 +123,7 @@ export const useDeparturesQuery = ({
       const secondsUntilNextFetch =
         DEPARTURES_REFETCH_INTERVAL_SECONDS - secondsSincePreviousFetch;
 
-      return Math.max(secondsUntilNextFetch, 0);
+      return Math.max(secondsUntilNextFetch * ONE_SECOND_MS, 0);
     },
   });
 
