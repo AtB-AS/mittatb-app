@@ -37,7 +37,7 @@ jobs:
       ENV_FORCE_BUILD: ${{ inputs.force-build || 'true' }}
     steps:
       - name: Checkout project
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
       - name: Apply new architecture patch
         if: inputs.new-architecture-patch == 'true'
         run: git apply docs/architecture/new-architecture.patch && yarn install
@@ -61,9 +61,10 @@ jobs:
       - name: Install imagemagick
         run: sudo apt-get update && sudo apt-get install imagemagick
       - name: install node v22
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v5
         with:
           node-version: 22
+          cache: 'yarn'
       - name: Get potential cached node_modules
         if: env.ENV_FORCE_BUILD != 'true'
         uses: actions/cache@v3
@@ -87,11 +88,12 @@ jobs:
       - name: Override native config files
         run: bash ./scripts/android/override-config-files.sh
       - name: Get potential cached APK
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: apk-cache
         with:
           path: app-staging.apk
           key: ${{ matrix.org }}-${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.env') }}
+      - name: Cache gradle files
       - name: Decode Android keystore
         run: bash ./scripts/android/create-keystore-file.sh
         env:
