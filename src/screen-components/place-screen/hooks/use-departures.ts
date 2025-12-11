@@ -1,6 +1,5 @@
 import {isValidDepartureTime} from '@atb/departure-list/utils';
-import {EstimatedCall} from '@atb/api/types/departures';
-import {useEffect, useMemo, useState} from 'react';
+import {useMemo} from 'react';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {useFavoritesContext} from '@atb/modules/favorites';
 import {DeparturesQueryProps, useDeparturesQuery} from './use-departures-query';
