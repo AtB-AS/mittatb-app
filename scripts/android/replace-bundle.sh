@@ -35,8 +35,8 @@ else
     echo "Re-generate bundle"
     npx react-native bundle --platform android --dev false --reset-cache --entry-file index.js --bundle-output $BUNDLE_PATH --sourcemap-output $SOURCEMAP_PATH
 
-    # Temporary brew update until Ubuntu runner image uses brew >= 4.0.19
-    brew update
+    # No longer needed, bundled brew in ubuntu-latest (24.04) is version 5
+    # brew update
 
     brew install apktool
     brew install yq
@@ -55,8 +55,8 @@ else
     apktool b decompiled-apk -o temp-$APK_FILE_NAME
 
     echo "The APK must be aligned to 4 byte boundaries to work on Android"
-    /usr/local/lib/android/sdk/build-tools/34.0.0/zipalign -p -f 4 temp-$APK_FILE_NAME $APK_FILE_NAME
+    /usr/local/lib/android/sdk/build-tools/36.0.0/zipalign -p -f 4 temp-$APK_FILE_NAME $APK_FILE_NAME
 
     echo "Re-sign APK"
-    /usr/local/lib/android/sdk/build-tools/34.0.0/apksigner sign --ks $KEYSTORE_PATH --ks-pass pass:"$KEYSTORE_PASS" --key-pass pass:"$KEY_PASS" --ks-key-alias $KEY_ALIAS $APK_FILE_NAME
+    /usr/local/lib/android/sdk/build-tools/36.0.0/apksigner sign --ks $KEYSTORE_PATH --ks-pass pass:"$KEYSTORE_PASS" --key-pass pass:"$KEY_PASS" --ks-key-alias $KEY_ALIAS $APK_FILE_NAME
 fi
