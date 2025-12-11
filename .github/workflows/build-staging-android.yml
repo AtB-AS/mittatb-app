@@ -93,7 +93,6 @@ jobs:
         with:
           path: app-staging.apk
           key: ${{ matrix.org }}-${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.env') }}
-      - name: Cache gradle files
       - name: Decode Android keystore
         run: bash ./scripts/android/create-keystore-file.sh
         env:
