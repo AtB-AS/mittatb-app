@@ -33,7 +33,7 @@ export const useDeparturesRealtimeQuery = ({
     enabled,
     queryKey: getDeparturesRealtimeQueryKey(query, belongsToQueryKey),
     queryFn: () => getDeparturesRealtime(query, belongsToQueryKey),
-    staleTime: ONE_HOUR_MS,
-    gcTime: ONE_HOUR_MS,
     refetchInterval: DEPARTURES_REALTIME_REFETCH_INTERVAL,
+    staleTime: DEPARTURES_REALTIME_REFETCH_INTERVAL,
+    gcTime: ONE_HOUR_MS,
   });
