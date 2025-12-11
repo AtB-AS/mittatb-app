@@ -1,7 +1,6 @@
 import {DepartureRealtimeQuery} from '@atb/api/bff/departures';
 import {
   DEPARTURES_REALTIME_REFETCH_INTERVAL,
-  getDeparturesRealtimeQueryKey,
   useDeparturesRealtimeQuery,
 } from './use-departures-realtime-query';
 import {
@@ -22,7 +21,6 @@ import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {useInterval} from '@atb/utils/use-interval';
 import {animateNextChange} from '@atb/utils/animation';
 import qs from 'query-string';
-import {useQueryClient} from '@tanstack/react-query';
 
 export type DeparturesProps = {
   quayIds: string[];
@@ -107,11 +105,7 @@ export const useDepartures = ({
         }
       : undefined;
 
-  const realtimeFetchingEnabled = useRealtimeFetchingEnabled(
-    departuresDataUpdatedAt,
-    departuresQueryKey,
-    departuresRealtimeQuery,
-  );
+  const [realtimeFetchingEnabled, setRealtimeFetchingEnabled] = useState(false);
 
   const {
     data: departuresRealtimeData,
@@ -122,6 +116,19 @@ export const useDepartures = ({
     enabled: realtimeFetchingEnabled,
   });
 
+  const shouldAugmentData =
+    departuresRealtimeData?.belongsToDeparturesQueryKey ===
+      departuresQueryKey &&
+    departuresRealtimeDataUpdatedAt > departuresDataUpdatedAt;
+
+  useSetRealtimeFetchingEnabled(
+    setRealtimeFetchingEnabled,
+    shouldAugmentData,
+    departuresQueryKey,
+    departuresDataUpdatedAt,
+    departuresRealtimeDataUpdatedAt,
+  );
+
   const augmentedDepartures: EstimatedCall[] = useMemo(() => {
     const estimatedCalls = departuresData
       ? flatMap(departuresData.quays, (q) => q.estimatedCalls)
@@ -129,11 +136,6 @@ export const useDepartures = ({
 
     // This line is just updating locally stored favorites if applicable, not needed to augment data
     potentiallyMigrateFavoriteDepartures(estimatedCalls);
-
-    const shouldAugmentData =
-      departuresRealtimeData?.belongsToDeparturesQueryKey ===
-        departuresQueryKey &&
-      departuresRealtimeDataUpdatedAt > departuresDataUpdatedAt;
 
     return shouldAugmentData
       ? getDeparturesAugmentedWithRealtimeData(
@@ -143,11 +145,9 @@ export const useDepartures = ({
       : estimatedCalls;
   }, [
     departuresData,
-    departuresDataUpdatedAt,
-    departuresQueryKey,
     departuresRealtimeData,
-    departuresRealtimeDataUpdatedAt,
     potentiallyMigrateFavoriteDepartures,
+    shouldAugmentData,
   ]);
 
   useInterval(
@@ -184,30 +184,28 @@ export const useDepartures = ({
  * enabling by one fetch interval, unless the data was cached, in which case
  * it ensures data must not be older than DEPARTURES_REALTIME_REFETCH_INTERVAL.
  */
-const useRealtimeFetchingEnabled = (
-  dataUpdatedAt: number,
-  belongsToQueryKey?: string,
-  departuresRealtimeQuery?: DepartureRealtimeQuery,
+const useSetRealtimeFetchingEnabled = (
+  setEnabled: (enabled: boolean) => void,
+  shouldAugmentData: boolean,
+  departuresQueryKey?: string,
+  departuresDataUpdatedAt?: number,
+  departuresRealtimeDataUpdatedAt?: number,
 ) => {
-  const queryClient = useQueryClient();
-  const queryKey = getDeparturesRealtimeQueryKey(
-    departuresRealtimeQuery,
-    belongsToQueryKey,
-  );
-
-  // Convert dataUpdatedAt to ref as it should not trigger updates
-  const dataLastUpdatedAtRef = useRef(dataUpdatedAt);
+  // Use dataUpdatedAt as ref as it should not trigger updates
+  const dataLastUpdatedAtRef = useRef(0);
   useEffect(() => {
-    const queryData = queryClient.getQueryState(queryKey);
-    const departuresRealtimeDataUpdatedAt = queryData?.dataUpdatedAt;
     dataLastUpdatedAtRef.current = Math.max(
-      dataUpdatedAt,
-      departuresRealtimeDataUpdatedAt ?? 0,
+      departuresDataUpdatedAt ?? 0,
+      (shouldAugmentData ? departuresRealtimeDataUpdatedAt : 0) ?? 0,
     );
-  }, [dataUpdatedAt, queryClient, queryKey]);
+  }, [
+    departuresQueryKey,
+    departuresDataUpdatedAt,
+    departuresRealtimeDataUpdatedAt,
+    shouldAugmentData,
+  ]);
 
-  const [enabled, setEnabled] = useState(false);
-
+  // toggle enabled at the right time to always ensure data is updated at interval=DEPARTURES_REALTIME_REFETCH_INTERVAL
   useEffect(() => {
     const timeSinceLastUpdate = Date.now() - dataLastUpdatedAtRef.current;
     const remainingTimeToNextFetch =
@@ -220,7 +218,5 @@ const useRealtimeFetchingEnabled = (
       ? undefined
       : setTimeout(() => setEnabled(true), remainingTimeToNextFetch);
     return () => clearTimeout(timeoutId);
-  }, [belongsToQueryKey]);
-
-  return enabled;
+  }, [departuresQueryKey, setEnabled]);
 };
