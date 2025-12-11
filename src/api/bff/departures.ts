@@ -75,9 +75,8 @@ export type DepartureRealtimeQuery = {
 };
 export async function getDeparturesRealtime(
   query?: DepartureRealtimeQuery,
-  belongsToQueryKey?: string,
   opts?: AxiosRequestConfig,
-): Promise<DeparturesRealtimeData & {belongsToQueryKey?: string}> {
+): Promise<DeparturesRealtimeData> {
   if (!query || query.quayIds.length === 0) return Promise.resolve({});
 
   const params = build({
@@ -86,9 +85,8 @@ export async function getDeparturesRealtime(
     lineIds: query.lineIds?.filter(onlyUniques),
   });
   const url = `bff/v2/departures/realtime?${params}`;
-
   const response = await client.get<DeparturesRealtimeData>(url, opts);
-  return Object.assign({...response.data, belongsToQueryKey});
+  return response.data;
 }
 
 export async function getNearestStopPlaceNodes(
@@ -150,17 +148,10 @@ export async function getDepartures(
   mode: StopPlacesMode,
   favorites?: UserFavoriteDepartures,
   opts?: AxiosRequestConfig,
-): Promise<
-  | (DeparturesWithLineName & {
-      query: DeparturesVariables;
-      mode: StopPlacesMode;
-      favorites?: UserFavoriteDepartures;
-    })
-  | null
-> {
+): Promise<DeparturesWithLineName | null> {
   if (!query || query.ids.length === 0) return Promise.resolve(null);
   const queryString = stringifyWithDate(query);
   const url = `bff/v2/departures/departures?${queryString}`;
   const response = await client.post<DeparturesQuery>(url, {favorites}, opts);
-  return {...response.data, ...{query, mode, favorites}};
+  return response.data;
 }
