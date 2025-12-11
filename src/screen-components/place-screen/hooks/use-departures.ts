@@ -117,8 +117,7 @@ export const useDepartures = ({
   });
 
   const shouldAugmentData =
-    departuresRealtimeData?.belongsToDeparturesQueryKey ===
-      departuresQueryKey &&
+    departuresRealtimeData?.belongsToQueryKey === departuresQueryKey &&
     departuresRealtimeDataUpdatedAt > departuresDataUpdatedAt;
 
   useSetRealtimeFetchingEnabled(

@@ -75,9 +75,9 @@ export type DepartureRealtimeQuery = {
 };
 export async function getDeparturesRealtime(
   query?: DepartureRealtimeQuery,
-  belongsToDeparturesQueryKey?: string,
+  belongsToQueryKey?: string,
   opts?: AxiosRequestConfig,
-): Promise<DeparturesRealtimeData & {belongsToDeparturesQueryKey?: string}> {
+): Promise<DeparturesRealtimeData & {belongsToQueryKey?: string}> {
   if (!query || query.quayIds.length === 0) return Promise.resolve({});
 
   const params = build({
@@ -88,7 +88,7 @@ export async function getDeparturesRealtime(
   const url = `bff/v2/departures/realtime?${params}`;
 
   const response = await client.get<DeparturesRealtimeData>(url, opts);
-  return Object.assign({...response.data, belongsToDeparturesQueryKey});
+  return Object.assign({...response.data, belongsToQueryKey});
 }
 
 export async function getNearestStopPlaceNodes(
