@@ -82,7 +82,6 @@ export const useDeparturesQuery = ({
             limitPerLine:
               query.limitPerLine ?? getLimitOfDeparturesPerLineByMode(mode),
           },
-          mode,
           favorites,
         );
         const newDepartures = newDeparturesQuery

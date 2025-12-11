@@ -17,7 +17,6 @@ import queryString from 'query-string';
 import {DeparturesQuery} from '../types/generated/DeparturesQuery';
 import {DeparturesWithLineName} from './types';
 import {NearestStopPlaceNode} from '../types/departures';
-import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 
 export type RealtimeData = {
   serviceJourneyId: string;
@@ -74,10 +73,10 @@ export type DepartureRealtimeQuery = {
   timeRange?: number;
 };
 export async function getDeparturesRealtime(
-  query?: DepartureRealtimeQuery,
+  query: DepartureRealtimeQuery,
   opts?: AxiosRequestConfig,
 ): Promise<DeparturesRealtimeData> {
-  if (!query || query.quayIds.length === 0) return Promise.resolve({});
+  if (query.quayIds.length === 0) return Promise.resolve({});
 
   const params = build({
     ...query,
@@ -145,11 +144,10 @@ export type DeparturesVariables = {
 };
 export async function getDepartures(
   query: DeparturesVariables,
-  mode: StopPlacesMode,
   favorites?: UserFavoriteDepartures,
   opts?: AxiosRequestConfig,
 ): Promise<DeparturesWithLineName | null> {
-  if (!query || query.ids.length === 0) return Promise.resolve(null);
+  if (query.ids.length === 0) return Promise.resolve(null);
   const queryString = stringifyWithDate(query);
   const url = `bff/v2/departures/departures?${queryString}`;
   const response = await client.post<DeparturesQuery>(url, {favorites}, opts);
