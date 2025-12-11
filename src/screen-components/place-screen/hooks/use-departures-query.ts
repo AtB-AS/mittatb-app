@@ -72,7 +72,7 @@ export const useDeparturesQuery = ({
             START_TIME_REFRESH_RATE_MINUTES)
       ) {
         const startTime = query.startTime ?? new Date().toISOString();
-        const departuresQuery = await getDepartures(
+        const departuresRaw = await getDepartures(
           {
             ...query,
             startTime,
@@ -82,8 +82,8 @@ export const useDeparturesQuery = ({
           },
           favorites,
         );
-        const departures = departuresQuery
-          ? flatMap(departuresQuery.quays, (q) => q.estimatedCalls)
+        const departures = departuresRaw
+          ? flatMap(departuresRaw.quays, (q) => q.estimatedCalls)
           : [];
         potentiallyMigrateFavoriteDepartures(departures);
         return {departures, startTime};
