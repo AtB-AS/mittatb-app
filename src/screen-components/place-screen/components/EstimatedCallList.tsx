@@ -11,6 +11,8 @@ import {
 } from '@atb/modules/favorites';
 import {QuaySectionProps} from './QuaySection';
 import {secondsBetween} from '@atb/utils/date';
+import {useNow} from '@atb/utils/use-now';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 
 type EstimatedCallRenderItem = {
   item: EstimatedCallItemProps;
@@ -44,6 +46,7 @@ export const EstimatedCallList = ({
     quay,
     addedFavoritesVisibleOnDashboard,
   );
+  const now = useNow(5 * ONE_SECOND_MS);
 
   const onPressFavorite = useCallback(
     (
@@ -85,7 +88,7 @@ export const EstimatedCallList = ({
 
       return {
         secondsUntilDeparture: secondsBetween(
-          new Date(),
+          new Date(now),
           departure.expectedDepartureTime,
         ),
         departure,
