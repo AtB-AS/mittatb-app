@@ -1,32 +1,44 @@
 import {MapFilter, MapFilterType} from '../types';
 import {storage} from '@atb/modules/storage';
-import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useCallback, useEffect, useState} from 'react';
 
 const MAP_FILTER_STORAGE_KEY = '@ATB_user_map_filters_v2';
 
-const fallback: MapFilterType = {
-  mobility: {},
+// default: show all
+const defaultMapFilter: MapFilterType = {
+  mobility: {
+    CAR: {
+      showAll: true,
+      operators: [],
+    },
+    BICYCLE: {
+      showAll: true,
+      operators: [],
+    },
+    SCOOTER: {
+      showAll: true,
+      operators: [],
+    },
+  },
 };
 
 /**
  * This hook should only be used in MapContext.
  */
 export const useUserMapFilters = () => {
-  const {default_map_filter} = useRemoteConfigContext();
   const [mapFilter, setMapFilter] = useState<MapFilterType>();
 
-  const getStoredMapFilter = useCallback(
-    () =>
-      storage
-        .get(MAP_FILTER_STORAGE_KEY)
-        .then((storedFilters) =>
-          storedFilters
-            ? (parse(storedFilters) ?? fallback)
-            : (parse(default_map_filter) ?? fallback),
-        ),
-    [default_map_filter],
-  );
+  const getStoredMapFilter = useCallback(async () => {
+    const loadedMapFilter = await storage.get(MAP_FILTER_STORAGE_KEY);
+    let mapFilter: MapFilterType = defaultMapFilter;
+    if (loadedMapFilter) {
+      const parseResult = MapFilter.safeParse(JSON.parse(loadedMapFilter));
+      if (parseResult.success) {
+        mapFilter = parseResult.data;
+      }
+    }
+    return mapFilter;
+  }, []);
 
   const setAndStoreMapFilter = useCallback(
     (filters: MapFilterType) => {
@@ -47,9 +59,4 @@ export const useUserMapFilters = () => {
     mapFilter,
     setMapFilter: setAndStoreMapFilter,
   };
-};
-
-const parse = (data: string) => {
-  const res = MapFilter.safeParse(JSON.parse(data));
-  return res.success ? res.data : undefined;
 };
