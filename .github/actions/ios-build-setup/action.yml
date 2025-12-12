@@ -56,7 +56,7 @@ runs:
         with:
           path: |
             "**/node_modules"
-          key: node-modules-${{ hashFiles('**/*.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Get potential cached pods
         uses: actions/cache@v4
         id: pods-cache
@@ -64,6 +64,7 @@ runs:
         with:
           path: |
             "./ios/Pods"
+            "Pods"
           key: pods-${{ hashFiles('**/Podfile.lock') }}
       - name: Install node_modules
         shell: bash
