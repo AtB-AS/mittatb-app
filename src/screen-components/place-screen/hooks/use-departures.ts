@@ -1,4 +1,3 @@
-import {isValidDepartureTime} from '@atb/departure-list/utils';
 import {useMemo} from 'react';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {useFavoritesContext} from '@atb/modules/favorites';
