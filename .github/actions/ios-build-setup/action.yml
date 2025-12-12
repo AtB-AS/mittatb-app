@@ -56,8 +56,8 @@ runs:
         with:
           path: |
             "**/node_modules"
-            "vendor/bundle"
-            "ios/Pods"
+            "Pods"
+            "~/Library/Caches/CocoaPods"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/*.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Install node_modules
         shell: bash
