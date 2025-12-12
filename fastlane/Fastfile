@@ -420,7 +420,8 @@ platform :android do
         )
     build_type = ENV['APP_ENVIRONMENT']
     app_flavor = ENV['APP_FLAVOR']
-    gradle(task: 'clean', project_dir: 'android/')
+    skip_clean = ENV['SKIP_CLEAN'] == 'true'
+    gradle(task: 'clean', project_dir: 'android/') unless skip_clean
     gradle(
       task: 'assemble',
       build_type: build_type,
