@@ -45,11 +45,8 @@ export const useDepartures = ({
 
   return useMemo(() => {
     animateNextChange();
-    const filteredDepartures = (departuresData?.departures ?? []).filter(
-      (departure) => isValidDepartureTime(departure.expectedDepartureTime),
-    );
     return {
-      departures: filteredDepartures,
+      departures: departuresData?.departures ?? [],
       departuresIsLoading,
       departuresIsError,
       refetchDepartures: refetchDeparturesData,

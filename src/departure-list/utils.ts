@@ -148,10 +148,14 @@ export function hasNoDeparturesOnGroup(group: DepartureGroup) {
   );
 }
 
-export function isValidDeparture(departure: DepartureTime) {
-  return !isNumberOfMinutesInThePast(departure.time, HIDE_AFTER_NUM_MINUTES);
+export function isValidDeparture(departure: DepartureTime, now?: number) {
+  return !isNumberOfMinutesInThePast(
+    departure.time,
+    HIDE_AFTER_NUM_MINUTES,
+    now,
+  );
 }
 
-export function isValidDepartureTime(time: string) {
-  return !isNumberOfMinutesInThePast(time, HIDE_AFTER_NUM_MINUTES);
+export function isValidDepartureTime(time: string, now?: number) {
+  return !isNumberOfMinutesInThePast(time, HIDE_AFTER_NUM_MINUTES, now);
 }
