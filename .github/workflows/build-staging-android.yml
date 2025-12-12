@@ -33,8 +33,6 @@ jobs:
     environment: ${{ matrix.org }}
     timeout-minutes: 180
     runs-on: ubuntu-latest
-    env:
-      ENV_FORCE_BUILD: ${{ inputs.force-build || 'true' }}
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
