@@ -152,7 +152,6 @@ export const PlaceScreenComponent = ({
         ) : (
           <StopPlacesView
             stopPlaces={[place]}
-            isFocused={isFocused}
             navigateToDetails={
               mode === 'Departure' ? navigateToDetails : undefined
             }

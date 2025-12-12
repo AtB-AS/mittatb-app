@@ -106,23 +106,21 @@ function updateDeparturesWithRealtime(
   });
 }
 
-export function updateDeparturesWithRealtimeV2(
-  estimatedCalls: EstimatedCall[] | null,
-  realtime?: DeparturesRealtimeData,
-): EstimatedCall[] | null {
-  if (!estimatedCalls) return null;
-  if (!realtime) return estimatedCalls;
+// A departure is basically an estimated call in connection to a particular quay and time
+export function getDeparturesAugmentedWithRealtimeData(
+  estimatedCalls?: EstimatedCall[],
+  realtimeDeparturesData?: DeparturesRealtimeData,
+): EstimatedCall[] {
+  if (!estimatedCalls) return [];
+  if (!realtimeDeparturesData) return estimatedCalls;
 
   return estimatedCalls
-    .filter((departure) =>
-      isValidDepartureTime(departure.expectedDepartureTime),
-    )
     .map((departure) => {
       const serviceJourneyId = departure.serviceJourney?.id;
       const quayId = departure.quay?.id;
       if (!serviceJourneyId || !quayId) return departure;
 
-      const quayRealtime = realtime[quayId];
+      const quayRealtime = realtimeDeparturesData[quayId];
       if (!quayRealtime) return departure;
 
       const departureRealtime = quayRealtime.departures[serviceJourneyId];

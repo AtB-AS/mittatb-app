@@ -11,7 +11,6 @@ import {
 } from '@atb/components/date-selection';
 import type {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {StopPlacesError} from './StopPlacesError';
-import {useDeparturesData} from '../hooks/use-departures-data';
 import {useFavoritesContext} from '@atb/modules/favorites';
 import {StopPlaceAndQuay} from '../types';
 import {
@@ -20,6 +19,7 @@ import {
   NUMBER_OF_DEPARTURES_IN_BUFFER,
   NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
 } from '../utils';
+import {DeparturesProps, useDepartures} from '../hooks/use-departures';
 
 type Props = {
   stopPlaces: StopPlace[];
@@ -35,7 +35,6 @@ type Props = {
   setSearchTime: (searchTime: DepartureSearchTime) => void;
   showOnlyFavorites: boolean;
   setShowOnlyFavorites: (enabled: boolean) => void;
-  isFocused: boolean;
   testID?: string;
   addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
@@ -64,7 +63,6 @@ export const StopPlacesView = (props: Props) => {
     setSearchTime,
     showOnlyFavorites,
     setShowOnlyFavorites,
-    isFocused,
     testID,
     mode,
     addedFavoritesVisibleOnDashboard,
@@ -96,14 +94,25 @@ export const StopPlacesView = (props: Props) => {
     ),
   );
 
-  const {state, forceRefresh} = useDeparturesData(
-    quays.map((q) => q.id),
-    NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW + NUMBER_OF_DEPARTURES_IN_BUFFER,
-    showOnlyFavorites,
-    isFocused,
-    mode,
-    searchStartTime,
+  const quayIds = quays.map((q) => q.id);
+  const departuresProps: DeparturesProps = useMemo(
+    () => ({
+      quayIds,
+      limitPerQuay:
+        NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW + NUMBER_OF_DEPARTURES_IN_BUFFER,
+      showOnlyFavorites,
+      mode,
+      startTime: searchStartTime,
+    }),
+    [mode, quayIds, searchStartTime, showOnlyFavorites],
   );
+
+  const {
+    departures,
+    departuresIsLoading,
+    departuresIsError,
+    refetchDepartures,
+  } = useDepartures(departuresProps);
 
   // If all favorites are removed while setShowOnlyFavorites is true, reset the
   // value to false
@@ -111,16 +120,14 @@ export const StopPlacesView = (props: Props) => {
     if (!placeHasFavorites) setShowOnlyFavorites(false);
   }, [placeHasFavorites, setShowOnlyFavorites]);
 
-  const didLoadingDataFail = !!state.isError;
-
   return (
     <SectionList
       ListHeaderComponent={
         <>
-          {didLoadingDataFail && (
+          {departuresIsError && (
             <StopPlacesError
               showTimeNavigation={showTimeNavigation}
-              forceRefresh={forceRefresh}
+              forceRefresh={refetchDepartures}
             />
           )}
           {mode === 'Departure' ? (
@@ -149,7 +156,10 @@ export const StopPlacesView = (props: Props) => {
         </>
       }
       refreshControl={
-        <RefreshControl refreshing={state.isLoading} onRefresh={forceRefresh} />
+        <RefreshControl
+          refreshing={departuresIsLoading}
+          onRefresh={refetchDepartures}
+        />
       }
       sections={quayListData}
       testID={testID}
@@ -157,10 +167,10 @@ export const StopPlacesView = (props: Props) => {
       renderItem={({item, index}) => (
         <QuaySection
           quay={item.quay}
-          isLoading={state.isLoading}
+          isLoading={departuresIsLoading}
           departuresPerQuay={NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW}
-          data={state.data}
-          didLoadingDataFail={didLoadingDataFail}
+          data={departures}
+          didLoadingDataFail={departuresIsError}
           navigateToDetails={navigateToDetails}
           navigateToQuay={(quay) => navigateToQuay(item.stopPlace, quay)}
           testID={'quaySection' + index}
