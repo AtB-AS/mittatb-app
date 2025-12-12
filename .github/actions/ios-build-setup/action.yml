@@ -39,9 +39,10 @@ runs:
         env:
           GIT_CRYPT_KEY: ${{ inputs.git-crypt-key }}
       - name: Install Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ inputs.node-version }}
+          cache: 'yarn'
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
         with:
@@ -49,7 +50,7 @@ runs:
           cache-version: 2
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Get potential cached dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@4
         id: modules-cache
         if: ${{ inputs.use-build-cache }} == 'true'
         with:
