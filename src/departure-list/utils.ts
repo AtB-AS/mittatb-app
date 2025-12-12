@@ -106,7 +106,6 @@ function updateDeparturesWithRealtime(
   });
 }
 
-// A departure is basically an estimated call in connection to a particular quay and time
 export function getDeparturesAugmentedWithRealtimeData(
   estimatedCalls?: EstimatedCall[],
   realtimeDeparturesData?: DeparturesRealtimeData,
