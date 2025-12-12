@@ -65,12 +65,13 @@ export const useDeparturesQuery = ({
       const existingDeparturesData =
         client.getQueryData<DeparturesData>(queryKey);
 
-      if (
+      const fullRefresh =
         !existingDeparturesData ||
         (!query.startTime &&
           minutesBetween(existingDeparturesData.startTime, new Date()) >
-            START_TIME_REFRESH_RATE_MINUTES)
-      ) {
+            START_TIME_REFRESH_RATE_MINUTES);
+
+      if (fullRefresh) {
         const startTime = query.startTime ?? new Date().toISOString();
         const departuresRaw = await getDepartures(
           {
@@ -88,10 +89,9 @@ export const useDeparturesQuery = ({
         potentiallyMigrateFavoriteDepartures(departures);
         return {departures, startTime};
       } else {
-        const {startTime} = existingDeparturesData;
         const departuresRealtimeQuery: DepartureRealtimeQuery = {
           quayIds: query.ids,
-          startTime,
+          startTime: existingDeparturesData.startTime,
           limit: query.numberOfDepartures,
           limitPerLine: query.limitPerLine,
           timeRange: query.timeRange,
@@ -107,7 +107,7 @@ export const useDeparturesQuery = ({
             existingDeparturesData.departures,
             departuresRealtimeData,
           ),
-          startTime,
+          startTime: existingDeparturesData.startTime,
         };
       }
     },
