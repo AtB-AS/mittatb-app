@@ -72,15 +72,15 @@ jobs:
         id: modules-cache
         with:
           path: |
-            "**/node_modules"
+            '**/node_modules'
           key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Get potential cached pods
         uses: actions/cache@v4
         id: pods-cache
         with:
           path: |
-            "./ios/Pods"
-            "Pods"
+            './ios/Pods'
+            'Pods'
           key: pods-${{ hashFiles('**/Podfile.lock') }}
       - name: Install node_modules
         if: steps.modules-cache.outputs.cache-hit != 'true'
