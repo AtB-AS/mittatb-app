@@ -46,54 +46,13 @@ jobs:
         env:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
-      - name: Set global env vars
-        shell: bash
-        run: |
-          echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
-          echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
-      - name: Decrypt env files
-        shell: bash
-        run: sh ./scripts/git-crypt-unlock.sh
-        env:
-          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
-      - name: Install Node
-        uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          cache: 'yarn'
-      - name: Setup ruby and bundle install
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.1.0
-          cache-version: 2
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Get potential cached node_modules
-        uses: actions/cache@v4
-        id: modules-cache
-        with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
-      - name: Get potential cached pods
-        uses: actions/cache@v4
-        id: pods-cache
-        with:
-          path: |
-            Pods
-            ios/Pods
-            ~/Library/Caches/CocoaPods
-            ~/.cocoapods
-          key: pods-${{ hashFiles('**/Podfile.lock') }}
-      - name: Install node_modules
-        if: steps.modules-cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
-      - name: Install cocoapods
-        if: steps.pods-cache.outputs.cache-hit != 'true'
-        run: cd ios && pod install
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
+          use-build-cache: 'true'
           app-environment: 'staging'
           app-org: ${{ matrix.org }}
+          git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
       - uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
