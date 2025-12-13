@@ -2,74 +2,19 @@ name: iOS build setup
 description: 'Sets up the necessarry dependencies, environment and assets for building the iOS app'
 inputs:
   # Dev dependencies
-  node-version:
-    default: "22"
-    required: false
-  ruby-version:
-    default: "3.1.0"
-    required: false
   xcode-version:
     default: "latest-stable"
     required: false
-  use-build-cache:
-    description: "Wether to use the build cache for artifacts and dependencies (will speed up subsequent builds if no native changes have happened)"
-    default: 'false'
-    required: true
   app-environment:
     description: "Which app-environment to build for, staging or store"
     required: true
   app-org:
     description: "Which app-organization to build for, atb, nfk, fram or other"
     required: true
-  git-crypt-key:
-    description: "The gitcrypt key to unlock the repository files with"
-    required: true
 
 runs:
   using: "composite"
   steps:
-      - name: Set global env vars
-        shell: bash
-        run: |
-          echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
-          echo "APP_ENVIRONMENT=${{ inputs.app-environment }}" >> $GITHUB_ENV
-      - name: Decrypt env files
-        shell: bash
-        run: sh ./scripts/git-crypt-unlock.sh
-        env:
-          GIT_CRYPT_KEY: ${{ inputs.git-crypt-key }}
-      - name: Install Node
-        uses: actions/setup-node@v5
-        with:
-          node-version: ${{ inputs.node-version }}
-          cache: 'yarn'
-      - name: Setup ruby and bundle install
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ${{ inputs.ruby-version }}
-          cache-version: 2
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Get potential cached node_modules
-        uses: actions/cache@v4
-        id: modules-cache
-        if: ${{ inputs.use-build-cache }} == 'true'
-        with:
-          path: |
-            "**/node_modules"
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
-      - name: Get potential cached pods
-        uses: actions/cache@v4
-        id: pods-cache
-        if: ${{ inputs.use-build-cache }} == 'true'
-        with:
-          path: |
-            "./ios/Pods"
-            "Pods"
-          key: pods-${{ hashFiles('**/Podfile.lock') }}
-      - name: Install node_modules
-        shell: bash
-        if: ${{ inputs.use-build-cache }} != 'true' || steps.modules-cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
       - name: Setup Xcode version
         uses: maxim-lobanov/setup-xcode@v1
         with:
