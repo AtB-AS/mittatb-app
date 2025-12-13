@@ -71,8 +71,7 @@ jobs:
         uses: actions/cache@v4
         id: modules-cache
         with:
-          path: |
-            '**/node_modules'
+          path: node_modules
           key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Get potential cached pods
         uses: actions/cache@v4
