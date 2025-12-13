@@ -64,14 +64,14 @@ jobs:
           node-version: 22
           cache: 'yarn'
       - name: Get potential cached node_modules
-        if: env.ENV_FORCE_BUILD != 'true'
+        if: inputs.force-build != 'true'
         uses: actions/cache@v4
         id: modules-cache
         with:
           path: '**/node_modules'
           key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Install node_modules
-        if: env.ENV_FORCE_BUILD == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
@@ -96,10 +96,10 @@ jobs:
         env:
           KEYSTORE: ${{ secrets.KEYSTORE }}
       - name: Generate native assets
-        if: env.ENV_FORCE_BUILD == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
         run: yarn generate-native-assets
       - name: Setup gradle and potentially use cached gradle if exist
-        if: env.ENV_FORCE_BUILD == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
         uses: gradle/actions/setup-gradle@v5
         id: setup-gradle
         with:
@@ -116,7 +116,7 @@ jobs:
               - 'android/app/build.gradle'
               - 'android/build.gradle'
       - name: Run fastlane build
-        if: env.ENV_FORCE_BUILD == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane android build
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
@@ -124,7 +124,7 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
           SKIP_CLEAN: ${{ steps.changes.outputs.deps != 'true' }}
       - name: Replace apk bundle
-        if: env.ENV_FORCE_BUILD == 'true' || steps.apk-cache.outputs.cache-hit == 'true'
+        if: inputs.force-build == 'true' || steps.apk-cache.outputs.cache-hit == 'true'
         run: bash ./scripts/android/replace-bundle.sh
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
