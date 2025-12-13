@@ -80,10 +80,15 @@ jobs:
           path: |
             Pods
             ios/Pods
+            ~/Library/Caches/CocoaPods
+            ~/.cocoapods
           key: pods-${{ hashFiles('**/Podfile.lock') }}
       - name: Install node_modules
         if: steps.modules-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
+      - name: Install cocoapods
+        if: steps.pods-cache.outputs.cache-hit != 'true'
+        run: pod install
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
