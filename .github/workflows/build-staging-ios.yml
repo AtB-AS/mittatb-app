@@ -77,9 +77,7 @@ jobs:
         uses: actions/cache@v4
         id: pods-cache
         with:
-          path: |
-            './ios/Pods'
-            'Pods'
+          path: .local_derived_data
           key: pods-${{ hashFiles('**/Podfile.lock') }}
       - name: Install node_modules
         if: steps.modules-cache.outputs.cache-hit != 'true'
