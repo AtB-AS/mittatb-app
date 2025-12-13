@@ -353,6 +353,9 @@ platform :ios do
       env_vars: ['BUILD_ID', 'EXPORT_METHOD', 'BUILD_CONFIGURATION']
     )
 
+    skip_pods = ENV['SKIP_PODS'] == 'true'
+
+
     increment_build_number(
       build_number: ENV["BUILD_ID"],
       xcodeproj: './ios/atb.xcodeproj/'
@@ -366,7 +369,7 @@ platform :ios do
 
     intent_prov_profile_name, intent_prov_profile_path = intent_cert_info
 
-    cocoapods(podfile: './ios/Podfile')
+    cocoapods(podfile: './ios/Podfile') unless skip_pods
     build_app(
       scheme: 'atb',
       configuration: ENV['BUILD_CONFIGURATION'],
