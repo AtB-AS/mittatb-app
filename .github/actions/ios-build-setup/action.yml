@@ -76,6 +76,7 @@ runs:
         with:
           xcode-version: ${{ inputs.xcode-version }}
       - name: Install cocoapods
+        shell: bash
         if: steps.pods-cache.outputs.cache-hit != 'true'
         run: cd ios && pod install
       - name: Copy .netrc
