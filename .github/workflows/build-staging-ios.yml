@@ -53,6 +53,15 @@ jobs:
           app-environment: 'staging'
           app-org: ${{ matrix.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+      - name: Detect dependency changes, skip doing pod install if dependency unchanged
+        uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            deps:
+              - 'package.json'
+              - 'package-lock.json'
+              - 'ios/Podfile'
       - name: Get potential cached pods
         uses: actions/cache@v4
         id: pods-cache
@@ -118,7 +127,7 @@ jobs:
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
-          SKIP_PODS: ${{ steps.pods-cache.outputs == 'true' }}
+          SKIP_PODS: ${{ steps.changes.outputs.deps != 'true' }}
       - name: Replace ipa bundle
         if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/ios/replace-bundle.sh
