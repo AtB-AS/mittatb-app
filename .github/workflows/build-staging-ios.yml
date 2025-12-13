@@ -50,7 +50,7 @@ jobs:
         shell: bash
         run: |
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
-          echo "APP_ENVIRONMENT='staging'" >> $GITHUB_ENV
+          echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
       - name: Decrypt env files
         shell: bash
         run: sh ./scripts/git-crypt-unlock.sh
@@ -83,16 +83,13 @@ jobs:
             "Pods"
           key: pods-${{ hashFiles('**/Podfile.lock') }}
       - name: Install node_modules
-        shell: bash
         if: steps.modules-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
-          use-build-cache: 'true'
           app-environment: 'staging'
           app-org: ${{ matrix.org }}
-          git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
       - uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
