@@ -369,7 +369,7 @@ platform :ios do
 
     intent_prov_profile_name, intent_prov_profile_path = intent_cert_info
 
-    cocoapods(podfile: './ios/Podfile') unless skip_pods
+    cocoapods(podfile: './ios/Podfile')
     build_app(
       scheme: 'atb',
       configuration: ENV['BUILD_CONFIGURATION'],
