@@ -1,11 +1,9 @@
-import {useIsFocused} from '@react-navigation/native';
 import {DeparturesStackProps} from './navigation-types';
 import {PlaceScreenComponent} from '@atb/screen-components/place-screen';
 
 type Props = DeparturesStackProps<'Departures_PlaceScreen'>;
 
 export const Departures_PlaceScreen = ({navigation, route}: Props) => {
-  const isFocused = useIsFocused();
   return (
     <PlaceScreenComponent
       {...route.params}
@@ -24,7 +22,6 @@ export const Departures_PlaceScreen = ({navigation, route}: Props) => {
           activeItemIndex,
         })
       }
-      isFocused={isFocused}
     />
   );
 };

@@ -35,7 +35,6 @@ export type QuayViewProps = {
   addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
   backgroundColor: ContrastColor;
-  isFocused: boolean;
 };
 
 export function QuayView({
@@ -50,7 +49,6 @@ export function QuayView({
   addedFavoritesVisibleOnDashboard,
   mode,
   backgroundColor,
-  isFocused,
 }: QuayViewProps) {
   const styles = useStyles();
   const {t} = useTranslation();

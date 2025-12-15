@@ -1,11 +1,9 @@
 import {PlaceScreenComponent} from '@atb/screen-components/place-screen';
 import {ProfileScreenProps} from './navigation-types';
-import {useIsFocused} from '@react-navigation/native';
 
 type Props = ProfileScreenProps<'Profile_PlaceScreen'>;
 
 export const Profile_PlaceScreen = ({navigation, route}: Props) => {
-  const isFocused = useIsFocused();
   return (
     <PlaceScreenComponent
       {...route.params}
@@ -19,7 +17,6 @@ export const Profile_PlaceScreen = ({navigation, route}: Props) => {
               mode: route.params.mode,
             })
       }
-      isFocused={isFocused}
     />
   );
 };
