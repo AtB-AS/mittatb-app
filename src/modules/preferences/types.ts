@@ -29,6 +29,7 @@ export type UserPreferences = {
   journeyAidEnabled?: boolean;
   debugPredictionInaccurate?: boolean;
   debugShowProgressBetweenStops?: boolean;
+  showShmoTesting?: boolean;
 };
 
 export type PreferenceItem = keyof UserPreferences;

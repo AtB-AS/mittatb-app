@@ -7,6 +7,7 @@ import {LocationSearchContent} from './components/LocationSearchContent';
 import {StyleSheet} from '@atb/theme';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_LocationSearchByTextScreen'>;
 
@@ -51,12 +52,17 @@ export const Root_LocationSearchByTextScreen = ({
 
   const a11yContext = useAccessibilityContext();
 
+  const focusRef = useFocusOnLoad(
+    navigation,
+    a11yContext.isScreenReaderEnabled,
+  );
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
         title={t(LocationSearchTexts.header.title)}
         rightButton={{type: 'close'}}
-        setFocusOnLoad={a11yContext.isScreenReaderEnabled}
+        focusRef={focusRef}
       />
 
       <LocationSearchContent

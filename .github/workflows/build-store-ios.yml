@@ -23,7 +23,7 @@ jobs:
           (contains(github.ref, 'troms') && matrix.org != 'troms') }}
         run: exit 1
       - name: Checkout project
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Add Entur private registry credentials
         run: sh ./scripts/add-entur-private-registry.sh
         env:

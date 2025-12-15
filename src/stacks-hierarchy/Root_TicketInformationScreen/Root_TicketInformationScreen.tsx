@@ -23,10 +23,11 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 import {FlexTicketDiscountInfo} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FlexTicketDiscountInfo';
 import React from 'react';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;
 
-export const Root_TicketInformationScreen = ({route}: Props) => {
+export const Root_TicketInformationScreen = ({navigation, route}: Props) => {
   const {preassignedFareProductId, userProfilesWithCountAndOffer} =
     route.params;
 
@@ -49,8 +50,11 @@ export const Root_TicketInformationScreen = ({route}: Props) => {
     (f) => f.type === preassignedFareProduct?.type,
   );
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(
           PurchaseOverviewTexts.ticketInformation.informationDetails.title,

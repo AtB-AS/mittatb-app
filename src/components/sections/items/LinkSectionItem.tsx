@@ -62,6 +62,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
       ? {...accessibility, accessibilityHint: undefined}
       : accessibility;
     const accessibilityLabel =
+      accessibilityWithOverrides?.accessibilityLabel ??
       text + screenReaderPause + (subtitle ? subtitle + screenReaderPause : '');
     return (
       <PressableOpacity

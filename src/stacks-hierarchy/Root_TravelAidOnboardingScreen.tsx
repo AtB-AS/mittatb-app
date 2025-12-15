@@ -7,8 +7,13 @@ import {
 import {Close, Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {TravelAidTexts} from '@atb/translations';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {RootStackScreenProps} from './navigation-types';
 
-export const Root_TravelAidOnboardingScreen = () => {
+type Props = RootStackScreenProps<'Root_TravelAidOnboardingScreen'>;
+
+export const Root_TravelAidOnboardingScreen = ({navigation}: Props) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
 
   const {setPreference} = usePreferencesContext();
@@ -35,11 +40,12 @@ export const Root_TravelAidOnboardingScreen = () => {
       }}
       secondaryFooterButton={{
         onPress: onDismiss,
-        text: t(TravelAidTexts.onboarding.dismiss),
+        text: t(TravelAidTexts.onboarding.skip),
         rightIcon: {svg: Close},
         expanded: true,
       }}
       testID="travelAidOnboarding"
+      focusRef={focusRef}
     />
   );
 };

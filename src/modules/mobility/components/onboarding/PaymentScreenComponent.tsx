@@ -1,13 +1,17 @@
-import React from 'react';
+import React, {Ref} from 'react';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useTranslation} from '@atb/translations';
 import {useRecurringPayment} from '@atb/modules/ticketing';
 import {ThemedPaymentCard} from '@atb/theme/ThemedAssets';
 
-export type PaymentScreenComponentProps = {};
+export type PaymentScreenComponentProps = {
+  focusRef: Ref<any>;
+};
 
-export const PaymentScreenComponent = ({}: PaymentScreenComponentProps) => {
+export const PaymentScreenComponent = ({
+  focusRef,
+}: PaymentScreenComponentProps) => {
   const {t} = useTranslation();
   const {onAddRecurringPayment} = useRecurringPayment();
 
@@ -24,6 +28,7 @@ export const PaymentScreenComponent = ({}: PaymentScreenComponentProps) => {
       headerProps={{
         rightButton: {type: 'close'},
       }}
+      focusRef={focusRef}
     />
   );
 };

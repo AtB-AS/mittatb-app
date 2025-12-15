@@ -7,12 +7,16 @@ import {StyleSheet, Theme} from '@atb/theme';
 import {Reservation, useGetFareProductsQuery} from '@atb/modules/ticketing';
 import {TravelRightDirection, FareContractType} from '@atb-as/utils';
 import {addDays} from 'date-fns';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useAuthContext} from '@atb/modules/auth';
+import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_FareContractsScreen = () => {
+type Props = ProfileScreenProps<'Profile_FareContractsScreen'>;
+
+export const Profile_FareContractsScreen = ({navigation}: Props) => {
   const styles = useStyles();
 
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
@@ -189,6 +193,12 @@ export const Profile_FareContractsScreen = () => {
     YOUTH_TICKET,
   ] as FareContractType[];
 
+  const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
+
+  const navigateToBonusScreen = useCallback(() => {
+    navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
+  }, [navigation, bonusScreenParams]);
+
   return (
     <View style={styles.container}>
       <FullScreenHeader title="Fare Contracts" leftButton={{type: 'back'}} />
@@ -202,6 +212,7 @@ export const Profile_FareContractsScreen = () => {
           onPressFareContract={() => {}}
           fcOrReservation={RESERVATION}
           now={Date.now()}
+          navigateToBonusScreen={navigateToBonusScreen}
         />
         <ThemeText typography="heading__2xl">Fare Contracts</ThemeText>
         {fareContracts.map((fc, i) => (
@@ -211,6 +222,7 @@ export const Profile_FareContractsScreen = () => {
             fcOrReservation={fc}
             now={Date.now()}
             onPressFareContract={() => {}}
+            navigateToBonusScreen={navigateToBonusScreen}
           />
         ))}
         <ThemeText typography="heading__2xl">Fare contract details</ThemeText>
@@ -224,6 +236,7 @@ export const Profile_FareContractsScreen = () => {
             now={Date.now()}
             onReceiptNavigate={() => {}}
             onNavigateToMap={() => {}}
+            navigateToBonusScreen={navigateToBonusScreen}
           />
         ))}
       </ScrollView>

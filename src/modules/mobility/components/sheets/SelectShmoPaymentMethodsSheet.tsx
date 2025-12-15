@@ -25,6 +25,7 @@ type Props = {
   onClose?: () => void;
   onGoToPaymentPage: () => void;
   locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 
 export const SelectShmoPaymentMethodSheet = ({
@@ -32,6 +33,7 @@ export const SelectShmoPaymentMethodSheet = ({
   onClose,
   onGoToPaymentPage,
   locationArrowOnPress,
+  navigateToScanQrCode,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -63,6 +65,7 @@ export const SelectShmoPaymentMethodSheet = ({
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
       locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
       <View style={styles.paymentMethods}>
         <MessageInfoBox

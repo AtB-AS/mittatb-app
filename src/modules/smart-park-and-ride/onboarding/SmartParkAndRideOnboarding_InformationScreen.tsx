@@ -1,14 +1,24 @@
 import {useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import React from 'react';
-import {OnboardingScreenComponent} from '@atb/modules/onboarding';
+import {
+  OnboardingCarouselScreenProps,
+  OnboardingScreenComponent,
+} from '@atb/modules/onboarding';
 import {ThemedCarValidTicket} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useOnboardingCarouselNavigation} from '@atb/modules/onboarding';
 import {sparOnboardingId} from './config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
-export const SmartParkAndRideOnboarding_InformationScreen = () => {
+export type InformationScreenProps =
+  OnboardingCarouselScreenProps<'SmartParkAndRideOnboarding_InformationScreen'>;
+
+export const SmartParkAndRideOnboarding_InformationScreen = ({
+  navigation,
+}: InformationScreenProps) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
   const analytics = useAnalyticsContext();
 
@@ -42,6 +52,7 @@ export const SmartParkAndRideOnboarding_InformationScreen = () => {
         rightIcon: {svg: ArrowRight},
       }}
       testID="smartParkAndRideOnboardingInformation"
+      focusRef={focusRef}
     />
   );
 };

@@ -10,8 +10,12 @@ import {StyleSheet, Theme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import TravelAidSettingsTexts from '@atb/translations/screens/subscreens/TravelAidSettingsTexts';
 import {View} from 'react-native';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_TravelAidInformationScreen = () => {
+type Props = ProfileScreenProps<'Profile_TravelAidInformationScreen'>;
+
+export const Profile_TravelAidInformationScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
 
@@ -24,8 +28,11 @@ export const Profile_TravelAidInformationScreen = () => {
     TravelAidSettingsTexts.information.keepInMind.content,
   );
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(TravelAidSettingsTexts.header.howTo.title),
         leftButton: {type: 'back'},

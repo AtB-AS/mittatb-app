@@ -8,8 +8,13 @@ import {
 } from '@atb/modules/onboarding';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {ThemedMyLocation} from '@atb/theme/ThemedAssets';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {RootStackScreenProps} from './navigation-types';
 
-export const Root_LocationWhenInUsePermissionScreen = () => {
+type Props = RootStackScreenProps<'Root_LocationWhenInUsePermissionScreen'>;
+
+export const Root_LocationWhenInUsePermissionScreen = ({navigation}: Props) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
 
   const {requestLocationPermission} = useGeolocationContext();
@@ -32,6 +37,7 @@ export const Root_LocationWhenInUsePermissionScreen = () => {
         expanded: true,
       }}
       testID="locationWhenInUsePermission"
+      focusRef={focusRef}
     />
   );
 };

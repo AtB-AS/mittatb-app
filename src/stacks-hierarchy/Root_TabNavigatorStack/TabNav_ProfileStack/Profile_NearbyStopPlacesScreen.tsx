@@ -5,16 +5,19 @@ import {StopPlace} from '@atb/api/types/departures';
 import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import {NearbyStopPlacesScreenComponent} from '@atb/screen-components/nearby-stop-places';
 import SharedTexts from '@atb/translations/shared';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = ProfileScreenProps<'Profile_NearbyStopPlacesScreen'>;
 
 export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
-  const fromLocation = useOnlySingleLocation<typeof route>('location');
+  const fromLocation = useOnlySingleLocation(route, 'location');
 
   const {t} = useTranslation();
+  const focusRef = useFocusOnLoad(navigation);
 
   return (
     <NearbyStopPlacesScreenComponent
+      focusRef={focusRef}
       location={fromLocation}
       mode={route.params.mode}
       headerProps={{

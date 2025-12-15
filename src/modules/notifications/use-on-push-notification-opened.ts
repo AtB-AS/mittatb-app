@@ -1,16 +1,14 @@
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {
   firebase,
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
-import {useNavigation} from '@react-navigation/native';
 import {useCallback, useEffect} from 'react';
 import {PushNotificationPayloadType, PushNotificationData} from './types';
 import Bugsnag from '@bugsnag/react-native';
 
-export function useOnPushNotificationOpened() {
-  const navigation = useNavigation<RootNavigationProps>();
-
+export function useOnPushNotificationOpened(
+  navigateToAvailableFareContracts: () => void,
+) {
   const onMessage = useCallback(
     (message: FirebaseMessagingTypes.RemoteMessage) => {
       const payload = PushNotificationData.safeParse(message.data);
@@ -20,24 +18,15 @@ export function useOnPushNotificationOpened() {
         );
         return;
       }
-      if (!navigation.isFocused()) return; // avoid navigating away from e.g. login or permission screens
 
       const messageData = payload.data;
       switch (messageData.type) {
         case PushNotificationPayloadType.activeFareContracts:
-          navigation.navigate('Root_TabNavigatorStack', {
-            screen: 'TabNav_TicketingStack',
-            params: {
-              screen: 'Ticketing_RootScreen',
-              params: {
-                screen: 'TicketTabNav_AvailableFareContractsTabScreen',
-              },
-            },
-          });
+          navigateToAvailableFareContracts();
           return;
       }
     },
-    [navigation],
+    [navigateToAvailableFareContracts],
   );
 
   useEffect(() => {

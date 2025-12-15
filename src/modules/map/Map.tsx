@@ -50,7 +50,6 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
-import {useIsFocused} from '@react-navigation/native';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
@@ -58,11 +57,28 @@ import {MapBottomSheets} from './MapBottomSheets';
 
 import {MapButtons} from './components/MapButtons';
 import {useFlyToSelectedMapItemWithPadding} from './hooks/use-fly-to-selected-map-item-with-padding';
+import {ShmoTesting} from './components/mobility/ShmoTesting';
+import {usePreferencesContext} from '../preferences';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
 export const Map = (props: MapProps) => {
-  const {includeSnackbar} = props;
+  const {
+    includeSnackbar,
+    isFocused,
+    tabBarHeight,
+    navigateToScooterSupport,
+    navigateToScooterOnboarding,
+    navigateToReportParkingViolation,
+    navigateToParkingPhoto,
+    navigateToScanQrCode,
+    navigateToLogin,
+    navigateToPaymentMethods,
+  } = props;
+
+  const {
+    preferences: {showShmoTesting},
+  } = usePreferencesContext();
 
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<Camera>(null);
@@ -76,8 +92,6 @@ export const Map = (props: MapProps) => {
     useState(paddingBottomMap);
 
   useFlyToSelectedMapItemWithPadding(mapCameraRef, mapViewRef);
-
-  const isFocused = useIsFocused();
 
   const startingCoordinates = getCurrentCoordinatesGlobal() || FOCUS_ORIGIN;
 
@@ -406,13 +420,27 @@ export const Map = (props: MapProps) => {
           )}
         </MapView>
         {mapState.bottomSheetType === MapBottomSheetType.None && (
-          <MapButtons locationArrowOnPress={locationArrowOnPress} />
+          <MapButtons
+            locationArrowOnPress={locationArrowOnPress}
+            navigateToScanQrCode={navigateToScanQrCode}
+          />
         )}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
+        {showShmoTesting && (
+          <ShmoTesting navigateToScooterSupport={navigateToScooterSupport} />
+        )}
       </View>
       <MapBottomSheets
         mapViewRef={mapViewRef}
         mapProps={props}
+        tabBarHeight={tabBarHeight}
+        navigateToScooterSupport={navigateToScooterSupport}
+        navigateToScooterOnboarding={navigateToScooterOnboarding}
+        navigateToReportParkingViolation={navigateToReportParkingViolation}
+        navigateToParkingPhoto={navigateToParkingPhoto}
+        navigateToScanQrCode={navigateToScanQrCode}
+        navigateToLogin={navigateToLogin}
+        navigateToPaymentMethods={navigateToPaymentMethods}
         locationArrowOnPress={locationArrowOnPress}
       />
     </View>

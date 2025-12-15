@@ -12,6 +12,8 @@ import {MapStateActionType, useMapContext} from '@atb/modules/map';
 import {blobToBase64} from '@atb/modules/parking-violations-reporting';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {compressImage} from '@atb/utils/image';
+import {useCallback} from 'react';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export type ParkingPhotoScreenProps =
   RootStackScreenProps<'Root_ParkingPhotoScreen'>;
@@ -20,12 +22,17 @@ export const Root_ParkingPhotoScreen = ({
   navigation,
   route,
 }: ParkingPhotoScreenProps) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
   const styles = useStyles();
   const {dispatchMapState} = useMapContext();
 
   const {mutateAsync: sendShmoBookingEvent, isPending} =
     useSendShmoBookingEventMutation();
+
+  const onGoBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
 
   const {logEvent} = useBottomSheetContext();
 
@@ -66,7 +73,7 @@ export const Root_ParkingPhotoScreen = ({
       bookingId: route.params.bookingId,
     });
 
-    navigation.goBack();
+    onGoBack();
   };
 
   if (isPending) {
@@ -80,8 +87,10 @@ export const Root_ParkingPhotoScreen = ({
   return (
     <PhotoCapture
       onConfirmImage={onConfirmImage}
+      onGoBack={onGoBack}
       title={t(MobilityTexts.photo.header)}
       secondaryText={t(MobilityTexts.photo.subHeader)}
+      focusRef={focusRef}
     />
   );
 };

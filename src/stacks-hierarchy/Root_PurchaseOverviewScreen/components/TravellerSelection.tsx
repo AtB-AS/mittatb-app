@@ -1,4 +1,4 @@
-import React, {RefObject, useRef} from 'react';
+import React, {useRef} from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
   getTextForLanguage,
@@ -13,7 +13,6 @@ import {
 } from '@atb/components/sections';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {TravellerSelectionSheet} from './TravellerSelectionSheet';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
@@ -24,6 +23,8 @@ import {
   type PurchaseSelectionType,
   useSelectableUserProfiles,
 } from '@atb/modules/purchase-selection';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {formatToNonBreakingSpaces} from '@atb/utils/text';
 
 type TravellerSelectionProps = {
   selection: PurchaseSelectionType;
@@ -38,10 +39,8 @@ export function TravellerSelection({
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
-
-  const {open: openBottomSheet, close: closeBottomSheet} =
-    useBottomSheetContext();
+  const onCloseFocusRef = useRef<View | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
 
   const selectionMode =
     selection.fareProductTypeConfig.configuration.travellerSelectionMode;
@@ -59,18 +58,12 @@ export function TravellerSelection({
     return null;
   }
 
-  const totalTravellersCount = selection.userProfilesWithCount.reduce(
-    (acc, {count}) => acc + count,
-    0,
-  );
-  const multipleTravellerCategoriesSelectedFrom =
-    selection.userProfilesWithCount.length > 1;
-
   const travellersDetailsText = [
     ...selection.userProfilesWithCount,
     ...selection.baggageProductsWithCount,
   ]
     .map((t) => `${t.count} ${getReferenceDataName(t, language)}`)
+    .map((t) => formatToNonBreakingSpaces(t))
     .join(', ');
 
   const travellerInfo = !canSelectUserProfile
@@ -104,46 +97,18 @@ export function TravellerSelection({
   };
 
   const travellerSelectionOnPress = () => {
-    openBottomSheet(
-      () => (
-        <TravellerSelectionSheet
-          selection={selection}
-          onSave={(selection) => {
-            onSave(selection);
-            closeBottomSheet();
-          }}
-        />
-      ),
-      onCloseFocusRef,
-    );
+    bottomSheetModalRef.current?.present();
   };
 
   const content = (
     <View style={styles.sectionContentContainer}>
       <View style={{flex: 1}}>
         <ThemeText typography="body__m__strong" testID="selectedTravellers">
-          {multipleTravellerCategoriesSelectedFrom
-            ? t(
-                PurchaseOverviewTexts.travellerSelection.travellers_title(
-                  totalTravellersCount,
-                ),
-              )
-            : travellersDetailsText}
+          {travellersDetailsText}
         </ThemeText>
         {!canSelectUserProfile && (
           <ThemeText typography="body__s" color="secondary">
             {travellerInfo}
-          </ThemeText>
-        )}
-
-        {multipleTravellerCategoriesSelectedFrom && (
-          <ThemeText
-            typography="body__s"
-            color="secondary"
-            style={styles.multipleTravellersDetails}
-            testID="selectedTravellers"
-          >
-            {travellersDetailsText}
           </ThemeText>
         )}
       </View>
@@ -174,6 +139,15 @@ export function TravellerSelection({
           <GenericSectionItem>{content}</GenericSectionItem>
         )}
       </Section>
+      <TravellerSelectionSheet
+        selection={selection}
+        onSave={(selection) => {
+          onSave(selection);
+          bottomSheetModalRef.current?.dismiss();
+        }}
+        bottomSheetModalRef={bottomSheetModalRef}
+        onCloseFocusRef={onCloseFocusRef}
+      />
     </View>
   );
 }

@@ -18,14 +18,19 @@ import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useCallback} from 'react';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {RootStackScreenProps} from '../navigation-types';
 
-export const Root_ConsiderTravelTokenChangeScreen = () => {
+type Props = RootStackScreenProps<'Root_ConsiderTravelTokenChangeScreen'>;
+
+export const Root_ConsiderTravelTokenChangeScreen = ({navigation}: Props) => {
   const styles = useStyle();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
-  const focusRef = useFocusOnLoad();
+  const focusRef = useFocusOnLoad(navigation);
   const {disable_travelcard} = useRemoteConfigContext();
+  const onPressChangeButton = () =>
+    navigation.navigate('Root_SelectTravelTokenScreen');
 
   const {continueFromOnboardingSection} = useOnboardingNavigation();
 
@@ -38,7 +43,10 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
   );
 
   const NoTokenView = (
-    <NoTravelTokenInfo onPressFooterButton={onPressContinue} />
+    <NoTravelTokenInfo
+      onPressFooterButton={onPressContinue}
+      focusRef={focusRef}
+    />
   );
 
   const {tokens, mobileTokenStatus} = useMobileTokenContext();
@@ -58,8 +66,9 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
         text: t(ConsiderTravelTokenChangeTexts.nextButton),
         expanded: true,
       }}
+      focusRef={focusRef}
     >
-      <View ref={focusRef} accessible>
+      <View accessible>
         <ThemeText
           typography="heading__xl"
           color={themeColor}
@@ -75,7 +84,11 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
       >
         {t(ConsiderTravelTokenChangeTexts.description)}
       </ThemeText>
-      <TravelTokenBox showIfThisDevice={true} alwaysShowErrors={true} />
+      <TravelTokenBox
+        showIfThisDevice={true}
+        alwaysShowErrors={true}
+        onPressChangeButton={onPressChangeButton}
+      />
     </OnboardingFullScreenView>
   );
 };

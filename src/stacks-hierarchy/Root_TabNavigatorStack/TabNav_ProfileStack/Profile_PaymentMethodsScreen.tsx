@@ -20,8 +20,12 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {ExpiryMessage, PaymentBrand} from '@atb/modules/payment';
 import {useRecurringPayment} from '@atb/modules/ticketing';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_PaymentMethodsScreen = () => {
+type Props = ProfileScreenProps<'Profile_PaymentMethodsScreen'>;
+
+export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {
@@ -34,8 +38,11 @@ export const Profile_PaymentMethodsScreen = () => {
     onAddRecurringPayment,
   } = useRecurringPayment();
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(PaymentMethodsTexts.header.title),
         leftButton: {type: 'back'},

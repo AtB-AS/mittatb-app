@@ -1,5 +1,4 @@
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -55,6 +54,8 @@ import {PaymentSelectionSectionItem} from '@atb/modules/payment';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {formatNumberToString} from '@atb-as/utils';
 import {ScreenHeading} from '@atb/components/heading';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -66,8 +67,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {t} = useTranslation();
   const {userId} = useAuthContext();
 
-  const {open: openBottomSheet, close: closeBottomSheet} =
-    useBottomSheetContext();
   const {previousPaymentMethod, recurringPaymentMethods} =
     usePreviousPaymentMethods();
   const analytics = useAnalyticsContext();
@@ -78,7 +77,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const [shouldSavePaymentMethod, setShouldSavePaymentMethod] = useState(false);
   const paymentMethod = selectedPaymentMethod ?? previousPaymentMethod;
   const [vippsNotInstalledError, setVippsNotInstalledError] = useState(false);
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
+  const onCloseFocusRef = useRef<View | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const focusRef = useFocusOnLoad(navigation);
 
   const {selection, recipient} = params;
 
@@ -128,6 +129,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   useDoOnceWhen(
     () => {
       if (reserveMutation.status !== 'success') return;
+      if (!reserveMutation.data.url) return;
       if (paymentMethod?.paymentType === PaymentType.Vipps) return;
       openInAppBrowser(
         reserveMutation.data.url,
@@ -195,49 +197,26 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     setVippsNotInstalledError(false);
     const offerExpirationTime =
       offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
-    if (offerExpirationTime && totalPrice > 0) {
-      if (offerExpirationTime < Date.now()) {
-        refreshOffer();
-      } else {
-        analytics.logEvent('Ticketing', 'Pay with card selected', {
-          paymentMethod,
-        });
-        reserveMutation.mutate();
-      }
+    if (offerExpirationTime && offerExpirationTime < Date.now()) {
+      refreshOffer();
     }
+    if (totalPrice === 0) {
+      analytics.logEvent('Ticketing', 'Complete free purchase selected');
+    } else {
+      analytics.logEvent('Ticketing', 'Pay with card selected', {
+        paymentMethod,
+      });
+    }
+    reserveMutation.mutate();
   }
 
   async function selectPaymentMethod() {
-    openBottomSheet(() => {
-      return (
-        <SelectPaymentMethodSheet
-          recurringPaymentMethods={recurringPaymentMethods}
-          onSelect={(
-            paymentMethod: PaymentMethod,
-            shouldSavePaymentMethod: boolean,
-          ) => {
-            setVippsNotInstalledError(false);
-            if (reserveMutation.data) {
-              cancelPaymentMutation.mutate({
-                reserveOfferResponse: reserveMutation.data,
-                isUser: false,
-              });
-            }
-            setSelectedPaymentMethod(paymentMethod);
-            setShouldSavePaymentMethod(shouldSavePaymentMethod);
-            closeBottomSheet();
-          }}
-          currentOptions={{
-            paymentMethod,
-            shouldSavePaymentMethod,
-          }}
-        />
-      );
-    }, onCloseFocusRef);
+    bottomSheetModalRef.current?.present();
   }
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(PurchaseConfirmationTexts.title),
         leftButton: {
@@ -323,7 +302,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             type="error"
           />
         )}
-        {paymentMethod && (
+        {paymentMethod && totalPrice > 0 && (
           <Section>
             <PaymentSelectionSectionItem
               paymentMethod={paymentMethod}
@@ -359,6 +338,31 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           }}
         />
       </View>
+
+      <SelectPaymentMethodSheet
+        recurringPaymentMethods={recurringPaymentMethods}
+        onSelect={(
+          paymentMethod: PaymentMethod,
+          shouldSavePaymentMethod: boolean,
+        ) => {
+          setVippsNotInstalledError(false);
+          if (reserveMutation.data) {
+            cancelPaymentMutation.mutate({
+              reserveOfferResponse: reserveMutation.data,
+              isUser: false,
+            });
+          }
+          setSelectedPaymentMethod(paymentMethod);
+          setShouldSavePaymentMethod(shouldSavePaymentMethod);
+          bottomSheetModalRef.current?.dismiss();
+        }}
+        currentOptions={{
+          paymentMethod,
+          shouldSavePaymentMethod,
+        }}
+        bottomSheetModalRef={bottomSheetModalRef}
+        onCloseFocusRef={onCloseFocusRef}
+      />
     </FullScreenView>
   );
 };
@@ -411,7 +415,7 @@ const PaymentButton = ({
       />
     );
 
-  if (!paymentMethod)
+  if (!paymentMethod && totalPrice > 0)
     return (
       <Button
         expanded={true}
@@ -460,18 +464,24 @@ const PaymentButton = ({
   return (
     <Button
       expanded={true}
-      text={t(PurchaseConfirmationTexts.payTotal.text(totalPriceString))}
+      text={
+        totalPrice > 0
+          ? t(PurchaseConfirmationTexts.payTotal.text(totalPriceString))
+          : t(PurchaseConfirmationTexts.complete)
+      }
       interactiveColor={theme.color.interactive[0]}
       disabled={!!isOfferError || reserveStatus === 'success'}
       onPress={() => {
-        analytics.logEvent(
-          'Ticketing',
-          'Pay with previous payment method clicked',
-          {
-            paymentMethod: paymentMethod?.paymentType,
-            mode: mode,
-          },
-        );
+        if (paymentMethod) {
+          analytics.logEvent(
+            'Ticketing',
+            'Pay with previous payment method clicked',
+            {
+              paymentMethod: paymentMethod?.paymentType,
+              mode: mode,
+            },
+          );
+        }
         onGoToPayment();
       }}
       loading={reserveStatus === 'pending'}

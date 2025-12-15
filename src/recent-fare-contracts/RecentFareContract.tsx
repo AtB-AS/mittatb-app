@@ -7,13 +7,13 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Dimensions, View} from 'react-native';
 import {
   FareProductTypeConfig,
+  FareZone,
   getReferenceDataName,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {getTransportModeText} from '@atb/components/transportation-modes';
 import {useHarborsQuery} from '@atb/queries';
-import {TravelRightDirection} from '@atb-as/utils';
 import {TileWithButton} from '@atb/components/tile';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {
@@ -23,6 +23,8 @@ import {
 } from '@atb/modules/fare-contracts';
 import {FareContractDetailItem} from '@atb/modules/fare-contracts';
 import {getTransportModeSvg} from '@atb/components/icon-box';
+import {useTicketAccessibilityLabel} from '@atb/modules/fare-contracts';
+import {isDefined} from '@atb/utils/presence';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContractType;
@@ -52,8 +54,6 @@ export const RecentFareContract = ({
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const fromZoneName = fromFareZone?.name.value;
-  const toZoneName = toFareZone?.name.value;
   const {width} = Dimensions.get('window');
   const interactiveColor = theme.color.interactive[2];
 
@@ -77,75 +77,25 @@ export const RecentFareContract = ({
     baggageProductsWithCount,
   );
 
+  const ticketAccessibilityLabel = useTicketAccessibilityLabel(
+    fareProductTypeConfig,
+    userProfilesWithCount,
+    baggageProductsWithCount,
+    [fromFareZone, toFareZone].filter(isDefined) as FareZone[],
+    pointToPointValidity?.fromPlace,
+    pointToPointValidity?.toPlace,
+    direction,
+  );
+
+  const accessibilityLabel = `${t(RecentFareContractsTexts.repeatPurchase.label)} ${productName} ${ticketAccessibilityLabel} `;
+
   if (!fareProductTypeConfig) return null;
-  const returnAccessibilityLabel = () => {
-    const modeInfo = `${productName} ${t(
-      RecentFareContractsTexts.a11yPreLabels.transportModes,
-    )}${getTransportModeText(fareProductTypeConfig.transportModes, t)}`;
-
-    const travellerInfo = `${t(
-      RecentFareContractsTexts.a11yPreLabels.travellers,
-    )}${travellersText}`;
-
-    if (fareProductTypeConfig.configuration.zoneSelectionMode === 'none') {
-      return `${t(
-        RecentFareContractsTexts.repeatPurchase.label,
-      )} ${modeInfo} ${travellerInfo}`;
-    }
-    const zoneInfo =
-      fromZoneName === toZoneName
-        ? `${t(
-            RecentFareContractsTexts.a11yPreLabels.zones.oneZone,
-          )} ${fromZoneName}`
-        : `${t(
-            RecentFareContractsTexts.a11yPreLabels.zones.multipleZones,
-          )} ${fromZoneName}, ${toZoneName}`;
-
-    const harborInfo = () => {
-      if (
-        pointToPointValidity?.fromPlace &&
-        pointToPointValidity?.toPlace &&
-        direction
-      ) {
-        const fromName =
-          harborsQuery.data?.find(
-            (sp) => sp.id === pointToPointValidity.fromPlace,
-          )?.name ?? '';
-        const toName =
-          harborsQuery.data?.find(
-            (sp) => sp.id === pointToPointValidity.toPlace,
-          )?.name ?? '';
-        return direction === TravelRightDirection.Both
-          ? t(
-              RecentFareContractsTexts.a11yPreLabels.harbors.returnTrip(
-                fromName,
-                toName,
-              ),
-            )
-          : t(
-              RecentFareContractsTexts.a11yPreLabels.harbors.oneWayTrip(
-                fromName,
-                toName,
-              ),
-            );
-      }
-      return '';
-    };
-    const zoneOrHarborInfo =
-      fromFareZone !== undefined ? zoneInfo : harborInfo();
-
-    return `${t(
-      RecentFareContractsTexts.repeatPurchase.label,
-    )} ${modeInfo} ${travellerInfo} ${zoneOrHarborInfo}`;
-  };
-
-  const currentAccessibilityLabel = returnAccessibilityLabel();
 
   return (
     <TileWithButton
       buttonSvg={ArrowRight}
       accessibilityHint={t(RecentFareContractsTexts.repeatPurchase.a11yHint)}
-      accessibilityLabel={currentAccessibilityLabel}
+      accessibilityLabel={accessibilityLabel}
       buttonText={t(RecentFareContractsTexts.repeatPurchase.label)}
       interactiveColor={interactiveColor}
       mode="spacious"

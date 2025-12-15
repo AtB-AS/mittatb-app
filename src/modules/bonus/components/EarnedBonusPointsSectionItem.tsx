@@ -2,17 +2,18 @@ import {BonusProgramTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {LinkSectionItem, SectionItemProps} from '@atb/components/sections';
 import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
-import {useNavigateToNestedProfileScreen} from '@atb/utils/use-navigate-to-nested-profile-screen';
 
 type Props = SectionItemProps<{
   amount: number;
+  navigateToBonusScreen: () => void;
 }>;
 
-export const EarnedBonusPointsSectionItem = ({amount, ...props}: Props) => {
+export const EarnedBonusPointsSectionItem = ({
+  amount,
+  navigateToBonusScreen,
+  ...props
+}: Props) => {
   const {t} = useTranslation();
-  const navigateToBonusScreen = useNavigateToNestedProfileScreen(
-    'Profile_BonusScreen',
-  );
 
   return (
     <LinkSectionItem
@@ -20,6 +21,11 @@ export const EarnedBonusPointsSectionItem = ({amount, ...props}: Props) => {
       isMarkdown={true}
       leftIcon={{svg: StarFill}}
       text={t(BonusProgramTexts.fareContract.youEarned(amount))}
+      accessibility={{
+        accessibilityLabel: t(
+          BonusProgramTexts.fareContract.youEarnedA11yLabel(amount),
+        ),
+      }}
       onPress={navigateToBonusScreen}
     />
   );

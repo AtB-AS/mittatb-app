@@ -1,6 +1,7 @@
 import React, {RefObject} from 'react';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
+// eslint-disable-next-line rulesdir/navigation-only-in-screens
 import {useNavigation} from '@react-navigation/native';
 import {AccessibilityProps, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
@@ -71,6 +72,7 @@ export const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
 const useHeaderButton = (
   buttonProps: HeaderButtonProps,
 ): IconButtonProps | undefined => {
+  // eslint-disable-next-line rulesdir/navigation-only-in-screens
   const navigation = useNavigation();
   const styles = useStyles();
 

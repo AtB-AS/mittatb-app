@@ -24,6 +24,7 @@ import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type BottomSheetModalProps = PropsWithChildren<{
   bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  enablePanDownToClose?: boolean;
   heading?: string;
   subText?: string;
   logoUrl?: string;
@@ -36,6 +37,8 @@ type BottomSheetModalProps = PropsWithChildren<{
   closeCallback?: () => void;
   Footer?: React.FC;
   testID?: string;
+  closeOnBackdropPress?: boolean;
+  overrideCloseButton?: () => void;
 }>;
 export const BottomSheetModal = ({
   children,
@@ -52,6 +55,9 @@ export const BottomSheetModal = ({
   closeCallback,
   Footer,
   testID,
+  enablePanDownToClose = true,
+  closeOnBackdropPress = true,
+  overrideCloseButton,
 }: BottomSheetModalProps) => {
   const styles = useBottomSheetStyles();
   const {height: screenHeight} = useWindowDimensions();
@@ -84,12 +90,12 @@ export const BottomSheetModal = ({
           {...props}
           appearsOnIndex={0}
           disappearsOnIndex={-1}
-          pressBehavior="close"
+          pressBehavior={closeOnBackdropPress ? 'close' : 'none'}
         />
       );
     },
 
-    [isScreenReaderEnabled],
+    [isScreenReaderEnabled, closeOnBackdropPress],
   );
 
   const renderFooter = useCallback(
@@ -122,6 +128,7 @@ export const BottomSheetModal = ({
         bottomSheetRef={bottomSheetModalRef}
         headerNode={headerNode}
         testID={testID}
+        overrideCloseButton={overrideCloseButton}
       />
     ),
     [
@@ -129,6 +136,7 @@ export const BottomSheetModal = ({
       headerNode,
       heading,
       logoUrl,
+      overrideCloseButton,
       rightIcon,
       rightIconText,
       subText,
@@ -144,6 +152,7 @@ export const BottomSheetModal = ({
       handleComponent={renderHandle}
       backgroundStyle={styles.sheet}
       snapPoints={snapPoints}
+      enablePanDownToClose={enablePanDownToClose}
       enableDynamicSizing={enableDynamicSizing}
       enableDismissOnClose={true}
       backdropComponent={renderBackdrop}

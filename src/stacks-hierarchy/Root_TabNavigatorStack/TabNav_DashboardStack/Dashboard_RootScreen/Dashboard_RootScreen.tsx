@@ -28,7 +28,7 @@ import {
 } from '@atb/translations';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import Bugsnag from '@bugsnag/react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -41,6 +41,8 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {BonusDashboard} from './components/BonusDashboard';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
@@ -61,6 +63,9 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
   const {isBonusProgramEnabled} = useFeatureTogglesContext();
   const {locationIsAvailable, location, requestLocationPermission} =
     useGeolocationContext();
+  const focusRef = useFocusOnLoad(navigation);
+
+  const isFocused = useIsFocused();
 
   const currentLocation = location || undefined;
 
@@ -169,8 +174,15 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
     }
   }
 
+  const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
+
+  const navigateToBonusScreen = useCallback(() => {
+    navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
+  }, [navigation, bonusScreenParams]);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(DashboardTexts.header.title),
         globalMessageContext: GlobalMessageContextEnum.appAssistant,
@@ -282,7 +294,9 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
             }}
           />
         )}
-        {isBonusProgramEnabled && <BonusDashboard />}
+        {isBonusProgramEnabled && (
+          <BonusDashboard onPress={navigateToBonusScreen} />
+        )}
         <DeparturesWidget
           style={style.contentSection}
           onEditFavouriteDeparture={() =>
@@ -301,6 +315,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
               activeItemIndex,
             })
           }
+          isFocused={isFocused}
         />
       </ScrollView>
     </FullScreenView>
@@ -310,6 +325,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
 function useLocations(
   currentLocation: GeoLocation | undefined,
 ): SearchForLocations {
+  const route = useRoute<RootProps['route']>();
   const {favorites} = useFavoritesContext();
 
   const memoedCurrentLocation = useMemo<GeoLocation | undefined>(
@@ -321,10 +337,8 @@ function useLocations(
     ],
   );
 
-  const searchedFromLocation =
-    useLocationSearchValue<RootProps['route']>('fromLocation');
-  const searchedToLocation =
-    useLocationSearchValue<RootProps['route']>('toLocation');
+  const searchedFromLocation = useLocationSearchValue(route, 'fromLocation');
+  const searchedToLocation = useLocationSearchValue(route, 'toLocation');
 
   return useUpdatedLocation(
     searchedFromLocation,

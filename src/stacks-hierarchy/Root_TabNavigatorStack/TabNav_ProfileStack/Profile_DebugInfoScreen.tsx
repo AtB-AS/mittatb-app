@@ -161,6 +161,7 @@ export const Profile_DebugInfoScreen = () => {
     debugShowSeconds,
     debugPredictionInaccurate,
     debugShowProgressBetweenStops,
+    showShmoTesting,
   } = preferences;
 
   return (
@@ -228,6 +229,13 @@ export const Profile_DebugInfoScreen = () => {
             value={debugPredictionInaccurate}
             onValueChange={(value) => {
               setPreference({debugPredictionInaccurate: value});
+            }}
+          />
+          <ToggleSectionItem
+            text="Show ShmoTesting"
+            value={showShmoTesting}
+            onValueChange={(value) => {
+              setPreference({showShmoTesting: value});
             }}
           />
           <LinkSectionItem

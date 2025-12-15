@@ -21,7 +21,7 @@ export const Root_LoginRequiredForFareProductScreen = ({navigation}: Props) => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {theme} = useThemeContext();
-  const focusRef = useFocusOnLoad();
+  const focusRef = useFocusOnLoad(navigation);
 
   const themeColor = getThemeColor(theme);
 
