@@ -33,7 +33,6 @@ type Props = PlaceScreenParams & {
     activeItemIndex: number,
   ) => void;
   onPressClose?: () => void;
-  isFocused: boolean;
 };
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
@@ -47,7 +46,6 @@ export const PlaceScreenComponent = ({
   onPressQuay,
   onPressDeparture,
   onPressClose,
-  isFocused,
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -147,12 +145,10 @@ export const PlaceScreenComponent = ({
             stopPlace={place}
             mode={mode}
             backgroundColor={themeColor}
-            isFocused={isFocused}
           />
         ) : (
           <StopPlacesView
             stopPlaces={[place]}
-            isFocused={isFocused}
             navigateToDetails={
               mode === 'Departure' ? navigateToDetails : undefined
             }

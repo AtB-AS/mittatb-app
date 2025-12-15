@@ -37,6 +37,7 @@ type Props = Pick<
   departures: EstimatedCall[];
   shouldShowMoreItemsLink: boolean;
   noDeparturesToShow: boolean;
+  now: number;
 };
 export const EstimatedCallList = ({
   quay,
@@ -47,6 +48,7 @@ export const EstimatedCallList = ({
   showOnlyFavorites,
   shouldShowMoreItemsLink,
   noDeparturesToShow,
+  now,
 }: Props) => {
   const {t} = useTranslation();
   const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
@@ -122,7 +124,7 @@ export const EstimatedCallList = ({
 
       return {
         secondsUntilDeparture: secondsBetween(
-          new Date(),
+          new Date(now),
           departure.expectedDepartureTime,
         ),
         departure,

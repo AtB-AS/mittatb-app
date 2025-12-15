@@ -72,11 +72,11 @@ export type DepartureRealtimeQuery = {
   lineIds?: string[];
   timeRange?: number;
 };
-export async function getRealtimeDepartures(
+export async function getDeparturesRealtime(
   query: DepartureRealtimeQuery,
   opts?: AxiosRequestConfig,
 ): Promise<DeparturesRealtimeData> {
-  if (query.quayIds.length === 0) return {};
+  if (query.quayIds.length === 0) return Promise.resolve({});
 
   const params = build({
     ...query,
@@ -84,7 +84,6 @@ export async function getRealtimeDepartures(
     lineIds: query.lineIds?.filter(onlyUniques),
   });
   const url = `bff/v2/departures/realtime?${params}`;
-
   const response = await client.get<DeparturesRealtimeData>(url, opts);
   return response.data;
 }
@@ -147,7 +146,8 @@ export async function getDepartures(
   query: DeparturesVariables,
   favorites?: UserFavoriteDepartures,
   opts?: AxiosRequestConfig,
-): Promise<DeparturesWithLineName> {
+): Promise<DeparturesWithLineName | null> {
+  if (query.ids.length === 0) return Promise.resolve(null);
   const queryString = stringifyWithDate(query);
   const url = `bff/v2/departures/departures?${queryString}`;
   const response = await client.post<DeparturesQuery>(url, {favorites}, opts);
