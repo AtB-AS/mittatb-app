@@ -157,6 +157,7 @@ export function QuaySection({
             navigateToDetails={navigateToDetails}
             showOnlyFavorites={showOnlyFavorites}
             noDeparturesToShow={!!data && !isLoading}
+            now={now}
           />
         )}
         {!isMinimized && didLoadingDataFail && !isLoading && (

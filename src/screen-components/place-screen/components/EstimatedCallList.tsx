@@ -18,8 +18,6 @@ import {
 } from '@atb/modules/favorites';
 import {QuaySectionProps} from './QuaySection';
 import {secondsBetween} from '@atb/utils/date';
-import {useNow} from '@atb/utils/use-now';
-import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 
@@ -39,6 +37,7 @@ type Props = Pick<
   departures: EstimatedCall[];
   shouldShowMoreItemsLink: boolean;
   noDeparturesToShow: boolean;
+  now: number;
 };
 export const EstimatedCallList = ({
   quay,
@@ -49,6 +48,7 @@ export const EstimatedCallList = ({
   showOnlyFavorites,
   shouldShowMoreItemsLink,
   noDeparturesToShow,
+  now,
 }: Props) => {
   const {t} = useTranslation();
   const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
@@ -57,8 +57,6 @@ export const EstimatedCallList = ({
     existingFavorite: StoredFavoriteDeparture | undefined;
     onCloseRef: RefObject<any>;
   } | null>(null);
-
-  const now = useNow(5 * ONE_SECOND_MS);
 
   const {alert, addFavorite} = useOnMarkFavouriteDepartures({
     ...selectedDeparture?.departure.serviceJourney.line,
