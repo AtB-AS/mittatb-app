@@ -60,6 +60,7 @@ import {MapButtons} from './components/MapButtons';
 import {useFlyToSelectedMapItemWithPadding} from './hooks/use-fly-to-selected-map-item-with-padding';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {usePreferencesContext} from '../preferences';
+import {useBottomSheetV2Context} from '@atb/components/bottom-sheet-v2';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -74,6 +75,7 @@ export const Map = (props: MapProps) => {
   const mapCameraRef = useRef<Camera>(null);
   const mapViewRef = useRef<MapView>(null);
   const [initMapLoaded, setInitMapLoaded] = useState(false);
+  const {bottomSheetGorRef} = useBottomSheetV2Context();
 
   const {mapFilter, mapState, dispatchMapState, paddingBottomMap} =
     useMapContext();
@@ -333,6 +335,9 @@ export const Map = (props: MapProps) => {
           pitchEnabled={false}
           onPress={onFeatureClick}
           testID="mapView"
+          onTouchStart={() => {
+            if (!activeShmoBooking) bottomSheetGorRef.current?.collapse();
+          }}
           onCameraChanged={(state) => {
             if (followUserLocation && activeShmoBooking?.bookingId) {
               mapPropertiesRef.current = {...state.properties};

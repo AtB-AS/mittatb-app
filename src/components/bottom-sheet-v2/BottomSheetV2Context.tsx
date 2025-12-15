@@ -1,9 +1,17 @@
-import React, {createContext, Dispatch, useContext, useState} from 'react';
+import BottomSheet from '@gorhom/bottom-sheet';
+import React, {
+  createContext,
+  Dispatch,
+  useContext,
+  useRef,
+  useState,
+} from 'react';
 import {View} from 'react-native';
 
 type BottomSheetState = {
   isOpen: boolean;
   setIsOpen: Dispatch<React.SetStateAction<boolean>>;
+  bottomSheetGorRef: React.RefObject<BottomSheet | null>;
 };
 
 const BottomSheetV2Context = createContext<BottomSheetState | undefined>(
@@ -16,10 +24,12 @@ type Props = {
 
 export const BottomSheetV2ContextProvider = ({children}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const bottomSheetGorRef = useRef<BottomSheet>(null);
 
   const state = {
     isOpen,
     setIsOpen,
+    bottomSheetGorRef,
   };
 
   return (

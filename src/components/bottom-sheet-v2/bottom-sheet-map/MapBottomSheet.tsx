@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  PropsWithChildren,
-  useRef,
-  useMemo,
-  useState,
-} from 'react';
+import React, {useCallback, PropsWithChildren, useMemo, useState} from 'react';
 import BottomSheetGor, {
   BottomSheetBackdrop,
   BottomSheetScrollView,
@@ -22,6 +16,7 @@ import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {BottomSheetHeader} from '../BottomSheetHeader';
 import {useBottomSheetStyles} from '../use-bottom-sheet-styles';
+import {useBottomSheetV2Context} from '../BottomSheetV2Context';
 
 export type BottomSheetProps = PropsWithChildren<{
   snapPoints?: Array<string | number>;
@@ -62,7 +57,6 @@ export const MapBottomSheet = ({
   headerNode,
 }: BottomSheetProps) => {
   const styles = useBottomSheetStyles();
-  const bottomSheetGorRef = useRef<BottomSheetGor>(null);
   const sheetTopPosition = useSharedValue(0);
   const {setPaddingBottomMap, setCurrentBottomSheet, mapState} =
     useMapContext();
@@ -70,6 +64,7 @@ export const MapBottomSheet = ({
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   const {top: safeAreaTop} = useSafeAreaInsets();
   const [headerHeight, setHeaderHeight] = useState(0);
+  const {bottomSheetGorRef} = useBottomSheetV2Context();
 
   const aStyle = useAnimatedStyle(() => {
     return {
