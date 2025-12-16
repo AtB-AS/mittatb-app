@@ -11,7 +11,7 @@ import {View} from 'react-native';
 type BottomSheetState = {
   isOpen: boolean;
   setIsOpen: Dispatch<React.SetStateAction<boolean>>;
-  bottomSheetGorRef: React.RefObject<BottomSheet | null>;
+  bottomSheetMapRef: React.RefObject<BottomSheet | null>;
 };
 
 const BottomSheetV2Context = createContext<BottomSheetState | undefined>(
@@ -24,12 +24,12 @@ type Props = {
 
 export const BottomSheetV2ContextProvider = ({children}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const bottomSheetGorRef = useRef<BottomSheet>(null);
+  const bottomSheetMapRef = useRef<BottomSheet>(null);
 
   const state = {
     isOpen,
     setIsOpen,
-    bottomSheetGorRef,
+    bottomSheetMapRef,
   };
 
   return (

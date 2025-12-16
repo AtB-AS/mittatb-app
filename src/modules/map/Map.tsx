@@ -57,7 +57,6 @@ import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {MapBottomSheets} from './MapBottomSheets';
 
 import {MapButtons} from './components/MapButtons';
-import {useFlyToSelectedMapItemWithPadding} from './hooks/use-fly-to-selected-map-item-with-padding';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {usePreferencesContext} from '../preferences';
 import {useBottomSheetV2Context} from '@atb/components/bottom-sheet-v2';
@@ -75,15 +74,14 @@ export const Map = (props: MapProps) => {
   const mapCameraRef = useRef<Camera>(null);
   const mapViewRef = useRef<MapView>(null);
   const [initMapLoaded, setInitMapLoaded] = useState(false);
-  const {bottomSheetGorRef} = useBottomSheetV2Context();
+  const {bottomSheetMapRef} = useBottomSheetV2Context();
+  const collapseTimerRef = useRef<ReturnType<typeof setTimeout>>(null);
 
   const {mapFilter, mapState, dispatchMapState, paddingBottomMap} =
     useMapContext();
 
   const [stalePaddingBottomMap, setStalePaddingBottomMap] =
     useState(paddingBottomMap);
-
-  useFlyToSelectedMapItemWithPadding(mapCameraRef, mapViewRef);
 
   const isFocused = useIsFocused();
 
@@ -152,6 +150,26 @@ export const Map = (props: MapProps) => {
     !selectedFeature && hideSnackbar();
   }, [selectedFeature, hideSnackbar]);
 
+  const cancelScheduledCollapse = useCallback(() => {
+    if (collapseTimerRef.current) {
+      clearTimeout(collapseTimerRef.current);
+      collapseTimerRef.current = null;
+    }
+  }, []);
+
+  const scheduleCollapse = useCallback(() => {
+    if (activeShmoBooking) return; // keep sheet during active trip
+    cancelScheduledCollapse();
+    collapseTimerRef.current = setTimeout(() => {
+      bottomSheetMapRef.current?.collapse();
+      collapseTimerRef.current = null;
+    }, 1000);
+  }, [activeShmoBooking, bottomSheetMapRef, cancelScheduledCollapse]);
+
+  useEffect(() => {
+    return () => cancelScheduledCollapse();
+  }, [cancelScheduledCollapse]);
+
   const geofencingZoneOnPress = useCallback(
     (geofencingZoneCustomProps?: GeofencingZoneCustomProps) => {
       const geofencingZoneContent = getGeofencingZoneContent(
@@ -200,6 +218,7 @@ export const Map = (props: MapProps) => {
 
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
+      cancelScheduledCollapse();
       const isActiveTrip =
         activeShmoBooking?.state === ShmoBookingState.IN_USE ||
         activeShmoBooking?.state === ShmoBookingState.FINISHING;
@@ -237,6 +256,7 @@ export const Map = (props: MapProps) => {
       }
     },
     [
+      cancelScheduledCollapse,
       activeShmoBooking?.state,
       showGeofencingZones,
       hideSnackbar,
@@ -247,6 +267,7 @@ export const Map = (props: MapProps) => {
 
   const onMapItemClick = useCallback(
     async (e: OnPressEvent) => {
+      cancelScheduledCollapse();
       const positionClicked = [e.coordinates.longitude, e.coordinates.latitude];
       const featuresAtClick = e.features;
       if (
@@ -316,7 +337,12 @@ export const Map = (props: MapProps) => {
         }
       }
     },
-    [activeShmoBooking?.state, paddingBottomMap, dispatchMapState],
+    [
+      cancelScheduledCollapse,
+      activeShmoBooking?.state,
+      paddingBottomMap,
+      dispatchMapState,
+    ],
   );
 
   const handleBreakFollow = useCallback(() => {
@@ -336,9 +362,16 @@ export const Map = (props: MapProps) => {
           onPress={onFeatureClick}
           testID="mapView"
           onTouchStart={() => {
-            if (!activeShmoBooking) bottomSheetGorRef.current?.collapse();
+            // Schedule collapse; canceled on feature tap
+            scheduleCollapse();
           }}
           onCameraChanged={(state) => {
+            // If a collapse is pending and the camera moves, collapse immediately
+            if (collapseTimerRef.current && state.gestures.isGestureActive) {
+              clearTimeout(collapseTimerRef.current);
+              collapseTimerRef.current = null;
+              bottomSheetMapRef.current?.collapse();
+            }
             if (followUserLocation && activeShmoBooking?.bookingId) {
               mapPropertiesRef.current = {...state.properties};
             }
@@ -424,6 +457,7 @@ export const Map = (props: MapProps) => {
       </View>
       <MapBottomSheets
         mapViewRef={mapViewRef}
+        mapCameraRef={mapCameraRef}
         mapProps={props}
         locationArrowOnPress={locationArrowOnPress}
       />

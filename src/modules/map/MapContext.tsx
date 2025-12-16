@@ -28,12 +28,10 @@ type MapContextState = {
   givenShmoConsent: boolean;
   setGivenShmoConsent: (value: boolean) => void;
   currentBottomSheet: {
-    isFullyOpen: boolean;
     bottomSheetType: MapBottomSheetType;
     feature: Feature<Point, GeoJsonProperties> | null;
   };
   setCurrentBottomSheet: (value: {
-    isFullyOpen: boolean;
     bottomSheetType: MapBottomSheetType;
     feature: Feature<Point, GeoJsonProperties> | null;
   }) => void;
@@ -79,11 +77,9 @@ export const MapContextProvider = ({children}: Props) => {
   const {mapFilter, setMapFilter} = useUserMapFilters();
 
   const [currentBottomSheet, setCurrentBottomSheet] = useState<{
-    isFullyOpen: boolean;
     bottomSheetType: MapBottomSheetType;
     feature: Feature<Point, GeoJsonProperties> | null;
   }>({
-    isFullyOpen: false,
     bottomSheetType: MapBottomSheetType.None,
     feature: null,
   });

@@ -20,6 +20,8 @@ import {
   getFeatureFromScan,
   isParkAndRide,
   CUSTOM_SCAN_ZOOM_LEVEL,
+  flyToLocation,
+  mapPositionToCoordinates,
 } from './utils';
 import MapboxGL from '@rnmapbox/maps';
 import {ShmoBookingState} from '@atb/api/types/mobility';
@@ -33,9 +35,14 @@ import {MapStateActionType} from './mapStateReducer';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {MapBottomSheetType, useMapContext} from './MapContext';
 import {useNavigateToNestedProfileScreen} from '@atb/utils/use-navigate-to-nested-profile-screen';
+import {getSlightlyRaisedMapPadding} from './MapConfig';
+import {useWindowDimensions} from 'react-native';
+import {useBottomNavigationStyles} from '@atb/utils/navigation';
+import {useBottomSheetV2Context} from '@atb/components/bottom-sheet-v2';
 
 type MapBottomSheetsProps = {
   mapViewRef: RefObject<MapboxGL.MapView | null>;
+  mapCameraRef: RefObject<MapboxGL.Camera | null>;
   mapProps: MapProps;
   locationArrowOnPress: () => void;
 };
@@ -44,14 +51,24 @@ export const MapBottomSheets = ({
   mapViewRef,
   mapProps,
   locationArrowOnPress,
+  mapCameraRef,
 }: MapBottomSheetsProps) => {
   const [openPaymentType, setOpenPaymentType] = useState<boolean>(false);
   const navigateToPaymentMethods = useNavigateToNestedProfileScreen(
     'Profile_PaymentMethodsScreen',
   );
-  const {mapState, dispatchMapState} = useMapContext();
+  const {
+    mapState,
+    dispatchMapState,
+    setCurrentBottomSheet,
+    currentBottomSheet,
+  } = useMapContext();
   const {data: activeBooking} = useActiveShmoBookingQuery();
   const tabBarHeight = useBottomTabBarHeight();
+  const {bottomSheetMapRef} = useBottomSheetV2Context();
+
+  const {height: screenHeight} = useWindowDimensions();
+  const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
 
   const analytics = useAnalyticsContext();
   const mapAnalytics = useMapSelectionAnalytics();
@@ -70,11 +87,57 @@ export const MapBottomSheets = ({
     dispatchMapState({type: MapStateActionType.None});
   }, [dispatchMapState]);
 
+  const flyToWithPadding = useCallback(() => {
+    if (mapState.feature) {
+      flyToLocation({
+        coordinates: mapPositionToCoordinates(
+          mapState.feature.geometry.coordinates,
+        ),
+        padding: getSlightlyRaisedMapPadding(
+          (screenHeight - tabBarMinHeight) * 0.75,
+        ),
+        mapCameraRef,
+        mapViewRef,
+        animationMode: 'easeTo',
+        zoomLevel: mapState?.customZoomLevel,
+      });
+    }
+  }, [
+    mapState.feature,
+    mapState?.customZoomLevel,
+    screenHeight,
+    tabBarMinHeight,
+    mapCameraRef,
+    mapViewRef,
+  ]);
+
   useEffect(() => {
     if (mapState.feature) {
       mapAnalytics.logMapSelection(mapState.feature);
+      flyToWithPadding();
+      //if same sheet but different feature, expand sheet
+      if (
+        currentBottomSheet?.bottomSheetType === mapState.bottomSheetType &&
+        currentBottomSheet?.feature?.properties?.id !==
+          mapState.feature.properties?.id
+      ) {
+        bottomSheetMapRef.current?.expand();
+        setCurrentBottomSheet({
+          bottomSheetType: mapState.bottomSheetType,
+          feature: mapState.feature,
+        });
+      }
     }
-  }, [mapAnalytics, mapState.feature]);
+  }, [
+    bottomSheetMapRef,
+    currentBottomSheet?.bottomSheetType,
+    currentBottomSheet?.feature?.properties?.id,
+    flyToWithPadding,
+    mapAnalytics,
+    mapState.bottomSheetType,
+    mapState.feature,
+    setCurrentBottomSheet,
+  ]);
 
   return (
     <>

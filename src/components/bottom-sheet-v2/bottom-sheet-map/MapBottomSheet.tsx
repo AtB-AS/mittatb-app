@@ -64,7 +64,7 @@ export const MapBottomSheet = ({
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   const {top: safeAreaTop} = useSafeAreaInsets();
   const [headerHeight, setHeaderHeight] = useState(0);
-  const {bottomSheetGorRef} = useBottomSheetV2Context();
+  const {bottomSheetMapRef} = useBottomSheetV2Context();
 
   const aStyle = useAnimatedStyle(() => {
     return {
@@ -126,7 +126,7 @@ export const MapBottomSheet = ({
     <>
       {HeaderOverlay}
       <BottomSheetGor
-        ref={bottomSheetGorRef}
+        ref={bottomSheetMapRef}
         handleComponent={() => (
           <View onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}>
             <BottomSheetHeader
@@ -135,7 +135,7 @@ export const MapBottomSheet = ({
               logoUrl={logoUrl}
               rightIcon={rightIcon}
               rightIconText={rightIconText}
-              bottomSheetRef={bottomSheetGorRef}
+              bottomSheetRef={bottomSheetMapRef}
               headerNode={headerNode}
             />
           </View>
@@ -152,7 +152,6 @@ export const MapBottomSheet = ({
             closeCallback?.();
             setPaddingBottomMap(0);
             setCurrentBottomSheet({
-              isFullyOpen: false,
               bottomSheetType: MapBottomSheetType.None,
               feature: null,
             });
@@ -163,7 +162,6 @@ export const MapBottomSheet = ({
         onChange={(index) => {
           if (index !== -1) {
             setCurrentBottomSheet({
-              isFullyOpen: true,
               bottomSheetType: mapState.bottomSheetType,
               feature: mapState.feature ?? null,
             });
