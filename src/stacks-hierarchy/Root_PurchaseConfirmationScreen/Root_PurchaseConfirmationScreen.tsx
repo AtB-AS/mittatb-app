@@ -24,7 +24,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {addMinutes} from 'date-fns';
-import React, {RefObject, useCallback, useMemo, useRef, useState} from 'react';
+import React, {RefObject, useCallback, useRef, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {
@@ -55,6 +55,7 @@ import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {formatNumberToString} from '@atb-as/utils';
 import {ScreenHeading} from '@atb/components/heading';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {useProductAlternatives} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
@@ -82,11 +83,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const focusRef = useFocusOnLoad(navigation);
 
   const {selection, recipient} = params;
-
-  const preassignedFareProductAlternatives = useMemo(
-    () => [selection.preassignedFareProduct],
-    [selection.preassignedFareProduct],
-  );
+  const productAlternatives = useProductAlternatives(selection);
 
   const {
     offerSearchTime,
@@ -97,7 +94,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     refreshOffer,
     userProfilesWithCountAndOffer,
     baggageProductsWithCountAndOffer,
-  } = useOfferState(preassignedFareProductAlternatives, selection);
+  } = useOfferState(productAlternatives, selection);
 
   const userProfileOffers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
     ({count, offer: {offerId}}) => ({
