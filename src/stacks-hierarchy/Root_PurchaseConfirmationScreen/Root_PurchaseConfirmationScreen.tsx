@@ -24,7 +24,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {addMinutes} from 'date-fns';
-import React, {RefObject, useCallback, useMemo, useRef, useState} from 'react';
+import React, {RefObject, useCallback, useRef, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {
@@ -55,6 +55,8 @@ import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {formatNumberToString} from '@atb-as/utils';
 import {ScreenHeading} from '@atb/components/heading';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {useProductAlternatives} from '@atb/modules/ticketing';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -78,13 +80,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const [vippsNotInstalledError, setVippsNotInstalledError] = useState(false);
   const onCloseFocusRef = useRef<View | null>(null);
   const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const focusRef = useFocusOnLoad(navigation);
 
   const {selection, recipient} = params;
-
-  const preassignedFareProductAlternatives = useMemo(
-    () => [selection.preassignedFareProduct],
-    [selection.preassignedFareProduct],
-  );
+  const productAlternatives = useProductAlternatives(selection);
 
   const {
     offerSearchTime,
@@ -95,7 +94,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     refreshOffer,
     userProfilesWithCountAndOffer,
     baggageProductsWithCountAndOffer,
-  } = useOfferState(preassignedFareProductAlternatives, selection);
+  } = useOfferState(productAlternatives, selection);
 
   const userProfileOffers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
     ({count, offer: {offerId}}) => ({
@@ -127,6 +126,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   useDoOnceWhen(
     () => {
       if (reserveMutation.status !== 'success') return;
+      if (!reserveMutation.data.url) return;
       if (paymentMethod?.paymentType === PaymentType.Vipps) return;
       openInAppBrowser(
         reserveMutation.data.url,
@@ -194,16 +194,17 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     setVippsNotInstalledError(false);
     const offerExpirationTime =
       offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
-    if (offerExpirationTime && totalPrice > 0) {
-      if (offerExpirationTime < Date.now()) {
-        refreshOffer();
-      } else {
-        analytics.logEvent('Ticketing', 'Pay with card selected', {
-          paymentMethod,
-        });
-        reserveMutation.mutate();
-      }
+    if (offerExpirationTime && offerExpirationTime < Date.now()) {
+      refreshOffer();
     }
+    if (totalPrice === 0) {
+      analytics.logEvent('Ticketing', 'Complete free purchase selected');
+    } else {
+      analytics.logEvent('Ticketing', 'Pay with card selected', {
+        paymentMethod,
+      });
+    }
+    reserveMutation.mutate();
   }
 
   async function selectPaymentMethod() {
@@ -212,6 +213,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(PurchaseConfirmationTexts.title),
         leftButton: {
@@ -297,7 +299,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             type="error"
           />
         )}
-        {paymentMethod && (
+        {paymentMethod && totalPrice > 0 && (
           <Section>
             <PaymentSelectionSectionItem
               paymentMethod={paymentMethod}
@@ -410,7 +412,7 @@ const PaymentButton = ({
       />
     );
 
-  if (!paymentMethod)
+  if (!paymentMethod && totalPrice > 0)
     return (
       <Button
         expanded={true}
@@ -459,18 +461,24 @@ const PaymentButton = ({
   return (
     <Button
       expanded={true}
-      text={t(PurchaseConfirmationTexts.payTotal.text(totalPriceString))}
+      text={
+        totalPrice > 0
+          ? t(PurchaseConfirmationTexts.payTotal.text(totalPriceString))
+          : t(PurchaseConfirmationTexts.complete)
+      }
       interactiveColor={theme.color.interactive[0]}
       disabled={!!isOfferError || reserveStatus === 'success'}
       onPress={() => {
-        analytics.logEvent(
-          'Ticketing',
-          'Pay with previous payment method clicked',
-          {
-            paymentMethod: paymentMethod?.paymentType,
-            mode: mode,
-          },
-        );
+        if (paymentMethod) {
+          analytics.logEvent(
+            'Ticketing',
+            'Pay with previous payment method clicked',
+            {
+              paymentMethod: paymentMethod?.paymentType,
+              mode: mode,
+            },
+          );
+        }
         onGoToPayment();
       }}
       loading={reserveStatus === 'pending'}

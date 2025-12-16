@@ -30,7 +30,7 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {ToggleSectionItem} from '@atb/components/sections';
-import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
+import {useProductAlternatives} from '@atb/modules/ticketing';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
 import {
@@ -42,6 +42,7 @@ import {isUserProfileSelectable} from './utils';
 import {useOnBehalfOf} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-on-behalf-of';
 import {useBookingTrips} from '@atb/modules/booking';
 import {isValidSelection} from '@atb/modules/booking';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type PurchaseOverviewError = OfferError | {type: 'booking-error'};
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
@@ -50,6 +51,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   navigation,
   route: {params},
 }) => {
+  const focusRef = useFocusOnLoad(navigation);
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
@@ -195,6 +197,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: getTextForLanguage(
           selection.fareProductTypeConfig.name,
@@ -204,7 +207,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           type: 'back',
           onPress: closeModal,
         },
-        setFocusOnLoad: false,
         globalMessageContext: GlobalMessageContextEnum.appTicketing,
       }}
       parallaxContent={(focusRef) => (

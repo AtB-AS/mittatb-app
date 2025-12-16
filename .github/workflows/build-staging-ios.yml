@@ -6,10 +6,10 @@ on:
         description: 'Forces a new build and ignores the cache'
         required: false
         type: choice
-        default: false
+        default: 'false'
         options:
-          - true
-          - false
+          - 'true'
+          - 'false'
       new-architecture-patch:
         description: 'Patch app to use new architecture'
         required: false
@@ -37,7 +37,7 @@ jobs:
       KEYCHAIN_NAME: 'CI'
     steps:
       - name: Checkout project
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Apply new architecture patch
         if: inputs.new-architecture-patch == 'true'
         run: git apply docs/architecture/new-architecture.patch && yarn install
@@ -53,11 +53,23 @@ jobs:
           app-environment: 'staging'
           app-org: ${{ matrix.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+      # - name: Get potential cached pods
+      #   uses: actions/cache@v4
+      #   id: pods-cache
+      #   with:
+      #     path: |
+      #       Pods
+      #       ~/Library/Caches/CocoaPods
+      #     key: pods-${{ hashFiles('**/Podfile.lock', '**/Podfile', '**/package.json', '**/yarn.lock') }}
+      # - name: Install CocoaPods
+      #   if: steps.pods-cache.outputs.cache-hit != 'true'
+      #   working-directory: ios
+      #   run: bundle exec pod install
       - uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
       - name: Get potential cached ipa & dsym
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: ipa-cache
         with:
           path: |
@@ -108,6 +120,7 @@ jobs:
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
+          SKIP_PODS: 'true'
       - name: Replace ipa bundle
         if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/ios/replace-bundle.sh

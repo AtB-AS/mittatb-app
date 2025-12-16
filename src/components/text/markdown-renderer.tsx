@@ -80,6 +80,9 @@ function renderToken(
       );
 
     case 'paragraph':
+      if (token.tokens?.length === 1) {
+        return renderToken(token.tokens[0], index, props, depth + 1);
+      }
       return (
         <Text key={index} {...props.textProps}>
           {renderChildren(token.tokens)}
@@ -111,7 +114,8 @@ function renderToken(
           key={index}
           onPress={openLink}
           {...props.textProps}
-          style={{textDecorationLine: 'underline'}}
+          style={[props.textProps?.style, {textDecorationLine: 'underline'}]}
+          accessibilityRole="link"
         >
           {token.text}
         </Text>

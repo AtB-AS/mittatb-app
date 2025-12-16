@@ -45,7 +45,8 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
   );
   const [emoji, setEmoji] = useState<string | undefined>(editItem?.emoji);
   const [name, setName] = useState<string>(editItem?.name ?? '');
-  const location = useOnlySingleLocation<Props['route']>(
+  const location = useOnlySingleLocation(
+    route,
     'searchLocation',
     editItem?.location,
   );

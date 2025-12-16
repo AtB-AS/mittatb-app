@@ -146,7 +146,6 @@ export const Root_LoginOptionsScreen = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        setFocusOnLoad={false}
         leftButton={
           showGoBack && transitionPreset !== 'slide-from-bottom'
             ? {type: 'back'}

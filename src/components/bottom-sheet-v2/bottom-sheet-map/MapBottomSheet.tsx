@@ -35,6 +35,7 @@ export type BottomSheetProps = PropsWithChildren<{
   locationArrowOnPress: () => void;
   canMinimize?: boolean;
   headerNode?: React.ReactNode;
+  navigateToScanQrCode: () => void;
 }>;
 
 export const MapBottomSheet = ({
@@ -55,6 +56,7 @@ export const MapBottomSheet = ({
   locationArrowOnPress,
   canMinimize = false,
   headerNode,
+  navigateToScanQrCode,
 }: BottomSheetProps) => {
   const styles = useBottomSheetStyles();
   const sheetTopPosition = useSharedValue(0);
@@ -107,10 +109,13 @@ export const MapBottomSheet = ({
           aStyle,
         ]}
       >
-        <MapButtons locationArrowOnPress={locationArrowOnPress} />
+        <MapButtons
+          locationArrowOnPress={locationArrowOnPress}
+          navigateToScanQrCode={navigateToScanQrCode}
+        />
       </Animated.View>
     );
-  }, [aStyle, locationArrowOnPress]);
+  }, [aStyle, locationArrowOnPress, navigateToScanQrCode]);
 
   const computedSnapPoints = useMemo(() => {
     if (!canMinimize) return snapPoints;

@@ -28,6 +28,7 @@ type DeparturesDialogSheetProps = {
     isTripCancelled?: boolean,
   ) => void;
   navigateToTripSearch: NavigateToTripSearchCallback;
+  navigateToScanQrCode: () => void;
   tabBarHeight: number | undefined;
   locationArrowOnPress: () => void;
 };
@@ -39,6 +40,7 @@ export const DeparturesDialogSheet = ({
   navigateToDetails,
   navigateToQuay,
   navigateToTripSearch,
+  navigateToScanQrCode,
   locationArrowOnPress,
 }: DeparturesDialogSheetProps) => {
   const {t} = useTranslation();
@@ -134,6 +136,7 @@ export const DeparturesDialogSheet = ({
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
       locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
       {StopPlaceViewOrError}
     </MapBottomSheet>

@@ -34,6 +34,7 @@ type Props = {
   onAddFavouriteDeparture: () => void;
   onPressDeparture: QuaySectionProps['onPressDeparture'];
   style?: StyleProp<ViewStyle>;
+  isFocused: boolean;
 };
 
 export const DeparturesWidget = ({
@@ -41,6 +42,7 @@ export const DeparturesWidget = ({
   onAddFavouriteDeparture,
   onPressDeparture,
   style,
+  isFocused,
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -48,7 +50,8 @@ export const DeparturesWidget = ({
   const themeColor = theme.color.background.neutral[1];
   const {favoriteDepartures} = useFavoritesContext();
   const {location} = useGeolocationContext();
-  const {state, loadInitialDepartures, searchDate} = useFavoriteDepartureData();
+  const {state, loadInitialDepartures, searchDate} =
+    useFavoriteDepartureData(isFocused);
   const onCloseFocusRef = useRef<View>(null);
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 

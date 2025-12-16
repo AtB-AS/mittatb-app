@@ -1,11 +1,10 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import React from 'react';
+import React, {Ref} from 'react';
 
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {OnboardingFullScreenView} from '@atb/modules/onboarding';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {Theme} from '@atb/theme/colors';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
 import {ButtonProps} from '@atb/components/button';
@@ -30,6 +29,7 @@ type OnboardingScreenComponentParams = {
   testID?: string;
   headerProps?: ScreenHeaderProps;
   contentNode?: React.JSX.Element;
+  focusRef: Ref<any>;
 };
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
@@ -47,15 +47,16 @@ export const OnboardingScreenComponent = ({
   testID,
   headerProps,
   contentNode,
+  focusRef,
 }: OnboardingScreenComponentParams) => {
   const styles = useThemeStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
-  const focusRef = useFocusOnLoad();
   const descriptionLinkColor = getInteractiveColor(theme).default.background;
 
   return (
     <OnboardingFullScreenView
+      focusRef={focusRef}
       footerButton={footerButton}
       secondaryFooterButton={secondaryFooterButton}
       vippsButton={vippsButton}

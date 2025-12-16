@@ -17,16 +17,13 @@ import {useShmoWarnings} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {AgeVerificationEnum} from '../queries/use-get-age-verification-query';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
-import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 
 type ShmoActionButtonProps = {
   onStartOnboarding: () => void;
+  loginCallback: () => void;
   vehicleId: string;
   operatorId: string;
   paymentMethod: PaymentMethod | undefined;
-  navigation: RootNavigationProps;
 };
 
 export const ShmoActionButton = ({
@@ -34,7 +31,7 @@ export const ShmoActionButton = ({
   vehicleId,
   operatorId,
   paymentMethod,
-  navigation,
+  loginCallback,
 }: ShmoActionButtonProps) => {
   const {authenticationType, userId} = useAuthContext();
   const {hasBlockers, numberOfBlockers, ageVerification, operatorAgeLimit} =
@@ -45,10 +42,6 @@ export const ShmoActionButton = ({
   const coordinates = getCurrentCoordinatesGlobal();
   const {warningMessage} = useShmoWarnings(vehicleId);
   const {logEvent} = useBottomSheetContext();
-
-  const {enable_vipps_login} = useRemoteConfigContext();
-  const hasReservationOrAvailableFareContract =
-    useHasReservationOrAvailableFareContract();
 
   const {
     mutateAsync: initShmoOneStopBooking,
@@ -90,19 +83,6 @@ export const ShmoActionButton = ({
     logEvent,
     userId,
   ]);
-
-  const loginCallback = useCallback(() => {
-    if (hasReservationOrAvailableFareContract) {
-      navigation.navigate('Root_LoginAvailableFareContractWarningScreen', {});
-    } else if (enable_vipps_login) {
-      navigation.navigate('Root_LoginOptionsScreen', {
-        showGoBack: true,
-        transitionOverride: 'slide-from-bottom',
-      });
-    } else {
-      navigation.navigate('Root_LoginPhoneInputScreen', {});
-    }
-  }, [enable_vipps_login, hasReservationOrAvailableFareContract, navigation]);
 
   if (authenticationType != 'phone') {
     return (

@@ -5,18 +5,19 @@ import {Qr} from '@atb/assets/svg/mono-icons/ticketing';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {useControlPositionsStyle} from '../hooks/use-control-styles';
-import {useNavigation} from '@react-navigation/native';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {useMapContext} from '../MapContext';
 import {MapStateActionType} from '../mapStateReducer';
 
-export const ScanButton = () => {
+export const ScanButton = ({
+  navigateToScanQrCode,
+}: {
+  navigateToScanQrCode: () => void;
+}) => {
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
   const styles = useStyles();
   const analytics = useAnalyticsContext();
-  const navigation = useNavigation<RootNavigationProps>();
   const {t} = useTranslation();
   const {mapButtonsContainer} = useControlPositionsStyle(false);
   const {close: closeBottomSheet} = useBottomSheetContext();
@@ -32,7 +33,7 @@ export const ScanButton = () => {
       onPress={() => {
         closeBottomSheet();
         analytics.logEvent('Map', 'Scan');
-        navigation.navigate('Root_ScanQrCodeScreen');
+        navigateToScanQrCode();
         dispatchMapState({type: MapStateActionType.None});
       }}
       text={t(MapTexts.qr.scan)}

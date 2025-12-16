@@ -14,6 +14,7 @@ type Props = {
   fareContracts: FareContractType[];
   now: number;
   onPressFareContract: (orderId: string) => void;
+  navigateToBonusScreen: () => void;
   emptyStateConfig: Pick<
     EmptyStateProps,
     'title' | 'details' | 'illustrationComponent'
@@ -25,6 +26,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   reservations,
   now,
   onPressFareContract,
+  navigateToBonusScreen,
   emptyStateConfig,
 }) => {
   const styles = useStyles();
@@ -52,6 +54,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
               onPressFareContract(fcOrReservation.id);
             }
           }}
+          navigateToBonusScreen={navigateToBonusScreen}
           key={
             'id' in fcOrReservation
               ? fcOrReservation.id

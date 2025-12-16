@@ -19,12 +19,15 @@ import {Button} from '@atb/components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useVehicle} from '@atb/modules/mobility';
-import {useNavigation} from '@react-navigation/native';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {useMapContext} from '../../MapContext';
+import {ScooterHelpParams} from '../../types';
 
-export const ShmoTesting = () => {
+type ShmoTestingProps = {
+  navigateToScooterSupport: (params: ScooterHelpParams) => void;
+};
+
+export const ShmoTesting = ({navigateToScooterSupport}: ShmoTestingProps) => {
   const {mapState} = useMapContext();
   const selectedVehicleId =
     mapState.feature?.properties?.id ?? mapState.assetId ?? '';
@@ -40,7 +43,6 @@ export const ShmoTesting = () => {
   const interactiveColor = theme.color.interactive[2];
   const destructiveColor = theme.color.interactive.destructive;
 
-  const navigation = useNavigation<RootNavigationProps>();
   const styles = useStyles();
   const {height: windowHeight} = useWindowDimensions();
   const {top: safeAreaTop} = useSafeAreaInsets();
@@ -224,12 +226,12 @@ export const ShmoTesting = () => {
         onPress={() => {
           closeBottomSheet();
           if (vehicleId) {
-            navigation.navigate('Root_ScooterHelpScreen', {
+            navigateToScooterSupport({
               vehicleId: vehicleId,
               operatorId: operatorId ?? 'YRY:Operator:Ryde',
             });
           } else if (activeShmoBooking) {
-            navigation.navigate('Root_ScooterHelpScreen', {
+            navigateToScooterSupport({
               operatorId: operatorId ?? 'YRY:Operator:Ryde',
               bookingId: activeShmoBooking.bookingId,
             });

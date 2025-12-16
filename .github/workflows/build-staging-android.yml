@@ -33,11 +33,9 @@ jobs:
     environment: ${{ matrix.org }}
     timeout-minutes: 180
     runs-on: ubuntu-latest
-    env:
-      ENV_FORCE_BUILD: ${{ inputs.force-build || 'true' }}
     steps:
       - name: Checkout project
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
       - name: Apply new architecture patch
         if: inputs.new-architecture-patch == 'true'
         run: git apply docs/architecture/new-architecture.patch && yarn install
@@ -61,18 +59,19 @@ jobs:
       - name: Install imagemagick
         run: sudo apt-get update && sudo apt-get install imagemagick
       - name: install node v22
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v5
         with:
           node-version: 22
+          cache: 'yarn'
       - name: Get potential cached node_modules
-        if: env.ENV_FORCE_BUILD != 'true'
-        uses: actions/cache@v3
+        if: inputs.force-build != 'true'
+        uses: actions/cache@v4
         id: modules-cache
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Install node_modules
-        if: env.ENV_FORCE_BUILD == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
@@ -87,7 +86,7 @@ jobs:
       - name: Override native config files
         run: bash ./scripts/android/override-config-files.sh
       - name: Get potential cached APK
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: apk-cache
         with:
           path: app-staging.apk
@@ -97,17 +96,35 @@ jobs:
         env:
           KEYSTORE: ${{ secrets.KEYSTORE }}
       - name: Generate native assets
-        if: env.ENV_FORCE_BUILD == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
         run: yarn generate-native-assets
+      - name: Setup gradle and potentially use cached gradle if exist
+        if: inputs.force-build == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
+        uses: gradle/actions/setup-gradle@v5
+        id: setup-gradle
+        with:
+          gradle-version: wrapper
+          cache-read-only: false
+      - name: Detect dependency changes, skip doing gradle clean if dependency unchanged
+        uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            deps:
+              - 'package.json'
+              - 'package-lock.json'
+              - 'android/app/build.gradle'
+              - 'android/build.gradle'
       - name: Run fastlane build
-        if: env.ENV_FORCE_BUILD == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane android build
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+          SKIP_CLEAN: ${{ steps.changes.outputs.deps != 'true' }}
       - name: Replace apk bundle
-        if: env.ENV_FORCE_BUILD == 'true' || steps.apk-cache.outputs.cache-hit == 'true'
+        if: inputs.force-build == 'true' || steps.apk-cache.outputs.cache-hit == 'true'
         run: bash ./scripts/android/replace-bundle.sh
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}

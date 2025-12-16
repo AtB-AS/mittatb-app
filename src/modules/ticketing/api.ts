@@ -118,7 +118,7 @@ export async function activateFareContractNow(fareContractId: string) {
 
 type ReserveOfferParams = {
   offers: ReserveOffer[];
-  paymentType: PaymentType;
+  paymentType?: PaymentType;
   opts?: AxiosRequestConfig;
   scaExemption: boolean;
   customerAccountId: string;

@@ -10,19 +10,31 @@ import {Section, GenericSectionItem} from '@atb/components/sections';
 import {TokenToggleInfo} from '@atb/screen-components/select-travel-token-screen';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
+import {ProfileScreenProps} from '../navigation-types';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useIsFocused} from '@react-navigation/native';
 
-export const Profile_TravelTokenScreen = () => {
+type Props = ProfileScreenProps<'Profile_TravelTokenScreen'>;
+
+export const Profile_TravelTokenScreen = ({navigation}: Props) => {
+  const focusRef = useFocusOnLoad(navigation);
+  const isFocused = useIsFocused();
   const styles = useStyles();
   const {t} = useTranslation();
   const {disable_travelcard} = useRemoteConfigContext();
-  const {data} = useTokenToggleDetailsQuery();
+  const {data, isLoading} = useTokenToggleDetailsQuery(isFocused);
+  const toggleLimit = data?.toggleLimit ?? 0;
 
   const title = disable_travelcard
     ? t(TravelTokenTexts.travelToken.header.titleWithoutTravelcard)
     : t(TravelTokenTexts.travelToken.header.title);
 
+  const onPressChangeButton = () =>
+    navigation.navigate('Root_SelectTravelTokenScreen');
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title,
         leftButton: {type: 'back'},
@@ -32,11 +44,18 @@ export const Profile_TravelTokenScreen = () => {
       )}
     >
       <View style={styles.content}>
-        <TravelTokenBox showIfThisDevice={true} alwaysShowErrors={true} />
+        <TravelTokenBox
+          showIfThisDevice={true}
+          alwaysShowErrors={true}
+          onPressChangeButton={onPressChangeButton}
+        />
         <Section>
           {data?.toggleLimit !== undefined && (
             <GenericSectionItem>
-              <TokenToggleInfo />
+              <TokenToggleInfo
+                toggleLimit={toggleLimit}
+                isLoading={isLoading}
+              />
             </GenericSectionItem>
           )}
         </Section>

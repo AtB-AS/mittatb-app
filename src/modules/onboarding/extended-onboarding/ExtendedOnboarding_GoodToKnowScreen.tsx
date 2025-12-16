@@ -3,9 +3,20 @@ import {ExtendedOnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {extendedOnboardingId} from '.';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {OnboardingScreenComponent, useOnboardingCarouselNavigation} from '..';
+import {
+  OnboardingCarouselScreenProps,
+  OnboardingScreenComponent,
+  useOnboardingCarouselNavigation,
+} from '..';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
-export const ExtendedOnboarding_GoodToKnowScreen = () => {
+export type GoodToKnowScreenProps =
+  OnboardingCarouselScreenProps<'ExtendedOnboarding_GoodToKnowScreen'>;
+
+export const ExtendedOnboarding_GoodToKnowScreen = ({
+  navigation,
+}: GoodToKnowScreenProps) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
 
   const {navigateToNextScreen} = useOnboardingCarouselNavigation(
@@ -26,6 +37,7 @@ export const ExtendedOnboarding_GoodToKnowScreen = () => {
         testID: 'nextButtonGoodToKnowOnboarding',
       }}
       testID="goodToKnowExtendedOnboarding"
+      focusRef={focusRef}
     />
   );
 };

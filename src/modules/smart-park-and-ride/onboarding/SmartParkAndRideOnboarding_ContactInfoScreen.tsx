@@ -2,6 +2,7 @@ import {useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import React from 'react';
 import {
+  OnboardingCarouselScreenProps,
   OnboardingScreenComponent,
   useOnboardingCarouselNavigation,
 } from '@atb/modules/onboarding';
@@ -18,8 +19,15 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
-export const SmartParkAndRideOnboarding_ContactInfoScreen = () => {
+export type ContactInfoScreenProps =
+  OnboardingCarouselScreenProps<'SmartParkAndRideOnboarding_ContactInfoScreen'>;
+
+export const SmartParkAndRideOnboarding_ContactInfoScreen = ({
+  navigation,
+}: ContactInfoScreenProps) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
   const analytics = useAnalyticsContext();
 
@@ -60,6 +68,7 @@ export const SmartParkAndRideOnboarding_ContactInfoScreen = () => {
         rightIcon: {svg: Confirm},
       }}
       testID="smartParkAndRideOnboardingContactInfo"
+      focusRef={focusRef}
     />
   );
 };

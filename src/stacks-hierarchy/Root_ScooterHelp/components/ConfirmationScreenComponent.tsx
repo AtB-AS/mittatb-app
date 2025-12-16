@@ -1,3 +1,4 @@
+import {Ref} from 'react';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
@@ -12,12 +13,14 @@ type ConfirmationScreenComponentProps = {
   onClose: () => void;
   title: string;
   description: string;
+  focusRef: Ref<any>;
 };
 
 export const ConfirmationScreenComponent = ({
   onClose,
   title,
   description,
+  focusRef,
 }: ConfirmationScreenComponentProps) => {
   const styles = useStyles();
   const {theme, themeName} = useThemeContext();
@@ -31,7 +34,10 @@ export const ConfirmationScreenComponent = ({
   };
 
   return (
-    <ScreenContainer rightHeaderButton={{type: 'close', onPress: onClose}}>
+    <ScreenContainer
+      rightHeaderButton={{type: 'close', onPress: onClose}}
+      focusRef={focusRef}
+    >
       <View style={styles.container}>
         <View style={styles.contentWrapper}>
           <ThemeIcon

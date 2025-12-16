@@ -21,11 +21,13 @@ import {sortFcOrReservationByCreation} from '@atb/modules/fare-contracts';
 
 type Props = TicketHistoryScreenParams & {
   onPressFareContract: (fareContractId: string) => void;
+  navigateToBonusScreen: () => void;
 };
 
 export const TicketHistoryScreenComponent = ({
   mode,
   onPressFareContract,
+  navigateToBonusScreen,
 }: Props) => {
   const {sentFareContracts, reservations, rejectedReservations} =
     useTicketingContext();
@@ -64,6 +66,7 @@ export const TicketHistoryScreenComponent = ({
         data={sortedItems}
         renderItem={({item, index}) => (
           <FareContractOrReservation
+            navigateToBonusScreen={navigateToBonusScreen}
             now={serverNow}
             onPressFareContract={() => {
               // Reservations don't have `id`, but also don't show the link to
