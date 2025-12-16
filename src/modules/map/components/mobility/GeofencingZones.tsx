@@ -14,16 +14,12 @@ import {useThemeContext} from '@atb/theme';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {GeofencingZoneCode} from '@atb-as/theme';
 import {Expression} from '@rnmapbox/maps/src/utils/MapboxStyles';
+import {geofencingZoneCodes} from '../../utils';
 
 const geofencingZonesVectorSourceId = 'geofencing-zones-source';
 const sourceLayerId = 'geofencing_zones_features';
 const minZoomLevel = 9;
-const geofencingZoneCodes: GeofencingZoneCode[] = [
-  'allowed',
-  'slow',
-  'noParking',
-  'noEntry',
-];
+const maxZoomLevel = 12;
 
 type GeofencingZonesProps = {
   systemId: string | null;
@@ -48,7 +44,6 @@ export const GeofencingZones = ({
       {geofencingZoneCodes.map((geofencingZoneCode) => (
         <GeofencingZonesForVehicle
           key={geofencingZoneCode}
-          vehicleTypeId={vehicleTypeId}
           geofencingZoneCode={geofencingZoneCode}
         />
       ))}
@@ -57,16 +52,18 @@ export const GeofencingZones = ({
 };
 
 const GeofencingZonesForVehicle = ({
-  vehicleTypeId,
   geofencingZoneCode,
 }: {
-  vehicleTypeId: string;
   geofencingZoneCode: GeofencingZoneCode;
 }) => {
-  const {geofencingZoneStyle, code} = useGeofencingZoneProps(vehicleTypeId);
+  const {geofencingZoneStyle, code} = useGeofencingZoneProps();
 
-  const bgColor = ['get', 'background', ['get', 'color', geofencingZoneStyle]];
-  const fillOpacity = ['get', 'fillOpacity', geofencingZoneStyle];
+  const bgColor: Expression = [
+    'get',
+    'background',
+    ['get', 'color', geofencingZoneStyle],
+  ];
+  const fillOpacity: Expression = ['get', 'fillOpacity', geofencingZoneStyle];
 
   return (
     <>
@@ -89,16 +86,8 @@ const GeofencingZonesForVehicle = ({
         lineDasharray: ['get', 'lineDasharray'],
         a hard coded style must be used for that style prop.
       */}
-      <GfzLineLayer
-        geofencingZoneCode={geofencingZoneCode}
-        isDashed={true}
-        vehicleTypeId={vehicleTypeId}
-      />
-      <GfzLineLayer
-        geofencingZoneCode={geofencingZoneCode}
-        isDashed={false}
-        vehicleTypeId={vehicleTypeId}
-      />
+      <GfzLineLayer geofencingZoneCode={geofencingZoneCode} isDashed={true} />
+      <GfzLineLayer geofencingZoneCode={geofencingZoneCode} isDashed={false} />
     </>
   );
 };
@@ -106,16 +95,14 @@ const GeofencingZonesForVehicle = ({
 const GfzLineLayer = ({
   isDashed,
   geofencingZoneCode,
-  vehicleTypeId,
 }: {
   isDashed: boolean;
   geofencingZoneCode: GeofencingZoneCode;
-  vehicleTypeId: string;
 }) => {
-  const {geofencingZoneStyle, code} = useGeofencingZoneProps(vehicleTypeId);
-  const lineOpacity = ['get', 'strokeOpacity', geofencingZoneStyle];
-  const lineStyle = ['get', 'lineStyle', geofencingZoneStyle];
-  const lineColor = [
+  const {geofencingZoneStyle, code} = useGeofencingZoneProps();
+  const lineOpacity: Expression = ['get', 'strokeOpacity', geofencingZoneStyle];
+  const lineStyle: Expression = ['get', 'lineStyle', geofencingZoneStyle];
+  const lineColor: Expression = [
     'get',
     'background',
     ['get', 'color', geofencingZoneStyle],
@@ -149,15 +136,9 @@ const GfzLineLayer = ({
   );
 };
 
-const useGeofencingZoneProps = (vehicleTypeId: string) => {
+const useGeofencingZoneProps = () => {
   const {theme} = useThemeContext();
-  const codePrefix = 'code_per_vehicle_type_id.';
-  const code: Expression = [
-    'coalesce',
-    ['get', ['concat', codePrefix, vehicleTypeId]],
-    ['get', ['concat', codePrefix, '*']],
-    'allowed',
-  ];
+  const code = ['coalesce', ['get', 'code'], 'allowed'];
   const geofencingZoneStyles = ['literal', theme.color.geofencingZone];
   const geofencingZoneStyle = ['get', code, geofencingZoneStyles];
   return {
@@ -174,14 +155,20 @@ const useGeofencingZoneProps = (vehicleTypeId: string) => {
  * then access this source with existing=true and the same source id.
  * @returns {id: string, source: StyleJsonVectorSource}
  */
-export const useGeofencingZonesVectorSource: (systemId: string) => {
+export const useGeofencingZonesVectorSource: (
+  systemId: string,
+  vehicleTypeId: string,
+) => {
   id: string;
   source: StyleJsonVectorSource;
-} = (systemId) => {
+} = (systemId, vehicleTypeId) => {
   // Could consider adding the sources only if shown.
   // The reason not to, is to simplify potential cache tile hotloading on the server.
   const tileLayerNames: TileLayerName[] = ['geofencing_zones_features'];
-  const tileUrlTemplate = useTileUrlTemplate(tileLayerNames, {systemId});
+  const tileUrlTemplate = useTileUrlTemplate(tileLayerNames, {
+    systemId,
+    vehicleTypeId,
+  });
 
   return useMemo(
     () => ({
@@ -190,7 +177,7 @@ export const useGeofencingZonesVectorSource: (systemId: string) => {
         type: 'vector',
         tiles: [tileUrlTemplate || ''],
         minzoom: minZoomLevel,
-        maxzoom: minZoomLevel,
+        maxzoom: maxZoomLevel,
         volatile: false, // hmmmm true?
       },
     }),
@@ -198,55 +185,55 @@ export const useGeofencingZonesVectorSource: (systemId: string) => {
   );
 };
 
-const reachFullScaleAtZoomLevel = 15.5;
-const iconFullSize = 0.85;
-const scaleTransitionZoomRange = 1.5;
-const opacityTransitionExtraZoomRange = scaleTransitionZoomRange / 8;
+// const reachFullScaleAtZoomLevel = 15.5;
+// const iconFullSize = 0.85;
+// const scaleTransitionZoomRange = 1.5;
+// const opacityTransitionExtraZoomRange = scaleTransitionZoomRange / 8;
 
-type GeofencingZoneIconProps = {
-  iconFeatureCollection: PointFeatureCollection;
-};
-export const GeofencingZoneIcon: React.FC<GeofencingZoneIconProps> = ({
-  iconFeatureCollection,
-}) => {
-  const {themeName} = useThemeContext();
+// type GeofencingZoneIconProps = {
+//   iconFeatureCollection: PointFeatureCollection;
+// };
+// export const GeofencingZoneIcon: React.FC<GeofencingZoneIconProps> = ({
+//   iconFeatureCollection,
+// }) => {
+//   const {themeName} = useThemeContext();
 
-  const code = ['get', 'code', getGeofencingZoneCustomProps];
+//   const code = ['get', 'code', getGeofencingZoneCustomProps];
 
-  // mapbox icons names are lower cased
-  const lowerCaseCode = ['downcase', code];
+//   // mapbox icons names are lower cased
+//   const lowerCaseCode = ['downcase', code];
 
-  const iconImage = [
-    'concat',
-    'geofencingzone_',
-    lowerCaseCode,
-    '_',
-    themeName,
-  ];
-  const {iconOpacity, iconSize} = getIconZoomTransitionStyle(
-    reachFullScaleAtZoomLevel,
-    iconFullSize,
-    scaleTransitionZoomRange,
-    opacityTransitionExtraZoomRange,
-  );
+//   const iconImage = [
+//     'concat',
+//     'geofencingzone_',
+//     lowerCaseCode,
+//     '_',
+//     themeName,
+//   ];
+//   const {iconOpacity, iconSize} = getIconZoomTransitionStyle(
+//     reachFullScaleAtZoomLevel,
+//     iconFullSize,
+//     scaleTransitionZoomRange,
+//     opacityTransitionExtraZoomRange,
+//   );
 
-  return (
-    <MapboxGL.ShapeSource
-      id={`iconGeofencingZonesShapeSource_${iconFeatureCollection?.renderKey}`}
-      shape={iconFeatureCollection}
-    >
-      <MapboxGL.SymbolLayer
-        id="geofencingZoneIcon"
-        style={{
-          symbolZOrder: 'source',
-          iconAllowOverlap: true,
-          iconIgnorePlacement: true,
-          iconImage: iconImage,
-          iconOpacity,
-          iconSize,
-        }}
-        aboveLayerID={MapSlotLayerId.GeofencingZones}
-      />
-    </MapboxGL.ShapeSource>
-  );
-};
+//   return (
+//     <MapboxGL.ShapeSource
+//       id={`iconGeofencingZonesShapeSource_${iconFeatureCollection?.renderKey}`}
+//       shape={iconFeatureCollection}
+//     >
+//       <MapboxGL.SymbolLayer
+//         id="geofencingZoneIcon"
+//         style={{
+//           symbolZOrder: 'source',
+//           iconAllowOverlap: true,
+//           iconIgnorePlacement: true,
+//           iconImage: iconImage,
+//           iconOpacity,
+//           iconSize,
+//         }}
+//         aboveLayerID={MapSlotLayerId.GeofencingZones}
+//       />
+//     </MapboxGL.ShapeSource>
+//   );
+// };

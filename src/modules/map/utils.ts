@@ -31,6 +31,7 @@ import {
 import {MapBottomSheetType} from './MapContext';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import z from 'zod';
+import {GeofencingZoneCode} from '@atb-as/theme';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
@@ -66,8 +67,14 @@ export const hasGeofencingZoneCustomProps = (f: Feature) =>
 //   {geofencingZoneCustomProps: GeofencingZoneCustomProps}
 // > => isFeaturePolylineEncodedMultiPolygon(f) && hasGeofencingZoneCustomProps(f);
 
+export const geofencingZoneCodes: GeofencingZoneCode[] = [
+  'allowed',
+  'slow',
+  'noParking',
+  'noEntry',
+];
 const GeofencingZonePropsSchema = z.object({
-  ['*']: z.enum(['allowed', 'slow', 'noParking', 'noEntry']), // hmm todo fix
+  code: z.enum(geofencingZoneCodes),
   systemId: z.string(),
 });
 export type GeofencingZoneProps = z.infer<typeof GeofencingZonePropsSchema>;

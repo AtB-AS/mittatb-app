@@ -25,7 +25,6 @@ import {
   getFeatureToSelect,
   isParkAndRide,
   isStopPlace,
-  getPropByVehicleTypeId,
 } from './utils';
 import {
   GeofencingZones,
@@ -137,6 +136,7 @@ export const Map = (props: MapProps) => {
     shouldShowVehiclesAndStations,
     shouldShowGeofencingZones: true, // showGeofencingZones, seems to be smoother and unproblematic with always true
     systemId: systemId ?? '',
+    vehicleTypeId: vehicleTypeId ?? '',
   });
 
   const [followUserLocation, setFollowUserLocation] = useState(false);
@@ -187,20 +187,13 @@ export const Map = (props: MapProps) => {
       if (!featuresAtClick || featuresAtClick.length === 0) return;
       const featureToSelect = featuresAtClick[0]; // currently ignore the ones behind
 
-      const code =
-        getPropByVehicleTypeId('code', vehicleTypeId, featureToSelect) ??
-        'allowed';
-
+      const code = featureToSelect.properties?.code ?? 'allowed';
       const stationParking =
-        getPropByVehicleTypeId(
-          'station_parking',
-          vehicleTypeId,
-          featureToSelect,
-        ) ?? false;
+        featureToSelect.properties?.stationParking ?? false;
 
       geofencingZoneOnPress(code, stationParking);
     },
-    [geofencingZoneOnPress, vehicleTypeId],
+    [geofencingZoneOnPress],
   );
 
   const locationArrowOnPress = useCallback(async () => {

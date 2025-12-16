@@ -47,10 +47,12 @@ export const useMapboxJsonStyle: (
   includeVehiclesAndStationsVectorSource: boolean,
   includeGeofencingZonesVectorSource: boolean,
   systemId?: string,
+  vehicleTypeId?: string,
 ) => string | undefined = (
   includeVehiclesAndStationsVectorSource,
   includeGeofencingZonesVectorSource,
   systemId,
+  vehicleTypeId,
 ) => {
   const {themeName} = useThemeContext();
   const {language} = useTranslation();
@@ -68,7 +70,7 @@ export const useMapboxJsonStyle: (
   const {
     id: geofencingZonesVectorSourceId,
     source: geofencingZonesVectorSource,
-  } = useGeofencingZonesVectorSource(systemId ?? '');
+  } = useGeofencingZonesVectorSource(systemId ?? '', vehicleTypeId ?? '');
 
   const themedStyleWithExtendedSourcesAndSlotLayers = useMemo(() => {
     const themedStyle =

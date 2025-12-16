@@ -21,6 +21,7 @@ type MapViewConfigOptions = {
   shouldShowVehiclesAndStations?: boolean;
   shouldShowGeofencingZones?: boolean;
   systemId?: string;
+  vehicleTypeId?: string;
 };
 
 export const useMapViewConfig = (
@@ -30,11 +31,13 @@ export const useMapViewConfig = (
     shouldShowVehiclesAndStations = false,
     shouldShowGeofencingZones = false,
     systemId = '',
+    vehicleTypeId = '',
   } = mapViewConfigOptions || {};
   const mapboxJsonStyle = useMapboxJsonStyle(
     shouldShowVehiclesAndStations,
     shouldShowGeofencingZones,
     systemId,
+    vehicleTypeId,
   );
   const configMap = useMemo(
     () => ({styleJSON: mapboxJsonStyle}),

@@ -4,7 +4,6 @@ import {useGeolocationContext} from '@atb/modules/geolocation';
 import {
   getFeaturesAtPoint,
   getFeatureToSelect,
-  getPropByVehicleTypeId,
   isFeatureGeofencingZone,
 } from '../utils';
 import {
@@ -64,10 +63,8 @@ export const useShmoWarnings = (
         mapViewRef,
       );
 
-      const geofencingZoneFeatures = featuresAtLocation?.filter(
-        (feature) =>
-          isFeatureGeofencingZone(feature) &&
-          getPropByVehicleTypeId('code', vehicle?.vehicleType.id, feature),
+      const geofencingZoneFeatures = featuresAtLocation?.filter((feature) =>
+        isFeatureGeofencingZone(feature),
       );
 
       if (!geofencingZoneFeatures || geofencingZoneFeatures.length === 0) {
