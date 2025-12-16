@@ -49,16 +49,13 @@ runs:
           ruby-version: ${{ inputs.ruby-version }}
           cache-version: 2
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Get potential cached dependencies
+      - name: Get potential cached node_modules
         uses: actions/cache@v4
         id: modules-cache
         if: ${{ inputs.use-build-cache }} == 'true'
         with:
-          path: |
-            "**/node_modules"
-            "Pods"
-            "~/Library/Caches/CocoaPods"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/*.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          path: node_modules
+          key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Install node_modules
         shell: bash
         if: ${{ inputs.use-build-cache }} != 'true' || steps.modules-cache.outputs.cache-hit != 'true'
