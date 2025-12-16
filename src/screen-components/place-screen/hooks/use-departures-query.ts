@@ -19,7 +19,7 @@ import {EstimatedCall} from '@atb/api/types/departures';
 import {minutesBetween} from '@atb/utils/date';
 
 const DEPARTURES_REFETCH_INTERVAL_SECONDS = 30;
-const START_TIME_REFRESH_RATE_MINUTES = 10;
+const FULL_REFRESH_INTERVAL_MINUTES = 5;
 
 type DeparturesData = {
   departures: EstimatedCall[];
@@ -46,7 +46,7 @@ export type DeparturesQueryProps = {
  * and the original departures data.
  *
  * When startTime is not set on the query, it defaults to the time when getDepartures is called,
- * which is used until START_TIME_REFRESH_RATE_MINUTES is reached. It is then reset.
+ * which is used until FULL_REFRESH_INTERVAL_MINUTES is reached. It is then reset.
  */
 export const useDeparturesQuery = ({
   query,
@@ -69,7 +69,7 @@ export const useDeparturesQuery = ({
         !existingDeparturesData ||
         (!query.startTime &&
           minutesBetween(existingDeparturesData.startTime, new Date()) >
-            START_TIME_REFRESH_RATE_MINUTES);
+            FULL_REFRESH_INTERVAL_MINUTES);
 
       if (fullRefresh) {
         const startTime = query.startTime ?? new Date().toISOString();
