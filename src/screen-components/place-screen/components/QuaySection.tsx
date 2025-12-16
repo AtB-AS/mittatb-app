@@ -24,6 +24,9 @@ import {
 } from '@atb/modules/situations';
 import {EstimatedCallList} from './EstimatedCallList';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
+import {isValidDepartureTime} from '@atb/departure-list/utils';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
+import {useNow} from '@atb/utils/use-now';
 
 export type QuaySectionProps = {
   quay: Quay;
@@ -66,10 +69,15 @@ export function QuaySection({
   const departures = getDeparturesForQuay(data, quay);
   const {t} = useTranslation();
 
-  const departuresToDisplay =
+  const now = useNow(5 * ONE_SECOND_MS);
+
+  const sortedDepartures =
     mode === 'Favourite'
       ? departures.sort((a, b) => compareByLineNameAndDesc(t, a, b))
       : departures;
+  const departuresToDisplay = sortedDepartures.filter((departure) =>
+    isValidDepartureTime(departure.expectedDepartureTime, now),
+  );
 
   const navigateToQuayEnabled = !!navigateToQuay;
 
@@ -149,6 +157,7 @@ export function QuaySection({
             navigateToDetails={navigateToDetails}
             showOnlyFavorites={showOnlyFavorites}
             noDeparturesToShow={!!data && !isLoading}
+            now={now}
           />
         )}
         {!isMinimized && didLoadingDataFail && !isLoading && (

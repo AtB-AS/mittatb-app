@@ -20,6 +20,7 @@ import {Close} from '@atb/assets/svg/mono-icons/actions';
 type Props = {
   onClose: () => void;
   navigateSupportCallback: (operatorId: string, bookingId: string) => void;
+  navigateToScanQrCode: () => void;
   bookingId: string;
   locationArrowOnPress: () => void;
 };
@@ -27,6 +28,7 @@ type Props = {
 export const FinishedScooterSheet = ({
   onClose,
   navigateSupportCallback,
+  navigateToScanQrCode,
   bookingId,
   locationArrowOnPress,
 }: Props) => {
@@ -50,6 +52,7 @@ export const FinishedScooterSheet = ({
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
       locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
       {isShmoDeepIntegrationEnabled && (
         <>

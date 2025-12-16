@@ -1,5 +1,9 @@
 import {humanizePaymentTypeString} from '@atb/modules/ticketing';
-import {FareContractType, FareContractState} from '@atb-as/utils';
+import {
+  FareContractType,
+  FareContractState,
+  formatNumberToString,
+} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
@@ -8,7 +12,6 @@ import {fromUnixTime} from 'date-fns';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
-import {formatNumberToString} from '@atb/utils/numbers';
 import {hasShmoBookingId} from '../utils';
 
 type OrderDetailsSectionItemProps = {

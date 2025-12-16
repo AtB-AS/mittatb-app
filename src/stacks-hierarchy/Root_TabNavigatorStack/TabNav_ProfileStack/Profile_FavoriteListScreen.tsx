@@ -17,6 +17,7 @@ import {
 import {FullScreenView} from '@atb/components/screen-view';
 import {View} from 'react-native';
 import {ScreenHeading} from '@atb/components/heading';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = ProfileScreenProps<'Profile_FavoriteListScreen'>;
 
@@ -35,11 +36,14 @@ export const Profile_FavoriteListScreen = ({navigation}: Props) => {
     navigation.push('Root_SearchFavoritePlaceScreen');
   const onSortClick = () => navigation.push('Profile_SortFavoritesScreen');
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(FavoriteListTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading

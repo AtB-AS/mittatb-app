@@ -26,7 +26,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
     const [nickname, setNickname] = useState('');
     const [licensePlate, setLicensePlate] = useState('');
     const {theme} = useThemeContext();
-    const focusRef = useFocusOnLoad(true);
+    const focusRef = useFocusOnLoad(navigation, true);
     const {authenticationType} = useAuthContext();
     const analytics = useAnalyticsContext();
 
@@ -115,9 +115,10 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
 
     return (
       <FullScreenView
+        focusRef={undefined} // content will be focused instead of header
         headerProps={{
           title: t(SmartParkAndRideTexts.add.header.title),
-          leftButton: {type: 'back', withIcon: true},
+          leftButton: {type: 'back'},
         }}
         contentColor={themeColor}
         avoidKeyboard={true}

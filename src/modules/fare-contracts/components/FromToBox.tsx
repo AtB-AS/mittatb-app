@@ -7,22 +7,24 @@ import {ArrowDown, ArrowUpDown} from '@atb/assets/svg/mono-icons/navigation';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 import {ContrastColor} from '@atb-as/theme';
 import {StyleSheet} from '@atb/theme';
+import {MapPin} from '@atb/assets/svg/mono-icons/tab-bar';
+import {Size, getContentTypography} from '../utils';
 
-type BorderedFromToBoxProps = {
+type FromToBoxProps = {
   fromText: string;
   toText?: string;
   direction: TravelRightDirection;
-  mode: 'small' | 'large';
+  size: Size;
   backgroundColor: ContrastColor;
 };
 
-export const BorderedFromToBox = ({
+export const FromToBox = ({
   fromText,
   toText,
   direction,
-  mode,
+  size,
   backgroundColor,
-}: BorderedFromToBoxProps) => {
+}: FromToBoxProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
 
@@ -40,23 +42,31 @@ export const BorderedFromToBox = ({
     if (!toText)
       return (
         <View style={styles.smallContent}>
-          <ThemeText color={backgroundColor} typography="body__xs">
-            {fromText}
-          </ThemeText>
+          <ThemeIcon color={backgroundColor} svg={MapPin} size={size} />
+          <View style={styles.smallContentText}>
+            <ThemeText
+              color={backgroundColor}
+              typography={getContentTypography(size)}
+            >
+              {fromText}
+            </ThemeText>
+          </View>
         </View>
       );
     return (
       <View style={styles.smallContent}>
-        <ThemeIcon
-          color={backgroundColor}
-          svg={icons[direction]}
-          size="small"
-        />
+        <ThemeIcon color={backgroundColor} svg={icons[direction]} size={size} />
         <View style={styles.smallContentText}>
-          <ThemeText color={backgroundColor} typography="body__xs">
+          <ThemeText
+            color={backgroundColor}
+            typography={getContentTypography(size)}
+          >
             {fromText}
           </ThemeText>
-          <ThemeText color={backgroundColor} typography="body__xs">
+          <ThemeText
+            color={backgroundColor}
+            typography={getContentTypography(size)}
+          >
             {toText}
           </ThemeText>
         </View>
@@ -66,9 +76,14 @@ export const BorderedFromToBox = ({
 
   const largeLayout = () => (
     <View style={styles.largeContent}>
-      <ThemeText color={backgroundColor} typography="body__m__strong">
-        {fromText}
-      </ThemeText>
+      <View style={styles.largeContentFromText}>
+        {!toText && (
+          <ThemeIcon color={backgroundColor} svg={MapPin} size="normal" />
+        )}
+        <ThemeText color={backgroundColor} typography="body__m__strong">
+          {fromText}
+        </ThemeText>
+      </View>
       {toText && (
         <>
           <ThemeIcon
@@ -86,11 +101,19 @@ export const BorderedFromToBox = ({
     </View>
   );
 
+  if (size === 'large') {
+    return (
+      <View accessible accessibilityLabel={accessibilityLabel}>
+        <BorderedInfoBox backgroundColor={backgroundColor} type={size}>
+          {largeLayout()}
+        </BorderedInfoBox>
+      </View>
+    );
+  }
+
   return (
     <View accessible accessibilityLabel={accessibilityLabel}>
-      <BorderedInfoBox backgroundColor={backgroundColor} type={mode}>
-        {mode === 'large' ? largeLayout() : smallLayout()}
-      </BorderedInfoBox>
+      {smallLayout()}
     </View>
   );
 };
@@ -101,15 +124,19 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     rowGap: theme.spacing.xSmall,
   },
-  smallContent: {
+  largeContentFromText: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
-    columnGap: theme.spacing.xSmall,
+    gap: theme.spacing.small,
+  },
+  smallContent: {
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.small,
   },
   smallContentText: {
     flexDirection: 'column',
-    paddingLeft: theme.spacing.xSmall,
   },
 }));
 

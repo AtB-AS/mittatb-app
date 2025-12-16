@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {ThemeText} from '@atb/components/text';
-import {Linking, StyleProp, View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {
   getTextForLanguage,
   PurchaseOverviewTexts,
@@ -11,7 +11,6 @@ import {
   getReferenceDataName,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
-import {formatNumberToString} from '@atb/utils/numbers';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {
@@ -23,7 +22,9 @@ import {
 import {ContentHeading} from '@atb/components/heading';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {formatNumberToString} from '@atb-as/utils';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type Props = {
   userProfiles: UserProfileWithCountAndOffer[];
@@ -130,7 +131,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
           <LinkSectionItem
             text={t(PurchaseOverviewTexts.flexDiscount.link)}
             rightIcon={{svg: ExternalLink}}
-            onPress={() => Linking.openURL(flex_ticket_url)}
+            onPress={() => openInAppBrowser(flex_ticket_url, 'close')}
             accessibility={{
               accessibilityHint: t(PurchaseOverviewTexts.flexDiscount.a11yHint),
               accessibilityRole: 'link',

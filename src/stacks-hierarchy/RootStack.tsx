@@ -31,7 +31,7 @@ import {Root_PurchaseOverviewScreen} from './Root_PurchaseOverviewScreen';
 import {Root_PurchaseConfirmationScreen} from './Root_PurchaseConfirmationScreen';
 import {Root_PurchaseFareZonesSearchByMapScreen} from '@atb/stacks-hierarchy/Root_PurchaseFareZonesSearchByMapScreen';
 import {Root_PurchaseFareZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Root_PurchaseFareZonesSearchByTextScreen';
-import {Root_PurchaseHarborSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/Root_PurchaseHarborSearchScreen';
+import {Root_PurchaseHarborSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen';
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
 import {Root_ReceiptScreen} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
@@ -79,6 +79,7 @@ import {
 } from './Root_SmartParkAndRide';
 import {Root_OnboardingCarouselStack} from './Root_OnboardingCarouselStack';
 import {getActiveRouteName} from '@atb/utils/navigation';
+import {Root_TravelAidOnboardingScreen} from './Root_TravelAidOnboardingScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -448,6 +449,10 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_LocationWhenInUsePermissionScreen"
                 component={Root_LocationWhenInUsePermissionScreen}
+              />
+              <Stack.Screen
+                name="Root_TravelAidOnboardingScreen"
+                component={Root_TravelAidOnboardingScreen}
               />
               <Stack.Screen
                 name="Root_ChooseTicketRecipientScreen"

@@ -10,8 +10,13 @@ import {Platform, View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {AppearanceSelection} from '@atb/theme/ThemeContext';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_AppearanceScreen = () => {
+type Props = ProfileScreenProps<'Profile_AppearanceScreen'>;
+
+export const Profile_AppearanceScreen = ({navigation}: Props) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {
     appearanceSelection,
     setAppearanceSelection,
@@ -23,9 +28,10 @@ export const Profile_AppearanceScreen = () => {
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(AppearanceSettingsTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading

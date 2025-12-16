@@ -13,6 +13,7 @@ import {
   isCanBeConsumedNowFareContract,
   isCanBeActivatedNowFareContract,
   useGetFareProductsQuery,
+  useSchoolCarnetInfoQuery,
 } from '@atb/modules/ticketing';
 import {FareContractType, getAccesses} from '@atb-as/utils';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
@@ -40,6 +41,7 @@ type Props = {
   fareContract: FareContractType;
   isStatic?: boolean;
   onPressDetails?: () => void;
+  navigateToBonusScreen: () => void;
   testID?: string;
 };
 
@@ -48,6 +50,7 @@ export const FareContractView: React.FC<Props> = ({
   fareContract,
   isStatic,
   onPressDetails,
+  navigateToBonusScreen,
   testID,
 }) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
@@ -86,6 +89,10 @@ export const FareContractView: React.FC<Props> = ({
   const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(
     fareContract.id,
     !shouldShowBonusAmountEarned,
+  );
+  const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(
+    fareContract,
+    validityStatus,
   );
 
   const accesses = getAccesses(fareContract);
@@ -129,7 +136,10 @@ export const FareContractView: React.FC<Props> = ({
       )}
 
       {shouldShowBonusAmountEarned && !!bonusAmountEarned?.amount && (
-        <EarnedBonusPointsSectionItem amount={bonusAmountEarned.amount} />
+        <EarnedBonusPointsSectionItem
+          amount={bonusAmountEarned.amount}
+          navigateToBonusScreen={navigateToBonusScreen}
+        />
       )}
 
       {shouldShowLegs && (
@@ -160,7 +170,12 @@ export const FareContractView: React.FC<Props> = ({
             fareProductType={preassignedFareProduct?.type}
           />
         )}
-      {isCanBeConsumedNowFareContract(fareContract, now, currentUserId) && (
+      {isCanBeConsumedNowFareContract(
+        fareContract,
+        now,
+        currentUserId,
+        schoolCarnetInfo,
+      ) && (
         <ConsumeCarnetSectionItem
           fareContractId={fareContract.id}
           fareProductType={preassignedFareProduct?.type}

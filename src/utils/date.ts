@@ -308,8 +308,11 @@ export const isBefore = (date: string | Date, dateToCompare: string | Date) =>
 export function isNumberOfMinutesInThePast(
   isoDate: string | Date,
   minutes: number,
+  now?: number,
 ) {
-  return differenceInMinutesStrings(isoDate, new Date()) < -minutes;
+  return (
+    differenceInMinutesStrings(isoDate, new Date(now ?? Date.now())) < -minutes
+  );
 }
 
 export function formatToLongDateTime(

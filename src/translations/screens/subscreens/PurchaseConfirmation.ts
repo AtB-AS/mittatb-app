@@ -188,6 +188,8 @@ const PurchaseConfirmationTexts = {
       _(`Betal ${total} kr`, `Pay ${total} kr`, `Betal ${total} kr`),
   },
 
+  complete: _('Fullfør', 'Complete', 'Fullfør'),
+
   ordinaryPricePrefix: _(`Ord. pris`, `Ord. price`, `Ord. pris`),
   ordinaryPricePrefixA11yLabel: _(
     `Ordinær pris`,

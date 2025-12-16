@@ -7,6 +7,7 @@ import {
   OnboardingCarouselScreenName,
 } from './types';
 import {useOnboardingNavigation} from '../use-onboarding-navigation';
+import {useOnboardingContext} from '../OnboardingContext';
 
 function getAdjacentOnboardingCarouselScreenName(
   configId: OnboardingCarouselConfigId,
@@ -29,12 +30,37 @@ function getAdjacentOnboardingCarouselScreenName(
   return config.onboardingScreens[index]?.name;
 }
 
+const useCloseOnboardingCarousel = (configId: OnboardingCarouselConfigId) => {
+  const {onboardingSections} = useOnboardingContext();
+  const comingFromOnboardingSectionId = onboardingSections.find(
+    (onboardingSection) =>
+      onboardingSection.initialScreen?.params?.configId === configId,
+  )?.onboardingSectionId;
+
+  const navigation = useNavigation<OnboardingCarouselNavigationProps>();
+  const {continueFromOnboardingSection} = useOnboardingNavigation();
+
+  return useCallback(() => {
+    if (comingFromOnboardingSectionId) {
+      continueFromOnboardingSection(comingFromOnboardingSectionId);
+    } else {
+      // onboarding carousel entered manually, not through config
+      navigation.getParent()?.goBack();
+    }
+  }, [
+    comingFromOnboardingSectionId,
+    continueFromOnboardingSection,
+    navigation,
+  ]);
+};
+
 function useNavigateToAdjacentOnboardingCarouselScreen(
   configId: OnboardingCarouselConfigId,
   currentScreenName: string,
   offset: number,
 ) {
   const navigation = useNavigation<OnboardingCarouselNavigationProps>();
+  const closeOnboardingCarousel = useCloseOnboardingCarousel(configId);
 
   return useCallback(() => {
     const adjacentScreenName = getAdjacentOnboardingCarouselScreenName(
@@ -45,9 +71,15 @@ function useNavigateToAdjacentOnboardingCarouselScreen(
     if (adjacentScreenName) {
       navigation.navigate(adjacentScreenName);
     } else {
-      navigation.getParent()?.goBack();
+      closeOnboardingCarousel();
     }
-  }, [configId, currentScreenName, offset, navigation]);
+  }, [
+    closeOnboardingCarousel,
+    configId,
+    currentScreenName,
+    navigation,
+    offset,
+  ]);
 }
 
 export function useOnboardingCarouselNavigation(
@@ -66,9 +98,7 @@ export function useOnboardingCarouselNavigation(
       -1,
     );
 
-  const {continueFromOnboardingSection} = useOnboardingNavigation();
-
-  const closeOnboardingCarousel = continueFromOnboardingSection;
+  const closeOnboardingCarousel = useCloseOnboardingCarousel(configId);
 
   return {
     navigateToNextScreen,

@@ -1,5 +1,5 @@
-import React from 'react';
-import {Linking, View} from 'react-native';
+import React, {Ref} from 'react';
+import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Theme} from '@atb/theme/colors';
 import {Button} from '@atb/components/button';
@@ -7,17 +7,18 @@ import {ThemeText} from '@atb/components/text';
 import {FeedbackTexts, useTranslation} from '@atb/translations';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import Intercom from '@intercom/intercom-react-native';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {FeedbackQuestionsViewContext} from './FeedbackContext';
 import {Opinions} from './Feedback';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type SubmittedComponentProps = {
   viewContext: FeedbackQuestionsViewContext;
   opinion: Opinions;
   selectedTextAlternatives: (string | undefined)[];
   firebaseId?: string;
+  focusRef?: Ref<any>;
 };
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
@@ -28,11 +29,11 @@ export const SubmittedComponent = ({
   opinion,
   selectedTextAlternatives,
   firebaseId,
+  focusRef,
 }: SubmittedComponentProps) => {
   const styles = useSubmittedComponentStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const focusRef = useFocusOnLoad();
   const {customer_service_url, enable_intercom} = useRemoteConfigContext();
 
   const handleButtonClick = () => {
@@ -48,7 +49,7 @@ export const SubmittedComponent = ({
       });
       Intercom.presentMessageComposer();
     } else {
-      Linking.openURL(customer_service_url);
+      openInAppBrowser(customer_service_url, 'close');
     }
   };
 

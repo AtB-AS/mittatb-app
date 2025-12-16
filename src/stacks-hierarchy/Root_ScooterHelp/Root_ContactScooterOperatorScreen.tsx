@@ -76,8 +76,7 @@ export const Root_ContactScooterOperatorScreen = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        leftButton={{type: 'back', withIcon: true}}
-        setFocusOnLoad={false}
+        leftButton={{type: 'back'}}
         title={t(ContactScooterOperatorTexts.title(operatorName ?? ''))}
       />
       <KeyboardAvoidingView behavior="padding" style={styles.mainView}>

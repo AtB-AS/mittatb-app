@@ -1,10 +1,8 @@
-import {StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import React, {useCallback, useEffect, useState} from 'react';
-import {Camera} from '@atb/components/camera';
+import {Camera, CameraScreenContainer} from '@atb/components/camera';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {ScreenContainer} from '../components/PhotoCapture/ScreenContainer';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useGetAssetFromQrCodeMutation} from '@atb/modules/mobility';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
@@ -19,13 +17,13 @@ import {AssetFromQrCodeResponse} from '@atb/api/types/mobility';
 import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {tGlobal} from '@atb/modules/locale';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export type Props = RootStackScreenProps<'Root_ScanQrCodeScreen'>;
 
 export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
-  const styles = useStyles();
   const {t} = useTranslation();
-
+  const focusRef = useFocusOnLoad(navigation);
   const isFocused = useIsFocusedAndActive();
   const {dispatchMapState} = useMapContext();
   const [hasCapturedQr, setHasCapturedQr] = useState(false);
@@ -36,6 +34,10 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
     isPending: getAssetFromQrCodeIsLoading,
     isError: getAssetFromQrCodeIsError,
   } = useGetAssetFromQrCodeMutation();
+
+  const onGoBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
 
   const clearStateAndAlertResultError = useCallback(() => {
     dispatchMapState({
@@ -48,11 +50,11 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
         {
           text: tGlobal(MapTexts.qr.notFound.ok),
           style: 'default',
-          onPress: navigation.goBack,
+          onPress: onGoBack,
         },
       ],
     );
-  }, [dispatchMapState, navigation.goBack]);
+  }, [dispatchMapState, onGoBack]);
 
   const assetFromQrCodeReceivedHandler = useCallback(
     (assetFromQrCode: AssetFromQrCodeResponse) => {
@@ -103,9 +105,9 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
         return;
       }
 
-      navigation.goBack();
+      onGoBack();
     },
-    [analytics, clearStateAndAlertResultError, dispatchMapState, navigation],
+    [analytics, clearStateAndAlertResultError, dispatchMapState, onGoBack],
   );
 
   const onQrCodeScanned = useCallback(
@@ -133,32 +135,17 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   }, [clearStateAndAlertResultError, getAssetFromQrCodeIsError]);
 
   return (
-    <ScreenContainer
-      overrideThemeName="dark"
+    <CameraScreenContainer
       title={t(ParkingViolationTexts.qr.title)}
-      leftHeaderButton={
-        getAssetFromQrCodeIsLoading
-          ? undefined
-          : {type: 'close', withIcon: true}
-      }
+      secondaryText={t(ParkingViolationTexts.qr.instructions)}
       isLoading={getAssetFromQrCodeIsLoading}
+      onGoBack={onGoBack}
+      focusRef={focusRef}
     >
       {isFocused &&
         !getAssetFromQrCodeIsLoading &&
         !getAssetFromQrCodeIsError &&
-        !hasCapturedQr && (
-          <Camera mode="qr" style={styles.camera} onCapture={onQrCodeScanned} />
-        )}
-    </ScreenContainer>
+        !hasCapturedQr && <Camera mode="qr" onCapture={onQrCodeScanned} />}
+    </CameraScreenContainer>
   );
 };
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1},
-  camera: {
-    flexGrow: 1,
-  },
-  error: {
-    margin: theme.spacing.medium,
-  },
-}));

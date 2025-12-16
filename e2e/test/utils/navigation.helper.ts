@@ -17,7 +17,7 @@ class NavigationHelper {
    * Cancel
    */
   async cancel() {
-    const cancelId = `//*[@resource-id="cancelButton"]`;
+    const cancelId = `//*[@resource-id="rhb"]`;
     await $(cancelId).click();
     await AppHelper.pause(2000);
   }
@@ -29,6 +29,15 @@ class NavigationHelper {
     const closeId = `//*[@resource-id="closeButton"]`;
     await $(closeId).click();
     await AppHelper.pause(2000);
+  }
+
+  /**
+   * Close bottom sheet
+   */
+  async closeBottomSheet() {
+    const closeId = `//*[@resource-id="closeBottomSheet"]`;
+    await $(closeId).click();
+    await AppHelper.pause(1000);
   }
 
   /**

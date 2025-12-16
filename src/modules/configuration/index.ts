@@ -26,8 +26,15 @@ export type {
   TravelSearchTransportModes,
   UserProfile,
 } from './types';
-export {LanguageAndTextTypeArray, PreassignedFareProduct} from './types';
 export {
+  LanguageAndTextTypeArray,
+  PreassignedFareProduct,
+  SupplementProduct,
+  BaggageProduct,
+  BaggageType,
+} from './types';
+export {
+  type ReferenceDataNames,
   findReferenceDataById,
   getReferenceDataName,
   isProductSellableInApp,

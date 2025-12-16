@@ -1,5 +1,4 @@
 import {dictionary, MapTexts, useTranslation} from '@atb/translations';
-import {Linking} from 'react-native';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
@@ -9,16 +8,19 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {Linking} from 'react-native';
 
 type ExternalRealtimeMapLinkSheetProps = {
   onClose: () => void;
   url: string;
   locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 export const ExternalRealtimeMapSheet = ({
   onClose,
   url,
   locationArrowOnPress,
+  navigateToScanQrCode,
 }: ExternalRealtimeMapLinkSheetProps) => {
   const {t} = useTranslation();
   const style = useStyle();
@@ -31,6 +33,7 @@ export const ExternalRealtimeMapSheet = ({
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
       locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
       <ScrollView
         style={style.container}

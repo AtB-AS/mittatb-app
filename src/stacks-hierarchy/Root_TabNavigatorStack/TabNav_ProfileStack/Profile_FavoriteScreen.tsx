@@ -6,6 +6,7 @@ import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type FavoriteProps = ProfileScreenProps<'Profile_FavoriteScreen'>;
 
@@ -13,11 +14,14 @@ export const Profile_FavoriteScreen = ({navigation}: FavoriteProps) => {
   const style = useStyle();
   const {t} = useTranslation();
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(ProfileTexts.sections.favorites.heading),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading

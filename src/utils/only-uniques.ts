@@ -7,3 +7,9 @@ export const onlyUniquesBasedOnField =
     if (treatUndefinedAsUnique && element[field] === undefined) return true;
     return array.findIndex((el) => el[field] === element[field]) === index;
   };
+
+export const onlyUniquesBasedOnPredicate =
+  <T>(predicate: (a: T, b: T) => boolean) =>
+  (value: T, index: number, array: T[]) => {
+    return array.findIndex((v) => predicate(v, value)) === index;
+  };

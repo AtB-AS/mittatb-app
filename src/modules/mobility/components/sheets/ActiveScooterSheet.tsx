@@ -26,6 +26,7 @@ import {useShmoWarnings} from '@atb/modules/map';
 import {useKeepAwake} from '@sayem314/react-native-keep-awake';
 import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {ThemeText} from '@atb/components/text';
 
 type Props = {
   navigateSupportCallback: () => void;
@@ -33,6 +34,7 @@ type Props = {
   onForceClose: () => void;
   mapViewRef: RefObject<MapView | null>;
   locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 
 export const ActiveScooterSheet = ({
@@ -41,6 +43,7 @@ export const ActiveScooterSheet = ({
   onForceClose,
   mapViewRef,
   locationArrowOnPress,
+  navigateToScanQrCode,
 }: Props) => {
   useKeepAwake();
   const {
@@ -53,7 +56,7 @@ export const ActiveScooterSheet = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
-  const {geofencingZoneMessage, warningMessage} = useShmoWarnings(
+  const {geofencingZoneWarning, warningMessage} = useShmoWarnings(
     activeBooking?.asset.id ?? '',
     mapViewRef,
   );
@@ -129,6 +132,7 @@ export const ActiveScooterSheet = ({
       heading={activeBooking?.asset.operator.name}
       enablePanDownToClose={false}
       locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
       headerNode={
         activeBooking ? <ShmoTripCard shmoBooking={activeBooking} /> : null
       }
@@ -155,11 +159,15 @@ export const ActiveScooterSheet = ({
               </View>
               <View style={styles.footer}>
                 <View style={styles.endTripWrapper}>
-                  {geofencingZoneMessage && (
-                    <MessageInfoText
-                      type="warning"
-                      message={geofencingZoneMessage}
-                    />
+                  {geofencingZoneWarning && (
+                    <View style={styles.geofencingZoneWarning}>
+                      {geofencingZoneWarning.iconNode}
+                      <View style={styles.geofencingZoneWarningText}>
+                        <ThemeText typography="body__s">
+                          {geofencingZoneWarning.description}
+                        </ThemeText>
+                      </View>
+                    </View>
                   )}
                   {warningMessage && (
                     <MessageInfoText type="warning" message={warningMessage} />
@@ -236,6 +244,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     tripWrapper: {
       marginBottom: theme.spacing.medium,
+    },
+    geofencingZoneWarning: {
+      flexDirection: 'row',
+      gap: theme.spacing.small,
+      alignItems: 'center',
+    },
+    geofencingZoneWarningText: {
+      flex: 1,
     },
   };
 });

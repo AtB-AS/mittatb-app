@@ -23,6 +23,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ErrorResponse} from '@atb-as/utils';
 import {errorDetailsToResponseData} from '@atb/api/utils';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;
 
@@ -120,11 +121,14 @@ export const Profile_EditProfileScreen = ({
     }
   }, [customerProfile]);
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(EditProfileTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <View style={styles.parallaxContent} ref={focusRef} accessible={true}>

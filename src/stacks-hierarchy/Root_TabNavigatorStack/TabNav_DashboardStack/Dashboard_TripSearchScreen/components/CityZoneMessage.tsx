@@ -23,6 +23,7 @@ import {CityZone} from '@atb/modules/configuration';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useFindZoneInLocation} from '@atb/utils/use-find-zone-in-location';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type ActionButton = {
   id: string;
@@ -158,7 +159,7 @@ const useActionButtons = (cityZone?: CityZone) => {
           name: 'book_online_action',
           orderUrl: orderUrl,
         });
-        Linking.openURL(orderUrl);
+        openInAppBrowser(orderUrl, 'close');
       },
     });
   }
@@ -194,7 +195,7 @@ const useActionButtons = (cityZone?: CityZone) => {
           name: 'more_info_action',
           moreInfoUrl: moreInfoUrl,
         });
-        Linking.openURL(moreInfoUrl);
+        openInAppBrowser(moreInfoUrl, 'close');
       },
     });
   }

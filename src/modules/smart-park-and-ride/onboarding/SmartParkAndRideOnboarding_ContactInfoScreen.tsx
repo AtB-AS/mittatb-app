@@ -2,6 +2,7 @@ import {useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import React from 'react';
 import {
+  OnboardingCarouselScreenProps,
   OnboardingScreenComponent,
   useOnboardingCarouselNavigation,
 } from '@atb/modules/onboarding';
@@ -17,8 +18,16 @@ import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
-export const SmartParkAndRideOnboarding_ContactInfoScreen = () => {
+export type ContactInfoScreenProps =
+  OnboardingCarouselScreenProps<'SmartParkAndRideOnboarding_ContactInfoScreen'>;
+
+export const SmartParkAndRideOnboarding_ContactInfoScreen = ({
+  navigation,
+}: ContactInfoScreenProps) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
   const analytics = useAnalyticsContext();
 
@@ -37,13 +46,11 @@ export const SmartParkAndRideOnboarding_ContactInfoScreen = () => {
       headerProps={{
         leftButton: {
           type: 'back',
-          withIcon: true,
           onPress: navigateToPreviousScreen,
         },
         rightButton: {
           type: 'close',
-          withIcon: true,
-          onPress: () => closeOnboardingCarousel('smartParkAndRide'),
+          onPress: closeOnboardingCarousel,
         },
       }}
       title={t(SmartParkAndRideTexts.onboarding.contactInfo.title)}
@@ -61,6 +68,7 @@ export const SmartParkAndRideOnboarding_ContactInfoScreen = () => {
         rightIcon: {svg: Confirm},
       }}
       testID="smartParkAndRideOnboardingContactInfo"
+      focusRef={focusRef}
     />
   );
 };
@@ -168,7 +176,7 @@ const ContactInfoContent = () => {
         </GenericSectionItem>
         <GenericSectionItem>
           <PressableOpacity
-            onPress={async () => Linking.openURL('https://atb.no/kontakt')}
+            onPress={() => openInAppBrowser('https://atb.no/kontakt', 'close')}
             accessibilityRole="link"
             style={style.linkItem}
           >

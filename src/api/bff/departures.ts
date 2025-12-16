@@ -8,11 +8,15 @@ import {client} from '../client';
 import {StopPlaceGroup} from './types';
 import {isDefined} from '@atb/utils/presence';
 import {stringifyWithDate} from '@atb/utils/querystring';
-import {NearestStopPlacesQuery} from '../types/generated/NearestStopPlacesQuery';
+import {
+  NearestStopPlacesQuery,
+  NearestStopPlacesQueryVariables,
+} from '../types/generated/NearestStopPlacesQuery';
 import {StopsDetailsQuery} from '../types/generated/StopsDetailsQuery';
 import queryString from 'query-string';
 import {DeparturesQuery} from '../types/generated/DeparturesQuery';
 import {DeparturesWithLineName} from './types';
+import {NearestStopPlaceNode} from '../types/departures';
 
 export type RealtimeData = {
   serviceJourneyId: string;
@@ -68,11 +72,11 @@ export type DepartureRealtimeQuery = {
   lineIds?: string[];
   timeRange?: number;
 };
-export async function getRealtimeDepartures(
+export async function getDeparturesRealtime(
   query: DepartureRealtimeQuery,
   opts?: AxiosRequestConfig,
 ): Promise<DeparturesRealtimeData> {
-  if (query.quayIds.length === 0) return {};
+  if (query.quayIds.length === 0) return Promise.resolve({});
 
   const params = build({
     ...query,
@@ -80,26 +84,42 @@ export async function getRealtimeDepartures(
     lineIds: query.lineIds?.filter(onlyUniques),
   });
   const url = `bff/v2/departures/realtime?${params}`;
-
   const response = await client.get<DeparturesRealtimeData>(url, opts);
   return response.data;
 }
 
-type StopsNearestQuery = CursoredQuery<{
-  latitude: number;
-  longitude: number;
-  count?: number;
-  distance?: number;
-  after?: string;
-}>;
-export async function getNearestStops(
-  query: StopsNearestQuery,
+export async function getNearestStopPlaceNodes(
+  query?: NearestStopPlacesQueryVariables,
   opts?: AxiosRequestConfig,
-): Promise<NearestStopPlacesQuery> {
+): Promise<NearestStopPlaceNode[] | null> {
+  if (!query) return Promise.resolve(null);
   const queryString = stringifyWithDate(query);
   const url = `bff/v2/departures/stops-nearest?${queryString}`;
   const response = await client.get<NearestStopPlacesQuery>(url, opts);
-  return response.data;
+
+  const nearestStopPlaceNodes =
+    response?.data?.nearest?.edges
+      // Cast to NearestStopPlaceNode, as it is the only possible type returned from bff
+      ?.map((e) => e.node as NearestStopPlaceNode)
+      .filter((n): n is NearestStopPlaceNode => !!n) || [];
+
+  return sortAndFilterStopPlaces(nearestStopPlaceNodes);
+}
+
+function sortAndFilterStopPlaces(
+  data?: NearestStopPlaceNode[],
+): NearestStopPlaceNode[] {
+  if (!data) return [];
+
+  // Sort StopPlaces on distance from search location
+  const sortedNodes = [...data]?.sort((n1, n2) => {
+    if (n1.distance === undefined) return 1;
+    if (n2.distance === undefined) return -1;
+    return n1.distance > n2.distance ? 1 : -1;
+  });
+
+  // Remove all StopPlaces without Quays
+  return sortedNodes.filter((n) => n.place?.quays?.length);
 }
 
 type StopsDetailsVariables = CursoredQuery<{
@@ -126,7 +146,8 @@ export async function getDepartures(
   query: DeparturesVariables,
   favorites?: UserFavoriteDepartures,
   opts?: AxiosRequestConfig,
-): Promise<DeparturesWithLineName> {
+): Promise<DeparturesWithLineName | null> {
+  if (query.ids.length === 0) return Promise.resolve(null);
   const queryString = stringifyWithDate(query);
   const url = `bff/v2/departures/departures?${queryString}`;
   const response = await client.post<DeparturesQuery>(url, {favorites}, opts);

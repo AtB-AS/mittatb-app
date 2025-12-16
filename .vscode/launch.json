@@ -25,6 +25,13 @@
       "type": "reactnativedirect",
       "request": "launch",
       "platform": "android"
+    },
+    {
+      "name": "Debug jest tests",
+      "cwd": "${workspaceFolder}",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "yarn test"
     }
   ]
 }

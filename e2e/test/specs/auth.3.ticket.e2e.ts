@@ -116,7 +116,7 @@ describe('Auth Ticket', () => {
             await PurchaseSummaryPage.summaryOnBehalfOfText.getText(),
           ).toContain(`Sending to ${onBehalfOfPhoneNumberFormatted}`);
           expect(
-            await PurchaseSummaryPage.userProfileCountAndName.getText(),
+            await PurchaseSummaryPage.travellerCountAndName.getText(),
           ).toContain('1 Child');
           expect(await PurchaseSummaryPage.getTotalPrice()).toBe(totalPrice);
           expect(await PurchaseSummaryPage.choosePayment.isEnabled()).toBe(

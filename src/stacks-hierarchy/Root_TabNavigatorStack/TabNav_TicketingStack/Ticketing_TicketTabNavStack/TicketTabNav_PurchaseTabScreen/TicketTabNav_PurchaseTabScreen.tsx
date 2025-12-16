@@ -65,11 +65,12 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
     navigation.navigate('Root_PurchaseOverviewScreen', {
       selection,
+      transitionOverride: 'slide-from-right',
       mode: 'Ticket',
     });
   };
 
-  const onFareContractSelect = (
+  const onRecentFareContractSelect = (
     rfc: RecentFareContractType,
     fareProductTypeConfig: FareProductTypeConfig,
     harbors?: StopPlaceFragment[],
@@ -99,15 +100,17 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       .forType(fareProductTypeConfig.type)
       .product(rfc.preassignedFareProduct)
       .userProfiles(rfc.userProfilesWithCount)
+      .baggageProducts(rfc.baggageProductsWithCount)
       .fromStopPlace(mapPlace(rfc.pointToPointValidity?.fromPlace))
       .toStopPlace(mapPlace(rfc.pointToPointValidity?.toPlace));
     if (rfc.fromFareZone) builder.fromZone(mapZone(rfc.fromFareZone));
     if (rfc.toFareZone) builder.toZone(mapZone(rfc.toFareZone));
     const selection = builder.build();
 
-    navigation.navigate('Root_PurchaseOverviewScreen', {
+    navigation.navigate('Root_PurchaseConfirmationScreen', {
       selection,
       mode: 'Ticket',
+      transitionOverride: 'slide-from-right',
     });
   };
 
@@ -131,7 +134,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       <RecentFareContracts
         recentFareContracts={recentFareContracts}
         loading={isLoadingRecentFareContracts}
-        onSelect={onFareContractSelect}
+        onSelect={onRecentFareContractSelect}
       />
       <View
         style={[

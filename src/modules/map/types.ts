@@ -1,6 +1,12 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {GeoLocation, Location, SearchLocation} from '@atb/modules/favorites';
-import {Feature, GeoJsonProperties, LineString, Position} from 'geojson';
+import {
+  Feature,
+  FeatureCollection,
+  GeoJsonProperties,
+  LineString,
+  Position,
+} from 'geojson';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {AnyMode} from '@atb/components/icon-box';
 import {
@@ -53,12 +59,26 @@ export type NavigateToDetailsCallback = (
   isTripCancelled?: boolean,
 ) => void;
 
+export type ScooterHelpParams = {operatorId: string} & (
+  | {vehicleId: string}
+  | {bookingId: string}
+);
+
 export type MapProps = {
+  isFocused: boolean;
+  tabBarHeight: number;
   initialLocation?: Location;
   includeSnackbar?: boolean;
   navigateToQuay: NavigateToQuayCallback;
   navigateToDetails: NavigateToDetailsCallback;
   navigateToTripSearch: NavigateToTripSearchCallback;
+  navigateToScooterSupport: (params: ScooterHelpParams) => void;
+  navigateToScooterOnboarding: () => void;
+  navigateToReportParkingViolation: () => void;
+  navigateToParkingPhoto: (bookingId: string) => void;
+  navigateToScanQrCode: () => void;
+  navigateToLogin: () => void;
+  navigateToPaymentMethods: () => void;
 };
 
 export type Cluster = {
@@ -161,3 +181,14 @@ export type MapPropertiesType = {
   center: GeoJSON.Position;
   zoom: number;
 };
+
+export type Point = {
+  type: 'Point';
+  coordinates: Position;
+};
+
+export interface PointFeatureCollection
+  extends FeatureCollection<Point, GeoJsonProperties> {
+  renderKey?: string;
+}
+export type PointFeature = Feature<Point, MobilityAPI_GeofencingZoneProperties>;

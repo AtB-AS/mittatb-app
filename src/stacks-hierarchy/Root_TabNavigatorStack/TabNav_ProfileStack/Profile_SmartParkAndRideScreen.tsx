@@ -26,6 +26,7 @@ import {useAuthContext} from '@atb/modules/auth';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useState} from 'react';
 import {ProfileScreenProps} from './navigation-types';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 const MAX_VEHICLE_REGISTRATIONS = 2;
 
@@ -69,11 +70,14 @@ export const Profile_SmartParkAndRideScreen = ({route, navigation}: Props) => {
     }
   };
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(SmartParkAndRideTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       refreshControl={
         <RefreshControl

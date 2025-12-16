@@ -35,7 +35,7 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import React, {RefObject, useCallback, useRef, useState} from 'react';
+import React, {Ref, useCallback, useRef, useState} from 'react';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
@@ -64,6 +64,7 @@ import {
   getLineAndTimeA11yLabel,
   getNoticesForServiceJourney,
   getShouldShowLiveVehicle,
+  debugProgressBetweenStopsText,
 } from './utils';
 import {BookingOptions} from './components/BookingOptions';
 import {BookingInfoBox} from './components/BookingInfoBox';
@@ -72,6 +73,7 @@ import {usePreferencesContext} from '@atb/modules/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
 import {
   FavouriteDepartureLine,
+  useFavoritesContext,
   useOnMarkFavouriteDepartures,
 } from '@atb/modules/favorites';
 import {getFavoriteIcon} from '@atb/modules/favorites';
@@ -80,8 +82,11 @@ import {
   InAppReviewContext,
   useInAppReviewFlow,
 } from '@atb/utils/use-in-app-review';
+// eslint-disable-next-line rulesdir/navigation-only-in-screens
 import {useFocusEffect} from '@react-navigation/native';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -92,6 +97,7 @@ type Props = DepartureDetailsScreenParams & {
   onPressDetailsMap: (params: TravelDetailsMapScreenParams) => void;
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
   onPressTravelAid: () => void;
+  focusRef: Ref<any>;
 };
 
 export const DepartureDetailsScreenComponent = ({
@@ -100,6 +106,7 @@ export const DepartureDetailsScreenComponent = ({
   onPressDetailsMap,
   onPressQuay,
   onPressTravelAid,
+  focusRef,
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useThemeContext();
@@ -157,7 +164,10 @@ export const DepartureDetailsScreenComponent = ({
   const screenReaderEnabled = useIsScreenReaderEnabled();
 
   const {
-    preferences: {journeyAidEnabled: travelAidPreferenceEnabled},
+    preferences: {
+      journeyAidEnabled: travelAidPreferenceEnabled,
+      debugShowProgressBetweenStops,
+    },
   } = usePreferencesContext();
   const shouldShowTravelAid =
     travelAidPreferenceEnabled &&
@@ -252,9 +262,11 @@ export const DepartureDetailsScreenComponent = ({
       vehicleWithPosition: vehiclePosition,
       mode: serviceJourney?.transportMode,
       subMode: serviceJourney?.transportSubmode,
+      estimatedCalls: serviceJourney?.estimatedCalls,
     });
   };
 
+  // eslint-disable-next-line rulesdir/navigation-only-in-screens
   useFocusEffect(
     useCallback(() => {
       if (shouldShowRequestReview.current) {
@@ -267,8 +279,9 @@ export const DepartureDetailsScreenComponent = ({
   return (
     <View style={styles.container}>
       <FullScreenView
+        focusRef={focusRef}
         headerProps={{
-          leftButton: {type: 'back', withIcon: true},
+          leftButton: {type: 'back'},
           title: t(DepartureDetailsTexts.header.alternateTitle),
         }}
         parallaxContent={(focusRef) => (
@@ -335,6 +348,14 @@ export const DepartureDetailsScreenComponent = ({
               <View style={styles.headerSubSection}>
                 <LastPassedStop realtimeText={realtimeText} />
               </View>
+            )}
+            {debugShowProgressBetweenStops && vehiclePosition && (
+              <ThemeText typography="body__s">
+                {debugProgressBetweenStopsText(
+                  vehiclePosition,
+                  serviceJourney?.estimatedCalls,
+                )}
+              </ThemeText>
             )}
           </View>
         )}
@@ -746,11 +767,11 @@ const FavoriteButton = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const analytics = useAnalyticsContext();
-  const {onMarkFavourite, getExistingFavorite} = useOnMarkFavouriteDepartures(
-    fromCall.quay,
-    false,
-  );
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+
+  const {getFavoriteDeparture} = useFavoritesContext();
+
+  const onCloseFocusRef = useRef<View | null>(null);
 
   const favouriteDepartureLine: FavouriteDepartureLine = {
     id: line.id,
@@ -759,39 +780,73 @@ const FavoriteButton = ({
     lineNumber: line.publicCode,
     destinationDisplay: fromCall.destinationDisplay,
   };
-  const existingFavorite = getExistingFavorite(favouriteDepartureLine);
+
+  const existingFavorite = getFavoriteDeparture({
+    destinationDisplay: favouriteDepartureLine.destinationDisplay,
+    lineId: favouriteDepartureLine.id,
+    quayId: fromCall.quay.id,
+  });
+
+  const {alert, addFavorite} = useOnMarkFavouriteDepartures({
+    quay: fromCall.quay,
+    lineNumber: line.publicCode,
+    existing: existingFavorite,
+    addedFavoritesVisibleOnDashboard: false,
+  });
 
   return (
-    <Button
-      type="small"
-      expanded={false}
-      leftIcon={{svg: getFavoriteIcon(existingFavorite)}}
-      text={t(FavoriteDeparturesTexts.favoriteButton)}
-      interactiveColor={theme.color.interactive['1']}
-      accessibilityLabel={
-        existingFavorite &&
-        (existingFavorite.destinationDisplay
-          ? t(DeparturesTexts.favorites.favoriteButton.oneVariation)
-          : t(DeparturesTexts.favorites.favoriteButton.allVariations))
-      }
-      accessibilityHint={
-        !!existingFavorite
-          ? t(FavoriteDeparturesTexts.favoriteItemDelete.a11yHint)
-          : t(FavoriteDeparturesTexts.favoriteItemAdd.a11yHint)
-      }
-      onPress={() => {
-        analytics.logEvent('Departure details', 'Add to Favourite clicked', {
-          line: favouriteDepartureLine?.id,
-          lineNumber: favouriteDepartureLine?.lineNumber,
-        });
-        onMarkFavourite(
-          favouriteDepartureLine,
-          existingFavorite,
-          onCloseFocusRef,
-        );
-      }}
-      ref={onCloseFocusRef}
-    />
+    <>
+      <Button
+        type="small"
+        expanded={false}
+        leftIcon={{svg: getFavoriteIcon(existingFavorite)}}
+        text={t(FavoriteDeparturesTexts.favoriteButton)}
+        interactiveColor={theme.color.interactive['1']}
+        accessibilityLabel={
+          existingFavorite &&
+          (existingFavorite.destinationDisplay
+            ? t(DeparturesTexts.favorites.favoriteButton.oneVariation)
+            : t(DeparturesTexts.favorites.favoriteButton.allVariations))
+        }
+        accessibilityHint={
+          !!existingFavorite
+            ? t(FavoriteDeparturesTexts.favoriteItemDelete.a11yHint)
+            : t(FavoriteDeparturesTexts.favoriteItemAdd.a11yHint)
+        }
+        onPress={() => {
+          analytics.logEvent('Departure details', 'Add to Favourite clicked', {
+            line: favouriteDepartureLine?.id,
+            lineNumber: favouriteDepartureLine?.lineNumber,
+          });
+
+          if (existingFavorite && favouriteDepartureLine.lineNumber) {
+            alert();
+          } else if (
+            favouriteDepartureLine.destinationDisplay &&
+            favouriteDepartureLine.lineNumber &&
+            fromCall.quay.name
+          ) {
+            bottomSheetModalRef.current?.present();
+          }
+        }}
+        ref={onCloseFocusRef}
+      />
+
+      {favouriteDepartureLine.destinationDisplay &&
+        favouriteDepartureLine.lineNumber &&
+        fromCall.quay.name && (
+          <FavoriteDialogSheet
+            quayName={fromCall.quay.name}
+            destinationDisplay={favouriteDepartureLine.destinationDisplay}
+            lineNumber={favouriteDepartureLine.lineNumber}
+            addFavorite={(forSpecificLineName: boolean) =>
+              addFavorite(favouriteDepartureLine, forSpecificLineName)
+            }
+            bottomSheetModalRef={bottomSheetModalRef}
+            onCloseFocusRef={onCloseFocusRef}
+          />
+        )}
+    </>
   );
 };
 

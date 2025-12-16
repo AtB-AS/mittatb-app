@@ -1,31 +1,29 @@
 import {
-  findReferenceDataById,
   PreassignedFareProduct,
+  SupplementProduct,
   FareZone,
   useFirestoreConfigurationContext,
   UserProfile,
 } from '@atb/modules/configuration';
 import {StyleSheet} from '@atb/theme';
-import {getLastUsedAccess} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import {
-  getValidityStatus,
+  getTravellersIcon,
+  getTravellersText,
   isValidFareContract,
-  mapToUserProfilesWithCount,
-  userProfileCountAndName,
   useFareZoneSummary,
   ValidityStatus,
 } from '../utils';
 import {FareContractDetailItem} from '../components/FareContractDetailItem';
 import {InspectionSymbol} from '../components/InspectionSymbol';
-import {UserProfileWithCount} from '../types';
 import {getTransportModeText} from '@atb/components/transportation-modes';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
-import {getAccesses} from '@atb-as/utils';
-import {isDefined} from '@atb/utils/presence';
+import {UniqueWithCount} from '@atb/utils/unique-with-count';
+import {getTransportModeSvg} from '@atb/components/icon-box';
+import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
 
 export type FareContractInfoProps = {
   status: ValidityStatus;
@@ -39,7 +37,8 @@ export type FareContractInfoDetailsProps = {
   preassignedFareProduct?: PreassignedFareProduct;
   fromFareZone?: FareZone;
   toFareZone?: FareZone;
-  userProfilesWithCount: UserProfileWithCount[];
+  userProfilesWithCount: UniqueWithCount<UserProfile>[];
+  baggageProductsWithCount: UniqueWithCount<SupplementProduct>[];
   status: FareContractInfoProps['status'];
   testID?: string;
   now?: number;
@@ -53,6 +52,7 @@ export const FareContractInfoDetailsSectionItem = ({
   fromFareZone,
   toFareZone,
   userProfilesWithCount,
+  baggageProductsWithCount,
   status,
   ...props
 }: SectionItemProps<FareContractInfoDetailsProps>) => {
@@ -78,6 +78,17 @@ export const FareContractInfoDetailsSectionItem = ({
   const isValidOrSentFareContract: boolean =
     isValidFareContract(status) || isStatusSent;
 
+  const travellersIcon = getTravellersIcon(
+    userProfilesWithCount,
+    baggageProductsWithCount,
+  );
+
+  const travellersText = getTravellersText(
+    userProfilesWithCount,
+    baggageProductsWithCount,
+    language,
+  );
+
   return (
     <View style={[topContainer, styles.container]} accessible={true}>
       <View style={styles.fareContractDetails}>
@@ -85,28 +96,36 @@ export const FareContractInfoDetailsSectionItem = ({
           {!!fareProductTypeConfig?.transportModes.length && (
             <FareContractDetailItem
               header={t(FareContractTexts.label.transportModes)}
-              content={[
-                getTransportModeText(fareProductTypeConfig.transportModes, t),
-              ]}
+              icon={
+                getTransportModeSvg(
+                  fareProductTypeConfig.transportModes[0].mode,
+                  fareProductTypeConfig.transportModes[0].subMode,
+                  false,
+                ).svg
+              }
+              content={getTransportModeText(
+                fareProductTypeConfig.transportModes,
+                t,
+              )}
             />
           )}
           {firstTravelRight.travelerName ? (
             <FareContractDetailItem
               header={t(FareContractTexts.label.travellers)}
-              content={[firstTravelRight.travelerName]}
+              icon={Travellers}
+              content={firstTravelRight.travelerName}
             />
           ) : (
             <FareContractDetailItem
               header={t(FareContractTexts.label.travellers)}
-              content={userProfilesWithCount.map((u) =>
-                userProfileCountAndName(u, language),
-              )}
+              icon={travellersIcon}
+              content={travellersText}
             />
           )}
           {fareZoneSummary && (
             <FareContractDetailItem
               header={t(FareContractTexts.label.zone)}
-              content={[fareZoneSummary]}
+              content={fareZoneSummary}
             />
           )}
         </View>
@@ -119,57 +138,6 @@ export const FareContractInfoDetailsSectionItem = ({
       </View>
     </View>
   );
-};
-
-export const getFareContractInfoDetails = (
-  fareContract: FareContractType,
-  now: number,
-  fareZones: FareZone[],
-  userProfiles: UserProfile[],
-  preassignedFareProducts: PreassignedFareProduct[],
-): FareContractInfoDetailsProps => {
-  const {
-    endDateTime,
-    fareProductRef: productRef,
-    fareZoneRefs,
-  } = fareContract.travelRights[0];
-  let validTo = endDateTime.getTime();
-  const validityStatus = getValidityStatus(now, fareContract);
-
-  const firstZone = fareZoneRefs?.[0];
-  const lastZone = fareZoneRefs?.slice(-1)?.[0];
-  const fromFareZone = firstZone
-    ? findReferenceDataById(fareZones, firstZone)
-    : undefined;
-  const toFareZone = lastZone
-    ? findReferenceDataById(fareZones, lastZone)
-    : undefined;
-  const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
-    productRef,
-  );
-  const userProfilesWithCount = mapToUserProfilesWithCount(
-    fareContract.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
-    userProfiles,
-  );
-
-  const flattenedAccesses = getAccesses(fareContract);
-  if (flattenedAccesses) {
-    const {usedAccesses} = flattenedAccesses;
-    const {validTo: usedAccessValidTo} = getLastUsedAccess(now, usedAccesses);
-    if (usedAccessValidTo) validTo = usedAccessValidTo;
-  }
-
-  return {
-    preassignedFareProduct: preassignedFareProduct,
-    fromFareZone: fromFareZone,
-    toFareZone: toFareZone,
-    userProfilesWithCount: userProfilesWithCount,
-    status: validityStatus,
-    now: now,
-    validTo: validTo,
-    fareContract,
-  };
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

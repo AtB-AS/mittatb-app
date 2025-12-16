@@ -3,7 +3,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {calculateCarnetData} from './calculate-carnet-data';
+import {calculateCarnetDisplayData} from './calculate-carnet-display-data';
 import {useSchoolCarnetInfoQuery} from '@atb/modules/ticketing';
 import {FareContractType, getAccesses} from '@atb-as/utils';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -31,19 +31,12 @@ export const CarnetFooter: React.FC<Props> = ({
   const accessInfo = getAccesses(fareContract);
   if (!accessInfo) return null;
 
-  const maximumNumberOfAccesses =
-    schoolCarnetInfo?.maximumNumberOfAccessesPerDay ??
-    accessInfo.maximumNumberOfAccesses;
-
-  const numberOfUsedAccesses =
-    schoolCarnetInfo?.numberOfUsedAccessesForToday ??
-    accessInfo.numberOfUsedAccesses;
-
   const {accessesRemaining, multiCarnetArray, unusedArray, usedArray} =
-    calculateCarnetData(
+    calculateCarnetDisplayData(
       validityStatus === 'valid',
-      maximumNumberOfAccesses,
-      numberOfUsedAccesses,
+      accessInfo.maximumNumberOfAccesses,
+      accessInfo.numberOfUsedAccesses,
+      schoolCarnetInfo,
     );
 
   if (isSchoolCarnetInfoFetching) return <ActivityIndicator />;

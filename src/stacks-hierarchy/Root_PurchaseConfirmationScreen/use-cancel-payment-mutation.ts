@@ -12,11 +12,18 @@ export const useCancelPaymentMutation = ({
   onSuccess?: () => void;
 }) =>
   useMutation({
-    mutationFn: ({reserveOfferResponse, isUser}: Params) =>
-      cancelPayment(
+    mutationFn: ({reserveOfferResponse, isUser}: Params) => {
+      if (
+        !reserveOfferResponse.paymentId ||
+        !reserveOfferResponse.transactionId
+      ) {
+        return Promise.resolve();
+      }
+      return cancelPayment(
         reserveOfferResponse.paymentId,
         reserveOfferResponse.transactionId,
         isUser,
-      ),
+      );
+    },
     onSuccess,
   });

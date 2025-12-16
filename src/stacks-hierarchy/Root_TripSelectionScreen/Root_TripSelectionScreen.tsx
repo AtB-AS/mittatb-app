@@ -14,6 +14,7 @@ import TripSelectionTexts from '@atb/translations/screens/TripSelectionScreen';
 import {useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_TripSelectionScreen'>;
 
@@ -38,6 +39,8 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
   const styles = useStyles();
   const builder = usePurchaseSelectionBuilder();
 
+  const focusRef = useFocusOnLoad(navigation);
+
   const screenHeaderTitle =
     selection.stopPlaces?.from && selection.stopPlaces?.to
       ? `${selection.stopPlaces.from.name} - ${selection.stopPlaces.to.name}`
@@ -47,7 +50,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
     <FullScreenView
       headerProps={{
         title: t(TripSelectionTexts.header),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={
         screenHeaderTitle
@@ -56,6 +59,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
             )
           : undefined
       }
+      focusRef={focusRef}
     >
       <View style={styles.header}>
         <DateSelection

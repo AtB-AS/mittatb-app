@@ -7,7 +7,10 @@ import {
   getPropByVehicleTypeId,
   isFeatureGeofencingZone,
 } from '../utils';
-import {useGeofencingZoneContent} from './use-geofencing-zone-content';
+import {
+  GeofencingZoneContent,
+  useGeofencingZoneContent,
+} from './use-geofencing-zone-content';
 import {ShmoWarnings} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useTranslation} from '@atb/translations';
 import {useVehicle} from '@atb/modules/mobility';
@@ -20,9 +23,8 @@ export const useShmoWarnings = (
   mapViewRef?: RefObject<MapView | null>,
 ) => {
   const {t} = useTranslation();
-  const [geofencingZoneMessage, setGeofencingZoneMessage] = useState<
-    string | null
-  >(null);
+  const [geofencingZoneWarning, setGeofencingZoneWarning] =
+    useState<GeofencingZoneContent | null>(null);
   const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {location} = useGeolocationContext();
 
@@ -69,7 +71,7 @@ export const useShmoWarnings = (
       );
 
       if (!geofencingZoneFeatures || geofencingZoneFeatures.length === 0) {
-        setGeofencingZoneMessage(null);
+        setGeofencingZoneWarning(null);
         return;
       }
 
@@ -82,9 +84,9 @@ export const useShmoWarnings = (
         const geofencingZoneContent = getGeofencingZoneContent(
           featureToSelect?.properties?.geofencingZoneCustomProps,
         );
-        setGeofencingZoneMessage(geofencingZoneContent.description);
+        setGeofencingZoneWarning(geofencingZoneContent);
       } else {
-        setGeofencingZoneMessage(null);
+        setGeofencingZoneWarning(null);
       }
     }, 1000),
   ).current;
@@ -95,5 +97,5 @@ export const useShmoWarnings = (
     }
   }, [location?.coordinates, throttledCallback, vehicleId, mapViewRef]);
 
-  return {geofencingZoneMessage, warningMessage};
+  return {geofencingZoneWarning, warningMessage};
 };

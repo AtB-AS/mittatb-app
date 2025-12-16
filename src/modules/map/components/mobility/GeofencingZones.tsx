@@ -197,3 +197,56 @@ export const useGeofencingZonesVectorSource: (systemId: string) => {
     [tileUrlTemplate],
   );
 };
+
+const reachFullScaleAtZoomLevel = 15.5;
+const iconFullSize = 0.85;
+const scaleTransitionZoomRange = 1.5;
+const opacityTransitionExtraZoomRange = scaleTransitionZoomRange / 8;
+
+type GeofencingZoneIconProps = {
+  iconFeatureCollection: PointFeatureCollection;
+};
+export const GeofencingZoneIcon: React.FC<GeofencingZoneIconProps> = ({
+  iconFeatureCollection,
+}) => {
+  const {themeName} = useThemeContext();
+
+  const code = ['get', 'code', getGeofencingZoneCustomProps];
+
+  // mapbox icons names are lower cased
+  const lowerCaseCode = ['downcase', code];
+
+  const iconImage = [
+    'concat',
+    'geofencingzone_',
+    lowerCaseCode,
+    '_',
+    themeName,
+  ];
+  const {iconOpacity, iconSize} = getIconZoomTransitionStyle(
+    reachFullScaleAtZoomLevel,
+    iconFullSize,
+    scaleTransitionZoomRange,
+    opacityTransitionExtraZoomRange,
+  );
+
+  return (
+    <MapboxGL.ShapeSource
+      id={`iconGeofencingZonesShapeSource_${iconFeatureCollection?.renderKey}`}
+      shape={iconFeatureCollection}
+    >
+      <MapboxGL.SymbolLayer
+        id="geofencingZoneIcon"
+        style={{
+          symbolZOrder: 'source',
+          iconAllowOverlap: true,
+          iconIgnorePlacement: true,
+          iconImage: iconImage,
+          iconOpacity,
+          iconSize,
+        }}
+        aboveLayerID={MapSlotLayerId.GeofencingZones}
+      />
+    </MapboxGL.ShapeSource>
+  );
+};

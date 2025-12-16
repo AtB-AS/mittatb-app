@@ -41,6 +41,11 @@ import {Info, Unknown} from '@atb/assets/svg/mono-icons/status';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {useChatUnreadCount} from '@atb/modules/chat';
 import Intercom, {Space} from '@intercom/intercom-react-native';
+import {
+  GlobalMessage,
+  GlobalMessageContextEnum,
+} from '@atb/modules/global-messages';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -65,13 +70,17 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const unreadCount = useChatUnreadCount();
   const {theme} = useThemeContext();
   const {enable_intercom} = useRemoteConfigContext();
+  const neutralContrastColor = theme.color.background.neutral[1];
+
+  const focusRef = useFocusOnLoad(navigation);
 
   return (
     <>
       <FullScreenView
+        focusRef={focusRef}
         headerProps={{
           title: t(ProfileTexts.header.title),
-          color: theme.color.background.neutral[1],
+          color: neutralContrastColor,
         }}
         parallaxContent={(focusRef) => (
           <ScreenHeading
@@ -87,6 +96,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           style={style.contentContainer}
         >
           <View style={style.mediumGap}>
+            <GlobalMessage
+              style={style.globalMessage}
+              globalMessageContext={GlobalMessageContextEnum.appProfile}
+              textColor={neutralContrastColor}
+            />
             <UserInfo
               navigateToEditProfileScreen={() =>
                 navigation.navigate('Profile_EditProfileScreen')
@@ -394,5 +408,8 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   logoutButton: {
     marginVertical: theme.spacing.large,
+  },
+  globalMessage: {
+    marginVertical: theme.spacing.xSmall,
   },
 }));

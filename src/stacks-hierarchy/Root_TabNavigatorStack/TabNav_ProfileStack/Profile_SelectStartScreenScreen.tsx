@@ -13,6 +13,8 @@ import React from 'react';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {StyleSheet} from '@atb/theme';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
 const identity = (s: string) => s;
 function toName(
@@ -29,7 +31,9 @@ function toName(
   }
 }
 
-export const Profile_SelectStartScreenScreen = () => {
+type Props = ProfileScreenProps<'Profile_SelectStartScreenScreen'>;
+
+export const Profile_SelectStartScreenScreen = ({navigation}: Props) => {
   const {
     setPreference,
     preferences: {startScreen},
@@ -38,11 +42,14 @@ export const Profile_SelectStartScreenScreen = () => {
   const styles = useStyles();
   const items = Array.from(preference_screenAlternatives);
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(SelectStartScreenTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading

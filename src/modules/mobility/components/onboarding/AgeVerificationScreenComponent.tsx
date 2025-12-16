@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {Ref, useEffect, useState} from 'react';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {dictionary, LoginTexts, useTranslation} from '@atb/translations';
@@ -14,7 +14,11 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
 import {useInitAgeVerificationMutation} from '../../index';
 
-export const AgeVerificationScreenComponent = () => {
+type Props = {
+  focusRef: Ref<any>;
+};
+
+export const AgeVerificationScreenComponent = ({focusRef}: Props) => {
   const {t} = useTranslation();
   const appStatus = useAppStateStatus();
   const [error, setError] = useState<VippsSignInErrorCode>();
@@ -107,8 +111,9 @@ export const AgeVerificationScreenComponent = () => {
         ) : undefined
       }
       headerProps={{
-        rightButton: {type: 'close', withIcon: true},
+        rightButton: {type: 'close'},
       }}
+      focusRef={focusRef}
     />
   );
 };

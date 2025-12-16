@@ -1,5 +1,5 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import React, {PropsWithChildren} from 'react';
+import React, {PropsWithChildren, Ref} from 'react';
 import {Button, ButtonProps} from '@atb/components/button';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -20,6 +20,7 @@ export type OnboardingFullScreenViewProps = PropsWithChildren<{
   testID?: string;
   secondaryTestID?: string;
   isError?: boolean;
+  focusRef: Ref<any>;
 }>;
 
 export const OnboardingFullScreenView = ({
@@ -32,6 +33,7 @@ export const OnboardingFullScreenView = ({
   testID,
   secondaryTestID,
   isError,
+  focusRef,
 }: OnboardingFullScreenViewProps) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
@@ -40,8 +42,8 @@ export const OnboardingFullScreenView = ({
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
-        setFocusOnLoad: false,
         ...(fullScreenHeaderProps || {}),
       }}
       contentColor={themeColor}

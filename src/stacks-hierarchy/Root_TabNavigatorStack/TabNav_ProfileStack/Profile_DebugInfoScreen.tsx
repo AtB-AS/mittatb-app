@@ -2,7 +2,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import React, {useEffect, useMemo, useState} from 'react';
-import {Alert, Linking, View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {getIdTokenGlobal, useAuthContext} from '@atb/modules/auth';
@@ -48,6 +48,10 @@ import {
 import {useMapContext} from '@atb/modules/map';
 import {useEventStreamContext} from '@atb/modules/event-stream';
 import {format} from 'date-fns';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {useQueryClient} from '@tanstack/react-query';
+import {useDebugUserInfoHeader} from '@atb/api';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -107,6 +111,8 @@ export const Profile_DebugInfoScreen = () => {
       remoteTokenError,
       setSabotage,
       sabotage,
+      setAlwaysFallback,
+      alwaysFallback,
       setAllTokenInspectable,
       allTokenInspectable,
     },
@@ -123,6 +129,12 @@ export const Profile_DebugInfoScreen = () => {
   } = useNotificationsContext();
 
   const remoteConfig = useRemoteConfigContext();
+
+  const {resubscribeFirestoreConfig} = useFirestoreConfigurationContext();
+
+  const queryClient = useQueryClient();
+
+  const {shouldAddHeader, setShouldAddHeader} = useDebugUserInfoHeader();
 
   const [storedValues, setStoredValues] = useState<
     readonly KeyValuePair[] | null
@@ -144,8 +156,13 @@ export const Profile_DebugInfoScreen = () => {
   }
 
   const {setPreference, preferences} = usePreferencesContext();
-  const {showTestIds, debugShowSeconds, debugPredictionInaccurate} =
-    preferences;
+  const {
+    showTestIds,
+    debugShowSeconds,
+    debugPredictionInaccurate,
+    debugShowProgressBetweenStops,
+    showShmoTesting,
+  } = preferences;
 
   return (
     <View style={styles.container}>
@@ -194,10 +211,31 @@ export const Profile_DebugInfoScreen = () => {
             }}
           />
           <ToggleSectionItem
+            text="Display percentage between stops in departure details"
+            value={debugShowProgressBetweenStops}
+            onValueChange={(debugShowProgressBetweenStops) => {
+              setPreference({debugShowProgressBetweenStops});
+            }}
+          />
+          <ToggleSectionItem
+            text="Add debug user info header"
+            value={shouldAddHeader}
+            onValueChange={(checked) => {
+              setShouldAddHeader(checked);
+            }}
+          />
+          <ToggleSectionItem
             text="Show prediction inaccurate info"
             value={debugPredictionInaccurate}
             onValueChange={(value) => {
               setPreference({debugPredictionInaccurate: value});
+            }}
+          />
+          <ToggleSectionItem
+            text="Show ShmoTesting"
+            value={showShmoTesting}
+            onValueChange={(value) => {
+              setPreference({showShmoTesting: value});
             }}
           />
           <LinkSectionItem
@@ -247,6 +285,16 @@ export const Profile_DebugInfoScreen = () => {
           <LinkSectionItem
             text="Force refresh remote config"
             onPress={remoteConfig.refresh}
+          />
+
+          <LinkSectionItem
+            text="Force refresh firestore config"
+            onPress={resubscribeFirestoreConfig}
+          />
+
+          <LinkSectionItem
+            text="Force refresh all react-query caches"
+            onPress={() => queryClient.resetQueries()}
           />
 
           <LinkSectionItem
@@ -357,7 +405,7 @@ export const Profile_DebugInfoScreen = () => {
               <View>
                 {eventLog.map((event) => (
                   <MapEntry
-                    key={event.date.toISOString()}
+                    key={event.date.toISOString() + event.meta}
                     title={format(event.date, 'HH:mm:ss.SSS')}
                     value={{streamEvent: event.streamEvent, meta: event.meta}}
                   />
@@ -510,6 +558,13 @@ export const Profile_DebugInfoScreen = () => {
                     onPress={renewToken}
                   />
                 )}
+                <ToggleSectionItem
+                  text="Always display fallback/static token"
+                  value={alwaysFallback}
+                  onValueChange={(alwaysFallback) => {
+                    setAlwaysFallback(alwaysFallback);
+                  }}
+                />
                 <ExpandableSectionItem
                   text="Remote tokens"
                   showIconText={true}
@@ -637,7 +692,7 @@ export const Profile_DebugInfoScreen = () => {
                       const privacyDashboardUrl =
                         await getPrivacyDashboardUrl();
                       privacyDashboardUrl &&
-                        Linking.openURL(privacyDashboardUrl);
+                        openInAppBrowser(privacyDashboardUrl, 'close');
                     }}
                     style={styles.button}
                     disabled={!isConsentGranted}
@@ -648,7 +703,8 @@ export const Profile_DebugInfoScreen = () => {
                     interactiveColor={interactiveColor}
                     onPress={async () => {
                       const privacyTermsUrl = await getPrivacyTermsUrl();
-                      privacyTermsUrl && Linking.openURL(privacyTermsUrl);
+                      privacyTermsUrl &&
+                        openInAppBrowser(privacyTermsUrl, 'close');
                     }}
                     style={styles.button}
                     disabled={!isConsentGranted}

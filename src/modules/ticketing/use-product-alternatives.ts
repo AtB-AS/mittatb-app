@@ -1,6 +1,6 @@
 import {useMemo} from 'react';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
-import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import {useGetFareProductsQuery} from './use-get-fare-products-query';
 import {isDefined} from '@atb/utils/presence';
 
 export const useProductAlternatives = (selection?: PurchaseSelectionType) => {

@@ -21,7 +21,7 @@ export const Root_LoginRequiredForFareProductScreen = ({navigation}: Props) => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {theme} = useThemeContext();
-  const focusRef = useFocusOnLoad();
+  const focusRef = useFocusOnLoad(navigation);
 
   const themeColor = getThemeColor(theme);
 
@@ -37,7 +37,7 @@ export const Root_LoginRequiredForFareProductScreen = ({navigation}: Props) => {
       if (enable_vipps_login) {
         navigation.navigate('Root_LoginOptionsScreen', {
           showGoBack: true,
-          transitionOverride: 'slide-from-bottom',
+          transitionOverride: 'slide-from-right',
         });
       } else {
         navigation.navigate('Root_LoginPhoneInputScreen', {});

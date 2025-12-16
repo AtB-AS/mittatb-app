@@ -1,17 +1,127 @@
-import {DeparturesVariables, getDepartures} from '@atb/api/bff/departures';
+import {
+  DepartureRealtimeQuery,
+  DeparturesVariables,
+  getDepartures,
+  getDeparturesRealtime,
+} from '@atb/api/bff/departures';
 import {useQuery} from '@tanstack/react-query';
-import {ONE_HOUR_MS, ONE_MINUTE_MS} from '@atb/utils/durations';
+import {ONE_HOUR_MS, ONE_SECOND_MS} from '@atb/utils/durations';
+import qs from 'query-string';
+import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
+import {getLimitOfDeparturesPerLineByMode, getTimeRangeByMode} from '../utils';
+import {
+  useFavoritesContext,
+  UserFavoriteDepartures,
+} from '@atb/modules/favorites';
+import {flatMap} from '@atb/utils/array';
+import {getDeparturesAugmentedWithRealtimeData} from '@atb/departure-list/utils';
+import {EstimatedCall} from '@atb/api/types/departures';
+import {minutesBetween} from '@atb/utils/date';
 
-type UseGetDeparturesQueryProps = {
-  query: DeparturesVariables;
+const DEPARTURES_REFETCH_INTERVAL_SECONDS = 30;
+const FULL_REFRESH_INTERVAL_MINUTES = 5;
+
+type DeparturesData = {
+  departures: EstimatedCall[];
+  startTime: string;
 };
 
-export const useDeparturesQuery = ({query}: UseGetDeparturesQueryProps) => {
+export type DeparturesQueryProps = {
+  query: Omit<DeparturesVariables, 'startTime'> & {
+    startTime?: string;
+  };
+  mode: StopPlacesMode;
+  favorites?: UserFavoriteDepartures;
+};
+
+/**
+ * First a request is sent to the departures endpoint.
+ *
+ * The refetch interval ensures that the data is always updated after
+ * DEPARTURES_REFETCH_INTERVAL_SECONDS has passed.
+ *
+ * When data already exists for the query key, the realtime endpoint is used instead,
+ * which is more lightweight and only includes data for the updated expectedDepartureTime.
+ * The departures (= estimated calls) are then augmented between the realtime data
+ * and the original departures data.
+ *
+ * When startTime is not set on the query, it defaults to the time when getDepartures is called,
+ * which is used until FULL_REFRESH_INTERVAL_MINUTES is reached. It is then reset.
+ */
+export const useDeparturesQuery = ({
+  query,
+  mode,
+  favorites,
+}: DeparturesQueryProps) => {
+  const {potentiallyMigrateFavoriteDepartures} = useFavoritesContext();
   return useQuery({
-    queryKey: ['departureData', query],
-    queryFn: () => getDepartures(query),
-    staleTime: ONE_HOUR_MS,
+    queryKey: [
+      'DEPARTURES',
+      qs.stringify(query),
+      mode,
+      qs.stringify(favorites ?? {}),
+    ],
+    queryFn: async function ({client, queryKey}): Promise<DeparturesData> {
+      const existingDeparturesData =
+        client.getQueryData<DeparturesData>(queryKey);
+
+      const fullRefresh =
+        !existingDeparturesData ||
+        (!query.startTime &&
+          minutesBetween(existingDeparturesData.startTime, new Date()) >
+            FULL_REFRESH_INTERVAL_MINUTES);
+
+      if (fullRefresh) {
+        const startTime = query.startTime ?? new Date().toISOString();
+        const departuresRaw = await getDepartures(
+          {
+            ...query,
+            startTime,
+            timeRange: query.timeRange ?? getTimeRangeByMode(mode, startTime),
+            limitPerLine:
+              query.limitPerLine ?? getLimitOfDeparturesPerLineByMode(mode),
+          },
+          favorites,
+        );
+        const departures = departuresRaw
+          ? flatMap(departuresRaw.quays, (q) => q.estimatedCalls)
+          : [];
+        potentiallyMigrateFavoriteDepartures(departures);
+        return {departures, startTime};
+      } else {
+        const departuresRealtimeQuery: DepartureRealtimeQuery = {
+          quayIds: query.ids,
+          startTime: existingDeparturesData.startTime,
+          limit: query.numberOfDepartures,
+          limitPerLine: query.limitPerLine,
+          timeRange: query.timeRange,
+          lineIds: favorites?.map((f) => f.lineId),
+        };
+
+        const departuresRealtimeData = await getDeparturesRealtime(
+          departuresRealtimeQuery,
+        );
+
+        return {
+          departures: getDeparturesAugmentedWithRealtimeData(
+            existingDeparturesData.departures,
+            departuresRealtimeData,
+          ),
+          startTime: existingDeparturesData.startTime,
+        };
+      }
+    },
+    staleTime: DEPARTURES_REFETCH_INTERVAL_SECONDS * ONE_SECOND_MS,
     gcTime: ONE_HOUR_MS,
-    refetchInterval: ONE_MINUTE_MS / 2,
+    refetchInterval: ({state: {dataUpdatedAt}}) => {
+      // Skip refetchInterval until the first successful fetch
+      if (!dataUpdatedAt) return false;
+
+      const secondsSincePreviousFetch = (Date.now() - dataUpdatedAt) / 1000;
+      const secondsUntilNextFetch =
+        DEPARTURES_REFETCH_INTERVAL_SECONDS - secondsSincePreviousFetch;
+
+      return Math.max(secondsUntilNextFetch, 0) * ONE_SECOND_MS;
+    },
   });
 };

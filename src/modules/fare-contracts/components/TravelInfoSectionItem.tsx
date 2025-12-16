@@ -1,6 +1,9 @@
 import {useTranslation} from '@atb/translations';
 import {useAuthContext} from '@atb/modules/auth';
-import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import {
+  useGetFareProductsQuery,
+  useGetSupplementProductsQuery,
+} from '@atb/modules/ticketing';
 import {type FareContractType} from '@atb-as/utils';
 import {View} from 'react-native';
 import {FareContractFromTo} from './FareContractFromTo';
@@ -8,8 +11,9 @@ import {FareContractDetailItem} from './FareContractDetailItem';
 import {getTransportModeText} from '@atb/components/transportation-modes';
 import {
   getFareContractInfo,
+  getTravellersIcon,
+  getTravellersText,
   mapToUserProfilesWithCount,
-  userProfileCountAndName,
 } from '../utils';
 import {InspectionSymbol} from './InspectionSymbol';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -21,6 +25,11 @@ import {useTimeContext} from '@atb/modules/time';
 import {useSectionItem} from '@atb/components/sections';
 import {isDefined} from '@atb/utils/presence';
 import {SentToMessageBox} from './SentToMessageBox';
+import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
+import {getBaggageProducts} from '../get-baggage-products';
+import {getTransportModeSvg} from '@atb/components/icon-box';
+import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
+import {useTicketAccessibilityLabel} from '../use-ticket-accessibility-label';
 
 type Props = {fc: FareContractType};
 
@@ -30,14 +39,27 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
 
   const {validityStatus} = getFareContractInfo(serverNow, fc, currentUserId);
-  const firstTravelRight = fc.travelRights[0];
-  const {userProfiles, fareProductTypeConfigs} =
+
+  const {userProfiles, fareProductTypeConfigs, fareZones} =
     useFirestoreConfigurationContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
-  const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
-    firstTravelRight.fareProductRef,
-  );
+
+  const productsInFareContract = fc.travelRights
+    .map((tr) =>
+      findReferenceDataById(preassignedFareProducts, tr.fareProductRef),
+    )
+    .filter(isDefined);
+
+  const firstTravelRight = fc.travelRights[0];
+  const preassignedFareProduct = productsInFareContract[0];
+
+  const travelRightFareZones = firstTravelRight.fareZoneRefs
+    ?.map((fz) => findReferenceDataById(fareZones, fz))
+    .filter(isDefined);
+  const travelRightFromPlace = firstTravelRight.startPointRef;
+  const travelRightToPlace = firstTravelRight.endPointRef;
+  const direction = firstTravelRight.direction;
+
   const fareProductTypeConfig = fareProductTypeConfigs.find((c) => {
     return c.type === preassignedFareProduct?.type;
   });
@@ -47,9 +69,42 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
     userProfiles,
   );
 
+  const {data: allSupplementProducts} = useGetSupplementProductsQuery();
+
+  const baggageProducts = getBaggageProducts(
+    productsInFareContract,
+    allSupplementProducts,
+  );
+
+  const baggageProductsWithCount = mapUniqueWithCount(
+    baggageProducts,
+    (a, b) => a.id === b.id,
+  );
+
+  const travellersIcon = getTravellersIcon(
+    userProfilesWithCount,
+    baggageProductsWithCount,
+  );
+
+  const travellersWithCountText = getTravellersText(
+    userProfilesWithCount,
+    baggageProductsWithCount,
+    language,
+  );
+
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {topContainer} = useSectionItem({});
+
+  const ticketAccessibilityLabel = useTicketAccessibilityLabel(
+    fareProductTypeConfig,
+    userProfilesWithCount,
+    baggageProductsWithCount,
+    travelRightFareZones ?? [],
+    travelRightFromPlace,
+    travelRightToPlace,
+    direction,
+  );
 
   return (
     <View
@@ -58,30 +113,42 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
         {rowGap: theme.spacing.large, paddingVertical: theme.spacing.large},
       ]}
     >
-      <View style={styles.detailRow}>
-        <View style={styles.fareContractDetailItems}>
+      <View style={styles.detailRow} accessible={true}>
+        <View
+          style={styles.fareContractDetailItems}
+          accessibilityLabel={ticketAccessibilityLabel}
+        >
           <FareContractFromTo
             fc={fc}
             backgroundColor={theme.color.background.neutral[0]}
-            mode="small"
+            size="normal"
           />
           {!!fareProductTypeConfig?.transportModes && (
             <FareContractDetailItem
-              content={[
-                getTransportModeText(fareProductTypeConfig.transportModes, t),
-              ]}
+              icon={
+                getTransportModeSvg(
+                  fareProductTypeConfig.transportModes[0].mode,
+                  fareProductTypeConfig.transportModes[0].subMode,
+                  false,
+                ).svg
+              }
+              content={getTransportModeText(
+                fareProductTypeConfig.transportModes,
+                t,
+              )}
             />
           )}
 
           {firstTravelRight.travelerName ? (
-            <FareContractDetailItem content={[firstTravelRight.travelerName]} />
+            <FareContractDetailItem
+              icon={Travellers}
+              content={firstTravelRight.travelerName}
+            />
           ) : (
-            userProfilesWithCount.map((u, i) => (
-              <FareContractDetailItem
-                key={`userProfile-${i}`}
-                content={[userProfileCountAndName(u, language)]}
-              />
-            ))
+            <FareContractDetailItem
+              icon={travellersIcon}
+              content={travellersWithCountText}
+            />
           )}
         </View>
         {(validityStatus === 'valid' || validityStatus === 'sent') && (
@@ -106,6 +173,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   fareContractDetailItems: {
     flex: 1,
-    rowGap: theme.spacing.xSmall,
+    gap: theme.spacing.medium,
   },
 }));

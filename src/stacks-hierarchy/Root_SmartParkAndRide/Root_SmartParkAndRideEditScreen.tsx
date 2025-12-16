@@ -16,6 +16,7 @@ import {
 } from '@atb/modules/smart-park-and-ride';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_SmartParkAndRideEditScreen'>;
 
@@ -33,7 +34,7 @@ export const Root_SmartParkAndRideEditScreen = ({
   );
   const {theme} = useThemeContext();
   const analytics = useAnalyticsContext();
-
+  const focusRef = useFocusOnLoad(navigation, true);
   const onUpdateSuccess = () => {
     navigation.popTo('Root_TabNavigatorStack', {
       screen: 'TabNav_ProfileStack',
@@ -107,9 +108,10 @@ export const Root_SmartParkAndRideEditScreen = ({
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(SmartParkAndRideTexts.edit.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
         color: theme.color.background.neutral[1],
       }}
       parallaxContent={(focusRef) => (

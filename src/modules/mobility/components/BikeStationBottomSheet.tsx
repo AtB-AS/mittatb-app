@@ -40,6 +40,7 @@ type Props = {
   onClose: () => void;
   onStationReceived?: (station: BikeStationFragment) => void;
   locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 
 export const BikeStationBottomSheet = ({
@@ -48,6 +49,7 @@ export const BikeStationBottomSheet = ({
   onClose,
   onStationReceived,
   locationArrowOnPress,
+  navigateToScanQrCode,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -90,6 +92,7 @@ export const BikeStationBottomSheet = ({
       rightIcon={Close}
       logoUrl={brandLogoUrl}
       locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
       <>
         {isLoading && (

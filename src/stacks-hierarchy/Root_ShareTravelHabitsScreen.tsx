@@ -4,7 +4,6 @@ import {
   getTextForLanguage,
 } from '@atb/translations';
 import React from 'react';
-import {Linking} from 'react-native';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {
   OnboardingScreenComponent,
@@ -13,8 +12,14 @@ import {
 import {useBeaconsContext, checkPermissionStatuses} from '@atb/modules/beacons';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {RootStackScreenProps} from './navigation-types';
 
-export const Root_ShareTravelHabitsScreen = () => {
+type Props = RootStackScreenProps<'Root_ShareTravelHabitsScreen'>;
+
+export const Root_ShareTravelHabitsScreen = ({navigation}: Props) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {t, language} = useTranslation();
 
   const {configurableLinks} = useFirestoreConfigurationContext();
@@ -55,7 +60,7 @@ export const Root_ShareTravelHabitsScreen = () => {
             configurableLinks?.dataSharingInfo,
             language,
           );
-          dataSharingInfoUrl && Linking.openURL(dataSharingInfoUrl);
+          dataSharingInfoUrl && openInAppBrowser(dataSharingInfoUrl, 'close');
         },
       }}
       footerDescription={t(ShareTravelHabitsTexts.bluetoothInfo)}
@@ -65,6 +70,7 @@ export const Root_ShareTravelHabitsScreen = () => {
         expanded: true,
       }}
       testID="shareTravelHabits"
+      focusRef={focusRef}
     />
   );
 };

@@ -7,15 +7,19 @@ import {
 } from '@atb/modules/configuration';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
-import {formatNumberToString} from '@atb/utils/numbers';
 import React from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
-import {UserProfileWithCountAndOffer} from '../../Root_PurchaseOverviewScreen/use-offer-state';
+import {
+  BaggageProductWithCountAndOffer,
+  UserProfileWithCountAndOffer,
+} from '../../Root_PurchaseOverviewScreen/use-offer-state';
+import {formatNumberToString, SearchOfferPrice} from '@atb-as/utils';
 
 type Props = {
   fareProductTypeConfig: FareProductTypeConfig;
   isSearchingOffer: boolean;
   userProfilesWithCountAndOffer: UserProfileWithCountAndOffer[];
+  baggageProductsWithCountAndOffer: BaggageProductWithCountAndOffer[];
   totalPrice: number;
 };
 
@@ -23,6 +27,7 @@ export const PriceSummary = ({
   fareProductTypeConfig,
   isSearchingOffer,
   userProfilesWithCountAndOffer,
+  baggageProductsWithCountAndOffer,
   totalPrice,
 }: Props) => {
   const styles = useStyles();
@@ -42,9 +47,20 @@ export const PriceSummary = ({
       {travellerSelectionMode !== 'none' && (
         <GenericSectionItem>
           {userProfilesWithCountAndOffer.map((u, i) => (
-            <PricePerUserProfile
+            <PricePerTraveller
               key={u.id}
-              userProfile={u}
+              name={getReferenceDataName(u, language)}
+              offerPrice={u.offer.price}
+              count={u.count}
+              style={i != 0 ? styles.smallTopMargin : undefined}
+            />
+          ))}
+          {baggageProductsWithCountAndOffer.map((sp, i) => (
+            <PricePerTraveller
+              key={sp.id}
+              name={getReferenceDataName(sp, language)}
+              offerPrice={sp.offer.supplementProducts[0].price}
+              count={sp.count}
               style={i != 0 ? styles.smallTopMargin : undefined}
             />
           ))}
@@ -83,19 +99,24 @@ export const PriceSummary = ({
   );
 };
 
-const PricePerUserProfile = ({
-  userProfile,
-  style,
-}: {
-  userProfile: UserProfileWithCountAndOffer;
+type PricePerTravellerProps = {
+  name: string;
+  offerPrice: SearchOfferPrice;
+  count: number;
   style: StyleProp<ViewStyle>;
-}) => {
+};
+
+const PricePerTraveller = ({
+  style,
+  name,
+  offerPrice,
+  count,
+}: PricePerTravellerProps) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const {count, offer} = userProfile;
 
-  const price = count * (offer.price.amountFloat || 0);
-  const originalPrice = count * (offer.price.originalAmountFloat || 0);
+  const price = count * (offerPrice.amountFloat || 0);
+  const originalPrice = count * (offerPrice.originalAmountFloat || 0);
 
   const priceString = formatNumberToString(price, language);
   const originalPriceString = originalPrice
@@ -104,9 +125,8 @@ const PricePerUserProfile = ({
 
   const hasFlexDiscount = price < originalPrice;
 
-  const userProfileName = getReferenceDataName(userProfile, language);
   const a11yLabel = [
-    `${count} ${userProfileName}`,
+    `${count} ${name}`,
     `${priceString} kr`,
     `${
       hasFlexDiscount
@@ -121,22 +141,22 @@ const PricePerUserProfile = ({
     <View
       accessible={true}
       accessibilityLabel={a11yLabel}
-      style={[style, styles.userProfileItem]}
+      style={[style, styles.travellerItem]}
     >
       <ThemeText
-        style={styles.userProfileCountAndName}
+        style={styles.travellerCountAndName}
         color="secondary"
         typography="body__s"
-        testID="userProfileCountAndName"
+        testID="travellerCountAndName"
       >
-        {count} {userProfileName}
+        {count} {name}
       </ThemeText>
-      <View style={styles.userProfilePrice}>
+      <View style={styles.travellerPrice}>
         {hasFlexDiscount && (
           <ThemeText
             typography="body__xs"
             color="secondary"
-            style={styles.userProfileOriginalPriceAmount}
+            style={styles.travellerOriginalPriceAmount}
           >
             {originalPriceString} kr
           </ThemeText>
@@ -150,15 +170,15 @@ const PricePerUserProfile = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  userProfileItem: {
+  travellerItem: {
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
-  userProfileCountAndName: {marginRight: theme.spacing.small},
-  userProfilePrice: {flexDirection: 'row', flexWrap: 'wrap'},
-  userProfileOriginalPriceAmount: {
+  travellerCountAndName: {marginRight: theme.spacing.small},
+  travellerPrice: {flexDirection: 'row', flexWrap: 'wrap'},
+  travellerOriginalPriceAmount: {
     marginEnd: theme.spacing.small,
     alignSelf: 'flex-end',
     textDecorationLine: 'line-through',

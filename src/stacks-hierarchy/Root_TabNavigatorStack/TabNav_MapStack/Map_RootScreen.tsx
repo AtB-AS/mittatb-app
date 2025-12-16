@@ -8,8 +8,14 @@ import {MapScreenProps} from './navigation-types';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import {ScooterHelpScreenProps} from '@atb/stacks-hierarchy/Root_ScooterHelp/Root_ScooterHelpScreen';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 
 export type MapScreenParams = {
   initialFilters?: MapFilterType;
@@ -20,6 +26,8 @@ export const Map_RootScreen = ({
 }: MapScreenProps<'Map_RootScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const {close} = useBottomSheetContext();
+  const tabBarHeight = useBottomTabBarHeight();
+  const isFocused = useIsFocused();
 
   useFocusEffect(
     useCallback(() => {
@@ -80,13 +88,76 @@ export const Map_RootScreen = ({
     [navigation],
   );
 
-  if (isScreenReaderEnabled) return <MapDisabledForScreenReader />;
+  const navigateToScooterSupport = useCallback(
+    (params: ScooterHelpScreenProps['route']['params']) => {
+      navigation.navigate('Root_ScooterHelpScreen', params);
+    },
+    [navigation],
+  );
+
+  const navigateToScooterOnboarding = useCallback(() => {
+    navigation.navigate('Root_ShmoOnboardingScreen');
+  }, [navigation]);
+
+  const navigateToReportParkingViolation = useCallback(() => {
+    navigation.navigate('Root_ParkingViolationsSelectScreen');
+  }, [navigation]);
+
+  const navigateToParkingPhoto = useCallback(
+    (bookingId: string) => {
+      navigation.navigate('Root_ParkingPhotoScreen', {bookingId});
+    },
+    [navigation],
+  );
+
+  const navigateToScanQrCode = useCallback(() => {
+    navigation.navigate('Root_ScanQrCodeScreen');
+  }, [navigation]);
+
+  const {enable_vipps_login} = useRemoteConfigContext();
+  const hasReservationOrAvailableFareContract =
+    useHasReservationOrAvailableFareContract();
+
+  const navigateToLogin = useCallback(() => {
+    if (hasReservationOrAvailableFareContract) {
+      navigation.navigate('Root_LoginAvailableFareContractWarningScreen', {});
+    } else if (enable_vipps_login) {
+      navigation.navigate('Root_LoginOptionsScreen', {
+        showGoBack: true,
+        transitionOverride: 'slide-from-bottom',
+      });
+    } else {
+      navigation.navigate('Root_LoginPhoneInputScreen', {});
+    }
+  }, [enable_vipps_login, hasReservationOrAvailableFareContract, navigation]);
+
+  const paymentMethodsScreenParams = useNestedProfileScreenParams(
+    'Profile_PaymentMethodsScreen',
+  );
+
+  const navigateToPaymentMethods = useCallback(() => {
+    navigation.navigate('Root_TabNavigatorStack', paymentMethodsScreenParams);
+  }, [navigation, paymentMethodsScreenParams]);
+
+  const focusRef = useFocusOnLoad(navigation);
+
+  if (isScreenReaderEnabled)
+    return <MapDisabledForScreenReader focusRef={focusRef} />;
 
   return (
     <Map
+      isFocused={isFocused}
+      tabBarHeight={tabBarHeight}
       navigateToQuay={navigateToQuay}
       navigateToDetails={navigateToDetails}
       navigateToTripSearch={navigateToTripSearch}
+      navigateToScooterSupport={navigateToScooterSupport}
+      navigateToScooterOnboarding={navigateToScooterOnboarding}
+      navigateToReportParkingViolation={navigateToReportParkingViolation}
+      navigateToParkingPhoto={navigateToParkingPhoto}
+      navigateToScanQrCode={navigateToScanQrCode}
+      navigateToLogin={navigateToLogin}
+      navigateToPaymentMethods={navigateToPaymentMethods}
       includeSnackbar={true}
     />
   );

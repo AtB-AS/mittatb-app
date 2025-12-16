@@ -1044,13 +1044,10 @@ export const Profile_DesignSystemScreen = ({
             onPress={() => setSelected(!selected)}
           />
           <RadioSectionItem
-            text="With right action"
+            text="With left icon"
             selected={selected}
             onPress={() => setSelected(!selected)}
-            rightAction={{
-              onPress: presser,
-              icon: Delete,
-            }}
+            leftIcon={BusFill}
           />
           <RadioSectionItem
             text="With right action"
@@ -1100,6 +1097,11 @@ export const Profile_DesignSystemScreen = ({
             subtitle="Subtitle text"
             onPress={() => {}}
             rightIcon={{svg: Delete, color: 'error'}}
+          />
+          <LinkSectionItem
+            text="Link with *leftIcon* and **markdown**"
+            leftIcon={{svg: BusFill}}
+            isMarkdown
           />
           <LinkSectionItem
             text="Disabled Dangerous Link Item text"

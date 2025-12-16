@@ -16,6 +16,7 @@ import {Root_ChooseTicketRecipientScreenParams} from '@atb/stacks-hierarchy/Root
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {Root_SmartParkAndRideEditScreenParams} from '@atb/stacks-hierarchy/Root_SmartParkAndRide/navigation-types';
 import {Root_OnboardingCarouselStackParams} from './Root_OnboardingCarouselStack';
+import {UserProfileWithCountAndOffer} from './Root_PurchaseOverviewScreen/use-offer-state';
 
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
@@ -42,8 +43,8 @@ type FareContractDetailsRouteParams = {
 };
 
 type TicketInformationScreenParams = {
-  selection?: PurchaseSelectionType;
-  shouldShowFlexTicketDiscountInfo?: boolean;
+  preassignedFareProductId: string | undefined;
+  userProfilesWithCountAndOffer?: UserProfileWithCountAndOffer[];
 };
 
 export type Root_LoginOptionsScreenParams = {
@@ -152,6 +153,7 @@ export type RootStackParamList = StackParams<{
   Root_SmartParkAndRideAddScreen: undefined;
   Root_SmartParkAndRideEditScreen: Root_SmartParkAndRideEditScreenParams;
   Root_OnboardingCarouselStack: Root_OnboardingCarouselStackParams;
+  Root_TravelAidOnboardingScreen: undefined;
 }>;
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;

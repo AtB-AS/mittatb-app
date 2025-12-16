@@ -7,6 +7,12 @@ import {GeofencingZoneIconBox} from '@atb/components/icon-box';
 import {useCallback} from 'react';
 import {GeofencingZoneCode} from '@atb-as/theme';
 
+export type GeofencingZoneContent = {
+  title: string;
+  description: string;
+  iconNode: React.ReactNode | null;
+};
+
 export const useGeofencingZoneContent = () => {
   const {t} = useTranslation();
 
