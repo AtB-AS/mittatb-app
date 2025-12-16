@@ -178,7 +178,7 @@ export const useGeofencingZonesVectorSource: (
         tiles: [tileUrlTemplate || ''],
         minzoom: minZoomLevel,
         maxzoom: maxZoomLevel,
-        volatile: false, // hmmmm true?
+        volatile: false,
       },
     }),
     [tileUrlTemplate],
