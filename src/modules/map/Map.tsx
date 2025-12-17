@@ -14,11 +14,10 @@ import {Feature} from 'geojson';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, getSlightlyRaisedMapPadding} from './MapConfig';
-import {GeofencingZoneCustomProps, MapPropertiesType, MapProps} from './types';
+import {MapPropertiesType, MapProps} from './types';
 import {
   isFeaturePoint,
   getFeaturesAtClick,
-  isFeatureGeofencingZone,
   isClusterFeatureV2,
   isQuayFeature,
   mapPositionToCoordinates,
@@ -57,6 +56,7 @@ import {MapBottomSheets} from './MapBottomSheets';
 
 import {MapButtons} from './components/MapButtons';
 import {useFlyToSelectedMapItemWithPadding} from './hooks/use-fly-to-selected-map-item-with-padding';
+import {GeofencingZoneCode} from '@atb-as/theme';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {usePreferencesContext} from '../preferences';
 
@@ -102,7 +102,6 @@ export const Map = (props: MapProps) => {
     false;
   const shouldShowVehiclesAndStations =
     isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
-  const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
 
   const selectedFeature = mapState.feature;
 
@@ -127,6 +126,18 @@ export const Map = (props: MapProps) => {
     isLoading: vehicleIsLoading,
     isError: vehicleError,
   } = useVehicleQuery(selectedFeature?.properties?.id);
+
+  const systemId =
+    vehicle?.system.id ?? activeShmoBooking?.asset.systemId ?? null;
+  const vehicleTypeId =
+    vehicle?.vehicleType.id ?? activeShmoBooking?.asset.vehicleTypeId ?? null;
+
+  const mapViewConfig = useMapViewConfig({
+    shouldShowVehiclesAndStations,
+    shouldShowGeofencingZones: true, // showGeofencingZones, seems to be smoother and unproblematic with always true
+    systemId: systemId ?? '',
+    vehicleTypeId: vehicleTypeId ?? '',
+  });
 
   const [followUserLocation, setFollowUserLocation] = useState(false);
   const mapPropertiesRef = useRef<MapPropertiesType | null>({
@@ -159,13 +170,30 @@ export const Map = (props: MapProps) => {
   }, [selectedFeature, hideSnackbar]);
 
   const geofencingZoneOnPress = useCallback(
-    (geofencingZoneCustomProps?: GeofencingZoneCustomProps) => {
+    (gfzCode?: GeofencingZoneCode, isStationParking?: boolean) => {
       const geofencingZoneContent = getGeofencingZoneContent(
-        geofencingZoneCustomProps,
+        gfzCode,
+        isStationParking,
       );
       showSnackbar({content: geofencingZoneContent, position: 'top'});
     },
     [showSnackbar, getGeofencingZoneContent],
+  );
+
+  // todo fix name
+  const onGfzClick = useCallback(
+    (e: OnPressEvent) => {
+      const featuresAtClick = e.features;
+      if (!featuresAtClick || featuresAtClick.length === 0) return;
+      const featureToSelect = featuresAtClick[0]; // currently ignore the ones behind
+
+      const code = featureToSelect.properties?.code ?? 'allowed';
+      const stationParking =
+        featureToSelect.properties?.stationParking ?? false;
+
+      geofencingZoneOnPress(code, stationParking);
+    },
+    [geofencingZoneOnPress],
   );
 
   const locationArrowOnPress = useCallback(async () => {
@@ -212,20 +240,10 @@ export const Map = (props: MapProps) => {
       if (!isFeaturePoint(feature)) return;
       if (!showGeofencingZones && !isActiveTrip) return;
 
-      const {coordinates: positionClicked} = feature.geometry;
-
       const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
       if (!featuresAtClick || featuresAtClick.length === 0) return;
-      const featureToSelect = getFeatureToSelect(
-        featuresAtClick,
-        positionClicked,
-      );
+      const featureToSelect = getFeatureToSelect(featuresAtClick);
 
-      /**
-       * this hides the Snackbar when a feature is clicked,
-       * unless the feature is a geofencingZone, in which case
-       * geofencingZoneOnPress will be called which sets it visible again
-       */
       hideSnackbar();
 
       if (isQuayFeature(featureToSelect) && !isActiveTrip) {
@@ -233,10 +251,6 @@ export const Map = (props: MapProps) => {
         // - select a stop place with the clicked quay sorted on top
         // - have a bottom sheet with departures just for the clicked quay
         return; // currently - do nothing
-      } else if (isFeatureGeofencingZone(featureToSelect)) {
-        geofencingZoneOnPress(
-          featureToSelect?.properties?.geofencingZoneCustomProps,
-        );
       } else if (isScooterV2(selectedFeature) && !isActiveTrip) {
         // outside of operational area, rules unspecified
         geofencingZoneOnPress(undefined);
@@ -253,7 +267,6 @@ export const Map = (props: MapProps) => {
 
   const onMapItemClick = useCallback(
     async (e: OnPressEvent) => {
-      const positionClicked = [e.coordinates.longitude, e.coordinates.latitude];
       const featuresAtClick = e.features;
       if (
         !featuresAtClick ||
@@ -263,10 +276,7 @@ export const Map = (props: MapProps) => {
       )
         return;
 
-      const featureToSelect = getFeatureToSelect(
-        featuresAtClick,
-        positionClicked,
-      );
+      const featureToSelect = getFeatureToSelect(featuresAtClick);
 
       if (isClusterFeatureV2(featureToSelect)) {
         const fromZoomLevel = (await mapViewRef.current?.getZoom()) ?? 0;
@@ -388,14 +398,9 @@ export const Map = (props: MapProps) => {
           />
           {showGeofencingZones && !vehicleError && !vehicleIsLoading && (
             <GeofencingZones
-              systemId={
-                vehicle?.system.id ?? activeShmoBooking?.asset.systemId ?? null
-              }
-              vehicleTypeId={
-                vehicle?.vehicleType.id ??
-                activeShmoBooking?.asset.vehicleTypeId ??
-                null
-              }
+              systemId={systemId}
+              vehicleTypeId={vehicleTypeId}
+              geofencingZoneOnPress={onGfzClick}
             />
           )}
 
@@ -410,7 +415,7 @@ export const Map = (props: MapProps) => {
 
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
 
-          {shouldShowVehiclesAndStations && (
+          {!!shouldShowVehiclesAndStations && (
             <VehiclesAndStations
               selectedFeatureId={selectedFeature?.properties?.id}
               onPress={onMapItemClick}
@@ -425,8 +430,10 @@ export const Map = (props: MapProps) => {
             navigateToScanQrCode={navigateToScanQrCode}
           />
         )}
-        {includeSnackbar && <Snackbar {...snackbarProps} />}
-        {showShmoTesting && (
+        {includeSnackbar && (
+          <Snackbar {...snackbarProps} onHideSnackbar={hideSnackbar} />
+        )}
+        {!!showShmoTesting && (
           <ShmoTesting navigateToScooterSupport={navigateToScooterSupport} />
         )}
       </View>
