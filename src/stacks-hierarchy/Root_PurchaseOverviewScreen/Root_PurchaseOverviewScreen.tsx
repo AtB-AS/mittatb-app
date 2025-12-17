@@ -14,8 +14,10 @@ import {StartTimeSelection} from './components/StartTimeSelection';
 import {Summary} from './components/Summary';
 import {TravellerSelection} from './components/TravellerSelection';
 import {type OfferError, useOfferState} from './use-offer-state';
-import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
-import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {
+  type RootStackParamList,
+  RootStackScreenProps,
+} from '@atb/stacks-hierarchy';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
 import {
@@ -28,7 +30,7 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {ToggleSectionItem} from '@atb/components/sections';
-import {useProductAlternatives} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-product-alternatives';
+import {useProductAlternatives} from '@atb/modules/ticketing';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
 import {
@@ -40,6 +42,7 @@ import {isUserProfileSelectable} from './utils';
 import {useOnBehalfOf} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-on-behalf-of';
 import {useBookingTrips} from '@atb/modules/booking';
 import {isValidSelection} from '@atb/modules/booking';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type PurchaseOverviewError = OfferError | {type: 'booking-error'};
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
@@ -48,6 +51,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   navigation,
   route: {params},
 }) => {
+  const focusRef = useFocusOnLoad(navigation);
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
@@ -75,11 +79,17 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
-  } = useOfferState(selection, preassignedFareProductAlternatives);
+    baggageProductsWithCountAndOffer,
+  } = useOfferState(preassignedFareProductAlternatives, selection);
+
+  const firstUserProfilesProductRef =
+    userProfilesWithCountAndOffer[0]?.offer?.fareProduct;
+  const firstBaggageProductRef =
+    baggageProductsWithCountAndOffer[0]?.offer?.supplementProducts[0]?.id;
 
   const preassignedFareProduct =
     preassignedFareProductAlternatives.find(
-      (p) => p.id === userProfilesWithCountAndOffer[0]?.offer.fareProduct,
+      (p) => p.id === firstUserProfilesProductRef || firstBaggageProductRef,
     ) ?? preassignedFareProductAlternatives[0];
 
   const rootPurchaseConfirmationScreenParams: Root_PurchaseConfirmationScreenParams =
@@ -97,9 +107,10 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   );
 
   const handleTicketInfoButtonPress = () => {
-    const parameters = {
-      fareProductTypeConfigType: selection.fareProductTypeConfig.type,
+    const parameters: RootStackParamList['Root_TicketInformationScreen'] = {
       preassignedFareProductId: preassignedFareProduct.id,
+      userProfilesWithCountAndOffer: userProfilesWithCountAndOffer,
+      transitionOverride: 'slide-from-right',
     };
     analytics.logEvent(
       'Ticketing',
@@ -132,8 +143,10 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const canProceed = (() => {
     const hasOffer =
-      selection.userProfilesWithCount.some((u) => u.count) &&
-      userProfilesWithCountAndOffer.some((u) => u.count);
+      (selection.userProfilesWithCount.some((u) => u.count) &&
+        userProfilesWithCountAndOffer.some((u) => u.count)) ||
+      (selection.baggageProductsWithCount.some((sp) => sp.count) &&
+        baggageProductsWithCountAndOffer.some((sp) => sp.count));
 
     return (
       hasOffer ||
@@ -184,16 +197,16 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: getTextForLanguage(
           selection.fareProductTypeConfig.name,
           language,
         ),
         leftButton: {
-          type: 'cancel',
+          type: 'back',
           onPress: closeModal,
         },
-        setFocusOnLoad: false,
         globalMessageContext: GlobalMessageContextEnum.appTicketing,
       }}
       parallaxContent={(focusRef) => (
@@ -201,12 +214,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           ref={params.onFocusElement ? undefined : focusRef}
           style={styles.header}
           fareProductTypeConfig={selection.fareProductTypeConfig}
-          preassignedFareProduct={preassignedFareProduct}
           onTicketInfoButtonPress={handleTicketInfoButtonPress}
         />
       )}
     >
-      <ScrollView>
+      <ScrollView testID="purchaseOverviewScrollView">
         <View style={styles.contentContainer}>
           {params.mode === 'TravelSearch' && (
             <MessageInfoBox
@@ -308,11 +320,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             style={styles.selectionComponent}
           />
 
-          <FlexTicketDiscountInfo
-            userProfiles={userProfilesWithCountAndOffer}
-            style={styles.selectionComponent}
-          />
-
           {isFree ? (
             <MessageInfoBox
               type="valid"
@@ -367,6 +374,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                     count: t.count,
                   }),
                 ),
+                baggageProductsWithCount:
+                  selection.baggageProductsWithCount.map((sp) => ({
+                    id: sp.id,
+                    count: sp.count,
+                  })),
                 preassignedFareProduct: {
                   id: selection.preassignedFareProduct.id,
                   name: selection.preassignedFareProduct.name.value,
@@ -384,7 +396,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
+  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   return {
     header: {
       marginHorizontal: theme.spacing.medium,
@@ -392,7 +404,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     contentContainer: {
       rowGap: theme.spacing.medium,
       margin: theme.spacing.medium,
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: bottomSafeAreaInset + theme.spacing.medium,
     },
     messages: {
       rowGap: theme.spacing.medium,

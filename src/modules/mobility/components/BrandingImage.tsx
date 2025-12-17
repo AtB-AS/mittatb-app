@@ -3,12 +3,13 @@ import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {Image, StyleProp, View, ViewStyle} from 'react-native';
 import {SvgCssUri} from 'react-native-svg/css';
+import {isSvgUrl} from '../utils';
 
 const DEFAULT_LOGO_SIZE = 50;
 
 type BrandingImageProps = {
   logoUrl: string | undefined;
-  fallback?: JSX.Element;
+  fallback?: React.JSX.Element;
   style?: StyleProp<ViewStyle>;
   logoSize?: number;
 };
@@ -21,12 +22,11 @@ export const BrandingImage = ({
 }: BrandingImageProps) => {
   const styles = useSheetStyle();
   const {enable_vehicle_operator_logo} = useRemoteConfigContext();
-  const isSvg = (url: string) => url.endsWith('.svg');
 
   return (
     <View style={style}>
       {logoUrl && enable_vehicle_operator_logo ? (
-        isSvg(logoUrl) ? (
+        isSvgUrl(logoUrl) ? (
           <SvgCssUri
             style={styles.logo}
             height={logoSize}
@@ -48,10 +48,9 @@ export const BrandingImage = ({
   );
 };
 
-const useSheetStyle = StyleSheet.createThemeHook((theme) => {
+const useSheetStyle = StyleSheet.createThemeHook(() => {
   return {
     logo: {
-      marginEnd: theme.spacing.small,
       overflow: 'hidden',
     },
   };

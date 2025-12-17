@@ -29,7 +29,7 @@ export const VenueResults: React.FC<Props> = ({
   return (
     <>
       <View accessibilityRole="header" style={styles.subHeader}>
-        <ThemeText typography="body__secondary" color="secondary">
+        <ThemeText typography="body__s" color="secondary">
           {t(FareZoneSearchTexts.results.heading)}
         </ThemeText>
       </View>
@@ -62,10 +62,10 @@ export const VenueResults: React.FC<Props> = ({
                   />
                 </View>
                 <View style={styles.nameContainer}>
-                  <ThemeText typography="body__primary--bold">
+                  <ThemeText typography="body__m__strong">
                     {location.name}
                   </ThemeText>
-                  <ThemeText typography="body__secondary">
+                  <ThemeText typography="body__s">
                     {t(
                       FareZoneSearchTexts.results.item.zoneLabel(
                         getReferenceDataName(fareZone, language),
@@ -101,15 +101,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   nameContainer: {
-    marginLeft: 16,
-  },
-  nameText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  zoneText: {
-    fontSize: 14,
-    marginTop: 2,
+    marginLeft: theme.spacing.medium,
   },
   locationIcon: {
     backgroundColor: theme.color.foreground.dynamic.primary,

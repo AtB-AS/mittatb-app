@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {ThemeText} from '@atb/components/text';
-import {Linking, StyleProp, View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {
   getTextForLanguage,
   PurchaseOverviewTexts,
@@ -11,7 +11,6 @@ import {
   getReferenceDataName,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
-import {formatNumberToString} from '@atb/utils/numbers';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {
@@ -23,10 +22,13 @@ import {
 import {ContentHeading} from '@atb/components/heading';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {formatNumberToString} from '@atb-as/utils';
+import {useAnalyticsContext} from '@atb/modules/analytics';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type Props = {
   userProfiles: UserProfileWithCountAndOffer[];
-  style: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
 };
 
 export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
@@ -36,6 +38,12 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
   const styles = useStyles();
   const {appTexts} = useFirestoreConfigurationContext();
   const {flex_ticket_url} = useRemoteConfigContext();
+  const analytics = useAnalyticsContext();
+
+  const onPress = () => {
+    analytics.logEvent('Ticketing', 'Expand flex discount info');
+    setExpanded(!expanded);
+  };
 
   if (!userProfiles.some((u) => u.offer.flexDiscountLadder)) return null;
 
@@ -44,19 +52,19 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
     t(PurchaseOverviewTexts.flexDiscount.description);
 
   return (
-    <View style={style}>
+    <View style={[styles.container, style]}>
       <ContentHeading text={t(PurchaseOverviewTexts.flexDiscount.heading)} />
       <Section>
         <ExpandableSectionItem
           text={t(PurchaseOverviewTexts.flexDiscount.expandableLabel)}
-          textType="heading__component"
+          textType="heading__m"
           expanded={expanded}
-          onPress={setExpanded}
+          onPress={onPress}
           testID="flexDiscountExpandable"
         />
         {expanded && (
           <GenericSectionItem accessibility={{accessible: true}}>
-            <ThemeText typography="body__secondary" color="secondary">
+            <ThemeText typography="body__s" color="secondary">
               {description}
             </ThemeText>
           </GenericSectionItem>
@@ -91,7 +99,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                 key={u.id}
               >
                 <View style={styles.userProfileDiscountInfo}>
-                  <ThemeText typography="body__secondary" color="secondary">
+                  <ThemeText typography="body__s" color="secondary">
                     {t(
                       PurchaseOverviewTexts.flexDiscount.per(
                         userProfileName.toLowerCase(),
@@ -109,7 +117,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                     )}
                     <ThemeText
                       style={styles.priceInfo}
-                      typography="body__tertiary"
+                      typography="body__xs"
                       color="primary"
                     >
                       {priceText}
@@ -123,7 +131,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
           <LinkSectionItem
             text={t(PurchaseOverviewTexts.flexDiscount.link)}
             rightIcon={{svg: ExternalLink}}
-            onPress={() => Linking.openURL(flex_ticket_url)}
+            onPress={() => openInAppBrowser(flex_ticket_url, 'close')}
             accessibility={{
               accessibilityHint: t(PurchaseOverviewTexts.flexDiscount.a11yHint),
               accessibilityRole: 'link',
@@ -136,6 +144,9 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    rowGap: theme.spacing.small,
+  },
   userProfileDiscountInfo: {
     flex: 1,
     flexWrap: 'wrap',

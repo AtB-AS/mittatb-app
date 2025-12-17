@@ -16,7 +16,7 @@ export type TileWithButtonProps = {
   style?: StyleProp<ViewStyle>;
   testID?: string;
   buttonText: string;
-  buttonSvg: (props: SvgProps) => JSX.Element;
+  buttonSvg: (props: SvgProps) => React.JSX.Element;
   children?: React.ReactNode;
 };
 
@@ -31,7 +31,7 @@ export function TileWithButton({
   buttonText,
   buttonSvg,
   children,
-}: TileWithButtonProps): JSX.Element {
+}: TileWithButtonProps): React.JSX.Element {
   const styles = useStyles(interactiveColor);
 
   return (
@@ -63,7 +63,7 @@ export function TileWithButton({
       >
         <ThemeText
           style={styles.buttonText}
-          typography={mode === 'spacious' ? 'body__primary' : 'body__tertiary'}
+          typography={mode === 'spacious' ? 'body__m' : 'body__xs'}
         >
           {buttonText}
         </ThemeText>

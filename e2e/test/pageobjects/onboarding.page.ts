@@ -1,5 +1,6 @@
 import ElementHelper from '../utils/element.helper.ts';
 import AppHelper from '../utils/app.helper.ts';
+import TokenPage from './token.page.js';
 
 class OnboardingPage {
   /**
@@ -84,6 +85,18 @@ class OnboardingPage {
   }
 
   /**
+   * Deny location prompt in onboarding
+   */
+  async denyLocationInOnboarding() {
+    await ElementHelper.waitForElement(
+      'id',
+      'locationWhenInUsePermissionButton',
+    );
+    await this.locationPermission.click();
+    await this.denyLocation();
+  }
+
+  /**
    * Tap through the onboarding
    */
   async skipOnboarding(testName: string = '') {
@@ -98,15 +111,26 @@ class OnboardingPage {
       }
 
       // Onboarding: location
-      await ElementHelper.waitForElement(
-        'id',
-        'locationWhenInUsePermissionButton',
-      );
-      await this.locationPermission.click();
-      await this.denyLocation();
+      await this.denyLocationInOnboarding();
     } catch (errMsg) {
       await AppHelper.screenshot(`error_${testName}_skipOnboarding`);
       throw errMsg;
+    }
+  }
+
+  /**
+   * Wait to see if token "onboarding" appears, i.e. token is used elsewhere, then change to this device
+   * @param toggleToDevice whether to toggle to this device or not
+   */
+  async waitOnTokenOnboarding(toggleToDevice: boolean = true) {
+    // Wait for potential token onboarding
+    const tokenOnboardingAppear = await ElementHelper.isElementExisting(
+      'travelTokenBox',
+      10,
+    );
+    // Change to this device
+    if (tokenOnboardingAppear) {
+      await TokenPage.toggleToThisDevice(toggleToDevice);
     }
   }
 }

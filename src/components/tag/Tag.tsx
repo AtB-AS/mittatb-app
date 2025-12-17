@@ -25,7 +25,7 @@ type BaseTagProps = {
 
 type TagProps = BaseTagProps & {
   tagType: TagStatuses;
-  icon?: (props: SvgProps) => JSX.Element;
+  icon?: (props: SvgProps) => React.JSX.Element;
 };
 
 export const Tag = ({
@@ -97,7 +97,7 @@ const PrimaryTag: React.FC<BaseTagProps> = ({
       {labels.map((content) => (
         <ThemeText
           color={theme.color.foreground.light.primary}
-          typography="body__tertiary"
+          typography="body__xs"
           style={commonStyles.text}
           key={content}
         >
@@ -116,7 +116,7 @@ const usePrimaryTagStyles = StyleSheet.createThemeHook((theme) => ({
 }));
 
 const SecondaryTag: React.FC<
-  BaseTagProps & {icon?: (props: SvgProps) => JSX.Element}
+  BaseTagProps & {icon?: (props: SvgProps) => React.JSX.Element}
 > = ({labels, a11yLabel, size = 'regular', icon, customStyle}) => {
   const commonStyles = useCommonTagStyles();
   const styles = useSecondaryTagStyles();
@@ -143,7 +143,7 @@ const SecondaryTag: React.FC<
       {labels.map((content) => (
         <ThemeText
           color={theme.color.foreground.dynamic.primary}
-          typography="body__tertiary"
+          typography="body__xs"
           key={content}
           style={commonStyles.text}
         >
@@ -191,7 +191,7 @@ const SemanticTag: React.FC<
       {labels.map((content) => (
         <ThemeText
           color={theme.color.foreground.dynamic.primary}
-          typography="body__tertiary"
+          typography="body__xs"
           key={content}
           style={commonStyles.text}
         >

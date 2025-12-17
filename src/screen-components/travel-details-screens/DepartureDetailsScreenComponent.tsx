@@ -35,22 +35,19 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import React, {RefObject, useCallback, useRef, useState} from 'react';
+import React, {Ref, useCallback, useRef, useState} from 'react';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
 import {TripLegDecoration} from './components/TripLegDecoration';
 import {TripRow} from './components/TripRow';
 import {ServiceJourneyDeparture} from './types';
-import {
-  EstimatedCallWithMetadata,
-  useDepartureData,
-} from './use-departure-data';
+import {useDepartureDetailsQuery} from './use-departure-details-query';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {PaginatedDetailsHeader} from './components/PaginatedDetailsHeader';
 import {useRealtimeText} from './use-realtime-text';
 import {Divider} from '@atb/components/divider';
-import {useMapData} from './use-map-data';
+import {useServiceJourneyPolylineQuery} from './use-service-journey-polyline-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
 import {
@@ -62,9 +59,12 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {canSellTicketsForSubMode} from '@atb/modules/operator-config';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
+  formatDestinationDisplay,
   getBookingStatus,
   getLineAndTimeA11yLabel,
+  getNoticesForServiceJourney,
   getShouldShowLiveVehicle,
+  debugProgressBetweenStopsText,
 } from './utils';
 import {BookingOptions} from './components/BookingOptions';
 import {BookingInfoBox} from './components/BookingInfoBox';
@@ -73,6 +73,7 @@ import {usePreferencesContext} from '@atb/modules/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
 import {
   FavouriteDepartureLine,
+  useFavoritesContext,
   useOnMarkFavouriteDepartures,
 } from '@atb/modules/favorites';
 import {getFavoriteIcon} from '@atb/modules/favorites';
@@ -81,7 +82,11 @@ import {
   InAppReviewContext,
   useInAppReviewFlow,
 } from '@atb/utils/use-in-app-review';
+// eslint-disable-next-line rulesdir/navigation-only-in-screens
 import {useFocusEffect} from '@react-navigation/native';
+import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -92,6 +97,7 @@ type Props = DepartureDetailsScreenParams & {
   onPressDetailsMap: (params: TravelDetailsMapScreenParams) => void;
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
   onPressTravelAid: () => void;
+  focusRef: Ref<any>;
 };
 
 export const DepartureDetailsScreenComponent = ({
@@ -100,6 +106,7 @@ export const DepartureDetailsScreenComponent = ({
   onPressDetailsMap,
   onPressQuay,
   onPressTravelAid,
+  focusRef,
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useThemeContext();
@@ -120,19 +127,25 @@ export const DepartureDetailsScreenComponent = ({
 
   const {requestReview} = useInAppReviewFlow();
 
-  const [
-    {
-      estimatedCallsWithMetadata,
-      title,
-      publicCode,
-      mode,
-      subMode,
-      situations,
-      notices,
-      line,
-    },
-    isLoading,
-  ] = useDepartureData(activeItem, 20);
+  const {data: serviceJourney, isLoading} =
+    useDepartureDetailsQuery(activeItem);
+  const notices = serviceJourney
+    ? getNoticesForServiceJourney(serviceJourney, activeItem.fromStopPosition)
+    : [];
+  const publicCode =
+    serviceJourney?.publicCode || serviceJourney?.line?.publicCode;
+  const estimatedCallsWithMetadata = addMetadataToEstimatedCalls(
+    serviceJourney?.estimatedCalls || [],
+    activeItem.fromStopPosition,
+    activeItem.toStopPosition,
+  );
+  const focusedEstimatedCall = estimatedCallsWithMetadata.find(
+    (e) => e.metadata.group === 'trip',
+  );
+  const situations =
+    focusedEstimatedCall?.situations.sort((n1, n2) =>
+      n1.id.localeCompare(n2.id),
+    ) ?? [];
 
   const fromCall = estimatedCallsWithMetadata.find(
     (c) => c.stopPositionInPattern === activeItem.fromStopPosition,
@@ -141,7 +154,7 @@ export const DepartureDetailsScreenComponent = ({
     (c) => c.stopPositionInPattern === activeItem.toStopPosition,
   );
 
-  const mapData = useMapData(
+  const {data: serviceJourneyPolyline} = useServiceJourneyPolylineQuery(
     activeItem.serviceJourneyId,
     fromCall?.quay.id,
     toCall?.quay.id,
@@ -151,7 +164,10 @@ export const DepartureDetailsScreenComponent = ({
   const screenReaderEnabled = useIsScreenReaderEnabled();
 
   const {
-    preferences: {journeyAidEnabled: travelAidPreferenceEnabled},
+    preferences: {
+      journeyAidEnabled: travelAidPreferenceEnabled,
+      debugShowProgressBetweenStops,
+    },
   } = usePreferencesContext();
   const shouldShowTravelAid =
     travelAidPreferenceEnabled &&
@@ -168,7 +184,9 @@ export const DepartureDetailsScreenComponent = ({
     shouldShowLive,
   );
 
-  const translatedModeName = getTranslatedModeName(mode);
+  const translatedModeName = getTranslatedModeName(
+    serviceJourney?.transportMode,
+  );
 
   const vehiclePosition = vehiclePositions?.find(
     (s) => s.serviceJourney?.id === activeItem.serviceJourneyId,
@@ -184,7 +202,7 @@ export const DepartureDetailsScreenComponent = ({
     (fromCall && !isInThePast(fromCall.expectedDepartureTime)) || false;
 
   const canSellTicketsForDeparture = canSellTicketsForSubMode(
-    subMode,
+    serviceJourney?.transportSubmode,
     modesWeSellTicketsFor,
   );
 
@@ -198,13 +216,13 @@ export const DepartureDetailsScreenComponent = ({
     .filter((s): s is string => !!s);
 
   const shouldShowMapButton =
-    mapData &&
-    mapData.mapLegs.length > 0 &&
+    serviceJourneyPolyline &&
+    serviceJourneyPolyline.mapLegs.length > 0 &&
     !screenReaderEnabled &&
     !isLoading &&
     estimatedCallsWithMetadata.length > 0 &&
     !isJourneyFinished;
-  const shouldShowFavoriteButton = !!fromCall && !!line;
+  const shouldShowFavoriteButton = !!fromCall && !!serviceJourney?.line;
   const shouldShowButtonsRow = shouldShowMapButton || shouldShowFavoriteButton;
 
   const a11yLabel =
@@ -213,8 +231,8 @@ export const DepartureDetailsScreenComponent = ({
       : undefined;
   const lineChipServiceJourney = {
     line: {publicCode},
-    transportMode: mode,
-    transportSubmode: subMode,
+    transportMode: serviceJourney?.transportMode,
+    transportSubmode: serviceJourney?.transportSubmode,
   };
 
   const handleTravelAidPress = () => {
@@ -227,26 +245,28 @@ export const DepartureDetailsScreenComponent = ({
   const shouldShowRequestReview = useRef(false);
 
   const handleMapButtonPress = () => {
-    if (!mapData) return;
+    if (!serviceJourneyPolyline) return;
     if (vehiclePosition) {
       analytics.logEvent('Departure details', 'See live bus clicked', {
-        fromPlace: mapData.start,
-        toPlace: mapData?.stop,
-        mode: mode,
-        subMode: subMode,
+        fromPlace: serviceJourneyPolyline.start,
+        toPlace: serviceJourneyPolyline.stop,
+        mode: serviceJourney?.transportMode,
+        subMode: serviceJourney?.transportSubmode,
       });
     }
     shouldShowRequestReview.current = true;
     onPressDetailsMap({
-      legs: mapData.mapLegs,
-      fromPlace: mapData.start,
-      toPlace: mapData.stop,
+      serviceJourneyPolylines: serviceJourneyPolyline.mapLegs,
+      fromPlace: serviceJourneyPolyline.start,
+      toPlace: serviceJourneyPolyline.stop,
       vehicleWithPosition: vehiclePosition,
-      mode: mode,
-      subMode: subMode,
+      mode: serviceJourney?.transportMode,
+      subMode: serviceJourney?.transportSubmode,
+      estimatedCalls: serviceJourney?.estimatedCalls,
     });
   };
 
+  // eslint-disable-next-line rulesdir/navigation-only-in-screens
   useFocusEffect(
     useCallback(() => {
       if (shouldShowRequestReview.current) {
@@ -259,8 +279,9 @@ export const DepartureDetailsScreenComponent = ({
   return (
     <View style={styles.container}>
       <FullScreenView
+        focusRef={focusRef}
         headerProps={{
-          leftButton: {type: 'back', withIcon: true},
+          leftButton: {type: 'back'},
           title: t(DepartureDetailsTexts.header.alternateTitle),
         }}
         parallaxContent={(focusRef) => (
@@ -273,12 +294,15 @@ export const DepartureDetailsScreenComponent = ({
             >
               <LineChip serviceJourney={lineChipServiceJourney} />
               <ThemeText
-                typography="heading__title"
+                typography="heading__m"
                 color={themeColor}
                 style={styles.headerTitle}
                 testID="lineName"
               >
-                {title ?? t(DepartureDetailsTexts.header.notFound)}
+                {formatDestinationDisplay(
+                  t,
+                  focusedEstimatedCall?.destinationDisplay,
+                ) ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
               {fromCall && shouldShowDepartureTime && (
                 <DepartureTime departure={fromCall} color={themeColor} />
@@ -297,7 +321,10 @@ export const DepartureDetailsScreenComponent = ({
             {shouldShowButtonsRow && (
               <View style={styles.actionButtons}>
                 {shouldShowFavoriteButton && (
-                  <FavoriteButton fromCall={fromCall} line={line} />
+                  <FavoriteButton
+                    fromCall={fromCall}
+                    line={serviceJourney.line}
+                  />
                 )}
                 {shouldShowMapButton && (
                   <View style={{flex: 1}}>
@@ -321,6 +348,14 @@ export const DepartureDetailsScreenComponent = ({
               <View style={styles.headerSubSection}>
                 <LastPassedStop realtimeText={realtimeText} />
               </View>
+            )}
+            {debugShowProgressBetweenStops && vehiclePosition && (
+              <ThemeText typography="body__s">
+                {debugProgressBetweenStopsText(
+                  vehiclePosition,
+                  serviceJourney?.estimatedCalls,
+                )}
+              </ThemeText>
             )}
           </View>
         )}
@@ -349,7 +384,7 @@ export const DepartureDetailsScreenComponent = ({
           ) : !isWithinSameDate(new Date(), activeItem.date) ? (
             <>
               <View style={styles.date}>
-                <ThemeText typography="body__primary" color="secondary">
+                <ThemeText typography="body__m" color="secondary">
                   {formatToVerboseFullDate(activeItem.date, language)}
                 </ThemeText>
               </View>
@@ -357,7 +392,8 @@ export const DepartureDetailsScreenComponent = ({
             </>
           ) : null}
 
-          {subMode === TransportSubmode.RailReplacementBus && (
+          {serviceJourney?.transportSubmode ===
+            TransportSubmode.RailReplacementBus && (
             <MessageInfoBox
               type="warning"
               message={t(
@@ -407,8 +443,8 @@ export const DepartureDetailsScreenComponent = ({
             ruleVariables={{
               ticketingEnabled: enable_ticketing,
               canSellTicketsForDeparture: canSellTicketsForDeparture,
-              mode: mode || null,
-              subMode: subMode || null,
+              mode: serviceJourney?.transportMode || null,
+              subMode: serviceJourney?.transportSubmode || null,
               fromZones:
                 fromCall?.quay?.tariffZones.map((zone) => zone.id) || null,
               toZones: toCall?.quay?.tariffZones.map((zone) => zone.id) || null,
@@ -420,8 +456,8 @@ export const DepartureDetailsScreenComponent = ({
 
           <EstimatedCallRows
             calls={estimatedCallsWithMetadata}
-            mode={mode}
-            subMode={subMode}
+            mode={serviceJourney?.transportMode}
+            subMode={serviceJourney?.transportSubmode}
             toStopPosition={activeItem.toStopPosition}
             alreadyShownSituationNumbers={alreadyShownSituationNumbers}
             onPressQuay={onPressQuay}
@@ -441,7 +477,7 @@ function LastPassedStop({realtimeText}: {realtimeText: string}) {
   return (
     <View style={styles.passedSection}>
       <ThemeText
-        typography="body__secondary"
+        typography="body__s"
         color={themeColor}
         style={styles.passedText}
       >
@@ -548,7 +584,7 @@ type TripItemProps = {
   call: EstimatedCallWithMetadata;
   mode: TransportMode | undefined;
   subMode: TransportSubmode | undefined;
-  collapseButton: JSX.Element | null;
+  collapseButton: React.JSX.Element | null;
   situations: SituationFragment[];
   onPressQuay: Props['onPressQuay'];
 };
@@ -609,9 +645,19 @@ function EstimatedCallRow({
         testID={'legType_' + group}
       >
         <ThemeText testID="quayName">{getQuayName(call.quay)}</ThemeText>
+        {isStartOfGroup && !!call.quay.description && (
+          <ThemeText
+            testID="quayDescription"
+            typography="body__s"
+            color="secondary"
+          >
+            {call.quay.description}
+          </ThemeText>
+        )}
+
         {!call.forAlighting && !call.metadata.isStartOfServiceJourney && (
           <AccessibleText
-            typography="body__secondary"
+            typography="body__s"
             color="secondary"
             style={styles.boardingInfo}
             pause="before"
@@ -621,7 +667,7 @@ function EstimatedCallRow({
         )}
         {!call.forBoarding && !call.metadata.isEndOfServiceJourney && (
           <AccessibleText
-            typography="body__secondary"
+            typography="body__s"
             color="secondary"
             style={styles.boardingInfo}
             pause="before"
@@ -721,11 +767,11 @@ const FavoriteButton = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const analytics = useAnalyticsContext();
-  const {onMarkFavourite, getExistingFavorite} = useOnMarkFavouriteDepartures(
-    fromCall.quay,
-    false,
-  );
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+
+  const {getFavoriteDeparture} = useFavoritesContext();
+
+  const onCloseFocusRef = useRef<View | null>(null);
 
   const favouriteDepartureLine: FavouriteDepartureLine = {
     id: line.id,
@@ -734,41 +780,119 @@ const FavoriteButton = ({
     lineNumber: line.publicCode,
     destinationDisplay: fromCall.destinationDisplay,
   };
-  const existingFavorite = getExistingFavorite(favouriteDepartureLine);
+
+  const existingFavorite = getFavoriteDeparture({
+    destinationDisplay: favouriteDepartureLine.destinationDisplay,
+    lineId: favouriteDepartureLine.id,
+    quayId: fromCall.quay.id,
+  });
+
+  const {alert, addFavorite} = useOnMarkFavouriteDepartures({
+    quay: fromCall.quay,
+    lineNumber: line.publicCode,
+    existing: existingFavorite,
+    addedFavoritesVisibleOnDashboard: false,
+  });
 
   return (
-    <Button
-      type="small"
-      expanded={false}
-      leftIcon={{svg: getFavoriteIcon(existingFavorite)}}
-      text={t(FavoriteDeparturesTexts.favoriteButton)}
-      interactiveColor={theme.color.interactive['1']}
-      accessibilityLabel={
-        existingFavorite &&
-        (existingFavorite.destinationDisplay
-          ? t(DeparturesTexts.favorites.favoriteButton.oneVariation)
-          : t(DeparturesTexts.favorites.favoriteButton.allVariations))
-      }
-      accessibilityHint={
-        !!existingFavorite
-          ? t(FavoriteDeparturesTexts.favoriteItemDelete.a11yHint)
-          : t(FavoriteDeparturesTexts.favoriteItemAdd.a11yHint)
-      }
-      onPress={() => {
-        analytics.logEvent('Departure details', 'Add to Favourite clicked', {
-          line: favouriteDepartureLine?.id,
-          lineNumber: favouriteDepartureLine?.lineNumber,
-        });
-        onMarkFavourite(
-          favouriteDepartureLine,
-          existingFavorite,
-          onCloseFocusRef,
-        );
-      }}
-      ref={onCloseFocusRef}
-    />
+    <>
+      <Button
+        type="small"
+        expanded={false}
+        leftIcon={{svg: getFavoriteIcon(existingFavorite)}}
+        text={t(FavoriteDeparturesTexts.favoriteButton)}
+        interactiveColor={theme.color.interactive['1']}
+        accessibilityLabel={
+          existingFavorite &&
+          (existingFavorite.destinationDisplay
+            ? t(DeparturesTexts.favorites.favoriteButton.oneVariation)
+            : t(DeparturesTexts.favorites.favoriteButton.allVariations))
+        }
+        accessibilityHint={
+          !!existingFavorite
+            ? t(FavoriteDeparturesTexts.favoriteItemDelete.a11yHint)
+            : t(FavoriteDeparturesTexts.favoriteItemAdd.a11yHint)
+        }
+        onPress={() => {
+          analytics.logEvent('Departure details', 'Add to Favourite clicked', {
+            line: favouriteDepartureLine?.id,
+            lineNumber: favouriteDepartureLine?.lineNumber,
+          });
+
+          if (existingFavorite && favouriteDepartureLine.lineNumber) {
+            alert();
+          } else if (
+            favouriteDepartureLine.destinationDisplay &&
+            favouriteDepartureLine.lineNumber &&
+            fromCall.quay.name
+          ) {
+            bottomSheetModalRef.current?.present();
+          }
+        }}
+        ref={onCloseFocusRef}
+      />
+
+      {favouriteDepartureLine.destinationDisplay &&
+        favouriteDepartureLine.lineNumber &&
+        fromCall.quay.name && (
+          <FavoriteDialogSheet
+            quayName={fromCall.quay.name}
+            destinationDisplay={favouriteDepartureLine.destinationDisplay}
+            lineNumber={favouriteDepartureLine.lineNumber}
+            addFavorite={(forSpecificLineName: boolean) =>
+              addFavorite(favouriteDepartureLine, forSpecificLineName)
+            }
+            bottomSheetModalRef={bottomSheetModalRef}
+            onCloseFocusRef={onCloseFocusRef}
+          />
+        )}
+    </>
   );
 };
+
+type EstimatedCallMetadata = {
+  group: 'passed' | 'trip' | 'after';
+  isStartOfServiceJourney: boolean;
+  isEndOfServiceJourney: boolean;
+  isStartOfGroup: boolean;
+  isEndOfGroup: boolean;
+};
+type EstimatedCallWithMetadata = EstimatedCallWithQuayFragment & {
+  metadata: EstimatedCallMetadata;
+};
+function addMetadataToEstimatedCalls(
+  estimatedCalls: EstimatedCallWithQuayFragment[],
+  fromStopPosition: number,
+  toStopPosition?: number,
+): EstimatedCallWithMetadata[] {
+  let currentGroup: EstimatedCallMetadata['group'] = 'passed';
+
+  return estimatedCalls.reduce<EstimatedCallWithMetadata[]>(
+    (calls, currentCall, index) => {
+      const previousCall = calls[calls.length - 1];
+      if (currentCall.stopPositionInPattern === fromStopPosition) {
+        if (previousCall) previousCall.metadata.isEndOfGroup = true;
+        currentGroup = 'trip';
+      }
+
+      const metadata: EstimatedCallMetadata = {
+        group: currentGroup,
+        isStartOfServiceJourney: index === 0,
+        isStartOfGroup: currentGroup !== previousCall?.metadata.group,
+        isEndOfServiceJourney: index === estimatedCalls.length - 1,
+        isEndOfGroup: index === estimatedCalls.length - 1,
+      };
+
+      if (currentCall.stopPositionInPattern === toStopPosition) {
+        metadata.isEndOfGroup = true;
+        currentGroup = 'after';
+      }
+
+      return [...calls, {...currentCall, metadata}];
+    },
+    [],
+  );
+}
 
 const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
   container: {

@@ -1,10 +1,8 @@
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {screenReaderPause} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -21,7 +19,7 @@ import {
   useLocationSearchValue,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {SearchForLocations} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   DashboardTexts,
   TripSearchTexts,
@@ -30,35 +28,44 @@ import {
 } from '@atb/translations';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import Bugsnag from '@bugsnag/react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {DashboardScreenProps} from '../navigation-types';
-import {CompactFareContracts} from './components/CompactFareContracts';
+import {CompactFareContracts} from '@atb/modules/fare-contracts';
 import {DeparturesWidget} from './components/DeparturesWidget';
 import {Announcements} from './components/Announcements';
 import SharedTexts from '@atb/translations/shared';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ScreenHeading} from '@atb/components/heading';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {BonusDashboard} from './components/BonusDashboard';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
 
 type RootProps = DashboardScreenProps<'Dashboard_RootScreen'>;
 
-const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
-
 export const Dashboard_RootScreen: React.FC<RootProps> = ({
   navigation,
   route,
 }) => {
   const style = useStyle();
+  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const {enable_ticketing} = useRemoteConfigContext();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
   const analytics = useAnalyticsContext();
 
+  const {isBonusProgramEnabled} = useFeatureTogglesContext();
   const {locationIsAvailable, location, requestLocationPermission} =
     useGeolocationContext();
+  const focusRef = useFocusOnLoad(navigation);
+
+  const isFocused = useIsFocused();
 
   const currentLocation = location || undefined;
 
@@ -167,17 +174,28 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
     }
   }
 
+  const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
+
+  const navigateToBonusScreen = useCallback(() => {
+    navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
+  }, [navigation, bonusScreenParams]);
+
   return (
-    <View style={style.container}>
-      <FullScreenHeader
-        title={t(DashboardTexts.header.title)}
-        globalMessageContext={GlobalMessageContextEnum.appAssistant}
-      />
-
-      <View style={style.backdrop}>
-        <DashboardBackground width="100%" height="100%" />
-      </View>
-
+    <FullScreenView
+      focusRef={focusRef}
+      headerProps={{
+        title: t(DashboardTexts.header.title),
+        globalMessageContext: GlobalMessageContextEnum.appAssistant,
+        color: theme.color.background.neutral[1],
+      }}
+      parallaxContent={(focusRef) => (
+        <ScreenHeading
+          ref={focusRef}
+          text={t(DashboardTexts.header.title)}
+          isLarge={true}
+        />
+      )}
+    >
       <ScrollView
         contentContainerStyle={style.scrollView}
         testID="dashboardScrollView"
@@ -246,9 +264,9 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
             onAddFavoritePlace={() =>
               navigation.navigate('Root_SearchFavoritePlaceScreen')
             }
+            backgroundColor={theme.color.background.neutral[1]}
           />
         </View>
-
         <Announcements
           style={[style.contentSection, style.contentSection__horizontalScroll]}
         />
@@ -261,6 +279,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
                 name: 'Root_FareContractDetailsScreen',
                 params: {
                   fareContractId: fareContractId,
+                  transitionOverride: 'slide-from-right',
                 },
               });
             }}
@@ -274,6 +293,9 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
               });
             }}
           />
+        )}
+        {isBonusProgramEnabled && (
+          <BonusDashboard onPress={navigateToBonusScreen} />
         )}
         <DeparturesWidget
           style={style.contentSection}
@@ -293,15 +315,17 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
               activeItemIndex,
             })
           }
+          isFocused={isFocused}
         />
       </ScrollView>
-    </View>
+    </FullScreenView>
   );
 };
 
 function useLocations(
   currentLocation: GeoLocation | undefined,
 ): SearchForLocations {
+  const route = useRoute<RootProps['route']>();
   const {favorites} = useFavoritesContext();
 
   const memoedCurrentLocation = useMemo<GeoLocation | undefined>(
@@ -313,10 +337,8 @@ function useLocations(
     ],
   );
 
-  const searchedFromLocation =
-    useLocationSearchValue<RootProps['route']>('fromLocation');
-  const searchedToLocation =
-    useLocationSearchValue<RootProps['route']>('toLocation');
+  const searchedFromLocation = useLocationSearchValue(route, 'fromLocation');
+  const searchedToLocation = useLocationSearchValue(route, 'toLocation');
 
   return useUpdatedLocation(
     searchedFromLocation,
@@ -399,10 +421,6 @@ function translateLocation(location: Location | undefined): string {
 }
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    backgroundColor: getThemeColor(theme).background,
-    flex: 1,
-  },
   scrollView: {
     paddingBottom: theme.spacing.medium,
     backgroundColor: 'transparent',
@@ -432,9 +450,12 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   searchHeader: {
     marginTop: 0,
-    backgroundColor: getThemeColor(theme).background,
+    paddingBottom: theme.spacing.medium,
   },
   dashboardGlobalmessages: {
     marginBottom: theme.spacing.medium,
+  },
+  heading: {
+    marginBottom: theme.spacing.small,
   },
 }));

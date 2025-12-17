@@ -34,7 +34,7 @@ export const Root_LoginPhoneInputScreen = ({
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
   const {signInWithPhoneNumber} = useAuthContext();
-  const focusRef = useFocusOnLoad();
+  const focusRef = useFocusOnLoad(navigation, false);
   const [prefix, setPrefix] = useState('47');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -83,13 +83,17 @@ export const Root_LoginPhoneInputScreen = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        leftButton={{
-          type:
-            params?.transitionOverride === 'slide-from-bottom'
-              ? 'close'
-              : 'back',
-        }}
-        setFocusOnLoad={false}
+        leftButton={
+          params?.transitionOverride !== 'slide-from-bottom'
+            ? {type: 'back'}
+            : undefined
+        }
+        rightButton={
+          params?.transitionOverride === 'slide-from-bottom'
+            ? {type: 'close'}
+            : undefined
+        }
+        focusRef={focusRef}
         color={themeColor}
         title={t(LoginTexts.phoneInput.title)}
         globalMessageContext={GlobalMessageContextEnum.appLoginPhone}
@@ -104,7 +108,7 @@ export const Root_LoginPhoneInputScreen = ({
         >
           <View accessible={true} accessibilityRole="header" ref={focusRef}>
             <ThemeText
-              typography="body__primary--jumbo--bold"
+              typography="heading__3xl"
               style={styles.title}
               color={themeColor}
             >

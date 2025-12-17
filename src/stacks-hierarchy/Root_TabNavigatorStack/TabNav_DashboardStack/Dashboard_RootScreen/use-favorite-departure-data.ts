@@ -1,4 +1,3 @@
-import {useIsFocused} from '@react-navigation/native';
 import {MutableRefObject, useCallback, useEffect, useRef} from 'react';
 import useReducerWithSideEffects, {
   NoUpdate,
@@ -10,7 +9,7 @@ import useReducerWithSideEffects, {
 import {getStopPlaceGroupRealtime} from '@atb/api/bff/departures';
 
 import {DepartureGroupMetadata} from '@atb/api/bff/types';
-import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
+import {toAxiosErrorKind, AxiosErrorKind} from '@atb/api/utils';
 import {useFavoritesContext} from '@atb/modules/favorites';
 import {UserFavoriteDepartures} from '@atb/modules/favorites';
 import {DeparturesRealtimeData} from '@atb/api/bff/departures';
@@ -26,6 +25,7 @@ import {
   DepartureFavoritesQuery,
   getFavouriteDepartures,
 } from '@atb/api/bff/departure-favorites';
+import {ErrorResponse} from '@atb-as/utils';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
@@ -39,7 +39,7 @@ export type DepartureDataState = {
   data: DepartureGroupMetadata['data'] | null;
   showOnlyFavorites: boolean;
   tick?: Date;
-  error?: {type: ErrorType; loadType: LoadType};
+  error?: {type: AxiosErrorKind; loadType: LoadType};
   isLoading: boolean;
   isFetchingMore: boolean;
   queryInput: DepartureFavoritesQuery;
@@ -86,7 +86,7 @@ type DepartureDataActions =
   | {
       type: 'SET_ERROR';
       loadType: LoadType;
-      error: ErrorType;
+      error: AxiosErrorKind;
       reset?: boolean;
     }
   | {
@@ -141,10 +141,11 @@ const reducer: ReducerWithSideEffects<
               result: result,
             });
           } catch (e) {
+            const error = e as ErrorResponse;
             dispatch({
               type: 'SET_ERROR',
               loadType: 'initial',
-              error: getAxiosErrorType(e),
+              error: toAxiosErrorKind(error.kind),
             });
           } finally {
             dispatch({type: 'STOP_LOADER'});
@@ -205,7 +206,7 @@ const reducer: ReducerWithSideEffects<
         ...state,
         isLoading: false,
         data: action.reset
-          ? action.result?.data ?? []
+          ? (action.result?.data ?? [])
           : (state.data ?? []).concat(action.result?.data ?? []),
         cursorInfo: action.result?.metadata,
         tick: new Date(),
@@ -248,6 +249,7 @@ const reducer: ReducerWithSideEffects<
  * @param {number} [tickRateInSeconds=10] - "tick frequency" is how often we retrigger time calculations and sorting. More frequent means more CPU load/battery drain. Less frequent can mean outdated data.
  */
 export function useFavoriteDepartureData(
+  isFocused: boolean,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
 ) {
@@ -265,7 +267,6 @@ export function useFavoriteDepartureData(
     },
     lastRefreshTime: new Date(),
   });
-  const isFocused = useIsFocused();
   const {favoriteDepartures, potentiallyMigrateFavoriteDepartures} =
     useFavoritesContext();
   const dashboardFavoriteDepartures = favoriteDepartures.filter(

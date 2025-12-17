@@ -1,8 +1,8 @@
 export {BackArrow} from './components/BackArrow';
-export {GeofencingZones, Stations} from './components/mobility';
+export {GeofencingZones} from './components/mobility';
 export {VehiclesAndStations} from './components/mobility/VehiclesAndStations.tsx';
 export {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
-export {PositionArrow} from './components/PositionArrow';
+export {LocationArrow} from './components/LocationArrow.tsx';
 export {SelectionPin} from './components/SelectionPin';
 export {shadows} from './components/shadows';
 export {ExploreLocationMap} from './ExploreLocationMap';
@@ -11,61 +11,56 @@ export {
   decodePolylineEncodedMultiPolygons,
   filterOutFeaturesNotApplicableForCurrentVehicle,
   sortFeaturesByLayerIndexWeight,
+  getIconFeatureCollections,
 } from './geofencing-zone-utils';
-export type {AutoSelectableMapItem} from './hooks/use-auto-select-map-item';
 export {useControlPositionsStyle} from './hooks/use-control-styles';
-export {useGeofencingZoneTextContent} from './hooks/use-geofencing-zone-text-content';
+export {useGeofencingZoneContent} from './hooks/use-geofencing-zone-content.tsx';
 export {useMapSymbolStyles} from './hooks/use-map-symbol-styles';
 export {useMapViewConfig} from './hooks/use-map-view-config.ts';
-export {usePreProcessedGeofencingZones} from './hooks/use-pre-processed-geofencing-zones';
-export {Map} from './Map';
 export {useShmoWarnings} from './hooks/use-shmo-warnings.tsx';
 export {
   MapCameraConfig,
   SCOOTERS_CLUSTER_RADIUS,
   SCOOTERS_MAX_CLUSTER_LEVEL,
   SCOOTERS_MAX_ZOOM_LEVEL,
-  SLIGHTLY_RAISED_MAP_PADDING,
+  getSlightlyRaisedMapPadding,
 } from './MapConfig';
 export {
-  AutoSelectableBottomSheetType,
+  MapBottomSheetType,
   MapContextProvider,
   useMapContext,
 } from './MapContext.tsx';
-export {MapV2} from './MapV2';
+export {Map} from './Map.tsx';
 export type {
   FormFactorFilterType,
   GeofencingZoneCustomProps,
   GeofencingZoneExplanationsType,
   MapFilterType,
-  MapLeg,
   MapLine,
   MapRegion,
-  MapSelectionActionType,
   MobilityMapFilterType,
   NavigateToTripSearchCallback,
   ParkingType,
   ParkingVehicleTypes,
   PolylineEncodedMultiPolygon,
   PreProcessedGeofencingZones,
-  StationFeatures,
-  StationsState,
-  VehicleFeatures,
-  VehiclesState,
+  PointFeatureCollection,
 } from './types';
 export {
   flyToLocation,
   getVisibleRange,
   hitboxCoveringIconOnly,
-  isClusterFeature,
   isFeaturePoint,
   toFeatureCollection,
   toFeaturePoint,
   toFeaturePoints,
-  zoomIn,
-  zoomOut,
   getFeatureWeight,
   getFeatureToSelect,
   getFeaturesAtClick,
   isFeatureGeofencingZone,
+  mapPositionToCoordinates,
+  CUSTOM_SCAN_ZOOM_LEVEL,
 } from './utils';
+export {MapStateActionType} from './mapStateReducer.ts';
+export {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics.tsx';
+export {MapButtons} from './components/MapButtons.tsx';

@@ -1,76 +1,71 @@
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {Camera, PhotoFile} from '@atb/components/camera';
-import {StyleSheet} from '@atb/theme';
+import {Camera, CameraScreenContainer, PhotoFile} from '@atb/components/camera';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {RefObject, useRef} from 'react';
-import {ScreenContainer} from './ScreenContainer';
+import {Ref, useRef, useState} from 'react';
 import {ImageConfirmationBottomSheet} from './ImageConfirmationBottomSheet';
 import {Coordinates} from '@atb/utils/coordinates';
-import {useGeolocationContext} from '@atb/modules/geolocation';
+import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
+import {View} from 'react-native';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 type PhotoCaptureProps = {
   onConfirmImage: (file: PhotoFile) => void;
+  onGoBack: () => void;
   coordinates?: Coordinates;
   title: string;
   secondaryText: string;
   isLoading?: boolean;
+  focusRef?: Ref<any>;
 };
 
 export const PhotoCapture = ({
   onConfirmImage,
+  onGoBack,
   coordinates,
   title,
   secondaryText,
   isLoading = false,
+  focusRef,
 }: PhotoCaptureProps) => {
   const isFocused = useIsFocusedAndActive();
-  const style = useStyles();
 
-  const {open: openBottomSheet, close: closeBottomSheet} =
-    useBottomSheetContext();
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
-  const {getCurrentCoordinates} = useGeolocationContext();
+  const onCloseFocusRef = useRef<View | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const [file, setFile] = useState<PhotoFile | null>(null);
+  const userCoordinates = getCurrentCoordinatesGlobal();
 
   const handlePhotoCapture = async (file: PhotoFile) => {
-    //if there is no coordinates given, use the current user coordinates
-    const userCoordinates = await getCurrentCoordinates();
-    openBottomSheet(
-      () => (
+    setFile(file);
+    bottomSheetModalRef.current?.present();
+  };
+  return (
+    <CameraScreenContainer
+      title={title}
+      secondaryText={secondaryText}
+      isLoading={isLoading}
+      onGoBack={onGoBack}
+      focusRef={focusRef}
+    >
+      {isFocused && (
+        <>
+          <Camera
+            mode="photo"
+            onCapture={handlePhotoCapture}
+            focusRef={onCloseFocusRef}
+          />
+        </>
+      )}
+      {file && (
         <ImageConfirmationBottomSheet
           onConfirm={() => {
-            closeBottomSheet();
+            bottomSheetModalRef.current?.dismiss();
             onConfirmImage(file);
           }}
           coordinates={coordinates ?? userCoordinates}
           file={file.path}
-        />
-      ),
-      onCloseFocusRef,
-    );
-  };
-
-  return (
-    <ScreenContainer
-      leftHeaderButton={{type: 'back', withIcon: true}}
-      title={title}
-      secondaryText={secondaryText}
-      isLoading={isLoading}
-    >
-      {isFocused && (
-        <Camera
-          mode="photo"
-          style={style.camera}
-          onCapture={handlePhotoCapture}
-          focusRef={onCloseFocusRef}
-          zoom={0.75}
+          onCloseFocusRef={onCloseFocusRef}
+          bottomSheetModalRef={bottomSheetModalRef}
         />
       )}
-    </ScreenContainer>
+    </CameraScreenContainer>
   );
 };
-
-const useStyles = StyleSheet.createThemeHook(() => ({
-  camera: {
-    flexGrow: 1,
-  },
-}));

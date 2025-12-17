@@ -21,7 +21,7 @@ jobs:
           (contains(github.ref, 'troms') && matrix.org != 'troms') }}
         run: exit 1
       - name: Checkout project
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
       - name: Set global env vars
         run: |
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
@@ -42,10 +42,10 @@ jobs:
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Install imagemagick
         run: sudo apt-get update && sudo apt-get install imagemagick
-      - name: install node v18
-        uses: actions/setup-node@v1
+      - name: install node v22
+        uses: actions/setup-node@v5
         with:
-          node-version: 18
+          node-version: 22
       - name: Install node_modules
         run: yarn install --frozen-lockfile
       - name: Setup ruby and bundle install

@@ -1,6 +1,10 @@
 import {StyleSheet} from '@atb/theme';
-import {useFareContracts, useTicketingContext} from '@atb/modules/ticketing';
-import React, {useRef} from 'react';
+import {
+  useFareContracts,
+  useGetFareProductsQuery,
+  useTicketingContext,
+} from '@atb/modules/ticketing';
+import React, {useCallback, useRef} from 'react';
 import {View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/modules/fare-contracts';
 import {useTranslation, TicketingTexts} from '@atb/translations';
@@ -12,6 +16,9 @@ import {TicketTabNavScreenProps} from './navigation-types';
 import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {ThemedTicketTilted} from '@atb/theme/ThemedAssets';
+import {useQueryClient} from '@tanstack/react-query';
+import {SCHOOL_CARNET_QUERY_KEY} from '@atb/modules/ticketing';
+import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 
 type Props =
   TicketTabNavScreenProps<'TicketTabNav_AvailableFareContractsTabScreen'>;
@@ -22,6 +29,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
   const {reservations, sentFareContracts} = useTicketingContext();
   const {serverNow} = useTimeContext();
   const analytics = useAnalyticsContext();
+  const queryClient = useQueryClient();
 
   const {
     fareContracts: availableFareContracts,
@@ -32,6 +40,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
     {availability: 'historical'},
     serverNow,
   );
+  const {refetch: refetchPreassignedFareProducts} = useGetFareProductsQuery();
 
   const styles = useStyles();
   const {t} = useTranslation();
@@ -42,6 +51,15 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
 
   const sentFareContractRef = useRef<View>(null);
 
+  const onPressChangeButton = () =>
+    navigation.navigate('Root_SelectTravelTokenScreen');
+
+  const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
+
+  const navigateToBonusScreen = useCallback(() => {
+    navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
+  }, [navigation, bonusScreenParams]);
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -51,6 +69,10 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
             refreshing={isRefetchingAvailableFareContracts}
             onRefresh={() => {
               refetchAvailableFareContracts();
+              refetchPreassignedFareProducts();
+              queryClient.invalidateQueries({
+                queryKey: [SCHOOL_CARNET_QUERY_KEY],
+              });
               analytics.logEvent('Ticketing', 'Pull to refresh tickets', {
                 reservationsCount: reservations.length,
                 availableFareContractsCount: availableFareContracts.length,
@@ -58,15 +80,22 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
             }}
           />
         }
+        testID="availableFCScrollView"
       >
-        <TravelTokenBox showIfThisDevice={false} alwaysShowErrors={false} />
+        <TravelTokenBox
+          showIfThisDevice={false}
+          alwaysShowErrors={false}
+          onPressChangeButton={onPressChangeButton}
+        />
         <FareContractAndReservationsList
           reservations={reservations}
           fareContracts={availableFareContracts}
           now={serverNow}
+          navigateToBonusScreen={navigateToBonusScreen}
           onPressFareContract={(fareContractId) =>
             navigation.navigate('Root_FareContractDetailsScreen', {
               fareContractId,
+              transitionOverride: 'slide-from-right',
             })
           }
           emptyStateConfig={{

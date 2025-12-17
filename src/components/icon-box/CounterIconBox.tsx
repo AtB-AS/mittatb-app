@@ -4,6 +4,7 @@ import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {TextNames} from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
+import {getIconBoxBorderRadius} from './utils';
 
 const getTransportColor = (theme: Theme) => theme.color.transport.other;
 
@@ -35,6 +36,7 @@ export const CounterIconBox = ({
         {
           padding:
             spacing === 'compact' ? theme.spacing.xSmall : theme.spacing.small,
+          borderRadius: getIconBoxBorderRadius(size, theme),
         },
       ]}
       importantForAccessibility="no-hide-descendants"
@@ -59,6 +61,5 @@ export const CounterIconBox = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   counterContainer: {
     backgroundColor: getTransportColor(theme).primary.background,
-    borderRadius: theme.border.radius.small,
   },
 }));

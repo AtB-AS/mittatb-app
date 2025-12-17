@@ -9,7 +9,8 @@ If you want to release only for a given organization, the release tag must inclu
 Skip the first two steps of creating release-branch and bumping version number on master if the release is a new release candidate on an existing major version.
 
 ### Create release branch
-Branch out from master to a new branch with prefix `release/`, like `release/1.30`.
+
+Branch out from master to a new branch with prefix `release/`, like `release/1.30`, and push it to GitHub.
 
 ### On master: Bump version number
 
@@ -21,9 +22,9 @@ Version number can be updated by running the following command:
 ./scripts/update-app-version.sh x.xx
 ```
 
-Then push your changes with commit message "chore: Bump to version x.xx".
+Then push your changes with commit message "chore: Bump to version x.xx" on a new branch and merge it to master.
 
-### Register new version at Entur registry
+### On master: Register new version at Entur registry
 
 After bumping the version number the new version should be registered at Entur for mobile token to work.
 
@@ -36,20 +37,19 @@ Finally, run this command:
 ./scripts/register-local-app-version.sh
 ```
 
-### Create release candidate with the command line
+### On release branch: Create release candidate with the command line
 
 This will create a draft release in GitHub.
 
-> [!WARNING]
-> **Check the app version in the `.env` files, make sure they are the correct version for the release, if not, bump the version for all variants (dev, staging, store, etc.).**
+> [!WARNING] > **Check the app version in the `.env` files, make sure they are the correct version for the release, if not, bump the version for all variants (dev, staging, store, etc.).**
 
 - `git fetch` to locally pull all existing tags
 - Make sure you've checked out the release branch from which you want to make the release.
 - Make sure you're authenticated with the GitHub CLI (`gh auth status`).
 - `yarn release-draft` to create a tag for the new release.
-- You are asked to specify version. This should be the major-version with a release candidate version suffix, for example `v1.16-rc2`.
-- If this is the first release for the current major version use `rc1` as suffix like this: `v1.16-rc1`.
-- If a release candidate already exists, increment the suffix number. If `v1.16-rc2` exists, the next version should be `v1.16-rc3`.
+  - You are asked to specify version. This should be the major-version with a release candidate version suffix, for example `v1.16-rc2`.
+  - If this is the first release for the current major version use `rc1` as suffix like this: `v1.16-rc1`.
+  - If a release candidate already exists, increment the suffix number. If `v1.16-rc2` exists, the next version should be `v1.16-rc3`.
 
 ### Release in GitHub
 
@@ -57,7 +57,6 @@ Follow these steps in GitHub:
 
 - Go to this repository in GitHub and select _Releases_.
 - Find the previously created draft release with the correct release candidate version and click _Edit_.
-- Set the target branch to the release branch the release draft was created from.
 - Click _Publish release_.
 
 This makes GitHub Actions build the release and send it to TestFlight / Play Store Alpha. This is configured with [fastlane](https://fastlane.tools/). The build itself will take approximately an hour, and there may be additional review time at Apple / Google. The exception is if the release is an update to an existing major version, then TestFlight will automatically accept the release without a new review.

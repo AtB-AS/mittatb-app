@@ -55,14 +55,14 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
             reservation={reservation}
             enabledLine={status !== 'rejected'}
           >
-            <ThemeText typography="heading--medium" style={styles.statusText}>
+            <ThemeText typography="heading__l">
               {t(TicketingTexts.reservation[status])}
             </ThemeText>
           </WithValidityLine>
         </GenericSectionItem>
         <GenericSectionItem accessibility={{accessible: true}}>
           {status == 'rejected' && (
-            <ThemeText typography="body__secondary" color="secondary">
+            <ThemeText typography="body__s" color="secondary">
               {t(
                 TicketingTexts.reservation.orderDate(
                   formatToLongDateTime(
@@ -74,7 +74,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
             </ThemeText>
           )}
           <ThemeText
-            typography="body__secondary"
+            typography="body__s"
             color="secondary"
             style={styles.detail}
           >
@@ -109,9 +109,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   detail: {
     paddingVertical: theme.spacing.xSmall,
-  },
-  statusText: {
-    textAlign: 'center',
   },
   vippsLinkContainer: {
     flex: 1,

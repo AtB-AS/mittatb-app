@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import RNBootSplash from 'react-native-bootsplash';
-import {default as StorybookApp} from '../../../.storybook';
+import {default as StorybookApp} from '../../../.rnstorybook';
 import {StatusBar} from 'react-native';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {SafeAreaView} from 'react-native-safe-area-context';

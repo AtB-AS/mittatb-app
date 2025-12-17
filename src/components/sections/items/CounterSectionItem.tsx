@@ -12,6 +12,8 @@ import {SectionTexts, useTranslation} from '@atb/translations';
 import {InteractiveColor} from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
+import {BaggageType} from '@atb/modules/configuration';
 
 type Props = SectionItemProps<{
   text: string;
@@ -20,8 +22,8 @@ type Props = SectionItemProps<{
   count: number;
   addCount: () => void;
   removeCount: () => void;
-  hideSubtext?: boolean;
   testID?: string;
+  baggageType?: BaggageType;
 }>;
 
 export function CounterSectionItem({
@@ -31,8 +33,8 @@ export function CounterSectionItem({
   count,
   addCount,
   removeCount,
-  hideSubtext,
   testID,
+  baggageType,
   ...props
 }: Props) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -42,6 +44,7 @@ export function CounterSectionItem({
   const {theme} = useThemeContext();
   const removeButtonDisabled = count === 0;
   const activeColor = count > 0 && color ? color.active : undefined;
+  const illustration = mapBaggageTypeToSvg(baggageType);
 
   return (
     <View style={[topContainer, counterStyles.countContainer]} testID={testID}>
@@ -52,14 +55,15 @@ export function CounterSectionItem({
           counterStyles.infoContainer,
         ]}
         accessible={true}
-        accessibilityLabel={`${count} ${text}, ${
-          (!hideSubtext && subtext) || ''
-        }`}
+        accessibilityLabel={`${count} ${text}, ${subtext || ''}`}
       >
-        <ThemeText>{text}</ThemeText>
-        {subtext && !hideSubtext && (
+        <View style={counterStyles.infoTextContainer}>
+          {illustration && <ThemeIcon svg={illustration} />}
+          <ThemeText>{text}</ThemeText>
+        </View>
+        {subtext && (
           <ThemeText
-            typography="body__secondary"
+            typography="body__s"
             color="secondary"
             style={counterStyles.infoSubtext}
           >
@@ -112,7 +116,7 @@ export function CounterSectionItem({
               counterStyles.countText,
               activeColor && {color: activeColor.foreground.primary},
             ]}
-            typography="body__primary--bold"
+            typography="body__m__strong"
             testID={testID + '_count'}
           >
             {count}
@@ -144,6 +148,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     infoContainer: {
       flexDirection: 'column',
       alignItems: 'flex-start',
+      justifyContent: 'center',
       marginRight: theme.spacing.medium,
     },
     infoSubtext: {
@@ -152,7 +157,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     countContainer: {
       flex: 1,
       flexDirection: 'row',
-      alignItems: 'center',
+      columnGap: theme.spacing.medium,
     },
     countActions: {
       flexDirection: 'row',
@@ -175,5 +180,19 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     addCount: {
       marginLeft: theme.spacing.xLarge,
     },
+    infoTextContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: theme.spacing.small,
+    },
   };
 });
+
+function mapBaggageTypeToSvg(baggageType?: BaggageType) {
+  switch (baggageType) {
+    case 'BICYCLE':
+      return BicycleFill;
+    default:
+      return;
+  }
+}

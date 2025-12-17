@@ -1,5 +1,5 @@
 import React from 'react';
-import {Linking, StyleProp, View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {Statuses, StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -16,6 +16,7 @@ import {
   useLiveRegionAnnouncement,
 } from '@atb/components/screen-reader-announcement';
 import {isDefined} from '@atb/utils/presence';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 /**
  * Configuration for how the onPress on the message box should work. The
@@ -69,7 +70,7 @@ export const MessageInfoBox = ({
     onPressConfig &&
     ('action' in onPressConfig
       ? onPressConfig.action
-      : () => Linking.openURL(onPressConfig.url));
+      : () => openInAppBrowser(onPressConfig.url, 'close'));
 
   const a11yCriticalityPrefix = t(dictionary.messageTypes[type]);
   const a11yLabel = [a11yCriticalityPrefix, title, message, onPressConfig?.text]
@@ -110,7 +111,7 @@ export const MessageInfoBox = ({
       >
         {title && (
           <ThemeText
-            typography="body__primary--bold"
+            typography="body__m__strong"
             color={textColor}
             style={styles.title}
             testID={testID ? `${testID}Title` : 'title'}
@@ -120,8 +121,9 @@ export const MessageInfoBox = ({
         )}
         <ThemeText
           color={textColor}
-          typography="body__primary"
+          typography="body__m"
           isMarkdown={isMarkdown}
+          testID={testID ? `${testID}Text` : 'text'}
         >
           {message}
         </ThemeText>
@@ -129,7 +131,7 @@ export const MessageInfoBox = ({
           <ThemeText
             color={textColor}
             style={styles.linkText}
-            typography="body__primary--underline"
+            typography="body__m__underline"
           >
             {onPressConfig.text}
           </ThemeText>

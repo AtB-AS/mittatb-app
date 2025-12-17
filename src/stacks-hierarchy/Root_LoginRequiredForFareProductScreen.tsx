@@ -21,7 +21,7 @@ export const Root_LoginRequiredForFareProductScreen = ({navigation}: Props) => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {theme} = useThemeContext();
-  const focusRef = useFocusOnLoad();
+  const focusRef = useFocusOnLoad(navigation);
 
   const themeColor = getThemeColor(theme);
 
@@ -37,7 +37,7 @@ export const Root_LoginRequiredForFareProductScreen = ({navigation}: Props) => {
       if (enable_vipps_login) {
         navigation.navigate('Root_LoginOptionsScreen', {
           showGoBack: true,
-          transitionOverride: 'slide-from-bottom',
+          transitionOverride: 'slide-from-right',
         });
       } else {
         navigation.navigate('Root_LoginPhoneInputScreen', {});
@@ -51,7 +51,7 @@ export const Root_LoginRequiredForFareProductScreen = ({navigation}: Props) => {
         <ThemedTicket style={styles.illustration} width={100} height={87} />
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
           <ThemeText
-            typography="body__primary--jumbo--bold"
+            typography="heading__3xl"
             style={styles.title}
             color={themeColor}
           >

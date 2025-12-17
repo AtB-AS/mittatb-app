@@ -1,10 +1,9 @@
 import React, {forwardRef, useEffect, useRef, useState} from 'react';
 import {
   AccessibilityInfo,
-  NativeSyntheticEvent,
   Platform,
   TextInput as InternalTextInput,
-  TextInputFocusEventData,
+  FocusEvent,
   TextInputProps as InternalTextInputProps,
   View,
 } from 'react-native';
@@ -20,8 +19,6 @@ import composeRefs from '@seznam/compose-react-refs';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {MessageInfoText} from '@atb/components/message-info-text';
-
-type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
 type TextProps = SectionItemProps<
   InternalTextInputProps & {
@@ -125,7 +122,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         ]}
         onAccessibilityEscape={accessibilityEscapeKeyboard}
       >
-        <ThemeText typography="body__secondary" style={styles.label}>
+        <ThemeText typography="body__s" style={styles.label}>
           {label}
         </ThemeText>
         <View
@@ -136,7 +133,14 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         >
           <InternalTextInput
             ref={combinedRef}
-            style={[styles.input, style]}
+            style={[
+              styles.input,
+              style,
+              props.multiline && {
+                minHeight: theme.typography.body__m.lineHeight * 3,
+                textAlignVertical: 'top',
+              },
+            ]}
             placeholderTextColor={theme.color.foreground.dynamic.secondary}
             onFocus={onFocusEvent}
             onBlur={onBlurEvent}
@@ -180,8 +184,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     color: theme.color.foreground.dynamic.primary,
     paddingRight: 40,
     paddingVertical: 0,
-
-    fontSize: theme.typography.body__primary.fontSize,
+    fontSize: theme.typography.body__m.fontSize,
   },
   container: {
     backgroundColor: theme.color.background.neutral[0].background,

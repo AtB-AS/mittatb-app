@@ -58,7 +58,7 @@ jobs:
         working-directory: e2e/firestore
         env:
           CREDENTIALS_APITESTER: ${{ secrets.CREDENTIALS_APITESTER }}
-          IS_GITHUB: "True"
+          IS_GITHUB: 'True'
 
       # E2E init
       - name: Enable KVM
@@ -127,9 +127,27 @@ jobs:
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}
-          IS_CI: "true"
+          IS_CI: 'true'
 
       # Results
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            ./e2e/results/*.xml
+            ./e2e/results/results-mochawesome.json
+          retention-days: 3
+
+      - name: Upload performance measures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-results
+          path: ./e2e/results/performance-results/performance-log.txt
+          retention-days: 3
+
       - name: Upload screenshots
         if: failure()
         uses: actions/upload-artifact@v4

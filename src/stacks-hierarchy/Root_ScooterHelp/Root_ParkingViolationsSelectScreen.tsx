@@ -14,6 +14,7 @@ import {ScreenContainer} from '../../components/PhotoCapture/ScreenContainer';
 import {SelectGroup} from './components/SelectGroup';
 import {useParkingViolations} from '@atb/modules/parking-violations-reporting';
 import {useGeolocationContext} from '@atb/modules/geolocation';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export type SelectViolationScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsSelectScreen'>;
@@ -21,6 +22,7 @@ export type SelectViolationScreenProps =
 export const Root_ParkingViolationsSelectScreen = ({
   navigation,
 }: SelectViolationScreenProps) => {
+  const focusRef = useFocusOnLoad(navigation);
   const style = useStyles();
   const {t} = useTranslation();
   const {parkingViolationsState, isLoading, violations} =
@@ -35,8 +37,9 @@ export const Root_ParkingViolationsSelectScreen = ({
 
   return (
     <ScreenContainer
-      leftHeaderButton={{type: 'close'}}
+      rightHeaderButton={{type: 'close'}}
       title={t(ParkingViolationTexts.selectViolation.title)}
+      focusRef={focusRef}
       buttons={
         <Button
           expanded={true}

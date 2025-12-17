@@ -26,8 +26,13 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_PrivacyScreen = () => {
+type Props = ProfileScreenProps<'Profile_PrivacyScreen'>;
+
+export const Profile_PrivacyScreen = ({navigation}: Props) => {
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const destructiveColor = theme.color.interactive.destructive;
@@ -64,11 +69,14 @@ export const Profile_PrivacyScreen = () => {
   }, []);
   useEffect(() => updatePermissions(), [updatePermissions]);
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(ProfileTexts.sections.privacy.heading),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading
@@ -139,7 +147,7 @@ export const Profile_PrivacyScreen = () => {
             }}
             testID="privacyButton"
             onPress={async () => {
-              await Linking.openURL(privacy_policy_url);
+              await openInAppBrowser(privacy_policy_url, 'close');
             }}
           />
         </Section>
@@ -162,7 +170,7 @@ export const Profile_PrivacyScreen = () => {
               onPress={async () => {
                 const privacyDashboardUrl = await getPrivacyDashboardUrl();
                 privacyDashboardUrl &&
-                  (await Linking.openURL(privacyDashboardUrl));
+                  (await openInAppBrowser(privacyDashboardUrl, 'close'));
               }}
             />
           </Section>
@@ -184,7 +192,7 @@ export const Profile_PrivacyScreen = () => {
               rightIcon={{svg: ExternalLink}}
               testID="dataSharingInfoButton"
               onPress={async () => {
-                Linking.openURL(dataSharingInfoUrl);
+                openInAppBrowser(dataSharingInfoUrl, 'close');
               }}
             />
           </Section>

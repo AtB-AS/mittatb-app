@@ -6,7 +6,7 @@ import {StyleSheet} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 
 export type MobilityStatProps = {
-  svg?(props: SvgProps): JSX.Element;
+  svg?(props: SvgProps): React.JSX.Element;
   style?: StyleProp<ViewStyle>;
   primaryStat: string | number;
   secondaryStat?: string | number;
@@ -26,7 +26,7 @@ export const MobilityStat = ({
       <StatWithIcon svg={svg} text={String(primaryStat)} />
       {!!secondaryStat && (
         <ThemeText
-          typography="body__secondary"
+          typography="body__s"
           style={secondaryStatStyle}
           color="secondary"
         >
@@ -38,7 +38,7 @@ export const MobilityStat = ({
 };
 
 type StatWithIconProps = {
-  svg?(props: SvgProps): JSX.Element;
+  svg?(props: SvgProps): React.JSX.Element;
   text: string;
 };
 
@@ -47,7 +47,7 @@ export const StatWithIcon = ({svg, text}: StatWithIconProps) => {
   return (
     <View style={styles.statWithIcon}>
       {svg && <ThemeIcon svg={svg} color="secondary" style={styles.statIcon} />}
-      <ThemeText typography="body__secondary--bold" color="secondary">
+      <ThemeText typography="body__s__strong" color="secondary">
         {text}
       </ThemeText>
     </View>

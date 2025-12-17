@@ -1,37 +1,41 @@
-import {getErrorResponse} from '@atb/api/utils';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
+import {RequestError} from '@atb/api/utils';
+import {Close, Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {consumeCarnet} from '@atb/modules/ticketing';
-import {FareContractTexts, useTranslation} from '@atb/translations';
+import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import React, {useState} from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {View} from 'react-native';
+import {RefObject} from '@testing-library/react-native/build/types';
+import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   fareContractId: string;
   fareProductType: string | undefined;
+  bottomSheetModalRef: RefObject<GorhomBottomSheetModal | null>;
+  onCloseFocusRef: RefObject<View | null>;
 };
 
 export const ConsumeCarnetBottomSheet = ({
   fareContractId,
   fareProductType,
+  bottomSheetModalRef,
+  onCloseFocusRef,
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setError] = useState<boolean>(false);
   const [isSchoolError, setSchoolError] = useState<boolean>(false);
-  const {close} = useBottomSheetContext();
-  const {logEvent} = useBottomSheetContext();
+  const {theme} = useThemeContext();
+  const {logEvent} = useAnalyticsContext();
 
   const onConsume = async () => {
     setIsLoading(true);
@@ -42,11 +46,11 @@ export const ConsumeCarnetBottomSheet = ({
       logEvent('Ticketing', 'Consumed carnet', {
         fareProductType,
       });
-      close();
+      bottomSheetModalRef.current?.dismiss();
     } catch (e: any) {
-      const errorResponse = getErrorResponse(e);
-      notifyBugsnag('Error when consuming carnet', {metadata: errorResponse});
-      if (errorResponse?.kind === 'SCHOOL_CARNET_IS_NOT_CONSUMABLE') {
+      const error = e as RequestError;
+      notifyBugsnag('Error when consuming carnet', {metadata: e});
+      if (error.kind === 'SCHOOL_CARNET_IS_NOT_CONSUMABLE') {
         setSchoolError(true);
       } else {
         setError(true);
@@ -56,14 +60,15 @@ export const ConsumeCarnetBottomSheet = ({
   };
 
   return (
-    <BottomSheetContainer
-      title={t(FareContractTexts.carnet.bottomSheetTitle)}
-      focusTitleOnLoad={true}
+    <BottomSheetModal
+      bottomSheetModalRef={bottomSheetModalRef}
+      heading={t(FareContractTexts.carnet.bottomSheetTitle)}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      closeCallback={() => giveFocus(onCloseFocusRef)}
+      testID="selectFavorite"
     >
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}
-      >
+      <View style={styles.container}>
         {isError && (
           <MessageInfoBox
             message={t(FareContractTexts.carnet.genericError)}
@@ -91,20 +96,23 @@ export const ConsumeCarnetBottomSheet = ({
           rightIcon={{svg: Confirm}}
           loading={isLoading}
         />
-      </ScrollView>
-    </BottomSheetContainer>
+        <Button
+          expanded={true}
+          mode="secondary"
+          onPress={() => bottomSheetModalRef.current?.dismiss()}
+          text={t(dictionary.cancel)}
+          backgroundColor={theme.color.background.neutral[1]}
+        />
+      </View>
+    </BottomSheetModal>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
   return {
     container: {
       backgroundColor: theme.color.background.neutral[1].background,
       marginHorizontal: theme.spacing.medium,
-      marginBottom: Math.max(bottom, theme.spacing.medium),
-    },
-    contentContainer: {
       rowGap: theme.spacing.medium,
     },
   };

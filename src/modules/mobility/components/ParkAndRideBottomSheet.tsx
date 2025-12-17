@@ -1,11 +1,10 @@
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import React from 'react';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {StyleSheet} from '@atb/theme';
 import {BicycleFill, CarFill} from '@atb/assets/svg/mono-icons/transportation';
 import {ParkAndRideTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {ScrollView, View} from 'react-native';
+import {View} from 'react-native';
 import {
   NavigateToTripSearchCallback,
   ParkingType,
@@ -22,6 +21,8 @@ import {MobilityStats} from './MobilityStats';
 import {MobilityStat} from './MobilityStat';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
 import {ThemedParkAndRide} from '@atb/theme/ThemedAssets';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type Props = {
   name: string | undefined;
@@ -31,6 +32,8 @@ type Props = {
   feature: Feature<Point, ParkingType>;
   onClose: () => void;
   navigateToTripSearch: NavigateToTripSearchCallback;
+  locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 export const ParkAndRideBottomSheet = ({
   name,
@@ -40,6 +43,8 @@ export const ParkAndRideBottomSheet = ({
   distance,
   onClose,
   navigateToTripSearch,
+  locationArrowOnPress,
+  navigateToScanQrCode,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -58,71 +63,77 @@ export const ParkAndRideBottomSheet = ({
   };
 
   return (
-    <BottomSheetContainer
-      title={t(ParkAndRideTexts.title)}
-      onClose={onClose}
-      maxHeightValue={0.5}
+    <MapBottomSheet
+      canMinimize={true}
+      enablePanDownToClose={false}
+      closeCallback={onClose}
+      closeOnBackdropPress={false}
+      allowBackgroundTouch={true}
+      enableDynamicSizing={true}
+      heading={t(ParkAndRideTexts.title)}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
-      <ScrollView>
-        <View style={styles.buttonsContainer}>
-          <Button
-            expanded={true}
-            text={t(DeparturesDialogSheetTexts.travelFrom.title)}
-            onPress={() => navigateToTripSearch(searchLocation, 'fromLocation')}
-            mode="primary"
-            style={styles.travelButton}
-          />
-          <Button
-            expanded={true}
-            text={t(DeparturesDialogSheetTexts.travelTo.title)}
-            onPress={() => navigateToTripSearch(searchLocation, 'toLocation')}
-            mode="primary"
-            style={styles.travelButton}
-          />
-        </View>
-        <ScrollView style={styles.container}>
-          <Section>
-            <GenericSectionItem>
-              <View style={styles.parkingName}>
-                <ThemeText typography="body__secondary" color="secondary">
-                  {heading}
-                </ThemeText>
-                <WalkingDistance distance={distance} />
-              </View>
-            </GenericSectionItem>
-            <GenericSectionItem>
-              <View style={styles.mobilityStatContainer}>
-                <MobilityStats
-                  first={
-                    <MobilityStat
-                      svg={parkingFor === 'pedalCycle' ? BicycleFill : CarFill}
-                      primaryStat={t(ParkAndRideTexts.parkingFor(parkingFor))}
-                    />
-                  }
-                  second={
-                    <MobilityStat
-                      svg={Parking}
-                      primaryStat={capacity ?? ''}
-                      secondaryStat={
-                        capacity
-                          ? t(ParkAndRideTexts.capacity)
-                          : t(ParkAndRideTexts.unknownCapacity)
-                      }
-                    />
-                  }
-                />
-                <ThemedParkAndRide />
-              </View>
-              <MessageInfoBox
-                style={styles.disclaimer}
-                type="info"
-                message={t(ParkAndRideTexts.disclaimer)}
+      <View style={styles.buttonsContainer}>
+        <Button
+          expanded={true}
+          text={t(DeparturesDialogSheetTexts.travelFrom.title)}
+          onPress={() => navigateToTripSearch(searchLocation, 'fromLocation')}
+          mode="primary"
+          style={styles.travelButton}
+        />
+        <Button
+          expanded={true}
+          text={t(DeparturesDialogSheetTexts.travelTo.title)}
+          onPress={() => navigateToTripSearch(searchLocation, 'toLocation')}
+          mode="primary"
+          style={styles.travelButton}
+        />
+      </View>
+      <View style={styles.container}>
+        <Section>
+          <GenericSectionItem>
+            <View style={styles.parkingName}>
+              <ThemeText typography="body__s" color="secondary">
+                {heading}
+              </ThemeText>
+              <WalkingDistance distance={distance} />
+            </View>
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <View style={styles.mobilityStatContainer}>
+              <MobilityStats
+                first={
+                  <MobilityStat
+                    svg={parkingFor === 'pedalCycle' ? BicycleFill : CarFill}
+                    primaryStat={t(ParkAndRideTexts.parkingFor(parkingFor))}
+                  />
+                }
+                second={
+                  <MobilityStat
+                    svg={Parking}
+                    primaryStat={capacity ?? ''}
+                    secondaryStat={
+                      capacity
+                        ? t(ParkAndRideTexts.capacity)
+                        : t(ParkAndRideTexts.unknownCapacity)
+                    }
+                  />
+                }
               />
-            </GenericSectionItem>
-          </Section>
-        </ScrollView>
-      </ScrollView>
-    </BottomSheetContainer>
+              <ThemedParkAndRide />
+            </View>
+            <MessageInfoBox
+              style={styles.disclaimer}
+              type="info"
+              message={t(ParkAndRideTexts.disclaimer)}
+            />
+          </GenericSectionItem>
+        </Section>
+      </View>
+    </MapBottomSheet>
   );
 };
 

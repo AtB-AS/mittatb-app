@@ -17,7 +17,7 @@ type Props = {
   a11yHint: string;
   disabled: boolean;
   selected: boolean;
-  icon: JSX.Element;
+  icon: React.JSX.Element;
   type?: ContainerSizingType;
   onPress: () => void;
   style?: ViewStyle;
@@ -68,7 +68,7 @@ export function RadioBox({
       testID={testID}
     >
       <ThemeText
-        typography="heading__title"
+        typography="heading__m"
         color={themeColor}
         style={{...styles.title, marginBottom: spacing}}
       >
@@ -76,17 +76,14 @@ export function RadioBox({
       </ThemeText>
       <View style={{...styles.icon, marginBottom: spacing}}>{icon}</View>
       <ThemeText
-        typography="body__secondary"
+        typography="body__s"
         color={themeColor}
         style={{...styles.description, marginBottom: spacing}}
         accessible={false}
       >
         {description}
       </ThemeText>
-      <View
-        style={styles.radioIcon}
-        testID={testID + (selected ? 'RadioChecked' : 'RadioNotChecked')}
-      >
+      <View style={styles.radioIcon} testID={`${testID}Radio`}>
         <RadioIcon checked={selected} color={textColor} />
       </View>
     </PressableOpacity>

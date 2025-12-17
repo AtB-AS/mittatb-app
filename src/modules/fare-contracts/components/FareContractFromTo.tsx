@@ -8,10 +8,12 @@ import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
+import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import {Size} from '../utils';
 
 type FareContractFromToBaseProps = {
   backgroundColor: ContrastColor;
-  mode: 'small' | 'large';
+  size: Size;
 };
 
 export type FareContractPropsSub = {
@@ -37,7 +39,7 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
       return (
         <ZonesFromTo
           fareZoneRefs={controllerData.fareZoneRefs}
-          mode={props.mode}
+          size={props.size}
           backgroundColor={props.backgroundColor}
         />
       );
@@ -47,7 +49,7 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
           startPointRef={controllerData.startPointRef}
           endPointRef={controllerData.endPointRef}
           direction={controllerData.direction}
-          mode={props.mode}
+          size={props.size}
           backgroundColor={props.backgroundColor}
         />
       );
@@ -56,7 +58,7 @@ export const FareContractFromTo = (props: FareContractFromToProps) => {
         <SchoolFromTo
           schoolName={controllerData.schoolName}
           backgroundColor={props.backgroundColor}
-          mode={props.mode}
+          size={props.size}
         />
       );
   }
@@ -67,6 +69,7 @@ enum FareContractFromToMode {
   Harbors = 'harbors',
   School = 'school',
 }
+
 type HarborsFromToData = {
   mode: FareContractFromToMode.Harbors;
   startPointRef: string;
@@ -93,8 +96,8 @@ type FareContractFromToControllerDataType =
 function useFareContractFromToController(
   fcOrRfc: FareContractType | RecentFareContractType,
 ): FareContractFromToControllerDataType {
-  const {fareProductTypeConfigs, preassignedFareProducts} =
-    useFirestoreConfigurationContext();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
 
   if (isFareContract(fcOrRfc)) {
     const firstTravelRight = fcOrRfc.travelRights.at(0);
@@ -162,9 +165,10 @@ function useFareContractFromToController(
   const {startPointRef = undefined, endPointRef = undefined} = (() => {
     if (isFareContract(fcOrRfc)) {
       const travelRight = fcOrRfc.travelRights[0];
+      const dsj = travelRight.datedServiceJourneys?.[0];
       return {
-        startPointRef: travelRight.startPointRef,
-        endPointRef: travelRight.endPointRef,
+        startPointRef: travelRight.startPointRef ?? dsj?.startPointRef,
+        endPointRef: travelRight.endPointRef ?? dsj?.endPointRef,
       };
     } else if (isRecentFareContract(fcOrRfc) && fcOrRfc.pointToPointValidity) {
       return {

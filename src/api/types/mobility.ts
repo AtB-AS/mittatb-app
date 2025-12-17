@@ -168,7 +168,7 @@ const ShmoCoordinatesSchema = z.object({
   altitude: z.number().nullish(),
 });
 
-const InitShmoOneStopBookingRequestBodySchema = z.object({
+export const InitShmoOneStopBookingRequestBodySchema = z.object({
   recurringPaymentId: z.number().int(),
   coordinates: ShmoCoordinatesSchema,
   assetId: z
@@ -187,7 +187,7 @@ export enum ShmoBookingEventType {
   FINISH = 'FINISH',
 }
 
-const ShmoImageFileSchema = z.object({
+export const ShmoImageFileSchema = z.object({
   fileName: z.string(),
   fileType: z.string(),
   fileData: z.string().describe('base64 encoded image data'),
@@ -201,7 +201,7 @@ export enum SupportType {
   OTHER = 'OTHER',
 }
 
-export const MAX_SUPPORT_COMMENT_LENGTH = 1000;
+export const MAX_SUPPORT_COMMENT_LENGTH = 400;
 
 export const SendSupportRequestBodySchema = z.object({
   bookingId: z.string().uuid().nullish(),
@@ -344,3 +344,8 @@ export const VehiclesClusteredFeatureSchema =
 export type VehiclesClusteredFeature = z.infer<
   typeof VehiclesClusteredFeatureSchema
 >;
+
+export const DateResponseSchema = z.object({
+  birthdate: z.string().nullable(),
+});
+export type DateResponse = z.infer<typeof DateResponseSchema>;

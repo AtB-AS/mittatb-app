@@ -10,11 +10,7 @@ const ProfileTexts = {
     account: {
       linkSectionItems: {
         login: {
-          label: _(
-            'Logg inn eller opprett profil',
-            'Log in or create profile',
-            'Logg inn eller opprett profil',
-          ),
+          label: _('Logg inn', 'Log in', 'Logg inn'),
         },
         logout: {
           label: _('Logg ut', 'Log out', 'Logg ut'),
@@ -37,14 +33,10 @@ const ProfileTexts = {
           label: _('Billetthistorikk', 'Ticket history', 'Billetthistorikk'),
         },
         bonus: {
-          label: _('Bonus', 'Bonus', 'Bonus'),
+          label: _('Poeng', 'Points', 'Poeng'),
         },
         smartParkAndRide: {
-          label: _(
-            'Parkering på Ranheim',
-            'Parking at Ranheim',
-            'Parkering på Ranheim',
-          ),
+          label: _('Innfartsparkering', 'Park and ride', 'Innfartsparkering'),
         },
         paymentMethods: {
           label: _('Betalingskort', 'Payment cards', 'Betalingskort'),
@@ -376,6 +368,14 @@ const ProfileTexts = {
             'Tilgjengelighetserklæring, åpner side i nettleser',
             'Accessibility statement, opens page in browser',
             'Tilgjengelegheitserklæring, åpner side i nettlesar',
+          ),
+        },
+        serviceDisruptions: {
+          label: _('Driftsmeldinger', 'Service disruptions', 'Driftsmeldingar'),
+          a11yLabel: _(
+            'Driftsmeldinger, åpner side i nettleser',
+            'Service disruptions, opens page in browser',
+            'Driftsmeldingar, opnar side i nettlesar',
           ),
         },
       },

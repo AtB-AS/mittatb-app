@@ -2,12 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
-import {useTranslation} from '@atb/translations';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {dictionary, useTranslation} from '@atb/translations';
+import {Close, Confirm} from '@atb/assets/svg/mono-icons/actions';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
-import {ScrollView} from 'react-native-gesture-handler';
 import {
   PaymentMethod,
   savePreviousPaymentMethodByUser,
@@ -18,18 +16,24 @@ import {
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
 import {useMutation} from '@tanstack/react-query';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
+import {BottomSheetScrollView} from '@gorhom/bottom-sheet';
 
 type Props = {
   onSelect: () => void;
   recurringPaymentMethods?: PaymentMethod[];
   onClose?: () => void;
   onGoToPaymentPage: () => void;
+  locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 
 export const SelectShmoPaymentMethodSheet = ({
   onSelect,
   onClose,
   onGoToPaymentPage,
+  locationArrowOnPress,
+  navigateToScanQrCode,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -41,7 +45,7 @@ export const SelectShmoPaymentMethodSheet = ({
     PaymentMethod | undefined
   >();
 
-  const {mutate: savePrevPaymentMethod, isLoading} = useMutation({
+  const {mutate: savePrevPaymentMethod, isPending} = useMutation({
     mutationFn: (params: {userId: string; paymentMethod: PaymentMethod}) =>
       savePreviousPaymentMethodByUser(params.userId, params.paymentMethod),
     onSuccess: onSelect,
@@ -54,73 +58,74 @@ export const SelectShmoPaymentMethodSheet = ({
   }, [defaultPaymentMethod]);
 
   return (
-    <BottomSheetContainer
-      title={t(SelectPaymentMethodTexts.header.text)}
-      onClose={onClose}
+    <MapBottomSheet
+      snapPoints={['70%']}
+      closeCallback={onClose}
+      enableDynamicSizing={false}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
-      <ScrollView>
-        <View style={{flex: 1}}>
-          <View style={styles.paymentMethods}>
-            <MessageInfoBox
-              type="info"
-              title={t(SelectPaymentMethodTexts.new_card_info.title)}
-              message={t(SelectPaymentMethodTexts.new_card_info.text)}
-              onPressConfig={{
-                action: onGoToPaymentPage,
-                text: t(SelectPaymentMethodTexts.new_card_info.link_profile),
+      <View style={styles.paymentMethods}>
+        <MessageInfoBox
+          type="info"
+          title={t(SelectPaymentMethodTexts.new_card_info.title)}
+          message={t(SelectPaymentMethodTexts.new_card_info.text)}
+          onPressConfig={{
+            action: onGoToPaymentPage,
+            text: t(SelectPaymentMethodTexts.new_card_info.link_profile),
+          }}
+        />
+        <BottomSheetScrollView>
+          {recurringPaymentMethods?.map((method, index) => (
+            <SinglePaymentMethod
+              key={method.recurringPayment?.id}
+              paymentMethod={method}
+              selected={
+                selectedPaymentMethod?.recurringPayment?.id ===
+                method.recurringPayment?.id
+              }
+              onSelect={(val: PaymentMethod) => {
+                if (!val?.recurringPayment) return;
+                setSelectedPaymentMethod(val);
               }}
+              index={index}
             />
-            <View>
-              {recurringPaymentMethods?.map((method, index) => (
-                <SinglePaymentMethod
-                  key={method.recurringPayment?.id}
-                  paymentMethod={method}
-                  selected={
-                    selectedPaymentMethod?.recurringPayment?.id ===
-                    method.recurringPayment?.id
-                  }
-                  onSelect={(val: PaymentMethod) => {
-                    if (!val?.recurringPayment) return;
-                    setSelectedPaymentMethod(val);
-                  }}
-                  index={index}
-                />
-              ))}
-            </View>
-          </View>
-          <FullScreenFooter>
-            <Button
-              expanded={true}
-              style={styles.confirmButton}
-              interactiveColor={theme.color.interactive[0]}
-              text={t(SelectPaymentMethodTexts.confirm_button.text)}
-              accessibilityHint={t(
-                SelectPaymentMethodTexts.confirm_button.a11yhint,
-              )}
-              onPress={async () => {
-                if (
-                  selectedPaymentMethod &&
-                  selectedPaymentMethod.recurringPayment &&
-                  userId
-                ) {
-                  savePrevPaymentMethod({
-                    userId,
-                    paymentMethod: {
-                      paymentType: selectedPaymentMethod?.paymentType,
-                      recurringPayment: selectedPaymentMethod.recurringPayment,
-                    },
-                  });
-                }
-              }}
-              disabled={!selectedPaymentMethod}
-              loading={isLoading}
-              rightIcon={{svg: Confirm}}
-              testID="confirmButton"
-            />
-          </FullScreenFooter>
-        </View>
-      </ScrollView>
-    </BottomSheetContainer>
+          ))}
+        </BottomSheetScrollView>
+      </View>
+      <FullScreenFooter>
+        <Button
+          expanded={true}
+          style={styles.confirmButton}
+          interactiveColor={theme.color.interactive[0]}
+          text={t(SelectPaymentMethodTexts.confirm_button.text)}
+          accessibilityHint={t(
+            SelectPaymentMethodTexts.confirm_button.a11yhint,
+          )}
+          onPress={async () => {
+            if (
+              selectedPaymentMethod &&
+              selectedPaymentMethod.recurringPayment &&
+              userId
+            ) {
+              savePrevPaymentMethod({
+                userId,
+                paymentMethod: {
+                  paymentType: selectedPaymentMethod?.paymentType,
+                  recurringPayment: selectedPaymentMethod.recurringPayment,
+                },
+              });
+            }
+          }}
+          disabled={!selectedPaymentMethod}
+          loading={isPending}
+          rightIcon={{svg: Confirm}}
+          testID="confirmButton"
+        />
+      </FullScreenFooter>
+    </MapBottomSheet>
   );
 };
 

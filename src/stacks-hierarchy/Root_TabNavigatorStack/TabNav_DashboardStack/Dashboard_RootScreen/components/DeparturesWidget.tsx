@@ -1,6 +1,5 @@
 import {Add, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {StopPlaceInfo} from '@atb/api/bff/types';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {
@@ -18,7 +17,7 @@ import {
 } from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
 import haversineDistance from 'haversine-distance';
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
 import {useFavoriteDepartureData} from '../use-favorite-departure-data';
 import {ThemedNoFavouriteDepartureImage} from '@atb/theme/ThemedAssets';
@@ -28,12 +27,14 @@ import {
   Section,
 } from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 type Props = {
   onEditFavouriteDeparture: () => void;
   onAddFavouriteDeparture: () => void;
   onPressDeparture: QuaySectionProps['onPressDeparture'];
   style?: StyleProp<ViewStyle>;
+  isFocused: boolean;
 };
 
 export const DeparturesWidget = ({
@@ -41,28 +42,23 @@ export const DeparturesWidget = ({
   onAddFavouriteDeparture,
   onPressDeparture,
   style,
+  isFocused,
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const themeColor = theme.color.background.accent[0];
+  const themeColor = theme.color.background.neutral[1];
   const {favoriteDepartures} = useFavoritesContext();
   const {location} = useGeolocationContext();
-  const {state, loadInitialDepartures, searchDate} = useFavoriteDepartureData();
-  const onCloseFocusRef = React.useRef(null);
+  const {state, loadInitialDepartures, searchDate} =
+    useFavoriteDepartureData(isFocused);
+  const onCloseFocusRef = useRef<View>(null);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   useEffect(() => loadInitialDepartures(), [loadInitialDepartures]);
 
-  const {open: openBottomSheet} = useBottomSheetContext();
-
   async function openFrontpageFavouritesBottomSheet() {
-    openBottomSheet(() => {
-      return (
-        <SelectFavouritesBottomSheet
-          onEditFavouriteDeparture={onEditFavouriteDeparture}
-        />
-      );
-    }, onCloseFocusRef);
+    bottomSheetRef.current?.present();
   }
 
   const sortedStopPlaceGroups = location
@@ -75,17 +71,16 @@ export const DeparturesWidget = ({
     <View style={style}>
       <ContentHeading
         style={styles.heading}
-        color={themeColor}
         text={t(DeparturesTexts.widget.heading)}
       />
       {!favoriteDepartures.length && (
         <Section>
           <GenericSectionItem>
             <View style={styles.noFavouritesView}>
-              <ThemedNoFavouriteDepartureImage height={97} width={87} />
+              <ThemedNoFavouriteDepartureImage height={64} width={64} />
               <View style={styles.noFavouritesTextContainer}>
                 <ThemeText
-                  typography="body__secondary"
+                  typography="body__s"
                   color="secondary"
                   style={styles.noFavouritesText}
                   testID="noFavoriteWidget"
@@ -96,7 +91,7 @@ export const DeparturesWidget = ({
             </View>
           </GenericSectionItem>
           <LinkSectionItem
-            textType="body__secondary"
+            textType="body__s"
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={onAddFavouriteDeparture}
             rightIcon={{svg: Add}}
@@ -104,11 +99,9 @@ export const DeparturesWidget = ({
           />
         </Section>
       )}
-
       {state.isLoading && (
         <ActivityIndicator size="large" style={styles.activityIndicator} />
       )}
-
       {sortedStopPlaceGroups?.map((stopPlaceGroup) => (
         <View key={stopPlaceGroup.stopPlace.id} testID="favoriteDepartures">
           {stopPlaceGroup.quays.map((quay) => (
@@ -123,7 +116,6 @@ export const DeparturesWidget = ({
           ))}
         </View>
       ))}
-
       {!!favoriteDepartures.length && (
         <Button
           expanded={true}
@@ -136,6 +128,11 @@ export const DeparturesWidget = ({
           testID="selectFavoriteDepartures"
         />
       )}
+      <SelectFavouritesBottomSheet
+        onEditFavouriteDeparture={onEditFavouriteDeparture}
+        bottomSheetModalRef={bottomSheetRef}
+        onCloseFocusRef={onCloseFocusRef}
+      />
     </View>
   );
 };
@@ -171,6 +168,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   noFavouritesTextContainer: {
     flex: 1,
     paddingVertical: theme.spacing.small,
+    paddingHorizontal: theme.spacing.medium,
   },
   noFavouritesText: {
     marginHorizontal: theme.spacing.small,

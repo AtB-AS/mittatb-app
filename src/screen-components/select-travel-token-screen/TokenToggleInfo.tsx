@@ -6,23 +6,25 @@ import {
 } from '@atb/utils/date';
 import {StyleSheet} from '@atb/theme';
 import {ContrastColor, Statuses} from '@atb/theme/colors';
-import {useTokenToggleDetailsQuery} from '@atb/modules/mobile-token';
 import {MessageInfoText} from '@atb/components/message-info-text';
 
 type TokenToggleInfoProps = {
   textColor?: ContrastColor;
+  toggleLimit: number;
+  isLoading: boolean;
 };
 
-export const TokenToggleInfo = ({textColor}: TokenToggleInfoProps) => {
+export const TokenToggleInfo = ({
+  textColor,
+  toggleLimit,
+  isLoading,
+}: TokenToggleInfoProps) => {
   const styles = useStyles();
-  const {data, isLoading} = useTokenToggleDetailsQuery();
-
-  const limit = data?.toggleLimit ?? 0;
 
   return isLoading ? (
     <ActivityIndicator style={styles.loader} />
   ) : (
-    <TokenToggleContent toggleLimit={limit} textColor={textColor} />
+    <TokenToggleContent toggleLimit={toggleLimit} textColor={textColor} />
   );
 };
 
@@ -77,6 +79,7 @@ const TokenToggleContent = ({
       type={getToggleInfoIcon(toggleLimit)}
       a11yLabel={getToggleInfo(toggleLimit, countRenewalDateA11yLabel)}
       textColor={textColor}
+      testID="tokenToggleInfo"
     />
   );
 };

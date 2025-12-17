@@ -12,7 +12,7 @@ export type InternalLabeledItemProps = SectionItemProps<
   PropsWithChildren<{
     label: string;
     subtext?: string;
-    leftIcon?: (props: SvgProps) => JSX.Element;
+    leftIcon?: (props: SvgProps) => React.JSX.Element;
     accessibleLabel?: boolean;
     wrapperStyle?: StyleProp<ViewStyle>;
   }>
@@ -34,12 +34,12 @@ export function InternalLabeledSectionItem({
     <View style={[style.spaceBetween, topContainer, wrapperStyle]}>
       {leftIcon && <ThemeIcon svg={leftIcon} style={itemStyle.icon} />}
       <View accessible={accessibleLabel} style={itemStyle.label}>
-        <ThemeText accessible={accessibleLabel} typography="body__primary">
+        <ThemeText accessible={accessibleLabel} typography="body__m">
           {label}
         </ThemeText>
         {subtext && (
           <ThemeText
-            typography="body__secondary"
+            typography="body__s"
             color="secondary"
             style={itemStyle.label}
             accessible={accessibleLabel}

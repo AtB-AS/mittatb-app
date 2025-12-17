@@ -3,12 +3,16 @@ import {LanguageAndTextType} from '@atb/translations';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {Rule} from '@atb/modules/rule-engine';
 
-export type AppPlatformType = 'ios' | 'android';
+import {z} from 'zod';
+
+export const AppPlatform = z.enum(['ios', 'android']);
+export type AppPlatform = z.infer<typeof AppPlatform>;
 
 export enum GlobalMessageContextEnum {
   appAssistant = 'app-assistant',
   appDepartures = 'app-departures',
   appTicketing = 'app-ticketing',
+  appProfile = 'app-profile',
   appPurchaseOverview = 'app-purchase-overview',
   appPurchaseConfirmation = 'app-purchase-confirmation',
   appPurchaseConfirmationBottom = 'app-purchase-confirmation-bottom',
@@ -32,7 +36,7 @@ export type GlobalMessageRaw = {
   subtle?: boolean;
   context: GlobalMessageContextEnum[];
   isDismissable?: boolean;
-  appPlatforms: AppPlatformType[];
+  appPlatforms: AppPlatform[];
   appVersionMin: string;
   appVersionMax: string;
   startDate?: FirebaseFirestoreTypes.Timestamp;

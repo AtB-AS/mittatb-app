@@ -27,7 +27,7 @@ export const StopPlaceItem = ({
   stopPlaceNode,
   onPress,
   testID,
-}: StopPlaceItemProps): JSX.Element => {
+}: StopPlaceItemProps): React.JSX.Element => {
   const styles = useStyles();
   const {t} = useTranslation();
 
@@ -64,6 +64,7 @@ export const StopPlaceItem = ({
     <Section>
       <GenericClickableSectionItem
         onPress={() => onPress(place)}
+        accessibilityRole="button"
         accessibilityLabel={a11yLabel}
         accessibilityHint={t(
           DeparturesTexts.stopPlaceList.a11yStopPlaceItemHint,
@@ -71,17 +72,14 @@ export const StopPlaceItem = ({
       >
         <View style={styles.stopPlaceContainer} testID={testID}>
           <View style={styles.stopPlaceInfo}>
-            <ThemeText typography="heading__component" testID={testID + 'Name'}>
+            <ThemeText typography="heading__m" testID={testID + 'Name'}>
               {place.name}
             </ThemeText>
-            <ThemeText
-              typography="body__secondary"
-              style={styles.stopDescription}
-            >
+            <ThemeText typography="body__s" style={styles.stopDescription}>
               {description}
             </ThemeText>
             {humanizedDistance && (
-              <ThemeText typography="body__secondary" color="secondary">
+              <ThemeText typography="body__s" color="secondary">
                 {humanizedDistance}
               </ThemeText>
             )}

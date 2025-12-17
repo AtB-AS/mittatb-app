@@ -7,7 +7,6 @@ import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
   isValidFareContract,
   useNonInspectableTokenWarning,
-  userProfileCountAndName,
   useFareZoneSummary,
 } from './utils';
 import {fareContractValidityUnits} from './fare-contract-validity-units';
@@ -16,10 +15,12 @@ import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {InspectionSymbol} from './components/InspectionSymbol';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {secondsToDuration} from '@atb/utils/date';
+import {toCountAndReferenceDataName} from '@atb/utils/unique-with-count';
 
 type CompactFareContractInfoProps = FareContractInfoDetailsProps & {
   style?: StyleProp<ViewStyle>;
   onPressDetails?: () => void;
+  testID?: string;
 };
 
 type FareContractInfoTextsProps = {
@@ -55,7 +56,10 @@ export const CompactFareContractInfo = (
 
   return (
     <Section style={props.style} {...accessibility}>
-      <GenericClickableSectionItem onPress={props.onPressDetails}>
+      <GenericClickableSectionItem
+        onPress={props.onPressDetails}
+        testID={props.testID ? props.testID : ''}
+      >
         <View style={styles.container}>
           <View style={styles.ticketDetails}>
             <CompactFareContractInfoTexts {...fareContractInfoTextsProps} />
@@ -70,35 +74,48 @@ export const CompactFareContractInfo = (
 const CompactFareContractInfoTexts = (
   props: CompactFareContractInfoTextsProps,
 ) => {
-  const {userProfilesWithCount, productName, fareZoneSummary, timeUntilExpire} =
-    props;
+  const {
+    userProfilesWithCount,
+    baggageProductsWithCount,
+    productName,
+    fareZoneSummary,
+    timeUntilExpire,
+  } = props;
   const {language} = useTranslation();
   const styles = useStyles();
   const firstTravelRight = props.fareContract.travelRights[0];
 
   return (
     <View style={styles.textsContainer}>
-      <ThemeText typography="body__primary--bold" style={styles.expireTime}>
+      <ThemeText typography="body__m__strong" style={styles.expireTime}>
         {timeUntilExpire}
       </ThemeText>
       {firstTravelRight.travelerName ? (
-        <ThemeText typography="body__secondary" color="secondary">
+        <ThemeText typography="body__s" color="secondary">
           {firstTravelRight.travelerName}
         </ThemeText>
       ) : (
-        userProfilesWithCount.map((u) => (
-          <ThemeText key={u.id} typography="body__secondary" color="secondary">
-            {userProfileCountAndName(u, language)}
-          </ThemeText>
-        ))
+        userProfilesWithCount
+          .map((u) => (
+            <ThemeText key={u.id} typography="body__s" color="secondary">
+              {toCountAndReferenceDataName(u, language)}
+            </ThemeText>
+          ))
+          .concat(
+            baggageProductsWithCount.map((p) => (
+              <ThemeText key={p.id} typography="body__s" color="secondary">
+                {toCountAndReferenceDataName(p, language)}
+              </ThemeText>
+            )),
+          )
       )}
       {productName && (
-        <ThemeText typography="body__secondary" color="secondary">
+        <ThemeText typography="body__s" color="secondary" testID="productName">
           {productName}
         </ThemeText>
       )}
       {fareZoneSummary && (
-        <ThemeText typography="body__secondary" color="secondary">
+        <ThemeText typography="body__s" color="secondary">
           {fareZoneSummary}
         </ThemeText>
       )}
@@ -165,7 +182,7 @@ export const useFareContractInfoTexts = (
   let accessibilityLabel: string = '';
   accessibilityLabel += timeUntilExpireOrWarning + screenReaderPause;
   accessibilityLabel += userProfilesWithCount.map(
-    (u) => userProfileCountAndName(u, language) + screenReaderPause,
+    (u) => toCountAndReferenceDataName(u, language) + screenReaderPause,
   );
   accessibilityLabel += productName + screenReaderPause;
   accessibilityLabel += fareZoneSummary + screenReaderPause;

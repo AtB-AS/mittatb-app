@@ -3,15 +3,14 @@ import {
   VehicleId,
 } from '@atb/api/types/generated/fragments/vehicles';
 import React from 'react';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useVehicle} from '../../use-vehicle';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -25,12 +24,18 @@ import {VehicleCard} from '../VehicleCard';
 import {ShmoActionButton} from '../ShmoActionButton';
 import {useOperators} from '../../use-operators';
 import {useShmoRequirements} from '../../use-shmo-requirements';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {Section} from '@atb/components/sections';
 import {
   PaymentSelectionSectionItem,
   useSelectedShmoPaymentMethod,
 } from '@atb/modules/payment';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+
+type ScooterHelpParams = {operatorId: string} & (
+  | {vehicleId: string}
+  | {bookingId: string}
+);
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -38,10 +43,11 @@ type Props = {
   onClose: () => void;
   onReportParkingViolation: () => void;
   onVehicleReceived?: (vehicle: VehicleExtendedFragment) => void;
-  navigateSupportCallback: () => void;
-  loginCallback: () => void;
   startOnboardingCallback: () => void;
-  navigation: RootNavigationProps;
+  locationArrowOnPress: () => void;
+  navigateToSupport: (params: ScooterHelpParams) => void;
+  navigateToLogin: () => void;
+  navigateToScanQrCode: () => void;
 };
 
 export const ScooterSheet = ({
@@ -50,10 +56,11 @@ export const ScooterSheet = ({
   onClose,
   onReportParkingViolation,
   onVehicleReceived,
-  navigateSupportCallback,
-  loginCallback,
   startOnboardingCallback,
-  navigation,
+  locationArrowOnPress,
+  navigateToSupport,
+  navigateToLogin,
+  navigateToScanQrCode,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -69,129 +76,132 @@ export const ScooterSheet = ({
     appStoreUri,
   } = useVehicle(id);
 
-  const {mobilityOperators} = useOperators();
-  const operatorIsIntegrationEnabled = mobilityOperators?.find(
-    (e) => e.id === operatorId,
-  )?.isDeepIntegrationEnabled;
+  const operator = useOperators().byId(operatorId);
+  const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
 
-  const {isLoading: shmoReqIsLoading, hasBlockers} = useShmoRequirements();
+  const {isLoading: shmoReqIsLoading, hasBlockers} =
+    useShmoRequirements(operatorId);
+
   const {operatorBenefit} = useOperatorBenefit(operatorId);
   const selectedPaymentMethod = useSelectedShmoPaymentMethod();
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
-  const {
-    isParkingViolationsReportingEnabled,
-    isShmoDeepIntegrationEnabled,
-    isMapV2Enabled,
-  } = useFeatureTogglesContext();
+  const {isParkingViolationsReportingEnabled, isShmoDeepIntegrationEnabled} =
+    useFeatureTogglesContext();
 
   return (
-    <BottomSheetContainer
-      title={t(MobilityTexts.formFactor(FormFactor.Scooter))}
-      maxHeightValue={0.7}
-      onClose={onClose}
+    <MapBottomSheet
+      canMinimize={true}
+      closeCallback={onClose}
+      enablePanDownToClose={false}
+      closeOnBackdropPress={false}
+      allowBackgroundTouch={true}
+      enableDynamicSizing={true}
+      heading={operatorName}
+      subText={t(MobilityTexts.formFactor(FormFactor.Scooter))}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      logoUrl={brandLogoUrl}
+      locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
-      <>
-        {(isLoading || shmoReqIsLoading) && (
-          <View style={styles.activityIndicator}>
-            <ActivityIndicator size="large" />
-          </View>
-        )}
-        {!isLoading && !shmoReqIsLoading && !isError && vehicle && (
-          <>
-            <ScrollView style={styles.container}>
-              {operatorBenefit && (
-                <OperatorBenefit
-                  benefit={operatorBenefit}
-                  formFactor={FormFactor.Scooter}
-                  style={styles.operatorBenefit}
-                />
-              )}
+      {(isLoading || shmoReqIsLoading) && (
+        <View
+          style={styles.activityIndicator}
+          accessibilityRole="progressbar"
+          accessibilityLiveRegion="polite"
+        >
+          <ActivityIndicator size="large" />
+        </View>
+      )}
+      {!isLoading && !shmoReqIsLoading && !isError && vehicle && (
+        <>
+          <View style={styles.container}>
+            {operatorBenefit && (
+              <OperatorBenefit
+                benefit={operatorBenefit}
+                formFactor={FormFactor.Scooter}
+                style={styles.operatorBenefit}
+              />
+            )}
+            <View style={styles.vehicleCardWrapper}>
               <VehicleCard
                 pricingPlan={vehicle.pricingPlan}
                 currentFuelPercent={vehicle.currentFuelPercent}
                 currentRangeMeters={vehicle.currentRangeMeters}
-                operatorName={operatorName}
-                brandLogoUrl={brandLogoUrl}
               />
-              {selectedPaymentMethod &&
-                isShmoDeepIntegrationEnabled &&
-                isMapV2Enabled &&
-                !hasBlockers &&
-                operatorIsIntegrationEnabled && (
-                  <Section style={styles.paymentWrapper}>
-                    <PaymentSelectionSectionItem
-                      paymentMethod={selectedPaymentMethod}
-                      onPress={selectPaymentMethod}
-                    />
-                  </Section>
-                )}
-            </ScrollView>
-            <View style={styles.footer}>
-              {isShmoDeepIntegrationEnabled &&
-              isMapV2Enabled &&
-              operatorId &&
-              operatorIsIntegrationEnabled ? (
-                <View style={styles.actionWrapper}>
-                  <ShmoActionButton
-                    onLogin={loginCallback}
-                    onStartOnboarding={startOnboardingCallback}
-                    vehicleId={id}
-                    operatorId={operatorId}
+            </View>
+
+            {selectedPaymentMethod &&
+              isShmoDeepIntegrationEnabled &&
+              !hasBlockers &&
+              operatorIsIntegrationEnabled && (
+                <Section style={styles.paymentWrapper}>
+                  <PaymentSelectionSectionItem
                     paymentMethod={selectedPaymentMethod}
+                    onPress={selectPaymentMethod}
                   />
+                </Section>
+              )}
+          </View>
+          <View style={styles.footer}>
+            {isShmoDeepIntegrationEnabled &&
+            operatorId &&
+            operatorIsIntegrationEnabled ? (
+              <View style={styles.actionWrapper}>
+                <ShmoActionButton
+                  onStartOnboarding={startOnboardingCallback}
+                  loginCallback={navigateToLogin}
+                  vehicleId={id}
+                  operatorId={operatorId}
+                  paymentMethod={selectedPaymentMethod}
+                />
+                <Button
+                  expanded={true}
+                  onPress={() => {
+                    navigateToSupport({vehicleId: id, operatorId});
+                  }}
+                  text={t(MobilityTexts.helpText)}
+                  mode="secondary"
+                  backgroundColor={theme.color.background.neutral[1]}
+                />
+              </View>
+            ) : (
+              <>
+                {rentalAppUri && (
+                  <OperatorActionButton
+                    operatorId={operatorId}
+                    operatorName={operatorName}
+                    appStoreUri={appStoreUri}
+                    rentalAppUri={rentalAppUri}
+                  />
+                )}
+                {isParkingViolationsReportingEnabled && (
                   <Button
                     expanded={true}
-                    onPress={() => {
-                      navigateSupportCallback();
-                      navigation.navigate('Root_ScooterHelpScreen', {
-                        vehicleId: id,
-                        operatorId,
-                      });
-                    }}
-                    text={t(MobilityTexts.helpText)}
+                    style={styles.parkingViolationsButton}
+                    text={t(MobilityTexts.reportParkingViolation)}
                     mode="secondary"
+                    onPress={onReportParkingViolation}
+                    rightIcon={{svg: ArrowRight}}
                     backgroundColor={theme.color.background.neutral[1]}
                   />
-                </View>
-              ) : (
-                <>
-                  {rentalAppUri && (
-                    <OperatorActionButton
-                      operatorId={operatorId}
-                      operatorName={operatorName}
-                      benefit={operatorBenefit}
-                      appStoreUri={appStoreUri}
-                      rentalAppUri={rentalAppUri}
-                    />
-                  )}
-                  {isParkingViolationsReportingEnabled && (
-                    <Button
-                      expanded={true}
-                      style={styles.parkingViolationsButton}
-                      text={t(MobilityTexts.reportParkingViolation)}
-                      mode="secondary"
-                      onPress={onReportParkingViolation}
-                      rightIcon={{svg: ArrowRight}}
-                      backgroundColor={theme.color.background.neutral[1]}
-                    />
-                  )}
-                </>
-              )}
-            </View>
-          </>
-        )}
-        {!isLoading && (isError || !vehicle) && (
-          <View style={styles.footer}>
-            <MessageInfoBox
-              type="error"
-              message={t(ScooterTexts.loadingFailed)}
-            />
+                )}
+              </>
+            )}
           </View>
-        )}
-      </>
-    </BottomSheetContainer>
+        </>
+      )}
+      {!isLoading && (isError || !vehicle) && (
+        <View style={styles.footer}>
+          <MessageInfoBox
+            type="error"
+            message={t(ScooterTexts.loadingFailed)}
+          />
+        </View>
+      )}
+    </MapBottomSheet>
   );
 };
 
@@ -201,14 +211,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacing.medium,
     },
     paymentWrapper: {
-      paddingHorizontal: theme.spacing.medium,
       marginBottom: theme.spacing.medium,
     },
     operatorBenefit: {
       marginBottom: theme.spacing.medium,
     },
     container: {
-      gap: theme.spacing.medium,
+      paddingHorizontal: theme.spacing.medium,
     },
     actionWrapper: {
       gap: theme.spacing.medium,
@@ -222,6 +231,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     operatorNameAndLogo: {
       flexDirection: 'row',
+    },
+    vehicleCardWrapper: {
+      marginBottom: theme.spacing.medium,
     },
   };
 });

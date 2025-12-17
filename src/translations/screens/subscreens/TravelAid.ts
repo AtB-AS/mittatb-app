@@ -1,5 +1,6 @@
 import {translation as _} from '../../commons';
-export const TravelAidTexts = {
+
+const TravelAidTexts = {
   close: _('Lukk Reisehjelp', 'Close Journey Aid', 'Lukk Reisehjelp'),
   stopPlaceHeader: {
     from: _('Fra:', 'From:', 'Frå:'),
@@ -23,9 +24,9 @@ export const TravelAidTexts = {
       'Stoppet er sendt!',
     ),
     notAvailable: _(
-      'Ikke mulig å sende stopp signal nå',
+      'Ikke mulig å sende stoppsignal nå',
       'Not possible to send stop signal now',
-      'Ikke mogleg å sende stopp signal no',
+      'Ikke mogleg å sende stoppsignal no',
     ),
   },
   apiError: {
@@ -54,4 +55,20 @@ export const TravelAidTexts = {
       'Vi har ingen kontakt med køyretøyet. Prøv igjen seinare eller velg ein annan avgang.',
     ),
   },
+  onboarding: {
+    title: _(
+      'Vil du prøve stoppknapp?',
+      'Want to try our stop button?',
+      'Vil du prøve stoppknapp?',
+    ),
+    description: _(
+      'For å få tilgang til stoppknappen i appen, må du slå på Reisehjelp her på denne siden eller i appens tilgjengelighetsinnstillinger.\n\nReisehjelp gir deg mulighet til å stoppe buss og trikk fra holdeplass. I tillegg får du sanntidsinformasjon før ankomst på valgt holdeplass og under reisen.\n\nDu finner Reisehjelp ved å velge en buss eller trikk under Avganger i hovedmenyen.',
+      "To access the stop button in the app, you need to enable Journey Aid here on this page or in the app's accessibility settings.\n\nJourney Aid lets you stop buses and trams from the stop. In addition, you get real-time information before arrival at the selected stop and during the journey.\n\nYou can find Journey Aid by selecting a bus or tram under Departures in the main menu.",
+      'For å få tilgang til stoppknappen i appen, må du slå på Reisehjelp her på denne sida eller i appens tilgjengelegheitsinnstillingar.\n\nReisehjelp gir deg moglegheit til å stoppe buss og trikk frå haldeplass. I tillegg får du sanntidsinformasjon før ankomst på vald haldeplass og under reisa.\n\nDu finn Reisehjelp ved å velje ein buss eller trikk under Avgangar i hovudmenyen.',
+    ),
+    activate: _('Slå på Reisehjelp', 'Enable Journey Aid', 'Slå på Reisehjelp'),
+    skip: _('Hopp over', 'Skip', 'Hopp over'),
+  },
 };
+
+export default TravelAidTexts;

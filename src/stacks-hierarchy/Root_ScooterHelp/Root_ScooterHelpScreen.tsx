@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import {RootNavigationProps, RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {ScooterHelpTexts} from '@atb/translations/screens/ScooterHelp';
 import {
   ExpandableSectionItem,
@@ -11,15 +11,18 @@ import {
   Section,
 } from '@atb/components/sections';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
-import {useNavigation} from '@react-navigation/native';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {FullScreenView} from '@atb/components/screen-view';
 import {useOperators} from '@atb/modules/mobility';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export type ScooterHelpScreenProps =
   RootStackScreenProps<'Root_ScooterHelpScreen'>;
 
-export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
+export const Root_ScooterHelpScreen = ({
+  navigation,
+  route,
+}: ScooterHelpScreenProps) => {
   /* vehicleId is only for support request body in Root_ContactScooterOperatorScreen,
      it can be null when there is an active booking.
      The support api accepts either vehicleId(as assetId) or a bookingId */
@@ -32,15 +35,16 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
   const operatorName = operators.byId(operatorId)?.name;
   const style = useStyles();
   const {t, language} = useTranslation();
-  const navigation = useNavigation<RootNavigationProps>();
   const {scooterFaqs} = useFirestoreConfigurationContext();
   const [currentlyOpenFaqIndex, setCurrentlyOpenFaqIndex] = useState<number>();
+  const focusRef = useFocusOnLoad(navigation);
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(ScooterHelpTexts.title),
-        rightButton: {type: 'close', withIcon: true},
+        rightButton: {type: 'close'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading ref={focusRef} text={t(ScooterHelpTexts.title)} />
@@ -84,7 +88,7 @@ export const Root_ScooterHelpScreen = ({route}: ScooterHelpScreenProps) => {
             <ExpandableSectionItem
               key={item.id}
               text={getTextForLanguage(item.title, language) ?? ''}
-              textType="body__primary--bold"
+              textType="body__m__strong"
               showIconText={false}
               expanded={currentlyOpenFaqIndex === index}
               onPress={() => {

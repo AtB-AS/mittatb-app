@@ -29,7 +29,7 @@ export const BenefitTile = ({
   benefit,
   interactiveColor,
   onNavigateToMap,
-}: BenefitCardProps): JSX.Element => {
+}: BenefitCardProps): React.JSX.Element => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const title = t(
@@ -82,14 +82,11 @@ export const BenefitTile = ({
             style: styles.image,
           }}
         />
-        <ThemeText
-          typography="body__tertiary--bold"
-          color={interactiveColor.default}
-        >
+        <ThemeText typography="heading__xs" color={interactiveColor.default}>
           {title}
         </ThemeText>
         <ThemeText
-          typography="body__tertiary"
+          typography="body__xs"
           color="secondary"
           style={styles.description}
         >
@@ -108,7 +105,7 @@ export const BenefitTiles = ({
   benefits,
   style,
   ...props
-}: BenefitCardsProps): JSX.Element => {
+}: BenefitCardsProps): React.JSX.Element => {
   const styles = useStyles();
 
   return (

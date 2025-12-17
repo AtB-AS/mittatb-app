@@ -19,22 +19,19 @@ import {Button} from '@atb/components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useVehicle} from '@atb/modules/mobility';
-import {useNavigation} from '@react-navigation/native';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {ToggleSectionItem} from '@atb/components/sections';
+import {useMapContext} from '../../MapContext';
+import {ScooterHelpParams} from '../../types';
 
 type ShmoTestingProps = {
-  selectedVehicleId?: string;
-  showSelectedFeature: boolean;
-  setShowSelectedFeature: (showSelectedFeature: boolean) => void;
+  navigateToScooterSupport: (params: ScooterHelpParams) => void;
 };
 
-export const ShmoTesting = ({
-  selectedVehicleId,
-  showSelectedFeature,
-  setShowSelectedFeature,
-}: ShmoTestingProps) => {
+export const ShmoTesting = ({navigateToScooterSupport}: ShmoTestingProps) => {
+  const {mapState} = useMapContext();
+  const selectedVehicleId =
+    mapState.feature?.properties?.id ?? mapState.assetId ?? '';
+
   const [previousBookingId, setPreviousBookingId] = useState<string>();
   const [vehicleId, setVehicleId] = useState<string | undefined>(
     selectedVehicleId,
@@ -46,7 +43,6 @@ export const ShmoTesting = ({
   const interactiveColor = theme.color.interactive[2];
   const destructiveColor = theme.color.interactive.destructive;
 
-  const navigation = useNavigation<RootNavigationProps>();
   const styles = useStyles();
   const {height: windowHeight} = useWindowDimensions();
   const {top: safeAreaTop} = useSafeAreaInsets();
@@ -73,19 +69,19 @@ export const ShmoTesting = ({
 
   const {
     mutateAsync: getAssetFromQrCode,
-    isLoading: getAssetFromQrCodeIsLoading,
+    isPending: getAssetFromQrCodeIsLoading,
     isError: getAssetFromQrCodeIsError,
   } = useGetAssetFromQrCodeMutation();
 
   const {
     mutateAsync: initShmoOneStopBooking,
-    isLoading: initShmoOneStopBookingIsLoading,
+    isPending: initShmoOneStopBookingIsLoading,
     isError: initShmoOneStopBookingIsError,
   } = useInitShmoOneStopBookingMutation();
 
   const {
     mutateAsync: sendShmoBookingEvent,
-    isLoading: sendShmoBookingEventIsLoading,
+    isPending: sendShmoBookingEventIsLoading,
     isError: sendShmoBookingEventIsError,
   } = useSendShmoBookingEventMutation();
 
@@ -230,12 +226,12 @@ export const ShmoTesting = ({
         onPress={() => {
           closeBottomSheet();
           if (vehicleId) {
-            navigation.navigate('Root_ScooterHelpScreen', {
+            navigateToScooterSupport({
               vehicleId: vehicleId,
               operatorId: operatorId ?? 'YRY:Operator:Ryde',
             });
           } else if (activeShmoBooking) {
-            navigation.navigate('Root_ScooterHelpScreen', {
+            navigateToScooterSupport({
               operatorId: operatorId ?? 'YRY:Operator:Ryde',
               bookingId: activeShmoBooking.bookingId,
             });
@@ -243,11 +239,6 @@ export const ShmoTesting = ({
         }}
         text="Help"
         hasShadow={true}
-      />
-      <ToggleSectionItem
-        text="Show selected map feature"
-        value={showSelectedFeature}
-        onValueChange={setShowSelectedFeature}
       />
     </View>
   );

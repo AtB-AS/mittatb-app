@@ -1,7 +1,6 @@
 import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {Pin} from '@atb/assets/svg/mono-icons/map';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
@@ -12,7 +11,7 @@ import {useFavoritesContext} from '@atb/modules/favorites';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
-import React, {RefObject, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Alert, Keyboard, ScrollView, View} from 'react-native';
 import {EmojiSheet} from './EmojiSheet';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
@@ -23,6 +22,7 @@ import {
   TextInputSectionItem,
 } from '@atb/components/sections';
 import {FullScreenFooter} from '@atb/components/screen-footer';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 export type Props = RootStackScreenProps<'Root_AddEditFavoritePlaceScreen'>;
 
@@ -45,11 +45,13 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
   );
   const [emoji, setEmoji] = useState<string | undefined>(editItem?.emoji);
   const [name, setName] = useState<string>(editItem?.name ?? '');
-  const location = useOnlySingleLocation<Props['route']>(
+  const location = useOnlySingleLocation(
+    route,
     'searchLocation',
     editItem?.location,
   );
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const onCloseFocusRef = useRef<View | null>(null);
 
   useEffect(() => setEmoji(editItem?.emoji), [editItem?.emoji]);
 
@@ -105,35 +107,8 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
     );
   };
 
-  const {open: openBottomSheet} = useBottomSheetContext();
-
   const openEmojiSheet = () => {
-    openBottomSheet(
-      () => (
-        <EmojiSheet
-          localizedCategories={[
-            t(AddEditFavoriteTexts.emojiSheet.categories.smileys),
-            t(AddEditFavoriteTexts.emojiSheet.categories.people),
-            t(AddEditFavoriteTexts.emojiSheet.categories.animals),
-            t(AddEditFavoriteTexts.emojiSheet.categories.food),
-            t(AddEditFavoriteTexts.emojiSheet.categories.activities),
-            t(AddEditFavoriteTexts.emojiSheet.categories.travel),
-            t(AddEditFavoriteTexts.emojiSheet.categories.objects),
-            t(AddEditFavoriteTexts.emojiSheet.categories.symbols),
-          ]}
-          value={emoji ?? null}
-          closeOnSelect={true}
-          onEmojiSelected={(emoji) => {
-            if (emoji == null) {
-              setEmoji(undefined);
-            } else {
-              setEmoji(emoji);
-            }
-          }}
-        />
-      ),
-      onCloseFocusRef,
-    );
+    bottomSheetModalRef.current?.present();
   };
 
   const openEmojiPopup = () => {
@@ -149,7 +124,16 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
             ? t(AddEditFavoriteTexts.header.titleEdit)
             : t(AddEditFavoriteTexts.header.title)
         }
-        leftButton={{type: !!editItem ? 'close' : 'back'}}
+        rightButton={
+          route.params.transitionOverride !== 'slide-from-right'
+            ? {type: 'close'}
+            : undefined
+        }
+        leftButton={
+          route.params.transitionOverride === 'slide-from-right'
+            ? {type: 'back'}
+            : undefined
+        }
       />
 
       <ScrollView style={styles.innerContainer}>
@@ -204,7 +188,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
               !emoji ? (
                 <ThemeIcon svg={Pin} />
               ) : (
-                <ThemeText typography="body__primary">{emoji}</ThemeText>
+                <ThemeText typography="body__m">{emoji}</ThemeText>
               )
             }
             testID="iconButton"
@@ -248,6 +232,30 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
           />
         </View>
       </FullScreenFooter>
+
+      <EmojiSheet
+        localizedCategories={[
+          t(AddEditFavoriteTexts.emojiSheet.categories.smileys),
+          t(AddEditFavoriteTexts.emojiSheet.categories.people),
+          t(AddEditFavoriteTexts.emojiSheet.categories.animals),
+          t(AddEditFavoriteTexts.emojiSheet.categories.food),
+          t(AddEditFavoriteTexts.emojiSheet.categories.activities),
+          t(AddEditFavoriteTexts.emojiSheet.categories.travel),
+          t(AddEditFavoriteTexts.emojiSheet.categories.objects),
+          t(AddEditFavoriteTexts.emojiSheet.categories.symbols),
+        ]}
+        value={emoji ?? null}
+        closeOnSelect={true}
+        onEmojiSelected={(emoji) => {
+          if (emoji == null) {
+            setEmoji(undefined);
+          } else {
+            setEmoji(emoji);
+          }
+        }}
+        bottomSheetModalRef={bottomSheetModalRef}
+        onCloseFocusRef={onCloseFocusRef}
+      />
     </View>
   );
 };

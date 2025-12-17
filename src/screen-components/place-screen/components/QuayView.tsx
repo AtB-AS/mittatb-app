@@ -1,6 +1,6 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {StyleSheet} from '@atb/theme';
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import {
   DateSelection,
@@ -8,14 +8,13 @@ import {
 } from '@atb/components/date-selection';
 import {FavoriteToggle} from './FavoriteToggle';
 import {QuaySection} from './QuaySection';
-import {useDeparturesData} from '../hooks/use-departures-data';
-import {hasFavorites} from './StopPlacesView';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
-import {useIsFocused} from '@react-navigation/native';
 import type {ContrastColor} from '@atb-as/theme';
 import {useFavoritesContext} from '@atb/modules/favorites';
+import {hasFavorites} from '../utils';
+import {DeparturesProps, useDepartures} from '../hooks/use-departures';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
 
@@ -56,19 +55,26 @@ export function QuayView({
   const {favoriteDepartures} = useFavoritesContext();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
-  const isFocused = useIsFocused();
 
-  const {state, forceRefresh} = useDeparturesData(
-    [quay.id],
-    NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
-    showOnlyFavorites,
-    isFocused,
-    mode,
-    searchStartTime,
+  const departuresProps: DeparturesProps = useMemo(
+    () => ({
+      quayIds: [quay.id],
+      limitPerQuay: NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
+      showOnlyFavorites,
+      mode,
+      startTime: searchStartTime,
+    }),
+    [mode, quay.id, searchStartTime, showOnlyFavorites],
   );
 
+  const {
+    departures,
+    departuresIsLoading,
+    departuresIsError,
+    refetchDepartures,
+  } = useDepartures(departuresProps);
+
   const quayListData: SectionListData<Quay>[] = [{data: [quay]}];
-  const didLoadingDataFail = !!state.error;
 
   const placeHasFavorites = hasFavorites(
     favoriteDepartures,
@@ -85,7 +91,7 @@ export function QuayView({
     <SectionList
       ListHeaderComponent={
         <>
-          {didLoadingDataFail && (
+          {departuresIsError && (
             <View
               style={[
                 styles.messageBox,
@@ -96,7 +102,7 @@ export function QuayView({
                 type="error"
                 message={t(DeparturesTexts.message.resultFailed)}
                 onPressConfig={{
-                  action: forceRefresh,
+                  action: refetchDepartures,
                   text: t(dictionary.retry),
                 }}
               />
@@ -121,8 +127,8 @@ export function QuayView({
       }
       refreshControl={
         <RefreshControl
-          refreshing={state.isLoading}
-          onRefresh={forceRefresh}
+          refreshing={departuresIsLoading}
+          onRefresh={refetchDepartures}
           testID="isLoading"
         />
       }
@@ -132,9 +138,9 @@ export function QuayView({
       renderItem={({item}) => (
         <QuaySection
           quay={item}
-          data={state.data}
-          isLoading={state.isLoading}
-          didLoadingDataFail={didLoadingDataFail}
+          data={departures}
+          isLoading={departuresIsLoading}
+          didLoadingDataFail={departuresIsError}
           navigateToDetails={navigateToDetails}
           testID="quaySection"
           showOnlyFavorites={showOnlyFavorites}

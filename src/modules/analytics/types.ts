@@ -10,6 +10,7 @@ export type AnalyticsEventContext =
   | 'Map'
   | 'Mobility'
   | 'Onboarding'
+  | 'OnPress event'
   | 'Parking violations'
   | 'Profile'
   | 'Receipt'
@@ -18,4 +19,6 @@ export type AnalyticsEventContext =
   | 'Trip details'
   | 'Trip search'
   | 'In App Review'
-  | 'Bonus';
+  | 'Bonus'
+  | 'Smart Park & Ride'
+  | 'AnnouncementSheet';

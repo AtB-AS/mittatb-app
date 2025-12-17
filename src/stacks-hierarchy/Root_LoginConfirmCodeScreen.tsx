@@ -31,7 +31,7 @@ const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 type Props = RootStackScreenProps<'Root_LoginConfirmCodeScreen'>;
 type LoginErrorCode = ConfirmationErrorCode | PhoneSignInErrorCode;
 
-export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
+export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
   const {phoneNumber} = route.params;
   const {t} = useTranslation();
   const styles = useStyles();
@@ -41,7 +41,7 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
   const [code, setCode] = useState('');
   const [error, setError] = useState<LoginErrorCode>();
   const [isLoading, setIsLoading] = useState(false);
-  const focusRef = useFocusOnLoad();
+  const focusRef = useFocusOnLoad(navigation);
   const {completeOnboardingSection} = useOnboardingContext();
   const {isRateLimited, rateLimitIfNeeded} = useRateLimitWhen<LoginErrorCode>(
     (code) => code === 'too_many_attempts',
@@ -76,7 +76,6 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
     <View style={styles.container}>
       <FullScreenHeader
         leftButton={{type: 'back'}}
-        setFocusOnLoad={false}
         color={themeColor}
         title={t(LoginTexts.logInOptions.title)}
         globalMessageContext={GlobalMessageContextEnum.appLoginPhone}
@@ -91,7 +90,7 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
         >
           <View accessible={true} accessibilityRole="header" ref={focusRef}>
             <ThemeText
-              typography="body__primary--jumbo--bold"
+              typography="heading__3xl"
               style={styles.title}
               color={themeColor}
             >
@@ -158,7 +157,7 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
                 >
                   <ThemeText
                     style={styles.resendButtonText}
-                    typography="body__primary--underline"
+                    typography="body__m__underline"
                     color={themeColor}
                   >
                     {t(LoginTexts.confirmCode.resendButton)}

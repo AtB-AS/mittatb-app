@@ -4,7 +4,7 @@ import {APP_VERSION} from '@env';
 import {Platform} from 'react-native';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {
-  AppPlatformType,
+  AppPlatform,
   GlobalMessageContextEnum,
   GlobalMessageRaw,
   GlobalMessageType,
@@ -93,7 +93,7 @@ function mapToContexts(data: any): GlobalMessageContextEnum[] | undefined {
     .filter(Boolean) as GlobalMessageContextEnum[];
 }
 
-function isAppPlatformValid(platforms: AppPlatformType[]) {
+function isAppPlatformValid(platforms: AppPlatform[]) {
   if (!platforms) return true;
   return !!platforms.find(
     (platform) => platform.toLowerCase() === Platform.OS.toLowerCase(),

@@ -90,9 +90,8 @@ const GlobalMessagesContextProvider = ({children}: Props) => {
   const addDismissedGlobalMessages = async (
     dismissedMessage: GlobalMessageType,
   ) => {
-    const dismissedGlobalMessages = await addDismissedMessageInStore(
-      dismissedMessage,
-    );
+    const dismissedGlobalMessages =
+      await addDismissedMessageInStore(dismissedMessage);
     setDismissedGlobalMessages(dismissedGlobalMessages);
   };
 

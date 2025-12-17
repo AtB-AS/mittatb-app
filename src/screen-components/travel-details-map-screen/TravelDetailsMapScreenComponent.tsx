@@ -10,9 +10,8 @@ import {
   flyToLocation,
   MapCameraConfig,
   MapFilterType,
-  MapLeg,
   NationalStopRegistryFeatures,
-  PositionArrow,
+  LocationArrow,
   useControlPositionsStyle,
   useMapViewConfig,
 } from '@atb/modules/map';
@@ -39,16 +38,21 @@ import {
   MapState,
   RegionPayload,
 } from '@rnmapbox/maps/lib/typescript/src/components/MapView';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
+import {ThemeText} from '@atb/components/text';
+import {debugProgressBetweenStopsText} from '../travel-details-screens/utils';
+import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
+import {usePreferencesContext} from '@atb/modules/preferences';
 
 export type TravelDetailsMapScreenParams = {
-  legs: MapLeg[];
+  serviceJourneyPolylines: ServiceJourneyPolyline[];
   vehicleWithPosition?: VehicleWithPosition;
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
   mode?: AnyMode;
   subMode?: AnySubMode;
   mapFilter?: MapFilterType;
+  estimatedCalls?: Array<EstimatedCallWithQuayFragment>;
 };
 
 type Props = TravelDetailsMapScreenParams & {
@@ -60,24 +64,30 @@ const FOLLOW_MIN_ZOOM_LEVEL = 8;
 const FOLLOW_ANIMATION_DURATION = 500;
 
 export const TravelDetailsMapScreenComponent = ({
-  legs,
+  serviceJourneyPolylines,
   vehicleWithPosition,
   toPlace,
   fromPlace,
   onPressBack,
   mode,
   subMode,
+  estimatedCalls,
 }: Props) => {
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const {location: geolocation} = useGeolocationContext();
   const isFocusedAndActive = useIsFocusedAndActive();
   const [loadedMap, setLoadedMap] = useState(false);
+  const {
+    preferences: {debugShowProgressBetweenStops},
+  } = usePreferencesContext();
 
-  const {isMapV2Enabled} = useFeatureTogglesContext();
   const mapViewConfig = useMapViewConfig();
 
-  const features = useMemo(() => createMapLines(legs), [legs]);
+  const features = useMemo(
+    () => createMapLines(serviceJourneyPolylines),
+    [serviceJourneyPolylines],
+  );
   const bounds = !vehicleWithPosition ? getMapBounds(features) : undefined;
   const centerPosition = vehicleWithPosition?.location
     ? [
@@ -158,12 +168,11 @@ export const TravelDetailsMapScreenComponent = ({
           centerCoordinate={vehicleWithPosition ? centerPosition : undefined}
           animationDuration={0}
         />
-        {isMapV2Enabled && (
-          <NationalStopRegistryFeatures
-            selectedFeaturePropertyId={undefined}
-            onMapItemClick={undefined}
-          />
-        )}
+        <NationalStopRegistryFeatures
+          selectedFeaturePropertyId={undefined}
+          onMapItemClick={undefined}
+        />
+
         <MapboxGL.UserLocation
           showsUserHeadingIndicator
           renderMode={UserLocationRenderMode.Native}
@@ -207,7 +216,7 @@ export const TravelDetailsMapScreenComponent = ({
           controlStyles.mapButtonsContainerRight,
         ]}
       >
-        <PositionArrow
+        <LocationArrow
           onPress={() => {
             setShouldTrack(false);
             flyToLocation({
@@ -218,6 +227,11 @@ export const TravelDetailsMapScreenComponent = ({
           }}
         />
       </View>
+      {debugShowProgressBetweenStops && liveVehicle && (
+        <ThemeText style={{color: 'white', backgroundColor: 'black'}}>
+          {debugProgressBetweenStopsText(liveVehicle, estimatedCalls)}
+        </ThemeText>
+      )}
     </View>
   );
 };
@@ -326,8 +340,8 @@ const LiveVehicleMarker = ({
                 isError
                   ? theme.color.interactive.destructive.default.background
                   : isStale
-                  ? theme.color.interactive[1].default.background
-                  : fillColor
+                    ? theme.color.interactive[1].default.background
+                    : fillColor
               }
             />
           )}
@@ -347,7 +361,7 @@ const LiveVehicleIcon = ({
   subMode,
   isStale,
   isError,
-}: LiveVehicleIconProps): JSX.Element => {
+}: LiveVehicleIconProps): React.JSX.Element => {
   const {theme} = useThemeContext();
   const fillColor = useTransportColor(mode, subMode).primary.foreground.primary;
   const {svg} = getTransportModeSvg(mode, subMode);

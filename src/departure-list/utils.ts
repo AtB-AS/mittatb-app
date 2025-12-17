@@ -106,23 +106,20 @@ function updateDeparturesWithRealtime(
   });
 }
 
-export function updateDeparturesWithRealtimeV2(
-  estimatedCalls: EstimatedCall[] | null,
-  realtime?: DeparturesRealtimeData,
-): EstimatedCall[] | null {
-  if (!estimatedCalls) return null;
-  if (!realtime) return estimatedCalls;
+export function getDeparturesAugmentedWithRealtimeData(
+  estimatedCalls?: EstimatedCall[],
+  realtimeDeparturesData?: DeparturesRealtimeData,
+): EstimatedCall[] {
+  if (!estimatedCalls) return [];
+  if (!realtimeDeparturesData) return estimatedCalls;
 
   return estimatedCalls
-    .filter((departure) =>
-      isValidDepartureTime(departure.expectedDepartureTime),
-    )
     .map((departure) => {
       const serviceJourneyId = departure.serviceJourney?.id;
       const quayId = departure.quay?.id;
       if (!serviceJourneyId || !quayId) return departure;
 
-      const quayRealtime = realtime[quayId];
+      const quayRealtime = realtimeDeparturesData[quayId];
       if (!quayRealtime) return departure;
 
       const departureRealtime = quayRealtime.departures[serviceJourneyId];
@@ -151,10 +148,14 @@ export function hasNoDeparturesOnGroup(group: DepartureGroup) {
   );
 }
 
-export function isValidDeparture(departure: DepartureTime) {
-  return !isNumberOfMinutesInThePast(departure.time, HIDE_AFTER_NUM_MINUTES);
+export function isValidDeparture(departure: DepartureTime, now?: number) {
+  return !isNumberOfMinutesInThePast(
+    departure.time,
+    HIDE_AFTER_NUM_MINUTES,
+    now,
+  );
 }
 
-export function isValidDepartureTime(time: string) {
-  return !isNumberOfMinutesInThePast(time, HIDE_AFTER_NUM_MINUTES);
+export function isValidDepartureTime(time: string, now?: number) {
+  return !isNumberOfMinutesInThePast(time, HIDE_AFTER_NUM_MINUTES, now);
 }

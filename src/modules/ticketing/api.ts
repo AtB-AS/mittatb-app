@@ -12,11 +12,17 @@ import {
   ReserveOffer,
   SendReceiptResponse,
   TicketRecipientType,
+  ConsumableSchoolCarnetResponse,
 } from './types';
-import {PreassignedFareProduct} from '@atb/modules/configuration';
+import {
+  PreassignedFareProduct,
+  SupplementProduct,
+} from '@atb/modules/configuration';
 import {convertIsoStringFieldsToDate} from '@atb/utils/date';
 import capitalize from 'lodash/capitalize';
 import qs from 'query-string';
+import {isDefined} from '@atb/utils/presence';
+import {Language} from '@atb/translations/commons';
 
 export async function listRecentFareContracts(): Promise<RecentOrderDetails[]> {
   const url = 'sales/v1/order/recent';
@@ -39,6 +45,7 @@ export type OfferSearchParams = {
 type Traveller = {
   id: string;
   userType: string;
+  baggageTypes?: string[];
   count: number;
 };
 
@@ -89,6 +96,14 @@ export async function consumeCarnet(fareContractId: string) {
   return response.data;
 }
 
+export async function getSchoolCarnetInfo(fareContractId: string) {
+  const url = `ticket/v4/consumable/school-carnet/${fareContractId}`;
+  const response = await client.get<ConsumableSchoolCarnetResponse>(url, {
+    authWithIdToken: true,
+  });
+  return response.data;
+}
+
 export async function activateFareContractNow(fareContractId: string) {
   const url = `ticket/v4/start-time`;
   const response = await client.put<void>(
@@ -103,7 +118,7 @@ export async function activateFareContractNow(fareContractId: string) {
 
 type ReserveOfferParams = {
   offers: ReserveOffer[];
-  paymentType: PaymentType;
+  paymentType?: PaymentType;
   opts?: AxiosRequestConfig;
   scaExemption: boolean;
   customerAccountId: string;
@@ -130,6 +145,7 @@ export async function sendReceipt(
   orderId: string,
   orderVersion: number,
   emailAddress: string,
+  language: Language,
 ) {
   const url = 'sales/v1/receipt';
 
@@ -137,9 +153,21 @@ export async function sendReceipt(
     orderId,
     orderVersion,
     emailAddress,
+    language: mapToReceiptLanguage(language),
   });
 
   return response.data;
+}
+
+type ReceiptLanguage = 'nob' | 'eng';
+
+function mapToReceiptLanguage(language: Language): ReceiptLanguage {
+  switch (language) {
+    case Language.English:
+      return 'eng';
+    default:
+      return 'nob';
+  }
 }
 
 export async function reserveOffers({
@@ -194,7 +222,20 @@ export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
     authWithIdToken: true,
   });
 
-  return response.data;
+  return response.data
+    .map((p) => PreassignedFareProduct.safeParse(p).data)
+    .filter(isDefined);
+}
+
+export async function getSupplementProducts(): Promise<SupplementProduct[]> {
+  const url = 'product/v1/supplement';
+  const response = await client.get<SupplementProduct[]>(url, {
+    authWithIdToken: true,
+  });
+
+  return response.data
+    .map((p) => SupplementProduct.safeParse(p).data)
+    .filter(isDefined);
 }
 
 export async function getFareContracts(

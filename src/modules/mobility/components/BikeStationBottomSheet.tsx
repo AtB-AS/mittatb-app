@@ -1,6 +1,5 @@
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
 import {
@@ -8,7 +7,7 @@ import {
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet} from '@atb/theme';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {useBikeStation} from '../use-bike-station';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useOperatorBenefit} from '../use-operator-benefit';
@@ -31,12 +30,17 @@ import {
   PayWithBonusPointsCheckbox,
   findRelevantBonusProduct,
 } from '@atb/modules/bonus';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   stationId: string;
   distance: number | undefined;
   onClose: () => void;
   onStationReceived?: (station: BikeStationFragment) => void;
+  locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 
 export const BikeStationBottomSheet = ({
@@ -44,6 +48,8 @@ export const BikeStationBottomSheet = ({
   distance,
   onClose,
   onStationReceived,
+  locationArrowOnPress,
+  navigateToScanQrCode,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -67,15 +73,26 @@ export const BikeStationBottomSheet = ({
     operatorId,
     FormFactor.Bicycle,
   );
+  const {logEvent} = useAnalyticsContext();
 
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
   useDoOnceOnItemReceived(onStationReceived, station);
 
   return (
-    <BottomSheetContainer
-      maxHeightValue={0.6}
-      title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
-      onClose={onClose}
+    <MapBottomSheet
+      canMinimize={true}
+      enablePanDownToClose={false}
+      closeCallback={onClose}
+      closeOnBackdropPress={false}
+      allowBackgroundTouch={true}
+      enableDynamicSizing={true}
+      heading={operatorName}
+      subText={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      logoUrl={brandLogoUrl}
+      locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
       <>
         {isLoading && (
@@ -85,7 +102,7 @@ export const BikeStationBottomSheet = ({
         )}
         {!isLoading && !isError && station && (
           <>
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
@@ -101,7 +118,7 @@ export const BikeStationBottomSheet = ({
                     style={styles.operatorNameAndLogo}
                   />
                   <View style={styles.stationText}>
-                    <ThemeText typography="body__secondary" color="secondary">
+                    <ThemeText typography="body__s" color="secondary">
                       {stationName}
                     </ThemeText>
                     <WalkingDistance distance={distance} />
@@ -149,20 +166,24 @@ export const BikeStationBottomSheet = ({
                   operatorName={operatorName}
                   isChecked={payWithBonusPoints}
                   onPress={() =>
-                    setPayWithBonusPoints(
-                      (payWithBonusPoints) => !payWithBonusPoints,
-                    )
+                    setPayWithBonusPoints((payWithBonusPoints) => {
+                      const newState = !payWithBonusPoints;
+                      logEvent('Bonus', 'bonus points checkbox toggled', {
+                        bonusProductId: bonusProduct.id,
+                        newState: newState,
+                      });
+                      return newState;
+                    })
                   }
                   style={styles.payWithBonusPointsSection}
                 />
               )}
-            </ScrollView>
+            </View>
             {rentalAppUri && (
               <View style={styles.footer}>
                 <OperatorActionButton
                   operatorId={operatorId}
                   operatorName={operatorName}
-                  benefit={operatorBenefit}
                   appStoreUri={appStoreUri}
                   rentalAppUri={rentalAppUri}
                   isBonusPayment={payWithBonusPoints}
@@ -182,7 +203,7 @@ export const BikeStationBottomSheet = ({
           </View>
         )}
       </>
-    </BottomSheetContainer>
+    </MapBottomSheet>
   );
 };
 

@@ -10,6 +10,7 @@ import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {
   type FareProductTypeConfig,
   FareZone,
+  type SupplementProduct,
   UserProfile,
 } from '@atb-as/config-specs';
 import {isValidDateString} from '@atb/utils/date';
@@ -113,13 +114,18 @@ export const isSelectableProfile = (
   product: PreassignedFareProduct,
   profile: UserProfile,
 ) => {
-  const profileLimitations = product.limitations.userProfileRefs;
-  const emptyLimitations = !profileLimitations.length;
-  return (
-    emptyLimitations ||
-    profileLimitations.some(
-      (allowedProfileId) => profile.id === allowedProfileId,
-    )
+  return !!product.limitations.userProfileRefs?.some(
+    (allowedProfileId) => profile.id === allowedProfileId,
+  );
+};
+
+export const isSelectableSupplementProduct = (
+  currentSelection: PurchaseSelectionType,
+  supplementProduct: SupplementProduct,
+) => {
+  return !!currentSelection.preassignedFareProduct.limitations.supplementProductRefs?.some(
+    (allowedSupplementProductId) =>
+      supplementProduct.id === allowedSupplementProductId,
   );
 };
 
@@ -150,6 +156,11 @@ export const isValidSelection = (
     isSelectableProfile(selection.preassignedFareProduct, p),
   );
   if (!areProfilesValid) return false;
+
+  const areBaggageProductsValid = selection.baggageProductsWithCount.every(
+    (sp) => isSelectableSupplementProduct(selection, sp),
+  );
+  if (!areBaggageProductsValid) return false;
 
   const isFromZoneValid = selection.zones
     ? isSelectableZone(selection.preassignedFareProduct, selection.zones.from)
@@ -201,6 +212,9 @@ export const applyProductChange = (
   const userCount = currentSelection.userProfilesWithCount.filter((up) =>
     isSelectableProfile(product, up),
   );
+  const baggageProductCount = currentSelection.baggageProductsWithCount.filter(
+    (sp) => isSelectableSupplementProduct(currentSelection, sp),
+  );
 
   const isFromZoneValid =
     !currentSelection.zones ||
@@ -215,12 +229,15 @@ export const applyProductChange = (
     ? undefined
     : getDefaultZones(input, currentSelection.fareProductTypeConfig, product);
 
+  const userProfiles =
+    !userCount.length && !baggageProductCount.length
+      ? getDefaultUserProfiles(input, product)
+      : userCount;
+
   return {
     ...currentSelection,
     preassignedFareProduct: product,
-    userProfilesWithCount: userCount.length
-      ? userCount
-      : getDefaultUserProfiles(input, product),
+    userProfilesWithCount: userProfiles,
     zones: newZones ?? currentSelection.zones,
   };
 };

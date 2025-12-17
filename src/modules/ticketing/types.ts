@@ -72,6 +72,7 @@ export type RecentOrderDetails = {
 export type ReserveOffer = {
   offerId: string;
   count: number;
+  selectableProductIds?: string[];
 };
 
 /**
@@ -128,9 +129,9 @@ export type TicketRecipientType = {
  */
 export type ReserveOfferResponse = {
   orderId: string;
-  paymentId: number;
-  transactionId: number;
-  url: string;
+  paymentId?: number;
+  transactionId?: number;
+  url?: string;
   recurringPaymentId?: number;
 };
 
@@ -158,4 +159,16 @@ export type AddPaymentMethodResponse = {
  */
 export type RefundOptions = {
   isRefundable: boolean;
+};
+
+/**
+ * Defined by ConsumableSchoolCarnetResponse in
+ * https://github.com/AtB-AS/ticket/blob/main/ticket-service/src/handlers.rs#L280
+ *
+ * @todo Use zod instead
+ */
+export type ConsumableSchoolCarnetResponse = {
+  nextConsumableDateTime?: string | null;
+  maximumNumberOfAccessesPerDay: number;
+  numberOfUsedAccessesForToday: number;
 };

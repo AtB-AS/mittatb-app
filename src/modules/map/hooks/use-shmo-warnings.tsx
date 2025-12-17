@@ -6,7 +6,10 @@ import {
   getFeatureToSelect,
   isFeatureGeofencingZone,
 } from '../utils';
-import {useGeofencingZoneTextContent} from './use-geofencing-zone-text-content';
+import {
+  GeofencingZoneContent,
+  useGeofencingZoneContent,
+} from './use-geofencing-zone-content';
 import {ShmoWarnings} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useTranslation} from '@atb/translations';
 import {useVehicle} from '@atb/modules/mobility';
@@ -19,10 +22,9 @@ export const useShmoWarnings = (
   mapViewRef?: RefObject<MapView | null>,
 ) => {
   const {t} = useTranslation();
-  const [geofencingZoneMessage, setGeofencingZoneMessage] = useState<
-    string | null
-  >(null);
-  const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
+  const [geofencingZoneWarning, setGeofencingZoneWarning] =
+    useState<GeofencingZoneContent | null>(null);
+  const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {location} = useGeolocationContext();
 
   const {vehicle} = useVehicle(vehicleId);
@@ -68,7 +70,7 @@ export const useShmoWarnings = (
       );
 
       if (!geofencingZoneFeatures || geofencingZoneFeatures.length === 0) {
-        setGeofencingZoneMessage(null);
+        setGeofencingZoneWarning(null);
         return;
       }
 
@@ -81,12 +83,12 @@ export const useShmoWarnings = (
         featureToSelect?.properties?.geofencingZoneCustomProps?.code !==
         'allowed'
       ) {
-        const textContent = getGeofencingZoneTextContent(
+        const geofencingZoneContent = getGeofencingZoneContent(
           featureToSelect?.properties?.geofencingZoneCustomProps,
         );
-        setGeofencingZoneMessage(textContent.description);
+        setGeofencingZoneWarning(geofencingZoneContent);
       } else {
-        setGeofencingZoneMessage(null);
+        setGeofencingZoneWarning(null);
       }
     }, 1000),
   ).current;
@@ -97,5 +99,5 @@ export const useShmoWarnings = (
     }
   }, [location?.coordinates, throttledCallback, vehicleId, mapViewRef]);
 
-  return {geofencingZoneMessage, warningMessage};
+  return {geofencingZoneWarning, warningMessage};
 };

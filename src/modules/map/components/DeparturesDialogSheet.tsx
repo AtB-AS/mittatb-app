@@ -1,20 +1,19 @@
-import {StyleSheet, useThemeContext} from '@atb/theme';
-import React, {useState} from 'react';
+import {StyleSheet} from '@atb/theme';
+import React, {JSX, useRef} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Feature, Point} from 'geojson';
 import {Location, SearchLocation} from '@atb/modules/favorites';
 import {NavigateToTripSearchCallback} from '../types';
-import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {isDefined} from '@atb/utils/presence';
 import {
-  StopPlacesView,
+  StopPlacesSheetView,
   useStopsDetailsDataQuery,
 } from '@atb/screen-components/place-screen';
-import type {DepartureSearchTime} from '@atb/components/date-selection';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
 
 type DeparturesDialogSheetProps = {
   onClose: () => void;
@@ -29,6 +28,9 @@ type DeparturesDialogSheetProps = {
     isTripCancelled?: boolean,
   ) => void;
   navigateToTripSearch: NavigateToTripSearchCallback;
+  navigateToScanQrCode: () => void;
+  tabBarHeight: number | undefined;
+  locationArrowOnPress: () => void;
 };
 
 export const DeparturesDialogSheet = ({
@@ -38,16 +40,13 @@ export const DeparturesDialogSheet = ({
   navigateToDetails,
   navigateToQuay,
   navigateToTripSearch,
+  navigateToScanQrCode,
+  locationArrowOnPress,
 }: DeparturesDialogSheetProps) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const styles = useBottomSheetStyles();
-  const [searchTime, setSearchTime] = useState<DepartureSearchTime>({
-    option: 'now',
-    date: new Date().toISOString(),
-  });
+  const searchDateRef = useRef(new Date().toISOString());
   const [longitude, latitude] = stopPlaceFeature.geometry.coordinates;
-  const appStateStatus = useAppStateStatus();
 
   const stopPlaceIds = getStopPlaceIds(stopPlaceFeature);
 
@@ -61,44 +60,47 @@ export const DeparturesDialogSheet = ({
     (sp) => sp.quays?.length,
   );
 
-  const StopPlaceViewOrError = () => {
+  const stopPlaceGeoLocation: Location | undefined =
+    (stopPlaceFeature.properties && {
+      ...(stopPlaceFeature.properties as SearchLocation),
+      label: stopPlaceFeature.properties.name,
+      coordinates: {latitude, longitude},
+      resultType: 'search',
+    }) ||
+    undefined;
+
+  let StopPlaceViewOrError: JSX.Element = <></>;
+
+  {
     if (stopDetailsStatus === 'success') {
       if (thereIsSomeQuays) {
-        return (
-          <StopPlacesView
+        StopPlaceViewOrError = (
+          <StopPlacesSheetView
             stopPlaces={stopDetailsData?.stopPlaces}
             showTimeNavigation={false}
             navigateToDetails={navigateToDetails}
             navigateToQuay={navigateToQuay}
-            isFocused={appStateStatus === 'active'}
-            searchTime={searchTime}
-            setSearchTime={setSearchTime}
-            showOnlyFavorites={false}
-            setShowOnlyFavorites={(_) => {}}
+            searchTime={searchDateRef.current}
             testID="departuresContentView"
-            mode="Map"
             distance={distance}
             setTravelTarget={(target) => {
               stopPlaceGeoLocation &&
                 navigateToTripSearch(stopPlaceGeoLocation, target);
             }}
-            backgroundColor={theme.color.background.neutral[1]}
           />
         );
+      } else {
+        StopPlaceViewOrError = (
+          <View style={styles.paddingHorizontal}>
+            <MessageInfoBox
+              type="info"
+              message={t(DeparturesTexts.message.emptyResult)}
+            />
+          </View>
+        );
       }
-
-      return (
-        <View style={styles.paddingHorizontal}>
-          <MessageInfoBox
-            type="info"
-            message={t(DeparturesTexts.message.emptyResult)}
-          />
-        </View>
-      );
-    }
-
-    if (stopDetailsStatus === 'error') {
-      return (
+    } else if (stopDetailsStatus === 'error') {
+      StopPlaceViewOrError = (
         <View style={styles.paddingHorizontal}>
           <MessageInfoBox
             type="error"
@@ -110,38 +112,34 @@ export const DeparturesDialogSheet = ({
           />
         </View>
       );
+    } else if (stopDetailsStatus === 'pending') {
+      StopPlaceViewOrError = (
+        <View style={styles.paddingHorizontal}>
+          <ActivityIndicator size="large" />
+        </View>
+      );
     }
-
-    return (
-      <View style={styles.paddingHorizontal}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  };
-
-  const stopPlaceGeoLocation: Location | undefined =
-    (stopPlaceFeature.properties && {
-      ...(stopPlaceFeature.properties as SearchLocation),
-      label: stopPlaceFeature.properties.name,
-      coordinates: {latitude, longitude},
-      resultType: 'search',
-    }) ||
-    undefined;
+  }
 
   return (
-    <BottomSheetContainer
-      title={
+    <MapBottomSheet
+      snapPoints={['50%', '90%']}
+      canMinimize={true}
+      enablePanDownToClose={false}
+      enableDynamicSizing={false}
+      closeCallback={onClose}
+      allowBackgroundTouch={true}
+      heading={
         stopPlaceFeature.properties?.name ??
         stopDetailsData?.stopPlaces[0]?.name
       }
-      maxHeightValue={0.5}
-      onClose={onClose}
-      fullHeight
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
-      <View style={styles.departuresContainer}>
-        <StopPlaceViewOrError />
-      </View>
-    </BottomSheetContainer>
+      {StopPlaceViewOrError}
+    </MapBottomSheet>
   );
 };
 
@@ -152,16 +150,13 @@ const getStopPlaceIds = (feature: Feature<Point>): string[] => {
   let adjacentSiteIds: string[];
   try {
     adjacentSiteIds = adjSitesRaw ? JSON.parse(adjSitesRaw) : [];
-  } catch (_) {
+  } catch {
     adjacentSiteIds = [];
   }
   return [stopPlaceId, ...adjacentSiteIds].filter(isDefined);
 };
 
 const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
-  departuresContainer: {
-    flex: 1,
-  },
   paddingHorizontal: {
     paddingHorizontal: theme.spacing.medium,
   },

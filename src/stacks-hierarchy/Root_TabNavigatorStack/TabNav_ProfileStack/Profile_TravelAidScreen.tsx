@@ -17,27 +17,36 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {CustomerServiceText} from '@atb/translations/screens/subscreens/CustomerService';
+import {ThemeText} from '@atb/components/text';
+import {useOnboardingContext} from '@atb/modules/onboarding';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_TravelAidScreen = () => {
+type Props = ProfileScreenProps<'Profile_TravelAidScreen'>;
+
+export const Profile_TravelAidScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const {setPreference, preferences} = usePreferencesContext();
   const {contactPhoneNumber} = useFirestoreConfigurationContext();
+  const {isTravelAidStopButtonEnabled} = useFeatureTogglesContext();
   const analytics = useAnalyticsContext();
   const screenReaderEnabled = useIsScreenReaderEnabled();
+  const {completeOnboardingSection} = useOnboardingContext();
 
   const backgroundColor = theme.color.background.neutral[0];
   const hasContactPhoneNumber = !!contactPhoneNumber;
 
-  const travelAidToggleTitle = t(TravelAidSettingsTexts.toggle.title);
-  const travelAidSubtext = t(TravelAidSettingsTexts.toggle.subText);
+  const focusRef = useFocusOnLoad(navigation);
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(TravelAidSettingsTexts.header.accessibility.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading
@@ -49,7 +58,7 @@ export const Profile_TravelAidScreen = () => {
       <View style={styles.content}>
         <Section>
           <ToggleSectionItem
-            text={travelAidToggleTitle}
+            text={t(TravelAidSettingsTexts.toggle.title)}
             value={preferences.journeyAidEnabled}
             onValueChange={(checked) => {
               analytics.logEvent(
@@ -60,15 +69,21 @@ export const Profile_TravelAidScreen = () => {
                   screenReaderEnabled,
                 },
               );
+              completeOnboardingSection('travelAid');
               setPreference({journeyAidEnabled: checked});
             }}
-            subtext={travelAidSubtext}
-            isSubtextMarkdown
             testID="toggleTravelAid"
           />
-          <GenericSectionItem style={styles.buttonContainer}>
-            <View style={styles.buttonContainer}>
-              {hasContactPhoneNumber && (
+          <GenericSectionItem>
+            <ThemeText isMarkdown={true} typography="body__s">
+              {isTravelAidStopButtonEnabled
+                ? t(TravelAidSettingsTexts.descriptionWithStopButton)
+                : t(TravelAidSettingsTexts.descriptionWithoutStopButton)}
+            </ThemeText>
+          </GenericSectionItem>
+          {hasContactPhoneNumber && (
+            <GenericSectionItem style={styles.buttonContainer}>
+              <View style={styles.buttonContainer}>
                 <Button
                   expanded={true}
                   mode="secondary"
@@ -91,9 +106,9 @@ export const Profile_TravelAidScreen = () => {
                     }
                   }}
                 />
-              )}
-            </View>
-          </GenericSectionItem>
+              </View>
+            </GenericSectionItem>
+          )}
         </Section>
       </View>
     </FullScreenView>

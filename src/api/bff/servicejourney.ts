@@ -1,8 +1,10 @@
 import {client} from '../client';
 import qs from 'query-string';
 import {stringifyUrl} from '../utils';
-import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
+import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
+import {AxiosRequestConfig} from 'axios';
+import type {DatedServiceJourney} from '@atb/api/types/generated/journey_planner_v3_types';
 
 /**
  * @param id Service Journey ID
@@ -20,25 +22,25 @@ export async function getServiceJourneyWithEstimatedCalls(
   return response.data.value;
 }
 
-export async function getServiceJourneyMapLegs(
+export async function getServiceJourneyPolylines(
   id: string,
   fromQuayId: string,
   toQuayId?: string,
-): Promise<ServiceJourneyMapInfoData_v3> {
-  const url = `bff/v2/servicejourney/${encodeURIComponent(id)}/polyline`;
-  const query = qs.stringify(
-    {
-      fromQuayId,
-      toQuayId,
-    },
-    {skipNull: true},
+): Promise<ServiceJourneyPolylines> {
+  const query = qs.stringify({fromQuayId, toQuayId}, {skipNull: true});
+  const url = stringifyUrl(
+    `bff/v2/servicejourney/${encodeURIComponent(id)}/polyline`,
+    query,
   );
-  const response = await client.get<ServiceJourneyMapInfoData_v3>(
-    stringifyUrl(url, query),
-  );
-  return (
-    response.data ?? {
-      mapLegs: [],
-    }
-  );
+  const response = await client.get<ServiceJourneyPolylines>(url);
+  return response.data;
+}
+
+export async function getDatedServiceJourney(
+  id?: string,
+  opts?: AxiosRequestConfig,
+) {
+  if (!id) return null;
+  const url = `bff/v2/servicejourney/datedservicejourney/${id}`;
+  return await client.get<DatedServiceJourney>(url, opts);
 }

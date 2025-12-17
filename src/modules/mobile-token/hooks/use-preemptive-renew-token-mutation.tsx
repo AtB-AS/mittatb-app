@@ -72,7 +72,7 @@ export const usePreemptiveRenewTokenMutation = (userId?: string) => {
       switch (errHandling) {
         case 'reset':
           await wipeToken(getSdkErrorTokenIds(err), traceId);
-          queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]);
+          queryClient.resetQueries({queryKey: [MOBILE_TOKEN_QUERY_KEY]});
           break;
         case 'unspecified':
         // Do nothing

@@ -178,6 +178,11 @@ const PurchaseOverviewTexts = {
     close: _('Lukk', 'Close', 'Lukk'),
     confirm: _('Bekreft valg', 'Confirm selection', 'Bekreft valg'),
   },
+  selectAtLeastOneTraveller: _(
+    'Velg minst én reisende',
+    'Select at least one traveller',
+    'Vel minst éin reisande',
+  ),
   startTime: {
     title: _('Oppstartstidspunkt', 'Start time', 'Starttidspunkt'),
     now: _('Nå', 'Now', 'No'),
@@ -221,7 +226,7 @@ const PurchaseOverviewTexts = {
       ),
   },
   flexDiscount: {
-    heading: _('Pris', 'Price', 'Pris'),
+    heading: _('Rabatt', 'Discount', 'Rabatt'),
     expandableLabel: _('Min pris', 'My price', 'Min pris'),
     description: _(
       'Min pris på enkeltbillett voksen baseres på antall kjøpte billetter de siste 14 dagene. Etter tre kjøpte billetter får du en litt lavere pris.',

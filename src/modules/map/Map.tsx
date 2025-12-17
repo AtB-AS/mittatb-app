@@ -2,94 +2,162 @@ import {
   getCurrentCoordinatesGlobal,
   useGeolocationContext,
 } from '@atb/modules/geolocation';
+
 import {FOCUS_ORIGIN} from '@atb/api/bff/geocoder';
-import {StyleSheet} from '@atb/theme';
-import {MapRoute} from '@atb/screen-components/travel-details-map-screen';
-import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';
-import {Feature, Position} from 'geojson';
-import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+
+import {
+  LocationPuck,
+  UserTrackingMode,
+  Viewport,
+  Camera,
+  MapView,
+} from '@rnmapbox/maps';
+
+import {Feature} from 'geojson';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
-import {MapCameraConfig} from './MapConfig';
-import {PositionArrow} from './components/PositionArrow';
-import {Stations, Vehicles} from './components/mobility';
-import {useControlPositionsStyle} from './hooks/use-control-styles';
-import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
-import {useAutoSelectMapItem} from './hooks/use-auto-select-map-item';
-import {GeofencingZoneCustomProps, MapProps, MapRegion} from './types';
+import {MapCameraConfig, getSlightlyRaisedMapPadding} from './MapConfig';
+import {GeofencingZoneCustomProps, MapPropertiesType, MapProps} from './types';
+
 import {
   isFeaturePoint,
   getFeaturesAtClick,
   isFeatureGeofencingZone,
-  isStopPlace,
+  isClusterFeatureV2,
+  isQuayFeature,
+  mapPositionToCoordinates,
+  flyToLocation,
+  getFeatureToSelect,
   isParkAndRide,
+  isStopPlace,
 } from './utils';
-import isEqual from 'lodash.isequal';
+
 import {
   GeofencingZones,
-  useGeofencingZoneTextContent,
+  MapBottomSheetType,
+  MapStateActionType,
+  useGeofencingZoneContent,
   useMapViewConfig,
 } from '@atb/modules/map';
-import {ExternalRealtimeMapButton} from './components/external-realtime-map/ExternalRealtimeMapButton';
+
 import {
-  isBicycle,
-  isScooter,
-  isCarStation,
-  isStation,
-  MapFilter,
+  isBicycleV2,
+  isScooterV2,
   useVehicleQuery,
+  isStationV2,
+  isCarStationV2,
+  isBikeStationV2,
 } from '@atb/modules/mobility';
-import {Snackbar, useSnackbar} from '@atb/components/snackbar';
-import {AutoSelectableBottomSheetType, useMapContext} from './MapContext';
+
+import {Snackbar, useSnackbar, useStableValue} from '@atb/components/snackbar';
+import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
+import {useMapContext} from '@atb/modules/map';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
+import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
+import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
+import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
+import {ShmoBookingState} from '@atb/api/types/mobility';
+import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
+import {MapBottomSheets} from './MapBottomSheets';
+
+import {MapButtons} from './components/MapButtons';
+import {ShmoTesting} from './components/mobility/ShmoTesting';
+import {usePreferencesContext} from '../preferences';
+import {useBottomSheetV2Context} from '@atb/components/bottom-sheet-v2';
+
+const DEFAULT_ZOOM_LEVEL = 14.5;
 
 export const Map = (props: MapProps) => {
-  const {initialLocation, includeSnackbar} = props;
+  const {
+    includeSnackbar,
+    isFocused,
+    tabBarHeight,
+    navigateToScooterSupport,
+    navigateToScooterOnboarding,
+    navigateToReportParkingViolation,
+    navigateToParkingPhoto,
+    navigateToScanQrCode,
+    navigateToLogin,
+    navigateToPaymentMethods,
+  } = props;
+
+  const {
+    preferences: {showShmoTesting},
+  } = usePreferencesContext();
+
   const {getCurrentCoordinates} = useGeolocationContext();
-  const mapCameraRef = useRef<MapboxGL.Camera>(null);
-  const mapViewRef = useRef<MapboxGL.MapView>(null);
-  const styles = useMapStyles();
-  const controlStyles = useControlPositionsStyle(false);
+  const mapCameraRef = useRef<Camera>(null);
+  const mapViewRef = useRef<MapView>(null);
+  const [initMapLoaded, setInitMapLoaded] = useState(false);
+  const {bottomSheetMapRef} = useBottomSheetV2Context();
+  const onPressStartRef = useRef<boolean>(false);
 
-  const mapViewConfig = useMapViewConfig();
+  const {mapFilter, mapState, dispatchMapState, paddingBottomMap} =
+    useMapContext();
 
-  const startingCoordinates = useMemo(
-    () =>
-      initialLocation && initialLocation?.resultType !== 'geolocation'
-        ? initialLocation.coordinates
-        : getCurrentCoordinatesGlobal() || FOCUS_ORIGIN,
-    [initialLocation],
-  );
+  const [stalePaddingBottomMap, setStalePaddingBottomMap] =
+    useState(paddingBottomMap);
 
-  const {mapLines, onMapClick, selectedFeature, onReportParkingViolation} =
-    useMapSelectionChangeEffect(
-      props,
-      mapViewRef,
-      mapCameraRef,
-      startingCoordinates,
-    );
+  const startingCoordinates = getCurrentCoordinatesGlobal() || FOCUS_ORIGIN;
 
-  const {bottomSheetCurrentlyAutoSelected} = useMapContext();
+  const showVehicles = mapFilter?.mobility.SCOOTER?.showAll ?? false;
+  const showStations =
+    (mapFilter?.mobility.BICYCLE?.showAll ||
+      mapFilter?.mobility.CAR?.showAll) ??
+    false;
+  const shouldShowVehiclesAndStations =
+    isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
+  const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
 
-  const aVehicleIsAutoSelected =
-    bottomSheetCurrentlyAutoSelected?.type ===
-      AutoSelectableBottomSheetType.Scooter ||
-    bottomSheetCurrentlyAutoSelected?.type ===
-      AutoSelectableBottomSheetType.Bicycle;
+  const selectedFeature = mapState.feature;
 
   const selectedFeatureIsAVehicle =
-    isScooter(selectedFeature) || isBicycle(selectedFeature);
+    isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
 
   const {isGeofencingZonesEnabled} = useFeatureTogglesContext();
 
-  const showGeofencingZones =
-    isGeofencingZonesEnabled &&
-    (selectedFeatureIsAVehicle || aVehicleIsAutoSelected);
-
-  const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
+  const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
-  useAutoSelectMapItem(mapCameraRef, mapViewRef, onReportParkingViolation);
+  const {data: activeShmoBooking} = useActiveShmoBookingQuery();
+
+  const showGeofencingZones =
+    isGeofencingZonesEnabled &&
+    (selectedFeatureIsAVehicle ||
+      (activeShmoBooking?.bookingId !== undefined &&
+        activeShmoBooking.state === ShmoBookingState.IN_USE));
+
+  const {
+    data: vehicle,
+    isLoading: vehicleIsLoading,
+    isError: vehicleError,
+  } = useVehicleQuery(selectedFeature?.properties?.id);
+
+  const [followUserLocation, setFollowUserLocation] = useState(false);
+  const mapPropertiesRef = useRef<MapPropertiesType | null>({
+    center: [startingCoordinates.longitude, startingCoordinates.latitude],
+    zoom: mapState.customZoomLevel ?? DEFAULT_ZOOM_LEVEL,
+  });
+
+  useEffect(() => {
+    if (followUserLocation) {
+      setStalePaddingBottomMap(paddingBottomMap);
+    }
+  }, [followUserLocation, paddingBottomMap]);
+
+  const stablePreviousActiveShmoBooking =
+    useStablePreviousValue(activeShmoBooking);
+  const stableActiveShmoBooking = useStableValue(activeShmoBooking);
+  useEffect(() => {
+    if (
+      !stablePreviousActiveShmoBooking &&
+      stableActiveShmoBooking &&
+      stableActiveShmoBooking.state === ShmoBookingState.IN_USE
+    ) {
+      setFollowUserLocation(true);
+    }
+  }, [stableActiveShmoBooking, stablePreviousActiveShmoBooking]);
 
   useEffect(() => {
     // hide the snackbar when the bottom sheet is closed
@@ -98,63 +166,40 @@ export const Map = (props: MapProps) => {
 
   const geofencingZoneOnPress = useCallback(
     (geofencingZoneCustomProps?: GeofencingZoneCustomProps) => {
-      const textContent = getGeofencingZoneTextContent(
+      const geofencingZoneContent = getGeofencingZoneContent(
         geofencingZoneCustomProps,
       );
-      showSnackbar({textContent, position: 'top'});
+      showSnackbar({content: geofencingZoneContent, position: 'top'});
     },
-    [showSnackbar, getGeofencingZoneTextContent],
+    [showSnackbar, getGeofencingZoneContent],
   );
 
-  const updateRegionForVehicles = props.vehicles?.updateRegion;
-  const updateRegionForStations = props.stations?.updateRegion;
-  const [mapRegion, setMapRegion] = useState<MapRegion>();
-  useEffect(() => {
-    if (!mapRegion) return;
-    updateRegionForVehicles?.(mapRegion);
-    updateRegionForStations?.(mapRegion);
-  }, [mapRegion, updateRegionForVehicles, updateRegionForStations]);
-
-  const onDidFinishLoadingMap = async () => {
-    const visibleBounds = await mapViewRef.current?.getVisibleBounds();
-    const zoomLevel = await mapViewRef.current?.getZoom();
-    const center = await mapViewRef.current?.getCenter();
-
-    if (!visibleBounds || !zoomLevel || !center) return;
-
-    setMapRegion({
-      visibleBounds,
-      zoomLevel,
-      center,
-    });
-  };
-
-  const {
-    data: vehicle,
-    isLoading: vehicleIsLoading,
-    isError: vehicleError,
-  } = useVehicleQuery(selectedFeature?.properties?.id);
-
-  /**
-   * OnMapIdle fires more often than expected, because of that we check if the
-   * map region is changed before updating its state.
-   *
-   * There is a slight performance overhead by deep comparing previous and new
-   * map regions on each on map idle, but since we have control over the size of
-   * the objects it should be ok. The risk of firing effects that uses the map
-   * region too often is greater than the risk introduced by the performance
-   * overhead.
-   */
-  const onMapIdle = (state: MapState) => {
-    const newMapRegion: MapRegion = {
-      visibleBounds: [state.properties.bounds.ne, state.properties.bounds.sw],
-      zoomLevel: state.properties.zoom,
-      center: state.properties.center,
-    };
-    setMapRegion((prevMapRegion) =>
-      isEqual(prevMapRegion, newMapRegion) ? prevMapRegion : newMapRegion,
-    );
-  };
+  const locationArrowOnPress = useCallback(async () => {
+    const coordinates = await getCurrentCoordinates(true);
+    if (
+      activeShmoBooking &&
+      activeShmoBooking.state === ShmoBookingState.IN_USE
+    ) {
+      setFollowUserLocation(true);
+    } else {
+      if (coordinates) {
+        flyToLocation({
+          coordinates,
+          padding: !selectedFeature
+            ? undefined
+            : getSlightlyRaisedMapPadding(paddingBottomMap),
+          mapCameraRef,
+          mapViewRef,
+          zoomLevel: DEFAULT_ZOOM_LEVEL + 2.5,
+        });
+      }
+    }
+  }, [
+    getCurrentCoordinates,
+    activeShmoBooking,
+    selectedFeature,
+    paddingBottomMap,
+  ]);
 
   /**
    * As setting onPress on the GeofencingZones ShapeSource prevents MapView's onPress
@@ -164,25 +209,22 @@ export const Map = (props: MapProps) => {
    * Step 2: decide feature to select
    * Step 3: selected the feature
    */
+
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
+      const isActiveTrip =
+        activeShmoBooking?.state === ShmoBookingState.IN_USE ||
+        activeShmoBooking?.state === ShmoBookingState.FINISHING;
       if (!isFeaturePoint(feature)) return;
-
-      if (!showGeofencingZones) {
-        onMapClick({source: 'map-click', feature});
-        return;
-      }
+      if (!showGeofencingZones && !isActiveTrip) return;
 
       const {coordinates: positionClicked} = feature.geometry;
 
       const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
       if (!featuresAtClick || featuresAtClick.length === 0) return;
-      const featureToSelect = featuresAtClick.reduce(
-        (selected, currentFeature) =>
-          getFeatureWeight(currentFeature, positionClicked) >
-          getFeatureWeight(selected, positionClicked)
-            ? currentFeature
-            : selected,
+      const featureToSelect = getFeatureToSelect(
+        featuresAtClick,
+        positionClicked,
       );
 
       /**
@@ -192,148 +234,230 @@ export const Map = (props: MapProps) => {
        */
       hideSnackbar();
 
-      if (isFeatureGeofencingZone(featureToSelect)) {
+      if (isQuayFeature(featureToSelect) && !isActiveTrip) {
+        // In this case we might want to either
+        // - select a stop place with the clicked quay sorted on top
+        // - have a bottom sheet with departures just for the clicked quay
+        return; // currently - do nothing
+      } else if (isFeatureGeofencingZone(featureToSelect)) {
         geofencingZoneOnPress(
           featureToSelect?.properties?.geofencingZoneCustomProps,
         );
-      } else {
-        if (isFeaturePoint(featureToSelect)) {
-          onMapClick({
-            source: 'map-click',
-            feature: featureToSelect,
-          });
-        } else if (isScooter(selectedFeature)) {
-          // outside of operational area, rules unspecified
-          geofencingZoneOnPress(undefined);
-        }
+      } else if (isScooterV2(selectedFeature) && !isActiveTrip) {
+        // outside of operational area, rules unspecified
+        geofencingZoneOnPress(undefined);
       }
     },
     [
-      geofencingZoneOnPress,
-      hideSnackbar,
-      onMapClick,
+      activeShmoBooking?.state,
       showGeofencingZones,
+      hideSnackbar,
+      geofencingZoneOnPress,
       selectedFeature,
     ],
   );
 
+  const onMapItemClick = useCallback(
+    async (e: OnPressEvent) => {
+      const positionClicked = [e.coordinates.longitude, e.coordinates.latitude];
+      const featuresAtClick = e.features;
+      if (
+        !featuresAtClick ||
+        featuresAtClick.length === 0 ||
+        activeShmoBooking?.state === ShmoBookingState.IN_USE ||
+        activeShmoBooking?.state === ShmoBookingState.FINISHING
+      )
+        return;
+
+      const featureToSelect = getFeatureToSelect(
+        featuresAtClick,
+        positionClicked,
+      );
+
+      if (isClusterFeatureV2(featureToSelect)) {
+        const fromZoomLevel = (await mapViewRef.current?.getZoom()) ?? 0;
+        const toZoomLevel = Math.max(fromZoomLevel + 2);
+
+        flyToLocation({
+          coordinates: mapPositionToCoordinates(
+            featureToSelect.geometry.coordinates,
+          ),
+          padding: getSlightlyRaisedMapPadding(paddingBottomMap),
+          mapCameraRef,
+          mapViewRef,
+          zoomLevel: toZoomLevel,
+        });
+      } else if (isFeaturePoint(featureToSelect)) {
+        if (isQuayFeature(featureToSelect)) return;
+
+        if (isScooterV2(featureToSelect)) {
+          dispatchMapState({
+            type: MapStateActionType.Scooter,
+            feature: featureToSelect,
+          });
+        } else if (isBicycleV2(featureToSelect)) {
+          dispatchMapState({
+            type: MapStateActionType.Bicycle,
+            feature: featureToSelect,
+          });
+        } else if (isCarStationV2(featureToSelect)) {
+          dispatchMapState({
+            type: MapStateActionType.CarStation,
+            feature: featureToSelect,
+          });
+        } else if (isParkAndRide(featureToSelect)) {
+          dispatchMapState({
+            type: MapStateActionType.ParkAndRideStation,
+            feature: featureToSelect,
+          });
+        } else if (isStopPlace(featureToSelect)) {
+          dispatchMapState({
+            type: MapStateActionType.StopPlace,
+            feature: featureToSelect,
+          });
+        } else if (isBikeStationV2(featureToSelect)) {
+          dispatchMapState({
+            type: MapStateActionType.BikeStation,
+            feature: featureToSelect,
+          });
+        } else if (isStationV2(featureToSelect)) {
+          dispatchMapState({
+            type: MapStateActionType.Station,
+            feature: featureToSelect,
+          });
+        }
+      }
+    },
+    [activeShmoBooking?.state, paddingBottomMap, dispatchMapState],
+  );
+
+  const handleBreakFollow = useCallback(() => {
+    setStalePaddingBottomMap(paddingBottomMap);
+    setFollowUserLocation(false);
+  }, [paddingBottomMap]);
+
   return (
-    <View style={styles.container}>
+    <View style={{flex: 1}}>
       <View style={{flex: 1}}>
-        <MapboxGL.MapView
+        <MapView
           ref={mapViewRef}
           style={{
             flex: 1,
           }}
           pitchEnabled={false}
-          onDidFinishLoadingMap={onDidFinishLoadingMap}
-          onMapIdle={onMapIdle}
           onPress={onFeatureClick}
           testID="mapView"
+          onTouchStart={() => {
+            onPressStartRef.current = true;
+          }}
+          onCameraChanged={(state) => {
+            // If a collapse is pending and the camera moves, collapse immediately
+            if (onPressStartRef.current && state.gestures.isGestureActive) {
+              onPressStartRef.current = false;
+              bottomSheetMapRef.current?.collapse();
+            }
+            if (followUserLocation && activeShmoBooking?.bookingId) {
+              mapPropertiesRef.current = {...state.properties};
+            }
+          }}
           {...mapViewConfig}
+          onDidFinishLoadingMap={() => {
+            setInitMapLoaded(true);
+          }}
         >
-          <MapboxGL.Camera
-            ref={mapCameraRef}
-            zoomLevel={15}
-            centerCoordinate={[
-              startingCoordinates.longitude,
-              startingCoordinates.latitude,
-            ]}
-            {...MapCameraConfig}
-          />
-
-          {showGeofencingZones && !vehicleError && !vehicleIsLoading && (
-            <GeofencingZones
-              systemId={vehicle?.system.id ?? null}
-              vehicleTypeId={vehicle?.vehicleType.id ?? null}
-            />
-          )}
-
-          {mapLines && <MapRoute lines={mapLines} />}
-          <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
-          {props.vehicles && (
-            <Vehicles
-              vehicles={props.vehicles.vehicles}
-              mapCameraRef={mapCameraRef}
-              mapViewRef={mapViewRef}
-              onClusterClick={(feature) => {
-                onMapClick({
-                  source: 'cluster-click',
-                  feature,
-                });
-              }}
-            />
-          )}
-          {props.stations && (
-            <Stations
-              stations={props.stations.stations}
-              mapCameraRef={mapCameraRef}
-              mapViewRef={mapViewRef}
-              onClusterClick={(feature) => {
-                onMapClick({
-                  source: 'cluster-click',
-                  feature,
-                });
-              }}
-            />
-          )}
-        </MapboxGL.MapView>
-        <View
-          style={[
-            controlStyles.mapButtonsContainer,
-            controlStyles.mapButtonsContainerRight,
-          ]}
-        >
-          <ExternalRealtimeMapButton onMapClick={onMapClick} />
-
-          {(props.vehicles || props.stations) && (
-            <MapFilter
-              onPress={() => onMapClick({source: 'filters-button'})}
-              isLoading={
-                (props.vehicles?.isLoading || props.stations?.isLoading) ??
-                false
-              }
-            />
-          )}
-          <PositionArrow
-            onPress={async () => {
-              const coordinates = await getCurrentCoordinates(true);
-              if (coordinates) {
-                onMapClick({
-                  source: 'my-position',
-                  coords: coordinates,
-                });
+          <Viewport
+            onStatusChanged={(status) => {
+              if (status.to.kind === 'idle') {
+                handleBreakFollow();
               }
             }}
           />
-        </View>
+          <Camera
+            ref={mapCameraRef}
+            zoomLevel={
+              !initMapLoaded
+                ? (mapPropertiesRef.current?.zoom ?? DEFAULT_ZOOM_LEVEL)
+                : undefined
+            }
+            centerCoordinate={
+              !initMapLoaded ? mapPropertiesRef.current?.center : undefined
+            }
+            padding={
+              activeShmoBooking?.bookingId
+                ? getSlightlyRaisedMapPadding(
+                    followUserLocation
+                      ? paddingBottomMap
+                      : stalePaddingBottomMap,
+                  )
+                : undefined
+            }
+            {...MapCameraConfig}
+            followUserLocation={
+              !!activeShmoBooking &&
+              activeShmoBooking.state === ShmoBookingState.IN_USE &&
+              followUserLocation
+            }
+            followUserMode={UserTrackingMode.FollowWithHeading}
+            followPadding={getSlightlyRaisedMapPadding(paddingBottomMap)}
+          />
+          {showGeofencingZones && !vehicleError && !vehicleIsLoading && (
+            <GeofencingZones
+              systemId={
+                vehicle?.system.id ?? activeShmoBooking?.asset.systemId ?? null
+              }
+              vehicleTypeId={
+                vehicle?.vehicleType.id ??
+                activeShmoBooking?.asset.vehicleTypeId ??
+                null
+              }
+            />
+          )}
+
+          <NationalStopRegistryFeatures
+            selectedFeaturePropertyId={selectedFeature?.properties?.id}
+            onMapItemClick={onMapItemClick}
+          />
+
+          {!activeShmoBooking && (
+            <SelectedFeatureIcon selectedFeature={selectedFeature} />
+          )}
+
+          <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
+
+          {!!shouldShowVehiclesAndStations && (
+            <VehiclesAndStations
+              selectedFeatureId={selectedFeature?.properties?.id}
+              onPress={onMapItemClick}
+              showVehicles={showVehicles}
+              showStations={showStations}
+            />
+          )}
+        </MapView>
+        {mapState.bottomSheetType === MapBottomSheetType.None && (
+          <MapButtons
+            locationArrowOnPress={locationArrowOnPress}
+            navigateToScanQrCode={navigateToScanQrCode}
+          />
+        )}
         {includeSnackbar && <Snackbar {...snackbarProps} />}
+        {showShmoTesting && (
+          <ShmoTesting navigateToScooterSupport={navigateToScooterSupport} />
+        )}
       </View>
+      <MapBottomSheets
+        mapViewRef={mapViewRef}
+        mapCameraRef={mapCameraRef}
+        mapProps={props}
+        tabBarHeight={tabBarHeight}
+        navigateToScooterSupport={navigateToScooterSupport}
+        navigateToScooterOnboarding={navigateToScooterOnboarding}
+        navigateToReportParkingViolation={navigateToReportParkingViolation}
+        navigateToParkingPhoto={navigateToParkingPhoto}
+        navigateToScanQrCode={navigateToScanQrCode}
+        navigateToLogin={navigateToLogin}
+        navigateToPaymentMethods={navigateToPaymentMethods}
+        locationArrowOnPress={locationArrowOnPress}
+      />
     </View>
   );
 };
-
-const useMapStyles = StyleSheet.createThemeHook(() => ({
-  container: {flex: 1},
-}));
-
-function getFeatureWeight(feature: Feature, positionClicked: Position): number {
-  if (isFeaturePoint(feature)) {
-    return isStopPlace(feature) ||
-      isScooter(feature) ||
-      isBicycle(feature) ||
-      isStation(feature) ||
-      isCarStation(feature) ||
-      isParkAndRide(feature)
-      ? 3
-      : 1;
-  } else if (isFeatureGeofencingZone(feature)) {
-    const positionClickedIsInsideGeofencingZone = turfBooleanPointInPolygon(
-      positionClicked,
-      feature.geometry,
-    );
-    return positionClickedIsInsideGeofencingZone ? 2 : 0;
-  } else {
-    return 0;
-  }
-}

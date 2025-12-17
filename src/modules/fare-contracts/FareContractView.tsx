@@ -12,8 +12,10 @@ import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {
   isCanBeConsumedNowFareContract,
   isCanBeActivatedNowFareContract,
+  useGetFareProductsQuery,
+  useSchoolCarnetInfoQuery,
 } from '@atb/modules/ticketing';
-import {FareContractType} from '@atb-as/utils';
+import {FareContractType, getAccesses} from '@atb-as/utils';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
@@ -25,20 +27,21 @@ import {TravelInfoSectionItem} from './components/TravelInfoSectionItem';
 import {ValidityTime} from './components/ValidityTime';
 import {FareContractShmoHeaderSectionItem} from './sections/FareContractShmoHeaderSectionItem';
 import {ShmoTripDetailsSectionItem} from '@atb/modules/mobility';
-import {
-  findReferenceDataById,
-  useFirestoreConfigurationContext,
-} from '@atb/modules/configuration';
+import {findReferenceDataById} from '@atb/modules/configuration';
 import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
 } from '../bonus';
+import {useFareContractLegs} from './use-fare-contract-legs';
+import {LegsSummary} from '@atb/components/journey-legs-summary';
+import {CarnetFooter} from './carnet/CarnetFooter';
 
 type Props = {
   now: number;
   fareContract: FareContractType;
   isStatic?: boolean;
   onPressDetails?: () => void;
+  navigateToBonusScreen: () => void;
   testID?: string;
 };
 
@@ -47,6 +50,7 @@ export const FareContractView: React.FC<Props> = ({
   fareContract,
   isStatic,
   onPressDetails,
+  navigateToBonusScreen,
   testID,
 }) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
@@ -56,14 +60,14 @@ export const FareContractView: React.FC<Props> = ({
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {travelRights, validityStatus} = getFareContractInfo(
+  const {validityStatus} = getFareContractInfo(
     now,
     fareContract,
     currentUserId,
   );
 
-  const firstTravelRight = travelRights[0];
-  const {preassignedFareProducts} = useFirestoreConfigurationContext();
+  const firstTravelRight = fareContract.travelRights[0];
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     firstTravelRight.fareProductRef,
@@ -71,17 +75,27 @@ export const FareContractView: React.FC<Props> = ({
   const {benefits} = useOperatorBenefitsForFareProduct(
     firstTravelRight.fareProductRef,
   );
+  const legs = useFareContractLegs(firstTravelRight?.datedServiceJourneys?.[0]);
 
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
-  const shouldShowEarnedBonusPoints =
+  const shouldShowBonusAmountEarned =
     validityStatus === 'valid' || validityStatus === 'upcoming';
 
-  const {data: earnedBonusPoints} = useBonusAmountEarnedQuery(
+  const shouldShowLegs =
+    preassignedFareProduct?.isBookingEnabled && !!legs?.length;
+
+  const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(
     fareContract.id,
-    !shouldShowEarnedBonusPoints,
+    !shouldShowBonusAmountEarned,
   );
+  const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(
+    fareContract,
+    validityStatus,
+  );
+
+  const accesses = getAccesses(fareContract);
 
   return (
     <Section testID={testID}>
@@ -107,20 +121,32 @@ export const FareContractView: React.FC<Props> = ({
       ) : (
         <TravelInfoSectionItem fc={fareContract} />
       )}
+
+      {accesses && (
+        <GenericSectionItem>
+          <CarnetFooter
+            validityStatus={validityStatus}
+            fareContract={fareContract}
+          />
+        </GenericSectionItem>
+      )}
+
       {shouldShowBundlingInfo && (
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
       )}
 
-      {shouldShowEarnedBonusPoints && !!earnedBonusPoints && (
-        <EarnedBonusPointsSectionItem amount={earnedBonusPoints} />
+      {shouldShowBonusAmountEarned && !!bonusAmountEarned?.amount && (
+        <EarnedBonusPointsSectionItem
+          amount={bonusAmountEarned.amount}
+          navigateToBonusScreen={navigateToBonusScreen}
+        />
       )}
-      {isActivateTicketNowEnabled &&
-        isCanBeActivatedNowFareContract(fareContract, now, currentUserId) && (
-          <ActivateNowSectionItem
-            fareContractId={fareContract.id}
-            fareProductType={preassignedFareProduct?.type}
-          />
-        )}
+
+      {shouldShowLegs && (
+        <GenericSectionItem>
+          <LegsSummary legs={legs} compact={true} />
+        </GenericSectionItem>
+      )}
       {!isStatic && (
         <LinkSectionItem
           text={t(
@@ -132,7 +158,24 @@ export const FareContractView: React.FC<Props> = ({
           testID={testID + 'Details'}
         />
       )}
-      {isCanBeConsumedNowFareContract(fareContract, now, currentUserId) && (
+      {isActivateTicketNowEnabled &&
+        isCanBeActivatedNowFareContract(
+          fareContract,
+          now,
+          currentUserId,
+          preassignedFareProduct?.isBookingEnabled,
+        ) && (
+          <ActivateNowSectionItem
+            fareContractId={fareContract.id}
+            fareProductType={preassignedFareProduct?.type}
+          />
+        )}
+      {isCanBeConsumedNowFareContract(
+        fareContract,
+        now,
+        currentUserId,
+        schoolCarnetInfo,
+      ) && (
         <ConsumeCarnetSectionItem
           fareContractId={fareContract.id}
           fareProductType={preassignedFareProduct?.type}

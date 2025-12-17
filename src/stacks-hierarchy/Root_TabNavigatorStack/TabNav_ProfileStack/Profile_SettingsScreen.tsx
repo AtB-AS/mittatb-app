@@ -20,6 +20,7 @@ import {
   Theme as ThemeIcon,
 } from '@atb/assets/svg/mono-icons/profile';
 import {House} from '@atb/assets/svg/mono-icons/places';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type ProfileProps = ProfileScreenProps<'Profile_SettingsScreen'>;
 
@@ -32,11 +33,14 @@ export const Profile_SettingsScreen = ({navigation}: ProfileProps) => {
   const {enable_ticketing} = useRemoteConfigContext();
   const {authenticationType} = useAuthContext();
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(ProfileTexts.sections.settings.heading),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading

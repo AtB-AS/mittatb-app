@@ -16,13 +16,13 @@ export function ContentHeading({
   color = 'secondary',
   accessibilityLabel,
   style,
-}: ContentHeadingProps): JSX.Element {
+}: ContentHeadingProps): React.JSX.Element {
   const styles = useStyles();
 
   return (
     <View style={[styles.container, style]}>
       <ThemeText
-        typography="body__secondary"
+        typography="body__s"
         color={color}
         accessibilityLabel={accessibilityLabel}
       >

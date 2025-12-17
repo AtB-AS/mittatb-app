@@ -1,6 +1,4 @@
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {MapTexts, useTranslation} from '@atb/translations';
-import {Linking} from 'react-native';
+import {dictionary, MapTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
@@ -8,22 +6,34 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import {ScrollView} from 'react-native-gesture-handler';
 import {GenericSectionItem, Section} from '@atb/components/sections';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {Linking} from 'react-native';
 
 type ExternalRealtimeMapLinkSheetProps = {
   onClose: () => void;
   url: string;
+  locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 export const ExternalRealtimeMapSheet = ({
   onClose,
   url,
+  locationArrowOnPress,
+  navigateToScanQrCode,
 }: ExternalRealtimeMapLinkSheetProps) => {
   const {t} = useTranslation();
   const style = useStyle();
 
   return (
-    <BottomSheetContainer
-      title={t(MapTexts.externalRealtimeMap.bottomSheet.heading)}
-      onClose={onClose}
+    <MapBottomSheet
+      closeCallback={onClose}
+      allowBackgroundTouch={false}
+      heading={t(MapTexts.externalRealtimeMap.bottomSheet.heading)}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
       <ScrollView
         style={style.container}
@@ -46,7 +56,7 @@ export const ExternalRealtimeMapSheet = ({
           rightIcon={{svg: ExternalLink}}
         />
       </ScrollView>
-    </BottomSheetContainer>
+    </MapBottomSheet>
   );
 };
 

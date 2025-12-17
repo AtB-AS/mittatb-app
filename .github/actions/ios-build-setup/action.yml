@@ -3,7 +3,7 @@ description: 'Sets up the necessarry dependencies, environment and assets for bu
 inputs:
   # Dev dependencies
   node-version:
-    default: "18"
+    default: "22"
     required: false
   ruby-version:
     default: "3.1.0"
@@ -39,25 +39,23 @@ runs:
         env:
           GIT_CRYPT_KEY: ${{ inputs.git-crypt-key }}
       - name: Install Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ inputs.node-version }}
+          cache: 'yarn'
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ inputs.ruby-version }}
           cache-version: 2
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Get potential cached dependencies
-        uses: actions/cache@v3
+      - name: Get potential cached node_modules
+        uses: actions/cache@v4
         id: modules-cache
         if: ${{ inputs.use-build-cache }} == 'true'
         with:
-          path: |
-            "**/node_modules"
-            "vendor/bundle"
-            "ios/Pods"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/*.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          path: node_modules
+          key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Install node_modules
         shell: bash
         if: ${{ inputs.use-build-cache }} != 'true' || steps.modules-cache.outputs.cache-hit != 'true'

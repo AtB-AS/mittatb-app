@@ -66,6 +66,12 @@ const FareContractTexts = {
   details: {
     header: {
       title: _('Billettdetaljer', 'Ticket details', 'Billettdetaljar'),
+      ticketInformation: _('Om', 'About', 'Om'),
+      infoButtonA11yHint: _(
+        'Aktivér for å gå til billettinformasjon',
+        'Activate to go to ticket information',
+        'Aktivér for å gå til billettinformasjon',
+      ),
     },
     paymentMethod: _(
       'Betalingsmetode: ',
@@ -96,15 +102,15 @@ const FareContractTexts = {
       ),
     sentTo: (phoneNumber: string) =>
       _(
-        `Denne billetten ble sendt til ${phoneNumber}`,
-        `This ticket was sent to ${phoneNumber}`,
-        `Denne billetten vart sendt til ${phoneNumber}`,
+        `Sendt til ${phoneNumber}`,
+        `Sent to ${phoneNumber}`,
+        `Sendt til ${phoneNumber}`,
       ),
     purchasedBy: (phoneNumber: string) =>
       _(
-        `Denne billetten ble kjøpt av ${phoneNumber}`,
-        `This ticket was purchased by ${phoneNumber}`,
-        `Denne billetten vart kjøpt av ${phoneNumber}`,
+        `Kjøpt av ${phoneNumber}`,
+        `Purchased by ${phoneNumber}`,
+        `Kjøpt av ${phoneNumber}`,
       ),
     totalPrice: (priceString: string) =>
       _(
@@ -188,26 +194,21 @@ const FareContractTexts = {
           ),
     validIn: (zone: string) =>
       _(`Gyldig i ${zone}`, `Valid in ${zone}`, `Gyldig i ${zone}`),
-    infoButtonA11yHint: _(
-      'Aktivér for å gå til billettinformasjon',
-      'Activate to go to ticket information',
-      'Aktivér for å gå til billetinformasjon',
-    ),
     usedAccesses: _('Brukte billetter', 'Used tickets', 'Brukte billettar'),
   },
   activateNow: {
-    startNow: _('Start billett nå', 'Start ticket now', 'Start billett no'),
+    startNow: _('Bruk billett nå', 'Use ticket now', 'Bruk billett no'),
     bottomSheetTitle: _(
-      'Vil du starte billetten?',
-      'Do you want to start the ticket?',
-      'Vil du starte billetten?',
+      'Bruk billett før planlagt tid?',
+      'Use ticket before scheduled time?',
+      'Bruk billett før planlagt tid?',
     ),
     bottomSheetDescription: _(
-      'Billetten starter med en gang du bekrefter. Dette valget kan ikke angres.',
-      'The ticket will start as soon as you confirm. This choice cannot be undone.',
-      'Billetten startar med ein gong du bekreftar. Dette valet kan ikkje gjerast om på.',
+      'Dette valget kan ikke angres. Billetten starter med en gang.',
+      'This action cannot be undone. The ticket will start immediately.',
+      'Dette valet kan ikkje angrast. Billetten startar med ein gong.',
     ),
-    confirm: _('Bekreft og start', 'Confirm and start', 'Bekreft og start'),
+    confirm: _('Bruk billett', 'Use ticket', 'Bruk billett'),
     genericError: _(
       'En feil har oppstått under aktivering av billetten. Vennligst prøv igjen.',
       'An error occurred while activating the ticket. Please try again.',
@@ -246,11 +247,17 @@ const FareContractTexts = {
   },
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>
-      _(
-        `${count} enkeltbilletter gjenstår`,
-        `${count} single ticket(s) left`,
-        `${count} enkeltbillettar att`,
-      ),
+      count === 1
+        ? _(
+            `${count} enkeltbillett gjenstår`,
+            `${count} single ticket left`,
+            `${count} enkeltbillett att`,
+          )
+        : _(
+            `${count} enkeltbilletter gjenstår`,
+            `${count} single tickets left`,
+            `${count} enkeltbillettar att`,
+          ),
     activateCarnet: _(
       'Aktiver enkeltbillett',
       'Activate single ticket',
@@ -280,6 +287,17 @@ const FareContractTexts = {
       'En feil har oppstått under aktivering av billetten. Vennligst prøv igjen.',
       'An error occurred while activating the ticket. Please try again.',
       'Ein feil har oppstått under aktivering av billetten. Ver venleg og prøv igjen.',
+    ),
+    nextConsumptionDayMessage: (date: string, clock: string) =>
+      _(
+        `Du får nye billetter ${date}, kl. ${clock}`,
+        `You will get new tickets on ${date}, at ${clock}`,
+        `Du får nye billettar ${date}, kl. ${clock}`,
+      ),
+    consumableInformationError: _(
+      'Klarte ikke å hente billettene dine.',
+      'Could not fetch your tickets.',
+      'Klarte ikkje å hente billettane dine.',
     ),
   },
   school: {
@@ -424,6 +442,41 @@ const FareContractTexts = {
     }
   },
   otherFareContracts: _('Andre billetter', 'Other tickets', 'Andre billettar'),
+  a11yTicketInfoLabels: {
+    zones: {
+      oneZone: _('i sone: ', 'in zone:', 'i sone:'),
+      multipleZones: _(
+        'mellom følgende soner:',
+        'between the following zones:',
+        'mellom følgjande soner:',
+      ),
+    },
+    transportModes: _(
+      `vil være gyldig for transportmidlene: `,
+      `will be valid for the transport modes: `,
+      `vil vere gyldig for transportmidlane: `,
+    ),
+    travellers: _(
+      'for følgende reisende: ',
+      'for the following travellers: ',
+      'for følgjande reisande: ',
+    ),
+    harbors: {
+      oneWayTrip: (from: string, to: string) =>
+        _(
+          `En vei, fra ${from}, til ${to}`,
+          `One way, from ${from}, to ${to}`,
+          `Ein veg, frå ${from}, til ${to}`,
+        ),
+      returnTrip: (from: string, to: string) =>
+        _(
+          `Tur/retur, fra ${from}, til ${to}`,
+          `Round trip, from ${from}, to ${to}`,
+          `Tur/retur, frå ${from}, til ${to}`,
+        ),
+      and: _(' og ', ' and ', ' og '),
+    },
+  },
 };
 
 export default orgSpecificTranslations(FareContractTexts, {

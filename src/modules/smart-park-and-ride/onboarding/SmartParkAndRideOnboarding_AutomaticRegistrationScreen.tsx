@@ -1,29 +1,52 @@
-import {useTranslation} from '@atb/translations';
+import {getTextForLanguage, useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import React from 'react';
-import {OnboardingScreenComponent} from '@atb/modules/onboarding';
-import {ThemedCityBike} from '@atb/theme/ThemedAssets';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {useSmartParkAndRideOnboarding} from './SmartParkAndRideOnboardingContext';
-import {useNavigation} from '@react-navigation/native';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
-import {Linking} from 'react-native';
+import {
+  OnboardingCarouselScreenProps,
+  OnboardingScreenComponent,
+  useOnboardingCarouselNavigation,
+} from '@atb/modules/onboarding';
+import {ThemedCarRegister} from '@atb/theme/ThemedAssets';
+import {sparOnboardingId} from './config';
+import {useAnalyticsContext} from '@atb/modules/analytics';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
-export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
-  const {t} = useTranslation();
-  const {completeOnboarding} = useSmartParkAndRideOnboarding();
-  const navigation = useNavigation<RootNavigationProps>();
+export type AutomaticRegistrationScreenProps =
+  OnboardingCarouselScreenProps<'SmartParkAndRideOnboarding_AutomaticRegistrationScreen'>;
 
-  const handleComplete = () => {
-    completeOnboarding();
-    navigation.navigate('Root_SmartParkAndRideAddScreen', {
-      hideHeader: true,
-    });
-  };
+export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = ({
+  navigation,
+}: AutomaticRegistrationScreenProps) => {
+  const focusRef = useFocusOnLoad(navigation);
+  const {t, language} = useTranslation();
+  const analytics = useAnalyticsContext();
+  const {configurableLinks} = useFirestoreConfigurationContext();
+
+  const {
+    navigateToNextScreen,
+    navigateToPreviousScreen,
+    closeOnboardingCarousel,
+  } = useOnboardingCarouselNavigation(
+    sparOnboardingId,
+    'SmartParkAndRideOnboarding_AutomaticRegistrationScreen',
+  );
 
   return (
     <OnboardingScreenComponent
-      illustration={<ThemedCityBike height={170} />}
+      illustration={<ThemedCarRegister height={170} />}
+      headerProps={{
+        leftButton: {
+          type: 'back',
+          onPress: navigateToPreviousScreen,
+        },
+        rightButton: {
+          type: 'close',
+          onPress: closeOnboardingCarousel,
+        },
+      }}
       title={t(SmartParkAndRideTexts.onboarding.automaticRegistration.title)}
       description={t(
         SmartParkAndRideTexts.onboarding.automaticRegistration.description,
@@ -38,18 +61,33 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = () => {
             .a11yHint,
         ),
         onPress: () => {
-          Linking.openURL('https://www.atb.no/RanheimFabrikker'); // TODO: This link should be configurable, and updated.
+          analytics.logEvent(
+            'Smart Park & Ride',
+            'Onboarding external link clicked',
+          );
+          const externalLink = getTextForLanguage(
+            configurableLinks?.sparReadMoreUrl,
+            language,
+          );
+          externalLink && openInAppBrowser(externalLink, 'close');
         },
       }}
       footerButton={{
-        onPress: handleComplete,
+        onPress: () => {
+          analytics.logEvent(
+            'Smart Park & Ride',
+            'Onboarding automatic registration continue clicked',
+          );
+          navigateToNextScreen();
+        },
         text: t(
           SmartParkAndRideTexts.onboarding.automaticRegistration.buttonText,
         ),
         expanded: true,
-        rightIcon: {svg: Confirm},
+        rightIcon: {svg: ArrowRight},
       }}
       testID="smartParkAndRideOnboardingAutomaticRegistration"
+      focusRef={focusRef}
     />
   );
 };

@@ -1,28 +1,37 @@
-import {Section, ToggleSectionItem} from '@atb/components/sections';
+import {
+  RadioGroupSection,
+  Section,
+  ToggleSectionItem,
+} from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {AppearanceSettingsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {Platform, View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
-import {ScreenHeading} from '@atb/components/heading';
+import {ContentHeading, ScreenHeading} from '@atb/components/heading';
+import {AppearanceSelection} from '@atb/theme/ThemeContext';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_AppearanceScreen = () => {
+type Props = ProfileScreenProps<'Profile_AppearanceScreen'>;
+
+export const Profile_AppearanceScreen = ({navigation}: Props) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {
-    storedColorScheme,
-    overrideSystemAppearance,
-    updateThemePreference,
-    overrideOSThemePreference,
-    useAndroidSystemFont,
-    updateAndroidFontOverride,
+    appearanceSelection,
+    setAppearanceSelection,
+    androidSystemFont,
+    setAndroidSystemFont,
   } = useThemeContext();
   const {t} = useTranslation();
   const styles = useStyles();
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(AppearanceSettingsTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading
@@ -31,32 +40,41 @@ export const Profile_AppearanceScreen = () => {
         />
       )}
     >
-      <View>
-        <Section style={styles.section}>
-          <ToggleSectionItem
-            text={t(AppearanceSettingsTexts.actions.usePhoneTheme)}
-            value={!overrideSystemAppearance}
-            onValueChange={(checked) => overrideOSThemePreference(!checked)}
-          />
-
-          {overrideSystemAppearance && (
-            <ToggleSectionItem
-              text={t(AppearanceSettingsTexts.actions.darkMode)}
-              value={storedColorScheme === 'dark'}
-              onValueChange={(checked) =>
-                updateThemePreference(checked ? 'dark' : 'light')
+      <View style={styles.container}>
+        <ContentHeading text={t(AppearanceSettingsTexts.theme.heading)} />
+        <Section>
+          <RadioGroupSection<AppearanceSelection>
+            items={[
+              AppearanceSelection.SYSTEM,
+              AppearanceSelection.LIGHT,
+              AppearanceSelection.DARK,
+            ]}
+            itemToText={(item) => {
+              switch (item) {
+                case AppearanceSelection.SYSTEM:
+                  return t(AppearanceSettingsTexts.theme.system);
+                case AppearanceSelection.LIGHT:
+                  return t(AppearanceSettingsTexts.theme.light);
+                case AppearanceSelection.DARK:
+                  return t(AppearanceSettingsTexts.theme.dark);
               }
-            />
-          )}
+            }}
+            selected={appearanceSelection}
+            keyExtractor={(item) => item}
+            onSelect={(selection) => setAppearanceSelection(selection)}
+          />
         </Section>
         {Platform.OS === 'android' && (
-          <Section style={styles.section}>
-            <ToggleSectionItem
-              text={t(AppearanceSettingsTexts.actions.useSystemFont)}
-              value={useAndroidSystemFont}
-              onValueChange={(checked) => updateAndroidFontOverride(checked)}
-            />
-          </Section>
+          <>
+            <ContentHeading text={t(AppearanceSettingsTexts.font.heading)} />
+            <Section>
+              <ToggleSectionItem
+                text={t(AppearanceSettingsTexts.font.toggle)}
+                value={androidSystemFont}
+                onValueChange={(checked) => setAndroidSystemFont(checked)}
+              />
+            </Section>
+          </>
         )}
       </View>
     </FullScreenView>
@@ -64,9 +82,8 @@ export const Profile_AppearanceScreen = () => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  section: {
-    marginHorizontal: theme.spacing.medium,
-    marginBottom: theme.spacing.small,
-    marginTop: theme.spacing.large,
+  container: {
+    gap: theme.spacing.small,
+    margin: theme.spacing.medium,
   },
 }));

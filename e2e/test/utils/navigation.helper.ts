@@ -17,7 +17,7 @@ class NavigationHelper {
    * Cancel
    */
   async cancel() {
-    const cancelId = `//*[@resource-id="cancelButton"]`;
+    const cancelId = `//*[@resource-id="rhb"]`;
     await $(cancelId).click();
     await AppHelper.pause(2000);
   }
@@ -32,6 +32,15 @@ class NavigationHelper {
   }
 
   /**
+   * Close bottom sheet
+   */
+  async closeBottomSheet() {
+    const closeId = `//*[@resource-id="closeBottomSheet"]`;
+    await $(closeId).click();
+    await AppHelper.pause(1000);
+  }
+
+  /**
    * Go to the chosen tab
    * @param page tab to open
    */
@@ -39,6 +48,16 @@ class NavigationHelper {
     page: 'assistant' | 'map' | 'departures' | 'tickets' | 'profile',
   ) {
     const menuId = `//*[@resource-id="${page}Tab"]`;
+    await $(menuId).click();
+    await AppHelper.pause(1000);
+  }
+
+  /**
+   * Go to the chosen ticket tab
+   * @param tab tab to open
+   */
+  async tapTicketTab(tab: 'purchase' | 'activeTickets') {
+    const menuId = `//*[@resource-id="${tab}Tab"]`;
     await $(menuId).click();
     await AppHelper.pause(1000);
   }

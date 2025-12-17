@@ -1,18 +1,13 @@
-import {ScrollView} from 'react-native';
-import React, {forwardRef, useState} from 'react';
+import {View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
+  dictionary,
   getTextForLanguage,
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
-import {FullScreenFooter} from '@atb/components/screen-footer';
-import {Button} from '@atb/components/button';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
 import {StyleSheet} from '@atb/theme';
 import {
   TransportModeFilterOptionWithSelectionType,
@@ -24,17 +19,23 @@ import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {TravelSearchPreferenceWithSelectionType} from '@atb/modules/travel-search-filters';
 import {TravelSearchPreference} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchPreference';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {BottomSheetModal as GorhamBottomSheetModal} from '@gorhom/bottom-sheet';
 
-export const TravelSearchFiltersBottomSheet = forwardRef<
-  any,
-  {
-    filtersSelection: TravelSearchFiltersSelectionType;
-    onSave: (t: TravelSearchFiltersSelectionType) => void;
-  }
->(({filtersSelection, onSave}, focusRef) => {
+export const TravelSearchFiltersBottomSheet = ({
+  filtersSelection,
+  onSave,
+  bottomSheetModalRef,
+  onCloseFocusRef,
+}: {
+  filtersSelection: TravelSearchFiltersSelectionType;
+  onSave: (t: TravelSearchFiltersSelectionType) => void;
+  bottomSheetModalRef: React.RefObject<GorhamBottomSheetModal | null>;
+  onCloseFocusRef: React.RefObject<View | null>;
+}) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {close} = useBottomSheetContext();
 
   const {setFilters} = useFiltersContext();
 
@@ -49,7 +50,17 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
       filtersSelection.travelSearchPreferences ?? [],
     );
 
-  const save = () => {
+  useEffect(() => {
+    setSelectedModes(filtersSelection.transportModes);
+    setSelectedTravelSearchPreferences(
+      filtersSelection.travelSearchPreferences ?? [],
+    );
+  }, [
+    filtersSelection.transportModes,
+    filtersSelection.travelSearchPreferences,
+  ]);
+
+  const save = useCallback(() => {
     const selectedFilters = {
       transportModes: selectedModeOptions,
       travelSearchPreferences: selectedTravelSearchPreferences,
@@ -61,23 +72,43 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
     setFilters({
       travelSearchPreferences: selectedTravelSearchPreferences,
     });
-
-    close();
-  };
+  }, [
+    onSave,
+    selectedModeOptions,
+    selectedTravelSearchPreferences,
+    setFilters,
+  ]);
 
   const allModesSelected = selectedModeOptions?.every((m) => m.selected);
 
   return (
-    <BottomSheetContainer
-      maxHeightValue={0.9}
-      title={t(TripSearchTexts.filters.bottomSheet.title)}
+    <BottomSheetModal
+      bottomSheetModalRef={bottomSheetModalRef}
+      heading={t(TripSearchTexts.filters.bottomSheet.title)}
+      rightIconText={t(dictionary.confirm)}
+      rightIcon={Confirm}
+      closeCallback={() => {
+        if (
+          filtersSelection.transportModes !== selectedModeOptions ||
+          filtersSelection.travelSearchPreferences !==
+            selectedTravelSearchPreferences
+        ) {
+          save();
+        }
+        giveFocus(onCloseFocusRef);
+      }}
     >
-      <ScrollView
+      <View
         style={styles.filtersContainer}
-        ref={focusRef}
         testID="filterView"
+        accessible={false}
+        importantForAccessibility="no"
       >
-        <ThemeText style={styles.headingText} typography="body__secondary">
+        <ThemeText
+          style={styles.headingText}
+          typography="body__s"
+          accessibilityRole="header"
+        >
           {t(TripSearchTexts.filters.bottomSheet.heading)}
         </ThemeText>
         <Section>
@@ -153,25 +184,14 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
             }
           />
         ))}
-      </ScrollView>
-
-      <FullScreenFooter>
-        <Button
-          expanded={true}
-          text={t(TripSearchTexts.filters.bottomSheet.use)}
-          onPress={save}
-          rightIcon={{svg: Confirm}}
-          testID="confirmButton"
-        />
-      </FullScreenFooter>
-    </BottomSheetContainer>
+      </View>
+    </BottomSheetModal>
   );
-});
+};
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   filtersContainer: {
     marginHorizontal: theme.spacing.medium,
-    marginBottom: theme.spacing.medium,
   },
   travelSearchPreference: {
     marginTop: theme.spacing.medium,

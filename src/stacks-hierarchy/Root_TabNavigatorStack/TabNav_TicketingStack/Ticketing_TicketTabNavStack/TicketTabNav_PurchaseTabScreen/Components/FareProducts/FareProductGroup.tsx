@@ -44,7 +44,7 @@ export const FareProductGroup = ({
           modes={transportModes}
           iconSize="xSmall"
           style={styles.heading}
-          textType="body__secondary"
+          textType="body__s"
           textColor={{
             foreground: {
               primary: theme.color.foreground.dynamic.primary,
@@ -60,7 +60,7 @@ export const FareProductGroup = ({
           modes={transportModes}
           iconSize="xSmall"
           style={styles.heading}
-          textType="body__secondary"
+          textType="body__s"
           textColor={{
             foreground: {
               primary: theme.color.foreground.dynamic.primary,

@@ -61,7 +61,7 @@ export const Root_LoginOptionsScreen = ({
     setIsLoading(true);
     try {
       await authorizeUser(setIsLoading);
-    } catch (err) {
+    } catch {
       setError('unknown_error');
       setIsLoading(false);
     }
@@ -87,13 +87,12 @@ export const Root_LoginOptionsScreen = ({
   useEffect(() => {
     const signInVippsUser = async (authorizationCode: string) => {
       try {
-        const customToken = await getOrCreateVippsUserCustomToken(
-          authorizationCode,
-        );
+        const customToken =
+          await getOrCreateVippsUserCustomToken(authorizationCode);
         await signInUsingCustomToken(customToken.data as string);
         await storage.set('vipps_state', '');
         await storage.set('vipps_nonce', '');
-      } catch (err) {
+      } catch {
         setError('unknown_error');
         setIsLoading(false);
       }
@@ -147,13 +146,14 @@ export const Root_LoginOptionsScreen = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        setFocusOnLoad={false}
         leftButton={
-          showGoBack
-            ? {
-                type:
-                  transitionPreset === 'slide-from-bottom' ? 'close' : 'back',
-              }
+          showGoBack && transitionPreset !== 'slide-from-bottom'
+            ? {type: 'back'}
+            : undefined
+        }
+        rightButton={
+          showGoBack && transitionPreset === 'slide-from-bottom'
+            ? {type: 'close'}
             : undefined
         }
         color={themeColor}
@@ -163,7 +163,7 @@ export const Root_LoginOptionsScreen = ({
       <ScrollView contentContainerStyle={styles.scrollView} bounces={false}>
         <View accessible={true} accessibilityRole="header">
           <ThemeText
-            typography="body__primary--jumbo--bold"
+            typography="heading__3xl"
             style={styles.title}
             color={themeColor}
           >

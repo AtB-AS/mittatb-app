@@ -12,7 +12,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {formatToClock, formatToClockOrRelativeMinutes} from '@atb/utils/date';
 import {TranslateFunction, dictionary, useTranslation} from '@atb/translations';
-import {TravelAidTexts} from '@atb/translations/screens/subscreens/TravelAid';
+import {TravelAidTexts} from '@atb/translations';
 import {
   getLineA11yLabel,
   getNoticesForServiceJourney,
@@ -26,7 +26,6 @@ import {
   TravelAidStatus,
   getFocusedEstimatedCall,
 } from './get-focused-estimated-call';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {getQuayName} from '@atb/utils/transportation-names';
 import {SituationMessageBox} from '@atb/modules/situations';
 import {CancelledDepartureMessage} from '@atb/screen-components/travel-details-screens';
@@ -38,12 +37,14 @@ import type {SendStopSignalRequestType} from '@atb/api/stop-signal';
 import type {ContrastColor} from '@atb/theme/colors';
 import {createSentStopSignalsCache} from './sent-stop-signals-cache';
 import {LiveRegionWrapper} from '@atb/components/screen-reader-announcement';
+import {useKeepAwake} from '@sayem314/react-native-keep-awake';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
 };
 type Props = TravelAidScreenParams & {
   goBack: () => void;
+  focusRef: Ref<any>;
 };
 
 const sentStopSignalsCache = createSentStopSignalsCache();
@@ -51,6 +52,7 @@ const sentStopSignalsCache = createSentStopSignalsCache();
 export const TravelAidScreenComponent = ({
   serviceJourneyDeparture,
   goBack,
+  focusRef,
 }: Props) => {
   const stopSignalMutation = useStopSignalMutation({
     onSuccess: () => sentStopSignalsCache.addSent(serviceJourneyDeparture),
@@ -58,7 +60,8 @@ export const TravelAidScreenComponent = ({
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const focusRef = useFocusOnLoad();
+
+  useKeepAwake();
 
   const hasSentStopSignal = sentStopSignalsCache.hasSent(
     serviceJourneyDeparture,
@@ -103,7 +106,7 @@ export const TravelAidScreenComponent = ({
         testID="closeJourneyAidButton"
       />
       <ScrollView contentContainerStyle={styles.scrollView}>
-        {status === 'loading' && (
+        {status === 'pending' && (
           <ActivityIndicator size="large" ref={focusRef} />
         )}
         {status === 'error' && (
@@ -207,6 +210,7 @@ const TravelAidSection = ({
               type="warning"
               title={t(TravelAidTexts.noRealtimeError.title)}
               message={t(TravelAidTexts.noRealtimeError.message)}
+              a11yLiveRegion="polite"
             />
           )}
 
@@ -244,10 +248,10 @@ const TravelAidSection = ({
                 getStopHeader(status, t) + screenReaderPause + quayName
               }
             >
-              <ThemeText typography="body__tertiary--bold">
+              <ThemeText typography="heading__xs">
                 {getStopHeader(status, t)}
               </ThemeText>
-              <ThemeText typography="heading__title">{quayName}</ThemeText>
+              <ThemeText typography="heading__m">{quayName}</ThemeText>
             </LiveRegionWrapper>
             <TimeInfo state={{status, focusedEstimatedCall}} />
           </View>
@@ -289,7 +293,7 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
         <LiveRegionWrapper
           accessibilityLabel={t(TravelAidTexts.scheduledTime(scheduledClock))}
         >
-          <ThemeText typography="body__secondary--bold">
+          <ThemeText typography="body__s__strong">
             {t(TravelAidTexts.scheduledTime(scheduledClock))}
           </ThemeText>
         </LiveRegionWrapper>
@@ -307,9 +311,7 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
                 svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
                 size="xSmall"
               />
-              <ThemeText typography="heading__title">
-                {relativeRealtime}
-              </ThemeText>
+              <ThemeText typography="heading__m">{relativeRealtime}</ThemeText>
             </View>
           </LiveRegionWrapper>
           <LiveRegionWrapper
@@ -317,7 +319,7 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
               TravelAidTexts.scheduledTimeA11yLabel(scheduledClock),
             )}`}
           >
-            <ThemeText typography="body__secondary--bold">
+            <ThemeText typography="body__s__strong">
               {t(TravelAidTexts.scheduledTime(scheduledClock))}
             </ThemeText>
           </LiveRegionWrapper>
@@ -336,9 +338,7 @@ const TimeInfo = ({state}: {state: FocusedEstimatedCallState}) => {
               svg={themeName === 'light' ? RealtimeLight : RealtimeDark}
               size="xSmall"
             />
-            <ThemeText typography="heading__title">
-              {relativeRealtime}
-            </ThemeText>
+            <ThemeText typography="heading__m">{relativeRealtime}</ThemeText>
           </View>
         </LiveRegionWrapper>
       );

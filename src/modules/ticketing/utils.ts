@@ -1,5 +1,10 @@
 import {startCase} from 'lodash';
-import {LastUsedAccessState, UsedAccessStatus, PaymentType} from './types';
+import {
+  LastUsedAccessState,
+  UsedAccessStatus,
+  PaymentType,
+  ConsumableSchoolCarnetResponse,
+} from './types';
 import {FareContractType, TravelRightType, UsedAccessType} from '@atb-as/utils';
 import {getAvailabilityStatus} from '@atb-as/utils';
 
@@ -11,8 +16,12 @@ export function isCanBeConsumedNowFareContract(
   f: FareContractType,
   now: number,
   currentUserId: string | undefined,
+  schoolCarnetInfo: ConsumableSchoolCarnetResponse | undefined,
 ) {
   if (f.customerAccountId !== currentUserId) return false;
+
+  // If there is a next consumable date time, it cannot be consumed
+  if (schoolCarnetInfo?.nextConsumableDateTime) return false;
 
   // Fare contracts without accesses cannot be consumed
   if (!hasTravelRightAccesses(f.travelRights)) return false;
@@ -24,8 +33,12 @@ export function isCanBeActivatedNowFareContract(
   f: FareContractType,
   now: number,
   currentUserId: string | undefined,
+  isBooking: boolean = false,
 ) {
   if (f.customerAccountId !== currentUserId) return false;
+
+  // You cannot activate a booking fare contract early
+  if (isBooking) return false;
 
   // A fare contract with accesses (carnets) cannot be activated by itself. It
   // is instead "consumed" to activate an access
@@ -52,6 +65,7 @@ export function getLastUsedAccess(
 
   return {status, validFrom, validTo};
 }
+
 function getUsedAccessValidity(
   now: number,
   validFrom: number,

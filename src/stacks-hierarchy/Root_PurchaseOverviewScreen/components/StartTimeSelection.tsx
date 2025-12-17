@@ -1,8 +1,7 @@
-import React, {RefObject, useRef} from 'react';
+import React, {useRef} from 'react';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {formatToLongDateTime, isInThePast} from '@atb/utils/date';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {ContentHeading} from '@atb/components/heading';
 import {
   type PurchaseSelectionType,
@@ -14,6 +13,7 @@ import {ThemeText} from '@atb/components/text';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
+import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 
 type StartTimeSelectionProps = {
   selection: PurchaseSelectionType;
@@ -28,11 +28,9 @@ export function StartTimeSelection({
 }: StartTimeSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
-
-  const {openDatePickerSheet, onCloseFocusRef} = useDatePickerSheet(
-    selection,
-    setSelection,
-  );
+  const selectionBuilder = usePurchaseSelectionBuilder();
+  const onCloseFocusRef = useRef<View | null>(null);
+  const bottomSheetModalRef = useRef<GorhomBottomSheetModal | null>(null);
 
   if (
     selection.fareProductTypeConfig.configuration.timeSelectionMode === 'none'
@@ -40,86 +38,74 @@ export function StartTimeSelection({
     return null;
   }
 
-  return (
-    <View style={style}>
-      <ContentHeading text={t(PurchaseOverviewTexts.startTime.title)} />
-      <Section>
-        <GenericClickableSectionItem
-          ref={onCloseFocusRef}
-          onPress={openDatePickerSheet}
-          accessibilityLabel={t(
-            PurchaseOverviewTexts.startTime.a11yLabel(
-              selection.travelDate &&
-                formatToLongDateTime(selection.travelDate, language),
-            ),
-          )}
-          accessibilityHint={t(PurchaseOverviewTexts.startTime.a11yLaterHint)}
-          testID="selectZonesButton"
-        >
-          <View style={styles.sectionContent}>
-            <ThemeText typography="body__primary--bold">
-              {selection.travelDate
-                ? t(
-                    PurchaseOverviewTexts.startTime.laterTime(
-                      formatToLongDateTime(selection.travelDate, language),
-                    ),
-                  )
-                : t(PurchaseOverviewTexts.startTime.now)}
-            </ThemeText>
-            <ThemeIcon svg={Edit} size="normal" />
-          </View>
-        </GenericClickableSectionItem>
-      </Section>
-    </View>
-  );
-}
-
-const useDatePickerSheet = (
-  selection: PurchaseSelectionType,
-  setSelection: (s: PurchaseSelectionType) => void,
-) => {
-  const {t} = useTranslation();
-  const selectionBuilder = usePurchaseSelectionBuilder();
-  const onCloseFocusRef = useRef<RefObject<any>>(null);
-
-  const {open: openBottomSheet} = useBottomSheetContext();
   const openDatePickerSheet = () => {
-    openBottomSheet(
-      () => (
-        <DatePickerSheet
-          options={[
-            {
-              option: 'now',
-              text: t(PurchaseOverviewTexts.startTime.now),
-              selected: !selection.travelDate,
-            },
-            {
-              option: 'later',
-              text: t(PurchaseOverviewTexts.startTime.laterOption),
-              selected: !!selection.travelDate,
-            },
-          ]}
-          onSave={(selectedOption) => {
-            const newSelection = selectionBuilder
-              .fromSelection(selection)
-              .date(
-                selectedOption.option === 'now' ||
-                  isInThePast(selectedOption.date)
-                  ? undefined
-                  : selectedOption.date,
-              )
-              .build();
-            setSelection(newSelection);
-          }}
-          initialDate={selection.travelDate}
-        />
-      ),
-      onCloseFocusRef,
-    );
+    bottomSheetModalRef.current?.present();
   };
 
-  return {openDatePickerSheet, onCloseFocusRef};
-};
+  return (
+    <>
+      <View style={style}>
+        <ContentHeading text={t(PurchaseOverviewTexts.startTime.title)} />
+        <Section>
+          <GenericClickableSectionItem
+            ref={onCloseFocusRef}
+            onPress={openDatePickerSheet}
+            accessibilityLabel={t(
+              PurchaseOverviewTexts.startTime.a11yLabel(
+                selection.travelDate &&
+                  formatToLongDateTime(selection.travelDate, language),
+              ),
+            )}
+            accessibilityHint={t(PurchaseOverviewTexts.startTime.a11yLaterHint)}
+            testID="startTimeButton"
+          >
+            <View style={styles.sectionContent}>
+              <ThemeText typography="body__m__strong">
+                {selection.travelDate
+                  ? t(
+                      PurchaseOverviewTexts.startTime.laterTime(
+                        formatToLongDateTime(selection.travelDate, language),
+                      ),
+                    )
+                  : t(PurchaseOverviewTexts.startTime.now)}
+              </ThemeText>
+              <ThemeIcon svg={Edit} size="normal" />
+            </View>
+          </GenericClickableSectionItem>
+        </Section>
+      </View>
+      <DatePickerSheet
+        options={[
+          {
+            option: 'now',
+            text: t(PurchaseOverviewTexts.startTime.now),
+            selected: !selection.travelDate,
+          },
+          {
+            option: 'later',
+            text: t(PurchaseOverviewTexts.startTime.laterOption),
+            selected: !!selection.travelDate,
+          },
+        ]}
+        onSave={(selectedOption) => {
+          const newSelection = selectionBuilder
+            .fromSelection(selection)
+            .date(
+              selectedOption.option === 'now' ||
+                isInThePast(selectedOption.date)
+                ? undefined
+                : selectedOption.date,
+            )
+            .build();
+          setSelection(newSelection);
+        }}
+        initialDate={selection.travelDate}
+        onCloseFocusRef={onCloseFocusRef}
+        bottomSheetModalRef={bottomSheetModalRef}
+      />
+    </>
+  );
+}
 
 const useStyles = StyleSheet.createThemeHook(() => ({
   sectionContent: {

@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import {renderMarkdown} from './markdown-renderer';
-import {MAX_FONT_SCALE} from './utils';
+import {getTextWeightStyle, MAX_FONT_SCALE} from './utils';
 import {
   ContrastColor,
   Statuses,
@@ -27,7 +27,7 @@ export type ThemeTextProps = TextProps & {
 };
 
 export const ThemeText: React.FC<ThemeTextProps> = ({
-  typography: fontType = 'body__primary',
+  typography: fontType = 'body__m',
   type = 'primary',
   color,
   isMarkdown = false,
@@ -35,7 +35,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   children,
   ...props
 }) => {
-  const {theme, useAndroidSystemFont} = useThemeContext();
+  const {theme, androidSystemFont} = useThemeContext();
   const textColor = useColor(color, type);
 
   const typeStyle = {
@@ -43,16 +43,11 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
     color: textColor,
   };
 
-  let textStyle: TextStyle = typeStyle;
+  let textStyle: TextStyle = {
+    ...typeStyle,
+    ...getTextWeightStyle(androidSystemFont, typeStyle.fontWeight),
+  };
 
-  if (Platform.OS === 'android' && !useAndroidSystemFont) {
-    textStyle = {
-      ...typeStyle,
-      fontFamily:
-        typeStyle.fontWeight === 'bold' ? 'Roboto-Bold' : 'Roboto-Regular',
-      fontWeight: 'normal',
-    };
-  }
   // Set specific letter spacing for android phones, as 0.4 leads to errors on newer pixel phones
   // https://github.com/facebook/react-native/issues/35039
   if (
@@ -76,6 +71,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
       ? renderMarkdown(children, {
           textProps,
           spacingBetweenListElements: theme.spacing.xSmall,
+          androidSystemFont,
         })
       : children;
 

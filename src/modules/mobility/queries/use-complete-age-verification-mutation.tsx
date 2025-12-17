@@ -1,8 +1,8 @@
 import {completeAgeVerification} from '@atb/api/identity';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {getAgeVerificationQueryKey} from './use-get-age-verification-query';
+import {ageVerificationQueryKeyString} from './use-get-age-verification-query';
 
-export const useCompleteAgeVerificationMutation = (legalAge: number) => {
+export const useCompleteAgeVerificationMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -10,7 +10,10 @@ export const useCompleteAgeVerificationMutation = (legalAge: number) => {
       completeAgeVerification(authorizationCode),
 
     onSuccess: () => {
-      queryClient.invalidateQueries(getAgeVerificationQueryKey(legalAge));
+      //invalidate all age verification queries
+      queryClient.invalidateQueries({
+        queryKey: [ageVerificationQueryKeyString],
+      });
     },
   });
 };

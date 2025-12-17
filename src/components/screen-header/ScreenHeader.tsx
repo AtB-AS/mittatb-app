@@ -4,10 +4,9 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {useMemo, useState} from 'react';
+import React, {Ref, useMemo, useState} from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {ButtonModes, HeaderButton, HeaderButtonProps} from './HeaderButton';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {HeaderButton, HeaderButtonProps} from './HeaderButton';
 import {
   GlobalMessage,
   GlobalMessageContextEnum,
@@ -15,15 +14,16 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {ContrastColor} from '@atb/theme/colors';
 
-export {AnimatedScreenHeader} from './AnimatedScreenHeader';
-
 export type LeftButtonProps = HeaderButtonProps & {
-  type: Exclude<ButtonModes, 'skip' | 'custom'>;
+  type: 'back';
 };
 
 export type RightButtonProps =
   | (HeaderButtonProps & {
-      type: 'skip' | 'close';
+      type: 'close';
+    })
+  | (HeaderButtonProps & {
+      type: 'cancel';
     })
   | (HeaderButtonProps & {
       type: 'info';
@@ -33,6 +33,7 @@ export type RightButtonProps =
       type: 'custom';
       onPress: () => void;
       text: string;
+      svg: ({fill}: {fill: string}) => React.JSX.Element;
     });
 
 export type ScreenHeaderProps = {
@@ -47,13 +48,12 @@ export type ScreenHeaderProps = {
   globalMessageContext?: GlobalMessageContextEnum;
   style?: ViewStyle;
   color?: ContrastColor;
-  setFocusOnLoad?: boolean;
   textOpacity?: number;
+  focusRef?: Ref<any>;
 };
 
 export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   color,
-  setFocusOnLoad,
   style,
   title,
   titleA11yLabel,
@@ -61,15 +61,18 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   leftButton,
   rightButton,
   textOpacity = 1,
+  focusRef,
 }) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const themeColor = color ?? theme.color.background.accent[0];
-  const focusRef = useFocusOnLoad(setFocusOnLoad);
 
   const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();
 
   const backgroundColor = themeColor.background;
+  const borderBottomColor = !!textOpacity
+    ? theme.color.background.neutral[2].background
+    : 'transparent';
 
   const leftIcon = leftButton ? (
     <HeaderButton color={themeColor} {...leftButton} testID="lhb" />
@@ -83,7 +86,9 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   );
 
   return (
-    <View style={[styles.container, style, {backgroundColor}]}>
+    <View
+      style={[styles.container, style, {backgroundColor, borderBottomColor}]}
+    >
       <View
         accessibilityLabel={titleA11yLabel}
         accessible={!!title && !!textOpacity}
@@ -103,7 +108,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
           <ThemeText
             accessible={false}
             onLayout={setLayoutFor('title')}
-            typography="body__primary--bold"
+            typography="body__m__strong"
             color={themeColor}
           >
             {title && textOpacity > 0 ? title : '\u00a0'}
@@ -136,6 +141,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacing.medium,
     paddingTop: theme.spacing.medium,
+    borderBottomWidth: theme.border.width.slim,
+    borderBottomColor: 'transparent',
   },
   headerTitle: {alignItems: 'center'},
   buttons: {

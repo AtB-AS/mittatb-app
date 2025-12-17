@@ -11,13 +11,12 @@ import {View} from 'react-native';
 import {MapCameraConfig} from './MapConfig';
 import {SelectionPin} from './components/SelectionPin';
 import {LocationBar} from './components/LocationBar';
-import {PositionArrow} from './components/PositionArrow';
+import {LocationArrow} from './components/LocationArrow';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {SelectionLocationCallback} from './types';
 
 import {isFeaturePoint} from './utils';
 import {Location} from '@atb/modules/favorites';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
 import {useMapViewConfig} from './hooks/use-map-view-config';
 
@@ -30,7 +29,6 @@ export const ExploreLocationMap = ({
   initialLocation,
   onLocationSelect,
 }: ExploreLocationMapProps) => {
-  const {isMapV2Enabled} = useFeatureTogglesContext();
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const styles = useMapStyles();
@@ -50,14 +48,14 @@ export const ExploreLocationMap = ({
   const onFeatureClick = useCallback(async (feature: Feature) => {
     if (!isFeaturePoint(feature)) return;
 
-    const {coordinates: positionClicked} = feature.geometry;
+    const {coordinates: locationClicked} = feature.geometry;
     setSelectedCoordinates({
-      longitude: positionClicked[0],
-      latitude: positionClicked[1],
+      longitude: locationClicked[0],
+      latitude: locationClicked[1],
     });
   }, []);
 
-  const onPositionArrowClick = async () => {
+  const onLocationArrowOnPress = async () => {
     const coordinates = await getCurrentCoordinates(true);
     if (coordinates) {
       mapCameraRef.current?.flyTo(
@@ -95,12 +93,10 @@ export const ExploreLocationMap = ({
             {...MapCameraConfig}
           />
 
-          {isMapV2Enabled && (
-            <NationalStopRegistryFeatures
-              selectedFeaturePropertyId={undefined}
-              onMapItemClick={undefined}
-            />
-          )}
+          <NationalStopRegistryFeatures
+            selectedFeaturePropertyId={undefined}
+            onMapItemClick={undefined}
+          />
 
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {selectedCoordinates && (
@@ -113,7 +109,7 @@ export const ExploreLocationMap = ({
             controlStyles.mapButtonsContainerRight,
           ]}
         >
-          <PositionArrow onPress={onPositionArrowClick} />
+          <LocationArrow onPress={onLocationArrowOnPress} />
         </View>
       </View>
     </View>

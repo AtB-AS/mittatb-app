@@ -14,7 +14,7 @@ import {formatDestinationDisplay} from '@atb/screen-components/travel-details-sc
 
 type BaseProps = {
   favorite: StoredFavoriteDeparture;
-  icon?: JSX.Element;
+  icon?: React.JSX.Element;
   testID?: string;
 };
 type WithOnPress = BaseProps & {
@@ -79,7 +79,7 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
           {formatDestinationDisplay(t, favorite.destinationDisplay) ??
             t(SectionTexts.favoriteDeparture.allVariations)}
         </ThemeText>
-        <ThemeText typography="body__secondary" color="secondary">
+        <ThemeText typography="body__s" color="secondary">
           {t(SectionTexts.favoriteDeparture.from)} {favorite.quayName}{' '}
           {favorite.quayPublicCode ?? ''}
         </ThemeText>

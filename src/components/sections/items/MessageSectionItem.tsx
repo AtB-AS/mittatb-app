@@ -1,5 +1,5 @@
 import React from 'react';
-import {Linking, View} from 'react-native';
+import {View} from 'react-native';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {ThemeText} from '@atb/components/text';
@@ -10,6 +10,7 @@ import {dictionary, useTranslation} from '@atb/translations';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {MessageInfoBoxProps} from '@atb/components/message-info-box';
 import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type Props = SectionItemProps<{
   messageType: Statuses;
@@ -43,7 +44,7 @@ export function MessageSectionItem({
     onPressConfig &&
     ('action' in onPressConfig
       ? onPressConfig.action
-      : () => Linking.openURL(onPressConfig.url));
+      : () => openInAppBrowser(onPressConfig.url, 'close'));
   const accessibilityRole =
     onPressConfig && 'action' in onPressConfig ? 'button' : 'link';
 
@@ -64,7 +65,7 @@ export function MessageSectionItem({
       <View style={styles.textContent}>
         {title && (
           <ThemeText
-            typography="body__primary--bold"
+            typography="body__m__strong"
             style={styles.title}
             color={messageType}
             testID="title"
@@ -77,7 +78,7 @@ export function MessageSectionItem({
           <ThemeText
             color={messageType}
             style={styles.linkText}
-            typography="body__primary--underline"
+            typography="body__m__underline"
           >
             {onPressConfig.text}
           </ThemeText>

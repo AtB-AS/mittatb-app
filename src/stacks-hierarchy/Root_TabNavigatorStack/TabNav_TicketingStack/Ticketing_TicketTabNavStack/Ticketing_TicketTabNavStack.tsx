@@ -2,7 +2,7 @@ import {
   createMaterialTopTabNavigator,
   MaterialTopTabBarProps,
 } from '@react-navigation/material-top-tabs';
-import {TicketTabNav_PurchaseTabScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/TicketTabNav_PurchaseTabScreen';
+import {TicketTabNav_PurchaseTabScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TicketTabNav_AvailableFareContractsTabScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_AvailableFareContractsTabScreen';
 import React from 'react';
@@ -42,7 +42,7 @@ export const Ticketing_TicketTabNavStack = () => {
         options={{
           tabBarLabel: t(TicketingTexts.purchaseTab.label),
           tabBarAccessibilityLabel: t(TicketingTexts.purchaseTab.a11yLabel),
-          tabBarTestID: 'purchaseTab',
+          tabBarButtonTestID: 'purchaseTab',
         }}
       />
       <TopTabNav.Screen
@@ -52,7 +52,7 @@ export const Ticketing_TicketTabNavStack = () => {
           tabBarLabel: t(
             TicketingTexts.availableFareProductsAndReservationsTab.label,
           ),
-          tabBarTestID: 'activeTicketsTab',
+          tabBarButtonTestID: 'activeTicketsTab',
         }}
       />
     </TopTabNav.Navigator>
@@ -74,8 +74,8 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
           options.tabBarLabel !== undefined
             ? options.tabBarLabel
             : options.title !== undefined
-            ? options.title
-            : route.name;
+              ? options.title
+              : route.name;
 
         const isFocused = state.index === index;
 
@@ -104,7 +104,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
         return (
           <PressableOpacity
             key={index}
-            accessibilityRole="button"
+            accessibilityRole="tab"
             accessibilityState={isFocused ? {selected: true} : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}
             onPress={onPress}
@@ -117,9 +117,9 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
             ]}
           >
             <ThemeText
-              typography={isFocused ? 'body__primary--bold' : 'body__primary'}
+              typography={isFocused ? 'body__m__strong' : 'body__m'}
               color={tabColor}
-              testID={options.tabBarTestID}
+              testID={options.tabBarButtonTestID}
             >
               <>{label}</>
             </ThemeText>

@@ -10,7 +10,6 @@ import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
 import * as React from 'react';
 import {Ref, useState} from 'react';
 import {ParallaxScroll} from '@atb/components/parallax-scroll';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {FullScreenFooter} from '../screen-footer';
 import {ContrastColor} from '@atb/theme/colors';
 
@@ -21,12 +20,26 @@ type Props = {
    * disappear with a parallax effect when scrolling.
    */
   parallaxContent?: (focusRef?: Ref<any>) => React.ReactNode;
+  /**
+   * When `parallaxContent` is set, the header text will appear gradually as the
+   * user scrolls. If `titleAlwaysVisible` is true, it will make the header text
+   * always visible instead.
+   */
+  titleAlwaysVisible?: boolean;
   handleScroll?: (scrollPercentage: number) => void;
   children?: React.ReactNode;
   footer?: React.ReactNode;
   refreshControl?: React.ReactElement<RefreshControlProps>;
   contentColor?: ContrastColor;
   avoidKeyboard?: boolean;
+  testID?: string;
+  /**
+   * The ref for the header to focus on load and navigation changes.
+   *
+   * Must explicitly be undefined if header is not going to be focused.
+   * E.g. if the header is not going to be visible, or content will be focused instead.
+   */
+  focusRef: Ref<any> | undefined;
 };
 
 type PropsWithParallaxContent = Props &
@@ -38,9 +51,14 @@ export function FullScreenView(props: Props) {
   const themeColor =
     props.headerProps.color ?? theme.color.background.accent[0];
   const backgroundColor = themeColor.background;
-  const [opacity, setOpacity] = useState(props.parallaxContent ? 0 : 1);
+
+  const titleShouldAnimate = props.titleAlwaysVisible
+    ? false
+    : !!props.parallaxContent;
+  const [opacity, setOpacity] = useState(titleShouldAnimate ? 0 : 1);
 
   const handleScroll = (scrollPercentage: number) => {
+    if (!titleShouldAnimate) return;
     if (scrollPercentage < 50) {
       setOpacity(0);
     } else {
@@ -58,6 +76,8 @@ export function FullScreenView(props: Props) {
     <ChildrenInNormalScrollView {...props} contentColor={props.contentColor} />
   );
 
+  const headerFocusRef = !titleShouldAnimate ? props.focusRef : undefined;
+
   return (
     <>
       <View
@@ -65,13 +85,12 @@ export function FullScreenView(props: Props) {
           backgroundColor,
           paddingTop: top,
         }}
+        testID={props.testID ? `${props.testID}` : ''}
       >
         <ScreenHeader
           {...props.headerProps}
           textOpacity={opacity}
-          setFocusOnLoad={
-            props.parallaxContent ? false : props.headerProps.setFocusOnLoad
-          }
+          focusRef={headerFocusRef}
         />
       </View>
 
@@ -100,8 +119,9 @@ const ChildrenWithParallaxScrollContent = ({
   children,
   headerColor,
   handleScroll,
+  titleAlwaysVisible,
+  focusRef,
 }: PropsWithParallaxContent & {headerColor: string}) => {
-  const focusRef = useFocusOnLoad();
   const styles = useStyles();
   return (
     <View style={styles.container}>
@@ -109,7 +129,7 @@ const ChildrenWithParallaxScrollContent = ({
         header={
           <View style={{backgroundColor: headerColor}}>
             <View style={styles.childrenContainer}>
-              {parallaxContent(focusRef)}
+              {parallaxContent(!titleAlwaysVisible ? focusRef : undefined)}
             </View>
           </View>
         }

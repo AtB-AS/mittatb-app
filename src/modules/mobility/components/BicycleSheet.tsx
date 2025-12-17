@@ -3,8 +3,7 @@ import {
   VehicleId,
 } from '@atb/api/types/generated/fragments/vehicles';
 import React from 'react';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {BatteryHigh} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
@@ -18,7 +17,7 @@ import {PricingPlan} from './PricingPlan';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
 import {formatRange} from '../utils';
 import {useVehicle} from '../use-vehicle';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useOperatorBenefit} from '../use-operator-benefit';
 import {OperatorActionButton} from './OperatorActionButton';
@@ -29,16 +28,22 @@ import {MobilityStat} from './MobilityStat';
 import {BrandingImage} from './BrandingImage';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type Props = {
   vehicleId: VehicleId;
   onClose: () => void;
   onVehicleReceived?: (vehicle: VehicleExtendedFragment) => void;
+  locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 export const BicycleSheet = ({
   vehicleId: id,
   onClose,
   onVehicleReceived,
+  locationArrowOnPress,
+  navigateToScanQrCode,
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useSheetStyle();
@@ -57,10 +62,20 @@ export const BicycleSheet = ({
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
   return (
-    <BottomSheetContainer
-      title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
-      onClose={onClose}
-      maxHeightValue={0.5}
+    <MapBottomSheet
+      canMinimize={true}
+      enablePanDownToClose={false}
+      closeCallback={onClose}
+      closeOnBackdropPress={false}
+      allowBackgroundTouch={true}
+      enableDynamicSizing={true}
+      heading={operatorName}
+      subText={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      logoUrl={brandLogoUrl}
+      locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
       <>
         {isLoading && (
@@ -70,7 +85,7 @@ export const BicycleSheet = ({
         )}
         {!isLoading && !isError && vehicle && (
           <>
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
@@ -128,13 +143,12 @@ export const BicycleSheet = ({
                   </View>
                 </GenericSectionItem>
               </Section>
-            </ScrollView>
+            </View>
             {rentalAppUri && (
               <View style={styles.footer}>
                 <OperatorActionButton
                   operatorId={operatorId}
                   operatorName={operatorName}
-                  benefit={operatorBenefit}
                   appStoreUri={appStoreUri}
                   rentalAppUri={rentalAppUri}
                 />
@@ -151,7 +165,7 @@ export const BicycleSheet = ({
           </View>
         )}
       </>
-    </BottomSheetContainer>
+    </MapBottomSheet>
   );
 };
 

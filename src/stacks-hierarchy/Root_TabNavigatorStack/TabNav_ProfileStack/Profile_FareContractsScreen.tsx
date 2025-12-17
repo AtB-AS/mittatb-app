@@ -1,22 +1,25 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {DetailsContent} from '@atb/modules/fare-contracts';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
 import {findReferenceDataById} from '@atb/modules/configuration';
 import {StyleSheet, Theme} from '@atb/theme';
-import {Reservation} from '@atb/modules/ticketing';
+import {Reservation, useGetFareProductsQuery} from '@atb/modules/ticketing';
 import {TravelRightDirection, FareContractType} from '@atb-as/utils';
 import {addDays} from 'date-fns';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useAuthContext} from '@atb/modules/auth';
+import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_FareContractsScreen = () => {
+type Props = ProfileScreenProps<'Profile_FareContractsScreen'>;
+
+export const Profile_FareContractsScreen = ({navigation}: Props) => {
   const styles = useStyles();
 
-  const {preassignedFareProducts} = useFirestoreConfigurationContext();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const getPreassignedFareProduct = (fcRef: string) =>
     findReferenceDataById(preassignedFareProducts, fcRef);
 
@@ -190,6 +193,12 @@ export const Profile_FareContractsScreen = () => {
     YOUTH_TICKET,
   ] as FareContractType[];
 
+  const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
+
+  const navigateToBonusScreen = useCallback(() => {
+    navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
+  }, [navigation, bonusScreenParams]);
+
   return (
     <View style={styles.container}>
       <FullScreenHeader title="Fare Contracts" leftButton={{type: 'back'}} />
@@ -197,14 +206,15 @@ export const Profile_FareContractsScreen = () => {
         style={styles.content}
         contentContainerStyle={styles.contentContainer}
       >
-        <ThemeText typography="heading--jumbo">Reservation</ThemeText>
+        <ThemeText typography="heading__2xl">Reservation</ThemeText>
         <FareContractOrReservation
           index={0}
           onPressFareContract={() => {}}
           fcOrReservation={RESERVATION}
           now={Date.now()}
+          navigateToBonusScreen={navigateToBonusScreen}
         />
-        <ThemeText typography="heading--jumbo">Fare Contracts</ThemeText>
+        <ThemeText typography="heading__2xl">Fare Contracts</ThemeText>
         {fareContracts.map((fc, i) => (
           <FareContractOrReservation
             key={i}
@@ -212,9 +222,10 @@ export const Profile_FareContractsScreen = () => {
             fcOrReservation={fc}
             now={Date.now()}
             onPressFareContract={() => {}}
+            navigateToBonusScreen={navigateToBonusScreen}
           />
         ))}
-        <ThemeText typography="heading--jumbo">Fare contract details</ThemeText>
+        <ThemeText typography="heading__2xl">Fare contract details</ThemeText>
         {fareContracts.map((fc, i) => (
           <DetailsContent
             key={i}
@@ -225,6 +236,7 @@ export const Profile_FareContractsScreen = () => {
             now={Date.now()}
             onReceiptNavigate={() => {}}
             onNavigateToMap={() => {}}
+            navigateToBonusScreen={navigateToBonusScreen}
           />
         ))}
       </ScrollView>

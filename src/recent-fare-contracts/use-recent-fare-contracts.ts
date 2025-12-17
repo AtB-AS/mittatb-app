@@ -6,10 +6,13 @@ import {
   useFirestoreConfigurationContext,
   findReferenceDataById,
   isProductSellableInApp,
+  SupplementProduct,
 } from '@atb/modules/configuration';
 import {
   listRecentFareContracts,
   RecentOrderDetails,
+  useGetFareProductsQuery,
+  useGetSupplementProductsQuery,
   useTicketingContext,
 } from '@atb/modules/ticketing';
 import {TravelRightDirection} from '@atb-as/utils';
@@ -18,16 +21,19 @@ import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {RecentFareContractType} from '@atb/recent-fare-contracts/types';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {enumFromString} from '@atb/utils/enum-from-string';
+import {isDefined} from '@atb/utils/presence';
+import {getBaggageProducts} from '@atb/modules/fare-contracts';
+import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 
 type State = {
-  error: boolean;
-  loading: boolean;
+  isError: boolean;
+  isLoading: boolean;
   recentFareContracts: RecentOrderDetails[];
 };
 
 const initialState: State = {
-  error: false,
-  loading: true,
+  isError: false,
+  isLoading: true,
   recentFareContracts: [],
 };
 
@@ -43,20 +49,20 @@ const reducer: Reducer = (prevState, action): State => {
     case 'FETCH':
       return {
         ...prevState,
-        loading: true,
-        error: false,
+        isLoading: true,
+        isError: false,
       };
     case 'ERROR':
       return {
         ...prevState,
-        loading: false,
-        error: true,
+        isLoading: false,
+        isError: true,
       };
     case 'SUCCESS':
       return {
         ...prevState,
-        loading: false,
-        error: false,
+        isLoading: false,
+        isError: false,
         recentFareContracts: action.data,
       };
   }
@@ -89,14 +95,20 @@ const mapUsers = (
 const mapBackendRecentFareContracts = (
   recentFareContract: RecentOrderDetails,
   preassignedFareProducts: PreassignedFareProduct[],
+  supplementFareProducts: SupplementProduct[],
   fareProductTypeConfigs: FareProductTypeConfig[],
   fareZones: FareZone[],
   userProfiles: UserProfile[],
 ): RecentFareContractType | null => {
-  const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts.filter((p) => isProductSellableInApp(p)),
-    recentFareContract.products[0],
+  const productsInFareContract = recentFareContract.products
+    .map((p) => findReferenceDataById(preassignedFareProducts, p))
+    .filter(isDefined);
+
+  const sellableProductsInFareContract = productsInFareContract.filter((p) =>
+    isProductSellableInApp(p),
   );
+
+  const preassignedFareProduct = sellableProductsInFareContract[0];
 
   if (!preassignedFareProduct) {
     return null;
@@ -110,12 +122,22 @@ const mapBackendRecentFareContracts = (
     return null;
   }
 
+  const baggageProducts = getBaggageProducts(
+    productsInFareContract,
+    supplementFareProducts,
+  );
+
+  const baggageProductsWithCount = mapUniqueWithCount(
+    baggageProducts,
+    (a, b) => a.id === b.id,
+  );
+
   const userProfilesWithCount = mapUsers(
     recentFareContract.users,
     userProfiles,
   );
 
-  if (!userProfilesWithCount?.length) {
+  if (!userProfilesWithCount?.length && !baggageProductsWithCount?.length) {
     return null;
   }
 
@@ -150,6 +172,7 @@ const mapBackendRecentFareContracts = (
     toFareZone: toFareZone,
     pointToPointValidity,
     userProfilesWithCount,
+    baggageProductsWithCount,
   };
 };
 
@@ -169,6 +192,7 @@ const mapBackendRecentFareContracts = (
 const mapToLastThreeUniqueRecentFareContracts = (
   recentFareContracts: RecentOrderDetails[],
   preassignedFareProducts: PreassignedFareProduct[],
+  supplementFareProducts: SupplementProduct[],
   fareProductTypeConfigs: FareProductTypeConfig[],
   fareZones: FareZone[],
   userProfiles: UserProfile[],
@@ -180,6 +204,7 @@ const mapToLastThreeUniqueRecentFareContracts = (
         const maybeFareContract = mapBackendRecentFareContracts(
           recentFareContract,
           preassignedFareProducts,
+          supplementFareProducts,
           fareProductTypeConfigs,
           fareZones,
           userProfiles,
@@ -197,19 +222,17 @@ const mapToLastThreeUniqueRecentFareContracts = (
 export const useRecentFareContracts = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const {fareContracts} = useTicketingContext();
-  const {
-    preassignedFareProducts,
-    fareProductTypeConfigs,
-    fareZones,
-    userProfiles,
-  } = useFirestoreConfigurationContext();
+  const {fareProductTypeConfigs, fareZones, userProfiles} =
+    useFirestoreConfigurationContext();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const {data: supplementFareProducts} = useGetSupplementProductsQuery();
 
   const fetchRecentFareContracts = async () => {
     dispatch({type: 'FETCH'});
     try {
       const recentFareContracts = await listRecentFareContracts();
       dispatch({type: 'SUCCESS', data: recentFareContracts});
-    } catch (e) {
+    } catch {
       dispatch({type: 'ERROR'});
     }
   };
@@ -228,6 +251,7 @@ export const useRecentFareContracts = () => {
       mapToLastThreeUniqueRecentFareContracts(
         state.recentFareContracts,
         preassignedFareProducts,
+        supplementFareProducts,
         fareProductTypeConfigs,
         fareZones,
         userProfiles,
@@ -235,6 +259,7 @@ export const useRecentFareContracts = () => {
     [
       state.recentFareContracts,
       preassignedFareProducts,
+      supplementFareProducts,
       fareProductTypeConfigs,
       fareZones,
       userProfiles,
@@ -242,8 +267,8 @@ export const useRecentFareContracts = () => {
   );
 
   return {
-    loading: state.loading,
-    error: state.error,
+    isLoading: state.isLoading,
+    isError: state.isError,
     recentFareContracts,
     refresh: fetchRecentFareContracts,
   };

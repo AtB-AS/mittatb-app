@@ -19,9 +19,14 @@ import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
 const identity = (s: string) => s;
-export const Profile_LanguageScreen = () => {
+
+type Props = ProfileScreenProps<'Profile_LanguageScreen'>;
+
+export const Profile_LanguageScreen = ({navigation}: Props) => {
   const {
     setPreference,
     preferences: {useSystemLanguage = true, language},
@@ -39,11 +44,14 @@ export const Profile_LanguageScreen = () => {
     ? languages
     : languagesExceptNynorsk;
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(LanguageSettingsTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading

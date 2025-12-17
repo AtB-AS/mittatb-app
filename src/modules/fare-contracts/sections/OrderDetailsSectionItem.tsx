@@ -1,5 +1,9 @@
 import {humanizePaymentTypeString} from '@atb/modules/ticketing';
-import {FareContractType, FareContractState} from '@atb-as/utils';
+import {
+  FareContractType,
+  FareContractState,
+  formatNumberToString,
+} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
@@ -8,7 +12,6 @@ import {fromUnixTime} from 'date-fns';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
-import {formatNumberToString} from '@atb/utils/numbers';
 import {hasShmoBookingId} from '../utils';
 
 type OrderDetailsSectionItemProps = {
@@ -30,7 +33,7 @@ export const OrderDetailsSectionItem = ({
   return (
     <View style={[topContainer, styles.container]} accessible={true}>
       {!hasShmoBookingId(fareContract) && (
-        <ThemeText typography="body__secondary" color="secondary">
+        <ThemeText typography="body__s" color="secondary">
           {t(
             FareContractTexts.details.purchaseTime(
               fullDateTime(
@@ -42,7 +45,7 @@ export const OrderDetailsSectionItem = ({
         </ThemeText>
       )}
 
-      <ThemeText typography="body__secondary" color="secondary">
+      <ThemeText typography="body__s" color="secondary">
         {hasShmoBookingId(fareContract)
           ? t(
               FareContractTexts.shmoDetails.tripStarted(
@@ -56,7 +59,7 @@ export const OrderDetailsSectionItem = ({
             )}
       </ThemeText>
 
-      <ThemeText typography="body__secondary" color="secondary">
+      <ThemeText typography="body__s" color="secondary">
         {hasShmoBookingId(fareContract)
           ? t(
               FareContractTexts.shmoDetails.tripEnded(
@@ -71,20 +74,20 @@ export const OrderDetailsSectionItem = ({
       </ThemeText>
 
       {fareContract.state !== FareContractState.Refunded && priceString && (
-        <ThemeText typography="body__secondary" color="secondary">
+        <ThemeText typography="body__s" color="secondary">
           {t(FareContractTexts.details.totalPrice(priceString))}
         </ThemeText>
       )}
 
       {!!fareContract.paymentType.length &&
         fareContract.state !== FareContractState.Refunded && (
-          <ThemeText typography="body__secondary" color="secondary">
+          <ThemeText typography="body__s" color="secondary">
             {t(FareContractTexts.details.paymentMethod)}
             {fareContract.paymentType.map(humanizePaymentTypeString).join(', ')}
           </ThemeText>
         )}
       {hasShmoBookingId(fareContract) && (
-        <ThemeText typography="body__secondary" color="secondary">
+        <ThemeText typography="body__s" color="secondary">
           {t(FareContractTexts.details.bookingId(fareContract.bookingId ?? ''))}
         </ThemeText>
       )}

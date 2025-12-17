@@ -15,8 +15,13 @@ import {useTimeContext} from '@atb/modules/time';
 import {useBeaconsContext} from '@atb/modules/beacons';
 import {tGlobal} from '@atb/modules/locale';
 import {useDeleteAgeVerificationMutation} from '@atb/modules/mobility';
+import {useMutation} from '@tanstack/react-query';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_DeleteProfileScreen = () => {
+type Props = ProfileScreenProps<'Profile_DeleteProfileScreen'>;
+
+export const Profile_DeleteProfileScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {signOut, customerNumber} = useAuthContext();
@@ -32,19 +37,24 @@ export const Profile_DeleteProfileScreen = () => {
   const {mutateAsync: deleteAgeVerification} =
     useDeleteAgeVerificationMutation();
 
-  const handleDeleteProfile = async () => {
+  const onDeleteProfileMutate = async () => {
     await deleteAgeVerification();
-    const isProfileDeleted = await deleteProfile();
-    if (isProfileDeleted) {
-      await deleteCollectedData();
-      await signOut();
-    } else {
-      Alert.alert(
-        tGlobal(DeleteProfileTexts.deleteError.title),
-        tGlobal(DeleteProfileTexts.deleteError.message),
-      );
-    }
+    await deleteCollectedData();
   };
+  const onDeleteProfileSuccess = async () => {
+    await signOut();
+  };
+  const onDeleteProfileError = () => {
+    Alert.alert(
+      tGlobal(DeleteProfileTexts.deleteError.title),
+      tGlobal(DeleteProfileTexts.deleteError.message),
+    );
+  };
+  const {mutateAsync: deleteProfile} = useDeleteProfileMutation({
+    onMutate: onDeleteProfileMutate,
+    onSuccess: onDeleteProfileSuccess,
+    onError: onDeleteProfileError,
+  });
 
   const showDeleteAlert = async () => {
     Alert.alert(
@@ -58,7 +68,7 @@ export const Profile_DeleteProfileScreen = () => {
         {
           text: t(DeleteProfileTexts.deleteConfirmation.confirm),
           style: 'destructive',
-          onPress: handleDeleteProfile,
+          onPress: () => deleteProfile(),
         },
       ],
     );
@@ -67,11 +77,14 @@ export const Profile_DeleteProfileScreen = () => {
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(DeleteProfileTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <View
@@ -80,7 +93,7 @@ export const Profile_DeleteProfileScreen = () => {
           ref={focusRef}
         >
           <ThemeText
-            typography="heading--medium"
+            typography="heading__l"
             color={themeColor}
             style={{flexShrink: 1}}
           >
@@ -119,6 +132,24 @@ export const Profile_DeleteProfileScreen = () => {
       </Section>
     </FullScreenView>
   );
+};
+
+const useDeleteProfileMutation = ({
+  onMutate,
+  onSuccess,
+  onError,
+}: {
+  onMutate: () => void;
+  onSuccess: () => void;
+  onError: () => void;
+}) => {
+  return useMutation({
+    mutationKey: ['deleteProfile'],
+    mutationFn: () => deleteProfile(),
+    onMutate,
+    onSuccess,
+    onError,
+  });
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

@@ -19,9 +19,20 @@ import {ThemeText} from '@atb/components/text';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
-import {enrollmentOnboardingConfig} from '@atb/modules/enrollment-onboarding';
+import {OnboardingCarouselConfigId} from '@atb/modules/onboarding';
+import {bonusOnboardingId} from '@atb/modules/bonus';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_EnrollmentScreen = () => {
+// Mapping of enrollment IDs to onboarding carousel config IDs for enrollments with onboarding
+const enrollmentOnboardingConfig: Record<string, OnboardingCarouselConfigId> = {
+  'bonus-pilot-a': bonusOnboardingId,
+  'bonus-pilot-b': bonusOnboardingId,
+};
+
+type Props = ProfileScreenProps<'Profile_EnrollmentScreen'>;
+
+export const Profile_EnrollmentScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -31,12 +42,15 @@ export const Profile_EnrollmentScreen = () => {
 
   const {onEnroll, hasError, isLoading, isEnrolled} = useEnroll();
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
       <FullScreenView
+        focusRef={focusRef}
         headerProps={{
           title: t(EnrollmentTexts.header),
-          leftButton: {type: 'back', withIcon: true},
+          leftButton: {type: 'back'},
         }}
         parallaxContent={(focusRef) => (
           <ScreenHeading ref={focusRef} text={t(EnrollmentTexts.header)} />
@@ -54,7 +68,7 @@ export const Profile_EnrollmentScreen = () => {
                   }}
                 />
                 <View style={styles.headerTextContainer}>
-                  <ThemeText typography="body__secondary" color="secondary">
+                  <ThemeText typography="body__s" color="secondary">
                     {t(EnrollmentTexts.info)}
                   </ThemeText>
                 </View>
@@ -77,7 +91,7 @@ export const Profile_EnrollmentScreen = () => {
           )}
           <Button
             expanded={true}
-            onPress={() => onEnroll(inviteCode)}
+            onPress={() => onEnroll(inviteCode, () => setInviteCode(''))}
             text={t(EnrollmentTexts.button)}
             interactiveColor={interactiveColor}
             loading={isLoading}
@@ -99,7 +113,7 @@ const useEnroll = () => {
   const [isEnrolled, setIsEnrolled] = useState<boolean>(false);
 
   const onEnroll = useCallback(
-    async function onEnroll(key: string) {
+    async function onEnroll(key: string, clearKey: () => void) {
       setHasError(false);
       setIsLoading(true);
       try {
@@ -112,15 +126,14 @@ const useEnroll = () => {
           await analytics().setUserProperties(userProperties);
           refresh();
           setIsEnrolled(true);
+          clearKey();
 
           if (enrollment.enrollmentId) {
-            const onboardingConfig = enrollmentOnboardingConfig.find((config) =>
-              config.enrollmentIds.includes(enrollment.enrollmentId),
-            );
-
-            if (onboardingConfig) {
-              navigation.navigate('Root_EnrollmentOnboardingStack', {
-                configId: onboardingConfig.id,
+            const onboardingConfigId =
+              enrollmentOnboardingConfig[enrollment.enrollmentId];
+            if (onboardingConfigId) {
+              navigation.navigate('Root_OnboardingCarouselStack', {
+                configId: onboardingConfigId,
               });
             }
           }

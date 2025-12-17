@@ -3,10 +3,9 @@ import {
   CustomerProfileUpdate,
   OnBehalfOfAccountsResponse,
 } from '@atb/api/types/profile';
-import Bugsnag from '@bugsnag/react-native';
 import {AxiosRequestConfig} from 'axios';
 import {client} from './client';
-import {getAxiosErrorMetadata} from './utils';
+import {isErrorResponse, RequestError} from './utils';
 
 export const getProfile = async () => {
   const response = await client.get<CustomerProfile>('/profile/v1', {
@@ -24,21 +23,12 @@ export const updateProfile = async (profile: CustomerProfileUpdate) => {
 
 export async function deleteProfile(opts?: AxiosRequestConfig) {
   const query = {expirationDate: new Date().toISOString()};
-  const deleteOK = await client
-    .delete('/profile/v1', {
-      ...opts,
-      authWithIdToken: true,
-      data: query,
-    })
-    .then(() => {
-      return true;
-    })
-    .catch((error) => {
-      Bugsnag.notify(error);
-      return false;
-    });
-
-  return deleteOK;
+  const deleteOK = await client.delete('/profile/v1', {
+    ...opts,
+    authWithIdToken: true,
+    data: query,
+  });
+  return deleteOK.data;
 }
 
 /**
@@ -64,10 +54,11 @@ export const getCustomerAccountId = async (
       },
     )
     .then((response) => response.data.customerAccountId as string)
-    .catch((error) => {
-      const metadata = getAxiosErrorMetadata(error);
-      const responseStatus = metadata.responseStatus;
-      if (responseStatus === 404 || responseStatus === 400) {
+    .catch((error: RequestError) => {
+      if (
+        isErrorResponse(error) &&
+        (error.http.code === 404 || error.http.code === 400)
+      ) {
         return undefined;
       }
       throw error;

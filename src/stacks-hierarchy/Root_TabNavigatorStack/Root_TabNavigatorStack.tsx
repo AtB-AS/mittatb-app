@@ -24,8 +24,8 @@ import {
   useBottomNavigationStyles,
 } from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import React, {useEffect} from 'react';
+import {BottomTabNavigationOptions} from '@react-navigation/bottom-tabs';
+import React, {useCallback, useEffect} from 'react';
 import {SvgProps} from 'react-native-svg';
 import {TabNavigatorStackParams} from './navigation-types';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
@@ -34,10 +34,12 @@ import {useOnPushNotificationOpened} from '@atb/modules/notifications';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '../navigation-types';
 import {
+  useOnboardingContext,
   useOnboardingFlow,
   useOnboardingNavigation,
 } from '@atb/modules/onboarding';
 import {useAuthContext} from '@atb/modules/auth';
+import {isDefined} from '@atb/utils/presence';
 import {useChatUnreadCount} from '@atb/modules/chat';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
@@ -47,32 +49,50 @@ export const Root_TabNavigatorStack = () => {
   const interactiveColor = theme.color.interactive[2];
   const {t} = useTranslation();
   const {startScreen} = usePreferencesContext().preferences;
-  const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
-
-  useOnPushNotificationOpened();
+  const lineHeight = theme.typography.body__s.fontSize.valueOf();
 
   const navigation = useNavigation<RootNavigationProps>();
 
+  const navigateToAvailableFareContracts = useCallback(() => {
+    if (!navigation.isFocused()) return; // avoid navigating away from e.g. login or permission screens
+
+    navigation.navigate('Root_TabNavigatorStack', {
+      screen: 'TabNav_TicketingStack',
+      params: {
+        screen: 'Ticketing_RootScreen',
+        params: {
+          screen: 'TicketTabNav_AvailableFareContractsTabScreen',
+        },
+      },
+    });
+  }, [navigation]);
+
+  useOnPushNotificationOpened(navigateToAvailableFareContracts);
+
+  const {currentRouteName} = useOnboardingContext();
   const {nextOnboardingSection} = useOnboardingFlow(true); // assumeUserCreationOnboarded true to ensure outdated userCreationOnboarded value not used
   const {goToScreen} = useOnboardingNavigation();
   const {customerNumber} = useAuthContext();
   const unreadCount = useChatUnreadCount();
 
   useEffect(() => {
-    if (!navigation.isFocused()) return; // only show onboarding screens from Root_TabNavigatorStack path
-
-    const nextOnboardingScreen = nextOnboardingSection?.initialScreen;
-    nextOnboardingScreen?.name && goToScreen(false, nextOnboardingScreen);
-  }, [nextOnboardingSection?.initialScreen, goToScreen, navigation]);
+    if (
+      isDefined(nextOnboardingSection?.customEntryPointRouteName)
+        ? currentRouteName === nextOnboardingSection?.customEntryPointRouteName
+        : navigation.isFocused()
+    ) {
+      goToScreen(false, nextOnboardingSection?.initialScreen);
+    }
+  }, [
+    nextOnboardingSection?.initialScreen,
+    nextOnboardingSection?.customEntryPointRouteName,
+    goToScreen,
+    navigation,
+    currentRouteName,
+  ]);
 
   const getProfileNotification = (): ThemeIconProps['notification'] => {
-    if (customerNumber === undefined) {
-      return {
-        color: theme.color.status.error.primary,
-        backgroundColor: interactiveColor.default,
-      };
-    }
-    if (unreadCount) {
+    if (customerNumber === undefined || unreadCount) {
       return {
         color: theme.color.status.error.primary,
         backgroundColor: interactiveColor.default,
@@ -164,25 +184,29 @@ export const Root_TabNavigatorStack = () => {
   );
 };
 
+type LabelPosition = NonNullable<
+  BottomTabNavigationOptions['tabBarLabelPosition']
+>;
+
 type TabSettings = {
   tabBarLabel(props: {
     focused: boolean;
     color: string;
     position: LabelPosition;
-  }): JSX.Element;
+  }): React.JSX.Element;
   tabBarIcon(props: {
     focused: boolean;
     color: string;
     size: number;
-  }): JSX.Element;
+  }): React.JSX.Element;
   testID?: string;
 };
 
 function tabSettings(
   tabBarLabel: string,
   tabBarA11yLabel: string,
-  Icon: (svg: SvgProps) => JSX.Element,
-  IconSelected: (svg: SvgProps) => JSX.Element,
+  Icon: (svg: SvgProps) => React.JSX.Element,
+  IconSelected: (svg: SvgProps) => React.JSX.Element,
   lineHeight: number,
   testID: string,
   notification?: ThemeIconProps['notification'],
@@ -190,8 +214,15 @@ function tabSettings(
   return {
     tabBarLabel: ({color}) => (
       <ThemeText
-        typography="body__secondary"
-        style={{color, textAlign: 'center', lineHeight}}
+        typography="body__s"
+        style={{
+          color,
+          textAlign: 'center',
+          lineHeight,
+          // react-navigation v7 adds 5px padding to the tab bar label, and breaks text too early
+          // this workaround is to use negative margins to extend beyond parent padding
+          marginHorizontal: -5,
+        }}
         accessibilityLabel={tabBarA11yLabel}
         maxFontSizeMultiplier={1.2}
         testID={testID}

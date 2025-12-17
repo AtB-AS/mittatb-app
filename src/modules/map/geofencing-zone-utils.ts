@@ -11,6 +11,10 @@ import {
 } from '@atb/api/types/generated/mobility-types_v2';
 import {GeofencingZoneStyles} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
+import polylabel from 'polylabel';
+import {PointFeature, PointFeatureCollection} from './types';
+import centroid from '@turf/centroid';
+import {Feature as GeoJsonFeature, Polygon as GeoJsonPolygon} from 'geojson';
 
 function getApplicableGeofencingZoneRules(
   feature: Feature,
@@ -99,6 +103,78 @@ export function decodePolylineEncodedMultiPolygons(
     const geojson = {...geofencingZone.geojson, features};
     return {...geofencingZone, geojson};
   });
+}
+
+export function getIconFeatureCollections(
+  geofencingZones: GeofencingZones[],
+): PointFeatureCollection[] {
+  return geofencingZones?.map((geofencingZone, geofencingZoneIndex) => {
+    const iconFeatures: PointFeature[] = [];
+    geofencingZone?.geojson?.features?.forEach((feature) => {
+      feature.geometry?.coordinates?.forEach((polygon) => {
+        if (isPolygonLarge(polygon)) {
+          // No icon for large polygons, long processing time and not useful
+          return;
+        }
+        let iconCoordinate: number[] | undefined;
+        if (polygon.length === 1 && polygon[0].length <= 7) {
+          // For polygons with few points, use centroid as icon position to avoid issues with polylabel
+          const polyFeature: GeoJsonFeature<GeoJsonPolygon> = {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'Polygon',
+              coordinates: polygon,
+            },
+          };
+          const polygonCentroid = centroid(polyFeature);
+          iconCoordinate = polygonCentroid.geometry.coordinates;
+        } else {
+          iconCoordinate = polylabel(polygon, 0.0001);
+        }
+        if (iconCoordinate && feature.properties) {
+          iconFeatures.push({
+            type: 'Feature',
+            properties: feature.properties,
+            geometry: {
+              type: 'Point',
+              coordinates: iconCoordinate,
+            },
+          });
+        }
+      });
+    });
+
+    return {
+      type: 'FeatureCollection',
+      features: iconFeatures,
+      renderKey: geofencingZoneIndex.toString(),
+    };
+  });
+}
+
+function boundingBox(exteriorRing: number[][]) {
+  let minLon = Infinity,
+    minLat = Infinity;
+  let maxLon = -Infinity,
+    maxLat = -Infinity;
+
+  for (const [lon, lat] of exteriorRing) {
+    if (lon < minLon) minLon = lon;
+    if (lon > maxLon) maxLon = lon;
+    if (lat < minLat) minLat = lat;
+    if (lat > maxLat) maxLat = lat;
+  }
+
+  return {
+    deltaWidth: maxLon - minLon,
+    deltaHeight: maxLat - minLat,
+  };
+}
+
+function isPolygonLarge(polygon: number[][][]): boolean {
+  const {deltaWidth, deltaHeight} = boundingBox(polygon[0]);
+  return deltaWidth > 1 || deltaHeight > 1;
 }
 
 export function addGeofencingZoneCustomProps(

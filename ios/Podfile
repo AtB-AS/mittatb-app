@@ -37,7 +37,7 @@ $RNFirebaseAsStaticFramework = true
 production = ENV["PRODUCTION"] == "1"
 
 $RNMapboxMapsImpl = 'mapbox'
-$RNMapboxMapsVersion = '~> 11.12.0'
+$RNMapboxMapsVersion = '~> 11.13.4'
 
 target 'app' do
   config = use_native_modules!
@@ -97,15 +97,6 @@ target 'app' do
 
   pre_install do |installer|
     $RNMapboxMaps.pre_install(installer)
-    # Workaround to get ReactNativeCameraKit to work with statically linked frameworks
-    # https://github.com/teslamotors/react-native-camera-kit/issues/578#issuecomment-1920367530
-    installer.pod_targets.each do |pod|
-      if pod.name.eql?('ReactNativeCameraKit')
-        def pod.build_type
-          Pod::BuildType.static_library
-        end
-      end
-    end
   end
 
 end

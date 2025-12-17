@@ -308,8 +308,11 @@ export const isBefore = (date: string | Date, dateToCompare: string | Date) =>
 export function isNumberOfMinutesInThePast(
   isoDate: string | Date,
   minutes: number,
+  now?: number,
 ) {
-  return differenceInMinutesStrings(isoDate, new Date()) < -minutes;
+  return (
+    differenceInMinutesStrings(isoDate, new Date(now ?? Date.now())) < -minutes
+  );
 }
 
 export function formatToLongDateTime(
@@ -408,6 +411,18 @@ export function formatToSimpleDate(date: Date | string, language: Language) {
   });
 }
 
+/** "Monday January 1st" in English and "mandag 1. januar" in Bokmål */
+export function formatToDateWithDayOfWeek(
+  date: Date | string,
+  language: Language,
+) {
+  const formatString =
+    language === Language.English ? 'EEEE MMMM do' : 'EEEE do MMMM';
+  return format(parseIfNeeded(date), formatString, {
+    locale: languageToLocale(language),
+  });
+}
+
 export function formatToVerboseFullDate(
   date: Date | string,
   language: Language,
@@ -425,8 +440,8 @@ export function formatToVerboseDateTime(
     language === Language.English
       ? 'at'
       : Language.Nynorsk
-      ? 'klokka'
-      : 'klokken';
+        ? 'klokka'
+        : 'klokken';
 
   const dateString = format(parseIfNeeded(date), 'do MMMM', {
     locale: languageToLocale(language),

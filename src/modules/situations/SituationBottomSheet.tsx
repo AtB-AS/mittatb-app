@@ -1,19 +1,14 @@
 import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
-import {
   dictionary,
   getTextForLanguage,
   SituationsTexts,
   useTranslation,
 } from '@atb/translations';
-import {ScrollView} from 'react-native-gesture-handler';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
-import React, {forwardRef} from 'react';
-import {Linking, View} from 'react-native';
+import React from 'react';
+import {View} from 'react-native';
 import {InfoLinkFragment} from '@atb/api/types/generated/fragments/shared';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {SituationType} from './types';
@@ -25,105 +20,107 @@ import {screenReaderPause} from '@atb/components/text';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {getMsgTypeForMostCriticalSituationOrNotice} from './utils';
+import {openInAppBrowser} from '../in-app-browser';
+import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 
 type Props = {
   situation: SituationType;
+  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  onCloseFocusRef: React.RefObject<View | null>;
 };
 
-export const SituationBottomSheet = forwardRef<View, Props>(
-  ({situation}, focusRef) => {
-    const {t, language} = useTranslation();
-    const styles = useStyles();
-    const {theme} = useThemeContext();
-    const interactiveColor = theme.color.interactive[0];
+export const SituationBottomSheet = ({
+  situation,
+  bottomSheetModalRef,
+  onCloseFocusRef,
+}: Props) => {
+  const {t, language} = useTranslation();
+  const styles = useStyles();
+  const {theme} = useThemeContext();
+  const interactiveColor = theme.color.interactive[0];
 
-    const summary = getTextForLanguage(situation.summary, language);
-    const description = getTextForLanguage(situation.description, language);
-    const advice = getTextForLanguage(situation.advice, language);
-    const infoLinks = filterInfoLinks(situation.infoLinks);
-    const validityPeriodText = useValidityPeriodText(situation.validityPeriod);
-    const msgType = getMsgTypeForMostCriticalSituationOrNotice([situation]);
-    const {close} = useBottomSheetContext();
+  const summary = getTextForLanguage(situation.summary, language);
+  const description = getTextForLanguage(situation.description, language);
+  const advice = getTextForLanguage(situation.advice, language);
+  const infoLinks = filterInfoLinks(situation.infoLinks);
+  const validityPeriodText = useValidityPeriodText(situation.validityPeriod);
+  const msgType = getMsgTypeForMostCriticalSituationOrNotice([situation]);
 
-    return (
-      <BottomSheetContainer
-        title={t(SituationsTexts.bottomSheet.title[msgType ?? 'info'])}
-      >
-        <ScrollView centerContent={true}>
-          <View>
-            <Section style={styles.section}>
-              <GenericSectionItem type="spacious">
-                <View
-                  accessibilityLabel={[summary, description, advice].join(
-                    screenReaderPause,
-                  )}
-                  ref={focusRef}
-                  accessible={true}
-                  style={styles.textContainer}
-                >
-                  <View style={styles.summaryContainer}>
-                    <SituationOrNoticeIcon
-                      situation={situation}
-                      style={styles.summaryIcon}
-                    />
-                    <ThemeText
-                      typography="heading__title"
-                      style={styles.summaryText}
-                    >
-                      {summary || description}
-                    </ThemeText>
-                  </View>
-                  {description && summary && (
-                    <ThemeText style={styles.description}>
-                      {description}
-                    </ThemeText>
-                  )}
-                  {advice && (
-                    <ThemeText style={styles.advice}>{advice}</ThemeText>
-                  )}
-                </View>
-                {infoLinks?.length ? (
-                  <View style={styles.infoLinksContainer}>
-                    {infoLinks.map((il) => (
-                      <InfoLink key={il.uri} infoLink={il} />
-                    ))}
-                  </View>
-                ) : null}
-                {validityPeriodText && (
-                  <View style={styles.validityContainer}>
-                    <ThemeIcon
-                      svg={Time}
-                      color="secondary"
-                      style={styles.validityIcon}
-                    />
-                    <ThemeText
-                      typography="body__secondary"
-                      color="secondary"
-                      style={styles.validityText}
-                    >
-                      {validityPeriodText}
-                    </ThemeText>
-                  </View>
-                )}
-              </GenericSectionItem>
-            </Section>
+  const Footer = () => (
+    <FullScreenFooter>
+      <Button
+        expanded={true}
+        onPress={() => bottomSheetModalRef.current?.dismiss()}
+        interactiveColor={interactiveColor}
+        text={t(SituationsTexts.bottomSheet.button)}
+        testID="closeButton"
+      />
+    </FullScreenFooter>
+  );
+
+  return (
+    <BottomSheetModal
+      bottomSheetModalRef={bottomSheetModalRef}
+      heading={t(SituationsTexts.bottomSheet.title[msgType ?? 'info'])}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      closeCallback={() => giveFocus(onCloseFocusRef)}
+      Footer={Footer}
+    >
+      <Section style={styles.section}>
+        <GenericSectionItem type="spacious">
+          <View
+            accessibilityLabel={[summary, description, advice].join(
+              screenReaderPause,
+            )}
+            accessible={true}
+            style={styles.textContainer}
+          >
+            <View style={styles.summaryContainer}>
+              <SituationOrNoticeIcon
+                situation={situation}
+                style={styles.summaryIcon}
+              />
+              <ThemeText typography="heading__m" style={styles.summaryText}>
+                {summary || description}
+              </ThemeText>
+            </View>
+            {description && summary && (
+              <ThemeText style={styles.description}>{description}</ThemeText>
+            )}
+            {advice && <ThemeText style={styles.advice}>{advice}</ThemeText>}
           </View>
-        </ScrollView>
-        <FullScreenFooter>
-          <Button
-            expanded={true}
-            style={styles.button}
-            onPress={close}
-            interactiveColor={interactiveColor}
-            text={t(SituationsTexts.bottomSheet.button)}
-            testID="closeButton"
-          />
-        </FullScreenFooter>
-      </BottomSheetContainer>
-    );
-  },
-);
-
+          {infoLinks?.length ? (
+            <View style={styles.infoLinksContainer}>
+              {infoLinks.map((il) => (
+                <InfoLink key={il.uri} infoLink={il} />
+              ))}
+            </View>
+          ) : null}
+          {validityPeriodText && (
+            <View style={styles.validityContainer}>
+              <ThemeIcon
+                svg={Time}
+                color="secondary"
+                style={styles.validityIcon}
+              />
+              <ThemeText
+                typography="body__s"
+                color="secondary"
+                style={styles.validityText}
+              >
+                {validityPeriodText}
+              </ThemeText>
+            </View>
+          )}
+        </GenericSectionItem>
+      </Section>
+    </BottomSheetModal>
+  );
+};
 const filterInfoLinks = (
   infoLinks?: Partial<InfoLinkFragment>[],
 ): InfoLinkFragment[] =>
@@ -175,11 +172,11 @@ const InfoLink = ({infoLink}: {infoLink: InfoLinkFragment}) => {
 
   return (
     <PressableOpacity
-      onPress={() => Linking.openURL(infoLink.uri)}
+      onPress={() => openInAppBrowser(infoLink.uri, 'close')}
       accessibilityRole="link"
       style={styles.infoLink}
     >
-      <ThemeText typography="body__primary--underline" color="secondary">
+      <ThemeText typography="body__m__underline" color="secondary">
         {infoLink.label || t(dictionary.readMore)}
       </ThemeText>
     </PressableOpacity>
@@ -199,5 +196,4 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   validityContainer: {flexDirection: 'row', marginTop: theme.spacing.medium},
   validityIcon: {marginRight: theme.spacing.small},
   validityText: {flex: 1},
-  button: {marginTop: theme.spacing.medium},
 }));

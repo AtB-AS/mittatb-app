@@ -19,7 +19,7 @@ import {
   TokenReattestationRemoteTokenStateError,
 } from '@entur-private/abt-token-server-javascript-interface';
 import Bugsnag from '@bugsnag/react-native';
-import {ErrorResponse, getAxiosErrorType} from '@atb/api/utils';
+import {ErrorResponse} from '@atb-as/utils';
 import {tokenService} from './tokenService';
 import {mobileTokenClient} from './mobileTokenClient';
 import {
@@ -209,9 +209,9 @@ const parseErrorKind = (errorResponse: ErrorResponse) => {
   }
 };
 
-export const parseTokenServerErrors = (rawError: any) => {
-  if (getAxiosErrorType(rawError) === 'network-error') {
-    return new ClientNetworkError(rawError.message);
+export const parseTokenServerErrors = (rawError: ErrorResponse) => {
+  if (rawError.kind === 'AXIOS_NETWORK_ERROR') {
+    return new ClientNetworkError(rawError.message ?? 'Network error');
   }
 
   const errorResponse = ErrorResponse.safeParse(rawError);

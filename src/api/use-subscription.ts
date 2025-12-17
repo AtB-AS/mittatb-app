@@ -5,7 +5,7 @@ const RETRY_INTERVAL_CAP_IN_SECONDS = 10;
 
 export type SubscriptionProps = {
   onMessage?: (event: WebSocketMessageEvent) => void;
-  onError?: (event: WebSocketCloseEvent) => void;
+  onClose?: (event: WebSocketCloseEvent) => void;
   onOpen?: (ws: WebSocket) => void;
   url: string | null;
   enabled: boolean;
@@ -14,7 +14,7 @@ export type SubscriptionProps = {
 export function useSubscription({
   url,
   onMessage,
-  onError,
+  onClose,
   onOpen,
   enabled,
 }: SubscriptionProps) {
@@ -55,7 +55,7 @@ export function useSubscription({
           );
         }
         retryTimeout = retryWithCappedBackoff(retryCount, connect);
-        onError?.(event);
+        onClose?.(event);
       };
 
       ws.onopen = () => {
@@ -84,7 +84,7 @@ export function useSubscription({
       }
       webSocket.current = null;
     };
-  }, [url, enabled, onMessage, onError, onOpen]);
+  }, [url, enabled, onMessage, onClose, onOpen]);
 }
 
 /**

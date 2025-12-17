@@ -1,21 +1,47 @@
+import z from 'zod';
 import {CancelToken as CancelTokenStatic} from '@atb/api';
-import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
+import {toAxiosErrorKind, AxiosErrorKind} from '@atb/api/utils';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {FlexDiscountLadder, searchOffers} from '@atb/modules/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
-import {UserProfileWithCount} from '@atb/modules/fare-contracts';
+import {
+  BaggageProductWithCount,
+  UserProfileWithCount,
+} from '@atb/modules/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
 import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {fetchOfferFromLegs} from '@atb/api/sales';
-import type {SearchOfferPrice, TicketOffer} from '@atb-as/utils';
+import {
+  ErrorResponse,
+  TicketOffer,
+  SupplementProductOffer,
+} from '@atb-as/utils';
+import {mapToSalesTripPatternLegs} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/utils';
+import {useTranslation} from '@atb/translations';
+import {
+  calculateOriginalPrice,
+  calculateTotalPrice,
+  getCheapestOffer,
+} from './offer-price-calculator';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: TicketOffer;
 };
 
+// Presuppose for now that there is only one supplement product offer per baggage product offer, and that the fare product is undefined (or null).
+export const BaggageTicketOffer = TicketOffer.extend({
+  fareProduct: z.undefined().nullish(),
+  supplementProducts: z.array(SupplementProductOffer).length(1),
+});
+export type BaggageTicketOffer = z.infer<typeof BaggageTicketOffer>;
+
+export type BaggageProductWithCountAndOffer = BaggageProductWithCount & {
+  offer: BaggageTicketOffer;
+};
+
 export type OfferError = {
-  type: ErrorType | 'empty-offers' | 'not-available';
+  type: AxiosErrorKind | 'empty-offers' | 'not-available';
 };
 
 type OfferState = {
@@ -26,6 +52,7 @@ type OfferState = {
   totalPrice: number;
   error?: OfferError;
   userProfilesWithCountAndOffer: UserProfileWithCountAndOffer[];
+  baggageProductsWithCountAndOffer: BaggageProductWithCountAndOffer[];
   flexDiscountLadder?: FlexDiscountLadder;
 };
 
@@ -40,12 +67,6 @@ type OfferReducer = (
   action: OfferReducerAction,
 ) => OfferState;
 
-const getCurrencyAsFloat = (price: SearchOfferPrice, currency = 'NOK') =>
-  price.currency === currency ? price.amountFloat ?? 0 : 0;
-
-const getOriginalPriceAsFloat = (price: SearchOfferPrice, currency: string) =>
-  price.currency === currency ? price.originalAmountFloat ?? 0 : 0;
-
 const getValidDurationSeconds = (offer: TicketOffer): number | undefined =>
   offer.validFrom && offer.validTo
     ? secondsBetween(offer.validFrom, offer.validTo)
@@ -54,44 +75,34 @@ const getValidDurationSeconds = (offer: TicketOffer): number | undefined =>
 const getOfferForTraveller = (
   offers: TicketOffer[],
   userTypeString: string,
-) => {
+): TicketOffer => {
+  // Filter if the offer is a fare product offer (it has a fare product ref set), and if it matches the traveller id.
   const offersForTraveller = offers.filter(
-    (o) => o.travellerId === userTypeString,
+    (o) => o.travellerId === userTypeString && o.fareProduct,
   );
 
   // If there are multiple offers for the same traveller, use the cheapest one.
   // This shouldn't happen in practice, but it's a sensible fallback.
-  const offersSortedByPrice = offersForTraveller.sort(
-    (a, b) =>
-      getCurrencyAsFloat(a.price, 'NOK') - getCurrencyAsFloat(b.price, 'NOK'),
-  );
-
-  return offersSortedByPrice[0];
+  return getCheapestOffer(offersForTraveller, (o) => o.price);
 };
 
-const calculateTotalPrice = (
-  userProfileWithCounts: UserProfileWithCount[],
+const getOfferForBaggageProduct = (
   offers: TicketOffer[],
-) =>
-  userProfileWithCounts.reduce((total, traveller) => {
-    const offer = getOfferForTraveller(offers, traveller.userTypeString);
-    const price = offer
-      ? getCurrencyAsFloat(offer.price, 'NOK') * traveller.count
-      : 0;
-    return total + price;
-  }, 0);
+  baggageProductId: string,
+): BaggageTicketOffer => {
+  const offersForBaggageProduct: BaggageTicketOffer[] = offers
+    .map((o) => BaggageTicketOffer.safeParse(o))
+    .filter((o) => o.success)
+    .map((o) => o.data)
+    .filter((o) => o.supplementProducts[0].id === baggageProductId);
 
-const calculateOriginalPrice = (
-  userProfileWithCounts: UserProfileWithCount[],
-  offers: TicketOffer[],
-) =>
-  userProfileWithCounts.reduce((total, traveller) => {
-    const offer = getOfferForTraveller(offers, traveller.userTypeString);
-    const price = offer
-      ? getOriginalPriceAsFloat(offer.price, 'NOK') * traveller.count
-      : 0;
-    return total + price;
-  }, 0);
+  // If there are multiple offers for the same supplement product, use the cheapest one.
+  // This shouldn't happen in practice, but it's a sensible fallback.
+  return getCheapestOffer(
+    offersForBaggageProduct,
+    (o) => o.supplementProducts[0].price,
+  );
+};
 
 const mapToUserProfilesWithCountAndOffer = (
   userProfileWithCounts: UserProfileWithCount[],
@@ -104,8 +115,22 @@ const mapToUserProfilesWithCountAndOffer = (
     }))
     .filter((u): u is UserProfileWithCountAndOffer => u.offer != null);
 
+const mapToBaggageProductsWithCountAndOffer = (
+  baggageProductsWithCount: BaggageProductWithCount[],
+  offers: TicketOffer[],
+): BaggageProductWithCountAndOffer[] =>
+  baggageProductsWithCount
+    .map((s) => ({
+      ...s,
+      offer: getOfferForBaggageProduct(offers, s.id),
+    }))
+    .filter((s): s is BaggageProductWithCountAndOffer => s.offer != null);
+
 const getOfferReducer =
-  (userProfilesWithCounts: UserProfileWithCount[]): OfferReducer =>
+  (
+    userProfilesWithCounts: UserProfileWithCount[],
+    baggageProductsWithCount: BaggageProductWithCount[],
+  ): OfferReducer =>
   (prevState, action): OfferState => {
     switch (action.type) {
       case 'SEARCHING_OFFER':
@@ -122,25 +147,34 @@ const getOfferReducer =
           originalPrice: 0,
           error: undefined,
           userProfilesWithCountAndOffer: [],
+          baggageProductsWithCountAndOffer: [],
         };
       case 'SET_OFFER':
+        const userProfilesWithCountAndOffer =
+          mapToUserProfilesWithCountAndOffer(
+            userProfilesWithCounts,
+            action.offers,
+          );
+        const baggageProductsWithCountAndOffer =
+          mapToBaggageProductsWithCountAndOffer(
+            baggageProductsWithCount,
+            action.offers,
+          );
         return {
           ...prevState,
           offerSearchTime: Date.now(),
           isSearchingOffer: false,
           validDurationSeconds: getValidDurationSeconds(action.offers?.[0]),
           originalPrice: calculateOriginalPrice(
-            userProfilesWithCounts,
-            action.offers,
+            userProfilesWithCountAndOffer,
+            baggageProductsWithCountAndOffer,
           ),
           totalPrice: calculateTotalPrice(
-            userProfilesWithCounts,
-            action.offers,
+            userProfilesWithCountAndOffer,
+            baggageProductsWithCountAndOffer,
           ),
-          userProfilesWithCountAndOffer: mapToUserProfilesWithCountAndOffer(
-            userProfilesWithCounts,
-            action.offers,
-          ),
+          userProfilesWithCountAndOffer,
+          baggageProductsWithCountAndOffer,
           error: undefined,
         };
       case 'SET_ERROR': {
@@ -160,32 +194,52 @@ const initialState: OfferState = {
   originalPrice: 0,
   error: undefined,
   userProfilesWithCountAndOffer: [],
+  baggageProductsWithCountAndOffer: [],
 };
 
 export function useOfferState(
-  selection: PurchaseSelectionType,
   preassignedFareProductAlternatives: PreassignedFareProduct[],
+  selection?: PurchaseSelectionType,
 ) {
-  const offerReducer = getOfferReducer(selection.userProfilesWithCount);
+  const offerReducer = getOfferReducer(
+    selection?.userProfilesWithCount ?? [],
+    selection?.baggageProductsWithCount ?? [],
+  );
   const [state, dispatch] = useReducer(offerReducer, initialState);
+  const {t} = useTranslation();
 
   const updateOffer = useCallback(
     async function (cancelToken?: CancelToken) {
-      if (selection.stopPlaces?.to?.isFree) {
+      if (selection?.stopPlaces?.to?.isFree) {
         dispatch({type: 'CLEAR_OFFER'});
         return;
       }
 
-      const offerTravellers = selection.userProfilesWithCount
-        .filter((t) => t.count)
-        .map((t) => ({
-          id: t.userTypeString,
-          userType: t.userTypeString,
-          count: t.count,
-        }));
+      const offerTravellers =
+        selection?.userProfilesWithCount
+          .filter((t) => t.count)
+          .map((t) => ({
+            id: t.userTypeString,
+            userType: t.userTypeString,
+            count: t.count,
+          })) ?? [];
 
-      const isTravellersValid = offerTravellers.length > 0;
-      const isStopPlacesValid = selection.stopPlaces
+      const baggageProductTravellers =
+        selection?.baggageProductsWithCount
+          .filter((sp) => sp.count)
+          .map((sp) => ({
+            id: sp.baggageType,
+            // Must be a valid user profile ref, and we are unsure if Entur supports 'ANYONE' yet for baggage products.
+            // Doesn't actually have an affect on the purchased product.
+            userType: 'ADULT',
+            baggageTypes: [sp.baggageType],
+            count: sp.count,
+          })) ?? [];
+
+      const allTravellers = [...offerTravellers, ...baggageProductTravellers];
+
+      const isTravellersValid = allTravellers.length > 0;
+      const isStopPlacesValid = selection?.stopPlaces
         ? selection.stopPlaces.from && selection.stopPlaces.to
         : true;
       const isSelectionValid = isTravellersValid && isStopPlacesValid;
@@ -197,32 +251,37 @@ export function useOfferState(
           dispatch({type: 'SEARCHING_OFFER'});
           let offers: TicketOffer[];
 
-          if (selection.legs.length) {
+          if (selection?.legs.length) {
             const response = await fetchOfferFromLegs(
               new Date(selection.legs[0].expectedStartTime),
-              selection.legs,
-              offerTravellers,
+              mapToSalesTripPatternLegs(t, selection.legs),
+              allTravellers,
               preassignedFareProductAlternatives.map((p) => p.id),
             );
             offers = response.offers;
           } else {
             const params = {
-              zones: selection.zones && [
+              zones: selection?.zones && [
                 ...new Set([selection.zones.from.id, selection.zones.to.id]),
               ],
-              from: selection.stopPlaces?.from!.id,
-              to: selection.stopPlaces?.to!.id,
-              isOnBehalfOf: selection.isOnBehalfOf,
-              travellers: offerTravellers,
-              products: preassignedFareProductAlternatives.map((p) => p.id),
-              travelDate: selection.travelDate,
+              from: selection?.stopPlaces?.from!.id,
+              to: selection?.stopPlaces?.to!.id,
+              isOnBehalfOf: selection?.isOnBehalfOf ?? false,
+              travellers: allTravellers,
+              products: offerTravellers.length
+                ? preassignedFareProductAlternatives.map((p) => p.id)
+                : [],
+              supplementProducts: selection?.baggageProductsWithCount.map(
+                (sp) => sp.id,
+              ),
+              travelDate: selection?.travelDate,
             };
 
-            const offerEndpoint = selection.stopPlaces
+            const offerEndpoint = selection?.stopPlaces
               ? 'stop-places'
-              : selection.zones
-              ? 'zones'
-              : 'authority';
+              : selection?.zones
+                ? 'zones'
+                : 'authority';
 
             offers = await searchOffers(offerEndpoint, params, {
               cancelToken,
@@ -244,22 +303,24 @@ export function useOfferState(
             });
           }
         } catch (err: any) {
-          const errorType = isNotAvailableError(err)
+          const error = err as ErrorResponse;
+          const errorKind = isNotAvailableError(error)
             ? 'not-available'
-            : getAxiosErrorType(err);
-          if (errorType !== 'cancel') {
+            : toAxiosErrorKind(error.kind);
+
+          if (errorKind !== 'AXIOS_CANCEL') {
             console.warn(err);
             dispatch({
               type: 'SET_ERROR',
               error: {
-                type: errorType,
+                type: errorKind,
               },
             });
           }
         }
       }
     },
-    [selection, preassignedFareProductAlternatives],
+    [selection, preassignedFareProductAlternatives, t],
   );
 
   useEffect(() => {

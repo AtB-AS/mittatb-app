@@ -1,8 +1,6 @@
-import {MapCameraConfig, MapLeg, useMapViewConfig} from '@atb/modules/map';
-
+import {MapCameraConfig, useMapViewConfig} from '@atb/modules/map';
 import {StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
-import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef} from 'react';
@@ -15,9 +13,10 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
 
 export type MapProps = {
-  mapLegs: MapLeg[];
+  serviceJourneyPolylines: ServiceJourneyPolyline[];
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
   buttonText: string;
@@ -25,20 +24,22 @@ export type MapProps = {
 };
 
 export const CompactTravelDetailsMap: React.FC<MapProps> = ({
-  mapLegs,
+  serviceJourneyPolylines,
   fromPlace,
   toPlace,
   buttonText,
   onExpand,
 }) => {
-  const disableMap = useDisableMapCheck();
   const {t} = useTranslation();
   const cameraRef = useRef<MapboxGL.Camera>(null);
 
-  const features = useMemo(() => createMapLines(mapLegs), [mapLegs]);
+  const features = useMemo(
+    () => createMapLines(serviceJourneyPolylines),
+    [serviceJourneyPolylines],
+  );
   const bounds = useMemo(() => getMapBounds(features), [features]);
 
-  const mapViewConfig = useMapViewConfig({useDarkModeForV1: true});
+  const mapViewConfig = useMapViewConfig();
 
   /*
    * Workaround for iOS as setting default bounds on camera is not working fully
@@ -57,10 +58,6 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   }, [bounds]);
 
   const styles = useStyles();
-
-  if (disableMap) {
-    return null;
-  }
 
   return (
     <View>
@@ -96,8 +93,12 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
           )}
         </MapboxGL.MapView>
       </View>
-      <PressableOpacity style={styles.button} onPress={onExpand}>
-        <ThemeText typography="body__secondary--bold" color="primary">
+      <PressableOpacity
+        style={styles.button}
+        onPress={onExpand}
+        accessibilityRole="button"
+      >
+        <ThemeText typography="body__s__strong" color="primary">
           {buttonText}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} />

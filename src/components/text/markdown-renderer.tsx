@@ -1,30 +1,50 @@
 import React from 'react';
-import {marked} from 'marked';
-import {Linking, Text, View} from 'react-native';
+import {marked, Token, Tokens} from 'marked';
+import {Text, View} from 'react-native';
 import {textTypeStyles} from '@atb/theme/colors';
 import Bugsnag from '@bugsnag/react-native';
 import {ThemeTextProps} from './ThemeText';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {getTextWeightStyle} from './utils';
+
+const MAX_RECURSION_DEPTH = 20;
 
 type MarkdownRendererProps = {
   // When rendering a list, this is the spacing between the list elements
   spacingBetweenListElements?: number;
   // The props to pass to the Text component
   textProps?: ThemeTextProps;
+  androidSystemFont: boolean;
 };
 
 export function renderMarkdown(
   markdown: string,
   props: MarkdownRendererProps,
 ): React.ReactElement[] {
-  const tree = marked.lexer(markdown, {smartypants: true});
+  const tree = marked.lexer(markdown);
   return tree.map((token, index) => renderToken(token, index, props));
 }
 
 function renderToken(
-  token: marked.Token,
+  token: Token,
   index: number,
   props: MarkdownRendererProps,
+  depth = 0,
 ): React.ReactElement {
+  if (depth > MAX_RECURSION_DEPTH) {
+    console.warn(
+      `Markdown render: max recursion depth (${MAX_RECURSION_DEPTH}) exceeded.`,
+    );
+    return (
+      <Text key={index} {...props.textProps}>
+        {token.raw}
+      </Text>
+    );
+  }
+
+  const renderChildren = (tokens?: Token[]) =>
+    tokens?.map((t, i) => renderToken(t, i, props, depth + 1));
+
   switch (token.type) {
     case 'text':
       return (
@@ -35,11 +55,16 @@ function renderToken(
 
     case 'heading':
     case 'strong':
+      const fontWeight = textTypeStyles['body__m__strong'].fontWeight;
+      const textWeightStyle = getTextWeightStyle(
+        props.androidSystemFont,
+        fontWeight,
+      );
       return (
         <Text
           key={index}
           {...props.textProps}
-          style={{fontWeight: textTypeStyles['body__primary--bold'].fontWeight}}
+          style={[props.textProps?.style, textWeightStyle]}
         >
           {token.text}
         </Text>
@@ -55,15 +80,18 @@ function renderToken(
       );
 
     case 'paragraph':
+      if (token.tokens?.length === 1) {
+        return renderToken(token.tokens[0], index, props, depth + 1);
+      }
       return (
         <Text key={index} {...props.textProps}>
-          {token.tokens.map((t, i) => renderToken(t, i, props))}
+          {renderChildren(token.tokens)}
         </Text>
       );
 
     case 'br':
     case 'space':
-      return <Text key={index} />;
+      return <Text accessible={false} key={index} />;
 
     case 'em':
       return (
@@ -76,7 +104,7 @@ function renderToken(
       const url = token.href;
       async function openLink() {
         try {
-          await Linking.openURL(url);
+          await openInAppBrowser(url, 'close');
         } catch (err: any) {
           Bugsnag.notify(err);
         }
@@ -86,7 +114,8 @@ function renderToken(
           key={index}
           onPress={openLink}
           {...props.textProps}
-          style={{textDecorationLine: 'underline'}}
+          style={[props.textProps?.style, {textDecorationLine: 'underline'}]}
+          accessibilityRole="link"
         >
           {token.text}
         </Text>
@@ -94,13 +123,17 @@ function renderToken(
     case 'list':
       return (
         <React.Fragment key={index}>
-          {token.items.map((item, itemIndex) => (
+          {token.items?.map((item: Tokens.ListItem, itemIndex: number) => (
             <View
               key={itemIndex}
               style={{
                 flexDirection: 'row',
                 paddingTop: props.spacingBetweenListElements ?? 0,
               }}
+              accessibilityLabel={`${
+                token.ordered ? `${itemIndex + 1}.` : '\u2022,'
+              } ${item.text}`}
+              accessible={true}
             >
               <Text {...props.textProps}>
                 {token.ordered ? `${itemIndex + 1}. ` : '\u2022 '}

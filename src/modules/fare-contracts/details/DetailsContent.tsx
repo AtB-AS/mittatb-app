@@ -3,7 +3,10 @@ import {
   isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
+  useGetFareProductsQuery,
+  useGetSupplementProductsQuery,
   useRefundOptionsQuery,
+  useSchoolCarnetInfoQuery,
 } from '@atb/modules/ticketing';
 import {FareContractType, getAccesses} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
@@ -27,17 +30,17 @@ import {
 } from '@atb/modules/global-messages';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {
+  findReferenceDataById,
+  useFirestoreConfigurationContext,
+} from '@atb/modules/configuration';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {Barcode} from './Barcode';
 import {MapFilterType} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/modules/on-behalf-of';
 import {useAuthContext} from '@atb/modules/auth';
-import {
-  CarnetFooter,
-  MAX_ACCESSES_FOR_CARNET_FOOTER,
-} from '../carnet/CarnetFooter';
+import {CarnetFooter} from '../carnet/CarnetFooter';
 import {MobilityBenefitsActionSectionItem} from '@atb/modules/mobility';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
@@ -54,6 +57,11 @@ import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
 } from '@atb/modules/bonus';
+import {useFareContractLegs} from '@atb/modules/fare-contracts';
+import {LegsSummary} from '@atb/components/journey-legs-summary';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
+import {getBaggageProducts} from '../get-baggage-products';
 
 type Props = {
   fareContract: FareContractType;
@@ -61,6 +69,7 @@ type Props = {
   now: number;
   onReceiptNavigate: () => void;
   onNavigateToMap: (initialFilters: MapFilterType) => void;
+  navigateToBonusScreen: () => void;
   hasActiveTravelCard?: boolean;
   isSentFareContract?: boolean;
 };
@@ -71,6 +80,7 @@ export const DetailsContent: React.FC<Props> = ({
   now,
   onReceiptNavigate,
   onNavigateToMap,
+  navigateToBonusScreen,
 }) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
 
@@ -81,23 +91,23 @@ export const DetailsContent: React.FC<Props> = ({
   const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
   const {data: refundOptions} = useRefundOptionsQuery(fc.orderId, fc.state);
 
-  const {
-    travelRights,
-    validityStatus,
-    usedAccesses,
-    maximumNumberOfAccesses,
-    numberOfUsedAccesses,
-  } = getFareContractInfo(now, fc, currentUserId);
+  const {validityStatus, usedAccesses} = getFareContractInfo(
+    now,
+    fc,
+    currentUserId,
+  );
 
   const isSentOrReceived = isSentOrReceivedFareContract(fc);
   const isReceived = isSentOrReceived && fc.purchasedBy != currentUserId;
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
 
-  const firstTravelRight = travelRights[0];
+  const firstTravelRight = fc.travelRights[0];
   const {userProfiles} = useFirestoreConfigurationContext();
   const {isInspectable, mobileTokenStatus} = useMobileTokenContext();
   const {benefits} = useOperatorBenefitsForFareProduct(
     preassignedFareProduct?.id,
   );
+  const legs = useFareContractLegs(firstTravelRight.datedServiceJourneys?.[0]);
 
   // If the ticket is received, get the sender account ID to look up for phone number.
   const senderAccountId = isReceived ? fc.purchasedBy : undefined;
@@ -108,6 +118,24 @@ export const DetailsContent: React.FC<Props> = ({
   const userProfilesWithCount = mapToUserProfilesWithCount(
     fc.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
     userProfiles,
+  );
+
+  const productsInFareContract = fc.travelRights
+    .map((tr) =>
+      findReferenceDataById(preassignedFareProducts, tr.fareProductRef),
+    )
+    .filter(isDefined);
+
+  const {data: allSupplementProducts} = useGetSupplementProductsQuery();
+
+  const baggageProducts = getBaggageProducts(
+    productsInFareContract,
+    allSupplementProducts,
+  );
+
+  const baggageProductsWithCount = mapUniqueWithCount(
+    baggageProducts,
+    (a, b) => a.id === b.id,
   );
 
   const globalMessageRuleVariables = {
@@ -126,11 +154,12 @@ export const DetailsContent: React.FC<Props> = ({
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
   const accesses = getAccesses(fc);
-  const shouldShowCarnetFooter =
-    accesses &&
-    accesses.maximumNumberOfAccesses <= MAX_ACCESSES_FOR_CARNET_FOOTER;
 
-  const {data: earnedBonusPoints} = useBonusAmountEarnedQuery(fc.id);
+  const shouldShowLegs =
+    preassignedFareProduct?.isBookingEnabled && !!legs?.length;
+
+  const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(fc.id);
+  const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(fc, validityStatus);
 
   return (
     <Section style={styles.section}>
@@ -151,6 +180,7 @@ export const DetailsContent: React.FC<Props> = ({
         <FareContractInfoDetailsSectionItem
           fareContract={fc}
           userProfilesWithCount={userProfilesWithCount}
+          baggageProductsWithCount={baggageProductsWithCount}
           status={validityStatus}
           preassignedFareProduct={preassignedFareProduct}
         />
@@ -167,13 +197,9 @@ export const DetailsContent: React.FC<Props> = ({
           <Barcode validityStatus={validityStatus} fc={fc} />
         </GenericSectionItem>
       )}
-      {shouldShowCarnetFooter && (
+      {accesses && (
         <GenericSectionItem>
-          <CarnetFooter
-            active={validityStatus === 'valid'}
-            maximumNumberOfAccesses={maximumNumberOfAccesses!}
-            numberOfUsedAccesses={numberOfUsedAccesses!}
-          />
+          <CarnetFooter validityStatus={validityStatus} fareContract={fc} />
         </GenericSectionItem>
       )}
       {globalMessageCount > 0 && (
@@ -202,14 +228,24 @@ export const DetailsContent: React.FC<Props> = ({
           />
         </GenericSectionItem>
       )}
+
+      {shouldShowLegs && (
+        <GenericSectionItem>
+          <LegsSummary compact={false} legs={legs} />
+        </GenericSectionItem>
+      )}
+
       {shouldShowBundlingInfo && (
         <MobilityBenefitsActionSectionItem
           benefits={benefits}
           onNavigateToMap={onNavigateToMap}
         />
       )}
-      {earnedBonusPoints != undefined && earnedBonusPoints > 0 && (
-        <EarnedBonusPointsSectionItem amount={earnedBonusPoints} />
+      {bonusAmountEarned != undefined && bonusAmountEarned.amount > 0 && (
+        <EarnedBonusPointsSectionItem
+          amount={bonusAmountEarned.amount}
+          navigateToBonusScreen={navigateToBonusScreen}
+        />
       )}
       {!!usedAccesses?.length && (
         <UsedAccessesSectionItem usedAccesses={usedAccesses} />
@@ -231,14 +267,24 @@ export const DetailsContent: React.FC<Props> = ({
           state={fc.state}
         />
       )}
-      {isCanBeConsumedNowFareContract(fc, now, currentUserId) && (
+      {isCanBeConsumedNowFareContract(
+        fc,
+        now,
+        currentUserId,
+        schoolCarnetInfo,
+      ) && (
         <ConsumeCarnetSectionItem
           fareContractId={fc.id}
           fareProductType={preassignedFareProduct?.type}
         />
       )}
       {isActivateTicketNowEnabled &&
-        isCanBeActivatedNowFareContract(fc, now, currentUserId) && (
+        isCanBeActivatedNowFareContract(
+          fc,
+          now,
+          currentUserId,
+          preassignedFareProduct?.isBookingEnabled,
+        ) && (
           <ActivateNowSectionItem
             fareContractId={fc.id}
             fareProductType={preassignedFareProduct?.type}
@@ -248,21 +294,24 @@ export const DetailsContent: React.FC<Props> = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  globalMessages: {
-    flex: 1,
-    rowGap: theme.spacing.medium,
-  },
-  section: {
-    marginBottom: theme.spacing.large,
-  },
-  fareContractDetails: {
-    flex: 1,
-    paddingBottom: theme.spacing.large,
-    rowGap: theme.spacing.medium,
-  },
-  enlargedWhiteBarcodePaddingView: {
-    backgroundColor: '#ffffff',
-    paddingVertical: theme.spacing.xLarge * 2,
-  },
-}));
+const useStyles = StyleSheet.createThemeHook((theme) => {
+  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
+  return {
+    globalMessages: {
+      flex: 1,
+      rowGap: theme.spacing.medium,
+    },
+    section: {
+      marginBottom: bottomSafeAreaInset,
+    },
+    fareContractDetails: {
+      flex: 1,
+      paddingBottom: theme.spacing.large,
+      rowGap: theme.spacing.medium,
+    },
+    enlargedWhiteBarcodePaddingView: {
+      backgroundColor: '#ffffff',
+      paddingVertical: theme.spacing.xLarge * 2,
+    },
+  };
+});

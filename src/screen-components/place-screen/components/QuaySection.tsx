@@ -24,6 +24,9 @@ import {
 } from '@atb/modules/situations';
 import {EstimatedCallList} from './EstimatedCallList';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
+import {isValidDepartureTime} from '@atb/departure-list/utils';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
+import {useNow} from '@atb/utils/use-now';
 
 export type QuaySectionProps = {
   quay: Quay;
@@ -59,17 +62,22 @@ export function QuaySection({
   addedFavoritesVisibleOnDashboard,
   searchDate,
   mode,
-}: QuaySectionProps): JSX.Element {
+}: QuaySectionProps): React.JSX.Element {
   const {favoriteDepartures} = useFavoritesContext();
   const [isMinimized, setIsMinimized] = useState(false);
   const styles = useStyles();
   const departures = getDeparturesForQuay(data, quay);
   const {t} = useTranslation();
 
-  const departuresToDisplay =
+  const now = useNow(5 * ONE_SECOND_MS);
+
+  const sortedDepartures =
     mode === 'Favourite'
       ? departures.sort((a, b) => compareByLineNameAndDesc(t, a, b))
       : departures;
+  const departuresToDisplay = sortedDepartures.filter((departure) =>
+    isValidDepartureTime(departure.expectedDepartureTime, now),
+  );
 
   const navigateToQuayEnabled = !!navigateToQuay;
 
@@ -108,7 +116,7 @@ export function QuaySection({
           <View style={styles.stopPlaceHeader} testID={testID + 'HideAction'}>
             <View style={styles.stopPlaceHeaderText}>
               <ThemeText
-                typography="body__secondary--bold"
+                typography="body__s__strong"
                 color="secondary"
                 style={styles.rightMargin}
                 testID={testID + 'Name'}
@@ -120,7 +128,7 @@ export function QuaySection({
               {!!quay.description && (
                 <ThemeText
                   style={styles.rightMargin}
-                  typography="body__secondary"
+                  typography="body__s"
                   color="secondary"
                   testID={testID + 'Description'}
                 >
@@ -149,12 +157,13 @@ export function QuaySection({
             navigateToDetails={navigateToDetails}
             showOnlyFavorites={showOnlyFavorites}
             noDeparturesToShow={!!data && !isLoading}
+            now={now}
           />
         )}
         {!isMinimized && didLoadingDataFail && !isLoading && (
           <GenericSectionItem>
             <View style={styles.messageBox}>
-              <ThemeText typography="body__secondary" color="secondary">
+              <ThemeText typography="body__s" color="secondary">
                 {t(DeparturesTexts.message.noData)}
               </ThemeText>
             </View>
@@ -170,7 +179,7 @@ export function QuaySection({
         {shouldShowMoreItemsLink && (
           <LinkSectionItem
             text={t(DeparturesTexts.quaySection.moreDepartures)}
-            textType="body__primary--bold"
+            textType="body__m__strong"
             onPress={() => navigateToQuay(quay)}
             accessibility={{
               accessibilityHint: t(DeparturesTexts.quaySection.a11yToQuayHint),

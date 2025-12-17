@@ -3,7 +3,7 @@ import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {TranslateFunction, useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {useState} from 'react';
 import {Alert, View} from 'react-native';
@@ -15,6 +15,8 @@ import {
   LicensePlateSection,
 } from '@atb/modules/smart-park-and-ride';
 import {MessageInfoBox} from '@atb/components/message-info-box';
+import {useAnalyticsContext} from '@atb/modules/analytics';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_SmartParkAndRideEditScreen'>;
 
@@ -31,17 +33,36 @@ export const Root_SmartParkAndRideEditScreen = ({
     params.vehicleRegistration.licensePlate,
   );
   const {theme} = useThemeContext();
+  const analytics = useAnalyticsContext();
+  const focusRef = useFocusOnLoad(navigation, true);
+  const onUpdateSuccess = () => {
+    navigation.popTo('Root_TabNavigatorStack', {
+      screen: 'TabNav_ProfileStack',
+      params: {
+        screen: 'Profile_SmartParkAndRideScreen',
+        params: {toast: 'vehicleUpdated'},
+      },
+    });
+  };
 
-  const onSuccess = () => navigation.goBack();
+  const onDeleteSuccess = () => {
+    navigation.popTo('Root_TabNavigatorStack', {
+      screen: 'TabNav_ProfileStack',
+      params: {
+        screen: 'Profile_SmartParkAndRideScreen',
+        params: {toast: 'vehicleDeleted'},
+      },
+    });
+  };
 
   const {
     mutate: editVehicleRegistrationMutate,
-    isError: editVehicleRegistrationIsError,
+    error: editVehicleRegistrationError,
   } = useEditVehicleRegistrationMutation(
     params.vehicleRegistration.id,
     licensePlate,
     nickname,
-    onSuccess,
+    onUpdateSuccess,
   );
 
   const {
@@ -49,10 +70,13 @@ export const Root_SmartParkAndRideEditScreen = ({
     isError: deleteVehicleRegistrationIsError,
   } = useDeleteVehicleRegistrationMutation(
     params.vehicleRegistration.id,
-    onSuccess,
+    onDeleteSuccess,
   );
 
   const showDeleteConfirmation = () => {
+    analytics.logEvent('Smart Park & Ride', 'Delete vehicle clicked', {
+      vehicleId: params.vehicleRegistration.id,
+    });
     Alert.alert(
       t(SmartParkAndRideTexts.edit.delete.confirmation.title),
       t(SmartParkAndRideTexts.edit.delete.confirmation.message),
@@ -60,11 +84,23 @@ export const Root_SmartParkAndRideEditScreen = ({
         {
           text: t(SmartParkAndRideTexts.edit.delete.confirmation.cancel),
           style: 'cancel',
+          onPress: () => {
+            analytics.logEvent('Smart Park & Ride', 'Delete vehicle cancelled');
+          },
         },
         {
           text: t(SmartParkAndRideTexts.edit.delete.confirmation.confirm),
           style: 'destructive',
-          onPress: () => deleteVehicleRegistrationMutate(),
+          onPress: () => {
+            analytics.logEvent(
+              'Smart Park & Ride',
+              'Delete vehicle confirmed',
+              {
+                vehicleId: params.vehicleRegistration.id,
+              },
+            );
+            deleteVehicleRegistrationMutate();
+          },
         },
       ],
     );
@@ -72,9 +108,10 @@ export const Root_SmartParkAndRideEditScreen = ({
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(SmartParkAndRideTexts.edit.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
         color: theme.color.background.neutral[1],
       }}
       parallaxContent={(focusRef) => (
@@ -87,7 +124,20 @@ export const Root_SmartParkAndRideEditScreen = ({
         <View style={styles.footer}>
           <Button
             expanded={true}
-            onPress={() => editVehicleRegistrationMutate()}
+            onPress={() => {
+              analytics.logEvent(
+                'Smart Park & Ride',
+                'Save vehicle changes clicked',
+                {
+                  vehicleId: params.vehicleRegistration.id,
+                  hasNicknameChange:
+                    nickname !== (params.vehicleRegistration.nickname || ''),
+                  hasLicensePlateChange:
+                    licensePlate !== params.vehicleRegistration.licensePlate,
+                },
+              );
+              editVehicleRegistrationMutate();
+            }}
             text={t(SmartParkAndRideTexts.edit.button)}
             rightIcon={{svg: Confirm}}
             mode="primary"
@@ -124,10 +174,13 @@ export const Root_SmartParkAndRideEditScreen = ({
           }}
         />
 
-        {editVehicleRegistrationIsError && (
+        {editVehicleRegistrationError && (
           <MessageInfoBox
             type="error"
-            message={t(SmartParkAndRideTexts.edit.error)}
+            message={getErrorMessageTranslation(
+              editVehicleRegistrationError?.kind,
+              t,
+            )}
           />
         )}
         {deleteVehicleRegistrationIsError && (
@@ -153,3 +206,17 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.medium,
   },
 }));
+
+function getErrorMessageTranslation(
+  kind: string | undefined,
+  t: TranslateFunction,
+) {
+  switch (kind) {
+    case 'INVALID_LICENSE_PLATE':
+      return t(SmartParkAndRideTexts.errors.invalidLicensePlate);
+    case 'VEHICLE_REGISTRATION_ALREADY_EXISTS':
+      return t(SmartParkAndRideTexts.errors.vehicleAlreadyAdded);
+    default:
+      return t(SmartParkAndRideTexts.errors.unknown);
+  }
+}

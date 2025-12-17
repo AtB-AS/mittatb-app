@@ -6,7 +6,6 @@ import SearchPage from '../pageobjects/search.page.ts';
 import NavigationHelper from '../utils/navigation.helper.ts';
 import DepartureOverviewPage from '../pageobjects/departure.overview.page.ts';
 import FavoritePage from '../pageobjects/favorite.page.ts';
-import FrontpagePage from '../pageobjects/frontpage.page.ts';
 
 describe('Frontpage', () => {
   before(async () => {
@@ -105,10 +104,13 @@ describe('Frontpage', () => {
 
       // Toggle out
       await FrontPagePage.selectFavoriteDeparture.click();
-      await ElementHelper.waitForElement('id', 'selectFavoriteBottomSheet');
+      await ElementHelper.waitForElement(
+        'id',
+        'selectFavoriteBottomSheetHeader',
+      );
       await FavoritePage.toggleVisibility.click();
       await AppHelper.pause(200);
-      await FavoritePage.confirm.click();
+      await NavigationHelper.closeBottomSheet();
 
       // Verify
       await AppHelper.pause(1000);
@@ -117,10 +119,13 @@ describe('Frontpage', () => {
 
       // Toggle in
       await FrontPagePage.selectFavoriteDeparture.click();
-      await ElementHelper.waitForElement('id', 'selectFavoriteBottomSheet');
+      await ElementHelper.waitForElement(
+        'id',
+        'selectFavoriteBottomSheetHeader',
+      );
       await FavoritePage.toggleVisibility.click();
       await AppHelper.pause(200);
-      await FavoritePage.confirm.click();
+      await NavigationHelper.closeBottomSheet();
 
       // Verify
       await AppHelper.pause(1000);
@@ -143,7 +148,10 @@ describe('Frontpage', () => {
       expect(await FrontPagePage.favoriteDepartures).toExist();
       expect(await FrontPagePage.noFavoriteInfo).not.toExist();
       await FrontPagePage.selectFavoriteDeparture.click();
-      await ElementHelper.waitForElement('id', 'selectFavoriteBottomSheet');
+      await ElementHelper.waitForElement(
+        'id',
+        'selectFavoriteBottomSheetHeader',
+      );
 
       // Delete
       await FavoritePage.editFavorites.click();
@@ -170,36 +178,13 @@ describe('Frontpage', () => {
   it('should open tickets tab', async () => {
     try {
       await ElementHelper.waitForElement('id', 'dashboardScrollView');
-      await ElementHelper.expectText('Travel search');
+      await ElementHelper.expectText('Find journey');
 
       await FrontPagePage.buyTickets.click();
       await ElementHelper.waitForElement('id', 'purchaseTab');
       await ElementHelper.expectText('Tickets');
     } catch (errMsg) {
       await AppHelper.screenshot('error_frontpage_should_open_tickets_tab');
-      throw errMsg;
-    }
-  });
-
-  /**
-   * Service disruption info
-   */
-  it('should show link to service disruptions', async () => {
-    const linkText = 'atb.no/driftsavvik';
-
-    try {
-      await ElementHelper.waitForElement('id', 'dashboardScrollView');
-      await FrontPagePage.serviceDisruptionsInfo.click();
-
-      await ElementHelper.waitForElement('id', 'serviceDisruptionsBottomSheet');
-      await ElementHelper.waitForElement('id', 'navigateToServiceDisruptions');
-      expect(await FrontpagePage.serviceDisruptionsLink).toContain(linkText);
-
-      await NavigationHelper.close();
-    } catch (errMsg) {
-      await AppHelper.screenshot(
-        'error_frontpage_should_show_link_to_service_disruptions',
-      );
       throw errMsg;
     }
   });

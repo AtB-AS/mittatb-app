@@ -12,7 +12,7 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {InteractiveColor, textNames, TextNames} from '@atb/theme/colors';
 import React, {useState} from 'react';
-import {Alert, View} from 'react-native';
+import {Alert, Platform, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {dictionary, useTranslation} from '@atb/translations';
 import {BusFill} from '@atb/assets/svg/mono-icons/transportation';
@@ -432,7 +432,7 @@ export const Profile_DesignSystemScreen = ({
           <ExpandableSectionItem
             text="Tag"
             showIconText={false}
-            textType="heading__title"
+            textType="heading__m"
             label="new"
             expandContent={
               <>
@@ -495,12 +495,12 @@ export const Profile_DesignSystemScreen = ({
           <ExpandableSectionItem
             text="Buttons"
             showIconText={false}
-            textType="heading__title"
+            textType="heading__m"
             expandContent={
               <View>
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   Primary - block - interactive/0
                 </ThemeText>
@@ -532,7 +532,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   Primary - block - interactive/1
                 </ThemeText>
@@ -564,7 +564,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   Primary - block - interactive/2
                 </ThemeText>
@@ -596,7 +596,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   Primary - block - interactive/destructive
                 </ThemeText>
@@ -628,7 +628,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   Secondary - block
                 </ThemeText>
@@ -660,7 +660,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   tertiary - block
                 </ThemeText>
@@ -692,7 +692,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   Medium button examples (interactive_0)
                 </ThemeText>
@@ -761,7 +761,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   Pill button examples (interactive_0)
                 </ThemeText>
@@ -837,7 +837,7 @@ export const Profile_DesignSystemScreen = ({
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  typography="heading__paragraph"
+                  typography="heading__m"
                 >
                   With icons examples (interactive_0)
                 </ThemeText>
@@ -1044,13 +1044,10 @@ export const Profile_DesignSystemScreen = ({
             onPress={() => setSelected(!selected)}
           />
           <RadioSectionItem
-            text="With right action"
+            text="With left icon"
             selected={selected}
             onPress={() => setSelected(!selected)}
-            rightAction={{
-              onPress: presser,
-              icon: Delete,
-            }}
+            leftIcon={BusFill}
           />
           <RadioSectionItem
             text="With right action"
@@ -1100,6 +1097,11 @@ export const Profile_DesignSystemScreen = ({
             subtitle="Subtitle text"
             onPress={() => {}}
             rightIcon={{svg: Delete, color: 'error'}}
+          />
+          <LinkSectionItem
+            text="Link with *leftIcon* and **markdown**"
+            leftIcon={{svg: BusFill}}
+            isMarkdown
           />
           <LinkSectionItem
             text="Disabled Dangerous Link Item text"
@@ -1181,6 +1183,37 @@ export const Profile_DesignSystemScreen = ({
               );
             })}
           </GenericSectionItem>
+          {Platform.OS === 'android' && (
+            <GenericSectionItem>
+              <Text
+                style={{
+                  fontFamily: 'Roboto-Regular',
+                  fontSize: 24,
+                  color: theme.color.background.neutral[0].foreground.primary,
+                }}
+              >
+                Roboto Regular
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'Roboto-Medium',
+                  fontSize: 24,
+                  color: theme.color.background.neutral[0].foreground.primary,
+                }}
+              >
+                Roboto Medium
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'Roboto-SemiBold',
+                  fontSize: 24,
+                  color: theme.color.background.neutral[0].foreground.primary,
+                }}
+              >
+                Roboto SemiBold
+              </Text>
+            </GenericSectionItem>
+          )}
         </Section>
 
         <Section style={styles.section}>

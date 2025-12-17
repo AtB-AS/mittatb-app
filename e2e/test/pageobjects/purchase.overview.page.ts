@@ -45,26 +45,19 @@ class PurchaseOverviewPage {
   }
 
   /**
+   * Check if offer exists
+   */
+  async hasOffer() {
+    return await ElementHelper.isElementExisting('offerTotalPriceText', 1);
+  }
+
+  /**
    * Click on the edit traveller button
    */
   async selectTraveller() {
     const reqId = `//*[@resource-id="selectTravellerButton"]`;
     await $(reqId).click();
     await ElementHelper.waitForElement('id', 'counterInput_adult');
-  }
-
-  /**
-   * Click on the edit zone button
-   */
-  async selectZones() {
-    const reqId = `//*[@resource-id="selectZonesButton"]`;
-    await $(reqId).click();
-
-    // Deny to share location
-    await OnboardingPage.denyLocationAndDontAskAgain();
-    await AlertHelper.systemSettingsCancel.click();
-
-    await ElementHelper.waitForElement('text', 'Select stops/zones');
   }
 
   /**
@@ -150,7 +143,7 @@ class PurchaseOverviewPage {
 
     // Deny to share location
     await OnboardingPage.denyLocationAndDontAskAgain();
-    await AlertHelper.systemSettingsCancel.click();
+    await AlertHelper.cancelSystemSettings();
 
     // Set from zone
     await ElementHelper.waitForElement('text', 'Select stops/zones');
@@ -159,6 +152,7 @@ class PurchaseOverviewPage {
     // One click to opt out of the search input field
     await $(zoneFromId).click();
     await $(zoneFromId).click();
+    await AlertHelper.cancelSystemSettings();
     await ElementHelper.waitForElement('text', 'Select stops/zones');
 
     // Set to zone
@@ -167,6 +161,7 @@ class PurchaseOverviewPage {
     // One click to opt out of the search input field
     await $(zoneToId).click();
     await $(zoneToId).click();
+    await AlertHelper.cancelSystemSettings();
     await ElementHelper.waitForElement('id', `saveZonesButton`);
 
     // Save

@@ -8,7 +8,7 @@ import {
   GeofencingZoneExplanationsType,
   ParkingVehicleTypes,
 } from '@atb/modules/map';
-import {formatNumberToString} from '@atb/utils/numbers';
+import {formatNumberToString} from '@atb-as/utils';
 
 export const MobilityTexts = {
   formFactor: (formFactor: FormFactor, isPlural: boolean = false) => {
@@ -29,16 +29,34 @@ export const MobilityTexts = {
         return _('Annet', 'Other', 'Anna');
     }
   },
+  finishing: {
+    button: _('Ta bilde', 'Take a photo', 'Ta eit bilde'),
+    header: _(
+      'Ta bilde før du avslutter',
+      'Take a photo before you finish',
+      'Ta eit bilde før du avsluttar',
+    ),
+    p1: _(
+      'Du kan få bot hvis sparkesykkelen meldes som feilparkert.',
+      'You may get a fine if the scooter is reported as incorrectly parked.',
+      'Du kan få bot viss sparkesykkelen vert meldt som feilparkert.',
+    ),
+    p2: _(
+      'Bilde kan brukes som bevis på at du har parkert riktig.',
+      'Photo can be used as evidence that you have parked correctly.',
+      'Bilde kan brukast som bevis på at du har parkert riktig.',
+    ),
+  },
   photo: {
     header: _(
-      'Ta bilde av el-sparkesykkelen',
-      'Take a photo of the escooter',
-      'Ta eit bilde av el-sparkesykkelen',
+      'Ta bilde av elsparkesykkelen',
+      'Take a photo of the e-scooter',
+      'Ta bilete av elsparkesykkelen',
     ),
     subHeader: _(
-      'Hold ca. 5 meter avstand. Unngå folk i bildet',
-      'Keep a distence of 5 meters. Avoid capturing people in the photo',
-      'Hold ca. 5 meter avstand. Unngå folk i bildet',
+      'Du blir ikke belastet for tiden du bruker på å ta bilde.',
+      'You will not be charged for the time you spend taking the photo.',
+      'Du blir ikkje belastet for tida du bruker på å ta bilete.',
     ),
   },
   shmoRequirements: {
@@ -360,19 +378,19 @@ export const ParkAndRideTexts = {
 
 export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
   allowed: {
-    title: _('Tillatt område', 'Allowed Area', 'Tillatt område'),
+    title: _('Tillatt sone', 'Allowed Area', 'Tillatt sone'),
     description: _(
-      'Her kan du både kjøre og parkere',
-      'Here you can both drive and park',
-      'Her kan du både køyre og parkere',
+      'Her kan du kjøre el-sparkesykkelen',
+      'You can ride the e-scooter here',
+      'Her kan du køyre el-sparkesykkelen',
     ),
   },
   slow: {
     title: _('Saktesone', 'Slow Zone', 'Saktesone'),
     description: _(
-      'Farten blir redusert i dette området',
-      'The speed will be reduced in this area',
-      'Farta vert redusert i dette området',
+      'Farten blir redusert her',
+      'The speed will be reduced here',
+      'Farta blir redusert her',
     ),
   },
 
@@ -400,23 +418,19 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
   // },
 
   noParking: {
-    title: _(
-      'Parkering forbudt-sone',
-      'No Parking Zone',
-      'Parkering forboden-sone',
-    ),
+    title: _('Parkering forbudt', 'No Parking', 'Parkering forboden'),
     description: _(
-      'Du kan ikke parkere i dette området',
-      'You cannot park in this area',
-      'Du kan ikkje parkere i dette området',
+      'Du kan ikke parkere her',
+      'You cannot park here',
+      'Du kan ikkje parkere her',
     ),
   },
   noEntry: {
     title: _('Kjøring forbudt', 'No Riding', 'Køyring forboden'),
     description: _(
-      'Du kan ikke kjøre inn i dette området',
-      'You cannot ride in this area',
-      'Du kan ikkje køyre inn i dette området',
+      'Du kan ikke kjøre eller parkere her',
+      'You cannot ride or park here',
+      'Du kan ikkje køyre eller parkere her',
     ),
   },
   unspecified: {
@@ -433,7 +447,7 @@ export const GeofencingZoneExtraExplanations = {
   isStationParking: _(
     'Se etter parkeringssoner i kartet.',
     'Look for parking zones on the map.',
-    'Se etter parkeringssoner i kartet.',
+    'Sjå etter parkeringssoner i kartet.',
   ),
 };
 

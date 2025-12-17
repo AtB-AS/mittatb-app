@@ -1,12 +1,11 @@
 import React from 'react';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {FareContractTexts, useTranslation} from '@atb/translations';
+import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
@@ -15,17 +14,23 @@ import {ShmoTripDetailsSectionItem} from '../ShmoTripDetailsSectionItem';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {useShmoBookingQuery} from '../../queries/use-shmo-booking-query';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type Props = {
   onClose: () => void;
   navigateSupportCallback: (operatorId: string, bookingId: string) => void;
+  navigateToScanQrCode: () => void;
   bookingId: string;
+  locationArrowOnPress: () => void;
 };
 
 export const FinishedScooterSheet = ({
   onClose,
   navigateSupportCallback,
+  navigateToScanQrCode,
   bookingId,
+  locationArrowOnPress,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -38,10 +43,16 @@ export const FinishedScooterSheet = ({
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
   return (
-    <BottomSheetContainer
-      title={t(MobilityTexts.formFactor(FormFactor.Scooter))}
-      maxHeightValue={0.7}
-      onClose={onClose}
+    <MapBottomSheet
+      closeCallback={onClose}
+      closeOnBackdropPress={false}
+      allowBackgroundTouch={true}
+      enableDynamicSizing={true}
+      heading={t(MobilityTexts.formFactor(FormFactor.Scooter))}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
       {isShmoDeepIntegrationEnabled && (
         <>
@@ -53,10 +64,10 @@ export const FinishedScooterSheet = ({
           {!isLoading && !isError && shmoBooking && (
             <>
               <View style={styles.footer}>
-                <ScrollView style={styles.container}>
+                <View style={styles.container}>
                   <Section>
                     <GenericSectionItem style={styles.finishingHeader}>
-                      <ThemeText typography="body__primary--big--bold">
+                      <ThemeText typography="heading__xl">
                         {t(FareContractTexts.shmoDetails.tripEnded())}
                       </ThemeText>
                     </GenericSectionItem>
@@ -70,7 +81,7 @@ export const FinishedScooterSheet = ({
                       withHeader={true}
                     />
                   </Section>
-                </ScrollView>
+                </View>
                 <Button
                   mode="primary"
                   active={false}
@@ -106,7 +117,7 @@ export const FinishedScooterSheet = ({
           )}
         </>
       )}
-    </BottomSheetContainer>
+    </MapBottomSheet>
   );
 };
 

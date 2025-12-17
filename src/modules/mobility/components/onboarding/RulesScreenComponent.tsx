@@ -19,14 +19,18 @@ import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {Linking, View} from 'react-native';
+import {View} from 'react-native';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {Ref} from 'react';
 
 export type RulesScreenComponentProps = {
   onGiveConsent: (given: boolean) => void;
+  focusRef: Ref<any>;
 };
 
 export const RulesScreenComponent = ({
   onGiveConsent,
+  focusRef,
 }: RulesScreenComponentProps) => {
   const {scooterConsentLines} = useFirestoreConfigurationContext();
   const {theme} = useThemeContext();
@@ -39,7 +43,7 @@ export const RulesScreenComponent = ({
 
   const onOpenTerms = () => {
     if (mobilityTermsUrl) {
-      Linking.openURL(mobilityTermsUrl);
+      openInAppBrowser(mobilityTermsUrl, 'close');
       analytics.logEvent('Mobility', 'Open terms');
     }
   };
@@ -62,8 +66,9 @@ export const RulesScreenComponent = ({
       }}
       contentNode={<ListElement scooterConsentLines={scooterConsentLines} />}
       headerProps={{
-        rightButton: {type: 'close', withIcon: true},
+        rightButton: {type: 'close'},
       }}
+      focusRef={focusRef}
     />
   );
 };
@@ -96,7 +101,7 @@ const ListElement = ({
         <View style={styles.row} key={line.id}>
           <ThemeIcon svg={getIcon(line.illustration)} size="large" />
 
-          <ThemeText style={styles.rowText} typography="body__primary">
+          <ThemeText style={styles.rowText} typography="body__m">
             {getTextForLanguage(line.description, language)}
           </ThemeText>
         </View>

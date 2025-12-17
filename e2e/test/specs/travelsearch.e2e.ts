@@ -10,8 +10,9 @@ import TravelsearchFilterPage from '../pageobjects/travelsearch.filter.page.js';
 import TimeHelper from '../utils/time.helper.js';
 import {stringToNumArray} from '../utils/utils.js';
 import TimePickerPage from '../pageobjects/time.picker.page.js';
+import {performancetotal} from 'wdio-performancetotal-service';
 
-describe('Travel search', () => {
+describe('Find journey', () => {
   before(async () => {
     await AppHelper.waitOnLoadingScreen();
     await OnboardingPage.skipOnboarding('travelsearch');
@@ -36,6 +37,7 @@ describe('Travel search', () => {
 
     try {
       await ElementHelper.waitForElement('id', 'searchFromButton');
+      performancetotal.sampleStart('travelSearch');
       await FrontPagePage.searchFrom.click();
       await SearchPage.setSearchLocation(departure);
 
@@ -44,6 +46,7 @@ describe('Travel search', () => {
       await SearchPage.setSearchLocation(arrival);
 
       await TravelsearchOverviewPage.waitForTravelSearchResults();
+      performancetotal.sampleEnd('travelSearch');
 
       const startTime: string = await TravelsearchOverviewPage.getStartTime(0);
       const endTime: string = await TravelsearchOverviewPage.getEndTime(0);
@@ -55,7 +58,7 @@ describe('Travel search', () => {
       //expect(TimeHelper.getTimeDurationInMin(startTime, endTime)).toEqual(travelTime + 1)
 
       // ** Details **
-      await TravelsearchOverviewPage.openFirstSearchResult();
+      await TravelsearchOverviewPage.openSearchResult();
 
       // Check start time and departure
       const startTimeInDetails = await TravelsearchDetailsPage.getTime(
@@ -138,7 +141,7 @@ describe('Travel search', () => {
       if (await TravelsearchOverviewPage.hasTravelSearchResults()) {
         // Number of legs
         const noLegs = await TravelsearchOverviewPage.getNumberOfLegs(0);
-        await TravelsearchOverviewPage.openFirstSearchResult();
+        await TravelsearchOverviewPage.openSearchResult();
         await AppHelper.scrollDownUntilId(
           'tripDetailsContentView',
           `legContainer${noLegs - 1}`,
@@ -178,6 +181,7 @@ describe('Travel search', () => {
     try {
       // Search and get start times of 3 first trip results
       await ElementHelper.waitForElement('id', 'searchFromButton');
+      performancetotal.sampleStart('travelSearch');
       await FrontPagePage.searchFrom.click();
       await SearchPage.setSearchLocation(departure);
 
@@ -186,6 +190,7 @@ describe('Travel search', () => {
       await SearchPage.setSearchLocation(arrival);
 
       await TravelsearchOverviewPage.waitForTravelSearchResults();
+      performancetotal.sampleEnd('travelSearch');
       const initStartTime_1: string =
         await TravelsearchOverviewPage.getStartTime(0);
       const initStartTime_2: string =
@@ -257,6 +262,7 @@ describe('Travel search', () => {
     try {
       // Search "long": only bike
       await ElementHelper.waitForElement('id', 'searchFromButton');
+      performancetotal.sampleStart('travelSearch');
       await FrontPagePage.searchFrom.click();
       await SearchPage.setSearchLocation(longDeparture);
       await ElementHelper.waitForElement('id', 'searchToButton');
@@ -264,6 +270,7 @@ describe('Travel search', () => {
       await SearchPage.setSearchLocation(longArrival);
 
       await TravelsearchOverviewPage.waitForTravelSearchResults();
+      performancetotal.sampleEnd('travelSearch');
 
       await expect(TravelsearchOverviewPage.bikeResult).toExist();
       // "Bike 1 h 23 min"
@@ -289,6 +296,7 @@ describe('Travel search', () => {
 
       // Search "short": walk + bike
       await ElementHelper.waitForElement('id', 'searchFromButton');
+      performancetotal.sampleStart('travelSearch');
       await FrontPagePage.searchFrom.click();
       await SearchPage.setSearchLocation(shortDeparture);
       await ElementHelper.waitForElement('id', 'searchToButton');
@@ -296,6 +304,7 @@ describe('Travel search', () => {
       await SearchPage.setSearchLocation(shortArrival);
 
       await TravelsearchOverviewPage.waitForTravelSearchResults();
+      performancetotal.sampleEnd('travelSearch');
 
       await expect(TravelsearchOverviewPage.bikeResult).toExist();
       await expect(TravelsearchOverviewPage.walkResult).toExist();

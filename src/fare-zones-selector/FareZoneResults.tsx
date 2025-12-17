@@ -28,7 +28,7 @@ export const FareZoneResults: React.FC<Props> = ({fareZones, onSelect}) => {
   return (
     <>
       <View accessibilityRole="header" style={styles.subHeader}>
-        <ThemeText typography="body__secondary" color="secondary">
+        <ThemeText typography="body__s" color="secondary">
           {t(FareZoneSearchTexts.zones.heading)}
         </ThemeText>
       </View>
@@ -56,11 +56,11 @@ export const FareZoneResults: React.FC<Props> = ({fareZones, onSelect}) => {
                   <ThemeIcon svg={Pin} width={20} />
                 </View>
                 <View style={styles.nameContainer}>
-                  <ThemeText typography="body__primary--bold">
+                  <ThemeText typography="body__m__strong">
                     {getReferenceDataName(fareZone, language)}
                   </ThemeText>
                   {fareZone.description && (
-                    <ThemeText typography="body__secondary">
+                    <ThemeText typography="body__s">
                       {getTextForLanguage(fareZone.description, language)}
                     </ThemeText>
                   )}

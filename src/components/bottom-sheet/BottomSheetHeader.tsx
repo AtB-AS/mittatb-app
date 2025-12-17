@@ -1,4 +1,4 @@
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import React from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
@@ -7,6 +7,7 @@ import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {BottomSheetTexts, useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {insets} from '@atb/utils/insets';
+import {PressableOpacity} from '../pressable-opacity';
 
 type BottomSheetHeaderWithoutNavigationProps = {
   title?: string;
@@ -60,11 +61,11 @@ export const BottomSheetHeader = ({
         style={styles.headerTitle}
         ref={focusTitleOnLoad ? onOpenFocusRef : undefined}
       >
-        <ThemeText accessible={false} typography="body__primary--bold">
+        <ThemeText accessible={false} typography="body__m__strong">
           {title}
         </ThemeText>
       </View>
-      <TouchableOpacity
+      <PressableOpacity
         onPress={handleClose}
         hitSlop={insets.all(10)}
         style={[styles.button, {backgroundColor: backgroundColor}]}
@@ -76,7 +77,7 @@ export const BottomSheetHeader = ({
         disabled={disableClose}
       >
         <ThemeIcon color={textColor} svg={Close} size="normal" />
-      </TouchableOpacity>
+      </PressableOpacity>
     </View>
   );
 };

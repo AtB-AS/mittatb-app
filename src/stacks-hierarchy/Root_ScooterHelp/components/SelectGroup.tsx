@@ -1,14 +1,9 @@
 import {Checkbox} from '@atb/components/checkbox';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {RadioIcon} from '@atb/components/radio';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useState, ReactElement} from 'react';
-import {
-  StyleProp,
-  TouchableOpacity,
-  View,
-  ViewProps,
-  ViewStyle,
-} from 'react-native';
+import {StyleProp, View, ViewProps, ViewStyle} from 'react-native';
 
 type BaseProps<T> = ViewProps & {
   items: T[];
@@ -103,7 +98,7 @@ const SelectItem = <T,>({
 
   return (
     <View style={style ?? itemStyles.container}>
-      <TouchableOpacity
+      <PressableOpacity
         style={{
           ...itemStyles.item,
           backgroundColor: selected ? selectedBackground : background,
@@ -129,7 +124,7 @@ const SelectItem = <T,>({
           </View>
         )}
         {renderItem(item, selected)}
-      </TouchableOpacity>
+      </PressableOpacity>
     </View>
   );
 };

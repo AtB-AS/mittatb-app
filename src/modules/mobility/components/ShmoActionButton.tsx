@@ -19,22 +19,23 @@ import {AgeVerificationEnum} from '../queries/use-get-age-verification-query';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 
 type ShmoActionButtonProps = {
-  onLogin: () => void;
   onStartOnboarding: () => void;
+  loginCallback: () => void;
   vehicleId: string;
   operatorId: string;
   paymentMethod: PaymentMethod | undefined;
 };
 
 export const ShmoActionButton = ({
-  onLogin,
   onStartOnboarding,
   vehicleId,
   operatorId,
   paymentMethod,
+  loginCallback,
 }: ShmoActionButtonProps) => {
   const {authenticationType, userId} = useAuthContext();
-  const {hasBlockers, numberOfBlockers} = useShmoRequirements();
+  const {hasBlockers, numberOfBlockers, ageVerification, operatorAgeLimit} =
+    useShmoRequirements(operatorId);
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
@@ -44,12 +45,10 @@ export const ShmoActionButton = ({
 
   const {
     mutateAsync: initShmoOneStopBooking,
-    isLoading: initShmoOneStopBookingIsLoading,
+    isPending: initShmoOneStopBookingIsLoading,
     isError: initShmoOneStopBookingIsError,
     error: initShmoOneStopBookingError,
   } = useInitShmoOneStopBookingMutation();
-
-  const {ageVerification, legalAge} = useShmoRequirements();
 
   const initShmoBooking = useCallback(async () => {
     const initReqBody: InitShmoOneStopBookingRequestBody = {
@@ -88,7 +87,7 @@ export const ShmoActionButton = ({
   if (authenticationType != 'phone') {
     return (
       <ButtonInfoTextCombo
-        onPress={onLogin}
+        onPress={loginCallback}
         buttonText={t(MobilityTexts.shmoRequirements.loginBlocker)}
         message={t(MobilityTexts.shmoRequirements.loginBlockerInfoMessage)}
       />
@@ -126,7 +125,9 @@ export const ShmoActionButton = ({
       {ageVerification === AgeVerificationEnum.UnderAge && (
         <MessageInfoBox
           type="warning"
-          message={t(MobilityTexts.shmoRequirements.underAgeWarning(legalAge))}
+          message={t(
+            MobilityTexts.shmoRequirements.underAgeWarning(operatorAgeLimit),
+          )}
         />
       )}
       <Button

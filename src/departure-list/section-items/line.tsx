@@ -26,7 +26,7 @@ import {
 import {insets} from '@atb/utils/insets';
 import {TFunc} from '@leile/lobo-t';
 import React from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
@@ -185,16 +185,16 @@ function getAccessibilityTextFirstDeparture(
           ),
         )
       : firstResult.realtime
-      ? t(
-          DeparturesTexts.results.departure.upcomingRealtimeAccessibilityLabel(
-            firstResultScreenReaderTimeText,
-          ),
-        )
-      : t(
-          DeparturesTexts.results.departure.upcomingAccessibilityLabel(
-            firstResultScreenReaderTimeText,
-          ),
-        )) +
+        ? t(
+            DeparturesTexts.results.departure.upcomingRealtimeAccessibilityLabel(
+              firstResultScreenReaderTimeText,
+            ),
+          )
+        : t(
+            DeparturesTexts.results.departure.upcomingAccessibilityLabel(
+              firstResultScreenReaderTimeText,
+            ),
+          )) +
     (firstResult.cancellation ? t(CancelledDepartureTexts.cancelled) : '');
 
   const nextLabel = secondResult
@@ -248,7 +248,7 @@ function DepartureTimeItem({
     return null;
   }
   return (
-    <TouchableOpacity
+    <PressableOpacity
       style={styles.departure}
       testID={testID}
       key={departure.aimedTime + departure.serviceJourneyId}
@@ -257,16 +257,15 @@ function DepartureTimeItem({
       {leftIcon && <ThemeIcon svg={leftIcon} size="xSmall" />}
 
       <ThemeText
-        typography="body__primary--bold"
-        style={[
-          styles.departureText,
-          departure.cancellation && styles.strikethrough,
-        ]}
+        typography={
+          departure.cancellation ? 'body__m__strike' : 'body__m__strong'
+        }
+        style={styles.departureText}
       >
         {formatTimeText(departure, searchDate, language, t)}
       </ThemeText>
       {rightIcon && <ThemeIcon svg={rightIcon} />}
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 }
 
@@ -313,10 +312,6 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   scrollContainer: {
     marginBottom: theme.spacing.medium,
     paddingLeft: theme.spacing.medium,
-  },
-  strikethrough: {
-    textDecorationLine: 'line-through',
-    fontWeight: 'normal',
   },
   departure: {
     padding: theme.spacing.small,

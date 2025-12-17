@@ -10,4 +10,4 @@ export {MOBILE_TOKEN_QUERY_KEY} from './utils';
 export {useTokenToggleDetailsQuery} from './use-token-toggle-details';
 export {DebugSabotage} from './DebugSabotage';
 export {DebugTokenServerAddress} from './DebugTokenServerAddress';
-export {mobileTokenClient} from './mobileTokenClient';
+export {CONTEXT_ID, mobileTokenClient} from './mobileTokenClient';

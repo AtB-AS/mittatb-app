@@ -14,7 +14,7 @@ export const useUserBenefitsQuery = (enabled: boolean) => {
     queryKey: ['mobilityUserBenefits', userId],
     queryFn: getBenefitsForUser,
     staleTime: ONE_MINUTE_MS,
-    cacheTime: ONE_MINUTE_MS,
+    gcTime: ONE_MINUTE_MS,
     enabled: enabled && authStatus === 'authenticated',
   });
 };

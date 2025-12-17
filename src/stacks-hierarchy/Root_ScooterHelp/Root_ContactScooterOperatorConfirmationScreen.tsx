@@ -3,6 +3,7 @@ import {useTranslation} from '@atb/translations';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ConfirmationScreenComponent} from '@atb/stacks-hierarchy/Root_ScooterHelp/components/ConfirmationScreenComponent';
 import {ContactScooterOperatorTexts} from '@atb/translations/screens/ContactScooterOperator';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export type ContactScooterOperatorConfirmationScreenProps =
   RootStackScreenProps<'Root_ContactScooterOperatorConfirmationScreen'>;
@@ -13,7 +14,7 @@ export const Root_ContactScooterOperatorConfirmationScreen = ({
 }: ContactScooterOperatorConfirmationScreenProps) => {
   const {t} = useTranslation();
   const analytics = useAnalyticsContext();
-
+  const focusRef = useFocusOnLoad(navigation);
   const closeReporting = () => {
     analytics.logEvent('Mobility', 'Scooter Operator Contact form sent');
     navigation.popToTop();
@@ -30,6 +31,7 @@ export const Root_ContactScooterOperatorConfirmationScreen = ({
         ),
       )}
       onClose={closeReporting}
+      focusRef={focusRef}
     />
   );
 };

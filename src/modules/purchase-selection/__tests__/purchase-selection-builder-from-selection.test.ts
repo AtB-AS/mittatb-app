@@ -6,6 +6,7 @@ import {
   TEST_ZONE,
   TEST_USER_PROFILE,
   TEST_ZONE_WITH_MD,
+  TEST_BAGGAGE_PRODUCT,
 } from './test-utils';
 import type {PurchaseSelectionType} from '../types';
 
@@ -15,7 +16,7 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
       .fromSelection(TEST_SELECTION)
       .build();
 
-    expect(selection).toBe(TEST_SELECTION);
+    expect(selection).toStrictEqual(TEST_SELECTION);
   });
 
   it('Should return same selection unaltered, with stop places', () => {
@@ -31,7 +32,7 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
       .fromSelection(originalSelection)
       .build();
 
-    expect(selection).toBe(originalSelection);
+    expect(selection).toStrictEqual(originalSelection);
   });
 
   it('Should create new selection with defaults when input selection product is invalid', () => {
@@ -133,4 +134,67 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
 
     expect(selection.isOnBehalfOf).toBe(true);
   });
+});
+
+it('Should create builder with baggage products', () => {
+  const selectionWithSupplements = {
+    ...TEST_SELECTION,
+    baggageProductsWithCount: [
+      {...TEST_BAGGAGE_PRODUCT, id: 'SP1', count: 2},
+      {...TEST_BAGGAGE_PRODUCT, id: 'SP2', count: 1},
+    ],
+  };
+
+  const selection = createEmptyBuilder(TEST_INPUT)
+    .fromSelection(selectionWithSupplements)
+    .build();
+
+  expect(selection.baggageProductsWithCount).toHaveLength(2);
+  expect(selection.baggageProductsWithCount[0].id).toBe('SP1');
+  expect(selection.baggageProductsWithCount[0].count).toBe(2);
+  expect(selection.baggageProductsWithCount[1].id).toBe('SP2');
+  expect(selection.baggageProductsWithCount[1].count).toBe(1);
+});
+
+it('Should build the default selection when some supplement products are not allowed by product limitations', () => {
+  const testSupplementProductWithCount = [
+    {
+      ...TEST_BAGGAGE_PRODUCT,
+      id: 'SP1',
+      count: 2,
+    },
+    {
+      ...TEST_BAGGAGE_PRODUCT,
+      id: 'SP2',
+      count: 2,
+    },
+    {
+      ...TEST_BAGGAGE_PRODUCT,
+      id: 'SP3',
+      count: 2,
+    },
+  ];
+
+  const productWithLimitations = {
+    ...TEST_SELECTION.preassignedFareProduct,
+    id: 'P2',
+    limitations: {
+      ...TEST_SELECTION.preassignedFareProduct.limitations,
+      supplementProductRefs: ['SP2'], // Only SP2 is allowed
+    },
+  };
+
+  const TEST_SELECTION_WITH_PRODUCT_WITH_LIMITATIONS = {
+    ...TEST_SELECTION,
+    preassignedFareProduct: productWithLimitations,
+    baggageProductsWithCount: testSupplementProductWithCount,
+  };
+
+  const selection = createEmptyBuilder(TEST_INPUT)
+    .fromSelection(TEST_SELECTION_WITH_PRODUCT_WITH_LIMITATIONS)
+    .build();
+
+  expect(selection.baggageProductsWithCount).toEqual([]);
+  expect(selection.preassignedFareProduct.id).toBe('P1');
+  expect(selection).toEqual(TEST_SELECTION);
 });

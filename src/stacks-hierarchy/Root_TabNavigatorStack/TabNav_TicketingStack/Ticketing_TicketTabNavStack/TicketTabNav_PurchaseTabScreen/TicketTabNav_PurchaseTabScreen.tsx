@@ -4,7 +4,7 @@ import {AnonymousPurchaseWarning} from '@atb/stacks-hierarchy/Root_TabNavigatorS
 import {FareProducts} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProducts';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import React from 'react';
-import {ScrollView, View} from 'react-native';
+import {RefreshControl, ScrollView, View} from 'react-native';
 import {RecentFareContracts} from './Components/RecentFareContracts/RecentFareContracts';
 import {TicketTabNavScreenProps} from '../navigation-types';
 import {UpgradeSplash} from './Components/UpgradeSplash';
@@ -25,8 +25,17 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {must_upgrade_ticketing} = useRemoteConfigContext();
   const {authenticationType} = useAuthContext();
   const {theme} = useThemeContext();
-  const {recentFareContracts, loading} = useRecentFareContracts();
-  const {data: fareProducts} = useGetFareProductsQuery();
+  const {
+    recentFareContracts,
+    isLoading: isLoadingRecentFareContracts,
+    refresh: refetchRecentFareContracts,
+  } = useRecentFareContracts();
+  const {
+    data: preassignedFareProducts,
+    refetch: refetchPreassignedFareProducts,
+    isRefetching: isRefetchingPreassignedFareProducts,
+    isPlaceholderData,
+  } = useGetFareProductsQuery();
   const selectionBuilder = usePurchaseSelectionBuilder();
 
   const hasRecentFareContracts = !!recentFareContracts.length;
@@ -56,11 +65,12 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
     navigation.navigate('Root_PurchaseOverviewScreen', {
       selection,
+      transitionOverride: 'slide-from-right',
       mode: 'Ticket',
     });
   };
 
-  const onFareContractSelect = (
+  const onRecentFareContractSelect = (
     rfc: RecentFareContractType,
     fareProductTypeConfig: FareProductTypeConfig,
     harbors?: StopPlaceFragment[],
@@ -90,25 +100,41 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       .forType(fareProductTypeConfig.type)
       .product(rfc.preassignedFareProduct)
       .userProfiles(rfc.userProfilesWithCount)
+      .baggageProducts(rfc.baggageProductsWithCount)
       .fromStopPlace(mapPlace(rfc.pointToPointValidity?.fromPlace))
       .toStopPlace(mapPlace(rfc.pointToPointValidity?.toPlace));
     if (rfc.fromFareZone) builder.fromZone(mapZone(rfc.fromFareZone));
     if (rfc.toFareZone) builder.toZone(mapZone(rfc.toFareZone));
     const selection = builder.build();
 
-    navigation.navigate('Root_PurchaseOverviewScreen', {
+    navigation.navigate('Root_PurchaseConfirmationScreen', {
       selection,
       mode: 'Ticket',
+      transitionOverride: 'slide-from-right',
     });
   };
 
   return authenticationType !== 'none' ? (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefetchingPreassignedFareProducts}
+          onRefresh={() => {
+            refetchRecentFareContracts();
+            refetchPreassignedFareProducts();
+            analytics.logEvent('Ticketing', 'Pull to refresh products', {
+              fareProductsCount: preassignedFareProducts.length,
+              isPlaceholderData,
+            });
+          }}
+        />
+      }
+    >
       <ErrorWithAccountMessage style={styles.accountWrongMessage} />
       <RecentFareContracts
         recentFareContracts={recentFareContracts}
-        loading={loading}
-        onSelect={onFareContractSelect}
+        loading={isLoadingRecentFareContracts}
+        onSelect={onRecentFareContractSelect}
       />
       <View
         style={[
@@ -135,7 +161,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         )}
 
         <FareProducts
-          fareProducts={fareProducts}
+          fareProducts={preassignedFareProducts}
           onProductSelect={onProductSelect}
         />
       </View>

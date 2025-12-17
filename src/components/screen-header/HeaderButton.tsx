@@ -1,35 +1,30 @@
 import React, {RefObject} from 'react';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
+// eslint-disable-next-line rulesdir/navigation-only-in-screens
 import {useNavigation} from '@react-navigation/native';
 import {AccessibilityProps, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
-import {useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {
   AnalyticsEventContext,
   useAnalyticsContext,
 } from '@atb/modules/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {Info} from '@atb/assets/svg/mono-icons/status';
 import {ContrastColor} from '@atb/theme/colors';
 
-export type ButtonModes =
-  | 'back'
-  | 'cancel'
-  | 'close'
-  | 'skip'
-  | 'info'
-  | 'custom';
+export type ButtonModes = 'back' | 'cancel' | 'close' | 'custom';
 export type HeaderButtonProps = {
   type: ButtonModes;
   onPress?: () => void;
   color?: ContrastColor;
   text?: string;
   testID?: string;
-  withIcon?: boolean;
+  /** SVG to use when type is 'custom' */
+  svg?: ({fill}: {fill: string}) => React.JSX.Element;
   /**
    * The context for the analytics event that will be logged when the button is
    * pressed. If no context provided, then no analytics event will be logged.
@@ -38,7 +33,7 @@ export type HeaderButtonProps = {
   focusRef?: RefObject<any>;
 } & AccessibilityProps;
 
-export type IconButtonProps = Omit<HeaderButtonProps, 'type' | 'withIcon'> & {
+export type IconButtonProps = Omit<HeaderButtonProps, 'type'> & {
   children: React.ReactNode;
 };
 
@@ -77,20 +72,18 @@ export const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
 const useHeaderButton = (
   buttonProps: HeaderButtonProps,
 ): IconButtonProps | undefined => {
+  // eslint-disable-next-line rulesdir/navigation-only-in-screens
   const navigation = useNavigation();
+  const styles = useStyles();
 
   const {t} = useTranslation();
   switch (buttonProps.type) {
-    case 'back':
-    case 'cancel':
-    case 'skip':
-    case 'close': {
-      const {type, color, onPress, withIcon, ...accessibilityProps} =
-        buttonProps;
+    case 'back': {
+      const {type, color, onPress, ...accessibilityProps} = buttonProps;
       return {
         children: (
-          <View style={{flexDirection: 'row'}}>
-            {withIcon ? <HeaderButtonIcon mode={type} color={color} /> : null}
+          <View style={styles.headerButtonContainer}>
+            <ThemeIcon svg={ArrowLeft} color={color} />
             <ThemeText color={color}>
               {t(ScreenHeaderTexts.headerButton[type].text)}
             </ThemeText>
@@ -101,18 +94,34 @@ const useHeaderButton = (
         ...accessibilityProps,
       };
     }
-    case 'info':
-      const {onPress, type, color, ...accessibilityProps} = buttonProps;
+    case 'cancel':
+    case 'close': {
+      const {type, color, onPress, ...accessibilityProps} = buttonProps;
       return {
-        children: <ThemeIcon svg={Info} color={color} />,
-        accessibilityLabel: t(ScreenHeaderTexts.headerButton[type].text),
-        onPress: onPress,
+        children: (
+          <View style={styles.headerButtonContainer}>
+            <ThemeText color={color}>
+              {t(ScreenHeaderTexts.headerButton[type].text)}
+            </ThemeText>
+            <ThemeIcon svg={Close} color={color} />
+          </View>
+        ),
+        accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
+        onPress: onPress || navigation.goBack,
         ...accessibilityProps,
       };
+    }
     case 'custom': {
       const {text, color, onPress, ...accessibilityProps} = buttonProps;
       return {
-        children: <ThemeText color={color}>{text}</ThemeText>,
+        children: (
+          <View style={styles.headerButtonContainer}>
+            <ThemeText color={color}>{text}</ThemeText>
+            {buttonProps.svg && (
+              <ThemeIcon svg={buttonProps.svg} color={color} />
+            )}
+          </View>
+        ),
         onPress: onPress,
         ...accessibilityProps,
       };
@@ -120,26 +129,9 @@ const useHeaderButton = (
   }
 };
 
-const HeaderButtonIcon = ({
-  mode,
-  color,
-}: {
-  mode: ButtonModes;
-  color?: ContrastColor;
-}) => {
-  const {theme} = useThemeContext();
-  const iconProps: Omit<ThemeIconProps, 'svg'> = {
-    color: color,
-    style: {marginRight: theme.spacing.xSmall},
-  };
-
-  switch (mode) {
-    case 'back':
-      return <ThemeIcon svg={ArrowLeft} {...iconProps} />;
-    case 'close':
-    case 'cancel':
-      return <ThemeIcon svg={Close} {...iconProps} />;
-    default:
-      return null;
-  }
-};
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  headerButtonContainer: {
+    flexDirection: 'row',
+    gap: theme.spacing.xSmall,
+  },
+}));

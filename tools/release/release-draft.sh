@@ -25,7 +25,7 @@ echo 'Gathering commits and creating changelog'
 message=`yarn --silent conventional-changelog -p angular -n ./tools/release/changelog.config.js`
 
 if [ $? -eq 0 ]; then
-  gh release create $releaseVersion --draft --title "$releaseVersion release draft" --notes "$message" 
+  gh release create $releaseVersion --draft --title "$releaseVersion release draft" --notes "$message" --target "$branch"
 else
   echo 'Could not create changelog'
   exit 1;

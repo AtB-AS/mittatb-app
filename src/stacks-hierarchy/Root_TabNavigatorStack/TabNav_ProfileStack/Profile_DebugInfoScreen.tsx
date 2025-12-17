@@ -1,16 +1,12 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import React, {useEffect, useState} from 'react';
-import {Alert, Linking, View} from 'react-native';
+import React, {useEffect, useMemo, useState} from 'react';
+import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {getIdTokenGlobal, useAuthContext} from '@atb/modules/auth';
-import {
-  KeyValuePair,
-  storage,
-  StorageModelKeysEnum,
-} from '@atb/modules/storage';
+import {KeyValuePair, storage} from '@atb/modules/storage';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {usePreferencesContext, UserPreferences} from '@atb/modules/preferences';
 import {get, keys} from 'lodash';
@@ -49,6 +45,13 @@ import {
   DebugSabotage,
   DebugTokenServerAddress,
 } from '@atb/modules/mobile-token';
+import {useMapContext} from '@atb/modules/map';
+import {useEventStreamContext} from '@atb/modules/event-stream';
+import {format} from 'date-fns';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {useQueryClient} from '@tanstack/react-query';
+import {useDebugUserInfoHeader} from '@atb/api';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -89,6 +92,8 @@ export const Profile_DebugInfoScreen = () => {
 
   const {resetDismissedAnnouncements} = useAnnouncementsContext();
 
+  const {eventLog} = useEventStreamContext();
+
   const {
     tokens,
     retry,
@@ -106,12 +111,15 @@ export const Profile_DebugInfoScreen = () => {
       remoteTokenError,
       setSabotage,
       sabotage,
+      setAlwaysFallback,
+      alwaysFallback,
       setAllTokenInspectable,
       allTokenInspectable,
     },
   } = useMobileTokenContext();
   const {serverNow} = useTimeContext();
-
+  const serverTimeOffset = useMemo(() => Date.now() - serverNow, [serverNow]);
+  const {setGivenShmoConsent} = useMapContext();
   const {
     fcmToken,
     permissionStatus: pushNotificationPermissionStatus,
@@ -121,6 +129,12 @@ export const Profile_DebugInfoScreen = () => {
   } = useNotificationsContext();
 
   const remoteConfig = useRemoteConfigContext();
+
+  const {resubscribeFirestoreConfig} = useFirestoreConfigurationContext();
+
+  const queryClient = useQueryClient();
+
+  const {shouldAddHeader, setShouldAddHeader} = useDebugUserInfoHeader();
 
   const [storedValues, setStoredValues] = useState<
     readonly KeyValuePair[] | null
@@ -142,8 +156,13 @@ export const Profile_DebugInfoScreen = () => {
   }
 
   const {setPreference, preferences} = usePreferencesContext();
-  const {showTestIds, debugShowSeconds, debugPredictionInaccurate} =
-    preferences;
+  const {
+    showTestIds,
+    debugShowSeconds,
+    debugPredictionInaccurate,
+    debugShowProgressBetweenStops,
+    showShmoTesting,
+  } = preferences;
 
   return (
     <View style={styles.container}>
@@ -168,13 +187,11 @@ export const Profile_DebugInfoScreen = () => {
               );
             })}
           />
-
-          <ButtonSectionItem
-            label="Reset Smart Park & Ride onboarding"
-            onPress={() => storage.remove('@ATB_smart_park_and_ride_onboarded')}
-          />
         </Section>
         <Section style={styles.section}>
+          <GenericSectionItem>
+            <ThemeText>{`Device is ${serverTimeOffset}ms ahead of server time`}</ThemeText>
+          </GenericSectionItem>
           <LinkSectionItem
             text="Reset shareTravelHabits session counter"
             onPress={() => storage.set(shareTravelHabitsSessionCountKey, '0')}
@@ -194,10 +211,31 @@ export const Profile_DebugInfoScreen = () => {
             }}
           />
           <ToggleSectionItem
+            text="Display percentage between stops in departure details"
+            value={debugShowProgressBetweenStops}
+            onValueChange={(debugShowProgressBetweenStops) => {
+              setPreference({debugShowProgressBetweenStops});
+            }}
+          />
+          <ToggleSectionItem
+            text="Add debug user info header"
+            value={shouldAddHeader}
+            onValueChange={(checked) => {
+              setShouldAddHeader(checked);
+            }}
+          />
+          <ToggleSectionItem
             text="Show prediction inaccurate info"
             value={debugPredictionInaccurate}
             onValueChange={(value) => {
               setPreference({debugPredictionInaccurate: value});
+            }}
+          />
+          <ToggleSectionItem
+            text="Show ShmoTesting"
+            value={showShmoTesting}
+            onValueChange={(value) => {
+              setPreference({showShmoTesting: value});
             }}
           />
           <LinkSectionItem
@@ -250,6 +288,16 @@ export const Profile_DebugInfoScreen = () => {
           />
 
           <LinkSectionItem
+            text="Force refresh firestore config"
+            onPress={resubscribeFirestoreConfig}
+          />
+
+          <LinkSectionItem
+            text="Force refresh all react-query caches"
+            onPress={() => queryClient.resetQueries()}
+          />
+
+          <LinkSectionItem
             text="Reset feedback displayStats"
             onPress={() => storage.set('@ATB_feedback_display_stats', '')}
           />
@@ -272,7 +320,7 @@ export const Profile_DebugInfoScreen = () => {
           />
           <LinkSectionItem
             text="Reset scooter consent"
-            onPress={() => storage.remove(StorageModelKeysEnum.ScooterConsent)}
+            onPress={() => setGivenShmoConsent(false)}
           />
         </Section>
         <Section style={styles.section}>
@@ -351,6 +399,24 @@ export const Profile_DebugInfoScreen = () => {
 
         <Section style={styles.section}>
           <ExpandableSectionItem
+            text="Event stream log"
+            showIconText={true}
+            expandContent={
+              <View>
+                {eventLog.map((event) => (
+                  <MapEntry
+                    key={event.date.toISOString() + event.meta}
+                    title={format(event.date, 'HH:mm:ss.SSS')}
+                    value={{streamEvent: event.streamEvent, meta: event.meta}}
+                  />
+                ))}
+              </View>
+            }
+          />
+        </Section>
+
+        <Section style={styles.section}>
+          <ExpandableSectionItem
             text="Notifications"
             showIconText={true}
             expandContent={
@@ -414,7 +480,7 @@ export const Profile_DebugInfoScreen = () => {
             expandContent={
               preferences && (
                 <View>
-                  <ThemeText typography="body__secondary">
+                  <ThemeText typography="body__s">
                     Press a line to reset to undefined {'\n'}
                   </ThemeText>
                   {Object.keys(preferences).map((key) => (
@@ -438,11 +504,12 @@ export const Profile_DebugInfoScreen = () => {
           <ExpandableSectionItem
             text="Mobile token state"
             showIconText={true}
+            testID="mobileTokenDebug"
             expandContent={
               <View>
                 {nativeToken && (
                   <View>
-                    <ThemeText>{`Token id: ${nativeToken.getTokenId()}`}</ThemeText>
+                    <ThemeText testID="tokenId">{`Token id: ${nativeToken.getTokenId()}`}</ThemeText>
                     <ThemeText>{`Token start: ${new Date(
                       nativeToken.getValidityStart(),
                     ).toISOString()}`}</ThemeText>
@@ -453,7 +520,7 @@ export const Profile_DebugInfoScreen = () => {
                     <ThemeText>{`Is attestation required: ${nativeToken.isAttestRequired()}`}</ThemeText>
                   </View>
                 )}
-                <ThemeText>{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
+                <ThemeText testID="tokenStatus">{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
                 <ThemeText>{`IsInspectable: ${isInspectable}`}</ThemeText>
                 <ThemeText>{`Override remote token inspectable: ${allTokenInspectable}`}</ThemeText>
                 <ThemeText>{`Native token status: ${nativeTokenStatus}`}</ThemeText>
@@ -491,10 +558,18 @@ export const Profile_DebugInfoScreen = () => {
                     onPress={renewToken}
                   />
                 )}
+                <ToggleSectionItem
+                  text="Always display fallback/static token"
+                  value={alwaysFallback}
+                  onValueChange={(alwaysFallback) => {
+                    setAlwaysFallback(alwaysFallback);
+                  }}
+                />
                 <ExpandableSectionItem
                   text="Remote tokens"
                   showIconText={true}
-                  expandContent={tokens?.map((token) => (
+                  testID="remoteTokenExpandable"
+                  expandContent={tokens?.map((token, index) => (
                     <View key={token.id} style={styles.remoteToken}>
                       {keys(token).map((k) => (
                         <ThemeText key={token.id + k}>
@@ -505,6 +580,7 @@ export const Profile_DebugInfoScreen = () => {
                         expanded={true}
                         onPress={() => removeRemoteToken(token.id)}
                         text="Remove"
+                        testID={`removeRemoteToken${index}`}
                       />
                     </View>
                   ))}
@@ -616,7 +692,7 @@ export const Profile_DebugInfoScreen = () => {
                       const privacyDashboardUrl =
                         await getPrivacyDashboardUrl();
                       privacyDashboardUrl &&
-                        Linking.openURL(privacyDashboardUrl);
+                        openInAppBrowser(privacyDashboardUrl, 'close');
                     }}
                     style={styles.button}
                     disabled={!isConsentGranted}
@@ -627,7 +703,8 @@ export const Profile_DebugInfoScreen = () => {
                     interactiveColor={interactiveColor}
                     onPress={async () => {
                       const privacyTermsUrl = await getPrivacyTermsUrl();
-                      privacyTermsUrl && Linking.openURL(privacyTermsUrl);
+                      privacyTermsUrl &&
+                        openInAppBrowser(privacyTermsUrl, 'close');
                     }}
                     style={styles.button}
                     disabled={!isConsentGranted}
@@ -689,6 +766,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
   const isLongString =
     !!value && typeof value === 'string' && value.length > 300;
   const [isExpanded, setIsExpanded] = useState<boolean>(!isLongString);
+  if (value === undefined) return null;
 
   if (!!value && typeof value === 'object') {
     return (
@@ -697,7 +775,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
           style={{flexDirection: 'row'}}
           onPress={() => setIsExpanded(!isExpanded)}
         >
-          <ThemeText typography="heading__title" color="secondary">
+          <ThemeText typography="heading__m" color="secondary">
             {title}
           </ThemeText>
           <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
@@ -717,11 +795,11 @@ function MapEntry({title, value}: {title: string; value: any}) {
             style={{flexDirection: 'row'}}
             onPress={() => setIsExpanded(!isExpanded)}
           >
-            <ThemeText typography="body__primary--bold">{title}: </ThemeText>
+            <ThemeText typography="body__m__strong">{title}: </ThemeText>
             <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
           </PressableOpacity>
         ) : (
-          <ThemeText typography="body__primary--bold">{title}: </ThemeText>
+          <ThemeText typography="body__m__strong">{title}: </ThemeText>
         )}
         {isExpanded && <MapValue value={value} />}
       </View>
@@ -753,7 +831,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   objectEntry: {
     flexDirection: 'column',
-    marginVertical: 12,
+    marginVertical: 8,
     borderLeftColor: theme.color.foreground.dynamic.secondary,
     borderLeftWidth: 1,
     paddingLeft: 4,

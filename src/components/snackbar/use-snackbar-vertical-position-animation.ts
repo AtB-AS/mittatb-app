@@ -59,8 +59,8 @@ export const useSnackbarVerticalPositionAnimation = (
   const hiddenY = isScreenReaderEnabled
     ? visibleY // jump directly to visible position when screen reader enabled
     : position === 'top'
-    ? -top - viewHeightIncludingShadow - shadowOffsetY
-    : bottom + viewHeightIncludingShadow - shadowOffsetY;
+      ? -top - viewHeightIncludingShadow - shadowOffsetY
+      : bottom + viewHeightIncludingShadow - shadowOffsetY;
 
   const translateY = useRef(new Animated.Value(hiddenY)).current;
 

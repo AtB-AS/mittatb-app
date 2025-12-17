@@ -10,7 +10,6 @@ type Props<T> = Omit<SectionProps, 'children'> & {
   itemToText(item: T, index: number): string;
   itemToSubtext?(item: T, index: number): string | undefined;
   itemToA11yLabel?(item: T): string | undefined;
-  hideSubtext?: boolean;
   onSelect?(item: T, index: number): void;
   headerText?: string;
   itemToRightAction?: (
@@ -23,7 +22,6 @@ export function RadioGroupSection<T>({
   itemToText,
   itemToSubtext,
   itemToA11yLabel,
-  hideSubtext,
   items,
   selected,
   onSelect,
@@ -44,10 +42,9 @@ export function RadioGroupSection<T>({
             key={keyExtractor(item, index)}
             selected={thisItemSelected}
             text={itemToText(item, index)}
-            hideSubtext={hideSubtext}
             subtext={itemToSubtext?.(item, index) || ''}
             onPress={() => onSelect?.(item, index)}
-            testID={'radioButton' + itemToText(item, index)}
+            testID={`radioButton${index}`}
             accessibilityHint={thisItemSelected ? '' : accessibilityHint}
             accessibilityLabel={itemToA11yLabel?.(item)}
             rightAction={itemToRightAction?.(item)}

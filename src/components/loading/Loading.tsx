@@ -18,7 +18,7 @@ export const Loading: React.FC<{text?: string}> = ({text}) => {
         color={themeColor.foreground.primary}
       />
       {text ? (
-        <ThemeText typography="body__primary--bold" style={styles.text}>
+        <ThemeText typography="body__m__strong" style={styles.text}>
           {text}
         </ThemeText>
       ) : null}

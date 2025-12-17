@@ -1,11 +1,10 @@
-import React, {forwardRef, useEffect, useRef, useState} from 'react';
+import React, {forwardRef, Ref, useEffect, useRef, useState} from 'react';
 import {
   AccessibilityInfo,
   Keyboard,
-  NativeSyntheticEvent,
   Platform,
   TextInput as InternalTextInput,
-  TextInputFocusEventData,
+  FocusEvent,
   TextInputProps as InternalTextInputProps,
   View,
 } from 'react-native';
@@ -23,11 +22,9 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {countryPhoneData} from 'phone';
 import {Section} from '../Section';
 import {GenericClickableSectionItem} from '@atb/components/sections';
-import {giveFocus, useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {MessageInfoText} from '@atb/components/message-info-text';
-
-type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
 type Props = SectionItemProps<
   InternalTextInputProps & {
@@ -37,6 +34,7 @@ type Props = SectionItemProps<
     showClear?: boolean;
     onClear?: () => void;
     errorText?: string;
+    focusRef?: Ref<any>;
   }
 >;
 
@@ -51,6 +49,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
       onBlur,
       showClear,
       onClear,
+      focusRef: prefixListRef,
       ...props
     },
     forwardedRef,
@@ -64,8 +63,6 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
     const myRef = useRef<InternalTextInput>(null);
     const combinedRef = composeRefs<InternalTextInput>(forwardedRef, myRef);
     const errorFocusRef = useRef(null);
-
-    const prefixListRef = useFocusOnLoad();
 
     useEffect(() => {
       giveFocus(errorFocusRef);
@@ -140,8 +137,11 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
       .filter((country) => {
         switch (country.country_code) {
           case '1':
-            // Filter out non-US +1 prefixes
-            return country.country_name === 'United States';
+            // Filter out non-US and Canada +1 prefixes
+            return (
+              country.country_name === 'United States' ||
+              country.country_name === 'Canada'
+            );
           default:
             return true;
         }
@@ -165,7 +165,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
             style={styles.inputMainContent}
           >
             {label && (
-              <ThemeText typography="body__secondary" style={styles.label}>
+              <ThemeText typography="body__s" style={styles.label}>
                 {label}
               </ThemeText>
             )}
@@ -282,7 +282,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   },
   inputPhoneNumber: {
     color: theme.color.foreground.dynamic.primary,
-    fontSize: theme.typography.body__primary.fontSize,
+    fontSize: theme.typography.body__m.fontSize,
     flex: 1,
   },
   expandIcon: {

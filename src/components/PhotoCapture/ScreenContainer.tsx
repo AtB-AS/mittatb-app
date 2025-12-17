@@ -1,13 +1,12 @@
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
-import {PropsWithChildren, ReactNode} from 'react';
+import {StyleSheet, useThemeContext, Theme} from '@atb/theme';
+import {PropsWithChildren, ReactNode, Ref} from 'react';
 import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Processing} from '@atb/components/loading';
 import {dictionary, useTranslation} from '@atb/translations';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -19,29 +18,10 @@ type Props = PropsWithChildren<{
   rightHeaderButton?: RightButtonProps;
   buttons?: ReactNode;
   isLoading?: boolean;
+  focusRef: Ref<any>;
 }>;
 
-export const ScreenContainer = (props: Props) => {
-  const {theme} = useThemeContext();
-  const themeColor = getThemeColor(theme);
-
-  return (
-    <FullScreenView
-      headerProps={{
-        leftButton: props.leftHeaderButton,
-        rightButton: props.rightHeaderButton,
-        color: themeColor,
-        setFocusOnLoad: false,
-      }}
-      contentColor={themeColor}
-    >
-      {props.isLoading && <LoadingBody />}
-      {!props.isLoading && <ContentBody {...props} />}
-    </FullScreenView>
-  );
-};
-
-const LoadingBody = () => {
+export const LoadingBody = () => {
   const style = useStyles();
   const {t} = useTranslation();
   return (
@@ -51,17 +31,42 @@ const LoadingBody = () => {
   );
 };
 
-const ContentBody = ({title, secondaryText, buttons, children}: Props) => {
+export const ScreenContainer = (props: Props) => {
+  const {theme} = useThemeContext();
+  const themeColor = getThemeColor(theme);
+
+  return (
+    <FullScreenView
+      focusRef={undefined} // content will be focused instead of header
+      headerProps={{
+        leftButton: props.leftHeaderButton,
+        rightButton: props.rightHeaderButton,
+        color: themeColor,
+      }}
+      contentColor={themeColor}
+    >
+      {props.isLoading && <LoadingBody />}
+      {!props.isLoading && <ContentBody {...props} />}
+    </FullScreenView>
+  );
+};
+
+const ContentBody = ({
+  title,
+  secondaryText,
+  buttons,
+  children,
+  focusRef,
+}: Props) => {
   const style = useStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
-  const focusRef = useFocusOnLoad();
   return (
     <>
       <View style={style.content}>
         <View style={style.header}>
           <View ref={focusRef} accessible>
-            <ThemeText color={themeColor} typography="heading--medium">
+            <ThemeText color={themeColor} typography="heading__l">
               {title}
             </ThemeText>
           </View>

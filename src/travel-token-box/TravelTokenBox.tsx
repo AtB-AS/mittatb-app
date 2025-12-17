@@ -10,8 +10,6 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {Button} from '@atb/components/button'; // re-add when new onboarding ready
 import {TravelTokenDeviceTitle} from './TravelTokenDeviceTitle';
-import {useNavigation} from '@react-navigation/native';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {MessageInfoText} from '@atb/components/message-info-text';
 
 const getInteractiveColor = (th: Theme) => th.color.interactive[2];
@@ -19,9 +17,11 @@ const getInteractiveColor = (th: Theme) => th.color.interactive[2];
 export function TravelTokenBox({
   showIfThisDevice,
   alwaysShowErrors,
+  onPressChangeButton,
 }: {
   showIfThisDevice: boolean;
   alwaysShowErrors: boolean;
+  onPressChangeButton: () => void;
 }) {
   const {theme} = useThemeContext();
   const interactiveColor = getInteractiveColor(theme);
@@ -30,10 +30,6 @@ export function TravelTokenBox({
   const {t} = useTranslation();
   const {mobileTokenStatus, isInspectable, tokens, retry} =
     useMobileTokenContext();
-
-  const navigation = useNavigation<RootNavigationProps>();
-  const onPressChangeButton = () =>
-    navigation.navigate('Root_SelectTravelTokenScreen');
 
   if (mobileTokenStatus === 'loading') {
     return <ActivityIndicator size="large" />;
@@ -52,6 +48,7 @@ export function TravelTokenBox({
           action: retry,
           text: t(dictionary.retry),
         }}
+        testID="tokenErrorMessage"
       />
     );
   }
@@ -80,7 +77,7 @@ export function TravelTokenBox({
           )}
           <View style={styles.activeTravelTokenInfo}>
             <ThemeText
-              typography="body__primary--bold"
+              typography="body__m__strong"
               color={interactiveColor.default}
             >
               {t(TravelTokenBoxTexts.title) +
@@ -88,8 +85,8 @@ export function TravelTokenBox({
                   isTravelCard
                     ? TravelTokenBoxTexts.tcardName
                     : inspectableToken.isThisDevice
-                    ? TravelTokenBoxTexts.thisDeviceSuffix
-                    : TravelTokenBoxTexts.otherDeviceSuffix,
+                      ? TravelTokenBoxTexts.thisDeviceSuffix
+                      : TravelTokenBoxTexts.otherDeviceSuffix,
                 )}
             </ThemeText>
 
@@ -104,6 +101,7 @@ export function TravelTokenBox({
           type="error"
           textColor={interactiveColor.default}
           message={t(TravelTokenBoxTexts.errorMessages.noInspectableToken)}
+          testID="noInspectableToken"
         />
       )}
       <Button
@@ -116,7 +114,7 @@ export function TravelTokenBox({
             ? t(TravelTokenBoxTexts.change)
             : t(TravelTokenBoxTexts.select)
         }
-        testID="continueWithoutChangingTravelTokenButton"
+        testID="changeTravelTokenButton"
       />
     </View>
   );

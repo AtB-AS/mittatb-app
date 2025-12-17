@@ -28,6 +28,7 @@ import {useProfileQuery} from '@atb/queries';
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
 import {useAuthContext} from '@atb/modules/auth';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type NotificationsScreenProps =
   ProfileScreenProps<'Profile_NotificationsScreen'>;
@@ -86,17 +87,21 @@ export const Profile_NotificationsScreen = ({
   const handleGroupToggle = async (id: string, enabled: boolean) => {
     updateConfig({config_type: 'group', id, enabled});
   };
+
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
         title: t(
           ProfileTexts.sections.settings.linkSectionItems.notifications.heading,
         ),
       }}
       parallaxContent={(focusRef) => (
         <View style={style.parallaxContent} ref={focusRef} accessible={true}>
-          <ThemeText color={themeColor} typography="heading--medium">
+          <ThemeText color={themeColor} typography="heading__l">
             {t(
               ProfileTexts.sections.settings.linkSectionItems.notifications
                 .heading,

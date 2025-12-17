@@ -17,7 +17,6 @@ import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {UserBonusBalance} from './UserBonusBalance';
 import {isDefined} from '@atb/utils/presence';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 
 type Props = SectionProps & {
   bonusProduct: BonusProductType;
@@ -36,7 +35,6 @@ export const PayWithBonusPointsCheckbox = ({
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t, language} = useTranslation();
-  const {logEvent} = useBottomSheetContext();
 
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
@@ -68,10 +66,6 @@ export const PayWithBonusPointsCheckbox = ({
           active={isChecked}
           onPress={() => {
             onPress();
-            logEvent('Bonus', 'bonus points checkbox toggled', {
-              bonusProductId: bonusProduct.id,
-              newState: isChecked,
-            });
           }}
           disabled={isDisabled}
           accessibilityRole="checkbox"
@@ -88,14 +82,14 @@ export const PayWithBonusPointsCheckbox = ({
                 ) ?? ''}
               </ThemeText>
               <View style={styles.currentPointsRow}>
-                <ThemeText typography="body__secondary" color="secondary">
+                <ThemeText typography="body__s" color="secondary">
                   {t(BonusProgramTexts.youHave)}
                 </ThemeText>
                 <UserBonusBalance
-                  typography="body__secondary"
+                  typography="body__s"
                   color={theme.color.foreground.dynamic.secondary}
                 />
-                <ThemeText typography="body__secondary" color="secondary">
+                <ThemeText typography="body__s" color="secondary">
                   {t(BonusProgramTexts.points)}
                 </ThemeText>
               </View>

@@ -34,7 +34,7 @@ export const ValidTo = ({fc}: Props) => {
 
   return (
     <ThemeText
-      typography="body__secondary"
+      typography="body__s"
       color={theme.color.foreground.dynamic.secondary}
       style={{}}
     >

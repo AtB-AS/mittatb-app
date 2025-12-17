@@ -15,7 +15,7 @@ export const UserBonusBalance = ({color, typography}: Props) => {
 
   return (
     <>
-      {userBonusBalanceStatus === 'loading' ? (
+      {userBonusBalanceStatus === 'pending' ? (
         <ActivityIndicator />
       ) : (
         <ThemeText typography={typography} color={color}>

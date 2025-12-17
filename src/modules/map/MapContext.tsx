@@ -1,102 +1,104 @@
-import React, {createContext, useContext, useMemo, useState} from 'react';
-import {AutoSelectableMapItem, MapFilterType} from '@atb/modules/map';
-import {Feature, GeoJsonProperties, Point} from 'geojson';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-type AutoSelectedFeature = Feature<Point, GeoJsonProperties> | undefined;
-import {ShmoBookingState} from '@atb/api/types/mobility';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
+import {MapFilterType} from '@atb/modules/map';
 import {useUserMapFilters} from './hooks/use-map-filter';
+import {
+  mapStateReducer,
+  ReducerMapState,
+  ReducerMapStateAction,
+} from './mapStateReducer';
+import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
+import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
+import {Feature, GeoJsonProperties, Point} from 'geojson';
+import MapboxGL from '@rnmapbox/maps';
+import {useRemoteConfigContext} from '../remote-config';
 
 type MapContextState = {
-  bottomSheetToAutoSelect?: AutoSelectableBottomSheet;
-  setBottomSheetToAutoSelect: (
-    bottomSheetToAutoSelect?: AutoSelectableBottomSheet,
-  ) => void;
-  bottomSheetCurrentlyAutoSelected?: AutoSelectableBottomSheet;
-  setBottomSheetCurrentlyAutoSelected: (
-    bottomSheetToAutoSelect?: AutoSelectableBottomSheet,
-  ) => void;
-  setAutoSelectedMapItem: (mapItemToAutoSelect?: AutoSelectableMapItem) => void;
-  autoSelectedFeature?: AutoSelectedFeature;
   mapFilter?: MapFilterType;
   setMapFilter: (mapFilter: MapFilterType) => void;
-  mapFilterIsOpen: boolean;
-  setMapFilterIsOpen: (mapFilterIsOpen: boolean) => void;
+  mapState: ReducerMapState;
+  dispatchMapState: React.Dispatch<ReducerMapStateAction>;
+  paddingBottomMap: number;
+  setPaddingBottomMap: (value: number) => void;
+  givenShmoConsent: boolean;
+  setGivenShmoConsent: (value: boolean) => void;
+  currentBottomSheet: {
+    bottomSheetType: MapBottomSheetType;
+    feature: Feature<Point, GeoJsonProperties> | null;
+  };
+  setCurrentBottomSheet: (value: {
+    bottomSheetType: MapBottomSheetType;
+    feature: Feature<Point, GeoJsonProperties> | null;
+  }) => void;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
 
-export enum AutoSelectableBottomSheetType {
+export enum MapBottomSheetType {
   Scooter = 'SCOOTER',
   Bicycle = 'BICYCLE',
   BikeStation = 'BIKE_STATION',
   CarStation = 'CAR_STATION',
-  // StopPlace = 'STOP_PLACE', // add support if needed
-  // ParkAndRideStation = 'PARK_AND_RIDE_STATION', // add support if needed
+  StopPlace = 'STOP_PLACE',
+  ParkAndRideStation = 'PARK_AND_RIDE_STATION',
+  Filter = 'FILTER',
+  ExternalMap = 'EXTERNAL_MAP',
+  FinishedBooking = 'FINISHED_BOOKING',
+  Station = 'STATION',
+  AutoDispatchOnMapFocus = 'AUTO_DISPATCH_ON_MAP_FOCUS',
+  None = 'NONE',
 }
-
-export type AutoSelectableBottomSheet = {
-  type: AutoSelectableBottomSheetType;
-  id: string;
-  shmoBookingState?: ShmoBookingState;
-};
 
 type Props = {
   children: React.ReactNode;
 };
 
 export const MapContextProvider = ({children}: Props) => {
-  const [bottomSheetToAutoSelect, setBottomSheetToAutoSelect] =
-    useState<AutoSelectableBottomSheet>();
+  const {mapbox_api_token} = useRemoteConfigContext();
+  useEffect(() => {
+    MapboxGL.setAccessToken(mapbox_api_token);
+  }, [mapbox_api_token]);
+
+  const [mapState, dispatchMapState] = useReducer(mapStateReducer, {
+    bottomSheetType: MapBottomSheetType.None,
+  });
+
+  const [givenShmoConsent, setGivenShmoConsent] = usePersistedBoolState(
+    storage,
+    StorageModelKeysEnum.ScooterConsent,
+    false,
+  );
 
   const {mapFilter, setMapFilter} = useUserMapFilters();
-  const [mapFilterIsOpen, setMapFilterIsOpen] = useState(false);
 
-  const [
-    bottomSheetCurrentlyAutoSelected,
-    setBottomSheetCurrentlyAutoSelected,
-  ] = useState<AutoSelectableBottomSheet>();
+  const [currentBottomSheet, setCurrentBottomSheet] = useState<{
+    bottomSheetType: MapBottomSheetType;
+    feature: Feature<Point, GeoJsonProperties> | null;
+  }>({
+    bottomSheetType: MapBottomSheetType.None,
+    feature: null,
+  });
 
-  const [autoSelectedMapItem, setAutoSelectedMapItem] =
-    useState<AutoSelectableMapItem>();
-
-  // todo: support station selection
-  const autoSelectedFeature: AutoSelectedFeature = useMemo(
-    () =>
-      !autoSelectedMapItem?.id
-        ? undefined
-        : {
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [autoSelectedMapItem?.lon, autoSelectedMapItem?.lat],
-            },
-            // properties should match the one received from the map onPressEvent
-            properties: {
-              id: autoSelectedMapItem.id,
-              system_id: autoSelectedMapItem?.system.id,
-              count: 1,
-              vehicle_type_form_factor:
-                mapAutoSelectableBottomSheetTypeToFormFactor(
-                  bottomSheetCurrentlyAutoSelected?.type,
-                ),
-            },
-          },
-    [autoSelectedMapItem, bottomSheetCurrentlyAutoSelected?.type],
-  );
+  const [paddingBottomMap, setPaddingBottomMap] = useState(0);
 
   return (
     <MapContext.Provider
       value={{
-        bottomSheetToAutoSelect,
-        setBottomSheetToAutoSelect,
-        bottomSheetCurrentlyAutoSelected,
-        setBottomSheetCurrentlyAutoSelected,
-        setAutoSelectedMapItem,
-        autoSelectedFeature,
         mapFilter,
         setMapFilter,
-        mapFilterIsOpen,
-        setMapFilterIsOpen,
+        mapState,
+        dispatchMapState,
+        paddingBottomMap,
+        setPaddingBottomMap,
+        givenShmoConsent,
+        setGivenShmoConsent,
+        currentBottomSheet,
+        setCurrentBottomSheet,
       }}
     >
       {children}
@@ -123,21 +125,4 @@ export function useMapContext() {
     throw new Error('useMapState must be used within a MapContextProvider');
   }
   return context;
-}
-
-function mapAutoSelectableBottomSheetTypeToFormFactor(
-  autoSelectableBottomSheetType?: AutoSelectableBottomSheetType,
-): FormFactor | undefined {
-  switch (autoSelectableBottomSheetType) {
-    case AutoSelectableBottomSheetType.Bicycle:
-      return FormFactor.Bicycle;
-    case AutoSelectableBottomSheetType.Scooter:
-      return FormFactor.Scooter;
-    case AutoSelectableBottomSheetType.BikeStation:
-      return FormFactor.Bicycle;
-    case AutoSelectableBottomSheetType.CarStation:
-      return FormFactor.Car;
-    default:
-      return undefined;
-  }
 }

@@ -19,10 +19,10 @@ export type ButtonSectionItemProps = SectionItemProps<{
   onIconPress?(): void;
   iconAccessibility?: AccessibilityProps;
   placeholder?: string;
-  value?: string | JSX.Element;
+  value?: string | React.JSX.Element;
   inlineValue?: boolean;
   highlighted?: boolean;
-  icon?: NavigationIconTypes | JSX.Element;
+  icon?: NavigationIconTypes | React.JSX.Element;
   containerStyle?: ViewStyle;
   testID?: string;
   focusRef?: RefObject<any>;
@@ -76,9 +76,7 @@ export function ButtonSectionItem({
     isStringText(value) || !value ? (
       <ThemeText
         numberOfLines={1}
-        typography={
-          value && highlighted ? 'body__primary--bold' : 'body__primary'
-        }
+        typography={value && highlighted ? 'body__m__strong' : 'body__m'}
         style={!value && styles.faded}
       >
         {value ?? placeholder}
@@ -98,7 +96,7 @@ export function ButtonSectionItem({
         {...props}
       >
         <View style={sectionStyles.spaceBetween}>
-          <ThemeText typography="body__secondary" style={styles.label}>
+          <ThemeText typography="body__s" style={styles.label}>
             {label}
           </ThemeText>
           {inlineValue && (

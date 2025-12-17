@@ -1,14 +1,15 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import React from 'react';
+import React, {Ref} from 'react';
 
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {OnboardingFullScreenView} from '@atb/modules/onboarding';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {Theme} from '@atb/theme/colors';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
 import {ButtonProps} from '@atb/components/button';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 type DescriptionLink = {
   text: string;
@@ -17,7 +18,7 @@ type DescriptionLink = {
 };
 
 type OnboardingScreenComponentParams = {
-  illustration?: JSX.Element;
+  illustration?: React.JSX.Element;
   title: string;
   description?: string;
   descriptionLink?: DescriptionLink;
@@ -27,10 +28,12 @@ type OnboardingScreenComponentParams = {
   footerButton?: ButtonProps;
   testID?: string;
   headerProps?: ScreenHeaderProps;
-  contentNode?: JSX.Element;
+  contentNode?: React.JSX.Element;
+  focusRef: Ref<any>;
 };
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getInteractiveColor = (theme: Theme) => theme.color.interactive[0];
 
 export const OnboardingScreenComponent = ({
   illustration,
@@ -44,14 +47,16 @@ export const OnboardingScreenComponent = ({
   testID,
   headerProps,
   contentNode,
+  focusRef,
 }: OnboardingScreenComponentParams) => {
   const styles = useThemeStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
-  const focusRef = useFocusOnLoad();
+  const descriptionLinkColor = getInteractiveColor(theme).default.background;
 
   return (
     <OnboardingFullScreenView
+      focusRef={focusRef}
       footerButton={footerButton}
       secondaryFooterButton={secondaryFooterButton}
       vippsButton={vippsButton}
@@ -62,7 +67,7 @@ export const OnboardingScreenComponent = ({
       <View style={styles.header}>{illustration}</View>
       <View ref={focusRef} accessible collapsable={false}>
         <ThemeText
-          typography="body__primary--big--bold"
+          typography="heading__xl"
           color={themeColor}
           style={styles.title}
           accessibilityRole="header"
@@ -72,7 +77,7 @@ export const OnboardingScreenComponent = ({
       </View>
       {description && (
         <ThemeText
-          typography="body__primary"
+          typography="body__m"
           color={themeColor}
           style={styles.description}
         >
@@ -85,14 +90,19 @@ export const OnboardingScreenComponent = ({
           onPress={descriptionLink.onPress}
           accessibilityRole="link"
           accessibilityHint={descriptionLink.a11yHint}
+          style={styles.descriptionLink}
         >
           <ThemeText
-            typography="body__primary--underline"
-            color={themeColor}
-            style={styles.descriptionLink}
+            typography="body__m__underline"
+            color={descriptionLinkColor}
           >
             {descriptionLink.text}
           </ThemeText>
+          <ThemeIcon
+            svg={ExternalLink}
+            size="normal"
+            color={descriptionLinkColor}
+          />
         </PressableOpacity>
       )}
     </OnboardingFullScreenView>
@@ -112,6 +122,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
   },
   descriptionLink: {
-    textAlign: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: theme.spacing.small,
+    marginTop: theme.spacing.small,
   },
 }));

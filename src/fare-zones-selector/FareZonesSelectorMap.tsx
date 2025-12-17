@@ -10,7 +10,7 @@ import {
   hitboxCoveringIconOnly,
   MapCameraConfig,
   NationalStopRegistryFeatures,
-  PositionArrow,
+  LocationArrow,
   useMapViewConfig,
 } from '@atb/modules/map';
 import hexToRgba from 'hex-to-rgba';
@@ -29,7 +29,6 @@ import {
   usePurchaseSelectionBuilder,
   useSelectableFareZones,
 } from '@atb/modules/purchase-selection';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type Props = {
   selection: PurchaseSelectionType;
@@ -91,7 +90,6 @@ const FareZonesSelectorMap = ({
   };
 
   const mapViewConfig = useMapViewConfig();
-  const {isMapV2Enabled} = useFeatureTogglesContext();
 
   return (
     <>
@@ -135,12 +133,11 @@ const FareZonesSelectorMap = ({
             }}
             {...mapViewConfig}
           >
-            {isMapV2Enabled && (
-              <NationalStopRegistryFeatures
-                selectedFeaturePropertyId={undefined}
-                onMapItemClick={undefined}
-              />
-            )}
+            <NationalStopRegistryFeatures
+              selectedFeaturePropertyId={undefined}
+              onMapItemClick={undefined}
+            />
+
             <MapboxGL.ShapeSource
               id="tariffZonesShape"
               shape={featureCollection}
@@ -205,7 +202,7 @@ const FareZonesSelectorMap = ({
             {location && (
               <View>
                 <View style={styles.mapControls}>
-                  <PositionArrow
+                  <LocationArrow
                     onPress={() =>
                       flyToLocation({
                         coordinates: location?.coordinates,

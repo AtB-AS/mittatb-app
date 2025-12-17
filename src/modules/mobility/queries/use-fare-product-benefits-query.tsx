@@ -12,7 +12,7 @@ export const useFareProductBenefitsQuery = (
     queryKey: ['fare-product-benefits', userId, productId],
     queryFn: () => (productId ? getFareProductBenefits(productId) : []),
     staleTime: ONE_HOUR_MS,
-    cacheTime: ONE_HOUR_MS,
+    gcTime: ONE_HOUR_MS,
     enabled: authStatus === 'authenticated',
   });
 };

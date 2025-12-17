@@ -11,8 +11,13 @@ import {
 } from '@atb/modules/configuration';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
+import {ProfileScreenProps} from './navigation-types';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
-export const Profile_DefaultUserProfileScreen = () => {
+type Props = ProfileScreenProps<'Profile_DefaultUserProfileScreen'>;
+
+export const Profile_DefaultUserProfileScreen = ({navigation}: Props) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {
     setPreference,
     preferences: {defaultUserTypeString},
@@ -34,9 +39,10 @@ export const Profile_DefaultUserProfileScreen = () => {
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(UserProfileSettingsTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading

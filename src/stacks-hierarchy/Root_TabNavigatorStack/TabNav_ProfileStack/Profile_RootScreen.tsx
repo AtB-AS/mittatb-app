@@ -22,7 +22,7 @@ import {View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
-import {ContentHeading} from '@atb/components/heading';
+import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -36,12 +36,16 @@ import {UserInfo} from './components/UserInfo';
 import {Button} from '@atb/components/button';
 import {Card, Receipt} from '@atb/assets/svg/mono-icons/ticketing';
 import {Star} from '@atb/assets/svg/mono-icons/bonus';
-import {Favorite} from '@atb/assets/svg/mono-icons/places';
-import {Car} from '@atb/assets/svg/mono-icons/transportation';
+import {Favorite, Parking} from '@atb/assets/svg/mono-icons/places';
 import {Info, Unknown} from '@atb/assets/svg/mono-icons/status';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {useChatUnreadCount} from '@atb/modules/chat';
 import Intercom, {Space} from '@intercom/intercom-react-native';
+import {
+  GlobalMessage,
+  GlobalMessageContextEnum,
+} from '@atb/modules/global-messages';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -66,13 +70,25 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const unreadCount = useChatUnreadCount();
   const {theme} = useThemeContext();
   const {enable_intercom} = useRemoteConfigContext();
+  const neutralContrastColor = theme.color.background.neutral[1];
+
+  const focusRef = useFocusOnLoad(navigation);
 
   return (
     <>
       <FullScreenView
+        focusRef={focusRef}
         headerProps={{
           title: t(ProfileTexts.header.title),
+          color: neutralContrastColor,
         }}
+        parallaxContent={(focusRef) => (
+          <ScreenHeading
+            ref={focusRef}
+            text={t(ProfileTexts.header.title)}
+            isLarge={true}
+          />
+        )}
       >
         <View
           testID="profileHomeScrollView"
@@ -80,6 +96,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           style={style.contentContainer}
         >
           <View style={style.mediumGap}>
+            <GlobalMessage
+              style={style.globalMessage}
+              globalMessageContext={GlobalMessageContextEnum.appProfile}
+              textColor={neutralContrastColor}
+            />
             <UserInfo
               navigateToEditProfileScreen={() =>
                 navigation.navigate('Profile_EditProfileScreen')
@@ -168,20 +189,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               onPress={() => navigation.navigate('Profile_FavoriteScreen')}
               testID="favoriteButton"
             />
-            {isSmartParkAndRideEnabled && (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.account.linkSectionItems
-                    .smartParkAndRide.label,
-                )}
-                leftIcon={{svg: Car}}
-                onPress={() =>
-                  navigation.navigate('Profile_SmartParkAndRideScreen')
-                }
-                label="new"
-                testID="smartParkAndRideButton"
-              />
-            )}
           </Section>
 
           <ContentHeading text={t(ProfileTexts.sections.newFeatures.heading)} />
@@ -195,6 +202,24 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               onPress={() => navigation.navigate('Profile_EnrollmentScreen')}
               testID="invitationCodeButton"
             />
+            {isSmartParkAndRideEnabled && (
+              <LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.account.linkSectionItems
+                    .smartParkAndRide.label,
+                )}
+                leftIcon={{svg: Parking}}
+                onPress={() => {
+                  analytics.logEvent(
+                    'Smart Park & Ride',
+                    'Profile button clicked',
+                  );
+                  navigation.navigate('Profile_SmartParkAndRideScreen', {});
+                }}
+                label="new"
+                testID="smartParkAndRideButton"
+              />
+            )}
           </Section>
           {enable_ticketing && (
             <>
@@ -320,7 +345,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             />
           )}
           <View style={style.debugInfoContainer}>
-            <ThemeText typography="body__secondary" color="secondary">
+            <ThemeText typography="body__s" color="secondary">
               v{version} ({buildNumber})
             </ThemeText>
             {config?.installId && (
@@ -330,7 +355,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                     <ScreenReaderAnnouncement
                       message={t(ProfileTexts.installId.wasCopiedAlert)}
                     />
-                    <ThemeText typography="body__secondary" color="secondary">
+                    <ThemeText typography="body__s" color="secondary">
                       ✅ {t(ProfileTexts.installId.wasCopiedAlert)}
                     </ThemeText>
                   </>
@@ -341,13 +366,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 )}
                 accessibilityHint={t(ProfileTexts.installId.a11yHint)}
               >
-                <ThemeText typography="body__secondary" color="secondary">
+                <ThemeText typography="body__s" color="secondary">
                   {t(ProfileTexts.installId.label(config.installId))}
                 </ThemeText>
               </ClickableCopy>
             )}
             <ThemeText
-              typography="body__secondary"
+              typography="body__s"
               color="secondary"
               accessibilityLabel={t(
                 ProfileTexts.orgNumberA11yLabel(APP_ORG_NUMBER),
@@ -383,5 +408,8 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   logoutButton: {
     marginVertical: theme.spacing.large,
+  },
+  globalMessage: {
+    marginVertical: theme.spacing.xSmall,
   },
 }));

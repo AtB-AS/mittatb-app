@@ -16,8 +16,13 @@ import {Support} from '@atb/assets/svg/mono-icons/actions';
 import {CustomerServiceText} from '@atb/translations/screens/subscreens/CustomerService';
 import {ThemedContactIllustration} from '@atb/theme/ThemedAssets';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_HelpAndContactScreen = () => {
+type Props = ProfileScreenProps<'Profile_HelpAndContactScreen'>;
+
+export const Profile_HelpAndContactScreen = ({navigation}: Props) => {
   const style = useStyle();
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
@@ -44,12 +49,15 @@ export const Profile_HelpAndContactScreen = () => {
   const hasContactPhoneNumber = !!contactPhoneNumber;
   const backgroundColor = theme.color.background.neutral[1];
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <>
       <FullScreenView
+        focusRef={focusRef}
         headerProps={{
           title: t(ProfileTexts.sections.contact.heading),
-          leftButton: {type: 'back', withIcon: true},
+          leftButton: {type: 'back'},
         }}
         parallaxContent={(focusRef) => (
           <ScreenHeading
@@ -133,7 +141,9 @@ export const Profile_HelpAndContactScreen = () => {
                 rightIcon={{svg: Support}}
                 accessibilityRole="button"
                 testID="contactCustomerServiceButton"
-                onPress={async () => openLink(`tel:${contactPhoneNumber}`)}
+                onPress={async () =>
+                  Linking.openURL(`tel:${contactPhoneNumber}`)
+                }
               />
             </View>
           )}
@@ -145,7 +155,7 @@ export const Profile_HelpAndContactScreen = () => {
 
 const openLink = async (url: string) => {
   if (await Linking.canOpenURL(url)) {
-    Linking.openURL(url);
+    openInAppBrowser(url, 'close');
   } else {
     Bugsnag.notify(new Error(`Could not open URL: ${url}`));
   }

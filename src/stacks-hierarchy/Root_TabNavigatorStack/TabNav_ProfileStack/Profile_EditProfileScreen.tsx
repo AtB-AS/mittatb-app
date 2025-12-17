@@ -1,5 +1,5 @@
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, Alert, Linking, View} from 'react-native';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import React, {useEffect, useState} from 'react';
 import {dictionary, useTranslation} from '@atb/translations';
@@ -17,6 +17,13 @@ import {CustomerProfile} from '@atb/api/types/profile';
 import {useProfileQuery, useProfileUpdateMutation} from '@atb/queries';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
+import {useGetBirthdateQuery} from '@atb/modules/mobility';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {ErrorResponse} from '@atb-as/utils';
+import {errorDetailsToResponseData} from '@atb/api/utils';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;
 
@@ -32,7 +39,7 @@ export const Profile_EditProfileScreen = ({
   } = useAuthContext();
   const {
     mutate: updateProfile,
-    isLoading: isLoadingUpdateProfile,
+    isPending: isLoadingUpdateProfile,
     isError: isErrorUpdateProfile,
     isSuccess: isSuccessUpdateProfile,
     error: errorUpdate,
@@ -44,6 +51,13 @@ export const Profile_EditProfileScreen = ({
     refetch: refetchProfile,
     isRefetching: isRefetchingProfile,
   } = useProfileQuery();
+
+  const {
+    data: birthdateRes,
+    isLoading: isLoadingGetBirthdate,
+    isError: isErrorGetBirthdate,
+  } = useGetBirthdateQuery();
+
   const {disable_email_field_in_profile_page} = useRemoteConfigContext();
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
@@ -53,7 +67,7 @@ export const Profile_EditProfileScreen = ({
   const [surname, setSurname] = useState('');
   const [invalidEmail, setInvalidEmail] = useState<boolean>(false);
   const isLoadingOrSubmittingProfile =
-    isLoadingUpdateProfile || isLoadingGetProfile;
+    isLoadingUpdateProfile || isLoadingGetProfile || isLoadingGetBirthdate;
 
   const phoneNumber = authPhoneNumber && formatPhoneNumber(authPhoneNumber);
 
@@ -67,12 +81,31 @@ export const Profile_EditProfileScreen = ({
 
   const getEmailErrorText = (
     invalidEmail: boolean,
-    errorOnUpdate: any,
+    errorResponse: ErrorResponse | null,
   ): string | undefined => {
-    if (errorOnUpdate?.status === 602) {
-      return t(EditProfileTexts.personalDetails.email.unavailableError);
+    if (!!errorResponse) {
+      const errorResponseData = errorDetailsToResponseData(errorResponse);
+
+      if ('upstreamError' in errorResponseData) {
+        const upstreamError = JSON.parse(errorResponseData.upstreamError);
+        if (upstreamError['errorCode'] === 602) {
+          return t(EditProfileTexts.personalDetails.email.unavailableError);
+        }
+      }
     } else if (invalidEmail) {
       return t(EditProfileTexts.personalDetails.email.formattingError);
+    }
+  };
+
+  const handleOpenVippsApp = async () => {
+    const deepLink = __DEV__ ? 'vippsMT://' : 'vipps://';
+
+    const canOpen = await Linking.canOpenURL(deepLink);
+
+    if (canOpen) {
+      await Linking.openURL(deepLink);
+    } else {
+      Alert.alert(t(EditProfileTexts.personalDetails.birthdate.openVippsError));
     }
   };
 
@@ -88,16 +121,19 @@ export const Profile_EditProfileScreen = ({
     }
   }, [customerProfile]);
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(EditProfileTexts.header.title),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <View style={styles.parallaxContent} ref={focusRef} accessible={true}>
           <ThemeText
-            typography="heading--medium"
+            typography="heading__l"
             color={themeColor}
             style={{flexShrink: 1}}
           >
@@ -169,7 +205,7 @@ export const Profile_EditProfileScreen = ({
                   <ThemeText>
                     {t(EditProfileTexts.personalDetails.email.label)}
                   </ThemeText>
-                  <ThemeText typography="body__secondary" color="secondary">
+                  <ThemeText typography="body__s" color="secondary">
                     {t(
                       EditProfileTexts.personalDetails.email
                         .disabledWithRemoteConfig,
@@ -200,16 +236,48 @@ export const Profile_EditProfileScreen = ({
               )}
               {phoneNumber && (
                 <View style={styles.phone}>
-                  <ThemeText>
+                  <ThemeText typography="body__s">
                     {t(EditProfileTexts.personalDetails.phone.header)}
                   </ThemeText>
-                  <ThemeText typography="body__secondary" color="secondary">
+                  <ThemeText typography="body__s" color="secondary">
                     {t(
                       EditProfileTexts.personalDetails.phone.loggedIn(
                         phoneNumber,
                       ),
                     )}
                   </ThemeText>
+                </View>
+              )}
+
+              {!!birthdateRes?.birthdate && !isErrorGetBirthdate && (
+                <View style={styles.birthdateWrapper}>
+                  <ThemeText typography="body__s">
+                    {t(EditProfileTexts.personalDetails.birthdate.header)}
+                  </ThemeText>
+                  <ThemeText style={styles.birthdate}>
+                    {new Intl.DateTimeFormat('nb-NO', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    }).format(new Date(birthdateRes.birthdate))}
+                  </ThemeText>
+                  <ThemeText typography="body__s" color="secondary">
+                    {t(EditProfileTexts.personalDetails.birthdate.info)}
+                  </ThemeText>
+
+                  <PressableOpacity
+                    onPress={handleOpenVippsApp}
+                    accessibilityRole="link"
+                    accessibilityHint={t(
+                      EditProfileTexts.personalDetails.birthdate.a11yHintLink,
+                    )}
+                    style={styles.vippsLink}
+                  >
+                    <ThemeText typography="body__m__underline">
+                      {t(EditProfileTexts.personalDetails.birthdate.link)}
+                    </ThemeText>
+                    <ThemeIcon svg={ExternalLink} />
+                  </PressableOpacity>
                 </View>
               )}
 
@@ -249,7 +317,7 @@ export const Profile_EditProfileScreen = ({
             </ThemeText>
             {phoneNumber && (
               <ThemeText
-                typography="body__secondary"
+                typography="body__s"
                 color="secondary"
                 style={styles.profileItem}
               >
@@ -262,7 +330,7 @@ export const Profile_EditProfileScreen = ({
                   {t(EditProfileTexts.profileInfo.customerNumber)}
                 </ThemeText>
                 <ThemeText
-                  typography="body__secondary"
+                  typography="body__s"
                   color="secondary"
                   accessibilityLabel={numberToAccessibilityString(
                     customerNumber,
@@ -309,6 +377,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacing.xLarge,
     marginBottom: theme.spacing.medium,
   },
+  birthdateWrapper: {
+    marginHorizontal: theme.spacing.xLarge,
+    marginBottom: theme.spacing.medium,
+    marginTop: theme.spacing.medium,
+    gap: theme.spacing.small,
+  },
+  birthdate: {
+    letterSpacing: 0.8,
+  },
   submitSection: {
     margin: theme.spacing.medium,
   },
@@ -330,5 +407,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   deleteProfile: {
     marginHorizontal: theme.spacing.medium,
     marginBottom: theme.spacing.xLarge,
+  },
+  vippsLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.small,
   },
 }));

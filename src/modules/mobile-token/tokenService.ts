@@ -22,6 +22,7 @@ import {isRemoteTokenStateError, parseTokenServerErrors} from './utils';
 import {storage} from '@atb/modules/storage';
 import {API_BASE_URL} from '@env';
 import {getCurrentUserIdGlobal} from '@atb/modules/auth';
+import {ErrorResponse} from '@atb-as/utils';
 
 const CorrelationIdHeaderName = 'Atb-Correlation-Id';
 const SignedTokenHeaderName = 'Atb-Signed-Token';
@@ -35,11 +36,7 @@ export type TokenService = RemoteTokenService & {
     secureContainer: string | undefined,
     traceId: string,
   ) => Promise<RemoteToken[]>;
-  toggle: (
-    tokenId: string,
-    traceId: string,
-    bypassRestrictions: boolean,
-  ) => Promise<RemoteToken[]>;
+  toggle: (tokenId: string, traceId: string) => Promise<RemoteToken[]>;
   getTokenToggleDetails: () => Promise<TokenLimitResponse>;
   postTokenStatus: (
     tokenId: string | undefined,
@@ -48,17 +45,16 @@ export type TokenService = RemoteTokenService & {
   ) => Promise<void>;
 };
 
-const handleError = (err: any) => {
-  throw parseTokenServerErrors(err.response?.data);
+const handleError = (err: ErrorResponse) => {
+  throw parseTokenServerErrors(err);
 };
 
 const getBaseUrl = async () => {
   const debugUrl = await storage.get('@ATB_debug_token_server_ip_address');
   const authId = getCurrentUserIdGlobal();
   if (debugUrl && debugUrl.length > 0) {
-    client.defaults.headers.common[
-      'entur-customer-account-id'
-    ] = `ATB:CustomerAccount:${authId}`;
+    client.defaults.headers.common['entur-customer-account-id'] =
+      `ATB:CustomerAccount:${authId}`;
     return debugUrl;
   } else return API_BASE_URL;
 };
@@ -210,15 +206,11 @@ export const tokenService: TokenService = {
       })
       .then((res) => res.data.tokens)
       .catch(handleError),
-  toggle: async (
-    tokenId: string,
-    traceId: string,
-    bypassRestrictions: boolean,
-  ) =>
+  toggle: async (tokenId: string, traceId: string) =>
     client
       .post<ToggleResponse>(
         '/token/v1/toggle',
-        {tokenId, bypassRestrictions},
+        {tokenId},
         {
           headers: {
             [CorrelationIdHeaderName]: traceId,

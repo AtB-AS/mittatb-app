@@ -11,49 +11,62 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {ContentHeading} from '@atb/components/heading';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {
+  getReferenceDataName,
+  useFirestoreConfigurationContext,
+} from '@atb/modules/configuration';
 import {TipsAndInformation} from './tips-and-information/TipsAndInformation';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {MobilitySingleBenefitInfoSectionItem} from '@atb/modules/mobility';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import {FlexTicketDiscountInfo} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FlexTicketDiscountInfo';
+import React from 'react';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;
 
-export const Root_TicketInformationScreen = (props: Props) => {
+export const Root_TicketInformationScreen = ({navigation, route}: Props) => {
+  const {preassignedFareProductId, userProfilesWithCountAndOffer} =
+    route.params;
+
   const {t, language} = useTranslation();
   const styles = useStyle();
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
-  const {preassignedFareProducts, fareProductTypeConfigs} =
-    useFirestoreConfigurationContext();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
+
   const {isTipsAndInformationEnabled} = useFeatureTogglesContext();
   const {benefits} = useOperatorBenefitsForFareProduct(
-    props.route.params.preassignedFareProductId,
+    preassignedFareProductId,
   );
 
-  const fareProductTypeConfig = fareProductTypeConfigs.find(
-    (f) => f.type === props.route.params.fareProductTypeConfigType,
-  );
   const preassignedFareProduct = preassignedFareProducts.find(
-    (p) => p.id === props.route.params.preassignedFareProductId,
+    (p) => p.id === preassignedFareProductId,
   );
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (f) => f.type === preassignedFareProduct?.type,
+  );
+
+  const focusRef = useFocusOnLoad(navigation);
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(
           PurchaseOverviewTexts.ticketInformation.informationDetails.title,
         ),
-        leftButton: {type: 'close'},
+        leftButton: {type: 'back'},
       }}
       contentColor={themeColor}
     >
       <ScrollView contentContainerStyle={styles.container}>
-        {preassignedFareProduct?.productDescription && (
+        {preassignedFareProduct && (
           <>
             <ContentHeading
-              color={themeColor}
               text={t(
                 PurchaseOverviewTexts.ticketInformation.informationDetails
                   .descriptionHeading,
@@ -68,15 +81,12 @@ export const Root_TicketInformationScreen = (props: Props) => {
                         iconSize="xSmall"
                         modes={fareProductTypeConfig?.transportModes}
                       />
-                      <ThemeText typography="body__primary--bold">
-                        {getTextForLanguage(
-                          fareProductTypeConfig.name,
-                          language,
-                        )}
+                      <ThemeText typography="body__m__strong">
+                        {getReferenceDataName(preassignedFareProduct, language)}
                       </ThemeText>
                     </View>
                   )}
-                  <ThemeText typography="body__secondary" isMarkdown={true}>
+                  <ThemeText typography="body__s" isMarkdown={true}>
                     {getTextForLanguage(
                       preassignedFareProduct.productDescription,
                       language,
@@ -90,10 +100,14 @@ export const Root_TicketInformationScreen = (props: Props) => {
             </Section>
           </>
         )}
+        {userProfilesWithCountAndOffer && (
+          <FlexTicketDiscountInfo
+            userProfiles={userProfilesWithCountAndOffer}
+          />
+        )}
         {isTipsAndInformationEnabled && (
           <>
             <ContentHeading
-              color={themeColor}
               text={t(
                 PurchaseOverviewTexts.ticketInformation.informationDetails
                   .tipsInformation,
@@ -108,11 +122,11 @@ export const Root_TicketInformationScreen = (props: Props) => {
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
+  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   return {
     container: {
       marginHorizontal: theme.spacing.medium,
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginBottom: bottomSafeAreaInset + theme.spacing.medium,
       rowGap: theme.spacing.small,
     },
     descriptionContainer: {

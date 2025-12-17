@@ -36,14 +36,14 @@ export const ParkingViolationTexts = {
   },
   photo: {
     title: _(
-      'Ta bilde av sykkelen',
-      'Take a photo of the bike',
-      'Ta bilete av sykkelen',
+      'Ta bilde av elsparkesykkelen',
+      'Take a photo of the e-scooter',
+      'Ta bilete av elsparkesykkelen',
     ),
     instruction: _(
-      'Hold ca. 5 meter avstand. Unngå folk i bildet.',
+      'Hold ca. 5 meter avstand. Unngå folk i bildet',
       'Stand approximately 5 meters away. Avoid people in the frame',
-      '"Hald ein avstand på omtrent 5 meter. Unngå folk i biletet',
+      'Hald ein avstand på ca. 5 meter. Unngå folk i biletet',
     ),
   },
   imageConfirmation: {
@@ -58,14 +58,14 @@ export const ParkingViolationTexts = {
   qr: {
     title: _('Skann QR-kode', 'Scan the QR code', 'Skann QR-kode'),
     instructions: _(
-      'QR-koden på sykkelstyret innholder informasjon om merke og registreringsnummer på sparkesykkelen.',
+      'QR-koden på sykkelstyret inneholder informasjon om merke og registreringsnummer på sparkesykkelen.',
       'The QR code on the handlebars contains information about brand and id of the scooter',
       'QR-koden på sykkelstyret inneheld informasjon om merke og registreringsnummer på sparkesykkelen.',
     ),
     scanningNotPossible: _(
-      'Ikke mulig å scanne',
+      'Ikke mulig å skanne',
       'Not possible to scan',
-      'Ikkje mogleg å scanne',
+      'Ikkje mogleg å skanne',
     ),
   },
   selectProvider: {

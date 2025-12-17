@@ -2,7 +2,7 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
-import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
@@ -11,6 +11,7 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type StopPlaceSelectionProps = {
   selection: PurchaseSelectionType;
@@ -25,9 +26,12 @@ export const HarborSelection = forwardRef<
   const {t} = useTranslation();
   const selectionBuilder = usePurchaseSelectionBuilder();
 
-  const fromHarborRef = useRef<typeof TouchableOpacity>(null);
-  const toHarborRef = useRef<typeof TouchableOpacity>(null);
-  useImperativeHandle(ref, () => ({fromHarborRef, toHarborRef}));
+  const fromHarborRef = useRef<typeof PressableOpacity>(null);
+  const toHarborRef = useRef<typeof PressableOpacity>(null);
+  useImperativeHandle(ref, () => ({
+    fromHarborRef: fromHarborRef as any,
+    toHarborRef: toHarborRef as any,
+  }));
 
   if (!selection.stopPlaces) return null;
 
@@ -74,7 +78,7 @@ type HarborSelectionItemProps = {
 };
 
 const HarborSelectionItem = forwardRef<
-  typeof TouchableOpacity,
+  typeof PressableOpacity,
   HarborSelectionItemProps
 >(({harbor, onPress, disabled, fromOrTo}: HarborSelectionItemProps, ref) => {
   const {t} = useTranslation();
@@ -106,7 +110,7 @@ const HarborSelectionItem = forwardRef<
       <View style={styles.sectionContent}>
         <ThemeText
           color={disabled ? 'disabled' : 'secondary'}
-          typography="body__secondary"
+          typography="body__s"
           style={styles.toFromLabel}
         >
           {t(PurchaseOverviewTexts.fromToLabel[fromOrTo])}
@@ -127,7 +131,7 @@ const HarborLabel = ({
   const harborName = harbor?.name;
   const {t} = useTranslation();
   return harborName ? (
-    <ThemeText typography="body__primary--bold">{harborName}</ThemeText>
+    <ThemeText typography="body__m__strong">{harborName}</ThemeText>
   ) : (
     <ThemeText
       style={{flexShrink: 1}}

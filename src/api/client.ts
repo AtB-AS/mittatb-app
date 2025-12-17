@@ -1,7 +1,8 @@
 import axios, {AxiosError, InternalAxiosRequestConfig} from 'axios';
 import {v4 as uuid} from 'uuid';
 import {API_BASE_URL, APP_VERSION, IOS_BUNDLE_IDENTIFIER} from '@env';
-import {getAxiosErrorMetadata, getAxiosErrorType} from './utils';
+import {RequestError, getAxiosErrorMetadata, getAxiosErrorType} from './utils';
+import {ErrorResponse} from '@atb-as/utils';
 import Bugsnag from '@bugsnag/react-native';
 import {
   AppIdentifierHeaderName,
@@ -20,25 +21,17 @@ import {
   getCurrentUserIdGlobal,
   getIdTokenExpirationTimeGlobal,
   getIdTokenGlobal,
+  getDebugUserInfoHeaderGlobal,
   getIdTokenValidityStatus,
 } from '@atb/modules/auth';
-
-type InternalUpstreamServerError = {
-  errorCode: 602;
-  shortNorwegian: string;
-  shortEnglish: string;
-};
+import {useEffect, useState} from 'react';
 
 export const client = createClient(API_BASE_URL);
-
-const DEFAULT_TIMEOUT = 15000;
 
 declare module 'axios' {
   export interface AxiosRequestConfig {
     // Use id token as bearer token in authorization header
     authWithIdToken?: boolean;
-    // Force refresh id token from firebase before request
-    forceRefreshIdToken?: boolean;
     // Whether the error logging to Bugsnag should be skipped for a given error
     skipErrorLogging?: (error: AxiosError) => boolean;
   }
@@ -53,7 +46,6 @@ export function createClient(baseUrl: string | undefined) {
   });
   client.interceptors.request.use(requestHandler, undefined);
   client.interceptors.request.use(requestIdTokenHandler);
-  client.interceptors.response.use(undefined, responseIdTokenHandler);
   client.interceptors.response.use(undefined, responseErrorHandler);
   return client;
 }
@@ -65,7 +57,6 @@ export function setInstallId(installId: string) {
 }
 
 export const CancelToken = axios.CancelToken;
-export const isCancel = axios.isCancel;
 
 function requestHandler(
   config: InternalAxiosRequestConfig,
@@ -92,32 +83,94 @@ function requestHandler(
 
 async function requestIdTokenHandler(config: InternalAxiosRequestConfig) {
   if (config.authWithIdToken) {
-    config.headers[Authorization] = 'Bearer ' + getIdTokenGlobal();
+    const idToken = getIdTokenGlobal();
+    if (idToken) {
+      config.headers[Authorization] = 'Bearer ' + idToken;
+      if (addDebugUserInfoHeader) {
+        config.headers['X-Endpoint-API-UserInfo'] =
+          getDebugUserInfoHeaderGlobal();
+      }
+    }
   }
   return config;
 }
 
-function responseIdTokenHandler(error: AxiosError) {
-  if (error?.config) {
-    error.config.forceRefreshIdToken =
-      error.config.authWithIdToken && error.response?.status === 401;
-  }
-  throw error;
-}
+function responseErrorHandler(error: AxiosError): Promise<RequestError> {
+  const errorResponse = parseErrorResponse(error);
 
-function isInternalUpstreamServerError(
-  e: any,
-): e is InternalUpstreamServerError {
-  return 'errorCode' in e && 'shortNorwegian' in e;
-}
-
-function responseErrorHandler(error: AxiosError) {
-  if (shouldSkipLogging(error)) {
-    return Promise.reject(error);
+  if (!shouldSkipLogging(error)) {
+    const errorType = getAxiosErrorType(error);
+    if (errorType === 'default' || errorType === 'unknown') {
+      notifyError(error);
+    }
   }
 
+  return Promise.reject(errorResponse);
+}
+
+const shouldSkipLogging = (error: AxiosError) =>
+  error.config?.skipErrorLogging?.(error);
+
+const parseErrorResponse = (error: AxiosError): RequestError => {
   const errorType = getAxiosErrorType(error);
 
+  switch (errorType) {
+    case 'default':
+      if (error.response) {
+        const parsed = ErrorResponse.safeParse(error.response.data);
+
+        if (parsed.success) {
+          return parsed.data;
+        }
+
+        return {
+          http: {
+            code: error.response.status,
+            message: error.code ?? 'UNKNOWN',
+          },
+          message: error.message,
+          kind: 'UNKNOWN',
+          details: [
+            {
+              responseData: error.response.data,
+            },
+          ],
+        };
+      }
+
+      return {
+        message: error.message,
+        kind: 'UNKNOWN',
+        details: [],
+      };
+    case 'unknown':
+      return {
+        message: error.message,
+        kind: 'AXIOS_UNKNOWN',
+        details: [],
+      };
+    case 'network-error':
+      return {
+        message: error.message,
+        kind: 'AXIOS_NETWORK_ERROR',
+        details: [],
+      };
+    case 'timeout':
+      return {
+        message: error.message,
+        kind: 'AXIOS_TIMEOUT',
+        details: [],
+      };
+    case 'cancel':
+      return {
+        message: error.message,
+        kind: 'AXIOS_CANCEL',
+        details: [],
+      };
+  }
+};
+
+const notifyError = (axiosError: AxiosError) => {
   const idTokenMetadata = {
     idToken: getIdTokenGlobal(),
     idTokenValidityStatus: getIdTokenValidityStatus(
@@ -128,62 +181,23 @@ function responseErrorHandler(error: AxiosError) {
   // ID token breadcrumb logging on API error
   Bugsnag.leaveBreadcrumb('ID Token', idTokenMetadata);
 
-  switch (errorType) {
-    case 'default':
-      const errorMetadata = getAxiosErrorMetadata(error);
-      Bugsnag.notify(error, (event) => {
-        event.addMetadata('api', {...errorMetadata});
-        // ID token metadata on API error
-        event.addMetadata('ID Token', idTokenMetadata);
-      });
-      break;
-    case 'unknown':
-      Bugsnag.notify(error);
-      break;
-    case 'network-error':
-    case 'timeout':
-      break;
-  }
-  const variable: any = error?.response?.data;
-  if (variable?.upstreamError) {
-    const upstreamError = JSON.parse(variable.upstreamError);
-    if (isInternalUpstreamServerError(upstreamError)) {
-      return Promise.reject({...error, status: upstreamError.errorCode});
-    }
-  }
-  return Promise.reject(error);
-}
+  const errorMetadata = getAxiosErrorMetadata(axiosError);
 
-const shouldSkipLogging = (error: AxiosError) =>
-  error.config?.skipErrorLogging?.(error);
-
-export type TimeoutRequest = {
-  didTimeout: boolean;
-  signal: AbortSignal;
-  start(): void;
-  clear(): void;
-  abort(): void;
+  Bugsnag.notify(axiosError, (event) => {
+    event.addMetadata('api', {...errorMetadata});
+    // ID token metadata on API error
+    event.addMetadata('ID Token', idTokenMetadata);
+  });
 };
 
-export const useTimeoutRequest = (): TimeoutRequest => {
-  const controller = new AbortController();
-  let didTimeout = false;
-  let timerId: NodeJS.Timeout | undefined;
+let addDebugUserInfoHeader = __DEV__;
+export const useDebugUserInfoHeader = () => {
+  const [shouldAddHeader, setShouldAddHeader] = useState(
+    addDebugUserInfoHeader,
+  );
+  useEffect(() => {
+    addDebugUserInfoHeader = shouldAddHeader;
+  }, [shouldAddHeader]);
 
-  const start = () => {
-    timerId = setTimeout(() => {
-      didTimeout = true;
-      controller.abort();
-    }, DEFAULT_TIMEOUT);
-  };
-
-  return {
-    didTimeout,
-    signal: controller.signal,
-    start,
-    clear: () => {
-      timerId && clearTimeout(timerId);
-    },
-    abort: () => controller.abort(),
-  };
+  return {shouldAddHeader, setShouldAddHeader};
 };

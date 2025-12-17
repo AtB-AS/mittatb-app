@@ -25,7 +25,8 @@ import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/boo
 import {BookingStatus, TripPatternBookingStatus} from './types';
 import {Statuses} from '@atb/theme';
 import {isDefined} from '@atb/utils/presence';
-import {EstimatedCallWithMetadata} from './use-departure-data';
+import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
+import {VehicleWithPosition} from '@atb/api/types/vehicles';
 
 export const getNoticesForLeg = (leg: Leg) =>
   filterNotices([
@@ -451,7 +452,7 @@ export const getShouldShowLiveVehicle = (
 };
 
 export function getLineAndTimeA11yLabel(
-  estimatedCall: EstimatedCallWithMetadata,
+  estimatedCall: EstimatedCallWithQuayFragment,
   publicCode: string,
   t: TranslateFunction,
   language: Language,
@@ -491,4 +492,21 @@ export function isFreeLeg(leg: Leg) {
     leg.transportSubmode === TransportSubmode.LocalCarFerry ||
     leg.transportSubmode === TransportSubmode.LocalPassengerFerry
   );
+}
+
+export function debugProgressBetweenStopsText(
+  vehiclePosition: VehicleWithPosition,
+  estimatedCalls?: Array<EstimatedCallWithQuayFragment>,
+): string {
+  const stopPointRefName =
+    estimatedCalls?.find(
+      (ec) => ec.quay.id === vehiclePosition?.monitoredCall?.stopPointRef,
+    )?.quay.name ?? vehiclePosition.monitoredCall?.stopPointRef;
+
+  const percent = `${vehiclePosition.progressBetweenStops?.percentage?.toFixed(0)}%`;
+  const distance = `${vehiclePosition.progressBetweenStops?.linkDistance}m`;
+  const atStop = vehiclePosition.monitoredCall?.vehicleAtStop
+    ? ' (at stop)'
+    : '';
+  return `${percent} of ${distance} until ${stopPointRefName}${atStop}`;
 }

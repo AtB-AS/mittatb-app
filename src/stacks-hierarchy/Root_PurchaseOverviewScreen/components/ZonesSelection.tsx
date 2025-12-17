@@ -7,13 +7,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
-import {
-  AccessibilityProps,
-  StyleProp,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {
   GenericClickableSectionItem,
@@ -27,6 +21,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
 import {ContentHeading} from '@atb/components/heading';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type ZonesSelectionProps = {
   selection: PurchaseSelectionType;
@@ -40,9 +35,9 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
     const styles = useStyles();
     const {t, language} = useTranslation();
 
-    const zonesRef = useRef<typeof TouchableOpacity>(null);
+    const zonesRef = useRef<typeof PressableOpacity>(null);
     useImperativeHandle(ref, () => ({
-      zonesRef,
+      zonesRef: zonesRef as any,
     }));
 
     if (!selection.zones) return null;
@@ -83,7 +78,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
               <View style={styles.fromZone}>
                 <ThemeText
                   color="secondary"
-                  typography="body__secondary"
+                  typography="body__s"
                   style={styles.toFromLabel}
                 >
                   {t(PurchaseOverviewTexts.fromToLabel.from)}
@@ -93,7 +88,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
               <View style={styles.toZone}>
                 <ThemeText
                   color="secondary"
-                  typography="body__secondary"
+                  typography="body__s"
                   style={styles.toFromLabel}
                 >
                   {t(PurchaseOverviewTexts.fromToLabel.to)}
@@ -146,13 +141,13 @@ const ZoneLabel = ({fareZone}: {fareZone: FareZoneWithMetadata}) => {
 
   return fareZone.venueName ? (
     <ThemeText style={{flexShrink: 1}} testID="selectedStationAndZone">
-      <ThemeText typography="body__primary--bold" testID="selectedStation">
+      <ThemeText typography="body__m__strong" testID="selectedStation">
         {fareZone.venueName + ' '}
       </ThemeText>
       ({zoneLabel})
     </ThemeText>
   ) : (
-    <ThemeText typography="body__primary--bold" testID="selectedZone">
+    <ThemeText typography="body__m__strong" testID="selectedZone">
       {zoneLabel}
     </ThemeText>
   );

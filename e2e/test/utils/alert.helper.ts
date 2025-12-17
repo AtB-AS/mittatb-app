@@ -1,4 +1,6 @@
 import Config from '../conf/config.js';
+import ElementHelper from './element.helper.js';
+import {$} from '@wdio/globals';
 
 /**
  * Different helper methods related to alerts
@@ -16,7 +18,7 @@ class AlertHelper {
    * Title of the pop-up alert
    */
   get alertTitle() {
-    const id = `//*[@resource-id="no.mittatb.${Config.appEnvironment()}:id/alertTitle"]`;
+    const id = `//*[@resource-id="no.mittatb.${Config.appEnvironment()}:id/alert_title"]`;
     return $(id).getText();
   }
 
@@ -29,11 +31,14 @@ class AlertHelper {
   }
 
   /**
-   * Cancel button in system settings modal
+   * Cancel the system settings modal
    */
-  get systemSettingsCancel() {
-    const id = `//*[@resource-id="android:id/button1"]`;
-    return $(id);
+  async cancelSystemSettings() {
+    const id = 'android:id/button1';
+    const ref = `//*[@resource-id="${id}"]`;
+    if (await ElementHelper.isElementExisting(id, 2)) {
+      await $(ref).click();
+    }
   }
 }
 

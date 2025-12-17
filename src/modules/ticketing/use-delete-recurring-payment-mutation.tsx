@@ -9,6 +9,8 @@ export const useDeleteRecurringPaymentMutation = () => {
     mutationFn: (recurringPaymentId: number) =>
       deleteRecurringPayment(recurringPaymentId),
     onSuccess: () =>
-      queryClient.invalidateQueries([LIST_RECURRING_PAYMENTS_QUERY_KEY]),
+      queryClient.invalidateQueries({
+        queryKey: [LIST_RECURRING_PAYMENTS_QUERY_KEY],
+      }),
   });
 };

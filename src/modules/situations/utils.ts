@@ -14,73 +14,58 @@ import {Mode} from '@atb-as/theme';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import type {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import type {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
+import type {Leg} from '@atb/api/types/trips';
 
-export const getUniqueSituations = (situations: SituationType[] = []) => {
-  const seenIds: string[] = [];
-  const seenSituationNumbers: string[] = [];
-  return situations.filter((s) => {
-    const situationNumber = s.situationNumber;
-    if ('id' in s) {
-      if (seenIds.includes(s.id)) return false;
-      else seenIds.push(s.id);
-    } else if (situationNumber) {
-      if (seenSituationNumbers.includes(situationNumber)) return false;
-      else seenSituationNumbers.push(situationNumber);
-    }
-    return true;
-  });
-};
+export function findAllNoticesFromLeg(leg: Leg): NoticeFragment[] {
+  const notices: NoticeFragment[] = [];
+  if (leg.fromEstimatedCall?.notices) {
+    notices.push(...leg.fromEstimatedCall.notices);
+  }
+  if (leg.toEstimatedCall?.notices) {
+    notices.push(...leg.toEstimatedCall.notices);
+  }
+  return notices.filter((n) => !!n.id && (n.text?.length ?? 0) > 0);
+}
 
 export function findAllNotices(tp: TripPatternFragment): NoticeFragment[] {
-  const notices: NoticeFragment[] = [];
-  tp.legs.forEach((leg) => {
-    if (leg.fromEstimatedCall?.notices) {
-      notices.push(...leg.fromEstimatedCall.notices);
-    }
-    if (leg.toEstimatedCall?.notices) {
-      notices.push(...leg.toEstimatedCall.notices);
-    }
-    if (leg.situations) {
-      leg.situations.forEach((situation) => {
-        if (situation) {
-          notices.push(situation);
-        }
-      });
-    }
-  });
-  return notices
-    .filter(onlyUniquesBasedOnField('id'))
-    .filter((n) => !!n.id && (n.text?.length ?? 0) > 0);
+  return tp.legs
+    .map(findAllNoticesFromLeg)
+    .flat()
+    .filter(onlyUniquesBasedOnField('id'));
+}
+
+export function findAllSituationsFromLeg(leg: Leg): SituationFragment[] {
+  const situations: SituationFragment[] = [];
+  if (leg.situations) {
+    leg.situations.forEach((situation) => {
+      if (situation) {
+        situations.push(situation);
+      }
+    });
+  }
+  if (leg.fromPlace.quay?.situations) {
+    leg.fromPlace.quay.situations.forEach((situation) => {
+      if (situation) {
+        situations.push(situation);
+      }
+    });
+  }
+  if (leg.toPlace.quay?.situations) {
+    leg.toPlace.quay.situations.forEach((situation) => {
+      if (situation) {
+        situations.push(situation);
+      }
+    });
+  }
+  return situations;
 }
 
 export function findAllSituations(
   tp: TripPatternFragment,
 ): SituationFragment[] {
-  const situations: SituationFragment[] = [];
-  tp.legs.forEach((leg) => {
-    if (leg.situations) {
-      leg.situations.forEach((situation) => {
-        if (situation) {
-          situations.push(situation);
-        }
-      });
-    }
-    if (leg.fromPlace.quay?.situations) {
-      leg.fromPlace.quay.situations.forEach((situation) => {
-        if (situation) {
-          situations.push(situation);
-        }
-      });
-    }
-    if (leg.toPlace.quay?.situations) {
-      leg.toPlace.quay.situations.forEach((situation) => {
-        if (situation) {
-          situations.push(situation);
-        }
-      });
-    }
-  });
-  return situations
+  return tp.legs
+    .map(findAllSituationsFromLeg)
+    .flat()
     .filter(isSituationValidAtDate(tp.expectedStartTime))
     .filter(onlyUniquesBasedOnField('id'));
 }
@@ -115,10 +100,9 @@ export const getMsgTypeForMostCriticalSituationOrNotice = (
   }
   return situations
     .map(getMessageTypeForSituation)
-    .reduce<Exclude<Statuses, 'valid'> | undefined>(
-      toMostCriticalStatus,
-      undefined,
-    );
+    .reduce<
+      Exclude<Statuses, 'valid'> | undefined
+    >(toMostCriticalStatus, undefined);
 };
 
 /**

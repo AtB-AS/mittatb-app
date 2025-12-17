@@ -24,7 +24,7 @@ export const useShmoBookingQuery = (
     queryFn: ({signal}) =>
       getShmoBooking(bookingIdString, acceptLanguage, {signal}),
     staleTime: ONE_HOUR_MS,
-    cacheTime: ONE_HOUR_MS,
+    gcTime: ONE_HOUR_MS,
     enabled: isValidBookingId && isShmoDeepIntegrationEnabled,
     refetchInterval,
   });

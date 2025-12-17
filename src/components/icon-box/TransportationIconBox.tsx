@@ -1,13 +1,13 @@
 import React from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemeText} from '@atb/components/text';
-import {getTransportModeSvg} from './utils';
+import {getIconBoxBorderRadius, getTransportModeSvg} from './utils';
 import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 
 export type TransportationIconBoxProps = {
@@ -41,10 +41,11 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
     : transportationColor.background;
   const {svg} = getTransportModeSvg(mode, subMode);
   const styles = useStyles();
+  const {theme} = useThemeContext();
 
   const lineNumberElement = lineNumber ? (
     <ThemeText
-      typography="body__primary--bold"
+      typography="body__m__strong"
       color={transportationColor}
       style={styles.lineNumberText}
       testID="lineNumber"
@@ -61,6 +62,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
         style,
         {
           backgroundColor,
+          borderRadius: getIconBoxBorderRadius(size, theme),
         },
       ]}
     >
@@ -81,7 +83,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     padding: theme.spacing.xSmall,
-    borderRadius: theme.border.radius.small,
   },
   standardTransportationIconBox: {
     padding: theme.spacing.small,

@@ -1,9 +1,9 @@
+import {formatNumberToString} from '@atb-as/utils';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import {formatNumberToString} from '@atb/utils/numbers';
 import React from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
 
@@ -45,7 +45,7 @@ export function Summary({
     <View style={style}>
       {!!formattedPrice ? (
         <ThemeText
-          typography="body__primary--bold"
+          typography="heading__xl"
           style={styles.price}
           testID="offerTotalPriceText"
         >
@@ -56,7 +56,7 @@ export function Summary({
       ) : null}
       {!isLoading && !!formattedPrice && originalPrice !== price && (
         <ThemeText
-          typography="body__tertiary--strike"
+          typography="body__xs__strike"
           style={styles.originalPrice}
           testID="offerTotalPriceText"
           accessibilityLabel={t(

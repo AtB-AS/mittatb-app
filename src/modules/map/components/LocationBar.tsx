@@ -6,7 +6,6 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import React, {useMemo} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {ErrorType} from '@atb/api/utils';
 import {GeoLocation, Location, SearchLocation} from '@atb/modules/favorites';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
@@ -14,11 +13,12 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {useReverseGeocoder} from '@atb/modules/geocoder';
 import {coordinatesDistanceInMetres} from '@atb/utils/location';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {Coordinates} from '@atb/utils/coordinates';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {useReverseGeocoderQuery} from '@atb/modules/geocoder';
+import {RequestError} from '@atb/api/utils';
 
 type Props = {
   coordinates?: Coordinates;
@@ -37,9 +37,14 @@ const getBackgroundColor = (theme: Theme) => theme.color.background.neutral[0];
 export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
   const styles = useStyles();
   const {location: geolocation} = useGeolocationContext();
-  const {closestLocation, isSearching, error} = useReverseGeocoder(
-    coordinates || null,
-  );
+
+  const {
+    data,
+    isLoading,
+    error: queryError,
+  } = useReverseGeocoderQuery(coordinates || null);
+  const error = queryError as RequestError | null;
+  const closestLocation = data?.[0];
 
   const onPress = () => {
     if (location && onSelect) {
@@ -64,15 +69,19 @@ export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
         <View style={styles.innerContainer}>
           <View style={styles.locationContainer}>
             <Icon
-              isSearching={isSearching}
               location={location}
+              isLoading={isLoading}
               hasError={!!error}
             />
-            <View style={{opacity: isSearching ? 0.6 : 1}}>
-              <LocationText location={location} error={error} />
+            <View style={{opacity: isLoading ? 0.6 : 1}}>
+              <LocationText
+                location={location}
+                isLoading={isLoading}
+                error={error}
+              />
             </View>
           </View>
-          {!isSearching && !!location && (
+          {!isLoading && !!location && (
             <View style={styles.button}>
               <ThemeIcon svg={ArrowRight} />
             </View>
@@ -84,14 +93,14 @@ export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
 };
 
 const Icon: React.FC<{
-  isSearching: boolean;
   location?: Location;
+  isLoading: boolean;
   hasError: boolean;
-}> = ({isSearching, location, hasError}) => {
+}> = ({isLoading, location, hasError}) => {
   const {theme} = useThemeContext();
   return (
     <View style={{marginHorizontal: 12}}>
-      {isSearching ? (
+      {isLoading ? (
         <ActivityIndicator
           animating={true}
           color={getBackgroundColor(theme).foreground.primary}
@@ -109,16 +118,15 @@ const Icon: React.FC<{
 
 const LocationText: React.FC<{
   location?: Location;
-  error?: ErrorType;
-}> = ({location, error}) => {
+  isLoading?: boolean;
+  error?: RequestError | null;
+}> = ({location, error, isLoading}) => {
   const {t} = useTranslation();
-  const {title, subtitle} = getLocationText(t, location, error);
+  const {title, subtitle} = getLocationText(t, location, isLoading, error);
   return (
     <>
-      <ThemeText typography="body__secondary">{title}</ThemeText>
-      {subtitle && (
-        <ThemeText typography="body__tertiary">{subtitle}</ThemeText>
-      )}
+      <ThemeText typography="body__s">{title}</ThemeText>
+      {subtitle && <ThemeText typography="body__xs">{subtitle}</ThemeText>}
     </>
   );
 };
@@ -126,7 +134,8 @@ const LocationText: React.FC<{
 function getLocationText(
   t: TranslateFunction,
   location?: Location,
-  error?: ErrorType,
+  isLoading?: boolean,
+  error?: RequestError | null,
 ): {title: string; subtitle?: string} {
   if (location) {
     return {
@@ -139,10 +148,17 @@ function getLocationText(
     };
   }
 
-  if (error) {
-    switch (error) {
-      case 'network-error':
-      case 'timeout':
+  if (isLoading) {
+    return {
+      title: t(LocationSearchTexts.mapSelection.messages.loading.title),
+      subtitle: undefined,
+    };
+  }
+
+  if (error?.kind) {
+    switch (error.kind) {
+      case 'AXIOS_NETWORK_ERROR':
+      case 'AXIOS_TIMEOUT':
         return {
           title: t(
             LocationSearchTexts.mapSelection.messages.networkError.title,

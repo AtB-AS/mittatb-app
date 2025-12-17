@@ -9,6 +9,7 @@ import {
   tripPatternAvailabilityFilter,
   tripPatternDisplayTimeFilter,
 } from './utils';
+import {useProductAlternatives} from '@atb/modules/ticketing';
 
 type BookingTripsType = {
   tripPatterns: TripPatternWithBooking[];
@@ -24,12 +25,8 @@ export function useBookingTrips({
 }: {
   selection: PurchaseSelectionType;
 }): BookingTripsType {
-  const {
-    stopPlaces,
-    travelDate,
-    preassignedFareProduct,
-    userProfilesWithCount,
-  } = selection;
+  const {stopPlaces, travelDate, userProfilesWithCount} = selection;
+  const productAlternatives = useProductAlternatives(selection);
 
   // We always search from the start of the day to ensure we get all trips for that day
   // The trip search in BFF searches 24 hours from searchTime
@@ -44,7 +41,7 @@ export function useBookingTrips({
     stopPlaces?.to?.id,
     searchTime.toISOString(),
     userProfilesWithCount.map((up) => up.id),
-    preassignedFareProduct.id,
+    productAlternatives.map((p) => p.id),
   ];
 
   const {data, isFetching, isSuccess, isError, isLoading, refetch} = useQuery({
@@ -54,7 +51,7 @@ export function useBookingTrips({
         fromStopPlaceId: stopPlaces?.from?.id!,
         toStopPlaceId: stopPlaces?.to?.id!,
         searchTime: searchTime.toISOString(),
-        products: [preassignedFareProduct.id],
+        products: productAlternatives.map((p) => p.id),
         travellers: userProfilesWithCount.map((p) => ({
           id: p.id,
           userType: p.userTypeString,
@@ -88,7 +85,7 @@ export function useBookingTrips({
      * At refetch (isLoading === false && isFetching === true):                       The query is not loading
      */
     isLoadingBooking: isLoading && isFetching,
-    isBookingRequired: !!preassignedFareProduct.isBookingEnabled,
+    isBookingRequired: productAlternatives.some((p) => p.isBookingEnabled),
     tripPatterns,
     reload: refetch,
     isError: isError,

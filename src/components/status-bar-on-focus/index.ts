@@ -1,1 +1,0 @@
-export {StatusBarOnFocus} from './StatusBarOnFocus';

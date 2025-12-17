@@ -1,18 +1,13 @@
 import React, {RefObject, useCallback, useEffect} from 'react';
-import {
-  BottomSheetContainer,
-  useBottomSheetContext,
-} from '@atb/components/bottom-sheet';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {ActivityIndicator, Alert, ScrollView, View} from 'react-native';
+import {ActivityIndicator, Alert, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
-import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {VehicleCard} from '../VehicleCard';
 import {useActiveShmoBookingQuery} from '../../queries/use-active-shmo-booking-query';
@@ -29,21 +24,26 @@ import {MapView} from '@rnmapbox/maps';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useShmoWarnings} from '@atb/modules/map';
 import {useKeepAwake} from '@sayem314/react-native-keep-awake';
+import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
+import {useAnalyticsContext} from '@atb/modules/analytics';
+import {ThemeText} from '@atb/components/text';
 
 type Props = {
-  onActiveBookingReceived?: () => void;
   navigateSupportCallback: () => void;
   photoNavigation: (bookingId: string) => void;
   onForceClose: () => void;
   mapViewRef: RefObject<MapView | null>;
+  locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 
 export const ActiveScooterSheet = ({
-  onActiveBookingReceived,
   navigateSupportCallback,
   photoNavigation,
   onForceClose,
   mapViewRef,
+  locationArrowOnPress,
+  navigateToScanQrCode,
 }: Props) => {
   useKeepAwake();
   const {
@@ -51,17 +51,15 @@ export const ActiveScooterSheet = ({
     isLoading,
     isError,
   } = useActiveShmoBookingQuery(ONE_SECOND_MS * 10);
-  const {logEvent} = useBottomSheetContext();
+  const {logEvent} = useAnalyticsContext();
 
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
-  const {geofencingZoneMessage, warningMessage} = useShmoWarnings(
+  const {geofencingZoneWarning, warningMessage} = useShmoWarnings(
     activeBooking?.asset.id ?? '',
     mapViewRef,
   );
-
-  useDoOnceOnItemReceived(onActiveBookingReceived, activeBooking);
 
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
@@ -73,7 +71,7 @@ export const ActiveScooterSheet = ({
 
   const {
     mutateAsync: sendShmoBookingEvent,
-    isLoading: sendShmoBookingEventIsLoading,
+    isPending: sendShmoBookingEventIsLoading,
     isError: sendShmoBookingEventIsError,
     error: sendShmoBookingEventError,
   } = useSendShmoBookingEventMutation();
@@ -126,7 +124,19 @@ export const ActiveScooterSheet = ({
   };
 
   return (
-    <BottomSheetContainer maxHeightValue={0.7} disableHeader={true}>
+    <MapBottomSheet
+      canMinimize={true}
+      closeOnBackdropPress={false}
+      allowBackgroundTouch={true}
+      enableDynamicSizing={true}
+      heading={activeBooking?.asset.operator.name}
+      enablePanDownToClose={false}
+      locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
+      headerNode={
+        activeBooking ? <ShmoTripCard shmoBooking={activeBooking} /> : null
+      }
+    >
       {isShmoDeepIntegrationEnabled && (
         <>
           {isLoading && (
@@ -136,8 +146,7 @@ export const ActiveScooterSheet = ({
           )}
           {!isLoading && !isError && activeBooking && (
             <>
-              <ScrollView style={styles.container}>
-                <ShmoTripCard shmoBooking={activeBooking} />
+              <View style={styles.container}>
                 <VehicleCard
                   pricingPlan={activeBooking.pricingPlan}
                   currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
@@ -146,16 +155,19 @@ export const ActiveScooterSheet = ({
                       ? activeBooking.asset.currentRangeKm * 1000
                       : 0
                   }
-                  operatorName={activeBooking.asset.operator.name}
                 />
-              </ScrollView>
+              </View>
               <View style={styles.footer}>
                 <View style={styles.endTripWrapper}>
-                  {geofencingZoneMessage && (
-                    <MessageInfoText
-                      type="warning"
-                      message={geofencingZoneMessage}
-                    />
+                  {geofencingZoneWarning && (
+                    <View style={styles.geofencingZoneWarning}>
+                      {geofencingZoneWarning.iconNode}
+                      <View style={styles.geofencingZoneWarningText}>
+                        <ThemeText typography="body__s">
+                          {geofencingZoneWarning.description}
+                        </ThemeText>
+                      </View>
+                    </View>
                   )}
                   {warningMessage && (
                     <MessageInfoText type="warning" message={warningMessage} />
@@ -206,7 +218,7 @@ export const ActiveScooterSheet = ({
           )}
         </>
       )}
-    </BottomSheetContainer>
+    </MapBottomSheet>
   );
 };
 
@@ -219,7 +231,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacing.medium,
     },
     container: {
-      gap: theme.spacing.medium,
+      paddingHorizontal: theme.spacing.medium,
+      marginBottom: theme.spacing.medium,
     },
     footer: {
       marginBottom: theme.spacing.medium,
@@ -228,6 +241,17 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     endTripWrapper: {
       gap: theme.spacing.medium,
+    },
+    tripWrapper: {
+      marginBottom: theme.spacing.medium,
+    },
+    geofencingZoneWarning: {
+      flexDirection: 'row',
+      gap: theme.spacing.small,
+      alignItems: 'center',
+    },
+    geofencingZoneWarningText: {
+      flex: 1,
     },
   };
 });

@@ -6,33 +6,41 @@ import {
   useTranslation,
 } from '@atb/translations';
 import React from 'react';
-import {Linking, View} from 'react-native';
+import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_InformationScreen = () => {
+type Props = ProfileScreenProps<'Profile_InformationScreen'>;
+
+export const Profile_InformationScreen = ({navigation}: Props) => {
   const style = useStyle();
   const {t, language} = useTranslation();
 
   const {configurableLinks} = useFirestoreConfigurationContext();
+  const {service_disruption_url} = useRemoteConfigContext();
   const ticketingInfo = configurableLinks?.ticketingInfo;
   const termsInfo = configurableLinks?.termsInfo;
   const inspectionInfo = configurableLinks?.inspectionInfo;
-  const refundInfo = configurableLinks?.refundInfo;
   const a11yStatement = configurableLinks?.appA11yStatement;
   const ticketingInfoUrl = getTextForLanguage(ticketingInfo, language);
   const termsInfoUrl = getTextForLanguage(termsInfo, language);
   const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
-  const refundInfoUrl = getTextForLanguage(refundInfo, language);
   const a11yStatementUrl = getTextForLanguage(a11yStatement, language);
+
+  const focusRef = useFocusOnLoad(navigation);
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(ProfileTexts.sections.information.heading),
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'back'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading
@@ -47,6 +55,24 @@ export const Profile_InformationScreen = () => {
         style={style.contentContainer}
       >
         <Section>
+          {service_disruption_url && (
+            <LinkSectionItem
+              rightIcon={{svg: ExternalLink}}
+              text={t(
+                ProfileTexts.sections.information.linkSectionItems
+                  .serviceDisruptions.label,
+              )}
+              testID="serviceDisruptionsButton"
+              onPress={() => openInAppBrowser(service_disruption_url, 'close')}
+              accessibility={{
+                accessibilityHint: t(
+                  ProfileTexts.sections.information.linkSectionItems
+                    .serviceDisruptions.a11yLabel,
+                ),
+                accessibilityRole: 'link',
+              }}
+            />
+          )}
           {ticketingInfoUrl && (
             <LinkSectionItem
               rightIcon={{svg: ExternalLink}}
@@ -55,7 +81,7 @@ export const Profile_InformationScreen = () => {
                   .label,
               )}
               testID="ticketingInfoButton"
-              onPress={() => Linking.openURL(ticketingInfoUrl)}
+              onPress={() => openInAppBrowser(ticketingInfoUrl, 'close')}
               accessibility={{
                 accessibilityHint: t(
                   ProfileTexts.sections.information.linkSectionItems.ticketing
@@ -72,7 +98,7 @@ export const Profile_InformationScreen = () => {
                 ProfileTexts.sections.information.linkSectionItems.terms.label,
               )}
               testID="termsInfoButton"
-              onPress={() => Linking.openURL(termsInfoUrl)}
+              onPress={() => openInAppBrowser(termsInfoUrl, 'close')}
               accessibility={{
                 accessibilityHint: t(
                   ProfileTexts.sections.information.linkSectionItems.terms
@@ -91,7 +117,7 @@ export const Profile_InformationScreen = () => {
                   .label,
               )}
               testID="inspectionInfoButton"
-              onPress={() => Linking.openURL(inspectionInfoUrl)}
+              onPress={() => openInAppBrowser(inspectionInfoUrl, 'close')}
               accessibility={{
                 accessibilityHint: t(
                   ProfileTexts.sections.information.linkSectionItems.inspection
@@ -102,23 +128,6 @@ export const Profile_InformationScreen = () => {
             />
           )}
 
-          {refundInfoUrl && (
-            <LinkSectionItem
-              rightIcon={{svg: ExternalLink}}
-              text={t(
-                ProfileTexts.sections.information.linkSectionItems.refund.label,
-              )}
-              testID="refundInfoButton"
-              onPress={() => Linking.openURL(refundInfoUrl)}
-              accessibility={{
-                accessibilityHint: t(
-                  ProfileTexts.sections.information.linkSectionItems.refund
-                    .a11yLabel,
-                ),
-                accessibilityRole: 'link',
-              }}
-            />
-          )}
           {a11yStatementUrl && (
             <LinkSectionItem
               rightIcon={{svg: ExternalLink}}
@@ -127,7 +136,7 @@ export const Profile_InformationScreen = () => {
                   .accessibilityStatement.label,
               )}
               testID="a11yStatementButton"
-              onPress={() => Linking.openURL(a11yStatementUrl)}
+              onPress={() => openInAppBrowser(a11yStatementUrl, 'close')}
               accessibility={{
                 accessibilityHint: t(
                   ProfileTexts.sections.information.linkSectionItems

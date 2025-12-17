@@ -4,6 +4,7 @@ import {useFontScale} from '@atb/utils/use-font-scale';
 import {Platform} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Preference_ScreenAlternatives} from '@atb/modules/preferences';
+import {NavigationState} from '@react-navigation/native';
 
 // This is code from react-navigation, for regular tab bar
 // (not compact). Should be a better way to set this or
@@ -43,3 +44,18 @@ export function settingToRouteName(
       return 'TabNav_DashboardStack';
   }
 }
+
+export const getActiveRouteName = (state: NavigationState): string => {
+  try {
+    const route = state.routes[state.index];
+
+    if (route.state) {
+      // Dive into nested navigators
+      return getActiveRouteName(route.state as NavigationState);
+    }
+
+    return route.name;
+  } catch {
+    return 'Unknown';
+  }
+};

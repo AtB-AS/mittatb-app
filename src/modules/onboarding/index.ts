@@ -18,3 +18,6 @@ export type {
   OnboardingSectionConfig,
   ShouldShowArgsType,
 } from './types';
+
+export * from './extended-onboarding';
+export * from './onboarding-carousel';

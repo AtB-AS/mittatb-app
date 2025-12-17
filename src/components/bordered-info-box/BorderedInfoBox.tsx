@@ -5,14 +5,13 @@ import {StyleSheet} from '@atb/theme';
 import {ContrastColor} from '@atb/theme/colors';
 import {addOpacity} from '@atb/utils/add-opacity';
 
-export type BorderedInfoBoxProps =
-  | {
-      /** The background color of the component where this box is placed */
-      backgroundColor: ContrastColor;
-      type: 'large' | 'small';
-      style?: StyleProp<ViewStyle>;
-      testID?: string;
-    } & ({text: string} | {children: ReactNode});
+export type BorderedInfoBoxProps = {
+  /** The background color of the component where this box is placed */
+  backgroundColor: ContrastColor;
+  type: 'large' | 'small';
+  style?: StyleProp<ViewStyle>;
+  testID?: string;
+} & ({text: string} | {children: ReactNode});
 
 /**
  * A bordered info box, where the border color is based on the text color of the
@@ -32,7 +31,7 @@ export const BorderedInfoBox = ({
     <View style={[styles.container, style]}>
       {'text' in props ? (
         <ThemeText
-          typography="body__tertiary"
+          typography="body__xs"
           color={backgroundColor}
           testID={testID}
         >

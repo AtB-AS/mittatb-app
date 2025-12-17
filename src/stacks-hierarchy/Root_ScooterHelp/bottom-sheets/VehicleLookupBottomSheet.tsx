@@ -1,19 +1,23 @@
 import {ViolationsReportingProvider} from '@atb/api/types/mobility';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ProviderLogo} from '../components/ProviderLogo';
+import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type Props = {
   provider: ViolationsReportingProvider;
   vehicleId: string | undefined;
   onReportSubmit: (providerId: number) => void;
   onClose: () => void;
+  onCloseFocusRef: React.RefObject<View | null>;
+  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
 };
 
 export const VehicleLookupConfirmationBottomSheet = ({
@@ -21,14 +25,22 @@ export const VehicleLookupConfirmationBottomSheet = ({
   vehicleId,
   onReportSubmit,
   onClose,
+  onCloseFocusRef,
+  bottomSheetModalRef,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
 
   return (
-    <BottomSheetContainer
-      title={t(ParkingViolationTexts.vehicleLookup.title)}
-      onClose={onClose}
+    <BottomSheetModal
+      bottomSheetModalRef={bottomSheetModalRef}
+      heading={t(ParkingViolationTexts.vehicleLookup.title)}
+      rightIconText={t(dictionary.appNavigation.close.text)}
+      rightIcon={Close}
+      closeCallback={() => {
+        giveFocus(onCloseFocusRef);
+        onClose();
+      }}
     >
       <View style={styles.content}>
         <ProviderLogo provider={provider} />
@@ -41,12 +53,11 @@ export const VehicleLookupConfirmationBottomSheet = ({
           onPress={() => onReportSubmit(Number(provider.id))}
         />
       </View>
-    </BottomSheetContainer>
+    </BottomSheetModal>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
   return {
     content: {
       flexDirection: 'row',
@@ -57,8 +68,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       margin: theme.spacing.medium,
     },
     footer: {
-      margin: theme.spacing.medium,
-      marginBottom: Math.max(bottom, theme.spacing.medium),
+      marginHorizontal: theme.spacing.medium,
+      marginTop: theme.spacing.medium,
     },
   };
 });

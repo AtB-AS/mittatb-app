@@ -16,7 +16,7 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {IconColor} from '@atb/components/theme-icon';
 
 type IconProps = {
-  svg: ({fill}: {fill: string}) => JSX.Element;
+  svg: ({fill}: {fill: string}) => React.JSX.Element;
   color?: IconColor;
   notificationColor?: ContrastColor;
 };
@@ -32,6 +32,7 @@ type Props = SectionItemProps<{
   disabled?: boolean;
   accessibility?: AccessibilityProps;
   textType?: TextNames;
+  isMarkdown?: boolean;
 }>;
 
 export const LinkSectionItem = forwardRef<any, Props>(
@@ -61,6 +62,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
       ? {...accessibility, accessibilityHint: undefined}
       : accessibility;
     const accessibilityLabel =
+      accessibilityWithOverrides?.accessibilityLabel ??
       text + screenReaderPause + (subtitle ? subtitle + screenReaderPause : '');
     return (
       <PressableOpacity
@@ -86,15 +88,18 @@ export const LinkSectionItem = forwardRef<any, Props>(
           {leftIcon && (
             <Icon icon={leftIcon} interactiveColor={interactiveColor} />
           )}
-          <ThemeText
-            style={[
-              contentContainer,
-              {color: interactiveColor.default.foreground.primary},
-            ]}
-            typography={textType}
-          >
-            {text}
-          </ThemeText>
+          <View style={linkSectionItemStyle.textContainer}>
+            <ThemeText
+              style={[
+                contentContainer,
+                {color: interactiveColor.default.foreground.primary},
+              ]}
+              typography={textType}
+              isMarkdown={props.isMarkdown}
+            >
+              {text}
+            </ThemeText>
+          </View>
           {label && (
             <Tag
               labels={[t(TagInfoTexts.labels[label].text)]}
@@ -108,7 +113,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
         </View>
         {subtitle && (
           <View style={disabledStyle}>
-            <ThemeText color="secondary" typography="body__secondary">
+            <ThemeText color="secondary" typography="body__s">
               {subtitle}
             </ThemeText>
           </View>
@@ -150,4 +155,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     // to fit the tag.
     marginVertical: -theme.spacing.xSmall,
   },
+  textContainer: {flex: 1},
 }));

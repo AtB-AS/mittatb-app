@@ -1,7 +1,6 @@
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioBox} from '@atb/components/radio';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {
   Token,
   useMobileTokenContext,
@@ -11,21 +10,25 @@ import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {dictionary, TravelTokenTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {Ref, useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {RadioGroupSection} from '@atb/components/sections';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {getDeviceNameWithUnitInfo} from './utils';
 import {TokenToggleInfo} from './TokenToggleInfo';
 import {useTokenToggleDetailsQuery} from '@atb/modules/mobile-token';
 import {useOnboardingContext} from '@atb/modules/onboarding';
-import {ContentHeading} from '@atb/components/heading';
+import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {FullScreenView} from '@atb/components/screen-view';
 
-type Props = {onAfterSave: () => void};
+type Props = {onAfterSave: () => void; focusRef: Ref<any>; isFocused: boolean};
 
-export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
+export const SelectTravelTokenScreenComponent = ({
+  onAfterSave,
+  focusRef,
+  isFocused,
+}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -35,7 +38,8 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
 
   const {tokens} = useMobileTokenContext();
   const toggleMutation = useToggleTokenMutation();
-  const {data} = useTokenToggleDetailsQuery();
+  const {data, isLoading} = useTokenToggleDetailsQuery(isFocused);
+  const toggleLimit = data?.toggleLimit ?? 0;
   const inspectableToken = tokens.find((t) => t.isInspectable);
 
   const [selectedType, setSelectedType] = useState<Token['type']>(
@@ -67,28 +71,29 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
       }
       toggleMutation.mutate({
         tokenId: selectedToken.id,
-        bypassRestrictions: false,
       });
     }
   }, [selectedToken, toggleMutation, onAfterSave]);
 
   const travelCardToken = tokens?.find((t) => t.type === 'travel-card');
   const mobileTokens = tokens?.filter((t) => t.type === 'mobile');
+  const title = disable_travelcard
+    ? t(TravelTokenTexts.toggleToken.titleWithoutTravelcard)
+    : t(TravelTokenTexts.toggleToken.title);
 
   return (
-    <View style={styles.container}>
-      <FullScreenHeader
-        title={
-          disable_travelcard
-            ? t(TravelTokenTexts.toggleToken.titleWithoutTravelcard)
-            : t(TravelTokenTexts.toggleToken.title)
-        }
-        leftButton={{type: 'close'}}
-      />
-      <ScrollView
-        contentContainerStyle={styles.scrollView}
-        testID="selectTokenScrollView"
-      >
+    <FullScreenView
+      focusRef={focusRef}
+      headerProps={{
+        title,
+        rightButton: {type: 'cancel'},
+      }}
+      parallaxContent={(focusRef) => (
+        <ScreenHeading ref={focusRef} text={title} />
+      )}
+      testID="selectTravelTokenView"
+    >
+      <View style={styles.container}>
         <View style={styles.radioArea}>
           {!disable_travelcard && (
             <RadioBox
@@ -141,6 +146,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             type="warning"
             message={t(TravelTokenTexts.toggleToken.noTravelCard)}
             isMarkdown={true}
+            testID="noTravelcardWarning"
           />
         )}
         {selectedType === 'mobile' && !mobileTokens?.length && (
@@ -173,9 +179,13 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
           />
         )}
         {data?.toggleLimit !== undefined && (
-          <TokenToggleInfo textColor={theme.color.background.accent[0]} />
+          <TokenToggleInfo
+            textColor={theme.color.background.accent[0]}
+            toggleLimit={toggleLimit}
+            isLoading={isLoading}
+          />
         )}
-        {toggleMutation.isLoading ? (
+        {toggleMutation.isPending ? (
           <ActivityIndicator size="large" />
         ) : (
           <Button
@@ -187,8 +197,8 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             testID="confirmSelectionButton"
           />
         )}
-      </ScrollView>
-    </View>
+      </View>
+    </FullScreenView>
   );
 };
 
@@ -196,12 +206,8 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => {
   const {bottom: safeAreaBottomInset} = useSafeAreaInsets();
   return {
     container: {
-      backgroundColor: theme.color.background.accent[0].background,
-      flex: 1,
       paddingBottom: safeAreaBottomInset,
-    },
-    scrollView: {
-      padding: theme.spacing.medium,
+      margin: theme.spacing.medium,
       gap: theme.spacing.medium,
     },
     radioArea: {

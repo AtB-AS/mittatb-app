@@ -19,7 +19,7 @@ const LOGO_SIZE = 20;
 type OperatorNameAndLogoProps = {
   operatorName: string;
   logoUrl: string | undefined;
-  fallback?: JSX.Element;
+  fallback?: React.JSX.Element;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -52,7 +52,7 @@ export const OperatorNameAndLogo = ({
           />
         )
       ) : null}
-      <ThemeText typography="body__primary--bold">{operatorName}</ThemeText>
+      <ThemeText typography="body__m__strong">{operatorName}</ThemeText>
     </View>
   );
 };

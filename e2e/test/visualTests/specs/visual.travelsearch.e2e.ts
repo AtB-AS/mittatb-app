@@ -54,15 +54,7 @@ describe('Visual tests', () => {
       // Test: Filter (top)
       await VisualHelper.visualTestElement(
         'filterView',
-        'travelSearch_filter_top',
-        testOptions,
-        newBaseline,
-      );
-      await AppHelper.scrollDownUntilId('filterView', 'saveFilterCheckbox');
-      // Test: Filter (bottom)
-      await VisualHelper.visualTestElement(
-        'filterView',
-        'travelSearch_filter_bottom',
+        'travelSearch_filter',
         testOptions,
         newBaseline,
       );
@@ -113,7 +105,7 @@ describe('Visual tests', () => {
       );
 
       // Open details
-      await TravelsearchOverviewPage.openFirstSearchResult();
+      await TravelsearchOverviewPage.openSearchResult();
 
       // Test: travel search details
       await VisualHelper.visualTestScreen(

@@ -9,8 +9,10 @@ export enum AgeVerificationEnum {
   NotVerified = 'notVerified',
 }
 
+export const ageVerificationQueryKeyString = 'getAgeVerification';
+
 export const getAgeVerificationQueryKey = (legalAge: number) => [
-  'getAgeVerification',
+  ageVerificationQueryKeyString,
   legalAge,
 ];
 
@@ -21,7 +23,7 @@ export const useGetAgeVerificationQuery = (legalAge: number) => {
     queryKey: getAgeVerificationQueryKey(legalAge),
     queryFn: ({signal}) => getAgeVerification(legalAge, {signal}),
     staleTime: ONE_MINUTE_MS,
-    cacheTime: ONE_MINUTE_MS,
+    gcTime: ONE_MINUTE_MS,
     refetchOnMount: 'always',
     retry: 5,
   });

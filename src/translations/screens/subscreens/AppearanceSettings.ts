@@ -3,14 +3,15 @@ const AppearanceSettingsTexts = {
   header: {
     title: _('Utseende', 'Appearance', 'Utsjånad'),
   },
-  actions: {
-    usePhoneTheme: _(
-      'Bruk fargetema fra telefonen',
-      "Use my phone's colour theme",
-      'Nytt fargetema frå mobilen min',
-    ),
-    darkMode: _('Mørk modus', 'Dark mode', 'Mørk modus'),
-    useSystemFont: _(
+  theme: {
+    heading: _('Fargetema', 'Theme', 'Fargetema'),
+    system: _('Automatisk', 'Automatic', 'Automatisk'),
+    light: _('Lyst', 'Light', 'Lyst'),
+    dark: _('Mørkt', 'Dark', 'Mørkt'),
+  },
+  font: {
+    heading: _('Skrifttype', 'Font', 'Skrifttype'),
+    toggle: _(
       'Bruk telefonens skrifttype',
       "Use my phone's font",
       'Nytt telefonens skrifttype',

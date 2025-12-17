@@ -7,7 +7,7 @@ export const useBikeStationQuery = (id: string) =>
     queryKey: ['getBikeStation', id],
     queryFn: ({signal}) => getBikeStation(id, {signal}),
     staleTime: ONE_MINUTE_MS,
-    cacheTime: ONE_MINUTE_MS,
+    gcTime: ONE_MINUTE_MS,
     refetchOnMount: 'always',
     retry: 5,
   });

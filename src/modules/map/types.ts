@@ -5,17 +5,15 @@ import {
   FeatureCollection,
   GeoJsonProperties,
   LineString,
-  Point,
   Position,
 } from 'geojson';
-import {Coordinates} from '@atb/utils/coordinates';
-import {
-  PointsOnLink,
-  TransportSubmode,
-} from '@atb/api/types/generated/journey_planner_v3_types';
+import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {AnyMode} from '@atb/components/icon-box';
-import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
-import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
+import {
+  BikeStationFragment,
+  CarStationFragment,
+} from '@atb/api/types/generated/fragments/stations';
+import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {z} from 'zod';
 
 // prefixes added to distinguish between geojson types and generated mobility api types, as they are not exact matches
@@ -27,11 +25,9 @@ import {
   FeatureCollection as MobilityAPI_FeatureCollection,
 } from '@atb/api/types/generated/mobility-types_v2';
 
-import {Line} from '@atb/api/types/trips';
 import {TranslatedString} from '@atb/translations';
-import {GeofencingZoneKeys, GeofencingZoneStyle} from '@atb-as/theme';
+import {GeofencingZoneCode, GeofencingZoneStyle} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
-import {ClusterOfVehiclesProperties} from '@atb/api/types/mobility';
 
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
@@ -49,30 +45,6 @@ export type MapPadding =
   | [number, number]
   | [number, number, number, number];
 
-export type VehicleFeatures = {
-  bicycles: FeatureCollection<Point, VehicleBasicFragment>;
-  scooters: FeatureCollection<Point, VehicleBasicFragment>;
-};
-
-export type VehiclesState = {
-  vehicles: VehicleFeatures;
-  updateRegion: (region: MapRegion) => void;
-  isLoading: boolean;
-  onFilterChange: (filter: MobilityMapFilterType) => void;
-};
-
-export type StationFeatures = {
-  bicycles: FeatureCollection<Point, StationBasicFragment>;
-  cars: FeatureCollection<Point, StationBasicFragment>;
-};
-
-export type StationsState = {
-  stations: StationFeatures;
-  updateRegion: (region: MapRegion) => void;
-  isLoading: boolean;
-  onFilterChange: (filter: MobilityMapFilterType) => void;
-};
-
 export type NavigateToTripSearchCallback = (
   location: GeoLocation | SearchLocation,
   destination: string,
@@ -87,14 +59,26 @@ export type NavigateToDetailsCallback = (
   isTripCancelled?: boolean,
 ) => void;
 
+export type ScooterHelpParams = {operatorId: string} & (
+  | {vehicleId: string}
+  | {bookingId: string}
+);
+
 export type MapProps = {
+  isFocused: boolean;
+  tabBarHeight: number;
   initialLocation?: Location;
-  vehicles?: VehiclesState; // V1 only
-  stations?: StationsState; // V1 only
   includeSnackbar?: boolean;
   navigateToQuay: NavigateToQuayCallback;
   navigateToDetails: NavigateToDetailsCallback;
   navigateToTripSearch: NavigateToTripSearchCallback;
+  navigateToScooterSupport: (params: ScooterHelpParams) => void;
+  navigateToScooterOnboarding: () => void;
+  navigateToReportParkingViolation: () => void;
+  navigateToParkingPhoto: (bookingId: string) => void;
+  navigateToScanQrCode: () => void;
+  navigateToLogin: () => void;
+  navigateToPaymentMethods: () => void;
 };
 
 export type Cluster = {
@@ -102,60 +86,6 @@ export type Cluster = {
   cluster: boolean;
   point_count_abbreviated: string;
   point_count: number;
-};
-
-export type MapSelectionActionType =
-  | {
-      source: 'map-click';
-      feature: Feature<Point>;
-    }
-  | {
-      source: 'map-item';
-      feature: Feature<Point>;
-    }
-  | {
-      source: 'cluster-click';
-      feature: Feature<Point, Cluster>;
-    }
-  | {
-      source: 'cluster-click-v2';
-      feature: Feature<Point, ClusterOfVehiclesProperties>;
-    }
-  | {
-      source: 'my-position';
-      coords: Coordinates;
-    }
-  | {source: 'filters-button'}
-  | {source: 'external-map-button'; url: string};
-
-export type CameraFocusModeType =
-  | {
-      mode: 'map-lines';
-      mapLines: MapLine[];
-      distance: number;
-    }
-  | {
-      mode: 'entity';
-      entityFeature: Feature<Point>;
-      mapLines?: MapLine[];
-      distance?: number;
-      zoomTo?: boolean;
-    }
-  | {
-      mode: 'coordinates';
-      coordinates: Coordinates;
-    }
-  | {
-      mode: 'my-position';
-      coordinates: Coordinates;
-    };
-
-export type MapLeg = {
-  mode?: AnyMode;
-  faded?: boolean;
-  transportSubmode?: TransportSubmode;
-  pointsOnLink?: PointsOnLink;
-  line?: Line;
 };
 
 export interface MapLine extends Feature<LineString> {
@@ -170,8 +100,8 @@ const FormFactorFilter = z.object({
 });
 export type FormFactorFilterType = z.infer<typeof FormFactorFilter>;
 
-const MobilityMapFilter = z.record(
-  z.nativeEnum(MobilityAPI_FormFactor),
+const MobilityMapFilter = z.partialRecord(
+  z.enum(Object.values(MobilityAPI_FormFactor)),
   FormFactorFilter,
 );
 export type MobilityMapFilterType = z.infer<typeof MobilityMapFilter>;
@@ -193,13 +123,13 @@ export type ParkingType = {
 
 export type PolylineEncodedMultiPolygon = String[][];
 
-type GeofencingZoneProps<GZKey extends GeofencingZoneKeys> =
+type GeofencingZoneProps<GZCode extends GeofencingZoneCode> =
   GeofencingZoneStyle<ContrastColor> & {
-    code: GZKey;
+    code: GZCode;
     isStationParking?: boolean;
   };
 
-export type GeofencingZoneCustomProps = GeofencingZoneProps<GeofencingZoneKeys>;
+export type GeofencingZoneCustomProps = GeofencingZoneProps<GeofencingZoneCode>;
 
 // two things differ PreProcessed vs not:
 // 1. geofencingZoneCustomProps on GeofencingZoneProperties
@@ -231,7 +161,7 @@ type GeofencingZoneExplanationType = {
 };
 
 export type GeofencingZoneExplanationsType = {
-  [GZKey in GeofencingZoneKeys | 'unspecified']: GeofencingZoneExplanationType;
+  [GZCode in GeofencingZoneCode | 'unspecified']: GeofencingZoneExplanationType;
 };
 
 export type SelectedMapItemProperties = GeoJsonProperties & {
@@ -241,3 +171,24 @@ export type SelectedMapItemProperties = GeoJsonProperties & {
 export type SelectedFeatureIdProp = {
   selectedFeatureId: SelectedMapItemProperties['id'];
 };
+
+export type AutoSelectableMapItem =
+  | VehicleExtendedFragment
+  | BikeStationFragment
+  | CarStationFragment;
+
+export type MapPropertiesType = {
+  center: GeoJSON.Position;
+  zoom: number;
+};
+
+export type Point = {
+  type: 'Point';
+  coordinates: Position;
+};
+
+export interface PointFeatureCollection
+  extends FeatureCollection<Point, GeoJsonProperties> {
+  renderKey?: string;
+}
+export type PointFeature = Feature<Point, MobilityAPI_GeofencingZoneProperties>;

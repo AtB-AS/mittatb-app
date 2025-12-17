@@ -4,18 +4,17 @@ import {type FareContractType} from '@atb-as/utils';
 import {
   findReferenceDataById,
   getReferenceDataName,
-  useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
+import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 
 type Props = {
   fc: FareContractType;
-  testID?: string;
 };
 
-export const ProductName = ({fc, testID}: Props) => {
-  const {preassignedFareProducts} = useFirestoreConfigurationContext();
+export const ProductName = ({fc}: Props) => {
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {language} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
@@ -30,9 +29,9 @@ export const ProductName = ({fc, testID}: Props) => {
     : undefined;
   return (
     <ThemeText
-      typography="body__secondary--bold"
+      typography="body__s__strong"
       accessibilityLabel={productName + screenReaderPause}
-      testID={testID + 'Product'}
+      testID="productName"
       color={theme.color.foreground.dynamic.secondary}
       style={styles.text}
     >
@@ -43,6 +42,6 @@ export const ProductName = ({fc, testID}: Props) => {
 
 const useStyles = StyleSheet.createThemeHook(() => ({
   text: {
-    textAlign: 'center',
+    textAlign: 'left',
   },
 }));

@@ -15,7 +15,6 @@ export type {
   OperatorBenefitIdType,
   OperatorBenefitType,
   PointToPointValidity,
-  PreassignedFareProduct,
   ProductTypeTransportModes,
   ScooterConsentLineType,
   FareZone,
@@ -28,6 +27,14 @@ export type {
   UserProfile,
 } from './types';
 export {
+  LanguageAndTextTypeArray,
+  PreassignedFareProduct,
+  SupplementProduct,
+  BaggageProduct,
+  BaggageType,
+} from './types';
+export {
+  type ReferenceDataNames,
   findReferenceDataById,
   getReferenceDataName,
   isProductSellableInApp,

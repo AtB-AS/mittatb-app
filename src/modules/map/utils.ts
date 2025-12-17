@@ -1,6 +1,9 @@
 import {RefObject} from 'react';
 import MapboxGL, {CameraAnimationMode, CameraPadding} from '@rnmapbox/maps';
-import {Expression} from '@rnmapbox/maps/src/utils/MapboxStyles';
+import {
+  Expression,
+  SymbolLayerStyleProps,
+} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   Feature,
@@ -13,10 +16,9 @@ import {
   Position,
 } from 'geojson';
 import {
-  MapPadding,
   ParkingType,
   GeofencingZoneCustomProps,
-  Cluster,
+  AutoSelectableMapItem,
 } from './types';
 import {
   ClusterOfVehiclesProperties,
@@ -27,56 +29,16 @@ import {
   isBicycleV2,
   isCarStationV2,
   isScooterV2,
-  isStation,
   isStationV2,
   isVehiclesClusteredFeature,
 } from '@atb/modules/mobility';
-import {SLIGHTLY_RAISED_MAP_PADDING} from './MapConfig';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import {MapBottomSheetType} from './MapContext';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
-export async function zoomIn(
-  mapViewRef: RefObject<MapboxGL.MapView>,
-  mapCameraRef: RefObject<MapboxGL.Camera>,
-) {
-  const currentZoom = await mapViewRef.current?.getZoom();
-  mapCameraRef.current?.zoomTo((currentZoom ?? 10) + 1, 200);
-}
-
-export async function zoomOut(
-  mapViewRef: RefObject<MapboxGL.MapView>,
-  mapCameraRef: RefObject<MapboxGL.Camera>,
-) {
-  const currentZoom = await mapViewRef.current?.getZoom();
-  mapCameraRef.current?.zoomTo((currentZoom ?? 10) - 1, 200);
-}
-
-export function fitBounds(
-  fromCoordinates: Coordinates,
-  toCoordinates: Coordinates,
-  mapCameraRef: RefObject<MapboxGL.Camera | null>,
-  padding: MapPadding = [100, 100],
-) {
-  mapCameraRef.current?.fitBounds(
-    [fromCoordinates.longitude, fromCoordinates.latitude],
-    [toCoordinates.longitude, toCoordinates.latitude],
-    padding,
-    1000,
-  );
-}
-
-export const findEntityAtClick = async (
-  clickedFeature: Feature<Point>,
-  mapViewRef: RefObject<MapboxGL.MapView | null>,
-) => {
-  const renderedFeatures = await getFeaturesAtClick(
-    clickedFeature,
-    mapViewRef,
-    ['==', ['geometry-type'], 'Point'],
-  );
-  return renderedFeatures?.filter(isFeaturePoint)?.filter(hasProperties)[0];
-};
+export const CUSTOM_SCAN_ZOOM_LEVEL = 17;
 
 export const isFeaturePoint = (f: Feature): f is Feature<Point> =>
   f.geometry.type === 'Point';
@@ -98,9 +60,6 @@ export const isFeaturePolylineEncodedMultiPolygon = (f: Feature): boolean =>
   (isFeatureMultiPolygon(f) || isFeaturePolygon(f)) &&
   !!f.properties?.polylineEncodedMultiPolygon;
 
-export const hasProperties = (f: Feature) =>
-  Object.keys(f.properties || {}).length > 0;
-
 export const hasGeofencingZoneCustomProps = (f: Feature) =>
   Object.keys(f.properties?.geofencingZoneCustomProps || {}).length > 0;
 
@@ -110,11 +69,6 @@ export const isFeatureGeofencingZone = (
   MultiPolygon,
   {geofencingZoneCustomProps: GeofencingZoneCustomProps}
 > => isFeaturePolylineEncodedMultiPolygon(f) && hasGeofencingZoneCustomProps(f);
-
-export const isClusterFeature = (
-  feature: Feature,
-): feature is Feature<Point, Cluster> =>
-  isFeaturePoint(feature) && feature.properties?.cluster;
 
 export const isClusterFeatureV2 = (
   feature: Feature,
@@ -153,6 +107,46 @@ export const getFeaturesAtPoint = async (
   );
 
   return featuresAtPoint?.features;
+};
+
+function mapMapBottomSheetTypeToFormFactor(
+  mapBottomSheetType?: MapBottomSheetType,
+): FormFactor | undefined {
+  switch (mapBottomSheetType) {
+    case MapBottomSheetType.Bicycle:
+      return FormFactor.Bicycle;
+    case MapBottomSheetType.Scooter:
+      return FormFactor.Scooter;
+    case MapBottomSheetType.BikeStation:
+      return FormFactor.Bicycle;
+    case MapBottomSheetType.CarStation:
+      return FormFactor.Car;
+    default:
+      return undefined;
+  }
+}
+
+export const getFeatureFromScan = (
+  mapItem: AutoSelectableMapItem,
+  mapBottomSheetType: MapBottomSheetType,
+): Feature<Point, GeoJsonProperties> => {
+  const feature: Feature<Point, GeoJsonProperties> = {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [mapItem?.lon, mapItem?.lat],
+    },
+    // properties should match the one received from the map onPressEvent
+    properties: {
+      id: mapItem.id,
+      system_id: mapItem?.system.id,
+      count: 1,
+      vehicle_type_form_factor:
+        mapMapBottomSheetTypeToFormFactor(mapBottomSheetType),
+    },
+  };
+
+  return feature;
 };
 
 /**
@@ -226,17 +220,6 @@ export function flyToLocation({
   });
 }
 
-export function getMapPadding(tabBarHeight: number | undefined) {
-  if (tabBarHeight) {
-    return {
-      ...SLIGHTLY_RAISED_MAP_PADDING,
-      paddingBottom: SLIGHTLY_RAISED_MAP_PADDING.paddingBottom + tabBarHeight,
-    };
-  } else {
-    return SLIGHTLY_RAISED_MAP_PADDING;
-  }
-}
-
 export const toFeaturePoint = <
   T extends {id?: string; lat: number; lon: number},
 >(
@@ -275,12 +258,6 @@ export const getVisibleRange = (visibleBounds: Position[]) => {
   return distance([lonSW, latSW], [lonSW, latNE], {units: 'meters'});
 };
 
-export const shouldShowMapLines = (entityFeature: Feature<Point>) =>
-  isStation(entityFeature) || isStopPlace(entityFeature);
-
-export const shouldZoomToFeature = (entityFeature: Feature<Point>) =>
-  isStation(entityFeature) || isStopPlace(entityFeature);
-
 export function getFeatureToSelect(
   featuresAtClick: Feature<Geometry, GeoJsonProperties>[],
   positionClicked: Position, // [lon, lat]
@@ -317,4 +294,40 @@ export function getFeatureWeight(
   } else {
     return 0;
   }
+}
+/*
+ * Standardized calculations for icon size and opacity zoom transitions.
+ */
+export function getIconZoomTransitionStyle(
+  reachFullScaleAtZoomLevel: number,
+  iconFullSize: number | Expression,
+  scaleTransitionZoomRange: number,
+  opacityTransitionExtraZoomRange: number,
+): Required<Pick<SymbolLayerStyleProps, 'iconSize' | 'iconOpacity'>> {
+  const iconOpacity: Expression = [
+    'interpolate',
+    ['linear'],
+    ['zoom'],
+    reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
+    0,
+    reachFullScaleAtZoomLevel -
+      scaleTransitionZoomRange +
+      opacityTransitionExtraZoomRange,
+    1,
+  ];
+
+  const iconSize: Expression = [
+    'interpolate',
+    ['linear'],
+    ['zoom'],
+    reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
+    0.3,
+    reachFullScaleAtZoomLevel,
+    iconFullSize,
+  ];
+
+  return {
+    iconSize,
+    iconOpacity,
+  };
 }

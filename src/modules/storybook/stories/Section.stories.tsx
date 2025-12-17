@@ -166,8 +166,7 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                 <ToggleSectionItem
                   leftImage={<ThemeIcon svg={Warning} />}
                   text="ToggleSectionItem"
-                  isSubtextMarkdown={true}
-                  subtext={`1. This is a list \n 2. made with markdown`}
+                  subtext="Subtext"
                   onValueChange={() => {}}
                 />
                 <SelectionInlineSectionItem

@@ -1,12 +1,15 @@
 import {OnboardingSectionConfig} from '@atb/modules/onboarding';
 import {Platform} from 'react-native';
+import {extendedOnboardingId} from './extended-onboarding';
+import {sparOnboardingId} from '../smart-park-and-ride';
 
 export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] = [
   {
     isOnboardedStoreKey: '@ATB_extended_onboarding_onboarded',
     onboardingSectionId: 'extendedOnboarding',
     initialScreen: {
-      name: 'Root_ExtendedOnboardingStack',
+      name: 'Root_OnboardingCarouselStack',
+      params: {configId: extendedOnboardingId},
     },
     shouldShowBeforeUserCreated: true,
     shouldShowPredicate: ({
@@ -95,5 +98,31 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] = [
       mobileTokenStatus === 'success-not-inspectable' &&
       travelCardDisabled &&
       authenticationType === 'phone',
+  },
+  {
+    isOnboardedStoreKey: '@ATB_travel_aid_onboarded',
+    onboardingSectionId: 'travelAid',
+    initialScreen: {
+      name: 'Root_TravelAidOnboardingScreen',
+    },
+    shouldShowPredicate: ({
+      isScreenReaderEnabled,
+      isTravelAidStopButtonEnabled,
+      fontScale,
+    }) =>
+      isTravelAidStopButtonEnabled &&
+      (isScreenReaderEnabled || fontScale > 1.5),
+  },
+  {
+    isOnboardedStoreKey: '@ATB_smart_park_and_ride_onboarded',
+    onboardingSectionId: 'smartParkAndRide',
+    initialScreen: {
+      name: 'Root_OnboardingCarouselStack',
+      params: {configId: sparOnboardingId},
+    },
+    customEntryPointRouteName: 'Profile_SmartParkAndRideScreen',
+    shouldShowPredicate: ({currentRouteName, hasVehicleRegistrations}) =>
+      currentRouteName === 'Profile_SmartParkAndRideScreen' &&
+      !hasVehicleRegistrations,
   },
 ];

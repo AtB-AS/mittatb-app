@@ -47,6 +47,7 @@ import {
   BundlingCityBikeActive as BundlingCityBikeActiveDark,
   CityBike as CityBikeDark,
   ParkAndRide as ParkAndRideDark,
+  BabyOnScooter as BabyOnScooterDark,
 } from '@atb/assets/svg/color/images/mobility/dark';
 import {
   BundlingCarSharing as BundlingCarSharingLight,
@@ -54,6 +55,7 @@ import {
   BundlingCityBikeActive as BundlingCityBikeActiveLight,
   CityBike as CityBikeLight,
   ParkAndRide as ParkAndRideLight,
+  BabyOnScooter as BabyOnScooterLight,
 } from '@atb/assets/svg/color/images/mobility/light';
 import {
   BonusBag as BonusBagLight,
@@ -71,6 +73,16 @@ import {
   BonusTransaction as BonusTransactionDark,
   BonusTrashCan as BonusTrashCanDark,
 } from '@atb/assets/svg/color/images/bonus/dark';
+import {
+  CarFront as CarFrontLight,
+  CarRegister as CarRegisterLight,
+  CarValidTicket as CarValidTicketLight,
+} from '@atb/assets/svg/color/images/smart-park-and-ride/light';
+import {
+  CarFront as CarFrontDark,
+  CarRegister as CarRegisterDark,
+  CarValidTicket as CarValidTicketDark,
+} from '@atb/assets/svg/color/images/smart-park-and-ride/dark';
 import {useThemeContext} from '@atb/theme/ThemeContext';
 import {SvgProps} from 'react-native-svg';
 
@@ -97,6 +109,10 @@ export const ThemedNoFavouriteDepartureImage = getThemedAsset(
 );
 export const ThemedOnBehalfOf = getThemedAsset(OnBehalfOfLight, OnBehalfOfDark);
 export const ThemedCityBike = getThemedAsset(CityBikeLight, CityBikeDark);
+export const ThemedBabyOnScooter = getThemedAsset(
+  BabyOnScooterLight,
+  BabyOnScooterDark,
+);
 export const ThemedParkAndRide = getThemedAsset(
   ParkAndRideLight,
   ParkAndRideDark,
@@ -165,10 +181,19 @@ export const ThemedContactIllustration = getThemedAsset(
   ContactIllustrationDark,
 );
 export const ThemedProfileCardLoggedIn = getThemedAsset(
-  ProfileCardLoggedInDark,
   ProfileCardLoggedInLight,
+  ProfileCardLoggedInDark,
 );
 export const ThemedProfileCardLoggedOut = getThemedAsset(
-  ProfileCardLoggedOutDark,
   ProfileCardLoggedOutLight,
+  ProfileCardLoggedOutDark,
+);
+export const ThemedCarFront = getThemedAsset(CarFrontLight, CarFrontDark);
+export const ThemedCarRegister = getThemedAsset(
+  CarRegisterLight,
+  CarRegisterDark,
+);
+export const ThemedCarValidTicket = getThemedAsset(
+  CarValidTicketLight,
+  CarValidTicketDark,
 );

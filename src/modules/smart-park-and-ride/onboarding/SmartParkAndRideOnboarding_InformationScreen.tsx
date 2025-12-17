@@ -1,44 +1,58 @@
 import {useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import React from 'react';
-import {OnboardingScreenComponent} from '@atb/modules/onboarding';
-import {ThemedParkAndRide} from '@atb/theme/ThemedAssets';
+import {
+  OnboardingCarouselScreenProps,
+  OnboardingScreenComponent,
+} from '@atb/modules/onboarding';
+import {ThemedCarValidTicket} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useNavigation} from '@react-navigation/native';
-import {ThemeText} from '@atb/components/text';
+import {useOnboardingCarouselNavigation} from '@atb/modules/onboarding';
+import {sparOnboardingId} from './config';
+import {useAnalyticsContext} from '@atb/modules/analytics';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
-export const SmartParkAndRideOnboarding_InformationScreen = () => {
+export type InformationScreenProps =
+  OnboardingCarouselScreenProps<'SmartParkAndRideOnboarding_InformationScreen'>;
+
+export const SmartParkAndRideOnboarding_InformationScreen = ({
+  navigation,
+}: InformationScreenProps) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
-  const navigation = useNavigation<any>();
+  const analytics = useAnalyticsContext();
 
-  const navigateToNext = () => {
-    navigation.navigate(
-      'SmartParkAndRideOnboarding_AutomaticRegistrationScreen',
+  const {navigateToNextScreen, closeOnboardingCarousel} =
+    useOnboardingCarouselNavigation(
+      sparOnboardingId,
+      'SmartParkAndRideOnboarding_InformationScreen',
     );
-  };
 
   return (
     <OnboardingScreenComponent
-      illustration={<ThemedParkAndRide height={170} />}
+      illustration={<ThemedCarValidTicket height={170} />}
+      headerProps={{
+        rightButton: {
+          type: 'close',
+          onPress: closeOnboardingCarousel,
+        },
+      }}
       title={t(SmartParkAndRideTexts.onboarding.information.title)}
       description={t(SmartParkAndRideTexts.onboarding.information.description)}
-      contentNode={<PenaltyNoticeText />}
       footerButton={{
-        onPress: navigateToNext,
+        onPress: () => {
+          analytics.logEvent(
+            'Smart Park & Ride',
+            'Onboarding information continue clicked',
+          );
+          navigateToNextScreen();
+        },
         text: t(SmartParkAndRideTexts.onboarding.information.buttonText),
         expanded: true,
         rightIcon: {svg: ArrowRight},
       }}
       testID="smartParkAndRideOnboardingInformation"
+      focusRef={focusRef}
     />
-  );
-};
-
-const PenaltyNoticeText = () => {
-  const {t} = useTranslation();
-  return (
-    <ThemeText typography="body__primary--bold" style={{textAlign: 'center'}}>
-      {t(SmartParkAndRideTexts.onboarding.information.penaltyNotice)}
-    </ThemeText>
   );
 };

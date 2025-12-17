@@ -4,17 +4,21 @@ import {
   UserProfile,
   FareZone,
 } from '@atb/modules/configuration';
-import {UserProfileWithCount} from '@atb/modules/fare-contracts';
+import {
+  UserProfileWithCount,
+  BaggageProductWithCount,
+} from '@atb/modules/fare-contracts';
 import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {StopPlaceFragmentWithIsFree} from '@atb/modules/harbors';
 import {CustomerProfile} from '@atb/modules/ticketing';
 import {Coordinates} from '@atb/utils/coordinates';
-import type {SalesTripPatternLeg} from '@atb/api/types/sales';
+import type {Leg} from '@atb/api/types/trips';
 
 export type PurchaseSelectionType = {
   fareProductTypeConfig: FareProductTypeConfig;
   preassignedFareProduct: PreassignedFareProduct;
   userProfilesWithCount: UserProfileWithCount[];
+  baggageProductsWithCount: BaggageProductWithCount[];
   stopPlaces:
     | {
         from: StopPlaceFragmentWithIsFree | undefined;
@@ -28,7 +32,7 @@ export type PurchaseSelectionType = {
       }
     | undefined;
   travelDate: string | undefined;
-  legs: SalesTripPatternLeg[];
+  legs: Leg[];
   isOnBehalfOf: boolean;
 };
 
@@ -103,6 +107,11 @@ export type PurchaseSelectionBuilder = {
   userProfiles: (u: UserProfileWithCount[]) => PurchaseSelectionBuilder;
 
   /**
+   * Apply the given baggage products with count to the purchase selection.
+   */
+  baggageProducts: (b: BaggageProductWithCount[]) => PurchaseSelectionBuilder;
+
+  /**
    * Apply the given travel date to the purchase selection. If the given date is
    * invalid the purchase selection will stay unmodified.
    */
@@ -113,7 +122,7 @@ export type PurchaseSelectionBuilder = {
    * on the same date as the travel date, the purchase selection will stay
    * unmodified.
    */
-  legs: (l: SalesTripPatternLeg[]) => PurchaseSelectionBuilder;
+  legs: (l: Leg[]) => PurchaseSelectionBuilder;
 
   /**
    * Apply isOnBehalfOf flag to the purchase selection.

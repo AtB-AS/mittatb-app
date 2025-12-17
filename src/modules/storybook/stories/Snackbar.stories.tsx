@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Snackbar,
   SnackbarProps,
-  SnackbarTextContent,
+  SnackbarContent,
 } from '@atb/components/snackbar';
 import {View} from 'react-native';
 import {
@@ -13,8 +13,10 @@ import {
 } from '../ThemedStoryDecorator';
 import {Meta} from '@storybook/react';
 import {ThemeText} from '@atb/components/text';
+import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
-type MetaPropsInputLayer = SnackbarTextContent & {
+type MetaPropsInputLayer = SnackbarContent & {
   actionButtonText: string;
 }; // to easily input title, description and action button text, define them directly as props, and map as input to Story
 
@@ -60,7 +62,8 @@ const SnackbarMeta: Meta<SnackbarMetaProps> = {
           args={{
             ...args,
             ...{
-              textContent: {
+              content: {
+                iconNode: args.iconNode,
                 title: args.title,
                 description: args.description,
               },
@@ -102,8 +105,18 @@ export const Minimal = {
   },
 };
 
+export const Medium = {
+  args: {
+    iconNode: <ThemeIcon svg={Chat} />,
+    title: undefined,
+    description: 'Some medium long description describing something here',
+    isDismissable: true,
+  },
+};
+
 export const Maximal = {
   args: {
+    iconNode: <ThemeIcon svg={Chat} />,
     title: 'The Title',
     description: 'Some rather long and detailed description right here',
     isDismissable: true,

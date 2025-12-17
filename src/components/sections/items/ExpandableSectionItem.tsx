@@ -61,7 +61,7 @@ export function ExpandableSectionItem({
   const {t} = useTranslation();
 
   const [expanded, setExpanded] = useState<boolean>(
-    'expanded' in props ? props.expanded ?? false : !!props.initiallyExpanded,
+    'expanded' in props ? (props.expanded ?? false) : !!props.initiallyExpanded,
   );
 
   useEffect(() => {
@@ -139,7 +139,7 @@ function ExpandIcon({
   return (
     <View style={styles.expandIcon}>
       {text && (
-        <ThemeText style={styles.expandIcon__text} typography="body__secondary">
+        <ThemeText style={styles.expandIcon__text} typography="body__s">
           {text}
         </ThemeText>
       )}

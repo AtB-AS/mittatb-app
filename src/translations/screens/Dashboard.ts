@@ -2,14 +2,14 @@ import {translation as _} from '../commons';
 
 const DashboardTexts = {
   header: {
-    title: _('Reisesøk', 'Travel search', 'Reisesøk'),
+    title: _('Finn reise', 'Find journey', 'Finn reise'),
     accessibility: {
       logo: _('Nullstill reisesøk', 'Reset search', 'Nullstill reisesøk'),
     },
   },
   buyButton: _('Kjøp billetter', 'Buy tickets', 'Kjøp billettar'),
-  announcemens: {
-    header: _('Aktuelt', 'Announcements', 'Aktuelt'),
+  announcements: {
+    header: _('Aktuelt', 'Latest', 'Aktuelt'),
     button: {
       accessibility: _(
         'Aktiver for å lese mer',
@@ -47,6 +47,10 @@ const DashboardTexts = {
             )
           : _('Les mer', 'Read mre', 'Les meir'),
     },
+  },
+  bonus: {
+    header: _('Poeng', 'Points', 'Poeng'),
+    button: _('Mer om Poeng', 'More about Points', 'Meir om Poeng'),
   },
 };
 

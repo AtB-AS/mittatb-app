@@ -14,11 +14,9 @@ import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_
 import {ParkingViolationType, ShmoBooking} from '@atb/api/types/mobility';
 import {Root_ChooseTicketRecipientScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/navigation-types';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
-import {
-  Root_SmartParkAndRideEditScreenParams,
-  Root_SmartParkAndRideAddScreenParams,
-} from '@atb/stacks-hierarchy/Root_SmartParkAndRide/navigation-types';
-import {Root_EnrollemntStackParams} from './Root_EntrollmentOnboradingStack';
+import {Root_SmartParkAndRideEditScreenParams} from '@atb/stacks-hierarchy/Root_SmartParkAndRide/navigation-types';
+import {Root_OnboardingCarouselStackParams} from './Root_OnboardingCarouselStack';
+import {UserProfileWithCountAndOffer} from './Root_PurchaseOverviewScreen/use-offer-state';
 
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
@@ -45,8 +43,8 @@ type FareContractDetailsRouteParams = {
 };
 
 type TicketInformationScreenParams = {
-  fareProductTypeConfigType: string;
   preassignedFareProductId: string | undefined;
+  userProfilesWithCountAndOffer?: UserProfileWithCountAndOffer[];
 };
 
 export type Root_LoginOptionsScreenParams = {
@@ -152,10 +150,10 @@ export type RootStackParamList = StackParams<{
   Root_ConfirmationScreen: Root_ConfirmationScreenParams;
   Root_ParkingPhotoScreen: Root_ParkingPhotoScreenParams;
   Root_TripSelectionScreen: Root_TripSearchScreenParams;
-  Root_SmartParkAndRideAddScreen: Root_SmartParkAndRideAddScreenParams;
+  Root_SmartParkAndRideAddScreen: undefined;
   Root_SmartParkAndRideEditScreen: Root_SmartParkAndRideEditScreenParams;
-  Root_SmartParkAndRideOnboardingStack: undefined;
-  Root_EnrollmentOnboardingStack: Root_EnrollemntStackParams;
+  Root_OnboardingCarouselStack: Root_OnboardingCarouselStackParams;
+  Root_TravelAidOnboardingScreen: undefined;
 }>;
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;

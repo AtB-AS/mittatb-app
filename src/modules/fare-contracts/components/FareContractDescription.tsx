@@ -1,20 +1,17 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import React from 'react';
 import {type FareContractType} from '@atb-as/utils';
-import {
-  findReferenceDataById,
-  useFirestoreConfigurationContext,
-} from '@atb/modules/configuration';
+import {findReferenceDataById} from '@atb/modules/configuration';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
+import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 
 type Props = {
   fc: FareContractType;
-  testID?: string;
 };
 
-export const Description = ({fc, testID}: Props) => {
-  const {preassignedFareProducts} = useFirestoreConfigurationContext();
+export const Description = ({fc}: Props) => {
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {language} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
@@ -30,9 +27,8 @@ export const Description = ({fc, testID}: Props) => {
   if (!description) return null;
   return (
     <ThemeText
-      typography="body__secondary"
+      typography="body__s"
       accessibilityLabel={description + screenReaderPause}
-      testID={testID + 'Product'}
       color={theme.color.foreground.dynamic.secondary}
       style={styles.text}
     >
@@ -43,6 +39,6 @@ export const Description = ({fc, testID}: Props) => {
 
 const useStyles = StyleSheet.createThemeHook(() => ({
   text: {
-    textAlign: 'center',
+    textAlign: 'left',
   },
 }));

@@ -1,7 +1,29 @@
 import remoteConfig from '@react-native-firebase/remote-config';
 import {ENABLE_TICKETING, PRIVACY_POLICY_URL, CUSTOMER_SERVICE_URL} from '@env';
+import {
+  MAPBOX_API_TOKEN,
+  MAPBOX_NSR_SOURCE_LAYER_ID,
+  MAPBOX_NSR_TILESET_ID,
+  MAPBOX_USER_NAME,
+} from '@env';
 
 export type RemoteConfig = {
+  /**
+   * Some code readers are sensitive to padding around code.
+   * Configurable parameter allows quick response to reading issues.
+   */
+  aztec_code_padding: number;
+  /**
+   * Some code readers are sensitive to code size.
+   * Configurable parameter allows quick response to reading issues.
+   */
+  aztec_code_max_height: number;
+  /**
+   * Some code readers are sensitive to code size. Configurable parameter allows
+   * quick response to reading issues. This field is used instead of
+   * aztec_code_max_height when enable_new_token_barcode is true.
+   */
+  aztec_code_size_in_cm: number;
   customer_feedback_url: string;
   customer_service_url: string;
   default_map_filter: string;
@@ -33,6 +55,8 @@ export type RemoteConfig = {
   enable_map_v2: boolean;
   enable_non_transit_trip_search: boolean;
   enable_nynorsk: boolean;
+  enable_new_token_barcode: boolean;
+  enable_new_token_barcode_base64: boolean;
   enable_on_behalf_of: boolean;
   enable_onboarding_login: boolean;
   enable_only_stop_places_checkbox: boolean;
@@ -58,6 +82,7 @@ export type RemoteConfig = {
   enable_in_app_review: boolean;
   enable_in_app_review_for_announcements: boolean;
   enable_smart_park_and_ride: boolean;
+  enable_harbor_distances_api: boolean;
   favourite_departures_poll_interval: number;
   feedback_questions: string;
   fetch_id_token_retry_count: number;
@@ -65,6 +90,10 @@ export type RemoteConfig = {
   flex_ticket_url: string;
   live_vehicle_stale_threshold: number;
   loading_screen_delay_ms: number;
+  mapbox_api_token: string;
+  mapbox_nsr_source_layer_id: string;
+  mapbox_nsr_tileset_id: string;
+  mapbox_user_name: string;
   minimum_app_version: string;
   must_upgrade_ticketing: boolean;
   new_favourites_info_url: string;
@@ -82,6 +111,9 @@ export type RemoteConfig = {
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
+  aztec_code_max_height: 275,
+  aztec_code_padding: 20,
+  aztec_code_size_in_cm: 3.5,
   customer_feedback_url: '',
   customer_service_url: CUSTOMER_SERVICE_URL,
   default_map_filter: JSON.stringify({
@@ -96,7 +128,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   disable_travelcard: false,
   enable_activate_ticket_now: false,
   enable_auto_sale: false,
-  enable_backend_sms_auth: false,
+  enable_backend_sms_auth: true,
   enable_beacons: false,
   enable_bonus_program: false,
   enable_car_sharing_in_map: false,
@@ -111,6 +143,8 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_loading_screen: true,
   enable_map_v2: true,
   enable_non_transit_trip_search: true,
+  enable_new_token_barcode: false,
+  enable_new_token_barcode_base64: false,
   enable_nynorsk: true,
   enable_on_behalf_of: false,
   enable_onboarding_login: true,
@@ -139,6 +173,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_in_app_review: false,
   enable_in_app_review_for_announcements: false,
   enable_smart_park_and_ride: false,
+  enable_harbor_distances_api: false,
   favourite_departures_poll_interval: 30000,
   feedback_questions: '',
   fetch_id_token_retry_count: 3,
@@ -146,6 +181,10 @@ export const defaultRemoteConfig: RemoteConfig = {
   flex_ticket_url: '',
   live_vehicle_stale_threshold: 15,
   loading_screen_delay_ms: 200,
+  mapbox_api_token: MAPBOX_API_TOKEN,
+  mapbox_nsr_source_layer_id: MAPBOX_NSR_SOURCE_LAYER_ID,
+  mapbox_nsr_tileset_id: MAPBOX_NSR_TILESET_ID,
+  mapbox_user_name: MAPBOX_USER_NAME,
   minimum_app_version: '',
   must_upgrade_ticketing: false,
   new_favourites_info_url: '',
@@ -167,6 +206,15 @@ export type RemoteConfigKeys = keyof RemoteConfig;
 export function getConfig(): RemoteConfig {
   const values = remoteConfig().getAll();
 
+  const aztec_code_max_height =
+    values['aztec_code_max_height']?.asNumber() ??
+    defaultRemoteConfig.aztec_code_max_height;
+  const aztec_code_padding =
+    values['aztec_code_padding']?.asNumber() ??
+    defaultRemoteConfig.aztec_code_padding;
+  const aztec_code_size_in_cm =
+    values['aztec_code_size_in_cm']?.asNumber() ??
+    defaultRemoteConfig.aztec_code_size_in_cm;
   const customer_feedback_url =
     values['customer_feedback_url']?.asString() ??
     defaultRemoteConfig.customer_feedback_url;
@@ -237,6 +285,12 @@ export function getConfig(): RemoteConfig {
   const enable_non_transit_trip_search =
     values['enable_non_transit_trip_search']?.asBoolean() ??
     defaultRemoteConfig.enable_non_transit_trip_search;
+  const enable_new_token_barcode =
+    values['enable_new_token_barcode']?.asBoolean() ??
+    defaultRemoteConfig.enable_new_token_barcode;
+  const enable_new_token_barcode_base64 =
+    values['enable_new_token_barcode_base64']?.asBoolean() ??
+    defaultRemoteConfig.enable_new_token_barcode_base64;
   const enable_nynorsk =
     values['enable_nynorsk']?.asBoolean() ?? defaultRemoteConfig.enable_nynorsk;
   const enable_on_behalf_of =
@@ -310,6 +364,9 @@ export function getConfig(): RemoteConfig {
   const enable_smart_park_and_ride =
     values['enable_smart_park_and_ride']?.asBoolean() ??
     defaultRemoteConfig.enable_smart_park_and_ride;
+  const enable_harbor_distances_api =
+    values['enable_harbor_distances_api']?.asBoolean() ??
+    defaultRemoteConfig.enable_harbor_distances_api;
   const favourite_departures_poll_interval =
     values['favourite_departures_poll_interval']?.asNumber() ??
     defaultRemoteConfig.favourite_departures_poll_interval;
@@ -331,6 +388,18 @@ export function getConfig(): RemoteConfig {
   const loading_screen_delay_ms =
     values['loading_screen_delay_ms']?.asNumber() ??
     defaultRemoteConfig.loading_screen_delay_ms;
+  const mapbox_api_token =
+    values['mapbox_api_token']?.asString() ??
+    defaultRemoteConfig.mapbox_api_token;
+  const mapbox_nsr_source_layer_id =
+    values['mapbox_nsr_source_layer_id']?.asString() ??
+    defaultRemoteConfig.mapbox_nsr_source_layer_id;
+  const mapbox_nsr_tileset_id =
+    values['mapbox_nsr_tileset_id']?.asString() ??
+    defaultRemoteConfig.mapbox_nsr_tileset_id;
+  const mapbox_user_name =
+    values['mapbox_user_name']?.asString() ??
+    defaultRemoteConfig.mapbox_user_name;
   const minimum_app_version =
     values['minimum_app_version']?.asString() ??
     defaultRemoteConfig.minimum_app_version;
@@ -374,6 +443,9 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.vehicles_poll_interval;
 
   return {
+    aztec_code_max_height,
+    aztec_code_padding,
+    aztec_code_size_in_cm,
     customer_feedback_url,
     customer_service_url,
     default_map_filter,
@@ -399,6 +471,8 @@ export function getConfig(): RemoteConfig {
     enable_loading_screen,
     enable_map_v2,
     enable_non_transit_trip_search,
+    enable_new_token_barcode,
+    enable_new_token_barcode_base64,
     enable_nynorsk,
     enable_on_behalf_of,
     enable_onboarding_login,
@@ -425,6 +499,7 @@ export function getConfig(): RemoteConfig {
     enable_in_app_review,
     enable_in_app_review_for_announcements,
     enable_smart_park_and_ride,
+    enable_harbor_distances_api,
     favourite_departures_poll_interval,
     feedback_questions,
     fetch_id_token_retry_count,
@@ -432,6 +507,10 @@ export function getConfig(): RemoteConfig {
     flex_ticket_url,
     live_vehicle_stale_threshold,
     loading_screen_delay_ms,
+    mapbox_api_token,
+    mapbox_nsr_source_layer_id,
+    mapbox_nsr_tileset_id,
+    mapbox_user_name,
     minimum_app_version,
     must_upgrade_ticketing,
     new_favourites_info_url,

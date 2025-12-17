@@ -1,6 +1,7 @@
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 import Clipboard from '@react-native-clipboard/clipboard';
 import React, {PropsWithChildren, useState} from 'react';
-import {AccessibilityProps, TouchableOpacity} from 'react-native';
+import {AccessibilityProps} from 'react-native';
 
 type ClickableCopyProps = PropsWithChildren<
   {
@@ -26,8 +27,8 @@ export function ClickableCopy({
   }
 
   return (
-    <TouchableOpacity disabled={isAnimating} onPress={setClipboard} {...props}>
+    <PressableOpacity disabled={isAnimating} onPress={setClipboard} {...props}>
       {isAnimating ? successElement : children}
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 }

@@ -6,7 +6,7 @@ import {ThemeText} from '@atb/components/text';
 import {SvgProps} from 'react-native-svg';
 
 type Props = {
-  icon: (SvgProps: SvgProps) => JSX.Element;
+  icon: (SvgProps: SvgProps) => React.JSX.Element;
   stat: string;
   description: string;
 };
@@ -17,10 +17,10 @@ export const VehicleCardStat = ({stat, description, icon}: Props) => {
   return (
     <View style={styles.contentItem}>
       <ThemeIcon svg={icon} color="primary" size="large" />
-      <ThemeText typography="body__primary--bold" color="primary">
+      <ThemeText typography="body__m__strong" color="primary">
         {stat}
       </ThemeText>
-      <ThemeText typography="body__secondary" color="secondary">
+      <ThemeText typography="body__s" color="secondary">
         {description}
       </ThemeText>
     </View>
