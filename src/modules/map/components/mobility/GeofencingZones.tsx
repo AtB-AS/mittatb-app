@@ -86,6 +86,7 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
     lineOpacity,
     lineCap: 'round',
     lineJoin: 'round',
+    lineEmissiveStrength: 1,
   };
 
   return (
@@ -100,6 +101,7 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
           fillAntialias: true,
           fillColor: bgColor,
           fillOpacity,
+          fillEmissiveStrength: 1,
         }}
         slot={geofencingZonesSlot}
       />
@@ -171,6 +173,7 @@ export const GeofencingZoneIcon: React.FC<GeofencingZoneIconProps> = ({
           iconImage,
           iconOpacity,
           iconSize,
+          iconEmissiveStrength: 1,
         }}
         aboveLayerID={MapSlotLayerId.GeofencingZonesIcons}
       />
