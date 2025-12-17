@@ -12,6 +12,7 @@ import {useRemoteConfigContext} from '@atb/modules/remote-config';
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
   GeofencingZones = 'geofencingZones',
+  GeofencingZonesIcons = 'geofencingZonesIcons',
   Vehicles = 'vehicles',
   Stations = 'stations',
   NSRItems = 'nsrItems',
@@ -21,6 +22,7 @@ export enum MapSlotLayerId {
 // the order of this list, determines which layers render on top. Last is on top.
 const slotLayerIds: MapSlotLayerId[] = [
   MapSlotLayerId.GeofencingZones,
+  MapSlotLayerId.GeofencingZonesIcons,
   MapSlotLayerId.Vehicles,
   MapSlotLayerId.Stations,
   MapSlotLayerId.NSRItems,
@@ -29,6 +31,7 @@ const slotLayerIds: MapSlotLayerId[] = [
 const slotLayers = slotLayerIds.map((slotLayerId) => ({
   id: slotLayerId,
   type: 'slot',
+  slot: slotLayerId === MapSlotLayerId.GeofencingZones ? 'middle' : 'top',
 }));
 
 export const useMapboxJsonStyle: (

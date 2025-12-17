@@ -62,6 +62,11 @@ const GeofencingZonesForVehicle = ({
 
 const getGeofencingZoneCustomProps = ['get', 'geofencingZoneCustomProps'];
 
+// likely a type error from mapbox, seems to work as intended when using a slot layer defined in useMapboxJsonStyle
+type MapboxSlot = 'bottom' | 'middle' | 'top';
+const geofencingZonesSlot =
+  MapSlotLayerId.GeofencingZones as unknown as MapboxSlot;
+
 type GeofencingZoneProps = {
   geofencingZone: PreProcessedGeofencingZones;
 };
@@ -96,7 +101,7 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
           fillColor: bgColor,
           fillOpacity,
         }}
-        aboveLayerID={MapSlotLayerId.GeofencingZones}
+        slot={geofencingZonesSlot}
       />
 
       {/*
@@ -108,13 +113,13 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
         id="geofencingZoneLine"
         filter={['!=', lineStyle, 'dashed']}
         style={lineLayerStyle}
-        aboveLayerID={MapSlotLayerId.GeofencingZones}
+        slot={geofencingZonesSlot}
       />
       <MapboxGL.LineLayer
         id="geofencingZoneDashedLine"
         filter={['==', lineStyle, 'dashed']}
         style={{...lineLayerStyle, lineDasharray: [2, 2]}}
-        aboveLayerID={MapSlotLayerId.GeofencingZones}
+        slot={geofencingZonesSlot}
       />
     </MapboxGL.ShapeSource>
   );
@@ -161,14 +166,13 @@ export const GeofencingZoneIcon: React.FC<GeofencingZoneIconProps> = ({
         id="geofencingZoneIcon"
         filter={hideItemsInTheDistanceFilter}
         style={{
-          symbolZOrder: 'source',
           iconAllowOverlap: true,
           iconIgnorePlacement: true,
-          iconImage: iconImage,
+          iconImage,
           iconOpacity,
           iconSize,
         }}
-        aboveLayerID={MapSlotLayerId.GeofencingZones}
+        aboveLayerID={MapSlotLayerId.GeofencingZonesIcons}
       />
     </MapboxGL.ShapeSource>
   );
