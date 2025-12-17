@@ -55,7 +55,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
             reservation={reservation}
             enabledLine={status !== 'rejected'}
           >
-            <ThemeText typography="heading__l" style={styles.statusText}>
+            <ThemeText typography="heading__l">
               {t(TicketingTexts.reservation[status])}
             </ThemeText>
           </WithValidityLine>
@@ -109,9 +109,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   detail: {
     paddingVertical: theme.spacing.xSmall,
-  },
-  statusText: {
-    textAlign: 'center',
   },
   vippsLinkContainer: {
     flex: 1,

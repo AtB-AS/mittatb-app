@@ -5,12 +5,16 @@ import {textTypeStyles} from '@atb/theme/colors';
 import Bugsnag from '@bugsnag/react-native';
 import {ThemeTextProps} from './ThemeText';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {getTextWeightStyle} from './utils';
+
+const MAX_RECURSION_DEPTH = 20;
 
 type MarkdownRendererProps = {
   // When rendering a list, this is the spacing between the list elements
   spacingBetweenListElements?: number;
   // The props to pass to the Text component
   textProps?: ThemeTextProps;
+  androidSystemFont: boolean;
 };
 
 export function renderMarkdown(
@@ -25,7 +29,22 @@ function renderToken(
   token: Token,
   index: number,
   props: MarkdownRendererProps,
+  depth = 0,
 ): React.ReactElement {
+  if (depth > MAX_RECURSION_DEPTH) {
+    console.warn(
+      `Markdown render: max recursion depth (${MAX_RECURSION_DEPTH}) exceeded.`,
+    );
+    return (
+      <Text key={index} {...props.textProps}>
+        {token.raw}
+      </Text>
+    );
+  }
+
+  const renderChildren = (tokens?: Token[]) =>
+    tokens?.map((t, i) => renderToken(t, i, props, depth + 1));
+
   switch (token.type) {
     case 'text':
       return (
@@ -36,11 +55,16 @@ function renderToken(
 
     case 'heading':
     case 'strong':
+      const fontWeight = textTypeStyles['body__m__strong'].fontWeight;
+      const textWeightStyle = getTextWeightStyle(
+        props.androidSystemFont,
+        fontWeight,
+      );
       return (
         <Text
           key={index}
           {...props.textProps}
-          style={{fontWeight: textTypeStyles['body__m__strong'].fontWeight}}
+          style={[props.textProps?.style, textWeightStyle]}
         >
           {token.text}
         </Text>
@@ -56,9 +80,12 @@ function renderToken(
       );
 
     case 'paragraph':
+      if (token.tokens?.length === 1) {
+        return renderToken(token.tokens[0], index, props, depth + 1);
+      }
       return (
         <Text key={index} {...props.textProps}>
-          {token.tokens?.map((t, i) => renderToken(t, i, props))}
+          {renderChildren(token.tokens)}
         </Text>
       );
 
@@ -87,7 +114,8 @@ function renderToken(
           key={index}
           onPress={openLink}
           {...props.textProps}
-          style={{textDecorationLine: 'underline'}}
+          style={[props.textProps?.style, {textDecorationLine: 'underline'}]}
+          accessibilityRole="link"
         >
           {token.text}
         </Text>

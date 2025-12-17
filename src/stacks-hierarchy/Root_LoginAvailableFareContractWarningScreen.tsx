@@ -1,7 +1,7 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {ScrollView, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
@@ -12,6 +12,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useTimeContext} from '@atb/modules/time';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
+import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -26,7 +27,7 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
   const styles = useStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
-  const focusRef = useFocusOnLoad();
+  const focusRef = useFocusOnLoad(navigation);
   const {reservations} = useTicketingContext();
   const {serverNow} = useTimeContext();
   const {fareContracts: availableFareContracts} = useFareContracts(
@@ -46,11 +47,16 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
     }
   };
 
+  const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
+
+  const navigateToBonusScreen = useCallback(() => {
+    navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
+  }, [navigation, bonusScreenParams]);
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
         leftButton={{type: 'back'}}
-        setFocusOnLoad={false}
         color={themeColor}
         title={t(LoginTexts.availableFareContractPrompt.header)}
       />
@@ -84,6 +90,7 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
               onPressFareContract={() => {}}
               now={serverNow}
               index={0}
+              navigateToBonusScreen={navigateToBonusScreen}
             />
           )}
         </View>

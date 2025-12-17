@@ -1,4 +1,4 @@
-import React, {forwardRef, useEffect, useRef, useState} from 'react';
+import React, {forwardRef, Ref, useEffect, useRef, useState} from 'react';
 import {
   AccessibilityInfo,
   Keyboard,
@@ -22,7 +22,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {countryPhoneData} from 'phone';
 import {Section} from '../Section';
 import {GenericClickableSectionItem} from '@atb/components/sections';
-import {giveFocus, useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {MessageInfoText} from '@atb/components/message-info-text';
 
@@ -34,6 +34,7 @@ type Props = SectionItemProps<
     showClear?: boolean;
     onClear?: () => void;
     errorText?: string;
+    focusRef?: Ref<any>;
   }
 >;
 
@@ -48,6 +49,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
       onBlur,
       showClear,
       onClear,
+      focusRef: prefixListRef,
       ...props
     },
     forwardedRef,
@@ -61,8 +63,6 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
     const myRef = useRef<InternalTextInput>(null);
     const combinedRef = composeRefs<InternalTextInput>(forwardedRef, myRef);
     const errorFocusRef = useRef(null);
-
-    const prefixListRef = useFocusOnLoad();
 
     useEffect(() => {
       giveFocus(errorFocusRef);

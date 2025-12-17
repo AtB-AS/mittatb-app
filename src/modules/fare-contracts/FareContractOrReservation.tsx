@@ -9,12 +9,14 @@ import {FareContractView} from './FareContractView';
 export function FareContractOrReservation({
   fcOrReservation,
   onPressFareContract,
+  navigateToBonusScreen,
   now,
   index,
   isStatic,
 }: {
   fcOrReservation: FareContractType | Reservation;
   onPressFareContract: () => void;
+  navigateToBonusScreen: () => void;
   now: number;
   index: number;
   isStatic?: boolean;
@@ -40,6 +42,7 @@ export function FareContractOrReservation({
           fareContract={fcOrReservation}
           isStatic={isStatic}
           onPressDetails={onPressFareContract}
+          navigateToBonusScreen={navigateToBonusScreen}
           testID={'ticket' + index}
         />
       </ErrorBoundary>

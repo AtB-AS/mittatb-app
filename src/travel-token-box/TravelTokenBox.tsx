@@ -10,8 +10,6 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {Button} from '@atb/components/button'; // re-add when new onboarding ready
 import {TravelTokenDeviceTitle} from './TravelTokenDeviceTitle';
-import {useNavigation} from '@react-navigation/native';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {MessageInfoText} from '@atb/components/message-info-text';
 
 const getInteractiveColor = (th: Theme) => th.color.interactive[2];
@@ -19,9 +17,11 @@ const getInteractiveColor = (th: Theme) => th.color.interactive[2];
 export function TravelTokenBox({
   showIfThisDevice,
   alwaysShowErrors,
+  onPressChangeButton,
 }: {
   showIfThisDevice: boolean;
   alwaysShowErrors: boolean;
+  onPressChangeButton: () => void;
 }) {
   const {theme} = useThemeContext();
   const interactiveColor = getInteractiveColor(theme);
@@ -30,10 +30,6 @@ export function TravelTokenBox({
   const {t} = useTranslation();
   const {mobileTokenStatus, isInspectable, tokens, retry} =
     useMobileTokenContext();
-
-  const navigation = useNavigation<RootNavigationProps>();
-  const onPressChangeButton = () =>
-    navigation.navigate('Root_SelectTravelTokenScreen');
 
   if (mobileTokenStatus === 'loading') {
     return <ActivityIndicator size="large" />;

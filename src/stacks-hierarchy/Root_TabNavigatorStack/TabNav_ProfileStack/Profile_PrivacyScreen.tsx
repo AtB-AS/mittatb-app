@@ -27,8 +27,12 @@ import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_PrivacyScreen = () => {
+type Props = ProfileScreenProps<'Profile_PrivacyScreen'>;
+
+export const Profile_PrivacyScreen = ({navigation}: Props) => {
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const destructiveColor = theme.color.interactive.destructive;
@@ -65,8 +69,11 @@ export const Profile_PrivacyScreen = () => {
   }, []);
   useEffect(() => updatePermissions(), [updatePermissions]);
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(ProfileTexts.sections.privacy.heading),
         leftButton: {type: 'back'},

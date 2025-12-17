@@ -2,12 +2,20 @@ import {Onboarding5} from '@atb/assets/svg/color/images';
 import {ExtendedOnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {
+  OnboardingCarouselScreenProps,
   OnboardingScreenComponent,
   useOnboardingNavigation,
 } from '@atb/modules/onboarding';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
-export const ExtendedOnboarding_AlsoGoodToKnowScreen = () => {
+export type AlsoGoodToKnowScreenProps =
+  OnboardingCarouselScreenProps<'ExtendedOnboarding_AlsoGoodToKnowScreen'>;
+
+export const ExtendedOnboarding_AlsoGoodToKnowScreen = ({
+  navigation,
+}: AlsoGoodToKnowScreenProps) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
 
   const {continueFromOnboardingSection} = useOnboardingNavigation();
@@ -25,6 +33,7 @@ export const ExtendedOnboarding_AlsoGoodToKnowScreen = () => {
         testID: 'nextButtonAlsoGoodToKnowOnboarding',
       }}
       testID="goodToKnowExtendedOnboarding"
+      focusRef={focusRef}
     />
   );
 };

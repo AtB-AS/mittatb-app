@@ -1,10 +1,17 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {TicketHistoryScreenComponent} from '@atb/screen-components/ticket-history';
 import {TicketingScreenProps} from './navigation-types';
+import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 
 type Props = TicketingScreenProps<'Ticketing_TicketHistoryScreen'>;
 
 export const Ticketing_TicketHistoryScreen = ({route, navigation}: Props) => {
+  const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
+
+  const navigateToBonusScreen = useCallback(() => {
+    navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
+  }, [navigation, bonusScreenParams]);
+
   return (
     <TicketHistoryScreenComponent
       mode={route.params.mode}
@@ -14,6 +21,7 @@ export const Ticketing_TicketHistoryScreen = ({route, navigation}: Props) => {
           transitionOverride: 'slide-from-right',
         })
       }
+      navigateToBonusScreen={navigateToBonusScreen}
     />
   );
 };

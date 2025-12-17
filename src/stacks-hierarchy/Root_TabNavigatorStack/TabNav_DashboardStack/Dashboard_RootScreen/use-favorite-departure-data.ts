@@ -1,4 +1,3 @@
-import {useIsFocused} from '@react-navigation/native';
 import {MutableRefObject, useCallback, useEffect, useRef} from 'react';
 import useReducerWithSideEffects, {
   NoUpdate,
@@ -250,6 +249,7 @@ const reducer: ReducerWithSideEffects<
  * @param {number} [tickRateInSeconds=10] - "tick frequency" is how often we retrigger time calculations and sorting. More frequent means more CPU load/battery drain. Less frequent can mean outdated data.
  */
 export function useFavoriteDepartureData(
+  isFocused: boolean,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
 ) {
@@ -267,7 +267,6 @@ export function useFavoriteDepartureData(
     },
     lastRefreshTime: new Date(),
   });
-  const isFocused = useIsFocused();
   const {favoriteDepartures, potentiallyMigrateFavoriteDepartures} =
     useFavoritesContext();
   const dashboardFavoriteDepartures = favoriteDepartures.filter(

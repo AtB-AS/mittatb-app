@@ -1,11 +1,9 @@
-import {PropsWithChildren} from 'react';
+import {PropsWithChildren, Ref} from 'react';
 import {StatusBar, View} from 'react-native';
 import {LoadingBody} from '../PhotoCapture/ScreenContainer';
 import {ThemeText} from '../text';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useNavigation} from '@react-navigation/native';
 import {PressableOpacity} from '../pressable-opacity';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {ThemeIcon} from '../theme-icon';
@@ -15,6 +13,8 @@ type CameraScreenContainerProps = PropsWithChildren<{
   title: string;
   secondaryText?: string;
   isLoading: boolean;
+  onGoBack: () => void;
+  focusRef?: Ref<any>;
 }>;
 
 export const CameraScreenContainer = ({
@@ -22,10 +22,10 @@ export const CameraScreenContainer = ({
   title,
   isLoading,
   secondaryText,
+  onGoBack,
+  focusRef,
 }: CameraScreenContainerProps) => {
   const styles = useStyles();
-  const focusRef = useFocusOnLoad();
-  const navigation = useNavigation();
   const {t} = useTranslation();
 
   if (isLoading) {
@@ -46,10 +46,7 @@ export const CameraScreenContainer = ({
             backgroundColor="transparent"
           />
           <View style={styles.header} ref={focusRef}>
-            <PressableOpacity
-              onPress={() => navigation.goBack()}
-              style={styles.back}
-            >
+            <PressableOpacity onPress={onGoBack} style={styles.back}>
               <ThemeIcon svg={SvgChevronLeft} color="white" />
               <ThemeText typography="body__s__strong" color="white">
                 {t(ScreenHeaderTexts.headerButton.back.text)}

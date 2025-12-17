@@ -4,7 +4,7 @@ import {
   useGetFareProductsQuery,
   useTicketingContext,
 } from '@atb/modules/ticketing';
-import React, {useRef} from 'react';
+import React, {useCallback, useRef} from 'react';
 import {View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/modules/fare-contracts';
 import {useTranslation, TicketingTexts} from '@atb/translations';
@@ -18,6 +18,7 @@ import {TravelTokenBox} from '@atb/travel-token-box';
 import {ThemedTicketTilted} from '@atb/theme/ThemedAssets';
 import {useQueryClient} from '@tanstack/react-query';
 import {SCHOOL_CARNET_QUERY_KEY} from '@atb/modules/ticketing';
+import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 
 type Props =
   TicketTabNavScreenProps<'TicketTabNav_AvailableFareContractsTabScreen'>;
@@ -50,6 +51,15 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
 
   const sentFareContractRef = useRef<View>(null);
 
+  const onPressChangeButton = () =>
+    navigation.navigate('Root_SelectTravelTokenScreen');
+
+  const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
+
+  const navigateToBonusScreen = useCallback(() => {
+    navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
+  }, [navigation, bonusScreenParams]);
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -72,11 +82,16 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
         }
         testID="availableFCScrollView"
       >
-        <TravelTokenBox showIfThisDevice={false} alwaysShowErrors={false} />
+        <TravelTokenBox
+          showIfThisDevice={false}
+          alwaysShowErrors={false}
+          onPressChangeButton={onPressChangeButton}
+        />
         <FareContractAndReservationsList
           reservations={reservations}
           fareContracts={availableFareContracts}
           now={serverNow}
+          navigateToBonusScreen={navigateToBonusScreen}
           onPressFareContract={(fareContractId) =>
             navigation.navigate('Root_FareContractDetailsScreen', {
               fareContractId,

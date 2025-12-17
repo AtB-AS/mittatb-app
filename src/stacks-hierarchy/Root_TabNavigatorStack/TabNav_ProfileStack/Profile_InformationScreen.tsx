@@ -13,8 +13,12 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_InformationScreen = () => {
+type Props = ProfileScreenProps<'Profile_InformationScreen'>;
+
+export const Profile_InformationScreen = ({navigation}: Props) => {
   const style = useStyle();
   const {t, language} = useTranslation();
 
@@ -29,8 +33,11 @@ export const Profile_InformationScreen = () => {
   const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
   const a11yStatementUrl = getTextForLanguage(a11yStatement, language);
 
+  const focusRef = useFocusOnLoad(navigation);
+
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title: t(ProfileTexts.sections.information.heading),
         leftButton: {type: 'back'},

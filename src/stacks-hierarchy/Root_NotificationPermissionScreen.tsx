@@ -9,8 +9,13 @@ import {
 } from '@atb/modules/onboarding';
 import {useNotificationsContext} from '@atb/modules/notifications';
 import {ThemedPushNotification} from '@atb/theme/ThemedAssets';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {RootStackScreenProps} from './navigation-types';
 
-export const Root_NotificationPermissionScreen = () => {
+type Props = RootStackScreenProps<'Root_NotificationPermissionScreen'>;
+
+export const Root_NotificationPermissionScreen = ({navigation}: Props) => {
+  const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
 
   const {continueFromOnboardingSection} = useOnboardingNavigation();
@@ -32,6 +37,7 @@ export const Root_NotificationPermissionScreen = () => {
         expanded: true,
       }}
       testID="notificationPermission"
+      focusRef={focusRef}
     />
   );
 };

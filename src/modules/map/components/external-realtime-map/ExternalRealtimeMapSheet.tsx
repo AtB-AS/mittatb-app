@@ -14,11 +14,13 @@ type ExternalRealtimeMapLinkSheetProps = {
   onClose: () => void;
   url: string;
   locationArrowOnPress: () => void;
+  navigateToScanQrCode: () => void;
 };
 export const ExternalRealtimeMapSheet = ({
   onClose,
   url,
   locationArrowOnPress,
+  navigateToScanQrCode,
 }: ExternalRealtimeMapLinkSheetProps) => {
   const {t} = useTranslation();
   const style = useStyle();
@@ -31,6 +33,7 @@ export const ExternalRealtimeMapSheet = ({
       rightIconText={t(dictionary.appNavigation.close.text)}
       rightIcon={Close}
       locationArrowOnPress={locationArrowOnPress}
+      navigateToScanQrCode={navigateToScanQrCode}
     >
       <ScrollView
         style={style.container}

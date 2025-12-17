@@ -25,7 +25,7 @@ import {
 } from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {BottomTabNavigationOptions} from '@react-navigation/bottom-tabs';
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {SvgProps} from 'react-native-svg';
 import {TabNavigatorStackParams} from './navigation-types';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
@@ -51,9 +51,23 @@ export const Root_TabNavigatorStack = () => {
   const {startScreen} = usePreferencesContext().preferences;
   const lineHeight = theme.typography.body__s.fontSize.valueOf();
 
-  useOnPushNotificationOpened();
-
   const navigation = useNavigation<RootNavigationProps>();
+
+  const navigateToAvailableFareContracts = useCallback(() => {
+    if (!navigation.isFocused()) return; // avoid navigating away from e.g. login or permission screens
+
+    navigation.navigate('Root_TabNavigatorStack', {
+      screen: 'TabNav_TicketingStack',
+      params: {
+        screen: 'Ticketing_RootScreen',
+        params: {
+          screen: 'TicketTabNav_AvailableFareContractsTabScreen',
+        },
+      },
+    });
+  }, [navigation]);
+
+  useOnPushNotificationOpened(navigateToAvailableFareContracts);
 
   const {currentRouteName} = useOnboardingContext();
   const {nextOnboardingSection} = useOnboardingFlow(true); // assumeUserCreationOnboarded true to ensure outdated userCreationOnboarded value not used

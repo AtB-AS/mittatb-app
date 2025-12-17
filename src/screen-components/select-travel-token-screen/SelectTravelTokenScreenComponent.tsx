@@ -10,7 +10,7 @@ import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {dictionary, TravelTokenTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {Ref, useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {RadioGroupSection} from '@atb/components/sections';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
@@ -22,9 +22,13 @@ import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
 
-type Props = {onAfterSave: () => void};
+type Props = {onAfterSave: () => void; focusRef: Ref<any>; isFocused: boolean};
 
-export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
+export const SelectTravelTokenScreenComponent = ({
+  onAfterSave,
+  focusRef,
+  isFocused,
+}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -34,7 +38,8 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
 
   const {tokens} = useMobileTokenContext();
   const toggleMutation = useToggleTokenMutation();
-  const {data} = useTokenToggleDetailsQuery();
+  const {data, isLoading} = useTokenToggleDetailsQuery(isFocused);
+  const toggleLimit = data?.toggleLimit ?? 0;
   const inspectableToken = tokens.find((t) => t.isInspectable);
 
   const [selectedType, setSelectedType] = useState<Token['type']>(
@@ -78,6 +83,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
 
   return (
     <FullScreenView
+      focusRef={focusRef}
       headerProps={{
         title,
         rightButton: {type: 'cancel'},
@@ -173,7 +179,11 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
           />
         )}
         {data?.toggleLimit !== undefined && (
-          <TokenToggleInfo textColor={theme.color.background.accent[0]} />
+          <TokenToggleInfo
+            textColor={theme.color.background.accent[0]}
+            toggleLimit={toggleLimit}
+            isLoading={isLoading}
+          />
         )}
         {toggleMutation.isPending ? (
           <ActivityIndicator size="large" />

@@ -26,7 +26,6 @@ import {
   TravelAidStatus,
   getFocusedEstimatedCall,
 } from './get-focused-estimated-call';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {getQuayName} from '@atb/utils/transportation-names';
 import {SituationMessageBox} from '@atb/modules/situations';
 import {CancelledDepartureMessage} from '@atb/screen-components/travel-details-screens';
@@ -45,6 +44,7 @@ export type TravelAidScreenParams = {
 };
 type Props = TravelAidScreenParams & {
   goBack: () => void;
+  focusRef: Ref<any>;
 };
 
 const sentStopSignalsCache = createSentStopSignalsCache();
@@ -52,6 +52,7 @@ const sentStopSignalsCache = createSentStopSignalsCache();
 export const TravelAidScreenComponent = ({
   serviceJourneyDeparture,
   goBack,
+  focusRef,
 }: Props) => {
   const stopSignalMutation = useStopSignalMutation({
     onSuccess: () => sentStopSignalsCache.addSent(serviceJourneyDeparture),
@@ -59,7 +60,6 @@ export const TravelAidScreenComponent = ({
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const focusRef = useFocusOnLoad();
 
   useKeepAwake();
 

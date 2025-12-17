@@ -4,7 +4,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {getThemeColor} from '../../components/PhotoCapture/ScreenContainer';
-import {useEffect, useMemo, useRef, useState} from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
 import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/bff/mobility';
@@ -20,6 +20,7 @@ import {compressImage} from '@atb/utils/image';
 import {View} from 'react-native';
 import {BottomSheetModal as GorhamBottomSheetModal} from '@gorhom/bottom-sheet';
 import {ViolationsReportingProvider} from '@atb/api/types/mobility';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export type QrScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsQrScreen'>;
@@ -29,6 +30,7 @@ export const Root_ParkingViolationsQrScreen = ({
   route: {params},
 }: QrScreenProps) => {
   const {t} = useTranslation();
+  const focusRef = useFocusOnLoad(navigation);
   const style = useStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
@@ -155,12 +157,18 @@ export const Root_ParkingViolationsQrScreen = ({
     setCapturedQr(undefined);
   };
 
+  const onGoBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
   return (
     <>
       <CameraScreenContainer
         title={t(ParkingViolationTexts.qr.title)}
         secondaryText={t(ParkingViolationTexts.qr.instructions)}
         isLoading={isLoading}
+        onGoBack={onGoBack}
+        focusRef={focusRef}
       >
         {isError && (
           <MessageInfoBox

@@ -25,7 +25,7 @@ import {canSellCollabTicket, getNonFreeLegs} from './utils';
 import {formatToClock, secondsBetween} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
-import React from 'react';
+import React, {Ref} from 'react';
 import {View} from 'react-native';
 import {Trip} from './components/Trip';
 import {useHarbors} from '@atb/modules/harbors';
@@ -44,6 +44,7 @@ type Props = TripDetailsScreenParams & {
   onPressBuyTicket: (params: Root_PurchaseOverviewScreenParams) => void;
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
   onPressDeparture: (items: ServiceJourneyDeparture[], index: number) => void;
+  focusRef: Ref<any>;
 };
 
 export const TripDetailsScreenComponent = ({
@@ -52,6 +53,7 @@ export const TripDetailsScreenComponent = ({
   onPressBuyTicket,
   onPressDeparture,
   onPressQuay,
+  focusRef,
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyle();
@@ -68,6 +70,7 @@ export const TripDetailsScreenComponent = ({
   return (
     <View style={styles.container}>
       <FullScreenView
+        focusRef={focusRef}
         headerProps={{
           leftButton: {type: 'back'},
           title: t(TripDetailsTexts.header.title),

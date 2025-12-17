@@ -21,13 +21,16 @@ import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {View} from 'react-native';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {Ref} from 'react';
 
 export type RulesScreenComponentProps = {
   onGiveConsent: (given: boolean) => void;
+  focusRef: Ref<any>;
 };
 
 export const RulesScreenComponent = ({
   onGiveConsent,
+  focusRef,
 }: RulesScreenComponentProps) => {
   const {scooterConsentLines} = useFirestoreConfigurationContext();
   const {theme} = useThemeContext();
@@ -65,6 +68,7 @@ export const RulesScreenComponent = ({
       headerProps={{
         rightButton: {type: 'close'},
       }}
+      focusRef={focusRef}
     />
   );
 };

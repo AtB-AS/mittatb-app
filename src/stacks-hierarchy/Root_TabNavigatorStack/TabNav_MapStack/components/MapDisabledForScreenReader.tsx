@@ -3,14 +3,17 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {ThemedMapImage} from '@atb/theme/ThemedAssets';
 import {MapTexts, useTranslation} from '@atb/translations';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {Ref} from 'react';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-export const MapDisabledForScreenReader = () => {
+type Props = {
+  focusRef: Ref<any>;
+};
+
+export const MapDisabledForScreenReader = ({focusRef}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const focusRef = useFocusOnLoad();
   return (
     <SafeAreaView style={styles.container}>
       <ThemedMapImage />

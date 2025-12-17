@@ -1,6 +1,7 @@
 import {Reservation} from '@atb/modules/ticketing';
 import {FareContractType, getAvailabilityStatus} from '@atb-as/utils';
 import {isDefined} from '@atb/utils/presence';
+import {isAfter} from '@atb/utils/date';
 
 export const getSortedFareContractsAndReservations = (
   fareContracts: FareContractType[],
@@ -24,6 +25,18 @@ export const getSortedFareContractsAndReservations = (
     return getAvailabilityStatus(fc, now).status === 'valid';
   });
 
+  // Only include the the failed reservation if it's more recent than all fare
+  // contracts.
+  const mostRecentFareContract =
+    sortFcOrReservationByCreation(fareContracts).at(0);
+  const shouldIncludeFailedReservation =
+    mostRecentFailedReservation && mostRecentFareContract
+      ? isAfter(
+          mostRecentFailedReservation.created,
+          mostRecentFareContract.created,
+        )
+      : true;
+
   // Non-valid fare contracts (e.g. inactive carnets) should come last, and be
   // sorted by creation date.
   const otherFareContracts = sortFcOrReservationByCreation(
@@ -35,7 +48,7 @@ export const getSortedFareContractsAndReservations = (
   // Sort everything but the non-valid fare contracts by creation date.
   const sortedFareContractsAndReservations = sortFcOrReservationByCreation(
     [
-      mostRecentFailedReservation,
+      shouldIncludeFailedReservation ? mostRecentFailedReservation : undefined,
       ...otherReservations,
       ...validFareContracts,
     ].filter(isDefined),

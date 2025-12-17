@@ -120,6 +120,6 @@ function validityTimeText(
 
 const useStyles = StyleSheet.createThemeHook(() => ({
   validityText: {
-    textAlign: 'center',
+    textAlign: 'left',
   },
 }));
