@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  PropsWithChildren,
-  useRef,
-  useMemo,
-  useState,
-} from 'react';
+import React, {useCallback, PropsWithChildren, useMemo, useState} from 'react';
 import BottomSheetGor, {
   BottomSheetBackdrop,
   BottomSheetScrollView,
@@ -22,6 +16,7 @@ import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {BottomSheetHeader} from '../BottomSheetHeader';
 import {useBottomSheetStyles} from '../use-bottom-sheet-styles';
+import {useBottomSheetV2Context} from '../BottomSheetV2Context';
 
 export type BottomSheetProps = PropsWithChildren<{
   snapPoints?: Array<string | number>;
@@ -64,7 +59,6 @@ export const MapBottomSheet = ({
   navigateToScanQrCode,
 }: BottomSheetProps) => {
   const styles = useBottomSheetStyles();
-  const bottomSheetGorRef = useRef<BottomSheetGor>(null);
   const sheetTopPosition = useSharedValue(0);
   const {setPaddingBottomMap, setCurrentBottomSheet, mapState} =
     useMapContext();
@@ -72,6 +66,7 @@ export const MapBottomSheet = ({
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   const {top: safeAreaTop} = useSafeAreaInsets();
   const [headerHeight, setHeaderHeight] = useState(0);
+  const {bottomSheetMapRef} = useBottomSheetV2Context();
 
   const aStyle = useAnimatedStyle(() => {
     return {
@@ -136,7 +131,7 @@ export const MapBottomSheet = ({
     <>
       {HeaderOverlay}
       <BottomSheetGor
-        ref={bottomSheetGorRef}
+        ref={bottomSheetMapRef}
         handleComponent={() => (
           <View onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}>
             <BottomSheetHeader
@@ -145,7 +140,7 @@ export const MapBottomSheet = ({
               logoUrl={logoUrl}
               rightIcon={rightIcon}
               rightIconText={rightIconText}
-              bottomSheetRef={bottomSheetGorRef}
+              bottomSheetRef={bottomSheetMapRef}
               headerNode={headerNode}
             />
           </View>
@@ -162,7 +157,6 @@ export const MapBottomSheet = ({
             closeCallback?.();
             setPaddingBottomMap(0);
             setCurrentBottomSheet({
-              isFullyOpen: false,
               bottomSheetType: MapBottomSheetType.None,
               feature: null,
             });
@@ -173,7 +167,6 @@ export const MapBottomSheet = ({
         onChange={(index) => {
           if (index !== -1) {
             setCurrentBottomSheet({
-              isFullyOpen: true,
               bottomSheetType: mapState.bottomSheetType,
               feature: mapState.feature ?? null,
             });
