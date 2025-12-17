@@ -47,11 +47,18 @@ const BonusProgramTexts = {
     },
     yourPoints: _('Dine poeng', 'Your points', 'Poenga dine'),
 
-    mapButton: _(
-      'Bruk poeng i kartet',
-      'Spend points in the map',
-      'Bruk poeng i kartet',
-    ),
+    mapButton: {
+      text: _(
+        'Bruk poeng i kartet',
+        'Spend points in the map',
+        'Bruk poeng i kartet',
+      ),
+      a11yHint: _(
+        'Kartet er ikke tilgjengelig med skjermleser.',
+        'The map is not accessible with screen reader.',
+        'Kartet er ikkje tilgjengeleg med skjermlesar.',
+      ),
+    },
     spendPoints: {
       heading: _(
         'Dette kan du få for poeng',
@@ -122,6 +129,12 @@ const BonusProgramTexts = {
           'Du kan bruke poenga i kartet når du vel å vel stasjonar frå Hyre eller Trondheim Bysykkel.',
         ),
       },
+      downloadOperator: (operator: string) =>
+        _(
+          `Last ned ${operator}`,
+          `Download ${operator}`,
+          `Last ned ${operator}`,
+        ),
     },
     feedback: {
       heading: _('Chat', 'Chat', 'Chat'),

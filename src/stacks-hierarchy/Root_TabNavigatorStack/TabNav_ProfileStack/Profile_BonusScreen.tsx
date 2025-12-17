@@ -7,11 +7,12 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   BonusProgramTexts,
   getTextForLanguage,
+  Language,
   useTranslation,
 } from '@atb/translations';
 import {Linking, Platform, View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {
   ThemedBonusMap,
   ThemedBonusTransaction,
@@ -26,7 +27,10 @@ import {
 } from '@atb/modules/bonus';
 import {useAuthContext} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {
+  BonusProductType,
+  useFirestoreConfigurationContext,
+} from '@atb/modules/configuration';
 import {BrandingImage, findOperatorBrandImageUrl} from '@atb/modules/mobility';
 import {isDefined} from '@atb/utils/presence';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
@@ -37,6 +41,8 @@ import {Button} from '@atb/components/button';
 import {MapPin} from '@atb/assets/svg/mono-icons/tab-bar';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
+import {useFontScale} from '@atb/utils/use-font-scale';
+import {TFunc} from '@leile/lobo-t';
 
 type Props = ProfileScreenProps<'Profile_BonusScreen'>;
 
@@ -47,6 +53,7 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
   const {bonusProducts, mobilityOperators} = useFirestoreConfigurationContext();
+  const fontScale = useFontScale();
 
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
@@ -91,8 +98,11 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
         <Button
           expanded
           rightIcon={{svg: MapPin}}
-          text={t(BonusProgramTexts.bonusProfile.mapButton)}
+          text={t(BonusProgramTexts.bonusProfile.mapButton.text)}
           style={styles.button}
+          accessibilityHint={t(
+            BonusProgramTexts.bonusProfile.mapButton.a11yHint,
+          )}
           onPress={() => {
             navigation.navigate('Root_TabNavigatorStack', {
               screen: 'TabNav_MapStack',
@@ -121,6 +131,14 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
                 <GenericSectionItem
                   key={bonusProduct.id}
                   style={{gap: theme.spacing.medium}}
+                  accessibility={{
+                    accessible: true,
+                    accessibilityLabel: bonusProductA11yLabel(
+                      bonusProduct,
+                      language,
+                      t,
+                    ),
+                  }}
                 >
                   <View style={styles.horizontalContainer}>
                     <BrandingImage
@@ -128,7 +146,9 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
                         bonusProduct.operatorId,
                         mobilityOperators,
                       )}
-                      logoSize={theme.typography['heading__xl'].fontSize}
+                      logoSize={
+                        theme.typography['heading__xl'].fontSize * fontScale
+                      }
                       style={styles.logo}
                     />
                     <ThemeText style={{flex: 1}}>
@@ -208,6 +228,24 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
+const bonusProductA11yLabel = (
+  bonusProduct: BonusProductType,
+  language: Language,
+  t: TFunc<typeof Language>,
+) => {
+  return (
+    (getTextForLanguage(bonusProduct.productDescription.title, language) ??
+      '') +
+    screenReaderPause +
+    t(BonusProgramTexts.costA11yLabel(bonusProduct.price.amount)) +
+    screenReaderPause +
+    (getTextForLanguage(
+      bonusProduct.productDescription.description,
+      language,
+    ) ?? '')
+  );
+};
+
 const iconSize = 61;
 
 const HowPointsWork = () => {
@@ -251,7 +289,11 @@ const HowPointsWork = () => {
                 key={product.operatorId}
                 rightIcon={{svg: ExternalLink}}
                 onPress={() => Linking.openURL(appUrl)}
-                text={'Last ned ' + getOperatorName(product.operatorId)}
+                text={t(
+                  BonusProgramTexts.bonusProfile.readMore.downloadOperator(
+                    getOperatorName(product.operatorId),
+                  ),
+                )}
               />
             );
           }
