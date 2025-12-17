@@ -101,7 +101,7 @@ export const MapBottomSheets = ({
           mapState.feature.geometry.coordinates,
         ),
         padding: getSlightlyRaisedMapPadding(
-          (screenHeight - tabBarMinHeight) * 0.75,
+          (screenHeight - tabBarMinHeight) * 0.7,
         ),
         mapCameraRef,
         mapViewRef,
