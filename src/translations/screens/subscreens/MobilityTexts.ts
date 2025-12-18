@@ -366,7 +366,7 @@ export const ParkAndRideTexts = {
   disclaimer: _(
     'Betaling eller andre vilkår kan gjelde på denne innfartsparkeringen',
     'Payment or other terms and conditions may apply to this parking',
-    '',
+    'Betaling eller andre vilkår kan gjelde på denne innfartsparkeringa',
   ),
   capacity: _('Plasser totalt', 'Parking spaces', 'Plassar totalt'),
   unknownCapacity: _(
