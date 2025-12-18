@@ -1,5 +1,4 @@
-import {Close, Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {Button} from '@atb/components/button';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   DatePickerSheetTexts,
@@ -59,18 +58,21 @@ export const DatePickerSheet = <T extends string>({
     options.find((o) => o.selected)?.option || options[0].option,
   );
 
-  const onSelect = () => {
-    onSave({option: selectedOptionId, date});
-    bottomSheetModalRef.current?.dismiss();
-  };
-
   return (
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(DatePickerSheetTexts.heading)}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
-      closeCallback={() => giveFocus(onCloseFocusRef)}
+      rightIconText={t(dictionary.confirm)}
+      rightIcon={Confirm}
+      closeCallback={() => {
+        if (initialDate !== date) {
+          onSave({option: selectedOptionId, date});
+        }
+        giveFocus(onCloseFocusRef);
+      }}
+      overrideCloseFunction={isSpinning ? () => {} : undefined}
+      closeOnBackdropPress={!isSpinning}
+      enablePanDownToClose={!isSpinning}
     >
       <View style={styles.container}>
         <RadioSegments
@@ -98,16 +100,6 @@ export const DatePickerSheet = <T extends string>({
             theme={themeName}
           />
         )}
-
-        <Button
-          expanded={true}
-          onPress={onSelect}
-          text={t(dictionary.confirm)}
-          rightIcon={{svg: Confirm}}
-          style={styles.button}
-          disabled={isSpinning}
-          testID="searchButton"
-        />
       </View>
     </BottomSheetModal>
   );
@@ -120,6 +112,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     container: {
       paddingHorizontal: theme.spacing.medium,
       paddingBottom: keyboardHeight,
+      alignItems: 'center',
     },
     button: {marginVertical: theme.spacing.medium},
   };

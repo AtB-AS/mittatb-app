@@ -18,7 +18,7 @@ type BottomSheetHeaderProps = {
   headerNode?: React.ReactNode;
   focusRef?: Ref<any>;
   testID?: string;
-  overrideCloseButton?: () => void;
+  overrideCloseFunction?: () => void;
 };
 
 export const BottomSheetHeader = ({
@@ -31,7 +31,7 @@ export const BottomSheetHeader = ({
   headerNode,
   focusRef,
   testID,
-  overrideCloseButton,
+  overrideCloseFunction,
 }: BottomSheetHeaderProps) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
@@ -66,7 +66,8 @@ export const BottomSheetHeader = ({
                 testID="closeBottomSheet"
                 accessibilityRole="button"
                 onPress={
-                  overrideCloseButton ?? (() => bottomSheetRef.current?.close())
+                  overrideCloseFunction ??
+                  (() => bottomSheetRef.current?.close())
                 }
               >
                 {rightIconText && (

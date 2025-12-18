@@ -38,7 +38,7 @@ type BottomSheetModalProps = PropsWithChildren<{
   Footer?: React.FC;
   testID?: string;
   closeOnBackdropPress?: boolean;
-  overrideCloseButton?: () => void;
+  overrideCloseFunction?: () => void;
 }>;
 export const BottomSheetModal = ({
   children,
@@ -57,7 +57,7 @@ export const BottomSheetModal = ({
   testID,
   enablePanDownToClose = true,
   closeOnBackdropPress = true,
-  overrideCloseButton,
+  overrideCloseFunction,
 }: BottomSheetModalProps) => {
   const styles = useBottomSheetStyles();
   const {height: screenHeight} = useWindowDimensions();
@@ -128,7 +128,7 @@ export const BottomSheetModal = ({
         bottomSheetRef={bottomSheetModalRef}
         headerNode={headerNode}
         testID={testID}
-        overrideCloseButton={overrideCloseButton}
+        overrideCloseFunction={overrideCloseFunction}
       />
     ),
     [
@@ -136,7 +136,7 @@ export const BottomSheetModal = ({
       headerNode,
       heading,
       logoUrl,
-      overrideCloseButton,
+      overrideCloseFunction,
       rightIcon,
       rightIconText,
       subText,
