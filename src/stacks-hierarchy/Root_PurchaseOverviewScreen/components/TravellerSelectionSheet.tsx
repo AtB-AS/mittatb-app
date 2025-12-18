@@ -69,7 +69,7 @@ export const TravellerSelectionSheet = ({
       rightIconText={t(dictionary.confirm)}
       closeOnBackdropPress={!nothingSelected}
       enablePanDownToClose={!nothingSelected}
-      overrideCloseButton={
+      overrideCloseFunction={
         nothingSelected ? () => setShowWarning(true) : undefined
       }
       rightIcon={Confirm}

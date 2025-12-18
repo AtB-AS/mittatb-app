@@ -70,7 +70,7 @@ export const DatePickerSheet = <T extends string>({
         }
         giveFocus(onCloseFocusRef);
       }}
-      overrideCloseButton={isSpinning ? () => {} : undefined}
+      overrideCloseFunction={isSpinning ? () => {} : undefined}
       closeOnBackdropPress={!isSpinning}
       enablePanDownToClose={!isSpinning}
     >
