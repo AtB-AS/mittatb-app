@@ -6,7 +6,7 @@ import {humanizePaymentType} from '@atb/modules/ticketing';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {View} from 'react-native';
 import {getRadioA11y, RadioIcon} from '@atb/components/radio';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {PaymentBrand} from './PaymentBrand';
 import {Checkbox} from '@atb/components/checkbox';
@@ -56,6 +56,17 @@ export const MultiplePaymentMethodsRadioSection = ({
   const paymentTexts = getPaymentTexts(paymentMethodsInGroup);
   const canSaveCard = authenticationType === 'phone';
 
+  const shouldSaveA11yLabel =
+    t(SelectPaymentMethodTexts.multiple_payment.text) +
+    screenReaderPause +
+    t(SelectPaymentMethodTexts.multiple_payment.information) +
+    screenReaderPause +
+    t(
+      shouldSave
+        ? SelectPaymentMethodTexts.a11yHint.notSave
+        : SelectPaymentMethodTexts.a11yHint.save,
+    );
+
   return (
     <View style={styles.card}>
       <PressableOpacity
@@ -90,6 +101,9 @@ export const MultiplePaymentMethodsRadioSection = ({
         <PressableOpacity
           onPress={toggleShouldSave}
           style={styles.saveMethodSection}
+          accessibilityRole="checkbox"
+          accessibilityState={{checked: shouldSave}}
+          accessibilityLabel={shouldSaveA11yLabel}
         >
           <ThemeText>
             {t(SelectPaymentMethodTexts.multiple_payment.text)}
