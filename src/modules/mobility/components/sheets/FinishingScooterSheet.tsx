@@ -9,11 +9,11 @@ import {ActivityIndicator, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {useActiveShmoBookingQuery} from '../../queries/use-active-shmo-booking-query';
-import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {ThemeText} from '@atb/components/text';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
 import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 
 type Props = {
   photoNavigation: () => void;
