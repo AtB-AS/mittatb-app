@@ -29,7 +29,7 @@ import {
   usePurchaseSelectionBuilder,
   useSelectableFareZones,
 } from '@atb/modules/purchase-selection';
-import {decodePolylineEncodedGeometry} from '@atb/modules/map/geofencing-zone-utils';
+import {decodePolylineEncodedGeometry} from '@atb/modules/map';
 
 type Props = {
   selection: PurchaseSelectionType;

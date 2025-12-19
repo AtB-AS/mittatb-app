@@ -1,6 +1,6 @@
 import {PolygonGeometry} from '@atb-as/config-specs';
 import {Location} from '@atb/modules/favorites';
-import {decodePolylineEncodedGeometry} from '@atb/modules/map/geofencing-zone-utils';
+import {decodePolylineEncodedGeometry} from '@atb/modules/map';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {Polygon} from 'geojson';
 import {useMemo} from 'react';
