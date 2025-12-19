@@ -24,7 +24,7 @@ import {ThemedParkAndRide} from '@atb/theme/ThemedAssets';
 import {
   BottomSheetHeaderType,
   MapBottomSheet,
-} from '@atb/components/bottom-sheet-v2';
+} from '@atb/components/bottom-sheet';
 
 type Props = {
   name: string | undefined;

@@ -17,7 +17,7 @@ import {useBottomSheetStyles} from '../use-bottom-sheet-styles';
 import {ReduceMotion} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useThemeContext} from '@atb/theme';
-import {useBottomSheetV2Context} from '../BottomSheetV2Context';
+import {useBottomSheetContext} from '../BottomSheetContext';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {BottomSheetHeaderType} from '../use-bottom-sheet-header-type';
@@ -63,7 +63,7 @@ export const BottomSheetModal = ({
   const [footerHeight, setFooterHeight] = useState(0);
   const {theme} = useThemeContext();
   const focusRef = React.useRef<View>(null);
-  const {setIsOpen, isOpen} = useBottomSheetV2Context();
+  const {setIsOpen, isOpen} = useBottomSheetContext();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   useEffect(() => {

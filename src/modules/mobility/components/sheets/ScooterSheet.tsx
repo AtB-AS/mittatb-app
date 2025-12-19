@@ -32,7 +32,7 @@ import {
 import {
   BottomSheetHeaderType,
   MapBottomSheet,
-} from '@atb/components/bottom-sheet-v2';
+} from '@atb/components/bottom-sheet';
 
 type ScooterHelpParams = {operatorId: string} & (
   | {vehicleId: string}

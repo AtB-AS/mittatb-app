@@ -31,7 +31,7 @@ import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
 import {
   BottomSheetHeaderType,
   MapBottomSheet,
-} from '@atb/components/bottom-sheet-v2';
+} from '@atb/components/bottom-sheet';
 
 type Props = {
   vehicleId: VehicleId;

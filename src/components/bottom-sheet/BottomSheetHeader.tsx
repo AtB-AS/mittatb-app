@@ -1,111 +1,134 @@
 import {View} from 'react-native';
-import React from 'react';
-import {StyleSheet, useThemeContext} from '@atb/theme';
-import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {BottomSheetTexts, useTranslation} from '@atb/translations';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {insets} from '@atb/utils/insets';
 import {PressableOpacity} from '../pressable-opacity';
+import {ThemeText} from '../text';
+import {ThemeIcon} from '../theme-icon';
+import {StyleSheet, useThemeContext} from '@atb/theme';
+import BottomSheet, {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BrandingImage} from '@atb/modules/mobility';
+import {Ref} from 'react';
+import {
+  BottomSheetHeaderType,
+  useBottomSheetHeaderType,
+} from './use-bottom-sheet-header-type';
 
-type BottomSheetHeaderWithoutNavigationProps = {
-  title?: string;
-  onClose?: () => void;
-  focusTitleOnLoad: boolean;
-  disableClose?: boolean;
-  disableHeader?: boolean;
+type BottomSheetHeaderProps = {
+  heading?: string;
+  subText?: string;
+  logoUrl?: string;
+  bottomSheetRef: React.RefObject<BottomSheetModal | BottomSheet | null>;
+  headerNode?: React.ReactNode;
+  focusRef?: Ref<any>;
+  testID?: string;
+  overrideCloseFunction?: () => void;
+  bottomSheetHeaderType: BottomSheetHeaderType;
 };
 
 export const BottomSheetHeader = ({
-  title,
-  onClose,
-  focusTitleOnLoad,
-  disableClose = false,
-  disableHeader = false,
-}: BottomSheetHeaderWithoutNavigationProps) => {
-  const styles = useStyle();
-  const {t} = useTranslation();
-
+  heading,
+  subText,
+  logoUrl,
+  bottomSheetRef,
+  headerNode,
+  focusRef,
+  testID,
+  overrideCloseFunction,
+  bottomSheetHeaderType,
+}: BottomSheetHeaderProps) => {
+  const styles = useStyles();
   const {theme} = useThemeContext();
-  const {close: closeBottomSheetDefault, onOpenFocusRef} =
-    useBottomSheetContext();
+  const headerData = useBottomSheetHeaderType(bottomSheetHeaderType);
 
-  const handleClose = () => {
-    closeBottomSheetDefault();
-    if (onClose) {
-      onClose();
-    }
-  };
-
-  const themeColor = theme.color.interactive[3];
-  const {
-    background: backgroundColor,
-    foreground: {primary: textColor},
-  } = themeColor.default;
-
-  if (disableHeader) {
-    return <View style={styles.headerBar} />;
-  }
   return (
-    <View style={styles.container}>
-      {/*Placeholder to center the title correctly*/}
-      <View style={[styles.button, {opacity: 0}]}>
-        <ThemeIcon svg={Close} size="normal" />
-      </View>
-      <View
-        accessibilityLabel={title}
-        accessible={true}
-        importantForAccessibility="yes"
-        accessibilityRole="header"
-        style={styles.headerTitle}
-        ref={focusTitleOnLoad ? onOpenFocusRef : undefined}
-      >
-        <ThemeText accessible={false} typography="body__m__strong">
-          {title}
-        </ThemeText>
-      </View>
-      <PressableOpacity
-        onPress={handleClose}
-        hitSlop={insets.all(10)}
-        style={[styles.button, {backgroundColor: backgroundColor}]}
-        accessible={true}
-        accessibilityLabel={t(BottomSheetTexts.closeButton.a11yLabel)}
-        accessibilityHint={t(BottomSheetTexts.closeButton.a11yHint)}
-        accessibilityRole="button"
-        testID="closeButton"
-        disabled={disableClose}
-      >
-        <ThemeIcon color={textColor} svg={Close} size="normal" />
-      </PressableOpacity>
+    <View accessibilityRole="header" testID={`${testID}BottomSheetHeader`}>
+      <View style={styles.handleIndicatorStyle} />
+      {(heading || headerData?.text || headerData?.icon) && (
+        <View style={styles.headerContainer}>
+          <View style={styles.headerContent}>
+            <View style={styles.headerLeft}>
+              {heading && (
+                <>
+                  {logoUrl && <BrandingImage logoUrl={logoUrl} logoSize={28} />}
+                  <View style={styles.headingWrapper} accessible ref={focusRef}>
+                    <ThemeText typography="heading__xl">{heading}</ThemeText>
+                    {subText && (
+                      <ThemeText
+                        typography="body__s"
+                        color={theme.color.foreground.dynamic.secondary}
+                      >
+                        {subText}
+                      </ThemeText>
+                    )}
+                  </View>
+                </>
+              )}
+            </View>
+
+            {(headerData?.text || headerData?.icon) && (
+              <PressableOpacity
+                style={styles.headerRight}
+                testID="closeBottomSheet"
+                accessibilityRole="button"
+                onPress={
+                  overrideCloseFunction ??
+                  (() => bottomSheetRef.current?.close())
+                }
+              >
+                {headerData?.text && (
+                  <ThemeText typography="body__s__strong">
+                    {headerData.text}
+                  </ThemeText>
+                )}
+                {headerData?.icon && <ThemeIcon svg={headerData.icon} />}
+              </PressableOpacity>
+            )}
+          </View>
+          {!!headerNode && (
+            <View style={styles.headerNodeContainer}>{headerNode}</View>
+          )}
+        </View>
+      )}
     </View>
   );
 };
 
-const useStyle = StyleSheet.createThemeHook((theme) => {
-  return {
-    container: {
-      marginHorizontal: theme.spacing.medium,
-      marginVertical: theme.spacing.large,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    button: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: theme.spacing.small,
-      borderRadius: 100,
-    },
-    headerBar: {
-      width: 75,
-      height: theme.spacing.small,
-      alignSelf: 'center',
-      borderRadius: theme.border.radius.large,
-      marginTop: theme.spacing.xSmall,
-      marginBottom: theme.spacing.medium,
-      backgroundColor: theme.color.background.neutral[3].background,
-    },
-    headerTitle: {alignItems: 'center', flex: 1},
-  };
-});
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  headerContainer: {
+    flexDirection: 'column',
+  },
+  headerContent: {
+    flexDirection: 'row',
+    gap: theme.spacing.small,
+    paddingBottom: theme.spacing.medium,
+    paddingRight: theme.spacing.medium,
+  },
+  headerNodeContainer: {
+    flex: 1,
+    paddingLeft: theme.spacing.medium,
+    paddingRight: theme.spacing.medium,
+    paddingBottom: theme.spacing.medium,
+  },
+  headerLeft: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.medium,
+    paddingLeft: theme.spacing.large,
+  },
+  headingWrapper: {
+    gap: theme.spacing.xSmall,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    gap: theme.spacing.xSmall,
+    paddingRight: theme.spacing.medium,
+  },
+  handleIndicatorStyle: {
+    backgroundColor: theme.color.foreground.inverse.secondary,
+    width: 75,
+    height: 6,
+    alignSelf: 'center',
+    borderRadius: theme.border.radius.regular,
+    marginBottom: theme.spacing.medium,
+    marginTop: theme.spacing.small,
+  },
+}));

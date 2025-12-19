@@ -15,7 +15,7 @@ import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {BottomSheetHeader} from '../BottomSheetHeader';
 import {useBottomSheetStyles} from '../use-bottom-sheet-styles';
-import {useBottomSheetV2Context} from '../BottomSheetV2Context';
+import {useBottomSheetContext} from '../BottomSheetContext';
 import {BottomSheetHeaderType} from '../use-bottom-sheet-header-type';
 
 export type BottomSheetProps = PropsWithChildren<{
@@ -64,7 +64,7 @@ export const MapBottomSheet = ({
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   const {top: safeAreaTop} = useSafeAreaInsets();
   const [headerHeight, setHeaderHeight] = useState(0);
-  const {bottomSheetMapRef} = useBottomSheetV2Context();
+  const {bottomSheetMapRef} = useBottomSheetContext();
 
   const aStyle = useAnimatedStyle(() => {
     return {

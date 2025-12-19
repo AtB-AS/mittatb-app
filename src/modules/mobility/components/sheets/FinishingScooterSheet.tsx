@@ -15,7 +15,7 @@ import {ThemedBeacons} from '@atb/theme/ThemedAssets';
 import {
   BottomSheetHeaderType,
   MapBottomSheet,
-} from '@atb/components/bottom-sheet-v2';
+} from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {

@@ -12,11 +12,11 @@ import type {
 import {default as RNDatePicker} from 'react-native-date-picker';
 import {getTimeZoneOffsetInMinutes, parseDate} from '@atb/utils/date';
 import {useLocaleContext} from '@atb/modules/locale';
-import {BottomSheetModal} from '../bottom-sheet-v2';
+import {BottomSheetModal} from '../bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {RefObject} from '@testing-library/react-native/build/types';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
-import {BottomSheetHeaderType} from '../bottom-sheet-v2/use-bottom-sheet-header-type';
+import {BottomSheetHeaderType} from '../bottom-sheet/use-bottom-sheet-header-type';
 
 type Props<T extends string> = {
   initialDate?: string;

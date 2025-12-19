@@ -19,7 +19,7 @@ import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
-} from '@atb/components/bottom-sheet-v2';
+} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
