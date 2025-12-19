@@ -12,8 +12,10 @@ import {
   StopPlacesSheetView,
   useStopsDetailsDataQuery,
 } from '@atb/screen-components/place-screen';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
+import {
+  BottomSheetHeaderType,
+  MapBottomSheet,
+} from '@atb/components/bottom-sheet-v2';
 
 type DeparturesDialogSheetProps = {
   onClose: () => void;
@@ -133,8 +135,7 @@ export const DeparturesDialogSheet = ({
         stopPlaceFeature.properties?.name ??
         stopDetailsData?.stopPlaces[0]?.name
       }
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >

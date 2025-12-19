@@ -2,14 +2,16 @@ import {ViolationsReportingProvider} from '@atb/api/types/mobility';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {dictionary, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {View} from 'react-native';
 import {ProviderLogo} from '../components/ProviderLogo';
-import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {
+  BottomSheetHeaderType,
+  BottomSheetModal,
+} from '@atb/components/bottom-sheet-v2';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type Props = {
   provider: ViolationsReportingProvider;
@@ -35,8 +37,7 @@ export const VehicleLookupConfirmationBottomSheet = ({
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(ParkingViolationTexts.vehicleLookup.title)}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       closeCallback={() => {
         giveFocus(onCloseFocusRef);
         onClose();

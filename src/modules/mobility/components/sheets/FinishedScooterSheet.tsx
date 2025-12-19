@@ -1,5 +1,5 @@
 import React from 'react';
-import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   MobilityTexts,
@@ -14,8 +14,10 @@ import {ShmoTripDetailsSectionItem} from '../ShmoTripDetailsSectionItem';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {useShmoBookingQuery} from '../../queries/use-shmo-booking-query';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {
+  BottomSheetHeaderType,
+  MapBottomSheet,
+} from '@atb/components/bottom-sheet-v2';
 
 type Props = {
   onClose: () => void;
@@ -49,8 +51,7 @@ export const FinishedScooterSheet = ({
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
       heading={t(MobilityTexts.formFactor(FormFactor.Scooter))}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >

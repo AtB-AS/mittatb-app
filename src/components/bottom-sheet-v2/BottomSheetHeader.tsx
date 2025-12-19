@@ -1,5 +1,4 @@
 import {View} from 'react-native';
-import {SvgProps} from 'react-native-svg';
 import {PressableOpacity} from '../pressable-opacity';
 import {ThemeText} from '../text';
 import {ThemeIcon} from '../theme-icon';
@@ -7,38 +6,42 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import BottomSheet, {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {BrandingImage} from '@atb/modules/mobility';
 import {Ref} from 'react';
+import {
+  BottomSheetHeaderType,
+  useBottomSheetHeaderType,
+} from './use-bottom-sheet-header-type';
 
 type BottomSheetHeaderProps = {
   heading?: string;
   subText?: string;
   logoUrl?: string;
-  rightIcon?: (props: SvgProps) => React.JSX.Element;
-  rightIconText?: string;
   bottomSheetRef: React.RefObject<BottomSheetModal | BottomSheet | null>;
   headerNode?: React.ReactNode;
   focusRef?: Ref<any>;
   testID?: string;
   overrideCloseFunction?: () => void;
+  bottomSheetHeaderType: BottomSheetHeaderType;
 };
 
 export const BottomSheetHeader = ({
   heading,
   subText,
   logoUrl,
-  rightIcon,
-  rightIconText,
   bottomSheetRef,
   headerNode,
   focusRef,
   testID,
   overrideCloseFunction,
+  bottomSheetHeaderType,
 }: BottomSheetHeaderProps) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
+  const headerData = useBottomSheetHeaderType(bottomSheetHeaderType);
+
   return (
     <View accessibilityRole="header" testID={`${testID}BottomSheetHeader`}>
       <View style={styles.handleIndicatorStyle} />
-      {(heading || rightIconText || rightIcon) && (
+      {(heading || headerData?.text || headerData?.icon) && (
         <View style={styles.headerContainer}>
           <View style={styles.headerContent}>
             <View style={styles.headerLeft}>
@@ -60,7 +63,7 @@ export const BottomSheetHeader = ({
               )}
             </View>
 
-            {(rightIconText || rightIcon) && (
+            {(headerData?.text || headerData?.icon) && (
               <PressableOpacity
                 style={styles.headerRight}
                 testID="closeBottomSheet"
@@ -70,12 +73,12 @@ export const BottomSheetHeader = ({
                   (() => bottomSheetRef.current?.close())
                 }
               >
-                {rightIconText && (
+                {headerData?.text && (
                   <ThemeText typography="body__s__strong">
-                    {rightIconText}
+                    {headerData.text}
                   </ThemeText>
                 )}
-                {rightIcon && <ThemeIcon svg={rightIcon} />}
+                {headerData?.icon && <ThemeIcon svg={headerData.icon} />}
               </PressableOpacity>
             )}
           </View>

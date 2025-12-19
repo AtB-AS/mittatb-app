@@ -1,5 +1,5 @@
 import {RequestError} from '@atb/api/utils';
-import {Close, Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {GenericSectionItem, Section} from '@atb/components/sections';
@@ -9,7 +9,10 @@ import {consumeCarnet} from '@atb/modules/ticketing';
 import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import React, {useState} from 'react';
-import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {
+  BottomSheetHeaderType,
+  BottomSheetModal,
+} from '@atb/components/bottom-sheet-v2';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {View} from 'react-native';
 import {RefObject} from '@testing-library/react-native/build/types';
@@ -63,8 +66,7 @@ export const ConsumeCarnetBottomSheet = ({
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(FareContractTexts.carnet.bottomSheetTitle)}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       closeCallback={() => giveFocus(onCloseFocusRef)}
       testID="selectFavorite"
     >
