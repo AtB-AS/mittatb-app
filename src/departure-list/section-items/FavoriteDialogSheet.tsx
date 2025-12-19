@@ -86,6 +86,7 @@ export const FavoriteDialogSheet = ({
         onCloseCallback?.();
       }}
       Footer={Footer}
+      testID="chooseFavorite"
     >
       <View style={styles.text} accessible={true}>
         <ThemeText>

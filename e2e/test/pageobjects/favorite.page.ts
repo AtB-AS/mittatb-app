@@ -60,23 +60,6 @@ class FavoritePage {
     await $(reqId).click();
     await ElementHelper.waitForElement('id', 'estimatedCallItem');
   }
-
-  /**
-   * Get favorite toggle icon
-   * @param favorite favorite or not [no, semi, all]
-   * @param quayIndex index of the quay
-   * @param depIndex index of the departure
-   */
-  async getFavoriteIcon(
-    favorite: 'no' | 'semi' | 'all',
-    quayIndex: number = 0,
-    depIndex: number = 0,
-  ) {
-    const quayId = `//*[@resource-id="quaySection${quayIndex}"]`;
-    const depId = `//*[@resource-id="estimatedCallItem"]`;
-    const favId = `//*[@resource-id="${favorite}Favorite"]`;
-    return $(quayId).$$(depId)[depIndex].$(favId);
-  }
 }
 
 export default new FavoritePage();
