@@ -6,6 +6,7 @@ import {
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   BonusProgramTexts,
+  dictionary,
   getTextForLanguage,
   Language,
   useTranslation,
@@ -294,6 +295,12 @@ const HowPointsWork = () => {
                     getOperatorName(product.operatorId),
                   ),
                 )}
+                accessibility={{
+                  accessibilityHint: t(
+                    dictionary.appNavigation.a11yHintForExternalContent,
+                  ),
+                  accessibilityRole: 'link',
+                }}
               />
             );
           }
