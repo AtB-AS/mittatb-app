@@ -29,6 +29,7 @@ import {
   usePurchaseSelectionBuilder,
   useSelectableFareZones,
 } from '@atb/modules/purchase-selection';
+import {decodePolylineEncodedGeometry} from '@atb/modules/map/geofencing-zone-utils';
 
 type Props = {
   selection: PurchaseSelectionType;
@@ -238,17 +239,20 @@ const mapZonesToFeatureCollection = (
   language: Language,
 ): FeatureCollection<Polygon> => ({
   type: 'FeatureCollection',
-  features: zones.map((t) => ({
-    type: 'Feature',
-    id: t.id,
-    properties: {
-      name: getReferenceDataName(t, language),
-      midPoint: turfCentroid(t.geometry, {
-        properties: {name: getReferenceDataName(t, language)},
-      }),
-    },
-    geometry: t.geometry,
-  })),
+  features: zones.map((t) => {
+    const geometry = decodePolylineEncodedGeometry(t.geometry);
+    return {
+      type: 'Feature',
+      id: t.id,
+      properties: {
+        name: getReferenceDataName(t, language),
+        midPoint: turfCentroid(geometry, {
+          properties: {name: getReferenceDataName(t, language)},
+        }),
+      },
+      geometry: geometry,
+    };
+  }),
 });
 
 export {FareZonesSelectorMap};

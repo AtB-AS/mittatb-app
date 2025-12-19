@@ -2,6 +2,7 @@ import {FareZone} from '@atb/modules/configuration';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useMemo} from 'react';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import {decodePolylineEncodedGeometry} from '@atb/modules/map/geofencing-zone-utils';
 
 export const useFareZoneFromLocation = (fareZones: FareZone[]) => {
   const {location} = useGeolocationContext();
@@ -9,7 +10,10 @@ export const useFareZoneFromLocation = (fareZones: FareZone[]) => {
     if (location) {
       const {longitude, latitude} = location.coordinates;
       return fareZones.find((t) =>
-        turfBooleanPointInPolygon([longitude, latitude], t.geometry),
+        turfBooleanPointInPolygon(
+          [longitude, latitude],
+          decodePolylineEncodedGeometry(t.geometry),
+        ),
       );
     }
   }, [fareZones, location]);

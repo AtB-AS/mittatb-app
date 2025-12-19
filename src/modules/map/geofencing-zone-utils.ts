@@ -15,6 +15,7 @@ import polylabel from 'polylabel';
 import {PointFeature, PointFeatureCollection} from './types';
 import centroid from '@turf/centroid';
 import {Feature as GeoJsonFeature, Polygon as GeoJsonPolygon} from 'geojson';
+import {PolygonGeometry} from '@atb-as/config-specs';
 
 function getApplicableGeofencingZoneRules(
   feature: Feature,
@@ -104,6 +105,16 @@ export function decodePolylineEncodedMultiPolygons(
     return {...geofencingZone, geojson};
   });
 }
+
+export const decodePolylineEncodedGeometry = (geometry: PolygonGeometry) => {
+  const coordinates = geometry.polylineEncodedCoordinates?.map(
+    (polylineEncodedRing) => {
+      const polygon = toGeoJSON(polylineEncodedRing);
+      return polygon.coordinates;
+    },
+  );
+  return {type: geometry.type, coordinates};
+};
 
 export function getIconFeatureCollections(
   geofencingZones: GeofencingZones[],
