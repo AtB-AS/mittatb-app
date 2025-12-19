@@ -54,7 +54,7 @@ describe('Travel search filter', () => {
         (await TravelsearchFilterPage.numberOfFilters) - 1;
       await TravelsearchFilterPage.toggleTransportModeFilter('bus');
       const filtersInUse = filtersAvailable - 1;
-      await TravelsearchFilterPage.confirmFilter();
+      await NavigationHelper.closeBottomSheet();
       await TravelsearchOverviewPage.waitForTravelSearchResults();
 
       // Verify
@@ -110,7 +110,7 @@ describe('Travel search filter', () => {
       // Filter out buses
       await TravelsearchFilterPage.openFilter();
       await TravelsearchFilterPage.setWalkSpeed('slow');
-      await TravelsearchFilterPage.confirmFilter();
+      await NavigationHelper.closeBottomSheet();
       await TravelsearchOverviewPage.waitForTravelSearchResults();
 
       await NavigationHelper.tapMenu('assistant');
@@ -129,7 +129,7 @@ describe('Travel search filter', () => {
       // Walk speed is still changed
       await TravelsearchFilterPage.openFilter();
       await TravelsearchFilterPage.walkSpeedIsEnabled('slow');
-      await TravelsearchFilterPage.confirmFilter();
+      await NavigationHelper.closeBottomSheet();
     } catch (errMsg) {
       await AppHelper.screenshot('error_travelsearch_save_filter');
       throw errMsg;
@@ -160,7 +160,7 @@ describe('Travel search filter', () => {
       // Filter out buses
       await TravelsearchFilterPage.openFilter();
       await TravelsearchFilterPage.toggleTransportModeFilter('bus');
-      await TravelsearchFilterPage.confirmFilter();
+      await NavigationHelper.closeBottomSheet();
       await TravelsearchOverviewPage.waitForTravelSearchResults();
 
       // Filters are enabled

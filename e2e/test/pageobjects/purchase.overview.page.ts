@@ -79,15 +79,6 @@ class PurchaseOverviewPage {
   }
 
   /**
-   * Confirm the traveller edits
-   */
-  async confirmTravellers() {
-    const reqId = `//*[@resource-id="confirmButton"]`;
-    await $(reqId).click();
-    await AppHelper.pause();
-  }
-
-  /**
    * Get the zones selected and displayed
    * @param index The zone to get (i.e. 0 = from / both, 1 = to)
    */
