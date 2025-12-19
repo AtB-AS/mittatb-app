@@ -9,6 +9,7 @@ export {ExploreLocationMap} from './ExploreLocationMap';
 export {
   addGeofencingZoneCustomProps,
   decodePolylineEncodedMultiPolygons,
+  decodePolylineEncodedGeometry,
   filterOutFeaturesNotApplicableForCurrentVehicle,
   sortFeaturesByLayerIndexWeight,
   getIconFeatureCollections,
