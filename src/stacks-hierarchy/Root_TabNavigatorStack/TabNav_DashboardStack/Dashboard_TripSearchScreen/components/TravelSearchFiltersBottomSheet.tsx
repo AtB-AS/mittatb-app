@@ -20,7 +20,7 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
-} from '@atb/components/bottom-sheet-v2';
+} from '@atb/components/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {BottomSheetModal as GorhamBottomSheetModal} from '@gorhom/bottom-sheet';
 

@@ -12,7 +12,7 @@ import React, {useState} from 'react';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
-} from '@atb/components/bottom-sheet-v2';
+} from '@atb/components/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {View} from 'react-native';
 import {RefObject} from '@testing-library/react-native/build/types';

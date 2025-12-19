@@ -19,7 +19,7 @@ import {useMutation} from '@tanstack/react-query';
 import {
   BottomSheetHeaderType,
   MapBottomSheet,
-} from '@atb/components/bottom-sheet-v2';
+} from '@atb/components/bottom-sheet';
 import {BottomSheetScrollView} from '@gorhom/bottom-sheet';
 
 type Props = {

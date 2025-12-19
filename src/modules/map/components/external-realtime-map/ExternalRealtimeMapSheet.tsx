@@ -9,7 +9,7 @@ import {GenericSectionItem, Section} from '@atb/components/sections';
 import {
   BottomSheetHeaderType,
   MapBottomSheet,
-} from '@atb/components/bottom-sheet-v2';
+} from '@atb/components/bottom-sheet';
 import {Linking} from 'react-native';
 
 type ExternalRealtimeMapLinkSheetProps = {

@@ -12,7 +12,7 @@ import {MobilityFilters} from './MobilityFilters';
 import {
   BottomSheetHeaderType,
   MapBottomSheet,
-} from '@atb/components/bottom-sheet-v2';
+} from '@atb/components/bottom-sheet';
 
 type MapFilterSheetProps = {
   onClose: () => void;

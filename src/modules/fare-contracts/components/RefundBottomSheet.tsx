@@ -19,7 +19,7 @@ import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
-} from '@atb/components/bottom-sheet-v2';
+} from '@atb/components/bottom-sheet';
 import {RefObject} from '@testing-library/react-native/build/types';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';

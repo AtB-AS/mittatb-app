@@ -33,7 +33,7 @@ import {MapStateActionType} from './mapStateReducer';
 import {getSlightlyRaisedMapPadding} from './MapConfig';
 import {useWindowDimensions} from 'react-native';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
-import {useBottomSheetV2Context} from '@atb/components/bottom-sheet-v2';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {MapBottomSheetType, useMapContext} from './MapContext';
 
 type MapBottomSheetsProps = {
@@ -73,7 +73,7 @@ export const MapBottomSheets = ({
     currentBottomSheet,
   } = useMapContext();
   const {data: activeBooking} = useActiveShmoBookingQuery();
-  const {bottomSheetMapRef} = useBottomSheetV2Context();
+  const {bottomSheetMapRef} = useBottomSheetContext();
 
   const {height: screenHeight} = useWindowDimensions();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();

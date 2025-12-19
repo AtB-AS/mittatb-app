@@ -38,7 +38,7 @@ import {BeaconsContextProvider} from '@atb/modules/beacons';
 import {FeatureTogglesContextProvider} from '@atb/modules/feature-toggles';
 import {configureReanimatedLogger} from 'react-native-reanimated';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
-import {BottomSheetV2ContextProvider} from './components/bottom-sheet-v2/BottomSheetV2Context';
+import {BottomSheetContextProvider} from './components/bottom-sheet/BottomSheetContext';
 import {EventStreamContextProvider} from './modules/event-stream/EventStreamContext';
 
 // https://rnfirebase.io/migrating-to-v22
@@ -111,7 +111,7 @@ export const App = () => {
                                                     <AnnouncementsContextProvider>
                                                       <NotificationContextProvider>
                                                         <BottomSheetModalProvider>
-                                                          <BottomSheetV2ContextProvider>
+                                                          <BottomSheetContextProvider>
                                                             <FeedbackQuestionsContextProvider>
                                                               <BeaconsContextProvider>
                                                                 <OnboardingContextProvider>
@@ -119,7 +119,7 @@ export const App = () => {
                                                                 </OnboardingContextProvider>
                                                               </BeaconsContextProvider>
                                                             </FeedbackQuestionsContextProvider>
-                                                          </BottomSheetV2ContextProvider>
+                                                          </BottomSheetContextProvider>
                                                         </BottomSheetModalProvider>
                                                       </NotificationContextProvider>
                                                     </AnnouncementsContextProvider>

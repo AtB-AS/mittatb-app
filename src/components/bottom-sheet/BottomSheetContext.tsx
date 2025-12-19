@@ -14,7 +14,7 @@ type BottomSheetState = {
   bottomSheetMapRef: React.RefObject<BottomSheet | null>;
 };
 
-const BottomSheetV2Context = createContext<BottomSheetState | undefined>(
+const BottomSheetContext = createContext<BottomSheetState | undefined>(
   undefined,
 );
 
@@ -22,7 +22,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-export const BottomSheetV2ContextProvider = ({children}: Props) => {
+export const BottomSheetContextProvider = ({children}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const bottomSheetMapRef = useRef<BottomSheet>(null);
 
@@ -33,7 +33,7 @@ export const BottomSheetV2ContextProvider = ({children}: Props) => {
   };
 
   return (
-    <BottomSheetV2Context.Provider value={state}>
+    <BottomSheetContext.Provider value={state}>
       <View
         style={{flex: 1}}
         accessibilityElementsHidden={isOpen}
@@ -41,15 +41,15 @@ export const BottomSheetV2ContextProvider = ({children}: Props) => {
       >
         {children}
       </View>
-    </BottomSheetV2Context.Provider>
+    </BottomSheetContext.Provider>
   );
 };
 
-export function useBottomSheetV2Context() {
-  const context = useContext(BottomSheetV2Context);
+export function useBottomSheetContext() {
+  const context = useContext(BottomSheetContext);
   if (context === undefined) {
     throw new Error(
-      'useBottomSheetV2Context must be used within a BottomSheetV2ContextProvider',
+      'useBottomSheetContext must be used within a BottomSheetContextProvider',
     );
   }
   return context;

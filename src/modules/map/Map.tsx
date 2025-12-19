@@ -64,7 +64,7 @@ import {MapBottomSheets} from './MapBottomSheets';
 import {MapButtons} from './components/MapButtons';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {usePreferencesContext} from '../preferences';
-import {useBottomSheetV2Context} from '@atb/components/bottom-sheet-v2';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -90,7 +90,7 @@ export const Map = (props: MapProps) => {
   const mapCameraRef = useRef<Camera>(null);
   const mapViewRef = useRef<MapView>(null);
   const [initMapLoaded, setInitMapLoaded] = useState(false);
-  const {bottomSheetMapRef} = useBottomSheetV2Context();
+  const {bottomSheetMapRef} = useBottomSheetContext();
   const onPressStartRef = useRef<boolean>(false);
 
   const {mapFilter, mapState, dispatchMapState, paddingBottomMap} =

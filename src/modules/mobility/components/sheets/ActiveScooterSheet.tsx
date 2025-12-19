@@ -27,7 +27,7 @@ import {useKeepAwake} from '@sayem314/react-native-keep-awake';
 import {
   BottomSheetHeaderType,
   MapBottomSheet,
-} from '@atb/components/bottom-sheet-v2';
+} from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemeText} from '@atb/components/text';
 
