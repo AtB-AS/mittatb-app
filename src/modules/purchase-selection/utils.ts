@@ -14,7 +14,7 @@ import {
   UserProfile,
 } from '@atb-as/config-specs';
 import {isValidDateString} from '@atb/utils/date';
-import {decodePolylineEncodedGeometry} from '../map';
+import {decodePolylineEncodedGeometry} from '@atb/utils/decode-polyline-geometry';
 
 export const isProductSellableInApp = (
   input: PurchaseSelectionBuilderInput,

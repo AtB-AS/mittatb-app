@@ -2,7 +2,7 @@ import {FareZone} from '@atb/modules/configuration';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useMemo} from 'react';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import {decodePolylineEncodedGeometry} from '@atb/modules/map';
+import {decodePolylineEncodedGeometry} from '@atb/utils/decode-polyline-geometry';
 
 export const useFareZoneFromLocation = (fareZones: FareZone[]) => {
   const {location} = useGeolocationContext();
