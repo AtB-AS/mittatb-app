@@ -1,10 +1,5 @@
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {
-  DatePickerSheetTexts,
-  dictionary,
-  useTranslation,
-} from '@atb/translations';
+import {DatePickerSheetTexts, useTranslation} from '@atb/translations';
 import {useKeyboardHeight} from '@atb/utils/use-keyboard-height';
 import React, {useState} from 'react';
 import {View} from 'react-native';
@@ -21,6 +16,7 @@ import {BottomSheetModal} from '../bottom-sheet-v2';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {RefObject} from '@testing-library/react-native/build/types';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetHeaderType} from '../bottom-sheet-v2/use-bottom-sheet-header-type';
 
 type Props<T extends string> = {
   initialDate?: string;
@@ -62,8 +58,7 @@ export const DatePickerSheet = <T extends string>({
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(DatePickerSheetTexts.heading)}
-      rightIconText={t(dictionary.confirm)}
-      rightIcon={Confirm}
+      bottomSheetHeaderType={BottomSheetHeaderType.Confirm}
       closeCallback={() => {
         if (initialDate !== date) {
           onSave({option: selectedOptionId, date});

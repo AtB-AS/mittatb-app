@@ -1,4 +1,4 @@
-import {dictionary, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
@@ -30,8 +30,10 @@ import {
   findRelevantBonusProduct,
   PayWithBonusPointsCheckbox,
 } from '@atb/modules/bonus';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
+import {
+  BottomSheetHeaderType,
+  MapBottomSheet,
+} from '@atb/components/bottom-sheet-v2';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
@@ -90,8 +92,7 @@ export const CarSharingStationBottomSheet = ({
       enableDynamicSizing={true}
       heading={operatorName}
       subText={t(MobilityTexts.formFactor(FormFactor.Car))}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       logoUrl={brandLogoUrl}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}

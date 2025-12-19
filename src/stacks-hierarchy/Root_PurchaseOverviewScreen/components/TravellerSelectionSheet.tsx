@@ -1,12 +1,7 @@
-import {
-  dictionary,
-  PurchaseOverviewTexts,
-  useTranslation,
-} from '@atb/translations';
+import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet} from '@atb/theme';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {MultipleTravellersSelection} from './Travellers/MultipleTravellersSelection';
 import {SingleTravellerSelection} from './Travellers/SingleTravellerSelection';
 import {useUserCountState} from './Travellers/use-user-count-state';
@@ -16,7 +11,10 @@ import {
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
-import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {
+  BottomSheetHeaderType,
+  BottomSheetModal,
+} from '@atb/components/bottom-sheet-v2';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {MessageSectionItem, Section} from '@atb/components/sections';
 
@@ -66,13 +64,12 @@ export const TravellerSelectionSheet = ({
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(PurchaseOverviewTexts.travellerSelectionSheet.title)}
-      rightIconText={t(dictionary.confirm)}
+      bottomSheetHeaderType={BottomSheetHeaderType.Confirm}
       closeOnBackdropPress={!nothingSelected}
       enablePanDownToClose={!nothingSelected}
       overrideCloseFunction={
         nothingSelected ? () => setShowWarning(true) : undefined
       }
-      rightIcon={Confirm}
       closeCallback={() => {
         giveFocus(onCloseFocusRef);
         saveSelection();

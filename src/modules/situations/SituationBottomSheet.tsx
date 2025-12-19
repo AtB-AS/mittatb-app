@@ -21,8 +21,10 @@ import {GenericSectionItem, Section} from '@atb/components/sections';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {getMsgTypeForMostCriticalSituationOrNotice} from './utils';
 import {openInAppBrowser} from '../in-app-browser';
-import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {
+  BottomSheetHeaderType,
+  BottomSheetModal,
+} from '@atb/components/bottom-sheet-v2';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 
@@ -65,8 +67,7 @@ export const SituationBottomSheet = ({
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(SituationsTexts.bottomSheet.title[msgType ?? 'info'])}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       closeCallback={() => giveFocus(onCloseFocusRef)}
       Footer={Footer}
     >

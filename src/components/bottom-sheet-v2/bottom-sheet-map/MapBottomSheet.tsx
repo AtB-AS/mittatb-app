@@ -4,7 +4,6 @@ import BottomSheetGor, {
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import {Platform, useWindowDimensions, View} from 'react-native';
-import {SvgProps} from 'react-native-svg';
 import {MapBottomSheetType, MapButtons, useMapContext} from '@atb/modules/map';
 import {BottomSheetTopPositionBridge} from './BottomSheetTopPositionBridge';
 import Animated, {
@@ -17,6 +16,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {BottomSheetHeader} from '../BottomSheetHeader';
 import {useBottomSheetStyles} from '../use-bottom-sheet-styles';
 import {useBottomSheetV2Context} from '../BottomSheetV2Context';
+import {BottomSheetHeaderType} from '../use-bottom-sheet-header-type';
 
 export type BottomSheetProps = PropsWithChildren<{
   snapPoints?: Array<string | number>;
@@ -29,13 +29,12 @@ export type BottomSheetProps = PropsWithChildren<{
   heading?: string;
   subText?: string;
   logoUrl?: string;
-  rightIcon?: (props: SvgProps) => React.JSX.Element;
-  rightIconText?: string;
   enablePanDownToClose?: boolean;
   locationArrowOnPress: () => void;
   canMinimize?: boolean;
   headerNode?: React.ReactNode;
   navigateToScanQrCode: () => void;
+  bottomSheetHeaderType: BottomSheetHeaderType;
 }>;
 
 export const MapBottomSheet = ({
@@ -50,13 +49,12 @@ export const MapBottomSheet = ({
   heading,
   subText,
   logoUrl,
-  rightIcon,
-  rightIconText,
   enablePanDownToClose = true,
   locationArrowOnPress,
   canMinimize = false,
   headerNode,
   navigateToScanQrCode,
+  bottomSheetHeaderType,
 }: BottomSheetProps) => {
   const styles = useBottomSheetStyles();
   const sheetTopPosition = useSharedValue(0);
@@ -138,10 +136,9 @@ export const MapBottomSheet = ({
               heading={heading}
               subText={subText}
               logoUrl={logoUrl}
-              rightIcon={rightIcon}
-              rightIconText={rightIconText}
               bottomSheetRef={bottomSheetMapRef}
               headerNode={headerNode}
+              bottomSheetHeaderType={bottomSheetHeaderType}
             />
           </View>
         )}

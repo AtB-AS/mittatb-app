@@ -19,13 +19,11 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 import {
-  AddEditFavoriteTexts,
-  dictionary,
-  useTranslation,
-} from '@atb/translations';
-import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
+  BottomSheetHeaderType,
+  BottomSheetModal,
+} from '@atb/components/bottom-sheet-v2';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 
@@ -208,8 +206,7 @@ export const EmojiSheet = ({
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(AddEditFavoriteTexts.emojiSheet.title)}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       closeCallback={() => giveFocus(onCloseFocusRef)}
     >
       {CATEGORIES.map((category) => (
