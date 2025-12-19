@@ -21,7 +21,6 @@ import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {PreferencesContextProvider} from '@atb/modules/preferences';
 import {AccessibilityContextProvider} from '@atb/modules/accessibility';
 import {AppLanguageContextProvider} from '@atb/translations/LanguageContext';
-import {BottomSheetContextProvider} from '@atb/components/bottom-sheet';
 import {LocaleContextProvider} from '@atb/modules/locale';
 import {setupConfig} from '@atb/setup';
 import {MobileTokenContextProvider} from '@atb/modules/mobile-token';
@@ -113,15 +112,13 @@ export const App = () => {
                                                       <NotificationContextProvider>
                                                         <BottomSheetModalProvider>
                                                           <BottomSheetV2ContextProvider>
-                                                            <BottomSheetContextProvider>
-                                                              <FeedbackQuestionsContextProvider>
-                                                                <BeaconsContextProvider>
-                                                                  <OnboardingContextProvider>
-                                                                    <RootStack />
-                                                                  </OnboardingContextProvider>
-                                                                </BeaconsContextProvider>
-                                                              </FeedbackQuestionsContextProvider>
-                                                            </BottomSheetContextProvider>
+                                                            <FeedbackQuestionsContextProvider>
+                                                              <BeaconsContextProvider>
+                                                                <OnboardingContextProvider>
+                                                                  <RootStack />
+                                                                </OnboardingContextProvider>
+                                                              </BeaconsContextProvider>
+                                                            </FeedbackQuestionsContextProvider>
                                                           </BottomSheetV2ContextProvider>
                                                         </BottomSheetModalProvider>
                                                       </NotificationContextProvider>

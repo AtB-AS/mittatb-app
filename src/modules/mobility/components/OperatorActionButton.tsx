@@ -10,10 +10,10 @@ import {useIsEligibleForBenefit} from '../use-is-eligible-for-benefit';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useThemeContext} from '@atb/theme';
 import {useBuyValueCodeWithBonusPointsMutation} from '@atb/modules/bonus';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {stringifyUrl} from '@atb/api/utils';
 import {useOperators} from '../use-operators';
 import {useOperatorBenefit} from '../use-operator-benefit';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type OperatorActionButtonProps = {
   operatorId: string | undefined;
@@ -33,7 +33,7 @@ export const OperatorActionButton = ({
   setIsBonusPayment,
   bonusProductId,
 }: OperatorActionButtonProps) => {
-  const {logEvent} = useBottomSheetContext();
+  const {logEvent} = useAnalyticsContext();
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const operator = useOperators().byId(operatorId);

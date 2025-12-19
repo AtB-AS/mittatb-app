@@ -8,8 +8,7 @@ import {MapScreenProps} from './navigation-types';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
+import {useIsFocused} from '@react-navigation/native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {ScooterHelpScreenProps} from '@atb/stacks-hierarchy/Root_ScooterHelp/Root_ScooterHelpScreen';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
@@ -25,18 +24,8 @@ export const Map_RootScreen = ({
   navigation,
 }: MapScreenProps<'Map_RootScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
-  const {close} = useBottomSheetContext();
   const tabBarHeight = useBottomTabBarHeight();
   const isFocused = useIsFocused();
-
-  useFocusEffect(
-    useCallback(() => {
-      return () => {
-        // on screen blur (navigating away from map tab), close bottomsheet
-        close();
-      };
-    }, [close]),
-  );
 
   const navigateToQuay = useCallback(
     (place: StopPlace, quay: Quay) => {
