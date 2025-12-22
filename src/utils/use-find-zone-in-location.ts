@@ -1,9 +1,11 @@
+import {PolygonGeometry} from '@atb-as/config-specs';
 import {Location} from '@atb/modules/favorites';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {Polygon} from 'geojson';
 import {useMemo} from 'react';
+import {decodePolylineEncodedGeometry} from './decode-polyline-geometry';
 
-type Zone = {geometry: Polygon};
+type Zone = {geometry: PolygonGeometry};
 
 export const useFindZoneInLocation = <T extends Zone>(
   location: Location | undefined,
@@ -30,7 +32,7 @@ export const findZoneInLocation = <T extends Zone>(
   return zones.find(({geometry}) =>
     turfBooleanPointInPolygon<Polygon>(
       [location.coordinates.longitude, location.coordinates.latitude],
-      geometry,
+      decodePolylineEncodedGeometry(geometry),
     ),
   );
 };
