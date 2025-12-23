@@ -10,6 +10,7 @@ import {NsrProps} from './NationalStopRegistryFeatures';
 import {SymbolLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Props as SymbolLayerProps} from '@rnmapbox/maps/lib/typescript/src/components/SymbolLayer';
 import {useMemo} from 'react';
+import {hideItemsInTheDistanceFilter} from '../../hooks/use-map-symbol-styles';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 export const useNsrSymbolLayers = (
@@ -34,7 +35,7 @@ export const useNsrSymbolLayers = (
         );
 
         const filter = getFilterWhichAlsoHidesSelectedFeature(
-          nsrSymbolLayer.filter,
+          [...nsrSymbolLayer.filter, hideItemsInTheDistanceFilter],
           selectedFeaturePropertyId,
         );
 
