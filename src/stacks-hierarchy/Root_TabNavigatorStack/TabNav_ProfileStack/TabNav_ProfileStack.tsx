@@ -23,7 +23,6 @@ import {Profile_EditProfileScreen} from '@atb/stacks-hierarchy/Root_TabNavigator
 import {Profile_FareContractsScreen} from './Profile_FareContractsScreen';
 import {Profile_NotificationsScreen} from './Profile_NotificationsScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
-import {Profile_TicketHistorySelectionScreen} from './Profile_TicketHistorySelectionScreen';
 import {Profile_TravelAidScreen} from './Profile_TravelAidScreen';
 import {Profile_TravelAidInformationScreen} from './Profile_TravelAidInformationScreen.tsx';
 import {Profile_BonusScreen} from './Profile_BonusScreen.tsx';
@@ -47,10 +46,6 @@ export const TabNav_ProfileStack = () => {
       <Stack.Screen
         name="Profile_TicketHistoryScreen"
         component={Profile_TicketHistoryScreen}
-      />
-      <Stack.Screen
-        name="Profile_TicketHistorySelectionScreen"
-        component={Profile_TicketHistorySelectionScreen}
       />
       <Stack.Screen
         name="Profile_BonusScreen"

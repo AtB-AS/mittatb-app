@@ -7,8 +7,6 @@ import {
 import {useTimeContext} from '@atb/modules/time';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
-import {TicketHistoryMode, TicketHistoryScreenParams} from './types';
-import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
 import {useAuthContext} from '@atb/modules/auth';
 import React from 'react';
 import {FullScreenHeader} from '@atb/components/screen-header';
@@ -16,16 +14,15 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {FlatList} from 'react-native-gesture-handler';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
 import {EmptyState} from '@atb/components/empty-state';
-import {ThemedHoldingHands, ThemedTicketTilted} from '@atb/theme/ThemedAssets';
+import {ThemedTicketTilted} from '@atb/theme/ThemedAssets';
 import {sortFcOrReservationByCreation} from '@atb/modules/fare-contracts';
 
-type Props = TicketHistoryScreenParams & {
+type Props = {
   onPressFareContract: (fareContractId: string) => void;
   navigateToBonusScreen: () => void;
 };
 
 export const TicketHistoryScreenComponent = ({
-  mode,
   onPressFareContract,
   navigateToBonusScreen,
 }: Props) => {
@@ -42,10 +39,8 @@ export const TicketHistoryScreenComponent = ({
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const fareContractsToShow =
-    mode === 'sent' ? sentFareContracts : historicalFareContracts;
+  const fareContractsToShow = sentFareContracts.concat(historicalFareContracts);
   const reservationsToShow = getReservationsToShow(
-    mode,
     reservations,
     rejectedReservations,
     customerAccountId,
@@ -59,7 +54,7 @@ export const TicketHistoryScreenComponent = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title={t(TicketHistoryModeTexts[mode].title)}
+        title={t(TicketingTexts.purchaseHistory.title)}
         leftButton={{type: 'back'}}
       />
       <FlatList
@@ -83,9 +78,9 @@ export const TicketHistoryScreenComponent = ({
         keyExtractor={(item) => item.created + item.orderId}
         ListEmptyComponent={
           <EmptyState
-            title={t(TicketingTexts.ticketHistory.emptyState)}
-            details={t(TicketHistoryModeTexts[mode].emptyDetail)}
-            illustrationComponent={emptyStateImage(mode)}
+            title={t(TicketingTexts.purchaseHistory.emptyState.title)}
+            details={t(TicketingTexts.purchaseHistory.emptyState.description)}
+            illustrationComponent={<ThemedTicketTilted height={84} />}
             testID="fareContracts"
           />
         }
@@ -97,30 +92,27 @@ export const TicketHistoryScreenComponent = ({
 };
 
 const getReservationsToShow = (
-  mode: TicketHistoryMode,
   reservations: Reservation[],
   rejectedReservations: Reservation[],
   customerAccountId?: string,
 ) => {
-  switch (mode) {
-    case 'historical':
-      return rejectedReservations.filter(
-        (reservation) => reservation.customerAccountId === customerAccountId,
-      );
-    case 'sent':
-      return reservations.filter(
-        (reservation) => reservation.customerAccountId !== customerAccountId,
-      );
-  }
-};
+  const reservationsToShow: Reservation[] = [];
 
-const emptyStateImage = (emptyStateMode: TicketHistoryMode) => {
-  switch (emptyStateMode) {
-    case 'historical':
-      return <ThemedTicketTilted height={84} />;
-    case 'sent':
-      return <ThemedHoldingHands height={84} />;
-  }
+  // only show reservations for tickets sent to others
+  reservationsToShow.push(
+    ...reservations.filter(
+      (reservation) => reservation.customerAccountId !== customerAccountId,
+    ),
+  );
+
+  // only show rejected reservations for tickets purchesed for own account
+  reservationsToShow.push(
+    ...rejectedReservations.filter(
+      (reservation) => reservation.customerAccountId === customerAccountId,
+    ),
+  );
+
+  return reservationsToShow;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

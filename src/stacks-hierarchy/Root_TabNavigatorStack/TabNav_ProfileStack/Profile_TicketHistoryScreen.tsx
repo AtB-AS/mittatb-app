@@ -5,7 +5,7 @@ import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen
 
 type Props = ProfileScreenProps<'Profile_TicketHistoryScreen'>;
 
-export const Profile_TicketHistoryScreen = ({route, navigation}: Props) => {
+export const Profile_TicketHistoryScreen = ({navigation}: Props) => {
   const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
 
   const navigateToBonusScreen = useCallback(() => {
@@ -14,7 +14,6 @@ export const Profile_TicketHistoryScreen = ({route, navigation}: Props) => {
 
   return (
     <TicketHistoryScreenComponent
-      mode={route.params.mode}
       onPressFareContract={(fareContractId) =>
         navigation.navigate('Root_FareContractDetailsScreen', {
           fareContractId,

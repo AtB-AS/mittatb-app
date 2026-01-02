@@ -9,32 +9,41 @@ import {
 import {isSentOrReceivedFareContract} from '@atb/modules/ticketing';
 import type {FareContractType} from '@atb-as/utils';
 
-export const SentToMessageBox = ({fc}: {fc: FareContractType}) => {
+export const SentOrReceivedMessageBox = ({fc}: {fc: FareContractType}) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
   const {t} = useTranslation();
-  const isSent =
-    isSentOrReceivedFareContract(fc) && fc.customerAccountId !== currentUserId;
-  const {data: phoneNumber} = useGetPhoneByAccountIdQuery(
-    isSent ? fc.customerAccountId : undefined,
-  );
+  const isSentOrReceived = isSentOrReceivedFareContract(fc);
+  const isSent = isSentOrReceived && fc.customerAccountId !== currentUserId;
+
+  const displayUserId = isSent ? fc.customerAccountId : fc.purchasedBy;
+
+  const {data: phoneNumber} = useGetPhoneByAccountIdQuery(displayUserId);
   const {data: onBehalfOfAccounts} = useFetchOnBehalfOfAccountsQuery({
     enabled: !!phoneNumber,
   });
 
-  if (!isSent || !phoneNumber) return null;
+  if (!isSentOrReceived || !phoneNumber) return null;
 
-  const recipientName = onBehalfOfAccounts?.find(
+  const name = onBehalfOfAccounts?.find(
     (a) => a.phoneNumber === phoneNumber,
   )?.name;
 
   return (
     <MessageInfoBox
       type="info"
-      message={t(
-        FareContractTexts.details.sentTo(
-          recipientName || formatPhoneNumber(phoneNumber),
-        ),
-      )}
+      message={
+        isSent
+          ? t(
+              FareContractTexts.details.sentTo(
+                name || formatPhoneNumber(phoneNumber),
+              ),
+            )
+          : t(
+              FareContractTexts.details.receivedFrom(
+                name || formatPhoneNumber(phoneNumber),
+              ),
+            )
+      }
     />
   );
 };

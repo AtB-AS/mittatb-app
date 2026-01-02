@@ -9,7 +9,6 @@ import {ValidTo} from '../components/ValidTo';
 import {WithValidityLine} from '../components/WithValidityLine';
 import {ProductName} from '../components/ProductName';
 import {ValidityTime} from '../components/ValidityTime';
-import {SentToMessageBox} from '../components/SentToMessageBox';
 
 type Props = {
   fareContract: FareContractType;
@@ -32,7 +31,6 @@ export const FareContractHeaderSectionItem = ({
         <Description fc={fc} />
       </WithValidityLine>
       <View style={styles.fareContractDetails}>
-        <SentToMessageBox fc={fc} />
         <FareContractFromTo
           backgroundColor={theme.color.background.neutral['0']}
           size="large"

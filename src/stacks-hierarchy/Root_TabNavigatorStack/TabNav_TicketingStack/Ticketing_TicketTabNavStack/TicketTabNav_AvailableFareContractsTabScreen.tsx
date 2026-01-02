@@ -4,14 +4,13 @@ import {
   useGetFareProductsQuery,
   useTicketingContext,
 } from '@atb/modules/ticketing';
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback} from 'react';
 import {View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/modules/fare-contracts';
 import {useTranslation, TicketingTexts} from '@atb/translations';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useTimeContext} from '@atb/modules/time';
 import {LinkSectionItem, Section} from '@atb/components/sections';
-import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
 import {TicketTabNavScreenProps} from './navigation-types';
 import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
 import {TravelTokenBox} from '@atb/travel-token-box';
@@ -26,7 +25,7 @@ type Props =
 export const TicketTabNav_AvailableFareContractsTabScreen = ({
   navigation,
 }: Props) => {
-  const {reservations, sentFareContracts} = useTicketingContext();
+  const {reservations} = useTicketingContext();
   const {serverNow} = useTimeContext();
   const analytics = useAnalyticsContext();
   const queryClient = useQueryClient();
@@ -36,20 +35,10 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
     refetch: refetchAvailableFareContracts,
     isRefetching: isRefetchingAvailableFareContracts,
   } = useFareContracts({availability: 'available'}, serverNow);
-  const {fareContracts: historicalFareContracts} = useFareContracts(
-    {availability: 'historical'},
-    serverNow,
-  );
   const {refetch: refetchPreassignedFareProducts} = useGetFareProductsQuery();
 
   const styles = useStyles();
   const {t} = useTranslation();
-
-  const hasHistoricalFareContracts = historicalFareContracts.length > 0;
-
-  const hasSentFareContracts = sentFareContracts.length > 0;
-
-  const sentFareContractRef = useRef<View>(null);
 
   const onPressChangeButton = () =>
     navigation.navigate('Root_SelectTravelTokenScreen');
@@ -111,38 +100,14 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
           }}
         />
         <Section>
-          {hasHistoricalFareContracts && (
-            <LinkSectionItem
-              text={t(TicketHistoryModeTexts.historical.title)}
-              accessibility={{
-                accessibilityHint: t(
-                  TicketHistoryModeTexts.historical.titleA11y,
-                ),
-              }}
-              testID="historicTicketsButton"
-              onPress={() =>
-                navigation.navigate('Ticketing_TicketHistoryScreen', {
-                  mode: 'historical',
-                })
-              }
-            />
-          )}
-
-          {hasSentFareContracts && (
-            <LinkSectionItem
-              ref={sentFareContractRef}
-              text={t(TicketHistoryModeTexts.sent.title)}
-              accessibility={{
-                accessibilityHint: t(TicketHistoryModeTexts.sent.titleA11y),
-              }}
-              testID="sentToOthersButton"
-              onPress={() =>
-                navigation.navigate('Ticketing_TicketHistoryScreen', {
-                  mode: 'sent',
-                })
-              }
-            />
-          )}
+          <LinkSectionItem
+            text={t(TicketingTexts.purchaseHistory.title)}
+            accessibility={{
+              accessibilityHint: t(TicketingTexts.purchaseHistory.titleA11y),
+            }}
+            testID="historicTicketsButton"
+            onPress={() => navigation.navigate('Ticketing_TicketHistoryScreen')}
+          />
         </Section>
       </ScrollView>
     </View>

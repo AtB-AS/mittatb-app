@@ -29,8 +29,8 @@ const ProfileTexts = {
             confirm: _('Logg ut', 'Log out', 'Logg ut'),
           },
         },
-        ticketHistory: {
-          label: _('Billetthistorikk', 'Ticket history', 'Billetthistorikk'),
+        purchaseHistory: {
+          label: _('Kjøpshistorikk', 'Purchase history', 'Kjøpshistorikk'),
         },
         bonus: {
           label: _('Poeng', 'Points', 'Poeng'),
