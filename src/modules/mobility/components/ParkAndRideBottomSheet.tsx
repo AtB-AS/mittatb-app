@@ -26,7 +26,7 @@ import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type Props = {
   name: string | undefined;
-  capacity: number | undefined;
+  capacity: number;
   distance: number | undefined;
   parkingFor: ParkingVehicleTypes;
   feature: Feature<Point, ParkingType>;
@@ -108,16 +108,15 @@ export const ParkAndRideBottomSheet = ({
                 first={
                   <MobilityStat
                     svg={parkingFor === 'pedalCycle' ? BicycleFill : CarFill}
-                    primaryStat={t(ParkAndRideTexts.parkingFor(parkingFor))}
+                    text={t(ParkAndRideTexts.parkingFor(parkingFor))}
                   />
                 }
                 second={
                   <MobilityStat
                     svg={Parking}
-                    primaryStat={capacity ? capacity : ''}
-                    secondaryStat={
-                      !!capacity
-                        ? t(ParkAndRideTexts.capacity)
+                    text={
+                      !Number.isNaN(capacity) && capacity > 0
+                        ? t(ParkAndRideTexts.capacity(capacity))
                         : t(ParkAndRideTexts.unknownCapacity)
                     }
                   />

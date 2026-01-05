@@ -111,21 +111,19 @@ export const BicycleSheet = ({
                         vehicle.currentFuelPercent ? (
                           <MobilityStat
                             svg={BatteryHigh}
-                            primaryStat={vehicle.currentFuelPercent + '%'}
-                            secondaryStat={t(
+                            text={`**${vehicle.currentFuelPercent}%** ${t(
                               MobilityTexts.range(
                                 formatRange(
                                   vehicle.currentRangeMeters,
                                   language,
                                 ),
                               ),
-                            )}
+                            )}`}
                           />
                         ) : (
                           <MobilityStat
                             svg={BicycleFill}
-                            primaryStat=""
-                            secondaryStat={t(BicycleTexts.humanPoweredBike)}
+                            text={t(BicycleTexts.humanPoweredBike)}
                           />
                         )
                       }

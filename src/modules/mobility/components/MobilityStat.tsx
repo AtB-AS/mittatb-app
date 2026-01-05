@@ -1,6 +1,6 @@
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
-import {StyleProp, TextStyle, View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -8,31 +8,18 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 export type MobilityStatProps = {
   svg?(props: SvgProps): React.JSX.Element;
   style?: StyleProp<ViewStyle>;
-  primaryStat: string | number;
-  secondaryStat?: string | number;
-  secondaryStatStyle?: TextStyle;
+  text: string;
 };
 
 export const MobilityStat = ({
   svg,
   style: externalStyle,
-  primaryStat,
-  secondaryStat,
-  secondaryStatStyle,
+  text,
 }: MobilityStatProps) => {
   const styles = useSheetStyle();
   return (
     <View style={[styles.container, externalStyle]}>
-      <StatWithIcon svg={svg} text={String(primaryStat)} />
-      {!!secondaryStat && (
-        <ThemeText
-          typography="body__s"
-          style={secondaryStatStyle}
-          color="secondary"
-        >
-          {secondaryStat}
-        </ThemeText>
-      )}
+      <StatWithIcon svg={svg} text={text} />
     </View>
   );
 };
@@ -47,7 +34,7 @@ export const StatWithIcon = ({svg, text}: StatWithIconProps) => {
   return (
     <View style={styles.statWithIcon}>
       {svg && <ThemeIcon svg={svg} color="secondary" style={styles.statIcon} />}
-      <ThemeText typography="body__s__strong" color="secondary">
+      <ThemeText typography="body__s" color="secondary" isMarkdown={true}>
         {text}
       </ThemeText>
     </View>
@@ -57,10 +44,10 @@ export const StatWithIcon = ({svg, text}: StatWithIconProps) => {
 const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
-    gap: theme.spacing.xSmall,
   },
   statWithIcon: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   statIcon: {
     marginRight: theme.spacing.small,

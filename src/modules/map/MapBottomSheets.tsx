@@ -223,8 +223,9 @@ export const MapBottomSheets = ({
           navigateToScanQrCode={navigateToScanQrCode}
         />
       )}
+
       {mapState.bottomSheetType === MapBottomSheetType.FinishedBooking &&
-        mapState?.bookingId !== undefined && (
+        !!mapState.bookingId && (
           <FinishedScooterSheet
             bookingId={mapState.bookingId}
             onClose={handleCloseSheet}
@@ -316,7 +317,7 @@ export const MapBottomSheets = ({
         />
       )}
       {mapState.bottomSheetType === MapBottomSheetType.ExternalMap &&
-        mapState?.url !== undefined && (
+        !!mapState.url && (
           <ExternalRealtimeMapSheet
             onClose={handleCloseSheet}
             url={mapState.url}
@@ -324,7 +325,7 @@ export const MapBottomSheets = ({
             navigateToScanQrCode={navigateToScanQrCode}
           />
         )}
-      {mapState?.bottomSheetType === MapBottomSheetType.StopPlace &&
+      {mapState.bottomSheetType === MapBottomSheetType.StopPlace &&
         !!mapState.feature && (
           <DeparturesDialogSheet
             tabBarHeight={tabBarHeight}
@@ -345,12 +346,11 @@ export const MapBottomSheets = ({
           />
         )}
       {mapState.bottomSheetType === MapBottomSheetType.ParkAndRideStation &&
-        mapState?.feature !== undefined &&
         isParkAndRide(mapState.feature) && (
           <ParkAndRideBottomSheet
-            name={mapState.feature?.properties?.name}
-            capacity={mapState.feature?.properties?.totalCapacity}
-            parkingFor={mapState.feature?.properties?.parkingVehicleTypes}
+            name={mapState.feature.properties?.name}
+            capacity={Number(mapState.feature.properties?.totalCapacity)}
+            parkingFor={mapState.feature.properties?.parkingVehicleTypes}
             feature={mapState.feature}
             distance={undefined}
             onClose={handleCloseSheet}

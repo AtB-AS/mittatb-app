@@ -21,7 +21,7 @@ export const PricingPlan = ({operator, plan, benefit}: PricingPlanProps) => {
   const {t} = useTranslation();
   const {isUserEligibleForBenefit} = useIsEligibleForBenefit(benefit);
   const seAppForPrices = (
-    <MobilityStat primaryStat={t(ScooterTexts.seeAppForPrices(operator))} />
+    <MobilityStat text={t(ScooterTexts.seeAppForPrices(operator))} />
   );
   if (hasMultiplePricingPlans(plan)) {
     return seAppForPrices;
@@ -66,19 +66,16 @@ const PriceInfo = ({
   eligibleBenefit,
 }: PriceInfoProps) => {
   const {t, language} = useTranslation();
+  const primaryText = `${formatNumberToString(
+    pricingSegment.rate,
+    language,
+  )} kr per ${unit}`;
+  const secondaryText = t(ScooterTexts.pricingPlan.price(price, language));
+  const hasStrikethrough = price > 0 && eligibleBenefit === 'free-unlock';
 
   return (
     <MobilityStat
-      primaryStat={`${formatNumberToString(
-        pricingSegment.rate,
-        language,
-      )} kr per ${unit}`}
-      secondaryStat={t(ScooterTexts.pricingPlan.price(price, language))}
-      secondaryStatStyle={
-        price > 0 && eligibleBenefit === 'free-unlock'
-          ? {textDecorationLine: 'line-through'}
-          : undefined
-      }
+      text={`**${primaryText}** ${hasStrikethrough ? `~~${secondaryText}~~` : secondaryText}`}
     />
   );
 };
