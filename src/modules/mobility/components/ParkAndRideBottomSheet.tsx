@@ -114,7 +114,7 @@ export const ParkAndRideBottomSheet = ({
                 second={
                   <MobilityStat
                     svg={Parking}
-                    primaryStat={!!capacity ? capacity : ''}
+                    primaryStat={capacity ? capacity : ''}
                     secondaryStat={
                       !!capacity
                         ? t(ParkAndRideTexts.capacity)
