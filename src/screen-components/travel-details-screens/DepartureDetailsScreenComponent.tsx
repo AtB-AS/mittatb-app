@@ -270,10 +270,10 @@ export const DepartureDetailsScreenComponent = ({
   useFocusEffect(
     useCallback(() => {
       if (shouldShowRequestReview.current) {
-        shouldShowLive && requestReview(InAppReviewContext.DepartureDetails);
+        vehiclePosition && requestReview(InAppReviewContext.DepartureDetails);
         shouldShowRequestReview.current = false;
       }
-    }, [requestReview, shouldShowLive]),
+    }, [requestReview, vehiclePosition]),
   );
 
   return (
