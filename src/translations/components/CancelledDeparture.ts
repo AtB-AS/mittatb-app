@@ -8,7 +8,7 @@ const CancelledDepartureTexts = {
   ),
   someDeparturesCancelled: _(
     'Noen avganger fra denne holdeplassen er kansellert.',
-    'Some departures from this stop are cancelled.',
+    'Some departures from this stop have been cancelled.',
     'Nokre avgangar frå denne haldeplassen er kansellert.',
   ),
   cancelled: _('Kansellert', 'Cancelled', 'Kansellert'),
