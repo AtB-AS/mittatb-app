@@ -6,16 +6,18 @@ import {
 } from '@atb/modules/ticketing';
 import {useTimeContext} from '@atb/modules/time';
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import {View} from 'react-native';
+import {SectionList, View} from 'react-native';
 import {useAuthContext} from '@atb/modules/auth';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {FlatList} from 'react-native-gesture-handler';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
 import {EmptyState} from '@atb/components/empty-state';
 import {ThemedTicketTilted} from '@atb/theme/ThemedAssets';
 import {sortFcOrReservationByCreation} from '@atb/modules/fare-contracts';
+import {FareContractType} from '@atb-as/utils';
+import {ThemeText} from '@atb/components/text';
+import {formatToMonthAndYear} from '@atb/utils/date';
 
 type Props = {
   onPressFareContract: (fareContractId: string) => void;
@@ -26,6 +28,7 @@ export const PurchaseHistoryScreenComponent = ({
   onPressFareContract,
   navigateToBonusScreen,
 }: Props) => {
+  const {language} = useTranslation();
   const {sentFareContracts, reservations, rejectedReservations} =
     useTicketingContext();
   const {serverNow} = useTimeContext();
@@ -46,10 +49,10 @@ export const PurchaseHistoryScreenComponent = ({
     customerAccountId,
   );
 
-  const sortedItems = sortFcOrReservationByCreation([
-    ...fareContractsToShow,
-    ...reservationsToShow,
-  ]);
+  const sections = useMemo(
+    () => groupByMonth([...fareContractsToShow, ...reservationsToShow]),
+    [fareContractsToShow, reservationsToShow],
+  );
 
   return (
     <View style={styles.container}>
@@ -57,8 +60,18 @@ export const PurchaseHistoryScreenComponent = ({
         title={t(TicketingTexts.purchaseHistory.title)}
         leftButton={{type: 'back'}}
       />
-      <FlatList
-        data={sortedItems}
+      <SectionList
+        sections={sections}
+        keyExtractor={(item) => item.created + item.orderId}
+        renderSectionHeader={({section}) => (
+          <ThemeText
+            typography="body__m"
+            color="secondary"
+            style={styles.sectionHeader}
+          >
+            {formatToMonthAndYear(section.month, language)}
+          </ThemeText>
+        )}
         renderItem={({item, index}) => (
           <FareContractOrReservation
             navigateToBonusScreen={navigateToBonusScreen}
@@ -75,7 +88,6 @@ export const PurchaseHistoryScreenComponent = ({
             index={index}
           />
         )}
-        keyExtractor={(item) => item.created + item.orderId}
         ListEmptyComponent={
           <EmptyState
             title={t(TicketingTexts.purchaseHistory.emptyState.title)}
@@ -84,11 +96,42 @@ export const PurchaseHistoryScreenComponent = ({
             testID="fareContracts"
           />
         }
-        contentContainerStyle={styles.flatListContent}
+        contentContainerStyle={styles.sectionListContent}
         testID="ticketHistoryScrollView"
+        stickySectionHeadersEnabled={false}
       />
     </View>
   );
+};
+
+type MonthSection = {
+  month: Date;
+  data: (Reservation | FareContractType)[];
+};
+
+const groupByMonth = (
+  items: (Reservation | FareContractType)[],
+): MonthSection[] => {
+  const sortedItems = sortFcOrReservationByCreation(items);
+  const sections: MonthSection[] = [];
+  let currentSection: MonthSection | null = null;
+
+  for (const item of sortedItems) {
+    const d = new Date(item.created);
+    const monthDate = new Date(d.getFullYear(), d.getMonth(), 1);
+
+    if (
+      !currentSection ||
+      currentSection.month.getTime() !== monthDate.getTime()
+    ) {
+      currentSection = {month: monthDate, data: []};
+      sections.push(currentSection);
+    }
+
+    currentSection.data.push(item);
+  }
+
+  return sections;
 };
 
 const getReservationsToShow = (
@@ -97,8 +140,6 @@ const getReservationsToShow = (
   customerAccountId?: string,
 ) => {
   const reservationsToShow: Reservation[] = [];
-
-  //TODO Jorunn: check if necessary
 
   // only show reservations for tickets sent to others
   reservationsToShow.push(
@@ -122,5 +163,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.color.background.neutral[1].background,
   },
-  flatListContent: {gap: theme.spacing.large, padding: theme.spacing.medium},
+  sectionListContent: {
+    gap: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.medium,
+    paddingTop: theme.spacing.large,
+  },
+  sectionHeader: {
+    paddingHorizontal: theme.spacing.small,
+  },
 }));

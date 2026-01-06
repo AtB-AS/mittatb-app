@@ -455,6 +455,19 @@ export function formatToVerboseDateTime(
     : `${dateString} ${at} ${timeString}`;
 }
 
+export function formatToMonthAndYear(
+  isoDate: Date | string,
+  language: Language,
+) {
+  const parsed = parseIfNeeded(isoDate);
+
+  const result = format(parsed, 'MMMM yyyy', {
+    locale: languageToLocale(language),
+  });
+
+  return result.charAt(0).toUpperCase() + result.slice(1);
+}
+
 export const isWithin24Hours = (
   dateLeft: Date | string,
   dateRight: Date | string,
