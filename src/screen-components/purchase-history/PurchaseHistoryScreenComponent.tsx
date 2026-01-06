@@ -22,7 +22,7 @@ type Props = {
   navigateToBonusScreen: () => void;
 };
 
-export const TicketHistoryScreenComponent = ({
+export const PurchaseHistoryScreenComponent = ({
   onPressFareContract,
   navigateToBonusScreen,
 }: Props) => {
@@ -97,6 +97,8 @@ const getReservationsToShow = (
   customerAccountId?: string,
 ) => {
   const reservationsToShow: Reservation[] = [];
+
+  //TODO Jorunn: check if necessary
 
   // only show reservations for tickets sent to others
   reservationsToShow.push(

@@ -106,7 +106,9 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
               accessibilityHint: t(TicketingTexts.purchaseHistory.titleA11y),
             }}
             testID="historicTicketsButton"
-            onPress={() => navigation.navigate('Ticketing_TicketHistoryScreen')}
+            onPress={() =>
+              navigation.navigate('Ticketing_PurchaseHistoryScreen')
+            }
           />
         </Section>
       </ScrollView>

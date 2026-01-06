@@ -9,12 +9,11 @@ import {
 import {TicketTabNavStackParams} from './Ticketing_TicketTabNavStack/navigation-types';
 import {TabNavigatorScreenProps} from '../navigation-types';
 import {StackScreenProps} from '@react-navigation/stack';
-import {TicketHistoryScreenParams} from '@atb/screen-components/ticket-history';
 
 export type TicketingStackParams = StackParams<{
   Ticketing_NotEnabledScreen: undefined;
   Ticketing_RootScreen: NavigatorScreenParams<TicketTabNavStackParams>;
-  Ticketing_TicketHistoryScreen: TicketHistoryScreenParams;
+  Ticketing_PurchaseHistoryScreen: undefined;
 }>;
 
 export type TicketingStackRootProps =

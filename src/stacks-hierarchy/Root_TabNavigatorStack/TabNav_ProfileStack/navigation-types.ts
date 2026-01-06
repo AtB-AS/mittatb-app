@@ -11,7 +11,7 @@ import {SmartParkAndRideScreenParams} from './Profile_SmartParkAndRideScreen';
 export type ProfileStackParams = StackParams<{
   Profile_RootScreen: undefined;
   Profile_PaymentMethodsScreen: undefined;
-  Profile_TicketHistoryScreen: undefined;
+  Profile_PurchaseHistoryScreen: undefined;
   Profile_BonusScreen: undefined;
   Profile_SmartParkAndRideScreen: SmartParkAndRideScreenParams;
   Profile_DeleteProfileScreen: undefined;

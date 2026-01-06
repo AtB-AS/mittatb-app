@@ -59,7 +59,7 @@ import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
-import {SentOrReceivedMessageBox} from '../components/SentToMessageBox';
+import {SentOrReceivedMessageBox} from '../components/SentOrReceivedMessageBox';
 
 type Props = {
   fareContract: FareContractType;

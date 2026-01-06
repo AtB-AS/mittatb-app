@@ -1,12 +1,11 @@
 import React, {useCallback} from 'react';
-import {TicketHistoryScreenComponent} from '@atb/screen-components/ticket-history';
-import {TicketingScreenProps} from './navigation-types';
+import {ProfileScreenProps} from './navigation-types';
+import {PurchaseHistoryScreenComponent} from '@atb/screen-components/purchase-history';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
-import {FareContractType} from '@atb-as/utils';
 
-type Props = TicketingScreenProps<'Ticketing_TicketHistoryScreen'>;
+type Props = ProfileScreenProps<'Profile_PurchaseHistoryScreen'>;
 
-export const Ticketing_TicketHistoryScreen = ({navigation}: Props) => {
+export const Profile_PurchaseHistoryScreen = ({navigation}: Props) => {
   const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
 
   const navigateToBonusScreen = useCallback(() => {
@@ -14,8 +13,8 @@ export const Ticketing_TicketHistoryScreen = ({navigation}: Props) => {
   }, [navigation, bonusScreenParams]);
 
   return (
-    <TicketHistoryScreenComponent
-      onPressFareContract={(fareContractId: FareContractType['id']) =>
+    <PurchaseHistoryScreenComponent
+      onPressFareContract={(fareContractId) =>
         navigation.navigate('Root_FareContractDetailsScreen', {
           fareContractId,
           transitionOverride: 'slide-from-right',

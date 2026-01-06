@@ -2,7 +2,7 @@ import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
 import {Profile_AppearanceScreen} from './Profile_AppearanceScreen';
 import {Profile_RootScreen} from './Profile_RootScreen';
-import {Profile_TicketHistoryScreen} from './Profile_TicketHistoryScreen';
+import {Profile_PurchaseHistoryScreen} from './Profile_PurchaseHistoryScreen.tsx';
 import {Profile_LanguageScreen} from './Profile_LanguageScreen';
 import {Profile_PrivacyScreen} from './Profile_PrivacyScreen';
 import {Profile_EnrollmentScreen} from './Profile_EnrollmentScreen';
@@ -44,8 +44,8 @@ export const TabNav_ProfileStack = () => {
     >
       <Stack.Screen name="Profile_RootScreen" component={Profile_RootScreen} />
       <Stack.Screen
-        name="Profile_TicketHistoryScreen"
-        component={Profile_TicketHistoryScreen}
+        name="Profile_PurchaseHistoryScreen"
+        component={Profile_PurchaseHistoryScreen}
       />
       <Stack.Screen
         name="Profile_BonusScreen"

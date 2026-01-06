@@ -24,7 +24,7 @@ import {
 import {useTimeContext} from '@atb/modules/time';
 import {useSectionItem} from '@atb/components/sections';
 import {isDefined} from '@atb/utils/presence';
-import {SentOrReceivedMessageBox} from './SentToMessageBox';
+import {SentOrReceivedMessageBox} from './SentOrReceivedMessageBox';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
 import {getTransportModeSvg} from '@atb/components/icon-box';

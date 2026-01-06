@@ -166,7 +166,9 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   .label,
               )}
               leftIcon={{svg: Receipt}}
-              onPress={() => navigation.navigate('Profile_TicketHistoryScreen')}
+              onPress={() =>
+                navigation.navigate('Profile_PurchaseHistoryScreen')
+              }
               testID="ticketHistoryButton"
             />
             {authenticationType == 'phone' && (
