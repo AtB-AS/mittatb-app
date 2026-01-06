@@ -1,5 +1,5 @@
 import {useAccessibilityContext} from '@atb/modules/accessibility';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {View} from 'react-native';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {SelectableLocationType} from './types';
@@ -8,6 +8,7 @@ import {StyleSheet} from '@atb/theme';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {updateCallerRouteParams} from './navigation-types';
 
 type Props = RootStackScreenProps<'Root_LocationSearchByTextScreen'>;
 
@@ -15,8 +16,7 @@ export const Root_LocationSearchByTextScreen = ({
   navigation,
   route: {
     params: {
-      callerRouteName,
-      callerRouteParam,
+      callerRouteConfig,
       label,
       favoriteChipTypes,
       initialLocation,
@@ -28,22 +28,23 @@ export const Root_LocationSearchByTextScreen = ({
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const onSelect = (location: SelectableLocationType) => {
-    navigation.navigate({
-      name: callerRouteName as any,
-      params: {
-        [callerRouteParam]: location,
-      },
-      merge: true,
-    });
-  };
+  const onSelect = useCallback(
+    (location: SelectableLocationType) => {
+      const callerRoute = updateCallerRouteParams(
+        callerRouteConfig.route,
+        callerRouteConfig.locationRouteParam,
+        location,
+      );
+      navigation.popTo(...callerRoute);
+    },
+    [callerRouteConfig, navigation],
+  );
 
   const onMapSelection = () => {
     navigation.navigate({
       name: 'Root_LocationSearchByMapScreen',
       params: {
-        callerRouteName,
-        callerRouteParam,
+        callerRouteConfig,
         initialLocation,
       },
       merge: true,

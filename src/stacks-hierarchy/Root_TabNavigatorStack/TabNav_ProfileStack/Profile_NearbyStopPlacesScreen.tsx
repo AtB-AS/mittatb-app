@@ -28,8 +28,23 @@ export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
       onPressLocationSearch={(location) =>
         navigation.navigate('Root_LocationSearchByTextScreen', {
           label: t(SharedTexts.from),
-          callerRouteName: route.name,
-          callerRouteParam: 'location',
+          callerRouteConfig: {
+            route: [
+              'Root_TabNavigatorStack',
+              {
+                screen: 'TabNav_ProfileStack',
+                params: {
+                  screen: 'Profile_NearbyStopPlacesScreen',
+                  params: {
+                    location: route.params.location,
+                    mode: route.params.mode,
+                  },
+                  merge: true,
+                },
+              },
+            ],
+            locationRouteParam: 'location',
+          },
           initialLocation: location,
           onlyStopPlacesCheckboxInitialState: true,
         })
