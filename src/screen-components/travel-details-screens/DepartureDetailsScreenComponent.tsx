@@ -655,26 +655,40 @@ function EstimatedCallRow({
           </ThemeText>
         )}
 
-        {!call.forAlighting && !call.metadata.isStartOfServiceJourney && (
+        {call.cancellation && !call.metadata.isStartOfServiceJourney && (
           <AccessibleText
             typography="body__s"
             color="secondary"
             style={styles.boardingInfo}
             pause="before"
           >
-            {t(DepartureDetailsTexts.messages.noAlighting)}
+            {t(DepartureDetailsTexts.messages.closed)}
           </AccessibleText>
         )}
-        {!call.forBoarding && !call.metadata.isEndOfServiceJourney && (
-          <AccessibleText
-            typography="body__s"
-            color="secondary"
-            style={styles.boardingInfo}
-            pause="before"
-          >
-            {t(DepartureDetailsTexts.messages.noBoarding)}
-          </AccessibleText>
-        )}
+        {!call.cancellation &&
+          !call.forAlighting &&
+          !call.metadata.isStartOfServiceJourney && (
+            <AccessibleText
+              typography="body__s"
+              color="secondary"
+              style={styles.boardingInfo}
+              pause="before"
+            >
+              {t(DepartureDetailsTexts.messages.noAlighting)}
+            </AccessibleText>
+          )}
+        {!call.cancellation &&
+          !call.forBoarding &&
+          !call.metadata.isEndOfServiceJourney && (
+            <AccessibleText
+              typography="body__s"
+              color="secondary"
+              style={styles.boardingInfo}
+              pause="before"
+            >
+              {t(DepartureDetailsTexts.messages.noBoarding)}
+            </AccessibleText>
+          )}
       </TripRow>
       {situations.map((situation) => (
         <TripRow
