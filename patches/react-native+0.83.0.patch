@@ -1,0 +1,16 @@
+diff --git a/node_modules/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm b/node_modules/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm
+index 15a5ab7..52cd38d 100644
+--- a/node_modules/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm
++++ b/node_modules/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm
+@@ -694,6 +694,11 @@ - (void)prepareForRecycle
+   _firstVisibleView = nil;
+   _firstVisibleViewTag = 0;
+   _virtualViewContainerState = nil;
++
++  // Reset contentOffset and inset so ScrollViews with
++  // very different heights are not bugged when recycled
++  _scrollView.contentOffset = CGPointZero;
++  _scrollView.contentInset = UIEdgeInsetsZero;
+ }
+ 
+ #pragma mark - UIScrollViewDelegate
