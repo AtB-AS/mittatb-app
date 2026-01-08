@@ -6,6 +6,7 @@
 //
 
 #import "RCTChangeAppearance.h"
+#import "AtB-Swift.h"
 
 @interface RCTChangeAppearance()
 @end
@@ -24,11 +25,23 @@
   // Your native implementation here
   // e.g. converting "mode" string to UIUserInterfaceStyle
   NSLog(@"Changing appearance to: %@", mode);
+
+  UIUserInterfaceStyle style = UIUserInterfaceStyleLight;
+  if ([mode isEqualToString:@"dark"]) {
+    style = UIUserInterfaceStyleDark;
+  } else if ([mode isEqualToString:@"light"]) {
+    style = UIUserInterfaceStyleLight;
+  } else {
+    style = UIUserInterfaceStyleUnspecified;
+  }
+
+  AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+  appDelegate.window.overrideUserInterfaceStyle = style;
 }
 
 + (NSString *)moduleName
 {
-  return @"ChangeAppearanceSpec";
+  return @"ChangeAppearance";
 }
 
 @end

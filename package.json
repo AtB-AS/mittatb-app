@@ -36,7 +36,7 @@
     },
     "ios": {
       "modulesProvider": {
-        "ChangeAppearanceSpec": "RCTChangeAppearance"
+        "ChangeAppearance": "RCTChangeAppearance"
       }
    }
   },

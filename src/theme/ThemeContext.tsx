@@ -3,6 +3,7 @@ import React, {createContext, useContext, useEffect} from 'react';
 import {Platform, useColorScheme} from 'react-native';
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {Mode, Theme, themes} from './colors';
+import {ChangeAppearance} from '@atb/specs/NativeChangeAppearance';
 
 export enum AppearanceSelection {
   LIGHT = 'light',
@@ -97,10 +98,12 @@ export const ThemeContextProvider = ({children}: Props) => {
   useEffect(() => {
     if (Platform.OS !== 'ios') return;
     if (overrideSystemAppearance && systemColorScheme !== colorScheme) {
-      changeAppearance(colorScheme);
+      ChangeAppearance.changeAppearance(colorScheme ?? null);
+      // changeAppearance(colorScheme);
     }
     if (!overrideSystemAppearance) {
-      changeAppearance(null);
+      // changeAppearance(null);
+      ChangeAppearance.changeAppearance(null);
     }
   }, [overrideSystemAppearance, colorScheme, systemColorScheme]);
 

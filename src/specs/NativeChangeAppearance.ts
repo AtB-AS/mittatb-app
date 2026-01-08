@@ -5,6 +5,5 @@ export interface Spec extends TurboModule {
   changeAppearance(mode: string | null): void;
 }
 
-export const ChangeAppearance = TurboModuleRegistry.getEnforcing<Spec>(
-  'ChangeAppearanceSpec',
-);
+export const ChangeAppearance =
+  TurboModuleRegistry.getEnforcing<Spec>('ChangeAppearance');
