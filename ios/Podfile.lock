@@ -5396,7 +5396,7 @@ SPEC CHECKSUMS:
   React-utils: 4879e98761ce2b45e1c3d0fdd6a534b9236e8eaf
   React-webperformancenativemodule: 01b22f321b9950ab4288921a0b413347827356f6
   ReactAppDependencyProvider: ebcf3a78dc1bcdf054c9e8d309244bade6b31568
-  ReactCodegen: 0c8601ce03eb3f724f4d251e4aa158555bf20942
+  ReactCodegen: 5b83367364dfc17b7e5717be1a658ee7922d83fc
   ReactCommon: 913c93ca20654c90cc57a3dd9e291b4ef9956e54
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
   RNBootSplash: 7fcc9a58ae343aeb1a1dd49f9030832fe432c544

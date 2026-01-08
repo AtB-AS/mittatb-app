@@ -50,6 +50,7 @@
 		6DAA1D0A2A77D3EC00CC8016 /* PassKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DAA1D092A77D3EC00CC8016 /* PassKit.framework */; };
 		6DB88ADA2A7A35A10060CC31 /* PassPresentationBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB88AD92A7A35A10060CC31 /* PassPresentationBridge.m */; };
 		6DB88ADC2A7A55570060CC31 /* PassPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */; };
+		866A72082F0FF27800AA66E6 /* RCTChangeAppearance.mm in Sources */ = {isa = PBXBuildFile; fileRef = 866A72072F0FF27800AA66E6 /* RCTChangeAppearance.mm */; };
 		A1B2EBBAED425D9A597C8294 /* Pods_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4189C266DDC08015840EBAA /* Pods_app.framework */; };
 		C18256D729E9412DA315E055 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80CBD2ACDD97450583702DEF /* Colors.xcassets */; };
 		FE09922928FFF47300E5046D /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE09922828FFF47300E5046D /* Storage.swift */; };
@@ -152,6 +153,8 @@
 		6DB88AD92A7A35A10060CC31 /* PassPresentationBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PassPresentationBridge.m; sourceTree = "<group>"; };
 		6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassPresentation.swift; sourceTree = "<group>"; };
 		80CBD2ACDD97450583702DEF /* Colors.xcassets */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = atb/Colors.xcassets; sourceTree = "<group>"; };
+		866A72062F0FF27800AA66E6 /* RCTChangeAppearance.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTChangeAppearance.h; sourceTree = "<group>"; };
+		866A72072F0FF27800AA66E6 /* RCTChangeAppearance.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTChangeAppearance.mm; sourceTree = "<group>"; };
 		E4189C266DDC08015840EBAA /* Pods_app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FE09922828FFF47300E5046D /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
@@ -300,6 +303,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				866A72052F0FF23800AA66E6 /* ChangeAppearance */,
 				5051B09328F4092200B8EA18 /* departureWidget.entitlements */,
 				FE8AF9EC28EC69FA00505277 /* departureWidgetDebug.entitlements */,
 				13B07FAE1A68108700A75B9A /* atb */,
@@ -324,6 +328,15 @@
 				500752DA29855BD100AC5A7F /* AtbAppIntent.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		866A72052F0FF23800AA66E6 /* ChangeAppearance */ = {
+			isa = PBXGroup;
+			children = (
+				866A72062F0FF27800AA66E6 /* RCTChangeAppearance.h */,
+				866A72072F0FF27800AA66E6 /* RCTChangeAppearance.mm */,
+			);
+			path = ChangeAppearance;
 			sourceTree = "<group>";
 		};
 		FE09922A28FFF4F000E5046D /* Extensions */ = {
@@ -655,6 +668,7 @@
 				FEBDDCCD2931038400C3755B /* LocationChangeManager.swift in Sources */,
 				FEBDDCDB29310DFE00C3755B /* WidgetUpdaterBridge.m in Sources */,
 				6DB88ADA2A7A35A10060CC31 /* PassPresentationBridge.m in Sources */,
+				866A72082F0FF27800AA66E6 /* RCTChangeAppearance.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

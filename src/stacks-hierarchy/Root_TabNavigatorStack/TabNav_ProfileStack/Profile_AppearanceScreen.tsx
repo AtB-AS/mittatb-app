@@ -5,13 +5,14 @@ import {
 } from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {AppearanceSettingsTexts, useTranslation} from '@atb/translations';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Platform, View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {AppearanceSelection} from '@atb/theme/ThemeContext';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
+import {ChangeAppearance} from '@atb/specs/NativeChangeAppearance';
 
 type Props = ProfileScreenProps<'Profile_AppearanceScreen'>;
 
@@ -25,6 +26,20 @@ export const Profile_AppearanceScreen = ({navigation}: Props) => {
   } = useThemeContext();
   const {t} = useTranslation();
   const styles = useStyles();
+
+  const onSet = useCallback((selection: AppearanceSelection) => {
+    switch (selection) {
+      case AppearanceSelection.SYSTEM:
+        ChangeAppearance.changeAppearance(null);
+        break;
+      case AppearanceSelection.LIGHT:
+        ChangeAppearance.changeAppearance('light');
+        break;
+      case AppearanceSelection.DARK:
+        ChangeAppearance.changeAppearance('dark');
+        break;
+    }
+  }, []);
 
   return (
     <FullScreenView
@@ -61,7 +76,7 @@ export const Profile_AppearanceScreen = ({navigation}: Props) => {
             }}
             selected={appearanceSelection}
             keyExtractor={(item) => item}
-            onSelect={(selection) => setAppearanceSelection(selection)}
+            onSelect={(selection) => onSet(selection)}
           />
         </Section>
         {Platform.OS === 'android' && (

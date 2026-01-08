@@ -27,6 +27,19 @@
     "unimported": "npx unimported",
     "storybook-generate": "sb-rn-get-stories"
   },
+  "codegenConfig": {
+    "name": "ChangeAppearanceSpec",
+    "type": "modules",
+    "jsSrcsDir": "src/specs",
+    "android": {
+      "javaPackageName": "com.nativechangeappearance"
+    },
+    "ios": {
+      "modulesProvider": {
+        "ChangeAppearanceSpec": "RCTChangeAppearance"
+      }
+   }
+  },
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
     "@atb-as/config-specs": "^8.7.0",
