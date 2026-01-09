@@ -131,26 +131,21 @@ export const BikeStationBottomSheet = ({
                       first={
                         <MobilityStat
                           svg={BicycleFill}
-                          primaryStat={availableBikes}
-                          secondaryStat={t(
+                          text={`**${availableBikes}** ${t(
                             BicycleTexts.stations.numBikesAvailable(
                               availableBikes,
                             ),
-                          )}
+                          )}`}
                         />
                       }
                       second={
                         <MobilityStat
                           svg={Parking}
-                          primaryStat={
-                            station.numDocksAvailable ??
-                            t(BicycleTexts.stations.unknownDocksAvailable)
-                          }
-                          secondaryStat={t(
+                          text={`**${station.numDocksAvailable ?? t(BicycleTexts.stations.unknownDocksAvailable)}** ${t(
                             BicycleTexts.stations.numDocksAvailable(
                               station.numDocksAvailable,
                             ),
-                          )}
+                          )}`}
                         />
                       }
                     />
