@@ -17,7 +17,10 @@ import {isValidDateString} from '@atb/utils/date';
 import {decodePolylineEncodedGeometry} from '@atb/utils/decode-polyline-geometry';
 
 export const isProductSellableInApp = (
-  input: PurchaseSelectionBuilderInput,
+  input: Pick<
+    PurchaseSelectionBuilderInput,
+    'appVersion' | 'customerProfile' | 'preassignedFareProducts'
+  >,
   product: PreassignedFareProduct,
 ) => {
   if (

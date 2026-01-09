@@ -81,6 +81,11 @@ import {Root_OnboardingCarouselStack} from './Root_OnboardingCarouselStack';
 import {getActiveRouteName} from '@atb/utils/navigation';
 import {Root_TravelAidOnboardingScreen} from './Root_TravelAidOnboardingScreen';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
+import {
+  useGetFareProductsQuery,
+  useTicketingContext,
+} from '@atb/modules/ticketing';
+import {isProductSellableInApp} from '@atb/modules/purchase-selection/utils';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -105,6 +110,8 @@ export const RootStack = () => {
 
   const {minimum_app_version} = useRemoteConfigContext();
   const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const {customerProfile} = useTicketingContext();
 
   useBeaconsContext();
   useTestIds();
@@ -259,17 +266,31 @@ export const RootStack = () => {
                 const params = new URLSearchParams(path.split('?')[1]);
                 const type = params.get('type');
                 if (type) {
-                  const selection = purchaseSelectionBuilder
-                    .forType(type)
-                    .build();
-                  return {
-                    routes: [
-                      {
-                        name: 'Root_PurchaseOverviewScreen',
-                        params: {selection: selection},
-                      },
-                    ],
-                  } as ResultState;
+                  const isSellable = preassignedFareProducts.some(
+                    (product) =>
+                      type === product.type &&
+                      isProductSellableInApp(
+                        {
+                          appVersion: APP_VERSION,
+                          customerProfile,
+                          preassignedFareProducts,
+                        },
+                        product,
+                      ),
+                  );
+                  if (isSellable) {
+                    const selection = purchaseSelectionBuilder
+                      .forType(type)
+                      .build();
+                    return {
+                      routes: [
+                        {
+                          name: 'Root_PurchaseOverviewScreen',
+                          params: {selection},
+                        },
+                      ],
+                    } as ResultState;
+                  }
                 }
               }
 
