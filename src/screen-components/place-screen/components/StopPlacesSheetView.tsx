@@ -100,8 +100,8 @@ export const StopPlacesSheetView = (props: Props) => {
       }
       sections={quayListData}
       testID={testID}
-      keyExtractor={(item) => item.quay.id}
-      renderItem={({item, index}) => (
+      keyExtractor={(item: StopPlaceAndQuay) => item.quay.id}
+      renderItem={({item, index}: {item: StopPlaceAndQuay; index: number}) => (
         <QuaySection
           quay={item.quay}
           isLoading={departuresIsLoading}
