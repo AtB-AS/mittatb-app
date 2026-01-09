@@ -114,14 +114,14 @@ const LocationSearchTexts = {
       },
       updateError: {
         title: _(
-          'Vi klarte ikke å oppdatere kartet. Prøv igjen, eller kontakt kundeservice for hjelp.',
-          'We couldn´t update the map. Please try again or contact customer service for assistance.',
-          'Vi klarte ikkje å oppdatere kartet. Prøv igjen, eller kontakt kundeservice for hjelp.',
+          'Vi klarte ikke å oppdatere kartet.',
+          'We couldn´t update the map.',
+          'Vi klarte ikkje å oppdatere kartet.',
         ),
         message: _(
-          'Supert om du prøver igjen 🤞',
-          'Please try again 🤞',
-          'Ver venleg og prøv igjen 🤞',
+          'Prøv igjen, eller kontakt kundeservice for hjelp.',
+          'Please try again or contact customer service for assistance.',
+          'Prøv igjen, eller kontakt kundeservice for hjelp.',
         ),
       },
     },
