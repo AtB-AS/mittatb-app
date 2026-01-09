@@ -70,9 +70,9 @@ const LocationSearchTexts = {
       `Hei, er du på nett? Vi klarar ikkje søke sidan tilkoplinga til internett manglar eller er ustabil.`,
     ),
     defaultError: _(
-      'Oops - vi feila med søket. Supert om du prøver igjen 🤞',
-      'Oops - our search engine failed. Please try again 🤞',
-      `Oops - det oppstod ein feil med søket. Ver venleg og prøv igjen 🤞`,
+      'Noe gikk galt med søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      'Something went wrong with the search. Please try again or contact customer service for assistance.',
+      'Noko gjekk gale med søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
     ),
     emptyResult: _(
       'Fant ingen søkeresultat',
@@ -114,9 +114,9 @@ const LocationSearchTexts = {
       },
       updateError: {
         title: _(
-          'Oops - vi feila med å oppdatere kartet.',
-          'Oops - we failed to update your map',
-          'Oops - det oppstod ein feil med å oppdatere kartet ditt.',
+          'Vi klarte ikke å oppdatere kartet. Prøv igjen, eller kontakt kundeservice for hjelp.',
+          'We couldn´t update the map. Please try again or contact customer service for assistance.',
+          'Vi klarte ikkje å oppdatere kartet. Prøv igjen, eller kontakt kundeservice for hjelp.',
         ),
         message: _(
           'Supert om du prøver igjen 🤞',
