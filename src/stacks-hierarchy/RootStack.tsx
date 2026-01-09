@@ -85,7 +85,7 @@ import {
   useGetFareProductsQuery,
   useTicketingContext,
 } from '@atb/modules/ticketing';
-import {isProductSellableInApp} from '@atb/modules/purchase-selection/utils';
+import {isProductSellableInApp} from '@atb/modules/purchase-selection';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
