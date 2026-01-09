@@ -84,7 +84,7 @@ export const RemoteConfigContextProvider = ({children}: Props) => {
           Bugsnag.leaveBreadcrumb('Remote config fetch error', userInfo);
         }
       } else {
-        Bugsnag.notify(e as any);
+        Bugsnag.notify(e as Error);
       }
     }
   }, []);

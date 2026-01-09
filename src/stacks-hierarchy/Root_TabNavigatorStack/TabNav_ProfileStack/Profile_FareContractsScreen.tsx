@@ -231,7 +231,7 @@ export const Profile_FareContractsScreen = ({navigation}: Props) => {
             key={i}
             fareContract={fc}
             preassignedFareProduct={getPreassignedFareProduct(
-              (fc.travelRights[0] as unknown as any).fareProductRef,
+              fc.travelRights[0].fareProductRef,
             )}
             now={Date.now()}
             onReceiptNavigate={() => {}}

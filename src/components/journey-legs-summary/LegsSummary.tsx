@@ -7,7 +7,7 @@ import {
   type TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {AnyMode, TransportationIconBox} from '@atb/components/icon-box';
+import {TransportationIconBox} from '@atb/components/icon-box';
 import {formatLocaleTime} from '@atb/utils/date';
 import SharedTexts from '@atb/translations/shared';
 import React from 'react';
@@ -57,7 +57,7 @@ export function LegsSummary({
             <TransportationIconBox
               style={[styles.sectionItemSpacing, styles.centered]}
               type="standard"
-              mode={leg.mode as AnyMode}
+              mode={leg.mode}
               subMode={leg.transportSubmode}
               lineNumber={leg.line?.publicCode}
             />

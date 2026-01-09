@@ -13,11 +13,15 @@ import {TravelAidScreenParams} from '@atb/screen-components/travel-aid';
 export type DashboardRootScreenParams = {} & TripSearchScreenParams;
 
 type Dashboard_NearbyStopPlacesScreenParams = NearbyStopPlacesScreenParams & {
-  onCloseRoute: keyof DashboardStackParams;
+  onCloseRoute: Parameters<
+    DashboardScreenProps<'Dashboard_NearbyStopPlacesScreen'>['navigation']['popTo']
+  >;
 };
 
 type Dashboard_PlaceScreenParams = PlaceScreenParams & {
-  onCloseRoute?: keyof DashboardStackParams;
+  onCloseRoute?: Parameters<
+    DashboardScreenProps<'Dashboard_PlaceScreen'>['navigation']['popTo']
+  >;
 };
 
 export type DashboardStackParams = StackParams<{

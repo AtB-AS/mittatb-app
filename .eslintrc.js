@@ -180,6 +180,17 @@ module.exports = {
         ],
       },
     ],
+
+    // Error on navigation methods being called with 'any' typed parameters
+    'rulesdir/no-any-navigation-params': [
+      'error',
+      {
+        allowedPaths: [
+          // TODO: Refactor use-onboarding-navigation.ts to use static typing for navigation methods
+          'src/modules/onboarding/use-onboarding-navigation.ts',
+        ],
+      },
+    ],
   },
   overrides: [
     // Allow 'export default' from these paths
