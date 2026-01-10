@@ -1,5 +1,4 @@
 import {GenericSectionItem, HeaderSectionItem} from '@atb/components/sections';
-import {Section} from '@atb/components/sections';
 import {JourneySearchHistoryEntry} from '@atb/modules/search-history';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -7,7 +6,6 @@ import {View} from 'react-native';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {useFilteredJourneySearch} from '../utils';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {StyleSheet} from '@atb/theme';
 
 type JourneyHistoryProps = {
   searchText?: string;
@@ -68,13 +66,6 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
     </View>
   );
 }
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  section: {
-    marginTop: theme.spacing.large,
-    marginBottom: theme.spacing.large,
-  },
-}));
 
 function mapToVisibleSearchResult(entry: JourneySearchHistoryEntry) {
   const [from, to] = entry;
