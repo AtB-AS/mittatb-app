@@ -19,7 +19,6 @@ const DEFAULT_HISTORY_LIMIT = 3;
 
 export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
   const {t} = useTranslation();
-  const styles = useStyles();
   const journeyHistory = useFilteredJourneySearch(searchText);
 
   if (!journeyHistory.length) {
@@ -27,7 +26,7 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
   }
 
   return (
-    <Section style={styles.section}>
+    <View>
       <HeaderSectionItem
         transparent
         text={t(
@@ -66,7 +65,7 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
             </PressableOpacity>
           ))}
       </View>
-    </Section>
+    </View>
   );
 }
 
