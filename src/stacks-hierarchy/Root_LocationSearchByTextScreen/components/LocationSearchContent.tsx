@@ -270,7 +270,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacing.medium,
   },
   fullFlex: {
-    backgroundColor: theme.color.background.neutral[2].background,
+    backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
 }));
