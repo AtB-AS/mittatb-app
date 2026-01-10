@@ -76,6 +76,14 @@ platform :ios do
     )
   end
 
+  desc "fetch firebase UDID"
+  lane :download_udids do
+    firebase_app_distribution_get_udids(
+      app: ENV['FIREBASE_APP_ID_IOS'],
+      output_file: ENV['IOS_DEVICES_FILE'],
+    )
+  end
+
   desc "Removes the use of beacons from the app"
   lane :remove_use_of_beacons do
     beacons_enabled = ENV["KETTLE_API_KEY"] != ""
