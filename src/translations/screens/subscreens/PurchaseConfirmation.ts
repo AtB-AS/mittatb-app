@@ -9,9 +9,9 @@ const PurchaseConfirmationTexts = {
       'Det oppstod ein feil',
     ),
     message: _(
-      'Oops - vi klarte ikke å søke opp prisen. Supert om du prøver igjen 🤞',
-      'Whoops - we were unable to retrieve cost. Please try again 🤞',
-      'Oops - vi klarte ikkje å søke opp prisen. Supert om du prøvar igjen 🤞',
+      'Vi klarte ikke å søke opp prisen. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      'We were unable to look up the price. Please try again, or contact customer service for assistance.',
+      'Vi klarte ikkje å søkje opp prisen. Prøv igjen, eller kontakt kundeservice for hjelp.',
     ),
   },
   title: _('Billettsammendrag', 'Ticket summary', 'Billettsamandrag'),
@@ -197,9 +197,9 @@ const PurchaseConfirmationTexts = {
     `Ordinær pris`,
   ),
   reserveError: _(
-    'Oops - vi feila når vi prøvde å sette i gang betalingen. Supert om du prøver igjen 🤞',
-    'Whoops - we failed when trying to set up the payment. Please try again 🤞',
-    'Oops - vi feila då vi prøvde å sette i gang betalinga. Supert om du prøver igjen 🤞',
+    'Vi klarte ikke å sette i gang betalingen. Prøv igjen, eller kontakt kundeservice for hjelp.',
+    'We were unable to start the payment. Please try again, or contact customer service for assistance.',
+    'Vi klarte ikkje å starte betalingen. Prøv igjen, eller kontakt kundeservice for hjelp.',
   ),
   vippsInstalledError: _(
     'Vi klarte ikke å sette i gang betalingen. Har du Vipps-appen installert?',

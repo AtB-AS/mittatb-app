@@ -214,11 +214,10 @@ const ProfileTexts = {
             ),
           },
           permissionError: {
-            title: _('Oops!', 'Whoops!', 'Oops!'),
             message: _(
-              'Det har oppstått en feil. Prøv igjen senere 🤞',
-              'An error ocurred. Please try again later 🤞',
-              'Det har skjedd ein feil. Prøv igjen seinare 🤞',
+              'Vi klarte ikke å redigere tillatelse. Prøv igjen, eller kontakt kundeservice for hjelp.',
+              'We are unable to change the permission. Please try again or contact customer service for assistance.',
+              'Vi klarte ikkje å redigera tillating. Prøv igjen, eller kontakt kundeservice for hjelp.',
             ),
           },
         },

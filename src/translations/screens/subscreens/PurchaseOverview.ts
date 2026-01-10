@@ -14,9 +14,9 @@ const PurchaseOverviewTexts = {
       'Det oppstod ein feil',
     ),
     message: _(
-      'Oops - vi klarte ikke å søke opp prisen. Supert om du prøver igjen 🤞',
-      'Whoops - we were unable to retrieve cost. Please try again 🤞',
-      'Oops - vi klarte ikkje å finne prisinformasjonen. Prøv igjen 🤞',
+      'Vi klarte ikke å søke opp prisen. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      'We were unable to look up the price. Please try again, or contact customer service for assistance.',
+      'Vi klarte ikkje å søkje opp prisen. Prøv igjen, eller kontakt kundeservice for hjelp.',
     ),
     productUnavailable: {
       title: (productName: string) =>

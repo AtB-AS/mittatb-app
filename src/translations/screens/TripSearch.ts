@@ -153,9 +153,9 @@ const TripSearchTexts = {
         `Er du på nett? Vi klarar ikkje hente reiseforslag då tilkopling til internett manglar eller er ustabil`,
       ),
       generic: _(
-        'Oops - vi feila med søket. Supert om du prøver igjen 🤞',
-        'Woops – our search engine failed. Please try again 🤞',
-        'Oops - det skjedde ein feil med søket. Ver venleg og prøv igjen 🤞',
+        'Noe gikk galt med søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
+        'Something went wrong with the search. Please try again or contact customer service for assistance.',
+        'Noko gjekk gale med søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
       ),
     },
 
