@@ -129,7 +129,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
 
   const styleText: TextStyle = {
     width: !expanded ? '100%' : undefined,
-    fontWeight: 600
+    fontWeight: 600,
   };
   const textContainer: TextStyle = {
     flex: !expanded ? undefined : 1,
