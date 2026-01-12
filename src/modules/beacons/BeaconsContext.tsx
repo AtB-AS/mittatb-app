@@ -139,7 +139,7 @@ const BeaconsContextProvider = ({children}: Props) => {
 
   const getPrivacyTermsUrl = useCallback(async () => {
     await initializeKettle(true);
-    return await Kettle.getPrivacyTermsUrl();
+    return Kettle.getPrivacyTermsUrl();
   }, [initializeKettle]);
 
   const onboardForBeacons = useCallback(
@@ -186,7 +186,7 @@ const BeaconsContextProvider = ({children}: Props) => {
     Kettle.revoke(BEACONS_CONSENTS);
     await storage.set(storeKey.beaconsConsent, 'false');
     setIsConsentGranted(false);
-    await updateBeaconsInfo();
+    updateBeaconsInfo();
   }, [isBeaconsSupported, stopBeacons, initializeKettle]);
 
   const deleteCollectedData = useCallback(async () => {
@@ -233,7 +233,7 @@ const BeaconsContextProvider = ({children}: Props) => {
         }
 
         Kettle.start(permissions);
-        await updateBeaconsInfo();
+        updateBeaconsInfo();
       }
     })();
   }, [
