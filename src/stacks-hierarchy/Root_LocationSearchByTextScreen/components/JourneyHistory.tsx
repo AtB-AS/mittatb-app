@@ -6,7 +6,7 @@ import {View} from 'react-native';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {useFilteredJourneySearch} from '../utils';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import { StyleSheet } from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 
 type JourneyHistoryProps = {
   searchText?: string;
@@ -84,4 +84,4 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingTop: theme.spacing.medium,
   },
-}))
+}));
