@@ -172,8 +172,20 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
         callerRouteParam === 'fromLocation'
           ? t(SharedTexts.from)
           : t(SharedTexts.to),
-      callerRouteName: route.name,
-      callerRouteParam,
+      callerRouteConfig: {
+        route: [
+          'Root_TabNavigatorStack',
+          {
+            screen: 'TabNav_DashboardStack',
+            params: {
+              screen: 'Dashboard_TripSearchScreen',
+              params: {},
+              merge: true,
+            },
+          },
+        ],
+        locationRouteParam: callerRouteParam,
+      },
       initialLocation,
       includeJourneyHistory: true,
       onlyStopPlacesCheckboxInitialState: false,
@@ -259,15 +271,12 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           leftButton: {
             type: 'back',
             onPress: () => {
-              if (callerRoute?.name) {
+              if (callerRoute) {
                 navigation.setParams({
                   callerRoute: undefined,
                 });
 
-                return navigation.navigate({
-                  name: callerRoute?.name as any,
-                  params: {},
-                });
+                return navigation.navigate(...callerRoute);
               }
 
               navigation.goBack();
