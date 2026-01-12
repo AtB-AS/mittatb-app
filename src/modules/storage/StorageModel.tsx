@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Bugsnag from '@bugsnag/react-native';
-import {Platform} from 'react-native';
 
 export enum StorageModelKeysEnum {
   PreviousPaymentMethods = '@ATB_previous_payment_methods',
