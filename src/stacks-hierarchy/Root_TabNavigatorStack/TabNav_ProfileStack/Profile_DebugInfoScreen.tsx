@@ -643,6 +643,7 @@ export const Profile_DebugInfoScreen = () => {
           <ExpandableSectionItem
             text="Server overrides"
             expandContent={<DebugServerOverrides />}
+            showIconText={true}
           />
         </Section>
       </ScrollView>
