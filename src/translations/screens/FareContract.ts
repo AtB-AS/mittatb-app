@@ -316,9 +316,9 @@ const FareContractTexts = {
         'Sender kvittering...',
       ),
       error: _(
-        'Vi klarte ikke å sende kvitteringer. Prøv igjen, eller kontakt kundeservice for hjelp.',
+        'Vi klarte ikke å sende kvitteringen. Prøv igjen, eller kontakt kundeservice for hjelp.',
         'We couldn´t send the receipt. Please try again or contact customer service for assistance.',
-        'Vi klarte ikkje å senda kvitteringar. Prøv igjen, eller kontakt kundeservice for hjelp.',
+        'Vi klarte ikkje å senda kvitteringa. Prøv igjen, eller kontakt kundeservice for hjelp.',
       ),
       success: (email: string, reference: string) =>
         _(
