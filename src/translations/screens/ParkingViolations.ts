@@ -112,9 +112,9 @@ export const ParkingViolationTexts = {
   issue: {
     general: {
       message: _(
-        'Vi fikk ikke til å starte feilrapporteringen denne gangen. Prøv igjen senere, eller kontakt kundeservice for hjelp',
-        'We were unable to start the error reporting this time. Please try again later, or contact customer service for assistance.',
-        'Vi fekk ikkje til å starte feilrapporteringa denne gongen. Prøv igjen seinare, eller kontakt kundeservice for hjelp.',
+        'Vi fikk ikke til å starte feilrapporteringen. Prøv igjen senere, eller kontakt kundeservice for hjelp',
+        'We were unable to start the error reporting. Please try again later, or contact customer service for assistance.',
+        'Vi fekk ikkje til å starte feilrapporteringa. Prøv igjen seinare, eller kontakt kundeservice for hjelp.',
       ),
     },
     positionNotGranted: {
