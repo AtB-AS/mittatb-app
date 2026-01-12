@@ -119,5 +119,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>APP_GROUP_NAME</key>
+	<string>$(APP_GROUP_NAME)</string>
 </dict>
 </plist>

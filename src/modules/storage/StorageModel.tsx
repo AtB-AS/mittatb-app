@@ -55,12 +55,6 @@ const leaveBreadCrumb = (
 export type KeyValuePair = [string, string | null];
 
 export const storage = {
-  /** Necessary for communication between App and iOS Widget */
-  setAppGroupName: async (groupName?: string) => {
-    if (Platform.OS === 'ios') {
-      await AsyncStorage.setAppGroupName(groupName).catch(errorHandler);
-    }
-  },
   get: async (key: string) => {
     const value = await AsyncStorage.getItem(key).catch(errorHandler);
     leaveBreadCrumb('read-single', key, value);
