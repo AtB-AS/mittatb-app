@@ -173,7 +173,6 @@ export const Root_ParkingViolationsQrScreen = ({
         {isError && (
           <MessageInfoBox
             style={style.error}
-            title={t(ParkingViolationTexts.issue.sendReport.title)}
             message={t(ParkingViolationTexts.issue.sendReport.message)}
             type="error"
           />

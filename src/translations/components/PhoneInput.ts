@@ -38,9 +38,9 @@ const PhoneInputTexts = {
       'Du har prøvd for mange gangar. Ver venleg og vent nokon minutt før du prøver igjen.',
     ),
     unknown_error: _(
-      'Oops - noe gikk galt. Supert om du prøver på nytt 🤞',
-      'Whoops - something went wrong. Please try again 🤞',
-      'Oops - noko gjekk gale. Supert om du prøver på nytt 🤞',
+      'Noe gikk galt. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      'Something went wrong. Please try again or contact customer service for assistance.',
+      'Noko gjekk gale. Prøv igjen, eller kontakt kundeservice for hjelp.',
     ),
   },
 };
