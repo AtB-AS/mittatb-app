@@ -37,12 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     window = UIWindow(frame: UIScreen.main.bounds)
 
     // Initialize Intercom
-    if let intercomPath = Bundle.main.path(forResource: "Intercom", ofType: "plist"),
-       let intercomDict = NSDictionary(contentsOfFile: intercomPath) as? [String: Any] {
-      let intercomApiKey = intercomDict["IntercomApiKey"] as? String ?? ""
-      let intercomAppId = intercomDict["IntercomAppId"] as? String ?? ""
-      
-      if !intercomApiKey.isEmpty && !intercomAppId.isEmpty {
+    if let intercomApiKey = Bundle.main.object(forInfoDictionaryKey: "IntercomApiKey") as? String, !intercomApiKey.isEmpty {
+      if let intercomAppId = Bundle.main.object(forInfoDictionaryKey: "IntercomAppId") as? String, !intercomAppId.isEmpty {
         Intercom.setApiKey(intercomApiKey, forAppId: intercomAppId)
       }
     }
