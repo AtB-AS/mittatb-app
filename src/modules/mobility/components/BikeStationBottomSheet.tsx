@@ -1,4 +1,4 @@
-import {dictionary, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
@@ -30,8 +30,10 @@ import {
   PayWithBonusPointsCheckbox,
   findRelevantBonusProduct,
 } from '@atb/modules/bonus';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {
+  BottomSheetHeaderType,
+  MapBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
@@ -88,8 +90,7 @@ export const BikeStationBottomSheet = ({
       enableDynamicSizing={true}
       heading={operatorName}
       subText={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       logoUrl={brandLogoUrl}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
@@ -130,26 +131,21 @@ export const BikeStationBottomSheet = ({
                       first={
                         <MobilityStat
                           svg={BicycleFill}
-                          primaryStat={availableBikes}
-                          secondaryStat={t(
+                          text={`**${availableBikes}** ${t(
                             BicycleTexts.stations.numBikesAvailable(
                               availableBikes,
                             ),
-                          )}
+                          )}`}
                         />
                       }
                       second={
                         <MobilityStat
                           svg={Parking}
-                          primaryStat={
-                            station.numDocksAvailable ??
-                            t(BicycleTexts.stations.unknownDocksAvailable)
-                          }
-                          secondaryStat={t(
+                          text={`**${station.numDocksAvailable ?? t(BicycleTexts.stations.unknownDocksAvailable)}** ${t(
                             BicycleTexts.stations.numDocksAvailable(
                               station.numDocksAvailable,
                             ),
-                          )}
+                          )}`}
                         />
                       }
                     />

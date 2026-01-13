@@ -3,7 +3,7 @@ import {
   VehicleId,
 } from '@atb/api/types/generated/fragments/vehicles';
 import React from 'react';
-import {dictionary, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   MobilityTexts,
@@ -29,8 +29,10 @@ import {
   PaymentSelectionSectionItem,
   useSelectedShmoPaymentMethod,
 } from '@atb/modules/payment';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {
+  BottomSheetHeaderType,
+  MapBottomSheet,
+} from '@atb/components/bottom-sheet';
 
 type ScooterHelpParams = {operatorId: string} & (
   | {vehicleId: string}
@@ -100,8 +102,7 @@ export const ScooterSheet = ({
       enableDynamicSizing={true}
       heading={operatorName}
       subText={t(MobilityTexts.formFactor(FormFactor.Scooter))}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       logoUrl={brandLogoUrl}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}

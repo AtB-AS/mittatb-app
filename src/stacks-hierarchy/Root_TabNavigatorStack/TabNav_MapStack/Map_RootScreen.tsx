@@ -8,35 +8,33 @@ import {MapScreenProps} from './navigation-types';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
+import {useIsFocused} from '@react-navigation/native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {ScooterHelpScreenProps} from '@atb/stacks-hierarchy/Root_ScooterHelp/Root_ScooterHelpScreen';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
+import {TripSearchCallerRoute} from '../TabNav_DashboardStack/types';
 
 export type MapScreenParams = {
   initialFilters?: MapFilterType;
 };
 
+const callerRoute: TripSearchCallerRoute = [
+  'Root_TabNavigatorStack',
+  {
+    screen: 'TabNav_MapStack',
+    params: {screen: 'Map_RootScreen', params: {}},
+  },
+];
+
 export const Map_RootScreen = ({
   navigation,
 }: MapScreenProps<'Map_RootScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
-  const {close} = useBottomSheetContext();
   const tabBarHeight = useBottomTabBarHeight();
   const isFocused = useIsFocused();
-
-  useFocusEffect(
-    useCallback(() => {
-      return () => {
-        // on screen blur (navigating away from map tab), close bottomsheet
-        close();
-      };
-    }, [close]),
-  );
 
   const navigateToQuay = useCallback(
     (place: StopPlace, quay: Quay) => {
@@ -80,7 +78,7 @@ export const Map_RootScreen = ({
         name: 'Dashboard_TripSearchScreen',
         params: {
           [destination]: location,
-          callerRoute: {name: 'Map_RootScreen'},
+          callerRoute,
         },
         merge: true,
       });

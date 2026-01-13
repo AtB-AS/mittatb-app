@@ -238,10 +238,6 @@ export const Profile_NotificationsScreen = ({
           {permissionStatus === 'error' && (
             <MessageInfoBox
               type="error"
-              title={t(
-                ProfileTexts.sections.settings.linkSectionItems.notifications
-                  .permissionError.title,
-              )}
               message={t(
                 ProfileTexts.sections.settings.linkSectionItems.notifications
                   .permissionError.message,

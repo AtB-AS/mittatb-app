@@ -1,9 +1,12 @@
 import {
-  authorizeUser,
   getOrCreateVippsUserCustomToken,
   VIPPS_CALLBACK_URL,
 } from '@atb/api/identity';
-import {useAuthContext, VippsSignInErrorCode} from '@atb/modules/auth';
+import {
+  useAuthContext,
+  useAuthenticateVipps,
+  VippsSignInErrorCode,
+} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
@@ -57,15 +60,16 @@ export const Root_LoginOptionsScreen = ({
   const {configurableLinks} = useFirestoreConfigurationContext();
   const {completeOnboardingSection} = useOnboardingContext();
 
-  const authenticateUserByVipps = async () => {
-    setIsLoading(true);
-    try {
-      await authorizeUser(setIsLoading);
-    } catch {
-      setError('unknown_error');
+  const {mutateAsync: authVipps} = useAuthenticateVipps({
+    onSuccess: (url) => openInAppBrowser(url, 'cancel'),
+    onError: () => setError('unknown_error'),
+    onSettled: () => {
       setIsLoading(false);
-    }
-  };
+    },
+    onMutate: () => {
+      setIsLoading(true);
+    },
+  });
 
   useEffect(
     () =>
@@ -75,33 +79,30 @@ export const Root_LoginOptionsScreen = ({
     [navigation],
   );
 
-  const signInUsingCustomToken = async (token: string) => {
-    completeOnboardingSection('userCreation');
-    const errorCode = await signInWithCustomToken(token);
-    if (errorCode) {
-      setError(errorCode);
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
     const signInVippsUser = async (authorizationCode: string) => {
       try {
         const customToken =
           await getOrCreateVippsUserCustomToken(authorizationCode);
-        await signInUsingCustomToken(customToken.data as string);
+        const errorCode = await signInWithCustomToken(
+          customToken.data as string,
+        );
+        if (errorCode) {
+          setError(errorCode);
+        }
         await storage.set('vipps_state', '');
         await storage.set('vipps_nonce', '');
+        completeOnboardingSection('userCreation');
       } catch {
         setError('unknown_error');
+      } finally {
         setIsLoading(false);
       }
     };
     if (authorizationCode) {
       signInVippsUser(authorizationCode);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authorizationCode]);
+  }, [authorizationCode, completeOnboardingSection, signInWithCustomToken]);
 
   useEffect(() => {
     const vippsCallbackHandler = async (event: any) => {
@@ -185,10 +186,7 @@ export const Root_LoginOptionsScreen = ({
         </ThemeText>
 
         <View style={styles.buttonContainer}>
-          <VippsLoginButton
-            onPress={authenticateUserByVipps}
-            disabled={isLoading}
-          />
+          <VippsLoginButton onPress={authVipps} disabled={isLoading} />
           <Button
             expanded={true}
             interactiveColor={theme.color.interactive[0]}

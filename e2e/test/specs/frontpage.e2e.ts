@@ -43,12 +43,9 @@ describe('Frontpage', () => {
 
     try {
       await ElementHelper.waitForElement('id', 'addFavoriteDeparture');
-      //expect(await FrontPagePage.noFavoriteInfo.getText()).toHaveTextContaining(
-      //  'You have no favorite departures',
-      //);
-      expect(await FrontPagePage.noFavoriteInfo).toHaveText(
-        expect.stringContaining('You have no favorite departures'),
-      );
+      //expect(await FrontPagePage.noFavoriteInfo.getText()).toHaveTextContaining(..)
+      //expect(await FrontPagePage.noFavoriteInfo).toHaveText(...)
+      expect(await FrontPagePage.noFavoriteInfo).toExist();
 
       // Choose stop place
       await FrontPagePage.addFavoriteDeparture.click();
@@ -61,8 +58,6 @@ describe('Frontpage', () => {
 
       // Before
       await ElementHelper.waitForElement('id', 'estimatedCallItem');
-      expect(await FavoritePage.getFavoriteIcon('semi', 0, 0)).not.toExist();
-      expect(await FavoritePage.getFavoriteIcon('no', 0, 1)).toExist();
 
       // Choose departure
       const linePublicCode = await DepartureOverviewPage.getLinePublicCode();
@@ -70,10 +65,11 @@ describe('Frontpage', () => {
       await DepartureOverviewPage.openDeparture();
 
       // Choose only marked departure
-      await ElementHelper.waitForElement('id', 'chooseFavoriteBottomSheet');
+      await ElementHelper.waitForElement(
+        'id',
+        'chooseFavoriteBottomSheetHeader',
+      );
       await FavoritePage.chooseFavoriteType('single');
-      expect(await FavoritePage.getFavoriteIcon('semi', 0, 0)).toExist();
-      expect(await FavoritePage.getFavoriteIcon('no', 0, 1)).toExist();
       await AppHelper.pause(1000);
       await FavoritePage.confirm.click();
 

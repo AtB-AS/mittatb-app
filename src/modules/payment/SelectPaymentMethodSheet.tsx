@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
-import {dictionary, useTranslation} from '@atb/translations';
-import {Close, Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {useTranslation} from '@atb/translations';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {FullScreenFooter} from '@atb/components/screen-footer';
@@ -20,7 +20,10 @@ import {
 } from './types';
 import {SinglePaymentMethod} from './SinglePaymentMethod';
 import {MultiplePaymentMethodsRadioSection} from './MultiplePaymentMethodsRadioSection';
-import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {
+  BottomSheetHeaderType,
+  BottomSheetModal,
+} from '@atb/components/bottom-sheet';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 
@@ -103,8 +106,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(SelectPaymentMethodTexts.header.text)}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       Footer={Footer}
       closeCallback={() => giveFocus(onCloseFocusRef)}
     >

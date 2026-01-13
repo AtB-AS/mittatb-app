@@ -1,4 +1,4 @@
-import {dictionary, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import React from 'react';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {StyleSheet} from '@atb/theme';
@@ -21,12 +21,14 @@ import {MobilityStats} from './MobilityStats';
 import {MobilityStat} from './MobilityStat';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
 import {ThemedParkAndRide} from '@atb/theme/ThemedAssets';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {
+  BottomSheetHeaderType,
+  MapBottomSheet,
+} from '@atb/components/bottom-sheet';
 
 type Props = {
   name: string | undefined;
-  capacity: number | undefined;
+  capacity: number;
   distance: number | undefined;
   parkingFor: ParkingVehicleTypes;
   feature: Feature<Point, ParkingType>;
@@ -71,8 +73,7 @@ export const ParkAndRideBottomSheet = ({
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
       heading={t(ParkAndRideTexts.title)}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >
@@ -108,16 +109,15 @@ export const ParkAndRideBottomSheet = ({
                 first={
                   <MobilityStat
                     svg={parkingFor === 'pedalCycle' ? BicycleFill : CarFill}
-                    primaryStat={t(ParkAndRideTexts.parkingFor(parkingFor))}
+                    text={t(ParkAndRideTexts.parkingFor(parkingFor))}
                   />
                 }
                 second={
                   <MobilityStat
                     svg={Parking}
-                    primaryStat={capacity ?? ''}
-                    secondaryStat={
-                      capacity
-                        ? t(ParkAndRideTexts.capacity)
+                    text={
+                      !Number.isNaN(capacity) && capacity > 0
+                        ? t(ParkAndRideTexts.capacity(capacity))
                         : t(ParkAndRideTexts.unknownCapacity)
                     }
                   />

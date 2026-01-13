@@ -21,7 +21,6 @@ import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {PreferencesContextProvider} from '@atb/modules/preferences';
 import {AccessibilityContextProvider} from '@atb/modules/accessibility';
 import {AppLanguageContextProvider} from '@atb/translations/LanguageContext';
-import {BottomSheetContextProvider} from '@atb/components/bottom-sheet';
 import {LocaleContextProvider} from '@atb/modules/locale';
 import {setupConfig} from '@atb/setup';
 import {MobileTokenContextProvider} from '@atb/modules/mobile-token';
@@ -39,7 +38,7 @@ import {BeaconsContextProvider} from '@atb/modules/beacons';
 import {FeatureTogglesContextProvider} from '@atb/modules/feature-toggles';
 import {configureReanimatedLogger} from 'react-native-reanimated';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
-import {BottomSheetV2ContextProvider} from './components/bottom-sheet-v2/BottomSheetV2Context';
+import {BottomSheetContextProvider} from './components/bottom-sheet/BottomSheetContext';
 import {EventStreamContextProvider} from './modules/event-stream/EventStreamContext';
 
 // https://rnfirebase.io/migrating-to-v22
@@ -112,17 +111,15 @@ export const App = () => {
                                                     <AnnouncementsContextProvider>
                                                       <NotificationContextProvider>
                                                         <BottomSheetModalProvider>
-                                                          <BottomSheetV2ContextProvider>
-                                                            <BottomSheetContextProvider>
-                                                              <FeedbackQuestionsContextProvider>
-                                                                <BeaconsContextProvider>
-                                                                  <OnboardingContextProvider>
-                                                                    <RootStack />
-                                                                  </OnboardingContextProvider>
-                                                                </BeaconsContextProvider>
-                                                              </FeedbackQuestionsContextProvider>
-                                                            </BottomSheetContextProvider>
-                                                          </BottomSheetV2ContextProvider>
+                                                          <BottomSheetContextProvider>
+                                                            <FeedbackQuestionsContextProvider>
+                                                              <BeaconsContextProvider>
+                                                                <OnboardingContextProvider>
+                                                                  <RootStack />
+                                                                </OnboardingContextProvider>
+                                                              </BeaconsContextProvider>
+                                                            </FeedbackQuestionsContextProvider>
+                                                          </BottomSheetContextProvider>
                                                         </BottomSheetModalProvider>
                                                       </NotificationContextProvider>
                                                     </AnnouncementsContextProvider>

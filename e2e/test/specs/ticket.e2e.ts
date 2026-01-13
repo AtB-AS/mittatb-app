@@ -68,17 +68,17 @@ describe('Ticket', () => {
 
       // Pre
       expect(await PurchaseOverviewPage.getZone()).toContain('Zone A');
-      expect(await PurchaseOverviewPage.getTraveller()).toContain('1 Adult');
+      expect(await PurchaseOverviewPage.getTraveller()).toContain('1 Adult');
 
       // Set traveller and zone
       await PurchaseOverviewPage.selectTraveller();
       await PurchaseOverviewPage.decreaseTravellerCount('adult');
       await PurchaseOverviewPage.increaseTravellerCount('child');
-      await PurchaseOverviewPage.confirmTravellers();
+      await NavigationHelper.closeBottomSheet();
       await PurchaseOverviewPage.setZones('B2', 'B2');
       expect(await PurchaseOverviewPage.getZone()).toContain('Zone B2');
 
-      expect(await PurchaseOverviewPage.getTraveller()).toContain('1 Child');
+      expect(await PurchaseOverviewPage.getTraveller()).toContain('1 Child');
 
       // Ensure an offer
       const hasOffer: boolean = await PurchaseOverviewPage.hasOffer();
@@ -126,7 +126,7 @@ describe('Ticket', () => {
           await PurchaseSummaryPage.confirmPayment.click();
          */
 
-        await NavigationHelper.close();
+        await NavigationHelper.closeBottomSheet();
         await AppHelper.pause();
         await NavigationHelper.back();
         await AppHelper.pause();
@@ -154,7 +154,7 @@ describe('Ticket', () => {
       // Check on-behalf-of
       await PurchaseOverviewPage.selectTraveller();
       expect(await PurchaseOverviewPage.onBehalfOfToggle).not.toExist();
-      await PurchaseOverviewPage.confirmTravellers();
+      await NavigationHelper.closeBottomSheet();
       await NavigationHelper.back();
 
       // Night ticket

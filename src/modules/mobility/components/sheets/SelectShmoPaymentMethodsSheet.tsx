@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
-import {dictionary, useTranslation} from '@atb/translations';
-import {Close, Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {useTranslation} from '@atb/translations';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {
@@ -16,7 +16,10 @@ import {
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
 import {useMutation} from '@tanstack/react-query';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
+import {
+  BottomSheetHeaderType,
+  MapBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {BottomSheetScrollView} from '@gorhom/bottom-sheet';
 
 type Props = {
@@ -62,8 +65,7 @@ export const SelectShmoPaymentMethodSheet = ({
       snapPoints={['70%']}
       closeCallback={onClose}
       enableDynamicSizing={false}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >

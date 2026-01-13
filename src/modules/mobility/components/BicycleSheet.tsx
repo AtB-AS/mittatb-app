@@ -3,7 +3,7 @@ import {
   VehicleId,
 } from '@atb/api/types/generated/fragments/vehicles';
 import React from 'react';
-import {dictionary, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {BatteryHigh} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
@@ -28,8 +28,10 @@ import {MobilityStat} from './MobilityStat';
 import {BrandingImage} from './BrandingImage';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {
+  BottomSheetHeaderType,
+  MapBottomSheet,
+} from '@atb/components/bottom-sheet';
 
 type Props = {
   vehicleId: VehicleId;
@@ -71,8 +73,7 @@ export const BicycleSheet = ({
       enableDynamicSizing={true}
       heading={operatorName}
       subText={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       logoUrl={brandLogoUrl}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
@@ -111,21 +112,19 @@ export const BicycleSheet = ({
                         vehicle.currentFuelPercent ? (
                           <MobilityStat
                             svg={BatteryHigh}
-                            primaryStat={vehicle.currentFuelPercent + '%'}
-                            secondaryStat={t(
+                            text={`**${vehicle.currentFuelPercent}%** ${t(
                               MobilityTexts.range(
                                 formatRange(
                                   vehicle.currentRangeMeters,
                                   language,
                                 ),
                               ),
-                            )}
+                            )}`}
                           />
                         ) : (
                           <MobilityStat
                             svg={BicycleFill}
-                            primaryStat=""
-                            secondaryStat={t(BicycleTexts.humanPoweredBike)}
+                            text={t(BicycleTexts.humanPoweredBike)}
                           />
                         )
                       }

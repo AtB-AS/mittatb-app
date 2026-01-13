@@ -5,7 +5,6 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {
   DashboardTexts,
-  dictionary,
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
@@ -16,8 +15,10 @@ import {
 } from '@atb/utils/use-in-app-review';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {useActionButtonProps} from './hooks';
-import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {
+  BottomSheetHeaderType,
+  BottomSheetModal,
+} from '@atb/components/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type Props = {
@@ -46,8 +47,7 @@ export const AnnouncementSheet = ({
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(DashboardTexts.announcements.header)}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       closeCallback={() => {
         requestReview(InAppReviewContext.Announcement);
         giveFocus(onCloseFocusRef);

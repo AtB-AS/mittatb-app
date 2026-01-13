@@ -24,7 +24,10 @@ import {MapView} from '@rnmapbox/maps';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useShmoWarnings} from '@atb/modules/map';
 import {useKeepAwake} from '@sayem314/react-native-keep-awake';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
+import {
+  BottomSheetHeaderType,
+  MapBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemeText} from '@atb/components/text';
 
@@ -136,6 +139,7 @@ export const ActiveScooterSheet = ({
       headerNode={
         activeBooking ? <ShmoTripCard shmoBooking={activeBooking} /> : null
       }
+      bottomSheetHeaderType={BottomSheetHeaderType.None}
     >
       {isShmoDeepIntegrationEnabled && (
         <>

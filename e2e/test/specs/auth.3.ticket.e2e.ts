@@ -84,14 +84,13 @@ describe('Auth Ticket', () => {
           'Single ticket, bus and tram',
         );
         await AppHelper.removeGlobalMessages();
-
-        expect(await PurchaseOverviewPage.getTraveller()).toContain('1 Adult');
+        expect(await PurchaseOverviewPage.getTraveller()).toContain('1 Adult');
 
         // Set on-behalf-of
         await PurchaseOverviewPage.selectTraveller();
         await PurchaseOverviewPage.decreaseTravellerCount('adult');
         await PurchaseOverviewPage.increaseTravellerCount('child');
-        await PurchaseOverviewPage.confirmTravellers();
+        await NavigationHelper.closeBottomSheet();
         expect(await PurchaseOverviewPage.onBehalfOfToggle).not.toBeChecked();
         await PurchaseOverviewPage.onBehalfOfToggle.click();
 
@@ -106,7 +105,10 @@ describe('Auth Ticket', () => {
           await PurchaseOverviewPage.goToPayment.click();
 
           // On-behalf-of
-          await ElementHelper.waitForElement('text', 'Buy for others');
+          await ElementHelper.waitForElement(
+            'text',
+            'Send the ticket to someone else',
+          );
           await PurchaseOverviewPage.setPhoneNumber(onBehalfOfPhoneNumber);
           await PurchaseOverviewPage.goToPaymentOnBehalfOf.click();
 

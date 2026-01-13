@@ -4,7 +4,7 @@ import {ValidityStatus} from '../utils';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {FareContractType} from '@atb-as/utils';
-import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import Bugsnag from '@bugsnag/react-native';
 import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
@@ -24,9 +24,11 @@ import {
 import {CONTEXT_ID} from '@atb/modules/mobile-token';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
-import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {
+  BottomSheetHeaderType,
+  BottomSheetModal,
+} from '@atb/components/bottom-sheet';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -375,8 +377,7 @@ const StaticBarcodeBottomSheet = ({
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(FareContractTexts.details.bottomSheetTitle)}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       closeCallback={() => giveFocus(onCloseFocusRef)}
       enableDynamicSizing={false}
       snapPoints={['80%']}

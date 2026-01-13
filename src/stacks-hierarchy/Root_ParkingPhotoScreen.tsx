@@ -10,10 +10,10 @@ import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MapStateActionType, useMapContext} from '@atb/modules/map';
 import {blobToBase64} from '@atb/modules/parking-violations-reporting';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {compressImage} from '@atb/utils/image';
 import {useCallback} from 'react';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 export type ParkingPhotoScreenProps =
   RootStackScreenProps<'Root_ParkingPhotoScreen'>;
@@ -26,6 +26,7 @@ export const Root_ParkingPhotoScreen = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const {dispatchMapState} = useMapContext();
+  const {logEvent} = useAnalyticsContext();
 
   const {mutateAsync: sendShmoBookingEvent, isPending} =
     useSendShmoBookingEventMutation();
@@ -33,8 +34,6 @@ export const Root_ParkingPhotoScreen = ({
   const onGoBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
-
-  const {logEvent} = useBottomSheetContext();
 
   const onEndTrip = async (bookingId: string, fileData: string) => {
     if (bookingId) {

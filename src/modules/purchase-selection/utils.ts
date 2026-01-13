@@ -14,6 +14,7 @@ import {
   UserProfile,
 } from '@atb-as/config-specs';
 import {isValidDateString} from '@atb/utils/date';
+import {decodePolylineEncodedGeometry} from '@atb/utils/decode-polyline-geometry';
 
 export const isProductSellableInApp = (
   input: PurchaseSelectionBuilderInput,
@@ -61,7 +62,10 @@ export const getDefaultZones = (
   if (input.currentCoordinates) {
     const {longitude, latitude} = input.currentCoordinates;
     const zoneFromLocation = selectableZones.find((t) =>
-      turfBooleanPointInPolygon([longitude, latitude], t.geometry),
+      turfBooleanPointInPolygon(
+        [longitude, latitude],
+        decodePolylineEncodedGeometry(t.geometry),
+      ),
     );
     if (zoneFromLocation) {
       zoneWithMetadata = {...zoneFromLocation, resultType: 'geolocation'};

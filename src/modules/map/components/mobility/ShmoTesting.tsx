@@ -19,7 +19,6 @@ import {Button} from '@atb/components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useVehicle} from '@atb/modules/mobility';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {useMapContext} from '../../MapContext';
 import {ScooterHelpParams} from '../../types';
 
@@ -58,8 +57,6 @@ export const ShmoTesting = ({navigateToScooterSupport}: ShmoTestingProps) => {
 
   const {data: activeShmoBooking} = useActiveShmoBookingQuery();
   const {data: shmoBooking} = useShmoBookingQuery(previousBookingId);
-
-  const {close: closeBottomSheet} = useBottomSheetContext();
 
   useEffect(() => {
     if (selectedVehicleId) {
@@ -224,7 +221,6 @@ export const ShmoTesting = ({navigateToScooterSupport}: ShmoTestingProps) => {
         interactiveColor={interactiveColor}
         accessibilityRole="button"
         onPress={() => {
-          closeBottomSheet();
           if (vehicleId) {
             navigateToScooterSupport({
               vehicleId: vehicleId,

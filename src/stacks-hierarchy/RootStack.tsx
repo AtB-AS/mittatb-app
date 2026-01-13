@@ -80,6 +80,7 @@ import {
 import {Root_OnboardingCarouselStack} from './Root_OnboardingCarouselStack';
 import {getActiveRouteName} from '@atb/utils/navigation';
 import {Root_TravelAidOnboardingScreen} from './Root_TravelAidOnboardingScreen';
+import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -103,6 +104,7 @@ export const RootStack = () => {
   );
 
   const {minimum_app_version} = useRemoteConfigContext();
+  const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
 
   useBeaconsContext();
   useTestIds();
@@ -201,7 +203,6 @@ export const RootStack = () => {
       />
       <LoadingScreenBoundary>
         <NavigationContainer<RootStackParamList>
-          navigationInChildEnabled // This is needed for react-navigation v7 and higher, will be removed in the future and we will have to fix nested navigation
           onStateChange={onNavigationStateChange}
           initialState={getInitialNavigationContainerState()}
           ref={navRef}
@@ -252,6 +253,23 @@ export const RootStack = () => {
                     },
                   ],
                 } as ResultState;
+              }
+              if (path.includes('purchase-overview')) {
+                const params = new URLSearchParams(path.split('?')[1]);
+                const type = params.get('type');
+                if (type) {
+                  const selection = purchaseSelectionBuilder
+                    .forType(type)
+                    .build();
+                  return {
+                    routes: [
+                      {
+                        name: 'Root_PurchaseOverviewScreen',
+                        params: {selection: selection},
+                      },
+                    ],
+                  } as ResultState;
+                }
               }
 
               // If the path is not from the widget, behave as usual

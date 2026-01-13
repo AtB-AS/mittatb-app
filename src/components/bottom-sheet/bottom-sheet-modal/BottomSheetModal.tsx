@@ -12,15 +12,15 @@ import {
   type BottomSheetFooterProps,
 } from '@gorhom/bottom-sheet';
 import {BottomSheetHeader} from '../BottomSheetHeader';
-import {SvgProps} from 'react-native-svg';
 import {Platform, useWindowDimensions, View} from 'react-native';
 import {useBottomSheetStyles} from '../use-bottom-sheet-styles';
 import {ReduceMotion} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useThemeContext} from '@atb/theme';
-import {useBottomSheetV2Context} from '../BottomSheetV2Context';
+import {useBottomSheetContext} from '../BottomSheetContext';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {BottomSheetHeaderType} from '../use-bottom-sheet-header-type';
 
 type BottomSheetModalProps = PropsWithChildren<{
   bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
@@ -28,8 +28,6 @@ type BottomSheetModalProps = PropsWithChildren<{
   heading?: string;
   subText?: string;
   logoUrl?: string;
-  rightIcon?: (props: SvgProps) => React.JSX.Element;
-  rightIconText?: string;
   headerNode?: React.ReactNode;
   snapPoints?: Array<string | number>;
   enableDynamicSizing?: boolean;
@@ -38,7 +36,8 @@ type BottomSheetModalProps = PropsWithChildren<{
   Footer?: React.FC;
   testID?: string;
   closeOnBackdropPress?: boolean;
-  overrideCloseButton?: () => void;
+  overrideCloseFunction?: () => void;
+  bottomSheetHeaderType: BottomSheetHeaderType;
 }>;
 export const BottomSheetModal = ({
   children,
@@ -46,8 +45,6 @@ export const BottomSheetModal = ({
   heading,
   subText,
   logoUrl,
-  rightIcon,
-  rightIconText,
   headerNode,
   snapPoints,
   enableDynamicSizing = true,
@@ -57,7 +54,8 @@ export const BottomSheetModal = ({
   testID,
   enablePanDownToClose = true,
   closeOnBackdropPress = true,
-  overrideCloseButton,
+  overrideCloseFunction,
+  bottomSheetHeaderType,
 }: BottomSheetModalProps) => {
   const styles = useBottomSheetStyles();
   const {height: screenHeight} = useWindowDimensions();
@@ -65,7 +63,7 @@ export const BottomSheetModal = ({
   const [footerHeight, setFooterHeight] = useState(0);
   const {theme} = useThemeContext();
   const focusRef = React.useRef<View>(null);
-  const {setIsOpen, isOpen} = useBottomSheetV2Context();
+  const {setIsOpen, isOpen} = useBottomSheetContext();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   useEffect(() => {
@@ -123,22 +121,20 @@ export const BottomSheetModal = ({
         heading={heading}
         subText={subText}
         logoUrl={logoUrl}
-        rightIcon={rightIcon}
-        rightIconText={rightIconText}
         bottomSheetRef={bottomSheetModalRef}
         headerNode={headerNode}
         testID={testID}
-        overrideCloseButton={overrideCloseButton}
+        overrideCloseFunction={overrideCloseFunction}
+        bottomSheetHeaderType={bottomSheetHeaderType}
       />
     ),
     [
+      bottomSheetHeaderType,
       bottomSheetModalRef,
       headerNode,
       heading,
       logoUrl,
-      overrideCloseButton,
-      rightIcon,
-      rightIconText,
+      overrideCloseFunction,
       subText,
       testID,
     ],

@@ -1,4 +1,4 @@
-import {dictionary, MapTexts, useTranslation} from '@atb/translations';
+import {MapTexts, useTranslation} from '@atb/translations';
 import {ActivityIndicator, View} from 'react-native';
 import React, {useRef} from 'react';
 
@@ -8,9 +8,11 @@ import {
   useMapContext,
 } from '@atb/modules/map';
 import {StyleSheet} from '@atb/theme';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {MobilityFilters} from './MobilityFilters';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
+import {
+  BottomSheetHeaderType,
+  MapBottomSheet,
+} from '@atb/components/bottom-sheet';
 
 type MapFilterSheetProps = {
   onClose: () => void;
@@ -49,8 +51,7 @@ export const MapFilterSheet = ({
       allowBackgroundTouch={false}
       enableDynamicSizing={true}
       heading={t(MapTexts.filters.bottomSheet.heading)}
-      rightIconText={t(dictionary.confirm)}
-      rightIcon={Confirm}
+      bottomSheetHeaderType={BottomSheetHeaderType.Confirm}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >

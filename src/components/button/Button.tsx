@@ -298,7 +298,15 @@ const useButtonStyle = StyleSheet.createThemeHook(() => ({
 }));
 
 function getTextType(mode: string, type: string) {
-  if (type === 'small') return 'body__s';
+  if (type === 'small')
+    switch (mode) {
+      case 'primary':
+      case 'secondary':
+        return 'body__s__strong';
+      case 'tertiary':
+        return 'body__s';
+    }
+
   switch (mode) {
     case 'primary':
     case 'secondary':

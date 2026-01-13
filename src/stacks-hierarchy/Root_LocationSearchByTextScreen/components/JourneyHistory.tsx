@@ -1,5 +1,4 @@
 import {GenericSectionItem, HeaderSectionItem} from '@atb/components/sections';
-import {Section} from '@atb/components/sections';
 import {JourneySearchHistoryEntry} from '@atb/modules/search-history';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -27,7 +26,7 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
   }
 
   return (
-    <Section style={styles.section}>
+    <View style={styles.container}>
       <HeaderSectionItem
         transparent
         text={t(
@@ -66,16 +65,9 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
             </PressableOpacity>
           ))}
       </View>
-    </Section>
+    </View>
   );
 }
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  section: {
-    marginTop: theme.spacing.large,
-    marginBottom: theme.spacing.large,
-  },
-}));
 
 function mapToVisibleSearchResult(entry: JourneySearchHistoryEntry) {
   const [from, to] = entry;
@@ -87,3 +79,9 @@ function mapToVisibleSearchResult(entry: JourneySearchHistoryEntry) {
     text: `${from.name} - ${to.name}`,
   };
 }
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    paddingTop: theme.spacing.medium,
+  },
+}));

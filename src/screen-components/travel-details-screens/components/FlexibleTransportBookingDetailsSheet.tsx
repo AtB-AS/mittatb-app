@@ -1,5 +1,4 @@
 import {
-  dictionary,
   getTextForLanguage,
   TripDetailsTexts,
   useTranslation,
@@ -18,8 +17,10 @@ import React from 'react';
 import {ThemedBestillMaxi} from '@atb/theme/ThemedAssets';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
-import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {
+  BottomSheetHeaderType,
+  BottomSheetModal,
+} from '@atb/components/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 
@@ -60,8 +61,7 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
           publicCode,
         ),
       )}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       closeCallback={() => giveFocus(onCloseFocusRef)}
     >
       <View style={style.container}>

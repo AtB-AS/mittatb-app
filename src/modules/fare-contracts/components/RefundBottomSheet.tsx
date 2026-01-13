@@ -9,16 +9,17 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useRefundFareContractMutation} from '@atb/modules/ticketing';
 import {useRefundOptionsQuery} from '@atb/modules/ticketing';
 import {
-  dictionary,
   FareContractTexts,
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
-import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {
+  BottomSheetHeaderType,
+  BottomSheetModal,
+} from '@atb/components/bottom-sheet';
 import {RefObject} from '@testing-library/react-native/build/types';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
@@ -68,8 +69,7 @@ export const RefundBottomSheet = ({
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(FareContractTexts.refund.bottomSheetTitle)}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       closeCallback={() => giveFocus(onCloseFocusRef)}
     >
       <View style={styles.container}>

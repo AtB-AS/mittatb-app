@@ -1,16 +1,9 @@
-import React, {
-  useCallback,
-  PropsWithChildren,
-  useRef,
-  useMemo,
-  useState,
-} from 'react';
+import React, {useCallback, PropsWithChildren, useMemo, useState} from 'react';
 import BottomSheetGor, {
   BottomSheetBackdrop,
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import {Platform, useWindowDimensions, View} from 'react-native';
-import {SvgProps} from 'react-native-svg';
 import {MapBottomSheetType, MapButtons, useMapContext} from '@atb/modules/map';
 import {BottomSheetTopPositionBridge} from './BottomSheetTopPositionBridge';
 import Animated, {
@@ -22,6 +15,8 @@ import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {BottomSheetHeader} from '../BottomSheetHeader';
 import {useBottomSheetStyles} from '../use-bottom-sheet-styles';
+import {useBottomSheetContext} from '../BottomSheetContext';
+import {BottomSheetHeaderType} from '../use-bottom-sheet-header-type';
 
 export type BottomSheetProps = PropsWithChildren<{
   snapPoints?: Array<string | number>;
@@ -34,13 +29,12 @@ export type BottomSheetProps = PropsWithChildren<{
   heading?: string;
   subText?: string;
   logoUrl?: string;
-  rightIcon?: (props: SvgProps) => React.JSX.Element;
-  rightIconText?: string;
   enablePanDownToClose?: boolean;
   locationArrowOnPress: () => void;
   canMinimize?: boolean;
   headerNode?: React.ReactNode;
   navigateToScanQrCode: () => void;
+  bottomSheetHeaderType: BottomSheetHeaderType;
 }>;
 
 export const MapBottomSheet = ({
@@ -55,16 +49,14 @@ export const MapBottomSheet = ({
   heading,
   subText,
   logoUrl,
-  rightIcon,
-  rightIconText,
   enablePanDownToClose = true,
   locationArrowOnPress,
   canMinimize = false,
   headerNode,
   navigateToScanQrCode,
+  bottomSheetHeaderType,
 }: BottomSheetProps) => {
   const styles = useBottomSheetStyles();
-  const bottomSheetGorRef = useRef<BottomSheetGor>(null);
   const sheetTopPosition = useSharedValue(0);
   const {setPaddingBottomMap, setCurrentBottomSheet, mapState} =
     useMapContext();
@@ -72,6 +64,7 @@ export const MapBottomSheet = ({
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   const {top: safeAreaTop} = useSafeAreaInsets();
   const [headerHeight, setHeaderHeight] = useState(0);
+  const {bottomSheetMapRef} = useBottomSheetContext();
 
   const aStyle = useAnimatedStyle(() => {
     return {
@@ -136,17 +129,16 @@ export const MapBottomSheet = ({
     <>
       {HeaderOverlay}
       <BottomSheetGor
-        ref={bottomSheetGorRef}
+        ref={bottomSheetMapRef}
         handleComponent={() => (
           <View onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}>
             <BottomSheetHeader
               heading={heading}
               subText={subText}
               logoUrl={logoUrl}
-              rightIcon={rightIcon}
-              rightIconText={rightIconText}
-              bottomSheetRef={bottomSheetGorRef}
+              bottomSheetRef={bottomSheetMapRef}
               headerNode={headerNode}
+              bottomSheetHeaderType={bottomSheetHeaderType}
             />
           </View>
         )}
@@ -162,7 +154,6 @@ export const MapBottomSheet = ({
             closeCallback?.();
             setPaddingBottomMap(0);
             setCurrentBottomSheet({
-              isFullyOpen: false,
               bottomSheetType: MapBottomSheetType.None,
               feature: null,
             });
@@ -173,7 +164,6 @@ export const MapBottomSheet = ({
         onChange={(index) => {
           if (index !== -1) {
             setCurrentBottomSheet({
-              isFullyOpen: true,
               bottomSheetType: mapState.bottomSheetType,
               feature: mapState.feature ?? null,
             });

@@ -23,7 +23,7 @@ function mockupFareContract(
     travelRights: [
       {
         startDateTime: startDate,
-        endDateTime: new Date(now + ONE_HOUR_MS),
+        endDateTime: new Date(startDate.valueOf() + ONE_HOUR_MS),
       } as unknown as TravelRightType,
     ],
   } as unknown as FareContractType & {testRef: string};
@@ -31,9 +31,10 @@ function mockupFareContract(
 
 function mockupCarnet(
   testRef: string,
-  startDate: Date,
+  createdDate: Date,
+  activeDate: Date,
 ): FareContractType & {testRef: string} {
-  const base = mockupFareContract(testRef, new Date(now - ONE_HOUR_MS));
+  const base = mockupFareContract(testRef, createdDate);
   return {
     ...base,
     travelRights: [
@@ -43,8 +44,8 @@ function mockupCarnet(
         numberOfUsedAccesses: 1,
         usedAccesses: [
           {
-            startDateTime: startDate,
-            endDateTime: new Date(now + ONE_HOUR_MS),
+            startDateTime: activeDate,
+            endDateTime: new Date(activeDate.valueOf() + ONE_HOUR_MS),
           },
         ],
       },
@@ -118,7 +119,11 @@ describe('Sort by Validity', () => {
 
   it('Should place inactive carnet behind active fare contracts', () => {
     const fareContracts: FareContractType[] = [
-      mockupCarnet('1', new Date(now + ONE_MINUTE_MS)),
+      mockupCarnet(
+        '1',
+        new Date(now + ONE_MINUTE_MS),
+        new Date(now + ONE_MINUTE_MS),
+      ),
       mockupFareContract('2', new Date(now - ONE_MINUTE_MS)),
     ];
     const reservations: Reservation[] = [];
@@ -144,6 +149,47 @@ describe('Sort by Validity', () => {
     ) as (FareContractType | (Reservation & {testRef: string}))[];
 
     expect(result.map((i) => (i as any).testRef)).toEqual(['1', '2']);
+  });
+
+  it('Should remove failed reservations after valid fc', () => {
+    const fcs = [mockupFareContract('1', new Date(now - ONE_MINUTE_MS * 1))];
+    const reservations = [
+      mockupReservation('_', new Date(now - ONE_MINUTE_MS * 2), 'REJECT'),
+    ];
+    const sorted = getSortedFareContractsAndReservations(
+      fcs,
+      reservations,
+      now,
+    );
+
+    expect(sorted.map((item) => (item as any).testRef)).toEqual(['1']);
+  });
+
+  it('Should remove failed reservations after upcoming carnet', () => {
+    const nonActiveCarnet = mockupCarnet(
+      '1',
+      new Date(now - ONE_MINUTE_MS),
+      new Date(now + ONE_MINUTE_MS),
+    );
+    const fcs = [nonActiveCarnet];
+    const reservations = [
+      mockupReservation('_', new Date(now - ONE_MINUTE_MS * 2), 'REJECT'),
+    ];
+    const sorted = getSortedFareContractsAndReservations(
+      fcs,
+      reservations,
+      now,
+    );
+
+    expect(sorted.map((item) => (item as any).testRef)).toEqual(['1']);
+  });
+
+  it('Should show single failed reservation', () => {
+    const reservations = [
+      mockupReservation('1', new Date(now - ONE_MINUTE_MS * 2), 'REJECT'),
+    ];
+    const sorted = getSortedFareContractsAndReservations([], reservations, now);
+    expect(sorted.map((item) => (item as any).testRef)).toEqual(['1']);
   });
 });
 

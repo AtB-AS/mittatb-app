@@ -2,7 +2,9 @@ import {
   getCurrentCoordinatesGlobal,
   useGeolocationContext,
 } from '@atb/modules/geolocation';
+
 import {FOCUS_ORIGIN} from '@atb/api/bff/geocoder';
+
 import {
   LocationPuck,
   UserTrackingMode,
@@ -10,11 +12,13 @@ import {
   Camera,
   MapView,
 } from '@rnmapbox/maps';
+
 import {Feature} from 'geojson';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, getSlightlyRaisedMapPadding} from './MapConfig';
 import {MapPropertiesType, MapProps} from './types';
+
 import {
   isFeaturePoint,
   getFeaturesAtClick,
@@ -26,6 +30,7 @@ import {
   isParkAndRide,
   isStopPlace,
 } from './utils';
+
 import {
   GeofencingZones,
   MapBottomSheetType,
@@ -33,6 +38,7 @@ import {
   useGeofencingZoneContent,
   useMapViewConfig,
 } from '@atb/modules/map';
+
 import {
   isBicycleV2,
   isScooterV2,
@@ -55,10 +61,10 @@ import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {MapBottomSheets} from './MapBottomSheets';
 
 import {MapButtons} from './components/MapButtons';
-import {useFlyToSelectedMapItemWithPadding} from './hooks/use-fly-to-selected-map-item-with-padding';
 import {GeofencingZoneCode} from '@atb-as/theme';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {usePreferencesContext} from '../preferences';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -84,14 +90,14 @@ export const Map = (props: MapProps) => {
   const mapCameraRef = useRef<Camera>(null);
   const mapViewRef = useRef<MapView>(null);
   const [initMapLoaded, setInitMapLoaded] = useState(false);
+  const {bottomSheetMapRef} = useBottomSheetContext();
+  const onPressStartRef = useRef<boolean>(false);
 
   const {mapFilter, mapState, dispatchMapState, paddingBottomMap} =
     useMapContext();
 
   const [stalePaddingBottomMap, setStalePaddingBottomMap] =
     useState(paddingBottomMap);
-
-  useFlyToSelectedMapItemWithPadding(mapCameraRef, mapViewRef);
 
   const startingCoordinates = getCurrentCoordinatesGlobal() || FOCUS_ORIGIN;
 
@@ -351,7 +357,15 @@ export const Map = (props: MapProps) => {
           pitchEnabled={false}
           onPress={onFeatureClick}
           testID="mapView"
+          onTouchStart={() => {
+            onPressStartRef.current = true;
+          }}
           onCameraChanged={(state) => {
+            // If a collapse is pending and the camera moves, collapse immediately
+            if (onPressStartRef.current && state.gestures.isGestureActive) {
+              onPressStartRef.current = false;
+              bottomSheetMapRef.current?.collapse();
+            }
             if (followUserLocation && activeShmoBooking?.bookingId) {
               mapPropertiesRef.current = {...state.properties};
             }
@@ -439,6 +453,7 @@ export const Map = (props: MapProps) => {
       </View>
       <MapBottomSheets
         mapViewRef={mapViewRef}
+        mapCameraRef={mapCameraRef}
         mapProps={props}
         tabBarHeight={tabBarHeight}
         navigateToScooterSupport={navigateToScooterSupport}
