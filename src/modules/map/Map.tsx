@@ -29,6 +29,7 @@ import {
   getFeatureToSelect,
   isParkAndRide,
   isStopPlace,
+  isFeatureGeofencingZone,
 } from './utils';
 
 import {
@@ -65,6 +66,8 @@ import {GeofencingZoneCode} from '@atb-as/theme';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {usePreferencesContext} from '../preferences';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
+import {useRemoteConfigContext} from '../remote-config';
+import {GeofencingZonesAsTiles} from './components/mobility/GeofencingZonesAsTiles';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -86,6 +89,8 @@ export const Map = (props: MapProps) => {
     preferences: {showShmoTesting},
   } = usePreferencesContext();
 
+  const {enable_geofencing_zones_as_tiles: a} = useRemoteConfigContext();
+  const enable_geofencing_zones_as_tiles = !!a; // todo remove, just for dev
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<Camera>(null);
   const mapViewRef = useRef<MapView>(null);
@@ -138,9 +143,11 @@ export const Map = (props: MapProps) => {
   const vehicleTypeId =
     vehicle?.vehicleType.id ?? activeShmoBooking?.asset.vehicleTypeId ?? null;
 
+  // Always including the vector sources avoids laggy transitions,
+  // and tile requests are only sent when they are used anyway.
   const mapViewConfig = useMapViewConfig({
-    shouldShowVehiclesAndStations,
-    shouldShowGeofencingZones: true, // showGeofencingZones, seems to be smoother and unproblematic with always true
+    includeVehiclesAndStationsVectorSource: true,
+    includeGeofencingZonesVectorSource: enable_geofencing_zones_as_tiles,
     systemId: systemId ?? '',
     vehicleTypeId: vehicleTypeId ?? '',
   });
@@ -175,10 +182,10 @@ export const Map = (props: MapProps) => {
     !selectedFeature && hideSnackbar();
   }, [selectedFeature, hideSnackbar]);
 
-  const geofencingZoneOnPress = useCallback(
-    (gfzCode?: GeofencingZoneCode, isStationParking?: boolean) => {
+  const showGeofencingZoneSnackbar = useCallback(
+    (geofencingZoneCode?: GeofencingZoneCode, isStationParking?: boolean) => {
       const geofencingZoneContent = getGeofencingZoneContent(
-        gfzCode,
+        geofencingZoneCode,
         isStationParking,
       );
       showSnackbar({content: geofencingZoneContent, position: 'top'});
@@ -186,8 +193,7 @@ export const Map = (props: MapProps) => {
     [showSnackbar, getGeofencingZoneContent],
   );
 
-  // todo fix name
-  const onGfzClick = useCallback(
+  const geofencingZoneOnPress = useCallback(
     (e: OnPressEvent) => {
       const featuresAtClick = e.features;
       if (!featuresAtClick || featuresAtClick.length === 0) return;
@@ -197,9 +203,9 @@ export const Map = (props: MapProps) => {
       const stationParking =
         featureToSelect.properties?.stationParking ?? false;
 
-      geofencingZoneOnPress(code, stationParking);
+      showGeofencingZoneSnackbar(code, stationParking);
     },
-    [geofencingZoneOnPress],
+    [showGeofencingZoneSnackbar],
   );
 
   const locationArrowOnPress = useCallback(async () => {
@@ -246,9 +252,14 @@ export const Map = (props: MapProps) => {
       if (!isFeaturePoint(feature)) return;
       if (!showGeofencingZones && !isActiveTrip) return;
 
+      const {coordinates: positionClicked} = feature.geometry;
+
       const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
       if (!featuresAtClick || featuresAtClick.length === 0) return;
-      const featureToSelect = getFeatureToSelect(featuresAtClick);
+      const featureToSelect = getFeatureToSelect(
+        featuresAtClick,
+        positionClicked,
+      );
 
       hideSnackbar();
 
@@ -257,22 +268,30 @@ export const Map = (props: MapProps) => {
         // - select a stop place with the clicked quay sorted on top
         // - have a bottom sheet with departures just for the clicked quay
         return; // currently - do nothing
+      } else if (
+        !enable_geofencing_zones_as_tiles &&
+        isFeatureGeofencingZone(featureToSelect)
+      ) {
+        const gfzProps = featureToSelect?.properties?.geofencingZoneCustomProps;
+        showGeofencingZoneSnackbar(gfzProps?.code, gfzProps.isStationParking);
       } else if (isScooterV2(selectedFeature) && !isActiveTrip) {
         // outside of operational area, rules unspecified
-        geofencingZoneOnPress(undefined);
+        showGeofencingZoneSnackbar(undefined);
       }
     },
     [
       activeShmoBooking?.state,
       showGeofencingZones,
       hideSnackbar,
-      geofencingZoneOnPress,
+      enable_geofencing_zones_as_tiles,
       selectedFeature,
+      showGeofencingZoneSnackbar,
     ],
   );
 
   const onMapItemClick = useCallback(
     async (e: OnPressEvent) => {
+      const positionClicked = [e.coordinates.longitude, e.coordinates.latitude];
       const featuresAtClick = e.features;
       if (
         !featuresAtClick ||
@@ -282,7 +301,10 @@ export const Map = (props: MapProps) => {
       )
         return;
 
-      const featureToSelect = getFeatureToSelect(featuresAtClick);
+      const featureToSelect = getFeatureToSelect(
+        featuresAtClick,
+        positionClicked,
+      );
 
       if (isClusterFeatureV2(featureToSelect)) {
         const fromZoomLevel = (await mapViewRef.current?.getZoom()) ?? 0;
@@ -410,13 +432,21 @@ export const Map = (props: MapProps) => {
             followUserMode={UserTrackingMode.FollowWithHeading}
             followPadding={getSlightlyRaisedMapPadding(paddingBottomMap)}
           />
-          {showGeofencingZones && !vehicleError && !vehicleIsLoading && (
-            <GeofencingZones
-              systemId={systemId}
-              vehicleTypeId={vehicleTypeId}
-              geofencingZoneOnPress={onGfzClick}
-            />
-          )}
+          {showGeofencingZones &&
+            !vehicleError &&
+            !vehicleIsLoading &&
+            (enable_geofencing_zones_as_tiles ? (
+              <GeofencingZonesAsTiles
+                systemId={systemId}
+                vehicleTypeId={vehicleTypeId}
+                geofencingZoneOnPress={geofencingZoneOnPress}
+              />
+            ) : (
+              <GeofencingZones
+                systemId={systemId}
+                vehicleTypeId={vehicleTypeId}
+              />
+            ))}
 
           <NationalStopRegistryFeatures
             selectedFeaturePropertyId={selectedFeature?.properties?.id}
@@ -445,7 +475,12 @@ export const Map = (props: MapProps) => {
           />
         )}
         {includeSnackbar && (
-          <Snackbar {...snackbarProps} onHideSnackbar={hideSnackbar} />
+          <Snackbar
+            {...snackbarProps}
+            onHideSnackbar={
+              enable_geofencing_zones_as_tiles ? hideSnackbar : undefined
+            }
+          />
         )}
         {!!showShmoTesting && (
           <ShmoTesting navigateToScooterSupport={navigateToScooterSupport} />

@@ -18,8 +18,8 @@ const MapViewStaticConfig = {
 };
 
 type MapViewConfigOptions = {
-  shouldShowVehiclesAndStations?: boolean;
-  shouldShowGeofencingZones?: boolean;
+  includeVehiclesAndStationsVectorSource?: boolean;
+  includeGeofencingZonesVectorSource?: boolean;
   systemId?: string;
   vehicleTypeId?: string;
 };
@@ -28,14 +28,14 @@ export const useMapViewConfig = (
   mapViewConfigOptions?: MapViewConfigOptions,
 ) => {
   const {
-    shouldShowVehiclesAndStations = false,
-    shouldShowGeofencingZones = false,
+    includeVehiclesAndStationsVectorSource = false,
+    includeGeofencingZonesVectorSource = false,
     systemId = '',
     vehicleTypeId = '',
   } = mapViewConfigOptions || {};
   const mapboxJsonStyle = useMapboxJsonStyle(
-    shouldShowVehiclesAndStations,
-    shouldShowGeofencingZones,
+    includeVehiclesAndStationsVectorSource,
+    includeGeofencingZonesVectorSource,
     systemId,
     vehicleTypeId,
   );

@@ -29,6 +29,7 @@ const slotSource: StyleJsonVectorSourcesObj = {
 
 // the order of this list, determines which layers render on top. Last is on top.
 const slotLayerIds: MapSlotLayerId[] = [
+  MapSlotLayerId.GeofencingZones,
   MapSlotLayerId.GeofencingZones_allowed,
   MapSlotLayerId.GeofencingZones_slow,
   MapSlotLayerId.GeofencingZones_noParking,
