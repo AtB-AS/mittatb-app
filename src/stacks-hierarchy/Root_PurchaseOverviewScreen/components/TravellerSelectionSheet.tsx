@@ -1,11 +1,6 @@
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {StyleSheet} from '@atb/theme';
-import {MultipleTravellersSelection} from './Travellers/MultipleTravellersSelection';
-import {SingleTravellerSelection} from './Travellers/SingleTravellerSelection';
-import {useUserCountState} from './Travellers/use-user-count-state';
-import {useBaggageCountState} from './Travellers/use-baggage-count-state';
+import React, {useCallback, useState} from 'react';
 import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
@@ -16,7 +11,9 @@ import {
   BottomSheetModal,
 } from '@atb/components/bottom-sheet';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
-import {MessageSectionItem, Section} from '@atb/components/sections';
+import {TravellerSelectionSheetContent} from './TravellerSelectionSheetContent';
+import {UniqueWithCount} from '@atb/utils/unique-with-count';
+import {BaggageProduct, UserProfile} from '@atb-as/config-specs';
 
 type TravellerSelectionSheetProps = {
   selection: PurchaseSelectionType;
@@ -31,34 +28,45 @@ export const TravellerSelectionSheet = ({
   onCloseFocusRef,
 }: TravellerSelectionSheetProps) => {
   const {t} = useTranslation();
-  const styles = useStyles();
-  const selectionBuilder = usePurchaseSelectionBuilder();
   const [showWarning, setShowWarning] = useState(false);
+  const [currentSelection, setCurrentSelection] = useState<
+    | {
+        userProfiles: UniqueWithCount<UserProfile>[];
+        baggageProducts: UniqueWithCount<BaggageProduct>[];
+      }
+    | undefined
+  >(undefined);
+  const selectionBuilder = usePurchaseSelectionBuilder();
 
-  const selectionMode =
-    selection.fareProductTypeConfig.configuration.travellerSelectionMode;
-
-  const userCountState = useUserCountState(selection);
-  const baggageCountState = useBaggageCountState(selection);
-
-  const nothingSelected =
-    userCountState.state.every((u) => !u.count) &&
-    baggageCountState.state.every((sp) => !sp.count);
-
-  useEffect(() => {
-    if (!nothingSelected) {
-      setShowWarning(false);
-    }
-  }, [nothingSelected]);
+  const updateCurrentSelection = useCallback(
+    (
+      userProfiles: UniqueWithCount<UserProfile>[],
+      baggageProducts: UniqueWithCount<BaggageProduct>[],
+    ) => {
+      setCurrentSelection({
+        userProfiles,
+        baggageProducts,
+      });
+    },
+    [setCurrentSelection],
+  );
 
   const saveSelection = () => {
-    const newSelection = selectionBuilder
-      .fromSelection(selection)
-      .userProfiles(userCountState.state)
-      .baggageProducts(baggageCountState.state)
-      .build();
+    let builder = selectionBuilder.fromSelection(selection);
+
+    if (currentSelection?.userProfiles)
+      builder.userProfiles(currentSelection.userProfiles);
+
+    if (currentSelection?.baggageProducts)
+      builder.baggageProducts(currentSelection.baggageProducts);
+
+    const newSelection = builder.build();
     onSave(newSelection);
   };
+
+  const nothingSelected =
+    !!currentSelection?.userProfiles.every((u) => !u.count) &&
+    !!currentSelection?.baggageProducts.every((sp) => !sp.count);
 
   return (
     <BottomSheetModal
@@ -73,37 +81,14 @@ export const TravellerSelectionSheet = ({
       closeCallback={() => {
         giveFocus(onCloseFocusRef);
         saveSelection();
+        setCurrentSelection(undefined);
       }}
     >
-      <View style={styles.container}>
-        {!!nothingSelected && showWarning && (
-          <Section style={styles.messageContainer}>
-            <MessageSectionItem
-              message={t(PurchaseOverviewTexts.selectAtLeastOneTraveller)}
-              messageType="error"
-            />
-          </Section>
-        )}
-        {selectionMode === 'multiple' ? (
-          <MultipleTravellersSelection
-            userCountState={userCountState}
-            baggageCountState={baggageCountState}
-          />
-        ) : (
-          <SingleTravellerSelection {...userCountState} />
-        )}
-      </View>
+      <TravellerSelectionSheetContent
+        selection={selection}
+        updateCurrentSelection={updateCurrentSelection}
+        showNothingSelectedWarning={nothingSelected && showWarning}
+      />
     </BottomSheetModal>
   );
 };
-
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  return {
-    container: {
-      marginHorizontal: theme.spacing.medium,
-    },
-    messageContainer: {
-      marginBottom: theme.spacing.medium,
-    },
-  };
-});
