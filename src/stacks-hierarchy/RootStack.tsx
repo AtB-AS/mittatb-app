@@ -85,7 +85,7 @@ import {
   useGetFareProductsQuery,
   useTicketingContext,
 } from '@atb/modules/ticketing';
-import {isProductSellableInApp} from '@atb/modules/purchase-selection';
+import {isProductSellableInApp} from '@atb/modules/configuration';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -269,14 +269,7 @@ export const RootStack = () => {
                   const isSellable = preassignedFareProducts.some(
                     (product) =>
                       type === product.type &&
-                      isProductSellableInApp(
-                        {
-                          appVersion: APP_VERSION,
-                          customerProfile,
-                          preassignedFareProducts,
-                        },
-                        product,
-                      ),
+                      isProductSellableInApp(product, customerProfile),
                   );
                   if (isSellable) {
                     const selection = purchaseSelectionBuilder

@@ -1,5 +1,7 @@
-import {PreassignedFareProduct} from '@atb/modules/configuration';
-import {compareVersion} from '@atb/utils/compare-version';
+import {
+  isProductSellableInApp,
+  PreassignedFareProduct,
+} from '@atb/modules/configuration';
 import type {
   PurchaseSelectionBuilderInput,
   PurchaseSelectionType,
@@ -16,37 +18,12 @@ import {
 import {isValidDateString} from '@atb/utils/date';
 import {decodePolylineEncodedGeometry} from '@atb/utils/decode-polyline-geometry';
 
-export const isProductSellableInApp = (
-  input: Pick<
-    PurchaseSelectionBuilderInput,
-    'appVersion' | 'customerProfile' | 'preassignedFareProducts'
-  >,
-  product: PreassignedFareProduct,
-) => {
-  if (
-    (product.limitations.appVersionMin &&
-      compareVersion(product.limitations.appVersionMin, input.appVersion) >
-        0) ||
-    (product.limitations.appVersionMax &&
-      compareVersion(product.limitations.appVersionMax, input.appVersion) < 0)
-  )
-    return false;
-
-  if (
-    product.distributionChannel.some((channel) => channel === 'debug-app') &&
-    input.customerProfile?.debug
-  )
-    return true;
-
-  return product.distributionChannel.some((channel) => channel === 'app');
-};
-
 export const getDefaultProduct = (
   input: PurchaseSelectionBuilderInput,
   configType: string,
 ) =>
   input.preassignedFareProducts
-    .filter((product) => isProductSellableInApp(input, product))
+    .filter((product) => isProductSellableInApp(product, input.customerProfile))
     .filter((product) => product.type === configType)
     .reduce((selected, current) => (current.isDefault ? current : selected));
 
@@ -114,7 +91,7 @@ export const isSelectableProduct = (
   if (currentSelection.fareProductTypeConfig.type !== product.type) {
     return false;
   }
-  return isProductSellableInApp(input, product);
+  return isProductSellableInApp(product, input.customerProfile);
 };
 
 export const isSelectableProfile = (
