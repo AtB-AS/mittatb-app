@@ -6,7 +6,6 @@ import {
   FareProductTypeConfig,
   LanguageAndTextType,
   ProductTypeTransportModes,
-  isProductSellableInApp,
   PreassignedFareProduct,
 } from '@atb/modules/configuration';
 import {flatMap} from '@atb/utils/array';
@@ -15,6 +14,7 @@ import {
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
+import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 
 type GroupedFareProducts = {
   transportModes: ProductTypeTransportModes[];

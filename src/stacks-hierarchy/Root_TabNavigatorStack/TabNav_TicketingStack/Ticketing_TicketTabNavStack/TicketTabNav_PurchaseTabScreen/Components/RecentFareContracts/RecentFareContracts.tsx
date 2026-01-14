@@ -1,6 +1,5 @@
 import {ThemeText} from '@atb/components/text';
 import {
-  isProductSellableInApp,
   useFirestoreConfigurationContext,
   FareProductTypeConfig,
 } from '@atb/modules/configuration';
@@ -15,6 +14,7 @@ import {
   RecentFareContract,
   type RecentFareContractType,
 } from '@atb/recent-fare-contracts';
+import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 
 type Props = {
   recentFareContracts: RecentFareContractType[];

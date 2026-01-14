@@ -1,7 +1,4 @@
-import {
-  isProductSellableInApp,
-  PreassignedFareProduct,
-} from '@atb/modules/configuration';
+import {PreassignedFareProduct} from '@atb/modules/configuration';
 import type {
   PurchaseSelectionBuilderInput,
   PurchaseSelectionType,
@@ -17,13 +14,16 @@ import {
 } from '@atb-as/config-specs';
 import {isValidDateString} from '@atb/utils/date';
 import {decodePolylineEncodedGeometry} from '@atb/utils/decode-polyline-geometry';
+import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 
 export const getDefaultProduct = (
   input: PurchaseSelectionBuilderInput,
   configType: string,
 ) =>
   input.preassignedFareProducts
-    .filter((product) => isProductSellableInApp(product, input.customerProfile))
+    .filter((product) =>
+      isProductSellableInApp(product, input.customerProfile, input.appVersion),
+    )
     .filter((product) => product.type === configType)
     .reduce((selected, current) => (current.isDefault ? current : selected));
 
@@ -91,7 +91,11 @@ export const isSelectableProduct = (
   if (currentSelection.fareProductTypeConfig.type !== product.type) {
     return false;
   }
-  return isProductSellableInApp(product, input.customerProfile);
+  return isProductSellableInApp(
+    product,
+    input.customerProfile,
+    input.appVersion,
+  );
 };
 
 export const isSelectableProfile = (
