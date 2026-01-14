@@ -2,7 +2,7 @@ name: Android Build Runner Cleanup
 description: 'Cleans up unnecessary stuff on the Runner VM for Android Build'
 
 runs:
-  using: composite
+  using: "composite"
   steps:
     - name: Remove DOTNET
       shell: bash
