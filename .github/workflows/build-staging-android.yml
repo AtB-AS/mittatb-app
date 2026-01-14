@@ -10,14 +10,6 @@ on:
         options:
           - 'true'
           - 'false'
-      new-architecture-patch:
-        description: 'Patch app to use new architecture'
-        required: false
-        type: choice
-        default: 'false'
-        options:
-          - 'true'
-          - 'false'
   push:
     branches:
       - master
@@ -36,9 +28,6 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
-      - name: Apply new architecture patch
-        if: inputs.new-architecture-patch == 'true'
-        run: git apply docs/architecture/new-architecture.patch && yarn install
       - name: Set global env vars
         run: |
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
