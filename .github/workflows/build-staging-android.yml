@@ -26,11 +26,23 @@ jobs:
     timeout-minutes: 180
     runs-on: ubuntu-latest
     steps:
+      - name: Original disk space before checkout
+        run: |
+          df -h / | tail -n 1 | awk '{print "Available: " $4 " (" $5 " used)"}' 
       - name: Checkout project
         uses: actions/checkout@v4
+      - name: Disk space after checkout, before cleanup
+        run: |
+          df -h / | tail -n 1 | awk '{print "Available: " $4 " (" $5 " used)"}' 
       # Attempt to clean up the disk space
       - name: Clean up runner
         uses: ./.github/actions/android-build-cleanup-runner
+      - name: Disk Space AFTER CLEANUP
+        run: |
+          df -h / | tail -n 1 | awk '{print "Available: " $4 " (" $5 " used)"}' 
+      - name: Apply new architecture patch
+        if: inputs.new-architecture-patch == 'true'
+        run: git apply docs/architecture/new-architecture.patch && yarn install
       - name: Set global env vars
         run: |
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
@@ -71,6 +83,9 @@ jobs:
           ruby-version: 3.1.0
           cache-version: 2
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Disk Space AFTER imagemagick, node modules, and ruby + bundle install
+        run: |
+          df -h / | tail -n 1 | awk '{print "Available: " $4 " (" $5 " used)"}' 
       - name: Set environment
         run: bash ./scripts/override-environment.sh $APP_ENVIRONMENT ${{ matrix.org }}
       - name: Export workflow env variables based on environment
@@ -97,6 +112,9 @@ jobs:
         with:
           gradle-version: wrapper
           cache-read-only: false
+      - name: Disk space after GRADLE
+        run: |
+          df -h / | tail -n 1 | awk '{print "Available: " $4 " (" $5 " used)"}' 
       - name: Detect dependency changes, skip doing gradle clean if dependency unchanged
         uses: dorny/paths-filter@v3
         id: changes
@@ -122,6 +140,9 @@ jobs:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+      - name: Disk space after build
+        run: |
+          df -h / | tail -n 1 | awk '{print "Available: " $4 " (" $5 " used)"}' 
       - name: Distribute to Firebase App Distribution
         run: |
           echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
