@@ -34,6 +34,9 @@ jobs:
     timeout-minutes: 180
     runs-on: ubuntu-latest
     steps:
+      # Attempt to clean up the disk space
+      - name: Clean up runner
+        uses: ./.github/actions/android-build-cleanup-runner
       - name: Checkout project
         uses: actions/checkout@v4
       - name: Apply new architecture patch

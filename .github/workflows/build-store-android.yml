@@ -14,6 +14,9 @@ jobs:
     timeout-minutes: 180
     runs-on: ubuntu-latest
     steps:
+      # Attempt to clean up the disk space
+      - name: Clean up runner
+        uses: ./.github/actions/android-build-cleanup-runner         
       - name: Check if release tag is org specific and exit for other orgs
         if: ${{ (contains(github.ref, 'atb') && matrix.org != 'atb') ||
           (contains(github.ref, 'nfk') && matrix.org != 'nfk') ||
