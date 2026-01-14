@@ -36,6 +36,9 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
+      # Attempt to clean up the disk space
+      - name: Clean up runner
+        uses: ./.github/actions/android-build-cleanup-runner
       - name: Apply new architecture patch
         if: inputs.new-architecture-patch == 'true'
         run: git apply docs/architecture/new-architecture.patch && yarn install
