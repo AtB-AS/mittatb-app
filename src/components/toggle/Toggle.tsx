@@ -54,10 +54,6 @@ export function Toggle({
         // The disabled state is not shown visually on Android by default, so we
         // need to style it manually.
         Platform.OS === 'android' && props.disabled && styles.androidDisabled,
-
-        // Fix for React Native 0.81 Switch component layout issue
-        // See: https://github.com/facebook/react-native/issues/53537
-        styles.fixedDimensions,
       ]}
       {...props}
       testID={props.testID}
@@ -79,12 +75,6 @@ const useStyles = StyleSheet.createThemeHook(() => {
     },
     ios: {
       transform: [{scale: 0.7 * scale}],
-    },
-    fixedDimensions: {
-      // Fix for React Native 0.81 Switch component layout problem
-      // Adding explicit dimensions as recommended in the issue
-      width: 51, // Standard iOS switch width
-      height: 31, // Standard iOS switch height
     },
   };
 });

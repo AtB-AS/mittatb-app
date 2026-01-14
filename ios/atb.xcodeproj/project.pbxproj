@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0FAAF32724069EFC00267583 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0FAAF32624069EFC00267583 /* GoogleService-Info.plist */; };
-		0FF6825D247C33BC00FB80EE /* Intercom.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0FF6825C247C33BC00FB80EE /* Intercom.plist */; };
 		0FF6825F247FE01600FB80EE /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FF6825E247FE01600FB80EE /* BootSplash.storyboard */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -115,7 +114,6 @@
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		0F1FBC3125CBDED600484CA4 /* AtB.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = AtB.entitlements; path = atb/AtB.entitlements; sourceTree = "<group>"; };
 		0FAAF32624069EFC00267583 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "atb/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		0FF6825C247C33BC00FB80EE /* Intercom.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Intercom.plist; path = atb/Intercom.plist; sourceTree = "<group>"; };
 		0FF6825E247FE01600FB80EE /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = atb/BootSplash.storyboard; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* AtB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AtB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -239,7 +237,6 @@
 				0FAAF32624069EFC00267583 /* GoogleService-Info.plist */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				FE1DCA8C2BCD62EF00E6EA0D /* PrivacyInfo.xcprivacy */,
-				0FF6825C247C33BC00FB80EE /* Intercom.plist */,
 				0FF6825E247FE01600FB80EE /* BootSplash.storyboard */,
 				385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -505,7 +502,6 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				298D19472AEBC45E00065733 /* InfoPlist.strings in Resources */,
-				0FF6825D247C33BC00FB80EE /* Intercom.plist in Resources */,
 				FE1DCA8D2BCD62EF00E6EA0D /* PrivacyInfo.xcprivacy in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				0FAAF32724069EFC00267583 /* GoogleService-Info.plist in Resources */,
@@ -548,7 +544,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"\\\"$WITH_ENVIRONMENT\\\" \\\"$REACT_NATIVE_XCODE\\\"\"\n";
 		};
 		2DB4BF2E4CCAAD4AB735D8E4 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
