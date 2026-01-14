@@ -52,7 +52,7 @@ export const TravellerSelectionSheet = ({
   );
 
   const saveSelection = () => {
-    let builder = selectionBuilder.fromSelection(selection);
+    const builder = selectionBuilder.fromSelection(selection);
 
     if (currentSelection?.userProfiles)
       builder.userProfiles(currentSelection.userProfiles);
