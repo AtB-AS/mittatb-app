@@ -65,8 +65,12 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     useHasReservationOrAvailableFareContract();
   const {setEnabled: setStorybookEnabled} = useStorybookContext();
   const [isLoading, setIsLoading] = useIsLoading(false);
-  const {isBonusProgramEnabled, isSmartParkAndRideEnabled} =
-    useFeatureTogglesContext();
+  const {
+    isBonusProgramEnabled,
+    isSmartParkAndRideEnabled,
+    isEventStreamEnabled,
+    isEventStreamFareContractsEnabled,
+  } = useFeatureTogglesContext();
   const unreadCount = useChatUnreadCount();
   const {theme} = useThemeContext();
   const {enable_intercom} = useRemoteConfigContext();
@@ -346,7 +350,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           )}
           <View style={style.debugInfoContainer}>
             <ThemeText typography="body__s" color="secondary">
-              v{version} ({buildNumber})
+              v{version} ({buildNumber}){' '}
+              {isEventStreamEnabled && isEventStreamFareContractsEnabled && 'S'}
             </ThemeText>
             {config?.installId && (
               <ClickableCopy
