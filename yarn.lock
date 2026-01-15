@@ -3414,12 +3414,12 @@
     invariant "^2.2.4"
     nullthrows "^1.1.1"
 
-"@react-navigation/bottom-tabs@^7.8.4":
-  version "7.9.0"
-  resolved "https://registry.yarnpkg.com/@react-navigation/bottom-tabs/-/bottom-tabs-7.9.0.tgz#b546adb0cedd72a1f0179e00b74039b3c8abb6bd"
-  integrity sha512-024FWdHp3ZsE5rP8tmGI4vh+1z3wg8u8E9Frep8eeGoYo1h9rQhvgofQDGxknmrKsb7t8o8Dim+IZSvl57cPFQ==
+"@react-navigation/bottom-tabs@^7.9.1":
+  version "7.9.1"
+  resolved "https://registry.yarnpkg.com/@react-navigation/bottom-tabs/-/bottom-tabs-7.9.1.tgz#1a228e68c85f27bb3f0d2b814bdddb25eeb60360"
+  integrity sha512-1MHn1b5tWFa8t8LXUvaNtlg5WGVXcNTsiV00ygQDBFDusMcu0ZPOU1exqELZwHf6kDntmTQE96/NRM+Cd2QR+A==
   dependencies:
-    "@react-navigation/elements" "^2.9.3"
+    "@react-navigation/elements" "^2.9.4"
     color "^4.2.3"
     sf-symbols-typescript "^2.1.0"
 
@@ -3446,37 +3446,28 @@
     nanoid "^3.3.11"
     stacktrace-parser "^0.1.11"
 
-"@react-navigation/elements@^2.6.4":
-  version "2.6.4"
-  resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-2.6.4.tgz#f1dc8548b1289588fabcd2f0342c1391c689a49f"
-  integrity sha512-O3X9vWXOEhAO56zkQS7KaDzL8BvjlwZ0LGSteKpt1/k6w6HONG+2Wkblrb057iKmehTkEkQMzMLkXiuLmN5x9Q==
+"@react-navigation/elements@^2.9.4":
+  version "2.9.4"
+  resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-2.9.4.tgz#72101e7cf74e6952a303ffd3a69aab5e9ba178a8"
+  integrity sha512-TMFh+QzwesEuSaKpvZk4BFC5105t5gJs9eq+jG7jtfdlMKyrcFwheu2/dy1zfrW4WYbVcoMxhzFqCU4mKwI4fw==
   dependencies:
     color "^4.2.3"
     use-latest-callback "^0.2.4"
     use-sync-external-store "^1.5.0"
 
-"@react-navigation/elements@^2.9.3":
-  version "2.9.3"
-  resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-2.9.3.tgz#505ae38af347a0bc5326155318a3d9a54e2071e3"
-  integrity sha512-3+eyvWiVPIEf6tN9UdduhOEHcTuNe3R5WovgiVkfH9+jApHMTZDc2loePTpY/i2HDJhObhhChpJzO6BVjrpdYQ==
+"@react-navigation/material-top-tabs@^7.4.12":
+  version "7.4.12"
+  resolved "https://registry.yarnpkg.com/@react-navigation/material-top-tabs/-/material-top-tabs-7.4.12.tgz#6bd7a1f3b1fe01bad913e376a6bb2e546ce547c4"
+  integrity sha512-SrftYrhyx/bnpl51EP62yyymT+AyOtSSP9XIc0vLVPf88e7W0dWJI1SgGdWoYnvFPT5O7QN2xmB/Il39deDhzQ==
   dependencies:
-    color "^4.2.3"
-    use-latest-callback "^0.2.4"
-    use-sync-external-store "^1.5.0"
-
-"@react-navigation/material-top-tabs@^7.4.2":
-  version "7.4.11"
-  resolved "https://registry.yarnpkg.com/@react-navigation/material-top-tabs/-/material-top-tabs-7.4.11.tgz#f47d6ddac98d50d88eee4e61c2793966e538f4d1"
-  integrity sha512-RSC/f1bSpodnx1oSXw7jNrwe83JddRhb12ehCY8oZZDtrNhm3atSHzlfvHN37i3E8cln7Tmc1ieLxjWrU65n/Q==
-  dependencies:
-    "@react-navigation/elements" "^2.9.3"
+    "@react-navigation/elements" "^2.9.4"
     color "^4.2.3"
     react-native-tab-view "^4.2.2"
 
-"@react-navigation/native@^7.1.19":
-  version "7.1.26"
-  resolved "https://registry.yarnpkg.com/@react-navigation/native/-/native-7.1.26.tgz#220672e115f39014b95ca3ce8f2c37076a0e74f4"
-  integrity sha512-RhKmeD0E2ejzKS6z8elAfdfwShpcdkYY8zJzvHYLq+wv183BBcElTeyMLcIX6wIn7QutXeI92Yi21t7aUWfqNQ==
+"@react-navigation/native@^7.1.27":
+  version "7.1.27"
+  resolved "https://registry.yarnpkg.com/@react-navigation/native/-/native-7.1.27.tgz#5be53e9fac9f6173d229b334fe41c2208684bac2"
+  integrity sha512-kW7LGP/RrisktpGyizTKw6HwSeQJdXnAN9L8GyQJcJAlgL9YtfEg6yEyD5n9RWH90CL8G0cRyUhphKIAFf4lVw==
   dependencies:
     "@react-navigation/core" "^7.13.7"
     escape-string-regexp "^4.0.0"
@@ -3491,13 +3482,14 @@
   dependencies:
     nanoid "^3.3.11"
 
-"@react-navigation/stack@^7.4.2":
-  version "7.4.8"
-  resolved "https://registry.yarnpkg.com/@react-navigation/stack/-/stack-7.4.8.tgz#8f3c32753bcecabf087e337dcd6558e45ade8bb3"
-  integrity sha512-zZsX52Nw1gsq33Hx4aNgGV2RmDJgVJM71udomCi3OdlntqXDguav3J2t5oe/Acf/9uU8JiJE9W8JGtoRZ6nXIg==
+"@react-navigation/stack@^7.6.14":
+  version "7.6.14"
+  resolved "https://registry.yarnpkg.com/@react-navigation/stack/-/stack-7.6.14.tgz#0bb92d36ea306222f6e8e613ce26e694f3f1bdd7"
+  integrity sha512-JsNHn4pivZjIjYsUZn6f018AsvwmKZSPNSyVzXd4IhbjrF5hOZApNp1R7pFnQgBiET76Z06qKwBeCwVcW0Xoig==
   dependencies:
-    "@react-navigation/elements" "^2.6.4"
+    "@react-navigation/elements" "^2.9.4"
     color "^4.2.3"
+    use-latest-callback "^0.2.4"
 
 "@rnmapbox/maps@^10.1.45":
   version "10.1.45"
