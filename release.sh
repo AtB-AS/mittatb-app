@@ -61,7 +61,7 @@ echo "Successfully created draft release for v$VERSION."
 # --- Step 3: Publish GitHub Release ---
 echo "--- Step 3: Publishing GitHub Release ---"
 echo "Finding and publishing the draft release..."
-gh release edit "v$VERSION" --draft=false
+gh release edit "v$VERSION" --draft=true
 echo "Successfully published release v$VERSION. The build pipeline has been triggered."
 
 # --- Step 4: Bump version on master (for rc1 only) ---
@@ -86,12 +86,12 @@ if [ "$RC_VERSION" -eq 1 ]; then
   fi
 
   # Run the Entur registration script
-  if [ -f "./scripts/register-local-app-version.sh" ]; then
-     ./scripts/register-local-app-version.sh
-  else
-    echo "Error: ./scripts/register-local-app-version.sh not found."
-    exit 1
-  fi
+  # if [ -f "./scripts/register-local-app-version.sh" ]; then
+  #    ./scripts/register-local-app-version.sh
+  # else
+  #   echo "Error: ./scripts/register-local-app-version.sh not found."
+  #   exit 1
+  # fi
 
   git commit -am "chore: Bump to version $NEXT_MAJOR_MINOR and register at Entur"
   git push -u origin "$BUMP_BRANCH"
