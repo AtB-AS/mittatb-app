@@ -1,7 +1,4 @@
-import {
-  RootStackParamList,
-  StackParams,
-} from '@atb/stacks-hierarchy/navigation-types';
+import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
 import {
   CompositeScreenProps,
   NavigatorScreenParams,
@@ -22,9 +19,6 @@ export type TicketingStackRootProps =
 
 export type TicketingScreenProps<T extends keyof TicketingStackParams> =
   CompositeScreenProps<
-    CompositeScreenProps<
-      StackScreenProps<TicketingStackParams, T>,
-      TicketingStackRootProps
-    >,
-    StackScreenProps<RootStackParamList>
+    StackScreenProps<TicketingStackParams, T>,
+    TicketingStackRootProps
   >;
