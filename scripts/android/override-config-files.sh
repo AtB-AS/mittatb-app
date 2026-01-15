@@ -27,5 +27,7 @@ xmlstarlet edit --inplace --omit-decl \
 
 
 echo "Set Intercom API key and App ID in Intercom.xml"
-sed -i "s|<string name=\"IntercomApiKey\">.*</string>|<string name=\"IntercomApiKey\">$INTERCOM_ANDROID_API_KEY</string>|" android/app/src/main/res/values/Intercom.xml
-sed -i "s|<string name=\"IntercomAppId\">.*</string>|<string name=\"IntercomAppId\">$INTERCOM_APP_ID</string>|" android/app/src/main/res/values/Intercom.xml
+xmlstarlet edit --inplace --omit-decl \
+  -u //resources/string[@name='IntercomApiKey'] -v "$INTERCOM_ANDROID_API_KEY" \
+  -u //resources/string[@name='IntercomAppId'] -v "$INTERCOM_APP_ID" \
+   android/app/src/main/res/values/Intercom.xml
