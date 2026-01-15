@@ -35,9 +35,11 @@ else
     echo "Re-generate bundle"
     npx react-native bundle --platform android --dev false --reset-cache --entry-file index.js --bundle-output $BUNDLE_PATH --sourcemap-output $SOURCEMAP_PATH
 
-    brew install apktool
-    brew install yq
-
+    sudo apt-get update
+    sudo apt-get install -y apktool
+    sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+    sudo chmod +x /usr/local/bin/yq
+    
     echo "Decompile Android APK"
     apktool d $APK_FILE_NAME --output decompiled-apk
 
