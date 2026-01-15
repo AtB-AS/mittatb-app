@@ -49,7 +49,7 @@ fi
 # --- Step 2: Create GitHub Release Draft ---
 echo "--- Step 2: Creating GitHub release draft ---"
 echo "Checking app versions in .env files..."
-grep "VERSION_NAME" .env* || echo "Could not automatically check .env versions. Please verify them manually."
+grep "APP_VERSION" .env* || echo "Could not automatically check .env versions. Please verify them manually."
 
 echo "Fetching tags to avoid conflicts..."
 git fetch --tags
