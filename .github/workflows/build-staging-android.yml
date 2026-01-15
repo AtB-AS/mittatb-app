@@ -63,7 +63,11 @@ jobs:
       - name: Install imagemagick
         run: sudo apt-get update && sudo apt-get install imagemagick
       - name: Install yarn
-        run: npm install -g yarn
+        run: |
+          curl --compressed -o- -L https://yarnpkg.com/install.sh | bash
+          source ~/.bashrc
+          export PATH="$HOME/.yarn/bin:$PATH"
+          yarn install
       - name: install node v22
         uses: actions/setup-node@v5
         with:
