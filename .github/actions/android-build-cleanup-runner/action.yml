@@ -18,10 +18,10 @@ runs:
       run: |
         sudo rm -rf /opt/hostedtoolcache/CodeQL
         sudo rm -rf /usr/local/share/powershell
-    - name: Remove Docker Images
-      shell: bash
-      run: |
-        docker system prune -a -f
+    # - name: Remove Docker Images
+    #   shell: bash
+    #   run: |
+    #     docker system prune -a -f
     - name: Remove large packages
       shell: bash
       run: |
