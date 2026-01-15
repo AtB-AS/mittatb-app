@@ -74,11 +74,14 @@ export const Map_RootScreen = ({
 
   const navigateToTripSearch: TravelFromAndToLocationsCallback = useCallback(
     (location, destination) => {
-      navigation.navigate({
-        name: 'Dashboard_TripSearchScreen',
+      navigation.navigate('Root_TabNavigatorStack', {
+        screen: 'TabNav_DashboardStack',
         params: {
-          [destination]: location,
-          callerRoute,
+          screen: 'Dashboard_TripSearchScreen',
+          params: {
+            [destination]: location,
+            callerRoute,
+          },
         },
         merge: true,
       });
