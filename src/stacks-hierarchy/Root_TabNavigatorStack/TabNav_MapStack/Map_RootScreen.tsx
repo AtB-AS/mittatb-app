@@ -82,8 +82,8 @@ export const Map_RootScreen = ({
             [destination]: location,
             callerRoute,
           },
+          merge: true,
         },
-        merge: true,
       });
     },
     [navigation],
