@@ -6,7 +6,7 @@ cat .netrc >> ~/.netrc
 chmod 600 ~/.netrc
 
 echo "Installing pre-build dependencies"
-sudo apt-get install -y xmlstarlet # for git-crypt
+brew install xmlstarlet # for git-crypt
 # xmlstarlet to edit androidmanifest
 
 echo "Loading all env variables from .env file"
