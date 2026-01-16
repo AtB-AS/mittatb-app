@@ -34,6 +34,11 @@ const DepartureDetailsTexts = {
     loading: _('Laster detaljer', 'Loading details', 'Lastar detaljar'),
     noAlighting: _('Ingen avstigning', 'No disembarking', 'Ingen avstiging'),
     noBoarding: _('Ingen påstigning', 'No boarding', 'Ingen påstiging'),
+    closed: _(
+      'Holdeplassen er stengt',
+      'This stop is closed',
+      'Haldeplassen er stengd',
+    ),
     noActiveItem: _(
       'Vi klarte ikke å laste av detaljer for denne reisen.',
       'We are unable to load the details for this journey.',

@@ -23,10 +23,7 @@ import {
   SituationSectionItem,
 } from '@atb/modules/situations';
 import {EstimatedCallList} from './EstimatedCallList';
-import {
-  CancelledDepartureMessage,
-  formatDestinationDisplay,
-} from '@atb/screen-components/travel-details-screens';
+import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 import {isValidDepartureTime} from '@atb/departure-list/utils';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {useNow} from '@atb/utils/use-now';
@@ -142,12 +139,6 @@ export function QuaySection({
             <ThemeIcon svg={isMinimized ? ExpandMore : ExpandLess} />
           </View>
         </GenericClickableSectionItem>
-        {!isMinimized &&
-          departuresToDisplay.find(
-            (departure) => departure.cancellation === true,
-          ) && (
-            <CancelledDepartureMessage someDeparturesCancelled isInSection />
-          )}
         {!isMinimized &&
           /*
            This is under its own 'isMinimized' as nesting section items in React
