@@ -8,7 +8,6 @@ import {StyleProp, View, ViewStyle} from 'react-native';
 import {
   PreassignedFareProduct,
   getReferenceDataName,
-  isProductSellableInApp,
 } from '@atb/modules/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {
@@ -28,6 +27,7 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
+import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 
 type ProductSelectionByProductsProps = {
   selection: PurchaseSelectionType;

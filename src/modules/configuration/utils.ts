@@ -9,9 +9,6 @@ import {
   Language,
   LanguageAndTextType,
 } from '@atb/translations';
-import {APP_VERSION} from '@env';
-import {compareVersion} from '@atb/utils/compare-version';
-import {CustomerProfile} from '@atb/modules/ticketing';
 
 export type ReferenceDataNames = {
   name: LanguageAndTextType;
@@ -39,24 +36,3 @@ export const findReferenceDataById = <
   elements: T[],
   id: string,
 ) => elements.find((p) => p.id === id);
-
-export const isProductSellableInApp = (
-  product: PreassignedFareProduct,
-  customerProfile?: CustomerProfile,
-) => {
-  if (
-    (product.limitations.appVersionMin &&
-      compareVersion(product.limitations.appVersionMin, APP_VERSION) > 0) ||
-    (product.limitations.appVersionMax &&
-      compareVersion(product.limitations.appVersionMax, APP_VERSION) < 0)
-  )
-    return false;
-
-  if (
-    product.distributionChannel.some((channel) => channel === 'debug-app') &&
-    customerProfile?.debug
-  )
-    return true;
-
-  return product.distributionChannel.some((channel) => channel === 'app');
-};
