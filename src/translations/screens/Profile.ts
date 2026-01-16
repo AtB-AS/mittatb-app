@@ -429,6 +429,7 @@ const ProfileTexts = {
       `Organisation number ${orgNr}`,
       `Organisasjonsnummer ${orgNr}`,
     ),
+  withStream: _('med strømming', 'with stream', 'med strømming'),
 };
 export default orgSpecificTranslations(ProfileTexts, {
   nfk: {
