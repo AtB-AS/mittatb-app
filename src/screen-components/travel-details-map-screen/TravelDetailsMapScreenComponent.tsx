@@ -1,10 +1,6 @@
 import {VehicleWithPosition} from '@atb/api/types/vehicles';
 import {useLiveVehicleSubscription} from '@atb/api/bff/vehicles';
-import {
-  AnyMode,
-  AnySubMode,
-  getTransportModeSvg,
-} from '@atb/components/icon-box';
+import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {
   BackArrow,
   flyToLocation,
@@ -15,7 +11,6 @@ import {
   useControlPositionsStyle,
   useMapViewConfig,
 } from '@atb/modules/map';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useThemeContext, StyleSheet} from '@atb/theme';
@@ -23,12 +18,16 @@ import {MapTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
 import {secondsBetween} from '@atb/utils/date';
 import {useInterval} from '@atb/utils/use-interval';
-import {useTransportColor} from '@atb/utils/use-transport-color';
 import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
-import {Feature, Point, Position} from 'geojson';
+import {
+  Feature,
+  FeatureCollection,
+  GeoJsonProperties,
+  Point,
+  Position,
+} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {ActivityIndicator, Platform, View} from 'react-native';
-import {DirectionArrow} from './components/DirectionArrow';
+import {Platform, View} from 'react-native';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
@@ -43,6 +42,7 @@ import {ThemeText} from '@atb/components/text';
 import {debugProgressBetweenStopsText} from '../travel-details-screens/utils';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {usePreferencesContext} from '@atb/modules/preferences';
+import {TRANSPORT_SUB_MODES_BOAT} from '@atb/components/icon-box';
 
 export type TravelDetailsMapScreenParams = {
   serviceJourneyPolylines: ServiceJourneyPolyline[];
@@ -60,7 +60,6 @@ type Props = TravelDetailsMapScreenParams & {
 };
 
 const FOLLOW_ZOOM_LEVEL = 14.5;
-const FOLLOW_MIN_ZOOM_LEVEL = 8;
 const FOLLOW_ANIMATION_DURATION = 500;
 
 export const TravelDetailsMapScreenComponent = ({
@@ -108,7 +107,6 @@ export const TravelDetailsMapScreenComponent = ({
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
   const [zoomLevel, setZoomLevel] = useState<number>(FOLLOW_ZOOM_LEVEL);
-  const [cameraHeading, setCameraHeading] = useState<number>(0);
 
   /* adding onCameraChanged to <MapView> caused an internal mapbox error in the iOS stage build version, so use the deprecated onRegionIsChanging instead for now and hope the error will be fixed when onRegionIsChanging is removed in the next mapbox version*/
   /* on Android, onRegionIsChanging is very laggy, so use the correct onCameraChanged instead */
@@ -116,7 +114,6 @@ export const TravelDetailsMapScreenComponent = ({
     Platform.OS === 'android'
       ? {
           onCameraChanged: (state: MapboxGL.MapState) => {
-            setCameraHeading(state.properties.heading);
             if (state.gestures.isGestureActive) {
               setShouldTrack(false);
             }
@@ -124,7 +121,6 @@ export const TravelDetailsMapScreenComponent = ({
         }
       : {
           onRegionIsChanging: (state: Feature<Point, RegionPayload>) => {
-            setCameraHeading(state.properties.heading);
             if (state.properties.isUserInteraction) {
               setShouldTrack(false);
             }
@@ -199,7 +195,6 @@ export const TravelDetailsMapScreenComponent = ({
             mode={mode}
             subMode={subMode}
             zoomLevel={zoomLevel}
-            heading={cameraHeading}
             isError={isLiveConnected}
           />
         )}
@@ -236,13 +231,12 @@ export const TravelDetailsMapScreenComponent = ({
   );
 };
 
-type VehicleIconProps = {
+type LiveVehicleMarkerProps = {
   vehicle: VehicleWithPosition;
   mode?: AnyMode;
   subMode?: AnySubMode;
   setShouldTrack: React.Dispatch<React.SetStateAction<boolean>>;
   zoomLevel: number;
-  heading: number;
   isError: boolean;
 };
 
@@ -251,12 +245,9 @@ const LiveVehicleMarker = ({
   setShouldTrack,
   mode,
   subMode,
-  zoomLevel,
-  heading,
   isError,
-}: VehicleIconProps) => {
-  const {theme} = useThemeContext();
-  const fillColor = useTransportColor(mode, subMode).primary.background;
+}: LiveVehicleMarkerProps) => {
+  const {themeName} = useThemeContext();
   const {live_vehicle_stale_threshold} = useRemoteConfigContext();
 
   const [isStale, setIsStale] = useState(false);
@@ -275,113 +266,74 @@ const LiveVehicleMarker = ({
     true,
   );
 
-  let circleBackgroundColor = fillColor;
-  let circleBorderColor = 'transparent';
-  if (isError) {
-    circleBackgroundColor =
-      theme.color.interactive.destructive.disabled.background;
-    circleBorderColor = theme.color.interactive.destructive.default.background;
+  if (!vehicle.location) return null;
+
+  const PointFeatureCollection: FeatureCollection<Point, GeoJsonProperties> = {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [vehicle.location.longitude, vehicle.location.latitude],
+        },
+        properties: {},
+      },
+    ],
+  };
+
+  const {iconImage, arrowImage} = getSpriteNames(
+    isStale,
+    isError,
+    themeName,
+    mode,
+    subMode,
+  );
+
+  const ARROW_OFFSET = 25;
+
+  const layers = [
+    <MapboxGL.SymbolLayer
+      id={`liveVehicleIcon_${vehicle.mode}`}
+      key={`liveVehicleIcon_${vehicle.mode}`}
+      style={{
+        iconImage,
+        iconAllowOverlap: true,
+        iconIgnorePlacement: true,
+      }}
+    />,
+  ];
+
+  if (!isError && !isStale && vehicle.bearing) {
+    layers.push(
+      <MapboxGL.SymbolLayer
+        id={`liveDirectionArrow_${vehicle.mode}`}
+        key={`liveDirectionArrow_${vehicle.mode}`}
+        style={{
+          iconImage: arrowImage,
+          iconAllowOverlap: true,
+          iconIgnorePlacement: true,
+          iconRotationAlignment: 'map',
+          iconRotate: vehicle.bearing,
+          iconOffset: [0, -ARROW_OFFSET],
+        }}
+      />,
+    );
   }
-  if (isStale) {
-    circleBackgroundColor = theme.color.interactive[1].disabled.background;
-    circleBorderColor = theme.color.interactive[1].default.background;
-  }
-
-  if (!vehicle.location || zoomLevel < FOLLOW_MIN_ZOOM_LEVEL) return null;
-
-  const iconBorderWidth = theme.border.width.medium;
-  const iconCircleSize = (theme.icon.size.normal + iconBorderWidth) * 2;
-
-  const iconScaleFactor = 2; // fix android transform rendering bugs by scaling up parent and child back down
-  const iconSize = iconCircleSize * 0.9 * iconScaleFactor;
-  const iconScale = 1 / iconScaleFactor;
 
   return (
-    <MapboxGL.MarkerView
-      coordinate={[vehicle.location.longitude, vehicle.location.latitude]}
-      allowOverlapWithPuck={true}
-    >
-      <View
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: iconSize,
-          height: iconSize,
+    <>
+      <MapboxGL.ShapeSource
+        id={`liveIconSource_${vehicle.mode}`}
+        shape={PointFeatureCollection}
+        onPress={() => {
+          setShouldTrack(true);
         }}
-        onTouchStart={() => setShouldTrack(true)}
       >
-        <View
-          style={{
-            position: 'absolute',
-            width: iconCircleSize,
-            height: iconCircleSize,
-            backgroundColor: circleBackgroundColor,
-            borderColor: circleBorderColor,
-            borderWidth: iconBorderWidth,
-            borderRadius: 100,
-          }}
-        />
-        <LiveVehicleIcon
-          mode={mode}
-          subMode={subMode}
-          isError={isError}
-          isStale={isStale}
-        />
-
-        {!isError &&
-          vehicle.bearing !== undefined && ( // only show direction if bearing is defined
-            <DirectionArrow
-              vehicleBearing={vehicle.bearing}
-              heading={heading}
-              iconSize={iconSize}
-              iconScale={iconScale}
-              fill={
-                isError
-                  ? theme.color.interactive.destructive.default.background
-                  : isStale
-                    ? theme.color.interactive[1].default.background
-                    : fillColor
-              }
-            />
-          )}
-      </View>
-    </MapboxGL.MarkerView>
+        {layers}
+      </MapboxGL.ShapeSource>
+    </>
   );
-};
-
-type LiveVehicleIconProps = {
-  isStale: boolean;
-  isError: boolean;
-  mode?: AnyMode;
-  subMode?: AnySubMode;
-};
-const LiveVehicleIcon = ({
-  mode,
-  subMode,
-  isStale,
-  isError,
-}: LiveVehicleIconProps): React.JSX.Element => {
-  const {theme} = useThemeContext();
-  const fillColor = useTransportColor(mode, subMode).primary.foreground.primary;
-  const {svg} = getTransportModeSvg(mode, subMode);
-
-  if (isError)
-    return (
-      <ThemeIcon
-        svg={svg}
-        color={theme.color.interactive.destructive.default.background}
-        allowFontScaling={false}
-      />
-    );
-  if (isStale)
-    return (
-      <ActivityIndicator
-        color={theme.color.interactive[1].disabled.foreground.primary}
-      />
-    );
-
-  return <ThemeIcon svg={svg} color={fillColor} allowFontScaling={false} />;
 };
 
 const useStyles = StyleSheet.createThemeHook(() => ({
@@ -392,3 +344,60 @@ const useStyles = StyleSheet.createThemeHook(() => ({
     flex: 1,
   },
 }));
+
+function getSpriteNames(
+  isStale: boolean,
+  isError: boolean,
+  themeName: string,
+  mode?: AnyMode,
+  subMode?: AnySubMode,
+) {
+  const activitySpriteString = isError
+    ? 'error'
+    : isStale
+      ? 'waiting'
+      : 'active';
+
+  const vehicleSpriteString = getTransportModeSpriteName(mode, subMode);
+
+  const iconImage =
+    'vehiclepin_' +
+    vehicleSpriteString +
+    '_' +
+    activitySpriteString +
+    '_' +
+    themeName;
+
+  const arrowImage =
+    'vehiclepin_' + vehicleSpriteString + '_indicator_' + themeName;
+
+  return {iconImage, arrowImage};
+}
+
+function getTransportModeSpriteName(mode?: AnyMode, subMode?: AnySubMode) {
+  // Logic here should align with useTransportColor in order to have consistent colors for transport modes
+
+  switch (mode) {
+    case 'bus':
+    case 'coach':
+      if (subMode === 'airportLinkBus') return 'otherbus';
+      if (subMode === 'localBus') return 'bus';
+      return 'regionalbus';
+    case 'tram':
+      return 'tram';
+    case 'metro':
+      return 'metro';
+    case 'rail':
+      // TODO: update to new sprites for airport link rail when available
+      if (subMode === 'airportLinkRail') return 'train';
+      return 'train';
+    case 'water':
+      return subMode && TRANSPORT_SUB_MODES_BOAT.includes(subMode)
+        ? 'boat'
+        : 'ferry';
+    case 'bicycle':
+      return 'citybike';
+    case 'car':
+      return 'sharedcar';
+  }
+}
