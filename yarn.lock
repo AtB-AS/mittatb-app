@@ -3437,7 +3437,7 @@
     use-latest-callback "^0.2.4"
     use-sync-external-store "^1.5.0"
 
-"@react-navigation/devtools@^7.0.39":
+"@react-navigation/devtools@^7.0.46":
   version "7.0.46"
   resolved "https://registry.yarnpkg.com/@react-navigation/devtools/-/devtools-7.0.46.tgz#fb2ce3c911b9d536dcfe74f3f6815ad0818e8085"
   integrity sha512-ypK12gsPDK0EalRJzCUuNBon/Lgjo3Vq4wiyUOBlYLkrHAXSzrehzGi0yxcCLRQ0+B+YtebW3yBzjz9BKV8lmg==

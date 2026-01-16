@@ -18,6 +18,7 @@ import {useTestIds} from './use-test-ids';
 import {parse} from 'search-params';
 
 import type {NavigationState, PartialState} from '@react-navigation/routers';
+import {useLogger as useReactNavigationLogger} from '@react-navigation/devtools';
 
 import {Root_SelectTravelTokenScreen} from './Root_SelectTravelTokenScreen';
 import {Root_ConsiderTravelTokenChangeScreen} from '@atb/stacks-hierarchy/Root_ConsiderTravelTokenChangeScreen';
@@ -93,6 +94,9 @@ export const RootStack = () => {
   const {getInitialNavigationContainerState} = useOnboardingFlow();
   const {theme} = useThemeContext();
   const navRef = useNavigationContainerRef<RootStackParamList>();
+
+  useReactNavigationLogger(navRef);
+
   const {setCurrentRouteName} = useOnboardingContext();
   const onNavigationStateChange = useCallback(
     (state?: NavigationState) => {
