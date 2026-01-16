@@ -2,7 +2,7 @@ import {useMemo} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import {ONE_HOUR_MS, ONE_SECOND_MS} from '@atb/utils/durations';
 import {useFavoritesContext} from '@atb/modules/favorites';
-import {DepartureGroupMetadata, DepartureLineInfo} from '@atb/api/bff/types';
+import {DepartureGroupMetadata} from '@atb/api/bff/types';
 import {
   DepartureFavoritesQuery,
   getFavouriteDepartures,
@@ -13,6 +13,7 @@ import {minutesBetween} from '@atb/utils/date';
 import {flatten} from 'lodash';
 import {animateNextChange} from '@atb/utils/animation';
 import {getDepartureRefetchInterval} from '@atb/utils/get-departure-refetch-interval';
+import {isDefined} from '@atb/utils/presence';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 const FAVORITE_DEPARTURES_REFETCH_INTERVAL_SECONDS = 30;
@@ -92,9 +93,7 @@ export const useFavoriteDeparturesQuery = (enabled: boolean) => {
               ),
             ),
           ),
-        ).filter(
-          (departureLineInfo) => !!departureLineInfo,
-        ) as DepartureLineInfo[];
+        ).filter(isDefined);
 
         potentiallyMigrateFavoriteDepartures(departureLineInfos);
 
