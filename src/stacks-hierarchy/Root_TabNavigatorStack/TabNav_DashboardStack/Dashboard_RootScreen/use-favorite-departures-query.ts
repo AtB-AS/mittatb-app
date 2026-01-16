@@ -43,7 +43,7 @@ export const useFavoriteDeparturesQuery = ({
 }: UseFavoriteDeparturesQueryProps) => {
   const {potentiallyMigrateFavoriteDepartures} = useFavoritesContext();
 
-  // sort favorite ID so the query cache can be used regardless of order 
+  // sort favorite ID so the query cache can be used regardless of order
   const sortedFavoriteIds = dashboardFavoriteDepartures
     .map((f) => f.id)
     .sort()
