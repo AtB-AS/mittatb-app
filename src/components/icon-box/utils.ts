@@ -34,7 +34,7 @@ import {Theme} from '@atb/theme';
 import {NoParking} from '@atb/assets/svg/mono-icons/mobility';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 
-const TRANSPORT_SUB_MODES_BOAT: AnySubMode[] = [
+export const TRANSPORT_SUB_MODES_BOAT: AnySubMode[] = [
   TransportSubmode.HighSpeedPassengerService,
   TransportSubmode.HighSpeedVehicleService,
   TransportSubmode.NationalPassengerFerry,
