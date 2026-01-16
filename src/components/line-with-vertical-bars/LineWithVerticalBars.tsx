@@ -8,10 +8,9 @@ import {
   Dimensions,
   View,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
-const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
+const AnimatedVerticalLineSegment = Animated.createAnimatedComponent(View);
 
 export const LineWithVerticalBars = ({
   backgroundColor,
@@ -92,11 +91,13 @@ const VerticalLine = ({
   index: number;
   color: string;
 }) => {
+  const styles = useStyles();
   return (
-    <AnimatedLinearGradient
+    <AnimatedVerticalLineSegment
       style={[
-        useStyles().verticalLine,
+        styles.verticalLine,
         {
+          backgroundColor: color,
           left: index * SPACE_BETWEEN_VERTICAL_LINES - 10,
           transform: [
             {
@@ -105,13 +106,12 @@ const VerticalLine = ({
                 outputRange: [SPACE_BETWEEN_VERTICAL_LINES, 0],
               }),
             },
+            {
+              skewX: '150deg',
+            },
           ],
         },
       ]}
-      useAngle={true}
-      angle={120}
-      locations={[0.25, 0.25, 0.75, 0.75]}
-      colors={['transparent', color, color, 'transparent']}
       pointerEvents="none"
     />
   );
@@ -131,7 +131,7 @@ const useStyles = StyleSheet.createThemeHook(() => ({
   verticalLine: {
     position: 'absolute',
     bottom: 0,
-    width: 20,
+    width: 13,
     height: '100%',
   },
 }));
