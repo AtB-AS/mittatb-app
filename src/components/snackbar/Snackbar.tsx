@@ -17,7 +17,7 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 import SnackbarTexts from '@atb/translations/components/Snackbar';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {PressableOpacity} from '../pressable-opacity';
-import {ReactNode} from 'react';
+import {ReactNode, useEffect} from 'react';
 
 export type SnackbarPosition = 'top' | 'bottom';
 const SNACKBAR_POSITIONS: SnackbarPosition[] = ['top', 'bottom'];
@@ -39,6 +39,8 @@ export type SnackbarProps = {
   isDismissable?: boolean;
   /** How many milliseconds the snackbar should stay in the visible position */
   customVisibleDurationMS?: number;
+
+  onHideSnackbar?: () => void;
 };
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[0];
@@ -70,6 +72,7 @@ const SnackbarInstance = ({
   isDismissable,
   customVisibleDurationMS,
   isDisabled,
+  onHideSnackbar,
 }: SnackbarInstanceProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -83,6 +86,12 @@ const SnackbarInstance = ({
     stableContent,
     customVisibleDurationMS,
   );
+
+  useEffect(() => {
+    if (!snackbarIsVisible) {
+      onHideSnackbar?.();
+    }
+  }, [snackbarIsVisible, onHideSnackbar]);
 
   const {verticalPositionStyle, animatedViewOnLayout, parentMeasurerOnLayout} =
     useSnackbarVerticalPositionAnimation(position, snackbarIsVisible);
