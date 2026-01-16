@@ -1,9 +1,7 @@
+import {useMemo} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import {ONE_HOUR_MS, ONE_SECOND_MS} from '@atb/utils/durations';
-import {
-  useFavoritesContext,
-  UserFavoriteDepartures,
-} from '@atb/modules/favorites';
+import {useFavoritesContext} from '@atb/modules/favorites';
 import {DepartureGroupMetadata, DepartureLineInfo} from '@atb/api/bff/types';
 import {
   DepartureFavoritesQuery,
@@ -13,10 +11,12 @@ import {getStopPlaceGroupRealtime} from '@atb/api/bff/departures';
 import {updateStopsWithRealtime} from '@atb/departure-list/utils';
 import {minutesBetween} from '@atb/utils/date';
 import {flatten} from 'lodash';
+import {animateNextChange} from '@atb/utils/animation';
+import {getDepartureRefetchInterval} from '@atb/utils/get-departure-refetch-interval';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
-const DEPARTURES_REFETCH_INTERVAL_SECONDS = 30;
-const FULL_REFRESH_INTERVAL_MINUTES = 10;
+const FAVORITE_DEPARTURES_REFETCH_INTERVAL_SECONDS = 30;
+const FAVORITE_DEPARTURES_FULL_REFRESH_INTERVAL_MINUTES = 10;
 
 type FavoriteDeparturesData = {
   data: DepartureGroupMetadata['data'];
@@ -24,24 +24,21 @@ type FavoriteDeparturesData = {
   startTime: string;
 };
 
-export type UseFavoriteDeparturesQueryProps = {
-  dashboardFavoriteDepartures: UserFavoriteDepartures;
-  enabled: boolean;
-};
-
 /**
- * On initial fetch (or after FULL_REFRESH_INTERVAL_MINUTES), calls the full
+ * On initial fetch (or after FAVORITE_DEPARTURES_FULL_REFRESH_INTERVAL_MINUTES), calls the full
  * favorite departures endpoint. On subsequent refetches, uses the lightweight
  * realtime endpoint and merges the data.
  *
- * Refetches automatically every DEPARTURES_REFETCH_INTERVAL_SECONDS,
+ * Refetches automatically every FAVORITE_DEPARTURES_REFETCH_INTERVAL_SECONDS,
  * instead of using "tick" like the old code.
  */
-export const useFavoriteDeparturesQuery = ({
-  dashboardFavoriteDepartures,
-  enabled,
-}: UseFavoriteDeparturesQueryProps) => {
-  const {potentiallyMigrateFavoriteDepartures} = useFavoritesContext();
+export const useFavoriteDeparturesQuery = (enabled: boolean) => {
+  const {favoriteDepartures, potentiallyMigrateFavoriteDepartures} =
+    useFavoritesContext();
+
+  const dashboardFavoriteDepartures = favoriteDepartures.filter(
+    (f) => f.visibleOnDashboard,
+  );
 
   // sort favorite ID so the query cache can be used regardless of order
   const sortedFavoriteIds = dashboardFavoriteDepartures
@@ -49,9 +46,9 @@ export const useFavoriteDeparturesQuery = ({
     .sort()
     .join(',');
 
-  return useQuery({
+  const {data, isLoading, isError, refetch} = useQuery({
     queryKey: [
-      'favoriteDepartures',
+      'FAVORITE_DEPARTURES',
       sortedFavoriteIds,
       dashboardFavoriteDepartures.length,
     ],
@@ -69,7 +66,7 @@ export const useFavoriteDeparturesQuery = ({
       const fullRefresh =
         !existingData ||
         minutesBetween(existingData.startTime, new Date()) >
-          FULL_REFRESH_INTERVAL_MINUTES;
+          FAVORITE_DEPARTURES_FULL_REFRESH_INTERVAL_MINUTES;
 
       if (fullRefresh) {
         const startTime = new Date().toISOString();
@@ -126,18 +123,16 @@ export const useFavoriteDeparturesQuery = ({
         };
       }
     },
-    staleTime: DEPARTURES_REFETCH_INTERVAL_SECONDS * ONE_SECOND_MS,
+    staleTime: FAVORITE_DEPARTURES_REFETCH_INTERVAL_SECONDS * ONE_SECOND_MS,
     gcTime: ONE_HOUR_MS,
     enabled: enabled && dashboardFavoriteDepartures.length > 0,
-    refetchInterval: ({state: {dataUpdatedAt}}) => {
-      // Skip refetchInterval until the first successful fetch
-      if (!dataUpdatedAt) return false;
-
-      const secondsSincePreviousFetch = (Date.now() - dataUpdatedAt) / 1000;
-      const secondsUntilNextFetch =
-        DEPARTURES_REFETCH_INTERVAL_SECONDS - secondsSincePreviousFetch;
-
-      return Math.max(secondsUntilNextFetch, 0) * ONE_SECOND_MS;
-    },
+    refetchInterval: getDepartureRefetchInterval(
+      FAVORITE_DEPARTURES_REFETCH_INTERVAL_SECONDS,
+    ),
   });
+
+  return useMemo(() => {
+    animateNextChange();
+    return {data, isLoading, isError, refetch};
+  }, [data, isLoading, isError, refetch]);
 };

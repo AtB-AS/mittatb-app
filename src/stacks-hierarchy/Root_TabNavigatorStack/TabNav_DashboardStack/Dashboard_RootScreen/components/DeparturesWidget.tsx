@@ -50,13 +50,8 @@ export const DeparturesWidget = ({
   const themeColor = theme.color.background.neutral[1];
   const {favoriteDepartures} = useFavoritesContext();
   const {location} = useGeolocationContext();
-  const dashboardFavoriteDepartures = favoriteDepartures.filter(
-    (f) => f.visibleOnDashboard,
-  );
-  const {data, isLoading} = useFavoriteDeparturesQuery({
-    dashboardFavoriteDepartures,
-    enabled: isFocused,
-  });
+  const {data: favoriteDeparturesData, isLoading: favoriteDeparturesIsLoading} =
+    useFavoriteDeparturesQuery(isFocused);
   const onCloseFocusRef = useRef<View>(null);
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
@@ -65,12 +60,13 @@ export const DeparturesWidget = ({
   }
 
   const sortedStopPlaceGroups = location
-    ? data?.data?.sort((a, b) =>
+    ? favoriteDeparturesData?.data?.sort((a, b) =>
         compareStopsByDistance(a.stopPlace, b.stopPlace, location.coordinates),
       )
-    : data?.data;
+    : favoriteDeparturesData?.data;
 
-  const searchDate = data?.startTime ?? new Date().toISOString();
+  const searchDate =
+    favoriteDeparturesData?.startTime ?? new Date().toISOString();
 
   return (
     <View style={style}>
@@ -104,7 +100,7 @@ export const DeparturesWidget = ({
           />
         </Section>
       )}
-      {isLoading && (
+      {favoriteDeparturesIsLoading && (
         <ActivityIndicator size="large" style={styles.activityIndicator} />
       )}
       {sortedStopPlaceGroups?.map((stopPlaceGroup) => (

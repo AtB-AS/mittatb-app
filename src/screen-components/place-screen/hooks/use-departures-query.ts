@@ -17,6 +17,7 @@ import {flatMap} from '@atb/utils/array';
 import {getDeparturesAugmentedWithRealtimeData} from '@atb/departure-list/utils';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {minutesBetween} from '@atb/utils/date';
+import {getDepartureRefetchInterval} from '@atb/utils/get-departure-refetch-interval';
 
 const DEPARTURES_REFETCH_INTERVAL_SECONDS = 30;
 const FULL_REFRESH_INTERVAL_MINUTES = 5;
@@ -113,15 +114,8 @@ export const useDeparturesQuery = ({
     },
     staleTime: DEPARTURES_REFETCH_INTERVAL_SECONDS * ONE_SECOND_MS,
     gcTime: ONE_HOUR_MS,
-    refetchInterval: ({state: {dataUpdatedAt}}) => {
-      // Skip refetchInterval until the first successful fetch
-      if (!dataUpdatedAt) return false;
-
-      const secondsSincePreviousFetch = (Date.now() - dataUpdatedAt) / 1000;
-      const secondsUntilNextFetch =
-        DEPARTURES_REFETCH_INTERVAL_SECONDS - secondsSincePreviousFetch;
-
-      return Math.max(secondsUntilNextFetch, 0) * ONE_SECOND_MS;
-    },
+    refetchInterval: getDepartureRefetchInterval(
+      DEPARTURES_REFETCH_INTERVAL_SECONDS,
+    ),
   });
 };
