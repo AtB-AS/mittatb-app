@@ -6,6 +6,7 @@ export {useHasReservationOrAvailableFareContract} from './use-has-reservation-or
 export {useFareContracts} from './use-fare-contracts';
 export {useListRecurringPaymentsQuery} from './use-list-recurring-payments-query';
 export {useRefundFareContractMutation} from './use-refund-mutation';
+export {useActivateFareContractNowMutation} from './use-activate-fare-contract-now-mutation';
 export {useRefundOptionsQuery} from './use-refund-options-query';
 export {useGetFareProductsQuery} from './use-get-fare-products-query';
 export {useGetSupplementProductsQuery} from './use-get-supplement-products-query';
