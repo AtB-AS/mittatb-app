@@ -17,7 +17,6 @@ import {
 } from '@atb/modules/ticketing';
 import {TravelRightDirection} from '@atb-as/utils';
 import {useMemo} from 'react';
-import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {RecentFareContractType} from '@atb/recent-fare-contracts/types';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {enumFromString} from '@atb/utils/enum-from-string';
@@ -31,18 +30,10 @@ const mapUsers = (
   userProfiles: UserProfile[],
 ) =>
   Object.entries(users)
-    .reduce<UserProfileWithCount[]>((foundUserProfiles, [profileId, count]) => {
+    .flatMap(([profileId, count]) => {
       const userProfile = findReferenceDataById(userProfiles, profileId);
-      if (userProfile) {
-        const userProfileWithCount = {
-          ...userProfile,
-          count,
-        };
-        return foundUserProfiles.concat(userProfileWithCount);
-      } else {
-        return foundUserProfiles;
-      }
-    }, [])
+      return userProfile ? [{...userProfile, count}] : [];
+    })
     .sort(
       // Sort by user profile order in remote config
       (u1, u2) =>
@@ -126,8 +117,8 @@ const mapBackendRecentFareContracts = (
     id,
     direction,
     preassignedFareProduct,
-    fromFareZone: fromFareZone,
-    toFareZone: toFareZone,
+    fromFareZone,
+    toFareZone,
     pointToPointValidity,
     userProfilesWithCount,
     baggageProductsWithCount,
@@ -157,22 +148,17 @@ const mapToLastThreeUniqueRecentFareContracts = (
 ): RecentFareContractType[] => {
   return recentFareContracts
     .sort((fc1, fc2) => fc2.createdAt.localeCompare(fc1.createdAt))
-    .reduce<RecentFareContractType[]>(
-      (mappedFareContracts, recentFareContract) => {
-        const maybeFareContract = mapBackendRecentFareContracts(
-          recentFareContract,
-          preassignedFareProducts,
-          supplementFareProducts,
-          fareProductTypeConfigs,
-          fareZones,
-          userProfiles,
-        );
-        return maybeFareContract
-          ? mappedFareContracts.concat(maybeFareContract)
-          : mappedFareContracts;
-      },
-      [],
+    .map((recentFareContract) =>
+      mapBackendRecentFareContracts(
+        recentFareContract,
+        preassignedFareProducts,
+        supplementFareProducts,
+        fareProductTypeConfigs,
+        fareZones,
+        userProfiles,
+      ),
     )
+    .filter(isDefined)
     .filter(onlyUniquesBasedOnField('id'))
     .slice(0, 3);
 };
@@ -191,7 +177,7 @@ export const useRecentFareContractsQuery = () => {
   );
 
   const {data, isLoading, isError, refetch} = useQuery({
-    queryKey: ['recentFareContracts', latestCreatedTime],
+    queryKey: ['RECENT_FARE_CONTRACTS', latestCreatedTime],
     queryFn: listRecentFareContracts,
   });
 
