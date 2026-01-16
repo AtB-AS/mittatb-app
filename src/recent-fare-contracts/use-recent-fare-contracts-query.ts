@@ -15,7 +15,7 @@ import {
   useTicketingContext,
 } from '@atb/modules/ticketing';
 import {TravelRightDirection} from '@atb-as/utils';
-import {useEffect, useMemo, useReducer} from 'react';
+import {useMemo} from 'react';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {RecentFareContractType} from '@atb/recent-fare-contracts/types';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
@@ -23,50 +23,7 @@ import {enumFromString} from '@atb/utils/enum-from-string';
 import {isDefined} from '@atb/utils/presence';
 import {getBaggageProducts} from '@atb/modules/fare-contracts';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
-import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
-
-type State = {
-  isError: boolean;
-  isLoading: boolean;
-  recentFareContracts: RecentOrderDetails[];
-};
-
-const initialState: State = {
-  isError: false,
-  isLoading: true,
-  recentFareContracts: [],
-};
-
-type Action =
-  | {type: 'FETCH'}
-  | {type: 'ERROR'}
-  | {type: 'SUCCESS'; data: RecentOrderDetails[]};
-
-type Reducer = (prevState: State, action: Action) => State;
-
-const reducer: Reducer = (prevState, action): State => {
-  switch (action.type) {
-    case 'FETCH':
-      return {
-        ...prevState,
-        isLoading: true,
-        isError: false,
-      };
-    case 'ERROR':
-      return {
-        ...prevState,
-        isLoading: false,
-        isError: true,
-      };
-    case 'SUCCESS':
-      return {
-        ...prevState,
-        isLoading: false,
-        isError: false,
-        recentFareContracts: action.data,
-      };
-  }
-};
+import {useQuery} from '@tanstack/react-query';
 
 const mapUsers = (
   users: {[userProfile: string]: number},
@@ -219,37 +176,28 @@ const mapToLastThreeUniqueRecentFareContracts = (
     .slice(0, 3);
 };
 
-export const useRecentFareContracts = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+export const useRecentFareContractsQuery = () => {
   const {fareContracts} = useTicketingContext();
   const {fareProductTypeConfigs, fareZones, userProfiles} =
     useFirestoreConfigurationContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {data: supplementFareProducts} = useGetSupplementProductsQuery();
 
-  const fetchRecentFareContracts = async () => {
-    dispatch({type: 'FETCH'});
-    try {
-      const recentFareContracts = await listRecentFareContracts();
-      dispatch({type: 'SUCCESS', data: recentFareContracts});
-    } catch {
-      dispatch({type: 'ERROR'});
-    }
-  };
-
+  // Trigger refetch when a new fare contract is created
   const latestCreatedTime = useMemo(
     () => Math.max(0, ...fareContracts.map((fc) => fc.created.getSeconds())),
     [fareContracts],
   );
 
-  useEffect(() => {
-    fetchRecentFareContracts();
-  }, [latestCreatedTime]);
+  const {data, isLoading, isError, refetch} = useQuery({
+    queryKey: ['recentFareContracts', latestCreatedTime],
+    queryFn: listRecentFareContracts,
+  });
 
   const recentFareContracts = useMemo(
     () =>
       mapToLastThreeUniqueRecentFareContracts(
-        state.recentFareContracts,
+        data ?? [],
         preassignedFareProducts,
         supplementFareProducts,
         fareProductTypeConfigs,
@@ -257,7 +205,7 @@ export const useRecentFareContracts = () => {
         userProfiles,
       ),
     [
-      state.recentFareContracts,
+      data,
       preassignedFareProducts,
       supplementFareProducts,
       fareProductTypeConfigs,
@@ -267,9 +215,9 @@ export const useRecentFareContracts = () => {
   );
 
   return {
-    isLoading: state.isLoading,
-    isError: state.isError,
+    isLoading,
+    isError,
     recentFareContracts,
-    refresh: fetchRecentFareContracts,
+    refresh: refetch,
   };
 };
