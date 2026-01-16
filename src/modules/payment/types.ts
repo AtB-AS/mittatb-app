@@ -8,15 +8,15 @@ export type CardPaymentMethod = {
     | PaymentType.PaymentCard;
   recurringPayment?: RecurringPayment;
 };
-export type VippsPaymentMethod = {
-  paymentType: PaymentType.Vipps;
+export type NonRecurringPaymentMethod = {
+  paymentType: PaymentType.Vipps | PaymentType.ApplePay;
   recurringPayment?: undefined;
 };
-export type PaymentMethod = CardPaymentMethod | VippsPaymentMethod;
+export type PaymentMethod = CardPaymentMethod | NonRecurringPaymentMethod;
 
 export type PaymentSelection =
   | {
-      paymentType: PaymentType.Vipps;
+      paymentType: PaymentType.Vipps | PaymentType.ApplePay;
     }
   | {
       paymentType: PaymentType.PaymentCard;
