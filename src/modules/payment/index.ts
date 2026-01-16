@@ -6,7 +6,7 @@ export {
 export {
   type PaymentSelection,
   type PaymentMethod,
-  type VippsPaymentMethod,
+  type NonRecurringPaymentMethod,
   type CardPaymentMethod,
 } from './types';
 export {PaymentSelectionSectionItem} from './PaymentSelectionSectionItem';

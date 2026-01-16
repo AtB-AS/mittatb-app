@@ -28,6 +28,19 @@
     "unimported": "npx unimported",
     "storybook-generate": "sb-rn-get-stories"
   },
+  "codegenConfig": {
+    "name": "AtbNativeModules",
+    "type": "modules",
+    "jsSrcsDir": "src/specs",
+    "android": {
+      "javaPackageName": "no.mittatb.nativemodules"
+    },
+    "ios": {
+      "modulesProvider": {
+        "PaymentHandler": "RCTPaymentHandler"
+      }
+    }
+  },
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
     "@atb-as/config-specs": "9.2.1",

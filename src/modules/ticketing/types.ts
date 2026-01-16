@@ -23,6 +23,7 @@ export enum PaymentType {
   Visa = 3,
   Mastercard = 4,
   Amex = 5,
+  ApplePay = 6,
 }
 
 export type RecurringPayment = {

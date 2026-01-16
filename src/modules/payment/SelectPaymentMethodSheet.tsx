@@ -16,7 +16,7 @@ import {
   CardPaymentMethod,
   PaymentMethod,
   PaymentSelection,
-  VippsPaymentMethod,
+  NonRecurringPaymentMethod,
 } from './types';
 import {SinglePaymentMethod} from './SinglePaymentMethod';
 import {MultiplePaymentMethodsRadioSection} from './MultiplePaymentMethodsRadioSection';
@@ -61,8 +61,8 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
     (paymentType) => ({paymentType}),
   );
   const singlePaymentMethods = defaultPaymentMethods.filter(
-    (method): method is VippsPaymentMethod =>
-      method.paymentType === PaymentType.Vipps,
+    (method): method is NonRecurringPaymentMethod =>
+      [PaymentType.Vipps, PaymentType.ApplePay].includes(method.paymentType),
   );
 
   const multiplePaymentMethods = defaultPaymentMethods.filter(
