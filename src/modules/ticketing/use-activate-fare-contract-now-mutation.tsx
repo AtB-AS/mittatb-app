@@ -5,8 +5,7 @@ import {RequestError} from '@atb/api/utils';
 
 export const useActivateFareContractNowMutation = () => {
   return useMutation({
-    mutationFn: (fareContractId: string) =>
-      activateFareContractNow(fareContractId),
+    mutationFn: activateFareContractNow,
     onError: (error: RequestError) => {
       const httpCode = error.http?.code ?? 'UNKNOWN';
       Bugsnag.notify({
