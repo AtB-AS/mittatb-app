@@ -662,7 +662,11 @@ function EstimatedCallRow({
             style={styles.boardingInfo}
             pause="before"
           >
-            {t(DepartureDetailsTexts.messages.closed)}
+            {t(
+              DepartureDetailsTexts.messages.notStoppingHere(
+                t(getTranslatedModeName(mode)),
+              ),
+            )}
           </AccessibleText>
         )}
         {!call.cancellation &&

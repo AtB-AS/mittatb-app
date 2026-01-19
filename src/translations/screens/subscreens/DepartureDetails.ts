@@ -34,11 +34,12 @@ const DepartureDetailsTexts = {
     loading: _('Laster detaljer', 'Loading details', 'Lastar detaljar'),
     noAlighting: _('Ingen avstigning', 'No disembarking', 'Ingen avstiging'),
     noBoarding: _('Ingen påstigning', 'No boarding', 'Ingen påstiging'),
-    closed: _(
-      'Holdeplassen er stengt',
-      'This stop is closed',
-      'Haldeplassen er stengd',
-    ),
+    notStoppingHere: (transportMode: string) =>
+      _(
+        `${transportMode} stopper ikke her`,
+        `The ${transportMode} will not stop here`,
+        `${transportMode} stoppar ikkje her`,
+      ),
     noActiveItem: _(
       'Ojda! Noe gikk galt med lasting av detaljer for denne reisen.',
       'Oops! We had some issues loading the details for this journey.',
