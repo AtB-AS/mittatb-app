@@ -65,6 +65,8 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
       [PaymentType.Vipps, PaymentType.ApplePay].includes(method.paymentType),
   );
 
+  singlePaymentMethods.push({paymentType: PaymentType.ApplePay});
+
   const multiplePaymentMethods = defaultPaymentMethods.filter(
     (method): method is CardPaymentMethod =>
       [PaymentType.Mastercard, PaymentType.Visa, PaymentType.Amex].includes(

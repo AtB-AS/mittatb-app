@@ -17,7 +17,7 @@ import {useIsLoading} from '@atb/utils/use-is-loading';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG_NUMBER, IS_QA_ENV} from '@env';
-import React from 'react';
+import React, {useState} from 'react';
 import {View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
@@ -46,6 +46,8 @@ import {
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {NativePaymentHandler} from '@atb/specs/NativePaymentHandler';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -78,6 +80,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
   const focusRef = useFocusOnLoad(navigation);
 
+  const [applePayResult, setApplePayResult] = useState<boolean | null>(null);
+
   return (
     <>
       <FullScreenView
@@ -100,6 +104,25 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           style={style.contentContainer}
         >
           <View style={style.mediumGap}>
+            <Button
+              expanded={true}
+              text="Apple pay!"
+              onPress={() => {
+                NativePaymentHandler.startPayment(100, (success) => {
+                  setApplePayResult(success);
+                });
+              }}
+            />
+            {applePayResult !== null && (
+              <MessageInfoBox
+                type={applePayResult ? 'valid' : 'error'}
+                message={
+                  applePayResult
+                    ? 'You did the apple pay! 🍎'
+                    : ':( no apple pay'
+                }
+              />
+            )}
             <GlobalMessage
               style={style.globalMessage}
               globalMessageContext={GlobalMessageContextEnum.appProfile}
