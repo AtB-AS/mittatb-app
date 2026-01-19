@@ -1,16 +1,22 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useEffect, useRef} from 'react';
+import {useEffect} from 'react';
 import {
   StyleProp,
   ViewStyle,
-  Animated,
-  Easing,
   Dimensions,
   View,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withTiming,
+  interpolate,
+  Easing,
+  SharedValue,
+} from 'react-native-reanimated';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
-const AnimatedVerticalLineSegment = Animated.createAnimatedComponent(View);
 
 export const LineWithVerticalBars = ({
   backgroundColor,
@@ -57,17 +63,20 @@ export const LineWithVerticalBars = ({
  * @returns the current animated offset value
  */
 const useAnimatedVerticalLineOffset = (animate: boolean | undefined = true) => {
-  const animatedOffset = useRef(new Animated.Value(0)).current;
+  const animatedOffset = useSharedValue(0);
   useEffect(() => {
-    if (!animate) return animatedOffset.stopAnimation();
-    return Animated.loop(
-      Animated.timing(animatedOffset, {
-        toValue: 1,
+    if (!animate) {
+      animatedOffset.value = 0;
+      return;
+    }
+    animatedOffset.value = withRepeat(
+      withTiming(1, {
         duration: 1000,
-        useNativeDriver: true,
         easing: Easing.linear,
       }),
-    ).start();
+      -1,
+      false,
+    );
   }, [animate, animatedOffset]);
   return animatedOffset;
 };
@@ -87,30 +96,37 @@ const VerticalLine = ({
   index,
   color,
 }: {
-  offset: Animated.Value;
+  offset: SharedValue<number>;
   index: number;
   color: string;
 }) => {
   const styles = useStyles();
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: interpolate(
+            offset.value,
+            [0, 1],
+            [SPACE_BETWEEN_VERTICAL_LINES, 0],
+          ),
+        },
+        {
+          skewX: '150deg',
+        },
+      ],
+    };
+  });
+
   return (
-    <AnimatedVerticalLineSegment
+    <Animated.View
       style={[
         styles.verticalLine,
         {
           backgroundColor: color,
           left: index * SPACE_BETWEEN_VERTICAL_LINES - 10,
-          transform: [
-            {
-              translateX: offset.interpolate({
-                inputRange: [0, 1],
-                outputRange: [SPACE_BETWEEN_VERTICAL_LINES, 0],
-              }),
-            },
-            {
-              skewX: '150deg',
-            },
-          ],
         },
+        animatedStyle,
       ]}
       pointerEvents="none"
     />
