@@ -399,5 +399,7 @@ function getTransportModeSpriteName(mode?: AnyMode, subMode?: AnySubMode) {
       return 'citybike';
     case 'car':
       return 'sharedcar';
+    case 'scooter':
+      return 'scooter';
   }
 }
