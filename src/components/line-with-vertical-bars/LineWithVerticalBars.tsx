@@ -1,11 +1,6 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useEffect} from 'react';
-import {
-  StyleProp,
-  ViewStyle,
-  Dimensions,
-  View,
-} from 'react-native';
+import {StyleProp, ViewStyle, Dimensions, View} from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
