@@ -66,7 +66,6 @@ import {GeofencingZoneCode} from '@atb-as/theme';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {usePreferencesContext} from '../preferences';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
-import {useRemoteConfigContext} from '../remote-config';
 import {GeofencingZonesAsTiles} from './components/mobility/GeofencingZonesAsTiles';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
@@ -89,8 +88,6 @@ export const Map = (props: MapProps) => {
     preferences: {showShmoTesting},
   } = usePreferencesContext();
 
-  const {enable_geofencing_zones_as_tiles: a} = useRemoteConfigContext();
-  const enable_geofencing_zones_as_tiles = !!a; // todo remove, just for dev
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<Camera>(null);
   const mapViewRef = useRef<MapView>(null);
@@ -119,7 +116,8 @@ export const Map = (props: MapProps) => {
   const selectedFeatureIsAVehicle =
     isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
 
-  const {isGeofencingZonesEnabled} = useFeatureTogglesContext();
+  const {isGeofencingZonesEnabled, isGeofencingZonesAsTilesEnabled} =
+    useFeatureTogglesContext();
 
   const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
@@ -147,7 +145,7 @@ export const Map = (props: MapProps) => {
   // and tile requests are only sent when they are used anyway.
   const mapViewConfig = useMapViewConfig({
     includeVehiclesAndStationsVectorSource: true,
-    includeGeofencingZonesVectorSource: enable_geofencing_zones_as_tiles,
+    includeGeofencingZonesVectorSource: isGeofencingZonesAsTilesEnabled,
     systemId: systemId ?? '',
     vehicleTypeId: vehicleTypeId ?? '',
   });
@@ -269,7 +267,7 @@ export const Map = (props: MapProps) => {
         // - have a bottom sheet with departures just for the clicked quay
         return; // currently - do nothing
       } else if (
-        !enable_geofencing_zones_as_tiles &&
+        !isGeofencingZonesAsTilesEnabled &&
         isFeatureGeofencingZone(featureToSelect)
       ) {
         const gfzProps = featureToSelect?.properties?.geofencingZoneCustomProps;
@@ -283,7 +281,7 @@ export const Map = (props: MapProps) => {
       activeShmoBooking?.state,
       showGeofencingZones,
       hideSnackbar,
-      enable_geofencing_zones_as_tiles,
+      isGeofencingZonesAsTilesEnabled,
       selectedFeature,
       showGeofencingZoneSnackbar,
     ],
@@ -368,6 +366,11 @@ export const Map = (props: MapProps) => {
     setFollowUserLocation(false);
   }, [paddingBottomMap]);
 
+  console.log(
+    'isGeofencingZonesAsTilesEnabled',
+    isGeofencingZonesAsTilesEnabled,
+  );
+
   return (
     <View style={{flex: 1}}>
       <View style={{flex: 1}}>
@@ -435,7 +438,7 @@ export const Map = (props: MapProps) => {
           {showGeofencingZones &&
             !vehicleError &&
             !vehicleIsLoading &&
-            (enable_geofencing_zones_as_tiles ? (
+            (isGeofencingZonesAsTilesEnabled ? (
               <GeofencingZonesAsTiles
                 systemId={systemId}
                 vehicleTypeId={vehicleTypeId}
@@ -478,7 +481,7 @@ export const Map = (props: MapProps) => {
           <Snackbar
             {...snackbarProps}
             onHideSnackbar={
-              enable_geofencing_zones_as_tiles ? hideSnackbar : undefined
+              isGeofencingZonesAsTilesEnabled ? hideSnackbar : undefined
             }
           />
         )}
