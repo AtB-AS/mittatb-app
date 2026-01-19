@@ -194,7 +194,6 @@ export const TravelDetailsMapScreenComponent = ({
             setShouldTrack={setShouldTrack}
             mode={mode}
             subMode={subMode}
-            zoomLevel={zoomLevel}
             isError={isLiveConnected}
           />
         )}
@@ -236,7 +235,6 @@ type LiveVehicleMarkerProps = {
   mode?: AnyMode;
   subMode?: AnySubMode;
   setShouldTrack: React.Dispatch<React.SetStateAction<boolean>>;
-  zoomLevel: number;
   isError: boolean;
 };
 
@@ -282,7 +280,7 @@ const LiveVehicleMarker = ({
     ],
   };
 
-  const {iconImage, arrowImage} = getSpriteNames(
+  const {iconImage, arrowImage} = getVehiclePinSpriteNames(
     isStale,
     isError,
     themeName,
@@ -292,47 +290,57 @@ const LiveVehicleMarker = ({
 
   const ARROW_OFFSET = 25;
 
-  const layers = [
-    <MapboxGL.SymbolLayer
-      id={`liveVehicleIcon_${vehicle.mode}`}
-      key={`liveVehicleIcon_${vehicle.mode}`}
-      style={{
-        iconImage,
-        iconAllowOverlap: true,
-        iconIgnorePlacement: true,
-      }}
-    />,
-  ];
-
-  if (!isError && !isStale && vehicle.bearing) {
-    layers.push(
+  const layers = useMemo<React.ReactElement[]>(() => {
+    const result: React.ReactElement[] = [
       <MapboxGL.SymbolLayer
-        id={`liveDirectionArrow_${vehicle.mode}`}
-        key={`liveDirectionArrow_${vehicle.mode}`}
+        id={`liveVehicleIcon_${vehicle.mode}`}
+        key={`liveVehicleIcon_${vehicle.mode}`}
         style={{
-          iconImage: arrowImage,
+          iconImage,
           iconAllowOverlap: true,
           iconIgnorePlacement: true,
-          iconRotationAlignment: 'map',
-          iconRotate: vehicle.bearing,
-          iconOffset: [0, -ARROW_OFFSET],
         }}
       />,
-    );
-  }
+    ];
+
+    if (!isError && !isStale && vehicle.bearing != null) {
+      result.push(
+        <MapboxGL.SymbolLayer
+          id={`liveDirectionArrow_${vehicle.mode}`}
+          key={`liveDirectionArrow_${vehicle.mode}`}
+          style={{
+            iconImage: arrowImage,
+            iconAllowOverlap: true,
+            iconIgnorePlacement: true,
+            iconRotationAlignment: 'map',
+            iconRotate: vehicle.bearing,
+            iconOffset: [0, -ARROW_OFFSET],
+          }}
+        />,
+      );
+    }
+
+    return result;
+  }, [
+    vehicle.mode,
+    vehicle.bearing,
+    iconImage,
+    arrowImage,
+    isError,
+    isStale,
+    ARROW_OFFSET,
+  ]);
 
   return (
-    <>
-      <MapboxGL.ShapeSource
-        id={`liveIconSource_${vehicle.mode}`}
-        shape={PointFeatureCollection}
-        onPress={() => {
-          setShouldTrack(true);
-        }}
-      >
-        {layers}
-      </MapboxGL.ShapeSource>
-    </>
+    <MapboxGL.ShapeSource
+      id={`liveIconSource_${vehicle.mode}`}
+      shape={PointFeatureCollection}
+      onPress={() => {
+        setShouldTrack(true);
+      }}
+    >
+      {layers}
+    </MapboxGL.ShapeSource>
   );
 };
 
@@ -345,7 +353,7 @@ const useStyles = StyleSheet.createThemeHook(() => ({
   },
 }));
 
-function getSpriteNames(
+function getVehiclePinSpriteNames(
   isStale: boolean,
   isError: boolean,
   themeName: string,
