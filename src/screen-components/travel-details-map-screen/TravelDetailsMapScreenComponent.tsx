@@ -106,7 +106,6 @@ export const TravelDetailsMapScreenComponent = ({
   });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
-  const [zoomLevel, setZoomLevel] = useState<number>(FOLLOW_ZOOM_LEVEL);
 
   /* adding onCameraChanged to <MapView> caused an internal mapbox error in the iOS stage build version, so use the deprecated onRegionIsChanging instead for now and hope the error will be fixed when onRegionIsChanging is removed in the next mapbox version*/
   /* on Android, onRegionIsChanging is very laggy, so use the correct onCameraChanged instead */
@@ -126,10 +125,6 @@ export const TravelDetailsMapScreenComponent = ({
             }
           },
         };
-
-  const onMapIdle = (state: MapState) => {
-    setZoomLevel(state.properties.zoom);
-  };
 
   useEffect(() => {
     const location = liveVehicle?.location;
@@ -153,7 +148,6 @@ export const TravelDetailsMapScreenComponent = ({
         pitchEnabled={false}
         {...mapViewConfig}
         {...mapCameraTrackingMethod}
-        onMapIdle={onMapIdle}
         onDidFinishLoadingMap={() => setLoadedMap(true)}
       >
         <MapboxGL.Camera
