@@ -34,13 +34,13 @@ export const ActivateNowBottomSheet = ({
   const {theme} = useThemeContext();
   const {logEvent} = useAnalyticsContext();
   const {
-    mutateAsync,
-    isPending: activateNowLoading,
-    isError: activateNowError,
+    mutateAsync: activateNowAsync,
+    isPending: activateNowIsPending,
+    isError: activateNowIsError,
   } = useActivateFareContractNowMutation();
 
-  const onActivate = async () => {
-    await mutateAsync(fareContractId, {
+  const onActivate = () => {
+    activateNowAsync(fareContractId, {
       onSuccess: () => {
         logEvent('Ticketing', 'Activated fare contract ahead of time', {
           fareProductType,
@@ -58,7 +58,7 @@ export const ActivateNowBottomSheet = ({
       closeCallback={() => giveFocus(onCloseFocusRef)}
     >
       <View style={styles.container}>
-        {activateNowError && (
+        {!!activateNowIsError && (
           <MessageInfoBox
             message={t(FareContractTexts.activateNow.genericError)}
             type="error"
@@ -76,7 +76,7 @@ export const ActivateNowBottomSheet = ({
           onPress={onActivate}
           text={t(FareContractTexts.activateNow.confirm)}
           rightIcon={{svg: Confirm}}
-          loading={activateNowLoading}
+          loading={activateNowIsPending}
         />
         <Button
           expanded={true}
