@@ -1,6 +1,6 @@
 {
   "name": "atb-e2e",
-  "version": "1.78.0",
+  "version": "1.78.1",
   "private": true,
   "license": "EUPL-1.2",
   "type": "module",
