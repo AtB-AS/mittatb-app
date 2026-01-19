@@ -5,7 +5,6 @@ import {
   FareProductTypeConfig,
   useFirestoreConfigurationContext,
   findReferenceDataById,
-  isProductSellableInApp,
   SupplementProduct,
 } from '@atb/modules/configuration';
 import {
@@ -24,6 +23,7 @@ import {enumFromString} from '@atb/utils/enum-from-string';
 import {isDefined} from '@atb/utils/presence';
 import {getBaggageProducts} from '@atb/modules/fare-contracts';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
+import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 
 type State = {
   isError: boolean;

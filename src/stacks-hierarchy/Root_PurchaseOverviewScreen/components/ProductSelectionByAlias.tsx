@@ -7,7 +7,6 @@ import {
 import {InteractiveColor} from '@atb/theme/colors';
 import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {isProductSellableInApp} from '@atb/modules/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {ProductAliasChip} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductAliasChip';
 import {
@@ -20,6 +19,7 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
+import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 
 type Props = {
   color: InteractiveColor;
