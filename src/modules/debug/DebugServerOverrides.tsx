@@ -1,5 +1,5 @@
 import {AxiosRequestHeaders} from 'axios';
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
@@ -8,10 +8,11 @@ import {
   SelectionInlineSectionItem,
   TextInputSectionItem,
 } from '@atb/components/sections';
-import {useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {storage} from '@atb/modules/storage';
+import {AddHeaderOverride} from './AddHeaderOverride';
 
 type DebugServerOverride = {
   match: RegExp;
@@ -19,12 +20,22 @@ type DebugServerOverride = {
   headers?: AxiosRequestHeaders;
 };
 
+type OftenUsedOverride = DebugServerOverride & {label: string};
+
+const oftenUsedOverrides: OftenUsedOverride[] = [
+  {
+    label: 'Local BFF',
+    match: RegExp('/.*/bff\/?.*/'),
+    newValue: 'http://localhost:8080/',
+  },
+];
+
 export function DebugServerOverrides() {
   const [overrides, setOverrides] = React.useState<DebugServerOverride[]>([]);
   const [newHeaders, setNewHeaders] = React.useState<string>('');
-  const {theme} = useThemeContext();
   const focusRef = useRef(null);
   const {open} = useBottomSheetContext();
+  const styles = useStyles();
 
   const addOverride = useCallback(
     (override: DebugServerOverride) => {
@@ -39,7 +50,7 @@ export function DebugServerOverrides() {
   );
 
   return (
-    <View ref={focusRef} style={{gap: theme.spacing.medium}}>
+    <View ref={focusRef} style={styles.overridesContainer}>
       {overrides.length ? (
         overrides.filter(onlyUniquesBasedOnField('match')).map((o) => (
           <SelectionInlineSectionItem
@@ -95,33 +106,40 @@ export function DebugServerOverrides() {
 }
 
 function DebugServerInput(props: {
+  existingOverride?: DebugServerOverride;
   onClose: (override: DebugServerOverride) => void;
 }) {
-  const {theme} = useThemeContext();
-  const [newMatch, setNewMatch] = React.useState<string>('');
+  const [match, setMatch] = React.useState<string>('');
   const [newValue, setNewValue] = React.useState<string>('');
+  const [headers, setHeaders] = React.useState<Map<string, string>>(new Map());
   const {close} = useBottomSheetContext();
+  const styles = useStyles();
+
+  function addExistingOverride(o: DebugServerOverride) {
+    setMatch(o.match.source);
+    setNewValue(o.newValue);
+  }
+
+  useEffect(() => {
+    if (props.existingOverride) {
+      addExistingOverride(props.existingOverride);
+    } else {
+      setHeaders((prev) => new Map(prev).set('Dummy key', 'Dummy value'));
+    }
+  }, [props.existingOverride]);
+
   return (
-    <View
-      style={{
-        paddingVertical: theme.spacing.large,
-        paddingHorizontal: theme.spacing.medium,
-        gap: theme.spacing.medium,
-      }}
-    >
+    <View style={styles.overrideInput}>
       <ThemeText typography="heading--medium">Add new override</ThemeText>
       <ThemeText typography="body__primary">
         Any request matching the regex will get its baseURL replaced by the New
         baseURL.
       </ThemeText>
-      <ThemeText typography="body__secondary">
-        Useful for rerouting some requests to i.e. local version of BFF
-      </ThemeText>
       <TextInputSectionItem
         label="Regex"
         placeholder=".*"
-        value={newMatch}
-        onChangeText={setNewMatch}
+        value={match}
+        onChangeText={setMatch}
         autoCapitalize="none"
       />
       <TextInputSectionItem
@@ -131,26 +149,58 @@ function DebugServerInput(props: {
         value={newValue}
         autoCapitalize="none"
       />
-      <View style={{gap: theme.spacing.small}}>
+      <View>
+        <ThemeText typography="body__secondary">Headers (optional)</ThemeText>
+        {[...headers.entries()].map(([key, value]) => (
+          <AddHeaderOverride
+            existingHeaderKey={key}
+            existingHeaderValue={value}
+            onSave={() => {}}
+          />
+        ))}
+      </View>
+      <View style={styles.oftenUsedContainer}>
         <ThemeText typography="body__secondary">Often used</ThemeText>
-        <Button
-          type="small"
-          expanded={false}
-          onPress={() => {
-            setNewMatch('.*\/bff\/?.*');
-            setNewValue('http://localhost:8080/');
-          }}
-          text="Local BFF"
-        />
+        <View style={styles.oftenUsedOptions}>
+          {oftenUsedOverrides.map((o) => (
+            <Button
+              key={o.label}
+              type="small"
+              expanded={false}
+              onPress={() => {
+                addExistingOverride(o);
+              }}
+              text={o.label}
+            />
+          ))}
+        </View>
       </View>
       <Button
         text="Add Override"
         expanded={true}
         onPress={() => {
-          props.onClose({match: new RegExp(newMatch), newValue});
+          props.onClose({match: new RegExp(match), newValue});
           close();
         }}
       />
     </View>
   );
 }
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  overridesContainer: {
+    gap: theme.spacing.medium,
+  },
+  overrideInput: {
+    paddingVertical: theme.spacing.large,
+    paddingHorizontal: theme.spacing.medium,
+    gap: theme.spacing.medium,
+  },
+  oftenUsedContainer: {
+    gap: theme.spacing.small,
+  },
+  oftenUsedOptions: {
+    gap: theme.spacing.small,
+    flexDirection: 'row',
+  },
+}));
