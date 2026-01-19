@@ -2,7 +2,7 @@ import axios, {AxiosError, Cancel} from 'axios';
 import {FirebaseAuthIdHeaderName, RequestIdHeaderName} from './headers';
 import {ErrorResponse} from '@atb-as/utils';
 import {PartialField} from '@atb/utils/object';
-import { OperatorsResponse } from './types/mobility';
+import {OperatorsResponse} from './types/mobility';
 
 /**
  * Error from API requests or Axios client errors.
@@ -115,4 +115,4 @@ export const getOperatorNameById = (
     (operator) => operator.id === operatorId,
   );
   return operator?.name.translations[0].value;
-}
+};

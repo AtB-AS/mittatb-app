@@ -103,10 +103,12 @@ export const sendSupportRequest = (
     },
   });
 
-  export const getOperatorsEntur = (
+export const getOperatorsEntur = (
   opts?: AxiosRequestConfig,
-): Promise<OperatorsResponse> => 
-  client.get<OperatorsResponse>('/mobility/v1/operators', {
+): Promise<OperatorsResponse> =>
+  client
+    .get<OperatorsResponse>('/mobility/v1/operators', {
       ...opts,
       authWithIdToken: true,
-  }).then((response) => OperatorsResponseSchema.parse(response.data))
+    })
+    .then((response) => OperatorsResponseSchema.parse(response.data));

@@ -246,7 +246,7 @@ export const MobilityTexts = {
       end: _('Avslutt turen', 'End the trip', 'Avslutt turen'),
     },
   },
-  fareContractHeader: (formFactor: FormFactor, operatorName:string) => {
+  fareContractHeader: (formFactor: FormFactor, operatorName: string) => {
     switch (formFactor) {
       case FormFactor.Scooter:
       case FormFactor.ScooterStanding:
