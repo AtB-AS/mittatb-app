@@ -23,6 +23,7 @@ import {isDefined} from '@atb/utils/presence';
 import {getBaggageProducts} from '@atb/modules/fare-contracts';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {useQuery} from '@tanstack/react-query';
+import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 
 const mapUsers = (
   users: {[userProfile: string]: number},
