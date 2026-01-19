@@ -10,14 +10,6 @@ on:
         options:
           - 'true'
           - 'false'
-      new-architecture-patch:
-        description: 'Patch app to use new architecture'
-        required: false
-        type: choice
-        default: 'false'
-        options:
-          - 'true'
-          - 'false'
   push:
     branches:
       - master
@@ -34,13 +26,10 @@ jobs:
     timeout-minutes: 360
     runs-on: macOS-14
     env:
-      KEYCHAIN_NAME: 'CI'
+      KEYCHAIN_NAME: "CI"
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
-      - name: Apply new architecture patch
-        if: inputs.new-architecture-patch == 'true'
-        run: git apply docs/architecture/new-architecture.patch && yarn install
       - name: Add Entur private registry credentials
         run: sh ./scripts/add-entur-private-registry.sh
         env:

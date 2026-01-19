@@ -1,0 +1,75 @@
+diff --git a/node_modules/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTEnhancedScrollView.mm b/node_modules/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTEnhancedScrollView.mm
+index 5720429..b3481c1 100644
+--- a/node_modules/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTEnhancedScrollView.mm
++++ b/node_modules/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTEnhancedScrollView.mm
+@@ -102,6 +102,20 @@ - (void)setContentOffset:(CGPoint)contentOffset
+       RCTSanitizeNaNValue(contentOffset.y, @"scrollView.contentOffset.y"));
+ }
+ 
++- (void)setCenterContent:(BOOL)centerContent
++{
++  if (_centerContent != centerContent) {
++    _centerContent = centerContent;
++    [self centerContentIfNeeded];
++  }
++}
++
++- (void)setContentSize:(CGSize)contentSize
++{
++  [super setContentSize:contentSize];
++  [self centerContentIfNeeded];
++}
++
+ - (void)setFrame:(CGRect)frame
+ {
+   [super setFrame:frame];
+@@ -156,6 +170,12 @@ - (void)setDelegate:(id<UIScrollViewDelegate>)delegate
+ 
+ #pragma mark - UIScrollViewDelegate
+ 
++- (void)scrollViewDidScroll:(__unused UIScrollView *)scrollView
++{
++  // Empty implementation. This method exists to prevent crashes when the delegate splitter
++  // forwards scrollViewDidScroll: messages to RCTEnhancedScrollView.
++}
++
+ - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView
+                      withVelocity:(CGPoint)velocity
+               targetContentOffset:(inout CGPoint *)targetContentOffset
+diff --git a/node_modules/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm b/node_modules/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm
+index 15a5ab7..b3f9f68 100644
+--- a/node_modules/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm
++++ b/node_modules/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm
+@@ -394,11 +394,20 @@ - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &
+ 
+   MAP_SCROLL_VIEW_PROP(zoomScale);
+ 
+-  if (oldScrollViewProps.contentInset != newScrollViewProps.contentInset) {
++  RCTEnhancedScrollView *scrollView = (RCTEnhancedScrollView *)_scrollView;
++
++  // When disabling centerContent, reset inset to prop value
++  // (enabling is handled automatically by the setCenterContent: setter)
++  if (oldScrollViewProps.centerContent && !newScrollViewProps.centerContent) {
++    scrollView.contentInset = RCTUIEdgeInsetsFromEdgeInsets(newScrollViewProps.contentInset);
++  }
++
++  // Only apply contentInset from props if centerContent is disabled
++  // When centerContent is enabled, the inset is calculated by centerContentIfNeeded
++  if (oldScrollViewProps.contentInset != newScrollViewProps.contentInset && !newScrollViewProps.centerContent) {
+     _scrollView.contentInset = RCTUIEdgeInsetsFromEdgeInsets(newScrollViewProps.contentInset);
+   }
+ 
+-  RCTEnhancedScrollView *scrollView = (RCTEnhancedScrollView *)_scrollView;
+   if (oldScrollViewProps.contentOffset != newScrollViewProps.contentOffset) {
+     _scrollView.contentOffset = RCTCGPointFromPoint(newScrollViewProps.contentOffset);
+   }
+@@ -680,6 +689,9 @@ - (void)prepareForRecycle
+ 
+   const auto &props = static_cast<const ScrollViewProps &>(*_props);
+   _scrollView.contentOffset = RCTCGPointFromPoint(props.contentOffset);
++  _scrollView.contentInset = RCTUIEdgeInsetsFromEdgeInsets(props.contentInset);
++  // Reset zoom scale to default
++  _scrollView.zoomScale = 1.0;
+   // We set the default behavior to "never" so that iOS
+   // doesn't do weird things to UIScrollView insets automatically
+   // and keeps it as an opt-in behavior.

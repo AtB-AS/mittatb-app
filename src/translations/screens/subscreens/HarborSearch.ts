@@ -47,9 +47,9 @@ const HarborSearchTexts = {
       'Hei, er du på nett? Vi kan ikkje hente reiseforslag sidan tilkoplinga di til internett manglar eller er ustabil.',
     ),
     defaultError: _(
-      'Oops - vi feila med søket. Supert om du prøver igjen 🤞',
-      'Whoops – our search failed. Please try again 🤞',
-      'Oops - noko gjekk gale. Supert om du prøver på nytt 🤞',
+      'Noe gikk galt med søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      'Something went wrong with the search. Please try again or contact customer service for assistance.',
+      'Noko gjekk gale med søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
     ),
     emptyResult: _(
       'Fant ingen søkeresultat',

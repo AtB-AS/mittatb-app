@@ -15,10 +15,19 @@ import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
+import {TripSearchCallerRoute} from '../TabNav_DashboardStack/types';
 
 export type MapScreenParams = {
   initialFilters?: MapFilterType;
 };
+
+const callerRoute: TripSearchCallerRoute = [
+  'Root_TabNavigatorStack',
+  {
+    screen: 'TabNav_MapStack',
+    params: {screen: 'Map_RootScreen', params: {}},
+  },
+];
 
 export const Map_RootScreen = ({
   navigation,
@@ -65,13 +74,16 @@ export const Map_RootScreen = ({
 
   const navigateToTripSearch: TravelFromAndToLocationsCallback = useCallback(
     (location, destination) => {
-      navigation.navigate({
-        name: 'Dashboard_TripSearchScreen',
+      navigation.navigate('Root_TabNavigatorStack', {
+        screen: 'TabNav_DashboardStack',
         params: {
-          [destination]: location,
-          callerRoute: {name: 'Map_RootScreen'},
+          screen: 'Dashboard_TripSearchScreen',
+          params: {
+            [destination]: location,
+            callerRoute,
+          },
+          merge: true,
         },
-        merge: true,
       });
     },
     [navigation],

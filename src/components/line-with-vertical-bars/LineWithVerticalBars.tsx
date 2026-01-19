@@ -1,17 +1,17 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useEffect, useRef} from 'react';
-import {
-  StyleProp,
-  ViewStyle,
-  Animated,
+import {useEffect} from 'react';
+import {StyleProp, ViewStyle, Dimensions, View} from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withTiming,
+  interpolate,
   Easing,
-  Dimensions,
-  View,
-} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+  SharedValue,
+} from 'react-native-reanimated';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
-const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
 export const LineWithVerticalBars = ({
   backgroundColor,
@@ -58,17 +58,20 @@ export const LineWithVerticalBars = ({
  * @returns the current animated offset value
  */
 const useAnimatedVerticalLineOffset = (animate: boolean | undefined = true) => {
-  const animatedOffset = useRef(new Animated.Value(0)).current;
+  const animatedOffset = useSharedValue(0);
   useEffect(() => {
-    if (!animate) return animatedOffset.stopAnimation();
-    return Animated.loop(
-      Animated.timing(animatedOffset, {
-        toValue: 1,
+    if (!animate) {
+      animatedOffset.value = 0;
+      return;
+    }
+    animatedOffset.value = withRepeat(
+      withTiming(1, {
         duration: 1000,
-        useNativeDriver: true,
         easing: Easing.linear,
       }),
-    ).start();
+      -1,
+      false,
+    );
   }, [animate, animatedOffset]);
   return animatedOffset;
 };
@@ -88,30 +91,38 @@ const VerticalLine = ({
   index,
   color,
 }: {
-  offset: Animated.Value;
+  offset: SharedValue<number>;
   index: number;
   color: string;
 }) => {
-  return (
-    <AnimatedLinearGradient
-      style={[
-        useStyles().verticalLine,
+  const styles = useStyles();
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
         {
-          left: index * SPACE_BETWEEN_VERTICAL_LINES - 10,
-          transform: [
-            {
-              translateX: offset.interpolate({
-                inputRange: [0, 1],
-                outputRange: [SPACE_BETWEEN_VERTICAL_LINES, 0],
-              }),
-            },
-          ],
+          translateX: interpolate(
+            offset.value,
+            [0, 1],
+            [SPACE_BETWEEN_VERTICAL_LINES, 0],
+          ),
         },
+        {
+          skewX: '150deg',
+        },
+      ],
+    };
+  });
+
+  return (
+    <Animated.View
+      style={[
+        styles.verticalLine,
+        {
+          backgroundColor: color,
+          left: index * SPACE_BETWEEN_VERTICAL_LINES - 10,
+        },
+        animatedStyle,
       ]}
-      useAngle={true}
-      angle={120}
-      locations={[0.25, 0.25, 0.75, 0.75]}
-      colors={['transparent', color, color, 'transparent']}
       pointerEvents="none"
     />
   );
@@ -131,7 +142,7 @@ const useStyles = StyleSheet.createThemeHook(() => ({
   verticalLine: {
     position: 'absolute',
     bottom: 0,
-    width: 20,
+    width: 13,
     height: '100%',
   },
 }));

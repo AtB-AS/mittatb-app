@@ -43,16 +43,22 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {BonusDashboard} from './components/BonusDashboard';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
-
-type DashboardRouteName = 'Dashboard_RootScreen';
-const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
+import {LocationSearchCallerRoute} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 
 type RootProps = DashboardScreenProps<'Dashboard_RootScreen'>;
+const callerRoute: LocationSearchCallerRoute = [
+  'Root_TabNavigatorStack',
+  {
+    screen: 'TabNav_DashboardStack',
+    params: {
+      screen: 'Dashboard_RootScreen',
+      params: {},
+      merge: true,
+    },
+  },
+];
 
-export const Dashboard_RootScreen: React.FC<RootProps> = ({
-  navigation,
-  route,
-}) => {
+export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
   const style = useStyle();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
@@ -129,8 +135,10 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
         callerRouteParam === 'fromLocation'
           ? t(SharedTexts.from)
           : t(SharedTexts.to),
-      callerRouteName: DashboardRouteNameStatic,
-      callerRouteParam,
+      callerRouteConfig: {
+        route: callerRoute,
+        locationRouteParam: callerRouteParam,
+      },
       initialLocation,
       includeJourneyHistory: true,
       onlyStopPlacesCheckboxInitialState: false,
@@ -306,7 +314,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
             navigation.navigate('Dashboard_NearbyStopPlacesScreen', {
               mode: 'Favourite',
               location: undefined,
-              onCloseRoute: route.name,
+              onCloseRoute: callerRoute,
             })
           }
           onPressDeparture={(items, activeItemIndex) =>

@@ -22,6 +22,9 @@ jobs:
         run: exit 1
       - name: Checkout project
         uses: actions/checkout@v4
+      # Attempt to clean up the disk space
+      - name: Clean up runner
+        uses: ./.github/actions/android-build-cleanup-runner
       - name: Set global env vars
         run: |
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
