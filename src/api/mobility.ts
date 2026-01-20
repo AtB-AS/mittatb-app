@@ -103,7 +103,7 @@ export const sendSupportRequest = (
     },
   });
 
-export const getOperatorsEntur = (
+export const getOperators = (
   opts?: AxiosRequestConfig,
 ): Promise<OperatorsResponse> =>
   client

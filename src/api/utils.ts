@@ -107,12 +107,39 @@ export const stringifyUrl = (url: string, query: string | undefined) => {
   return url.includes('?') ? `${url}&${query}` : `${url}?${query}`;
 };
 
+const mapLanguageToLangCode = (lang: string) => {
+  switch (lang) {
+    case 'nb':
+    case 'no':
+      return 'nb';
+    case 'nn':
+    case 'nno':
+      return 'nn';
+    case 'en':
+    case 'eng':
+      return 'en';
+    default:
+      return 'en';
+  }
+};
+
 export const getOperatorNameById = (
   operatorsData: OperatorsResponse | undefined,
   operatorId: string | undefined,
+  lang:string,
 ): string | undefined => {
   const operator = operatorsData?.operators?.find(
     (operator) => operator.id === operatorId,
   );
-  return operator?.name.translations[0].value;
+  
+  const translation = operator?.name.translations.find(
+    (t) => mapLanguageToLangCode(t.language) === lang,
+  );
+
+  if (translation) {
+    return translation.value;
+  } else {
+    return operator?.name.translations[0].value;
+  }
+  
 };

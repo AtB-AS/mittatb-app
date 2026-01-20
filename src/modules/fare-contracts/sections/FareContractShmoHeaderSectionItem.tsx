@@ -36,7 +36,11 @@ export const FareContractShmoHeaderSectionItem = ({
   const dateTime = formatToLongDateTime(toDate(validTo), language);
   const label = t(FareContractTexts.shmoDetails.tripEnded(dateTime));
   const {data: operatorsData} = useGetOperatorsQuery();
-  const operatorName = getOperatorNameById(operatorsData, fc?.operatorId);
+  const operatorName = getOperatorNameById(
+    operatorsData,
+    fc?.operatorId,
+    language,
+  );
 
   return (
     <View style={[topContainer, styles.container]}>

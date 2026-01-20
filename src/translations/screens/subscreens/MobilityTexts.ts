@@ -275,9 +275,9 @@ export const MobilityTexts = {
         );
       case FormFactor.CargoBicycle:
         return _(
-          `Lastebysykkel fra ${operatorName}`,
+          `Lastesykkel fra ${operatorName}`,
           `Cargo bike from ${operatorName}`,
-          `Lastebysykkel frå ${operatorName}`,
+          `Lastesykkel frå ${operatorName}`,
         );
       case FormFactor.Moped:
         return _(
@@ -289,7 +289,7 @@ export const MobilityTexts = {
         return _(
           `Annet kjøretøy fra ${operatorName}`,
           `Other vehicle from ${operatorName}`,
-          `Annet kjøretøy frå ${operatorName}`,
+          `Anna køyretøy frå ${operatorName}`,
         );
     }
   },
