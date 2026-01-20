@@ -107,7 +107,7 @@ const VerticalLine = ({
           ),
         },
         {
-          skewX: '150deg',
+          rotateZ: '30deg',
         },
       ],
     };
@@ -141,8 +141,8 @@ const useStyles = StyleSheet.createThemeHook(() => ({
   },
   verticalLine: {
     position: 'absolute',
-    bottom: 0,
+    bottom: -5,
     width: 13,
-    height: '100%',
+    height: 25,
   },
 }));
