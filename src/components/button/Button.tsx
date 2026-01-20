@@ -129,7 +129,8 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
   };
 
   const styleText: TextStyle = {
-    width: !expanded ? '100%' : undefined,
+    // Add 1% width to the text to avoid layout issues on Android with small font sizes
+    width: !expanded ? '101%' : undefined,
   };
   const textContainer: TextStyle = {
     flex: !expanded ? undefined : 1,
