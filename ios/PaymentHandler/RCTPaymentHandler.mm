@@ -24,8 +24,8 @@ RCT_EXPORT_MODULE(NativePaymentHandler)
 - (void)startPayment:(double)price
           onComplete:(RCTResponseSenderBlock)onComplete {
   NSLog(@"OBJC: Start payment with price: %f", price);
-  [paymentHandler startPaymentFor:price completionHandler:^(BOOL success) {
-    onComplete(@[ @(success) ]);
+  [paymentHandler startPaymentFor:price completionHandler:^(NSString * _Nullable paymentData) {
+    onComplete(@[ paymentData ?: [NSNull null] ]);
   }];
 }
 

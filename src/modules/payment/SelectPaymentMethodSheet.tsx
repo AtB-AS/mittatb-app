@@ -57,9 +57,9 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   const {authenticationType} = useAuthContext();
 
   const {paymentTypes} = useFirestoreConfigurationContext();
-  const defaultPaymentMethods: PaymentMethod[] = paymentTypes.map(
-    (paymentType) => ({paymentType}),
-  );
+  const defaultPaymentMethods = paymentTypes.map((paymentType) => ({
+    paymentType,
+  }));
   const singlePaymentMethods = defaultPaymentMethods.filter(
     (method): method is NonRecurringPaymentMethod =>
       [PaymentType.Vipps, PaymentType.ApplePay].includes(method.paymentType),

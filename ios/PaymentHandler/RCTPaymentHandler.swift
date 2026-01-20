@@ -1,7 +1,7 @@
 import Foundation
 import PassKit
 
-typealias PaymentCompletionHandler = (Bool) -> Void
+typealias PaymentCompletionHandler = (String?) -> Void
 
 @objcMembers public class PaymentHandler: NSObject {
 
@@ -9,6 +9,7 @@ typealias PaymentCompletionHandler = (Bool) -> Void
   var paymentSummaryItems = [PKPaymentSummaryItem]()
   var paymentStatus = PKPaymentAuthorizationStatus.failure
   var completionHandler: PaymentCompletionHandler!
+  var paymentData: Data?
 
   static let supportedNetworks: [PKPaymentNetwork] = [
       .amex,
@@ -16,7 +17,7 @@ typealias PaymentCompletionHandler = (Bool) -> Void
       .visa
   ]
 
-  public func startPayment(for price: Float, completionHandler: @escaping (Bool) -> Void) -> Void {
+  public func startPayment(for price: Float, completionHandler: @escaping (String?) -> Void) -> Void {
     self.completionHandler = completionHandler;
 
     let singleTicket = PKPaymentSummaryItem(label: "Single ticket", amount: NSDecimalNumber(string: "47.00"), type: .final)
@@ -28,7 +29,7 @@ typealias PaymentCompletionHandler = (Bool) -> Void
     let paymentRequest = PKPaymentRequest()
     paymentRequest.paymentSummaryItems = paymentSummaryItems
     paymentRequest.merchantIdentifier = "merchant.no.mittatb.atb"
-    paymentRequest.merchantCapabilities = .capability3DS
+    paymentRequest.merchantCapabilities = .threeDSecure
     paymentRequest.countryCode = "NO"
     paymentRequest.currencyCode = "NOK"
     paymentRequest.supportedNetworks = PaymentHandler.supportedNetworks
@@ -50,7 +51,8 @@ extension PaymentHandler: PKPaymentAuthorizationControllerDelegate {
   public func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
       let errors = [Error]()
       let status = PKPaymentAuthorizationStatus.success
-      self.paymentStatus = status
+      self.paymentData = payment.token.paymentData
+      debugPrint("paymentData", String(data: payment.token.paymentData, encoding: .utf8)!)
       completion(PKPaymentAuthorizationResult(status: status, errors: errors))
   }
 
@@ -58,11 +60,18 @@ extension PaymentHandler: PKPaymentAuthorizationControllerDelegate {
     controller.dismiss {
       // The payment sheet doesn't automatically dismiss once it has finished. Dismiss the payment sheet.
       DispatchQueue.main.async {
+        var paymentDataString: String? = nil
+        if let paymentData = self.paymentData {
+          paymentDataString = String(data: paymentData, encoding: .utf8)
+        }
+
         debugPrint(self.paymentStatus.rawValue);
+        debugPrint("TOKEN", self.paymentData as Any)
+
         if self.paymentStatus == .success {
-          self.completionHandler!(true)
+          self.completionHandler!(paymentDataString)
         } else {
-          self.completionHandler!(false)
+          self.completionHandler!(nil)
         }
       }
     }
