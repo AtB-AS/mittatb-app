@@ -3,6 +3,7 @@ import {View} from 'react-native';
 import {PaymentType} from '@atb/modules/ticketing';
 import {
   Amex,
+  ApplePay,
   MasterCard,
   Vipps,
   Visa,
@@ -49,6 +50,8 @@ const Logo = ({
       return <Vipps height="100%" width="100%" />;
     case PaymentType.Amex:
       return <Amex height="100%" width="100%" />;
+    case PaymentType.ApplePay:
+      return <ApplePay height="100%" width="100%" />;
     default:
       return <ThemeIcon svg={Card} />;
   }
