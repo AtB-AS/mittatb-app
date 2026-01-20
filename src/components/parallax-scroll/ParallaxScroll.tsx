@@ -1,14 +1,16 @@
 import {StyleSheet} from '@atb/theme';
 import {useLayout} from '@atb/utils/use-layout';
-import React, {PropsWithChildren, useEffect, useRef} from 'react';
-import {
-  Animated,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  Platform,
-  RefreshControlProps,
-  View,
-} from 'react-native';
+import React, {PropsWithChildren, useCallback, useEffect, useMemo} from 'react';
+import {Platform, RefreshControlProps, View} from 'react-native';
+import Animated, {
+  Extrapolation,
+  interpolate,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+  ScrollEvent,
+} from 'react-native-reanimated';
+import {scheduleOnRN} from 'react-native-worklets';
 
 type Props = PropsWithChildren<{
   header: React.ReactNode;
@@ -28,44 +30,68 @@ export function ParallaxScroll({
   }, [contentHeight]);
 
   const styles = useStyles();
-  const scrollYRef = useRef(new Animated.Value(0)).current;
+  const scrollY = useSharedValue(0);
 
-  const headerTranslate = scrollYRef.interpolate(
-    Platform.OS === 'android'
-      ? {
-          inputRange: [0, contentHeight],
-          outputRange: [0, -(contentHeight / 2)],
-          extrapolateRight: 'extend',
-          extrapolateLeft: 'clamp',
-        }
-      : {
-          inputRange: [-contentHeight, contentHeight],
-          outputRange: [0, -contentHeight],
-          extrapolateRight: 'extend',
-          extrapolateLeft: 'clamp',
+  const {scrollYInputRange, scrollYOutputRange} = useMemo(() => {
+    return Platform.select({
+      android: {
+        scrollYInputRange: [0, contentHeight],
+        scrollYOutputRange: [0, -(contentHeight / 2)],
+      },
+      default: {
+        scrollYInputRange: [-contentHeight, contentHeight],
+        scrollYOutputRange: [0, -contentHeight],
+      },
+    });
+  }, [contentHeight]);
+
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: interpolate(
+            scrollY.value,
+            scrollYInputRange,
+            scrollYOutputRange,
+            {
+              extrapolateRight: Extrapolation.EXTEND,
+              extrapolateLeft: Extrapolation.CLAMP,
+            },
+          ),
         },
+      ],
+    };
+  });
+
+  // clone the refreshControl to avoid mutating the original prop
+  const clonedRefreshControl = refreshControl
+    ? React.cloneElement(refreshControl, {
+        ...refreshControl.props,
+        progressViewOffset: contentHeight,
+      })
+    : undefined;
+
+  const handleScrollCallback = useCallback(
+    (event: ScrollEvent) => {
+      if (handleScroll) {
+        handleScroll((event.contentOffset.y / contentHeightRef.current) * 100);
+      }
+    },
+    [handleScroll],
   );
 
-  if (refreshControl) {
-    refreshControl.props.progressViewOffset = contentHeight;
-  }
-
-  const onScroll = Animated.event<NativeScrollEvent>(
-    [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
+  const onScroll = useAnimatedScrollHandler(
     {
-      useNativeDriver: false,
-      listener: (ev) => {
-        if (handleScroll) {
-          handleScroll(
-            (ev.nativeEvent?.contentOffset.y / contentHeightRef.current) * 100,
-          );
-        }
+      onScroll: (event) => {
+        scrollY.value = event.contentOffset.y;
+        scheduleOnRN(handleScrollCallback, event);
       },
     },
+    [handleScrollCallback],
   );
 
   const childrenProps: ChildrenProps = {
-    refreshControl,
+    refreshControl: clonedRefreshControl,
     contentHeight,
     children,
     onScroll,
@@ -80,9 +106,7 @@ export function ParallaxScroll({
       )}
 
       {/* Header component declared after children to make it render on top of children*/}
-      <Animated.View
-        style={[styles.header, {transform: [{translateY: headerTranslate}]}]}
-      >
+      <Animated.View style={[animatedStyles, styles.header]}>
         <View onLayout={onHeaderContentLayout}>{header}</View>
       </Animated.View>
     </View>
@@ -92,7 +116,7 @@ export function ParallaxScroll({
 type ChildrenProps = PropsWithChildren<{
   refreshControl: Props['refreshControl'];
   contentHeight: number;
-  onScroll: (nativeEvent: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  onScroll: ReturnType<typeof useAnimatedScrollHandler>;
 }>;
 
 const ScrollChildrenAndroid = ({
