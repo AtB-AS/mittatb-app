@@ -15,7 +15,7 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {FareZone} from '@atb/modules/configuration';
 import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 import {ErrorWithAccountMessage} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/ErrorWithAccountMessage';
-import {useRecentFareContractsQuery} from '@atb/recent-fare-contracts/use-recent-fare-contracts-query';
+import {useRecentFareContracts} from '@atb/recent-fare-contracts/use-recent-fare-contracts';
 import type {RecentFareContractType} from '@atb/recent-fare-contracts';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 
@@ -27,9 +27,9 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {theme} = useThemeContext();
   const {
     recentFareContracts,
-    isLoading: isLoadingRecentFareContracts,
-    refresh: refetchRecentFareContracts,
-  } = useRecentFareContractsQuery();
+    recentFareContractsLoading,
+    recentFareContractsRefetch,
+  } = useRecentFareContracts();
   const {
     data: preassignedFareProducts,
     refetch: refetchPreassignedFareProducts,
@@ -120,7 +120,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         <RefreshControl
           refreshing={isRefetchingPreassignedFareProducts}
           onRefresh={() => {
-            refetchRecentFareContracts();
+            recentFareContractsRefetch();
             refetchPreassignedFareProducts();
             analytics.logEvent('Ticketing', 'Pull to refresh products', {
               fareProductsCount: preassignedFareProducts.length,
@@ -133,7 +133,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       <ErrorWithAccountMessage style={styles.accountWrongMessage} />
       <RecentFareContracts
         recentFareContracts={recentFareContracts}
-        loading={isLoadingRecentFareContracts}
+        loading={recentFareContractsLoading}
         onSelect={onRecentFareContractSelect}
       />
       <View
