@@ -108,8 +108,9 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               expanded={true}
               text="Apple pay!"
               onPress={() => {
-                NativePaymentHandler.startPayment(100, (success) => {
-                  setApplePayResult(success);
+                NativePaymentHandler.startPayment(100, (paymentData) => {
+                  console.log('Payment data:', paymentData);
+                  setApplePayResult(paymentData !== null);
                 });
               }}
             />
