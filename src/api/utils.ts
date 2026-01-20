@@ -139,6 +139,6 @@ export const getOperatorNameById = (
   if (translation) {
     return translation.value;
   } else {
-    return operator?.name.translations[0].value;
+    return operator?.name.translations?.[0]?.value;
   }
 };

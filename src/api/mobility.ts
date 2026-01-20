@@ -109,6 +109,5 @@ export const getOperators = (
   client
     .get<OperatorsResponse>('/mobility/v1/operators', {
       ...opts,
-      authWithIdToken: true,
     })
     .then((response) => OperatorsResponseSchema.parse(response.data));
