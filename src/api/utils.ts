@@ -126,12 +126,12 @@ const mapLanguageToLangCode = (lang: string) => {
 export const getOperatorNameById = (
   operatorsData: OperatorsResponse | undefined,
   operatorId: string | undefined,
-  lang:string,
+  lang: string,
 ): string | undefined => {
   const operator = operatorsData?.operators?.find(
     (operator) => operator.id === operatorId,
   );
-  
+
   const translation = operator?.name.translations.find(
     (t) => mapLanguageToLangCode(t.language) === lang,
   );
@@ -141,5 +141,4 @@ export const getOperatorNameById = (
   } else {
     return operator?.name.translations[0].value;
   }
-  
 };
