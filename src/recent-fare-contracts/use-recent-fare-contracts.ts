@@ -170,7 +170,6 @@ export const useRecentFareContracts = () => {
   const {
     data: recentFareContractsData,
     isLoading: recentFareContractsLoading,
-    isError: recentFareContractsError,
     refetch: recentFareContractsRefetch,
   } = useRecentFareContractsQuery();
 
@@ -196,7 +195,6 @@ export const useRecentFareContracts = () => {
 
   return {
     recentFareContractsLoading,
-    recentFareContractsError,
     recentFareContracts,
     recentFareContractsRefetch,
   };
