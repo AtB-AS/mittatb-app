@@ -33,10 +33,7 @@ import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
 
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {
-  MapState,
-  RegionPayload,
-} from '@rnmapbox/maps/lib/typescript/src/components/MapView';
+import {RegionPayload} from '@rnmapbox/maps/lib/typescript/src/components/MapView';
 import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
 import {ThemeText} from '@atb/components/text';
 import {debugProgressBetweenStopsText} from '../travel-details-screens/utils';
@@ -244,6 +241,8 @@ const LiveVehicleMarker = ({
 
   const [isStale, setIsStale] = useState(false);
 
+  const ARROW_OFFSET = 28;
+
   useInterval(
     () => {
       const secondsSinceUpdate = secondsBetween(
@@ -258,8 +257,6 @@ const LiveVehicleMarker = ({
     true,
   );
 
-  if (!vehicle.location) return null;
-
   const PointFeatureCollection: FeatureCollection<Point, GeoJsonProperties> = {
     type: 'FeatureCollection',
     features: [
@@ -267,7 +264,10 @@ const LiveVehicleMarker = ({
         type: 'Feature',
         geometry: {
           type: 'Point',
-          coordinates: [vehicle.location.longitude, vehicle.location.latitude],
+          coordinates: [
+            vehicle.location?.longitude ?? 0,
+            vehicle.location?.latitude ?? 0,
+          ],
         },
         properties: {},
       },
@@ -281,8 +281,6 @@ const LiveVehicleMarker = ({
     mode,
     subMode,
   );
-
-  const ARROW_OFFSET = 25;
 
   const layers = useMemo<React.ReactElement[]>(() => {
     const result: React.ReactElement[] = [
@@ -324,6 +322,8 @@ const LiveVehicleMarker = ({
     isStale,
     ARROW_OFFSET,
   ]);
+
+  if (!vehicle.location) return null;
 
   return (
     <MapboxGL.ShapeSource
@@ -390,8 +390,7 @@ function getTransportModeSpriteName(mode?: AnyMode, subMode?: AnySubMode) {
     case 'metro':
       return 'metro';
     case 'rail':
-      // TODO: update to new sprites for airport link rail when available
-      if (subMode === 'airportLinkRail') return 'train';
+      if (subMode === 'airportLinkRail') return 'othertrain';
       return 'train';
     case 'water':
       return subMode && TRANSPORT_SUB_MODES_BOAT.includes(subMode)
