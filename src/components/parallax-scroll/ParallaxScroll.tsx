@@ -1,7 +1,12 @@
 import {StyleSheet} from '@atb/theme';
 import {useLayout} from '@atb/utils/use-layout';
 import React, {PropsWithChildren, useCallback, useEffect, useMemo} from 'react';
-import {Platform, RefreshControlProps, View} from 'react-native';
+import {
+  Platform,
+  RefreshControl,
+  RefreshControlProps,
+  View,
+} from 'react-native';
 import Animated, {
   Extrapolation,
   interpolate,
@@ -14,13 +19,13 @@ import {scheduleOnRN} from 'react-native-worklets';
 
 type Props = PropsWithChildren<{
   header: React.ReactNode;
-  refreshControl?: React.ReactElement<RefreshControlProps>;
+  refreshControlProps?: RefreshControlProps;
   handleScroll?: (scrollPercentage: number) => void;
 }>;
 export function ParallaxScroll({
   header,
   children,
-  refreshControl,
+  refreshControlProps,
   handleScroll,
 }: Props) {
   const {onLayout: onHeaderContentLayout, height: contentHeight} = useLayout();
@@ -33,16 +38,10 @@ export function ParallaxScroll({
   const scrollY = useSharedValue(0);
 
   const {scrollYInputRange, scrollYOutputRange} = useMemo(() => {
-    return Platform.select({
-      android: {
-        scrollYInputRange: [0, contentHeight],
-        scrollYOutputRange: [0, -(contentHeight / 2)],
-      },
-      default: {
-        scrollYInputRange: [-contentHeight, contentHeight],
-        scrollYOutputRange: [0, -contentHeight],
-      },
-    });
+    return {
+      scrollYInputRange: [0, contentHeight],
+      scrollYOutputRange: [0, -(contentHeight / 2)],
+    };
   }, [contentHeight]);
 
   const animatedStyles = useAnimatedStyle(() => {
@@ -63,14 +62,6 @@ export function ParallaxScroll({
     };
   });
 
-  // clone the refreshControl to avoid mutating the original prop
-  const clonedRefreshControl = refreshControl
-    ? React.cloneElement(refreshControl, {
-        ...refreshControl.props,
-        progressViewOffset: contentHeight,
-      })
-    : undefined;
-
   const handleScrollCallback = useCallback(
     (event: ScrollEvent) => {
       if (handleScroll) {
@@ -90,8 +81,17 @@ export function ParallaxScroll({
     [handleScrollCallback],
   );
 
+  const refreshControl = React.useMemo(() => {
+    return refreshControlProps ? (
+      <RefreshControl
+        progressViewOffset={contentHeight}
+        {...refreshControlProps}
+      />
+    ) : undefined;
+  }, [refreshControlProps, contentHeight]);
+
   const childrenProps: ChildrenProps = {
-    refreshControl: clonedRefreshControl,
+    refreshControl,
     contentHeight,
     children,
     onScroll,
@@ -114,7 +114,7 @@ export function ParallaxScroll({
 }
 
 type ChildrenProps = PropsWithChildren<{
-  refreshControl: Props['refreshControl'];
+  refreshControl?: React.ReactElement<RefreshControlProps>;
   contentHeight: number;
   onScroll: ReturnType<typeof useAnimatedScrollHandler>;
 }>;

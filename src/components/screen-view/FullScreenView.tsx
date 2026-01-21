@@ -1,9 +1,10 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
-  RefreshControlProps,
   ScrollView,
   View,
   KeyboardAvoidingView,
+  RefreshControl,
+  RefreshControlProps,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
@@ -29,7 +30,7 @@ type Props = {
   handleScroll?: (scrollPercentage: number) => void;
   children?: React.ReactNode;
   footer?: React.ReactNode;
-  refreshControl?: React.ReactElement<RefreshControlProps>;
+  refreshControlProps?: RefreshControlProps;
   contentColor?: ContrastColor;
   avoidKeyboard?: boolean;
   testID?: string;
@@ -115,7 +116,7 @@ const hasParallaxContent = (props: Props): props is PropsWithParallaxContent =>
 
 const ChildrenWithParallaxScrollContent = ({
   parallaxContent,
-  refreshControl,
+  refreshControlProps,
   children,
   headerColor,
   handleScroll,
@@ -133,7 +134,7 @@ const ChildrenWithParallaxScrollContent = ({
             </View>
           </View>
         }
-        refreshControl={refreshControl}
+        refreshControlProps={refreshControlProps}
         handleScroll={handleScroll}
       >
         {children}
@@ -143,7 +144,7 @@ const ChildrenWithParallaxScrollContent = ({
 };
 
 const ChildrenInNormalScrollView = ({
-  refreshControl,
+  refreshControlProps,
   children,
   contentColor,
 }: Props & {contentColor?: ContrastColor}) => {
@@ -151,7 +152,11 @@ const ChildrenInNormalScrollView = ({
 
   return (
     <ScrollView
-      refreshControl={refreshControl}
+      refreshControl={
+        refreshControlProps ? (
+          <RefreshControl {...refreshControlProps} />
+        ) : undefined
+      }
       contentContainerStyle={{flexGrow: 1}}
       style={{backgroundColor}}
     >

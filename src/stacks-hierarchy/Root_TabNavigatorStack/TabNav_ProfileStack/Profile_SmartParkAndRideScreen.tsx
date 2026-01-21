@@ -1,6 +1,6 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TranslateFunction, useTranslation} from '@atb/translations';
-import {RefreshControl, View} from 'react-native';
+import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {
@@ -24,7 +24,7 @@ import {ThemedCarRegister} from '@atb/theme/ThemedAssets';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import {ProfileScreenProps} from './navigation-types';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
@@ -70,6 +70,13 @@ export const Profile_SmartParkAndRideScreen = ({route, navigation}: Props) => {
     }
   };
 
+  const refreshControlProps = useMemo(() => {
+    return {
+      refreshing: vehicleRegistrationsIsFetching,
+      onRefresh: refetchVehicleRegistrations,
+    };
+  }, [vehicleRegistrationsIsFetching, refetchVehicleRegistrations]);
+
   const focusRef = useFocusOnLoad(navigation);
 
   return (
@@ -79,12 +86,7 @@ export const Profile_SmartParkAndRideScreen = ({route, navigation}: Props) => {
         title: t(SmartParkAndRideTexts.header.title),
         leftButton: {type: 'back'},
       }}
-      refreshControl={
-        <RefreshControl
-          refreshing={vehicleRegistrationsIsFetching}
-          onRefresh={refetchVehicleRegistrations}
-        />
-      }
+      refreshControlProps={refreshControlProps}
     >
       <View style={styles.container}>
         <ContentHeading
