@@ -26,14 +26,38 @@ const dictionary = {
   a11yRealTimePrefix: _('sanntid ', 'realtime ', `sanntid `),
   travel: {
     legModes: {
-      bus: _('Buss', 'Bus', `Buss`),
-      rail: _('Tog', 'Train', `Tog`),
-      tram: _('Trikk', 'Tram', `Trikk`),
-      water: _('Båt', 'Boat', `Båt`),
-      air: _('Fly', 'Plane', `Fly`),
-      foot: _('Gange', 'Walk', `Gange`),
-      metro: _('T-bane', 'Metro', `T-bane`),
-      bicycle: _('Sykkel', 'Bicycle', `Sykkel`),
+      bus: {
+        ..._('Buss', 'Bus', `Buss`),
+        definite: _('Bussen', 'The bus', 'Bussen'),
+      },
+      rail: {
+        ..._('Tog', 'Train', `Tog`),
+        definite: _('Toget', 'The train', 'Toget'),
+      },
+      tram: {
+        ..._('Trikk', 'Tram', `Trikk`),
+        definite: _('Trikken', 'The tram', 'Trikken'),
+      },
+      water: {
+        ..._('Båt', 'Boat', `Båt`),
+        definite: _('Båten', 'The boat', 'Båten'),
+      },
+      air: {
+        ..._('Fly', 'Plane', `Fly`),
+        definite: _('Flyet', 'The plane', 'Flyet'),
+      },
+      foot: {
+        ..._('Gange', 'Walk', `Gange`),
+        definite: _('Gangen', 'The walk', 'Gangen'),
+      },
+      metro: {
+        ..._('T-bane', 'Metro', `T-bane`),
+        definite: _('T-banen', 'The metro', 'T-bane'),
+      },
+      bicycle: {
+        ..._('Sykkel', 'Bicycle', `Sykkel`),
+        definite: _('Sykkelen', 'The bicycle', 'Sykkelen'),
+      },
       unknown: _(
         'Ukjent transportmiddel',
         'Unknown transport',
@@ -41,7 +65,10 @@ const dictionary = {
       ),
     },
     legSubModes: {
-      nightBus: _('Nattbuss', 'Night bus', `Nattbuss`),
+      nightBus: {
+        ..._('Nattbuss', 'Night bus', `Nattbuss`),
+        definite: _('Nattbussen', 'The night bus', 'Nattbussen'),
+      },
     },
     line: _('Linje', 'Line', 'Linje'),
     time: {
