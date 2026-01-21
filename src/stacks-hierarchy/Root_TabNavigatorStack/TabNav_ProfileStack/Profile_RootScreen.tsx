@@ -113,8 +113,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 )}
                 mode="primary"
                 expanded={true}
-                onPress={async () => {
-                  if (await getHasReservationOrAvailableFareContract()) {
+                onPress={() => {
+                  if (getHasReservationOrAvailableFareContract()) {
                     navigation.navigate(
                       'Root_LoginAvailableFareContractWarningScreen',
                       {},

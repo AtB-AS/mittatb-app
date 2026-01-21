@@ -13,19 +13,16 @@ export const useGetHasReservationOrAvailableFareContract = () => {
     status: 'valid',
   };
   const {reservations} = useTicketingContext();
-  const {refetch: getFareContractsFromBackend} = useGetFareContractsQuery({
-    enabled: false,
+  const {data: fareContracts} = useGetFareContractsQuery({
+    enabled: true,
     availability: availabilityStatus.availability,
   });
 
-  const getHasReservationOrAvailableFareContract = async () => {
-    const fareContractsFromBackend = await getFareContractsFromBackend();
-    if (!fareContractsFromBackend.isSuccess) {
-      return false;
-    }
-    const parsedFareContracts = fareContractsFromBackend.data
-      ?.map((fc) => FareContractType.safeParse(fc).data)
-      .filter(isDefined);
+  const getHasReservationOrAvailableFareContract = () => {
+    const parsedFareContracts =
+      fareContracts
+        ?.map((fc) => FareContractType.safeParse(fc).data)
+        .filter(isDefined) || [];
 
     const availableFareContracts = getFilterdFareContracts(
       parsedFareContracts,

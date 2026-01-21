@@ -119,8 +119,8 @@ export const Map_RootScreen = ({
   const getHasReservationOrAvailableFareContract =
     useGetHasReservationOrAvailableFareContract();
 
-  const navigateToLogin = useCallback(async () => {
-    if (await getHasReservationOrAvailableFareContract()) {
+  const navigateToLogin = useCallback(() => {
+    if (getHasReservationOrAvailableFareContract()) {
       navigation.navigate('Root_LoginAvailableFareContractWarningScreen', {});
     } else if (enable_vipps_login) {
       navigation.navigate('Root_LoginOptionsScreen', {

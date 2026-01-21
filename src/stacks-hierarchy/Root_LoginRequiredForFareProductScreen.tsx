@@ -28,8 +28,8 @@ export const Root_LoginRequiredForFareProductScreen = ({navigation}: Props) => {
   const getHasReservationOrAvailableFareContract =
     useGetHasReservationOrAvailableFareContract();
 
-  const onNext = async () => {
-    if (await getHasReservationOrAvailableFareContract()) {
+  const onNext = () => {
+    if (getHasReservationOrAvailableFareContract()) {
       navigation.navigate('Root_LoginAvailableFareContractWarningScreen', {
         transitionOverride: 'slide-from-bottom',
       });

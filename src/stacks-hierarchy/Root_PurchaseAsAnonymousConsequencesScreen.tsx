@@ -40,9 +40,9 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
   const completeUserCreationOnboardingAndEnterApp =
     useCompleteUserCreationOnboardingAndEnterApp();
 
-  const onPressLogin = async () => {
+  const onPressLogin = () => {
     let screen: keyof RootStackParamList = 'Root_LoginPhoneInputScreen';
-    if (await getHasReservationOrAvailableFareContract()) {
+    if (getHasReservationOrAvailableFareContract()) {
       screen = 'Root_LoginAvailableFareContractWarningScreen';
     } else if (enable_vipps_login) {
       screen = 'Root_LoginOptionsScreen';
