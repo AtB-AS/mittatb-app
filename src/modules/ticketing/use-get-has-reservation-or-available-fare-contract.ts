@@ -7,11 +7,12 @@ import {
 import {AvailabilityStatus, FareContractType} from '@atb-as/utils';
 import {isDefined} from '@atb/utils/presence';
 
+const availabilityStatus: AvailabilityStatus = {
+  availability: 'available',
+  status: 'valid',
+};
+
 export const useGetHasReservationOrAvailableFareContract = () => {
-  const availabilityStatus: AvailabilityStatus = {
-    availability: 'available',
-    status: 'valid',
-  };
   const {reservations} = useTicketingContext();
   const {data: fareContracts} = useGetFareContractsQuery({
     enabled: true,
