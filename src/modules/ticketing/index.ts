@@ -2,7 +2,7 @@ export {
   TicketingContextProvider,
   useTicketingContext,
 } from './TicketingContext';
-export {useHasReservationOrAvailableFareContract} from './use-has-reservation-or-available-fare-contract';
+export {useGetHasReservationOrAvailableFareContract} from './use-get-has-reservation-or-available-fare-contract';
 export {useFareContracts} from './use-fare-contracts';
 export {useListRecurringPaymentsQuery} from './use-list-recurring-payments-query';
 export {useRefundFareContractMutation} from './use-refund-mutation';

@@ -28,7 +28,7 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useStorybookContext} from '@atb/modules/storybook';
 import {
-  useHasReservationOrAvailableFareContract,
+  useGetHasReservationOrAvailableFareContract,
   useTicketingContext,
 } from '@atb/modules/ticketing';
 import {ClickableCopy} from './components/ClickableCopy';
@@ -61,8 +61,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {authenticationType, signOut} = useAuthContext();
   const config = useLocalConfig();
   const {customerProfile} = useTicketingContext();
-  const hasReservationOrAvailableFareContract =
-    useHasReservationOrAvailableFareContract();
+  const getHasReservationOrAvailableFareContract =
+    useGetHasReservationOrAvailableFareContract();
   const {setEnabled: setStorybookEnabled} = useStorybookContext();
   const [isLoading, setIsLoading] = useIsLoading(false);
   const {isBonusProgramEnabled, isSmartParkAndRideEnabled} =
@@ -113,8 +113,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 )}
                 mode="primary"
                 expanded={true}
-                onPress={() => {
-                  if (hasReservationOrAvailableFareContract) {
+                onPress={async () => {
+                  if (await getHasReservationOrAvailableFareContract()) {
                     navigation.navigate(
                       'Root_LoginAvailableFareContractWarningScreen',
                       {},

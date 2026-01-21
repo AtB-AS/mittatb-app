@@ -5,7 +5,7 @@ import {
   RootStackParamList,
   RootStackScreenProps,
 } from './navigation-types';
-import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
+import {useGetHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {Support} from '@atb/assets/svg/mono-icons/actions';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {Receipt} from '@atb/assets/svg/mono-icons/ticketing';
@@ -35,14 +35,14 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
   route: {params},
 }: Props) => {
   const {enable_vipps_login} = useRemoteConfigContext();
-  const hasReservationOrAvailableFareContract =
-    useHasReservationOrAvailableFareContract();
+  const getHasReservationOrAvailableFareContract =
+    useGetHasReservationOrAvailableFareContract();
   const completeUserCreationOnboardingAndEnterApp =
     useCompleteUserCreationOnboardingAndEnterApp();
 
-  const onPressLogin = () => {
+  const onPressLogin = async () => {
     let screen: keyof RootStackParamList = 'Root_LoginPhoneInputScreen';
-    if (hasReservationOrAvailableFareContract) {
+    if (await getHasReservationOrAvailableFareContract()) {
       screen = 'Root_LoginAvailableFareContractWarningScreen';
     } else if (enable_vipps_login) {
       screen = 'Root_LoginOptionsScreen';

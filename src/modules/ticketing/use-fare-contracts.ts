@@ -7,6 +7,7 @@ import {useAuthContext} from '@atb/modules/auth';
 import {getAvailabilityStatus, AvailabilityStatus} from '@atb-as/utils';
 import {isDefined} from '@atb/utils/presence';
 import {ONE_WEEK_MS} from '@atb/utils/durations';
+import {getServerNowGlobal} from '../time';
 
 type AvailabilityStatusInput = {
   availability: Exclude<AvailabilityStatus['availability'], 'invalid'>;
@@ -55,16 +56,11 @@ export const useFareContracts = (
     });
   };
 
-  const filteredFareContracts = fareContracts.filter((fc) => {
-    const as = getAvailabilityStatus(fc, now);
-    if (as.availability === availabilityStatus.availability) {
-      return availabilityStatus.status
-        ? as.status === availabilityStatus.status
-        : true;
-    }
-
-    return false;
-  });
+  const filteredFareContracts = getFilterdFareContracts(
+    fareContracts,
+    availabilityStatus,
+    now,
+  );
 
   return {fareContracts: filteredFareContracts, refetch, isRefetching};
 };
@@ -88,3 +84,19 @@ export const useGetFareContractsQuery = (props: {
     },
   });
 };
+
+export const getFilterdFareContracts = (
+  fareContracts: FareContractType[],
+  availabilityStatus: AvailabilityStatusInput,
+  now = getServerNowGlobal(),
+) =>
+  fareContracts.filter((fc) => {
+    const as = getAvailabilityStatus(fc, now);
+    if (as.availability === availabilityStatus.availability) {
+      return availabilityStatus.status
+        ? as.status === availabilityStatus.status
+        : true;
+    }
+
+    return false;
+  });
