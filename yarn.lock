@@ -3491,10 +3491,10 @@
     color "^4.2.3"
     use-latest-callback "^0.2.4"
 
-"@rnmapbox/maps@^10.1.45":
-  version "10.1.45"
-  resolved "https://registry.yarnpkg.com/@rnmapbox/maps/-/maps-10.1.45.tgz#4c7776a9616a628dd80fb9d631da1dea4f1b6adb"
-  integrity sha512-Rk6Yu5euDnYZDsFPFgQ1Rvp5e2IrTMIjtl6OYj9e/OMSuRGufNSa6P6tt0SwOnUG6QHUcle0c9jhsSL9VQBtTg==
+"@rnmapbox/maps@^10.2.10":
+  version "10.2.10"
+  resolved "https://registry.yarnpkg.com/@rnmapbox/maps/-/maps-10.2.10.tgz#5ba121ffd1017e5a5550e9d4829f53701e87ce87"
+  integrity sha512-OfjW0rHp5bUWfzBo5fZ7qdKwAzGoocXYTsSssSPVMxZ2Y7axuhcbmsO5bV6gg+BJs5RwEsghzwTIoGydBNUClA==
   dependencies:
     "@turf/along" "6.5.0"
     "@turf/distance" "6.5.0"

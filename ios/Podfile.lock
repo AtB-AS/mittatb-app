@@ -1230,8 +1230,6 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - BVLinearGradient (2.8.3):
-    - React-Core
   - DevicePpi (1.2.24)
   - DoubleConversion (1.1.6)
   - fast_float (8.0.0)
@@ -1535,13 +1533,13 @@ PODS:
     - SocketRocket
     - Yoga
   - leveldb-library (1.22.6)
-  - MapboxCommon (24.13.5):
+  - MapboxCommon (24.15.4):
     - Turf (= 4.0.0)
-  - MapboxCoreMaps (11.13.5):
-    - MapboxCommon (= 24.13.5)
-  - MapboxMaps (11.13.5):
-    - MapboxCommon (= 24.13.5)
-    - MapboxCoreMaps (= 11.13.5)
+  - MapboxCoreMaps (11.15.4):
+    - MapboxCommon (= 24.15.4)
+  - MapboxMaps (11.15.4):
+    - MapboxCommon (= 24.15.4)
+    - MapboxCoreMaps (= 11.15.4)
     - Turf (= 4.0.0)
   - nanopb (3.30910.0):
     - nanopb/decode (= 3.30910.0)
@@ -4460,19 +4458,19 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - rnmapbox-maps (10.1.45):
-    - MapboxMaps (~> 11.13.4)
+  - rnmapbox-maps (10.2.10):
+    - MapboxMaps (~> 11.15.0)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.1.45)
+    - rnmapbox-maps/DynamicLibrary (= 10.2.10)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.1.45):
+  - rnmapbox-maps/DynamicLibrary (10.2.10):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - hermes-engine
-    - MapboxMaps (~> 11.13.4)
+    - MapboxMaps (~> 11.15.0)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -4856,7 +4854,6 @@ DEPENDENCIES:
   - "BarcodeiOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/barcode-ios-lib`)"
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - "BugsnagReactNative (from `../node_modules/@bugsnag/react-native`)"
-  - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - fast_float (from `../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -5033,8 +5030,6 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   BugsnagReactNative:
     :path: "../node_modules/@bugsnag/react-native"
-  BVLinearGradient:
-    :path: "../node_modules/react-native-linear-gradient"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   fast_float:
@@ -5278,7 +5273,6 @@ SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   BoringSSL-GRPC: dded2a44897e45f28f08ae87a55ee4bcd19bc508
   BugsnagReactNative: 369b97061fed0b36acbf0eb0c1d635b95c7ccfe2
-  BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
   DevicePpi: c25a1f180fba317379a32de32b89cc09e337b55e
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
@@ -5307,18 +5301,18 @@ SPEC CHECKSUMS:
   "gRPC-C++": cc207623316fb041a7a3e774c252cf68a058b9e8
   gRPC-Core: 860978b7db482de8b4f5e10677216309b5ff6330
   GTMSessionFetcher: 02d6e866e90bc236f48a703a041dfe43e6221a29
-  hermes-engine: 64c8724b2919f58c70c597ff023697370b732563
+  hermes-engine: 7b97af1957eaf8cfc1fa8f146b57ed75fe5f2e65
   Intercom: aca703f001cf9470b1f13b72cb8cc969a09bafca
   intercom-react-native: c8ee5e7d845955c5f6898c0f094ebcf1d6db9255
   KettleKit: 37e98f1e9d2da85616378fd0acc8a8bf81360b67
   KettleModule: fc99af0e96a9a0ad186c160016887f56ebfac33b
   leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
-  MapboxCommon: f38b69d24b1bb648629f001a6160bfaa3d8dd2b4
-  MapboxCoreMaps: 90c838346286fc2136450443bfeb88194815d39b
-  MapboxMaps: 8d37ffe7c7f4f219e801858550d672e08b59f992
+  MapboxCommon: 975faa94b893bb64a1d28b09d9d6d820e1030a26
+  MapboxCoreMaps: 105af9894d850290fbb466e9f9a133f5d175abf1
+  MapboxMaps: e97e59d6ba48bb6f695a4c1dc2f174cb24743cd4
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
+  RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
   RCTDeprecation: a41bbdd9af30bf2e5715796b313e44ec43eefff1
   RCTRequired: 7be34aabb0b77c3cefe644528df0fa0afad4e4d0
   RCTSwiftUI: a6c7271c39098bf00dbdad8f8ed997a59bbfbe44
@@ -5413,7 +5407,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: c6327cf6e2bd384dc90351ccfff0da8142d62f54
   RNInAppBrowser: 6d3eb68d471b9834335c664704719b8be1bfdb20
   RNLocalize: d8ccb568b40c72c767714db3808ce66a1ecf444a
-  rnmapbox-maps: e874cce5114d5e1e4d2c52f0346b67a23559de22
+  rnmapbox-maps: df786769607427115545ba9bee95360436218510
   RNPermissions: 0d6950c452b8d89d506ec1a60ab095d68bc1ce92
   RNReanimated: fbcb7fd8da5b0b088401542c58fb5d266388f1cf
   RNScreens: d6413aeb1878cdafd3c721e2c5218faf5d5d3b13
@@ -5423,13 +5417,13 @@ SPEC CHECKSUMS:
   SwiftProtobuf: 4dbaffec76a39a8dc5da23b40af1a5dc01a4c02d
   TimeApiiOSLib: 8289d67019d958c29676dfb9e38ffdcefbcdb9bd
   TokenCore: cdce158c4f5331f81f35e34f3b708b6582c0d569
-  TokenStateReactNativeLib: 00fb9cd8cc92a36f350c9d216686277837d6474a
+  TokenStateReactNativeLib: e1b93062a2b35f28bddad865aaadfb8026a22e4a
   Turf: c9eb11a65d96af58cac523460fd40fec5061b081
   VisionCamera: 30b358b807324c692064f78385e9a732ce1bebfe
   VisualCodeModeliOSLib: c40687c1f0bd60e672088a023d3ec0984608c118
   VisualCodeViewiOSLib: 448c13fd82ceb72aa4a12d9c69c92278d9da2989
   Yoga: 33b53536a0500d039f2cd78caf1d5d68712d3af7
 
-PODFILE CHECKSUM: 5dfcbc2114b7c1bd999ba148aefae23b7d6334fb
+PODFILE CHECKSUM: 2c09d93c5022c92b280570bc9e263210a3d5f60b
 
 COCOAPODS: 1.16.2
