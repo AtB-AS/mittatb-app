@@ -1,3 +1,4 @@
+import {useMemo} from 'react';
 import {useTicketingContext} from '@atb/modules/ticketing';
 import {getReservationStatus} from '@atb/modules/fare-contracts';
 import {
@@ -14,27 +15,34 @@ const availabilityStatus: AvailabilityStatus = {
 
 export const useGetHasReservationOrAvailableFareContract = () => {
   const {reservations} = useTicketingContext();
+
   const {data: fareContracts} = useGetFareContractsQuery({
     enabled: true,
     availability: availabilityStatus.availability,
   });
 
-  const getHasReservationOrAvailableFareContract = () => {
-    const parsedFareContracts =
-      fareContracts
-        ?.map((fc) => FareContractType.safeParse(fc).data)
-        .filter(isDefined) || [];
+  const hasReservationOrAvailableFareContract = useMemo(
+    () => () => {
+      const parsedFareContracts =
+        fareContracts
+          ?.map((fc) => FareContractType.safeParse(fc).data)
+          .filter(isDefined) ?? [];
 
-    const availableFareContracts = getFilterdFareContracts(
-      parsedFareContracts,
-      availabilityStatus,
-    );
-    const hasAvailableFareContracts = availableFareContracts.length > 0;
-    const hasNonRejectedReservations = reservations
-      .map(getReservationStatus)
-      .some((status) => status !== 'rejected');
+      const availableFareContracts = getFilterdFareContracts(
+        parsedFareContracts,
+        availabilityStatus,
+      );
 
-    return hasAvailableFareContracts || hasNonRejectedReservations;
-  };
-  return getHasReservationOrAvailableFareContract;
+      const hasAvailableFareContracts = availableFareContracts.length > 0;
+
+      const hasNonRejectedReservations = reservations
+        .map(getReservationStatus)
+        .some((status) => status !== 'rejected');
+
+      return hasAvailableFareContracts || hasNonRejectedReservations;
+    },
+    [fareContracts, reservations],
+  );
+
+  return hasReservationOrAvailableFareContract;
 };
