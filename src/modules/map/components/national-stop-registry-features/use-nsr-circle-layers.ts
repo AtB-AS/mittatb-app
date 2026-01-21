@@ -6,7 +6,8 @@ import {
   getLayerPropsDeterminedByZoomLevel,
   getNsrLayerSourceProps,
 } from './nsr-utils';
-import {Props as SymbolLayerProps} from '@rnmapbox/maps/lib/typescript/src/components/SymbolLayer';
+import {Props as SymbolLayerProps} from 'node_modules/@rnmapbox/maps/src/components/SymbolLayer';
+import {CircleLayerStyleProps} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 import {useMemo} from 'react';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
@@ -38,21 +39,25 @@ export const useNsrCircleLayers = (
 
         const {iconSize: circleRadius, iconOpacity: circleOpacity} = style;
 
-        return {
+        const circleLayerStyle: CircleLayerStyleProps = {
+          circleRadius,
+          circleOpacity,
+
+          circleColor: theme.color.transport.city.primary.background,
+          circleStrokeColor: themeName === 'light' ? '#ffffff' : '#000000',
+          circleStrokeWidth: 1.1,
+          circleTranslate: [0, 0] as const,
+        };
+
+        const circleLayerProps: SymbolLayerProps = {
           ...nsrLayerSourceProps,
-          id,
+          id: id ?? '',
           filter,
           minZoomLevel,
-          style: {
-            circleRadius,
-            circleOpacity,
-
-            circleColor: theme.color.transport.city.primary.background,
-            circleStrokeColor: themeName === 'light' ? '#ffffff' : '#000000',
-            circleStrokeWidth: 1.1,
-            circleTranslate: [0, 0],
-          },
+          style: circleLayerStyle,
         };
+
+        return circleLayerProps;
       }),
     [
       mapbox_nsr_source_layer_id,

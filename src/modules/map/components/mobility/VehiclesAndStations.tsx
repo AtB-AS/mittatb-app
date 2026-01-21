@@ -6,7 +6,7 @@ import {
   useMapSymbolStyles,
 } from '@atb/modules/map';
 import {SelectedFeatureIdProp} from '../../types';
-import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
+import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
 
 import {
   TileLayerName,
@@ -19,7 +19,7 @@ import {
 import {
   Expression,
   FilterExpression,
-} from '@rnmapbox/maps/src/utils/MapboxStyles';
+} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 import {scaleTransitionZoomRange} from '../../hooks/use-map-symbol-styles';
 
 const vehiclesAndStationsVectorSourceId =
