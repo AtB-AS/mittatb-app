@@ -13,6 +13,7 @@ import {Ref, useState} from 'react';
 import {ParallaxScroll} from '@atb/components/parallax-scroll';
 import {FullScreenFooter} from '../screen-footer';
 import {ContrastColor} from '@atb/theme/colors';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 type Props = {
   headerProps: ScreenHeaderProps;
@@ -53,9 +54,12 @@ export function FullScreenView(props: Props) {
     props.headerProps.color ?? theme.color.background.accent[0];
   const backgroundColor = themeColor.background;
 
-  const titleShouldAnimate = props.titleAlwaysVisible
-    ? false
-    : !!props.parallaxContent;
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+
+  const titleShouldAnimate =
+    props.titleAlwaysVisible || isScreenReaderEnabled
+      ? false
+      : !!props.parallaxContent;
   const [opacity, setOpacity] = useState(titleShouldAnimate ? 0 : 1);
 
   const handleScroll = (scrollPercentage: number) => {
@@ -77,8 +81,6 @@ export function FullScreenView(props: Props) {
     <ChildrenInNormalScrollView {...props} contentColor={props.contentColor} />
   );
 
-  const headerFocusRef = !titleShouldAnimate ? props.focusRef : undefined;
-
   return (
     <>
       <View
@@ -91,7 +93,7 @@ export function FullScreenView(props: Props) {
         <ScreenHeader
           {...props.headerProps}
           textOpacity={opacity}
-          focusRef={headerFocusRef}
+          focusRef={isScreenReaderEnabled ? props.focusRef : undefined}
         />
       </View>
 

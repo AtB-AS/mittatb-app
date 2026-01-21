@@ -1,12 +1,7 @@
 import {StyleSheet} from '@atb/theme';
 import {useLayout} from '@atb/utils/use-layout';
 import React, {PropsWithChildren, useCallback, useEffect, useMemo} from 'react';
-import {
-  Platform,
-  RefreshControl,
-  RefreshControlProps,
-  View,
-} from 'react-native';
+import {RefreshControl, RefreshControlProps, View} from 'react-native';
 import Animated, {
   Extrapolation,
   interpolate,
@@ -28,21 +23,22 @@ export function ParallaxScroll({
   refreshControlProps,
   handleScroll,
 }: Props) {
-  const {onLayout: onHeaderContentLayout, height: contentHeight} = useLayout();
-  const contentHeightRef = React.useRef(contentHeight);
+  const {onLayout: onHeaderContentLayout, height: headerHeight} = useLayout();
+  const contentHeightRef = React.useRef(headerHeight);
+
   useEffect(() => {
-    contentHeightRef.current = contentHeight;
-  }, [contentHeight]);
+    contentHeightRef.current = headerHeight;
+  }, [headerHeight]);
 
   const styles = useStyles();
   const scrollY = useSharedValue(0);
 
   const {scrollYInputRange, scrollYOutputRange} = useMemo(() => {
     return {
-      scrollYInputRange: [0, contentHeight],
-      scrollYOutputRange: [0, -(contentHeight / 2)],
+      scrollYInputRange: [0, headerHeight],
+      scrollYOutputRange: [0, -(headerHeight / 2)],
     };
-  }, [contentHeight]);
+  }, [headerHeight]);
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
@@ -84,26 +80,22 @@ export function ParallaxScroll({
   const refreshControl = React.useMemo(() => {
     return refreshControlProps ? (
       <RefreshControl
-        progressViewOffset={contentHeight}
+        progressViewOffset={headerHeight}
         {...refreshControlProps}
       />
     ) : undefined;
-  }, [refreshControlProps, contentHeight]);
-
-  const childrenProps: ChildrenProps = {
-    refreshControl,
-    contentHeight,
-    children,
-    onScroll,
-  };
+  }, [refreshControlProps, headerHeight]);
 
   return (
     <View style={styles.content}>
-      {Platform.OS === 'android' ? (
-        <ScrollChildrenAndroid {...childrenProps} />
-      ) : (
-        <ScrollChildrenIOS {...childrenProps} />
-      )}
+      <Animated.ScrollView
+        scrollEventThrottle={10}
+        refreshControl={refreshControl}
+        onScroll={onScroll}
+        contentContainerStyle={{paddingTop: headerHeight}}
+      >
+        {children}
+      </Animated.ScrollView>
 
       {/* Header component declared after children to make it render on top of children*/}
       <Animated.View style={[animatedStyles, styles.header]}>
@@ -112,55 +104,6 @@ export function ParallaxScroll({
     </View>
   );
 }
-
-type ChildrenProps = PropsWithChildren<{
-  refreshControl?: React.ReactElement<RefreshControlProps>;
-  contentHeight: number;
-  onScroll: ReturnType<typeof useAnimatedScrollHandler>;
-}>;
-
-const ScrollChildrenAndroid = ({
-  refreshControl,
-  children,
-  contentHeight,
-  onScroll,
-}: ChildrenProps) => (
-  <Animated.ScrollView
-    scrollEventThrottle={10}
-    refreshControl={refreshControl}
-    onScroll={onScroll}
-    contentContainerStyle={{paddingTop: contentHeight}}
-  >
-    {children}
-  </Animated.ScrollView>
-);
-
-/*
-  On iOS The Animated ScrollView needs the padding applied to a wrapping View
-  to be able to work correctly with Voice Over. This can't be done on Android
-  since overflow visible is buggy there.
- */
-const ScrollChildrenIOS = ({
-  refreshControl,
-  children,
-  contentHeight,
-  onScroll,
-}: ChildrenProps) => {
-  const styles = useStyles();
-  return (
-    <Animated.ScrollView
-      scrollEventThrottle={10}
-      refreshControl={refreshControl}
-      onScroll={onScroll}
-      style={styles.childrenIOS}
-      contentInset={{top: contentHeight}}
-      contentOffset={{x: 0, y: -contentHeight}}
-      automaticallyAdjustContentInsets={false}
-    >
-      {children}
-    </Animated.ScrollView>
-  );
-};
 
 const useStyles = StyleSheet.createThemeHook(() => ({
   content: {
@@ -173,5 +116,4 @@ const useStyles = StyleSheet.createThemeHook(() => ({
     left: 0,
     right: 0,
   },
-  childrenIOS: {},
 }));
