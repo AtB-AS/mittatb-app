@@ -132,7 +132,9 @@ export const Map = (props: MapProps) => {
     data: vehicle,
     isLoading: vehicleIsLoading,
     isError: vehicleError,
-  } = useVehicleQuery(selectedFeature?.properties?.id);
+  } = useVehicleQuery(
+    selectedFeatureIsAVehicle ? selectedFeature?.properties?.id : undefined,
+  );
 
   const [followUserLocation, setFollowUserLocation] = useState(false);
   const mapPropertiesRef = useRef<MapPropertiesType | null>({

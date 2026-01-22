@@ -64,7 +64,7 @@ export const getVehicles = (
 };
 
 export const getVehicle = (
-  id: string,
+  id?: string,
   opts?: VehicleRequestOpts,
 ): Promise<VehicleExtendedFragment | null> => {
   if (!id || id === '') return Promise.resolve(null);
