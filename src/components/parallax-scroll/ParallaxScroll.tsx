@@ -1,13 +1,9 @@
 import {StyleSheet} from '@atb/theme';
 import {useLayout} from '@atb/utils/use-layout';
-import React, {PropsWithChildren, useCallback, useEffect, useMemo} from 'react';
+import React, {PropsWithChildren, useCallback, useEffect} from 'react';
 import {RefreshControl, RefreshControlProps, View} from 'react-native';
 import Animated, {
-  Extrapolation,
-  interpolate,
   useAnimatedScrollHandler,
-  useAnimatedStyle,
-  useSharedValue,
   ScrollEvent,
 } from 'react-native-reanimated';
 import {scheduleOnRN} from 'react-native-worklets';
@@ -31,32 +27,6 @@ export function ParallaxScroll({
   }, [headerHeight]);
 
   const styles = useStyles();
-  const scrollY = useSharedValue(0);
-
-  const {scrollYInputRange, scrollYOutputRange} = useMemo(() => {
-    return {
-      scrollYInputRange: [0, headerHeight],
-      scrollYOutputRange: [0, -(headerHeight / 2)],
-    };
-  }, [headerHeight]);
-
-  const animatedStyles = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateY: interpolate(
-            scrollY.value,
-            scrollYInputRange,
-            scrollYOutputRange,
-            {
-              extrapolateRight: Extrapolation.EXTEND,
-              extrapolateLeft: Extrapolation.CLAMP,
-            },
-          ),
-        },
-      ],
-    };
-  });
 
   const handleScrollCallback = useCallback(
     (event: ScrollEvent) => {
@@ -70,7 +40,6 @@ export function ParallaxScroll({
   const onScroll = useAnimatedScrollHandler(
     {
       onScroll: (event) => {
-        scrollY.value = event.contentOffset.y;
         scheduleOnRN(handleScrollCallback, event);
       },
     },
@@ -79,12 +48,9 @@ export function ParallaxScroll({
 
   const refreshControl = React.useMemo(() => {
     return refreshControlProps ? (
-      <RefreshControl
-        progressViewOffset={headerHeight}
-        {...refreshControlProps}
-      />
+      <RefreshControl {...refreshControlProps} />
     ) : undefined;
-  }, [refreshControlProps, headerHeight]);
+  }, [refreshControlProps]);
 
   return (
     <View style={styles.content}>
@@ -92,15 +58,10 @@ export function ParallaxScroll({
         scrollEventThrottle={10}
         refreshControl={refreshControl}
         onScroll={onScroll}
-        contentContainerStyle={{paddingTop: headerHeight}}
       >
+        <View onLayout={onHeaderContentLayout}>{header}</View>
         {children}
       </Animated.ScrollView>
-
-      {/* Header component declared after children to make it render on top of children*/}
-      <Animated.View style={[animatedStyles, styles.header]}>
-        <View onLayout={onHeaderContentLayout}>{header}</View>
-      </Animated.View>
     </View>
   );
 }
@@ -109,11 +70,5 @@ const useStyles = StyleSheet.createThemeHook(() => ({
   content: {
     flex: 1,
     overflow: 'hidden',
-  },
-  header: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
   },
 }));

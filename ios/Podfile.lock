@@ -1230,8 +1230,6 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - BVLinearGradient (2.8.3):
-    - React-Core
   - DevicePpi (1.2.24)
   - DoubleConversion (1.1.6)
   - fast_float (8.0.0)
@@ -4856,7 +4854,6 @@ DEPENDENCIES:
   - "BarcodeiOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/barcode-ios-lib`)"
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - "BugsnagReactNative (from `../node_modules/@bugsnag/react-native`)"
-  - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - fast_float (from `../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -5033,8 +5030,6 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   BugsnagReactNative:
     :path: "../node_modules/@bugsnag/react-native"
-  BVLinearGradient:
-    :path: "../node_modules/react-native-linear-gradient"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   fast_float:
@@ -5278,7 +5273,6 @@ SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   BoringSSL-GRPC: dded2a44897e45f28f08ae87a55ee4bcd19bc508
   BugsnagReactNative: 369b97061fed0b36acbf0eb0c1d635b95c7ccfe2
-  BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
   DevicePpi: c25a1f180fba317379a32de32b89cc09e337b55e
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
@@ -5415,7 +5409,7 @@ SPEC CHECKSUMS:
   RNLocalize: d8ccb568b40c72c767714db3808ce66a1ecf444a
   rnmapbox-maps: e874cce5114d5e1e4d2c52f0346b67a23559de22
   RNPermissions: 0d6950c452b8d89d506ec1a60ab095d68bc1ce92
-  RNReanimated: fbcb7fd8da5b0b088401542c58fb5d266388f1cf
+  RNReanimated: e59e7353bf86f9834ea78fff4a926a9c9fe31246
   RNScreens: d6413aeb1878cdafd3c721e2c5218faf5d5d3b13
   RNSVG: acb39c771c3dbb33fa8f65d1b11dc4500147189e
   RNWorklets: 69f7239afaf3a156f7f9549eeb0ae8d02adc095f
