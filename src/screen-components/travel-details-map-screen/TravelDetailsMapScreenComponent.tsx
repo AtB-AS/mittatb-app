@@ -241,7 +241,7 @@ const LiveVehicleMarker = ({
 
   const [isStale, setIsStale] = useState(false);
 
-  const ARROW_OFFSET = 28;
+  const ARROW_OFFSET = 31;
 
   useInterval(
     () => {
