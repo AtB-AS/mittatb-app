@@ -17,7 +17,6 @@ import {ThemedTicketTilted} from '@atb/theme/ThemedAssets';
 import {sortFcOrReservationByCreation} from '@atb/modules/fare-contracts';
 import {FareContractType} from '@atb-as/utils';
 import {ThemeText} from '@atb/components/text';
-import {formatToMonthAndYear} from '@atb/utils/date';
 
 type Props = {
   onPressFareContract: (fareContractId: string) => void;
@@ -28,7 +27,6 @@ export const PurchaseHistoryScreenComponent = ({
   onPressFareContract,
   navigateToBonusScreen,
 }: Props) => {
-  const {language} = useTranslation();
   const {sentFareContracts, reservations, rejectedReservations} =
     useTicketingContext();
   const {serverNow} = useTimeContext();
@@ -50,7 +48,7 @@ export const PurchaseHistoryScreenComponent = ({
   );
 
   const sections = useMemo(
-    () => groupByMonth([...fareContractsToShow, ...reservationsToShow]),
+    () => groupByYear([...fareContractsToShow, ...reservationsToShow]),
     [fareContractsToShow, reservationsToShow],
   );
 
@@ -69,7 +67,7 @@ export const PurchaseHistoryScreenComponent = ({
             color="secondary"
             style={styles.sectionHeader}
           >
-            {formatToMonthAndYear(section.month, language)}
+            {section.year}
           </ThemeText>
         )}
         renderItem={({item, index}) => (
@@ -104,27 +102,24 @@ export const PurchaseHistoryScreenComponent = ({
   );
 };
 
-type MonthSection = {
-  month: Date;
+type YearSection = {
+  year: number;
   data: (Reservation | FareContractType)[];
 };
 
-const groupByMonth = (
+const groupByYear = (
   items: (Reservation | FareContractType)[],
-): MonthSection[] => {
+): YearSection[] => {
   const sortedItems = sortFcOrReservationByCreation(items);
-  const sections: MonthSection[] = [];
-  let currentSection: MonthSection | null = null;
+  const sections: YearSection[] = [];
+  let currentSection: YearSection | null = null;
 
   for (const item of sortedItems) {
     const d = new Date(item.created);
-    const monthDate = new Date(d.getFullYear(), d.getMonth(), 1);
+    const year = d.getFullYear();
 
-    if (
-      !currentSection ||
-      currentSection.month.getTime() !== monthDate.getTime()
-    ) {
-      currentSection = {month: monthDate, data: []};
+    if (!currentSection || currentSection.year !== year) {
+      currentSection = {year, data: []};
       sections.push(currentSection);
     }
 
