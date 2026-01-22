@@ -37,7 +37,7 @@ index 5720429..b3481c1 100644
                       withVelocity:(CGPoint)velocity
                targetContentOffset:(inout CGPoint *)targetContentOffset
 diff --git a/node_modules/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm b/node_modules/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm
-index 15a5ab7..b3f9f68 100644
+index 15a5ab7..735aea6 100644
 --- a/node_modules/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm
 +++ b/node_modules/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm
 @@ -394,11 +394,20 @@ - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &
@@ -63,6 +63,15 @@ index 15a5ab7..b3f9f68 100644
    if (oldScrollViewProps.contentOffset != newScrollViewProps.contentOffset) {
      _scrollView.contentOffset = RCTCGPointFromPoint(newScrollViewProps.contentOffset);
    }
+@@ -521,7 +530,7 @@ - (UIView *)betterHitTest:(CGPoint)point withEvent:(UIEvent *)event
+     }
+   }
+ 
+-  return isPointInside ? self : nil;
++  return isPointInside ? _scrollView : nil;
+ }
+ 
+ /*
 @@ -680,6 +689,9 @@ - (void)prepareForRecycle
  
    const auto &props = static_cast<const ScrollViewProps &>(*_props);
