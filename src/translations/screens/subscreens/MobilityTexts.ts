@@ -357,10 +357,14 @@ export const ParkAndRideTexts = {
   parkingFor: (type: ParkingVehicleTypes) => {
     switch (type) {
       case 'pedalCycle':
-        return _('Sykkelparkering', 'Bike parking', 'Sykkelparkering');
+        return _(
+          '**Sykkelparkering**',
+          '**Bike parking**',
+          '**Sykkelparkering**',
+        );
       case 'car':
       default:
-        return _('Bilparkering', 'Car parking', 'Bilparkering');
+        return _('**Bilparkering**', '**Car parking**', '**Bilparkering**');
     }
   },
   disclaimer: _(
@@ -368,7 +372,12 @@ export const ParkAndRideTexts = {
     'Payment or other terms and conditions may apply to this parking',
     'Betaling eller andre vilkår kan gjelde på denne innfartsparkeringa',
   ),
-  capacity: _('Plasser totalt', 'Parking spaces', 'Plassar totalt'),
+  capacity: (capacity: number) =>
+    _(
+      `**${capacity}** plasser totalt`,
+      `**${capacity}** parking spaces`,
+      `**${capacity}** plassar totalt`,
+    ),
   unknownCapacity: _(
     'Ukjent antall plasser',
     'Unknown number of spaces',

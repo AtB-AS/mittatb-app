@@ -4,11 +4,9 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {activateFareContractNow} from '@atb/modules/ticketing';
+import {useActivateFareContractNowMutation} from '@atb/modules/ticketing';
 import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
-import Bugsnag from '@bugsnag/react-native';
-import React, {RefObject, useState} from 'react';
-import {RequestError} from '@atb/api/utils';
+import React, {RefObject} from 'react';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
@@ -33,29 +31,23 @@ export const ActivateNowBottomSheet = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<boolean>(false);
   const {theme} = useThemeContext();
   const {logEvent} = useAnalyticsContext();
+  const {
+    mutateAsync: activateNowAsync,
+    isPending: activateNowIsPending,
+    isError: activateNowIsError,
+  } = useActivateFareContractNowMutation();
 
-  const onActivate = async () => {
-    setIsLoading(true);
-    try {
-      await activateFareContractNow(fareContractId);
-      logEvent('Ticketing', 'Activated fare contract ahead of time', {
-        fareProductType,
-      });
-      bottomSheetModalRef.current?.dismiss();
-    } catch (e: any) {
-      const error = e as RequestError;
-      const httpCode = error.http?.code ?? 'UNKNOWN';
-      Bugsnag.notify({
-        name: `${httpCode} error when activating fare contract ahead of time`,
-        message: `Error: ${JSON.stringify(error)}`,
-      });
-      setError(true);
-    }
-    setIsLoading(false);
+  const onActivate = () => {
+    activateNowAsync(fareContractId, {
+      onSuccess: () => {
+        logEvent('Ticketing', 'Activated fare contract ahead of time', {
+          fareProductType,
+        });
+        bottomSheetModalRef.current?.dismiss();
+      },
+    });
   };
 
   return (
@@ -66,7 +58,7 @@ export const ActivateNowBottomSheet = ({
       closeCallback={() => giveFocus(onCloseFocusRef)}
     >
       <View style={styles.container}>
-        {error && (
+        {!!activateNowIsError && (
           <MessageInfoBox
             message={t(FareContractTexts.activateNow.genericError)}
             type="error"
@@ -84,7 +76,7 @@ export const ActivateNowBottomSheet = ({
           onPress={onActivate}
           text={t(FareContractTexts.activateNow.confirm)}
           rightIcon={{svg: Confirm}}
-          loading={isLoading}
+          loading={activateNowIsPending}
         />
         <Button
           expanded={true}

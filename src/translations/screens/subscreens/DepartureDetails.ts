@@ -34,10 +34,16 @@ const DepartureDetailsTexts = {
     loading: _('Laster detaljer', 'Loading details', 'Lastar detaljar'),
     noAlighting: _('Ingen avstigning', 'No disembarking', 'Ingen avstiging'),
     noBoarding: _('Ingen påstigning', 'No boarding', 'Ingen påstiging'),
+    notStoppingHere: (transportMode: string) =>
+      _(
+        `${transportMode} stopper ikke her`,
+        `The ${transportMode} will not stop here`,
+        `${transportMode} stoppar ikkje her`,
+      ),
     noActiveItem: _(
-      'Ojda! Noe gikk galt med lasting av detaljer for denne reisen.',
-      'Oops! We had some issues loading the details for this journey.',
-      'Oi då! Noko gjekk gale med lasting av detaljar for denne reisa.',
+      'Vi klarte ikke å laste av detaljer for denne reisen.',
+      'We are unable to load the details for this journey.',
+      'Vi klarte ikkje a laste av detaljar for denne reisa.',
     ),
   },
 };

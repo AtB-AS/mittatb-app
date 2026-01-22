@@ -118,7 +118,7 @@ export type ParkingType = {
   name: string;
   entityType: 'Parking';
   parkingVehicleTypes: ParkingVehicleTypes;
-  totalCapacity: number;
+  totalCapacity: string;
 };
 
 export type PolylineEncodedMultiPolygon = String[][];

@@ -116,7 +116,6 @@ const IssueMessageBox = () => {
   return (
     <View style={style.issueMessageBoxContainer}>
       <MessageInfoBox
-        title={t(ParkingViolationTexts.issue[titleAndMessageTexts].title)}
         message={t(ParkingViolationTexts.issue[titleAndMessageTexts].message)}
         type={type}
         onPressConfig={onPressConfig}

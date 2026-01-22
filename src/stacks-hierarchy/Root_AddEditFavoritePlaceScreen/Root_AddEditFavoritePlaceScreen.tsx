@@ -152,8 +152,10 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
             location={location}
             onPress={() =>
               navigation.navigate('Root_LocationSearchByTextScreen', {
-                callerRouteName: route.name,
-                callerRouteParam: 'searchLocation',
+                callerRouteConfig: {
+                  route: ['Root_AddEditFavoritePlaceScreen', {}, {merge: true}],
+                  locationRouteParam: 'searchLocation',
+                },
                 label: t(AddEditFavoriteTexts.fields.location.label),
                 favoriteChipTypes: ['location', 'map'],
                 initialLocation: location,

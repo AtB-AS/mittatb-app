@@ -68,7 +68,7 @@ export const ForceUpdateScreen = () => {
                   supported && Linking.openURL(link);
                 },
                 (err) => {
-                  Bugsnag.notify(err as any);
+                  Bugsnag.notify(err);
                   setError(true);
                 },
               );

@@ -96,9 +96,9 @@ const AnonymousPurchases = {
     ),
   },
   unknown_error: _(
-    'Oops - noe gikk galt. Supert om du prøver på nytt 🤞',
-    'Whoops - something went wrong. Please try again ��',
-    'Oi - noko gjekk gale. Prøv igjen 🤞',
+    'Noe gikk galt. Prøv igjen, eller kontakt kundeservice for hjelp.',
+    'Something went wrong. Please try again or contact customer service for assistance.',
+    'Noko gjekk gale. Prøv igjen, eller kontakt kundeservice for hjelp.',
   ),
 };
 

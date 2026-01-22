@@ -40,7 +40,7 @@ type BeaconsInfo = {
    * definitions. Not to be confused with permissions.
    * https://developer.kogenta.com/docs/kettle/react-native/usage#consents
    */
-  consents: Record<string, boolean> | null;
+  consents: number[];
 };
 
 type BeaconsContextState = {
@@ -104,7 +104,10 @@ const BeaconsContextProvider = ({children}: Props) => {
   const isInitializedRef = useRef(false);
   const isBeaconsSupported = isBeaconsEnabled && !!KETTLE_API_KEY;
 
-  const updateBeaconsInfo = () => getBeaconsInfo().then(setBeaconsInfo);
+  const updateBeaconsInfo = () => {
+    const beaconsInfo = getBeaconsInfo();
+    setBeaconsInfo(beaconsInfo);
+  };
 
   const initializeKettle = useCallback(async (bypassPermissions: boolean) => {
     // By checking permissions we can avoid initializing the SDK if the user
@@ -131,12 +134,12 @@ const BeaconsContextProvider = ({children}: Props) => {
 
   const getPrivacyDashboardUrl = useCallback(async () => {
     await initializeKettle(true);
-    return await Kettle.getPrivacyDashboardUrl();
+    return Kettle.getPrivacyDashboardUrl();
   }, [initializeKettle]);
 
   const getPrivacyTermsUrl = useCallback(async () => {
     await initializeKettle(true);
-    return await Kettle.getPrivacyTermsUrl();
+    return Kettle.getPrivacyTermsUrl();
   }, [initializeKettle]);
 
   const onboardForBeacons = useCallback(
@@ -161,7 +164,7 @@ const BeaconsContextProvider = ({children}: Props) => {
         await initializeKettle(false);
         if (isInitializedRef.current) {
           Kettle.grant(BEACONS_CONSENTS);
-          await updateBeaconsInfo();
+          updateBeaconsInfo();
         }
 
         // If consent wasn't set above, set it to true now
@@ -183,15 +186,17 @@ const BeaconsContextProvider = ({children}: Props) => {
     Kettle.revoke(BEACONS_CONSENTS);
     await storage.set(storeKey.beaconsConsent, 'false');
     setIsConsentGranted(false);
-    await updateBeaconsInfo();
+    updateBeaconsInfo();
   }, [isBeaconsSupported, stopBeacons, initializeKettle]);
 
   const deleteCollectedData = useCallback(async () => {
     if (!isBeaconsSupported) return;
     await initializeKettle(true);
-    Kettle.deleteCollectedData().catch((error) => {
-      Bugsnag.notify(error);
-    });
+    try {
+      Kettle.deleteCollectedData();
+    } catch (error: unknown) {
+      Bugsnag.notify(error as Error);
+    }
   }, [isBeaconsSupported, initializeKettle]);
 
   useEffect(() => {
@@ -202,7 +207,7 @@ const BeaconsContextProvider = ({children}: Props) => {
         // when the app is already onboarded for beacons.
         if (isInitializedRef.current) {
           stopBeacons();
-          await updateBeaconsInfo();
+          updateBeaconsInfo();
         }
         return;
       }
@@ -222,13 +227,13 @@ const BeaconsContextProvider = ({children}: Props) => {
         // If the user have given consents, but permissions were enabled later,
         // the consents are not necessarily set in the SDK. So we check the SDKs
         // list of granted consents and grant if they are not set.
-        const consents: any[] = await Kettle.getGrantedConsents();
+        const consents = Kettle.getGrantedConsents();
         if (consents.length === 0) {
           Kettle.grant(BEACONS_CONSENTS);
         }
 
         Kettle.start(permissions);
-        await updateBeaconsInfo();
+        updateBeaconsInfo();
       }
     })();
   }, [
@@ -265,10 +270,10 @@ const BeaconsContextProvider = ({children}: Props) => {
   );
 };
 
-const getBeaconsInfo = async (): Promise<BeaconsInfo> => {
-  const isStarted = await Kettle.isStarted();
-  const identifier = await Kettle.getIdentifier();
-  const consents = await Kettle.getGrantedConsents();
+const getBeaconsInfo = (): BeaconsInfo => {
+  const isStarted = Kettle.isStarted();
+  const identifier = Kettle.getIdentifier();
+  const consents = Kettle.getGrantedConsents();
   return {
     isStarted,
     identifier,

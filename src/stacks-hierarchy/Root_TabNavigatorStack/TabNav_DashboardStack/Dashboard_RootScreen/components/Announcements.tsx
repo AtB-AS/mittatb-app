@@ -71,6 +71,7 @@ export const Announcements = ({style}: Props) => {
       <ScrollView
         contentContainerStyle={styles.scrollView}
         horizontal={showHorizontally}
+        showsHorizontalScrollIndicator={false}
       >
         {filteredAnnouncements.map((a) => (
           <AnnouncementSection

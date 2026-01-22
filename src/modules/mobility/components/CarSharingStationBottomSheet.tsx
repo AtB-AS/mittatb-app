@@ -131,15 +131,12 @@ export const CarSharingStationBottomSheet = ({
                   <View style={styles.carSection}>
                     <MobilityStat
                       svg={CarFill}
-                      primaryStat={t(
+                      text={`**${t(
                         CarSharingTexts.stations.carsAvailable(
                           totalAvailableCars(station.vehicleTypesAvailable),
                           station.capacity,
                         ),
-                      )}
-                      secondaryStat={t(
-                        CarSharingTexts.stations.carsAvailableLabel,
-                      )}
+                      )}** ${t(CarSharingTexts.stations.carsAvailableLabel)}`}
                     />
                     {station.vehicleTypesAvailable && (
                       <CarPreviews

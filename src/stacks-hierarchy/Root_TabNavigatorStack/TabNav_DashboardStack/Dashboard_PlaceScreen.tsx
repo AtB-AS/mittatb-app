@@ -1,9 +1,19 @@
 import {DashboardScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
 import {PlaceScreenComponent} from '@atb/screen-components/place-screen';
+import {useMemo} from 'react';
 
 type Props = DashboardScreenProps<'Dashboard_PlaceScreen'>;
 
 export const Dashboard_PlaceScreen = ({navigation, route}: Props) => {
+  const onPressClose = useMemo(() => {
+    const {onCloseRoute} = route.params;
+
+    if (onCloseRoute !== undefined) {
+      return () => navigation.popTo(...onCloseRoute);
+    }
+    return undefined;
+  }, [navigation, route.params]);
+
   return (
     <PlaceScreenComponent
       {...route.params}
@@ -25,11 +35,7 @@ export const Dashboard_PlaceScreen = ({navigation, route}: Props) => {
           activeItemIndex,
         })
       }
-      onPressClose={
-        route.params.onCloseRoute
-          ? () => navigation.popTo(route.params.onCloseRoute as any)
-          : undefined
-      }
+      onPressClose={onPressClose}
     />
   );
 };

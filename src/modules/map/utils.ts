@@ -82,8 +82,8 @@ export const isQuayFeature = (f: Feature<Geometry, GeoJsonProperties>) =>
   f.properties?.entityType === 'Quay';
 
 export const isParkAndRide = (
-  f: Feature<Point>,
-): f is Feature<Point, ParkingType> => f.properties?.entityType === 'Parking';
+  f: Feature<Point> | undefined,
+): f is Feature<Point, ParkingType> => f?.properties?.entityType === 'Parking';
 
 export const mapPositionToCoordinates = (p: Position): Coordinates => ({
   longitude: p[0],

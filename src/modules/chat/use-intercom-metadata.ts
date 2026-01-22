@@ -21,6 +21,7 @@ type Metadata = {
   'AtB-Mobile-Token-Status': IntercomTokenStatus;
   'AtB-Mobile-Token-Error-Correlation-Id': string;
   'AtB-Beta-TripSearch': string;
+  'AtB-Stream-Enabled': string;
 };
 
 export const useIntercomMetadata = () => {
