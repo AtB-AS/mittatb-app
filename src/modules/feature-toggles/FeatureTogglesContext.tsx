@@ -1,4 +1,4 @@
-import React, {createContext, useContext} from 'react';
+import React, {createContext, useContext, useEffect} from 'react';
 import {storage} from '@atb/modules/storage';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {FeatureTogglesContextState} from './types';
@@ -24,16 +24,21 @@ export const FeatureTogglesContextProvider = ({children}: Props) => {
   const state = useFeatureTogglesContextState(remoteConfig, storage);
   const {updateMetadata} = useIntercomMetadata();
 
-  if (state.isEventStreamEnabled && state.isEventStreamFareContractsEnabled) {
+  useEffect(() => {
+    const isStreamEnabled =
+      state.isEventStreamEnabled && state.isEventStreamFareContractsEnabled;
     try {
-      updateMetadata({'AtB-Stream-Enabled': 'true'});
+      updateMetadata({
+        'AtB-Stream-Enabled': isStreamEnabled ? 'true' : 'false',
+      });
     } catch (error) {
-      console.error(
-        'Failed to update Intercom metadata with stream enabled',
-        error,
-      );
+      console.error(error);
     }
-  }
+  }, [
+    state.isEventStreamEnabled,
+    state.isEventStreamFareContractsEnabled,
+    updateMetadata,
+  ]);
 
   return (
     <FeatureTogglesContext.Provider value={state}>
