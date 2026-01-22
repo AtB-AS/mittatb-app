@@ -18,7 +18,8 @@ export function getTranslatedModeName(
     case 'bus':
     case 'coach':
       if (subMode === 'nightBus') {
-        return legSubModeNames.nightBus;
+        result = legSubModeNames.nightBus;
+        break;
       }
       result = legModeNames.bus;
       break;

@@ -52,17 +52,24 @@ const dictionary = {
       },
       metro: {
         ..._('T-bane', 'Metro', `T-bane`),
-        definite: _('T-banen', 'The metro', 'T-bane'),
+        definite: _('T-banen', 'The metro', 'T-banen'),
       },
       bicycle: {
         ..._('Sykkel', 'Bicycle', `Sykkel`),
         definite: _('Sykkelen', 'The bicycle', 'Sykkelen'),
       },
-      unknown: _(
-        'Ukjent transportmiddel',
-        'Unknown transport',
-        `Ukjent transportmiddel`,
-      ),
+      unknown: {
+        ..._(
+          'Ukjent transportmiddel',
+          'Unknown transport',
+          `Ukjent transportmiddel`,
+        ),
+        definite: _(
+          'Det ukjente transportmiddelet',
+          'The unknown transport',
+          'Det ukjende transportmiddelet',
+        ),
+      },
     },
     legSubModes: {
       nightBus: {
