@@ -27,13 +27,9 @@ export const FeatureTogglesContextProvider = ({children}: Props) => {
   useEffect(() => {
     const isStreamEnabled =
       state.isEventStreamEnabled && state.isEventStreamFareContractsEnabled;
-    try {
-      updateMetadata({
-        'AtB-Stream-Enabled': isStreamEnabled ? 'true' : 'false',
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    updateMetadata({
+      'AtB-Stream-Enabled': isStreamEnabled ? 'true' : 'false',
+    });
   }, [
     state.isEventStreamEnabled,
     state.isEventStreamFareContractsEnabled,
