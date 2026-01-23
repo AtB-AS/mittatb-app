@@ -3,7 +3,12 @@ import BottomSheetGor, {
   BottomSheetBackdrop,
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
-import {Platform, useWindowDimensions, View} from 'react-native';
+import {
+  LayoutChangeEvent,
+  Platform,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import {MapBottomSheetType, MapButtons, useMapContext} from '@atb/modules/map';
 import {BottomSheetTopPositionBridge} from './BottomSheetTopPositionBridge';
 import Animated, {
@@ -125,7 +130,7 @@ export const MapBottomSheet = ({
       : prevSnapPoints;
   }, [canMinimize, headerHeight, snapPoints]);
 
-  const onHeaderLayout = useCallback((e: any) => {
+  const onHeaderLayout = useCallback((e: LayoutChangeEvent) => {
     const h = e.nativeEvent.layout.height;
     setHeaderHeight((prev) => (prev !== h ? h : prev));
   }, []);
