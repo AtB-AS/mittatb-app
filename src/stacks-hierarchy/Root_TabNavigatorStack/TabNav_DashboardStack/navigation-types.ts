@@ -9,6 +9,7 @@ import {TripSearchScreenParams} from '@atb/stacks-hierarchy/Root_TabNavigatorSta
 import {NearbyStopPlacesScreenParams} from '@atb/screen-components/nearby-stop-places';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
 import {TravelAidScreenParams} from '@atb/screen-components/travel-aid';
+import {SelectFavouriteDeparturesScreenParams} from './Dashboard_SelectFavouriteDepartureScreen';
 
 export type DashboardRootScreenParams = {} & TripSearchScreenParams;
 
@@ -29,6 +30,7 @@ export type DashboardStackParams = StackParams<{
   Dashboard_DepartureDetailsScreen: DepartureDetailsScreenParams;
   Dashboard_TravelDetailsMapScreen: TravelDetailsMapScreenParams;
   Dashboard_PlaceScreen: Dashboard_PlaceScreenParams;
+  Dashboard_SelectFavouriteDeparturesScreen: SelectFavouriteDeparturesScreenParams;
   Dashboard_TripSearchScreen: TripSearchScreenParams;
   Dashboard_TripDetailsScreen: TripDetailsScreenParams;
   Dashboard_FavoriteDeparturesScreen: undefined;

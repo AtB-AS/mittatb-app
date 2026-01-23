@@ -51,12 +51,13 @@ export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
       }
       onSelectStopPlace={useCallback(
         (place: StopPlace) => {
-          navigation.navigate('Profile_PlaceScreen', {
+          navigation.navigate('Profile_SelectFavouriteDeparturesScreen', {
             place,
-            mode: route.params.mode,
+            limitPerQuay: 5,
+            addedFavoritesVisibleOnDashboard: false,
           });
         },
-        [navigation, route.params.mode],
+        [navigation],
       )}
       onUpdateLocation={(location) => navigation.setParams({location})}
       onAddFavoritePlace={() =>
