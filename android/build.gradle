@@ -9,7 +9,7 @@ buildscript {
         // Setting androidXBrowser to avoid react-native-reborn picking newest alpha requiring SDK 33
         androidXBrowser = "1.7.0"
         RNMapboxMapsImpl = "mapbox"
-        RNMapboxMapsVersion = '11.13.4'
+        RNMapboxMapsVersion = '11.18.0'
 
         // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
         ndkVersion = "27.1.12297006"
