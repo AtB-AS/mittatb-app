@@ -2,10 +2,10 @@ import {useThemeContext} from '@atb/theme';
 
 import {nsrSymbolLayers} from '../components/national-stop-registry-features/nsr-layers';
 import {
-  ExpressionField,
   Expression,
   SymbolLayerStyleProps,
-} from '@rnmapbox/maps/src/utils/MapboxStyles';
+} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
+type ExpressionField = Expression[1];
 import {PinType} from '../mapbox-styles/pin-types';
 import {SelectedMapItemProperties} from '../types';
 import {getIconZoomTransitionStyle} from '../utils';

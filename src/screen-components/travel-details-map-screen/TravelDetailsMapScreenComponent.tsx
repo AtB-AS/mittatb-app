@@ -33,7 +33,7 @@ import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
 
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {RegionPayload} from '@rnmapbox/maps/lib/typescript/src/components/MapView';
+import {RegionPayload} from 'node_modules/@rnmapbox/maps/src/components/MapView';
 import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
 import {ThemeText} from '@atb/components/text';
 import {debugProgressBetweenStopsText} from '../travel-details-screens/utils';
