@@ -125,23 +125,40 @@ export const MapBottomSheet = ({
       : prevSnapPoints;
   }, [canMinimize, headerHeight, snapPoints]);
 
+  const onHeaderLayout = useCallback((e: any) => {
+    const h = e.nativeEvent.layout.height;
+    setHeaderHeight((prev) => (prev !== h ? h : prev));
+  }, []);
+
+  const HandleComponent = useCallback(() => {
+    return (
+      <View onLayout={onHeaderLayout}>
+        <BottomSheetHeader
+          heading={heading}
+          subText={subText}
+          logoUrl={logoUrl}
+          bottomSheetRef={bottomSheetMapRef}
+          headerNode={headerNode}
+          bottomSheetHeaderType={bottomSheetHeaderType}
+        />
+      </View>
+    );
+  }, [
+    onHeaderLayout,
+    heading,
+    subText,
+    logoUrl,
+    bottomSheetMapRef,
+    headerNode,
+    bottomSheetHeaderType,
+  ]);
+
   return (
     <>
       {HeaderOverlay}
       <BottomSheetGor
         ref={bottomSheetMapRef}
-        handleComponent={() => (
-          <View onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)}>
-            <BottomSheetHeader
-              heading={heading}
-              subText={subText}
-              logoUrl={logoUrl}
-              bottomSheetRef={bottomSheetMapRef}
-              headerNode={headerNode}
-              bottomSheetHeaderType={bottomSheetHeaderType}
-            />
-          </View>
-        )}
+        handleComponent={HandleComponent}
         snapPoints={computedSnapPoints}
         enableDynamicSizing={enableDynamicSizing}
         backdropComponent={allowBackgroundTouch ? undefined : renderBackdrop}
