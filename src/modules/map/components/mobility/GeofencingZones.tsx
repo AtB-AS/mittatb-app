@@ -12,6 +12,7 @@ import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
 import {useGeofencingZonesQuery} from '@atb/modules/mobility';
 import {useThemeContext} from '@atb/theme';
 import {getIconZoomTransitionStyle} from '../../utils';
+import {hideItemsInTheDistanceFilter} from '../../hooks/use-map-symbol-styles';
 
 type GeofencingZonesProps = {
   systemId: string | null;
@@ -61,6 +62,11 @@ const GeofencingZonesForVehicle = ({
 
 const getGeofencingZoneCustomProps = ['get', 'geofencingZoneCustomProps'];
 
+// likely a type error from mapbox, seems to work as intended when using a slot layer defined in useMapboxJsonStyle
+type MapboxSlot = 'bottom' | 'middle' | 'top';
+const geofencingZonesSlot =
+  MapSlotLayerId.GeofencingZones as unknown as MapboxSlot;
+
 type GeofencingZoneProps = {
   geofencingZone: PreProcessedGeofencingZones;
 };
@@ -80,6 +86,7 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
     lineOpacity,
     lineCap: 'round',
     lineJoin: 'round',
+    lineEmissiveStrength: 1,
   };
 
   return (
@@ -94,8 +101,9 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
           fillAntialias: true,
           fillColor: bgColor,
           fillOpacity,
+          fillEmissiveStrength: 1,
         }}
-        aboveLayerID={MapSlotLayerId.GeofencingZones}
+        slot={geofencingZonesSlot}
       />
 
       {/*
@@ -107,13 +115,13 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
         id="geofencingZoneLine"
         filter={['!=', lineStyle, 'dashed']}
         style={lineLayerStyle}
-        aboveLayerID={MapSlotLayerId.GeofencingZones}
+        slot={geofencingZonesSlot}
       />
       <MapboxGL.LineLayer
         id="geofencingZoneDashedLine"
         filter={['==', lineStyle, 'dashed']}
         style={{...lineLayerStyle, lineDasharray: [2, 2]}}
-        aboveLayerID={MapSlotLayerId.GeofencingZones}
+        slot={geofencingZonesSlot}
       />
     </MapboxGL.ShapeSource>
   );
@@ -158,15 +166,16 @@ export const GeofencingZoneIcon: React.FC<GeofencingZoneIconProps> = ({
     >
       <MapboxGL.SymbolLayer
         id="geofencingZoneIcon"
+        filter={hideItemsInTheDistanceFilter}
         style={{
-          symbolZOrder: 'source',
           iconAllowOverlap: true,
           iconIgnorePlacement: true,
-          iconImage: iconImage,
+          iconImage,
           iconOpacity,
           iconSize,
+          iconEmissiveStrength: 1,
         }}
-        aboveLayerID={MapSlotLayerId.GeofencingZones}
+        aboveLayerID={MapSlotLayerId.GeofencingZonesIcons}
       />
     </MapboxGL.ShapeSource>
   );

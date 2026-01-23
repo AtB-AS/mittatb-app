@@ -346,7 +346,7 @@ export const Map = (props: MapProps) => {
           style={{
             flex: 1,
           }}
-          pitchEnabled={false}
+          pitchEnabled={true}
           onPress={onFeatureClick}
           testID="mapView"
           onTouchStart={() => {

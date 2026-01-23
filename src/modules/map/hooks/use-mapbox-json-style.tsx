@@ -5,26 +5,24 @@ import {getMapboxDarkStyle} from '../mapbox-styles/get-mapbox-dark-style';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
+import {MAPBOX_API_TOKEN} from '@env';
+import {colorTheme} from '../mapbox-styles/mapbox-color-theme';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
   GeofencingZones = 'geofencingZones',
+  GeofencingZonesIcons = 'geofencingZonesIcons',
   Vehicles = 'vehicles',
   Stations = 'stations',
   NSRItems = 'nsrItems',
   SelectedFeature = 'selectedFeature',
 }
 
-const slotSourceKey = 'slotSource';
-// This source only exists for slots layers, no data is fetched.
-const slotSource: StyleJsonVectorSourcesObj = {
-  [slotSourceKey]: {type: 'vector'}, // type is required, but otherwise doesn't matter here.
-};
-
 // the order of this list, determines which layers render on top. Last is on top.
 const slotLayerIds: MapSlotLayerId[] = [
   MapSlotLayerId.GeofencingZones,
+  MapSlotLayerId.GeofencingZonesIcons,
   MapSlotLayerId.Vehicles,
   MapSlotLayerId.Stations,
   MapSlotLayerId.NSRItems,
@@ -32,8 +30,8 @@ const slotLayerIds: MapSlotLayerId[] = [
 ];
 const slotLayers = slotLayerIds.map((slotLayerId) => ({
   id: slotLayerId,
-  type: 'symbol', // type is required, but otherwise doesn't matter here.
-  source: slotSourceKey,
+  type: 'slot',
+  slot: slotLayerId === MapSlotLayerId.GeofencingZones ? 'middle' : 'top',
 }));
 
 export const useMapboxJsonStyle: (
@@ -58,9 +56,25 @@ export const useMapboxJsonStyle: (
         ? getMapboxDarkStyle(mapbox_user_name, mapbox_nsr_tileset_id)
         : getMapboxLightStyle(mapbox_user_name, mapbox_nsr_tileset_id);
 
+    const themedLayers = themedStyle.layers.map((layer) => ({
+      ...layer,
+      slot: 'middle', // above mapbox ground style, but below 3d buildings/items, https://docs.mapbox.com/mapbox-gl-js/guides/migrate/#layer-slots
+      paint: {
+        ...layer.paint,
+        // add emissive strength to everything in order to be unaffected by lightPreset
+        'background-emissive-strength': 1,
+        'fill-emissive-strength': 1,
+        'line-emissive-strength': 1,
+        'icon-emissive-strength': 1,
+        'circle-emissive-strength': 1,
+        'fill-extrusion-emissive-strength': 1,
+        'model-emissive-strength': 1,
+        'text-emissive-strength': 1,
+      },
+    }));
+
     const extendedSources: StyleJsonVectorSourcesObj = {
       ...themedStyle.sources,
-      ...slotSource,
       ...(includeVehiclesAndStationsVectorSource
         ? {
             [vehiclesAndStationsVectorSourceId]:
@@ -69,12 +83,12 @@ export const useMapboxJsonStyle: (
         : undefined),
     };
 
-    const layersWithSlots = [...themedStyle.layers, ...slotLayers];
+    const themedLayersWithSlots = [...themedLayers, ...slotLayers];
 
     return {
       ...themedStyle,
       sources: extendedSources,
-      layers: layersWithSlots,
+      layers: themedLayersWithSlots,
     };
   }, [
     themeName,
@@ -90,6 +104,23 @@ export const useMapboxJsonStyle: (
       JSON.stringify({
         ...themedStyleWithExtendedSourcesAndSlotLayers,
         sprite: mapboxSpriteUrl + themeName,
+        projection: {name: 'mercator'}, // Using 'globe' instead looks pretty cool, but there is an initial frame flicker with zoom 0. Might be possible to fix somehow.
+        imports: [
+          {
+            id: 'basemap',
+            // url must be absolute for this to work
+            url: `https://api.mapbox.com/styles/v1/mapbox/standard?access_token=${MAPBOX_API_TOKEN}`,
+            config: {
+              lightPreset: themeName === 'dark' ? 'night' : 'day',
+              showPlaceLabels: true,
+              showPointOfInterestLabels: false,
+              showTransitLabels: false,
+              showPedestrianRoads: true,
+              showRoadLabels: false,
+            },
+            'color-theme': colorTheme,
+          },
+        ],
       }),
     [themeName, mapboxSpriteUrl, themedStyleWithExtendedSourcesAndSlotLayers],
   );

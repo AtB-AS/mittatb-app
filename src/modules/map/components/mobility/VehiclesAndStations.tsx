@@ -20,7 +20,10 @@ import {
   Expression,
   FilterExpression,
 } from '@rnmapbox/maps/src/utils/MapboxStyles';
-import {scaleTransitionZoomRange} from '../../hooks/use-map-symbol-styles';
+import {
+  hideItemsInTheDistanceFilter,
+  scaleTransitionZoomRange,
+} from '../../hooks/use-map-symbol-styles';
 
 const vehiclesAndStationsVectorSourceId =
   'vehicles-clustered-and-stations-source';
@@ -36,7 +39,7 @@ export const VehiclesWithClusters = ({
   });
 
   const filter: FilterExpression = useMemo(
-    () => ['all', ['!', isSelected]],
+    () => ['all', ['!', isSelected], hideItemsInTheDistanceFilter],
     [isSelected],
   );
 
@@ -106,6 +109,7 @@ export const Stations = ({
           ['!', !showSharedCars],
         ],
       ],
+      hideItemsInTheDistanceFilter,
     ];
   }, [
     isSelected,
