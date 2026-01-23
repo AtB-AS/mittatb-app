@@ -357,15 +357,14 @@ function getVehiclePinSpriteNames(
   const activitySpriteString = isError
     ? 'error'
     : isStale
-      ? 'waiting'
+      ? 'loading'
       : 'active';
 
   const vehicleSpriteString = getTransportModeSpriteName(mode, subMode);
 
   const iconImage =
     'vehiclepin_' +
-    vehicleSpriteString +
-    '_' +
+    (activitySpriteString === 'loading' ? '' : vehicleSpriteString + '_') +
     activitySpriteString +
     '_' +
     themeName;
