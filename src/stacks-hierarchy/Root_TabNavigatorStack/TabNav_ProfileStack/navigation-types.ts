@@ -1,12 +1,11 @@
 import {TabNavigatorScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
-
-import {PlaceScreenParams} from '@atb/screen-components/place-screen';
 import {NearbyStopPlacesScreenParams} from '@atb/screen-components/nearby-stop-places';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
 import {TicketHistoryScreenParams} from '@atb/screen-components/ticket-history';
 import {SmartParkAndRideScreenParams} from './Profile_SmartParkAndRideScreen';
+import {SelectFavoriteDeparturesScreenParams} from '@atb/screen-components/favorite-departures';
 
 export type ProfileStackParams = StackParams<{
   Profile_RootScreen: undefined;
@@ -32,7 +31,7 @@ export type ProfileStackParams = StackParams<{
   Profile_FareContractsScreen: undefined;
   Profile_DebugInfoScreen: undefined;
   Profile_NearbyStopPlacesScreen: NearbyStopPlacesScreenParams;
-  Profile_PlaceScreen: PlaceScreenParams;
+  Profile_SelectFavouriteDeparturesScreen: SelectFavoriteDeparturesScreenParams;
   Profile_TravelAidScreen: undefined;
   Profile_TravelAidInformationScreen: undefined;
   Profile_SettingsScreen: undefined;
