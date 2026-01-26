@@ -12,7 +12,7 @@ export const Profile_SelectFavouriteDeparturesScreen = ({
     <SelectFavoriteDeparturesScreenComponent
       {...route.params}
       addedFavoritesVisibleOnDashboard={false}
-      onPressClose={() => navigation.popTo('Profile_FavoriteDeparturesScreen')}
+      onComplete={() => navigation.popTo('Profile_FavoriteDeparturesScreen')}
       onNavigateToQuay={(selectedQuay: Quay) =>
         navigation.push('Profile_SelectFavouriteDeparturesScreen', {
           place: route.params.place,

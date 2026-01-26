@@ -37,6 +37,7 @@ type Props = {
   testID?: string;
   addedFavoritesVisibleOnDashboard?: boolean;
   onNavigateToQuay: (quay: Quay) => void;
+  onComplete: () => void;
 };
 
 export const FavoriteLineList = ({
@@ -46,6 +47,7 @@ export const FavoriteLineList = ({
   addedFavoritesVisibleOnDashboard,
   testID,
   onNavigateToQuay,
+  onComplete,
 }: Props) => {
   const stopPlaceAndQuays: StopPlaceAndQuay[] = useMemo(
     () =>
@@ -97,6 +99,7 @@ export const FavoriteLineList = ({
           testID={'lineList' + index}
           addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
           onNavigateToQuay={onNavigateToQuay}
+          onComplete={onComplete}
         />
       )}
     />
@@ -112,6 +115,7 @@ export type QuaySectionProps = {
   testID?: 'quaySection' | string;
   addedFavoritesVisibleOnDashboard?: boolean;
   onNavigateToQuay: (quay: Quay) => void;
+  onComplete: () => void;
 };
 
 export function QuayLineSection({
@@ -123,6 +127,7 @@ export function QuayLineSection({
   testID,
   addedFavoritesVisibleOnDashboard,
   onNavigateToQuay,
+  onComplete,
 }: QuaySectionProps): React.JSX.Element {
   const styles = useStyles();
   const departures = getDeparturesForQuay(data, quay);
@@ -248,7 +253,7 @@ export function QuayLineSection({
             lineNumber={
               selectedDeparture?.departure.serviceJourney.line.publicCode
             }
-            addFavorite={(forSpecificLineName: boolean) =>
+            addFavorite={(forSpecificLineName: boolean) => {
               addFavorite(
                 {
                   ...selectedDeparture.departure.serviceJourney.line,
@@ -258,8 +263,9 @@ export function QuayLineSection({
                     selectedDeparture.departure.destinationDisplay,
                 },
                 forSpecificLineName,
-              )
-            }
+              );
+              onComplete();
+            }}
             bottomSheetModalRef={bottomSheetModalRef}
             onCloseFocusRef={selectedDeparture.onCloseRef}
           />

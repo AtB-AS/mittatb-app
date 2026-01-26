@@ -19,14 +19,14 @@ export const Dashboard_SelectFavoriteDeparturesScreen = ({
     <SelectFavoriteDeparturesScreenComponent
       {...route.params}
       addedFavoritesVisibleOnDashboard={true}
-      onPressClose={() => navigation.popTo(route.params.onCloseRouteName, {})}
+      onComplete={() => navigation.popTo(route.params.onCompleteRouteName, {})}
       onNavigateToQuay={(selectedQuay: Quay) =>
         navigation.push('Dashboard_SelectFavoriteDeparturesScreen', {
           place: route.params.place,
           selectedQuay,
           limitPerQuay: 1000,
           addedFavoritesVisibleOnDashboard: true,
-          onCloseRouteName: route.params.onCloseRouteName,
+          onCompleteRouteName: route.params.onCompleteRouteName,
         })
       }
     />
