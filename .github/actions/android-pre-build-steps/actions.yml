@@ -32,9 +32,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Checkout project
-      uses: actions/checkout@v4
-
     - name: Clean up runner
       uses: ./.github/actions/android-build-cleanup-runner
 
