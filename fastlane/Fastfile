@@ -432,7 +432,7 @@ platform :android do
       flavor: app_flavor,
       project_dir: 'android/',
       print_command: false, #don't print my passwords please
-      flags: "--configuration-cache"
+      flags: "--configuration-cache",
       properties: {
         "android.injected.signing.store.file" => File.expand_path(ENV["KEYSTORE_PATH"], Dir.pwd + "/../"),
         "android.injected.signing.store.password" => ENV["KEYSTORE_PASS"],
