@@ -312,7 +312,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
           }
           onAddFavouriteDeparture={() =>
             navigation.navigate('Dashboard_NearbyStopPlacesScreen', {
-              mode: 'Favourite',
               location: undefined,
               onCloseRoute: callerRoute,
             })

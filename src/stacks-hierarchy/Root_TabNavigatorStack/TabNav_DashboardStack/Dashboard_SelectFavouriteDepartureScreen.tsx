@@ -17,10 +17,8 @@ export const Dashboard_SelectFavouriteDeparturesScreen = ({
 }: Props) => {
   return (
     <SelectFavoriteDeparturesScreenComponent
-      place={route.params.place}
+      {...route.params}
       addedFavoritesVisibleOnDashboard={true}
-      limitPerQuay={route.params.limitPerQuay}
-      selectedQuay={route.params.selectedQuay}
       onPressClose={() =>
         navigation.popTo('Dashboard_FavoriteDeparturesScreen')
       }

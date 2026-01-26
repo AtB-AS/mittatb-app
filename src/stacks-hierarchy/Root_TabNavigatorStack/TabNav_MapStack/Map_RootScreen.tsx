@@ -41,7 +41,6 @@ export const Map_RootScreen = ({
       navigation.navigate('Map_PlaceScreen', {
         place,
         selectedQuayId: quay.id,
-        mode: 'Departure',
       });
     },
     [navigation],

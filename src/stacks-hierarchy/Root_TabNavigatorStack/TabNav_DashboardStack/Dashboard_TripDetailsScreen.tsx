@@ -31,7 +31,6 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
         navigation.push('Dashboard_PlaceScreen', {
           place: stopPlace,
           selectedQuayId,
-          mode: 'Departure',
         });
       }}
       onPressDeparture={(items, activeItemIndex) => {
