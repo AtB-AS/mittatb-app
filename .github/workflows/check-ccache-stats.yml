@@ -1,0 +1,27 @@
+name: Check ccache stats
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install ccache
+        run: sudo apt-get update && sudo apt-get install -y ccache
+
+      - name: Restore ccache
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/ccache
+          key: ccache-android-${{ runner.os }}-
+          restore-keys: |
+            ccache-android-${{ runner.os }}-
+
+      - name: Show ccache stats
+        run: |
+          ccache --show-stats
+          echo ""
+          echo "=== Cache directory contents ==="
+          du -sh ~/.cache/ccache 2>/dev/null || echo "Cache directory not found"
+          ls -la ~/.cache/ccache 2>/dev/null || true

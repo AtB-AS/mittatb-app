@@ -50,6 +50,20 @@ jobs:
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Install imagemagick
         run: sudo apt-get update && sudo apt-get install imagemagick
+      - name: Install ccache
+        run: sudo apt-get install -y ccache
+      - name: Configure ccache
+        run: |
+          ccache --set-config=max_size=2G
+          ccache --set-config=compiler_check=content
+          ccache --zero-stats
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: ccache-android-${{ runner.os }}-${{ hashFiles('android/app/build.gradle', 'android/build.gradle') }}
+          restore-keys: |
+            ccache-android-${{ runner.os }}-
       - name: install node v22
         uses: actions/setup-node@v5
         with:
@@ -116,6 +130,9 @@ jobs:
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
           SKIP_CLEAN: ${{ steps.changes.outputs.deps != 'true' }}
+          CCACHE_DIR: ~/.cache/ccache
+          USE_CCACHE: 1
+          NDK_CCACHE: /usr/bin/ccache
       - name: Replace apk bundle
         # if: inputs.force-build == 'true' # || steps.apk-cache.outputs.cache-hit == 'true'
         run: bash ./scripts/android/replace-bundle.sh
