@@ -11,7 +11,7 @@ import {Dashboard_FavoriteDeparturesScreen} from '@atb/stacks-hierarchy/Root_Tab
 import {Dashboard_TripDetailsScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripDetailsScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {Dashboard_TravelAidScreen} from './Dashboard_TravelAidScreen';
-import {Dashboard_SelectFavouriteDeparturesScreen} from './Dashboard_SelectFavouriteDepartureScreen';
+import {Dashboard_SelectFavoriteDeparturesScreen} from './Dashboard_SelectFavoriteDeparturesScreen';
 
 const Stack = createStackNavigator<DashboardStackParams>();
 
@@ -56,8 +56,8 @@ export const TabNav_DashboardStack = () => {
         component={Dashboard_FavoriteDeparturesScreen}
       />
       <Stack.Screen
-        name="Dashboard_SelectFavouriteDeparturesScreen"
-        component={Dashboard_SelectFavouriteDeparturesScreen}
+        name="Dashboard_SelectFavoriteDeparturesScreen"
+        component={Dashboard_SelectFavoriteDeparturesScreen}
       />
       <Stack.Screen
         name="Dashboard_TravelAidScreen"

@@ -195,7 +195,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
   const navigateToNearbyStopPlacesScreen = useCallback(() => {
     navigation.navigate('Dashboard_NearbyStopPlacesScreen', {
       location: undefined,
-      onCloseRoute: callerRoute,
+      onCloseRouteName: 'Dashboard_RootScreen',
     });
   }, [navigation]);
 

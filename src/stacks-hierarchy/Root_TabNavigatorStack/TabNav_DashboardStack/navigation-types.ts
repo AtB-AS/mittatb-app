@@ -9,28 +9,31 @@ import {TripSearchScreenParams} from '@atb/stacks-hierarchy/Root_TabNavigatorSta
 import {NearbyStopPlacesScreenParams} from '@atb/screen-components/nearby-stop-places';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
 import {TravelAidScreenParams} from '@atb/screen-components/travel-aid';
-import {SelectFavouriteDeparturesScreenParams} from './Dashboard_SelectFavouriteDepartureScreen';
+import {SelectFavoriteDeparturesScreenParams} from './Dashboard_SelectFavoriteDeparturesScreen';
 
 export type DashboardRootScreenParams = {} & TripSearchScreenParams;
 
-type Dashboard_NearbyStopPlacesScreenParams = NearbyStopPlacesScreenParams & {
-  onCloseRoute: Parameters<
-    DashboardScreenProps<'Dashboard_NearbyStopPlacesScreen'>['navigation']['popTo']
-  >;
-};
+type CloseRouteNames =
+  | 'Dashboard_FavoriteDeparturesScreen'
+  | 'Dashboard_RootScreen';
 
-type Dashboard_PlaceScreenParams = PlaceScreenParams & {
-  onCloseRoute?: Parameters<
-    DashboardScreenProps<'Dashboard_PlaceScreen'>['navigation']['popTo']
-  >;
+type Dashboard_NearbyStopPlacesScreenParams = NearbyStopPlacesScreenParams & {
+  onCloseRouteName: CloseRouteNames;
 };
+type Dashboard_PlaceScreenParams = PlaceScreenParams & {
+  onCloseRouteName?: CloseRouteNames;
+};
+type Dashboard_SelectFavoriteDeparturesScreenParams =
+  SelectFavoriteDeparturesScreenParams & {
+    onCloseRouteName: CloseRouteNames;
+  };
 
 export type DashboardStackParams = StackParams<{
   Dashboard_RootScreen: DashboardRootScreenParams;
   Dashboard_DepartureDetailsScreen: DepartureDetailsScreenParams;
   Dashboard_TravelDetailsMapScreen: TravelDetailsMapScreenParams;
   Dashboard_PlaceScreen: Dashboard_PlaceScreenParams;
-  Dashboard_SelectFavouriteDeparturesScreen: SelectFavouriteDeparturesScreenParams;
+  Dashboard_SelectFavoriteDeparturesScreen: Dashboard_SelectFavoriteDeparturesScreenParams;
   Dashboard_TripSearchScreen: TripSearchScreenParams;
   Dashboard_TripDetailsScreen: TripDetailsScreenParams;
   Dashboard_FavoriteDeparturesScreen: undefined;
