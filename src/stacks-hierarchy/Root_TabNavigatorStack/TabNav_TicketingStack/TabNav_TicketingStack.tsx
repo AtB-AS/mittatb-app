@@ -3,7 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {Ticketing_NotEnabledScreen} from './Ticketing_NotEnabledScreen';
 import {Ticketing_RootScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_RootScreen';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {Ticketing_TicketHistoryScreen} from './Ticketing_TicketHistoryScreen';
+import {Ticketing_PurchaseHistoryScreen} from './Ticketing_PurchaseHistoryScreen';
 import {TicketingStackParams} from './navigation-types';
 
 const Stack = createStackNavigator<TicketingStackParams>();
@@ -25,8 +25,8 @@ export const TabNav_TicketingStack = () => {
         />
       )}
       <Stack.Screen
-        name="Ticketing_TicketHistoryScreen"
-        component={Ticketing_TicketHistoryScreen}
+        name="Ticketing_PurchaseHistoryScreen"
+        component={Ticketing_PurchaseHistoryScreen}
       />
     </Stack.Navigator>
   );

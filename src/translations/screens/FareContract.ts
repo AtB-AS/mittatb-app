@@ -106,11 +106,11 @@ const FareContractTexts = {
         `Sent to ${phoneNumber}`,
         `Sendt til ${phoneNumber}`,
       ),
-    purchasedBy: (phoneNumber: string) =>
+    receivedFrom: (phoneNumber: string) =>
       _(
-        `Kjøpt av ${phoneNumber}`,
-        `Purchased by ${phoneNumber}`,
-        `Kjøpt av ${phoneNumber}`,
+        `Mottatt fra ${phoneNumber}`,
+        `Received from ${phoneNumber}`,
+        `Motteke frå ${phoneNumber}`,
       ),
     totalPrice: (priceString: string) =>
       _(

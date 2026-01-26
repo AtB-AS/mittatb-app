@@ -38,8 +38,6 @@ import {
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {Barcode} from './Barcode';
 import {MapFilterType, ScooterHelpParams} from '@atb/modules/map';
-import {MessageInfoText} from '@atb/components/message-info-text';
-import {useGetPhoneByAccountIdQuery} from '@atb/modules/on-behalf-of';
 import {useAuthContext} from '@atb/modules/auth';
 import {CarnetFooter} from '../carnet/CarnetFooter';
 import {MobilityBenefitsActionSectionItem} from '@atb/modules/mobility';
@@ -47,7 +45,6 @@ import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
 import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {UsedAccessesSectionItem} from './UsedAccessesSectionItem';
 import {ShmoTripDetailsSectionItem} from '@atb/modules/mobility';
 import {FareContractHeaderSectionItem} from '../sections/FareContractHeaderSectionItem';
@@ -64,6 +61,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
 import {Mail} from '@atb/assets/svg/mono-icons/profile';
+import {SentOrReceivedMessageBox} from '../components/SentOrReceivedMessageBox';
 
 type Props = {
   fareContract: FareContractType;
@@ -112,12 +110,6 @@ export const DetailsContent: React.FC<Props> = ({
     preassignedFareProduct?.id,
   );
   const legs = useFareContractLegs(firstTravelRight.datedServiceJourneys?.[0]);
-
-  // If the ticket is received, get the sender account ID to look up for phone number.
-  const senderAccountId = isReceived ? fc.purchasedBy : undefined;
-
-  const {data: purchaserPhoneNumber} =
-    useGetPhoneByAccountIdQuery(senderAccountId);
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
     fc.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
@@ -220,16 +212,9 @@ export const DetailsContent: React.FC<Props> = ({
           </View>
         </GenericSectionItem>
       )}
-      {purchaserPhoneNumber && (
+      {isSentOrReceived && (
         <GenericSectionItem>
-          <MessageInfoText
-            type="info"
-            message={t(
-              FareContractTexts.details.purchasedBy(
-                formatPhoneNumber(purchaserPhoneNumber),
-              ),
-            )}
-          />
+          <SentOrReceivedMessageBox fc={fc} />
         </GenericSectionItem>
       )}
 
@@ -273,7 +258,7 @@ export const DetailsContent: React.FC<Props> = ({
         />
       )}
 
-      {fc.orderId && fc.version && (
+      {fc.orderId && fc.version && !isReceived && (
         <LinkSectionItem
           text={t(FareContractTexts.details.askForReceipt)}
           onPress={onReceiptNavigate}

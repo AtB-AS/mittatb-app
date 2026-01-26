@@ -166,12 +166,12 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           <Section>
             <LinkSectionItem
               text={t(
-                ProfileTexts.sections.account.linkSectionItems.ticketHistory
+                ProfileTexts.sections.account.linkSectionItems.purchaseHistory
                   .label,
               )}
               leftIcon={{svg: Receipt}}
               onPress={() =>
-                navigation.navigate('Profile_TicketHistorySelectionScreen')
+                navigation.navigate('Profile_PurchaseHistoryScreen')
               }
               testID="ticketHistoryButton"
             />

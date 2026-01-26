@@ -1,48 +1,6 @@
-import {TranslatedString, translation as _} from '../commons';
-import {TicketHistoryMode} from '@atb/screen-components/ticket-history';
+import {translation as _} from '../commons';
 
 const bulletPoint = '\u2022';
-
-type TicketHistoryModeText = {
-  title: TranslatedString;
-  titleA11y: TranslatedString;
-  emptyDetail: TranslatedString;
-};
-
-export const TicketHistoryModeTexts: {
-  [key in TicketHistoryMode]: TicketHistoryModeText;
-} = {
-  historical: {
-    title: _('Utløpte billetter', 'Expired tickets', 'Utgåtte billettar'),
-    titleA11y: _(
-      'Aktiver for å vise dine utløpte billetter',
-      'Activate to show your expired tickets',
-      'Aktiver for å vise billettane dine som har gått ut',
-    ),
-    emptyDetail: _(
-      'Dine utløpte billetter vil dukke opp her. Dra ned for å oppdatere om du ikke finner billetten din.',
-      "Your expired tickets will show here. Pull down to refresh if you can't find your ticket.",
-      'Billettane dine som har gått ut vil dukke opp her. Drag ned for å oppdatere om du ikkje finn billetten din.',
-    ),
-  },
-  sent: {
-    title: _(
-      'Billetter sendt til andre',
-      'Tickets sent to others',
-      'Billettar sendt til andre',
-    ),
-    titleA11y: _(
-      'Aktiver for å vise billetter sendt til andre',
-      'Activate to show tickets sent to other',
-      'Aktiver for å vise billettar sendt til andre',
-    ),
-    emptyDetail: _(
-      'Billetter sendt til andre vil dukke opp her. Dra ned for å oppdatere om du ikke finner billetten din.',
-      "Tickets sent to others will show here. Pull down to refresh if you can't find your ticket.",
-      'Billettar sendt til andre vil dukke opp her. Drag ned for å oppdatere om du ikkje finn billetten din.',
-    ),
-  },
-};
 
 const TicketingTexts = {
   header: {
@@ -95,21 +53,30 @@ const TicketingTexts = {
       'Ingen aktive billettar',
     ),
     noActiveTicketsDetails: _(
-      'Når du kjøper billetter vil de dukke opp her. Dra ned for å oppdatere hvis billetten din ikke vises.',
-      'When you buy tickets, they will show up here. Pull down to refresh if your ticket is not showing.',
-      'Når du kjøper billettar vil dei dukke opp her. Drag ned for å oppdatere dersom billetten din ikkje visast.',
+      'Når du kjøper en billett, vil den vises her.',
+      'When you buy a ticket, it will show up here. ',
+      'Når du kjøper ein billett, vil han visast her. ',
     ),
   },
-  ticketHistoryTab: {
-    noItems: _(
-      'Fant ingen billetthistorikk.',
-      'Nothing to show here until you have purchased a ticket.',
-      'Fann ingen billetthistorikk.',
+  purchaseHistory: {
+    title: _('Kjøpshistorikk', 'Purchase history', 'Kjøpshistorikk'),
+    titleA11y: _(
+      'Aktiver for å vise dine tidligere kjøp',
+      'Activate to show your previous purchases',
+      'Aktiver for å vise dine tidlegare kjøp',
     ),
-  },
-  ticketHistory: {
-    title: _('Billetthistorikk', 'Ticket history', 'Billetthistorikk'),
-    emptyState: _('Ingen billetter', 'No tickets', 'Ingen billettar'),
+    emptyState: {
+      title: _(
+        'Ingen registrerte kjøp',
+        'No recorded purchases',
+        'Ingen registrerte kjøp',
+      ),
+      description: _(
+        'Dine kjøp vil vises her.',
+        'Your purchases will be shown here.',
+        'Dine kjøp vil visast her.',
+      ),
+    },
   },
   ticket: {
     valid: {

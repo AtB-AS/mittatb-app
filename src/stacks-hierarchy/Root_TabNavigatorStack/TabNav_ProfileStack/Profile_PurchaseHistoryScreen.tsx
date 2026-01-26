@@ -1,11 +1,11 @@
 import React, {useCallback} from 'react';
 import {ProfileScreenProps} from './navigation-types';
-import {TicketHistoryScreenComponent} from '@atb/screen-components/ticket-history';
+import {PurchaseHistoryScreenComponent} from '@atb/screen-components/purchase-history';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 
-type Props = ProfileScreenProps<'Profile_TicketHistoryScreen'>;
+type Props = ProfileScreenProps<'Profile_PurchaseHistoryScreen'>;
 
-export const Profile_TicketHistoryScreen = ({route, navigation}: Props) => {
+export const Profile_PurchaseHistoryScreen = ({navigation}: Props) => {
   const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
 
   const navigateToBonusScreen = useCallback(() => {
@@ -13,8 +13,7 @@ export const Profile_TicketHistoryScreen = ({route, navigation}: Props) => {
   }, [navigation, bonusScreenParams]);
 
   return (
-    <TicketHistoryScreenComponent
-      mode={route.params.mode}
+    <PurchaseHistoryScreenComponent
       onPressFareContract={(fareContractId) =>
         navigation.navigate('Root_FareContractDetailsScreen', {
           fareContractId,
