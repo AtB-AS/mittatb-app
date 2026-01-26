@@ -14,28 +14,34 @@ import {
   FavoriteDeparturesTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {type RefObject, useRef} from 'react';
+import React, {PropsWithChildren, type RefObject, useRef} from 'react';
 import {View} from 'react-native';
-import {GenericClickableSectionItem} from '@atb/components/sections';
+import {
+  GenericClickableSectionItem,
+  SectionItemProps,
+} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {getFavoriteIcon} from '@atb/modules/favorites';
 import {LineChip} from '@atb/components/estimated-call';
 
-type Props = {
-  quay: Quay;
-  departure: EstimatedCall;
-  onPressFavorite: (
-    departure: EstimatedCall,
-    existingFavorite: StoredFavoriteDeparture | undefined,
-    onCloseRef: RefObject<any>,
-  ) => void;
-  testID?: string;
-};
+type Props = PropsWithChildren<
+  SectionItemProps<{
+    quay: Quay;
+    departure: EstimatedCall;
+    onPressFavorite: (
+      departure: EstimatedCall,
+      existingFavorite: StoredFavoriteDeparture | undefined,
+      onCloseRef: RefObject<any>,
+    ) => void;
+    testID?: string;
+  }>
+>;
 
-export const FavoriteLineItem = ({
+export const FavoriteLineSectionItem = ({
   departure,
   quay,
   onPressFavorite,
+  ...props
 }: Props): React.JSX.Element => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -73,6 +79,7 @@ export const FavoriteLineItem = ({
 
   return (
     <GenericClickableSectionItem
+      {...props}
       onPress={onPress}
       accessible={true}
       accessibilityRole="button"
