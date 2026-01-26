@@ -39,7 +39,7 @@ export const Dashboard_NearbyStopPlacesScreen = ({
                   screen: 'Dashboard_NearbyStopPlacesScreen',
                   params: {
                     location: route.params.location,
-                    onCloseRoute: route.params.onCloseRoute,
+                    onCloseRouteName: route.params.onCloseRouteName,
                   },
                   merge: true,
                 },
@@ -53,13 +53,14 @@ export const Dashboard_NearbyStopPlacesScreen = ({
       }
       onSelectStopPlace={useCallback(
         (place: StopPlace) => {
-          navigation.navigate('Dashboard_SelectFavouriteDeparturesScreen', {
+          navigation.navigate('Dashboard_SelectFavoriteDeparturesScreen', {
             place,
             addedFavoritesVisibleOnDashboard: true,
             limitPerQuay: 5,
+            onCloseRouteName: route.params.onCloseRouteName,
           });
         },
-        [navigation],
+        [navigation, route.params.onCloseRouteName],
       )}
       onUpdateLocation={(location) => navigation.setParams({location})}
       onAddFavoritePlace={() =>
