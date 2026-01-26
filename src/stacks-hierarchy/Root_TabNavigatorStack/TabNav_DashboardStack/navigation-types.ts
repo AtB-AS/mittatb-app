@@ -13,19 +13,19 @@ import {SelectFavoriteDeparturesScreenParams} from './Dashboard_SelectFavoriteDe
 
 export type DashboardRootScreenParams = {} & TripSearchScreenParams;
 
-type CloseRouteNames =
+type OnCompleteRouteNames =
   | 'Dashboard_FavoriteDeparturesScreen'
   | 'Dashboard_RootScreen';
 
 type Dashboard_NearbyStopPlacesScreenParams = NearbyStopPlacesScreenParams & {
-  onCloseRouteName: CloseRouteNames;
+  onCompleteRouteName: OnCompleteRouteNames;
 };
 type Dashboard_PlaceScreenParams = PlaceScreenParams & {
-  onCloseRouteName?: CloseRouteNames;
+  onCompleteRouteName?: OnCompleteRouteNames;
 };
 type Dashboard_SelectFavoriteDeparturesScreenParams =
   SelectFavoriteDeparturesScreenParams & {
-    onCloseRouteName: CloseRouteNames;
+    onCompleteRouteName: OnCompleteRouteNames;
   };
 
 export type DashboardStackParams = StackParams<{

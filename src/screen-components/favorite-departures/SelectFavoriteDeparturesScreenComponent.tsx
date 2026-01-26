@@ -1,7 +1,6 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
-import {Button} from '@atb/components/button';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
@@ -17,7 +16,7 @@ export type SelectFavoriteDeparturesScreenParams = {
 };
 
 type Props = SelectFavoriteDeparturesScreenParams & {
-  onPressClose?: () => void;
+  onComplete: () => void;
   onNavigateToQuay: (quay: Quay) => void;
 };
 
@@ -26,13 +25,11 @@ export const SelectFavoriteDeparturesScreenComponent = ({
   selectedQuay,
   limitPerQuay,
   addedFavoritesVisibleOnDashboard,
-  onPressClose,
+  onComplete,
   onNavigateToQuay,
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[0];
 
   const {data: stopsDetailsData, isError: isStopsDetailsError} =
     useStopsDetailsDataQuery(place.quays === undefined ? [place.id] : []);
@@ -71,20 +68,9 @@ export const SelectFavoriteDeparturesScreenComponent = ({
           addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
           testID="lineList"
           onNavigateToQuay={onNavigateToQuay}
+          onComplete={onComplete}
         />
       </View>
-
-      {onPressClose && (
-        <View style={styles.closeButton}>
-          <Button
-            expanded={true}
-            interactiveColor={interactiveColor}
-            text={t(DeparturesTexts.closeButton.label)}
-            onPress={onPressClose}
-            testID="confirmButton"
-          />
-        </View>
-      )}
     </View>
   );
 };

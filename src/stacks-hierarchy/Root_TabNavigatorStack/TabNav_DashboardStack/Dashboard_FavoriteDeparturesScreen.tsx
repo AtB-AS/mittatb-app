@@ -13,7 +13,7 @@ export const Dashboard_FavoriteDeparturesScreen = ({navigation}: Props) => {
       onPressAddFavorite={() =>
         navigation.navigate('Dashboard_NearbyStopPlacesScreen', {
           location: undefined,
-          onCloseRouteName: 'Dashboard_FavoriteDeparturesScreen',
+          onCompleteRouteName: 'Dashboard_FavoriteDeparturesScreen',
         })
       }
     />
