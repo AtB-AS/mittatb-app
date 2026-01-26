@@ -19,7 +19,7 @@ import {
   Section,
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {FavoriteLineItem} from './FavoriteLineItem';
+import {FavoriteLineSectionItem} from './FavoriteLineItem';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 import {getStopPlaceAndQuays} from '@atb/screen-components/place-screen';
 import {StopPlaceAndQuay} from '@atb/screen-components/place-screen';
@@ -197,7 +197,7 @@ export function QuayLineSection({
           </View>
         </GenericSectionItem>
         {sortedDepartures.slice(0, limitPerQuay).map((departure) => (
-          <FavoriteLineItem
+          <FavoriteLineSectionItem
             key={departure.serviceJourney.id}
             quay={quay}
             departure={departure}
