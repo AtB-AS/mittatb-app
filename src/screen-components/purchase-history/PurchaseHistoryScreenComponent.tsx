@@ -8,7 +8,7 @@ import {useTimeContext} from '@atb/modules/time';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {SectionList, View} from 'react-native';
 import {useAuthContext} from '@atb/modules/auth';
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
@@ -52,6 +52,24 @@ export const PurchaseHistoryScreenComponent = ({
     [fareContractsToShow, reservationsToShow],
   );
 
+  const renderItem = useCallback(
+    ({item, index}: {item: Reservation | FareContractType; index: number}) => (
+      <FareContractOrReservation
+        navigateToBonusScreen={navigateToBonusScreen}
+        now={serverNow}
+        onPressFareContract={() => {
+          if ('id' in item) {
+            analytics.logEvent('Ticketing', 'Ticket details clicked');
+            onPressFareContract(item.id);
+          }
+        }}
+        fcOrReservation={item}
+        index={index}
+      />
+    ),
+    [analytics, navigateToBonusScreen, onPressFareContract, serverNow],
+  );
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -70,22 +88,7 @@ export const PurchaseHistoryScreenComponent = ({
             {section.year}
           </ThemeText>
         )}
-        renderItem={({item, index}) => (
-          <FareContractOrReservation
-            navigateToBonusScreen={navigateToBonusScreen}
-            now={serverNow}
-            onPressFareContract={() => {
-              // Reservations don't have `id`, but also don't show the link to
-              // ticket details.
-              if ('id' in item) {
-                analytics.logEvent('Ticketing', 'Ticket details clicked');
-                onPressFareContract(item.id);
-              }
-            }}
-            fcOrReservation={item}
-            index={index}
-          />
-        )}
+        renderItem={renderItem}
         ListEmptyComponent={
           <EmptyState
             title={t(TicketingTexts.purchaseHistory.emptyState.title)}
@@ -97,6 +100,11 @@ export const PurchaseHistoryScreenComponent = ({
         contentContainerStyle={styles.sectionListContent}
         testID="ticketHistoryScrollView"
         stickySectionHeadersEnabled={false}
+        windowSize={7}
+        maxToRenderPerBatch={10}
+        initialNumToRender={10}
+        updateCellsBatchingPeriod={50}
+        scrollEventThrottle={16}
       />
     </View>
   );
