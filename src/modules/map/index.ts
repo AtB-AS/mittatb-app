@@ -45,7 +45,7 @@ export type {
   PolylineEncodedMultiPolygon,
   PreProcessedGeofencingZones,
   PointFeatureCollection,
-  ScooterHelpParams
+  ScooterHelpParams,
 } from './types';
 export {
   flyToLocation,
