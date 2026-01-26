@@ -36,10 +36,12 @@ runs:
         GCP_CREDENTIALS_PATH: google-services.json
         FIREBASE_APP_ID: ${{ inputs.firebase-app-id }}
     - name: Upload bundle and source maps
+      shell: bash
       run: bash ./scripts/android/upload-sourcemaps.sh
       env:
         BUGSNAG_API_KEY: ${{ inputs.bugsnag-api-key }}
     - name: Register app version
+      shell: bash
       run: bash ./scripts/android/register-app-version.sh
       env:
           ENTUR_PUBLISH_CLIENT: ${{ inputs.abt-entur-publish-client-staging }}
