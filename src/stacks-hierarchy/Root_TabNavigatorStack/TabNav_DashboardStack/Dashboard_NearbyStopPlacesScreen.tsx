@@ -21,7 +21,7 @@ export const Dashboard_NearbyStopPlacesScreen = ({
     <NearbyStopPlacesScreenComponent
       focusRef={focusRef}
       location={fromLocation}
-      mode={route.params.mode}
+      showFavoriteChips={false}
       headerProps={{
         title: t(FavoriteDeparturesTexts.favoriteItemAdd.label),
         leftButton: {type: 'back'},
@@ -39,7 +39,6 @@ export const Dashboard_NearbyStopPlacesScreen = ({
                   screen: 'Dashboard_NearbyStopPlacesScreen',
                   params: {
                     location: route.params.location,
-                    mode: route.params.mode,
                     onCloseRoute: route.params.onCloseRoute,
                   },
                   merge: true,

@@ -28,11 +28,7 @@ type EstimatedCallRenderItem = {
 
 type Props = Pick<
   QuaySectionProps,
-  | 'quay'
-  | 'addedFavoritesVisibleOnDashboard'
-  | 'navigateToDetails'
-  | 'mode'
-  | 'showOnlyFavorites'
+  'quay' | 'navigateToDetails' | 'mode' | 'showOnlyFavorites'
 > & {
   departures: EstimatedCall[];
   shouldShowMoreItemsLink: boolean;
@@ -42,7 +38,6 @@ type Props = Pick<
 export const EstimatedCallList = ({
   quay,
   departures,
-  addedFavoritesVisibleOnDashboard,
   navigateToDetails,
   mode,
   showOnlyFavorites,
@@ -63,7 +58,7 @@ export const EstimatedCallList = ({
     quay,
     lineNumber: selectedDeparture?.departure.serviceJourney.line.publicCode,
     existing: selectedDeparture?.existingFavorite,
-    addedFavoritesVisibleOnDashboard,
+    addedFavoritesVisibleOnDashboard: false,
   });
 
   useEffect(() => {
@@ -85,21 +80,6 @@ export const EstimatedCallList = ({
   }, [alert, quay.name, selectedDeparture]);
 
   const {getFavoriteDeparture} = useFavoritesContext();
-
-  const onPressFavorite = useCallback(
-    (
-      departure: EstimatedCall,
-      existingFavorite: StoredFavoriteDeparture | undefined,
-      onCloseRef: RefObject<any>,
-    ) => {
-      setSelectedDeparture({
-        departure,
-        existingFavorite,
-        onCloseRef,
-      });
-    },
-    [],
-  );
 
   const onPressDetails = useCallback(
     (departure: EstimatedCall) => {
@@ -131,7 +111,6 @@ export const EstimatedCallList = ({
         mode,
         existingFavorite,
         onPressDetails: onPressDetails,
-        onPressFavorite: onPressFavorite,
         showBottomBorder:
           index === departures.length - 1 && !shouldShowMoreItemsLink,
       };
