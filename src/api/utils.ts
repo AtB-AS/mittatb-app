@@ -2,6 +2,7 @@ import axios, {AxiosError, Cancel} from 'axios';
 import {FirebaseAuthIdHeaderName, RequestIdHeaderName} from './headers';
 import {ErrorResponse} from '@atb-as/utils';
 import {PartialField} from '@atb/utils/object';
+import {OperatorsResponse} from './types/mobility';
 
 /**
  * Error from API requests or Axios client errors.
@@ -104,4 +105,40 @@ export const errorDetailsToResponseData = (
 export const stringifyUrl = (url: string, query: string | undefined) => {
   if (!query) return url;
   return url.includes('?') ? `${url}&${query}` : `${url}?${query}`;
+};
+
+const mapLanguageToLangCode = (lang: string) => {
+  switch (lang) {
+    case 'nb':
+    case 'no':
+      return 'nb';
+    case 'nn':
+    case 'nno':
+      return 'nn';
+    case 'en':
+    case 'eng':
+      return 'en';
+    default:
+      return 'en';
+  }
+};
+
+export const getOperatorNameById = (
+  operatorsData: OperatorsResponse | undefined,
+  operatorId: string | undefined,
+  lang: string,
+): string | undefined => {
+  const operator = operatorsData?.operators?.find(
+    (operator) => operator.id === operatorId,
+  );
+
+  const translation = operator?.name.translations.find(
+    (t) => mapLanguageToLangCode(t.language) === lang,
+  );
+
+  if (translation) {
+    return translation.value;
+  } else {
+    return operator?.name.translations?.[0]?.value;
+  }
 };

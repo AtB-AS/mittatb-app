@@ -11,6 +11,8 @@ import {
   ShmoBooking,
   ShmoBookingEvent,
   ShmoBookingSchema,
+  OperatorsResponse,
+  OperatorsResponseSchema,
 } from './types/mobility';
 
 export const getActiveShmoBooking = (
@@ -100,3 +102,12 @@ export const sendSupportRequest = (
       'Operator-Id': operatorId,
     },
   });
+
+export const getOperators = (
+  opts?: AxiosRequestConfig,
+): Promise<OperatorsResponse> =>
+  client
+    .get<OperatorsResponse>('/mobility/v1/operators', {
+      ...opts,
+    })
+    .then((response) => OperatorsResponseSchema.parse(response.data));
