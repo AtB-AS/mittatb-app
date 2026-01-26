@@ -246,6 +246,53 @@ export const MobilityTexts = {
       end: _('Avslutt turen', 'End the trip', 'Avslutt turen'),
     },
   },
+  fareContractHeader: (formFactor: FormFactor, operatorName: string) => {
+    switch (formFactor) {
+      case FormFactor.Scooter:
+      case FormFactor.ScooterStanding:
+        return _(
+          `Elsparkesykkel fra ${operatorName}`,
+          `E-scooter from ${operatorName}`,
+          `Elsparkesykkel frå ${operatorName}`,
+        );
+      case FormFactor.ScooterSeated:
+        return _(
+          `Scooter fra ${operatorName}`,
+          `Scooter from ${operatorName}`,
+          `Scooter frå ${operatorName}`,
+        );
+      case FormFactor.Bicycle:
+        return _(
+          `Sykkel fra ${operatorName}`,
+          `Bicycle from ${operatorName}`,
+          `Sykkel frå ${operatorName}`,
+        );
+      case FormFactor.Car:
+        return _(
+          `Bil fra ${operatorName}`,
+          `Car from ${operatorName}`,
+          `Bil frå ${operatorName}`,
+        );
+      case FormFactor.CargoBicycle:
+        return _(
+          `Lastesykkel fra ${operatorName}`,
+          `Cargo bike from ${operatorName}`,
+          `Lastesykkel frå ${operatorName}`,
+        );
+      case FormFactor.Moped:
+        return _(
+          `Moped fra ${operatorName}`,
+          `Moped from ${operatorName}`,
+          `Moped frå ${operatorName}`,
+        );
+      case FormFactor.Other:
+        return _(
+          `Annet kjøretøy fra ${operatorName}`,
+          `Other vehicle from ${operatorName}`,
+          `Anna køyretøy frå ${operatorName}`,
+        );
+    }
+  },
 };
 
 export const ScooterTexts = {

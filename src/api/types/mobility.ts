@@ -280,6 +280,29 @@ export const AssetFromQrCodeQuerySchema = z.object({
 
 export type AssetFromQrCodeQuery = z.infer<typeof AssetFromQrCodeQuerySchema>;
 
+export const TranslationSchema = z.object({
+  language: z.string(),
+  value: z.string(),
+});
+
+export const NameSchema = z.object({
+  translations: z.array(TranslationSchema),
+});
+
+export const OperatorSchema = z.object({
+  id: z.string(),
+  name: NameSchema,
+});
+
+export const OperatorsResponseSchema = z.object({
+  operators: z.array(OperatorSchema).nullable(),
+});
+
+export type Translation = z.infer<typeof TranslationSchema>;
+export type Name = z.infer<typeof NameSchema>;
+export type Operator = z.infer<typeof OperatorSchema>;
+export type OperatorsResponse = z.infer<typeof OperatorsResponseSchema>;
+
 const GeoJsonCoordinatesSchema = z.union([
   z.tuple([longitude, latitude]), // lon, lat
   z.tuple([longitude, latitude, z.number()]), // lon, lat, altitude
