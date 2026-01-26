@@ -7,11 +7,9 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   PreassignedFareProduct,
   ProductTypeTransportModes,
-  FareZone,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
 import {Moon, Student, Youth} from '@atb/assets/svg/mono-icons/ticketing';
-import {ContrastColor} from '@atb/theme/colors';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {SvgProps} from 'react-native-svg';
@@ -26,38 +24,26 @@ export const InspectionSymbol = ({
   preassignedFareProduct,
   sentTicket,
 }: InspectionSymbolProps) => {
-  const {theme} = useThemeContext();
-
-  const fareProductColor = useFareProductColor(preassignedFareProduct?.type);
   const {isInspectable, mobileTokenStatus} = useMobileTokenContext();
-  const themeColor = isInspectable
-    ? fareProductColor
-    : theme.color.status['warning'].primary;
 
   if (mobileTokenStatus === 'loading') {
     return <ActivityIndicator size="large" />;
   }
 
   return isInspectable && !sentTicket ? (
-    <InspectableContent
-      preassignedFareProduct={preassignedFareProduct}
-      themeColor={themeColor}
-    />
+    <InspectableContent preassignedFareProduct={preassignedFareProduct} />
   ) : (
-    <NotInspectableContent themeColor={themeColor} />
+    <NotInspectableContent />
   );
 };
 
 const InspectableContent = ({
   preassignedFareProduct,
-  themeColor,
 }: {
   preassignedFareProduct?: PreassignedFareProduct;
-  fromFareZone?: FareZone;
-  toFareZone?: FareZone;
-  themeColor: ContrastColor;
 }) => {
   const styles = useStyles();
+  const themeColor = useFareProductColor(preassignedFareProduct?.type);
 
   const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
@@ -102,13 +88,15 @@ const InspectableContent = ({
   );
 };
 
-const NotInspectableContent = ({themeColor}: {themeColor: ContrastColor}) => {
+const NotInspectableContent = () => {
   const {t} = useTranslation();
+  const {theme} = useThemeContext();
   const styles = useStyles();
+
+  const borderColor = theme.color.status['warning'].primary.background;
+
   return (
-    <View
-      style={[styles.symbolContainer, {borderColor: themeColor.background}]}
-    >
+    <View style={[styles.symbolContainer, {borderColor}]}>
       <View style={styles.symbolContent} testID="notInspectableIcon">
         <ThemeText
           typography="body__xs"

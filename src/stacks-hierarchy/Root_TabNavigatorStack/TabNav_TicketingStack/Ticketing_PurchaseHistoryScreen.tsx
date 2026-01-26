@@ -1,11 +1,12 @@
 import React, {useCallback} from 'react';
-import {TicketHistoryScreenComponent} from '@atb/screen-components/ticket-history';
+import {PurchaseHistoryScreenComponent} from '@atb/screen-components/purchase-history';
 import {TicketingScreenProps} from './navigation-types';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
+import {FareContractType} from '@atb-as/utils';
 
-type Props = TicketingScreenProps<'Ticketing_TicketHistoryScreen'>;
+type Props = TicketingScreenProps<'Ticketing_PurchaseHistoryScreen'>;
 
-export const Ticketing_TicketHistoryScreen = ({route, navigation}: Props) => {
+export const Ticketing_PurchaseHistoryScreen = ({navigation}: Props) => {
   const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
 
   const navigateToBonusScreen = useCallback(() => {
@@ -13,9 +14,8 @@ export const Ticketing_TicketHistoryScreen = ({route, navigation}: Props) => {
   }, [navigation, bonusScreenParams]);
 
   return (
-    <TicketHistoryScreenComponent
-      mode={route.params.mode}
-      onPressFareContract={(fareContractId) =>
+    <PurchaseHistoryScreenComponent
+      onPressFareContract={(fareContractId: FareContractType['id']) =>
         navigation.navigate('Root_FareContractDetailsScreen', {
           fareContractId,
           transitionOverride: 'slide-from-right',
