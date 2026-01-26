@@ -30,7 +30,7 @@ inputs:
     required: true
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Clean up runner
       uses: ./.github/actions/android-build-cleanup-runner
