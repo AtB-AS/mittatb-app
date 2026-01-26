@@ -1,0 +1,22 @@
+diff --git a/node_modules/react-native-worklets/android/build.gradle b/node_modules/react-native-worklets/android/build.gradle
+index 61c565b..782b677 100644
+--- a/node_modules/react-native-worklets/android/build.gradle
++++ b/node_modules/react-native-worklets/android/build.gradle
+@@ -319,13 +319,12 @@ task prepareWorkletsHeadersForPrefabs(type: Copy) {
+     into(workletsPrefabHeadersDir)
+ }
+ 
+-task cleanCmakeCache() {
+-    tasks.getByName("clean").dependsOn(cleanCmakeCache)
+-    doFirst {
+-        delete "${projectDir}/.cxx"
+-    }
++task cleanCmakeCache(type: Delete) {
++    delete layout.projectDirectory.dir(".cxx")
+ }
+ 
++clean.dependsOn(cleanCmakeCache)
++
+ repositories {
+     mavenCentral()
+     google()

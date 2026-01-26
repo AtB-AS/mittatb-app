@@ -1,0 +1,19 @@
+diff --git a/node_modules/react-native-vision-camera/android/build.gradle b/node_modules/react-native-vision-camera/android/build.gradle
+index b1d9973..f1e2a5a 100644
+--- a/node_modules/react-native-vision-camera/android/build.gradle
++++ b/node_modules/react-native-vision-camera/android/build.gradle
+@@ -214,12 +214,8 @@ dependencies {
+   }
+ }
+ 
+-task deleteCmakeCache() {
+-  doFirst {
+-    delete "${projectDir}/.cxx"
+-    delete "${nodeModules}/react-native-vision-camera/android/.cxx"
+-    delete "${nodeModules}/react-native-vision-camera/android/build"
+-  }
++task deleteCmakeCache(type: Delete) {
++    delete layout.projectDirectory.dir(".cxx")
+ }
+ 
+ task prepareHeaders(type: Copy) {
