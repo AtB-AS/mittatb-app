@@ -236,6 +236,7 @@ export const Profile_FareContractsScreen = ({navigation}: Props) => {
             now={Date.now()}
             onReceiptNavigate={() => {}}
             onNavigateToMap={() => {}}
+            onSupportNavigate={() => {}}
             navigateToBonusScreen={navigateToBonusScreen}
           />
         ))}

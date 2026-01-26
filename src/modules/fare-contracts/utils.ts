@@ -85,6 +85,7 @@ export function getValidityStatus(
 }
 
 export const hasShmoBookingId = (fc?: FareContractType) => !!fc?.bookingId;
+export const hasShmoOperatorId = (fc?: FareContractType) => !!fc?.operatorId;
 
 export const useSortFcOrReservationByValidityAndCreation = (
   now: number,

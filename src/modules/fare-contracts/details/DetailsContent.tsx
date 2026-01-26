@@ -14,6 +14,7 @@ import {FareContractInfoDetailsSectionItem} from '../sections/FareContractInfoDe
 import {
   getFareContractInfo,
   hasShmoBookingId,
+  hasShmoOperatorId,
   mapToUserProfilesWithCount,
 } from '../utils';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
@@ -36,7 +37,7 @@ import {
 } from '@atb/modules/configuration';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {Barcode} from './Barcode';
-import {MapFilterType} from '@atb/modules/map';
+import {MapFilterType, ScooterHelpParams} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/modules/on-behalf-of';
 import {useAuthContext} from '@atb/modules/auth';
@@ -62,12 +63,14 @@ import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
+import {Mail} from '@atb/assets/svg/mono-icons/profile';
 
 type Props = {
   fareContract: FareContractType;
   preassignedFareProduct?: PreassignedFareProduct;
   now: number;
   onReceiptNavigate: () => void;
+  onSupportNavigate: (params: ScooterHelpParams) => void;
   onNavigateToMap: (initialFilters: MapFilterType) => void;
   navigateToBonusScreen: () => void;
   hasActiveTravelCard?: boolean;
@@ -79,6 +82,7 @@ export const DetailsContent: React.FC<Props> = ({
   preassignedFareProduct,
   now,
   onReceiptNavigate,
+  onSupportNavigate,
   onNavigateToMap,
   navigateToBonusScreen,
 }) => {
@@ -253,11 +257,28 @@ export const DetailsContent: React.FC<Props> = ({
 
       <OrderDetailsSectionItem fareContract={fc} />
 
+      {hasShmoBookingId(fc) && hasShmoOperatorId(fc) && (
+        <LinkSectionItem
+          text={t(
+            FareContractTexts.details.askOperatorRefund(
+              preassignedFareProduct?.name.value,
+            ),
+          )}
+          onPress={() =>
+            onSupportNavigate({
+              operatorId: fc.operatorId!,
+              bookingId: fc.bookingId!,
+            })
+          }
+        />
+      )}
+
       {fc.orderId && fc.version && (
         <LinkSectionItem
           text={t(FareContractTexts.details.askForReceipt)}
           onPress={onReceiptNavigate}
           testID="receiptButton"
+          rightIcon={{svg: Mail}}
         />
       )}
       {refundOptions?.isRefundable && (
