@@ -125,13 +125,6 @@ android {
     def KETTLE_API_KEY_VALUE = System.getProperty("KETTLE_API_KEY") as String
     def BUGSNAG_API_KEY_VALUE = System.getProperty("BUGSNAG_API_KEY") as String
 
-    externalNativeBuild {
-        cmake {
-            // set minimum Cmake version to prevent issue when configuration-cache is enabled
-            version "3.26.0+"
-        }
-    }
-
     namespace "no.mittatb"
     defaultConfig {
         resValue "string", "app_name", appName

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.26)
+cmake_minimum_required(VERSION 3.13)
 
 # Define the library name here.
 project(rndiffapp_appmodules)
