@@ -17,7 +17,7 @@ on:
 
 jobs:
   build-atb:
-    name: Android build workflow for AtB
+    name: Build Android (AtB)
     environment: atb
     timeout-minutes: 180
     runs-on: ubuntu-latest
@@ -71,7 +71,7 @@ jobs:
           abt-entur-publish-client-staging: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_STAGING }}
 
   build-oms:
-    name: Android build workflow for ${{ matrix.org }}
+    name: Build Android (${{ matrix.org }})
     strategy:
       fail-fast: false
       matrix:
