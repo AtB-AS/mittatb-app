@@ -100,10 +100,10 @@ export const PurchaseHistoryScreenComponent = ({
         contentContainerStyle={styles.sectionListContent}
         testID="ticketHistoryScrollView"
         stickySectionHeadersEnabled={false}
+        // Optimizations for large lists
         windowSize={7}
         maxToRenderPerBatch={10}
         initialNumToRender={10}
-        updateCellsBatchingPeriod={50}
         scrollEventThrottle={16}
       />
     </View>

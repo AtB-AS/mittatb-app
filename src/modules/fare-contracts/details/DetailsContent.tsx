@@ -249,12 +249,14 @@ export const DetailsContent: React.FC<Props> = ({
               preassignedFareProduct?.name.value,
             ),
           )}
-          onPress={() =>
-            onSupportNavigate({
-              operatorId: fc.operatorId!,
-              bookingId: fc.bookingId!,
-            })
-          }
+          onPress={() => {
+            if (fc?.operatorId && fc?.bookingId) {
+              onSupportNavigate({
+                operatorId: fc.operatorId,
+                bookingId: fc.bookingId,
+              });
+            }
+          }}
         />
       )}
 
