@@ -7,33 +7,48 @@ import {Quay} from '@atb/api/types/generated/journey_planner_v3_types';
 export function getTranslatedModeName(
   mode?: AnyMode,
   subMode?: AnySubMode,
+  isDefinite: boolean = false,
 ): TranslatedString {
   const legModeNames = dictionary.travel.legModes;
   const legSubModeNames = dictionary.travel.legSubModes;
+
+  let result: TranslatedString & {definite: TranslatedString};
+
   switch (mode) {
     case 'bus':
     case 'coach':
       if (subMode === 'nightBus') {
-        return legSubModeNames.nightBus;
+        result = legSubModeNames.nightBus;
+        break;
       }
-      return legModeNames.bus;
+      result = legModeNames.bus;
+      break;
     case 'rail':
-      return legModeNames.rail;
+      result = legModeNames.rail;
+      break;
     case 'tram':
-      return legModeNames.tram;
+      result = legModeNames.tram;
+      break;
     case 'water':
-      return legModeNames.water;
+      result = legModeNames.water;
+      break;
     case 'air':
-      return legModeNames.air;
+      result = legModeNames.air;
+      break;
     case 'foot':
-      return legModeNames.foot;
+      result = legModeNames.foot;
+      break;
     case 'metro':
-      return legModeNames.metro;
+      result = legModeNames.metro;
+      break;
     case 'bicycle':
-      return legModeNames.bicycle;
+      result = legModeNames.bicycle;
+      break;
     default:
-      return legModeNames.unknown;
+      result = legModeNames.unknown;
   }
+
+  return isDefinite ? result.definite : result;
 }
 
 export function getQuayName(

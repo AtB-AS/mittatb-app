@@ -37,7 +37,7 @@ const DepartureDetailsTexts = {
     notStoppingHere: (transportMode: string) =>
       _(
         `${transportMode} stopper ikke her`,
-        `The ${transportMode} will not stop here`,
+        `${transportMode} does not stop here`,
         `${transportMode} stoppar ikkje her`,
       ),
     noActiveItem: _(
