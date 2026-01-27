@@ -368,11 +368,6 @@ export const Map = (props: MapProps) => {
     setFollowUserLocation(false);
   }, [paddingBottomMap]);
 
-  console.log(
-    'isGeofencingZonesAsTilesEnabled',
-    isGeofencingZonesAsTilesEnabled,
-  );
-
   return (
     <View style={{flex: 1}}>
       <View style={{flex: 1}}>

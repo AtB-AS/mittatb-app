@@ -11,9 +11,12 @@ import {
   useTileUrlTemplate,
 } from '../../hooks/use-tile-url-template';
 import {useThemeContext} from '@atb/theme';
-import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
+import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
+import {
+  AllLayerStyleProps,
+  Expression,
+} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 import {GeofencingZoneCode} from '@atb-as/theme';
-import {Expression} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {geofencingZoneCodes} from '../../utils';
 
 const geofencingZonesVectorSourceId = 'geofencing-zones-source';
@@ -108,7 +111,7 @@ const GfzLineLayer = ({
     ['get', 'color', geofencingZoneStyle],
   ]; // same as bg
 
-  const lineLayerStyle = {
+  const lineLayerStyle: MapboxGL.FillLayerStyle & AllLayerStyleProps = {
     lineWidth: ['interpolate', ['exponential', 1.5], ['zoom'], 12, 2, 18, 4],
     lineColor,
     lineOpacity,
