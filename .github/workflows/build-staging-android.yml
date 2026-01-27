@@ -19,7 +19,27 @@ permissions:
   contents: read
 
 jobs:
+
+  setup:
+    name: Install tools
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache APKTool
+        uses: actions/cache@v4
+        id: apktool-cache
+        with:
+          path: /usr/local/bin/apktool*
+          key: apktool-2.12.1
+
+      - name: Install APKTool
+        if: steps.apktool-cache.outputs.cache-hit != 'true'
+        run: |
+          wget -q https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -O /usr/local/bin/apktool
+          wget -q https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.12.1.jar -O /usr/local/bin/apktool.jar
+          chmod +x /usr/local/bin/apktool
+
   build-atb:
+    needs: setup
     name: Build Android (AtB)
     environment: atb
     timeout-minutes: 180
@@ -62,6 +82,12 @@ jobs:
           USE_CCACHE: 1
           NDK_CCACHE: /usr/bin/ccache
 
+      - name: Restore APKTool cache
+        uses: actions/cache@v4
+        with:
+          path: /usr/local/bin/apktool*
+          key: apktool-2.12.1
+      
       - name: Post-build steps
         uses: ./.github/actions/android-post-build-steps
         with:
@@ -119,6 +145,12 @@ jobs:
           CCACHE_DIR: ~/.cache/ccache
           USE_CCACHE: 1
           NDK_CCACHE: /usr/bin/ccache
+
+      - name: Restore APKTool cache
+        uses: actions/cache@v4
+        with:
+          path: /usr/local/bin/apktool*
+          key: apktool-2.12.1
 
       - name: Post-build steps
         uses: ./.github/actions/android-post-build-steps
