@@ -107,6 +107,7 @@ jobs:
           abt-entur-publish-client-staging: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_STAGING }}
 
   build-oms:
+    needs: setup
     name: Build Android (${{ matrix.org }})
     strategy:
       fail-fast: false
