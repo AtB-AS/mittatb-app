@@ -664,7 +664,7 @@ function EstimatedCallRow({
           >
             {t(
               DepartureDetailsTexts.messages.notStoppingHere(
-                t(getTranslatedModeName(mode, subMode, 'definite')),
+                t(getTranslatedModeName(mode, subMode, true)),
               ),
             )}
           </AccessibleText>
