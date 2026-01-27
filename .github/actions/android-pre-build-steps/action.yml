@@ -28,11 +28,16 @@ inputs:
   entur-registry-token:
     description: 'Entur registry token'
     required: true
+  can-skip:
+    description: 'APK Cache found, can skip step'
+    required: true
+    default: 'false'
 
 runs:
   using: "composite"
   steps:
     - name: Clean up runner
+      if: inputs.can-skip != 'true'
       uses: ./.github/actions/android-build-cleanup-runner
 
     - name: Set global env vars
@@ -63,10 +68,12 @@ runs:
       run: sudo apt-get update && sudo apt-get install imagemagick
 
     - name: Install ccache
+      if: inputs.can-skip != 'true'
       shell: bash
       run: sudo apt-get install -y ccache
 
     - name: Configure ccache
+      if: inputs.can-skip != 'true'
       shell: bash
       run: |
         ccache --set-config=max_size=2G
@@ -74,6 +81,7 @@ runs:
         ccache --zero-stats
 
     - name: Cache ccache
+      if: inputs.can-skip != 'true'
       uses: actions/cache@v4
       with:
         path: ~/.cache/ccache
@@ -126,10 +134,12 @@ runs:
         KEYSTORE: ${{ inputs.keystore }}
 
     - name: Generate native assets
+      if: inputs.can-skip != 'true'
       shell: bash
       run: yarn generate-native-assets
 
     - name: Setup Gradle
+      if: inputs.can-skip != 'true'
       uses: gradle/actions/setup-gradle@v5
       with:
         gradle-version: wrapper

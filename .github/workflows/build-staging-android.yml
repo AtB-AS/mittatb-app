@@ -42,77 +42,13 @@ jobs:
       - name: Add APKTool to PATH
         run: echo "$HOME/apktool" >> $GITHUB_PATH
 
-  build-atb:
-    needs: setup
-    name: Build Android (AtB)
-    environment: atb
-    timeout-minutes: 180
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout project
-        uses: actions/checkout@v4
-
-      - name: Pre-build steps
-        uses: ./.github/actions/android-pre-build-steps
-        with:
-          org: atb
-          force-build: ${{ inputs.force-build }}
-          cache-read-only: 'false'
-          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
-          keystore: ${{ secrets.KEYSTORE }}
-          git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
-          entur-registry-user: ${{ vars.ENTUR_REGISTRY_USER }}
-          entur-registry-token: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
-
-      - name: Detect dependency changes
-        uses: dorny/paths-filter@v3
-        id: changes
-        with:
-          filters: |
-            deps:
-              - 'package.json'
-              - 'package-lock.json'
-              - 'android/app/build.gradle'
-              - 'android/build.gradle'
-
-      - name: Run fastlane build
-        run: bundle exec fastlane android build
-        env:
-          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
-          KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
-          KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
-          SKIP_CLEAN: ${{ steps.changes.outputs.deps != 'true' }}
-          CCACHE_DIR: ~/.cache/ccache
-          USE_CCACHE: 1
-          NDK_CCACHE: /usr/bin/ccache
-
-      - name: Restore APKTool cache
-        uses: actions/cache@v4
-        with:
-          path: ~/apktool
-          key: apktool-2.12.1
-
-      - name: Add APKTool to PATH
-        run: echo "$HOME/apktool" >> $GITHUB_PATH
-      
-      - name: Post-build steps
-        uses: ./.github/actions/android-post-build-steps
-        with:
-          keystore-pass: ${{ secrets.KEYSTORE_PASS }}
-          keystore-key-pass: ${{ secrets.KEYSTORE_KEY_PASS }}
-          keystore-key-alias: ${{ secrets.KEYSTORE_KEY_ALIAS }}
-          firebase-distribution-credentials: ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}}
-          firebase-app-id: ${{ secrets.FIREBASE_APP_ID }}
-          bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
-          abt-entur-publish-client-staging: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_STAGING }}
-
   build-oms:
     needs: setup
     name: Build Android (${{ matrix.org }})
     strategy:
       fail-fast: false
       matrix:
-        org: [nfk, fram, troms]
+        org: [atb, nfk, fram, troms]
     environment: ${{ matrix.org }}
     timeout-minutes: 180
     runs-on: ubuntu-latest
@@ -120,17 +56,25 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v4
 
+      - name: Get potential cached APK
+        uses: actions/cache@v4
+        id: apk-cache
+        with:
+          path: app-staging.apk
+          key: ${{ matrix.org }}-apk-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.env') }}
+
       - name: Pre-build steps
         uses: ./.github/actions/android-pre-build-steps
         with:
           org: ${{ matrix.org }}
           force-build: ${{ inputs.force-build }}
-          cache-read-only: ${{ matrix.org != 'fram' }}
+          cache-read-only: ${{ matrix.org != 'atb' }}
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           keystore: ${{ secrets.KEYSTORE }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
           entur-registry-user: ${{ vars.ENTUR_REGISTRY_USER }}
           entur-registry-token: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+          can-skip: ${{ steps.apk-cache.outputs.cache-hit }}
 
       - name: Detect dependency changes
         uses: dorny/paths-filter@v3
@@ -144,6 +88,7 @@ jobs:
               - 'android/build.gradle'
 
       - name: Run fastlane build
+        if: inputs.force-build == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane android build
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
