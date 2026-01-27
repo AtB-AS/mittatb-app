@@ -14,6 +14,7 @@ import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useGetOperatorsQuery} from '@atb/modules/mobility';
 import {getOperatorNameById} from '@atb/api/utils';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {ProductName} from '../components/ProductName';
 
 type Props = {
   fareContract: FareContractType;
@@ -44,15 +45,19 @@ export const FareContractShmoHeaderSectionItem = ({
 
   return (
     <View style={[topContainer, styles.container]}>
-      {!!operatorName && !!fc.formFactor && (
-        <ThemeText
-          typography="body__s__strong"
-          accessibilityLabel={fc?.formFactor + operatorName}
-          color={theme.color.foreground.dynamic.secondary}
-          style={styles.headerText}
-        >
-          {t(MobilityTexts.fareContractHeader(fc.formFactor, operatorName))}
-        </ThemeText>
+      {!!operatorName ? (
+        !!fc.formFactor && (
+          <ThemeText
+            typography="body__s__strong"
+            accessibilityLabel={fc?.formFactor + operatorName}
+            color={theme.color.foreground.dynamic.secondary}
+            style={styles.headerText}
+          >
+            {t(MobilityTexts.fareContractHeader(fc.formFactor, operatorName))}
+          </ThemeText>
+        )
+      ) : (
+        <ProductName fc={fc} />
       )}
 
       <ThemeText
