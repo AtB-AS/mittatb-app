@@ -72,7 +72,7 @@ export function ParallaxScroll({
 
   return (
     <View style={styles.content}>
-      <Animated.View style={animatedHeaderBackdropStyle}></Animated.View>
+      <Animated.View style={animatedHeaderBackdropStyle} />
       <Animated.ScrollView
         scrollEventThrottle={10}
         refreshControl={refreshControl}
