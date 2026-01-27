@@ -426,7 +426,6 @@ platform :android do
     app_flavor = ENV['APP_FLAVOR']
     skip_clean = ENV['SKIP_CLEAN'] == 'true'
 
-
     # Install CMake 3.22.1 for native builds (ignore if already installed)
     begin
       android_home = ENV['ANDROID_HOME'] || ENV['ANDROID_SDK_ROOT'] || '/usr/local/lib/android/sdk'
@@ -437,6 +436,9 @@ platform :android do
 
     sh("find ../node_modules -type d -name '.cxx' -exec rm -rf {} + || true")
     sh("rm -rf ~/.gradle/caches/*/transforms/*react-android* || true")
+
+    ENV['CMAKE_C_COMPILER_LAUNCHER'] = 'ccache'
+    ENV['CMAKE_CXX_COMPILER_LAUNCHER'] = 'ccache'
 
     gradle(task: 'clean', project_dir: 'android/') unless skip_clean
     gradle(
