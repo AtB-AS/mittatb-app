@@ -15,6 +15,9 @@ on:
       - master
       - release/**
 
+permissions:
+  contents: read
+
 jobs:
   build-atb:
     name: Build Android (AtB)

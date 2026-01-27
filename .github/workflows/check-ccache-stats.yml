@@ -3,6 +3,9 @@ name: Check ccache stats
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   check-cache:
     runs-on: ubuntu-latest
