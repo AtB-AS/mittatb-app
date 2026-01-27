@@ -103,11 +103,6 @@ runs:
         path: '**/node_modules'
         key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
 
-    - name: Install node_modules
-      if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
-      shell: bash
-      run: yarn install --frozen-lockfile
-
     - name: Setup ruby and bundle install
       uses: ruby/setup-ruby@v1
       with:

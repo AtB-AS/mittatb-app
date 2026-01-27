@@ -21,16 +21,18 @@ permissions:
 jobs:
 
   setup:
-    name: Install tools
+    name: Install tools and warm up caches
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+      # ===== Install & Cache APKTool =====
       - name: Cache APKTool
         uses: actions/cache@v4
         id: apktool-cache
         with:
           path: ~/apktool
           key: apktool-2.12.1
-
       - name: Install APKTool
         if: steps.apktool-cache.outputs.cache-hit != 'true'
         run: |
@@ -38,10 +40,31 @@ jobs:
           wget https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -O ~/apktool/apktool
           wget https://github.com/iBotPeaches/Apktool/releases/download/v2.12.1/apktool_2.12.1.jar -O ~/apktool/apktool.jar
           chmod +x ~/apktool/apktool
-
       - name: Add APKTool to PATH
         run: echo "$HOME/apktool" >> $GITHUB_PATH
-
+      # ===== Install & Cache node-modules  =====
+      - name: Install node v22
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: 'yarn'
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: modules-cache
+        with:
+          path: '**/node_modules'
+          key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+      - name: Install node_modules
+        if: steps.modules-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+      # ===== Ruby & Bundler =====
+      - name: Setup ruby and bundle install
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.0
+          cache-version: 2
+          bundler-cache: true
+      
   build-oms:
     needs: setup
     name: Build Android (${{ matrix.org }})
