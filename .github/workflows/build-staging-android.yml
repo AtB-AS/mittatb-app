@@ -28,15 +28,19 @@ jobs:
         uses: actions/cache@v4
         id: apktool-cache
         with:
-          path: /usr/local/bin/apktool*
+          path: ~/apktool
           key: apktool-2.12.1
 
       - name: Install APKTool
         if: steps.apktool-cache.outputs.cache-hit != 'true'
         run: |
-          wget -q https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -O /usr/local/bin/apktool
-          wget -q https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.12.1.jar -O /usr/local/bin/apktool.jar
-          chmod +x /usr/local/bin/apktool
+          mkdir -p ~/apktool
+          wget -q https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -O ~/apktool/apktool
+          wget -q https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.12.1.jar -O ~/apktool/apktool.jar
+          chmod +x ~/apktool/apktool
+
+      - name: Add APKTool to PATH
+        run: echo "$HOME/apktool" >> $GITHUB_PATH
 
   build-atb:
     needs: setup
@@ -85,8 +89,11 @@ jobs:
       - name: Restore APKTool cache
         uses: actions/cache@v4
         with:
-          path: /usr/local/bin/apktool*
+          path: ~/apktool
           key: apktool-2.12.1
+
+      - name: Add APKTool to PATH
+        run: echo "$HOME/apktool" >> $GITHUB_PATH
       
       - name: Post-build steps
         uses: ./.github/actions/android-post-build-steps
@@ -149,8 +156,11 @@ jobs:
       - name: Restore APKTool cache
         uses: actions/cache@v4
         with:
-          path: /usr/local/bin/apktool*
+          path: ~/apktool
           key: apktool-2.12.1
+
+      - name: Add APKTool to PATH
+        run: echo "$HOME/apktool" >> $GITHUB_PATH
 
       - name: Post-build steps
         uses: ./.github/actions/android-post-build-steps
