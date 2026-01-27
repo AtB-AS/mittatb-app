@@ -129,6 +129,7 @@ const ChildrenWithParallaxScrollContent = ({
   return (
     <View style={styles.container}>
       <ParallaxScroll
+        headerColor={headerColor}
         header={
           <View style={{backgroundColor: headerColor}}>
             <View style={styles.childrenContainer}>

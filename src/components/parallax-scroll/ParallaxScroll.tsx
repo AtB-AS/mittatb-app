@@ -5,22 +5,27 @@ import {RefreshControl, RefreshControlProps, View} from 'react-native';
 import Animated, {
   useAnimatedScrollHandler,
   ScrollEvent,
+  useSharedValue,
+  useAnimatedStyle,
 } from 'react-native-reanimated';
 import {scheduleOnRN} from 'react-native-worklets';
 
 type Props = PropsWithChildren<{
   header: React.ReactNode;
+  headerColor: string;
   refreshControlProps?: RefreshControlProps;
   handleScroll?: (scrollPercentage: number) => void;
 }>;
 export function ParallaxScroll({
   header,
+  headerColor,
   children,
   refreshControlProps,
   handleScroll,
 }: Props) {
   const {onLayout: onHeaderContentLayout, height: headerHeight} = useLayout();
   const contentHeightRef = React.useRef(headerHeight);
+  const scrollY = useSharedValue(0);
 
   useEffect(() => {
     contentHeightRef.current = headerHeight;
@@ -40,6 +45,7 @@ export function ParallaxScroll({
   const onScroll = useAnimatedScrollHandler(
     {
       onScroll: (event) => {
+        scrollY.value = event.contentOffset.y;
         scheduleOnRN(handleScrollCallback, event);
       },
     },
@@ -52,8 +58,21 @@ export function ParallaxScroll({
     ) : undefined;
   }, [refreshControlProps]);
 
+  const animatedHeaderBackdropStyle = useAnimatedStyle(() => {
+    return {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      height: Math.max(0, -scrollY.value + 10),
+      backgroundColor: headerColor,
+    };
+  }, [scrollY, headerColor]);
+
   return (
     <View style={styles.content}>
+      <Animated.View style={animatedHeaderBackdropStyle}></Animated.View>
       <Animated.ScrollView
         scrollEventThrottle={10}
         refreshControl={refreshControl}
