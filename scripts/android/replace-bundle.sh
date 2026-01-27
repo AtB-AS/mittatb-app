@@ -38,7 +38,7 @@ else
     brew install yq
 
     echo "Decompile Android APK"
-    apktool d $APK_FILE_NAME --output decompiled-apk
+    apktool d $APK_FILE_NAME --output decompiled-apk --no-res
 
     echo "Replace bundle in decompiled APK"
     rm decompiled-apk/assets/index.android.bundle
