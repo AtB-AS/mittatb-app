@@ -22,7 +22,7 @@ import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {VehicleCard} from '../VehicleCard';
 import {ShmoActionButton} from '../ShmoActionButton';
-import {useOperators} from '../../use-operators';
+//import {useOperators} from '../../use-operators';
 import {useShmoRequirements} from '../../use-shmo-requirements';
 import {Section} from '@atb/components/sections';
 import {
@@ -78,8 +78,8 @@ export const ScooterSheet = ({
     appStoreUri,
   } = useVehicle(id);
 
-  const operator = useOperators().byId(operatorId);
-  const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
+  //const operator = useOperators().byId(operatorId);
+  const operatorIsIntegrationEnabled = true;
 
   const {isLoading: shmoReqIsLoading, hasBlockers} =
     useShmoRequirements(operatorId);
