@@ -7,7 +7,7 @@ import {Quay} from '@atb/api/types/generated/journey_planner_v3_types';
 export function getTranslatedModeName(
   mode?: AnyMode,
   subMode?: AnySubMode,
-  form: 'indefinite' | 'definite' = 'indefinite',
+  isDefinite: boolean = false,
 ): TranslatedString {
   const legModeNames = dictionary.travel.legModes;
   const legSubModeNames = dictionary.travel.legSubModes;
@@ -48,7 +48,7 @@ export function getTranslatedModeName(
       result = legModeNames.unknown;
   }
 
-  return form === 'definite' && result.definite ? result.definite : result;
+  return isDefinite && result.definite ? result.definite : result;
 }
 
 export function getQuayName(
