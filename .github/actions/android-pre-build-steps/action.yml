@@ -135,8 +135,3 @@ runs:
         gradle-version: wrapper
         cache-encryption-key: ${{ inputs.gradle-encryption-key }}
         cache-read-only: ${{ inputs.cache-read-only }}
-    
-    - name: Install CMake 3.22.1
-      shell: bash
-      run: |
-        yes | sdkmanager --install "cmake;3.22.1"
