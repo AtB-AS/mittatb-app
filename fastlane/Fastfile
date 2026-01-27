@@ -425,6 +425,16 @@ platform :android do
     build_type = ENV['APP_ENVIRONMENT']
     app_flavor = ENV['APP_FLAVOR']
     skip_clean = ENV['SKIP_CLEAN'] == 'true'
+
+
+    # Install CMake 3.22.1 for native builds (ignore if already installed)
+    begin
+      android_home = ENV['ANDROID_HOME'] || ENV['ANDROID_SDK_ROOT'] || '/usr/local/lib/android/sdk'
+      sh("yes | #{android_home}/cmdline-tools/latest/bin/sdkmanager --install 'cmake;3.22.1'")
+    rescue => e
+      UI.message("CMake installation note: #{e.message}")
+    end
+
     gradle(task: 'clean', project_dir: 'android/') unless skip_clean
     gradle(
       task: 'assemble',
