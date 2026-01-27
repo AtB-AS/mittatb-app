@@ -12,6 +12,10 @@ import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
 import {useGeofencingZonesQuery} from '@atb/modules/mobility';
 import {useThemeContext} from '@atb/theme';
 import {getIconZoomTransitionStyle} from '../../utils';
+import {
+  AllLayerStyleProps,
+  Expression,
+} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 
 type GeofencingZonesProps = {
   systemId: string | null;
@@ -59,22 +63,37 @@ const GeofencingZonesForVehicle = ({
   );
 };
 
-const getGeofencingZoneCustomProps = ['get', 'geofencingZoneCustomProps'];
+const getGeofencingZoneCustomProps: Expression = [
+  'get',
+  'geofencingZoneCustomProps',
+];
 
 type GeofencingZoneProps = {
   geofencingZone: PreProcessedGeofencingZones;
 };
 const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
-  const bgColor = [
+  const bgColor: Expression = [
     'get',
     'background',
     ['get', 'color', getGeofencingZoneCustomProps],
   ];
-  const fillOpacity = ['get', 'fillOpacity', getGeofencingZoneCustomProps];
-  const lineOpacity = ['get', 'strokeOpacity', getGeofencingZoneCustomProps];
-  const lineStyle = ['get', 'lineStyle', getGeofencingZoneCustomProps];
+  const fillOpacity: Expression = [
+    'get',
+    'fillOpacity',
+    getGeofencingZoneCustomProps,
+  ];
+  const lineOpacity: Expression = [
+    'get',
+    'strokeOpacity',
+    getGeofencingZoneCustomProps,
+  ];
+  const lineStyle: Expression = [
+    'get',
+    'lineStyle',
+    getGeofencingZoneCustomProps,
+  ];
 
-  const lineLayerStyle = {
+  const lineLayerStyle: MapboxGL.FillLayerStyle & AllLayerStyleProps = {
     lineWidth: ['interpolate', ['exponential', 1.5], ['zoom'], 12, 2, 18, 4],
     lineColor: bgColor,
     lineOpacity,
@@ -132,12 +151,12 @@ export const GeofencingZoneIcon: React.FC<GeofencingZoneIconProps> = ({
 }) => {
   const {themeName} = useThemeContext();
 
-  const code = ['get', 'code', getGeofencingZoneCustomProps];
+  const code: Expression = ['get', 'code', getGeofencingZoneCustomProps];
 
   // mapbox icons names are lower cased
-  const lowerCaseCode = ['downcase', code];
+  const lowerCaseCode: Expression = ['downcase', code];
 
-  const iconImage = [
+  const iconImage: Expression = [
     'concat',
     'geofencingzone_',
     lowerCaseCode,

@@ -19,6 +19,7 @@ import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {hasShmoBookingId} from '@atb/modules/fare-contracts';
 import SvgInfo from '@atb/assets/svg/mono-icons/status/Info';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
+import {ScooterHelpScreenProps} from './Root_ScooterHelp/Root_ScooterHelpScreen';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -68,6 +69,13 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       transitionOverride: 'slide-from-right',
     });
 
+  const navigateToScooterSupport = useCallback(
+    (params: ScooterHelpScreenProps['route']['params']) => {
+      navigation.navigate('Root_ScooterHelpScreen', params);
+    },
+    [navigation],
+  );
+
   const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
 
   const navigateToBonusScreen = useCallback(() => {
@@ -109,6 +117,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
               now={serverNow}
               isSentFareContract={isSentFareContract}
               onReceiptNavigate={onReceiptNavigate}
+              onSupportNavigate={navigateToScooterSupport}
               onNavigateToMap={onNavigateToMap}
               navigateToBonusScreen={navigateToBonusScreen}
             />

@@ -12,7 +12,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {ScooterHelpScreenProps} from '@atb/stacks-hierarchy/Root_ScooterHelp/Root_ScooterHelpScreen';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
+import {useGetHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import {TripSearchCallerRoute} from '../TabNav_DashboardStack/types';
@@ -74,13 +74,16 @@ export const Map_RootScreen = ({
 
   const navigateToTripSearch: TravelFromAndToLocationsCallback = useCallback(
     (location, destination) => {
-      navigation.navigate({
-        name: 'Dashboard_TripSearchScreen',
+      navigation.navigate('Root_TabNavigatorStack', {
+        screen: 'TabNav_DashboardStack',
         params: {
-          [destination]: location,
-          callerRoute,
+          screen: 'Dashboard_TripSearchScreen',
+          params: {
+            [destination]: location,
+            callerRoute,
+          },
+          merge: true,
         },
-        merge: true,
       });
     },
     [navigation],
@@ -113,11 +116,11 @@ export const Map_RootScreen = ({
   }, [navigation]);
 
   const {enable_vipps_login} = useRemoteConfigContext();
-  const hasReservationOrAvailableFareContract =
-    useHasReservationOrAvailableFareContract();
+  const getHasReservationOrAvailableFareContract =
+    useGetHasReservationOrAvailableFareContract();
 
   const navigateToLogin = useCallback(() => {
-    if (hasReservationOrAvailableFareContract) {
+    if (getHasReservationOrAvailableFareContract()) {
       navigation.navigate('Root_LoginAvailableFareContractWarningScreen', {});
     } else if (enable_vipps_login) {
       navigation.navigate('Root_LoginOptionsScreen', {
@@ -127,7 +130,11 @@ export const Map_RootScreen = ({
     } else {
       navigation.navigate('Root_LoginPhoneInputScreen', {});
     }
-  }, [enable_vipps_login, hasReservationOrAvailableFareContract, navigation]);
+  }, [
+    enable_vipps_login,
+    getHasReservationOrAvailableFareContract,
+    navigation,
+  ]);
 
   const paymentMethodsScreenParams = useNestedProfileScreenParams(
     'Profile_PaymentMethodsScreen',

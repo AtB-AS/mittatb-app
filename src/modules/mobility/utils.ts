@@ -218,11 +218,6 @@ export const formatPricePerUnit = (
   return undefined;
 };
 
-export const getOperators = (
-  filter: MobilityMapFilterType,
-  formFactor: FormFactor,
-) => filter[formFactor]?.operators ?? [];
-
 export const isShowAll = (
   filter: MobilityMapFilterType,
   formFactor: FormFactor,

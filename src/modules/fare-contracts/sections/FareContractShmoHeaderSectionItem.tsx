@@ -2,8 +2,7 @@ import React from 'react';
 import {FareContractType} from '@atb-as/utils';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
-import {ProductName} from '../components/ProductName';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useTimeContext} from '@atb/modules/time';
@@ -12,6 +11,10 @@ import {formatToLongDateTime} from '@atb/utils/date';
 import {toDate} from 'date-fns';
 import {getFareContractInfo} from '../utils';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
+import {useGetOperatorsQuery} from '@atb/modules/mobility';
+import {getOperatorNameById} from '@atb/api/utils';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {ProductName} from '../components/ProductName';
 
 type Props = {
   fareContract: FareContractType;
@@ -28,14 +31,35 @@ export const FareContractShmoHeaderSectionItem = ({
   const {serverNow} = useTimeContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
   const {isInspectable} = useMobileTokenContext();
+  const {theme} = useThemeContext();
 
   const {validTo} = getFareContractInfo(serverNow, fc, currentUserId);
   const dateTime = formatToLongDateTime(toDate(validTo), language);
   const label = t(FareContractTexts.shmoDetails.tripEnded(dateTime));
+  const {data: operatorsData} = useGetOperatorsQuery();
+  const operatorName = getOperatorNameById(
+    operatorsData,
+    fc?.operatorId,
+    language,
+  );
 
   return (
     <View style={[topContainer, styles.container]}>
-      <ProductName fc={fc} />
+      {!!operatorName ? (
+        !!fc.formFactor && (
+          <ThemeText
+            typography="body__s__strong"
+            accessibilityLabel={fc?.formFactor + operatorName}
+            color={theme.color.foreground.dynamic.secondary}
+            style={styles.headerText}
+          >
+            {t(MobilityTexts.fareContractHeader(fc.formFactor, operatorName))}
+          </ThemeText>
+        )
+      ) : (
+        <ProductName fc={fc} />
+      )}
+
       <ThemeText
         style={styles.validityText}
         typography="heading__l"
@@ -62,5 +86,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   validityText: {
     textAlign: 'center',
+  },
+  headerText: {
+    textAlign: 'left',
   },
 }));

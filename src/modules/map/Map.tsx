@@ -54,7 +54,7 @@ import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
 import {useMapContext} from '@atb/modules/map';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
-import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
+import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
 import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {ShmoBookingState} from '@atb/api/types/mobility';
@@ -134,7 +134,9 @@ export const Map = (props: MapProps) => {
     data: vehicle,
     isLoading: vehicleIsLoading,
     isError: vehicleError,
-  } = useVehicleQuery(selectedFeature?.properties?.id);
+  } = useVehicleQuery(
+    selectedFeatureIsAVehicle ? selectedFeature?.properties?.id : undefined,
+  );
 
   const systemId =
     vehicle?.system.id ?? activeShmoBooking?.asset.systemId ?? null;

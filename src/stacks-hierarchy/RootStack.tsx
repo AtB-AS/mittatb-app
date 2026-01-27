@@ -18,6 +18,7 @@ import {useTestIds} from './use-test-ids';
 import {parse} from 'search-params';
 
 import type {NavigationState, PartialState} from '@react-navigation/routers';
+import {useLogger as useReactNavigationLogger} from '@react-navigation/devtools';
 
 import {Root_SelectTravelTokenScreen} from './Root_SelectTravelTokenScreen';
 import {Root_ConsiderTravelTokenChangeScreen} from '@atb/stacks-hierarchy/Root_ConsiderTravelTokenChangeScreen';
@@ -81,6 +82,11 @@ import {Root_OnboardingCarouselStack} from './Root_OnboardingCarouselStack';
 import {getActiveRouteName} from '@atb/utils/navigation';
 import {Root_TravelAidOnboardingScreen} from './Root_TravelAidOnboardingScreen';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
+import {
+  useGetFareProductsQuery,
+  useTicketingContext,
+} from '@atb/modules/ticketing';
+import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -93,6 +99,9 @@ export const RootStack = () => {
   const {getInitialNavigationContainerState} = useOnboardingFlow();
   const {theme} = useThemeContext();
   const navRef = useNavigationContainerRef<RootStackParamList>();
+
+  useReactNavigationLogger(navRef);
+
   const {setCurrentRouteName} = useOnboardingContext();
   const onNavigationStateChange = useCallback(
     (state?: NavigationState) => {
@@ -105,6 +114,8 @@ export const RootStack = () => {
 
   const {minimum_app_version} = useRemoteConfigContext();
   const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const {customerProfile} = useTicketingContext();
 
   useBeaconsContext();
   useTestIds();
@@ -258,17 +269,24 @@ export const RootStack = () => {
                 const params = new URLSearchParams(path.split('?')[1]);
                 const type = params.get('type');
                 if (type) {
-                  const selection = purchaseSelectionBuilder
-                    .forType(type)
-                    .build();
-                  return {
-                    routes: [
-                      {
-                        name: 'Root_PurchaseOverviewScreen',
-                        params: {selection: selection},
-                      },
-                    ],
-                  } as ResultState;
+                  const isSellable = preassignedFareProducts.some(
+                    (product) =>
+                      type === product.type &&
+                      isProductSellableInApp(product, customerProfile),
+                  );
+                  if (isSellable) {
+                    const selection = purchaseSelectionBuilder
+                      .forType(type)
+                      .build();
+                    return {
+                      routes: [
+                        {
+                          name: 'Root_PurchaseOverviewScreen',
+                          params: {selection},
+                        },
+                      ],
+                    } as ResultState;
+                  }
                 }
               }
 

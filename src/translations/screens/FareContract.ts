@@ -106,11 +106,11 @@ const FareContractTexts = {
         `Sent to ${phoneNumber}`,
         `Sendt til ${phoneNumber}`,
       ),
-    purchasedBy: (phoneNumber: string) =>
+    receivedFrom: (phoneNumber: string) =>
       _(
-        `Kjøpt av ${phoneNumber}`,
-        `Purchased by ${phoneNumber}`,
-        `Kjøpt av ${phoneNumber}`,
+        `Mottatt fra ${phoneNumber}`,
+        `Received from ${phoneNumber}`,
+        `Motteke frå ${phoneNumber}`,
       ),
     totalPrice: (priceString: string) =>
       _(
@@ -123,6 +123,12 @@ const FareContractTexts = {
       'Get receipt sent',
       'Få kvittering tilsendt',
     ),
+    askOperatorRefund: (operatorName?: string) =>
+      _(
+        `Be ${operatorName ?? 'operatør'} om refusjon`,
+        `Ask ${operatorName ?? 'operator'} for refund`,
+        `Be ${operatorName ?? 'operatør'} om refusjon`,
+      ),
     barcodeA11yLabel: _(
       'QR-kode. Vis frem denne koden ved billettkontroll.',
       'QR code. Show this code in case of inspection.',

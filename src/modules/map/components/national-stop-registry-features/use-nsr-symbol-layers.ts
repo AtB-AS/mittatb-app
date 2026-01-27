@@ -7,8 +7,8 @@ import {
   LayerPropsDeterminedByZoomLevelParams,
 } from './nsr-utils';
 import {NsrProps} from './NationalStopRegistryFeatures';
-import {SymbolLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
-import {Props as SymbolLayerProps} from '@rnmapbox/maps/lib/typescript/src/components/SymbolLayer';
+import {SymbolLayerStyleProps} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
+import {Props as SymbolLayerProps} from 'node_modules/@rnmapbox/maps/src/components/SymbolLayer';
 import {useMemo} from 'react';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 

@@ -27,8 +27,8 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {theme} = useThemeContext();
   const {
     recentFareContracts,
-    isLoading: isLoadingRecentFareContracts,
-    refresh: refetchRecentFareContracts,
+    recentFareContractsLoading,
+    recentFareContractsRefetch,
   } = useRecentFareContracts();
   const {
     data: preassignedFareProducts,
@@ -120,7 +120,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         <RefreshControl
           refreshing={isRefetchingPreassignedFareProducts}
           onRefresh={() => {
-            refetchRecentFareContracts();
+            recentFareContractsRefetch();
             refetchPreassignedFareProducts();
             analytics.logEvent('Ticketing', 'Pull to refresh products', {
               fareProductsCount: preassignedFareProducts.length,
@@ -133,7 +133,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       <ErrorWithAccountMessage style={styles.accountWrongMessage} />
       <RecentFareContracts
         recentFareContracts={recentFareContracts}
-        loading={isLoadingRecentFareContracts}
+        loading={recentFareContractsLoading}
         onSelect={onRecentFareContractSelect}
       />
       <View

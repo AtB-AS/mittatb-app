@@ -3,17 +3,14 @@ import {CompositeScreenProps} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 
 import {PlaceScreenParams} from '@atb/screen-components/place-screen';
-import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {NearbyStopPlacesScreenParams} from '@atb/screen-components/nearby-stop-places';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
-import {TicketHistoryScreenParams} from '@atb/screen-components/ticket-history';
 import {SmartParkAndRideScreenParams} from './Profile_SmartParkAndRideScreen';
 
 export type ProfileStackParams = StackParams<{
   Profile_RootScreen: undefined;
   Profile_PaymentMethodsScreen: undefined;
-  Profile_TicketHistoryScreen: TicketHistoryScreenParams;
-  Profile_TicketHistorySelectionScreen: undefined;
+  Profile_PurchaseHistoryScreen: undefined;
   Profile_BonusScreen: undefined;
   Profile_SmartParkAndRideScreen: SmartParkAndRideScreenParams;
   Profile_DeleteProfileScreen: undefined;
@@ -47,9 +44,6 @@ export type ProfileStackRootProps =
 
 export type ProfileScreenProps<T extends keyof ProfileStackParams> =
   CompositeScreenProps<
-    CompositeScreenProps<
-      StackScreenProps<ProfileStackParams, T>,
-      ProfileStackRootProps
-    >,
-    StackScreenProps<RootStackParamList>
+    StackScreenProps<ProfileStackParams, T>,
+    ProfileStackRootProps
   >;

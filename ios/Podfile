@@ -1,10 +1,5 @@
 plugin 'cocoapods-patch'
 
-# Disable new architecture, this now comes true by default,
-# but there are some of our dependencies still not compatible.
-# For more details please check https://reactnative.dev/architecture/landing-page#ios
-ENV['RCT_NEW_ARCH_ENABLED'] = '0'
-
 def node_require(script)
   # Resolve script with node to allow for hoisting
   require Pod::Executable.execute_command('node', ['-p',
@@ -37,7 +32,7 @@ $RNFirebaseAsStaticFramework = true
 production = ENV["PRODUCTION"] == "1"
 
 $RNMapboxMapsImpl = 'mapbox'
-$RNMapboxMapsVersion = '~> 11.13.4'
+$RNMapboxMapsVersion = '~> 11.15.0'
 
 target 'app' do
   config = use_native_modules!
@@ -76,7 +71,6 @@ target 'app' do
       end
     end
 
-    # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(
       installer,
       config[:reactNativePath],

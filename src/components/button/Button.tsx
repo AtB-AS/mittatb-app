@@ -92,6 +92,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
       backgroundColor: mainContrastColor.background,
       borderColor: borderColorValue,
       paddingHorizontal: spacing,
+      gap: type === 'small' ? theme.spacing.xSmall : undefined,
       paddingVertical: type === 'small' ? theme.spacing.xSmall : spacing,
       borderRadius: theme.border.radius.circle,
       borderWidth:
@@ -128,7 +129,8 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
   };
 
   const styleText: TextStyle = {
-    width: !expanded ? '100%' : undefined,
+    // Add 1% width to the text to avoid layout issues on Android with small font sizes
+    width: !expanded ? '101%' : undefined,
   };
   const textContainer: TextStyle = {
     flex: !expanded ? undefined : 1,
