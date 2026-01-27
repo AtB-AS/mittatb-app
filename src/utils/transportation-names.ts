@@ -12,7 +12,7 @@ export function getTranslatedModeName(
   const legModeNames = dictionary.travel.legModes;
   const legSubModeNames = dictionary.travel.legSubModes;
 
-  let result: TranslatedString & {definite?: TranslatedString};
+  let result: TranslatedString & {definite: TranslatedString};
 
   switch (mode) {
     case 'bus':
@@ -48,7 +48,7 @@ export function getTranslatedModeName(
       result = legModeNames.unknown;
   }
 
-  return isDefinite && result.definite ? result.definite : result;
+  return isDefinite ? result.definite : result;
 }
 
 export function getQuayName(
