@@ -4,6 +4,7 @@ import {fareContractsQueryKey} from '../ticketing/use-fare-contracts';
 import {getBonusAmountEarnedQueryKey} from '../bonus';
 import {getActiveShmoBookingQueryKey} from '../mobility/queries/use-active-shmo-booking-query';
 import {getShmoBookingQueryKey} from '../mobility/queries/use-shmo-booking-query';
+import {languageGlobal} from '../locale';
 
 export const handleStreamEvent = (
   streamEvent: StreamEvent,
@@ -27,12 +28,12 @@ export const handleStreamEvent = (
         });
       }
       break;
-    case EventKind.ShmoBookingUpdate:
+    case EventKind.ShmoBookingUpdated:
       queryClient.invalidateQueries({
-        queryKey: getActiveShmoBookingQueryKey(),
+        queryKey: getActiveShmoBookingQueryKey(languageGlobal),
       });
       queryClient.invalidateQueries({
-        queryKey: getShmoBookingQueryKey(streamEvent.bookingId),
+        queryKey: getShmoBookingQueryKey(streamEvent.bookingId, languageGlobal),
       });
       break;
   }

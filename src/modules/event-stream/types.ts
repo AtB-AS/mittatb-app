@@ -6,7 +6,7 @@ export enum EventKind {
   Profile = 'PROFILE',
   Token = 'TOKEN',
   Vehicle = 'VEHICLE',
-  ShmoBookingUpdate = 'SHMO_BOOKING_UPDATE',
+  ShmoBookingUpdated = 'SHMO_BOOKING_UPDATED',
 }
 
 export const StreamEventSchema = z.discriminatedUnion('event', [
@@ -36,7 +36,7 @@ export const StreamEventSchema = z.discriminatedUnion('event', [
   }),
 
   z.object({
-    event: z.literal(EventKind.ShmoBookingUpdate),
+    event: z.literal(EventKind.ShmoBookingUpdated),
     bookingId: z.string(),
     orderId: z.string(),
   }),
