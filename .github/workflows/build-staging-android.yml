@@ -35,8 +35,8 @@ jobs:
         if: steps.apktool-cache.outputs.cache-hit != 'true'
         run: |
           mkdir -p ~/apktool
-          wget -q https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -O ~/apktool/apktool
-          wget -q https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.12.1.jar -O ~/apktool/apktool.jar
+          wget https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -O ~/apktool/apktool
+          wget https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.12.1.jar -O ~/apktool/apktool.jar
           chmod +x ~/apktool/apktool
 
       - name: Add APKTool to PATH
