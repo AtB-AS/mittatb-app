@@ -1,6 +1,6 @@
 import {StyleSheet} from '@atb/theme';
 import {useLayout} from '@atb/utils/use-layout';
-import React, {PropsWithChildren, useCallback, useEffect} from 'react';
+import React, {PropsWithChildren, useCallback, useEffect, useMemo} from 'react';
 import {RefreshControl, RefreshControlProps, View} from 'react-native';
 import Animated, {
   useAnimatedScrollHandler,
@@ -60,19 +60,21 @@ export function ParallaxScroll({
 
   const animatedHeaderBackdropStyle = useAnimatedStyle(() => {
     return {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
       height: Math.max(0, -scrollY.value + 10),
-      backgroundColor: headerColor,
     };
-  }, [scrollY, headerColor]);
+  });
+
+  const backdropStyle = useMemo(() => {
+    return [
+      styles.headerBackdrop,
+      animatedHeaderBackdropStyle,
+      {backgroundColor: headerColor},
+    ];
+  }, [animatedHeaderBackdropStyle, headerColor]);
 
   return (
     <View style={styles.content}>
-      <Animated.View style={animatedHeaderBackdropStyle} />
+      <Animated.View style={backdropStyle} />
       <Animated.ScrollView
         scrollEventThrottle={10}
         refreshControl={refreshControl}
@@ -89,5 +91,13 @@ const useStyles = StyleSheet.createThemeHook(() => ({
   content: {
     flex: 1,
     overflow: 'hidden',
+  },
+  headerBackdrop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 2,
   },
 }));
