@@ -33,6 +33,8 @@ import {
   BottomSheetHeaderType,
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
+import {getOperatorNameById} from '@atb/api/utils';
+import {useGetOperatorsQuery} from '../../queries/use-get-operators-query';
 
 type ScooterHelpParams = {operatorId: string} & (
   | {vehicleId: string}
@@ -64,19 +66,23 @@ export const ScooterSheet = ({
   navigateToLogin,
   navigateToScanQrCode,
 }: Props) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {theme} = useThemeContext();
+
   const styles = useStyles();
   const {
     vehicle,
     isLoading,
     isError,
+    operatorName: fallbackName,
     operatorId,
-    operatorName,
     rentalAppUri,
     brandLogoUrl,
     appStoreUri,
   } = useVehicle(id);
+
+  const {data: operators} = useGetOperatorsQuery();
+  const operatorName = getOperatorNameById(operators, operatorId, language);
 
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
@@ -100,7 +106,7 @@ export const ScooterSheet = ({
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
-      heading={operatorName}
+      heading={operatorName ?? fallbackName}
       subText={t(MobilityTexts.formFactor(FormFactor.Scooter))}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
       logoUrl={brandLogoUrl}
@@ -173,7 +179,7 @@ export const ScooterSheet = ({
                 {rentalAppUri && (
                   <OperatorActionButton
                     operatorId={operatorId}
-                    operatorName={operatorName}
+                    operatorName={operatorName ?? fallbackName}
                     appStoreUri={appStoreUri}
                     rentalAppUri={rentalAppUri}
                   />
