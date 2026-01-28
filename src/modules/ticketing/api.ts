@@ -23,6 +23,7 @@ import capitalize from 'lodash/capitalize';
 import qs from 'query-string';
 import {isDefined} from '@atb/utils/presence';
 import {Language} from '@atb/translations/commons';
+import type {OfferSearchLeg} from '@atb/api/types/sales';
 
 export async function listRecentFareContracts(): Promise<RecentOrderDetails[]> {
   const url = 'sales/v1/order/recent';
@@ -36,10 +37,12 @@ export type OfferSearchParams = {
   isOnBehalfOf: boolean;
   travellers: Traveller[];
   products: string[];
+  supplementProducts: string[];
   travelDate?: string;
   zones?: string[];
   from?: string;
   to?: string;
+  legs?: OfferSearchLeg[];
 };
 
 type Traveller = {
