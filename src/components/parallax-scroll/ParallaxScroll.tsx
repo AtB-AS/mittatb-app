@@ -70,7 +70,7 @@ export function ParallaxScroll({
       animatedHeaderBackdropStyle,
       {backgroundColor: headerColor},
     ];
-  }, [animatedHeaderBackdropStyle, headerColor]);
+  }, [styles, animatedHeaderBackdropStyle, headerColor]);
 
   return (
     <View style={styles.content}>
