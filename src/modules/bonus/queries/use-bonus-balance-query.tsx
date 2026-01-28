@@ -3,22 +3,22 @@ import {useAuthContext} from '@atb/modules/auth';
 import {getBonusBalance} from '../api/api';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
-export const getBonusBalanceQueryKey = (
-  userId: string | undefined,
-  isLoggedIn: boolean,
-) => {
-  return ['bonusUserBalance', userId, isLoggedIn];
+export const getBonusBalanceQueryKey = (userId: string | undefined) => {
+  return ['bonusUserBalance', userId];
 };
 
 export const useBonusBalanceQuery = () => {
   const {userId, authStatus} = useAuthContext();
   const {isBonusProgramEnabled} = useFeatureTogglesContext();
   const {authenticationType} = useAuthContext();
-  const isLoggedIn = authenticationType === 'phone';
+  const isEnabled =
+    authStatus === 'authenticated' &&
+    authenticationType === 'phone' &&
+    isBonusProgramEnabled;
 
   return useQuery({
-    queryKey: getBonusBalanceQueryKey(userId, isLoggedIn),
-    queryFn: () => getBonusBalance(isLoggedIn),
-    enabled: authStatus === 'authenticated' && isBonusProgramEnabled,
+    enabled: isEnabled,
+    queryKey: getBonusBalanceQueryKey(userId),
+    queryFn: getBonusBalance,
   });
 };
