@@ -13,6 +13,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useAuthContext} from '@atb/modules/auth';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import {ProfileScreenProps} from './navigation-types';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type Props = ProfileScreenProps<'Profile_FareContractsScreen'>;
 
@@ -195,9 +196,18 @@ export const Profile_FareContractsScreen = ({navigation}: Props) => {
 
   const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
 
-  const navigateToBonusScreen = useCallback(() => {
+  const onNavigateToBonusScreen = useCallback(() => {
     navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
   }, [navigation, bonusScreenParams]);
+
+  const onNavigateToPurchaseFlow = useCallback(
+    (selection: PurchaseSelectionType) => {
+      navigation.navigate('Root_PurchaseOverviewScreen', {
+        selection,
+      });
+    },
+    [navigation],
+  );
 
   return (
     <View style={styles.container}>
@@ -212,7 +222,8 @@ export const Profile_FareContractsScreen = ({navigation}: Props) => {
           onPressFareContract={() => {}}
           fcOrReservation={RESERVATION}
           now={Date.now()}
-          navigateToBonusScreen={navigateToBonusScreen}
+          onNavigateToBonusScreen={onNavigateToBonusScreen}
+          onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
         />
         <ThemeText typography="heading__2xl">Fare Contracts</ThemeText>
         {fareContracts.map((fc, i) => (
@@ -222,7 +233,8 @@ export const Profile_FareContractsScreen = ({navigation}: Props) => {
             fcOrReservation={fc}
             now={Date.now()}
             onPressFareContract={() => {}}
-            navigateToBonusScreen={navigateToBonusScreen}
+            onNavigateToBonusScreen={onNavigateToBonusScreen}
+            onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
           />
         ))}
         <ThemeText typography="heading__2xl">Fare contract details</ThemeText>
@@ -236,7 +248,8 @@ export const Profile_FareContractsScreen = ({navigation}: Props) => {
             now={Date.now()}
             onReceiptNavigate={() => {}}
             onNavigateToMap={() => {}}
-            navigateToBonusScreen={navigateToBonusScreen}
+            onNavigateToBonusScreen={onNavigateToBonusScreen}
+            onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
           />
         ))}
       </ScrollView>

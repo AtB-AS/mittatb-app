@@ -6,7 +6,7 @@ import {
   TEST_ZONE,
   TEST_USER_PROFILE,
   TEST_ZONE_WITH_MD,
-  TEST_BAGGAGE_PRODUCT,
+  TEST_SUPPLEMENT_PRODUCT,
 } from './test-utils';
 import type {PurchaseSelectionType} from '../types';
 
@@ -139,9 +139,9 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
 it('Should create builder with baggage products', () => {
   const selectionWithSupplements = {
     ...TEST_SELECTION,
-    baggageProductsWithCount: [
-      {...TEST_BAGGAGE_PRODUCT, id: 'SP1', count: 2},
-      {...TEST_BAGGAGE_PRODUCT, id: 'SP2', count: 1},
+    supplementProductsWithCount: [
+      {...TEST_SUPPLEMENT_PRODUCT, id: 'SP1', count: 2},
+      {...TEST_SUPPLEMENT_PRODUCT, id: 'SP2', count: 1},
     ],
   };
 
@@ -149,27 +149,27 @@ it('Should create builder with baggage products', () => {
     .fromSelection(selectionWithSupplements)
     .build();
 
-  expect(selection.baggageProductsWithCount).toHaveLength(2);
-  expect(selection.baggageProductsWithCount[0].id).toBe('SP1');
-  expect(selection.baggageProductsWithCount[0].count).toBe(2);
-  expect(selection.baggageProductsWithCount[1].id).toBe('SP2');
-  expect(selection.baggageProductsWithCount[1].count).toBe(1);
+  expect(selection.supplementProductsWithCount).toHaveLength(2);
+  expect(selection.supplementProductsWithCount[0].id).toBe('SP1');
+  expect(selection.supplementProductsWithCount[0].count).toBe(2);
+  expect(selection.supplementProductsWithCount[1].id).toBe('SP2');
+  expect(selection.supplementProductsWithCount[1].count).toBe(1);
 });
 
 it('Should build the default selection when some supplement products are not allowed by product limitations', () => {
   const testSupplementProductWithCount = [
     {
-      ...TEST_BAGGAGE_PRODUCT,
+      ...TEST_SUPPLEMENT_PRODUCT,
       id: 'SP1',
       count: 2,
     },
     {
-      ...TEST_BAGGAGE_PRODUCT,
+      ...TEST_SUPPLEMENT_PRODUCT,
       id: 'SP2',
       count: 2,
     },
     {
-      ...TEST_BAGGAGE_PRODUCT,
+      ...TEST_SUPPLEMENT_PRODUCT,
       id: 'SP3',
       count: 2,
     },
@@ -187,14 +187,14 @@ it('Should build the default selection when some supplement products are not all
   const TEST_SELECTION_WITH_PRODUCT_WITH_LIMITATIONS = {
     ...TEST_SELECTION,
     preassignedFareProduct: productWithLimitations,
-    baggageProductsWithCount: testSupplementProductWithCount,
+    supplementProductsWithCount: testSupplementProductWithCount,
   };
 
   const selection = createEmptyBuilder(TEST_INPUT)
     .fromSelection(TEST_SELECTION_WITH_PRODUCT_WITH_LIMITATIONS)
     .build();
 
-  expect(selection.baggageProductsWithCount).toEqual([]);
+  expect(selection.supplementProductsWithCount).toEqual([]);
   expect(selection.preassignedFareProduct.id).toBe('P1');
   expect(selection).toEqual(TEST_SELECTION);
 });

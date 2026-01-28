@@ -19,6 +19,7 @@ import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {hasShmoBookingId} from '@atb/modules/fare-contracts';
 import SvgInfo from '@atb/assets/svg/mono-icons/status/Info';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -70,9 +71,18 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
 
   const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
 
-  const navigateToBonusScreen = useCallback(() => {
+  const onNavigateToBonusScreen = useCallback(() => {
     navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
   }, [navigation, bonusScreenParams]);
+
+  const onNavigateToPurchaseFlow = useCallback(
+    (selection: PurchaseSelectionType) => {
+      navigation.navigate('Root_PurchaseOverviewScreen', {
+        selection,
+      });
+    },
+    [navigation],
+  );
 
   return (
     <View style={styles.container}>
@@ -110,7 +120,8 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
               isSentFareContract={isSentFareContract}
               onReceiptNavigate={onReceiptNavigate}
               onNavigateToMap={onNavigateToMap}
-              navigateToBonusScreen={navigateToBonusScreen}
+              onNavigateToBonusScreen={onNavigateToBonusScreen}
+              onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
             />
           </ErrorBoundary>
         )}

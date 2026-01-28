@@ -4,21 +4,19 @@ import {
   UserProfile,
   FareZone,
 } from '@atb/modules/configuration';
-import {
-  UserProfileWithCount,
-  BaggageProductWithCount,
-} from '@atb/modules/fare-contracts';
+import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {StopPlaceFragmentWithIsFree} from '@atb/modules/harbors';
 import {CustomerProfile} from '@atb/modules/ticketing';
 import {Coordinates} from '@atb/utils/coordinates';
 import type {Leg} from '@atb/api/types/trips';
+import type {SupplementProductWithCount} from '@atb/modules/fare-contracts';
 
 export type PurchaseSelectionType = {
   fareProductTypeConfig: FareProductTypeConfig;
   preassignedFareProduct: PreassignedFareProduct;
   userProfilesWithCount: UserProfileWithCount[];
-  baggageProductsWithCount: BaggageProductWithCount[];
+  supplementProductsWithCount: SupplementProductWithCount[];
   stopPlaces:
     | {
         from: StopPlaceFragmentWithIsFree | undefined;
@@ -34,6 +32,7 @@ export type PurchaseSelectionType = {
   travelDate: string | undefined;
   legs: Leg[];
   isOnBehalfOf: boolean;
+  existingProduct?: PreassignedFareProduct;
 };
 
 /**
@@ -109,7 +108,9 @@ export type PurchaseSelectionBuilder = {
   /**
    * Apply the given baggage products with count to the purchase selection.
    */
-  baggageProducts: (b: BaggageProductWithCount[]) => PurchaseSelectionBuilder;
+  supplementProducts: (
+    b: SupplementProductWithCount[],
+  ) => PurchaseSelectionBuilder;
 
   /**
    * Apply the given travel date to the purchase selection. If the given date is
@@ -129,6 +130,13 @@ export type PurchaseSelectionBuilder = {
    * @param isOnBehalfOf
    */
   isOnBehalfOf: (isOnBehalfOf: boolean) => PurchaseSelectionBuilder;
+
+  /**
+   * Apply an existing product to the purchase selection. This is used when
+   * purchasing a supplementProduct to an existing Fare Contract.
+   * @param p The product from the existing Fare Contract
+   */
+  existingProduct: (p?: PreassignedFareProduct) => PurchaseSelectionBuilder;
 
   /**
    * Retrieve the built purchase selection. It is the purchase selection that

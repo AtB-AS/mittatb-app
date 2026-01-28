@@ -62,6 +62,7 @@ import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type Props = {
   fareContract: FareContractType;
@@ -69,7 +70,8 @@ type Props = {
   now: number;
   onReceiptNavigate: () => void;
   onNavigateToMap: (initialFilters: MapFilterType) => void;
-  navigateToBonusScreen: () => void;
+  onNavigateToBonusScreen: () => void;
+  onNavigateToPurchaseFlow?: (selection: PurchaseSelectionType) => void;
   hasActiveTravelCard?: boolean;
   isSentFareContract?: boolean;
 };
@@ -80,7 +82,8 @@ export const DetailsContent: React.FC<Props> = ({
   now,
   onReceiptNavigate,
   onNavigateToMap,
-  navigateToBonusScreen,
+  onNavigateToBonusScreen,
+  onNavigateToPurchaseFlow,
 }) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
 
@@ -183,6 +186,7 @@ export const DetailsContent: React.FC<Props> = ({
           baggageProductsWithCount={baggageProductsWithCount}
           status={validityStatus}
           preassignedFareProduct={preassignedFareProduct}
+          onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
         />
       )}
 
@@ -244,7 +248,7 @@ export const DetailsContent: React.FC<Props> = ({
       {bonusAmountEarned != undefined && bonusAmountEarned.amount > 0 && (
         <EarnedBonusPointsSectionItem
           amount={bonusAmountEarned.amount}
-          navigateToBonusScreen={navigateToBonusScreen}
+          navigateToBonusScreen={onNavigateToBonusScreen}
         />
       )}
       {!!usedAccesses?.length && (

@@ -19,6 +19,7 @@ import {ThemedTicketTilted} from '@atb/theme/ThemedAssets';
 import {useQueryClient} from '@tanstack/react-query';
 import {SCHOOL_CARNET_QUERY_KEY} from '@atb/modules/ticketing';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type Props =
   TicketTabNavScreenProps<'TicketTabNav_AvailableFareContractsTabScreen'>;
@@ -60,6 +61,15 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
     navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
   }, [navigation, bonusScreenParams]);
 
+  const navigateToBookingPurchaseFlow = useCallback(
+    (selection: PurchaseSelectionType) => {
+      if (selection) {
+        navigation.navigate('Root_PurchaseOverviewScreen', {selection});
+      }
+    },
+    [navigation],
+  );
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -91,7 +101,8 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
           reservations={reservations}
           fareContracts={availableFareContracts}
           now={serverNow}
-          navigateToBonusScreen={navigateToBonusScreen}
+          onNavigateToBonusScreen={navigateToBonusScreen}
+          onNavigateToPurchaseFlow={navigateToBookingPurchaseFlow}
           onPressFareContract={(fareContractId) =>
             navigation.navigate('Root_FareContractDetailsScreen', {
               fareContractId,

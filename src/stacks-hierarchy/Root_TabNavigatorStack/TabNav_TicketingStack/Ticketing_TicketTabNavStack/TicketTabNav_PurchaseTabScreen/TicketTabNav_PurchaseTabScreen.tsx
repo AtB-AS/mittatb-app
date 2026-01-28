@@ -100,7 +100,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       .forType(fareProductTypeConfig.type)
       .product(rfc.preassignedFareProduct)
       .userProfiles(rfc.userProfilesWithCount)
-      .baggageProducts(rfc.baggageProductsWithCount)
+      .supplementProducts(rfc.baggageProductsWithCount)
       .fromStopPlace(mapPlace(rfc.pointToPointValidity?.fromPlace))
       .toStopPlace(mapPlace(rfc.pointToPointValidity?.toPlace));
     if (rfc.fromFareZone) builder.fromZone(mapZone(rfc.fromFareZone));

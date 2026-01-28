@@ -58,7 +58,7 @@ export const TravellerSelectionSheet = ({
       builder.userProfiles(currentSelection.userProfiles);
 
     if (currentSelection?.baggageProducts)
-      builder.baggageProducts(currentSelection.baggageProducts);
+      builder.supplementProducts(currentSelection.baggageProducts);
 
     const newSelection = builder.build();
     onSave(newSelection);

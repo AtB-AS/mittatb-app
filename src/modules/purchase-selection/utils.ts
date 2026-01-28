@@ -38,6 +38,10 @@ export const isProductSellableInApp = (
   return product.distributionChannel.some((channel) => channel === 'app');
 };
 
+/**
+ * This implementation assumes that input.preassignedFareProducts always has at least one
+ * selectable zone for the given product
+ */
 export const getDefaultProduct = (
   input: PurchaseSelectionBuilderInput,
   configType: string,
@@ -47,6 +51,10 @@ export const getDefaultProduct = (
     .filter((product) => product.type === configType)
     .reduce((selected, current) => (current.isDefault ? current : selected));
 
+/**
+ * This implementation assumes that input.fareZones always has at least one
+ * selectable zone for the given product
+ */
 export const getDefaultZones = (
   input: PurchaseSelectionBuilderInput,
   typeConfig: FareProductTypeConfig,
@@ -89,6 +97,10 @@ export const getDefaultStopPlaces = (
   return {from: undefined, to: undefined};
 };
 
+/**
+ * This implementation assumes that input.userProfiles always has at least one
+ * selectable zone for the given product
+ */
 export const getDefaultUserProfiles = (
   input: PurchaseSelectionBuilderInput,
   product: PreassignedFareProduct,
@@ -161,10 +173,11 @@ export const isValidSelection = (
   );
   if (!areProfilesValid) return false;
 
-  const areBaggageProductsValid = selection.baggageProductsWithCount.every(
-    (sp) => isSelectableSupplementProduct(selection, sp),
-  );
-  if (!areBaggageProductsValid) return false;
+  const areSupplementProductsValid =
+    selection.supplementProductsWithCount.every((sp) =>
+      isSelectableSupplementProduct(selection, sp),
+    );
+  if (!areSupplementProductsValid) return false;
 
   const isFromZoneValid = selection.zones
     ? isSelectableZone(selection.preassignedFareProduct, selection.zones.from)
@@ -216,9 +229,10 @@ export const applyProductChange = (
   const userCount = currentSelection.userProfilesWithCount.filter((up) =>
     isSelectableProfile(product, up),
   );
-  const baggageProductCount = currentSelection.baggageProductsWithCount.filter(
-    (sp) => isSelectableSupplementProduct(currentSelection, sp),
-  );
+  const supplementProductCount =
+    currentSelection.supplementProductsWithCount.filter((sp) =>
+      isSelectableSupplementProduct(currentSelection, sp),
+    );
 
   const isFromZoneValid =
     !currentSelection.zones ||
@@ -234,7 +248,7 @@ export const applyProductChange = (
     : getDefaultZones(input, currentSelection.fareProductTypeConfig, product);
 
   const userProfiles =
-    !userCount.length && !baggageProductCount.length
+    !userCount.length && !supplementProductCount.length
       ? getDefaultUserProfiles(input, product)
       : userCount;
 
