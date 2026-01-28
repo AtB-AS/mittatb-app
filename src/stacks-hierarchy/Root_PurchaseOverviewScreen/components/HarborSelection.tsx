@@ -1,5 +1,5 @@
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
@@ -12,12 +12,10 @@ import {
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {SwapButton} from '@atb/components/swap-button';
 
 type StopPlaceSelectionProps = {
   selection: PurchaseSelectionType;
   onSelect: (selection: PurchaseSelectionType) => void;
-  onSwap?: () => void;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -29,15 +27,12 @@ export const HarborSelection = forwardRef<
     {
       selection /*: initialSelection*/,
       onSelect,
-      onSwap,
       style,
     }: StopPlaceSelectionProps,
     ref,
   ) => {
     const {t} = useTranslation();
     const selectionBuilder = usePurchaseSelectionBuilder();
-    const {theme} = useThemeContext();
-    const styles = useStyles();
 
     const fromHarborRef = useRef<typeof PressableOpacity>(null);
     const toHarborRef = useRef<typeof PressableOpacity>(null);
@@ -78,15 +73,6 @@ export const HarborSelection = forwardRef<
             onPress={() => onSelect(selection)}
             ref={toHarborRef}
           />
-          {selection.stopPlaces.from && selection.stopPlaces.to && (
-            <SwapButton
-              style={styles.swapButton}
-              expanded={false}
-              pointerEvents="box-only"
-              backgroundColor={theme.color.background.neutral['0']}
-              onPress={() => onSwap?.()}
-            />
-          )}
         </Section>
       </View>
     );
