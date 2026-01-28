@@ -66,6 +66,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_geofencing_zones',
   },
   {
+    name: 'isGeofencingZonesAsTilesEnabled',
+    remoteConfigKey: 'enable_geofencing_zones_as_tiles',
+  },
+  {
     name: 'isLoadingErrorScreenEnabled',
     remoteConfigKey: 'enable_loading_error_screen',
   },

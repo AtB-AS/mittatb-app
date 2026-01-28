@@ -49,6 +49,7 @@ export type RemoteConfig = {
   enable_from_travel_search_to_ticket_boat: boolean;
   enable_from_travel_search_to_ticket: boolean;
   enable_geofencing_zones: boolean;
+  enable_geofencing_zones_as_tiles: boolean;
   enable_intercom: boolean;
   enable_loading_error_screen: boolean;
   enable_loading_screen: boolean;
@@ -138,6 +139,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_from_travel_search_to_ticket_boat: false,
   enable_from_travel_search_to_ticket: false,
   enable_geofencing_zones: false,
+  enable_geofencing_zones_as_tiles: false,
   enable_intercom: false,
   enable_loading_error_screen: false,
   enable_loading_screen: true,
@@ -273,6 +275,9 @@ export function getConfig(): RemoteConfig {
   const enable_geofencing_zones =
     values['enable_geofencing_zones']?.asBoolean() ??
     defaultRemoteConfig.enable_geofencing_zones;
+  const enable_geofencing_zones_as_tiles =
+    values['enable_geofencing_zones_as_tiles']?.asBoolean() ??
+    defaultRemoteConfig.enable_geofencing_zones_as_tiles;
   const enable_intercom = values['enable_intercom']?.asBoolean() ?? false;
   const enable_loading_error_screen =
     values['enable_loading_error_screen']?.asBoolean() ??
@@ -466,6 +471,7 @@ export function getConfig(): RemoteConfig {
     enable_from_travel_search_to_ticket_boat,
     enable_from_travel_search_to_ticket,
     enable_geofencing_zones,
+    enable_geofencing_zones_as_tiles,
     enable_intercom,
     enable_loading_error_screen,
     enable_loading_screen,

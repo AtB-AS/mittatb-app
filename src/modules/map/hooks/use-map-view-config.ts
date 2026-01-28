@@ -18,14 +18,27 @@ const MapViewStaticConfig = {
 };
 
 type MapViewConfigOptions = {
-  shouldShowVehiclesAndStations?: boolean;
+  includeVehiclesAndStationsVectorSource?: boolean;
+  includeGeofencingZonesVectorSource?: boolean;
+  systemId?: string;
+  vehicleTypeId?: string;
 };
 
 export const useMapViewConfig = (
   mapViewConfigOptions?: MapViewConfigOptions,
 ) => {
-  const {shouldShowVehiclesAndStations = false} = mapViewConfigOptions || {};
-  const mapboxJsonStyle = useMapboxJsonStyle(shouldShowVehiclesAndStations);
+  const {
+    includeVehiclesAndStationsVectorSource = false,
+    includeGeofencingZonesVectorSource = false,
+    systemId = '',
+    vehicleTypeId = '',
+  } = mapViewConfigOptions || {};
+  const mapboxJsonStyle = useMapboxJsonStyle(
+    includeVehiclesAndStationsVectorSource,
+    includeGeofencingZonesVectorSource,
+    systemId,
+    vehicleTypeId,
+  );
   const configMap = useMemo(
     () => ({styleJSON: mapboxJsonStyle}),
     [mapboxJsonStyle],
