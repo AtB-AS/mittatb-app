@@ -8,15 +8,13 @@ export const useBuyValueCodeWithBonusPointsMutation = (
 ) => {
   const queryClient = useQueryClient();
   const {userId} = useAuthContext();
-  const {authenticationType} = useAuthContext();
-  const isLoggedIn = authenticationType === 'phone';
 
   return useMutation({
     mutationKey: ['bonusValueCode', userId, bonusProductId],
     mutationFn: () => buyValueCodeWithBonusPoints(bonusProductId),
     onSuccess: () =>
       queryClient.invalidateQueries({
-        queryKey: getBonusBalanceQueryKey(userId, isLoggedIn),
+        queryKey: getBonusBalanceQueryKey(userId),
       }),
   });
 };

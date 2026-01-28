@@ -5,6 +5,7 @@ import {getBonusAmountEarnedQueryKey} from '../bonus';
 import {getActiveShmoBookingQueryKey} from '../mobility/queries/use-active-shmo-booking-query';
 import {getShmoBookingQueryKey} from '../mobility/queries/use-shmo-booking-query';
 import {languageGlobal} from '../locale';
+import {getBonusBalanceQueryKey} from '../bonus/queries/use-bonus-balance-query';
 
 export const handleStreamEvent = (
   streamEvent: StreamEvent,
@@ -34,6 +35,11 @@ export const handleStreamEvent = (
       });
       queryClient.invalidateQueries({
         queryKey: getShmoBookingQueryKey(streamEvent.bookingId, languageGlobal),
+      });
+      break;
+    case EventKind.PersonalisationProgramPoint:
+      queryClient.invalidateQueries({
+        queryKey: getBonusBalanceQueryKey(userId),
       });
       break;
   }
