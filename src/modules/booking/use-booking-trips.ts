@@ -56,6 +56,9 @@ export function useBookingTrips({
           id: p.id,
           userType: p.userTypeString,
           count: p.count,
+          productIds: selection.existingProduct
+            ? [selection.existingProduct.id]
+            : [],
         })),
       }),
     enabled:

@@ -7,6 +7,7 @@ import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
 import {
   BaggageProductWithCount,
+  type SupplementProductWithCount,
   UserProfileWithCount,
 } from '@atb/modules/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
@@ -30,14 +31,18 @@ export type UserProfileWithCountAndOffer = UserProfileWithCount & {
 };
 
 // Presuppose for now that there is only one supplement product offer per baggage product offer, and that the fare product is undefined (or null).
-export const BaggageTicketOffer = TicketOffer.extend({
+export const SupplementTicketOffer = TicketOffer.extend({
   fareProduct: z.undefined().nullish(),
   supplementProducts: z.array(SupplementProductOffer).length(1),
 });
-export type BaggageTicketOffer = z.infer<typeof BaggageTicketOffer>;
+export type SupplementTicketOffer = z.infer<typeof SupplementTicketOffer>;
 
 export type BaggageProductWithCountAndOffer = BaggageProductWithCount & {
-  offer: BaggageTicketOffer;
+  offer: SupplementTicketOffer;
+};
+
+export type SupplementProductWithCountAndOffer = SupplementProductWithCount & {
+  offer: SupplementTicketOffer;
 };
 
 export type OfferError = {
@@ -52,7 +57,7 @@ type OfferState = {
   totalPrice: number;
   error?: OfferError;
   userProfilesWithCountAndOffer: UserProfileWithCountAndOffer[];
-  baggageProductsWithCountAndOffer: BaggageProductWithCountAndOffer[];
+  supplementProductsWithCountAndOffer: SupplementProductWithCountAndOffer[];
   flexDiscountLadder?: FlexDiscountLadder;
 };
 
@@ -88,18 +93,18 @@ const getOfferForTraveller = (
 
 const getOfferForBaggageProduct = (
   offers: TicketOffer[],
-  baggageProductId: string,
-): BaggageTicketOffer => {
-  const offersForBaggageProduct: BaggageTicketOffer[] = offers
-    .map((o) => BaggageTicketOffer.safeParse(o))
+  supplementProductId: string,
+): SupplementTicketOffer => {
+  const offersForSupplementProduct: SupplementTicketOffer[] = offers
+    .map((o) => SupplementTicketOffer.safeParse(o))
     .filter((o) => o.success)
     .map((o) => o.data)
-    .filter((o) => o.supplementProducts[0].id === baggageProductId);
+    .filter((o) => o.supplementProducts[0].id === supplementProductId);
 
   // If there are multiple offers for the same supplement product, use the cheapest one.
   // This shouldn't happen in practice, but it's a sensible fallback.
   return getCheapestOffer(
-    offersForBaggageProduct,
+    offersForSupplementProduct,
     (o) => o.supplementProducts[0].price,
   );
 };
@@ -115,11 +120,11 @@ const mapToUserProfilesWithCountAndOffer = (
     }))
     .filter((u): u is UserProfileWithCountAndOffer => u.offer != null);
 
-const mapToBaggageProductsWithCountAndOffer = (
-  baggageProductsWithCount: BaggageProductWithCount[],
+const mapToSupplementProductsWithCountAndOffer = (
+  supplementProductsWithCount: SupplementProductWithCount[],
   offers: TicketOffer[],
-): BaggageProductWithCountAndOffer[] =>
-  baggageProductsWithCount
+): SupplementProductWithCountAndOffer[] =>
+  supplementProductsWithCount
     .map((s) => ({
       ...s,
       offer: getOfferForBaggageProduct(offers, s.id),
@@ -129,7 +134,7 @@ const mapToBaggageProductsWithCountAndOffer = (
 const getOfferReducer =
   (
     userProfilesWithCounts: UserProfileWithCount[],
-    baggageProductsWithCount: BaggageProductWithCount[],
+    supplementProductsWithCount: SupplementProductWithCount[],
   ): OfferReducer =>
   (prevState, action): OfferState => {
     switch (action.type) {
@@ -147,7 +152,7 @@ const getOfferReducer =
           originalPrice: 0,
           error: undefined,
           userProfilesWithCountAndOffer: [],
-          baggageProductsWithCountAndOffer: [],
+          supplementProductsWithCountAndOffer: [],
         };
       case 'SET_OFFER':
         const userProfilesWithCountAndOffer =
@@ -155,9 +160,9 @@ const getOfferReducer =
             userProfilesWithCounts,
             action.offers,
           );
-        const baggageProductsWithCountAndOffer =
-          mapToBaggageProductsWithCountAndOffer(
-            baggageProductsWithCount,
+        const supplementProductsWithCountAndOffer =
+          mapToSupplementProductsWithCountAndOffer(
+            supplementProductsWithCount,
             action.offers,
           );
         return {
@@ -167,14 +172,15 @@ const getOfferReducer =
           validDurationSeconds: getValidDurationSeconds(action.offers?.[0]),
           originalPrice: calculateOriginalPrice(
             userProfilesWithCountAndOffer,
-            baggageProductsWithCountAndOffer,
+            supplementProductsWithCountAndOffer,
           ),
           totalPrice: calculateTotalPrice(
             userProfilesWithCountAndOffer,
-            baggageProductsWithCountAndOffer,
+            supplementProductsWithCountAndOffer,
           ),
           userProfilesWithCountAndOffer,
-          baggageProductsWithCountAndOffer,
+          supplementProductsWithCountAndOffer:
+            supplementProductsWithCountAndOffer,
           error: undefined,
         };
       case 'SET_ERROR': {
@@ -194,7 +200,7 @@ const initialState: OfferState = {
   originalPrice: 0,
   error: undefined,
   userProfilesWithCountAndOffer: [],
-  baggageProductsWithCountAndOffer: [],
+  supplementProductsWithCountAndOffer: [],
 };
 
 export function useOfferState(
@@ -203,7 +209,7 @@ export function useOfferState(
 ) {
   const offerReducer = getOfferReducer(
     selection?.userProfilesWithCount ?? [],
-    selection?.baggageProductsWithCount ?? [],
+    selection?.supplementProductsWithCount ?? [],
   );
   const [state, dispatch] = useReducer(offerReducer, initialState);
   const {t} = useTranslation();
@@ -222,21 +228,29 @@ export function useOfferState(
             id: t.userTypeString,
             userType: t.userTypeString,
             count: t.count,
+            productIds: selection?.existingProduct
+              ? [selection.existingProduct.id]
+              : [],
           })) ?? [];
 
       const baggageProductTravellers =
-        selection?.baggageProductsWithCount
-          .filter((sp) => sp.count)
-          .map((sp) => ({
-            id: sp.baggageType,
+        selection?.supplementProductsWithCount
+          .filter(isBaggageProductWithCount)
+          ?.filter((sp) => sp.count)
+          .map((bp) => ({
+            id: bp.baggageType,
             // Must be a valid user profile ref, and we are unsure if Entur supports 'ANYONE' yet for baggage products.
             // Doesn't actually have an affect on the purchased product.
             userType: 'ADULT',
-            baggageTypes: [sp.baggageType],
-            count: sp.count,
+            baggageTypes: [bp.baggageType],
+            count: bp.count,
           })) ?? [];
 
       const allTravellers = [...offerTravellers, ...baggageProductTravellers];
+      const nonBaggageProductSupplementProducts =
+        selection?.supplementProductsWithCount.filter(
+          (sp) => !isBaggageProductWithCount(sp),
+        ) ?? [];
 
       const isTravellersValid = allTravellers.length > 0;
       const isStopPlacesValid = selection?.stopPlaces
@@ -256,7 +270,9 @@ export function useOfferState(
               new Date(selection.legs[0].expectedStartTime),
               mapToSalesTripPatternLegs(t, selection.legs),
               allTravellers,
-              preassignedFareProductAlternatives.map((p) => p.id),
+              selection.existingProduct
+                ? nonBaggageProductSupplementProducts.map((sp) => sp.id)
+                : preassignedFareProductAlternatives.map((p) => p.id),
             );
             offers = response.offers;
           } else {
@@ -271,7 +287,7 @@ export function useOfferState(
               products: offerTravellers.length
                 ? preassignedFareProductAlternatives.map((p) => p.id)
                 : [],
-              supplementProducts: selection?.baggageProductsWithCount.map(
+              supplementProducts: selection?.supplementProductsWithCount.map(
                 (sp) => sp.id,
               ),
               travelDate: selection?.travelDate,
@@ -344,3 +360,9 @@ export function useOfferState(
 
 const isNotAvailableError = (err: any) =>
   err.http?.code === 404 && err.kind === 'NO_AVAILABLE_OFFERS_DUE_TO_SCHEDULE';
+
+function isBaggageProductWithCount(
+  supplementProductWithCount: SupplementProductWithCount,
+): supplementProductWithCount is BaggageProductWithCount {
+  return supplementProductWithCount.kind === 'baggage';
+}

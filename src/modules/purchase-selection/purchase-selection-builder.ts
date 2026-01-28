@@ -18,7 +18,7 @@ import {
 } from './utils';
 import {isValidDateString} from '@atb/utils/date';
 import {isSameDay} from 'date-fns';
-import type {BaggageProductWithCount} from '@atb/modules/fare-contracts';
+import type {SupplementProductWithCount} from '@atb/modules/fare-contracts';
 
 export const createEmptyBuilder = (
   input: PurchaseSelectionBuilderInput,
@@ -47,7 +47,7 @@ const createBuilder = (
   let currentSelection = selection;
   const buildState = {
     userProfilesWithCount: selection.userProfilesWithCount,
-    baggageProductsWithCount: selection.baggageProductsWithCount,
+    supplementProductsWithCount: selection.supplementProductsWithCount,
   };
   const builder: PurchaseSelectionBuilder = {
     product: (preassignedFareProduct) => {
@@ -109,8 +109,8 @@ const createBuilder = (
       buildState.userProfilesWithCount = userProfilesWithCount;
       return builder;
     },
-    baggageProducts: (baggageProductsWithCount) => {
-      buildState.baggageProductsWithCount = baggageProductsWithCount;
+    supplementProducts: (supplementProductsWithCount) => {
+      buildState.supplementProductsWithCount = supplementProductsWithCount;
       return builder;
     },
     date: (travelDate) => {
@@ -141,32 +141,40 @@ const createBuilder = (
       };
       return builder;
     },
+    existingProduct(existingProduct) {
+      currentSelection = {
+        ...currentSelection,
+        existingProduct: existingProduct,
+      };
+      return builder;
+    },
 
     build: () => {
       const onlyProfilesWithActualCount =
         buildState.userProfilesWithCount.filter((u) => u.count);
-      const onlyBaggageProductsWithActualCount =
-        buildState.baggageProductsWithCount.filter((s) => s.count);
+      const onlySupplementProductsWithActualCount =
+        buildState.supplementProductsWithCount.filter((s) => s.count);
 
       const anySelection =
         onlyProfilesWithActualCount.length ||
-        onlyBaggageProductsWithActualCount.length;
+        onlySupplementProductsWithActualCount.length;
 
       const areProfilesValid = onlyProfilesWithActualCount.every((p) =>
         isSelectableProfile(currentSelection.preassignedFareProduct, p),
       );
-      const areBaggageProductsValid = onlyBaggageProductsWithActualCount.every(
-        (sp) => isSelectableSupplementProduct(currentSelection, sp),
-      );
+      const areSupplementProductsValid =
+        onlySupplementProductsWithActualCount.every((sp) =>
+          isSelectableSupplementProduct(currentSelection, sp),
+        );
 
-      if (!anySelection || !areProfilesValid || !areBaggageProductsValid) {
+      if (!anySelection || !areProfilesValid || !areSupplementProductsValid) {
         return currentSelection;
       }
 
       return {
         ...currentSelection,
         userProfilesWithCount: onlyProfilesWithActualCount,
-        baggageProductsWithCount: onlyBaggageProductsWithActualCount,
+        supplementProductsWithCount: onlySupplementProductsWithActualCount,
       };
     },
   };
@@ -197,7 +205,7 @@ const createSelectionForType = (
     input,
     preassignedFareProduct,
   );
-  const baggageProductsWithCount: BaggageProductWithCount[] = [];
+  const supplementProductsWithCount: SupplementProductWithCount[] = [];
 
   return {
     fareProductTypeConfig,
@@ -205,7 +213,7 @@ const createSelectionForType = (
     zones,
     stopPlaces,
     userProfilesWithCount,
-    baggageProductsWithCount,
+    supplementProductsWithCount,
     travelDate: undefined,
     legs: [],
     isOnBehalfOf: false,
