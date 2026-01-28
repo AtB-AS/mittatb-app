@@ -24,7 +24,6 @@ export const Departures_DepartureDetailsScreen = ({
         navigation.push('Departures_PlaceScreen', {
           place: stopPlace,
           selectedQuayId,
-          mode: 'Departure',
         })
       }
       onPressTravelAid={() =>

@@ -12,7 +12,7 @@ import {Profile_DebugInfoScreen} from './Profile_DebugInfoScreen';
 import {Profile_DefaultUserProfileScreen} from './Profile_DefaultUserProfileScreen';
 import {Profile_PaymentMethodsScreen} from './Profile_PaymentMethodsScreen';
 import {ProfileStackParams} from './navigation-types';
-import {Profile_PlaceScreen} from './Profile_PlaceScreen';
+import {Profile_SelectFavouriteDeparturesScreen} from './Profile_SelectFavouriteDeparturesScreen.tsx';
 import {Profile_NearbyStopPlacesScreen} from './Profile_NearbyStopPlacesScreen';
 import {Profile_FavoriteDeparturesScreen} from './Profile_FavoriteDeparturesScreen';
 import {Profile_DeleteProfileScreen} from './Profile_DeleteProfileScreen';
@@ -132,8 +132,8 @@ export const TabNav_ProfileStack = () => {
         component={Profile_NearbyStopPlacesScreen}
       />
       <Stack.Screen
-        name="Profile_PlaceScreen"
-        component={Profile_PlaceScreen}
+        name="Profile_SelectFavouriteDeparturesScreen"
+        component={Profile_SelectFavouriteDeparturesScreen}
       />
       <Stack.Screen
         name="Profile_TravelAidScreen"

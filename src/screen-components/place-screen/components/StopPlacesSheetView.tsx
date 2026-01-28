@@ -28,7 +28,6 @@ type Props = {
   ) => void;
   searchTime: string;
   testID?: string;
-  addedFavoritesVisibleOnDashboard?: boolean;
   setTravelTarget?: (target: string) => void;
   distance?: number | undefined;
 };
@@ -41,7 +40,6 @@ export const StopPlacesSheetView = (props: Props) => {
     navigateToDetails,
     searchTime,
     testID,
-    addedFavoritesVisibleOnDashboard,
     setTravelTarget,
     distance,
   } = props;
@@ -112,7 +110,6 @@ export const StopPlacesSheetView = (props: Props) => {
           navigateToQuay={(quay) => navigateToQuay(item.stopPlace, quay)}
           testID={'quaySection' + index}
           showOnlyFavorites={false}
-          addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
           searchDate={searchTime}
           mode="Map"
         />
