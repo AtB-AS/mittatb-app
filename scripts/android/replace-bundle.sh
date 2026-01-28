@@ -35,11 +35,10 @@ else
     echo "Re-generate bundle"
     npx react-native bundle --platform android --dev false --reset-cache --entry-file index.js --bundle-output $BUNDLE_PATH --sourcemap-output $SOURCEMAP_PATH
 
-    brew install apktool
     brew install yq
 
     echo "Decompile Android APK"
-    apktool d $APK_FILE_NAME --output decompiled-apk
+    apktool d $APK_FILE_NAME --output decompiled-apk --no-res
 
     echo "Replace bundle in decompiled APK"
     rm decompiled-apk/assets/index.android.bundle
