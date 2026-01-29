@@ -37,15 +37,18 @@ else
 
     brew install yq
 
+    echo "Install Android framework for apktool"
+    apktool if $ANDROID_HOME/platforms/android-36/android.jar
+
     echo "Decompile Android APK"
-    apktool d $APK_FILE_NAME --output decompiled-apk --no-res
+    apktool d $APK_FILE_NAME --output decompiled-apk --no-src
 
     echo "Replace bundle in decompiled APK"
     rm decompiled-apk/assets/index.android.bundle
     cp $BUNDLE_PATH decompiled-apk/assets/
 
     echo "Set version code to build id: $BUILD_ID"
-    yq e ".versionInfo.versionCode = env(BUILD_ID)" -i decompiled-apk/apktool.yml
+    yq e ".versionInfo.versionCode = \"$BUILD_ID\"" -i decompiled-apk/apktool.yml
 
     echo "Re-compile Android APK"
     apktool b decompiled-apk -o temp-$APK_FILE_NAME
