@@ -66,14 +66,13 @@ export const ScooterSheet = ({
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-
   const styles = useStyles();
   const {
     vehicle,
     isLoading,
     isError,
-    operatorName,
     operatorId,
+    operatorName,
     rentalAppUri,
     brandLogoUrl,
     appStoreUri,
