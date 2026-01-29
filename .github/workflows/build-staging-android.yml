@@ -90,7 +90,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [atb, nfk, fram, troms]
+        org: ${{ fromJson(needs.setup.outputs.matrix) }} 
     environment: ${{ matrix.org }}
     timeout-minutes: 180
     runs-on: ubuntu-latest
