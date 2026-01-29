@@ -171,7 +171,7 @@ jobs:
         env:
           BRANCH_NAME: ${{ github.ref_name }}
           OUTPUT_FILE: ./release-notes.txt
-        run: bash ./scripts/generate-release-notes.sh
+        run: bash ./scripts/generate-staging-release-notes.sh
 
       - name: Post-build steps
         uses: ./.github/actions/android-post-build-steps
