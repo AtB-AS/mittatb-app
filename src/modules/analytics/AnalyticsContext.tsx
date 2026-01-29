@@ -43,13 +43,9 @@ export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
 
 type Props = {
   children: React.ReactNode;
-  currentRouteName: string | undefined;
 };
 
-export const AnalyticsContextProvider = ({
-  children,
-  currentRouteName,
-}: Props) => {
+export const AnalyticsContextProvider = ({children}: Props) => {
   const {userId, authenticationType} = useAuthContext();
   const {isPosthogEnabled} = useFeatureTogglesContext();
 
@@ -69,8 +65,8 @@ export const AnalyticsContextProvider = ({
 
   const handleScreenshot = useCallback(() => {
     if (!client) return;
-    client.capture('ScreenshotTaken', {screen: currentRouteName ?? null});
-  }, [client, currentRouteName]);
+    client.capture('ScreenshotTaken');
+  }, [client]);
 
   useScreenshotAware(handleScreenshot);
 

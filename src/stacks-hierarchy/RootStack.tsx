@@ -10,7 +10,7 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback} from 'react';
 import {StatusBar} from 'react-native';
 import {Root_TabNavigatorStack} from './Root_TabNavigatorStack';
 import {RootStackParamList} from './navigation-types';
@@ -102,25 +102,12 @@ export const RootStack = () => {
 
   useReactNavigationLogger(navRef);
 
-  const [currentRouteName, setCurrentRouteName] = useState<string | undefined>(
-    undefined,
-  );
-  const {setCurrentRouteName: setOnboardingCurrentRouteName} =
-    useOnboardingContext();
-
-  useEffect(() => {
-    if (currentRouteName) {
-      setOnboardingCurrentRouteName(currentRouteName);
-      trackNavigation(currentRouteName);
-    }
-  }, [currentRouteName, setOnboardingCurrentRouteName]);
-
+  const {setCurrentRouteName} = useOnboardingContext();
   const onNavigationStateChange = useCallback(
     (state?: NavigationState) => {
-      if (state) {
-        const activeRouteName = getActiveRouteName(state);
-        setCurrentRouteName(activeRouteName);
-      }
+      const currentRouteName = !state ? '' : getActiveRouteName(state);
+      setCurrentRouteName(currentRouteName);
+      state && trackNavigation(currentRouteName);
     },
     [setCurrentRouteName],
   );
@@ -340,7 +327,7 @@ export const RootStack = () => {
             },
           }}
         >
-          <AnalyticsContextProvider currentRouteName={currentRouteName}>
+          <AnalyticsContextProvider>
             <Stack.Navigator
               screenOptions={screenOptions(
                 TransitionPresets.ModalSlideFromBottomIOS,
