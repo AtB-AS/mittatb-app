@@ -2,7 +2,7 @@ package no.mittatb
 
 import android.content.pm.PackageManager
 import android.text.TextUtils
-import androidx.multidex.MultiDexApplication
+import android.app.Application
 import com.bugsnag.android.Bugsnag
 import com.bugsnag.android.Configuration
 import com.facebook.react.PackageList
@@ -12,10 +12,9 @@ import com.facebook.react.ReactNativeApplicationEntryPoint.loadReactNative
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
-import com.facebook.soloader.SoLoader
 import com.intercom.reactnative.IntercomModule
 
-class MainApplication : MultiDexApplication(), ReactApplication {
+class MainApplication : Application(), ReactApplication {
     override val reactHost: ReactHost by lazy {
         getDefaultReactHost(
             context = applicationContext,
