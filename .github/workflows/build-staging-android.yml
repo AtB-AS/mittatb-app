@@ -10,6 +10,11 @@ on:
         options:
           - 'true'
           - 'false'
+      org:
+        description: 'Which orgs to build (comma-separated, options are atb,nfk,fram,troms - e.g. "atb,fram", leave blank to build all)'
+        required: false
+        type: string
+        default: 'atb,nfk,fram,troms'
   push:
     branches:
       - master
@@ -23,7 +28,15 @@ jobs:
   setup:
     name: Install tools and warm up caches
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
+      - id: set-matrix
+        run: |
+          ORG_INPUT="${{ inputs.org }}"
+          ORG_INPUT="${ORG_INPUT:-a,b,c,d}"
+          MATRIX=$(echo "$ORG_INPUT" | tr -d ' ' | jq -R 'split(",")')
+          echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
       - name: Checkout project
         uses: actions/checkout@v4
       # ===== Install & Cache APKTool =====
