@@ -175,4 +175,4 @@ jobs:
           firebase-app-id: ${{ secrets.FIREBASE_APP_ID }}
           bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
           abt-entur-publish-client-staging: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_STAGING }}
-          version-name: ${{ steps.version-info.outputs.new_version_name }}
+          new-version-name: ${{ steps.version-info.outputs.new_version_name }}
