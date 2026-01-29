@@ -24,19 +24,6 @@ Version number can be updated by running the following command:
 
 Then push your changes with commit message "chore: Bump to version x.xx" on a new branch and merge it to master.
 
-### On master: Register new version at Entur registry
-
-After bumping the version number the new version should be registered at Entur for mobile token to work.
-
-> [!NOTE]
-> Please make sure that you have [jq](https://jqlang.github.io/jq/) installed. You can run `brew install jq` (or [similar instructions](https://jqlang.github.io/jq/download/) on other environments) to install it.
-
-Finally, run this command:
-
-```bash
-./scripts/register-local-app-version.sh
-```
-
 ### On release branch: Create release candidate with the command line
 
 This will create a draft release in GitHub.
