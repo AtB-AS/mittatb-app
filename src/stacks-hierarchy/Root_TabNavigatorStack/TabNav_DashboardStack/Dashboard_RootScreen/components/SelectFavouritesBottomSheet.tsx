@@ -139,6 +139,8 @@ export const SelectFavouritesBottomSheet = ({
       closeCallback={() => {
         if (shouldRestoreFocusRef.current) {
           giveFocus(onCloseFocusRef);
+        } else {
+          shouldRestoreFocusRef.current = true;
         }
       }}
       testID="selectFavorite"
