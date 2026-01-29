@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-} from 'react';
+import React, {createContext, useContext, useEffect, useMemo} from 'react';
 import {
   PostHog,
   type PostHogOptions,
@@ -14,7 +8,6 @@ import {POSTHOG_API_KEY, POSTHOG_HOST} from '@env';
 import {AnalyticsEventContext} from './types';
 import {useAuthContext} from '@atb/modules/auth';
 import Bugsnag from '@bugsnag/react-native';
-import {useScreenshotAware} from 'react-native-screenshot-aware';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 let client: PostHog | undefined;
@@ -62,13 +55,6 @@ export const AnalyticsContextProvider = ({children}: Props) => {
       client?.identify(userId, {authenticationType});
     }
   }, [client, userId, authenticationType]);
-
-  const handleScreenshot = useCallback(() => {
-    if (!client) return;
-    client.capture('ScreenshotTaken');
-  }, [client]);
-
-  useScreenshotAware(handleScreenshot);
 
   return (
     <AnalyticsContext.Provider value={client}>
