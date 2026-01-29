@@ -41,6 +41,7 @@ runs:
       env:
         GCP_CREDENTIALS_PATH: google-services.json
         FIREBASE_APP_ID: ${{ inputs.firebase-app-id }}
+        RELEASE_NOTES_FILE: ./release-notes.txt
     - name: Upload bundle and source maps
       shell: bash
       run: bash ./scripts/android/upload-sourcemaps.sh

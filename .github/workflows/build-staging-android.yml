@@ -97,6 +97,8 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Get potential cached APK
         uses: actions/cache@v4
@@ -163,6 +165,13 @@ jobs:
 
       - name: Add APKTool to PATH
         run: echo "$HOME/apktool" >> $GITHUB_PATH
+
+      - name: Generate release notes
+        id: release-notes
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
+          OUTPUT_FILE: ./release-notes.txt
+        run: bash ./scripts/generate-release-notes.sh
 
       - name: Post-build steps
         uses: ./.github/actions/android-post-build-steps

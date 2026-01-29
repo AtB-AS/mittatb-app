@@ -492,7 +492,8 @@ platform :android do
       service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
       android_artifact_type:'APK',
       android_artifact_path:ENV['APK_FILE_NAME'],
-      groups:ENV['APP_DISTRIBUTION_GROUP_NAME']
+      groups:ENV['APP_DISTRIBUTION_GROUP_NAME'],
+      release_notes_file: ENV['RELEASE_NOTES_FILE']
     )
   end
 
