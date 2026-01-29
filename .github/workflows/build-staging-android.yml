@@ -67,6 +67,12 @@ jobs:
         with:
           path: '**/node_modules'
           key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+      - name: Add Entur private registry credentials
+        shell: bash
+        run: bash ./scripts/add-entur-private-registry.sh
+        env:
+          ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Install node_modules
         if: steps.modules-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
