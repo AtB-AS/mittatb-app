@@ -11,7 +11,7 @@ on:
           - 'true'
           - 'false'
       org:
-        description: 'Which orgs to build (comma-separated, options are atb,nfk,fram,troms - e.g. "atb,fram", leave blank to build all)'
+        description: 'Which orgs to build (comma-separated, blank=all)'
         required: false
         type: string
         default: 'atb,nfk,fram,troms'
@@ -34,8 +34,8 @@ jobs:
       - id: set-matrix
         run: |
           ORG_INPUT="${{ inputs.org }}"
-          ORG_INPUT="${ORG_INPUT:-a,b,c,d}"
-          MATRIX=$(echo "$ORG_INPUT" | tr -d ' ' | jq -R 'split(",")')
+          ORG_INPUT="${ORG_INPUT:-atb,nfk,fram,troms}"
+          MATRIX=$(echo "$ORG_INPUT" | tr -d ' ' | jq -Rc 'split(",")')
           echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
       - name: Checkout project
         uses: actions/checkout@v4
