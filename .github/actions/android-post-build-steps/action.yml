@@ -2,6 +2,8 @@ name: 'Android post-build steps'
 description: 'Post-build steps for Android'
 
 inputs:
+  should-replace-bundle:
+    required: true
   keystore-pass:
     required: true
   keystore-key-pass:
@@ -16,17 +18,21 @@ inputs:
     required: true
   abt-entur-publish-client-staging:
     required: true
+  new-version-name:
+    required: true
 
 runs:
   using: "composite"
   steps:
     - name: Replace apk bundle
+      if: inputs.should-replace-bundle == 'true'
       shell: bash
       run: bash ./scripts/android/replace-bundle.sh
       env:
         KEYSTORE_PASS: ${{ inputs.keystore-pass }}
         KEY_PASS: ${{ inputs.keystore-key-pass }}
         KEY_ALIAS: ${{ inputs.keystore-key-alias }}
+        VERSION_NAME: ${{ inputs.new-version-name }}
     - name: Distribute to Firebase App Distribution
       shell: bash
       run: |
