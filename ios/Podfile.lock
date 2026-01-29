@@ -4815,6 +4815,34 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
+  - ScreenshotAware (1.3.18):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - SocketRocket (0.7.1)
   - SwiftProtobuf (1.28.2)
   - TimeApiiOSLib (3.3.14-hotfix2)
@@ -4963,6 +4991,7 @@ DEPENDENCIES:
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNWorklets (from `../node_modules/react-native-worklets`)
+  - ScreenshotAware (from `../node_modules/react-native-screenshot-aware`)
   - SocketRocket (~> 0.7.1)
   - "TimeApiiOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/time-api-ios-lib`)"
   - "TokenCore (from `../node_modules/@entur-private/abt-token-state-react-native-lib/token-core-ios-lib`)"
@@ -5245,6 +5274,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-svg"
   RNWorklets:
     :path: "../node_modules/react-native-worklets"
+  ScreenshotAware:
+    :path: "../node_modules/react-native-screenshot-aware"
   TimeApiiOSLib:
     :path: !ruby/object:Pathname
     path: "../node_modules/@entur-private/abt-token-state-react-native-lib/time-api-ios-lib"
@@ -5301,7 +5332,7 @@ SPEC CHECKSUMS:
   "gRPC-C++": cc207623316fb041a7a3e774c252cf68a058b9e8
   gRPC-Core: 860978b7db482de8b4f5e10677216309b5ff6330
   GTMSessionFetcher: 02d6e866e90bc236f48a703a041dfe43e6221a29
-  hermes-engine: 7b97af1957eaf8cfc1fa8f146b57ed75fe5f2e65
+  hermes-engine: 64c8724b2919f58c70c597ff023697370b732563
   Intercom: aca703f001cf9470b1f13b72cb8cc969a09bafca
   intercom-react-native: c8ee5e7d845955c5f6898c0f094ebcf1d6db9255
   KettleKit: 37e98f1e9d2da85616378fd0acc8a8bf81360b67
@@ -5312,7 +5343,7 @@ SPEC CHECKSUMS:
   MapboxMaps: e97e59d6ba48bb6f695a4c1dc2f174cb24743cd4
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
+  RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: a41bbdd9af30bf2e5715796b313e44ec43eefff1
   RCTRequired: 7be34aabb0b77c3cefe644528df0fa0afad4e4d0
   RCTSwiftUI: a6c7271c39098bf00dbdad8f8ed997a59bbfbe44
@@ -5409,15 +5440,16 @@ SPEC CHECKSUMS:
   RNLocalize: d8ccb568b40c72c767714db3808ce66a1ecf444a
   rnmapbox-maps: df786769607427115545ba9bee95360436218510
   RNPermissions: 0d6950c452b8d89d506ec1a60ab095d68bc1ce92
-  RNReanimated: fbcb7fd8da5b0b088401542c58fb5d266388f1cf
+  RNReanimated: e59e7353bf86f9834ea78fff4a926a9c9fe31246
   RNScreens: d6413aeb1878cdafd3c721e2c5218faf5d5d3b13
   RNSVG: acb39c771c3dbb33fa8f65d1b11dc4500147189e
   RNWorklets: 69f7239afaf3a156f7f9549eeb0ae8d02adc095f
+  ScreenshotAware: 508d7e1a6ed436aaf4768e48f94352f472f89761
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   SwiftProtobuf: 4dbaffec76a39a8dc5da23b40af1a5dc01a4c02d
   TimeApiiOSLib: 8289d67019d958c29676dfb9e38ffdcefbcdb9bd
   TokenCore: cdce158c4f5331f81f35e34f3b708b6582c0d569
-  TokenStateReactNativeLib: e1b93062a2b35f28bddad865aaadfb8026a22e4a
+  TokenStateReactNativeLib: 00fb9cd8cc92a36f350c9d216686277837d6474a
   Turf: c9eb11a65d96af58cac523460fd40fec5061b081
   VisionCamera: 30b358b807324c692064f78385e9a732ce1bebfe
   VisualCodeModeliOSLib: c40687c1f0bd60e672088a023d3ec0984608c118

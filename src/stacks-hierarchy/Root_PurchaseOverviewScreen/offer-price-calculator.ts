@@ -3,34 +3,34 @@ import {
   TicketOffer,
 } from '@atb-as/utils/lib/offers/ticket-offer';
 import {
-  BaggageProductWithCountAndOffer,
-  BaggageTicketOffer,
+  type SupplementProductWithCountAndOffer,
+  SupplementTicketOffer,
   UserProfileWithCountAndOffer,
 } from './use-offer-state';
 
 export const calculateTotalPrice = (
   userProfileWithCounts: UserProfileWithCountAndOffer[],
-  baggageProductsWithCount: BaggageProductWithCountAndOffer[],
+  supplementProductsWithCount: SupplementProductWithCountAndOffer[],
 ) => {
   return calculateTotalPriceWithPriceFunction(
     getPriceAsFloat,
     userProfileWithCounts,
-    baggageProductsWithCount,
+    supplementProductsWithCount,
   );
 };
 
 export const calculateOriginalPrice = (
   userProfileWithCounts: UserProfileWithCountAndOffer[],
-  baggageProductsWithCount: BaggageProductWithCountAndOffer[],
+  supplementProductsWithCount: SupplementProductWithCountAndOffer[],
 ) => {
   return calculateTotalPriceWithPriceFunction(
     getOriginalPriceAsFloat,
     userProfileWithCounts,
-    baggageProductsWithCount,
+    supplementProductsWithCount,
   );
 };
 
-export const getCheapestOffer = <T extends TicketOffer | BaggageTicketOffer>(
+export const getCheapestOffer = <T extends TicketOffer | SupplementTicketOffer>(
   offers: T[],
   priceSelector: (offer: T) => SearchOfferPrice,
 ) => {
@@ -44,7 +44,7 @@ export const getCheapestOffer = <T extends TicketOffer | BaggageTicketOffer>(
 const calculateTotalPriceWithPriceFunction = (
   priceFunction: PriceFunction,
   userProfileWithCountsAndOffers: UserProfileWithCountAndOffer[],
-  baggageProductsWithCountAndOffers: BaggageProductWithCountAndOffer[],
+  supplementProductsWithCountAndOffers: SupplementProductWithCountAndOffer[],
 ): number => {
   const userProfilesPrice = userProfileWithCountsAndOffers.reduce(
     (total, traveller) => {
@@ -55,15 +55,15 @@ const calculateTotalPriceWithPriceFunction = (
     0,
   );
 
-  const baggageProductsPrice = baggageProductsWithCountAndOffers.reduce(
-    (total, baggageProductWithOffer) => {
+  const baggageProductsPrice = supplementProductsWithCountAndOffers.reduce(
+    (total, supplementProductWithOffer) => {
       return (
         total +
         priceFunction(
-          baggageProductWithOffer.offer.supplementProducts[0].price,
+          supplementProductWithOffer.offer.supplementProducts[0].price,
           'NOK',
         ) *
-          baggageProductWithOffer.count
+          supplementProductWithOffer.count
       );
     },
     0,

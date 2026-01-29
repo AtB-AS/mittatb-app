@@ -19,6 +19,7 @@ export type SalesTripPatternLeg = {
 export type Traveller = {
   id: string;
   userType: UserProfile['userTypeString'];
+  productIds?: string[];
 };
 
 export type OfferFromLegsResponse = {

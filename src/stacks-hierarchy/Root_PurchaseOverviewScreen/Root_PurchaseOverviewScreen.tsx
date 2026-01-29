@@ -79,13 +79,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
-    baggageProductsWithCountAndOffer,
+    supplementProductsWithCountAndOffer,
   } = useOfferState(preassignedFareProductAlternatives, selection);
 
   const firstUserProfilesProductRef =
     userProfilesWithCountAndOffer[0]?.offer?.fareProduct;
   const firstBaggageProductRef =
-    baggageProductsWithCountAndOffer[0]?.offer?.supplementProducts[0]?.id;
+    supplementProductsWithCountAndOffer[0]?.offer?.supplementProducts[0]?.id;
 
   const preassignedFareProduct =
     preassignedFareProductAlternatives.find(
@@ -145,8 +145,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     const hasOffer =
       (selection.userProfilesWithCount.some((u) => u.count) &&
         userProfilesWithCountAndOffer.some((u) => u.count)) ||
-      (selection.baggageProductsWithCount.some((sp) => sp.count) &&
-        baggageProductsWithCountAndOffer.some((sp) => sp.count));
+      (selection.supplementProductsWithCount.some((sp) => sp.count) &&
+        supplementProductsWithCountAndOffer.some((sp) => sp.count));
 
     return (
       hasOffer ||
@@ -375,7 +375,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                   }),
                 ),
                 baggageProductsWithCount:
-                  selection.baggageProductsWithCount.map((sp) => ({
+                  selection.supplementProductsWithCount.map((sp) => ({
                     id: sp.id,
                     count: sp.count,
                   })),

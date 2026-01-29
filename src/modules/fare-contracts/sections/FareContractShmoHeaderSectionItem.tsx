@@ -49,7 +49,9 @@ export const FareContractShmoHeaderSectionItem = ({
         !!fc.formFactor && (
           <ThemeText
             typography="body__s__strong"
-            accessibilityLabel={fc?.formFactor + operatorName}
+            accessibilityLabel={t(
+              MobilityTexts.fareContractHeader(fc.formFactor, operatorName),
+            )}
             color={theme.color.foreground.dynamic.secondary}
             style={styles.headerText}
           >

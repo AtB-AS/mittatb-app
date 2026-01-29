@@ -35,13 +35,17 @@ import {
 import {useFareContractLegs} from './use-fare-contract-legs';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {CarnetFooter} from './carnet/CarnetFooter';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type Props = {
   now: number;
   fareContract: FareContractType;
   isStatic?: boolean;
   onPressDetails?: () => void;
-  navigateToBonusScreen: () => void;
+  onNavigateToBonusScreen: () => void;
+  onNavigateToPurchaseFlow?: (
+    supplementProductSelection: PurchaseSelectionType,
+  ) => void;
   testID?: string;
 };
 
@@ -50,7 +54,8 @@ export const FareContractView: React.FC<Props> = ({
   fareContract,
   isStatic,
   onPressDetails,
-  navigateToBonusScreen,
+  onNavigateToBonusScreen,
+  onNavigateToPurchaseFlow,
   testID,
 }) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
@@ -58,6 +63,7 @@ export const FareContractView: React.FC<Props> = ({
   const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
 
   const {t} = useTranslation();
+
   const styles = useStyles();
 
   const {validityStatus} = getFareContractInfo(
@@ -119,7 +125,10 @@ export const FareContractView: React.FC<Props> = ({
           withHeader={true}
         />
       ) : (
-        <TravelInfoSectionItem fc={fareContract} />
+        <TravelInfoSectionItem
+          fc={fareContract}
+          onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
+        />
       )}
 
       {accesses && (
@@ -138,7 +147,7 @@ export const FareContractView: React.FC<Props> = ({
       {shouldShowBonusAmountEarned && !!bonusAmountEarned?.amount && (
         <EarnedBonusPointsSectionItem
           amount={bonusAmountEarned.amount}
-          navigateToBonusScreen={navigateToBonusScreen}
+          navigateToBonusScreen={onNavigateToBonusScreen}
         />
       )}
 
@@ -147,6 +156,7 @@ export const FareContractView: React.FC<Props> = ({
           <LegsSummary legs={legs} compact={true} />
         </GenericSectionItem>
       )}
+
       {!isStatic && (
         <LinkSectionItem
           text={t(

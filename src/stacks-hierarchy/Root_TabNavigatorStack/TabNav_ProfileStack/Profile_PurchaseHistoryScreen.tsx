@@ -8,7 +8,7 @@ type Props = ProfileScreenProps<'Profile_PurchaseHistoryScreen'>;
 export const Profile_PurchaseHistoryScreen = ({navigation}: Props) => {
   const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
 
-  const navigateToBonusScreen = useCallback(() => {
+  const onNavigateToBonusScreen = useCallback(() => {
     navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
   }, [navigation, bonusScreenParams]);
 
@@ -20,7 +20,7 @@ export const Profile_PurchaseHistoryScreen = ({navigation}: Props) => {
           transitionOverride: 'slide-from-right',
         })
       }
-      navigateToBonusScreen={navigateToBonusScreen}
+      onNavigateToBonusScreen={onNavigateToBonusScreen}
     />
   );
 };
