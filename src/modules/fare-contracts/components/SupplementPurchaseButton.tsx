@@ -22,16 +22,18 @@ export function SupplementPurchaseButton({
   const {theme} = useThemeContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {data: supplementProducts} = useGetSupplementProductsQuery();
-  const {selection: bookingPurchaseSelection} =
-    useSupplementProductPurchaseSelection(existingFareContract);
-  const {buttonMode, buttonText} =
-    useSupplementProductPurchaseButtonConfig(existingFareContract);
-
   const hasReservationProduct = hasReservationTypeSupplementProduct(
     existingFareContract,
     preassignedFareProducts,
     supplementProducts,
   );
+  const {selection: bookingPurchaseSelection} =
+    useSupplementProductPurchaseSelection({
+      existingFareContract,
+      isEnabled: hasReservationProduct,
+    });
+  const {buttonMode, buttonText} =
+    useSupplementProductPurchaseButtonConfig(existingFareContract);
 
   if (!hasReservationProduct || !navigateToPurchaseFlow) return null;
 

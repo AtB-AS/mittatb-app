@@ -40,7 +40,7 @@ export const isProductSellableInApp = (
 
 /**
  * This implementation assumes that input.preassignedFareProducts always has at least one
- * selectable zone for the given product
+ * produdct for the given configType
  */
 export const getDefaultProduct = (
   input: PurchaseSelectionBuilderInput,

@@ -2,7 +2,11 @@ import z from 'zod';
 import {CancelToken as CancelTokenStatic} from '@atb/api';
 import {toAxiosErrorKind, AxiosErrorKind} from '@atb/api/utils';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
-import {FlexDiscountLadder, searchOffers} from '@atb/modules/ticketing';
+import {
+  FlexDiscountLadder,
+  type OfferSearchParams,
+  searchOffers,
+} from '@atb/modules/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
 import {
@@ -12,19 +16,18 @@ import {
 } from '@atb/modules/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
 import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
-import {fetchOfferFromLegs} from '@atb/api/sales';
 import {
   ErrorResponse,
   TicketOffer,
   SupplementProductOffer,
 } from '@atb-as/utils';
-import {mapToSalesTripPatternLegs} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/utils';
-import {useTranslation} from '@atb/translations';
 import {
   calculateOriginalPrice,
   calculateTotalPrice,
   getCheapestOffer,
 } from './offer-price-calculator';
+import {searchTripPatternOffers} from '@atb/api/sales';
+import {mapToOfferSearchLegs} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/utils';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: TicketOffer;
@@ -212,7 +215,6 @@ export function useOfferState(
     selection?.supplementProductsWithCount ?? [],
   );
   const [state, dispatch] = useReducer(offerReducer, initialState);
-  const {t} = useTranslation();
 
   const updateOffer = useCallback(
     async function (cancelToken?: CancelToken) {
@@ -221,7 +223,7 @@ export function useOfferState(
         return;
       }
 
-      const offerTravellers =
+      const userProfileTravellers =
         selection?.userProfilesWithCount
           .filter((t) => t.count)
           .map((t) => ({
@@ -246,11 +248,10 @@ export function useOfferState(
             count: bp.count,
           })) ?? [];
 
-      const allTravellers = [...offerTravellers, ...baggageProductTravellers];
-      const nonBaggageProductSupplementProducts =
-        selection?.supplementProductsWithCount.filter(
-          (sp) => !isBaggageProductWithCount(sp),
-        ) ?? [];
+      const allTravellers = [
+        ...userProfileTravellers,
+        ...baggageProductTravellers,
+      ];
 
       const isTravellersValid = allTravellers.length > 0;
       const isStopPlacesValid = selection?.stopPlaces
@@ -266,17 +267,20 @@ export function useOfferState(
           let offers: TicketOffer[];
 
           if (selection?.legs.length) {
-            const response = await fetchOfferFromLegs(
-              new Date(selection.legs[0].expectedStartTime),
-              mapToSalesTripPatternLegs(t, selection.legs),
-              allTravellers,
-              selection.existingProduct
-                ? nonBaggageProductSupplementProducts.map((sp) => sp.id)
+            const params: OfferSearchParams = {
+              travellers: allTravellers,
+              products: selection.existingProduct
+                ? [] // existingProduct means we are purchasing supplementProduct. products should be empty.
                 : preassignedFareProductAlternatives.map((p) => p.id),
-            );
+              supplementProducts:
+                selection?.supplementProductsWithCount.map((sp) => sp.id) ?? [],
+              isOnBehalfOf: false,
+              legs: mapToOfferSearchLegs(selection.legs),
+            };
+            const response = await searchTripPatternOffers(params);
             offers = response.offers;
           } else {
-            const params = {
+            const params: OfferSearchParams = {
               zones: selection?.zones && [
                 ...new Set([selection.zones.from.id, selection.zones.to.id]),
               ],
@@ -284,12 +288,11 @@ export function useOfferState(
               to: selection?.stopPlaces?.to!.id,
               isOnBehalfOf: selection?.isOnBehalfOf ?? false,
               travellers: allTravellers,
-              products: offerTravellers.length
+              products: userProfileTravellers.length
                 ? preassignedFareProductAlternatives.map((p) => p.id)
                 : [],
-              supplementProducts: selection?.supplementProductsWithCount.map(
-                (sp) => sp.id,
-              ),
+              supplementProducts:
+                selection?.supplementProductsWithCount.map((sp) => sp.id) ?? [],
               travelDate: selection?.travelDate,
             };
 
@@ -336,7 +339,7 @@ export function useOfferState(
         }
       }
     },
-    [selection, preassignedFareProductAlternatives, t],
+    [selection, preassignedFareProductAlternatives],
   );
 
   useEffect(() => {
