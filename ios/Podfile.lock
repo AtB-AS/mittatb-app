@@ -4127,6 +4127,34 @@ PODS:
     - Yoga
   - RNSVG (15.13.0):
     - React-Core
+  - ScreenshotAware (1.3.18):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - SocketRocket (0.7.1)
   - SwiftProtobuf (1.28.2)
   - TimeApiiOSLib (3.3.14-hotfix2)
@@ -4269,6 +4297,7 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - ScreenshotAware (from `../node_modules/react-native-screenshot-aware`)
   - SocketRocket (~> 0.7.1)
   - "TimeApiiOSLib (from `../node_modules/@entur-private/abt-token-state-react-native-lib/time-api-ios-lib`)"
   - "TokenCore (from `../node_modules/@entur-private/abt-token-state-react-native-lib/token-core-ios-lib`)"
@@ -4538,6 +4567,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  ScreenshotAware:
+    :path: "../node_modules/react-native-screenshot-aware"
   TimeApiiOSLib:
     :path: !ruby/object:Pathname
     path: "../node_modules/@entur-private/abt-token-state-react-native-lib/time-api-ios-lib"
@@ -4699,6 +4730,7 @@ SPEC CHECKSUMS:
   RNReanimated: f0afa2ce3b2a47f495b9962d5fe7a006aa8676ef
   RNScreens: 5dc1a3d8a8720d4a2ba1fc26f912ae47f5a84dc6
   RNSVG: e0293d50d2cc0c7b8259fc66faa292378a04ba9a
+  ScreenshotAware: 224a17559de29466a65447f59ebccb9cf25d7d85
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   SwiftProtobuf: 4dbaffec76a39a8dc5da23b40af1a5dc01a4c02d
   TimeApiiOSLib: 8289d67019d958c29676dfb9e38ffdcefbcdb9bd

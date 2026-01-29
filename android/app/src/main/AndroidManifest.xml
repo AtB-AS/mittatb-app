@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.DETECT_SCREEN_CAPTURE" />
     <!-- Removed as part of https://github.com/AtB-AS/kundevendt/issues/18747 -->
     <uses-permission
         android:name="android.permission.FOREGROUND_SERVICE"
