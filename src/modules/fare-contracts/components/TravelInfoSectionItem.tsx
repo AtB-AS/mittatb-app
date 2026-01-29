@@ -13,6 +13,7 @@ import {
   getFareContractInfo,
   getTravellersIcon,
   getTravellersText,
+  hasReservationTypeSupplementProduct,
   mapToUserProfilesWithCount,
 } from '../utils';
 import {InspectionSymbol} from './InspectionSymbol';
@@ -57,6 +58,13 @@ export const TravelInfoSectionItem = ({
       findReferenceDataById(preassignedFareProducts, tr.fareProductRef),
     )
     .filter(isDefined);
+
+  const {data: supplementProducts} = useGetSupplementProductsQuery();
+  const hasReservationProduct = hasReservationTypeSupplementProduct(
+    fc,
+    preassignedFareProducts,
+    supplementProducts,
+  );
 
   const firstTravelRight = fc.travelRights[0];
   const preassignedFareProduct = productsInFareContract[0];
@@ -168,10 +176,12 @@ export const TravelInfoSectionItem = ({
       </View>
 
       <SentOrReceivedMessageBox fc={fc} />
-      <SupplementPurchaseButton
-        existingFareContract={fc}
-        navigateToPurchaseFlow={onNavigateToPurchaseFlow}
-      />
+      {hasReservationProduct && onNavigateToPurchaseFlow && (
+        <SupplementPurchaseButton
+          existingFareContract={fc}
+          navigateToPurchaseFlow={onNavigateToPurchaseFlow}
+        />
+      )}
     </View>
   );
 };

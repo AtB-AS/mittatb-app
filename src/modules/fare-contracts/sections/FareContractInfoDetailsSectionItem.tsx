@@ -12,6 +12,7 @@ import {View} from 'react-native';
 import {
   getTravellersIcon,
   getTravellersText,
+  hasReservationTypeSupplementProduct,
   isValidFareContract,
   useFareZoneSummary,
   ValidityStatus,
@@ -26,6 +27,10 @@ import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
 import type {BaggageProduct} from '@atb-as/config-specs';
 import {SupplementPurchaseButton} from '@atb/modules/fare-contracts';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {
+  useGetFareProductsQuery,
+  useGetSupplementProductsQuery,
+} from '@atb/modules/ticketing';
 
 export type FareContractInfoProps = {
   status: ValidityStatus;
@@ -70,6 +75,8 @@ export const FareContractInfoDetailsSectionItem = ({
     fromFareZone,
     toFareZone,
   );
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const {data: supplementProducts} = useGetSupplementProductsQuery();
 
   const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
@@ -91,6 +98,12 @@ export const FareContractInfoDetailsSectionItem = ({
     userProfilesWithCount,
     baggageProductsWithCount,
     language,
+  );
+
+  const hasReservationProduct = hasReservationTypeSupplementProduct(
+    fareContract,
+    preassignedFareProducts,
+    supplementProducts,
   );
 
   return (
@@ -140,10 +153,12 @@ export const FareContractInfoDetailsSectionItem = ({
           />
         )}
       </View>
-      <SupplementPurchaseButton
-        existingFareContract={fareContract}
-        navigateToPurchaseFlow={onNavigateToPurchaseFlow}
-      />
+      {hasReservationProduct && onNavigateToPurchaseFlow && (
+        <SupplementPurchaseButton
+          existingFareContract={fareContract}
+          navigateToPurchaseFlow={onNavigateToPurchaseFlow}
+        />
+      )}
     </View>
   );
 };
