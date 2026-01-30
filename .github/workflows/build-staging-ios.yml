@@ -10,6 +10,11 @@ on:
         options:
           - 'true'
           - 'false'
+      org:
+        description: 'Which orgs to build (comma-separated, blank=all)'
+        required: false
+        type: string
+        default: 'atb,nfk,fram,troms'
   push:
     branches:
       - master
@@ -29,14 +34,58 @@ jobs:
         id: detect
         uses: ./.github/actions/detect-changes
 
-  build-ios:
+  setup:
     needs: detect-changes
     if: needs.detect-changes.outputs.should_build == 'true'
-    name: Build iOS
+    name: Set-up tools and warm up cache
+    runs-on: macOS-14
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          ORG_INPUT="${{ inputs.org }}"
+          ORG_INPUT="${ORG_INPUT:-atb,nfk,fram,troms}"
+          MATRIX=$(echo "$ORG_INPUT" | tr -d ' ' | jq -Rc 'split(",")')
+          echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
+      - name: Checkout project
+        uses: actions/checkout@v4
+      # ===== Install & Cache node-modules  =====
+      - name: Install node v22
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: 'yarn'
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: modules-cache
+        with:
+          path: '**/node_modules'
+          key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+      - name: Add Entur private registry credentials
+        shell: bash
+        run: bash ./scripts/add-entur-private-registry.sh
+        env:
+          ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+      - name: Install node_modules
+        if: steps.modules-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+            # ===== Ruby & Bundler =====
+      - name: Setup ruby and bundle install
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.0
+          cache-version: 2
+          bundler-cache: true
+  
+  build-ios:
+    needs: setup
+    name: Build iOS (${{ matrix.org }})
     strategy:
       fail-fast: false
       matrix:
-        org: [atb, nfk, fram, troms]
+        org: ${{ fromJson(needs.setup.outputs.matrix) }} 
     environment: ${{ matrix.org }}
     timeout-minutes: 360
     runs-on: macOS-26
@@ -45,6 +94,14 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
+      - name: Get potential cached ipa & dsym
+        uses: actions/cache@v4
+        id: ipa-cache
+        with:
+          path: |
+            AtB.ipa
+            AtB.app.dSYM.zip
+          key: ${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets/') }}
       - name: Add Entur private registry credentials
         run: sh ./scripts/add-entur-private-registry.sh
         env:
@@ -53,10 +110,10 @@ jobs:
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
-          use-build-cache: 'true'
           app-environment: 'staging'
           app-org: ${{ matrix.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+          can-skip: ${{ steps.ipa-cache.outputs.cache-hit == 'true'}}
       # - name: Get potential cached pods
       #   uses: actions/cache@v4
       #   id: pods-cache
@@ -72,14 +129,6 @@ jobs:
       - uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
-      - name: Get potential cached ipa & dsym
-        uses: actions/cache@v4
-        id: ipa-cache
-        with:
-          path: |
-            AtB.ipa
-            AtB.app.dSYM.zip
-          key: ${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets/') }}
       - name: Generate native assets
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: |

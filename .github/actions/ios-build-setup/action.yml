@@ -2,19 +2,9 @@ name: iOS build setup
 description: 'Sets up the necessarry dependencies, environment and assets for building the iOS app'
 inputs:
   # Dev dependencies
-  node-version:
-    default: "22"
-    required: false
-  ruby-version:
-    default: "3.1.0"
-    required: false
   xcode-version:
     default: "latest-stable"
     required: false
-  use-build-cache:
-    description: "Wether to use the build cache for artifacts and dependencies (will speed up subsequent builds if no native changes have happened)"
-    default: 'false'
-    required: true
   app-environment:
     description: "Which app-environment to build for, staging or store"
     required: true
@@ -24,6 +14,10 @@ inputs:
   git-crypt-key:
     description: "The gitcrypt key to unlock the repository files with"
     required: true
+  can-skip:
+    description: 'Cached IPA found, can skip step'
+    required: true
+    default: 'false'
 
 runs:
   using: "composite"
@@ -52,14 +46,9 @@ runs:
       - name: Get potential cached node_modules
         uses: actions/cache@v4
         id: modules-cache
-        if: ${{ inputs.use-build-cache }} == 'true'
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
-      - name: Install node_modules
-        shell: bash
-        if: ${{ inputs.use-build-cache }} != 'true' || steps.modules-cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
       - name: Setup Xcode version
         uses: maxim-lobanov/setup-xcode@v1
         with:
