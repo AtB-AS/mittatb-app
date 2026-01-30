@@ -7,7 +7,7 @@ import {
 } from '@atb-as/config-specs';
 import {KeysMatching} from './types';
 
-// find every key in configurableLinks where the value is of type AppVersionedConfigurableLink
+// find every key in configurableLinks where the value is of type AppVersionedConfigurableLink[] | undefined
 type AppVersionedConfigurableLinkKey = KeysMatching<
   ConfigurableLinks,
   AppVersionedConfigurableLink[] | undefined
