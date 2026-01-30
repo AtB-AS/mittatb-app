@@ -3,11 +3,12 @@ import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
 import Bugsnag from '@bugsnag/react-native';
 import {useAuthContext} from '@atb/modules/auth';
 import {useListRecurringPaymentsQuery} from '@atb/modules/ticketing';
-import {PaymentMethod} from './types';
+import {CardPaymentMethod, PaymentMethod} from './types';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {parseISO} from 'date-fns';
 import {PaymentType, listRecurringPayments} from '@atb/modules/ticketing';
 import {onlyUniques} from '@atb/utils/only-uniques';
+import {isNonRecurringPaymentType} from './utils';
 
 export function usePreviousPaymentMethods(): {
   recurringPaymentMethods: PaymentMethod[] | undefined;
@@ -157,8 +158,13 @@ export const savePreviousPayment = async (
 
   if (!recurringPaymentId) {
     if (!paymentType) return;
+    if (isNonRecurringPaymentType(paymentType)) {
+      await savePreviousPaymentMethodByUser(userId, {
+        paymentType: paymentType,
+      });
+    }
     await savePreviousPaymentMethodByUser(userId, {
-      paymentType: paymentType,
+      paymentType: PaymentType.PaymentCard,
     });
   } else {
     try {

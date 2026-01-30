@@ -123,6 +123,9 @@ export type ReserveOfferRequest = {
    * https://developer.nexigroup.com/netaxept/en-EU/api/rest-v1/#netaxept-registeraspx-get-parameters-autosale
    */
   autoSale?: boolean;
+
+  /** Only needed if payment type is a wallet type, e.g. Apple Pay or Google Pay */
+  paymentData?: string;
 };
 
 export type TicketRecipientType = {

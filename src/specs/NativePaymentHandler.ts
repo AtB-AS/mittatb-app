@@ -2,7 +2,10 @@ import {TurboModule, TurboModuleRegistry} from 'react-native';
 
 export interface Spec extends TurboModule {
   startPayment(
-    price: number,
+    items: {
+      price: number;
+      label: string;
+    }[],
     onComplete: (paymentData: string | null) => void,
   ): void;
 }

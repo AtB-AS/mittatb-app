@@ -16,6 +16,7 @@ type Args = {
   recipient?: TicketRecipientType;
   shouldSavePaymentMethod: boolean;
   onSuccess?: (reserveOfferResponse: ReserveOfferResponse) => void;
+  applePayPaymentData?: string;
 };
 
 export const useReserveOfferMutation = ({
@@ -24,6 +25,7 @@ export const useReserveOfferMutation = ({
   recipient,
   shouldSavePaymentMethod,
   onSuccess,
+  applePayPaymentData,
 }: Args) => {
   const {abtCustomerId, phoneNumber} = useAuthContext();
   const {enable_auto_sale: autoSale} = useRemoteConfigContext();
@@ -41,6 +43,7 @@ export const useReserveOfferMutation = ({
         phoneNumber,
         autoSale,
         recipient,
+        applePayPaymentData,
       });
     },
     onSuccess: (data) => {

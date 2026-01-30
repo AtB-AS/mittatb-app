@@ -21,10 +21,9 @@ RCT_EXPORT_MODULE(NativePaymentHandler)
   return std::make_shared<facebook::react::NativePaymentHandlerSpecJSI>(params);
 }
 
-- (void)startPayment:(double)price
+- (void)startPayment:(NSArray *)items
           onComplete:(RCTResponseSenderBlock)onComplete {
-  NSLog(@"OBJC: Start payment with price: %f", price);
-  [paymentHandler startPaymentFor:price completionHandler:^(NSString * _Nullable paymentData) {
+  [paymentHandler startPaymentWithItems:items completionHandler:^(NSString * _Nullable paymentData) {
     onComplete(@[ paymentData ?: [NSNull null] ]);
   }];
 }

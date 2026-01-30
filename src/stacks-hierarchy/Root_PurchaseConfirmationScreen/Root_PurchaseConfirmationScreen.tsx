@@ -58,6 +58,9 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useProductAlternatives} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {isNonRecurringPaymentType} from '@atb/modules/payment/utils';
+import {NativePaymentHandler} from '@atb/specs/NativePaymentHandler';
+import {APP_NAME} from '@env';
+import {getReferenceDataName} from '@atb/modules/configuration';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -66,8 +69,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   route: {params},
 }) => {
   const styles = useStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {userId} = useAuthContext();
+  const [applePayPaymentData, setApplePayPaymentData] = useState<string>();
 
   const {previousPaymentMethod, recurringPaymentMethods} =
     usePreviousPaymentMethods();
@@ -123,6 +127,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     paymentMethod,
     recipient,
     shouldSavePaymentMethod,
+    applePayPaymentData,
   });
   useDoOnceWhen(
     () => {
@@ -204,6 +209,32 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     }
     if (totalPrice === 0) {
       analytics.logEvent('Ticketing', 'Complete free purchase selected');
+      reserveMutation.mutate();
+      return;
+    }
+
+    if (paymentMethod?.paymentType === PaymentType.ApplePay) {
+      analytics.logEvent('Ticketing', 'Apple Pay selected');
+      const userProfileItems = userProfilesWithCountAndOffer.map((u) => ({
+        price: (u.offer.price.amountFloat || 0) * u.count,
+        label: `${u.count} ${getReferenceDataName(u, language)}`,
+      }));
+      const supplementItems = supplementProductsWithCountAndOffer.map((sp) => ({
+        price:
+          (sp.offer.supplementProducts[0].price.amountFloat || 0) * sp.count,
+        label: `${sp.count} ${getReferenceDataName(sp, language)}`,
+      }));
+      NativePaymentHandler.startPayment(
+        [
+          ...userProfileItems,
+          ...supplementItems,
+          // Final item is the total
+          {price: totalPrice, label: APP_NAME},
+        ],
+        (paymentData) => {
+          paymentData && setApplePayPaymentData(paymentData);
+        },
+      );
     } else {
       analytics.logEvent('Ticketing', 'Pay with card selected', {
         paymentMethod,
