@@ -2,6 +2,7 @@ import {AppPlatform} from '@atb/modules/global-messages';
 import {Platform} from 'react-native';
 import {APP_VERSION} from '@env';
 import {compareVersion} from '@atb/utils/compare-version';
+import {AppVersionedItem} from '@atb-as/config-specs';
 
 export const appliesToAppPlaform = (platforms?: AppPlatform[]) => {
   if (!platforms) return true;
@@ -21,3 +22,15 @@ export const appliesToAppVersion = (
     return false;
   return true;
 };
+
+export const getAppVersionedItem = <T extends AppVersionedItem>(
+  appVersionedItems: T[] = [],
+  appVersion: string = APP_VERSION,
+): T | undefined =>
+  appVersionedItems.find((appVersionedItem) =>
+    appliesToAppVersion(
+      appVersionedItem.appVersionMin,
+      appVersionedItem.appVersionMax,
+      appVersion,
+    ),
+  );
