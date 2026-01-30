@@ -14,7 +14,7 @@ import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import React, {useMemo} from 'react';
-import {View} from 'react-native';
+import {RefreshControlProps, View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
@@ -40,7 +40,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
 
   const focusRef = useFocusOnLoad(navigation);
 
-  const refreshControlProps = useMemo(() => {
+  const refreshControlProps: RefreshControlProps = useMemo(() => {
     return {
       refreshing: recurringPaymentLoading,
       onRefresh: refetchRecurringPayment,
