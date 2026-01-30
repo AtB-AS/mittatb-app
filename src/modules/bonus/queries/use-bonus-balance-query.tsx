@@ -20,5 +20,6 @@ export const useBonusBalanceQuery = () => {
     enabled: isEnabled,
     queryKey: getBonusBalanceQueryKey(userId),
     queryFn: getBonusBalance,
+    placeholderData: 0,
   });
 };
