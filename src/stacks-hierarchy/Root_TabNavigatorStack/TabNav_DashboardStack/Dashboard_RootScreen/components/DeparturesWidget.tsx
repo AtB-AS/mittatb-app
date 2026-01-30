@@ -17,7 +17,7 @@ import {
 } from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
 import haversineDistance from 'haversine-distance';
-import React, {useRef} from 'react';
+import React, {memo, useRef} from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
 import {useFavoriteDeparturesQuery} from '../use-favorite-departures-query';
 import {ThemedNoFavouriteDepartureImage} from '@atb/theme/ThemedAssets';
@@ -67,6 +67,26 @@ export const DeparturesWidget = ({
 
   const searchDate =
     favoriteDeparturesData?.startTime ?? new Date().toISOString();
+
+  const SelectFavouritesBottomSheetMemo = memo(
+    function SelectFavouritesBottomSheetMemo({
+      onEditFavouriteDeparture,
+      bottomSheetModalRef,
+      onCloseFocusRef,
+    }: {
+      onEditFavouriteDeparture: () => void;
+      bottomSheetModalRef: React.RefObject<BottomSheetModal | null>;
+      onCloseFocusRef: React.RefObject<View | null>;
+    }) {
+      return (
+        <SelectFavouritesBottomSheet
+          onEditFavouriteDeparture={onEditFavouriteDeparture}
+          bottomSheetModalRef={bottomSheetModalRef}
+          onCloseFocusRef={onCloseFocusRef}
+        />
+      );
+    },
+  );
 
   return (
     <View style={style}>
@@ -129,7 +149,7 @@ export const DeparturesWidget = ({
           testID="selectFavoriteDepartures"
         />
       )}
-      <SelectFavouritesBottomSheet
+      <SelectFavouritesBottomSheetMemo
         onEditFavouriteDeparture={onEditFavouriteDeparture}
         bottomSheetModalRef={bottomSheetRef}
         onCloseFocusRef={onCloseFocusRef}
