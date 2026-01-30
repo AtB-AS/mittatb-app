@@ -12,6 +12,7 @@ import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {PaymentMethod} from './types';
 import {PaymentBrand} from './PaymentBrand';
+import {isNonRecurringPaymentType} from './utils';
 
 type PaymentSelectionCardProps = SectionItemProps<{
   paymentMethod: PaymentMethod;
@@ -26,7 +27,7 @@ export const PaymentSelectionSectionItem = forwardRef<
   const {t} = useTranslation();
   const multiplePaymentMethods = !(
     paymentMethod.recurringPayment ||
-    paymentMethod.paymentType === PaymentType.Vipps
+    isNonRecurringPaymentType(paymentMethod.paymentType)
   );
   const {topContainer} = useSectionItem(props);
 
@@ -65,7 +66,7 @@ export const PaymentSelectionSectionItem = forwardRef<
               : paymentName}
           </ThemeText>
           {!multiplePaymentMethods &&
-            paymentMethod.paymentType !== PaymentType.Vipps && (
+            !isNonRecurringPaymentType(paymentMethod.paymentType) && (
               <ThemeText
                 style={style.maskedPan}
                 accessibilityLabel={t(
