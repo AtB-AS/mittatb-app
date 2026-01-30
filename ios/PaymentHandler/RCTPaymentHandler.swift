@@ -17,13 +17,16 @@ typealias PaymentCompletionHandler = (String?) -> Void
       .visa
   ]
 
-  public func startPayment(for price: Float, completionHandler: @escaping (String?) -> Void) -> Void {
+  public func startPayment(items: [[String: Any]], completionHandler: @escaping (String?) -> Void) -> Void {
     self.completionHandler = completionHandler;
 
-    let singleTicket = PKPaymentSummaryItem(label: "Single ticket", amount: NSDecimalNumber(string: "47.00"), type: .final)
-    let mva = PKPaymentSummaryItem(label: "Hvorav MVA", amount: NSDecimalNumber(string: "12.00"), type: .final)
-    let total = PKPaymentSummaryItem(label: "AtB", amount: 47.00)
-    paymentSummaryItems = [singleTicket, mva, total]
+    var paymentSummaryItems: [PKPaymentSummaryItem] = []
+    for item in items {
+      if let label = item["label"] as? String,
+         let itemPrice = item["price"] as? Double {
+        paymentSummaryItems.append(PKPaymentSummaryItem(label: label, amount: NSDecimalNumber(value: itemPrice)))
+      }
+    }
 
     // Create a payment request.
     let paymentRequest = PKPaymentRequest()
