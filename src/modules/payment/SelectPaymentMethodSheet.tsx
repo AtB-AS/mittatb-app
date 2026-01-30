@@ -26,6 +26,7 @@ import {
 } from '@atb/components/bottom-sheet';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {isNonRecurringPaymentType} from './utils';
 
 type Props = {
   onSelect: (
@@ -62,7 +63,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   }));
   const singlePaymentMethods = defaultPaymentMethods.filter(
     (method): method is NonRecurringPaymentMethod =>
-      [PaymentType.Vipps, PaymentType.ApplePay].includes(method.paymentType),
+      isNonRecurringPaymentType(method.paymentType),
   );
 
   singlePaymentMethods.push({paymentType: PaymentType.ApplePay});

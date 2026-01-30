@@ -28,6 +28,11 @@ export enum PaymentType {
   GooglePay = 8,
 }
 
+export type NonRecurringPaymentType =
+  | PaymentType.Vipps
+  | PaymentType.ApplePay
+  | PaymentType.GooglePay;
+
 export type RecurringPayment = {
   id: number;
   expiresAt: string;
