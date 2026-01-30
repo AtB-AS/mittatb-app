@@ -358,6 +358,12 @@ export const getContentTypography = (size: Size): TextNames => {
   }
 };
 
+/**
+ * Check if fare contract has any supplement product of type ReservationProduct
+ * @param fareContract The fare contract to check
+ * @param products All preassigned fare products. Used to lookup fare products
+ * @param supplementProducts All supplement products. Used to lookup supplement products
+ */
 export function hasReservationTypeSupplementProduct(
   fareContract: FareContractType,
   products: PreassignedFareProduct[],
