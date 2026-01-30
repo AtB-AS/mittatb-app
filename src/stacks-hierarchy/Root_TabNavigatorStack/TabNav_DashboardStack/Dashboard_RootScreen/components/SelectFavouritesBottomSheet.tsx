@@ -1,4 +1,4 @@
-import React, {RefObject, useCallback, useRef} from 'react';
+import React, {memo, RefObject, useCallback, useRef} from 'react';
 import {View} from 'react-native';
 import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
@@ -86,7 +86,7 @@ type SelectFavouritesBottomSheetProps = {
   onCloseFocusRef: RefObject<View | null>;
 };
 
-export const SelectFavouritesBottomSheet = ({
+const SelectFavouritesBottomSheetComponent = ({
   onEditFavouriteDeparture,
   bottomSheetModalRef,
   onCloseFocusRef,
@@ -177,6 +177,10 @@ export const SelectFavouritesBottomSheet = ({
     </BottomSheetModal>
   );
 };
+
+export const SelectFavouritesBottomSheet = memo(
+  SelectFavouritesBottomSheetComponent,
+);
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
