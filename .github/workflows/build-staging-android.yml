@@ -16,7 +16,7 @@ on:
         type: string
         default: 'atb,nfk,fram,troms'
       abi:
-        description: 'Which architecture to build (comma-separated, blank=arm64_v8a)'
+        description: 'Which architecture to build (comma-separated, blank=arm64_v8a,armeabi_v7a)'
         required: false
         type: string
         default: 'armeabi_v7a,arm64_v8a,x86,x86_64'
