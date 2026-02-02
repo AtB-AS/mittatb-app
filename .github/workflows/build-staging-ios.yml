@@ -60,6 +60,7 @@ jobs:
         uses: actions/cache@v4
         id: modules-cache
         with:
+          lookup-only: true
           path: '**/node_modules'
           key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
           restore-keys: |
@@ -85,6 +86,7 @@ jobs:
         uses: actions/cache@v4
         id: pods-cache
         with:
+          lookup-only: true
           path: |
             ios/Pods
             ~/Library/Caches/CocoaPods
