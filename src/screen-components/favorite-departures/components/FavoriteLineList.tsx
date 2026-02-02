@@ -19,7 +19,7 @@ import {
   Section,
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {FavoriteLineSectionItem} from './FavoriteLineItem';
+import {FavoriteLineSectionItem} from './FavoriteLineSectionItem';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 import {getStopPlaceAndQuays} from '@atb/screen-components/place-screen';
 import {StopPlaceAndQuay} from '@atb/screen-components/place-screen';
