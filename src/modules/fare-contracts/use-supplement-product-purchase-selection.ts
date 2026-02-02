@@ -15,14 +15,21 @@ import {
 } from '@atb/modules/ticketing';
 import {SupplementProduct} from '@atb-as/config-specs';
 
+type Props = {
+  existingFareContract: FareContractType;
+  isEnabled: boolean;
+};
+
 /**
  * Generates a purchase selection for purchasing a supplement product
  * for an existing fare contract, at a later point in time
  * @param existingFareContract The FareContract to build the purchase selection for
+ * @param isEnabled Whether supplement product purchase selection is enabled
  */
-export function useSupplementProductPurchaseSelection(
-  existingFareContract: FareContractType,
-): {
+export function useSupplementProductPurchaseSelection({
+  existingFareContract,
+  isEnabled,
+}: Props): {
   selection?: PurchaseSelectionType;
 } {
   const builder = usePurchaseSelectionBuilder();
@@ -32,6 +39,7 @@ export function useSupplementProductPurchaseSelection(
   const supplementProducts = useSupplementProducts();
 
   const selection = useMemo(() => {
+    if (!isEnabled) return;
     const travelRight = existingFareContract.travelRights[0];
     const product = findReferenceDataById(products, travelRight.fareProductRef);
     const supplementProductRef =
@@ -64,7 +72,13 @@ export function useSupplementProductPurchaseSelection(
     // We disable the exhaustive-deps rule here because we know builder is not
     // referentially stable. See documentation in usePurchaseSelectionBuilder.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [existingFareContract.travelRights, harbors, products, userProfiles]);
+  }, [
+    existingFareContract.travelRights,
+    harbors,
+    products,
+    userProfiles,
+    isEnabled,
+  ]);
 
   return {
     selection,

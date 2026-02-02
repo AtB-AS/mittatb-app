@@ -32,7 +32,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {TFunc} from '@leile/lobo-t';
 import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {ActivityIndicator, Platform, RefreshControl, View} from 'react-native';
+import {ActivityIndicator, Platform, View} from 'react-native';
 import {DashboardScreenProps} from '../navigation-types';
 import {
   type SearchForLocations,
@@ -240,7 +240,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     timePickerBottomSheetModalRef.current?.present();
   };
 
-  const refresh = () => {
+  const refresh = useCallback(() => {
     navigation.setParams({
       fromLocation: from?.resultType === 'geolocation' ? currentLocation : from,
       toLocation: to?.resultType === 'geolocation' ? currentLocation : to,
@@ -252,11 +252,24 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             }
           : {...searchTime},
     });
-  };
+  }, [from, to, currentLocation, searchTime, navigation]);
 
   const nonTransitTripsVisible =
     (tripPatterns.length > 0 || searchState === 'search-empty-result') &&
     nonTransitTrips.length > 0;
+
+  const refreshControlProps = useMemo(() => {
+    // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
+    return isFocused || Platform.OS === 'android'
+      ? {
+          refreshing:
+            Platform.OS === 'ios'
+              ? false
+              : searchState === 'searching' && !tripPatterns.length,
+          onRefresh: refresh,
+        }
+      : undefined;
+  }, [searchState, tripPatterns.length, refresh, isFocused]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(refresh, [from, to]);
@@ -283,19 +296,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             },
           },
         }}
-        refreshControl={
-          // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
-          isFocused || Platform.OS === 'android' ? (
-            <RefreshControl
-              refreshing={
-                Platform.OS === 'ios'
-                  ? false
-                  : searchState === 'searching' && !tripPatterns.length
-              }
-              onRefresh={refresh}
-            />
-          ) : undefined
-        }
+        refreshControlProps={refreshControlProps}
         parallaxContent={() => (
           <View style={styles.searchHeader}>
             <Section>

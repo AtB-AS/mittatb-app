@@ -1,6 +1,6 @@
 {
   "name": "atb",
-  "version": "1.79.0",
+  "version": "1.80.0",
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
@@ -114,6 +114,7 @@
     "react-native-reanimated": "^4.1.3",
     "react-native-safe-area-context": "^5.6.2",
     "react-native-screens": "^4.18.0",
+    "react-native-screenshot-aware": "^1.3.18",
     "react-native-svg": "^15.13.0",
     "react-native-tab-view": "^4.1.3",
     "react-native-vision-camera": "^4.7.2",

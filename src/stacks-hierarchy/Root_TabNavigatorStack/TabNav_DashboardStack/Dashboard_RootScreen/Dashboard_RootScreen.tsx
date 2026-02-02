@@ -188,6 +188,28 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
     navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
   }, [navigation, bonusScreenParams]);
 
+  const navigateToFavoriteDeparturesScreen = useCallback(() => {
+    navigation.navigate('Dashboard_FavoriteDeparturesScreen');
+  }, [navigation]);
+
+  const navigateToNearbyStopPlacesScreen = useCallback(() => {
+    navigation.navigate('Dashboard_NearbyStopPlacesScreen', {
+      mode: 'Favourite',
+      location: undefined,
+      onCloseRoute: callerRoute,
+    });
+  }, [navigation]);
+
+  const navigateToDepartureDetailsScreen = useCallback(
+    (items: any[], activeItemIndex: number) => {
+      navigation.navigate('Dashboard_DepartureDetailsScreen', {
+        items,
+        activeItemIndex,
+      });
+    },
+    [navigation],
+  );
+
   return (
     <FullScreenView
       focusRef={focusRef}
@@ -307,22 +329,9 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
         )}
         <DeparturesWidget
           style={style.contentSection}
-          onEditFavouriteDeparture={() =>
-            navigation.navigate('Dashboard_FavoriteDeparturesScreen')
-          }
-          onAddFavouriteDeparture={() =>
-            navigation.navigate('Dashboard_NearbyStopPlacesScreen', {
-              mode: 'Favourite',
-              location: undefined,
-              onCloseRoute: callerRoute,
-            })
-          }
-          onPressDeparture={(items, activeItemIndex) =>
-            navigation.navigate('Dashboard_DepartureDetailsScreen', {
-              items,
-              activeItemIndex,
-            })
-          }
+          onEditFavouriteDeparture={navigateToFavoriteDeparturesScreen}
+          onAddFavouriteDeparture={navigateToNearbyStopPlacesScreen}
+          onPressDeparture={navigateToDepartureDetailsScreen}
           isFocused={isFocused}
         />
       </ScrollView>

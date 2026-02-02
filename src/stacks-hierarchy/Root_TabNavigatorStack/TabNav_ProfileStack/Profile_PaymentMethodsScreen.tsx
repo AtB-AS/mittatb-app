@@ -13,8 +13,8 @@ import {humanizePaymentType, RecurringPayment} from '@atb/modules/ticketing';
 import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import React from 'react';
-import {RefreshControl, View} from 'react-native';
+import React, {useMemo} from 'react';
+import {RefreshControlProps, View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
@@ -40,6 +40,13 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
 
   const focusRef = useFocusOnLoad(navigation);
 
+  const refreshControlProps: RefreshControlProps = useMemo(() => {
+    return {
+      refreshing: recurringPaymentLoading,
+      onRefresh: refetchRecurringPayment,
+    };
+  }, [recurringPaymentLoading, refetchRecurringPayment]);
+
   return (
     <FullScreenView
       focusRef={focusRef}
@@ -47,12 +54,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
         title: t(PaymentMethodsTexts.header.title),
         leftButton: {type: 'back'},
       }}
-      refreshControl={
-        <RefreshControl
-          refreshing={recurringPaymentLoading}
-          onRefresh={refetchRecurringPayment}
-        />
-      }
+      refreshControlProps={refreshControlProps}
       parallaxContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
