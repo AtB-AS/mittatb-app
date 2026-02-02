@@ -5,7 +5,7 @@ import {SelectFavoriteDeparturesScreenComponent} from '@atb/screen-components/fa
 type Props = DashboardScreenProps<'Dashboard_SelectFavoriteDeparturesScreen'>;
 
 export type SelectFavoriteDeparturesScreenParams = {
-  place: StopPlace;
+  stopPlace: StopPlace;
   selectedQuay?: Quay;
   limitPerQuay: number;
   addedFavoritesVisibleOnDashboard?: boolean;
@@ -22,7 +22,7 @@ export const Dashboard_SelectFavoriteDeparturesScreen = ({
       onComplete={() => navigation.popTo(route.params.onCompleteRouteName, {})}
       onNavigateToQuay={(selectedQuay: Quay) =>
         navigation.push('Dashboard_SelectFavoriteDeparturesScreen', {
-          place: route.params.place,
+          stopPlace: route.params.stopPlace,
           selectedQuay,
           limitPerQuay: 1000,
           addedFavoritesVisibleOnDashboard: true,

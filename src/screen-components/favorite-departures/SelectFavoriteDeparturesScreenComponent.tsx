@@ -9,7 +9,7 @@ import {useStopsDetailsDataQuery} from '../place-screen';
 import {FavoriteLineList} from './components/FavoriteLineList';
 
 export type SelectFavoriteDeparturesScreenParams = {
-  place: StopPlace;
+  stopPlace: StopPlace;
   selectedQuay?: Quay;
   limitPerQuay: number;
   addedFavoritesVisibleOnDashboard?: boolean;
@@ -21,7 +21,7 @@ type Props = SelectFavoriteDeparturesScreenParams & {
 };
 
 export const SelectFavoriteDeparturesScreenComponent = ({
-  place,
+  stopPlace,
   selectedQuay,
   limitPerQuay,
   addedFavoritesVisibleOnDashboard,
@@ -32,13 +32,15 @@ export const SelectFavoriteDeparturesScreenComponent = ({
   const {t} = useTranslation();
 
   const {data: stopsDetailsData, isError: isStopsDetailsError} =
-    useStopsDetailsDataQuery(place.quays === undefined ? [place.id] : []);
+    useStopsDetailsDataQuery(
+      stopPlace.quays === undefined ? [stopPlace.id] : [],
+    );
 
   let missingStopData = false;
 
-  if (stopsDetailsData && place.quays === undefined) {
+  if (stopsDetailsData && stopPlace.quays === undefined) {
     if (stopsDetailsData.stopPlaces[0].quays?.length) {
-      place = stopsDetailsData.stopPlaces[0];
+      stopPlace = stopsDetailsData.stopPlaces[0];
     } else {
       missingStopData = true;
     }
@@ -47,7 +49,7 @@ export const SelectFavoriteDeparturesScreenComponent = ({
   if (isStopsDetailsError || missingStopData) {
     return (
       <View style={styles.container}>
-        <FullScreenHeader title={place.name} leftButton={{type: 'back'}} />
+        <FullScreenHeader title={stopPlace.name} leftButton={{type: 'back'}} />
         <MessageInfoBox
           style={styles.messageBox}
           type="error"
@@ -59,10 +61,10 @@ export const SelectFavoriteDeparturesScreenComponent = ({
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader title={place.name} leftButton={{type: 'back'}} />
+      <FullScreenHeader title={stopPlace.name} leftButton={{type: 'back'}} />
       <View style={styles.quayData}>
         <FavoriteLineList
-          stopPlace={place}
+          stopPlace={stopPlace}
           selectedQuay={selectedQuay}
           limitPerQuay={limitPerQuay}
           addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}

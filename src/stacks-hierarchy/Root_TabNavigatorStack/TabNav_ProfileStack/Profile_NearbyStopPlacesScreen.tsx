@@ -51,7 +51,7 @@ export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
       onSelectStopPlace={useCallback(
         (place: StopPlace) => {
           navigation.navigate('Profile_SelectFavouriteDeparturesScreen', {
-            place,
+            stopPlace: place,
             limitPerQuay: 5,
             addedFavoritesVisibleOnDashboard: false,
           });

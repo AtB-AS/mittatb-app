@@ -15,7 +15,7 @@ export const Profile_SelectFavouriteDeparturesScreen = ({
       onComplete={() => navigation.popTo('Profile_FavoriteDeparturesScreen')}
       onNavigateToQuay={(selectedQuay: Quay) =>
         navigation.push('Profile_SelectFavouriteDeparturesScreen', {
-          place: route.params.place,
+          stopPlace: route.params.stopPlace,
           selectedQuay,
           limitPerQuay: 1000,
           addedFavoritesVisibleOnDashboard: true,

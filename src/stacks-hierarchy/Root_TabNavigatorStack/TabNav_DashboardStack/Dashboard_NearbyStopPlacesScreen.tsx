@@ -52,9 +52,9 @@ export const Dashboard_NearbyStopPlacesScreen = ({
         })
       }
       onSelectStopPlace={useCallback(
-        (place: StopPlace) => {
+        (stopPlace: StopPlace) => {
           navigation.navigate('Dashboard_SelectFavoriteDeparturesScreen', {
-            place,
+            stopPlace,
             addedFavoritesVisibleOnDashboard: true,
             limitPerQuay: 5,
             onCompleteRouteName: route.params.onCompleteRouteName,
