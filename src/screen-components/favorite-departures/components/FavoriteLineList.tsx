@@ -201,6 +201,17 @@ export function QuayLineSection({
             </View>
           </View>
         </GenericSectionItem>
+        {sortedDepartures.length === 0 && !isLoading && !didLoadingDataFail && (
+          <GenericSectionItem>
+            <ThemeText
+              color="secondary"
+              typography="body__s"
+              style={{textAlign: 'center', width: '100%'}}
+            >
+              {t(DeparturesTexts.noDepartures)}
+            </ThemeText>
+          </GenericSectionItem>
+        )}
         {sortedDepartures.slice(0, limitPerQuay).map((departure) => (
           <FavoriteLineSectionItem
             key={departure.serviceJourney.id}
