@@ -99,7 +99,7 @@ jobs:
       - name: Install CocoaPods
         working-directory: ios
         if: inputs.force-build == 'true' || steps.pods-cache.outputs.cache-hit != 'true'
-        run: bundle exec pod install --deployment
+        run: bundle exec pod install
 
   build-ios:
     needs: setup
