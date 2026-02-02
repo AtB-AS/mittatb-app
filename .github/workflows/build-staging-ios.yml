@@ -14,6 +14,7 @@ on:
     branches:
       - master
       - release/**
+      - rosvik/test-builds
 
 jobs:
   build-ios:
@@ -24,7 +25,7 @@ jobs:
         org: [atb, nfk, fram, troms]
     environment: ${{ matrix.org }}
     timeout-minutes: 360
-    runs-on: macOS-14
+    runs-on: macOS-26
     env:
       KEYCHAIN_NAME: "CI"
     steps:
