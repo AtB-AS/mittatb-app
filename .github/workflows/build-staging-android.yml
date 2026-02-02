@@ -47,7 +47,7 @@ jobs:
         run: |
           ABI_INPUT="${{ inputs.abi }}"
           ABI_INPUT="${ABI_INPUT// /}"
-          ABI_INPUT="${ABI_INPUT:-arm64_v8a}"  # fallback when empty (push events)
+          ABI_INPUT="${ABI_INPUT:-arm64_v8a,armeabi_v7a}"  # fallback when empty (push events)
           echo "abi=$ABI_INPUT" >> $GITHUB_OUTPUT
       - name: Checkout project
         uses: actions/checkout@v4
