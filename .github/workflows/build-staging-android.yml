@@ -16,10 +16,10 @@ on:
         type: string
         default: 'atb,nfk,fram,troms'
       abi:
-        description: 'Which architecture to build (comma-separated, blank=arm64_v8a,armeabi_v7a)'
+        description: 'Which architecture to build (comma-separated, blank=arm64-v8a,armeabi-v7a)'
         required: false
         type: string
-        default: 'armeabi_v7a,arm64_v8a,x86,x86_64'
+        default: 'armeabi-v7a,arm64-v8a,x86,x86_64'
   push:
     branches:
       - master
@@ -47,7 +47,7 @@ jobs:
         run: |
           ABI_INPUT="${{ inputs.abi }}"
           ABI_INPUT="${ABI_INPUT// /}"
-          ABI_INPUT="${ABI_INPUT:-arm64_v8a,armeabi_v7a}"  # fallback when empty (push events)
+          ABI_INPUT="${ABI_INPUT:-arm64-v8a,armeabi-v7a}"
           echo "abi=$ABI_INPUT" >> $GITHUB_OUTPUT
       - name: Checkout project
         uses: actions/checkout@v4
