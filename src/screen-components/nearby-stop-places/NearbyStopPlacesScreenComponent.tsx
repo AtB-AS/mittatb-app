@@ -14,7 +14,6 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
 import React, {Ref, useEffect, useMemo} from 'react';
 import {Platform, ScrollView, View} from 'react-native';
-import {StopPlacesMode} from './types';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
@@ -26,7 +25,6 @@ import {useNearestStopPlaceNodesQuery} from './use-nearest-stop-place-nodes-quer
 
 export type NearbyStopPlacesScreenParams = {
   location: Location | undefined;
-  mode: StopPlacesMode;
 };
 
 type Props = NearbyStopPlacesScreenParams & {
@@ -37,11 +35,12 @@ type Props = NearbyStopPlacesScreenParams & {
   onAddFavoritePlace: () => void;
   isLargeTitle: boolean;
   focusRef: Ref<any>;
+  showFavoriteChips: boolean;
 };
 
 export const NearbyStopPlacesScreenComponent = ({
   location,
-  mode,
+  showFavoriteChips,
   headerProps,
   onPressLocationSearch,
   onSelectStopPlace,
@@ -142,13 +141,13 @@ export const NearbyStopPlacesScreenComponent = ({
           <Header
             fromLocation={location}
             updatingLocation={updatingLocation}
+            showFavoriteChips={showFavoriteChips}
             openLocationSearch={() => onPressLocationSearch(location)}
             setLocation={(location: Location) => {
               location.resultType === 'search' && location.layer === 'venue'
                 ? onSelectStopPlace(location)
                 : onUpdateLocation(location);
             }}
-            mode={mode}
             onAddFavoritePlace={onAddFavoritePlace}
           />
         </>
@@ -193,7 +192,7 @@ type HeaderProps = {
   fromLocation?: Location;
   openLocationSearch: () => void;
   setLocation: (location: Location) => void;
-  mode: StopPlacesMode;
+  showFavoriteChips: boolean;
   onAddFavoritePlace: Props['onAddFavoritePlace'];
 };
 
@@ -202,7 +201,7 @@ const Header = React.memo(function Header({
   fromLocation,
   openLocationSearch,
   setLocation,
-  mode,
+  showFavoriteChips,
   onAddFavoritePlace,
 }: HeaderProps) {
   const {t} = useTranslation();
@@ -241,7 +240,7 @@ const Header = React.memo(function Header({
           }}
         />
       </Section>
-      {mode === 'Departure' && (
+      {showFavoriteChips && (
         <FavoriteChips
           onSelectLocation={(location) => {
             setLocation(location);

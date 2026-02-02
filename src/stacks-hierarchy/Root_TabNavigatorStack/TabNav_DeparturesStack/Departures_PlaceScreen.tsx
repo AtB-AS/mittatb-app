@@ -7,15 +7,7 @@ export const Departures_PlaceScreen = ({navigation, route}: Props) => {
   return (
     <PlaceScreenComponent
       {...route.params}
-      onPressQuay={(stopPlace, quayId, onlyReplaceParam) =>
-        onlyReplaceParam
-          ? navigation.setParams({selectedQuayId: quayId})
-          : navigation.push('Departures_PlaceScreen', {
-              place: stopPlace,
-              selectedQuayId: quayId,
-              mode: route.params.mode,
-            })
-      }
+      onPressQuay={(quayId) => navigation.setParams({selectedQuayId: quayId})}
       onPressDeparture={(items, activeItemIndex) =>
         navigation.push('Departures_DepartureDetailsScreen', {
           items,

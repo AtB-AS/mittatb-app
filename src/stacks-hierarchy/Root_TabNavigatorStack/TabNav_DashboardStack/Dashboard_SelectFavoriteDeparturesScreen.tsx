@@ -1,0 +1,34 @@
+import {DashboardScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
+import {Quay, StopPlace} from '@atb/api/types/departures';
+import {SelectFavoriteDeparturesScreenComponent} from '@atb/screen-components/favorite-departures';
+
+type Props = DashboardScreenProps<'Dashboard_SelectFavoriteDeparturesScreen'>;
+
+export type SelectFavoriteDeparturesScreenParams = {
+  stopPlace: StopPlace;
+  selectedQuay?: Quay;
+  limitPerQuay: number;
+  addedFavoritesVisibleOnDashboard?: boolean;
+};
+
+export const Dashboard_SelectFavoriteDeparturesScreen = ({
+  navigation,
+  route,
+}: Props) => {
+  return (
+    <SelectFavoriteDeparturesScreenComponent
+      {...route.params}
+      addedFavoritesVisibleOnDashboard={true}
+      onComplete={() => navigation.popTo(route.params.onCompleteRouteName, {})}
+      onNavigateToQuay={(selectedQuay: Quay) =>
+        navigation.push('Dashboard_SelectFavoriteDeparturesScreen', {
+          stopPlace: route.params.stopPlace,
+          selectedQuay,
+          limitPerQuay: 1000,
+          addedFavoritesVisibleOnDashboard: true,
+          onCompleteRouteName: route.params.onCompleteRouteName,
+        })
+      }
+    />
+  );
+};
