@@ -15,6 +15,11 @@ on:
         required: false
         type: string
         default: 'atb,nfk,fram,troms'
+      abi:
+        description: 'Which architecture to build (comma-separated, blank=arm64_v8a)'
+        required: false
+        type: string
+        default: 'armeabi_v7a,arm64_v8a,x86,x86_64'
   push:
     branches:
       - master
@@ -30,6 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
+      abi: ${{ steps.set-abi.outputs.abi}}
     steps:
       - id: set-matrix
         run: |
@@ -37,6 +43,12 @@ jobs:
           ORG_INPUT="${ORG_INPUT:-atb,nfk,fram,troms}"
           MATRIX=$(echo "$ORG_INPUT" | tr -d ' ' | jq -Rc 'split(",")')
           echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
+      - id: set-abi
+        run: |
+          ABI_INPUT="${{ inputs.abi }}"
+          ABI_INPUT="${ABI_INPUT// /}"
+          ABI_INPUT="${ABI_INPUT:-arm64_v8a}"  # fallback when empty (push events)
+          echo "abi=$ABI_INPUT" >> $GITHUB_OUTPUT
       - name: Checkout project
         uses: actions/checkout@v4
       # ===== Install & Cache APKTool =====
@@ -44,6 +56,7 @@ jobs:
         uses: actions/cache@v4
         id: apktool-cache
         with:
+          lookup-only: true
           path: ~/apktool
           key: apktool-2.12.1
       - name: Install APKTool
@@ -53,22 +66,23 @@ jobs:
           wget https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -O ~/apktool/apktool
           wget https://github.com/iBotPeaches/Apktool/releases/download/v2.12.1/apktool_2.12.1.jar -O ~/apktool/apktool.jar
           chmod +x ~/apktool/apktool
-      - name: Add APKTool to PATH
-        run: echo "$HOME/apktool" >> $GITHUB_PATH
       # ===== Install & Cache node-modules  =====
-      - name: Install node v22
-        uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          cache: 'yarn'
       - name: Cache node_modules
         uses: actions/cache@v4
         id: modules-cache
         with:
+          lookup-only: true
           path: '**/node_modules'
           key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+      - name: Install node v22
+        uses: actions/setup-node@v5
+        if: steps.modules-cache.outputs.cache-hit != 'true'
+        with:
+          node-version: 22
+          cache: 'yarn'
       - name: Add Entur private registry credentials
         shell: bash
+        if: steps.modules-cache.outputs.cache-hit != 'true'
         run: bash ./scripts/add-entur-private-registry.sh
         env:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
@@ -153,6 +167,7 @@ jobs:
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
           SKIP_CLEAN: ${{ steps.changes.outputs.deps != 'true' }}
+          ABI: ${{ needs.setup.outputs.abi }}
           CCACHE_DIR: ~/.cache/ccache
           USE_CCACHE: 1
           NDK_CCACHE: /usr/bin/ccache
