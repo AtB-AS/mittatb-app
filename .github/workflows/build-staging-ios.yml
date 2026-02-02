@@ -92,6 +92,10 @@ jobs:
           restore-keys: |
             pods-${{ hashFiles('yarn.lock') }}-
             pods-
+      - name: Setup Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "latest-stable"
       - name: Install CocoaPods
         working-directory: ios
         if: inputs.force-build == 'true' || steps.pods-cache.outputs.cache-hit != 'true'
