@@ -75,7 +75,7 @@ target 'app' do
       installer,
       config[:reactNativePath],
       :mac_catalyst_enabled => false,
-      # :ccache_enabled => true
+      :ccache_enabled => true
     )
     # Xcode 14 workaround: https://github.com/CocoaPods/CocoaPods/issues/11402#issuecomment-1201464693
     # https://stackoverflow.com/questions/48122769/facebook-cocoapods-sharedapplication-is-unavailable-not-available-on-ios-app

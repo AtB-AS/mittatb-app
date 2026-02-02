@@ -62,6 +62,8 @@ jobs:
         with:
           path: '**/node_modules'
           key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          restore-keys: |
+            node-modules- 
       - name: Add Entur private registry credentials
         shell: bash
         run: bash ./scripts/add-entur-private-registry.sh
@@ -70,38 +72,55 @@ jobs:
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Install node_modules
         if: steps.modules-cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
-            # ===== Ruby & Bundler =====
+        run:
+          yarn install --frozen-lockfile
+          # ===== Ruby & Bundler =====
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.0
           cache-version: 2
           bundler-cache: true
-  
+      - name: Cache pods
+        uses: actions/cache@v4
+        id: pods-cache
+        with:
+          path: |
+            ios/Pods
+            ~/Library/Caches/CocoaPods
+          key: pods-${{ hashFiles('yarn.lock') }}-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: |
+            pods-${{ hashFiles('yarn.lock') }}-
+            pods-
+      - name: Install CocoaPods
+        working-directory: ios
+        if: inputs.force-build == 'true' || steps.pods-cache.outputs.cache-hit != 'true'
+        run: bundle exec pod install --deployment
+
   build-ios:
     needs: setup
     name: Build iOS (${{ matrix.org }})
     strategy:
       fail-fast: false
       matrix:
-        org: ${{ fromJson(needs.setup.outputs.matrix) }} 
+        org: ${{ fromJson(needs.setup.outputs.matrix) }}
     environment: ${{ matrix.org }}
     timeout-minutes: 360
     runs-on: macOS-26
     env:
-      KEYCHAIN_NAME: "CI"
+      KEYCHAIN_NAME: 'CI'
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
       - name: Get potential cached ipa & dsym
         uses: actions/cache@v4
         id: ipa-cache
+        if: inputs.force-build != 'true'
         with:
           path: |
             AtB.ipa
             AtB.app.dSYM.zip
-          key: ${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets/') }}
+          key: ${{ matrix.org }}-ipa-app-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets*/') }}
       - name: Add Entur private registry credentials
         run: sh ./scripts/add-entur-private-registry.sh
         env:
@@ -114,18 +133,18 @@ jobs:
           app-org: ${{ matrix.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
           can-skip: ${{ steps.ipa-cache.outputs.cache-hit == 'true'}}
-      # - name: Get potential cached pods
-      #   uses: actions/cache@v4
-      #   id: pods-cache
-      #   with:
-      #     path: |
-      #       Pods
-      #       ~/Library/Caches/CocoaPods
-      #     key: pods-${{ hashFiles('**/Podfile.lock', '**/Podfile', '**/package.json', '**/yarn.lock') }}
-      # - name: Install CocoaPods
-      #   if: steps.pods-cache.outputs.cache-hit != 'true'
-      #   working-directory: ios
-      #   run: bundle exec pod install
+      - name: Get potential cached pods
+        uses: actions/cache@v4
+        id: pods-cache
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
+        with:
+          path: |
+            ios/Pods
+            ~/Library/Caches/CocoaPods
+          key: pods-${{ hashFiles('yarn.lock') }}-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: |
+            pods-${{ hashFiles('yarn.lock') }}-
+            pods-
       - uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
