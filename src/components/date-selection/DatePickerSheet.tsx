@@ -17,6 +17,7 @@ import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {RefObject} from '@testing-library/react-native/build/types';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {BottomSheetHeaderType} from '../bottom-sheet/use-bottom-sheet-header-type';
+import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 
 type Props<T extends string> = {
   initialDate?: string;
@@ -54,6 +55,8 @@ export const DatePickerSheet = <T extends string>({
     options.find((o) => o.selected)?.option || options[0].option,
   );
 
+  const nativeGesture = Gesture.Native().disallowInterruption(true);
+
   return (
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
@@ -84,16 +87,18 @@ export const DatePickerSheet = <T extends string>({
         />
 
         {selectedOptionId !== 'now' && (
-          <RNDatePicker
-            date={parseDate(date)}
-            onDateChange={(date) => setDate(date.toISOString())}
-            mode="datetime"
-            locale={locale.localeString}
-            onStateChange={(state) => setIsSpinning(state === 'spinning')}
-            // Applies timezone offset between CET and UTC to enforce CET timezone on date picker
-            timeZoneOffsetInMinutes={getTimeZoneOffsetInMinutes()}
-            theme={themeName}
-          />
+          <GestureDetector gesture={nativeGesture}>
+            <RNDatePicker
+              date={parseDate(date)}
+              onDateChange={(date) => setDate(date.toISOString())}
+              mode="datetime"
+              locale={locale.localeString}
+              onStateChange={(state) => setIsSpinning(state === 'spinning')}
+              // Applies timezone offset between CET and UTC to enforce CET timezone on date picker
+              timeZoneOffsetInMinutes={getTimeZoneOffsetInMinutes()}
+              theme={themeName}
+            />
+          </GestureDetector>
         )}
       </View>
     </BottomSheetModal>
