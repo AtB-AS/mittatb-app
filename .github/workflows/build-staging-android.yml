@@ -166,6 +166,7 @@ jobs:
           entur-registry-user: ${{ vars.ENTUR_REGISTRY_USER }}
           entur-registry-token: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
           can-skip: ${{ steps.apk-cache.outputs.cache-hit }}
+          output-type: ${{ inputs.output-type }}
 
       - name: Detect dependency changes
         uses: dorny/paths-filter@v3
