@@ -20,7 +20,6 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/screen-components/travel-details-map-screen';
 import {ServiceJourneyDeparture} from './types';
-import {useCurrentTripPatternWithUpdates} from './use-current-trip-pattern-with-updates';
 import {canSellCollabTicket, getNonFreeLegs} from './utils';
 import {formatToClock, secondsBetween} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
@@ -34,6 +33,7 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
+import {useSingleTripQuery} from './use-single-trip-query';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -45,6 +45,7 @@ type Props = TripDetailsScreenParams & {
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
   onPressDeparture: (items: ServiceJourneyDeparture[], index: number) => void;
   focusRef: Ref<any>;
+  isFocused: boolean;
 };
 
 export const TripDetailsScreenComponent = ({
@@ -54,14 +55,19 @@ export const TripDetailsScreenComponent = ({
   onPressDeparture,
   onPressQuay,
   focusRef,
+  isFocused,
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyle();
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
 
-  const {updatedTripPattern, error} =
-    useCurrentTripPatternWithUpdates(tripPattern);
+  const {data, error, isFetching, refetch} = useSingleTripQuery(
+    tripPattern.compressedQuery,
+    isFocused,
+  );
+
+  const updatedTripPattern = data ?? tripPattern;
 
   const purchaseSelection = usePurchaseSelectionFromTrip(updatedTripPattern);
   const fromToNames = getFromToName(updatedTripPattern.legs);
@@ -75,6 +81,10 @@ export const TripDetailsScreenComponent = ({
           leftButton: {type: 'back'},
           title: t(TripDetailsTexts.header.title),
           color: themeColor,
+        }}
+        refreshControlProps={{
+          refreshing: isFetching,
+          onRefresh: refetch,
         }}
         parallaxContent={(focusRef) => (
           <View style={styles.parallaxContent}>
@@ -121,7 +131,7 @@ export const TripDetailsScreenComponent = ({
           <View style={styles.paddedContainer} testID="tripDetailsContentView">
             <Trip
               tripPattern={updatedTripPattern}
-              error={error}
+              error={error ?? undefined}
               onPressDetailsMap={onPressDetailsMap}
               onPressDeparture={onPressDeparture}
               onPressQuay={onPressQuay}
