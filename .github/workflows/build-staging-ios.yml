@@ -156,6 +156,15 @@ jobs:
           restore-keys: |
             pods-${{ hashFiles('yarn.lock') }}-
             pods-
+      - name: Cache Derived Data
+        uses: actions/cache@v4
+        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: derived-${{ hashFiles('**/Podfile.lock') }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj') }}
+          restore-keys: |
+            derived-${{ hashFiles('**/Podfile.lock') }}-
+            derived-
       - uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
