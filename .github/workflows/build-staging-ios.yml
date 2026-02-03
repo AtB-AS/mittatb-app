@@ -156,15 +156,6 @@ jobs:
           restore-keys: |
             pods-${{ hashFiles('yarn.lock') }}-
             pods-
-      - name: Cache Derived Data
-        uses: actions/cache@v4
-        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
-        with:
-          path: ~/Library/Developer/Xcode/DerivedData
-          key: derived-${{ hashFiles('**/Podfile.lock') }}-${{ hashFiles('**/*.xcodeproj/project.pbxproj') }}
-          restore-keys: |
-            derived-${{ hashFiles('**/Podfile.lock') }}-
-            derived-
       - uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
@@ -189,7 +180,10 @@ jobs:
           brew install imagemagick
           yarn generate-native-assets
       - name: Install ccache
-        run: brew install ccache
+        run: |
+          brew install ccache
+          sudo mkdir -p /usr/local/bin
+          sudo ln -sf $(which ccache) /usr/local/bin/ccache
       - name: Configure ccache
         run: |
           echo "/usr/local/opt/ccache/libexec" >> $GITHUB_PATH
@@ -233,6 +227,8 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
           SKIP_PODS: ${{ steps.pods-cache.outputs.cache-hit == 'true'}}
+          USE_CCACHE: '1'
+          PATH: /usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin
       - name: Replace ipa bundle
         if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/ios/replace-bundle.sh
