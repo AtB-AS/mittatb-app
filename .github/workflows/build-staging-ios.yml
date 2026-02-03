@@ -179,36 +179,6 @@ jobs:
           rm '/usr/local/bin/python3.11-config'
           brew install imagemagick
           yarn generate-native-assets
-      - name: Install ccache
-        run: |
-          brew install ccache
-          CCACHE_PATH=$(which ccache)
-    
-          sudo mkdir -p /usr/local/bin
-    
-          echo '#!/bin/bash
-          exec '$CCACHE_PATH' /usr/bin/clang "$@"' | sudo tee /usr/local/bin/ccache-clang
-    
-          echo '#!/bin/bash
-          exec '$CCACHE_PATH' /usr/bin/clang++ "$@"' | sudo tee /usr/local/bin/ccache-clang++
-    
-          sudo chmod +x /usr/local/bin/ccache-clang
-          sudo chmod +x /usr/local/bin/ccache-clang++
-    
-          sudo ln -sf $CCACHE_PATH /usr/local/bin/ccache
-      - name: Configure ccache
-        run: |
-          echo "/usr/local/opt/ccache/libexec" >> $GITHUB_PATH
-          ccache --set-config=max_size=2G
-          ccache --set-config=compression=true
-      - name: Cache ccache
-        uses: actions/cache@v4
-        with:
-          path: ~/Library/Caches/ccache
-          key: ccache-ios-${{ runner.os }}-${{ hashFiles('ios/Podfile.lock') }}
-          restore-keys: |
-            ccache-ios-${{ runner.os }}-
-      
       - name: Disable widget
         if: ${{ env.ENABLE_WIDGET != 'true' }}
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget AtbAppIntent
@@ -239,7 +209,6 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
           SKIP_PODS: ${{ steps.pods-cache.outputs.cache-hit == 'true'}}
-          USE_CCACHE: '1'
           PATH: /usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin
       - name: Replace ipa bundle
         if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
