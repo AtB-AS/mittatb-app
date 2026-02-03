@@ -188,6 +188,21 @@ jobs:
           rm '/usr/local/bin/python3.11-config'
           brew install imagemagick
           yarn generate-native-assets
+      - name: Install ccache
+        run: brew install ccache
+      - name: Configure ccache
+        run: |
+          echo "/usr/local/opt/ccache/libexec" >> $GITHUB_PATH
+          ccache --set-config=max_size=2G
+          ccache --set-config=compression=true
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/ccache
+          key: ccache-ios-${{ runner.os }}-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: |
+            ccache-ios-${{ runner.os }}-
+      
       - name: Disable widget
         if: ${{ env.ENABLE_WIDGET != 'true' }}
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget AtbAppIntent

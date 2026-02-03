@@ -58,6 +58,8 @@ target 'app' do
       target.build_configurations.each do |config|
         # Workaround fix for https://github.com/facebook/react-native/issues/34106#issuecomment-1417685116
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.4'
+        config.build_settings['CC'] = 'ccache clang'
+        config.build_settings['CXX'] = 'ccache clang++'
       end
     end
 

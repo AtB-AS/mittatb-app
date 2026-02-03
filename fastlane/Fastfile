@@ -374,6 +374,7 @@ platform :ios do
       configuration: ENV['BUILD_CONFIGURATION'],
       export_method: ENV['EXPORT_METHOD'],
       workspace: './ios/atb.xcworkspace',
+      derived_data_path: "~/Library/Developer/Xcode/DerivedData",
       export_options: {
         signingStyle: "manual",
         provisioningProfiles: {
