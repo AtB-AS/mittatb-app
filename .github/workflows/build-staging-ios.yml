@@ -182,8 +182,20 @@ jobs:
       - name: Install ccache
         run: |
           brew install ccache
+          CCACHE_PATH=$(which ccache)
+    
           sudo mkdir -p /usr/local/bin
-          sudo ln -sf $(which ccache) /usr/local/bin/ccache
+    
+          echo '#!/bin/bash
+          exec '$CCACHE_PATH' /usr/bin/clang "$@"' | sudo tee /usr/local/bin/ccache-clang
+    
+          echo '#!/bin/bash
+          exec '$CCACHE_PATH' /usr/bin/clang++ "$@"' | sudo tee /usr/local/bin/ccache-clang++
+    
+          sudo chmod +x /usr/local/bin/ccache-clang
+          sudo chmod +x /usr/local/bin/ccache-clang++
+    
+          sudo ln -sf $CCACHE_PATH /usr/local/bin/ccache
       - name: Configure ccache
         run: |
           echo "/usr/local/opt/ccache/libexec" >> $GITHUB_PATH
