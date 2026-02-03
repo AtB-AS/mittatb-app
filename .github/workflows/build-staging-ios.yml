@@ -211,7 +211,7 @@ jobs:
           SKIP_PODS: ${{ steps.pods-cache.outputs.cache-hit == 'true'}}
           PATH: /usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin
       - name: Replace ipa bundle
-        if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
+        if: steps.ipa-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/ios/replace-bundle.sh
         env:
           IPA_FILE_NAME: 'AtB.ipa'
