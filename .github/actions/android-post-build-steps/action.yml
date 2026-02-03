@@ -20,6 +20,9 @@ inputs:
     required: true
   new-version-name:
     required: true
+  output-type:
+    required: true
+    default: 'APK'
 
 runs:
   using: "composite"
@@ -42,6 +45,7 @@ runs:
         GCP_CREDENTIALS_PATH: google-services.json
         FIREBASE_APP_ID: ${{ inputs.firebase-app-id }}
         RELEASE_NOTES_FILE: ./release-notes.txt
+        OUTPUT_TYPE: ${{ inputs.output-type }}
     - name: Upload bundle and source maps
       shell: bash
       run: bash ./scripts/android/upload-sourcemaps.sh

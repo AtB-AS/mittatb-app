@@ -20,6 +20,14 @@ on:
         required: false
         type: string
         default: 'armeabi-v7a,arm64-v8a,x86,x86_64'
+      output-type:
+        description: 'Which output to build (defaults to APK, AAB is only for build test!)'
+        required: false
+        type: choice
+        default: 'APK'
+        options:
+          - 'APK'
+          - 'AAB'
   push:
     branches:
       - master
@@ -179,7 +187,7 @@ jobs:
 
       - name: Run fastlane build
         if: inputs.force-build == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
-        run: bundle exec fastlane android build
+        run: bundle exec fastlane android ${{ inputs.output-type == 'AAB' && 'build_aab' || 'build' }}
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
@@ -218,3 +226,4 @@ jobs:
           bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
           abt-entur-publish-client-staging: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_STAGING }}
           new-version-name: ${{ steps.version-info.outputs.new_version_name }}
+          output-type: ${{ inputs.output-type }}
