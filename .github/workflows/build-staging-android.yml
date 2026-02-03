@@ -15,6 +15,11 @@ on:
         required: false
         type: string
         default: 'atb,nfk,fram,troms'
+      abi:
+        description: 'Which architecture to build (comma-separated, blank=arm64-v8a,armeabi-v7a)'
+        required: false
+        type: string
+        default: 'armeabi-v7a,arm64-v8a,x86,x86_64'
   push:
     branches:
       - master
@@ -30,6 +35,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
+      abi: ${{ steps.set-abi.outputs.abi}}
+      abi-filename: ${{ steps.set-abi.outputs.abi_filename}}
     steps:
       - id: set-matrix
         run: |
@@ -37,6 +44,15 @@ jobs:
           ORG_INPUT="${ORG_INPUT:-atb,nfk,fram,troms}"
           MATRIX=$(echo "$ORG_INPUT" | tr -d ' ' | jq -Rc 'split(",")')
           echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
+      - id: set-abi
+        run: |
+          ABI_INPUT="${{ inputs.abi }}"
+          ABI_INPUT="${ABI_INPUT// /}"
+          ABI_INPUT="${ABI_INPUT:-arm64-v8a,armeabi-v7a}"
+          ABI_SORTED=$(echo "$ABI_INPUT" | tr ',' '\n' | sort | paste -sd ',')
+          ABI_FILENAME=$(echo "$ABI_SORTED" | tr ',' '-')
+          echo "abi=$ABI_INPUT" >> $GITHUB_OUTPUT
+          echo "abi_filename=$ABI_FILENAME" >> $GITHUB_OUTPUT
       - name: Checkout project
         uses: actions/checkout@v4
       # ===== Install & Cache APKTool =====
@@ -44,6 +60,7 @@ jobs:
         uses: actions/cache@v4
         id: apktool-cache
         with:
+          lookup-only: true
           path: ~/apktool
           key: apktool-2.12.1
       - name: Install APKTool
@@ -53,22 +70,23 @@ jobs:
           wget https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -O ~/apktool/apktool
           wget https://github.com/iBotPeaches/Apktool/releases/download/v2.12.1/apktool_2.12.1.jar -O ~/apktool/apktool.jar
           chmod +x ~/apktool/apktool
-      - name: Add APKTool to PATH
-        run: echo "$HOME/apktool" >> $GITHUB_PATH
       # ===== Install & Cache node-modules  =====
-      - name: Install node v22
-        uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          cache: 'yarn'
       - name: Cache node_modules
         uses: actions/cache@v4
         id: modules-cache
         with:
+          lookup-only: true
           path: '**/node_modules'
           key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+      - name: Install node v22
+        uses: actions/setup-node@v5
+        if: steps.modules-cache.outputs.cache-hit != 'true'
+        with:
+          node-version: 22
+          cache: 'yarn'
       - name: Add Entur private registry credentials
         shell: bash
+        if: steps.modules-cache.outputs.cache-hit != 'true'
         run: bash ./scripts/add-entur-private-registry.sh
         env:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
@@ -84,7 +102,7 @@ jobs:
           cache-version: 2
           bundler-cache: true
       
-  build-oms:
+  build:
     needs: setup
     name: Build Android (${{ matrix.org }})
     strategy:
@@ -105,7 +123,7 @@ jobs:
         id: apk-cache
         with:
           path: app-staging.apk
-          key: ${{ matrix.org }}-apk-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.env') }}
+          key: ${{ matrix.org }}-apk-cache-${{needs.setup.outputs.abi-filename}}-${{ hashFiles('android/**', '**/yarn.lock', '**/patches/**/*.patch', '.env') }}
 
       - name: Set version name with branch
         id: version-info
@@ -153,6 +171,7 @@ jobs:
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
           SKIP_CLEAN: ${{ steps.changes.outputs.deps != 'true' }}
+          ABI: ${{ needs.setup.outputs.abi }}
           CCACHE_DIR: ~/.cache/ccache
           USE_CCACHE: 1
           NDK_CCACHE: /usr/bin/ccache
