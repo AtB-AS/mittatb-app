@@ -117,6 +117,12 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
+      - name: Set version name with branch
+        id: version-info
+        shell: bash
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
+        run: bash ./scripts/set-version-name.sh
       - name: Get potential cached ipa & dsym
         uses: actions/cache@v4
         id: ipa-cache
@@ -185,6 +191,11 @@ jobs:
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
+      - name: Append branch name to version name
+        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
+        run: |
+           VERSION_NAME="${{ steps.version-info.outputs.new_version_name }}"
+           sed -i '' "s/MARKETING_VERSION = .*\$(APP_VERSION).*;/MARKETING_VERSION = $VERSION_NAME;/g" ios/atb.xcodeproj/project.pbxproj
       - name: Run fastlane build
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane ios build
@@ -206,6 +217,12 @@ jobs:
           APP_NAME: 'AtB.app'
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
+      - name: Generate release notes
+        id: release-notes
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
+          OUTPUT_FILE: ./release-notes.txt
+        run: bash ./scripts/generate-staging-release-notes.sh
       - name: Distribute to Firebase App Distribution
         run: |
           echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
@@ -213,6 +230,7 @@ jobs:
         env:
           GCP_CREDENTIALS_PATH: google-services.json
           FIREBASE_APP_ID_IOS: ${{ secrets.FIREBASE_APP_ID_IOS }}
+          RELEASE_NOTES_FILE: ./release-notes.txt
       - name: Create bundle and source maps
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: sh ./scripts/ios/create-sourcemaps.sh
