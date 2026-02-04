@@ -151,7 +151,6 @@ jobs:
           app-environment: 'staging'
           app-org: ${{ matrix.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
-          can-skip: ${{ steps.ipa-cache.outputs.cache-hit == 'true'}}
       - name: Get potential cached pods
         uses: actions/cache@v4
         id: pods-cache

@@ -14,10 +14,6 @@ inputs:
   git-crypt-key:
     description: "The gitcrypt key to unlock the repository files with"
     required: true
-  can-skip:
-    description: 'Cached IPA found, can skip step'
-    required: true
-    default: 'false'
 
 runs:
   using: "composite"
@@ -39,14 +35,12 @@ runs:
           cache: 'yarn'
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
-        if: inputs.can-skip != 'true'
         with:
           ruby-version: ${{ inputs.ruby-version }}
           cache-version: 2
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Get potential cached node_modules
         uses: actions/cache@v4
-        if: inputs.can-skip != 'true'
         id: modules-cache
         with:
           path: node_modules
