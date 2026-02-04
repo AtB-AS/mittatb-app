@@ -77,14 +77,14 @@ jobs:
       # ===== Install node-modules  =====
       - name: Install node v22
         uses: actions/setup-node@v5
-        if: ${{ steps.modules-cache.outputs.cache-hit != 'true' }}
+        if: steps.modules-cache.outputs.cache-hit != 'true'
         with:
           node-version: 22
           cache: 'yarn'
 
       - name: Add Entur private registry credentials
         shell: bash
-        if: ${{ steps.modules-cache.outputs.cache-hit != 'true' }}
+        if: steps.modules-cache.outputs.cache-hit != 'true'
         run: bash ./scripts/add-entur-private-registry.sh
         env:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
@@ -101,6 +101,7 @@ jobs:
           cache-version: 2
           bundler-cache: true
       - name: Setup Xcode version
+        if: steps.pods-cache.outputs.cache-hit != 'true'
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: "latest-stable"
