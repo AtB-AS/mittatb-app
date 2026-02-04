@@ -31,8 +31,8 @@ import {
   isCarStation,
   isScooter,
   isStation,
-  isClusterVehicle,
-  isClusterStation,
+  isVehicleCluster,
+  isStationCluster,
 } from '@atb/modules/mobility';
 import {MapBottomSheetType} from './MapContext';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
@@ -92,7 +92,7 @@ export const isClusterFeatureV2 = (
 ): feature is Feature<Point, VehiclesClusteredProperties> =>
   VehiclesClusteredPropertiesSchema.safeParse(feature.properties).success;
 export const isClusterFeature = (feature: Feature<Point>) =>
-  isClusterStation(feature) || isClusterVehicle(feature);
+  isStationCluster(feature) || isVehicleCluster(feature);
 
 export const isStopPlace = (f: Feature<Point>) =>
   f.properties?.entityType === 'StopPlace';
@@ -296,7 +296,7 @@ export function getFeatureWeight(
 ): number {
   if (isFeaturePoint(feature)) {
     return isStopPlace(feature) ||
-      isClusterVehicle(feature) ||
+      isVehicleCluster(feature) ||
       isScooter(feature) ||
       isBicycle(feature) ||
       isStation(feature) ||

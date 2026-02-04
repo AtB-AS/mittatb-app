@@ -42,12 +42,12 @@ import {
 import {TFunc} from '@leile/lobo-t';
 import {ErrorResponse, formatNumberToString} from '@atb-as/utils';
 
-export const isClusterStation = (
+export const isStationCluster = (
   feature: Feature<Point> | undefined,
 ): feature is StationsClusteredFeature =>
   StationsClusteredFeatureSchema.safeParse(feature).success;
 
-export const isClusterVehicle = (
+export const isVehicleCluster = (
   feature: Feature<Point> | undefined,
 ): feature is VehiclesClusteredFeature =>
   VehiclesClusteredFeatureSchema.safeParse(feature).success;

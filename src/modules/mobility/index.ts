@@ -46,8 +46,8 @@ export {
   isScooter,
   isStation,
   isVehicle,
-  isClusterVehicle,
-  isClusterStation,
+  isVehicleCluster,
+  isStationCluster,
 } from './utils';
 export {
   AgeVerificationEnum,
