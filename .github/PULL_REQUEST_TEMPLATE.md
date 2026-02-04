@@ -1,4 +1,4 @@
-## Referenced Issue
+## Issue Reference
 <!-- Which issue is fixed in this PR? Include link to reference if possible -->
 
 ## Description
