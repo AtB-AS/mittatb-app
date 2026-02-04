@@ -24,7 +24,7 @@ import {canSellCollabTicket, getNonFreeLegs} from './utils';
 import {formatToClock, secondsBetween} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
-import React, {Ref} from 'react';
+import React, {Ref, useCallback, useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {Trip} from './components/Trip';
 import {useHarbors} from '@atb/modules/harbors';
@@ -73,6 +73,18 @@ export const TripDetailsScreenComponent = ({
   const fromToNames = getFromToName(updatedTripPattern.legs);
   const startEndTime = getStartEndTime(updatedTripPattern, language);
 
+  const [isManualRefresh, setIsManualRefresh] = useState(false);
+  const onManualRefresh = useCallback(() => {
+    setIsManualRefresh(true);
+    refetch();
+  }, [refetch]);
+
+  useEffect(() => {
+    if (!isFetching && isManualRefresh) {
+      setIsManualRefresh(false);
+    }
+  }, [isFetching, isManualRefresh]);
+
   return (
     <View style={styles.container}>
       <FullScreenView
@@ -83,8 +95,8 @@ export const TripDetailsScreenComponent = ({
           color: themeColor,
         }}
         refreshControlProps={{
-          refreshing: isFetching,
-          onRefresh: refetch,
+          refreshing: isFetching && isManualRefresh,
+          onRefresh: onManualRefresh,
         }}
         parallaxContent={(focusRef) => (
           <View style={styles.parallaxContent}>
