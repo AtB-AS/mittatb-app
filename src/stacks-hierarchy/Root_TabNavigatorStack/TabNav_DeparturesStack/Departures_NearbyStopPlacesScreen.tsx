@@ -42,7 +42,7 @@ export const Departures_NearbyStopPlacesScreen = ({
                 params: {
                   screen: 'Departures_NearbyStopPlacesScreen',
                   params: {
-                    location: route.params.location,
+                    location: route.params?.location,
                   },
                   merge: true,
                 },
