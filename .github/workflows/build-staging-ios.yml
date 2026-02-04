@@ -22,7 +22,7 @@ on:
 
 permissions:
   contents: read
-  
+
 jobs:
   detect-changes:
     name: Detect changes
@@ -53,8 +53,19 @@ jobs:
           echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
       - name: Checkout project
         uses: actions/checkout@v4
+      - name: Get potential cached ipa & dsym
+        uses: actions/cache@v4
+        id: ipa-cache
+        if: inputs.force-build != 'true'
+        with:
+          path: |
+            AtB.ipa
+            AtB.app.dSYM.zip
+          key: ${{ matrix.org }}-ipa-app-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets*/') }}
+          lookup-only: true
       # ===== Install & Cache node-modules  =====
       - name: Install node v22
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
         uses: actions/setup-node@v5
         with:
           node-version: 22
@@ -62,30 +73,34 @@ jobs:
       - name: Cache node_modules
         uses: actions/cache@v4
         id: modules-cache
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
         with:
           path: '**/node_modules'
           key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
           restore-keys: |
-            node-modules- 
+            node-modules-
       - name: Add Entur private registry credentials
         shell: bash
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: bash ./scripts/add-entur-private-registry.sh
         env:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Install node_modules
-        if: steps.modules-cache.outputs.cache-hit != 'true'
+        if: steps.modules-cache.outputs.cache-hit != 'true' && steps.ipa-cache.outputs.cache-hit != 'true'
         run:
           yarn install --frozen-lockfile
           # ===== Ruby & Bundler =====
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
         with:
           ruby-version: 3.1.0
           cache-version: 2
           bundler-cache: true
       - name: Cache pods
         uses: actions/cache@v4
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
         id: pods-cache
         with:
           lookup-only: true
@@ -98,11 +113,12 @@ jobs:
             pods-
       - name: Setup Xcode version
         uses: maxim-lobanov/setup-xcode@v1
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
         with:
-          xcode-version: "latest-stable"
+          xcode-version: 'latest-stable'
       - name: Install CocoaPods
         working-directory: ios
-        if: inputs.force-build == 'true' || steps.pods-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || (steps.ipa-cache.outputs.cache-hit != 'true' && steps.pods-cache.outputs.cache-hit != 'true')
         run: bundle exec pod install
 
   build-ios:
@@ -197,8 +213,8 @@ jobs:
       - name: Append branch name to version name
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: |
-           VERSION_NAME="${{ steps.version-info.outputs.new_version_name }}"
-           sed -i '' "s/MARKETING_VERSION = .*\$(APP_VERSION).*;/MARKETING_VERSION = \"$VERSION_NAME\";/g" ios/atb.xcodeproj/project.pbxproj
+          VERSION_NAME="${{ steps.version-info.outputs.new_version_name }}"
+          sed -i '' "s/MARKETING_VERSION = .*\$(APP_VERSION).*;/MARKETING_VERSION = \"$VERSION_NAME\";/g" ios/atb.xcodeproj/project.pbxproj
       - name: Run fastlane build
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane ios build
