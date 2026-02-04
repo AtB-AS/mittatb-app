@@ -155,7 +155,7 @@ jobs:
       - name: Get potential cached pods
         uses: actions/cache@v4
         id: pods-cache
-        if: steps.ipa-cache.outputs.cache-hit != 'true'
+        if: 
         with:
           path: |
             ios/Pods
@@ -188,10 +188,10 @@ jobs:
           brew install imagemagick
           yarn generate-native-assets
       - name: Disable widget
-        if: ${{ env.ENABLE_WIDGET != 'true' }}
+        if: ${{ env.ENABLE_WIDGET != 'true' && steps.ipa-cache.outputs.cache-hit != 'true' }}
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget AtbAppIntent
       - name: Remove use of beacons
-        if: ${{ env.KETTLE_API_KEY == '' }}
+        if: ${{ env.KETTLE_API_KEY == '' && steps.ipa-cache.outputs.cache-hit != 'true' }}
         run: bundle exec fastlane ios remove_use_of_beacons
       - name: Run fastlane cert match
         if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
