@@ -41,7 +41,7 @@ jobs:
     needs: detect-changes
     if: needs.detect-changes.outputs.should_build == 'true'
     name: Set-up tools and warm up cache
-    runs-on: macOS-14
+    runs-on: macOS-26
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
