@@ -318,36 +318,49 @@ const GeoJsonFeatureWithPointGeometrySchema = z.object({
   properties: z.object({}).passthrough(),
 }) satisfies z.ZodType<Feature<Point>>;
 
+export const StationFeaturePropertiesSchema = z.object({
+  id: z.string(),
+  system_id: z.string(),
+  vehicle_type_form_factor: FormFactorSchema,
+  num_vehicles_available: z.number(),
+  capacity: z.number(),
+  count: z.literal(1),
+});
+export type StationFeatureProperties = z.infer<
+  typeof StationFeaturePropertiesSchema
+>;
+
 // See martin.yaml -> stations, in the tile server
 export const StationFeatureSchema =
   GeoJsonFeatureWithPointGeometrySchema.extend({
-    properties: z.object({
-      id: z.string(),
-      system_id: z.string(),
-      vehicle_type_form_factor: FormFactorSchema,
-      num_vehicles_available: z.number(),
-      capacity: z.number(),
-      is_virtual_station: z.boolean(),
-    }),
+    properties: StationFeaturePropertiesSchema,
   }) satisfies z.ZodType<Feature<Point>>;
 export type StationFeature = z.infer<typeof StationFeatureSchema>;
 
-export const ClusterOfVehiclesPropertiesSchema = z
-  .object({
-    count: z.number(),
-    vehicle_type_form_factor: FormFactorSchema,
-  })
-  .strict(); // don't allow any other props, in order to avoid matching with VehiclePropertiesSchema
-export type ClusterOfVehiclesProperties = z.infer<
-  typeof ClusterOfVehiclesPropertiesSchema
+export const VehiclesClusteredPropertiesSchema = z.object({
+  count: z.number().gt(1),
+  vehicle_type_form_factor: FormFactorSchema,
+}); // don't allow any other props, in order to avoid matching with Station clustered
+export type VehiclesClusteredProperties = z.infer<
+  typeof VehiclesClusteredPropertiesSchema
 >;
 
-export const VehiclePropertiesSchema = z.object({
-  id: z.string(),
-  system_id: z.string(),
-  count: z.number(),
-  vehicle_type_form_factor: FormFactorSchema,
-});
+export const VehiclesClusteredFeatureSchema =
+  GeoJsonFeatureWithPointGeometrySchema.extend({
+    properties: VehiclesClusteredPropertiesSchema,
+  }) satisfies z.ZodType<Feature<Point>>;
+export type VehiclesClusteredFeature = z.infer<
+  typeof VehiclesClusteredFeatureSchema
+>;
+
+export const VehiclePropertiesSchema = z
+  .object({
+    id: z.string(),
+    system_id: z.string(),
+    count: z.literal(1),
+    vehicle_type_form_factor: FormFactorSchema,
+  })
+  .strict();
 
 export const VehicleFeatureSchema =
   GeoJsonFeatureWithPointGeometrySchema.extend({
@@ -355,17 +368,22 @@ export const VehicleFeatureSchema =
   }) satisfies z.ZodType<Feature<Point>>;
 export type VehicleFeature = z.infer<typeof VehicleFeatureSchema>;
 
-// This should match the output of the vehicles_clustered postgres function,
-// which can be found in schema.sql in the mobility service.
-export const VehiclesClusteredFeatureSchema =
+export const StationsClusteredPropertiesSchema = z.object({
+  count: z.number().gt(1),
+  num_vehicles_available: z.number(),
+  capacity: z.number(),
+  vehicle_type_form_factor: FormFactorSchema,
+});
+export type StationsClusteredProperties = z.infer<
+  typeof StationsClusteredPropertiesSchema
+>;
+
+export const StationsClusteredFeatureSchema =
   GeoJsonFeatureWithPointGeometrySchema.extend({
-    properties: z.union([
-      VehiclePropertiesSchema,
-      ClusterOfVehiclesPropertiesSchema,
-    ]),
+    properties: StationsClusteredPropertiesSchema,
   }) satisfies z.ZodType<Feature<Point>>;
-export type VehiclesClusteredFeature = z.infer<
-  typeof VehiclesClusteredFeatureSchema
+export type StationsClusteredFeature = z.infer<
+  typeof StationsClusteredFeatureSchema
 >;
 
 export const DateResponseSchema = z.object({

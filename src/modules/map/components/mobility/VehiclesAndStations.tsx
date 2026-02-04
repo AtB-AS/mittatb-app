@@ -61,7 +61,7 @@ export const VehiclesWithClusters = ({
   );
 };
 
-export const Stations = ({
+export const StationsWithClusters = ({
   selectedFeatureId,
   showNonVirtualStations,
 }: SelectedFeatureIdProp & {
@@ -119,7 +119,7 @@ export const Stations = ({
     () => ({
       ...iconStyle,
       ...textStyle,
-      iconAllowOverlap: false, // todo: server side clustering for stations
+      iconAllowOverlap: true,
     }),
     [iconStyle, textStyle],
   );
@@ -128,7 +128,7 @@ export const Stations = ({
     <MapboxGL.SymbolLayer
       id="stations-symbol-layer"
       sourceID={vehiclesAndStationsVectorSourceId}
-      sourceLayerID="stations"
+      sourceLayerID="combined_stations_layer"
       minZoomLevel={minZoomLevel}
       aboveLayerID={MapSlotLayerId.Stations}
       filter={filter}
@@ -162,7 +162,7 @@ export const VehiclesAndStations = ({
           <VehiclesWithClusters selectedFeatureId={selectedFeatureId} />
         )}
         {!!showStations && (
-          <Stations
+          <StationsWithClusters
             selectedFeatureId={selectedFeatureId}
             showNonVirtualStations={true}
           />
@@ -186,7 +186,10 @@ export const useVehiclesAndStationsVectorSource: () => {
 } = () => {
   // Could consider adding the sources only if shown.
   // The reason not to, is to simplify potential cache tile hotloading on the server.
-  const tileLayerNames: TileLayerName[] = ['vehicles_clustered', 'stations'];
+  const tileLayerNames: TileLayerName[] = [
+    'vehicles_clustered',
+    'stations_clustered',
+  ];
   const tileUrlTemplate = useTileUrlTemplate(tileLayerNames);
 
   return useMemo(

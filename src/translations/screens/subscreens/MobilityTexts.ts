@@ -313,9 +313,9 @@ export const ScooterTexts = {
         : _('Gratis oppstart', 'Free to unlock', 'Gratis oppstart'),
   },
   loadingFailed: _(
-    'Ops! Vi fant ikke denne sparkesykkelen',
-    "Ops! We couldn't find this scooter",
-    'Ops! Vi fann ikkje denne sparkesykkelen',
+    'Vi fant ikke denne sparkesykkelen',
+    "We couldn't find this scooter",
+    'Vi fann ikkje denne sparkesykkelen',
   ),
   range: _('rekkevidde', 'range', 'rekkjevidde'),
   unlock: _('opplåsning', 'unlock', 'opplåsing'),
@@ -346,12 +346,17 @@ export const BicycleTexts = {
         : _('ledige sykkelplasser', 'available docks', 'ledige sykkelplassar');
     },
     unknownDocksAvailable: _('Ukjent antall', 'Unknown', 'Ukjent antal'),
+    loadingFailed: _(
+      'Vi fant ikke denne sykkelstasjonen',
+      "We couldn't find this bike station",
+      'Vi fann ikkje denne sykkelstasjonen',
+    ),
   },
   humanPoweredBike: _('Sykkel', 'Bicycle', 'Sykkel'),
   loadingFailed: _(
-    'Ops! Vi fant ikke denne sykkelstasjonen',
-    "Ops! We couldn't find this bike station",
-    'Ops! Vi fann ikkje denne sykkelstasjonen',
+    'Vi fant ikke denne sykkelen',
+    "We couldn't find this bike",
+    'Vi fann ikkje denne sykkelen',
   ),
 };
 
@@ -371,9 +376,9 @@ export const CarSharingTexts = {
     ),
   },
   loadingFailed: _(
-    'Ops! Vi fant ikke denne parkeringen',
-    "Ops! We couldn't find this car sharing station",
-    'Ops! Vi fann ikkje denne parkeringa',
+    'Vi fant ikke denne parkeringen',
+    "We couldn't find this car sharing station",
+    'Vi fann ikkje denne parkeringa',
   ),
   propultionType: (type: PropulsionType) => {
     switch (type) {
