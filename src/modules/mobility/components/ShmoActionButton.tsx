@@ -17,6 +17,7 @@ import {useShmoWarnings} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {AgeVerificationEnum} from '../queries/use-get-age-verification-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type ShmoActionButtonProps = {
   onStartOnboarding: () => void;
@@ -24,6 +25,7 @@ type ShmoActionButtonProps = {
   vehicleId: string;
   operatorId: string;
   paymentMethod: PaymentMethod | undefined;
+  formFactor: FormFactor;
 };
 
 export const ShmoActionButton = ({
@@ -32,6 +34,7 @@ export const ShmoActionButton = ({
   operatorId,
   paymentMethod,
   loginCallback,
+  formFactor,
 }: ShmoActionButtonProps) => {
   const {authenticationType, userId} = useAuthContext();
   const {hasBlockers, numberOfBlockers, ageVerification, operatorAgeLimit} =
@@ -59,6 +62,7 @@ export const ShmoActionButton = ({
       },
       assetId: vehicleId ?? '',
       operatorId: operatorId,
+      formFactor: formFactor,
     };
     const res = await initShmoOneStopBooking(initReqBody);
     logEvent('Mobility', 'Shmo booking started', {
@@ -79,6 +83,7 @@ export const ShmoActionButton = ({
     coordinates?.longitude,
     vehicleId,
     operatorId,
+    formFactor,
     initShmoOneStopBooking,
     logEvent,
     userId,

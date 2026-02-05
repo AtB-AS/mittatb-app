@@ -21,6 +21,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useVehicle} from '@atb/modules/mobility';
 import {useMapContext} from '../../MapContext';
 import {ScooterHelpParams} from '../../types';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type ShmoTestingProps = {
   navigateToScooterSupport: (params: ScooterHelpParams) => void;
@@ -98,6 +99,7 @@ export const ShmoTesting = ({navigateToScooterSupport}: ShmoTestingProps) => {
         coordinates: {latitude: 0, longitude: 0},
         assetId: vehicleId,
         operatorId: operatorId ?? 'YRY:Operator:Ryde',
+        formFactor: FormFactor.Scooter,
       };
       initShmoOneStopBooking(initReqBody);
     }

@@ -157,6 +157,7 @@ export const ScooterSheet = ({
                   vehicleId={id}
                   operatorId={operatorId}
                   paymentMethod={selectedPaymentMethod}
+                  formFactor={vehicle.vehicleType.formFactor}
                 />
                 <Button
                   expanded={true}

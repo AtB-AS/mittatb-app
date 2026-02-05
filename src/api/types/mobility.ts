@@ -176,6 +176,7 @@ export const InitShmoOneStopBookingRequestBodySchema = z.object({
     .nullish()
     .describe('This is the same id as vehicleId from the mobility API'),
   operatorId: z.string(),
+  formFactor: FormFactorSchema,
 });
 
 export type InitShmoOneStopBookingRequestBody = z.infer<
