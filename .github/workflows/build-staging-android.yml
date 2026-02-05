@@ -166,7 +166,6 @@ jobs:
           entur-registry-user: ${{ vars.ENTUR_REGISTRY_USER }}
           entur-registry-token: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
           can-skip: ${{ steps.apk-cache.outputs.cache-hit }}
-          output-type: ${{ inputs.output-type }}
 
       - name: Detect dependency changes
         uses: dorny/paths-filter@v3
@@ -200,22 +199,26 @@ jobs:
           NDK_CCACHE: /usr/bin/ccache
 
       - name: Restore APKTool cache
+        if: inputs.output-type != 'AAB'
         uses: actions/cache@v4
         with:
           path: ~/apktool
           key: apktool-2.12.1
 
       - name: Add APKTool to PATH
+        if: inputs.output-type != 'AAB'
         run: echo "$HOME/apktool" >> $GITHUB_PATH
 
       - name: Generate release notes
         id: release-notes
+        if: inputs.output-type != 'AAB'
         env:
           BRANCH_NAME: ${{ github.ref_name }}
           OUTPUT_FILE: ./release-notes.txt
         run: bash ./scripts/generate-staging-release-notes.sh
 
       - name: Post-build steps
+        if: inputs.output-type != 'AAB'
         uses: ./.github/actions/android-post-build-steps
         with:
           should-replace-bundle: ${{ inputs.force-build != 'true' && steps.apk-cache.outputs.cache-hit == 'true'}}

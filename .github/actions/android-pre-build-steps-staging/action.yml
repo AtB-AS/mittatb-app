@@ -32,10 +32,6 @@ inputs:
     description: 'APK Cache found, can skip step'
     required: true
     default: 'false'
-  output-type:
-    description: 'APK or AAB (case sensitive)'
-    required: true
-    default: 'APK'
 
 runs:
   using: "composite"
@@ -50,8 +46,7 @@ runs:
         echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
         echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
         echo "KEYSTORE_PATH=./android/app/keystore.jks" >> $GITHUB_ENV
-        OUTPUT_TYPE="${{ inputs.output-type }}"
-        echo "${OUTPUT_TYPE}_FILE_NAME=app-staging.${OUTPUT_TYPE,,}" >> $GITHUB_ENV
+        echo "APK_FILE_NAME=app-staging.apk" >> $GITHUB_ENV
         echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
         echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
 
