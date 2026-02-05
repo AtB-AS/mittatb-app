@@ -227,4 +227,3 @@ jobs:
           bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
           abt-entur-publish-client-staging: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_STAGING }}
           new-version-name: ${{ steps.version-info.outputs.new_version_name }}
-          output-type: ${{ inputs.output-type }}

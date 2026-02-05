@@ -486,16 +486,14 @@ platform :android do
 
   lane :firebase_distribution_staging do
     ensure_env_vars(
-      env_vars: ['FIREBASE_APP_ID','GCP_CREDENTIALS_PATH','OUTPUT_TYPE']
+      env_vars: ['FIREBASE_APP_ID','GCP_CREDENTIALS_PATH','APK_FILE_NAME']
     )
-    
-    artifact_path = ENV['OUTPUT_TYPE'] == 'APK' ? ENV['APK_FILE_NAME'] : ENV['AAB_FILE_NAME']
 
     firebase_app_distribution(
       app:ENV['FIREBASE_APP_ID'],
       service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
-      android_artifact_type:ENV['OUTPUT_TYPE'],
-      android_artifact_path:artifact_path,
+      android_artifact_type:'APK',
+      android_artifact_path:ENV['APK_FILE_NAME'],
       groups:ENV['APP_DISTRIBUTION_GROUP_NAME'],
       release_notes_file: ENV['RELEASE_NOTES_FILE']
     )
