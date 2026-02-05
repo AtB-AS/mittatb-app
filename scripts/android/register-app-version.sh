@@ -100,7 +100,7 @@ json=$(cat <<EOJ
     },
     android: {
       "apk_package_name": "$ANDROID_APPLICATION_ID",
-      "version_name": "$APP_VERSION",
+      "version_name": "$REGISTRATION_NAME",
       "version_code": "$BUILD_ID",
       "certificate_digests": [
         "$certificate_digest"
@@ -115,7 +115,7 @@ EOJ
 
 echo "Registering app"
 # Register app
-echo "Registering mitt-atb version $APP_VERSION, version code: $BUILD_ID, command_id / x-correlation-id: $request_id"
+echo "Registering mitt-atb version $REGISTRATION_NAME, version code: $BUILD_ID, command_id / x-correlation-id: $request_id"
 register=$(curl -v --header "Content-Type: application/json" \
   --header "Authorization: Bearer $access_token" \
   --header "X-Correlation-Id: $request_id" \
@@ -135,4 +135,4 @@ if [[ $register != {} ]]; then
   exit 8
 fi
 
-echo "Registration complete for version $APP_VERSION with version code $BUILD_ID with checksum"
+echo "Registration complete for version $REGISTRATION_NAME with version code $BUILD_ID with checksum"
