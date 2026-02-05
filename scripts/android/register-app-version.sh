@@ -50,6 +50,17 @@ ENTUR_CLIENT_SECRET=$(echo $DECODED_ENTUR_PUBLISH_CLIENT | jq -r '.clientSecret'
 AUDIENCE=$(echo $DECODED_ENTUR_PUBLISH_CLIENT | jq -r '.endpointParams.audience[0]')
 TOKEN_URL=$(echo $DECODED_ENTUR_PUBLISH_CLIENT | jq -r '.tokenUrl')
 
+# Specify registration name
+REGISTRATION_NAME=${CUSTOM_VERSION_NAME:-$APP_VERSION}
+
+if [ -n "$CUSTOM_VERSION_NAME" ]; then
+    echo "Custom version name detected"
+else
+    echo "Custom version name not detected"
+fi
+
+echo "App will be registered using version name: $REGISTRATION_NAME"
+
 echo "Fetching access token"
 # App login for register call
 login=$(curl --silent \

@@ -55,5 +55,6 @@ runs:
       shell: bash
       run: bash ./scripts/android/register-app-version.sh
       env:
+          CUSTOM_VERSION_NAME: ${{ inputs.new-version-name }} 
           ENTUR_PUBLISH_CLIENT: ${{ inputs.abt-entur-publish-client-staging }}
           DISABLE_LISTED_ON_PLAY_STORE: true
