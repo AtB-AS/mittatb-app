@@ -14,7 +14,7 @@ import {PaymentType} from '@atb/modules/ticketing';
 import {
   FareProductGroupType,
   FareProductTypeConfig,
-  ConfigurableLinksType,
+  ConfigurableLinks,
   HarborConnectionOverrideType,
   TravelSearchFiltersType,
   CityZone,
@@ -77,7 +77,7 @@ type ConfigurationContextState = {
   fareProductTypeConfigs: FareProductTypeConfig[];
   travelSearchFilters: TravelSearchFiltersType | undefined;
   appTexts: AppTexts | undefined;
-  configurableLinks: ConfigurableLinksType | undefined;
+  configurableLinks: ConfigurableLinks | undefined;
   mobilityOperators: MobilityOperatorType[] | undefined;
   scooterFaqs: ScooterFaqType[] | undefined;
   scooterConsentLines: ScooterConsentLineType[] | undefined;
@@ -125,7 +125,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     useState<TravelSearchFiltersType>();
   const [appTexts, setAppTexts] = useState<AppTexts>();
   const [configurableLinks, setConfigurableLinks] =
-    useState<ConfigurableLinksType>();
+    useState<ConfigurableLinks>();
   const [mobilityOperators, setMobilityOperators] = useState<
     MobilityOperatorType[]
   >([]);
@@ -611,7 +611,7 @@ function getAppTextsFromSnapshot(
 
 function getConfigurableLinksFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): ConfigurableLinksType | undefined {
+): ConfigurableLinks | undefined {
   const urls = snapshot.docs.find((doc) => doc.id == 'urls');
 
   const ticketingInfo = mapLanguageAndTextType(urls?.get('ticketingInfo'));
