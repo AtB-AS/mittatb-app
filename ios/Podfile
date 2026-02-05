@@ -44,7 +44,6 @@ target 'app' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => '12.6.0'
   pod "Intercom"
 
   use_entur_private_pods
