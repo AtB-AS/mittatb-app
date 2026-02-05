@@ -38,8 +38,8 @@ export const Dashboard_NearbyStopPlacesScreen = ({
                 params: {
                   screen: 'Dashboard_NearbyStopPlacesScreen',
                   params: {
-                    location: route.params.location,
-                    onCompleteRouteName: route.params.onCompleteRouteName,
+                    location: route.params?.location,
+                    onCompleteRouteName: route.params?.onCompleteRouteName,
                   },
                   merge: true,
                 },
