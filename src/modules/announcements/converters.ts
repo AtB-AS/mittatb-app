@@ -1,7 +1,10 @@
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {Announcement} from './types';
 import {isDefined} from '@atb/utils/presence';
-import {appliesToAppPlaform, appliesToAppVersion} from '@atb/utils/converters';
+import {
+  appliesToAppPlaform,
+  appliesToAppVersion,
+} from '@atb/utils/firestore-utils';
 
 export const mapToAnnouncements = (
   snapshots: FirebaseFirestoreTypes.QueryDocumentSnapshot[],

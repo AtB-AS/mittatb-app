@@ -1,6 +1,6 @@
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useTranslation, getTextForLanguage} from '@atb/translations';
-import {getAppVersionedItem} from './converters';
+import {getAppVersionedItem} from './firestore-utils';
 import {
   ConfigurableLinks,
   AppVersionedConfigurableLink,
