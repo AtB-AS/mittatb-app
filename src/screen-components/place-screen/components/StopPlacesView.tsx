@@ -36,7 +36,6 @@ type Props = {
   showOnlyFavorites: boolean;
   setShowOnlyFavorites: (enabled: boolean) => void;
   testID?: string;
-  addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
   backgroundColor: ContrastColor;
 } & (
@@ -65,7 +64,6 @@ export const StopPlacesView = (props: Props) => {
     setShowOnlyFavorites,
     testID,
     mode,
-    addedFavoritesVisibleOnDashboard,
     backgroundColor,
   } = props;
 
@@ -175,7 +173,6 @@ export const StopPlacesView = (props: Props) => {
           navigateToQuay={(quay) => navigateToQuay(item.stopPlace, quay)}
           testID={'quaySection' + index}
           showOnlyFavorites={showOnlyFavorites}
-          addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
           searchDate={searchStartTime}
           mode={mode}
         />

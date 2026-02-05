@@ -109,12 +109,9 @@ export const nonTransitTripSearch = (
   );
 
 export async function singleTripSearch(
-  queryString?: string,
+  queryString: string,
   opts?: AxiosRequestConfig,
-): Promise<TripPattern | undefined> {
-  if (!queryString) {
-    return undefined;
-  }
+): Promise<TripPattern> {
   const url = '/bff/v2/singleTrip';
   const query = {
     compressedQuery: queryString,

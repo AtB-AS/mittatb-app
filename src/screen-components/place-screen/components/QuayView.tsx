@@ -32,7 +32,6 @@ export type QuayViewProps = {
   setShowOnlyFavorites: (enabled: boolean) => void;
   testID?: string;
   stopPlace: StopPlace;
-  addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
   backgroundColor: ContrastColor;
 };
@@ -46,7 +45,6 @@ export function QuayView({
   setShowOnlyFavorites,
   testID,
   stopPlace,
-  addedFavoritesVisibleOnDashboard,
   mode,
   backgroundColor,
 }: QuayViewProps) {
@@ -92,12 +90,7 @@ export function QuayView({
       ListHeaderComponent={
         <>
           {departuresIsError && (
-            <View
-              style={[
-                styles.messageBox,
-                mode !== 'Departure' ? styles.marginBottom : undefined,
-              ]}
-            >
+            <View style={styles.messageBox}>
               <MessageInfoBox
                 type="error"
                 message={t(DeparturesTexts.message.resultFailed)}
@@ -108,21 +101,19 @@ export function QuayView({
               />
             </View>
           )}
-          {mode === 'Departure' ? (
-            <View style={styles.header}>
-              {placeHasFavorites && (
-                <FavoriteToggle
-                  enabled={showOnlyFavorites}
-                  setEnabled={setShowOnlyFavorites}
-                />
-              )}
-              <DateSelection
-                searchTime={searchTime}
-                setSearchTime={setSearchTime}
-                backgroundColor={backgroundColor}
+          <View style={styles.header}>
+            {placeHasFavorites && (
+              <FavoriteToggle
+                enabled={showOnlyFavorites}
+                setEnabled={setShowOnlyFavorites}
               />
-            </View>
-          ) : null}
+            )}
+            <DateSelection
+              searchTime={searchTime}
+              setSearchTime={setSearchTime}
+              backgroundColor={backgroundColor}
+            />
+          </View>
         </>
       }
       refreshControl={
@@ -144,7 +135,6 @@ export function QuayView({
           navigateToDetails={navigateToDetails}
           testID="quaySection"
           showOnlyFavorites={showOnlyFavorites}
-          addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
           searchDate={searchStartTime}
           mode={mode}
         />

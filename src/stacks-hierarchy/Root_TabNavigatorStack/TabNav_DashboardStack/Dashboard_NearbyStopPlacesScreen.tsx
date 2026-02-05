@@ -21,10 +21,10 @@ export const Dashboard_NearbyStopPlacesScreen = ({
     <NearbyStopPlacesScreenComponent
       focusRef={focusRef}
       location={fromLocation}
-      mode={route.params.mode}
+      showFavoriteChips={false}
       headerProps={{
         title: t(FavoriteDeparturesTexts.favoriteItemAdd.label),
-        rightButton: {type: 'close'},
+        leftButton: {type: 'back'},
       }}
       isLargeTitle={false}
       onPressLocationSearch={(location) =>
@@ -39,8 +39,7 @@ export const Dashboard_NearbyStopPlacesScreen = ({
                   screen: 'Dashboard_NearbyStopPlacesScreen',
                   params: {
                     location: route.params.location,
-                    mode: route.params.mode,
-                    onCloseRoute: route.params.onCloseRoute,
+                    onCompleteRouteName: route.params.onCompleteRouteName,
                   },
                   merge: true,
                 },
@@ -53,14 +52,15 @@ export const Dashboard_NearbyStopPlacesScreen = ({
         })
       }
       onSelectStopPlace={useCallback(
-        (place: StopPlace) => {
-          navigation.navigate('Dashboard_PlaceScreen', {
-            place,
-            mode: route.params.mode,
-            onCloseRoute: route.params.onCloseRoute,
+        (stopPlace: StopPlace) => {
+          navigation.navigate('Dashboard_SelectFavoriteDeparturesScreen', {
+            stopPlace,
+            addedFavoritesVisibleOnDashboard: true,
+            limitPerQuay: 5,
+            onCompleteRouteName: route.params.onCompleteRouteName,
           });
         },
-        [navigation, route.params.mode, route.params.onCloseRoute],
+        [navigation, route.params.onCompleteRouteName],
       )}
       onUpdateLocation={(location) => navigation.setParams({location})}
       onAddFavoritePlace={() =>

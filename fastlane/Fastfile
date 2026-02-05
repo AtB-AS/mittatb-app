@@ -425,6 +425,7 @@ platform :android do
     build_type = ENV['APP_ENVIRONMENT']
     app_flavor = ENV['APP_FLAVOR']
     skip_clean = ENV['SKIP_CLEAN'] == 'true'
+    abi = ENV['ABI']
 
     # Install CMake 3.22.1 for native builds (ignore if already installed)
     begin
@@ -447,7 +448,7 @@ platform :android do
       flavor: app_flavor,
       project_dir: 'android/',
       print_command: false, #don't print my passwords please
-      flags: "-PreactNativeArchitectures=arm64-v8a", 
+      flags: "-PreactNativeArchitectures=#{ENV['ABI']}", 
       properties: {
         "android.injected.signing.store.file" => File.expand_path(ENV["KEYSTORE_PATH"], Dir.pwd + "/../"),
         "android.injected.signing.store.password" => ENV["KEYSTORE_PASS"],
