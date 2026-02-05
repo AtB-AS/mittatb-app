@@ -29,8 +29,22 @@ permissions:
   contents: read
 
 jobs:
+  detect-changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      should_build: ${{ steps.detect.outputs.should_build}}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Detect change after checkout
+        id: detect
+        uses: ./.github/actions/detect-changes
 
   setup:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.should_build == 'true'
     name: Install tools and warm up caches
     runs-on: ubuntu-latest
     outputs:
