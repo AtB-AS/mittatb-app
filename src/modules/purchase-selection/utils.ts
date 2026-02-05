@@ -139,7 +139,16 @@ export const isSelectableSupplementProduct = (
   currentSelection: PurchaseSelectionType,
   supplementProduct: SupplementProduct,
 ) => {
-  return !!currentSelection.preassignedFareProduct.limitations.supplementProductRefs?.some(
+  const supplementProductLimitations =
+    currentSelection.preassignedFareProduct.limitations.supplementProductRefs;
+  if (
+    !supplementProductLimitations ||
+    supplementProductLimitations.length === 0
+  ) {
+    // There are no limitations, all supplement products are allowed
+    return true;
+  }
+  return supplementProductLimitations.some(
     (allowedSupplementProductId) =>
       supplementProduct.id === allowedSupplementProductId,
   );
