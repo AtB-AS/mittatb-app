@@ -47,6 +47,7 @@ import {
   mapToTravelSearchPreferences,
   mapToStopSignalButtonConfig,
   mapToScooterConsentLines,
+  mapToAppVersionedConfigurableLinks,
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
@@ -632,10 +633,12 @@ function getConfigurableLinksFromSnapshot(
   const externalRealtimeMap = mapLanguageAndTextType(
     urls?.get('externalRealtimeMap'),
   );
-  const tileServerBaseUrl = mapLanguageAndTextType(
-    urls?.get('tileServerBaseUrl'),
+  const tileServerBaseUrls = mapToAppVersionedConfigurableLinks(
+    urls?.get('tileServerBaseUrls'),
   );
-  const mapboxSpriteUrl = mapLanguageAndTextType(urls?.get('mapboxSpriteUrl'));
+  const mapboxSpriteUrls = mapToAppVersionedConfigurableLinks(
+    urls?.get('mapboxSpriteUrls'),
+  );
   const mobilityTermsUrl = mapLanguageAndTextType(
     urls?.get('mobilityTermsUrl'),
   );
@@ -657,8 +660,8 @@ function getConfigurableLinksFromSnapshot(
     iosStoreListing,
     androidStoreListing,
     externalRealtimeMap,
-    tileServerBaseUrl,
-    mapboxSpriteUrl,
+    tileServerBaseUrls,
+    mapboxSpriteUrls,
     mobilityTermsUrl,
     contactFormUrl,
     lostAndFoundUrl,
