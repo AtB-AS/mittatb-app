@@ -13,6 +13,7 @@
     "check-all": "yarn tsc && yarn lint && yarn test --coverage --coverageReporters && yarn prettier",
     "postinstall": "patch-package",
     "icons": "app-icon generate --platforms=android,ios --adaptive-icons --background-icon icons/background.png --foreground-icon icons/foreground.png -i icons/icon.png --rounded none && yarn app-icon generate --platforms=android -i icons/icon.round.png --rounded only",
+    "release": "sh ./release.sh",
     "release-draft": "sh tools/release/release-draft.sh",
     "generate-svg-mono-icons": "svgr --config-file .svgrrc.mono-icons.yml -d ./src/assets/svg/mono-icons --svgo-config svgo.config.mono.js -- ./assets/design-assets/mono",
     "generate-svg-color": "svgr --config-file .svgrrc.color.yml -d ./src/assets/svg/color --svgo-config svgo.config.js -- ./assets/design-assets/colors ./assets/svgs/color",
