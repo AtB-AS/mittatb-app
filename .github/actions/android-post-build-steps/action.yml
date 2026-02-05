@@ -21,6 +21,7 @@ inputs:
   new-version-name:
     required: true
   output-type:
+    description: 'APK or AAB (case sensitive)'
     required: true
     default: 'APK'
 

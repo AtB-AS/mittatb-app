@@ -33,7 +33,7 @@ inputs:
     required: true
     default: 'false'
   output-type:
-    description: 'apk or aab'
+    description: 'APK or AAB (case sensitive)'
     required: true
     default: 'APK'
 
