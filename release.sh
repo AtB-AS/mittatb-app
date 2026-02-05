@@ -1,22 +1,43 @@
 #!/bin/bash
 # This script automates the release process based on the current branch.
 #
-# Usage: ./release.sh [test]
+# Usage: ./release.sh [--preview|--publish]
 #
 # - On 'master' branch: Starts a new release cycle (e.g., v1.80-rc1).
 # - On 'release/x.xx' branch: Creates the next release candidate (e.g., v1.80-rc2).
-# - Add 'test' argument to preview what would happen without making changes.
+#
+# Options:
+#   --preview   Preview the release details without making changes
+#   --publish   Create and publish the release immediately (draft=false)
+#   (none)      Create the release as a draft (draft=true)
 
 set -e
 
-# DRY RUN check
+# --- Parse arguments ---
 DRY_RUN=false
-if [[ "$1" == "test" || "$1" == "dry-run" ]]; then
-  DRY_RUN=true
-  echo "============================================"
-  echo "🧪 DRY RUN MODE - No changes will be made"
-  echo "============================================"
-  echo ""
+DRAFT=true
+
+for arg in "$@"; do
+  case "$arg" in
+    --preview)
+      DRY_RUN=true
+      ;;
+    --publish)
+      DRAFT=false
+      ;;
+    *)
+      echo "Unknown argument: $arg"
+      echo "Usage: ./release.sh [--preview] [--publish]"
+      exit 1
+      ;;
+  esac
+done
+
+# Prevent conflicting arguments
+if [ "$DRY_RUN" = true ] && [ "$DRAFT" = false ]; then
+  echo "Error: Cannot use '--preview' and '--publish' together."
+  echo "Usage: ./release.sh [--preview|--publish]"
+  exit 1
 fi
 
 # --- Determine current branch ---
@@ -33,8 +54,8 @@ MAJOR_MINOR=""
 if [[ "$CURRENT_BRANCH" == "master" ]]; then
   IS_NEW_RELEASE_CYCLE=true
 
-  # Fetch to get all remote branches
-  git fetch --all --quiet
+  # Fetch to get remote branches, also remove stale branches
+  git fetch --prune --quiet
 
   # Find the latest release branch matching ONLY release/X.XX format (no patch versions or suffixes)
   LATEST_RELEASE_BRANCH=$(git branch -r | grep -E '^[[:space:]]*origin/release/[0-9]+\.[0-9]+$' | sed 's|.*origin/release/||' | sort -t. -k1,1n -k2,2n | tail -n1)
@@ -52,15 +73,21 @@ if [[ "$CURRENT_BRANCH" == "master" ]]; then
 
   VERSION="$MAJOR_MINOR-rc1"
   RELEASE_BRANCH="release/$MAJOR_MINOR"
-  NEXT_MASTER_VERSION="$MAJOR_MINOR"
 
+  # Get NEXT_MASTER_VERSION from package.json
+  CURRENT_PACKAGE_VERSION=$(node -p "require('./package.json').version")
+  PKG_MAJOR=$(echo "$CURRENT_PACKAGE_VERSION" | cut -d. -f1)
+  PKG_MINOR=$(echo "$CURRENT_PACKAGE_VERSION" | cut -d. -f2)
+  PKG_NEXT_MINOR=$((PKG_MINOR + 1))
+  NEXT_MASTER_VERSION="$PKG_MAJOR.$PKG_NEXT_MINOR"
+  
 # --- Logic for 'release' branch ---
 elif [[ "$CURRENT_BRANCH" == "release/"* ]]; then
   MAJOR_MINOR=$(echo "$CURRENT_BRANCH" | sed 's/release\///')
   RELEASE_BRANCH="$CURRENT_BRANCH"
 
   # Fetch tags to get the latest RC version
-  git fetch --tags --quiet
+  git fetch --tags --prune-tags --quiet 
   LATEST_TAG=$(git tag --sort=-v:refname | grep "^v$MAJOR_MINOR-rc" | head -n1)
 
   if [ -z "$LATEST_TAG" ]; then
@@ -79,7 +106,7 @@ fi
 
 # --- Dry run output ---
 if [ "$DRY_RUN" = true ]; then
-  echo "📍 Current branch:         $CURRENT_BRANCH"
+  echo "📍 Current branch:         $CURRENT_BRANCH (version $PKG_MAJOR.$PKG_MINOR)"
   if [ -n "$LATEST_RELEASE_BRANCH" ]; then
     echo "📦 Latest release branch:  release/$LATEST_RELEASE_BRANCH"
   fi
@@ -89,9 +116,9 @@ if [ "$DRY_RUN" = true ]; then
     echo "⬆️  Next master version:    $NEXT_MASTER_VERSION"
   fi
   echo ""
-  echo "============================================"
-  echo "Run without 'test' to execute the release."
-  echo "============================================"
+  echo "==============================================="
+  echo "Run without '--preview' to execute the release."
+  echo "==============================================="
   exit 0
 fi
 
@@ -125,9 +152,15 @@ yarn release-draft "v$VERSION"
 echo "Successfully created draft release for v$VERSION."
 
 # --- Step 3: Publish GitHub Release ---
-echo "--- Step 3: Publishing GitHub Release ---"
-gh release edit "v$VERSION" --draft=false
-echo "Successfully published release v$VERSION. The build pipeline has been triggered."
+if [ "$DRAFT" = false ]; then
+  echo "--- Step 3: Publishing GitHub Release ---"
+  gh release edit "v$VERSION" --draft=false
+  echo "Successfully published release v$VERSION. The build pipeline has been triggered."
+else
+  echo "--- Step 3: Skipping publish (draft mode) ---"
+  echo "Release v$VERSION created as draft."
+  echo "To publish later, run: gh release edit v$VERSION --draft=false or publish manually from GitHub Releases page"
+fi
 
 # --- Step 4: Bump version on master (for new release cycles only) ---
 if [ "$IS_NEW_RELEASE_CYCLE" = true ]; then
