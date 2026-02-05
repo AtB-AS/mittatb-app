@@ -36,7 +36,7 @@ export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
                 params: {
                   screen: 'Profile_NearbyStopPlacesScreen',
                   params: {
-                    location: route.params.location,
+                    location: route.params?.location,
                   },
                   merge: true,
                 },

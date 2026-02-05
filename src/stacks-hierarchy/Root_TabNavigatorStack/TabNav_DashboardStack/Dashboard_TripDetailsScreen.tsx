@@ -2,17 +2,20 @@ import {DashboardScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack
 import {TripDetailsScreenComponent} from '@atb/screen-components/travel-details-screens';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type Props = DashboardScreenProps<'Dashboard_TripDetailsScreen'>;
 
 export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
   const analytics = useAnalyticsContext();
   const focusRef = useFocusOnLoad(navigation);
+  const isFocused = useIsFocusedAndActive();
 
   return (
     <TripDetailsScreenComponent
       {...route.params}
       focusRef={focusRef}
+      isFocused={isFocused}
       onPressDetailsMap={(params) => {
         params.vehicleWithPosition
           ? analytics.logEvent('Trip details', 'See live bus clicked', {
