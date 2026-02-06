@@ -100,6 +100,8 @@ export const Camera = ({
               device={device}
               isActive={isFocused}
               resizeMode="cover"
+              video={false}
+              audio={false}
               photo={mode === 'photo'}
               torch={device?.hasTorch ? torch : undefined}
               codeScanner={mode === 'qr' ? codeScanner : undefined}
