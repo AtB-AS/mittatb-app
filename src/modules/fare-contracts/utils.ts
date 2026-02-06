@@ -14,7 +14,6 @@ import {
   findReferenceDataById,
   getReferenceDataName,
   PreassignedFareProduct,
-  SupplementProduct,
   useFirestoreConfigurationContext,
   UserProfile,
 } from '@atb/modules/configuration';
@@ -38,6 +37,12 @@ import {SvgProps} from 'react-native-svg';
 import {Bicycle} from '@atb/assets/svg/mono-icons/transportation';
 import {TextNames} from '@atb-as/theme';
 import {formatToNonBreakingSpaces} from '@atb/utils/text';
+import {isDefined} from '@atb/utils/presence';
+import {
+  type BaggageProduct,
+  ReservationProduct,
+  type SupplementProduct,
+} from '@atb-as/config-specs';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -318,7 +323,7 @@ export const getReservationStatus = (reservation: Reservation) => {
 
 export function getTravellersText(
   userProfilesWithCount: UniqueWithCount<UserProfile>[],
-  baggageProductsWithCount: UniqueWithCount<SupplementProduct>[],
+  baggageProductsWithCount: UniqueWithCount<BaggageProduct>[],
   language: Language,
 ): string {
   return [...userProfilesWithCount, ...baggageProductsWithCount]
@@ -329,7 +334,7 @@ export function getTravellersText(
 
 export function getTravellersIcon(
   userProfilesWithCount: UniqueWithCount<UserProfile>[],
-  baggageProductsWithCount: UniqueWithCount<SupplementProduct>[],
+  baggageProductsWithCount: UniqueWithCount<BaggageProduct>[],
 ): ((props: SvgProps) => React.JSX.Element) | undefined {
   if (userProfilesWithCount.length > 0) {
     return Travellers;
@@ -352,3 +357,26 @@ export const getContentTypography = (size: Size): TextNames => {
       return 'body__m';
   }
 };
+
+/**
+ * Check if fare contract has any supplement product of type ReservationProduct
+ * @param fareContract The fare contract to check
+ * @param products All preassigned fare products. Used to lookup fare products
+ * @param supplementProducts All supplement products. Used to lookup supplement products
+ */
+export function hasReservationTypeSupplementProduct(
+  fareContract: FareContractType,
+  products: PreassignedFareProduct[],
+  supplementProducts: SupplementProduct[],
+): boolean {
+  const supplementProductIds = fareContract.travelRights
+    .flatMap(
+      (tr) =>
+        products.find((p) => p.id === tr.fareProductRef)?.limitations
+          .supplementProductRefs,
+    )
+    .filter(isDefined);
+  return supplementProducts
+    .filter((sp) => supplementProductIds.includes(sp.id))
+    .some((sp) => ReservationProduct.safeParse(sp).success);
+}

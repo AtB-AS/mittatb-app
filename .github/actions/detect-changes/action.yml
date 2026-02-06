@@ -1,0 +1,67 @@
+# GitHub Action to determine whether a build should be made based on commit prefix and files changed.
+#
+# Build will be ignored IF:
+# - Commit prefix uses `docs:` or `chore:` (step: check commit prefix) AND
+# - Changed files extensions are `.md` or `.sh` (step: check changed files)
+#
+# Can update the rules on the respective function
+
+name: 'Detect Sourcecode Changes'
+description: 'Determines if a build should run based on commit prefix and changed files'
+
+outputs:
+  should_build:
+    description: 'Whether a build is required'
+    value: ${{ steps.evaluate.outputs.should_build }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Get changed files
+      id: changed-files
+      shell: bash
+      run: |
+        CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
+        echo "Changed files:"
+        echo "$CHANGED_FILES"
+        
+        # Check if ALL changed files are skippable (.md or .sh, add more extensions here as necessary)
+        NON_SKIPPABLE_FILES=$(echo "$CHANGED_FILES" | grep -vE '\.(md|sh)$' || true)
+        
+        if [ -z "$NON_SKIPPABLE_FILES" ]; then
+          echo "only_skippable=true" >> $GITHUB_OUTPUT
+        else
+          echo "only_skippable=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Check commit message prefix
+      id: commit-prefix
+      shell: bash
+      run: |
+        COMMIT_MSG=$(git log -1 --pretty=%B)
+        echo "Commit message: $COMMIT_MSG"
+        
+        if [[ "$COMMIT_MSG" =~ ^docs: ]] || [[ "$COMMIT_MSG" =~ ^chore: ]]; then
+          echo "is_skippable_prefix=true" >> $GITHUB_OUTPUT
+        else
+          echo "is_skippable_prefix=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Evaluate build requirements
+      id: evaluate
+      shell: bash
+      run: |
+        ONLY_SKIPPABLE="${{ steps.changed-files.outputs.only_skippable }}"
+        SKIPPABLE_PREFIX="${{ steps.commit-prefix.outputs.is_skippable_prefix }}"
+        
+        echo "=== Build Decision ==="
+        echo "Only skippable files (.md/.sh): $ONLY_SKIPPABLE"
+        echo "Skippable prefix (docs:/chore:): $SKIPPABLE_PREFIX"
+        
+        if [[ "$SKIPPABLE_PREFIX" == "true" && "$ONLY_SKIPPABLE" == "true" ]]; then
+          echo "should_build=false" >> $GITHUB_OUTPUT
+          echo ">>> SKIPPING BUILD"
+        else
+          echo "should_build=true" >> $GITHUB_OUTPUT
+          echo ">>> BUILD REQUIRED"
+        fi

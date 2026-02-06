@@ -14,7 +14,7 @@ export function useBaggageCountState(selection: PurchaseSelectionType) {
     return {
       ...b,
       count:
-        selection.baggageProductsWithCount.find((sp) => sp.id === b.id)
+        selection.supplementProductsWithCount.find((sp) => sp.id === b.id)
           ?.count ?? 0,
     };
   });

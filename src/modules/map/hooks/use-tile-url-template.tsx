@@ -1,6 +1,5 @@
 import {useAuthContext} from '@atb/modules/auth';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {useTranslation, getTextForLanguage} from '@atb/translations';
+import {useAppVersionedConfigurableLink} from '@atb/utils/use-app-versioned-configurable-link';
 
 /**
  * Layers supported by the tile server.
@@ -20,17 +19,14 @@ export const useTileUrlTemplate = (
   tileLayerNames: TileLayerName[],
   params?: Record<string, string>,
 ): string | undefined => {
-  const {language} = useTranslation();
-  const {configurableLinks} = useFirestoreConfigurationContext();
   const {userId} = useAuthContext();
   const userIdParam = !userId ? '' : '?userId=' + userId;
   const customParams = Object.entries(params ?? {})
     .map(([key, value]) => `${key}=${value}`)
     .join('&');
-  const tileServerBaseUrl = getTextForLanguage(
-    configurableLinks?.tileServerBaseUrl,
-    language,
-  );
+
+  const tileServerBaseUrl =
+    useAppVersionedConfigurableLink('tileServerBaseUrls');
 
   if (!tileServerBaseUrl || tileLayerNames.length === 0) {
     return undefined;

@@ -23,7 +23,6 @@ export const Dashboard_DepartureDetailsScreen = ({
         navigation.push('Dashboard_PlaceScreen', {
           place: stopPlace,
           selectedQuayId,
-          mode: 'Departure',
         })
       }
       onPressTravelAid={() => {

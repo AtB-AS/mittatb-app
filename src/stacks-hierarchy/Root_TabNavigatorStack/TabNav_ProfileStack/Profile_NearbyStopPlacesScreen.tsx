@@ -19,10 +19,10 @@ export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
     <NearbyStopPlacesScreenComponent
       focusRef={focusRef}
       location={fromLocation}
-      mode={route.params.mode}
+      showFavoriteChips={false}
       headerProps={{
         title: t(FavoriteDeparturesTexts.favoriteItemAdd.label),
-        rightButton: {type: 'close'},
+        leftButton: {type: 'back'},
       }}
       isLargeTitle={false}
       onPressLocationSearch={(location) =>
@@ -36,8 +36,7 @@ export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
                 params: {
                   screen: 'Profile_NearbyStopPlacesScreen',
                   params: {
-                    location: route.params.location,
-                    mode: route.params.mode,
+                    location: route.params?.location,
                   },
                   merge: true,
                 },
@@ -51,12 +50,13 @@ export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
       }
       onSelectStopPlace={useCallback(
         (place: StopPlace) => {
-          navigation.navigate('Profile_PlaceScreen', {
-            place,
-            mode: route.params.mode,
+          navigation.navigate('Profile_SelectFavouriteDeparturesScreen', {
+            stopPlace: place,
+            limitPerQuay: 5,
+            addedFavoritesVisibleOnDashboard: false,
           });
         },
-        [navigation, route.params.mode],
+        [navigation],
       )}
       onUpdateLocation={(location) => navigation.setParams({location})}
       onAddFavoritePlace={() =>

@@ -35,18 +35,24 @@ else
     echo "Re-generate bundle"
     npx react-native bundle --platform android --dev false --reset-cache --entry-file index.js --bundle-output $BUNDLE_PATH --sourcemap-output $SOURCEMAP_PATH
 
-    brew install apktool
     brew install yq
 
+    echo "Install Android framework for apktool"
+    apktool if $ANDROID_HOME/platforms/android-36/android.jar
+
     echo "Decompile Android APK"
-    apktool d $APK_FILE_NAME --output decompiled-apk
+    apktool d $APK_FILE_NAME --output decompiled-apk --no-src
 
     echo "Replace bundle in decompiled APK"
     rm decompiled-apk/assets/index.android.bundle
     cp $BUNDLE_PATH decompiled-apk/assets/
 
+    # Replace build number
     echo "Set version code to build id: $BUILD_ID"
-    yq e ".versionInfo.versionCode = env(BUILD_ID)" -i decompiled-apk/apktool.yml
+    yq e ".versionInfo.versionCode = \"$BUILD_ID\"" -i decompiled-apk/apktool.yml
+
+    echo "Set version name to: $APP_VERSION"
+    yq e ".versionInfo.versionName = \"$APP_VERSION\"" -i decompiled-apk/apktool.yml
 
     echo "Re-compile Android APK"
     apktool b decompiled-apk -o temp-$APK_FILE_NAME

@@ -9,26 +9,31 @@ import {TripSearchScreenParams} from '@atb/stacks-hierarchy/Root_TabNavigatorSta
 import {NearbyStopPlacesScreenParams} from '@atb/screen-components/nearby-stop-places';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
 import {TravelAidScreenParams} from '@atb/screen-components/travel-aid';
+import {SelectFavoriteDeparturesScreenParams} from './Dashboard_SelectFavoriteDeparturesScreen';
 
 export type DashboardRootScreenParams = {} & TripSearchScreenParams;
 
-type Dashboard_NearbyStopPlacesScreenParams = NearbyStopPlacesScreenParams & {
-  onCloseRoute: Parameters<
-    DashboardScreenProps<'Dashboard_NearbyStopPlacesScreen'>['navigation']['popTo']
-  >;
-};
+type OnCompleteRouteNames =
+  | 'Dashboard_FavoriteDeparturesScreen'
+  | 'Dashboard_RootScreen';
 
-type Dashboard_PlaceScreenParams = PlaceScreenParams & {
-  onCloseRoute?: Parameters<
-    DashboardScreenProps<'Dashboard_PlaceScreen'>['navigation']['popTo']
-  >;
+type Dashboard_NearbyStopPlacesScreenParams = NearbyStopPlacesScreenParams & {
+  onCompleteRouteName: OnCompleteRouteNames;
 };
+type Dashboard_PlaceScreenParams = PlaceScreenParams & {
+  onCompleteRouteName?: OnCompleteRouteNames;
+};
+type Dashboard_SelectFavoriteDeparturesScreenParams =
+  SelectFavoriteDeparturesScreenParams & {
+    onCompleteRouteName: OnCompleteRouteNames;
+  };
 
 export type DashboardStackParams = StackParams<{
   Dashboard_RootScreen: DashboardRootScreenParams;
   Dashboard_DepartureDetailsScreen: DepartureDetailsScreenParams;
   Dashboard_TravelDetailsMapScreen: TravelDetailsMapScreenParams;
   Dashboard_PlaceScreen: Dashboard_PlaceScreenParams;
+  Dashboard_SelectFavoriteDeparturesScreen: Dashboard_SelectFavoriteDeparturesScreenParams;
   Dashboard_TripSearchScreen: TripSearchScreenParams;
   Dashboard_TripDetailsScreen: TripDetailsScreenParams;
   Dashboard_FavoriteDeparturesScreen: undefined;

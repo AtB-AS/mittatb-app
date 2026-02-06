@@ -13,6 +13,7 @@ import {useTimeContext} from '@atb/modules/time';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -49,10 +50,18 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
 
   const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
 
-  const navigateToBonusScreen = useCallback(() => {
+  const onNavigateToBonusScreen = useCallback(() => {
     navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
   }, [navigation, bonusScreenParams]);
 
+  const onNavigateToBookingPurchaseFlow = useCallback(
+    (selection: PurchaseSelectionType) => {
+      if (selection) {
+        navigation.navigate('Root_PurchaseOverviewScreen', {selection});
+      }
+    },
+    [navigation],
+  );
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -90,7 +99,8 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
               onPressFareContract={() => {}}
               now={serverNow}
               index={0}
-              navigateToBonusScreen={navigateToBonusScreen}
+              onNavigateToBonusScreen={onNavigateToBonusScreen}
+              onNavigateToPurchaseFlow={onNavigateToBookingPurchaseFlow}
             />
           )}
         </View>

@@ -134,6 +134,12 @@ const TicketingTexts = {
         'Fleire reisemåtar',
       ),
     },
+    reserve: _('Reserver plass', 'Reserve seat', 'Reserver plass'),
+    reserveOnBoat: _(
+      'Reserver plass på båt',
+      'Reserve seat on boat',
+      'Reserver plass på båt',
+    ),
   },
   reservation: {
     reserving: _(

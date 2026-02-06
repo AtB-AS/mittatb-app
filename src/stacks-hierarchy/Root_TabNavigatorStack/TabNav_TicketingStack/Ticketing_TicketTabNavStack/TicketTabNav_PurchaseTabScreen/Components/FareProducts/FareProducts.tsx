@@ -39,7 +39,10 @@ export const FareProducts = ({
   );
 
   const sellableFareProductTypeConfigs = fareProductTypeConfigs.filter(
-    (config) => sellableProductsInApp.some((p) => p.type === config.type),
+    (config) =>
+      sellableProductsInApp.some(
+        (p) => p.type === config.type && !p.isSupplementProduct,
+      ),
   );
 
   let groupedFareProducts: GroupedFareProducts[] = fareProductGroups.map(

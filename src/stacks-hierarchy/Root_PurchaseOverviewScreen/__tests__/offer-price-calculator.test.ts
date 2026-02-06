@@ -1,7 +1,7 @@
 import {TicketOffer, OfferValidity} from '@atb-as/utils';
 import {
   BaggageProductWithCountAndOffer,
-  BaggageTicketOffer,
+  SupplementTicketOffer,
   UserProfileWithCountAndOffer,
 } from '../use-offer-state';
 import {BaggageProduct, UserProfile} from '@atb-as/config-specs';
@@ -194,7 +194,7 @@ const TEST_BICYCLE_PRODUCT: BaggageProduct = {
   id: 'B',
   name: {lang: 'no', value: 'Test Baggage'},
   version: 'v1',
-  isBaggageProduct: true,
+  kind: 'baggage',
   baggageType: 'BICYCLE',
   distributionChannel: ['app'],
   alternativeNames: [],
@@ -234,7 +234,7 @@ const TEST_ADULT_SINGLE_TICKET_OFFER: TicketOffer = {
   supplementProducts: [],
 };
 
-const TEST_BICYCLE_TICKET_OFFER: BaggageTicketOffer = {
+const TEST_BICYCLE_TICKET_OFFER: SupplementTicketOffer = {
   offerId: 'A',
   available: 1,
   shouldStartNow: false,

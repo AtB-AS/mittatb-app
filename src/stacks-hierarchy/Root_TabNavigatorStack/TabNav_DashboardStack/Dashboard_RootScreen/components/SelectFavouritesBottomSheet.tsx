@@ -1,4 +1,4 @@
-import React, {RefObject, useCallback} from 'react';
+import React, {memo, RefObject, useCallback, useRef} from 'react';
 import {View} from 'react-native';
 import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
@@ -86,7 +86,7 @@ type SelectFavouritesBottomSheetProps = {
   onCloseFocusRef: RefObject<View | null>;
 };
 
-export const SelectFavouritesBottomSheet = ({
+const SelectFavouritesBottomSheetComponent = ({
   onEditFavouriteDeparture,
   bottomSheetModalRef,
   onCloseFocusRef,
@@ -96,6 +96,7 @@ export const SelectFavouritesBottomSheet = ({
   const {theme} = useThemeContext();
   const {favoriteDepartures, setFavoriteDepartures} = useFavoritesContext();
   const favouriteItems = favoriteDepartures ?? [];
+  const shouldRestoreFocusRef = useRef(true);
 
   const handleSwitchFlip = (id: string, active: boolean) => {
     setFavoriteDepartures(
@@ -115,6 +116,7 @@ export const SelectFavouritesBottomSheet = ({
             SelectFavouriteDeparturesText.edit_button.a11yhint,
           )}
           onPress={() => {
+            shouldRestoreFocusRef.current = false;
             onEditFavouriteDeparture();
             bottomSheetModalRef.current?.dismiss();
           }}
@@ -134,7 +136,13 @@ export const SelectFavouritesBottomSheet = ({
       heading={t(SelectFavouriteDeparturesText.header.text)}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
       Footer={footer}
-      closeCallback={() => giveFocus(onCloseFocusRef)}
+      closeCallback={() => {
+        if (shouldRestoreFocusRef.current) {
+          giveFocus(onCloseFocusRef);
+        } else {
+          shouldRestoreFocusRef.current = true;
+        }
+      }}
       testID="selectFavorite"
     >
       <View style={styles.flatListArea}>
@@ -169,6 +177,10 @@ export const SelectFavouritesBottomSheet = ({
     </BottomSheetModal>
   );
 };
+
+export const SelectFavouritesBottomSheet = memo(
+  SelectFavouritesBottomSheetComponent,
+);
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {

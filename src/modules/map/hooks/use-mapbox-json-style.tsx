@@ -2,11 +2,10 @@ import {useThemeContext} from '@atb/theme';
 import {useMemo} from 'react';
 import {getMapboxLightStyle} from '../mapbox-styles/get-mapbox-light-style';
 import {getMapboxDarkStyle} from '../mapbox-styles/get-mapbox-dark-style';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useGeofencingZonesVectorSource} from '../components/mobility/GeofencingZonesAsTiles';
+import {useAppVersionedConfigurableLink} from '@atb/utils/use-app-versioned-configurable-link';
 
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
@@ -57,12 +56,9 @@ export const useMapboxJsonStyle: (
   vehicleTypeId,
 ) => {
   const {themeName} = useThemeContext();
-  const {language} = useTranslation();
   const {mapbox_user_name, mapbox_nsr_tileset_id} = useRemoteConfigContext();
 
-  const {configurableLinks} = useFirestoreConfigurationContext();
-  const mapboxSpriteUrl =
-    getTextForLanguage(configurableLinks?.mapboxSpriteUrl, language) ?? '';
+  const mapboxSpriteUrl = useAppVersionedConfigurableLink('mapboxSpriteUrls');
 
   const {
     id: vehiclesAndStationsVectorSourceId,
@@ -119,7 +115,7 @@ export const useMapboxJsonStyle: (
     () =>
       JSON.stringify({
         ...themedStyleWithExtendedSourcesAndSlotLayers,
-        sprite: mapboxSpriteUrl + themeName,
+        sprite: (mapboxSpriteUrl ?? '') + themeName,
       }),
     [themeName, mapboxSpriteUrl, themedStyleWithExtendedSourcesAndSlotLayers],
   );

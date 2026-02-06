@@ -24,7 +24,7 @@ export const Departures_NearbyStopPlacesScreen = ({
     <NearbyStopPlacesScreenComponent
       focusRef={focusRef}
       location={fromLocation}
-      mode={route.params.mode}
+      showFavoriteChips={true}
       headerProps={{
         title: t(DeparturesTexts.header.title),
         globalMessageContext: GlobalMessageContextEnum.appDepartures,
@@ -42,8 +42,7 @@ export const Departures_NearbyStopPlacesScreen = ({
                 params: {
                   screen: 'Departures_NearbyStopPlacesScreen',
                   params: {
-                    location: route.params.location,
-                    mode: route.params.mode,
+                    location: route.params?.location,
                   },
                   merge: true,
                 },
@@ -59,10 +58,9 @@ export const Departures_NearbyStopPlacesScreen = ({
         (place: StopPlace) => {
           navigation.navigate('Departures_PlaceScreen', {
             place,
-            mode: route.params.mode,
           });
         },
-        [navigation, route.params.mode],
+        [navigation],
       )}
       onUpdateLocation={(location) => navigation.setParams({location})}
       onAddFavoritePlace={() =>
