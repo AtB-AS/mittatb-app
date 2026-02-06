@@ -17,6 +17,8 @@ import Bugsnag from '@bugsnag/react-native';
 import {isArray} from 'lodash';
 import {isDefined} from '@atb/utils/presence';
 import {
+  AppVersionedConfigurableLink,
+  AppVersionedConfigurableLinkSchema,
   FlexibleTransportOption,
   NotificationConfig,
   StopSignalButtonConfig,
@@ -137,6 +139,17 @@ export function mapLanguageAndTextType(text?: any) {
     return;
 
   return text as LanguageAndTextType[];
+}
+
+export function mapToAppVersionedConfigurableLinks(
+  text?: any,
+): AppVersionedConfigurableLink[] | undefined {
+  try {
+    return AppVersionedConfigurableLinkSchema.array().safeParse(text).data;
+  } catch (err) {
+    console.warn('APP_VERSIONED_CONFIGURABLE_LINK PARSE FAILED', err);
+    return undefined;
+  }
 }
 
 export function mapToMobilityOperators(operators?: any) {

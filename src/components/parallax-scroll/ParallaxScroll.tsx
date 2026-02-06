@@ -1,7 +1,12 @@
 import {StyleSheet} from '@atb/theme';
 import {useLayout} from '@atb/utils/use-layout';
 import React, {PropsWithChildren, useCallback, useEffect, useMemo} from 'react';
-import {RefreshControl, RefreshControlProps, View} from 'react-native';
+import {
+  Platform,
+  RefreshControl,
+  RefreshControlProps,
+  View,
+} from 'react-native';
 import Animated, {
   useAnimatedScrollHandler,
   ScrollEvent,
@@ -52,11 +57,18 @@ export function ParallaxScroll({
     [handleScrollCallback],
   );
 
+  const progressViewOffset = useMemo(() => {
+    return Platform.OS === 'android' ? headerHeight : 0;
+  }, [headerHeight]);
+
   const refreshControl = React.useMemo(() => {
     return refreshControlProps ? (
-      <RefreshControl {...refreshControlProps} />
+      <RefreshControl
+        {...refreshControlProps}
+        progressViewOffset={progressViewOffset}
+      />
     ) : undefined;
-  }, [refreshControlProps]);
+  }, [refreshControlProps, progressViewOffset]);
 
   const animatedHeaderBackdropStyle = useAnimatedStyle(() => {
     return {

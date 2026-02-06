@@ -121,7 +121,7 @@ describe('isSelectableSupplementProduct', () => {
     );
   });
 
-  it('returns false if supplementProductRefs is empty (no limitations)', () => {
+  it('returns true if supplementProductRefs is empty (no limitations)', () => {
     const selection: PurchaseSelectionType = {
       ...TEST_SELECTION,
       preassignedFareProduct: {
@@ -134,7 +134,7 @@ describe('isSelectableSupplementProduct', () => {
     };
     const supplementProduct = {...TEST_SUPPLEMENT_PRODUCT, id: 'SP3'};
     expect(isSelectableSupplementProduct(selection, supplementProduct)).toBe(
-      false,
+      true,
     );
   });
 });

@@ -63,6 +63,9 @@ export function useBookingTrips({
             ? [selection.existingProduct.id]
             : [],
         })),
+        supplementProducts: selection.supplementProductsWithCount.map(
+          (p) => p.id,
+        ),
       }),
     enabled:
       !!selection.preassignedFareProduct.isBookingEnabled &&
