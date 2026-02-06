@@ -20,6 +20,14 @@ on:
         required: false
         type: string
         default: 'armeabi-v7a,arm64-v8a,x86,x86_64'
+      output-type:
+        description: 'Which output to build (defaults to APK, AAB is only for build test!)'
+        required: false
+        type: choice
+        default: 'APK'
+        options:
+          - 'APK'
+          - 'AAB'
   push:
     branches:
       - master
@@ -139,15 +147,8 @@ jobs:
           path: app-staging.apk
           key: ${{ matrix.org }}-apk-cache-${{needs.setup.outputs.abi-filename}}-${{ hashFiles('android/**', '**/yarn.lock', '**/patches/**/*.patch', '.env') }}
 
-      - name: Set version name with branch
-        id: version-info
-        shell: bash
-        env:
-          BRANCH_NAME: ${{ github.ref_name }}
-        run: bash ./scripts/set-version-name.sh
-
       - name: Pre-build steps
-        uses: ./.github/actions/android-pre-build-steps
+        uses: ./.github/actions/android-pre-build-steps-staging
         with:
           org: ${{ matrix.org }}
           force-build: ${{ inputs.force-build }}
@@ -158,6 +159,12 @@ jobs:
           entur-registry-user: ${{ vars.ENTUR_REGISTRY_USER }}
           entur-registry-token: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
           can-skip: ${{ steps.apk-cache.outputs.cache-hit }}
+
+      - name: Override version name on staging build
+        shell: bash
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
+        run: bash ./scripts/set-version-name.sh
 
       - name: Detect dependency changes
         uses: dorny/paths-filter@v3
@@ -170,16 +177,9 @@ jobs:
               - 'android/app/build.gradle'
               - 'android/build.gradle'
 
-      - name: Append branch name to version name
-        if: inputs.force-build == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
-        run: |
-          VERSION_NAME="${{ steps.version-info.outputs.new_version_name }}"
-          sed -i "s/versionName \"[^\"]*\"/versionName \"$VERSION_NAME\"/" android/app/build.gradle
-          sed -i "s/versionName '[^']*'/versionName '$VERSION_NAME'/" android/app/build.gradle
-
       - name: Run fastlane build
         if: inputs.force-build == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
-        run: bundle exec fastlane android build
+        run: bundle exec fastlane android ${{ inputs.output-type == 'AAB' && 'build_aab' || 'build' }}
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
@@ -191,23 +191,27 @@ jobs:
           NDK_CCACHE: /usr/bin/ccache
 
       - name: Restore APKTool cache
+        if: inputs.output-type != 'AAB'
         uses: actions/cache@v4
         with:
           path: ~/apktool
           key: apktool-2.12.1
 
       - name: Add APKTool to PATH
+        if: inputs.output-type != 'AAB'
         run: echo "$HOME/apktool" >> $GITHUB_PATH
 
       - name: Generate release notes
         id: release-notes
+        if: inputs.output-type != 'AAB'
         env:
           BRANCH_NAME: ${{ github.ref_name }}
           OUTPUT_FILE: ./release-notes.txt
         run: bash ./scripts/generate-staging-release-notes.sh
 
       - name: Post-build steps
-        uses: ./.github/actions/android-post-build-steps
+        if: inputs.output-type != 'AAB'
+        uses: ./.github/actions/android-post-build-steps-staging
         with:
           should-replace-bundle: ${{ inputs.force-build != 'true' && steps.apk-cache.outputs.cache-hit == 'true'}}
           keystore-pass: ${{ secrets.KEYSTORE_PASS }}
@@ -217,4 +221,3 @@ jobs:
           firebase-app-id: ${{ secrets.FIREBASE_APP_ID }}
           bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
           abt-entur-publish-client-staging: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_STAGING }}
-          new-version-name: ${{ steps.version-info.outputs.new_version_name }}
