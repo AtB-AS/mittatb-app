@@ -16,7 +16,7 @@ if [[
 else
     echo "Uploading Android source maps"
     npx bugsnag-cli upload react-native-android \
-      --version-name=$APP_VERSION \
+      --version-name="{$APP_VERSION}" \
       --version-code=$BUILD_ID \
       --api-key=$BUGSNAG_API_KEY \
       --variant=$(echo $APP_FLAVOR${APP_ENVIRONMENT^})
