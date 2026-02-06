@@ -87,7 +87,6 @@ import {
   useTicketingContext,
 } from '@atb/modules/ticketing';
 import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
-import {useApplePassPresentationSuppression} from '@atb/modules/native-bridges';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -121,7 +120,6 @@ export const RootStack = () => {
   useBeaconsContext();
   useTestIds();
   useSetupReactQueryWindowFocus();
-  useApplePassPresentationSuppression();
 
   // init Intercom user
   useRegisterIntercomUser();
