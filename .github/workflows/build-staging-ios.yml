@@ -125,12 +125,6 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
-      - name: Set version name with branch
-        id: version-info
-        shell: bash
-        env:
-          BRANCH_NAME: ${{ github.ref_name }}
-        run: bash ./scripts/set-version-name.sh
       - name: Get potential cached ipa & dsym
         uses: actions/cache@v4
         id: ipa-cache
@@ -151,6 +145,11 @@ jobs:
           app-environment: 'staging'
           app-org: ${{ matrix.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+      - name: Override version name on staging
+        shell: bash
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
+        run: bash ./scripts/set-version-name.sh
       - name: Get potential cached pods
         uses: actions/cache@v4
         id: pods-cache
@@ -198,11 +197,6 @@ jobs:
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
-      - name: Append branch name to version name
-        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
-        run: |
-           VERSION_NAME="${{ steps.version-info.outputs.new_version_name }}"
-           sed -i '' "s/MARKETING_VERSION = .*\$(APP_VERSION).*;/MARKETING_VERSION = \"$VERSION_NAME\";/g" ios/atb.xcodeproj/project.pbxproj
       - name: Run fastlane build
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane ios build
