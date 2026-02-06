@@ -5,6 +5,7 @@
 #
 # - On 'master' branch: Starts a new release cycle (e.g., v1.80-rc1).
 # - On 'release/x.xx' branch: Creates the next release candidate (e.g., v1.80-rc2).
+# - On other branch: Runs the script as if in `master` with --preview flag 
 #
 # Options:
 #   --preview   Preview the release details without making changes
@@ -42,6 +43,16 @@ fi
 
 # --- Determine current branch ---
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+# Branches other than master and release is treated as master, and runs in preview mode
+if [[ "$CURRENT_BRANCH" != "master" && "$CURRENT_BRANCH" != "release/"* ]]; then
+  echo "⚠️  Not on 'master' or 'release/*' branch."
+  echo "   Treating as 'master' in preview mode."
+  echo "   Run in 'master' or 'release/*' for actual release."
+  echo ""
+  CURRENT_BRANCH="master"
+  DRY_RUN=true
+fi
 
 VERSION=""
 IS_NEW_RELEASE_CYCLE=false
@@ -97,11 +108,6 @@ elif [[ "$CURRENT_BRANCH" == "release/"* ]]; then
     NEXT_RC=$((LATEST_RC + 1))
     VERSION="$MAJOR_MINOR-rc$NEXT_RC"
   fi
-
-# --- Invalid branch ---
-else
-  echo "Error: You must be on the 'master' branch or a 'release/x.xx' branch to run this script."
-  exit 1
 fi
 
 # --- Dry run output ---
