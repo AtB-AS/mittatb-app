@@ -1,6 +1,5 @@
 import {FullScreenHeader, useTicketInfo} from '@atb/components/screen-header';
 import {DetailsContent} from '@atb/modules/fare-contracts';
-import {useApplePassPresentationSuppression} from '@atb/modules/native-bridges';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   FareContractTexts,
@@ -39,8 +38,6 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const isSentFareContract =
     fareContract?.customerAccountId !== fareContract?.purchasedBy &&
     fareContract?.purchasedBy === currentUserId;
-
-  useApplePassPresentationSuppression();
 
   const navigateToTicketInfoScreen = () => {
     if (preassignedFareProduct) {
