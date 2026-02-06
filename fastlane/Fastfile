@@ -466,7 +466,7 @@ platform :android do
     )
     build_type = ENV['APP_ENVIRONMENT']
     app_flavor = ENV['APP_FLAVOR']
-    gradle(task: 'clean', project_dir: 'android/')
+    # gradle(task: 'clean', project_dir: 'android/') - NOT NEEDED ON A FRESH BUILD (no caches involved)
     gradle(
       task: 'bundle',
       build_type: build_type,
@@ -488,6 +488,7 @@ platform :android do
     ensure_env_vars(
       env_vars: ['FIREBASE_APP_ID','GCP_CREDENTIALS_PATH','APK_FILE_NAME']
     )
+
     firebase_app_distribution(
       app:ENV['FIREBASE_APP_ID'],
       service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
@@ -495,19 +496,6 @@ platform :android do
       android_artifact_path:ENV['APK_FILE_NAME'],
       groups:ENV['APP_DISTRIBUTION_GROUP_NAME'],
       release_notes_file: ENV['RELEASE_NOTES_FILE']
-    )
-  end
-
-  lane :playstore_internal do
-    ensure_env_vars(
-      env_vars: ['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH','APK_FILE_NAME','ANDROID_PACKAGE_NAME']
-    )
-
-    upload_to_play_store(
-      track: "internal",
-      json_key:ENV['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH'],
-      apk: ENV['APK_FILE_NAME'],
-      package_name: ENV['ANDROID_PACKAGE_NAME']
     )
   end
 
