@@ -155,7 +155,7 @@ jobs:
         run: bash ./scripts/set-version-name.sh
 
       - name: Pre-build steps
-        uses: ./.github/actions/android-pre-build-steps
+        uses: ./.github/actions/android-pre-build-steps-staging
         with:
           org: ${{ matrix.org }}
           force-build: ${{ inputs.force-build }}
@@ -219,7 +219,7 @@ jobs:
 
       - name: Post-build steps
         if: inputs.output-type != 'AAB'
-        uses: ./.github/actions/android-post-build-steps
+        uses: ./.github/actions/android-post-build-steps-staging
         with:
           should-replace-bundle: ${{ inputs.force-build != 'true' && steps.apk-cache.outputs.cache-hit == 'true'}}
           keystore-pass: ${{ secrets.KEYSTORE_PASS }}
