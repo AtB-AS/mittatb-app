@@ -160,7 +160,7 @@ jobs:
           entur-registry-token: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
           can-skip: ${{ steps.apk-cache.outputs.cache-hit }}
 
-      - name: Set version name with branch
+      - name: Override version name on staging build
         shell: bash
         env:
           BRANCH_NAME: ${{ github.ref_name }}
