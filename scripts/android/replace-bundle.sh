@@ -51,6 +51,9 @@ else
     echo "Set version code to build id: $BUILD_ID"
     yq e ".versionInfo.versionCode = \"$BUILD_ID\"" -i decompiled-apk/apktool.yml
 
+    echo "Set version name to: $APP_VERSION"
+    yq e ".versionInfo.versionName = \"$APP_VERSION\"" -i decompiled-apk/apktool.yml
+
     echo "Re-compile Android APK"
     apktool b decompiled-apk -o temp-$APK_FILE_NAME
 
