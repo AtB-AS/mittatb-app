@@ -388,7 +388,8 @@ export const TripSection: React.FC<TripSectionProps> = ({
     <>
       {sectionOutput}
       {wait?.mustWaitForNextLeg &&
-        significantWaitTime(wait.waitTimeInSeconds) && (
+        significantWaitTime(wait.waitTimeInSeconds) && 
+        leg.interchangeTo?.staySeated && (
           <WaitSection {...wait} />
         )}
     </>
