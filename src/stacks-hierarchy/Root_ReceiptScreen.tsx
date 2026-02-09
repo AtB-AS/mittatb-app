@@ -129,7 +129,8 @@ function translateStateToMessage(
   t: TranslateFunction,
   email: string,
   reference?: string,
-): Required<Pick<MessageInfoBoxProps, 'type' | 'message'>> {
+): Required<Pick<MessageInfoBoxProps, 'type' | 'message'>> &
+  Pick<MessageInfoBoxProps, 'a11yLabel'> {
   switch (state) {
     case 'loading':
       return {
@@ -147,6 +148,12 @@ function translateStateToMessage(
           FareContractTexts.receipt.messages.success(email, reference!),
         ),
         type: 'valid',
+        a11yLabel: t(
+          FareContractTexts.receipt.messages.success(
+            email,
+            reference!.split('').join(' '),
+          ),
+        ),
       };
     case 'invalid-field':
       return {
