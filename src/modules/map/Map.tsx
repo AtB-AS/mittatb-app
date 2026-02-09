@@ -266,10 +266,8 @@ export const Map = (props: MapProps) => {
         // - select a stop place with the clicked quay sorted on top
         // - have a bottom sheet with departures just for the clicked quay
         return; // currently - do nothing
-      } else if (
-        !isGeofencingZonesAsTilesEnabled &&
-        isFeatureGeofencingZone(featureToSelect)
-      ) {
+      } else if (isFeatureGeofencingZone(featureToSelect)) {
+        if (isGeofencingZonesAsTilesEnabled) return;
         const gfzProps = featureToSelect?.properties?.geofencingZoneCustomProps;
         showGeofencingZoneSnackbar(gfzProps?.code, gfzProps.isStationParking);
       } else if (isScooterV2(selectedFeature) && !isActiveTrip) {
