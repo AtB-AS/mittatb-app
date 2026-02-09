@@ -148,9 +148,6 @@ export const Map = (props: MapProps) => {
   const mapViewConfig = useMapViewConfig({
     includeVehiclesAndStationsVectorSource:
       shouldShowVehiclesAndStations || Platform.OS !== 'android',
-    includeGeofencingZonesVectorSource: isGeofencingZonesAsTilesEnabled,
-    systemId: systemId ?? '',
-    vehicleTypeId: vehicleTypeId ?? '',
   });
 
   const [followUserLocation, setFollowUserLocation] = useState(false);

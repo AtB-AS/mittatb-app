@@ -1,10 +1,7 @@
 import MapboxGL from '@rnmapbox/maps';
 
 import {hitboxCoveringIconOnly} from '@atb/modules/map';
-import {
-  MapSlotLayerId,
-  StyleJsonVectorSource,
-} from '../../hooks/use-mapbox-json-style';
+import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
 import {useMemo} from 'react';
 import {
   TileLayerName,
@@ -18,6 +15,7 @@ import {
 } from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 import {GeofencingZoneCode} from '@atb-as/theme';
 import {geofencingZoneCodes} from '../../utils';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 const geofencingZonesVectorSourceId = 'geofencing-zones-source';
 const sourceLayerId = 'geofencing_zones_features';
@@ -34,13 +32,29 @@ export const GeofencingZonesAsTiles = ({
   vehicleTypeId,
   geofencingZoneOnPress,
 }: GeofencingZonesAsTilesProps) => {
-  if (!systemId || !vehicleTypeId) {
-    return <></>;
+  const {isGeofencingZonesEnabled, isGeofencingZonesAsTilesEnabled} =
+    useFeatureTogglesContext();
+
+  const tileLayerNames: TileLayerName[] = ['geofencing_zones_features'];
+  const tileUrlTemplate = useTileUrlTemplate(tileLayerNames, {
+    systemId: systemId ?? '',
+    vehicleTypeId: vehicleTypeId ?? '',
+  });
+  const tileUrlTemplates = useMemo(
+    () => [tileUrlTemplate || ''],
+    [tileUrlTemplate],
+  );
+
+  const enabled = isGeofencingZonesEnabled && isGeofencingZonesAsTilesEnabled;
+  if (!enabled || !systemId || !vehicleTypeId) {
+    return null;
   }
   return (
     <MapboxGL.VectorSource
       id={geofencingZonesVectorSourceId}
-      existing={true}
+      tileUrlTemplates={tileUrlTemplates}
+      minZoomLevel={minZoomLevel}
+      maxZoomLevel={maxZoomLevel}
       hitbox={hitboxCoveringIconOnly} // to not be able to hit multiple zones with one click
       onPress={geofencingZoneOnPress}
     >
@@ -148,42 +162,4 @@ const useGeofencingZoneProps = () => {
     geofencingZoneStyle,
     code,
   };
-};
-
-/**
- * In order to only store live data in memory, not in the locally stored cache,
- * volatile should be set to true. However, since rnmapbox doesn't yet support
- * this prop on MapboxGL.VectorSource (see https://github.com/rnmapbox/maps/discussions/3351),
- * the source must instead be sent directly as styleJson. MapboxGL.VectorSource can
- * then access this source with existing=true and the same source id.
- * @returns {id: string, source: StyleJsonVectorSource}
- */
-export const useGeofencingZonesVectorSource: (
-  systemId: string,
-  vehicleTypeId: string,
-) => {
-  id: string;
-  source: StyleJsonVectorSource;
-} = (systemId, vehicleTypeId) => {
-  // Could consider adding the sources only if shown.
-  // The reason not to, is to simplify potential cache tile hotloading on the server.
-  const tileLayerNames: TileLayerName[] = ['geofencing_zones_features'];
-  const tileUrlTemplate = useTileUrlTemplate(tileLayerNames, {
-    systemId,
-    vehicleTypeId,
-  });
-
-  return useMemo(
-    () => ({
-      id: geofencingZonesVectorSourceId,
-      source: {
-        type: 'vector',
-        tiles: [tileUrlTemplate || ''],
-        minzoom: minZoomLevel,
-        maxzoom: maxZoomLevel,
-        volatile: false,
-      },
-    }),
-    [tileUrlTemplate],
-  );
 };

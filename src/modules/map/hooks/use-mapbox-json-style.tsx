@@ -4,7 +4,6 @@ import {getMapboxLightStyle} from '../mapbox-styles/get-mapbox-light-style';
 import {getMapboxDarkStyle} from '../mapbox-styles/get-mapbox-dark-style';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {useGeofencingZonesVectorSource} from '../components/mobility/GeofencingZonesAsTiles';
 import {useAppVersionedConfigurableLink} from '@atb/utils/use-app-versioned-configurable-link';
 
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
@@ -46,15 +45,7 @@ const slotLayers = slotLayerIds.map((slotLayerId) => ({
 
 export const useMapboxJsonStyle: (
   includeVehiclesAndStationsVectorSource: boolean,
-  includeGeofencingZonesVectorSource: boolean,
-  systemId?: string,
-  vehicleTypeId?: string,
-) => string | undefined = (
-  includeVehiclesAndStationsVectorSource,
-  includeGeofencingZonesVectorSource,
-  systemId,
-  vehicleTypeId,
-) => {
+) => string | undefined = (includeVehiclesAndStationsVectorSource) => {
   const {themeName} = useThemeContext();
   const {mapbox_user_name, mapbox_nsr_tileset_id} = useRemoteConfigContext();
 
@@ -64,11 +55,6 @@ export const useMapboxJsonStyle: (
     id: vehiclesAndStationsVectorSourceId,
     source: vehiclesAndStationsVectorSource,
   } = useVehiclesAndStationsVectorSource();
-
-  const {
-    id: geofencingZonesVectorSourceId,
-    source: geofencingZonesVectorSource,
-  } = useGeofencingZonesVectorSource(systemId ?? '', vehicleTypeId ?? '');
 
   const themedStyleWithExtendedSourcesAndSlotLayers = useMemo(() => {
     const themedStyle =
@@ -83,11 +69,6 @@ export const useMapboxJsonStyle: (
         ? {
             [vehiclesAndStationsVectorSourceId]:
               vehiclesAndStationsVectorSource,
-          }
-        : undefined),
-      ...(includeGeofencingZonesVectorSource
-        ? {
-            [geofencingZonesVectorSourceId]: geofencingZonesVectorSource,
           }
         : undefined),
     };
@@ -106,9 +87,6 @@ export const useMapboxJsonStyle: (
     includeVehiclesAndStationsVectorSource,
     vehiclesAndStationsVectorSourceId,
     vehiclesAndStationsVectorSource,
-    includeGeofencingZonesVectorSource,
-    geofencingZonesVectorSourceId,
-    geofencingZonesVectorSource,
   ]);
 
   const mapboxJsonStyle = useMemo(
