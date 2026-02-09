@@ -2,7 +2,7 @@ import {Platform, TextStyle} from 'react-native';
 
 export const MAX_FONT_SCALE = 2;
 
-export const screenReaderPause = '\n';
+export const screenReaderPause = '. ';
 
 export function fontWeightToRobotoFamily(weight?: string) {
   switch (weight) {

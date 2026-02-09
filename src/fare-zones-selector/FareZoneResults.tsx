@@ -43,7 +43,9 @@ export const FareZoneResults: React.FC<Props> = ({fareZones, onSelect}) => {
                     FareZoneSearchTexts.zones.item.a11yLabel(
                       getReferenceDataName(fareZone, language),
                     ),
-                  ) + screenReaderPause
+                  ) +
+                  screenReaderPause +
+                  getTextForLanguage(fareZone.description, language)
                 }
                 accessibilityHint={t(FareZoneSearchTexts.zones.item.a11yHint)}
                 accessibilityRole="button"
