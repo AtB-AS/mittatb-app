@@ -83,9 +83,7 @@ const GeofencingZonePropsSchema = z.object({
   systemId: z.string(),
 });
 export type GeofencingZoneProps = z.infer<typeof GeofencingZonePropsSchema>;
-export const isFeatureGeofencingZoneAsTiles = (
-  feature: Feature,
-): feature is Feature<Point, GeofencingZoneProps> =>
+export const isFeatureGeofencingZoneAsTiles = (feature: Feature) =>
   GeofencingZonePropsSchema.safeParse(feature.properties).success;
 
 export const isClusterFeatureV2 = (
