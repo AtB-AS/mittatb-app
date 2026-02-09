@@ -90,8 +90,9 @@ export function Root_ReceiptScreen({route}: Props) {
         title={t(FareContractTexts.receipt.header.title)}
       />
       <View style={styles.content}>
-        <View accessibilityLiveRegion="polite">
+        <View>
           <MessageInfoBox
+            a11yLiveRegion="polite"
             {...translateStateToMessage(state, t, email, reference)}
           />
         </View>
