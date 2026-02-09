@@ -267,7 +267,7 @@ export const Map = (props: MapProps) => {
         // - have a bottom sheet with departures just for the clicked quay
         return; // currently - do nothing
       } else if (isFeatureGeofencingZone(featureToSelect)) {
-        if (isGeofencingZonesAsTilesEnabled) return;
+        if (isGeofencingZonesAsTilesEnabled) return; // Handled directly with geofencingZoneOnPress instead in this case
         const gfzProps = featureToSelect?.properties?.geofencingZoneCustomProps;
         showGeofencingZoneSnackbar(gfzProps?.code, gfzProps.isStationParking);
       } else if (isScooterV2(selectedFeature) && !isActiveTrip) {
