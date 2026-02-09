@@ -2,6 +2,7 @@ import {QuayFragment} from '@atb/api/types/generated/fragments/quays';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {
+  ReportType,
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
@@ -143,9 +144,9 @@ export const DepartureDetailsScreenComponent = ({
     (e) => e.metadata.group === 'trip',
   );
   const situations =
-    focusedEstimatedCall?.situations.sort((n1, n2) =>
-      n1.id.localeCompare(n2.id),
-    ) ?? [];
+    focusedEstimatedCall?.situations
+      .sort((n1, n2) => n1.id.localeCompare(n2.id))
+      .filter((s) => s.reportType == ReportType.General) ?? [];
 
   const fromCall = estimatedCallsWithMetadata.find(
     (c) => c.stopPositionInPattern === activeItem.fromStopPosition,
