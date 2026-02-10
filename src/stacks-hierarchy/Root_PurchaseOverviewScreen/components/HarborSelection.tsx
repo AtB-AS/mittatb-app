@@ -56,9 +56,6 @@ export const HarborSelection = forwardRef<
           onPress={() => onSwap?.()}
           backgroundColor={theme.color.background.neutral[0]}
           horizontalPosition="right"
-          buttonIsVisible={
-            !!selection.stopPlaces.from && !!selection.stopPlaces.to
-          }
         >
           <Section accessible={false}>
             <HarborSelectionItem

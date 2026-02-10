@@ -16,7 +16,7 @@ export function SwapButton(props: ButtonProps) {
         t(TripSearchTexts.location.swapButton.a11yLabel) + screenReaderPause
       }
     >
-      <ThemeIcon svg={Swap} />
+      <ThemeIcon svg={Swap} size="normal" />
     </PressableOpacity>
   );
 }

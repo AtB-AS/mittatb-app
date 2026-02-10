@@ -8,7 +8,6 @@ type Props = PropsWithChildren<{
   onPress: () => void;
   backgroundColor: ContrastColor;
   horizontalPosition: 'left' | 'right';
-  buttonIsVisible?: boolean;
   swapButtonStyleOverride?: ViewStyle;
 }>;
 
@@ -17,36 +16,33 @@ export function WithSwapButton({
   horizontalPosition,
   onPress,
   backgroundColor,
-  buttonIsVisible = true,
   swapButtonStyleOverride,
 }: Props) {
   const style = useStyle();
   return (
     <View>
       {children}
-      {buttonIsVisible && (
-        <SwapButton
-          style={[
-            style.common,
-            style.circle,
-            style.verticalCenter,
-            style[horizontalPosition],
-            swapButtonStyleOverride && swapButtonStyleOverride,
-          ]}
-          onPress={onPress}
-          expanded={false}
-          backgroundColor={backgroundColor}
-          pointerEvents="box-only"
-        />
-      )}
+      <SwapButton
+        style={[
+          style.common,
+          style.circle,
+          style.verticalCenter,
+          style[horizontalPosition],
+          swapButtonStyleOverride && swapButtonStyleOverride,
+        ]}
+        onPress={onPress}
+        expanded={false}
+        backgroundColor={backgroundColor}
+        pointerEvents="box-only"
+      />
     </View>
   );
 }
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   circle: {
-    paddingVertical: 8,
-    paddingHorizontal: 8,
+    paddingVertical: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.medium,
     borderRadius: theme.border.radius.circle,
     borderWidth: theme.border.width.slim,
     borderColor: theme.color.border.secondary.foreground.secondary,
