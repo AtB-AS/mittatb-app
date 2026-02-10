@@ -42,6 +42,7 @@ export type MessageInfoBoxProps = {
   style?: StyleProp<ViewStyle>;
   onPressConfig?: OnPressConfig;
   a11yLiveRegion?: A11yLiveRegion;
+  a11yLabel?: string;
   focusRef?: React.Ref<any>;
   testID?: string;
 };
@@ -55,6 +56,7 @@ export const MessageInfoBox = ({
   onPressConfig,
   onDismiss,
   a11yLiveRegion,
+  a11yLabel,
   focusRef,
   testID,
 }: MessageInfoBoxProps) => {
@@ -73,11 +75,16 @@ export const MessageInfoBox = ({
       : () => openInAppBrowser(onPressConfig.url, 'close'));
 
   const a11yCriticalityPrefix = t(dictionary.messageTypes[type]);
-  const a11yLabel = [a11yCriticalityPrefix, title, message, onPressConfig?.text]
+  const a11yLabelInternal = [
+    a11yCriticalityPrefix,
+    title,
+    a11yLabel ?? message,
+    onPressConfig?.text,
+  ]
     .filter(isDefined)
     .join(screenReaderPause);
   const liveRegionA11yProps = useLiveRegionAnnouncement(
-    a11yLabel,
+    a11yLabelInternal,
     a11yLiveRegion,
   );
 
