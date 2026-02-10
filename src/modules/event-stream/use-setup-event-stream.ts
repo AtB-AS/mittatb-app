@@ -2,7 +2,11 @@ import {useSubscription} from '@atb/api/use-subscription';
 import {useQueryClient} from '@tanstack/react-query';
 import {useCallback, useState} from 'react';
 import {WS_API_BASE_URL} from '@env';
-import {getIdTokenGlobal, useAuthContext} from '../auth';
+import {
+  getIdTokenGlobal,
+  isIdTokenRefreshEnabled,
+  useAuthContext,
+} from '../auth';
 import Bugsnag from '@bugsnag/react-native';
 import {handleStreamEvent} from './handle-stream-event';
 import {StreamEventLog, StreamEvent, StreamEventSchema} from './types';
@@ -27,9 +31,8 @@ export const useSetupEventStream = () => {
 
   const url = `${WS_API_BASE_URL}stream/v1`;
 
-  // Similar to what's done in `useRefreshIdTokenWhenNecessary`, to ensure the id
-  // token is kept up to date.
-  const enabled = isEventStreamEnabled && authStatus === 'authenticated';
+  // Id token needs to be fresh for authentication (`AUTH ${token}`).
+  const enabled = isEventStreamEnabled && isIdTokenRefreshEnabled(authStatus);
 
   const onMessage = useCallback(
     (event: WebSocketMessageEvent) => {
