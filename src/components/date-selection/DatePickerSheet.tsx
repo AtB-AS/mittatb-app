@@ -90,7 +90,10 @@ export const DatePickerSheet = <T extends string>({
           <GestureDetector gesture={nativeGesture}>
             <RNDatePicker
               date={parseDate(date)}
-              onDateChange={(date) => setDate(date.toISOString())}
+              onDateChange={(date) => {
+                date.setSeconds(0, 0);
+                setDate(date.toISOString());
+              }}
               mode="datetime"
               locale={locale.localeString}
               onStateChange={(state) => setIsSpinning(state === 'spinning')}
