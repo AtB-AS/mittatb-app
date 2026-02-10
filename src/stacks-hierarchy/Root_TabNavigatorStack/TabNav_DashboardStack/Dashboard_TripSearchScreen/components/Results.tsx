@@ -10,7 +10,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment} from 'react';
 import {View} from 'react-native';
 
 import {TripPattern} from '@atb/api/types/trips';
@@ -46,31 +46,21 @@ export const Results: React.FC<Props> = ({
   anyFiltersApplied,
 }) => {
   const styles = useThemeStyles();
-
-  const [errorMessage, setErrorMessage] = useState<string>('');
   const {t} = useTranslation();
-
   const now = useNow(30000);
-
-  useEffect(() => {
-    if (errorType) {
-      switch (errorType) {
-        case 'AXIOS_NETWORK_ERROR':
-        case 'AXIOS_TIMEOUT':
-          setErrorMessage(t(TripSearchTexts.results.error.network));
-          break;
-        default:
-          setErrorMessage(t(TripSearchTexts.results.error.generic));
-          break;
-      }
-    }
-  }, [errorType, t]);
 
   if (showEmptyScreen) {
     return null;
   }
 
   if (errorType) {
+    const errorMessage = t(
+      TripSearchTexts.results.error[
+        errorType === 'AXIOS_NETWORK_ERROR' || errorType === 'AXIOS_TIMEOUT'
+          ? 'network'
+          : 'generic'
+      ],
+    );
     return (
       <View style={styles.errorContainer}>
         <ScreenReaderAnnouncement message={errorMessage} />
