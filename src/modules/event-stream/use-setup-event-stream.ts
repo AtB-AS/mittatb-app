@@ -8,12 +8,10 @@ import {handleStreamEvent} from './handle-stream-event';
 import {StreamEventLog, StreamEvent, StreamEventSchema} from './types';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {jsonStringToObject} from '@atb/utils/object';
-import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 
 export const useSetupEventStream = () => {
   const queryClient = useQueryClient();
   const {userId, authStatus} = useAuthContext();
-  const appState = useAppStateStatus();
   const {isEventStreamEnabled, isEventStreamFareContractsEnabled} =
     useFeatureTogglesContext();
 
@@ -31,10 +29,7 @@ export const useSetupEventStream = () => {
 
   // Similar to what's done in `useRefreshIdTokenWhenNecessary`, to ensure the id
   // token is kept up to date.
-  const enabled =
-    isEventStreamEnabled &&
-    appState === 'active' &&
-    authStatus === 'authenticated';
+  const enabled = isEventStreamEnabled && authStatus === 'authenticated';
 
   const onMessage = useCallback(
     (event: WebSocketMessageEvent) => {
