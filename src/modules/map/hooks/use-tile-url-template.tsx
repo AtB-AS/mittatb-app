@@ -22,8 +22,8 @@ export const useTileUrlTemplate = (
   const {userId} = useAuthContext();
   const userIdParam = !userId ? '' : '?userId=' + userId;
   const customParams = Object.entries(params ?? {})
-    .map(([key, value]) => `${key}=${value}`)
-    .join('&');
+    .map(([key, value]) => `&${key}=${value}`)
+    .join('');
 
   const tileServerBaseUrl =
     useAppVersionedConfigurableLink('tileServerBaseUrls');
@@ -36,7 +36,6 @@ export const useTileUrlTemplate = (
       tileLayerNames.join(',') +
       '/{z}/{x}/{y}' +
       userIdParam +
-      (customParams.length > 0 ? '&' : '') +
       customParams
     );
   }
