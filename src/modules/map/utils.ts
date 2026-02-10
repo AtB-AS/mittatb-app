@@ -17,13 +17,14 @@ import {
 } from 'geojson';
 import {
   ParkingType,
-  GeofencingZoneCustomProps,
   AutoSelectableMapItem,
+  GeofencingZoneCustomProps,
 } from './types';
 import {
   ClusterOfVehiclesProperties,
   ClusterOfVehiclesPropertiesSchema,
 } from '@atb/api/types/mobility';
+import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import distance from '@turf/distance';
 import {
   isBicycleV2,
@@ -32,9 +33,10 @@ import {
   isStationV2,
   isVehiclesClusteredFeature,
 } from '@atb/modules/mobility';
-import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {MapBottomSheetType} from './MapContext';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import z from 'zod';
+import {GeofencingZoneCode} from '@atb-as/theme';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
@@ -69,6 +71,20 @@ export const isFeatureGeofencingZone = (
   MultiPolygon,
   {geofencingZoneCustomProps: GeofencingZoneCustomProps}
 > => isFeaturePolylineEncodedMultiPolygon(f) && hasGeofencingZoneCustomProps(f);
+
+export const geofencingZoneCodes: GeofencingZoneCode[] = [
+  'allowed',
+  'slow',
+  'noParking',
+  'noEntry',
+];
+const GeofencingZonePropsSchema = z.object({
+  code: z.enum(geofencingZoneCodes),
+  systemId: z.string(),
+});
+export type GeofencingZoneProps = z.infer<typeof GeofencingZonePropsSchema>;
+export const isFeatureGeofencingZoneAsTiles = (feature: Feature) =>
+  GeofencingZonePropsSchema.safeParse(feature.properties).success;
 
 export const isClusterFeatureV2 = (
   feature: Feature,
@@ -286,6 +302,8 @@ export function getFeatureWeight(
       ? 3
       : 1;
   } else if (isFeatureGeofencingZone(feature)) {
+    // note: This case never happens when enable_geofencing_zones_as_tiles is true.
+    // Can just return 0 after removing the old solution
     const positionClickedIsInsideGeofencingZone = turfBooleanPointInPolygon(
       positionClicked,
       feature.geometry,
@@ -295,6 +313,7 @@ export function getFeatureWeight(
     return 0;
   }
 }
+
 /*
  * Standardized calculations for icon size and opacity zoom transitions.
  */
