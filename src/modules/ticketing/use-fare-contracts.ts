@@ -1,6 +1,6 @@
 import {useTicketingContext} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
-import {useQuery} from '@tanstack/react-query';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {useEffect, useState} from 'react';
 import {getFareContracts} from '@atb/modules/ticketing';
 import {useAuthContext} from '@atb/modules/auth';
@@ -40,12 +40,15 @@ export const useFareContracts = (
   const [fareContracts, setFareContracts] = useState(
     fareContractsFromFirestore,
   );
-
+  const queryClient = useQueryClient();
   useEffect(() => {
     setFareContracts(fareContractsFromFirestore);
   }, [fareContractsFromFirestore]);
 
   const refetch = () => {
+    // On refetch, also invalidate queries with availability !== 'available' to
+    // ensure consistency throughout the app.
+    queryClient.invalidateQueries({queryKey: [fareContractsQueryKey]});
     getFareContractsFromBackend().then(({data, isSuccess}) => {
       if (isSuccess) {
         const parsedFareContracts = data
