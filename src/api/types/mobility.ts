@@ -340,7 +340,8 @@ export type StationFeature = z.infer<typeof StationFeatureSchema>;
 export const VehiclesClusteredPropertiesSchema = z.object({
   count: z.number().gt(1),
   vehicle_type_form_factor: FormFactorSchema,
-}); // don't allow any other props, in order to avoid matching with Station clustered
+  cluster_extent: z.number(),
+});
 export type VehiclesClusteredProperties = z.infer<
   typeof VehiclesClusteredPropertiesSchema
 >;
@@ -373,6 +374,7 @@ export const StationsClusteredPropertiesSchema = z.object({
   num_vehicles_available: z.number(),
   capacity: z.number(),
   vehicle_type_form_factor: FormFactorSchema,
+  cluster_extent: z.number(),
 });
 export type StationsClusteredProperties = z.infer<
   typeof StationsClusteredPropertiesSchema

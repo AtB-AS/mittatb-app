@@ -304,8 +304,12 @@ export const Map = (props: MapProps) => {
       if (isFeaturePoint(featureToSelect)) {
         if (isQuayFeature(featureToSelect)) return;
         if (isClusterFeature(featureToSelect)) {
+          dispatchMapState({type: MapStateActionType.None});
           const fromZoomLevel = (await mapViewRef.current?.getZoom()) ?? 0;
-          const toZoomLevel = Math.max(fromZoomLevel + 2);
+          const toZoomLevel = getToZoomLevel(
+            fromZoomLevel,
+            featureToSelect.properties?.cluster_extent,
+          );
 
           flyToLocation({
             coordinates: mapPositionToCoordinates(
@@ -497,3 +501,31 @@ export const Map = (props: MapProps) => {
     </View>
   );
 };
+
+const DEFAULT_ZOOM_DELTA = 1.5;
+
+export function getToZoomLevel(
+  currentZoom: number,
+  clusterExtentMeters?: number | null,
+): number {
+  const defaultZoom = currentZoom + DEFAULT_ZOOM_DELTA;
+
+  if (
+    clusterExtentMeters == null ||
+    clusterExtentMeters <= 0 ||
+    !Number.isFinite(clusterExtentMeters)
+  ) {
+    return defaultZoom;
+  }
+
+  const newZoomLevel: number = (() => {
+    if (clusterExtentMeters <= 15) return 19;
+    if (clusterExtentMeters <= 30) return 18;
+    if (clusterExtentMeters <= 60) return 17;
+    if (clusterExtentMeters <= 120) return 16;
+    if (clusterExtentMeters <= 250) return 15;
+    return defaultZoom;
+  })();
+
+  return Math.max(defaultZoom, newZoomLevel);
+}
