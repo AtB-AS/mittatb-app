@@ -2,7 +2,6 @@ import {QuayFragment} from '@atb/api/types/generated/fragments/quays';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {
-  ReportType,
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
