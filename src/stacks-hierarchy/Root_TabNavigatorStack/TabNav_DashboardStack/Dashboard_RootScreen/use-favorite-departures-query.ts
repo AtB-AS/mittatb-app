@@ -128,7 +128,7 @@ export const useFavoriteDeparturesQuery = (enabled: boolean) => {
     refetchInterval: getDepartureRefetchInterval(
       FAVORITE_DEPARTURES_REFETCH_INTERVAL_SECONDS,
     ),
-    refetchOnWindowFocus: 'always',
+    refetchOnWindowFocus: true,
   });
 
   return useMemo(() => {
