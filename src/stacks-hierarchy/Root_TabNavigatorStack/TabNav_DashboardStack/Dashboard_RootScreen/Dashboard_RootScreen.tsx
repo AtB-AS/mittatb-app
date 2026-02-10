@@ -28,7 +28,7 @@ import {
 } from '@atb/translations';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import Bugsnag from '@bugsnag/react-native';
-import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -44,6 +44,7 @@ import {BonusDashboard} from './components/BonusDashboard';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import {LocationSearchCallerRoute} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type RootProps = DashboardScreenProps<'Dashboard_RootScreen'>;
 const callerRoute: LocationSearchCallerRoute = [
@@ -71,7 +72,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
     useGeolocationContext();
   const focusRef = useFocusOnLoad(navigation);
 
-  const isFocused = useIsFocused();
+  const isFocused = useIsFocusedAndActive();
 
   const currentLocation = location || undefined;
 
