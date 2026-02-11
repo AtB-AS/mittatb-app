@@ -28,7 +28,7 @@ export function WithSwapButton({
           style.circle,
           style.verticalCenter,
           style[horizontalPosition],
-          swapButtonStyleOverride && swapButtonStyleOverride,
+          swapButtonStyleOverride,
         ]}
         onPress={onPress}
         expanded={false}
