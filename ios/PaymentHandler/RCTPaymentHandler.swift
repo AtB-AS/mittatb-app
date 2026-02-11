@@ -31,7 +31,7 @@ typealias PaymentCompletionHandler = (String?) -> Void
     // Create a payment request.
     let paymentRequest = PKPaymentRequest()
     paymentRequest.paymentSummaryItems = paymentSummaryItems
-    paymentRequest.merchantIdentifier = "merchant.no.mittatb.atb"
+    paymentRequest.merchantIdentifier = "merchant.no.mittatb.staging.atb"
     paymentRequest.merchantCapabilities = .threeDSecure
     paymentRequest.countryCode = "NO"
     paymentRequest.currencyCode = "NOK"
@@ -47,6 +47,10 @@ typealias PaymentCompletionHandler = (String?) -> Void
             debugPrint("Failed to present payment controller")
         }
     })
+  }
+
+  public func canMakePayments() -> Bool {
+    return PKPaymentAuthorizationController.canMakePayments()
   }
 }
 

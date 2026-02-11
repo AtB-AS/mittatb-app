@@ -233,12 +233,15 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         ],
         (paymentData) => {
           paymentData && setApplePayPaymentData(paymentData);
+          reserveMutation.mutate();
+          return;
         },
       );
     } else {
       analytics.logEvent('Ticketing', 'Pay with card selected', {
         paymentMethod,
       });
+      reserveMutation.mutate();
     }
     reserveMutation.mutate();
   }

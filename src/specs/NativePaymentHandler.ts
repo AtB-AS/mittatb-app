@@ -8,6 +8,7 @@ export interface Spec extends TurboModule {
     }[],
     onComplete: (paymentData: string | null) => void,
   ): void;
+  canMakePayments(): boolean;
 }
 
 export const NativePaymentHandler = TurboModuleRegistry.get<Spec>(
