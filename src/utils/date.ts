@@ -11,6 +11,7 @@ import {
   format as fnsFormat,
   isAfter as fnsIsAfter,
   isBefore as fnsIsBefore,
+  isEqual,
   getHours,
   getMinutes,
   getSeconds,
@@ -301,6 +302,13 @@ export const isBetween = (
 
 export const isAfter = (date: string | Date, dateToCompare: string | Date) =>
   fnsIsAfter(parseIfNeeded(date), parseIfNeeded(dateToCompare));
+
+export const isEqualOrAfter = (
+  date: string | Date,
+  dateToCompare: string | Date,
+) =>
+  isEqual(parseIfNeeded(date), parseIfNeeded(dateToCompare)) ||
+  isAfter(date, dateToCompare);
 
 export const isBefore = (date: string | Date, dateToCompare: string | Date) =>
   fnsIsBefore(parseIfNeeded(date), parseIfNeeded(dateToCompare));
