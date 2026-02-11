@@ -59,7 +59,10 @@ export const ShmoTesting = ({navigateToScooterSupport}: ShmoTestingProps) => {
   const isFocusedAndActive = useIsFocusedAndActive();
   const {data: activeShmoBooking} =
     useActiveShmoBookingQuery(isFocusedAndActive);
-  const {data: shmoBooking} = useShmoBookingQuery(previousBookingId);
+  const {data: shmoBooking} = useShmoBookingQuery(
+    isFocusedAndActive,
+    previousBookingId,
+  );
 
   useEffect(() => {
     if (selectedVehicleId) {
