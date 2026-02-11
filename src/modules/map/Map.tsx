@@ -430,18 +430,21 @@ export const Map = (props: MapProps) => {
             followUserMode={UserTrackingMode.FollowWithHeading}
             followPadding={getSlightlyRaisedMapPadding(paddingBottomMap)}
           />
-          {showGeofencingZones && !vehicleError && !vehicleIsLoading && (
-            <GeofencingZones
-              systemId={
-                vehicle?.system.id ?? activeShmoBooking?.asset.systemId ?? null
-              }
-              vehicleTypeId={
-                vehicle?.vehicleType.id ??
-                activeShmoBooking?.asset.vehicleTypeId ??
-                null
-              }
-            />
-          )}
+          {showGeofencingZones &&
+            !vehicleError &&
+            !vehicleIsLoading &&
+            (isGeofencingZonesAsTilesEnabled ? (
+              <GeofencingZonesAsTiles
+                systemId={systemId}
+                vehicleTypeId={vehicleTypeId}
+                geofencingZoneOnPress={geofencingZoneOnPress}
+              />
+            ) : (
+              <GeofencingZones
+                systemId={systemId}
+                vehicleTypeId={vehicleTypeId}
+              />
+            ))}
 
           <NationalStopRegistryFeatures
             selectedFeaturePropertyId={selectedFeature?.properties?.id}
