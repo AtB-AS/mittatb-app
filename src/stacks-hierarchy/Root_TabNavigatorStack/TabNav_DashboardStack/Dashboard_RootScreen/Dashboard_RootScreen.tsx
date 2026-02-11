@@ -28,7 +28,7 @@ import {
 } from '@atb/translations';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import Bugsnag from '@bugsnag/react-native';
-import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -70,8 +70,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
   const {locationIsAvailable, location, requestLocationPermission} =
     useGeolocationContext();
   const focusRef = useFocusOnLoad(navigation);
-
-  const isFocused = useIsFocused();
 
   const currentLocation = location || undefined;
 
@@ -331,7 +329,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
           onEditFavouriteDeparture={navigateToFavoriteDeparturesScreen}
           onAddFavouriteDeparture={navigateToNearbyStopPlacesScreen}
           onPressDeparture={navigateToDepartureDetailsScreen}
-          isFocused={isFocused}
         />
       </ScrollView>
     </FullScreenView>
