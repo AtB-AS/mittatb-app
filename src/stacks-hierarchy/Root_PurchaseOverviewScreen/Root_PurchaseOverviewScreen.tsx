@@ -311,6 +311,14 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 {selection},
               );
             }}
+            onSwap={() => {
+              const newSelection = builder
+                .fromSelection(selection)
+                .fromStopPlace(selection.stopPlaces?.to)
+                .toStopPlace(selection.stopPlaces?.from)
+                .build();
+              setSelection(newSelection);
+            }}
             ref={focusRefs}
           />
 
