@@ -355,7 +355,6 @@ platform :ios do
 
     skip_pods = ENV['SKIP_PODS'] == 'true'
 
-
     increment_build_number(
       build_number: ENV["BUILD_ID"],
       xcodeproj: './ios/atb.xcodeproj/'
@@ -399,7 +398,8 @@ platform :ios do
     firebase_app_distribution(
       app:ENV['FIREBASE_APP_ID_IOS'],
       service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
-      groups:ENV['APP_DISTRIBUTION_GROUP_NAME']
+      groups:ENV['APP_DISTRIBUTION_GROUP_NAME'],
+      release_notes_file: ENV['RELEASE_NOTES_FILE']
     )
   end
 
