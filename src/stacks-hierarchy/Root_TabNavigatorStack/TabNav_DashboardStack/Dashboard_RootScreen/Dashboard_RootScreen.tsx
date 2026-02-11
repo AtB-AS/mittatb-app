@@ -329,7 +329,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
           onEditFavouriteDeparture={navigateToFavoriteDeparturesScreen}
           onAddFavouriteDeparture={navigateToNearbyStopPlacesScreen}
           onPressDeparture={navigateToDepartureDetailsScreen}
-          isFocused={isFocused}
         />
       </ScrollView>
     </FullScreenView>
