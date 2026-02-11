@@ -186,7 +186,7 @@ export const useMapSymbolStyles = ({
   const textOffset: Expression = [
     'case',
     isMinimized,
-    [0.44, -0.175],
+    [0.44, 0],
     [
       'step',
       numberOfUnits,
