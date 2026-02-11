@@ -28,13 +28,13 @@ import {
 } from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type Props = {
   onEditFavouriteDeparture: () => void;
   onAddFavouriteDeparture: () => void;
   onPressDeparture: QuaySectionProps['onPressDeparture'];
   style?: StyleProp<ViewStyle>;
-  isFocused: boolean;
 };
 
 export const DeparturesWidget = ({
@@ -42,7 +42,6 @@ export const DeparturesWidget = ({
   onAddFavouriteDeparture,
   onPressDeparture,
   style,
-  isFocused,
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -50,6 +49,7 @@ export const DeparturesWidget = ({
   const themeColor = theme.color.background.neutral[1];
   const {favoriteDepartures} = useFavoritesContext();
   const {location} = useGeolocationContext();
+  const isFocused = useIsFocusedAndActive();
   const {data: favoriteDeparturesData, isLoading: favoriteDeparturesIsLoading} =
     useFavoriteDeparturesQuery(isFocused);
   const onCloseFocusRef = useRef<View>(null);
