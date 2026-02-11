@@ -18,12 +18,10 @@ type EstimatedCallItemDeparture = {
 type EstimatedCallProps = {
   departure: EstimatedCallItemDeparture;
   messageType?: Exclude<Statuses, 'valid'>;
-  testID?: string;
 };
 export function EstimatedCallInfo({
   departure,
   messageType,
-  testID = 'estimatedCallItem',
 }: EstimatedCallProps) {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -38,7 +36,6 @@ export function EstimatedCallInfo({
       <LineChip
         serviceJourney={departure.serviceJourney}
         messageType={messageType}
-        testID={testID}
       />
       {debugPredictionInaccurate && departure.predictionInaccurate && (
         <ThemeIcon svg={PinInvalid} color="warning" />
@@ -47,7 +44,7 @@ export function EstimatedCallInfo({
         typography={departure.cancellation ? 'body__m__strike' : 'body__m'}
         color={departure.cancellation ? 'secondary' : 'primary'}
         style={styles.lineName}
-        testID={`${testID}LineName`}
+        testID="lineName"
       >
         {lineName}
       </ThemeText>

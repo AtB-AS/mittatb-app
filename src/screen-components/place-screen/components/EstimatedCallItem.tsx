@@ -48,10 +48,10 @@ export const EstimatedCallItem = memo(
     departure,
     onPressDetails,
     showBottomBorder,
+    testID,
   }: EstimatedCallItemProps): React.JSX.Element => {
     const styles = useStyles();
     const {t, language} = useTranslation();
-    const testID = 'estimatedCallItem';
     const onCloseRef = useRef<RefObject<any>>(null);
 
     return (
@@ -64,12 +64,12 @@ export const EstimatedCallItem = memo(
         accessibilityHint={t(DeparturesTexts.a11yViewDepartureDetailsHint)}
         importantForAccessibility="yes"
         ref={onCloseRef}
+        testID={`${testID}CallItem`}
       >
-        <View style={styles.container} testID={testID}>
+        <View style={styles.container}>
           <EstimatedCallInfo
             departure={departure}
             messageType={getMsgTypeForEstimatedCall(departure)}
-            testID={testID}
           />
           <DepartureTime departure={departure} />
         </View>

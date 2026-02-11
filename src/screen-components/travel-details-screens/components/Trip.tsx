@@ -194,7 +194,7 @@ export const Trip: React.FC<TripProps> = ({
                   leg.interchangeTo?.toServiceJourney?.id,
                 )}
                 leg={leg}
-                testID={'legContainer' + index}
+                testID={'leg' + index}
                 onPressShowLive={
                   legVehiclePosition
                     ? (serviceJourneyPolylines: ServiceJourneyPolylines) => {
