@@ -16,7 +16,7 @@ else
 echo "Uploading iOS source maps"
     npx bugsnag-source-maps upload-react-native \
         --api-key=$BUGSNAG_API_KEY \
-        --app-version=$APP_VERSION \
+        --app-version="{$APP_VERSION}" \
         --app-bundle-version=$BUILD_ID \
         --platform=ios \
         --source-map=bundle/main.jsbundle.map \
