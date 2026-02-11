@@ -88,6 +88,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -128,8 +129,11 @@ export const DepartureDetailsScreenComponent = ({
 
   const {requestReview} = useInAppReviewFlow();
 
-  const {data: serviceJourney, isLoading} =
-    useDepartureDetailsQuery(activeItem);
+  const isFocusedAndActive = useIsFocusedAndActive();
+  const {data: serviceJourney, isLoading} = useDepartureDetailsQuery(
+    isFocusedAndActive,
+    activeItem,
+  );
   const notices = serviceJourney
     ? getNoticesForServiceJourney(serviceJourney, activeItem.fromStopPosition)
     : [];
