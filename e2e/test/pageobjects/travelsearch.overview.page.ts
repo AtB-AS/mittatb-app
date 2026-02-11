@@ -16,7 +16,6 @@ class TravelSearchOverviewPage {
   get bikeResultText() {
     const reqId = `//*[@resource-id="bicycleResult"]`;
     const textId = `//*[@resource-id="buttonText"]`;
-    //return await $(reqId).$(textId).getText();
     return $(reqId).$(textId).getText();
   }
 
@@ -55,7 +54,7 @@ class TravelSearchOverviewPage {
     const tripResult = await this.tripResult(index);
     await tripResult.click();
     await ElementHelper.waitForElement('id', `tripDetailsContentView`);
-    await ElementHelper.waitForElement('id', `legContainer0`);
+    await ElementHelper.waitForElement('id', `leg0`);
   }
 
   /**

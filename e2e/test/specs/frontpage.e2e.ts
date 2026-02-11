@@ -4,7 +4,6 @@ import ElementHelper from '../utils/element.helper.ts';
 import FrontPagePage from '../pageobjects/frontpage.page.ts';
 import SearchPage from '../pageobjects/search.page.ts';
 import NavigationHelper from '../utils/navigation.helper.ts';
-import DepartureOverviewPage from '../pageobjects/departure.overview.page.ts';
 import FavoritePage from '../pageobjects/favorite.page.ts';
 
 describe('Frontpage', () => {
@@ -57,12 +56,12 @@ describe('Frontpage', () => {
       await SearchPage.setSearchLocation(stopPlace);
 
       // Before
-      await ElementHelper.waitForElement('id', 'estimatedCallItem');
+      await ElementHelper.waitForElement('id', 'lineItem');
 
       // Choose departure
-      const linePublicCode = await DepartureOverviewPage.getLinePublicCode();
-      const lineName = await DepartureOverviewPage.getLineName();
-      await DepartureOverviewPage.openDeparture();
+      const linePublicCode = await FavoritePage.getLinePublicCode();
+      const lineName = await FavoritePage.getLineName();
+      await FavoritePage.chooseLine();
 
       // Choose only marked departure
       await ElementHelper.waitForElement(
@@ -71,7 +70,6 @@ describe('Frontpage', () => {
       );
       await FavoritePage.chooseFavoriteType('single');
       await AppHelper.pause(1000);
-      await FavoritePage.confirm.click();
 
       // Verify
       await ElementHelper.waitForElement('id', 'favoriteDepartures');
@@ -174,7 +172,7 @@ describe('Frontpage', () => {
   it('should open tickets tab', async () => {
     try {
       await ElementHelper.waitForElement('id', 'dashboardScrollView');
-      await ElementHelper.expectText('Find journey');
+      await ElementHelper.expectText('Travel');
 
       await FrontPagePage.buyTickets.click();
       await ElementHelper.waitForElement('id', 'purchaseTab');

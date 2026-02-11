@@ -12,10 +12,10 @@ class TokenPage {
   }
 
   /**
-   * Get the token error message
+   * Get the token error message title
    */
-  get tokenErrorMessage() {
-    const reqId = `//*[@resource-id="tokenErrorMessage"]`;
+  get tokenErrorMessageTitle() {
+    const reqId = `//*[@resource-id="tokenErrorMessageTitle"]`;
     return $(reqId).getText();
   }
 
