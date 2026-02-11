@@ -28,4 +28,8 @@ RCT_EXPORT_MODULE(NativePaymentHandler)
   }];
 }
 
+- (NSNumber *)canMakePayments {
+  return @([paymentHandler canMakePayments]);
+}
+
 @end
