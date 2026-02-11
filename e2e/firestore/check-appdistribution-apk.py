@@ -35,10 +35,10 @@ def main():
         github_env_file = os.getenv('GITHUB_ENV')
         with open(github_env_file, "a") as env_file:
             print("[INFO] Exporting env parameters")
-            env_file.write(f"APK_IS_AVAILABLE={str(apkIsAvailable).lower()}")
+            env_file.write(f"APK_IS_AVAILABLE={str(apkIsAvailable).lower()}\n")
             if apkIsAvailable:
-                env_file.write(f"TESTED_VERSION={appVersion}-{appBuildId}")
-                env_file.write(f"APK_DOWNLOAD_URL={apk_url}")
+                env_file.write(f"TESTED_VERSION={appVersion}-{appBuildId}\n")
+                env_file.write(f"APK_DOWNLOAD_URL={apk_url}\n")
 
 
 # Authenticate using the service account
