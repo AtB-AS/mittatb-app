@@ -88,6 +88,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -168,6 +169,7 @@ export const DepartureDetailsScreenComponent = ({
 
   const {isRealtimeMapEnabled, isTravelAidEnabled} = useFeatureTogglesContext();
   const screenReaderEnabled = useIsScreenReaderEnabled();
+  const isFocusedAndActive = useIsFocusedAndActive();
 
   const {
     preferences: {
@@ -182,7 +184,7 @@ export const DepartureDetailsScreenComponent = ({
 
   const shouldShowLive = getShouldShowLiveVehicle(
     estimatedCallsWithMetadata,
-    isRealtimeMapEnabled,
+    isRealtimeMapEnabled && isFocusedAndActive,
   );
 
   const {data: vehiclePositions} = useGetServiceJourneyVehiclesQuery(
