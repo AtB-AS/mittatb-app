@@ -3,6 +3,7 @@ import os
 import sys
 import requests
 import json
+from datetime import datetime, timezone
 from google.auth.transport.requests import Request
 from google.oauth2 import service_account
 
@@ -18,22 +19,15 @@ OUTPUT_FILE = "../apk/app-staging.apk"
 
 
 def main():
+    # ENV parameters exist
+    TESTED_VERSION = os.getenv("TESTED_VERSION")
+    APK_DOWNLOAD_URL = os.getenv("APK_DOWNLOAD_URL")
+
     print("[INFO] Authenticate")
     service_account_info = json.loads(CREDENTIALS_APITESTER)
     access_token = authenticate(service_account_info)
-    print("[INFO] List releases")
-    apk_url, appVersion, appBuildId = list_releases(access_token)
-    print("[INFO] Release found")
-    download_release(apk_url, access_token)
-    print("[INFO] App version: {}".format(appVersion))
-    print("[INFO] App build ID: {}".format(appBuildId))
-
-    # Set apk details in env file to access it (only on GitHub)
-    if os.environ.get('IS_GITHUB', 'False') == 'True':
-        github_env_file = os.getenv('GITHUB_ENV')
-        with open(github_env_file, "a") as env_file:
-            print("[INFO] Export env parameter TESTED_VERSION={}-{}".format(appVersion, appBuildId))
-            env_file.write("TESTED_VERSION={}-{}".format(appVersion, appBuildId))
+    print(f"[INFO] Download build {TESTED_VERSION}")
+    download_release(APK_DOWNLOAD_URL, access_token)
 
 
 # Authenticate using the service account
@@ -50,28 +44,6 @@ def authenticate(service_account_info):
     return access_token
 
 
-# Function to list all releases
-def list_releases(access_token: str):
-    LIST_URL = f"https://firebaseappdistribution.googleapis.com/v1/projects/{PROJECT_ID}/apps/{APP_ID}/releases"
-    headers = {
-        "Authorization": f"Bearer {access_token}",
-    }
-    response = requests.get(LIST_URL, headers=headers)
-    if response.status_code == 200:
-        releases = response.json().get("releases", [])
-        if not releases:
-            print("[WARN] No releases found")
-            sys.exit()
-        else:
-            #for release in releases:
-            #    print(f"- Release ID: {release.get('name', 'N/A')} | Display Version: {release.get('displayVersion', 'N/A')} | Build Version: {release.get('buildVersion', 'N/A')}")
-            return releases[0].get('binaryDownloadUri'), releases[0].get('displayVersion'), releases[0].get('buildVersion')
-    else:
-        print(f"[ERROR] Failed to list releases")
-        print(f"[ERROR] HTTP {response.status_code}. Response: {response.text}")
-        sys.exit()
-
-
 def download_release(apk_url: str, access_token: str):
     headers = {
         "Authorization": f"Bearer {access_token}",
@@ -81,7 +53,6 @@ def download_release(apk_url: str, access_token: str):
 
     # Check if the request was successful
     if response.status_code == 200:
-        print("[INFO] Downloading release")
         # Save the release to the specified file
         with open(OUTPUT_FILE, "wb") as f:
             for chunk in response.iter_content(chunk_size=8192):
