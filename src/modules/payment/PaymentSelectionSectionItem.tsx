@@ -1,6 +1,6 @@
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {humanizePaymentType, PaymentType} from '@atb/modules/ticketing';
+import {humanizePaymentType} from '@atb/modules/ticketing';
 import {useTranslation} from '@atb/translations';
 import React, {forwardRef} from 'react';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
