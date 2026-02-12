@@ -74,7 +74,7 @@ def list_releases(access_token: str):
                 # Only use master branch
                 # TODO Test a specific build version
                 #if 'Branch: master' in (release.get('releaseNotes', {}).get('text', '')):
-                if release.get('buildVersion', '1770899455') == '':
+                if release.get('buildVersion', '') == '1770899455':
                     ts = release.get('createTime', '')
                     dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
                     # Only check for new releases, i.e. releases today
