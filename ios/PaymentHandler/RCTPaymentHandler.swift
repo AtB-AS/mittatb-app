@@ -72,14 +72,7 @@ extension PaymentHandler: PKPaymentAuthorizationControllerDelegate {
           paymentDataString = String(data: paymentData, encoding: .utf8)
         }
 
-        debugPrint(self.paymentStatus.rawValue);
-        debugPrint("TOKEN", self.paymentData as Any)
-
-        if self.paymentStatus == .success {
-          self.completionHandler!(paymentDataString)
-        } else {
-          self.completionHandler!(nil)
-        }
+        self.completionHandler!(paymentDataString)
       }
     }
   }

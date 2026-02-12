@@ -3,7 +3,7 @@ import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
 import Bugsnag from '@bugsnag/react-native';
 import {useAuthContext} from '@atb/modules/auth';
 import {useListRecurringPaymentsQuery} from '@atb/modules/ticketing';
-import {CardPaymentMethod, PaymentMethod} from './types';
+import {PaymentMethod} from './types';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {parseISO} from 'date-fns';
 import {PaymentType, listRecurringPayments} from '@atb/modules/ticketing';

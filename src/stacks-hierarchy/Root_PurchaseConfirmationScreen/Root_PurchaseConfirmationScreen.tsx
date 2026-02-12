@@ -57,7 +57,7 @@ import {ScreenHeading} from '@atb/components/heading';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useProductAlternatives} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {isNonRecurringPaymentType} from '@atb/modules/payment/utils';
+import {isNonRecurringPaymentType} from '@atb/modules/payment';
 import {NativePaymentHandler} from '@atb/specs/NativePaymentHandler';
 import {APP_NAME} from '@env';
 import {getReferenceDataName} from '@atb/modules/configuration';
@@ -189,6 +189,16 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     reserveMutation.data?.recurringPaymentId,
   ]);
 
+  useDoOnceWhen(
+    () => {
+      if (applePayPaymentData) {
+        reserveMutation.mutate();
+      }
+    },
+    !!applePayPaymentData,
+    true,
+  );
+
   // When deep link {APP_SCHEME}://purchase-callback is called, save payment
   // method and navigate to active tickets.
   usePurchaseCallbackListener(onPaymentCompleted);
@@ -233,7 +243,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         ],
         (paymentData) => {
           paymentData && setApplePayPaymentData(paymentData);
-          reserveMutation.mutate();
           return;
         },
       );
@@ -243,7 +252,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       });
       reserveMutation.mutate();
     }
-    reserveMutation.mutate();
   }
 
   async function selectPaymentMethod() {
