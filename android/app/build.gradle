@@ -124,6 +124,7 @@ android {
     // Store the KETTLE_API_KEY in a constant
     def KETTLE_API_KEY_VALUE = System.getProperty("KETTLE_API_KEY") as String
     def BUGSNAG_API_KEY_VALUE = System.getProperty("BUGSNAG_API_KEY") as String
+    def RELEASE_STAGE_KEY_VALUE = System.getProperty("RELEASE_STAGE") as String
 
     namespace "no.mittatb"
     defaultConfig {
@@ -143,7 +144,8 @@ android {
         // This is fetched inside Java / Kotlin code
         buildConfigField 'String', 'KETTLE_API_KEY', "\"$KETTLE_API_KEY_VALUE\""
         manifestPlaceholders = [
-                bugsnagApiKey: BUGSNAG_API_KEY_VALUE
+                bugsnagApiKey: BUGSNAG_API_KEY_VALUE,
+                releaseStage: RELEASE_STAGE_KEY_VALUE
         ]
     }
 

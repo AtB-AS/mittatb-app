@@ -22,6 +22,7 @@ class MainApplication : Application(), ReactApplication {
                 PackageList(this).packages.apply {
                     // Packages that cannot be autolinked yet can be added manually here, for example:
                     add(KettleSDKPackage())
+                    add(ExperimentalFeaturePackage())
                 }
         )
     }
@@ -40,9 +41,9 @@ class MainApplication : Application(), ReactApplication {
             val bugsnagKey = bundle.getString("com.bugsnag.android.API_KEY")
             if (!TextUtils.isEmpty(bugsnagKey)) {
                 val config = Configuration(bugsnagKey!!)
-                val bugsnagReleaseStage = bundle.getString("com.bugsnag.android.RELEASE_STAGE")
-                if (!TextUtils.isEmpty(bugsnagReleaseStage)) {
-                    config.releaseStage = bugsnagReleaseStage
+                val releaseStage = bundle.getString("no.mittatb.releaseStage")
+                if (!TextUtils.isEmpty(releaseStage)) {
+                    config.releaseStage = releaseStage
                 }
                 Bugsnag.start(this, config)
             }

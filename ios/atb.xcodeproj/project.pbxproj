@@ -185,6 +185,20 @@
 		FEE4FE1A2AE6F0C200E1821B /* BeaconsPermissionsBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BeaconsPermissionsBridge.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		22D476662F3CBAD6008B795E /* TurboModules */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = TurboModules;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		13B07F8C1A680F5B00A75B9A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -240,6 +254,7 @@
 				0FF6825E247FE01600FB80EE /* BootSplash.storyboard */,
 				385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				22D476662F3CBAD6008B795E /* TurboModules */,
 				FEBDDCD829310DCB00C3755B /* BridgeModules */,
 				FE8186AC297593DA000D2195 /* Configs */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
@@ -412,6 +427,9 @@
 			dependencies = (
 				FE55265328EC45EE0091F697 /* PBXTargetDependency */,
 				500752E229855BD100AC5A7F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				22D476662F3CBAD6008B795E /* TurboModules */,
 			);
 			name = app;
 			productName = atb;
