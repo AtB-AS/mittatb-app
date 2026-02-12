@@ -589,7 +589,7 @@ function InterchangeSection({
 
   // If maximum wait time is defined or over 0, append it to the message.
   // In some cases with missing data the maximum wait time can be -1.
-  if (maximumWaitTime && maximumWaitTime > 0) {
+  if (maximumWaitTime && maximumWaitTime > 0 && !staySeated) {
     text =
       text +
       ' ' +
