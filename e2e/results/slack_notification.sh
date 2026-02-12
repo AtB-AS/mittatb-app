@@ -31,7 +31,7 @@ else
       )
     | .list
     | join("\n")
-    ' results-mochawesome.json)
+    ' e2e/results/results-mochawesome.json)
     if [ -n "$ERRORS" ]; then
       echo "$ERRORS" > errors.log
     fi
