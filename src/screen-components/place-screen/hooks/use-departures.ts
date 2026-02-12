@@ -5,6 +5,7 @@ import {DeparturesQueryProps, useDeparturesQuery} from './use-departures-query';
 import {animateNextChange} from '@atb/utils/animation';
 
 export type DeparturesProps = {
+  enabled: boolean;
   quayIds: string[];
   limitPerQuay: number;
   showOnlyFavorites: boolean;
@@ -13,6 +14,7 @@ export type DeparturesProps = {
 };
 
 export const useDepartures = ({
+  enabled,
   quayIds,
   limitPerQuay,
   showOnlyFavorites,
@@ -37,6 +39,7 @@ export const useDepartures = ({
     isError: departuresIsError,
     refetch: refetchDeparturesData,
   } = useDeparturesQuery({
+    enabled,
     query: departuresQuery,
     mode,
     favorites: activeFavoriteDepartures,

@@ -122,7 +122,7 @@ export const Map = (props: MapProps) => {
   const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
-  const {data: activeShmoBooking} = useActiveShmoBookingQuery();
+  const {data: activeShmoBooking} = useActiveShmoBookingQuery(isFocused);
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&

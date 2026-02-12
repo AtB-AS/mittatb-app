@@ -15,6 +15,7 @@ import {
 
 import {SectionListData} from 'react-native';
 import {DeparturesProps, useDepartures} from '../hooks/use-departures';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type Props = {
   stopPlaces: StopPlace[];
@@ -58,9 +59,11 @@ export const StopPlacesSheetView = (props: Props) => {
     stopPlaceAndQuays.length ? [{data: stopPlaceAndQuays}] : [];
 
   const quayIds = useMemo(() => quays.map((q) => q.id), [quays]);
+  const isFocusedAndActive = useIsFocusedAndActive();
 
   const departuresProps: DeparturesProps = useMemo(
     () => ({
+      enabled: isFocusedAndActive,
       quayIds,
       limitPerQuay:
         NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW + NUMBER_OF_DEPARTURES_IN_BUFFER,
@@ -68,7 +71,7 @@ export const StopPlacesSheetView = (props: Props) => {
       mode: 'Map',
       startTime: searchTime,
     }),
-    [quayIds, searchTime],
+    [quayIds, searchTime, isFocusedAndActive],
   );
 
   const {
