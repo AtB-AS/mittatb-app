@@ -2,19 +2,6 @@ name: E2E tests on Android
 on:
   workflow_dispatch:
     inputs:
-      api_level:
-        description: 'Define API level'
-        required: true
-        default: 30
-      system_image:
-        description: 'Define system image'
-        type: choice
-        required: true
-        default: 'default'
-        options:
-          - 'default'
-          - 'google_apis'
-          - 'google_apis_playstore'
       branch:
         description: 'Define branch to test'
         required: true
@@ -71,8 +58,8 @@ jobs:
     environment: atb
     timeout-minutes: 90
     env:
-      ENV_API_LEVEL: ${{ github.event.inputs.api_level || '30' }}
-      ENV_SYSTEM_IMAGE: ${{ github.event.inputs.system_image || 'default' }}
+      ENV_API_LEVEL: 30
+      ENV_SYSTEM_IMAGE: default
     steps:
       # Setup
       - name: Set env variables

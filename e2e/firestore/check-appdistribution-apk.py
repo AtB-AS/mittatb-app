@@ -65,16 +65,13 @@ def list_releases(access_token: str):
     response = requests.get(LIST_URL, headers=headers)
     if response.status_code == 200:
         releases = response.json().get("releases", [])
-        #print(f"***{releases}***")
         if not releases:
             print("[WARN] No releases found")
             sys.exit()
         else:
             for release in releases:
-                # Only use master branch
-                # TODO Test a specific build version
-                #if 'Branch: master' in (release.get('releaseNotes', {}).get('text', '')):
-                if release.get('buildVersion', '') == '1770899455':
+                # Only use master branch from today
+                if 'Branch: master' in (release.get('releaseNotes', {}).get('text', '')):
                     ts = release.get('createTime', '')
                     dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
                     # Only check for new releases, i.e. releases today
