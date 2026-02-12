@@ -308,7 +308,7 @@ export const Map = (props: MapProps) => {
           const fromZoomLevel = (await mapViewRef.current?.getZoom()) ?? 0;
           const toZoomLevel = getToZoomLevel(
             fromZoomLevel,
-            featureToSelect.properties?.cluster_extent,
+            featureToSelect.properties?.cluster_extent_meters,
           );
 
           flyToLocation({
