@@ -171,7 +171,29 @@ jobs:
           APP_PATH: ${{ github.workspace }}
           IS_CI: 'true'
 
+      # Slack
+      - name: Notify Slack
+        if: always()
+        run: |
+          ./e2e/results/slack_notification.sh ${{ secrets.ATB_SLACK_TOKEN }} e2e_tests ${{ github.run_id }} smoke
+
       # Results
+      - name: Fail on any errors
+        if: always()
+        run: |
+          if find e2e/results -maxdepth 1 -name "errors.log" | grep -q .; then
+            echo "### ⚠️ Test errors" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "See more details in the workflow" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ Errors are found, failing the job."
+            cat e2e/results/errors.log
+            exit 1
+          else
+            echo "✅ All good!" >> $GITHUB_STEP_SUMMARY
+            echo "✅ All good!"
+          fi
+
+      # Upload results
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
