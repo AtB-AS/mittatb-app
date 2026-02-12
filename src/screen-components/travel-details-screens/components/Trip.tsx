@@ -54,6 +54,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {ErrorResponse} from '@atb-as/utils';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {SaveTripPatternButtonComponent} from '@atb/modules/experimental-store-trip-patterns';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -239,6 +240,7 @@ export const Trip: React.FC<TripProps> = ({
           }}
         />
       )}
+      <SaveTripPatternButtonComponent tripPattern={tripPattern} />
       <TripSummary {...tripPattern} />
     </View>
   );

@@ -41,6 +41,9 @@ import {BonusDashboard} from './components/BonusDashboard';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import {LocationSearchCallerRoute} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+import {StoredTripPatternsDashboardComponent} from '@atb/modules/experimental-store-trip-patterns';
+import {TripPattern} from '@atb/api/types/trips';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {WithOverlayButton} from '@atb/components/overlay-button';
 
@@ -68,6 +71,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
   const {isBonusProgramEnabled} = useFeatureTogglesContext();
   const {locationIsAvailable, location} = useGeolocationContext();
   const focusRef = useFocusOnLoad(navigation);
+  const isFocused = useIsFocusedAndActive();
 
   const currentLocation = location || undefined;
 
@@ -194,6 +198,15 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
     [navigation],
   );
 
+  const navigateToTripDetailsScreen = useCallback(
+    (tripPattern: TripPattern) => {
+      navigation.navigate('Dashboard_TripDetailsScreen', {
+        tripPattern,
+      });
+    },
+    [navigation],
+  );
+
   return (
     <FullScreenView
       focusRef={focusRef}
@@ -267,6 +280,12 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
             backgroundColor={theme.color.background.neutral[1]}
           />
         </View>
+
+        <StoredTripPatternsDashboardComponent
+          onDetailsPressed={navigateToTripDetailsScreen}
+          isFocused={isFocused}
+        />
+
         <Announcements
           style={[style.contentSection, style.contentSection__horizontalScroll]}
         />
