@@ -3,3 +3,4 @@ export {
   PassthroughComponent,
   wrapWithPassthroughComponent,
 } from './passthrough-component';
+export {NullComponent, wrapWithNullComponent} from './null-component';
