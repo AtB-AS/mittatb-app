@@ -318,6 +318,7 @@ const GeoJsonFeatureWithPointGeometrySchema = z.object({
   properties: z.object({}).passthrough(),
 }) satisfies z.ZodType<Feature<Point>>;
 
+// See martin.yaml -> stations, in the tile server
 export const StationFeaturePropertiesSchema = z.object({
   id: z.string(),
   system_id: z.string(),
@@ -330,17 +331,17 @@ export type StationFeatureProperties = z.infer<
   typeof StationFeaturePropertiesSchema
 >;
 
-// See martin.yaml -> stations, in the tile server
 export const StationFeatureSchema =
   GeoJsonFeatureWithPointGeometrySchema.extend({
     properties: StationFeaturePropertiesSchema,
   }) satisfies z.ZodType<Feature<Point>>;
 export type StationFeature = z.infer<typeof StationFeatureSchema>;
 
+// See martin.yaml -> vehicles_clustered, in the tile server
 export const VehiclesClusteredPropertiesSchema = z.object({
   count: z.number().gt(1),
   vehicle_type_form_factor: FormFactorSchema,
-  cluster_extent: z.number(),
+  cluster_extent: z.number().optional(),
 });
 export type VehiclesClusteredProperties = z.infer<
   typeof VehiclesClusteredPropertiesSchema
@@ -354,14 +355,14 @@ export type VehiclesClusteredFeature = z.infer<
   typeof VehiclesClusteredFeatureSchema
 >;
 
-export const VehiclePropertiesSchema = z
-  .object({
-    id: z.string(),
-    system_id: z.string(),
-    count: z.literal(1),
-    vehicle_type_form_factor: FormFactorSchema,
-  })
-  .strict();
+// See martin.yaml -> vehicles, in the tile server
+export const VehiclePropertiesSchema = z.object({
+  id: z.string(),
+  system_id: z.string(),
+  count: z.literal(1),
+  vehicle_type_form_factor: FormFactorSchema,
+  num_vehicles_available: z.never().optional(), // to differenciate from station features, which have this field
+});
 
 export const VehicleFeatureSchema =
   GeoJsonFeatureWithPointGeometrySchema.extend({
@@ -369,6 +370,7 @@ export const VehicleFeatureSchema =
   }) satisfies z.ZodType<Feature<Point>>;
 export type VehicleFeature = z.infer<typeof VehicleFeatureSchema>;
 
+// See martin.yaml -> stations_clustered, in the tile server
 export const StationsClusteredPropertiesSchema = z.object({
   count: z.number().gt(1),
   num_vehicles_available: z.number(),

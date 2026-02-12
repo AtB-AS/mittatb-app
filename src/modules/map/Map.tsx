@@ -502,7 +502,7 @@ export const Map = (props: MapProps) => {
   );
 };
 
-const DEFAULT_ZOOM_DELTA = 1.5;
+const DEFAULT_ZOOM_DELTA = 2;
 
 export function getToZoomLevel(
   currentZoom: number,
