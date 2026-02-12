@@ -31,15 +31,15 @@ else
       )
     | .list
     | join("\n")
-    ' e2e/results/results-mochawesome.json)
+    ' results-mochawesome.json)
     if [ -n "$ERRORS" ]; then
       echo "$ERRORS" > errors.log
     fi
 
     # Error or success
-    if find e2e/results/ -maxdepth 1 -name "errors.log" | grep -q .; then
+    if find ./ -maxdepth 1 -name "errors.log" | grep -q .; then
       # WARNING: If error details are too long, Slack might give error 79 back. Might need to truncate or split in several messages
-      ERRORS=$(awk 'NR>1 {print ""} {printf "%s", $0}' e2e/results/errors.log)
+      ERRORS=$(awk 'NR>1 {print ""} {printf "%s", $0}' errors.log)
       PAYLOAD_DETAILS=$(jq -n \
         --arg channel "$SLACK_CHANNEL" \
         --arg text "$ERRORS" '
