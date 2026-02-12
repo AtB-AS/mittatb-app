@@ -33,7 +33,7 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
-import {useSingleTripQuery} from './use-single-trip-query';
+import {useSingleTripQuery} from '@atb/modules/trip-patterns';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -166,7 +166,7 @@ export const TripDetailsScreenComponent = ({
               });
             }}
             text={t(TripDetailsTexts.trip.buyTicket.text)}
-            rightIcon={{svg: Ticket}}
+            leftIcon={{svg: Ticket}}
             style={styles.purchaseButtonAccessible}
           />
         </View>

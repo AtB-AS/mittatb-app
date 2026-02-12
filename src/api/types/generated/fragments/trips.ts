@@ -19,6 +19,7 @@ export type TripPatternFragment = {
   duration?: any;
   walkDistance?: number;
   legs: Array<{
+    id?: string;
     mode: Types.Mode;
     distance: number;
     duration: any;
@@ -113,7 +114,7 @@ export type TripPatternFragment = {
     bookingArrangements?: BookingArrangementFragment;
     datedServiceJourney?: {
       id: string;
-      estimatedCalls?: Array<{
+      estimatedCalls: Array<{
         actualDepartureTime?: any;
         predictionInaccurate: boolean;
         quay: {name: string};
