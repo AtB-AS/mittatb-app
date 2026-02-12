@@ -172,7 +172,6 @@ export const DepartureDetailsScreenComponent = ({
 
   const {isRealtimeMapEnabled, isTravelAidEnabled} = useFeatureTogglesContext();
   const screenReaderEnabled = useIsScreenReaderEnabled();
-  const isFocusedAndActive = useIsFocusedAndActive();
 
   const {
     preferences: {
