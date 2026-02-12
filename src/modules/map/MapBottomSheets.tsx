@@ -35,6 +35,7 @@ import {useWindowDimensions} from 'react-native';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {MapBottomSheetType, useMapContext} from './MapContext';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type MapBottomSheetsProps = {
   mapViewRef: RefObject<MapboxGL.MapView | null>;
@@ -72,7 +73,8 @@ export const MapBottomSheets = ({
     setCurrentBottomSheet,
     currentBottomSheet,
   } = useMapContext();
-  const {data: activeBooking} = useActiveShmoBookingQuery();
+  const isFocusedAndActive = useIsFocusedAndActive();
+  const {data: activeBooking} = useActiveShmoBookingQuery(isFocusedAndActive);
   const {bottomSheetMapRef} = useBottomSheetContext();
 
   const {height: screenHeight} = useWindowDimensions();

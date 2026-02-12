@@ -172,6 +172,7 @@ export const DepartureDetailsScreenComponent = ({
 
   const {isRealtimeMapEnabled, isTravelAidEnabled} = useFeatureTogglesContext();
   const screenReaderEnabled = useIsScreenReaderEnabled();
+  const isFocusedAndActive = useIsFocusedAndActive();
 
   const {
     preferences: {
@@ -186,7 +187,7 @@ export const DepartureDetailsScreenComponent = ({
 
   const shouldShowLive = getShouldShowLiveVehicle(
     estimatedCallsWithMetadata,
-    isRealtimeMapEnabled,
+    isRealtimeMapEnabled && isFocusedAndActive,
   );
 
   const {data: vehiclePositions} = useGetServiceJourneyVehiclesQuery(

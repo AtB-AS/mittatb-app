@@ -13,6 +13,7 @@ import {LocationArrow} from './LocationArrow';
 import {ScanButton} from './ScanButton';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {View} from 'react-native';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export const MapButtons = ({
   navigateToScanQrCode,
@@ -29,8 +30,9 @@ export const MapButtons = ({
   const selectedFeatureIsAVehicle =
     isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
 
+  const isFocusedAndActive = useIsFocusedAndActive();
   const {data: activeShmoBooking, isLoading: activeShmoBookingIsLoading} =
-    useActiveShmoBookingQuery();
+    useActiveShmoBookingQuery(isFocusedAndActive);
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
   const {isMutating: initShmoOneStopBookingIsMutating} =

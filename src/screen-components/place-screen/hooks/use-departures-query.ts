@@ -28,6 +28,7 @@ type DeparturesData = {
 };
 
 export type DeparturesQueryProps = {
+  enabled: boolean;
   query: Omit<DeparturesVariables, 'startTime'> & {
     startTime?: string;
   };
@@ -50,6 +51,7 @@ export type DeparturesQueryProps = {
  * which is used until FULL_REFRESH_INTERVAL_MINUTES is reached. It is then reset.
  */
 export const useDeparturesQuery = ({
+  enabled,
   query,
   mode,
   favorites,
@@ -112,6 +114,7 @@ export const useDeparturesQuery = ({
         };
       }
     },
+    enabled: enabled,
     staleTime: DEPARTURES_REFETCH_INTERVAL_SECONDS * ONE_SECOND_MS,
     gcTime: ONE_HOUR_MS,
     refetchInterval: getDepartureRefetchInterval(
