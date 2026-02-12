@@ -176,7 +176,7 @@ jobs:
         if: always()
         working-directory: e2e/results
         run: |
-          ./e2e/results/slack_notification.sh ${{ secrets.ATB_SLACK_TOKEN }} e2e_tests ${{ github.run_id }} smoke
+          ./slack_notification.sh ${{ secrets.ATB_SLACK_TOKEN }} e2e_tests ${{ github.run_id }} smoke
 
       # Results
       - name: Fail on any errors
