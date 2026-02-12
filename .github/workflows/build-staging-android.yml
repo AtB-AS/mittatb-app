@@ -32,6 +32,8 @@ on:
     branches:
       - master
       - release/**
+  schedule:
+    - cron: '0 1 * * 1-5' 
 
 permissions:
   contents: read
@@ -68,9 +70,13 @@ jobs:
           echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
       - id: set-abi
         run: |
-          ABI_INPUT="${{ inputs.abi }}"
-          ABI_INPUT="${ABI_INPUT// /}"
-          ABI_INPUT="${ABI_INPUT:-arm64-v8a,armeabi-v7a}"
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            ABI_INPUT="armeabi-v7a,arm64-v8a,x86,x86_64"
+          else
+            ABI_INPUT="${{ inputs.abi }}"
+            ABI_INPUT="${ABI_INPUT// /}"
+            ABI_INPUT="${ABI_INPUT:-arm64-v8a,armeabi-v7a}"
+          fi
           ABI_SORTED=$(echo "$ABI_INPUT" | tr ',' '\n' | sort | paste -sd ',')
           ABI_FILENAME=$(echo "$ABI_SORTED" | tr ',' '-')
           echo "abi=$ABI_INPUT" >> $GITHUB_OUTPUT

@@ -19,6 +19,8 @@ on:
     branches:
       - master
       - release/**
+  schedule:
+    - cron: '0 1 * * 1-5'
 
 permissions:
   contents: read
