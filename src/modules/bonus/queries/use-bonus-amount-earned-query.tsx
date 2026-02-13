@@ -5,13 +5,13 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export const getBonusAmountEarnedQueryKey = (
   userId: string | undefined,
-  fareContractId: string | undefined,
+  orderId: string | undefined,
 ) => {
-  return ['bonusUserBalance', userId, fareContractId];
+  return ['bonusUserBalance', userId, orderId];
 };
 
 export const useBonusAmountEarnedQuery = (
-  fareContractId: string | undefined,
+  orderId: string | undefined,
   disabled: boolean = false,
 ) => {
   const {userId, authStatus} = useAuthContext();
@@ -20,8 +20,8 @@ export const useBonusAmountEarnedQuery = (
   const isLoggedIn = authenticationType === 'phone';
 
   return useQuery({
-    queryKey: getBonusAmountEarnedQueryKey(userId, fareContractId),
-    queryFn: () => getBonusAmountEarned(fareContractId),
+    queryKey: getBonusAmountEarnedQueryKey(userId, orderId),
+    queryFn: () => getBonusAmountEarned(orderId),
     enabled:
       authStatus === 'authenticated' &&
       isBonusProgramEnabled &&

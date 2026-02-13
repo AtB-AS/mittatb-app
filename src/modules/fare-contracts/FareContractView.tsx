@@ -93,7 +93,7 @@ export const FareContractView: React.FC<Props> = ({
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;
 
   const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(
-    fareContract.id,
+    fareContract.orderId,
     !shouldShowBonusAmountEarned,
   );
   const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(
