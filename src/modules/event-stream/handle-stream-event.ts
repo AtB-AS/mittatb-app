@@ -17,12 +17,6 @@ export const handleStreamEvent = (
 ) => {
   switch (streamEvent.event) {
     case EventKind.FareContract:
-      queryClient.invalidateQueries({
-        queryKey: getBonusAmountEarnedQueryKey(
-          userId,
-          streamEvent.fareContractId,
-        ),
-      });
       if (featureToggles.isEventStreamFareContractsEnabled) {
         queryClient.invalidateQueries({
           queryKey: [fareContractsQueryKey],
@@ -40,6 +34,9 @@ export const handleStreamEvent = (
     case EventKind.PersonalisationProgramPoint:
       queryClient.invalidateQueries({
         queryKey: getBonusBalanceQueryKey(userId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: getBonusAmountEarnedQueryKey(userId, streamEvent.orderId),
       });
       break;
   }
