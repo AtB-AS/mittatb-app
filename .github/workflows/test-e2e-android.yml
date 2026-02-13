@@ -6,8 +6,8 @@ on:
         description: 'Define branch to test'
         required: true
         default: 'master'
-  #schedule:
-  #  - cron: '0 6 * * 1-5'
+  schedule:
+    - cron: '0 3 * * 1-5'
 
 jobs:
   check-builds:

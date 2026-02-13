@@ -15,7 +15,7 @@ import TicketBuyPage from '../pageobjects/ticket.buy.page.js';
 import PurchaseOverviewPage from '../pageobjects/purchase.overview.page.js';
 import PurchaseSummaryPage from '../pageobjects/purchase.summary.page.js';
 import PurchasePaymentPage from '../pageobjects/purchase.payment.page.js';
-import OnboardingPage from "../pageobjects/onboarding.page.js";
+import OnboardingPage from '../pageobjects/onboarding.page.js';
 
 describe('Smoke tests', () => {
   const phoneNumber = Config.phoneNumber();
@@ -134,7 +134,7 @@ describe('Smoke tests', () => {
           }
           await ElementHelper.waitForElement('id', 'confirmPaymentButton');
           expect(
-              await PurchaseSummaryPage.recurringPaymentCard.isExisting(),
+            await PurchaseSummaryPage.recurringPaymentCard.isExisting(),
           ).toBe(true);
 
           // Do NOT purchase
@@ -152,6 +152,19 @@ describe('Smoke tests', () => {
     } catch (errMsg) {
       await AppHelper.screenshot('error_smoke_ticket');
       throw errMsg;
+    }
+  });
+
+  it('should log out', async () => {
+    if (authorized) {
+      try {
+        await NavigationHelper.tapMenu('profile');
+        await ElementHelper.waitForElement('text', 'Profile');
+        await ProfilePage.logout();
+      } catch (errMsg) {
+        await AppHelper.screenshot('error_auth_logout');
+        throw errMsg;
+      }
     }
   });
 });
