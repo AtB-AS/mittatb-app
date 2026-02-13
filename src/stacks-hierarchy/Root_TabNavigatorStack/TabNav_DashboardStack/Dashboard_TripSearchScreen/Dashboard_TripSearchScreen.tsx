@@ -110,11 +110,13 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const {
     tripPatterns,
     timeOfLastSearch,
-    loadMore,
+    loadMoreTrips,
     refetchTrips,
-    searchState,
-    error,
+    tripsSearchState,
+    tripsIsError,
+    tripsIsNetworkError,
   } = useTrips(from, to, searchTime, filtersState.filtersSelection);
+
   const {nonTransitTrips} = useNonTransitTripsQuery(
     from,
     to,
@@ -122,8 +124,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     filtersState.filtersSelection,
   );
 
-  const isSearching = searchState === 'searching';
-  const showEmptyScreen = !tripPatterns && !isSearching && !error;
+  const isSearching = tripsSearchState === 'searching';
+  const showEmptyScreen = !tripPatterns && !isSearching && !tripsIsError;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
   const isValidLocations = isValidTripLocations(from, to);
@@ -139,7 +141,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   useEffect(() => {
     if (!screenHasFocus) return;
-    switch (searchState) {
+    switch (tripsSearchState) {
       case 'searching':
         setSearchStateMessage(t(TripSearchTexts.searchState.searching));
         break;
@@ -154,7 +156,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
         break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchState, t]);
+  }, [tripsSearchState, t]);
 
   const setCurrentLocationAsFrom = useCallback(
     function setCurrentLocationAsFrom() {
@@ -265,7 +267,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   }, [from, to, currentLocation, searchTime, navigation, refetchTrips]);
 
   const nonTransitTripsVisible =
-    (tripPatterns.length > 0 || searchState === 'search-empty-result') &&
+    (tripPatterns.length > 0 || tripsSearchState === 'search-empty-result') &&
     nonTransitTrips.length > 0;
 
   const refreshControlProps = useMemo(() => {
@@ -275,11 +277,11 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           refreshing:
             Platform.OS === 'ios'
               ? false
-              : searchState === 'searching' && !tripPatterns.length,
+              : tripsSearchState === 'searching' && !tripPatterns.length,
           onRefresh: refresh,
         }
       : undefined;
-  }, [searchState, tripPatterns.length, refresh, isFocused]);
+  }, [tripsSearchState, tripPatterns.length, refresh, isFocused]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(refresh, [from, to]);
@@ -462,8 +464,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               {isFlexibleTransportEnabled &&
                 !flexibleTransportInfoDismissed &&
                 (tripPatterns.length > 0 ||
-                  searchState === 'search-empty-result') &&
-                !error && (
+                  tripsSearchState === 'search-empty-result') &&
+                !tripsIsError && (
                   <CityZoneMessage
                     from={from}
                     to={to}
@@ -491,7 +493,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 onDetailsPressed={(tripPattern, resultIndex) =>
                   onPressed(tripPattern, {analyticsMetadata: {resultIndex}})
                 }
-                errorType={error}
+                isNetworkError={tripsIsNetworkError}
                 searchTime={searchTime}
                 anyFiltersApplied={
                   filtersState.enabled && filtersState.anyFiltersApplied
@@ -500,14 +502,14 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             </View>
           )}
           {!tripPatterns.length && <View style={styles.emptyResultsSpacer} />}
-          {!error && isValidLocations && (
+          {!tripsIsError && isValidLocations && (
             <PressableOpacity
-              onPress={loadMore}
-              disabled={searchState === 'searching'}
+              onPress={loadMoreTrips}
+              disabled={tripsSearchState === 'searching'}
               style={styles.loadMoreButton}
               testID="loadMoreButton"
             >
-              {searchState === 'searching' ? (
+              {tripsSearchState === 'searching' ? (
                 <View style={styles.loadingIndicator}>
                   {tripPatterns.length ? (
                     <>
@@ -529,7 +531,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 </View>
               ) : (
                 <>
-                  {loadMore ? (
+                  {loadMoreTrips ? (
                     <>
                       <ThemeIcon
                         color="secondary"

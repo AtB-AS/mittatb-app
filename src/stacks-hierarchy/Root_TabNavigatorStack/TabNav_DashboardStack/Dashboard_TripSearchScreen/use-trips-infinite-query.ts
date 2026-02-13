@@ -1,4 +1,4 @@
-import {useInfiniteQuery} from '@tanstack/react-query';
+import {InfiniteData, useInfiniteQuery} from '@tanstack/react-query';
 import {Location} from '@atb/modules/favorites';
 import {defaultJourneyModes, getSearchPlace} from './utils';
 import {tripsSearch} from '@atb/api/bff/trips';
@@ -32,24 +32,27 @@ export type TripsProps = {
 export const useTripsInfiniteQuery = (
   tripsProps: TripsProps,
   enabled: boolean,
-) =>
-  useInfiniteQuery<TripsQuery, ErrorResponse>({
-    queryKey: ['TRIPS_INFINITE_QUERY_KEY', tripsProps],
-    queryFn: async ({pageParam: cursor, signal}) => {
-      const query = createTripsQuery(
-        tripsProps,
-        typeof cursor === 'string' ? cursor : undefined,
-      );
+) => {
+  const queryKey = ['TRIPS_INFINITE_QUERY_KEY', tripsProps];
 
-      return await tripsSearch(query, {
+  return useInfiniteQuery<
+    TripsQuery,
+    ErrorResponse,
+    InfiniteData<TripsQuery, unknown>,
+    typeof queryKey,
+    string | undefined
+  >({
+    queryKey,
+    queryFn: ({pageParam: cursor, signal}) =>
+      tripsSearch(createTripsQuery(tripsProps, cursor), {
         signal,
-      });
-    },
-    enabled,
-    initialPageParam: '',
+      }),
     maxPages: 100,
-    getNextPageParam: (lastPage) => lastPage.trip.nextPageCursor,
+    enabled,
+    initialPageParam: undefined,
+    getNextPageParam: (lastPage) => lastPage?.trip?.nextPageCursor,
   });
+};
 
 function createTripsQuery(
   tripsProps: TripsProps,

@@ -30,7 +30,8 @@ type Props = {
   isSearching: boolean;
   resultReasons: string[];
   onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
-  errorType?: AxiosErrorKind;
+  isNetworkError: boolean;
+  axiosErrorKind?: AxiosErrorKind;
   searchTime: TripSearchTime;
   anyFiltersApplied: boolean;
 };
@@ -41,7 +42,8 @@ export const Results: React.FC<Props> = ({
   isEmptyResult,
   resultReasons,
   onDetailsPressed,
-  errorType,
+  isNetworkError,
+  axiosErrorKind,
   searchTime,
   anyFiltersApplied,
 }) => {
@@ -53,13 +55,9 @@ export const Results: React.FC<Props> = ({
     return null;
   }
 
-  if (errorType) {
+  if (axiosErrorKind) {
     const errorMessage = t(
-      TripSearchTexts.results.error[
-        errorType === 'AXIOS_NETWORK_ERROR' || errorType === 'AXIOS_TIMEOUT'
-          ? 'network'
-          : 'generic'
-      ],
+      TripSearchTexts.results.error[isNetworkError ? 'network' : 'generic'],
     );
     return (
       <View style={styles.errorContainer}>

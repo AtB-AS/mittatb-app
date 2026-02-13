@@ -1,5 +1,5 @@
 import {TripPattern} from '@atb/api/types/trips';
-import {toAxiosErrorKind, AxiosErrorKind} from '@atb/api/utils';
+import {toAxiosErrorKind} from '@atb/api/utils';
 import {Location} from '@atb/modules/favorites';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useSearchHistoryContext} from '@atb/modules/search-history';
@@ -22,10 +22,11 @@ export function useTrips(
 ): {
   tripPatterns: TripPatternWithKey[];
   timeOfLastSearch: string;
-  loadMore: (() => void) | undefined;
+  loadMoreTrips: (() => void) | undefined;
   refetchTrips: () => void;
-  searchState: SearchStateType;
-  error?: AxiosErrorKind;
+  tripsSearchState: SearchStateType;
+  tripsIsError: boolean;
+  tripsIsNetworkError: boolean;
 } {
   const {
     tripsSearch_max_number_of_chained_searches: config_max_performed_searches,
@@ -65,6 +66,7 @@ export function useTrips(
     data: tripsData,
     isFetching: tripsIsFetching,
     refetch: refetchTrips,
+    isError: tripsIsError,
     error: tripsError,
     hasNextPage,
     fetchNextPage,
@@ -131,7 +133,7 @@ export function useTrips(
   const resultsAreEmpty =
     !tripLocationsAreValid || (hasSearched && tripPatterns.length === 0);
 
-  const searchState: SearchStateType = tripsIsFetching
+  const tripsSearchState: SearchStateType = tripsIsFetching
     ? 'searching'
     : resultsAreEmpty
       ? 'search-empty-result'
@@ -141,26 +143,34 @@ export function useTrips(
 
   const timeOfLastSearch = tripsProps.searchTime.date;
 
-  const loadMore = hasNextPage ? fetchNextPage : undefined;
+  const loadMoreTrips = hasNextPage ? fetchNextPage : undefined;
 
-  const error = tripsError ? toAxiosErrorKind(tripsError.kind) : undefined;
+  const axiosErrorKind = tripsError
+    ? toAxiosErrorKind(tripsError.kind)
+    : undefined;
+
+  const tripsIsNetworkError =
+    axiosErrorKind === 'AXIOS_NETWORK_ERROR' ||
+    axiosErrorKind === 'AXIOS_TIMEOUT';
 
   return useMemo(
     () => ({
       tripPatterns,
       timeOfLastSearch,
-      loadMore,
+      loadMoreTrips,
       refetchTrips,
-      searchState,
-      error,
+      tripsSearchState,
+      tripsIsError,
+      tripsIsNetworkError,
     }),
     [
-      error,
-      loadMore,
+      loadMoreTrips,
       refetchTrips,
-      searchState,
+      tripsSearchState,
       timeOfLastSearch,
       tripPatterns,
+      tripsIsError,
+      tripsIsNetworkError,
     ],
   );
 }
