@@ -162,7 +162,7 @@ describe('Smoke tests', () => {
         await ElementHelper.waitForElement('text', 'Profile');
         await ProfilePage.logout();
       } catch (errMsg) {
-        await AppHelper.screenshot('error_auth_logout');
+        await AppHelper.screenshot('error_smoke_logout');
         throw errMsg;
       }
     }
