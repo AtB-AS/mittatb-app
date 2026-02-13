@@ -58,7 +58,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useProductAlternatives} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {isNonRecurringPaymentType} from '@atb/modules/payment';
-import {NativePaymentHandler} from '@atb/specs/NativePaymentHandler';
+import {NativePaymentHandler} from '@atb/modules/native';
 import {APP_NAME} from '@env';
 import {getReferenceDataName} from '@atb/modules/configuration';
 
