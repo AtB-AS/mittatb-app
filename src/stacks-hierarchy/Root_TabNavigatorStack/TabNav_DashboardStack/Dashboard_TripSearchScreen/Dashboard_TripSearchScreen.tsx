@@ -18,7 +18,7 @@ import {
   useLocationSearchValue,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Results} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/Results';
-// import {useTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-trips-query';
+
 import {useTrips} from './use-trips';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {Language, TripSearchTexts, useTranslation} from '@atb/translations';

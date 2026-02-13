@@ -49,7 +49,6 @@ export const useTripsInfiniteQuery = (
     initialPageParam: '',
     maxPages: 100,
     getNextPageParam: (lastPage) => lastPage.trip.nextPageCursor,
-    getPreviousPageParam: (firstPage) => firstPage.trip.previousPageCursor,
   });
 
 function createTripsQuery(
