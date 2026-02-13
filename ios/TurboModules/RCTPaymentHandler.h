@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <PassKit/PassKit.h>
-#import <AtbNativeModules/AtbNativeModules.h>
+#import <AtBTurboModuleSpec/AtBTurboModuleSpec.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

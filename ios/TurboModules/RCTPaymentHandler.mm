@@ -1,18 +1,18 @@
 #import "RCTPaymentHandler.h"
+#import "PaymentHandlerImplObjC.h"
 #import <CoreLocation/CoreLocation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <RCTAppDelegate.h>
-#import "Atb-Swift.h"
 
 @implementation RCTPaymentHandler {
-  PaymentHandler *paymentHandler;
+  PaymentHandlerImpl *paymentHandler;
 }
 
 RCT_EXPORT_MODULE(NativePaymentHandler)
 
 - (id) init {
   if (self = [super init]) {
-    paymentHandler = [PaymentHandler new];
+    paymentHandler = [PaymentHandlerImpl new];
   }
   return self;
 }

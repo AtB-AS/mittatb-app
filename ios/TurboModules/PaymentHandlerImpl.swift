@@ -3,7 +3,8 @@ import PassKit
 
 typealias PaymentCompletionHandler = (String?) -> Void
 
-@objcMembers public class PaymentHandler: NSObject {
+@objc(PaymentHandlerImpl)
+class PaymentHandlerImpl: NSObject {
 
   var paymentController: PKPaymentAuthorizationController?
   var paymentSummaryItems = [PKPaymentSummaryItem]()
@@ -17,7 +18,7 @@ typealias PaymentCompletionHandler = (String?) -> Void
       .visa
   ]
 
-  public func startPayment(items: [[String: Any]], completionHandler: @escaping (String?) -> Void) -> Void {
+  @objc func startPayment(items: [[String: Any]], completionHandler: @escaping (String?) -> Void) -> Void {
     self.completionHandler = completionHandler;
 
     var paymentSummaryItems: [PKPaymentSummaryItem] = []
@@ -35,7 +36,7 @@ typealias PaymentCompletionHandler = (String?) -> Void
     paymentRequest.merchantCapabilities = .threeDSecure
     paymentRequest.countryCode = "NO"
     paymentRequest.currencyCode = "NOK"
-    paymentRequest.supportedNetworks = PaymentHandler.supportedNetworks
+    paymentRequest.supportedNetworks = PaymentHandlerImpl.supportedNetworks
 
     // Display the payment request.
     paymentController = PKPaymentAuthorizationController(paymentRequest: paymentRequest)
@@ -49,12 +50,12 @@ typealias PaymentCompletionHandler = (String?) -> Void
     })
   }
 
-  public func canMakePayments() -> Bool {
+  @objc func canMakePayments() -> Bool {
     return PKPaymentAuthorizationController.canMakePayments()
   }
 }
 
-extension PaymentHandler: PKPaymentAuthorizationControllerDelegate {
+extension PaymentHandlerImpl: PKPaymentAuthorizationControllerDelegate {
   public func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
       let errors = [Error]()
       let status = PKPaymentAuthorizationStatus.success
