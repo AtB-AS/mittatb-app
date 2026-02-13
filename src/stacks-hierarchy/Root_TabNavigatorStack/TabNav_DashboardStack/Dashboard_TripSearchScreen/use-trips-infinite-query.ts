@@ -1,21 +1,22 @@
 import {InfiniteData, useInfiniteQuery} from '@tanstack/react-query';
 import {Location} from '@atb/modules/favorites';
-import {defaultJourneyModes, getSearchPlace} from './utils';
+import {
+  defaultJourneyModes,
+  getSearchPlace,
+  transportModeToEnum,
+} from './utils';
 import {tripsSearch} from '@atb/api/bff/trips';
 import type {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 import {
   Modes,
   TransportMode,
-  TransportModes,
-  TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {
   TripsQuery,
   TripsQueryVariables,
 } from '@atb/api/types/generated/TripsQuery';
 import {isDefined} from '@atb/utils/presence';
-import {TravelSearchTransportModesType} from '@atb-as/config-specs';
-import {enumFromString} from '@atb/utils/enum-from-string';
+
 import {flatMap} from '@atb/utils/array';
 import {TripSearchTime} from '../types';
 import {ErrorResponse} from '@atb-as/utils';
@@ -115,17 +116,4 @@ function createTripsQuery(
     );
   }
   return query;
-}
-
-function transportModeToEnum(
-  modes: TravelSearchTransportModesType[],
-): TransportModes[] {
-  return modes.map((internal) => {
-    return {
-      transportMode: enumFromString(TransportMode, internal.transportMode),
-      transportSubModes: internal.transportSubModes
-        ?.map((submode) => enumFromString(TransportSubmode, submode))
-        .filter(isDefined),
-    };
-  });
 }

@@ -1,6 +1,11 @@
 import {Location} from '@atb/modules/favorites';
 import {TransportModeFilterOptionWithSelectionType} from '@atb/modules/travel-search-filters';
-import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {
+  StreetMode,
+  TransportMode,
+  TransportModes,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 import {FeatureCategory} from '@atb/api/bff/types';
 import type {TripSearchTime} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {
@@ -13,6 +18,9 @@ import type {DateOptionAndValue} from '@atb/components/date-selection';
 import {type TripPatternBookingStatus} from '@atb/screen-components/travel-details-screens';
 import type {Leg} from '@atb/api/types/trips';
 import {getRealtimeState} from '@atb/utils/realtime';
+import {TravelSearchTransportModesType} from '@atb-as/config-specs';
+import {enumFromString} from '@atb/utils/enum-from-string';
+import {isDefined} from '@atb/utils/presence';
 
 export type TimeSearch = {
   searchTime: DateOptionAndValue<'now' | 'departure' | 'arrival'>;
@@ -31,6 +39,19 @@ export const defaultJourneyModes = {
   directMode: StreetMode.Foot,
   egressMode: StreetMode.Foot,
 };
+
+export function transportModeToEnum(
+  modes: TravelSearchTransportModesType[],
+): TransportModes[] {
+  return modes.map((internal) => {
+    return {
+      transportMode: enumFromString(TransportMode, internal.transportMode),
+      transportSubModes: internal.transportSubModes
+        ?.map((submode) => enumFromString(TransportSubmode, submode))
+        .filter(isDefined),
+    };
+  });
+}
 
 export const sanitizeSearchTime = (
   searchTime: DateOptionAndValue<'now' | 'departure' | 'arrival'>,
