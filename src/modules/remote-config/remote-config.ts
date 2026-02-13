@@ -30,6 +30,7 @@ export type RemoteConfig = {
   delay_share_travel_habits_screen_by_sessions_count: number;
   disable_email_field_in_profile_page: boolean;
   disable_travelcard: boolean;
+  disable_experimental_features: boolean;
   enable_activate_ticket_now: boolean;
   /**
    * Configuration whether the app should use auto sale or not when reserving
@@ -127,6 +128,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   delay_share_travel_habits_screen_by_sessions_count: 0,
   disable_email_field_in_profile_page: false,
   disable_travelcard: false,
+  disable_experimental_features: false,
   enable_activate_ticket_now: false,
   enable_auto_sale: false,
   enable_backend_sms_auth: true,
@@ -234,6 +236,9 @@ export function getConfig(): RemoteConfig {
   const disable_travelcard =
     values['disable_travelcard']?.asBoolean() ??
     defaultRemoteConfig.disable_travelcard;
+  const disable_experimental_features =
+    values['disable_experimental_features']?.asBoolean() ??
+    defaultRemoteConfig.disable_experimental_features;
   const enable_activate_ticket_now =
     values['enable_activate_ticket_now']?.asBoolean() ??
     defaultRemoteConfig.enable_activate_ticket_now;
@@ -457,6 +462,7 @@ export function getConfig(): RemoteConfig {
     delay_share_travel_habits_screen_by_sessions_count,
     disable_email_field_in_profile_page,
     disable_travelcard,
+    disable_experimental_features,
     enable_activate_ticket_now,
     enable_auto_sale,
     enable_backend_sms_auth,
