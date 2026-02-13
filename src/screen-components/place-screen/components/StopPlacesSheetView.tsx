@@ -111,7 +111,7 @@ export const StopPlacesSheetView = (props: Props) => {
           didLoadingDataFail={departuresIsError}
           navigateToDetails={navigateToDetails}
           navigateToQuay={(quay) => navigateToQuay(item.stopPlace, quay)}
-          testID={'quaySection' + index}
+          testID={'quay' + index}
           showOnlyFavorites={false}
           searchDate={searchTime}
           mode="Map"

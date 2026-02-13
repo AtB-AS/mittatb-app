@@ -107,7 +107,6 @@ describe('Departure', () => {
       const linePublicCode = await DepartureOverviewPage.getLinePublicCode();
       const lineName = await DepartureOverviewPage.getLineName();
       await DepartureOverviewPage.openDeparture();
-      await ElementHelper.waitForElement('id', 'departureDetailsContentView');
       expect(await DepartureDetailsPage.getPublicCode()).toHaveText(
         linePublicCode,
       );

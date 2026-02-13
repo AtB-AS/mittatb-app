@@ -84,10 +84,7 @@ export function LineItem({
   const nextValids = group.departures.filter(isValidDeparture);
 
   return (
-    <View
-      style={[topContainer, {paddingVertical: 0, paddingHorizontal: 0}]}
-      testID={testID}
-    >
+    <View style={[topContainer, {paddingVertical: 0, paddingHorizontal: 0}]}>
       <View style={[topContainer, sectionStyle.spaceBetween]}>
         <PressableOpacity
           style={[contentContainer, styles.lineHeader]}
@@ -105,13 +102,14 @@ export function LineItem({
             t,
             language,
           )}
+          testID={testID}
         >
           <TransportationIconBox
             style={styles.transportationMode}
             mode={group.lineInfo?.transportMode}
             subMode={group.lineInfo?.transportSubmode}
           />
-          <ThemeText style={{flex: 1}} testID={testID + 'Title'}>
+          <ThemeText style={{flex: 1}} testID="title">
             {title}
           </ThemeText>
         </PressableOpacity>
@@ -121,6 +119,7 @@ export function LineItem({
         contentContainerStyle={styles.scrollContainer}
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
+        testID={`${testID}DepTimes`}
       >
         {group.departures.map((departure, i) => (
           <DepartureTimeItem

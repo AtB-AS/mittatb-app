@@ -8,8 +8,8 @@ class DepartureOverviewPage {
   async showAllQuays() {
     const buttonId = `//*[@resource-id="allStopsSelectionButton"]`;
     await $(buttonId).click();
-    await ElementHelper.waitForElement('id', 'quaySection0');
-    await ElementHelper.waitForElement('id', 'estimatedCallItem');
+    await ElementHelper.waitForElement('id', 'quay0');
+    await ElementHelper.waitForElement('id', 'quay0CallItem');
   }
 
   /**
@@ -20,8 +20,8 @@ class DepartureOverviewPage {
     const buttonId = `//*[@resource-id="quaySelectionButton"]`;
     await $$(buttonId)[quayIndex].click();
     await AppHelper.pause(500);
-    await ElementHelper.waitForElement('id', 'quaySection');
-    await ElementHelper.waitForElement('id', 'estimatedCallItem');
+    await ElementHelper.waitForElement('id', 'quay');
+    await ElementHelper.waitForElement('id', 'quayCallItem');
   }
 
   /**
@@ -30,9 +30,8 @@ class DepartureOverviewPage {
    * @param departureIndex index for the departure, default: first
    */
   async getDeparture(quayIndex: number = 0, departureIndex: number = 0) {
-    const quayId = `//*[@resource-id="quaySection${quayIndex}"]`;
-    const depId = `//*[@resource-id="estimatedCallItem"]`;
-    return $(quayId).$$(depId)[departureIndex];
+    const depId = `//*[@resource-id="quay${quayIndex}CallItem"]`;
+    return $$(depId)[departureIndex];
   }
 
   /**
@@ -41,11 +40,10 @@ class DepartureOverviewPage {
    * @param departureIndex index for the departure, default: first
    */
   async openDeparture(quayIndex: number = 0, departureIndex: number = 0) {
-    const quayId = `//*[@resource-id="quaySection${quayIndex}"]`;
-    const depId = `//*[@resource-id="estimatedCallItem"]`;
-    await ElementHelper.waitForElement('id', `quaySection${quayIndex}`);
-    await ElementHelper.waitForElement('id', 'estimatedCallItem');
-    await $(quayId).$$(depId)[departureIndex].click();
+    const depId = `//*[@resource-id="quay${quayIndex}CallItem"]`;
+    await ElementHelper.waitForElement('id', `quay${quayIndex}CallItem`);
+    await $$(depId)[departureIndex].click();
+    await ElementHelper.waitForElement('id', 'departureDetailsContentView');
   }
 
   /**
@@ -53,7 +51,7 @@ class DepartureOverviewPage {
    * @param quayIndex index for the quay, default: first
    */
   async hideExpandDeps(quayIndex: number = 0) {
-    const hideId = `//*[@resource-id="quaySection${quayIndex}HideAction"]`;
+    const hideId = `//*[@resource-id="quay${quayIndex}HideAction"]`;
     await $(hideId).click();
     await AppHelper.pause(1000);
   }
@@ -64,9 +62,9 @@ class DepartureOverviewPage {
    * @param depIndex index of the departure
    */
   async getLinePublicCode(quayIndex: number = 0, depIndex: number = 0) {
-    const quayId = `//*[@resource-id="quaySection${quayIndex}"]`;
-    const publicCodeId = `//*[@resource-id="estimatedCallItemPublicCode"]`;
-    return $(quayId).$$(publicCodeId)[depIndex].getText();
+    const elemId = `//*[@resource-id="quay${quayIndex}CallItem"]`;
+    const pcId = `//*[@resource-id="publicCode"]`;
+    return $$(elemId)[depIndex].$(pcId).getText();
   }
 
   /**
@@ -75,9 +73,9 @@ class DepartureOverviewPage {
    * @param depIndex index of the departure
    */
   async getLineName(quayIndex: number = 0, depIndex: number = 0) {
-    const quayId = `//*[@resource-id="quaySection${quayIndex}"]`;
-    const lineNameId = `//*[@resource-id="estimatedCallItemLineName"]`;
-    return $(quayId).$$(lineNameId)[depIndex].getText();
+    const elemId = `//*[@resource-id="quay${quayIndex}CallItem"]`;
+    const lineId = `//*[@resource-id="lineName"]`;
+    return $$(elemId)[depIndex].$(lineId).getText();
   }
 
   /**
@@ -85,12 +83,10 @@ class DepartureOverviewPage {
    * @param quayIndex index of quay id overview or empty if quay-view
    */
   async getNumberOfDepartures(quayIndex: string = '') {
-    const quayId = `//*[@resource-id="quaySection${quayIndex}"]`;
-    const depId = `//*[@resource-id="estimatedCallItem"]`;
-    await ElementHelper.waitForElement('id', `quaySection${quayIndex}`);
-    await ElementHelper.waitForElement('id', `estimatedCallItem`);
+    const depId = `//*[@resource-id="quay${quayIndex}CallItem"]`;
+    await ElementHelper.waitForElement('id', `quay${quayIndex}CallItem`);
     // considers only visible element
-    return await $(quayId).$$(depId).length;
+    return await $$(depId).length;
   }
 
   /**
@@ -98,12 +94,12 @@ class DepartureOverviewPage {
    * @param quayIndex index for the quay
    */
   async showMoreDepartures(quayIndex: number = 0) {
-    await ElementHelper.waitForElement('id', `quaySection${quayIndex}More`);
-    const moreId = `//*[@resource-id="quaySection${quayIndex}More"]`;
+    await ElementHelper.waitForElement('id', `quay${quayIndex}More`);
+    const moreId = `//*[@resource-id="quay${quayIndex}More"]`;
     await $(moreId).click();
     await AppHelper.pause(500);
-    await ElementHelper.waitForElement('id', 'quaySection');
-    await ElementHelper.waitForElement('id', 'estimatedCallItem');
+    await ElementHelper.waitForElement('id', 'quay');
+    await ElementHelper.waitForElement('id', 'quayCallItem');
   }
 }
 

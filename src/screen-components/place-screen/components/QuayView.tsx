@@ -137,7 +137,7 @@ export function QuayView({
           isLoading={departuresIsLoading}
           didLoadingDataFail={departuresIsError}
           navigateToDetails={navigateToDetails}
-          testID="quaySection"
+          testID="quay"
           showOnlyFavorites={showOnlyFavorites}
           searchDate={searchStartTime}
           mode={mode}
