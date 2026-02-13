@@ -18,6 +18,7 @@ if (Platform.OS === 'ios' && !PassPresentationBridge) {
 export function useApplePassPresentationSuppression() {
   useEffect(() => {
     if (Platform.OS === 'android') return;
+    console.log('starting process to suppress apple pass');
     PassPresentationBridge.requestAutomaticPassPresentationSuppression();
     return () => {
       PassPresentationBridge.endAutomaticPassPresentationSuppression();
