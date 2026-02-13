@@ -18,7 +18,8 @@ import {
   useLocationSearchValue,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Results} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/Results';
-import {useTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-trips-query';
+// import {useTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-trips-query';
+import {useTrips} from './use-trips';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {Language, TripSearchTexts, useTranslation} from '@atb/translations';
 import {isInThePast} from '@atb/utils/date';
@@ -106,8 +107,14 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   const {isFlexibleTransportEnabled: isFlexibleTransportEnabledInRemoteConfig} =
     useFeatureTogglesContext();
-  const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
-    useTripsQuery(from, to, searchTime, filtersState.filtersSelection);
+  const {
+    tripPatterns,
+    timeOfLastSearch,
+    loadMore,
+    refetchTrips,
+    searchState,
+    error,
+  } = useTrips(from, to, searchTime, filtersState.filtersSelection);
   const {nonTransitTrips} = useNonTransitTripsQuery(
     from,
     to,
@@ -241,18 +248,21 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   };
 
   const refresh = useCallback(() => {
+    const updatedSearchTime: TripSearchTime =
+      searchTime.option === 'now'
+        ? {
+            option: 'now',
+            date: new Date().toISOString(),
+          }
+        : {...searchTime};
+    setSearchTime(updatedSearchTime);
     navigation.setParams({
       fromLocation: from?.resultType === 'geolocation' ? currentLocation : from,
       toLocation: to?.resultType === 'geolocation' ? currentLocation : to,
-      searchTime:
-        searchTime.option === 'now'
-          ? {
-              option: 'now',
-              date: new Date().toISOString(),
-            }
-          : {...searchTime},
+      searchTime: updatedSearchTime,
     });
-  }, [from, to, currentLocation, searchTime, navigation]);
+    refetchTrips();
+  }, [from, to, currentLocation, searchTime, navigation, refetchTrips]);
 
   const nonTransitTripsVisible =
     (tripPatterns.length > 0 || searchState === 'search-empty-result') &&
