@@ -79,7 +79,7 @@ function createTripsQuery(
   const query: TripsQueryVariables = {
     from,
     to,
-    cursor: isDefined(cursor) && cursor !== '' ? cursor : undefined,
+    cursor,
     when: searchTime?.date,
     arriveBy,
     modes: journeySearchModes,
