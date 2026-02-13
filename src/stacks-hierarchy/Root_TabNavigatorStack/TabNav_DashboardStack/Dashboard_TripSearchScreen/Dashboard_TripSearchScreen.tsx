@@ -493,7 +493,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 onDetailsPressed={(tripPattern, resultIndex) =>
                   onPressed(tripPattern, {analyticsMetadata: {resultIndex}})
                 }
-                isNetworkError={tripsIsNetworkError}
+                tripsIsError={tripsIsError}
+                tripsIsNetworkError={tripsIsNetworkError}
                 searchTime={searchTime}
                 anyFiltersApplied={
                   filtersState.enabled && filtersState.anyFiltersApplied

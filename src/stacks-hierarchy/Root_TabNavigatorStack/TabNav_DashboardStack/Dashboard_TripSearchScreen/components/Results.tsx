@@ -1,4 +1,3 @@
-import {AxiosErrorKind} from '@atb/api/utils';
 import {DayLabel} from './DayLabel';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -30,8 +29,8 @@ type Props = {
   isSearching: boolean;
   resultReasons: string[];
   onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
-  isNetworkError: boolean;
-  axiosErrorKind?: AxiosErrorKind;
+  tripsIsError: boolean;
+  tripsIsNetworkError: boolean;
   searchTime: TripSearchTime;
   anyFiltersApplied: boolean;
 };
@@ -42,8 +41,8 @@ export const Results: React.FC<Props> = ({
   isEmptyResult,
   resultReasons,
   onDetailsPressed,
-  isNetworkError,
-  axiosErrorKind,
+  tripsIsError,
+  tripsIsNetworkError,
   searchTime,
   anyFiltersApplied,
 }) => {
@@ -55,9 +54,11 @@ export const Results: React.FC<Props> = ({
     return null;
   }
 
-  if (axiosErrorKind) {
+  if (tripsIsError) {
     const errorMessage = t(
-      TripSearchTexts.results.error[isNetworkError ? 'network' : 'generic'],
+      TripSearchTexts.results.error[
+        tripsIsNetworkError ? 'network' : 'generic'
+      ],
     );
     return (
       <View style={styles.errorContainer}>
