@@ -38,6 +38,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_event_stream_fare_contracts',
   },
   {
+    name: 'isExperimentalFeaturesEnabled',
+    remoteConfigKey: 'enable_experimental_features',
+  },
+  {
     name: 'isFlexibleTransportEnabled',
     remoteConfigKey: 'enable_flexible_transport',
   },

@@ -1,13 +1,28 @@
+import React from 'react';
+import {useFeatureTogglesContext} from '../feature-toggles';
 import {isExperimentalEnabled} from './is-experimental-enabled';
 
 const isExperimental = isExperimentalEnabled();
 
-export const NullComponent: React.FC<any> = () => {
+const NullComponent: React.FC<any> = () => {
   return null;
 };
 
-export const wrapWithNullComponent = <T extends any>(
-  component: React.FC<T>,
+const ExperimentalFeatureToggledComponent: React.FC<
+  React.PropsWithChildren
+> = ({children}) => {
+  const {isExperimentalFeaturesEnabled} = useFeatureTogglesContext();
+  return isExperimentalFeaturesEnabled ? children : null;
+};
+
+export const wrapWithExperimentalFeatureToggledComponent = <T extends {}>(
+  WrappedComponent: React.FC<T>,
 ): React.FC<T> => {
-  return isExperimental ? component : (NullComponent as React.FC<T>);
+  return isExperimental
+    ? (props: T) => (
+        <ExperimentalFeatureToggledComponent>
+          <WrappedComponent {...props} />
+        </ExperimentalFeatureToggledComponent>
+      )
+    : (NullComponent as React.FC<T>);
 };

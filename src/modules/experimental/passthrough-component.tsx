@@ -4,7 +4,7 @@ type PassthroughComponentProps = React.PropsWithChildren<any>;
 
 const isExperimental = isExperimentalEnabled();
 
-export const PassthroughComponent: React.FC<PassthroughComponentProps> = ({
+const PassthroughComponent: React.FC<PassthroughComponentProps> = ({
   children,
 }) => {
   return children;

@@ -3,7 +3,7 @@ import {getBooleanConfigValue} from '../remote-config/remote-config';
 
 export const isExperimentalEnabled = () => {
   return (
-    !getBooleanConfigValue('disable_experimental_features') &&
+    getBooleanConfigValue('enable_experimental_features') &&
     ExperimentalFeature.isExperimentalEnabled()
   );
 };
