@@ -1,20 +1,6 @@
 import {Location} from '@atb/modules/favorites';
-import {
-  TransportModeFilterOptionWithSelectionType,
-  TravelSearchFiltersSelectionType,
-} from '@atb/modules/travel-search-filters';
-import {
-  Modes,
-  StreetMode,
-  TransportMode,
-  TransportModes,
-  TransportSubmode,
-} from '@atb/api/types/generated/journey_planner_v3_types';
-import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
-import {flatMap} from '@atb/utils/array';
-import {TravelSearchTransportModesType} from '@atb-as/config-specs';
-import {enumFromString} from '@atb/utils/enum-from-string';
-import {isDefined} from '@atb/utils/presence';
+import {TransportModeFilterOptionWithSelectionType} from '@atb/modules/travel-search-filters';
+import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {FeatureCategory} from '@atb/api/bff/types';
 import type {TripSearchTime} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {
@@ -45,77 +31,6 @@ export const defaultJourneyModes = {
   directMode: StreetMode.Foot,
   egressMode: StreetMode.Foot,
 };
-
-export function createQuery(
-  fromLocation: Location,
-  toLocation: Location,
-  {searchTime, cursor}: SearchInput,
-  arriveBy: boolean,
-  travelSearchFiltersSelection: TravelSearchFiltersSelectionType | undefined,
-  journeySearchModes?: Modes,
-): TripsQueryVariables {
-  const from = {
-    ...fromLocation,
-    place: getSearchPlace(fromLocation),
-  };
-  const to = {
-    ...toLocation,
-    place: getSearchPlace(toLocation),
-  };
-
-  const query: TripsQueryVariables = {
-    from,
-    to,
-    cursor,
-    when: searchTime?.date,
-    arriveBy,
-    modes: journeySearchModes,
-  };
-
-  if (travelSearchFiltersSelection?.transportModes) {
-    const selectedFilters = travelSearchFiltersSelection.transportModes.filter(
-      (m) => m.selected,
-    );
-
-    const includeFlexibleTransport = selectedFilters.some(
-      (sf) => sf.id === TransportMode.Bus, // filter flex transport on bus filter
-    );
-
-    query.modes = {
-      ...(includeFlexibleTransport ? journeySearchModes : defaultJourneyModes),
-      transportModes: flatMap(selectedFilters, (tm) =>
-        transportModeToEnum(tm.modes),
-      ),
-    };
-  }
-
-  if (travelSearchFiltersSelection?.travelSearchPreferences) {
-    travelSearchFiltersSelection.travelSearchPreferences.forEach(
-      (preference) => {
-        const value = preference.options.find(
-          (o) => o.id === preference.selectedOption,
-        )?.value;
-        if (isDefined(value)) {
-          query[preference.type] = value;
-        }
-      },
-    );
-  }
-  return query;
-}
-
-function transportModeToEnum(
-  modes: TravelSearchTransportModesType[],
-): TransportModes[] {
-  return modes.map((internal) => {
-    return {
-      transportMode: enumFromString(TransportMode, internal.transportMode),
-      transportSubModes: internal.transportSubModes
-        ?.map((submode) => enumFromString(TransportSubmode, submode))
-        .filter(isDefined),
-    };
-  });
-}
 
 export const sanitizeSearchTime = (
   searchTime: DateOptionAndValue<'now' | 'departure' | 'arrival'>,
