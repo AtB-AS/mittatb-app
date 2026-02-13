@@ -143,7 +143,8 @@ const isGroupOfStopPlaces = (location: Location): boolean => {
   );
 };
 
-export const getSearchPlace = (location: Location) => {
+export const getSearchPlace = (location?: Location) => {
+  if (!location) return undefined;
   return location.resultType === 'search' &&
     (isVenue(location) || isGroupOfStopPlaces(location))
     ? location.id
