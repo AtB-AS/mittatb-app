@@ -44,11 +44,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     // Initialize Bugsnag
-    if let bugsnagApiKey = Bundle.main.object(forInfoDictionaryKey: "BugsnagAPIKey") as? String, !bugsnagApiKey.isEmpty {
+    if let bugsnagApiKey = Bundle.main.object(forInfoDictionaryKey: "BugsnagApiKey") as? String, !bugsnagApiKey.isEmpty {
       let config = BugsnagConfiguration.init(bugsnagApiKey)
       
-      if let bugsnagReleaseStage = Bundle.main.object(forInfoDictionaryKey: "BugsnagReleaseStage") as? String, !bugsnagReleaseStage.isEmpty {
-        config.releaseStage = bugsnagReleaseStage
+      if let releaseStage = Bundle.main.object(forInfoDictionaryKey: "ReleaseStage") as? String, !releaseStage.isEmpty {
+        config.releaseStage = releaseStage
       }
       
       Bugsnag.start(with: config)

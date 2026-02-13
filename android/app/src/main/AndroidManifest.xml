@@ -52,6 +52,10 @@
             android:name="com.bugsnag.android.API_KEY"
             android:value="${bugsnagApiKey}"
             tools:node="merge" />
+        <meta-data
+            android:name="no.mittatb.releaseStage"
+            android:value="${releaseStage}"
+            tools:node="merge" />
         <!-- Kogenta SDK remove receivers / services -->
         <service
             android:name="com.kogenta.kettle.core.mmi.service.SensorService"
