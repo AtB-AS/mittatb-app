@@ -1,4 +1,10 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import {journeyStore, searchStore} from './storage';
 import {
   JourneySearchHistory,
@@ -41,18 +47,21 @@ export const SearchHistoryContextProvider = ({children}: Props) => {
     populateSearchHistory();
   }, []);
 
+  const addJourneySearchEntry = useCallback(
+    async (searchEntry: JourneySearchHistoryEntry) => {
+      setJourneySearchHistory(await journeyStore.addEntry(searchEntry));
+    },
+    [],
+  );
+
   const contextValue: SearchHistoryContextState = {
     history,
     async addSearchEntry(searchEntry: SearchHistoryEntry) {
       const history = await searchStore.addEntry(searchEntry);
       setSearchHistory(history);
     },
-
     journeyHistory,
-    async addJourneySearchEntry(searchEntry: JourneySearchHistoryEntry) {
-      setJourneySearchHistory(await journeyStore.addEntry(searchEntry));
-    },
-
+    addJourneySearchEntry,
     async clearHistory() {
       setSearchHistory(await searchStore.clear());
       setJourneySearchHistory(await journeyStore.clear());
