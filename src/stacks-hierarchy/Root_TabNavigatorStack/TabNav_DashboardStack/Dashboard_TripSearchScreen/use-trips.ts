@@ -13,6 +13,7 @@ import {useJourneyModes} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabN
 import {TripsProps, useTripsInfiniteQuery} from './use-trips-infinite-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {sanitizeSearchTime} from './utils';
+import Bugsnag from '@bugsnag/react-native';
 
 export function useTrips(
   fromLocation: Location | undefined,
@@ -74,9 +75,11 @@ export function useTrips(
 
   const tripPatterns = useMemo(
     () =>
-      tripsData?.pages.flatMap((page) =>
-        decorateTripPatternWithKey(page.trip.tripPatterns),
-      ) ?? [],
+      filterDuplicateTripPatterns(
+        tripsData?.pages.flatMap((page) =>
+          decorateTripPatternWithKey(page.trip.tripPatterns),
+        ) ?? [],
+      ),
     [tripsData?.pages],
   );
 
@@ -197,6 +200,26 @@ function generateKeyFromTripPattern(tripPattern: TripPattern) {
       .join('-');
 
   return key;
+}
+
+function filterDuplicateTripPatterns(
+  tripPatterns: TripPatternWithKey[],
+): TripPatternWithKey[] {
+  const existing = new Map<string, TripPatternWithKey>();
+  return tripPatterns.filter((tp) => {
+    if (existing.has(tp.key)) {
+      Bugsnag.leaveBreadcrumb(
+        'Removed duplicate tripPattern from search results',
+        {
+          original: existing.get(tp.key),
+          duplicate: tp,
+        },
+      );
+      return false;
+    }
+    existing.set(tp.key, tp);
+    return true;
+  });
 }
 
 function toLoggableFiltersSelection(
