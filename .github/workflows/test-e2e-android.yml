@@ -67,7 +67,7 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.branch || 'tor/e2e' }}
+          ref: ${{ github.event.inputs.branch || 'master' }}
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
