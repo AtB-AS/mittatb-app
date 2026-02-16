@@ -1,5 +1,5 @@
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
@@ -12,12 +12,10 @@ import {
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {WithSwapButton} from '@atb/components/swap-button';
 
 type StopPlaceSelectionProps = {
   selection: PurchaseSelectionType;
   onSelect: (selection: PurchaseSelectionType) => void;
-  onSwap?: () => void;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -29,14 +27,12 @@ export const HarborSelection = forwardRef<
     {
       selection /*: initialSelection*/,
       onSelect,
-      onSwap,
       style,
     }: StopPlaceSelectionProps,
     ref,
   ) => {
     const {t} = useTranslation();
     const selectionBuilder = usePurchaseSelectionBuilder();
-    const {theme} = useThemeContext();
 
     const fromHarborRef = useRef<typeof PressableOpacity>(null);
     const toHarborRef = useRef<typeof PressableOpacity>(null);
@@ -52,38 +48,32 @@ export const HarborSelection = forwardRef<
         <ContentHeading
           text={t(PurchaseOverviewTexts.stopPlaces.harborSelection.select)}
         />
-        <WithSwapButton
-          onPress={() => onSwap?.()}
-          backgroundColor={theme.color.background.neutral[0]}
-          horizontalPosition="right"
-        >
-          <Section accessible={false}>
-            <HarborSelectionItem
-              fromOrTo="from"
-              harbor={selection.stopPlaces.from}
-              disabled={false}
-              onPress={() =>
-                onSelect(
-                  // Wipe existing stop places when selecting new from stop place
-                  selectionBuilder
-                    .fromSelection(selection)
-                    .fromStopPlace(undefined)
-                    .toStopPlace(undefined)
-                    .legs([])
-                    .build(),
-                )
-              }
-              ref={fromHarborRef}
-            />
-            <HarborSelectionItem
-              fromOrTo="to"
-              harbor={selection.stopPlaces.to}
-              disabled={!selection.stopPlaces.from}
-              onPress={() => onSelect(selection)}
-              ref={toHarborRef}
-            />
-          </Section>
-        </WithSwapButton>
+        <Section accessible={false}>
+          <HarborSelectionItem
+            fromOrTo="from"
+            harbor={selection.stopPlaces.from}
+            disabled={false}
+            onPress={() =>
+              onSelect(
+                // Wipe existing stop places when selecting new from stop place
+                selectionBuilder
+                  .fromSelection(selection)
+                  .fromStopPlace(undefined)
+                  .toStopPlace(undefined)
+                  .legs([])
+                  .build(),
+              )
+            }
+            ref={fromHarborRef}
+          />
+          <HarborSelectionItem
+            fromOrTo="to"
+            harbor={selection.stopPlaces.to}
+            disabled={!selection.stopPlaces.from}
+            onPress={() => onSelect(selection)}
+            ref={toHarborRef}
+          />
+        </Section>
       </View>
     );
   },
@@ -168,5 +158,18 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   toFromLabel: {
     minWidth: 40,
     marginRight: theme.spacing.small,
+  },
+  swapButton: {
+    position: 'absolute',
+    right: theme.spacing.medium,
+    top: '50%',
+    transform: [{translateY: '-50%'}],
+    backgroundColor: theme.color.background.neutral['0'].background,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    borderRadius: theme.border.radius.circle,
+    zIndex: 100,
+    borderWidth: theme.border.width.slim,
+    borderColor: theme.color.border.secondary.foreground.secondary,
   },
 }));

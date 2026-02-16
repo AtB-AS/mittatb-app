@@ -8,12 +8,11 @@ import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 type SelectionProps = {
   selection: PurchaseSelectionType;
   onSelect: (selection: PurchaseSelectionType) => void;
-  onSwap?: () => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export const FromToSelection = forwardRef<FocusRefsType, SelectionProps>(
-  ({selection, onSelect, onSwap, style}: SelectionProps, ref) => {
+  ({selection, onSelect, style}: SelectionProps, ref) => {
     let selectionMode =
       selection.fareProductTypeConfig.configuration.zoneSelectionMode;
     if (selectionMode === 'none') {
@@ -25,7 +24,6 @@ export const FromToSelection = forwardRef<FocusRefsType, SelectionProps>(
         <HarborSelection
           selection={selection}
           onSelect={onSelect}
-          onSwap={onSwap}
           style={style}
           ref={ref}
         />
