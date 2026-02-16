@@ -19,6 +19,7 @@ export const buyValueCodeWithBonusPoints = async (
   if (!bonusProductId) return null;
   const response = await client.post(
     `/bonus/v2/buy-product/value-code/${bonusProductId}`,
+    undefined,
     {
       authWithIdToken: true,
     },
