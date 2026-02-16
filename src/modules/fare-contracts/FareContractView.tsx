@@ -16,7 +16,7 @@ import {
   useSchoolCarnetInfoQuery,
 } from '@atb/modules/ticketing';
 import {FareContractType, getAccesses} from '@atb-as/utils';
-import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
+import {ConsumeCarnetSectionitem} from './components/ConsumeCarnetSectionitem';
 import {StyleSheet} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -157,17 +157,6 @@ export const FareContractView: React.FC<Props> = ({
         </GenericSectionItem>
       )}
 
-      {!isStatic && (
-        <LinkSectionItem
-          text={t(
-            validityStatus === 'valid' && isInspectable
-              ? FareContractTexts.detailsLink.valid
-              : FareContractTexts.detailsLink.notValid,
-          )}
-          onPress={onPressDetails}
-          testID={testID + 'Details'}
-        />
-      )}
       {isActivateTicketNowEnabled &&
         isCanBeActivatedNowFareContract(
           fareContract,
@@ -186,9 +175,21 @@ export const FareContractView: React.FC<Props> = ({
         currentUserId,
         schoolCarnetInfo,
       ) && (
-        <ConsumeCarnetSectionItem
+        <ConsumeCarnetSectionitem
           fareContractId={fareContract.id}
           fareProductType={preassignedFareProduct?.type}
+        />
+      )}
+
+      {!isStatic && (
+        <LinkSectionItem
+          text={t(
+            validityStatus === 'valid' && isInspectable
+              ? FareContractTexts.detailsLink.valid
+              : FareContractTexts.detailsLink.notValid,
+          )}
+          onPress={onPressDetails}
+          testID={testID + 'Details'}
         />
       )}
     </Section>
