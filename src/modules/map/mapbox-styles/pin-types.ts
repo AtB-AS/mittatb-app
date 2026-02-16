@@ -32,7 +32,7 @@ export type LiveVehiclePinState =
   | 'activewaiting'
   | 'indicator';
 
-export type PinType = 'vehicle' | 'station' | 'stop';
+export type PinType = 'vehicle' | 'station' | 'stop' | 'unknown'; // 'unknown' is used for features that does not match the expected schemas
 export type PinIconCode = NsrPinIconCode | VehicleIconCode | StationIconCode;
 export type PinState =
   | 'default'

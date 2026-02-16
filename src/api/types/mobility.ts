@@ -326,6 +326,7 @@ export const StationFeaturePropertiesSchema = z.object({
   num_vehicles_available: z.number(),
   capacity: z.number(),
   count: z.literal(1),
+  is_virtual_station: z.boolean(),
 });
 export type StationFeatureProperties = z.infer<
   typeof StationFeaturePropertiesSchema

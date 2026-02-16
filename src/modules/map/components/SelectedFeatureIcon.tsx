@@ -5,7 +5,10 @@ import {hitboxCoveringIconOnly, useMapSymbolStyles} from '@atb/modules/map';
 import {Expression} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 import {PinType} from '../mapbox-styles/pin-types';
 import {MapSlotLayerId} from '../hooks/use-mapbox-json-style';
-import {StationFeaturePropertiesSchema} from '@atb/api/types/mobility';
+import {
+  StationFeaturePropertiesSchema,
+  VehiclePropertiesSchema,
+} from '@atb/api/types/mobility';
 
 export const SelectedFeatureIcon = ({
   selectedFeature,
@@ -90,9 +93,17 @@ function getPinType(selectedFeatureProperties?: GeoJsonProperties): PinType {
     case 'Quay':
       return 'stop';
     default:
-      return StationFeaturePropertiesSchema.safeParse(selectedFeatureProperties)
-        .success
-        ? 'station'
-        : 'vehicle';
+      if (
+        StationFeaturePropertiesSchema.safeParse(selectedFeatureProperties)
+          .success
+      ) {
+        return 'station';
+      }
+      if (
+        VehiclePropertiesSchema.safeParse(selectedFeatureProperties).success
+      ) {
+        return 'vehicle';
+      }
+      return 'unknown';
   }
 }
