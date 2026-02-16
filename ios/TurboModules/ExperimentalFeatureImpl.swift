@@ -17,7 +17,7 @@ final class ExperimentalFeatureImpl: NSObject {
   /// - Simulator => not App Store
   /// - embedded.mobileprovision present => not App Store (dev/ad-hoc/enterprise/testflight)
   /// - sandboxReceipt => not App Store (typically TestFlight)
-  @objc func isExperimentalEnabled() -> Bool {
+  @objc func isNonProductionReleaseChannel() -> Bool {
     return isSimulator() || isExperimentalReleaseStage() || hasEmbeddedMobileProvision() || hasSandboxReceipt()
   }
   

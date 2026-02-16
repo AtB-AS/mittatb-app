@@ -19,9 +19,9 @@
   return std::make_shared<facebook::react::NativeExperimentalFeatureSpecJSI>(params);
 }
 
-- (NSNumber *)isExperimentalEnabled
+- (NSNumber *)isNonProductionReleaseChannel
 {
-  return @([_impl isExperimentalEnabled]);
+  return @([_impl isNonProductionReleaseChannel]);
 }
 
 + (NSString *)moduleName

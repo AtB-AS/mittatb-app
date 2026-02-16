@@ -20,7 +20,7 @@ class ExperimentalFeatureModule(
 
     override fun getName() = NAME
 
-    override fun isExperimentalEnabled(): Boolean {
+    override fun isNonProductionReleaseChannel(): Boolean {
         return experimentalReleaseStages.contains(releaseStage)
     }
 

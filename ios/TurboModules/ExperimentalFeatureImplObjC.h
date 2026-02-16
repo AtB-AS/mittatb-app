@@ -3,7 +3,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ExperimentalFeatureImpl : NSObject
-- (BOOL)isExperimentalEnabled;
+- (BOOL)isNonProductionReleaseChannel;
 @end
 
 NS_ASSUME_NONNULL_END
