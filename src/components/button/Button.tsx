@@ -156,7 +156,6 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
       style={[
         {
           opacity: fadeAnim,
-          width: expanded ? '100%' : undefined,
         },
         style,
       ]}
