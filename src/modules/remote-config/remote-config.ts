@@ -199,8 +199,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   vehicles_poll_interval: 20000,
 };
 
-remoteConfig().setDefaults(defaultRemoteConfig);
-
 export type RemoteConfigKeys = keyof RemoteConfig;
 
 export function getConfig(): RemoteConfig {
