@@ -335,15 +335,19 @@ export type StationFeatureProperties = z.infer<
 export const StationFeatureSchema =
   GeoJsonFeatureWithPointGeometrySchema.extend({
     properties: StationFeaturePropertiesSchema,
-  }) satisfies z.ZodType<Feature<Point>>;
+  });
 export type StationFeature = z.infer<typeof StationFeatureSchema>;
 
-// See martin.yaml -> vehicles_clustered, in the tile server
-export const VehiclesClusteredPropertiesSchema = z.object({
+// common properties for all clustered features (vehicles and stations)
+export const ClusterPropertiesBaseSchema = z.object({
   count: z.number().gt(1),
   vehicle_type_form_factor: FormFactorSchema,
   cluster_extent_meters: z.number().optional(),
 });
+
+// See martin.yaml -> vehicles_clustered, in the tile server
+export const VehiclesClusteredPropertiesSchema = ClusterPropertiesBaseSchema;
+
 export type VehiclesClusteredProperties = z.infer<
   typeof VehiclesClusteredPropertiesSchema
 >;
@@ -351,7 +355,7 @@ export type VehiclesClusteredProperties = z.infer<
 export const VehiclesClusteredFeatureSchema =
   GeoJsonFeatureWithPointGeometrySchema.extend({
     properties: VehiclesClusteredPropertiesSchema,
-  }) satisfies z.ZodType<Feature<Point>>;
+  });
 export type VehiclesClusteredFeature = z.infer<
   typeof VehiclesClusteredFeatureSchema
 >;
@@ -368,17 +372,15 @@ export const VehiclePropertiesSchema = z.object({
 export const VehicleFeatureSchema =
   GeoJsonFeatureWithPointGeometrySchema.extend({
     properties: VehiclePropertiesSchema,
-  }) satisfies z.ZodType<Feature<Point>>;
+  });
 export type VehicleFeature = z.infer<typeof VehicleFeatureSchema>;
 
 // See martin.yaml -> stations_clustered, in the tile server
-export const StationsClusteredPropertiesSchema = z.object({
-  count: z.number().gt(1),
-  num_vehicles_available: z.number(),
-  capacity: z.number(),
-  vehicle_type_form_factor: FormFactorSchema,
-  cluster_extent_meters: z.number(),
-});
+export const StationsClusteredPropertiesSchema =
+  ClusterPropertiesBaseSchema.extend({
+    num_vehicles_available: z.number(),
+    capacity: z.number(),
+  });
 export type StationsClusteredProperties = z.infer<
   typeof StationsClusteredPropertiesSchema
 >;
@@ -386,7 +388,7 @@ export type StationsClusteredProperties = z.infer<
 export const StationsClusteredFeatureSchema =
   GeoJsonFeatureWithPointGeometrySchema.extend({
     properties: StationsClusteredPropertiesSchema,
-  }) satisfies z.ZodType<Feature<Point>>;
+  });
 export type StationsClusteredFeature = z.infer<
   typeof StationsClusteredFeatureSchema
 >;
