@@ -78,8 +78,9 @@ export const StoredTripPatternsDashboardComponent =
       }
 
       return (
-        <View style={styles.container} testID="storedTripPatternsContentView">
+        <View testID="storedTripPatternsContentView">
           <ContentHeading
+            style={styles.contentHeading}
             text={t(StoredTripPatternsDashboardComponentTexts.header)}
           />
           {tripPatterns.map((tripPattern, i) => (
@@ -128,6 +129,7 @@ const StoredTripPatternRow: React.FC<{
   isRemoving,
   isFocused,
 }) => {
+  const styles = useThemeStyles();
   const {data} = useSingleTripQuery(tripPattern.compressedQuery, isFocused);
   const swipeableRef = useRef<SwipeableMethods>(null);
 
@@ -159,18 +161,20 @@ const StoredTripPatternRow: React.FC<{
     <Swipeable
       friction={2}
       enableTrackpadTwoFingerGesture
-      rightThreshold={40}
+      rightThreshold={20}
       renderRightActions={RightAction}
       onSwipeableOpen={handleSwipe}
       ref={swipeableRef}
     >
-      <ResultRow
-        tripPattern={updatedTripPattern}
-        onDetailsPressed={onDetailsPressed}
-        resultIndex={resultIndex}
-        searchTime={searchTime}
-        testID={'tripSearchSearchResult' + resultIndex}
-      />
+      <View style={styles.resultRowContainer}>
+        <ResultRow
+          tripPattern={updatedTripPattern}
+          onDetailsPressed={onDetailsPressed}
+          resultIndex={resultIndex}
+          searchTime={searchTime}
+          testID={'tripSearchSearchResult' + resultIndex}
+        />
+      </View>
     </Swipeable>
   );
 };
@@ -179,7 +183,7 @@ function RightAction(prog: SharedValue<number>, drag: SharedValue<number>) {
   const {theme} = useThemeContext();
   const styleAnimation = useAnimatedStyle(() => {
     return {
-      transform: [{translateX: drag.value + 100}],
+      transform: [{translateX: drag.value + 80}],
     };
   });
 
@@ -187,7 +191,7 @@ function RightAction(prog: SharedValue<number>, drag: SharedValue<number>) {
     <Animated.View
       style={[
         {
-          width: 100,
+          width: 80,
           padding: theme.spacing.medium,
           justifyContent: 'center',
         },
@@ -207,9 +211,11 @@ const StoredTripPatternsDashboardComponentTexts = {
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    paddingHorizontal: theme.spacing.medium,
-    paddingBottom: theme.spacing.medium,
+  contentHeading: {
+    marginHorizontal: theme.spacing.medium,
+  },
+  resultRowContainer: {
+    marginHorizontal: theme.spacing.medium,
   },
   errorContainer: {
     paddingBottom: theme.spacing.medium,
