@@ -33,7 +33,7 @@ on:
       - master
       - release/**
   schedule:
-    - cron: '0 1 * * 1-5' 
+    - cron: '0 1 * * 1-5'
 
 permissions:
   contents: read
@@ -43,7 +43,7 @@ jobs:
     name: Detect changes
     runs-on: ubuntu-latest
     outputs:
-      should_build: ${{ steps.detect.outputs.should_build}}
+      should_build: ${{ steps.detect.outputs.should_build || inputs.force-build == 'true' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -103,24 +103,24 @@ jobs:
         uses: actions/cache@v4
         id: modules-cache
         with:
-          lookup-only: true
+          lookup-only: ${{ inputs.force-build != 'true' }}
           path: '**/node_modules'
           key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Install node v22
         uses: actions/setup-node@v5
-        if: steps.modules-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         with:
           node-version: 22
           cache: 'yarn'
       - name: Add Entur private registry credentials
         shell: bash
-        if: steps.modules-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         run: bash ./scripts/add-entur-private-registry.sh
         env:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Install node_modules
-        if: steps.modules-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       # ===== Ruby & Bundler =====
       - name: Setup ruby and bundle install
@@ -129,14 +129,14 @@ jobs:
           ruby-version: 3.1.0
           cache-version: 2
           bundler-cache: true
-      
+
   build:
     needs: setup
     name: Build Android (${{ matrix.org }})
     strategy:
       fail-fast: false
       matrix:
-        org: ${{ fromJson(needs.setup.outputs.matrix) }} 
+        org: ${{ fromJson(needs.setup.outputs.matrix) }}
     environment: ${{ matrix.org }}
     timeout-minutes: 180
     runs-on: ubuntu-latest
@@ -148,6 +148,7 @@ jobs:
 
       - name: Get potential cached APK
         uses: actions/cache@v4
+        if: inputs.force-build != 'true'
         id: apk-cache
         with:
           path: app-staging.apk
