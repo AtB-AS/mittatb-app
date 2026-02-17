@@ -159,9 +159,10 @@ const StoredTripPatternRow: React.FC<{
 
   return (
     <Swipeable
-      friction={2}
+      friction={1}
+      overshootFriction={8}
       enableTrackpadTwoFingerGesture
-      rightThreshold={20}
+      rightThreshold={30}
       renderRightActions={RightAction}
       onSwipeableOpen={handleSwipe}
       ref={swipeableRef}
@@ -179,11 +180,13 @@ const StoredTripPatternRow: React.FC<{
   );
 };
 
+const ACTION_WIDTH = 80;
+
 function RightAction(prog: SharedValue<number>, drag: SharedValue<number>) {
   const {theme} = useThemeContext();
   const styleAnimation = useAnimatedStyle(() => {
     return {
-      transform: [{translateX: drag.value + 80}],
+      transform: [{translateX: drag.value + ACTION_WIDTH}],
     };
   });
 
@@ -191,9 +194,10 @@ function RightAction(prog: SharedValue<number>, drag: SharedValue<number>) {
     <Animated.View
       style={[
         {
-          width: 80,
-          padding: theme.spacing.medium,
+          width: ACTION_WIDTH,
+          paddingRight: theme.spacing.medium * 2, // This is to make the icon center aligned, the result row has a padding right of theme.spacing.medium
           justifyContent: 'center',
+          alignItems: 'center',
         },
         styleAnimation,
       ]}
