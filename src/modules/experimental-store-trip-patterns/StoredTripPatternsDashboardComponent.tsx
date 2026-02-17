@@ -35,6 +35,7 @@ type Props = {
 
 export const StoredTripPatternsDashboardComponent =
   wrapWithExperimentalFeatureToggledComponent<Props>(
+    'render-children-if-disabled',
     ({onDetailsPressed, isFocused}) => {
       const styles = useThemeStyles();
       const now = useNow(30000);
