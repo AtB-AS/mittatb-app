@@ -70,7 +70,7 @@ extension PaymentHandlerImpl: PKPaymentAuthorizationControllerDelegate {
       DispatchQueue.main.async {
         var paymentDataString: String? = nil
         if let paymentData = self.paymentData {
-          paymentDataString = String(data: paymentData, encoding: .utf8)
+          paymentDataString = paymentData.base64EncodedString()
         }
 
         self.completionHandler!(paymentDataString)
