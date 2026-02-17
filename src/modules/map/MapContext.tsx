@@ -35,8 +35,6 @@ type MapContextState = {
     bottomSheetType: MapBottomSheetType;
     feature: Feature<Point, GeoJsonProperties> | null;
   }) => void;
-  setHeaderHeight: React.Dispatch<React.SetStateAction<number>>;
-  headerHeight: number;
 };
 
 const MapContext = createContext<MapContextState | undefined>(undefined);
@@ -70,8 +68,6 @@ export const MapContextProvider = ({children}: Props) => {
     bottomSheetType: MapBottomSheetType.None,
   });
 
-  const [headerHeight, setHeaderHeight] = useState(0);
-
   const [givenShmoConsent, setGivenShmoConsent] = usePersistedBoolState(
     storage,
     StorageModelKeysEnum.ScooterConsent,
@@ -103,8 +99,6 @@ export const MapContextProvider = ({children}: Props) => {
         setGivenShmoConsent,
         currentBottomSheet,
         setCurrentBottomSheet,
-        setHeaderHeight,
-        headerHeight,
       }}
     >
       {children}

@@ -334,13 +334,21 @@ export const ScooterTexts = {
     discount(unit: string, price: string) {
       switch (unit) {
         case 'min':
-          return _(`så ${price}kr/min`, `then ${price}kr/min`, `så ${price}kr/min`);
+          return _(
+            `så ${price}kr/min`,
+            `then ${price}kr/min`,
+            `så ${price}kr/min`,
+          );
         case 'km':
-          return _(`så ${price}kr/km`, `then ${price}kr/km`, `så ${price}kr/km`);
+          return _(
+            `så ${price}kr/km`,
+            `then ${price}kr/km`,
+            `så ${price}kr/km`,
+          );
         default:
           return _(`så ${price}kr`, `then ${price}kr`, `så ${price}kr`);
       }
-    }
+    },
   },
 };
 

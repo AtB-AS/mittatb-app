@@ -2,7 +2,7 @@ import {
   VehicleExtendedFragment,
   VehicleId,
 } from '@atb/api/types/generated/fragments/vehicles';
-import React, {useMemo, useState} from 'react';
+import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -34,7 +34,6 @@ import {
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {PriceDetailsCard} from '../PriceDetailsCard';
-import {useMapContext} from '@atb/modules/map';
 
 type ScooterHelpParams = {operatorId: string} & (
   | {vehicleId: string}
@@ -82,7 +81,6 @@ export const ScooterSheet = ({
 
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
-  const {headerHeight} = useMapContext();
 
   const priceAdjustments = operator?.priceAdjustments?.[FormFactor.Scooter];
 
@@ -97,31 +95,9 @@ export const ScooterSheet = ({
   const {isParkingViolationsReportingEnabled, isShmoDeepIntegrationEnabled} =
     useFeatureTogglesContext();
 
-  const [height, setHeight] = useState<number | null>(null);
-  const [actionButtonsHeight, setActionButtonsHeight] = useState<number | null>(
-    null,
-  );
-
-  const snapPoints = useMemo(() => {
-    if (
-      height === null ||
-      actionButtonsHeight === null ||
-      headerHeight === null
-    )
-      return ['25%', '50%']; // fallback while measuring
-    return [height + actionButtonsHeight + headerHeight - theme.spacing.medium];
-  }, [height, actionButtonsHeight, headerHeight, theme.spacing.medium]);
-
   return (
     <MapBottomSheet
       canMinimize={true}
-      snapPoints={
-        isShmoDeepIntegrationEnabled &&
-        operatorIsIntegrationEnabled &&
-        !hasBlockers
-          ? snapPoints
-          : undefined
-      }
       closeCallback={onClose}
       enablePanDownToClose={false}
       closeOnBackdropPress={false}
@@ -154,57 +130,45 @@ export const ScooterSheet = ({
 
       {!isLoading && !shmoReqIsLoading && !isError && vehicle && (
         <View style={styles.container}>
-          <View
-            onLayout={(e) => {
-              setHeight(e.nativeEvent.layout.height);
-            }}
-          >
-            {operatorBenefit && (
-              <OperatorBenefit
-                benefit={operatorBenefit}
-                formFactor={FormFactor.Scooter}
-                style={styles.operatorBenefit}
-              />
-            )}
-            <View style={styles.vehicleContent}>
-              <VehicleCard
-                currentFuelPercent={vehicle.currentFuelPercent}
-                currentRangeMeters={vehicle.currentRangeMeters}
-              />
+          {operatorBenefit && (
+            <OperatorBenefit
+              benefit={operatorBenefit}
+              formFactor={FormFactor.Scooter}
+              style={styles.operatorBenefit}
+            />
+          )}
+          <View style={styles.vehicleContent}>
+            <VehicleCard
+              currentFuelPercent={vehicle.currentFuelPercent}
+              currentRangeMeters={vehicle.currentRangeMeters}
+            />
 
-              <PriceDetailsCard
-                pricingPlan={vehicle.pricingPlan}
-                priceAdjustments={priceAdjustments}
-              />
-            </View>
+            <PriceDetailsCard
+              pricingPlan={vehicle.pricingPlan}
+              priceAdjustments={priceAdjustments}
+            />
           </View>
 
           {isShmoDeepIntegrationEnabled &&
           operatorId &&
           operatorIsIntegrationEnabled ? (
             <>
-              <View
-                onLayout={(e) =>
-                  setActionButtonsHeight(e.nativeEvent.layout.height)
-                }
-                style={{gap: theme.spacing.large}}
-              >
-                <ShmoActionButton
-                  onStartOnboarding={startOnboardingCallback}
-                  loginCallback={navigateToLogin}
-                  vehicleId={id}
-                  operatorId={operatorId}
-                  paymentMethod={selectedPaymentMethod}
-                />
-                {selectedPaymentMethod && !hasBlockers && (
-                  <Section>
-                    <PaymentSelectionSectionItem
-                      paymentMethod={selectedPaymentMethod}
-                      onPress={selectPaymentMethod}
-                    />
-                  </Section>
-                )}
-              </View>
+              <ShmoActionButton
+                onStartOnboarding={startOnboardingCallback}
+                loginCallback={navigateToLogin}
+                vehicleId={id}
+                operatorId={operatorId}
+                paymentMethod={selectedPaymentMethod}
+              />
+              {selectedPaymentMethod && !hasBlockers && (
+                <Section>
+                  <PaymentSelectionSectionItem
+                    paymentMethod={selectedPaymentMethod}
+                    onPress={selectPaymentMethod}
+                  />
+                </Section>
+              )}
+
               <Button
                 expanded={true}
                 onPress={() => {

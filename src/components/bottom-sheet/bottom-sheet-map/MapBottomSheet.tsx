@@ -1,4 +1,4 @@
-import React, {useCallback, PropsWithChildren, useMemo} from 'react';
+import React, {useCallback, PropsWithChildren, useMemo, useState} from 'react';
 import BottomSheetGor, {
   BottomSheetBackdrop,
   BottomSheetScrollView,
@@ -63,18 +63,15 @@ export const MapBottomSheet = ({
 }: BottomSheetProps) => {
   const styles = useBottomSheetStyles();
   const sheetTopPosition = useSharedValue(0);
-  const {
-    setPaddingBottomMap,
-    setCurrentBottomSheet,
-    mapState,
-    setHeaderHeight,
-    headerHeight,
-  } = useMapContext();
+  const {setPaddingBottomMap, setCurrentBottomSheet, mapState} =
+    useMapContext();
   const {height: screenHeight} = useWindowDimensions();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   const {top: safeAreaTop} = useSafeAreaInsets();
 
   const {bottomSheetMapRef} = useBottomSheetContext();
+
+  const [headerHeight, setHeaderHeight] = useState(0);
 
   const aStyle = useAnimatedStyle(() => {
     return {

@@ -219,14 +219,14 @@ export const formatPricePerUnit = (
 };
 
 export const extractNumber = (numberText: string): number | null => {
-    if (!numberText) return null;
+  if (!numberText) return null;
 
-    const number = numberText.match(/[0-9]+(?:[.,][0-9]+)?/);
-    if (!number) return null;
-    const normalized = number[0].replace(',', '.');
-    const num = parseFloat(normalized);
+  const number = numberText.match(/[0-9]+(?:[.,][0-9]+)?/);
+  if (!number) return null;
+  const normalized = number[0].replace(',', '.');
+  const num = parseFloat(normalized);
 
-    return Number.isFinite(num) ? num : null;
+  return Number.isFinite(num) ? num : null;
 };
 
 export const isShowAll = (
