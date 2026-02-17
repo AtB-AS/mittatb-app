@@ -30,12 +30,14 @@ jobs:
     name: Detect changes
     runs-on: ubuntu-latest
     outputs:
-      should_build: ${{ steps.detect.outputs.should_build}}
+      should_build: ${{ steps.detect.outputs.should_build || inputs.force-build == 'true' }}
     steps:
       - uses: actions/checkout@v4
+        if: inputs.force-build != 'true'
         with:
           fetch-depth: 2
       - name: Detect change after checkout
+        if: inputs.force-build != 'true'
         id: detect
         uses: ./.github/actions/detect-changes
 
@@ -92,7 +94,7 @@ jobs:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Install node_modules
-        if: steps.modules-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         run:
           yarn install --frozen-lockfile
       # ===== Ruby & Bundler =====
@@ -103,7 +105,7 @@ jobs:
           cache-version: 2
           bundler-cache: true
       - name: Setup Xcode version
-        if: steps.pods-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.pods-cache.outputs.cache-hit != 'true'
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: "latest-stable"
