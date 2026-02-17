@@ -40,6 +40,7 @@ export function ConsumeCarnetSectionitem({
         interactiveColor={interactiveColor}
         onPress={onPress}
         expanded={true}
+        style={{width: '100%'}} // Without this the GenericSectionItem squishes the button
       />
       <ConsumeCarnetBottomSheet
         fareContractId={fareContractId}

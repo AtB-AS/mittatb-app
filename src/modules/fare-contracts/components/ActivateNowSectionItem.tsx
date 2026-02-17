@@ -41,6 +41,7 @@ export function ActivateNowSectionItem({
           svg: TicketValid,
         }}
         ref={onCloseFocusRef}
+        style={{width: '100%'}} // Without this the GenericSectionItem squishes the button
       />
       <ActivateNowBottomSheet
         fareContractId={fareContractId}
