@@ -6,14 +6,14 @@ import {useStoredTripPatterns} from './StoredTripPatternsContext';
 import {Button} from '@atb/components/button';
 import {Save, SaveFill} from '@atb/assets/svg/mono-icons/actions';
 import analytics from '@react-native-firebase/analytics';
-import {wrapWithNullComponent} from '../experimental/null-component';
+import {wrapWithExperimentalFeatureToggledComponent} from '@atb/modules/experimental';
 
 type SaveTripPatternButtonComponentProps = {
   tripPattern: TripPattern;
 };
 
 export const SaveTripPatternButtonComponent =
-  wrapWithNullComponent<SaveTripPatternButtonComponentProps>(
+  wrapWithExperimentalFeatureToggledComponent<SaveTripPatternButtonComponentProps>(
     ({tripPattern}) => {
       const {addTripPattern, removeTripPattern, isTripPatternStored} =
         useStoredTripPatterns();
