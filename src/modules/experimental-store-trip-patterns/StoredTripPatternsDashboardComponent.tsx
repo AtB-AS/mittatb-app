@@ -1,12 +1,5 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import React, {
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {TripPattern} from '@atb/api/types/trips';
 import {useNow} from '@atb/utils/use-now';
@@ -17,7 +10,12 @@ import Swipeable, {
   SwipeableMethods,
   SwipeDirection,
 } from 'react-native-gesture-handler/ReanimatedSwipeable';
-import Animated, {SharedValue, useAnimatedStyle} from 'react-native-reanimated';
+import Animated, {
+  LinearTransition,
+  SharedValue,
+  useAnimatedStyle,
+  ZoomOut,
+} from 'react-native-reanimated';
 import {ContentHeading} from '@atb/components/heading';
 import {translation as _, useTranslation} from '@atb/translations';
 import {ResultRow} from '../../stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultRow';
@@ -84,7 +82,12 @@ export const StoredTripPatternsDashboardComponent =
             text={t(StoredTripPatternsDashboardComponentTexts.header)}
           />
           {tripPatterns.map((tripPattern, i) => (
-            <Fragment key={tripPattern.compressedQuery}>
+            <Animated.View
+              key={tripPattern.key}
+              exiting={ZoomOut}
+              layout={LinearTransition} // https://github.com/software-mansion/react-native-reanimated/discussions/5857#discussioncomment-9992457
+              style={{zIndex: 999}} // This is to make the animation appear above content which is not animating
+            >
               <StoredTripPatternRow
                 tripPattern={tripPattern}
                 onDetailsPressed={onDetailsPressed}
@@ -98,7 +101,7 @@ export const StoredTripPatternsDashboardComponent =
                 }
                 isFocused={isFocused}
               />
-            </Fragment>
+            </Animated.View>
           ))}
           <RemoveStoredTripPatternBottomSheet
             onRemovePress={onRemovePress}
