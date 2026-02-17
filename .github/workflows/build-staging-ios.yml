@@ -79,7 +79,7 @@ jobs:
       # ===== Install node-modules  =====
       - name: Install node v22
         uses: actions/setup-node@v5
-        if: steps.modules-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         with:
           node-version: 22
           cache: 'yarn'
