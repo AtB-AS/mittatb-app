@@ -1,4 +1,4 @@
-import React, {useCallback, PropsWithChildren, useMemo, useState} from 'react';
+import React, {useCallback, PropsWithChildren, useMemo} from 'react';
 import BottomSheetGor, {
   BottomSheetBackdrop,
   BottomSheetScrollView,
@@ -63,12 +63,17 @@ export const MapBottomSheet = ({
 }: BottomSheetProps) => {
   const styles = useBottomSheetStyles();
   const sheetTopPosition = useSharedValue(0);
-  const {setPaddingBottomMap, setCurrentBottomSheet, mapState} =
-    useMapContext();
+  const {
+    setPaddingBottomMap,
+    setCurrentBottomSheet,
+    mapState,
+    setHeaderHeight,
+    headerHeight,
+  } = useMapContext();
   const {height: screenHeight} = useWindowDimensions();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   const {top: safeAreaTop} = useSafeAreaInsets();
-  const [headerHeight, setHeaderHeight] = useState(0);
+
   const {bottomSheetMapRef} = useBottomSheetContext();
 
   const aStyle = useAnimatedStyle(() => {
@@ -130,10 +135,13 @@ export const MapBottomSheet = ({
       : prevSnapPoints;
   }, [canMinimize, headerHeight, snapPoints]);
 
-  const onHeaderLayout = useCallback((e: LayoutChangeEvent) => {
-    const h = e.nativeEvent.layout.height;
-    setHeaderHeight((prev) => (prev !== h ? h : prev));
-  }, []);
+  const onHeaderLayout = useCallback(
+    (e: LayoutChangeEvent) => {
+      const h = e.nativeEvent.layout.height;
+      setHeaderHeight((prev) => (prev !== h ? h : prev));
+    },
+    [setHeaderHeight],
+  );
 
   const HandleComponent = useCallback(() => {
     return (

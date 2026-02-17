@@ -152,7 +152,6 @@ export const ActiveScooterSheet = ({
             <>
               <View style={styles.container}>
                 <VehicleCard
-                  pricingPlan={activeBooking.pricingPlan}
                   currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
                   currentRangeMeters={
                     activeBooking.asset?.currentRangeKm

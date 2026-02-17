@@ -218,6 +218,17 @@ export const formatPricePerUnit = (
   return undefined;
 };
 
+export const extractNumber = (numberText: string): number | null => {
+    if (!numberText) return null;
+
+    const number = numberText.match(/[0-9]+(?:[.,][0-9]+)?/);
+    if (!number) return null;
+    const normalized = number[0].replace(',', '.');
+    const num = parseFloat(normalized);
+
+    return Number.isFinite(num) ? num : null;
+};
+
 export const isShowAll = (
   filter: MobilityMapFilterType,
   formFactor: FormFactor,

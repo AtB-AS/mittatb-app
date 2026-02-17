@@ -2,7 +2,7 @@ import {
   VehicleExtendedFragment,
   VehicleId,
 } from '@atb/api/types/generated/fragments/vehicles';
-import React from 'react';
+import React, {useMemo, useState} from 'react';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -33,6 +33,8 @@ import {
   BottomSheetHeaderType,
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
+import {PriceDetailsCard} from '../PriceDetailsCard';
+import {useMapContext} from '@atb/modules/map';
 
 type ScooterHelpParams = {operatorId: string} & (
   | {vehicleId: string}
@@ -80,6 +82,9 @@ export const ScooterSheet = ({
 
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
+  const {headerHeight} = useMapContext();
+
+  const priceAdjustments = operator?.priceAdjustments?.[FormFactor.Scooter];
 
   const {isLoading: shmoReqIsLoading, hasBlockers} =
     useShmoRequirements(operatorId);
@@ -92,9 +97,31 @@ export const ScooterSheet = ({
   const {isParkingViolationsReportingEnabled, isShmoDeepIntegrationEnabled} =
     useFeatureTogglesContext();
 
+  const [height, setHeight] = useState<number | null>(null);
+  const [actionButtonsHeight, setActionButtonsHeight] = useState<number | null>(
+    null,
+  );
+
+  const snapPoints = useMemo(() => {
+    if (
+      height === null ||
+      actionButtonsHeight === null ||
+      headerHeight === null
+    )
+      return ['25%', '50%']; // fallback while measuring
+    return [height + actionButtonsHeight + headerHeight - theme.spacing.medium];
+  }, [height, actionButtonsHeight, headerHeight, theme.spacing.medium]);
+
   return (
     <MapBottomSheet
       canMinimize={true}
+      snapPoints={
+        isShmoDeepIntegrationEnabled &&
+        operatorIsIntegrationEnabled &&
+        !hasBlockers
+          ? snapPoints
+          : undefined
+      }
       closeCallback={onClose}
       enablePanDownToClose={false}
       closeOnBackdropPress={false}
@@ -116,9 +143,22 @@ export const ScooterSheet = ({
           <ActivityIndicator size="large" />
         </View>
       )}
+      {!isLoading && (isError || !vehicle) && (
+        <View style={styles.messageInfo}>
+          <MessageInfoBox
+            type="error"
+            message={t(ScooterTexts.loadingFailed)}
+          />
+        </View>
+      )}
+
       {!isLoading && !shmoReqIsLoading && !isError && vehicle && (
-        <>
-          <View style={styles.container}>
+        <View style={styles.container}>
+          <View
+            onLayout={(e) => {
+              setHeight(e.nativeEvent.layout.height);
+            }}
+          >
             {operatorBenefit && (
               <OperatorBenefit
                 benefit={operatorBenefit}
@@ -126,31 +166,29 @@ export const ScooterSheet = ({
                 style={styles.operatorBenefit}
               />
             )}
-            <View style={styles.vehicleCardWrapper}>
+            <View style={styles.vehicleContent}>
               <VehicleCard
-                pricingPlan={vehicle.pricingPlan}
                 currentFuelPercent={vehicle.currentFuelPercent}
                 currentRangeMeters={vehicle.currentRangeMeters}
               />
-            </View>
 
-            {selectedPaymentMethod &&
-              isShmoDeepIntegrationEnabled &&
-              !hasBlockers &&
-              operatorIsIntegrationEnabled && (
-                <Section style={styles.paymentWrapper}>
-                  <PaymentSelectionSectionItem
-                    paymentMethod={selectedPaymentMethod}
-                    onPress={selectPaymentMethod}
-                  />
-                </Section>
-              )}
+              <PriceDetailsCard
+                pricingPlan={vehicle.pricingPlan}
+                priceAdjustments={priceAdjustments}
+              />
+            </View>
           </View>
-          <View style={styles.footer}>
-            {isShmoDeepIntegrationEnabled &&
-            operatorId &&
-            operatorIsIntegrationEnabled ? (
-              <View style={styles.actionWrapper}>
+
+          {isShmoDeepIntegrationEnabled &&
+          operatorId &&
+          operatorIsIntegrationEnabled ? (
+            <>
+              <View
+                onLayout={(e) =>
+                  setActionButtonsHeight(e.nativeEvent.layout.height)
+                }
+                style={{gap: theme.spacing.large}}
+              >
                 <ShmoActionButton
                   onStartOnboarding={startOnboardingCallback}
                   loginCallback={navigateToLogin}
@@ -158,48 +196,47 @@ export const ScooterSheet = ({
                   operatorId={operatorId}
                   paymentMethod={selectedPaymentMethod}
                 />
+                {selectedPaymentMethod && !hasBlockers && (
+                  <Section>
+                    <PaymentSelectionSectionItem
+                      paymentMethod={selectedPaymentMethod}
+                      onPress={selectPaymentMethod}
+                    />
+                  </Section>
+                )}
+              </View>
+              <Button
+                expanded={true}
+                onPress={() => {
+                  navigateToSupport({vehicleId: id, operatorId});
+                }}
+                text={t(MobilityTexts.helpText)}
+                mode="secondary"
+                backgroundColor={theme.color.background.neutral[1]}
+              />
+            </>
+          ) : (
+            <>
+              {rentalAppUri && (
+                <OperatorActionButton
+                  operatorId={operatorId}
+                  operatorName={operatorName}
+                  appStoreUri={appStoreUri}
+                  rentalAppUri={rentalAppUri}
+                />
+              )}
+              {isParkingViolationsReportingEnabled && (
                 <Button
                   expanded={true}
-                  onPress={() => {
-                    navigateToSupport({vehicleId: id, operatorId});
-                  }}
-                  text={t(MobilityTexts.helpText)}
+                  text={t(MobilityTexts.reportParkingViolation)}
                   mode="secondary"
+                  onPress={onReportParkingViolation}
+                  rightIcon={{svg: ArrowRight}}
                   backgroundColor={theme.color.background.neutral[1]}
                 />
-              </View>
-            ) : (
-              <>
-                {rentalAppUri && (
-                  <OperatorActionButton
-                    operatorId={operatorId}
-                    operatorName={operatorName}
-                    appStoreUri={appStoreUri}
-                    rentalAppUri={rentalAppUri}
-                  />
-                )}
-                {isParkingViolationsReportingEnabled && (
-                  <Button
-                    expanded={true}
-                    style={styles.parkingViolationsButton}
-                    text={t(MobilityTexts.reportParkingViolation)}
-                    mode="secondary"
-                    onPress={onReportParkingViolation}
-                    rightIcon={{svg: ArrowRight}}
-                    backgroundColor={theme.color.background.neutral[1]}
-                  />
-                )}
-              </>
-            )}
-          </View>
-        </>
-      )}
-      {!isLoading && (isError || !vehicle) && (
-        <View style={styles.footer}>
-          <MessageInfoBox
-            type="error"
-            message={t(ScooterTexts.loadingFailed)}
-          />
+              )}
+            </>
+          )}
         </View>
       )}
     </MapBottomSheet>
@@ -208,33 +245,22 @@ export const ScooterSheet = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
-    activityIndicator: {
-      marginBottom: theme.spacing.medium,
+    container: {
+      paddingHorizontal: theme.spacing.medium,
+      paddingBottom: theme.spacing.medium,
+      gap: theme.spacing.large,
     },
-    paymentWrapper: {
+    vehicleContent: {
+      gap: theme.spacing.small,
+    },
+    activityIndicator: {
       marginBottom: theme.spacing.medium,
     },
     operatorBenefit: {
       marginBottom: theme.spacing.medium,
     },
-    container: {
-      paddingHorizontal: theme.spacing.medium,
-    },
-    actionWrapper: {
-      gap: theme.spacing.medium,
-    },
-    footer: {
-      marginBottom: theme.spacing.medium,
-      marginHorizontal: theme.spacing.medium,
-    },
-    parkingViolationsButton: {
-      marginTop: theme.spacing.medium,
-    },
-    operatorNameAndLogo: {
-      flexDirection: 'row',
-    },
-    vehicleCardWrapper: {
-      marginBottom: theme.spacing.medium,
+    messageInfo: {
+      paddingBottom: theme.spacing.medium,
     },
   };
 });
