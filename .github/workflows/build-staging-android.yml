@@ -33,7 +33,7 @@ on:
       - master
       - release/**
   schedule:
-    - cron: '0 1 * * 1-5' 
+    - cron: '0 1 * * 1-5'
 
 permissions:
   contents: read
@@ -41,9 +41,10 @@ permissions:
 jobs:
   detect-changes:
     name: Detect changes
+    if: inputs.force-build != 'true'
     runs-on: ubuntu-latest
     outputs:
-      should_build: ${{ steps.detect.outputs.should_build}}
+      should_build: ${{ steps.detect.outputs.should_build }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -54,7 +55,7 @@ jobs:
 
   setup:
     needs: detect-changes
-    if: needs.detect-changes.outputs.should_build == 'true'
+    if: ${{ !failure() && (inputs.force-build == 'true' || needs.detect-changes.outputs.should_build == 'true') }}
     name: Install tools and warm up caches
     runs-on: ubuntu-latest
     outputs:
@@ -103,24 +104,26 @@ jobs:
         uses: actions/cache@v4
         id: modules-cache
         with:
-          lookup-only: true
+          lookup-only: ${{ inputs.force-build != 'true' }}
           path: '**/node_modules'
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
       - name: Install node v22
         uses: actions/setup-node@v5
-        if: steps.modules-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         with:
           node-version: 22
           cache: 'yarn'
       - name: Add Entur private registry credentials
         shell: bash
-        if: steps.modules-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         run: bash ./scripts/add-entur-private-registry.sh
         env:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Install node_modules
-        if: steps.modules-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       # ===== Ruby & Bundler =====
       - name: Setup ruby and bundle install
@@ -129,14 +132,14 @@ jobs:
           ruby-version: 3.1.0
           cache-version: 2
           bundler-cache: true
-      
+
   build:
     needs: setup
     name: Build Android (${{ matrix.org }})
     strategy:
       fail-fast: false
       matrix:
-        org: ${{ fromJson(needs.setup.outputs.matrix) }} 
+        org: ${{ fromJson(needs.setup.outputs.matrix) }}
     environment: ${{ matrix.org }}
     timeout-minutes: 180
     runs-on: ubuntu-latest
@@ -148,6 +151,7 @@ jobs:
 
       - name: Get potential cached APK
         uses: actions/cache@v4
+        if: inputs.force-build != 'true'
         id: apk-cache
         with:
           path: app-staging.apk
@@ -192,9 +196,9 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
           SKIP_CLEAN: ${{ steps.changes.outputs.deps != 'true' }}
           ABI: ${{ needs.setup.outputs.abi }}
-          CCACHE_DIR: ~/.cache/ccache
-          USE_CCACHE: 1
-          NDK_CCACHE: /usr/bin/ccache
+          # CCACHE_DIR: ~/.cache/ccache
+          # USE_CCACHE: 1
+          # NDK_CCACHE: /usr/bin/ccache
 
       - name: Restore APKTool cache
         if: inputs.output-type != 'AAB'

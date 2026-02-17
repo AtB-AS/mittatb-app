@@ -67,27 +67,28 @@ runs:
       shell: bash
       run: sudo apt-get update && sudo apt-get install imagemagick
 
-    - name: Install ccache
-      if: inputs.can-skip != 'true'
-      shell: bash
-      run: sudo apt-get install -y ccache
+    # CCache is disabled for now until we can enable Gradle Config Cache
+    # - name: Install ccache
+    #   if: inputs.can-skip != 'true'
+    #   shell: bash
+    #   run: sudo apt-get install -y ccache
 
-    - name: Configure ccache
-      if: inputs.can-skip != 'true'
-      shell: bash
-      run: |
-        ccache --set-config=max_size=2G
-        ccache --set-config=compiler_check=content
-        ccache --zero-stats
+    # - name: Configure ccache
+    #   if: inputs.can-skip != 'true'
+    #   shell: bash
+    #   run: |
+    #     ccache --set-config=max_size=2G
+    #     ccache --set-config=compiler_check=content
+    #     ccache --zero-stats
 
-    - name: Cache ccache
-      if: inputs.can-skip != 'true'
-      uses: actions/cache@v4
-      with:
-        path: ~/.cache/ccache
-        key: ccache-android-${{ runner.os }}-${{ hashFiles('android/app/build.gradle', 'android/build.gradle') }}
-        restore-keys: |
-          ccache-android-${{ runner.os }}-
+    # - name: Cache ccache
+    #   if: inputs.can-skip != 'true'
+    #   uses: actions/cache@v4
+    #   with:
+    #     path: ~/.cache/ccache
+    #     key: ccache-android-${{ runner.os }}-${{ hashFiles('android/app/build.gradle', 'android/build.gradle') }}
+    #     restore-keys: |
+    #       ccache-android-${{ runner.os }}-
 
     - name: Install node v22
       uses: actions/setup-node@v5
@@ -96,12 +97,19 @@ runs:
         cache: 'yarn'
 
     - name: Get potential cached node_modules
-      if: inputs.force-build != 'true'
       uses: actions/cache@v4
+      if: inputs.can-skip != 'true'
       id: modules-cache
       with:
         path: '**/node_modules'
-        key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+        key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+        restore-keys: |
+          node-modules-${{ runner.os }}-
+
+    - name: Install node_modules
+      if: inputs.can-skip != 'true' && steps.modules-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: yarn install --frozen-lockfile
 
     - name: Setup ruby and bundle install
       uses: ruby/setup-ruby@v1
