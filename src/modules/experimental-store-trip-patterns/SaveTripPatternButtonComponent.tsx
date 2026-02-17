@@ -14,6 +14,7 @@ type SaveTripPatternButtonComponentProps = {
 
 export const SaveTripPatternButtonComponent =
   wrapWithExperimentalFeatureToggledComponent<SaveTripPatternButtonComponentProps>(
+    'render-nothing-if-disabled',
     ({tripPattern}) => {
       const {addTripPattern, removeTripPattern, isTripPatternStored} =
         useStoredTripPatterns();

@@ -71,7 +71,7 @@ export const RemoteConfigContextProvider = ({children}: Props) => {
   const fetchConfig = useCallback(async () => {
     try {
       await remoteConfig().fetchAndActivate();
-      const currentConfig = await getConfig();
+      const currentConfig = getConfig();
       setConfig(currentConfig);
       setFetchError(false);
       setIsLoaded(true);

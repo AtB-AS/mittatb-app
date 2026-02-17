@@ -205,6 +205,8 @@ export const defaultRemoteConfig: RemoteConfig = {
   vehicles_poll_interval: 20000,
 };
 
+remoteConfig().setDefaults(defaultRemoteConfig);
+
 export type RemoteConfigKeys = keyof RemoteConfig;
 
 export function getConfig(): RemoteConfig {
@@ -538,26 +540,4 @@ export function getConfig(): RemoteConfig {
     use_trygg_overgang_qr_code,
     vehicles_poll_interval,
   };
-}
-
-// Pick keys of certain value type
-type SubType<Base, Condition> = Pick<
-  Base,
-  {
-    [Key in keyof Base]: Base[Key] extends Condition ? Key : never;
-  }[keyof Base]
->;
-
-export function getBooleanConfigValue(
-  key: keyof SubType<RemoteConfig, boolean>,
-) {
-  return remoteConfig().getBoolean(key);
-}
-
-export function getStringConfigValue(key: keyof SubType<RemoteConfig, string>) {
-  return remoteConfig().getString(key);
-}
-
-export function getNumberConfigValue(key: keyof SubType<RemoteConfig, number>) {
-  return remoteConfig().getNumber(key);
 }
