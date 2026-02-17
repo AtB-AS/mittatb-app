@@ -23,7 +23,13 @@ class TripPatternStore {
   private async _setTripPatterns(
     tripPatterns: StoredTripPattern[],
   ): Promise<StoredTripPattern[]> {
-    await storage.set(this.storageKey, JSON.stringify(tripPatterns));
+    const sorted = [...tripPatterns].sort((a, b) => {
+      return (
+        new Date(a.expectedStartTime).getTime() -
+        new Date(b.expectedStartTime).getTime()
+      );
+    });
+    await storage.set(this.storageKey, JSON.stringify(sorted));
     return tripPatterns;
   }
 
