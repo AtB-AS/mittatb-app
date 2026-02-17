@@ -24,7 +24,7 @@ import {ResultRow} from '../../stacks-hierarchy/Root_TabNavigatorStack/TabNav_Da
 import {useStoredTripPatterns} from './StoredTripPatternsContext';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {wrapWithNullComponent} from '../experimental/null-component';
+import {wrapWithExperimentalFeatureToggledComponent} from '@atb/modules/experimental';
 import {RemoveStoredTripPatternBottomSheet} from './RemoveStoredTripPatternBottomSheet';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 
@@ -34,77 +34,79 @@ type Props = {
 };
 
 export const StoredTripPatternsDashboardComponent =
-  wrapWithNullComponent<Props>(({onDetailsPressed, isFocused}) => {
-    const styles = useThemeStyles();
-    const now = useNow(30000);
-    const {t} = useTranslation();
-    const bottomSheetModalRef = useRef<GorhomBottomSheetModal | null>(null);
+  wrapWithExperimentalFeatureToggledComponent<Props>(
+    ({onDetailsPressed, isFocused}) => {
+      const styles = useThemeStyles();
+      const now = useNow(30000);
+      const {t} = useTranslation();
+      const bottomSheetModalRef = useRef<GorhomBottomSheetModal | null>(null);
 
-    const searchTime = useMemo<TripSearchTime>(
-      () => ({option: 'now', date: new Date(now).toISOString()}),
-      [now],
-    );
+      const searchTime = useMemo<TripSearchTime>(
+        () => ({option: 'now', date: new Date(now).toISOString()}),
+        [now],
+      );
 
-    const {tripPatterns, updateTripPattern, removeTripPattern} =
-      useStoredTripPatterns();
+      const {tripPatterns, updateTripPattern, removeTripPattern} =
+        useStoredTripPatterns();
 
-    const [tripPatternToRemove, setTripPatternToRemove] = useState<
-      TripPattern | undefined
-    >(undefined);
+      const [tripPatternToRemove, setTripPatternToRemove] = useState<
+        TripPattern | undefined
+      >(undefined);
 
-    useEffect(() => {
-      if (tripPatternToRemove) {
-        bottomSheetModalRef.current?.present();
-      } else {
-        bottomSheetModalRef.current?.dismiss();
-      }
-    }, [tripPatternToRemove]);
+      useEffect(() => {
+        if (tripPatternToRemove) {
+          bottomSheetModalRef.current?.present();
+        } else {
+          bottomSheetModalRef.current?.dismiss();
+        }
+      }, [tripPatternToRemove]);
 
-    const onRemovePress = useCallback(() => {
-      if (tripPatternToRemove) {
-        removeTripPattern(tripPatternToRemove);
+      const onRemovePress = useCallback(() => {
+        if (tripPatternToRemove) {
+          removeTripPattern(tripPatternToRemove);
+          setTripPatternToRemove(undefined);
+        }
+      }, [tripPatternToRemove, removeTripPattern]);
+
+      const onCancelPress = useCallback(() => {
         setTripPatternToRemove(undefined);
+      }, []);
+
+      if (!tripPatterns.length) {
+        return null;
       }
-    }, [tripPatternToRemove, removeTripPattern]);
 
-    const onCancelPress = useCallback(() => {
-      setTripPatternToRemove(undefined);
-    }, []);
-
-    if (!tripPatterns.length) {
-      return null;
-    }
-
-    return (
-      <View style={styles.container} testID="storedTripPatternsContentView">
-        <ContentHeading
-          text={t(StoredTripPatternsDashboardComponentTexts.header)}
-        />
-        {tripPatterns.map((tripPattern, i) => (
-          <Fragment key={tripPattern.compressedQuery}>
-            <StoredTripPatternRow
-              tripPattern={tripPattern}
-              onDetailsPressed={onDetailsPressed}
-              resultIndex={i}
-              searchTime={searchTime}
-              updateTripPattern={updateTripPattern}
-              setTripPatternToRemove={setTripPatternToRemove}
-              isRemoving={
-                tripPatternToRemove?.compressedQuery ===
-                tripPattern.compressedQuery
-              }
-              isFocused={isFocused}
-            />
-          </Fragment>
-        ))}
-        <RemoveStoredTripPatternBottomSheet
-          onRemovePress={onRemovePress}
-          onCancelPress={onCancelPress}
-          bottomSheetModalRef={bottomSheetModalRef}
-        />
-      </View>
-    );
-  });
+      return (
+        <View style={styles.container} testID="storedTripPatternsContentView">
+          <ContentHeading
+            text={t(StoredTripPatternsDashboardComponentTexts.header)}
+          />
+          {tripPatterns.map((tripPattern, i) => (
+            <Fragment key={tripPattern.compressedQuery}>
+              <StoredTripPatternRow
+                tripPattern={tripPattern}
+                onDetailsPressed={onDetailsPressed}
+                resultIndex={i}
+                searchTime={searchTime}
+                updateTripPattern={updateTripPattern}
+                setTripPatternToRemove={setTripPatternToRemove}
+                isRemoving={
+                  tripPatternToRemove?.compressedQuery ===
+                  tripPattern.compressedQuery
+                }
+                isFocused={isFocused}
+              />
+            </Fragment>
+          ))}
+          <RemoveStoredTripPatternBottomSheet
+            onRemovePress={onRemovePress}
+            onCancelPress={onCancelPress}
+            bottomSheetModalRef={bottomSheetModalRef}
+          />
+        </View>
+      );
+    },
+  );
 
 const StoredTripPatternRow: React.FC<{
   tripPattern: TripPattern;
