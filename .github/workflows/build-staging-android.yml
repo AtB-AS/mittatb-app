@@ -193,9 +193,9 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
           SKIP_CLEAN: ${{ steps.changes.outputs.deps != 'true' }}
           ABI: ${{ needs.setup.outputs.abi }}
-          CCACHE_DIR: ~/.cache/ccache
-          USE_CCACHE: 1
-          NDK_CCACHE: /usr/bin/ccache
+          # CCACHE_DIR: ~/.cache/ccache
+          # USE_CCACHE: 1
+          # NDK_CCACHE: /usr/bin/ccache
 
       - name: Restore APKTool cache
         if: inputs.output-type != 'AAB'
