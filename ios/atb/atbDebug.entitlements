@@ -8,7 +8,7 @@
 	<string>production</string>
 	<key>com.apple.developer.in-app-payments</key>
 	<array>
-		<string>merchant.no.mittatb.staging.atb</string>
+		<string>$(APPLE_PAY_MERCHANT_ID)</string>
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>

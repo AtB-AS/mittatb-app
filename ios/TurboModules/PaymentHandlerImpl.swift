@@ -12,13 +12,27 @@ class PaymentHandlerImpl: NSObject {
   var completionHandler: PaymentCompletionHandler!
   var paymentData: Data?
 
+  private let merchantIdentifier: String?
+
   static let supportedNetworks: [PKPaymentNetwork] = [
-      .amex,
-      .masterCard,
-      .visa
+    .amex,
+    .masterCard,
+    .visa
   ]
 
+  override init() {
+    if let id = Bundle.main.object(forInfoDictionaryKey: "ApplePayMerchantId") as? String, !id.isEmpty {
+      self.merchantIdentifier = id
+    } else {
+      debugPrint("Missing Apple Pay merchant identifier")
+      self.merchantIdentifier = nil
+    }
+    super.init()
+  }
+
   @objc func startPayment(items: [[String: Any]], completionHandler: @escaping (String?) -> Void) -> Void {
+    if self.merchantIdentifier == nil { return }
+
     self.completionHandler = completionHandler;
 
     var paymentSummaryItems: [PKPaymentSummaryItem] = []
@@ -29,17 +43,10 @@ class PaymentHandlerImpl: NSObject {
       }
     }
 
-    // Get merchant identifier
-    guard let merchantIdentifier = Bundle.main.object(forInfoDictionaryKey: "ApplePayMerchantId") as? String, !merchantIdentifier.isEmpty else {
-      debugPrint("Missing Apple Pay merchant identifier")
-      completionHandler(nil)
-      return
-    }
-
     // Create a payment request.
     let paymentRequest = PKPaymentRequest()
     paymentRequest.paymentSummaryItems = paymentSummaryItems
-    paymentRequest.merchantIdentifier = merchantIdentifier
+    paymentRequest.merchantIdentifier = self.merchantIdentifier!
     paymentRequest.merchantCapabilities = .threeDSecure
     paymentRequest.countryCode = "NO"
     paymentRequest.currencyCode = "NOK"
@@ -49,30 +56,27 @@ class PaymentHandlerImpl: NSObject {
     paymentController = PKPaymentAuthorizationController(paymentRequest: paymentRequest)
     paymentController?.delegate = self
     paymentController?.present(completion: { (presented: Bool) in
-        if presented {
-            debugPrint("Presented payment controller")
-        } else {
-            debugPrint("Failed to present payment controller")
-        }
+      if presented {
+        debugPrint("Presented payment controller")
+      } else {
+        debugPrint("Failed to present payment controller")
+      }
     })
   }
 
   @objc func canMakePayments() -> Bool {
-    if let merchantIdentifier = Bundle.main.object(forInfoDictionaryKey: "ApplePayMerchantId") as? String, merchantIdentifier.isEmpty {
-      debugPrint("Missing Apple Pay merchant identifier")
-      return false
-    }
+    if self.merchantIdentifier == nil { return false }
     return PKPaymentAuthorizationController.canMakePayments()
   }
 }
 
 extension PaymentHandlerImpl: PKPaymentAuthorizationControllerDelegate {
   public func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
-      let errors = [Error]()
-      let status = PKPaymentAuthorizationStatus.success
-      self.paymentData = payment.token.paymentData
-      debugPrint("paymentData", String(data: payment.token.paymentData, encoding: .utf8)!)
-      completion(PKPaymentAuthorizationResult(status: status, errors: errors))
+    let errors = [Error]()
+    let status = PKPaymentAuthorizationStatus.success
+    self.paymentData = payment.token.paymentData
+
+    completion(PKPaymentAuthorizationResult(status: status, errors: errors))
   }
 
   public func paymentAuthorizationControllerDidFinish(_ controller: PKPaymentAuthorizationController) {
