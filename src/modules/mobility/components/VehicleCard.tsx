@@ -7,7 +7,7 @@ import {BatteryHigh} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {VehicleCardStat} from './VehicleCardStat';
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {formatRange, getBatteryLevelIcon} from '../utils';
-import {ThemedBabyOnScooter} from '@atb/theme/ThemedAssets';
+import {ThemedScooter} from '@atb/theme/ThemedAssets';
 
 type Props = {
   currentFuelPercent: number | undefined;
@@ -34,7 +34,7 @@ export const VehicleCard = ({
             stat={formatRange(currentRangeMeters, language)}
             description={t(ScooterTexts.range)}
           />
-          <ThemedBabyOnScooter width={50} height={50} />
+          <ThemedScooter width={50} height={50} />
         </View>
       </GenericSectionItem>
     </Section>

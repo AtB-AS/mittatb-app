@@ -68,10 +68,8 @@ export const MapBottomSheet = ({
   const {height: screenHeight} = useWindowDimensions();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   const {top: safeAreaTop} = useSafeAreaInsets();
-
-  const {bottomSheetMapRef} = useBottomSheetContext();
-
   const [headerHeight, setHeaderHeight] = useState(0);
+  const {bottomSheetMapRef} = useBottomSheetContext();
 
   const aStyle = useAnimatedStyle(() => {
     return {
@@ -132,13 +130,10 @@ export const MapBottomSheet = ({
       : prevSnapPoints;
   }, [canMinimize, headerHeight, snapPoints]);
 
-  const onHeaderLayout = useCallback(
-    (e: LayoutChangeEvent) => {
-      const h = e.nativeEvent.layout.height;
-      setHeaderHeight((prev) => (prev !== h ? h : prev));
-    },
-    [setHeaderHeight],
-  );
+  const onHeaderLayout = useCallback((e: LayoutChangeEvent) => {
+    const h = e.nativeEvent.layout.height;
+    setHeaderHeight((prev) => (prev !== h ? h : prev));
+  }, []);
 
   const HandleComponent = useCallback(() => {
     return (
