@@ -20,6 +20,7 @@ import SvgInfo from '@atb/assets/svg/mono-icons/status/Info';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import type {ScooterHelpScreenProps} from '@atb/stacks-hierarchy/Root_ScooterHelp/Root_ScooterHelpScreen';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {useApplePassPresentationSuppression} from '@atb/modules/native-bridges';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -38,6 +39,8 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const isSentFareContract =
     fareContract?.customerAccountId !== fareContract?.purchasedBy &&
     fareContract?.purchasedBy === currentUserId;
+
+  useApplePassPresentationSuppression();
 
   const navigateToTicketInfoScreen = () => {
     if (preassignedFareProduct) {
