@@ -198,7 +198,7 @@ if [ "$IS_NEW_RELEASE_CYCLE" = true ]; then
 
   # Create PR for version bump
   echo "Creating pull request to merge version bump into master..."
-  PR_URL=$(gh pr create --base master --head "$BUMP_BRANCH" --title "chore: Bump to version $NEXT_MASTER_VERSION" --body "Automated version bump and Entur registration.")
+  PR_URL=$(gh pr create --draft --base master --head "$BUMP_BRANCH" --title "chore: Bump to version $NEXT_MASTER_VERSION" --body "Automated version bump and Entur registration.")
   echo "Pull request created, ready for review: $PR_URL"
 fi
 
