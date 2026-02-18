@@ -29,10 +29,17 @@ class PaymentHandlerImpl: NSObject {
       }
     }
 
+    // Get merchant identifier
+    guard let merchantIdentifier = Bundle.main.object(forInfoDictionaryKey: "ApplePayMerchantId") as? String, !merchantIdentifier.isEmpty else {
+      debugPrint("Missing Apple Pay merchant identifier")
+      completionHandler(nil)
+      return
+    }
+
     // Create a payment request.
     let paymentRequest = PKPaymentRequest()
     paymentRequest.paymentSummaryItems = paymentSummaryItems
-    paymentRequest.merchantIdentifier = "merchant.no.mittatb.staging.atb"
+    paymentRequest.merchantIdentifier = merchantIdentifier
     paymentRequest.merchantCapabilities = .threeDSecure
     paymentRequest.countryCode = "NO"
     paymentRequest.currencyCode = "NOK"
@@ -51,6 +58,10 @@ class PaymentHandlerImpl: NSObject {
   }
 
   @objc func canMakePayments() -> Bool {
+    if let merchantIdentifier = Bundle.main.object(forInfoDictionaryKey: "ApplePayMerchantId") as? String, merchantIdentifier.isEmpty {
+      debugPrint("Missing Apple Pay merchant identifier")
+      return false
+    }
     return PKPaymentAuthorizationController.canMakePayments()
   }
 }
