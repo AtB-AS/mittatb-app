@@ -1,6 +1,5 @@
 import {FullScreenHeader, useTicketInfo} from '@atb/components/screen-header';
 import {DetailsContent} from '@atb/modules/fare-contracts';
-import {useApplePassPresentationSuppression} from '@atb/modules/native-bridges';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   FareContractTexts,
@@ -21,6 +20,7 @@ import SvgInfo from '@atb/assets/svg/mono-icons/status/Info';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import type {ScooterHelpScreenProps} from '@atb/stacks-hierarchy/Root_ScooterHelp/Root_ScooterHelpScreen';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {useApplePassPresentationSuppression} from '@atb/modules/native-bridges';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
