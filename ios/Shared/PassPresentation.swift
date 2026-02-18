@@ -11,7 +11,6 @@ import Bugsnag
     guard PKPassLibrary.isPassLibraryAvailable() else { return }
     guard !PKPassLibrary.isSuppressingAutomaticPassPresentation() else { return }
 
-    print("called here")
     suppressionRequestToken = PKPassLibrary.requestAutomaticPassPresentationSuppression { result in
       guard result == .success else {
         let error = NSError(
@@ -21,7 +20,6 @@ import Bugsnag
             NSLocalizedDescriptionKey: "Automatic pass presentation suppression failed: \(result)"
           ]
         )
-        print(error)
         Bugsnag.notifyError(error)
         return
       }
