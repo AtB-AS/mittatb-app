@@ -13,7 +13,7 @@ if [[
 
     exit 1
 else
-echo "Uploading iOS source maps"
+echo "Uploading iOS source maps for ${APP_VERSION}, ${BUILD_ID}"
     npx bugsnag-source-maps upload-react-native \
         --api-key=$BUGSNAG_API_KEY \
         --app-version="{$APP_VERSION}" \
