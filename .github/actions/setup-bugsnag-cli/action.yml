@@ -1,0 +1,61 @@
+name: "Setup Bugsnag CLI"
+description: "Install, cache, and configure Bugsnag CLI for GitHub Actions"
+
+inputs:
+  version:
+    description: "Bugsnag CLI version to install"
+    required: false
+    default: "3.7.0"
+
+outputs:
+  version:
+    description: "The installed Bugsnag CLI version"
+    value: ${{ steps.resolve-version.outputs.version }}
+  cache-hit:
+    description: "Whether the cache was restored"
+    value: ${{ steps.cache-bugsnag.outputs.cache-hit }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Resolve version
+      id: resolve-version
+      shell: bash
+      run: echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+
+    - name: Detect environment
+      id: detect-env
+      shell: bash
+      run: |
+        os="$(uname | tr '[:upper:]' '[:lower:]')"
+        arch="$(uname -m)"
+        echo "os=${os}" >> "$GITHUB_OUTPUT"
+        echo "arch=${arch}" >> "$GITHUB_OUTPUT"
+        echo "install-dir=${HOME}/.local/bugsnag" >> "$GITHUB_OUTPUT"
+
+    - name: Restore cache
+      id: cache-bugsnag
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.detect-env.outputs.install-dir }}
+        key: bugsnag-cli-${{ steps.detect-env.outputs.os }}-${{ steps.detect-env.outputs.arch }}-${{ steps.resolve-version.outputs.version }}
+
+    - name: Install Bugsnag CLI
+      if: steps.cache-bugsnag.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        curl -fsSL https://raw.githubusercontent.com/bugsnag/bugsnag-cli/main/install.sh | bash -s -- --version=${{ steps.resolve-version.outputs.version }}
+
+    - name: Verify installation
+      shell: bash
+      run: |
+        INSTALL_DIR="${{ steps.detect-env.outputs.install-dir }}"
+        if [[ ! -x "${INSTALL_DIR}/bin/bugsnag-cli" ]]; then
+          echo "::error::Bugsnag CLI binary not found at ${INSTALL_DIR}/bin/bugsnag-cli"
+          exit 1
+        fi
+        echo "Bugsnag CLI installed at ${INSTALL_DIR}/bin/bugsnag-cli"
+
+    - name: Add to PATH
+      shell: bash
+      run: echo "${{ steps.detect-env.outputs.install-dir }}/bin" >> "$GITHUB_PATH"
