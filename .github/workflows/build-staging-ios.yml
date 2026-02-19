@@ -240,7 +240,7 @@ jobs:
         if: steps.bugsnag-cli-cache.outputs.cache-hit != 'true'
         run: curl -o- https://raw.githubusercontent.com/bugsnag/bugsnag-cli/main/install.sh | bash
       - name: Add Bugsnag CLI to PATH
-        run: echo "$HOME/.local/bugsnag" >> $GITHUB_PATH
+        run: echo "$HOME/.local/bugsnag/bin" >> $GITHUB_PATH
       - name: Upload bundle and source maps
         run: sh ./scripts/ios/upload-sourcemaps.sh
         env:
