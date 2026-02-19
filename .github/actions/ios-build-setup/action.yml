@@ -39,12 +39,14 @@ runs:
           ruby-version: ${{ inputs.ruby-version }}
           cache-version: 2
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Get potential cached node_modules
+      - name: Get cached node_modules
         uses: actions/cache@v4
         id: modules-cache
         with:
-          path: node_modules
+          path: '**/node_modules'
           key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          restore-keys: |
+            node-modules-
       - name: Setup Xcode version
         uses: maxim-lobanov/setup-xcode@v1
         with:
