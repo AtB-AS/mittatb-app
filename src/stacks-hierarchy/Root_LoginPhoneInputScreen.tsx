@@ -148,6 +148,7 @@ export const Root_LoginPhoneInputScreen = ({
 
             {error && !isSubmitting && (
               <MessageInfoBox
+                a11yLiveRegion="polite"
                 style={styles.errorMessage}
                 type="error"
                 message={t(PhoneInputTexts.errors[error])}
