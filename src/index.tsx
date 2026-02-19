@@ -52,11 +52,7 @@ configureReanimatedLogger({
 
 trackAppState();
 
-LogBox.ignoreLogs([
-  'new NativeEventEmitter',
-  'Could not find Fiber with id',
-  'Open debugger to view warnings.',
-]);
+LogBox.ignoreAllLogs(true);
 
 if (Platform.OS === 'android') {
   // Default seems to be True in later React Native versions,
