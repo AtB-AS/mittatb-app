@@ -19,10 +19,11 @@ else
     echo "Uploading bugsnag mapping files for ${APP_VERSION}, ${BUILD_ID}, $APP_FLAVOR${APP_ENVIRONMENT^} ..."
     echo "Uploading React Native source maps..."
     bugsnag-cli upload react-native-android \
-      --version-name="{$APP_VERSION}" \
+      --version-name="${APP_VERSION}" \
       --version-code=$BUILD_ID \
       --api-key=$BUGSNAG_API_KEY \
       --variant=$VARIANT \
+      --application-id="${ANDROID_APPLICATION_ID}" \
       --verbose
 
     if [[ "${APP_ENVIRONMENT}" == "store" ]]; then
