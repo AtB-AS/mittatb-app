@@ -219,6 +219,20 @@ jobs:
           OUTPUT_FILE: ./release-notes.txt
         run: bash ./scripts/generate-staging-release-notes.sh
 
+      - name: Cache Bugsnag CLI
+        id: bugsnag-cli-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/bugsnag
+          key: bugsnag-cli-${{ runner.os }}-${{ runner.arch }}
+
+      - name: Install Bugsnag CLI
+        if: steps.bugsnag-cli-cache.outputs.cache-hit != 'true'
+        run: curl -o- https://raw.githubusercontent.com/bugsnag/bugsnag-cli/main/install.sh | bash
+        
+      - name: Add Bugsnag CLI to PATH
+        run: echo "$HOME/.local/bugsnag" >> $GITHUB_PATH
+
       - name: Post-build steps
         if: inputs.output-type != 'AAB'
         uses: ./.github/actions/android-post-build-steps-staging
