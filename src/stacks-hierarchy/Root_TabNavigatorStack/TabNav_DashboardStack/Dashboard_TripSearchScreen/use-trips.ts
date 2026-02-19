@@ -6,7 +6,7 @@ import {useSearchHistoryContext} from '@atb/modules/search-history';
 import type {SearchStateType, TripSearchTime} from '../types';
 
 import {isValidTripLocations} from '@atb/utils/location';
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useCallback, useEffect, useMemo} from 'react';
 import type {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 import type {TripPatternWithKey} from '@atb/screen-components/travel-details-screens';
 import {useJourneyModes} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/hooks';
@@ -31,18 +31,9 @@ export function useTrips(
   tripsIsNetworkError: boolean;
 } {
   const {
-    tripsSearch_max_number_of_chained_searches: config_max_performed_searches,
-    tripsSearch_target_number_of_initial_hits: config_target_initial_hits,
-    tripsSearch_target_number_of_page_hits: config_target_page_hits,
+    tripsSearch_max_number_of_chained_initial_searches,
+    tripsSearch_target_number_of_initial_hits,
   } = useRemoteConfigContext();
-  const [
-    numberOfHitsBeforeCurrentSearchLoop,
-    setNumberOfHitsBeforeCurrentSearchLoop,
-  ] = useState(0);
-  const [
-    performedSearchesCountBeforeCurrentSearchLoop,
-    setPerformedSearchesCountBeforeCurrentSearchLoop,
-  ] = useState(0);
 
   const journeySearchModes = useJourneyModes();
   const {addJourneySearchEntry} = useSearchHistoryContext();
@@ -93,61 +84,40 @@ export function useTrips(
   );
 
   const cursor = tripsData?.pageParams;
-  const targetNumberOfHits = cursor
-    ? config_target_page_hits
-    : config_target_initial_hits;
-
-  const numberOfHits = tripPatterns.length;
-  const enoughNumberOfHits =
-    numberOfHits - numberOfHitsBeforeCurrentSearchLoop >= targetNumberOfHits;
 
   const performedSearchesCount = tripsData?.pages.length ?? 0;
-  const maxPerformedSearchesCountReached =
-    performedSearchesCount - performedSearchesCountBeforeCurrentSearchLoop >=
-    config_max_performed_searches;
 
-  const shouldLoadMoreTrips =
+  const shouldAutoLoadMoreInitialTrips =
     tripLocationsAreValid &&
-    !enoughNumberOfHits &&
-    !maxPerformedSearchesCountReached &&
+    tripPatterns.length < tripsSearch_target_number_of_initial_hits &&
+    performedSearchesCount <
+      tripsSearch_max_number_of_chained_initial_searches &&
     hasNextPage;
 
   useEffect(() => {
-    if (shouldLoadMoreTrips) {
-      fetchNextPage();
-    }
+    shouldAutoLoadMoreInitialTrips && fetchNextPage();
   }, [
     cursor, // check if more pages are needed when a new page is loaded
     fetchNextPage,
-    shouldLoadMoreTrips,
+    shouldAutoLoadMoreInitialTrips,
   ]);
 
-  const previousShouldLoadMoreTrips =
-    useStablePreviousValue(shouldLoadMoreTrips);
-  const didJustEndSearchLoop =
-    previousShouldLoadMoreTrips && !shouldLoadMoreTrips;
+  const sendAnalyticsSearchEvent = useCallback(() => {
+    analytics.logEvent('Trip search', 'Search performed', {
+      searchTime: tripsProps.searchTime,
+      filtersSelection: toLoggableFiltersSelection(
+        travelSearchFiltersSelection,
+      ),
+    });
+  }, [analytics, travelSearchFiltersSelection, tripsProps.searchTime]);
+
+  const didJustEndChainOfSearches =
+    useStablePreviousValue(shouldAutoLoadMoreInitialTrips) &&
+    !shouldAutoLoadMoreInitialTrips;
 
   useEffect(() => {
-    if (didJustEndSearchLoop) {
-      analytics.logEvent('Trip search', 'Search performed', {
-        searchTime: tripsProps.searchTime,
-        filtersSelection: toLoggableFiltersSelection(
-          travelSearchFiltersSelection,
-        ),
-        performedSearchesCount:
-          performedSearchesCount -
-          performedSearchesCountBeforeCurrentSearchLoop, // count only in this search loop
-      });
-    }
-  }, [
-    analytics,
-    didJustEndSearchLoop,
-    performedSearchesCount,
-    performedSearchesCountBeforeCurrentSearchLoop,
-    travelSearchFiltersSelection,
-    tripPatterns.length,
-    tripsProps.searchTime,
-  ]);
+    didJustEndChainOfSearches && sendAnalyticsSearchEvent();
+  }, [didJustEndChainOfSearches, sendAnalyticsSearchEvent]);
 
   const shouldSaveSearch =
     tripLocationsAreValid &&
@@ -178,13 +148,14 @@ export function useTrips(
 
   const timeOfLastSearch = tripsProps.searchTime.date;
 
-  const startNewSearchLoop = useCallback(() => {
-    // resetting counters changes conditions for shouldLoadMoreTrips, which in turn triggers fetchNextPage in the useEffect
-    setNumberOfHitsBeforeCurrentSearchLoop(tripPatterns.length);
-    setPerformedSearchesCountBeforeCurrentSearchLoop(performedSearchesCount);
-  }, [performedSearchesCount, tripPatterns.length]);
+  const loadNextTripsPage = useCallback(() => {
+    // For the initial search, the app loops searches until a good amount of results are found. This allows for fast results along the way.
+    // However for "load more", we don't need that many results, and the bff handles some retries anyway, so here we just fetch one more page.
+    fetchNextPage();
+    sendAnalyticsSearchEvent();
+  }, [fetchNextPage, sendAnalyticsSearchEvent]);
 
-  const loadMoreTrips = hasNextPage ? startNewSearchLoop : undefined;
+  const loadMoreTrips = hasNextPage ? loadNextTripsPage : undefined;
 
   const axiosErrorKind = tripsError
     ? toAxiosErrorKind(tripsError.kind)
