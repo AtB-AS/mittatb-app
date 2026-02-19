@@ -1,6 +1,5 @@
-import {Filter, Swap} from '@atb/assets/svg/mono-icons/actions';
+import {Filter} from '@atb/assets/svg/mono-icons/actions';
 import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
-import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
@@ -63,6 +62,7 @@ import SharedTexts from '@atb/translations/shared';
 import {TravelSearchFiltersBottomSheet} from './components/TravelSearchFiltersBottomSheet';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {WithSwapButton} from '@atb/components/swap-button';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -96,7 +96,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const timePickerBottomSheetModalRef = useRef<BottomSheetModal | null>(null);
   const timePickerCloseRef = useRef<View | null>(null);
 
-  const {location, requestLocationPermission} = useGeolocationContext();
+  const {location} = useGeolocationContext();
 
   const currentLocation = location || undefined;
 
@@ -149,20 +149,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchState, t]);
 
-  const setCurrentLocationAsFrom = useCallback(
-    function setCurrentLocationAsFrom() {
-      log('set_current_location_as_from');
-      navigation.setParams({
-        fromLocation: currentLocation && {
-          ...currentLocation,
-          resultType: 'geolocation',
-        },
-        toLocation: to,
-      });
-    },
-    [navigation, currentLocation, to],
-  );
-
   const openLocationSearch = (
     callerRouteParam: keyof RootProps['route']['params'],
     initialLocation: Location | undefined,
@@ -190,20 +176,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       includeJourneyHistory: true,
       onlyStopPlacesCheckboxInitialState: false,
     });
-
-  const setCurrentLocationOrRequest = useCallback(
-    async function setCurrentLocationOrRequest() {
-      if (currentLocation) {
-        setCurrentLocationAsFrom();
-      } else {
-        const status = await requestLocationPermission(false);
-        if (status === 'granted') {
-          setCurrentLocationAsFrom();
-        }
-      }
-    },
-    [currentLocation, setCurrentLocationAsFrom, requestLocationPermission],
-  );
 
   const onPressed = useCallback(
     (
@@ -299,57 +271,39 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
         refreshControlProps={refreshControlProps}
         parallaxContent={() => (
           <View style={styles.searchHeader}>
-            <Section>
-              <LocationInputSectionItem
-                accessibilityLabel={
-                  t(TripSearchTexts.location.departurePicker.a11yLabel) +
-                  screenReaderPause
-                }
-                accessibilityHint={
-                  t(TripSearchTexts.location.departurePicker.a11yHint) +
-                  screenReaderPause
-                }
-                updatingLocation={updatingLocation && !to}
-                location={from}
-                label={t(SharedTexts.from)}
-                onPress={() => openLocationSearch('fromLocation', from)}
-                icon={<ThemeIcon svg={LocationIcon} />}
-                onIconPress={setCurrentLocationOrRequest}
-                iconAccessibility={{
-                  accessible: true,
-                  accessibilityLabel:
-                    from?.resultType == 'geolocation'
-                      ? t(
-                          TripSearchTexts.location.locationButton.a11yLabel
-                            .update,
-                        )
-                      : t(
-                          TripSearchTexts.location.locationButton.a11yLabel.use,
-                        ),
-                  accessibilityRole: 'button',
-                }}
-                testID="searchFromButton"
-              />
+            <WithSwapButton
+              onPress={swap}
+              backgroundColor={theme.color.background.neutral[0]}
+              horizontalPosition="right"
+            >
+              <Section>
+                <LocationInputSectionItem
+                  accessibilityLabel={
+                    t(TripSearchTexts.location.departurePicker.a11yLabel) +
+                    screenReaderPause
+                  }
+                  accessibilityHint={
+                    t(TripSearchTexts.location.departurePicker.a11yHint) +
+                    screenReaderPause
+                  }
+                  updatingLocation={updatingLocation && !to}
+                  location={from}
+                  label={t(SharedTexts.from)}
+                  onPress={() => openLocationSearch('fromLocation', from)}
+                  testID="searchFromButton"
+                />
 
-              <LocationInputSectionItem
-                accessibilityLabel={t(
-                  TripSearchTexts.location.destinationPicker.a11yLabel,
-                )}
-                label={t(SharedTexts.to)}
-                location={to}
-                onPress={() => openLocationSearch('toLocation', to)}
-                icon={<ThemeIcon svg={Swap} />}
-                onIconPress={swap}
-                iconAccessibility={{
-                  accessible: true,
-                  accessibilityLabel:
-                    t(TripSearchTexts.location.swapButton.a11yLabel) +
-                    screenReaderPause,
-                  accessibilityRole: 'button',
-                }}
-                testID="searchToButton"
-              />
-            </Section>
+                <LocationInputSectionItem
+                  accessibilityLabel={t(
+                    TripSearchTexts.location.destinationPicker.a11yLabel,
+                  )}
+                  label={t(SharedTexts.to)}
+                  location={to}
+                  onPress={() => openLocationSearch('toLocation', to)}
+                  testID="searchToButton"
+                />
+              </Section>
+            </WithSwapButton>
             <View style={styles.searchParametersButtons}>
               <Button
                 expanded={true}

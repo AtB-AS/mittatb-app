@@ -18,14 +18,17 @@ const MapViewStaticConfig = {
 };
 
 type MapViewConfigOptions = {
-  shouldShowVehiclesAndStations?: boolean;
+  includeVehiclesAndStationsVectorSource?: boolean;
 };
 
 export const useMapViewConfig = (
   mapViewConfigOptions?: MapViewConfigOptions,
 ) => {
-  const {shouldShowVehiclesAndStations = false} = mapViewConfigOptions || {};
-  const mapboxJsonStyle = useMapboxJsonStyle(shouldShowVehiclesAndStations);
+  const {includeVehiclesAndStationsVectorSource = false} =
+    mapViewConfigOptions || {};
+  const mapboxJsonStyle = useMapboxJsonStyle(
+    includeVehiclesAndStationsVectorSource,
+  );
   const configMap = useMemo(
     () => ({styleJSON: mapboxJsonStyle}),
     [mapboxJsonStyle],

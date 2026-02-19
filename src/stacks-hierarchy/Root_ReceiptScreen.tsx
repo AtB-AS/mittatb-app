@@ -90,8 +90,9 @@ export function Root_ReceiptScreen({route}: Props) {
         title={t(FareContractTexts.receipt.header.title)}
       />
       <View style={styles.content}>
-        <View accessibilityLiveRegion="polite">
+        <View>
           <MessageInfoBox
+            a11yLiveRegion="polite"
             {...translateStateToMessage(state, t, email, reference)}
           />
         </View>
@@ -128,7 +129,8 @@ function translateStateToMessage(
   t: TranslateFunction,
   email: string,
   reference?: string,
-): Required<Pick<MessageInfoBoxProps, 'type' | 'message'>> {
+): Required<Pick<MessageInfoBoxProps, 'type' | 'message'>> &
+  Pick<MessageInfoBoxProps, 'a11yLabel'> {
   switch (state) {
     case 'loading':
       return {
@@ -146,6 +148,12 @@ function translateStateToMessage(
           FareContractTexts.receipt.messages.success(email, reference!),
         ),
         type: 'valid',
+        a11yLabel: t(
+          FareContractTexts.receipt.messages.success(
+            email,
+            reference!.split('').join(' '),
+          ),
+        ),
       };
     case 'invalid-field':
       return {

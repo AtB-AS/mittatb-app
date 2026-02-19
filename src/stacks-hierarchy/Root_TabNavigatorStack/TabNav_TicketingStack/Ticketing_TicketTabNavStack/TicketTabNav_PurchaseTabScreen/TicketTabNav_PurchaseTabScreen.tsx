@@ -107,7 +107,15 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     if (rfc.toFareZone) builder.toZone(mapZone(rfc.toFareZone));
     const selection = builder.build();
 
-    navigation.navigate('Root_PurchaseConfirmationScreen', {
+    /*
+     *  If booking is enabled we need the user to select a departure, and
+     *  thus cannot send them directly to the confirmation screen.
+     */
+    const targetScreen = rfc.preassignedFareProduct.isBookingEnabled
+      ? 'Root_PurchaseOverviewScreen'
+      : 'Root_PurchaseConfirmationScreen';
+
+    navigation.navigate(targetScreen, {
       selection,
       mode: 'Ticket',
       transitionOverride: 'slide-from-right',

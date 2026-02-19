@@ -51,8 +51,14 @@ const mapBackendRecentFareContracts = (
     .map((p) => findReferenceDataById(preassignedFareProducts, p))
     .filter(isDefined);
 
-  const sellableProductsInFareContract = productsInFareContract.filter((p) =>
-    isProductSellableInApp(p),
+  /*
+   *  We lack some information to properly handle supplement products
+   *  as recent fare contracts (no preassignedFareProduct for bike ticket,
+   *  and no existingProduct for reservation), so for now we will only
+   *  show recent fare contracts that aren't supplement products.
+   */
+  const sellableProductsInFareContract = productsInFareContract.filter(
+    (p) => isProductSellableInApp(p) && !p.isSupplementProduct,
   );
 
   const preassignedFareProduct = sellableProductsInFareContract[0];

@@ -65,6 +65,7 @@ import {
   getNoticesForServiceJourney,
   getShouldShowLiveVehicle,
   debugProgressBetweenStopsText,
+  findCommonSituationId,
 } from './utils';
 import {BookingOptions} from './components/BookingOptions';
 import {BookingInfoBox} from './components/BookingInfoBox';
@@ -142,10 +143,15 @@ export const DepartureDetailsScreenComponent = ({
   const focusedEstimatedCall = estimatedCallsWithMetadata.find(
     (e) => e.metadata.group === 'trip',
   );
+
+  const commonSituationId = findCommonSituationId(estimatedCallsWithMetadata);
+
   const situations =
-    focusedEstimatedCall?.situations.sort((n1, n2) =>
-      n1.id.localeCompare(n2.id),
-    ) ?? [];
+    focusedEstimatedCall?.situations
+      .sort((n1, n2) => n1.id.localeCompare(n2.id))
+      .filter((s) => {
+        return commonSituationId.some((id) => s.id == id);
+      }) ?? [];
 
   const fromCall = estimatedCallsWithMetadata.find(
     (c) => c.stopPositionInPattern === activeItem.fromStopPosition,

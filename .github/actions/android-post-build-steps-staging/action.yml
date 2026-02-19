@@ -18,8 +18,6 @@ inputs:
     required: true
   abt-entur-publish-client-staging:
     required: true
-  new-version-name:
-    required: true
 
 runs:
   using: "composite"
@@ -32,7 +30,6 @@ runs:
         KEYSTORE_PASS: ${{ inputs.keystore-pass }}
         KEY_PASS: ${{ inputs.keystore-key-pass }}
         KEY_ALIAS: ${{ inputs.keystore-key-alias }}
-        VERSION_NAME: ${{ inputs.new-version-name }}
     - name: Distribute to Firebase App Distribution
       shell: bash
       run: |
