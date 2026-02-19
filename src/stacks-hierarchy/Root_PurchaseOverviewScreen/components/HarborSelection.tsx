@@ -52,40 +52,38 @@ export const HarborSelection = forwardRef<
         <ContentHeading
           text={t(PurchaseOverviewTexts.stopPlaces.harborSelection.select)}
         />
-        <View>
-          <WithOverlayButton
-            svgIcon={Swap}
-            onPress={onSwap}
-            horizontalPosition="right"
-          >
-            <Section accessible={false}>
-              <HarborSelectionItem
-                fromOrTo="from"
-                harbor={selection.stopPlaces.from}
-                disabled={false}
-                onPress={() =>
-                  onSelect(
-                    // Wipe existing stop places when selecting new from stop place
-                    selectionBuilder
-                      .fromSelection(selection)
-                      .fromStopPlace(undefined)
-                      .toStopPlace(undefined)
-                      .legs([])
-                      .build(),
-                  )
-                }
-                ref={fromHarborRef}
-              />
-              <HarborSelectionItem
-                fromOrTo="to"
-                harbor={selection.stopPlaces.to}
-                disabled={!selection.stopPlaces.from}
-                onPress={() => onSelect(selection)}
-                ref={toHarborRef}
-              />
-            </Section>
-          </WithOverlayButton>
-        </View>
+        <WithOverlayButton
+          svgIcon={Swap}
+          onPress={onSwap}
+          horizontalPosition="right"
+        >
+          <Section accessible={false}>
+            <HarborSelectionItem
+              fromOrTo="from"
+              harbor={selection.stopPlaces.from}
+              disabled={false}
+              onPress={() =>
+                onSelect(
+                  // Wipe existing stop places when selecting new from stop place
+                  selectionBuilder
+                    .fromSelection(selection)
+                    .fromStopPlace(undefined)
+                    .toStopPlace(undefined)
+                    .legs([])
+                    .build(),
+                )
+              }
+              ref={fromHarborRef}
+            />
+            <HarborSelectionItem
+              fromOrTo="to"
+              harbor={selection.stopPlaces.to}
+              disabled={!selection.stopPlaces.from}
+              onPress={() => onSelect(selection)}
+              ref={toHarborRef}
+            />
+          </Section>
+        </WithOverlayButton>
       </View>
     );
   },
