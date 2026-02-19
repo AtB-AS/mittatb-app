@@ -18,6 +18,18 @@ import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 const MAX_NUMBER_OF_CHAINGED_INITIAL_SEARCHES = 5;
 const TARGET_NUMBER_OF_INITIAL_HITS = 8;
 
+/**
+ * Hook for fetching trip results with progressive loading for the initial search.
+ *
+ * For the initial search, the app automatically keeps requesting additional pages
+ * until a sufficient number of results is reached (or a maximum number of chained
+ * requests is hit). This provides fast feedback to the user while still attempting
+ * to fill the list with enough trips.
+ *
+ * For "load more", this behavior is not needed — only a single additional page is
+ * fetched. The BFF already performs its own retries, so extra chaining here would
+ * be unnecessary.
+ */
 export function useTrips(
   fromLocation: Location | undefined,
   toLocation: Location | undefined,
@@ -84,7 +96,8 @@ export function useTrips(
 
   const performedSearchesCount = tripsData?.pages.length ?? 0;
 
-  const allowFetchNextPage = tripLocationsAreValid && hasNextPage;
+  const allowFetchNextPage =
+    tripLocationsAreValid && !tripsIsFetching && hasNextPage;
 
   const shouldAutoLoadMoreInitialTrips =
     allowFetchNextPage &&
@@ -146,8 +159,6 @@ export function useTrips(
   const timeOfLastSearch = tripsProps.searchTime.date;
 
   const loadNextTripsPage = useCallback(() => {
-    // For the initial search, the app loops searches until a good amount of results are found. This allows for fast results along the way.
-    // However for "load more", we don't need that many results, and the bff handles some retries anyway, so here we just fetch one more page.
     if (allowFetchNextPage) {
       fetchNextPage();
       sendAnalyticsSearchEvent();
