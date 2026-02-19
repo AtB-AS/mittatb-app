@@ -17,7 +17,7 @@ else
     VARIANT="$APP_FLAVOR${APP_ENVIRONMENT^}"
     echo "Uploading bugsnag mapping files for ${APP_VERSION}, ${BUILD_ID}, $APP_FLAVOR${APP_ENVIRONMENT^} ..."
     echo "Uploading React Native source maps..."
-    npx bugsnag-cli upload react-native-android \
+    bugsnag-cli upload react-native-android \
       --version-name="{$APP_VERSION}" \
       --version-code=$BUILD_ID \
       --api-key=$BUGSNAG_API_KEY \
@@ -25,7 +25,7 @@ else
       --verbose
 
     echo "Uploading Android NDK symbols..."
-    npx bugsnag-cli upload android-ndk \
+    bugsnag-cli upload android-ndk \
       --api-key="${BUGSNAG_API_KEY}" \
       --version-name="${APP_VERSION}" \
       --version-code="${BUILD_ID}" \
@@ -34,7 +34,7 @@ else
 
     if [[ "${APP_ENVIRONMENT}" == "store" ]]; then
       echo "Uploading ProGuard/R8 mappings"
-      npx bugsnag-cli upload android-proguard \
+      bugsnag-cli upload android-proguard \
         --api-key="${BUGSNAG_API_KEY}" \
         --version-name="${APP_VERSION}" \
         --version-code="${BUILD_ID}" \

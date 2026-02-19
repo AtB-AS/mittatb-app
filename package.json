@@ -132,7 +132,6 @@
     "@babel/preset-typescript": "^7.26.0",
     "@babel/runtime": "^7.28.4",
     "@babel/types": "^7.28.4",
-    "@bugsnag/cli": "^3.7.0",
     "@entur-private/abt-token-state-react-native-lib": "3.3.14-hotfix2",
     "@react-native-community/cli": "^20.0.2",
     "@react-native-community/cli-platform-android": "^20.0.2",

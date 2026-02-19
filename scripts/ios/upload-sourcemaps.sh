@@ -14,7 +14,7 @@ if [[
     exit 1
 else
 echo "Uploading iOS source maps for ${APP_VERSION}, ${BUILD_ID}"
-    npx bugsnag-cli upload react-native-ios \
+    bugsnag-cli upload react-native-ios \
         --api-key="${BUGSNAG_API_KEY}" \
         --version-name="${APP_VERSION}" \
         --bundle-version="${BUILD_ID}" \
