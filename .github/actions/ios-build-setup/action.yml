@@ -43,8 +43,11 @@ runs:
         uses: actions/cache@v4
         id: modules-cache
         with:
-          path: node_modules
+          lookup-only: ${{ steps.pods-cache.outputs.cache-hit == 'true' }}
+          path: '**/node_modules'
           key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          restore-keys: |
+            node-modules-
       - name: Setup Xcode version
         uses: maxim-lobanov/setup-xcode@v1
         with:
