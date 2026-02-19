@@ -13,7 +13,7 @@ import {
 } from '@atb/modules/purchase-selection';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
-import {WithOverlayButton} from '@atb/components/overlay-button/WithOverlayButton';
+import {WithOverlayButton} from '@atb/components/overlay-button';
 
 type StopPlaceSelectionProps = {
   selection: PurchaseSelectionType;
@@ -37,7 +37,6 @@ export const HarborSelection = forwardRef<
   ) => {
     const {t} = useTranslation();
     const selectionBuilder = usePurchaseSelectionBuilder();
-    const styles = useStyles();
 
     const fromHarborRef = useRef<typeof PressableOpacity>(null);
     const toHarborRef = useRef<typeof PressableOpacity>(null);
@@ -91,12 +90,6 @@ export const HarborSelection = forwardRef<
     );
   },
 );
-
-const useStyles = StyleSheet.createThemeHook(() => ({
-  swapButton: {
-    top: '50%',
-  },
-}));
 
 type HarborSelectionItemProps = {
   harbor?: StopPlaceFragment;

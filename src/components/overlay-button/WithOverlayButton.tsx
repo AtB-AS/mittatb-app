@@ -7,7 +7,7 @@ import {
 import type {PropsWithChildren} from 'react';
 import type {SvgProps} from 'react-native-svg';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {OverlayButton} from '@atb/components/overlay-button/OverlayButton';
+import {OverlayButton} from './OverlayButton';
 
 type Props = PropsWithChildren<{
   svgIcon(props: SvgProps): React.JSX.Element;
@@ -20,7 +20,7 @@ type Props = PropsWithChildren<{
 export function WithOverlayButton({
   children,
   svgIcon,
-  horizontalPosition,
+  horizontalPosition = 'right',
   isLoading,
   onPress,
   buttonStyleOverride,
@@ -28,7 +28,8 @@ export function WithOverlayButton({
   const {theme} = useThemeContext();
   const styles = useStyles();
   return (
-    <View>
+    <View style={styles.container}>
+      <View style={styles.content}>{children}</View>
       {isLoading ? (
         <ActivityIndicator color={theme.color.foreground.dynamic.primary} />
       ) : (
@@ -36,26 +37,27 @@ export function WithOverlayButton({
           svgIcon={svgIcon}
           onPress={onPress}
           style={[
-            styles.icon,
-            styles.verticalCenter,
+            styles.button,
             styles[horizontalPosition],
             buttonStyleOverride,
           ]}
         />
       )}
-      {children}
     </View>
   );
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  icon: {
-    position: 'absolute',
-    zIndex: 100,
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  verticalCenter: {
-    top: '50%',
-    transform: [{translateY: '-50%'}],
+  content: {
+    width: '100%',
+  },
+  button: {
+    position: 'absolute',
+    zIndex: 2,
   },
   right: {
     right: theme.spacing.medium,
