@@ -36,10 +36,10 @@
     js-yaml "^4.1.0"
     yargs "^17.7.1"
 
-"@atb-as/generate-assets@^18.9.0":
-  version "18.9.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-18.9.0.tgz#6dce2e5451754516f475152dfcc4c73cc8c97861"
-  integrity sha512-tv9U00NFYrzi57Zai29S627tFunOF9TXLGFn5ZY/aZx3iMKZ6YdPI+yr2wcl3aStoOdXEOezKc75D9a23om2bg==
+"@atb-as/generate-assets@^18.10.0":
+  version "18.10.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-18.10.0.tgz#8f1f15039f77df5912c6a68bf3941bfcbeca2d18"
+  integrity sha512-WAwaB5f2WuL7lYySC1uWbpJwRZUzQC5Co/4WNfyRof2a6Z0ut3+EsBmneeK6w0YdWyIr9t3Q56W6fzmz7aT46w==
   dependencies:
     "@atb-as/theme" "14.0.1"
     commander "^9.4.0"
