@@ -29,6 +29,7 @@ jobs:
   detect-changes:
     if: inputs.force-build != 'true'
     name: Detect changes
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     outputs:
       should_build: ${{ steps.detect.outputs.should_build }}
@@ -42,7 +43,7 @@ jobs:
 
   setup:
     needs: detect-changes
-    if: ${{ !failure() && !cancelled() && (needs.detect-changes.outputs.should_build == 'true' || inputs.force-build == 'true') }}
+    if: ${{ !failure() && !cancelled() && ( github.event_name == 'workflow_dispatch' || needs.detect-changes.outputs.should_build == 'true' || inputs.force-build == 'true') }}
     name: Set-up tools and warm up cache
     runs-on: macOS-26
     outputs:
