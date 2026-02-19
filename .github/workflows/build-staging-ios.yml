@@ -148,11 +148,6 @@ jobs:
           app-environment: 'staging'
           app-org: ${{ matrix.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
-      - name: Override version name on staging
-        shell: bash
-        env:
-          BRANCH_NAME: ${{ github.ref_name }}
-        run: bash ./scripts/set-version-name.sh
       - name: Get potential cached pods
         uses: actions/cache@v4
         id: pods-cache
