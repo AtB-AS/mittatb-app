@@ -15,6 +15,7 @@ if [[
     exit 1
 else
     VARIANT="$APP_FLAVOR${APP_ENVIRONMENT^}"
+    echo "Merged manifest in $(ls android/app/build/intermediates/merged_manifests/)"
     echo "Uploading bugsnag mapping files for ${APP_VERSION}, ${BUILD_ID}, $APP_FLAVOR${APP_ENVIRONMENT^} ..."
     echo "Uploading React Native source maps..."
     bugsnag-cli upload react-native-android \
