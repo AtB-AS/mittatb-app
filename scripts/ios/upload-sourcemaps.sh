@@ -19,5 +19,6 @@ echo "Uploading iOS source maps for ${APP_VERSION}, ${BUILD_ID}"
         --version-name="${APP_VERSION}" \
         --bundle-version="${BUILD_ID}" \
         --source-map=bundle/main.jsbundle.map \
-        --bundle=bundle/main.jsbundle
+        --bundle=bundle/main.jsbundle \
+        --verbose
 fi
