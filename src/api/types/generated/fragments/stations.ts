@@ -8,7 +8,10 @@ import * as Types from '../mobility-types_v2';
 
 export type VehicleTypeAvailabilityBasicFragment = {
   count: number;
-  vehicleType: {formFactor: Types.FormFactor, propulsionType: Types.PropulsionType};
+  vehicleType: {
+    formFactor: Types.FormFactor;
+    propulsionType: Types.PropulsionType;
+  };
 };
 
 export type StationBasicFragment = {
