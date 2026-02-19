@@ -12,5 +12,6 @@ else
     echo "Uploading iOS dsyms"
     npx bugsnag-cli upload xcode-build \
         --api-key="${BUGSNAG_API_KEY}" \
-        AtB.app.dSYM.zip
+        AtB.app.dSYM.zip \
+        --verbose
 fi
