@@ -10,7 +10,7 @@ if [[
     exit 1
 else 
     echo "Uploading iOS dsyms"
-    npx bugsnag-cli upload xcode-build \
+    bugsnag-cli upload xcode-build \
         --api-key="${BUGSNAG_API_KEY}" \
         AtB.app.dSYM.zip \
         --verbose
