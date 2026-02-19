@@ -24,14 +24,6 @@ else
       --variant=$VARIANT \
       --verbose
 
-    echo "Uploading Android NDK symbols..."
-    bugsnag-cli upload android-ndk \
-      --api-key="${BUGSNAG_API_KEY}" \
-      --version-name="${APP_VERSION}" \
-      --version-code="${BUILD_ID}" \
-      --variant="${VARIANT}" \
-      --verbose
-
     if [[ "${APP_ENVIRONMENT}" == "store" ]]; then
       echo "Uploading ProGuard/R8 mappings"
       bugsnag-cli upload android-proguard \
