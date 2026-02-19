@@ -15,7 +15,10 @@ if [[
     exit 1
 else
     VARIANT="$APP_FLAVOR${APP_ENVIRONMENT^}"
-    echo "Merged manifest in $(ls android/app/build/intermediates/merged_manifests/)"
+    SOURCEMAP_ARGS=""
+    if [[ "${BUNDLE_ONLY}" == "true" ]]; then
+      SOURCEMAP_ARGS="--bundle=${BUNDLE_PATH} --source-map=${SOURCEMAP_PATH}"
+    fi
     echo "Uploading bugsnag mapping files for ${APP_VERSION}, ${BUILD_ID}, $APP_FLAVOR${APP_ENVIRONMENT^} ..."
     echo "Uploading React Native source maps..."
     bugsnag-cli upload react-native-android \
@@ -23,7 +26,7 @@ else
       --version-code=$BUILD_ID \
       --api-key=$BUGSNAG_API_KEY \
       --variant=$VARIANT \
-      --application-id="${ANDROID_APPLICATION_ID}" \
+      {SOURCEMAP_ARGS} \
       --verbose
 
     if [[ "${APP_ENVIRONMENT}" == "store" ]]; then
