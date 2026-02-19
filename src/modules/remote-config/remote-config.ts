@@ -100,8 +100,6 @@ export type RemoteConfig = {
   privacy_policy_url: string;
   service_disruption_url: string;
   token_timeout_in_seconds: number;
-  tripsSearch_max_number_of_chained_initial_searches: number;
-  tripsSearch_target_number_of_initial_hits: number;
   use_flexible_on_accessMode: boolean;
   use_flexible_on_directMode: boolean;
   use_flexible_on_egressMode: boolean;
@@ -190,8 +188,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   privacy_policy_url: PRIVACY_POLICY_URL,
   service_disruption_url: '',
   token_timeout_in_seconds: 10,
-  tripsSearch_max_number_of_chained_initial_searches: 5,
-  tripsSearch_target_number_of_initial_hits: 8,
   use_flexible_on_accessMode: true,
   use_flexible_on_directMode: true,
   use_flexible_on_egressMode: true,
@@ -415,12 +411,6 @@ export function getConfig(): RemoteConfig {
   const token_timeout_in_seconds =
     values['token_timeout_in_seconds']?.asNumber() ??
     defaultRemoteConfig.token_timeout_in_seconds;
-  const tripsSearch_max_number_of_chained_initial_searches =
-    values['tripsSearch_max_number_of_chained_initial_searches']?.asNumber() ??
-    defaultRemoteConfig.tripsSearch_max_number_of_chained_initial_searches;
-  const tripsSearch_target_number_of_initial_hits =
-    values['tripsSearch_target_number_of_initial_hits']?.asNumber() ??
-    defaultRemoteConfig.tripsSearch_target_number_of_initial_hits;
   const use_flexible_on_accessMode =
     values['use_flexible_on_accessMode']?.asBoolean() ??
     defaultRemoteConfig.use_flexible_on_accessMode;
@@ -512,8 +502,6 @@ export function getConfig(): RemoteConfig {
     privacy_policy_url,
     service_disruption_url,
     token_timeout_in_seconds,
-    tripsSearch_max_number_of_chained_initial_searches,
-    tripsSearch_target_number_of_initial_hits,
     use_flexible_on_accessMode,
     use_flexible_on_directMode,
     use_flexible_on_egressMode,

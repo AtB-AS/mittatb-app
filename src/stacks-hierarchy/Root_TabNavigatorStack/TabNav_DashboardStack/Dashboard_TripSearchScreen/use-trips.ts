@@ -1,7 +1,6 @@
 import {TripPattern} from '@atb/api/types/trips';
 import {toAxiosErrorKind} from '@atb/api/utils';
 import {Location} from '@atb/modules/favorites';
-import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useSearchHistoryContext} from '@atb/modules/search-history';
 import type {SearchStateType, TripSearchTime} from '../types';
 
@@ -15,6 +14,9 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {sanitizeSearchTime} from './utils';
 import Bugsnag from '@bugsnag/react-native';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
+
+const MAX_NUMBER_OF_CHAINGED_INITIAL_SEARCHES = 5;
+const TARGET_NUMBER_OF_INITIAL_HITS = 8;
 
 export function useTrips(
   fromLocation: Location | undefined,
@@ -30,11 +32,6 @@ export function useTrips(
   tripsIsError: boolean;
   tripsIsNetworkError: boolean;
 } {
-  const {
-    tripsSearch_max_number_of_chained_initial_searches,
-    tripsSearch_target_number_of_initial_hits,
-  } = useRemoteConfigContext();
-
   const journeySearchModes = useJourneyModes();
   const {addJourneySearchEntry} = useSearchHistoryContext();
 
@@ -87,12 +84,12 @@ export function useTrips(
 
   const performedSearchesCount = tripsData?.pages.length ?? 0;
 
+  const allowFetchNextPage = tripLocationsAreValid && hasNextPage;
+
   const shouldAutoLoadMoreInitialTrips =
-    tripLocationsAreValid &&
-    tripPatterns.length < tripsSearch_target_number_of_initial_hits &&
-    performedSearchesCount <
-      tripsSearch_max_number_of_chained_initial_searches &&
-    hasNextPage;
+    allowFetchNextPage &&
+    tripPatterns.length < TARGET_NUMBER_OF_INITIAL_HITS &&
+    performedSearchesCount < MAX_NUMBER_OF_CHAINGED_INITIAL_SEARCHES;
 
   useEffect(() => {
     shouldAutoLoadMoreInitialTrips && fetchNextPage();
@@ -151,9 +148,11 @@ export function useTrips(
   const loadNextTripsPage = useCallback(() => {
     // For the initial search, the app loops searches until a good amount of results are found. This allows for fast results along the way.
     // However for "load more", we don't need that many results, and the bff handles some retries anyway, so here we just fetch one more page.
-    fetchNextPage();
-    sendAnalyticsSearchEvent();
-  }, [fetchNextPage, sendAnalyticsSearchEvent]);
+    if (allowFetchNextPage) {
+      fetchNextPage();
+      sendAnalyticsSearchEvent();
+    }
+  }, [allowFetchNextPage, fetchNextPage, sendAnalyticsSearchEvent]);
 
   const loadMoreTrips = hasNextPage ? loadNextTripsPage : undefined;
 
