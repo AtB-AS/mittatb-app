@@ -89,6 +89,7 @@ export const ResultRow: React.FC<ResultRowProps> = ({
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   pressableOpacity: {
     marginTop: theme.spacing.small,
+    marginHorizontal: theme.spacing.medium,
   },
 }));
 
