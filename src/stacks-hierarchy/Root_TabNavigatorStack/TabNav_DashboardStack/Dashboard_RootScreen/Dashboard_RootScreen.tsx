@@ -218,7 +218,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
           <WithOverlayButton
             svgIcon={Swap}
             onPress={swap}
-            horizontalPosition="right"
+            overlayPosition="right"
             isLoading={updatingLocation && !to}
             buttonStyleOverride={style.swapButton}
           >

@@ -55,7 +55,7 @@ export const HarborSelection = forwardRef<
         <WithOverlayButton
           svgIcon={Swap}
           onPress={onSwap}
-          horizontalPosition="right"
+          overlayPosition="right"
         >
           <Section accessible={false}>
             <HarborSelectionItem

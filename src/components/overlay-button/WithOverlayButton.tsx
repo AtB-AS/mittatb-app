@@ -11,7 +11,7 @@ import {OverlayButton} from './OverlayButton';
 
 type Props = PropsWithChildren<{
   svgIcon(props: SvgProps): React.JSX.Element;
-  horizontalPosition: 'left' | 'right';
+  overlayPosition: 'left' | 'right';
   isLoading?: boolean;
   onPress?: () => void;
   buttonStyleOverride?: StyleProp<ViewStyle>;
@@ -20,7 +20,7 @@ type Props = PropsWithChildren<{
 export function WithOverlayButton({
   children,
   svgIcon,
-  horizontalPosition = 'right',
+  overlayPosition = 'right',
   isLoading,
   onPress,
   buttonStyleOverride,
@@ -36,11 +36,7 @@ export function WithOverlayButton({
         <OverlayButton
           svgIcon={svgIcon}
           onPress={onPress}
-          style={[
-            styles.button,
-            styles[horizontalPosition],
-            buttonStyleOverride,
-          ]}
+          style={[styles.button, styles[overlayPosition], buttonStyleOverride]}
         />
       )}
     </View>

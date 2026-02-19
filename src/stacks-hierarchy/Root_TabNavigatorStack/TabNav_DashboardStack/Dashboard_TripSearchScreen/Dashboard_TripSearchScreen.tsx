@@ -274,7 +274,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             <WithOverlayButton
               svgIcon={Swap}
               onPress={swap}
-              horizontalPosition="right"
+              overlayPosition="right"
               isLoading={updatingLocation && !to}
             >
               <Section>
