@@ -2,8 +2,6 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
-apply plugin: "com.bugsnag.android.gradle"
-
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
@@ -143,17 +141,6 @@ android {
                 bugsnagApiKey: BUGSNAG_API_KEY_VALUE,
                 releaseStage: RELEASE_STAGE_KEY_VALUE
         ]
-    }
-
-    bugsnag {
-        variantFilter { variant ->
-            // disables plugin for all variants of the 'staging' productFlavor
-            def name = variant.name.toLowerCase()
-            if (name.contains("staging") || name.contains("debug")) {
-                enabled = false
-            }
-        }
-        uploadReactNativeMappings = true // enables upload of React Native source maps
     }
 
     signingConfigs {
