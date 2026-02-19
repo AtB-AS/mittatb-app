@@ -77,7 +77,7 @@ export const FinishedScooterSheet = ({
                       startDateTime={shmoBooking.departureTime ?? new Date()}
                       endDateTime={new Date(shmoBooking.arrivalTime ?? '')}
                       totalAmount={
-                        shmoBooking.pricing.currentAmount?.toString() ?? ''
+                        shmoBooking.pricing.finalAmount?.toString() ?? ''
                       }
                       withHeader={true}
                     />
