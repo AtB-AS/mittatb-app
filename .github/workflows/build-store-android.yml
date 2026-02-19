@@ -90,10 +90,8 @@ jobs:
         env:
           GOOGLE_PLAY_SERVICE_ACCOUNT_PATH: google-play-service-account.json
           ANDROID_PACKAGE_NAME: ${{ env.ANDROID_APPLICATION_ID }}
-      - name: Install Bugsnag CLI
-        run: curl -o- https://raw.githubusercontent.com/bugsnag/bugsnag-cli/main/install.sh | bash
-      - name: Add Bugsnag CLI to PATH
-        run: echo "$HOME/.local/bugsnag/bin" >> $GITHUB_PATH
+      - name: Setup Bugsnag CLI
+        uses: ./.github/actions/setup-bugsnag-cli
       - name: Upload bundle and source maps
         if: github.event_name != 'workflow_dispatch'
         run: bash ./scripts/android/upload-sourcemaps.sh
