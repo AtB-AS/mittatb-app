@@ -5,6 +5,7 @@ import {
 
 import {defaultJourneyModes} from './utils';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useMemo} from 'react';
 
 export function useJourneyModes(): Modes {
   const {
@@ -15,20 +16,29 @@ export function useJourneyModes(): Modes {
     isNonTransitTripSearchEnabled,
   } = useFeatureTogglesContext();
 
-  return {
-    accessMode:
-      isFlexibleTransportEnabled && isFlexibleTransportOnAccessModeEnabled
-        ? StreetMode.Flexible
-        : defaultJourneyModes.accessMode,
-    directMode:
-      isFlexibleTransportEnabled && isFlexibleTransportOnDirectModeEnabled
-        ? StreetMode.Flexible
-        : isNonTransitTripSearchEnabled
-          ? undefined
-          : defaultJourneyModes.directMode,
-    egressMode:
-      isFlexibleTransportEnabled && isFlexibleTransportOnEgressModeEnabled
-        ? StreetMode.Flexible
-        : defaultJourneyModes.egressMode,
-  };
+  return useMemo(
+    () => ({
+      accessMode:
+        isFlexibleTransportEnabled && isFlexibleTransportOnAccessModeEnabled
+          ? StreetMode.Flexible
+          : defaultJourneyModes.accessMode,
+      directMode:
+        isFlexibleTransportEnabled && isFlexibleTransportOnDirectModeEnabled
+          ? StreetMode.Flexible
+          : isNonTransitTripSearchEnabled
+            ? undefined
+            : defaultJourneyModes.directMode,
+      egressMode:
+        isFlexibleTransportEnabled && isFlexibleTransportOnEgressModeEnabled
+          ? StreetMode.Flexible
+          : defaultJourneyModes.egressMode,
+    }),
+    [
+      isFlexibleTransportEnabled,
+      isFlexibleTransportOnAccessModeEnabled,
+      isFlexibleTransportOnDirectModeEnabled,
+      isFlexibleTransportOnEgressModeEnabled,
+      isNonTransitTripSearchEnabled,
+    ],
+  );
 }

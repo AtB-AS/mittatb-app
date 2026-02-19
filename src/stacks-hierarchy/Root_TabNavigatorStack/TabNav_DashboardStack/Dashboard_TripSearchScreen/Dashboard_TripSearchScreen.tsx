@@ -17,7 +17,8 @@ import {
   useLocationSearchValue,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Results} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/Results';
-import {useTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-trips-query';
+
+import {useTrips} from './use-trips';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {Language, TripSearchTexts, useTranslation} from '@atb/translations';
 import {isInThePast} from '@atb/utils/date';
@@ -106,8 +107,16 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   const {isFlexibleTransportEnabled: isFlexibleTransportEnabledInRemoteConfig} =
     useFeatureTogglesContext();
-  const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
-    useTripsQuery(from, to, searchTime, filtersState.filtersSelection);
+  const {
+    tripPatterns,
+    timeOfLastSearch,
+    loadMoreTrips,
+    refetchTrips,
+    tripsSearchState,
+    tripsIsError,
+    tripsIsNetworkError,
+  } = useTrips(from, to, searchTime, filtersState.filtersSelection);
+
   const {nonTransitTrips} = useNonTransitTripsQuery(
     from,
     to,
@@ -115,8 +124,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     filtersState.filtersSelection,
   );
 
-  const isSearching = searchState === 'searching';
-  const showEmptyScreen = !tripPatterns && !isSearching && !error;
+  const isSearching = tripsSearchState === 'searching';
+  const showEmptyScreen = !tripPatterns && !isSearching && !tripsIsError;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
   const isValidLocations = isValidTripLocations(from, to);
@@ -132,7 +141,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   useEffect(() => {
     if (!screenHasFocus) return;
-    switch (searchState) {
+    switch (tripsSearchState) {
       case 'searching':
         setSearchStateMessage(t(TripSearchTexts.searchState.searching));
         break;
@@ -147,7 +156,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
         break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchState, t]);
+  }, [tripsSearchState, t]);
 
   const openLocationSearch = (
     callerRouteParam: keyof RootProps['route']['params'],
@@ -213,21 +222,24 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   };
 
   const refresh = useCallback(() => {
+    const updatedSearchTime: TripSearchTime =
+      searchTime.option === 'now'
+        ? {
+            option: 'now',
+            date: new Date().toISOString(),
+          }
+        : {...searchTime};
+    setSearchTime(updatedSearchTime);
     navigation.setParams({
       fromLocation: from?.resultType === 'geolocation' ? currentLocation : from,
       toLocation: to?.resultType === 'geolocation' ? currentLocation : to,
-      searchTime:
-        searchTime.option === 'now'
-          ? {
-              option: 'now',
-              date: new Date().toISOString(),
-            }
-          : {...searchTime},
+      searchTime: updatedSearchTime,
     });
-  }, [from, to, currentLocation, searchTime, navigation]);
+    refetchTrips();
+  }, [from, to, currentLocation, searchTime, navigation, refetchTrips]);
 
   const nonTransitTripsVisible =
-    (tripPatterns.length > 0 || searchState === 'search-empty-result') &&
+    (tripPatterns.length > 0 || tripsSearchState === 'search-empty-result') &&
     nonTransitTrips.length > 0;
 
   const refreshControlProps = useMemo(() => {
@@ -237,11 +249,11 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           refreshing:
             Platform.OS === 'ios'
               ? false
-              : searchState === 'searching' && !tripPatterns.length,
+              : tripsSearchState === 'searching' && !tripPatterns.length,
           onRefresh: refresh,
         }
       : undefined;
-  }, [searchState, tripPatterns.length, refresh, isFocused]);
+  }, [tripsSearchState, tripPatterns.length, refresh, isFocused]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(refresh, [from, to]);
@@ -406,8 +418,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               {isFlexibleTransportEnabled &&
                 !flexibleTransportInfoDismissed &&
                 (tripPatterns.length > 0 ||
-                  searchState === 'search-empty-result') &&
-                !error && (
+                  tripsSearchState === 'search-empty-result') &&
+                !tripsIsError && (
                   <CityZoneMessage
                     from={from}
                     to={to}
@@ -435,7 +447,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 onDetailsPressed={(tripPattern, resultIndex) =>
                   onPressed(tripPattern, {analyticsMetadata: {resultIndex}})
                 }
-                errorType={error}
+                tripsIsError={tripsIsError}
+                tripsIsNetworkError={tripsIsNetworkError}
                 searchTime={searchTime}
                 anyFiltersApplied={
                   filtersState.enabled && filtersState.anyFiltersApplied
@@ -444,14 +457,14 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             </View>
           )}
           {!tripPatterns.length && <View style={styles.emptyResultsSpacer} />}
-          {!error && isValidLocations && (
+          {!tripsIsError && isValidLocations && (
             <PressableOpacity
-              onPress={loadMore}
-              disabled={searchState === 'searching'}
+              onPress={loadMoreTrips}
+              disabled={tripsSearchState === 'searching'}
               style={styles.loadMoreButton}
               testID="loadMoreButton"
             >
-              {searchState === 'searching' ? (
+              {tripsSearchState === 'searching' ? (
                 <View style={styles.loadingIndicator}>
                   {tripPatterns.length ? (
                     <>
@@ -473,7 +486,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 </View>
               ) : (
                 <>
-                  {loadMore ? (
+                  {loadMoreTrips ? (
                     <>
                       <ThemeIcon
                         color="secondary"
