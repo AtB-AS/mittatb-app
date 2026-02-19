@@ -41,7 +41,8 @@ import {BonusDashboard} from './components/BonusDashboard';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import {LocationSearchCallerRoute} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
-import {WithSwapButton} from '@atb/components/swap-button';
+import {Swap} from '@atb/assets/svg/mono-icons/actions';
+import {WithOverlayButton} from '@atb/components/overlay-button';
 
 type RootProps = DashboardScreenProps<'Dashboard_RootScreen'>;
 const callerRoute: LocationSearchCallerRoute = [
@@ -214,11 +215,12 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
         testID="dashboardScrollView"
       >
         <View style={style.searchHeader}>
-          <WithSwapButton
+          <WithOverlayButton
+            svgIcon={Swap}
             onPress={swap}
-            backgroundColor={theme.color.background.neutral[0]}
             horizontalPosition="right"
-            swapButtonStyleOverride={style.swapButton}
+            isLoading={updatingLocation && !to}
+            buttonStyleOverride={style.swapButton}
           >
             <Section
               style={[style.contentSection, style.contentSection__first]}
@@ -232,13 +234,11 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
                   t(TripSearchTexts.location.departurePicker.a11yHint) +
                   screenReaderPause
                 }
-                updatingLocation={updatingLocation && !to}
                 location={from}
                 label={t(SharedTexts.from)}
                 onPress={() => openLocationSearch('fromLocation', from)}
                 testID="searchFromButton"
               />
-
               <LocationInputSectionItem
                 accessibilityLabel={t(
                   TripSearchTexts.location.destinationPicker.a11yLabel,
@@ -249,7 +249,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
                 testID="searchToButton"
               />
             </Section>
-          </WithSwapButton>
+          </WithOverlayButton>
 
           <FavoriteChips
             key="favoriteChips"

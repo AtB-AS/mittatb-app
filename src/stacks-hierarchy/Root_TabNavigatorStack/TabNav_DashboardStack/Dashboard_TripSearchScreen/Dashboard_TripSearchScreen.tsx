@@ -1,4 +1,4 @@
-import {Filter} from '@atb/assets/svg/mono-icons/actions';
+import {Filter, Swap} from '@atb/assets/svg/mono-icons/actions';
 import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
@@ -62,7 +62,7 @@ import SharedTexts from '@atb/translations/shared';
 import {TravelSearchFiltersBottomSheet} from './components/TravelSearchFiltersBottomSheet';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {WithSwapButton} from '@atb/components/swap-button';
+import {WithOverlayButton} from '@atb/components/overlay-button';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -271,10 +271,11 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
         refreshControlProps={refreshControlProps}
         parallaxContent={() => (
           <View style={styles.searchHeader}>
-            <WithSwapButton
+            <WithOverlayButton
+              svgIcon={Swap}
               onPress={swap}
-              backgroundColor={theme.color.background.neutral[0]}
               horizontalPosition="right"
+              isLoading={updatingLocation && !to}
             >
               <Section>
                 <LocationInputSectionItem
@@ -286,7 +287,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     t(TripSearchTexts.location.departurePicker.a11yHint) +
                     screenReaderPause
                   }
-                  updatingLocation={updatingLocation && !to}
                   location={from}
                   label={t(SharedTexts.from)}
                   onPress={() => openLocationSearch('fromLocation', from)}
@@ -303,7 +303,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   testID="searchToButton"
                 />
               </Section>
-            </WithSwapButton>
+            </WithOverlayButton>
             <View style={styles.searchParametersButtons}>
               <Button
                 expanded={true}
