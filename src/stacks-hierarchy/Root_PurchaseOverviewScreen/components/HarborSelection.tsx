@@ -18,7 +18,7 @@ import {WithOverlayButton} from '@atb/components/overlay-button';
 type StopPlaceSelectionProps = {
   selection: PurchaseSelectionType;
   onSelect: (selection: PurchaseSelectionType) => void;
-  onSwap?: () => void;
+  onSwap: () => void;
   style?: StyleProp<ViewStyle>;
 };
 
