@@ -4518,7 +4518,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNReanimated (4.2.1):
+  - RNReanimated (4.2.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -4545,11 +4545,11 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 4.2.1)
+    - RNReanimated/reanimated (= 4.2.2)
     - RNWorklets
     - SocketRocket
     - Yoga
-  - RNReanimated/reanimated (4.2.1):
+  - RNReanimated/reanimated (4.2.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -4576,11 +4576,11 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated/apple (= 4.2.1)
+    - RNReanimated/reanimated/apple (= 4.2.2)
     - RNWorklets
     - SocketRocket
     - Yoga
-  - RNReanimated/reanimated/apple (4.2.1):
+  - RNReanimated/reanimated/apple (4.2.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -4726,7 +4726,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNWorklets (0.7.1):
+  - RNWorklets (0.7.4):
     - boost
     - DoubleConversion
     - fast_float
@@ -4753,10 +4753,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNWorklets/worklets (= 0.7.1)
+    - RNWorklets/worklets (= 0.7.4)
     - SocketRocket
     - Yoga
-  - RNWorklets/worklets (0.7.1):
+  - RNWorklets/worklets (0.7.4):
     - boost
     - DoubleConversion
     - fast_float
@@ -4783,10 +4783,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNWorklets/worklets/apple (= 0.7.1)
+    - RNWorklets/worklets/apple (= 0.7.4)
     - SocketRocket
     - Yoga
-  - RNWorklets/worklets/apple (0.7.1):
+  - RNWorklets/worklets/apple (0.7.4):
     - boost
     - DoubleConversion
     - fast_float
@@ -5440,10 +5440,10 @@ SPEC CHECKSUMS:
   RNLocalize: d8ccb568b40c72c767714db3808ce66a1ecf444a
   rnmapbox-maps: df786769607427115545ba9bee95360436218510
   RNPermissions: 0d6950c452b8d89d506ec1a60ab095d68bc1ce92
-  RNReanimated: e59e7353bf86f9834ea78fff4a926a9c9fe31246
+  RNReanimated: 3a370b0e17cc956af2478248ffb65683651f7515
   RNScreens: d6413aeb1878cdafd3c721e2c5218faf5d5d3b13
   RNSVG: acb39c771c3dbb33fa8f65d1b11dc4500147189e
-  RNWorklets: 69f7239afaf3a156f7f9549eeb0ae8d02adc095f
+  RNWorklets: a3184955a41f2be46898a937e2821469c8c8da42
   ScreenshotAware: 508d7e1a6ed436aaf4768e48f94352f472f89761
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   SwiftProtobuf: 4dbaffec76a39a8dc5da23b40af1a5dc01a4c02d
