@@ -5,7 +5,7 @@ import {useSearchHistoryContext} from '@atb/modules/search-history';
 import type {SearchStateType, TripSearchTime} from '../types';
 
 import {isValidTripLocations} from '@atb/utils/location';
-import {useCallback, useEffect, useMemo} from 'react';
+import {useCallback, useEffect, useMemo, useRef} from 'react';
 import type {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 import type {TripPatternWithKey} from '@atb/screen-components/travel-details-screens';
 import {useJourneyModes} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/hooks';
@@ -13,9 +13,8 @@ import {TripsProps, useTripsInfiniteQuery} from './use-trips-infinite-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {sanitizeSearchTime} from './utils';
 import Bugsnag from '@bugsnag/react-native';
-import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 
-const MAX_NUMBER_OF_CHAINGED_INITIAL_SEARCHES = 5;
+const MAX_NUMBER_OF_CHAINED_INITIAL_SEARCHES = 5;
 const TARGET_NUMBER_OF_INITIAL_HITS = 8;
 
 /**
@@ -51,11 +50,16 @@ export function useTrips(
 
   const arriveBy = searchTime.option === 'arrival';
 
+  const sanitizedSearchTime = useMemo(
+    () => sanitizeSearchTime(searchTime),
+    [searchTime],
+  );
+
   const tripsProps: TripsProps = useMemo(
     () => ({
       fromLocation,
       toLocation,
-      searchTime: sanitizeSearchTime(searchTime),
+      searchTime: sanitizedSearchTime,
       arriveBy,
       travelSearchFiltersSelection,
       journeySearchModes,
@@ -64,13 +68,14 @@ export function useTrips(
       arriveBy,
       fromLocation,
       journeySearchModes,
-      searchTime,
+      sanitizedSearchTime,
       toLocation,
       travelSearchFiltersSelection,
     ],
   );
 
   const tripLocationsAreValid = isValidTripLocations(fromLocation, toLocation);
+  const tripsInfiniteQueryEnabled = tripLocationsAreValid;
 
   const {
     data: tripsData,
@@ -80,7 +85,7 @@ export function useTrips(
     error: tripsError,
     hasNextPage,
     fetchNextPage,
-  } = useTripsInfiniteQuery(tripsProps, tripLocationsAreValid);
+  } = useTripsInfiniteQuery(tripsProps, tripsInfiniteQueryEnabled);
 
   const tripPatterns = useMemo(
     () =>
@@ -96,13 +101,10 @@ export function useTrips(
 
   const performedSearchesCount = tripsData?.pages.length ?? 0;
 
-  const allowFetchNextPage =
-    tripLocationsAreValid && !tripsIsFetching && hasNextPage;
-
   const shouldAutoLoadMoreInitialTrips =
-    allowFetchNextPage &&
+    hasNextPage &&
     tripPatterns.length < TARGET_NUMBER_OF_INITIAL_HITS &&
-    performedSearchesCount < MAX_NUMBER_OF_CHAINGED_INITIAL_SEARCHES;
+    performedSearchesCount < MAX_NUMBER_OF_CHAINED_INITIAL_SEARCHES;
 
   useEffect(() => {
     shouldAutoLoadMoreInitialTrips && fetchNextPage();
@@ -111,6 +113,12 @@ export function useTrips(
     fetchNextPage,
     shouldAutoLoadMoreInitialTrips,
   ]);
+
+  const hasSentAnalyticsEventForCurrentSearchRef = useRef(false);
+  useEffect(() => {
+    // When tripsProps changes, consider it a new search relevant for analytics.
+    hasSentAnalyticsEventForCurrentSearchRef.current = false;
+  }, [tripsProps]);
 
   const sendAnalyticsSearchEvent = useCallback(() => {
     analytics.logEvent('Trip search', 'Search performed', {
@@ -121,13 +129,21 @@ export function useTrips(
     });
   }, [analytics, travelSearchFiltersSelection, tripsProps.searchTime]);
 
-  const didJustEndChainOfSearches =
-    useStablePreviousValue(shouldAutoLoadMoreInitialTrips) &&
-    !shouldAutoLoadMoreInitialTrips;
-
   useEffect(() => {
-    didJustEndChainOfSearches && sendAnalyticsSearchEvent();
-  }, [didJustEndChainOfSearches, sendAnalyticsSearchEvent]);
+    if (
+      !shouldAutoLoadMoreInitialTrips &&
+      performedSearchesCount > 0 &&
+      !hasSentAnalyticsEventForCurrentSearchRef.current &&
+      tripsInfiniteQueryEnabled
+    ) {
+      sendAnalyticsSearchEvent();
+    }
+  }, [
+    performedSearchesCount,
+    sendAnalyticsSearchEvent,
+    shouldAutoLoadMoreInitialTrips,
+    tripsInfiniteQueryEnabled,
+  ]);
 
   const shouldSaveSearch =
     tripLocationsAreValid &&
@@ -159,11 +175,10 @@ export function useTrips(
   const timeOfLastSearch = tripsProps.searchTime.date;
 
   const loadNextTripsPage = useCallback(() => {
-    if (allowFetchNextPage) {
+    if (tripsInfiniteQueryEnabled && hasNextPage && !tripsIsFetching) {
       fetchNextPage();
-      sendAnalyticsSearchEvent();
     }
-  }, [allowFetchNextPage, fetchNextPage, sendAnalyticsSearchEvent]);
+  }, [fetchNextPage, hasNextPage, tripsInfiniteQueryEnabled, tripsIsFetching]);
 
   const loadMoreTrips = hasNextPage ? loadNextTripsPage : undefined;
 
@@ -180,7 +195,7 @@ export function useTrips(
       tripPatterns,
       timeOfLastSearch,
       loadMoreTrips,
-      refetchTrips,
+      refetchTrips: () => tripsInfiniteQueryEnabled && refetchTrips(),
       tripsSearchState,
       tripsIsError,
       tripsIsNetworkError,
@@ -188,11 +203,12 @@ export function useTrips(
     [
       loadMoreTrips,
       refetchTrips,
-      tripsSearchState,
       timeOfLastSearch,
+      tripsInfiniteQueryEnabled,
       tripPatterns,
       tripsIsError,
       tripsIsNetworkError,
+      tripsSearchState,
     ],
   );
 }
