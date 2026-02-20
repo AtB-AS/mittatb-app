@@ -9,6 +9,7 @@ import Animated, {
   interpolate,
   Easing,
   SharedValue,
+  ReduceMotion,
 } from 'react-native-reanimated';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
@@ -71,6 +72,8 @@ const useAnimatedVerticalLineOffset = (animate: boolean | undefined = true) => {
       }),
       -1,
       false,
+      undefined,
+      ReduceMotion.Never,
     );
   }, [animate, animatedOffset]);
   return animatedOffset;
