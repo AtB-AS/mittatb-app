@@ -68,6 +68,14 @@ export const TravellerSelectionSheet = ({
     !!currentSelection?.userProfiles.every((u) => !u.count) &&
     !!currentSelection?.baggageProducts.every((sp) => !sp.count);
 
+  const overrideClose = useCallback(() => {
+    if (nothingSelected) {
+      setShowWarning(true);
+      return true;
+    }
+    return false;
+  }, [nothingSelected]);
+
   return (
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
@@ -75,9 +83,7 @@ export const TravellerSelectionSheet = ({
       bottomSheetHeaderType={BottomSheetHeaderType.Confirm}
       closeOnBackdropPress={!nothingSelected}
       enablePanDownToClose={!nothingSelected}
-      overrideCloseFunction={
-        nothingSelected ? () => setShowWarning(true) : undefined
-      }
+      overrideClose={overrideClose}
       closeCallback={() => {
         giveFocus(onCloseFocusRef);
         saveSelection();
