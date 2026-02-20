@@ -1,4 +1,10 @@
-import React, {useCallback, PropsWithChildren, useMemo, useState} from 'react';
+import React, {
+  useCallback,
+  PropsWithChildren,
+  useMemo,
+  useState,
+  useRef,
+} from 'react';
 import BottomSheetGor, {
   BottomSheetBackdrop,
   BottomSheetScrollView,
@@ -158,6 +164,30 @@ export const MapBottomSheet = ({
     bottomSheetHeaderType,
   ]);
 
+  const canRunCloseCallbackRef = useRef<boolean>(false);
+
+  const onClose = useCallback(() => {
+    if (canRunCloseCallbackRef.current) {
+      canRunCloseCallbackRef.current = false;
+      closeCallback?.();
+      setPaddingBottomMap(0);
+      setCurrentBottomSheet({
+        bottomSheetType: MapBottomSheetType.None,
+        feature: null,
+      });
+    }
+  }, [closeCallback, setPaddingBottomMap, setCurrentBottomSheet]);
+
+  const onOpen = useCallback(() => {
+    if (canRunCloseCallbackRef.current) return;
+
+    canRunCloseCallbackRef.current = true;
+    setCurrentBottomSheet({
+      bottomSheetType: mapState.bottomSheetType,
+      feature: mapState.feature ?? null,
+    });
+  }, [setCurrentBottomSheet, mapState.bottomSheetType, mapState.feature]);
+
   return (
     <>
       {HeaderOverlay}
@@ -172,25 +202,14 @@ export const MapBottomSheet = ({
         keyboardBlurBehavior="restore"
         backgroundStyle={styles.sheet}
         onAnimate={(_fromIndex, toIndex, _fromPosition, toPosition) => {
-          if (toIndex === -1) {
-            closeCallback?.();
-            setPaddingBottomMap(0);
-            setCurrentBottomSheet({
-              bottomSheetType: MapBottomSheetType.None,
-              feature: null,
-            });
-          } else {
+          if (toIndex >= 0) {
+            onOpen();
             setPaddingBottomMap(screenHeight - toPosition + tabBarMinHeight);
+          } else if (toIndex === -1) {
+            onClose();
           }
         }}
-        onChange={(index) => {
-          if (index !== -1) {
-            setCurrentBottomSheet({
-              bottomSheetType: mapState.bottomSheetType,
-              feature: mapState.feature ?? null,
-            });
-          }
-        }}
+        onClose={onClose}
         accessible={false}
         maxDynamicContentSize={screenHeight - safeAreaTop - headerHeight}
         index={canMinimize ? 1 : 0}
