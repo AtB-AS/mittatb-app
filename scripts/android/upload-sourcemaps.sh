@@ -29,7 +29,7 @@ else
       --version-code=$BUILD_ID \
       --api-key=$BUGSNAG_API_KEY \
       --variant=$VARIANT \
-      {SOURCEMAP_ARGS}
+      ${SOURCEMAP_ARGS}
 
     if [[ "${APP_ENVIRONMENT}" == "store" ]]; then
       echo "Uploading ProGuard/R8 mappings"
