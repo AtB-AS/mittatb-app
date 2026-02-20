@@ -34,6 +34,7 @@ export type BottomSheetProps = PropsWithChildren<{
   heading?: string;
   subText?: string;
   logoUrl?: string;
+  logoIcon?: React.JSX.Element | null;
   enablePanDownToClose?: boolean;
   locationArrowOnPress: () => void;
   canMinimize?: boolean;
@@ -54,6 +55,7 @@ export const MapBottomSheet = ({
   heading,
   subText,
   logoUrl,
+  logoIcon,
   enablePanDownToClose = true,
   locationArrowOnPress,
   canMinimize = false,
@@ -142,6 +144,7 @@ export const MapBottomSheet = ({
           heading={heading}
           subText={subText}
           logoUrl={logoUrl}
+          logoIcon={logoIcon}
           bottomSheetRef={bottomSheetMapRef}
           headerNode={headerNode}
           bottomSheetHeaderType={bottomSheetHeaderType}
@@ -153,6 +156,7 @@ export const MapBottomSheet = ({
     heading,
     subText,
     logoUrl,
+    logoIcon,
     bottomSheetMapRef,
     headerNode,
     bottomSheetHeaderType,

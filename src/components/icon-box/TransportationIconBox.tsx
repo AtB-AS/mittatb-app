@@ -19,6 +19,7 @@ export type TransportationIconBoxProps = {
   type?: 'compact' | 'standard';
   style?: StyleProp<ViewStyle>;
   disabled?: boolean;
+  overrideBorderRadius?: string;
   testID?: string;
 };
 
@@ -31,6 +32,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   type = 'compact',
   style,
   disabled,
+  overrideBorderRadius,
   testID,
 }) => {
   const {t} = useTranslation();
@@ -62,7 +64,8 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
         style,
         {
           backgroundColor,
-          borderRadius: getIconBoxBorderRadius(size, theme),
+          borderRadius:
+            overrideBorderRadius ?? getIconBoxBorderRadius(size, theme),
         },
       ]}
     >
