@@ -1,30 +1,25 @@
-import {StyleSheet, useThemeContext} from '@atb/theme';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {StyleSheet} from '@atb/theme';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View} from 'react-native';
 import {TripPattern} from '@atb/api/types/trips';
 import {useNow} from '@atb/utils/use-now';
 
 import {TripSearchTime} from '../../stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {useSingleTripQuery} from '@atb/modules/trip-patterns';
-import Swipeable, {
-  SwipeableMethods,
-  SwipeDirection,
-} from 'react-native-gesture-handler/ReanimatedSwipeable';
 import Animated, {
+  Easing,
   LinearTransition,
-  SharedValue,
-  useAnimatedStyle,
   ZoomOut,
 } from 'react-native-reanimated';
 import {ContentHeading} from '@atb/components/heading';
 import {translation as _, useTranslation} from '@atb/translations';
 import {ResultRow} from '../../stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultRow';
 import {useStoredTripPatterns} from './StoredTripPatternsContext';
-import {Delete} from '@atb/assets/svg/mono-icons/actions';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {wrapWithExperimentalFeatureToggledComponent} from '@atb/modules/experimental';
 import {RemoveStoredTripPatternBottomSheet} from './RemoveStoredTripPatternBottomSheet';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {SwipeableResultRow} from './SwipeableResultRow';
+import {SwipeableMethods} from 'react-native-gesture-handler/lib/typescript/components/ReanimatedSwipeable';
 
 type Props = {
   onDetailsPressed(tripPattern: TripPattern): void;
@@ -33,12 +28,16 @@ type Props = {
 
 export const StoredTripPatternsDashboardComponent =
   wrapWithExperimentalFeatureToggledComponent<Props>(
-    'render-children-if-disabled',
+    'render-nothing-if-disabled',
     ({onDetailsPressed, isFocused}) => {
       const styles = useThemeStyles();
       const now = useNow(30000);
       const {t} = useTranslation();
-      const bottomSheetModalRef = useRef<GorhomBottomSheetModal | null>(null);
+      const bottomSheetModalRef =
+        useRef<GorhomBottomSheetModal<TripPattern> | null>(null);
+
+      const {registerCloseCallback, closeAllSwipeables} =
+        useCloseAllSwipeables();
 
       const searchTime = useMemo<TripSearchTime>(
         () => ({option: 'now', date: new Date(now).toISOString()}),
@@ -48,28 +47,17 @@ export const StoredTripPatternsDashboardComponent =
       const {tripPatterns, updateTripPattern, removeTripPattern} =
         useStoredTripPatterns();
 
-      const [tripPatternToRemove, setTripPatternToRemove] = useState<
-        TripPattern | undefined
-      >(undefined);
-
-      useEffect(() => {
-        if (tripPatternToRemove) {
-          bottomSheetModalRef.current?.present();
-        } else {
-          bottomSheetModalRef.current?.dismiss();
-        }
-      }, [tripPatternToRemove]);
-
-      const onRemovePress = useCallback(() => {
-        if (tripPatternToRemove) {
-          removeTripPattern(tripPatternToRemove);
-          setTripPatternToRemove(undefined);
-        }
-      }, [tripPatternToRemove, removeTripPattern]);
-
-      const onCancelPress = useCallback(() => {
-        setTripPatternToRemove(undefined);
+      const setTripPatternToRemove = useCallback((tripPattern: TripPattern) => {
+        bottomSheetModalRef.current?.present(tripPattern);
       }, []);
+
+      const onRemovePress = useCallback(
+        (tripPattern: TripPattern) => {
+          removeTripPattern(tripPattern);
+          bottomSheetModalRef.current?.dismiss();
+        },
+        [removeTripPattern],
+      );
 
       if (!tripPatterns.length) {
         return null;
@@ -84,7 +72,7 @@ export const StoredTripPatternsDashboardComponent =
           {tripPatterns.map((tripPattern, i) => (
             <Animated.View
               key={tripPattern.key}
-              exiting={ZoomOut}
+              exiting={ZoomOut.easing(Easing.inOut(Easing.ease))}
               layout={LinearTransition} // https://github.com/software-mansion/react-native-reanimated/discussions/5857#discussioncomment-9992457
               style={{zIndex: 999}} // This is to make the animation appear above content which is not animating
             >
@@ -95,17 +83,14 @@ export const StoredTripPatternsDashboardComponent =
                 searchTime={searchTime}
                 updateTripPattern={updateTripPattern}
                 setTripPatternToRemove={setTripPatternToRemove}
-                isRemoving={
-                  tripPatternToRemove?.compressedQuery ===
-                  tripPattern.compressedQuery
-                }
                 isFocused={isFocused}
+                registerCloseCallback={registerCloseCallback}
               />
             </Animated.View>
           ))}
           <RemoveStoredTripPatternBottomSheet
             onRemovePress={onRemovePress}
-            onCancelPress={onCancelPress}
+            onClose={closeAllSwipeables}
             bottomSheetModalRef={bottomSheetModalRef}
           />
         </View>
@@ -120,8 +105,8 @@ const StoredTripPatternRow: React.FC<{
   searchTime: TripSearchTime;
   updateTripPattern: (tripPattern: TripPattern) => void;
   setTripPatternToRemove: (tripPattern: TripPattern) => void;
-  isRemoving: boolean;
   isFocused: boolean;
+  registerCloseCallback: (callback: () => void) => void;
 }> = ({
   tripPattern,
   onDetailsPressed,
@@ -129,12 +114,17 @@ const StoredTripPatternRow: React.FC<{
   searchTime,
   updateTripPattern,
   setTripPatternToRemove,
-  isRemoving,
   isFocused,
+  registerCloseCallback,
 }) => {
-  const styles = useThemeStyles();
   const {data} = useSingleTripQuery(tripPattern.compressedQuery, isFocused);
-  const swipeableRef = useRef<SwipeableMethods>(null);
+  const swipeableRef = useRef<SwipeableMethods | null>(null);
+
+  useEffect(() => {
+    return registerCloseCallback(() => {
+      swipeableRef.current?.close();
+    });
+  }, [registerCloseCallback]);
 
   const updatedTripPattern = useMemo(
     () => data ?? tripPattern,
@@ -145,70 +135,47 @@ const StoredTripPatternRow: React.FC<{
     updateTripPattern({...updatedTripPattern});
   }, [updatedTripPattern, updateTripPattern]);
 
-  const handleSwipe = useCallback(
-    (direction: SwipeDirection) => {
-      if (direction === 'left') {
-        setTripPatternToRemove(tripPattern);
-      }
-    },
-    [setTripPatternToRemove, tripPattern],
-  );
-
-  useEffect(() => {
-    if (!isRemoving) {
-      swipeableRef.current?.close();
-    }
-  }, [isRemoving]);
+  const onRightAction = useCallback(() => {
+    setTripPatternToRemove(tripPattern);
+  }, [setTripPatternToRemove, tripPattern]);
 
   return (
-    <Swipeable
-      friction={1}
-      overshootFriction={8}
-      enableTrackpadTwoFingerGesture
-      rightThreshold={30}
-      renderRightActions={RightAction}
-      onSwipeableOpen={handleSwipe}
-      ref={swipeableRef}
+    <SwipeableResultRow
+      onRightAction={onRightAction}
+      swipeableRef={swipeableRef}
+      rightActionKind="delete"
     >
-      <View style={styles.resultRowContainer}>
-        <ResultRow
-          tripPattern={updatedTripPattern}
-          onDetailsPressed={onDetailsPressed}
-          resultIndex={resultIndex}
-          searchTime={searchTime}
-          testID={'tripSearchSearchResult' + resultIndex}
-        />
-      </View>
-    </Swipeable>
+      <ResultRow
+        tripPattern={updatedTripPattern}
+        onDetailsPressed={onDetailsPressed}
+        resultIndex={resultIndex}
+        searchTime={searchTime}
+        testID={'tripSearchSearchResult' + resultIndex}
+      />
+    </SwipeableResultRow>
   );
 };
 
-const ACTION_WIDTH = 80;
+const useCloseAllSwipeables = () => {
+  const closeSwipeableCallbacks = useRef<(() => void)[]>([]);
 
-function RightAction(prog: SharedValue<number>, drag: SharedValue<number>) {
-  const {theme} = useThemeContext();
-  const styleAnimation = useAnimatedStyle(() => {
-    return {
-      transform: [{translateX: drag.value + ACTION_WIDTH}],
+  const registerCloseCallback = useCallback((callback: () => void) => {
+    closeSwipeableCallbacks.current.push(callback);
+
+    // Return cleanup function
+    return () => {
+      closeSwipeableCallbacks.current = closeSwipeableCallbacks.current.filter(
+        (cb) => cb !== callback,
+      );
     };
-  });
+  }, []);
 
-  return (
-    <Animated.View
-      style={[
-        {
-          width: ACTION_WIDTH,
-          paddingRight: theme.spacing.medium * 2, // This is to make the icon center aligned, the result row has a padding right of theme.spacing.medium
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
-        styleAnimation,
-      ]}
-    >
-      <ThemeIcon svg={Delete} size="large" />
-    </Animated.View>
-  );
-}
+  const closeAllSwipeables = useCallback(() => {
+    closeSwipeableCallbacks.current.forEach((callback) => callback());
+  }, [closeSwipeableCallbacks]);
+
+  return {registerCloseCallback, closeAllSwipeables};
+};
 
 const StoredTripPatternsDashboardComponentTexts = {
   header: _('Lagrede reiser', 'Saved trips', 'Lagrede reiser'),
@@ -219,9 +186,6 @@ const StoredTripPatternsDashboardComponentTexts = {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   contentHeading: {
-    marginHorizontal: theme.spacing.medium,
-  },
-  resultRowContainer: {
     marginHorizontal: theme.spacing.medium,
   },
   errorContainer: {
