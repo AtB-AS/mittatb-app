@@ -17,17 +17,19 @@ else
     VARIANT="$APP_FLAVOR${APP_ENVIRONMENT^}"
     SOURCEMAP_ARGS=""
     if [[ "${BUNDLE_ONLY}" == "true" ]]; then
+      echo "Uploading sourcemaps from replaced bundle"
       SOURCEMAP_ARGS="--bundle=${BUNDLE_PATH} --source-map=${SOURCEMAP_PATH}"
+      echo "${SOURCEMAP_ARGS}"
     fi
     echo "Uploading bugsnag mapping files for ${APP_VERSION}, ${BUILD_ID}, $APP_FLAVOR${APP_ENVIRONMENT^} ..."
     echo "Uploading React Native source maps..."
     bugsnag-cli upload react-native-android \
+      --verbose \
       --version-name="${APP_VERSION}" \
       --version-code=$BUILD_ID \
       --api-key=$BUGSNAG_API_KEY \
       --variant=$VARIANT \
-      {SOURCEMAP_ARGS} \
-      --verbose
+      {SOURCEMAP_ARGS}
 
     if [[ "${APP_ENVIRONMENT}" == "store" ]]; then
       echo "Uploading ProGuard/R8 mappings"
