@@ -48,7 +48,7 @@ type BottomSheetModalProps<T extends any> = {
   Footer?: React.FC;
   testID?: string;
   closeOnBackdropPress?: boolean;
-  overrideCloseFunction?: () => void;
+  overrideClose?: () => boolean;
   bottomSheetHeaderType: BottomSheetHeaderType;
 };
 
@@ -67,7 +67,7 @@ export const BottomSheetModal = <T extends any>({
   testID,
   enablePanDownToClose = true,
   closeOnBackdropPress = true,
-  overrideCloseFunction,
+  overrideClose = () => false,
   bottomSheetHeaderType,
 }: BottomSheetModalProps<T>) => {
   const styles = useBottomSheetStyles();
@@ -78,29 +78,6 @@ export const BottomSheetModal = <T extends any>({
   const focusRef = React.useRef<View>(null);
   const {setIsOpen, isOpen} = useBottomSheetContext();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
-
-  const canRunCallbacksRef = useRef<boolean>(isOpen);
-
-  const onClose = useCallback(() => {
-    if (!canRunCallbacksRef.current) return;
-
-    canRunCallbacksRef.current = false;
-    closeCallback?.();
-    setIsOpen(false);
-  }, [closeCallback, setIsOpen]);
-
-  const onOpen = useCallback(() => {
-    if (canRunCallbacksRef.current) return;
-
-    canRunCallbacksRef.current = true;
-    setIsOpen(true);
-  }, [setIsOpen]);
-
-  const {internalRef} = useInternalBottomSheetModalRef(
-    bottomSheetModalRef,
-    onClose,
-    onOpen,
-  );
 
   useEffect(() => {
     if (isOpen) {
@@ -157,23 +134,45 @@ export const BottomSheetModal = <T extends any>({
         heading={heading}
         subText={subText}
         logoUrl={logoUrl}
-        bottomSheetRef={internalRef}
+        bottomSheetRef={bottomSheetModalRef}
         headerNode={headerNode}
         testID={testID}
-        overrideCloseFunction={overrideCloseFunction}
         bottomSheetHeaderType={bottomSheetHeaderType}
       />
     ),
     [
       bottomSheetHeaderType,
-      internalRef,
+      bottomSheetModalRef,
       headerNode,
       heading,
       logoUrl,
-      overrideCloseFunction,
       subText,
       testID,
     ],
+  );
+
+  const canRunCallbacksRef = useRef<boolean>(isOpen);
+
+  const onClose = useCallback(() => {
+    if (!canRunCallbacksRef.current) return;
+
+    canRunCallbacksRef.current = false;
+    closeCallback?.();
+    setIsOpen(false);
+  }, [closeCallback, setIsOpen]);
+
+  const onOpen = useCallback(() => {
+    if (canRunCallbacksRef.current) return;
+
+    canRunCallbacksRef.current = true;
+    setIsOpen(true);
+  }, [setIsOpen]);
+
+  const {internalRef} = useInternalBottomSheetModalRef(
+    bottomSheetModalRef,
+    onClose,
+    onOpen,
+    overrideClose,
   );
 
   const content = useBottomSheetContent(children, footerHeight);
@@ -256,14 +255,19 @@ const useInternalBottomSheetModalRef = <T extends any>(
   externalBottomSheetModalRef: React.RefObject<BottomSheetModalMethods<T> | null>,
   onClose: () => void,
   onOpen: () => void,
+  overrideClose: () => boolean,
 ) => {
   const internalRef = useRef<BottomSheetModalMethods<T>>(null);
 
   useImperativeHandle(externalBottomSheetModalRef, (): BottomSheetModalMethods<T> => {
     return {
       present: (data?: T) => internalRef.current?.present(data) && onOpen(),
-      dismiss: (animationConfigs?: SpringConfig | TimingConfig | undefined) =>
-        internalRef.current?.dismiss(animationConfigs) && onClose(),
+      dismiss: (animationConfigs?: SpringConfig | TimingConfig | undefined) => {
+        if (overrideClose()) {
+          return;
+        }
+        return internalRef.current?.dismiss(animationConfigs) && onClose();
+      },
       snapToIndex: (
         index: number,
         animationConfigs?: SpringConfig | TimingConfig | undefined,
@@ -276,13 +280,22 @@ const useInternalBottomSheetModalRef = <T extends any>(
         internalRef.current?.expand(animationConfigs),
       collapse: (animationConfigs?: SpringConfig | TimingConfig | undefined) =>
         internalRef.current?.collapse(animationConfigs),
-      close: (animationConfigs?: SpringConfig | TimingConfig | undefined) =>
-        internalRef.current?.close(animationConfigs) && onClose(),
+      close: (animationConfigs?: SpringConfig | TimingConfig | undefined) => {
+        if (overrideClose()) {
+          return;
+        }
+        return internalRef.current?.close(animationConfigs) && onClose();
+      },
       forceClose: (
         animationConfigs?: SpringConfig | TimingConfig | undefined,
-      ) => internalRef.current?.forceClose(animationConfigs) && onClose(),
+      ) => {
+        if (overrideClose()) {
+          return;
+        }
+        return internalRef.current?.forceClose(animationConfigs) && onClose();
+      },
     };
-  }, [internalRef, onClose, onOpen]);
+  }, [internalRef, onClose, onOpen, overrideClose]);
 
   return {internalRef};
 };
