@@ -438,8 +438,8 @@ platform :android do
     sh("find ../node_modules -type d -name '.cxx' -exec rm -rf {} + || true")
     sh("rm -rf ~/.gradle/caches/*/transforms/*react-android* || true")
 
-    ENV['CMAKE_C_COMPILER_LAUNCHER'] = 'ccache'
-    ENV['CMAKE_CXX_COMPILER_LAUNCHER'] = 'ccache'
+    # ENV['CMAKE_C_COMPILER_LAUNCHER'] = 'ccache'
+    # ENV['CMAKE_CXX_COMPILER_LAUNCHER'] = 'ccache'
 
     gradle(task: 'clean', project_dir: 'android/') unless skip_clean
     gradle(
