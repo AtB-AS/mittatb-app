@@ -133,8 +133,7 @@ export function useTrips(
     if (
       !shouldAutoLoadMoreInitialTrips &&
       performedSearchesCount > 0 &&
-      !hasSentAnalyticsEventForCurrentSearchRef.current &&
-      tripsInfiniteQueryEnabled
+      !hasSentAnalyticsEventForCurrentSearchRef.current
     ) {
       sendAnalyticsSearchEvent();
     }
@@ -142,7 +141,6 @@ export function useTrips(
     performedSearchesCount,
     sendAnalyticsSearchEvent,
     shouldAutoLoadMoreInitialTrips,
-    tripsInfiniteQueryEnabled,
   ]);
 
   const shouldSaveSearch =
