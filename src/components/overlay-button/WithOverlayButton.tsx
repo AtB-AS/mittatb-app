@@ -7,13 +7,13 @@ import {
 import type {PropsWithChildren} from 'react';
 import type {SvgProps} from 'react-native-svg';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {OverlayButton} from './OverlayButton';
+import {Button} from '@atb/components/button';
 
 type Props = PropsWithChildren<{
   svgIcon(props: SvgProps): React.JSX.Element;
   overlayPosition: 'left' | 'right';
   isLoading?: boolean;
-  onPress?: () => void;
+  onPress: () => void;
   buttonStyleOverride?: StyleProp<ViewStyle>;
 }>;
 
@@ -33,10 +33,18 @@ export function WithOverlayButton({
       {isLoading ? (
         <ActivityIndicator color={theme.color.foreground.dynamic.primary} />
       ) : (
-        <OverlayButton
-          svgIcon={svgIcon}
+        <Button
+          rightIcon={{svg: svgIcon}}
+          mode="primary"
+          expanded={false}
           onPress={onPress}
-          style={[styles.button, styles[overlayPosition], buttonStyleOverride]}
+          style={[
+            styles.circleBorder,
+            styles.button,
+            styles[overlayPosition],
+            buttonStyleOverride,
+          ]}
+          interactiveColor={theme.color.interactive[2]}
         />
       )}
     </View>
@@ -45,8 +53,7 @@ export function WithOverlayButton({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'center',
   },
   content: {
     width: '100%',
@@ -54,6 +61,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   button: {
     position: 'absolute',
     zIndex: 2,
+  },
+  circleBorder: {
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: theme.color.border.primary.background,
+    borderRadius: theme.border.radius.circle,
   },
   right: {
     right: theme.spacing.medium,
