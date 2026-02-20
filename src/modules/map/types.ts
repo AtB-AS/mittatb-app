@@ -96,6 +96,12 @@ export interface MapLine extends Feature<LineString> {
 
 const FormFactorFilter = z.object({
   showAll: z.boolean().default(false),
+  /**
+   * The map and map filter component currently do not support filtering items per operator.
+   * If an operator should be hidden from all users, it should be filtered server side.
+   * The operators prop is kept for now to avoid migration of locally stored filters,
+   * and in case we want to support it again.
+   */
   operators: z.array(z.string()).default([]),
 });
 export type FormFactorFilterType = z.infer<typeof FormFactorFilter>;
