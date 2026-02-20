@@ -30,23 +30,30 @@ export function WithOverlayButton({
   return (
     <View style={styles.container}>
       <View style={styles.content}>{children}</View>
-      {isLoading ? (
-        <ActivityIndicator color={theme.color.foreground.dynamic.primary} />
-      ) : (
-        <Button
-          rightIcon={{svg: svgIcon}}
-          mode="primary"
-          expanded={false}
-          onPress={onPress}
-          style={[
-            styles.circleBorder,
-            styles.button,
-            styles[overlayPosition],
-            buttonStyleOverride,
-          ]}
-          interactiveColor={theme.color.interactive[2]}
-        />
-      )}
+      <View
+        style={[
+          styles.background,
+          styles.button,
+          styles[overlayPosition],
+          buttonStyleOverride,
+        ]}
+      >
+        {isLoading ? (
+          <ActivityIndicator
+            color={theme.color.foreground.dynamic.primary}
+            style={styles.activityIndicator}
+            size="small"
+          />
+        ) : (
+          <Button
+            rightIcon={{svg: svgIcon}}
+            mode="primary"
+            expanded={false}
+            onPress={onPress}
+            interactiveColor={theme.color.interactive[2]}
+          />
+        )}
+      </View>
     </View>
   );
 }
@@ -62,11 +69,17 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     position: 'absolute',
     zIndex: 2,
   },
-  circleBorder: {
+  activityIndicator: {
+    padding: theme.spacing.medium,
+    margin: theme.spacing.xSmall / 2, // To compensate for smaller ActivityIndicator size
+  },
+  background: {
     borderWidth: 1,
     borderStyle: 'solid',
     borderColor: theme.color.border.primary.background,
     borderRadius: theme.border.radius.circle,
+    // Setting backgroundColor here is necessary for the ActivityIndicator
+    backgroundColor: theme.color.interactive[2].default.background,
   },
   right: {
     right: theme.spacing.medium,
