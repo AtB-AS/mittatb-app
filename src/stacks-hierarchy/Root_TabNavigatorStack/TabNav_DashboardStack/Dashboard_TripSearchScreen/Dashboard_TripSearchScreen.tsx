@@ -242,8 +242,12 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   const refresh = useCallback(() => {
     navigation.setParams({
-      fromLocation: from?.resultType === 'geolocation' ? currentLocation : from,
-      toLocation: to?.resultType === 'geolocation' ? currentLocation : to,
+      ...(from?.resultType === 'geolocation' && {
+        fromLocation: currentLocation,
+      }),
+      ...(to?.resultType === 'geolocation' && {
+        toLocation: currentLocation,
+      }),
       searchTime:
         searchTime.option === 'now'
           ? {
