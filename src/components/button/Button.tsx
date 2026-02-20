@@ -7,14 +7,16 @@ import {
   Animated,
   type ColorValue,
   Easing,
-  PressableProps,
   StyleProp,
   TextStyle,
   View,
   ViewStyle,
 } from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {
+  PressableOpacity,
+  PressableOpacityProps,
+} from '@atb/components/pressable-opacity';
 import {shadows} from '@atb/modules/map';
 import {ContrastColor, InteractiveColor} from '@atb/theme/colors';
 
@@ -46,7 +48,7 @@ export type ButtonProps = {
   style?: StyleProp<ViewStyle>;
   hasShadow?: boolean;
 } & ButtonModeAwareProps &
-  PressableProps;
+  PressableOpacityProps;
 
 const DISABLED_OPACITY = 0.2;
 

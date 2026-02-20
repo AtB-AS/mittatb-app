@@ -1,5 +1,5 @@
 import React from 'react';
-import {AccessibilityProps, GestureResponderEvent, View} from 'react-native';
+import {AccessibilityProps, View} from 'react-native';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {StoredFavoriteDeparture} from '@atb/modules/favorites';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
@@ -9,7 +9,10 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {
+  PressableOpacity,
+  PressableOpacityEvent,
+} from '@atb/components/pressable-opacity';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 
 type BaseProps = {
@@ -20,7 +23,7 @@ type BaseProps = {
 type WithOnPress = BaseProps & {
   onPress(
     favorite: StoredFavoriteDeparture,
-    event: GestureResponderEvent,
+    event: PressableOpacityEvent,
   ): void;
   accessibility?: AccessibilityProps;
 };
