@@ -66,7 +66,7 @@ export const DatePickerSheet = <T extends string>({
         onSave({option: selectedOptionId, date});
         giveFocus(onCloseFocusRef);
       }}
-      overrideCloseFunction={isSpinning ? () => {} : undefined}
+      overrideClose={() => isSpinning}
       closeOnBackdropPress={!isSpinning}
       enablePanDownToClose={!isSpinning}
     >
