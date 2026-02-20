@@ -48,8 +48,6 @@ runs:
         echo "KEYSTORE_PATH=./android/app/keystore.jks" >> $GITHUB_ENV
         echo "APK_FILE_NAME=app-staging.apk" >> $GITHUB_ENV
         echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
-        echo "BUNDLE_PATH=android/app/build/generated/assets/createBundle$(echo ${APP_FLAVOR^}${APP_ENVIRONMENT^})JsAndAssets/index.android.bundle" >> $GITHUB_ENV
-        echo "SOURCEMAP_PATH=android/app/build/generated/sourcemaps/react/$(echo $APP_FLAVOR${APP_ENVIRONMENT^})/index.android.bundle.map" >> $GITHUB_ENV
         echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
 
     - name: Decrypt env files
