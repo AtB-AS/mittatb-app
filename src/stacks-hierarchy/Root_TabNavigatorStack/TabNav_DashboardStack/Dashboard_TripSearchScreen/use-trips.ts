@@ -5,7 +5,7 @@ import {useSearchHistoryContext} from '@atb/modules/search-history';
 import type {SearchStateType, TripSearchTime} from '../types';
 
 import {isValidTripLocations} from '@atb/utils/location';
-import {useCallback, useEffect, useMemo, useRef} from 'react';
+import {useCallback, useEffect, useMemo} from 'react';
 import type {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 import type {TripPatternWithKey} from '@atb/screen-components/travel-details-screens';
 import {useJourneyModes} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/hooks';
@@ -114,34 +114,21 @@ export function useTrips(
     shouldAutoLoadMoreInitialTrips,
   ]);
 
-  const hasSentAnalyticsEventForCurrentSearchRef = useRef(false);
-  useEffect(() => {
-    // When tripsProps changes, consider it a new search relevant for analytics.
-    hasSentAnalyticsEventForCurrentSearchRef.current = false;
-  }, [tripsProps]);
-
-  const sendAnalyticsSearchEvent = useCallback(() => {
-    analytics.logEvent('Trip search', 'Search performed', {
-      searchTime: tripsProps.searchTime,
-      filtersSelection: toLoggableFiltersSelection(
-        travelSearchFiltersSelection,
-      ),
-    });
-  }, [analytics, travelSearchFiltersSelection, tripsProps.searchTime]);
+  const sendAnalyticsSearchEvent = useCallback(
+    (tripsProps: TripsProps) =>
+      tripsInfiniteQueryEnabled &&
+      analytics.logEvent('Trip search', 'Search performed', {
+        searchTime: tripsProps.searchTime,
+        filtersSelection: toLoggableFiltersSelection(
+          tripsProps.travelSearchFiltersSelection,
+        ),
+      }),
+    [analytics, tripsInfiniteQueryEnabled],
+  );
 
   useEffect(() => {
-    if (
-      !shouldAutoLoadMoreInitialTrips &&
-      performedSearchesCount > 0 &&
-      !hasSentAnalyticsEventForCurrentSearchRef.current
-    ) {
-      sendAnalyticsSearchEvent();
-    }
-  }, [
-    performedSearchesCount,
-    sendAnalyticsSearchEvent,
-    shouldAutoLoadMoreInitialTrips,
-  ]);
+    sendAnalyticsSearchEvent(tripsProps);
+  }, [sendAnalyticsSearchEvent, tripsProps]);
 
   const shouldSaveSearch =
     tripLocationsAreValid &&
@@ -175,8 +162,16 @@ export function useTrips(
   const loadNextTripsPage = useCallback(() => {
     if (tripsInfiniteQueryEnabled && hasNextPage && !tripsIsFetching) {
       fetchNextPage();
+      sendAnalyticsSearchEvent(tripsProps);
     }
-  }, [fetchNextPage, hasNextPage, tripsInfiniteQueryEnabled, tripsIsFetching]);
+  }, [
+    fetchNextPage,
+    hasNextPage,
+    sendAnalyticsSearchEvent,
+    tripsInfiniteQueryEnabled,
+    tripsIsFetching,
+    tripsProps,
+  ]);
 
   const loadMoreTrips = hasNextPage ? loadNextTripsPage : undefined;
 
