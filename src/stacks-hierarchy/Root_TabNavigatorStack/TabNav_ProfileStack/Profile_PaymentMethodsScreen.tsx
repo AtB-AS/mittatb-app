@@ -64,12 +64,11 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
     >
       <View style={styles.content}>
         {isError && (
-          <View accessibilityLiveRegion="polite">
-            <MessageInfoBox
-              type="error"
-              message={t(PaymentMethodsTexts.genericError)}
-            />
-          </View>
+          <MessageInfoBox
+            a11yLiveRegion="polite"
+            type="error"
+            message={t(PaymentMethodsTexts.genericError)}
+          />
         )}
         {recurringPayment && recurringPayment.length > 0 && (
           <Section>
@@ -177,12 +176,11 @@ const Card = (props: {
 const NoCardsInfo = () => {
   const {t} = useTranslation();
   return (
-    <View accessibilityLiveRegion="polite">
-      <MessageInfoBox
-        type="info"
-        message={t(PaymentMethodsTexts.noStoredCards)}
-      />
-    </View>
+    <MessageInfoBox
+      a11yLiveRegion="polite"
+      type="info"
+      message={t(PaymentMethodsTexts.noStoredCards)}
+    />
   );
 };
 
