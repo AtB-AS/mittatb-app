@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemeText} from '@atb/components/text';
@@ -9,20 +9,38 @@ type Props = {
   icon: (SvgProps: SvgProps) => React.JSX.Element;
   stat: string;
   description: string;
+  hasPriceAdjustment?: boolean;
 };
 
-export const VehicleCardStat = ({stat, description, icon}: Props) => {
+export const VehicleCardStat = ({
+  stat,
+  description,
+  icon,
+  hasPriceAdjustment = false,
+}: Props) => {
   const styles = useStyles();
+  const {theme} = useThemeContext();
 
   return (
-    <View style={styles.contentItem}>
+    <View
+      style={
+        hasPriceAdjustment
+          ? [
+              styles.contentItem,
+              {backgroundColor: theme.color.status.valid.secondary.background},
+            ]
+          : styles.contentItem
+      }
+    >
       <ThemeIcon svg={icon} color="primary" size="large" />
-      <ThemeText typography="body__m__strong" color="primary">
-        {stat}
-      </ThemeText>
-      <ThemeText typography="body__s" color="secondary">
-        {description}
-      </ThemeText>
+      <View>
+        <ThemeText typography="body__m__strong" color="primary">
+          {stat}
+        </ThemeText>
+        <ThemeText typography="body__s" color="secondary">
+          {description}
+        </ThemeText>
+      </View>
     </View>
   );
 };
@@ -30,9 +48,12 @@ export const VehicleCardStat = ({stat, description, icon}: Props) => {
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     contentItem: {
-      flexDirection: 'column',
+      flex: 1,
+      flexDirection: 'row',
       alignItems: 'center',
-      gap: theme.spacing.xSmall,
+      gap: theme.spacing.small,
+      padding: theme.spacing.small,
+      borderRadius: theme.border.radius.small,
     },
   };
 });
