@@ -1,15 +1,12 @@
 import React from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 
-export const ActivityIndicatorOverlay = () => {
+export const ViewOverlay = () => {
   const styles = useStyles();
   return (
     <View style={styles.spinner}>
-      <ActivityIndicator
-        size="large"
-        color={styles.activityIndicator.backgroundColor}
-      />
+      <View size="large" color={styles.activityIndicator.backgroundColor} />
     </View>
   );
 };

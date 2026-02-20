@@ -1,6 +1,6 @@
 import {FareZoneResultType, type FareZoneWithMetadata} from './types';
 import {FareZoneResults} from './FareZoneResults';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {Language, FareZonesTexts, useTranslation} from '@atb/translations';
 import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
@@ -123,7 +123,7 @@ const FareZonesSelectorMap = ({
         </>
       ) : !initialCoordinates ? (
         <View style={styles.waitingForInitialCoords}>
-          <ActivityIndicator size="large" />
+          <View size="large" />
         </View>
       ) : (
         <>

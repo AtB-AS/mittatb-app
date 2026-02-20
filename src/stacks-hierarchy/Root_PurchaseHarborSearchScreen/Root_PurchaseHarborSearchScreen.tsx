@@ -2,12 +2,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  ActivityIndicator,
-  Keyboard,
-  TextInput as InternalTextInput,
-  View,
-} from 'react-native';
+import {View, Keyboard, TextInput as InternalTextInput} from 'react-native';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {TextInputSectionItem} from '@atb/components/sections';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -104,7 +99,7 @@ export const Root_PurchaseHarborSearchScreen = ({
         keyboardShouldPersistTaps="handled"
         onScrollBeginDrag={() => Keyboard.dismiss()}
       >
-        {harborsQuery.isLoading && <ActivityIndicator />}
+        {harborsQuery.isLoading && <View />}
         {harborsQuery.isError && (
           <>
             <ScreenReaderAnnouncement message={t(dictionary.genericErrorMsg)} />

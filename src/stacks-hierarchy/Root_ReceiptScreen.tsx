@@ -14,7 +14,7 @@ import {
 } from '@atb/translations';
 import {isValidEmail} from '@atb/utils/validation';
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {useAnalyticsContext} from '@atb/modules/analytics';
@@ -98,7 +98,7 @@ export function Root_ReceiptScreen({route}: Props) {
         </View>
         <Section style={styles.section}>
           {profileStatus === 'pending' ? (
-            <ActivityIndicator />
+            <View />
           ) : (
             <TextInputSectionItem
               label={t(FareContractTexts.receipt.inputLabel)}

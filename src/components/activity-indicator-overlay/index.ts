@@ -1,1 +1,1 @@
-export {ActivityIndicatorOverlay} from './ActivityIndicatorOverlay';
+export {ViewOverlay} from './ActivityIndicatorOverlay';

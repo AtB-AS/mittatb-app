@@ -9,7 +9,7 @@ import {filterPreviousLocations} from '../utils';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {LocationSearchResultType, SelectableLocationType} from '../types';
 import {useAccessibilityContext} from '@atb/modules/accessibility';
-import {ActivityIndicator, Keyboard, View} from 'react-native';
+import {View, Keyboard} from 'react-native';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {
@@ -202,7 +202,7 @@ export function LocationSearchContent({
         onScrollBeginDrag={() => Keyboard.dismiss()}
         testID="historyAndResultsScrollView"
       >
-        {isLoading && <ActivityIndicator />}
+        {isLoading && <View />}
         {searchBarIsEmpty ? (
           <>
             {includeJourneyHistory && (

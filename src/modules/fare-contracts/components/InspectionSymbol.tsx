@@ -1,6 +1,6 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -27,7 +27,7 @@ export const InspectionSymbol = ({
   const {isInspectable, mobileTokenStatus} = useMobileTokenContext();
 
   if (mobileTokenStatus === 'loading') {
-    return <ActivityIndicator size="large" />;
+    return <View size="large" />;
   }
 
   return isInspectable && !sentTicket ? (

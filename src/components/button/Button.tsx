@@ -3,13 +3,12 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Theme} from '@atb/theme/colors';
 import React, {useRef} from 'react';
 import {
-  ActivityIndicator,
+  View,
   Animated,
   type ColorValue,
   Easing,
   StyleProp,
   TextStyle,
-  View,
   ViewStyle,
 } from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -191,10 +190,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
         {(rightIcon || loading) && (
           <View style={rightStyling}>
             {loading ? (
-              <ActivityIndicator
-                size="small"
-                color={mainContrastColor.foreground.primary}
-              />
+              <View size="small" color={mainContrastColor.foreground.primary} />
             ) : (
               rightIcon && (
                 <ButtonIcon

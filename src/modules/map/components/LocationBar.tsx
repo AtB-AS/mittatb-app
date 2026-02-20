@@ -5,7 +5,7 @@ import {LocationIcon} from '@atb/components/location-icon';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import React, {useMemo} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {GeoLocation, Location, SearchLocation} from '@atb/modules/favorites';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
@@ -101,7 +101,7 @@ const Icon: React.FC<{
   return (
     <View style={{marginHorizontal: 12}}>
       {isLoading ? (
-        <ActivityIndicator
+        <View
           animating={true}
           color={getBackgroundColor(theme).foreground.primary}
         />

@@ -10,7 +10,7 @@ import {
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useVehicle} from '../../use-vehicle';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -113,7 +113,7 @@ export const ScooterSheet = ({
           accessibilityRole="progressbar"
           accessibilityLiveRegion="polite"
         >
-          <ActivityIndicator size="large" />
+          <View size="large" />
         </View>
       )}
       {!isLoading && !shmoReqIsLoading && !isError && vehicle && (

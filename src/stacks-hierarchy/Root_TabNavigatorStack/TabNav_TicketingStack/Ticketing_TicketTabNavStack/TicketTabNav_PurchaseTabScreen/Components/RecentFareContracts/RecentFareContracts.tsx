@@ -7,7 +7,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import React, {useMemo} from 'react';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import {useTicketingContext} from '@atb/modules/ticketing';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {
@@ -67,9 +67,7 @@ export const RecentFareContracts = ({
           >
             {t(TicketingTexts.recentFareContracts.loading)}
           </ThemeText>
-          <ActivityIndicator
-            color={theme.color.background.neutral[0].foreground.primary}
-          />
+          <View color={theme.color.background.neutral[0].foreground.primary} />
         </View>
       )}
 

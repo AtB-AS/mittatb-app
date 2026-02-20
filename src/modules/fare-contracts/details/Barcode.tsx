@@ -10,7 +10,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
 import QRCode from 'qrcode';
 import React, {RefObject, useEffect, useRef, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {SvgXml} from 'react-native-svg';
 import {GenericSectionItem} from '@atb/components/sections';
@@ -232,10 +232,7 @@ const LoadingBarcode = () => {
   const {theme} = useThemeContext();
   return (
     <View style={{flex: 1}}>
-      <ActivityIndicator
-        animating={true}
-        color={theme.color.foreground.dynamic.primary}
-      />
+      <View animating={true} color={theme.color.foreground.dynamic.primary} />
     </View>
   );
 };

@@ -1,5 +1,5 @@
 import {MapTexts, useTranslation} from '@atb/translations';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import React, {useRef} from 'react';
 
 import {
@@ -34,7 +34,7 @@ export const MapFilterSheet = ({
   if (!initialFilterRef.current || !mapFilter) {
     return (
       <View style={style.activityIndicator}>
-        <ActivityIndicator size="large" />
+        <View size="large" />
       </View>
     );
   }

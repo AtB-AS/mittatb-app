@@ -32,7 +32,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {TFunc} from '@leile/lobo-t';
 import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {ActivityIndicator, Platform, View} from 'react-native';
+import {View, Platform} from 'react-native';
 import {DashboardScreenProps} from '../navigation-types';
 import {
   type SearchForLocations,
@@ -468,7 +468,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 <View style={styles.loadingIndicator}>
                   {tripPatterns.length ? (
                     <>
-                      <ActivityIndicator
+                      <View
                         color={theme.color.foreground.dynamic.secondary}
                         style={{
                           marginRight: theme.spacing.medium,

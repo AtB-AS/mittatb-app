@@ -25,7 +25,7 @@ import {
 } from '@atb/translations';
 import {addMinutes} from 'date-fns';
 import React, {RefObject, useCallback, useRef, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {
   savePreviousPayment,
@@ -407,7 +407,7 @@ const PaymentButton = ({
 
   if (isSearchingOffer)
     return (
-      <ActivityIndicator
+      <View
         size="large"
         color={theme.color.foreground.dynamic.primary}
         style={{margin: theme.spacing.medium}}
@@ -442,7 +442,7 @@ const PaymentButton = ({
           <ThemeText>
             {t(PurchaseConfirmationTexts.waitingForPayment)}
           </ThemeText>
-          <ActivityIndicator />
+          <View />
         </View>
         <Button
           expanded={true}

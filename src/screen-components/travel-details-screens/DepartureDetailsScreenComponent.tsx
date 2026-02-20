@@ -37,7 +37,7 @@ import {
 } from '@atb/utils/transportation-names';
 import React, {Ref, useCallback, useRef, useState} from 'react';
 import {useTransportColor} from '@atb/utils/use-transport-color';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {Time} from './components/Time';
 import {TripLegDecoration} from './components/TripLegDecoration';
 import {TripRow} from './components/TripRow';
@@ -436,7 +436,7 @@ export const DepartureDetailsScreenComponent = ({
 
           {isLoading && (
             <View>
-              <ActivityIndicator
+              <View
                 color={theme.color.foreground.dynamic.primary}
                 style={styles.spinner}
                 animating={true}

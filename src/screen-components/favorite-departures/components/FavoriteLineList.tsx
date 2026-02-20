@@ -1,12 +1,7 @@
 import {EstimatedCall, Quay, StopPlace} from '@atb/api/types/departures';
 import {StyleSheet} from '@atb/theme';
 import React, {RefObject, useEffect, useMemo, useRef, useState} from 'react';
-import {
-  ActivityIndicator,
-  SectionList,
-  SectionListData,
-  View,
-} from 'react-native';
+import {View, SectionList, SectionListData} from 'react-native';
 import {useDepartures} from '@atb/screen-components/place-screen';
 import {
   DeparturesTexts,
@@ -241,7 +236,7 @@ export function QuayLineSection({
         {isLoading && (
           <GenericSectionItem>
             <View style={{width: '100%'}}>
-              <ActivityIndicator />
+              <View />
             </View>
           </GenericSectionItem>
         )}

@@ -5,7 +5,7 @@ import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
@@ -61,7 +61,7 @@ export const FinishedScooterSheet = ({
         <>
           {isLoading && (
             <View style={styles.activityIndicator}>
-              <ActivityIndicator size="large" />
+              <View size="large" />
             </View>
           )}
           {!isLoading && !isError && shmoBooking && (

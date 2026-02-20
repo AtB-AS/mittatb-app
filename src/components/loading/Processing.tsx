@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 
@@ -12,10 +12,7 @@ export const Processing: React.FC<{message: string}> = ({message}) => {
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator
-        color={themeColor.foreground.primary}
-        style={styles.indicator}
-      />
+      <View color={themeColor.foreground.primary} style={styles.indicator} />
       <ThemeText>{message}</ThemeText>
     </View>
   );

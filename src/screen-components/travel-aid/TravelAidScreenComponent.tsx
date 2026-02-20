@@ -8,7 +8,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTravelAidDataQuery} from './use-travel-aid-data';
 import {ScrollView} from 'react-native-gesture-handler';
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {formatToClock, formatToClockOrRelativeMinutes} from '@atb/utils/date';
 import {TranslateFunction, dictionary, useTranslation} from '@atb/translations';
@@ -110,9 +110,7 @@ export const TravelAidScreenComponent = ({
         testID="closeJourneyAidButton"
       />
       <ScrollView contentContainerStyle={styles.scrollView}>
-        {status === 'pending' && (
-          <ActivityIndicator size="large" ref={focusRef} />
-        )}
+        {status === 'pending' && <View size="large" ref={focusRef} />}
         {status === 'error' && (
           <View ref={focusRef}>
             <MessageInfoBox

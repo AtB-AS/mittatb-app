@@ -5,7 +5,7 @@ import {ShmoBookingEvent, ShmoBookingEventType} from '@atb/api/types/mobility';
 import {useSendShmoBookingEventMutation} from '@atb/modules/mobility';
 import {PhotoCapture} from '@atb/components/PhotoCapture';
 import {PhotoFile} from '@atb/components/camera';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MapStateActionType, useMapContext} from '@atb/modules/map';
@@ -78,7 +78,7 @@ export const Root_ParkingPhotoScreen = ({
   if (isPending) {
     return (
       <View style={styles.activityIndicator}>
-        <ActivityIndicator size="large" />
+        <View size="large" />
       </View>
     );
   }

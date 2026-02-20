@@ -7,7 +7,7 @@ import {
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet} from '@atb/theme';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {useBikeStation} from '../use-bike-station';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useOperatorBenefit} from '../use-operator-benefit';
@@ -98,7 +98,7 @@ export const BikeStationBottomSheet = ({
       <>
         {isLoading && (
           <View style={styles.activityIndicator}>
-            <ActivityIndicator size="large" />
+            <View size="large" />
           </View>
         )}
         {!isLoading && !isError && station && (

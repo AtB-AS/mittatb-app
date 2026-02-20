@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext, Theme} from '@atb/theme';
 
@@ -12,7 +12,7 @@ export const Loading: React.FC<{text?: string}> = ({text}) => {
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator
+      <View
         animating={true}
         size="large"
         color={themeColor.foreground.primary}

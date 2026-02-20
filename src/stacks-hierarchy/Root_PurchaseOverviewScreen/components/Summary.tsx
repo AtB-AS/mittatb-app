@@ -5,7 +5,7 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
+import {View, StyleProp, ViewStyle} from 'react-native';
 
 type Props = {
   price?: number;
@@ -52,7 +52,7 @@ export function Summary({
           {t(PurchaseOverviewTexts.summary.price(formattedPrice))}
         </ThemeText>
       ) : isLoading ? (
-        <ActivityIndicator size="large" />
+        <View size="large" />
       ) : null}
       {!isLoading && !!formattedPrice && originalPrice !== price && (
         <ThemeText

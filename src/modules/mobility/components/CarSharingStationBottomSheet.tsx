@@ -7,7 +7,7 @@ import {
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet} from '@atb/theme';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useCarSharingStation} from '../use-car-sharing-station';
 import {ThemeText} from '@atb/components/text';
@@ -100,7 +100,7 @@ export const CarSharingStationBottomSheet = ({
       <>
         {isLoading && (
           <View style={styles.activityIndicator}>
-            <ActivityIndicator size="large" />
+            <View size="large" />
           </View>
         )}
         {!isLoading && !isError && station && (

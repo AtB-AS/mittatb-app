@@ -1,5 +1,5 @@
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 
 import React from 'react';
@@ -32,7 +32,7 @@ export function TravelTokenBox({
     useMobileTokenContext();
 
   if (mobileTokenStatus === 'loading') {
-    return <ActivityIndicator size="large" />;
+    return <View size="large" />;
   }
 
   const showTokensNotWorkingError =

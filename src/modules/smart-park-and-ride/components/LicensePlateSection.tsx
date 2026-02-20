@@ -1,4 +1,4 @@
-import {View, ActivityIndicator} from 'react-native';
+import {View} from 'react-native';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
@@ -86,7 +86,7 @@ export const LicensePlateSection = ({
       )}
       {!!showLoading && (
         <View style={styles.loadingBox}>
-          <ActivityIndicator />
+          <View />
         </View>
       )}
     </>

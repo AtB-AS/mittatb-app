@@ -1,6 +1,6 @@
 import {StyleSheet} from '@atb/theme';
 import React, {JSX, useRef} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -117,7 +117,7 @@ export const DeparturesDialogSheet = ({
     } else if (stopDetailsStatus === 'pending') {
       StopPlaceViewOrError = (
         <View style={styles.paddingHorizontal}>
-          <ActivityIndicator size="large" />
+          <View size="large" />
         </View>
       );
     }

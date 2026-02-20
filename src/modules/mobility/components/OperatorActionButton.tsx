@@ -4,7 +4,7 @@ import React, {useCallback} from 'react';
 import {Button} from '@atb/components/button';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {ActivityIndicator, Linking} from 'react-native';
+import {View, Linking} from 'react-native';
 import {useValueCodeMutation} from '../queries/use-value-code-mutation';
 import {useIsEligibleForBenefit} from '../use-is-eligible-for-benefit';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -150,7 +150,7 @@ export const OperatorActionButton = ({
   ]);
 
   if (isLoading) {
-    return <ActivityIndicator />;
+    return <View />;
   }
 
   if (hasError) {

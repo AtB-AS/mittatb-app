@@ -1,5 +1,5 @@
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
-import {ActivityIndicator} from 'react-native';
+import {View} from 'react-native';
 import {
   formatToShortDateWithYear,
   formatToVerboseFullDate,
@@ -22,7 +22,7 @@ export const TokenToggleInfo = ({
   const styles = useStyles();
 
   return isLoading ? (
-    <ActivityIndicator style={styles.loader} />
+    <View style={styles.loader} />
   ) : (
     <TokenToggleContent toggleLimit={toggleLimit} textColor={textColor} />
   );

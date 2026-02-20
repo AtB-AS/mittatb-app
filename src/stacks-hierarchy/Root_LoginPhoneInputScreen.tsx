@@ -4,12 +4,7 @@ import {LoginTexts, PhoneInputTexts, useTranslation} from '@atb/translations';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {PhoneSignInErrorCode, useAuthContext} from '@atb/modules/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  ScrollView,
-  View,
-} from 'react-native';
+import {View, KeyboardAvoidingView, ScrollView} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -139,7 +134,7 @@ export const Root_LoginPhoneInputScreen = ({
 
           <View style={styles.buttonView}>
             {isSubmitting && (
-              <ActivityIndicator
+              <View
                 style={styles.activityIndicator}
                 size="large"
                 color={themeColor.foreground.primary}

@@ -16,7 +16,7 @@ import {
 } from '@atb/modules/on-behalf-of';
 import {useState} from 'react';
 import phoneValidator from 'phone';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -124,7 +124,7 @@ export const SubmitButton = ({
   return (
     <View style={styles.container}>
       {isSubmitting && (
-        <ActivityIndicator size="large" color={themeColor.foreground.primary} />
+        <View size="large" color={themeColor.foreground.primary} />
       )}
 
       {error === 'unknown_error' && !isSubmitting && (

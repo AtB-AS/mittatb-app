@@ -17,7 +17,7 @@ import {PricingPlan} from './PricingPlan';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
 import {formatRange} from '../utils';
 import {useVehicle} from '../use-vehicle';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useOperatorBenefit} from '../use-operator-benefit';
 import {OperatorActionButton} from './OperatorActionButton';
@@ -81,7 +81,7 @@ export const BicycleSheet = ({
       <>
         {isLoading && (
           <View style={styles.activityIndicator}>
-            <ActivityIndicator size="large" />
+            <View size="large" />
           </View>
         )}
         {!isLoading && !isError && vehicle && (

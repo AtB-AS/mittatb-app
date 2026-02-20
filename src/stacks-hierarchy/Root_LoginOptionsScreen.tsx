@@ -20,7 +20,7 @@ import {
 } from '@atb/translations';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
+import {View, Linking, ScrollView} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import queryString from 'query-string';
 
@@ -171,9 +171,7 @@ export const Root_LoginOptionsScreen = ({
             {t(LoginTexts.logInOptions.title)}
           </ThemeText>
         </View>
-        {isLoading && (
-          <ActivityIndicator style={styles.activityIndicator} size="large" />
-        )}
+        {isLoading && <View style={styles.activityIndicator} size="large" />}
         {error && error !== 'access_denied' && (
           <MessageInfoBox
             style={styles.errorMessage}

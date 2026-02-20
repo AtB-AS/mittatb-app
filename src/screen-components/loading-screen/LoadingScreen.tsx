@@ -1,4 +1,4 @@
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
@@ -19,10 +19,7 @@ export const LoadingScreen = React.memo(() => {
       accessibilityLabel={t(dictionary.loading)}
       testID="loadingScreen"
     >
-      <ActivityIndicator
-        size="large"
-        color={styles.activityIndicator.backgroundColor}
-      />
+      <View size="large" color={styles.activityIndicator.backgroundColor} />
       <ThemeText
         style={styles.loadingText}
         typography="body__m"

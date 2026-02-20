@@ -12,7 +12,7 @@ import {useFavoritesContext} from '@atb/modules/favorites';
 import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {
   isSituationValidAtDate,
@@ -161,7 +161,7 @@ export function QuaySection({
         {isLoading && !isMinimized && (
           <GenericSectionItem>
             <View style={{width: '100%'}}>
-              <ActivityIndicator />
+              <View />
             </View>
           </GenericSectionItem>
         )}

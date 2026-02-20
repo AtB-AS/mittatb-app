@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
@@ -39,7 +39,7 @@ export const CarnetFooter: React.FC<Props> = ({
       schoolCarnetInfo,
     );
 
-  if (isSchoolCarnetInfoFetching) return <ActivityIndicator />;
+  if (isSchoolCarnetInfoFetching) return <View />;
   if (isSchoolCarnetInfoError)
     return (
       <MessageInfoBox

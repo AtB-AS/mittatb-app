@@ -1,5 +1,5 @@
 import {FlatList} from 'react-native-gesture-handler';
-import {ActivityIndicator, ViewStyle} from 'react-native';
+import {View, ViewStyle} from 'react-native';
 import {Button} from '@atb/components/button';
 import React from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -39,7 +39,7 @@ const StopPlaceAndQuaySelection = ({
       ListHeaderComponent={
         <>
           {isMissingQuays ? (
-            <ActivityIndicator size="large" />
+            <View size="large" />
           ) : (
             <Button
               expanded={true}

@@ -1,5 +1,5 @@
 import React from 'react';
-import {AccessibilityProps, ActivityIndicator} from 'react-native';
+import {AccessibilityProps, View} from 'react-native';
 import {Location} from '@atb/modules/favorites';
 import {useThemeContext} from '@atb/theme';
 import {screenReaderPause} from '@atb/components/text';
@@ -49,7 +49,7 @@ export function LocationInputSectionItem({
       }
       icon={
         updatingLocation ? (
-          <ActivityIndicator color={theme.color.foreground.dynamic.primary} />
+          <View color={theme.color.foreground.dynamic.primary} />
         ) : (
           inputIcon
         )

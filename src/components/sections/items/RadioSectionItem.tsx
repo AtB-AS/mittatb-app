@@ -2,9 +2,8 @@ import React from 'react';
 import {
   AccessibilityInfo,
   AccessibilityProps,
-  ActivityIndicator,
-  Platform,
   View,
+  Platform,
 } from 'react-native';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
@@ -117,7 +116,7 @@ export function RadioSectionItem({
           accessibilityRole="button"
         >
           {rightAction.isLoading ? (
-            <ActivityIndicator />
+            <View />
           ) : (
             <ThemeIcon svg={rightAction.icon} />
           )}

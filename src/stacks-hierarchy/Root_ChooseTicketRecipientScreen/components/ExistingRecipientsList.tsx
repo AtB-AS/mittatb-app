@@ -1,7 +1,7 @@
 import {RecipientSelectionState} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types';
 import {dictionary, useTranslation} from '@atb/translations';
 import {useEffect, useLayoutEffect} from 'react';
-import {ActivityIndicator, Alert} from 'react-native';
+import {View, Alert} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioGroupSection} from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -72,7 +72,7 @@ export const ExistingRecipientsList = ({
   return (
     <>
       {recipientsQuery.status === 'pending' && (
-        <ActivityIndicator
+        <View
           style={styles.loadingSpinner}
           size="large"
           color={themeColor.foreground.primary}
