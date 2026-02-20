@@ -16,7 +16,7 @@ import {
   CardPaymentMethod,
   PaymentMethod,
   PaymentSelection,
-  VippsPaymentMethod,
+  NonRecurringPaymentMethod,
 } from './types';
 import {SinglePaymentMethod} from './SinglePaymentMethod';
 import {MultiplePaymentMethodsRadioSection} from './MultiplePaymentMethodsRadioSection';
@@ -26,6 +26,7 @@ import {
 } from '@atb/components/bottom-sheet';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {isNonRecurringPaymentType} from './utils';
 
 type Props = {
   onSelect: (
@@ -57,13 +58,15 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   const {authenticationType} = useAuthContext();
 
   const {paymentTypes} = useFirestoreConfigurationContext();
-  const defaultPaymentMethods: PaymentMethod[] = paymentTypes.map(
-    (paymentType) => ({paymentType}),
-  );
+  const defaultPaymentMethods = paymentTypes.map((paymentType) => ({
+    paymentType,
+  }));
   const singlePaymentMethods = defaultPaymentMethods.filter(
-    (method): method is VippsPaymentMethod =>
-      method.paymentType === PaymentType.Vipps,
+    (method): method is NonRecurringPaymentMethod =>
+      isNonRecurringPaymentType(method.paymentType),
   );
+
+  singlePaymentMethods.push({paymentType: PaymentType.ApplePay});
 
   const multiplePaymentMethods = defaultPaymentMethods.filter(
     (method): method is CardPaymentMethod =>

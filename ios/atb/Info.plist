@@ -127,5 +127,7 @@
 	<string>$(APP_GROUP_NAME)</string>
 	<key>ReleaseStage</key>
 	<string>$(RELEASE_STAGE)</string>
+	<key>ApplePayMerchantId</key>
+	<string>$(APPLE_PAY_MERCHANT_ID)</string>
 </dict>
 </plist>

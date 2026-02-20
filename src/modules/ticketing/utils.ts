@@ -90,6 +90,8 @@ export function humanizePaymentType(paymentType: PaymentType) {
       return 'Vipps';
     case PaymentType.Amex:
       return 'American Express';
+    case PaymentType.ApplePay:
+      return 'Apple Pay';
     default:
       return '';
   }
@@ -105,6 +107,8 @@ export function humanizePaymentTypeString(paymentType: string) {
       return 'Vipps';
     case 'amex':
       return 'American Express';
+    case 'applepay':
+      return 'Apple Pay';
     default:
       return startCase(paymentType);
   }
