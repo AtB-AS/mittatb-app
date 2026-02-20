@@ -8,7 +8,7 @@ import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 type SelectionProps = {
   selection: PurchaseSelectionType;
   onSelect: (selection: PurchaseSelectionType) => void;
-  onSwap?: () => void;
+  onSwap: () => void;
   style?: StyleProp<ViewStyle>;
 };
 
