@@ -1,58 +1,66 @@
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {translation as _, useTranslation} from '@atb/translations';
-import React, {RefObject} from 'react';
+import React, {RefObject, useCallback} from 'react';
 import {View} from 'react-native';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
 } from '@atb/components/bottom-sheet';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {TripPattern} from '@atb/api/types/trips';
 
 type Props = {
-  onRemovePress: () => void;
-  onCancelPress: () => void;
+  onRemovePress: (tripPattern: TripPattern) => void;
+  onClose: () => void;
   bottomSheetModalRef: RefObject<GorhomBottomSheetModal | null>;
 };
 
 export const RemoveStoredTripPatternBottomSheet = ({
   onRemovePress,
-  onCancelPress,
+  onClose,
   bottomSheetModalRef,
 }: Props) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
 
+  const onCancelPress = useCallback(() => {
+    bottomSheetModalRef.current?.dismiss();
+  }, [bottomSheetModalRef]);
+
   return (
-    <BottomSheetModal
+    <BottomSheetModal<TripPattern>
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(RemoveStoredTripPatternBottomSheetTexts.header.text)}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      closeCallback={onCancelPress}
+      closeCallback={onClose}
     >
-      <View style={styles.container}>
-        <Button
-          expanded={true}
-          onPress={onRemovePress}
-          text={t(RemoveStoredTripPatternBottomSheetTexts.removeButton.text)}
-          accessibilityLabel={t(
-            RemoveStoredTripPatternBottomSheetTexts.removeButton.a11yLabel,
-          )}
-        />
-        <Button
-          expanded={true}
-          mode="secondary"
-          text={t(
-            RemoveStoredTripPatternBottomSheetTexts.doNotRemoveButton.text,
-          )}
-          onPress={onCancelPress}
-          backgroundColor={theme.color.background.neutral[1]}
-          accessibilityLabel={t(
-            RemoveStoredTripPatternBottomSheetTexts.doNotRemoveButton.a11yLabel,
-          )}
-        />
-      </View>
+      {({data}) => (
+        <View style={styles.container}>
+          <Button
+            expanded={true}
+            onPress={() => data && onRemovePress(data)}
+            text={t(RemoveStoredTripPatternBottomSheetTexts.removeButton.text)}
+            accessibilityLabel={t(
+              RemoveStoredTripPatternBottomSheetTexts.removeButton.a11yLabel,
+            )}
+          />
+          <Button
+            expanded={true}
+            mode="secondary"
+            text={t(
+              RemoveStoredTripPatternBottomSheetTexts.doNotRemoveButton.text,
+            )}
+            onPress={onCancelPress}
+            backgroundColor={theme.color.background.neutral[1]}
+            accessibilityLabel={t(
+              RemoveStoredTripPatternBottomSheetTexts.doNotRemoveButton
+                .a11yLabel,
+            )}
+          />
+        </View>
+      )}
     </BottomSheetModal>
   );
 };
