@@ -26,9 +26,9 @@ else
     bugsnag-cli upload react-native-android \
       --verbose \
       --version-name="${APP_VERSION}" \
-      --version-code=$BUILD_ID \
-      --api-key=$BUGSNAG_API_KEY \
-      --variant=$VARIANT \
+      --version-code="${BUILD_ID}" \
+      --api-key="${BUGSNAG_API_KEY}" \
+      --variant="${VARIANT}" \
       ${SOURCEMAP_ARGS}
 
     if [[ "${APP_ENVIRONMENT}" == "store" ]]; then
