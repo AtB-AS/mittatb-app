@@ -3,6 +3,8 @@ set -euo pipefail
 
 BRANCH_NAME="${BRANCH_NAME:-}"
 
+echo "Branch name is: $BRANCH_NAME"
+
 CURRENT_VERSION=$(node -p "require('./package.json').version")
 
 # Master branch: do nothing, use version as-is
