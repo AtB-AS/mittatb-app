@@ -20,6 +20,7 @@ import {isDefined} from '@atb/utils/presence';
 import {flatMap} from '@atb/utils/array';
 import {TripSearchTime} from '../types';
 import {ErrorResponse} from '@atb-as/utils';
+import {ONE_MINUTE_MS} from '@atb/utils/durations';
 
 export type TripsProps = {
   fromLocation?: Location;
@@ -50,6 +51,8 @@ export const useTripsInfiniteQuery = (
       }),
     maxPages: 100,
     enabled,
+    staleTime: 30 * ONE_MINUTE_MS,
+    gcTime: 30 * ONE_MINUTE_MS,
     initialPageParam: undefined,
     getNextPageParam: (lastPage) => lastPage?.trip?.nextPageCursor,
   });

@@ -13,9 +13,8 @@ import {TripsProps, useTripsInfiniteQuery} from './use-trips-infinite-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {sanitizeSearchTime} from './utils';
 import Bugsnag from '@bugsnag/react-native';
-import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 
-const MAX_NUMBER_OF_CHAINGED_INITIAL_SEARCHES = 5;
+const MAX_NUMBER_OF_CHAINED_INITIAL_SEARCHES = 5;
 const TARGET_NUMBER_OF_INITIAL_HITS = 8;
 
 /**
@@ -51,11 +50,16 @@ export function useTrips(
 
   const arriveBy = searchTime.option === 'arrival';
 
+  const sanitizedSearchTime = useMemo(
+    () => sanitizeSearchTime(searchTime),
+    [searchTime],
+  );
+
   const tripsProps: TripsProps = useMemo(
     () => ({
       fromLocation,
       toLocation,
-      searchTime: sanitizeSearchTime(searchTime),
+      searchTime: sanitizedSearchTime,
       arriveBy,
       travelSearchFiltersSelection,
       journeySearchModes,
@@ -64,13 +68,14 @@ export function useTrips(
       arriveBy,
       fromLocation,
       journeySearchModes,
-      searchTime,
+      sanitizedSearchTime,
       toLocation,
       travelSearchFiltersSelection,
     ],
   );
 
   const tripLocationsAreValid = isValidTripLocations(fromLocation, toLocation);
+  const tripsInfiniteQueryEnabled = tripLocationsAreValid;
 
   const {
     data: tripsData,
@@ -80,7 +85,7 @@ export function useTrips(
     error: tripsError,
     hasNextPage,
     fetchNextPage,
-  } = useTripsInfiniteQuery(tripsProps, tripLocationsAreValid);
+  } = useTripsInfiniteQuery(tripsProps, tripsInfiniteQueryEnabled);
 
   const tripPatterns = useMemo(
     () =>
@@ -96,13 +101,10 @@ export function useTrips(
 
   const performedSearchesCount = tripsData?.pages.length ?? 0;
 
-  const allowFetchNextPage =
-    tripLocationsAreValid && !tripsIsFetching && hasNextPage;
-
   const shouldAutoLoadMoreInitialTrips =
-    allowFetchNextPage &&
+    hasNextPage &&
     tripPatterns.length < TARGET_NUMBER_OF_INITIAL_HITS &&
-    performedSearchesCount < MAX_NUMBER_OF_CHAINGED_INITIAL_SEARCHES;
+    performedSearchesCount < MAX_NUMBER_OF_CHAINED_INITIAL_SEARCHES;
 
   useEffect(() => {
     shouldAutoLoadMoreInitialTrips && fetchNextPage();
@@ -112,22 +114,21 @@ export function useTrips(
     shouldAutoLoadMoreInitialTrips,
   ]);
 
-  const sendAnalyticsSearchEvent = useCallback(() => {
-    analytics.logEvent('Trip search', 'Search performed', {
-      searchTime: tripsProps.searchTime,
-      filtersSelection: toLoggableFiltersSelection(
-        travelSearchFiltersSelection,
-      ),
-    });
-  }, [analytics, travelSearchFiltersSelection, tripsProps.searchTime]);
-
-  const didJustEndChainOfSearches =
-    useStablePreviousValue(shouldAutoLoadMoreInitialTrips) &&
-    !shouldAutoLoadMoreInitialTrips;
+  const sendAnalyticsSearchEvent = useCallback(
+    (tripsProps: TripsProps) =>
+      tripsInfiniteQueryEnabled &&
+      analytics.logEvent('Trip search', 'Search performed', {
+        searchTime: tripsProps.searchTime,
+        filtersSelection: toLoggableFiltersSelection(
+          tripsProps.travelSearchFiltersSelection,
+        ),
+      }),
+    [analytics, tripsInfiniteQueryEnabled],
+  );
 
   useEffect(() => {
-    didJustEndChainOfSearches && sendAnalyticsSearchEvent();
-  }, [didJustEndChainOfSearches, sendAnalyticsSearchEvent]);
+    sendAnalyticsSearchEvent(tripsProps);
+  }, [sendAnalyticsSearchEvent, tripsProps]);
 
   const shouldSaveSearch =
     tripLocationsAreValid &&
@@ -159,11 +160,18 @@ export function useTrips(
   const timeOfLastSearch = tripsProps.searchTime.date;
 
   const loadNextTripsPage = useCallback(() => {
-    if (allowFetchNextPage) {
+    if (tripsInfiniteQueryEnabled && hasNextPage && !tripsIsFetching) {
       fetchNextPage();
-      sendAnalyticsSearchEvent();
+      sendAnalyticsSearchEvent(tripsProps);
     }
-  }, [allowFetchNextPage, fetchNextPage, sendAnalyticsSearchEvent]);
+  }, [
+    fetchNextPage,
+    hasNextPage,
+    sendAnalyticsSearchEvent,
+    tripsInfiniteQueryEnabled,
+    tripsIsFetching,
+    tripsProps,
+  ]);
 
   const loadMoreTrips = hasNextPage ? loadNextTripsPage : undefined;
 
@@ -180,7 +188,7 @@ export function useTrips(
       tripPatterns,
       timeOfLastSearch,
       loadMoreTrips,
-      refetchTrips,
+      refetchTrips: () => tripsInfiniteQueryEnabled && refetchTrips(),
       tripsSearchState,
       tripsIsError,
       tripsIsNetworkError,
@@ -188,11 +196,12 @@ export function useTrips(
     [
       loadMoreTrips,
       refetchTrips,
-      tripsSearchState,
       timeOfLastSearch,
+      tripsInfiniteQueryEnabled,
       tripPatterns,
       tripsIsError,
       tripsIsNetworkError,
+      tripsSearchState,
     ],
   );
 }

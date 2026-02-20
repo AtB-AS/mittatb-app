@@ -221,7 +221,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     timePickerBottomSheetModalRef.current?.present();
   };
 
-  const refresh = useCallback(() => {
+  const forceRefresh = useCallback(() => {
     const updatedSearchTime: TripSearchTime =
       searchTime.option === 'now'
         ? {
@@ -254,13 +254,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             Platform.OS === 'ios'
               ? false
               : tripsSearchState === 'searching' && !tripPatterns.length,
-          onRefresh: refresh,
+          onRefresh: forceRefresh,
         }
       : undefined;
-  }, [tripsSearchState, tripPatterns.length, refresh, isFocused]);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(refresh, [from, to]);
+  }, [tripsSearchState, tripPatterns.length, forceRefresh, isFocused]);
 
   return (
     <View style={styles.container}>
@@ -619,7 +616,7 @@ function useUpdatedLocation(
     setLocation('to', searchedToLocation);
   }, [searchedToLocation, setLocation]);
 
-  return {from, to};
+  return useMemo(() => ({from, to}), [from, to]);
 }
 
 function log(message: string, metadata?: {[key: string]: string}) {
