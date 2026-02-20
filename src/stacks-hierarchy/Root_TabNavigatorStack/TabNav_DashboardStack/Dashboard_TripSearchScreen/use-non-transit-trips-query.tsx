@@ -94,7 +94,7 @@ export const useNonTransitTripsQuery = (
   return useMemo(
     () => ({
       nonTransitTrips,
-      searchState: searchState,
+      searchState,
     }),
     [nonTransitTrips, searchState],
   );
