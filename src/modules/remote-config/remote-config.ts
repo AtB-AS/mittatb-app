@@ -521,25 +521,3 @@ export function getConfig(): RemoteConfig {
     vehicles_poll_interval,
   };
 }
-
-// Pick keys of certain value type
-type SubType<Base, Condition> = Pick<
-  Base,
-  {
-    [Key in keyof Base]: Base[Key] extends Condition ? Key : never;
-  }[keyof Base]
->;
-
-export function getBooleanConfigValue(
-  key: keyof SubType<RemoteConfig, boolean>,
-) {
-  return remoteConfig().getBoolean(key);
-}
-
-export function getStringConfigValue(key: keyof SubType<RemoteConfig, string>) {
-  return remoteConfig().getString(key);
-}
-
-export function getNumberConfigValue(key: keyof SubType<RemoteConfig, number>) {
-  return remoteConfig().getNumber(key);
-}

@@ -21,6 +21,7 @@ import {EmptyState} from '@atb/components/empty-state';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 import type {TripSearchTime} from '../../types';
 import {ResultRow} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultRow';
+import {SaveableTripSearchResultRow} from '@atb/modules/experimental-store-trip-patterns';
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
@@ -99,13 +100,15 @@ export const Results: React.FC<Props> = ({
               departureTime={tripPattern.expectedStartTime}
               previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
             />
-            <ResultRow
-              tripPattern={tripPattern}
-              onDetailsPressed={onDetailsPressed}
-              resultIndex={i}
-              searchTime={searchTime}
-              testID={'tripSearchSearchResult' + i}
-            />
+            <SaveableTripSearchResultRow tripPattern={tripPattern}>
+              <ResultRow
+                tripPattern={tripPattern}
+                onDetailsPressed={onDetailsPressed}
+                resultIndex={i}
+                searchTime={searchTime}
+                testID={'tripSearchSearchResult' + i}
+              />
+            </SaveableTripSearchResultRow>
           </Fragment>
         ))}
     </View>
@@ -133,7 +136,6 @@ const getDetailsTextForEmptyResult = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    paddingHorizontal: theme.spacing.medium,
     paddingBottom: theme.spacing.medium,
   },
   errorContainer: {

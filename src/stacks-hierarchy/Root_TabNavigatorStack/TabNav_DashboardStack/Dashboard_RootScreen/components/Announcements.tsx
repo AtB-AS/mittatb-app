@@ -16,6 +16,7 @@ import {useStableLocation} from '@atb/modules/geolocation';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {findZoneInLocation} from '@atb/utils/use-find-zone-in-location';
 import {useMemo} from 'react';
+import Animated, {LinearTransition} from 'react-native-reanimated';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -64,7 +65,11 @@ export const Announcements = ({style}: Props) => {
     !isScreenReaderEnabled && filteredAnnouncements.length > 1;
 
   return (
-    <View style={[style, styles.container]} testID="announcements">
+    <Animated.View
+      style={[style, styles.container]}
+      testID="announcements"
+      layout={LinearTransition}
+    >
       <View style={styles.headerWrapper}>
         <ContentHeading text={t(DashboardTexts.announcements.header)} />
       </View>
@@ -81,7 +86,7 @@ export const Announcements = ({style}: Props) => {
           />
         ))}
       </ScrollView>
-    </View>
+    </Animated.View>
   );
 };
 

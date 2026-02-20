@@ -1,40 +1,47 @@
 import React from 'react';
-import {
-  isExperimentalEnabled,
-  useIsExperimentalEnabled,
-} from './is-experimental-enabled';
+import {useIsExperimentalEnabled} from './use-is-experimental-enabled';
 
-const isExperimental = isExperimentalEnabled();
+type FeatureToggleType =
+  | 'render-children-if-disabled'
+  | 'render-nothing-if-disabled';
 
-const NullComponent: React.FC<any> = () => {
-  return null;
+type FeatureToggleComponentProps<TProps> = {
+  featureToggleType: FeatureToggleType;
+  Component: React.FC<React.PropsWithChildren<TProps>>;
+  componentProps: React.PropsWithChildren<TProps>;
 };
 
 /**
  * A component that will only render its children if the experimental feature is enabled.
  * Can be overridden in the debug menu at runtime.
  */
-const ExperimentalFeatureToggledComponent: React.FC<
-  React.PropsWithChildren
-> = ({children}) => {
+const ExperimentalFeatureToggledComponent = <TProps extends {}>({
+  componentProps,
+  Component,
+  featureToggleType,
+}: FeatureToggleComponentProps<TProps>) => {
   const isExperimental = useIsExperimentalEnabled();
-  return isExperimental ? children : null;
+  if (isExperimental) {
+    return <Component {...componentProps} />;
+  }
+  return featureToggleType === 'render-children-if-disabled'
+    ? componentProps.children
+    : null;
 };
 
 /**
  * Wraps a component with an experimental feature toggled component.
- * If the experimental feature is enabled on app start, the component will be wrapped with an experimental feature toggled component.
- *
- * Else it will return a null component. In that case it cannot be overridden in the debug menu at runtime.
+ * Can be overridden in the debug menu at runtime.
  */
 export const wrapWithExperimentalFeatureToggledComponent = <T extends {}>(
+  featureToggleType: FeatureToggleType,
   WrappedComponent: React.FC<T>,
 ): React.FC<T> => {
-  return isExperimental
-    ? (props: T) => (
-        <ExperimentalFeatureToggledComponent>
-          <WrappedComponent {...props} />
-        </ExperimentalFeatureToggledComponent>
-      )
-    : (NullComponent as React.FC<T>);
+  return (props: T) => (
+    <ExperimentalFeatureToggledComponent<T>
+      featureToggleType={featureToggleType}
+      Component={WrappedComponent}
+      componentProps={props}
+    />
+  );
 };
