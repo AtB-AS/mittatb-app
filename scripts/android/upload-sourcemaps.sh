@@ -10,19 +10,23 @@ if [[
     echo "Expected env variables:
   - APP_VERSION
   - BUILD_ID
-  - APP_FLAVOR"
+  - APP_FLAVOR
+  - BUGSNAG_API_KEY"
 
     exit 1
 else
     VARIANT="$APP_FLAVOR${APP_ENVIRONMENT^}"
     SOURCEMAP_ARGS=""
     if [[ "${BUNDLE_ONLY}" == "true" ]]; then
+    
+    # Dummy manifest only required as a workaround for this https://github.com/bugsnag/bugsnag-cli/issues/261
+    # Start Dummy manifest
       MANIFEST_DIR="android/app/build/intermediates/merged_manifests/${VARIANT}"
       mkdir -p "${MANIFEST_DIR}"
       cat > "${MANIFEST_DIR}/AndroidManifest.xml" << EOF
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.your.package.name"
+    package="${ANDROID_APPLICATION_ID}"
     android:versionCode="${BUILD_ID}"
     android:versionName="${APP_VERSION}">
     <application>
@@ -30,6 +34,7 @@ else
     </application>
 </manifest>
 EOF
+    ### End Dummy manifest
       echo "Uploading sourcemaps from replaced bundle"
       SOURCEMAP_ARGS="--bundle=${BUNDLE_PATH} --source-map=${SOURCEMAP_PATH}"
       echo "${SOURCEMAP_ARGS}"
