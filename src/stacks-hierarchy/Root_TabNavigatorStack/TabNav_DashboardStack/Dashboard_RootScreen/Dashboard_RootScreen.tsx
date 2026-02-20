@@ -98,7 +98,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
       // when navigating back.
       reset();
 
-      navigation.navigate('Dashboard_TripSearchScreen', {
+      navigation.push('Dashboard_TripSearchScreen', {
         fromLocation,
         toLocation,
         searchTime: undefined,
