@@ -231,8 +231,12 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
         : {...searchTime};
     setSearchTime(updatedSearchTime);
     navigation.setParams({
-      fromLocation: from?.resultType === 'geolocation' ? currentLocation : from,
-      toLocation: to?.resultType === 'geolocation' ? currentLocation : to,
+      ...(from?.resultType === 'geolocation' && {
+        fromLocation: currentLocation,
+      }),
+      ...(to?.resultType === 'geolocation' && {
+        toLocation: currentLocation,
+      }),
       searchTime: updatedSearchTime,
     });
     refetchTrips();
