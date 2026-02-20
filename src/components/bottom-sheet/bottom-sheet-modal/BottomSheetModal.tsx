@@ -214,32 +214,6 @@ const useBottomSheetContent = <T extends any>(
   children: BottomSheetModalChildren<T>,
   footerHeight: number,
 ) => {
-  return useMemo(() => {
-    if (typeof children === 'function') {
-      const ChildrenComponent = children;
-
-      return ({data}: {data?: T | undefined}) => (
-        <BottomSheetScrollViewContent footerHeight={footerHeight}>
-          <ChildrenComponent data={data} />
-        </BottomSheetScrollViewContent>
-      );
-    }
-
-    return (
-      <BottomSheetScrollViewContent footerHeight={footerHeight}>
-        {children}
-      </BottomSheetScrollViewContent>
-    );
-  }, [children, footerHeight]);
-};
-
-const BottomSheetScrollViewContent = ({
-  children,
-  footerHeight,
-}: {
-  children: React.ReactNode;
-  footerHeight: number;
-}) => {
   const {theme} = useThemeContext();
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
 
@@ -251,15 +225,31 @@ const BottomSheetScrollViewContent = ({
     [footerHeight, safeAreaBottom, theme.spacing.large],
   );
 
-  return (
-    <BottomSheetScrollView
-      keyboardShouldPersistTaps="handled"
-      alwaysBounceVertical={false}
-      contentContainerStyle={contentContainerStyle}
-    >
-      {children}
-    </BottomSheetScrollView>
-  );
+  return useMemo(() => {
+    if (typeof children === 'function') {
+      const ChildrenComponent = children;
+
+      return ({data}: {data?: T | undefined}) => (
+        <BottomSheetScrollView
+          keyboardShouldPersistTaps="handled"
+          alwaysBounceVertical={false}
+          contentContainerStyle={contentContainerStyle}
+        >
+          <ChildrenComponent data={data} />
+        </BottomSheetScrollView>
+      );
+    }
+
+    return (
+      <BottomSheetScrollView
+        keyboardShouldPersistTaps="handled"
+        alwaysBounceVertical={false}
+        contentContainerStyle={contentContainerStyle}
+      >
+        {children}
+      </BottomSheetScrollView>
+    );
+  }, [children, contentContainerStyle]);
 };
 
 const useInternalBottomSheetModalRef = <T extends any>(
