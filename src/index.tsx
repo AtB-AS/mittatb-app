@@ -1,4 +1,6 @@
 import 'react-native-get-random-values';
+import {enableScreens} from 'react-native-screens';
+enableScreens(true);
 
 import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
