@@ -1,0 +1,24 @@
+diff --git a/node_modules/react-native-worklets/Common/cpp/worklets/NativeModules/WorkletsModuleProxy.h b/node_modules/react-native-worklets/Common/cpp/worklets/NativeModules/WorkletsModuleProxy.h
+index 0e54e9d..316cfcb 100644
+--- a/node_modules/react-native-worklets/Common/cpp/worklets/NativeModules/WorkletsModuleProxy.h
++++ b/node_modules/react-native-worklets/Common/cpp/worklets/NativeModules/WorkletsModuleProxy.h
+@@ -2,7 +2,6 @@
+ 
+ #include <cxxreact/MessageQueueThread.h>
+ #include <jsi/jsi.h>
+-#include <jsireact/JSIExecutor.h>
+ #include <worklets/AnimationFrameQueue/AnimationFrameBatchinator.h>
+ #include <worklets/NativeModules/JSIWorkletsModuleProxy.h>
+ #include <worklets/SharedItems/MemoryManager.h>
+diff --git a/node_modules/react-native-worklets/Common/cpp/worklets/WorkletRuntime/WorkletRuntime.h b/node_modules/react-native-worklets/Common/cpp/worklets/WorkletRuntime/WorkletRuntime.h
+index 715c700..58f808b 100644
+--- a/node_modules/react-native-worklets/Common/cpp/worklets/WorkletRuntime/WorkletRuntime.h
++++ b/node_modules/react-native-worklets/Common/cpp/worklets/WorkletRuntime/WorkletRuntime.h
+@@ -2,7 +2,6 @@
+ 
+ #include <cxxreact/MessageQueueThread.h>
+ #include <jsi/jsi.h>
+-#include <jsireact/JSIExecutor.h>
+ #include <react/debug/react_native_assert.h>
+ 
+ #include <worklets/RunLoop/AsyncQueue.h>
