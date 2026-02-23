@@ -92,9 +92,14 @@ jobs:
           ANDROID_PACKAGE_NAME: ${{ env.ANDROID_APPLICATION_ID }}
       - name: Setup Bugsnag CLI
         uses: ./.github/actions/setup-bugsnag-cli
-      - name: Upload bundle and source maps
+      - name: Upload JS bundle and source maps
         if: github.event_name != 'workflow_dispatch'
         run: bash ./scripts/android/upload-sourcemaps.sh
+        env:
+          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
+      - name: Upload Android proguard files
+        if: github.event_name != 'workflow_dispatch'
+        run: bash ./scripts/android/upload-proguard.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Register app version
