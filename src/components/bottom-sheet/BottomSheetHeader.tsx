@@ -47,11 +47,11 @@ export const BottomSheetHeader = ({
             <View style={styles.headerLeft}>
               {heading && (
                 <>
-                  {logoUrl
-                    ? logoUrl && (
-                        <BrandingImage logoUrl={logoUrl} logoSize={28} />
-                      )
-                    : logoIcon && logoIcon}
+                  {logoUrl ? (
+                    <BrandingImage logoUrl={logoUrl} logoSize={28} />
+                  ) : (
+                    logoIcon && logoIcon
+                  )}
                   <View style={styles.headingWrapper} accessible ref={focusRef}>
                     <ThemeText typography="heading__xl">{heading}</ThemeText>
                     {subText && (
