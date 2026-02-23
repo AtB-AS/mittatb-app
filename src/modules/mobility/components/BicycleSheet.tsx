@@ -32,6 +32,7 @@ import {
   BottomSheetHeaderType,
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
+import {TransportationIconBox} from '@atb/components/icon-box';
 
 type Props = {
   vehicleId: VehicleId;
@@ -71,10 +72,18 @@ export const BicycleSheet = ({
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
-      heading={operatorName}
-      subText={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
+      heading={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
+      subText={operatorName}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      logoUrl={brandLogoUrl}
+      logoIcon={
+        <TransportationIconBox
+          mode="bicycle"
+          isFlexible={false}
+          size="normal"
+          type="compact"
+          overrideBorderRadius="50%"
+        />
+      }
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >
