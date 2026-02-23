@@ -131,7 +131,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
 
             {error && !isLoading && (
               <MessageInfoBox
-                a11yLiveRegion='polite'
+                a11yLiveRegion="polite"
                 style={styles.messageBox}
                 type="error"
                 message={t(LoginTexts.confirmCode.errors[error])}
