@@ -1,10 +1,9 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useEffect} from 'react';
 import {StyleProp, ViewStyle, Dimensions, View} from 'react-native';
-import {Canvas, Circle, Group, Line, SkPoint} from '@shopify/react-native-skia';
-import Animated, {
+import {Canvas, Group, Line, SkPoint} from '@shopify/react-native-skia';
+import {
   useSharedValue,
-  useAnimatedStyle,
   withRepeat,
   withTiming,
   interpolate,
