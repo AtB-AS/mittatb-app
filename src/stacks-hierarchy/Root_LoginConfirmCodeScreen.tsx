@@ -6,12 +6,7 @@ import {
   useAuthContext,
 } from '@atb/modules/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  ScrollView,
-  View,
-} from 'react-native';
+import {KeyboardAvoidingView, ScrollView, View} from 'react-native';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
@@ -25,6 +20,7 @@ import {useOnboardingContext} from '@atb/modules/onboarding';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
+import {Loading} from '@atb/components/loading';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -122,7 +118,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
           </Section>
           <View style={styles.buttonView}>
             {isLoading && (
-              <ActivityIndicator
+              <Loading
                 style={styles.activityIndicator}
                 size="large"
                 color={themeColor.foreground.primary}

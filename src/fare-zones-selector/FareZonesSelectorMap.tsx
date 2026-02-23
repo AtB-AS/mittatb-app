@@ -1,6 +1,6 @@
 import {FareZoneResultType, type FareZoneWithMetadata} from './types';
 import {FareZoneResults} from './FareZoneResults';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {Language, FareZonesTexts, useTranslation} from '@atb/translations';
 import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
@@ -30,6 +30,7 @@ import {
   useSelectableFareZones,
 } from '@atb/modules/purchase-selection';
 import {decodePolylineEncodedGeometry} from '@atb/utils/decode-polyline-geometry';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   selection: PurchaseSelectionType;
@@ -123,7 +124,7 @@ const FareZonesSelectorMap = ({
         </>
       ) : !initialCoordinates ? (
         <View style={styles.waitingForInitialCoords}>
-          <ActivityIndicator size="large" />
+          <Loading size="large" />
         </View>
       ) : (
         <>

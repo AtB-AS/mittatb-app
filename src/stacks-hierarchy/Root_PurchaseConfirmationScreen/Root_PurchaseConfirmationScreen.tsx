@@ -25,7 +25,7 @@ import {
 } from '@atb/translations';
 import {addMinutes} from 'date-fns';
 import React, {RefObject, useCallback, useRef, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {
   savePreviousPayment,
@@ -57,6 +57,7 @@ import {ScreenHeading} from '@atb/components/heading';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useProductAlternatives} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {Loading} from '@atb/components/loading';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -407,7 +408,7 @@ const PaymentButton = ({
 
   if (isSearchingOffer)
     return (
-      <ActivityIndicator
+      <Loading
         size="large"
         color={theme.color.foreground.dynamic.primary}
         style={{margin: theme.spacing.medium}}
@@ -442,7 +443,7 @@ const PaymentButton = ({
           <ThemeText>
             {t(PurchaseConfirmationTexts.waitingForPayment)}
           </ThemeText>
-          <ActivityIndicator />
+          <Loading />
         </View>
         <Button
           expanded={true}

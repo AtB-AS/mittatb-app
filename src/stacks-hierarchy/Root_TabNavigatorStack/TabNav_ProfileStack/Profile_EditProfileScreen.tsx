@@ -1,5 +1,5 @@
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
-import {ActivityIndicator, Alert, Linking, View} from 'react-native';
+import {Alert, Linking, View} from 'react-native';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import React, {useEffect, useState} from 'react';
 import {dictionary, useTranslation} from '@atb/translations';
@@ -24,6 +24,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {ErrorResponse} from '@atb-as/utils';
 import {errorDetailsToResponseData} from '@atb/api/utils';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {Loading} from '@atb/components/loading';
 
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;
 
@@ -156,7 +157,7 @@ export const Profile_EditProfileScreen = ({
               {t(EditProfileTexts.personalDetails.header)}
             </ThemeText>
             {(isLoadingGetProfile || isRefetchingProfile) && (
-              <ActivityIndicator size="large" />
+              <Loading size="large" />
             )}
           </View>
           {isErrorGetProfile ? (

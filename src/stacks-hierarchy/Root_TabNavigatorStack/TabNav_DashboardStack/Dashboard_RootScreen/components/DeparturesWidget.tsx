@@ -18,7 +18,7 @@ import {
 import {Coordinates} from '@atb/utils/coordinates';
 import haversineDistance from 'haversine-distance';
 import React, {useRef} from 'react';
-import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {useFavoriteDeparturesQuery} from '../use-favorite-departures-query';
 import {ThemedNoFavouriteDepartureImage} from '@atb/theme/ThemedAssets';
 import {
@@ -29,6 +29,7 @@ import {
 import {ContentHeading} from '@atb/components/heading';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   onEditFavouriteDeparture: () => void;
@@ -101,7 +102,7 @@ export const DeparturesWidget = ({
         </Section>
       )}
       {favoriteDeparturesIsLoading && (
-        <ActivityIndicator size="large" style={styles.activityIndicator} />
+        <Loading size="large" style={styles.activityIndicator} />
       )}
       {sortedStopPlaceGroups?.map((stopPlaceGroup) => (
         <View key={stopPlaceGroup.stopPlace.id} testID="favoriteDepartures">

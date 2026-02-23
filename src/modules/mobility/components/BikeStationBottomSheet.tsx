@@ -7,7 +7,7 @@ import {
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet} from '@atb/theme';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {useBikeStation} from '../use-bike-station';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useOperatorBenefit} from '../use-operator-benefit';
@@ -35,6 +35,7 @@ import {
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   stationId: string;
@@ -98,7 +99,7 @@ export const BikeStationBottomSheet = ({
       <>
         {isLoading && (
           <View style={styles.activityIndicator}>
-            <ActivityIndicator size="large" />
+            <Loading size="large" />
           </View>
         )}
         {!isLoading && !isError && station && (

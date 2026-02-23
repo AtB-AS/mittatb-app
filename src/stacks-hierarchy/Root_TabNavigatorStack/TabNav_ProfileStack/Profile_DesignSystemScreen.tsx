@@ -39,6 +39,7 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {Tag} from '@atb/components/tag';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
+import {Loading} from '@atb/components/loading';
 
 type DesignSystemScreenProps = ProfileScreenProps<'Profile_DesignSystemScreen'>;
 
@@ -274,6 +275,8 @@ export const Profile_DesignSystemScreen = ({
                 />
               ))}
             </View>
+            <Loading size="large" />
+            <Loading size="small" />
           </GenericSectionItem>
         </Section>
 

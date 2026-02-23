@@ -2,7 +2,6 @@ import React from 'react';
 import {
   AccessibilityInfo,
   AccessibilityProps,
-  ActivityIndicator,
   Platform,
   View,
 } from 'react-native';
@@ -18,6 +17,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {RadioIcon} from '@atb/components/radio';
 import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {dictionary, useTranslation} from '@atb/translations';
+import {Loading} from '@atb/components/loading';
 
 type Props = SectionItemProps<{
   text: string;
@@ -117,7 +117,7 @@ export function RadioSectionItem({
           accessibilityRole="button"
         >
           {rightAction.isLoading ? (
-            <ActivityIndicator />
+            <Loading />
           ) : (
             <ThemeIcon svg={rightAction.icon} />
           )}
