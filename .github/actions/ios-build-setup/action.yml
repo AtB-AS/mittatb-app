@@ -44,9 +44,9 @@ runs:
         id: modules-cache
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
           restore-keys: |
-            ${{ runner.os }}-node-modules-
+            node-modules-${{ runner.os }}-
       - name: Install node_modules
         if: steps.modules-cache.outputs.cache-hit != 'true'
         shell: bash

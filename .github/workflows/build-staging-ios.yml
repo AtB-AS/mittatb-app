@@ -74,9 +74,9 @@ jobs:
         with:
           lookup-only: ${{ steps.pods-cache.outputs.cache-hit == 'true' }}
           path: '**/node_modules'
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
           restore-keys: |
-            ${{ runner.os }}-node-modules-
+            node-modules-${{ runner.os }}-
       # ===== Install node-modules  =====
       - name: Install node v22
         uses: actions/setup-node@v5
