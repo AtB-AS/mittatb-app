@@ -1,5 +1,4 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {ThemeText} from '@atb/components/text';
 import {DetailsContent} from '@atb/modules/fare-contracts';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
 import {findReferenceDataById} from '@atb/modules/configuration';
@@ -9,7 +8,7 @@ import {TravelRightDirection, FareContractType} from '@atb-as/utils';
 import {addDays} from 'date-fns';
 import React, {useCallback} from 'react';
 import {View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {FlatList} from 'react-native-gesture-handler';
 import {useAuthContext} from '@atb/modules/auth';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import {ProfileScreenProps} from './navigation-types';
@@ -194,6 +193,21 @@ export const Profile_FareContractsScreen = ({navigation}: Props) => {
     YOUTH_TICKET,
   ] as FareContractType[];
 
+  const cardData = [RESERVATION, ...fareContracts].map((item) => ({
+    category: 'card',
+    ...item,
+  })) as ({category: 'card'} & (FareContractType | Reservation))[];
+
+  const detailsData = fareContracts.map((item) => ({
+    category: 'details',
+    ...item,
+  })) as ({category: 'details'} & FareContractType)[];
+
+  const data: ({category: 'card' | 'details'} & (
+    | FareContractType
+    | Reservation
+  ))[] = [...cardData, ...detailsData];
+
   const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
 
   const onNavigateToBonusScreen = useCallback(() => {
@@ -212,48 +226,43 @@ export const Profile_FareContractsScreen = ({navigation}: Props) => {
   return (
     <View style={styles.container}>
       <FullScreenHeader title="Fare Contracts" leftButton={{type: 'back'}} />
-      <ScrollView
+      <FlatList
+        data={data}
+        initialNumToRender={3}
+        maxToRenderPerBatch={3}
+        renderItem={({item, index}) => {
+          if (item.category === 'card') {
+            return (
+              <FareContractOrReservation
+                key={index}
+                index={index}
+                fcOrReservation={item}
+                now={Date.now()}
+                onPressFareContract={() => {}}
+                onNavigateToBonusScreen={onNavigateToBonusScreen}
+                onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
+              />
+            );
+          }
+          return (
+            <DetailsContent
+              key={index}
+              fareContract={item as FareContractType}
+              preassignedFareProduct={getPreassignedFareProduct(
+                (item as FareContractType).travelRights[0].fareProductRef,
+              )}
+              now={Date.now()}
+              onReceiptNavigate={() => {}}
+              onNavigateToMap={() => {}}
+              onSupportNavigate={() => {}}
+              onNavigateToBonusScreen={onNavigateToBonusScreen}
+              onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
+            />
+          );
+        }}
         style={styles.content}
         contentContainerStyle={styles.contentContainer}
-      >
-        <ThemeText typography="heading__2xl">Reservation</ThemeText>
-        <FareContractOrReservation
-          index={0}
-          onPressFareContract={() => {}}
-          fcOrReservation={RESERVATION}
-          now={Date.now()}
-          onNavigateToBonusScreen={onNavigateToBonusScreen}
-          onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
-        />
-        <ThemeText typography="heading__2xl">Fare Contracts</ThemeText>
-        {fareContracts.map((fc, i) => (
-          <FareContractOrReservation
-            key={i}
-            index={i}
-            fcOrReservation={fc}
-            now={Date.now()}
-            onPressFareContract={() => {}}
-            onNavigateToBonusScreen={onNavigateToBonusScreen}
-            onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
-          />
-        ))}
-        <ThemeText typography="heading__2xl">Fare contract details</ThemeText>
-        {fareContracts.map((fc, i) => (
-          <DetailsContent
-            key={i}
-            fareContract={fc}
-            preassignedFareProduct={getPreassignedFareProduct(
-              fc.travelRights[0].fareProductRef,
-            )}
-            now={Date.now()}
-            onReceiptNavigate={() => {}}
-            onNavigateToMap={() => {}}
-            onSupportNavigate={() => {}}
-            onNavigateToBonusScreen={onNavigateToBonusScreen}
-            onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
-          />
-        ))}
-      </ScrollView>
+      />
     </View>
   );
 };
