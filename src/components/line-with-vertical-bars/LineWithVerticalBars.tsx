@@ -100,11 +100,14 @@ const VerticalLine = ({
     return {
       transform: [
         {
-          translateX: interpolate(
-            offset.value,
-            [0, 1],
-            [SPACE_BETWEEN_VERTICAL_LINES, 0],
-          ),
+          translateX:
+            interpolate(
+              offset.value,
+              [0, 1],
+              [SPACE_BETWEEN_VERTICAL_LINES, 0],
+            ) +
+            index * SPACE_BETWEEN_VERTICAL_LINES -
+            10,
         },
         {
           rotateZ: '30deg',
@@ -119,7 +122,6 @@ const VerticalLine = ({
         styles.verticalLine,
         {
           backgroundColor: color,
-          left: index * SPACE_BETWEEN_VERTICAL_LINES - 10,
         },
         animatedStyle,
       ]}
