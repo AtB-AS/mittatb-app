@@ -4,7 +4,7 @@ import React, {useCallback} from 'react';
 import {Button} from '@atb/components/button';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {ActivityIndicator, Linking} from 'react-native';
+import {Linking} from 'react-native';
 import {useValueCodeMutation} from '../queries/use-value-code-mutation';
 import {useIsEligibleForBenefit} from '../use-is-eligible-for-benefit';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -14,6 +14,7 @@ import {stringifyUrl} from '@atb/api/utils';
 import {useOperators} from '../use-operators';
 import {useOperatorBenefit} from '../use-operator-benefit';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {Loading} from '@atb/components/loading';
 
 type OperatorActionButtonProps = {
   operatorId: string | undefined;
@@ -150,7 +151,7 @@ export const OperatorActionButton = ({
   ]);
 
   if (isLoading) {
-    return <ActivityIndicator />;
+    return <Loading />;
   }
 
   if (hasError) {

@@ -1,8 +1,8 @@
 import {TextNames} from '@atb/theme';
-import {ActivityIndicator} from 'react-native';
 import {useBonusBalanceQuery} from '..';
 import {ThemeText} from '@atb/components/text';
 import {isDefined} from '@atb/utils/presence';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   typography: TextNames;
@@ -16,7 +16,7 @@ export const UserBonusBalance = ({color, typography}: Props) => {
   return (
     <>
       {userBonusBalanceStatus === 'pending' ? (
-        <ActivityIndicator />
+        <Loading />
       ) : (
         <ThemeText typography={typography} color={color}>
           {isDefined(userBonusBalance) &&

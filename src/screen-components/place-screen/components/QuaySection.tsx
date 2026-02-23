@@ -12,7 +12,7 @@ import {useFavoritesContext} from '@atb/modules/favorites';
 import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {
   isSituationValidAtDate,
@@ -22,6 +22,7 @@ import {EstimatedCallList} from './EstimatedCallList';
 import {isValidDepartureTime} from '@atb/departure-list/utils';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {useNow} from '@atb/utils/use-now';
+import {Loading} from '@atb/components/loading';
 
 export type QuaySectionProps = {
   quay: Quay;
@@ -161,7 +162,7 @@ export function QuaySection({
         {isLoading && !isMinimized && (
           <GenericSectionItem>
             <View style={{width: '100%'}}>
-              <ActivityIndicator />
+              <Loading />
             </View>
           </GenericSectionItem>
         )}
