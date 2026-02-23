@@ -41,9 +41,10 @@ permissions:
 jobs:
   detect-changes:
     name: Detect changes
+    if: inputs.force-build != 'true'
     runs-on: ubuntu-latest
     outputs:
-      should_build: ${{ steps.detect.outputs.should_build || inputs.force-build == 'true' }}
+      should_build: ${{ steps.detect.outputs.should_build }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -54,7 +55,7 @@ jobs:
 
   setup:
     needs: detect-changes
-    if: needs.detect-changes.outputs.should_build == 'true'
+    if: ${{ !failure() && (inputs.force-build == 'true' || needs.detect-changes.outputs.should_build == 'true') }}
     name: Install tools and warm up caches
     runs-on: ubuntu-latest
     outputs:
@@ -105,7 +106,9 @@ jobs:
         with:
           lookup-only: ${{ inputs.force-build != 'true' }}
           path: '**/node_modules'
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
       - name: Install node v22
         uses: actions/setup-node@v5
         if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
