@@ -112,6 +112,10 @@ const mapToTransportModeFilterOption = (
   const typeConfigPotential = TransportModeFilterOption.safeParse(filter);
 
   if (!typeConfigPotential.success) {
+    console.warn(
+      `mapToTransportModeFilterOption failed safeParsing:\n`,
+      typeConfigPotential.error,
+    );
     return;
   }
   return typeConfigPotential.data;
@@ -120,6 +124,10 @@ const mapToTransportModeFilterOption = (
 export const mapToTravelSearchPreferences = (preferences: any) => {
   const parseResult = TravelSearchPreference.array().safeParse(preferences);
   if (!parseResult.success) {
+    console.warn(
+      `mapToTravelSearchPreferences failed safeParsing:\n`,
+      parseResult.error,
+    );
     return;
   }
   return parseResult.data;
@@ -151,6 +159,10 @@ export function mapToMobilityOperators(operators?: any) {
     .map((operator) => {
       const parseResult = MobilityOperator.safeParse(operator);
       if (!parseResult.success) {
+        console.warn(
+          `mapToMobilityOperators with id ${operator?.id} failed safeParsing:\n`,
+          parseResult.error,
+        );
         return;
       }
       return parseResult.data;
@@ -165,6 +177,10 @@ export function mapToScooterFaqs(scooterFaqs?: any) {
     .map((scooterFaq) => {
       const parseResult = ScooterFaq.safeParse(scooterFaq);
       if (!parseResult.success) {
+        console.warn(
+          `mapToScooterFaqs with id ${scooterFaq?.id} failed safeParsing:\n`,
+          parseResult.error,
+        );
         return;
       }
       return parseResult.data;
@@ -179,6 +195,10 @@ export function mapToScooterConsentLines(scooterConsentLines?: any) {
     .map((scooterConsentLine) => {
       const parseResult = ScooterConsentLine.safeParse(scooterConsentLine);
       if (!parseResult.success) {
+        console.warn(
+          `mapToScooterConsentLines with id ${scooterConsentLine?.id} failed safeParsing:\n`,
+          parseResult.error,
+        );
         return;
       }
       return parseResult.data;
@@ -193,6 +213,10 @@ export function mapToBonusProducts(bonusProducts?: any) {
     .map((bonusProduct) => {
       const parseResult = BonusProduct.safeParse(bonusProduct);
       if (!parseResult.success) {
+        console.warn(
+          `mapToBonusProducts with id ${bonusProduct?.id} failed safeParsing:\n`,
+          parseResult.error,
+        );
         return;
       }
       return parseResult.data;
@@ -204,6 +228,7 @@ export function mapToBonusTexts(bonusTexts?: any) {
   if (!bonusTexts) return;
   const parseResult = BonusTexts.safeParse(bonusTexts);
   if (!parseResult.success) {
+    console.warn(`mapToBonusTexts failed safeParsing:\n`, parseResult.error);
     return;
   }
   return parseResult.data;
@@ -220,6 +245,10 @@ export function mapToBenefitIdsRequiringValueCode(
         benefitIdRequiringValueCode,
       );
       if (!parseResult.success) {
+        console.warn(
+          `mapToBenefitIdsRequiringValueCode with id ${benefitIdRequiringValueCode} failed safeParsing:\n`,
+          parseResult.error,
+        );
         return;
       }
       return parseResult.data;
@@ -234,6 +263,10 @@ export function mapToHarborConnectionOverride(overrides?: any) {
     .map((override) => {
       const parseResult = HarborConnectionOverride.safeParse(override);
       if (!parseResult.success) {
+        console.warn(
+          `mapToHarborConnectionOverride with id ${override?.id} failed safeParsing:\n`,
+          parseResult.error,
+        );
         return;
       }
       return parseResult.data;
@@ -246,6 +279,10 @@ export function mapToNotificationConfig(config?: any) {
   if (!(typeof config === 'object')) return;
   const parseResult = NotificationConfig.safeParse(config);
   if (!parseResult.success) {
+    console.warn(
+      `mapToNotificationConfig failed safeParsing:\n`,
+      parseResult.error,
+    );
     return;
   }
   return parseResult.data;
