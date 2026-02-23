@@ -42,7 +42,7 @@ runs:
     - name: Set sourcemaps directory
       shell: bash
       run: |
-        echo "BUNDLE_PATH=android/app/build/generated/assets/react/$(echo ${APP_FLAVOR^}${APP_ENVIRONMENT^})/index.android.bundle" >> $GITHUB_ENV
+        echo "BUNDLE_PATH=android/app/build/generated/assets/react/$(echo ${APP_FLAVOR}${APP_ENVIRONMENT^})/index.android.bundle" >> $GITHUB_ENV
         echo "SOURCEMAP_PATH=android/app/build/generated/sourcemaps/react/$(echo $APP_FLAVOR${APP_ENVIRONMENT^})/index.android.bundle.map" >> $GITHUB_ENV
     - name: Upload bundle and source maps
       shell: bash
