@@ -1,6 +1,7 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useEffect} from 'react';
 import {StyleProp, ViewStyle, Dimensions, View} from 'react-native';
+import {Canvas, Circle, Group, Line, SkPoint} from '@shopify/react-native-skia';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -9,6 +10,7 @@ import Animated, {
   interpolate,
   Easing,
   SharedValue,
+  useDerivedValue,
 } from 'react-native-reanimated';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
@@ -38,14 +40,18 @@ export const LineWithVerticalBars = ({
           style,
         ]}
       >
-        {[...Array(numberOfVerticalLines)].map((e, i) => (
-          <VerticalLine
-            key={i}
-            offset={animatedVerticalLineOffset}
-            index={i}
-            color={lineColor}
-          />
-        ))}
+        <Canvas style={{width: '100%', height: 50}}>
+          <Group blendMode="multiply">
+            {[...Array(numberOfVerticalLines)].map((e, i) => (
+              <VerticalLine
+                key={i}
+                offset={animatedVerticalLineOffset}
+                index={i}
+                color={lineColor}
+              />
+            ))}
+          </Group>
+        </Canvas>
       </View>
     </View>
   );
@@ -95,39 +101,21 @@ const VerticalLine = ({
   index: number;
   color: string;
 }) => {
-  const styles = useStyles();
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateX:
-            interpolate(
-              offset.value,
-              [0, 1],
-              [SPACE_BETWEEN_VERTICAL_LINES, 0],
-            ) +
-            index * SPACE_BETWEEN_VERTICAL_LINES -
-            10,
-        },
-        {
-          rotateZ: '30deg',
-        },
-      ],
-    };
-  });
-
-  return (
-    <Animated.View
-      style={[
-        styles.verticalLine,
-        {
-          backgroundColor: color,
-        },
-        animatedStyle,
-      ]}
-      pointerEvents="none"
-    />
-  );
+  const p1 = useDerivedValue<SkPoint>(() => ({
+    x:
+      interpolate(offset.value, [0, 1], [SPACE_BETWEEN_VERTICAL_LINES, 0]) +
+      index * SPACE_BETWEEN_VERTICAL_LINES -
+      10,
+    y: -10,
+  }));
+  const p2 = useDerivedValue<SkPoint>(() => ({
+    x:
+      interpolate(offset.value, [0, 1], [SPACE_BETWEEN_VERTICAL_LINES, 0]) +
+      index * SPACE_BETWEEN_VERTICAL_LINES +
+      20,
+    y: 30,
+  }));
+  return <Line p1={p1} p2={p2} strokeWidth={10} color={color} />;
 };
 const useStyles = StyleSheet.createThemeHook(() => ({
   container: {
