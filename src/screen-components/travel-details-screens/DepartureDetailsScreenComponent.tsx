@@ -37,7 +37,7 @@ import {
 } from '@atb/utils/transportation-names';
 import React, {Ref, useCallback, useRef, useState} from 'react';
 import {useTransportColor} from '@atb/utils/use-transport-color';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {Time} from './components/Time';
 import {TripLegDecoration} from './components/TripLegDecoration';
 import {TripRow} from './components/TripRow';
@@ -89,6 +89,7 @@ import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {Loading} from '@atb/components/loading';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -436,7 +437,7 @@ export const DepartureDetailsScreenComponent = ({
 
           {isLoading && (
             <View>
-              <ActivityIndicator
+              <Loading
                 color={theme.color.foreground.dynamic.primary}
                 style={styles.spinner}
                 animating={true}

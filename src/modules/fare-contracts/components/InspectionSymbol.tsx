@@ -1,6 +1,6 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -14,6 +14,7 @@ import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {SvgProps} from 'react-native-svg';
 import {useFareProductColor} from '../use-fare-product-color';
+import {Loading} from '@atb/components/loading';
 
 export type InspectionSymbolProps = {
   preassignedFareProduct?: PreassignedFareProduct;
@@ -27,7 +28,7 @@ export const InspectionSymbol = ({
   const {isInspectable, mobileTokenStatus} = useMobileTokenContext();
 
   if (mobileTokenStatus === 'loading') {
-    return <ActivityIndicator size="large" />;
+    return <Loading size="large" />;
   }
 
   return isInspectable && !sentTicket ? (

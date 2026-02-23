@@ -1,15 +1,13 @@
 import React from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
+import {Loading} from '../loading';
 
-export const ActivityIndicatorOverlay = () => {
+export const LoadingOverlay = () => {
   const styles = useStyles();
   return (
     <View style={styles.spinner}>
-      <ActivityIndicator
-        size="large"
-        color={styles.activityIndicator.backgroundColor}
-      />
+      <Loading size="large" color={styles.activityIndicator.backgroundColor} />
     </View>
   );
 };

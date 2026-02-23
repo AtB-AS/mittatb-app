@@ -12,7 +12,7 @@ import {StyleSheet, Theme} from '@atb/theme';
 import {dictionary, ProfileTexts, useTranslation} from '@atb/translations';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {forwardRef} from 'react';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -20,6 +20,7 @@ import {
   ThemedProfileCardLoggedIn,
   ThemedProfileCardLoggedOut,
 } from '@atb/theme/ThemedAssets';
+import {Loading} from '@atb/components/loading';
 
 type UserInfoProps = {
   navigateToEditProfileScreen: () => void;
@@ -39,7 +40,7 @@ export const UserInfo = ({navigateToEditProfileScreen}: UserInfoProps) => {
         <GenericSectionItem
           style={{justifyContent: 'center', flexDirection: 'row'}}
         >
-          <ActivityIndicator />
+          <Loading />
         </GenericSectionItem>
       )}
 

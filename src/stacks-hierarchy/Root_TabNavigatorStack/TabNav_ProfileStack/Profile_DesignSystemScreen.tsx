@@ -39,6 +39,7 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {Tag} from '@atb/components/tag';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
+import {Loading} from '@atb/components/loading';
 
 type DesignSystemScreenProps = ProfileScreenProps<'Profile_DesignSystemScreen'>;
 
@@ -83,12 +84,20 @@ export const Profile_DesignSystemScreen = ({
   const backgroundSwatches = [
     ...Object.entries(theme.color.background.neutral).map(([key, color]) => {
       return (
-        <Swatch color={color} name={`background neutral ${key}`} key={key} />
+        <Swatch
+          color={color}
+          name={`background neutral ${key}`}
+          key={'neutral-' + key}
+        />
       );
     }),
     ...Object.entries(theme.color.background.accent).map(([key, color]) => {
       return (
-        <Swatch color={color} name={`background accent ${key}`} key={key} />
+        <Swatch
+          color={color}
+          name={`background accent ${key}`}
+          key={'accent-' + key}
+        />
       );
     }),
   ];
@@ -176,7 +185,7 @@ export const Profile_DesignSystemScreen = ({
           <HeaderSectionItem text="Icons" />
 
           <GenericSectionItem>
-            <View style={styles.icons}>
+            <View style={styles.contentContainer}>
               <ThemeIcon svg={Check} />
               <ThemeIcon svg={Check} color="info" />
               <ThemeIcon svg={Check} color="warning" />
@@ -186,7 +195,7 @@ export const Profile_DesignSystemScreen = ({
               <ThemeIcon svg={Ticket} color="error" />
               <ThemeIcon svg={Ticket} size="large" />
             </View>
-            <View style={styles.icons}>
+            <View style={styles.contentContainer}>
               <ThemeText style={{marginRight: 12}}>
                 With notification indicators:
               </ThemeText>
@@ -217,7 +226,7 @@ export const Profile_DesignSystemScreen = ({
                 notification={{color: theme.color.status.error.primary}}
               />
             </View>
-            <View style={styles.icons}>
+            <View style={styles.contentContainer}>
               <ThemeText style={{marginRight: 12}}>
                 And notification spacing:
               </ThemeText>
@@ -260,7 +269,7 @@ export const Profile_DesignSystemScreen = ({
                 }}
               />
             </View>
-            <View style={styles.icons}>
+            <View style={styles.contentContainer}>
               <TransportationIconBox
                 style={styles.transportationIcon}
                 mode={Mode.Bus}
@@ -273,6 +282,30 @@ export const Profile_DesignSystemScreen = ({
                   mode={mode}
                 />
               ))}
+            </View>
+          </GenericSectionItem>
+        </Section>
+
+        <Section style={styles.section}>
+          <HeaderSectionItem text="Loading" />
+
+          <GenericSectionItem>
+            <ThemeText>Default</ThemeText>
+            <View style={styles.contentContainer}>
+              <Loading size="large" />
+              <Loading size="small" />
+            </View>
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <ThemeText>Custom color</ThemeText>
+            <View style={styles.contentContainer}>
+              <Loading
+                color={theme.color.background.neutral[0].foreground.primary}
+              />
+              <Loading
+                color={theme.color.foreground.dynamic.primary}
+                size="small"
+              />
             </View>
           </GenericSectionItem>
         </Section>
@@ -1287,7 +1320,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   transportationIcon: {
     marginRight: theme.spacing.xSmall,
   },
-  icons: {
+  contentContainer: {
     flexDirection: 'row',
     marginBottom: theme.spacing.small,
     flexWrap: 'wrap',

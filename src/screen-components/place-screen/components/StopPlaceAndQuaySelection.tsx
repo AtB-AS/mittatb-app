@@ -1,10 +1,11 @@
 import {FlatList} from 'react-native-gesture-handler';
-import {ActivityIndicator, ViewStyle} from 'react-native';
+import {ViewStyle} from 'react-native';
 import {Button} from '@atb/components/button';
 import React from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {StopPlace, Quay} from '@atb/api/types/departures';
+import {Loading} from '@atb/components/loading';
 
 type quayChipData = {
   item: Quay;
@@ -39,7 +40,7 @@ const StopPlaceAndQuaySelection = ({
       ListHeaderComponent={
         <>
           {isMissingQuays ? (
-            <ActivityIndicator size="large" />
+            <Loading size="large" />
           ) : (
             <Button
               expanded={true}
