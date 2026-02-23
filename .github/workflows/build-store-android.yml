@@ -97,6 +97,11 @@ jobs:
         run: bash ./scripts/android/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
+      - name: Upload Android NDK files
+        if: github.event_name != 'workflow_dispatch'
+        run: bash ./scripts/android/upload-ndk.sh
+        env:
+          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}    
       - name: Upload Android proguard files
         if: github.event_name != 'workflow_dispatch'
         run: bash ./scripts/android/upload-proguard.sh
