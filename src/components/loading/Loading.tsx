@@ -1,19 +1,17 @@
 import {
   BlurMask,
   Canvas,
+  Group,
   Path,
   Skia,
   SweepGradient,
   vec,
 } from '@shopify/react-native-skia';
 import {Ref, useEffect, useMemo} from 'react';
-import {ActivityIndicatorProps} from 'react-native';
-import Animated, {
+import {View, ActivityIndicatorProps} from 'react-native';
+import {
   Easing,
-  FadeIn,
-  FadeOut,
   interpolate,
-  useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
   withRepeat,
@@ -66,14 +64,12 @@ export const Loading: React.FC<
     }
   }, [progress, animating]);
 
-  const rContainerStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{rotate: `${2 * Math.PI * progress.value}rad`}],
-    };
-  });
-
   const startPath = useDerivedValue(() => {
     return interpolate(progress.value, [0, 0.5, 1], [0.6, 0.3, 0.6]);
+  }, []);
+
+  const rotationTransform = useDerivedValue(() => {
+    return [{rotate: progress.value * 2 * Math.PI}];
   }, []);
 
   if (!animating && hidesWhenStopped) {
@@ -81,35 +77,34 @@ export const Loading: React.FC<
   }
 
   return (
-    <Animated.View
-      entering={FadeIn.duration(500)}
-      exiting={FadeOut.duration(500)}
-      style={[rContainerStyle, style]}
-      ref={ref}
-      {...props}
-    >
+    <View style={style} ref={ref} {...props}>
       <Canvas
         style={{
           width: canvasSize,
           height: canvasSize,
         }}
       >
-        <Path
-          path={circle}
-          color="red"
-          style="stroke"
-          strokeWidth={strokeWidth}
-          start={startPath}
-          end={1}
-          strokeCap="round"
+        <Group
+          origin={{x: canvasSize / 2, y: canvasSize / 2}}
+          transform={rotationTransform}
         >
-          <SweepGradient
-            c={vec(canvasSize / 2, canvasSize / 2)}
-            colors={['cyan', 'magenta', 'yellow', 'cyan']}
-          />
-          <BlurMask blur={5} style="solid" />
-        </Path>
+          <Path
+            path={circle}
+            color="red"
+            style="stroke"
+            strokeWidth={strokeWidth}
+            start={startPath}
+            end={1}
+            strokeCap="round"
+          >
+            <SweepGradient
+              c={vec(canvasSize / 2, canvasSize / 2)}
+              colors={['cyan', 'magenta', 'yellow', 'cyan']}
+            />
+            <BlurMask blur={5} style="solid" />
+          </Path>
+        </Group>
       </Canvas>
-    </Animated.View>
+    </View>
   );
 };
