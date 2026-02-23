@@ -16,46 +16,13 @@ if [[
     exit 1
 else
     VARIANT="$APP_FLAVOR${APP_ENVIRONMENT^}"
-    SOURCEMAP_ARGS=""
-    if [[ "${BUNDLE_ONLY}" == "true" ]]; then
-    
-    # Dummy manifest only required as a workaround for this https://github.com/bugsnag/bugsnag-cli/issues/261
-    # Start Dummy manifest
-      MANIFEST_DIR="android/app/build/intermediates/merged_manifests/${VARIANT}"
-      mkdir -p "${MANIFEST_DIR}"
-      cat > "${MANIFEST_DIR}/AndroidManifest.xml" << EOF
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="${ANDROID_APPLICATION_ID}"
-    android:versionCode="${BUILD_ID}"
-    android:versionName="${APP_VERSION}">
-    <application>
-        <meta-data android:name="com.bugsnag.android.API_KEY" android:value="${BUGSNAG_API_KEY}"/>
-    </application>
-</manifest>
-EOF
-    ### End Dummy manifest
-      echo "Uploading sourcemaps from replaced bundle"
-      SOURCEMAP_ARGS="--bundle=${BUNDLE_PATH} --source-map=${SOURCEMAP_PATH}"
-      echo "${SOURCEMAP_ARGS}"
-    fi
-    echo "Uploading bugsnag mapping files for ${APP_VERSION}, ${BUILD_ID}, $APP_FLAVOR${APP_ENVIRONMENT^} ..."
-    echo "Uploading React Native source maps..."
-    bugsnag-cli upload react-native-android \
-      --verbose \
-      --version-name="${APP_VERSION}" \
-      --version-code="${BUILD_ID}" \
-      --api-key="${BUGSNAG_API_KEY}" \
-      --variant="${VARIANT}" \
-      ${SOURCEMAP_ARGS}
-
-    if [[ "${APP_ENVIRONMENT}" == "store" ]]; then
-      echo "Uploading ProGuard/R8 mappings"
-      bugsnag-cli upload android-proguard \
-        --api-key="${BUGSNAG_API_KEY}" \
-        --version-name="${APP_VERSION}" \
-        --version-code="${BUILD_ID}" \
-        --variant="${VARIANT}" \
-        --verbose
-    fi
+    bugsnag-cli upload react-native-sourcemaps \
+    --api-key="${BUGSNAG_API_KEY}" \
+    --version-name="${APP_VERSION}" \
+    --version-code="${BUILD_ID}" \
+    --source-map="${SOURCEMAP_PATH}" \
+    --bundle="${BUNDLE_PATH}" \
+    --platform=android \
+    --project-root=/Users/runner/work/mittatb-app/mittatb-app \
+    --verbose
 fi
