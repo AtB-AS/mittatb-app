@@ -1,4 +1,4 @@
-import {View, ActivityIndicator} from 'react-native';
+import {View} from 'react-native';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
@@ -10,6 +10,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
+import {Loading} from '@atb/components/loading';
 
 type LicensePlateInputSectionItemProps = {
   inputProps: {label?: string} & Omit<
@@ -86,7 +87,7 @@ export const LicensePlateSection = ({
       )}
       {!!showLoading && (
         <View style={styles.loadingBox}>
-          <ActivityIndicator />
+          <Loading />
         </View>
       )}
     </>
