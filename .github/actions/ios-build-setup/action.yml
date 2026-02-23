@@ -44,9 +44,13 @@ runs:
         id: modules-cache
         with:
           path: '**/node_modules'
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
           restore-keys: |
-            node-modules-
+            ${{ runner.os }}-node-modules-
+      - name: Install node_modules
+        if: steps.modules-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: yarn install --frozen-lockfile
       - name: Setup Xcode version
         uses: maxim-lobanov/setup-xcode@v1
         with:
