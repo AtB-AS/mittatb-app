@@ -21,6 +21,7 @@ import {getRealtimeState} from '@atb/utils/realtime';
 import {TravelSearchTransportModesType} from '@atb-as/config-specs';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {isDefined} from '@atb/utils/presence';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 
 export type TimeSearch = {
   searchTime: DateOptionAndValue<'now' | 'departure' | 'arrival'>;
@@ -53,11 +54,17 @@ export function transportModeToEnum(
   });
 }
 
+const getDateWithRoundedTime = (milliseconds: number) =>
+  new Date(Math.round(new Date().getTime() / milliseconds) * milliseconds);
+
 export const sanitizeSearchTime = (
   searchTime: DateOptionAndValue<'now' | 'departure' | 'arrival'>,
 ) =>
   searchTime.option === 'now'
-    ? {...searchTime, date: new Date().toISOString()}
+    ? {
+        ...searchTime,
+        date: getDateWithRoundedTime(5 * ONE_SECOND_MS).toISOString(), // round to nearest 5 seconds to avoid unnecessary calls
+      }
     : searchTime;
 
 export const areDefaultFiltersSelected = (
