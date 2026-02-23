@@ -1,6 +1,5 @@
 import {
   type AccessibilityProps,
-  ActivityIndicator,
   type StyleProp,
   View,
   type ViewStyle,
@@ -9,6 +8,7 @@ import type {PropsWithChildren} from 'react';
 import type {SvgProps} from 'react-native-svg';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
+import {Loading} from '../loading';
 
 type Props = PropsWithChildren<
   {
@@ -42,8 +42,8 @@ export function WithOverlayButton({
         ]}
       >
         {isLoading ? (
-          <View style={[styles.border, styles.activityIndicator]}>
-            <ActivityIndicator
+          <View style={[styles.border, styles.loading]}>
+            <Loading
               color={theme.color.foreground.dynamic.primary}
               size="small"
             />
@@ -79,7 +79,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderColor: theme.color.background.neutral[3].background,
     borderWidth: theme.border.width.slim,
   },
-  activityIndicator: {
+  loading: {
     padding: theme.spacing.medium,
     borderRadius: theme.border.radius.circle,
     backgroundColor: theme.color.interactive[2].default.background,

@@ -20,7 +20,7 @@ import {
 } from '@atb/translations';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
+import {Linking, ScrollView, View} from 'react-native';
 import queryString from 'query-string';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
@@ -33,6 +33,7 @@ import {
   closeInAppBrowseriOS,
   openInAppBrowser,
 } from '@atb/modules/in-app-browser';
+import {Loading} from '@atb/components/loading';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -170,9 +171,7 @@ export const Root_LoginOptionsScreen = ({
             {t(LoginTexts.logInOptions.title)}
           </ThemeText>
         </View>
-        {isLoading && (
-          <ActivityIndicator style={styles.activityIndicator} size="large" />
-        )}
+        {isLoading && <Loading style={styles.loading} size="large" />}
         {error && error !== 'access_denied' && (
           <MessageInfoBox
             style={styles.errorMessage}
@@ -258,7 +257,7 @@ const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
       marginVertical: theme.spacing.large,
       textAlign: 'center',
     },
-    activityIndicator: {
+    loading: {
       marginVertical: theme.spacing.large,
     },
     errorMessage: {

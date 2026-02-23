@@ -1,5 +1,5 @@
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 
 import React from 'react';
@@ -11,6 +11,7 @@ import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {Button} from '@atb/components/button'; // re-add when new onboarding ready
 import {TravelTokenDeviceTitle} from './TravelTokenDeviceTitle';
 import {MessageInfoText} from '@atb/components/message-info-text';
+import {Loading} from '@atb/components/loading';
 
 const getInteractiveColor = (th: Theme) => th.color.interactive[2];
 
@@ -32,7 +33,7 @@ export function TravelTokenBox({
     useMobileTokenContext();
 
   if (mobileTokenStatus === 'loading') {
-    return <ActivityIndicator size="large" />;
+    return <Loading size="large" />;
   }
 
   const showTokensNotWorkingError =
