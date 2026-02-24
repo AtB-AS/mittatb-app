@@ -18,23 +18,11 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 
-/*
-animating?: boolean | undefined;
-
-  color?: ColorValue | undefined;
-
-  hidesWhenStopped?: boolean | undefined;
-
-  size?: number | 'small' | 'large' | undefined;
-
-  style?: StyleProp<ViewStyle> | undefined;
-*/
-
 export const Loading: React.FC<
   ActivityIndicatorProps & {ref?: Ref<any> | null}
 > = ({
   animating = true,
-  //color,
+  color,
   hidesWhenStopped = true,
   size: sizeType = 'large',
   style,
@@ -76,6 +64,8 @@ export const Loading: React.FC<
     return null;
   }
 
+  const colorValue = color ? color.toString() : 'cyan';
+
   return (
     <View style={style} ref={ref} {...props}>
       <Canvas
@@ -99,7 +89,7 @@ export const Loading: React.FC<
           >
             <SweepGradient
               c={vec(canvasSize / 2, canvasSize / 2)}
-              colors={['cyan', 'magenta', 'yellow', 'cyan']}
+              colors={[colorValue, 'magenta', 'yellow', colorValue]}
             />
             <BlurMask blur={5} style="solid" />
           </Path>
