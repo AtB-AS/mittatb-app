@@ -11,7 +11,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {InteractiveColor, textNames, TextNames} from '@atb/theme/colors';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {Alert, Platform, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {dictionary, useTranslation} from '@atb/translations';
@@ -30,6 +30,7 @@ import {
   TextInputSectionItem,
   ToggleSectionItem,
   PhoneInputSectionItem,
+  RadioGroupSection,
 } from '@atb/components/sections';
 import {ProfileScreenProps} from './navigation-types';
 import {MessageInfoText} from '@atb/components/message-info-text';
@@ -40,6 +41,13 @@ import {
 import {Tag} from '@atb/components/tag';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {Loading} from '@atb/components/loading';
+import {AppearanceSelection} from '@atb/theme/ThemeContext';
+import {
+  BottomSheetHeaderType,
+  BottomSheetModal,
+} from '@atb/components/bottom-sheet';
+import {BottomSheetModalMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
+import {Settings} from '@atb/assets/svg/mono-icons/profile';
 
 type DesignSystemScreenProps = ProfileScreenProps<'Profile_DesignSystemScreen'>;
 
@@ -52,7 +60,11 @@ export const Profile_DesignSystemScreen = ({
   const {t} = useTranslation();
   const [selected, setSelected] = useState(false);
 
+  const {appearanceSelection, setAppearanceSelection} = useThemeContext();
+
   const [segmentedSelection, setSegmentedSelection] = useState(0);
+
+  const bottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
 
   const buttons = Object.entries(theme.color.interactive).map(
     ([key, color]) => (
@@ -169,7 +181,16 @@ export const Profile_DesignSystemScreen = ({
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader title="Design System" leftButton={{type: 'back'}} />
+      <FullScreenHeader
+        title="Design System"
+        leftButton={{type: 'back'}}
+        rightButton={{
+          type: 'custom',
+          onPress: () => bottomSheetModalRef.current?.present(),
+          text: 'Appearance',
+          svg: Settings,
+        }}
+      />
 
       <ScrollView>
         <Section style={styles.section}>
@@ -1301,6 +1322,35 @@ export const Profile_DesignSystemScreen = ({
           {radioSegments}
         </View>
       </ScrollView>
+      <BottomSheetModal
+        heading="Appearance"
+        bottomSheetModalRef={bottomSheetModalRef}
+        bottomSheetHeaderType={BottomSheetHeaderType.Close}
+      >
+        <Section style={styles.section}>
+          <HeaderSectionItem text="Theme" />
+          <RadioGroupSection<AppearanceSelection>
+            items={[
+              AppearanceSelection.SYSTEM,
+              AppearanceSelection.LIGHT,
+              AppearanceSelection.DARK,
+            ]}
+            itemToText={(item) => {
+              switch (item) {
+                case AppearanceSelection.SYSTEM:
+                  return 'System';
+                case AppearanceSelection.LIGHT:
+                  return 'Light';
+                case AppearanceSelection.DARK:
+                  return 'Dark';
+              }
+            }}
+            selected={appearanceSelection}
+            keyExtractor={(item) => item}
+            onSelect={(selection) => setAppearanceSelection(selection)}
+          />
+        </Section>
+      </BottomSheetModal>
     </View>
   );
 };
