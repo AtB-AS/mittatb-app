@@ -1,1 +1,5 @@
-export {PressableOpacity, type PressableOpacityProps} from './PressableOpacity';
+export {
+  PressableOpacity,
+  type PressableOpacityProps,
+  type PressableOpacityEvent,
+} from './PressableOpacity';

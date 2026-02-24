@@ -24,13 +24,14 @@ on:
 
 permissions:
   contents: read
-  
+
 jobs:
   detect-changes:
+    if: inputs.force-build != 'true'
     name: Detect changes
     runs-on: ubuntu-latest
     outputs:
-      should_build: ${{ steps.detect.outputs.should_build}}
+      should_build: ${{ steps.detect.outputs.should_build }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -41,7 +42,7 @@ jobs:
 
   setup:
     needs: detect-changes
-    if: needs.detect-changes.outputs.should_build == 'true'
+    if: ${{ !failure() && !cancelled() && (needs.detect-changes.outputs.should_build == 'true' || inputs.force-build == 'true') }}
     name: Set-up tools and warm up cache
     runs-on: macOS-26
     outputs:
@@ -73,13 +74,13 @@ jobs:
         with:
           lookup-only: ${{ steps.pods-cache.outputs.cache-hit == 'true' }}
           path: '**/node_modules'
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
           restore-keys: |
-            node-modules- 
+            node-modules-${{ runner.os }}-
       # ===== Install node-modules  =====
       - name: Install node v22
         uses: actions/setup-node@v5
-        if: steps.modules-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         with:
           node-version: 22
           cache: 'yarn'
@@ -92,9 +93,8 @@ jobs:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Install node_modules
-        if: steps.modules-cache.outputs.cache-hit != 'true'
-        run:
-          yarn install --frozen-lockfile
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
       # ===== Ruby & Bundler =====
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
@@ -103,10 +103,10 @@ jobs:
           cache-version: 2
           bundler-cache: true
       - name: Setup Xcode version
-        if: steps.pods-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.pods-cache.outputs.cache-hit != 'true'
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: "latest-stable"
+          xcode-version: 'latest-stable'
       - name: Install CocoaPods
         working-directory: ios
         if: inputs.force-build == 'true' || steps.pods-cache.outputs.cache-hit != 'true'
@@ -147,11 +147,6 @@ jobs:
           app-environment: 'staging'
           app-org: ${{ matrix.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
-      - name: Override version name on staging
-        shell: bash
-        env:
-          BRANCH_NAME: ${{ github.ref_name }}
-        run: bash ./scripts/set-version-name.sh
       - name: Get potential cached pods
         uses: actions/cache@v4
         id: pods-cache
