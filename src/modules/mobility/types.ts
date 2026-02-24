@@ -10,3 +10,9 @@ export type ShmoRequirementType = {
   isLoading: boolean;
   isBlocking: boolean;
 };
+
+export type FormattedRatePerUnit = {
+  formattedRate: string;
+  rate: number;
+  perUnit: string;
+};

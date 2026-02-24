@@ -39,6 +39,7 @@ import {
 } from '@atb/api/types/mobility';
 import {TFunc} from '@leile/lobo-t';
 import {ErrorResponse, formatNumberToString} from '@atb-as/utils';
+import { FormattedRatePerUnit } from './types';
 
 export const isVehiclesClusteredFeature = (
   feature: Feature<Point> | undefined,
@@ -195,38 +196,29 @@ export const getBatteryLevelIcon = (batteryPercentage: number) => {
   }
 };
 
-export const formatPricePerUnit = (
-  pricePlan: PricingPlanFragment | ShmoPricingPlan,
+export const formatRatePerUnit = (
+  pricingPlan: PricingPlanFragment | ShmoPricingPlan,
   language: Language,
-) => {
-  const perMinPrice = pricePlan.perMinPricing?.[0];
+): FormattedRatePerUnit | undefined => {
+  const perMinPrice = pricingPlan.perMinPricing?.[0];
 
   if (perMinPrice) {
     return {
-      price: `${formatNumberToString(perMinPrice.rate, language)} kr`,
-      unit: 'min',
+      rate: perMinPrice.rate,
+      formattedRate: `${formatNumberToString(perMinPrice.rate, language)} kr`,
+      perUnit: 'min',
     };
-  } else if (!isShmoPricingPlan(pricePlan)) {
-    const perKmPrice = pricePlan.perKmPricing?.[0];
+  } else if (!isShmoPricingPlan(pricingPlan)) {
+    const perKmPrice = pricingPlan.perKmPricing?.[0];
     if (perKmPrice) {
       return {
-        price: `${formatNumberToString(perKmPrice.rate, language)} kr`,
-        unit: 'km',
+        rate: perKmPrice.rate,
+        formattedRate: `${formatNumberToString(perKmPrice.rate, language)} kr`,
+        perUnit: 'km',
       };
     }
   }
   return undefined;
-};
-
-export const extractNumber = (numberText: string): number | null => {
-  if (!numberText) return null;
-
-  const number = numberText.match(/[0-9]+(?:[.,][0-9]+)?/);
-  if (!number) return null;
-  const normalized = number[0].replace(',', '.');
-  const num = parseFloat(normalized);
-
-  return Number.isFinite(num) ? num : null;
 };
 
 export const isShowAll = (

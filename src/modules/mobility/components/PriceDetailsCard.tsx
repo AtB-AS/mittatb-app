@@ -6,7 +6,7 @@ import {View} from 'react-native';
 import {Unlock, PricePerTime} from '@atb/assets/svg/mono-icons/mobility';
 import {VehicleCardStat} from './VehicleCardStat';
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {extractNumber, formatPricePerUnit} from '../utils';
+import {formatRatePerUnit} from '../utils';
 import {PricingPlanFragment} from '@atb/api/types/generated/fragments/mobility-shared';
 import {ShmoPricingPlan} from '@atb/api/types/mobility';
 import {formatNumberToString} from '@atb-as/utils';
@@ -20,7 +20,7 @@ type Props = {
 export const PriceDetailsCard = ({pricingPlan, priceAdjustments}: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const price = formatPricePerUnit(pricingPlan, language);
+  const ratePrUnit = formatRatePerUnit(pricingPlan, language);
   const freeUnlock = priceAdjustments?.find(
     (e) => e.description === 'Free unlock',
   );
@@ -28,28 +28,26 @@ export const PriceDetailsCard = ({pricingPlan, priceAdjustments}: Props) => {
     (e) => e.description === 'Free minutes',
   );
 
-  const priceValue = extractNumber(price?.price ?? '');
-
   const unlockStat = freeUnlock
     ? t(ScooterTexts.free)
     : `${formatNumberToString(pricingPlan.price, language)} kr`;
 
   const minutePriceStat =
-    freeMinutes && priceValue !== null
+    freeMinutes && ratePrUnit?.rate
       ? `${formatNumberToString(
-          Math.floor(Math.abs(freeMinutes.amount) / priceValue),
+          Math.floor(Math.abs(freeMinutes.amount) / ratePrUnit.rate),
           language,
         )} min ${t(ScooterTexts.free).toLocaleLowerCase(language)}`
-      : price?.price;
+      : ratePrUnit?.formattedRate;
 
   const minutePriceDescription = freeMinutes
     ? t(
         ScooterTexts.per.discount(
-          price?.unit ?? '',
-          priceValue?.toString() ?? '',
+          ratePrUnit?.perUnit ?? '',
+          ratePrUnit?.rate.toString() ?? '',
         ),
       )
-    : t(ScooterTexts.per.unit(price?.unit ?? ''));
+    : t(ScooterTexts.per.unit(ratePrUnit?.perUnit ?? ''));
 
   return (
     <Section>
