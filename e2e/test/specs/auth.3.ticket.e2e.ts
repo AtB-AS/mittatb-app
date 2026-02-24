@@ -33,7 +33,7 @@ describe('Auth Ticket', () => {
       await AuthenticationPage.loginWithPhone(phoneNumber);
       await OnboardingPage.denyLocationInOnboarding();
       await OnboardingPage.waitOnTokenOnboarding(false);
-      await ElementHelper.waitForElement('text', 'Find journey');
+      await ElementHelper.waitForElement('text', 'Travel');
       await AppHelper.pause(2000);
 
       // Verify
@@ -215,7 +215,7 @@ describe('Auth Ticket', () => {
     - Check some ticket details if the ticket is valid
     - Check the barcode type depending on the token
    */
-  xit('should have a valid ticket in active tickets', async () => {
+  it('should have a valid ticket in active tickets', async () => {
     try {
       if (authorized) {
         await NavigationHelper.tapMenu('tickets');

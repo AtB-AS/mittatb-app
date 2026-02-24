@@ -87,11 +87,12 @@ export const FavoriteLineSectionItem = ({
       accessibilityHint={a11yHint}
       importantForAccessibility="yes"
       ref={onCloseRef}
+      testID={testID}
     >
-      <View style={styles.container} testID={testID}>
+      <View style={styles.container}>
         <View style={styles.transportInfo}>
-          <LineChip serviceJourney={departure.serviceJourney} testID={testID} />
-          <ThemeText style={styles.lineName} testID={`${testID}LineName`}>
+          <LineChip serviceJourney={departure.serviceJourney} />
+          <ThemeText style={styles.lineName} testID="lineName">
             {lineName}
           </ThemeText>
         </View>

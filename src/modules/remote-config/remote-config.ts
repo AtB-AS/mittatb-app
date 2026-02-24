@@ -44,6 +44,7 @@ export type RemoteConfig = {
   enable_city_bikes_in_map: boolean;
   enable_event_stream: boolean;
   enable_event_stream_fare_contracts: boolean;
+  enable_experimental_features: boolean;
   enable_extended_onboarding: boolean;
   enable_flexible_transport: boolean;
   enable_from_travel_search_to_ticket_boat: boolean;
@@ -101,9 +102,6 @@ export type RemoteConfig = {
   privacy_policy_url: string;
   service_disruption_url: string;
   token_timeout_in_seconds: number;
-  tripsSearch_max_number_of_chained_searches: number;
-  tripsSearch_target_number_of_initial_hits: number;
-  tripsSearch_target_number_of_page_hits: number;
   use_flexible_on_accessMode: boolean;
   use_flexible_on_directMode: boolean;
   use_flexible_on_egressMode: boolean;
@@ -135,6 +133,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_car_sharing_in_map: false,
   enable_city_bikes_in_map: false,
   enable_extended_onboarding: false,
+  enable_experimental_features: true,
   enable_flexible_transport: false,
   enable_from_travel_search_to_ticket_boat: false,
   enable_from_travel_search_to_ticket: false,
@@ -193,9 +192,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   privacy_policy_url: PRIVACY_POLICY_URL,
   service_disruption_url: '',
   token_timeout_in_seconds: 10,
-  tripsSearch_max_number_of_chained_searches: 5,
-  tripsSearch_target_number_of_initial_hits: 8,
-  tripsSearch_target_number_of_page_hits: 8,
   use_flexible_on_accessMode: true,
   use_flexible_on_directMode: true,
   use_flexible_on_egressMode: true,
@@ -260,6 +256,9 @@ export function getConfig(): RemoteConfig {
   const enable_event_stream_fare_contracts =
     values['enable_event_stream_fare_contracts']?.asBoolean() ??
     defaultRemoteConfig.enable_event_stream_fare_contracts;
+  const enable_experimental_features =
+    values['enable_experimental_features']?.asBoolean() ??
+    defaultRemoteConfig.enable_experimental_features;
   const enable_extended_onboarding =
     values['enable_extended_onboarding']?.asBoolean() ??
     defaultRemoteConfig.enable_extended_onboarding;
@@ -422,15 +421,6 @@ export function getConfig(): RemoteConfig {
   const token_timeout_in_seconds =
     values['token_timeout_in_seconds']?.asNumber() ??
     defaultRemoteConfig.token_timeout_in_seconds;
-  const tripsSearch_max_number_of_chained_searches =
-    values['tripsSearch_max_number_of_chained_searches']?.asNumber() ??
-    defaultRemoteConfig.tripsSearch_max_number_of_chained_searches;
-  const tripsSearch_target_number_of_initial_hits =
-    values['tripsSearch_target_number_of_initial_hits']?.asNumber() ??
-    defaultRemoteConfig.tripsSearch_target_number_of_initial_hits;
-  const tripsSearch_target_number_of_page_hits =
-    values['tripsSearch_target_number_of_page_hits']?.asNumber() ??
-    defaultRemoteConfig.tripsSearch_target_number_of_page_hits;
   const use_flexible_on_accessMode =
     values['use_flexible_on_accessMode']?.asBoolean() ??
     defaultRemoteConfig.use_flexible_on_accessMode;
@@ -467,6 +457,7 @@ export function getConfig(): RemoteConfig {
     enable_event_stream,
     enable_event_stream_fare_contracts,
     enable_extended_onboarding,
+    enable_experimental_features,
     enable_flexible_transport,
     enable_from_travel_search_to_ticket_boat,
     enable_from_travel_search_to_ticket,
@@ -523,35 +514,10 @@ export function getConfig(): RemoteConfig {
     privacy_policy_url,
     service_disruption_url,
     token_timeout_in_seconds,
-    tripsSearch_max_number_of_chained_searches,
-    tripsSearch_target_number_of_initial_hits,
-    tripsSearch_target_number_of_page_hits,
     use_flexible_on_accessMode,
     use_flexible_on_directMode,
     use_flexible_on_egressMode,
     use_trygg_overgang_qr_code,
     vehicles_poll_interval,
   };
-}
-
-// Pick keys of certain value type
-type SubType<Base, Condition> = Pick<
-  Base,
-  {
-    [Key in keyof Base]: Base[Key] extends Condition ? Key : never;
-  }[keyof Base]
->;
-
-export function getBooleanConfigValue(
-  key: keyof SubType<RemoteConfig, boolean>,
-) {
-  return remoteConfig().getBoolean(key);
-}
-
-export function getStringConfigValue(key: keyof SubType<RemoteConfig, string>) {
-  return remoteConfig().getString(key);
-}
-
-export function getNumberConfigValue(key: keyof SubType<RemoteConfig, number>) {
-  return remoteConfig().getNumber(key);
 }

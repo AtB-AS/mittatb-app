@@ -53,6 +53,8 @@ import {
 import {useFocusEffect} from '@react-navigation/native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {ErrorResponse} from '@atb-as/utils';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {SaveTripPatternButtonComponent} from '@atb/modules/experimental-store-trip-patterns';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -83,6 +85,8 @@ export const Trip: React.FC<TripProps> = ({
 
   const {isRealtimeMapEnabled} = useFeatureTogglesContext();
 
+  const isFocusedAndActive = useIsFocusedAndActive();
+
   const liveVehicleIds = tripPattern.legs
     .filter((leg) =>
       getShouldShowLiveVehicle(
@@ -92,8 +96,10 @@ export const Trip: React.FC<TripProps> = ({
     )
     .map((leg) => leg.serviceJourney?.id)
     .filter(isDefined);
-  const {data: vehiclePositions} =
-    useGetServiceJourneyVehiclesQuery(liveVehicleIds);
+  const {data: vehiclePositions} = useGetServiceJourneyVehiclesQuery(
+    liveVehicleIds,
+    isFocusedAndActive,
+  );
 
   const tripPatternLegs = tripPattern?.legs;
 
@@ -194,7 +200,7 @@ export const Trip: React.FC<TripProps> = ({
                   leg.interchangeTo?.toServiceJourney?.id,
                 )}
                 leg={leg}
-                testID={'legContainer' + index}
+                testID={'leg' + index}
                 onPressShowLive={
                   legVehiclePosition
                     ? (serviceJourneyPolylines: ServiceJourneyPolylines) => {
@@ -234,6 +240,7 @@ export const Trip: React.FC<TripProps> = ({
           }}
         />
       )}
+      <SaveTripPatternButtonComponent tripPattern={tripPattern} />
       <TripSummary {...tripPattern} />
     </View>
   );

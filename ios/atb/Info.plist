@@ -60,6 +60,8 @@
 	<string>$(INTERCOM_IOS_API_KEY)</string>
 	<key>IntercomAppId</key>
 	<string>$(INTERCOM_APP_ID)</string>
+	<key>BugsnagApiKey</key>
+	<string>$(BUGSNAG_API_KEY)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>vipps</string>
@@ -123,5 +125,7 @@
 	<false/>
 	<key>APP_GROUP_NAME</key>
 	<string>$(APP_GROUP_NAME)</string>
+	<key>ReleaseStage</key>
+	<string>$(RELEASE_STAGE)</string>
 </dict>
 </plist>

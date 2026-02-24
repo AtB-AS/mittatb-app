@@ -63,12 +63,10 @@ export const DatePickerSheet = <T extends string>({
       heading={t(DatePickerSheetTexts.heading)}
       bottomSheetHeaderType={BottomSheetHeaderType.Confirm}
       closeCallback={() => {
-        if (initialDate !== date) {
-          onSave({option: selectedOptionId, date});
-        }
+        onSave({option: selectedOptionId, date});
         giveFocus(onCloseFocusRef);
       }}
-      overrideCloseFunction={isSpinning ? () => {} : undefined}
+      overrideClose={() => isSpinning}
       closeOnBackdropPress={!isSpinning}
       enablePanDownToClose={!isSpinning}
     >

@@ -146,6 +146,7 @@ export function QuaySection({
             showOnlyFavorites={showOnlyFavorites}
             noDeparturesToShow={!!data && !isLoading}
             now={now}
+            testID={testID}
           />
         )}
         {!isMinimized && didLoadingDataFail && !isLoading && (

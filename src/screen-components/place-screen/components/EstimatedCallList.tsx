@@ -34,6 +34,7 @@ type Props = Pick<
   shouldShowMoreItemsLink: boolean;
   noDeparturesToShow: boolean;
   now: number;
+  testID?: string;
 };
 export const EstimatedCallList = ({
   quay,
@@ -44,6 +45,7 @@ export const EstimatedCallList = ({
   shouldShowMoreItemsLink,
   noDeparturesToShow,
   now,
+  testID,
 }: Props) => {
   const {t} = useTranslation();
   const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
@@ -118,8 +120,10 @@ export const EstimatedCallList = ({
   );
 
   const renderItem = useCallback(
-    ({item}: EstimatedCallRenderItem) => <EstimatedCallItem {...item} />,
-    [],
+    ({item}: EstimatedCallRenderItem) => (
+      <EstimatedCallItem {...item} testID={testID} />
+    ),
+    [testID],
   );
 
   const keyExtractor = useCallback(

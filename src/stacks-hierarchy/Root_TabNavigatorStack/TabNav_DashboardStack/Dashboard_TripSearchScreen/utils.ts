@@ -1,20 +1,11 @@
 import {Location} from '@atb/modules/favorites';
+import {TransportModeFilterOptionWithSelectionType} from '@atb/modules/travel-search-filters';
 import {
-  TransportModeFilterOptionWithSelectionType,
-  TravelSearchFiltersSelectionType,
-} from '@atb/modules/travel-search-filters';
-import {
-  Modes,
   StreetMode,
   TransportMode,
   TransportModes,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
-import {flatMap} from '@atb/utils/array';
-import {TravelSearchTransportModesType} from '@atb-as/config-specs';
-import {enumFromString} from '@atb/utils/enum-from-string';
-import {isDefined} from '@atb/utils/presence';
 import {FeatureCategory} from '@atb/api/bff/types';
 import type {TripSearchTime} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {
@@ -27,6 +18,10 @@ import type {DateOptionAndValue} from '@atb/components/date-selection';
 import {type TripPatternBookingStatus} from '@atb/screen-components/travel-details-screens';
 import type {Leg} from '@atb/api/types/trips';
 import {getRealtimeState} from '@atb/utils/realtime';
+import {TravelSearchTransportModesType} from '@atb-as/config-specs';
+import {enumFromString} from '@atb/utils/enum-from-string';
+import {isDefined} from '@atb/utils/presence';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 
 export type TimeSearch = {
   searchTime: DateOptionAndValue<'now' | 'departure' | 'arrival'>;
@@ -46,65 +41,7 @@ export const defaultJourneyModes = {
   egressMode: StreetMode.Foot,
 };
 
-export function createQuery(
-  fromLocation: Location,
-  toLocation: Location,
-  {searchTime, cursor}: SearchInput,
-  arriveBy: boolean,
-  travelSearchFiltersSelection: TravelSearchFiltersSelectionType | undefined,
-  journeySearchModes?: Modes,
-): TripsQueryVariables {
-  const from = {
-    ...fromLocation,
-    place: getSearchPlace(fromLocation),
-  };
-  const to = {
-    ...toLocation,
-    place: getSearchPlace(toLocation),
-  };
-
-  const query: TripsQueryVariables = {
-    from,
-    to,
-    cursor,
-    when: searchTime?.date,
-    arriveBy,
-    modes: journeySearchModes,
-  };
-
-  if (travelSearchFiltersSelection?.transportModes) {
-    const selectedFilters = travelSearchFiltersSelection.transportModes.filter(
-      (m) => m.selected,
-    );
-
-    const includeFlexibleTransport = selectedFilters.some(
-      (sf) => sf.id === TransportMode.Bus, // filter flex transport on bus filter
-    );
-
-    query.modes = {
-      ...(includeFlexibleTransport ? journeySearchModes : defaultJourneyModes),
-      transportModes: flatMap(selectedFilters, (tm) =>
-        transportModeToEnum(tm.modes),
-      ),
-    };
-  }
-
-  if (travelSearchFiltersSelection?.travelSearchPreferences) {
-    travelSearchFiltersSelection.travelSearchPreferences.forEach(
-      (preference) => {
-        const value = preference.options.find(
-          (o) => o.id === preference.selectedOption,
-        )?.value;
-        if (isDefined(value)) {
-          query[preference.type] = value;
-        }
-      },
-    );
-  }
-  return query;
-}
-
-function transportModeToEnum(
+export function transportModeToEnum(
   modes: TravelSearchTransportModesType[],
 ): TransportModes[] {
   return modes.map((internal) => {
@@ -117,11 +54,17 @@ function transportModeToEnum(
   });
 }
 
+const getDateWithRoundedTime = (milliseconds: number) =>
+  new Date(Math.round(new Date().getTime() / milliseconds) * milliseconds);
+
 export const sanitizeSearchTime = (
   searchTime: DateOptionAndValue<'now' | 'departure' | 'arrival'>,
 ) =>
   searchTime.option === 'now'
-    ? {...searchTime, date: new Date().toISOString()}
+    ? {
+        ...searchTime,
+        date: getDateWithRoundedTime(5 * ONE_SECOND_MS).toISOString(), // round to nearest 5 seconds to avoid unnecessary calls
+      }
     : searchTime;
 
 export const areDefaultFiltersSelected = (
@@ -143,7 +86,8 @@ const isGroupOfStopPlaces = (location: Location): boolean => {
   );
 };
 
-export const getSearchPlace = (location: Location) => {
+export const getSearchPlace = (location?: Location) => {
+  if (!location) return undefined;
   return location.resultType === 'search' &&
     (isVenue(location) || isGroupOfStopPlaces(location))
     ? location.id

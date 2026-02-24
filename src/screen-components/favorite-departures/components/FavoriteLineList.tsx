@@ -29,6 +29,7 @@ import {
 } from '@atb/modules/favorites';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type Props = {
   stopPlace: StopPlace;
@@ -74,8 +75,10 @@ export const FavoriteLineList = ({
     stopPlaceAndQuays.length ? [{data: stopPlaceAndQuays}] : [];
 
   const quayIds = quays.map((q) => q.id);
+  const isFocusedAndActive = useIsFocusedAndActive();
 
   const {departures, departuresIsLoading, departuresIsError} = useDepartures({
+    enabled: isFocusedAndActive,
     quayIds,
     // Upper limit to the number of different lines to show per quay. Normally
     // there are a lot fewer.

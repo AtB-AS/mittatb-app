@@ -15,11 +15,11 @@ type BottomSheetHeaderProps = {
   heading?: string;
   subText?: string;
   logoUrl?: string;
+  logoIcon?: React.JSX.Element | null;
   bottomSheetRef: React.RefObject<BottomSheetModal | BottomSheet | null>;
   headerNode?: React.ReactNode;
   focusRef?: Ref<any>;
   testID?: string;
-  overrideCloseFunction?: () => void;
   bottomSheetHeaderType: BottomSheetHeaderType;
 };
 
@@ -27,11 +27,11 @@ export const BottomSheetHeader = ({
   heading,
   subText,
   logoUrl,
+  logoIcon,
   bottomSheetRef,
   headerNode,
   focusRef,
   testID,
-  overrideCloseFunction,
   bottomSheetHeaderType,
 }: BottomSheetHeaderProps) => {
   const styles = useStyles();
@@ -47,7 +47,11 @@ export const BottomSheetHeader = ({
             <View style={styles.headerLeft}>
               {heading && (
                 <>
-                  {logoUrl && <BrandingImage logoUrl={logoUrl} logoSize={28} />}
+                  {logoUrl ? (
+                    <BrandingImage logoUrl={logoUrl} logoSize={28} />
+                  ) : (
+                    logoIcon && logoIcon
+                  )}
                   <View style={styles.headingWrapper} accessible ref={focusRef}>
                     <ThemeText typography="heading__xl">{heading}</ThemeText>
                     {subText && (
@@ -68,10 +72,7 @@ export const BottomSheetHeader = ({
                 style={styles.headerRight}
                 testID="closeBottomSheet"
                 accessibilityRole="button"
-                onPress={
-                  overrideCloseFunction ??
-                  (() => bottomSheetRef.current?.close())
-                }
+                onPress={() => bottomSheetRef.current?.close()}
               >
                 {headerData?.text && (
                   <ThemeText typography="body__s__strong">

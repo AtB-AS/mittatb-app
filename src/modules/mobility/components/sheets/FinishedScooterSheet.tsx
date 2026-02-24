@@ -18,6 +18,7 @@ import {
   BottomSheetHeaderType,
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type Props = {
   onClose: () => void;
@@ -37,11 +38,12 @@ export const FinishedScooterSheet = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
+  const isFocusedAndActive = useIsFocusedAndActive();
   const {
     data: shmoBooking,
     isLoading,
     isError,
-  } = useShmoBookingQuery(bookingId);
+  } = useShmoBookingQuery(isFocusedAndActive, bookingId);
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
   return (

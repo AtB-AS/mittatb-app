@@ -8,7 +8,6 @@ import {MapScreenProps} from './navigation-types';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
-import {useIsFocused} from '@react-navigation/native';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {ScooterHelpScreenProps} from '@atb/stacks-hierarchy/Root_ScooterHelp/Root_ScooterHelpScreen';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
@@ -16,6 +15,7 @@ import {useGetHasReservationOrAvailableFareContract} from '@atb/modules/ticketin
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import {TripSearchCallerRoute} from '../TabNav_DashboardStack/types';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export type MapScreenParams = {
   initialFilters?: MapFilterType;
@@ -34,7 +34,7 @@ export const Map_RootScreen = ({
 }: MapScreenProps<'Map_RootScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const tabBarHeight = useBottomTabBarHeight();
-  const isFocused = useIsFocused();
+  const isFocused = useIsFocusedAndActive();
 
   const navigateToQuay = useCallback(
     (place: StopPlace, quay: Quay) => {

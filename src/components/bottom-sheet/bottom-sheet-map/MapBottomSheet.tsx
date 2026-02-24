@@ -1,4 +1,10 @@
-import React, {useCallback, PropsWithChildren, useMemo, useState} from 'react';
+import React, {
+  useCallback,
+  PropsWithChildren,
+  useMemo,
+  useState,
+  useRef,
+} from 'react';
 import BottomSheetGor, {
   BottomSheetBackdrop,
   BottomSheetScrollView,
@@ -34,6 +40,7 @@ export type BottomSheetProps = PropsWithChildren<{
   heading?: string;
   subText?: string;
   logoUrl?: string;
+  logoIcon?: React.JSX.Element | null;
   enablePanDownToClose?: boolean;
   locationArrowOnPress: () => void;
   canMinimize?: boolean;
@@ -54,6 +61,7 @@ export const MapBottomSheet = ({
   heading,
   subText,
   logoUrl,
+  logoIcon,
   enablePanDownToClose = true,
   locationArrowOnPress,
   canMinimize = false,
@@ -142,6 +150,7 @@ export const MapBottomSheet = ({
           heading={heading}
           subText={subText}
           logoUrl={logoUrl}
+          logoIcon={logoIcon}
           bottomSheetRef={bottomSheetMapRef}
           headerNode={headerNode}
           bottomSheetHeaderType={bottomSheetHeaderType}
@@ -153,10 +162,35 @@ export const MapBottomSheet = ({
     heading,
     subText,
     logoUrl,
+    logoIcon,
     bottomSheetMapRef,
     headerNode,
     bottomSheetHeaderType,
   ]);
+
+  const canRunCloseCallbackRef = useRef<boolean>(false);
+
+  const onClose = useCallback(() => {
+    if (canRunCloseCallbackRef.current) {
+      canRunCloseCallbackRef.current = false;
+      closeCallback?.();
+      setPaddingBottomMap(0);
+      setCurrentBottomSheet({
+        bottomSheetType: MapBottomSheetType.None,
+        feature: null,
+      });
+    }
+  }, [closeCallback, setPaddingBottomMap, setCurrentBottomSheet]);
+
+  const onOpen = useCallback(() => {
+    if (canRunCloseCallbackRef.current) return;
+
+    canRunCloseCallbackRef.current = true;
+    setCurrentBottomSheet({
+      bottomSheetType: mapState.bottomSheetType,
+      feature: mapState.feature ?? null,
+    });
+  }, [setCurrentBottomSheet, mapState.bottomSheetType, mapState.feature]);
 
   return (
     <>
@@ -172,25 +206,14 @@ export const MapBottomSheet = ({
         keyboardBlurBehavior="restore"
         backgroundStyle={styles.sheet}
         onAnimate={(_fromIndex, toIndex, _fromPosition, toPosition) => {
-          if (toIndex === -1) {
-            closeCallback?.();
-            setPaddingBottomMap(0);
-            setCurrentBottomSheet({
-              bottomSheetType: MapBottomSheetType.None,
-              feature: null,
-            });
-          } else {
+          if (toIndex >= 0) {
+            onOpen();
             setPaddingBottomMap(screenHeight - toPosition + tabBarMinHeight);
+          } else if (toIndex === -1) {
+            onClose();
           }
         }}
-        onChange={(index) => {
-          if (index !== -1) {
-            setCurrentBottomSheet({
-              bottomSheetType: mapState.bottomSheetType,
-              feature: mapState.feature ?? null,
-            });
-          }
-        }}
+        onClose={onClose}
         accessible={false}
         maxDynamicContentSize={screenHeight - safeAreaTop - headerHeight}
         index={canMinimize ? 1 : 0}

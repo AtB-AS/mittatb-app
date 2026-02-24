@@ -16,9 +16,9 @@ else
   APP_ORG=$1
 
   echo "Installing generated assets from design system (SVGs only)"
-  npx generate-assets all $APP_ORG -o assets/design-assets -g "**.svg" -nm
+  npx @atb-as/generate-assets all $APP_ORG -o assets/design-assets -g "**.svg" -nm
 
   echo "Installing photo background"
-  npx generate-assets all $APP_ORG -o assets/design-assets -g "**/PhotoBackground.jpg" -nm
+  npx @atb-as/generate-assets all $APP_ORG -o assets/design-assets -g "**/PhotoBackground.jpg" -nm
   yarn generate-svgs
 fi

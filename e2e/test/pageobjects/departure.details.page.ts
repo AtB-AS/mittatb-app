@@ -23,7 +23,7 @@ class DepartureDetailPage {
    * Return the public code
    */
   async getPublicCode() {
-    const publicCodeId = `//*[@resource-id="PublicCode"]`;
+    const publicCodeId = `//*[@resource-id="publicCode"]`;
     return $(publicCodeId).getText();
   }
 
@@ -57,8 +57,8 @@ class DepartureDetailPage {
     const quayNameId = `//*[@resource-id="quayName"]`;
     await $$(legId)[legIndex].$(quayNameId).click();
     await AppHelper.pause(500);
-    await ElementHelper.waitForElement('id', 'quaySection');
-    await ElementHelper.waitForElement('id', 'estimatedCallItem');
+    await ElementHelper.waitForElement('id', 'quay');
+    await ElementHelper.waitForElement('id', 'quayCallItem');
   }
 
   /**

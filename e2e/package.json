@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "test:android": "APP_ENV=staging wdio ./conf/android.conf.ts",
+    "test:android:smoke": "APP_ENV=staging wdio ./conf/android.conf.ts --spec test/specs/smoke.e2e.ts",
     "test:android:local:dev": "APP_ENV=debug IS_LOCAL=true wdio ./conf/android.conf.local.dev.ts",
     "test:android:local:firebase": "APP_ENV=staging IS_LOCAL=true wdio ./conf/android.conf.local.firebase.ts",
     "test:android:local:perfMeasure": "flashlight test --bundleId no.mittatb.debug --testCommand \"APP_ENV=debug yarn test:android:local:dev --spec test/flashlight/performanceMeasures.e2e.ts\" --resultsTitle performanceMeasures --iterationCount 1 --maxRetries 1"

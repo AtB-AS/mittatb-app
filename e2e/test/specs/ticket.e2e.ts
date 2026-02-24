@@ -39,7 +39,7 @@ describe('Ticket', () => {
       expect(await OnboardingPage.acceptLimitations.isEnabled()).toBe(true);
       await OnboardingPage.acceptLimitations.click();
 
-      await ElementHelper.waitForElement('text', 'Find journey');
+      await ElementHelper.waitForElement('text', 'Travel');
       await NavigationHelper.tapMenu('tickets');
       expect(await TicketBuyPage.anonymousWarning).toBeDisplayed();
 

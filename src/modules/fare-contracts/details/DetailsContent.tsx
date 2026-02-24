@@ -42,7 +42,7 @@ import {useAuthContext} from '@atb/modules/auth';
 import {CarnetFooter} from '../carnet/CarnetFooter';
 import {MobilityBenefitsActionSectionItem} from '@atb/modules/mobility';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
-import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
+import {ConsumeCarnetSectionitem} from '../components/ConsumeCarnetSectionitem';
 import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {UsedAccessesSectionItem} from './UsedAccessesSectionItem';
@@ -157,7 +157,7 @@ export const DetailsContent: React.FC<Props> = ({
   const shouldShowLegs =
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;
 
-  const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(fc.id);
+  const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(fc.orderId);
   const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(fc, validityStatus);
 
   return (
@@ -246,6 +246,30 @@ export const DetailsContent: React.FC<Props> = ({
 
       <OrderDetailsSectionItem fareContract={fc} />
 
+      {isCanBeConsumedNowFareContract(
+        fc,
+        now,
+        currentUserId,
+        schoolCarnetInfo,
+      ) && (
+        <ConsumeCarnetSectionitem
+          fareContractId={fc.id}
+          fareProductType={preassignedFareProduct?.type}
+        />
+      )}
+      {isActivateTicketNowEnabled &&
+        isCanBeActivatedNowFareContract(
+          fc,
+          now,
+          currentUserId,
+          preassignedFareProduct?.isBookingEnabled,
+        ) && (
+          <ActivateNowSectionItem
+            fareContractId={fc.id}
+            fareProductType={preassignedFareProduct?.type}
+          />
+        )}
+
       {hasShmoBookingId(fc) && hasShmoOperatorId(fc) && (
         <LinkSectionItem
           text={t(
@@ -279,29 +303,6 @@ export const DetailsContent: React.FC<Props> = ({
           state={fc.state}
         />
       )}
-      {isCanBeConsumedNowFareContract(
-        fc,
-        now,
-        currentUserId,
-        schoolCarnetInfo,
-      ) && (
-        <ConsumeCarnetSectionItem
-          fareContractId={fc.id}
-          fareProductType={preassignedFareProduct?.type}
-        />
-      )}
-      {isActivateTicketNowEnabled &&
-        isCanBeActivatedNowFareContract(
-          fc,
-          now,
-          currentUserId,
-          preassignedFareProduct?.isBookingEnabled,
-        ) && (
-          <ActivateNowSectionItem
-            fareContractId={fc.id}
-            fareProductType={preassignedFareProduct?.type}
-          />
-        )}
     </Section>
   );
 };

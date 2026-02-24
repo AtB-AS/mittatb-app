@@ -30,6 +30,7 @@ import {
 } from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemeText} from '@atb/components/text';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type Props = {
   navigateSupportCallback: () => void;
@@ -49,11 +50,12 @@ export const ActiveScooterSheet = ({
   navigateToScanQrCode,
 }: Props) => {
   useKeepAwake();
+  const isFocusedAndActive = useIsFocusedAndActive();
   const {
     data: activeBooking,
     isLoading,
     isError,
-  } = useActiveShmoBookingQuery(ONE_SECOND_MS * 10);
+  } = useActiveShmoBookingQuery(isFocusedAndActive, ONE_SECOND_MS * 10);
   const {logEvent} = useAnalyticsContext();
 
   const {t} = useTranslation();

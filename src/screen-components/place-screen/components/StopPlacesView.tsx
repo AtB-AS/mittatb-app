@@ -20,6 +20,7 @@ import {
   NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
 } from '../utils';
 import {DeparturesProps, useDepartures} from '../hooks/use-departures';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type Props = {
   stopPlaces: StopPlace[];
@@ -93,8 +94,11 @@ export const StopPlacesView = (props: Props) => {
   );
 
   const quayIds = quays.map((q) => q.id);
+  const isFocusedAndActive = useIsFocusedAndActive();
+
   const departuresProps: DeparturesProps = useMemo(
     () => ({
+      enabled: isFocusedAndActive,
       quayIds,
       limitPerQuay:
         NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW + NUMBER_OF_DEPARTURES_IN_BUFFER,
@@ -102,7 +106,7 @@ export const StopPlacesView = (props: Props) => {
       mode,
       startTime: searchStartTime,
     }),
-    [mode, quayIds, searchStartTime, showOnlyFavorites],
+    [mode, quayIds, searchStartTime, showOnlyFavorites, isFocusedAndActive],
   );
 
   const {
@@ -171,7 +175,7 @@ export const StopPlacesView = (props: Props) => {
           didLoadingDataFail={departuresIsError}
           navigateToDetails={navigateToDetails}
           navigateToQuay={(quay) => navigateToQuay(item.stopPlace, quay)}
-          testID={'quaySection' + index}
+          testID={'quay' + index}
           showOnlyFavorites={showOnlyFavorites}
           searchDate={searchStartTime}
           mode={mode}

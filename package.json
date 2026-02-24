@@ -210,5 +210,18 @@
     "staticFeatureFlags": {
       "ANDROID_SYNCHRONOUSLY_UPDATE_UI_PROPS": true
     }
+  },
+  "codegenConfig": {
+    "name": "AtBTurboModuleSpec",
+    "type": "modules",
+    "jsSrcsDir": "src/modules/native",
+    "android": {
+      "javaPackageName": "no.mittatb"
+    },
+    "ios": {
+      "modulesProvider": {
+        "ExperimentalFeature": "RCTExperimentalFeature"
+      }
+    }
   }
 }

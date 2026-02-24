@@ -15,6 +15,7 @@ import type {ContrastColor} from '@atb-as/theme';
 import {useFavoritesContext} from '@atb/modules/favorites';
 import {hasFavorites} from '../utils';
 import {DeparturesProps, useDepartures} from '../hooks/use-departures';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
 
@@ -54,15 +55,18 @@ export function QuayView({
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
 
+  const isFocusedAndActive = useIsFocusedAndActive();
+
   const departuresProps: DeparturesProps = useMemo(
     () => ({
+      enabled: isFocusedAndActive,
       quayIds: [quay.id],
       limitPerQuay: NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
       showOnlyFavorites,
       mode,
       startTime: searchStartTime,
     }),
-    [mode, quay.id, searchStartTime, showOnlyFavorites],
+    [mode, quay.id, searchStartTime, showOnlyFavorites, isFocusedAndActive],
   );
 
   const {
@@ -133,7 +137,7 @@ export function QuayView({
           isLoading={departuresIsLoading}
           didLoadingDataFail={departuresIsError}
           navigateToDetails={navigateToDetails}
-          testID="quaySection"
+          testID="quay"
           showOnlyFavorites={showOnlyFavorites}
           searchDate={searchStartTime}
           mode={mode}
