@@ -16,6 +16,6 @@ else
         --application-id="${ANDROID_APPLICATION_ID}" \
         --version-name="${APP_VERSION}" \
         --version-code="${BUILD_ID}" \
-        --project-root=/Users/runner/work/mittatb-app/mittatb-app \
+        --project-root="${GITHUB_WORKSPACE:-.}" \
         --verbose
 fi
