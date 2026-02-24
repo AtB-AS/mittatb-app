@@ -7,6 +7,7 @@ import {Map_TravelDetailsMapScreen} from './Map_TravelDetailsMapScreen';
 import {Map_PlaceScreen} from './Map_PlaceScreen';
 import {MapStackParams} from './navigation-types';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
+import {Map_CityBikeStartTripScreen} from './Map_CityBikeStartTripScreen';
 
 const Stack = createStackNavigator<MapStackParams>();
 
@@ -31,6 +32,10 @@ export const TabNav_MapStack = () => {
       <Stack.Screen
         name="Map_TravelAidScreen"
         component={Map_TravelAidScreen}
+      />
+      <Stack.Screen
+        name="Map_CityBikeStartTripScreen"
+        component={Map_CityBikeStartTripScreen}
       />
     </Stack.Navigator>
   );

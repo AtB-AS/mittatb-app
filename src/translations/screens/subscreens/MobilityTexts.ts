@@ -29,6 +29,16 @@ export const MobilityTexts = {
         return _('Annet', 'Other', 'Anna');
     }
   },
+  cityBike: {
+    location:(position:number) => _(`Plass ${position}`, `Dock ${position}`, `Plass ${position}`),
+    startTripView: {
+      title: _('Trykk på knappen på styret', 'Press the button on the handlebar', 'Trykk på knappen på styret'),
+      description: _('Når knappen lyser grønt og sykkelen lager lyd kan du ta den ut av stativet og sykle av sted.', 'When the button lights up green and the bike makes a sound, you can take it out of the dock and start riding.', 'Når knappen lyser grønt og sykkelen lagar lyd kan du ta den ut av stativet og sykle av stad.'),
+      safeTrip: _('God tur!', 'Have a nice trip!', 'God tur!'),
+      header: _('Start tur', 'Start trip', 'Start tur'),
+    }
+  },
+  loadingBookingFailed: _('Ops! Vi kunne ikke hente informasjon om turen', "Ops! We couldn't fetch the trip information", 'Ops! Vi kunne ikkje hente informasjon om turen'),
   finishing: {
     button: _('Ta bilde', 'Take a photo', 'Ta eit bilde'),
     header: _(
