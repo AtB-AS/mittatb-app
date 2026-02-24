@@ -98,7 +98,6 @@ runs:
 
     - name: Get potential cached node_modules
       uses: actions/cache@v4
-      if: inputs.can-skip != 'true'
       id: modules-cache
       with:
         path: '**/node_modules'
@@ -107,7 +106,7 @@ runs:
           node-modules-${{ runner.os }}-
 
     - name: Install node_modules
-      if: inputs.can-skip != 'true' && steps.modules-cache.outputs.cache-hit != 'true'
+      if: steps.modules-cache.outputs.cache-hit != 'true'
       shell: bash
       run: yarn install --frozen-lockfile
 
