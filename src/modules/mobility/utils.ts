@@ -39,7 +39,7 @@ import {
 } from '@atb/api/types/mobility';
 import {TFunc} from '@leile/lobo-t';
 import {ErrorResponse, formatNumberToString} from '@atb-as/utils';
-import { FormattedRatePerUnit } from './types';
+import {FormattedRatePerUnit} from './types';
 
 export const isVehiclesClusteredFeature = (
   feature: Feature<Point> | undefined,
