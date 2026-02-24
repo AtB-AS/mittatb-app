@@ -136,7 +136,7 @@ export const Root_LoginPhoneInputScreen = ({
           <View style={styles.buttonView}>
             {isSubmitting && (
               <Loading
-                style={styles.activityIndicator}
+                style={styles.loading}
                 size="large"
                 color={themeColor.foreground.primary}
               />
@@ -199,7 +199,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   phoneInput: {
     marginVertical: theme.spacing.xSmall,
   },
-  activityIndicator: {
+  loading: {
     marginVertical: theme.spacing.large,
   },
   errorMessage: {

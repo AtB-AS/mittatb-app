@@ -77,7 +77,7 @@ export const FinishingScooterSheet = ({
       bottomSheetHeaderType={BottomSheetHeaderType.None}
     >
       {isLoading && (
-        <View style={styles.activityIndicator}>
+        <View style={styles.loading}>
           <Loading size="large" />
         </View>
       )}
@@ -119,7 +119,7 @@ export const FinishingScooterSheet = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
-    activityIndicator: {
+    loading: {
       marginBottom: theme.spacing.medium,
     },
     container: {

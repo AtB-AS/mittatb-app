@@ -172,7 +172,7 @@ export const Root_LoginOptionsScreen = ({
             {t(LoginTexts.logInOptions.title)}
           </ThemeText>
         </View>
-        {isLoading && <Loading style={styles.activityIndicator} size="large" />}
+        {isLoading && <Loading style={styles.loading} size="large" />}
         {error && error !== 'access_denied' && (
           <MessageInfoBox
             style={styles.errorMessage}
@@ -259,7 +259,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginVertical: theme.spacing.large,
       textAlign: 'center',
     },
-    activityIndicator: {
+    loading: {
       marginVertical: theme.spacing.large,
     },
     errorMessage: {

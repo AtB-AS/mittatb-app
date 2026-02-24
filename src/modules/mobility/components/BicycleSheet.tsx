@@ -90,7 +90,7 @@ export const BicycleSheet = ({
     >
       <>
         {isLoading && (
-          <View style={styles.activityIndicator}>
+          <View style={styles.loading}>
             <Loading size="large" />
           </View>
         )}
@@ -180,7 +180,7 @@ export const BicycleSheet = ({
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   return {
-    activityIndicator: {
+    loading: {
       marginBottom: theme.spacing.medium,
     },
     container: {

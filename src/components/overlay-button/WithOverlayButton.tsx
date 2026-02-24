@@ -1,13 +1,9 @@
-import {
-  ActivityIndicator,
-  type StyleProp,
-  View,
-  type ViewStyle,
-} from 'react-native';
+import {type StyleProp, View, type ViewStyle} from 'react-native';
 import type {PropsWithChildren} from 'react';
 import type {SvgProps} from 'react-native-svg';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
+import {Loading} from '../loading';
 
 type Props = PropsWithChildren<{
   svgIcon(props: SvgProps): React.JSX.Element;
@@ -39,9 +35,9 @@ export function WithOverlayButton({
         ]}
       >
         {isLoading ? (
-          <ActivityIndicator
+          <Loading
             color={theme.color.foreground.dynamic.primary}
-            style={styles.activityIndicator}
+            style={styles.loading}
             size="small"
           />
         ) : (
@@ -69,16 +65,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     position: 'absolute',
     zIndex: 2,
   },
-  activityIndicator: {
+  loading: {
     padding: theme.spacing.medium,
-    margin: theme.spacing.xSmall / 2, // To compensate for smaller ActivityIndicator size
+    margin: theme.spacing.xSmall / 2, // To compensate for smaller Loading size
   },
   background: {
     borderWidth: 1,
     borderStyle: 'solid',
     borderColor: theme.color.border.primary.background,
     borderRadius: theme.border.radius.circle,
-    // Setting backgroundColor here is necessary for the ActivityIndicator
+    // Setting backgroundColor here is necessary for the Loading
     backgroundColor: theme.color.interactive[2].default.background,
   },
   right: {

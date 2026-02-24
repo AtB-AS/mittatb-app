@@ -119,7 +119,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
           <View style={styles.buttonView}>
             {isLoading && (
               <Loading
-                style={styles.activityIndicator}
+                style={styles.loading}
                 size="large"
                 color={themeColor.foreground.primary}
               />
@@ -195,7 +195,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacing.large,
     textAlign: 'center',
   },
-  activityIndicator: {
+  loading: {
     marginVertical: theme.spacing.large,
   },
   messageBox: {

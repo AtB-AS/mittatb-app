@@ -34,7 +34,7 @@ export const MapFilterSheet = ({
 
   if (!initialFilterRef.current || !mapFilter) {
     return (
-      <View style={style.activityIndicator}>
+      <View style={style.loading}>
         <Loading size="large" />
       </View>
     );
@@ -68,7 +68,7 @@ export const MapFilterSheet = ({
 
 const useStyle = StyleSheet.createThemeHook((theme) => {
   return {
-    activityIndicator: {
+    loading: {
       marginBottom: theme.spacing.medium,
     },
     container: {

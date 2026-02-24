@@ -102,7 +102,7 @@ export const DeparturesWidget = ({
         </Section>
       )}
       {favoriteDeparturesIsLoading && (
-        <Loading size="large" style={styles.activityIndicator} />
+        <Loading size="large" style={styles.loading} />
       )}
       {sortedStopPlaceGroups?.map((stopPlaceGroup) => (
         <View key={stopPlaceGroup.stopPlace.id} testID="favoriteDepartures">
@@ -178,7 +178,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   noFavouritesUrl: {
     marginVertical: theme.spacing.xSmall,
   },
-  activityIndicator: {
+  loading: {
     marginVertical: theme.spacing.medium,
   },
 }));

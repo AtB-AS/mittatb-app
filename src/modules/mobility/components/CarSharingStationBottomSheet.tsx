@@ -100,7 +100,7 @@ export const CarSharingStationBottomSheet = ({
     >
       <>
         {isLoading && (
-          <View style={styles.activityIndicator}>
+          <View style={styles.loading}>
             <Loading size="large" />
           </View>
         )}
@@ -197,7 +197,7 @@ export const CarSharingStationBottomSheet = ({
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   return {
-    activityIndicator: {
+    loading: {
       marginBottom: theme.spacing.medium,
     },
     operatorBenefit: {

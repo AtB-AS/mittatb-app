@@ -61,7 +61,7 @@ export const FinishedScooterSheet = ({
       {isShmoDeepIntegrationEnabled && (
         <>
           {isLoading && (
-            <View style={styles.activityIndicator}>
+            <View style={styles.loading}>
               <Loading size="large" />
             </View>
           )}
@@ -127,7 +127,7 @@ export const FinishedScooterSheet = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
-    activityIndicator: {
+    loading: {
       marginBottom: theme.spacing.medium,
     },
     container: {

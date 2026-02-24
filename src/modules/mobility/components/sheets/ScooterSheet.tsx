@@ -110,7 +110,7 @@ export const ScooterSheet = ({
     >
       {(isLoading || shmoReqIsLoading) && (
         <View
-          style={styles.activityIndicator}
+          style={styles.loading}
           accessibilityRole="progressbar"
           accessibilityLiveRegion="polite"
         >
@@ -209,7 +209,7 @@ export const ScooterSheet = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
-    activityIndicator: {
+    loading: {
       marginBottom: theme.spacing.medium,
     },
     paymentWrapper: {
