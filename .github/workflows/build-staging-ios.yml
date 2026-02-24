@@ -42,7 +42,7 @@ jobs:
 
   setup:
     needs: detect-changes
-    if: ${{ !failure() && !cancelled() && ( github.event_name == 'workflow_dispatch' || needs.detect-changes.outputs.should_build == 'true' || inputs.force-build == 'true') }}
+    if: ${{ !failure() && !cancelled() && ( github.event_name == 'workflow_dispatch' || needs.detect-changes.outputs.should_build == 'true') }}
     name: Set-up tools and warm up cache
     runs-on: macOS-26
     outputs:
@@ -227,20 +227,14 @@ jobs:
           GCP_CREDENTIALS_PATH: google-services.json
           FIREBASE_APP_ID_IOS: ${{ secrets.FIREBASE_APP_ID_IOS }}
           RELEASE_NOTES_FILE: ./release-notes.txt
-      - name: Create bundle and source maps
-        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
-        run: sh ./scripts/ios/create-sourcemaps.sh
       - name: Setup Bugsnag CLI
         uses: ./.github/actions/setup-bugsnag-cli
-      - name: Upload bundle and source maps
-        run: sh ./scripts/ios/upload-sourcemaps.sh
-        env:
-          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
-      - name: Upload dSYMs
-        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
-        run: sh ./scripts/ios/upload-dsyms.sh
-        env:
-          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
+      - name: Upload Bugsnag symbols
+        uses: ./.github/actions/ios-upload-bugsnag
+        with:
+          bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
+          skip-create-sourcemaps: ${{ inputs.force-build != 'true' && steps.ipa-cache.outputs.cache-hit == 'true' }}
+          skip-dsyms: ${{ inputs.force-build != 'true' && steps.ipa-cache.outputs.cache-hit == 'true' }}
       - name: Register app version
         run: sh ./scripts/ios/register-app-version.sh
         env:

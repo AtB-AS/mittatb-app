@@ -35,7 +35,6 @@ jobs:
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
-          use-build-cache: 'false'
           app-environment: 'store'
           app-org: ${{ matrix.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
@@ -84,18 +83,12 @@ jobs:
           bundle exec fastlane ios testflight_prod
         env:
           APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
-      - name: Create bundle and source maps
-        run: sh ./scripts/ios/create-sourcemaps.sh
       - name: Setup Bugsnag CLI
         uses: ./.github/actions/setup-bugsnag-cli
-      - name: Upload bundle and source maps
-        run: sh ./scripts/ios/upload-sourcemaps.sh
-        env:
-          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
-      - name: Upload dSYMs
-        run: sh ./scripts/ios/upload-dsyms.sh
-        env:
-          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
+      - name: Upload Bugsnag symbols
+        uses: ./.github/actions/ios-upload-bugsnag
+        with:
+          bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Register app version
         run: sh ./scripts/ios/register-app-version.sh
         env:

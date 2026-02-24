@@ -21,6 +21,6 @@ else
         --source-map=bundle/main.jsbundle.map \
         --bundle=bundle/main.jsbundle \
         --platform=ios \
-        --project-root=/Users/runner/work/mittatb-app/mittatb-app \
+        --project-root="${GITHUB_WORKSPACE:-.}" \
         --verbose
 fi

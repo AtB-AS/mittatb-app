@@ -39,17 +39,11 @@ runs:
         GCP_CREDENTIALS_PATH: google-services.json
         FIREBASE_APP_ID: ${{ inputs.firebase-app-id }}
         RELEASE_NOTES_FILE: ./release-notes.txt
-    - name: Set sourcemaps directory
-      shell: bash
-      run: |
-        echo "BUNDLE_PATH=android/app/build/generated/assets/react/$(echo ${APP_FLAVOR}${APP_ENVIRONMENT^})/index.android.bundle" >> $GITHUB_ENV
-        echo "SOURCEMAP_PATH=android/app/build/generated/sourcemaps/react/$(echo $APP_FLAVOR${APP_ENVIRONMENT^})/index.android.bundle.map" >> $GITHUB_ENV
-    - name: Upload bundle and source maps
-      shell: bash
-      run: bash ./scripts/android/upload-sourcemaps.sh
-      env:
-        BUGSNAG_API_KEY: ${{ inputs.bugsnag-api-key }}
-        BUNDLE_ONLY: ${{ inputs.should-replace-bundle }}
+    - name: Upload Bugsnag symbols
+      uses: ./.github/actions/android-upload-bugsnag
+      with:
+        bugsnag-api-key: ${{ inputs.bugsnag-api-key }}
+        skip-native: ${{ inputs.should-replace-bundle }}
     - name: Register app version
       shell: bash
       run: bash ./scripts/android/register-app-version.sh

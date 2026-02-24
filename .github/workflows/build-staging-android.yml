@@ -41,7 +41,7 @@ permissions:
 jobs:
   detect-changes:
     name: Detect changes
-    if: inputs.force-build != 'true' || github.event_name != 'workflow_dispatch'
+    if: inputs.force-build != 'true'
     runs-on: ubuntu-latest
     outputs:
       should_build: ${{ steps.detect.outputs.should_build }}
@@ -55,7 +55,7 @@ jobs:
 
   setup:
     needs: detect-changes
-    if: ${{ !failure() && (github.event_name == 'workflow_dispatch' || inputs.force-build == 'true' || needs.detect-changes.outputs.should_build == 'true') }}
+    if: ${{ !failure() && !cancelled() && (github.event_name == 'workflow_dispatch' || needs.detect-changes.outputs.should_build == 'true') }}
     name: Install tools and warm up caches
     runs-on: ubuntu-latest
     outputs:
@@ -104,7 +104,7 @@ jobs:
         uses: actions/cache@v4
         id: modules-cache
         with:
-          lookup-only: ${{ inputs.force-build != 'true' }}
+          lookup-only: true
           path: '**/node_modules'
           key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
           restore-keys: |
@@ -168,7 +168,7 @@ jobs:
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
           entur-registry-user: ${{ vars.ENTUR_REGISTRY_USER }}
           entur-registry-token: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
-          can-skip: ${{ steps.apk-cache.outputs.cache-hit }}
+          can-skip: ${{ inputs.force-build != 'true' && steps.apk-cache.outputs.cache-hit == 'true' }}
 
       - name: Override version name on staging build
         shell: bash
@@ -201,14 +201,14 @@ jobs:
           # NDK_CCACHE: /usr/bin/ccache
 
       - name: Restore APKTool cache
-        if: inputs.output-type != 'AAB'
+        if: inputs.output-type != 'AAB' && inputs.force-build != 'true' && steps.apk-cache.outputs.cache-hit == 'true'
         uses: actions/cache@v4
         with:
           path: ~/apktool
           key: apktool-2.12.1
 
       - name: Add APKTool to PATH
-        if: inputs.output-type != 'AAB'
+        if: inputs.output-type != 'AAB' && inputs.force-build != 'true' && steps.apk-cache.outputs.cache-hit == 'true'
         run: echo "$HOME/apktool" >> $GITHUB_PATH
 
       - name: Generate release notes
@@ -220,6 +220,7 @@ jobs:
         run: bash ./scripts/generate-staging-release-notes.sh
 
       - name: Setup Bugsnag CLI
+        if: inputs.output-type != 'AAB'
         uses: ./.github/actions/setup-bugsnag-cli
 
       - name: Post-build steps
