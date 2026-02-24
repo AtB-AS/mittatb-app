@@ -16,7 +16,7 @@ export const MapDisabledForScreenReader = ({focusRef}: Props) => {
   const {t} = useTranslation();
   return (
     <SafeAreaView style={styles.container}>
-      <ThemedMapImage />
+      <ThemedMapImage width={150} height={150} />
       <View
         ref={focusRef}
         accessible={true}

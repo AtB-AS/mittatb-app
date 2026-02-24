@@ -8,7 +8,7 @@ import {
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {
   type SupplementProductWithCountAndOffer,
   UserProfileWithCountAndOffer,
@@ -45,23 +45,21 @@ export const PriceSummary = ({
   return (
     <Section>
       {travellerSelectionMode !== 'none' && (
-        <GenericSectionItem>
-          {userProfilesWithCountAndOffer.map((u, i) => (
+        <GenericSectionItem style={styles.travellerList}>
+          {userProfilesWithCountAndOffer.map((u) => (
             <PricePerTraveller
               key={u.id}
               name={getReferenceDataName(u, language)}
               offerPrice={u.offer.price}
               count={u.count}
-              style={i != 0 ? styles.smallTopMargin : undefined}
             />
           ))}
-          {supplementProductsWithCountAndOffer.map((sp, i) => (
+          {supplementProductsWithCountAndOffer.map((sp) => (
             <PricePerTraveller
               key={sp.id}
               name={getReferenceDataName(sp, language)}
               offerPrice={sp.offer.supplementProducts[0].price}
               count={sp.count}
-              style={i != 0 ? styles.smallTopMargin : undefined}
             />
           ))}
         </GenericSectionItem>
@@ -103,11 +101,9 @@ type PricePerTravellerProps = {
   name: string;
   offerPrice: SearchOfferPrice;
   count: number;
-  style: StyleProp<ViewStyle>;
 };
 
 const PricePerTraveller = ({
-  style,
   name,
   offerPrice,
   count,
@@ -141,7 +137,7 @@ const PricePerTraveller = ({
     <View
       accessible={true}
       accessibilityLabel={a11yLabel}
-      style={[style, styles.travellerItem]}
+      style={styles.travellerItem}
     >
       <ThemeText
         style={styles.travellerCountAndName}
@@ -170,6 +166,9 @@ const PricePerTraveller = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  travellerList: {
+    gap: theme.spacing.xSmall,
+  },
   travellerItem: {
     flex: 1,
     flexDirection: 'row',
@@ -191,8 +190,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   totalContainerHeadings: {
     paddingVertical: theme.spacing.xSmall,
-  },
-  smallTopMargin: {
-    marginTop: theme.spacing.xSmall,
   },
 }));
