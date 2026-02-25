@@ -125,6 +125,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   staticChipsContainer: {
     flexDirection: 'row',
     gap: theme.spacing.small,
+    // On Android, buttons were slighly cut off by the scroll view container
+    // when it had no extra vertical space
+    marginVertical: 1,
   },
 }));
 
