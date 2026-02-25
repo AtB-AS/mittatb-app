@@ -1,6 +1,4 @@
-import qs from 'query-string';
 import {client} from '../client';
-import {stringifyUrl} from '../utils';
 
 type EnrollmentResponse =
   | {
@@ -9,17 +7,11 @@ type EnrollmentResponse =
   | {status: 'ok'; groups: string[]; enrollmentId: string};
 
 export async function enrollIntoBetaGroups(inviteKey: string) {
-  const url = 'bff/v1/enrollment/group';
-  const query = qs.stringify({
-    inviteKey,
-  });
+  const url = 'enrollment/v2';
+  const body = {code: inviteKey};
 
-  return await client.post<EnrollmentResponse>(
-    stringifyUrl(url, query),
-    undefined,
-    {
-      authWithIdToken: true,
-      skipErrorLogging: (error) => error.response?.status === 422,
-    },
-  );
+  return await client.post<EnrollmentResponse>(url, body, {
+    authWithIdToken: true,
+    skipErrorLogging: (error) => error.response?.status === 422,
+  });
 }
