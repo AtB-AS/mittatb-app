@@ -1,6 +1,10 @@
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {
+  PurchaseOverviewTexts,
+  TripSearchTexts,
+  useTranslation,
+} from '@atb/translations';
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
@@ -56,6 +60,9 @@ export const HarborSelection = forwardRef<
           svgIcon={Swap}
           onPress={onSwap}
           overlayPosition="right"
+          accessibilityLabel={
+            t(TripSearchTexts.location.swapButton.a11yLabel) + screenReaderPause
+          }
         >
           <Section accessible={false}>
             <HarborSelectionItem

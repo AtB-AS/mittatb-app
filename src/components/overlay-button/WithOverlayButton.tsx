@@ -1,4 +1,5 @@
 import {
+  type AccessibilityProps,
   ActivityIndicator,
   type StyleProp,
   View,
@@ -9,13 +10,15 @@ import type {SvgProps} from 'react-native-svg';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
 
-type Props = PropsWithChildren<{
-  svgIcon(props: SvgProps): React.JSX.Element;
-  overlayPosition: 'left' | 'right';
-  isLoading?: boolean;
-  onPress: () => void;
-  buttonStyleOverride?: StyleProp<ViewStyle>;
-}>;
+type Props = PropsWithChildren<
+  {
+    svgIcon(props: SvgProps): React.JSX.Element;
+    overlayPosition: 'left' | 'right';
+    isLoading?: boolean;
+    onPress: () => void;
+    buttonStyleOverride?: StyleProp<ViewStyle>;
+  } & AccessibilityProps
+>;
 
 export function WithOverlayButton({
   children,
