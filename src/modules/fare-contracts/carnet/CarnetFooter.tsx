@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
@@ -9,6 +9,7 @@ import {FareContractType, getAccesses} from '@atb-as/utils';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {formatToClock, formatToDateWithDayOfWeek} from '@atb/utils/date';
 import {ValidityStatus} from '../utils';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -39,7 +40,7 @@ export const CarnetFooter: React.FC<Props> = ({
       schoolCarnetInfo,
     );
 
-  if (isSchoolCarnetInfoFetching) return <ActivityIndicator />;
+  if (isSchoolCarnetInfoFetching) return <Loading />;
   if (isSchoolCarnetInfoError)
     return (
       <MessageInfoBox

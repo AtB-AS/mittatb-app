@@ -23,7 +23,7 @@ import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 import {useTranslation} from '@atb/translations';
 import {BicycleTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import React, {useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {useBikeStation} from '../use-bike-station';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
 import {useOperatorBenefit} from '../use-operator-benefit';
@@ -33,6 +33,7 @@ import {MobilityStats} from './MobilityStats';
 import {OperatorActionButton} from './OperatorActionButton';
 import {OperatorBenefit} from './OperatorBenefit';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   stationId: string;
@@ -102,8 +103,8 @@ export const BikeStationBottomSheet = ({
     >
       <>
         {isLoading && (
-          <View style={styles.activityIndicator}>
-            <ActivityIndicator size="large" />
+          <View style={styles.loading}>
+            <Loading size="large" />
           </View>
         )}
         {!isLoading && !isError && station && (
@@ -210,7 +211,7 @@ export const BikeStationBottomSheet = ({
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   return {
-    activityIndicator: {
+    loading: {
       marginBottom: theme.spacing.medium,
     },
     operatorBenefit: {

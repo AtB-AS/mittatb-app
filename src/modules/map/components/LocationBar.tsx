@@ -5,7 +5,7 @@ import {LocationIcon} from '@atb/components/location-icon';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import React, {useMemo} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {GeoLocation, Location, SearchLocation} from '@atb/modules/favorites';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
@@ -19,6 +19,7 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useReverseGeocoderQuery} from '@atb/modules/geocoder';
 import {RequestError} from '@atb/api/utils';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   coordinates?: Coordinates;
@@ -101,7 +102,7 @@ const Icon: React.FC<{
   return (
     <View style={{marginHorizontal: 12}}>
       {isLoading ? (
-        <ActivityIndicator
+        <Loading
           animating={true}
           color={getBackgroundColor(theme).foreground.primary}
         />

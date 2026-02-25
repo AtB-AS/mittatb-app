@@ -17,7 +17,7 @@ import {PricingPlan} from './PricingPlan';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
 import {formatRange} from '../utils';
 import {useVehicle} from '../use-vehicle';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useOperatorBenefit} from '../use-operator-benefit';
 import {OperatorActionButton} from './OperatorActionButton';
@@ -33,6 +33,7 @@ import {
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {TransportationIconBox} from '@atb/components/icon-box';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   vehicleId: VehicleId;
@@ -89,8 +90,8 @@ export const BicycleSheet = ({
     >
       <>
         {isLoading && (
-          <View style={styles.activityIndicator}>
-            <ActivityIndicator size="large" />
+          <View style={styles.loading}>
+            <Loading size="large" />
           </View>
         )}
         {!isLoading && !isError && vehicle && (
@@ -179,7 +180,7 @@ export const BicycleSheet = ({
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   return {
-    activityIndicator: {
+    loading: {
       marginBottom: theme.spacing.medium,
     },
     container: {

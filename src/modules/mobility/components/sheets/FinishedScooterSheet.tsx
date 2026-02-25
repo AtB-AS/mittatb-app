@@ -5,7 +5,7 @@ import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
@@ -19,6 +19,7 @@ import {
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   onClose: () => void;
@@ -60,8 +61,8 @@ export const FinishedScooterSheet = ({
       {isShmoDeepIntegrationEnabled && (
         <>
           {isLoading && (
-            <View style={styles.activityIndicator}>
-              <ActivityIndicator size="large" />
+            <View style={styles.loading}>
+              <Loading size="large" />
             </View>
           )}
           {!isLoading && !isError && shmoBooking && (
@@ -126,7 +127,7 @@ export const FinishedScooterSheet = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
-    activityIndicator: {
+    loading: {
       marginBottom: theme.spacing.medium,
     },
     container: {

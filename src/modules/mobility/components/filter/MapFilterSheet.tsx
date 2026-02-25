@@ -1,5 +1,5 @@
 import {MapTexts, useTranslation} from '@atb/translations';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import React, {useRef} from 'react';
 
 import {
@@ -13,6 +13,7 @@ import {
   BottomSheetHeaderType,
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
+import {Loading} from '@atb/components/loading';
 
 type MapFilterSheetProps = {
   onClose: () => void;
@@ -33,8 +34,8 @@ export const MapFilterSheet = ({
 
   if (!initialFilterRef.current || !mapFilter) {
     return (
-      <View style={style.activityIndicator}>
-        <ActivityIndicator size="large" />
+      <View style={style.loading}>
+        <Loading size="large" />
       </View>
     );
   }
@@ -67,7 +68,7 @@ export const MapFilterSheet = ({
 
 const useStyle = StyleSheet.createThemeHook((theme) => {
   return {
-    activityIndicator: {
+    loading: {
       marginBottom: theme.spacing.medium,
     },
     container: {

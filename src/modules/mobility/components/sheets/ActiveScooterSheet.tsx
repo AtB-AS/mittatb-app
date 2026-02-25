@@ -5,7 +5,7 @@ import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {ActivityIndicator, Alert, View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -31,6 +31,7 @@ import {
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemeText} from '@atb/components/text';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   navigateSupportCallback: () => void;
@@ -146,8 +147,8 @@ export const ActiveScooterSheet = ({
       {isShmoDeepIntegrationEnabled && (
         <>
           {isLoading && (
-            <View style={styles.activityIndicator}>
-              <ActivityIndicator size="large" />
+            <View style={styles.loading}>
+              <Loading size="large" />
             </View>
           )}
           {!isLoading && !isError && activeBooking && (
@@ -230,7 +231,7 @@ export const ActiveScooterSheet = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
-    activityIndicator: {
+    loading: {
       marginBottom: theme.spacing.medium,
     },
     operatorBenefit: {
