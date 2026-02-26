@@ -9,10 +9,7 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {
-  PressableOpacity,
-  PressableOpacityEvent,
-} from '@atb/components/pressable-opacity';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 
 type BaseProps = {
@@ -21,10 +18,7 @@ type BaseProps = {
   testID?: string;
 };
 type WithOnPress = BaseProps & {
-  onPress(
-    favorite: StoredFavoriteDeparture,
-    event: PressableOpacityEvent,
-  ): void;
+  onPress(favorite: StoredFavoriteDeparture): void;
   accessibility?: AccessibilityProps;
 };
 
@@ -50,7 +44,7 @@ export function FavoriteDepartureSectionItem(props: Props) {
       accessible
       accessibilityLabel={a11yLabel + screenReaderPause}
       accessibilityRole="button"
-      onPress={(e) => props.onPress(props.favorite, e)}
+      onPress={() => props.onPress(props.favorite)}
       {...props.accessibility}
       testID={props.testID}
     >

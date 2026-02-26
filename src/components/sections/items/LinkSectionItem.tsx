@@ -8,10 +8,7 @@ import {useSectionStyle} from '../use-section-style';
 import {StyleSheet} from '@atb/theme';
 import {ContrastColor, InteractiveColor, TextNames} from '@atb/theme/colors';
 import {LabelType} from '@atb/modules/configuration';
-import {
-  PressableOpacity,
-  PressableOpacityEvent,
-} from '@atb/components/pressable-opacity';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useTranslation} from '@atb/translations';
 import {TagInfoTexts} from '@atb/translations/components/TagInfo';
 import {Tag} from '@atb/components/tag';
@@ -29,7 +26,7 @@ type Props = SectionItemProps<{
   subtitle?: string;
   /* Label will be placed by the icon. "Beta", "New", etc. */
   label?: LabelType;
-  onPress?(event: PressableOpacityEvent): void;
+  onPress?(): void;
   leftIcon?: IconProps;
   rightIcon?: IconProps;
   disabled?: boolean;
@@ -82,7 +79,6 @@ export const LinkSectionItem = forwardRef<any, Props>(
         style={topContainer}
         testID={testID}
         ref={forwardedRef}
-        collapsable={false}
         {...accessibilityWithOverrides}
       >
         <View

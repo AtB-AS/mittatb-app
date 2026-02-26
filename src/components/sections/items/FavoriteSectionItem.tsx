@@ -10,10 +10,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {
-  PressableOpacity,
-  PressableOpacityEvent,
-} from '@atb/components/pressable-opacity';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type BaseProps = {
   favorite: StoredLocationFavorite;
@@ -21,7 +18,7 @@ type BaseProps = {
   testID?: string;
 };
 type WithOnPress = BaseProps & {
-  onPress(favorite: StoredLocationFavorite, event: PressableOpacityEvent): void;
+  onPress(favorite: StoredLocationFavorite): void;
   accessibility?: AccessibilityProps;
 };
 
@@ -40,7 +37,7 @@ export function FavoriteSectionItem(props: Props) {
       accessible
       accessibilityLabel={a11yLabel + screenReaderPause}
       accessibilityRole="button"
-      onPress={(e) => props.onPress(props.favorite, e)}
+      onPress={() => props.onPress(props.favorite)}
       testID={props.testID}
       {...props.accessibility}
     >

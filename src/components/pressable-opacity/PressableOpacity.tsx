@@ -1,22 +1,15 @@
-import {Pressable, PressableProps} from 'react-native-gesture-handler';
-import {PressableEvent} from 'react-native-gesture-handler/lib/typescript/components/Pressable/PressableProps';
-import {StyleProp, ViewStyle} from 'react-native';
+import {RectButton, RectButtonProps} from 'react-native-gesture-handler';
 import React, {forwardRef} from 'react';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
-export type PressableOpacityProps = {
-  style?: StyleProp<ViewStyle>;
-} & PressableProps;
-
-export type PressableOpacityEvent = PressableEvent;
+export type PressableOpacityProps = {disabled?: boolean} & RectButtonProps;
 
 export const PressableOpacity = forwardRef<any, PressableOpacityProps>(
-  ({style, ...pressableProps}: PressableOpacityProps, focusRef) => {
+  ({...pressableProps}: PressableOpacityProps, focusRef) => {
     const {logEvent} = useAnalyticsContext();
     return (
-      <Pressable
+      <RectButton
         ref={focusRef}
-        style={({pressed}) => [{opacity: pressed ? 0.2 : 1}, style]}
         {...pressableProps}
         onPress={(e) => {
           pressableProps.onPress?.(e);
@@ -24,9 +17,10 @@ export const PressableOpacity = forwardRef<any, PressableOpacityProps>(
             logEvent('OnPress event', pressableProps.testID);
           }
         }}
+        activeOpacity={0.2}
       >
         {pressableProps?.children}
-      </Pressable>
+      </RectButton>
     );
   },
 );
