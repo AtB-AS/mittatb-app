@@ -136,18 +136,17 @@ jobs:
             AtB.ipa
             AtB.app.dSYM.zip
           key: ${{ matrix.org }}-ipa-app-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets*/') }}
-      - name: Add Entur private registry credentials
-        run: sh ./scripts/add-entur-private-registry.sh
-        env:
-          ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
-          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
           app-environment: 'staging'
           app-org: ${{ matrix.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+          entur-registry-user: ${{ vars.ENTUR_REGISTRY_USER }}
+          entur-registry-token: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+          match-ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
           force-build: ${{ inputs.force-build }}
+          skip-heavy-steps: ${{ inputs.force-build != 'true' && steps.ipa-cache.outputs.cache-hit == 'true' }}
       - name: Get potential cached pods
         uses: actions/cache@v4
         id: pods-cache
@@ -160,29 +159,6 @@ jobs:
           restore-keys: |
             pods-${{ hashFiles('yarn.lock') }}-
             pods-
-      - uses: webfactory/ssh-agent@v0.4.1
-        with:
-          ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
-      - name: Generate native assets
-        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
-        run: |
-          rm '/usr/local/bin/2to3'
-          rm '/usr/local/bin/2to3-3.12'
-          rm '/usr/local/bin/idle3'
-          rm '/usr/local/bin/idle3.12'
-          rm '/usr/local/bin/pydoc3'
-          rm '/usr/local/bin/pydoc3.12'
-          rm '/usr/local/bin/python3'
-          rm '/usr/local/bin/python3-config'
-          rm '/usr/local/bin/python3.12'
-          rm '/usr/local/bin/python3.12-config'
-          rm '/usr/local/bin/2to3-3.11'
-          rm '/usr/local/bin/idle3.11'
-          rm '/usr/local/bin/pydoc3.11'
-          rm '/usr/local/bin/python3.11'
-          rm '/usr/local/bin/python3.11-config'
-          brew install imagemagick
-          yarn generate-native-assets
       - name: Disable widget
         if: ${{ env.ENABLE_WIDGET != 'true' && steps.ipa-cache.outputs.cache-hit != 'true' }}
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget AtbAppIntent

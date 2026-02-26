@@ -78,11 +78,11 @@ flowchart TD
         ipa_check -- No --> ipa_cache{"IPA + dSYM
         cache hit?"}
 
-        ipa_skip --> entur_b["Add Entur registry credentials"]
-        ipa_cache --> entur_b
+        ipa_skip --> ios_build_setup["iOS build setup
+        composite action
+        skip-heavy-steps based on cache"]
+        ipa_cache --> ios_build_setup
 
-        entur_b --> ios_build_setup["iOS build setup
-        composite action"]
         ios_build_setup --> build_path["Build path decision"]
     end
 ```
@@ -100,10 +100,12 @@ flowchart TD
     git-crypt-unlock.sh
     uses brew install git-crypt"]
 
-    decrypt --> node["Install Node v22"]
+    decrypt --> entur["Add Entur registry credentials
+    add-entur-private-registry.sh"]
 
-    node --> ruby["Setup Ruby 3.1.0 + Bundler
-    WARNING: uses undefined inputs.ruby-version"]
+    entur --> node["Install Node v22"]
+
+    node --> ruby["Setup Ruby 3.1.0 + Bundler"]
 
     ruby --> nm_check{"force-build = true?"}
 
@@ -132,7 +134,19 @@ flowchart TD
     ios/override-config-files.sh
     updates Info.plist reCAPTCHA URL schemes"]
 
-    override_config --> done(["ios-build-setup done"])
+    override_config --> ssh_agent["Setup SSH agent
+    for Match private key"]
+
+    ssh_agent --> heavy_check{"skip-heavy-steps
+    = true?"}
+
+    heavy_check -- No --> gen_assets["Generate native assets
+    remove Python symlinks
+    brew install imagemagick
+    yarn generate-native-assets"]
+
+    gen_assets --> done(["ios-build-setup done"])
+    heavy_check -- Yes --> done
 ```
 
 ## Build Path Decision
@@ -144,24 +158,9 @@ flowchart TD
     setup_done --> pods_restore{"IPA cache hit?"}
 
     pods_restore -- "Miss or skipped" --> restore_pods["Restore Pods cache"]
-    pods_restore -- "Hit" --> ssh_agent
+    pods_restore -- "Hit" --> widget_skip
 
-    restore_pods --> ssh_agent["Setup SSH agent
-    for Match private key"]
-
-    ssh_agent --> native_check{"force-build = true
-    OR IPA cache miss?"}
-
-    native_check -- Yes --> gen_assets
-    native_check -- No --> cert_match
-
-    gen_assets["Generate native assets
-    remove Python symlinks
-    brew install imagemagick
-    yarn generate-native-assets
-    WARNING: rm without -f flag"]
-
-    gen_assets --> widget_check{"ENABLE_WIDGET != true
+    restore_pods --> widget_check{"ENABLE_WIDGET != true
     AND IPA cache miss?"}
 
     widget_check -- Yes --> disable_widget["Disable widget
@@ -181,6 +180,9 @@ flowchart TD
     SKIP_PODS based on pods cache"]
 
     fastlane_build --> release_notes
+
+    widget_skip["Skip widget/beacons
+    native code unchanged"] --> cert_match
 
     cert_match["Fastlane cert match only
     bundle exec fastlane ios get_certs
@@ -309,34 +311,32 @@ flowchart TD
 flowchart LR
     subgraph fresh ["Path A: Fresh Build - force-build=true OR no IPA cache"]
         direction TB
-        f1["Full setup: node, ruby, xcode, pods"] --> f2["Decrypt + set environment"]
-        f2 --> f3["Generate native assets
-        brew install imagemagick"]
-        f3 --> f4["Disable widget / remove beacons
+        f1["ios-build-setup: node, ruby, xcode,
+        entur, ssh-agent, native assets"] --> f2["Disable widget / remove beacons
         if applicable"]
-        f4 --> f5["Fastlane ios build
+        f2 --> f3["Fastlane ios build
         ad-hoc export"]
-        f5 --> f6["Generate release notes"]
-        f6 --> f7["Firebase distribution"]
-        f7 --> f8["Bugsnag: create + upload sourcemaps
+        f3 --> f4["Generate release notes"]
+        f4 --> f5["Firebase distribution"]
+        f5 --> f6["Bugsnag: create + upload sourcemaps
         + upload dSYMs"]
-        f8 --> f9["Register app version"]
+        f6 --> f7["Register app version"]
     end
 
     subgraph cached ["Path B: Cached IPA - force-build=false AND IPA cache hit"]
         direction TB
-        c1["Setup: node, ruby, xcode
-        skip pods restore"] --> c2["Decrypt + set environment"]
-        c2 --> c3["Fastlane cert match only
+        c1["ios-build-setup: node, ruby, xcode,
+        entur, ssh-agent
+        skip native assets"] --> c2["Fastlane cert match only
         get signing certs"]
-        c3 --> c4["Replace IPA bundle
+        c2 --> c3["Replace IPA bundle
         regen JS, unzip, replace,
         re-sign, re-zip"]
-        c4 --> c5["Generate release notes"]
-        c5 --> c6["Firebase distribution"]
-        c6 --> c7["Bugsnag: upload sourcemaps only
+        c3 --> c4["Generate release notes"]
+        c4 --> c5["Firebase distribution"]
+        c5 --> c6["Bugsnag: upload sourcemaps only
         skip dSYMs"]
-        c7 --> c8["Register app version"]
+        c6 --> c7["Register app version"]
     end
 ```
 
