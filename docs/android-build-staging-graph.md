@@ -8,17 +8,17 @@ flowchart TD
     schedule weekdays 01:00,
     workflow_dispatch"]
 
-    trigger --> dc_decision{"force-build = true
-    OR schedule?"}
-    dc_decision -- Yes --> setup
-    dc_decision -- No --> detect_changes
+    trigger --> detect_changes
 
     subgraph detect_changes ["detect-changes - ubuntu-latest"]
-        dc_checkout["Checkout
+        force_check{"force-build = true
+        OR schedule?"}
+        force_check -- Yes --> force_build(["should_build: true
+        skip checkout + detection"])
+        force_check -- No --> dc_checkout["Checkout
         fetch-depth: 2"]
-        dc_detect["Detect changes
+        dc_checkout --> dc_detect["Detect changes
         .github/actions/detect-changes"]
-        dc_checkout --> dc_detect
         dc_detect --> dc_out(["should_build: true/false"])
     end
 
@@ -316,12 +316,12 @@ flowchart LR
 
 ## Trigger Conditions Reference
 
-| Trigger | force-build | detect-changes runs? | inputs.org | inputs.abi | inputs.output-type |
-|---------|------------|---------------------|------------|-----------|-------------------|
-| push to master/release | N/A - empty | Yes | default: all 4 | default fallback: arm64-v8a, armeabi-v7a | default: APK |
-| schedule - cron | N/A - empty | No - skipped | default: all 4 | hardcoded: all 4 ABIs | default: APK |
-| workflow_dispatch force=false | false | Yes | user input | user input | user input |
-| workflow_dispatch force=true | true | No - skipped | user input | user input | user input |
+| Trigger | force-build | detect-changes behavior | inputs.org | inputs.abi | inputs.output-type |
+|---------|------------|------------------------|------------|-----------|-------------------|
+| push to master/release | N/A - empty | Runs full detection | default: all 4 | default fallback: arm64-v8a, armeabi-v7a | default: APK |
+| schedule - cron | N/A - empty | Short-circuits to should_build=true | default: all 4 | hardcoded: all 4 ABIs | default: APK |
+| workflow_dispatch force=false | false | Runs full detection | user input | user input | user input |
+| workflow_dispatch force=true | true | Short-circuits to should_build=true | user input | user input | user input |
 
 ## Key Environment Variables Flow
 

@@ -27,22 +27,27 @@ permissions:
 
 jobs:
   detect-changes:
-    if: inputs.force-build != 'true' && github.event_name != 'schedule'
     name: Detect changes
     runs-on: ubuntu-latest
     outputs:
-      should_build: ${{ steps.detect.outputs.should_build }}
+      should_build: ${{ steps.force.outputs.should_build || steps.detect.outputs.should_build }}
     steps:
+      - name: Force build
+        id: force
+        if: inputs.force-build == 'true' || github.event_name == 'schedule'
+        run: echo "should_build=true" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v4
+        if: steps.force.outputs.should_build != 'true'
         with:
           fetch-depth: 2
       - name: Detect change after checkout
         id: detect
+        if: steps.force.outputs.should_build != 'true'
         uses: ./.github/actions/detect-changes
 
   setup:
     needs: detect-changes
-    if: ${{ !failure() && !cancelled() && needs.detect-changes.outputs.should_build != 'false' }}
+    if: needs.detect-changes.outputs.should_build != 'false'
     name: Set-up tools and warm up cache
     runs-on: macOS-26
     outputs:
