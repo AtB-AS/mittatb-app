@@ -2,7 +2,10 @@ import {RectButton, RectButtonProps} from 'react-native-gesture-handler';
 import React, {forwardRef} from 'react';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
-export type NativeButtonProps = {disabled?: boolean} & RectButtonProps;
+export type NativeButtonProps = {disabled?: boolean} & Omit<
+  RectButtonProps,
+  'enabled'
+>;
 
 export const NativeButton = forwardRef<any, NativeButtonProps>(
   ({disabled, ...pressableProps}: NativeButtonProps, focusRef) => {
