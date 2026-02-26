@@ -151,12 +151,9 @@ flowchart TD
     gradle_check -- Yes --> gradle["Setup Gradle
     gradle/actions/setup-gradle@v5
     cache based on force-build flag"]
-    gradle_check -- No --> version_name
+    gradle_check -- No --> dep_changes
 
-    gradle --> version_name["Override version name
-    set-version-name.sh"]
-
-    version_name --> dep_changes["Detect dependency changes
+    gradle --> dep_changes["Detect dependency changes
     dorny/paths-filter"]
 
     dep_changes --> should_build{"force-build = true
@@ -280,14 +277,13 @@ flowchart LR
         f1["android-build-setup
         full run incl. cleanup,
         imagemagick, native assets"] --> f2["Setup Gradle"]
-        f2 --> f3["Override version name"]
-        f3 --> f4["Fastlane build APK or AAB"]
-        f4 --> f5["Generate release notes"]
-        f5 --> f6["Setup Bugsnag CLI"]
-        f6 --> f7["Firebase distribution"]
-        f7 --> f8["Bugsnag: sourcemaps only
+        f2 --> f3["Fastlane build APK or AAB"]
+        f3 --> f4["Generate release notes"]
+        f4 --> f5["Setup Bugsnag CLI"]
+        f5 --> f6["Firebase distribution"]
+        f6 --> f7["Bugsnag: sourcemaps only
         NDK + Proguard skipped"]
-        f8 --> f9["Register app version"]
+        f7 --> f8["Register app version"]
     end
 
     subgraph cached ["Path B: Cached APK - force-build=false AND APK cache hit"]
@@ -295,16 +291,15 @@ flowchart LR
         c1["android-build-setup
         skip-heavy-steps=true
         skip cleanup, imagemagick,
-        native assets"] --> c2["Override version name"]
-        c2 --> c3["Restore APKTool from cache"]
-        c3 --> c4["Generate release notes"]
-        c4 --> c5["Setup Bugsnag CLI"]
-        c5 --> c6["Replace APK bundle
+        native assets"] --> c2["Restore APKTool from cache"]
+        c2 --> c3["Generate release notes"]
+        c3 --> c4["Setup Bugsnag CLI"]
+        c4 --> c5["Replace APK bundle
         decompile, replace, recompile, re-sign"]
-        c6 --> c7["Firebase distribution"]
-        c7 --> c8["Bugsnag: sourcemaps only
+        c5 --> c6["Firebase distribution"]
+        c6 --> c7["Bugsnag: sourcemaps only
         NDK + Proguard skipped"]
-        c8 --> c9["Register app version"]
+        c7 --> c8["Register app version"]
     end
 ```
 
