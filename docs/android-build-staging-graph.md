@@ -258,17 +258,10 @@ flowchart TD
         based on APP_FLAVOR + APP_ENVIRONMENT"]
         bs_sourcemaps["Upload JS sourcemaps
         upload-sourcemaps.sh via bugsnag-cli"]
-        bs_native_check{"skip-native?
-        true when cached APK"}
-        bs_ndk["Upload NDK symbols
-        upload-ndk.sh via bugsnag-cli"]
-        bs_proguard["Upload Proguard mappings
-        upload-proguard.sh via bugsnag-cli"]
-        bs_skip_native(["NDK + Proguard skipped"])
+        bs_skip_native(["NDK + Proguard skipped
+        skip-native=true always on staging"])
 
-        bs_set --> bs_sourcemaps --> bs_native_check
-        bs_native_check -- "false - fresh build" --> bs_ndk --> bs_proguard
-        bs_native_check -- "true - cached APK" --> bs_skip_native
+        bs_set --> bs_sourcemaps --> bs_skip_native
     end
 
     bugsnag_upload --> register["Register app version
@@ -292,7 +285,8 @@ flowchart LR
         f4 --> f5["Generate release notes"]
         f5 --> f6["Setup Bugsnag CLI"]
         f6 --> f7["Firebase distribution"]
-        f7 --> f8["Bugsnag: sourcemaps + NDK + Proguard"]
+        f7 --> f8["Bugsnag: sourcemaps only
+        NDK + Proguard skipped"]
         f8 --> f9["Register app version"]
     end
 
