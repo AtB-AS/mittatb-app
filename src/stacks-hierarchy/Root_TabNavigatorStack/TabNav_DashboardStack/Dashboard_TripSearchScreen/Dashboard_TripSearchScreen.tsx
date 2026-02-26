@@ -289,6 +289,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               onPress={swap}
               overlayPosition="right"
               isLoading={updatingLocation && !to}
+              accessibilityLabel={
+                t(TripSearchTexts.location.swapButton.a11yLabel) +
+                screenReaderPause
+              }
             >
               <Section>
                 <LocationInputSectionItem

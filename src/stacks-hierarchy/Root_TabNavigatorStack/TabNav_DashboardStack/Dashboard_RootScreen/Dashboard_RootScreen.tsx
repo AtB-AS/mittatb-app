@@ -234,6 +234,10 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
             overlayPosition="right"
             isLoading={updatingLocation && !to}
             buttonStyleOverride={style.swapButton}
+            accessibilityLabel={
+              t(TripSearchTexts.location.swapButton.a11yLabel) +
+              screenReaderPause
+            }
           >
             <Section
               style={[style.contentSection, style.contentSection__first]}
