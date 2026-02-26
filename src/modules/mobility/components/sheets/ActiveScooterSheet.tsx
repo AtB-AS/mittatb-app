@@ -160,6 +160,7 @@ export const ActiveScooterSheet = ({
                       ? activeBooking.asset.currentRangeKm * 1000
                       : 0
                   }
+                  formFactor={activeBooking.asset.formFactor ?? undefined}
                 />
               </View>
               <View style={styles.footer}>

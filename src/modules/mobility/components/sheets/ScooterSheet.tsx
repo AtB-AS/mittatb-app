@@ -141,11 +141,13 @@ export const ScooterSheet = ({
             <VehicleCard
               currentFuelPercent={vehicle.currentFuelPercent}
               currentRangeMeters={vehicle.currentRangeMeters}
+              formFactor={vehicle.vehicleType.formFactor}
             />
 
             <PriceDetailsCard
               pricingPlan={vehicle.pricingPlan}
               priceAdjustments={priceAdjustments}
+              systemId={vehicle.system.id}
             />
           </View>
 

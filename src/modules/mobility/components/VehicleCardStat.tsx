@@ -23,14 +23,12 @@ export const VehicleCardStat = ({
 
   return (
     <View
-      style={
-        hasPriceAdjustment
-          ? [
-              styles.contentItem,
-              {backgroundColor: theme.color.status.valid.secondary.background},
-            ]
-          : styles.contentItem
-      }
+      style={[
+        styles.contentItem,
+        hasPriceAdjustment && {
+          backgroundColor: theme.color.status.valid.secondary.background,
+        },
+      ]}
     >
       <ThemeIcon svg={icon} color="primary" size="large" />
       <View>

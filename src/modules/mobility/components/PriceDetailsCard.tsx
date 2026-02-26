@@ -10,22 +10,34 @@ import {formatRatePerUnit} from '../utils';
 import {PricingPlanFragment} from '@atb/api/types/generated/fragments/mobility-shared';
 import {ShmoPricingPlan} from '@atb/api/types/mobility';
 import {formatNumberToString} from '@atb-as/utils';
-import {PriceAdjustmentType} from '@atb-as/config-specs/lib/mobility';
+import {
+  PriceAdjustmentEnum,
+  PriceAdjustmentType,
+} from '@atb-as/config-specs/lib/mobility';
 
 type Props = {
   pricingPlan: PricingPlanFragment | ShmoPricingPlan;
   priceAdjustments?: PriceAdjustmentType[];
+  systemId: string;
 };
 
-export const PriceDetailsCard = ({pricingPlan, priceAdjustments}: Props) => {
+export const PriceDetailsCard = ({
+  pricingPlan,
+  priceAdjustments,
+  systemId,
+}: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const ratePrUnit = formatRatePerUnit(pricingPlan, language);
   const freeUnlock = priceAdjustments?.find(
-    (e) => e.description === 'Free unlock',
+    (e) =>
+      e.type === PriceAdjustmentEnum.enum.FREE_UNLOCK &&
+      e.systemIds.includes(systemId),
   );
   const freeMinutes = priceAdjustments?.find(
-    (e) => e.description === 'Free minutes',
+    (e) =>
+      e.type === PriceAdjustmentEnum.enum.FREE_MINUTES &&
+      e.systemIds.includes(systemId),
   );
 
   const unlockStat = freeUnlock

@@ -40,6 +40,7 @@ import {
 import {TFunc} from '@leile/lobo-t';
 import {ErrorResponse, formatNumberToString} from '@atb-as/utils';
 import {FormattedRatePerUnit} from './types';
+import { ThemedCityBike, ThemedScooter } from '@atb/theme/ThemedAssets';
 
 export const isVehiclesClusteredFeature = (
   feature: Feature<Point> | undefined,
@@ -319,5 +320,16 @@ export function isSvgUrl(url: string) {
     return u.pathname.toLowerCase().endsWith('.svg');
   } catch {
     return false;
+  }
+}
+
+export function getThemedIllustrationForFormFactor(formFactor: FormFactor) {
+  switch (formFactor) {
+    case FormFactor.Scooter:
+      return ThemedScooter;
+    case FormFactor.Bicycle:
+      return ThemedCityBike;
+    default:
+      return null;
   }
 }

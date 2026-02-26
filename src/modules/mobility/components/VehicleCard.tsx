@@ -6,20 +6,29 @@ import {View} from 'react-native';
 import {BatteryHigh} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {VehicleCardStat} from './VehicleCardStat';
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {formatRange, getBatteryLevelIcon} from '../utils';
-import {ThemedScooter} from '@atb/theme/ThemedAssets';
+import {
+  formatRange,
+  getBatteryLevelIcon,
+  getThemedIllustrationForFormFactor,
+} from '../utils';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type Props = {
   currentFuelPercent: number | undefined;
   currentRangeMeters: number;
+  formFactor?: FormFactor;
 };
 
 export const VehicleCard = ({
   currentFuelPercent,
   currentRangeMeters,
+  formFactor,
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
+  const ThemedIllustration = formFactor
+    ? getThemedIllustrationForFormFactor(formFactor)
+    : null;
 
   return (
     <Section>
@@ -34,7 +43,9 @@ export const VehicleCard = ({
             stat={formatRange(currentRangeMeters, language)}
             description={t(ScooterTexts.range)}
           />
-          <ThemedScooter width={50} height={50} />
+          {!!ThemedIllustration && (
+            <ThemedIllustration width={50} height={50} />
+          )}
         </View>
       </GenericSectionItem>
     </Section>
