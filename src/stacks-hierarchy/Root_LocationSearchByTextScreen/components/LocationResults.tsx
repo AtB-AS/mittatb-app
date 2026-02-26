@@ -13,7 +13,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {SearchLocation} from '@atb/modules/favorites';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 
 type Props = {
   title?: string;
@@ -42,7 +42,7 @@ export const LocationResults: React.FC<Props> = ({
         {locations.map(mapToVisibleSearchResult).map((searchResult, idx) => (
           <View style={styles.rowContainer} key={searchResult.key}>
             <View style={styles.locationButtonContainer}>
-              <PressableOpacity
+              <NativeButton
                 accessible={true}
                 accessibilityLabel={
                   getLocationIconAccessibilityLabel(searchResult.location, t) +
@@ -80,7 +80,7 @@ export const LocationResults: React.FC<Props> = ({
                     {searchResult.subtext}
                   </ThemeText>
                 </View>
-              </PressableOpacity>
+              </NativeButton>
             </View>
           </View>
         ))}

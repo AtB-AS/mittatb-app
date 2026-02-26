@@ -20,7 +20,7 @@ import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 import {useOnboardingContext} from '@atb/modules/onboarding';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
@@ -150,7 +150,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
                   style={styles.submitButton}
                   testID="submitButton"
                 />
-                <PressableOpacity
+                <NativeButton
                   style={styles.resendButton}
                   onPress={onResendCode}
                   accessibilityRole="button"
@@ -163,7 +163,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
                   >
                     {t(LoginTexts.confirmCode.resendButton)}
                   </ThemeText>
-                </PressableOpacity>
+                </NativeButton>
               </>
             )}
           </View>

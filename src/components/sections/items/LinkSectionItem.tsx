@@ -8,7 +8,7 @@ import {useSectionStyle} from '../use-section-style';
 import {StyleSheet} from '@atb/theme';
 import {ContrastColor, InteractiveColor, TextNames} from '@atb/theme/colors';
 import {LabelType} from '@atb/modules/configuration';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 import {useTranslation} from '@atb/translations';
 import {TagInfoTexts} from '@atb/translations/components/TagInfo';
 import {Tag} from '@atb/components/tag';
@@ -65,7 +65,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
       accessibilityWithOverrides?.accessibilityLabel ??
       text + screenReaderPause + (subtitle ? subtitle + screenReaderPause : '');
     return (
-      <PressableOpacity
+      <NativeButton
         accessible
         accessibilityRole="button"
         onPress={disabled ? undefined : onPress}
@@ -117,7 +117,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
             </ThemeText>
           </View>
         )}
-      </PressableOpacity>
+      </NativeButton>
     );
   },
 );

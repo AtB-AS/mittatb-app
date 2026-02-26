@@ -2,7 +2,7 @@ import React, {PropsWithChildren, forwardRef} from 'react';
 import {AccessibilityProps, View} from 'react-native';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 
 type Props = PropsWithChildren<
   SectionItemProps<
@@ -18,13 +18,13 @@ export const GenericClickableSectionItem = forwardRef<any, Props>(
     const {topContainer} = useSectionItem(props);
 
     return (
-      <PressableOpacity
+      <NativeButton
         {...props}
         ref={focusRef}
         style={props.disabled && {opacity: 0.5}}
       >
         <View style={topContainer}>{children}</View>
-      </PressableOpacity>
+      </NativeButton>
     );
   },
 );

@@ -13,7 +13,7 @@ import {
   AnalyticsEventContext,
   useAnalyticsContext,
 } from '@atb/modules/analytics';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 import {ContrastColor} from '@atb/theme/colors';
 
 export type ButtonModes = 'back' | 'cancel' | 'close' | 'custom';
@@ -57,7 +57,7 @@ export const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
   };
 
   return (
-    <PressableOpacity
+    <NativeButton
       onPress={onPressWithLogEvent}
       hitSlop={insets.all(12)}
       accessibilityRole="button"
@@ -65,7 +65,7 @@ export const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
       {...accessibilityProps}
     >
       {children}
-    </PressableOpacity>
+    </NativeButton>
   );
 };
 

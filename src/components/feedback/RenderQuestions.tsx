@@ -6,7 +6,7 @@ import {ThemeText} from '@atb/components/text';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useSectionItem} from '@atb/components/sections';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 import {Theme} from '@atb/theme/colors';
 
 export interface RenderQuestionProps {
@@ -80,7 +80,7 @@ function AlternativeItem({
   const isChecked = selectedAlternativeIds.includes(alternative.alternativeId);
 
   return (
-    <PressableOpacity
+    <NativeButton
       onPress={() => handleAnswerPress(alternative.alternativeId)}
       accessibilityRole="checkbox"
       accessibilityState={{checked: isChecked}}
@@ -101,7 +101,7 @@ function AlternativeItem({
           {alternative.alternativeText[language]}
         </ThemeText>
       </View>
-    </PressableOpacity>
+    </NativeButton>
   );
 }
 

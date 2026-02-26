@@ -13,10 +13,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {
-  PressableOpacity,
-  PressableOpacityProps,
-} from '@atb/components/pressable-opacity';
+import {NativeButton, NativeButtonProps} from '@atb/components/native-button';
 import {shadows} from '@atb/modules/map';
 import {ContrastColor, InteractiveColor} from '@atb/theme/colors';
 
@@ -48,7 +45,7 @@ export type ButtonProps = {
   style?: StyleProp<ViewStyle>;
   hasShadow?: boolean;
 } & ButtonModeAwareProps &
-  PressableOpacityProps;
+  NativeButtonProps;
 
 const DISABLED_OPACITY = 0.2;
 
@@ -162,7 +159,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
         style,
       ]}
     >
-      <PressableOpacity
+      <NativeButton
         style={[styleContainer, hasShadow ? shadows : undefined]}
         onPress={disabled || loading ? undefined : onPress}
         disabled={disabled || loading}
@@ -205,7 +202,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
             )}
           </View>
         )}
-      </PressableOpacity>
+      </NativeButton>
     </Animated.View>
   );
 });

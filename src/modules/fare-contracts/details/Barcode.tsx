@@ -11,7 +11,7 @@ import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
 import QRCode from 'qrcode';
 import React, {RefObject, useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 import {SvgXml} from 'react-native-svg';
 import {GenericSectionItem} from '@atb/components/sections';
 import {useGetSignedTokenQuery} from '@atb/modules/mobile-token';
@@ -264,7 +264,7 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
           {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
         ]}
       >
-        <PressableOpacity
+        <NativeButton
           onPress={() => bottomSheetModalRef.current?.present()}
           accessibilityRole="button"
           accessibilityLabel={t(
@@ -274,7 +274,7 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
           ref={onCloseFocusRef}
         >
           <SvgXml xml={aztecXml} width="100%" height="100%" />
-        </PressableOpacity>
+        </NativeButton>
       </View>
       <StaticBarcodeBottomSheet
         qrCodeSvg={aztecXml}
@@ -311,7 +311,7 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
           styles.staticQrCodeSmall,
         ]}
       >
-        <PressableOpacity
+        <NativeButton
           onPress={() => bottomSheetModalRef.current?.present()}
           accessibilityRole="button"
           accessibilityLabel={t(
@@ -321,7 +321,7 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
           ref={onCloseFocusRef}
         >
           <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
-        </PressableOpacity>
+        </NativeButton>
       </View>
       <StaticBarcodeBottomSheet
         qrCodeSvg={qrCodeSvg}
@@ -390,7 +390,7 @@ const StaticBarcodeBottomSheet = ({
             styles.staticQrCode,
           ]}
         >
-          <PressableOpacity
+          <NativeButton
             onPress={() => bottomSheetModalRef.current?.dismiss()}
             accessible={true}
             accessibilityLabel={t(
@@ -399,7 +399,7 @@ const StaticBarcodeBottomSheet = ({
             testID="staticBigQRCode"
           >
             <SvgXml xml={qrCodeSvg ?? ''} width="100%" height="100%" />
-          </PressableOpacity>
+          </NativeButton>
         </View>
       </View>
     </BottomSheetModal>

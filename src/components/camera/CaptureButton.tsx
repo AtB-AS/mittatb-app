@@ -1,7 +1,7 @@
 import {StyleSheet} from '@atb/theme';
 import {RefObject} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
-import {PressableOpacity} from '../pressable-opacity';
+import {NativeButton} from '../native-button';
 
 type Props = {
   onCapture: () => void;
@@ -21,9 +21,9 @@ export const CaptureButton = ({
   const style = useStyles({size, color})();
   return (
     <View style={containerStyle}>
-      <PressableOpacity onPress={onCapture} style={style.button} ref={focusRef}>
+      <NativeButton onPress={onCapture} style={style.button} ref={focusRef}>
         <View style={style.innerButton} />
-      </PressableOpacity>
+      </NativeButton>
     </View>
   );
 };

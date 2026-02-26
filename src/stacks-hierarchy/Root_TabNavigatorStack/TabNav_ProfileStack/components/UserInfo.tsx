@@ -13,7 +13,7 @@ import {dictionary, ProfileTexts, useTranslation} from '@atb/translations';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {ActivityIndicator, View} from 'react-native';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 import {forwardRef} from 'react';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {
@@ -72,7 +72,7 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
     const {topContainer} = useSectionItem(props);
 
     return (
-      <PressableOpacity
+      <NativeButton
         {...props}
         ref={focusRef}
         onPress={onPress}
@@ -128,7 +128,7 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
           </View>
           <ThemeIcon svg={ArrowRight} />
         </View>
-      </PressableOpacity>
+      </NativeButton>
     );
   },
 );

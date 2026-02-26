@@ -3,7 +3,7 @@ import {PaymentMethod} from './types';
 import {useAuthContext} from '@atb/modules/auth';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {humanizePaymentType} from '@atb/modules/ticketing';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 import {View} from 'react-native';
 import {getRadioA11y, RadioIcon} from '@atb/components/radio';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
@@ -69,7 +69,7 @@ export const MultiplePaymentMethodsRadioSection = ({
 
   return (
     <View style={styles.card}>
-      <PressableOpacity
+      <NativeButton
         style={[styles.paymentMethod, styles.centerRow]}
         onPress={onSelect}
         accessibilityHint={paymentTexts.hint}
@@ -96,9 +96,9 @@ export const MultiplePaymentMethodsRadioSection = ({
             </View>
           </View>
         </View>
-      </PressableOpacity>
+      </NativeButton>
       {selected && canSaveCard && (
-        <PressableOpacity
+        <NativeButton
           onPress={toggleShouldSave}
           style={styles.saveMethodSection}
           accessibilityRole="checkbox"
@@ -126,7 +126,7 @@ export const MultiplePaymentMethodsRadioSection = ({
             />
             <ThemeText>{t(SelectPaymentMethodTexts.save_card)}</ThemeText>
           </View>
-        </PressableOpacity>
+        </NativeButton>
       )}
     </View>
   );

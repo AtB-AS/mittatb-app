@@ -4,7 +4,7 @@ import {LoadingBody} from '../PhotoCapture/ScreenContainer';
 import {ThemeText} from '../text';
 import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {PressableOpacity} from '../pressable-opacity';
+import {NativeButton} from '../native-button';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {ThemeIcon} from '../theme-icon';
 import SvgChevronLeft from '@atb/assets/svg/mono-icons/navigation/ChevronLeft';
@@ -46,12 +46,12 @@ export const CameraScreenContainer = ({
             backgroundColor="transparent"
           />
           <View style={styles.header} ref={focusRef}>
-            <PressableOpacity onPress={onGoBack} style={styles.back}>
+            <NativeButton onPress={onGoBack} style={styles.back}>
               <ThemeIcon svg={SvgChevronLeft} color="white" />
               <ThemeText typography="body__s__strong" color="white">
                 {t(ScreenHeaderTexts.headerButton.back.text)}
               </ThemeText>
-            </PressableOpacity>
+            </NativeButton>
           </View>
           <View style={styles.content}>
             <ThemeText typography="heading__l" color="white">

@@ -11,7 +11,7 @@ import {
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 import {formatToClock, isInThePast, secondsToDuration} from '@atb/utils/date';
 import {
   getQuayName,
@@ -51,7 +51,7 @@ export const ResultRow: React.FC<ResultRowProps> = ({
     searchTime?.option !== 'now';
 
   return (
-    <PressableOpacity
+    <NativeButton
       accessibilityLabel={tripSummary(
         tripPattern,
         t,
@@ -82,7 +82,7 @@ export const ResultRow: React.FC<ResultRowProps> = ({
           />
         </GenericSectionItem>
       </Section>
-    </PressableOpacity>
+    </NativeButton>
   );
 };
 

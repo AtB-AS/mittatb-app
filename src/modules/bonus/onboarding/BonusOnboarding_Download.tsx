@@ -12,7 +12,7 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {ThemeText} from '@atb/components/text';
 import {Linking, Platform, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 import {bonusOnboardingId} from './config';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
@@ -73,7 +73,7 @@ export const DownloadButtons = () => {
         const appUrl = getPlatformAppUrl(operatorId);
 
         return (
-          <PressableOpacity
+          <NativeButton
             key={operatorId}
             style={styles.operatorSection}
             accessibilityRole="button"
@@ -87,7 +87,7 @@ export const DownloadButtons = () => {
             <ThemeText style={styles.operatorText} typography="body__s__strong">
               {mobilityOperators?.find((op) => op.id === operatorId)?.name}
             </ThemeText>
-          </PressableOpacity>
+          </NativeButton>
         );
       })}
     </View>

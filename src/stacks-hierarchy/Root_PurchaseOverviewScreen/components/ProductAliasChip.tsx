@@ -2,7 +2,7 @@ import {InteractiveColor} from '@atb/theme/colors';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 import {useTranslation} from '@atb/translations';
 import {getRadioA11y} from '@atb/components/radio';
 
@@ -25,7 +25,7 @@ export const ProductAliasChip = ({color, text, selected, onPress}: Props) => {
   const borderOffset = selected ? theme.border.width.medium : 0;
 
   return (
-    <PressableOpacity
+    <NativeButton
       style={[
         styles.container,
         {
@@ -47,7 +47,7 @@ export const ProductAliasChip = ({color, text, selected, onPress}: Props) => {
       >
         {text}
       </ThemeText>
-    </PressableOpacity>
+    </NativeButton>
   );
 };
 

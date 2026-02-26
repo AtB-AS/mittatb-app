@@ -5,7 +5,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {useFilteredJourneySearch} from '../utils';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 import {StyleSheet} from '@atb/theme';
 
 type JourneyHistoryProps = {
@@ -39,7 +39,7 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
           .slice(0, DEFAULT_HISTORY_LIMIT)
           .map(mapToVisibleSearchResult)
           .map((searchResult, idx) => (
-            <PressableOpacity
+            <NativeButton
               accessible={true}
               key={searchResult.key}
               accessibilityLabel={
@@ -62,7 +62,7 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
                   {searchResult.text}
                 </ThemeText>
               </GenericSectionItem>
-            </PressableOpacity>
+            </NativeButton>
           ))}
       </View>
     </View>

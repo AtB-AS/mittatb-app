@@ -14,7 +14,7 @@ import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 
 import {SvgProps} from 'react-native-svg';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 import {RadioIcon} from '@atb/components/radio';
 import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {dictionary, useTranslation} from '@atb/translations';
@@ -66,7 +66,7 @@ export function RadioSectionItem({
 
   return (
     <View style={[style.spaceBetween, topContainer]}>
-      <PressableOpacity
+      <NativeButton
         onPress={() => {
           // Talkback doesn't read out the updated state automatically, so we
           // trigger it manually instead.
@@ -108,7 +108,7 @@ export function RadioSectionItem({
             </ThemeText>
           )}
         </View>
-      </PressableOpacity>
+      </NativeButton>
       {rightAction && (
         <PressableOpacityOrView
           onClick={rightAction.isLoading ? undefined : rightAction.onPress}

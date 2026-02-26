@@ -4,7 +4,7 @@ import {ThemeText} from '@atb/components/text';
 import {View, ViewStyle} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
 import VippsLogo from '@atb/assets/svg/color/icons/ticketing/VippsLogo';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 
 const VIPPS_BACKGROUND_COLOR = '#FF5B24';
 const VIPPS_TEXT_COLOR = '#FFFFFF';
@@ -22,7 +22,7 @@ export const VippsLoginButton = ({
   const styles = useStyles();
 
   return (
-    <PressableOpacity
+    <NativeButton
       accessibilityLabel={t(LoginTexts.logInOptions.options.vipps.a11yLabel)}
       role="button"
       onPress={onPress}
@@ -39,7 +39,7 @@ export const VippsLoginButton = ({
         </ThemeText>
         <VippsLogo style={styles.vippsLogo} />
       </View>
-    </PressableOpacity>
+    </NativeButton>
   );
 };
 

@@ -2,15 +2,16 @@ import {RectButton, RectButtonProps} from 'react-native-gesture-handler';
 import React, {forwardRef} from 'react';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
-export type PressableOpacityProps = {disabled?: boolean} & RectButtonProps;
+export type NativeButtonProps = {disabled?: boolean} & RectButtonProps;
 
-export const PressableOpacity = forwardRef<any, PressableOpacityProps>(
-  ({...pressableProps}: PressableOpacityProps, focusRef) => {
+export const NativeButton = forwardRef<any, NativeButtonProps>(
+  ({disabled, ...pressableProps}: NativeButtonProps, focusRef) => {
     const {logEvent} = useAnalyticsContext();
     return (
       <RectButton
         ref={focusRef}
         {...pressableProps}
+        enabled={!disabled}
         onPress={(e) => {
           pressableProps.onPress?.(e);
           if (pressableProps.testID) {

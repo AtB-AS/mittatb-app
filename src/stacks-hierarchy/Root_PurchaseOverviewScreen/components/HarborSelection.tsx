@@ -15,7 +15,7 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {WithOverlayButton} from '@atb/components/overlay-button';
 
@@ -42,8 +42,8 @@ export const HarborSelection = forwardRef<
     const {t} = useTranslation();
     const selectionBuilder = usePurchaseSelectionBuilder();
 
-    const fromHarborRef = useRef<typeof PressableOpacity>(null);
-    const toHarborRef = useRef<typeof PressableOpacity>(null);
+    const fromHarborRef = useRef<typeof NativeButton>(null);
+    const toHarborRef = useRef<typeof NativeButton>(null);
     useImperativeHandle(ref, () => ({
       fromHarborRef: fromHarborRef as any,
       toHarborRef: toHarborRef as any,
@@ -104,7 +104,7 @@ type HarborSelectionItemProps = {
 };
 
 const HarborSelectionItem = forwardRef<
-  typeof PressableOpacity,
+  typeof NativeButton,
   HarborSelectionItemProps
 >(({harbor, onPress, disabled, fromOrTo}: HarborSelectionItemProps, ref) => {
   const {t} = useTranslation();

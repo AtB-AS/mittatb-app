@@ -3,7 +3,7 @@ import React, {Ref} from 'react';
 
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeButton} from '@atb/components/native-button';
 import {OnboardingFullScreenView} from '@atb/modules/onboarding';
 import {Theme} from '@atb/theme/colors';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
@@ -86,7 +86,7 @@ export const OnboardingScreenComponent = ({
       )}
       {contentNode}
       {descriptionLink && (
-        <PressableOpacity
+        <NativeButton
           onPress={descriptionLink.onPress}
           accessibilityRole="link"
           accessibilityHint={descriptionLink.a11yHint}
@@ -103,7 +103,7 @@ export const OnboardingScreenComponent = ({
             size="normal"
             color={descriptionLinkColor}
           />
-        </PressableOpacity>
+        </NativeButton>
       )}
     </OnboardingFullScreenView>
   );
