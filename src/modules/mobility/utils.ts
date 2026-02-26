@@ -40,7 +40,7 @@ import {
 import {TFunc} from '@leile/lobo-t';
 import {ErrorResponse, formatNumberToString} from '@atb-as/utils';
 import {FormattedRatePerUnit} from './types';
-import { ThemedCityBike, ThemedScooter } from '@atb/theme/ThemedAssets';
+import {ThemedCityBike, ThemedScooter} from '@atb/theme/ThemedAssets';
 
 export const isVehiclesClusteredFeature = (
   feature: Feature<Point> | undefined,
