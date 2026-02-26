@@ -70,89 +70,94 @@ flowchart TD
         cache-hit = undefined"]
         apk_cache_check -- No --> apk_cache{"APK cache hit?"}
 
-        apk_skip --> pre_build["Pre-build steps"]
-        apk_cache --> pre_build
-
-        pre_build --> version_name["Override version name
-        set-version-name.sh"]
-        version_name --> dep_changes["Detect dependency changes
-        dorny/paths-filter"]
-        dep_changes --> build_decision["Build decision"]
+        apk_skip --> build_setup["Build setup
+        android-build-setup action"]
+        apk_cache --> build_setup
     end
 ```
 
-## Pre-build Steps - composite action
+## Build Setup - shared composite action
 
-The `can-skip` input is `true` when `force-build != true AND apk-cache hit`.
+The `skip-heavy-steps` input is `true` when `force-build != true AND apk-cache hit`.
+This action is shared between staging and store builds.
 
 ```mermaid
 flowchart TD
-    start(["Pre-build steps start
-    can-skip derived from
-    force-build + apk cache"])
+    start(["android-build-setup start
+    inputs: app-environment, org,
+    git-crypt-key, keystore,
+    entur credentials, skip-heavy-steps"])
 
-    start --> can_skip{"can-skip?"}
+    start --> heavy_check1{"skip-heavy-steps?"}
 
-    can_skip -- "false - fresh build" --> cleanup["Clean up runner
+    heavy_check1 -- "false" --> cleanup["Clean up runner
     Remove dotnet, haskell,
     codeql, docker, large pkgs"]
-    can_skip -- "true - cached APK" --> env_vars
+    heavy_check1 -- "true" --> env_vars
 
     cleanup --> env_vars["Set global env vars
     BUILD_ID, APP_ENVIRONMENT,
-    KEYSTORE_PATH, JAVA_HOME, etc."]
+    KEYSTORE_PATH, APK/AAB_FILE_NAME,
+    JAVA_HOME, linuxbrew PATH"]
 
     env_vars --> decrypt["Decrypt env files
-    git-crypt-unlock.sh
-    NOTE: uses brew install git-crypt"]
+    git-crypt-unlock.sh"]
 
     decrypt --> entur["Add Entur registry credentials
     add-entur-private-registry.sh"]
 
-    entur --> imagemagick["Install imagemagick
+    entur --> heavy_check2{"skip-heavy-steps?"}
+    heavy_check2 -- "false" --> imagemagick["Install imagemagick
     apt-get install"]
+    heavy_check2 -- "true" --> node
 
-    imagemagick --> node["Install Node v22"]
+    imagemagick --> node["Install Node v22
+    with yarn cache"]
 
-    node --> nm_cache{"node_modules
-    cache hit?"}
-    nm_cache -- Miss --> yarn["yarn install --frozen-lockfile"]
-    nm_cache -- Hit --> ruby
+    node --> yarn["yarn install --frozen-lockfile"]
+
     yarn --> ruby["Setup Ruby 3.1.0 + Bundler"]
 
     ruby --> set_env["Set environment
-    override-environment.sh
-    WARNING: uses macOS-only sed syntax"]
+    override-environment.sh"]
 
     set_env --> export_env["Export workflow env vars
-    export-workflow-parameters.sh
-    sources set-app-flavor.sh"]
+    export-workflow-parameters.sh"]
 
     export_env --> override_config["Override native config files
-    android/override-config-files.sh
-    WARNING: uses brew install xmlstarlet"]
+    android/override-config-files.sh"]
 
     override_config --> decode_ks["Decode Android keystore
     create-keystore-file.sh"]
 
-    decode_ks --> can_skip2{"can-skip?"}
+    decode_ks --> heavy_check3{"skip-heavy-steps?"}
 
-    can_skip2 -- "false - fresh build" --> gen_assets["Generate native assets
+    heavy_check3 -- "false" --> gen_assets["Generate native assets
     yarn generate-native-assets"]
-    can_skip2 -- "true - cached APK" --> done
+    heavy_check3 -- "true" --> done
 
-    gen_assets --> gradle["Setup Gradle
-    gradle/actions/setup-gradle@v5
-    cache based on force-build flag"]
-
-    gradle --> done(["Pre-build done"])
+    gen_assets --> done(["android-build-setup done"])
 ```
 
-## Build Decision and Fastlane
+## Build Steps After Setup
 
 ```mermaid
 flowchart TD
-    dep_changes(["After dependency detection"])
+    setup_done(["After android-build-setup"])
+
+    setup_done --> gradle_check{"force-build = true
+    OR apk cache miss?"}
+
+    gradle_check -- Yes --> gradle["Setup Gradle
+    gradle/actions/setup-gradle@v5
+    cache based on force-build flag"]
+    gradle_check -- No --> version_name
+
+    gradle --> version_name["Override version name
+    set-version-name.sh"]
+
+    version_name --> dep_changes["Detect dependency changes
+    dorny/paths-filter"]
 
     dep_changes --> should_build{"force-build = true
     OR apk cache miss?"}
@@ -181,9 +186,10 @@ flowchart TD
 
     release_notes["Generate release notes
     generate-staging-release-notes.sh"]
-    release_notes --> bugsnag_setup
 
-    subgraph bugsnag_setup ["Setup Bugsnag CLI"]
+    release_notes --> bugsnag_cli_setup
+
+    subgraph bugsnag_cli_setup ["Setup Bugsnag CLI"]
         bs_detect["Detect OS + arch"]
         bs_cache{"Bugsnag CLI
         cache hit?"}
@@ -198,21 +204,22 @@ flowchart TD
         bs_verify --> bs_path
     end
 
-    bugsnag_setup --> post_build
-    post_build(["Post-build steps"])
+    bugsnag_cli_setup --> post_build_steps
+    post_build_steps(["Post-build steps"])
 ```
 
-## Post-build Steps - composite action
+## Post-build Steps
 
-The `should-replace-bundle` input is `true` when `force-build != true AND apk-cache hit`.
+These steps are now inline in the workflow, not in a separate composite action.
 
 ```mermaid
 flowchart TD
     start(["Post-build steps start"])
 
-    start --> replace_check{"should-replace-bundle?"}
+    start --> replace_check{"force-build != true
+    AND apk cache hit?"}
 
-    replace_check -- "true - cached APK path" --> replace_bundle
+    replace_check -- "true - cached APK" --> replace_bundle
     replace_check -- "false - fresh build" --> firebase
 
     subgraph replace_bundle ["Replace APK Bundle - replace-bundle.sh"]
@@ -220,8 +227,7 @@ flowchart TD
         npx react-native bundle"]
         rb_yq["brew install yq"]
         rb_framework["Install android-36 framework
-        for APKTool
-        WARNING: hardcoded android-36"]
+        for APKTool"]
         rb_decompile["Decompile APK
         apktool d"]
         rb_replace["Replace bundle in decompiled APK"]
@@ -230,9 +236,9 @@ flowchart TD
         rb_recompile["Re-compile APK
         apktool b"]
         rb_align["zipalign APK
-        WARNING: hardcoded build-tools 36.0.0"]
+        build-tools 36.0.0"]
         rb_sign["Re-sign APK with apksigner
-        WARNING: hardcoded build-tools 36.0.0"]
+        build-tools 36.0.0"]
 
         rb_bundle --> rb_yq --> rb_framework --> rb_decompile
         rb_decompile --> rb_replace --> rb_version
@@ -247,18 +253,17 @@ flowchart TD
 
     firebase --> bugsnag_upload
 
-    subgraph bugsnag_upload ["Upload Bugsnag Symbols"]
+    subgraph bugsnag_upload ["Upload Bugsnag Symbols - android-upload-bugsnag action"]
         bs_set["Set BUNDLE_PATH + SOURCEMAP_PATH
         based on APP_FLAVOR + APP_ENVIRONMENT"]
         bs_sourcemaps["Upload JS sourcemaps
         upload-sourcemaps.sh via bugsnag-cli"]
         bs_native_check{"skip-native?
-        equals should-replace-bundle"}
+        true when cached APK"}
         bs_ndk["Upload NDK symbols
         upload-ndk.sh via bugsnag-cli"]
         bs_proguard["Upload Proguard mappings
-        upload-proguard.sh via bugsnag-cli
-        WARNING: expects android/app/bundle/mapping.txt"]
+        upload-proguard.sh via bugsnag-cli"]
         bs_skip_native(["NDK + Proguard skipped"])
 
         bs_set --> bs_sourcemaps --> bs_native_check
@@ -279,11 +284,13 @@ flowchart TD
 flowchart LR
     subgraph fresh ["Path A: Fresh Build - force-build=true OR no APK cache"]
         direction TB
-        f1["Clean up runner"] --> f2["Full pre-build setup"]
-        f2 --> f3["Generate native assets"]
-        f3 --> f4["Setup Gradle"]
-        f4 --> f5["Fastlane build APK or AAB"]
-        f5 --> f6["Generate release notes"]
+        f1["android-build-setup
+        full run incl. cleanup,
+        imagemagick, native assets"] --> f2["Setup Gradle"]
+        f2 --> f3["Override version name"]
+        f3 --> f4["Fastlane build APK or AAB"]
+        f4 --> f5["Generate release notes"]
+        f5 --> f6["Setup Bugsnag CLI"]
         f6 --> f7["Firebase distribution"]
         f7 --> f8["Bugsnag: sourcemaps + NDK + Proguard"]
         f8 --> f9["Register app version"]
@@ -291,16 +298,19 @@ flowchart LR
 
     subgraph cached ["Path B: Cached APK - force-build=false AND APK cache hit"]
         direction TB
-        c1["Skip runner cleanup"] --> c2["Pre-build setup
-        skip native assets + Gradle"]
+        c1["android-build-setup
+        skip-heavy-steps=true
+        skip cleanup, imagemagick,
+        native assets"] --> c2["Override version name"]
         c2 --> c3["Restore APKTool from cache"]
-        c3 --> c4["Replace JS bundle in APK
+        c3 --> c4["Generate release notes"]
+        c4 --> c5["Setup Bugsnag CLI"]
+        c5 --> c6["Replace APK bundle
         decompile, replace, recompile, re-sign"]
-        c4 --> c5["Generate release notes"]
-        c5 --> c6["Firebase distribution"]
-        c6 --> c7["Bugsnag: sourcemaps only
+        c6 --> c7["Firebase distribution"]
+        c7 --> c8["Bugsnag: sourcemaps only
         NDK + Proguard skipped"]
-        c7 --> c8["Register app version"]
+        c8 --> c9["Register app version"]
     end
 ```
 
@@ -321,7 +331,7 @@ flowchart LR
         env_file[".env file
         per org and environment"]
         scripts["export-workflow-parameters.sh"]
-        pre_build_action["pre-build action
+        build_setup["android-build-setup action
         Set global env vars step"]
     end
 
@@ -347,7 +357,7 @@ flowchart LR
         register["register-app-version.sh"]
     end
 
-    pre_build_action --> BUILD_ID & APP_ENVIRONMENT & KEYSTORE_PATH
+    build_setup --> BUILD_ID & APP_ENVIRONMENT & KEYSTORE_PATH
     env_file --> scripts --> APP_VERSION & APP_FLAVOR
     BUILD_ID & APP_VERSION --> fastlane & replace & bugsnag & register
     APP_FLAVOR & APP_ENVIRONMENT --> bugsnag & replace
