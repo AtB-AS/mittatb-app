@@ -10,6 +10,8 @@ if [[
     exit 1
 else 
     echo "Uploading Android NDK symbols (so files)"
+    echo "Deleting problematic .so files" # https://github.com/bugsnag/bugsnag-cli/issues/265
+    find ./android/app/build/intermediates/merged_native_libs/ -name "libh3-java.so" -delete
     bugsnag-cli upload android-ndk \
         android/ \
         --api-key="${BUGSNAG_API_KEY}" \
