@@ -1,5 +1,5 @@
 import React, {PropsWithChildren, forwardRef} from 'react';
-import {AccessibilityProps, View} from 'react-native';
+import {AccessibilityProps} from 'react-native';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {NativeButton} from '@atb/components/native-button';
@@ -21,9 +21,9 @@ export const GenericClickableSectionItem = forwardRef<any, Props>(
       <NativeButton
         {...props}
         ref={focusRef}
-        style={props.disabled && {opacity: 0.5}}
+        style={[props.disabled && {opacity: 0.5}, topContainer]}
       >
-        <View style={topContainer}>{children}</View>
+        {children}
       </NativeButton>
     );
   },
