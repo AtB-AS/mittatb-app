@@ -182,12 +182,6 @@ jobs:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           cache-read-only: ${{ matrix.org != 'atb' }}
 
-      - name: Override version name on staging build
-        shell: bash
-        env:
-          BRANCH_NAME: ${{ github.ref_name }}
-        run: bash ./scripts/set-version-name.sh
-
       - name: Detect dependency changes
         uses: dorny/paths-filter@v3
         id: changes
