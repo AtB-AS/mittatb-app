@@ -14,6 +14,10 @@ inputs:
   git-crypt-key:
     description: "The gitcrypt key to unlock the repository files with"
     required: true
+  force-build:
+    description: "Force build ignoring cache"
+    required: false
+    default: 'false'
 
 runs:
   using: "composite"
@@ -36,11 +40,12 @@ runs:
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ inputs.ruby-version }}
+          ruby-version: 3.1.0
           cache-version: 2
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Get cached node_modules
         uses: actions/cache@v4
+        if: inputs.force-build != 'true'
         id: modules-cache
         with:
           path: '**/node_modules'
@@ -48,7 +53,7 @@ runs:
           restore-keys: |
             node-modules-${{ runner.os }}-
       - name: Install node_modules
-        if: steps.modules-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         shell: bash
         run: yarn install --frozen-lockfile
       - name: Setup Xcode version
