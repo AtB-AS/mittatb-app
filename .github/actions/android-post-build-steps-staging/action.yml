@@ -33,7 +33,7 @@ runs:
     - name: Distribute to Firebase App Distribution
       shell: bash
       run: |
-        echo ${{ inputs.firebase-distribution-credentials}} | base64 --decode > google-services.json
+        echo "${{ inputs.firebase-distribution-credentials}}" | base64 --decode > google-services.json
         bundle exec fastlane android firebase_distribution_staging
       env:
         GCP_CREDENTIALS_PATH: google-services.json

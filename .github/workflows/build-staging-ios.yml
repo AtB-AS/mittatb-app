@@ -27,7 +27,7 @@ permissions:
 
 jobs:
   detect-changes:
-    if: inputs.force-build != 'true'
+    if: inputs.force-build != 'true' && github.event_name != 'schedule'
     name: Detect changes
     runs-on: ubuntu-latest
     outputs:
@@ -42,7 +42,7 @@ jobs:
 
   setup:
     needs: detect-changes
-    if: ${{ !failure() && !cancelled() && ( github.event_name == 'workflow_dispatch' || needs.detect-changes.outputs.should_build == 'true') }}
+    if: ${{ !failure() && !cancelled() && needs.detect-changes.outputs.should_build != 'false' }}
     name: Set-up tools and warm up cache
     runs-on: macOS-26
     outputs:
@@ -72,7 +72,7 @@ jobs:
         uses: actions/cache@v4
         id: modules-cache
         with:
-          lookup-only: ${{ steps.pods-cache.outputs.cache-hit == 'true' }}
+          lookup-only: true
           path: '**/node_modules'
           key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
           restore-keys: |
@@ -147,6 +147,7 @@ jobs:
           app-environment: 'staging'
           app-org: ${{ matrix.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+          force-build: ${{ inputs.force-build }}
       - name: Get potential cached pods
         uses: actions/cache@v4
         id: pods-cache
@@ -186,7 +187,7 @@ jobs:
         if: ${{ env.ENABLE_WIDGET != 'true' && steps.ipa-cache.outputs.cache-hit != 'true' }}
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget AtbAppIntent
       - name: Run fastlane cert match
-        if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
+        if: steps.ipa-cache.outputs.cache-hit == 'true'
         run: bundle exec fastlane ios get_certs
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
@@ -221,7 +222,7 @@ jobs:
         run: bash ./scripts/generate-staging-release-notes.sh
       - name: Distribute to Firebase App Distribution
         run: |
-          echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
+          echo "${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}}" | base64 --decode > google-services.json
           bundle exec fastlane ios firebase_distribution_staging
         env:
           GCP_CREDENTIALS_PATH: google-services.json
