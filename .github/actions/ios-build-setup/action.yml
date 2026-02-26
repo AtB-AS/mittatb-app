@@ -1,7 +1,6 @@
 name: iOS build setup
-description: 'Sets up the necessarry dependencies, environment and assets for building the iOS app'
+description: 'Shared build setup steps for iOS staging and store builds'
 inputs:
-  # Dev dependencies
   xcode-version:
     default: "latest-stable"
     required: false
@@ -14,8 +13,21 @@ inputs:
   git-crypt-key:
     description: "The gitcrypt key to unlock the repository files with"
     required: true
+  entur-registry-user:
+    description: 'Entur registry user'
+    required: true
+  entur-registry-token:
+    description: 'Entur registry token'
+    required: true
+  match-ssh-private-key:
+    description: 'SSH private key for Fastlane match'
+    required: true
   force-build:
     description: "Force build ignoring cache"
+    required: false
+    default: 'false'
+  skip-heavy-steps:
+    description: 'Skip imagemagick install and native asset generation (e.g. when using cached IPA)'
     required: false
     default: 'false'
 
@@ -32,6 +44,12 @@ runs:
         run: sh ./scripts/git-crypt-unlock.sh
         env:
           GIT_CRYPT_KEY: ${{ inputs.git-crypt-key }}
+      - name: Add Entur private registry credentials
+        shell: bash
+        run: sh ./scripts/add-entur-private-registry.sh
+        env:
+          ENTUR_REGISTRY_USER: ${{ inputs.entur-registry-user }}
+          ENTUR_REGISTRY_TOKEN: ${{ inputs.entur-registry-token }}
       - name: Install Node
         uses: actions/setup-node@v5
         with:
@@ -74,3 +92,27 @@ runs:
       - name: Override native config files
         shell: bash
         run: sh ./scripts/ios/override-config-files.sh
+      - uses: webfactory/ssh-agent@v0.4.1
+        with:
+          ssh-private-key: ${{ inputs.match-ssh-private-key }}
+      - name: Generate native assets
+        if: inputs.skip-heavy-steps != 'true'
+        shell: bash
+        run: |
+          rm '/usr/local/bin/2to3'
+          rm '/usr/local/bin/2to3-3.12'
+          rm '/usr/local/bin/idle3'
+          rm '/usr/local/bin/idle3.12'
+          rm '/usr/local/bin/pydoc3'
+          rm '/usr/local/bin/pydoc3.12'
+          rm '/usr/local/bin/python3'
+          rm '/usr/local/bin/python3-config'
+          rm '/usr/local/bin/python3.12'
+          rm '/usr/local/bin/python3.12-config'
+          rm '/usr/local/bin/2to3-3.11'
+          rm '/usr/local/bin/idle3.11'
+          rm '/usr/local/bin/pydoc3.11'
+          rm '/usr/local/bin/python3.11'
+          rm '/usr/local/bin/python3.11-config'
+          brew install imagemagick
+          yarn generate-native-assets
