@@ -9,7 +9,7 @@ import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 import {animateNextChange} from '@atb/utils/animation';
 import {TextNames} from '@atb/theme/colors';
-import {NativeButton} from '@atb/components/native-button';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {LabelType} from '@atb-as/config-specs';
 import {Tag} from '@atb/components/tag';
 import {TagInfoTexts} from '@atb/translations/components/TagInfo';
@@ -82,7 +82,7 @@ export function ExpandableSectionItem({
 
   return (
     <View style={topContainer}>
-      <NativeButton
+      <NativeBlockButton
         hitSlop={insets.all(theme.spacing.medium)}
         accessibilityHint={
           expanded
@@ -112,7 +112,7 @@ export function ExpandableSectionItem({
           />
         )}
         <ExpandIcon expanded={expanded} showText={showIconText} />
-      </NativeButton>
+      </NativeBlockButton>
       {expanded && 'expandContent' in props && (
         <View style={styles.expandContent}>{props.expandContent}</View>
       )}

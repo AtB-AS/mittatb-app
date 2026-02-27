@@ -11,7 +11,10 @@ import {
   ViewStyle,
 } from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {NativeButton, NativeButtonProps} from '@atb/components/native-button';
+import {
+  NativeBlockButton,
+  NativeBlockButtonProps,
+} from '@atb/components/native-button';
 import {shadows} from '@atb/modules/map';
 import {ContrastColor, InteractiveColor} from '@atb/theme/colors';
 
@@ -43,7 +46,7 @@ export type ButtonProps = {
   style?: StyleProp<ViewStyle>;
   hasShadow?: boolean;
 } & ButtonModeAwareProps &
-  NativeButtonProps;
+  NativeBlockButtonProps;
 
 export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
   const {
@@ -134,7 +137,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
   }
 
   return (
-    <NativeButton
+    <NativeBlockButton
       accessible
       accessibilityRole="button"
       accessibilityState={{disabled}}
@@ -178,7 +181,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
           )}
         </View>
       )}
-    </NativeButton>
+    </NativeBlockButton>
   );
 });
 

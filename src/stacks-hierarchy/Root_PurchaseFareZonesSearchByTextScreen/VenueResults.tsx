@@ -8,7 +8,7 @@ import {FareZoneSearchTexts, useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
 import React from 'react';
 import {View} from 'react-native';
-import {NativeButton} from '@atb/components/native-button';
+import {NativeBlockButton} from '@atb/components/native-button';
 
 export type LocationAndFareZone = {
   location: SearchLocation;
@@ -37,7 +37,7 @@ export const VenueResults: React.FC<Props> = ({
         {locationsAndFareZones.map(({location, fareZone}, index) => (
           <View style={styles.rowContainer} key={location.id}>
             <View style={styles.fareZoneButtonContainer}>
-              <NativeButton
+              <NativeBlockButton
                 accessible={true}
                 accessibilityLabel={
                   t(
@@ -73,7 +73,7 @@ export const VenueResults: React.FC<Props> = ({
                     )}
                   </ThemeText>
                 </View>
-              </NativeButton>
+              </NativeBlockButton>
             </View>
           </View>
         ))}

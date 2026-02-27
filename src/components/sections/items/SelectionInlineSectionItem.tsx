@@ -9,7 +9,7 @@ import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {AccessibilityProps, View} from 'react-native';
 import {SectionItemProps} from '../types';
-import {NativeButton} from '@atb/components/native-button';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {useSectionItem} from '..';
 import {SvgProps} from 'react-native-svg';
 
@@ -50,7 +50,7 @@ export function SelectionInlineSectionItem({
     ));
 
   return (
-    <NativeButton
+    <NativeBlockButton
       onPress={onPress}
       style={[topContainer, styles.container]}
       {...accessibility}
@@ -73,7 +73,7 @@ export function SelectionInlineSectionItem({
 
         {onPressIconEl}
       </View>
-    </NativeButton>
+    </NativeBlockButton>
   );
 }
 

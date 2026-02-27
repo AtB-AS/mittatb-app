@@ -2,7 +2,7 @@ import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {PaymentMethod, PaymentSelection} from './types';
 import {humanizePaymentType, PaymentType} from '@atb/modules/ticketing';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {NativeButton} from '@atb/components/native-button';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {View} from 'react-native';
 import {getRadioA11y, RadioIcon} from '@atb/components/radio';
 import {ThemeText} from '@atb/components/text';
@@ -70,7 +70,7 @@ export const SinglePaymentMethod = ({
 
   return (
     <View style={styles.card}>
-      <NativeButton
+      <NativeBlockButton
         style={[styles.paymentMethod, styles.centerRow]}
         onPress={() => onSelect(paymentSelection)}
         accessibilityHint={paymentTexts.hint}
@@ -98,7 +98,7 @@ export const SinglePaymentMethod = ({
 
           <ExpiryMessage recurringPayment={paymentMethod.recurringPayment} />
         </View>
-      </NativeButton>
+      </NativeBlockButton>
     </View>
   );
 };

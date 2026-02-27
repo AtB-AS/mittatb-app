@@ -11,7 +11,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {InteractiveColor} from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import {NativeButton} from '@atb/components/native-button';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
 import {BaggageType} from '@atb/modules/configuration';
 
@@ -72,7 +72,7 @@ export function CounterSectionItem({
         )}
       </View>
       <View style={counterStyles.countActions}>
-        <NativeButton
+        <NativeBlockButton
           disabled={removeButtonDisabled}
           onPress={() => removeCount()}
           accessibilityRole="button"
@@ -102,7 +102,7 @@ export function CounterSectionItem({
                 : theme.color.foreground.dynamic.primary
             }
           />
-        </NativeButton>
+        </NativeBlockButton>
         <View
           style={[
             counterStyles.countTextContainer,
@@ -122,7 +122,7 @@ export function CounterSectionItem({
             {count}
           </ThemeText>
         </View>
-        <NativeButton
+        <NativeBlockButton
           onPress={() => addCount()}
           accessibilityRole="button"
           accessibilityLabel={t(
@@ -136,7 +136,7 @@ export function CounterSectionItem({
           testID={testID + '_add'}
         >
           <ThemeIcon svg={Add} />
-        </NativeButton>
+        </NativeBlockButton>
       </View>
     </View>
   );

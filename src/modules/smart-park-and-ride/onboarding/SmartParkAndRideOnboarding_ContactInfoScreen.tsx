@@ -15,7 +15,7 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemeText} from '@atb/components/text';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
-import {NativeButton} from '@atb/components/native-button';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
@@ -105,7 +105,7 @@ const ContactInfoContent = () => {
         </GenericSectionItem>
 
         <GenericSectionItem>
-          <NativeButton
+          <NativeBlockButton
             onPress={async () =>
               Linking.openURL(`tel:${telephoneNumbers['parking']}`)
             }
@@ -121,7 +121,7 @@ const ContactInfoContent = () => {
                 ),
               )}
             </ThemeText>
-          </NativeButton>
+          </NativeBlockButton>
         </GenericSectionItem>
       </Section>
 
@@ -144,7 +144,7 @@ const ContactInfoContent = () => {
           </View>
         </GenericSectionItem>
         <GenericSectionItem>
-          <NativeButton
+          <NativeBlockButton
             onPress={async () =>
               Linking.openURL(`tel:${telephoneNumbers['project']}`)
             }
@@ -160,7 +160,7 @@ const ContactInfoContent = () => {
                 ),
               )}
             </ThemeText>
-          </NativeButton>
+          </NativeBlockButton>
         </GenericSectionItem>
       </Section>
 
@@ -175,7 +175,7 @@ const ContactInfoContent = () => {
           </View>
         </GenericSectionItem>
         <GenericSectionItem>
-          <NativeButton
+          <NativeBlockButton
             onPress={() => openInAppBrowser('https://atb.no/kontakt', 'close')}
             accessibilityRole="link"
             style={style.linkItem}
@@ -191,7 +191,7 @@ const ContactInfoContent = () => {
               size="normal"
               color={theme.color.interactive[0].default.background}
             />
-          </NativeButton>
+          </NativeBlockButton>
         </GenericSectionItem>
       </Section>
     </View>

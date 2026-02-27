@@ -9,7 +9,7 @@ import SvgEdit from '@atb/assets/svg/mono-icons/actions/Edit';
 import {View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
-import {NativeButton} from '@atb/components/native-button';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {PaymentMethod} from './types';
 import {PaymentBrand} from './PaymentBrand';
 
@@ -43,7 +43,7 @@ export const PaymentSelectionSectionItem = forwardRef<
     : t(PaymentMethodsTexts.a11y.editCard(paymentName));
 
   return (
-    <NativeButton
+    <NativeBlockButton
       {...props}
       ref={focusRef}
       accessibilityLabel={a11yLabel}
@@ -83,7 +83,7 @@ export const PaymentSelectionSectionItem = forwardRef<
           <ThemeIcon svg={SvgEdit} />
         </View>
       </View>
-    </NativeButton>
+    </NativeBlockButton>
   );
 });
 

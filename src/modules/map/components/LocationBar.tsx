@@ -16,7 +16,7 @@ import {
 import {coordinatesDistanceInMetres} from '@atb/utils/location';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {Coordinates} from '@atb/utils/coordinates';
-import {NativeButton} from '@atb/components/native-button';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {useReverseGeocoderQuery} from '@atb/modules/geocoder';
 import {RequestError} from '@atb/api/utils';
 
@@ -65,7 +65,7 @@ export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
 
   return (
     <View style={styles.container}>
-      <NativeButton style={{flex: 1}} onPress={onPress}>
+      <NativeBlockButton style={{flex: 1}} onPress={onPress}>
         <View style={styles.innerContainer}>
           <View style={styles.locationContainer}>
             <Icon
@@ -87,7 +87,7 @@ export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
             </View>
           )}
         </View>
-      </NativeButton>
+      </NativeBlockButton>
     </View>
   );
 };

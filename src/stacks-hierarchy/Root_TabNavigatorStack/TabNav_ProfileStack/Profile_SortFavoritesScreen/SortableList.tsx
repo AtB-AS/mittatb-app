@@ -17,7 +17,7 @@ import {insets} from '@atb/utils/insets';
 import React, {useCallback} from 'react';
 import {FlatList, View} from 'react-native';
 import {immutableMove} from './sort-utils';
-import {NativeButton} from '@atb/components/native-button';
+import {NativeBlockButton} from '@atb/components/native-button';
 
 type SortableListFallbackProps = {
   data: UserFavorites;
@@ -138,7 +138,7 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
   }
 
   return (
-    <NativeButton
+    <NativeBlockButton
       onPress={() => onPress({item, direction, index, length})}
       accessibilityRole="button"
       accessible
@@ -149,6 +149,6 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
       testID={direction}
     >
       <ThemeIcon svg={Icon} />
-    </NativeButton>
+    </NativeBlockButton>
   );
 }

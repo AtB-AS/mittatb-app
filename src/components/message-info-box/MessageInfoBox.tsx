@@ -10,7 +10,7 @@ import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
-import {NativeButton} from '@atb/components/native-button';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {
   type A11yLiveRegion,
   useLiveRegionAnnouncement,
@@ -146,7 +146,7 @@ export const MessageInfoBox = ({
       </View>
       {onDismiss && (
         <View>
-          <NativeButton
+          <NativeBlockButton
             onPress={onDismiss}
             accessible={true}
             accessibilityLabel={t(MessageBoxTexts.dismiss.allyLabel)}
@@ -155,7 +155,7 @@ export const MessageInfoBox = ({
             testID={testID ? `${testID}Close` : 'close'}
           >
             <ThemeIcon svg={Close} {...iconColorProps} />
-          </NativeButton>
+          </NativeBlockButton>
         </View>
       )}
     </PressableOpacityOrView>

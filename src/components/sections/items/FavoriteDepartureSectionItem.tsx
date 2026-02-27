@@ -9,7 +9,7 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {NativeButton} from '@atb/components/native-button';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 
 type BaseProps = {
@@ -40,7 +40,7 @@ export function FavoriteDepartureSectionItem(props: Props) {
     : `${favorite.lineLineNumber} ${favoriteLineName}, ${favorite.quayName}`;
 
   return (
-    <NativeButton
+    <NativeBlockButton
       accessible
       accessibilityLabel={a11yLabel + screenReaderPause}
       accessibilityRole="button"
@@ -49,7 +49,7 @@ export function FavoriteDepartureSectionItem(props: Props) {
       testID={props.testID}
     >
       <FavoriteItemContent {...props} />
-    </NativeButton>
+    </NativeBlockButton>
   );
 }
 

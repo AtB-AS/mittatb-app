@@ -1,1 +1,8 @@
-export {NativeButton, type NativeButtonProps} from './NativeButton';
+export {
+  NativeBlockButton,
+  type NativeBlockButtonProps,
+} from './NativeBlockButton';
+export {
+  NativeBorderlessButton,
+  type NativeBorderlessButtonProps,
+} from './NativeBorderlessButton';

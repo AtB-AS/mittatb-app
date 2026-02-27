@@ -15,7 +15,7 @@ import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import React from 'react';
 import {ThemedBestillMaxi} from '@atb/theme/ThemedAssets';
-import {NativeButton} from '@atb/components/native-button';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
 import {
   BottomSheetHeaderType,
@@ -107,7 +107,7 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
             }
           </View>
 
-          <NativeButton
+          <NativeBlockButton
             style={style.readMoreAbout}
             onPress={() => {
               const flexTransportInfoUrl = getTextForLanguage(
@@ -131,7 +131,7 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
             >
               {t(TripDetailsTexts.flexibleTransport.readMoreAbout(publicCode))}
             </ThemeText>
-          </NativeButton>
+          </NativeBlockButton>
 
           {bookingStatus === 'bookable' && (
             <BookingOptions bookingArrangements={leg.bookingArrangements} />

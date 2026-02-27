@@ -15,7 +15,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {TFunc} from '@leile/lobo-t';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {NativeButton} from '@atb/components/native-button';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {StopPlaceFragmentWithIsFree} from '@atb/modules/harbors';
 
 type Props = {
@@ -65,7 +65,7 @@ export const HarborResults: React.FC<Props> = ({
         {harborResults.map((harbor, index) => (
           <View style={styles.rowContainer} key={harbor.id}>
             <View style={styles.buttonContainer}>
-              <NativeButton
+              <NativeBlockButton
                 accessible={true}
                 accessibilityLabel={
                   t(HarborSearchTexts.results.item.a11yLabel(harbor.name)) +
@@ -84,7 +84,7 @@ export const HarborResults: React.FC<Props> = ({
                     {harbor.name}
                   </ThemeText>
                 </View>
-              </NativeButton>
+              </NativeBlockButton>
             </View>
           </View>
         ))}

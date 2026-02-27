@@ -32,7 +32,7 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
-import {NativeButton} from '@atb/components/native-button';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {shareTravelHabitsSessionCountKey} from '@atb/modules/beacons';
 import {useAnnouncementsContext} from '@atb/modules/announcements';
 import {useNotificationsContext} from '@atb/modules/notifications';
@@ -466,7 +466,7 @@ export const Profile_DebugInfoScreen = () => {
                     Press a line to reset to undefined {'\n'}
                   </ThemeText>
                   {Object.keys(preferences).map((key) => (
-                    <NativeButton
+                    <NativeBlockButton
                       key={key}
                       onPress={() => setPreference({[key]: undefined})}
                     >
@@ -474,7 +474,7 @@ export const Profile_DebugInfoScreen = () => {
                         title={key}
                         value={preferences[key as keyof UserPreferences]}
                       />
-                    </NativeButton>
+                    </NativeBlockButton>
                   ))}
                 </View>
               )
@@ -674,7 +674,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
   if (!!value && typeof value === 'object') {
     return (
       <View key={title} style={styles.objectEntry}>
-        <NativeButton
+        <NativeBlockButton
           style={{flexDirection: 'row'}}
           onPress={() => setIsExpanded(!isExpanded)}
         >
@@ -682,7 +682,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
             {title}
           </ThemeText>
           <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
-        </NativeButton>
+        </NativeBlockButton>
         {isExpanded && <MapValue value={value} />}
       </View>
     );
@@ -694,13 +694,13 @@ function MapEntry({title, value}: {title: string; value: any}) {
         testID={title === 'user_id' ? 'userId' : ''}
       >
         {isLongString ? (
-          <NativeButton
+          <NativeBlockButton
             style={{flexDirection: 'row'}}
             onPress={() => setIsExpanded(!isExpanded)}
           >
             <ThemeText typography="body__m__strong">{title}: </ThemeText>
             <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
-          </NativeButton>
+          </NativeBlockButton>
         ) : (
           <ThemeText typography="body__m__strong">{title}: </ThemeText>
         )}

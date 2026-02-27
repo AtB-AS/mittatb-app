@@ -16,7 +16,7 @@ import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {dictionary, SectionTexts, useTranslation} from '@atb/translations';
 import composeRefs from '@seznam/compose-react-refs';
-import {NativeButton} from '@atb/components/native-button';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {MessageInfoText} from '@atb/components/message-info-text';
 
@@ -149,7 +149,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
           />
           {showClear ? (
             <View style={styles.inputClear}>
-              <NativeButton
+              <NativeBlockButton
                 accessible={true}
                 accessibilityRole="button"
                 accessibilityLabel={t(SectionTexts.textInput.clear)}
@@ -157,7 +157,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
                 onPress={onClearEvent}
               >
                 <ThemeIcon svg={Close} />
-              </NativeButton>
+              </NativeBlockButton>
             </View>
           ) : null}
         </View>
