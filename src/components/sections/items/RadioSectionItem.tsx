@@ -84,7 +84,7 @@ export function RadioSectionItem({
       accessibilityLabel={a11yLabel}
       accessibilityHint={accessibilityHint}
     >
-      <View style={[style.spaceBetween]}>
+      <View style={style.spaceBetween}>
         <View style={styles.radioIcon}>
           <RadioIcon checked={selected} color={selectedRadioColor || 'black'} />
         </View>
