@@ -14,6 +14,7 @@ export const NativeBlockButton = forwardRef<any, NativeBlockButtonProps>(
       <RectButton
         ref={focusRef}
         {...pressableProps}
+        accessible
         enabled={!disabled}
         onPress={(e) => {
           pressableProps.onPress?.(e);

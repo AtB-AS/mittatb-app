@@ -23,6 +23,7 @@ export const NativeBorderlessButton = forwardRef<
       <BorderlessButton
         ref={focusRef}
         {...pressableProps}
+        accessible
         enabled={!disabled}
         onPress={(e) => {
           pressableProps.onPress?.(e);
@@ -33,6 +34,7 @@ export const NativeBorderlessButton = forwardRef<
         style={[disabled ? {opacity: 0.2} : undefined, style]}
         activeOpacity={0.2}
         rippleRadius={30}
+        foreground={true}
       >
         {pressableProps?.children}
       </BorderlessButton>
