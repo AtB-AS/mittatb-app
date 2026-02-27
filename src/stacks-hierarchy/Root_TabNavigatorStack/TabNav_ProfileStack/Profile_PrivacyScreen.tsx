@@ -1,30 +1,15 @@
-import {
-  LinkSectionItem,
-  MessageSectionItem,
-  Section,
-  ToggleSectionItem,
-} from '@atb/components/sections';
+import {LinkSectionItem, Section} from '@atb/components/sections';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
-import {
-  ProfileTexts,
-  getTextForLanguage,
-  useTranslation,
-} from '@atb/translations';
-import React, {useCallback, useEffect, useState} from 'react';
-import {Linking, View} from 'react-native';
-import PrivacySettingsTexts from '@atb/translations/screens/subscreens/PrivacySettingsTexts';
+import {ProfileTexts, useTranslation} from '@atb/translations';
+import React from 'react';
+import {View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {destructiveAlert} from './utils';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useSearchHistoryContext} from '@atb/modules/search-history';
-import {
-  useBeaconsContext,
-  allowedPermissionsForBeacons,
-} from '@atb/modules/beacons';
 import {FullScreenView} from '@atb/components/screen-view';
-import {ContentHeading, ScreenHeading} from '@atb/components/heading';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {ScreenHeading} from '@atb/components/heading';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
@@ -33,41 +18,13 @@ import {ProfileScreenProps} from './navigation-types';
 type Props = ProfileScreenProps<'Profile_PrivacyScreen'>;
 
 export const Profile_PrivacyScreen = ({navigation}: Props) => {
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const {theme} = useThemeContext();
   const destructiveColor = theme.color.interactive.destructive;
-  const {
-    revokeBeacons,
-    isConsentGranted,
-    onboardForBeacons,
-    isBeaconsSupported,
-    deleteCollectedData,
-    getPrivacyDashboardUrl,
-  } = useBeaconsContext();
 
   const {privacy_policy_url} = useRemoteConfigContext();
   const style = useStyle();
   const {clearHistory} = useSearchHistoryContext();
-  const {configurableLinks} = useFirestoreConfigurationContext();
-
-  const [isCleaningCollectedData, setIsCleaningCollectedData] =
-    React.useState<boolean>(false);
-
-  const [hasPermissionsForBeacons, setHasPermissionsForBeacons] =
-    useState(false);
-
-  const dataSharingInfoUrl = getTextForLanguage(
-    configurableLinks?.dataSharingInfo,
-    language,
-  );
-
-  const updatePermissions = useCallback(() => {
-    allowedPermissionsForBeacons().then((permissions) => {
-      const hasSomePermissions = permissions.length > 0;
-      setHasPermissionsForBeacons(hasSomePermissions);
-    });
-  }, []);
-  useEffect(() => updatePermissions(), [updatePermissions]);
 
   const focusRef = useFocusOnLoad(navigation);
 
@@ -86,53 +43,6 @@ export const Profile_PrivacyScreen = ({navigation}: Props) => {
       )}
     >
       <View style={style.content}>
-        {isBeaconsSupported && (
-          <>
-            <ContentHeading
-              text={t(PrivacySettingsTexts.sections.consents.title)}
-            />
-            <Section>
-              <ToggleSectionItem
-                text={t(
-                  PrivacySettingsTexts.sections.consents.items
-                    .CollectTravelHabits.title,
-                )}
-                subtext={t(
-                  PrivacySettingsTexts.sections.consents.items
-                    .CollectTravelHabits.subText,
-                )}
-                value={isConsentGranted}
-                onValueChange={async (checked) => {
-                  checked
-                    ? await onboardForBeacons(true)
-                    : await revokeBeacons();
-                  updatePermissions();
-                }}
-                testID="toggleCollectData"
-              />
-              {isConsentGranted && !hasPermissionsForBeacons && (
-                <MessageSectionItem
-                  messageType="info"
-                  title={t(
-                    ProfileTexts.sections.privacy.linkSectionItems
-                      .permissionRequired.title,
-                  )}
-                  message={t(
-                    ProfileTexts.sections.privacy.linkSectionItems
-                      .permissionRequired.message,
-                  )}
-                  onPressConfig={{
-                    text: t(
-                      ProfileTexts.sections.privacy.linkSectionItems
-                        .permissionRequired.action,
-                    ),
-                    action: () => Linking.openSettings(),
-                  }}
-                />
-              )}
-            </Section>
-          </>
-        )}
         <Section style={style.spacingTop}>
           <LinkSectionItem
             text={t(
@@ -151,52 +61,6 @@ export const Profile_PrivacyScreen = ({navigation}: Props) => {
             }}
           />
         </Section>
-
-        {isBeaconsSupported && (
-          <Section style={style.spacingTop}>
-            <LinkSectionItem
-              text={t(PrivacySettingsTexts.sections.items.controlPanel.title)}
-              subtitle={t(
-                PrivacySettingsTexts.sections.items.controlPanel.subTitle,
-              )}
-              rightIcon={{svg: ExternalLink}}
-              accessibility={{
-                accessibilityHint: t(
-                  PrivacySettingsTexts.sections.items.controlPanel.a11yHint,
-                ),
-                accessibilityRole: 'link',
-              }}
-              testID="controlPanelButton"
-              onPress={async () => {
-                const privacyDashboardUrl = await getPrivacyDashboardUrl();
-                privacyDashboardUrl &&
-                  (await openInAppBrowser(privacyDashboardUrl, 'close'));
-              }}
-            />
-          </Section>
-        )}
-
-        {isBeaconsSupported && isConsentGranted && dataSharingInfoUrl && (
-          <Section style={style.spacingTop}>
-            <LinkSectionItem
-              text={t(
-                PrivacySettingsTexts.sections.items.dataSharingButton.title,
-              )}
-              accessibility={{
-                accessibilityHint: t(
-                  PrivacySettingsTexts.sections.items.dataSharingButton
-                    .a11yHint,
-                ),
-                accessibilityRole: 'link',
-              }}
-              rightIcon={{svg: ExternalLink}}
-              testID="dataSharingInfoButton"
-              onPress={async () => {
-                openInAppBrowser(dataSharingInfoUrl, 'close');
-              }}
-            />
-          </Section>
-        )}
 
         <Section style={style.spacingTop}>
           <Button
@@ -227,36 +91,6 @@ export const Profile_PrivacyScreen = ({navigation}: Props) => {
             }
             testID="deleteLocalSearchDataButton"
           />
-          {isBeaconsSupported && (
-            <Button
-              expanded={true}
-              style={style.spacingTop}
-              leftIcon={{svg: Delete}}
-              interactiveColor={destructiveColor}
-              text={t(PrivacySettingsTexts.clearCollectedData.label)}
-              loading={isCleaningCollectedData}
-              disabled={isCleaningCollectedData}
-              onPress={async () => {
-                destructiveAlert({
-                  alertTitleString: t(
-                    PrivacySettingsTexts.clearCollectedData.confirmTitle,
-                  ),
-                  cancelAlertString: t(
-                    PrivacySettingsTexts.clearCollectedData.alert.cancel,
-                  ),
-                  confirmAlertString: t(
-                    PrivacySettingsTexts.clearCollectedData.alert.confirm,
-                  ),
-                  destructiveArrowFunction: async () => {
-                    setIsCleaningCollectedData(true);
-                    await deleteCollectedData();
-                    setIsCleaningCollectedData(false);
-                  },
-                });
-              }}
-              testID="deleteCollectedDataButton"
-            />
-          )}
         </Section>
       </View>
     </FullScreenView>

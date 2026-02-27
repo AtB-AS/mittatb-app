@@ -76,62 +76,6 @@ platform :ios do
     )
   end
 
-  desc "Removes the use of beacons from the app"
-  lane :remove_use_of_beacons do
-    beacons_enabled = ENV["KETTLE_API_KEY"] != ""
-    puts "Is beacons enabled: #{beacons_enabled}"
-
-    # Don't remove beacons if they are enabled
-    unless beacons_enabled
-      languages = ['nb', 'en', 'nn']
-      keys = [
-        'NSLocationAlwaysUsageDescription'
-      ]
-
-      update_info_plist(
-        xcodeproj: "./ios/atb.xcodeproj",
-        plist_path: "./atb/Info.plist",
-        block: proc do |plist|
-          %w(location bluetooth-central).each do |key|
-            plist["UIBackgroundModes"].delete(key)
-          end
-          keys.each do |key|
-            plist.delete(key)
-          end
-        end
-      )
-
-      languages.each do |language|
-        file_path = "../ios/#{language}.lproj/InfoPlist.strings"
-        lines = File.readlines(file_path)
-
-        lines_hash = {}
-        lines.each do |line|
-          match = line.match(/^"(.*?)"\s*=\s*"(.*?)";$/)
-          if match
-            key = match[1]
-            value = match[2]
-            lines_hash[key] = value
-          end
-        end
-
-        # Apple requires that the key NSLocationAlwaysAndWhenInUseUsageDescription is present even if the app only uses when in use
-        # because some of the libraries we use require always permission even if we don't use it.
-        # If NSLocationAlwaysAndWhenInUseUsageDescription is present it takes precedence over NSLocationWhenInUseUsageDescription
-        # so to avoid presenting the wrong text to the user we copy the value from NSLocationWhenInUseUsageDescription to NSLocationAlwaysAndWhenInUseUsageDescription
-        # even if we don't use always permission.
-        lines_hash["NSLocationAlwaysAndWhenInUseUsageDescription"] = lines_hash["NSLocationWhenInUseUsageDescription"]
-
-        # Save key-value pairs in a file
-        File.open(file_path, "w") do |file|
-          lines_hash.each do |key, value|
-            file.puts "\"#{key}\" = \"#{value}\";"
-          end
-        end
-      end
-    end
-  end
-
   desc "Nuke certificates"
   lane :nuke_certificates do
     ensure_env_vars(

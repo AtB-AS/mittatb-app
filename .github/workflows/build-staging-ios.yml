@@ -185,9 +185,6 @@ jobs:
       - name: Disable widget
         if: ${{ env.ENABLE_WIDGET != 'true' && steps.ipa-cache.outputs.cache-hit != 'true' }}
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget AtbAppIntent
-      - name: Remove use of beacons
-        if: ${{ env.KETTLE_API_KEY == '' && steps.ipa-cache.outputs.cache-hit != 'true' }}
-        run: bundle exec fastlane ios remove_use_of_beacons
       - name: Run fastlane cert match
         if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
         run: bundle exec fastlane ios get_certs

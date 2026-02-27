@@ -1,14 +1,6 @@
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "I tillegg til å kunne vise di posisjon i kart og til å planleggje reiser, vil vi få verdifull læring om kor du og andre kundar reiser. Det vil hjelpe oss til å kunne forbetre reisetilbodet ditt.";
-
-"NSLocationAlwaysUsageDescription" = "I tillegg til å kunne vise di posisjon i kart og til å planleggje reiser, vil vi få verdifull læring om kor du og andre kundar reiser. Det vil hjelpe oss til å kunne forbetre reisetilbodet ditt.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Vi brukar posisjon for å vise posisjonen din i kart og reisesøk, til å finne haldeplassar og stader i nærleiken, og til å bekrefte posisjonen din når du brukar sparkesyklar.";
 
 "NSLocationWhenInUseUsageDescription" = "Vi brukar posisjon for å vise posisjonen din i kart og reisesøk, til å finne haldeplassar og stader i nærleiken, og til å bekrefte posisjonen din når du brukar sparkesyklar.";
-
-"NSBluetoothAlwaysUsageDescription" = "Du gir oss løyve til å kjenne att bussar og busshaldeplassar i nærleiken. Dette gjer at vi kan analysere kvar du og andre kundar reiser, og til å sende deg relevante undersøkingar. Det vil hjelpe oss til å kunne betre reisetilbodet ditt.";
-
-"NSBluetoothPeripheralUsageDescription" = "Du gir oss løyve til å kjenne att bussar og busshaldeplassar i nærleiken. Dette gjer at vi kan analysere kvar du og andre kundar reiser, og til å sende deg relevante undersøkingar. Det vil hjelpe oss til å kunne betre reisetilbodet ditt.";
-
-"NSMotionUsageDescription" = "Du gir oss løyve til å bruke disse dataene for å læra meir om dine reisevaner. Vi kan for eksempel se om kunder veljer å sykle, gå eller kjøre bil framan å busse. Det vil hjelpe oss til å kunne forbetre reisetilbodet ditt.";
 
 "NSCameraUsageDescription" = "Vi bruker kamera til å ta bilete av feilparkerte elsparkesyklar og å skanne QR-koden på elsparkesyklar.";
 

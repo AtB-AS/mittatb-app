@@ -36,7 +36,6 @@ import {TimeContextProvider} from '@atb/modules/time';
 import {AnnouncementsContextProvider} from '@atb/modules/announcements';
 import {StorybookContextProvider} from '@atb/modules/storybook';
 import {NotificationContextProvider} from '@atb/modules/notifications';
-import {BeaconsContextProvider} from '@atb/modules/beacons';
 import {FeatureTogglesContextProvider} from '@atb/modules/feature-toggles';
 import {configureReanimatedLogger} from 'react-native-reanimated';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
@@ -117,11 +116,9 @@ export const App = () => {
                                                           <BottomSheetModalProvider>
                                                             <BottomSheetContextProvider>
                                                               <FeedbackQuestionsContextProvider>
-                                                                <BeaconsContextProvider>
-                                                                  <OnboardingContextProvider>
-                                                                    <RootStack />
-                                                                  </OnboardingContextProvider>
-                                                                </BeaconsContextProvider>
+                                                                <OnboardingContextProvider>
+                                                                  <RootStack />
+                                                                </OnboardingContextProvider>
                                                               </FeedbackQuestionsContextProvider>
                                                             </BottomSheetContextProvider>
                                                           </BottomSheetModalProvider>

@@ -24,7 +24,6 @@ import {Root_SelectTravelTokenScreen} from './Root_SelectTravelTokenScreen';
 import {Root_ConsiderTravelTokenChangeScreen} from '@atb/stacks-hierarchy/Root_ConsiderTravelTokenChangeScreen';
 import {Root_AddEditFavoritePlaceScreen} from './Root_AddEditFavoritePlaceScreen';
 import {Root_SearchFavoritePlaceScreen} from './Root_SearchFavoritePlaceScreen';
-import {Root_ShareTravelHabitsScreen} from './Root_ShareTravelHabitsScreen';
 import {Root_LocationSearchByMapScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByMapScreen';
 import {Root_ScanQrCodeScreen} from '@atb/stacks-hierarchy/Root_ScanQrCodeScreen';
 import {Root_LocationSearchByTextScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
@@ -55,7 +54,6 @@ import {
 } from '@atb/stacks-hierarchy/Root_ScooterHelp';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
-import {useBeaconsContext} from '@atb/modules/beacons';
 import {Root_TicketInformationScreen} from './Root_TicketInformationScreen/Root_TicketInformationScreen';
 import {Root_ChooseTicketRecipientScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
@@ -117,7 +115,6 @@ export const RootStack = () => {
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {customerProfile} = useTicketingContext();
 
-  useBeaconsContext();
   useTestIds();
   useSetupReactQueryWindowFocus();
 
@@ -415,10 +412,6 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_SearchFavoritePlaceScreen"
                 component={Root_SearchFavoritePlaceScreen}
-              />
-              <Stack.Screen
-                name="Root_ShareTravelHabitsScreen"
-                component={Root_ShareTravelHabitsScreen}
               />
               <Stack.Screen
                 name="Root_LoginAvailableFareContractWarningScreen"

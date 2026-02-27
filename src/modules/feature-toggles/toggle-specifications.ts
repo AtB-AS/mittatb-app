@@ -14,10 +14,6 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_backend_sms_auth',
   },
   {
-    name: 'isBeaconsEnabled',
-    remoteConfigKey: 'enable_beacons',
-  },
-  {
     name: 'isBonusProgramEnabled',
     remoteConfigKey: 'enable_bonus_program',
   },

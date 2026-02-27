@@ -40,9 +40,6 @@ allprojects {
 
         mavenCentral()
 
-        // For more details, see the requirements setting for Kettle at https://developer.kogenta.com/docs/react-native/add-kettle#declare-repository-manually
-        maven { url "https://artifacts.kogenta.com/release" }
-
         maven {
             url 'https://api.mapbox.com/downloads/v2/releases/maven'
             authentication {

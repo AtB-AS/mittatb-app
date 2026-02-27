@@ -78,22 +78,14 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Du gir oss lov til å gjenkjenne busser og bussholdeplasser i nærheten. Det gjør at vi kan analysere hvor du og andre kunder reiser, og til å sende deg relevante undersøkelser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Du gir oss lov til å gjenkjenne busser og bussholdeplasser i nærheten. Det gjør at vi kan analysere hvor du og andre kunder reiser, og til å sende deg relevante undersøkelser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>$(APP_NAME) trenger tilgang til kamera</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>I tillegg til å kunne vise din posisjon i kart og til å planlegge reiser, vil vi få verdifull læring om hvor du og andre kunder reiser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>I tillegg til å kunne vise din posisjon i kart og til å planlegge reiser, vil vi få verdifull læring om hvor du og andre kunder reiser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.</string>
+	<string>Vi bruker posisjon til å vise din posisjon i kart og reisesøk, til å finne holdeplasser og steder i nærheten, og til å bekrefte din posisjon når du bruker sparkesykler.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Vi bruker posisjon til å vise din posisjon i kart og reisesøk, til å finne holdeplasser og steder i nærheten, og til å bekrefte din posisjon når du bruker sparkesykler.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>$(APP_NAME) trenger tilgang til mikrofon</string>
-	<key>NSMotionUsageDescription</key>
-	<string>Du gir oss lov til å bruke disse dataene for å lære mer om dine reisevaner. Vi kan for eksempel se om kunder velger å sykle, gå eller kjøre bil fremfor å busse. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Send bilder for å hjelpe til med å løse problemer i appen</string>
 	<key>NSUserActivityTypes</key>
@@ -106,9 +98,7 @@
 	<array/>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>bluetooth-central</string>
 		<string>fetch</string>
-		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

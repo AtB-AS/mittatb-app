@@ -10420,11 +10420,6 @@ react-native-is-edge-to-edge@1.2.1, react-native-is-edge-to-edge@^1.2.1:
   resolved "https://registry.yarnpkg.com/react-native-is-edge-to-edge/-/react-native-is-edge-to-edge-1.2.1.tgz#64e10851abd9d176cbf2b40562f751622bde3358"
   integrity sha512-FLbPWl/MyYQWz+KwqOZsSyj2JmLKglHatd3xLZWskXOpRaio4LfEDEz8E/A6uD8QoTHW6Aobw1jbEwK7KMgR7Q==
 
-react-native-kettle-module@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-kettle-module/-/react-native-kettle-module-2.0.0.tgz#b85ef8924300d37650346b9c2bedd97eb660387b"
-  integrity sha512-YnQlmRhok23rU1/4GCIgyjKaFVnucCCUok83vdjz3yrTQy9IOfObO/bBwrPlA6bpTWfNLQuH5gHTsSB4UMwXfg==
-
 react-native-localize@^3.2.1:
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-3.5.2.tgz#7fcf3e1086ff3c6389359ffed28f6d0947d076f4"

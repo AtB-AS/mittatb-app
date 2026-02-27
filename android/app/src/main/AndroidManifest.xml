@@ -1,20 +1,12 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="no.mittatb">
+    xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.DETECT_SCREEN_CAPTURE" />
-    <!-- Removed as part of https://github.com/AtB-AS/kundevendt/issues/18747 -->
-    <uses-permission
-        android:name="android.permission.FOREGROUND_SERVICE"
-        tools:node="remove" />
-    <uses-permission
-        android:name="android.permission.FOREGROUND_SERVICE_LOCATION"
-        tools:node="remove" />
     <application
         android:name=".MainApplication"
         android:label="@string/app_name"
@@ -56,77 +48,5 @@
             android:name="no.mittatb.releaseStage"
             android:value="${releaseStage}"
             tools:node="merge" />
-        <!-- Kogenta SDK remove receivers / services -->
-        <service
-            android:name="com.kogenta.kettle.core.mmi.service.SensorService"
-            android:foregroundServiceType="location"
-            android:launchMode="singleInstance"
-            android:enabled="true"
-            android:exported="false"
-            tools:node="remove" />
-        <service
-            android:name="com.kogenta.kettle.core.manager.compatibility.MotionService"
-            android:enabled="true"
-            android:exported="false"
-            tools:node="remove" />
-        <provider
-            android:name="com.kogenta.kettle.core.api.KettleInitializer"
-            android:authorities="${applicationId}.KettleInitializer"
-            android:enabled="true"
-            android:exported="false"
-            tools:node="remove" />
-        <receiver
-            android:name="com.kogenta.kettle.core.bluetooth.broadcast.BeaconBroadcastReceiver"
-            android:enabled="true"
-            android:exported="false"
-            tools:node="remove">
-            <intent-filter>
-                <action
-                    android:name="android.bluetooth.adapter.action.STATE_CHANGED"
-                    tools:node="remove" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.kogenta.kettle.core.broadcast.BootBroadcastReceiver"
-            android:enabled="true"
-            android:exported="false"
-            tools:node="remove">
-            <intent-filter>
-                <action
-                    android:name="com.kogenta.kettle.BootBroadcastReceiver.SHUTDOWN"
-                    tools:node="remove" />
-                <action
-                    android:name="com.kogenta.kettle.BootBroadcastReceiver.WAKEUP"
-                    tools:node="remove" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.kogenta.kettle.core.broadcast.LocationMotionBroadcastReceiver"
-            android:enabled="true"
-            android:exported="false"
-            tools:node="remove">
-            <intent-filter>
-                <action
-                    android:name="com.kogenta.kettle.ActivityBroadcastReceiver"
-                    tools:node="remove" />
-                <action
-                    android:name="com.kogenta.kettle.LocationBroadcastReceiver"
-                    tools:node="remove" />
-                <action
-                    android:name="com.kogenta.kettle.BatchLocationBroadcastReceiver"
-                    tools:node="remove" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.kogenta.kettle.core.api.StartupBroadcastReceiver"
-            android:enabled="true"
-            android:exported="false"
-            tools:node="remove">
-            <intent-filter>
-                <action
-                    android:name="android.intent.action.BOOT_COMPLETED"
-                    tools:node="remove" />
-            </intent-filter>
-        </receiver>
     </application>
 </manifest>
