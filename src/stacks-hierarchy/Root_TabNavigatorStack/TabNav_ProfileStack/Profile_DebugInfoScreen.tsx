@@ -33,7 +33,6 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {NativeBlockButton} from '@atb/components/native-button';
-import {shareTravelHabitsSessionCountKey} from '@atb/modules/beacons';
 import {useAnnouncementsContext} from '@atb/modules/announcements';
 import {useNotificationsContext} from '@atb/modules/notifications';
 import {useTimeContext} from '@atb/modules/time';
