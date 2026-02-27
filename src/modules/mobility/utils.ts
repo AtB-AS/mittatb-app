@@ -32,6 +32,8 @@ import {
   ShmoPricingPlan,
   StationFeature,
   StationFeatureSchema,
+  StationsClusteredFeature,
+  StationsClusteredFeatureSchema,
   VehicleFeature,
   VehicleFeatureSchema,
   VehiclesClusteredFeature,
@@ -40,54 +42,62 @@ import {
 import {TFunc} from '@leile/lobo-t';
 import {ErrorResponse, formatNumberToString} from '@atb-as/utils';
 
-export const isVehiclesClusteredFeature = (
+export const isStationCluster = (
+  feature: Feature<Point> | undefined,
+): feature is StationsClusteredFeature =>
+  StationsClusteredFeatureSchema.safeParse(feature).success;
+
+export const isVehicleCluster = (
   feature: Feature<Point> | undefined,
 ): feature is VehiclesClusteredFeature =>
   VehiclesClusteredFeatureSchema.safeParse(feature).success;
 
-export const isVehicleFeature = (
+export const isVehicle = (
   feature: Feature<Point> | undefined,
 ): feature is VehicleFeature => VehicleFeatureSchema.safeParse(feature).success;
 
-export const isScooterV2 = (
+export const isScooter = (
   feature: Feature<Point> | undefined,
 ): feature is VehicleFeature & {
   properties: {
     vehicle_type_form_factor: FormFactor.Scooter | FormFactor.ScooterStanding;
   };
 } =>
-  isVehicleFeature(feature) &&
-  (feature?.properties?.vehicle_type_form_factor === FormFactor.Scooter ||
-    feature?.properties?.vehicle_type_form_factor ===
-      FormFactor.ScooterStanding);
+  isVehicle(feature) &&
+  (feature.properties.vehicle_type_form_factor === FormFactor.Scooter ||
+    feature.properties.vehicle_type_form_factor === FormFactor.ScooterStanding);
 
-export const isBicycleV2 = (
+export const isBicycle = (
   feature: Feature<Point> | undefined,
 ): feature is VehicleFeature & {
   properties: {vehicle_type_form_factor: FormFactor.Bicycle};
 } =>
-  isVehiclesClusteredFeature(feature) &&
-  feature?.properties?.vehicle_type_form_factor === FormFactor.Bicycle &&
-  !isStationV2(feature);
+  isVehicle(feature) &&
+  feature?.properties?.vehicle_type_form_factor === FormFactor.Bicycle;
 
-export const isStationV2 = (
+export const isClusteredStation = (
+  feature: Feature<Point> | undefined,
+): feature is StationsClusteredFeature =>
+  StationsClusteredFeatureSchema.safeParse(feature).success;
+
+export const isStation = (
   feature: Feature<Point> | undefined,
 ): feature is StationFeature => StationFeatureSchema.safeParse(feature).success;
 
-export const isBikeStationV2 = (
+export const isBikeStation = (
   feature: Feature<Point> | undefined,
 ): feature is StationFeature & {
   properties: {vehicle_type_form_factor: FormFactor.Bicycle};
 } =>
-  isStationV2(feature) &&
+  isStation(feature) &&
   feature.properties?.vehicle_type_form_factor === FormFactor.Bicycle;
 
-export const isCarStationV2 = (
+export const isCarStation = (
   feature: Feature<Point> | undefined,
 ): feature is StationFeature & {
   properties: {vehicle_type_form_factor: FormFactor.Car};
 } =>
-  isStationV2(feature) &&
+  isStation(feature) &&
   feature.properties?.vehicle_type_form_factor === FormFactor.Car;
 
 export const getAvailableVehicles = (

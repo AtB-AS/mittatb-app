@@ -22,7 +22,6 @@ import {MapPropertiesType, MapProps} from './types';
 import {
   isFeaturePoint,
   getFeaturesAtClick,
-  isClusterFeatureV2,
   isQuayFeature,
   mapPositionToCoordinates,
   flyToLocation,
@@ -30,6 +29,7 @@ import {
   isParkAndRide,
   isStopPlace,
   isFeatureGeofencingZone,
+  isClusterFeature,
 } from './utils';
 
 import {
@@ -41,12 +41,13 @@ import {
 } from '@atb/modules/map';
 
 import {
-  isBicycleV2,
-  isScooterV2,
+  isBicycle,
+  isScooter,
   useVehicleQuery,
-  isStationV2,
-  isCarStationV2,
-  isBikeStationV2,
+  isStation,
+  isCarStation,
+  isBikeStation,
+  isVehicle,
 } from '@atb/modules/mobility';
 
 import {Snackbar, useSnackbar, useStableValue} from '@atb/components/snackbar';
@@ -113,8 +114,7 @@ export const Map = (props: MapProps) => {
 
   const selectedFeature = mapState.feature;
 
-  const selectedFeatureIsAVehicle =
-    isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
+  const selectedFeatureIsAVehicle = isVehicle(selectedFeature);
 
   const {isGeofencingZonesEnabled, isGeofencingZonesAsTilesEnabled} =
     useFeatureTogglesContext();
@@ -270,7 +270,7 @@ export const Map = (props: MapProps) => {
         if (isGeofencingZonesAsTilesEnabled) return; // Handled directly with geofencingZoneOnPress instead in this case
         const gfzProps = featureToSelect?.properties?.geofencingZoneCustomProps;
         showGeofencingZoneSnackbar(gfzProps?.code, gfzProps.isStationParking);
-      } else if (isScooterV2(selectedFeature) && !isActiveTrip) {
+      } else if (isScooter(selectedFeature) && !isActiveTrip) {
         // outside of operational area, rules unspecified
         showGeofencingZoneSnackbar(undefined);
       }
@@ -301,34 +301,36 @@ export const Map = (props: MapProps) => {
         featuresAtClick,
         positionClicked,
       );
-
-      if (isClusterFeatureV2(featureToSelect)) {
-        const fromZoomLevel = (await mapViewRef.current?.getZoom()) ?? 0;
-        const toZoomLevel = Math.max(fromZoomLevel + 2);
-
-        flyToLocation({
-          coordinates: mapPositionToCoordinates(
-            featureToSelect.geometry.coordinates,
-          ),
-          padding: getSlightlyRaisedMapPadding(paddingBottomMap),
-          mapCameraRef,
-          mapViewRef,
-          zoomLevel: toZoomLevel,
-        });
-      } else if (isFeaturePoint(featureToSelect)) {
+      if (isFeaturePoint(featureToSelect)) {
         if (isQuayFeature(featureToSelect)) return;
+        if (isClusterFeature(featureToSelect)) {
+          dispatchMapState({type: MapStateActionType.None});
+          const fromZoomLevel = (await mapViewRef.current?.getZoom()) ?? 0;
+          const toZoomLevel = getToZoomLevel(
+            fromZoomLevel,
+            featureToSelect.properties?.cluster_extent_meters,
+          );
 
-        if (isScooterV2(featureToSelect)) {
+          flyToLocation({
+            coordinates: mapPositionToCoordinates(
+              featureToSelect.geometry.coordinates,
+            ),
+            padding: getSlightlyRaisedMapPadding(paddingBottomMap),
+            mapCameraRef,
+            mapViewRef,
+            zoomLevel: toZoomLevel,
+          });
+        } else if (isScooter(featureToSelect)) {
           dispatchMapState({
             type: MapStateActionType.Scooter,
             feature: featureToSelect,
           });
-        } else if (isBicycleV2(featureToSelect)) {
+        } else if (isBicycle(featureToSelect)) {
           dispatchMapState({
             type: MapStateActionType.Bicycle,
             feature: featureToSelect,
           });
-        } else if (isCarStationV2(featureToSelect)) {
+        } else if (isCarStation(featureToSelect)) {
           dispatchMapState({
             type: MapStateActionType.CarStation,
             feature: featureToSelect,
@@ -343,12 +345,12 @@ export const Map = (props: MapProps) => {
             type: MapStateActionType.StopPlace,
             feature: featureToSelect,
           });
-        } else if (isBikeStationV2(featureToSelect)) {
+        } else if (isBikeStation(featureToSelect)) {
           dispatchMapState({
             type: MapStateActionType.BikeStation,
             feature: featureToSelect,
           });
-        } else if (isStationV2(featureToSelect)) {
+        } else if (isStation(featureToSelect)) {
           dispatchMapState({
             type: MapStateActionType.Station,
             feature: featureToSelect,
@@ -499,3 +501,31 @@ export const Map = (props: MapProps) => {
     </View>
   );
 };
+
+const DEFAULT_ZOOM_DELTA = 2;
+
+export function getToZoomLevel(
+  currentZoom: number,
+  clusterExtentMeters?: number | null,
+): number {
+  const defaultZoom = currentZoom + DEFAULT_ZOOM_DELTA;
+
+  if (
+    clusterExtentMeters == null ||
+    clusterExtentMeters < 0 ||
+    !Number.isFinite(clusterExtentMeters)
+  ) {
+    return defaultZoom;
+  }
+
+  const newZoomLevel: number = (() => {
+    if (clusterExtentMeters <= 15) return 19;
+    if (clusterExtentMeters <= 30) return 18;
+    if (clusterExtentMeters <= 60) return 17;
+    if (clusterExtentMeters <= 120) return 16;
+    if (clusterExtentMeters <= 250) return 15;
+    return defaultZoom;
+  })();
+
+  return Math.max(defaultZoom, newZoomLevel);
+}
