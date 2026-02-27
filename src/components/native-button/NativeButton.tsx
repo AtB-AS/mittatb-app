@@ -8,7 +8,7 @@ export type NativeButtonProps = {disabled?: boolean} & Omit<
 >;
 
 export const NativeButton = forwardRef<any, NativeButtonProps>(
-  ({disabled, ...pressableProps}: NativeButtonProps, focusRef) => {
+  ({disabled, style, ...pressableProps}: NativeButtonProps, focusRef) => {
     const {logEvent} = useAnalyticsContext();
     return (
       <RectButton
@@ -21,6 +21,7 @@ export const NativeButton = forwardRef<any, NativeButtonProps>(
             logEvent('OnPress event', pressableProps.testID);
           }
         }}
+        style={[disabled ? {opacity: 0.2} : undefined, style]}
         activeOpacity={0.2}
       >
         {pressableProps?.children}
