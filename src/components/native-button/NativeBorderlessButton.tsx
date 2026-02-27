@@ -4,7 +4,6 @@ import {
 } from 'react-native-gesture-handler';
 import React, {forwardRef} from 'react';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {View} from 'react-native';
 
 export type NativeBorderlessButtonProps = {disabled?: boolean} & Omit<
   BorderlessButtonProps,
@@ -21,23 +20,21 @@ export const NativeBorderlessButton = forwardRef<
   ) => {
     const {logEvent} = useAnalyticsContext();
     return (
-      <View>
-        <BorderlessButton
-          ref={focusRef}
-          {...pressableProps}
-          enabled={!disabled}
-          onPress={(e) => {
-            pressableProps.onPress?.(e);
-            if (pressableProps.testID) {
-              logEvent('OnPress event', pressableProps.testID);
-            }
-          }}
-          style={[disabled ? {opacity: 0.2} : undefined, style]}
-          activeOpacity={0.2}
-        >
-          {pressableProps?.children}
-        </BorderlessButton>
-      </View>
+      <BorderlessButton
+        ref={focusRef}
+        {...pressableProps}
+        enabled={!disabled}
+        onPress={(e) => {
+          pressableProps.onPress?.(e);
+          if (pressableProps.testID) {
+            logEvent('OnPress event', pressableProps.testID);
+          }
+        }}
+        style={[disabled ? {opacity: 0.2} : undefined, style]}
+        activeOpacity={0.2}
+      >
+        {pressableProps?.children}
+      </BorderlessButton>
     );
   },
 );
