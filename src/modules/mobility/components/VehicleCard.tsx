@@ -4,56 +4,48 @@ import {StyleSheet} from '@atb/theme';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {View} from 'react-native';
 import {BatteryHigh} from '@atb/assets/svg/mono-icons/miscellaneous';
-import {Unlock, PricePerTime} from '@atb/assets/svg/mono-icons/mobility';
 import {VehicleCardStat} from './VehicleCardStat';
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {formatPricePerUnit, formatRange, getBatteryLevelIcon} from '../utils';
-import {PricingPlanFragment} from '@atb/api/types/generated/fragments/mobility-shared';
-import {ShmoPricingPlan} from '@atb/api/types/mobility';
-import {formatNumberToString} from '@atb-as/utils';
+import {
+  formatRange,
+  getBatteryLevelIcon,
+  getThemedIllustrationForFormFactor,
+} from '../utils';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type Props = {
-  pricingPlan: PricingPlanFragment | ShmoPricingPlan;
   currentFuelPercent: number | undefined;
   currentRangeMeters: number;
+  formFactor?: FormFactor;
 };
 
 export const VehicleCard = ({
-  pricingPlan,
   currentFuelPercent,
   currentRangeMeters,
+  formFactor,
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
-
-  const price = formatPricePerUnit(pricingPlan, language);
+  const ThemedIllustration = formFactor
+    ? getThemedIllustrationForFormFactor(formFactor)
+    : null;
 
   return (
     <Section>
-      <GenericSectionItem>
+      <GenericSectionItem style={styles.sectionWrapper}>
         <View style={styles.content}>
-          <>
-            <VehicleCardStat
-              icon={
-                currentFuelPercent
-                  ? getBatteryLevelIcon(currentFuelPercent)
-                  : BatteryHigh
-              }
-              stat={formatRange(currentRangeMeters, language)}
-              description={t(ScooterTexts.range)}
-            />
-            <VehicleCardStat
-              icon={Unlock}
-              stat={formatNumberToString(pricingPlan.price, language) + ' kr'}
-              description={t(ScooterTexts.unlock)}
-            />
-
-            <VehicleCardStat
-              icon={PricePerTime}
-              stat={price?.price ?? ''}
-              description={t(ScooterTexts.per.unit(price?.unit ?? ''))}
-            />
-          </>
+          <VehicleCardStat
+            icon={
+              currentFuelPercent
+                ? getBatteryLevelIcon(currentFuelPercent)
+                : BatteryHigh
+            }
+            stat={formatRange(currentRangeMeters, language)}
+            description={t(ScooterTexts.range)}
+          />
+          {!!ThemedIllustration && (
+            <ThemedIllustration width={50} height={50} />
+          )}
         </View>
       </GenericSectionItem>
     </Section>
@@ -66,12 +58,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: theme.spacing.medium,
-      paddingTop: theme.spacing.small,
+      gap: theme.spacing.small,
     },
-    operatorNameAndLogo: {
-      flexDirection: 'row',
+
+    sectionWrapper: {
+      padding: theme.spacing.small,
     },
   };
 });

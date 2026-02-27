@@ -154,13 +154,13 @@ export const ActiveScooterSheet = ({
             <>
               <View style={styles.container}>
                 <VehicleCard
-                  pricingPlan={activeBooking.pricingPlan}
                   currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
                   currentRangeMeters={
                     activeBooking.asset?.currentRangeKm
                       ? activeBooking.asset.currentRangeKm * 1000
                       : 0
                   }
+                  formFactor={activeBooking.asset.formFactor ?? undefined}
                 />
               </View>
               <View style={styles.footer}>

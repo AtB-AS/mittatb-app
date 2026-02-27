@@ -319,6 +319,7 @@ export const ScooterTexts = {
   ),
   range: _('rekkevidde', 'range', 'rekkjevidde'),
   unlock: _('opplåsning', 'unlock', 'opplåsing'),
+  free: _('Gratis', 'Free', 'Gratis'),
   per: {
     unit(unit: string) {
       switch (unit) {
@@ -328,6 +329,24 @@ export const ScooterTexts = {
           return _('per kilometer', 'per kilometer', 'per kilometer');
         default:
           return _('per', 'per', 'per');
+      }
+    },
+    discount(unit: string, price: string) {
+      switch (unit) {
+        case 'min':
+          return _(
+            `så ${price}kr/min`,
+            `then ${price}kr/min`,
+            `så ${price}kr/min`,
+          );
+        case 'km':
+          return _(
+            `så ${price}kr/km`,
+            `then ${price}kr/km`,
+            `så ${price}kr/km`,
+          );
+        default:
+          return _(`så ${price}kr`, `then ${price}kr`, `så ${price}kr`);
       }
     },
   },

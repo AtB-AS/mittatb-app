@@ -39,6 +39,8 @@ import {
 } from '@atb/api/types/mobility';
 import {TFunc} from '@leile/lobo-t';
 import {ErrorResponse, formatNumberToString} from '@atb-as/utils';
+import {FormattedRatePerUnit} from './types';
+import {ThemedCityBike, ThemedScooter} from '@atb/theme/ThemedAssets';
 
 export const isVehiclesClusteredFeature = (
   feature: Feature<Point> | undefined,
@@ -195,23 +197,25 @@ export const getBatteryLevelIcon = (batteryPercentage: number) => {
   }
 };
 
-export const formatPricePerUnit = (
-  pricePlan: PricingPlanFragment | ShmoPricingPlan,
+export const formatRatePerUnit = (
+  pricingPlan: PricingPlanFragment | ShmoPricingPlan,
   language: Language,
-) => {
-  const perMinPrice = pricePlan.perMinPricing?.[0];
+): FormattedRatePerUnit | undefined => {
+  const perMinPrice = pricingPlan.perMinPricing?.[0];
 
   if (perMinPrice) {
     return {
-      price: `${formatNumberToString(perMinPrice.rate, language)} kr`,
-      unit: 'min',
+      rate: perMinPrice.rate,
+      formattedRate: `${formatNumberToString(perMinPrice.rate, language)} kr`,
+      perUnit: 'min',
     };
-  } else if (!isShmoPricingPlan(pricePlan)) {
-    const perKmPrice = pricePlan.perKmPricing?.[0];
+  } else if (!isShmoPricingPlan(pricingPlan)) {
+    const perKmPrice = pricingPlan.perKmPricing?.[0];
     if (perKmPrice) {
       return {
-        price: `${formatNumberToString(perKmPrice.rate, language)} kr`,
-        unit: 'km',
+        rate: perKmPrice.rate,
+        formattedRate: `${formatNumberToString(perKmPrice.rate, language)} kr`,
+        perUnit: 'km',
       };
     }
   }
@@ -316,5 +320,16 @@ export function isSvgUrl(url: string) {
     return u.pathname.toLowerCase().endsWith('.svg');
   } catch {
     return false;
+  }
+}
+
+export function getThemedIllustrationForFormFactor(formFactor: FormFactor) {
+  switch (formFactor) {
+    case FormFactor.Scooter:
+      return ThemedScooter;
+    case FormFactor.Bicycle:
+      return ThemedCityBike;
+    default:
+      return null;
   }
 }
