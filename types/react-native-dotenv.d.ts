@@ -22,5 +22,4 @@ declare module '@env' {
   export const ENABLE_TICKETING: string | undefined;
   export const POSTHOG_API_KEY: string | undefined;
   export const POSTHOG_HOST: string | undefined;
-  export const KETTLE_API_KEY: string | undefined;
 }

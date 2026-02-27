@@ -67,9 +67,6 @@ jobs:
       - name: Enable apple pass suppression
         if: ${{ env.ENABLE_APPLE_PASS_SUPPRESSION == 'true' }}
         run: bundle exec fastlane ios enable_pass_presentation_suppression_entitlement
-      - name: Remove use of beacons
-        if: ${{ env.KETTLE_API_KEY == '' }}
-        run: bundle exec fastlane ios remove_use_of_beacons
       - name: Run fastlane build
         run: bundle exec fastlane ios build
         env:

@@ -25,12 +25,12 @@ Then run `yarn android` to build and launch the app on a connected device or emu
 To generate a APK locally, run this command:
 
 ```sh
-npx react-native build-android --tasks assembleBeacons
+npx react-native build-android --tasks assembleAppDebug
 ```
 
-Use the `assembleApp` task to build without beacons. Run `./gradlew tasks` to see all available tasks.
+Run `./gradlew tasks` to see all available tasks.
 
-The APK will be located in `android/app/build/outputs/apk/beacons/debug/app-beacons-debug.apk`
+The APK will be located in `android/app/build/outputs/apk/app/debug/app-app-debug.apk`
 
 ## Create dependency graph
 

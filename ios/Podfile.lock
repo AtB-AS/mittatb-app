@@ -1502,36 +1502,6 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - KettleKit (1.4.0)
-  - KettleModule (2.0.0):
-    - boost
-    - DoubleConversion
-    - fast_float
-    - fmt
-    - glog
-    - hermes-engine
-    - KettleKit (= 1.4.0)
-    - RCT-Folly
-    - RCT-Folly/Fabric
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - SocketRocket
-    - Yoga
   - leveldb-library (1.22.6)
   - MapboxCommon (24.15.4):
     - Turf (= 4.0.0)
@@ -4920,7 +4890,6 @@ DEPENDENCIES:
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - Intercom
   - "intercom-react-native (from `../node_modules/@intercom/intercom-react-native`)"
-  - KettleModule (from `../node_modules/react-native-kettle-module`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
   - RCTRequired (from `../node_modules/react-native/Libraries/Required`)
@@ -5060,7 +5029,6 @@ SPEC REPOS:
     - gRPC-Core
     - GTMSessionFetcher
     - Intercom
-    - KettleKit
     - leveldb-library
     - MapboxCommon
     - MapboxCoreMaps
@@ -5105,8 +5073,6 @@ EXTERNAL SOURCES:
     :tag: hermes-v0.14.0
   intercom-react-native:
     :path: "../node_modules/@intercom/intercom-react-native"
-  KettleModule:
-    :path: "../node_modules/react-native-kettle-module"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTDeprecation:
@@ -5365,18 +5331,16 @@ SPEC CHECKSUMS:
   "gRPC-C++": cc207623316fb041a7a3e774c252cf68a058b9e8
   gRPC-Core: 860978b7db482de8b4f5e10677216309b5ff6330
   GTMSessionFetcher: b8ab00db932816e14b0a0664a08cb73dda6d164b
-  hermes-engine: 64c8724b2919f58c70c597ff023697370b732563
+  hermes-engine: 95a0fb9c07da4436b70c1484fcff2bb9efb17dd8
   Intercom: aca703f001cf9470b1f13b72cb8cc969a09bafca
   intercom-react-native: c8ee5e7d845955c5f6898c0f094ebcf1d6db9255
-  KettleKit: 37e98f1e9d2da85616378fd0acc8a8bf81360b67
-  KettleModule: fc99af0e96a9a0ad186c160016887f56ebfac33b
   leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
   MapboxCommon: 975faa94b893bb64a1d28b09d9d6d820e1030a26
   MapboxCoreMaps: 105af9894d850290fbb466e9f9a133f5d175abf1
   MapboxMaps: e97e59d6ba48bb6f695a4c1dc2f174cb24743cd4
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
+  RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
   RCTDeprecation: a41bbdd9af30bf2e5715796b313e44ec43eefff1
   RCTRequired: 7be34aabb0b77c3cefe644528df0fa0afad4e4d0
   RCTSwiftUI: a6c7271c39098bf00dbdad8f8ed997a59bbfbe44
@@ -5473,7 +5437,7 @@ SPEC CHECKSUMS:
   RNInAppBrowser: 6d3eb68d471b9834335c664704719b8be1bfdb20
   RNLocalize: d8ccb568b40c72c767714db3808ce66a1ecf444a
   rnmapbox-maps: df786769607427115545ba9bee95360436218510
-  RNPermissions: 0d6950c452b8d89d506ec1a60ab095d68bc1ce92
+  RNPermissions: aa40c7e2acdc1e3f0ed85814657fb2841874006d
   RNReanimated: 9160d535792c6b3f9d1974d7bf5c5813afce1c91
   RNScreens: 199799bdab32fa1e17ebf938b06fec52033e81e5
   RNSVG: acb39c771c3dbb33fa8f65d1b11dc4500147189e
@@ -5483,13 +5447,13 @@ SPEC CHECKSUMS:
   SwiftProtobuf: 4dbaffec76a39a8dc5da23b40af1a5dc01a4c02d
   TimeApiiOSLib: 8289d67019d958c29676dfb9e38ffdcefbcdb9bd
   TokenCore: cdce158c4f5331f81f35e34f3b708b6582c0d569
-  TokenStateReactNativeLib: 00fb9cd8cc92a36f350c9d216686277837d6474a
+  TokenStateReactNativeLib: e2ef35bc07a1a6e3772c99f1d90d426e86535f5b
   Turf: c9eb11a65d96af58cac523460fd40fec5061b081
   VisionCamera: 30b358b807324c692064f78385e9a732ce1bebfe
   VisualCodeModeliOSLib: c40687c1f0bd60e672088a023d3ec0984608c118
   VisualCodeViewiOSLib: 448c13fd82ceb72aa4a12d9c69c92278d9da2989
   Yoga: 33b53536a0500d039f2cd78caf1d5d68712d3af7
 
-PODFILE CHECKSUM: 298cb486e311393205f43aea96cadd09f0341dea
+PODFILE CHECKSUM: 4068aa57be2fd371ca958cf135ccce300b97466d
 
 COCOAPODS: 1.16.2

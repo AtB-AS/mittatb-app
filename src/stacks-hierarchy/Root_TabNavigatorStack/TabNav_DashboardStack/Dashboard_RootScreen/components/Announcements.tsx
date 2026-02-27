@@ -6,12 +6,10 @@ import {DashboardTexts, useTranslation} from '@atb/translations';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
 import {StyleSheet} from '@atb/theme';
-import {useBeaconsContext} from '@atb/modules/beacons';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {useTimeContext} from '@atb/modules/time';
 import {useFareContracts} from '@atb/modules/ticketing';
 import {ContentHeading} from '@atb/components/heading';
-import {useOnboardingSectionIsOnboarded} from '@atb/modules/onboarding';
 import {useStableLocation} from '@atb/modules/geolocation';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {findZoneInLocation} from '@atb/utils/use-find-zone-in-location';
@@ -26,10 +24,6 @@ export const Announcements = ({style}: Props) => {
   const {findAnnouncements} = useAnnouncementsContext();
   const {t} = useTranslation();
   const now = useNow(10000);
-  const {isConsentGranted} = useBeaconsContext();
-
-  const shareTravelHabitsIsOnboarded =
-    useOnboardingSectionIsOnboarded('shareTravelHabits');
 
   const {serverNow} = useTimeContext();
   const {fareContracts: validFareContracts} = useFareContracts(
@@ -44,8 +38,6 @@ export const Announcements = ({style}: Props) => {
   const {fareZone, cityZone, carPoolingZone} = useZones();
 
   const ruleVariables = {
-    isBeaconsConsentGranted: isConsentGranted ?? false,
-    shareTravelHabitsIsOnboarded,
     hasValidFareContract,
     fareZoneId: fareZone?.id ?? null,
     cityZoneId: cityZone?.id ?? null,

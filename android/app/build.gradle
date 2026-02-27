@@ -121,8 +121,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    // Store the KETTLE_API_KEY in a constant
-    def KETTLE_API_KEY_VALUE = System.getProperty("KETTLE_API_KEY") as String
     def BUGSNAG_API_KEY_VALUE = System.getProperty("BUGSNAG_API_KEY") as String
     def RELEASE_STAGE_KEY_VALUE = System.getProperty("RELEASE_STAGE") as String
 
@@ -141,8 +139,6 @@ android {
             versionCode appVersionCode.toInteger()
         }
 
-        // This is fetched inside Java / Kotlin code
-        buildConfigField 'String', 'KETTLE_API_KEY', "\"$KETTLE_API_KEY_VALUE\""
         manifestPlaceholders = [
                 bugsnagApiKey: BUGSNAG_API_KEY_VALUE,
                 releaseStage: RELEASE_STAGE_KEY_VALUE
@@ -212,9 +208,6 @@ android {
         app {
             dimension "type"
         }
-        beacons {
-            dimension "type"
-        }
     }
     packagingOptions {
         pickFirst "lib/armeabi-v7a/libc++_shared.so"
@@ -236,8 +229,6 @@ dependencies {
     implementation("com.facebook.react:react-android")
 
     implementation "androidx.core:core-splashscreen:1.2.0"
-
-    implementation 'com.kogenta.kettle:kettle-sdk:1.4.5'
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

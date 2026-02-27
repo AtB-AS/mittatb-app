@@ -1,6 +1,6 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo, useState} from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -33,11 +33,9 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {shareTravelHabitsSessionCountKey} from '@atb/modules/beacons';
 import {useAnnouncementsContext} from '@atb/modules/announcements';
 import {useNotificationsContext} from '@atb/modules/notifications';
 import {useTimeContext} from '@atb/modules/time';
-import {useBeaconsContext} from '@atb/modules/beacons';
 import {useOnboardingContext} from '@atb/modules/onboarding';
 import Bugsnag from '@bugsnag/react-native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -51,7 +49,6 @@ import {format} from 'date-fns';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useQueryClient} from '@tanstack/react-query';
 import {useDebugUserInfoHeader} from '@atb/api';
-import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -60,8 +57,6 @@ function setClipboard(content: string) {
 
 export const Profile_DebugInfoScreen = () => {
   const styles = useStyles();
-  const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[0];
 
   const {
     onboardingSections,
@@ -69,16 +64,6 @@ export const Profile_DebugInfoScreen = () => {
     restartAllOnboardingSections,
   } = useOnboardingContext();
 
-  const {
-    onboardForBeacons,
-    revokeBeacons,
-    deleteCollectedData,
-    beaconsInfo,
-    isConsentGranted,
-    isBeaconsSupported,
-    getPrivacyDashboardUrl,
-    getPrivacyTermsUrl,
-  } = useBeaconsContext();
   const {resetDismissedGlobalMessages} = useGlobalMessagesContext();
   const {
     userId,
@@ -192,10 +177,6 @@ export const Profile_DebugInfoScreen = () => {
           <GenericSectionItem>
             <ThemeText>{`Device is ${serverTimeOffset}ms ahead of server time`}</ThemeText>
           </GenericSectionItem>
-          <LinkSectionItem
-            text="Reset shareTravelHabits session counter"
-            onPress={() => storage.set(shareTravelHabitsSessionCountKey, '0')}
-          />
           <ToggleSectionItem
             text="Toggle test-ID"
             value={showTestIds}
@@ -636,85 +617,6 @@ export const Profile_DebugInfoScreen = () => {
             }
           />
         </Section>
-
-        {isBeaconsSupported && (
-          <Section style={styles.section}>
-            <ExpandableSectionItem
-              text="Beacons"
-              showIconText={true}
-              expandContent={
-                <View>
-                  <View>
-                    <ThemeText>{`Identifier: ${
-                      beaconsInfo?.identifier ?? 'N/A'
-                    }`}</ThemeText>
-                    <ThemeText>{`Status: ${
-                      beaconsInfo?.isStarted ? 'Running' : 'Not running'
-                    }`}</ThemeText>
-                    <ThemeText>{`Granted consents: ${
-                      beaconsInfo?.consents ?? 'N/A'
-                    }`}</ThemeText>
-                  </View>
-                  <Button
-                    expanded={true}
-                    interactiveColor={interactiveColor}
-                    onPress={async () => {
-                      const granted = await onboardForBeacons(true);
-                      Alert.alert('Onboarding', `Access granted: ${granted}`);
-                    }}
-                    disabled={isConsentGranted}
-                    style={styles.button}
-                    text="Onboard and give consent"
-                  />
-                  <Button
-                    expanded={true}
-                    interactiveColor={interactiveColor}
-                    onPress={async () => {
-                      await revokeBeacons();
-                    }}
-                    style={styles.button}
-                    disabled={!isConsentGranted}
-                    text="Revoke"
-                  />
-                  <Button
-                    expanded={true}
-                    interactiveColor={interactiveColor}
-                    onPress={async () => {
-                      await deleteCollectedData();
-                    }}
-                    style={styles.button}
-                    text="Delete Collected Data"
-                  />
-                  <Button
-                    expanded={true}
-                    interactiveColor={interactiveColor}
-                    onPress={async () => {
-                      const privacyDashboardUrl =
-                        await getPrivacyDashboardUrl();
-                      privacyDashboardUrl &&
-                        openInAppBrowser(privacyDashboardUrl, 'close');
-                    }}
-                    style={styles.button}
-                    disabled={!isConsentGranted}
-                    text="Open Privacy Dashboard"
-                  />
-                  <Button
-                    expanded={true}
-                    interactiveColor={interactiveColor}
-                    onPress={async () => {
-                      const privacyTermsUrl = await getPrivacyTermsUrl();
-                      privacyTermsUrl &&
-                        openInAppBrowser(privacyTermsUrl, 'close');
-                    }}
-                    style={styles.button}
-                    disabled={!isConsentGranted}
-                    text="Open Privacy Terms"
-                  />
-                </View>
-              }
-            />
-          </Section>
-        )}
       </ScrollView>
     </View>
   );

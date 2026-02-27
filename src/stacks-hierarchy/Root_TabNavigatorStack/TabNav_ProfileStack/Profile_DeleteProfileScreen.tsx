@@ -12,7 +12,6 @@ import {ThemeText} from '@atb/components/text';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import {useTimeContext} from '@atb/modules/time';
-import {useBeaconsContext} from '@atb/modules/beacons';
 import {tGlobal} from '@atb/modules/locale';
 import {useDeleteAgeVerificationMutation} from '@atb/modules/mobility';
 import {useMutation} from '@tanstack/react-query';
@@ -32,14 +31,11 @@ export const Profile_DeleteProfileScreen = ({navigation}: Props) => {
   );
   const hasAvailableFareContracts = availableFareContracts.length > 0;
 
-  const {deleteCollectedData} = useBeaconsContext();
-
   const {mutateAsync: deleteAgeVerification} =
     useDeleteAgeVerificationMutation();
 
   const onDeleteProfileMutate = async () => {
     await deleteAgeVerification();
-    await deleteCollectedData();
   };
   const onDeleteProfileSuccess = async () => {
     await signOut();
