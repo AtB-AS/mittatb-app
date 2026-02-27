@@ -9,7 +9,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {dictionary, useTranslation} from '@atb/translations';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {MessageInfoBoxProps} from '@atb/components/message-info-box';
-import {BorderlessButtonOrView} from '@atb/components/borderless-button-or-view';
+import {NativeButtonOrView} from '@atb/components/native-button-or-view';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type Props = SectionItemProps<{
@@ -49,13 +49,14 @@ export function MessageSectionItem({
     onPressConfig && 'action' in onPressConfig ? 'button' : 'link';
 
   return (
-    <BorderlessButtonOrView
+    <NativeButtonOrView
       onClick={onPress}
       accessible={true}
       accessibilityRole={accessibilityRole}
       accessibilityLabel={a11yLabel}
       style={[topContainer, styles.container]}
       focusRef={focusRef}
+      type="block"
     >
       <ThemeIcon
         style={styles.icon}
@@ -84,7 +85,7 @@ export function MessageSectionItem({
           </ThemeText>
         )}
       </View>
-    </BorderlessButtonOrView>
+    </NativeButtonOrView>
   );
 }
 

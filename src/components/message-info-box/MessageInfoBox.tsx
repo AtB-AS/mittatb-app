@@ -7,7 +7,7 @@ import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {dictionary, useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
-import {BorderlessButtonOrView} from '@atb/components/borderless-button-or-view';
+import {NativeButtonOrView} from '@atb/components/native-button-or-view';
 import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
 import {NativeBorderlessButton} from '@atb/components/native-button';
@@ -89,12 +89,13 @@ export const MessageInfoBox = ({
   );
 
   return (
-    <BorderlessButtonOrView
+    <NativeButtonOrView
       onClick={onPress}
       style={[styles.container, style]}
       accessible={false}
       testID={testID}
       focusRef={focusRef}
+      type="block"
     >
       {!noStatusIcon && (
         <ThemeIcon
@@ -158,7 +159,7 @@ export const MessageInfoBox = ({
           </NativeBorderlessButton>
         </View>
       )}
-    </BorderlessButtonOrView>
+    </NativeButtonOrView>
   );
 };
 
