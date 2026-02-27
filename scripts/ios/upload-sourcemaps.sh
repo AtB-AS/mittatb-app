@@ -13,12 +13,14 @@ if [[
 
     exit 1
 else
-echo "Uploading iOS source maps"
-    npx bugsnag-source-maps upload-react-native \
-        --api-key=$BUGSNAG_API_KEY \
-        --app-version="{$APP_VERSION}" \
-        --app-bundle-version=$BUILD_ID \
-        --platform=ios \
+    echo "Uploading iOS source maps for ${APP_VERSION}, ${BUILD_ID}"
+    bugsnag-cli upload react-native-sourcemaps \
+        --api-key="${BUGSNAG_API_KEY}" \
+        --version-name="${APP_VERSION}" \
+        --bundle-version="${BUILD_ID}" \
         --source-map=bundle/main.jsbundle.map \
-        --bundle=bundle/main.jsbundle
+        --bundle=bundle/main.jsbundle \
+        --platform=ios \
+        --project-root="${GITHUB_WORKSPACE:-.}" \
+        --verbose
 fi

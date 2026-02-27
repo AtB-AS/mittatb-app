@@ -23,9 +23,9 @@ if [[
     exit 1
 else
 
-    BUNDLE_DIR="android/app/build/generated/assets/createBundle$(echo ${APP_FLAVOR^}${APP_ENVIRONMENT^})JsAndAssets"
+    BUNDLE_DIR="android/app/build/generated/assets/react/$(echo ${APP_FLAVOR}${APP_ENVIRONMENT^})"
     SOURCEMAP_DIR="android/app/build/generated/sourcemaps/react/$(echo $APP_FLAVOR${APP_ENVIRONMENT^})"
-
+    
     mkdir -p $BUNDLE_DIR
     mkdir -p $SOURCEMAP_DIR
 

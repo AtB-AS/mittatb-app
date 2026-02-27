@@ -41,21 +41,26 @@ permissions:
 jobs:
   detect-changes:
     name: Detect changes
-    if: inputs.force-build != 'true'
     runs-on: ubuntu-latest
     outputs:
-      should_build: ${{ steps.detect.outputs.should_build }}
+      should_build: ${{ steps.force.outputs.should_build || steps.detect.outputs.should_build }}
     steps:
+      - name: Force build
+        id: force
+        if: inputs.force-build == 'true' || github.event_name == 'schedule'
+        run: echo "should_build=true" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v4
+        if: steps.force.outputs.should_build != 'true'
         with:
           fetch-depth: 2
       - name: Detect change after checkout
         id: detect
+        if: steps.force.outputs.should_build != 'true'
         uses: ./.github/actions/detect-changes
 
   setup:
     needs: detect-changes
-    if: ${{ !failure() && (inputs.force-build == 'true' || needs.detect-changes.outputs.should_build == 'true') }}
+    if: needs.detect-changes.outputs.should_build != 'false'
     name: Install tools and warm up caches
     runs-on: ubuntu-latest
     outputs:
@@ -104,7 +109,7 @@ jobs:
         uses: actions/cache@v4
         id: modules-cache
         with:
-          lookup-only: ${{ inputs.force-build != 'true' }}
+          lookup-only: true
           path: '**/node_modules'
           key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
           restore-keys: |
@@ -157,24 +162,25 @@ jobs:
           path: app-staging.apk
           key: ${{ matrix.org }}-apk-cache-${{needs.setup.outputs.abi-filename}}-${{ hashFiles('android/**', '**/yarn.lock', '**/patches/**/*.patch', '.env') }}
 
-      - name: Pre-build steps
-        uses: ./.github/actions/android-pre-build-steps-staging
+      - name: Build setup
+        uses: ./.github/actions/android-build-setup
         with:
+          app-environment: staging
           org: ${{ matrix.org }}
-          force-build: ${{ inputs.force-build }}
-          cache-read-only: ${{ matrix.org != 'atb' }}
-          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           keystore: ${{ secrets.KEYSTORE }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
           entur-registry-user: ${{ vars.ENTUR_REGISTRY_USER }}
           entur-registry-token: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
-          can-skip: ${{ steps.apk-cache.outputs.cache-hit }}
+          skip-heavy-steps: ${{ inputs.force-build != 'true' && steps.apk-cache.outputs.cache-hit == 'true' }}
 
-      - name: Override version name on staging build
-        shell: bash
-        env:
-          BRANCH_NAME: ${{ github.ref_name }}
-        run: bash ./scripts/set-version-name.sh
+      - name: Setup Gradle
+        if: inputs.force-build == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
+        uses: gradle/actions/setup-gradle@v5
+        with:
+          gradle-version: wrapper
+          cache-disabled: ${{ inputs.force-build == 'true' }}
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          cache-read-only: ${{ matrix.org != 'atb' }}
 
       - name: Detect dependency changes
         uses: dorny/paths-filter@v3
@@ -201,14 +207,14 @@ jobs:
           # NDK_CCACHE: /usr/bin/ccache
 
       - name: Restore APKTool cache
-        if: inputs.output-type != 'AAB'
+        if: inputs.output-type != 'AAB' && inputs.force-build != 'true' && steps.apk-cache.outputs.cache-hit == 'true'
         uses: actions/cache@v4
         with:
           path: ~/apktool
           key: apktool-2.12.1
 
       - name: Add APKTool to PATH
-        if: inputs.output-type != 'AAB'
+        if: inputs.output-type != 'AAB' && inputs.force-build != 'true' && steps.apk-cache.outputs.cache-hit == 'true'
         run: echo "$HOME/apktool" >> $GITHUB_PATH
 
       - name: Generate release notes
@@ -219,15 +225,38 @@ jobs:
           OUTPUT_FILE: ./release-notes.txt
         run: bash ./scripts/generate-staging-release-notes.sh
 
-      - name: Post-build steps
+      - name: Setup Bugsnag CLI
         if: inputs.output-type != 'AAB'
-        uses: ./.github/actions/android-post-build-steps-staging
+        uses: ./.github/actions/setup-bugsnag-cli
+
+      - name: Replace apk bundle
+        if: inputs.output-type != 'AAB' && inputs.force-build != 'true' && steps.apk-cache.outputs.cache-hit == 'true'
+        run: bash ./scripts/android/replace-bundle.sh
+        env:
+          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+          KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
+          KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+
+      - name: Distribute to Firebase App Distribution
+        if: inputs.output-type != 'AAB'
+        run: |
+          echo "${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}}" | base64 --decode > google-services.json
+          bundle exec fastlane android firebase_distribution_staging
+        env:
+          GCP_CREDENTIALS_PATH: google-services.json
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          RELEASE_NOTES_FILE: ./release-notes.txt
+
+      - name: Upload Bugsnag symbols
+        if: inputs.output-type != 'AAB'
+        uses: ./.github/actions/android-upload-bugsnag
         with:
-          should-replace-bundle: ${{ inputs.force-build != 'true' && steps.apk-cache.outputs.cache-hit == 'true'}}
-          keystore-pass: ${{ secrets.KEYSTORE_PASS }}
-          keystore-key-pass: ${{ secrets.KEYSTORE_KEY_PASS }}
-          keystore-key-alias: ${{ secrets.KEYSTORE_KEY_ALIAS }}
-          firebase-distribution-credentials: ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}}
-          firebase-app-id: ${{ secrets.FIREBASE_APP_ID }}
           bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
-          abt-entur-publish-client-staging: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_STAGING }}
+          skip-native: 'true'
+
+      - name: Register app version
+        if: inputs.output-type != 'AAB'
+        run: bash ./scripts/android/register-app-version.sh
+        env:
+          ENTUR_PUBLISH_CLIENT: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_STAGING }}
+          DISABLE_LISTED_ON_PLAY_STORE: true

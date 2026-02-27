@@ -1,26 +1,18 @@
-name: 'Android pre-build steps'
-description: 'Pre-build steps for Android'
+name: 'Android build setup'
+description: 'Shared build setup steps for Android staging and store builds'
 
 inputs:
+  app-environment:
+    description: 'Build environment: staging or store'
+    required: true
   org:
     description: 'Organization/OMS to build for'
     required: true
-  force-build:
-    description: 'Force build ignoring cache'
-    required: false
-    default: 'false'
-  cache-read-only:
-    description: 'Gradle cache read-only flag'
-    required: false
-    default: 'false'
-  gradle-encryption-key:
-    description: 'Gradle encryption key'
+  git-crypt-key:
+    description: 'Git-crypt decryption key'
     required: true
   keystore:
     description: 'Keystore decryption key'
-    required: true
-  git-crypt-key:
-    description: 'Git-crypt decryption key'
     required: true
   entur-registry-user:
     description: 'Entur registry user'
@@ -28,25 +20,26 @@ inputs:
   entur-registry-token:
     description: 'Entur registry token'
     required: true
-  can-skip:
-    description: 'APK Cache found, can skip step'
-    required: true
+  skip-heavy-steps:
+    description: 'Skip runner cleanup, imagemagick install, and native asset generation (e.g. when using cached APK)'
+    required: false
     default: 'false'
 
 runs:
   using: "composite"
   steps:
     - name: Clean up runner
-      if: inputs.can-skip != 'true'
+      if: inputs.skip-heavy-steps != 'true'
       uses: ./.github/actions/android-build-cleanup-runner
 
     - name: Set global env vars
       shell: bash
       run: |
         echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
-        echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
+        echo "APP_ENVIRONMENT=${{ inputs.app-environment }}" >> $GITHUB_ENV
         echo "KEYSTORE_PATH=./android/app/keystore.jks" >> $GITHUB_ENV
-        echo "APK_FILE_NAME=app-staging.apk" >> $GITHUB_ENV
+        echo "APK_FILE_NAME=app-${{ inputs.app-environment }}.apk" >> $GITHUB_ENV
+        echo "AAB_FILE_NAME=app-${{ inputs.app-environment }}.aab" >> $GITHUB_ENV
         echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
         echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
 
@@ -55,7 +48,7 @@ runs:
       run: bash ./scripts/git-crypt-unlock.sh
       env:
         GIT_CRYPT_KEY: ${{ inputs.git-crypt-key }}
-    
+
     - name: Add Entur private registry credentials
       shell: bash
       run: bash ./scripts/add-entur-private-registry.sh
@@ -64,31 +57,9 @@ runs:
         ENTUR_REGISTRY_TOKEN: ${{ inputs.entur-registry-token }}
 
     - name: Install imagemagick
+      if: inputs.skip-heavy-steps != 'true'
       shell: bash
       run: sudo apt-get update && sudo apt-get install imagemagick
-
-    # CCache is disabled for now until we can enable Gradle Config Cache
-    # - name: Install ccache
-    #   if: inputs.can-skip != 'true'
-    #   shell: bash
-    #   run: sudo apt-get install -y ccache
-
-    # - name: Configure ccache
-    #   if: inputs.can-skip != 'true'
-    #   shell: bash
-    #   run: |
-    #     ccache --set-config=max_size=2G
-    #     ccache --set-config=compiler_check=content
-    #     ccache --zero-stats
-
-    # - name: Cache ccache
-    #   if: inputs.can-skip != 'true'
-    #   uses: actions/cache@v4
-    #   with:
-    #     path: ~/.cache/ccache
-    #     key: ccache-android-${{ runner.os }}-${{ hashFiles('android/app/build.gradle', 'android/build.gradle') }}
-    #     restore-keys: |
-    #       ccache-android-${{ runner.os }}-
 
     - name: Install node v22
       uses: actions/setup-node@v5
@@ -96,17 +67,7 @@ runs:
         node-version: 22
         cache: 'yarn'
 
-    - name: Get potential cached node_modules
-      uses: actions/cache@v4
-      id: modules-cache
-      with:
-        path: '**/node_modules'
-        key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
-        restore-keys: |
-          node-modules-${{ runner.os }}-
-
     - name: Install node_modules
-      if: steps.modules-cache.outputs.cache-hit != 'true'
       shell: bash
       run: yarn install --frozen-lockfile
 
@@ -119,7 +80,7 @@ runs:
 
     - name: Set environment
       shell: bash
-      run: bash ./scripts/override-environment.sh $APP_ENVIRONMENT ${{ inputs.org }}
+      run: bash ./scripts/override-environment.sh ${{ inputs.app-environment }} ${{ inputs.org }}
 
     - name: Export workflow env variables based on environment
       shell: bash
@@ -136,14 +97,6 @@ runs:
         KEYSTORE: ${{ inputs.keystore }}
 
     - name: Generate native assets
-      if: inputs.can-skip != 'true'
+      if: inputs.skip-heavy-steps != 'true'
       shell: bash
       run: yarn generate-native-assets
-
-    - name: Setup Gradle
-      if: inputs.can-skip != 'true'
-      uses: gradle/actions/setup-gradle@v5
-      with:
-        gradle-version: wrapper
-        cache-encryption-key: ${{ inputs.gradle-encryption-key }}
-        cache-read-only: ${{ inputs.cache-read-only }}
