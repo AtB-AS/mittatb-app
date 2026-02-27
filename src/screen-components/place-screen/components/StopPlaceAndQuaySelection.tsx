@@ -42,7 +42,7 @@ const StopPlaceAndQuaySelection = ({
             <ActivityIndicator size="large" />
           ) : (
             <Button
-              expanded={true}
+              expanded={false}
               onPress={() => onPress()}
               text={t(DeparturesTexts.quayChips.allStops)}
               interactiveColor={interactiveColor}
@@ -55,7 +55,7 @@ const StopPlaceAndQuaySelection = ({
       }
       renderItem={({item}: quayChipData) => (
         <Button
-          expanded={true}
+          expanded={false}
           onPress={() => onPress(item.id)}
           text={getQuayName(item)}
           interactiveColor={interactiveColor}

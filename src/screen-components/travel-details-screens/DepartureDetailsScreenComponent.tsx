@@ -57,7 +57,7 @@ import {
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {canSellTicketsForSubMode} from '@atb/modules/operator-config';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {
   formatDestinationDisplay,
   getBookingStatus,
@@ -774,14 +774,14 @@ function CollapseButtonRow({
     </>
   );
   return (
-    <PressableOpacity
+    <NativeBlockButton
       accessibilityRole="button"
       onPress={() => setCollapsed(!collapsed)}
       testID={testID}
       style={styles.container}
     >
       {child}
-    </PressableOpacity>
+    </NativeBlockButton>
   );
 }
 

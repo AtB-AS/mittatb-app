@@ -1,5 +1,5 @@
 import {Checkbox} from '@atb/components/checkbox';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {RadioIcon} from '@atb/components/radio';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useState, ReactElement} from 'react';
@@ -98,7 +98,7 @@ const SelectItem = <T,>({
 
   return (
     <View style={style ?? itemStyles.container}>
-      <PressableOpacity
+      <NativeBlockButton
         style={{
           ...itemStyles.item,
           backgroundColor: selected ? selectedBackground : background,
@@ -124,7 +124,7 @@ const SelectItem = <T,>({
           </View>
         )}
         {renderItem(item, selected)}
-      </PressableOpacity>
+      </NativeBlockButton>
     </View>
   );
 };

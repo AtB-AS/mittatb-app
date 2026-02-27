@@ -16,7 +16,7 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 
 import SnackbarTexts from '@atb/translations/components/Snackbar';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
-import {PressableOpacity} from '../pressable-opacity';
+import {NativeBlockButton} from '../native-button';
 import {ReactNode, useEffect} from 'react';
 
 export type SnackbarPosition = 'top' | 'bottom';
@@ -156,7 +156,7 @@ const SnackbarInstance = ({
             )}
 
             {(isDismissable || isScreenReaderEnabled) && (
-              <PressableOpacity
+              <NativeBlockButton
                 onPress={hideSnackbar}
                 accessible={true}
                 accessibilityLabel={t(SnackbarTexts.closeButton.a11yLabel)}
@@ -165,7 +165,7 @@ const SnackbarInstance = ({
                 testID="closeSnackbarButton"
               >
                 <ThemeIcon svg={Close} size="normal" />
-              </PressableOpacity>
+              </NativeBlockButton>
             )}
           </View>
         </View>

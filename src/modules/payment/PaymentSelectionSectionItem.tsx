@@ -9,7 +9,7 @@ import SvgEdit from '@atb/assets/svg/mono-icons/actions/Edit';
 import {View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {PaymentMethod} from './types';
 import {PaymentBrand} from './PaymentBrand';
 
@@ -43,15 +43,16 @@ export const PaymentSelectionSectionItem = forwardRef<
     : t(PaymentMethodsTexts.a11y.editCard(paymentName));
 
   return (
-    <PressableOpacity
+    <NativeBlockButton
       {...props}
       ref={focusRef}
       accessibilityLabel={a11yLabel}
       accessibilityHint={t(PaymentMethodsTexts.a11y.editCardHint)}
       accessibilityRole="button"
       testID="paymentSelectionItem"
+      style={topContainer}
     >
-      <View style={[topContainer, style.container]}>
+      <View style={style.container}>
         <PaymentBrand
           paymentType={
             multiplePaymentMethods ? undefined : paymentMethod.paymentType
@@ -83,7 +84,7 @@ export const PaymentSelectionSectionItem = forwardRef<
           <ThemeIcon svg={SvgEdit} />
         </View>
       </View>
-    </PressableOpacity>
+    </NativeBlockButton>
   );
 });
 

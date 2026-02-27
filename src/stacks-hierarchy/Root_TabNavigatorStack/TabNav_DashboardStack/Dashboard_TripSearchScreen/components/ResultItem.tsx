@@ -19,15 +19,15 @@ import {
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
 
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   AccessibilityProps,
-  Animated,
   StyleProp,
   Text,
   View,
   ViewStyle,
 } from 'react-native';
+import Animated, {FadeIn} from 'react-native-reanimated';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {RailReplacementBusMessage} from './RailReplacementBusMessage';
 import {
@@ -130,8 +130,6 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   const [numberOfExpandedLegs, setNumberOfExpandedLegs] = useState(
     filteredLegs.length,
   );
-  const fadeInValueRef = useRef(new Animated.Value(0));
-
   const [hasMinimumOfExpandedLegs, setHasMinimumOfExpandedLegs] =
     useState(false);
 
@@ -143,12 +141,6 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         !hasMinimumOfExpandedLegs
       ) {
         setNumberOfExpandedLegs((val) => Math.max(val - 1, 1));
-      } else {
-        Animated.timing(fadeInValueRef.current, {
-          toValue: 1,
-          duration: 250,
-          useNativeDriver: true,
-        }).start();
       }
     }
   }, [legIconsParentWidth, legIconsContentWidth, hasMinimumOfExpandedLegs]);
@@ -186,7 +178,8 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 
   return (
     <Animated.View
-      style={[{opacity: fadeInValueRef.current}, styles.container]}
+      entering={FadeIn}
+      style={styles.container}
       {...props}
       accessible={false}
     >

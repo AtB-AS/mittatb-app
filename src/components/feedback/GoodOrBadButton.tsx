@@ -4,7 +4,7 @@ import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {Opinions} from './Feedback';
 import {FeedbackTexts, useTranslation} from '@atb/translations';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {Theme} from '@atb/theme/colors';
 import {getRadioA11y} from '@atb/components/radio';
 
@@ -33,7 +33,7 @@ export const GoodOrBadButton = ({
 
   return (
     <View style={styles.outerGoodOrBad}>
-      <PressableOpacity
+      <NativeBlockButton
         onPress={() =>
           setSelectedOpinion(checked ? Opinions.NotClickedYet : opinion)
         }
@@ -66,7 +66,7 @@ export const GoodOrBadButton = ({
             )}
           </View>
         </View>
-      </PressableOpacity>
+      </NativeBlockButton>
     </View>
   );
 };
