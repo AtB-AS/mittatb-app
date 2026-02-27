@@ -13,10 +13,16 @@ export const updateCallerRouteParams = (
   location: Location | SelectableLocationType | undefined,
 ): LocationSearchCallerRoute => {
   const [screen, params, options] = callerRoute;
-  if (params) {
-    let nestedParam = params;
-    while ('screen' in nestedParam) {
-      if (!nestedParam.params) break; // found the deepest nested params, and therefore the one we need to update
+  const paramsCopy = params ? cloneNestedParams(params) : params;
+
+  if (paramsCopy) {
+    let nestedParam: any = paramsCopy;
+    while (
+      nestedParam &&
+      typeof nestedParam === 'object' &&
+      'screen' in nestedParam
+    ) {
+      if (!nestedParam.params) break;
       nestedParam = nestedParam.params;
     }
 
@@ -25,8 +31,18 @@ export const updateCallerRouteParams = (
       [callerRouteParam]: location,
     });
   }
-  return [screen, params, options] as LocationSearchCallerRoute;
+
+  return [screen, paramsCopy, options] as LocationSearchCallerRoute;
 };
+
+function cloneNestedParams<T>(params: T): T {
+  if (!params || typeof params !== 'object') return params;
+  const copy: any = Array.isArray(params) ? [...params] : {...params};
+  if (copy.params) {
+    copy.params = cloneNestedParams(copy.params);
+  }
+  return copy;
+}
 
 export type CallerRouteConfig = {
   route: LocationSearchCallerRoute;

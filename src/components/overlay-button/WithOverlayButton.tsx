@@ -79,7 +79,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   background: {
     borderWidth: 1,
     borderStyle: 'solid',
-    borderColor: theme.color.border.primary.background,
+    borderColor: theme.color.background.neutral[3].background,
     borderRadius: theme.border.radius.circle,
     // Setting backgroundColor here is necessary for the ActivityIndicator
     backgroundColor: theme.color.interactive[2].default.background,
