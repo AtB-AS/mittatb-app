@@ -23,7 +23,7 @@ import {countryPhoneData} from 'phone';
 import {Section} from '../Section';
 import {GenericClickableSectionItem} from '@atb/components/sections';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeBorderlessButton} from '@atb/components/native-button';
 import {MessageInfoText} from '@atb/components/message-info-text';
 
 type Props = SectionItemProps<
@@ -171,7 +171,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
             )}
             <View style={styles.inputRow}>
               {prefix && (
-                <NativeBlockButton
+                <NativeBorderlessButton
                   style={styles.inputPrefix}
                   onPress={onOpenPrefixSelection}
                   accessibilityRole="button"
@@ -185,7 +185,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
                     svg={isSelectingPrefix ? ExpandLess : ExpandMore}
                     size="normal"
                   />
-                </NativeBlockButton>
+                </NativeBorderlessButton>
               )}
               <InternalTextInput
                 ref={combinedRef}
@@ -215,7 +215,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
           </View>
           {showClear ? (
             <View style={styles.inputClear}>
-              <NativeBlockButton
+              <NativeBorderlessButton
                 accessible={true}
                 accessibilityRole="button"
                 accessibilityLabel={t(SectionTexts.textInput.clear)}
@@ -223,7 +223,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
                 onPress={onClearEvent}
               >
                 <ThemeIcon svg={Close} />
-              </NativeBlockButton>
+              </NativeBorderlessButton>
             </View>
           ) : null}
         </View>

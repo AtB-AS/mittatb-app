@@ -7,10 +7,10 @@ import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {dictionary, useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
-import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
+import {BorderlessButtonOrView} from '@atb/components/borderless-button-or-view';
 import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeBorderlessButton} from '@atb/components/native-button';
 import {
   type A11yLiveRegion,
   useLiveRegionAnnouncement,
@@ -89,7 +89,7 @@ export const MessageInfoBox = ({
   );
 
   return (
-    <PressableOpacityOrView
+    <BorderlessButtonOrView
       onClick={onPress}
       style={[styles.container, style]}
       accessible={false}
@@ -146,7 +146,7 @@ export const MessageInfoBox = ({
       </View>
       {onDismiss && (
         <View>
-          <NativeBlockButton
+          <NativeBorderlessButton
             onPress={onDismiss}
             accessible={true}
             accessibilityLabel={t(MessageBoxTexts.dismiss.allyLabel)}
@@ -155,10 +155,10 @@ export const MessageInfoBox = ({
             testID={testID ? `${testID}Close` : 'close'}
           >
             <ThemeIcon svg={Close} {...iconColorProps} />
-          </NativeBlockButton>
+          </NativeBorderlessButton>
         </View>
       )}
-    </PressableOpacityOrView>
+    </BorderlessButtonOrView>
   );
 };
 

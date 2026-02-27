@@ -16,7 +16,7 @@ import {useSectionStyle} from '../use-section-style';
 import {SvgProps} from 'react-native-svg';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {RadioIcon} from '@atb/components/radio';
-import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
+import {BorderlessButtonOrView} from '@atb/components/borderless-button-or-view';
 import {dictionary, useTranslation} from '@atb/translations';
 
 type Props = SectionItemProps<{
@@ -109,7 +109,7 @@ export function RadioSectionItem({
           )}
         </View>
         {rightAction && (
-          <PressableOpacityOrView
+          <BorderlessButtonOrView
             onClick={rightAction.isLoading ? undefined : rightAction.onPress}
             style={styles.rightAction}
             accessible={true}
@@ -120,7 +120,7 @@ export function RadioSectionItem({
             ) : (
               <ThemeIcon svg={rightAction.icon} />
             )}
-          </PressableOpacityOrView>
+          </BorderlessButtonOrView>
         )}
       </View>
     </NativeBlockButton>

@@ -1,8 +1,8 @@
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {ReactNode} from 'react';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeBorderlessButton} from '@atb/components/native-button';
 
-export const PressableOpacityOrView = ({
+export const BorderlessButtonOrView = ({
   style,
   onClick,
   children,
@@ -17,7 +17,7 @@ export const PressableOpacityOrView = ({
   focusRef?: React.Ref<any>;
 } & AccessibilityProps) => {
   return onClick ? (
-    <NativeBlockButton
+    <NativeBorderlessButton
       onPress={onClick}
       style={style}
       ref={focusRef}
@@ -25,7 +25,7 @@ export const PressableOpacityOrView = ({
       testID={testID ? testID : 'messageBox'}
     >
       {children}
-    </NativeBlockButton>
+    </NativeBorderlessButton>
   ) : (
     <View
       style={style}

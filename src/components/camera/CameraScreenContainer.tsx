@@ -4,7 +4,7 @@ import {LoadingBody} from '../PhotoCapture/ScreenContainer';
 import {ThemeText} from '../text';
 import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {NativeBlockButton} from '../native-button';
+import {NativeBorderlessButton} from '../native-button';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {ThemeIcon} from '../theme-icon';
 import SvgChevronLeft from '@atb/assets/svg/mono-icons/navigation/ChevronLeft';
@@ -46,12 +46,12 @@ export const CameraScreenContainer = ({
             backgroundColor="transparent"
           />
           <View style={styles.header} ref={focusRef}>
-            <NativeBlockButton onPress={onGoBack} style={styles.back}>
+            <NativeBorderlessButton onPress={onGoBack} style={styles.back}>
               <ThemeIcon svg={SvgChevronLeft} color="white" />
               <ThemeText typography="body__s__strong" color="white">
                 {t(ScreenHeaderTexts.headerButton.back.text)}
               </ThemeText>
-            </NativeBlockButton>
+            </NativeBorderlessButton>
           </View>
           <View style={styles.content}>
             <ThemeText typography="heading__l" color="white">
