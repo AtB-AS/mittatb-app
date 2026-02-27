@@ -57,7 +57,6 @@ export const LinkSectionItem = forwardRef<any, Props>(
       useSectionItem(props);
     const style = useSectionStyle();
     const linkSectionItemStyle = useStyles();
-    const disabledStyle = disabled ? linkSectionItemStyle.disabled : undefined;
     const accessibilityWithOverrides = disabled
       ? {...accessibility, accessibilityHint: undefined}
       : accessibility;
@@ -81,9 +80,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
         ref={forwardedRef}
         {...accessibilityWithOverrides}
       >
-        <View
-          style={[style.spaceBetween, disabledStyle, linkSectionItemStyle.gap]}
-        >
+        <View style={[style.spaceBetween, linkSectionItemStyle.gap]}>
           {leftIcon && (
             <Icon icon={leftIcon} interactiveColor={interactiveColor} />
           )}
@@ -111,7 +108,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
           )}
         </View>
         {subtitle && (
-          <View style={disabledStyle}>
+          <View>
             <ThemeText color="secondary" typography="body__s">
               {subtitle}
             </ThemeText>
