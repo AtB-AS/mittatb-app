@@ -26,7 +26,6 @@ export type RemoteConfig = {
   aztec_code_size_in_cm: number;
   customer_feedback_url: string;
   customer_service_url: string;
-  default_map_filter: string;
   delay_share_travel_habits_screen_by_sessions_count: number;
   disable_email_field_in_profile_page: boolean;
   disable_travelcard: boolean;
@@ -115,13 +114,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   aztec_code_size_in_cm: 3.5,
   customer_feedback_url: '',
   customer_service_url: CUSTOMER_SERVICE_URL,
-  default_map_filter: JSON.stringify({
-    mobility: {
-      CAR: {showAll: true},
-      SCOOTER: {showAll: true},
-      BICYCLE: {showAll: true},
-    },
-  }),
   delay_share_travel_habits_screen_by_sessions_count: 0,
   disable_email_field_in_profile_page: false,
   disable_travelcard: false,
@@ -219,9 +211,6 @@ export function getConfig(): RemoteConfig {
   const customer_service_url =
     values['customer_service_url']?.asString() ??
     defaultRemoteConfig.customer_service_url;
-  const default_map_filter =
-    values['default_map_filter']?.asString() ??
-    defaultRemoteConfig.default_map_filter;
   const delay_share_travel_habits_screen_by_sessions_count =
     values['delay_share_travel_habits_screen_by_sessions_count']?.asNumber() ??
     defaultRemoteConfig.delay_share_travel_habits_screen_by_sessions_count;
@@ -443,7 +432,6 @@ export function getConfig(): RemoteConfig {
     aztec_code_size_in_cm,
     customer_feedback_url,
     customer_service_url,
-    default_map_filter,
     delay_share_travel_habits_screen_by_sessions_count,
     disable_email_field_in_profile_page,
     disable_travelcard,
