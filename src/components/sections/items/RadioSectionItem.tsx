@@ -65,26 +65,26 @@ export function RadioSectionItem({
   const a11yLabel = accessibilityLabel || `${text}, ${subtext || ''}`;
 
   return (
-    <View style={[style.spaceBetween, topContainer]}>
-      <NativeButton
-        onPress={() => {
-          // Talkback doesn't read out the updated state automatically, so we
-          // trigger it manually instead.
-          if (Platform.OS === 'android' && !selected) {
-            AccessibilityInfo.announceForAccessibility(t(dictionary.selected));
-          }
-          onPress(!selected);
-        }}
-        style={styles.mainContent}
-        testID={testID}
-        // There is a bug in React Native where `accessibilityRole="radio"`
-        // doesn't work consistently with VoiceOver. Using "button" until it's
-        // fixed: https://github.com/facebook/react-native/issues/43266
-        accessibilityRole="button"
-        accessibilityState={{selected: !!selected}}
-        accessibilityLabel={a11yLabel}
-        accessibilityHint={accessibilityHint}
-      >
+    <NativeButton
+      onPress={() => {
+        // Talkback doesn't read out the updated state automatically, so we
+        // trigger it manually instead.
+        if (Platform.OS === 'android' && !selected) {
+          AccessibilityInfo.announceForAccessibility(t(dictionary.selected));
+        }
+        onPress(!selected);
+      }}
+      style={[styles.mainContent, topContainer]}
+      testID={testID}
+      // There is a bug in React Native where `accessibilityRole="radio"`
+      // doesn't work consistently with VoiceOver. Using "button" until it's
+      // fixed: https://github.com/facebook/react-native/issues/43266
+      accessibilityRole="button"
+      accessibilityState={{selected: !!selected}}
+      accessibilityLabel={a11yLabel}
+      accessibilityHint={accessibilityHint}
+    >
+      <View style={[style.spaceBetween]}>
         <View style={styles.radioIcon}>
           <RadioIcon checked={selected} color={selectedRadioColor || 'black'} />
         </View>
@@ -108,22 +108,22 @@ export function RadioSectionItem({
             </ThemeText>
           )}
         </View>
-      </NativeButton>
-      {rightAction && (
-        <PressableOpacityOrView
-          onClick={rightAction.isLoading ? undefined : rightAction.onPress}
-          style={styles.rightAction}
-          accessible={true}
-          accessibilityRole="button"
-        >
-          {rightAction.isLoading ? (
-            <ActivityIndicator />
-          ) : (
-            <ThemeIcon svg={rightAction.icon} />
-          )}
-        </PressableOpacityOrView>
-      )}
-    </View>
+        {rightAction && (
+          <PressableOpacityOrView
+            onClick={rightAction.isLoading ? undefined : rightAction.onPress}
+            style={styles.rightAction}
+            accessible={true}
+            accessibilityRole="button"
+          >
+            {rightAction.isLoading ? (
+              <ActivityIndicator />
+            ) : (
+              <ThemeIcon svg={rightAction.icon} />
+            )}
+          </PressableOpacityOrView>
+        )}
+      </View>
+    </NativeButton>
   );
 }
 
