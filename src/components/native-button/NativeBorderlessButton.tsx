@@ -32,6 +32,7 @@ export const NativeBorderlessButton = forwardRef<
         }}
         style={[disabled ? {opacity: 0.2} : undefined, style]}
         activeOpacity={0.2}
+        rippleRadius={30}
       >
         {pressableProps?.children}
       </BorderlessButton>
