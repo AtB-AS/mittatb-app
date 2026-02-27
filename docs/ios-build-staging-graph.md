@@ -165,23 +165,16 @@ flowchart TD
 
     widget_check -- Yes --> disable_widget["Disable widget
     configure_extensions remove"]
-    widget_check -- No --> beacon_check
+    widget_check -- No --> fastlane_build
 
-    disable_widget --> beacon_check{"KETTLE_API_KEY empty
-    AND IPA cache miss?"}
-
-    beacon_check -- Yes --> remove_beacons["Remove use of beacons
-    fastlane ios remove_use_of_beacons"]
-    beacon_check -- No --> fastlane_build
-
-    remove_beacons --> fastlane_build["Fastlane build
+    disable_widget --> fastlane_build["Fastlane build
     bundle exec fastlane ios build
     EXPORT_METHOD: ad-hoc
     SKIP_PODS based on pods cache"]
 
     fastlane_build --> release_notes
 
-    widget_skip["Skip widget/beacons
+    widget_skip["Skip widget
     native code unchanged"] --> cert_match
 
     cert_match["Fastlane cert match only
@@ -312,7 +305,7 @@ flowchart LR
     subgraph fresh ["Path A: Fresh Build - force-build=true OR no IPA cache"]
         direction TB
         f1["ios-build-setup: node, ruby, xcode,
-        entur, ssh-agent, native assets"] --> f2["Disable widget / remove beacons
+        entur, ssh-agent, native assets"] --> f2["Disable widget
         if applicable"]
         f2 --> f3["Fastlane ios build
         ad-hoc export"]
@@ -378,8 +371,6 @@ flowchart LR
         = CI"]
         ENABLE_WIDGET["ENABLE_WIDGET
         from .env"]
-        KETTLE_API_KEY["KETTLE_API_KEY
-        from .env"]
     end
 
     subgraph consumers ["Consumers"]
@@ -387,17 +378,17 @@ flowchart LR
         replace["replace-bundle.sh"]
         bugsnag["Bugsnag uploads"]
         register["register-app-version.sh"]
-        widget["Widget/beacon config"]
+        widget["Widget config"]
     end
 
     build_setup --> BUILD_ID & APP_ENVIRONMENT
     workflow --> KEYCHAIN_NAME
-    env_file --> scripts --> APP_VERSION & IOS_BUNDLE_IDENTIFIER & IOS_CODE_SIGN_IDENTITY & ENABLE_WIDGET & KETTLE_API_KEY
+    env_file --> scripts --> APP_VERSION & IOS_BUNDLE_IDENTIFIER & IOS_CODE_SIGN_IDENTITY & ENABLE_WIDGET
 
     BUILD_ID & APP_VERSION --> fastlane & replace & bugsnag & register
     IOS_CODE_SIGN_IDENTITY & KEYCHAIN_NAME --> fastlane & replace
     IOS_BUNDLE_IDENTIFIER --> register
-    ENABLE_WIDGET & KETTLE_API_KEY --> widget
+    ENABLE_WIDGET --> widget
 ```
 
 ## IPA Cache Key Components

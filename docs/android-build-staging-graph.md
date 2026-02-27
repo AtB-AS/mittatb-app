@@ -154,13 +154,14 @@ flowchart TD
     gradle_check -- No --> dep_changes
 
     gradle --> dep_changes["Detect dependency changes
-    dorny/paths-filter"]
+    dorny/paths-filter
+    (always runs)"]
 
     dep_changes --> should_build{"force-build = true
     OR apk cache miss?"}
 
     should_build -- Yes --> build_type{"output-type?"}
-    should_build -- No --> apktool_path
+    should_build -- No --> apktool_restore
 
     build_type -- AAB --> build_aab["fastlane android build_aab
     KEYSTORE_PASS, KEY_PASS,
@@ -169,12 +170,13 @@ flowchart TD
     KEYSTORE_PASS, KEY_PASS,
     KEY_ALIAS, SKIP_CLEAN, ABI"]
 
+    apktool_restore["Restore APKTool cache
+    Add to PATH
+    (only when NOT AAB, NOT force-build, AND cache hit)"]
+
     build_aab --> aab_check{"output-type = AAB?"}
     build_apk --> aab_check
-
-    apktool_path --> restore_apktool["Restore APKTool cache
-    Add to PATH"]
-    restore_apktool --> aab_check
+    apktool_restore --> aab_check
 
     aab_check -- "Yes - AAB" --> aab_done(["Build complete
     No distribution,
@@ -330,11 +332,9 @@ flowchart LR
         APP_ENVIRONMENT["APP_ENVIRONMENT
         = staging"]
         APP_VERSION["APP_VERSION
-        from .env, overridden
-        by set-version-name.sh"]
+        from .env"]
         APP_FLAVOR["APP_FLAVOR
-        app or beacons
-        from KETTLE_API_KEY"]
+        always 'app'"]
         KEYSTORE_PATH["KEYSTORE_PATH
         ./android/app/keystore.jks"]
     end
