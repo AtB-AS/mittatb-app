@@ -50,8 +50,9 @@ export const PaymentSelectionSectionItem = forwardRef<
       accessibilityHint={t(PaymentMethodsTexts.a11y.editCardHint)}
       accessibilityRole="button"
       testID="paymentSelectionItem"
+      style={topContainer}
     >
-      <View style={[topContainer, style.container]}>
+      <View style={style.container}>
         <PaymentBrand
           paymentType={
             multiplePaymentMethods ? undefined : paymentMethod.paymentType
