@@ -12,6 +12,7 @@ import firestore, {
 import Bugsnag from '@bugsnag/react-native';
 import {PaymentType} from '@atb/modules/ticketing';
 import {
+  PaymentType as FirestorePaymentType,
   FareProductGroupType,
   FareProductTypeConfig,
   ConfigurableLinks,
@@ -55,6 +56,7 @@ import {
   StopSignalButtonConfig,
   type StopSignalButtonConfigType,
 } from '@atb-as/config-specs';
+import {isDefined} from '@atb/utils/presence';
 
 export const defaultVatPercent: number = 12;
 export const defaultStopSignalButtonConfig = StopSignalButtonConfig.parse({});
@@ -508,29 +510,36 @@ function getContactPhoneNumberFromSnapshot(
 function getPaymentTypesFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
 ): PaymentType[] | undefined {
-  const paymentTypesField = snapshot.docs
+  const firestorePaymentTypes = snapshot.docs
     .find((doc) => doc.id == 'paymentTypes')
-    ?.get<string[]>('app');
-  if (paymentTypesField != undefined) {
-    return mapPaymentTypeStringsToEnums(paymentTypesField);
+    ?.get<FirestorePaymentType[]>('app');
+  if (firestorePaymentTypes != undefined) {
+    return mapPaymentTypeStringsToEnums(firestorePaymentTypes);
   }
   return undefined;
 }
 
 function mapPaymentTypeStringsToEnums(
-  arrayOfPaymentTypes: string[],
+  firestorePaymentTypes: FirestorePaymentType[],
 ): PaymentType[] {
-  const paymentTypes: PaymentType[] = [];
-  for (const option of arrayOfPaymentTypes) {
-    const typeName =
-      option.charAt(0).toUpperCase() + option.slice(1).toLocaleLowerCase();
-    const paymentType: PaymentType =
-      PaymentType[typeName as keyof typeof PaymentType];
-    if (paymentType != undefined) {
-      paymentTypes.push(paymentType);
-    }
+  return firestorePaymentTypes
+    .map(mapPaymentTypeStringToEnum)
+    .filter(isDefined);
+}
+
+function mapPaymentTypeStringToEnum(
+  paymentTypeString: FirestorePaymentType,
+): PaymentType | undefined {
+  switch (paymentTypeString) {
+    case 'visa':
+      return PaymentType.Visa;
+    case 'mastercard':
+      return PaymentType.Mastercard;
+    case 'amex':
+      return PaymentType.Amex;
+    case 'vipps':
+      return PaymentType.Vipps;
   }
-  return paymentTypes;
 }
 
 function getFareProductTypeConfigsFromSnapshot(
