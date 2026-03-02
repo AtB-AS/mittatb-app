@@ -361,7 +361,7 @@ export type VehiclesClusteredFeature = z.infer<
 >;
 
 // See martin.yaml -> vehicles, in the tile server
-export const VehiclePropertiesSchema = z.object({
+export const VehicleFeaturePropertiesSchema = z.object({
   id: z.string(),
   system_id: z.string(),
   count: z.literal(1),
@@ -371,7 +371,7 @@ export const VehiclePropertiesSchema = z.object({
 
 export const VehicleFeatureSchema =
   GeoJsonFeatureWithPointGeometrySchema.extend({
-    properties: VehiclePropertiesSchema,
+    properties: VehicleFeaturePropertiesSchema,
   });
 export type VehicleFeature = z.infer<typeof VehicleFeatureSchema>;
 

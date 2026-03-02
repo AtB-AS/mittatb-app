@@ -7,7 +7,7 @@ import {PinType} from '../mapbox-styles/pin-types';
 import {MapSlotLayerId} from '../hooks/use-mapbox-json-style';
 import {
   StationFeaturePropertiesSchema,
-  VehiclePropertiesSchema,
+  VehicleFeaturePropertiesSchema,
 } from '@atb/api/types/mobility';
 
 export const SelectedFeatureIcon = ({
@@ -100,7 +100,8 @@ function getPinType(selectedFeatureProperties?: GeoJsonProperties): PinType {
         return 'station';
       }
       if (
-        VehiclePropertiesSchema.safeParse(selectedFeatureProperties).success
+        VehicleFeaturePropertiesSchema.safeParse(selectedFeatureProperties)
+          .success
       ) {
         return 'vehicle';
       }
