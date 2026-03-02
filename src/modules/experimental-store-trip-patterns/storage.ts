@@ -38,6 +38,13 @@ class TripPatternStore {
     if (!tripPattern) {
       return tripPatterns;
     }
+
+    if (
+      tripPatterns.some((item) => item.key === getTripPatternKey(tripPattern))
+    ) {
+      return tripPatterns;
+    }
+
     tripPatterns = tripPatterns.concat({
       ...tripPattern,
       key: getTripPatternKey(tripPattern),
