@@ -33,6 +33,10 @@ class PaymentHandlerImpl: NSObject {
   @objc func startPayment(items: [[String: Any]], completionHandler: @escaping (String?) -> Void) -> Void {
     if self.merchantIdentifier == nil { return }
 
+    // Reset state from any previous payment
+    self.paymentData = nil
+    self.paymentStatus = .failure
+
     self.completionHandler = completionHandler;
 
     var paymentSummaryItems: [PKPaymentSummaryItem] = []
@@ -74,6 +78,7 @@ extension PaymentHandlerImpl: PKPaymentAuthorizationControllerDelegate {
   public func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
     let errors = [Error]()
     let status = PKPaymentAuthorizationStatus.success
+    self.paymentStatus = .success
     self.paymentData = payment.token.paymentData
 
     completion(PKPaymentAuthorizationResult(status: status, errors: errors))
@@ -81,14 +86,15 @@ extension PaymentHandlerImpl: PKPaymentAuthorizationControllerDelegate {
 
   public func paymentAuthorizationControllerDidFinish(_ controller: PKPaymentAuthorizationController) {
     controller.dismiss {
-      // The payment sheet doesn't automatically dismiss once it has finished. Dismiss the payment sheet.
+      // The payment sheet doesn't automatically dismiss once it has finished.
       DispatchQueue.main.async {
-        var paymentDataString: String? = nil
-        if let paymentData = self.paymentData {
-          paymentDataString = paymentData.base64EncodedString()
+        if self.paymentStatus == .success {
+          if let paymentData = self.paymentData {
+            self.completionHandler!(paymentData.base64EncodedString())
+            return
+          }
         }
-
-        self.completionHandler!(paymentDataString)
+        self.completionHandler!(nil)
       }
     }
   }
