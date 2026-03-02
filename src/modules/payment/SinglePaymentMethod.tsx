@@ -3,7 +3,7 @@ import {PaymentMethod, PaymentSelection} from './types';
 import {humanizePaymentType, PaymentType} from '@atb/modules/ticketing';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {NativeBlockButton} from '@atb/components/native-button';
-import {View} from 'react-native';
+import {Platform, View} from 'react-native';
 import {getRadioA11y, RadioIcon} from '@atb/components/radio';
 import {ThemeText} from '@atb/components/text';
 import {PaymentBrand} from './PaymentBrand';
@@ -67,6 +67,13 @@ export const SinglePaymentMethod = ({
   const {theme} = useThemeContext();
   const radioColor = theme.color.interactive[2].outline.background;
   const paymentSelection = getPaymentSelection(paymentMethod);
+
+  if (
+    Platform.OS !== 'ios' &&
+    paymentMethod.paymentType === PaymentType.ApplePay
+  ) {
+    return null;
+  }
 
   return (
     <View style={styles.card}>
