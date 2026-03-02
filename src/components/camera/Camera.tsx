@@ -116,8 +116,8 @@ export const Camera = ({
               style={[
                 styles.flashlightButton,
                 footerHeight > 0
-                  ? {paddingBottom: theme.spacing.medium + footerHeight}
-                  : {paddingBottom: safeBottomInset + theme.spacing.medium},
+                  ? {marginBottom: theme.spacing.medium + footerHeight}
+                  : {marginBottom: safeBottomInset + theme.spacing.medium},
               ]}
               text={t(CameraTexts.flashlight.default)}
               expanded={false}
