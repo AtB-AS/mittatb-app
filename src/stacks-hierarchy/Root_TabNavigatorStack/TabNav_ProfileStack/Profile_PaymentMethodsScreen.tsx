@@ -1,7 +1,7 @@
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -134,7 +134,7 @@ const Card = (props: {
         </View>
 
         <View style={style.cardIcons}>
-          <PressableOpacity
+          <NativeBlockButton
             accessibilityLabel={t(
               PaymentMethodsTexts.a11y.deleteCardIcon(
                 paymentName,
@@ -164,7 +164,7 @@ const Card = (props: {
               width={21 * fontScale}
               fill={theme.color.foreground.dynamic.primary}
             />
-          </PressableOpacity>
+          </NativeBlockButton>
         </View>
       </View>
 

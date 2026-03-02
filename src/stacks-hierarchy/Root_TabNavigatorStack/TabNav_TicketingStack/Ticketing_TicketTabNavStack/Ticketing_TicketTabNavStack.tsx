@@ -12,7 +12,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {View} from 'react-native';
 import {Route} from '@react-navigation/native';
 import {ThemeText} from '@atb/components/text';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {useTimeContext} from '@atb/modules/time';
 import {useApplePassPresentationSuppression} from '@atb/modules/native-bridges';
 
@@ -105,7 +105,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
           ? theme.color.background.neutral[1]
           : theme.color.background.accent[0];
         return (
-          <PressableOpacity
+          <NativeBlockButton
             key={index}
             accessibilityRole="tab"
             accessibilityState={isFocused ? {selected: true} : {}}
@@ -126,7 +126,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
             >
               <>{label}</>
             </ThemeText>
-          </PressableOpacity>
+          </NativeBlockButton>
         );
       })}
     </View>

@@ -33,9 +33,11 @@ export function useFocusOnLoad(
   useEffect(() => {
     if (!navigation || !focusRef || !setFocusOnLoad) return;
 
-    const unsubscribe = navigation.addListener('focus', () =>
-      giveFocus(focusRef),
-    );
+    const unsubscribe = navigation.addListener('focus', () => {
+      InteractionManager.runAfterInteractions(() => {
+        giveFocus(focusRef);
+      });
+    });
     return () => unsubscribe();
   }, [navigation, setFocusOnLoad]);
 

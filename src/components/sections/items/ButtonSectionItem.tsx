@@ -11,7 +11,7 @@ import {AccessibilityProps, View, ViewStyle} from 'react-native';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 
 export type ButtonSectionItemProps = SectionItemProps<{
   label: string;
@@ -62,14 +62,14 @@ export function ButtonSectionItem({
 
   const handlerWithPress =
     hasIcon && onIconPress ? (
-      <PressableOpacity
+      <NativeBlockButton
         hitSlop={insets.all(12)}
         onPress={onIconPress}
         style={[styles.iconContainer, padding]}
         {...iconAccessibility}
       >
         <View>{iconEl}</View>
-      </PressableOpacity>
+      </NativeBlockButton>
     ) : undefined;
 
   const valueEl =
@@ -89,7 +89,7 @@ export function ButtonSectionItem({
 
   return (
     <View>
-      <PressableOpacity
+      <NativeBlockButton
         onPress={onPress}
         style={[topContainer, styles.container, containerPadding]}
         ref={focusRef}
@@ -105,7 +105,7 @@ export function ButtonSectionItem({
         </View>
         {!inlineValue && <View style={styles.inlineValueStyle}>{valueEl}</View>}
         {handlerWithoutPress}
-      </PressableOpacity>
+      </NativeBlockButton>
       {handlerWithPress}
     </View>
   );

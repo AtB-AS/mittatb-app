@@ -1,4 +1,4 @@
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
@@ -35,7 +35,7 @@ export function TileWithButton({
   const styles = useStyles(interactiveColor);
 
   return (
-    <PressableOpacity
+    <NativeBlockButton
       style={[styles.container, style]}
       accessible={true}
       onPress={onPress}
@@ -73,7 +73,7 @@ export function TileWithButton({
           color={interactiveColor.default.foreground.primary}
         />
       </View>
-    </PressableOpacity>
+    </NativeBlockButton>
   );
 }
 
