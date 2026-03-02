@@ -58,9 +58,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useProductAlternatives} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {isNonRecurringPaymentType} from '@atb/modules/payment';
-import {NativePaymentHandler} from '@atb/modules/native';
-import {APP_NAME} from '@env';
-import {getReferenceDataName} from '@atb/modules/configuration';
+import {startApplePayPayment} from './start-apple-pay';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -189,14 +187,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     reserveMutation.data?.recurringPaymentId,
   ]);
 
+  // Call reserve when payment data is received from the Apple Pay payment sheet
   useDoOnceWhen(
-    () => {
-      if (applePayPaymentData) {
-        reserveMutation.mutate();
-      }
-    },
+    () => applePayPaymentData && reserveMutation.mutate(),
     !!applePayPaymentData,
-    true,
+    false,
   );
 
   // When deep link {APP_SCHEME}://purchase-callback is called, save payment
@@ -225,27 +220,13 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
     if (paymentMethod?.paymentType === PaymentType.ApplePay) {
       analytics.logEvent('Ticketing', 'Apple Pay selected');
-      const userProfileItems = userProfilesWithCountAndOffer.map((u) => ({
-        price: (u.offer.price.amountFloat || 0) * u.count,
-        label: `${u.count} ${getReferenceDataName(u, language)}`,
-      }));
-      const supplementItems = supplementProductsWithCountAndOffer.map((sp) => ({
-        price:
-          (sp.offer.supplementProducts[0].price.amountFloat || 0) * sp.count,
-        label: `${sp.count} ${getReferenceDataName(sp, language)}`,
-      }));
-      NativePaymentHandler.startPayment(
-        [
-          ...userProfileItems,
-          ...supplementItems,
-          // Final item is the total
-          {price: totalPrice, label: APP_NAME},
-        ],
-        (paymentData) => {
-          paymentData && setApplePayPaymentData(paymentData);
-          return;
-        },
-      );
+      startApplePayPayment({
+        userProfilesWithCountAndOffer,
+        supplementProductsWithCountAndOffer,
+        totalPrice,
+        setApplePayPaymentData,
+        language,
+      });
     } else {
       analytics.logEvent('Ticketing', 'Pay with card selected', {
         paymentMethod,
