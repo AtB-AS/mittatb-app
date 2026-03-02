@@ -199,7 +199,7 @@ export const BikeStationBottomSheet = ({
           <View style={styles.footer}>
             <MessageInfoBox
               type="error"
-              message={t(BicycleTexts.loadingFailed)}
+              message={t(BicycleTexts.stations.loadingFailed)}
             />
           </View>
         )}
