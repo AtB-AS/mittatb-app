@@ -101,6 +101,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.small,
     paddingBottom: theme.spacing.medium,
     paddingRight: theme.spacing.medium,
+    alignItems: 'center',
   },
   headerNodeContainer: {
     flex: 1,

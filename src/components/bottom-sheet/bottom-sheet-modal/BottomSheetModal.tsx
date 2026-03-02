@@ -218,10 +218,10 @@ const useBottomSheetContent = <T extends any>(
 
   const contentContainerStyle = useMemo(
     () => ({
-      paddingBottom:
-        Math.max(footerHeight, safeAreaBottom) + theme.spacing.large,
+      paddingTop: theme.spacing.medium,
+      paddingBottom: footerHeight + safeAreaBottom,
     }),
-    [footerHeight, safeAreaBottom, theme.spacing.large],
+    [footerHeight, safeAreaBottom, theme],
   );
 
   return useMemo(() => {

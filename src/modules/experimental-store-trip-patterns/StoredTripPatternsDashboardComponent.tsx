@@ -186,7 +186,7 @@ const StoredTripPatternsDashboardComponentTexts = {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   contentHeading: {
-    marginHorizontal: theme.spacing.medium,
+    marginHorizontal: theme.spacing.xLarge,
   },
   errorContainer: {
     paddingBottom: theme.spacing.medium,

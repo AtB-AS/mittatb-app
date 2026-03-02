@@ -35,6 +35,9 @@ class TripPatternStore {
 
   async addTripPattern(tripPattern: TripPattern): Promise<StoredTripPattern[]> {
     let tripPatterns = await this.getTripPatterns();
+    if (!tripPattern) {
+      return tripPatterns;
+    }
     tripPatterns = tripPatterns.concat({
       ...tripPattern,
       key: getTripPatternKey(tripPattern),
@@ -46,6 +49,9 @@ class TripPatternStore {
     tripPattern: TripPattern,
   ): Promise<StoredTripPattern[]> {
     let tripPatterns = await this.getTripPatterns();
+    if (!tripPattern) {
+      return tripPatterns;
+    }
     tripPatterns = tripPatterns.filter(
       (item) => item.key !== getTripPatternKey(tripPattern),
     );
@@ -56,6 +62,9 @@ class TripPatternStore {
     tripPattern: TripPattern,
   ): Promise<StoredTripPattern[]> {
     let tripPatterns = await this.getTripPatterns();
+    if (!tripPattern) {
+      return tripPatterns;
+    }
     tripPatterns = tripPatterns.map((item) => {
       if (item.key !== getTripPatternKey(tripPattern)) {
         return item;
