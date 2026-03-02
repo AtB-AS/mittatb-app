@@ -45,6 +45,7 @@ type BottomSheetModalProps<T extends any> = {
   enableDynamicSizing?: boolean;
   keyboardBehavior?: 'extend' | 'interactive' | 'fillParent';
   closeCallback?: () => void;
+  fullyDismissedCallback?: () => void;
   Footer?: React.FC;
   testID?: string;
   closeOnBackdropPress?: boolean;
@@ -63,6 +64,7 @@ export const BottomSheetModal = <T extends any>({
   enableDynamicSizing = true,
   keyboardBehavior = Platform.OS === 'ios' ? 'interactive' : 'extend',
   closeCallback,
+  fullyDismissedCallback,
   Footer,
   testID,
   enablePanDownToClose = true,
@@ -199,6 +201,7 @@ export const BottomSheetModal = <T extends any>({
       }}
       onDismiss={() => {
         onClose();
+        fullyDismissedCallback?.();
       }}
       accessible={false}
       overrideReduceMotion={ReduceMotion.Never}

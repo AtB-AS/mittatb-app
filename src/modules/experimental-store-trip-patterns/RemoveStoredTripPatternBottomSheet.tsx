@@ -32,6 +32,7 @@ export const RemoveStoredTripPatternBottomSheet = ({
       heading={t(RemoveStoredTripPatternBottomSheetTexts.header.text)}
       bottomSheetHeaderType={BottomSheetHeaderType.Cancel}
       closeCallback={onClose}
+      fullyDismissedCallback={onClose}
     >
       {({data}) => (
         <View style={styles.container}>
