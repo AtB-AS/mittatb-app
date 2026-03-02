@@ -3,7 +3,7 @@ import {InteractiveColor} from '@atb/theme/colors';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
-import {PressableOpacity} from '../pressable-opacity';
+import {NativeBlockButton} from '../native-button';
 import {useTranslation} from '@atb/translations';
 import {getRadioA11y} from '@atb/components/radio';
 
@@ -59,7 +59,7 @@ export function RadioSegments({
         const a11yLabel = getAccessibilityLabel(option);
 
         return (
-          <PressableOpacity
+          <NativeBlockButton
             key={i}
             onPress={option.onPress}
             disabled={!enabled}
@@ -94,7 +94,7 @@ export function RadioSegments({
                 {option.subtext}
               </ThemeText>
             )}
-          </PressableOpacity>
+          </NativeBlockButton>
         );
       })}
     </View>

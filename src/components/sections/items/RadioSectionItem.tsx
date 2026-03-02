@@ -14,9 +14,9 @@ import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 
 import {SvgProps} from 'react-native-svg';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {RadioIcon} from '@atb/components/radio';
-import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
+import {NativeButtonOrView} from '@atb/components/native-button-or-view';
 import {dictionary, useTranslation} from '@atb/translations';
 
 type Props = SectionItemProps<{
@@ -65,26 +65,26 @@ export function RadioSectionItem({
   const a11yLabel = accessibilityLabel || `${text}, ${subtext || ''}`;
 
   return (
-    <View style={[style.spaceBetween, topContainer]}>
-      <PressableOpacity
-        onPress={() => {
-          // Talkback doesn't read out the updated state automatically, so we
-          // trigger it manually instead.
-          if (Platform.OS === 'android' && !selected) {
-            AccessibilityInfo.announceForAccessibility(t(dictionary.selected));
-          }
-          onPress(!selected);
-        }}
-        style={styles.mainContent}
-        testID={testID}
-        // There is a bug in React Native where `accessibilityRole="radio"`
-        // doesn't work consistently with VoiceOver. Using "button" until it's
-        // fixed: https://github.com/facebook/react-native/issues/43266
-        accessibilityRole="button"
-        accessibilityState={{selected: !!selected}}
-        accessibilityLabel={a11yLabel}
-        accessibilityHint={accessibilityHint}
-      >
+    <NativeBlockButton
+      onPress={() => {
+        // Talkback doesn't read out the updated state automatically, so we
+        // trigger it manually instead.
+        if (Platform.OS === 'android' && !selected) {
+          AccessibilityInfo.announceForAccessibility(t(dictionary.selected));
+        }
+        onPress(!selected);
+      }}
+      style={[styles.mainContent, topContainer]}
+      testID={testID}
+      // There is a bug in React Native where `accessibilityRole="radio"`
+      // doesn't work consistently with VoiceOver. Using "button" until it's
+      // fixed: https://github.com/facebook/react-native/issues/43266
+      accessibilityRole="button"
+      accessibilityState={{selected: !!selected}}
+      accessibilityLabel={a11yLabel}
+      accessibilityHint={accessibilityHint}
+    >
+      <View style={style.spaceBetween}>
         <View style={styles.radioIcon}>
           <RadioIcon checked={selected} color={selectedRadioColor || 'black'} />
         </View>
@@ -108,22 +108,23 @@ export function RadioSectionItem({
             </ThemeText>
           )}
         </View>
-      </PressableOpacity>
-      {rightAction && (
-        <PressableOpacityOrView
-          onClick={rightAction.isLoading ? undefined : rightAction.onPress}
-          style={styles.rightAction}
-          accessible={true}
-          accessibilityRole="button"
-        >
-          {rightAction.isLoading ? (
-            <ActivityIndicator />
-          ) : (
-            <ThemeIcon svg={rightAction.icon} />
-          )}
-        </PressableOpacityOrView>
-      )}
-    </View>
+        {rightAction && (
+          <NativeButtonOrView
+            onClick={rightAction.isLoading ? undefined : rightAction.onPress}
+            style={styles.rightAction}
+            accessible={true}
+            accessibilityRole="button"
+            type="borderless"
+          >
+            {rightAction.isLoading ? (
+              <ActivityIndicator />
+            ) : (
+              <ThemeIcon svg={rightAction.icon} />
+            )}
+          </NativeButtonOrView>
+        )}
+      </View>
+    </NativeBlockButton>
   );
 }
 

@@ -47,7 +47,7 @@ import {TripPattern} from '@atb/api/types/trips';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trips-query';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {areDefaultFiltersSelected, getSearchTimeLabel} from './utils';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -453,7 +453,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           )}
           {!tripPatterns.length && <View style={styles.emptyResultsSpacer} />}
           {!error && isValidLocations && (
-            <PressableOpacity
+            <NativeBlockButton
               onPress={loadMore}
               disabled={searchState === 'searching'}
               style={styles.loadMoreButton}
@@ -496,7 +496,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   ) : null}
                 </>
               )}
-            </PressableOpacity>
+            </NativeBlockButton>
           )}
         </View>
       </FullScreenView>

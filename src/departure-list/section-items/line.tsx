@@ -37,7 +37,7 @@ import {
   getBookingStatus,
 } from '@atb/screen-components/travel-details-screens';
 import {QuaySectionProps} from '@atb/departure-list/section-items/quay-section';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   getMsgTypeForMostCriticalSituationOrNotice,
@@ -89,7 +89,7 @@ export function LineItem({
       testID={testID}
     >
       <View style={[topContainer, sectionStyle.spaceBetween]}>
-        <PressableOpacity
+        <NativeBlockButton
           style={[contentContainer, styles.lineHeader]}
           onPress={() => onPressDeparture(items, 0)}
           hitSlop={insets.symmetric(12, 0)}
@@ -114,7 +114,7 @@ export function LineItem({
           <ThemeText style={{flex: 1}} testID={testID + 'Title'}>
             {title}
           </ThemeText>
-        </PressableOpacity>
+        </NativeBlockButton>
       </View>
       <ScrollView
         horizontal
@@ -248,7 +248,7 @@ function DepartureTimeItem({
     return null;
   }
   return (
-    <PressableOpacity
+    <NativeBlockButton
       style={styles.departure}
       testID={testID}
       key={departure.aimedTime + departure.serviceJourneyId}
@@ -265,7 +265,7 @@ function DepartureTimeItem({
         {formatTimeText(departure, searchDate, language, t)}
       </ThemeText>
       {rightIcon && <ThemeIcon svg={rightIcon} />}
-    </PressableOpacity>
+    </NativeBlockButton>
   );
 }
 

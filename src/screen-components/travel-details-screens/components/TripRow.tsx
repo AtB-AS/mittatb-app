@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, ViewProps} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 
 type TripRowProps = {
   rowLabel?: React.ReactNode;
@@ -29,9 +29,13 @@ export const TripRow: React.FC<TripRowProps> = ({
   );
   if (isClickable) {
     return (
-      <PressableOpacity onPress={onPress} accessibilityRole="button" {...props}>
+      <NativeBlockButton
+        onPress={onPress}
+        accessibilityRole="button"
+        {...props}
+      >
         <View style={rowStyles}>{rowContent}</View>
-      </PressableOpacity>
+      </NativeBlockButton>
     );
   }
   return (
