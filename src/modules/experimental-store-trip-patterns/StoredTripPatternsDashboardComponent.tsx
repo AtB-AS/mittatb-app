@@ -132,8 +132,9 @@ const StoredTripPatternRow: React.FC<{
   );
 
   useEffect(() => {
-    updateTripPattern({...updatedTripPattern});
-  }, [updatedTripPattern, updateTripPattern]);
+    if (!data) return;
+    updateTripPattern({...data});
+  }, [data, updateTripPattern]);
 
   const onRightAction = useCallback(() => {
     setTripPatternToRemove(tripPattern);
