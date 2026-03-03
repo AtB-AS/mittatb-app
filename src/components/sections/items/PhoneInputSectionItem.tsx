@@ -55,8 +55,8 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
     forwardedRef,
   ) => {
     const {topContainer} = useSectionItem(props);
-    const {theme, themeName} = useThemeContext();
-    const styles = useInputStyle(theme, themeName);
+    const {theme} = useThemeContext();
+    const styles = useInputStyle();
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
     const [isSelectingPrefix, setIsSelectingPrefix] = useState(false);
     const {t} = useTranslation();
@@ -253,7 +253,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
   },
 );
 
-const useInputStyle = StyleSheet.createTheme((theme) => ({
+const useInputStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.color.background.neutral[0].background,
     borderWidth: theme.border.width.slim,

@@ -4,7 +4,6 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext, Theme} from '@atb/theme';
 import {PropsWithChildren, ReactNode, Ref} from 'react';
 import {View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Processing} from '@atb/components/loading';
 import {dictionary, useTranslation} from '@atb/translations';
 
@@ -58,7 +57,6 @@ const ContentBody = ({
   children,
   focusRef,
 }: Props) => {
-  const {bottom} = useSafeAreaInsets();
   const style = useStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
@@ -79,21 +77,12 @@ const ContentBody = ({
         </View>
         {children}
       </View>
-      {!!buttons && (
-        <View
-          style={[
-            style.actionButtons,
-            {marginBottom: Math.max(bottom, theme.spacing.medium)},
-          ]}
-        >
-          {buttons}
-        </View>
-      )}
+      {!!buttons && <View style={style.actionButtons}>{buttons}</View>}
     </>
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     content: {
       flex: 1,
@@ -112,6 +101,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     actionButtons: {
       marginHorizontal: theme.spacing.medium,
+      marginBottom: Math.max(bottom, theme.spacing.medium),
     },
   };
 });

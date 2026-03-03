@@ -14,7 +14,6 @@ import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useAuthContext} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {RootStackScreenProps} from '../navigation-types';
 
@@ -22,7 +21,6 @@ type Props = RootStackScreenProps<'Root_SmartParkAndRideAddScreen'>;
 export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
   {
     const {t} = useTranslation();
-    const {top: safeAreaTop} = useSafeAreaInsets();
     const styles = useStyles();
     const [nickname, setNickname] = useState('');
     const [licensePlate, setLicensePlate] = useState('');
@@ -131,7 +129,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
   }
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
+const useStyles = StyleSheet.createThemeHook((theme, {top: safeAreaTop}) => {
   return {
     container: {
       rowGap: theme.spacing.small,
@@ -157,6 +155,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       paddingTop: theme.spacing.medium,
     },
     hideHeaderContainer: {
+      paddingTop: safeAreaTop,
       flex: 1,
       backgroundColor: theme.color.background.accent[0].background,
     },

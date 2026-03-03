@@ -21,7 +21,6 @@ import {
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import queryString from 'query-string';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
@@ -47,7 +46,6 @@ export const Root_LoginOptionsScreen = ({
   const transitionPreset = params?.transitionOverride;
 
   const {t, language} = useTranslation();
-  const {bottom: safeAreaBottom} = useSafeAreaInsets();
   const styles = useStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
@@ -162,13 +160,7 @@ export const Root_LoginOptionsScreen = ({
         title={t(LoginTexts.logInOptions.title)}
         globalMessageContext={GlobalMessageContextEnum.appLogin}
       />
-      <ScrollView
-        contentContainerStyle={[
-          styles.scrollView,
-          {paddingBottom: safeAreaBottom},
-        ]}
-        bounces={false}
-      >
+      <ScrollView contentContainerStyle={styles.scrollView} bounces={false}>
         <View accessible={true} accessibilityRole="header">
           <ThemeText
             typography="heading__3xl"
@@ -243,7 +235,7 @@ export const Root_LoginOptionsScreen = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     container: {
       backgroundColor: getThemeColor(theme).background,
@@ -256,6 +248,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       flexGrow: 1,
       justifyContent: 'center',
       paddingHorizontal: theme.spacing.xLarge,
+      paddingBottom: bottom,
     },
     title: {
       textAlign: 'center',

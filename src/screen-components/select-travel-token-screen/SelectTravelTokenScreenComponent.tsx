@@ -19,7 +19,6 @@ import {TokenToggleInfo} from './TokenToggleInfo';
 import {useTokenToggleDetailsQuery} from '@atb/modules/mobile-token';
 import {useOnboardingContext} from '@atb/modules/onboarding';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
 
 type Props = {onAfterSave: () => void; focusRef: Ref<any>; isFocused: boolean};
@@ -29,7 +28,6 @@ export const SelectTravelTokenScreenComponent = ({
   focusRef,
   isFocused,
 }: Props) => {
-  const {bottom: safeAreaBottomInset} = useSafeAreaInsets();
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -94,7 +92,7 @@ export const SelectTravelTokenScreenComponent = ({
       )}
       testID="selectTravelTokenView"
     >
-      <View style={[styles.container, {paddingBottom: safeAreaBottomInset}]}>
+      <View style={styles.container}>
         <View style={styles.radioArea}>
           {!disable_travelcard && (
             <RadioBox
@@ -203,9 +201,10 @@ export const SelectTravelTokenScreenComponent = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme: Theme) => {
+const useStyles = StyleSheet.createThemeHook((theme: Theme, {bottom}) => {
   return {
     container: {
+      paddingBottom: bottom,
       margin: theme.spacing.medium,
       gap: theme.spacing.medium,
     },

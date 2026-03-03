@@ -46,8 +46,8 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
     forwardedRef,
   ) => {
     const {topContainer, contentContainer} = useSectionItem(props);
-    const {theme, themeName} = useThemeContext();
-    const styles = useInputStyle(theme, themeName);
+    const {theme} = useThemeContext();
+    const styles = useInputStyle();
     const [isFocused, setIsFocused] = useState(Boolean(props?.autoFocus));
     const {t} = useTranslation();
     const myRef = useRef<InternalTextInput>(null);
@@ -179,7 +179,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
   },
 );
 
-const useInputStyle = StyleSheet.createTheme((theme) => ({
+const useInputStyle = StyleSheet.createThemeHook((theme) => ({
   input: {
     color: theme.color.foreground.dynamic.primary,
     paddingRight: 40,

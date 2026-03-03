@@ -21,7 +21,6 @@ import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {useHarbors} from '@atb/modules/harbors';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = RootStackScreenProps<'Root_PurchaseHarborSearchScreen'>;
 
@@ -51,7 +50,6 @@ export const Root_PurchaseHarborSearchScreen = ({
     );
   };
 
-  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   const styles = useStyles();
   // capturing focus on mount and on press
   const isFocused = useIsFocused();
@@ -67,7 +65,7 @@ export const Root_PurchaseHarborSearchScreen = ({
   const debouncedText = useDebounce(text, 200);
 
   return (
-    <View style={[styles.container, {paddingBottom: bottomSafeAreaInset}]}>
+    <View style={styles.container}>
       <View style={styles.headerContainer}>
         <FullScreenHeader
           title={
@@ -132,11 +130,12 @@ export const Root_PurchaseHarborSearchScreen = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     container: {
       flex: 1,
       backgroundColor: theme.color.background.neutral[2].background,
+      paddingBottom: bottom,
     },
     headerContainer: {
       backgroundColor: theme.color.background.accent[0].background,

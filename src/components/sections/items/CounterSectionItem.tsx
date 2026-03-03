@@ -174,8 +174,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       justifyContent: 'center',
     },
     countText: {
-      minWidth: theme.spacing.large,
-      margin: theme.spacing.small,
       textAlign: 'center',
     },
     removeCount: {

@@ -16,7 +16,6 @@ import {
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
 import {TipsAndInformation} from './tips-and-information/TipsAndInformation';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {MobilitySingleBenefitInfoSectionItem} from '@atb/modules/mobility';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -32,7 +31,6 @@ export const Root_TicketInformationScreen = ({navigation, route}: Props) => {
     route.params;
 
   const {t, language} = useTranslation();
-  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   const styles = useStyle();
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
@@ -64,12 +62,7 @@ export const Root_TicketInformationScreen = ({navigation, route}: Props) => {
       }}
       contentColor={themeColor}
     >
-      <ScrollView
-        contentContainerStyle={[
-          styles.container,
-          {marginBottom: bottomSafeAreaInset + theme.spacing.medium},
-        ]}
-      >
+      <ScrollView contentContainerStyle={styles.container}>
         {preassignedFareProduct && (
           <>
             <ContentHeading
@@ -127,10 +120,11 @@ export const Root_TicketInformationScreen = ({navigation, route}: Props) => {
   );
 };
 
-const useStyle = StyleSheet.createThemeHook((theme) => {
+const useStyle = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     container: {
       marginHorizontal: theme.spacing.medium,
+      marginBottom: bottom + theme.spacing.medium,
       rowGap: theme.spacing.small,
     },
     descriptionContainer: {

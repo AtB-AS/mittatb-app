@@ -57,7 +57,6 @@ import {
 } from '@atb/modules/bonus';
 import {useFareContractLegs} from '@atb/modules/fare-contracts';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
@@ -91,7 +90,6 @@ export const DetailsContent: React.FC<Props> = ({
 
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   const styles = useStyles();
   const {findGlobalMessages} = useGlobalMessagesContext();
   const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
@@ -162,7 +160,7 @@ export const DetailsContent: React.FC<Props> = ({
   const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(fc, validityStatus);
 
   return (
-    <Section style={[styles.section, {marginBottom: bottomSafeAreaInset}]}>
+    <Section style={styles.section}>
       {hasShmoBookingId(fc) ? (
         <FareContractShmoHeaderSectionItem fareContract={fc} />
       ) : (
@@ -308,13 +306,15 @@ export const DetailsContent: React.FC<Props> = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     globalMessages: {
       flex: 1,
       rowGap: theme.spacing.medium,
     },
-    section: {},
+    section: {
+      marginBottom: bottom,
+    },
     fareContractDetails: {
       flex: 1,
       paddingBottom: theme.spacing.large,

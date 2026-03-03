@@ -5,7 +5,6 @@ import {
   MaterialTopTabBarProps,
 } from '@react-navigation/material-top-tabs';
 import React from 'react';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {Theme} from '@atb/theme/colors';
 import {RootStackScreenProps} from '../navigation-types';
@@ -20,7 +19,6 @@ const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 type Props = RootStackScreenProps<'Root_OnboardingCarouselStack'>;
 
 export const Root_OnboardingCarouselStack = ({route}: Props) => {
-  const {bottom: safeAreaBottom} = useSafeAreaInsets();
   const styles = useStyles();
   const {configId} = route.params;
   const config = onboardingCarouselConfigs.find(
@@ -36,7 +34,7 @@ export const Root_OnboardingCarouselStack = ({route}: Props) => {
       )}
       tabBarPosition="bottom"
       initialRouteName={config?.onboardingScreens[0].name}
-      style={[styles.container, {paddingBottom: safeAreaBottom}]}
+      style={styles.container}
     >
       {config?.onboardingScreens.map((screen) => (
         <Tab.Screen
@@ -49,11 +47,12 @@ export const Root_OnboardingCarouselStack = ({route}: Props) => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     container: {
       flex: 1,
       backgroundColor: getThemeColor(theme).background,
+      paddingBottom: bottom,
     },
   };
 });

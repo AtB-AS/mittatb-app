@@ -7,14 +7,12 @@ import {PhotoCapture} from '@atb/components/PhotoCapture';
 import {PhotoFile} from '@atb/components/camera';
 import {ActivityIndicator, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MapStateActionType, useMapContext} from '@atb/modules/map';
 import {blobToBase64} from '@atb/modules/parking-violations-reporting';
 import {compressImage} from '@atb/utils/image';
 import {useCallback} from 'react';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useThemeContext} from '@atb/theme';
 
 export type ParkingPhotoScreenProps =
   RootStackScreenProps<'Root_ParkingPhotoScreen'>;
@@ -25,10 +23,8 @@ export const Root_ParkingPhotoScreen = ({
 }: ParkingPhotoScreenProps) => {
   const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
-  const {bottom} = useSafeAreaInsets();
   const styles = useStyles();
   const {dispatchMapState} = useMapContext();
-  const {theme} = useThemeContext();
   const {logEvent} = useAnalyticsContext();
 
   const {mutateAsync: sendShmoBookingEvent, isPending} =
@@ -80,12 +76,7 @@ export const Root_ParkingPhotoScreen = ({
 
   if (isPending) {
     return (
-      <View
-        style={[
-          styles.activityIndicator,
-          {marginBottom: Math.max(bottom, theme.spacing.medium)},
-        ]}
-      >
+      <View style={styles.activityIndicator}>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -102,11 +93,12 @@ export const Root_ParkingPhotoScreen = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     activityIndicator: {
       flex: 1,
       justifyContent: 'center',
+      marginBottom: Math.max(bottom, theme.spacing.medium),
     },
   };
 });
