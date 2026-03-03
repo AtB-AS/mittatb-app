@@ -66,8 +66,6 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
       isNonRecurringPaymentType(method.paymentType),
   );
 
-  singlePaymentMethods.push({paymentType: PaymentType.ApplePay});
-
   const multiplePaymentMethods = defaultPaymentMethods.filter(
     (method): method is CardPaymentMethod =>
       [PaymentType.Mastercard, PaymentType.Visa, PaymentType.Amex].includes(

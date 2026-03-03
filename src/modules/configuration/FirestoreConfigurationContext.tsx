@@ -539,6 +539,8 @@ function mapPaymentTypeStringToEnum(
       return PaymentType.Amex;
     case 'vipps':
       return PaymentType.Vipps;
+    case 'applePay':
+      return PaymentType.ApplePay;
   }
 }
 
