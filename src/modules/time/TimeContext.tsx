@@ -52,7 +52,7 @@ export const TimeContextProvider = ({children}: Props) => {
     // running when device time is set back in time.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data],
-    1000,
+    10000,
     false,
     true,
   );
