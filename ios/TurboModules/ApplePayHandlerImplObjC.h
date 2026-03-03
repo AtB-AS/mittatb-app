@@ -2,7 +2,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PaymentHandlerImpl : NSObject
+@interface ApplePayHandlerImpl : NSObject
 
 - (void)startPaymentWithItems:(NSArray *)items
             completionHandler:(void (^)(NSString * _Nullable))completionHandler;

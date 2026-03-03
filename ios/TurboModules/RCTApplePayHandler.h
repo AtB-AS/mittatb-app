@@ -4,7 +4,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RCTPaymentHandler : NSObject <NativePaymentHandlerSpec>
+@interface RCTApplePayHandler : NSObject <NativeApplePayHandlerSpec>
 
 @end
 

@@ -3,8 +3,8 @@ import PassKit
 
 typealias PaymentCompletionHandler = (String?) -> Void
 
-@objc(PaymentHandlerImpl)
-class PaymentHandlerImpl: NSObject {
+@objc(ApplePayHandlerImpl)
+class ApplePayHandlerImpl: NSObject {
 
   var paymentController: PKPaymentAuthorizationController?
   var paymentSummaryItems = [PKPaymentSummaryItem]()
@@ -54,7 +54,7 @@ class PaymentHandlerImpl: NSObject {
     paymentRequest.merchantCapabilities = .threeDSecure
     paymentRequest.countryCode = "NO"
     paymentRequest.currencyCode = "NOK"
-    paymentRequest.supportedNetworks = PaymentHandlerImpl.supportedNetworks
+    paymentRequest.supportedNetworks = ApplePayHandlerImpl.supportedNetworks
 
     // Display the payment request.
     paymentController = PKPaymentAuthorizationController(paymentRequest: paymentRequest)
@@ -74,7 +74,7 @@ class PaymentHandlerImpl: NSObject {
   }
 }
 
-extension PaymentHandlerImpl: PKPaymentAuthorizationControllerDelegate {
+extension ApplePayHandlerImpl: PKPaymentAuthorizationControllerDelegate {
   public func paymentAuthorizationController(_ controller: PKPaymentAuthorizationController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
     let errors = [Error]()
     let status = PKPaymentAuthorizationStatus.success

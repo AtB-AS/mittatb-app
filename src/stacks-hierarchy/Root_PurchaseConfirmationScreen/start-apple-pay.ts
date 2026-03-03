@@ -1,5 +1,5 @@
 import {getReferenceDataName} from '@atb/modules/configuration';
-import {NativePaymentHandler} from '@atb/modules/native';
+import {NativeApplePayHandler} from '@atb/modules/native';
 import {Language} from '@atb/translations';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {APP_NAME} from '@env';
@@ -18,7 +18,7 @@ export function startApplePayPayment({
   setApplePayPaymentData: (data: string) => void;
   language: Language;
 }) {
-  if (!NativePaymentHandler.canMakePayments()) {
+  if (!NativeApplePayHandler.canMakePayments()) {
     notifyBugsnag('Apple Pay was selected, but not available');
     return;
   }
@@ -36,7 +36,7 @@ export function startApplePayPayment({
     label: `${sp.count} ${getReferenceDataName(sp, language)}`,
   }));
 
-  NativePaymentHandler.startPayment(
+  NativeApplePayHandler.startPayment(
     [
       ...userProfileItems,
       ...supplementItems,

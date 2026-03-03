@@ -1,2 +1,2 @@
 export {ExperimentalFeature} from './NativeExperimentalFeature';
-export {NativePaymentHandler} from './NativePaymentHandler';
+export {NativeApplePayHandler} from './NativeApplePayHandler';

@@ -11,6 +11,6 @@ export interface Spec extends TurboModule {
   canMakePayments(): boolean;
 }
 
-export const NativePaymentHandler = TurboModuleRegistry.get<Spec>(
-  'PaymentHandler',
+export const NativeApplePayHandler = TurboModuleRegistry.get<Spec>(
+  'ApplePayHandler',
 ) as Spec;
