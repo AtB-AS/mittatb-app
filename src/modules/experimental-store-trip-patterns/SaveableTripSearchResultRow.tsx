@@ -15,12 +15,18 @@ export const SaveableTripSearchResultRow: React.FC<
 > = ({children, tripPattern}) => {
   const isExperimentalEnabled = useIsExperimentalEnabled();
   const swipeableRef = useRef<SwipeableMethods>(null);
-  const {tripPatterns, addTripPattern, removeTripPattern} =
+  const {tripPatterns, addTripPattern, removeTripPattern, canAddTripPattern} =
     useStoredTripPatterns();
 
+  const canAdd = useMemo(() => {
+    return canAddTripPattern(tripPattern);
+  }, [tripPattern, canAddTripPattern]);
+
   const isStored = useMemo(
-    () => tripPatterns.some((tp) => tp.key === getTripPatternKey(tripPattern)),
-    [tripPattern, tripPatterns],
+    () =>
+      canAdd &&
+      tripPatterns.some((tp) => tp.key === getTripPatternKey(tripPattern)),
+    [tripPattern, tripPatterns, canAdd],
   );
 
   const rightActionKind = useMemo<RightActionKind>(
@@ -40,7 +46,7 @@ export const SaveableTripSearchResultRow: React.FC<
     [tripPattern, addTripPattern, removeTripPattern],
   );
 
-  if (!isExperimentalEnabled) {
+  if (!isExperimentalEnabled || !canAdd) {
     return children;
   }
 
