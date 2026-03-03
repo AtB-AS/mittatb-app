@@ -29,6 +29,7 @@ export const SelectTravelTokenScreenComponent = ({
   focusRef,
   isFocused,
 }: Props) => {
+  const {bottom: safeAreaBottomInset} = useSafeAreaInsets();
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -93,7 +94,7 @@ export const SelectTravelTokenScreenComponent = ({
       )}
       testID="selectTravelTokenView"
     >
-      <View style={styles.container}>
+      <View style={[styles.container, {paddingBottom: safeAreaBottomInset}]}>
         <View style={styles.radioArea}>
           {!disable_travelcard && (
             <RadioBox
@@ -203,10 +204,8 @@ export const SelectTravelTokenScreenComponent = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => {
-  const {bottom: safeAreaBottomInset} = useSafeAreaInsets();
   return {
     container: {
-      paddingBottom: safeAreaBottomInset,
       margin: theme.spacing.medium,
       gap: theme.spacing.medium,
     },

@@ -58,6 +58,7 @@ const ContentBody = ({
   children,
   focusRef,
 }: Props) => {
+  const {bottom} = useSafeAreaInsets();
   const style = useStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
@@ -78,13 +79,21 @@ const ContentBody = ({
         </View>
         {children}
       </View>
-      {!!buttons && <View style={style.actionButtons}>{buttons}</View>}
+      {!!buttons && (
+        <View
+          style={[
+            style.actionButtons,
+            {marginBottom: Math.max(bottom, theme.spacing.medium)},
+          ]}
+        >
+          {buttons}
+        </View>
+      )}
     </>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
   return {
     content: {
       flex: 1,
@@ -103,7 +112,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     actionButtons: {
       marginHorizontal: theme.spacing.medium,
-      marginBottom: Math.max(bottom, theme.spacing.medium),
     },
   };
 });

@@ -52,6 +52,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   route: {params},
 }) => {
   const focusRef = useFocusOnLoad(navigation);
+  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
@@ -219,7 +220,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       )}
     >
       <ScrollView testID="purchaseOverviewScrollView">
-        <View style={styles.contentContainer}>
+        <View
+          style={[
+            styles.contentContainer,
+            {marginBottom: bottomSafeAreaInset + theme.spacing.medium},
+          ]}
+        >
           {params.mode === 'TravelSearch' && (
             <MessageInfoBox
               type="valid"
@@ -404,7 +410,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   return {
     header: {
       marginHorizontal: theme.spacing.medium,
@@ -412,7 +417,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     contentContainer: {
       rowGap: theme.spacing.medium,
       margin: theme.spacing.medium,
-      marginBottom: bottomSafeAreaInset + theme.spacing.medium,
     },
     messages: {
       rowGap: theme.spacing.medium,

@@ -91,6 +91,7 @@ export const DetailsContent: React.FC<Props> = ({
 
   const {t} = useTranslation();
   const {theme} = useThemeContext();
+  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   const styles = useStyles();
   const {findGlobalMessages} = useGlobalMessagesContext();
   const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
@@ -161,7 +162,7 @@ export const DetailsContent: React.FC<Props> = ({
   const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(fc, validityStatus);
 
   return (
-    <Section style={styles.section}>
+    <Section style={[styles.section, {marginBottom: bottomSafeAreaInset}]}>
       {hasShmoBookingId(fc) ? (
         <FareContractShmoHeaderSectionItem fareContract={fc} />
       ) : (
@@ -308,15 +309,12 @@ export const DetailsContent: React.FC<Props> = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   return {
     globalMessages: {
       flex: 1,
       rowGap: theme.spacing.medium,
     },
-    section: {
-      marginBottom: bottomSafeAreaInset,
-    },
+    section: {},
     fareContractDetails: {
       flex: 1,
       paddingBottom: theme.spacing.large,

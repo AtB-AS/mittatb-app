@@ -1,8 +1,6 @@
 import {TFunc} from '@leile/lobo-t';
 
 import {initLobot, Translatable} from '@leile/lobo-t';
-import {useCallback} from 'react';
-
 export enum Language {
   Norwegian = 'nb',
   English = 'en',
@@ -16,11 +14,11 @@ export const DEFAULT_REGION = 'NO';
 export type TranslatedString = Translatable<typeof Language, string>;
 
 export const lobot = initLobot<typeof Language>(DEFAULT_LANGUAGE);
-export const useTranslation: typeof lobot.useTranslation = () => {
+export const useTranslation = (): ReturnType<typeof lobot.useTranslation> => {
   const {language} = lobot.useTranslation();
   return {
-    t: useCallback((arg) => arg[language], [language]),
-    language: language,
+    t: <U>(arg: Translatable<typeof Language, U>): U => arg[language],
+    language,
   };
 };
 

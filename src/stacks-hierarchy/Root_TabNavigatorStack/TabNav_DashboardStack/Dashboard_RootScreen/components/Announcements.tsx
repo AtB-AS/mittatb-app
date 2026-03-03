@@ -4,7 +4,6 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {AnnouncementSection} from './AnnouncementSection';
 import {DashboardTexts, useTranslation} from '@atb/translations';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
-import {useNow} from '@atb/utils/use-now';
 import {StyleSheet} from '@atb/theme';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {useTimeContext} from '@atb/modules/time';
@@ -23,7 +22,6 @@ type Props = {
 export const Announcements = ({style}: Props) => {
   const {findAnnouncements} = useAnnouncementsContext();
   const {t} = useTranslation();
-  const now = useNow(10000);
 
   const {serverNow} = useTimeContext();
   const {fareContracts: validFareContracts} = useFareContracts(
@@ -47,7 +45,7 @@ export const Announcements = ({style}: Props) => {
   const filteredAnnouncements = findAnnouncements(ruleVariables).filter((a) =>
     isWithinTimeRange(
       {startDate: a.startDate?.valueOf(), endDate: a.endDate?.valueOf()},
-      now,
+      serverNow,
     ),
   );
 

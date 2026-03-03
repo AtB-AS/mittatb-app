@@ -32,6 +32,7 @@ export const Root_TicketInformationScreen = ({navigation, route}: Props) => {
     route.params;
 
   const {t, language} = useTranslation();
+  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   const styles = useStyle();
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.accent[0];
@@ -63,7 +64,12 @@ export const Root_TicketInformationScreen = ({navigation, route}: Props) => {
       }}
       contentColor={themeColor}
     >
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={[
+          styles.container,
+          {marginBottom: bottomSafeAreaInset + theme.spacing.medium},
+        ]}
+      >
         {preassignedFareProduct && (
           <>
             <ContentHeading
@@ -122,11 +128,9 @@ export const Root_TicketInformationScreen = ({navigation, route}: Props) => {
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => {
-  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   return {
     container: {
       marginHorizontal: theme.spacing.medium,
-      marginBottom: bottomSafeAreaInset + theme.spacing.medium,
       rowGap: theme.spacing.small,
     },
     descriptionContainer: {

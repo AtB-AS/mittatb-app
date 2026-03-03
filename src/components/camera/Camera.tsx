@@ -129,7 +129,10 @@ export const Camera = ({
 
             {mode !== 'qr' || bottomButtonNode ? (
               <View
-                style={styles.footerWrapper}
+                style={[
+                  styles.footerWrapper,
+                  {paddingBottom: safeBottomInset + theme.spacing.medium},
+                ]}
                 onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
               >
                 {mode !== 'qr' && (
@@ -164,8 +167,6 @@ export const Camera = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom: safeBottomInset} = useSafeAreaInsets();
-
   return {
     container: {
       flex: 1,
@@ -200,7 +201,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       right: 0,
       bottom: 0,
       paddingTop: theme.spacing.large,
-      paddingBottom: safeBottomInset + theme.spacing.medium,
+      paddingBottom: theme.spacing.medium,
       alignItems: 'center',
       gap: theme.spacing.large,
       backgroundColor: 'black',

@@ -51,6 +51,7 @@ export const Root_PurchaseHarborSearchScreen = ({
     );
   };
 
+  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   const styles = useStyles();
   // capturing focus on mount and on press
   const isFocused = useIsFocused();
@@ -66,7 +67,7 @@ export const Root_PurchaseHarborSearchScreen = ({
   const debouncedText = useDebounce(text, 200);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {paddingBottom: bottomSafeAreaInset}]}>
       <View style={styles.headerContainer}>
         <FullScreenHeader
           title={
@@ -132,12 +133,10 @@ export const Root_PurchaseHarborSearchScreen = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   return {
     container: {
       flex: 1,
       backgroundColor: theme.color.background.neutral[2].background,
-      paddingBottom: bottomSafeAreaInset,
     },
     headerContainer: {
       backgroundColor: theme.color.background.accent[0].background,

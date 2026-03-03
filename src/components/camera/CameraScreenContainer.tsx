@@ -2,7 +2,7 @@ import {PropsWithChildren, Ref} from 'react';
 import {StatusBar, View} from 'react-native';
 import {LoadingBody} from '../PhotoCapture/ScreenContainer';
 import {ThemeText} from '../text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {NativeBorderlessButton} from '../native-button';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
@@ -25,8 +25,10 @@ export const CameraScreenContainer = ({
   onGoBack,
   focusRef,
 }: CameraScreenContainerProps) => {
+  const {top: safeTopInset} = useSafeAreaInsets();
   const styles = useStyles();
   const {t} = useTranslation();
+  const {theme} = useThemeContext();
 
   if (isLoading) {
     return <LoadingBody />;
@@ -39,7 +41,12 @@ export const CameraScreenContainer = ({
       </View>
 
       <View style={styles.overlay} pointerEvents="box-none">
-        <View style={styles.container}>
+        <View
+          style={[
+            styles.container,
+            {paddingTop: safeTopInset + theme.spacing.medium},
+          ]}
+        >
           <StatusBar
             barStyle="light-content"
             translucent
@@ -70,7 +77,6 @@ export const CameraScreenContainer = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {top: safeTopInset} = useSafeAreaInsets();
   return {
     root: {
       flex: 1,
@@ -82,7 +88,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     container: {
       gap: theme.spacing.medium,
       backgroundColor: 'black',
-      paddingTop: safeTopInset + theme.spacing.medium,
       paddingBottom: theme.spacing.medium,
     },
     header: {

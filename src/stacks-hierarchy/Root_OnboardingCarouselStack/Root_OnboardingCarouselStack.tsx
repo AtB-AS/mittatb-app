@@ -20,6 +20,7 @@ const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 type Props = RootStackScreenProps<'Root_OnboardingCarouselStack'>;
 
 export const Root_OnboardingCarouselStack = ({route}: Props) => {
+  const {bottom: safeAreaBottom} = useSafeAreaInsets();
   const styles = useStyles();
   const {configId} = route.params;
   const config = onboardingCarouselConfigs.find(
@@ -35,7 +36,7 @@ export const Root_OnboardingCarouselStack = ({route}: Props) => {
       )}
       tabBarPosition="bottom"
       initialRouteName={config?.onboardingScreens[0].name}
-      style={styles.container}
+      style={[styles.container, {paddingBottom: safeAreaBottom}]}
     >
       {config?.onboardingScreens.map((screen) => (
         <Tab.Screen
@@ -49,12 +50,10 @@ export const Root_OnboardingCarouselStack = ({route}: Props) => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom: safeAreaBottom} = useSafeAreaInsets();
   return {
     container: {
       flex: 1,
       backgroundColor: getThemeColor(theme).background,
-      paddingBottom: safeAreaBottom,
     },
   };
 });

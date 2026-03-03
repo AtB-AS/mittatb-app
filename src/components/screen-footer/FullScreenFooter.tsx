@@ -1,4 +1,4 @@
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import React from 'react';
 import {KeyboardAvoidingView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -14,8 +14,14 @@ export function FullScreenFooter({
   avoidKeyboard,
   footerColor,
 }: ScreenFooterProps) {
+  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
+  const {theme} = useThemeContext();
   const styles = useStyles();
-  const containerStyle = {...styles.container, backgroundColor: footerColor};
+  const containerStyle = {
+    ...styles.container,
+    backgroundColor: footerColor,
+    paddingBottom: bottomSafeAreaInset + theme.spacing.medium,
+  };
 
   return avoidKeyboard ? (
     <KeyboardAvoidingView behavior="padding" style={containerStyle}>
@@ -27,10 +33,9 @@ export function FullScreenFooter({
 }
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => {
-  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
   return {
     container: {
-      paddingBottom: bottomSafeAreaInset + theme.spacing.medium,
+      paddingBottom: theme.spacing.medium,
       paddingHorizontal: theme.spacing.medium,
     },
   };

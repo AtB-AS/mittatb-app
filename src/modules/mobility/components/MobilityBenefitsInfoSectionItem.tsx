@@ -21,6 +21,7 @@ export const MobilityBenefitsInfoSectionItem = ({
 }: Props) => {
   const {topContainer} = useSectionItem(props);
   const {t, language} = useTranslation();
+  const fontScale = useFontScale();
   const styles = useStyles();
   const {theme} = useThemeContext();
 
@@ -69,10 +70,16 @@ const BenefitInfo = ({
 }) => {
   const {language} = useTranslation();
   const styles = useStyles();
+  const fontScale = useFontScale();
   return (
     <View style={styles.benefitInfo}>
       {!!formFactors.length && (
-        <View style={styles.formFactorsContainer}>
+        <View
+          style={[
+            styles.formFactorsContainer,
+            {height: 18 * fontScale, width: 28 * fontScale},
+          ]}
+        >
           {formFactors.map((ff) => (
             <BenefitImageAsset
               formFactor={toFormFactorEnum(ff)}
@@ -90,12 +97,11 @@ const BenefitInfo = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const fontScale = useFontScale();
   return {
     borderedInfoBox: {marginTop: theme.spacing.small},
     borderedInfoBoxContent: {gap: theme.spacing.small},
     benefitInfo: {flexDirection: 'row', flex: 1, gap: theme.spacing.small},
-    formFactorsContainer: {height: 18 * fontScale, width: 28 * fontScale},
+    formFactorsContainer: {},
     benefitText: {flex: 1},
   };
 });

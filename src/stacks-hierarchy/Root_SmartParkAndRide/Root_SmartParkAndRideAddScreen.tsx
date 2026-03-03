@@ -22,6 +22,7 @@ type Props = RootStackScreenProps<'Root_SmartParkAndRideAddScreen'>;
 export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
   {
     const {t} = useTranslation();
+    const {top: safeAreaTop} = useSafeAreaInsets();
     const styles = useStyles();
     const [nickname, setNickname] = useState('');
     const [licensePlate, setLicensePlate] = useState('');
@@ -131,7 +132,6 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {top: safeAreaTop} = useSafeAreaInsets();
   return {
     container: {
       rowGap: theme.spacing.small,
@@ -157,7 +157,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       paddingTop: theme.spacing.medium,
     },
     hideHeaderContainer: {
-      paddingTop: safeAreaTop,
       flex: 1,
       backgroundColor: theme.color.background.accent[0].background,
     },
