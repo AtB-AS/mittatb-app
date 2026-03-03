@@ -5,11 +5,14 @@ import {Ticketing_RootScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {Ticketing_PurchaseHistoryScreen} from './Ticketing_PurchaseHistoryScreen';
 import {TicketingStackParams} from './navigation-types';
+import {useApplePassPresentationSuppression} from '@atb/modules/native-bridges';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Stack = createStackNavigator<TicketingStackParams>();
 
 export const TabNav_TicketingStack = () => {
   const {enable_ticketing} = useRemoteConfigContext();
+  useApplePassPresentationSuppression(useFocusEffect);
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       {!enable_ticketing && (

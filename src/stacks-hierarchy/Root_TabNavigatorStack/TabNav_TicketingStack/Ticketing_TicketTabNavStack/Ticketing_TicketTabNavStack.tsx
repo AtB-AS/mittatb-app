@@ -14,7 +14,6 @@ import {Route} from '@react-navigation/native';
 import {ThemeText} from '@atb/components/text';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {useTimeContext} from '@atb/modules/time';
-import {useApplePassPresentationSuppression} from '@atb/modules/native-bridges';
 
 const TopTabNav = createMaterialTopTabNavigator<TicketTabNavStackParams>();
 
@@ -30,8 +29,6 @@ export const Ticketing_TicketTabNavStack = () => {
     availableFareContracts.length
       ? 'TicketTabNav_AvailableFareContractsTabScreen'
       : 'TicketTabNav_PurchaseTabScreen';
-
-  useApplePassPresentationSuppression();
 
   return (
     <TopTabNav.Navigator
