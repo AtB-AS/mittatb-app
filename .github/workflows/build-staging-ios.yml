@@ -167,6 +167,9 @@ jobs:
       - name: Disable widget
         if: ${{ env.ENABLE_WIDGET != 'true' && steps.ipa-cache.outputs.cache-hit != 'true' }}
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget AtbAppIntent
+      - name: Enable Apple Pay entitlement
+        if: ${{ env.APPLE_PAY_MERCHANT_ID != '' && steps.ipa-cache.outputs.cache-hit != 'true' }}
+        run: bundle exec fastlane ios enable_apple_pay_entitlement
       - name: Run fastlane cert match
         if: steps.ipa-cache.outputs.cache-hit == 'true'
         run: bundle exec fastlane ios get_certs
