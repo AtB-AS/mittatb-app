@@ -33,7 +33,7 @@ export function WithOverlayButton({
   const styles = useStyles();
   return (
     <View style={styles.container}>
-      <View style={styles.content}>{children}</View>
+      <View style={styles.children}>{children}</View>
       <View
         style={[
           styles.overlayContainer,
@@ -42,11 +42,12 @@ export function WithOverlayButton({
         ]}
       >
         {isLoading ? (
-          <ActivityIndicator
-            color={theme.color.foreground.dynamic.primary}
-            style={styles.activityIndicator}
-            size="small"
-          />
+          <View style={[styles.border, styles.activityIndicator]}>
+            <ActivityIndicator
+              color={theme.color.foreground.dynamic.primary}
+              size="small"
+            />
+          </View>
         ) : (
           <Button
             rightIcon={{svg: svgIcon}}
@@ -54,7 +55,7 @@ export function WithOverlayButton({
             expanded={false}
             onPress={onPress}
             interactiveColor={theme.color.interactive[2]}
-            style={styles.button}
+            style={styles.border}
             {...props}
           />
         )}
@@ -67,24 +68,21 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     justifyContent: 'center',
   },
-  content: {
+  children: {
     width: '100%',
   },
   overlayContainer: {
     position: 'absolute',
     zIndex: 2,
   },
-  activityIndicator: {
-    padding: theme.spacing.medium,
-    margin: theme.spacing.xSmall / 2, // To compensate for smaller ActivityIndicator size
-  },
-  background: {
-    // Setting backgroundColor here is necessary for the ActivityIndicator
-    backgroundColor: theme.color.interactive[2].default.background,
-  },
-  button: {
+  border: {
     borderColor: theme.color.background.neutral[3].background,
     borderWidth: theme.border.width.slim,
+  },
+  activityIndicator: {
+    padding: theme.spacing.medium,
+    borderRadius: theme.border.radius.circle,
+    backgroundColor: theme.color.interactive[2].default.background,
   },
   right: {
     right: theme.spacing.medium,
