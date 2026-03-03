@@ -92,6 +92,8 @@ export function humanizePaymentType(paymentType: PaymentType) {
       return 'American Express';
     case PaymentType.ApplePay:
       return 'Apple Pay';
+    case PaymentType.GooglePay:
+      return 'Google Pay';
     default:
       return '';
   }
@@ -109,6 +111,8 @@ export function humanizePaymentTypeString(paymentType: string) {
       return 'American Express';
     case 'applepay':
       return 'Apple Pay';
+    case 'googlepay':
+      return 'Google Pay';
     default:
       return startCase(paymentType);
   }
