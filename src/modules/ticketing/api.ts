@@ -139,7 +139,12 @@ export async function searchOffers(
 ): Promise<TicketOffer[]> {
   const url = `sales/v1/search/${offerEndpoint}`;
 
-  const response = await client.post<TicketOffer[]>(url, params, opts);
+  const response = await client.post(url, params, opts);
+
+  if (response.data.offers) {
+    // search/trip-pattern returns offers in a nested object
+    return response.data.offers;
+  }
 
   return response.data;
 }

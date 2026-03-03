@@ -26,7 +26,6 @@ import {
   calculateTotalPrice,
   getCheapestOffer,
 } from './offer-price-calculator';
-import {searchTripPatternOffers} from '@atb/api/sales';
 import {mapToOfferSearchLegs} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/utils';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
@@ -264,52 +263,45 @@ export function useOfferState(
       } else {
         try {
           dispatch({type: 'SEARCHING_OFFER'});
-          let offers: TicketOffer[];
 
-          if (selection?.legs.length) {
-            const params: OfferSearchParams = {
-              travellers: allTravellers,
-              products: selection.existingProduct
-                ? [] // existingProduct means we are purchasing supplementProduct. products should be empty.
+          const params: OfferSearchParams = {
+            zones: selection?.zones && [
+              ...new Set([selection.zones.from.id, selection.zones.to.id]),
+            ],
+            from: selection?.stopPlaces?.from!.id,
+            to: selection?.stopPlaces?.to!.id,
+            isOnBehalfOf: selection?.isOnBehalfOf ?? false,
+            travellers: allTravellers,
+            products:
+              /**
+               * If there is an existing product, we are purchasing a supplement product, so fare products should be empty.
+               * If there are no travellers, we shouldn't search for offers, so products are set to empty.
+               */
+              selection?.existingProduct || !userProfileTravellers.length
+                ? []
                 : preassignedFareProductAlternatives.map((p) => p.id),
-              supplementProducts:
-                selection?.supplementProductsWithCount.map((sp) => sp.id) ?? [],
-              isOnBehalfOf: false,
-              legs: mapToOfferSearchLegs(selection.legs),
-            };
-            const response = await searchTripPatternOffers(params);
-            offers = response.offers;
-          } else {
-            const params: OfferSearchParams = {
-              zones: selection?.zones && [
-                ...new Set([selection.zones.from.id, selection.zones.to.id]),
-              ],
-              from: selection?.stopPlaces?.from!.id,
-              to: selection?.stopPlaces?.to!.id,
-              isOnBehalfOf: selection?.isOnBehalfOf ?? false,
-              travellers: allTravellers,
-              products: userProfileTravellers.length
-                ? preassignedFareProductAlternatives.map((p) => p.id)
-                : [],
-              supplementProducts:
-                selection?.supplementProductsWithCount.map((sp) => sp.id) ?? [],
-              travelDate: selection?.travelDate,
-            };
+            supplementProducts:
+              selection?.supplementProductsWithCount.map((sp) => sp.id) ?? [],
+            travelDate: selection?.travelDate,
+            legs: mapToOfferSearchLegs(selection?.legs),
+          };
 
-            const offerEndpoint = selection?.stopPlaces
+          // TODO: This info also exists in FareProductTypeConfig. Consider using or removing that
+          const offerEndpoint = selection?.legs.length
+            ? 'trip-pattern'
+            : selection?.stopPlaces
               ? 'stop-places'
               : selection?.zones
                 ? 'zones'
                 : 'authority';
 
-            offers = await searchOffers(offerEndpoint, params, {
-              cancelToken,
-              authWithIdToken: true,
-              skipErrorLogging: isNotAvailableError,
-            });
+          const offers = await searchOffers(offerEndpoint, params, {
+            cancelToken,
+            authWithIdToken: true,
+            skipErrorLogging: isNotAvailableError,
+          });
 
-            cancelToken?.throwIfRequested();
-          }
+          cancelToken?.throwIfRequested();
 
           if (offers.length) {
             dispatch({type: 'SET_OFFER', offers});
