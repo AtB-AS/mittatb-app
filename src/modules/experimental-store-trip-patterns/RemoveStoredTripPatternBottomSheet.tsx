@@ -43,8 +43,8 @@ export const RemoveStoredTripPatternBottomSheet = ({
             accessibilityLabel={t(
               RemoveStoredTripPatternBottomSheetTexts.removeButton.a11yLabel,
             )}
-            mode="secondary"
-            backgroundColor={theme.color.interactive.destructive.default}
+            mode="primary"
+            interactiveColor={theme.color.interactive.destructive}
             leftIcon={{svg: Delete}}
           />
         </View>

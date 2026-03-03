@@ -99,7 +99,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   headerContent: {
     flexDirection: 'row',
     gap: theme.spacing.small,
-    paddingBottom: theme.spacing.medium,
+    paddingBottom: theme.spacing.large,
     paddingRight: theme.spacing.medium,
     alignItems: 'center',
   },
