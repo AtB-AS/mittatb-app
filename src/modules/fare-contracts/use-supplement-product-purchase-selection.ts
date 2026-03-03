@@ -62,6 +62,7 @@ export function useSupplementProductPurchaseSelection({
 
     return builder
       .forType(supplementProductFareProduct.type)
+      .product(supplementProductFareProduct) // This is necessary because we might have several supplement products, so getDefaultProduct in .forType can default to another.
       .existingProduct(product)
       .supplementProducts([{...supplementProduct, count: 1}])
       .userProfiles(userProfile ? [{...userProfile, count: 1}] : [])
