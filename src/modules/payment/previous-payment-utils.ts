@@ -162,10 +162,11 @@ export const savePreviousPayment = async (
       await savePreviousPaymentMethodByUser(userId, {
         paymentType: paymentType,
       });
+    } else {
+      await savePreviousPaymentMethodByUser(userId, {
+        paymentType: PaymentType.PaymentCard,
+      });
     }
-    await savePreviousPaymentMethodByUser(userId, {
-      paymentType: PaymentType.PaymentCard,
-    });
   } else {
     try {
       // Brief delay to display previous payment method immediately after adding a new card
