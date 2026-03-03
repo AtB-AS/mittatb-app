@@ -22,8 +22,17 @@ import {scaleTransitionZoomRange} from '../../hooks/use-map-symbol-styles';
 const vehiclesAndStationsVectorSourceId =
   'vehicles-clustered-and-stations-source';
 
+// This filter requires validUntilUtc to be set on every single feature that uses it.
+// Using volatile: true would avoid that, but has to be set through styleJSON, currently has a bug on Android and hides data immeditaely if a request fails (which is overly pessimistic).
+const getMapTimeUtcFilter = (mapTimeUtc: number) => [
+  '>',
+  ['coalesce', ['get', 'validUntilUtc'], mapTimeUtc + 1], // assume Infinite validity if no validUntilUtc is set
+  mapTimeUtc,
+];
+
 export const VehiclesWithClusters = ({
   selectedFeatureId,
+  mapTimeUtc,
 }: SelectedFeatureIdProp) => {
   const minZoomLevel = 14;
   const {isSelected, iconStyle, textStyle} = useMapSymbolStyles({
@@ -33,8 +42,8 @@ export const VehiclesWithClusters = ({
   });
 
   const filter: FilterExpression = useMemo(
-    () => ['all', ['!', isSelected]],
-    [isSelected],
+    () => ['all', ['!', isSelected], getMapTimeUtcFilter(mapTimeUtc)],
+    [isSelected, mapTimeUtc],
   );
 
   const style = useMemo(
@@ -61,6 +70,7 @@ export const VehiclesWithClusters = ({
 export const StationsWithClusters = ({
   selectedFeatureId,
   showNonVirtualStations,
+  mapTimeUtc,
 }: SelectedFeatureIdProp & {
   showNonVirtualStations: boolean;
 }) => {
@@ -85,6 +95,7 @@ export const StationsWithClusters = ({
     return [
       'all',
       ['!', isSelected],
+      getMapTimeUtcFilter(mapTimeUtc),
       [
         'any',
         ['==', isVirtualStation, showVirtualStations],
@@ -106,10 +117,11 @@ export const StationsWithClusters = ({
     ];
   }, [
     isSelected,
-    showVirtualStations,
-    showNonVirtualStations,
+    mapTimeUtc,
     showCityBikes,
+    showNonVirtualStations,
     showSharedCars,
+    showVirtualStations,
   ]);
 
   const style = useMemo(
@@ -140,10 +152,12 @@ export const VehiclesAndStations = ({
   onPress,
   showVehicles,
   showStations,
+  mapTimeUtc,
 }: SelectedFeatureIdProp & {
   onPress?: (e: OnPressEvent) => void;
   showVehicles: boolean;
   showStations: boolean;
+  mapTimeUtc: number;
 }) => {
   // Could consider adding the sources only if shown.
   // The reason not to (for now), is to simplify potential cache tile hotloading on the server.
@@ -170,12 +184,16 @@ export const VehiclesAndStations = ({
     >
       <>
         {!!showVehicles && (
-          <VehiclesWithClusters selectedFeatureId={selectedFeatureId} />
+          <VehiclesWithClusters
+            selectedFeatureId={selectedFeatureId}
+            mapTimeUtc={mapTimeUtc}
+          />
         )}
         {!!showStations && (
           <StationsWithClusters
             selectedFeatureId={selectedFeatureId}
             showNonVirtualStations={true}
+            mapTimeUtc={mapTimeUtc}
           />
         )}
       </>

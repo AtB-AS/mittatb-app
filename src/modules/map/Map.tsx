@@ -101,9 +101,6 @@ export const Map = (props: MapProps) => {
     useMapContext();
 
   const mapTimeUtc = useMapTimeUtc(isFocusedAndActive);
-  useEffect(() => {
-    console.log('mapTimeUtc in useMapTimeUtc', mapTimeUtc);
-  }, [mapTimeUtc]);
 
   const [stalePaddingBottomMap, setStalePaddingBottomMap] =
     useState(paddingBottomMap);
@@ -465,6 +462,7 @@ export const Map = (props: MapProps) => {
               onPress={onMapItemClick}
               showVehicles={showVehicles}
               showStations={showStations}
+              mapTimeUtc={mapTimeUtc}
             />
           )}
         </MapView>
