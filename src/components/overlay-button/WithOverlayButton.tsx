@@ -27,6 +27,7 @@ export function WithOverlayButton({
   isLoading,
   onPress,
   buttonStyleOverride,
+  ...props
 }: Props) {
   const {theme} = useThemeContext();
   const styles = useStyles();
@@ -54,6 +55,7 @@ export function WithOverlayButton({
             expanded={false}
             onPress={onPress}
             interactiveColor={theme.color.interactive[2]}
+            {...props}
           />
         )}
       </View>
