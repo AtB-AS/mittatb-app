@@ -15,7 +15,7 @@ import {
 
 import {Feature} from 'geojson';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {Platform, View} from 'react-native';
+import {View} from 'react-native';
 import {MapCameraConfig, getSlightlyRaisedMapPadding} from './MapConfig';
 import {MapPropertiesType, MapProps} from './types';
 
@@ -143,12 +143,7 @@ export const Map = (props: MapProps) => {
   const vehicleTypeId =
     vehicle?.vehicleType.id ?? activeShmoBooking?.asset.vehicleTypeId ?? null;
 
-  // Always including the vector sources avoids laggy transitions for iOS (but buggy on Android, so skipped there),
-  // and tile requests are only sent when they are used anyway.
-  const mapViewConfig = useMapViewConfig({
-    includeVehiclesAndStationsVectorSource:
-      shouldShowVehiclesAndStations || Platform.OS !== 'android',
-  });
+  const mapViewConfig = useMapViewConfig();
 
   const [followUserLocation, setFollowUserLocation] = useState(false);
   const mapPropertiesRef = useRef<MapPropertiesType | null>({

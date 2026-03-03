@@ -12,10 +12,7 @@ import {
   TileLayerName,
   useTileUrlTemplate,
 } from '../../hooks/use-tile-url-template';
-import {
-  MapSlotLayerId,
-  StyleJsonVectorSource,
-} from '../../hooks/use-mapbox-json-style';
+import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
 import {
   Expression,
   FilterExpression,
@@ -148,12 +145,26 @@ export const VehiclesAndStations = ({
   showVehicles: boolean;
   showStations: boolean;
 }) => {
+  // Could consider adding the sources only if shown.
+  // The reason not to (for now), is to simplify potential cache tile hotloading on the server.
+  const tileLayerNames: TileLayerName[] = [
+    'vehicles_clustered',
+    'stations_clustered',
+  ];
+  const tileUrlTemplate = useTileUrlTemplate(tileLayerNames);
+  const tileUrlTemplates = useMemo(
+    () => [tileUrlTemplate || ''],
+    [tileUrlTemplate],
+  );
+
   if (!showVehicles && !showStations) return null;
 
   return (
     <MapboxGL.VectorSource
       id={vehiclesAndStationsVectorSourceId}
-      existing={true}
+      tileUrlTemplates={tileUrlTemplates}
+      minZoomLevel={14}
+      maxZoomLevel={17}
       hitbox={hitboxCoveringIconOnly}
       onPress={onPress}
     >
@@ -169,40 +180,5 @@ export const VehiclesAndStations = ({
         )}
       </>
     </MapboxGL.VectorSource>
-  );
-};
-
-/**
- * In order to only store live data in memory, not in the locally stored cache,
- * volatile should be set to true. However, since rnmapbox doesn't yet support
- * this prop on MapboxGL.VectorSource (see https://github.com/rnmapbox/maps/discussions/3351),
- * the source must instead be sent directly as styleJson. MapboxGL.VectorSource can
- * then access this source with existing=true and the same source id.
- * @returns {id: string, source: StyleJsonVectorSource}
- */
-export const useVehiclesAndStationsVectorSource: () => {
-  id: string;
-  source: StyleJsonVectorSource;
-} = () => {
-  // Could consider adding the sources only if shown.
-  // The reason not to, is to simplify potential cache tile hotloading on the server.
-  const tileLayerNames: TileLayerName[] = [
-    'vehicles_clustered',
-    'stations_clustered',
-  ];
-  const tileUrlTemplate = useTileUrlTemplate(tileLayerNames);
-
-  return useMemo(
-    () => ({
-      id: vehiclesAndStationsVectorSourceId,
-      source: {
-        type: 'vector',
-        tiles: [tileUrlTemplate || ''],
-        minzoom: 14,
-        maxzoom: 17,
-        volatile: true,
-      },
-    }),
-    [tileUrlTemplate],
   );
 };

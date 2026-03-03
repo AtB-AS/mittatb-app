@@ -17,18 +17,8 @@ const MapViewStaticConfig = {
   }),
 };
 
-type MapViewConfigOptions = {
-  includeVehiclesAndStationsVectorSource?: boolean;
-};
-
-export const useMapViewConfig = (
-  mapViewConfigOptions?: MapViewConfigOptions,
-) => {
-  const {includeVehiclesAndStationsVectorSource = false} =
-    mapViewConfigOptions || {};
-  const mapboxJsonStyle = useMapboxJsonStyle(
-    includeVehiclesAndStationsVectorSource,
-  );
+export const useMapViewConfig = () => {
+  const mapboxJsonStyle = useMapboxJsonStyle();
   const configMap = useMemo(
     () => ({styleJSON: mapboxJsonStyle}),
     [mapboxJsonStyle],
