@@ -16,7 +16,7 @@ type Props = PropsWithChildren<
     overlayPosition: 'left' | 'right';
     isLoading?: boolean;
     onPress: () => void;
-    buttonStyleOverride?: StyleProp<ViewStyle>;
+    overlayStyleOverride?: StyleProp<ViewStyle>;
   } & AccessibilityProps
 >;
 
@@ -26,7 +26,7 @@ export function WithOverlayButton({
   overlayPosition = 'right',
   isLoading,
   onPress,
-  buttonStyleOverride,
+  overlayStyleOverride,
   ...props
 }: Props) {
   const {theme} = useThemeContext();
@@ -36,10 +36,9 @@ export function WithOverlayButton({
       <View style={styles.content}>{children}</View>
       <View
         style={[
-          styles.background,
-          styles.button,
+          styles.overlayContainer,
           styles[overlayPosition],
-          buttonStyleOverride,
+          overlayStyleOverride,
         ]}
       >
         {isLoading ? (
@@ -55,6 +54,7 @@ export function WithOverlayButton({
             expanded={false}
             onPress={onPress}
             interactiveColor={theme.color.interactive[2]}
+            style={styles.button}
             {...props}
           />
         )}
@@ -70,7 +70,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   content: {
     width: '100%',
   },
-  button: {
+  overlayContainer: {
     position: 'absolute',
     zIndex: 2,
   },
@@ -79,12 +79,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     margin: theme.spacing.xSmall / 2, // To compensate for smaller ActivityIndicator size
   },
   background: {
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: theme.color.background.neutral[3].background,
-    borderRadius: theme.border.radius.circle,
     // Setting backgroundColor here is necessary for the ActivityIndicator
     backgroundColor: theme.color.interactive[2].default.background,
+  },
+  button: {
+    borderColor: theme.color.background.neutral[3].background,
+    borderWidth: theme.border.width.slim,
   },
   right: {
     right: theme.spacing.medium,

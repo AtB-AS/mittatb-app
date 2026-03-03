@@ -233,7 +233,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
             onPress={swap}
             overlayPosition="right"
             isLoading={updatingLocation && !to}
-            buttonStyleOverride={style.swapButton}
+            overlayStyleOverride={style.swapButton}
             accessibilityLabel={
               t(TripSearchTexts.location.swapButton.a11yLabel) +
               screenReaderPause
