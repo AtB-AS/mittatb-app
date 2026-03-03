@@ -16,6 +16,7 @@ export type StoredTripPatternsContextState = {
   removeTripPattern(tripPattern: TripPattern): Promise<void>;
   updateTripPattern(tripPattern: TripPattern): Promise<void>;
   isTripPatternStored(tripPattern: TripPattern): boolean;
+  canAddTripPattern(tripPattern: TripPattern): boolean;
 };
 const StoredTripPatternsContext = createContext<
   StoredTripPatternsContextState | undefined
@@ -71,12 +72,17 @@ export const StoredTripPatternsContextProvider =
         [tripPatterns],
       );
 
+      const canAddTripPattern = useCallback((tripPattern: TripPattern) => {
+        return tripPattern && tripPattern.legs.filter((l) => l.id).length > 0;
+      }, []);
+
       const contextValue: StoredTripPatternsContextState = {
         tripPatterns,
         addTripPattern,
         removeTripPattern,
         updateTripPattern,
         isTripPatternStored,
+        canAddTripPattern,
       };
 
       return (

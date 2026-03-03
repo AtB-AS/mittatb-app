@@ -132,8 +132,9 @@ const StoredTripPatternRow: React.FC<{
   );
 
   useEffect(() => {
-    updateTripPattern({...updatedTripPattern});
-  }, [updatedTripPattern, updateTripPattern]);
+    if (!data) return;
+    updateTripPattern({...data});
+  }, [data, updateTripPattern]);
 
   const onRightAction = useCallback(() => {
     setTripPatternToRemove(tripPattern);
@@ -186,7 +187,7 @@ const StoredTripPatternsDashboardComponentTexts = {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   contentHeading: {
-    marginHorizontal: theme.spacing.medium,
+    marginHorizontal: theme.spacing.xLarge,
   },
   errorContainer: {
     paddingBottom: theme.spacing.medium,

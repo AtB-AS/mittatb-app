@@ -16,13 +16,30 @@ export const SaveTripPatternButtonComponent =
   wrapWithExperimentalFeatureToggledComponent<SaveTripPatternButtonComponentProps>(
     'render-nothing-if-disabled',
     ({tripPattern}) => {
-      const {addTripPattern, removeTripPattern, isTripPatternStored} =
-        useStoredTripPatterns();
+      const {
+        addTripPattern,
+        removeTripPattern,
+        isTripPatternStored,
+        canAddTripPattern,
+      } = useStoredTripPatterns();
       const {t} = useTranslation();
       const {theme} = useThemeContext();
+
+      const canAdd = useMemo(() => {
+        return canAddTripPattern(tripPattern);
+      }, [tripPattern, canAddTripPattern]);
+
       const isStored = useMemo(() => {
+        if (!canAdd) {
+          return false;
+        }
+
         return isTripPatternStored(tripPattern);
-      }, [tripPattern, isTripPatternStored]);
+      }, [tripPattern, isTripPatternStored, canAdd]);
+
+      if (!canAdd) {
+        return null;
+      }
 
       return (
         <Button
