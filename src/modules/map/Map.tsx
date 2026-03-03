@@ -68,13 +68,14 @@ import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {usePreferencesContext} from '../preferences';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {GeofencingZonesAsTiles} from './components/mobility/GeofencingZonesAsTiles';
+import {useMapTimeUtc} from './hooks/use-map-time-utc';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
 export const Map = (props: MapProps) => {
   const {
     includeSnackbar,
-    isFocused,
+    isFocusedAndActive,
     tabBarHeight,
     navigateToScooterSupport,
     navigateToScooterOnboarding,
@@ -99,6 +100,11 @@ export const Map = (props: MapProps) => {
   const {mapFilter, mapState, dispatchMapState, paddingBottomMap} =
     useMapContext();
 
+  const mapTimeUtc = useMapTimeUtc(isFocusedAndActive);
+  useEffect(() => {
+    console.log('mapTimeUtc in useMapTimeUtc', mapTimeUtc);
+  }, [mapTimeUtc]);
+
   const [stalePaddingBottomMap, setStalePaddingBottomMap] =
     useState(paddingBottomMap);
 
@@ -110,7 +116,7 @@ export const Map = (props: MapProps) => {
       mapFilter?.mobility.CAR?.showAll) ??
     false;
   const shouldShowVehiclesAndStations =
-    isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
+    isFocusedAndActive && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
 
   const selectedFeature = mapState.feature;
 
@@ -122,7 +128,8 @@ export const Map = (props: MapProps) => {
   const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
-  const {data: activeShmoBooking} = useActiveShmoBookingQuery(isFocused);
+  const {data: activeShmoBooking} =
+    useActiveShmoBookingQuery(isFocusedAndActive);
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&

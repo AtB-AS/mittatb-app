@@ -34,7 +34,7 @@ export const Map_RootScreen = ({
 }: MapScreenProps<'Map_RootScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const tabBarHeight = useBottomTabBarHeight();
-  const isFocused = useIsFocusedAndActive();
+  const isFocusedAndActive = useIsFocusedAndActive();
 
   const navigateToQuay = useCallback(
     (place: StopPlace, quay: Quay) => {
@@ -150,7 +150,7 @@ export const Map_RootScreen = ({
 
   return (
     <Map
-      isFocused={isFocused}
+      isFocusedAndActive={isFocusedAndActive}
       tabBarHeight={tabBarHeight}
       navigateToQuay={navigateToQuay}
       navigateToDetails={navigateToDetails}

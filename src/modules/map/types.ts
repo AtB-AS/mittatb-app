@@ -65,7 +65,7 @@ export type ScooterHelpParams = {operatorId: string} & (
 );
 
 export type MapProps = {
-  isFocused: boolean;
+  isFocusedAndActive: boolean;
   tabBarHeight: number;
   initialLocation?: Location;
   includeSnackbar?: boolean;

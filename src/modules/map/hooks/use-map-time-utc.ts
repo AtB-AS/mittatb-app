@@ -7,26 +7,32 @@ import {useState, useCallback, useEffect} from 'react';
 const MAP_TIME_UTC_UPDATE_INTERVAL = 30 * ONE_SECOND_MS;
 
 // timestamp used for filtering tiles with outdated data
-export const useMapTimeUtc = (isFocused: boolean) => {
+export const useMapTimeUtc = (isFocusedAndActive: boolean) => {
   const [mapTimeUtc, setMapTimeUtc] = useState(getServerNowGlobal());
 
   const updateMapTimeUtc = useCallback(
-    (isFocused: boolean) => {
+    (isFocusedAndActive: boolean) => {
       const now = getServerNowGlobal();
-      if (isFocused && now > mapTimeUtc + MAP_TIME_UTC_UPDATE_INTERVAL) {
+      if (
+        isFocusedAndActive &&
+        now > mapTimeUtc + MAP_TIME_UTC_UPDATE_INTERVAL
+      ) {
         setMapTimeUtc(now);
       }
     },
     [mapTimeUtc],
   );
 
-  // update when isFocused changes
-  useEffect(() => updateMapTimeUtc(isFocused), [isFocused, updateMapTimeUtc]);
+  // update when isFocusedAndActive changes
+  useEffect(
+    () => updateMapTimeUtc(isFocusedAndActive),
+    [isFocusedAndActive, updateMapTimeUtc],
+  );
 
   // update every 30s
   useInterval(
-    () => updateMapTimeUtc(isFocused),
-    [updateMapTimeUtc, isFocused],
+    () => updateMapTimeUtc(isFocusedAndActive),
+    [updateMapTimeUtc, isFocusedAndActive],
     MAP_TIME_UTC_UPDATE_INTERVAL,
   );
 
