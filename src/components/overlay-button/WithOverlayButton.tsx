@@ -16,7 +16,7 @@ type Props = PropsWithChildren<
     overlayPosition: 'left' | 'right';
     isLoading?: boolean;
     onPress: () => void;
-    buttonStyleOverride?: StyleProp<ViewStyle>;
+    overlayStyleOverride?: StyleProp<ViewStyle>;
   } & AccessibilityProps
 >;
 
@@ -26,27 +26,28 @@ export function WithOverlayButton({
   overlayPosition = 'right',
   isLoading,
   onPress,
-  buttonStyleOverride,
+  overlayStyleOverride,
+  ...props
 }: Props) {
   const {theme} = useThemeContext();
   const styles = useStyles();
   return (
     <View style={styles.container}>
-      <View style={styles.content}>{children}</View>
+      <View style={styles.children}>{children}</View>
       <View
         style={[
-          styles.background,
-          styles.button,
+          styles.overlayContainer,
           styles[overlayPosition],
-          buttonStyleOverride,
+          overlayStyleOverride,
         ]}
       >
         {isLoading ? (
-          <ActivityIndicator
-            color={theme.color.foreground.dynamic.primary}
-            style={styles.activityIndicator}
-            size="small"
-          />
+          <View style={[styles.border, styles.activityIndicator]}>
+            <ActivityIndicator
+              color={theme.color.foreground.dynamic.primary}
+              size="small"
+            />
+          </View>
         ) : (
           <Button
             rightIcon={{svg: svgIcon}}
@@ -54,6 +55,8 @@ export function WithOverlayButton({
             expanded={false}
             onPress={onPress}
             interactiveColor={theme.color.interactive[2]}
+            style={styles.border}
+            {...props}
           />
         )}
       </View>
@@ -65,23 +68,20 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     justifyContent: 'center',
   },
-  content: {
+  children: {
     width: '100%',
   },
-  button: {
+  overlayContainer: {
     position: 'absolute',
     zIndex: 2,
   },
+  border: {
+    borderColor: theme.color.background.neutral[3].background,
+    borderWidth: theme.border.width.slim,
+  },
   activityIndicator: {
     padding: theme.spacing.medium,
-    margin: theme.spacing.xSmall / 2, // To compensate for smaller ActivityIndicator size
-  },
-  background: {
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: theme.color.background.neutral[3].background,
     borderRadius: theme.border.radius.circle,
-    // Setting backgroundColor here is necessary for the ActivityIndicator
     backgroundColor: theme.color.interactive[2].default.background,
   },
   right: {
