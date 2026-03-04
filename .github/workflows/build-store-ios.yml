@@ -27,40 +27,15 @@ jobs:
         run: exit 1
       - name: Checkout project
         uses: actions/checkout@v4
-      - name: Add Entur private registry credentials
-        run: sh ./scripts/add-entur-private-registry.sh
-        env:
-          ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
-          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
-          use-build-cache: 'false'
           app-environment: 'store'
           app-org: ${{ matrix.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
-      - uses: webfactory/ssh-agent@v0.4.1
-        with:
-          ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
-      - name: Generate native assets
-        run: |
-          rm '/usr/local/bin/2to3'
-          rm '/usr/local/bin/2to3-3.12'
-          rm '/usr/local/bin/idle3'
-          rm '/usr/local/bin/idle3.12'
-          rm '/usr/local/bin/pydoc3'
-          rm '/usr/local/bin/pydoc3.12'
-          rm '/usr/local/bin/python3'
-          rm '/usr/local/bin/python3-config'
-          rm '/usr/local/bin/python3.12'
-          rm '/usr/local/bin/python3.12-config'
-          rm '/usr/local/bin/2to3-3.11'
-          rm '/usr/local/bin/idle3.11'
-          rm '/usr/local/bin/pydoc3.11'
-          rm '/usr/local/bin/python3.11'
-          rm '/usr/local/bin/python3.11-config'
-          brew install imagemagick
-          yarn generate-native-assets
+          entur-registry-user: ${{ vars.ENTUR_REGISTRY_USER }}
+          entur-registry-token: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+          match-ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
       - name: Disable widget
         if: ${{ env.ENABLE_WIDGET != 'true' }}
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget AtbAppIntent
@@ -84,16 +59,12 @@ jobs:
           bundle exec fastlane ios testflight_prod
         env:
           APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
-      - name: Create bundle and source maps
-        run: sh ./scripts/ios/create-sourcemaps.sh
-      - name: Upload bundle and source maps
-        run: sh ./scripts/ios/upload-sourcemaps.sh
-        env:
-          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
-      - name: Upload dSYMs
-        run: sh ./scripts/ios/upload-dsyms.sh
-        env:
-          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
+      - name: Setup Bugsnag CLI
+        uses: ./.github/actions/setup-bugsnag-cli
+      - name: Upload Bugsnag symbols
+        uses: ./.github/actions/ios-upload-bugsnag
+        with:
+          bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Register app version
         run: sh ./scripts/ios/register-app-version.sh
         env:
