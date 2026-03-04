@@ -1,24 +1,25 @@
 import Foundation
 import PassKit
+import Bugsnag
 
 typealias PaymentCompletionHandler = (String?) -> Void
 
 @objc(ApplePayHandlerImpl)
 class ApplePayHandlerImpl: NSObject {
+  private static let errorDomain = "ApplePayHandlerError"
+  private static let supportedNetworks: [PKPaymentNetwork] = [
+    .amex,
+    .masterCard,
+    .visa
+  ]
+
+  private let merchantIdentifier: String?
 
   var paymentController: PKPaymentAuthorizationController?
   var paymentSummaryItems = [PKPaymentSummaryItem]()
   var paymentStatus = PKPaymentAuthorizationStatus.failure
   var completionHandler: PaymentCompletionHandler!
   var paymentData: Data?
-
-  private let merchantIdentifier: String?
-
-  static let supportedNetworks: [PKPaymentNetwork] = [
-    .amex,
-    .masterCard,
-    .visa
-  ]
 
   override init() {
     if let id = Bundle.main.object(forInfoDictionaryKey: "ApplePayMerchantId") as? String, !id.isEmpty {
@@ -64,6 +65,14 @@ class ApplePayHandlerImpl: NSObject {
         debugPrint("Presented payment controller")
       } else {
         debugPrint("Failed to present payment controller")
+        let error = NSError(
+          domain: ApplePayHandlerImpl.errorDomain,
+          code: 0,
+          userInfo: [
+            NSLocalizedDescriptionKey: "Failed to present payment controller"
+          ]
+        )
+        Bugsnag.notifyError(error)
       }
     })
   }
