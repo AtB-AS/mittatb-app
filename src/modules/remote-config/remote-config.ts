@@ -24,10 +24,8 @@ export type RemoteConfig = {
    * aztec_code_max_height when enable_new_token_barcode is true.
    */
   aztec_code_size_in_cm: number;
-  customer_feedback_url: string;
   customer_service_url: string;
   default_map_filter: string;
-  delay_share_travel_habits_screen_by_sessions_count: number;
   disable_email_field_in_profile_page: boolean;
   disable_travelcard: boolean;
   enable_activate_ticket_now: boolean;
@@ -54,7 +52,6 @@ export type RemoteConfig = {
   enable_intercom: boolean;
   enable_loading_error_screen: boolean;
   enable_loading_screen: boolean;
-  enable_map_v2: boolean;
   enable_non_transit_trip_search: boolean;
   enable_nynorsk: boolean;
   enable_new_token_barcode: boolean;
@@ -67,7 +64,6 @@ export type RemoteConfig = {
   enable_push_notifications: boolean;
   enable_realtime_map: boolean;
   enable_refunds: boolean;
-  enable_save_ticket_recipients: boolean;
   enable_server_time: boolean;
   enable_shmo_deep_integration: boolean;
   enable_show_valid_time_info: boolean;
@@ -85,7 +81,6 @@ export type RemoteConfig = {
   enable_in_app_review_for_announcements: boolean;
   enable_smart_park_and_ride: boolean;
   enable_harbor_distances_api: boolean;
-  favourite_departures_poll_interval: number;
   feedback_questions: string;
   fetch_id_token_retry_count: number;
   flex_booking_number_of_days_available: number;
@@ -98,7 +93,6 @@ export type RemoteConfig = {
   mapbox_user_name: string;
   minimum_app_version: string;
   must_upgrade_ticketing: boolean;
-  new_favourites_info_url: string;
   privacy_policy_url: string;
   service_disruption_url: string;
   token_timeout_in_seconds: number;
@@ -106,14 +100,12 @@ export type RemoteConfig = {
   use_flexible_on_directMode: boolean;
   use_flexible_on_egressMode: boolean;
   use_trygg_overgang_qr_code: boolean;
-  vehicles_poll_interval: number;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
   aztec_code_max_height: 275,
   aztec_code_padding: 20,
   aztec_code_size_in_cm: 3.5,
-  customer_feedback_url: '',
   customer_service_url: CUSTOMER_SERVICE_URL,
   default_map_filter: JSON.stringify({
     mobility: {
@@ -122,7 +114,6 @@ export const defaultRemoteConfig: RemoteConfig = {
       BICYCLE: {showAll: true},
     },
   }),
-  delay_share_travel_habits_screen_by_sessions_count: 0,
   disable_email_field_in_profile_page: false,
   disable_travelcard: false,
   enable_activate_ticket_now: false,
@@ -142,7 +133,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_intercom: false,
   enable_loading_error_screen: false,
   enable_loading_screen: true,
-  enable_map_v2: true,
   enable_non_transit_trip_search: true,
   enable_new_token_barcode: false,
   enable_new_token_barcode_base64: false,
@@ -155,7 +145,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_push_notifications: false,
   enable_realtime_map: false,
   enable_refunds: true,
-  enable_save_ticket_recipients: false,
   enable_server_time: true,
   enable_shmo_deep_integration: false,
   enable_show_valid_time_info: true,
@@ -175,7 +164,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_in_app_review_for_announcements: false,
   enable_smart_park_and_ride: false,
   enable_harbor_distances_api: false,
-  favourite_departures_poll_interval: 30000,
   feedback_questions: '',
   fetch_id_token_retry_count: 3,
   flex_booking_number_of_days_available: 7,
@@ -188,7 +176,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   mapbox_user_name: MAPBOX_USER_NAME,
   minimum_app_version: '',
   must_upgrade_ticketing: false,
-  new_favourites_info_url: '',
   privacy_policy_url: PRIVACY_POLICY_URL,
   service_disruption_url: '',
   token_timeout_in_seconds: 10,
@@ -196,7 +183,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   use_flexible_on_directMode: true,
   use_flexible_on_egressMode: true,
   use_trygg_overgang_qr_code: false,
-  vehicles_poll_interval: 20000,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -213,18 +199,12 @@ export function getConfig(): RemoteConfig {
   const aztec_code_size_in_cm =
     values['aztec_code_size_in_cm']?.asNumber() ??
     defaultRemoteConfig.aztec_code_size_in_cm;
-  const customer_feedback_url =
-    values['customer_feedback_url']?.asString() ??
-    defaultRemoteConfig.customer_feedback_url;
   const customer_service_url =
     values['customer_service_url']?.asString() ??
     defaultRemoteConfig.customer_service_url;
   const default_map_filter =
     values['default_map_filter']?.asString() ??
     defaultRemoteConfig.default_map_filter;
-  const delay_share_travel_habits_screen_by_sessions_count =
-    values['delay_share_travel_habits_screen_by_sessions_count']?.asNumber() ??
-    defaultRemoteConfig.delay_share_travel_habits_screen_by_sessions_count;
   const disable_email_field_in_profile_page =
     values['disable_email_field_in_profile_page']?.asBoolean() ?? false;
   const disable_travelcard =
@@ -285,8 +265,6 @@ export function getConfig(): RemoteConfig {
   const enable_loading_screen =
     values['enable_loading_screen']?.asBoolean() ??
     defaultRemoteConfig.enable_loading_screen;
-  const enable_map_v2 =
-    values['enable_map_v2']?.asBoolean() ?? defaultRemoteConfig.enable_map_v2;
   const enable_non_transit_trip_search =
     values['enable_non_transit_trip_search']?.asBoolean() ??
     defaultRemoteConfig.enable_non_transit_trip_search;
@@ -320,9 +298,6 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.enable_realtime_map;
   const enable_refunds =
     values['enable_refunds']?.asBoolean() ?? defaultRemoteConfig.enable_refunds;
-  const enable_save_ticket_recipients =
-    values['enable_save_ticket_recipients']?.asBoolean() ??
-    defaultRemoteConfig.enable_save_ticket_recipients;
   const enable_server_time =
     values['enable_server_time']?.asBoolean() ??
     defaultRemoteConfig.enable_server_time;
@@ -372,9 +347,6 @@ export function getConfig(): RemoteConfig {
   const enable_harbor_distances_api =
     values['enable_harbor_distances_api']?.asBoolean() ??
     defaultRemoteConfig.enable_harbor_distances_api;
-  const favourite_departures_poll_interval =
-    values['favourite_departures_poll_interval']?.asNumber() ??
-    defaultRemoteConfig.favourite_departures_poll_interval;
   const feedback_questions =
     values['feedback_questions']?.asString() ??
     defaultRemoteConfig.feedback_questions;
@@ -410,9 +382,6 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.minimum_app_version;
   const must_upgrade_ticketing =
     values['must_upgrade_ticketing']?.asBoolean() ?? false;
-  const new_favourites_info_url =
-    values['new_favourites_info_url']?.asString() ??
-    defaultRemoteConfig.new_favourites_info_url;
   const privacy_policy_url =
     values['privacy_policy_url']?.asString() ??
     defaultRemoteConfig.privacy_policy_url;
@@ -434,18 +403,13 @@ export function getConfig(): RemoteConfig {
   const use_trygg_overgang_qr_code =
     values['use_trygg_overgang_qr_code']?.asBoolean() ??
     defaultRemoteConfig.use_trygg_overgang_qr_code;
-  const vehicles_poll_interval =
-    values['vehicles_poll_interval']?.asNumber() ??
-    defaultRemoteConfig.vehicles_poll_interval;
 
   return {
     aztec_code_max_height,
     aztec_code_padding,
     aztec_code_size_in_cm,
-    customer_feedback_url,
     customer_service_url,
     default_map_filter,
-    delay_share_travel_habits_screen_by_sessions_count,
     disable_email_field_in_profile_page,
     disable_travelcard,
     enable_activate_ticket_now,
@@ -467,7 +431,6 @@ export function getConfig(): RemoteConfig {
     enable_intercom,
     enable_loading_error_screen,
     enable_loading_screen,
-    enable_map_v2,
     enable_non_transit_trip_search,
     enable_new_token_barcode,
     enable_new_token_barcode_base64,
@@ -480,7 +443,6 @@ export function getConfig(): RemoteConfig {
     enable_push_notifications,
     enable_realtime_map,
     enable_refunds,
-    enable_save_ticket_recipients,
     enable_server_time,
     enable_shmo_deep_integration,
     enable_show_valid_time_info,
@@ -498,7 +460,6 @@ export function getConfig(): RemoteConfig {
     enable_in_app_review_for_announcements,
     enable_smart_park_and_ride,
     enable_harbor_distances_api,
-    favourite_departures_poll_interval,
     feedback_questions,
     fetch_id_token_retry_count,
     flex_booking_number_of_days_available,
@@ -511,7 +472,6 @@ export function getConfig(): RemoteConfig {
     mapbox_user_name,
     minimum_app_version,
     must_upgrade_ticketing,
-    new_favourites_info_url,
     privacy_policy_url,
     service_disruption_url,
     token_timeout_in_seconds,
@@ -519,6 +479,5 @@ export function getConfig(): RemoteConfig {
     use_flexible_on_directMode,
     use_flexible_on_egressMode,
     use_trygg_overgang_qr_code,
-    vehicles_poll_interval,
   };
 }
