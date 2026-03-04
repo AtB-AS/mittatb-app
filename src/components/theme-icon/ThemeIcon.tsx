@@ -28,7 +28,7 @@ export type ThemeIconProps = {
 } & Omit<SvgProps, 'color' | 'fill'>;
 
 export const ThemeIcon = ({
-  svg,
+  svg: SvgComponent,
   color,
   size = 'normal',
   customSize,
@@ -41,7 +41,7 @@ export const ThemeIcon = ({
   const fontScale = useFontScale();
   const fill = useColor(color);
 
-  if (!svg) {
+  if (!SvgComponent) {
     notifyBugsnag('Undefined SVG provided to ThemeIcon');
     return null;
   }
@@ -61,12 +61,10 @@ export const ThemeIcon = ({
 
   return (
     <View style={style}>
-      <>
-        {svg(settings)}
-        {notification && (
-          <NotificationIndicator {...notification} iconSize={size} />
-        )}
-      </>
+      <SvgComponent {...settings} />
+      {notification && (
+        <NotificationIndicator {...notification} iconSize={size} />
+      )}
     </View>
   );
 };
