@@ -10,12 +10,12 @@ export function startApplePayPayment({
   supplementProductsWithCountAndOffer,
   totalPrice,
   language,
-  setApplePayPaymentData,
+  setPaymentData,
 }: {
   userProfilesWithCountAndOffer: any[];
   supplementProductsWithCountAndOffer: any[];
   totalPrice: number;
-  setApplePayPaymentData: (data: string) => void;
+  setPaymentData: (data: string) => void;
   language: Language;
 }) {
   if (!NativeApplePayHandler.canMakePayments()) {
@@ -44,7 +44,7 @@ export function startApplePayPayment({
       {price: totalPrice, label: APP_NAME},
     ],
     (paymentData) => {
-      paymentData && setApplePayPaymentData(paymentData);
+      paymentData && setPaymentData(paymentData);
     },
   );
 }

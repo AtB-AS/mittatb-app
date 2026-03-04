@@ -69,7 +69,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {userId} = useAuthContext();
-  const [applePayPaymentData, setApplePayPaymentData] = useState<string>();
+  const [paymentData, setPaymentData] = useState<string>();
 
   const {previousPaymentMethod, recurringPaymentMethods} =
     usePreviousPaymentMethods();
@@ -125,7 +125,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     paymentMethod,
     recipient,
     shouldSavePaymentMethod,
-    applePayPaymentData,
+    paymentData,
   });
   useDoOnceWhen(
     () => {
@@ -189,8 +189,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   // Call reserve when payment data is received from the Apple Pay payment sheet
   useDoOnceWhen(
-    () => applePayPaymentData && reserveMutation.mutate(),
-    !!applePayPaymentData,
+    () => paymentData && reserveMutation.mutate(),
+    !!paymentData,
     false,
   );
 
@@ -224,7 +224,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         userProfilesWithCountAndOffer,
         supplementProductsWithCountAndOffer,
         totalPrice,
-        setApplePayPaymentData,
+        setPaymentData,
         language,
       });
     } else {
