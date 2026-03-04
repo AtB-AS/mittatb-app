@@ -139,7 +139,12 @@ export const ActiveScooterSheet = ({
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
       headerNode={
-        activeBooking ? <ShmoTripCard shmoBooking={activeBooking} /> : null
+        activeBooking ? (
+          <ShmoTripCard
+            shmoBooking={activeBooking}
+            isFocused={isFocusedAndActive}
+          />
+        ) : null
       }
       bottomSheetHeaderType={BottomSheetHeaderType.None}
     >

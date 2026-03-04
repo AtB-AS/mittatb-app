@@ -8,14 +8,18 @@ import {useTransportColor} from '@atb/utils/use-transport-color';
 import {ShmoBooking, ShmoBookingState} from '@atb/api/types/mobility';
 import {LineWithVerticalBars} from '@atb/components/line-with-vertical-bars';
 import {View} from 'react-native';
+import {ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
 
 type ShmoTripCardProps = {
   shmoBooking: ShmoBooking;
+  isFocused: boolean;
 };
 
-export const ShmoTripCard = ({shmoBooking}: ShmoTripCardProps) => {
+export const ShmoTripCard = ({shmoBooking, isFocused}: ShmoTripCardProps) => {
   const styles = useStyles();
-  const {serverNow} = useTimeContext();
+  const {serverNow} = useTimeContext(
+    isFocused ? ONE_SECOND_MS * 5 : ONE_MINUTE_MS,
+  );
   const backgroundColor = useTransportColor('scooter', 'escooter');
 
   return (

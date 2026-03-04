@@ -162,9 +162,9 @@ export const DetailsContent: React.FC<Props> = ({
   return (
     <Section style={styles.section}>
       {hasShmoBookingId(fc) ? (
-        <FareContractShmoHeaderSectionItem fareContract={fc} />
+        <FareContractShmoHeaderSectionItem fareContract={fc} now={now} />
       ) : (
-        <FareContractHeaderSectionItem fareContract={fc} />
+        <FareContractHeaderSectionItem fareContract={fc} now={now} />
       )}
 
       {hasShmoBookingId(fc) ? (

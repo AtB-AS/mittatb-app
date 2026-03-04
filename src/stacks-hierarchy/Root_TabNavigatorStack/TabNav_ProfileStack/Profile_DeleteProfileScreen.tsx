@@ -17,14 +17,19 @@ import {useDeleteAgeVerificationMutation} from '@atb/modules/mobility';
 import {useMutation} from '@tanstack/react-query';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
 
 type Props = ProfileScreenProps<'Profile_DeleteProfileScreen'>;
 
 export const Profile_DeleteProfileScreen = ({navigation}: Props) => {
+  const isFocused = useIsFocusedAndActive();
   const styles = useStyles();
   const {t} = useTranslation();
   const {signOut, customerNumber} = useAuthContext();
-  const {serverNow} = useTimeContext();
+  const {serverNow} = useTimeContext(
+    isFocused ? ONE_SECOND_MS * 5 : ONE_MINUTE_MS,
+  );
   const {fareContracts: availableFareContracts} = useFareContracts(
     {availability: 'available'},
     serverNow,

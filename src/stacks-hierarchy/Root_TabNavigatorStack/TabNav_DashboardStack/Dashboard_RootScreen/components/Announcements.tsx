@@ -14,16 +14,20 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {findZoneInLocation} from '@atb/utils/use-find-zone-in-location';
 import {useMemo} from 'react';
 import Animated, {LinearTransition} from 'react-native-reanimated';
+import {ONE_MINUTE_MS} from '@atb/utils/durations';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
+  isFocused: boolean;
 };
 
-export const Announcements = ({style}: Props) => {
+export const Announcements = ({style, isFocused}: Props) => {
   const {findAnnouncements} = useAnnouncementsContext();
   const {t} = useTranslation();
 
-  const {serverNow} = useTimeContext();
+  const {serverNow} = useTimeContext(
+    isFocused ? ONE_MINUTE_MS : ONE_MINUTE_MS * 2,
+  );
   const {fareContracts: validFareContracts} = useFareContracts(
     {availability: 'available', status: 'valid'},
     serverNow,

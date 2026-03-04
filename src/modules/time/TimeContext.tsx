@@ -1,15 +1,25 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {z} from 'zod';
 import {useInterval} from '@atb/utils/use-interval';
 import {useServerTimeQuery} from './use-server-time-query';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
+
+const TEN_SECONDS_MS = ONE_SECOND_MS * 10;
 
 type TimeContextState = {
   /**
-   * The current time in milliseconds, updated every second. This is based
+   * The current time in milliseconds. This is based
    * on server time when possible, and can be safely used for checking the
    * validity of fare contracts.
    */
-  serverNow: number;
+  getServerNow: () => number;
 };
 
 const TimeContext = createContext<TimeContextState | undefined>(undefined);
@@ -35,7 +45,7 @@ const TimeResult = z.object({
 });
 
 export const TimeContextProvider = ({children}: Props) => {
-  const [serverNow, setServerNow] = useState(Date.now());
+  const serverNowRef = useRef(Date.now());
 
   const {data} = useServerTimeQuery();
   useEffect(() => {
@@ -46,21 +56,27 @@ export const TimeContextProvider = ({children}: Props) => {
   }, [data]);
 
   useInterval(
-    () => setServerNow(Date.now() + serverTimeOffsetGlobal),
+    () => {
+      serverNowRef.current = Date.now() + serverTimeOffsetGlobal;
+    },
     // NOTE: When we get new server time data, we need to reset this interval.
     // This is due to a bug in React Native that causes intervals to stop
     // running when device time is set back in time.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data],
-    10000,
+    1000,
     false,
     true,
   );
 
+  const getServerNow = useCallback(() => {
+    return serverNowRef.current;
+  }, []);
+
   return (
     <TimeContext.Provider
       value={{
-        serverNow,
+        getServerNow,
       }}
     >
       {children}
@@ -68,12 +84,31 @@ export const TimeContextProvider = ({children}: Props) => {
   );
 };
 
-export function useTimeContext() {
+/**
+ * Returns the current time in milliseconds. This is based
+ * on server time when possible, and can be safely used for checking the
+ * validity of fare contracts.
+ *
+ * @param updateInterval - The interval at which to update the time in milliseconds. Defaults to 10 seconds.
+ * @returns The current time in milliseconds.
+ * @throws An error if the function is used outside of a TimeContextProvider.
+ */
+export function useTimeContext(updateInterval: number = TEN_SECONDS_MS) {
   const context = useContext(TimeContext);
   if (context === undefined) {
-    throw new Error(
-      'useTimeContextState must be used within a TimeContextProvider',
-    );
+    throw new Error('useTimeContext must be used within a TimeContextProvider');
   }
-  return context;
+
+  const [serverNow, setServerNow] = useState(context.getServerNow());
+  useInterval(
+    () => {
+      setServerNow(context.getServerNow());
+    },
+    [context],
+    updateInterval,
+    false,
+    true,
+  );
+
+  return {serverNow};
 }
