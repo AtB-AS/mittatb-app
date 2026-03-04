@@ -3,7 +3,7 @@ import {ONE_MINUTE_MS} from '@atb/utils/durations';
 import {useInterval} from '@atb/utils/use-interval';
 import {useState, useCallback} from 'react';
 
-// Use case: filtering tiles with expired data
+// Use case: filter out features with expired data
 export const useMapTimeUtc = (isFocusedAndActive: boolean) => {
   const [mapTimeUtc, setMapTimeUtc] = useState(getServerNowGlobal());
 
