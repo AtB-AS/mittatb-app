@@ -4,7 +4,6 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext, Theme} from '@atb/theme';
 import {PropsWithChildren, ReactNode, Ref} from 'react';
 import {View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Processing} from '@atb/components/loading';
 import {dictionary, useTranslation} from '@atb/translations';
 
@@ -83,8 +82,7 @@ const ContentBody = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     content: {
       flex: 1,

@@ -4,30 +4,29 @@ import {
   TextStyle,
   ImageStyle,
 } from 'react-native';
-import {Mode as ThemeMode, Theme} from './colors';
+import {Theme} from './colors';
 import {useThemeContext} from './ThemeContext';
+import {useSafeAreaInsets, EdgeInsets} from 'react-native-safe-area-context';
 
 export type NamedStyles<T> = {
   [P in keyof T]: ViewStyle | TextStyle | ImageStyle;
 };
-export type ThemedStyles<T> = (theme: Theme, themeName: ThemeMode) => T;
+export type ThemedStyles<T> = (theme: Theme, insets: EdgeInsets) => T;
 
 type StyleSheetType = typeof StyleSheetNative;
 interface ExtendedStyleSheet extends StyleSheetType {
   createThemeHook<T>(input: ThemedStyles<NamedStyles<T>>): () => NamedStyles<T>;
-  createTheme<T>(
-    input: ThemedStyles<NamedStyles<T>>,
-  ): ThemedStyles<NamedStyles<T>>;
 }
 
 export function useStyle<T extends NamedStyles<T>>(
   style: ThemedStyles<T> | T,
 ): T {
-  const {theme, themeName} = useThemeContext();
+  const {theme} = useThemeContext();
+  const insets = useSafeAreaInsets();
   if (!isThemedStyles<T>(style)) {
     return style;
   }
-  return style(theme, themeName);
+  return style(theme, insets);
 }
 
 function isThemedStyles<T>(style: any): style is ThemedStyles<T> {
@@ -42,11 +41,5 @@ export const StyleSheet: ExtendedStyleSheet = {
     return function useThemeStyle() {
       return useStyle(input);
     };
-  },
-  createTheme<T>(
-    input: ThemedStyles<NamedStyles<T>>,
-  ): ThemedStyles<NamedStyles<T>> {
-    return (theme: Theme, themeName: ThemeMode) =>
-      StyleSheetNative.create<NamedStyles<T>>(input(theme, themeName));
   },
 };

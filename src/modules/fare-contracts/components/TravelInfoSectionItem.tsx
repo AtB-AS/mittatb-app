@@ -21,7 +21,6 @@ import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
-import {useTimeContext} from '@atb/modules/time';
 import {useSectionItem} from '@atb/components/sections';
 import {isDefined} from '@atb/utils/presence';
 import {SentOrReceivedMessageBox} from './SentOrReceivedMessageBox';
@@ -36,17 +35,18 @@ import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 type Props = {
   fc: FareContractType;
   onNavigateToPurchaseFlow?: (selection: PurchaseSelectionType) => void;
+  now: number;
 };
 
 export const TravelInfoSectionItem = ({
   fc,
   onNavigateToPurchaseFlow,
+  now,
 }: Props) => {
   const {t, language} = useTranslation();
-  const {serverNow} = useTimeContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
 
-  const {validityStatus} = getFareContractInfo(serverNow, fc, currentUserId);
+  const {validityStatus} = getFareContractInfo(now, fc, currentUserId);
 
   const {userProfiles, fareProductTypeConfigs, fareZones} =
     useFirestoreConfigurationContext();

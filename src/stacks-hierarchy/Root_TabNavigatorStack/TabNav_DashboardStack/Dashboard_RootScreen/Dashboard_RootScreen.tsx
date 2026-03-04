@@ -292,10 +292,12 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
 
         <Announcements
           style={[style.contentSection, style.contentSection__horizontalScroll]}
+          isFocused={isFocused}
         />
 
         {enable_ticketing && (
           <CompactFareContracts
+            isFocused={isFocused}
             style={style.contentSection}
             onPressDetails={(fareContractId: string) => {
               return navigation.navigate({

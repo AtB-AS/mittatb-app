@@ -21,15 +21,20 @@ import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen
 import type {ScooterHelpScreenProps} from '@atb/stacks-hierarchy/Root_ScooterHelp/Root_ScooterHelpScreen';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {useApplePassPresentationSuppression} from '@atb/modules/native-bridges';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
 export function Root_FareContractDetailsScreen({navigation, route}: Props) {
+  const isFocused = useIsFocusedAndActive();
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const {enable_ticket_information} = useRemoteConfigContext();
-  const {serverNow} = useTimeContext();
+  const {serverNow} = useTimeContext(
+    isFocused ? ONE_SECOND_MS * 5 : ONE_MINUTE_MS,
+  );
   const analytics = useAnalyticsContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
   const {fareContract, preassignedFareProduct} = useTicketInfo(

@@ -44,6 +44,7 @@ export const DatePickerSheet = <T extends string>({
   bottomSheetModalRef,
   onCloseFocusRef,
 }: Props<T>) => {
+  const keyboardHeight = useKeyboardHeight();
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme, themeName} = useThemeContext();
@@ -70,7 +71,7 @@ export const DatePickerSheet = <T extends string>({
       closeOnBackdropPress={!isSpinning}
       enablePanDownToClose={!isSpinning}
     >
-      <View style={styles.container}>
+      <View style={[styles.container, {paddingBottom: keyboardHeight}]}>
         <RadioSegments
           color={theme.color.interactive[2]}
           activeIndex={options.findIndex((o) => o.option === selectedOptionId)}
@@ -107,12 +108,9 @@ export const DatePickerSheet = <T extends string>({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const keyboardHeight = useKeyboardHeight();
-
   return {
     container: {
       paddingHorizontal: theme.spacing.medium,
-      paddingBottom: keyboardHeight,
       alignItems: 'center',
     },
     button: {marginVertical: theme.spacing.medium},
