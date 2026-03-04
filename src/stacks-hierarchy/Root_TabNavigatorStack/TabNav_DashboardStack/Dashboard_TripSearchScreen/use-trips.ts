@@ -9,7 +9,10 @@ import {useCallback, useEffect, useMemo} from 'react';
 import type {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 import type {TripPatternWithKey} from '@atb/screen-components/travel-details-screens';
 import {useJourneyModes} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/hooks';
-import {TripsProps, useTripsInfiniteQuery} from './use-trips-infinite-query';
+import {
+  TripsInfiniteQueryProps,
+  useTripsInfiniteQuery,
+} from './use-trips-infinite-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {sanitizeSearchTime} from './utils';
 import Bugsnag from '@bugsnag/react-native';
@@ -55,7 +58,7 @@ export function useTrips(
     [searchTime],
   );
 
-  const tripsProps: TripsProps = useMemo(
+  const tripsInfiniteQueryProps: TripsInfiniteQueryProps = useMemo(
     () => ({
       fromLocation,
       toLocation,
@@ -85,7 +88,7 @@ export function useTrips(
     error: tripsError,
     hasNextPage,
     fetchNextPage,
-  } = useTripsInfiniteQuery(tripsProps, tripsInfiniteQueryEnabled);
+  } = useTripsInfiniteQuery(tripsInfiniteQueryProps, tripsInfiniteQueryEnabled);
 
   const tripPatterns = useMemo(
     () =>
@@ -115,20 +118,20 @@ export function useTrips(
   ]);
 
   const sendAnalyticsSearchEvent = useCallback(
-    (tripsProps: TripsProps) =>
+    (tripsInfiniteQueryProps: TripsInfiniteQueryProps) =>
       tripsInfiniteQueryEnabled &&
       analytics.logEvent('Trip search', 'Search performed', {
-        searchTime: tripsProps.searchTime,
+        searchTime: tripsInfiniteQueryProps.searchTime,
         filtersSelection: toLoggableFiltersSelection(
-          tripsProps.travelSearchFiltersSelection,
+          tripsInfiniteQueryProps.travelSearchFiltersSelection,
         ),
       }),
     [analytics, tripsInfiniteQueryEnabled],
   );
 
   useEffect(() => {
-    sendAnalyticsSearchEvent(tripsProps);
-  }, [sendAnalyticsSearchEvent, tripsProps]);
+    sendAnalyticsSearchEvent(tripsInfiniteQueryProps);
+  }, [sendAnalyticsSearchEvent, tripsInfiniteQueryProps]);
 
   const shouldSaveSearch =
     tripLocationsAreValid &&
@@ -157,12 +160,12 @@ export function useTrips(
         ? 'search-success'
         : 'idle';
 
-  const timeOfLastSearch = tripsProps.searchTime.date;
+  const timeOfLastSearch = tripsInfiniteQueryProps.searchTime.date;
 
   const loadNextTripsPage = useCallback(() => {
     if (tripsInfiniteQueryEnabled && hasNextPage && !tripsIsFetching) {
       fetchNextPage();
-      sendAnalyticsSearchEvent(tripsProps);
+      sendAnalyticsSearchEvent(tripsInfiniteQueryProps);
     }
   }, [
     fetchNextPage,
@@ -170,7 +173,7 @@ export function useTrips(
     sendAnalyticsSearchEvent,
     tripsInfiniteQueryEnabled,
     tripsIsFetching,
-    tripsProps,
+    tripsInfiniteQueryProps,
   ]);
 
   const loadMoreTrips = hasNextPage ? loadNextTripsPage : undefined;

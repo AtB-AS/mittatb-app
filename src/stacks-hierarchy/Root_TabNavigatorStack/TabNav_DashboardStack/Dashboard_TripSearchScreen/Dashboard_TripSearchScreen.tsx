@@ -46,7 +46,6 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {CityZoneMessage} from './components/CityZoneMessage';
 import {TripPattern} from '@atb/api/types/trips';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trips-query';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
@@ -64,6 +63,7 @@ import {TravelSearchFiltersBottomSheet} from './components/TravelSearchFiltersBo
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {WithOverlayButton} from '@atb/components/overlay-button';
+import {useNonTransitTrips} from './use-non-transit-trips';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -117,7 +117,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     tripsIsNetworkError,
   } = useTrips(from, to, searchTime, filtersState.filtersSelection);
 
-  const {nonTransitTrips} = useNonTransitTripsQuery(
+  const {nonTransitTripPatterns} = useNonTransitTrips(
     from,
     to,
     searchTime,
@@ -244,7 +244,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   const nonTransitTripsVisible =
     (tripPatterns.length > 0 || tripsSearchState === 'search-empty-result') &&
-    nonTransitTrips.length > 0;
+    nonTransitTripPatterns.length > 0;
 
   const refreshControlProps = useMemo(() => {
     // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
@@ -439,7 +439,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 )}
               {nonTransitTripsVisible && (
                 <NonTransitResults
-                  tripPatterns={nonTransitTrips}
+                  tripPatterns={nonTransitTripPatterns}
                   onDetailsPressed={onPressed}
                 />
               )}

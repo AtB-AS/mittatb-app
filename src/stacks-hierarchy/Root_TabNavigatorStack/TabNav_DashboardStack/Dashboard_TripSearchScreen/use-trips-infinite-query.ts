@@ -22,20 +22,23 @@ import {TripSearchTime} from '../types';
 import {ErrorResponse} from '@atb-as/utils';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 
-export type TripsProps = {
+export type AllTripsProps = {
   fromLocation?: Location;
   toLocation?: Location;
   arriveBy: boolean;
   searchTime: TripSearchTime;
   travelSearchFiltersSelection?: TravelSearchFiltersSelectionType;
+};
+
+export type TripsInfiniteQueryProps = AllTripsProps & {
   journeySearchModes: Modes;
 };
 
 export const useTripsInfiniteQuery = (
-  tripsProps: TripsProps,
+  tripsInfiniteQueryProps: TripsInfiniteQueryProps,
   enabled: boolean,
 ) => {
-  const queryKey = ['TRIPS_INFINITE_QUERY_KEY', tripsProps];
+  const queryKey = ['TRIPS_INFINITE_QUERY_KEY', tripsInfiniteQueryProps];
 
   return useInfiniteQuery<
     TripsQuery,
@@ -46,7 +49,7 @@ export const useTripsInfiniteQuery = (
   >({
     queryKey,
     queryFn: ({pageParam: cursor, signal}) =>
-      tripsSearch(createTripsQuery(tripsProps, cursor), {
+      tripsSearch(createTripsQuery(tripsInfiniteQueryProps, cursor), {
         signal,
       }),
     maxPages: 100,
@@ -59,7 +62,7 @@ export const useTripsInfiniteQuery = (
 };
 
 function createTripsQuery(
-  tripsProps: TripsProps,
+  tripsInfiniteQueryProps: TripsInfiniteQueryProps,
   cursor?: string,
 ): TripsQueryVariables {
   const {
@@ -69,7 +72,7 @@ function createTripsQuery(
     arriveBy,
     travelSearchFiltersSelection,
     journeySearchModes,
-  } = tripsProps;
+  } = tripsInfiniteQueryProps;
 
   const from = {
     ...fromLocation,
