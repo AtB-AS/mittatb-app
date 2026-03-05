@@ -110,10 +110,6 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_push_notifications',
   },
   {
-    name: 'isRealtimeMapEnabled',
-    remoteConfigKey: 'enable_realtime_map',
-  },
-  {
     name: 'isRefundsEnabled',
     remoteConfigKey: 'enable_refunds',
   },
