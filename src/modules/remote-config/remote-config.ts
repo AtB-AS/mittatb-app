@@ -72,7 +72,6 @@ export type RemoteConfig = {
   mapbox_nsr_tileset_id: string;
   mapbox_user_name: string;
   minimum_app_version: string;
-  must_upgrade_ticketing: boolean;
   privacy_policy_url: string;
   service_disruption_url: string;
   token_timeout_in_seconds: number;
@@ -145,7 +144,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   mapbox_nsr_tileset_id: MAPBOX_NSR_TILESET_ID,
   mapbox_user_name: MAPBOX_USER_NAME,
   minimum_app_version: '',
-  must_upgrade_ticketing: false,
   privacy_policy_url: PRIVACY_POLICY_URL,
   service_disruption_url: '',
   token_timeout_in_seconds: 10,
@@ -326,8 +324,6 @@ export function getConfig(): RemoteConfig {
   const minimum_app_version =
     values['minimum_app_version']?.asString() ??
     defaultRemoteConfig.minimum_app_version;
-  const must_upgrade_ticketing =
-    values['must_upgrade_ticketing']?.asBoolean() ?? false;
   const privacy_policy_url =
     values['privacy_policy_url']?.asString() ??
     defaultRemoteConfig.privacy_policy_url;
@@ -401,7 +397,6 @@ export function getConfig(): RemoteConfig {
     mapbox_nsr_tileset_id,
     mapbox_user_name,
     minimum_app_version,
-    must_upgrade_ticketing,
     privacy_policy_url,
     service_disruption_url,
     token_timeout_in_seconds,

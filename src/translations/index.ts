@@ -29,7 +29,6 @@ export {default as ProfileTexts} from './screens/Profile';
 export {default as FareContractTexts} from './screens/FareContract';
 export {default as TicketingTexts} from './screens/Ticketing';
 export {default as TicketingSplashTexts} from './screens/TicketingSplash';
-export {default as UpgradeSplashTexts} from './screens/UpgradeSplash';
 export {default as NearbyTexts} from './screens/Nearby';
 export {default as AddEditFavoriteTexts} from './screens/subscreens/AddEditFavorite';
 export {default as EnrollmentTexts} from './screens/subscreens/Enrollment';
