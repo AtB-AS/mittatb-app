@@ -76,9 +76,6 @@ export type RemoteConfig = {
   privacy_policy_url: string;
   service_disruption_url: string;
   token_timeout_in_seconds: number;
-  use_flexible_on_accessMode: boolean;
-  use_flexible_on_directMode: boolean;
-  use_flexible_on_egressMode: boolean;
   use_trygg_overgang_qr_code: boolean;
 };
 
@@ -152,9 +149,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   privacy_policy_url: PRIVACY_POLICY_URL,
   service_disruption_url: '',
   token_timeout_in_seconds: 10,
-  use_flexible_on_accessMode: true,
-  use_flexible_on_directMode: true,
-  use_flexible_on_egressMode: true,
   use_trygg_overgang_qr_code: false,
 };
 
@@ -343,15 +337,6 @@ export function getConfig(): RemoteConfig {
   const token_timeout_in_seconds =
     values['token_timeout_in_seconds']?.asNumber() ??
     defaultRemoteConfig.token_timeout_in_seconds;
-  const use_flexible_on_accessMode =
-    values['use_flexible_on_accessMode']?.asBoolean() ??
-    defaultRemoteConfig.use_flexible_on_accessMode;
-  const use_flexible_on_directMode =
-    values['use_flexible_on_directMode']?.asBoolean() ??
-    defaultRemoteConfig.use_flexible_on_directMode;
-  const use_flexible_on_egressMode =
-    values['use_flexible_on_egressMode']?.asBoolean() ??
-    defaultRemoteConfig.use_flexible_on_egressMode;
   const use_trygg_overgang_qr_code =
     values['use_trygg_overgang_qr_code']?.asBoolean() ??
     defaultRemoteConfig.use_trygg_overgang_qr_code;
@@ -420,9 +405,6 @@ export function getConfig(): RemoteConfig {
     privacy_policy_url,
     service_disruption_url,
     token_timeout_in_seconds,
-    use_flexible_on_accessMode,
-    use_flexible_on_directMode,
-    use_flexible_on_egressMode,
     use_trygg_overgang_qr_code,
   };
 }

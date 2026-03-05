@@ -42,18 +42,6 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_flexible_transport',
   },
   {
-    name: 'isFlexibleTransportOnAccessModeEnabled',
-    remoteConfigKey: 'use_flexible_on_accessMode',
-  },
-  {
-    name: 'isFlexibleTransportOnDirectModeEnabled',
-    remoteConfigKey: 'use_flexible_on_directMode',
-  },
-  {
-    name: 'isFlexibleTransportOnEgressModeEnabled',
-    remoteConfigKey: 'use_flexible_on_egressMode',
-  },
-  {
     name: 'isFromTravelSearchToTicketBoatEnabled',
     remoteConfigKey: 'enable_from_travel_search_to_ticket_boat',
   },
