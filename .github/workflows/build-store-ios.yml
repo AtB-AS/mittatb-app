@@ -42,6 +42,9 @@ jobs:
       - name: Enable apple pass suppression
         if: ${{ env.ENABLE_APPLE_PASS_SUPPRESSION == 'true' }}
         run: bundle exec fastlane ios enable_pass_presentation_suppression_entitlement
+      - name: Enable Apple Pay entitlement
+        if: ${{ env.APPLE_PAY_MERCHANT_ID != '' }}
+        run: bundle exec fastlane ios enable_apple_pay_entitlement
       - name: Run fastlane build
         run: bundle exec fastlane ios build
         env:

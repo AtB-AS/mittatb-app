@@ -8,6 +8,7 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {parseISO} from 'date-fns';
 import {PaymentType, listRecurringPayments} from '@atb/modules/ticketing';
 import {onlyUniques} from '@atb/utils/only-uniques';
+import {isNonRecurringPaymentType} from './utils';
 
 export function usePreviousPaymentMethods(): {
   recurringPaymentMethods: PaymentMethod[] | undefined;
@@ -157,9 +158,15 @@ export const savePreviousPayment = async (
 
   if (!recurringPaymentId) {
     if (!paymentType) return;
-    await savePreviousPaymentMethodByUser(userId, {
-      paymentType: paymentType,
-    });
+    if (isNonRecurringPaymentType(paymentType)) {
+      await savePreviousPaymentMethodByUser(userId, {
+        paymentType: paymentType,
+      });
+    } else {
+      await savePreviousPaymentMethodByUser(userId, {
+        paymentType: PaymentType.PaymentCard,
+      });
+    }
   } else {
     try {
       // Brief delay to display previous payment method immediately after adding a new card
