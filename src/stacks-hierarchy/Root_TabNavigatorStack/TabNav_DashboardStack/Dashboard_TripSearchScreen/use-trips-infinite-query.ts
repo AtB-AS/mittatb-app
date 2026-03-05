@@ -61,7 +61,7 @@ export const useTripsInfiniteQuery = (
   });
 };
 
-function createTripsQuery(
+export function createTripsQuery(
   tripsInfiniteQueryProps: TripsInfiniteQueryProps,
   cursor?: string,
 ): TripsQueryVariables {
