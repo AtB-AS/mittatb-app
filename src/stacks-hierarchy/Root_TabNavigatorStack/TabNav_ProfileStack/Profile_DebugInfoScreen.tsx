@@ -279,11 +279,6 @@ export const Profile_DebugInfoScreen = () => {
           />
 
           <LinkSectionItem
-            text="Reset feedback displayStats"
-            onPress={() => storage.set('@ATB_feedback_display_stats', '')}
-          />
-
-          <LinkSectionItem
             text="Reset frontpage favourite departures"
             onPress={() => storage.set('@ATB_user_frontpage_departures', '[]')}
           />

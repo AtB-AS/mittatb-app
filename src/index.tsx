@@ -26,7 +26,6 @@ import {AppLanguageContextProvider} from '@atb/translations/LanguageContext';
 import {LocaleContextProvider} from '@atb/modules/locale';
 import {setupConfig} from '@atb/setup';
 import {MobileTokenContextProvider} from '@atb/modules/mobile-token';
-import {FeedbackQuestionsContextProvider} from '@atb/components/feedback';
 import {FirestoreConfigurationContextProvider} from '@atb/modules/configuration';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {LogBox, Platform, UIManager} from 'react-native';
@@ -115,11 +114,9 @@ export const App = () => {
                                                         <NotificationContextProvider>
                                                           <BottomSheetModalProvider>
                                                             <BottomSheetContextProvider>
-                                                              <FeedbackQuestionsContextProvider>
-                                                                <OnboardingContextProvider>
-                                                                  <RootStack />
-                                                                </OnboardingContextProvider>
-                                                              </FeedbackQuestionsContextProvider>
+                                                              <OnboardingContextProvider>
+                                                                <RootStack />
+                                                              </OnboardingContextProvider>
                                                             </BottomSheetContextProvider>
                                                           </BottomSheetModalProvider>
                                                         </NotificationContextProvider>
