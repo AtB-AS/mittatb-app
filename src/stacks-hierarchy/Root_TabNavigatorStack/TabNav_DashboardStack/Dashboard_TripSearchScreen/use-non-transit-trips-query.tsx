@@ -7,19 +7,21 @@ import {NonTransitTripsQueryVariables} from '@atb/api/types/generated/TripsQuery
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {TripsProps} from './use-trips';
 
-export type NonTransitTripsQueryProps = TripsProps & {
-  directModes: StreetMode[];
-};
+const NON_TRANSIT_DIRECT_MODES: StreetMode[] = [
+  StreetMode.Foot,
+  StreetMode.BikeRental,
+  StreetMode.Bicycle,
+];
 
 export const useNonTransitTripsQuery = (
-  nonTransitTripsQueryProps: NonTransitTripsQueryProps,
+  tripsProps: TripsProps,
   enabled: boolean,
 ) => {
   const {isNonTransitTripSearchEnabled} = useFeatureTogglesContext();
   return useQuery({
-    queryKey: ['NON_TRANSIT_TRIPS_QUERY_KEY', nonTransitTripsQueryProps],
+    queryKey: ['NON_TRANSIT_TRIPS_QUERY_KEY', tripsProps],
     queryFn: ({signal}) =>
-      nonTransitTripSearch(createNonTransitQuery(nonTransitTripsQueryProps), {
+      nonTransitTripSearch(createNonTransitQuery(tripsProps), {
         signal,
       }),
     enabled: enabled && isNonTransitTripSearchEnabled,
@@ -29,7 +31,7 @@ export const useNonTransitTripsQuery = (
 };
 
 function createNonTransitQuery(
-  nonTransitTripsQueryProps: NonTransitTripsQueryProps,
+  nonTransitTripsQueryProps: TripsProps,
 ): NonTransitTripsQueryVariables {
   const {
     cursor: _cursor,
@@ -46,6 +48,6 @@ function createNonTransitQuery(
 
   return {
     ...nonTransitTripsQueryBase,
-    directModes: nonTransitTripsQueryProps.directModes,
+    directModes: NON_TRANSIT_DIRECT_MODES,
   };
 }

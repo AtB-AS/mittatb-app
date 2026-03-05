@@ -68,11 +68,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {WithOverlayButton} from '@atb/components/overlay-button';
 
-import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {
-  NonTransitTripsQueryProps,
-  useNonTransitTripsQuery,
-} from './use-non-transit-trips-query';
+import {useNonTransitTripsQuery} from './use-non-transit-trips-query';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -145,16 +141,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     tripsIsNetworkError,
   } = useTrips(tripsProps, tripSearchEnabled);
 
-  const nonTransitTripsQueryProps: NonTransitTripsQueryProps = useMemo(
-    () => ({
-      ...tripsProps,
-      directModes: [StreetMode.Foot, StreetMode.BikeRental, StreetMode.Bicycle],
-    }),
-    [tripsProps],
-  );
-
   const {data: nonTransitTripPatterns} = useNonTransitTripsQuery(
-    nonTransitTripsQueryProps,
+    tripsProps,
     tripSearchEnabled,
   );
 
