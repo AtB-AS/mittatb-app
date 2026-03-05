@@ -8,22 +8,6 @@ import {
 } from '@env';
 
 export type RemoteConfig = {
-  /**
-   * Some code readers are sensitive to padding around code.
-   * Configurable parameter allows quick response to reading issues.
-   */
-  aztec_code_padding: number;
-  /**
-   * Some code readers are sensitive to code size.
-   * Configurable parameter allows quick response to reading issues.
-   */
-  aztec_code_max_height: number;
-  /**
-   * Some code readers are sensitive to code size. Configurable parameter allows
-   * quick response to reading issues. This field is used instead of
-   * aztec_code_max_height when enable_new_token_barcode is true.
-   */
-  aztec_code_size_in_cm: number;
   customer_service_url: string;
   default_map_filter: string;
   disable_email_field_in_profile_page: boolean;
@@ -103,9 +87,6 @@ export type RemoteConfig = {
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
-  aztec_code_max_height: 275,
-  aztec_code_padding: 20,
-  aztec_code_size_in_cm: 3.5,
   customer_service_url: CUSTOMER_SERVICE_URL,
   default_map_filter: JSON.stringify({
     mobility: {
@@ -190,15 +171,6 @@ export type RemoteConfigKeys = keyof RemoteConfig;
 export function getConfig(): RemoteConfig {
   const values = remoteConfig().getAll();
 
-  const aztec_code_max_height =
-    values['aztec_code_max_height']?.asNumber() ??
-    defaultRemoteConfig.aztec_code_max_height;
-  const aztec_code_padding =
-    values['aztec_code_padding']?.asNumber() ??
-    defaultRemoteConfig.aztec_code_padding;
-  const aztec_code_size_in_cm =
-    values['aztec_code_size_in_cm']?.asNumber() ??
-    defaultRemoteConfig.aztec_code_size_in_cm;
   const customer_service_url =
     values['customer_service_url']?.asString() ??
     defaultRemoteConfig.customer_service_url;
@@ -405,9 +377,6 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.use_trygg_overgang_qr_code;
 
   return {
-    aztec_code_max_height,
-    aztec_code_padding,
-    aztec_code_size_in_cm,
     customer_service_url,
     default_map_filter,
     disable_email_field_in_profile_page,
