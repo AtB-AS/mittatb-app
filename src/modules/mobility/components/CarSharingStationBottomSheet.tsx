@@ -24,7 +24,6 @@ import {CarPreviews} from './CarPreviews';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {MobilityStat} from './MobilityStat';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {
   findRelevantBonusProduct,
@@ -35,6 +34,7 @@ import {
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {ProgramId, useIsEnrolled} from '@atb/modules/enrollment';
 
 type Props = {
   stationId: string;
@@ -69,7 +69,7 @@ export const CarSharingStationBottomSheet = ({
   } = useCarSharingStation(stationId);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
-  const {isBonusProgramEnabled} = useFeatureTogglesContext();
+  const isBonusEnabled = useIsEnrolled(ProgramId.BONUS);
   const {bonusProducts} = useFirestoreConfigurationContext();
   const bonusProduct = findRelevantBonusProduct(
     bonusProducts,
@@ -147,7 +147,7 @@ export const CarSharingStationBottomSheet = ({
                   </View>
                 </GenericSectionItem>
               </Section>
-              {isBonusProgramEnabled && bonusProduct && (
+              {isBonusEnabled && bonusProduct && (
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
                   operatorName={operatorName}

@@ -17,7 +17,6 @@ import {
   findRelevantBonusProduct,
 } from '@atb/modules/bonus';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {StyleSheet} from '@atb/theme';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 import {useTranslation} from '@atb/translations';
@@ -33,6 +32,7 @@ import {MobilityStats} from './MobilityStats';
 import {OperatorActionButton} from './OperatorActionButton';
 import {OperatorBenefit} from './OperatorBenefit';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
+import {ProgramId, useIsEnrolled} from '@atb/modules/enrollment';
 
 type Props = {
   stationId: string;
@@ -66,7 +66,7 @@ export const BikeStationBottomSheet = ({
     availableBikes,
   } = useBikeStation(stationId);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
-  const {isBonusProgramEnabled} = useFeatureTogglesContext();
+  const isBonusEnabled = useIsEnrolled(ProgramId.BONUS);
   const {bonusProducts} = useFirestoreConfigurationContext();
   const bonusProduct = findRelevantBonusProduct(
     bonusProducts,
@@ -161,7 +161,7 @@ export const BikeStationBottomSheet = ({
                   </View>
                 </GenericSectionItem>
               </Section>
-              {isBonusProgramEnabled && bonusProduct && (
+              {isBonusEnabled && bonusProduct && (
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
                   operatorName={operatorName}

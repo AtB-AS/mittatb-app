@@ -7,8 +7,8 @@ import {
 } from '@atb/modules/onboarding';
 import {ThemedBundlingCityBikeActive} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {bonusOnboardingId} from './config';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ProgramId} from '@atb/modules/enrollment';
 
 export type MoreTravelMethodsScreenProps =
   OnboardingCarouselScreenProps<'BonusOnboarding_MoreTravelMethodsScreen'>;
@@ -19,7 +19,7 @@ export const BonusOnboarding_MoreTravelMethodsScreen = ({
   const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
   const {navigateToNextScreen} = useOnboardingCarouselNavigation(
-    bonusOnboardingId,
+    ProgramId.BONUS,
     'BonusOnboarding_MoreTravelMethodsScreen',
   );
 
