@@ -101,11 +101,11 @@ export const App = () => {
                             <AccessibilityContextProvider>
                               <ThemeContextProvider>
                                 <FavoritesContextProvider>
-                                  <StoredTripPatternsContextProvider>
-                                    <FiltersContextProvider>
-                                      <SearchHistoryContextProvider>
-                                        <FirestoreConfigurationContextProvider>
-                                          <TicketingContextProvider>
+                                  <FiltersContextProvider>
+                                    <SearchHistoryContextProvider>
+                                      <FirestoreConfigurationContextProvider>
+                                        <TicketingContextProvider>
+                                          <StoredTripPatternsContextProvider>
                                             <MobileTokenContextProvider>
                                               <AppLanguageContextProvider>
                                                 <GeolocationContextProvider>
@@ -129,11 +129,11 @@ export const App = () => {
                                                 </GeolocationContextProvider>
                                               </AppLanguageContextProvider>
                                             </MobileTokenContextProvider>
-                                          </TicketingContextProvider>
-                                        </FirestoreConfigurationContextProvider>
-                                      </SearchHistoryContextProvider>
-                                    </FiltersContextProvider>
-                                  </StoredTripPatternsContextProvider>
+                                          </StoredTripPatternsContextProvider>
+                                        </TicketingContextProvider>
+                                      </FirestoreConfigurationContextProvider>
+                                    </SearchHistoryContextProvider>
+                                  </FiltersContextProvider>
                                 </FavoritesContextProvider>
                               </ThemeContextProvider>
                             </AccessibilityContextProvider>
