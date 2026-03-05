@@ -12,7 +12,9 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useTimeContext} from '@atb/modules/time';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import {TicketTabNavScreenProps} from './navigation-types';
-import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
+import {RefreshControl} from 'react-native-gesture-handler';
+import {AnimatedGestureHandlerScrollView} from '@atb/components/animated-gesture-handler-scroll-view';
+import {useTabScrollHandler} from './Ticketing_TicketTabNavStack';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {ThemedTicketTilted} from '@atb/theme/ThemedAssets';
 import {useQueryClient} from '@tanstack/react-query';
@@ -45,6 +47,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
 
   const styles = useStyles();
   const {t} = useTranslation();
+  const {scrollHandler} = useTabScrollHandler(1);
 
   const onPressChangeButton = () =>
     navigation.navigate('Root_SelectTravelTokenScreen');
@@ -66,8 +69,10 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
 
   return (
     <View style={styles.container}>
-      <ScrollView
+      <AnimatedGestureHandlerScrollView
         contentContainerStyle={styles.content}
+        onScroll={scrollHandler}
+        scrollEventThrottle={10}
         refreshControl={
           <RefreshControl
             refreshing={isRefetchingAvailableFareContracts}
@@ -127,7 +132,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
             }
           />
         </Section>
-      </ScrollView>
+      </AnimatedGestureHandlerScrollView>
     </View>
   );
 };

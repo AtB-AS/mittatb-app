@@ -1,9 +1,9 @@
 import {useAuthContext} from '@atb/modules/auth';
 import {AnonymousPurchaseWarning} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/AnonymousPurchaseWarning';
 import {FareProducts} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProducts';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import React from 'react';
-import {RefreshControl, ScrollView, View} from 'react-native';
+import {RefreshControl, View} from 'react-native';
 import {RecentFareContracts} from './Components/RecentFareContracts/RecentFareContracts';
 import {TicketTabNavScreenProps} from '../navigation-types';
 import {FareProductTypeConfig} from '@atb/modules/configuration';
@@ -16,12 +16,13 @@ import {ErrorWithAccountMessage} from '@atb/stacks-hierarchy/Root_TabNavigatorSt
 import {useRecentFareContracts} from '@atb/recent-fare-contracts/use-recent-fare-contracts';
 import type {RecentFareContractType} from '@atb/recent-fare-contracts';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
+import {AnimatedGestureHandlerScrollView} from '@atb/components/animated-gesture-handler-scroll-view';
+import {useTabScrollHandler} from '../Ticketing_TicketTabNavStack';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
 export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {authenticationType} = useAuthContext();
-  const {theme} = useThemeContext();
   const {
     recentFareContracts,
     recentFareContractsLoading,
@@ -35,9 +36,9 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   } = useGetFareProductsQuery();
   const selectionBuilder = usePurchaseSelectionBuilder();
 
-  const hasRecentFareContracts = !!recentFareContracts.length;
   const styles = useStyles();
   const analytics = useAnalyticsContext();
+  const {scrollHandler} = useTabScrollHandler(0);
 
   const onProductSelect = (fareProductTypeConfig: FareProductTypeConfig) => {
     analytics.logEvent('Ticketing', 'Fare product selected', {
@@ -118,7 +119,9 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   };
 
   return authenticationType !== 'none' ? (
-    <ScrollView
+    <AnimatedGestureHandlerScrollView
+      onScroll={scrollHandler}
+      scrollEventThrottle={10}
       refreshControl={
         <RefreshControl
           refreshing={isRefetchingPreassignedFareProducts}
@@ -139,16 +142,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         loading={recentFareContractsLoading}
         onSelect={onRecentFareContractSelect}
       />
-      <View
-        style={[
-          styles.container,
-          {
-            backgroundColor: hasRecentFareContracts
-              ? theme.color.background.neutral[2].background
-              : undefined,
-          },
-        ]}
-      >
+      <View style={styles.container}>
         {authenticationType !== 'phone' && (
           <AnonymousPurchaseWarning
             onPress={() =>
@@ -168,13 +162,12 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
           onProductSelect={onProductSelect}
         />
       </View>
-    </ScrollView>
+    </AnimatedGestureHandlerScrollView>
   ) : null;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginTop: theme.spacing.medium,
     paddingBottom: theme.spacing.medium,
   },
   heading: {
