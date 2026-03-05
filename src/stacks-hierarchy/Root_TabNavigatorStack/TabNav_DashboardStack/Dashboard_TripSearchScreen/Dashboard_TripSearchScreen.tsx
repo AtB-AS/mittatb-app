@@ -68,8 +68,6 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {WithOverlayButton} from '@atb/components/overlay-button';
 
-import {useNonTransitTripsQuery} from './use-non-transit-trips-query';
-
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
 const getHeaderBackgroundColor = (theme: Theme) =>
@@ -140,11 +138,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     tripsIsError,
     tripsIsNetworkError,
   } = useTrips(tripsProps, tripSearchEnabled);
-
-  const {data: nonTransitTripPatterns} = useNonTransitTripsQuery(
-    tripsProps,
-    tripSearchEnabled,
-  );
 
   const isSearching = tripsSearchState === 'searching';
   const showEmptyScreen = !tripPatterns && !isSearching && !tripsIsError;
@@ -263,11 +256,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     });
     refetchTrips();
   }, [from, to, currentLocation, searchTime, navigation, refetchTrips]);
-
-  const nonTransitTripsVisible =
-    (tripPatterns.length > 0 || tripsSearchState === 'search-empty-result') &&
-    nonTransitTripPatterns &&
-    nonTransitTripPatterns?.length > 0;
 
   const refreshControlProps = useMemo(() => {
     // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
@@ -460,9 +448,9 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     }}
                   />
                 )}
-              {nonTransitTripsVisible && (
+              {tripSearchEnabled && (
                 <NonTransitResults
-                  tripPatterns={nonTransitTripPatterns}
+                  tripsProps={tripsProps}
                   onDetailsPressed={onPressed}
                 />
               )}

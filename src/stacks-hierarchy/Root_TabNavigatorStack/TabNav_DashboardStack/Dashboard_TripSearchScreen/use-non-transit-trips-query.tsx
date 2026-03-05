@@ -13,10 +13,7 @@ const NON_TRANSIT_DIRECT_MODES: StreetMode[] = [
   StreetMode.Bicycle,
 ];
 
-export const useNonTransitTripsQuery = (
-  tripsProps: TripsProps,
-  enabled: boolean,
-) => {
+export const useNonTransitTripsQuery = (tripsProps: TripsProps) => {
   const {isNonTransitTripSearchEnabled} = useFeatureTogglesContext();
   return useQuery({
     queryKey: ['NON_TRANSIT_TRIPS_QUERY_KEY', tripsProps],
@@ -24,7 +21,7 @@ export const useNonTransitTripsQuery = (
       nonTransitTripSearch(createNonTransitQuery(tripsProps), {
         signal,
       }),
-    enabled: enabled && isNonTransitTripSearchEnabled,
+    enabled: isNonTransitTripSearchEnabled,
     staleTime: 30 * ONE_MINUTE_MS,
     gcTime: 30 * ONE_MINUTE_MS,
   });
