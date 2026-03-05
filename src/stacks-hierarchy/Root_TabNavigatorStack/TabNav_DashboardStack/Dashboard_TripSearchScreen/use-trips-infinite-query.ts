@@ -22,7 +22,7 @@ import {TripSearchTime} from '../types';
 import {ErrorResponse} from '@atb-as/utils';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 
-export type AllTripsProps = {
+export type TripsPropsBase = {
   fromLocation?: Location;
   toLocation?: Location;
   arriveBy: boolean;
@@ -30,7 +30,7 @@ export type AllTripsProps = {
   travelSearchFiltersSelection?: TravelSearchFiltersSelectionType;
 };
 
-export type TripsInfiniteQueryProps = AllTripsProps & {
+export type TripsInfiniteQueryProps = TripsPropsBase & {
   journeySearchModes: Modes;
 };
 

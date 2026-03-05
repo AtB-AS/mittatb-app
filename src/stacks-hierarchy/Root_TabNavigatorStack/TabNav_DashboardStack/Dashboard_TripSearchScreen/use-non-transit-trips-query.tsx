@@ -2,10 +2,10 @@ import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {nonTransitTripSearch} from '@atb/api/bff/trips';
 import {useQuery} from '@tanstack/react-query';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
-import {AllTripsProps, createTripsQuery} from './use-trips-infinite-query';
+import {TripsPropsBase, createTripsQuery} from './use-trips-infinite-query';
 import {NonTransitTripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 
-export type NonTransitTripsQueryProps = AllTripsProps & {
+export type NonTransitTripsQueryProps = TripsPropsBase & {
   directModes: StreetMode[];
 };
 
