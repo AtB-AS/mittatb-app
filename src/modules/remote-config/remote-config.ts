@@ -56,7 +56,6 @@ export type RemoteConfig = {
   enable_token_fallback: boolean;
   enable_travel_aid_stop_button: boolean;
   enable_travel_aid: boolean;
-  enable_vehicle_operator_logo: boolean;
   enable_vehicles_in_map: boolean;
   enable_vipps_login: boolean;
   enable_in_app_review: boolean;
@@ -72,7 +71,6 @@ export type RemoteConfig = {
   mapbox_nsr_tileset_id: string;
   mapbox_user_name: string;
   minimum_app_version: string;
-  privacy_policy_url: string;
   service_disruption_url: string;
   token_timeout_in_seconds: number;
   use_trygg_overgang_qr_code: boolean;
@@ -128,7 +126,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_token_fallback: true,
   enable_travel_aid_stop_button: false,
   enable_travel_aid: false,
-  enable_vehicle_operator_logo: false,
   enable_vehicles_in_map: false,
   enable_vipps_login: false,
   enable_in_app_review: false,
@@ -275,9 +272,6 @@ export function getConfig(): RemoteConfig {
   const enable_travel_aid_stop_button =
     values['enable_travel_aid_stop_button']?.asBoolean() ??
     defaultRemoteConfig.enable_travel_aid_stop_button;
-  const enable_vehicle_operator_logo =
-    values['enable_vehicle_operator_logo']?.asBoolean() ??
-    defaultRemoteConfig.enable_vehicle_operator_logo;
   const enable_vehicles_in_map =
     values['enable_vehicles_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_vehicles_in_map;
@@ -377,7 +371,6 @@ export function getConfig(): RemoteConfig {
     enable_token_fallback,
     enable_travel_aid_stop_button,
     enable_travel_aid,
-    enable_vehicle_operator_logo,
     enable_vehicles_in_map,
     enable_vipps_login,
     enable_in_app_review,
