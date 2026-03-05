@@ -4,7 +4,7 @@ import {
   NewConcept,
   Settings,
 } from '@atb/assets/svg/mono-icons/profile';
-import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
+import {LoadingOverlay} from '@atb/components/loading-overlay';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
@@ -388,7 +388,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           </View>
         </View>
       </FullScreenView>
-      {isLoading && <ActivityIndicatorOverlay />}
+      {isLoading && <LoadingOverlay />}
     </>
   );
 };

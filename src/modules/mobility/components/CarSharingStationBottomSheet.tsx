@@ -7,7 +7,7 @@ import {
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet} from '@atb/theme';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useCarSharingStation} from '../use-car-sharing-station';
 import {ThemeText} from '@atb/components/text';
@@ -35,6 +35,7 @@ import {
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   stationId: string;
@@ -99,8 +100,8 @@ export const CarSharingStationBottomSheet = ({
     >
       <>
         {isLoading && (
-          <View style={styles.activityIndicator}>
-            <ActivityIndicator size="large" />
+          <View style={styles.loading}>
+            <Loading size="large" />
           </View>
         )}
         {!isLoading && !isError && station && (
@@ -196,7 +197,7 @@ export const CarSharingStationBottomSheet = ({
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   return {
-    activityIndicator: {
+    loading: {
       marginBottom: theme.spacing.medium,
     },
     operatorBenefit: {

@@ -3,7 +3,6 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Theme} from '@atb/theme/colors';
 import React from 'react';
 import {
-  ActivityIndicator,
   type ColorValue,
   StyleProp,
   TextStyle,
@@ -17,6 +16,7 @@ import {
 } from '@atb/components/native-button';
 import {shadows} from '@atb/modules/map';
 import {ContrastColor, InteractiveColor} from '@atb/theme/colors';
+import {Loading} from '../loading';
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';
 type ButtonType = 'large' | 'small';
@@ -167,7 +167,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
       {(rightIcon || loading) && (
         <View style={rightStyling}>
           {loading ? (
-            <ActivityIndicator
+            <Loading
               size="small"
               color={mainContrastColor.foreground.primary}
             />

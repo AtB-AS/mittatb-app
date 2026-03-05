@@ -1,12 +1,7 @@
 import {EstimatedCall, Quay, StopPlace} from '@atb/api/types/departures';
 import {StyleSheet} from '@atb/theme';
 import React, {RefObject, useEffect, useMemo, useRef, useState} from 'react';
-import {
-  ActivityIndicator,
-  SectionList,
-  SectionListData,
-  View,
-} from 'react-native';
+import {SectionList, SectionListData, View} from 'react-native';
 import {useDepartures} from '@atb/screen-components/place-screen';
 import {
   DeparturesTexts,
@@ -30,6 +25,7 @@ import {
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   stopPlace: StopPlace;
@@ -241,7 +237,7 @@ export function QuayLineSection({
         {isLoading && (
           <GenericSectionItem>
             <View style={{width: '100%'}}>
-              <ActivityIndicator />
+              <Loading />
             </View>
           </GenericSectionItem>
         )}

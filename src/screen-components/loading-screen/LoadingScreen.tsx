@@ -1,8 +1,9 @@
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
+import {Loading} from '@atb/components/loading';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -19,10 +20,7 @@ export const LoadingScreen = React.memo(() => {
       accessibilityLabel={t(dictionary.loading)}
       testID="loadingScreen"
     >
-      <ActivityIndicator
-        size="large"
-        color={styles.activityIndicator.backgroundColor}
-      />
+      <Loading size="small" color={styles.loading.backgroundColor} />
       <ThemeText
         style={styles.loadingText}
         typography="body__m"
@@ -42,7 +40,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: getThemeColor(theme).background,
   },
   loadingText: {textAlign: 'center', marginTop: theme.spacing.medium},
-  activityIndicator: {
+  loading: {
     backgroundColor: getThemeColor(theme).foreground.primary,
   },
 }));

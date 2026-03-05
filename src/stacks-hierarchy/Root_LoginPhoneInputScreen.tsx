@@ -4,12 +4,7 @@ import {LoginTexts, PhoneInputTexts, useTranslation} from '@atb/translations';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {PhoneSignInErrorCode, useAuthContext} from '@atb/modules/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  ScrollView,
-  View,
-} from 'react-native';
+import {KeyboardAvoidingView, ScrollView, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -20,6 +15,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import phone from 'phone';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
+import {Loading} from '@atb/components/loading';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -139,8 +135,8 @@ export const Root_LoginPhoneInputScreen = ({
 
           <View style={styles.buttonView}>
             {isSubmitting && (
-              <ActivityIndicator
-                style={styles.activityIndicator}
+              <Loading
+                style={styles.loading}
                 size="large"
                 color={themeColor.foreground.primary}
               />
@@ -203,7 +199,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   phoneInput: {
     marginVertical: theme.spacing.xSmall,
   },
-  activityIndicator: {
+  loading: {
     marginVertical: theme.spacing.large,
   },
   errorMessage: {
