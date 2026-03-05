@@ -65,7 +65,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 }) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
-  const themeColor = color ?? theme.color.background.accent[0];
+  const themeColor = color ?? theme.color.background.neutral[1];
 
   const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();
 

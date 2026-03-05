@@ -51,7 +51,7 @@ export function FullScreenView(props: Props) {
   const {top} = useSafeAreaInsets();
   const {theme} = useThemeContext();
   const themeColor =
-    props.headerProps.color ?? theme.color.background.accent[0];
+    props.headerProps.color ?? theme.color.background.neutral[1];
   const backgroundColor = themeColor.background;
 
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
