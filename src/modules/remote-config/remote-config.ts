@@ -31,6 +31,7 @@ export type RemoteConfig = {
   disable_email_field_in_profile_page: boolean;
   disable_travelcard: boolean;
   enable_activate_ticket_now: boolean;
+  enable_apple_pay: boolean;
   /**
    * Configuration whether the app should use auto sale or not when reserving
    * ticket. Auto sale means that there is no need for capturing the
@@ -125,6 +126,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   disable_email_field_in_profile_page: false,
   disable_travelcard: false,
   enable_activate_ticket_now: false,
+  enable_apple_pay: false,
   enable_auto_sale: false,
   enable_backend_sms_auth: true,
   enable_bonus_program: false,
@@ -231,6 +233,9 @@ export function getConfig(): RemoteConfig {
   const enable_activate_ticket_now =
     values['enable_activate_ticket_now']?.asBoolean() ??
     defaultRemoteConfig.enable_activate_ticket_now;
+  const enable_apple_pay =
+    values['enable_apple_pay']?.asBoolean() ??
+    defaultRemoteConfig.enable_apple_pay;
   const enable_auto_sale =
     values['enable_auto_sale']?.asBoolean() ??
     defaultRemoteConfig.enable_auto_sale;
@@ -444,6 +449,7 @@ export function getConfig(): RemoteConfig {
     disable_email_field_in_profile_page,
     disable_travelcard,
     enable_activate_ticket_now,
+    enable_apple_pay,
     enable_auto_sale,
     enable_backend_sms_auth,
     enable_bonus_program,

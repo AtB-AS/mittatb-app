@@ -9,6 +9,7 @@ import {getRadioA11y, RadioIcon} from '@atb/components/radio';
 import {ThemeText} from '@atb/components/text';
 import {PaymentBrand} from './PaymentBrand';
 import {ExpiryMessage, getExpiryMessageText} from './ExpiryMessage';
+import {useFeatureTogglesContext} from '../feature-toggles';
 
 type SinglePaymentMethodProps = {
   paymentMethod: PaymentMethod;
@@ -24,6 +25,7 @@ export const SinglePaymentMethod = ({
   index,
 }: SinglePaymentMethodProps) => {
   const {t, language} = useTranslation();
+  const {isApplePayEnabled} = useFeatureTogglesContext();
   const styles = useStyles();
 
   function getPaymentTexts(method: PaymentMethod): {
@@ -71,7 +73,9 @@ export const SinglePaymentMethod = ({
 
   if (
     paymentMethod.paymentType === PaymentType.ApplePay &&
-    (Platform.OS !== 'ios' || !NativeApplePayHandler.canMakePayments())
+    (Platform.OS !== 'ios' ||
+      !isApplePayEnabled ||
+      !NativeApplePayHandler.canMakePayments())
   ) {
     return null;
   }
