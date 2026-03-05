@@ -44,7 +44,6 @@ export {default as LanguageSettingsTexts} from './screens/subscreens/LanguageSet
 export {default as UserProfileSettingsTexts} from './screens/subscreens/UserProfileSettingsTexts';
 export {default as LoginTexts} from './screens/subscreens/Login';
 export {default as dictionary} from './dictionary';
-export {default as FeedbackTexts} from './screens/Feedback';
 export {default as TravelTokenTexts} from './screens/subscreens/TravelToken';
 export {default as ConsiderTravelTokenChangeTexts} from './screens/ConsiderTravelTokenChangeScreen';
 export {default as DashboardTexts} from './screens/Dashboard';

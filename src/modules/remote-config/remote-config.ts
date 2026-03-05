@@ -63,7 +63,6 @@ export type RemoteConfig = {
   enable_in_app_review_for_announcements: boolean;
   enable_smart_park_and_ride: boolean;
   enable_harbor_distances_api: boolean;
-  feedback_questions: string;
   fetch_id_token_retry_count: number;
   flex_booking_number_of_days_available: number;
   flex_ticket_url: string;
@@ -141,7 +140,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_in_app_review_for_announcements: false,
   enable_smart_park_and_ride: false,
   enable_harbor_distances_api: false,
-  feedback_questions: '',
   fetch_id_token_retry_count: 3,
   flex_booking_number_of_days_available: 7,
   flex_ticket_url: '',
@@ -309,9 +307,6 @@ export function getConfig(): RemoteConfig {
   const enable_harbor_distances_api =
     values['enable_harbor_distances_api']?.asBoolean() ??
     defaultRemoteConfig.enable_harbor_distances_api;
-  const feedback_questions =
-    values['feedback_questions']?.asString() ??
-    defaultRemoteConfig.feedback_questions;
   const fetch_id_token_retry_count =
     values['fetch_id_token_retry_count']?.asNumber() ??
     defaultRemoteConfig.fetch_id_token_retry_count;
@@ -417,7 +412,6 @@ export function getConfig(): RemoteConfig {
     enable_in_app_review_for_announcements,
     enable_smart_park_and_ride,
     enable_harbor_distances_api,
-    feedback_questions,
     fetch_id_token_retry_count,
     flex_booking_number_of_days_available,
     flex_ticket_url,
