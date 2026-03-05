@@ -14,10 +14,6 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_apple_pay',
   },
   {
-    name: 'isBackendSmsAuthEnabled',
-    remoteConfigKey: 'enable_backend_sms_auth',
-  },
-  {
     name: 'isBonusProgramEnabled',
     remoteConfigKey: 'enable_bonus_program',
   },
