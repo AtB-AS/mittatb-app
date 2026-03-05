@@ -1,5 +1,5 @@
 import remoteConfig from '@react-native-firebase/remote-config';
-import {ENABLE_TICKETING, PRIVACY_POLICY_URL, CUSTOMER_SERVICE_URL} from '@env';
+import {ENABLE_TICKETING, CUSTOMER_SERVICE_URL} from '@env';
 import {
   MAPBOX_API_TOKEN,
   MAPBOX_NSR_SOURCE_LAYER_ID,
@@ -144,7 +144,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   mapbox_nsr_tileset_id: MAPBOX_NSR_TILESET_ID,
   mapbox_user_name: MAPBOX_USER_NAME,
   minimum_app_version: '',
-  privacy_policy_url: PRIVACY_POLICY_URL,
   service_disruption_url: '',
   token_timeout_in_seconds: 10,
   use_trygg_overgang_qr_code: false,
@@ -324,9 +323,6 @@ export function getConfig(): RemoteConfig {
   const minimum_app_version =
     values['minimum_app_version']?.asString() ??
     defaultRemoteConfig.minimum_app_version;
-  const privacy_policy_url =
-    values['privacy_policy_url']?.asString() ??
-    defaultRemoteConfig.privacy_policy_url;
   const service_disruption_url =
     values['service_disruption_url']?.asString() ??
     defaultRemoteConfig.service_disruption_url;
@@ -397,7 +393,6 @@ export function getConfig(): RemoteConfig {
     mapbox_nsr_tileset_id,
     mapbox_user_name,
     minimum_app_version,
-    privacy_policy_url,
     service_disruption_url,
     token_timeout_in_seconds,
     use_trygg_overgang_qr_code,
