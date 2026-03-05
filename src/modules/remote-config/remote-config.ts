@@ -33,7 +33,6 @@ export type RemoteConfig = {
   enable_geofencing_zones: boolean;
   enable_geofencing_zones_as_tiles: boolean;
   enable_intercom: boolean;
-  enable_loading_error_screen: boolean;
   enable_loading_screen: boolean;
   enable_non_transit_trip_search: boolean;
   enable_nynorsk: boolean;
@@ -101,7 +100,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_geofencing_zones: false,
   enable_geofencing_zones_as_tiles: false,
   enable_intercom: false,
-  enable_loading_error_screen: false,
   enable_loading_screen: true,
   enable_non_transit_trip_search: true,
   enable_new_token_barcode: false,
@@ -134,8 +132,8 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_harbor_distances_api: false,
   flex_booking_number_of_days_available: 7,
   flex_ticket_url: '',
-  live_vehicle_stale_threshold: 15,
-  loading_screen_delay_ms: 200,
+  live_vehicle_stale_threshold: 15, //
+  loading_screen_delay_ms: 200, //
   mapbox_api_token: MAPBOX_API_TOKEN,
   mapbox_nsr_source_layer_id: MAPBOX_NSR_SOURCE_LAYER_ID,
   mapbox_nsr_tileset_id: MAPBOX_NSR_TILESET_ID,
@@ -208,9 +206,6 @@ export function getConfig(): RemoteConfig {
     values['enable_geofencing_zones_as_tiles']?.asBoolean() ??
     defaultRemoteConfig.enable_geofencing_zones_as_tiles;
   const enable_intercom = values['enable_intercom']?.asBoolean() ?? false;
-  const enable_loading_error_screen =
-    values['enable_loading_error_screen']?.asBoolean() ??
-    defaultRemoteConfig.enable_loading_error_screen;
   const enable_loading_screen =
     values['enable_loading_screen']?.asBoolean() ??
     defaultRemoteConfig.enable_loading_screen;
@@ -348,7 +343,6 @@ export function getConfig(): RemoteConfig {
     enable_geofencing_zones,
     enable_geofencing_zones_as_tiles,
     enable_intercom,
-    enable_loading_error_screen,
     enable_loading_screen,
     enable_non_transit_trip_search,
     enable_new_token_barcode,
