@@ -4,6 +4,7 @@ import {useQuery} from '@tanstack/react-query';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 import {TripsPropsBase, createTripsQuery} from './use-trips-infinite-query';
 import {NonTransitTripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type NonTransitTripsQueryProps = TripsPropsBase & {
   directModes: StreetMode[];
@@ -12,17 +13,19 @@ export type NonTransitTripsQueryProps = TripsPropsBase & {
 export const useNonTransitTripsQuery = (
   nonTransitTripsQueryProps: NonTransitTripsQueryProps,
   enabled: boolean,
-) =>
-  useQuery({
+) => {
+  const {isNonTransitTripSearchEnabled} = useFeatureTogglesContext();
+  return useQuery({
     queryKey: ['NON_TRANSIT_TRIPS_QUERY_KEY', nonTransitTripsQueryProps],
     queryFn: ({signal}) =>
       nonTransitTripSearch(createNonTransitQuery(nonTransitTripsQueryProps), {
         signal,
       }),
-    enabled,
+    enabled: enabled && isNonTransitTripSearchEnabled,
     staleTime: 30 * ONE_MINUTE_MS,
     gcTime: 30 * ONE_MINUTE_MS,
   });
+};
 
 function createNonTransitQuery(
   nonTransitTripsQueryProps: NonTransitTripsQueryProps,

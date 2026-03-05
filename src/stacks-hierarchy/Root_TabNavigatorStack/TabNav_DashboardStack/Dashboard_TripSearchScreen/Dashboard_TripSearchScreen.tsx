@@ -49,7 +49,11 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {areDefaultFiltersSelected, getSearchTimeLabel} from './utils';
+import {
+  areDefaultFiltersSelected,
+  getSearchTimeLabel,
+  sanitizeSearchTime,
+} from './utils';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   GlobalMessage,
@@ -63,7 +67,12 @@ import {TravelSearchFiltersBottomSheet} from './components/TravelSearchFiltersBo
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {WithOverlayButton} from '@atb/components/overlay-button';
-import {useNonTransitTrips} from './use-non-transit-trips';
+import {TripsPropsBase} from './use-trips-infinite-query';
+import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {
+  NonTransitTripsQueryProps,
+  useNonTransitTripsQuery,
+} from './use-non-transit-trips-query';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -97,16 +106,36 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const timePickerBottomSheetModalRef = useRef<BottomSheetModal | null>(null);
   const timePickerCloseRef = useRef<View | null>(null);
 
+  const {isFlexibleTransportEnabled: isFlexibleTransportEnabledInRemoteConfig} =
+    useFeatureTogglesContext();
+
   const {location} = useGeolocationContext();
 
   const currentLocation = location || undefined;
 
   const {from, to} = useLocations(currentLocation);
+  const tripSearchEnabled = isValidTripLocations(from, to);
 
   const filtersState = useTravelSearchFiltersState();
 
-  const {isFlexibleTransportEnabled: isFlexibleTransportEnabledInRemoteConfig} =
-    useFeatureTogglesContext();
+  const arriveBy = searchTime.option === 'arrival';
+  const sanitizedSearchTime = useMemo(
+    () => sanitizeSearchTime(searchTime),
+    [searchTime],
+  );
+
+  const tripsPropsBase: TripsPropsBase = useMemo(
+    () => ({
+      fromLocation: from,
+      toLocation: to,
+      searchTime: sanitizedSearchTime,
+      arriveBy,
+      travelSearchFiltersSelection: filtersState.filtersSelection,
+      directModes: [StreetMode.Foot, StreetMode.BikeRental, StreetMode.Bicycle],
+    }),
+    [from, to, sanitizedSearchTime, arriveBy, filtersState.filtersSelection],
+  );
+
   const {
     tripPatterns,
     timeOfLastSearch,
@@ -115,13 +144,19 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     tripsSearchState,
     tripsIsError,
     tripsIsNetworkError,
-  } = useTrips(from, to, searchTime, filtersState.filtersSelection);
+  } = useTrips(tripsPropsBase, tripSearchEnabled);
 
-  const {nonTransitTripPatterns} = useNonTransitTrips(
-    from,
-    to,
-    searchTime,
-    filtersState.filtersSelection,
+  const nonTransitTripsQueryProps: NonTransitTripsQueryProps = useMemo(
+    () => ({
+      ...tripsPropsBase,
+      directModes: [StreetMode.Foot, StreetMode.BikeRental, StreetMode.Bicycle],
+    }),
+    [tripsPropsBase],
+  );
+
+  const {data: nonTransitTripPatterns} = useNonTransitTripsQuery(
+    nonTransitTripsQueryProps,
+    tripSearchEnabled,
   );
 
   const isSearching = tripsSearchState === 'searching';
@@ -244,7 +279,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   const nonTransitTripsVisible =
     (tripPatterns.length > 0 || tripsSearchState === 'search-empty-result') &&
-    nonTransitTripPatterns.length > 0;
+    nonTransitTripPatterns &&
+    nonTransitTripPatterns?.length > 0;
 
   const refreshControlProps = useMemo(() => {
     // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
