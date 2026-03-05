@@ -5,9 +5,9 @@ import {ONE_MINUTE_MS} from '@atb/utils/durations';
 import {createTripsQuery} from './use-trips-infinite-query';
 import {NonTransitTripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {TripsBaseProps} from './use-trips';
+import {TripsProps} from './use-trips';
 
-export type NonTransitTripsQueryProps = TripsBaseProps & {
+export type NonTransitTripsQueryProps = TripsProps & {
   directModes: StreetMode[];
 };
 

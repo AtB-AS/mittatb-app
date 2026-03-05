@@ -20,7 +20,7 @@ import {TripSearchTime} from '../types';
 const MAX_NUMBER_OF_CHAINED_INITIAL_SEARCHES = 5;
 const TARGET_NUMBER_OF_INITIAL_HITS = 8;
 
-export type TripsBaseProps = {
+export type TripsProps = {
   fromLocation?: Location;
   toLocation?: Location;
   arriveBy: boolean;
@@ -41,7 +41,7 @@ export type TripsBaseProps = {
  * be unnecessary.
  */
 export function useTrips(
-  tripsBaseProps: TripsBaseProps,
+  tripsProps: TripsProps,
   enabled: boolean,
 ): {
   tripPatterns: TripPatternWithKey[];
@@ -59,13 +59,13 @@ export function useTrips(
 
   const tripsInfiniteQueryProps: TripsInfiniteQueryProps = useMemo(
     () => ({
-      ...tripsBaseProps,
+      ...tripsProps,
       journeySearchModes,
     }),
-    [journeySearchModes, tripsBaseProps],
+    [journeySearchModes, tripsProps],
   );
 
-  const {fromLocation, toLocation} = tripsBaseProps;
+  const {fromLocation, toLocation} = tripsProps;
 
   const tripLocationsAreValid = isValidTripLocations(fromLocation, toLocation);
 

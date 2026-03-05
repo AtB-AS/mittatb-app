@@ -20,9 +20,9 @@ import {flatMap} from '@atb/utils/array';
 
 import {ErrorResponse} from '@atb-as/utils';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
-import {TripsBaseProps} from './use-trips';
+import {TripsProps} from './use-trips';
 
-export type TripsInfiniteQueryProps = TripsBaseProps & {
+export type TripsInfiniteQueryProps = TripsProps & {
   journeySearchModes: Modes;
 };
 

@@ -18,7 +18,7 @@ import {
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Results} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/Results';
 
-import {TripsBaseProps, useTrips} from './use-trips';
+import {TripsProps, useTrips} from './use-trips';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {Language, TripSearchTexts, useTranslation} from '@atb/translations';
 import {isInThePast} from '@atb/utils/date';
@@ -124,14 +124,13 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     [searchTime],
   );
 
-  const tripsBaseProps: TripsBaseProps = useMemo(
+  const tripsProps: TripsProps = useMemo(
     () => ({
       fromLocation: from,
       toLocation: to,
       searchTime: sanitizedSearchTime,
       arriveBy,
       travelSearchFiltersSelection: filtersState.filtersSelection,
-      directModes: [StreetMode.Foot, StreetMode.BikeRental, StreetMode.Bicycle],
     }),
     [from, to, sanitizedSearchTime, arriveBy, filtersState.filtersSelection],
   );
@@ -144,14 +143,14 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     tripsSearchState,
     tripsIsError,
     tripsIsNetworkError,
-  } = useTrips(tripsBaseProps, tripSearchEnabled);
+  } = useTrips(tripsProps, tripSearchEnabled);
 
   const nonTransitTripsQueryProps: NonTransitTripsQueryProps = useMemo(
     () => ({
-      ...tripsBaseProps,
+      ...tripsProps,
       directModes: [StreetMode.Foot, StreetMode.BikeRental, StreetMode.Bicycle],
     }),
-    [tripsBaseProps],
+    [tripsProps],
   );
 
   const {data: nonTransitTripPatterns} = useNonTransitTripsQuery(
