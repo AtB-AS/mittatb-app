@@ -14,9 +14,8 @@ export async function enrollIntoProgram(inviteKey: string) {
     .then((response) => Enrollment.parse(response.data));
 }
 
-export async function getActiveEnrollments() {
+export async function getEnrollments() {
   const url = 'enrollment/v2';
-  console.log('Fetching active enrollments from API...');
 
   return await client
     .get<EnrollmentType[]>(url, {
