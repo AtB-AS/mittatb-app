@@ -10,6 +10,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_activate_ticket_now',
   },
   {
+    name: 'isApplePayEnabled',
+    remoteConfigKey: 'enable_apple_pay',
+  },
+  {
     name: 'isBackendSmsAuthEnabled',
     remoteConfigKey: 'enable_backend_sms_auth',
   },

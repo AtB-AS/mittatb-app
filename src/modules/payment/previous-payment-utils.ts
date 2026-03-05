@@ -9,6 +9,7 @@ import {parseISO} from 'date-fns';
 import {PaymentType, listRecurringPayments} from '@atb/modules/ticketing';
 import {onlyUniques} from '@atb/utils/only-uniques';
 import {isNonRecurringPaymentType} from './utils';
+import {useFeatureTogglesContext} from '../feature-toggles';
 
 export function usePreviousPaymentMethods(): {
   recurringPaymentMethods: PaymentMethod[] | undefined;
@@ -19,6 +20,7 @@ export function usePreviousPaymentMethods(): {
   const [previousPaymentMethod, setPreviousPaymentMethod] =
     useState<PaymentMethod>();
   const {paymentTypes} = useFirestoreConfigurationContext();
+  const {isApplePayEnabled} = useFeatureTogglesContext();
 
   const isValidPaymentMethod = useCallback(
     (paymentMethod: PaymentMethod | undefined) => {
@@ -45,6 +47,14 @@ export function usePreviousPaymentMethods(): {
       if (!enabledPaymentTypes.includes(paymentMethod.paymentType))
         return false;
 
+      // Apple Pay is disabled
+      if (
+        paymentMethod.paymentType === PaymentType.ApplePay &&
+        !isApplePayEnabled
+      ) {
+        return false;
+      }
+
       if (paymentMethod.recurringPayment) {
         const now = Date.now();
         // Card registration has expired
@@ -59,7 +69,7 @@ export function usePreviousPaymentMethods(): {
 
       return true;
     },
-    [recurringPayments, paymentTypes],
+    [recurringPayments, paymentTypes, isApplePayEnabled],
   );
 
   useEffect(() => {
