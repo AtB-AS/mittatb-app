@@ -15,7 +15,7 @@ import {
 
 import {Feature} from 'geojson';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {Platform, View} from 'react-native';
+import {View} from 'react-native';
 import {MapCameraConfig, getSlightlyRaisedMapPadding} from './MapConfig';
 import {MapPropertiesType, MapProps} from './types';
 
@@ -68,13 +68,14 @@ import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {usePreferencesContext} from '../preferences';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {GeofencingZonesAsTiles} from './components/mobility/GeofencingZonesAsTiles';
+import {useMapTimeUtc} from './hooks/use-map-time-utc';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
 export const Map = (props: MapProps) => {
   const {
     includeSnackbar,
-    isFocused,
+    isFocusedAndActive,
     tabBarHeight,
     navigateToScooterSupport,
     navigateToScooterOnboarding,
@@ -99,6 +100,8 @@ export const Map = (props: MapProps) => {
   const {mapFilter, mapState, dispatchMapState, paddingBottomMap} =
     useMapContext();
 
+  const mapTimeUtc = useMapTimeUtc(isFocusedAndActive);
+
   const [stalePaddingBottomMap, setStalePaddingBottomMap] =
     useState(paddingBottomMap);
 
@@ -110,7 +113,7 @@ export const Map = (props: MapProps) => {
       mapFilter?.mobility.CAR?.showAll) ??
     false;
   const shouldShowVehiclesAndStations =
-    isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
+    isFocusedAndActive && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
 
   const selectedFeature = mapState.feature;
 
@@ -122,7 +125,8 @@ export const Map = (props: MapProps) => {
   const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
-  const {data: activeShmoBooking} = useActiveShmoBookingQuery(isFocused);
+  const {data: activeShmoBooking} =
+    useActiveShmoBookingQuery(isFocusedAndActive);
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&
@@ -143,12 +147,7 @@ export const Map = (props: MapProps) => {
   const vehicleTypeId =
     vehicle?.vehicleType.id ?? activeShmoBooking?.asset.vehicleTypeId ?? null;
 
-  // Always including the vector sources avoids laggy transitions for iOS (but buggy on Android, so skipped there),
-  // and tile requests are only sent when they are used anyway.
-  const mapViewConfig = useMapViewConfig({
-    includeVehiclesAndStationsVectorSource:
-      shouldShowVehiclesAndStations || Platform.OS !== 'android',
-  });
+  const mapViewConfig = useMapViewConfig();
 
   const [followUserLocation, setFollowUserLocation] = useState(false);
   const mapPropertiesRef = useRef<MapPropertiesType | null>({
@@ -463,6 +462,7 @@ export const Map = (props: MapProps) => {
               onPress={onMapItemClick}
               showVehicles={showVehicles}
               showStations={showStations}
+              mapTimeUtc={mapTimeUtc}
             />
           )}
         </MapView>
