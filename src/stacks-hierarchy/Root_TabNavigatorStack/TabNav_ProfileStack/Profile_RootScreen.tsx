@@ -229,7 +229,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             )}
           </Section>
           {enable_ticketing && (
-            <View>
+            <View style={style.mediumGap}>
               <ContentHeading
                 text={t(ProfileTexts.sections.information.heading)}
               />
@@ -279,7 +279,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           {(!!JSON.parse(IS_QA_ENV || 'false') ||
             __DEV__ ||
             customerProfile?.debug) && (
-            <View>
+            <View style={style.mediumGap}>
               <ContentHeading text="Developer menu" />
               <Section>
                 <LinkSectionItem
