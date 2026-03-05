@@ -14,7 +14,6 @@ export type LoadingParams = {
 
 export type LoadingState = {
   status: LoadingStatus;
-  retry: () => void;
   /**
      The parameters used to deduce the loading status are returned as a ref object,
      so they can be used in logging, error reporting etc. without causing
