@@ -18,7 +18,7 @@ import {
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Results} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/Results';
 
-import {useTrips} from './use-trips';
+import {TripsBaseProps, useTrips} from './use-trips';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {Language, TripSearchTexts, useTranslation} from '@atb/translations';
 import {isInThePast} from '@atb/utils/date';
@@ -67,7 +67,7 @@ import {TravelSearchFiltersBottomSheet} from './components/TravelSearchFiltersBo
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {WithOverlayButton} from '@atb/components/overlay-button';
-import {TripsPropsBase} from './use-trips-infinite-query';
+
 import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {
   NonTransitTripsQueryProps,
@@ -124,7 +124,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     [searchTime],
   );
 
-  const tripsPropsBase: TripsPropsBase = useMemo(
+  const tripsBaseProps: TripsBaseProps = useMemo(
     () => ({
       fromLocation: from,
       toLocation: to,
@@ -144,14 +144,14 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     tripsSearchState,
     tripsIsError,
     tripsIsNetworkError,
-  } = useTrips(tripsPropsBase, tripSearchEnabled);
+  } = useTrips(tripsBaseProps, tripSearchEnabled);
 
   const nonTransitTripsQueryProps: NonTransitTripsQueryProps = useMemo(
     () => ({
-      ...tripsPropsBase,
+      ...tripsBaseProps,
       directModes: [StreetMode.Foot, StreetMode.BikeRental, StreetMode.Bicycle],
     }),
-    [tripsPropsBase],
+    [tripsBaseProps],
   );
 
   const {data: nonTransitTripPatterns} = useNonTransitTripsQuery(

@@ -1,12 +1,11 @@
 import {InfiniteData, useInfiniteQuery} from '@tanstack/react-query';
-import {Location} from '@atb/modules/favorites';
+
 import {
   defaultJourneyModes,
   getSearchPlace,
   transportModeToEnum,
 } from './utils';
 import {tripsSearch} from '@atb/api/bff/trips';
-import type {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 import {
   Modes,
   TransportMode,
@@ -18,19 +17,12 @@ import {
 import {isDefined} from '@atb/utils/presence';
 
 import {flatMap} from '@atb/utils/array';
-import {TripSearchTime} from '../types';
+
 import {ErrorResponse} from '@atb-as/utils';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
+import {TripsBaseProps} from './use-trips';
 
-export type TripsPropsBase = {
-  fromLocation?: Location;
-  toLocation?: Location;
-  arriveBy: boolean;
-  searchTime: TripSearchTime;
-  travelSearchFiltersSelection?: TravelSearchFiltersSelectionType;
-};
-
-export type TripsInfiniteQueryProps = TripsPropsBase & {
+export type TripsInfiniteQueryProps = TripsBaseProps & {
   journeySearchModes: Modes;
 };
 

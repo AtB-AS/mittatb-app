@@ -10,14 +10,23 @@ import type {TripPatternWithKey} from '@atb/screen-components/travel-details-scr
 import {useJourneyModes} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/hooks';
 import {
   TripsInfiniteQueryProps,
-  TripsPropsBase,
   useTripsInfiniteQuery,
 } from './use-trips-infinite-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import Bugsnag from '@bugsnag/react-native';
+import {Location} from '@atb/modules/favorites';
+import {TripSearchTime} from '../types';
 
 const MAX_NUMBER_OF_CHAINED_INITIAL_SEARCHES = 5;
 const TARGET_NUMBER_OF_INITIAL_HITS = 8;
+
+export type TripsBaseProps = {
+  fromLocation?: Location;
+  toLocation?: Location;
+  arriveBy: boolean;
+  searchTime: TripSearchTime;
+  travelSearchFiltersSelection?: TravelSearchFiltersSelectionType;
+};
 
 /**
  * Hook for fetching trip results with progressive loading for the initial search.
@@ -32,7 +41,7 @@ const TARGET_NUMBER_OF_INITIAL_HITS = 8;
  * be unnecessary.
  */
 export function useTrips(
-  tripsPropsBase: TripsPropsBase,
+  tripsBaseProps: TripsBaseProps,
   enabled: boolean,
 ): {
   tripPatterns: TripPatternWithKey[];
@@ -50,13 +59,13 @@ export function useTrips(
 
   const tripsInfiniteQueryProps: TripsInfiniteQueryProps = useMemo(
     () => ({
-      ...tripsPropsBase,
+      ...tripsBaseProps,
       journeySearchModes,
     }),
-    [journeySearchModes, tripsPropsBase],
+    [journeySearchModes, tripsBaseProps],
   );
 
-  const {fromLocation, toLocation} = tripsPropsBase;
+  const {fromLocation, toLocation} = tripsBaseProps;
 
   const tripLocationsAreValid = isValidTripLocations(fromLocation, toLocation);
 
