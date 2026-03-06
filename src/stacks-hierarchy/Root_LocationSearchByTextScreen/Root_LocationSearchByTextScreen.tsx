@@ -64,6 +64,7 @@ export const Root_LocationSearchByTextScreen = ({
         title={t(LocationSearchTexts.header.title)}
         rightButton={{type: 'close'}}
         focusRef={focusRef}
+        showBorder={false}
       />
 
       <LocationSearchContent
@@ -87,9 +88,8 @@ export const Root_LocationSearchByTextScreen = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   container: {
-    backgroundColor: theme.color.background.neutral[2].background,
     flex: 1,
   },
 }));
