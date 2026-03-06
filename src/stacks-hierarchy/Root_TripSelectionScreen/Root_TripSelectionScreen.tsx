@@ -72,6 +72,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
             }));
           }}
           backgroundColor={theme.color.background.neutral[1]}
+          latestDate={selection.existingTicket?.endDate}
         />
       </View>
       <GenericSectionItem style={styles.content}>

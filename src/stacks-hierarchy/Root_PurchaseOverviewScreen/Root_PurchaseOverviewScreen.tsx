@@ -166,10 +166,10 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const onPressBuy = () => {
     if (isBookingRequired) {
-      navigation.push(
-        'Root_TripSelectionScreen',
-        rootPurchaseConfirmationScreenParams,
-      );
+      navigation.push('Root_TripSelectionScreen', {
+        ...rootPurchaseConfirmationScreenParams,
+        purchaseDeadline: params.purchaseDeadline,
+      });
       return;
     }
     if (selection.isOnBehalfOf) {
@@ -325,6 +325,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             selection={selection}
             setSelection={setSelection}
             style={styles.selectionComponent}
+            latestStartTime={selection.existingTicket?.endDate}
           />
 
           {isFree ? (

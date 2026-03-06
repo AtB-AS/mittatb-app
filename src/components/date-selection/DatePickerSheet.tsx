@@ -25,6 +25,7 @@ type Props<T extends string> = {
   onSave: (optionAndValue: DateOptionAndValue<T>) => void;
   bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
   onCloseFocusRef: RefObject<View | null>;
+  maximumDate?: Date;
 };
 
 /**
@@ -43,6 +44,7 @@ export const DatePickerSheet = <T extends string>({
   onSave,
   bottomSheetModalRef,
   onCloseFocusRef,
+  maximumDate,
 }: Props<T>) => {
   const keyboardHeight = useKeyboardHeight();
   const styles = useStyles();
@@ -99,6 +101,7 @@ export const DatePickerSheet = <T extends string>({
               // Applies timezone offset between CET and UTC to enforce CET timezone on date picker
               timeZoneOffsetInMinutes={getTimeZoneOffsetInMinutes()}
               theme={themeName}
+              maximumDate={maximumDate}
             />
           </GestureDetector>
         )}

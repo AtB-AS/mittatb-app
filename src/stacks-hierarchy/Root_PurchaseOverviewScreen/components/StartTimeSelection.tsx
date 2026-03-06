@@ -19,12 +19,14 @@ type StartTimeSelectionProps = {
   selection: PurchaseSelectionType;
   setSelection: (s: PurchaseSelectionType) => void;
   style?: StyleProp<ViewStyle>;
+  latestStartTime?: Date;
 };
 
 export function StartTimeSelection({
   selection,
   setSelection,
   style,
+  latestStartTime,
 }: StartTimeSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -102,6 +104,7 @@ export function StartTimeSelection({
         initialDate={selection.travelDate}
         onCloseFocusRef={onCloseFocusRef}
         bottomSheetModalRef={bottomSheetModalRef}
+        maximumDate={latestStartTime}
       />
     </>
   );

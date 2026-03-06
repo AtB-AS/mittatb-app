@@ -99,6 +99,7 @@ type Root_ConfirmationScreenParams = {
 
 type Root_TripSearchScreenParams = {
   selection: PurchaseSelectionType;
+  purchaseDeadline?: Date;
   mode?: 'Ticket' | 'TravelSearch';
 };
 

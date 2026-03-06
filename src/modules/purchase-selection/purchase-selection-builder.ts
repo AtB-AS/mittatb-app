@@ -141,10 +141,10 @@ const createBuilder = (
       };
       return builder;
     },
-    existingProduct(existingProduct) {
+    existingTicket(existingTicket) {
       currentSelection = {
         ...currentSelection,
-        existingProduct: existingProduct,
+        existingTicket,
       };
       return builder;
     },
