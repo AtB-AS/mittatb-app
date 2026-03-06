@@ -109,11 +109,11 @@ export function humanizePaymentTypeString(paymentType: string) {
       return 'Vipps';
     case 'amex':
       return 'American Express';
-    case 'applepay':
+    case 'apple_pay':
       return 'Apple Pay';
-    case 'googlepay':
+    case 'google_pay':
       return 'Google Pay';
     default:
-      return startCase(paymentType);
+      return startCase(paymentType.toLowerCase());
   }
 }
