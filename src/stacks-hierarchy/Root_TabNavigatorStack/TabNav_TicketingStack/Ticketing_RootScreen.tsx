@@ -17,6 +17,7 @@ export const Ticketing_RootScreen = () => {
   return (
     <View style={styles.container}>
       <FullScreenHeader
+        textOpacity={0}
         globalMessageContext={GlobalMessageContextEnum.appTicketing}
         color={theme.color.background.neutral[1]}
       />
