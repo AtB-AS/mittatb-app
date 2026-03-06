@@ -114,8 +114,14 @@ export const isSelectableProfile = (
   product: PreassignedFareProduct,
   profile: UserProfile,
 ) => {
-  return !!product.limitations.userProfileRefs?.some(
-    (allowedProfileId) => profile.id === allowedProfileId,
+  return (
+    // TODO: limitations.userProfileRefs is deprecated and should be removed in favor of limitations.userProfileLimitations
+    !!product.limitations.userProfileRefs?.some(
+      (allowedProfileId) => profile.id === allowedProfileId,
+    ) ||
+    product.limitations.userProfileLimitations?.some(
+      (allowedUserProfile) => profile.id === allowedUserProfile.userProfileRef,
+    )
   );
 };
 

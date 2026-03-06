@@ -1,14 +1,15 @@
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import {ReferenceDataNames} from '@atb/modules/configuration';
 import {Language} from '@atb/translations';
 import {getReferenceDataName} from '@atb/modules/configuration';
 
-export type UniqueWithCount<T> = T & {count: number};
+export type UniqueWithCount<T> = T & {count: number; limit?: number};
 
 export type UniqueCountState<T> = {
   state: UniqueWithCount<T>[];
   increment: (item: T) => void;
   decrement: (item: T) => void;
+  isAllCountsWithinLimit: boolean;
 };
 
 const addCount = (count: number) => count + 1;
@@ -19,6 +20,12 @@ export function useUniqueCountState<T>(
   equalityPredicate: (a: T, b: T) => boolean,
 ): UniqueCountState<T> {
   const [state, setState] = useState<UniqueWithCount<T>[]>(initialState);
+
+  const isAllCountsWithinLimit = useMemo(() => {
+    return state.every(
+      (item) => item.limit === undefined || item.count < item.limit,
+    );
+  }, [state]);
 
   const setItemCount = (item: T, countOperation: (count: number) => number) => {
     setState((prevState) => {
@@ -55,6 +62,7 @@ export function useUniqueCountState<T>(
     state,
     increment,
     decrement,
+    isAllCountsWithinLimit,
   };
 }
 
