@@ -77,12 +77,11 @@ function getQuayName(quay: Quay): string {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   quayChipContainer: {
-    backgroundColor: theme.color.background.accent[0].background,
     flexShrink: 0,
     flexGrow: 0,
-    gap: theme.spacing.medium,
   },
   quayChipContentContainer: {
+    alignItems: 'center',
     gap: theme.spacing.medium,
     paddingHorizontal: theme.spacing.medium,
     // On Android, buttons were slighly cut off by the scroll view container

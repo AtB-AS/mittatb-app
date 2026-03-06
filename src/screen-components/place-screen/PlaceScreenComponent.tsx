@@ -153,7 +153,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   stopPlaceAndQuaySelection: {
-    paddingBottom: theme.spacing.medium,
+    marginBottom: theme.spacing.medium,
   },
   quayData: {flex: 1},
   messageBox: {
