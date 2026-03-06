@@ -11,6 +11,7 @@ import {QuayView} from './components/QuayView';
 import {StopPlacesView} from './components/StopPlacesView';
 import type {DepartureSearchTime} from 'src/components/date-selection';
 import {useStopsDetailsDataQuery} from './hooks/use-stops-details-data-query';
+import {useScrollBorder} from '@atb/utils/use-scroll-border';
 
 export type PlaceScreenParams = {
   place: StopPlace;
@@ -39,6 +40,7 @@ export const PlaceScreenComponent = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
+  const {onScroll, borderStyle} = useScrollBorder();
 
   const [searchTime, setSearchTime] = useState<DepartureSearchTime>({
     option: 'now',
@@ -106,13 +108,15 @@ export const PlaceScreenComponent = ({
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader title={place.name} leftButton={{type: 'back'}} />
-      <StopPlaceAndQuaySelection
-        place={place}
-        selectedQuay={selectedQuay}
-        onPress={(quayId) => onPressQuay?.(quayId)}
-        style={styles.stopPlaceAndQuaySelection}
-      />
+      <View style={borderStyle}>
+        <FullScreenHeader title={place.name} leftButton={{type: 'back'}} />
+        <StopPlaceAndQuaySelection
+          place={place}
+          selectedQuay={selectedQuay}
+          onPress={(quayId) => onPressQuay?.(quayId)}
+          style={styles.stopPlaceAndQuaySelection}
+        />
+      </View>
 
       <View style={styles.quayData}>
         {selectedQuay ? (
@@ -127,6 +131,7 @@ export const PlaceScreenComponent = ({
             testID="departuresContentView"
             stopPlace={place}
             backgroundColor={themeColor}
+            onScroll={onScroll}
           />
         ) : (
           <StopPlacesView
@@ -140,6 +145,7 @@ export const PlaceScreenComponent = ({
             setShowOnlyFavorites={setShowOnlyFavorites}
             testID="departuresContentView"
             backgroundColor={themeColor}
+            onScroll={onScroll}
           />
         )}
       </View>
