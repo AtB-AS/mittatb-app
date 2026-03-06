@@ -1,7 +1,14 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
-import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  RefreshControl,
+  SectionList,
+  SectionListData,
+  View,
+} from 'react-native';
 import {QuaySection} from './QuaySection';
 import {FavoriteToggle} from './FavoriteToggle';
 import type {ContrastColor} from '@atb-as/theme';
@@ -39,6 +46,7 @@ type Props = {
   testID?: string;
   mode: StopPlacesMode;
   backgroundColor: ContrastColor;
+  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 } & (
   | {
       mode: 'Map';
@@ -66,6 +74,7 @@ export const StopPlacesView = (props: Props) => {
     testID,
     mode,
     backgroundColor,
+    onScroll,
   } = props;
 
   const styles = useStyles();
@@ -124,6 +133,8 @@ export const StopPlacesView = (props: Props) => {
 
   return (
     <SectionList
+      onScroll={onScroll}
+      scrollEventThrottle={16}
       ListHeaderComponent={
         <>
           {departuresIsError && (
