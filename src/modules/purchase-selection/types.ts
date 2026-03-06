@@ -12,6 +12,11 @@ import {Coordinates} from '@atb/utils/coordinates';
 import type {Leg} from '@atb/api/types/trips';
 import type {SupplementProductWithCount} from '@atb/modules/fare-contracts';
 
+type ExistingTicket = {
+  product: PreassignedFareProduct;
+  endDate: Date;
+};
+
 export type PurchaseSelectionType = {
   fareProductTypeConfig: FareProductTypeConfig;
   preassignedFareProduct: PreassignedFareProduct;
@@ -32,7 +37,7 @@ export type PurchaseSelectionType = {
   travelDate: string | undefined;
   legs: Leg[];
   isOnBehalfOf: boolean;
-  existingProduct?: PreassignedFareProduct;
+  existingTicket?: ExistingTicket;
 };
 
 /**
@@ -132,11 +137,11 @@ export type PurchaseSelectionBuilder = {
   isOnBehalfOf: (isOnBehalfOf: boolean) => PurchaseSelectionBuilder;
 
   /**
-   * Apply an existing product to the purchase selection. This is used when
+   * Apply an existing ticket to the purchase selection. This is used when
    * purchasing a supplementProduct to an existing Fare Contract.
    * @param p The product from the existing Fare Contract
    */
-  existingProduct: (p?: PreassignedFareProduct) => PurchaseSelectionBuilder;
+  existingTicket: (p?: ExistingTicket) => PurchaseSelectionBuilder;
 
   /**
    * Retrieve the built purchase selection. It is the purchase selection that

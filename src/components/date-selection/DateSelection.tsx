@@ -24,12 +24,14 @@ type DateSelectionProps = {
   searchTime: DepartureSearchTime;
   setSearchTime: (searchTime: DepartureSearchTime) => void;
   backgroundColor: ContrastColor;
+  latestDate?: Date;
 };
 
 export const DateSelection = ({
   searchTime,
   setSearchTime,
   backgroundColor,
+  latestDate,
 }: DateSelectionProps): React.JSX.Element => {
   const styles = useStyles();
   const {t, language} = useTranslation();
@@ -136,6 +138,7 @@ export const DateSelection = ({
         }))}
         bottomSheetModalRef={bottomSheetModalRef}
         onCloseFocusRef={onCloseFocusRef}
+        maximumDate={latestDate}
       />
     </>
   );
