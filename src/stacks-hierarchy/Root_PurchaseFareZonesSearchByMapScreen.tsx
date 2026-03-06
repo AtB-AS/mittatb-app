@@ -46,24 +46,23 @@ export const Root_PurchaseFareZonesSearchByMapScreen = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <FullScreenHeader
-          title={
-            isApplicableOnSingleZoneOnly
-              ? t(FareZonesTexts.header.title.singleZone)
-              : t(FareZonesTexts.header.title.multipleZone)
-          }
-          leftButton={{type: 'back'}}
-        />
+      <FullScreenHeader
+        showBorder={false}
+        title={
+          isApplicableOnSingleZoneOnly
+            ? t(FareZonesTexts.header.title.singleZone)
+            : t(FareZonesTexts.header.title.multipleZone)
+        }
+        leftButton={{type: 'back'}}
+      />
 
-        <FareZonesSelectorButtons
-          selection={selection}
-          selectNext={selectNext}
-          onVenueSearchClick={onVenueSearchClick}
-          isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
-          style={styles.selectorButtons}
-        />
-      </View>
+      <FareZonesSelectorButtons
+        selection={selection}
+        selectNext={selectNext}
+        onVenueSearchClick={onVenueSearchClick}
+        isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
+        style={styles.selectorButtons}
+      />
 
       <FareZonesSelectorMap
         selection={selection}
@@ -88,10 +87,6 @@ export const Root_PurchaseFareZonesSearchByMapScreen = ({
 const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.color.background.neutral[2].background,
-  },
-  headerContainer: {
-    backgroundColor: theme.color.background.accent[0].background,
   },
   saveButton: {
     marginHorizontal: theme.spacing.medium,
