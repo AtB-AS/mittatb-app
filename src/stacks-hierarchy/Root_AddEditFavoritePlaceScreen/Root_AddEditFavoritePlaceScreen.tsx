@@ -31,7 +31,7 @@ export type Props = RootStackScreenProps<'Root_AddEditFavoritePlaceScreen'>;
 
 const RESULT_KEY = 'Root_AddEditFavoritePlaceScreen--searchLocation';
 
-const getThemeColor = (theme: Theme) => theme.color.background.neutral[3];
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
 export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
   const styles = useStyles();
