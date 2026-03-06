@@ -141,13 +141,14 @@ export function useTrips(
   const resultsAreEmpty =
     !tripLocationsAreValid || (hasSearched && tripPatterns.length === 0);
 
-  const tripsSearchState: SearchStateType = tripsIsFetching
-    ? 'searching'
-    : resultsAreEmpty
-      ? 'search-empty-result'
-      : hasSearched
-        ? 'search-success'
-        : 'idle';
+  const tripsSearchState: SearchStateType =
+    tripsIsFetching || shouldAutoLoadMoreInitialTrips
+      ? 'searching'
+      : resultsAreEmpty
+        ? 'search-empty-result'
+        : hasSearched
+          ? 'search-success'
+          : 'idle';
 
   const timeOfLastSearch = tripsInfiniteQueryProps.searchTime.date;
 
