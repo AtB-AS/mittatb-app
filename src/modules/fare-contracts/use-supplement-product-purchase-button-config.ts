@@ -7,6 +7,7 @@ import type {
 } from '@atb-as/config-specs';
 import {isDefined} from '@atb/utils/presence';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 
 export function useSupplementProductPurchaseButtonConfig(
   existingFareContract: FareContractType,
@@ -14,8 +15,8 @@ export function useSupplementProductPurchaseButtonConfig(
   buttonText: string;
   buttonMode: 'primary' | 'secondary';
 } {
-  const {fareProductTypeConfigs, preassignedFareProducts: products} =
-    useFirestoreConfigurationContext();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
+  const {data: products} = useGetFareProductsQuery();
   const {t} = useTranslation();
 
   return useMemo(() => {

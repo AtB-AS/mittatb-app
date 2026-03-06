@@ -15,6 +15,7 @@ import {
   isSelectableSupplementProduct,
   isSelectableZone,
   isValidSelection,
+  isWithinUserProfileMaxCount,
 } from './utils';
 import {isValidDateString} from '@atb/utils/date';
 import {isSameDay} from 'date-fns';
@@ -162,12 +163,20 @@ const createBuilder = (
       const areProfilesValid = onlyProfilesWithActualCount.every((p) =>
         isSelectableProfile(currentSelection.preassignedFareProduct, p),
       );
+      const areProfilesWithinMaxCount = onlyProfilesWithActualCount.every((p) =>
+        isWithinUserProfileMaxCount(currentSelection.preassignedFareProduct, p),
+      );
       const areSupplementProductsValid =
         onlySupplementProductsWithActualCount.every((sp) =>
           isSelectableSupplementProduct(currentSelection, sp),
         );
 
-      if (!anySelection || !areProfilesValid || !areSupplementProductsValid) {
+      if (
+        !anySelection ||
+        !areProfilesValid ||
+        !areProfilesWithinMaxCount ||
+        !areSupplementProductsValid
+      ) {
         return currentSelection;
       }
 
