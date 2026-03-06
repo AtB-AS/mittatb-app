@@ -28,7 +28,6 @@ export const TravellerSelectionSheet = ({
   onCloseFocusRef,
 }: TravellerSelectionSheetProps) => {
   const {t} = useTranslation();
-  const [showWarning, setShowWarning] = useState(false);
   const [currentSelection, setCurrentSelection] = useState<
     | {
         userProfiles: UniqueWithCount<UserProfile>[];
@@ -70,7 +69,6 @@ export const TravellerSelectionSheet = ({
 
   const overrideClose = useCallback(() => {
     if (nothingSelected) {
-      setShowWarning(true);
       return true;
     }
     return false;
@@ -93,7 +91,6 @@ export const TravellerSelectionSheet = ({
       <TravellerSelectionSheetContent
         selection={selection}
         updateCurrentSelection={updateCurrentSelection}
-        showNothingSelectedWarning={nothingSelected && showWarning}
       />
     </BottomSheetModal>
   );

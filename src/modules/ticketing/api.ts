@@ -223,7 +223,7 @@ export async function cancelPayment(
 }
 
 export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
-  const url = 'product/v1';
+  const url = 'product/v2';
   const response = await client.get<PreassignedFareProduct[]>(url, {
     authWithIdToken: true,
   });
