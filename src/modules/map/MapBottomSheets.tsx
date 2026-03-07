@@ -33,8 +33,9 @@ import {MapStateActionType} from './mapStateReducer';
 import {getSlightlyRaisedMapPadding} from './MapConfig';
 import {useWindowDimensions} from 'react-native';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
-import {useBottomSheetV2Context} from '@atb/components/bottom-sheet-v2';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {MapBottomSheetType, useMapContext} from './MapContext';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type MapBottomSheetsProps = {
   mapViewRef: RefObject<MapboxGL.MapView | null>;
@@ -72,8 +73,9 @@ export const MapBottomSheets = ({
     setCurrentBottomSheet,
     currentBottomSheet,
   } = useMapContext();
-  const {data: activeBooking} = useActiveShmoBookingQuery();
-  const {bottomSheetMapRef} = useBottomSheetV2Context();
+  const isFocusedAndActive = useIsFocusedAndActive();
+  const {data: activeBooking} = useActiveShmoBookingQuery(isFocusedAndActive);
+  const {bottomSheetMapRef} = useBottomSheetContext();
 
   const {height: screenHeight} = useWindowDimensions();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
@@ -223,8 +225,9 @@ export const MapBottomSheets = ({
           navigateToScanQrCode={navigateToScanQrCode}
         />
       )}
+
       {mapState.bottomSheetType === MapBottomSheetType.FinishedBooking &&
-        mapState?.bookingId !== undefined && (
+        !!mapState.bookingId && (
           <FinishedScooterSheet
             bookingId={mapState.bookingId}
             onClose={handleCloseSheet}
@@ -316,7 +319,7 @@ export const MapBottomSheets = ({
         />
       )}
       {mapState.bottomSheetType === MapBottomSheetType.ExternalMap &&
-        mapState?.url !== undefined && (
+        !!mapState.url && (
           <ExternalRealtimeMapSheet
             onClose={handleCloseSheet}
             url={mapState.url}
@@ -324,7 +327,7 @@ export const MapBottomSheets = ({
             navigateToScanQrCode={navigateToScanQrCode}
           />
         )}
-      {mapState?.bottomSheetType === MapBottomSheetType.StopPlace &&
+      {mapState.bottomSheetType === MapBottomSheetType.StopPlace &&
         !!mapState.feature && (
           <DeparturesDialogSheet
             tabBarHeight={tabBarHeight}
@@ -345,12 +348,11 @@ export const MapBottomSheets = ({
           />
         )}
       {mapState.bottomSheetType === MapBottomSheetType.ParkAndRideStation &&
-        mapState?.feature !== undefined &&
         isParkAndRide(mapState.feature) && (
           <ParkAndRideBottomSheet
-            name={mapState.feature?.properties?.name}
-            capacity={mapState.feature?.properties?.totalCapacity}
-            parkingFor={mapState.feature?.properties?.parkingVehicleTypes}
+            name={mapState.feature.properties?.name}
+            capacity={Number(mapState.feature.properties?.totalCapacity)}
+            parkingFor={mapState.feature.properties?.parkingVehicleTypes}
             feature={mapState.feature}
             distance={undefined}
             onClose={handleCloseSheet}

@@ -9,6 +9,10 @@ import {
   formatLocaleTime,
   formatToLongDateTime,
   getTimeBetweenFormatted,
+  isAfter,
+  isBefore,
+  isBetween,
+  isEqualOrAfter,
   secondsToDuration,
 } from '../date'; // Adjust the path if needed
 
@@ -375,6 +379,92 @@ describe('secondsToDuration', () => {
     test('uses hours and minutes for durations under a day', () => {
       const result = secondsToDuration(7200, Language.English);
       expect(result).toBe('2 hours');
+    });
+  });
+
+  describe('date comparison utilities', () => {
+    const earlier = new Date('2026-02-09T00:00:00Z');
+    const middle = new Date('2026-02-10T00:00:00Z');
+    const later = new Date('2026-02-11T00:00:00Z');
+
+    describe('isAfter', () => {
+      test('returns true when date is after comparison date', () => {
+        expect(isAfter(later, middle)).toBe(true);
+      });
+
+      test('returns false when date is before comparison date', () => {
+        expect(isAfter(earlier, middle)).toBe(false);
+      });
+
+      test('returns false when dates are equal', () => {
+        expect(isAfter(middle, middle)).toBe(false);
+      });
+
+      test('works with string dates', () => {
+        expect(isAfter('2026-02-11', '2026-02-10')).toBe(true);
+      });
+    });
+
+    describe('isBefore', () => {
+      test('returns true when date is before comparison date', () => {
+        expect(isBefore(earlier, middle)).toBe(true);
+      });
+
+      test('returns false when date is after comparison date', () => {
+        expect(isBefore(later, middle)).toBe(false);
+      });
+
+      test('returns false when dates are equal', () => {
+        expect(isBefore(middle, middle)).toBe(false);
+      });
+
+      test('works with string dates', () => {
+        expect(isBefore('2026-02-09', '2026-02-10')).toBe(true);
+      });
+    });
+
+    describe('isEqualOrAfter', () => {
+      test('returns true when date is after comparison date', () => {
+        expect(isEqualOrAfter(later, middle)).toBe(true);
+      });
+
+      test('returns true when dates are equal', () => {
+        expect(isEqualOrAfter(middle, middle)).toBe(true);
+      });
+
+      test('returns false when date is before comparison date', () => {
+        expect(isEqualOrAfter(earlier, middle)).toBe(false);
+      });
+
+      test('works with string dates', () => {
+        expect(isEqualOrAfter('2026-02-10', '2026-02-10')).toBe(true);
+      });
+    });
+
+    describe('isBetween', () => {
+      test('returns true when date is strictly between start and end', () => {
+        expect(isBetween(middle, earlier, later)).toBe(true);
+      });
+
+      test('returns false when date equals start date', () => {
+        expect(isBetween(earlier, earlier, later)).toBe(false);
+      });
+
+      test('returns false when date equals end date', () => {
+        expect(isBetween(later, earlier, later)).toBe(false);
+      });
+
+      test('returns false when date is before start date', () => {
+        expect(isBetween(earlier, middle, later)).toBe(false);
+      });
+
+      test('returns false when date is after end date', () => {
+        expect(isBetween(later, earlier, middle)).toBe(false);
+      });
+
+      test('works with string dates', () => {
+        expect(isBetween('2026-02-10', '2026-02-09', '2026-02-11')).toBe(true);
+      });
     });
   });
 });

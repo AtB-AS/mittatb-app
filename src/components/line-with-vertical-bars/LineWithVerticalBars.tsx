@@ -1,17 +1,19 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useEffect, useRef} from 'react';
+import {useEffect} from 'react';
+import {StyleProp, ViewStyle, Dimensions, View} from 'react-native';
+import {Canvas, Group, Line, SkPoint} from '@shopify/react-native-skia';
 import {
-  StyleProp,
-  ViewStyle,
-  Animated,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+  interpolate,
   Easing,
-  Dimensions,
-  View,
-} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+  SharedValue,
+  ReduceMotion,
+  useDerivedValue,
+} from 'react-native-reanimated';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
-const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
 export const LineWithVerticalBars = ({
   backgroundColor,
@@ -38,14 +40,18 @@ export const LineWithVerticalBars = ({
           style,
         ]}
       >
-        {[...Array(numberOfVerticalLines)].map((e, i) => (
-          <VerticalLine
-            key={i}
-            offset={animatedVerticalLineOffset}
-            index={i}
-            color={lineColor}
-          />
-        ))}
+        <Canvas style={{width: '100%', height: 50}}>
+          <Group blendMode="multiply">
+            {[...Array(numberOfVerticalLines)].map((e, i) => (
+              <VerticalLine
+                key={i}
+                offset={animatedVerticalLineOffset}
+                index={i}
+                color={lineColor}
+              />
+            ))}
+          </Group>
+        </Canvas>
       </View>
     </View>
   );
@@ -58,17 +64,22 @@ export const LineWithVerticalBars = ({
  * @returns the current animated offset value
  */
 const useAnimatedVerticalLineOffset = (animate: boolean | undefined = true) => {
-  const animatedOffset = useRef(new Animated.Value(0)).current;
+  const animatedOffset = useSharedValue(0);
   useEffect(() => {
-    if (!animate) return animatedOffset.stopAnimation();
-    return Animated.loop(
-      Animated.timing(animatedOffset, {
-        toValue: 1,
+    if (!animate) {
+      animatedOffset.value = 0;
+      return;
+    }
+    animatedOffset.value = withRepeat(
+      withTiming(1, {
         duration: 1000,
-        useNativeDriver: true,
         easing: Easing.linear,
       }),
-    ).start();
+      -1,
+      false,
+      undefined,
+      ReduceMotion.Never,
+    );
   }, [animate, animatedOffset]);
   return animatedOffset;
 };
@@ -88,33 +99,25 @@ const VerticalLine = ({
   index,
   color,
 }: {
-  offset: Animated.Value;
+  offset: SharedValue<number>;
   index: number;
   color: string;
 }) => {
-  return (
-    <AnimatedLinearGradient
-      style={[
-        useStyles().verticalLine,
-        {
-          left: index * SPACE_BETWEEN_VERTICAL_LINES - 10,
-          transform: [
-            {
-              translateX: offset.interpolate({
-                inputRange: [0, 1],
-                outputRange: [SPACE_BETWEEN_VERTICAL_LINES, 0],
-              }),
-            },
-          ],
-        },
-      ]}
-      useAngle={true}
-      angle={120}
-      locations={[0.25, 0.25, 0.75, 0.75]}
-      colors={['transparent', color, color, 'transparent']}
-      pointerEvents="none"
-    />
-  );
+  const p1 = useDerivedValue<SkPoint>(() => ({
+    x:
+      interpolate(offset.value, [0, 1], [SPACE_BETWEEN_VERTICAL_LINES, 0]) +
+      index * SPACE_BETWEEN_VERTICAL_LINES -
+      10,
+    y: -10,
+  }));
+  const p2 = useDerivedValue<SkPoint>(() => ({
+    x:
+      interpolate(offset.value, [0, 1], [SPACE_BETWEEN_VERTICAL_LINES, 0]) +
+      index * SPACE_BETWEEN_VERTICAL_LINES +
+      20,
+    y: 30,
+  }));
+  return <Line p1={p1} p2={p2} strokeWidth={10} color={color} />;
 };
 const useStyles = StyleSheet.createThemeHook(() => ({
   container: {
@@ -130,8 +133,8 @@ const useStyles = StyleSheet.createThemeHook(() => ({
   },
   verticalLine: {
     position: 'absolute',
-    bottom: 0,
-    width: 20,
-    height: '100%',
+    bottom: -5,
+    width: 13,
+    height: 25,
   },
 }));

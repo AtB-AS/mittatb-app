@@ -12,9 +12,10 @@ import firestore, {
 import Bugsnag from '@bugsnag/react-native';
 import {PaymentType} from '@atb/modules/ticketing';
 import {
+  PaymentType as FirestorePaymentType,
   FareProductGroupType,
   FareProductTypeConfig,
-  ConfigurableLinksType,
+  ConfigurableLinks,
   HarborConnectionOverrideType,
   TravelSearchFiltersType,
   CityZone,
@@ -47,6 +48,7 @@ import {
   mapToTravelSearchPreferences,
   mapToStopSignalButtonConfig,
   mapToScooterConsentLines,
+  mapToAppVersionedConfigurableLinks,
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
@@ -54,6 +56,7 @@ import {
   StopSignalButtonConfig,
   type StopSignalButtonConfigType,
 } from '@atb-as/config-specs';
+import {isDefined} from '@atb/utils/presence';
 
 export const defaultVatPercent: number = 12;
 export const defaultStopSignalButtonConfig = StopSignalButtonConfig.parse({});
@@ -77,7 +80,7 @@ type ConfigurationContextState = {
   fareProductTypeConfigs: FareProductTypeConfig[];
   travelSearchFilters: TravelSearchFiltersType | undefined;
   appTexts: AppTexts | undefined;
-  configurableLinks: ConfigurableLinksType | undefined;
+  configurableLinks: ConfigurableLinks | undefined;
   mobilityOperators: MobilityOperatorType[] | undefined;
   scooterFaqs: ScooterFaqType[] | undefined;
   scooterConsentLines: ScooterConsentLineType[] | undefined;
@@ -125,7 +128,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     useState<TravelSearchFiltersType>();
   const [appTexts, setAppTexts] = useState<AppTexts>();
   const [configurableLinks, setConfigurableLinks] =
-    useState<ConfigurableLinksType>();
+    useState<ConfigurableLinks>();
   const [mobilityOperators, setMobilityOperators] = useState<
     MobilityOperatorType[]
   >([]);
@@ -507,29 +510,38 @@ function getContactPhoneNumberFromSnapshot(
 function getPaymentTypesFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
 ): PaymentType[] | undefined {
-  const paymentTypesField = snapshot.docs
+  const firestorePaymentTypes = snapshot.docs
     .find((doc) => doc.id == 'paymentTypes')
-    ?.get<string[]>('app');
-  if (paymentTypesField != undefined) {
-    return mapPaymentTypeStringsToEnums(paymentTypesField);
+    ?.get<FirestorePaymentType[]>('app');
+  if (firestorePaymentTypes != undefined) {
+    return mapPaymentTypeStringsToEnums(firestorePaymentTypes);
   }
   return undefined;
 }
 
 function mapPaymentTypeStringsToEnums(
-  arrayOfPaymentTypes: string[],
+  firestorePaymentTypes: FirestorePaymentType[],
 ): PaymentType[] {
-  const paymentTypes: PaymentType[] = [];
-  for (const option of arrayOfPaymentTypes) {
-    const typeName =
-      option.charAt(0).toUpperCase() + option.slice(1).toLocaleLowerCase();
-    const paymentType: PaymentType =
-      PaymentType[typeName as keyof typeof PaymentType];
-    if (paymentType != undefined) {
-      paymentTypes.push(paymentType);
-    }
+  return firestorePaymentTypes
+    .map(mapPaymentTypeStringToEnum)
+    .filter(isDefined);
+}
+
+function mapPaymentTypeStringToEnum(
+  paymentTypeString: FirestorePaymentType,
+): PaymentType | undefined {
+  switch (paymentTypeString) {
+    case 'visa':
+      return PaymentType.Visa;
+    case 'mastercard':
+      return PaymentType.Mastercard;
+    case 'amex':
+      return PaymentType.Amex;
+    case 'vipps':
+      return PaymentType.Vipps;
+    case 'applePay':
+      return PaymentType.ApplePay;
   }
-  return paymentTypes;
 }
 
 function getFareProductTypeConfigsFromSnapshot(
@@ -611,7 +623,7 @@ function getAppTextsFromSnapshot(
 
 function getConfigurableLinksFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): ConfigurableLinksType | undefined {
+): ConfigurableLinks | undefined {
   const urls = snapshot.docs.find((doc) => doc.id == 'urls');
 
   const ticketingInfo = mapLanguageAndTextType(urls?.get('ticketingInfo'));
@@ -632,10 +644,12 @@ function getConfigurableLinksFromSnapshot(
   const externalRealtimeMap = mapLanguageAndTextType(
     urls?.get('externalRealtimeMap'),
   );
-  const tileServerBaseUrl = mapLanguageAndTextType(
-    urls?.get('tileServerBaseUrl'),
+  const tileServerBaseUrls = mapToAppVersionedConfigurableLinks(
+    urls?.get('tileServerBaseUrls'),
   );
-  const mapboxSpriteUrl = mapLanguageAndTextType(urls?.get('mapboxSpriteUrl'));
+  const mapboxSpriteUrls = mapToAppVersionedConfigurableLinks(
+    urls?.get('mapboxSpriteUrls'),
+  );
   const mobilityTermsUrl = mapLanguageAndTextType(
     urls?.get('mobilityTermsUrl'),
   );
@@ -657,8 +671,8 @@ function getConfigurableLinksFromSnapshot(
     iosStoreListing,
     androidStoreListing,
     externalRealtimeMap,
-    tileServerBaseUrl,
-    mapboxSpriteUrl,
+    tileServerBaseUrls,
+    mapboxSpriteUrls,
     mobilityTermsUrl,
     contactFormUrl,
     lostAndFoundUrl,

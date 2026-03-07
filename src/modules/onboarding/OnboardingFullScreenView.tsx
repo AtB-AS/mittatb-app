@@ -102,12 +102,11 @@ export const OnboardingFullScreenView = ({
 const GenericError = () => {
   const {t} = useTranslation();
   return (
-    <View accessibilityLiveRegion="polite">
-      <MessageInfoBox
-        type="error"
-        message={t(PaymentMethodsTexts.genericError)}
-      />
-    </View>
+    <MessageInfoBox
+      a11yLiveRegion="polite"
+      type="error"
+      message={t(PaymentMethodsTexts.genericError)}
+    />
   );
 };
 

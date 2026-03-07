@@ -86,9 +86,9 @@ export const EditProfileTexts = {
     ),
     otp: (phoneNumber: string | undefined) =>
       _(
-        `Engangspassord på SMS til ${phoneNumber}`,
-        `One-time password on SMS to ${phoneNumber}`,
-        `Eingongspassord på SMS til ${phoneNumber}`,
+        `Telefonnummer ${phoneNumber}`,
+        `Phone number ${phoneNumber}`,
+        `Telefonnummer ${phoneNumber}`,
       ),
   },
   button: {

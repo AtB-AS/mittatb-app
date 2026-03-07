@@ -1,6 +1,10 @@
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {
+  PurchaseOverviewTexts,
+  TripSearchTexts,
+  useTranslation,
+} from '@atb/translations';
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
@@ -11,64 +15,86 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
+import {Swap} from '@atb/assets/svg/mono-icons/actions';
+import {WithOverlayButton} from '@atb/components/overlay-button';
 
 type StopPlaceSelectionProps = {
   selection: PurchaseSelectionType;
   onSelect: (selection: PurchaseSelectionType) => void;
+  onSwap: () => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export const HarborSelection = forwardRef<
   FocusRefsType,
   StopPlaceSelectionProps
->(({selection, onSelect, style}: StopPlaceSelectionProps, ref) => {
-  const {t} = useTranslation();
-  const selectionBuilder = usePurchaseSelectionBuilder();
+>(
+  (
+    {
+      selection /*: initialSelection*/,
+      onSelect,
+      onSwap,
+      style,
+    }: StopPlaceSelectionProps,
+    ref,
+  ) => {
+    const {t} = useTranslation();
+    const selectionBuilder = usePurchaseSelectionBuilder();
 
-  const fromHarborRef = useRef<typeof PressableOpacity>(null);
-  const toHarborRef = useRef<typeof PressableOpacity>(null);
-  useImperativeHandle(ref, () => ({
-    fromHarborRef: fromHarborRef as any,
-    toHarborRef: toHarborRef as any,
-  }));
+    const fromHarborRef = useRef<typeof NativeBlockButton>(null);
+    const toHarborRef = useRef<typeof NativeBlockButton>(null);
+    useImperativeHandle(ref, () => ({
+      fromHarborRef: fromHarborRef as any,
+      toHarborRef: toHarborRef as any,
+    }));
 
-  if (!selection.stopPlaces) return null;
+    if (!selection.stopPlaces) return null;
 
-  return (
-    <View style={style} accessible={false}>
-      <ContentHeading
-        text={t(PurchaseOverviewTexts.stopPlaces.harborSelection.select)}
-      />
-      <Section accessible={false}>
-        <HarborSelectionItem
-          fromOrTo="from"
-          harbor={selection.stopPlaces.from}
-          disabled={false}
-          onPress={() =>
-            onSelect(
-              // Wipe existing stop places when selecting new from stop place
-              selectionBuilder
-                .fromSelection(selection)
-                .fromStopPlace(undefined)
-                .toStopPlace(undefined)
-                .legs([])
-                .build(),
-            )
+    return (
+      <View style={style} accessible={false}>
+        <ContentHeading
+          text={t(PurchaseOverviewTexts.stopPlaces.harborSelection.select)}
+        />
+        <WithOverlayButton
+          svgIcon={Swap}
+          onPress={onSwap}
+          overlayPosition="right"
+          accessibilityLabel={
+            t(TripSearchTexts.location.swapButton.a11yLabel) + screenReaderPause
           }
-          ref={fromHarborRef}
-        />
-        <HarborSelectionItem
-          fromOrTo="to"
-          harbor={selection.stopPlaces.to}
-          disabled={!selection.stopPlaces.from}
-          onPress={() => onSelect(selection)}
-          ref={toHarborRef}
-        />
-      </Section>
-    </View>
-  );
-});
+        >
+          <Section accessible={false}>
+            <HarborSelectionItem
+              fromOrTo="from"
+              harbor={selection.stopPlaces.from}
+              disabled={false}
+              onPress={() =>
+                onSelect(
+                  // Wipe existing stop places when selecting new from stop place
+                  selectionBuilder
+                    .fromSelection(selection)
+                    .fromStopPlace(undefined)
+                    .toStopPlace(undefined)
+                    .legs([])
+                    .build(),
+                )
+              }
+              ref={fromHarborRef}
+            />
+            <HarborSelectionItem
+              fromOrTo="to"
+              harbor={selection.stopPlaces.to}
+              disabled={!selection.stopPlaces.from}
+              onPress={() => onSelect(selection)}
+              ref={toHarborRef}
+            />
+          </Section>
+        </WithOverlayButton>
+      </View>
+    );
+  },
+);
 
 type HarborSelectionItemProps = {
   harbor?: StopPlaceFragment;
@@ -78,11 +104,11 @@ type HarborSelectionItemProps = {
 };
 
 const HarborSelectionItem = forwardRef<
-  typeof PressableOpacity,
+  typeof NativeBlockButton,
   HarborSelectionItemProps
 >(({harbor, onPress, disabled, fromOrTo}: HarborSelectionItemProps, ref) => {
   const {t} = useTranslation();
-  const styles = useStyles();
+  const styles = useItemStyles();
 
   return (
     <GenericClickableSectionItem
@@ -142,7 +168,7 @@ const HarborLabel = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   sectionContent: {
     flexDirection: 'row',
   },

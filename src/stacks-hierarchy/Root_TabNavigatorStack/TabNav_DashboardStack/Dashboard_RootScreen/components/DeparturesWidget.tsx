@@ -17,9 +17,9 @@ import {
 } from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
 import haversineDistance from 'haversine-distance';
-import React, {useEffect, useRef} from 'react';
+import React, {useRef} from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
-import {useFavoriteDepartureData} from '../use-favorite-departure-data';
+import {useFavoriteDeparturesQuery} from '../use-favorite-departures-query';
 import {ThemedNoFavouriteDepartureImage} from '@atb/theme/ThemedAssets';
 import {
   GenericSectionItem,
@@ -28,13 +28,13 @@ import {
 } from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type Props = {
   onEditFavouriteDeparture: () => void;
   onAddFavouriteDeparture: () => void;
   onPressDeparture: QuaySectionProps['onPressDeparture'];
   style?: StyleProp<ViewStyle>;
-  isFocused: boolean;
 };
 
 export const DeparturesWidget = ({
@@ -42,7 +42,6 @@ export const DeparturesWidget = ({
   onAddFavouriteDeparture,
   onPressDeparture,
   style,
-  isFocused,
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -50,22 +49,24 @@ export const DeparturesWidget = ({
   const themeColor = theme.color.background.neutral[1];
   const {favoriteDepartures} = useFavoritesContext();
   const {location} = useGeolocationContext();
-  const {state, loadInitialDepartures, searchDate} =
-    useFavoriteDepartureData(isFocused);
+  const isFocused = useIsFocusedAndActive();
+  const {data: favoriteDeparturesData, isLoading: favoriteDeparturesIsLoading} =
+    useFavoriteDeparturesQuery(isFocused);
   const onCloseFocusRef = useRef<View>(null);
   const bottomSheetRef = useRef<BottomSheetModal>(null);
-
-  useEffect(() => loadInitialDepartures(), [loadInitialDepartures]);
 
   async function openFrontpageFavouritesBottomSheet() {
     bottomSheetRef.current?.present();
   }
 
   const sortedStopPlaceGroups = location
-    ? state.data?.sort((a, b) =>
+    ? favoriteDeparturesData?.data?.sort((a, b) =>
         compareStopsByDistance(a.stopPlace, b.stopPlace, location.coordinates),
       )
-    : state.data;
+    : favoriteDeparturesData?.data;
+
+  const searchDate =
+    favoriteDeparturesData?.startTime ?? new Date().toISOString();
 
   return (
     <View style={style}>
@@ -99,7 +100,7 @@ export const DeparturesWidget = ({
           />
         </Section>
       )}
-      {state.isLoading && (
+      {favoriteDeparturesIsLoading && (
         <ActivityIndicator size="large" style={styles.activityIndicator} />
       )}
       {sortedStopPlaceGroups?.map((stopPlaceGroup) => (

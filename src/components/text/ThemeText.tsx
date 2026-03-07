@@ -18,6 +18,7 @@ import {
   isStatusColor,
   isTextColor,
 } from '@atb/theme/colors';
+import {useFontScale} from '@atb/utils/use-font-scale';
 
 export type ThemeTextProps = TextProps & {
   typography?: TextNames;
@@ -37,6 +38,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
 }) => {
   const {theme, androidSystemFont} = useThemeContext();
   const textColor = useColor(color, type);
+  const fontScale = useFontScale();
 
   const typeStyle = {
     ...theme.typography[fontType],
@@ -52,11 +54,12 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   // https://github.com/facebook/react-native/issues/35039
   if (
     Platform.OS === 'android' &&
-    (textStyle.letterSpacing === 0.4 || textStyle.letterSpacing === 1.6)
+    textStyle.letterSpacing !== undefined &&
+    fontScale < 1.0
   ) {
     textStyle = {
       ...textStyle,
-      letterSpacing: textStyle.letterSpacing - 0.01,
+      letterSpacing: textStyle.letterSpacing - 0.05,
     };
   }
 

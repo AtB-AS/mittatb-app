@@ -59,7 +59,6 @@ describe('Find journey', () => {
 
       // ** Details **
       await TravelsearchOverviewPage.openSearchResult();
-
       // Check start time and departure
       const startTimeInDetails = await TravelsearchDetailsPage.getTime(
         'start',
@@ -144,7 +143,7 @@ describe('Find journey', () => {
         await TravelsearchOverviewPage.openSearchResult();
         await AppHelper.scrollDownUntilId(
           'tripDetailsContentView',
-          `legContainer${noLegs - 1}`,
+          `leg${noLegs - 1}`,
         );
         await AppHelper.scrollDownUntilId(
           'tripDetailsContentView',

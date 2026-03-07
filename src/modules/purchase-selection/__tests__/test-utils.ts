@@ -45,15 +45,7 @@ export const TEST_ZONE: FareZone = {
   version: 'v1',
   geometry: {
     type: 'Polygon',
-    coordinates: [
-      [
-        [10, 10],
-        [10, 20],
-        [20, 20],
-        [20, 10],
-        [10, 10],
-      ],
-    ],
+    polylineEncodedCoordinates: ['_c`|@_c`|@?_c`|@_c`|@??~b`|@~b`|@?'],
   },
 };
 
@@ -70,12 +62,12 @@ export const TEST_USER_PROFILE: UserProfile = {
   userTypeString: 'ADULT',
 };
 
-export const TEST_BAGGAGE_PRODUCT: BaggageProduct = {
+export const TEST_SUPPLEMENT_PRODUCT: BaggageProduct = {
   id: 'SP1',
   name: {lang: 'no', value: 'Sykkel'},
   version: 'v1',
   distributionChannel: ['app'],
-  isBaggageProduct: true,
+  kind: 'baggage',
   baggageType: 'BICYCLE',
 };
 
@@ -99,8 +91,9 @@ export const TEST_SELECTION: PurchaseSelectionType = {
   },
   stopPlaces: undefined,
   userProfilesWithCount: [{...TEST_USER_PROFILE, count: 1}],
-  baggageProductsWithCount: [],
+  supplementProductsWithCount: [],
   travelDate: undefined,
   legs: [],
   isOnBehalfOf: false,
+  existingProduct: undefined,
 };

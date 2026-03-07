@@ -7,6 +7,7 @@ import RNBootSplash
 import SwiftBridging
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
+import RNCAsyncStorage
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -36,22 +37,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     window = UIWindow(frame: UIScreen.main.bounds)
 
     // Initialize Intercom
-    if let intercomPath = Bundle.main.path(forResource: "Intercom", ofType: "plist"),
-       let intercomDict = NSDictionary(contentsOfFile: intercomPath) as? [String: Any] {
-      let intercomApiKey = intercomDict["IntercomApiKey"] as? String ?? ""
-      let intercomAppId = intercomDict["IntercomAppId"] as? String ?? ""
-      
-      if !intercomApiKey.isEmpty && !intercomAppId.isEmpty {
+    if let intercomApiKey = Bundle.main.object(forInfoDictionaryKey: "IntercomApiKey") as? String, !intercomApiKey.isEmpty {
+      if let intercomAppId = Bundle.main.object(forInfoDictionaryKey: "IntercomAppId") as? String, !intercomAppId.isEmpty {
         Intercom.setApiKey(intercomApiKey, forAppId: intercomAppId)
       }
     }
     
     // Initialize Bugsnag
-    if let bugsnagApiKey = Bundle.main.object(forInfoDictionaryKey: "BugsnagAPIKey") as? String, !bugsnagApiKey.isEmpty {
+    if let bugsnagApiKey = Bundle.main.object(forInfoDictionaryKey: "BugsnagApiKey") as? String, !bugsnagApiKey.isEmpty {
       let config = BugsnagConfiguration.init(bugsnagApiKey)
       
-      if let bugsnagReleaseStage = Bundle.main.object(forInfoDictionaryKey: "BugsnagReleaseStage") as? String, !bugsnagReleaseStage.isEmpty {
-        config.releaseStage = bugsnagReleaseStage
+      if let releaseStage = Bundle.main.object(forInfoDictionaryKey: "ReleaseStage") as? String, !releaseStage.isEmpty {
+        config.releaseStage = releaseStage
       }
       
       Bugsnag.start(with: config)
@@ -60,6 +57,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Initialize Firebase
     if FirebaseApp.app() == nil {
       FirebaseApp.configure()
+    }
+
+    // Initialize App Group
+    if let appGroupName = Bundle.main.object(forInfoDictionaryKey: "APP_GROUP_NAME") as? String, !appGroupName.isEmpty {
+      RNCAsyncStorage.setAppGroupName(appGroupName);
     }
     
     factory.startReactNative(

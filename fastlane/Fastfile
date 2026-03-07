@@ -76,62 +76,6 @@ platform :ios do
     )
   end
 
-  desc "Removes the use of beacons from the app"
-  lane :remove_use_of_beacons do
-    beacons_enabled = ENV["KETTLE_API_KEY"] != ""
-    puts "Is beacons enabled: #{beacons_enabled}"
-
-    # Don't remove beacons if they are enabled
-    unless beacons_enabled
-      languages = ['nb', 'en', 'nn']
-      keys = [
-        'NSLocationAlwaysUsageDescription'
-      ]
-
-      update_info_plist(
-        xcodeproj: "./ios/atb.xcodeproj",
-        plist_path: "./atb/Info.plist",
-        block: proc do |plist|
-          %w(location bluetooth-central).each do |key|
-            plist["UIBackgroundModes"].delete(key)
-          end
-          keys.each do |key|
-            plist.delete(key)
-          end
-        end
-      )
-
-      languages.each do |language|
-        file_path = "../ios/#{language}.lproj/InfoPlist.strings"
-        lines = File.readlines(file_path)
-
-        lines_hash = {}
-        lines.each do |line|
-          match = line.match(/^"(.*?)"\s*=\s*"(.*?)";$/)
-          if match
-            key = match[1]
-            value = match[2]
-            lines_hash[key] = value
-          end
-        end
-
-        # Apple requires that the key NSLocationAlwaysAndWhenInUseUsageDescription is present even if the app only uses when in use
-        # because some of the libraries we use require always permission even if we don't use it.
-        # If NSLocationAlwaysAndWhenInUseUsageDescription is present it takes precedence over NSLocationWhenInUseUsageDescription
-        # so to avoid presenting the wrong text to the user we copy the value from NSLocationWhenInUseUsageDescription to NSLocationAlwaysAndWhenInUseUsageDescription
-        # even if we don't use always permission.
-        lines_hash["NSLocationAlwaysAndWhenInUseUsageDescription"] = lines_hash["NSLocationWhenInUseUsageDescription"]
-
-        # Save key-value pairs in a file
-        File.open(file_path, "w") do |file|
-          lines_hash.each do |key, value|
-            file.puts "\"#{key}\" = \"#{value}\";"
-          end
-        end
-      end
-    end
-  end
-
   desc "Nuke certificates"
   lane :nuke_certificates do
     ensure_env_vars(
@@ -278,6 +222,19 @@ platform :ios do
     )
   end
 
+  desc 'Enable Apple Pay entitlement'
+  lane :enable_apple_pay_entitlement do
+    ensure_env_vars(
+      env_vars: ['APPLE_PAY_MERCHANT_ID']
+    )
+    update_plist(
+      plist_path: "./ios/atb/AtB.entitlements",
+      block: proc do |plist|
+        plist['com.apple.developer.in-app-payments'] = [ENV['APPLE_PAY_MERCHANT_ID']]
+      end
+    )
+  end
+
   lane :verify_installed_certificates do |options|
     keychain_path = options[:keychain] || File.expand_path("/Library/Keychains/System.keychain")
 
@@ -355,7 +312,6 @@ platform :ios do
 
     skip_pods = ENV['SKIP_PODS'] == 'true'
 
-
     increment_build_number(
       build_number: ENV["BUILD_ID"],
       xcodeproj: './ios/atb.xcodeproj/'
@@ -399,7 +355,8 @@ platform :ios do
     firebase_app_distribution(
       app:ENV['FIREBASE_APP_ID_IOS'],
       service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
-      groups:ENV['APP_DISTRIBUTION_GROUP_NAME']
+      groups:ENV['APP_DISTRIBUTION_GROUP_NAME'],
+      release_notes_file: ENV['RELEASE_NOTES_FILE']
     )
   end
 
@@ -425,6 +382,22 @@ platform :android do
     build_type = ENV['APP_ENVIRONMENT']
     app_flavor = ENV['APP_FLAVOR']
     skip_clean = ENV['SKIP_CLEAN'] == 'true'
+    abi = ENV['ABI']
+
+    # Install CMake 3.22.1 for native builds (ignore if already installed)
+    begin
+      android_home = ENV['ANDROID_HOME'] || ENV['ANDROID_SDK_ROOT'] || '/usr/local/lib/android/sdk'
+      sh("yes | #{android_home}/cmdline-tools/latest/bin/sdkmanager --install 'cmake;3.22.1'")
+    rescue => e
+      UI.message("CMake installation note: #{e.message}")
+    end
+
+    sh("find ../node_modules -type d -name '.cxx' -exec rm -rf {} + || true")
+    sh("rm -rf ~/.gradle/caches/*/transforms/*react-android* || true")
+
+    # ENV['CMAKE_C_COMPILER_LAUNCHER'] = 'ccache'
+    # ENV['CMAKE_CXX_COMPILER_LAUNCHER'] = 'ccache'
+
     gradle(task: 'clean', project_dir: 'android/') unless skip_clean
     gradle(
       task: 'assemble',
@@ -432,6 +405,7 @@ platform :android do
       flavor: app_flavor,
       project_dir: 'android/',
       print_command: false, #don't print my passwords please
+      flags: "-PreactNativeArchitectures=#{ENV['ABI']}", 
       properties: {
         "android.injected.signing.store.file" => File.expand_path(ENV["KEYSTORE_PATH"], Dir.pwd + "/../"),
         "android.injected.signing.store.password" => ENV["KEYSTORE_PASS"],
@@ -449,7 +423,7 @@ platform :android do
     )
     build_type = ENV['APP_ENVIRONMENT']
     app_flavor = ENV['APP_FLAVOR']
-    gradle(task: 'clean', project_dir: 'android/')
+    # gradle(task: 'clean', project_dir: 'android/') - NOT NEEDED ON A FRESH BUILD (no caches involved)
     gradle(
       task: 'bundle',
       build_type: build_type,
@@ -471,25 +445,14 @@ platform :android do
     ensure_env_vars(
       env_vars: ['FIREBASE_APP_ID','GCP_CREDENTIALS_PATH','APK_FILE_NAME']
     )
+
     firebase_app_distribution(
       app:ENV['FIREBASE_APP_ID'],
       service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
       android_artifact_type:'APK',
       android_artifact_path:ENV['APK_FILE_NAME'],
-      groups:ENV['APP_DISTRIBUTION_GROUP_NAME']
-    )
-  end
-
-  lane :playstore_internal do
-    ensure_env_vars(
-      env_vars: ['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH','APK_FILE_NAME','ANDROID_PACKAGE_NAME']
-    )
-
-    upload_to_play_store(
-      track: "internal",
-      json_key:ENV['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH'],
-      apk: ENV['APK_FILE_NAME'],
-      package_name: ENV['ANDROID_PACKAGE_NAME']
+      groups:ENV['APP_DISTRIBUTION_GROUP_NAME'],
+      release_notes_file: ENV['RELEASE_NOTES_FILE']
     )
   end
 

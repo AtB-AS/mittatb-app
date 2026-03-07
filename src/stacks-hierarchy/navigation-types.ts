@@ -17,6 +17,7 @@ import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {Root_SmartParkAndRideEditScreenParams} from '@atb/stacks-hierarchy/Root_SmartParkAndRide/navigation-types';
 import {Root_OnboardingCarouselStackParams} from './Root_OnboardingCarouselStack';
 import {UserProfileWithCountAndOffer} from './Root_PurchaseOverviewScreen/use-offer-state';
+import {CallerRouteConfig} from './Root_LocationSearchByTextScreen/navigation-types';
 
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
@@ -28,8 +29,7 @@ export type Root_PurchaseFareZonesSearchByMapScreenParams = {
 };
 
 export type Root_LocationSearchByMapScreenParams = {
-  callerRouteName: string;
-  callerRouteParam: string;
+  callerRouteConfig: CallerRouteConfig;
   initialLocation?: Location;
 };
 
@@ -121,7 +121,6 @@ export type RootStackParamList = StackParams<{
   Root_ScanQrCodeScreen: undefined;
   Root_AddEditFavoritePlaceScreen: Root_AddEditFavoritePlaceScreenParams;
   Root_SearchFavoritePlaceScreen: undefined;
-  Root_ShareTravelHabitsScreen: undefined;
   Root_PurchaseOverviewScreen: Root_PurchaseOverviewScreenParams;
   Root_PurchaseConfirmationScreen: Root_PurchaseConfirmationScreenParams;
   Root_PurchaseFareZonesSearchByMapScreen: Root_PurchaseFareZonesSearchByMapScreenParams;

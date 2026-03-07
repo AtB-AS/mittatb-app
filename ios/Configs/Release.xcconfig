@@ -3,4 +3,4 @@
 #include "Config.xcconfig"
 #include "../Pods/Target Support Files/Pods-app/Pods-app.release.xcconfig"
 CODE_SIGN_IDENTITY=iPhone Distribution
-GCC_PREPROCESSOR_DEFINITIONS = $(inherit) IS_WIDGET_ENABLE=$(ENABLE_WIDGET) KETTLE_API_KEY=\@\"$(KETTLE_API_KEY)\"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherit) IS_WIDGET_ENABLE=$(ENABLE_WIDGET)

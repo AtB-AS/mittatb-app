@@ -1,6 +1,6 @@
 import {Camera, CameraScreenContainer, PhotoFile} from '@atb/components/camera';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {Ref, useRef, useState} from 'react';
+import {Ref, useEffect, useRef, useState} from 'react';
 import {ImageConfirmationBottomSheet} from './ImageConfirmationBottomSheet';
 import {Coordinates} from '@atb/utils/coordinates';
 import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
@@ -35,8 +35,14 @@ export const PhotoCapture = ({
 
   const handlePhotoCapture = async (file: PhotoFile) => {
     setFile(file);
-    bottomSheetModalRef.current?.present();
   };
+
+  useEffect(() => {
+    if (file && bottomSheetModalRef?.current) {
+      bottomSheetModalRef.current.present();
+    }
+  }, [file]);
+
   return (
     <CameraScreenContainer
       title={title}

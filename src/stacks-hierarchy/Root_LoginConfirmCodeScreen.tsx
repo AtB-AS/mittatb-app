@@ -20,7 +20,7 @@ import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBorderlessButton} from '@atb/components/native-button';
 import {useOnboardingContext} from '@atb/modules/onboarding';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
@@ -131,6 +131,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
 
             {error && !isLoading && (
               <MessageInfoBox
+                a11yLiveRegion="polite"
                 style={styles.messageBox}
                 type="error"
                 message={t(LoginTexts.confirmCode.errors[error])}
@@ -149,7 +150,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
                   style={styles.submitButton}
                   testID="submitButton"
                 />
-                <PressableOpacity
+                <NativeBorderlessButton
                   style={styles.resendButton}
                   onPress={onResendCode}
                   accessibilityRole="button"
@@ -162,7 +163,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
                   >
                     {t(LoginTexts.confirmCode.resendButton)}
                   </ThemeText>
-                </PressableOpacity>
+                </NativeBorderlessButton>
               </>
             )}
           </View>

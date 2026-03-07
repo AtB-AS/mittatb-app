@@ -1,12 +1,11 @@
 import {GenericSectionItem, HeaderSectionItem} from '@atb/components/sections';
-import {Section} from '@atb/components/sections';
 import {JourneySearchHistoryEntry} from '@atb/modules/search-history';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {useFilteredJourneySearch} from '../utils';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {StyleSheet} from '@atb/theme';
 
 type JourneyHistoryProps = {
@@ -27,7 +26,7 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
   }
 
   return (
-    <Section style={styles.section}>
+    <View style={styles.container}>
       <HeaderSectionItem
         transparent
         text={t(
@@ -40,7 +39,7 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
           .slice(0, DEFAULT_HISTORY_LIMIT)
           .map(mapToVisibleSearchResult)
           .map((searchResult, idx) => (
-            <PressableOpacity
+            <NativeBlockButton
               accessible={true}
               key={searchResult.key}
               accessibilityLabel={
@@ -63,19 +62,12 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
                   {searchResult.text}
                 </ThemeText>
               </GenericSectionItem>
-            </PressableOpacity>
+            </NativeBlockButton>
           ))}
       </View>
-    </Section>
+    </View>
   );
 }
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  section: {
-    marginTop: theme.spacing.large,
-    marginBottom: theme.spacing.large,
-  },
-}));
 
 function mapToVisibleSearchResult(entry: JourneySearchHistoryEntry) {
   const [from, to] = entry;
@@ -87,3 +79,9 @@ function mapToVisibleSearchResult(entry: JourneySearchHistoryEntry) {
     text: `${from.name} - ${to.name}`,
   };
 }
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    paddingTop: theme.spacing.medium,
+  },
+}));

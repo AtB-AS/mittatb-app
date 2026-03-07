@@ -1,11 +1,9 @@
-import React, {RefObject, useCallback} from 'react';
+import React, {memo, RefObject, useCallback, useRef} from 'react';
 import {View} from 'react-native';
 import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
-
-import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, useThemeContext, type Theme} from '@atb/theme';
-import {dictionary, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {
@@ -18,7 +16,10 @@ import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
-import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {
+  BottomSheetHeaderType,
+  BottomSheetModal,
+} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
@@ -85,7 +86,7 @@ type SelectFavouritesBottomSheetProps = {
   onCloseFocusRef: RefObject<View | null>;
 };
 
-export const SelectFavouritesBottomSheet = ({
+const SelectFavouritesBottomSheetComponent = ({
   onEditFavouriteDeparture,
   bottomSheetModalRef,
   onCloseFocusRef,
@@ -95,6 +96,7 @@ export const SelectFavouritesBottomSheet = ({
   const {theme} = useThemeContext();
   const {favoriteDepartures, setFavoriteDepartures} = useFavoritesContext();
   const favouriteItems = favoriteDepartures ?? [];
+  const shouldRestoreFocusRef = useRef(true);
 
   const handleSwitchFlip = (id: string, active: boolean) => {
     setFavoriteDepartures(
@@ -114,6 +116,7 @@ export const SelectFavouritesBottomSheet = ({
             SelectFavouriteDeparturesText.edit_button.a11yhint,
           )}
           onPress={() => {
+            shouldRestoreFocusRef.current = false;
             onEditFavouriteDeparture();
             bottomSheetModalRef.current?.dismiss();
           }}
@@ -131,10 +134,15 @@ export const SelectFavouritesBottomSheet = ({
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(SelectFavouriteDeparturesText.header.text)}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       Footer={footer}
-      closeCallback={() => giveFocus(onCloseFocusRef)}
+      closeCallback={() => {
+        if (shouldRestoreFocusRef.current) {
+          giveFocus(onCloseFocusRef);
+        } else {
+          shouldRestoreFocusRef.current = true;
+        }
+      }}
       testID="selectFavorite"
     >
       <View style={styles.flatListArea}>
@@ -169,6 +177,10 @@ export const SelectFavouritesBottomSheet = ({
     </BottomSheetModal>
   );
 };
+
+export const SelectFavouritesBottomSheet = memo(
+  SelectFavouritesBottomSheetComponent,
+);
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {

@@ -1,6 +1,6 @@
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import type {TripPatternWithBooking} from '@atb/api/types/trips';
-import {isAfter, isBefore} from '@atb/utils/date';
+import {isBefore, isEqualOrAfter} from '@atb/utils/date';
 import {endOfDay} from 'date-fns';
 
 export function isValidSelection(selection: PurchaseSelectionType) {
@@ -26,7 +26,7 @@ export function tripPatternDisplayTimeFilter(
   travelDate: string,
 ): boolean {
   return (
-    isAfter(tp.expectedStartTime, travelDate) &&
+    isEqualOrAfter(tp.expectedStartTime, travelDate) &&
     isBefore(tp.expectedStartTime, endOfDay(travelDate))
   );
 }

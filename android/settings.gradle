@@ -3,12 +3,6 @@ plugins { id("com.facebook.react.settings") }
 
 extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
 
-include ':libs:token:token-state-react-native-lib'
-project(':libs:token:token-state-react-native-lib').projectDir = new File(rootProject.projectDir, '../node_modules/@entur-private/abt-token-state-react-native-lib/android')
-
-include ':libs:time:time-react-native-lib'
-project(':libs:time:time-react-native-lib').projectDir = new File(rootProject.projectDir, '../node_modules/@entur-private/abt-time-react-native-lib/android')
-
 rootProject.name = 'atb'
 include ':app'
 

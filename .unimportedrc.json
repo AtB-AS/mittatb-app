@@ -4,7 +4,6 @@
     "geojson"
   ],
   "ignoreUnused": [
-    "@bugsnag/source-maps",
     "react",
     "react-dom",
     "react-native"

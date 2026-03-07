@@ -5,12 +5,10 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
-import {FullScreenFooter} from '@atb/components/screen-footer';
-import {Button} from '@atb/components/button';
 import React from 'react';
 import {View} from 'react-native';
 import {InfoLinkFragment} from '@atb/api/types/generated/fragments/shared';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {SituationType} from './types';
 import {SituationOrNoticeIcon} from './SituationOrNoticeIcon';
 import {daysBetween, formatToLongDateTime} from '@atb/utils/date';
@@ -18,11 +16,13 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 import {screenReaderPause} from '@atb/components/text';
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {getMsgTypeForMostCriticalSituationOrNotice} from './utils';
 import {openInAppBrowser} from '../in-app-browser';
-import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {
+  BottomSheetHeaderType,
+  BottomSheetModal,
+} from '@atb/components/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 
@@ -39,8 +39,6 @@ export const SituationBottomSheet = ({
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[0];
 
   const summary = getTextForLanguage(situation.summary, language);
   const description = getTextForLanguage(situation.description, language);
@@ -49,26 +47,12 @@ export const SituationBottomSheet = ({
   const validityPeriodText = useValidityPeriodText(situation.validityPeriod);
   const msgType = getMsgTypeForMostCriticalSituationOrNotice([situation]);
 
-  const Footer = () => (
-    <FullScreenFooter>
-      <Button
-        expanded={true}
-        onPress={() => bottomSheetModalRef.current?.dismiss()}
-        interactiveColor={interactiveColor}
-        text={t(SituationsTexts.bottomSheet.button)}
-        testID="closeButton"
-      />
-    </FullScreenFooter>
-  );
-
   return (
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(SituationsTexts.bottomSheet.title[msgType ?? 'info'])}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       closeCallback={() => giveFocus(onCloseFocusRef)}
-      Footer={Footer}
     >
       <Section style={styles.section}>
         <GenericSectionItem type="spacious">
@@ -171,7 +155,7 @@ const InfoLink = ({infoLink}: {infoLink: InfoLinkFragment}) => {
   const styles = useStyles();
 
   return (
-    <PressableOpacity
+    <NativeBlockButton
       onPress={() => openInAppBrowser(infoLink.uri, 'close')}
       accessibilityRole="link"
       style={styles.infoLink}
@@ -179,7 +163,7 @@ const InfoLink = ({infoLink}: {infoLink: InfoLinkFragment}) => {
       <ThemeText typography="body__m__underline" color="secondary">
         {infoLink.label || t(dictionary.readMore)}
       </ThemeText>
-    </PressableOpacity>
+    </NativeBlockButton>
   );
 };
 

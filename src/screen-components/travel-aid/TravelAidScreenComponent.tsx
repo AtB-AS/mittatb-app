@@ -38,6 +38,7 @@ import type {ContrastColor} from '@atb/theme/colors';
 import {createSentStopSignalsCache} from './sent-stop-signals-cache';
 import {LiveRegionWrapper} from '@atb/components/screen-reader-announcement';
 import {useKeepAwake} from '@sayem314/react-native-keep-awake';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export type TravelAidScreenParams = {
   serviceJourneyDeparture: ServiceJourneyDeparture;
@@ -70,11 +71,14 @@ export const TravelAidScreenComponent = ({
     ? 'success'
     : stopSignalMutation.status;
 
+  const isFocusedAndActive = useIsFocusedAndActive();
+
   const {
     data: serviceJourney,
     status,
     refetch,
   } = useTravelAidDataQuery(
+    isFocusedAndActive,
     serviceJourneyDeparture.serviceJourneyId,
     serviceJourneyDeparture.serviceDate,
   );

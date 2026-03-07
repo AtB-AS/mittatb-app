@@ -159,15 +159,7 @@ describe('purchaseSelectionBuilder - forType', () => {
           id: 'T3',
           geometry: {
             type: 'Polygon',
-            coordinates: [
-              [
-                [40, 40],
-                [40, 60],
-                [60, 60],
-                [60, 40],
-                [40, 40],
-              ],
-            ],
+            polylineEncodedCoordinates: ['_ocsF_ocsF?_gayB_gayB??~fayB~fayB?'],
           },
         },
       ],

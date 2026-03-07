@@ -19,13 +19,8 @@ export type LineChipServiceJourney = {
 type LineChipProps = {
   serviceJourney: LineChipServiceJourney;
   messageType?: Exclude<Statuses, 'valid'>;
-  testID?: string;
 };
-export function LineChip({
-  serviceJourney,
-  messageType,
-  testID = '',
-}: LineChipProps) {
+export function LineChip({serviceJourney, messageType}: LineChipProps) {
   const styles = useStyles();
   const fontScale = useFontScale();
   const {theme, themeName} = useThemeContext();
@@ -60,7 +55,7 @@ export function LineChip({
             },
           ]}
           typography="body__m__strong"
-          testID={`${testID}PublicCode`}
+          testID="publicCode"
         >
           {publicCode}
         </ThemeText>

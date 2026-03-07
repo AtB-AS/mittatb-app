@@ -28,6 +28,7 @@ export type BookingAvailabilityQueryVariables = {
   toStopPlaceId: string;
   travellers: {id: string; userType: string}[];
   products: string[];
+  supplementProducts?: string[];
 };
 
 export type TripPatternWithBooking = TripPattern & {

@@ -19,9 +19,9 @@ import {Button} from '@atb/components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useVehicle} from '@atb/modules/mobility';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {useMapContext} from '../../MapContext';
 import {ScooterHelpParams} from '../../types';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type ShmoTestingProps = {
   navigateToScooterSupport: (params: ScooterHelpParams) => void;
@@ -56,10 +56,13 @@ export const ShmoTesting = ({navigateToScooterSupport}: ShmoTestingProps) => {
   const recurringPaymentId =
     lastRecurringPaymentMethod?.recurringPayment?.id ?? '';
 
-  const {data: activeShmoBooking} = useActiveShmoBookingQuery();
-  const {data: shmoBooking} = useShmoBookingQuery(previousBookingId);
-
-  const {close: closeBottomSheet} = useBottomSheetContext();
+  const isFocusedAndActive = useIsFocusedAndActive();
+  const {data: activeShmoBooking} =
+    useActiveShmoBookingQuery(isFocusedAndActive);
+  const {data: shmoBooking} = useShmoBookingQuery(
+    isFocusedAndActive,
+    previousBookingId,
+  );
 
   useEffect(() => {
     if (selectedVehicleId) {
@@ -224,7 +227,6 @@ export const ShmoTesting = ({navigateToScooterSupport}: ShmoTestingProps) => {
         interactiveColor={interactiveColor}
         accessibilityRole="button"
         onPress={() => {
-          closeBottomSheet();
           if (vehicleId) {
             navigateToScooterSupport({
               vehicleId: vehicleId,

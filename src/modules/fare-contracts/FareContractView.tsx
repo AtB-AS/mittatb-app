@@ -16,7 +16,7 @@ import {
   useSchoolCarnetInfoQuery,
 } from '@atb/modules/ticketing';
 import {FareContractType, getAccesses} from '@atb-as/utils';
-import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
+import {ConsumeCarnetSectionitem} from './components/ConsumeCarnetSectionitem';
 import {StyleSheet} from '@atb/theme';
 import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -35,13 +35,17 @@ import {
 import {useFareContractLegs} from './use-fare-contract-legs';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {CarnetFooter} from './carnet/CarnetFooter';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type Props = {
   now: number;
   fareContract: FareContractType;
   isStatic?: boolean;
   onPressDetails?: () => void;
-  navigateToBonusScreen: () => void;
+  onNavigateToBonusScreen: () => void;
+  onNavigateToPurchaseFlow?: (
+    supplementProductSelection: PurchaseSelectionType,
+  ) => void;
   testID?: string;
 };
 
@@ -50,7 +54,8 @@ export const FareContractView: React.FC<Props> = ({
   fareContract,
   isStatic,
   onPressDetails,
-  navigateToBonusScreen,
+  onNavigateToBonusScreen,
+  onNavigateToPurchaseFlow,
   testID,
 }) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
@@ -58,6 +63,7 @@ export const FareContractView: React.FC<Props> = ({
   const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
 
   const {t} = useTranslation();
+
   const styles = useStyles();
 
   const {validityStatus} = getFareContractInfo(
@@ -87,7 +93,7 @@ export const FareContractView: React.FC<Props> = ({
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;
 
   const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(
-    fareContract.id,
+    fareContract.orderId,
     !shouldShowBonusAmountEarned,
   );
   const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(
@@ -100,12 +106,15 @@ export const FareContractView: React.FC<Props> = ({
   return (
     <Section testID={testID}>
       {hasShmoBookingId(fareContract) ? (
-        <FareContractShmoHeaderSectionItem fareContract={fareContract} />
+        <FareContractShmoHeaderSectionItem
+          fareContract={fareContract}
+          now={now}
+        />
       ) : (
         <GenericSectionItem style={styles.header}>
-          <WithValidityLine fc={fareContract}>
+          <WithValidityLine fc={fareContract} now={now}>
             <ProductName fc={fareContract} />
-            <ValidityTime fc={fareContract} />
+            <ValidityTime fc={fareContract} now={now} />
             <Description fc={fareContract} />
           </WithValidityLine>
         </GenericSectionItem>
@@ -119,7 +128,11 @@ export const FareContractView: React.FC<Props> = ({
           withHeader={true}
         />
       ) : (
-        <TravelInfoSectionItem fc={fareContract} />
+        <TravelInfoSectionItem
+          fc={fareContract}
+          onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
+          now={now}
+        />
       )}
 
       {accesses && (
@@ -138,7 +151,7 @@ export const FareContractView: React.FC<Props> = ({
       {shouldShowBonusAmountEarned && !!bonusAmountEarned?.amount && (
         <EarnedBonusPointsSectionItem
           amount={bonusAmountEarned.amount}
-          navigateToBonusScreen={navigateToBonusScreen}
+          navigateToBonusScreen={onNavigateToBonusScreen}
         />
       )}
 
@@ -147,17 +160,7 @@ export const FareContractView: React.FC<Props> = ({
           <LegsSummary legs={legs} compact={true} />
         </GenericSectionItem>
       )}
-      {!isStatic && (
-        <LinkSectionItem
-          text={t(
-            validityStatus === 'valid' && isInspectable
-              ? FareContractTexts.detailsLink.valid
-              : FareContractTexts.detailsLink.notValid,
-          )}
-          onPress={onPressDetails}
-          testID={testID + 'Details'}
-        />
-      )}
+
       {isActivateTicketNowEnabled &&
         isCanBeActivatedNowFareContract(
           fareContract,
@@ -176,9 +179,21 @@ export const FareContractView: React.FC<Props> = ({
         currentUserId,
         schoolCarnetInfo,
       ) && (
-        <ConsumeCarnetSectionItem
+        <ConsumeCarnetSectionitem
           fareContractId={fareContract.id}
           fareProductType={preassignedFareProduct?.type}
+        />
+      )}
+
+      {!isStatic && (
+        <LinkSectionItem
+          text={t(
+            validityStatus === 'valid' && isInspectable
+              ? FareContractTexts.detailsLink.valid
+              : FareContractTexts.detailsLink.notValid,
+          )}
+          onPress={onPressDetails}
+          testID={testID + 'Details'}
         />
       )}
     </Section>

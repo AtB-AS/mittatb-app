@@ -9,14 +9,15 @@ import {ValidTo} from '../components/ValidTo';
 import {WithValidityLine} from '../components/WithValidityLine';
 import {ProductName} from '../components/ProductName';
 import {ValidityTime} from '../components/ValidityTime';
-import {SentToMessageBox} from '../components/SentToMessageBox';
 
 type Props = {
   fareContract: FareContractType;
+  now: number;
 };
 
 export const FareContractHeaderSectionItem = ({
   fareContract: fc,
+  now,
   ...props
 }: SectionItemProps<Props>) => {
   const {topContainer} = useSectionItem(props);
@@ -25,14 +26,13 @@ export const FareContractHeaderSectionItem = ({
 
   return (
     <View style={[topContainer, styles.sectionItemOverrides]}>
-      <WithValidityLine fc={fc}>
+      <WithValidityLine fc={fc} now={now}>
         <ProductName fc={fc} />
-        <ValidityTime fc={fc} />
-        <ValidTo fc={fc} />
+        <ValidityTime fc={fc} now={now} />
+        <ValidTo fc={fc} now={now} />
         <Description fc={fc} />
       </WithValidityLine>
       <View style={styles.fareContractDetails}>
-        <SentToMessageBox fc={fc} />
         <FareContractFromTo
           backgroundColor={theme.color.background.neutral['0']}
           size="large"

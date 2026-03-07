@@ -12,23 +12,15 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {View} from 'react-native';
 import {Route} from '@react-navigation/native';
 import {ThemeText} from '@atb/components/text';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useTimeContext} from '@atb/modules/time';
+import {NativeBlockButton} from '@atb/components/native-button';
+import {getServerNowGlobal} from '@atb/modules/time';
 
 const TopTabNav = createMaterialTopTabNavigator<TicketTabNavStackParams>();
 
 export const Ticketing_TicketTabNavStack = () => {
   const {t} = useTranslation();
 
-  const {serverNow} = useTimeContext();
-  const {fareContracts: availableFareContracts} = useFareContracts(
-    {availability: 'available'},
-    serverNow,
-  );
-  const initialRoute: keyof TicketTabNavStackParams =
-    availableFareContracts.length
-      ? 'TicketTabNav_AvailableFareContractsTabScreen'
-      : 'TicketTabNav_PurchaseTabScreen';
+  const initialRoute = useInitialRoute();
 
   return (
     <TopTabNav.Navigator
@@ -57,6 +49,20 @@ export const Ticketing_TicketTabNavStack = () => {
       />
     </TopTabNav.Navigator>
   );
+};
+
+// This hook is used to determine the initial route to navigate to when the
+// user opens the ticketing tab navigator. Using the global server time to avoid
+// re-rendering the component just because the server time has ticked forward a second.
+const useInitialRoute = () => {
+  const {fareContracts: availableFareContracts} = useFareContracts(
+    {availability: 'available'},
+    getServerNowGlobal(),
+  );
+
+  return availableFareContracts.length
+    ? 'TicketTabNav_AvailableFareContractsTabScreen'
+    : 'TicketTabNav_PurchaseTabScreen';
 };
 
 const TabBar: React.FC<MaterialTopTabBarProps> = ({
@@ -102,7 +108,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
           ? theme.color.background.neutral[1]
           : theme.color.background.accent[0];
         return (
-          <PressableOpacity
+          <NativeBlockButton
             key={index}
             accessibilityRole="tab"
             accessibilityState={isFocused ? {selected: true} : {}}
@@ -123,7 +129,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
             >
               <>{label}</>
             </ThemeText>
-          </PressableOpacity>
+          </NativeBlockButton>
         );
       })}
     </View>

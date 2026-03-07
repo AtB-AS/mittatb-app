@@ -3,9 +3,9 @@ import {NsrLayer} from './nsr-layers';
 import {
   Expression,
   FilterExpression,
-} from '@rnmapbox/maps/src/utils/MapboxStyles';
-import {Props as LayerPropsCommonAndStyle} from '@rnmapbox/maps/lib/typescript/src/components/SymbolLayer';
-import {SymbolLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
+  SymbolLayerStyleProps,
+} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
+import {Props as LayerPropsCommonAndStyle} from 'node_modules/@rnmapbox/maps/src/components/SymbolLayer';
 import {NsrPinIconCode, PinTheme, PinType} from '../../mapbox-styles/pin-types';
 import {getIconZoomTransitionStyle} from '../../utils';
 

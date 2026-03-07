@@ -111,11 +111,10 @@ export const ParkingViolationTexts = {
   },
   issue: {
     general: {
-      title: _('Oops!', 'Oops!', 'Oops!'),
       message: _(
-        'Vi fikk ikke til å starte feilrapporteringen denne gangen.',
-        'We were unable to start the error reporting this time',
-        'Vi fekk ikkje til å starte feilrapporteringa denne gongen.',
+        'Vi fikk ikke til å starte feilrapporteringen. Prøv igjen senere, eller kontakt kundeservice for hjelp',
+        'We were unable to start the error reporting. Please try again later, or contact customer service for assistance.',
+        'Vi fekk ikkje til å starte feilrapporteringa. Prøv igjen seinare, eller kontakt kundeservice for hjelp.',
       ),
     },
     positionNotGranted: {
@@ -132,7 +131,6 @@ export const ParkingViolationTexts = {
       action: _('Gi tilgang', 'Grant access', 'Gje tilgang'),
     },
     noLocation: {
-      title: _('Oops!', 'Oops!', 'Oops!'),
       message: _(
         'Vi fikk ikke til å finne posisjonen din. Prøv å bevege deg litt. Lukk appen og åpne den på nytt dersom problemet ikke løser seg.',
         'We were unable to obtain your position. Try to move around a bit. Close the app, and open it again if the problem persists.',
@@ -140,11 +138,10 @@ export const ParkingViolationTexts = {
       ),
     },
     sendReport: {
-      title: _('Oops!', 'Oops!', 'Oops!'),
       message: _(
-        'Vi fikk ikke til å sende feilrapporteringen',
-        'We were unable to submit the error report',
-        'Vi fekk ikkje til å sende feilrapporteringa.',
+        'Vi fikk ikke til å sende feilrapporteringen. Prøv igjen, eller kontakt kundeservice for hjelp',
+        'We were unable to submit the error report. Please try again or contact customer service for assistance.',
+        'Vi fekk ikkje til å sende feilrapporteringa. Prøv igjen, eller kontakt kundeservice for hjelp',
       ),
     },
   },

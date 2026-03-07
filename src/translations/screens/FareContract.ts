@@ -106,11 +106,11 @@ const FareContractTexts = {
         `Sent to ${phoneNumber}`,
         `Sendt til ${phoneNumber}`,
       ),
-    purchasedBy: (phoneNumber: string) =>
+    receivedFrom: (phoneNumber: string) =>
       _(
-        `Kjøpt av ${phoneNumber}`,
-        `Purchased by ${phoneNumber}`,
-        `Kjøpt av ${phoneNumber}`,
+        `Mottatt fra ${phoneNumber}`,
+        `Received from ${phoneNumber}`,
+        `Motteke frå ${phoneNumber}`,
       ),
     totalPrice: (priceString: string) =>
       _(
@@ -123,6 +123,12 @@ const FareContractTexts = {
       'Get receipt sent',
       'Få kvittering tilsendt',
     ),
+    askOperatorRefund: (operatorName?: string) =>
+      _(
+        `Be ${operatorName ?? 'operatør'} om refusjon`,
+        `Ask ${operatorName ?? 'operator'} for refund`,
+        `Be ${operatorName ?? 'operatør'} om refusjon`,
+      ),
     barcodeA11yLabel: _(
       'QR-kode. Vis frem denne koden ved billettkontroll.',
       'QR code. Show this code in case of inspection.',
@@ -316,9 +322,9 @@ const FareContractTexts = {
         'Sender kvittering...',
       ),
       error: _(
-        'Oops! Noe feilet under sending av kvittering, kan du prøve igjen? 🤞',
-        'Whops, something failed during the transfer of receipt. Please try again 🤞',
-        'Oops! Noko gjekk gale under sending av kvittering, kan du prøve igjen? 🤞',
+        'Vi klarte ikke å sende kvitteringen. Prøv igjen, eller kontakt kundeservice for hjelp.',
+        'We couldn´t send the receipt. Please try again or contact customer service for assistance.',
+        'Vi klarte ikkje å senda kvitteringa. Prøv igjen, eller kontakt kundeservice for hjelp.',
       ),
       success: (email: string, reference: string) =>
         _(

@@ -26,7 +26,7 @@ describe('Auth Mobile Token', () => {
       await AuthenticationPage.loginWithPhone(phoneNumber);
       await OnboardingPage.denyLocationInOnboarding();
       await OnboardingPage.waitOnTokenOnboarding(false);
-      await ElementHelper.waitForElement('text', 'Find journey');
+      await ElementHelper.waitForElement('text', 'Travel');
       await AppHelper.pause(2000);
 
       // Verify
@@ -52,7 +52,7 @@ describe('Auth Mobile Token', () => {
       await ProfilePage.open('settings');
       if (authorized) {
         await ProfilePage.open('travelToken');
-        await ElementHelper.waitForElement('id', 'travelTokenBox');
+        await ElementHelper.waitForElement('id', 'tokenToggleInfo');
 
         // Check if mobile token is OK
         hasMobileTokenOnThisDevice = await TokenPage.deviceNameExists('this');
@@ -81,7 +81,7 @@ describe('Auth Mobile Token', () => {
           await NavigationHelper.cancel();
           await ElementHelper.waitForElement('id', 'travelTokenBox');
         } else {
-          const errorMessage: string = await TokenPage.tokenErrorMessage;
+          const errorMessage: string = await TokenPage.tokenErrorMessageTitle;
           expect(errorMessage.toLowerCase()).toContain('unable');
         }
       }

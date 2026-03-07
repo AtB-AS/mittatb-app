@@ -133,7 +133,7 @@ class AppHelper {
   async scrollDownUntilId(scrollableId: string, scrollUntilId: string) {
     let elem = await ElementHelper.getElement(scrollUntilId);
     let j = 0;
-    while (elem.elementId === undefined && j < 5) {
+    while (elem.elementId === undefined && j < 10) {
       await this.scrollDown(scrollableId);
       elem = await ElementHelper.getElement(scrollUntilId);
       j++;
@@ -149,7 +149,7 @@ class AppHelper {
   async scrollUpUntilId(scrollableId: string, scrollUntilId: string) {
     let elem = await ElementHelper.getElement(scrollUntilId);
     let j = 0;
-    while (elem.elementId === undefined && j < 5) {
+    while (elem.elementId === undefined && j < 10) {
       await this.scrollUp(scrollableId);
       elem = await ElementHelper.getElement(scrollUntilId);
       j++;

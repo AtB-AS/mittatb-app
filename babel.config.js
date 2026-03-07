@@ -1,9 +1,7 @@
 module.exports = {
-  presets: [
-    '@babel/preset-typescript',
-    'module:@react-native/babel-preset',
-  ],
+  presets: ['@babel/preset-typescript', 'module:@react-native/babel-preset'],
   plugins: [
+    'babel-plugin-react-compiler',
     'module:react-native-dotenv',
     [
       'module-resolver',
@@ -14,7 +12,7 @@ module.exports = {
         },
       },
     ],
-    'react-native-reanimated/plugin',
     '@babel/plugin-transform-export-namespace-from',
+    'react-native-worklets/plugin',
   ],
 };

@@ -25,7 +25,6 @@ import {
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
@@ -79,13 +78,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
-    baggageProductsWithCountAndOffer,
+    supplementProductsWithCountAndOffer,
   } = useOfferState(preassignedFareProductAlternatives, selection);
 
   const firstUserProfilesProductRef =
     userProfilesWithCountAndOffer[0]?.offer?.fareProduct;
   const firstBaggageProductRef =
-    baggageProductsWithCountAndOffer[0]?.offer?.supplementProducts[0]?.id;
+    supplementProductsWithCountAndOffer[0]?.offer?.supplementProducts[0]?.id;
 
   const preassignedFareProduct =
     preassignedFareProductAlternatives.find(
@@ -145,8 +144,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     const hasOffer =
       (selection.userProfilesWithCount.some((u) => u.count) &&
         userProfilesWithCountAndOffer.some((u) => u.count)) ||
-      (selection.baggageProductsWithCount.some((sp) => sp.count) &&
-        baggageProductsWithCountAndOffer.some((sp) => sp.count));
+      (selection.supplementProductsWithCount.some((sp) => sp.count) &&
+        supplementProductsWithCountAndOffer.some((sp) => sp.count));
 
     return (
       hasOffer ||
@@ -311,6 +310,14 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 {selection},
               );
             }}
+            onSwap={() => {
+              const newSelection = builder
+                .fromSelection(selection)
+                .fromStopPlace(selection.stopPlaces?.to)
+                .toStopPlace(selection.stopPlaces?.from)
+                .build();
+              setSelection(newSelection);
+            }}
             ref={focusRefs}
           />
 
@@ -375,7 +382,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                   }),
                 ),
                 baggageProductsWithCount:
-                  selection.baggageProductsWithCount.map((sp) => ({
+                  selection.supplementProductsWithCount.map((sp) => ({
                     id: sp.id,
                     count: sp.count,
                   })),
@@ -395,8 +402,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     header: {
       marginHorizontal: theme.spacing.medium,
@@ -404,7 +410,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     contentContainer: {
       rowGap: theme.spacing.medium,
       margin: theme.spacing.medium,
-      marginBottom: bottomSafeAreaInset + theme.spacing.medium,
+      marginBottom: bottom + theme.spacing.medium,
     },
     messages: {
       rowGap: theme.spacing.medium,

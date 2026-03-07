@@ -510,3 +510,19 @@ export function debugProgressBetweenStopsText(
     : '';
   return `${percent} of ${distance} until ${stopPointRefName}${atStop}`;
 }
+
+/**
+ * Function to find common situation ID that exists in all stop
+ * returns IDs of the situation in string[]
+ */
+export function findCommonSituationId(
+  data: EstimatedCallWithQuayFragment[],
+): string[] {
+  if (data.length === 0) return [];
+
+  const candidateIds = new Set(data[0].situations.map((s) => s.id));
+
+  return Array.from(candidateIds).filter((id) =>
+    data.every((item) => item.situations.some((s) => s.id === id)),
+  );
+}

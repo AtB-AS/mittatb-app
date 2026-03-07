@@ -57,6 +57,8 @@ import {ScreenHeading} from '@atb/components/heading';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useProductAlternatives} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {isNonRecurringPaymentType} from '@atb/modules/payment';
+import {startApplePayPayment} from './start-apple-pay';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -65,8 +67,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   route: {params},
 }) => {
   const styles = useStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {userId} = useAuthContext();
+  const [paymentData, setPaymentData] = useState<string>();
 
   const {previousPaymentMethod, recurringPaymentMethods} =
     usePreviousPaymentMethods();
@@ -93,7 +96,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
-    baggageProductsWithCountAndOffer,
+    supplementProductsWithCountAndOffer,
   } = useOfferState(productAlternatives, selection);
 
   const userProfileOffers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
@@ -104,7 +107,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   );
 
   const baggageProductOffers: ReserveOffer[] =
-    baggageProductsWithCountAndOffer.map(
+    supplementProductsWithCountAndOffer.map(
       ({count, offer: {offerId, supplementProducts}}) => ({
         count,
         offerId,
@@ -122,12 +125,17 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     paymentMethod,
     recipient,
     shouldSavePaymentMethod,
+    paymentData,
   });
   useDoOnceWhen(
     () => {
       if (reserveMutation.status !== 'success') return;
       if (!reserveMutation.data.url) return;
-      if (paymentMethod?.paymentType === PaymentType.Vipps) return;
+      if (
+        paymentMethod?.paymentType &&
+        isNonRecurringPaymentType(paymentMethod.paymentType)
+      )
+        return;
       openInAppBrowser(
         reserveMutation.data.url,
         'cancel',
@@ -179,6 +187,13 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     reserveMutation.data?.recurringPaymentId,
   ]);
 
+  // Call reserve when payment data is received from the Apple Pay payment sheet
+  useDoOnceWhen(
+    () => paymentData && reserveMutation.mutate(),
+    !!paymentData,
+    false,
+  );
+
   // When deep link {APP_SCHEME}://purchase-callback is called, save payment
   // method and navigate to active tickets.
   usePurchaseCallbackListener(onPaymentCompleted);
@@ -199,12 +214,25 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     }
     if (totalPrice === 0) {
       analytics.logEvent('Ticketing', 'Complete free purchase selected');
+      reserveMutation.mutate();
+      return;
+    }
+
+    if (paymentMethod?.paymentType === PaymentType.ApplePay) {
+      analytics.logEvent('Ticketing', 'Apple Pay selected');
+      startApplePayPayment({
+        userProfilesWithCountAndOffer,
+        supplementProductsWithCountAndOffer,
+        totalPrice,
+        setPaymentData,
+        language,
+      });
     } else {
       analytics.logEvent('Ticketing', 'Pay with card selected', {
         paymentMethod,
       });
+      reserveMutation.mutate();
     }
-    reserveMutation.mutate();
   }
 
   async function selectPaymentMethod() {
@@ -269,7 +297,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           isSearchingOffer={isSearchingOffer}
           totalPrice={totalPrice}
           userProfilesWithCountAndOffer={userProfilesWithCountAndOffer}
-          baggageProductsWithCountAndOffer={baggageProductsWithCountAndOffer}
+          supplementProductsWithCountAndOffer={
+            supplementProductsWithCountAndOffer
+          }
         />
         {inspectableTokenWarningText && !recipient && (
           <MessageInfoBox

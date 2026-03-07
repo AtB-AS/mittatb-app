@@ -2,17 +2,19 @@ import {useThemeContext} from '@atb/theme';
 import {useMemo} from 'react';
 import {getMapboxLightStyle} from '../mapbox-styles/get-mapbox-light-style';
 import {getMapboxDarkStyle} from '../mapbox-styles/get-mapbox-dark-style';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
 import {MAPBOX_API_TOKEN} from '@env';
 import {colorTheme} from '../mapbox-styles/mapbox-color-theme';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {useAppVersionedConfigurableLink} from '@atb/utils/use-app-versioned-configurable-link';
 
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
   GeofencingZones = 'geofencingZones',
-  GeofencingZonesIcons = 'geofencingZonesIcons',
+  GeofencingZones_allowed = 'geofencingZones_allowed',
+  GeofencingZones_slow = 'geofencingZones_slow',
+  GeofencingZones_noParking = 'geofencingZones_noParking',
+  GeofencingZones_noEntry = 'geofencingZones_noEntry',
   Vehicles = 'vehicles',
   Stations = 'stations',
   NSRItems = 'nsrItems',
@@ -22,7 +24,10 @@ export enum MapSlotLayerId {
 // the order of this list, determines which layers render on top. Last is on top.
 const slotLayerIds: MapSlotLayerId[] = [
   MapSlotLayerId.GeofencingZones,
-  MapSlotLayerId.GeofencingZonesIcons,
+  MapSlotLayerId.GeofencingZones_allowed,
+  MapSlotLayerId.GeofencingZones_slow,
+  MapSlotLayerId.GeofencingZones_noParking,
+  MapSlotLayerId.GeofencingZones_noEntry,
   MapSlotLayerId.Vehicles,
   MapSlotLayerId.Stations,
   MapSlotLayerId.NSRItems,
@@ -38,12 +43,9 @@ export const useMapboxJsonStyle: (
   includeVehiclesAndStationsVectorSource: boolean,
 ) => string | undefined = (includeVehiclesAndStationsVectorSource) => {
   const {themeName} = useThemeContext();
-  const {language} = useTranslation();
   const {mapbox_user_name, mapbox_nsr_tileset_id} = useRemoteConfigContext();
 
-  const {configurableLinks} = useFirestoreConfigurationContext();
-  const mapboxSpriteUrl =
-    getTextForLanguage(configurableLinks?.mapboxSpriteUrl, language) ?? '';
+  const mapboxSpriteUrl = useAppVersionedConfigurableLink('mapboxSpriteUrls');
 
   const {
     id: vehiclesAndStationsVectorSourceId,
@@ -103,7 +105,7 @@ export const useMapboxJsonStyle: (
     () =>
       JSON.stringify({
         ...themedStyleWithExtendedSourcesAndSlotLayers,
-        sprite: mapboxSpriteUrl + themeName,
+        sprite: (mapboxSpriteUrl ?? '') + themeName,
         projection: {name: 'mercator'}, // Using 'globe' instead looks pretty cool, but there is an initial frame flicker with zoom 0. Might be possible to fix somehow.
         imports: [
           {

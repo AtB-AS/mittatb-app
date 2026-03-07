@@ -10,100 +10,168 @@ on:
         options:
           - 'true'
           - 'false'
-      new-architecture-patch:
-        description: 'Patch app to use new architecture'
+      org:
+        description: 'Which orgs to build (comma-separated, blank=all)'
         required: false
-        type: choice
-        default: 'false'
-        options:
-          - 'true'
-          - 'false'
+        type: string
+        default: 'atb,nfk,fram,troms'
   push:
     branches:
       - master
       - release/**
+  schedule:
+    - cron: '0 1 * * 1-5'
+
+permissions:
+  contents: read
 
 jobs:
+  detect-changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      should_build: ${{ steps.force.outputs.should_build || steps.detect.outputs.should_build }}
+    steps:
+      - name: Force build
+        id: force
+        if: inputs.force-build == 'true' || github.event_name == 'schedule'
+        run: echo "should_build=true" >> $GITHUB_OUTPUT
+      - uses: actions/checkout@v4
+        if: steps.force.outputs.should_build != 'true'
+        with:
+          fetch-depth: 2
+      - name: Detect change after checkout
+        id: detect
+        if: steps.force.outputs.should_build != 'true'
+        uses: ./.github/actions/detect-changes
+
+  setup:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.should_build != 'false'
+    name: Set-up tools and warm up cache
+    runs-on: macOS-26
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          ORG_INPUT="${{ inputs.org }}"
+          ORG_INPUT="${ORG_INPUT:-atb,nfk,fram,troms}"
+          MATRIX=$(echo "$ORG_INPUT" | tr -d ' ' | jq -Rc 'split(",")')
+          echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
+      - name: Checkout project
+        uses: actions/checkout@v4
+      - name: Cache pods
+        uses: actions/cache@v4
+        id: pods-cache
+        with:
+          lookup-only: true
+          path: |
+            ios/Pods
+            ~/Library/Caches/CocoaPods
+          key: pods-${{ hashFiles('yarn.lock') }}-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: |
+            pods-${{ hashFiles('yarn.lock') }}-
+            pods-
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: modules-cache
+        with:
+          lookup-only: true
+          path: '**/node_modules'
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
+      # ===== Install node-modules  =====
+      - name: Install node v22
+        uses: actions/setup-node@v5
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
+        with:
+          node-version: 22
+          cache: 'yarn'
+
+      - name: Add Entur private registry credentials
+        shell: bash
+        if: steps.modules-cache.outputs.cache-hit != 'true'
+        run: bash ./scripts/add-entur-private-registry.sh
+        env:
+          ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+      - name: Install node_modules
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+      # ===== Ruby & Bundler =====
+      - name: Setup ruby and bundle install
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1.0
+          cache-version: 2
+          bundler-cache: true
+      - name: Setup Xcode version
+        if: inputs.force-build == 'true' || steps.pods-cache.outputs.cache-hit != 'true'
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 'latest-stable'
+      - name: Install CocoaPods
+        working-directory: ios
+        if: inputs.force-build == 'true' || steps.pods-cache.outputs.cache-hit != 'true'
+        run: bundle exec pod install
+
   build-ios:
-    name: Build iOS
+    needs: setup
+    name: Build iOS (${{ matrix.org }})
     strategy:
       fail-fast: false
       matrix:
-        org: [atb, nfk, fram, troms]
+        org: ${{ fromJson(needs.setup.outputs.matrix) }}
     environment: ${{ matrix.org }}
     timeout-minutes: 360
-    runs-on: macOS-14
+    runs-on: macOS-26
     env:
       KEYCHAIN_NAME: 'CI'
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
-      - name: Apply new architecture patch
-        if: inputs.new-architecture-patch == 'true'
-        run: git apply docs/architecture/new-architecture.patch && yarn install
-      - name: Add Entur private registry credentials
-        run: sh ./scripts/add-entur-private-registry.sh
-        env:
-          ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
-          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
-      - name: Setup build dependencies, environment and assets
-        uses: ./.github/actions/ios-build-setup
-        with:
-          use-build-cache: 'true'
-          app-environment: 'staging'
-          app-org: ${{ matrix.org }}
-          git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
-      # - name: Get potential cached pods
-      #   uses: actions/cache@v4
-      #   id: pods-cache
-      #   with:
-      #     path: |
-      #       Pods
-      #       ~/Library/Caches/CocoaPods
-      #     key: pods-${{ hashFiles('**/Podfile.lock', '**/Podfile', '**/package.json', '**/yarn.lock') }}
-      # - name: Install CocoaPods
-      #   if: steps.pods-cache.outputs.cache-hit != 'true'
-      #   working-directory: ios
-      #   run: bundle exec pod install
-      - uses: webfactory/ssh-agent@v0.4.1
-        with:
-          ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
       - name: Get potential cached ipa & dsym
         uses: actions/cache@v4
         id: ipa-cache
+        if: inputs.force-build != 'true'
         with:
           path: |
             AtB.ipa
             AtB.app.dSYM.zip
-          key: ${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets/') }}
-      - name: Generate native assets
-        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
-        run: |
-          rm '/usr/local/bin/2to3'
-          rm '/usr/local/bin/2to3-3.12'
-          rm '/usr/local/bin/idle3'
-          rm '/usr/local/bin/idle3.12'
-          rm '/usr/local/bin/pydoc3'
-          rm '/usr/local/bin/pydoc3.12'
-          rm '/usr/local/bin/python3'
-          rm '/usr/local/bin/python3-config'
-          rm '/usr/local/bin/python3.12'
-          rm '/usr/local/bin/python3.12-config'
-          rm '/usr/local/bin/2to3-3.11'
-          rm '/usr/local/bin/idle3.11'
-          rm '/usr/local/bin/pydoc3.11'
-          rm '/usr/local/bin/python3.11'
-          rm '/usr/local/bin/python3.11-config'
-          brew install imagemagick
-          yarn generate-native-assets
+          key: ${{ matrix.org }}-ipa-app-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets*/') }}
+      - name: Setup build dependencies, environment and assets
+        uses: ./.github/actions/ios-build-setup
+        with:
+          app-environment: 'staging'
+          app-org: ${{ matrix.org }}
+          git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+          entur-registry-user: ${{ vars.ENTUR_REGISTRY_USER }}
+          entur-registry-token: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+          match-ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
+          force-build: ${{ inputs.force-build }}
+          skip-heavy-steps: ${{ inputs.force-build != 'true' && steps.ipa-cache.outputs.cache-hit == 'true' }}
+      - name: Get potential cached pods
+        uses: actions/cache@v4
+        id: pods-cache
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
+        with:
+          path: |
+            ios/Pods
+            ~/Library/Caches/CocoaPods
+          key: pods-${{ hashFiles('yarn.lock') }}-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: |
+            pods-${{ hashFiles('yarn.lock') }}-
+            pods-
       - name: Disable widget
-        if: ${{ env.ENABLE_WIDGET != 'true' }}
+        if: ${{ env.ENABLE_WIDGET != 'true' && steps.ipa-cache.outputs.cache-hit != 'true' }}
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget AtbAppIntent
-      - name: Remove use of beacons
-        if: ${{ env.KETTLE_API_KEY == '' }}
-        run: bundle exec fastlane ios remove_use_of_beacons
+      - name: Enable Apple Pay entitlement
+        if: ${{ env.APPLE_PAY_MERCHANT_ID != '' && steps.ipa-cache.outputs.cache-hit != 'true' }}
+        run: bundle exec fastlane ios enable_apple_pay_entitlement
       - name: Run fastlane cert match
-        if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
+        if: steps.ipa-cache.outputs.cache-hit == 'true'
         run: bundle exec fastlane ios get_certs
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
@@ -120,34 +188,38 @@ jobs:
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
-          SKIP_PODS: 'true'
+          SKIP_PODS: ${{ steps.pods-cache.outputs.cache-hit == 'true'}}
+          PATH: /usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin
       - name: Replace ipa bundle
-        if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
+        if: steps.ipa-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/ios/replace-bundle.sh
         env:
           IPA_FILE_NAME: 'AtB.ipa'
           APP_NAME: 'AtB.app'
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
+      - name: Generate release notes
+        id: release-notes
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
+          OUTPUT_FILE: ./release-notes.txt
+        run: bash ./scripts/generate-staging-release-notes.sh
       - name: Distribute to Firebase App Distribution
         run: |
-          echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
+          echo "${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}}" | base64 --decode > google-services.json
           bundle exec fastlane ios firebase_distribution_staging
         env:
           GCP_CREDENTIALS_PATH: google-services.json
           FIREBASE_APP_ID_IOS: ${{ secrets.FIREBASE_APP_ID_IOS }}
-      - name: Create bundle and source maps
-        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
-        run: sh ./scripts/ios/create-sourcemaps.sh
-      - name: Upload bundle and source maps
-        run: sh ./scripts/ios/upload-sourcemaps.sh
-        env:
-          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
-      - name: Upload dSYMs
-        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
-        run: sh ./scripts/ios/upload-dsyms.sh
-        env:
-          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
+          RELEASE_NOTES_FILE: ./release-notes.txt
+      - name: Setup Bugsnag CLI
+        uses: ./.github/actions/setup-bugsnag-cli
+      - name: Upload Bugsnag symbols
+        uses: ./.github/actions/ios-upload-bugsnag
+        with:
+          bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
+          skip-create-sourcemaps: ${{ inputs.force-build != 'true' && steps.ipa-cache.outputs.cache-hit == 'true' }}
+          skip-dsyms: ${{ inputs.force-build != 'true' && steps.ipa-cache.outputs.cache-hit == 'true' }}
       - name: Register app version
         run: sh ./scripts/ios/register-app-version.sh
         env:

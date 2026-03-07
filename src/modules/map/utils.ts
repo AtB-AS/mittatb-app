@@ -3,7 +3,7 @@ import MapboxGL, {CameraAnimationMode, CameraPadding} from '@rnmapbox/maps';
 import {
   Expression,
   SymbolLayerStyleProps,
-} from '@rnmapbox/maps/src/utils/MapboxStyles';
+} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   Feature,
@@ -17,24 +17,27 @@ import {
 } from 'geojson';
 import {
   ParkingType,
-  GeofencingZoneCustomProps,
   AutoSelectableMapItem,
+  GeofencingZoneCustomProps,
 } from './types';
 import {
-  ClusterOfVehiclesProperties,
-  ClusterOfVehiclesPropertiesSchema,
+  VehiclesClusteredProperties,
+  VehiclesClusteredPropertiesSchema,
 } from '@atb/api/types/mobility';
+import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import distance from '@turf/distance';
 import {
-  isBicycleV2,
-  isCarStationV2,
-  isScooterV2,
-  isStationV2,
-  isVehiclesClusteredFeature,
+  isBicycle,
+  isCarStation,
+  isScooter,
+  isStation,
+  isVehicleCluster,
+  isStationCluster,
 } from '@atb/modules/mobility';
-import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {MapBottomSheetType} from './MapContext';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import z from 'zod';
+import {GeofencingZoneCode} from '@atb-as/theme';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
@@ -70,10 +73,26 @@ export const isFeatureGeofencingZone = (
   {geofencingZoneCustomProps: GeofencingZoneCustomProps}
 > => isFeaturePolylineEncodedMultiPolygon(f) && hasGeofencingZoneCustomProps(f);
 
+export const geofencingZoneCodes: GeofencingZoneCode[] = [
+  'allowed',
+  'slow',
+  'noParking',
+  'noEntry',
+];
+const GeofencingZonePropsSchema = z.object({
+  code: z.enum(geofencingZoneCodes),
+  systemId: z.string(),
+});
+export type GeofencingZoneProps = z.infer<typeof GeofencingZonePropsSchema>;
+export const isFeatureGeofencingZoneAsTiles = (feature: Feature) =>
+  GeofencingZonePropsSchema.safeParse(feature.properties).success;
+
 export const isClusterFeatureV2 = (
   feature: Feature,
-): feature is Feature<Point, ClusterOfVehiclesProperties> =>
-  ClusterOfVehiclesPropertiesSchema.safeParse(feature.properties).success;
+): feature is Feature<Point, VehiclesClusteredProperties> =>
+  VehiclesClusteredPropertiesSchema.safeParse(feature.properties).success;
+export const isClusterFeature = (feature: Feature<Point>) =>
+  isStationCluster(feature) || isVehicleCluster(feature);
 
 export const isStopPlace = (f: Feature<Point>) =>
   f.properties?.entityType === 'StopPlace';
@@ -82,8 +101,8 @@ export const isQuayFeature = (f: Feature<Geometry, GeoJsonProperties>) =>
   f.properties?.entityType === 'Quay';
 
 export const isParkAndRide = (
-  f: Feature<Point>,
-): f is Feature<Point, ParkingType> => f.properties?.entityType === 'Parking';
+  f: Feature<Point> | undefined,
+): f is Feature<Point, ParkingType> => f?.properties?.entityType === 'Parking';
 
 export const mapPositionToCoordinates = (p: Position): Coordinates => ({
   longitude: p[0],
@@ -277,15 +296,17 @@ export function getFeatureWeight(
 ): number {
   if (isFeaturePoint(feature)) {
     return isStopPlace(feature) ||
-      isVehiclesClusteredFeature(feature) ||
-      isScooterV2(feature) ||
-      isBicycleV2(feature) ||
-      isStationV2(feature) ||
-      isCarStationV2(feature) ||
+      isVehicleCluster(feature) ||
+      isScooter(feature) ||
+      isBicycle(feature) ||
+      isStation(feature) ||
+      isCarStation(feature) ||
       isParkAndRide(feature)
       ? 3
       : 1;
   } else if (isFeatureGeofencingZone(feature)) {
+    // note: This case never happens when enable_geofencing_zones_as_tiles is true.
+    // Can just return 0 after removing the old solution
     const positionClickedIsInsideGeofencingZone = turfBooleanPointInPolygon(
       positionClicked,
       feature.geometry,
@@ -295,6 +316,7 @@ export function getFeatureWeight(
     return 0;
   }
 }
+
 /*
  * Standardized calculations for icon size and opacity zoom transitions.
  */

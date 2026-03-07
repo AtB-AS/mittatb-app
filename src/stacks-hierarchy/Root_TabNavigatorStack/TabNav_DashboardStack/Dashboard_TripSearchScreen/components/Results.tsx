@@ -1,4 +1,3 @@
-import {AxiosErrorKind} from '@atb/api/utils';
 import {DayLabel} from './DayLabel';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -10,7 +9,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment} from 'react';
 import {View} from 'react-native';
 
 import {TripPattern} from '@atb/api/types/trips';
@@ -22,6 +21,7 @@ import {EmptyState} from '@atb/components/empty-state';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 import type {TripSearchTime} from '../../types';
 import {ResultRow} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultRow';
+import {SaveableTripSearchResultRow} from '@atb/modules/experimental-store-trip-patterns';
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
@@ -30,7 +30,8 @@ type Props = {
   isSearching: boolean;
   resultReasons: string[];
   onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
-  errorType?: AxiosErrorKind;
+  tripsIsError: boolean;
+  tripsIsNetworkError: boolean;
   searchTime: TripSearchTime;
   anyFiltersApplied: boolean;
 };
@@ -41,36 +42,25 @@ export const Results: React.FC<Props> = ({
   isEmptyResult,
   resultReasons,
   onDetailsPressed,
-  errorType,
+  tripsIsError,
+  tripsIsNetworkError,
   searchTime,
   anyFiltersApplied,
 }) => {
   const styles = useThemeStyles();
-
-  const [errorMessage, setErrorMessage] = useState<string>('');
   const {t} = useTranslation();
-
   const now = useNow(30000);
-
-  useEffect(() => {
-    if (errorType) {
-      switch (errorType) {
-        case 'AXIOS_NETWORK_ERROR':
-        case 'AXIOS_TIMEOUT':
-          setErrorMessage(t(TripSearchTexts.results.error.network));
-          break;
-        default:
-          setErrorMessage(t(TripSearchTexts.results.error.generic));
-          break;
-      }
-    }
-  }, [errorType, t]);
 
   if (showEmptyScreen) {
     return null;
   }
 
-  if (errorType) {
+  if (tripsIsError) {
+    const errorMessage = t(
+      TripSearchTexts.results.error[
+        tripsIsNetworkError ? 'network' : 'generic'
+      ],
+    );
     return (
       <View style={styles.errorContainer}>
         <ScreenReaderAnnouncement message={errorMessage} />
@@ -110,13 +100,15 @@ export const Results: React.FC<Props> = ({
               departureTime={tripPattern.expectedStartTime}
               previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
             />
-            <ResultRow
-              tripPattern={tripPattern}
-              onDetailsPressed={onDetailsPressed}
-              resultIndex={i}
-              searchTime={searchTime}
-              testID={'tripSearchSearchResult' + i}
-            />
+            <SaveableTripSearchResultRow tripPattern={tripPattern}>
+              <ResultRow
+                tripPattern={tripPattern}
+                onDetailsPressed={onDetailsPressed}
+                resultIndex={i}
+                searchTime={searchTime}
+                testID={'tripSearchSearchResult' + i}
+              />
+            </SaveableTripSearchResultRow>
           </Fragment>
         ))}
     </View>
@@ -144,7 +136,6 @@ const getDetailsTextForEmptyResult = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    paddingHorizontal: theme.spacing.medium,
     paddingBottom: theme.spacing.medium,
   },
   errorContainer: {

@@ -4,10 +4,7 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = DashboardScreenProps<'Dashboard_FavoriteDeparturesScreen'>;
 
-export const Dashboard_FavoriteDeparturesScreen = ({
-  navigation,
-  route,
-}: Props) => {
+export const Dashboard_FavoriteDeparturesScreen = ({navigation}: Props) => {
   const focusRef = useFocusOnLoad(navigation);
 
   return (
@@ -16,8 +13,7 @@ export const Dashboard_FavoriteDeparturesScreen = ({
       onPressAddFavorite={() =>
         navigation.navigate('Dashboard_NearbyStopPlacesScreen', {
           location: undefined,
-          mode: 'Favourite',
-          onCloseRoute: route.name,
+          onCompleteRouteName: 'Dashboard_FavoriteDeparturesScreen',
         })
       }
     />

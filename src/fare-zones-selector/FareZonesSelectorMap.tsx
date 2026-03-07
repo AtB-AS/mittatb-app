@@ -22,13 +22,14 @@ import {getReferenceDataName, FareZone} from '@atb/modules/configuration';
 import {FeatureCollection, Polygon} from 'geojson';
 import turfCentroid from '@turf/centroid';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
+import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
 import {useInitialCoordinates} from '@atb/utils/use-initial-coordinates';
 import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
   useSelectableFareZones,
 } from '@atb/modules/purchase-selection';
+import {decodePolylineEncodedGeometry} from '@atb/utils/decode-polyline-geometry';
 
 type Props = {
   selection: PurchaseSelectionType;
@@ -151,9 +152,9 @@ const FareZonesSelectorMap = ({
                   fillColor: [
                     // Mapbox Expression syntax
                     'case',
-                    ['==', selection.zones?.from.id, ['id']],
+                    ['==', selection.zones?.from.id ?? '', ['id']],
                     hexToRgba(theme.color.zone.from.background, 0.6),
-                    ['==', selection.zones?.to.id, ['id']],
+                    ['==', selection.zones?.to.id ?? '', ['id']],
                     !isApplicableOnSingleZoneOnly
                       ? hexToRgba(theme.color.zone.to.background, 0.6)
                       : 'transparent',
@@ -238,17 +239,20 @@ const mapZonesToFeatureCollection = (
   language: Language,
 ): FeatureCollection<Polygon> => ({
   type: 'FeatureCollection',
-  features: zones.map((t) => ({
-    type: 'Feature',
-    id: t.id,
-    properties: {
-      name: getReferenceDataName(t, language),
-      midPoint: turfCentroid(t.geometry, {
-        properties: {name: getReferenceDataName(t, language)},
-      }),
-    },
-    geometry: t.geometry,
-  })),
+  features: zones.map((t) => {
+    const geometry = decodePolylineEncodedGeometry(t.geometry);
+    return {
+      type: 'Feature',
+      id: t.id,
+      properties: {
+        name: getReferenceDataName(t, language),
+        midPoint: turfCentroid(geometry, {
+          properties: {name: getReferenceDataName(t, language)},
+        }),
+      },
+      geometry: geometry,
+    };
+  }),
 });
 
 export {FareZonesSelectorMap};

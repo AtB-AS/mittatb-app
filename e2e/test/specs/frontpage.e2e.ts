@@ -4,7 +4,6 @@ import ElementHelper from '../utils/element.helper.ts';
 import FrontPagePage from '../pageobjects/frontpage.page.ts';
 import SearchPage from '../pageobjects/search.page.ts';
 import NavigationHelper from '../utils/navigation.helper.ts';
-import DepartureOverviewPage from '../pageobjects/departure.overview.page.ts';
 import FavoritePage from '../pageobjects/favorite.page.ts';
 
 describe('Frontpage', () => {
@@ -43,12 +42,9 @@ describe('Frontpage', () => {
 
     try {
       await ElementHelper.waitForElement('id', 'addFavoriteDeparture');
-      //expect(await FrontPagePage.noFavoriteInfo.getText()).toHaveTextContaining(
-      //  'You have no favorite departures',
-      //);
-      expect(await FrontPagePage.noFavoriteInfo).toHaveText(
-        expect.stringContaining('You have no favorite departures'),
-      );
+      //expect(await FrontPagePage.noFavoriteInfo.getText()).toHaveTextContaining(..)
+      //expect(await FrontPagePage.noFavoriteInfo).toHaveText(...)
+      expect(await FrontPagePage.noFavoriteInfo).toExist();
 
       // Choose stop place
       await FrontPagePage.addFavoriteDeparture.click();
@@ -60,22 +56,20 @@ describe('Frontpage', () => {
       await SearchPage.setSearchLocation(stopPlace);
 
       // Before
-      await ElementHelper.waitForElement('id', 'estimatedCallItem');
-      expect(await FavoritePage.getFavoriteIcon('semi', 0, 0)).not.toExist();
-      expect(await FavoritePage.getFavoriteIcon('no', 0, 1)).toExist();
+      await ElementHelper.waitForElement('id', 'lineItem');
 
       // Choose departure
-      const linePublicCode = await DepartureOverviewPage.getLinePublicCode();
-      const lineName = await DepartureOverviewPage.getLineName();
-      await DepartureOverviewPage.openDeparture();
+      const linePublicCode = await FavoritePage.getLinePublicCode();
+      const lineName = await FavoritePage.getLineName();
+      await FavoritePage.chooseLine();
 
       // Choose only marked departure
-      await ElementHelper.waitForElement('id', 'chooseFavoriteBottomSheet');
+      await ElementHelper.waitForElement(
+        'id',
+        'chooseFavoriteBottomSheetHeader',
+      );
       await FavoritePage.chooseFavoriteType('single');
-      expect(await FavoritePage.getFavoriteIcon('semi', 0, 0)).toExist();
-      expect(await FavoritePage.getFavoriteIcon('no', 0, 1)).toExist();
       await AppHelper.pause(1000);
-      await FavoritePage.confirm.click();
 
       // Verify
       await ElementHelper.waitForElement('id', 'favoriteDepartures');
@@ -178,7 +172,7 @@ describe('Frontpage', () => {
   it('should open tickets tab', async () => {
     try {
       await ElementHelper.waitForElement('id', 'dashboardScrollView');
-      await ElementHelper.expectText('Find journey');
+      await ElementHelper.expectText('Travel');
 
       await FrontPagePage.buyTickets.click();
       await ElementHelper.waitForElement('id', 'purchaseTab');

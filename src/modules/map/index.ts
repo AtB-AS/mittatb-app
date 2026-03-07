@@ -45,6 +45,7 @@ export type {
   PolylineEncodedMultiPolygon,
   PreProcessedGeofencingZones,
   PointFeatureCollection,
+  ScooterHelpParams,
 } from './types';
 export {
   flyToLocation,
@@ -58,6 +59,7 @@ export {
   getFeatureToSelect,
   getFeaturesAtClick,
   isFeatureGeofencingZone,
+  isFeatureGeofencingZoneAsTiles,
   mapPositionToCoordinates,
   CUSTOM_SCAN_ZOOM_LEVEL,
 } from './utils';

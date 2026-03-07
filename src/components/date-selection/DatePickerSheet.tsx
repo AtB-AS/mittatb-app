@@ -1,11 +1,5 @@
-import {Close, Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {
-  DatePickerSheetTexts,
-  dictionary,
-  useTranslation,
-} from '@atb/translations';
+import {DatePickerSheetTexts, useTranslation} from '@atb/translations';
 import {useKeyboardHeight} from '@atb/utils/use-keyboard-height';
 import React, {useState} from 'react';
 import {View} from 'react-native';
@@ -18,10 +12,12 @@ import type {
 import {default as RNDatePicker} from 'react-native-date-picker';
 import {getTimeZoneOffsetInMinutes, parseDate} from '@atb/utils/date';
 import {useLocaleContext} from '@atb/modules/locale';
-import {BottomSheetModal} from '../bottom-sheet-v2';
+import {BottomSheetModal} from '../bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {RefObject} from '@testing-library/react-native/build/types';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetHeaderType} from '../bottom-sheet/use-bottom-sheet-header-type';
+import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 
 type Props<T extends string> = {
   initialDate?: string;
@@ -48,6 +44,7 @@ export const DatePickerSheet = <T extends string>({
   bottomSheetModalRef,
   onCloseFocusRef,
 }: Props<T>) => {
+  const keyboardHeight = useKeyboardHeight();
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme, themeName} = useThemeContext();
@@ -59,20 +56,22 @@ export const DatePickerSheet = <T extends string>({
     options.find((o) => o.selected)?.option || options[0].option,
   );
 
-  const onSelect = () => {
-    onSave({option: selectedOptionId, date});
-    bottomSheetModalRef.current?.dismiss();
-  };
+  const nativeGesture = Gesture.Native().disallowInterruption(true);
 
   return (
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(DatePickerSheetTexts.heading)}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
-      closeCallback={() => giveFocus(onCloseFocusRef)}
+      bottomSheetHeaderType={BottomSheetHeaderType.Confirm}
+      closeCallback={() => {
+        onSave({option: selectedOptionId, date});
+        giveFocus(onCloseFocusRef);
+      }}
+      overrideClose={() => isSpinning}
+      closeOnBackdropPress={!isSpinning}
+      enablePanDownToClose={!isSpinning}
     >
-      <View style={styles.container}>
+      <View style={[styles.container, {paddingBottom: keyboardHeight}]}>
         <RadioSegments
           color={theme.color.interactive[2]}
           activeIndex={options.findIndex((o) => o.option === selectedOptionId)}
@@ -87,39 +86,32 @@ export const DatePickerSheet = <T extends string>({
         />
 
         {selectedOptionId !== 'now' && (
-          <RNDatePicker
-            date={parseDate(date)}
-            onDateChange={(date) => setDate(date.toISOString())}
-            mode="datetime"
-            locale={locale.localeString}
-            onStateChange={(state) => setIsSpinning(state === 'spinning')}
-            // Applies timezone offset between CET and UTC to enforce CET timezone on date picker
-            timeZoneOffsetInMinutes={getTimeZoneOffsetInMinutes()}
-            theme={themeName}
-          />
+          <GestureDetector gesture={nativeGesture}>
+            <RNDatePicker
+              date={parseDate(date)}
+              onDateChange={(date) => {
+                date.setSeconds(0, 0);
+                setDate(date.toISOString());
+              }}
+              mode="datetime"
+              locale={locale.localeString}
+              onStateChange={(state) => setIsSpinning(state === 'spinning')}
+              // Applies timezone offset between CET and UTC to enforce CET timezone on date picker
+              timeZoneOffsetInMinutes={getTimeZoneOffsetInMinutes()}
+              theme={themeName}
+            />
+          </GestureDetector>
         )}
-
-        <Button
-          expanded={true}
-          onPress={onSelect}
-          text={t(dictionary.confirm)}
-          rightIcon={{svg: Confirm}}
-          style={styles.button}
-          disabled={isSpinning}
-          testID="searchButton"
-        />
       </View>
     </BottomSheetModal>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const keyboardHeight = useKeyboardHeight();
-
   return {
     container: {
       paddingHorizontal: theme.spacing.medium,
-      paddingBottom: keyboardHeight,
+      alignItems: 'center',
     },
     button: {marginVertical: theme.spacing.medium},
   };

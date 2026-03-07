@@ -57,7 +57,7 @@ import {
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {canSellTicketsForSubMode} from '@atb/modules/operator-config';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {
   formatDestinationDisplay,
   getBookingStatus,
@@ -65,6 +65,7 @@ import {
   getNoticesForServiceJourney,
   getShouldShowLiveVehicle,
   debugProgressBetweenStopsText,
+  findCommonSituationId,
 } from './utils';
 import {BookingOptions} from './components/BookingOptions';
 import {BookingInfoBox} from './components/BookingInfoBox';
@@ -87,6 +88,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -127,8 +129,11 @@ export const DepartureDetailsScreenComponent = ({
 
   const {requestReview} = useInAppReviewFlow();
 
-  const {data: serviceJourney, isLoading} =
-    useDepartureDetailsQuery(activeItem);
+  const isFocusedAndActive = useIsFocusedAndActive();
+  const {data: serviceJourney, isLoading} = useDepartureDetailsQuery(
+    isFocusedAndActive,
+    activeItem,
+  );
   const notices = serviceJourney
     ? getNoticesForServiceJourney(serviceJourney, activeItem.fromStopPosition)
     : [];
@@ -142,10 +147,15 @@ export const DepartureDetailsScreenComponent = ({
   const focusedEstimatedCall = estimatedCallsWithMetadata.find(
     (e) => e.metadata.group === 'trip',
   );
+
+  const commonSituationId = findCommonSituationId(estimatedCallsWithMetadata);
+
   const situations =
-    focusedEstimatedCall?.situations.sort((n1, n2) =>
-      n1.id.localeCompare(n2.id),
-    ) ?? [];
+    focusedEstimatedCall?.situations
+      .sort((n1, n2) => n1.id.localeCompare(n2.id))
+      .filter((s) => {
+        return commonSituationId.some((id) => s.id == id);
+      }) ?? [];
 
   const fromCall = estimatedCallsWithMetadata.find(
     (c) => c.stopPositionInPattern === activeItem.fromStopPosition,
@@ -176,7 +186,7 @@ export const DepartureDetailsScreenComponent = ({
 
   const shouldShowLive = getShouldShowLiveVehicle(
     estimatedCallsWithMetadata,
-    isRealtimeMapEnabled,
+    isRealtimeMapEnabled && isFocusedAndActive,
   );
 
   const {data: vehiclePositions} = useGetServiceJourneyVehiclesQuery(
@@ -270,10 +280,10 @@ export const DepartureDetailsScreenComponent = ({
   useFocusEffect(
     useCallback(() => {
       if (shouldShowRequestReview.current) {
-        shouldShowLive && requestReview(InAppReviewContext.DepartureDetails);
+        vehiclePosition && requestReview(InAppReviewContext.DepartureDetails);
         shouldShowRequestReview.current = false;
       }
-    }, [requestReview, shouldShowLive]),
+    }, [requestReview, vehiclePosition]),
   );
 
   return (
@@ -655,26 +665,44 @@ function EstimatedCallRow({
           </ThemeText>
         )}
 
-        {!call.forAlighting && !call.metadata.isStartOfServiceJourney && (
+        {call.cancellation && !call.metadata.isStartOfServiceJourney && (
           <AccessibleText
             typography="body__s"
             color="secondary"
             style={styles.boardingInfo}
             pause="before"
           >
-            {t(DepartureDetailsTexts.messages.noAlighting)}
+            {t(
+              DepartureDetailsTexts.messages.notStoppingHere(
+                t(getTranslatedModeName(mode, subMode, true)),
+              ),
+            )}
           </AccessibleText>
         )}
-        {!call.forBoarding && !call.metadata.isEndOfServiceJourney && (
-          <AccessibleText
-            typography="body__s"
-            color="secondary"
-            style={styles.boardingInfo}
-            pause="before"
-          >
-            {t(DepartureDetailsTexts.messages.noBoarding)}
-          </AccessibleText>
-        )}
+        {!call.cancellation &&
+          !call.forAlighting &&
+          !call.metadata.isStartOfServiceJourney && (
+            <AccessibleText
+              typography="body__s"
+              color="secondary"
+              style={styles.boardingInfo}
+              pause="before"
+            >
+              {t(DepartureDetailsTexts.messages.noAlighting)}
+            </AccessibleText>
+          )}
+        {!call.cancellation &&
+          !call.forBoarding &&
+          !call.metadata.isEndOfServiceJourney && (
+            <AccessibleText
+              typography="body__s"
+              color="secondary"
+              style={styles.boardingInfo}
+              pause="before"
+            >
+              {t(DepartureDetailsTexts.messages.noBoarding)}
+            </AccessibleText>
+          )}
       </TripRow>
       {situations.map((situation) => (
         <TripRow
@@ -746,14 +774,14 @@ function CollapseButtonRow({
     </>
   );
   return (
-    <PressableOpacity
+    <NativeBlockButton
       accessibilityRole="button"
       onPress={() => setCollapsed(!collapsed)}
       testID={testID}
       style={styles.container}
     >
       {child}
-    </PressableOpacity>
+    </NativeBlockButton>
   );
 }
 

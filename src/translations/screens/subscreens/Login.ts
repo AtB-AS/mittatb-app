@@ -104,9 +104,9 @@ const LoginTexts = {
         'Oppdater Vipps-appen før du bruker den til å logge inn.',
       ),
       unknown_error: _(
-        'Oops - noe gikk galt. Supert om du prøver på nytt 🤞',
-        'Whoops - something went wrong. Please try again 🤞',
-        'Oops - noko gjekk gale. Supert om du prøver på nytt 🤞',
+        'Vi klarte ikke å logge deg inn. Prøv igjen, eller kontakt kundeservice for hjelp.',
+        'We couldn’t log you in. Please try again or contact customer service for assistance.',
+        'Vi klarte ikkje å logge deg inn. Prøv igjen, eller kontakt kundeservice for hjelp.',
       ),
     },
   },
@@ -162,9 +162,9 @@ const LoginTexts = {
         'Eingongskoden har gått ut. Ver venleg og be om ein ny.',
       ),
       unknown_error: _(
-        'Oops - noe gikk galt. Supert om du prøver på nytt.',
-        'Whoops - something went wrong. Please try again.',
-        'Oops - noko gjekk gale. Supert om du prøver på nytt.',
+        'Vi klarte ikke å logge deg inn. Prøv igjen, eller kontakt kundeservice for hjelp.',
+        'We couldn’t log you in. Please try again or contact customer service for assistance.',
+        'Vi klarte ikkje å logge deg inn. Prøv igjen, eller kontakt kundeservice for hjelp.',
       ),
       too_many_attempts: _(
         'Du har prøvd for mange ganger. Vennligst vent litt før du prøver igjen.',

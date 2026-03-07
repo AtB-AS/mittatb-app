@@ -71,7 +71,7 @@ export const RemoteConfigContextProvider = ({children}: Props) => {
   const fetchConfig = useCallback(async () => {
     try {
       await remoteConfig().fetchAndActivate();
-      const currentConfig = await getConfig();
+      const currentConfig = getConfig();
       setConfig(currentConfig);
       setFetchError(false);
       setIsLoaded(true);
@@ -84,7 +84,7 @@ export const RemoteConfigContextProvider = ({children}: Props) => {
           Bugsnag.leaveBreadcrumb('Remote config fetch error', userInfo);
         }
       } else {
-        Bugsnag.notify(e as any);
+        Bugsnag.notify(e as Error);
       }
     }
   }, []);

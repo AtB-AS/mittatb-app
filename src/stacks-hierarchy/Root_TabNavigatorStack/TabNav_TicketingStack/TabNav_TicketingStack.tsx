@@ -3,13 +3,16 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {Ticketing_NotEnabledScreen} from './Ticketing_NotEnabledScreen';
 import {Ticketing_RootScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_RootScreen';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {Ticketing_TicketHistoryScreen} from './Ticketing_TicketHistoryScreen';
+import {Ticketing_PurchaseHistoryScreen} from './Ticketing_PurchaseHistoryScreen';
 import {TicketingStackParams} from './navigation-types';
+import {useApplePassPresentationSuppression} from '@atb/modules/native-bridges';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Stack = createStackNavigator<TicketingStackParams>();
 
 export const TabNav_TicketingStack = () => {
   const {enable_ticketing} = useRemoteConfigContext();
+  useApplePassPresentationSuppression(useFocusEffect);
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       {!enable_ticketing && (
@@ -25,8 +28,8 @@ export const TabNav_TicketingStack = () => {
         />
       )}
       <Stack.Screen
-        name="Ticketing_TicketHistoryScreen"
-        component={Ticketing_TicketHistoryScreen}
+        name="Ticketing_PurchaseHistoryScreen"
+        component={Ticketing_PurchaseHistoryScreen}
       />
     </Stack.Navigator>
   );

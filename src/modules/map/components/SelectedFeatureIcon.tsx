@@ -2,9 +2,13 @@ import React, {useMemo} from 'react';
 import MapboxGL from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {hitboxCoveringIconOnly, useMapSymbolStyles} from '@atb/modules/map';
-import {Expression} from '@rnmapbox/maps/src/utils/MapboxStyles';
+import {Expression} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 import {PinType} from '../mapbox-styles/pin-types';
 import {MapSlotLayerId} from '../hooks/use-mapbox-json-style';
+import {
+  StationFeaturePropertiesSchema,
+  VehicleFeaturePropertiesSchema,
+} from '@atb/api/types/mobility';
 
 export const SelectedFeatureIcon = ({
   selectedFeature,
@@ -89,11 +93,18 @@ function getPinType(selectedFeatureProperties?: GeoJsonProperties): PinType {
     case 'Quay':
       return 'stop';
     default:
-      // would be nice to have a better check than this
-      if (selectedFeatureProperties?.is_virtual_station !== undefined) {
+      if (
+        StationFeaturePropertiesSchema.safeParse(selectedFeatureProperties)
+          .success
+      ) {
         return 'station';
-      } else {
+      }
+      if (
+        VehicleFeaturePropertiesSchema.safeParse(selectedFeatureProperties)
+          .success
+      ) {
         return 'vehicle';
       }
+      return 'unknown';
   }
 }

@@ -1,5 +1,5 @@
 import React, {forwardRef} from 'react';
-import {AccessibilityProps, GestureResponderEvent, View} from 'react-native';
+import {AccessibilityProps, View} from 'react-native';
 import {ThemeText, screenReaderPause} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
@@ -8,7 +8,7 @@ import {useSectionStyle} from '../use-section-style';
 import {StyleSheet} from '@atb/theme';
 import {ContrastColor, InteractiveColor, TextNames} from '@atb/theme/colors';
 import {LabelType} from '@atb/modules/configuration';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {useTranslation} from '@atb/translations';
 import {TagInfoTexts} from '@atb/translations/components/TagInfo';
 import {Tag} from '@atb/components/tag';
@@ -26,7 +26,7 @@ type Props = SectionItemProps<{
   subtitle?: string;
   /* Label will be placed by the icon. "Beta", "New", etc. */
   label?: LabelType;
-  onPress?(event: GestureResponderEvent): void;
+  onPress?(): void;
   leftIcon?: IconProps;
   rightIcon?: IconProps;
   disabled?: boolean;
@@ -57,7 +57,6 @@ export const LinkSectionItem = forwardRef<any, Props>(
       useSectionItem(props);
     const style = useSectionStyle();
     const linkSectionItemStyle = useStyles();
-    const disabledStyle = disabled ? linkSectionItemStyle.disabled : undefined;
     const accessibilityWithOverrides = disabled
       ? {...accessibility, accessibilityHint: undefined}
       : accessibility;
@@ -65,7 +64,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
       accessibilityWithOverrides?.accessibilityLabel ??
       text + screenReaderPause + (subtitle ? subtitle + screenReaderPause : '');
     return (
-      <PressableOpacity
+      <NativeBlockButton
         accessible
         accessibilityRole="button"
         onPress={disabled ? undefined : onPress}
@@ -79,12 +78,9 @@ export const LinkSectionItem = forwardRef<any, Props>(
         style={topContainer}
         testID={testID}
         ref={forwardedRef}
-        collapsable={false}
         {...accessibilityWithOverrides}
       >
-        <View
-          style={[style.spaceBetween, disabledStyle, linkSectionItemStyle.gap]}
-        >
+        <View style={[style.spaceBetween, linkSectionItemStyle.gap]}>
           {leftIcon && (
             <Icon icon={leftIcon} interactiveColor={interactiveColor} />
           )}
@@ -112,13 +108,13 @@ export const LinkSectionItem = forwardRef<any, Props>(
           )}
         </View>
         {subtitle && (
-          <View style={disabledStyle}>
+          <View>
             <ThemeText color="secondary" typography="body__s">
               {subtitle}
             </ThemeText>
           </View>
         )}
-      </PressableOpacity>
+      </NativeBlockButton>
     );
   },
 );

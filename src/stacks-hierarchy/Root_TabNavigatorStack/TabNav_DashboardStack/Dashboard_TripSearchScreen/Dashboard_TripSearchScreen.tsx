@@ -1,6 +1,5 @@
 import {Filter, Swap} from '@atb/assets/svg/mono-icons/actions';
 import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
-import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
@@ -18,7 +17,8 @@ import {
   useLocationSearchValue,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Results} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/Results';
-import {useTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-trips-query';
+
+import {useTrips} from './use-trips';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {Language, TripSearchTexts, useTranslation} from '@atb/translations';
 import {isInThePast} from '@atb/utils/date';
@@ -32,7 +32,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {TFunc} from '@leile/lobo-t';
 import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {ActivityIndicator, Platform, RefreshControl, View} from 'react-native';
+import {ActivityIndicator, Platform, View} from 'react-native';
 import {DashboardScreenProps} from '../navigation-types';
 import {
   type SearchForLocations,
@@ -48,7 +48,7 @@ import {TripPattern} from '@atb/api/types/trips';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trips-query';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {areDefaultFiltersSelected, getSearchTimeLabel} from './utils';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -63,6 +63,7 @@ import SharedTexts from '@atb/translations/shared';
 import {TravelSearchFiltersBottomSheet} from './components/TravelSearchFiltersBottomSheet';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {WithOverlayButton} from '@atb/components/overlay-button';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -96,7 +97,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const timePickerBottomSheetModalRef = useRef<BottomSheetModal | null>(null);
   const timePickerCloseRef = useRef<View | null>(null);
 
-  const {location, requestLocationPermission} = useGeolocationContext();
+  const {location} = useGeolocationContext();
 
   const currentLocation = location || undefined;
 
@@ -106,8 +107,16 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   const {isFlexibleTransportEnabled: isFlexibleTransportEnabledInRemoteConfig} =
     useFeatureTogglesContext();
-  const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
-    useTripsQuery(from, to, searchTime, filtersState.filtersSelection);
+  const {
+    tripPatterns,
+    timeOfLastSearch,
+    loadMoreTrips,
+    refetchTrips,
+    tripsSearchState,
+    tripsIsError,
+    tripsIsNetworkError,
+  } = useTrips(from, to, searchTime, filtersState.filtersSelection);
+
   const {nonTransitTrips} = useNonTransitTripsQuery(
     from,
     to,
@@ -115,8 +124,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     filtersState.filtersSelection,
   );
 
-  const isSearching = searchState === 'searching';
-  const showEmptyScreen = !tripPatterns && !isSearching && !error;
+  const isSearching = tripsSearchState === 'searching';
+  const showEmptyScreen = !tripPatterns && !isSearching && !tripsIsError;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
   const isValidLocations = isValidTripLocations(from, to);
@@ -132,7 +141,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   useEffect(() => {
     if (!screenHasFocus) return;
-    switch (searchState) {
+    switch (tripsSearchState) {
       case 'searching':
         setSearchStateMessage(t(TripSearchTexts.searchState.searching));
         break;
@@ -147,21 +156,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
         break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchState, t]);
-
-  const setCurrentLocationAsFrom = useCallback(
-    function setCurrentLocationAsFrom() {
-      log('set_current_location_as_from');
-      navigation.setParams({
-        fromLocation: currentLocation && {
-          ...currentLocation,
-          resultType: 'geolocation',
-        },
-        toLocation: to,
-      });
-    },
-    [navigation, currentLocation, to],
-  );
+  }, [tripsSearchState, t]);
 
   const openLocationSearch = (
     callerRouteParam: keyof RootProps['route']['params'],
@@ -172,26 +167,24 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
         callerRouteParam === 'fromLocation'
           ? t(SharedTexts.from)
           : t(SharedTexts.to),
-      callerRouteName: route.name,
-      callerRouteParam,
+      callerRouteConfig: {
+        route: [
+          'Root_TabNavigatorStack',
+          {
+            screen: 'TabNav_DashboardStack',
+            params: {
+              screen: 'Dashboard_TripSearchScreen',
+              params: {},
+              merge: true,
+            },
+          },
+        ],
+        locationRouteParam: callerRouteParam,
+      },
       initialLocation,
       includeJourneyHistory: true,
       onlyStopPlacesCheckboxInitialState: false,
     });
-
-  const setCurrentLocationOrRequest = useCallback(
-    async function setCurrentLocationOrRequest() {
-      if (currentLocation) {
-        setCurrentLocationAsFrom();
-      } else {
-        const status = await requestLocationPermission(false);
-        if (status === 'granted') {
-          setCurrentLocationAsFrom();
-        }
-      }
-    },
-    [currentLocation, setCurrentLocationAsFrom, requestLocationPermission],
-  );
 
   const onPressed = useCallback(
     (
@@ -228,26 +221,43 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     timePickerBottomSheetModalRef.current?.present();
   };
 
-  const refresh = () => {
+  const forceRefresh = useCallback(() => {
+    const updatedSearchTime: TripSearchTime =
+      searchTime.option === 'now'
+        ? {
+            option: 'now',
+            date: new Date().toISOString(),
+          }
+        : {...searchTime};
+    setSearchTime(updatedSearchTime);
     navigation.setParams({
-      fromLocation: from?.resultType === 'geolocation' ? currentLocation : from,
-      toLocation: to?.resultType === 'geolocation' ? currentLocation : to,
-      searchTime:
-        searchTime.option === 'now'
-          ? {
-              option: 'now',
-              date: new Date().toISOString(),
-            }
-          : {...searchTime},
+      ...(from?.resultType === 'geolocation' && {
+        fromLocation: currentLocation,
+      }),
+      ...(to?.resultType === 'geolocation' && {
+        toLocation: currentLocation,
+      }),
+      searchTime: updatedSearchTime,
     });
-  };
+    refetchTrips();
+  }, [from, to, currentLocation, searchTime, navigation, refetchTrips]);
 
   const nonTransitTripsVisible =
-    (tripPatterns.length > 0 || searchState === 'search-empty-result') &&
+    (tripPatterns.length > 0 || tripsSearchState === 'search-empty-result') &&
     nonTransitTrips.length > 0;
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(refresh, [from, to]);
+  const refreshControlProps = useMemo(() => {
+    // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
+    return isFocused || Platform.OS === 'android'
+      ? {
+          refreshing:
+            Platform.OS === 'ios'
+              ? false
+              : tripsSearchState === 'searching' && !tripPatterns.length,
+          onRefresh: forceRefresh,
+        }
+      : undefined;
+  }, [tripsSearchState, tripPatterns.length, forceRefresh, isFocused]);
 
   return (
     <View style={styles.container}>
@@ -259,87 +269,58 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           leftButton: {
             type: 'back',
             onPress: () => {
-              if (callerRoute?.name) {
+              if (callerRoute) {
                 navigation.setParams({
                   callerRoute: undefined,
                 });
 
-                return navigation.navigate({
-                  name: callerRoute?.name as any,
-                  params: {},
-                });
+                return navigation.navigate(...callerRoute);
               }
 
               navigation.goBack();
             },
           },
         }}
-        refreshControl={
-          // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
-          isFocused || Platform.OS === 'android' ? (
-            <RefreshControl
-              refreshing={
-                Platform.OS === 'ios'
-                  ? false
-                  : searchState === 'searching' && !tripPatterns.length
-              }
-              onRefresh={refresh}
-            />
-          ) : undefined
-        }
+        refreshControlProps={refreshControlProps}
         parallaxContent={() => (
           <View style={styles.searchHeader}>
-            <Section>
-              <LocationInputSectionItem
-                accessibilityLabel={
-                  t(TripSearchTexts.location.departurePicker.a11yLabel) +
-                  screenReaderPause
-                }
-                accessibilityHint={
-                  t(TripSearchTexts.location.departurePicker.a11yHint) +
-                  screenReaderPause
-                }
-                updatingLocation={updatingLocation && !to}
-                location={from}
-                label={t(SharedTexts.from)}
-                onPress={() => openLocationSearch('fromLocation', from)}
-                icon={<ThemeIcon svg={LocationIcon} />}
-                onIconPress={setCurrentLocationOrRequest}
-                iconAccessibility={{
-                  accessible: true,
-                  accessibilityLabel:
-                    from?.resultType == 'geolocation'
-                      ? t(
-                          TripSearchTexts.location.locationButton.a11yLabel
-                            .update,
-                        )
-                      : t(
-                          TripSearchTexts.location.locationButton.a11yLabel.use,
-                        ),
-                  accessibilityRole: 'button',
-                }}
-                testID="searchFromButton"
-              />
+            <WithOverlayButton
+              svgIcon={Swap}
+              onPress={swap}
+              overlayPosition="right"
+              isLoading={updatingLocation && !to}
+              accessibilityLabel={
+                t(TripSearchTexts.location.swapButton.a11yLabel) +
+                screenReaderPause
+              }
+            >
+              <Section>
+                <LocationInputSectionItem
+                  accessibilityLabel={
+                    t(TripSearchTexts.location.departurePicker.a11yLabel) +
+                    screenReaderPause
+                  }
+                  accessibilityHint={
+                    t(TripSearchTexts.location.departurePicker.a11yHint) +
+                    screenReaderPause
+                  }
+                  location={from}
+                  label={t(SharedTexts.from)}
+                  onPress={() => openLocationSearch('fromLocation', from)}
+                  testID="searchFromButton"
+                />
 
-              <LocationInputSectionItem
-                accessibilityLabel={t(
-                  TripSearchTexts.location.destinationPicker.a11yLabel,
-                )}
-                label={t(SharedTexts.to)}
-                location={to}
-                onPress={() => openLocationSearch('toLocation', to)}
-                icon={<ThemeIcon svg={Swap} />}
-                onIconPress={swap}
-                iconAccessibility={{
-                  accessible: true,
-                  accessibilityLabel:
-                    t(TripSearchTexts.location.swapButton.a11yLabel) +
-                    screenReaderPause,
-                  accessibilityRole: 'button',
-                }}
-                testID="searchToButton"
-              />
-            </Section>
+                <LocationInputSectionItem
+                  accessibilityLabel={t(
+                    TripSearchTexts.location.destinationPicker.a11yLabel,
+                  )}
+                  label={t(SharedTexts.to)}
+                  location={to}
+                  onPress={() => openLocationSearch('toLocation', to)}
+                  testID="searchToButton"
+                />
+              </Section>
+            </WithOverlayButton>
             <View style={styles.searchParametersButtons}>
               <Button
                 expanded={true}
@@ -442,8 +423,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               {isFlexibleTransportEnabled &&
                 !flexibleTransportInfoDismissed &&
                 (tripPatterns.length > 0 ||
-                  searchState === 'search-empty-result') &&
-                !error && (
+                  tripsSearchState === 'search-empty-result') &&
+                !tripsIsError && (
                   <CityZoneMessage
                     from={from}
                     to={to}
@@ -471,7 +452,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 onDetailsPressed={(tripPattern, resultIndex) =>
                   onPressed(tripPattern, {analyticsMetadata: {resultIndex}})
                 }
-                errorType={error}
+                tripsIsError={tripsIsError}
+                tripsIsNetworkError={tripsIsNetworkError}
                 searchTime={searchTime}
                 anyFiltersApplied={
                   filtersState.enabled && filtersState.anyFiltersApplied
@@ -480,14 +462,14 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             </View>
           )}
           {!tripPatterns.length && <View style={styles.emptyResultsSpacer} />}
-          {!error && isValidLocations && (
-            <PressableOpacity
-              onPress={loadMore}
-              disabled={searchState === 'searching'}
+          {!tripsIsError && isValidLocations && (
+            <NativeBlockButton
+              onPress={loadMoreTrips}
+              disabled={tripsSearchState === 'searching'}
               style={styles.loadMoreButton}
               testID="loadMoreButton"
             >
-              {searchState === 'searching' ? (
+              {tripsSearchState === 'searching' ? (
                 <View style={styles.loadingIndicator}>
                   {tripPatterns.length ? (
                     <>
@@ -509,7 +491,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 </View>
               ) : (
                 <>
-                  {loadMore ? (
+                  {loadMoreTrips ? (
                     <>
                       <ThemeIcon
                         color="secondary"
@@ -524,7 +506,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   ) : null}
                 </>
               )}
-            </PressableOpacity>
+            </NativeBlockButton>
           )}
         </View>
       </FullScreenView>
@@ -638,7 +620,7 @@ function useUpdatedLocation(
     setLocation('to', searchedToLocation);
   }, [searchedToLocation, setLocation]);
 
-  return {from, to};
+  return useMemo(() => ({from, to}), [from, to]);
 }
 
 function log(message: string, metadata?: {[key: string]: string}) {

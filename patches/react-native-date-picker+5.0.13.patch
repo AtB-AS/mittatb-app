@@ -23,3 +23,17 @@ index da42873..b08d772 100644
  
  @implementation RCTConvert(UIDatePicker)
  
+diff --git a/node_modules/react-native-date-picker/package.json b/node_modules/react-native-date-picker/package.json
+index 469386d..36460e4 100644
+--- a/node_modules/react-native-date-picker/package.json
++++ b/node_modules/react-native-date-picker/package.json
+@@ -70,9 +70,6 @@
+     "ios": {
+       "componentProvider": {
+         "RNDatePicker": "RNDatePicker"
+-      },
+-      "modulesProvider": {
+-        "RNDatePicker": "RNDatePickerManager"
+       }
+     }
+   }

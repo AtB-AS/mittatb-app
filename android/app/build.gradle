@@ -2,8 +2,6 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
-apply plugin: "com.bugsnag.android.gradle"
-
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
@@ -121,9 +119,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    // Store the KETTLE_API_KEY in a constant
-    def KETTLE_API_KEY_VALUE = System.getProperty("KETTLE_API_KEY") as String
     def BUGSNAG_API_KEY_VALUE = System.getProperty("BUGSNAG_API_KEY") as String
+    def RELEASE_STAGE_KEY_VALUE = System.getProperty("RELEASE_STAGE") as String
 
     namespace "no.mittatb"
     defaultConfig {
@@ -133,7 +130,6 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionName appVersionName
-        multiDexEnabled true
 
         if (System.getenv()["CI"]) {
             versionCode System.getenv()["BUILD_ID"] as Integer
@@ -141,22 +137,10 @@ android {
             versionCode appVersionCode.toInteger()
         }
 
-        // This is fetched inside Java / Kotlin code
-        buildConfigField 'String', 'KETTLE_API_KEY', "\"$KETTLE_API_KEY_VALUE\""
         manifestPlaceholders = [
-                bugsnagApiKey: BUGSNAG_API_KEY_VALUE
+                bugsnagApiKey: BUGSNAG_API_KEY_VALUE,
+                releaseStage: RELEASE_STAGE_KEY_VALUE
         ]
-    }
-
-    bugsnag {
-        variantFilter { variant ->
-            // disables plugin for all variants of the 'staging' productFlavor
-            def name = variant.name.toLowerCase()
-            if (name.contains("staging") || name.contains("debug")) {
-                enabled = false
-            }
-        }
-        uploadReactNativeMappings = true // enables upload of React Native source maps
     }
 
     signingConfigs {
@@ -211,9 +195,6 @@ android {
         app {
             dimension "type"
         }
-        beacons {
-            dimension "type"
-        }
     }
     packagingOptions {
         pickFirst "lib/armeabi-v7a/libc++_shared.so"
@@ -224,34 +205,23 @@ android {
 }
 
 dependencies {
-    implementation 'com.facebook.soloader:soloader:0.10.5'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${KOTLIN_VERSION}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KOTLIN_VERSION}"
 
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.4"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.1.5"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 
-    implementation 'androidx.multidex:multidex:2.0.1'
-    implementation "androidx.core:core-splashscreen:1.0.0"
-
-    implementation 'com.kogenta.kettle:kettle-sdk:1.4.5'
+    implementation "androidx.core:core-splashscreen:1.2.0"
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
     }
-}
-
-// Run this once to be able to run the application with BUCK
-// puts all compile dependencies into folder libs for BUCK to use
-task copyDownloadableDepsToLibs(type: Copy) {
-    from configurations.implementation
-    into 'libs'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -106,11 +106,15 @@ export function decodePolylineEncodedMultiPolygons(
 }
 
 export function getIconFeatureCollections(
-  geofencingZones: GeofencingZones[],
+  preProcessedGeofencingZones: PreProcessedGeofencingZones[],
 ): PointFeatureCollection[] {
-  return geofencingZones?.map((geofencingZone, geofencingZoneIndex) => {
+  return preProcessedGeofencingZones?.map((preProcessedGeofencingZone, i) => {
     const iconFeatures: PointFeature[] = [];
-    geofencingZone?.geojson?.features?.forEach((feature) => {
+    preProcessedGeofencingZone?.geojson?.features?.forEach((feature) => {
+      if (feature.properties?.geofencingZoneCustomProps?.code === 'allowed') {
+        // Skip icons for allowed zones.
+        return;
+      }
       feature.geometry?.coordinates?.forEach((polygon) => {
         if (isPolygonLarge(polygon)) {
           // No icon for large polygons, long processing time and not useful
@@ -148,7 +152,7 @@ export function getIconFeatureCollections(
     return {
       type: 'FeatureCollection',
       features: iconFeatures,
-      renderKey: geofencingZoneIndex.toString(),
+      renderKey: i.toString(),
     };
   });
 }

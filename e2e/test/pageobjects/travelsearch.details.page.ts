@@ -15,12 +15,13 @@ class TravelSearchDetailsPage {
    * @param mode mode to check for (bike, foot)
    */
   async hasSingleLeg(mode: 'bike' | 'foot') {
-    const legId_0 = `//*[@resource-id="legContainer0"]`;
-    const legId_1 = `//*[@resource-id="legContainer1"]`;
+    const legId_0 = `//*[@resource-id="leg0"]`;
+    const legId_1 = `//*[@resource-id="leg1"]`;
     const modeId = `//*[@resource-id="${mode}Leg"]`;
     await ElementHelper.waitForElement('id', 'tripDetailsContentView');
+    expect(await $(legId_0).isExisting()).toBe(true);
     expect(await $(legId_1).isExisting()).toBe(false);
-    return await $(legId_0).$(modeId).isExisting();
+    return (await $$(modeId).length) === 1;
   }
 
   /**
@@ -29,15 +30,14 @@ class TravelSearchDetailsPage {
    * @param startOrEnd to get start or end time of a leg
    */
   async getTime(startOrEnd: 'start' | 'end', legIndex: number) {
-    const searchResultId = `//*[@resource-id="legContainer${legIndex}"]`;
     const fromToPlaceId =
       startOrEnd == 'start'
-        ? `//*[@resource-id="fromPlace"]`
-        : `//*[@resource-id="toPlace"]`;
+        ? `//*[@resource-id="leg${legIndex}FromPlace"]`
+        : `//*[@resource-id="leg${legIndex}ToPlace"]`;
     const schTimeId = `//*[@resource-id="schTime"]`;
     const schCaTimeId = `//*[@resource-id="schCaTime"]`;
     const aimTimeId = `//*[@resource-id="aimTime"]`;
-    const parentEl = await $(searchResultId).$(fromToPlaceId);
+    const parentEl = await $(fromToPlaceId);
 
     // Either scheduled or aimed time
     if (await parentEl.$(aimTimeId).isExisting()) {
@@ -54,13 +54,12 @@ class TravelSearchDetailsPage {
    * @param legIndex leg index
    */
   async getLocation(startOrEnd: 'start' | 'end', legIndex: number) {
-    const searchResultId = `//*[@resource-id="legContainer${legIndex}"]`;
     const fromToPlaceId =
       startOrEnd == 'start'
-        ? `//*[@resource-id="fromPlaceName"]`
-        : `//*[@resource-id="toPlaceName"]`;
+        ? `//*[@resource-id="leg${legIndex}FromPlaceName"]`
+        : `//*[@resource-id="leg${legIndex}ToPlaceName"]`;
 
-    return await $(searchResultId).$(fromToPlaceId).getText();
+    return await $(fromToPlaceId).getText();
   }
 }
 

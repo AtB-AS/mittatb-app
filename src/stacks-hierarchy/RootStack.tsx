@@ -18,12 +18,12 @@ import {useTestIds} from './use-test-ids';
 import {parse} from 'search-params';
 
 import type {NavigationState, PartialState} from '@react-navigation/routers';
+import {useLogger as useReactNavigationLogger} from '@react-navigation/devtools';
 
 import {Root_SelectTravelTokenScreen} from './Root_SelectTravelTokenScreen';
 import {Root_ConsiderTravelTokenChangeScreen} from '@atb/stacks-hierarchy/Root_ConsiderTravelTokenChangeScreen';
 import {Root_AddEditFavoritePlaceScreen} from './Root_AddEditFavoritePlaceScreen';
 import {Root_SearchFavoritePlaceScreen} from './Root_SearchFavoritePlaceScreen';
-import {Root_ShareTravelHabitsScreen} from './Root_ShareTravelHabitsScreen';
 import {Root_LocationSearchByMapScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByMapScreen';
 import {Root_ScanQrCodeScreen} from '@atb/stacks-hierarchy/Root_ScanQrCodeScreen';
 import {Root_LocationSearchByTextScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
@@ -54,7 +54,6 @@ import {
 } from '@atb/stacks-hierarchy/Root_ScooterHelp';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
-import {useBeaconsContext} from '@atb/modules/beacons';
 import {Root_TicketInformationScreen} from './Root_TicketInformationScreen/Root_TicketInformationScreen';
 import {Root_ChooseTicketRecipientScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
@@ -80,6 +79,12 @@ import {
 import {Root_OnboardingCarouselStack} from './Root_OnboardingCarouselStack';
 import {getActiveRouteName} from '@atb/utils/navigation';
 import {Root_TravelAidOnboardingScreen} from './Root_TravelAidOnboardingScreen';
+import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
+import {
+  useGetFareProductsQuery,
+  useTicketingContext,
+} from '@atb/modules/ticketing';
+import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -92,6 +97,9 @@ export const RootStack = () => {
   const {getInitialNavigationContainerState} = useOnboardingFlow();
   const {theme} = useThemeContext();
   const navRef = useNavigationContainerRef<RootStackParamList>();
+
+  useReactNavigationLogger(navRef);
+
   const {setCurrentRouteName} = useOnboardingContext();
   const onNavigationStateChange = useCallback(
     (state?: NavigationState) => {
@@ -103,8 +111,10 @@ export const RootStack = () => {
   );
 
   const {minimum_app_version} = useRemoteConfigContext();
+  const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const {customerProfile} = useTicketingContext();
 
-  useBeaconsContext();
   useTestIds();
   useSetupReactQueryWindowFocus();
 
@@ -201,7 +211,6 @@ export const RootStack = () => {
       />
       <LoadingScreenBoundary>
         <NavigationContainer<RootStackParamList>
-          navigationInChildEnabled // This is needed for react-navigation v7 and higher, will be removed in the future and we will have to fix nested navigation
           onStateChange={onNavigationStateChange}
           initialState={getInitialNavigationContainerState()}
           ref={navRef}
@@ -252,6 +261,30 @@ export const RootStack = () => {
                     },
                   ],
                 } as ResultState;
+              }
+              if (path.includes('purchase-overview')) {
+                const params = new URLSearchParams(path.split('?')[1]);
+                const type = params.get('type');
+                if (type) {
+                  const isSellable = preassignedFareProducts.some(
+                    (product) =>
+                      type === product.type &&
+                      isProductSellableInApp(product, customerProfile),
+                  );
+                  if (isSellable) {
+                    const selection = purchaseSelectionBuilder
+                      .forType(type)
+                      .build();
+                    return {
+                      routes: [
+                        {
+                          name: 'Root_PurchaseOverviewScreen',
+                          params: {selection},
+                        },
+                      ],
+                    } as ResultState;
+                  }
+                }
               }
 
               // If the path is not from the widget, behave as usual
@@ -379,10 +412,6 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_SearchFavoritePlaceScreen"
                 component={Root_SearchFavoritePlaceScreen}
-              />
-              <Stack.Screen
-                name="Root_ShareTravelHabitsScreen"
-                component={Root_ShareTravelHabitsScreen}
               />
               <Stack.Screen
                 name="Root_LoginAvailableFareContractWarningScreen"

@@ -1,5 +1,18 @@
+diff --git a/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.h b/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.h
+index 24b09eb..20a04e0 100644
+--- a/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.h
++++ b/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.h
+@@ -62,6 +62,8 @@ NS_ASSUME_NONNULL_BEGIN
+ // Interface for natively fetching all the keys from the storage data.
+ - (void)getAllKeys:(RCTResponseSenderBlock)callback;
+ 
+++ (void)setAppGroupName:(NSString *)groupName;
++
+ @end
+ 
+ NS_ASSUME_NONNULL_END
 diff --git a/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.mm b/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.mm
-index fa3bb04..3930a2e 100644
+index fa3bb04..ef02130 100644
 --- a/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.mm
 +++ b/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.mm
 @@ -19,6 +19,7 @@
@@ -26,100 +39,14 @@ index fa3bb04..3930a2e 100644
      // We should use the "Application Support/[bundleID]" folder for persistent data storage that's
      // hidden from users
      storageDirectoryPath = [storageDirectoryPath
-@@ -174,7 +180,7 @@ static void RCTAppendError(NSDictionary *error, NSMutableArray<NSDictionary *> *
-     static NSString *manifestFilePath = nil;
-     static dispatch_once_t onceToken;
-     dispatch_once(&onceToken, ^{
--      manifestFilePath = RCTCreateManifestFilePath(RCTStorageDirectory);
-+        manifestFilePath = RCTCreateManifestFilePath(RCTStorageDirectory);
-     });
-     return manifestFilePath;
- }
-@@ -665,8 +671,22 @@ - (BOOL)_passthroughDelegate
+@@ -665,6 +671,10 @@ - (BOOL)_passthroughDelegate
          [self.delegate respondsToSelector:@selector(isPassthrough)] && self.delegate.isPassthrough;
  }
  
-+-(void)_setGroupName:(NSString *)groupName {
+++ (void)setAppGroupName:(NSString *)groupName {
 +    AppGroupName = groupName;
 +}
 +
  #pragma mark - Exported JS Functions
  
-+// clang-format off
-+RCT_EXPORT_METHOD(setAppGroupName:(NSString*)groupName
-+                  callback:(RCTResponseSenderBlock)callback)
-+// clang-format on
-+{
-+    [self _setGroupName: NULL];
-+    [self _setGroupName: groupName];
-+    callback(@[RCTNullIfNil(nil)]);
-+}
-+
  // clang-format off
- RCT_EXPORT_METHOD(multiGet:(NSArray<NSString *> *)keys
-                   callback:(RCTResponseSenderBlock)callback)
-diff --git a/node_modules/@react-native-async-storage/async-storage/lib/typescript/types.d.ts b/node_modules/@react-native-async-storage/async-storage/lib/typescript/types.d.ts
-index c5d3a6b..bd3e593 100644
---- a/node_modules/@react-native-async-storage/async-storage/lib/typescript/types.d.ts
-+++ b/node_modules/@react-native-async-storage/async-storage/lib/typescript/types.d.ts
-@@ -28,6 +28,7 @@ export type AsyncStorageHook = {
-  * See https://react-native-async-storage.github.io/async-storage/docs/api
-  */
- export type AsyncStorageStatic = {
-+    setAppGroupName: (groupName?: string, callback?: Callback) => Promise<void>;
-     /**
-      * Fetches an item for a `key` and invokes a callback upon completion.
-      *
-diff --git a/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.native.ts b/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.native.ts
-index 6ba0f29..94147e9 100644
---- a/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.native.ts
-+++ b/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.native.ts
-@@ -51,6 +51,19 @@ const AsyncStorage = ((): AsyncStorageStatic => {
-   let _immediate: ReturnType<typeof setImmediate> | null = null;
- 
-   return {
-+    setAppGroupName: (groupName, callback) => {
-+      return new Promise((resolve, reject) => {
-+        RCTAsyncStorage.setAppGroupName(groupName, (error?: ErrorLike) => {
-+          const err = convertError(error);
-+          callback?.(err);
-+          if (err) {
-+            reject(err);
-+          } else {
-+            resolve(undefined);
-+          }
-+        });
-+      });
-+    },
-     /**
-      * Fetches an item for a `key` and invokes a callback upon completion.
-      *
-diff --git a/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.ts b/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.ts
-index 60a6a1a..0be828d 100644
---- a/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.ts
-+++ b/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.ts
-@@ -74,6 +74,12 @@ function createPromiseAll<
- }
- 
- const AsyncStorage: AsyncStorageStatic = {
-+  /**
-+  * Sets `groupName` value.
-+  */
-+  setAppGroupName: (_groupName, callback) => {
-+    return createPromise(() => undefined, callback);
-+  },
-   /**
-    * Fetches `key` value.
-    */
-diff --git a/node_modules/@react-native-async-storage/async-storage/src/types.ts b/node_modules/@react-native-async-storage/async-storage/src/types.ts
-index 5dd2a6c..4dbbfc8 100644
---- a/node_modules/@react-native-async-storage/async-storage/src/types.ts
-+++ b/node_modules/@react-native-async-storage/async-storage/src/types.ts
-@@ -42,6 +42,7 @@ export type AsyncStorageHook = {
-  * See https://react-native-async-storage.github.io/async-storage/docs/api
-  */
- export type AsyncStorageStatic = {
-+  setAppGroupName: (groupName?: string, callback?: Callback) => Promise<void>;
-   /**
-    * Fetches an item for a `key` and invokes a callback upon completion.
-    *

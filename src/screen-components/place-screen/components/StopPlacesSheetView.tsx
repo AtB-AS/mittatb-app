@@ -15,6 +15,7 @@ import {
 
 import {SectionListData} from 'react-native';
 import {DeparturesProps, useDepartures} from '../hooks/use-departures';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type Props = {
   stopPlaces: StopPlace[];
@@ -28,7 +29,6 @@ type Props = {
   ) => void;
   searchTime: string;
   testID?: string;
-  addedFavoritesVisibleOnDashboard?: boolean;
   setTravelTarget?: (target: string) => void;
   distance?: number | undefined;
 };
@@ -41,7 +41,6 @@ export const StopPlacesSheetView = (props: Props) => {
     navigateToDetails,
     searchTime,
     testID,
-    addedFavoritesVisibleOnDashboard,
     setTravelTarget,
     distance,
   } = props;
@@ -60,9 +59,11 @@ export const StopPlacesSheetView = (props: Props) => {
     stopPlaceAndQuays.length ? [{data: stopPlaceAndQuays}] : [];
 
   const quayIds = useMemo(() => quays.map((q) => q.id), [quays]);
+  const isFocusedAndActive = useIsFocusedAndActive();
 
   const departuresProps: DeparturesProps = useMemo(
     () => ({
+      enabled: isFocusedAndActive,
       quayIds,
       limitPerQuay:
         NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW + NUMBER_OF_DEPARTURES_IN_BUFFER,
@@ -70,7 +71,7 @@ export const StopPlacesSheetView = (props: Props) => {
       mode: 'Map',
       startTime: searchTime,
     }),
-    [quayIds, searchTime],
+    [quayIds, searchTime, isFocusedAndActive],
   );
 
   const {
@@ -100,8 +101,8 @@ export const StopPlacesSheetView = (props: Props) => {
       }
       sections={quayListData}
       testID={testID}
-      keyExtractor={(item) => item.quay.id}
-      renderItem={({item, index}) => (
+      keyExtractor={(item: StopPlaceAndQuay) => item.quay.id}
+      renderItem={({item, index}: {item: StopPlaceAndQuay; index: number}) => (
         <QuaySection
           quay={item.quay}
           isLoading={departuresIsLoading}
@@ -110,9 +111,8 @@ export const StopPlacesSheetView = (props: Props) => {
           didLoadingDataFail={departuresIsError}
           navigateToDetails={navigateToDetails}
           navigateToQuay={(quay) => navigateToQuay(item.stopPlace, quay)}
-          testID={'quaySection' + index}
+          testID={'quay' + index}
           showOnlyFavorites={false}
-          addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
           searchDate={searchTime}
           mode="Map"
         />

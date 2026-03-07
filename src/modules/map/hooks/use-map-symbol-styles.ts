@@ -2,11 +2,11 @@ import {useThemeContext} from '@atb/theme';
 
 import {nsrSymbolLayers} from '../components/national-stop-registry-features/nsr-layers';
 import {
-  ExpressionField,
   Expression,
   SymbolLayerStyleProps,
   FilterExpression,
-} from '@rnmapbox/maps/src/utils/MapboxStyles';
+} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
+type ExpressionField = Expression[1];
 import {PinType} from '../mapbox-styles/pin-types';
 import {SelectedMapItemProperties} from '../types';
 import {getIconZoomTransitionStyle} from '../utils';
@@ -187,13 +187,13 @@ export const useMapSymbolStyles = ({
   const textOffset: Expression = [
     'case',
     isMinimized,
-    [0.44, -0.175],
+    [0.44, 0],
     [
       'step',
       numberOfUnits,
-      [0.82 * textOffsetXFactor, -0.15],
+      [0.82 * textOffsetXFactor, 0],
       100,
-      [1.0 * textOffsetXFactor, -0.15],
+      [1.0 * textOffsetXFactor, 0],
     ],
   ];
 

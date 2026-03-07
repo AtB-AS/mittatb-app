@@ -24,7 +24,7 @@ export const TabNav_DeparturesStack = ({}: RootDeparturesScreenProps) => {
       <Stack.Screen
         name="Departures_NearbyStopPlacesScreen"
         component={Departures_NearbyStopPlacesScreen}
-        initialParams={{mode: 'Departure'}}
+        initialParams={{}}
       />
       <Stack.Screen
         name="Departures_PlaceScreen"

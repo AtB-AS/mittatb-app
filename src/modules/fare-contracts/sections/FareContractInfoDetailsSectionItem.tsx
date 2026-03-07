@@ -1,6 +1,5 @@
 import {
   PreassignedFareProduct,
-  SupplementProduct,
   FareZone,
   useFirestoreConfigurationContext,
   UserProfile,
@@ -24,6 +23,9 @@ import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {UniqueWithCount} from '@atb/utils/unique-with-count';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
+import type {BaggageProduct} from '@atb-as/config-specs';
+import {SupplementPurchaseButton} from '@atb/modules/fare-contracts';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 export type FareContractInfoProps = {
   status: ValidityStatus;
@@ -38,12 +40,13 @@ export type FareContractInfoDetailsProps = {
   fromFareZone?: FareZone;
   toFareZone?: FareZone;
   userProfilesWithCount: UniqueWithCount<UserProfile>[];
-  baggageProductsWithCount: UniqueWithCount<SupplementProduct>[];
+  baggageProductsWithCount: UniqueWithCount<BaggageProduct>[];
   status: FareContractInfoProps['status'];
   testID?: string;
   now?: number;
   validTo?: number;
   fareProductType?: string;
+  onNavigateToPurchaseFlow?: (selection: PurchaseSelectionType) => void;
 };
 
 export const FareContractInfoDetailsSectionItem = ({
@@ -54,6 +57,7 @@ export const FareContractInfoDetailsSectionItem = ({
   userProfilesWithCount,
   baggageProductsWithCount,
   status,
+  onNavigateToPurchaseFlow,
   ...props
 }: SectionItemProps<FareContractInfoDetailsProps>) => {
   const {t, language} = useTranslation();
@@ -136,12 +140,16 @@ export const FareContractInfoDetailsSectionItem = ({
           />
         )}
       </View>
+      <SupplementPurchaseButton
+        existingFareContract={fareContract}
+        navigateToPurchaseFlow={onNavigateToPurchaseFlow}
+      />
     </View>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1},
+  container: {flex: 1, rowGap: theme.spacing.large},
   fareContractDetails: {
     flexDirection: 'row',
     justifyContent: 'space-between',

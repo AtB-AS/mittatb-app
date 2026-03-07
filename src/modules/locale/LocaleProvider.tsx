@@ -10,13 +10,14 @@ import {
 } from '@atb/translations/commons';
 import {AppState} from 'react-native';
 
-let globalLanguage: Language = DEFAULT_LANGUAGE;
+export let languageGlobal: Language = DEFAULT_LANGUAGE;
+
 /**
  * tGlobal can be used instead of the t function for when you don't want
  * language changes to potentially retrigger an action (such as e.g. an alert box)
  */
 export const tGlobal: TFunc<typeof Language> = (translatable) =>
-  translatable[globalLanguage];
+  translatable[languageGlobal];
 
 export type Locale = {
   language: Language;
@@ -79,7 +80,7 @@ function useLocale(): Locale {
       ? systemLocale.language
       : mapLanguageStringToEnum(userPreferencedLanguage);
 
-    globalLanguage = newLanguage;
+    languageGlobal = newLanguage;
     setLanguage(newLanguage);
   }, [useSystemLanguage, userPreferencedLanguage, systemLocale]);
 

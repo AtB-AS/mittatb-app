@@ -12,7 +12,7 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
 
 export type MapProps = {
@@ -93,7 +93,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
           )}
         </MapboxGL.MapView>
       </View>
-      <PressableOpacity
+      <NativeBlockButton
         style={styles.button}
         onPress={onExpand}
         accessibilityRole="button"
@@ -102,7 +102,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
           {buttonText}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} />
-      </PressableOpacity>
+      </NativeBlockButton>
     </View>
   );
 };

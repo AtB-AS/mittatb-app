@@ -7,10 +7,10 @@ import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {dictionary, useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
-import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
+import {NativeButtonOrView} from '@atb/components/native-button-or-view';
 import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBorderlessButton} from '@atb/components/native-button';
 import {
   type A11yLiveRegion,
   useLiveRegionAnnouncement,
@@ -42,6 +42,7 @@ export type MessageInfoBoxProps = {
   style?: StyleProp<ViewStyle>;
   onPressConfig?: OnPressConfig;
   a11yLiveRegion?: A11yLiveRegion;
+  a11yLabel?: string;
   focusRef?: React.Ref<any>;
   testID?: string;
 };
@@ -55,6 +56,7 @@ export const MessageInfoBox = ({
   onPressConfig,
   onDismiss,
   a11yLiveRegion,
+  a11yLabel,
   focusRef,
   testID,
 }: MessageInfoBoxProps) => {
@@ -73,21 +75,27 @@ export const MessageInfoBox = ({
       : () => openInAppBrowser(onPressConfig.url, 'close'));
 
   const a11yCriticalityPrefix = t(dictionary.messageTypes[type]);
-  const a11yLabel = [a11yCriticalityPrefix, title, message, onPressConfig?.text]
+  const a11yLabelInternal = [
+    a11yCriticalityPrefix,
+    title,
+    a11yLabel ?? message,
+    onPressConfig?.text,
+  ]
     .filter(isDefined)
     .join(screenReaderPause);
   const liveRegionA11yProps = useLiveRegionAnnouncement(
-    a11yLabel,
+    a11yLabelInternal,
     a11yLiveRegion,
   );
 
   return (
-    <PressableOpacityOrView
+    <NativeButtonOrView
       onClick={onPress}
       style={[styles.container, style]}
       accessible={false}
       testID={testID}
       focusRef={focusRef}
+      type="block"
     >
       {!noStatusIcon && (
         <ThemeIcon
@@ -139,7 +147,7 @@ export const MessageInfoBox = ({
       </View>
       {onDismiss && (
         <View>
-          <PressableOpacity
+          <NativeBorderlessButton
             onPress={onDismiss}
             accessible={true}
             accessibilityLabel={t(MessageBoxTexts.dismiss.allyLabel)}
@@ -148,10 +156,10 @@ export const MessageInfoBox = ({
             testID={testID ? `${testID}Close` : 'close'}
           >
             <ThemeIcon svg={Close} {...iconColorProps} />
-          </PressableOpacity>
+          </NativeBorderlessButton>
         </View>
       )}
-    </PressableOpacityOrView>
+    </NativeButtonOrView>
   );
 };
 

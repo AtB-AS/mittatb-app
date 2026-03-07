@@ -2,7 +2,11 @@
 
 # AtB app
 
-This repo contains code for the AtB app, a travel assistant and ticketing app for public transportation and mobility in Norway. In addition to AtB in Trøndelag, the app is also used by [FRAM](https://frammr.no/) (Møre og Romsdal), [Reis Nordland](https://www.reisnordland.no/) and [Svipper](https://svipper.no/) (Troms).
+This repo contains code for the AtB app, a travel assistant and ticketing app for public transportation and mobility in Norway. The app is currently used in four counties (fylkeskommune) in Norway, they are:
+- [AtB](https://www.atb.no/) in [Trøndelag](https://www.trondelagfylke.no/)
+- [FRAM](https://frammr.no/) in [Møre og Romsdal](https://mrfylke.no/)
+- [Reis Nordland](https://www.reisnordland.no/) in [Nordland](https://www.nfk.no/)
+- [Svipper](https://svipper.no/) in [Troms](https://www.tromsfylke.no/)
 
 You can submit a new bug report or feature proposal by [creating a new issue](https://github.com/AtB-AS/mittatb-app/issues/new/choose).
 
@@ -72,7 +76,7 @@ Since iOS development is only supported on MacOS, using MacOS for development is
    a. Mapbox v6 requires token for installing dependencies. This means you need to set proper auth on curl for MapBox API. `git-crypt` should decrypt a `.netrc` file in root. You can copy this to set user info:
    `   cp .netrc ~/`
 
-   b. Pod install: `cd ios/` and `pod install`
+   b. Pod install: `cd ios/` and `bundle exec pod install`
 
 5. From root folder run: `yarn setup dev <organization>` where organization is either `atb`, `fram`, `nfk` or `troms`, to set root .env for local development and generate all icons and launch screens for iOS and Android.
 

@@ -7,11 +7,9 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   PreassignedFareProduct,
   ProductTypeTransportModes,
-  FareZone,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
 import {Moon, Student, Youth} from '@atb/assets/svg/mono-icons/ticketing';
-import {ContrastColor} from '@atb/theme/colors';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {SvgProps} from 'react-native-svg';
@@ -26,45 +24,26 @@ export const InspectionSymbol = ({
   preassignedFareProduct,
   sentTicket,
 }: InspectionSymbolProps) => {
-  const styles = useStyles();
-  const {theme} = useThemeContext();
-
-  const fareProductColor = useFareProductColor(preassignedFareProduct?.type);
   const {isInspectable, mobileTokenStatus} = useMobileTokenContext();
-  const themeColor = isInspectable
-    ? fareProductColor
-    : theme.color.status['warning'].primary;
 
   if (mobileTokenStatus === 'loading') {
     return <ActivityIndicator size="large" />;
   }
 
-  return (
-    <View
-      style={[styles.symbolContainer, {borderColor: themeColor.background}]}
-    >
-      {isInspectable && !sentTicket ? (
-        <InspectableContent
-          preassignedFareProduct={preassignedFareProduct}
-          themeColor={themeColor}
-        />
-      ) : (
-        <NotInspectableContent />
-      )}
-    </View>
+  return isInspectable && !sentTicket ? (
+    <InspectableContent preassignedFareProduct={preassignedFareProduct} />
+  ) : (
+    <NotInspectableContent />
   );
 };
 
 const InspectableContent = ({
   preassignedFareProduct,
-  themeColor,
 }: {
   preassignedFareProduct?: PreassignedFareProduct;
-  fromFareZone?: FareZone;
-  toFareZone?: FareZone;
-  themeColor: ContrastColor;
 }) => {
   const styles = useStyles();
+  const themeColor = useFareProductColor(preassignedFareProduct?.type);
 
   const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
@@ -85,38 +64,52 @@ const InspectableContent = ({
   return (
     <View
       style={[
-        styles.symbolContent,
-        {
-          backgroundColor: shouldFill ? themeColor.background : undefined,
-        },
+        styles.symbolContainer,
+        // On Android we need to set the border width to 0 to avoid a visual glitch if the symbol is filled
+        {borderColor: themeColor.background, borderWidth: shouldFill ? 0 : 2},
       ]}
-      testID="inspectableIcon"
     >
-      <ThemeIcon
-        svg={InspectionSvg}
-        color={shouldFill ? themeColor : undefined}
-        size="large"
-      />
+      <View
+        style={[
+          styles.symbolContent,
+          {
+            backgroundColor: shouldFill ? themeColor.background : undefined,
+          },
+        ]}
+        testID="inspectableIcon"
+      >
+        <ThemeIcon
+          svg={InspectionSvg}
+          color={shouldFill ? themeColor : undefined}
+          size="large"
+        />
+      </View>
     </View>
   );
 };
 
 const NotInspectableContent = () => {
   const {t} = useTranslation();
+  const {theme} = useThemeContext();
   const styles = useStyles();
+
+  const borderColor = theme.color.status['warning'].primary.background;
+
   return (
-    <View style={styles.symbolContent} testID="notInspectableIcon">
-      <ThemeText
-        typography="body__xs"
-        style={{
-          textAlign: 'center',
-        }}
-        accessibilityLabel={t(
-          FareContractTexts.fareContractInfo.noInspectionIconA11yLabel,
-        )}
-      >
-        {t(FareContractTexts.fareContractInfo.noInspectionIcon)}
-      </ThemeText>
+    <View style={[styles.symbolContainer, {borderColor}]}>
+      <View style={styles.symbolContent} testID="notInspectableIcon">
+        <ThemeText
+          typography="body__xs"
+          style={{
+            textAlign: 'center',
+          }}
+          accessibilityLabel={t(
+            FareContractTexts.fareContractInfo.noInspectionIconA11yLabel,
+          )}
+        >
+          {t(FareContractTexts.fareContractInfo.noInspectionIcon)}
+        </ThemeText>
+      </View>
     </View>
   );
 };

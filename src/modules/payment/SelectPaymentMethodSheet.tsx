@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
-import {dictionary, useTranslation} from '@atb/translations';
-import {Close, Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {useTranslation} from '@atb/translations';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {FullScreenFooter} from '@atb/components/screen-footer';
@@ -16,13 +16,17 @@ import {
   CardPaymentMethod,
   PaymentMethod,
   PaymentSelection,
-  VippsPaymentMethod,
+  NonRecurringPaymentMethod,
 } from './types';
 import {SinglePaymentMethod} from './SinglePaymentMethod';
 import {MultiplePaymentMethodsRadioSection} from './MultiplePaymentMethodsRadioSection';
-import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {
+  BottomSheetHeaderType,
+  BottomSheetModal,
+} from '@atb/components/bottom-sheet';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {isNonRecurringPaymentType} from './utils';
 
 type Props = {
   onSelect: (
@@ -54,12 +58,12 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   const {authenticationType} = useAuthContext();
 
   const {paymentTypes} = useFirestoreConfigurationContext();
-  const defaultPaymentMethods: PaymentMethod[] = paymentTypes.map(
-    (paymentType) => ({paymentType}),
-  );
+  const defaultPaymentMethods = paymentTypes.map((paymentType) => ({
+    paymentType,
+  }));
   const singlePaymentMethods = defaultPaymentMethods.filter(
-    (method): method is VippsPaymentMethod =>
-      method.paymentType === PaymentType.Vipps,
+    (method): method is NonRecurringPaymentMethod =>
+      isNonRecurringPaymentType(method.paymentType),
   );
 
   const multiplePaymentMethods = defaultPaymentMethods.filter(
@@ -103,8 +107,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(SelectPaymentMethodTexts.header.text)}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       Footer={Footer}
       closeCallback={() => giveFocus(onCloseFocusRef)}
     >

@@ -14,6 +14,7 @@ import {FareContractInfoDetailsSectionItem} from '../sections/FareContractInfoDe
 import {
   getFareContractInfo,
   hasShmoBookingId,
+  hasShmoOperatorId,
   mapToUserProfilesWithCount,
 } from '../utils';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
@@ -36,17 +37,14 @@ import {
 } from '@atb/modules/configuration';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {Barcode} from './Barcode';
-import {MapFilterType} from '@atb/modules/map';
-import {MessageInfoText} from '@atb/components/message-info-text';
-import {useGetPhoneByAccountIdQuery} from '@atb/modules/on-behalf-of';
+import {MapFilterType, ScooterHelpParams} from '@atb/modules/map';
 import {useAuthContext} from '@atb/modules/auth';
 import {CarnetFooter} from '../carnet/CarnetFooter';
 import {MobilityBenefitsActionSectionItem} from '@atb/modules/mobility';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
-import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
+import {ConsumeCarnetSectionitem} from '../components/ConsumeCarnetSectionitem';
 import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {UsedAccessesSectionItem} from './UsedAccessesSectionItem';
 import {ShmoTripDetailsSectionItem} from '@atb/modules/mobility';
 import {FareContractHeaderSectionItem} from '../sections/FareContractHeaderSectionItem';
@@ -59,17 +57,21 @@ import {
 } from '@atb/modules/bonus';
 import {useFareContractLegs} from '@atb/modules/fare-contracts';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {SentOrReceivedMessageBox} from '../components/SentOrReceivedMessageBox';
+import {Mail} from '@atb/assets/svg/mono-icons/profile';
 
 type Props = {
   fareContract: FareContractType;
   preassignedFareProduct?: PreassignedFareProduct;
   now: number;
   onReceiptNavigate: () => void;
+  onSupportNavigate: (params: ScooterHelpParams) => void;
   onNavigateToMap: (initialFilters: MapFilterType) => void;
-  navigateToBonusScreen: () => void;
+  onNavigateToBonusScreen: () => void;
+  onNavigateToPurchaseFlow?: (selection: PurchaseSelectionType) => void;
   hasActiveTravelCard?: boolean;
   isSentFareContract?: boolean;
 };
@@ -79,8 +81,10 @@ export const DetailsContent: React.FC<Props> = ({
   preassignedFareProduct,
   now,
   onReceiptNavigate,
+  onSupportNavigate,
   onNavigateToMap,
-  navigateToBonusScreen,
+  onNavigateToBonusScreen,
+  onNavigateToPurchaseFlow,
 }) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
 
@@ -108,12 +112,6 @@ export const DetailsContent: React.FC<Props> = ({
     preassignedFareProduct?.id,
   );
   const legs = useFareContractLegs(firstTravelRight.datedServiceJourneys?.[0]);
-
-  // If the ticket is received, get the sender account ID to look up for phone number.
-  const senderAccountId = isReceived ? fc.purchasedBy : undefined;
-
-  const {data: purchaserPhoneNumber} =
-    useGetPhoneByAccountIdQuery(senderAccountId);
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
     fc.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
@@ -158,15 +156,15 @@ export const DetailsContent: React.FC<Props> = ({
   const shouldShowLegs =
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;
 
-  const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(fc.id);
+  const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(fc.orderId);
   const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(fc, validityStatus);
 
   return (
     <Section style={styles.section}>
       {hasShmoBookingId(fc) ? (
-        <FareContractShmoHeaderSectionItem fareContract={fc} />
+        <FareContractShmoHeaderSectionItem fareContract={fc} now={now} />
       ) : (
-        <FareContractHeaderSectionItem fareContract={fc} />
+        <FareContractHeaderSectionItem fareContract={fc} now={now} />
       )}
 
       {hasShmoBookingId(fc) ? (
@@ -183,6 +181,7 @@ export const DetailsContent: React.FC<Props> = ({
           baggageProductsWithCount={baggageProductsWithCount}
           status={validityStatus}
           preassignedFareProduct={preassignedFareProduct}
+          onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
         />
       )}
 
@@ -216,16 +215,9 @@ export const DetailsContent: React.FC<Props> = ({
           </View>
         </GenericSectionItem>
       )}
-      {purchaserPhoneNumber && (
+      {isSentOrReceived && (
         <GenericSectionItem>
-          <MessageInfoText
-            type="info"
-            message={t(
-              FareContractTexts.details.purchasedBy(
-                formatPhoneNumber(purchaserPhoneNumber),
-              ),
-            )}
-          />
+          <SentOrReceivedMessageBox fc={fc} />
         </GenericSectionItem>
       )}
 
@@ -244,7 +236,7 @@ export const DetailsContent: React.FC<Props> = ({
       {bonusAmountEarned != undefined && bonusAmountEarned.amount > 0 && (
         <EarnedBonusPointsSectionItem
           amount={bonusAmountEarned.amount}
-          navigateToBonusScreen={navigateToBonusScreen}
+          navigateToBonusScreen={onNavigateToBonusScreen}
         />
       )}
       {!!usedAccesses?.length && (
@@ -253,27 +245,13 @@ export const DetailsContent: React.FC<Props> = ({
 
       <OrderDetailsSectionItem fareContract={fc} />
 
-      {fc.orderId && fc.version && (
-        <LinkSectionItem
-          text={t(FareContractTexts.details.askForReceipt)}
-          onPress={onReceiptNavigate}
-          testID="receiptButton"
-        />
-      )}
-      {refundOptions?.isRefundable && (
-        <RefundSectionItem
-          orderId={fc.orderId}
-          fareProductType={preassignedFareProduct?.type}
-          state={fc.state}
-        />
-      )}
       {isCanBeConsumedNowFareContract(
         fc,
         now,
         currentUserId,
         schoolCarnetInfo,
       ) && (
-        <ConsumeCarnetSectionItem
+        <ConsumeCarnetSectionitem
           fareContractId={fc.id}
           fareProductType={preassignedFareProduct?.type}
         />
@@ -290,19 +268,52 @@ export const DetailsContent: React.FC<Props> = ({
             fareProductType={preassignedFareProduct?.type}
           />
         )}
+
+      {hasShmoBookingId(fc) && hasShmoOperatorId(fc) && (
+        <LinkSectionItem
+          text={t(
+            FareContractTexts.details.askOperatorRefund(
+              preassignedFareProduct?.name.value,
+            ),
+          )}
+          onPress={() => {
+            if (fc?.operatorId && fc?.bookingId) {
+              onSupportNavigate({
+                operatorId: fc.operatorId,
+                bookingId: fc.bookingId,
+              });
+            }
+          }}
+        />
+      )}
+
+      {fc.orderId && fc.version && !isReceived && (
+        <LinkSectionItem
+          text={t(FareContractTexts.details.askForReceipt)}
+          onPress={onReceiptNavigate}
+          testID="receiptButton"
+          rightIcon={{svg: Mail}}
+        />
+      )}
+      {refundOptions?.isRefundable && (
+        <RefundSectionItem
+          orderId={fc.orderId}
+          fareProductType={preassignedFareProduct?.type}
+          state={fc.state}
+        />
+      )}
     </Section>
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     globalMessages: {
       flex: 1,
       rowGap: theme.spacing.medium,
     },
     section: {
-      marginBottom: bottomSafeAreaInset,
+      marginBottom: bottom,
     },
     fareContractDetails: {
       flex: 1,

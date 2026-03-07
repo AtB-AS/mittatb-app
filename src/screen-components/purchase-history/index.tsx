@@ -1,0 +1,1 @@
+export {PurchaseHistoryScreenComponent} from './PurchaseHistoryScreenComponent';

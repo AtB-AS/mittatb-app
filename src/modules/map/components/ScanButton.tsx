@@ -5,7 +5,6 @@ import {Qr} from '@atb/assets/svg/mono-icons/ticketing';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {useControlPositionsStyle} from '../hooks/use-control-styles';
-import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {useMapContext} from '../MapContext';
 import {MapStateActionType} from '../mapStateReducer';
 
@@ -20,7 +19,6 @@ export const ScanButton = ({
   const analytics = useAnalyticsContext();
   const {t} = useTranslation();
   const {mapButtonsContainer} = useControlPositionsStyle(false);
-  const {close: closeBottomSheet} = useBottomSheetContext();
   const {dispatchMapState} = useMapContext();
 
   return (
@@ -31,7 +29,6 @@ export const ScanButton = ({
       interactiveColor={interactiveColor}
       accessibilityRole="button"
       onPress={() => {
-        closeBottomSheet();
         analytics.logEvent('Map', 'Scan');
         navigateToScanQrCode();
         dispatchMapState({type: MapStateActionType.None});

@@ -12,6 +12,7 @@
 -keep class com.facebook.jni.** { *; }
 -keep class com.swmansion.reanimated.** { *; }
 -keep class com.facebook.react.turbomodule.** { *; }
+-keep class com.shopify.reactnative.skia.** { *; }
 
 -keep public class com.bugsnag.**
 
@@ -28,10 +29,6 @@
 
 # For react-svg
 -keep public class com.horcrux.svg.** {*;}
-
-# For Kogenta SDK
--keep class com.kogenta.kettle.core.model.** { *; }
--keep class com.kogenta.kettle.common.model.** { *; }
 
 # For retracing stack traces https://developer.android.com/build/shrink-code#retracing
 -keepattributes LineNumberTable,SourceFile

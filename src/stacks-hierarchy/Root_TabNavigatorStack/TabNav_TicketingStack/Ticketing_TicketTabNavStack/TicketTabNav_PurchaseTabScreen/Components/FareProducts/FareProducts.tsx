@@ -6,7 +6,6 @@ import {
   FareProductTypeConfig,
   LanguageAndTextType,
   ProductTypeTransportModes,
-  isProductSellableInApp,
   PreassignedFareProduct,
 } from '@atb/modules/configuration';
 import {flatMap} from '@atb/utils/array';
@@ -15,6 +14,7 @@ import {
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
+import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 
 type GroupedFareProducts = {
   transportModes: ProductTypeTransportModes[];
@@ -39,7 +39,10 @@ export const FareProducts = ({
   );
 
   const sellableFareProductTypeConfigs = fareProductTypeConfigs.filter(
-    (config) => sellableProductsInApp.some((p) => p.type === config.type),
+    (config) =>
+      sellableProductsInApp.some(
+        (p) => p.type === config.type && !p.isSupplementProduct,
+      ),
   );
 
   let groupedFareProducts: GroupedFareProducts[] = fareProductGroups.map(

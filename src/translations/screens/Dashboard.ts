@@ -2,7 +2,7 @@ import {translation as _} from '../commons';
 
 const DashboardTexts = {
   header: {
-    title: _('Finn reise', 'Find journey', 'Finn reise'),
+    title: _('Reise', 'Travel', 'Reise'),
     accessibility: {
       logo: _('Nullstill reisesøk', 'Reset search', 'Nullstill reisesøk'),
     },

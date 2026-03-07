@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Bugsnag from '@bugsnag/react-native';
-import {Platform} from 'react-native';
 
 export enum StorageModelKeysEnum {
   PreviousPaymentMethods = '@ATB_previous_payment_methods',
@@ -26,6 +25,7 @@ export type StorageModel = {
   '@ATB_user_travel_search_filters': string;
   '@ATB_user_travel_search_filters_v2': string;
   '@ATB_only_stop_places_checkbox': string;
+  '@ATB_user_trip_patterns': string;
 };
 
 export type StorageModelTypes = keyof StorageModel | StorageModelKeysTypes;
@@ -55,12 +55,6 @@ const leaveBreadCrumb = (
 export type KeyValuePair = [string, string | null];
 
 export const storage = {
-  /** Necessary for communication between App and iOS Widget */
-  setAppGroupName: async (groupName?: string) => {
-    if (Platform.OS === 'ios') {
-      await AsyncStorage.setAppGroupName(groupName).catch(errorHandler);
-    }
-  },
   get: async (key: string) => {
     const value = await AsyncStorage.getItem(key).catch(errorHandler);
     leaveBreadCrumb('read-single', key, value);

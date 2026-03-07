@@ -25,7 +25,7 @@ describe('Auth Cleanup', () => {
       await ElementHelper.waitForElement('text', 'Profile');
       await MyProfilePage.login.click();
       await AuthenticationPage.loginWithPhone(phoneNumber)
-      await ElementHelper.waitForElement('text', 'Find journey');
+      await ElementHelper.waitForElement('text', 'Travel');
       await AppHelper.pause(2000);
        */
 
@@ -33,7 +33,7 @@ describe('Auth Cleanup', () => {
       await AuthenticationPage.loginWithPhone(phoneNumber);
       await OnboardingPage.denyLocationInOnboarding();
       await OnboardingPage.waitOnTokenOnboarding(false);
-      await ElementHelper.waitForElement('text', 'Find journey');
+      await ElementHelper.waitForElement('text', 'Travel');
       await AppHelper.pause(2000);
 
       // Verify

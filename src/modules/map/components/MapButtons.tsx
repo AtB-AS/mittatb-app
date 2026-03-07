@@ -3,8 +3,7 @@ import {useControlPositionsStyle} from '../hooks/use-control-styles';
 import {MapBottomSheetType, useMapContext} from '../MapContext';
 import {ExternalRealtimeMapButton} from './external-realtime-map/ExternalRealtimeMapButton';
 import {
-  isBicycleV2,
-  isScooterV2,
+  isVehicle,
   MapFilter,
   useActiveShmoBookingQuery,
   useInitShmoBookingMutationStatus,
@@ -13,6 +12,7 @@ import {LocationArrow} from './LocationArrow';
 import {ScanButton} from './ScanButton';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {View} from 'react-native';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export const MapButtons = ({
   navigateToScanQrCode,
@@ -26,11 +26,11 @@ export const MapButtons = ({
   const mapFilterIsOpen =
     mapState.bottomSheetType === MapBottomSheetType.Filter;
   const selectedFeature = mapState.feature;
-  const selectedFeatureIsAVehicle =
-    isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
+  const selectedFeatureIsAVehicle = isVehicle(selectedFeature);
 
+  const isFocusedAndActive = useIsFocusedAndActive();
   const {data: activeShmoBooking, isLoading: activeShmoBookingIsLoading} =
-    useActiveShmoBookingQuery();
+    useActiveShmoBookingQuery(isFocusedAndActive);
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
 
   const {isMutating: initShmoOneStopBookingIsMutating} =

@@ -1,4 +1,3 @@
-import {ColorSchemeName} from 'react-native';
 import {appLanguages} from '@atb/translations';
 
 export const preference_screenAlternatives = [
@@ -14,7 +13,7 @@ export type Preference_Language = (typeof appLanguages)[number];
 
 export type UserPreferences = {
   startScreen?: Preference_ScreenAlternatives;
-  colorScheme?: ColorSchemeName;
+  colorScheme?: 'light' | 'dark';
   overrideSystemAppearance?: boolean;
   useAndroidSystemFont?: boolean;
   language?: Preference_Language;

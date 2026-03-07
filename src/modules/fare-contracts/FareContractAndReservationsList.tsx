@@ -8,13 +8,15 @@ import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
 import type {EmptyStateProps} from '@atb/components/empty-state';
 import {FareContractType} from '@atb-as/utils';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type Props = {
   reservations: Reservation[];
   fareContracts: FareContractType[];
   now: number;
   onPressFareContract: (orderId: string) => void;
-  navigateToBonusScreen: () => void;
+  onNavigateToBonusScreen: () => void;
+  onNavigateToPurchaseFlow: (newSelection: PurchaseSelectionType) => void;
   emptyStateConfig: Pick<
     EmptyStateProps,
     'title' | 'details' | 'illustrationComponent'
@@ -26,7 +28,8 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   reservations,
   now,
   onPressFareContract,
-  navigateToBonusScreen,
+  onNavigateToBonusScreen,
+  onNavigateToPurchaseFlow,
   emptyStateConfig,
 }) => {
   const styles = useStyles();
@@ -54,7 +57,8 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
               onPressFareContract(fcOrReservation.id);
             }
           }}
-          navigateToBonusScreen={navigateToBonusScreen}
+          onNavigateToBonusScreen={onNavigateToBonusScreen}
+          onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
           key={
             'id' in fcOrReservation
               ? fcOrReservation.id

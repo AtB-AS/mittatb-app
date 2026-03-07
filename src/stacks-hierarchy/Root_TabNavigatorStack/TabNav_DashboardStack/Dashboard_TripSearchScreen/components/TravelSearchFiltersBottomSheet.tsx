@@ -1,12 +1,10 @@
 import {View} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {
-  dictionary,
   getTextForLanguage,
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -19,7 +17,10 @@ import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {TravelSearchPreferenceWithSelectionType} from '@atb/modules/travel-search-filters';
 import {TravelSearchPreference} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchPreference';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {
+  BottomSheetHeaderType,
+  BottomSheetModal,
+} from '@atb/components/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {BottomSheetModal as GorhamBottomSheetModal} from '@gorhom/bottom-sheet';
 
@@ -85,8 +86,7 @@ export const TravelSearchFiltersBottomSheet = ({
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(TripSearchTexts.filters.bottomSheet.title)}
-      rightIconText={t(dictionary.confirm)}
-      rightIcon={Confirm}
+      bottomSheetHeaderType={BottomSheetHeaderType.Confirm}
       closeCallback={() => {
         if (
           filtersSelection.transportModes !== selectedModeOptions ||

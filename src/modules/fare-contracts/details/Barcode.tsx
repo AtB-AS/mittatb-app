@@ -4,14 +4,14 @@ import {ValidityStatus} from '../utils';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {FareContractType} from '@atb-as/utils';
-import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import Bugsnag from '@bugsnag/react-native';
 import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
 import QRCode from 'qrcode';
 import React, {RefObject, useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {SvgXml} from 'react-native-svg';
 import {GenericSectionItem} from '@atb/components/sections';
 import {useGetSignedTokenQuery} from '@atb/modules/mobile-token';
@@ -24,9 +24,11 @@ import {
 import {CONTEXT_ID} from '@atb/modules/mobile-token';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
-import {BottomSheetModal} from '@atb/components/bottom-sheet-v2';
+import {
+  BottomSheetHeaderType,
+  BottomSheetModal,
+} from '@atb/components/bottom-sheet';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -262,7 +264,7 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
           {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
         ]}
       >
-        <PressableOpacity
+        <NativeBlockButton
           onPress={() => bottomSheetModalRef.current?.present()}
           accessibilityRole="button"
           accessibilityLabel={t(
@@ -272,7 +274,7 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
           ref={onCloseFocusRef}
         >
           <SvgXml xml={aztecXml} width="100%" height="100%" />
-        </PressableOpacity>
+        </NativeBlockButton>
       </View>
       <StaticBarcodeBottomSheet
         qrCodeSvg={aztecXml}
@@ -309,7 +311,7 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
           styles.staticQrCodeSmall,
         ]}
       >
-        <PressableOpacity
+        <NativeBlockButton
           onPress={() => bottomSheetModalRef.current?.present()}
           accessibilityRole="button"
           accessibilityLabel={t(
@@ -319,7 +321,7 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
           ref={onCloseFocusRef}
         >
           <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
-        </PressableOpacity>
+        </NativeBlockButton>
       </View>
       <StaticBarcodeBottomSheet
         qrCodeSvg={qrCodeSvg}
@@ -375,8 +377,7 @@ const StaticBarcodeBottomSheet = ({
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(FareContractTexts.details.bottomSheetTitle)}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       closeCallback={() => giveFocus(onCloseFocusRef)}
       enableDynamicSizing={false}
       snapPoints={['80%']}
@@ -389,7 +390,7 @@ const StaticBarcodeBottomSheet = ({
             styles.staticQrCode,
           ]}
         >
-          <PressableOpacity
+          <NativeBlockButton
             onPress={() => bottomSheetModalRef.current?.dismiss()}
             accessible={true}
             accessibilityLabel={t(
@@ -398,7 +399,7 @@ const StaticBarcodeBottomSheet = ({
             testID="staticBigQRCode"
           >
             <SvgXml xml={qrCodeSvg ?? ''} width="100%" height="100%" />
-          </PressableOpacity>
+          </NativeBlockButton>
         </View>
       </View>
     </BottomSheetModal>

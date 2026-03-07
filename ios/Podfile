@@ -1,10 +1,5 @@
 plugin 'cocoapods-patch'
 
-# Disable new architecture, this now comes true by default,
-# but there are some of our dependencies still not compatible.
-# For more details please check https://reactnative.dev/architecture/landing-page#ios
-ENV['RCT_NEW_ARCH_ENABLED'] = '0'
-
 def node_require(script)
   # Resolve script with node to allow for hoisting
   require Pod::Executable.execute_command('node', ['-p',
@@ -22,12 +17,10 @@ platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
 setup_permissions([
-  'Bluetooth',
   'Camera',
   'LocationAccuracy',
   'LocationAlways',
   'LocationWhenInUse',
-  'Motion',
   'Notifications',
 ])
 
@@ -37,7 +30,7 @@ $RNFirebaseAsStaticFramework = true
 production = ENV["PRODUCTION"] == "1"
 
 $RNMapboxMapsImpl = 'mapbox'
-$RNMapboxMapsVersion = '~> 11.13.4'
+$RNMapboxMapsVersion = '~> 11.15.0'
 
 target 'app' do
   config = use_native_modules!
@@ -58,41 +51,18 @@ target 'app' do
 
     # Patch for issue using use_frameworks with hermes
     installer.pods_project.targets.each do |target|
-      # Workaround fix for GRPC https://github.com/grpc/grpc/pull/36904 & Xcode 16
-      if target.name == 'BoringSSL-GRPC'
-        target.source_build_phase.files.each do |file|
-          if file.settings && file.settings['COMPILER_FLAGS']
-            flags = file.settings['COMPILER_FLAGS'].split
-            flags.reject! { |flag| flag == '-GCC_WARN_INHIBIT_ALL_WARNINGS' }
-            file.settings['COMPILER_FLAGS'] = flags.join(' ')
-          end
-        end
-      end
 
       target.build_configurations.each do |config|
         # Workaround fix for https://github.com/facebook/react-native/issues/34106#issuecomment-1417685116
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.4'
-        config.build_settings['ENABLE_BITCODE'] = 'NO'
       end
     end
 
-    # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(
       installer,
       config[:reactNativePath],
       :mac_catalyst_enabled => false,
-      # :ccache_enabled => true
     )
-    # Xcode 14 workaround: https://github.com/CocoaPods/CocoaPods/issues/11402#issuecomment-1201464693
-    # https://stackoverflow.com/questions/48122769/facebook-cocoapods-sharedapplication-is-unavailable-not-available-on-ios-app
-    # TODO: Find a better way to exclude react-native from extensions
-    installer.pods_project.targets.each do |target|
-      if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
-        target.build_configurations.each do |config|
-            config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
-        end
-      end
-    end
   end
 
   pre_install do |installer|

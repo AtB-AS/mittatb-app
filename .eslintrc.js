@@ -180,6 +180,20 @@ module.exports = {
         ],
       },
     ],
+
+    // Error on navigation methods being called with 'any' typed parameters
+    'rulesdir/no-any-navigation-params': [
+      'error',
+      {
+        allowedPaths: [
+          // TODO: Refactor use-onboarding-navigation.ts to use static typing for navigation methods
+          'src/modules/onboarding/use-onboarding-navigation.ts',
+        ],
+      },
+    ],
+
+    // Error on React hooks being called inside StyleSheet.createThemeHook
+    'rulesdir/no-hooks-in-create-theme-hook': 'error',
   },
   overrides: [
     // Allow 'export default' from these paths

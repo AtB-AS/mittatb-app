@@ -10,12 +10,12 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_activate_ticket_now',
   },
   {
-    name: 'isBackendSmsAuthEnabled',
-    remoteConfigKey: 'enable_backend_sms_auth',
+    name: 'isApplePayEnabled',
+    remoteConfigKey: 'enable_apple_pay',
   },
   {
-    name: 'isBeaconsEnabled',
-    remoteConfigKey: 'enable_beacons',
+    name: 'isBackendSmsAuthEnabled',
+    remoteConfigKey: 'enable_backend_sms_auth',
   },
   {
     name: 'isBonusProgramEnabled',
@@ -36,6 +36,10 @@ export const toggleSpecifications = [
   {
     name: 'isEventStreamFareContractsEnabled',
     remoteConfigKey: 'enable_event_stream_fare_contracts',
+  },
+  {
+    name: 'isExperimentalFeaturesEnabled',
+    remoteConfigKey: 'enable_experimental_features',
   },
   {
     name: 'isFlexibleTransportEnabled',
@@ -64,6 +68,10 @@ export const toggleSpecifications = [
   {
     name: 'isGeofencingZonesEnabled',
     remoteConfigKey: 'enable_geofencing_zones',
+  },
+  {
+    name: 'isGeofencingZonesAsTilesEnabled',
+    remoteConfigKey: 'enable_geofencing_zones_as_tiles',
   },
   {
     name: 'isLoadingErrorScreenEnabled',

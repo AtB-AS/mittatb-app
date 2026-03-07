@@ -1,7 +1,7 @@
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -13,8 +13,8 @@ import {humanizePaymentType, RecurringPayment} from '@atb/modules/ticketing';
 import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import React from 'react';
-import {RefreshControl, View} from 'react-native';
+import React, {useMemo} from 'react';
+import {RefreshControlProps, View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
@@ -40,6 +40,13 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
 
   const focusRef = useFocusOnLoad(navigation);
 
+  const refreshControlProps: RefreshControlProps = useMemo(() => {
+    return {
+      refreshing: recurringPaymentLoading,
+      onRefresh: refetchRecurringPayment,
+    };
+  }, [recurringPaymentLoading, refetchRecurringPayment]);
+
   return (
     <FullScreenView
       focusRef={focusRef}
@@ -47,12 +54,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
         title: t(PaymentMethodsTexts.header.title),
         leftButton: {type: 'back'},
       }}
-      refreshControl={
-        <RefreshControl
-          refreshing={recurringPaymentLoading}
-          onRefresh={refetchRecurringPayment}
-        />
-      }
+      refreshControlProps={refreshControlProps}
       parallaxContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
@@ -62,12 +64,11 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
     >
       <View style={styles.content}>
         {isError && (
-          <View accessibilityLiveRegion="polite">
-            <MessageInfoBox
-              type="error"
-              message={t(PaymentMethodsTexts.genericError)}
-            />
-          </View>
+          <MessageInfoBox
+            a11yLiveRegion="polite"
+            type="error"
+            message={t(PaymentMethodsTexts.genericError)}
+          />
         )}
         {recurringPayment && recurringPayment.length > 0 && (
           <Section>
@@ -133,7 +134,7 @@ const Card = (props: {
         </View>
 
         <View style={style.cardIcons}>
-          <PressableOpacity
+          <NativeBlockButton
             accessibilityLabel={t(
               PaymentMethodsTexts.a11y.deleteCardIcon(
                 paymentName,
@@ -163,7 +164,7 @@ const Card = (props: {
               width={21 * fontScale}
               fill={theme.color.foreground.dynamic.primary}
             />
-          </PressableOpacity>
+          </NativeBlockButton>
         </View>
       </View>
 
@@ -175,12 +176,11 @@ const Card = (props: {
 const NoCardsInfo = () => {
   const {t} = useTranslation();
   return (
-    <View accessibilityLiveRegion="polite">
-      <MessageInfoBox
-        type="info"
-        message={t(PaymentMethodsTexts.noStoredCards)}
-      />
-    </View>
+    <MessageInfoBox
+      a11yLiveRegion="polite"
+      type="info"
+      message={t(PaymentMethodsTexts.noStoredCards)}
+    />
   );
 };
 

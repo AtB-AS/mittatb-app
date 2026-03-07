@@ -11,7 +11,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {InteractiveColor} from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
 import {BaggageType} from '@atb/modules/configuration';
 
@@ -39,6 +39,7 @@ export function CounterSectionItem({
 }: Props) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
+  const fontScale = useFontScale();
   const counterStyles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -72,7 +73,7 @@ export function CounterSectionItem({
         )}
       </View>
       <View style={counterStyles.countActions}>
-        <PressableOpacity
+        <NativeBlockButton
           disabled={removeButtonDisabled}
           onPress={() => removeCount()}
           accessibilityRole="button"
@@ -102,7 +103,7 @@ export function CounterSectionItem({
                 : theme.color.foreground.dynamic.primary
             }
           />
-        </PressableOpacity>
+        </NativeBlockButton>
         <View
           style={[
             counterStyles.countTextContainer,
@@ -114,6 +115,10 @@ export function CounterSectionItem({
             importantForAccessibility="no"
             style={[
               counterStyles.countText,
+              {
+                minWidth: theme.spacing.large * fontScale,
+                margin: theme.spacing.small * fontScale,
+              },
               activeColor && {color: activeColor.foreground.primary},
             ]}
             typography="body__m__strong"
@@ -122,7 +127,7 @@ export function CounterSectionItem({
             {count}
           </ThemeText>
         </View>
-        <PressableOpacity
+        <NativeBlockButton
           onPress={() => addCount()}
           accessibilityRole="button"
           accessibilityLabel={t(
@@ -136,14 +141,13 @@ export function CounterSectionItem({
           testID={testID + '_add'}
         >
           <ThemeIcon svg={Add} />
-        </PressableOpacity>
+        </NativeBlockButton>
       </View>
     </View>
   );
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const scale = useFontScale();
   return {
     infoContainer: {
       flexDirection: 'column',
@@ -170,8 +174,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       justifyContent: 'center',
     },
     countText: {
-      minWidth: theme.spacing.large * scale,
-      margin: theme.spacing.small * scale,
       textAlign: 'center',
     },
     removeCount: {

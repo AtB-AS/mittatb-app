@@ -58,24 +58,37 @@ class FavoritePage {
     }
     const reqId = `//*[@resource-id="${typeId}"]`;
     await $(reqId).click();
-    await ElementHelper.waitForElement('id', 'estimatedCallItem');
+    //await ElementHelper.waitForElement('id', 'estimatedCallItem');
+    //await ElementHelper.waitForElement('id', 'lineItem');
   }
 
   /**
-   * Get favorite toggle icon
-   * @param favorite favorite or not [no, semi, all]
-   * @param quayIndex index of the quay
-   * @param depIndex index of the departure
+   * Return the public code
+   * @param lineIndex index of the line
    */
-  async getFavoriteIcon(
-    favorite: 'no' | 'semi' | 'all',
-    quayIndex: number = 0,
-    depIndex: number = 0,
-  ) {
-    const quayId = `//*[@resource-id="quaySection${quayIndex}"]`;
-    const depId = `//*[@resource-id="estimatedCallItem"]`;
-    const favId = `//*[@resource-id="${favorite}Favorite"]`;
-    return $(quayId).$$(depId)[depIndex].$(favId);
+  async getLinePublicCode(lineIndex: number = 0) {
+    const elemId = `//*[@resource-id="lineItem"]`;
+    const pcId = `//*[@resource-id="publicCode"]`;
+    return $$(elemId)[lineIndex].$(pcId).getText();
+  }
+
+  /**
+   * Return the line name
+   * @param lineIndex index of the line
+   */
+  async getLineName(lineIndex: number = 0) {
+    const elemId = `//*[@resource-id="lineItem"]`;
+    const lineId = `//*[@resource-id="lineName"]`;
+    return $$(elemId)[lineIndex].$(lineId).getText();
+  }
+
+  /**
+   * Choose the given line
+   * @param lineIndex index of the line
+   */
+  async chooseLine(lineIndex: number = 0) {
+    const depId = `//*[@resource-id="lineItem"]`;
+    await $$(depId)[lineIndex].click();
   }
 }
 

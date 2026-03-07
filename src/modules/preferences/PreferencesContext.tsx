@@ -23,6 +23,8 @@ type Props = {
 export const PreferencesContextProvider = ({children}: Props) => {
   const [preferences, setPreferencesState] = useState<UserPreferences>({});
   const colorScheme = useColorScheme();
+  const systemColorWithFallback =
+    colorScheme === 'unspecified' ? 'light' : colorScheme;
 
   async function populatePreferences() {
     const preferences = await getPreferences_storage();
@@ -35,7 +37,7 @@ export const PreferencesContextProvider = ({children}: Props) => {
 
   const contextValue: PreferencesContextState = {
     preferences: {
-      colorScheme,
+      colorScheme: systemColorWithFallback,
       ...preferences,
     },
     async setPreference(items: UserPreferences) {

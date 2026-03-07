@@ -190,14 +190,14 @@ export const TripSection: React.FC<TripSectionProps> = ({
               />
             }
             onPress={() => handleQuayPress(leg.fromPlace.quay)}
-            testID="fromPlace"
+            testID={`${testID}FromPlace`}
           >
-            <ThemeText testID="fromPlaceName">
+            <ThemeText testID={`${testID}FromPlaceName`}>
               {getPlaceName(leg.fromPlace)}
             </ThemeText>
             {showQuayDescription && (
               <ThemeText
-                testID="fromPlaceQuayDescription"
+                testID={`${testID}FromPlaceQuayDescription`}
                 typography="body__s"
                 color="secondary"
               >
@@ -212,7 +212,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
           <BikeSection {...leg} />
         ) : (
           <TripRow
-            testID="transportationLeg"
+            testID={`${testID}Mode`}
             accessibilityLabel={
               t(
                 TripDetailsTexts.trip.leg.transport.a11ylabel(
@@ -340,7 +340,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {leg.intermediateEstimatedCalls.length > 0 && (
-          <IntermediateInfo leg={leg} onPressDeparture={onPressDeparture} />
+          <IntermediateInfo
+            leg={leg}
+            onPressDeparture={onPressDeparture}
+            testID={testID}
+          />
         )}
         {showTo && (
           <TripRow
@@ -361,9 +365,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
               />
             }
             onPress={() => handleQuayPress(leg.toPlace.quay)}
-            testID="toPlace"
+            testID={`${testID}ToPlace`}
           >
-            <ThemeText testID="toPlaceName">
+            <ThemeText testID={`${testID}ToPlaceName`}>
               {getPlaceName(leg.toPlace)}
             </ThemeText>
           </TripRow>
@@ -404,9 +408,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
 const IntermediateInfo = ({
   leg,
   onPressDeparture,
+  testID,
 }: {
   leg: Leg;
   onPressDeparture: TripProps['onPressDeparture'];
+  testID?: string;
 }) => {
   const {t, language} = useTranslation();
 
@@ -428,7 +434,7 @@ const IntermediateInfo = ({
 
   return (
     <TripRow
-      testID="intermediateStops"
+      testID={`${testID}IntermediateStops`}
       onPress={navigateToDeparture}
       accessibilityLabel={
         t(
@@ -589,7 +595,7 @@ function InterchangeSection({
 
   // If maximum wait time is defined or over 0, append it to the message.
   // In some cases with missing data the maximum wait time can be -1.
-  if (maximumWaitTime && maximumWaitTime > 0) {
+  if (maximumWaitTime && maximumWaitTime > 0 && !staySeated) {
     text =
       text +
       ' ' +

@@ -29,6 +29,7 @@ export {useSendShmoBookingEventMutation} from './queries/use-send-shmo-booking-e
 export {useSendSupportRequestMutation} from './queries/use-send-support-request-mutation';
 export {useShmoBookingQuery} from './queries/use-shmo-booking-query';
 export {useInitAgeVerificationMutation} from './queries/use-init-age-verification-mutation';
+export {useGetOperatorsQuery} from './queries/use-get-operators-query';
 export {useVehicleQuery} from './queries/use-vehicle-query';
 export {ShmoRequirementEnum} from './types';
 export {useOperatorBenefitsForFareProduct} from './use-operator-benefits-for-fare-product';
@@ -39,13 +40,14 @@ export {useDeleteAgeVerificationMutation} from './queries/use-remove-age-verific
 export {
   findOperatorBrandImageUrl,
   getAvailableVehicles,
-  isBicycleV2,
-  isBikeStationV2,
-  isCarStationV2,
-  isScooterV2,
-  isStationV2,
-  isVehicleFeature,
-  isVehiclesClusteredFeature,
+  isBicycle,
+  isBikeStation,
+  isCarStation,
+  isScooter,
+  isStation,
+  isVehicle,
+  isVehicleCluster,
+  isStationCluster,
 } from './utils';
 export {
   AgeVerificationEnum,

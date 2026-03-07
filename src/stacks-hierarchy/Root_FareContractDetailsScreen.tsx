@@ -1,6 +1,5 @@
 import {FullScreenHeader, useTicketInfo} from '@atb/components/screen-header';
 import {DetailsContent} from '@atb/modules/fare-contracts';
-import {useApplePassPresentationSuppression} from '@atb/modules/native-bridges';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   FareContractTexts,
@@ -19,15 +18,23 @@ import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {hasShmoBookingId} from '@atb/modules/fare-contracts';
 import SvgInfo from '@atb/assets/svg/mono-icons/status/Info';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
+import type {ScooterHelpScreenProps} from '@atb/stacks-hierarchy/Root_ScooterHelp/Root_ScooterHelpScreen';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {useApplePassPresentationSuppression} from '@atb/modules/native-bridges';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
 export function Root_FareContractDetailsScreen({navigation, route}: Props) {
+  const isFocused = useIsFocusedAndActive();
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const {enable_ticket_information} = useRemoteConfigContext();
-  const {serverNow} = useTimeContext();
+  const {serverNow} = useTimeContext(
+    isFocused ? ONE_SECOND_MS * 5 : ONE_MINUTE_MS,
+  );
   const analytics = useAnalyticsContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
   const {fareContract, preassignedFareProduct} = useTicketInfo(
@@ -68,11 +75,27 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       transitionOverride: 'slide-from-right',
     });
 
+  const navigateToScooterSupport = useCallback(
+    (params: ScooterHelpScreenProps['route']['params']) => {
+      navigation.navigate('Root_ScooterHelpScreen', params);
+    },
+    [navigation],
+  );
+
   const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
 
-  const navigateToBonusScreen = useCallback(() => {
+  const onNavigateToBonusScreen = useCallback(() => {
     navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
   }, [navigation, bonusScreenParams]);
+
+  const onNavigateToPurchaseFlow = useCallback(
+    (selection: PurchaseSelectionType) => {
+      navigation.navigate('Root_PurchaseOverviewScreen', {
+        selection,
+      });
+    },
+    [navigation],
+  );
 
   return (
     <View style={styles.container}>
@@ -109,8 +132,10 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
               now={serverNow}
               isSentFareContract={isSentFareContract}
               onReceiptNavigate={onReceiptNavigate}
+              onSupportNavigate={navigateToScooterSupport}
               onNavigateToMap={onNavigateToMap}
-              navigateToBonusScreen={navigateToBonusScreen}
+              onNavigateToBonusScreen={onNavigateToBonusScreen}
+              onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
             />
           </ErrorBoundary>
         )}

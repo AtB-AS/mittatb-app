@@ -21,24 +21,32 @@ import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
-import {useTimeContext} from '@atb/modules/time';
 import {useSectionItem} from '@atb/components/sections';
 import {isDefined} from '@atb/utils/presence';
-import {SentToMessageBox} from './SentToMessageBox';
+import {SentOrReceivedMessageBox} from './SentOrReceivedMessageBox';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
 import {useTicketAccessibilityLabel} from '../use-ticket-accessibility-label';
+import {SupplementPurchaseButton} from '@atb/modules/fare-contracts';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
-type Props = {fc: FareContractType};
+type Props = {
+  fc: FareContractType;
+  onNavigateToPurchaseFlow?: (selection: PurchaseSelectionType) => void;
+  now: number;
+};
 
-export const TravelInfoSectionItem = ({fc}: Props) => {
+export const TravelInfoSectionItem = ({
+  fc,
+  onNavigateToPurchaseFlow,
+  now,
+}: Props) => {
   const {t, language} = useTranslation();
-  const {serverNow} = useTimeContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
 
-  const {validityStatus} = getFareContractInfo(serverNow, fc, currentUserId);
+  const {validityStatus} = getFareContractInfo(now, fc, currentUserId);
 
   const {userProfiles, fareProductTypeConfigs, fareZones} =
     useFirestoreConfigurationContext();
@@ -110,7 +118,7 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
     <View
       style={[
         topContainer,
-        {rowGap: theme.spacing.large, paddingVertical: theme.spacing.large},
+        {rowGap: theme.spacing.large, paddingTop: theme.spacing.large},
       ]}
     >
       <View style={styles.detailRow} accessible={true}>
@@ -159,7 +167,11 @@ export const TravelInfoSectionItem = ({fc}: Props) => {
         )}
       </View>
 
-      <SentToMessageBox fc={fc} />
+      <SentOrReceivedMessageBox fc={fc} />
+      <SupplementPurchaseButton
+        existingFareContract={fc}
+        navigateToPurchaseFlow={onNavigateToPurchaseFlow}
+      />
     </View>
   );
 };

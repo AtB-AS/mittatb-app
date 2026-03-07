@@ -15,6 +15,7 @@ import type {ContrastColor} from '@atb-as/theme';
 import {useFavoritesContext} from '@atb/modules/favorites';
 import {hasFavorites} from '../utils';
 import {DeparturesProps, useDepartures} from '../hooks/use-departures';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
 
@@ -32,7 +33,6 @@ export type QuayViewProps = {
   setShowOnlyFavorites: (enabled: boolean) => void;
   testID?: string;
   stopPlace: StopPlace;
-  addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
   backgroundColor: ContrastColor;
 };
@@ -46,7 +46,6 @@ export function QuayView({
   setShowOnlyFavorites,
   testID,
   stopPlace,
-  addedFavoritesVisibleOnDashboard,
   mode,
   backgroundColor,
 }: QuayViewProps) {
@@ -56,15 +55,18 @@ export function QuayView({
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
 
+  const isFocusedAndActive = useIsFocusedAndActive();
+
   const departuresProps: DeparturesProps = useMemo(
     () => ({
+      enabled: isFocusedAndActive,
       quayIds: [quay.id],
       limitPerQuay: NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
       showOnlyFavorites,
       mode,
       startTime: searchStartTime,
     }),
-    [mode, quay.id, searchStartTime, showOnlyFavorites],
+    [mode, quay.id, searchStartTime, showOnlyFavorites, isFocusedAndActive],
   );
 
   const {
@@ -92,12 +94,7 @@ export function QuayView({
       ListHeaderComponent={
         <>
           {departuresIsError && (
-            <View
-              style={[
-                styles.messageBox,
-                mode !== 'Departure' ? styles.marginBottom : undefined,
-              ]}
-            >
+            <View style={styles.messageBox}>
               <MessageInfoBox
                 type="error"
                 message={t(DeparturesTexts.message.resultFailed)}
@@ -108,21 +105,19 @@ export function QuayView({
               />
             </View>
           )}
-          {mode === 'Departure' ? (
-            <View style={styles.header}>
-              {placeHasFavorites && (
-                <FavoriteToggle
-                  enabled={showOnlyFavorites}
-                  setEnabled={setShowOnlyFavorites}
-                />
-              )}
-              <DateSelection
-                searchTime={searchTime}
-                setSearchTime={setSearchTime}
-                backgroundColor={backgroundColor}
+          <View style={styles.header}>
+            {placeHasFavorites && (
+              <FavoriteToggle
+                enabled={showOnlyFavorites}
+                setEnabled={setShowOnlyFavorites}
               />
-            </View>
-          ) : null}
+            )}
+            <DateSelection
+              searchTime={searchTime}
+              setSearchTime={setSearchTime}
+              backgroundColor={backgroundColor}
+            />
+          </View>
         </>
       }
       refreshControl={
@@ -142,9 +137,8 @@ export function QuayView({
           isLoading={departuresIsLoading}
           didLoadingDataFail={departuresIsError}
           navigateToDetails={navigateToDetails}
-          testID="quaySection"
+          testID="quay"
           showOnlyFavorites={showOnlyFavorites}
-          addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
           searchDate={searchStartTime}
           mode={mode}
         />

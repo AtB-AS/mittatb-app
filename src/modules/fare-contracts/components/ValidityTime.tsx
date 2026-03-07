@@ -13,29 +13,28 @@ import {View} from 'react-native';
 import {getFareContractInfo, ValidityStatus} from '../utils';
 import {fareContractValidityUnits} from '../fare-contract-validity-units';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
-import {useTimeContext} from '@atb/modules/time';
 import {useAuthContext} from '@atb/modules/auth';
 import type {FareContractType} from '@atb-as/utils';
 
 type Props = {
   fc: FareContractType;
+  now: number;
 };
 
-export const ValidityTime = ({fc}: Props) => {
+export const ValidityTime = ({fc, now}: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {isInspectable} = useMobileTokenContext();
-  const {serverNow} = useTimeContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
 
   const {validityStatus, validFrom, validTo} = getFareContractInfo(
-    serverNow,
+    now,
     fc,
     currentUserId,
   );
   const label: string = validityTimeText(
     validityStatus,
-    serverNow,
+    now,
     fc.created.getTime(),
     validFrom,
     validTo,

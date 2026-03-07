@@ -1,4 +1,4 @@
-import {dictionary, MapTexts, useTranslation} from '@atb/translations';
+import {MapTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
@@ -6,8 +6,10 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import {ScrollView} from 'react-native-gesture-handler';
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {
+  BottomSheetHeaderType,
+  MapBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {Linking} from 'react-native';
 
 type ExternalRealtimeMapLinkSheetProps = {
@@ -30,8 +32,7 @@ export const ExternalRealtimeMapSheet = ({
       closeCallback={onClose}
       allowBackgroundTouch={false}
       heading={t(MapTexts.externalRealtimeMap.bottomSheet.heading)}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >

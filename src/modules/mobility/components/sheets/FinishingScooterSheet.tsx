@@ -9,11 +9,15 @@ import {ActivityIndicator, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {useActiveShmoBookingQuery} from '../../queries/use-active-shmo-booking-query';
-import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {ThemeText} from '@atb/components/text';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
+import {
+  BottomSheetHeaderType,
+  MapBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type Props = {
   photoNavigation: () => void;
@@ -28,11 +32,12 @@ export const FinishingScooterSheet = ({
   locationArrowOnPress,
   navigateToScanQrCode,
 }: Props) => {
+  const isFocusedAndActive = useIsFocusedAndActive();
   const {
     data: activeBooking,
     isLoading,
     isError,
-  } = useActiveShmoBookingQuery(ONE_SECOND_MS * 10);
+  } = useActiveShmoBookingQuery(isFocusedAndActive, ONE_SECOND_MS * 10);
   const {logEvent} = useAnalyticsContext();
 
   const {t} = useTranslation();
@@ -68,6 +73,7 @@ export const FinishingScooterSheet = ({
       enablePanDownToClose={false}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
+      bottomSheetHeaderType={BottomSheetHeaderType.None}
     >
       {isLoading && (
         <View style={styles.activityIndicator}>

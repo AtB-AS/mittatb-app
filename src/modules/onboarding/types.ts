@@ -8,7 +8,6 @@ type IsOnboardedStoreKey =
   | '@ATB_extended_onboarding_onboarded'
   | '@ATB_onboarded'
   | '@ATB_location_when_in_use_permission_onboarded'
-  | '@ATB_share_travel_habits_onboarded'
   | '@ATB_notification_permission_onboarded'
   | '@ATB_mobile_token_onboarded'
   | '@ATB_mobile_token_without_travelcard_onboarded'
@@ -19,7 +18,6 @@ export type OnboardingSectionId =
   | 'extendedOnboarding'
   | 'userCreation'
   | 'locationWhenInUsePermission'
-  | 'shareTravelHabits'
   | 'notificationPermission'
   | 'mobileToken'
   | 'mobileTokenWithoutTravelcard'
@@ -37,7 +35,6 @@ export type ShouldShowArgsType = {
   mobileTokenStatus: MobileTokenStatus;
   extendedOnboardingEnabled: boolean;
   userCreationIsOnboarded: boolean;
-  shouldShowShareTravelHabitsScreen: boolean;
   currentRouteName: string;
   hasVehicleRegistrations: boolean;
   isScreenReaderEnabled: boolean;

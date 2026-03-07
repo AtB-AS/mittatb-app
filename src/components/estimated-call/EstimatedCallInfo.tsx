@@ -17,15 +17,11 @@ type EstimatedCallItemDeparture = {
 };
 type EstimatedCallProps = {
   departure: EstimatedCallItemDeparture;
-  ignoreSituationsAndCancellations?: boolean;
   messageType?: Exclude<Statuses, 'valid'>;
-  testID?: string;
 };
 export function EstimatedCallInfo({
   departure,
-  ignoreSituationsAndCancellations = false,
   messageType,
-  testID = 'estimatedCallItem',
 }: EstimatedCallProps) {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -34,26 +30,21 @@ export function EstimatedCallInfo({
   } = usePreferencesContext();
 
   const lineName = formatDestinationDisplay(t, departure.destinationDisplay);
-  const showAsCancelled =
-    departure.cancellation && !ignoreSituationsAndCancellations;
 
   return (
     <View style={styles.transportInfo}>
       <LineChip
         serviceJourney={departure.serviceJourney}
-        messageType={
-          !ignoreSituationsAndCancellations ? messageType : undefined
-        }
-        testID={testID}
+        messageType={messageType}
       />
       {debugPredictionInaccurate && departure.predictionInaccurate && (
         <ThemeIcon svg={PinInvalid} color="warning" />
       )}
       <ThemeText
-        typography={showAsCancelled ? 'body__m__strike' : 'body__m'}
-        color={showAsCancelled ? 'secondary' : 'primary'}
+        typography={departure.cancellation ? 'body__m__strike' : 'body__m'}
+        color={departure.cancellation ? 'secondary' : 'primary'}
         style={styles.lineName}
-        testID={`${testID}LineName`}
+        testID="lineName"
       >
         {lineName}
       </ThemeText>

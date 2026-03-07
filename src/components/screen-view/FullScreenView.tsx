@@ -1,9 +1,10 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
-  RefreshControlProps,
   ScrollView,
   View,
   KeyboardAvoidingView,
+  RefreshControl,
+  RefreshControlProps,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
@@ -12,6 +13,7 @@ import {Ref, useState} from 'react';
 import {ParallaxScroll} from '@atb/components/parallax-scroll';
 import {FullScreenFooter} from '../screen-footer';
 import {ContrastColor} from '@atb/theme/colors';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 type Props = {
   headerProps: ScreenHeaderProps;
@@ -29,7 +31,7 @@ type Props = {
   handleScroll?: (scrollPercentage: number) => void;
   children?: React.ReactNode;
   footer?: React.ReactNode;
-  refreshControl?: React.ReactElement<RefreshControlProps>;
+  refreshControlProps?: RefreshControlProps;
   contentColor?: ContrastColor;
   avoidKeyboard?: boolean;
   testID?: string;
@@ -52,9 +54,12 @@ export function FullScreenView(props: Props) {
     props.headerProps.color ?? theme.color.background.accent[0];
   const backgroundColor = themeColor.background;
 
-  const titleShouldAnimate = props.titleAlwaysVisible
-    ? false
-    : !!props.parallaxContent;
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+
+  const titleShouldAnimate =
+    props.titleAlwaysVisible || isScreenReaderEnabled
+      ? false
+      : !!props.parallaxContent;
   const [opacity, setOpacity] = useState(titleShouldAnimate ? 0 : 1);
 
   const handleScroll = (scrollPercentage: number) => {
@@ -76,8 +81,6 @@ export function FullScreenView(props: Props) {
     <ChildrenInNormalScrollView {...props} contentColor={props.contentColor} />
   );
 
-  const headerFocusRef = !titleShouldAnimate ? props.focusRef : undefined;
-
   return (
     <>
       <View
@@ -90,7 +93,7 @@ export function FullScreenView(props: Props) {
         <ScreenHeader
           {...props.headerProps}
           textOpacity={opacity}
-          focusRef={headerFocusRef}
+          focusRef={isScreenReaderEnabled ? props.focusRef : undefined}
         />
       </View>
 
@@ -115,7 +118,7 @@ const hasParallaxContent = (props: Props): props is PropsWithParallaxContent =>
 
 const ChildrenWithParallaxScrollContent = ({
   parallaxContent,
-  refreshControl,
+  refreshControlProps,
   children,
   headerColor,
   handleScroll,
@@ -126,6 +129,7 @@ const ChildrenWithParallaxScrollContent = ({
   return (
     <View style={styles.container}>
       <ParallaxScroll
+        headerColor={headerColor}
         header={
           <View style={{backgroundColor: headerColor}}>
             <View style={styles.childrenContainer}>
@@ -133,7 +137,7 @@ const ChildrenWithParallaxScrollContent = ({
             </View>
           </View>
         }
-        refreshControl={refreshControl}
+        refreshControlProps={refreshControlProps}
         handleScroll={handleScroll}
       >
         {children}
@@ -143,7 +147,7 @@ const ChildrenWithParallaxScrollContent = ({
 };
 
 const ChildrenInNormalScrollView = ({
-  refreshControl,
+  refreshControlProps,
   children,
   contentColor,
 }: Props & {contentColor?: ContrastColor}) => {
@@ -151,7 +155,11 @@ const ChildrenInNormalScrollView = ({
 
   return (
     <ScrollView
-      refreshControl={refreshControl}
+      refreshControl={
+        refreshControlProps ? (
+          <RefreshControl {...refreshControlProps} />
+        ) : undefined
+      }
       contentContainerStyle={{flexGrow: 1}}
       style={{backgroundColor}}
     >

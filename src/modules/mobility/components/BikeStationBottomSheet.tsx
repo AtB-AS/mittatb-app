@@ -1,38 +1,38 @@
-import {dictionary, useTranslation} from '@atb/translations';
-import React, {useState} from 'react';
-import {GenericSectionItem, Section} from '@atb/components/sections';
-import {OperatorNameAndLogo} from './OperatorNameAndLogo';
-import {
-  BicycleTexts,
-  MobilityTexts,
-} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {StyleSheet} from '@atb/theme';
-import {ActivityIndicator, View} from 'react-native';
-import {useBikeStation} from '../use-bike-station';
-import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useOperatorBenefit} from '../use-operator-benefit';
-import {OperatorBenefit} from './OperatorBenefit';
-import {OperatorActionButton} from './OperatorActionButton';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {ThemeText} from '@atb/components/text';
-import {BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
-import {MobilityStats} from './MobilityStats';
-import {MobilityStat} from './MobilityStat';
-import {Parking} from '@atb/assets/svg/mono-icons/places';
-import {WalkingDistance} from '@atb/components/walking-distance';
-import {BrandingImage} from './BrandingImage';
-import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 import {BikeStationFragment} from '@atb/api/types/generated/fragments/stations';
-import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {Parking} from '@atb/assets/svg/mono-icons/places';
+import {BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
+import {
+  BottomSheetHeaderType,
+  MapBottomSheet,
+} from '@atb/components/bottom-sheet';
+import {TransportationIconBox} from '@atb/components/icon-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
+import {GenericSectionItem, Section} from '@atb/components/sections';
+import {ThemeText} from '@atb/components/text';
+import {WalkingDistance} from '@atb/components/walking-distance';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {
   PayWithBonusPointsCheckbox,
   findRelevantBonusProduct,
 } from '@atb/modules/bonus';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {useAnalyticsContext} from '@atb/modules/analytics';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {StyleSheet} from '@atb/theme';
+import {ThemedCityBike} from '@atb/theme/ThemedAssets';
+import {useTranslation} from '@atb/translations';
+import {BicycleTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import React, {useState} from 'react';
+import {ActivityIndicator, View} from 'react-native';
+import {useBikeStation} from '../use-bike-station';
+import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
+import {useOperatorBenefit} from '../use-operator-benefit';
+import {BrandingImage} from './BrandingImage';
+import {MobilityStat} from './MobilityStat';
+import {MobilityStats} from './MobilityStats';
+import {OperatorActionButton} from './OperatorActionButton';
+import {OperatorBenefit} from './OperatorBenefit';
+import {OperatorNameAndLogo} from './OperatorNameAndLogo';
 
 type Props = {
   stationId: string;
@@ -86,11 +86,17 @@ export const BikeStationBottomSheet = ({
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
-      heading={operatorName}
-      subText={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
-      rightIconText={t(dictionary.appNavigation.close.text)}
-      rightIcon={Close}
-      logoUrl={brandLogoUrl}
+      heading={stationName}
+      subText={operatorName}
+      bottomSheetHeaderType={BottomSheetHeaderType.Close}
+      logoIcon={
+        <TransportationIconBox
+          mode="bicycle"
+          isFlexible={false}
+          size="normal"
+          type="compact"
+        />
+      }
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >
@@ -130,26 +136,21 @@ export const BikeStationBottomSheet = ({
                       first={
                         <MobilityStat
                           svg={BicycleFill}
-                          primaryStat={availableBikes}
-                          secondaryStat={t(
+                          text={`**${availableBikes}** ${t(
                             BicycleTexts.stations.numBikesAvailable(
                               availableBikes,
                             ),
-                          )}
+                          )}`}
                         />
                       }
                       second={
                         <MobilityStat
                           svg={Parking}
-                          primaryStat={
-                            station.numDocksAvailable ??
-                            t(BicycleTexts.stations.unknownDocksAvailable)
-                          }
-                          secondaryStat={t(
+                          text={`**${station.numDocksAvailable ?? t(BicycleTexts.stations.unknownDocksAvailable)}** ${t(
                             BicycleTexts.stations.numDocksAvailable(
                               station.numDocksAvailable,
                             ),
-                          )}
+                          )}`}
                         />
                       }
                     />
@@ -198,7 +199,7 @@ export const BikeStationBottomSheet = ({
           <View style={styles.footer}>
             <MessageInfoBox
               type="error"
-              message={t(BicycleTexts.loadingFailed)}
+              message={t(BicycleTexts.stations.loadingFailed)}
             />
           </View>
         )}

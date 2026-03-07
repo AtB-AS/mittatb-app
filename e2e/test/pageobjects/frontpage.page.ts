@@ -42,15 +42,6 @@ class FrontPagePage {
   }
 
   /**
-   * Service disruptions link in bottom sheet
-   */
-  get serviceDisruptionsLink() {
-    const reqId = `//*[@resource-id="navigateToServiceDisruptions"]`;
-    const textId = `//*[@resource-id="buttonText"]`;
-    return $(reqId).$(textId).getText();
-  }
-
-  /**
    * Favorite departures
    */
   get favoriteDepartures() {
@@ -70,9 +61,10 @@ class FrontPagePage {
    * Get stop place in favorite departures
    */
   get getFavoriteStopPlace() {
-    const favId = `//*[@resource-id="favoriteDepartures"]`;
+    //const favId = `//*[@resource-id="favoriteDepartures"]`;
     const titleId = `//*[@resource-id="stopPlaceTitle"]`;
-    return $(favId).$(titleId).getText();
+    //return $(favId).$(titleId).getText();
+    return $(titleId).getText();
   }
 
   /**
@@ -80,9 +72,10 @@ class FrontPagePage {
    * Note! Returns the first line (at index 0)
    */
   get favoriteDepartureLine() {
-    const favId = `//*[@resource-id="favoriteDepartures"]`;
-    const titleId = `//*[@resource-id="lineItem0Title"]`;
-    return $(favId).$(titleId).getText();
+    const lineId = `//*[@resource-id="lineItem0"]`;
+    const titleId = `//*[@resource-id="title"]`;
+    return $(lineId).$(titleId).getText();
+    //return $(titleId).getText();
   }
 
   /**
@@ -90,7 +83,7 @@ class FrontPagePage {
    * Note! Returns the first departure (at index 0)
    */
   get favoriteDeparture() {
-    const favId = `//*[@resource-id="favoriteDepartures"]`;
+    const favId = `//*[@resource-id="lineItem0DepTimes"]`;
     const depId = `//*[@resource-id="depTime0"]`;
     return $(favId).$(depId);
   }

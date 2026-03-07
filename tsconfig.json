@@ -7,7 +7,8 @@
     "baseUrl": ".",
     "paths": {
       "@atb/*": ["src/*/index", "src/*"]
-    }
+    },
+    "types": ["jest"]
   },
   "types": [
     "node",

@@ -19,14 +19,18 @@ import {
 import {useSendShmoBookingEventMutation} from '../../queries/use-send-shmo-booking-event-mutation';
 import {ShmoTripCard} from '../ShmoTripCard';
 import {formatFriendlyShmoErrorMessage} from '../../utils';
-import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {MapView} from '@rnmapbox/maps';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useShmoWarnings} from '@atb/modules/map';
 import {useKeepAwake} from '@sayem314/react-native-keep-awake';
-import {MapBottomSheet} from '@atb/components/bottom-sheet-v2';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
+import {
+  BottomSheetHeaderType,
+  MapBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemeText} from '@atb/components/text';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type Props = {
   navigateSupportCallback: () => void;
@@ -46,11 +50,12 @@ export const ActiveScooterSheet = ({
   navigateToScanQrCode,
 }: Props) => {
   useKeepAwake();
+  const isFocusedAndActive = useIsFocusedAndActive();
   const {
     data: activeBooking,
     isLoading,
     isError,
-  } = useActiveShmoBookingQuery(ONE_SECOND_MS * 10);
+  } = useActiveShmoBookingQuery(isFocusedAndActive, ONE_SECOND_MS * 10);
   const {logEvent} = useAnalyticsContext();
 
   const {t} = useTranslation();
@@ -134,8 +139,14 @@ export const ActiveScooterSheet = ({
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
       headerNode={
-        activeBooking ? <ShmoTripCard shmoBooking={activeBooking} /> : null
+        activeBooking ? (
+          <ShmoTripCard
+            shmoBooking={activeBooking}
+            isFocused={isFocusedAndActive}
+          />
+        ) : null
       }
+      bottomSheetHeaderType={BottomSheetHeaderType.None}
     >
       {isShmoDeepIntegrationEnabled && (
         <>
@@ -148,13 +159,13 @@ export const ActiveScooterSheet = ({
             <>
               <View style={styles.container}>
                 <VehicleCard
-                  pricingPlan={activeBooking.pricingPlan}
                   currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
                   currentRangeMeters={
                     activeBooking.asset?.currentRangeKm
                       ? activeBooking.asset.currentRangeKm * 1000
                       : 0
                   }
+                  formFactor={activeBooking.asset.formFactor ?? undefined}
                 />
               </View>
               <View style={styles.footer}>

@@ -3,10 +3,10 @@ import {PaymentMethod} from './types';
 import {useAuthContext} from '@atb/modules/auth';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {humanizePaymentType} from '@atb/modules/ticketing';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {View} from 'react-native';
 import {getRadioA11y, RadioIcon} from '@atb/components/radio';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {PaymentBrand} from './PaymentBrand';
 import {Checkbox} from '@atb/components/checkbox';
@@ -56,9 +56,20 @@ export const MultiplePaymentMethodsRadioSection = ({
   const paymentTexts = getPaymentTexts(paymentMethodsInGroup);
   const canSaveCard = authenticationType === 'phone';
 
+  const shouldSaveA11yLabel =
+    t(SelectPaymentMethodTexts.multiple_payment.text) +
+    screenReaderPause +
+    t(SelectPaymentMethodTexts.multiple_payment.information) +
+    screenReaderPause +
+    t(
+      shouldSave
+        ? SelectPaymentMethodTexts.a11yHint.notSave
+        : SelectPaymentMethodTexts.a11yHint.save,
+    );
+
   return (
     <View style={styles.card}>
-      <PressableOpacity
+      <NativeBlockButton
         style={[styles.paymentMethod, styles.centerRow]}
         onPress={onSelect}
         accessibilityHint={paymentTexts.hint}
@@ -85,11 +96,14 @@ export const MultiplePaymentMethodsRadioSection = ({
             </View>
           </View>
         </View>
-      </PressableOpacity>
+      </NativeBlockButton>
       {selected && canSaveCard && (
-        <PressableOpacity
+        <NativeBlockButton
           onPress={toggleShouldSave}
           style={styles.saveMethodSection}
+          accessibilityRole="checkbox"
+          accessibilityState={{checked: shouldSave}}
+          accessibilityLabel={shouldSaveA11yLabel}
         >
           <ThemeText>
             {t(SelectPaymentMethodTexts.multiple_payment.text)}
@@ -112,7 +126,7 @@ export const MultiplePaymentMethodsRadioSection = ({
             />
             <ThemeText>{t(SelectPaymentMethodTexts.save_card)}</ThemeText>
           </View>
-        </PressableOpacity>
+        </NativeBlockButton>
       )}
     </View>
   );

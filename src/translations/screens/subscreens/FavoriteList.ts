@@ -31,9 +31,9 @@ const FavoriteListTexts = {
     title: _('Endre rekkefølge', 'Reorder favourites', 'Endre rekkefølge'),
     messages: {
       error: _(
-        'Ooops. Fikk ikke til å lagre favoritter. Prøv igjen er du snill. 🤞',
-        'Whoops. We were unable to save your favourites. Please try again. 🤞',
-        'Oi, noko gjekk gale med å lagre favorittane dine. Prøv igjen er du snill. 🤞',
+        'Vi fikk ikke til å lagre favoritter. Prøv igjen, eller kontakt kundeservice for hjelp.',
+        'We were unable to save your favourites. Please try again or contact customer service for assistance.',
+        'Vi fekk ikkje til å lagra favorittar. Prøv igjen, eller kontakt kundeservice for hjelp.',
       ),
     },
     buttons: {

@@ -1,11 +1,13 @@
 import {useAuthContext} from '@atb/modules/auth';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {useTranslation, getTextForLanguage} from '@atb/translations';
+import {useAppVersionedConfigurableLink} from '@atb/utils/use-app-versioned-configurable-link';
 
 /**
  * Layers supported by the tile server.
  */
-export type TileLayerName = 'vehicles_clustered' | 'stations';
+export type TileLayerName =
+  | 'vehicles_clustered'
+  | 'stations_clustered'
+  | 'geofencing_zones_features';
 
 /**
  * Returns a tile URL template for fetching map tiles or undefined if unavailable.
@@ -15,15 +17,16 @@ export type TileLayerName = 'vehicles_clustered' | 'stations';
  */
 export const useTileUrlTemplate = (
   tileLayerNames: TileLayerName[],
+  params?: Record<string, string>,
 ): string | undefined => {
-  const {language} = useTranslation();
-  const {configurableLinks} = useFirestoreConfigurationContext();
   const {userId} = useAuthContext();
   const userIdParam = !userId ? '' : '?userId=' + userId;
-  const tileServerBaseUrl = getTextForLanguage(
-    configurableLinks?.tileServerBaseUrl,
-    language,
-  );
+  const customParams = Object.entries(params ?? {})
+    .map(([key, value]) => `&${key}=${value}`)
+    .join('');
+
+  const tileServerBaseUrl =
+    useAppVersionedConfigurableLink('tileServerBaseUrls');
 
   if (!tileServerBaseUrl || tileLayerNames.length === 0) {
     return undefined;
@@ -32,7 +35,8 @@ export const useTileUrlTemplate = (
       tileServerBaseUrl +
       tileLayerNames.join(',') +
       '/{z}/{x}/{y}' +
-      userIdParam
+      userIdParam +
+      customParams
     );
   }
 };

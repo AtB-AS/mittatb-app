@@ -37,5 +37,4 @@ export {
   type ReferenceDataNames,
   findReferenceDataById,
   getReferenceDataName,
-  isProductSellableInApp,
 } from './utils';

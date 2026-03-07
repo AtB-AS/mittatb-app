@@ -15,21 +15,21 @@ import {
 
 import {Feature} from 'geojson';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {View} from 'react-native';
+import {Platform, View} from 'react-native';
 import {MapCameraConfig, getSlightlyRaisedMapPadding} from './MapConfig';
-import {GeofencingZoneCustomProps, MapPropertiesType, MapProps} from './types';
+import {MapPropertiesType, MapProps} from './types';
 
 import {
   isFeaturePoint,
   getFeaturesAtClick,
-  isFeatureGeofencingZone,
-  isClusterFeatureV2,
   isQuayFeature,
   mapPositionToCoordinates,
   flyToLocation,
   getFeatureToSelect,
   isParkAndRide,
   isStopPlace,
+  isFeatureGeofencingZone,
+  isClusterFeature,
 } from './utils';
 
 import {
@@ -41,12 +41,13 @@ import {
 } from '@atb/modules/map';
 
 import {
-  isBicycleV2,
-  isScooterV2,
+  isBicycle,
+  isScooter,
   useVehicleQuery,
-  isStationV2,
-  isCarStationV2,
-  isBikeStationV2,
+  isStation,
+  isCarStation,
+  isBikeStation,
+  isVehicle,
 } from '@atb/modules/mobility';
 
 import {Snackbar, useSnackbar, useStableValue} from '@atb/components/snackbar';
@@ -54,7 +55,7 @@ import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
 import {useMapContext} from '@atb/modules/map';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
-import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
+import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
 import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {ShmoBookingState} from '@atb/api/types/mobility';
@@ -62,9 +63,11 @@ import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {MapBottomSheets} from './MapBottomSheets';
 
 import {MapButtons} from './components/MapButtons';
+import {GeofencingZoneCode} from '@atb-as/theme';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {usePreferencesContext} from '../preferences';
-import {useBottomSheetV2Context} from '@atb/components/bottom-sheet-v2';
+import {useBottomSheetContext} from '@atb/components/bottom-sheet';
+import {GeofencingZonesAsTiles} from './components/mobility/GeofencingZonesAsTiles';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -90,7 +93,7 @@ export const Map = (props: MapProps) => {
   const mapCameraRef = useRef<Camera>(null);
   const mapViewRef = useRef<MapView>(null);
   const [initMapLoaded, setInitMapLoaded] = useState(false);
-  const {bottomSheetMapRef} = useBottomSheetV2Context();
+  const {bottomSheetMapRef} = useBottomSheetContext();
   const onPressStartRef = useRef<boolean>(false);
 
   const {mapFilter, mapState, dispatchMapState, paddingBottomMap} =
@@ -108,19 +111,18 @@ export const Map = (props: MapProps) => {
     false;
   const shouldShowVehiclesAndStations =
     isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
-  const mapViewConfig = useMapViewConfig({shouldShowVehiclesAndStations});
 
   const selectedFeature = mapState.feature;
 
-  const selectedFeatureIsAVehicle =
-    isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
+  const selectedFeatureIsAVehicle = isVehicle(selectedFeature);
 
-  const {isGeofencingZonesEnabled} = useFeatureTogglesContext();
+  const {isGeofencingZonesEnabled, isGeofencingZonesAsTilesEnabled} =
+    useFeatureTogglesContext();
 
   const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
-  const {data: activeShmoBooking} = useActiveShmoBookingQuery();
+  const {data: activeShmoBooking} = useActiveShmoBookingQuery(isFocused);
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&
@@ -132,7 +134,21 @@ export const Map = (props: MapProps) => {
     data: vehicle,
     isLoading: vehicleIsLoading,
     isError: vehicleError,
-  } = useVehicleQuery(selectedFeature?.properties?.id);
+  } = useVehicleQuery(
+    selectedFeatureIsAVehicle ? selectedFeature?.properties?.id : undefined,
+  );
+
+  const systemId =
+    vehicle?.system.id ?? activeShmoBooking?.asset.systemId ?? null;
+  const vehicleTypeId =
+    vehicle?.vehicleType.id ?? activeShmoBooking?.asset.vehicleTypeId ?? null;
+
+  // Always including the vector sources avoids laggy transitions for iOS (but buggy on Android, so skipped there),
+  // and tile requests are only sent when they are used anyway.
+  const mapViewConfig = useMapViewConfig({
+    includeVehiclesAndStationsVectorSource:
+      shouldShowVehiclesAndStations || Platform.OS !== 'android',
+  });
 
   const [followUserLocation, setFollowUserLocation] = useState(false);
   const mapPropertiesRef = useRef<MapPropertiesType | null>({
@@ -164,14 +180,30 @@ export const Map = (props: MapProps) => {
     !selectedFeature && hideSnackbar();
   }, [selectedFeature, hideSnackbar]);
 
-  const geofencingZoneOnPress = useCallback(
-    (geofencingZoneCustomProps?: GeofencingZoneCustomProps) => {
+  const showGeofencingZoneSnackbar = useCallback(
+    (geofencingZoneCode?: GeofencingZoneCode, isStationParking?: boolean) => {
       const geofencingZoneContent = getGeofencingZoneContent(
-        geofencingZoneCustomProps,
+        geofencingZoneCode,
+        isStationParking,
       );
       showSnackbar({content: geofencingZoneContent, position: 'top'});
     },
     [showSnackbar, getGeofencingZoneContent],
+  );
+
+  const geofencingZoneOnPress = useCallback(
+    (e: OnPressEvent) => {
+      const featuresAtClick = e.features;
+      if (!featuresAtClick || featuresAtClick.length === 0) return;
+      const featureToSelect = featuresAtClick[0]; // currently ignore the ones behind
+
+      const code = featureToSelect.properties?.code ?? 'allowed';
+      const stationParking =
+        featureToSelect.properties?.stationParking ?? false;
+
+      showGeofencingZoneSnackbar(code, stationParking);
+    },
+    [showGeofencingZoneSnackbar],
   );
 
   const locationArrowOnPress = useCallback(async () => {
@@ -227,11 +259,6 @@ export const Map = (props: MapProps) => {
         positionClicked,
       );
 
-      /**
-       * this hides the Snackbar when a feature is clicked,
-       * unless the feature is a geofencingZone, in which case
-       * geofencingZoneOnPress will be called which sets it visible again
-       */
       hideSnackbar();
 
       if (isQuayFeature(featureToSelect) && !isActiveTrip) {
@@ -240,20 +267,21 @@ export const Map = (props: MapProps) => {
         // - have a bottom sheet with departures just for the clicked quay
         return; // currently - do nothing
       } else if (isFeatureGeofencingZone(featureToSelect)) {
-        geofencingZoneOnPress(
-          featureToSelect?.properties?.geofencingZoneCustomProps,
-        );
-      } else if (isScooterV2(selectedFeature) && !isActiveTrip) {
+        if (isGeofencingZonesAsTilesEnabled) return; // Handled directly with geofencingZoneOnPress instead in this case
+        const gfzProps = featureToSelect?.properties?.geofencingZoneCustomProps;
+        showGeofencingZoneSnackbar(gfzProps?.code, gfzProps.isStationParking);
+      } else if (isScooter(selectedFeature) && !isActiveTrip) {
         // outside of operational area, rules unspecified
-        geofencingZoneOnPress(undefined);
+        showGeofencingZoneSnackbar(undefined);
       }
     },
     [
       activeShmoBooking?.state,
       showGeofencingZones,
       hideSnackbar,
-      geofencingZoneOnPress,
+      isGeofencingZonesAsTilesEnabled,
       selectedFeature,
+      showGeofencingZoneSnackbar,
     ],
   );
 
@@ -273,34 +301,36 @@ export const Map = (props: MapProps) => {
         featuresAtClick,
         positionClicked,
       );
-
-      if (isClusterFeatureV2(featureToSelect)) {
-        const fromZoomLevel = (await mapViewRef.current?.getZoom()) ?? 0;
-        const toZoomLevel = Math.max(fromZoomLevel + 2);
-
-        flyToLocation({
-          coordinates: mapPositionToCoordinates(
-            featureToSelect.geometry.coordinates,
-          ),
-          padding: getSlightlyRaisedMapPadding(paddingBottomMap),
-          mapCameraRef,
-          mapViewRef,
-          zoomLevel: toZoomLevel,
-        });
-      } else if (isFeaturePoint(featureToSelect)) {
+      if (isFeaturePoint(featureToSelect)) {
         if (isQuayFeature(featureToSelect)) return;
+        if (isClusterFeature(featureToSelect)) {
+          dispatchMapState({type: MapStateActionType.None});
+          const fromZoomLevel = (await mapViewRef.current?.getZoom()) ?? 0;
+          const toZoomLevel = getToZoomLevel(
+            fromZoomLevel,
+            featureToSelect.properties?.cluster_extent_meters,
+          );
 
-        if (isScooterV2(featureToSelect)) {
+          flyToLocation({
+            coordinates: mapPositionToCoordinates(
+              featureToSelect.geometry.coordinates,
+            ),
+            padding: getSlightlyRaisedMapPadding(paddingBottomMap),
+            mapCameraRef,
+            mapViewRef,
+            zoomLevel: toZoomLevel,
+          });
+        } else if (isScooter(featureToSelect)) {
           dispatchMapState({
             type: MapStateActionType.Scooter,
             feature: featureToSelect,
           });
-        } else if (isBicycleV2(featureToSelect)) {
+        } else if (isBicycle(featureToSelect)) {
           dispatchMapState({
             type: MapStateActionType.Bicycle,
             feature: featureToSelect,
           });
-        } else if (isCarStationV2(featureToSelect)) {
+        } else if (isCarStation(featureToSelect)) {
           dispatchMapState({
             type: MapStateActionType.CarStation,
             feature: featureToSelect,
@@ -315,12 +345,12 @@ export const Map = (props: MapProps) => {
             type: MapStateActionType.StopPlace,
             feature: featureToSelect,
           });
-        } else if (isBikeStationV2(featureToSelect)) {
+        } else if (isBikeStation(featureToSelect)) {
           dispatchMapState({
             type: MapStateActionType.BikeStation,
             feature: featureToSelect,
           });
-        } else if (isStationV2(featureToSelect)) {
+        } else if (isStation(featureToSelect)) {
           dispatchMapState({
             type: MapStateActionType.Station,
             feature: featureToSelect,
@@ -400,18 +430,21 @@ export const Map = (props: MapProps) => {
             followUserMode={UserTrackingMode.FollowWithHeading}
             followPadding={getSlightlyRaisedMapPadding(paddingBottomMap)}
           />
-          {showGeofencingZones && !vehicleError && !vehicleIsLoading && (
-            <GeofencingZones
-              systemId={
-                vehicle?.system.id ?? activeShmoBooking?.asset.systemId ?? null
-              }
-              vehicleTypeId={
-                vehicle?.vehicleType.id ??
-                activeShmoBooking?.asset.vehicleTypeId ??
-                null
-              }
-            />
-          )}
+          {showGeofencingZones &&
+            !vehicleError &&
+            !vehicleIsLoading &&
+            (isGeofencingZonesAsTilesEnabled ? (
+              <GeofencingZonesAsTiles
+                systemId={systemId}
+                vehicleTypeId={vehicleTypeId}
+                geofencingZoneOnPress={geofencingZoneOnPress}
+              />
+            ) : (
+              <GeofencingZones
+                systemId={systemId}
+                vehicleTypeId={vehicleTypeId}
+              />
+            ))}
 
           <NationalStopRegistryFeatures
             selectedFeaturePropertyId={selectedFeature?.properties?.id}
@@ -439,8 +472,15 @@ export const Map = (props: MapProps) => {
             navigateToScanQrCode={navigateToScanQrCode}
           />
         )}
-        {includeSnackbar && <Snackbar {...snackbarProps} />}
-        {showShmoTesting && (
+        {includeSnackbar && (
+          <Snackbar
+            {...snackbarProps}
+            onHideSnackbar={
+              isGeofencingZonesAsTilesEnabled ? hideSnackbar : undefined
+            }
+          />
+        )}
+        {!!showShmoTesting && (
           <ShmoTesting navigateToScooterSupport={navigateToScooterSupport} />
         )}
       </View>
@@ -461,3 +501,31 @@ export const Map = (props: MapProps) => {
     </View>
   );
 };
+
+const DEFAULT_ZOOM_DELTA = 2;
+
+export function getToZoomLevel(
+  currentZoom: number,
+  clusterExtentMeters?: number | null,
+): number {
+  const defaultZoom = currentZoom + DEFAULT_ZOOM_DELTA;
+
+  if (
+    clusterExtentMeters == null ||
+    clusterExtentMeters < 0 ||
+    !Number.isFinite(clusterExtentMeters)
+  ) {
+    return defaultZoom;
+  }
+
+  const newZoomLevel: number = (() => {
+    if (clusterExtentMeters <= 15) return 19;
+    if (clusterExtentMeters <= 30) return 18;
+    if (clusterExtentMeters <= 60) return 17;
+    if (clusterExtentMeters <= 120) return 16;
+    if (clusterExtentMeters <= 250) return 15;
+    return defaultZoom;
+  })();
+
+  return Math.max(defaultZoom, newZoomLevel);
+}

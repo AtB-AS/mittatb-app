@@ -29,8 +29,8 @@ const ProfileTexts = {
             confirm: _('Logg ut', 'Log out', 'Logg ut'),
           },
         },
-        ticketHistory: {
-          label: _('Billetthistorikk', 'Ticket history', 'Billetthistorikk'),
+        purchaseHistory: {
+          label: _('Kjøpshistorikk', 'Purchase history', 'Kjøpshistorikk'),
         },
         bonus: {
           label: _('Poeng', 'Points', 'Poeng'),
@@ -214,11 +214,10 @@ const ProfileTexts = {
             ),
           },
           permissionError: {
-            title: _('Oops!', 'Whoops!', 'Oops!'),
             message: _(
-              'Det har oppstått en feil. Prøv igjen senere 🤞',
-              'An error ocurred. Please try again later 🤞',
-              'Det har skjedd ein feil. Prøv igjen seinare 🤞',
+              'Vi klarte ikke å redigere tillatelse. Prøv igjen, eller kontakt kundeservice for hjelp.',
+              'We were unable to change the permission. Please try again or contact customer service for assistance.',
+              'Vi klarte ikkje å redigera tillating. Prøv igjen, eller kontakt kundeservice for hjelp.',
             ),
           },
         },
@@ -280,23 +279,6 @@ const ProfileTexts = {
             'Aktivér for å lese personvernerklæring på ekstern side',
             'Activate to read our privacy statement (external content)',
             'Aktiver for å lese personvernerklæring på ekstern side',
-          ),
-        },
-        permissionRequired: {
-          title: _(
-            'Tillatelse kreves',
-            'Permission required',
-            'Tillating krevjast',
-          ),
-          message: _(
-            'Gi tilgang til Bluetooth for å dele dine reisevaner.',
-            'Enable Bluetooth to share your travel habits.',
-            'Gi tilgang til Bluetooth for å dele dine reisevanar.',
-          ),
-          action: _(
-            'Åpne telefoninnstillinger',
-            'Open Settings',
-            'Opne telefoninnstillingar',
           ),
         },
         clearHistory: {

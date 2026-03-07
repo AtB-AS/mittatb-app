@@ -1,5 +1,4 @@
 import {PreassignedFareProduct} from '@atb/modules/configuration';
-import {compareVersion} from '@atb/utils/compare-version';
 import type {
   PurchaseSelectionBuilderInput,
   PurchaseSelectionType,
@@ -14,38 +13,28 @@ import {
   UserProfile,
 } from '@atb-as/config-specs';
 import {isValidDateString} from '@atb/utils/date';
+import {decodePolylineEncodedGeometry} from '@atb/utils/decode-polyline-geometry';
+import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 
-export const isProductSellableInApp = (
-  input: PurchaseSelectionBuilderInput,
-  product: PreassignedFareProduct,
-) => {
-  if (
-    (product.limitations.appVersionMin &&
-      compareVersion(product.limitations.appVersionMin, input.appVersion) >
-        0) ||
-    (product.limitations.appVersionMax &&
-      compareVersion(product.limitations.appVersionMax, input.appVersion) < 0)
-  )
-    return false;
-
-  if (
-    product.distributionChannel.some((channel) => channel === 'debug-app') &&
-    input.customerProfile?.debug
-  )
-    return true;
-
-  return product.distributionChannel.some((channel) => channel === 'app');
-};
-
+/**
+ * This implementation assumes that input.preassignedFareProducts always has at least one
+ * produdct for the given configType
+ */
 export const getDefaultProduct = (
   input: PurchaseSelectionBuilderInput,
   configType: string,
 ) =>
   input.preassignedFareProducts
-    .filter((product) => isProductSellableInApp(input, product))
+    .filter((product) =>
+      isProductSellableInApp(product, input.customerProfile, input.appVersion),
+    )
     .filter((product) => product.type === configType)
     .reduce((selected, current) => (current.isDefault ? current : selected));
 
+/**
+ * This implementation assumes that input.fareZones always has at least one
+ * selectable zone for the given product
+ */
 export const getDefaultZones = (
   input: PurchaseSelectionBuilderInput,
   typeConfig: FareProductTypeConfig,
@@ -61,7 +50,10 @@ export const getDefaultZones = (
   if (input.currentCoordinates) {
     const {longitude, latitude} = input.currentCoordinates;
     const zoneFromLocation = selectableZones.find((t) =>
-      turfBooleanPointInPolygon([longitude, latitude], t.geometry),
+      turfBooleanPointInPolygon(
+        [longitude, latitude],
+        decodePolylineEncodedGeometry(t.geometry),
+      ),
     );
     if (zoneFromLocation) {
       zoneWithMetadata = {...zoneFromLocation, resultType: 'geolocation'};
@@ -85,6 +77,10 @@ export const getDefaultStopPlaces = (
   return {from: undefined, to: undefined};
 };
 
+/**
+ * This implementation assumes that input.userProfiles always has at least one
+ * selectable zone for the given product
+ */
 export const getDefaultUserProfiles = (
   input: PurchaseSelectionBuilderInput,
   product: PreassignedFareProduct,
@@ -107,7 +103,11 @@ export const isSelectableProduct = (
   if (currentSelection.fareProductTypeConfig.type !== product.type) {
     return false;
   }
-  return isProductSellableInApp(input, product);
+  return isProductSellableInApp(
+    product,
+    input.customerProfile,
+    input.appVersion,
+  );
 };
 
 export const isSelectableProfile = (
@@ -123,7 +123,16 @@ export const isSelectableSupplementProduct = (
   currentSelection: PurchaseSelectionType,
   supplementProduct: SupplementProduct,
 ) => {
-  return !!currentSelection.preassignedFareProduct.limitations.supplementProductRefs?.some(
+  const supplementProductLimitations =
+    currentSelection.preassignedFareProduct.limitations.supplementProductRefs;
+  if (
+    !supplementProductLimitations ||
+    supplementProductLimitations.length === 0
+  ) {
+    // There are no limitations, all supplement products are allowed
+    return true;
+  }
+  return supplementProductLimitations.some(
     (allowedSupplementProductId) =>
       supplementProduct.id === allowedSupplementProductId,
   );
@@ -157,10 +166,11 @@ export const isValidSelection = (
   );
   if (!areProfilesValid) return false;
 
-  const areBaggageProductsValid = selection.baggageProductsWithCount.every(
-    (sp) => isSelectableSupplementProduct(selection, sp),
-  );
-  if (!areBaggageProductsValid) return false;
+  const areSupplementProductsValid =
+    selection.supplementProductsWithCount.every((sp) =>
+      isSelectableSupplementProduct(selection, sp),
+    );
+  if (!areSupplementProductsValid) return false;
 
   const isFromZoneValid = selection.zones
     ? isSelectableZone(selection.preassignedFareProduct, selection.zones.from)
@@ -212,9 +222,10 @@ export const applyProductChange = (
   const userCount = currentSelection.userProfilesWithCount.filter((up) =>
     isSelectableProfile(product, up),
   );
-  const baggageProductCount = currentSelection.baggageProductsWithCount.filter(
-    (sp) => isSelectableSupplementProduct(currentSelection, sp),
-  );
+  const supplementProductCount =
+    currentSelection.supplementProductsWithCount.filter((sp) =>
+      isSelectableSupplementProduct(currentSelection, sp),
+    );
 
   const isFromZoneValid =
     !currentSelection.zones ||
@@ -230,7 +241,7 @@ export const applyProductChange = (
     : getDefaultZones(input, currentSelection.fareProductTypeConfig, product);
 
   const userProfiles =
-    !userCount.length && !baggageProductCount.length
+    !userCount.length && !supplementProductCount.length
       ? getDefaultUserProfiles(input, product)
       : userCount;
 

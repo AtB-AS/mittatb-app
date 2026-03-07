@@ -1,5 +1,5 @@
 import React from 'react';
-import {AccessibilityProps, GestureResponderEvent, View} from 'react-native';
+import {AccessibilityProps, View} from 'react-native';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {StoredFavoriteDeparture} from '@atb/modules/favorites';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
@@ -9,7 +9,7 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 
 type BaseProps = {
@@ -18,10 +18,7 @@ type BaseProps = {
   testID?: string;
 };
 type WithOnPress = BaseProps & {
-  onPress(
-    favorite: StoredFavoriteDeparture,
-    event: GestureResponderEvent,
-  ): void;
+  onPress(favorite: StoredFavoriteDeparture): void;
   accessibility?: AccessibilityProps;
 };
 
@@ -43,16 +40,16 @@ export function FavoriteDepartureSectionItem(props: Props) {
     : `${favorite.lineLineNumber} ${favoriteLineName}, ${favorite.quayName}`;
 
   return (
-    <PressableOpacity
+    <NativeBlockButton
       accessible
       accessibilityLabel={a11yLabel + screenReaderPause}
       accessibilityRole="button"
-      onPress={(e) => props.onPress(props.favorite, e)}
+      onPress={() => props.onPress(props.favorite)}
       {...props.accessibility}
       testID={props.testID}
     >
       <FavoriteItemContent {...props} />
-    </PressableOpacity>
+    </NativeBlockButton>
   );
 }
 

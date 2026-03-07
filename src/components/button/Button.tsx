@@ -1,20 +1,20 @@
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Theme} from '@atb/theme/colors';
-import React, {useRef} from 'react';
+import React from 'react';
 import {
   ActivityIndicator,
-  Animated,
   type ColorValue,
-  Easing,
-  PressableProps,
   StyleProp,
   TextStyle,
   View,
   ViewStyle,
 } from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {
+  NativeBlockButton,
+  NativeBlockButtonProps,
+} from '@atb/components/native-button';
 import {shadows} from '@atb/modules/map';
 import {ContrastColor, InteractiveColor} from '@atb/theme/colors';
 
@@ -46,9 +46,7 @@ export type ButtonProps = {
   style?: StyleProp<ViewStyle>;
   hasShadow?: boolean;
 } & ButtonModeAwareProps &
-  PressableProps;
-
-const DISABLED_OPACITY = 0.2;
+  NativeBlockButtonProps;
 
 export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
   const {
@@ -71,19 +69,6 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
 
   const {mainContrastColor, borderColorValue} = getButtonColors(props, theme);
 
-  const fadeAnim = useRef(
-    new Animated.Value(disabled ? DISABLED_OPACITY : 1),
-  ).current;
-
-  React.useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: disabled ? DISABLED_OPACITY : 1,
-      duration: 200,
-      easing: Easing.inOut(Easing.ease),
-      useNativeDriver: true,
-    }).start();
-  }, [disabled, fadeAnim]);
-
   const spacing = theme.spacing.medium;
 
   const styleContainer: ViewStyle[] = [
@@ -92,6 +77,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
       backgroundColor: mainContrastColor.background,
       borderColor: borderColorValue,
       paddingHorizontal: spacing,
+      gap: type === 'small' ? theme.spacing.xSmall : undefined,
       paddingVertical: type === 'small' ? theme.spacing.xSmall : spacing,
       borderRadius: theme.border.radius.circle,
       borderWidth:
@@ -128,7 +114,8 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
   };
 
   const styleText: TextStyle = {
-    width: !expanded ? '100%' : undefined,
+    // Add 1% width to the text to avoid layout issues on Android with small font sizes
+    width: !expanded ? '101%' : undefined,
   };
   const textContainer: TextStyle = {
     flex: !expanded ? undefined : 1,
@@ -150,59 +137,51 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
   }
 
   return (
-    <Animated.View
-      style={[
-        {
-          opacity: fadeAnim,
-        },
-        style,
-      ]}
+    <NativeBlockButton
+      accessible
+      accessibilityRole="button"
+      accessibilityState={{disabled}}
+      style={[styleContainer, hasShadow ? shadows : undefined, style]}
+      onPress={disabled || loading ? undefined : onPress}
+      disabled={disabled || loading}
+      ref={ref}
+      {...otherProps}
     >
-      <PressableOpacity
-        style={[styleContainer, hasShadow ? shadows : undefined]}
-        onPress={disabled || loading ? undefined : onPress}
-        disabled={disabled || loading}
-        accessibilityRole="button"
-        accessibilityState={{disabled: !!disabled}}
-        ref={ref}
-        {...otherProps}
-      >
-        {leftIcon && (
-          <View style={leftStyling}>
-            <ButtonIcon {...leftIcon} mainContrastColor={mainContrastColor} />
-          </View>
-        )}
-        {text && (
-          <View style={textContainer}>
-            <ThemeText
-              typography={getTextType(mode, type)}
-              style={styleText}
-              color={mainContrastColor}
-              testID="buttonText"
-            >
-              {text}
-            </ThemeText>
-          </View>
-        )}
-        {(rightIcon || loading) && (
-          <View style={rightStyling}>
-            {loading ? (
-              <ActivityIndicator
-                size="small"
-                color={mainContrastColor.foreground.primary}
+      {leftIcon && (
+        <View style={leftStyling}>
+          <ButtonIcon {...leftIcon} mainContrastColor={mainContrastColor} />
+        </View>
+      )}
+      {text && (
+        <View style={textContainer}>
+          <ThemeText
+            typography={getTextType(mode, type)}
+            style={styleText}
+            color={mainContrastColor}
+            testID="buttonText"
+          >
+            {text}
+          </ThemeText>
+        </View>
+      )}
+      {(rightIcon || loading) && (
+        <View style={rightStyling}>
+          {loading ? (
+            <ActivityIndicator
+              size="small"
+              color={mainContrastColor.foreground.primary}
+            />
+          ) : (
+            rightIcon && (
+              <ButtonIcon
+                {...rightIcon}
+                mainContrastColor={mainContrastColor}
               />
-            ) : (
-              rightIcon && (
-                <ButtonIcon
-                  {...rightIcon}
-                  mainContrastColor={mainContrastColor}
-                />
-              )
-            )}
-          </View>
-        )}
-      </PressableOpacity>
-    </Animated.View>
+            )
+          )}
+        </View>
+      )}
+    </NativeBlockButton>
   );
 });
 
@@ -298,7 +277,15 @@ const useButtonStyle = StyleSheet.createThemeHook(() => ({
 }));
 
 function getTextType(mode: string, type: string) {
-  if (type === 'small') return 'body__s';
+  if (type === 'small')
+    switch (mode) {
+      case 'primary':
+      case 'secondary':
+        return 'body__s__strong';
+      case 'tertiary':
+        return 'body__s';
+    }
+
   switch (mode) {
     case 'primary':
     case 'secondary':

@@ -2,14 +2,11 @@ import auth from '@react-native-firebase/auth';
 import Bugsnag from '@bugsnag/react-native';
 import {v4 as uuid} from 'uuid';
 
-import {APP_GROUP_NAME} from '@env';
-
 import {setInstallId as setApiInstallId} from './api/client';
 import {loadLocalConfig} from './local-config';
 import {storage} from '@atb/modules/storage';
 
 export async function setupConfig() {
-  await storage.setAppGroupName(APP_GROUP_NAME);
   await ensureFirstTimeSetup();
   const {installId} = await loadLocalConfig();
   Bugsnag.setUser(installId);

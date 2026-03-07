@@ -1,0 +1,34 @@
+name: 'Upload Bugsnag symbols (iOS)'
+description: 'Create sourcemaps and upload JS sourcemaps and dSYMs to Bugsnag'
+
+inputs:
+  bugsnag-api-key:
+    description: 'Bugsnag API key'
+    required: true
+  skip-create-sourcemaps:
+    description: 'Skip creating sourcemaps (e.g. when replace-bundle.sh already created them)'
+    required: false
+    default: 'false'
+  skip-dsyms:
+    description: 'Skip dSYM upload (e.g. when using a cached IPA without dSYMs)'
+    required: false
+    default: 'false'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Create bundle and source maps
+      if: inputs.skip-create-sourcemaps != 'true'
+      shell: bash
+      run: sh ./scripts/ios/create-sourcemaps.sh
+    - name: Upload JS bundle and source maps
+      shell: bash
+      run: sh ./scripts/ios/upload-sourcemaps.sh
+      env:
+        BUGSNAG_API_KEY: ${{ inputs.bugsnag-api-key }}
+    - name: Upload dSYMs
+      if: inputs.skip-dsyms != 'true'
+      shell: bash
+      run: sh ./scripts/ios/upload-dsyms.sh
+      env:
+        BUGSNAG_API_KEY: ${{ inputs.bugsnag-api-key }}

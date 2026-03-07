@@ -32,6 +32,8 @@ import {
   ShmoPricingPlan,
   StationFeature,
   StationFeatureSchema,
+  StationsClusteredFeature,
+  StationsClusteredFeatureSchema,
   VehicleFeature,
   VehicleFeatureSchema,
   VehiclesClusteredFeature,
@@ -39,55 +41,65 @@ import {
 } from '@atb/api/types/mobility';
 import {TFunc} from '@leile/lobo-t';
 import {ErrorResponse, formatNumberToString} from '@atb-as/utils';
+import {FormattedRatePerUnit} from './types';
+import {ThemedCityBike, ThemedScooter} from '@atb/theme/ThemedAssets';
 
-export const isVehiclesClusteredFeature = (
+export const isStationCluster = (
+  feature: Feature<Point> | undefined,
+): feature is StationsClusteredFeature =>
+  StationsClusteredFeatureSchema.safeParse(feature).success;
+
+export const isVehicleCluster = (
   feature: Feature<Point> | undefined,
 ): feature is VehiclesClusteredFeature =>
   VehiclesClusteredFeatureSchema.safeParse(feature).success;
 
-export const isVehicleFeature = (
+export const isVehicle = (
   feature: Feature<Point> | undefined,
 ): feature is VehicleFeature => VehicleFeatureSchema.safeParse(feature).success;
 
-export const isScooterV2 = (
+export const isScooter = (
   feature: Feature<Point> | undefined,
 ): feature is VehicleFeature & {
   properties: {
     vehicle_type_form_factor: FormFactor.Scooter | FormFactor.ScooterStanding;
   };
 } =>
-  isVehicleFeature(feature) &&
-  (feature?.properties?.vehicle_type_form_factor === FormFactor.Scooter ||
-    feature?.properties?.vehicle_type_form_factor ===
-      FormFactor.ScooterStanding);
+  isVehicle(feature) &&
+  (feature.properties.vehicle_type_form_factor === FormFactor.Scooter ||
+    feature.properties.vehicle_type_form_factor === FormFactor.ScooterStanding);
 
-export const isBicycleV2 = (
+export const isBicycle = (
   feature: Feature<Point> | undefined,
 ): feature is VehicleFeature & {
   properties: {vehicle_type_form_factor: FormFactor.Bicycle};
 } =>
-  isVehiclesClusteredFeature(feature) &&
-  feature?.properties?.vehicle_type_form_factor === FormFactor.Bicycle &&
-  !isStationV2(feature);
+  isVehicle(feature) &&
+  feature?.properties?.vehicle_type_form_factor === FormFactor.Bicycle;
 
-export const isStationV2 = (
+export const isClusteredStation = (
+  feature: Feature<Point> | undefined,
+): feature is StationsClusteredFeature =>
+  StationsClusteredFeatureSchema.safeParse(feature).success;
+
+export const isStation = (
   feature: Feature<Point> | undefined,
 ): feature is StationFeature => StationFeatureSchema.safeParse(feature).success;
 
-export const isBikeStationV2 = (
+export const isBikeStation = (
   feature: Feature<Point> | undefined,
 ): feature is StationFeature & {
   properties: {vehicle_type_form_factor: FormFactor.Bicycle};
 } =>
-  isStationV2(feature) &&
+  isStation(feature) &&
   feature.properties?.vehicle_type_form_factor === FormFactor.Bicycle;
 
-export const isCarStationV2 = (
+export const isCarStation = (
   feature: Feature<Point> | undefined,
 ): feature is StationFeature & {
   properties: {vehicle_type_form_factor: FormFactor.Car};
 } =>
-  isStationV2(feature) &&
+  isStation(feature) &&
   feature.properties?.vehicle_type_form_factor === FormFactor.Car;
 
 export const getAvailableVehicles = (
@@ -195,33 +207,30 @@ export const getBatteryLevelIcon = (batteryPercentage: number) => {
   }
 };
 
-export const formatPricePerUnit = (
-  pricePlan: PricingPlanFragment | ShmoPricingPlan,
+export const formatRatePerUnit = (
+  pricingPlan: PricingPlanFragment | ShmoPricingPlan,
   language: Language,
-) => {
-  const perMinPrice = pricePlan.perMinPricing?.[0];
+): FormattedRatePerUnit | undefined => {
+  const perMinPrice = pricingPlan.perMinPricing?.[0];
 
   if (perMinPrice) {
     return {
-      price: `${formatNumberToString(perMinPrice.rate, language)} kr`,
-      unit: 'min',
+      rate: perMinPrice.rate,
+      formattedRate: `${formatNumberToString(perMinPrice.rate, language)} kr`,
+      perUnit: 'min',
     };
-  } else if (!isShmoPricingPlan(pricePlan)) {
-    const perKmPrice = pricePlan.perKmPricing?.[0];
+  } else if (!isShmoPricingPlan(pricingPlan)) {
+    const perKmPrice = pricingPlan.perKmPricing?.[0];
     if (perKmPrice) {
       return {
-        price: `${formatNumberToString(perKmPrice.rate, language)} kr`,
-        unit: 'km',
+        rate: perKmPrice.rate,
+        formattedRate: `${formatNumberToString(perKmPrice.rate, language)} kr`,
+        perUnit: 'km',
       };
     }
   }
   return undefined;
 };
-
-export const getOperators = (
-  filter: MobilityMapFilterType,
-  formFactor: FormFactor,
-) => filter[formFactor]?.operators ?? [];
 
 export const isShowAll = (
   filter: MobilityMapFilterType,
@@ -321,5 +330,16 @@ export function isSvgUrl(url: string) {
     return u.pathname.toLowerCase().endsWith('.svg');
   } catch {
     return false;
+  }
+}
+
+export function getThemedIllustrationForFormFactor(formFactor: FormFactor) {
+  switch (formFactor) {
+    case FormFactor.Scooter:
+      return ThemedScooter;
+    case FormFactor.Bicycle:
+      return ThemedCityBike;
+    default:
+      return null;
   }
 }

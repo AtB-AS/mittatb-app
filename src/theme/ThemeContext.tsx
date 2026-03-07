@@ -50,6 +50,8 @@ type Props = {
 
 export const ThemeContextProvider = ({children}: Props) => {
   const systemColorScheme = useColorScheme();
+  const systemColorWithFallback =
+    systemColorScheme === 'unspecified' ? 'light' : systemColorScheme;
   const {
     setPreference,
     preferences: {colorScheme, overrideSystemAppearance, useAndroidSystemFont},
@@ -57,7 +59,8 @@ export const ThemeContextProvider = ({children}: Props) => {
   const androidSystemFont = !!useAndroidSystemFont;
 
   const themeName: Mode =
-    (overrideSystemAppearance ? colorScheme : systemColorScheme) ?? 'light';
+    (overrideSystemAppearance ? colorScheme : systemColorWithFallback) ??
+    'light';
 
   const appearanceSelection = overrideSystemAppearance
     ? colorScheme === 'dark'

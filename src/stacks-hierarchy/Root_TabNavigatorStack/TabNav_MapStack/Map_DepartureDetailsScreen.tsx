@@ -21,7 +21,6 @@ export const Map_DepartureDetailsScreen = ({navigation, route}: Props) => {
         navigation.push('Map_PlaceScreen', {
           place: stopPlace,
           selectedQuayId,
-          mode: 'Departure',
         })
       }
       onPressTravelAid={() =>

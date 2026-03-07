@@ -2,55 +2,83 @@ name: E2E tests on Android
 on:
   workflow_dispatch:
     inputs:
-      api_level:
-        description: 'Define API level'
-        required: true
-        default: 30
-      system_image:
-        description: 'Define system image'
-        type: choice
-        required: true
-        default: 'default'
-        options:
-          - 'default'
-          - 'google_apis'
-          - 'google_apis_playstore'
       branch:
         description: 'Define branch to test'
         required: true
         default: 'master'
   schedule:
-    - cron: '0 6 * * 1-5'
+    - cron: '0 3 * * 1-5'
 
 jobs:
-  run_tests:
-    name: E2E test Android
-    runs-on: ubuntu-24.04
+  check-builds:
+    name: Check for builds
+    runs-on: ubuntu-latest
     environment: atb
-    timeout-minutes: 90
-    env:
-      ENV_BRANCH: ${{ github.event.inputs.branch || 'master' }}
-      ENV_API_LEVEL: ${{ github.event.inputs.api_level || '30' }}
-      ENV_SYSTEM_IMAGE: ${{ github.event.inputs.system_image || 'default' }}
+    outputs:
+      APK_IS_AVAILABLE: ${{ steps.check-output.outputs.APK_IS_AVAILABLE}}
+      TESTED_VERSION: ${{ steps.check-output.outputs.TESTED_VERSION}}
+      APK_DOWNLOAD_URL: ${{ steps.check-output.outputs.APK_DOWNLOAD_URL}}
     steps:
+      # Setup
       - name: Set env variables
         run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
       - name: Checkout project
         uses: actions/checkout@v4
         with:
-          ref: ${{ env.ENV_BRANCH }}
-
+          ref: ${{ github.event.inputs.branch || 'master' }}
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: 3.12
           cache: 'pip'
           cache-dependency-path: '**/requirements.txt'
-
       - name: Install Python packages
         run: |
           pip install -r e2e/firestore/requirements.txt
+      # Check for APK built today
+      - name: Check for Firebase AppDistribution APK
+        id: check-appdistribution-apk
+        run: python check-appdistribution-apk.py
+        working-directory: e2e/firestore
+        env:
+          CREDENTIALS_APITESTER: ${{ secrets.CREDENTIALS_APITESTER }}
+          IS_GITHUB: 'True'
+      - name: APK output
+        id: check-output
+        run: |
+          echo "APK_IS_AVAILABLE=${{ env.APK_IS_AVAILABLE }}" >> $GITHUB_OUTPUT
+          echo "TESTED_VERSION=${{ env.TESTED_VERSION }}" >> $GITHUB_OUTPUT
+          echo "APK_DOWNLOAD_URL=${{ env.APK_DOWNLOAD_URL }}" >> $GITHUB_OUTPUT
 
+  run_tests:
+    needs: check-builds
+    if: needs.check-builds.outputs.APK_IS_AVAILABLE == 'true'
+    name: Run E2E tests
+    runs-on: ubuntu-latest
+    environment: atb
+    timeout-minutes: 90
+    env:
+      ENV_API_LEVEL: 30
+      ENV_SYSTEM_IMAGE: default
+    steps:
+      # Setup
+      - name: Set env variables
+        run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
+      - name: Checkout project
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || 'master' }}
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+          cache: 'pip'
+          cache-dependency-path: '**/requirements.txt'
+      - name: Install Python packages
+        run: |
+          pip install -r e2e/firestore/requirements.txt
+      - name: Clean up runner
+        uses: ./.github/actions/android-build-cleanup-runner
       # Download APK
       - name: Get Firebase AppDistribution APK
         id: get-appdistribution-apk
@@ -58,7 +86,8 @@ jobs:
         working-directory: e2e/firestore
         env:
           CREDENTIALS_APITESTER: ${{ secrets.CREDENTIALS_APITESTER }}
-          IS_GITHUB: 'True'
+          TESTED_VERSION: ${{ needs.check-builds.outputs.TESTED_VERSION }}
+          APK_DOWNLOAD_URL: ${{ needs.check-builds.outputs.APK_DOWNLOAD_URL }}
 
       # E2E init
       - name: Enable KVM
@@ -123,13 +152,36 @@ jobs:
           emulator-build: 12414864
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          script: yarn test:android
+          script: yarn test:android:smoke
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}
           IS_CI: 'true'
 
+      # Slack
+      - name: Notify Slack
+        if: always()
+        working-directory: e2e/results
+        run: |
+          ./slack_notification.sh ${{ secrets.ATB_SLACK_TOKEN }} e2e_tests ${{ github.run_id }} smoke
+
       # Results
+      - name: Fail on any errors
+        if: always()
+        run: |
+          if find e2e/results -maxdepth 1 -name "errors.log" | grep -q .; then
+            echo "### ⚠️ Test errors" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "See more details in the workflow" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ Errors are found, failing the job."
+            cat e2e/results/errors.log
+            exit 1
+          else
+            echo "✅ All good!" >> $GITHUB_STEP_SUMMARY
+            echo "✅ All good!"
+          fi
+
+      # Upload results
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4

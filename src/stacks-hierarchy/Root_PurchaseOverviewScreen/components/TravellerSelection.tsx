@@ -60,7 +60,7 @@ export function TravellerSelection({
 
   const travellersDetailsText = [
     ...selection.userProfilesWithCount,
-    ...selection.baggageProductsWithCount,
+    ...selection.supplementProductsWithCount,
   ]
     .map((t) => `${t.count} ${getReferenceDataName(t, language)}`)
     .map((t) => formatToNonBreakingSpaces(t))

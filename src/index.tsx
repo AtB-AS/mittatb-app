@@ -1,4 +1,6 @@
 import 'react-native-get-random-values';
+import {enableScreens} from 'react-native-screens';
+enableScreens(true);
 
 import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -21,7 +23,6 @@ import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {PreferencesContextProvider} from '@atb/modules/preferences';
 import {AccessibilityContextProvider} from '@atb/modules/accessibility';
 import {AppLanguageContextProvider} from '@atb/translations/LanguageContext';
-import {BottomSheetContextProvider} from '@atb/components/bottom-sheet';
 import {LocaleContextProvider} from '@atb/modules/locale';
 import {setupConfig} from '@atb/setup';
 import {MobileTokenContextProvider} from '@atb/modules/mobile-token';
@@ -35,12 +36,12 @@ import {TimeContextProvider} from '@atb/modules/time';
 import {AnnouncementsContextProvider} from '@atb/modules/announcements';
 import {StorybookContextProvider} from '@atb/modules/storybook';
 import {NotificationContextProvider} from '@atb/modules/notifications';
-import {BeaconsContextProvider} from '@atb/modules/beacons';
 import {FeatureTogglesContextProvider} from '@atb/modules/feature-toggles';
 import {configureReanimatedLogger} from 'react-native-reanimated';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
-import {BottomSheetV2ContextProvider} from './components/bottom-sheet-v2/BottomSheetV2Context';
+import {BottomSheetContextProvider} from './components/bottom-sheet/BottomSheetContext';
 import {EventStreamContextProvider} from './modules/event-stream/EventStreamContext';
+import {StoredTripPatternsContextProvider} from '@atb/modules/experimental-store-trip-patterns';
 
 // https://rnfirebase.io/migrating-to-v22
 (globalThis as any).RNFB_SILENCE_MODULAR_DEPRECATION_WARNINGS = true;
@@ -104,33 +105,31 @@ export const App = () => {
                                     <SearchHistoryContextProvider>
                                       <FirestoreConfigurationContextProvider>
                                         <TicketingContextProvider>
-                                          <MobileTokenContextProvider>
-                                            <AppLanguageContextProvider>
-                                              <GeolocationContextProvider>
-                                                <MapContextProvider>
-                                                  <GlobalMessagesContextProvider>
-                                                    <AnnouncementsContextProvider>
-                                                      <NotificationContextProvider>
-                                                        <BottomSheetModalProvider>
-                                                          <BottomSheetV2ContextProvider>
+                                          <StoredTripPatternsContextProvider>
+                                            <MobileTokenContextProvider>
+                                              <AppLanguageContextProvider>
+                                                <GeolocationContextProvider>
+                                                  <MapContextProvider>
+                                                    <GlobalMessagesContextProvider>
+                                                      <AnnouncementsContextProvider>
+                                                        <NotificationContextProvider>
+                                                          <BottomSheetModalProvider>
                                                             <BottomSheetContextProvider>
                                                               <FeedbackQuestionsContextProvider>
-                                                                <BeaconsContextProvider>
-                                                                  <OnboardingContextProvider>
-                                                                    <RootStack />
-                                                                  </OnboardingContextProvider>
-                                                                </BeaconsContextProvider>
+                                                                <OnboardingContextProvider>
+                                                                  <RootStack />
+                                                                </OnboardingContextProvider>
                                                               </FeedbackQuestionsContextProvider>
                                                             </BottomSheetContextProvider>
-                                                          </BottomSheetV2ContextProvider>
-                                                        </BottomSheetModalProvider>
-                                                      </NotificationContextProvider>
-                                                    </AnnouncementsContextProvider>
-                                                  </GlobalMessagesContextProvider>
-                                                </MapContextProvider>
-                                              </GeolocationContextProvider>
-                                            </AppLanguageContextProvider>
-                                          </MobileTokenContextProvider>
+                                                          </BottomSheetModalProvider>
+                                                        </NotificationContextProvider>
+                                                      </AnnouncementsContextProvider>
+                                                    </GlobalMessagesContextProvider>
+                                                  </MapContextProvider>
+                                                </GeolocationContextProvider>
+                                              </AppLanguageContextProvider>
+                                            </MobileTokenContextProvider>
+                                          </StoredTripPatternsContextProvider>
                                         </TicketingContextProvider>
                                       </FirestoreConfigurationContextProvider>
                                     </SearchHistoryContextProvider>

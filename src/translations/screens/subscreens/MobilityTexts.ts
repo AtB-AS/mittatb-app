@@ -246,6 +246,53 @@ export const MobilityTexts = {
       end: _('Avslutt turen', 'End the trip', 'Avslutt turen'),
     },
   },
+  fareContractHeader: (formFactor: FormFactor, operatorName: string) => {
+    switch (formFactor) {
+      case FormFactor.Scooter:
+      case FormFactor.ScooterStanding:
+        return _(
+          `Elsparkesykkel fra ${operatorName}`,
+          `E-scooter from ${operatorName}`,
+          `Elsparkesykkel frå ${operatorName}`,
+        );
+      case FormFactor.ScooterSeated:
+        return _(
+          `Scooter fra ${operatorName}`,
+          `Scooter from ${operatorName}`,
+          `Scooter frå ${operatorName}`,
+        );
+      case FormFactor.Bicycle:
+        return _(
+          `Sykkel fra ${operatorName}`,
+          `Bicycle from ${operatorName}`,
+          `Sykkel frå ${operatorName}`,
+        );
+      case FormFactor.Car:
+        return _(
+          `Bil fra ${operatorName}`,
+          `Car from ${operatorName}`,
+          `Bil frå ${operatorName}`,
+        );
+      case FormFactor.CargoBicycle:
+        return _(
+          `Lastesykkel fra ${operatorName}`,
+          `Cargo bike from ${operatorName}`,
+          `Lastesykkel frå ${operatorName}`,
+        );
+      case FormFactor.Moped:
+        return _(
+          `Moped fra ${operatorName}`,
+          `Moped from ${operatorName}`,
+          `Moped frå ${operatorName}`,
+        );
+      case FormFactor.Other:
+        return _(
+          `Annet kjøretøy fra ${operatorName}`,
+          `Other vehicle from ${operatorName}`,
+          `Anna køyretøy frå ${operatorName}`,
+        );
+    }
+  },
 };
 
 export const ScooterTexts = {
@@ -266,12 +313,13 @@ export const ScooterTexts = {
         : _('Gratis oppstart', 'Free to unlock', 'Gratis oppstart'),
   },
   loadingFailed: _(
-    'Ops! Vi fant ikke denne sparkesykkelen',
-    "Ops! We couldn't find this scooter",
-    'Ops! Vi fann ikkje denne sparkesykkelen',
+    'Vi fant ikke denne sparkesykkelen',
+    "We couldn't find this scooter",
+    'Vi fann ikkje denne sparkesykkelen',
   ),
   range: _('rekkevidde', 'range', 'rekkjevidde'),
   unlock: _('opplåsning', 'unlock', 'opplåsing'),
+  free: _('Gratis', 'Free', 'Gratis'),
   per: {
     unit(unit: string) {
       switch (unit) {
@@ -281,6 +329,24 @@ export const ScooterTexts = {
           return _('per kilometer', 'per kilometer', 'per kilometer');
         default:
           return _('per', 'per', 'per');
+      }
+    },
+    discount(unit: string, price: string) {
+      switch (unit) {
+        case 'min':
+          return _(
+            `så ${price}kr/min`,
+            `then ${price}kr/min`,
+            `så ${price}kr/min`,
+          );
+        case 'km':
+          return _(
+            `så ${price}kr/km`,
+            `then ${price}kr/km`,
+            `så ${price}kr/km`,
+          );
+        default:
+          return _(`så ${price}kr`, `then ${price}kr`, `så ${price}kr`);
       }
     },
   },
@@ -299,12 +365,17 @@ export const BicycleTexts = {
         : _('ledige sykkelplasser', 'available docks', 'ledige sykkelplassar');
     },
     unknownDocksAvailable: _('Ukjent antall', 'Unknown', 'Ukjent antal'),
+    loadingFailed: _(
+      'Vi fant ikke denne sykkelstasjonen',
+      "We couldn't find this bike station",
+      'Vi fann ikkje denne sykkelstasjonen',
+    ),
   },
   humanPoweredBike: _('Sykkel', 'Bicycle', 'Sykkel'),
   loadingFailed: _(
-    'Ops! Vi fant ikke denne sykkelstasjonen',
-    "Ops! We couldn't find this bike station",
-    'Ops! Vi fann ikkje denne sykkelstasjonen',
+    'Vi fant ikke denne sykkelen',
+    "We couldn't find this bike",
+    'Vi fann ikkje denne sykkelen',
   ),
 };
 
@@ -324,9 +395,9 @@ export const CarSharingTexts = {
     ),
   },
   loadingFailed: _(
-    'Ops! Vi fant ikke denne parkeringen',
-    "Ops! We couldn't find this car sharing station",
-    'Ops! Vi fann ikkje denne parkeringa',
+    'Vi fant ikke denne parkeringen',
+    "We couldn't find this car sharing station",
+    'Vi fann ikkje denne parkeringa',
   ),
   propultionType: (type: PropulsionType) => {
     switch (type) {
@@ -357,18 +428,27 @@ export const ParkAndRideTexts = {
   parkingFor: (type: ParkingVehicleTypes) => {
     switch (type) {
       case 'pedalCycle':
-        return _('Sykkelparkering', 'Bike parking', 'Sykkelparkering');
+        return _(
+          '**Sykkelparkering**',
+          '**Bike parking**',
+          '**Sykkelparkering**',
+        );
       case 'car':
       default:
-        return _('Bilparkering', 'Car parking', 'Bilparkering');
+        return _('**Bilparkering**', '**Car parking**', '**Bilparkering**');
     }
   },
   disclaimer: _(
     'Betaling eller andre vilkår kan gjelde på denne innfartsparkeringen',
     'Payment or other terms and conditions may apply to this parking',
-    '',
+    'Betaling eller andre vilkår kan gjelde på denne innfartsparkeringa',
   ),
-  capacity: _('Plasser totalt', 'Parking spaces', 'Plassar totalt'),
+  capacity: (capacity: number) =>
+    _(
+      `**${capacity}** plasser totalt`,
+      `**${capacity}** parking spaces`,
+      `**${capacity}** plassar totalt`,
+    ),
   unknownCapacity: _(
     'Ukjent antall plasser',
     'Unknown number of spaces',

@@ -46,21 +46,18 @@ export const verifySms = async (
   return result.data;
 };
 
-export const authorizeUser = async (setIsLoading: any) => {
-  const state = await generateState();
-  const nonce = await generateNonce();
-  return client
-    .get(
+export const authorizeVippsUser = async (): Promise<string> => {
+  try {
+    const state = await generateState();
+    const nonce = await generateNonce();
+    const response = await client.get(
       `/identity/v1/vipps/authorization-url?callbackUrl=${VIPPS_CALLBACK_URL}`,
-    )
-    .then(async (response) => {
-      const authorisationUrl = response.data;
-      setIsLoading(false);
-      openInAppBrowser(
-        `${authorisationUrl}&state=${state}&nonce=${nonce}`,
-        'cancel',
-      );
-    });
+    );
+    const authorisationUrl = response.data;
+    return `${authorisationUrl}&state=${state}&nonce=${nonce}`;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getOrCreateVippsUserCustomToken = async (

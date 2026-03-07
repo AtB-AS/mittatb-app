@@ -28,7 +28,7 @@ describe('Onboarding', () => {
       await OnboardingPage.denyLocation();
 
       await ElementHelper.waitForElement('id', 'dashboardScrollView');
-      await ElementHelper.expectText('Find journey');
+      await ElementHelper.expectText('Travel');
     } catch (errMsg) {
       await AppHelper.screenshot('error_onboarding_should_onboard');
       throw errMsg;

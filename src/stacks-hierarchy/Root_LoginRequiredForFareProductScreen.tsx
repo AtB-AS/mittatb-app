@@ -7,7 +7,7 @@ import {ThemeText} from '@atb/components/text';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {useHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
+import {useGetHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {ThemedTicket} from '@atb/theme/ThemedAssets';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {LogIn} from '@atb/assets/svg/mono-icons/profile';
@@ -25,11 +25,11 @@ export const Root_LoginRequiredForFareProductScreen = ({navigation}: Props) => {
 
   const themeColor = getThemeColor(theme);
 
-  const hasReservationOrAvailableFareContract =
-    useHasReservationOrAvailableFareContract();
+  const getHasReservationOrAvailableFareContract =
+    useGetHasReservationOrAvailableFareContract();
 
-  const onNext = async () => {
-    if (hasReservationOrAvailableFareContract) {
+  const onNext = () => {
+    if (getHasReservationOrAvailableFareContract()) {
       navigation.navigate('Root_LoginAvailableFareContractWarningScreen', {
         transitionOverride: 'slide-from-bottom',
       });

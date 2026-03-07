@@ -52,9 +52,9 @@ const FareZoneSearchTexts = {
       'Hei, er du på nett? Vi klarar ikkje søke då du har manglande eller ustabil tilkoping til internett.',
     ),
     defaultError: _(
-      'Oops - vi feila med søket. Supert om du prøver igjen 🤞',
-      'Whoops – our search failed. Please try again 🤞',
-      'Oops - søket vårt feila. Ver venleg og prøv igjen 🤞',
+      'Noe gikk galt med søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      'Something went wrong with the search. Please try again or contact customer service for assistance.',
+      'Noko gjekk gale med søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
     ),
     emptyResult: _(
       'Fant ingen søkeresultat',
