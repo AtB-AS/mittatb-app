@@ -91,7 +91,12 @@ export function ButtonSectionItem({
     <View>
       <NativeBlockButton
         onPress={onPress}
-        style={[topContainer, styles.container, containerPadding, highlighted && styles.highlighted]}
+        style={[
+          topContainer,
+          styles.container,
+          containerPadding,
+          highlighted && styles.highlighted,
+        ]}
         ref={focusRef}
         {...props}
       >

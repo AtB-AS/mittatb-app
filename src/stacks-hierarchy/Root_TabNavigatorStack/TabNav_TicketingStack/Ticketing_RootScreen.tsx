@@ -1,4 +1,4 @@
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
@@ -10,7 +10,6 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export const Ticketing_RootScreen = () => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const focusRef = useFocusOnLoad();
   const styles = useStyles();
 
@@ -19,7 +18,6 @@ export const Ticketing_RootScreen = () => {
       <FullScreenHeader
         textOpacity={0}
         globalMessageContext={GlobalMessageContextEnum.appTicketing}
-        color={theme.color.background.neutral[1]}
       />
       <View style={styles.headingContainer}>
         <ScreenHeading
@@ -36,10 +34,8 @@ export const Ticketing_RootScreen = () => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.color.background.neutral[1].background,
   },
   headingContainer: {
     paddingBottom: theme.spacing.medium,
-    backgroundColor: theme.color.background.neutral[1].background,
   },
 }));

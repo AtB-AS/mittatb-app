@@ -33,7 +33,7 @@ export const Root_TicketInformationScreen = ({navigation, route}: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyle();
   const {theme} = useThemeContext();
-  const themeColor = theme.color.background.accent[0];
+  const themeColor = theme.color.background.neutral[1];
   const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
 
@@ -58,6 +58,7 @@ export const Root_TicketInformationScreen = ({navigation, route}: Props) => {
         title: t(
           PurchaseOverviewTexts.ticketInformation.informationDetails.title,
         ),
+        showBorder: false,
         leftButton: {type: 'back'},
       }}
       contentColor={themeColor}
