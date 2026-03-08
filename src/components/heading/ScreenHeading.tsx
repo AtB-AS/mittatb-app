@@ -23,7 +23,7 @@ export const ScreenHeading = forwardRef<any, ScreenHeadingProps>(
             ? theme.spacing.medium
             : theme.spacing.xLarge,
           paddingLeft: isLarge ? theme.spacing.medium : 0,
-          marginVertical: 0
+          marginVertical: 0,
         }}
         ref={ref}
         accessible

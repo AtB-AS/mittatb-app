@@ -109,7 +109,11 @@ export const PlaceScreenComponent = ({
   return (
     <View style={styles.container}>
       <View style={borderStyle}>
-        <FullScreenHeader title={place.name} leftButton={{type: 'back'}} showBorder={false} />
+        <FullScreenHeader
+          title={place.name}
+          leftButton={{type: 'back'}}
+          showBorder={false}
+        />
         <StopPlaceAndQuaySelection
           place={place}
           selectedQuay={selectedQuay}

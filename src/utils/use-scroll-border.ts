@@ -1,5 +1,9 @@
 import {useCallback, useState} from 'react';
-import type {NativeScrollEvent, NativeSyntheticEvent, ViewStyle} from 'react-native';
+import type {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  ViewStyle,
+} from 'react-native';
 import {useThemeContext} from '@atb/theme';
 
 export function useScrollBorder() {
@@ -7,10 +11,13 @@ export function useScrollBorder() {
   const [isScrolled, setIsScrolled] = useState(false);
   const color = theme.color.background.neutral[3].background;
 
-  const onScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const y = event.nativeEvent.contentOffset.y;
-    setIsScrolled(y > 0);
-  }, []);
+  const onScroll = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const y = event.nativeEvent.contentOffset.y;
+      setIsScrolled(y > 0);
+    },
+    [],
+  );
 
   const borderStyle: ViewStyle = {
     borderBottomWidth: 1,
