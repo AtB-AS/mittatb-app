@@ -9,7 +9,6 @@ import {colorTheme} from '../mapbox-styles/mapbox-color-theme';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useAppVersionedConfigurableLink} from '@atb/utils/use-app-versioned-configurable-link';
 import {useGeofencingZonesLayers} from './use-geofencing-zones-layers';
-// import {geofencingZonesLayers} from '../components/mobility/GeofencingZonesAsTiles';
 
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
