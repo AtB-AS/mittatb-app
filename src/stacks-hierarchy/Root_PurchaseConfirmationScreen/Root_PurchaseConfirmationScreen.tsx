@@ -438,8 +438,7 @@ const PaymentButton = ({
     return (
       <Loading
         size="large"
-        color={theme.color.foreground.dynamic.primary}
-        style={{margin: theme.spacing.medium}}
+        style={{margin: theme.spacing.medium, alignSelf: 'center'}}
       />
     );
 

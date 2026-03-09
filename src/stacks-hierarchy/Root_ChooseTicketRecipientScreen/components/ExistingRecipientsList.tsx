@@ -5,7 +5,6 @@ import {Alert} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioGroupSection} from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {ContrastColor} from '@atb/theme/colors';
 import OnBehalfOfTexts from '@atb/translations/screens/subscreens/OnBehalfOf';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {useDeleteRecipientMutation} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-delete-recipient-mutation';
@@ -24,13 +23,11 @@ export const ExistingRecipientsList = ({
   onSelect,
   onEmptyRecipients,
   onDelete,
-  themeColor,
 }: {
   state: RecipientSelectionState;
   onSelect: (r?: OnBehalfOfAccountType) => void;
   onEmptyRecipients: () => void;
   onDelete: () => void;
-  themeColor: ContrastColor;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -73,11 +70,7 @@ export const ExistingRecipientsList = ({
   return (
     <>
       {recipientsQuery.status === 'pending' && (
-        <Loading
-          style={styles.loadingSpinner}
-          size="large"
-          color={themeColor.foreground.primary}
-        />
+        <Loading style={styles.loadingSpinner} size="large" />
       )}
       {recipientsQuery.status === 'error' && (
         <MessageInfoBox

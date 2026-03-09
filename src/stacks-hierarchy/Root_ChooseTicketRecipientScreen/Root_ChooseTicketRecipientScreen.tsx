@@ -74,7 +74,6 @@ export const Root_ChooseTicketRecipientScreen = ({
               dispatch({type: 'SELECT_SEND_TO_OTHER'});
             }, [dispatch])}
             onDelete={useCallback(() => giveFocus(onDeleteRef), [])}
-            themeColor={themeColor}
           />
           <SendToOtherButton
             state={state}
@@ -113,7 +112,6 @@ export const Root_ChooseTicketRecipientScreen = ({
               animateNextChange();
               dispatch({type: 'SET_ERROR', error: e});
             }}
-            themeColor={themeColor}
           />
         </ScrollView>
       </KeyboardAvoidingView>

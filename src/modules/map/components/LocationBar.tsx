@@ -7,7 +7,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import React, {useMemo} from 'react';
 import {View} from 'react-native';
 import {GeoLocation, Location, SearchLocation} from '@atb/modules/favorites';
-import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {
   LocationSearchTexts,
   TranslateFunction,
@@ -98,14 +98,10 @@ const Icon: React.FC<{
   isLoading: boolean;
   hasError: boolean;
 }> = ({isLoading, location, hasError}) => {
-  const {theme} = useThemeContext();
   return (
     <View style={{marginHorizontal: 12}}>
       {isLoading ? (
-        <Loading
-          animating={true}
-          color={getBackgroundColor(theme).foreground.primary}
-        />
+        <Loading animating={true} />
       ) : location ? (
         <LocationIcon location={location} />
       ) : hasError ? (

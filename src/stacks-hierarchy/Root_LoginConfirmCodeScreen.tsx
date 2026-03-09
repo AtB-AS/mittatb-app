@@ -117,13 +117,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
             />
           </Section>
           <View style={styles.buttonView}>
-            {isLoading && (
-              <Loading
-                style={styles.loading}
-                size="large"
-                color={themeColor.foreground.primary}
-              />
-            )}
+            {isLoading && <Loading style={styles.loading} size="large" />}
 
             {error && !isLoading && (
               <MessageInfoBox
@@ -197,6 +191,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   loading: {
     marginVertical: theme.spacing.large,
+    alignSelf: 'center',
   },
   messageBox: {
     marginBottom: theme.spacing.medium,

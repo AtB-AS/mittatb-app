@@ -20,7 +20,7 @@ export const LoadingScreen = React.memo(() => {
       accessibilityLabel={t(dictionary.loading)}
       testID="loadingScreen"
     >
-      <Loading size="small" color={styles.loading.backgroundColor} />
+      <Loading size="large" />
       <ThemeText
         style={styles.loadingText}
         typography="body__m"
@@ -37,6 +37,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: getThemeColor(theme).background,
   },
   loadingText: {textAlign: 'center', marginTop: theme.spacing.medium},

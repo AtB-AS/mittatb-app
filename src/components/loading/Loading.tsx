@@ -8,8 +8,13 @@ import {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
+import {useThemeContext} from '@atb/theme';
 
-type LoadingProps = ActivityIndicatorProps & {ref?: Ref<any> | null};
+type LoadingProps = Omit<ActivityIndicatorProps, 'color'> & {
+  ref?: Ref<any> | null;
+  donutColor?: string;
+  arcColor?: string;
+};
 
 export const Loading: React.FC<LoadingProps> = ({
   animating = true,
@@ -19,6 +24,7 @@ export const Loading: React.FC<LoadingProps> = ({
   ref,
   ...props
 }) => {
+  const {theme} = useThemeContext();
   const size = sizeType === 'small' ? 24 : 36;
 
   const cx = size / 2;
@@ -29,8 +35,10 @@ export const Loading: React.FC<LoadingProps> = ({
   const donutInner = donutOuter - donutWidth;
   const donutRadius = donutInner + donutWidth / 2;
 
-  const donutColor = '#e1f4bd';
-  const arcColor = '#587e05';
+  const donutColor =
+    props.donutColor ?? theme.color.background.neutral[3].background;
+  const arcColor =
+    props.arcColor ?? theme.color.interactive[0].default.background;
 
   const path = useMemo(() => {
     const p = Skia.Path.Make();
