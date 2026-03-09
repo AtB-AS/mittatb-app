@@ -25,7 +25,7 @@ import {ProfileScreenProps} from './navigation-types';
 import {
   isValidProgramId,
   ProgramId,
-  useEnrollIntoProgram,
+  useEnrollIntoProgramMutation,
 } from '@atb/modules/enrollment';
 
 const programsWithOnboarding: ProgramId[] = [ProgramId.BONUS];
@@ -117,13 +117,13 @@ export const Profile_EnrollmentScreen = ({navigation}: Props) => {
 
 export const useEnroll = () => {
   const navigation = useNavigation<RootNavigationProps>();
-  const enrollMutation = useEnrollIntoProgram();
+  const enrollMutation = useEnrollIntoProgramMutation();
 
   const onEnroll = useCallback(
-    async (key: string, clearKey: () => void) => {
-      const enrollment = await enrollMutation.mutateAsync(key);
+    async (code: string, clearCode: () => void) => {
+      const enrollment = await enrollMutation.mutateAsync(code);
 
-      clearKey();
+      clearCode();
 
       if (
         isValidProgramId(enrollment.programId) &&

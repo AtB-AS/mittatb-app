@@ -13,12 +13,6 @@ export const Enrollment = z.object({
 
 export type EnrollmentType = z.infer<typeof Enrollment>;
 
-export type EnrollmentContextState = {
-  enrollments: EnrollmentType[];
-  isLoading: boolean;
-  error: Error | null;
-};
-
 export enum ProgramId {
   BONUS = 'bonus',
 }

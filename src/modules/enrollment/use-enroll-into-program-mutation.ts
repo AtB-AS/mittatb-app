@@ -3,9 +3,9 @@ import {enrollIntoProgram} from './api/api';
 import {GET_ENROLLMENTS_KEY} from './use-get-enrollments-query';
 import {EnrollmentType} from './types';
 
-const ENROLL_INTO_PROGRAM_KEY = 'enrollIntoProgram';
+const ENROLL_INTO_PROGRAM_KEY = 'ENROLL_INTO_PROGRAM';
 
-export const useEnrollIntoProgram = () => {
+export const useEnrollIntoProgramMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation<EnrollmentType, Error, string>({

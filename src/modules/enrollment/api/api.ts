@@ -2,9 +2,9 @@ import {client} from '@atb/api';
 import {Enrollment, EnrollmentType} from '../types';
 import z from 'zod';
 
-export async function enrollIntoProgram(inviteKey: string) {
+export async function enrollIntoProgram(code: string) {
   const url = 'enrollment/v2';
-  const body = {code: inviteKey};
+  const body = {code: code};
 
   return await client
     .post<EnrollmentType>(url, body, {
