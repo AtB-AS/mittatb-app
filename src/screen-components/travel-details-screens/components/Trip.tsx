@@ -51,7 +51,6 @@ import {
 } from '@atb/utils/use-in-app-review';
 // eslint-disable-next-line rulesdir/navigation-only-in-screens
 import {useFocusEffect} from '@react-navigation/native';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {ErrorResponse} from '@atb-as/utils';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {SaveTripPatternButtonComponent} from '@atb/modules/experimental-store-trip-patterns';
@@ -83,17 +82,10 @@ export const Trip: React.FC<TripProps> = ({
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
 
-  const {isRealtimeMapEnabled} = useFeatureTogglesContext();
-
   const isFocusedAndActive = useIsFocusedAndActive();
 
   const liveVehicleIds = tripPattern.legs
-    .filter((leg) =>
-      getShouldShowLiveVehicle(
-        leg.serviceJourneyEstimatedCalls,
-        isRealtimeMapEnabled,
-      ),
-    )
+    .filter((leg) => getShouldShowLiveVehicle(leg.serviceJourneyEstimatedCalls))
     .map((leg) => leg.serviceJourney?.id)
     .filter(isDefined);
   const {data: vehiclePositions} = useGetServiceJourneyVehiclesQuery(
