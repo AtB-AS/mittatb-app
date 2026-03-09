@@ -1,4 +1,4 @@
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import Clipboard from '@react-native-clipboard/clipboard';
 import React, {PropsWithChildren, useState} from 'react';
 import {AccessibilityProps} from 'react-native';
@@ -27,8 +27,8 @@ export function ClickableCopy({
   }
 
   return (
-    <PressableOpacity disabled={isAnimating} onPress={setClipboard} {...props}>
+    <NativeBlockButton disabled={isAnimating} onPress={setClipboard} {...props}>
       {isAnimating ? successElement : children}
-    </PressableOpacity>
+    </NativeBlockButton>
   );
 }

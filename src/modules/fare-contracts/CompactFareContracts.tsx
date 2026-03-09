@@ -33,21 +33,26 @@ import {mapToUserProfilesWithCount} from './utils';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from './get-baggage-products';
 import {getLastUsedAccess} from '@atb/modules/ticketing';
+import {ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
 
 type Props = {
   onPressDetails: (fareContractId: string) => void;
   onPressBuy: () => void;
   style?: ViewStyle;
+  isFocused: boolean;
 };
 
 export const CompactFareContracts: React.FC<Props> = ({
   onPressDetails,
   onPressBuy,
   style,
+  isFocused,
 }) => {
   const itemStyle = useStyles();
 
-  const {serverNow} = useTimeContext();
+  const {serverNow} = useTimeContext(
+    isFocused ? ONE_SECOND_MS * 5 : ONE_MINUTE_MS,
+  );
   const {fareContracts: validFareContracts} = useFareContracts(
     {availability: 'available', status: 'valid'},
     serverNow,

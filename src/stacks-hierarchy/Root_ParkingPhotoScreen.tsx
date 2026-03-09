@@ -7,7 +7,6 @@ import {PhotoCapture} from '@atb/components/PhotoCapture';
 import {PhotoFile} from '@atb/components/camera';
 import {ActivityIndicator, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MapStateActionType, useMapContext} from '@atb/modules/map';
 import {blobToBase64} from '@atb/modules/parking-violations-reporting';
 import {compressImage} from '@atb/utils/image';
@@ -94,8 +93,7 @@ export const Root_ParkingPhotoScreen = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     activityIndicator: {
       flex: 1,

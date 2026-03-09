@@ -27,7 +27,6 @@ import {
   useAuthContext,
 } from '@atb/modules/auth';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {useShouldShowShareTravelHabitsScreen} from '@atb/modules/beacons';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useOnAuthStateChanged} from '@atb/modules/auth';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -324,9 +323,6 @@ const useShouldShowArgs = (
     disable_travelcard: travelCardDisabled,
   } = useRemoteConfigContext();
 
-  const shouldShowShareTravelHabitsScreen =
-    useShouldShowShareTravelHabitsScreen(loadedOnboardingSections);
-
   const userCreationIsOnboarded = getOnboardingSectionIsOnboarded(
     loadedOnboardingSections,
     'userCreation',
@@ -350,7 +346,6 @@ const useShouldShowArgs = (
       locationPermissionStatus,
       authenticationType,
       extendedOnboardingEnabled,
-      shouldShowShareTravelHabitsScreen,
       travelCardDisabled,
       userCreationIsOnboarded,
       mobileTokenStatus,
@@ -368,7 +363,6 @@ const useShouldShowArgs = (
       locationPermissionStatus,
       authenticationType,
       extendedOnboardingEnabled,
-      shouldShowShareTravelHabitsScreen,
       travelCardDisabled,
       userCreationIsOnboarded,
       mobileTokenStatus,

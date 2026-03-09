@@ -42,7 +42,7 @@ const StopPlaceAndQuaySelection = ({
             <ActivityIndicator size="large" />
           ) : (
             <Button
-              expanded={true}
+              expanded={false}
               onPress={() => onPress()}
               text={t(DeparturesTexts.quayChips.allStops)}
               interactiveColor={interactiveColor}
@@ -55,7 +55,7 @@ const StopPlaceAndQuaySelection = ({
       }
       renderItem={({item}: quayChipData) => (
         <Button
-          expanded={true}
+          expanded={false}
           onPress={() => onPress(item.id)}
           text={getQuayName(item)}
           interactiveColor={interactiveColor}
@@ -84,6 +84,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   quayChipContentContainer: {
     gap: theme.spacing.medium,
     paddingHorizontal: theme.spacing.medium,
+    // On Android, buttons were slighly cut off by the scroll view container
+    // when it had no extra vertical space
+    marginVertical: 1,
   },
 }));
 

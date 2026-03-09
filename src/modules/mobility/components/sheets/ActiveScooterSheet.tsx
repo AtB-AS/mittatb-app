@@ -139,7 +139,12 @@ export const ActiveScooterSheet = ({
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
       headerNode={
-        activeBooking ? <ShmoTripCard shmoBooking={activeBooking} /> : null
+        activeBooking ? (
+          <ShmoTripCard
+            shmoBooking={activeBooking}
+            isFocused={isFocusedAndActive}
+          />
+        ) : null
       }
       bottomSheetHeaderType={BottomSheetHeaderType.None}
     >
@@ -154,13 +159,13 @@ export const ActiveScooterSheet = ({
             <>
               <View style={styles.container}>
                 <VehicleCard
-                  pricingPlan={activeBooking.pricingPlan}
                   currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
                   currentRangeMeters={
                     activeBooking.asset?.currentRangeKm
                       ? activeBooking.asset.currentRangeKm * 1000
                       : 0
                   }
+                  formFactor={activeBooking.asset.formFactor ?? undefined}
                 />
               </View>
               <View style={styles.footer}>

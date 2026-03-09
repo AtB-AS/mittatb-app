@@ -1,6 +1,6 @@
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {humanizePaymentType, PaymentType} from '@atb/modules/ticketing';
+import {humanizePaymentType} from '@atb/modules/ticketing';
 import {useTranslation} from '@atb/translations';
 import React, {forwardRef} from 'react';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
@@ -9,9 +9,10 @@ import SvgEdit from '@atb/assets/svg/mono-icons/actions/Edit';
 import {View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {PaymentMethod} from './types';
 import {PaymentBrand} from './PaymentBrand';
+import {isNonRecurringPaymentType} from './utils';
 
 type PaymentSelectionCardProps = SectionItemProps<{
   paymentMethod: PaymentMethod;
@@ -26,7 +27,7 @@ export const PaymentSelectionSectionItem = forwardRef<
   const {t} = useTranslation();
   const multiplePaymentMethods = !(
     paymentMethod.recurringPayment ||
-    paymentMethod.paymentType === PaymentType.Vipps
+    isNonRecurringPaymentType(paymentMethod.paymentType)
   );
   const {topContainer} = useSectionItem(props);
 
@@ -43,15 +44,16 @@ export const PaymentSelectionSectionItem = forwardRef<
     : t(PaymentMethodsTexts.a11y.editCard(paymentName));
 
   return (
-    <PressableOpacity
+    <NativeBlockButton
       {...props}
       ref={focusRef}
       accessibilityLabel={a11yLabel}
       accessibilityHint={t(PaymentMethodsTexts.a11y.editCardHint)}
       accessibilityRole="button"
       testID="paymentSelectionItem"
+      style={topContainer}
     >
-      <View style={[topContainer, style.container]}>
+      <View style={style.container}>
         <PaymentBrand
           paymentType={
             multiplePaymentMethods ? undefined : paymentMethod.paymentType
@@ -64,7 +66,7 @@ export const PaymentSelectionSectionItem = forwardRef<
               : paymentName}
           </ThemeText>
           {!multiplePaymentMethods &&
-            paymentMethod.paymentType !== PaymentType.Vipps && (
+            !isNonRecurringPaymentType(paymentMethod.paymentType) && (
               <ThemeText
                 style={style.maskedPan}
                 accessibilityLabel={t(
@@ -83,7 +85,7 @@ export const PaymentSelectionSectionItem = forwardRef<
           <ThemeIcon svg={SvgEdit} />
         </View>
       </View>
-    </PressableOpacity>
+    </NativeBlockButton>
   );
 });
 

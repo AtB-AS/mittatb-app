@@ -1,9 +1,9 @@
 import {RefObject, useRef, useEffect} from 'react';
 import {giveFocus} from './use-focus-on-load';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 
 export type FocusRefsType = {
-  [key: string]: RefObject<typeof PressableOpacity>;
+  [key: string]: RefObject<typeof NativeBlockButton>;
 };
 
 export function useFocusRefs(focusOnElementName: string | undefined) {
@@ -31,10 +31,10 @@ ref={focusRefs}
 forwardRef<FocusRefsType, MyProps>(...)
 
 // create new relevant refs in child
-const fromHarborRef = useRef<PressableOpacity>(null);
-const toHarborRef = useRef<PressableOpacity>(null);
-<PressableOpacity ref={fromHarborRef} />
-<PressableOpacity ref={toHarborRef} />
+const fromHarborRef = useRef<NativeButton>(null);
+const toHarborRef = useRef<NativeButton>(null);
+<NativeButton ref={fromHarborRef} />
+<NativeButton ref={toHarborRef} />
 
 // make the new refs available to the ref in useFocusRefs
 useImperativeHandle(ref, () => ({fromHarborRef, toHarborRef}));

@@ -10,12 +10,12 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_activate_ticket_now',
   },
   {
-    name: 'isBackendSmsAuthEnabled',
-    remoteConfigKey: 'enable_backend_sms_auth',
+    name: 'isApplePayEnabled',
+    remoteConfigKey: 'enable_apple_pay',
   },
   {
-    name: 'isBeaconsEnabled',
-    remoteConfigKey: 'enable_beacons',
+    name: 'isBackendSmsAuthEnabled',
+    remoteConfigKey: 'enable_backend_sms_auth',
   },
   {
     name: 'isCarSharingInMapEnabled',

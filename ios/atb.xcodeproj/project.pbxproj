@@ -63,7 +63,6 @@
 		FE55265428EC45EE0091F697 /* departureWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE55264728EC45ED0091F697 /* departureWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FE7DE4F5294A2EDC009BE6DB /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7DE4F4294A2EDC009BE6DB /* String.swift */; };
 		FE7E785F29433F3900C57A1F /* DefaultFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7E785D29433F3900C57A1F /* DefaultFonts.swift */; };
-		FE8BA01D2AEAF48A00E8CF1C /* KettleSDKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = FE8BA01C2AEAF48A00E8CF1C /* KettleSDKExtension.m */; };
 		FE9A677C29426E57008921BD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE9A677B29426E57008921BD /* CoreLocation.framework */; };
 		FE9C416D293744B100EC2D53 /* ChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9C416C293744B100EC2D53 /* ChipView.swift */; };
 		FEBDDCCD2931038400C3755B /* LocationChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationChangeManager.swift */; };
@@ -74,8 +73,6 @@
 		FEBDDCDE2934D49700C3755B /* ChangeNativeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBDDCDD2934D49600C3755B /* ChangeNativeBridge.m */; };
 		FED3D5DF2968501400B7DEC4 /* NoFavoriteViewSmall.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED3D5DD2968501400B7DEC4 /* NoFavoriteViewSmall.swift */; };
 		FED3D5E02968501400B7DEC4 /* NoFavoriteViewMedium.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED3D5DE2968501400B7DEC4 /* NoFavoriteViewMedium.swift */; };
-		FEE4FE192AE6F08600E1821B /* BeaconsPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE4FE182AE6F08600E1821B /* BeaconsPermissions.swift */; };
-		FEE4FE1B2AE6F0C200E1821B /* BeaconsPermissionsBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = FEE4FE1A2AE6F0C200E1821B /* BeaconsPermissionsBridge.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -169,8 +166,6 @@
 		FE8186AF297593DA000D2195 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FE8AF9EC28EC69FA00505277 /* departureWidgetDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = departureWidgetDebug.entitlements; sourceTree = "<group>"; };
 		FE8AF9ED28EC6A0400505277 /* atbDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = atbDebug.entitlements; path = atb/atbDebug.entitlements; sourceTree = "<group>"; };
-		FE8BA01B2AEAF48A00E8CF1C /* KettleSDKExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KettleSDKExtension.h; sourceTree = "<group>"; };
-		FE8BA01C2AEAF48A00E8CF1C /* KettleSDKExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KettleSDKExtension.m; sourceTree = "<group>"; };
 		FE9A677B29426E57008921BD /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		FE9C416C293744B100EC2D53 /* ChipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipView.swift; sourceTree = "<group>"; };
 		FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetUpdater.swift; sourceTree = "<group>"; };
@@ -181,8 +176,6 @@
 		FED22488286F06AC0049ECE3 /* CoreNFC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreNFC.framework; path = System/Library/Frameworks/CoreNFC.framework; sourceTree = SDKROOT; };
 		FED3D5DD2968501400B7DEC4 /* NoFavoriteViewSmall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoFavoriteViewSmall.swift; sourceTree = "<group>"; };
 		FED3D5DE2968501400B7DEC4 /* NoFavoriteViewMedium.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoFavoriteViewMedium.swift; sourceTree = "<group>"; };
-		FEE4FE182AE6F08600E1821B /* BeaconsPermissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconsPermissions.swift; sourceTree = "<group>"; };
-		FEE4FE1A2AE6F0C200E1821B /* BeaconsPermissionsBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BeaconsPermissionsBridge.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -380,7 +373,6 @@
 		FEBDDCCC2931035E00C3755B /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				FEE4FE182AE6F08600E1821B /* BeaconsPermissions.swift */,
 				5038614B28FD750A00E16E13 /* LocationChangeManager.swift */,
 				6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */,
 				FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */,
@@ -391,11 +383,8 @@
 		FEBDDCD829310DCB00C3755B /* BridgeModules */ = {
 			isa = PBXGroup;
 			children = (
-				FEE4FE1A2AE6F0C200E1821B /* BeaconsPermissionsBridge.m */,
 				FEBDDCDC2934D49600C3755B /* ChangeNativeBridge.h */,
 				FEBDDCDD2934D49600C3755B /* ChangeNativeBridge.m */,
-				FE8BA01B2AEAF48A00E8CF1C /* KettleSDKExtension.h */,
-				FE8BA01C2AEAF48A00E8CF1C /* KettleSDKExtension.m */,
 				6DB88AD82A7A33EE0060CC31 /* PassPresentationBridge.h */,
 				6DB88AD92A7A35A10060CC31 /* PassPresentationBridge.m */,
 				FEBDDCD929310DFE00C3755B /* WidgetUpdaterBridge.h */,
@@ -658,11 +647,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FEE4FE192AE6F08600E1821B /* BeaconsPermissions.swift in Sources */,
-				FEE4FE1B2AE6F0C200E1821B /* BeaconsPermissionsBridge.m in Sources */,
 				6DB88ADC2A7A55570060CC31 /* PassPresentation.swift in Sources */,
 				22CDD79A2E682A4B009A6A01 /* AppDelegate.swift in Sources */,
-				FE8BA01D2AEAF48A00E8CF1C /* KettleSDKExtension.m in Sources */,
 				FEBDDCDE2934D49700C3755B /* ChangeNativeBridge.m in Sources */,
 				FEBDDCD12931065D00C3755B /* WidgetUpdater.swift in Sources */,
 				385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */,

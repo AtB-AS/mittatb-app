@@ -233,7 +233,11 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
             onPress={swap}
             overlayPosition="right"
             isLoading={updatingLocation && !to}
-            buttonStyleOverride={style.swapButton}
+            overlayStyleOverride={style.swapButton}
+            accessibilityLabel={
+              t(TripSearchTexts.location.swapButton.a11yLabel) +
+              screenReaderPause
+            }
           >
             <Section
               style={[style.contentSection, style.contentSection__first]}
@@ -288,10 +292,12 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
 
         <Announcements
           style={[style.contentSection, style.contentSection__horizontalScroll]}
+          isFocused={isFocused}
         />
 
         {enable_ticketing && (
           <CompactFareContracts
+            isFocused={isFocused}
             style={style.contentSection}
             onPressDetails={(fareContractId: string) => {
               return navigation.navigate({

@@ -227,7 +227,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             )}
           </Section>
           {enable_ticketing && (
-            <>
+            <View>
               <ContentHeading
                 text={t(ProfileTexts.sections.information.heading)}
               />
@@ -241,7 +241,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   testID="informationButton"
                 />
               </Section>
-            </>
+            </View>
           )}
           <ContentHeading text={t(ProfileTexts.sections.contact.heading)} />
           <Section>
@@ -277,7 +277,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           {(!!JSON.parse(IS_QA_ENV || 'false') ||
             __DEV__ ||
             customerProfile?.debug) && (
-            <>
+            <View>
               <ContentHeading text="Developer menu" />
               <Section>
                 <LinkSectionItem
@@ -297,7 +297,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   onPress={() => navigation.navigate('Profile_DebugInfoScreen')}
                 />
               </Section>
-            </>
+            </View>
           )}
           {authenticationType === 'phone' && (
             <Button

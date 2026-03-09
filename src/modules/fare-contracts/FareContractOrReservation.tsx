@@ -31,6 +31,7 @@ export function FareContractOrReservation({
       <PurchaseReservation
         key={fcOrReservation.orderId}
         reservation={fcOrReservation}
+        now={now}
       />
     );
   } else {

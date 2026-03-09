@@ -52,7 +52,7 @@ export const config: WebdriverIO.Config = {
         'appium:appWaitPackage': 'no.mittatb.debug',
         'appium:appActivity': 'no.mittatb.MainActivity',
         'appium:appWaitActivity': 'no.mittatb.MainActivity',
-        'appium:app': `${process.env.PWD}/../android/app/build/outputs/apk/beacons/debug/app-beacons-debug.apk`,
+        'appium:app': `${process.env.PWD}/../android/app/build/outputs/apk/app/debug/app-app-debug.apk`,
 
         //'appium:appWaitForLaunch': true,
         //'appium:skipDeviceInitialization': true,

@@ -57,7 +57,6 @@ import {
 } from '@atb/modules/bonus';
 import {useFareContractLegs} from '@atb/modules/fare-contracts';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
@@ -163,9 +162,9 @@ export const DetailsContent: React.FC<Props> = ({
   return (
     <Section style={styles.section}>
       {hasShmoBookingId(fc) ? (
-        <FareContractShmoHeaderSectionItem fareContract={fc} />
+        <FareContractShmoHeaderSectionItem fareContract={fc} now={now} />
       ) : (
-        <FareContractHeaderSectionItem fareContract={fc} />
+        <FareContractHeaderSectionItem fareContract={fc} now={now} />
       )}
 
       {hasShmoBookingId(fc) ? (
@@ -307,15 +306,14 @@ export const DetailsContent: React.FC<Props> = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     globalMessages: {
       flex: 1,
       rowGap: theme.spacing.medium,
     },
     section: {
-      marginBottom: bottomSafeAreaInset,
+      marginBottom: bottom,
     },
     fareContractDetails: {
       flex: 1,

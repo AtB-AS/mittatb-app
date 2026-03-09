@@ -48,6 +48,7 @@ import {
   CityBike as CityBikeDark,
   ParkAndRide as ParkAndRideDark,
   BabyOnScooter as BabyOnScooterDark,
+  Scooter as ScooterDark,
 } from '@atb/assets/svg/color/images/mobility/dark';
 import {
   BundlingCarSharing as BundlingCarSharingLight,
@@ -56,6 +57,7 @@ import {
   CityBike as CityBikeLight,
   ParkAndRide as ParkAndRideLight,
   BabyOnScooter as BabyOnScooterLight,
+  Scooter as ScooterLight,
 } from '@atb/assets/svg/color/images/mobility/light';
 import {
   BonusBag as BonusBagLight,
@@ -113,6 +115,7 @@ export const ThemedBabyOnScooter = getThemedAsset(
   BabyOnScooterLight,
   BabyOnScooterDark,
 );
+export const ThemedScooter = getThemedAsset(ScooterLight, ScooterDark);
 export const ThemedParkAndRide = getThemedAsset(
   ParkAndRideLight,
   ParkAndRideDark,

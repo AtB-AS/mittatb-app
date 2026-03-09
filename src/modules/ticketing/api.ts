@@ -130,6 +130,7 @@ type ReserveOfferParams = {
   autoSale: boolean;
   phoneNumber?: string;
   recipient?: TicketRecipientType;
+  paymentData?: string;
 };
 
 export async function searchOffers(
@@ -184,6 +185,7 @@ export async function reserveOffers({
   recipient,
   shouldSavePaymentMethod,
   recurringPaymentId,
+  paymentData,
 }: ReserveOfferParams): Promise<ReserveOfferResponse> {
   const url = 'sales/v1/reserve';
 
@@ -200,6 +202,7 @@ export async function reserveOffers({
     storeAlias: recipient?.name
       ? {alias: recipient.name, phoneNumber: recipient.phoneNumber}
       : undefined,
+    paymentData,
   };
 
   const response = await client.post<ReserveOfferResponse>(url, body, {

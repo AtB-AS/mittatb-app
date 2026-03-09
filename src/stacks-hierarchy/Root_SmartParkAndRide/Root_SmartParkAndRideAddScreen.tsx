@@ -14,7 +14,6 @@ import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useAuthContext} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {RootStackScreenProps} from '../navigation-types';
 
@@ -130,8 +129,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
   }
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {top: safeAreaTop} = useSafeAreaInsets();
+const useStyles = StyleSheet.createThemeHook((theme, {top: safeAreaTop}) => {
   return {
     container: {
       rowGap: theme.spacing.small,

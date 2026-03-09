@@ -36,7 +36,6 @@ import {TimeContextProvider} from '@atb/modules/time';
 import {AnnouncementsContextProvider} from '@atb/modules/announcements';
 import {StorybookContextProvider} from '@atb/modules/storybook';
 import {NotificationContextProvider} from '@atb/modules/notifications';
-import {BeaconsContextProvider} from '@atb/modules/beacons';
 import {FeatureTogglesContextProvider} from '@atb/modules/feature-toggles';
 import {configureReanimatedLogger} from 'react-native-reanimated';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
@@ -102,11 +101,11 @@ export const App = () => {
                             <AccessibilityContextProvider>
                               <ThemeContextProvider>
                                 <FavoritesContextProvider>
-                                  <StoredTripPatternsContextProvider>
-                                    <FiltersContextProvider>
-                                      <SearchHistoryContextProvider>
-                                        <FirestoreConfigurationContextProvider>
-                                          <TicketingContextProvider>
+                                  <FiltersContextProvider>
+                                    <SearchHistoryContextProvider>
+                                      <FirestoreConfigurationContextProvider>
+                                        <TicketingContextProvider>
+                                          <StoredTripPatternsContextProvider>
                                             <MobileTokenContextProvider>
                                               <AppLanguageContextProvider>
                                                 <GeolocationContextProvider>
@@ -117,11 +116,9 @@ export const App = () => {
                                                           <BottomSheetModalProvider>
                                                             <BottomSheetContextProvider>
                                                               <FeedbackQuestionsContextProvider>
-                                                                <BeaconsContextProvider>
-                                                                  <OnboardingContextProvider>
-                                                                    <RootStack />
-                                                                  </OnboardingContextProvider>
-                                                                </BeaconsContextProvider>
+                                                                <OnboardingContextProvider>
+                                                                  <RootStack />
+                                                                </OnboardingContextProvider>
                                                               </FeedbackQuestionsContextProvider>
                                                             </BottomSheetContextProvider>
                                                           </BottomSheetModalProvider>
@@ -132,11 +129,11 @@ export const App = () => {
                                                 </GeolocationContextProvider>
                                               </AppLanguageContextProvider>
                                             </MobileTokenContextProvider>
-                                          </TicketingContextProvider>
-                                        </FirestoreConfigurationContextProvider>
-                                      </SearchHistoryContextProvider>
-                                    </FiltersContextProvider>
-                                  </StoredTripPatternsContextProvider>
+                                          </StoredTripPatternsContextProvider>
+                                        </TicketingContextProvider>
+                                      </FirestoreConfigurationContextProvider>
+                                    </SearchHistoryContextProvider>
+                                  </FiltersContextProvider>
                                 </FavoritesContextProvider>
                               </ThemeContextProvider>
                             </AccessibilityContextProvider>

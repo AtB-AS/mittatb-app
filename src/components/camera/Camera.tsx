@@ -116,8 +116,8 @@ export const Camera = ({
               style={[
                 styles.flashlightButton,
                 footerHeight > 0
-                  ? {paddingBottom: theme.spacing.medium + footerHeight}
-                  : {paddingBottom: safeBottomInset + theme.spacing.medium},
+                  ? {marginBottom: theme.spacing.medium + footerHeight}
+                  : {marginBottom: safeBottomInset + theme.spacing.medium},
               ]}
               text={t(CameraTexts.flashlight.default)}
               expanded={false}
@@ -163,9 +163,7 @@ export const Camera = ({
   }
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom: safeBottomInset} = useSafeAreaInsets();
-
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     container: {
       flex: 1,
@@ -200,7 +198,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       right: 0,
       bottom: 0,
       paddingTop: theme.spacing.large,
-      paddingBottom: safeBottomInset + theme.spacing.medium,
+      paddingBottom: bottom + theme.spacing.medium,
       alignItems: 'center',
       gap: theme.spacing.large,
       backgroundColor: 'black',
