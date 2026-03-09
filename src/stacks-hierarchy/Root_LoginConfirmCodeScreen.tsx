@@ -64,7 +64,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
     setIsLoading(true);
     setError(undefined);
     setCode('');
-    const errorCode = await signInWithPhoneNumber(phoneNumber, true);
+    const errorCode = await signInWithPhoneNumber(phoneNumber);
     setIsLoading(false);
     if (errorCode) {
       rateLimitIfNeeded(errorCode);

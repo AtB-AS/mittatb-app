@@ -96,11 +96,7 @@ function useScreenBrightnessIncrease() {
 
 const BarcodeInspectionView = () => {
   const styles = useStyles();
-  const {
-    aztec_code_size_in_cm,
-    aztec_code_padding,
-    enable_new_token_barcode_base64,
-  } = useRemoteConfigContext();
+  const {enable_new_token_barcode_base64} = useRemoteConfigContext();
 
   useEffect(() => {
     // Prepare data for RNBarcodeInspectionView
@@ -126,11 +122,8 @@ const BarcodeInspectionView = () => {
 
   return (
     <View style={styles.barcodeInspectionContainer}>
-      <View
-        style={[styles.barcodeInspection, {padding: aztec_code_padding}]}
-        testID="mobileTokenBarcode"
-      >
-        <RNBarcodeInspectionView sizeInCm={aztec_code_size_in_cm} />
+      <View style={styles.barcodeInspection} testID="mobileTokenBarcode">
+        <RNBarcodeInspectionView sizeInCm={3.5} />
       </View>
     </View>
   );
@@ -144,7 +137,6 @@ const BarcodeInspectionView = () => {
  */
 const MobileTokenAztec = ({fc}: {fc: FareContractType}) => {
   const styles = useStyles();
-  const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
   const {data: signedToken} = useGetSignedTokenQuery();
   const [aztecCodeError, setAztecCodeError] = useState(false);
@@ -167,10 +159,7 @@ const MobileTokenAztec = ({fc}: {fc: FareContractType}) => {
 
   return (
     <View
-      style={[
-        styles.aztecCode,
-        {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
-      ]}
+      style={styles.aztecCode}
       accessible={true}
       accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
       testID="mobileTokenBarcode"
@@ -242,7 +231,6 @@ const LoadingBarcode = () => {
 
 const StaticAztec = ({fc}: {fc: FareContractType}) => {
   const styles = useStyles();
-  const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
   const [aztecXml, setAztecXml] = useState<string>();
   const onCloseFocusRef = useRef<View | null>(null);
@@ -258,12 +246,7 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
 
   return (
     <>
-      <View
-        style={[
-          styles.aztecCode,
-          {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
-        ]}
-      >
+      <View style={styles.aztecCode}>
         <NativeBlockButton
           onPress={() => bottomSheetModalRef.current?.present()}
           accessibilityRole="button"
@@ -287,7 +270,6 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
 
 const StaticQrCode = ({fc}: {fc: FareContractType}) => {
   const styles = useStyles();
-  const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
   const [qrCodeSvg, setQrCodeSvg] = useState<string>();
   const onCloseFocusRef = useRef<View | null>(null);
@@ -306,7 +288,6 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
       <View
         style={[
           styles.aztecCode,
-          {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
           styles.staticQrCode,
           styles.staticQrCodeSmall,
         ]}
@@ -337,9 +318,12 @@ const useStyles = StyleSheet.createThemeHook(() => ({
     width: '100%',
     aspectRatio: 1,
     backgroundColor: '#FFFFFF',
+    padding: 20,
+    maxHeight: 275,
   },
   barcodeInspection: {
     backgroundColor: 'white',
+    padding: 20,
   },
   barcodeInspectionContainer: {
     flex: 1,
@@ -370,7 +354,6 @@ const StaticBarcodeBottomSheet = ({
   bottomSheetModalRef: RefObject<GorhomBottomSheetModal | null>;
 }) => {
   const styles = useStyles();
-  const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
 
   return (
@@ -383,13 +366,7 @@ const StaticBarcodeBottomSheet = ({
       snapPoints={['80%']}
     >
       <View style={styles.staticBottomContainer}>
-        <View
-          style={[
-            styles.aztecCode,
-            {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
-            styles.staticQrCode,
-          ]}
-        >
+        <View style={[styles.aztecCode, styles.staticQrCode]}>
           <NativeBlockButton
             onPress={() => bottomSheetModalRef.current?.dismiss()}
             accessible={true}

@@ -1,6 +1,5 @@
 import React from 'react';
 import {LoadingScreen} from './LoadingScreen';
-import {LoadingErrorScreen} from './LoadingErrorScreen';
 import {useDelayGate} from '@atb/utils/use-delay-gate';
 import {useLoadingState} from './use-loading-state';
 import {useNotifyBugsnagOnTimeoutStatus} from './use-notify-bugsnag-on-timeout-status';
@@ -14,10 +13,9 @@ export const LoadingScreenBoundary = ({
 }: {
   children: React.JSX.Element;
 }): React.JSX.Element => {
-  const {isLoadingScreenEnabled, isLoadingErrorScreenEnabled} =
-    useFeatureTogglesContext();
+  const {isLoadingScreenEnabled} = useFeatureTogglesContext();
   const {loading_screen_delay_ms} = useRemoteConfigContext();
-  const {status, retry, paramsRef} = useLoadingState(LOADING_TIMEOUT_MS);
+  const {status, paramsRef} = useLoadingState(LOADING_TIMEOUT_MS);
   useNotifyBugsnagOnTimeoutStatus(status, paramsRef);
 
   // Wait after load success to let the app "settle".
@@ -32,11 +30,7 @@ export const LoadingScreenBoundary = ({
     case 'loading':
       return <LoadingScreen />;
     case 'timeout':
-      return isLoadingErrorScreenEnabled ? (
-        <LoadingErrorScreen retry={retry} />
-      ) : (
-        children
-      );
+      return children;
     case 'success':
       return waitFinished ? children : <LoadingScreen />;
   }

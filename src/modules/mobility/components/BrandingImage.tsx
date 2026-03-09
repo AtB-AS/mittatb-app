@@ -1,4 +1,3 @@
-import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {Image, StyleProp, View, ViewStyle} from 'react-native';
@@ -21,11 +20,9 @@ export const BrandingImage = ({
   logoSize = DEFAULT_LOGO_SIZE,
 }: BrandingImageProps) => {
   const styles = useSheetStyle();
-  const {enable_vehicle_operator_logo} = useRemoteConfigContext();
-
   return (
     <View style={style}>
-      {logoUrl && enable_vehicle_operator_logo ? (
+      {logoUrl ? (
         isSvgUrl(logoUrl) ? (
           <SvgCssUri
             style={styles.logo}
