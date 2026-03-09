@@ -4,17 +4,16 @@ import {getMapboxLightStyle} from '../mapbox-styles/get-mapbox-light-style';
 import {getMapboxDarkStyle} from '../mapbox-styles/get-mapbox-dark-style';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
 import {MAPBOX_API_TOKEN} from '@env';
+// eslint-disable-next-line import/extensions
 import {colorTheme} from '../mapbox-styles/mapbox-color-theme';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useAppVersionedConfigurableLink} from '@atb/utils/use-app-versioned-configurable-link';
+import {useGeofencingZonesLayers} from './use-geofencing-zones-layers';
+// import {geofencingZonesLayers} from '../components/mobility/GeofencingZonesAsTiles';
 
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
-  GeofencingZones = 'geofencingZones',
-  GeofencingZones_allowed = 'geofencingZones_allowed',
-  GeofencingZones_slow = 'geofencingZones_slow',
-  GeofencingZones_noParking = 'geofencingZones_noParking',
-  GeofencingZones_noEntry = 'geofencingZones_noEntry',
+  GeofencingZones = 'geofencingZones', // can be removed once support for GeofencingZones not as tiles is removed
   Vehicles = 'vehicles',
   Stations = 'stations',
   NSRItems = 'nsrItems',
@@ -24,10 +23,6 @@ export enum MapSlotLayerId {
 // the order of this list, determines which layers render on top. Last is on top.
 const slotLayerIds: MapSlotLayerId[] = [
   MapSlotLayerId.GeofencingZones,
-  MapSlotLayerId.GeofencingZones_allowed,
-  MapSlotLayerId.GeofencingZones_slow,
-  MapSlotLayerId.GeofencingZones_noParking,
-  MapSlotLayerId.GeofencingZones_noEntry,
   MapSlotLayerId.Vehicles,
   MapSlotLayerId.Stations,
   MapSlotLayerId.NSRItems,
@@ -36,16 +31,22 @@ const slotLayerIds: MapSlotLayerId[] = [
 const slotLayers = slotLayerIds.map((slotLayerId) => ({
   id: slotLayerId,
   type: 'slot',
-  slot: slotLayerId === MapSlotLayerId.GeofencingZones ? 'middle' : 'top',
 }));
 
 export const useMapboxJsonStyle: (
   includeVehiclesAndStationsVectorSource: boolean,
-) => string | undefined = (includeVehiclesAndStationsVectorSource) => {
+  shouldShowGeofencingZonesLayers: boolean,
+) => string | undefined = (
+  includeVehiclesAndStationsVectorSource,
+  shouldShowGeofencingZonesLayers,
+) => {
   const {themeName} = useThemeContext();
   const {mapbox_user_name, mapbox_nsr_tileset_id} = useRemoteConfigContext();
 
   const mapboxSpriteUrl = useAppVersionedConfigurableLink('mapboxSpriteUrls');
+  const geofencingZonesLayers = useGeofencingZonesLayers(
+    shouldShowGeofencingZonesLayers,
+  );
 
   const {
     id: vehiclesAndStationsVectorSourceId,
@@ -75,6 +76,12 @@ export const useMapboxJsonStyle: (
       },
     }));
 
+    const themedLayersWithSlots = [
+      ...themedLayers,
+      ...geofencingZonesLayers,
+      ...slotLayers,
+    ];
+
     const extendedSources: StyleJsonVectorSourcesObj = {
       ...themedStyle.sources,
       ...(includeVehiclesAndStationsVectorSource
@@ -85,20 +92,19 @@ export const useMapboxJsonStyle: (
         : undefined),
     };
 
-    const themedLayersWithSlots = [...themedLayers, ...slotLayers];
-
     return {
       ...themedStyle,
       sources: extendedSources,
       layers: themedLayersWithSlots,
     };
   }, [
-    themeName,
-    mapbox_user_name,
-    mapbox_nsr_tileset_id,
+    geofencingZonesLayers,
     includeVehiclesAndStationsVectorSource,
-    vehiclesAndStationsVectorSourceId,
+    mapbox_nsr_tileset_id,
+    mapbox_user_name,
+    themeName,
     vehiclesAndStationsVectorSource,
+    vehiclesAndStationsVectorSourceId,
   ]);
 
   const mapboxJsonStyle = useMemo(

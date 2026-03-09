@@ -69,11 +69,6 @@ const getGeofencingZoneCustomProps: Expression = [
   'geofencingZoneCustomProps',
 ];
 
-// likely a type error from mapbox, seems to work as intended when using a slot layer defined in useMapboxJsonStyle
-type MapboxSlot = 'bottom' | 'middle' | 'top';
-const geofencingZonesSlot =
-  MapSlotLayerId.GeofencingZones as unknown as MapboxSlot;
-
 type GeofencingZoneProps = {
   geofencingZone: PreProcessedGeofencingZones;
 };
@@ -122,7 +117,7 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
           fillOpacity,
           fillEmissiveStrength: 1,
         }}
-        slot={geofencingZonesSlot}
+        aboveLayerID={MapSlotLayerId.GeofencingZones}
       />
 
       {/*
@@ -134,13 +129,13 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
         id="geofencingZoneLine"
         filter={['!=', lineStyle, 'dashed']}
         style={lineLayerStyle}
-        slot={geofencingZonesSlot}
+        aboveLayerID={MapSlotLayerId.GeofencingZones}
       />
       <MapboxGL.LineLayer
         id="geofencingZoneDashedLine"
         filter={['==', lineStyle, 'dashed']}
         style={{...lineLayerStyle, lineDasharray: [2, 2]}}
-        slot={geofencingZonesSlot}
+        aboveLayerID={MapSlotLayerId.GeofencingZones}
       />
     </MapboxGL.ShapeSource>
   );
@@ -194,7 +189,7 @@ export const GeofencingZoneIcon: React.FC<GeofencingZoneIconProps> = ({
           iconSize,
           iconEmissiveStrength: 1,
         }}
-        aboveLayerID={MapSlotLayerId.GeofencingZonesIcons}
+        aboveLayerID={MapSlotLayerId.GeofencingZones}
       />
     </MapboxGL.ShapeSource>
   );

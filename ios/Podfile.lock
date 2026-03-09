@@ -1202,7 +1202,7 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.37):
     - BoringSSL-GRPC/Interface (= 0.0.37)
   - BoringSSL-GRPC/Interface (0.0.37)
-  - BugsnagReactNative (8.7.0):
+  - BugsnagReactNative (8.8.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -1503,13 +1503,13 @@ PODS:
     - SocketRocket
     - Yoga
   - leveldb-library (1.22.6)
-  - MapboxCommon (24.15.4):
+  - MapboxCommon (24.16.6):
     - Turf (= 4.0.0)
-  - MapboxCoreMaps (11.15.4):
-    - MapboxCommon (= 24.15.4)
-  - MapboxMaps (11.15.4):
-    - MapboxCommon (= 24.15.4)
-    - MapboxCoreMaps (= 11.15.4)
+  - MapboxCoreMaps (11.16.6):
+    - MapboxCommon (= 24.16.6)
+  - MapboxMaps (11.16.6):
+    - MapboxCommon (= 24.16.6)
+    - MapboxCoreMaps (= 11.16.6)
     - Turf (= 4.0.0)
   - nanopb (3.30910.0):
     - nanopb/decode (= 3.30910.0)
@@ -4459,7 +4459,7 @@ PODS:
     - SocketRocket
     - Yoga
   - rnmapbox-maps (10.2.10):
-    - MapboxMaps (~> 11.15.0)
+    - MapboxMaps (~> 11.16.2)
     - React
     - React-Core
     - rnmapbox-maps/DynamicLibrary (= 10.2.10)
@@ -4470,7 +4470,7 @@ PODS:
     - fast_float
     - fmt
     - hermes-engine
-    - MapboxMaps (~> 11.15.0)
+    - MapboxMaps (~> 11.16.2)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -5302,7 +5302,7 @@ SPEC CHECKSUMS:
   BarcodeiOSLib: 056cd6e483d4273ec7621c46b8fcd0af1bb35ea6
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   BoringSSL-GRPC: dded2a44897e45f28f08ae87a55ee4bcd19bc508
-  BugsnagReactNative: 369b97061fed0b36acbf0eb0c1d635b95c7ccfe2
+  BugsnagReactNative: ee42e0ce7cfde91bae3288d7290912c6b703f5db
   DevicePpi: c25a1f180fba317379a32de32b89cc09e337b55e
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
@@ -5331,16 +5331,16 @@ SPEC CHECKSUMS:
   "gRPC-C++": cc207623316fb041a7a3e774c252cf68a058b9e8
   gRPC-Core: 860978b7db482de8b4f5e10677216309b5ff6330
   GTMSessionFetcher: b8ab00db932816e14b0a0664a08cb73dda6d164b
-  hermes-engine: 64c8724b2919f58c70c597ff023697370b732563
+  hermes-engine: 7b97af1957eaf8cfc1fa8f146b57ed75fe5f2e65
   Intercom: aca703f001cf9470b1f13b72cb8cc969a09bafca
   intercom-react-native: c8ee5e7d845955c5f6898c0f094ebcf1d6db9255
   leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
-  MapboxCommon: 975faa94b893bb64a1d28b09d9d6d820e1030a26
-  MapboxCoreMaps: 105af9894d850290fbb466e9f9a133f5d175abf1
-  MapboxMaps: e97e59d6ba48bb6f695a4c1dc2f174cb24743cd4
+  MapboxCommon: 10cbf74edb23c9abcfe2424899d804f288a47334
+  MapboxCoreMaps: f19680d20681797067268284b2292349de861730
+  MapboxMaps: 04c7bf46d66265ad0f4b98484a251777a926c423
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
+  RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
   RCTDeprecation: a41bbdd9af30bf2e5715796b313e44ec43eefff1
   RCTRequired: 7be34aabb0b77c3cefe644528df0fa0afad4e4d0
   RCTSwiftUI: a6c7271c39098bf00dbdad8f8ed997a59bbfbe44
@@ -5419,7 +5419,7 @@ SPEC CHECKSUMS:
   React-utils: 28158276c67b375d1b7546a342571cfffbea9770
   React-webperformancenativemodule: 3aa0693c4d19898831317e17b005fad3444d2c99
   ReactAppDependencyProvider: 0eb286cc274abb059ee601b862ebddac2e681d01
-  ReactCodegen: 31ec6c16f11abb1acf1397951272c5e85ec67767
+  ReactCodegen: ebc88b9d8aafed0872ff6e5a5c18570129e789ff
   ReactCommon: 15e1e727fa34f760beb7dd52928687fda8edf8dc
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
   RNBootSplash: 7fcc9a58ae343aeb1a1dd49f9030832fe432c544
@@ -5436,7 +5436,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: c6327cf6e2bd384dc90351ccfff0da8142d62f54
   RNInAppBrowser: 6d3eb68d471b9834335c664704719b8be1bfdb20
   RNLocalize: d8ccb568b40c72c767714db3808ce66a1ecf444a
-  rnmapbox-maps: df786769607427115545ba9bee95360436218510
+  rnmapbox-maps: af4fbec8592157b79d58db9d1464afc81f113f65
   RNPermissions: aa40c7e2acdc1e3f0ed85814657fb2841874006d
   RNReanimated: 9160d535792c6b3f9d1974d7bf5c5813afce1c91
   RNScreens: 199799bdab32fa1e17ebf938b06fec52033e81e5
@@ -5447,13 +5447,13 @@ SPEC CHECKSUMS:
   SwiftProtobuf: 4dbaffec76a39a8dc5da23b40af1a5dc01a4c02d
   TimeApiiOSLib: 8289d67019d958c29676dfb9e38ffdcefbcdb9bd
   TokenCore: cdce158c4f5331f81f35e34f3b708b6582c0d569
-  TokenStateReactNativeLib: 00fb9cd8cc92a36f350c9d216686277837d6474a
+  TokenStateReactNativeLib: e1b93062a2b35f28bddad865aaadfb8026a22e4a
   Turf: c9eb11a65d96af58cac523460fd40fec5061b081
   VisionCamera: 30b358b807324c692064f78385e9a732ce1bebfe
   VisualCodeModeliOSLib: c40687c1f0bd60e672088a023d3ec0984608c118
   VisualCodeViewiOSLib: 448c13fd82ceb72aa4a12d9c69c92278d9da2989
   Yoga: 33b53536a0500d039f2cd78caf1d5d68712d3af7
 
-PODFILE CHECKSUM: 4068aa57be2fd371ca958cf135ccce300b97466d
+PODFILE CHECKSUM: 53e273f6c55b7da961eb1db0efdac38a8fc59b03
 
 COCOAPODS: 1.16.2
