@@ -40,6 +40,7 @@ import {debugProgressBetweenStopsText} from '../travel-details-screens/utils';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {TRANSPORT_SUB_MODES_BOAT} from '@atb/components/icon-box';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type TravelDetailsMapScreenParams = {
   serviceJourneyPolylines: ServiceJourneyPolyline[];
@@ -77,6 +78,7 @@ export const TravelDetailsMapScreenComponent = ({
   const {
     preferences: {debugShowProgressBetweenStops},
   } = usePreferencesContext();
+  const {isMapPitchEnabled} = useFeatureTogglesContext();
 
   const mapViewConfig = useMapViewConfig();
 
@@ -142,7 +144,7 @@ export const TravelDetailsMapScreenComponent = ({
       <MapboxGL.MapView
         ref={mapViewRef}
         style={styles.map}
-        pitchEnabled={true}
+        pitchEnabled={isMapPitchEnabled}
         {...mapViewConfig}
         {...mapCameraTrackingMethod}
         onDidFinishLoadingMap={() => setLoadedMap(true)}

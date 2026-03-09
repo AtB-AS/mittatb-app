@@ -7,6 +7,7 @@ import {MAPBOX_API_TOKEN} from '@env';
 // eslint-disable-next-line import/extensions
 import {colorTheme} from '../mapbox-styles/mapbox-color-theme';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useAppVersionedConfigurableLink} from '@atb/utils/use-app-versioned-configurable-link';
 import {useGeofencingZonesLayers} from './use-geofencing-zones-layers';
 
@@ -41,6 +42,7 @@ export const useMapboxJsonStyle: (
 ) => {
   const {themeName} = useThemeContext();
   const {mapbox_user_name, mapbox_nsr_tileset_id} = useRemoteConfigContext();
+  const {isMap3dEnabled} = useFeatureTogglesContext();
 
   const mapboxSpriteUrl = useAppVersionedConfigurableLink('mapboxSpriteUrls');
   const geofencingZonesLayers = useGeofencingZonesLayers(
@@ -112,24 +114,31 @@ export const useMapboxJsonStyle: (
         ...themedStyleWithExtendedSourcesAndSlotLayers,
         sprite: (mapboxSpriteUrl ?? '') + themeName,
         projection: {name: 'mercator'}, // Using 'globe' instead looks pretty cool, but there is an initial frame flicker with zoom 0. Might be possible to fix somehow.
-        imports: [
-          {
-            id: 'basemap',
-            // url must be absolute for this to work
-            url: `https://api.mapbox.com/styles/v1/mapbox/standard?access_token=${MAPBOX_API_TOKEN}`,
-            config: {
-              lightPreset: themeName === 'dark' ? 'night' : 'day',
-              showPlaceLabels: true,
-              showPointOfInterestLabels: false,
-              showTransitLabels: false,
-              showPedestrianRoads: true,
-              showRoadLabels: false,
-            },
-            'color-theme': colorTheme,
-          },
-        ],
+        imports: isMap3dEnabled
+          ? [
+              {
+                id: 'basemap',
+                // url must be absolute for this to work
+                url: `https://api.mapbox.com/styles/v1/mapbox/standard?access_token=${MAPBOX_API_TOKEN}`,
+                config: {
+                  lightPreset: themeName === 'dark' ? 'night' : 'day',
+                  showPlaceLabels: true,
+                  showPointOfInterestLabels: false,
+                  showTransitLabels: false,
+                  showPedestrianRoads: true,
+                  showRoadLabels: false,
+                },
+                'color-theme': colorTheme,
+              },
+            ]
+          : [],
       }),
-    [themeName, mapboxSpriteUrl, themedStyleWithExtendedSourcesAndSlotLayers],
+    [
+      themedStyleWithExtendedSourcesAndSlotLayers,
+      mapboxSpriteUrl,
+      themeName,
+      isMap3dEnabled,
+    ],
   );
 
   return mapboxJsonStyle;
