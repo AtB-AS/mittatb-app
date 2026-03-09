@@ -8,7 +8,7 @@ import {
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {StyleProp, View, ViewStyle} from 'react-native';
+import {View} from 'react-native';
 import {
   type SupplementProductWithCountAndOffer,
   UserProfileWithCountAndOffer,
@@ -88,7 +88,6 @@ export const PriceSummary = ({
           ) : (
             <Loading
               size={theme.spacing.medium}
-              color={theme.color.foreground.dynamic.primary}
               style={{margin: theme.spacing.medium}}
             />
           )}

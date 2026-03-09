@@ -43,10 +43,7 @@ export function WithOverlayButton({
       >
         {isLoading ? (
           <View style={[styles.border, styles.loading]}>
-            <Loading
-              color={theme.color.foreground.dynamic.primary}
-              size="small"
-            />
+            <Loading size="small" />
           </View>
         ) : (
           <Button

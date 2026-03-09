@@ -58,6 +58,7 @@ export const RecentFareContracts = ({
         <View
           style={{
             paddingVertical: theme.spacing.xLarge,
+            alignItems: 'center',
           }}
           accessible={true}
           accessibilityLabel={t(RecentFareContractsTexts.titles.loading)}
@@ -68,12 +69,9 @@ export const RecentFareContracts = ({
           >
             {t(TicketingTexts.recentFareContracts.loading)}
           </ThemeText>
-          <Loading
-            color={theme.color.background.neutral[0].foreground.primary}
-          />
+          <Loading size="large" />
         </View>
       )}
-
       {!!memoizedRecentFareContracts.length && (
         <>
           <ThemeText typography="body__s" style={styles.header}>

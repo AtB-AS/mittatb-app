@@ -486,7 +486,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   {tripPatterns.length ? (
                     <>
                       <Loading
-                        color={theme.color.foreground.dynamic.secondary}
                         style={{
                           marginRight: theme.spacing.medium,
                         }}
@@ -703,6 +702,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   loadingIndicator: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   missingLocationText: {
     padding: theme.spacing.xLarge,

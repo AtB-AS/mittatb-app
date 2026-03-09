@@ -434,12 +434,7 @@ export const DepartureDetailsScreenComponent = ({
 
           {isLoading && (
             <View>
-              <Loading
-                color={theme.color.foreground.dynamic.primary}
-                style={styles.spinner}
-                animating={true}
-                size="large"
-              />
+              <Loading style={styles.spinner} animating={true} size="large" />
               <ScreenReaderAnnouncement
                 message={t(DepartureDetailsTexts.messages.loading)}
               />
@@ -1002,6 +997,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
   spinner: {
     paddingTop: theme.spacing.medium,
+    alignSelf: 'center',
   },
   messageBox: {
     marginBottom: theme.spacing.medium,

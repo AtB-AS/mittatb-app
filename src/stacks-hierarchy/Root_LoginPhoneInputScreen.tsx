@@ -134,13 +134,7 @@ export const Root_LoginPhoneInputScreen = ({
           </Section>
 
           <View style={styles.buttonView}>
-            {isSubmitting && (
-              <Loading
-                style={styles.loading}
-                size="large"
-                color={themeColor.foreground.primary}
-              />
-            )}
+            {isSubmitting && <Loading style={styles.loading} size="large" />}
 
             {error && !isSubmitting && (
               <MessageInfoBox
@@ -201,6 +195,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   loading: {
     marginVertical: theme.spacing.large,
+    alignSelf: 'center',
   },
   errorMessage: {
     marginBottom: theme.spacing.medium,

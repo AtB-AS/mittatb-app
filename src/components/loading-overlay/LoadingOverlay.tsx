@@ -7,7 +7,7 @@ export const LoadingOverlay = () => {
   const styles = useStyles();
   return (
     <View style={styles.spinner}>
-      <Loading size="large" color={styles.loading.backgroundColor} />
+      <Loading size="large" />
     </View>
   );
 };
@@ -23,8 +23,5 @@ const useStyles = StyleSheet.createThemeHook(() => ({
     justifyContent: 'center',
     backgroundColor: 'black',
     opacity: 0.4,
-  },
-  loading: {
-    backgroundColor: 'white',
   },
 }));

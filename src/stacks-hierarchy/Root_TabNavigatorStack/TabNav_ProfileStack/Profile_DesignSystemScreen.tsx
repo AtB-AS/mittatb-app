@@ -321,10 +321,12 @@ export const Profile_DesignSystemScreen = ({
             <ThemeText>Custom color</ThemeText>
             <View style={styles.contentContainer}>
               <Loading
-                color={theme.color.background.neutral[0].foreground.primary}
+                donutColor={
+                  theme.color.background.neutral[0].foreground.primary
+                }
               />
               <Loading
-                color={theme.color.foreground.dynamic.primary}
+                donutColor={theme.color.foreground.dynamic.primary}
                 size="small"
               />
             </View>

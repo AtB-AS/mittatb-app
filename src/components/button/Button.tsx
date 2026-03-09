@@ -169,7 +169,8 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
           {loading ? (
             <Loading
               size="small"
-              color={mainContrastColor.foreground.primary}
+              donutColor={mainContrastColor.background}
+              arcColor={mainContrastColor.foreground.primary}
             />
           ) : (
             rightIcon && (
