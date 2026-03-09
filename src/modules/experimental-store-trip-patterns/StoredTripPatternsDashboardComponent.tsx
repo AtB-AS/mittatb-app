@@ -1,6 +1,6 @@
 import {StyleSheet} from '@atb/theme';
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import {View} from 'react-native';
+import React, {useCallback, useEffect, useMemo} from 'react';
+import {Alert, View} from 'react-native';
 import {TripPattern} from '@atb/api/types/trips';
 import {useNow} from '@atb/utils/use-now';
 
@@ -16,10 +16,7 @@ import {translation as _, useTranslation} from '@atb/translations';
 import {ResultRow} from '../../stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultRow';
 import {useStoredTripPatterns} from './StoredTripPatternsContext';
 import {wrapWithExperimentalFeatureToggledComponent} from '@atb/modules/experimental';
-import {RemoveStoredTripPatternBottomSheet} from './RemoveStoredTripPatternBottomSheet';
-import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
-import {SwipeableResultRow} from './SwipeableResultRow';
-import {SwipeableMethods} from 'react-native-gesture-handler/lib/typescript/components/ReanimatedSwipeable';
+import {RightActionKind, SwipeableResultRow} from './SwipeableResultRow';
 
 type Props = {
   onDetailsPressed(tripPattern: TripPattern): void;
@@ -33,11 +30,6 @@ export const StoredTripPatternsDashboardComponent =
       const styles = useThemeStyles();
       const now = useNow(30000);
       const {t} = useTranslation();
-      const bottomSheetModalRef =
-        useRef<GorhomBottomSheetModal<TripPattern> | null>(null);
-
-      const {registerCloseCallback, closeAllSwipeables} =
-        useCloseAllSwipeables();
 
       const searchTime = useMemo<TripSearchTime>(
         () => ({option: 'now', date: new Date(now).toISOString()}),
@@ -47,16 +39,26 @@ export const StoredTripPatternsDashboardComponent =
       const {tripPatterns, updateTripPattern, removeTripPattern} =
         useStoredTripPatterns();
 
-      const setTripPatternToRemove = useCallback((tripPattern: TripPattern) => {
-        bottomSheetModalRef.current?.present(tripPattern);
-      }, []);
-
-      const onRemovePress = useCallback(
-        (tripPattern: TripPattern) => {
-          removeTripPattern(tripPattern);
-          bottomSheetModalRef.current?.dismiss();
+      const setTripPatternToRemove = useCallback(
+        (tripPattern: TripPattern, cancelRemove: () => void) => {
+          Alert.alert(
+            t(RemoveStoredTripPatternAlertTexts.header.text),
+            undefined,
+            [
+              {
+                text: t(RemoveStoredTripPatternAlertTexts.cancelButton.text),
+                style: 'cancel',
+                onPress: cancelRemove,
+              },
+              {
+                text: t(RemoveStoredTripPatternAlertTexts.removeButton.text),
+                style: 'destructive',
+                onPress: () => removeTripPattern(tripPattern),
+              },
+            ],
+          );
         },
-        [removeTripPattern],
+        [removeTripPattern, t],
       );
 
       if (!tripPatterns.length) {
@@ -84,15 +86,9 @@ export const StoredTripPatternsDashboardComponent =
                 updateTripPattern={updateTripPattern}
                 setTripPatternToRemove={setTripPatternToRemove}
                 isFocused={isFocused}
-                registerCloseCallback={registerCloseCallback}
               />
             </Animated.View>
           ))}
-          <RemoveStoredTripPatternBottomSheet
-            onRemovePress={onRemovePress}
-            onClose={closeAllSwipeables}
-            bottomSheetModalRef={bottomSheetModalRef}
-          />
         </View>
       );
     },
@@ -104,9 +100,11 @@ const StoredTripPatternRow: React.FC<{
   resultIndex: number;
   searchTime: TripSearchTime;
   updateTripPattern: (tripPattern: TripPattern) => void;
-  setTripPatternToRemove: (tripPattern: TripPattern) => void;
+  setTripPatternToRemove: (
+    tripPattern: TripPattern,
+    cancelRemove: () => void,
+  ) => void;
   isFocused: boolean;
-  registerCloseCallback: (callback: () => void) => void;
 }> = ({
   tripPattern,
   onDetailsPressed,
@@ -115,16 +113,8 @@ const StoredTripPatternRow: React.FC<{
   updateTripPattern,
   setTripPatternToRemove,
   isFocused,
-  registerCloseCallback,
 }) => {
   const {data} = useSingleTripQuery(tripPattern.compressedQuery, isFocused);
-  const swipeableRef = useRef<SwipeableMethods | null>(null);
-
-  useEffect(() => {
-    return registerCloseCallback(() => {
-      swipeableRef.current?.close();
-    });
-  }, [registerCloseCallback]);
 
   const updatedTripPattern = useMemo(
     () => data ?? tripPattern,
@@ -136,16 +126,17 @@ const StoredTripPatternRow: React.FC<{
     updateTripPattern({...data});
   }, [data, updateTripPattern]);
 
-  const onRightAction = useCallback(() => {
-    setTripPatternToRemove(tripPattern);
-  }, [setTripPatternToRemove, tripPattern]);
+  const onRightAction = useCallback(
+    (kind: RightActionKind, closeSwipeable: () => void) => {
+      if (kind === 'delete') {
+        setTripPatternToRemove(tripPattern, closeSwipeable);
+      }
+    },
+    [setTripPatternToRemove, tripPattern],
+  );
 
   return (
-    <SwipeableResultRow
-      onRightAction={onRightAction}
-      swipeableRef={swipeableRef}
-      rightActionKind="delete"
-    >
+    <SwipeableResultRow onRightAction={onRightAction} rightActionKind="delete">
       <ResultRow
         tripPattern={updatedTripPattern}
         onDetailsPressed={onDetailsPressed}
@@ -157,31 +148,22 @@ const StoredTripPatternRow: React.FC<{
   );
 };
 
-const useCloseAllSwipeables = () => {
-  const closeSwipeableCallbacks = useRef<(() => void)[]>([]);
-
-  const registerCloseCallback = useCallback((callback: () => void) => {
-    closeSwipeableCallbacks.current.push(callback);
-
-    // Return cleanup function
-    return () => {
-      closeSwipeableCallbacks.current = closeSwipeableCallbacks.current.filter(
-        (cb) => cb !== callback,
-      );
-    };
-  }, []);
-
-  const closeAllSwipeables = useCallback(() => {
-    closeSwipeableCallbacks.current.forEach((callback) => callback());
-  }, [closeSwipeableCallbacks]);
-
-  return {registerCloseCallback, closeAllSwipeables};
-};
-
 const StoredTripPatternsDashboardComponentTexts = {
   header: _('Lagrede reiser', 'Saved trips', 'Lagrede reiser'),
   removeTrip: {
     text: _('Fjern lagret reise', 'Remove saved trip', 'Fjern lagret reise'),
+  },
+};
+
+const RemoveStoredTripPatternAlertTexts = {
+  header: {
+    text: _('Fjern lagret reise?', 'Remove saved trip?', 'Fjern lagret reise?'),
+  },
+  removeButton: {
+    text: _('Fjern lagret reise', 'Remove saved trip', 'Fjern lagret reise'),
+  },
+  cancelButton: {
+    text: _('Avbryt', 'Cancel', 'Avbryt'),
   },
 };
 
