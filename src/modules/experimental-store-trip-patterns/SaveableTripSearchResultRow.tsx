@@ -1,10 +1,9 @@
-import React, {useCallback, useMemo, useRef} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {useStoredTripPatterns} from './StoredTripPatternsContext';
 import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import {RightActionKind, SwipeableResultRow} from './SwipeableResultRow';
 import {getTripPatternKey} from './utils';
 import {TripPattern} from '@atb/api/types/trips';
-import {SwipeableMethods} from 'react-native-gesture-handler/lib/typescript/components/ReanimatedSwipeable';
 import {SaveFill} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 
@@ -14,7 +13,6 @@ export const SaveableTripSearchResultRow: React.FC<
   }>
 > = ({children, tripPattern}) => {
   const isExperimentalEnabled = useIsExperimentalEnabled();
-  const swipeableRef = useRef<SwipeableMethods>(null);
   const {tripPatterns, addTripPattern, removeTripPattern, canAddTripPattern} =
     useStoredTripPatterns();
 
@@ -35,8 +33,8 @@ export const SaveableTripSearchResultRow: React.FC<
   );
 
   const onRightAction = useCallback(
-    (actionKind: RightActionKind) => {
-      swipeableRef.current?.close();
+    (actionKind: RightActionKind, closeSwipeable: () => void) => {
+      closeSwipeable();
       if (actionKind === 'delete') {
         removeTripPattern(tripPattern);
       } else {
@@ -52,7 +50,6 @@ export const SaveableTripSearchResultRow: React.FC<
 
   return (
     <SwipeableResultRow
-      swipeableRef={swipeableRef}
       onRightAction={onRightAction}
       rightActionKind={rightActionKind}
     >
