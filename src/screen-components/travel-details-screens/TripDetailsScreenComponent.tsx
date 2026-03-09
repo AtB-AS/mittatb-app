@@ -34,6 +34,12 @@ import {
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
 import {useSingleTripQuery} from '@atb/modules/trip-patterns';
+import {getPosthogClientGlobal} from '@atb/modules/analytics';
+import {isDefined} from '@atb/utils/presence';
+import {
+  onlyUniques,
+  onlyUniquesBasedOnPredicate,
+} from '@atb/utils/only-uniques';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -187,6 +193,12 @@ function usePurchaseSelectionFromTrip(
   const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const {fareZones} = useFirestoreConfigurationContext();
   const {data: harbors} = useHarbors();
+
+  useEffect(() => {
+    if (tripPattern) {
+      trackTripDetails(tripPattern, fareZones);
+    }
+  }, [tripPattern, fareZones]);
 
   const hasTooLongWaitTime = totalWaitTimeIsMoreThanAnHour(tripPattern.legs);
 
@@ -412,6 +424,29 @@ function getFirstFareZoneWeSellTicketFor(
   if (!matchingZones[0]) return;
 
   return matchingZones[0];
+}
+
+function trackTripDetails(tripPattern: TripPattern, fareZones: FareZone[]) {
+  const posthogClient = getPosthogClientGlobal();
+  if (!posthogClient) return;
+
+  const places = tripPattern.legs
+    .map((leg) => [leg.fromPlace, leg.toPlace])
+    .flat()
+    .filter(isDefined)
+    .filter(onlyUniquesBasedOnPredicate((a, b) => a.quay?.id === b.quay?.id));
+
+  const zones = places
+    .map((quay) => getFareZoneWithMetadata(quay, fareZones)?.name?.value)
+    .filter(isDefined)
+    .filter(onlyUniques);
+
+  posthogClient.capture('TripDetailsOpened', {
+    zones,
+    numberOfLegs: tripPattern.legs.length,
+    legModes: tripPattern.legs.map((leg) => leg.mode),
+    duration: tripPattern.duration,
+  });
 }
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
