@@ -40,6 +40,8 @@ import {
   onlyUniques,
   onlyUniquesBasedOnPredicate,
 } from '@atb/utils/only-uniques';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {useScreenshotAware} from 'react-native-screenshot-aware';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -74,6 +76,8 @@ export const TripDetailsScreenComponent = ({
   );
 
   const updatedTripPattern = data ?? tripPattern;
+
+  useTrackScreenshottedTripDetails(updatedTripPattern);
 
   const purchaseSelection = usePurchaseSelectionFromTrip(updatedTripPattern);
   const fromToNames = getFromToName(updatedTripPattern.legs);
@@ -193,12 +197,6 @@ function usePurchaseSelectionFromTrip(
   const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const {fareZones} = useFirestoreConfigurationContext();
   const {data: harbors} = useHarbors();
-
-  useEffect(() => {
-    if (tripPattern) {
-      trackTripDetails(tripPattern, fareZones);
-    }
-  }, [tripPattern, fareZones]);
 
   const hasTooLongWaitTime = totalWaitTimeIsMoreThanAnHour(tripPattern.legs);
 
@@ -426,7 +424,20 @@ function getFirstFareZoneWeSellTicketFor(
   return matchingZones[0];
 }
 
-function trackTripDetails(tripPattern: TripPattern, fareZones: FareZone[]) {
+function useTrackScreenshottedTripDetails(tripPattern: TripPattern) {
+  const {fareZones} = useFirestoreConfigurationContext();
+
+  const screenshotCallback = useCallback(() => {
+    trackScreenshottedTripDetails(tripPattern, fareZones);
+  }, [tripPattern, fareZones]);
+
+  useScreenshotAware(screenshotCallback);
+}
+
+function trackScreenshottedTripDetails(
+  tripPattern: TripPattern,
+  fareZones: FareZone[],
+) {
   const posthogClient = getPosthogClientGlobal();
   if (!posthogClient) return;
 
@@ -441,9 +452,12 @@ function trackTripDetails(tripPattern: TripPattern, fareZones: FareZone[]) {
     .filter(isDefined)
     .filter(onlyUniques);
 
-  posthogClient.capture('TripDetailsOpened', {
+  posthogClient.capture('TripDetailsScreenshotTaken', {
     zones,
-    numberOfLegs: tripPattern.legs.length,
+    zoneCount: zones.length,
+    legCount: tripPattern.legs.length,
+    nonFootLegCount: tripPattern.legs.filter((leg) => leg.mode !== Mode.Foot)
+      .length,
     legModes: tripPattern.legs.map((leg) => leg.mode),
     duration: tripPattern.duration,
   });
