@@ -24,13 +24,41 @@ runs:
     - name: Upload JS bundle and source maps
       continue-on-error: true
       shell: bash
-      run: sh ./scripts/ios/upload-sourcemaps.sh
+      run: |
+        delays=(10 30 60)
+        for attempt in 1 2 3; do
+          echo "Attempt $attempt of 3"
+          if sh ./scripts/ios/upload-sourcemaps.sh; then
+            echo "Upload succeeded on attempt $attempt"
+            exit 0
+          fi
+          if [ "$attempt" -lt 3 ]; then
+            echo "Upload failed, retrying in ${delays[$attempt-1]}s..."
+            sleep ${delays[$attempt-1]}
+          fi
+        done
+        echo "Upload failed after 3 attempts"
+        exit 1
       env:
         BUGSNAG_API_KEY: ${{ inputs.bugsnag-api-key }}
     - name: Upload dSYMs
       continue-on-error: true
       if: inputs.skip-dsyms != 'true'
       shell: bash
-      run: sh ./scripts/ios/upload-dsyms.sh
+      run: |
+        delays=(10 30 60)
+        for attempt in 1 2 3; do
+          echo "Attempt $attempt of 3"
+          if sh ./scripts/ios/upload-dsyms.sh; then
+            echo "Upload succeeded on attempt $attempt"
+            exit 0
+          fi
+          if [ "$attempt" -lt 3 ]; then
+            echo "Upload failed, retrying in ${delays[$attempt-1]}s..."
+            sleep ${delays[$attempt-1]}
+          fi
+        done
+        echo "Upload failed after 3 attempts"
+        exit 1
       env:
         BUGSNAG_API_KEY: ${{ inputs.bugsnag-api-key }}

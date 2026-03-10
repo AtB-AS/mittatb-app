@@ -21,20 +21,62 @@ runs:
     - name: Upload JS bundle and source maps
       continue-on-error: true
       shell: bash
-      run: bash ./scripts/android/upload-sourcemaps.sh
+      run: |
+        delays=(10 30 60)
+        for attempt in 1 2 3; do
+          echo "Attempt $attempt of 3"
+          if bash ./scripts/android/upload-sourcemaps.sh; then
+            echo "Upload succeeded on attempt $attempt"
+            exit 0
+          fi
+          if [ "$attempt" -lt 3 ]; then
+            echo "Upload failed, retrying in ${delays[$attempt-1]}s..."
+            sleep ${delays[$attempt-1]}
+          fi
+        done
+        echo "Upload failed after 3 attempts"
+        exit 1
       env:
         BUGSNAG_API_KEY: ${{ inputs.bugsnag-api-key }}
     - name: Upload Android NDK files
       continue-on-error: true
       if: inputs.skip-native != 'true'
       shell: bash
-      run: bash ./scripts/android/upload-ndk.sh
+      run: |
+        delays=(10 30 60)
+        for attempt in 1 2 3; do
+          echo "Attempt $attempt of 3"
+          if bash ./scripts/android/upload-ndk.sh; then
+            echo "Upload succeeded on attempt $attempt"
+            exit 0
+          fi
+          if [ "$attempt" -lt 3 ]; then
+            echo "Upload failed, retrying in ${delays[$attempt-1]}s..."
+            sleep ${delays[$attempt-1]}
+          fi
+        done
+        echo "Upload failed after 3 attempts"
+        exit 1
       env:
         BUGSNAG_API_KEY: ${{ inputs.bugsnag-api-key }}
     - name: Upload Android Proguard files
       continue-on-error: true
       if: inputs.skip-native != 'true'
       shell: bash
-      run: bash ./scripts/android/upload-proguard.sh
+      run: |
+        delays=(10 30 60)
+        for attempt in 1 2 3; do
+          echo "Attempt $attempt of 3"
+          if bash ./scripts/android/upload-proguard.sh; then
+            echo "Upload succeeded on attempt $attempt"
+            exit 0
+          fi
+          if [ "$attempt" -lt 3 ]; then
+            echo "Upload failed, retrying in ${delays[$attempt-1]}s..."
+            sleep ${delays[$attempt-1]}
+          fi
+        done
+        echo "Upload failed after 3 attempts"
+        exit 1
       env:
         BUGSNAG_API_KEY: ${{ inputs.bugsnag-api-key }}
