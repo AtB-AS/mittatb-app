@@ -97,7 +97,9 @@ export const DatePickerSheet = <T extends string>({
               locale={locale.localeString}
               onStateChange={(state) => setIsSpinning(state === 'spinning')}
               // Applies timezone offset between CET and UTC to enforce CET timezone on date picker
-              timeZoneOffsetInMinutes={getTimeZoneOffsetInMinutes()}
+              timeZoneOffsetInMinutes={getTimeZoneOffsetInMinutes(
+                parseDate(date),
+              )}
               theme={themeName}
             />
           </GestureDetector>
