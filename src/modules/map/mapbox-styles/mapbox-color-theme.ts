@@ -7,5 +7,5 @@
  * - slightly brighter
  * - slightly less saturation
  */
-import data from './mapbox-color-theme.json';
+import data from './mapbox-color-theme-data.json';
 export const colorTheme = data; // To avoid slow ts processing, the data is in its own json file.
