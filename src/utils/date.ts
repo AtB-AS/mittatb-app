@@ -683,7 +683,7 @@ export const convertIsoStringFieldsToDate = (value: any): any => {
   return value;
 };
 
-export const getTimeZoneOffsetInMinutes = () => {
-  const offsetMs = getTimezoneOffset(CET, new Date());
+export const getTimeZoneOffsetInMinutes = (date: Date) => {
+  const offsetMs = getTimezoneOffset(CET, date);
   return offsetMs / ONE_MINUTE_MS;
 };

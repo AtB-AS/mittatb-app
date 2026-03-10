@@ -14,10 +14,6 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_apple_pay',
   },
   {
-    name: 'isBackendSmsAuthEnabled',
-    remoteConfigKey: 'enable_backend_sms_auth',
-  },
-  {
     name: 'isCarSharingInMapEnabled',
     remoteConfigKey: 'enable_car_sharing_in_map',
   },
@@ -42,18 +38,6 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_flexible_transport',
   },
   {
-    name: 'isFlexibleTransportOnAccessModeEnabled',
-    remoteConfigKey: 'use_flexible_on_accessMode',
-  },
-  {
-    name: 'isFlexibleTransportOnDirectModeEnabled',
-    remoteConfigKey: 'use_flexible_on_directMode',
-  },
-  {
-    name: 'isFlexibleTransportOnEgressModeEnabled',
-    remoteConfigKey: 'use_flexible_on_egressMode',
-  },
-  {
     name: 'isFromTravelSearchToTicketBoatEnabled',
     remoteConfigKey: 'enable_from_travel_search_to_ticket_boat',
   },
@@ -68,10 +52,6 @@ export const toggleSpecifications = [
   {
     name: 'isGeofencingZonesAsTilesEnabled',
     remoteConfigKey: 'enable_geofencing_zones_as_tiles',
-  },
-  {
-    name: 'isLoadingErrorScreenEnabled',
-    remoteConfigKey: 'enable_loading_error_screen',
   },
   {
     name: 'isLoadingScreenEnabled',
@@ -108,10 +88,6 @@ export const toggleSpecifications = [
   {
     name: 'isPushNotificationsEnabled',
     remoteConfigKey: 'enable_push_notifications',
-  },
-  {
-    name: 'isRealtimeMapEnabled',
-    remoteConfigKey: 'enable_realtime_map',
   },
   {
     name: 'isRefundsEnabled',

@@ -10,10 +10,6 @@ export type AuthStatus =
 
 export type AuthReducerAction =
   | {type: 'SIGN_IN_INITIATED'; phoneNumber: string}
-  | {
-      type: 'LEGACY_SIGN_IN_INITIATED';
-      confirmationHandler: FirebaseAuthTypes.ConfirmationResult;
-    }
   | {type: 'SET_USER'; user: FirebaseAuthTypes.User}
   | {type: 'SET_ID_TOKEN'; idTokenResult: FirebaseAuthTypes.IdTokenResult}
   | {type: 'SET_FETCH_ID_TOKEN_TIMEOUT'}
