@@ -30,7 +30,6 @@ import {
 } from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemeText} from '@atb/components/text';
-import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type Props = {
   navigateSupportCallback: () => void;
@@ -39,6 +38,7 @@ type Props = {
   mapViewRef: RefObject<MapView | null>;
   locationArrowOnPress: () => void;
   navigateToScanQrCode: () => void;
+  isFocusedAndActive: boolean;
 };
 
 export const ActiveScooterSheet = ({
@@ -48,9 +48,9 @@ export const ActiveScooterSheet = ({
   mapViewRef,
   locationArrowOnPress,
   navigateToScanQrCode,
+  isFocusedAndActive,
 }: Props) => {
   useKeepAwake();
-  const isFocusedAndActive = useIsFocusedAndActive();
   const {
     data: activeBooking,
     isLoading,
@@ -142,7 +142,7 @@ export const ActiveScooterSheet = ({
         activeBooking ? (
           <ShmoTripCard
             shmoBooking={activeBooking}
-            isFocused={isFocusedAndActive}
+            isFocusedAndActive={isFocusedAndActive}
           />
         ) : null
       }

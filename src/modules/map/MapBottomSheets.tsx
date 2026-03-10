@@ -35,7 +35,6 @@ import {useWindowDimensions} from 'react-native';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {MapBottomSheetType, useMapContext} from './MapContext';
-import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type MapBottomSheetsProps = {
   mapViewRef: RefObject<MapboxGL.MapView | null>;
@@ -50,6 +49,7 @@ type MapBottomSheetsProps = {
   navigateToScanQrCode: () => void;
   navigateToLogin: () => void;
   navigateToPaymentMethods: () => void;
+  isFocusedAndActive: boolean;
 };
 
 export const MapBottomSheets = ({
@@ -65,6 +65,7 @@ export const MapBottomSheets = ({
   navigateToScanQrCode,
   navigateToLogin,
   navigateToPaymentMethods,
+  isFocusedAndActive,
 }: MapBottomSheetsProps) => {
   const [openPaymentType, setOpenPaymentType] = useState<boolean>(false);
   const {
@@ -73,7 +74,6 @@ export const MapBottomSheets = ({
     setCurrentBottomSheet,
     currentBottomSheet,
   } = useMapContext();
-  const isFocusedAndActive = useIsFocusedAndActive();
   const {data: activeBooking} = useActiveShmoBookingQuery(isFocusedAndActive);
   const {bottomSheetMapRef} = useBottomSheetContext();
 
@@ -212,6 +212,7 @@ export const MapBottomSheets = ({
           }}
           locationArrowOnPress={locationArrowOnPress}
           navigateToScanQrCode={navigateToScanQrCode}
+          isFocusedAndActive={isFocusedAndActive}
         />
       )}
       {activeBooking?.state === ShmoBookingState.FINISHING && (

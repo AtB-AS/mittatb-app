@@ -12,13 +12,16 @@ import {ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
 
 type ShmoTripCardProps = {
   shmoBooking: ShmoBooking;
-  isFocused: boolean;
+  isFocusedAndActive: boolean;
 };
 
-export const ShmoTripCard = ({shmoBooking, isFocused}: ShmoTripCardProps) => {
+export const ShmoTripCard = ({
+  shmoBooking,
+  isFocusedAndActive,
+}: ShmoTripCardProps) => {
   const styles = useStyles();
   const {serverNow} = useTimeContext(
-    isFocused ? ONE_SECOND_MS * 5 : ONE_MINUTE_MS,
+    isFocusedAndActive ? ONE_SECOND_MS * 5 : ONE_MINUTE_MS,
   );
   const backgroundColor = useTransportColor('scooter', 'escooter');
 

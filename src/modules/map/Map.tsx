@@ -74,7 +74,7 @@ const DEFAULT_ZOOM_LEVEL = 14.5;
 export const Map = (props: MapProps) => {
   const {
     includeSnackbar,
-    isFocused,
+    isFocusedAndActive,
     tabBarHeight,
     navigateToScooterSupport,
     navigateToScooterOnboarding,
@@ -110,7 +110,7 @@ export const Map = (props: MapProps) => {
       mapFilter?.mobility.CAR?.showAll) ??
     false;
   const shouldShowVehiclesAndStations =
-    isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
+    isFocusedAndActive && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
 
   const selectedFeature = mapState.feature;
 
@@ -122,7 +122,8 @@ export const Map = (props: MapProps) => {
   const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
-  const {data: activeShmoBooking} = useActiveShmoBookingQuery(isFocused);
+  const {data: activeShmoBooking} =
+    useActiveShmoBookingQuery(isFocusedAndActive);
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&
@@ -497,6 +498,7 @@ export const Map = (props: MapProps) => {
         navigateToLogin={navigateToLogin}
         navigateToPaymentMethods={navigateToPaymentMethods}
         locationArrowOnPress={locationArrowOnPress}
+        isFocusedAndActive={isFocusedAndActive}
       />
     </View>
   );
