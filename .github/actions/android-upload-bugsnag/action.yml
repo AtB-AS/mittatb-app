@@ -19,17 +19,20 @@ runs:
         echo "BUNDLE_PATH=android/app/build/generated/assets/react/$(echo ${APP_FLAVOR}${APP_ENVIRONMENT^})/index.android.bundle" >> $GITHUB_ENV
         echo "SOURCEMAP_PATH=android/app/build/generated/sourcemaps/react/$(echo $APP_FLAVOR${APP_ENVIRONMENT^})/index.android.bundle.map" >> $GITHUB_ENV
     - name: Upload JS bundle and source maps
+      continue-on-error: true
       shell: bash
       run: bash ./scripts/android/upload-sourcemaps.sh
       env:
         BUGSNAG_API_KEY: ${{ inputs.bugsnag-api-key }}
     - name: Upload Android NDK files
+      continue-on-error: true
       if: inputs.skip-native != 'true'
       shell: bash
       run: bash ./scripts/android/upload-ndk.sh
       env:
         BUGSNAG_API_KEY: ${{ inputs.bugsnag-api-key }}
     - name: Upload Android Proguard files
+      continue-on-error: true
       if: inputs.skip-native != 'true'
       shell: bash
       run: bash ./scripts/android/upload-proguard.sh
