@@ -13,8 +13,8 @@ import {ThemeText} from '@atb/components/text';
 import {Linking, Platform, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {NativeBlockButton} from '@atb/components/native-button';
-import {bonusOnboardingId} from './config';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {KnownProgramId} from '@atb/modules/enrollment';
 
 export type DownloadScreenProps =
   OnboardingCarouselScreenProps<'BonusOnboarding_DownloadScreen'>;
@@ -25,7 +25,7 @@ export const BonusOnboarding_DownloadScreen = ({
   const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
   const {navigateToNextScreen} = useOnboardingCarouselNavigation(
-    bonusOnboardingId,
+    KnownProgramId.BONUS,
     'BonusOnboarding_DownloadScreen',
   );
 

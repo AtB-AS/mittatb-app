@@ -1,10 +1,11 @@
-import {bonusOnboardingId, BonusOnboardingScreenName} from '@atb/modules/bonus';
+import {BonusOnboardingScreenName} from '@atb/modules/bonus';
 import {extendedOnboardingId} from '../extended-onboarding';
 import {ExtendedOnboardingScreenName} from '../extended-onboarding';
 import {
   sparOnboardingId,
   SparPilotOnboardingScreenName,
 } from '@atb/modules/smart-park-and-ride';
+import {KnownProgramId} from '@atb/modules/enrollment';
 
 export type OnboardingCarouselScreenName =
   | BonusOnboardingScreenName
@@ -12,7 +13,7 @@ export type OnboardingCarouselScreenName =
   | SparPilotOnboardingScreenName;
 
 export type OnboardingCarouselConfigId =
-  | typeof bonusOnboardingId
+  | typeof KnownProgramId.BONUS
   | typeof extendedOnboardingId
   | typeof sparOnboardingId;
 
