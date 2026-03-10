@@ -18,7 +18,7 @@ import {
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Results} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/Results';
 
-import {useTrips} from './use-trips';
+import {TripsProps, useTrips} from './use-trips';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {Language, TripSearchTexts, useTranslation} from '@atb/translations';
 import {isInThePast} from '@atb/utils/date';
@@ -46,11 +46,14 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {CityZoneMessage} from './components/CityZoneMessage';
 import {TripPattern} from '@atb/api/types/trips';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trips-query';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {areDefaultFiltersSelected, getSearchTimeLabel} from './utils';
+import {
+  areDefaultFiltersSelected,
+  getSearchTimeLabel,
+  sanitizeSearchTime,
+} from './utils';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   GlobalMessage,
@@ -97,16 +100,35 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const timePickerBottomSheetModalRef = useRef<BottomSheetModal | null>(null);
   const timePickerCloseRef = useRef<View | null>(null);
 
+  const {isFlexibleTransportEnabled: isFlexibleTransportEnabledInRemoteConfig} =
+    useFeatureTogglesContext();
+
   const {location} = useGeolocationContext();
 
   const currentLocation = location || undefined;
 
   const {from, to} = useLocations(currentLocation);
+  const tripSearchEnabled = isValidTripLocations(from, to);
 
   const filtersState = useTravelSearchFiltersState();
 
-  const {isFlexibleTransportEnabled: isFlexibleTransportEnabledInRemoteConfig} =
-    useFeatureTogglesContext();
+  const arriveBy = searchTime.option === 'arrival';
+  const sanitizedSearchTime = useMemo(
+    () => sanitizeSearchTime(searchTime),
+    [searchTime],
+  );
+
+  const tripsProps: TripsProps = useMemo(
+    () => ({
+      fromLocation: from,
+      toLocation: to,
+      searchTime: sanitizedSearchTime,
+      arriveBy,
+      travelSearchFiltersSelection: filtersState.filtersSelection,
+    }),
+    [from, to, sanitizedSearchTime, arriveBy, filtersState.filtersSelection],
+  );
+
   const {
     tripPatterns,
     timeOfLastSearch,
@@ -115,14 +137,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     tripsSearchState,
     tripsIsError,
     tripsIsNetworkError,
-  } = useTrips(from, to, searchTime, filtersState.filtersSelection);
-
-  const {nonTransitTrips} = useNonTransitTripsQuery(
-    from,
-    to,
-    searchTime,
-    filtersState.filtersSelection,
-  );
+  } = useTrips(tripsProps, tripSearchEnabled);
 
   const isSearching = tripsSearchState === 'searching';
   const showEmptyScreen = !tripPatterns && !isSearching && !tripsIsError;
@@ -241,10 +256,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     });
     refetchTrips();
   }, [from, to, currentLocation, searchTime, navigation, refetchTrips]);
-
-  const nonTransitTripsVisible =
-    (tripPatterns.length > 0 || tripsSearchState === 'search-empty-result') &&
-    nonTransitTrips.length > 0;
 
   const refreshControlProps = useMemo(() => {
     // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
@@ -437,9 +448,9 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     }}
                   />
                 )}
-              {nonTransitTripsVisible && (
+              {tripSearchEnabled && (
                 <NonTransitResults
-                  tripPatterns={nonTransitTrips}
+                  tripsProps={tripsProps}
                   onDetailsPressed={onPressed}
                 />
               )}

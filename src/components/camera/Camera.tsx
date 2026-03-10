@@ -163,9 +163,7 @@ export const Camera = ({
   }
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom: safeBottomInset} = useSafeAreaInsets();
-
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     container: {
       flex: 1,
@@ -200,7 +198,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       right: 0,
       bottom: 0,
       paddingTop: theme.spacing.large,
-      paddingBottom: safeBottomInset + theme.spacing.medium,
+      paddingBottom: bottom + theme.spacing.medium,
       alignItems: 'center',
       gap: theme.spacing.large,
       backgroundColor: 'black',

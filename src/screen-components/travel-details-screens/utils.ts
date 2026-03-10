@@ -440,10 +440,7 @@ export function getIsTooLateToBookFlexLine(
 
 export const getShouldShowLiveVehicle = (
   estimatedCalls: Pick<EstimatedCall, 'aimedDepartureTime'>[],
-  realtimeMapEnabled: boolean,
 ): boolean => {
-  if (!realtimeMapEnabled) return false;
-
   const aimedStartTime: string | undefined =
     estimatedCalls[0]?.aimedDepartureTime;
   return aimedStartTime

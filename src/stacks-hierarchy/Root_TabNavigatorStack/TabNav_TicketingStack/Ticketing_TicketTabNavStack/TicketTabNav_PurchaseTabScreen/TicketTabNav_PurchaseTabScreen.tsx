@@ -1,5 +1,4 @@
 import {useAuthContext} from '@atb/modules/auth';
-import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {AnonymousPurchaseWarning} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/AnonymousPurchaseWarning';
 import {FareProducts} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProducts';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -7,7 +6,6 @@ import React from 'react';
 import {RefreshControl, ScrollView, View} from 'react-native';
 import {RecentFareContracts} from './Components/RecentFareContracts/RecentFareContracts';
 import {TicketTabNavScreenProps} from '../navigation-types';
-import {UpgradeSplash} from './Components/UpgradeSplash';
 import {FareProductTypeConfig} from '@atb/modules/configuration';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
@@ -22,7 +20,6 @@ import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
 export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
-  const {must_upgrade_ticketing} = useRemoteConfigContext();
   const {authenticationType} = useAuthContext();
   const {theme} = useThemeContext();
   const {
@@ -41,8 +38,6 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const hasRecentFareContracts = !!recentFareContracts.length;
   const styles = useStyles();
   const analytics = useAnalyticsContext();
-
-  if (must_upgrade_ticketing) return <UpgradeSplash />;
 
   const onProductSelect = (fareProductTypeConfig: FareProductTypeConfig) => {
     analytics.logEvent('Ticketing', 'Fare product selected', {

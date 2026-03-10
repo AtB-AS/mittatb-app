@@ -12,10 +12,12 @@ import {ValidityTime} from '../components/ValidityTime';
 
 type Props = {
   fareContract: FareContractType;
+  now: number;
 };
 
 export const FareContractHeaderSectionItem = ({
   fareContract: fc,
+  now,
   ...props
 }: SectionItemProps<Props>) => {
   const {topContainer} = useSectionItem(props);
@@ -24,10 +26,10 @@ export const FareContractHeaderSectionItem = ({
 
   return (
     <View style={[topContainer, styles.sectionItemOverrides]}>
-      <WithValidityLine fc={fc}>
+      <WithValidityLine fc={fc} now={now}>
         <ProductName fc={fc} />
-        <ValidityTime fc={fc} />
-        <ValidTo fc={fc} />
+        <ValidityTime fc={fc} now={now} />
+        <ValidTo fc={fc} now={now} />
         <Description fc={fc} />
       </WithValidityLine>
       <View style={styles.fareContractDetails}>

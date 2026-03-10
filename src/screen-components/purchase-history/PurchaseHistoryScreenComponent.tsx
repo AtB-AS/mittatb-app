@@ -17,19 +17,24 @@ import {ThemedTicketTilted} from '@atb/theme/ThemedAssets';
 import {sortFcOrReservationByCreation} from '@atb/modules/fare-contracts';
 import {FareContractType} from '@atb-as/utils';
 import {ThemeText} from '@atb/components/text';
+import {ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
 
 type Props = {
   onPressFareContract: (fareContractId: string) => void;
   onNavigateToBonusScreen: () => void;
+  isFocused: boolean;
 };
 
 export const PurchaseHistoryScreenComponent = ({
   onPressFareContract,
   onNavigateToBonusScreen,
+  isFocused,
 }: Props) => {
   const {sentFareContracts, reservations, rejectedReservations} =
     useTicketingContext();
-  const {serverNow} = useTimeContext();
+  const {serverNow} = useTimeContext(
+    isFocused ? ONE_SECOND_MS * 5 : ONE_MINUTE_MS,
+  );
   const analytics = useAnalyticsContext();
   const {fareContracts: historicalFareContracts} = useFareContracts(
     {availability: 'historical'},

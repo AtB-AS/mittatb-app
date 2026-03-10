@@ -13,22 +13,14 @@ import {View} from 'react-native';
 import {Route} from '@react-navigation/native';
 import {ThemeText} from '@atb/components/text';
 import {NativeBlockButton} from '@atb/components/native-button';
-import {useTimeContext} from '@atb/modules/time';
+import {getServerNowGlobal} from '@atb/modules/time';
 
 const TopTabNav = createMaterialTopTabNavigator<TicketTabNavStackParams>();
 
 export const Ticketing_TicketTabNavStack = () => {
   const {t} = useTranslation();
 
-  const {serverNow} = useTimeContext();
-  const {fareContracts: availableFareContracts} = useFareContracts(
-    {availability: 'available'},
-    serverNow,
-  );
-  const initialRoute: keyof TicketTabNavStackParams =
-    availableFareContracts.length
-      ? 'TicketTabNav_AvailableFareContractsTabScreen'
-      : 'TicketTabNav_PurchaseTabScreen';
+  const initialRoute = useInitialRoute();
 
   return (
     <TopTabNav.Navigator
@@ -57,6 +49,20 @@ export const Ticketing_TicketTabNavStack = () => {
       />
     </TopTabNav.Navigator>
   );
+};
+
+// This hook is used to determine the initial route to navigate to when the
+// user opens the ticketing tab navigator. Using the global server time to avoid
+// re-rendering the component just because the server time has ticked forward a second.
+const useInitialRoute = () => {
+  const {fareContracts: availableFareContracts} = useFareContracts(
+    {availability: 'available'},
+    getServerNowGlobal(),
+  );
+
+  return availableFareContracts.length
+    ? 'TicketTabNav_AvailableFareContractsTabScreen'
+    : 'TicketTabNav_PurchaseTabScreen';
 };
 
 const TabBar: React.FC<MaterialTopTabBarProps> = ({

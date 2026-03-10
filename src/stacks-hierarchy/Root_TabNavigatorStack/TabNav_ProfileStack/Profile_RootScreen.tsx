@@ -46,6 +46,7 @@ import {
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {KnownProgramId, useIsEnrolled} from '@atb/modules/enrollment';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -66,11 +67,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {setEnabled: setStorybookEnabled} = useStorybookContext();
   const [isLoading, setIsLoading] = useIsLoading(false);
   const {
-    isBonusProgramEnabled,
     isSmartParkAndRideEnabled,
     isEventStreamEnabled,
     isEventStreamFareContractsEnabled,
   } = useFeatureTogglesContext();
+  const isBonusEnabled = useIsEnrolled(KnownProgramId.BONUS);
   const unreadCount = useChatUnreadCount();
   const {theme} = useThemeContext();
   const {enable_intercom} = useRemoteConfigContext();
@@ -145,7 +146,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 testID="settingsButton"
               />
             </Section>
-            {isBonusProgramEnabled && (
+            {isBonusEnabled && (
               <Section>
                 <LinkSectionItem
                   text={t(
@@ -226,7 +227,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             )}
           </Section>
           {enable_ticketing && (
-            <>
+            <View>
               <ContentHeading
                 text={t(ProfileTexts.sections.information.heading)}
               />
@@ -240,7 +241,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   testID="informationButton"
                 />
               </Section>
-            </>
+            </View>
           )}
           <ContentHeading text={t(ProfileTexts.sections.contact.heading)} />
           <Section>
@@ -276,7 +277,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           {(!!JSON.parse(IS_QA_ENV || 'false') ||
             __DEV__ ||
             customerProfile?.debug) && (
-            <>
+            <View>
               <ContentHeading text="Developer menu" />
               <Section>
                 <LinkSectionItem
@@ -296,7 +297,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   onPress={() => navigation.navigate('Profile_DebugInfoScreen')}
                 />
               </Section>
-            </>
+            </View>
           )}
           {authenticationType === 'phone' && (
             <Button

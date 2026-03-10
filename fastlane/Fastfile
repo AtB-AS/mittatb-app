@@ -222,6 +222,19 @@ platform :ios do
     )
   end
 
+  desc 'Enable Apple Pay entitlement'
+  lane :enable_apple_pay_entitlement do
+    ensure_env_vars(
+      env_vars: ['APPLE_PAY_MERCHANT_ID']
+    )
+    update_plist(
+      plist_path: "./ios/atb/AtB.entitlements",
+      block: proc do |plist|
+        plist['com.apple.developer.in-app-payments'] = [ENV['APPLE_PAY_MERCHANT_ID']]
+      end
+    )
+  end
+
   lane :verify_installed_certificates do |options|
     keychain_path = options[:keychain] || File.expand_path("/Library/Keychains/System.keychain")
 

@@ -191,6 +191,9 @@ module.exports = {
         ],
       },
     ],
+
+    // Error on React hooks being called inside StyleSheet.createThemeHook
+    'rulesdir/no-hooks-in-create-theme-hook': 'error',
   },
   overrides: [
     // Allow 'export default' from these paths

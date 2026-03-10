@@ -36,7 +36,6 @@ import {Announcements} from './components/Announcements';
 import SharedTexts from '@atb/translations/shared';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {BonusDashboard} from './components/BonusDashboard';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
@@ -46,6 +45,7 @@ import {TripPattern} from '@atb/api/types/trips';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {WithOverlayButton} from '@atb/components/overlay-button';
+import {KnownProgramId, useIsEnrolled} from '@atb/modules/enrollment';
 
 type RootProps = DashboardScreenProps<'Dashboard_RootScreen'>;
 const callerRoute: LocationSearchCallerRoute = [
@@ -68,7 +68,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
   const analytics = useAnalyticsContext();
 
-  const {isBonusProgramEnabled} = useFeatureTogglesContext();
+  const isBonusEnabled = useIsEnrolled(KnownProgramId.BONUS);
   const {locationIsAvailable, location} = useGeolocationContext();
   const focusRef = useFocusOnLoad(navigation);
   const isFocused = useIsFocusedAndActive();
@@ -292,10 +292,12 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
 
         <Announcements
           style={[style.contentSection, style.contentSection__horizontalScroll]}
+          isFocused={isFocused}
         />
 
         {enable_ticketing && (
           <CompactFareContracts
+            isFocused={isFocused}
             style={style.contentSection}
             onPressDetails={(fareContractId: string) => {
               return navigation.navigate({
@@ -317,9 +319,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
             }}
           />
         )}
-        {isBonusProgramEnabled && (
-          <BonusDashboard onPress={navigateToBonusScreen} />
-        )}
+        {isBonusEnabled && <BonusDashboard onPress={navigateToBonusScreen} />}
         <DeparturesWidget
           style={style.contentSection}
           onEditFavouriteDeparture={navigateToFavoriteDeparturesScreen}

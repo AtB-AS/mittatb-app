@@ -10,7 +10,8 @@ if [[
     exit 1
 else 
     echo "Uploading iOS dsyms"
-    curl --http1.1 https://upload.bugsnag.com/ \
-    -F apiKey=$BUGSNAG_API_KEY \
-    -F dsym=@AtB.app.dSYM.zip
+    bugsnag-cli upload xcode-build \
+        --api-key="${BUGSNAG_API_KEY}" \
+        AtB.app.dSYM.zip \
+        --verbose
 fi

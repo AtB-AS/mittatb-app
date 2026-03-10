@@ -8,20 +8,20 @@ import {
 } from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import {getFareContractInfo, getReservationStatus} from '../utils';
-import {useTimeContext} from '@atb/modules/time';
 import {useAuthContext} from '@atb/modules/auth';
 import {findReferenceDataById} from '@atb/modules/configuration';
 
 type Props = PropsWithChildren<
-  | {
-      fc: FareContractType;
-    }
-  | ({reservation: Reservation} & {enabledLine?: boolean})
+  (
+    | {
+        fc: FareContractType;
+      }
+    | ({reservation: Reservation} & {enabledLine?: boolean})
+  ) & {now: number}
 >;
 
 export const WithValidityLine = (props: Props) => {
   const styles = useStyles();
-  const {serverNow} = useTimeContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
 
@@ -46,7 +46,7 @@ export const WithValidityLine = (props: Props) => {
       firstTravelRight.fareProductRef,
     );
     const {validityStatus} = getFareContractInfo(
-      serverNow,
+      props.now,
       props.fc,
       currentUserId,
     );

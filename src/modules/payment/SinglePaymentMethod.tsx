@@ -3,11 +3,13 @@ import {PaymentMethod, PaymentSelection} from './types';
 import {humanizePaymentType, PaymentType} from '@atb/modules/ticketing';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {NativeBlockButton} from '@atb/components/native-button';
-import {View} from 'react-native';
+import {Platform, View} from 'react-native';
+import {NativeApplePayHandler} from '@atb/modules/native';
 import {getRadioA11y, RadioIcon} from '@atb/components/radio';
 import {ThemeText} from '@atb/components/text';
 import {PaymentBrand} from './PaymentBrand';
 import {ExpiryMessage, getExpiryMessageText} from './ExpiryMessage';
+import {useFeatureTogglesContext} from '../feature-toggles';
 
 type SinglePaymentMethodProps = {
   paymentMethod: PaymentMethod;
@@ -23,6 +25,7 @@ export const SinglePaymentMethod = ({
   index,
 }: SinglePaymentMethodProps) => {
   const {t, language} = useTranslation();
+  const {isApplePayEnabled} = useFeatureTogglesContext();
   const styles = useStyles();
 
   function getPaymentTexts(method: PaymentMethod): {
@@ -67,6 +70,15 @@ export const SinglePaymentMethod = ({
   const {theme} = useThemeContext();
   const radioColor = theme.color.interactive[2].outline.background;
   const paymentSelection = getPaymentSelection(paymentMethod);
+
+  if (
+    paymentMethod.paymentType === PaymentType.ApplePay &&
+    (Platform.OS !== 'ios' ||
+      !isApplePayEnabled ||
+      !NativeApplePayHandler.canMakePayments())
+  ) {
+    return null;
+  }
 
   return (
     <View style={styles.card}>

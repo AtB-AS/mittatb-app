@@ -3,7 +3,6 @@ import {StatusBar, View} from 'react-native';
 import {LoadingBody} from '../PhotoCapture/ScreenContainer';
 import {ThemeText} from '../text';
 import {StyleSheet} from '@atb/theme';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {NativeBorderlessButton} from '../native-button';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {ThemeIcon} from '../theme-icon';
@@ -69,8 +68,7 @@ export const CameraScreenContainer = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {top: safeTopInset} = useSafeAreaInsets();
+const useStyles = StyleSheet.createThemeHook((theme, {top: safeTopInset}) => {
   return {
     root: {
       flex: 1,

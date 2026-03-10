@@ -19,9 +19,10 @@ import {GenericSectionItem, Section} from '@atb/components/sections';
 
 type Props = {
   reservation: Reservation;
+  now: number;
 };
 
-export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
+export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
   const styles = useStyles();
   const {customerProfile} = useTicketingContext();
   const {t, language} = useTranslation();
@@ -54,6 +55,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
           <WithValidityLine
             reservation={reservation}
             enabledLine={status !== 'rejected'}
+            now={now}
           >
             <ThemeText typography="heading__l">
               {t(TicketingTexts.reservation[status])}
