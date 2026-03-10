@@ -2,8 +2,10 @@ import {parseDuration} from '../durations';
 
 describe('parseDuration', () => {
   describe('valid durations', () => {
-    test('parses seconds with fractional part', () => {
-      expect(parseDuration('PT20.345S')).toBeCloseTo(20.345);
+    test('rounds seconds with fractional part', () => {
+      expect(parseDuration('PT20.345S')).toBe(20);
+      expect(parseDuration('PT20.645S')).toBe(21);
+      expect(parseDuration('PT20.5S')).toBe(21);
     });
 
     test('parses minutes only', () => {
@@ -20,8 +22,8 @@ describe('parseDuration', () => {
 
     test('parses hours, minutes and fractional seconds', () => {
       const result = parseDuration('PT8H6M12.345S');
-      const expected = 8 * 3600 + 6 * 60 + 12.345;
-      expect(result).toBeCloseTo(expected);
+      const expected = 8 * 3600 + 6 * 60 + 12;
+      expect(result).toBe(expected);
     });
 
     test('parses with explicit positive sign', () => {

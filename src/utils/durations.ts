@@ -6,8 +6,9 @@ export const ONE_DAY_MS = 24 * ONE_HOUR_MS;
 export const ONE_WEEK_MS = 7 * ONE_DAY_MS;
 
 /**
- * Parses an duration string on the format `PT{hours}H{minutes}M{seconds}S`,
- * such as `PT8H6M12.345S` into a number of seconds.
+ * Parses duration strings on the format `PT{hours}H{minutes}M{seconds}S`, such
+ * as `PT8H6M12.345S` (ISO-8601) into a number of seconds, rounded off to the
+ * nearest second. Only hours, minutes and seconds are supported.
  */
 export function parseDuration(duration: string): number | undefined {
   // Matches ISO-8601 duration strings in the form PTnHnMnS with optional sign
@@ -29,7 +30,7 @@ export function parseDuration(duration: string): number | undefined {
 
   const hours = hoursPart ? Number.parseInt(hoursPart, 10) : 0;
   const minutes = minutesPart ? Number.parseInt(minutesPart, 10) : 0;
-  const seconds = secondsPart ? Number.parseFloat(secondsPart) : 0;
+  const seconds = secondsPart ? Math.round(Number.parseFloat(secondsPart)) : 0;
 
   const totalSeconds = sign * (hours * 3600 + minutes * 60 + seconds);
 
