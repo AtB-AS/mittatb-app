@@ -2,35 +2,25 @@ import {useThemeContext} from '@atb/theme';
 import {useMemo} from 'react';
 import {getMapboxLightStyle} from '../mapbox-styles/get-mapbox-light-style';
 import {getMapboxDarkStyle} from '../mapbox-styles/get-mapbox-dark-style';
+import {MAPBOX_API_TOKEN} from '@env';
+import {colorTheme} from '../mapbox-styles/mapbox-color-theme';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useAppVersionedConfigurableLink} from '@atb/utils/use-app-versioned-configurable-link';
+import {useGeofencingZonesLayers} from './use-geofencing-zones-layers';
 
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
-  GeofencingZones = 'geofencingZones',
-  GeofencingZones_allowed = 'geofencingZones_allowed',
-  GeofencingZones_slow = 'geofencingZones_slow',
-  GeofencingZones_noParking = 'geofencingZones_noParking',
-  GeofencingZones_noEntry = 'geofencingZones_noEntry',
+  GeofencingZones = 'geofencingZones', // can be removed once support for GeofencingZones not as tiles is removed
   Vehicles = 'vehicles',
   Stations = 'stations',
   NSRItems = 'nsrItems',
   SelectedFeature = 'selectedFeature',
 }
 
-const slotSourceKey = 'slotSource';
-// This source only exists for slots layers, no data is fetched.
-const slotSource: StyleJsonVectorSourcesObj = {
-  [slotSourceKey]: {type: 'vector'}, // type is required, but otherwise doesn't matter here.
-};
-
 // the order of this list, determines which layers render on top. Last is on top.
 const slotLayerIds: MapSlotLayerId[] = [
   MapSlotLayerId.GeofencingZones,
-  MapSlotLayerId.GeofencingZones_allowed,
-  MapSlotLayerId.GeofencingZones_slow,
-  MapSlotLayerId.GeofencingZones_noParking,
-  MapSlotLayerId.GeofencingZones_noEntry,
   MapSlotLayerId.Vehicles,
   MapSlotLayerId.Stations,
   MapSlotLayerId.NSRItems,
@@ -38,15 +28,20 @@ const slotLayerIds: MapSlotLayerId[] = [
 ];
 const slotLayers = slotLayerIds.map((slotLayerId) => ({
   id: slotLayerId,
-  type: 'symbol', // type is required, but otherwise doesn't matter here.
-  source: slotSourceKey,
+  type: 'slot',
 }));
 
-export const useMapboxJsonStyle: () => string | undefined = () => {
+export const useMapboxJsonStyle: (
+  shouldShowGeofencingZonesLayers: boolean,
+) => string | undefined = (shouldShowGeofencingZonesLayers) => {
   const {themeName} = useThemeContext();
   const {mapbox_user_name, mapbox_nsr_tileset_id} = useRemoteConfigContext();
+  const {isMap3dEnabled} = useFeatureTogglesContext();
 
   const mapboxSpriteUrl = useAppVersionedConfigurableLink('mapboxSpriteUrls');
+  const geofencingZonesLayers = useGeofencingZonesLayers(
+    shouldShowGeofencingZonesLayers,
+  );
 
   const themedStyleWithExtendedSourcesAndSlotLayers = useMemo(() => {
     const themedStyle =
@@ -54,27 +49,76 @@ export const useMapboxJsonStyle: () => string | undefined = () => {
         ? getMapboxDarkStyle(mapbox_user_name, mapbox_nsr_tileset_id)
         : getMapboxLightStyle(mapbox_user_name, mapbox_nsr_tileset_id);
 
+    const themedLayers = themedStyle.layers.map((layer) => ({
+      ...layer,
+      slot: 'middle', // above mapbox ground style, but below 3d buildings/items, https://docs.mapbox.com/mapbox-gl-js/guides/migrate/#layer-slots
+      paint: {
+        ...layer.paint,
+        // add emissive strength to everything in order to be unaffected by lightPreset
+        'background-emissive-strength': 1,
+        'fill-emissive-strength': 1,
+        'line-emissive-strength': 1,
+        'icon-emissive-strength': 1,
+        'circle-emissive-strength': 1,
+        'fill-extrusion-emissive-strength': 1,
+        'model-emissive-strength': 1,
+        'text-emissive-strength': 1,
+      },
+    }));
+
+    const themedLayersWithSlots = [
+      ...themedLayers,
+      ...geofencingZonesLayers,
+      ...slotLayers,
+    ];
+
     const extendedSources: StyleJsonVectorSourcesObj = {
       ...themedStyle.sources,
-      ...slotSource,
     };
-
-    const layersWithSlots = [...themedStyle.layers, ...slotLayers];
 
     return {
       ...themedStyle,
       sources: extendedSources,
-      layers: layersWithSlots,
+      layers: themedLayersWithSlots,
     };
-  }, [themeName, mapbox_user_name, mapbox_nsr_tileset_id]);
+  }, [
+    geofencingZonesLayers,
+    mapbox_nsr_tileset_id,
+    mapbox_user_name,
+    themeName,
+  ]);
 
   const mapboxJsonStyle = useMemo(
     () =>
       JSON.stringify({
         ...themedStyleWithExtendedSourcesAndSlotLayers,
         sprite: (mapboxSpriteUrl ?? '') + themeName,
+        projection: {name: 'mercator'}, // Using 'globe' instead looks pretty cool, but there is an initial frame flicker with zoom 0. Might be possible to fix somehow.
+        imports: isMap3dEnabled
+          ? [
+              {
+                id: 'basemap',
+                // url must be absolute for this to work
+                url: `https://api.mapbox.com/styles/v1/mapbox/standard?access_token=${MAPBOX_API_TOKEN}`,
+                config: {
+                  lightPreset: themeName === 'dark' ? 'night' : 'day',
+                  showPlaceLabels: true,
+                  showPointOfInterestLabels: false,
+                  showTransitLabels: false,
+                  showPedestrianRoads: true,
+                  showRoadLabels: false,
+                },
+                'color-theme': colorTheme,
+              },
+            ]
+          : [],
       }),
-    [themeName, mapboxSpriteUrl, themedStyleWithExtendedSourcesAndSlotLayers],
+    [
+      themedStyleWithExtendedSourcesAndSlotLayers,
+      mapboxSpriteUrl,
+      themeName,
+      isMap3dEnabled,
+    ],
   );
 
   return mapboxJsonStyle;

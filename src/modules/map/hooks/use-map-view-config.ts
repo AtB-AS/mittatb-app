@@ -17,8 +17,15 @@ const MapViewStaticConfig = {
   }),
 };
 
-export const useMapViewConfig = () => {
-  const mapboxJsonStyle = useMapboxJsonStyle();
+type MapViewConfigOptions = {
+  shouldShowGeofencingZonesLayers?: boolean;
+};
+
+export const useMapViewConfig = (
+  mapViewConfigOptions?: MapViewConfigOptions,
+) => {
+  const {shouldShowGeofencingZonesLayers = false} = mapViewConfigOptions || {};
+  const mapboxJsonStyle = useMapboxJsonStyle(shouldShowGeofencingZonesLayers);
   const configMap = useMemo(
     () => ({styleJSON: mapboxJsonStyle}),
     [mapboxJsonStyle],

@@ -12,6 +12,7 @@ import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
 import {useGeofencingZonesQuery} from '@atb/modules/mobility';
 import {useThemeContext} from '@atb/theme';
 import {getIconZoomTransitionStyle} from '../../utils';
+import {hideItemsInTheDistanceFilter} from '../../hooks/use-map-symbol-styles';
 import {
   AllLayerStyleProps,
   Expression,
@@ -99,6 +100,7 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
     lineOpacity,
     lineCap: 'round',
     lineJoin: 'round',
+    lineEmissiveStrength: 1,
   };
 
   return (
@@ -113,6 +115,7 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
           fillAntialias: true,
           fillColor: bgColor,
           fillOpacity,
+          fillEmissiveStrength: 1,
         }}
         aboveLayerID={MapSlotLayerId.GeofencingZones}
       />
@@ -177,13 +180,14 @@ export const GeofencingZoneIcon: React.FC<GeofencingZoneIconProps> = ({
     >
       <MapboxGL.SymbolLayer
         id="geofencingZoneIcon"
+        filter={hideItemsInTheDistanceFilter}
         style={{
-          symbolZOrder: 'source',
           iconAllowOverlap: true,
           iconIgnorePlacement: true,
-          iconImage: iconImage,
+          iconImage,
           iconOpacity,
           iconSize,
+          iconEmissiveStrength: 1,
         }}
         aboveLayerID={MapSlotLayerId.GeofencingZones}
       />

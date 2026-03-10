@@ -30,7 +30,7 @@ $RNFirebaseAsStaticFramework = true
 production = ENV["PRODUCTION"] == "1"
 
 $RNMapboxMapsImpl = 'mapbox'
-$RNMapboxMapsVersion = '~> 11.15.0'
+$RNMapboxMapsVersion = '~> 11.16.2'
 
 target 'app' do
   config = use_native_modules!

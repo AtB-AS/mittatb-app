@@ -33,6 +33,8 @@ export type RemoteConfig = {
   enable_geofencing_zones_as_tiles: boolean;
   enable_intercom: boolean;
   enable_loading_screen: boolean;
+  enable_map_3d: boolean;
+  enable_map_pitch: boolean;
   enable_non_transit_trip_search: boolean;
   enable_nynorsk: boolean;
   enable_new_token_barcode: boolean;
@@ -99,6 +101,8 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_geofencing_zones_as_tiles: false,
   enable_intercom: false,
   enable_loading_screen: true,
+  enable_map_3d: true,
+  enable_map_pitch: false,
   enable_non_transit_trip_search: true,
   enable_new_token_barcode: false,
   enable_new_token_barcode_base64: false,
@@ -204,6 +208,11 @@ export function getConfig(): RemoteConfig {
   const enable_loading_screen =
     values['enable_loading_screen']?.asBoolean() ??
     defaultRemoteConfig.enable_loading_screen;
+  const enable_map_3d =
+    values['enable_map_3d']?.asBoolean() ?? defaultRemoteConfig.enable_map_3d;
+  const enable_map_pitch =
+    values['enable_map_pitch']?.asBoolean() ??
+    defaultRemoteConfig.enable_map_pitch;
   const enable_non_transit_trip_search =
     values['enable_non_transit_trip_search']?.asBoolean() ??
     defaultRemoteConfig.enable_non_transit_trip_search;
@@ -338,6 +347,8 @@ export function getConfig(): RemoteConfig {
     enable_geofencing_zones_as_tiles,
     enable_intercom,
     enable_loading_screen,
+    enable_map_3d,
+    enable_map_pitch,
     enable_non_transit_trip_search,
     enable_new_token_barcode,
     enable_new_token_barcode_base64,

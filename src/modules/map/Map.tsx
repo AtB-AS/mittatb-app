@@ -119,8 +119,11 @@ export const Map = (props: MapProps) => {
 
   const selectedFeatureIsAVehicle = isVehicle(selectedFeature);
 
-  const {isGeofencingZonesEnabled, isGeofencingZonesAsTilesEnabled} =
-    useFeatureTogglesContext();
+  const {
+    isGeofencingZonesEnabled,
+    isGeofencingZonesAsTilesEnabled,
+    isMapPitchEnabled,
+  } = useFeatureTogglesContext();
 
   const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
@@ -147,7 +150,11 @@ export const Map = (props: MapProps) => {
   const vehicleTypeId =
     vehicle?.vehicleType.id ?? activeShmoBooking?.asset.vehicleTypeId ?? null;
 
-  const mapViewConfig = useMapViewConfig();
+  // Always including the vector sources avoids laggy transitions for iOS (but buggy on Android, so skipped there),
+  // and tile requests are only sent when they are used anyway.
+  const mapViewConfig = useMapViewConfig({
+    shouldShowGeofencingZonesLayers: !!systemId && !!vehicleTypeId,
+  });
 
   const [followUserLocation, setFollowUserLocation] = useState(false);
   const mapPropertiesRef = useRef<MapPropertiesType | null>({
@@ -373,7 +380,7 @@ export const Map = (props: MapProps) => {
           style={{
             flex: 1,
           }}
-          pitchEnabled={false}
+          pitchEnabled={isMapPitchEnabled}
           onPress={onFeatureClick}
           testID="mapView"
           onTouchStart={() => {
