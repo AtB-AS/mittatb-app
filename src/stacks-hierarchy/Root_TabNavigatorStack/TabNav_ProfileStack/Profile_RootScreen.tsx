@@ -46,7 +46,7 @@ import {
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {ProgramId, useIsEnrolled} from '@atb/modules/enrollment';
+import {KnownProgramId, useIsEnrolled} from '@atb/modules/enrollment';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -71,7 +71,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     isEventStreamEnabled,
     isEventStreamFareContractsEnabled,
   } = useFeatureTogglesContext();
-  const isBonusEnabled = useIsEnrolled(ProgramId.BONUS);
+  const isBonusEnabled = useIsEnrolled(KnownProgramId.BONUS);
   const unreadCount = useChatUnreadCount();
   const {theme} = useThemeContext();
   const {enable_intercom} = useRemoteConfigContext();

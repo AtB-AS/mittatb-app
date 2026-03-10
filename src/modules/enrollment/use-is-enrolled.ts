@@ -1,8 +1,8 @@
 import {useMemo} from 'react';
 import {useGetEnrollmentsQuery} from './use-get-enrollments-query';
-import {ProgramId} from './types';
+import {KnownProgramId} from './types';
 
-export function useIsEnrolled(programId: ProgramId): boolean {
+export function useIsEnrolled(programId: KnownProgramId): boolean {
   const {data: enrollments} = useGetEnrollmentsQuery();
 
   return useMemo(() => {

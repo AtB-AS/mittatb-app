@@ -34,7 +34,7 @@ import {
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {ProgramId, useIsEnrolled} from '@atb/modules/enrollment';
+import {KnownProgramId, useIsEnrolled} from '@atb/modules/enrollment';
 
 type Props = {
   stationId: string;
@@ -69,7 +69,7 @@ export const CarSharingStationBottomSheet = ({
   } = useCarSharingStation(stationId);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
-  const isBonusEnabled = useIsEnrolled(ProgramId.BONUS);
+  const isBonusEnabled = useIsEnrolled(KnownProgramId.BONUS);
   const {bonusProducts} = useFirestoreConfigurationContext();
   const bonusProduct = findRelevantBonusProduct(
     bonusProducts,

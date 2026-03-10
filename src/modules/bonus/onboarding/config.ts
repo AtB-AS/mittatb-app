@@ -3,7 +3,7 @@ import {BonusOnboarding_BuyTicketsScreen} from './BonusOnboarding_BuyTickets';
 import {BonusOnboarding_DownloadScreen} from './BonusOnboarding_Download';
 import {BonusOnboarding_MoreTravelMethodsScreen} from './BonusOnboarding_MoreTravelMethods';
 import {BonusOnboarding_WelcomeScreen} from './BonusOnboarding_WelcomeScreen';
-import {ProgramId} from '@atb/modules/enrollment';
+import {KnownProgramId} from '@atb/modules/enrollment';
 
 export type BonusOnboardingScreenName =
   | 'BonusOnboarding_WelcomeScreen'
@@ -12,7 +12,7 @@ export type BonusOnboardingScreenName =
   | 'BonusOnboarding_DownloadScreen';
 
 export const bonusOnboardingCarouselConfig: OnboardingCarouselConfig = {
-  id: ProgramId.BONUS,
+  id: KnownProgramId.BONUS,
   onboardingScreens: [
     {
       name: 'BonusOnboarding_WelcomeScreen',

@@ -45,7 +45,7 @@ import {TripPattern} from '@atb/api/types/trips';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {WithOverlayButton} from '@atb/components/overlay-button';
-import {ProgramId, useIsEnrolled} from '@atb/modules/enrollment';
+import {KnownProgramId, useIsEnrolled} from '@atb/modules/enrollment';
 
 type RootProps = DashboardScreenProps<'Dashboard_RootScreen'>;
 const callerRoute: LocationSearchCallerRoute = [
@@ -68,7 +68,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
   const analytics = useAnalyticsContext();
 
-  const isBonusEnabled = useIsEnrolled(ProgramId.BONUS);
+  const isBonusEnabled = useIsEnrolled(KnownProgramId.BONUS);
   const {locationIsAvailable, location} = useGeolocationContext();
   const focusRef = useFocusOnLoad(navigation);
   const isFocused = useIsFocusedAndActive();

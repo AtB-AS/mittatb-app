@@ -23,12 +23,15 @@ import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
 import {
-  isValidProgramId,
-  ProgramId,
+  isKnownProgramId,
+  KnownProgramId,
   useEnrollIntoProgramMutation,
 } from '@atb/modules/enrollment';
+import {OnboardingCarouselConfigId} from '@atb/modules/onboarding';
 
-const programsWithOnboarding: ProgramId[] = [ProgramId.BONUS];
+const programsWithOnboarding: OnboardingCarouselConfigId[] = [
+  KnownProgramId.BONUS,
+];
 
 type Props = ProfileScreenProps<'Profile_EnrollmentScreen'>;
 
@@ -126,7 +129,7 @@ export const useEnroll = () => {
       clearCode();
 
       if (
-        isValidProgramId(enrollment.programId) &&
+        isKnownProgramId(enrollment.programId) &&
         programsWithOnboarding.includes(enrollment.programId)
       ) {
         navigation.navigate('Root_OnboardingCarouselStack', {

@@ -32,7 +32,7 @@ import {MobilityStats} from './MobilityStats';
 import {OperatorActionButton} from './OperatorActionButton';
 import {OperatorBenefit} from './OperatorBenefit';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
-import {ProgramId, useIsEnrolled} from '@atb/modules/enrollment';
+import {KnownProgramId, useIsEnrolled} from '@atb/modules/enrollment';
 
 type Props = {
   stationId: string;
@@ -66,7 +66,7 @@ export const BikeStationBottomSheet = ({
     availableBikes,
   } = useBikeStation(stationId);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
-  const isBonusEnabled = useIsEnrolled(ProgramId.BONUS);
+  const isBonusEnabled = useIsEnrolled(KnownProgramId.BONUS);
   const {bonusProducts} = useFirestoreConfigurationContext();
   const bonusProduct = findRelevantBonusProduct(
     bonusProducts,

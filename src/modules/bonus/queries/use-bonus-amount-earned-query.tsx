@@ -1,7 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {useAuthContext} from '@atb/modules/auth';
 import {getBonusAmountEarned} from '../api/api';
-import {useIsEnrolled, ProgramId} from '@atb/modules/enrollment';
+import {useIsEnrolled, KnownProgramId} from '@atb/modules/enrollment';
 
 export const getBonusAmountEarnedQueryKey = (
   userId: string | undefined,
@@ -17,7 +17,7 @@ export const useBonusAmountEarnedQuery = (
   const {userId, authStatus} = useAuthContext();
   const {authenticationType} = useAuthContext();
   const isLoggedIn = authenticationType === 'phone';
-  const isBonusEnabled = useIsEnrolled(ProgramId.BONUS);
+  const isBonusEnabled = useIsEnrolled(KnownProgramId.BONUS);
 
   return useQuery({
     queryKey: getBonusAmountEarnedQueryKey(userId, orderId),

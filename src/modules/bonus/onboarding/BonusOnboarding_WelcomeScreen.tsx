@@ -8,7 +8,7 @@ import {
 import {ThemedContact} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {ProgramId} from '@atb/modules/enrollment';
+import {KnownProgramId} from '@atb/modules/enrollment';
 
 export type WelcomeScreenProps =
   OnboardingCarouselScreenProps<'BonusOnboarding_WelcomeScreen'>;
@@ -20,7 +20,7 @@ export const BonusOnboarding_WelcomeScreen = ({
   const {t} = useTranslation();
 
   const {navigateToNextScreen} = useOnboardingCarouselNavigation(
-    ProgramId.BONUS,
+    KnownProgramId.BONUS,
     'BonusOnboarding_WelcomeScreen',
   );
 

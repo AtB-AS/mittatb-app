@@ -2,7 +2,7 @@ import {LanguageAndTextSchema} from '@atb/translations';
 import z from 'zod';
 
 export const Enrollment = z.object({
-  programId: z.string(), // can be mapped to ProgramId enum, but keeping it flexible to allow for new programs without app code changes
+  programId: z.string(), // can be mapped to KnownProgramId enum, but keeping it flexible to allow for new programs without app code changes
   programTitle: z.array(LanguageAndTextSchema),
   programIsActive: z.boolean(),
   enturProgramId: z.number().nullable().optional(),
@@ -13,10 +13,10 @@ export const Enrollment = z.object({
 
 export type EnrollmentType = z.infer<typeof Enrollment>;
 
-export enum ProgramId {
+export enum KnownProgramId {
   BONUS = 'bonus',
 }
 
-export function isValidProgramId(value: string): value is ProgramId {
-  return Object.values(ProgramId).includes(value as ProgramId);
+export function isKnownProgramId(value: string): value is KnownProgramId {
+  return Object.values(KnownProgramId).includes(value as KnownProgramId);
 }
