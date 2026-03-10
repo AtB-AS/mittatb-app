@@ -1,21 +1,32 @@
 import {TripPattern} from '@atb/api/types/trips';
 import {toAxiosErrorKind} from '@atb/api/utils';
-import {Location} from '@atb/modules/favorites';
 import {useSearchHistoryContext} from '@atb/modules/search-history';
-import type {SearchStateType, TripSearchTime} from '../types';
+import type {SearchStateType} from '../types';
 
 import {isValidTripLocations} from '@atb/utils/location';
 import {useCallback, useEffect, useMemo} from 'react';
 import type {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 import type {TripPatternWithKey} from '@atb/screen-components/travel-details-screens';
 import {useJourneyModes} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/hooks';
-import {TripsProps, useTripsInfiniteQuery} from './use-trips-infinite-query';
+import {
+  TripsInfiniteQueryProps,
+  useTripsInfiniteQuery,
+} from './use-trips-infinite-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {sanitizeSearchTime} from './utils';
 import Bugsnag from '@bugsnag/react-native';
+import {Location} from '@atb/modules/favorites';
+import {TripSearchTime} from '../types';
 
 const MAX_NUMBER_OF_CHAINED_INITIAL_SEARCHES = 5;
 const TARGET_NUMBER_OF_INITIAL_HITS = 8;
+
+export type TripsProps = {
+  fromLocation?: Location;
+  toLocation?: Location;
+  arriveBy: boolean;
+  searchTime: TripSearchTime;
+  travelSearchFiltersSelection?: TravelSearchFiltersSelectionType;
+};
 
 /**
  * Hook for fetching trip results with progressive loading for the initial search.
@@ -30,10 +41,8 @@ const TARGET_NUMBER_OF_INITIAL_HITS = 8;
  * be unnecessary.
  */
 export function useTrips(
-  fromLocation: Location | undefined,
-  toLocation: Location | undefined,
-  searchTime: TripSearchTime,
-  travelSearchFiltersSelection: TravelSearchFiltersSelectionType | undefined,
+  tripsProps: TripsProps,
+  enabled: boolean,
 ): {
   tripPatterns: TripPatternWithKey[];
   timeOfLastSearch: string;
@@ -48,34 +57,17 @@ export function useTrips(
 
   const analytics = useAnalyticsContext();
 
-  const arriveBy = searchTime.option === 'arrival';
-
-  const sanitizedSearchTime = useMemo(
-    () => sanitizeSearchTime(searchTime),
-    [searchTime],
-  );
-
-  const tripsProps: TripsProps = useMemo(
+  const tripsInfiniteQueryProps: TripsInfiniteQueryProps = useMemo(
     () => ({
-      fromLocation,
-      toLocation,
-      searchTime: sanitizedSearchTime,
-      arriveBy,
-      travelSearchFiltersSelection,
+      ...tripsProps,
       journeySearchModes,
     }),
-    [
-      arriveBy,
-      fromLocation,
-      journeySearchModes,
-      sanitizedSearchTime,
-      toLocation,
-      travelSearchFiltersSelection,
-    ],
+    [journeySearchModes, tripsProps],
   );
 
+  const {fromLocation, toLocation} = tripsProps;
+
   const tripLocationsAreValid = isValidTripLocations(fromLocation, toLocation);
-  const tripsInfiniteQueryEnabled = tripLocationsAreValid;
 
   const {
     data: tripsData,
@@ -85,7 +77,7 @@ export function useTrips(
     error: tripsError,
     hasNextPage,
     fetchNextPage,
-  } = useTripsInfiniteQuery(tripsProps, tripsInfiniteQueryEnabled);
+  } = useTripsInfiniteQuery(tripsInfiniteQueryProps, enabled);
 
   const tripPatterns = useMemo(
     () =>
@@ -115,20 +107,20 @@ export function useTrips(
   ]);
 
   const sendAnalyticsSearchEvent = useCallback(
-    (tripsProps: TripsProps) =>
-      tripsInfiniteQueryEnabled &&
+    (tripsInfiniteQueryProps: TripsInfiniteQueryProps) =>
+      enabled &&
       analytics.logEvent('Trip search', 'Search performed', {
-        searchTime: tripsProps.searchTime,
+        searchTime: tripsInfiniteQueryProps.searchTime,
         filtersSelection: toLoggableFiltersSelection(
-          tripsProps.travelSearchFiltersSelection,
+          tripsInfiniteQueryProps.travelSearchFiltersSelection,
         ),
       }),
-    [analytics, tripsInfiniteQueryEnabled],
+    [analytics, enabled],
   );
 
   useEffect(() => {
-    sendAnalyticsSearchEvent(tripsProps);
-  }, [sendAnalyticsSearchEvent, tripsProps]);
+    sendAnalyticsSearchEvent(tripsInfiniteQueryProps);
+  }, [sendAnalyticsSearchEvent, tripsInfiniteQueryProps]);
 
   const shouldSaveSearch =
     tripLocationsAreValid &&
@@ -149,28 +141,29 @@ export function useTrips(
   const resultsAreEmpty =
     !tripLocationsAreValid || (hasSearched && tripPatterns.length === 0);
 
-  const tripsSearchState: SearchStateType = tripsIsFetching
-    ? 'searching'
-    : resultsAreEmpty
-      ? 'search-empty-result'
-      : hasSearched
-        ? 'search-success'
-        : 'idle';
+  const tripsSearchState: SearchStateType =
+    tripsIsFetching || shouldAutoLoadMoreInitialTrips
+      ? 'searching'
+      : resultsAreEmpty
+        ? 'search-empty-result'
+        : hasSearched
+          ? 'search-success'
+          : 'idle';
 
-  const timeOfLastSearch = tripsProps.searchTime.date;
+  const timeOfLastSearch = tripsInfiniteQueryProps.searchTime.date;
 
   const loadNextTripsPage = useCallback(() => {
-    if (tripsInfiniteQueryEnabled && hasNextPage && !tripsIsFetching) {
+    if (enabled && hasNextPage && !tripsIsFetching) {
       fetchNextPage();
-      sendAnalyticsSearchEvent(tripsProps);
+      sendAnalyticsSearchEvent(tripsInfiniteQueryProps);
     }
   }, [
     fetchNextPage,
     hasNextPage,
     sendAnalyticsSearchEvent,
-    tripsInfiniteQueryEnabled,
+    enabled,
     tripsIsFetching,
-    tripsProps,
+    tripsInfiniteQueryProps,
   ]);
 
   const loadMoreTrips = hasNextPage ? loadNextTripsPage : undefined;
@@ -188,7 +181,7 @@ export function useTrips(
       tripPatterns,
       timeOfLastSearch,
       loadMoreTrips,
-      refetchTrips: () => tripsInfiniteQueryEnabled && refetchTrips(),
+      refetchTrips: () => enabled && refetchTrips(),
       tripsSearchState,
       tripsIsError,
       tripsIsNetworkError,
@@ -197,7 +190,7 @@ export function useTrips(
       loadMoreTrips,
       refetchTrips,
       timeOfLastSearch,
-      tripsInfiniteQueryEnabled,
+      enabled,
       tripPatterns,
       tripsIsError,
       tripsIsNetworkError,

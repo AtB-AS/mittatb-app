@@ -1,12 +1,11 @@
 import {InfiniteData, useInfiniteQuery} from '@tanstack/react-query';
-import {Location} from '@atb/modules/favorites';
+
 import {
   defaultJourneyModes,
   getSearchPlace,
   transportModeToEnum,
 } from './utils';
 import {tripsSearch} from '@atb/api/bff/trips';
-import type {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 import {
   Modes,
   TransportMode,
@@ -18,24 +17,20 @@ import {
 import {isDefined} from '@atb/utils/presence';
 
 import {flatMap} from '@atb/utils/array';
-import {TripSearchTime} from '../types';
+
 import {ErrorResponse} from '@atb-as/utils';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
+import {TripsProps} from './use-trips';
 
-export type TripsProps = {
-  fromLocation?: Location;
-  toLocation?: Location;
-  arriveBy: boolean;
-  searchTime: TripSearchTime;
-  travelSearchFiltersSelection?: TravelSearchFiltersSelectionType;
+export type TripsInfiniteQueryProps = TripsProps & {
   journeySearchModes: Modes;
 };
 
 export const useTripsInfiniteQuery = (
-  tripsProps: TripsProps,
+  tripsInfiniteQueryProps: TripsInfiniteQueryProps,
   enabled: boolean,
 ) => {
-  const queryKey = ['TRIPS_INFINITE_QUERY_KEY', tripsProps];
+  const queryKey = ['TRIPS_INFINITE_QUERY_KEY', tripsInfiniteQueryProps];
 
   return useInfiniteQuery<
     TripsQuery,
@@ -46,7 +41,7 @@ export const useTripsInfiniteQuery = (
   >({
     queryKey,
     queryFn: ({pageParam: cursor, signal}) =>
-      tripsSearch(createTripsQuery(tripsProps, cursor), {
+      tripsSearch(createTripsQuery(tripsInfiniteQueryProps, cursor), {
         signal,
       }),
     maxPages: 100,
@@ -58,8 +53,8 @@ export const useTripsInfiniteQuery = (
   });
 };
 
-function createTripsQuery(
-  tripsProps: TripsProps,
+export function createTripsQuery(
+  tripsInfiniteQueryProps: TripsInfiniteQueryProps,
   cursor?: string,
 ): TripsQueryVariables {
   const {
@@ -69,7 +64,7 @@ function createTripsQuery(
     arriveBy,
     travelSearchFiltersSelection,
     journeySearchModes,
-  } = tripsProps;
+  } = tripsInfiniteQueryProps;
 
   const from = {
     ...fromLocation,
