@@ -18,7 +18,7 @@ type ShmoTripCardProps = {
 export const ShmoTripCard = ({shmoBooking, isFocused}: ShmoTripCardProps) => {
   const styles = useStyles();
   const {serverNow} = useTimeContext(
-    isFocused ? ONE_SECOND_MS * 5 : ONE_MINUTE_MS,
+    isFocused ? ONE_SECOND_MS : ONE_MINUTE_MS * 5,
   );
   const backgroundColor = useTransportColor('scooter', 'escooter');
 
