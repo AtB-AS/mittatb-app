@@ -116,8 +116,11 @@ export const Map = (props: MapProps) => {
 
   const selectedFeatureIsAVehicle = isVehicle(selectedFeature);
 
-  const {isGeofencingZonesEnabled, isGeofencingZonesAsTilesEnabled} =
-    useFeatureTogglesContext();
+  const {
+    isGeofencingZonesEnabled,
+    isGeofencingZonesAsTilesEnabled,
+    isMapPitchEnabled,
+  } = useFeatureTogglesContext();
 
   const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
@@ -148,6 +151,7 @@ export const Map = (props: MapProps) => {
   const mapViewConfig = useMapViewConfig({
     includeVehiclesAndStationsVectorSource:
       shouldShowVehiclesAndStations || Platform.OS !== 'android',
+    shouldShowGeofencingZonesLayers: !!systemId && !!vehicleTypeId,
   });
 
   const [followUserLocation, setFollowUserLocation] = useState(false);
@@ -374,7 +378,7 @@ export const Map = (props: MapProps) => {
           style={{
             flex: 1,
           }}
-          pitchEnabled={false}
+          pitchEnabled={isMapPitchEnabled}
           onPress={onFeatureClick}
           testID="mapView"
           onTouchStart={() => {

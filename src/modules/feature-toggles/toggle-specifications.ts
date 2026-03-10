@@ -58,6 +58,14 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_loading_screen',
   },
   {
+    name: 'isMap3dEnabled',
+    remoteConfigKey: 'enable_map_3d',
+  },
+  {
+    name: 'isMapPitchEnabled',
+    remoteConfigKey: 'enable_map_pitch',
+  },
+  {
     name: 'isNonTransitTripSearchEnabled',
     remoteConfigKey: 'enable_non_transit_trip_search',
   },

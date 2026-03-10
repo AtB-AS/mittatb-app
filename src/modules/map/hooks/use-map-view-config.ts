@@ -19,15 +19,19 @@ const MapViewStaticConfig = {
 
 type MapViewConfigOptions = {
   includeVehiclesAndStationsVectorSource?: boolean;
+  shouldShowGeofencingZonesLayers?: boolean;
 };
 
 export const useMapViewConfig = (
   mapViewConfigOptions?: MapViewConfigOptions,
 ) => {
-  const {includeVehiclesAndStationsVectorSource = false} =
-    mapViewConfigOptions || {};
+  const {
+    includeVehiclesAndStationsVectorSource = false,
+    shouldShowGeofencingZonesLayers = false,
+  } = mapViewConfigOptions || {};
   const mapboxJsonStyle = useMapboxJsonStyle(
     includeVehiclesAndStationsVectorSource,
+    shouldShowGeofencingZonesLayers,
   );
   const configMap = useMemo(
     () => ({styleJSON: mapboxJsonStyle}),
