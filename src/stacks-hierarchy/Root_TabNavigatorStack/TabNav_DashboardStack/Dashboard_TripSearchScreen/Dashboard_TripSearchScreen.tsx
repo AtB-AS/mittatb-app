@@ -477,7 +477,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             <NativeBlockButton
               onPress={loadMoreTrips}
               disabled={tripsSearchState === 'searching'}
-              style={styles.loadMoreButton}
+              style={[styles.loadMoreButton, {opacity: 1}]}
               testID="loadMoreButton"
             >
               {tripsSearchState === 'searching' ? (
