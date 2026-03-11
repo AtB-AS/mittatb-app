@@ -20,13 +20,17 @@
     "generate-svgs": "yarn generate-svg-mono-icons && yarn generate-svg-color",
     "update-device-profiles": "bundle exec fastlane ios update_devices",
     "clean": "rm -rf node_modules/ **/node_modules/ yarn-error.log",
+    "clean:android": "rm -rf android/app/.cxx android/app/build",
     "clean:install": "yarn clean && yarn install",
     "setup": "sh ./setup.sh",
     "get_ios_certs": "sh ./scripts/ios/get_ios_certs.sh",
     "generate-native-assets": "sh ./scripts/generate-native-assets.sh",
     "link-assets": "react-native link",
     "unimported": "npx unimported",
-    "storybook-generate": "sb-rn-get-stories"
+    "storybook-generate": "sb-rn-get-stories",
+    "sourcemaps": "yarn sourcemaps:ios && yarn sourcemaps:android",
+    "sourcemaps:android": "sh ./scripts/android/create-sourcemaps.sh",
+    "sourcemaps:ios": "sh ./scripts/ios/create-sourcemaps.sh"
   },
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
