@@ -37,7 +37,7 @@ export const ReactQueryProvider = ({children}: {children: ReactNode}) => (
           // data contains non-serializable data, it may cause issues when
           // rehydrating. It's equivalent to `JSON.parse(JSON.stringify(data))`.
           // Only includes successful queries to avoid the "dehydrated as pending ended
-          // up rejecting" error on rehydration. 
+          // up rejecting" error on rehydration.
           return (
             query.meta?.persistInAsyncStorage === true &&
             query.state.status === 'success'
