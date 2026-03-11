@@ -177,6 +177,11 @@ export const Profile_DesignSystemScreen = ({
     ),
   );
 
+  const interactiveColorKeys: (keyof typeof theme.color.interactive)[] =
+    Object.keys(
+      theme.color.interactive,
+    ) as (keyof typeof theme.color.interactive)[];
+
   // @TODO: add display of static colors
 
   return (
@@ -320,15 +325,26 @@ export const Profile_DesignSystemScreen = ({
           <GenericSectionItem>
             <ThemeText>Custom color</ThemeText>
             <View style={styles.contentContainer}>
-              <Loading
-                donutColor={
-                  theme.color.background.neutral[0].foreground.primary
-                }
-              />
-              <Loading
-                donutColor={theme.color.foreground.dynamic.primary}
-                size="small"
-              />
+              {interactiveColorKeys.map((key) => (
+                <>
+                  <Loading
+                    key={key + 'large'}
+                    size="large"
+                    donutColor={
+                      theme.color.interactive[key].default.foreground.primary
+                    }
+                    arcColor={theme.color.interactive[key].default.background}
+                  />
+                  <Loading
+                    key={key + 'small'}
+                    size="small"
+                    donutColor={
+                      theme.color.interactive[key].default.foreground.primary
+                    }
+                    arcColor={theme.color.interactive[key].default.background}
+                  />
+                </>
+              ))}
             </View>
           </GenericSectionItem>
         </Section>
