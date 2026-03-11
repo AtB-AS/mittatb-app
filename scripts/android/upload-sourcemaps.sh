@@ -20,8 +20,8 @@ else
     --api-key="${BUGSNAG_API_KEY}" \
     --version-name="${APP_VERSION}" \
     --version-code="${BUILD_ID}" \
-    --source-map="${SOURCEMAP_PATH}" \
-    --bundle="${BUNDLE_PATH}" \
+    --source-map="bundle/index.android.bundle.map" \
+    --bundle="bundle/index.android.bundle" \
     --platform=android \
     --project-root="${GITHUB_WORKSPACE:-.}" \
     --verbose

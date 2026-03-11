@@ -252,6 +252,7 @@ jobs:
         uses: ./.github/actions/android-upload-bugsnag
         with:
           bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
+          skip-create-sourcemaps: ${{ inputs.force-build != 'true' && steps.apk-cache.outputs.cache-hit == 'true' }}
           skip-native: 'true'
 
       - name: Register app version
