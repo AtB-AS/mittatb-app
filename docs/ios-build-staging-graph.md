@@ -255,7 +255,7 @@ flowchart TD
         bs_detect["Detect OS + arch"]
         bs_cache{"Bugsnag CLI
         cache hit?"}
-        bs_install["Install Bugsnag CLI v3.7.0
+        bs_install["Install Bugsnag CLI v3.9.0
         curl install script from GitHub"]
         bs_verify["Verify installation"]
         bs_path["Add to PATH"]
