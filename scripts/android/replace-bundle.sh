@@ -23,14 +23,10 @@ if [[
     exit 1
 else
 
-    BUNDLE_DIR="android/app/build/generated/assets/react/$(echo ${APP_FLAVOR}${APP_ENVIRONMENT^})"
-    SOURCEMAP_DIR="android/app/build/generated/sourcemaps/react/$(echo $APP_FLAVOR${APP_ENVIRONMENT^})"
-    
-    mkdir -p $BUNDLE_DIR
-    mkdir -p $SOURCEMAP_DIR
+    mkdir -p bundle
 
-    BUNDLE_PATH="$BUNDLE_DIR/index.android.bundle"
-    SOURCEMAP_PATH="$SOURCEMAP_DIR/index.android.bundle.map"
+    BUNDLE_PATH="bundle/index.android.bundle"
+    SOURCEMAP_PATH="bundle/index.android.bundle.map"
 
     echo "Re-generate bundle"
     npx react-native bundle --platform android --dev false --reset-cache --entry-file index.js --bundle-output $BUNDLE_PATH --sourcemap-output $SOURCEMAP_PATH
