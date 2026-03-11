@@ -4259,6 +4259,34 @@ PODS:
     - React-perflogger (= 0.83.1)
     - React-utils (= 0.83.1)
     - SocketRocket
+  - ReactNativeFs (2.37.0):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - RecaptchaInterop (101.0.0)
   - RNBootSplash (6.3.11):
     - boost
@@ -4971,6 +4999,7 @@ DEPENDENCIES:
   - ReactAppDependencyProvider (from `build/generated/ios/ReactAppDependencyProvider`)
   - ReactCodegen (from `build/generated/ios/ReactCodegen`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "ReactNativeFs (from `../node_modules/@dr.pogodin/react-native-fs`)"
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
@@ -5233,6 +5262,8 @@ EXTERNAL SOURCES:
     :path: build/generated/ios/ReactCodegen
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeFs:
+    :path: "../node_modules/@dr.pogodin/react-native-fs"
   RNBootSplash:
     :path: "../node_modules/react-native-bootsplash"
   RNCAsyncStorage:
@@ -5331,7 +5362,7 @@ SPEC CHECKSUMS:
   "gRPC-C++": cc207623316fb041a7a3e774c252cf68a058b9e8
   gRPC-Core: 860978b7db482de8b4f5e10677216309b5ff6330
   GTMSessionFetcher: b8ab00db932816e14b0a0664a08cb73dda6d164b
-  hermes-engine: 7b97af1957eaf8cfc1fa8f146b57ed75fe5f2e65
+  hermes-engine: 64c8724b2919f58c70c597ff023697370b732563
   Intercom: aca703f001cf9470b1f13b72cb8cc969a09bafca
   intercom-react-native: c8ee5e7d845955c5f6898c0f094ebcf1d6db9255
   leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
@@ -5340,7 +5371,7 @@ SPEC CHECKSUMS:
   MapboxMaps: 04c7bf46d66265ad0f4b98484a251777a926c423
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
+  RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: a41bbdd9af30bf2e5715796b313e44ec43eefff1
   RCTRequired: 7be34aabb0b77c3cefe644528df0fa0afad4e4d0
   RCTSwiftUI: a6c7271c39098bf00dbdad8f8ed997a59bbfbe44
@@ -5419,8 +5450,9 @@ SPEC CHECKSUMS:
   React-utils: 28158276c67b375d1b7546a342571cfffbea9770
   React-webperformancenativemodule: 3aa0693c4d19898831317e17b005fad3444d2c99
   ReactAppDependencyProvider: 0eb286cc274abb059ee601b862ebddac2e681d01
-  ReactCodegen: ebc88b9d8aafed0872ff6e5a5c18570129e789ff
+  ReactCodegen: 569af680f581d3613e85ea2538df77f5eb2d78cd
   ReactCommon: 15e1e727fa34f760beb7dd52928687fda8edf8dc
+  ReactNativeFs: bfd69a5e7b2fa58a532be574a7ede8c46f001871
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
   RNBootSplash: 7fcc9a58ae343aeb1a1dd49f9030832fe432c544
   RNCAsyncStorage: fd44f4b03e007e642e98df6726737bc66e9ba609
@@ -5447,7 +5479,7 @@ SPEC CHECKSUMS:
   SwiftProtobuf: 4dbaffec76a39a8dc5da23b40af1a5dc01a4c02d
   TimeApiiOSLib: 8289d67019d958c29676dfb9e38ffdcefbcdb9bd
   TokenCore: cdce158c4f5331f81f35e34f3b708b6582c0d569
-  TokenStateReactNativeLib: e1b93062a2b35f28bddad865aaadfb8026a22e4a
+  TokenStateReactNativeLib: 00fb9cd8cc92a36f350c9d216686277837d6474a
   Turf: c9eb11a65d96af58cac523460fd40fec5061b081
   VisionCamera: 30b358b807324c692064f78385e9a732ce1bebfe
   VisualCodeModeliOSLib: c40687c1f0bd60e672088a023d3ec0984608c118
