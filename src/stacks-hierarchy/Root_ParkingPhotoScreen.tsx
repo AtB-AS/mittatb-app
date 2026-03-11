@@ -8,7 +8,6 @@ import {PhotoFile} from '@atb/components/camera';
 import {ActivityIndicator, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {MapStateActionType, useMapContext} from '@atb/modules/map';
-import {blobToBase64} from '@atb/modules/parking-violations-reporting';
 import {compressImageToBase64} from '@atb/utils/image';
 import {useCallback} from 'react';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
@@ -53,7 +52,11 @@ export const Root_ParkingPhotoScreen = ({
   };
 
   const onConfirmImage = async (photo: PhotoFile) => {
-    const compressedBase64Image = await compressImageToBase64(photo.path, 1024, 1024);
+    const compressedBase64Image = await compressImageToBase64(
+      photo.path,
+      1024,
+      1024,
+    );
     if (!compressedBase64Image) return;
 
     // Remove metadata

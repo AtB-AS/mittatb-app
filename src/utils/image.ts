@@ -2,7 +2,8 @@ import ImageResizer from '@bam.tech/react-native-image-resizer';
 import {readFile} from '@dr.pogodin/react-native-fs';
 import {notifyBugsnag} from './bugsnag-utils';
 
-const EMPTY_IMAGE_BASE64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQI12NgAAIABQABNjN9GQAAAABJRu5ErkJggg==';
+const EMPTY_IMAGE_BASE64 =
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQI12NgAAIABQABNjN9GQAAAABJRu5ErkJggg==';
 
 export async function compressImageToBase64(
   path: string,

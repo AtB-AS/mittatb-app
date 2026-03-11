@@ -9,10 +9,7 @@ import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomShe
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
 import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/bff/mobility';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {
-  blobToBase64,
-  useParkingViolations,
-} from '@atb/modules/parking-violations-reporting';
+import {useParkingViolations} from '@atb/modules/parking-violations-reporting';
 import {useAuthContext} from '@atb/modules/auth';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
@@ -82,7 +79,11 @@ export const Root_ParkingViolationsQrScreen = ({
     selectProviderBottomSheetModalRef?.current?.dismiss();
     providerAndVehicleBottomSheetModalRef?.current?.dismiss();
 
-    const compressedBase64Image = await compressImageToBase64(params.photo, 2048, 2048);
+    const compressedBase64Image = await compressImageToBase64(
+      params.photo,
+      2048,
+      2048,
+    );
     if (!compressedBase64Image) {
       setIsError(true);
       return;
