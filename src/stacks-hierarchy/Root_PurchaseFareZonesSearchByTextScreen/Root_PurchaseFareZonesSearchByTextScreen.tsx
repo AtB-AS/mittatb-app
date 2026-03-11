@@ -14,12 +14,7 @@ import {
 import {useDebounce} from '@atb/utils/use-debounce';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {
-  ActivityIndicator,
-  Keyboard,
-  TextInput as InternalTextInput,
-  View,
-} from 'react-native';
+import {Keyboard, TextInput as InternalTextInput, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {FareZoneResults} from '@atb/fare-zones-selector/FareZoneResults';
 import {LocationAndFareZone, VenueResults} from './VenueResults';
@@ -32,6 +27,7 @@ import {
 import type {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {RequestError, toAxiosErrorKind} from '@atb/api/utils';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Loading} from '@atb/components/loading';
 
 type Props = RootStackScreenProps<'Root_PurchaseFareZonesSearchByTextScreen'>;
 
@@ -179,7 +175,7 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
             <MessageInfoBox type="warning" message={errorMessage} />
           </View>
         )}
-        {isLoading && <ActivityIndicator />}
+        {isLoading && <Loading />}
         {showFareZones && (
           <FareZoneResults fareZones={fareZones} onSelect={onSelectZone} />
         )}

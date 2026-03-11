@@ -1,11 +1,10 @@
 import {RecipientSelectionState} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types';
 import {dictionary, useTranslation} from '@atb/translations';
 import {useEffect, useLayoutEffect} from 'react';
-import {ActivityIndicator, Alert} from 'react-native';
+import {Alert} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioGroupSection} from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {ContrastColor} from '@atb/theme/colors';
 import OnBehalfOfTexts from '@atb/translations/screens/subscreens/OnBehalfOf';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {useDeleteRecipientMutation} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-delete-recipient-mutation';
@@ -17,19 +16,18 @@ import {
 } from '@atb/modules/on-behalf-of';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {spellOut} from '@atb/utils/accessibility';
+import {Loading} from '@atb/components/loading';
 
 export const ExistingRecipientsList = ({
   state: {recipient},
   onSelect,
   onEmptyRecipients,
   onDelete,
-  themeColor,
 }: {
   state: RecipientSelectionState;
   onSelect: (r?: OnBehalfOfAccountType) => void;
   onEmptyRecipients: () => void;
   onDelete: () => void;
-  themeColor: ContrastColor;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -72,11 +70,7 @@ export const ExistingRecipientsList = ({
   return (
     <>
       {recipientsQuery.status === 'pending' && (
-        <ActivityIndicator
-          style={styles.loadingSpinner}
-          size="large"
-          color={themeColor.foreground.primary}
-        />
+        <Loading style={styles.loadingSpinner} size="large" />
       )}
       {recipientsQuery.status === 'error' && (
         <MessageInfoBox

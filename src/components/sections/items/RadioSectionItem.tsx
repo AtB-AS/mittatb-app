@@ -2,7 +2,6 @@ import React from 'react';
 import {
   AccessibilityInfo,
   AccessibilityProps,
-  ActivityIndicator,
   Platform,
   View,
 } from 'react-native';
@@ -18,6 +17,7 @@ import {NativeBlockButton} from '@atb/components/native-button';
 import {RadioIcon} from '@atb/components/radio';
 import {NativeButtonOrView} from '@atb/components/native-button-or-view';
 import {dictionary, useTranslation} from '@atb/translations';
+import {Loading} from '@atb/components/loading';
 
 type Props = SectionItemProps<{
   text: string;
@@ -117,7 +117,7 @@ export function RadioSectionItem({
             type="borderless"
           >
             {rightAction.isLoading ? (
-              <ActivityIndicator />
+              <Loading />
             ) : (
               <ThemeIcon svg={rightAction.icon} />
             )}

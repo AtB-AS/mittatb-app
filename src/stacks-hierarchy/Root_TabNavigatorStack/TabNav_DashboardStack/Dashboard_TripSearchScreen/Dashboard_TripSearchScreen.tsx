@@ -32,7 +32,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {TFunc} from '@leile/lobo-t';
 import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {ActivityIndicator, Platform, View} from 'react-native';
+import {Platform, View} from 'react-native';
 import {DashboardScreenProps} from '../navigation-types';
 import {
   type SearchForLocations,
@@ -67,6 +67,7 @@ import {TravelSearchFiltersBottomSheet} from './components/TravelSearchFiltersBo
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {WithOverlayButton} from '@atb/components/overlay-button';
+import {Loading} from '@atb/components/loading';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -484,8 +485,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 <View style={styles.loadingIndicator}>
                   {tripPatterns.length ? (
                     <>
-                      <ActivityIndicator
-                        color={theme.color.foreground.dynamic.secondary}
+                      <Loading
                         style={{
                           marginRight: theme.spacing.medium,
                         }}
@@ -702,6 +702,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   loadingIndicator: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   missingLocationText: {
     padding: theme.spacing.xLarge,

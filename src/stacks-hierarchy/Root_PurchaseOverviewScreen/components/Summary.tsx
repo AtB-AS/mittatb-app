@@ -1,11 +1,12 @@
 import {formatNumberToString} from '@atb-as/utils';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
+import {Loading} from '@atb/components/loading';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 
 type Props = {
   price?: number;
@@ -52,7 +53,7 @@ export function Summary({
           {t(PurchaseOverviewTexts.summary.price(formattedPrice))}
         </ThemeText>
       ) : isLoading ? (
-        <ActivityIndicator size="large" />
+        <Loading size="large" />
       ) : null}
       {!isLoading && !!formattedPrice && originalPrice !== price && (
         <ThemeText

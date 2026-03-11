@@ -1,5 +1,5 @@
 import {type PurchaseSelectionType} from '@atb/modules/purchase-selection';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import React from 'react';
 import {MemoizedResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
 import {useBookingTrips} from '@atb/modules/booking';
@@ -25,6 +25,7 @@ import {
 } from '@atb/modules/situations';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {findAllNotices, findAllSituations} from '@atb/modules/situations';
+import {Loading} from '@atb/components/loading';
 
 type BookingTripSelectionProps = {
   selection: PurchaseSelectionType;
@@ -53,7 +54,7 @@ export function BookingTripSelection({
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" />
+        <Loading size="large" />
       </View>
     );
   }

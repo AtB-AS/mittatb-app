@@ -8,12 +8,13 @@ import {
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {
   type SupplementProductWithCountAndOffer,
   UserProfileWithCountAndOffer,
 } from '../../Root_PurchaseOverviewScreen/use-offer-state';
 import {formatNumberToString, SearchOfferPrice} from '@atb-as/utils';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -85,9 +86,8 @@ export const PriceSummary = ({
               {totalPriceString} kr
             </ThemeText>
           ) : (
-            <ActivityIndicator
+            <Loading
               size={theme.spacing.medium}
-              color={theme.color.foreground.dynamic.primary}
               style={{margin: theme.spacing.medium}}
             />
           )}
