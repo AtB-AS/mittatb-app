@@ -9,14 +9,11 @@ import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomShe
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
 import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/bff/mobility';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {
-  blobToBase64,
-  useParkingViolations,
-} from '@atb/modules/parking-violations-reporting';
+import {useParkingViolations} from '@atb/modules/parking-violations-reporting';
 import {useAuthContext} from '@atb/modules/auth';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {compressImage} from '@atb/utils/image';
+import {compressImageToBase64} from '@atb/utils/image';
 import {View} from 'react-native';
 import {BottomSheetModal as GorhamBottomSheetModal} from '@gorhom/bottom-sheet';
 import {ViolationsReportingProvider} from '@atb/api/types/mobility';
@@ -82,17 +79,15 @@ export const Root_ParkingViolationsQrScreen = ({
     selectProviderBottomSheetModalRef?.current?.dismiss();
     providerAndVehicleBottomSheetModalRef?.current?.dismiss();
 
-    const compressedBlob = await compressImage(params.photo, 2048, 2048);
-    if (!compressedBlob) {
-      setIsError(true);
-      return;
-    }
-
-    const base64Image = await blobToBase64(compressedBlob);
+    const compressedBase64Image = await compressImageToBase64(
+      params.photo,
+      2048,
+      2048,
+    );
 
     // Remove metadata, e.g. 'data:image/png;base64', and keep just the base64
     // encoded part of the image.
-    const base64data = base64Image.split(',').pop();
+    const base64data = compressedBase64Image.split(',').pop();
 
     // Nivel uses the file name suffix as imageType.
     const imageType = params.photo.split('.').pop();
