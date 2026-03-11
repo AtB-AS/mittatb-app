@@ -253,14 +253,18 @@ flowchart TD
     firebase --> bugsnag_upload
 
     subgraph bugsnag_upload ["Upload Bugsnag Symbols - android-upload-bugsnag action"]
-        bs_set["Set BUNDLE_PATH + SOURCEMAP_PATH
-        based on APP_FLAVOR + APP_ENVIRONMENT"]
-        bs_sourcemaps["Upload JS sourcemaps
-        upload-sourcemaps.sh via bugsnag-cli"]
-        bs_skip_native(["NDK + Proguard skipped
-        skip-native=true always on staging"])
+        bs_create_check{"skip-create-sourcemaps?
+        true when cached APK"}
+        bs_create_check -- "false - fresh build" --> bs_create["Create sourcemaps
+        create-sourcemaps.sh
+        npx react-native bundle"]
+        bs_create_check -- "true - cached APK" --> bs_sourcemaps
 
-        bs_set --> bs_sourcemaps --> bs_skip_native
+        bs_create --> bs_sourcemaps["Upload JS sourcemaps
+        upload-sourcemaps.sh via bugsnag-cli
+        continue-on-error, 3 retries"]
+        bs_sourcemaps --> bs_skip_native(["NDK + Proguard skipped
+        skip-native=true always on staging"])
     end
 
     bugsnag_upload --> register["Register app version
@@ -283,8 +287,9 @@ flowchart LR
         f3 --> f4["Generate release notes"]
         f4 --> f5["Setup Bugsnag CLI"]
         f5 --> f6["Firebase distribution"]
-        f6 --> f7["Bugsnag: sourcemaps only
-        NDK + Proguard skipped"]
+        f6 --> f7["Bugsnag: create + upload sourcemaps
+        NDK + Proguard skipped
+        continue-on-error, 3 retries"]
         f7 --> f8["Register app version"]
     end
 
@@ -299,8 +304,10 @@ flowchart LR
         c4 --> c5["Replace APK bundle
         decompile, replace, recompile, re-sign"]
         c5 --> c6["Firebase distribution"]
-        c6 --> c7["Bugsnag: sourcemaps only
-        NDK + Proguard skipped"]
+        c6 --> c7["Bugsnag: upload sourcemaps only
+        skip create-sourcemaps
+        NDK + Proguard skipped
+        continue-on-error, 3 retries"]
         c7 --> c8["Register app version"]
     end
 ```

@@ -165,9 +165,16 @@ flowchart TD
 
     widget_check -- Yes --> disable_widget["Disable widget
     configure_extensions remove"]
-    widget_check -- No --> fastlane_build
+    widget_check -- No --> apple_pay_check
 
-    disable_widget --> fastlane_build["Fastlane build
+    disable_widget --> apple_pay_check{"APPLE_PAY_MERCHANT_ID != ''
+    AND IPA cache miss?"}
+
+    apple_pay_check -- Yes --> enable_apple_pay["Enable Apple Pay entitlement
+    fastlane ios enable_apple_pay_entitlement"]
+    apple_pay_check -- No --> fastlane_build
+
+    enable_apple_pay --> fastlane_build["Fastlane build
     bundle exec fastlane ios build
     EXPORT_METHOD: ad-hoc
     SKIP_PODS based on pods cache"]
@@ -272,7 +279,8 @@ flowchart TD
         create_sm --> upload_sm["Upload JS sourcemaps
         upload-sourcemaps.sh
         bugsnag-cli upload
-        APP_VERSION, BUILD_ID"]
+        APP_VERSION, BUILD_ID
+        continue-on-error, 3 retries"]
 
         upload_sm --> dsym_check{"skip-dsyms?
         true when cached IPA"}
@@ -280,7 +288,8 @@ flowchart TD
         dsym_check -- "false - fresh build" --> upload_dsym["Upload dSYMs
         upload-dsyms.sh
         bugsnag-cli upload xcode-build
-        AtB.app.dSYM.zip"]
+        AtB.app.dSYM.zip
+        continue-on-error, 3 retries"]
         dsym_check -- "true - cached IPA" --> dsym_skip(["dSYM upload skipped
         native code unchanged"])
 
@@ -307,12 +316,15 @@ flowchart LR
         f1["ios-build-setup: node, ruby, xcode,
         entur, ssh-agent, native assets"] --> f2["Disable widget
         if applicable"]
-        f2 --> f3["Fastlane ios build
+        f2 --> f2b["Enable Apple Pay entitlement
+        if applicable"]
+        f2b --> f3["Fastlane ios build
         ad-hoc export"]
         f3 --> f4["Generate release notes"]
         f4 --> f5["Firebase distribution"]
         f5 --> f6["Bugsnag: create + upload sourcemaps
-        + upload dSYMs"]
+        + upload dSYMs
+        continue-on-error, 3 retries"]
         f6 --> f7["Register app version"]
     end
 
@@ -328,7 +340,8 @@ flowchart LR
         c3 --> c4["Generate release notes"]
         c4 --> c5["Firebase distribution"]
         c5 --> c6["Bugsnag: upload sourcemaps only
-        skip dSYMs"]
+        skip dSYMs
+        continue-on-error, 3 retries"]
         c6 --> c7["Register app version"]
     end
 ```
@@ -371,6 +384,8 @@ flowchart LR
         = CI"]
         ENABLE_WIDGET["ENABLE_WIDGET
         from .env"]
+        APPLE_PAY_MERCHANT_ID["APPLE_PAY_MERCHANT_ID
+        from .env"]
     end
 
     subgraph consumers ["Consumers"]
@@ -379,16 +394,18 @@ flowchart LR
         bugsnag["Bugsnag uploads"]
         register["register-app-version.sh"]
         widget["Widget config"]
+        apple_pay["Apple Pay config"]
     end
 
     build_setup --> BUILD_ID & APP_ENVIRONMENT
     workflow --> KEYCHAIN_NAME
-    env_file --> scripts --> APP_VERSION & IOS_BUNDLE_IDENTIFIER & IOS_CODE_SIGN_IDENTITY & ENABLE_WIDGET
+    env_file --> scripts --> APP_VERSION & IOS_BUNDLE_IDENTIFIER & IOS_CODE_SIGN_IDENTITY & ENABLE_WIDGET & APPLE_PAY_MERCHANT_ID
 
     BUILD_ID & APP_VERSION --> fastlane & replace & bugsnag & register
     IOS_CODE_SIGN_IDENTITY & KEYCHAIN_NAME --> fastlane & replace
     IOS_BUNDLE_IDENTIFIER --> register
     ENABLE_WIDGET --> widget
+    APPLE_PAY_MERCHANT_ID --> apple_pay
 ```
 
 ## IPA Cache Key Components
