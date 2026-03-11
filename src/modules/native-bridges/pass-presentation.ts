@@ -1,4 +1,4 @@
-import {EffectCallback, useCallback, useEffect} from 'react';
+import {useEffect} from 'react';
 import {NativeModules, Platform} from 'react-native';
 
 // Found in /ios/BridgeModules/PassPresentationBridge.m
@@ -15,16 +15,12 @@ if (Platform.OS === 'ios' && !PassPresentationBridge) {
   );
 }
 
-export function useApplePassPresentationSuppression(
-  effectHook: (effect: EffectCallback) => void = useEffect,
-) {
-  const effect = useCallback(() => {
+export function useApplePassPresentationSuppression() {
+  useEffect(() => {
     if (Platform.OS === 'android') return;
     PassPresentationBridge.requestAutomaticPassPresentationSuppression();
     return () => {
       PassPresentationBridge.endAutomaticPassPresentationSuppression();
     };
   }, []);
-
-  effectHook(effect);
 }
