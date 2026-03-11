@@ -9,7 +9,7 @@ export async function compressImageToBase64(
   path: string,
   maxWidth: number,
   maxHeight: number,
-): Promise<string | undefined> {
+): Promise<string> {
   try {
     const compressed = await ImageResizer.createResizedImage(
       path,

@@ -84,10 +84,6 @@ export const Root_ParkingViolationsQrScreen = ({
       2048,
       2048,
     );
-    if (!compressedBase64Image) {
-      setIsError(true);
-      return;
-    }
 
     // Remove metadata, e.g. 'data:image/png;base64', and keep just the base64
     // encoded part of the image.

@@ -57,7 +57,6 @@ export const Root_ParkingPhotoScreen = ({
       1024,
       1024,
     );
-    if (!compressedBase64Image) return;
 
     // Remove metadata
     const base64data = compressedBase64Image.split(',').pop();
