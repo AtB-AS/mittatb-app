@@ -2,6 +2,7 @@ name: Build store iOS project
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -57,18 +58,22 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
       - name: Distribute to TestFlight
+        if: ${{ github.event_name != 'workflow_dispatch' }}
         run: |
           echo ${{ secrets.APP_STORE_CONNECT_API_KEY}} | base64 --decode > app-store-connect-api-key.json
           bundle exec fastlane ios testflight_prod
         env:
           APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
       - name: Setup Bugsnag CLI
+        if: ${{ github.event_name != 'workflow_dispatch' }}
         uses: ./.github/actions/setup-bugsnag-cli
       - name: Upload Bugsnag symbols
+        if: ${{ github.event_name != 'workflow_dispatch' }}
         uses: ./.github/actions/ios-upload-bugsnag
         with:
           bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Register app version
+        if: ${{ github.event_name != 'workflow_dispatch' }}
         run: sh ./scripts/ios/register-app-version.sh
         env:
           ENTUR_PUBLISH_CLIENT: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_PRODUCTION}}
