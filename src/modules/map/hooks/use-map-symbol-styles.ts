@@ -10,6 +10,7 @@ type ExpressionField = Expression[1];
 import {PinType} from '../mapbox-styles/pin-types';
 import {SelectedMapItemProperties} from '../types';
 import {getIconZoomTransitionStyle} from '../utils';
+import {PropulsionType} from '@atb/api/types/generated/mobility-types_v2';
 
 export const scaleTransitionZoomRange = 0.4;
 const opacityTransitionExtraZoomRange = scaleTransitionZoomRange / 8;
@@ -94,6 +95,16 @@ export const useMapSymbolStyles = ({
     'get',
     'vehicle_type_form_factor',
   ];
+  const vehicle_type_propulsion_type: Expression = [
+    'get',
+    'vehicle_type_propulsion_type',
+  ];
+  const isElectric: Expression = [
+    'in',
+    vehicle_type_propulsion_type,
+    ['literal', [PropulsionType.Electric, PropulsionType.ElectricAssist]],
+  ];
+
   const iconCode: Expression = [
     'case',
     ...stopPlacesExpression,
@@ -102,7 +113,7 @@ export const useMapSymbolStyles = ({
     ['==', vehicle_type_form_factor, 'SCOOTER_STANDING'],
     'scooter',
     ['==', vehicle_type_form_factor, 'BICYCLE'],
-    'citybike',
+    ['case', isElectric, 'ebike', 'citybike'],
     ['==', vehicle_type_form_factor, 'CAR'],
     'sharedcar',
     'non-existing-icon',
@@ -127,7 +138,16 @@ export const useMapSymbolStyles = ({
 
   const suffix: Expression =
     pinType === 'vehicle'
-      ? ['case', ['==', iconCode, 'scooter'], transportOperator, '']
+      ? [
+          'case',
+          [
+            'any',
+            ['==', iconCode, 'scooter'],
+            ['all', ['==', iconCode, 'ebike'], ['!', isCluster]],
+          ],
+          transportOperator,
+          '',
+        ]
       : mapItemIconNonClusterState;
 
   // should make this easier to understand, perhaps rename images to achieve it
@@ -144,6 +164,8 @@ export const useMapSymbolStyles = ({
         : [
             'case',
             ['==', iconCode, 'citybike'],
+            'bikes',
+            ['==', iconCode, 'ebike'],
             'bikes',
             ['==', iconCode, 'sharedcar'],
             'cars',
