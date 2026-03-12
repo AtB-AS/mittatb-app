@@ -19,7 +19,7 @@ else
         --version-name="${APP_VERSION}" \
         --bundle-version="${BUILD_ID}" \
         --source-map="${GITHUB_WORKSPACE:-.}/bundle/main.jsbundle.map" \
-        --bundle="${GITHUB_WORKSPACE:-.}/bundle/main.jsbundle" \
+        --bundle="${GITHUB_WORKSPACE:-.}/bundle/main.jsbundle.hbc" \
         --platform=ios \
         --project-root="${GITHUB_WORKSPACE:-.}" \
         --verbose
