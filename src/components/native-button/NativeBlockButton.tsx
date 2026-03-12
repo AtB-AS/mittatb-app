@@ -9,6 +9,11 @@ export type NativeBlockButtonProps = {disabled?: boolean} & Omit<
 
 export const NativeBlockButton = forwardRef<any, NativeBlockButtonProps>(
   ({disabled, style, ...pressableProps}: NativeBlockButtonProps, focusRef) => {
+    // Yep, this is a hack. backgroundColor is a prop that is not officially supported by the RectButton component.
+    // But if you send it in, it will be applied to the button, and cannot be changed later
+    // @ts-ignore
+    delete pressableProps.backgroundColor;
+
     const {logEvent} = useAnalyticsContext();
     return (
       <RectButton
