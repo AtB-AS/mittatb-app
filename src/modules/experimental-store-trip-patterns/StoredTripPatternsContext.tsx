@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import {StoredTripPattern, storedTripPatterns} from './storage';
 import {TripPattern} from '@atb/api/types/trips';
-import {getTripPatternKey} from './utils';
+import {getTripPatternKey} from '../trip-patterns/utils';
 import {wrapWithExperimentalFeatureToggledComponent} from '@atb/modules/experimental';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 import {useTimeContext} from '@atb/modules/time';
