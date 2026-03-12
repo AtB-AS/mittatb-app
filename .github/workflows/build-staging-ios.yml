@@ -65,7 +65,6 @@ jobs:
         uses: actions/cache@v4
         id: pods-cache
         with:
-          lookup-only: true
           path: |
             ios/Pods
             ~/Library/Caches/CocoaPods
@@ -77,7 +76,6 @@ jobs:
         uses: actions/cache@v4
         id: modules-cache
         with:
-          lookup-only: true
           path: '**/node_modules'
           key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
           restore-keys: |
@@ -85,7 +83,6 @@ jobs:
       # ===== Install node-modules  =====
       - name: Install node v22
         uses: actions/setup-node@v5
-        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         with:
           node-version: 22
           cache: 'yarn'
