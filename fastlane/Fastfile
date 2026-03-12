@@ -374,6 +374,7 @@ platform :ios do
       configuration: ENV['BUILD_CONFIGURATION'],
       export_method: ENV['EXPORT_METHOD'],
       workspace: './ios/atb.xcworkspace',
+      buildlog_path: "./build_logs",
       export_options: {
         signingStyle: "manual",
         provisioningProfiles: {

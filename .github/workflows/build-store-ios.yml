@@ -93,6 +93,26 @@ jobs:
         with:
           name: sourcemaps-${{ matrix.org }}
           path: ios/bundle/
+      - name: Upload build logs
+        if: always()  # uploads even if build fails
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: ./build_logs/
+      - name: Dump bundling logs
+        if: always()
+        run: |
+          mkdir -p build_logs
+          find ~/Library/Developer/Xcode/DerivedData -name "*.log" -path "*Logs/Build*" | while read LOG; do
+          grep -A5 -E "react-native-xcode|hermesc|compose-source|sourcemap|Writing bundle" "$LOG" >> build_logs/bundling.txt 2>/dev/null || true
+          done
+          echo "Lines found: $(wc -l < build_logs/bundling.txt)"
+      - name: Upload bundling logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundling-logs
+          path: build_logs/
       - name: Distribute to TestFlight
         if: ${{ github.event_name != 'workflow_dispatch' }}
         run: |
