@@ -57,6 +57,7 @@ else
     codesign -vvvv -f -s "$IOS_CODE_SIGN_IDENTITY" --entitlements entitlements.plist "Payload/$APP_NAME/"
 
     echo "Generate new ipa"
+    rm -f "$IPA_FILE_NAME"
     zip -qr "$IPA_FILE_NAME" Payload/
 
     echo "Check integrity"
