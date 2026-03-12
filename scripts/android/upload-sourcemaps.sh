@@ -18,7 +18,7 @@ else
     --version-name="${APP_VERSION}" \
     --version-code="${BUILD_ID}" \
     --source-map="${GITHUB_WORKSPACE:-.}/bundle/index.android.bundle.map" \
-    --bundle="${GITHUB_WORKSPACE:-.}/bundle/index.android.bundle" \
+    --bundle="${GITHUB_WORKSPACE:-.}/bundle/index.android.bundle.hbc" \
     --platform=android \
     --project-root="${GITHUB_WORKSPACE:-.}" \
     --verbose
