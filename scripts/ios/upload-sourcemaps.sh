@@ -18,8 +18,8 @@ else
         --api-key="${BUGSNAG_API_KEY}" \
         --version-name="${APP_VERSION}" \
         --bundle-version="${BUILD_ID}" \
-        --source-map=bundle/main.jsbundle.map \
-        --bundle=bundle/main.jsbundle \
+        --source-map="${GITHUB_WORKSPACE:-.}/bundle/main.jsbundle.map" \
+        --bundle="${GITHUB_WORKSPACE:-.}/bundle/main.jsbundle" \
         --platform=ios \
         --project-root="${GITHUB_WORKSPACE:-.}" \
         --verbose

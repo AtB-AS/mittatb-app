@@ -20,7 +20,7 @@ runs:
     - name: Create bundle and source maps
       if: inputs.skip-create-sourcemaps != 'true'
       shell: bash
-      run: sh ./scripts/android/create-sourcemaps.sh
+      run: bash ./scripts/android/create-sourcemaps.sh
     - name: Upload JS bundle and source maps
       continue-on-error: true
       shell: bash

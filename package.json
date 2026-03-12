@@ -29,8 +29,8 @@
     "unimported": "npx unimported",
     "storybook-generate": "sb-rn-get-stories",
     "sourcemaps": "yarn sourcemaps:ios && yarn sourcemaps:android",
-    "sourcemaps:android": "sh ./scripts/android/create-sourcemaps.sh",
-    "sourcemaps:ios": "sh ./scripts/ios/create-sourcemaps.sh"
+    "sourcemaps:android": "bash ./scripts/android/create-sourcemaps.sh",
+    "sourcemaps:ios": "bash ./scripts/ios/create-sourcemaps.sh"
   },
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
