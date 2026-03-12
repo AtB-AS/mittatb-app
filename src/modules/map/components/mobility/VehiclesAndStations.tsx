@@ -193,7 +193,7 @@ export const useVehiclesAndStationsVectorSource: () => {
   // The reason not to, is to simplify potential cache tile hotloading on the server.
   const tileLayerNames: TileLayerName[] = [
     'vehicles_clustered',
-    'stations_clustered',
+    'stations_clustered_v2',
   ];
   const tileUrlTemplate = useTileUrlTemplate(tileLayerNames);
 
