@@ -2,6 +2,7 @@ name: Build store iOS project
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -93,22 +94,27 @@ jobs:
           name: sourcemaps-${{ matrix.org }}
           path: ios/bundle/
       - name: Distribute to TestFlight
+        if: ${{ github.event_name != 'workflow_dispatch' }}
         run: |
           echo ${{ secrets.APP_STORE_CONNECT_API_KEY}} | base64 --decode > app-store-connect-api-key.json
           bundle exec fastlane ios testflight_prod
         env:
           APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
       - name: Create bundle and source maps
+        if: ${{ github.event_name != 'workflow_dispatch' }}
         run: sh ./scripts/ios/create-sourcemaps.sh
       - name: Upload bundle and source maps
+        if: ${{ github.event_name != 'workflow_dispatch' }}
         run: sh ./scripts/ios/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Upload dSYMs
+        if: ${{ github.event_name != 'workflow_dispatch' }}
         run: sh ./scripts/ios/upload-dsyms.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Register app version
+        if: ${{ github.event_name != 'workflow_dispatch' }}
         run: sh ./scripts/ios/register-app-version.sh
         env:
           ENTUR_PUBLISH_CLIENT: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_PRODUCTION}}
