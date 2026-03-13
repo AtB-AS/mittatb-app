@@ -18,7 +18,7 @@ const LOGO_SIZE = 20;
  */
 type OperatorNameAndLogoProps = {
   operatorName: string;
-  logoUrl: string | undefined;
+  logoUrl: string | undefined | null;
   fallback?: React.JSX.Element;
   style?: StyleProp<ViewStyle>;
 };

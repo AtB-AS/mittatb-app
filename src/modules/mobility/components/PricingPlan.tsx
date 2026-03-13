@@ -1,8 +1,4 @@
 import React from 'react';
-import {
-  PricingPlanFragment,
-  PricingSegmentFragment,
-} from '@atb/api/types/generated/fragments/mobility-shared';
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {MobilityStat} from './MobilityStat';
 import {useTranslation} from '@atb/translations';
@@ -11,10 +7,11 @@ import {OperatorBenefitIdType} from '@atb/modules/configuration';
 import {useIsEligibleForBenefit} from '../use-is-eligible-for-benefit';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';
 import {formatNumberToString} from '@atb-as/utils';
+import {ShmoPricingPlan, ShmoPricingSegment} from '@atb/api/types/mobility';
 
 type PricingPlanProps = {
   operator: string;
-  plan: PricingPlanFragment;
+  plan: ShmoPricingPlan;
   benefit?: OperatorBenefitType | undefined;
 };
 export const PricingPlan = ({operator, plan, benefit}: PricingPlanProps) => {
@@ -54,7 +51,7 @@ export const PricingPlan = ({operator, plan, benefit}: PricingPlanProps) => {
 
 type PriceInfoProps = {
   price: number;
-  pricingSegment: PricingSegmentFragment;
+  pricingSegment: ShmoPricingSegment;
   unit: 'min' | 'km';
   eligibleBenefit?: OperatorBenefitIdType;
 };

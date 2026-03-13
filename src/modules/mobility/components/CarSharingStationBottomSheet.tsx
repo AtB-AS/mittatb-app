@@ -93,7 +93,7 @@ export const CarSharingStationBottomSheet = ({
       heading={operatorName}
       subText={t(MobilityTexts.formFactor(FormFactor.Car))}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      logoUrl={brandLogoUrl}
+      logoUrl={brandLogoUrl ?? ''}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >
@@ -171,7 +171,7 @@ export const CarSharingStationBottomSheet = ({
                 <OperatorActionButton
                   operatorId={operatorId}
                   operatorName={operatorName}
-                  appStoreUri={appStoreUri}
+                  appStoreUri={appStoreUri ?? ''}
                   rentalAppUri={rentalAppUri}
                   isBonusPayment={payWithBonusPoints}
                   setIsBonusPayment={setPayWithBonusPoints}

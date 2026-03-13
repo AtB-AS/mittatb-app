@@ -8,13 +8,12 @@ import {Unlock, PricePerTime} from '@atb/assets/svg/mono-icons/mobility';
 import {VehicleCardStat} from './VehicleCardStat';
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {formatPricePerUnit, formatRange, getBatteryLevelIcon} from '../utils';
-import {PricingPlanFragment} from '@atb/api/types/generated/fragments/mobility-shared';
 import {ShmoPricingPlan} from '@atb/api/types/mobility';
 import {formatNumberToString} from '@atb-as/utils';
 
 type Props = {
-  pricingPlan: PricingPlanFragment | ShmoPricingPlan;
-  currentFuelPercent: number | undefined;
+  pricingPlan: ShmoPricingPlan;
+  currentFuelPercent: number | undefined | null;
   currentRangeMeters: number;
 };
 

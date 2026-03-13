@@ -37,7 +37,6 @@ import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {MapBottomSheetType, useMapContext} from './MapContext';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type MapBottomSheetsProps = {
   mapViewRef: RefObject<MapboxGL.MapView | null>;
@@ -206,7 +205,6 @@ export const MapBottomSheets = ({
             navigateToShmoSupport({
               operatorId: activeBooking.asset.operator.id,
               bookingId: activeBooking.bookingId,
-              formFactor: FormFactor.Scooter,
             });
           }}
           photoNavigation={() => {
@@ -239,7 +237,6 @@ export const MapBottomSheets = ({
               navigateToShmoSupport({
                 operatorId,
                 bookingId,
-                formFactor: FormFactor.Scooter,
               });
             }}
             locationArrowOnPress={locationArrowOnPress}

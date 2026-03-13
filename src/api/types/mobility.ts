@@ -83,6 +83,8 @@ const ShmoPricingSegmentSchema = z.object({
     ),
 });
 
+export type ShmoPricingSegment = z.infer<typeof ShmoPricingSegmentSchema>;
+
 const ShmoPricingPlanSchema = z.object({
   currency: z.string().describe('Currency in ISO 4217 code'),
   price: z.number().describe('Fare price in the specified currency'),
@@ -90,6 +92,10 @@ const ShmoPricingPlanSchema = z.object({
     .array(ShmoPricingSegmentSchema)
     .nullish()
     .describe('Array of pricing segments, optional'),
+  perKmPricing: z
+    .array(ShmoPricingSegmentSchema)
+    .nullish()
+    .describe('Array of pricing segments per kilometer, optional'),
 });
 
 export type ShmoPricingPlan = z.infer<typeof ShmoPricingPlanSchema>;
@@ -121,10 +127,96 @@ const ShmoPricingSchema = z.object({
   finalAmount: z.number().nullish(),
 });
 
+export type ShmoPricing = z.infer<typeof ShmoPricingSchema>;
+
 const ShmoOperatorSchema = z.object({
   id: z.string(),
   name: z.string(),
 });
+
+export type ShmoOperator = z.infer<typeof ShmoOperatorSchema>;
+
+const TranslationSchema = z.object({
+  language: z.string(),
+  value: z.string(),
+});
+
+export type TranslatedString = z.infer<typeof TranslationSchema>[];
+
+const LocalizedStringSchema = z.object({
+  translation: z.array(TranslationSchema).optional(),
+});
+
+export type LocalizedString = z.infer<typeof LocalizedStringSchema>;
+
+const RentalAppPlatformSchema = z.object({
+  discoveryUri: z.string().nullable(),
+  storeUri: z.string().nullable(),
+});
+
+export type RentalAppPlatform = z.infer<typeof RentalAppPlatformSchema>;
+
+const BrandAssetsSchema = z.object({
+  brandImageUrl: z.string().nullable(),
+  brandImageUrlDark: z.string().nullable(),
+  brandLastModified: z.string().nullable(),
+});
+
+export type BrandAssets = z.infer<typeof BrandAssetsSchema>;
+
+const SystemSchema = z.object({
+  id: z.string(),
+  operator: z.object({
+    id: z.string(),
+    name: LocalizedStringSchema,
+  }),
+  name: LocalizedStringSchema,
+  brandAssets: BrandAssetsSchema.nullable().optional(),
+  rentalApps: z
+    .object({
+      android: RentalAppPlatformSchema.optional(),
+      ios: RentalAppPlatformSchema.optional(),
+    })
+    .optional(),
+  openingHours: z.string().nullable().optional(),
+});
+
+export type System = z.infer<typeof SystemSchema>;
+
+const VehicleTypeSchema = z.object({
+  id: z.string(),
+  maxRangeMeters: z.number().nullable().optional(),
+  formFactor: z.string(),
+  propulsionType: z.string(),
+  name: LocalizedStringSchema,
+});
+
+export type VehicleType = z.infer<typeof VehicleTypeSchema>;
+
+const RentalUrisSchema = z.object({
+  android: z.string().nullable().optional(),
+  ios: z.string().nullable().optional(),
+});
+
+export type RentalUris = z.infer<typeof RentalUrisSchema>;
+
+export const VehicleSchema = z.object({
+  id: z.string(),
+  lat: z.number(),
+  lon: z.number(),
+  currentFuelPercent: z.number().nullable().optional(),
+  currentRangeMeters: z.number(),
+  isReserved: z.boolean(),
+  isDisabled: z.boolean(),
+  availableUntil: z.string().nullable().optional(),
+  pricingPlan: ShmoPricingPlanSchema,
+  system: SystemSchema,
+  station: z.object({id: z.string()}).nullable().optional(),
+  rentalUris: RentalUrisSchema.optional(),
+  vehicleType: VehicleTypeSchema,
+});
+
+export type Vehicle = z.infer<typeof VehicleSchema>;
 
 export const AssetSchema = z.object({
   id: z.string().nullish(),
@@ -203,9 +295,19 @@ export enum SupportType {
 
 export const MAX_SUPPORT_COMMENT_LENGTH = 400;
 
+export const VehiclesRequestBodySchema = z.object({
+  stationId: z.string().nullish(),
+  propulsionType: z.string().nullish(),
+  sort: z.string().nullish(),
+  maxCount: z.number().int().nullish(),
+});
+
+export type VehiclesRequestBody = z.infer<typeof VehiclesRequestBodySchema>;
+
 export const SendSupportRequestBodySchema = z.object({
   bookingId: z.string().uuid().nullish(),
   assetId: z.string().nullish(),
+  stationId: z.string().nullish(),
   supportType: z.nativeEnum(SupportType),
   contactInformationEndUser: z
     .object({
@@ -280,18 +382,9 @@ export const AssetFromQrCodeQuerySchema = z.object({
 
 export type AssetFromQrCodeQuery = z.infer<typeof AssetFromQrCodeQuerySchema>;
 
-export const TranslationSchema = z.object({
-  language: z.string(),
-  value: z.string(),
-});
-
-export const NameSchema = z.object({
-  translations: z.array(TranslationSchema),
-});
-
 export const OperatorSchema = z.object({
   id: z.string(),
-  name: NameSchema,
+  name: LocalizedStringSchema,
 });
 
 export const OperatorsResponseSchema = z.object({
@@ -299,7 +392,6 @@ export const OperatorsResponseSchema = z.object({
 });
 
 export type Translation = z.infer<typeof TranslationSchema>;
-export type Name = z.infer<typeof NameSchema>;
 export type Operator = z.infer<typeof OperatorSchema>;
 export type OperatorsResponse = z.infer<typeof OperatorsResponseSchema>;
 

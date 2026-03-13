@@ -1,8 +1,5 @@
 import {Feature, Point, Position} from 'geojson';
-import {
-  PricingPlanFragment,
-  RentalUrisFragment,
-} from '@atb/api/types/generated/fragments/mobility-shared';
+import {PricingPlanFragment} from '@atb/api/types/generated/fragments/mobility-shared';
 import {
   FormFactorFilterType,
   getVisibleRange,
@@ -29,6 +26,7 @@ import {
 } from '@atb/assets/svg/mono-icons/miscellaneous';
 import {
   isShmoPricingPlan,
+  RentalUris,
   ShmoPricingPlan,
   StationFeature,
   StationFeatureSchema,
@@ -152,11 +150,11 @@ export type AreaState = {
   range: number;
 };
 
-export const getRentalAppUri = <T extends {rentalUris?: RentalUrisFragment}>(
+export const getRentalAppUri = <T extends {rentalUris?: RentalUris}>(
   t: T | undefined | null,
 ) => (Platform.OS === 'ios' ? t?.rentalUris?.ios : t?.rentalUris?.android);
 
-export const hasMultiplePricingPlans = (plan: PricingPlanFragment) =>
+export const hasMultiplePricingPlans = (plan: ShmoPricingPlan) =>
   (plan.perKmPricing && plan.perMinPricing) ||
   (plan.perKmPricing && plan.perKmPricing.length > 1) ||
   (plan.perMinPricing && plan.perMinPricing.length > 1);

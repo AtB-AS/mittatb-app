@@ -1,7 +1,4 @@
-import {
-  VehicleExtendedFragment,
-  VehicleId,
-} from '@atb/api/types/generated/fragments/vehicles';
+import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
 import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -33,21 +30,18 @@ import {
   BottomSheetHeaderType,
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
-
-type ScooterHelpParams = {operatorId: string} & (
-  | {vehicleId: string}
-  | {bookingId: string}
-);
+import {ShmoHelpParams} from '@atb/stacks-hierarchy';
+import {Vehicle} from '@atb/api/types/mobility';
 
 type Props = {
   selectPaymentMethod: () => void;
   vehicleId: VehicleId;
   onClose: () => void;
   onReportParkingViolation: () => void;
-  onVehicleReceived?: (vehicle: VehicleExtendedFragment) => void;
+  onVehicleReceived?: (vehicle: Vehicle) => void;
   startOnboardingCallback: () => void;
   locationArrowOnPress: () => void;
-  navigateToSupport: (params: ScooterHelpParams) => void;
+  navigateToSupport: (params: ShmoHelpParams) => void;
   navigateToLogin: () => void;
   navigateToScanQrCode: () => void;
 };
@@ -80,7 +74,6 @@ export const ScooterSheet = ({
 
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
-
   const {isLoading: shmoReqIsLoading, hasBlockers} =
     useShmoRequirements(operatorId);
 
@@ -103,7 +96,7 @@ export const ScooterSheet = ({
       heading={operatorName}
       subText={t(MobilityTexts.formFactor(FormFactor.Scooter))}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      logoUrl={brandLogoUrl}
+      logoUrl={brandLogoUrl ?? ''}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >
@@ -161,7 +154,10 @@ export const ScooterSheet = ({
                 <Button
                   expanded={true}
                   onPress={() => {
-                    navigateToSupport({vehicleId: id, operatorId});
+                    navigateToSupport({
+                      vehicleId: id,
+                      operatorId,
+                    });
                   }}
                   text={t(MobilityTexts.helpText)}
                   mode="secondary"
@@ -174,7 +170,7 @@ export const ScooterSheet = ({
                   <OperatorActionButton
                     operatorId={operatorId}
                     operatorName={operatorName}
-                    appStoreUri={appStoreUri}
+                    appStoreUri={appStoreUri ?? ''}
                     rentalAppUri={rentalAppUri}
                   />
                 )}
