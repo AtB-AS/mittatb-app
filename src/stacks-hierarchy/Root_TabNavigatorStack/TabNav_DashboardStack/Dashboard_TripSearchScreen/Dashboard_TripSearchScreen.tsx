@@ -14,6 +14,7 @@ import {
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {
   SelectableLocationType,
+  usePendingLocationSearchStore,
   useLocationSearchValue,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Results} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/Results';
@@ -68,6 +69,9 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {WithOverlayButton} from '@atb/components/overlay-button';
 
+const RESULT_KEY_FROM = 'Dashboard_TripSearchScreen--fromLocation';
+const RESULT_KEY_TO = 'Dashboard_TripSearchScreen--toLocation';
+
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
 const getHeaderBackgroundColor = (theme: Theme) =>
@@ -106,6 +110,18 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const {location} = useGeolocationContext();
 
   const currentLocation = location || undefined;
+
+  const {pendingResult, clearPendingResult} = usePendingLocationSearchStore();
+
+  useEffect(() => {
+    if (pendingResult?.key === RESULT_KEY_FROM) {
+      navigation.setParams({fromLocation: pendingResult.location});
+      clearPendingResult();
+    } else if (pendingResult?.key === RESULT_KEY_TO) {
+      navigation.setParams({toLocation: pendingResult.location});
+      clearPendingResult();
+    }
+  }, [pendingResult, clearPendingResult, navigation]);
 
   const {from, to} = useLocations(currentLocation);
   const tripSearchEnabled = isValidTripLocations(from, to);
@@ -174,32 +190,19 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   }, [tripsSearchState, t]);
 
   const openLocationSearch = (
-    callerRouteParam: keyof RootProps['route']['params'],
+    resultKey: typeof RESULT_KEY_FROM | typeof RESULT_KEY_TO,
     initialLocation: Location | undefined,
-  ) =>
+  ) => {
+    clearPendingResult();
     navigation.navigate('Root_LocationSearchByTextScreen', {
+      resultKey,
       label:
-        callerRouteParam === 'fromLocation'
-          ? t(SharedTexts.from)
-          : t(SharedTexts.to),
-      callerRouteConfig: {
-        route: [
-          'Root_TabNavigatorStack',
-          {
-            screen: 'TabNav_DashboardStack',
-            params: {
-              screen: 'Dashboard_TripSearchScreen',
-              params: {},
-              merge: true,
-            },
-          },
-        ],
-        locationRouteParam: callerRouteParam,
-      },
+        resultKey === RESULT_KEY_FROM ? t(SharedTexts.from) : t(SharedTexts.to),
       initialLocation,
       includeJourneyHistory: true,
       onlyStopPlacesCheckboxInitialState: false,
     });
+  };
 
   const onPressed = useCallback(
     (
@@ -317,7 +320,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   }
                   location={from}
                   label={t(SharedTexts.from)}
-                  onPress={() => openLocationSearch('fromLocation', from)}
+                  onPress={() => openLocationSearch(RESULT_KEY_FROM, from)}
                   testID="searchFromButton"
                 />
 
@@ -327,7 +330,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   )}
                   label={t(SharedTexts.to)}
                   location={to}
-                  onPress={() => openLocationSearch('toLocation', to)}
+                  onPress={() => openLocationSearch(RESULT_KEY_TO, to)}
                   testID="searchToButton"
                 />
               </Section>

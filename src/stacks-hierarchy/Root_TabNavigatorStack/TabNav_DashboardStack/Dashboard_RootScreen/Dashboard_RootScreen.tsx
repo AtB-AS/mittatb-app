@@ -39,7 +39,7 @@ import {ScreenHeading} from '@atb/components/heading';
 import {BonusDashboard} from './components/BonusDashboard';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
-import {LocationSearchCallerRoute} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+import {usePendingLocationSearchStore} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {StoredTripPatternsDashboardComponent} from '@atb/modules/experimental-store-trip-patterns';
 import {TripPattern} from '@atb/api/types/trips';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
@@ -48,17 +48,6 @@ import {WithOverlayButton} from '@atb/components/overlay-button';
 import {KnownProgramId, useIsEnrolled} from '@atb/modules/enrollment';
 
 type RootProps = DashboardScreenProps<'Dashboard_RootScreen'>;
-const callerRoute: LocationSearchCallerRoute = [
-  'Root_TabNavigatorStack',
-  {
-    screen: 'TabNav_DashboardStack',
-    params: {
-      screen: 'Dashboard_RootScreen',
-      params: {},
-      merge: true,
-    },
-  },
-];
 
 export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
   const style = useStyle();
@@ -70,6 +59,18 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
 
   const isBonusEnabled = useIsEnrolled(KnownProgramId.BONUS);
   const {locationIsAvailable, location} = useGeolocationContext();
+
+  const {pendingResult, clearPendingResult} = usePendingLocationSearchStore();
+  useEffect(() => {
+    if (pendingResult?.key === 'Dashboard_RootScreen/fromLocation') {
+      navigation.setParams({fromLocation: pendingResult.location});
+      clearPendingResult();
+    } else if (pendingResult?.key === 'Dashboard_RootScreen/toLocation') {
+      navigation.setParams({toLocation: pendingResult.location});
+      clearPendingResult();
+    }
+  }, [pendingResult, clearPendingResult, navigation]);
+
   const focusRef = useFocusOnLoad(navigation);
   const isFocused = useIsFocusedAndActive();
 
@@ -127,22 +128,21 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
   );
 
   const openLocationSearch = (
-    callerRouteParam: keyof RootProps['route']['params'],
+    callerRouteParam: 'fromLocation' | 'toLocation',
     initialLocation: Location | undefined,
-  ) =>
+  ) => {
+    clearPendingResult();
     navigation.navigate('Root_LocationSearchByTextScreen', {
+      resultKey: `Dashboard_RootScreen/${callerRouteParam}`,
       label:
         callerRouteParam === 'fromLocation'
           ? t(SharedTexts.from)
           : t(SharedTexts.to),
-      callerRouteConfig: {
-        route: callerRoute,
-        locationRouteParam: callerRouteParam,
-      },
       initialLocation,
       includeJourneyHistory: true,
       onlyStopPlacesCheckboxInitialState: false,
     });
+  };
 
   function swap() {
     log('swap', {
