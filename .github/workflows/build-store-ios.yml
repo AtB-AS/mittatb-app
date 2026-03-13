@@ -2,6 +2,7 @@ name: Build store iOS project
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -12,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [atb, nfk, fram, troms]
+        org: [atb]
     environment: ${{ matrix.org }}
     timeout-minutes: 360
     runs-on: macOS-26
@@ -45,6 +46,8 @@ jobs:
       - name: Enable Apple Pay entitlement
         if: ${{ env.APPLE_PAY_MERCHANT_ID != '' }}
         run: bundle exec fastlane ios enable_apple_pay_entitlement
+      - name: Create sourcemap output directory
+        run: mkdir -p ios/bundle
       - name: Run fastlane build
         run: bundle exec fastlane ios build
         env:
@@ -56,19 +59,8 @@ jobs:
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
-      - name: Distribute to TestFlight
-        run: |
-          echo ${{ secrets.APP_STORE_CONNECT_API_KEY}} | base64 --decode > app-store-connect-api-key.json
-          bundle exec fastlane ios testflight_prod
-        env:
-          APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
-      - name: Setup Bugsnag CLI
-        uses: ./.github/actions/setup-bugsnag-cli
-      - name: Upload Bugsnag symbols
-        uses: ./.github/actions/ios-upload-bugsnag
+      - name: Upload bundle and sourcemap artifact
+        uses: actions/upload-artifact@v4
         with:
-          bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
-      - name: Register app version
-        run: sh ./scripts/ios/register-app-version.sh
-        env:
-          ENTUR_PUBLISH_CLIENT: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_PRODUCTION}}
+          name: sourcemaps-${{ matrix.org }}
+          path: ios/bundle/
