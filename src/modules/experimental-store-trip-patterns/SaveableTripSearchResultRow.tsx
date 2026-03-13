@@ -1,66 +1,70 @@
 import React, {useCallback, useMemo} from 'react';
 import {useStoredTripPatterns} from './StoredTripPatternsContext';
-import {useIsExperimentalEnabled} from '@atb/modules/experimental';
+import {
+  useIsExperimentalEnabled,
+  wrapWithExperimentalFeatureToggledComponent,
+} from '@atb/modules/experimental';
 import {RightActionKind, SwipeableResultRow} from './SwipeableResultRow';
 import {getTripPatternKey} from './utils';
 import {TripPattern} from '@atb/api/types/trips';
 import {SaveFill} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 
-export const SaveableTripSearchResultRow: React.FC<
-  React.PropsWithChildren<{
-    tripPattern: TripPattern;
-  }>
-> = ({children, tripPattern}) => {
-  const isExperimentalEnabled = useIsExperimentalEnabled();
-  const {tripPatterns, addTripPattern, removeTripPattern, canAddTripPattern} =
-    useStoredTripPatterns();
+export const SaveableTripSearchResultRow =
+  wrapWithExperimentalFeatureToggledComponent<
+    React.PropsWithChildren<{
+      tripPattern: TripPattern;
+    }>
+  >('render-children-if-disabled', ({children, tripPattern}) => {
+    const isExperimentalEnabled = useIsExperimentalEnabled();
+    const {tripPatterns, addTripPattern, removeTripPattern, canAddTripPattern} =
+      useStoredTripPatterns();
 
-  const canAdd = useMemo(() => {
-    return canAddTripPattern(tripPattern);
-  }, [tripPattern, canAddTripPattern]);
+    const canAdd = useMemo(() => {
+      return canAddTripPattern(tripPattern);
+    }, [tripPattern, canAddTripPattern]);
 
-  const isStored = useMemo(
-    () =>
-      canAdd &&
-      tripPatterns.some((tp) => tp.key === getTripPatternKey(tripPattern)),
-    [tripPattern, tripPatterns, canAdd],
-  );
+    const isStored = useMemo(
+      () =>
+        canAdd &&
+        tripPatterns.some((tp) => tp.key === getTripPatternKey(tripPattern)),
+      [tripPattern, tripPatterns, canAdd],
+    );
 
-  const rightActionKind = useMemo<RightActionKind>(
-    () => (isStored ? 'delete' : 'save'),
-    [isStored],
-  );
+    const rightActionKind = useMemo<RightActionKind>(
+      () => (isStored ? 'delete' : 'save'),
+      [isStored],
+    );
 
-  const onRightAction = useCallback(
-    (actionKind: RightActionKind, closeSwipeable: () => void) => {
-      closeSwipeable();
-      if (actionKind === 'delete') {
-        removeTripPattern(tripPattern);
-      } else {
-        addTripPattern(tripPattern);
-      }
-    },
-    [tripPattern, addTripPattern, removeTripPattern],
-  );
+    const onRightAction = useCallback(
+      (actionKind: RightActionKind, closeSwipeable: () => void) => {
+        closeSwipeable();
+        if (actionKind === 'delete') {
+          removeTripPattern(tripPattern);
+        } else {
+          addTripPattern(tripPattern);
+        }
+      },
+      [tripPattern, addTripPattern, removeTripPattern],
+    );
 
-  if (!isExperimentalEnabled || !canAdd) {
-    return children;
-  }
+    if (!isExperimentalEnabled || !canAdd) {
+      return children;
+    }
 
-  return (
-    <SwipeableResultRow
-      onRightAction={onRightAction}
-      rightActionKind={rightActionKind}
-    >
-      {children}
-      {isStored && (
-        <ThemeIcon
-          svg={SaveFill}
-          color="secondary"
-          style={{position: 'absolute', right: 20, top: 2}}
-        />
-      )}
-    </SwipeableResultRow>
-  );
-};
+    return (
+      <SwipeableResultRow
+        onRightAction={onRightAction}
+        rightActionKind={rightActionKind}
+      >
+        {children}
+        {isStored && (
+          <ThemeIcon
+            svg={SaveFill}
+            color="secondary"
+            style={{position: 'absolute', right: 20, top: 2}}
+          />
+        )}
+      </SwipeableResultRow>
+    );
+  });
