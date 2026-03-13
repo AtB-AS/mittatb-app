@@ -135,7 +135,7 @@ export const Profile_EditProfileScreen = ({
           <ThemeText
             typography="heading__l"
             color={themeColor}
-            style={{flexShrink: 1}}
+            style={{flexShrink: 1, marginLeft: theme.spacing.medium}}
           >
             {t(EditProfileTexts.header.title)}
           </ThemeText>
