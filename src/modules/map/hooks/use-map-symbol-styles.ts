@@ -120,12 +120,16 @@ export const useMapSymbolStyles = ({
   ];
 
   const symbolSortKey: Expression = [
-    'case',
-    ['==', iconCode, 'ebike'],
-    2, // Bikes get priority
-    ['==', iconCode, 'scooter'],
-    1, // Scooters stay below
-    0, // Default
+    '+',
+    [
+      'case',
+      ['==', iconCode, 'ebike'],
+      2, // Bikes get priority
+      ['==', iconCode, 'scooter'],
+      1, // Scooters stay below
+      0, // Default
+    ],
+    ['case', isCluster, 3, 0],
   ];
 
   const systemId: Expression = ['get', 'system_id'];
