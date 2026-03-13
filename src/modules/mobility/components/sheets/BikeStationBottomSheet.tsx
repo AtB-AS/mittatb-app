@@ -1,5 +1,4 @@
 import {BikeStationFragment} from '@atb/api/types/generated/fragments/stations';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {
   BottomSheetHeaderType,
   MapBottomSheet,
@@ -13,8 +12,6 @@ import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useBikeStation} from '../../use-bike-station';
 import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
-import {useOperatorBenefit} from '../../use-operator-benefit';
-import {OperatorBenefit} from '../OperatorBenefit';
 import {BikeStationIntegration} from '../BikeStationIntegration';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import {getVehicles} from '@atb/api/mobility';
@@ -41,9 +38,8 @@ export const BikeStationBottomSheet = ({
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
-  const {isLoading, isError, station, stationName, operatorId, operatorName} =
+  const {isLoading, isError, station, stationName, operatorName} =
     useBikeStation(stationId);
-  const {operatorBenefit} = useOperatorBenefit(operatorId);
   const [loadingSelectedVehicle, setLoadingSelectedVehicle] = useState(false);
   const [selectedVehicleError, setSelectedVehicleError] = useState(false);
 
@@ -119,13 +115,6 @@ export const BikeStationBottomSheet = ({
           />
         </View>
       )}
-      {operatorBenefit && (
-        <OperatorBenefit
-          benefit={operatorBenefit}
-          formFactor={FormFactor.Bicycle}
-          style={styles.operatorBenefit}
-        />
-      )}
       {!isLoading && !loadingSelectedVehicle && !isError && station && (
         <BikeStationIntegration
           station={station}
@@ -140,9 +129,6 @@ export const BikeStationBottomSheet = ({
 const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   return {
     activityIndicator: {
-      marginBottom: theme.spacing.medium,
-    },
-    operatorBenefit: {
       marginBottom: theme.spacing.medium,
     },
     container: {
