@@ -10,10 +10,7 @@ import {
 } from '@atb/components/sections';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {
-  FormFactor,
-  PropulsionType,
-} from '@atb/api/types/generated/mobility-types_v2';
+import {PropulsionType} from '@atb/api/types/generated/mobility-types_v2';
 import SvgParking from '@atb/assets/svg/mono-icons/places/Parking';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -83,7 +80,6 @@ export const BikeStationIntegration = ({
             navigateSupportCallback({
               operatorId: station?.system.operator.id ?? '',
               stationId: station?.id ?? '',
-              formFactor: FormFactor.Bicycle,
             })
           }
         />

@@ -7,4 +7,5 @@ export type {
   RootStackProps,
   NextScreenParams,
   StackParams,
+  ShmoHelpParams,
 } from './navigation-types';

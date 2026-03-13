@@ -1,6 +1,6 @@
 import {translation as _} from '../commons';
 
-export const ScooterHelpTexts = {
+export const ShmoHelpTexts = {
   title: _('Hjelp', 'Help', 'Hjelp'),
   contactAndReport: _(
     'Kontakt og rapporter',

@@ -3,7 +3,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {Image, View} from 'react-native';
 import {Coordinates} from '@atb/utils/coordinates';
-import {UserCoordinatesMap} from '../../stacks-hierarchy/Root_ScooterHelp/components/UserCoordinatesMap';
+import {UserCoordinatesMap} from '../../stacks-hierarchy/Root_ShmoHelp/components/UserCoordinatesMap';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {BottomSheetHeaderType, BottomSheetModal} from '../bottom-sheet';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';

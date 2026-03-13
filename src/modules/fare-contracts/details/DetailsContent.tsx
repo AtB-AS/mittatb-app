@@ -37,7 +37,7 @@ import {
 } from '@atb/modules/configuration';
 import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {Barcode} from './Barcode';
-import {MapFilterType, ScooterHelpParams} from '@atb/modules/map';
+import {MapFilterType} from '@atb/modules/map';
 import {useAuthContext} from '@atb/modules/auth';
 import {CarnetFooter} from '../carnet/CarnetFooter';
 import {MobilityBenefitsActionSectionItem} from '@atb/modules/mobility';
@@ -63,13 +63,14 @@ import {getBaggageProducts} from '../get-baggage-products';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {SentOrReceivedMessageBox} from '../components/SentOrReceivedMessageBox';
 import {Mail} from '@atb/assets/svg/mono-icons/profile';
+import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 
 type Props = {
   fareContract: FareContractType;
   preassignedFareProduct?: PreassignedFareProduct;
   now: number;
   onReceiptNavigate: () => void;
-  onSupportNavigate: (params: ScooterHelpParams) => void;
+  onSupportNavigate: (params: ShmoHelpParams) => void;
   onNavigateToMap: (initialFilters: MapFilterType) => void;
   onNavigateToBonusScreen: () => void;
   onNavigateToPurchaseFlow?: (selection: PurchaseSelectionType) => void;
@@ -278,7 +279,7 @@ export const DetailsContent: React.FC<Props> = ({
             ),
           )}
           onPress={() => {
-            if (fc?.operatorId && fc?.bookingId) {
+            if (fc?.operatorId && fc?.bookingId && fc?.formFactor) {
               onSupportNavigate({
                 operatorId: fc.operatorId,
                 bookingId: fc.bookingId,
