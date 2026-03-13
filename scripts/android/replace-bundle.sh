@@ -23,29 +23,26 @@ if [[
     exit 1
 else
 
-    BUNDLE_DIR="android/app/build/generated/assets/react/$(echo ${APP_FLAVOR}${APP_ENVIRONMENT^})"
-    SOURCEMAP_DIR="android/app/build/generated/sourcemaps/react/$(echo $APP_FLAVOR${APP_ENVIRONMENT^})"
-    
-    mkdir -p $BUNDLE_DIR
-    mkdir -p $SOURCEMAP_DIR
+    BUNDLE_DIR="${GITHUB_WORKSPACE:-.}/bundle"
+    mkdir -p "$BUNDLE_DIR"
 
     BUNDLE_PATH="$BUNDLE_DIR/index.android.bundle"
-    SOURCEMAP_PATH="$SOURCEMAP_DIR/index.android.bundle.map"
+    SOURCEMAP_PATH="$BUNDLE_DIR/index.android.bundle.map"
 
     echo "Re-generate bundle"
-    npx react-native bundle --platform android --dev false --reset-cache --entry-file index.js --bundle-output $BUNDLE_PATH --sourcemap-output $SOURCEMAP_PATH
+    npx react-native bundle --platform android --dev false --reset-cache --entry-file index.js --bundle-output "$BUNDLE_PATH" --sourcemap-output "$SOURCEMAP_PATH"
 
     brew install yq
 
     echo "Install Android framework for apktool"
-    apktool if $ANDROID_HOME/platforms/android-36/android.jar
+    apktool if "$ANDROID_HOME/platforms/android-36/android.jar"
 
     echo "Decompile Android APK"
-    apktool d $APK_FILE_NAME --output decompiled-apk --no-src
+    apktool d "$APK_FILE_NAME" --output decompiled-apk --no-src
 
     echo "Replace bundle in decompiled APK"
     rm decompiled-apk/assets/index.android.bundle
-    cp $BUNDLE_PATH decompiled-apk/assets/
+    cp "$BUNDLE_PATH" decompiled-apk/assets/
 
     # Replace build number
     echo "Set version code to build id: $BUILD_ID"
@@ -55,11 +52,11 @@ else
     yq e ".versionInfo.versionName = \"$APP_VERSION\"" -i decompiled-apk/apktool.yml
 
     echo "Re-compile Android APK"
-    apktool b decompiled-apk -o temp-$APK_FILE_NAME
+    apktool b decompiled-apk -o "temp-$APK_FILE_NAME"
 
     echo "The APK must be aligned to 4 byte boundaries to work on Android"
-    /usr/local/lib/android/sdk/build-tools/36.0.0/zipalign -p -f 4 temp-$APK_FILE_NAME $APK_FILE_NAME
+    /usr/local/lib/android/sdk/build-tools/36.0.0/zipalign -p -f 4 "temp-$APK_FILE_NAME" "$APK_FILE_NAME"
 
     echo "Re-sign APK"
-    /usr/local/lib/android/sdk/build-tools/36.0.0/apksigner sign --ks $KEYSTORE_PATH --ks-pass pass:"$KEYSTORE_PASS" --key-pass pass:"$KEY_PASS" --ks-key-alias $KEY_ALIAS $APK_FILE_NAME
+    /usr/local/lib/android/sdk/build-tools/36.0.0/apksigner sign --ks "$KEYSTORE_PATH" --ks-pass pass:"$KEYSTORE_PASS" --key-pass pass:"$KEY_PASS" --ks-key-alias "$KEY_ALIAS" "$APK_FILE_NAME"
 fi
