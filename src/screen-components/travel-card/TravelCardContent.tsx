@@ -48,70 +48,6 @@ type TravelCardContentProps = {
   state: ResultItemState;
 };
 
-const TravelCardContentHeader: React.FC<{
-  tripPattern: TripPattern;
-}> = ({tripPattern}) => {
-  const styles = useThemeStyles();
-  const {t, language} = useTranslation();
-  let start = tripPattern.legs[0];
-  let startName = start.fromPlace.name;
-  if (tripPattern.legs[0].mode === 'foot' && tripPattern.legs[1]) {
-    start = tripPattern.legs[1];
-    startName = getQuayName(start.fromPlace.quay);
-  } else if (tripPattern.legs[0].mode !== 'foot') {
-    startName = getQuayName(start.fromPlace.quay);
-  }
-  const startLegIsFlexibleTransport = isLineFlexibleTransport(start.line);
-  const publicCode = start.fromPlace.quay?.publicCode || start.line?.publicCode;
-
-  const durationText = secondsToDurationShort(tripPattern.duration, language);
-  const transportName = t(getTranslatedModeName(start.mode));
-
-  return (
-    <View style={styles.resultHeader}>
-      <ThemeText
-        style={styles.fromPlaceText}
-        typography="body__s__strong"
-        testID="resultDeparturePlace"
-      >
-        {startName
-          ? t(
-              TripSearchTexts.results.resultItem.header.title(
-                transportName,
-                startName,
-              ),
-            )
-          : startLegIsFlexibleTransport && publicCode
-            ? t(
-                TripSearchTexts.results.resultItem.header.flexTransportTitle(
-                  publicCode,
-                ),
-              )
-            : transportName}
-      </ThemeText>
-      <View style={styles.durationContainer}>
-        <AccessibleText
-          typography="body__s"
-          color="secondary"
-          testID="resultDuration"
-          prefix={t(TripSearchTexts.results.resultItem.header.totalDuration)}
-        >
-          {durationText}
-        </AccessibleText>
-      </View>
-
-      <SituationOrNoticeIcon
-        situations={flatMap(tripPattern.legs, (leg) => leg.situations)}
-        notices={flatMap(tripPattern.legs, getNoticesForLeg)}
-        accessibilityLabel={t(
-          TripSearchTexts.results.resultItem.hasSituationsTip,
-        )}
-        style={styles.warningIcon}
-      />
-    </View>
-  );
-};
-
 export const TravelCardContent: React.FC<
   TravelCardContentProps & AccessibilityProps
 > = ({tripPattern, ...props}) => {
@@ -159,11 +95,6 @@ export const TravelCardContent: React.FC<
     filteredLegs.length,
   );
 
-  const iconHeight = {
-    height: theme.icon.size['normal'] * fontScale + theme.spacing.small * 2,
-  };
-  const lineHeight = {height: (theme.spacing.xSmall / 2) * fontScale};
-
   const staySeated = (idx: number): boolean => {
     const previousLeg = expandedLegs[idx - 1];
     return previousLeg && previousLeg.interchangeTo?.staySeated === true;
@@ -181,7 +112,6 @@ export const TravelCardContent: React.FC<
       accessible={false}
     >
       <TravelCardHeader tripPattern={tripPattern} />
-      <TravelCardContentHeader tripPattern={tripPattern} />
       <View style={styles.detailsContainer} {...screenReaderHidden}>
         <View
           style={styles.flexRow}
@@ -214,34 +144,6 @@ export const TravelCardContent: React.FC<
                         }
                       />
                     )}
-                    <View style={styles.departureTimes}>
-                      {staySeated(i) || isIntermediateFootLeg(leg, i) ? null : (
-                        <ThemeText
-                          typography="body__xs"
-                          color="primary"
-                          testID={'schTime' + i}
-                        >
-                          {(isLineFlexibleTransport(leg.line)
-                            ? t(dictionary.missingRealTimePrefix)
-                            : '') +
-                            formatToClock(
-                              leg.expectedStartTime,
-                              language,
-                              'floor',
-                            )}
-                        </ThemeText>
-                      )}
-                      {isSignificantDifference(leg) && (
-                        <ThemeText
-                          style={styles.scheduledTime}
-                          typography="body__xs__strike"
-                          color="secondary"
-                          testID={'aimTime' + i}
-                        >
-                          {formatToClock(leg.aimedStartTime, language, 'floor')}
-                        </ThemeText>
-                      )}
-                    </View>
                   </View>
                 </View>
               ))}
@@ -251,21 +153,6 @@ export const TravelCardContent: React.FC<
               spacing="standard"
               textType="body__m__strong"
             />
-          </View>
-          <View style={[styles.destinationLineContainer_grow, iconHeight]}>
-            <View style={[styles.destinationLine_grow, lineHeight]} />
-          </View>
-        </View>
-        <View style={[styles.destinationLineContainer, iconHeight]}>
-          <View style={[styles.destinationLine, lineHeight]} />
-        </View>
-        <View>
-          <DestinationIcon style={styles.iconContainer} />
-          <View style={styles.departureTimes}>
-            <ThemeText typography="body__xs" color="primary" testID="endTime">
-              {(lastLegIsFlexible ? t(dictionary.missingRealTimePrefix) : '') +
-                formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
-            </ThemeText>
           </View>
         </View>
       </View>
@@ -277,6 +164,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     gap: theme.spacing.medium,
+    backgroundColor: theme.color.background.neutral[0].background,
+    padding: theme.spacing.medium,
+    borderRadius: theme.border.radius.regular,
   },
   detailsContainer: {
     flexDirection: 'row',
@@ -353,7 +243,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   legOutput: {
     flexDirection: 'row',
-    gap: theme.spacing.small,
+    gap: theme.spacing.xSmall,
   },
   legAndDash: {flexDirection: 'row'},
   departureTimes: {
