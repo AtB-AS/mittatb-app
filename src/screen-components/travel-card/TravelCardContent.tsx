@@ -29,7 +29,6 @@ import {
 } from 'react-native';
 import Animated, {FadeIn} from 'react-native-reanimated';
 import {Leg, TripPattern} from '@atb/api/types/trips';
-import {RailReplacementBusMessage} from './RailReplacementBusMessage';
 import {
   getFilteredLegsByWalkOrWaitTime,
   getNoticesForLeg,
@@ -40,15 +39,16 @@ import {
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {isSignificantDifference} from './utils';
+import {TravelCardHeader} from './TravelCardHeader';
 
 type ResultItemState = 'enabled' | 'dimmed' | 'disabled';
 
-type ResultItemProps = {
+type TravelCardContentProps = {
   tripPattern: TripPattern;
   state: ResultItemState;
 };
 
-const ResultItemHeader: React.FC<{
+const TravelCardContentHeader: React.FC<{
   tripPattern: TripPattern;
 }> = ({tripPattern}) => {
   const styles = useThemeStyles();
@@ -100,8 +100,6 @@ const ResultItemHeader: React.FC<{
         </AccessibleText>
       </View>
 
-      <RailReplacementBusMessage tripPattern={tripPattern} />
-
       <SituationOrNoticeIcon
         situations={flatMap(tripPattern.legs, (leg) => leg.situations)}
         notices={flatMap(tripPattern.legs, getNoticesForLeg)}
@@ -114,10 +112,9 @@ const ResultItemHeader: React.FC<{
   );
 };
 
-const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
-  tripPattern,
-  ...props
-}) => {
+export const TravelCardContent: React.FC<
+  TravelCardContentProps & AccessibilityProps
+> = ({tripPattern, ...props}) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
@@ -183,7 +180,8 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       {...props}
       accessible={false}
     >
-      <ResultItemHeader tripPattern={tripPattern} />
+      <TravelCardHeader tripPattern={tripPattern} />
+      <TravelCardContentHeader tripPattern={tripPattern} />
       <View style={styles.detailsContainer} {...screenReaderHidden}>
         <View
           style={styles.flexRow}
@@ -274,8 +272,6 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     </Animated.View>
   );
 };
-
-export const MemoizedResultItem = React.memo(ResultItem);
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

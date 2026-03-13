@@ -2,8 +2,7 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import type {TripPattern} from '@atb/api/types/trips';
 import type {TripSearchTime} from './types';
-import {MemoizedResultItem} from './ResultItem';
-import {MemoizedResultItemFooter} from './ResultRowFooter';
+import {TravelCardContent} from './TravelCardContent';
 import {
   dictionary,
   Language,
@@ -24,7 +23,6 @@ import {
 } from '@atb/screen-components/travel-details-screens';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {getTripPatternBookingText, isSignificantDifference} from './utils';
-import {View} from 'react-native';
 import Animated, {FadeIn} from 'react-native-reanimated';
 import {NativeBlockButton} from '@atb/components/native-button';
 
@@ -73,14 +71,9 @@ export const TravelCard: React.FC<TravelCardProps> = ({
         onPress={() => onDetailsPressed(tripPattern, resultIndex)}
         testID={testID}
       >
-        <MemoizedResultItem
+        <TravelCardContent
           tripPattern={tripPattern}
           state={isInPast ? 'dimmed' : 'enabled'}
-        />
-        <View style={styles.separator} />
-        <MemoizedResultItemFooter
-          tripPattern={tripPattern}
-          isInPast={isInPast}
         />
       </NativeBlockButton>
     </Animated.View>
@@ -92,13 +85,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     marginTop: theme.spacing.small,
     marginHorizontal: theme.spacing.medium,
-  },
-  separator: {
-    flexGrow: 0,
-    backgroundColor: theme.color.background.neutral[2].background,
-    height: 1,
-    marginVertical: theme.spacing.small,
-    marginHorizontal: -theme.spacing.medium,
   },
 }));
 
