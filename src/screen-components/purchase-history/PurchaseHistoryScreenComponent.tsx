@@ -193,6 +193,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.medium,
   },
   sectionHeader: {
-    paddingHorizontal: theme.spacing.small,
+    paddingHorizontal: theme.spacing.medium,
   },
 }));
