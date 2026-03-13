@@ -6,6 +6,13 @@ import type {
 } from 'react-native';
 import {useThemeContext} from '@atb/theme';
 
+/**
+ * Hook to show a bottom border on a header when the user has scrolled.
+ * Returns an `onScroll` handler to attach to a ScrollView/FlatList, and a
+ * `borderStyle` to apply to the header element. The border is transparent
+ * when scroll position is at 0 (the top) and becomes visible as soon as 
+ * the content is scrolled.
+ */
 export function useScrollBorder() {
   const {theme} = useThemeContext();
   const [isScrolled, setIsScrolled] = useState(false);
