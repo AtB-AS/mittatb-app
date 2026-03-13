@@ -65,7 +65,7 @@ export type ScooterHelpParams = {operatorId: string} & (
 );
 
 export type MapProps = {
-  isFocused: boolean;
+  isFocusedAndActive: boolean;
   tabBarHeight: number;
   initialLocation?: Location;
   includeSnackbar?: boolean;
@@ -170,6 +170,7 @@ export type SelectedMapItemProperties = GeoJsonProperties & {
 // export type SelectedFeature = Feature<Point, SelectedMapItemProperties>;
 export type SelectedFeatureIdProp = {
   selectedFeatureId: SelectedMapItemProperties['id'];
+  mapTimeUtc: number;
 };
 
 export type AutoSelectableMapItem =
