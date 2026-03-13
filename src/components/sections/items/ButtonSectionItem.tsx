@@ -143,7 +143,7 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   },
   highlighted: {
     borderWidth: theme.border.width.slim,
-    borderColor: theme.color.foreground.dynamic.primary,
+    borderColor: theme.color.border.focus.background,
   },
   inlineValueStyle: {
     paddingTop: theme.spacing.xSmall,
