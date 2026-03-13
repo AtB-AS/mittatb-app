@@ -21,6 +21,7 @@ import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {useHarbors} from '@atb/modules/harbors';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
+import {useScrollBorder} from '@atb/utils/use-scroll-border';
 
 type Props = RootStackScreenProps<'Root_PurchaseHarborSearchScreen'>;
 
@@ -34,6 +35,7 @@ export const Root_PurchaseHarborSearchScreen = ({
   const inputRef = useRef<InternalTextInput>(null);
   const [text, setText] = useState('');
   const selectionBuilder = usePurchaseSelectionBuilder();
+  const {onScroll, borderStyle} = useScrollBorder();
 
   const onSave = (selectedStopPlace: StopPlaceFragment) => {
     const builder = selectionBuilder.fromSelection(selection);
@@ -66,39 +68,38 @@ export const Root_PurchaseHarborSearchScreen = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <FullScreenHeader
-          title={
+      <FullScreenHeader
+        showBorder={false}
+        title={
+          selection.stopPlaces?.from
+            ? t(HarborSearchTexts.header.titleTo)
+            : t(HarborSearchTexts.header.titleFrom)
+        }
+        leftButton={{type: 'back'}}
+      />
+      <View style={[styles.withPadding, borderStyle]}>
+        <TextInputSectionItem
+          ref={inputRef}
+          radius="top-bottom"
+          label={
             selection.stopPlaces?.from
-              ? t(HarborSearchTexts.header.titleTo)
-              : t(HarborSearchTexts.header.titleFrom)
+              ? t(HarborSearchTexts.stopPlaces.to)
+              : t(HarborSearchTexts.stopPlaces.from)
           }
-          leftButton={{type: 'back'}}
+          value={text}
+          onChangeText={setText}
+          showClear={Boolean(text?.length)}
+          onClear={() => setText('')}
+          placeholder={t(HarborSearchTexts.searchField.placeholder)}
+          autoCorrect={false}
+          autoComplete="off"
+          testID="searchInput"
         />
-      </View>
-      <View style={styles.header}>
-        <View style={styles.withMargin}>
-          <TextInputSectionItem
-            ref={inputRef}
-            radius="top-bottom"
-            label={
-              selection.stopPlaces?.from
-                ? t(HarborSearchTexts.stopPlaces.to)
-                : t(HarborSearchTexts.stopPlaces.from)
-            }
-            value={text}
-            onChangeText={setText}
-            showClear={Boolean(text?.length)}
-            onClear={() => setText('')}
-            placeholder={t(HarborSearchTexts.searchField.placeholder)}
-            autoCorrect={false}
-            autoComplete="off"
-            testID="searchInput"
-          />
-        </View>
       </View>
       <ScrollView
         style={styles.scroll}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
         contentContainerStyle={styles.contentBlock}
         keyboardShouldPersistTaps="handled"
         onScrollBeginDrag={() => Keyboard.dismiss()}
@@ -134,17 +135,10 @@ const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     container: {
       flex: 1,
-      backgroundColor: theme.color.background.neutral[2].background,
       paddingBottom: bottom,
     },
-    headerContainer: {
-      backgroundColor: theme.color.background.accent[0].background,
-    },
-    header: {
-      backgroundColor: theme.color.background.accent[0].background,
-    },
-    withMargin: {
-      margin: theme.spacing.medium,
+    withPadding: {
+      padding: theme.spacing.medium,
     },
     contentBlock: {
       marginHorizontal: theme.spacing.medium,

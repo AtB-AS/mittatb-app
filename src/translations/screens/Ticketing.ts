@@ -7,7 +7,7 @@ const TicketingTexts = {
     title: _('Billetter', 'Tickets', 'Billettar'),
   },
   purchaseTab: {
-    label: _('Kjøp', 'Buy', 'Kjøp'),
+    label: _('Kjøp billett', 'Buy ticket', 'Kjøp billett'),
     a11yLabel: _('Kjøp billetter', 'Buy tickets', 'Kjøp billettar'),
     button: {
       single: {

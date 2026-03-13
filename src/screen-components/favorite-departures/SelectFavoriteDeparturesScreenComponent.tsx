@@ -79,7 +79,6 @@ export const SelectFavoriteDeparturesScreenComponent = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
   closeButton: {

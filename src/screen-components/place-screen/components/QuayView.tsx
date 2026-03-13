@@ -1,7 +1,14 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
-import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  RefreshControl,
+  SectionList,
+  SectionListData,
+  View,
+} from 'react-native';
 import {
   DateSelection,
   type DepartureSearchTime,
@@ -35,6 +42,7 @@ export type QuayViewProps = {
   stopPlace: StopPlace;
   mode: StopPlacesMode;
   backgroundColor: ContrastColor;
+  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 };
 
 export function QuayView({
@@ -48,6 +56,7 @@ export function QuayView({
   stopPlace,
   mode,
   backgroundColor,
+  onScroll,
 }: QuayViewProps) {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -91,6 +100,8 @@ export function QuayView({
 
   return (
     <SectionList
+      onScroll={onScroll}
+      scrollEventThrottle={16}
       ListHeaderComponent={
         <>
           {departuresIsError && (

@@ -21,7 +21,7 @@ import phone from 'phone';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 
-const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
 type Props = RootStackScreenProps<'Root_LoginPhoneInputScreen'>;
 
@@ -83,6 +83,7 @@ export const Root_LoginPhoneInputScreen = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
+        showBorder={false}
         leftButton={
           params?.transitionOverride !== 'slide-from-bottom'
             ? {type: 'back'}
@@ -94,7 +95,6 @@ export const Root_LoginPhoneInputScreen = ({
             : undefined
         }
         focusRef={focusRef}
-        color={themeColor}
         title={t(LoginTexts.phoneInput.title)}
         globalMessageContext={GlobalMessageContextEnum.appLoginPhone}
       />
@@ -176,7 +176,6 @@ export const Root_LoginPhoneInputScreen = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   mainView: {

@@ -36,6 +36,7 @@ export const Root_NotificationPermissionScreen = ({navigation}: Props) => {
         text: t(NotificationPermissionTexts.button),
         expanded: true,
       }}
+      headerProps={{showBorder: false}}
       testID="notificationPermission"
       focusRef={focusRef}
     />

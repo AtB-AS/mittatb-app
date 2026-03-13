@@ -6,10 +6,9 @@ import {
 } from '@atb/modules/ticketing';
 import {useTimeContext} from '@atb/modules/time';
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import {SectionList, View} from 'react-native';
+import {View} from 'react-native';
 import {useAuthContext} from '@atb/modules/auth';
-import React, {useCallback, useMemo} from 'react';
-import {FullScreenHeader} from '@atb/components/screen-header';
+import React, {Ref, useCallback, useMemo} from 'react';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
 import {EmptyState} from '@atb/components/empty-state';
@@ -18,17 +17,21 @@ import {sortFcOrReservationByCreation} from '@atb/modules/fare-contracts';
 import {FareContractType} from '@atb-as/utils';
 import {ThemeText} from '@atb/components/text';
 import {ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ScreenHeading} from '@atb/components/heading';
 
 type Props = {
   onPressFareContract: (fareContractId: string) => void;
   onNavigateToBonusScreen: () => void;
   isFocused: boolean;
+  focusRef: Ref<any>;
 };
 
 export const PurchaseHistoryScreenComponent = ({
   onPressFareContract,
   onNavigateToBonusScreen,
   isFocused,
+  focusRef,
 }: Props) => {
   const {sentFareContracts, reservations, rejectedReservations} =
     useTicketingContext();
@@ -76,42 +79,52 @@ export const PurchaseHistoryScreenComponent = ({
   );
 
   return (
-    <View style={styles.container}>
-      <FullScreenHeader
-        title={t(TicketingTexts.purchaseHistory.title)}
-        leftButton={{type: 'back'}}
-      />
-      <SectionList
-        sections={sections}
-        keyExtractor={(item) => item.created + item.orderId}
-        renderSectionHeader={({section}) => (
-          <ThemeText
-            typography="body__m"
-            color="secondary"
-            style={styles.sectionHeader}
-          >
-            {section.year}
-          </ThemeText>
-        )}
-        renderItem={renderItem}
-        ListEmptyComponent={
-          <EmptyState
-            title={t(TicketingTexts.purchaseHistory.emptyState.title)}
-            details={t(TicketingTexts.purchaseHistory.emptyState.description)}
-            illustrationComponent={<ThemedTicketTilted height={84} />}
-            testID="fareContracts"
-          />
-        }
-        contentContainerStyle={styles.sectionListContent}
-        testID="ticketHistoryScrollView"
-        stickySectionHeadersEnabled={false}
-        // Optimizations for large lists
-        windowSize={7}
-        maxToRenderPerBatch={10}
-        initialNumToRender={10}
-        scrollEventThrottle={16}
-      />
-    </View>
+    <FullScreenView
+      headerProps={{
+        title: t(TicketingTexts.purchaseHistory.title),
+        leftButton: {type: 'back'},
+      }}
+      parallaxContent={(focusRef) => (
+        <ScreenHeading
+          ref={focusRef}
+          text={t(TicketingTexts.purchaseHistory.title)}
+        />
+      )}
+      focusRef={focusRef}
+    >
+      <View style={styles.container}>
+        <View
+          style={styles.sectionListContent}
+          testID="ticketHistoryScrollView"
+        >
+          {sections.length === 0 ? (
+            <EmptyState
+              title={t(TicketingTexts.purchaseHistory.emptyState.title)}
+              details={t(TicketingTexts.purchaseHistory.emptyState.description)}
+              illustrationComponent={<ThemedTicketTilted height={84} />}
+              testID="fareContracts"
+            />
+          ) : (
+            sections.map((section) => (
+              <View key={section.year} style={styles.section}>
+                <ThemeText
+                  typography="body__m"
+                  color="secondary"
+                  style={styles.sectionHeader}
+                >
+                  {section.year}
+                </ThemeText>
+                {section.data.map((item, index) => (
+                  <View key={item.created + item.orderId}>
+                    {renderItem({item, index})}
+                  </View>
+                ))}
+              </View>
+            ))
+          )}
+        </View>
+      </View>
+    </FullScreenView>
   );
 };
 
@@ -176,7 +189,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacing.medium,
     paddingTop: theme.spacing.large,
   },
+  section: {
+    gap: theme.spacing.medium,
+  },
   sectionHeader: {
-    paddingHorizontal: theme.spacing.small,
+    paddingHorizontal: theme.spacing.medium,
   },
 }));

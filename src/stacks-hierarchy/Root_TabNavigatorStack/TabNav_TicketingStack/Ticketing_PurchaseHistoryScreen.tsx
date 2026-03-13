@@ -4,6 +4,7 @@ import {TicketingScreenProps} from './navigation-types';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import {FareContractType} from '@atb-as/utils';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = TicketingScreenProps<'Ticketing_PurchaseHistoryScreen'>;
 
@@ -15,6 +16,7 @@ export const Ticketing_PurchaseHistoryScreen = ({navigation}: Props) => {
     navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
   }, [navigation, bonusScreenParams]);
 
+  const focusRef = useFocusOnLoad(navigation);
   return (
     <PurchaseHistoryScreenComponent
       onPressFareContract={(fareContractId: FareContractType['id']) =>
@@ -25,6 +27,7 @@ export const Ticketing_PurchaseHistoryScreen = ({navigation}: Props) => {
       }
       onNavigateToBonusScreen={onNavigateToBonusScreen}
       isFocused={isFocused}
+      focusRef={focusRef}
     />
   );
 };
