@@ -119,6 +119,15 @@ export const useMapSymbolStyles = ({
     'non-existing-icon',
   ];
 
+  const symbolSortKey: Expression = [
+    'case',
+    ['==', iconCode, 'ebike'],
+    2, // Bikes get priority
+    ['==', iconCode, 'scooter'],
+    1, // Scooters stay below
+    0, // Default
+  ];
+
   const systemId: Expression = ['get', 'system_id'];
   const transportOperator: Expression = [
     'case',
@@ -183,6 +192,7 @@ export const useMapSymbolStyles = ({
     iconAllowOverlap: true,
     iconOpacity,
     iconSize,
+    symbolSortKey,
   };
 
   const textOffsetXFactor = pinType == 'vehicle' ? 1 : 1.045;
