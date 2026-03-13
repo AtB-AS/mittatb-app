@@ -221,7 +221,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   );
                   navigation.navigate('Profile_SmartParkAndRideScreen', {});
                 }}
-                label="new"
                 testID="smartParkAndRideButton"
               />
             )}
