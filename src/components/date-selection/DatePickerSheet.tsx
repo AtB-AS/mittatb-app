@@ -1,7 +1,7 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DatePickerSheetTexts, useTranslation} from '@atb/translations';
 import {useKeyboardHeight} from '@atb/utils/use-keyboard-height';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {RadioSegments} from '@atb/components/radio';
 import {animateNextChange} from '@atb/utils/animation';
@@ -21,6 +21,7 @@ import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 
 type Props<T extends string> = {
   initialDate?: string;
+  initialOption?: T;
   options: DateOptionAndText<T>[];
   onSave: (optionAndValue: DateOptionAndValue<T>) => void;
   bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
@@ -39,6 +40,7 @@ type Props<T extends string> = {
  */
 export const DatePickerSheet = <T extends string>({
   initialDate = new Date().toISOString(),
+  initialOption,
   options,
   onSave,
   bottomSheetModalRef,
@@ -53,8 +55,17 @@ export const DatePickerSheet = <T extends string>({
   const [isSpinning, setIsSpinning] = useState(false);
   const [date, setDate] = useState(initialDate);
   const [selectedOptionId, setSelectedOptionId] = useState<T>(
-    options.find((o) => o.selected)?.option || options[0].option,
+    initialOption ||
+      options.find((o) => o.selected)?.option ||
+      options[0].option,
   );
+
+  useEffect(() => {
+    initialDate && setDate(initialDate);
+  }, [initialDate]);
+  useEffect(() => {
+    initialOption && setSelectedOptionId(initialOption);
+  }, [initialOption]);
 
   const nativeGesture = Gesture.Native().disallowInterruption(true);
 

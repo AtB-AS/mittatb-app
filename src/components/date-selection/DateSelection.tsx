@@ -127,6 +127,7 @@ export const DateSelection = ({
       </View>
       <DatePickerSheet
         initialDate={searchTime.date}
+        initialOption={searchTime.option}
         onSave={onSetSearchTime}
         options={DepartureDateOptions.map((option) => ({
           option,
