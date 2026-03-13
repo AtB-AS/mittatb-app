@@ -104,9 +104,10 @@ const FormFactorSchema = z.enum(
   Object.values(FormFactor) as [FormFactor, ...FormFactor[]],
 );
 
-const PropulsionTypeSchema = z.enum(
-  Object.values(PropulsionType) as [PropulsionType, ...PropulsionType[]],
-);
+const PropulsionTypeSchema = z.enum([
+  ...(Object.values(PropulsionType) as [PropulsionType, ...PropulsionType[]]),
+  'COMBINED',
+]);
 
 export enum ShmoBookingState {
   NOT_STARTED = 'NOT_STARTED',
