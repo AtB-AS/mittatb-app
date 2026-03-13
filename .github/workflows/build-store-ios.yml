@@ -84,18 +84,6 @@ jobs:
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
-      - name: Find packager artifacts
-        run: |
-          echo "=== All main.jsbundle.map files ==="
-          find ~/Library/Developer/Xcode/DerivedData -name "main.jsbundle.map" 2>/dev/null
-          echo "=== All main.jsbundle files ==="
-          find ~/Library/Developer/Xcode/DerivedData -name "main.jsbundle" 2>/dev/null
-      - name: Copy bundle and sourcemap
-        run: |
-          BUNDLE_DIR=$(find ~/Library/Developer/Xcode/DerivedData -name "main.jsbundle.map" \
-            -path "*/Release-iphoneos/*" -not -path "*.app/*" -print -quit | xargs dirname)
-          cp "$BUNDLE_DIR/main.jsbundle" ios/bundle/main.jsbundle.packager
-          cp "$BUNDLE_DIR/main.jsbundle.map" ios/bundle/main.jsbundle.packager.map
       - name: Upload bundle and sourcemap artifact
         uses: actions/upload-artifact@v4
         with:
