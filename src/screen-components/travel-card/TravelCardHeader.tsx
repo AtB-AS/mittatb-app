@@ -1,5 +1,5 @@
 import {AccessibleText, ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TripSearchTexts, useTranslation} from '@atb/translations';
 import {formatToClock, secondsToDurationShort} from '@atb/utils/date';
 import {
@@ -12,15 +12,20 @@ import {View} from 'react-native';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {isLineFlexibleTransport} from '@atb/screen-components/travel-details-screens';
 import {addSeconds} from 'date-fns';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
 export const TravelCardHeader: React.FC<{
   tripPattern: TripPattern;
   includeDayInfo?: boolean;
 }> = ({tripPattern, includeDayInfo = false}) => {
   const styles = useThemeStyles();
+  const {theme} = useThemeContext();
   const {t, language} = useTranslation();
   let start = tripPattern.legs[0];
   let startName = start.fromPlace.name;
+  const end = tripPattern.legs[tripPattern.legs.length - 1];
+  const endName = end.toPlace.name;
   if (tripPattern.legs[0].mode === 'foot' && tripPattern.legs[1]) {
     start = tripPattern.legs[1];
     startName = getQuayName(start.fromPlace.quay);
@@ -36,14 +41,18 @@ export const TravelCardHeader: React.FC<{
   const {aimedStartTime, aimedEndTime} = computeAimedStartEndTimes(tripPattern);
 
   return (
-    <View style={{backgroundColor: 'blue'}}>
+    <View
+      style={{
+        gap: theme.spacing.small,
+      }}
+    >
       <View style={styles.resultHeader}>
-        <View>
+        <View style={{gap: theme.spacing.xSmall}}>
           <ThemeText typography="body__m__strong">
             {formatToClock(expectedStartTime, language, 'floor')} -{' '}
             {formatToClock(expectedEndTime, language, 'ceil')}
           </ThemeText>
-          <ThemeText typography="body__s">
+          <ThemeText typography="body__s" color="secondary">
             Opprinnelig {formatToClock(aimedStartTime, language, 'floor')} -{' '}
             {formatToClock(aimedEndTime, language, 'ceil')}
           </ThemeText>
@@ -51,7 +60,7 @@ export const TravelCardHeader: React.FC<{
 
         <View style={styles.durationContainer}>
           <AccessibleText
-            typography="body__s"
+            typography="body__m"
             color="secondary"
             testID="resultDuration"
             prefix={t(TripSearchTexts.results.resultItem.header.totalDuration)}
@@ -60,19 +69,16 @@ export const TravelCardHeader: React.FC<{
           </AccessibleText>
         </View>
       </View>
-      <View>
-        <ThemeText
-          style={styles.fromPlaceText}
-          typography="body__s__strong"
-          testID="resultDeparturePlace"
-        >
+      <View
+        style={{
+          flexDirection: 'row',
+          gap: theme.spacing.xSmall,
+          alignItems: 'center',
+        }}
+      >
+        <ThemeText typography="body__m">
           {startName
-            ? t(
-                TripSearchTexts.results.resultItem.header.title(
-                  transportName,
-                  startName,
-                ),
-              )
+            ? startName
             : startLegIsFlexibleTransport && publicCode
               ? t(
                   TripSearchTexts.results.resultItem.header.flexTransportTitle(
@@ -81,6 +87,8 @@ export const TravelCardHeader: React.FC<{
                 )
               : transportName}
         </ThemeText>
+        <ThemeIcon svg={ArrowRight} />
+        <ThemeText typography="body__m">{endName}</ThemeText>
       </View>
     </View>
   );
