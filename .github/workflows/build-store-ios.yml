@@ -84,6 +84,25 @@ jobs:
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
+      - name: Dump bundling logs
+        if: always()
+        run: |
+          mkdir -p build_logs
+          find ~/Library/Developer/Xcode/DerivedData -name "*.log" -path "*Logs/Build*" | while read LOG; do
+            grep -A5 -E "react-native-xcode|hermesc|compose-source|sourcemap|Writing bundle" "$LOG" >> build_logs/bundling.txt 2>/dev/null || true
+          done
+          echo "Lines found: $(wc -l < build_logs/bundling.txt)"
+
+      - name: Upload bundling logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundling-logs
+          path: build_logs/
+      - name: Find all bundles
+        run: |
+          find ~/Library/Developer/Xcode/DerivedData -name "main.jsbundle"
+          find ~/Library/Developer/Xcode/Archives -name "main.jsbundle"
       - name: Copy JS bundle from build output
         run: |
           find ~/Library/Developer/Xcode/DerivedData -name "main.jsbundle" \
