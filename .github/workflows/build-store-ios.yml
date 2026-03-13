@@ -84,6 +84,16 @@ jobs:
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           KEYCHAIN_NAME: ${{ env.KEYCHAIN_NAME }}
+      - name: Print build debug log
+        if: always()
+        run: |
+          if [ -f ios/bundle/build_debug.log ]; then
+            cat ios/bundle/build_debug.log
+          else
+            echo "build_debug.log not found — build phase may not have run"
+            echo "Checking if bundle dir exists:"
+            ls -la ios/bundle/ 2>/dev/null || echo "ios/bundle/ doesn't exist either"
+          fi
       - name: Upload bundle and sourcemap artifact
         uses: actions/upload-artifact@v4
         with:
