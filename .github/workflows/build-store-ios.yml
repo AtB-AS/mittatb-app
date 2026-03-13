@@ -97,7 +97,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: bundling-logs
+          name: bundling-logs-${{ matrix.org }}
           path: build_logs/
       - name: Find all bundles
         run: |
