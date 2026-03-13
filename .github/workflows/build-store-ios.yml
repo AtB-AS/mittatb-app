@@ -88,22 +88,23 @@ jobs:
         if: always()
         run: |
           mkdir -p build_logs
+          touch build_logs/bundling.txt
           find ~/Library/Developer/Xcode/DerivedData -name "*.log" -path "*Logs/Build*" | while read LOG; do
             grep -A5 -E "react-native-xcode|hermesc|compose-source|sourcemap|Writing bundle" "$LOG" >> build_logs/bundling.txt 2>/dev/null || true
           done
           echo "Lines found: $(wc -l < build_logs/bundling.txt)"
-
       - name: Upload bundling logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: bundling-logs-${{ matrix.org }}
           path: build_logs/
-      - name: Copy JS bundle from build output
+      - name: Copy bundle and sourcemap
         run: |
-          find ~/Library/Developer/Xcode/Archives -name "main.jsbundle" \
-            -path "*.app/*" -print -quit | \
-            xargs -I{} cp {} ios/bundle/main.jsbundle
+          BUNDLE_DIR=$(find ~/Library/Developer/Xcode/DerivedData -name "main.jsbundle.map" \
+            -path "*/Release-iphoneos/*" -not -path "*.app/*" -print -quit | xargs dirname)
+          cp "$BUNDLE_DIR/main.jsbundle" ios/bundle/main.jsbundle.packager
+          cp "$BUNDLE_DIR/main.jsbundle.map" ios/bundle/main.jsbundle.packager.map
       - name: Upload bundle and sourcemap artifact
         uses: actions/upload-artifact@v4
         with:
