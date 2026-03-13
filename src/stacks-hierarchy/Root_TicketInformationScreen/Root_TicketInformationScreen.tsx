@@ -10,7 +10,7 @@ import {ScrollView, View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
-import {ContentHeading} from '@atb/components/heading';
+import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {
   getReferenceDataName,
   useFirestoreConfigurationContext,
@@ -58,9 +58,16 @@ export const Root_TicketInformationScreen = ({navigation, route}: Props) => {
         title: t(
           PurchaseOverviewTexts.ticketInformation.informationDetails.title,
         ),
-        showBorder: false,
         leftButton: {type: 'back'},
       }}
+      parallaxContent={(focusRef) => (
+        <ScreenHeading
+          ref={focusRef}
+          text={t(
+            PurchaseOverviewTexts.ticketInformation.informationDetails.title,
+          )}
+        />
+      )}
       contentColor={themeColor}
     >
       <ScrollView contentContainerStyle={styles.container}>
