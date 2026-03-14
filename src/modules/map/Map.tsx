@@ -415,6 +415,12 @@ export const Map = (props: MapProps) => {
                 ? (mapPropertiesRef.current?.zoom ?? DEFAULT_ZOOM_LEVEL)
                 : undefined
             }
+            pitch={
+              isMapPitchEnabled &&
+              activeShmoBooking?.state === ShmoBookingState.IN_USE
+                ? 60
+                : 0
+            }
             centerCoordinate={
               !initMapLoaded ? mapPropertiesRef.current?.center : undefined
             }
