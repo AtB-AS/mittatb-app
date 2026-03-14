@@ -119,19 +119,6 @@ export const useMapSymbolStyles = ({
     'non-existing-icon',
   ];
 
-  const symbolSortKey: Expression = [
-    '+',
-    [
-      'case',
-      ['==', iconCode, 'ebike'],
-      2, // Bikes get priority
-      ['==', iconCode, 'scooter'],
-      1, // Scooters stay below
-      0, // Default
-    ],
-    ['case', isCluster, 3, 0],
-  ];
-
   const systemId: Expression = ['get', 'system_id'];
   const transportOperator: Expression = [
     'case',
@@ -190,15 +177,6 @@ export const useMapSymbolStyles = ({
     themeName,
   ];
 
-  const iconStyle: SymbolLayerStyleProps = {
-    iconImage,
-    iconOffset: [0, 0],
-    iconAllowOverlap: true,
-    iconOpacity,
-    iconSize,
-    symbolSortKey,
-  };
-
   const textOffsetXFactor = pinType == 'vehicle' ? 1 : 1.045;
   const numberOfUnits = pinType == 'vehicle' ? count : numVehiclesAvailable;
   const numberOfUnitsLimitedAt99Plus: Expression = [
@@ -209,6 +187,32 @@ export const useMapSymbolStyles = ({
     '99+',
     numberOfUnits,
   ];
+
+  const symbolSortKey: Expression = [
+    '+',
+    [
+      'case',
+      ['==', iconCode, 'ebike'],
+      2000, // Bikes get priority
+      ['==', iconCode, 'scooter'],
+      1000, // Scooters stay below
+      0, // Default
+    ],
+    ['case', isCluster, 3000, 0], // Clusters get priority
+
+    // Also give priority to clusters/stations with higher count.
+    // Location data is not accessible in style expressions, so uniqueness requires an id. Using numberOfUnits resolves this for all cases apart from when numberOfUnits is the same.
+    ['coalesce', numberOfUnits, 0],
+  ];
+
+  const iconStyle: SymbolLayerStyleProps = {
+    iconImage,
+    iconOffset: [0, 0],
+    iconAllowOverlap: true,
+    iconOpacity,
+    iconSize,
+    symbolSortKey,
+  };
 
   const textField: Expression =
     pinType == 'station'
