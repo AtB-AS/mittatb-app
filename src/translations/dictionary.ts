@@ -159,12 +159,6 @@ const dictionary = {
     km: _('km', 'km', `km`),
     m: _('m', 'm', `m`),
   },
-  currency: {
-    nok: {
-      short: _('kr', 'kr', `kr`),
-      long: _('kroner', 'kroner', `kroner`),
-    },
-  },
   messageActions: {
     positiveButton: _('OK', 'OK', 'OK'),
   },

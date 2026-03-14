@@ -81,6 +81,7 @@ export const FinishedScooterSheet = ({
                       totalAmount={
                         shmoBooking.pricing.finalAmount?.toString() ?? ''
                       }
+                      currency={shmoBooking?.pricingPlan.currency}
                       withHeader={true}
                     />
                   </Section>
