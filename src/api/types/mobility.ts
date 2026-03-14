@@ -1,5 +1,8 @@
 import {z} from 'zod';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {
+  FormFactor,
+  PropulsionType,
+} from '@atb/api/types/generated/mobility-types_v2';
 import {isValidPhoneNumber} from 'libphonenumber-js';
 import {isValidEmail} from '@atb/utils/validation';
 import {Feature, Point} from 'geojson';
@@ -100,6 +103,11 @@ export const isShmoPricingPlan = (value: unknown): value is ShmoPricingPlan =>
 const FormFactorSchema = z.enum(
   Object.values(FormFactor) as [FormFactor, ...FormFactor[]],
 );
+
+const PropulsionTypeSchema = z.enum([
+  ...(Object.values(PropulsionType) as [PropulsionType, ...PropulsionType[]]),
+  'COMBINED',
+]);
 
 export enum ShmoBookingState {
   NOT_STARTED = 'NOT_STARTED',
@@ -323,6 +331,7 @@ export const StationFeaturePropertiesSchema = z.object({
   id: z.string(),
   system_id: z.string(),
   vehicle_type_form_factor: FormFactorSchema,
+  vehicle_type_propulsion_type: PropulsionTypeSchema,
   num_vehicles_available: z.number(),
   capacity: z.number(),
   count: z.literal(1),
@@ -342,6 +351,7 @@ export type StationFeature = z.infer<typeof StationFeatureSchema>;
 export const ClusterPropertiesBaseSchema = z.object({
   count: z.number().gt(1),
   vehicle_type_form_factor: FormFactorSchema,
+  vehicle_type_propulsion_type: PropulsionTypeSchema,
   cluster_extent_meters: z.number().optional(),
 });
 
@@ -366,6 +376,7 @@ export const VehicleFeaturePropertiesSchema = z.object({
   system_id: z.string(),
   count: z.literal(1),
   vehicle_type_form_factor: FormFactorSchema,
+  vehicle_type_propulsion_type: PropulsionTypeSchema,
   num_vehicles_available: z.never().optional(), // to differenciate from station features, which have this field
 });
 
