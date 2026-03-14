@@ -8,15 +8,15 @@ import {VehicleCardStat} from './VehicleCardStat';
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {formatRatePerUnit} from '../utils';
 import {PricingPlanFragment} from '@atb/api/types/generated/fragments/mobility-shared';
-import {ShmoPricingPlan} from '@atb/api/types/mobility';
 import {formatNumberToString} from '@atb-as/utils';
 import {
   PriceAdjustmentEnum,
   PriceAdjustmentType,
 } from '@atb-as/config-specs/lib/mobility';
+import {getCurrencySymbol} from '@atb/translations/currency';
 
 type Props = {
-  pricingPlan: PricingPlanFragment | ShmoPricingPlan;
+  pricingPlan: PricingPlanFragment;
   priceAdjustments?: PriceAdjustmentType[];
   systemId: string;
 };
@@ -42,7 +42,7 @@ export const PriceDetailsCard = ({
 
   const unlockStat = freeUnlock
     ? t(ScooterTexts.free)
-    : `${formatNumberToString(pricingPlan.price, language)} kr`;
+    : `${formatNumberToString(pricingPlan.price, language)} ${getCurrencySymbol(pricingPlan.currency)}`;
 
   const minutePriceStat =
     freeMinutes && ratePrUnit?.rate
@@ -57,6 +57,7 @@ export const PriceDetailsCard = ({
         ScooterTexts.per.discount(
           ratePrUnit?.perUnit ?? '',
           ratePrUnit?.rate.toString() ?? '',
+          pricingPlan.currency,
         ),
       )
     : t(ScooterTexts.per.unit(ratePrUnit?.perUnit ?? ''));

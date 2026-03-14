@@ -125,6 +125,7 @@ export const FareContractView: React.FC<Props> = ({
           startDateTime={fareContract.travelRights[0].startDateTime}
           endDateTime={fareContract.travelRights[0].endDateTime}
           totalAmount={fareContract.totalAmount}
+          currency="NOK" // not supported for fc yet
           withHeader={true}
         />
       ) : (

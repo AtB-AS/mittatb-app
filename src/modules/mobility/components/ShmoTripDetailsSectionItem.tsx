@@ -1,4 +1,4 @@
-import {dictionary, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {Duration} from '@atb/assets/svg/mono-icons/mobility';
@@ -7,11 +7,16 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {getTimeBetweenFormatted} from '@atb/utils/date';
+import {
+  getCurrencySymbol,
+  getCurrencyMajorName,
+} from '@atb/translations/currency';
 
 type Props = {
   startDateTime: Date;
   endDateTime: Date;
   totalAmount: string;
+  currency: string;
   withHeader: boolean;
 };
 
@@ -19,6 +24,7 @@ export const ShmoTripDetailsSectionItem = ({
   startDateTime,
   endDateTime,
   totalAmount,
+  currency,
   withHeader,
   ...props
 }: SectionItemProps<Props>) => {
@@ -31,6 +37,11 @@ export const ShmoTripDetailsSectionItem = ({
     ? parseFloat(totalAmount).toFixed(2)
     : 0;
 
+  const currencyMajorName = getCurrencyMajorName(
+    parseInt(totalAmount),
+    currency,
+  );
+
   const timeUsed = getTimeBetweenFormatted(startDateTime, endDateTime);
   return (
     <View style={[topContainer, styles.container]}>
@@ -39,7 +50,7 @@ export const ShmoTripDetailsSectionItem = ({
         accessible={true}
         accessibilityLabel={`${t(
           MobilityTexts.totalCost,
-        )} ${formattedTotalAmount} ${t(dictionary.currency.nok.long)}`}
+        )} ${formattedTotalAmount} ${currencyMajorName}`}
       >
         {withHeader && (
           <ThemeText
@@ -59,9 +70,7 @@ export const ShmoTripDetailsSectionItem = ({
       <View
         style={styles.rightSection}
         accessible={true}
-        accessibilityLabel={`${t(MobilityTexts.totalCost)} ${totalAmount} ${t(
-          dictionary.currency.nok.long,
-        )}`}
+        accessibilityLabel={`${t(MobilityTexts.totalCost)} ${totalAmount} ${currencyMajorName}`}
       >
         {withHeader && (
           <ThemeText
@@ -73,7 +82,7 @@ export const ShmoTripDetailsSectionItem = ({
           </ThemeText>
         )}
         <ThemeText typography="heading__xl">
-          {formattedTotalAmount} {t(dictionary.currency.nok.short)}
+          {formattedTotalAmount} {getCurrencySymbol(currency)}
         </ThemeText>
       </View>
     </View>
