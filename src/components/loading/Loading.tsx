@@ -68,7 +68,7 @@ export const Loading: React.FC<LoadingProps> = ({
   if (!animating && hidesWhenStopped) return null;
 
   return (
-    <View style={style} ref={ref} {...props}>
+    <View style={[style, {alignSelf: 'center'}]} ref={ref} {...props}>
       <Canvas style={{width: size, height: size}}>
         <Path
           path={path}
