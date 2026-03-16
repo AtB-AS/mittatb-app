@@ -13,6 +13,7 @@ import {ErrorResponse} from '@atb-as/utils';
 type BookingEventArgs = {
   bookingId: ShmoBooking['bookingId'];
   shmoBookingEvent: ShmoBookingEvent;
+  finishImmediately?: boolean;
 };
 
 export const useSendShmoBookingEventMutation = () => {
@@ -20,8 +21,17 @@ export const useSendShmoBookingEventMutation = () => {
   const acceptLanguage = useAcceptLanguage();
 
   return useMutation<ShmoBooking, ErrorResponse, BookingEventArgs>({
-    mutationFn: ({bookingId, shmoBookingEvent}: BookingEventArgs) =>
-      sendShmoBookingEvent(bookingId, shmoBookingEvent, acceptLanguage),
+    mutationFn: ({
+      bookingId,
+      shmoBookingEvent,
+      finishImmediately = false,
+    }: BookingEventArgs) =>
+      sendShmoBookingEvent(
+        bookingId,
+        shmoBookingEvent,
+        finishImmediately,
+        acceptLanguage,
+      ),
 
     onSuccess: (data: ShmoBooking, arg: BookingEventArgs) => {
       switch (arg.shmoBookingEvent.event) {

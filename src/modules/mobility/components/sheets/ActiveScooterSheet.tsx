@@ -89,6 +89,8 @@ export const ActiveScooterSheet = ({
       const res = await sendShmoBookingEvent({
         bookingId: activeBooking.bookingId,
         shmoBookingEvent: startFinishingEvent,
+        finishImmediately:
+          activeBooking.asset.systemId?.includes('voi') ?? false,
       });
 
       logEvent('Mobility', 'Shmo booking start finishing', {
@@ -103,6 +105,7 @@ export const ActiveScooterSheet = ({
     }
   }, [
     activeBooking?.asset.operator.id,
+    activeBooking?.asset.systemId,
     activeBooking?.bookingId,
     logEvent,
     photoNavigation,
