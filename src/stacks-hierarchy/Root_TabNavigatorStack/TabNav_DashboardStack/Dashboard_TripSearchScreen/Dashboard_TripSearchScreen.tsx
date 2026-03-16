@@ -531,6 +531,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       )}
       <DatePickerSheet
         initialDate={searchTime.date}
+        initialOption={searchTime.option}
         onSave={setSearchTime}
         options={TripDateOptions.map((option) => ({
           option,
