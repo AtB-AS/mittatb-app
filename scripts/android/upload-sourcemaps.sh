@@ -20,6 +20,6 @@ else
     --source-map="${SOURCEMAP_PATH}" \
     --bundle="${BUNDLE_PATH}" \
     --platform=android \
-    --project-root="${GITHUB_WORKSPACE:-.}" \
+    --project-root="/home/runner/work/mittatb-app/mittatb-app" \
     --verbose
 fi
