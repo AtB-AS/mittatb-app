@@ -19,7 +19,7 @@ import {
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {
   AccessibilityProps,
   StyleProp,
@@ -39,7 +39,6 @@ import {
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {isSignificantDifference} from './utils';
-import {TravelCardHeader} from './TravelCardHeader';
 
 type ResultItemState = 'enabled' | 'dimmed' | 'disabled';
 
@@ -48,7 +47,7 @@ type TravelCardContentProps = {
   state: ResultItemState;
 };
 
-export const TravelCardContent: React.FC<
+export const TravelCardLegs: React.FC<
   TravelCardContentProps & AccessibilityProps
 > = ({tripPattern, ...props}) => {
   const styles = useThemeStyles();
@@ -67,7 +66,7 @@ export const TravelCardContent: React.FC<
     useState(false);
 
   // Dynamically collapse legs to fit horizontally
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (legIconsParentWidth && legIconsContentWidth) {
       if (
         legIconsContentWidth >= legIconsParentWidth &&
@@ -78,7 +77,7 @@ export const TravelCardContent: React.FC<
     }
   }, [legIconsParentWidth, legIconsContentWidth, hasMinimumOfExpandedLegs]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (numberOfExpandedLegs <= 1) {
       setHasMinimumOfExpandedLegs(true);
     }
@@ -105,70 +104,56 @@ export const TravelCardContent: React.FC<
   };
 
   return (
-    <Animated.View
-      entering={FadeIn}
-      style={styles.container}
-      {...props}
-      accessible={false}
-    >
-      <TravelCardHeader tripPattern={tripPattern} />
-      <View style={styles.detailsContainer} {...screenReaderHidden}>
+    <View style={styles.detailsContainer} {...screenReaderHidden}>
+      <View
+        style={styles.flexRow}
+        onLayout={(ev) => {
+          setLegIconsParentWidth(ev.nativeEvent.layout.width);
+        }}
+      >
         <View
-          style={styles.flexRow}
+          style={styles.row}
           onLayout={(ev) => {
-            setLegIconsParentWidth(ev.nativeEvent.layout.width);
+            setLegIconsContentWidth(ev.nativeEvent.layout.width);
           }}
         >
-          <View
-            style={styles.row}
-            onLayout={(ev) => {
-              setLegIconsContentWidth(ev.nativeEvent.layout.width);
-            }}
-          >
-            <View style={styles.legOutput}>
-              {expandedLegs.map((leg, i) => (
-                <View
-                  key={tripPattern.compressedQuery + leg.aimedStartTime}
-                  style={styles.legAndDash}
-                >
-                  <View testID="tripLeg">
-                    {leg.mode === 'foot' ? (
-                      <FootLeg leg={leg} nextLeg={filteredLegs[i + 1]} />
-                    ) : staySeated(i) ? null : (
-                      <TransportationLeg
-                        leg={leg}
-                        style={
-                          isSignificantDifference(leg)
-                            ? styles.transportationIcon_wide
-                            : undefined
-                        }
-                      />
-                    )}
-                  </View>
+          <View style={styles.legOutput}>
+            {expandedLegs.map((leg, i) => (
+              <View
+                key={tripPattern.compressedQuery + leg.aimedStartTime}
+                style={styles.legAndDash}
+              >
+                <View testID="tripLeg">
+                  {leg.mode === 'foot' ? (
+                    <FootLeg leg={leg} nextLeg={filteredLegs[i + 1]} />
+                  ) : staySeated(i) ? null : (
+                    <TransportationLeg
+                      leg={leg}
+                      style={
+                        isSignificantDifference(leg)
+                          ? styles.transportationIcon_wide
+                          : undefined
+                      }
+                    />
+                  )}
                 </View>
-              ))}
-            </View>
-            <CounterIconBox
-              count={collapsedLegs.length}
-              spacing="standard"
-              textType="body__m__strong"
-            />
+              </View>
+            ))}
           </View>
+          <CounterIconBox
+            count={collapsedLegs.length}
+            spacing="standard"
+            textType="body__m__strong"
+          />
         </View>
       </View>
-    </Animated.View>
+    </View>
   );
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    flex: 1,
-    gap: theme.spacing.medium,
-    backgroundColor: theme.color.background.neutral[0].background,
-    padding: theme.spacing.medium,
-    borderRadius: theme.border.radius.regular,
-  },
   detailsContainer: {
+    flex: 1,
     flexDirection: 'row',
   },
   lineContainer: {

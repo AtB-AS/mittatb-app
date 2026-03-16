@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import type {TripPattern} from '@atb/api/types/trips';
 import type {TripSearchTime} from './types';
-import {TravelCardContent} from './TravelCardContent';
+import {TravelCardLegs} from './TravelCardLegs';
 import {
   dictionary,
   Language,
@@ -25,6 +25,10 @@ import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {getTripPatternBookingText, isSignificantDifference} from './utils';
 import Animated, {FadeIn} from 'react-native-reanimated';
 import {NativeBlockButton} from '@atb/components/native-button';
+import {TravelCardHeader} from './TravelCardHeader';
+import {View} from 'react-native';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 
 type TravelCardProps = {
   tripPattern: TripPattern;
@@ -50,12 +54,9 @@ export const TravelCard: React.FC<TravelCardProps> = ({
     searchTime?.option !== 'now';
 
   return (
-    <Animated.View
-      style={styles.container}
-      entering={FadeIn}
-      accessible={false}
-    >
+    <Animated.View entering={FadeIn} accessible={false}>
       <NativeBlockButton
+        style={styles.container}
         accessible={true}
         accessibilityLabel={tripSummary(
           tripPattern,
@@ -71,10 +72,16 @@ export const TravelCard: React.FC<TravelCardProps> = ({
         onPress={() => onDetailsPressed(tripPattern, resultIndex)}
         testID={testID}
       >
-        <TravelCardContent
-          tripPattern={tripPattern}
-          state={isInPast ? 'dimmed' : 'enabled'}
-        />
+        <TravelCardHeader tripPattern={tripPattern} />
+        <View style={styles.legsContainer}>
+          <TravelCardLegs
+            tripPattern={tripPattern}
+            state={isInPast ? 'dimmed' : 'enabled'}
+          />
+          <View>
+            <ThemeIcon svg={ChevronRight} />
+          </View>
+        </View>
       </NativeBlockButton>
     </Animated.View>
   );
@@ -83,8 +90,17 @@ export const TravelCard: React.FC<TravelCardProps> = ({
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    marginTop: theme.spacing.small,
+    gap: theme.spacing.medium,
+    backgroundColor: theme.color.background.neutral[0].background,
+    padding: theme.spacing.medium,
+    borderRadius: theme.border.radius.regular,
     marginHorizontal: theme.spacing.medium,
+    marginTop: theme.spacing.small,
+  },
+  legsContainer: {
+    gap: theme.spacing.medium,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 }));
 
