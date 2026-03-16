@@ -59,14 +59,31 @@ export const NotificationContextProvider = ({children}: Props) => {
 
   const getFcmToken = useCallback(async () => {
     try {
-      // On iOS, the device must be registered for remote messages before
-      // fetching an FCM token — this is what provides the underlying APNs
-      // token that FCM depends on. Safe to call multiple times; resolves
-      // immediately if already registered. No-op on Android.
-      // See the docs on the method for more information.
+      // Ensures device is registered to Apple for remote messages
+      // It should be automatically registered in our workflow
+      // but if there are cases where it fails, this should safeguard it.
+      // Safe to call on Android, no need to do a platform check.
       if (!messaging().isDeviceRegisteredForRemoteMessages) {
         await messaging().registerDeviceForRemoteMessages();
       }
+
+      // On iOS, wait for the APNs token to be available before requesting
+      // the FCM token. registerDeviceForRemoteMessages resolves before the
+      // APNs token callback fires, so getToken() can fail without this.
+      if (Platform.OS === 'ios') {
+        let apnsToken = await messaging().getAPNSToken();
+        if (!apnsToken) {
+          for (let i = 0; i < 5; i++) {
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            apnsToken = await messaging().getAPNSToken();
+            if (apnsToken) break;
+          }
+          if (!apnsToken) {
+            throw new Error('APNs token not available after waiting');
+          }
+        }
+      }
+
       const token = await messaging().getToken();
       setFcmToken(token);
       return token;
