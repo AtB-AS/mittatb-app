@@ -551,7 +551,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"\\\"$WITH_ENVIRONMENT\\\" \\\"$REACT_NATIVE_XCODE\\\"\"\n\nif [ -f \"$CONFIGURATION_BUILD_DIR/main.jsbundle.packager.map\" ]; then\n  mkdir -p \"${SRCROOT}/bundle\"\n  cp \"$CONFIGURATION_BUILD_DIR/main.jsbundle\" \"${SRCROOT}/bundle/main.jsbundle.packager\"\n  cp \"$CONFIGURATION_BUILD_DIR/main.jsbundle.packager.map\" \"${SRCROOT}/bundle/main.jsbundle.packager.map\"\nfi\n";		};
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"\\\"$WITH_ENVIRONMENT\\\" \\\"$REACT_NATIVE_XCODE\\\"\\\"\n\nif [ -f \"$CONFIGURATION_BUILD_DIR/main.jsbundle.packager.map\" ]; then\n  mkdir -p \"${SRCROOT}/bundle\"\n  cp \"$CONFIGURATION_BUILD_DIR/main.jsbundle\" \"${SRCROOT}/bundle/main.jsbundle.packager\"\n  cp \"$CONFIGURATION_BUILD_DIR/main.jsbundle.packager.map\" \"${SRCROOT}/bundle/main.jsbundle.packager.map\"\nfi\n";		};
 		};
 		480701A5476B3A6E2ECEA7F9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
