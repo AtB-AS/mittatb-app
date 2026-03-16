@@ -12,7 +12,7 @@ import {Coordinates} from '@atb/utils/coordinates';
 import type {Leg} from '@atb/api/types/trips';
 import type {SupplementProductWithCount} from '@atb/modules/fare-contracts';
 
-type ExistingTicket = {
+export type ExistingTicket = {
   product: PreassignedFareProduct;
   endDate: Date;
 };

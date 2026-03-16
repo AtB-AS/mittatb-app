@@ -95,5 +95,5 @@ export const TEST_SELECTION: PurchaseSelectionType = {
   travelDate: undefined,
   legs: [],
   isOnBehalfOf: false,
-  existingProduct: undefined,
+  existingTicket: undefined,
 };

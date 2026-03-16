@@ -230,8 +230,8 @@ export function useOfferState(
             id: t.userTypeString,
             userType: t.userTypeString,
             count: t.count,
-            productIds: selection?.existingProduct
-              ? [selection.existingProduct.id]
+            productIds: selection?.existingTicket
+              ? [selection.existingTicket?.product.id]
               : [],
           })) ?? [];
 
@@ -269,8 +269,8 @@ export function useOfferState(
           if (selection?.legs.length) {
             const params: OfferSearchParams = {
               travellers: allTravellers,
-              products: selection.existingProduct
-                ? [] // existingProduct means we are purchasing supplementProduct. products should be empty.
+              products: selection.existingTicket
+                ? [] // existingTicket means we are purchasing supplementProduct. products should be empty.
                 : preassignedFareProductAlternatives.map((p) => p.id),
               supplementProducts:
                 selection?.supplementProductsWithCount.map((sp) => sp.id) ?? [],

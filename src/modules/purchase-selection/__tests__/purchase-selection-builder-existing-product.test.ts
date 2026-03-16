@@ -1,4 +1,4 @@
-import {PurchaseSelectionEmptyBuilder} from '../types';
+import {type ExistingTicket, PurchaseSelectionEmptyBuilder} from '../types';
 import {createEmptyBuilder} from '../purchase-selection-builder';
 import {TEST_INPUT, TEST_PRODUCT, TEST_SELECTION} from './test-utils';
 
@@ -10,22 +10,28 @@ describe('PurchaseSelectionBuilder existingProduct', () => {
   });
 
   test('should add an existing product to the selection', () => {
-    const existingProduct = {...TEST_PRODUCT, id: 'EP1'};
+    const existingTicket: ExistingTicket = {
+      product: {...TEST_PRODUCT, id: 'EP1'},
+      endDate: new Date(),
+    };
     const selection = builder
       .forType('single')
-      .existingProduct(existingProduct)
+      .existingTicket(existingTicket)
       .build();
 
-    expect(selection.existingProduct).toBe(existingProduct);
+    expect(selection.existingTicket).toBe(existingTicket);
   });
 
   test('should keep existing product when using fromSelection', () => {
-    const existingProduct = {...TEST_PRODUCT, id: 'EP1'};
-    const initialSelection = {...TEST_SELECTION, existingProduct};
+    const existingTicket: ExistingTicket = {
+      product: {...TEST_PRODUCT, id: 'EP1'},
+      endDate: new Date(),
+    };
+    const initialSelection = {...TEST_SELECTION, existingTicket};
 
     const newSelection = builder.fromSelection(initialSelection).build();
 
-    expect(newSelection.existingProduct).toBe(existingProduct);
+    expect(newSelection.existingTicket).toBe(existingTicket);
   });
 
   test('calling with undefined should delete any set existing product', () => {
@@ -33,30 +39,39 @@ describe('PurchaseSelectionBuilder existingProduct', () => {
     const selectionWithExistingProduct = {...TEST_SELECTION, existingProduct};
     const selection = builder
       .fromSelection(selectionWithExistingProduct)
-      .existingProduct(undefined)
+      .existingTicket(undefined)
       .build();
 
-    expect(selection.existingProduct).toBeUndefined();
+    expect(selection.existingTicket).toBeUndefined();
   });
 
   test('should overwrite a previously set existing product', () => {
-    const oneExistingProduct = {...TEST_PRODUCT, id: 'EP1'};
-    const anotherExistingProduct = {...TEST_PRODUCT, id: 'EP2'};
+    const oneExistingTicket: ExistingTicket = {
+      product: {...TEST_PRODUCT, id: 'EP1'},
+      endDate: new Date(),
+    };
+    const anotherExistingTicket: ExistingTicket = {
+      product: {...TEST_PRODUCT, id: 'EP2'},
+      endDate: new Date(),
+    };
 
     const selection = builder
       .forType('single')
-      .existingProduct(oneExistingProduct)
-      .existingProduct(anotherExistingProduct)
+      .existingTicket(oneExistingTicket)
+      .existingTicket(anotherExistingTicket)
       .build();
 
-    expect(selection.existingProduct).toBe(anotherExistingProduct);
+    expect(selection.existingTicket).toBe(anotherExistingTicket);
   });
 
   test('should retain other properties when adding an existing product', () => {
-    const existingProduct = {...TEST_PRODUCT, id: 'EP1'};
+    const existingTicket: ExistingTicket = {
+      product: {...TEST_PRODUCT, id: 'EP1'},
+      endDate: new Date(),
+    };
     const selection = builder
       .forType('single')
-      .existingProduct(existingProduct)
+      .existingTicket(existingTicket)
       .build();
 
     expect(selection.fareProductTypeConfig.type).toBe('single');

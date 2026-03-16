@@ -42,7 +42,7 @@ export function useBookingTrips({
     searchTime.toISOString(),
     userProfilesWithCount.map((up) => up.id),
     productAlternatives.map((p) => p.id),
-    selection.existingProduct,
+    selection.existingTicket,
   ];
 
   const {data, isFetching, isSuccess, isError, isLoading, refetch} = useQuery({
@@ -52,15 +52,15 @@ export function useBookingTrips({
         fromStopPlaceId: stopPlaces?.from?.id!,
         toStopPlaceId: stopPlaces?.to?.id!,
         searchTime: searchTime.toISOString(),
-        products: selection.existingProduct
+        products: selection.existingTicket
           ? []
           : productAlternatives.map((p) => p.id),
         travellers: userProfilesWithCount.map((p) => ({
           id: p.id,
           userType: p.userTypeString,
           count: p.count,
-          productIds: selection.existingProduct
-            ? [selection.existingProduct.id]
+          productIds: selection.existingTicket
+            ? [selection.existingTicket.product.id]
             : [],
         })),
         supplementProducts: selection.supplementProductsWithCount.map(
