@@ -215,7 +215,6 @@ jobs:
         uses: ./.github/actions/ios-upload-bugsnag
         with:
           bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
-          skip-create-sourcemaps: ${{ inputs.force-build != 'true' && steps.ipa-cache.outputs.cache-hit == 'true' }}
           skip-dsyms: ${{ inputs.force-build != 'true' && steps.ipa-cache.outputs.cache-hit == 'true' }}
       - name: Register app version
         run: sh ./scripts/ios/register-app-version.sh

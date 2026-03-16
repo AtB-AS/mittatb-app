@@ -27,10 +27,7 @@
     "generate-native-assets": "sh ./scripts/generate-native-assets.sh",
     "link-assets": "react-native link",
     "unimported": "npx unimported",
-    "storybook-generate": "sb-rn-get-stories",
-    "sourcemaps": "yarn sourcemaps:ios && yarn sourcemaps:android",
-    "sourcemaps:android": "bash ./scripts/android/create-sourcemaps.sh",
-    "sourcemaps:ios": "bash ./scripts/ios/create-sourcemaps.sh"
+    "storybook-generate": "sb-rn-get-stories"
   },
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",

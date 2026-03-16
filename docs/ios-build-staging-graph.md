@@ -269,14 +269,7 @@ flowchart TD
     bugsnag_cli_setup --> bugsnag_upload
 
     subgraph bugsnag_upload ["Upload Bugsnag Symbols - ios-upload-bugsnag"]
-        sm_check{"skip-create-sourcemaps?
-        true when cached IPA"}
-        sm_check -- "false - fresh build" --> create_sm["Create sourcemaps
-        create-sourcemaps.sh
-        npx react-native bundle"]
-        sm_check -- "true - cached IPA" --> upload_sm
-
-        create_sm --> upload_sm["Upload JS sourcemaps
+        upload_sm["Upload JS sourcemaps
         upload-sourcemaps.sh
         bugsnag-cli upload
         APP_VERSION, BUILD_ID
@@ -322,7 +315,7 @@ flowchart LR
         ad-hoc export"]
         f3 --> f4["Generate release notes"]
         f4 --> f5["Firebase distribution"]
-        f5 --> f6["Bugsnag: create + upload sourcemaps
+        f5 --> f6["Bugsnag: upload sourcemaps
         + upload dSYMs
         continue-on-error, 3 retries"]
         f6 --> f7["Register app version"]

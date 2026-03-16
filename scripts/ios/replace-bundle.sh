@@ -27,7 +27,7 @@ else
     mkdir -p "$BUNDLE_DIR"
 
     echo "Re-generate bundle"
-    npx react-native bundle --platform ios --dev false --reset-cache --entry-file index.js --bundle-output "$BUNDLE_DIR/main.jsbundle" --sourcemap-output "$BUNDLE_DIR/main.jsbundle.map"
+    npx react-native bundle --platform ios --dev false --reset-cache --entry-file index.js --bundle-output "$BUNDLE_DIR/main.jsbundle.packager" --sourcemap-output "$BUNDLE_DIR/main.jsbundle.packager.map"
 
     unzip "$IPA_FILE_NAME"
 
@@ -36,7 +36,7 @@ else
 
     echo "Replace bundle"
     rm "Payload/$APP_NAME/main.jsbundle"
-    cp "$BUNDLE_DIR/main.jsbundle" "Payload/$APP_NAME/"
+    cp "$BUNDLE_DIR/main.jsbundle.packager" "Payload/$APP_NAME/main.jsbundle"
 
     echo "Set CFBundleVersion to build id: $BUILD_ID"
     plutil -replace CFBundleVersion -string "${BUILD_ID}" "Payload/$APP_NAME/Info.plist"

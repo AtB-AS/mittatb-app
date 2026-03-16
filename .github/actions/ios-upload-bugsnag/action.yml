@@ -5,10 +5,6 @@ inputs:
   bugsnag-api-key:
     description: 'Bugsnag API key'
     required: true
-  skip-create-sourcemaps:
-    description: 'Skip creating sourcemaps (e.g. when replace-bundle.sh already created them)'
-    required: false
-    default: 'false'
   skip-dsyms:
     description: 'Skip dSYM upload (e.g. when using a cached IPA without dSYMs)'
     required: false
