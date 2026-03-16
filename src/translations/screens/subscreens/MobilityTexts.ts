@@ -29,9 +29,10 @@ export const MobilityTexts = {
         return _('Annet', 'Other', 'Anna');
     }
   },
-  bikeNameByPropulsionType: (propulsionType: PropulsionType) => {
+  bikeNameByPropulsionType: (propulsionType: PropulsionType | undefined) => {
     switch (propulsionType) {
       case PropulsionType.ElectricAssist:
+      case PropulsionType.Electric:
         return _(
           'Elektrisk bysykkel',
           'Electric city bike',

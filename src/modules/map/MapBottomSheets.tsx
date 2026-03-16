@@ -261,6 +261,9 @@ export const MapBottomSheets = ({
           }}
           locationArrowOnPress={locationArrowOnPress}
           navigateToScanQrCode={navigateToScanQrCode}
+          navigateToLogin={navigateToLogin}
+          navigateToSupport={navigateToShmoSupport}
+          selectPaymentMethod={selectPaymentMethod}
         />
       )}
 

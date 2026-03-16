@@ -1,4 +1,4 @@
-export {BicycleSheet} from './components/BicycleSheet';
+export {BicycleSheet} from './components/sheets/BicycleSheet';
 export {BikeStationBottomSheet} from './components/sheets/BikeStationBottomSheet';
 export {BrandingImage} from './components/BrandingImage';
 export {CarSharingStationBottomSheet} from './components/CarSharingStationBottomSheet';

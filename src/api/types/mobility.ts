@@ -1,5 +1,5 @@
 import {z} from 'zod';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {FormFactor, PropulsionType} from '@atb/api/types/generated/mobility-types_v2';
 import {isValidPhoneNumber} from 'libphonenumber-js';
 import {isValidEmail} from '@atb/utils/validation';
 import {Feature, Point} from 'geojson';
@@ -187,7 +187,7 @@ const VehicleTypeSchema = z.object({
   id: z.string(),
   maxRangeMeters: z.number().nullable().optional(),
   formFactor: z.enum(FormFactor),
-  propulsionType: z.string(),
+  propulsionType: z.enum(PropulsionType),
   name: LocalizedStringSchema,
 });
 
