@@ -209,8 +209,8 @@ flowchart TD
 
     start --> regen["Re-generate JS bundle
     npx react-native bundle
-    outputs: bundle/main.jsbundle
-    and bundle/main.jsbundle.map"]
+    outputs: bundle/main.jsbundle.packager
+    and bundle/main.jsbundle.packager.map"]
 
     regen --> unzip["Unzip cached IPA"]
 
