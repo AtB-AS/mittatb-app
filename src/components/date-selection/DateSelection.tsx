@@ -40,7 +40,7 @@ export const DateSelection = ({
   const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
 
   const fontScale = useFontScale();
-  const shouldShowNextPrevTexts = fontScale < 1.3;
+  const shouldShowNextPrevTexts = fontScale <= 1.3;
 
   const searchTimeText =
     searchTime.option === 'now'
