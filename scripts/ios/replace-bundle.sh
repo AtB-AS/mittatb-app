@@ -10,15 +10,17 @@ if [[
     || -z "${BUILD_ID}"
     || -z "${MATCH_PASSWORD}"
     || -z "${KEYCHAIN_NAME}"
+    || -z "${APP_VERSION}"
    ]]; then
     echo "Argument error!"
-    echo "Expected 6 env variables: 
+    echo "Expected 7 env variables:
   - BUILD_ID
   - IPA_FILE_NAME
   - APP_NAME
   - IOS_CODE_SIGN_IDENTITY
   - MATCH_PASSWORD
-  - KEYCHAIN_NAME"
+  - KEYCHAIN_NAME
+  - APP_VERSION"
     exit 1
 else 
     mkdir -p bundle
@@ -37,6 +39,9 @@ else
 
     echo "Set CFBundleVersion to build id: $BUILD_ID"
     plutil -replace CFBundleVersion -string "${BUILD_ID}" "Payload/$APP_NAME/Info.plist"
+
+    echo "Set CFBundleShortVersionString to: $APP_VERSION"
+    plutil -replace CFBundleShortVersionString -string "${APP_VERSION}" "Payload/$APP_NAME/Info.plist"
 
     echo "Set up the correct keychain"
     KEYCHAIN_PATH=~/Library/Keychains/$KEYCHAIN_NAME-db
