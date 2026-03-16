@@ -173,6 +173,7 @@ export const DetailsContent: React.FC<Props> = ({
           startDateTime={fc.travelRights[0].startDateTime}
           endDateTime={fc.travelRights[0].endDateTime}
           totalAmount={fc.totalAmount}
+          currency="NOK" // not supported for fc yet
           withHeader={true}
         />
       ) : (

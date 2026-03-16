@@ -9,6 +9,7 @@ import {
   ParkingVehicleTypes,
 } from '@atb/modules/map';
 import {formatNumberToString} from '@atb-as/utils';
+import {getCurrencySymbol} from '@atb/translations/currency';
 
 export const MobilityTexts = {
   formFactor: (formFactor: FormFactor, isPlural: boolean = false) => {
@@ -328,12 +329,12 @@ export const ScooterTexts = {
       `Sjå ${operator}-appen for prisar`,
     ),
   pricingPlan: {
-    price: (price: number, language: Language) =>
+    price: (price: number, language: Language, currency?: string) =>
       price > 0
         ? _(
-            `+ ${formatNumberToString(price, language)} kr for oppstart`,
-            `+ ${formatNumberToString(price, language)} kr to unlock`,
-            `+ ${formatNumberToString(price, language)} kr for å låse opp`,
+            `+ ${formatNumberToString(price, language)} ${getCurrencySymbol(currency)} for oppstart`,
+            `+ ${formatNumberToString(price, language)} ${getCurrencySymbol(currency)} to unlock`,
+            `+ ${formatNumberToString(price, language)} ${getCurrencySymbol(currency)} for å låse opp`,
           )
         : _('Gratis oppstart', 'Free to unlock', 'Gratis oppstart'),
   },
@@ -356,22 +357,26 @@ export const ScooterTexts = {
           return _('per', 'per', 'per');
       }
     },
-    discount(unit: string, price: string) {
+    discount(unit: string, price: string, currency?: string) {
       switch (unit) {
         case 'min':
           return _(
-            `så ${price}kr/min`,
-            `then ${price}kr/min`,
-            `så ${price}kr/min`,
+            `så ${price}${getCurrencySymbol(currency)}/min`,
+            `then ${price}${getCurrencySymbol(currency)}/min`,
+            `så ${price}${getCurrencySymbol(currency)}/min`,
           );
         case 'km':
           return _(
-            `så ${price}kr/km`,
-            `then ${price}kr/km`,
-            `så ${price}kr/km`,
+            `så ${price}${getCurrencySymbol(currency)}/km`,
+            `then ${price}${getCurrencySymbol(currency)}/km`,
+            `så ${price}${getCurrencySymbol(currency)}/km`,
           );
         default:
-          return _(`så ${price}kr`, `then ${price}kr`, `så ${price}kr`);
+          return _(
+            `så ${price}${getCurrencySymbol(currency)}`,
+            `then ${price}${getCurrencySymbol(currency)}`,
+            `så ${price}${getCurrencySymbol(currency)}`,
+          );
       }
     },
   },

@@ -4,6 +4,7 @@ export type OperatorFragment = {id: string; name: TranslatedStringFragment};
 
 export type PricingPlanFragment = {
   price: number;
+  currency: string;
   perKmPricing?: Array<PricingSegmentFragment>;
   perMinPricing?: Array<PricingSegmentFragment>;
 };

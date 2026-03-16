@@ -8,6 +8,7 @@ import {useIsEligibleForBenefit} from '../use-is-eligible-for-benefit';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';
 import {formatNumberToString} from '@atb-as/utils';
 import {ShmoPricingPlan, ShmoPricingSegment} from '@atb/api/types/mobility';
+import {getCurrencySymbol} from '@atb/translations/currency';
 
 type PricingPlanProps = {
   operator: string;
@@ -17,11 +18,12 @@ type PricingPlanProps = {
 export const PricingPlan = ({operator, plan, benefit}: PricingPlanProps) => {
   const {t} = useTranslation();
   const {isUserEligibleForBenefit} = useIsEligibleForBenefit(benefit);
-  const seAppForPrices = (
+
+  const seeAppForPrices = (
     <MobilityStat text={t(ScooterTexts.seeAppForPrices(operator))} />
   );
   if (hasMultiplePricingPlans(plan)) {
-    return seAppForPrices;
+    return seeAppForPrices;
   }
 
   if (plan.perMinPricing?.length) {
@@ -30,6 +32,7 @@ export const PricingPlan = ({operator, plan, benefit}: PricingPlanProps) => {
         price={plan.price}
         pricingSegment={plan.perMinPricing[0]}
         unit="min"
+        currency={plan.currency}
         eligibleBenefit={isUserEligibleForBenefit ? benefit?.id : undefined}
       />
     );
@@ -41,18 +44,20 @@ export const PricingPlan = ({operator, plan, benefit}: PricingPlanProps) => {
         price={plan.price}
         pricingSegment={plan.perKmPricing[0]}
         unit="km"
+        currency={plan.currency}
         eligibleBenefit={isUserEligibleForBenefit ? benefit?.id : undefined}
       />
     );
   }
 
-  return seAppForPrices;
+  return seeAppForPrices;
 };
 
 type PriceInfoProps = {
   price: number;
   pricingSegment: ShmoPricingSegment;
   unit: 'min' | 'km';
+  currency?: string;
   eligibleBenefit?: OperatorBenefitIdType;
 };
 
@@ -60,13 +65,14 @@ const PriceInfo = ({
   price,
   pricingSegment,
   unit,
+  currency,
   eligibleBenefit,
 }: PriceInfoProps) => {
   const {t, language} = useTranslation();
   const primaryText = `${formatNumberToString(
     pricingSegment.rate,
     language,
-  )} kr per ${unit}`;
+  )} ${getCurrencySymbol(currency)} per ${unit}`;
   const secondaryText = t(ScooterTexts.pricingPlan.price(price, language));
   const hasStrikethrough = price > 0 && eligibleBenefit === 'free-unlock';
 

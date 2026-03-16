@@ -25,7 +25,6 @@ import {
   BatteryMedium,
 } from '@atb/assets/svg/mono-icons/miscellaneous';
 import {
-  isShmoPricingPlan,
   RentalUris,
   ShmoPricingPlan,
   StationFeature,
@@ -41,6 +40,7 @@ import {TFunc} from '@leile/lobo-t';
 import {ErrorResponse, formatNumberToString} from '@atb-as/utils';
 import {FormattedRatePerUnit} from './types';
 import {ThemedCityBike, ThemedScooter} from '@atb/theme/ThemedAssets';
+import {getCurrencySymbol} from '@atb/translations/currency';
 
 export const isStationCluster = (
   feature: Feature<Point> | undefined,
@@ -206,26 +206,24 @@ export const getBatteryLevelIcon = (batteryPercentage: number) => {
 };
 
 export const formatRatePerUnit = (
-  pricingPlan: PricingPlanFragment | ShmoPricingPlan,
+  pricingPlan: PricingPlanFragment,
   language: Language,
 ): FormattedRatePerUnit | undefined => {
   const perMinPrice = pricingPlan.perMinPricing?.[0];
+  const perKmPrice = pricingPlan?.perKmPricing?.[0];
 
   if (perMinPrice) {
     return {
       rate: perMinPrice.rate,
-      formattedRate: `${formatNumberToString(perMinPrice.rate, language)} kr`,
+      formattedRate: `${formatNumberToString(perMinPrice.rate, language)} ${getCurrencySymbol(pricingPlan.currency)}`,
       perUnit: 'min',
     };
-  } else if (!isShmoPricingPlan(pricingPlan)) {
-    const perKmPrice = pricingPlan.perKmPricing?.[0];
-    if (perKmPrice) {
-      return {
-        rate: perKmPrice.rate,
-        formattedRate: `${formatNumberToString(perKmPrice.rate, language)} kr`,
-        perUnit: 'km',
-      };
-    }
+  } else if (perKmPrice) {
+    return {
+      rate: perKmPrice.rate,
+      formattedRate: `${formatNumberToString(perKmPrice.rate, language)} ${getCurrencySymbol(pricingPlan.currency)}`,
+      perUnit: 'km',
+    };
   }
   return undefined;
 };
