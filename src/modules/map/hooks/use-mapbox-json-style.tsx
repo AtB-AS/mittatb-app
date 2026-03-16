@@ -2,7 +2,6 @@ import {useThemeContext} from '@atb/theme';
 import {useMemo} from 'react';
 import {getMapboxLightStyle} from '../mapbox-styles/get-mapbox-light-style';
 import {getMapboxDarkStyle} from '../mapbox-styles/get-mapbox-dark-style';
-import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
 import {MAPBOX_API_TOKEN} from '@env';
 import {colorTheme} from '../mapbox-styles/mapbox-color-theme';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
@@ -33,12 +32,8 @@ const slotLayers = slotLayerIds.map((slotLayerId) => ({
 }));
 
 export const useMapboxJsonStyle: (
-  includeVehiclesAndStationsVectorSource: boolean,
   shouldShowGeofencingZonesLayers: boolean,
-) => string | undefined = (
-  includeVehiclesAndStationsVectorSource,
-  shouldShowGeofencingZonesLayers,
-) => {
+) => string | undefined = (shouldShowGeofencingZonesLayers) => {
   const {themeName} = useThemeContext();
   const {mapbox_user_name, mapbox_nsr_tileset_id} = useRemoteConfigContext();
   const {isMap3dEnabled} = useFeatureTogglesContext();
@@ -47,11 +42,6 @@ export const useMapboxJsonStyle: (
   const geofencingZonesLayers = useGeofencingZonesLayers(
     shouldShowGeofencingZonesLayers,
   );
-
-  const {
-    id: vehiclesAndStationsVectorSourceId,
-    source: vehiclesAndStationsVectorSource,
-  } = useVehiclesAndStationsVectorSource();
 
   const themedStyleWithExtendedSourcesAndSlotLayers = useMemo(() => {
     const themedStyle =
@@ -84,12 +74,6 @@ export const useMapboxJsonStyle: (
 
     const extendedSources: StyleJsonVectorSourcesObj = {
       ...themedStyle.sources,
-      ...(includeVehiclesAndStationsVectorSource
-        ? {
-            [vehiclesAndStationsVectorSourceId]:
-              vehiclesAndStationsVectorSource,
-          }
-        : undefined),
     };
 
     return {
@@ -99,12 +83,9 @@ export const useMapboxJsonStyle: (
     };
   }, [
     geofencingZonesLayers,
-    includeVehiclesAndStationsVectorSource,
     mapbox_nsr_tileset_id,
     mapbox_user_name,
     themeName,
-    vehiclesAndStationsVectorSource,
-    vehiclesAndStationsVectorSourceId,
   ]);
 
   const mapboxJsonStyle = useMemo(
@@ -152,7 +133,7 @@ enum StyleJsonVectorSourceScheme {
   XYZ = 'xyz',
   TMS = 'tms',
 }
-export type StyleJsonVectorSource = {
+type StyleJsonVectorSource = {
   type: string;
   attribution?: string;
   bounds?: number[];
