@@ -58,9 +58,24 @@ export const NotificationContextProvider = ({children}: Props) => {
   const {authStatus} = useAuthContext();
 
   const getFcmToken = useCallback(async () => {
-    const token = await messaging().getToken();
-    setFcmToken(token);
-    return token;
+    try {
+      // On iOS, the device must be registered for remote messages before
+      // fetching an FCM token — this is what provides the underlying APNs
+      // token that FCM depends on. Safe to call multiple times; resolves
+      // immediately if already registered. No-op on Android.
+      // See the docs on the method for more information.
+      if (!messaging().isDeviceRegisteredForRemoteMessages) {
+        await messaging().registerDeviceForRemoteMessages();
+      }
+      const token = await messaging().getToken();
+      setFcmToken(token);
+      return token;
+    } catch (e) {
+      Bugsnag.notify(
+        e instanceof Error ? e : new Error(`Failed to get FCM token: ${e}`),
+      );
+      return undefined;
+    }
   }, []);
 
   const register = useCallback(
@@ -136,11 +151,6 @@ export const NotificationContextProvider = ({children}: Props) => {
     if (isPushNotificationsEnabled && authStatus === 'authenticated')
       checkPermissions();
   }, [isPushNotificationsEnabled, checkPermissions, authStatus]);
-
-  // Get FCM token when component mounts
-  useEffect(() => {
-    getFcmToken();
-  }, [getFcmToken]);
 
   return (
     <NotificationContext.Provider
