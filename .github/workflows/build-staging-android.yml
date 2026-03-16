@@ -162,6 +162,11 @@ jobs:
           path: app-staging.apk
           key: ${{ matrix.org }}-apk-cache-${{needs.setup.outputs.abi-filename}}-${{ hashFiles('android/**', '**/yarn.lock', '**/patches/**/*.patch', '.env') }}
 
+      - name: Print workspace directory
+        run: |
+          echo "${{github.workspace}}"
+          echo "$(pwd)"
+
       - name: Build setup
         uses: ./.github/actions/android-build-setup
         with:

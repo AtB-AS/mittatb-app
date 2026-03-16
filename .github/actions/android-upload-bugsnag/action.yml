@@ -17,10 +17,11 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Create bundle and source maps
-      if: inputs.skip-create-sourcemaps != 'true'
+    - name: Set sourcemaps directory
       shell: bash
-      run: bash ./scripts/android/create-sourcemaps.sh
+      run: |
+        echo "BUNDLE_PATH=android/app/build/generated/assets/react/$(echo ${APP_FLAVOR}${APP_ENVIRONMENT^})/index.android.bundle" >> $GITHUB_ENV
+        echo "SOURCEMAP_PATH=android/app/build/intermediates/sourcemaps/react/$(echo $APP_FLAVOR${APP_ENVIRONMENT^})/index.android.bundle.packager.map" >> $GITHUB_ENV
     - name: Upload JS bundle and source maps
       continue-on-error: true
       shell: bash
