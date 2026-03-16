@@ -203,7 +203,7 @@ export const Map = (props: MapProps) => {
 
       const code = featureToSelect.properties?.code ?? 'allowed';
       const stationParking =
-        featureToSelect.properties?.stationParking ?? false;
+        featureToSelect.properties?.station_parking ?? false;
 
       showGeofencingZoneSnackbar(code, stationParking);
     },
