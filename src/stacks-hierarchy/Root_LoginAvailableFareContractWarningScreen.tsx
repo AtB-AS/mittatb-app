@@ -14,6 +14,8 @@ import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FareContractOrReservation} from '@atb/modules/fare-contracts';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
@@ -23,6 +25,7 @@ type Props =
 export const Root_LoginAvailableFareContractWarningScreen = ({
   navigation,
 }: Props) => {
+  const isFocused = useIsFocusedAndActive();
   const {enable_vipps_login} = useRemoteConfigContext();
   const {t} = useTranslation();
   const styles = useStyles();
@@ -30,7 +33,9 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
   const themeColor = getThemeColor(theme);
   const focusRef = useFocusOnLoad(navigation);
   const {reservations} = useTicketingContext();
-  const {serverNow} = useTimeContext();
+  const {serverNow} = useTimeContext(
+    isFocused ? ONE_SECOND_MS * 5 : ONE_MINUTE_MS,
+  );
   const {fareContracts: availableFareContracts} = useFareContracts(
     {availability: 'available'},
     serverNow,

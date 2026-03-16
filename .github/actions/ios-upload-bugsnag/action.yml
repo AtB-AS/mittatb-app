@@ -1,0 +1,64 @@
+name: 'Upload Bugsnag symbols (iOS)'
+description: 'Create sourcemaps and upload JS sourcemaps and dSYMs to Bugsnag'
+
+inputs:
+  bugsnag-api-key:
+    description: 'Bugsnag API key'
+    required: true
+  skip-create-sourcemaps:
+    description: 'Skip creating sourcemaps (e.g. when replace-bundle.sh already created them)'
+    required: false
+    default: 'false'
+  skip-dsyms:
+    description: 'Skip dSYM upload (e.g. when using a cached IPA without dSYMs)'
+    required: false
+    default: 'false'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Create bundle and source maps
+      if: inputs.skip-create-sourcemaps != 'true'
+      shell: bash
+      run: sh ./scripts/ios/create-sourcemaps.sh
+    - name: Upload JS bundle and source maps
+      continue-on-error: true
+      shell: bash
+      run: |
+        delays=(10 30 60)
+        for attempt in 1 2 3; do
+          echo "Attempt $attempt of 3"
+          if sh ./scripts/ios/upload-sourcemaps.sh; then
+            echo "Upload succeeded on attempt $attempt"
+            exit 0
+          fi
+          if [ "$attempt" -lt 3 ]; then
+            echo "Upload failed, retrying in ${delays[$attempt-1]}s..."
+            sleep ${delays[$attempt-1]}
+          fi
+        done
+        echo "Upload failed after 3 attempts"
+        exit 1
+      env:
+        BUGSNAG_API_KEY: ${{ inputs.bugsnag-api-key }}
+    - name: Upload dSYMs
+      continue-on-error: true
+      if: inputs.skip-dsyms != 'true'
+      shell: bash
+      run: |
+        delays=(10 30 60)
+        for attempt in 1 2 3; do
+          echo "Attempt $attempt of 3"
+          if sh ./scripts/ios/upload-dsyms.sh; then
+            echo "Upload succeeded on attempt $attempt"
+            exit 0
+          fi
+          if [ "$attempt" -lt 3 ]; then
+            echo "Upload failed, retrying in ${delays[$attempt-1]}s..."
+            sleep ${delays[$attempt-1]}
+          fi
+        done
+        echo "Upload failed after 3 attempts"
+        exit 1
+      env:
+        BUGSNAG_API_KEY: ${{ inputs.bugsnag-api-key }}

@@ -3,10 +3,12 @@ import {PurchaseHistoryScreenComponent} from '@atb/screen-components/purchase-hi
 import {TicketingScreenProps} from './navigation-types';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import {FareContractType} from '@atb-as/utils';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type Props = TicketingScreenProps<'Ticketing_PurchaseHistoryScreen'>;
 
 export const Ticketing_PurchaseHistoryScreen = ({navigation}: Props) => {
+  const isFocused = useIsFocusedAndActive();
   const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
 
   const onNavigateToBonusScreen = useCallback(() => {
@@ -22,6 +24,7 @@ export const Ticketing_PurchaseHistoryScreen = ({navigation}: Props) => {
         })
       }
       onNavigateToBonusScreen={onNavigateToBonusScreen}
+      isFocused={isFocused}
     />
   );
 };

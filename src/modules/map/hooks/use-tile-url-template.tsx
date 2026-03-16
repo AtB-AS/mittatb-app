@@ -6,7 +6,7 @@ import {useAppVersionedConfigurableLink} from '@atb/utils/use-app-versioned-conf
  */
 export type TileLayerName =
   | 'vehicles_clustered'
-  | 'stations'
+  | 'stations_clustered'
   | 'geofencing_zones_features';
 
 /**

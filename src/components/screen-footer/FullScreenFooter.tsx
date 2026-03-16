@@ -1,7 +1,6 @@
 import {StyleSheet, Theme} from '@atb/theme';
 import React from 'react';
 import {KeyboardAvoidingView, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type ScreenFooterProps = {
   children: React.ReactNode;
@@ -26,11 +25,10 @@ export function FullScreenFooter({
   );
 }
 
-const useStyles = StyleSheet.createThemeHook((theme: Theme) => {
-  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
+const useStyles = StyleSheet.createThemeHook((theme: Theme, {bottom}) => {
   return {
     container: {
-      paddingBottom: bottomSafeAreaInset + theme.spacing.medium,
+      paddingBottom: bottom + theme.spacing.medium,
       paddingHorizontal: theme.spacing.medium,
     },
   };

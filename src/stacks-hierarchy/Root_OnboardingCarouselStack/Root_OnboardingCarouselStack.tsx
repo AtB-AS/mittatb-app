@@ -5,7 +5,6 @@ import {
   MaterialTopTabBarProps,
 } from '@react-navigation/material-top-tabs';
 import React from 'react';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {Theme} from '@atb/theme/colors';
 import {RootStackScreenProps} from '../navigation-types';
@@ -48,13 +47,12 @@ export const Root_OnboardingCarouselStack = ({route}: Props) => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom: safeAreaBottom} = useSafeAreaInsets();
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     container: {
       flex: 1,
       backgroundColor: getThemeColor(theme).background,
-      paddingBottom: safeAreaBottom,
+      paddingBottom: bottom,
     },
   };
 });

@@ -19,6 +19,8 @@ import {useQueryClient} from '@tanstack/react-query';
 import {SCHOOL_CARNET_QUERY_KEY} from '@atb/modules/ticketing';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 
 type Props =
   TicketTabNavScreenProps<'TicketTabNav_AvailableFareContractsTabScreen'>;
@@ -26,8 +28,11 @@ type Props =
 export const TicketTabNav_AvailableFareContractsTabScreen = ({
   navigation,
 }: Props) => {
+  const isFocused = useIsFocusedAndActive();
   const {reservations} = useTicketingContext();
-  const {serverNow} = useTimeContext();
+  const {serverNow} = useTimeContext(
+    isFocused ? ONE_SECOND_MS : ONE_SECOND_MS * 10,
+  );
   const analytics = useAnalyticsContext();
   const queryClient = useQueryClient();
 

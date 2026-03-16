@@ -3,8 +3,7 @@ import {useControlPositionsStyle} from '../hooks/use-control-styles';
 import {MapBottomSheetType, useMapContext} from '../MapContext';
 import {ExternalRealtimeMapButton} from './external-realtime-map/ExternalRealtimeMapButton';
 import {
-  isBicycleV2,
-  isScooterV2,
+  isVehicle,
   MapFilter,
   useActiveShmoBookingQuery,
   useInitShmoBookingMutationStatus,
@@ -27,8 +26,7 @@ export const MapButtons = ({
   const mapFilterIsOpen =
     mapState.bottomSheetType === MapBottomSheetType.Filter;
   const selectedFeature = mapState.feature;
-  const selectedFeatureIsAVehicle =
-    isScooterV2(selectedFeature) || isBicycleV2(selectedFeature);
+  const selectedFeatureIsAVehicle = isVehicle(selectedFeature);
 
   const isFocusedAndActive = useIsFocusedAndActive();
   const {data: activeShmoBooking, isLoading: activeShmoBookingIsLoading} =

@@ -21,17 +21,18 @@ import {
   GeofencingZoneCustomProps,
 } from './types';
 import {
-  ClusterOfVehiclesProperties,
-  ClusterOfVehiclesPropertiesSchema,
+  VehiclesClusteredProperties,
+  VehiclesClusteredPropertiesSchema,
 } from '@atb/api/types/mobility';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import distance from '@turf/distance';
 import {
-  isBicycleV2,
-  isCarStationV2,
-  isScooterV2,
-  isStationV2,
-  isVehiclesClusteredFeature,
+  isBicycle,
+  isCarStation,
+  isScooter,
+  isStation,
+  isVehicleCluster,
+  isStationCluster,
 } from '@atb/modules/mobility';
 import {MapBottomSheetType} from './MapContext';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
@@ -88,8 +89,10 @@ export const isFeatureGeofencingZoneAsTiles = (feature: Feature) =>
 
 export const isClusterFeatureV2 = (
   feature: Feature,
-): feature is Feature<Point, ClusterOfVehiclesProperties> =>
-  ClusterOfVehiclesPropertiesSchema.safeParse(feature.properties).success;
+): feature is Feature<Point, VehiclesClusteredProperties> =>
+  VehiclesClusteredPropertiesSchema.safeParse(feature.properties).success;
+export const isClusterFeature = (feature: Feature<Point>) =>
+  isStationCluster(feature) || isVehicleCluster(feature);
 
 export const isStopPlace = (f: Feature<Point>) =>
   f.properties?.entityType === 'StopPlace';
@@ -293,11 +296,11 @@ export function getFeatureWeight(
 ): number {
   if (isFeaturePoint(feature)) {
     return isStopPlace(feature) ||
-      isVehiclesClusteredFeature(feature) ||
-      isScooterV2(feature) ||
-      isBicycleV2(feature) ||
-      isStationV2(feature) ||
-      isCarStationV2(feature) ||
+      isVehicleCluster(feature) ||
+      isScooter(feature) ||
+      isBicycle(feature) ||
+      isStation(feature) ||
+      isCarStation(feature) ||
       isParkAndRide(feature)
       ? 3
       : 1;

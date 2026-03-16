@@ -27,8 +27,8 @@ export const NationalStopRegistryFeatures = ({
 
   return (
     <MapboxGL.VectorSource
-      id="nsr-layers-source"
-      url={`mapbox://${MAPBOX_NSR_TILESET_ID}`}
+      id={MAPBOX_NSR_TILESET_ID}
+      existing={true}
       onPress={onMapItemClick}
       hitbox={hitboxCoveringIconOnly}
     >

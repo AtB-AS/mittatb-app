@@ -11,7 +11,6 @@ import {
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {formatToClock, isInThePast, secondsToDuration} from '@atb/utils/date';
 import {
   getQuayName,
@@ -25,7 +24,8 @@ import {
 } from '@atb/screen-components/travel-details-screens';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {getTripPatternBookingText, isSignificantDifference} from '../utils';
-import {GenericSectionItem, Section} from '@atb/components/sections';
+import {GenericClickableSectionItem, Section} from '@atb/components/sections';
+import {View} from 'react-native';
 
 type ResultRowProps = {
   tripPattern: TripPattern;
@@ -51,45 +51,49 @@ export const ResultRow: React.FC<ResultRowProps> = ({
     searchTime?.option !== 'now';
 
   return (
-    <PressableOpacity
-      accessibilityLabel={tripSummary(
-        tripPattern,
-        t,
-        language,
-        isInPast,
-        resultNumber,
-      )}
-      accessibilityHint={t(
-        TripSearchTexts.results.resultItem.footer.detailsHint,
-      )}
-      accessibilityRole="button"
-      style={styles.pressableOpacity}
-      onPress={() => onDetailsPressed(tripPattern, resultIndex)}
-      accessible={true}
-      testID={testID}
-    >
-      <Section>
-        <GenericSectionItem>
-          <MemoizedResultItem
-            tripPattern={tripPattern}
-            state={isInPast ? 'dimmed' : 'enabled'}
-          />
-        </GenericSectionItem>
-        <GenericSectionItem>
-          <MemoizedResultItemFooter
-            tripPattern={tripPattern}
-            isInPast={isInPast}
-          />
-        </GenericSectionItem>
-      </Section>
-    </PressableOpacity>
+    <Section style={styles.container}>
+      <GenericClickableSectionItem
+        accessibilityLabel={tripSummary(
+          tripPattern,
+          t,
+          language,
+          isInPast,
+          resultNumber,
+        )}
+        accessibilityHint={t(
+          TripSearchTexts.results.resultItem.footer.detailsHint,
+        )}
+        accessibilityRole="button"
+        onPress={() => onDetailsPressed(tripPattern, resultIndex)}
+        accessible={true}
+        testID={testID}
+      >
+        <MemoizedResultItem
+          tripPattern={tripPattern}
+          state={isInPast ? 'dimmed' : 'enabled'}
+        />
+        <View style={styles.separator} />
+        <MemoizedResultItemFooter
+          tripPattern={tripPattern}
+          isInPast={isInPast}
+        />
+      </GenericClickableSectionItem>
+    </Section>
   );
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  pressableOpacity: {
+  container: {
+    flex: 1,
     marginTop: theme.spacing.small,
     marginHorizontal: theme.spacing.medium,
+  },
+  separator: {
+    flexGrow: 0,
+    backgroundColor: theme.color.background.neutral[2].background,
+    height: 1,
+    marginVertical: theme.spacing.small,
+    marginHorizontal: -theme.spacing.medium,
   },
 }));
 

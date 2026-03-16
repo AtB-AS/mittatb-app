@@ -12,9 +12,9 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {ThemeText} from '@atb/components/text';
 import {Linking, Platform, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {bonusOnboardingId} from './config';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {KnownProgramId} from '@atb/modules/enrollment';
 
 export type DownloadScreenProps =
   OnboardingCarouselScreenProps<'BonusOnboarding_DownloadScreen'>;
@@ -25,7 +25,7 @@ export const BonusOnboarding_DownloadScreen = ({
   const focusRef = useFocusOnLoad(navigation);
   const {t} = useTranslation();
   const {navigateToNextScreen} = useOnboardingCarouselNavigation(
-    bonusOnboardingId,
+    KnownProgramId.BONUS,
     'BonusOnboarding_DownloadScreen',
   );
 
@@ -73,7 +73,7 @@ export const DownloadButtons = () => {
         const appUrl = getPlatformAppUrl(operatorId);
 
         return (
-          <PressableOpacity
+          <NativeBlockButton
             key={operatorId}
             style={styles.operatorSection}
             accessibilityRole="button"
@@ -87,7 +87,7 @@ export const DownloadButtons = () => {
             <ThemeText style={styles.operatorText} typography="body__s__strong">
               {mobilityOperators?.find((op) => op.id === operatorId)?.name}
             </ThemeText>
-          </PressableOpacity>
+          </NativeBlockButton>
         );
       })}
     </View>

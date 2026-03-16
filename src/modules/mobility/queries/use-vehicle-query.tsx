@@ -6,7 +6,6 @@ export const useVehicleQuery = (id?: string) =>
   useQuery({
     queryKey: ['getVehicle', id],
     queryFn: ({signal}) => getVehicle(id, {signal}),
-    staleTime: ONE_MINUTE_MS,
     gcTime: ONE_MINUTE_MS,
     refetchOnMount: 'always',
     retry: 5,

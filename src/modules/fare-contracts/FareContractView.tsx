@@ -106,12 +106,15 @@ export const FareContractView: React.FC<Props> = ({
   return (
     <Section testID={testID}>
       {hasShmoBookingId(fareContract) ? (
-        <FareContractShmoHeaderSectionItem fareContract={fareContract} />
+        <FareContractShmoHeaderSectionItem
+          fareContract={fareContract}
+          now={now}
+        />
       ) : (
         <GenericSectionItem style={styles.header}>
-          <WithValidityLine fc={fareContract}>
+          <WithValidityLine fc={fareContract} now={now}>
             <ProductName fc={fareContract} />
-            <ValidityTime fc={fareContract} />
+            <ValidityTime fc={fareContract} now={now} />
             <Description fc={fareContract} />
           </WithValidityLine>
         </GenericSectionItem>
@@ -128,6 +131,7 @@ export const FareContractView: React.FC<Props> = ({
         <TravelInfoSectionItem
           fc={fareContract}
           onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
+          now={now}
         />
       )}
 

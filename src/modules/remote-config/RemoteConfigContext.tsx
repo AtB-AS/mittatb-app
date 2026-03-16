@@ -9,7 +9,6 @@ import remoteConfig from '@react-native-firebase/remote-config';
 import {defaultRemoteConfig, getConfig, RemoteConfig} from './remote-config';
 import Bugsnag from '@bugsnag/react-native';
 
-import {FeedbackConfiguration} from '@atb/components/feedback';
 import {useInterval} from '@atb/utils/use-interval';
 
 /**
@@ -22,7 +21,6 @@ const RETRY_INTERVAL_MS_MAX = 30000;
 export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
   isLoaded: boolean;
-  feedback_questions: FeedbackConfiguration[];
 };
 
 const RemoteConfigContext = createContext<RemoteConfigContextState | undefined>(
@@ -121,7 +119,6 @@ export const RemoteConfigContextProvider = ({children}: Props) => {
     <RemoteConfigContext.Provider
       value={{
         ...config,
-        feedback_questions: parseJson(config.feedback_questions, []),
         refresh,
         isLoaded,
       }}
@@ -140,13 +137,3 @@ export function useRemoteConfigContext() {
   }
   return context;
 }
-
-const parseJson = (text: string, defaultObject: object) => {
-  if (!text) return defaultObject;
-  try {
-    return JSON.parse(text);
-  } catch (err) {
-    console.warn('Error parsing this json:', text, err);
-    return defaultObject;
-  }
-};

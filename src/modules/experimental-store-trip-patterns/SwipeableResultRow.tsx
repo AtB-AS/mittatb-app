@@ -1,5 +1,5 @@
 import {useThemeContext} from '@atb/theme';
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useMemo, useRef} from 'react';
 import Swipeable, {
   SwipeableMethods,
   SwipeDirection,
@@ -13,18 +13,26 @@ export type RightActionKind = 'delete' | 'save';
 
 export const SwipeableResultRow: React.FC<
   React.PropsWithChildren<{
-    onRightAction: (actionKind: RightActionKind) => void;
-    swipeableRef: React.RefObject<SwipeableMethods | null>;
+    onRightAction: (
+      actionKind: RightActionKind,
+      closeSwipeable: () => void,
+    ) => void;
     rightActionKind: RightActionKind;
   }>
-> = ({children, onRightAction, swipeableRef, rightActionKind}) => {
+> = ({children, onRightAction, rightActionKind}) => {
+  const swipeableRef = useRef<SwipeableMethods | null>(null);
+
+  const closeSwipeable = useCallback(() => {
+    swipeableRef.current?.close();
+  }, [swipeableRef]);
+
   const handleSwipe = useCallback(
     (direction: SwipeDirection) => {
       if (direction === 'left') {
-        onRightAction(rightActionKind);
+        onRightAction(rightActionKind, closeSwipeable);
       }
     },
-    [onRightAction, rightActionKind],
+    [onRightAction, rightActionKind, closeSwipeable],
   );
 
   const RightAction = useMemo(() => {

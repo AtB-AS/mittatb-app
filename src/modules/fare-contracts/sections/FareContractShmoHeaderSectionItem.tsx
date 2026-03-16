@@ -5,7 +5,6 @@ import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {useTimeContext} from '@atb/modules/time';
 import {useAuthContext} from '@atb/modules/auth';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {toDate} from 'date-fns';
@@ -18,22 +17,23 @@ import {ProductName} from '../components/ProductName';
 
 type Props = {
   fareContract: FareContractType;
+  now: number;
 };
 
 export const FareContractShmoHeaderSectionItem = ({
   fareContract: fc,
+  now,
   ...props
 }: SectionItemProps<Props>) => {
   const {topContainer} = useSectionItem(props);
   const styles = useStyles();
 
   const {t, language} = useTranslation();
-  const {serverNow} = useTimeContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
   const {isInspectable} = useMobileTokenContext();
   const {theme} = useThemeContext();
 
-  const {validTo} = getFareContractInfo(serverNow, fc, currentUserId);
+  const {validTo} = getFareContractInfo(now, fc, currentUserId);
   const dateTime = formatToLongDateTime(toDate(validTo), language);
   const label = t(FareContractTexts.shmoDetails.tripEnded(dateTime));
   const {data: operatorsData} = useGetOperatorsQuery();

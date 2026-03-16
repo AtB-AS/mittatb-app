@@ -1,0 +1,102 @@
+name: 'Android build setup'
+description: 'Shared build setup steps for Android staging and store builds'
+
+inputs:
+  app-environment:
+    description: 'Build environment: staging or store'
+    required: true
+  org:
+    description: 'Organization/OMS to build for'
+    required: true
+  git-crypt-key:
+    description: 'Git-crypt decryption key'
+    required: true
+  keystore:
+    description: 'Keystore decryption key'
+    required: true
+  entur-registry-user:
+    description: 'Entur registry user'
+    required: true
+  entur-registry-token:
+    description: 'Entur registry token'
+    required: true
+  skip-heavy-steps:
+    description: 'Skip runner cleanup, imagemagick install, and native asset generation (e.g. when using cached APK)'
+    required: false
+    default: 'false'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Clean up runner
+      if: inputs.skip-heavy-steps != 'true'
+      uses: ./.github/actions/android-build-cleanup-runner
+
+    - name: Set global env vars
+      shell: bash
+      run: |
+        echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
+        echo "APP_ENVIRONMENT=${{ inputs.app-environment }}" >> $GITHUB_ENV
+        echo "KEYSTORE_PATH=./android/app/keystore.jks" >> $GITHUB_ENV
+        echo "APK_FILE_NAME=app-${{ inputs.app-environment }}.apk" >> $GITHUB_ENV
+        echo "AAB_FILE_NAME=app-${{ inputs.app-environment }}.aab" >> $GITHUB_ENV
+        echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
+        echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
+
+    - name: Decrypt env files
+      shell: bash
+      run: bash ./scripts/git-crypt-unlock.sh
+      env:
+        GIT_CRYPT_KEY: ${{ inputs.git-crypt-key }}
+
+    - name: Add Entur private registry credentials
+      shell: bash
+      run: bash ./scripts/add-entur-private-registry.sh
+      env:
+        ENTUR_REGISTRY_USER: ${{ inputs.entur-registry-user }}
+        ENTUR_REGISTRY_TOKEN: ${{ inputs.entur-registry-token }}
+
+    - name: Install imagemagick
+      if: inputs.skip-heavy-steps != 'true'
+      shell: bash
+      run: sudo apt-get update && sudo apt-get install imagemagick
+
+    - name: Install node v22
+      uses: actions/setup-node@v5
+      with:
+        node-version: 22
+        cache: 'yarn'
+
+    - name: Install node_modules
+      shell: bash
+      run: yarn install --frozen-lockfile
+
+    - name: Setup ruby and bundle install
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.1.0
+        cache-version: 2
+        bundler-cache: true
+
+    - name: Set environment
+      shell: bash
+      run: bash ./scripts/override-environment.sh ${{ inputs.app-environment }} ${{ inputs.org }}
+
+    - name: Export workflow env variables based on environment
+      shell: bash
+      run: bash ./scripts/export-workflow-parameters.sh
+
+    - name: Override native config files
+      shell: bash
+      run: bash ./scripts/android/override-config-files.sh
+
+    - name: Decode Android keystore
+      shell: bash
+      run: bash ./scripts/android/create-keystore-file.sh
+      env:
+        KEYSTORE: ${{ inputs.keystore }}
+
+    - name: Generate native assets
+      if: inputs.skip-heavy-steps != 'true'
+      shell: bash
+      run: yarn generate-native-assets

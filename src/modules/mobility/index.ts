@@ -40,13 +40,14 @@ export {useDeleteAgeVerificationMutation} from './queries/use-remove-age-verific
 export {
   findOperatorBrandImageUrl,
   getAvailableVehicles,
-  isBicycleV2,
-  isBikeStationV2,
-  isCarStationV2,
-  isScooterV2,
-  isStationV2,
-  isVehicleFeature,
-  isVehiclesClusteredFeature,
+  isBicycle,
+  isBikeStation,
+  isCarStation,
+  isScooter,
+  isStation,
+  isVehicle,
+  isVehicleCluster,
+  isStationCluster,
 } from './utils';
 export {
   AgeVerificationEnum,

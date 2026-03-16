@@ -14,6 +14,5 @@ export {
 } from './queries';
 export {
   bonusOnboardingCarouselConfig,
-  bonusOnboardingId,
   type BonusOnboardingScreenName,
 } from './onboarding';

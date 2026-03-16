@@ -6,7 +6,7 @@ export {
 export {
   type PaymentSelection,
   type PaymentMethod,
-  type VippsPaymentMethod,
+  type NonRecurringPaymentMethod,
   type CardPaymentMethod,
 } from './types';
 export {PaymentSelectionSectionItem} from './PaymentSelectionSectionItem';
@@ -15,5 +15,5 @@ export {PaymentBrand} from './PaymentBrand';
 export {ExpiryMessage} from './ExpiryMessage';
 export {SinglePaymentMethod} from './SinglePaymentMethod';
 export {MultiplePaymentMethodsRadioSection} from './MultiplePaymentMethodsRadioSection';
-export {isCardPaymentMethod} from './utils';
+export {isCardPaymentMethod, isNonRecurringPaymentType} from './utils';
 export {useSelectedShmoPaymentMethod} from './hooks/use-selected-shmo-payment-method';

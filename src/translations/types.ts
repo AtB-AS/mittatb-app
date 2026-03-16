@@ -1,4 +1,5 @@
 import {Language} from '@atb/translations/commons';
+import z from 'zod';
 
 export enum LanguageAndTextLanguagesEnum {
   'nob' = 'nob',
@@ -30,9 +31,15 @@ export const LanguageKeyVariants: Record<Language, string[]> = {
   ],
 };
 
-export type LanguageAndTextType =
-  | {
-      lang: string;
-      value: string;
-    }
-  | {language?: string; value?: string};
+export const LanguageAndTextSchema = z.union([
+  z.object({
+    lang: z.string(),
+    value: z.string(),
+  }),
+  z.object({
+    language: z.string().optional(),
+    value: z.string().optional(),
+  }),
+]);
+
+export type LanguageAndTextType = z.infer<typeof LanguageAndTextSchema>;

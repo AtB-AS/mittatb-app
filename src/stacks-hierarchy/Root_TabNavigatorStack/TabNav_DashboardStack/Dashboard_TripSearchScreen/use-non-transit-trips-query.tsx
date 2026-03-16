@@ -1,148 +1,50 @@
-import {Location} from '@atb/modules/favorites';
 import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {useEffect, useMemo, useRef, useState} from 'react';
-import {SearchStateType} from '../types';
-import {CancelTokenSource} from 'axios';
 import {nonTransitTripSearch} from '@atb/api/bff/trips';
-import {sanitizeSearchTime, SearchInput} from './utils';
-import {CancelToken} from '@atb/api';
-import {isValidTripLocations} from '@atb/utils/location';
-import {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
+import {useQuery} from '@tanstack/react-query';
+import {ONE_MINUTE_MS} from '@atb/utils/durations';
+import {createTripsQuery} from './use-trips-infinite-query';
 import {NonTransitTripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
-import {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
-import {TravelSearchPreferenceWithSelectionType} from '@atb/modules/travel-search-filters';
-import {TravelSearchPreferenceParameterType} from '@atb-as/config-specs';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import type {DateOptionAndValue} from '@atb/components/date-selection';
+import {TripsProps} from './use-trips';
 
-export const useNonTransitTripsQuery = (
-  fromLocation: Location | undefined,
-  toLocation: Location | undefined,
-  searchTime: DateOptionAndValue<'now' | 'departure' | 'arrival'> = {
-    option: 'now',
-    date: new Date().toISOString(),
-  },
-  filtersSelection: TravelSearchFiltersSelectionType | undefined,
-) => {
-  const [nonTransitTrips, setNonTransitTrips] = useState<TripPatternFragment[]>(
-    [],
-  );
-  const [searchState, setSearchState] = useState<SearchStateType>('idle');
-  const cancelTokenRef = useRef<CancelTokenSource>(undefined);
+const NON_TRANSIT_DIRECT_MODES: StreetMode[] = [
+  StreetMode.Foot,
+  StreetMode.BikeRental,
+  StreetMode.Bicycle,
+];
+
+export const useNonTransitTripsQuery = (tripsProps: TripsProps) => {
   const {isNonTransitTripSearchEnabled} = useFeatureTogglesContext();
-
-  useEffect(() => {
-    if (!isNonTransitTripSearchEnabled) return;
-
-    setSearchState('searching');
-
-    if (
-      !fromLocation ||
-      !toLocation ||
-      !isValidTripLocations(fromLocation, toLocation)
-    ) {
-      setNonTransitTrips([]);
-      setSearchState('search-empty-result');
-      return;
-    }
-
-    cancelTokenRef.current?.cancel('New search starting');
-    const cancelTokenSource = CancelToken.source();
-
-    const searchInput: SearchInput = {
-      searchTime: sanitizeSearchTime(searchTime),
-    };
-
-    const arriveBy = searchTime.option === 'arrival';
-
-    const query = createNonTransitQuery(
-      fromLocation,
-      toLocation,
-      searchInput,
-      arriveBy,
-      filtersSelection,
-      [StreetMode.Foot, StreetMode.BikeRental, StreetMode.Bicycle],
-    );
-
-    nonTransitTripSearch(query, {cancelToken: cancelTokenSource.token})
-      .then((result) => {
-        setNonTransitTrips(result);
-        setSearchState(
-          result?.length === 0 ? 'search-empty-result' : 'search-success',
-        );
-      })
-      .catch(() => {
-        cancelTokenRef.current = cancelTokenSource;
-        // Purposely ignore errors from non transit trip searches.
-        // Non transit trip searches are not a critical feature,
-        // and failing silently will thus not affect the user experience severely.
-        // If travel search fails in general, the error handling in the normal
-        // travel search will display an error message to the user.
-      });
-
-    return () => {
-      cancelTokenSource.cancel('Unmounting use trips hook');
-    };
-  }, [
-    isNonTransitTripSearchEnabled,
-    fromLocation,
-    toLocation,
-    searchTime,
-    filtersSelection,
-  ]);
-
-  return useMemo(
-    () => ({
-      nonTransitTrips,
-      searchState,
-    }),
-    [nonTransitTrips, searchState],
-  );
+  return useQuery({
+    queryKey: ['NON_TRANSIT_TRIPS_QUERY_KEY', tripsProps],
+    queryFn: ({signal}) =>
+      nonTransitTripSearch(createNonTransitQuery(tripsProps), {
+        signal,
+      }),
+    enabled: isNonTransitTripSearchEnabled,
+    staleTime: 30 * ONE_MINUTE_MS,
+    gcTime: 30 * ONE_MINUTE_MS,
+  });
 };
 
-export function createNonTransitQuery(
-  fromLocation: Location,
-  toLocation: Location,
-  {searchTime}: SearchInput,
-  arriveBy: boolean,
-  filtersSelection: TravelSearchFiltersSelectionType | undefined,
-  directModes: StreetMode[],
+function createNonTransitQuery(
+  nonTransitTripsQueryProps: TripsProps,
 ): NonTransitTripsQueryVariables {
-  const from = {
-    ...fromLocation,
-    place:
-      fromLocation.resultType === 'search' && fromLocation.layer === 'venue'
-        ? fromLocation.id
-        : undefined,
-  };
-  const to = {
-    ...toLocation,
-    place:
-      toLocation.resultType === 'search' && toLocation.layer === 'venue'
-        ? toLocation.id
-        : undefined,
-  };
-  const walkSpeed = getPreferenceFromFilter(
-    'walkSpeed',
-    filtersSelection?.travelSearchPreferences,
-  );
+  const {
+    cursor: _cursor,
+    transferPenalty: _transferPenalty,
+    waitReluctance: _waitReluctance,
+    walkReluctance: _walkReluctance,
+    transferSlack: _transferSlack,
+    modes: _modes,
+    ...nonTransitTripsQueryBase
+  } = createTripsQuery({
+    ...nonTransitTripsQueryProps,
+    journeySearchModes: {},
+  });
 
   return {
-    from,
-    to,
-    when: searchTime?.date,
-    arriveBy,
-    walkSpeed,
-    directModes,
+    ...nonTransitTripsQueryBase,
+    directModes: NON_TRANSIT_DIRECT_MODES,
   };
 }
-
-const getPreferenceFromFilter = (
-  type: TravelSearchPreferenceParameterType,
-  filters: TravelSearchPreferenceWithSelectionType[] | undefined,
-) => {
-  const filterOfType = filters?.find((f) => f.type === type);
-  if (!filterOfType) return;
-  return filterOfType.options.find((o) => o.id === filterOfType.selectedOption)
-    ?.value;
-};

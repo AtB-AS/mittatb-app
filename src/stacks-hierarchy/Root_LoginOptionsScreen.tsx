@@ -21,7 +21,6 @@ import {
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import queryString from 'query-string';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
@@ -236,8 +235,7 @@ export const Root_LoginOptionsScreen = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom: safeAreaBottom} = useSafeAreaInsets();
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     container: {
       backgroundColor: getThemeColor(theme).background,
@@ -250,7 +248,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       flexGrow: 1,
       justifyContent: 'center',
       paddingHorizontal: theme.spacing.xLarge,
-      paddingBottom: safeAreaBottom,
+      paddingBottom: bottom,
     },
     title: {
       textAlign: 'center',

@@ -4,6 +4,7 @@ import {nsrSymbolLayers} from '../components/national-stop-registry-features/nsr
 import {
   Expression,
   SymbolLayerStyleProps,
+  FilterExpression,
 } from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 type ExpressionField = Expression[1];
 import {PinType} from '../mapbox-styles/pin-types';
@@ -237,3 +238,23 @@ export const useMapSymbolStyles = ({
     textStyle,
   };
 };
+
+/**
+ * Add this filter to hide far away items.
+ * The higher pitch, the less distance away makes sense to show.
+ * Otherwise the whole horizon may be filled with items.
+ */
+export const hideItemsInTheDistanceFilter: FilterExpression = [
+  'case',
+  ['<=', ['pitch'], 40],
+  true,
+  [
+    '<=',
+    ['distance-from-center'],
+    [
+      'min',
+      ['interpolate', ['linear'], ['pitch'], 50, 1, 85, 0.75],
+      ['interpolate', ['linear'], ['zoom'], 10, 1, 18, 0.75],
+    ],
+  ],
+];

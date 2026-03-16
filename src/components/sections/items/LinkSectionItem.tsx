@@ -8,10 +8,7 @@ import {useSectionStyle} from '../use-section-style';
 import {StyleSheet} from '@atb/theme';
 import {ContrastColor, InteractiveColor, TextNames} from '@atb/theme/colors';
 import {LabelType} from '@atb/modules/configuration';
-import {
-  PressableOpacity,
-  PressableOpacityEvent,
-} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {useTranslation} from '@atb/translations';
 import {TagInfoTexts} from '@atb/translations/components/TagInfo';
 import {Tag} from '@atb/components/tag';
@@ -29,7 +26,7 @@ type Props = SectionItemProps<{
   subtitle?: string;
   /* Label will be placed by the icon. "Beta", "New", etc. */
   label?: LabelType;
-  onPress?(event: PressableOpacityEvent): void;
+  onPress?(): void;
   leftIcon?: IconProps;
   leftElement?: ReactNode;
   rightIcon?: IconProps;
@@ -62,7 +59,6 @@ export const LinkSectionItem = forwardRef<any, Props>(
       useSectionItem(props);
     const style = useSectionStyle();
     const linkSectionItemStyle = useStyles();
-    const disabledStyle = disabled ? linkSectionItemStyle.disabled : undefined;
     const accessibilityWithOverrides = disabled
       ? {...accessibility, accessibilityHint: undefined}
       : accessibility;
@@ -77,7 +73,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
       ) : null);
 
     return (
-      <PressableOpacity
+      <NativeBlockButton
         accessible
         accessibilityRole="button"
         onPress={disabled ? undefined : onPress}
@@ -91,12 +87,9 @@ export const LinkSectionItem = forwardRef<any, Props>(
         style={topContainer}
         testID={testID}
         ref={forwardedRef}
-        collapsable={false}
         {...accessibilityWithOverrides}
       >
-        <View
-          style={[style.spaceBetween, disabledStyle, linkSectionItemStyle.gap]}
-        >
+        <View style={[style.spaceBetween, linkSectionItemStyle.gap]}>
           {leftAccessory}
           <View style={[linkSectionItemStyle.textContainer, contentContainer]}>
             <ThemeText
@@ -107,7 +100,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
               {text}
             </ThemeText>
             {subtitle && (
-              <View style={disabledStyle}>
+              <View>
                 <ThemeText color="secondary" typography="body__s">
                   {subtitle}
                 </ThemeText>
@@ -125,7 +118,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
             <Icon icon={rightIcon} interactiveColor={interactiveColor} />
           )}
         </View>
-      </PressableOpacity>
+      </NativeBlockButton>
     );
   },
 );

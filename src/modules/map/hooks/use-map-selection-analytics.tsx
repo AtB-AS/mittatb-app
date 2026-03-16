@@ -3,10 +3,10 @@ import {useMemo} from 'react';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {isStopPlace} from '../utils';
 import {
-  isBicycleV2,
-  isBikeStationV2,
-  isCarStationV2,
-  isScooterV2,
+  isBicycle,
+  isBikeStation,
+  isCarStation,
+  isScooter,
 } from '@atb/modules/mobility';
 
 export const useMapSelectionAnalytics = () => {
@@ -18,19 +18,19 @@ export const useMapSelectionAnalytics = () => {
           analytics.logEvent('Map', 'Stop place selected', {
             id: selectedFeature.id,
           });
-        } else if (isBikeStationV2(selectedFeature)) {
+        } else if (isBikeStation(selectedFeature)) {
           analytics.logEvent('Map', 'City bike station selected', {
             id: selectedFeature.properties.id,
           });
-        } else if (isCarStationV2(selectedFeature)) {
+        } else if (isCarStation(selectedFeature)) {
           analytics.logEvent('Map', 'Car sharing station selected', {
             id: selectedFeature.properties.id,
           });
-        } else if (isScooterV2(selectedFeature)) {
+        } else if (isScooter(selectedFeature)) {
           analytics.logEvent('Map', 'Scooter selected', {
             id: selectedFeature.properties.id,
           });
-        } else if (isBicycleV2(selectedFeature)) {
+        } else if (isBicycle(selectedFeature)) {
           analytics.logEvent('Map', 'Bike selected', {
             id: selectedFeature.properties.id,
           });

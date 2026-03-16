@@ -3,6 +3,8 @@ import {
   FilterExpression,
   SymbolLayerStyleProps,
 } from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
+type ExpressionField = Expression[1];
+
 import {NsrPinIconCode} from '../../mapbox-styles/pin-types';
 
 /**
@@ -60,6 +62,15 @@ export const nsrCircleLayers: NsrCircleLayer[] = [
   {...quaysBaseLayer, id: quaysBaseLayer.id + '_circle'},
 ];
 
+/**
+ * Always use type 'all', which is extendable by appending.
+ * Note: cannot include hideItemsInTheDistanceFilter here as this part of the filter
+ * is also used not as the root, and ['pitch'] must be used as root in style.
+ */
+const getAllFilter: (
+  filterConditions: ExpressionField[],
+) => FilterExpression = (filterConditions) => ['all', ...filterConditions];
+
 const isStopPlaceEntityType: Expression = [
   'match',
   ['get', 'entityType'],
@@ -83,11 +94,10 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
     id: 'carparking.nsr.api',
     iconCode: 'commuterparking',
     reachFullScaleAtZoomLevel: 13,
-    filter: [
-      'all',
+    filter: getAllFilter([
       ['match', ['get', 'entityType'], ['Parking'], true, false],
       ['match', ['get', 'parkingVehicleTypes'], ['car'], true, false],
-    ],
+    ]),
     textField: nameTextField,
     textLocation: NsrSymbolLayerTextLocation.BelowIcon,
   },
@@ -95,12 +105,11 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
     id: 'tram.nsr.api',
     iconCode: 'tram',
     reachFullScaleAtZoomLevel: busMetroTramStopZoomLevel,
-    filter: [
-      'all',
+    filter: getAllFilter([
       isStopPlaceEntityType,
       ['match', stopPlaceType, ['onstreetTram'], true, false],
       ['!', hasAdjacentSites],
-    ],
+    ]),
     textField: nameTextField,
     textLocation: NsrSymbolLayerTextLocation.BelowIcon,
   },
@@ -108,8 +117,7 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
     id: 'metro.tram.nsr.api',
     iconCode: 'metroandtram', // Bekkestua seems to be the only one matching this
     reachFullScaleAtZoomLevel: busMetroTramStopZoomLevel,
-    filter: [
-      'all',
+    filter: getAllFilter([
       isStopPlaceEntityType,
       ['match', ['get', 'isPrimaryAdjacentSite'], ['true'], true, false],
       [
@@ -120,19 +128,18 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
         false,
       ],
       hasAdjacentSites,
-    ],
+    ]),
     textField: nameTextField,
     textLocation: NsrSymbolLayerTextLocation.BelowIcon,
   },
   {
     id: 'metro.nsr.api',
     reachFullScaleAtZoomLevel: busMetroTramStopZoomLevel,
-    filter: [
-      'all',
+    filter: getAllFilter([
       isStopPlaceEntityType,
       ['match', stopPlaceType, ['metroStation'], true, false],
       ['!', hasAdjacentSites],
-    ],
+    ]),
     iconCode: 'metro',
     textField: nameTextField,
     textLocation: NsrSymbolLayerTextLocation.BelowIcon,
@@ -142,8 +149,7 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
     id: 'bus.tram.nsr.api',
     iconCode: 'busandtram',
     reachFullScaleAtZoomLevel: busMetroTramStopZoomLevel,
-    filter: [
-      'all',
+    filter: getAllFilter([
       isStopPlaceEntityType,
       hasAdjacentSites,
       [
@@ -154,7 +160,7 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
         false,
       ],
       ['match', ['get', 'isPrimaryAdjacentSite'], ['true'], true, false],
-    ],
+    ]),
     textField: nameTextField,
     textLocation: NsrSymbolLayerTextLocation.BelowIcon,
   },
@@ -162,11 +168,10 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
     id: 'bussterminal.nsr.api',
     iconCode: 'bus',
     reachFullScaleAtZoomLevel: busMetroTramStopZoomLevel,
-    filter: [
-      'all',
+    filter: getAllFilter([
       isStopPlaceEntityType,
       ['match', stopPlaceType, ['busStation'], true, false],
-    ],
+    ]),
     textField: nameTextField,
     textLocation: NsrSymbolLayerTextLocation.BelowIcon,
   },
@@ -174,13 +179,12 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
     id: 'bus.nsr.api',
     iconCode: 'bus',
     reachFullScaleAtZoomLevel: busMetroTramStopZoomLevel,
-    filter: [
-      'all',
+    filter: getAllFilter([
       isStopPlaceEntityType,
       ['match', stopPlaceType, ['onstreetBus'], true, false],
       ['match', ['get', 'submode'], ['railReplacementBus'], false, true],
       ['!', hasAdjacentSites],
-    ],
+    ]),
     textField: nameTextField,
     textLocation: NsrSymbolLayerTextLocation.BelowIcon,
   },
@@ -188,11 +192,10 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
     id: 'ferjekai.nsr.api',
     iconCode: 'ferry',
     reachFullScaleAtZoomLevel: 12,
-    filter: [
-      'all',
+    filter: getAllFilter([
       isStopPlaceEntityType,
       ['match', stopPlaceType, ['harbourPort'], true, false],
-    ],
+    ]),
     textField: nameTextField,
     textLocation: NsrSymbolLayerTextLocation.BelowIcon,
   },
@@ -200,11 +203,10 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
     id: 'boat.nsr.api',
     iconCode: 'boat',
     reachFullScaleAtZoomLevel: 12,
-    filter: [
-      'all',
+    filter: getAllFilter([
       isStopPlaceEntityType,
       ['match', stopPlaceType, ['ferryStop'], true, false],
-    ],
+    ]),
     textField: nameTextField,
     textLocation: NsrSymbolLayerTextLocation.BelowIcon,
   },
@@ -212,12 +214,11 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
     id: 'railway.nsr.api',
     iconCode: 'train',
     reachFullScaleAtZoomLevel: 12,
-    filter: [
-      'all',
+    filter: getAllFilter([
       isStopPlaceEntityType,
       ['match', stopPlaceType, ['railStation'], true, false],
       ['match', ['get', 'submode'], ['touristRailway'], false, true],
-    ],
+    ]),
     textField: nameTextField,
     textLocation: NsrSymbolLayerTextLocation.BelowIcon,
   },
@@ -225,12 +226,11 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
     id: 'helicopter.nsr.api',
     iconCode: 'helicopter',
     reachFullScaleAtZoomLevel: 10,
-    filter: [
-      'all',
+    filter: getAllFilter([
       isStopPlaceEntityType,
       ['match', stopPlaceType, ['airport'], true, false],
       ['match', ['get', 'submode'], ['helicopterService'], true, false],
-    ],
+    ]),
     textField: nameTextField,
     textLocation: NsrSymbolLayerTextLocation.BelowIcon,
   },
@@ -238,12 +238,11 @@ export const nsrSymbolLayers: NsrSymbolLayer[] = [
     id: 'airport.nsr.api',
     iconCode: 'plane',
     reachFullScaleAtZoomLevel: 9,
-    filter: [
-      'all',
+    filter: getAllFilter([
       isStopPlaceEntityType,
       ['match', stopPlaceType, ['airport'], true, false],
       ['match', ['get', 'submode'], ['helicopterService'], false, true],
-    ],
+    ]),
     textField: nameTextField,
     textLocation: NsrSymbolLayerTextLocation.BelowIcon,
   },

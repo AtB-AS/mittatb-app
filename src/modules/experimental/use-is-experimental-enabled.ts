@@ -1,5 +1,6 @@
 import {ExperimentalFeature} from '@atb/modules/native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useTicketingContext} from '../ticketing/TicketingContext';
 
 /**
  * Evaluates two conditions:
@@ -8,8 +9,10 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
  */
 export const useIsExperimentalEnabled = () => {
   const {isExperimentalFeaturesEnabled} = useFeatureTogglesContext();
+  const {customerProfile} = useTicketingContext();
   return (
     isExperimentalFeaturesEnabled &&
-    ExperimentalFeature.isNonProductionReleaseChannel()
+    (ExperimentalFeature.isNonProductionReleaseChannel() ||
+      customerProfile?.debug)
   );
 };

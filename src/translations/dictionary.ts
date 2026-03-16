@@ -92,6 +92,14 @@ const dictionary = {
         'Aktivér for å lukke',
       ),
     },
+    cancel: {
+      text: _('Avbryt', 'Cancel', 'Avbryt'),
+      a11yHint: _(
+        'Aktivér for å avbryte',
+        'Activate to cancel',
+        'Aktivér for å avbryte',
+      ),
+    },
     a11yHintForExternalContent: _(
       'Aktivér for å åpne ekstern side',
       'Activate to open external content',

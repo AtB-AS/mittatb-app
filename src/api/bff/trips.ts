@@ -13,6 +13,9 @@ import {
 import Bugsnag from '@bugsnag/react-native';
 import {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 
+// see updateCallerRouteParams - ts safety missing
+// query contains more data than the type says, which the bff currently doesn't allow
+// should be fixed as part of router refactor
 function cleanQuery(query: TripsQueryVariables) {
   const cleanQuery: TripsQueryVariables | NonTransitTripsQueryVariables = {
     to: {
@@ -38,6 +41,9 @@ function cleanQuery(query: TripsQueryVariables) {
   return cleanQuery;
 }
 
+// see updateCallerRouteParams - ts safety missing
+// query contains more data than the type says, which the bff currently doesn't allow
+// should be fixed as part of router refactor
 function cleanNonTransitQuery(query: NonTransitTripsQueryVariables) {
   const cleanQuery: NonTransitTripsQueryVariables = {
     to: {

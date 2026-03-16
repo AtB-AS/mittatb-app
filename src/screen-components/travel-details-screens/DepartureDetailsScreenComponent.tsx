@@ -57,7 +57,7 @@ import {
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {canSellTicketsForSubMode} from '@atb/modules/operator-config';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {
   formatDestinationDisplay,
   getBookingStatus,
@@ -170,7 +170,7 @@ export const DepartureDetailsScreenComponent = ({
     toCall?.quay.id,
   );
 
-  const {isRealtimeMapEnabled, isTravelAidEnabled} = useFeatureTogglesContext();
+  const {isTravelAidEnabled} = useFeatureTogglesContext();
   const screenReaderEnabled = useIsScreenReaderEnabled();
 
   const {
@@ -184,14 +184,11 @@ export const DepartureDetailsScreenComponent = ({
     isTravelAidEnabled &&
     !activeItem.isTripCancelled;
 
-  const shouldShowLive = getShouldShowLiveVehicle(
-    estimatedCallsWithMetadata,
-    isRealtimeMapEnabled && isFocusedAndActive,
-  );
+  const shouldShowLive = getShouldShowLiveVehicle(estimatedCallsWithMetadata);
 
   const {data: vehiclePositions} = useGetServiceJourneyVehiclesQuery(
     [activeItem.serviceJourneyId],
-    shouldShowLive,
+    shouldShowLive && isFocusedAndActive,
   );
 
   const translatedModeName = getTranslatedModeName(
@@ -774,14 +771,14 @@ function CollapseButtonRow({
     </>
   );
   return (
-    <PressableOpacity
+    <NativeBlockButton
       accessibilityRole="button"
       onPress={() => setCollapsed(!collapsed)}
       testID={testID}
       style={styles.container}
     >
       {child}
-    </PressableOpacity>
+    </NativeBlockButton>
   );
 }
 

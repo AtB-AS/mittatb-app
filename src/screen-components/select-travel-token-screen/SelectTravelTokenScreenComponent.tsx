@@ -19,7 +19,6 @@ import {TokenToggleInfo} from './TokenToggleInfo';
 import {useTokenToggleDetailsQuery} from '@atb/modules/mobile-token';
 import {useOnboardingContext} from '@atb/modules/onboarding';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
 
 type Props = {onAfterSave: () => void; focusRef: Ref<any>; isFocused: boolean};
@@ -202,11 +201,10 @@ export const SelectTravelTokenScreenComponent = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme: Theme) => {
-  const {bottom: safeAreaBottomInset} = useSafeAreaInsets();
+const useStyles = StyleSheet.createThemeHook((theme: Theme, {bottom}) => {
   return {
     container: {
-      paddingBottom: safeAreaBottomInset,
+      paddingBottom: bottom,
       margin: theme.spacing.medium,
       gap: theme.spacing.medium,
     },

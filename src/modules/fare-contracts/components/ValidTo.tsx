@@ -6,25 +6,24 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import {fullDateTime} from '@atb/utils/date';
 import {getValidityStatus} from '@atb/modules/fare-contracts';
 import {useThemeContext} from '@atb/theme';
-import {useTimeContext} from '@atb/modules/time';
 import {getAccesses} from '@atb-as/utils';
 
 type Props = {
   fc: FareContractType;
+  now: number;
 };
 
-export const ValidTo = ({fc}: Props) => {
+export const ValidTo = ({fc, now}: Props) => {
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
-  const {serverNow} = useTimeContext();
   const firstTravelRight = fc.travelRights[0];
-  if (getValidityStatus(serverNow, fc) !== 'valid') return null;
+  if (getValidityStatus(now, fc) !== 'valid') return null;
 
   let endDateTime = firstTravelRight.endDateTime;
   const flattenedAccesses = getAccesses(fc);
   if (flattenedAccesses) {
     const {validTo: usedAccessValidTo} = getLastUsedAccess(
-      serverNow,
+      now,
       flattenedAccesses.usedAccesses,
     );
     if (usedAccessValidTo) {

@@ -13,21 +13,26 @@ import {getTransportModeSvg} from '@atb/components/icon-box';
 import arrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
 import {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {useNonTransitTripsQuery} from '../use-non-transit-trips-query';
+import {TripsProps} from '../use-trips';
 
 type OnPressedOptions = {
   analyticsMetadata?: {[key: string]: any};
 };
 
 type Props = {
-  tripPatterns: TripPatternFragment[];
+  tripsProps: TripsProps;
   onDetailsPressed: (tripDetails: TripPattern, opts: OnPressedOptions) => void;
 };
 
-export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
+export const NonTransitResults = ({tripsProps, onDetailsPressed}: Props) => {
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
   const style = useStyle();
+
+  const {data: tripPatterns} = useNonTransitTripsQuery(tripsProps);
+  if (!tripPatterns?.length) return null;
 
   return (
     <ScrollView

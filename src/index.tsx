@@ -26,7 +26,6 @@ import {AppLanguageContextProvider} from '@atb/translations/LanguageContext';
 import {LocaleContextProvider} from '@atb/modules/locale';
 import {setupConfig} from '@atb/setup';
 import {MobileTokenContextProvider} from '@atb/modules/mobile-token';
-import {FeedbackQuestionsContextProvider} from '@atb/components/feedback';
 import {FirestoreConfigurationContextProvider} from '@atb/modules/configuration';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {LogBox, Platform, UIManager} from 'react-native';
@@ -36,7 +35,6 @@ import {TimeContextProvider} from '@atb/modules/time';
 import {AnnouncementsContextProvider} from '@atb/modules/announcements';
 import {StorybookContextProvider} from '@atb/modules/storybook';
 import {NotificationContextProvider} from '@atb/modules/notifications';
-import {BeaconsContextProvider} from '@atb/modules/beacons';
 import {FeatureTogglesContextProvider} from '@atb/modules/feature-toggles';
 import {configureReanimatedLogger} from 'react-native-reanimated';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
@@ -102,11 +100,11 @@ export const App = () => {
                             <AccessibilityContextProvider>
                               <ThemeContextProvider>
                                 <FavoritesContextProvider>
-                                  <StoredTripPatternsContextProvider>
-                                    <FiltersContextProvider>
-                                      <SearchHistoryContextProvider>
-                                        <FirestoreConfigurationContextProvider>
-                                          <TicketingContextProvider>
+                                  <FiltersContextProvider>
+                                    <SearchHistoryContextProvider>
+                                      <FirestoreConfigurationContextProvider>
+                                        <TicketingContextProvider>
+                                          <StoredTripPatternsContextProvider>
                                             <MobileTokenContextProvider>
                                               <AppLanguageContextProvider>
                                                 <GeolocationContextProvider>
@@ -116,13 +114,9 @@ export const App = () => {
                                                         <NotificationContextProvider>
                                                           <BottomSheetModalProvider>
                                                             <BottomSheetContextProvider>
-                                                              <FeedbackQuestionsContextProvider>
-                                                                <BeaconsContextProvider>
-                                                                  <OnboardingContextProvider>
-                                                                    <RootStack />
-                                                                  </OnboardingContextProvider>
-                                                                </BeaconsContextProvider>
-                                                              </FeedbackQuestionsContextProvider>
+                                                              <OnboardingContextProvider>
+                                                                <RootStack />
+                                                              </OnboardingContextProvider>
                                                             </BottomSheetContextProvider>
                                                           </BottomSheetModalProvider>
                                                         </NotificationContextProvider>
@@ -132,11 +126,11 @@ export const App = () => {
                                                 </GeolocationContextProvider>
                                               </AppLanguageContextProvider>
                                             </MobileTokenContextProvider>
-                                          </TicketingContextProvider>
-                                        </FirestoreConfigurationContextProvider>
-                                      </SearchHistoryContextProvider>
-                                    </FiltersContextProvider>
-                                  </StoredTripPatternsContextProvider>
+                                          </StoredTripPatternsContextProvider>
+                                        </TicketingContextProvider>
+                                      </FirestoreConfigurationContextProvider>
+                                    </SearchHistoryContextProvider>
+                                  </FiltersContextProvider>
                                 </FavoritesContextProvider>
                               </ThemeContextProvider>
                             </AccessibilityContextProvider>

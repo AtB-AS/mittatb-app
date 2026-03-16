@@ -11,7 +11,7 @@ import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
 import QRCode from 'qrcode';
 import React, {RefObject, useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {SvgXml} from 'react-native-svg';
 import {GenericSectionItem} from '@atb/components/sections';
 import {useGetSignedTokenQuery} from '@atb/modules/mobile-token';
@@ -96,11 +96,7 @@ function useScreenBrightnessIncrease() {
 
 const BarcodeInspectionView = () => {
   const styles = useStyles();
-  const {
-    aztec_code_size_in_cm,
-    aztec_code_padding,
-    enable_new_token_barcode_base64,
-  } = useRemoteConfigContext();
+  const {enable_new_token_barcode_base64} = useRemoteConfigContext();
 
   useEffect(() => {
     // Prepare data for RNBarcodeInspectionView
@@ -126,11 +122,8 @@ const BarcodeInspectionView = () => {
 
   return (
     <View style={styles.barcodeInspectionContainer}>
-      <View
-        style={[styles.barcodeInspection, {padding: aztec_code_padding}]}
-        testID="mobileTokenBarcode"
-      >
-        <RNBarcodeInspectionView sizeInCm={aztec_code_size_in_cm} />
+      <View style={styles.barcodeInspection} testID="mobileTokenBarcode">
+        <RNBarcodeInspectionView sizeInCm={3.5} />
       </View>
     </View>
   );
@@ -144,7 +137,6 @@ const BarcodeInspectionView = () => {
  */
 const MobileTokenAztec = ({fc}: {fc: FareContractType}) => {
   const styles = useStyles();
-  const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
   const {data: signedToken} = useGetSignedTokenQuery();
   const [aztecCodeError, setAztecCodeError] = useState(false);
@@ -167,10 +159,7 @@ const MobileTokenAztec = ({fc}: {fc: FareContractType}) => {
 
   return (
     <View
-      style={[
-        styles.aztecCode,
-        {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
-      ]}
+      style={styles.aztecCode}
       accessible={true}
       accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
       testID="mobileTokenBarcode"
@@ -242,7 +231,6 @@ const LoadingBarcode = () => {
 
 const StaticAztec = ({fc}: {fc: FareContractType}) => {
   const styles = useStyles();
-  const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
   const [aztecXml, setAztecXml] = useState<string>();
   const onCloseFocusRef = useRef<View | null>(null);
@@ -258,13 +246,8 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
 
   return (
     <>
-      <View
-        style={[
-          styles.aztecCode,
-          {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
-        ]}
-      >
-        <PressableOpacity
+      <View style={styles.aztecCode}>
+        <NativeBlockButton
           onPress={() => bottomSheetModalRef.current?.present()}
           accessibilityRole="button"
           accessibilityLabel={t(
@@ -274,7 +257,7 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
           ref={onCloseFocusRef}
         >
           <SvgXml xml={aztecXml} width="100%" height="100%" />
-        </PressableOpacity>
+        </NativeBlockButton>
       </View>
       <StaticBarcodeBottomSheet
         qrCodeSvg={aztecXml}
@@ -287,7 +270,6 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
 
 const StaticQrCode = ({fc}: {fc: FareContractType}) => {
   const styles = useStyles();
-  const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
   const [qrCodeSvg, setQrCodeSvg] = useState<string>();
   const onCloseFocusRef = useRef<View | null>(null);
@@ -306,12 +288,11 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
       <View
         style={[
           styles.aztecCode,
-          {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
           styles.staticQrCode,
           styles.staticQrCodeSmall,
         ]}
       >
-        <PressableOpacity
+        <NativeBlockButton
           onPress={() => bottomSheetModalRef.current?.present()}
           accessibilityRole="button"
           accessibilityLabel={t(
@@ -321,7 +302,7 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
           ref={onCloseFocusRef}
         >
           <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
-        </PressableOpacity>
+        </NativeBlockButton>
       </View>
       <StaticBarcodeBottomSheet
         qrCodeSvg={qrCodeSvg}
@@ -337,9 +318,12 @@ const useStyles = StyleSheet.createThemeHook(() => ({
     width: '100%',
     aspectRatio: 1,
     backgroundColor: '#FFFFFF',
+    padding: 20,
+    maxHeight: 275,
   },
   barcodeInspection: {
     backgroundColor: 'white',
+    padding: 20,
   },
   barcodeInspectionContainer: {
     flex: 1,
@@ -370,7 +354,6 @@ const StaticBarcodeBottomSheet = ({
   bottomSheetModalRef: RefObject<GorhomBottomSheetModal | null>;
 }) => {
   const styles = useStyles();
-  const {aztec_code_max_height, aztec_code_padding} = useRemoteConfigContext();
   const {t} = useTranslation();
 
   return (
@@ -383,14 +366,8 @@ const StaticBarcodeBottomSheet = ({
       snapPoints={['80%']}
     >
       <View style={styles.staticBottomContainer}>
-        <View
-          style={[
-            styles.aztecCode,
-            {padding: aztec_code_padding, maxHeight: aztec_code_max_height},
-            styles.staticQrCode,
-          ]}
-        >
-          <PressableOpacity
+        <View style={[styles.aztecCode, styles.staticQrCode]}>
+          <NativeBlockButton
             onPress={() => bottomSheetModalRef.current?.dismiss()}
             accessible={true}
             accessibilityLabel={t(
@@ -399,7 +376,7 @@ const StaticBarcodeBottomSheet = ({
             testID="staticBigQRCode"
           >
             <SvgXml xml={qrCodeSvg ?? ''} width="100%" height="100%" />
-          </PressableOpacity>
+          </NativeBlockButton>
         </View>
       </View>
     </BottomSheetModal>

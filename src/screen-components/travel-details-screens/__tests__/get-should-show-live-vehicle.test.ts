@@ -12,89 +12,41 @@ const estimatedCallsWhichDepartInGivenMinutes = (
 describe('getShouldShowLiveVehicle', () => {
   it('returns true if less than 10 minutes since departure time', () => {
     expect(
-      getShouldShowLiveVehicle(
-        estimatedCallsWhichDepartInGivenMinutes(9),
-        true,
-      ),
+      getShouldShowLiveVehicle(estimatedCallsWhichDepartInGivenMinutes(9)),
     ).toBe(true);
     expect(
-      getShouldShowLiveVehicle(
-        estimatedCallsWhichDepartInGivenMinutes(5),
-        true,
-      ),
+      getShouldShowLiveVehicle(estimatedCallsWhichDepartInGivenMinutes(5)),
     ).toBe(true);
     expect(
-      getShouldShowLiveVehicle(
-        estimatedCallsWhichDepartInGivenMinutes(1),
-        true,
-      ),
+      getShouldShowLiveVehicle(estimatedCallsWhichDepartInGivenMinutes(1)),
     ).toBe(true);
   });
 
   it('returns true if departure time is passed', () => {
     expect(
-      getShouldShowLiveVehicle(
-        estimatedCallsWhichDepartInGivenMinutes(0),
-        true,
-      ),
+      getShouldShowLiveVehicle(estimatedCallsWhichDepartInGivenMinutes(0)),
     ).toBe(true);
     expect(
-      getShouldShowLiveVehicle(
-        estimatedCallsWhichDepartInGivenMinutes(-10),
-        true,
-      ),
+      getShouldShowLiveVehicle(estimatedCallsWhichDepartInGivenMinutes(-10)),
     ).toBe(true);
     expect(
-      getShouldShowLiveVehicle(
-        estimatedCallsWhichDepartInGivenMinutes(-7200),
-        true,
-      ),
+      getShouldShowLiveVehicle(estimatedCallsWhichDepartInGivenMinutes(-7200)),
     ).toBe(true);
   });
 
   it('returns false if more than 10 minutes until departure time', () => {
     expect(
-      getShouldShowLiveVehicle(
-        estimatedCallsWhichDepartInGivenMinutes(11),
-        true,
-      ),
+      getShouldShowLiveVehicle(estimatedCallsWhichDepartInGivenMinutes(11)),
     ).toBe(false);
     expect(
-      getShouldShowLiveVehicle(
-        estimatedCallsWhichDepartInGivenMinutes(30),
-        true,
-      ),
+      getShouldShowLiveVehicle(estimatedCallsWhichDepartInGivenMinutes(30)),
     ).toBe(false);
     expect(
-      getShouldShowLiveVehicle(
-        estimatedCallsWhichDepartInGivenMinutes(7200),
-        true,
-      ),
-    ).toBe(false);
-  });
-
-  it('returns false if realtime map is not enabled', () => {
-    expect(
-      getShouldShowLiveVehicle(
-        estimatedCallsWhichDepartInGivenMinutes(15),
-        false,
-      ),
-    ).toBe(false);
-    expect(
-      getShouldShowLiveVehicle(
-        estimatedCallsWhichDepartInGivenMinutes(0),
-        false,
-      ),
-    ).toBe(false);
-    expect(
-      getShouldShowLiveVehicle(
-        estimatedCallsWhichDepartInGivenMinutes(-15),
-        false,
-      ),
+      getShouldShowLiveVehicle(estimatedCallsWhichDepartInGivenMinutes(7200)),
     ).toBe(false);
   });
 
   it('returns false if estimated call list is empty', () => {
-    expect(getShouldShowLiveVehicle([], true)).toBe(false);
+    expect(getShouldShowLiveVehicle([])).toBe(false);
   });
 });

@@ -16,7 +16,6 @@ import {
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
 import {TipsAndInformation} from './tips-and-information/TipsAndInformation';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {MobilitySingleBenefitInfoSectionItem} from '@atb/modules/mobility';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -121,12 +120,11 @@ export const Root_TicketInformationScreen = ({navigation, route}: Props) => {
   );
 };
 
-const useStyle = StyleSheet.createThemeHook((theme) => {
-  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
+const useStyle = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     container: {
       marginHorizontal: theme.spacing.medium,
-      marginBottom: bottomSafeAreaInset + theme.spacing.medium,
+      marginBottom: bottom + theme.spacing.medium,
       rowGap: theme.spacing.small,
     },
     descriptionContainer: {

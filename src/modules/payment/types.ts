@@ -1,4 +1,8 @@
-import {PaymentType, RecurringPayment} from '@atb/modules/ticketing';
+import {
+  NonRecurringPaymentType,
+  PaymentType,
+  RecurringPayment,
+} from '@atb/modules/ticketing';
 
 export type CardPaymentMethod = {
   paymentType:
@@ -8,15 +12,15 @@ export type CardPaymentMethod = {
     | PaymentType.PaymentCard;
   recurringPayment?: RecurringPayment;
 };
-export type VippsPaymentMethod = {
-  paymentType: PaymentType.Vipps;
+export type NonRecurringPaymentMethod = {
+  paymentType: NonRecurringPaymentType;
   recurringPayment?: undefined;
 };
-export type PaymentMethod = CardPaymentMethod | VippsPaymentMethod;
+export type PaymentMethod = CardPaymentMethod | NonRecurringPaymentMethod;
 
 export type PaymentSelection =
   | {
-      paymentType: PaymentType.Vipps;
+      paymentType: NonRecurringPaymentType;
     }
   | {
       paymentType: PaymentType.PaymentCard;

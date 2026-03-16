@@ -7,10 +7,8 @@ import {PhotoCapture} from '@atb/components/PhotoCapture';
 import {PhotoFile} from '@atb/components/camera';
 import {ActivityIndicator, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MapStateActionType, useMapContext} from '@atb/modules/map';
-import {blobToBase64} from '@atb/modules/parking-violations-reporting';
-import {compressImage} from '@atb/utils/image';
+import {compressImageToBase64} from '@atb/utils/image';
 import {useCallback} from 'react';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useAnalyticsContext} from '@atb/modules/analytics';
@@ -54,14 +52,14 @@ export const Root_ParkingPhotoScreen = ({
   };
 
   const onConfirmImage = async (photo: PhotoFile) => {
-    const compressedBlob = await compressImage(photo.path, 1024, 1024);
-    if (!compressedBlob) return;
-
-    // Convert to Base64
-    const base64Image = await blobToBase64(compressedBlob);
+    const compressedBase64Image = await compressImageToBase64(
+      photo.path,
+      1024,
+      1024,
+    );
 
     // Remove metadata
-    const base64data = base64Image.split(',').pop();
+    const base64data = compressedBase64Image.split(',').pop();
 
     if (base64data) {
       await onEndTrip(route.params.bookingId, base64data);
@@ -94,8 +92,7 @@ export const Root_ParkingPhotoScreen = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     activityIndicator: {
       flex: 1,

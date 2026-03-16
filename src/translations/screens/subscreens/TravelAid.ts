@@ -17,11 +17,11 @@ const TravelAidTexts = {
       `Rutetid klokken. ${time}`,
     ),
   stopButton: {
-    text: _('Send stopp', 'Send stop', 'Send stopp'),
+    text: _('Send stoppsignal', 'Send stop signal', 'Send stoppsignal'),
     successMessage: _(
-      'Stoppet er sendt!',
-      'The stop is sent!',
-      'Stoppet er sendt!',
+      'Stoppsignal er sendt til sjåføren',
+      'Stop signal has been sent to the driver',
+      'Stoppsignal er sendt til sjåføren',
     ),
     notAvailable: _(
       'Ikke mulig å sende stoppsignal nå',

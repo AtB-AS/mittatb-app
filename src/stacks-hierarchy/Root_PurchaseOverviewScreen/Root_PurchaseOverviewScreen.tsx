@@ -25,7 +25,6 @@ import {
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
@@ -403,8 +402,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  const {bottom: bottomSafeAreaInset} = useSafeAreaInsets();
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     header: {
       marginHorizontal: theme.spacing.medium,
@@ -412,7 +410,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     contentContainer: {
       rowGap: theme.spacing.medium,
       margin: theme.spacing.medium,
-      marginBottom: bottomSafeAreaInset + theme.spacing.medium,
+      marginBottom: bottom + theme.spacing.medium,
     },
     messages: {
       rowGap: theme.spacing.medium,

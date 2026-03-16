@@ -38,15 +38,6 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] = [
       locationPermissionStatus === 'denied',
   },
   {
-    isOnboardedStoreKey: '@ATB_share_travel_habits_onboarded',
-    onboardingSectionId: 'shareTravelHabits',
-    initialScreen: {
-      name: 'Root_ShareTravelHabitsScreen',
-    },
-    shouldShowPredicate: ({shouldShowShareTravelHabitsScreen}) =>
-      shouldShowShareTravelHabitsScreen,
-  },
-  {
     isOnboardedStoreKey: '@ATB_notification_permission_onboarded',
     onboardingSectionId: 'notificationPermission',
     initialScreen: {

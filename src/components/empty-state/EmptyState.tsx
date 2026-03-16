@@ -48,14 +48,16 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         {details}
       </ThemeText>
       {buttonProps && (
-        <Button
-          expanded={false}
-          interactiveColor={interactiveColor}
-          text={buttonProps.text}
-          mode="primary"
-          onPress={buttonProps.onPress}
-          type="small"
-        />
+        <View>
+          <Button
+            expanded={false}
+            interactiveColor={interactiveColor}
+            text={buttonProps.text}
+            mode="primary"
+            onPress={buttonProps.onPress}
+            type="small"
+          />
+        </View>
       )}
     </View>
   );

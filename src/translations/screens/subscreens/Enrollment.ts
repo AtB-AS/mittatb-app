@@ -6,7 +6,12 @@ const EnrollmentTexts = {
     'We are trying out new features in the app with a selected group of users. Have you received a code to join? Enter it here.',
     'Me testar ny funksjonalitet i appen med utvalde brukarar. Har du fått ein kode for å bli med? Skriv den inn her.',
   ),
-  success: _('Du er inne!', 'You are in!', 'Du er inne!'),
+  success: (programTitle: string) =>
+    _(
+      `Du er med i ${programTitle}!`,
+      `You have joined ${programTitle}!`,
+      `Du er med i ${programTitle}!`,
+    ),
   label: _('Kode', 'Code', 'Kode'),
   placeholder: _('Skriv inn kode ', 'Enter code', 'Skriv inn kode'),
   button: _('Bli med', 'Join', 'Bli med'),

@@ -1,14 +1,6 @@
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "In addition to being able to show your position on maps and to plan journeys, we will gain valuable learning about where you and other customers travel. The data is used to improve our services to make them better for you.";
-
-"NSLocationAlwaysUsageDescription" = "In addition to being able to show your position on maps and to plan journeys, we will gain valuable learning about where you and other customers travel. The data is used to improve our services to make them better for you.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "We use your location to display it on maps and in travel searches, and to find stops and places nearby.";
 
 "NSLocationWhenInUseUsageDescription" = "We use your location to display it on maps and in travel searches, and to find stops and places nearby.";
-
-"NSBluetoothAlwaysUsageDescription" = "You give us permission to recognize buses and bus stops nearby. This enables us to analyze where you and other customers travel, and to send you relevant surveys. The data is used to improve our services to make them better for you.";
-
-"NSBluetoothPeripheralUsageDescription" = "You give us permission to recognize buses and bus stops nearby. This enables us to analyze where you and other customers travel, and to send you relevant surveys. The data is used to improve our services to make them better for you.";
-
-"NSMotionUsageDescription" = "You give us permission to use this data to learn more about your travel habits. For example, we can see whether customers choose to cycle, walk or drive a car rather than take the bus. The data is used to improve our services to make them better for you.";
 
 "NSCameraUsageDescription" = "We use camera to capture the image of wrongfully parked electric scooters, and scan the QR code on the electric scooters.";
 

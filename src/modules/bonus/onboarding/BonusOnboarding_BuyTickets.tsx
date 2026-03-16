@@ -8,8 +8,8 @@ import {
 } from '@atb/modules/onboarding';
 import {ThemedBonusTransaction} from '@atb/theme/ThemedAssets';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {bonusOnboardingId} from './config';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {KnownProgramId} from '@atb/modules/enrollment';
 
 export type BuyTicketsScreenProps =
   OnboardingCarouselScreenProps<'BonusOnboarding_BuyTicketsScreen'>;
@@ -21,7 +21,7 @@ export const BonusOnboarding_BuyTicketsScreen = ({
   const focusRef = useFocusOnLoad(navigation);
 
   const {navigateToNextScreen} = useOnboardingCarouselNavigation(
-    bonusOnboardingId,
+    KnownProgramId.BONUS,
     'BonusOnboarding_BuyTicketsScreen',
   );
 
