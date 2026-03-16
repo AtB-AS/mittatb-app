@@ -1,5 +1,4 @@
 import {Feature, Point, Position} from 'geojson';
-import {PricingPlanFragment} from '@atb/api/types/generated/fragments/mobility-shared';
 import {
   FormFactorFilterType,
   getVisibleRange,
@@ -206,7 +205,7 @@ export const getBatteryLevelIcon = (batteryPercentage: number) => {
 };
 
 export const formatRatePerUnit = (
-  pricingPlan: PricingPlanFragment,
+  pricingPlan: ShmoPricingPlan,
   language: Language,
 ): FormattedRatePerUnit | undefined => {
   const perMinPrice = pricingPlan.perMinPricing?.[0];
