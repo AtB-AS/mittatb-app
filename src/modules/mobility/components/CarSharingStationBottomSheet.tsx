@@ -171,7 +171,7 @@ export const CarSharingStationBottomSheet = ({
                 <OperatorActionButton
                   operatorId={operatorId}
                   operatorName={operatorName}
-                  appStoreUri={appStoreUri ?? ''}
+                  appStoreUri={appStoreUri ?? undefined}
                   rentalAppUri={rentalAppUri}
                   isBonusPayment={payWithBonusPoints}
                   setIsBonusPayment={setPayWithBonusPoints}
