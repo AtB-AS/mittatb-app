@@ -39,7 +39,7 @@ type Props<T extends string> = {
  * - Selecting 'now' sets the date to the current date and time.
  */
 export const DatePickerSheet = <T extends string>({
-  initialDate = new Date().toISOString(),
+  initialDate,
   initialOption,
   options,
   onSave,
@@ -53,7 +53,7 @@ export const DatePickerSheet = <T extends string>({
   const locale = useLocaleContext();
 
   const [isSpinning, setIsSpinning] = useState(false);
-  const [date, setDate] = useState(initialDate);
+  const [date, setDate] = useState(initialDate ?? new Date().toISOString());
   const [selectedOptionId, setSelectedOptionId] = useState<T>(
     initialOption ||
       options.find((o) => o.selected)?.option ||
