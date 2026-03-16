@@ -184,7 +184,7 @@ export const ScooterSheet = ({
                   rentalAppUri={rentalAppUri}
                 />
               )}
-              {isParkingViolationsReportingEnabled && operatorId && (
+              {isParkingViolationsReportingEnabled && (
                 <Button
                   expanded={true}
                   text={t(MobilityTexts.reportParkingViolation)}
