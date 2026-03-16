@@ -138,10 +138,6 @@ jobs:
             AtB.ipa
             AtB.app.dSYM.zip
           key: ${{ matrix.org }}-ipa-app-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets*/') }}
-      - name: Print workspace directory
-        run: |
-          echo "${{github.workspace}}"
-          echo "$(pwd)"
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
