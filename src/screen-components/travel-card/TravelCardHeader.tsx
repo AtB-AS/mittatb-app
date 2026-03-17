@@ -1,7 +1,13 @@
 import {AccessibleText, ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TripSearchTexts, useTranslation} from '@atb/translations';
-import {formatToClock, secondsToDurationShort} from '@atb/utils/date';
+import {
+  daysBetween,
+  formatToClock,
+  formatToSimpleDate,
+  isInThePast,
+  secondsToDurationShort,
+} from '@atb/utils/date';
 import {
   getQuayName,
   getTranslatedModeName,
@@ -14,11 +20,12 @@ import {isLineFlexibleTransport} from '@atb/screen-components/travel-details-scr
 import {addSeconds} from 'date-fns';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import TravelCardTexts from '@atb/translations/components/TravelCard';
 
 export const TravelCardHeader: React.FC<{
   tripPattern: TripPattern;
   includeDayInfo?: boolean;
-}> = ({tripPattern, includeDayInfo = false}) => {
+}> = ({tripPattern, includeDayInfo = true}) => {
   const styles = useThemeStyles();
   const {theme} = useThemeContext();
   const {t, language} = useTranslation();
@@ -40,6 +47,16 @@ export const TravelCardHeader: React.FC<{
   const {expectedStartTime, expectedEndTime} = tripPattern;
   const {aimedStartTime, aimedEndTime} = computeAimedStartEndTimes(tripPattern);
 
+  const isInPast = isInThePast(expectedEndTime);
+
+  const expectedTimeLabel = useTimeLabel(
+    expectedStartTime,
+    expectedEndTime,
+    includeDayInfo,
+  );
+
+  const aimedTimeLabel = useTimeLabel(aimedStartTime, aimedEndTime, isInPast);
+
   return (
     <View
       style={{
@@ -47,14 +64,12 @@ export const TravelCardHeader: React.FC<{
       }}
     >
       <View style={styles.resultHeader}>
-        <View style={{gap: theme.spacing.xSmall}}>
+        <View style={{flex: 1, flexShrink: 1, gap: theme.spacing.xSmall}}>
           <ThemeText typography="body__m__strong">
-            {formatToClock(expectedStartTime, language, 'floor')} -{' '}
-            {formatToClock(expectedEndTime, language, 'ceil')}
+            {isInPast ? t(TravelCardTexts.header.pastTime) : expectedTimeLabel}
           </ThemeText>
           <ThemeText typography="body__s" color="secondary">
-            Opprinnelig {formatToClock(aimedStartTime, language, 'floor')} -{' '}
-            {formatToClock(aimedEndTime, language, 'ceil')}
+            {t(TravelCardTexts.header.originalTime)} {aimedTimeLabel}
           </ThemeText>
         </View>
 
@@ -93,6 +108,30 @@ export const TravelCardHeader: React.FC<{
     </View>
   );
 };
+
+/**
+ * Returns the time label for the expected start and end times. If the start time is today, the day information is not included.
+ */
+function useTimeLabel(
+  expectedStartTime: Date,
+  expectedEndTime: Date,
+  includeDayInfo: boolean,
+) {
+  const {t, language} = useTranslation();
+  const numberOfDays = daysBetween(new Date(), expectedStartTime);
+  const isToday = numberOfDays === 0;
+
+  let dateLabel = formatToSimpleDate(expectedStartTime, language);
+
+  if (numberOfDays == 1) {
+    dateLabel = t(TravelCardTexts.header.day.tomorrow);
+  }
+  if (numberOfDays == 2) {
+    dateLabel = t(TravelCardTexts.header.day.dayAfterTomorrow);
+  }
+
+  return `${includeDayInfo && !isToday ? dateLabel + ', ' : ''}${formatToClock(expectedStartTime, language, 'floor')} - ${formatToClock(expectedEndTime, language, 'ceil')}`;
+}
 
 /**
  * The trip patterns returned by Entur has an issue:
@@ -161,7 +200,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'flex-start',
   },
   durationContainer: {
-    flex: 1,
+    flexShrink: 0,
     alignItems: 'flex-end',
   },
   warningIcon: {
