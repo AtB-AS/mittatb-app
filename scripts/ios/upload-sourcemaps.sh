@@ -19,8 +19,8 @@ else
         --api-key="${BUGSNAG_API_KEY}" \
         --version-name="${APP_VERSION}" \
         --bundle-version="${BUILD_ID}" \
-        --source-map="bundle/main.jsbundle.packager.map" \
-        --bundle="bundle/main.jsbundle.packager" \
+        --source-map="ios/bundle/main.jsbundle.packager.map" \
+        --bundle="ios/bundle/main.jsbundle.packager" \
         --platform=ios \
         --project-root="/Users/runner/work/mittatb-app/mittatb-app" \
         --verbose
