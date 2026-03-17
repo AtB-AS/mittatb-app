@@ -64,6 +64,7 @@ fastlane/report.xml
 
 # Bundle artifact
 *.jsbundle
+/ios/bundle/
 
 # CocoaPods
 **/Pods/
