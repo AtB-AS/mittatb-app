@@ -1,6 +1,6 @@
 # Staging Build Process Summary
 
-This document explains the concepts behind the staging CI builds. For exact step-by-step details, see the flow graphs in [android-build-staging-graph.md](./android-build-staging-graph.md) and [ios-build-staging-graph.md](./ios-build-staging-graph.md).
+This document explains the concepts behind the staging CI builds. For exact step-by-step details, see the flow graphs in [android-staging-build-graph.md](./android-staging-build-graph.md) and [ios-staging-build-graph.md](./ios-staging-build-graph.md).
 
 ---
 
