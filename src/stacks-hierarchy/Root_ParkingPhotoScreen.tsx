@@ -5,13 +5,14 @@ import {ShmoBookingEvent, ShmoBookingEventType} from '@atb/api/types/mobility';
 import {useSendShmoBookingEventMutation} from '@atb/modules/mobility';
 import {PhotoCapture} from '@atb/components/PhotoCapture';
 import {PhotoFile} from '@atb/components/camera';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {MapStateActionType, useMapContext} from '@atb/modules/map';
 import {compressImageToBase64} from '@atb/utils/image';
 import {useCallback} from 'react';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {Loading} from '@atb/components/loading';
 
 export type ParkingPhotoScreenProps =
   RootStackScreenProps<'Root_ParkingPhotoScreen'>;
@@ -75,8 +76,8 @@ export const Root_ParkingPhotoScreen = ({
 
   if (isPending) {
     return (
-      <View style={styles.activityIndicator}>
-        <ActivityIndicator size="large" />
+      <View style={styles.loading}>
+        <Loading size="large" />
       </View>
     );
   }
@@ -94,7 +95,7 @@ export const Root_ParkingPhotoScreen = ({
 
 const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
-    activityIndicator: {
+    loading: {
       flex: 1,
       justifyContent: 'center',
       marginBottom: Math.max(bottom, theme.spacing.medium),

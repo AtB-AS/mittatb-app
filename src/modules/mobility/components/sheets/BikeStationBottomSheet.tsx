@@ -9,7 +9,7 @@ import {StyleSheet} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
 import {BicycleTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import React, {useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {useBikeStation} from '../../use-bike-station';
 import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
 import {BikeStationIntegration} from '../BikeStationIntegration';
@@ -17,6 +17,7 @@ import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import {getVehicles} from '@atb/api/mobility';
 import {BikeStationNotIntegrated} from '../BicycleSheetNotIntegrated';
 import {useOperators} from '../../use-operators';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   stationId: string;
@@ -109,8 +110,8 @@ export const BikeStationBottomSheet = ({
       navigateToScanQrCode={navigateToScanQrCode}
     >
       {(isLoading || loadingSelectedVehicle) && (
-        <View style={styles.activityIndicator}>
-          <ActivityIndicator size="large" />
+        <View style={styles.loading}>
+          <Loading size="large" />
         </View>
       )}
       {!isLoading && !loadingSelectedVehicle && (isError || !station) && (
@@ -163,7 +164,7 @@ export const BikeStationBottomSheet = ({
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   return {
-    activityIndicator: {
+    loading: {
       marginBottom: theme.spacing.medium,
     },
     container: {

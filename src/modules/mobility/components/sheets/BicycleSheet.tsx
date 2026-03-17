@@ -7,7 +7,7 @@ import {
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useVehicle} from '../../use-vehicle';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useOperatorBenefit} from '../../use-operator-benefit';
 import {OperatorActionButton} from '../OperatorActionButton';
@@ -43,6 +43,7 @@ import {
   useSelectedShmoPaymentMethod,
 } from '@atb/modules/payment';
 import {Section} from '@atb/components/sections';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   vehicleId: VehicleId;
@@ -130,11 +131,11 @@ export const BicycleSheet = ({
     >
       {(isLoading || shmoReqIsLoading) && (
         <View
-          style={styles.activityIndicator}
+          style={styles.loading}
           accessibilityRole="progressbar"
           accessibilityLiveRegion="polite"
         >
-          <ActivityIndicator size="large" />
+          <Loading size="large" />
         </View>
       )}
       {!isLoading && (isError || !vehicle) && (
@@ -247,7 +248,7 @@ export const BicycleSheet = ({
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   return {
-    activityIndicator: {
+    loading: {
       marginBottom: theme.spacing.medium,
     },
     container: {

@@ -1,5 +1,4 @@
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
-import {ActivityIndicator} from 'react-native';
 import {
   formatToShortDateWithYear,
   formatToVerboseFullDate,
@@ -7,6 +6,7 @@ import {
 import {StyleSheet} from '@atb/theme';
 import {ContrastColor, Statuses} from '@atb/theme/colors';
 import {MessageInfoText} from '@atb/components/message-info-text';
+import {Loading} from '@atb/components/loading';
 
 type TokenToggleInfoProps = {
   textColor?: ContrastColor;
@@ -22,7 +22,7 @@ export const TokenToggleInfo = ({
   const styles = useStyles();
 
   return isLoading ? (
-    <ActivityIndicator style={styles.loader} />
+    <Loading style={styles.loader} />
   ) : (
     <TokenToggleContent toggleLimit={toggleLimit} textColor={textColor} />
   );
