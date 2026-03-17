@@ -23,7 +23,7 @@ if [[
   - APP_VERSION"
     exit 1
 else
-    BUNDLE_DIR="${GITHUB_WORKSPACE:-.}/ios/bundle"
+    BUNDLE_DIR="ios/bundle"
     mkdir -p "$BUNDLE_DIR"
 
     echo "Re-generate bundle"
