@@ -17,7 +17,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {isLineFlexibleTransport} from '@atb/screen-components/travel-details-screens';
-import {addSeconds} from 'date-fns';
+import {addSeconds, differenceInMinutes} from 'date-fns';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import TravelCardTexts from '@atb/translations/components/TravelCard';
@@ -57,6 +57,10 @@ export const TravelCardHeader: React.FC<{
 
   const aimedTimeLabel = useTimeLabel(aimedStartTime, aimedEndTime, isInPast);
 
+  const areTimesEquivalentInMinutes =
+    differenceInMinutes(expectedStartTime, aimedStartTime) < 1 &&
+    differenceInMinutes(expectedEndTime, aimedEndTime) < 1;
+
   return (
     <View
       style={{
@@ -68,9 +72,11 @@ export const TravelCardHeader: React.FC<{
           <ThemeText typography="body__m__strong">
             {isInPast ? t(TravelCardTexts.header.pastTime) : expectedTimeLabel}
           </ThemeText>
-          <ThemeText typography="body__s" color="secondary">
-            {t(TravelCardTexts.header.originalTime)} {aimedTimeLabel}
-          </ThemeText>
+          {(!areTimesEquivalentInMinutes || isInPast) && (
+            <ThemeText typography="body__s" color="secondary">
+              {t(TravelCardTexts.header.originalTime)} {aimedTimeLabel}
+            </ThemeText>
+          )}
         </View>
 
         <View style={styles.durationContainer}>
