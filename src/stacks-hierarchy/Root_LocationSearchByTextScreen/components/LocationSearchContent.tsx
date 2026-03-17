@@ -203,7 +203,7 @@ export function LocationSearchContent({
         onScrollBeginDrag={() => Keyboard.dismiss()}
         testID="historyAndResultsScrollView"
       >
-        {isLoading && <Loading />}
+        {isLoading && <Loading style={styles.withMargin} />}
         {searchBarIsEmpty ? (
           <>
             {includeJourneyHistory && (
