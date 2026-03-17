@@ -4,7 +4,7 @@ import React from 'react';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
 
-const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
 export const LoadingScreen = React.memo(() => {
   const styles = useStyles();

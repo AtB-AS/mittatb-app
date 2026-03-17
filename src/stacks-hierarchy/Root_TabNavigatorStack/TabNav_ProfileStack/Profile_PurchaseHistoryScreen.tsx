@@ -3,6 +3,7 @@ import {ProfileScreenProps} from './navigation-types';
 import {PurchaseHistoryScreenComponent} from '@atb/screen-components/purchase-history';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = ProfileScreenProps<'Profile_PurchaseHistoryScreen'>;
 
@@ -14,6 +15,7 @@ export const Profile_PurchaseHistoryScreen = ({navigation}: Props) => {
     navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
   }, [navigation, bonusScreenParams]);
 
+  const focusRef = useFocusOnLoad(navigation);
   return (
     <PurchaseHistoryScreenComponent
       onPressFareContract={(fareContractId) =>
@@ -24,6 +26,7 @@ export const Profile_PurchaseHistoryScreen = ({navigation}: Props) => {
       }
       onNavigateToBonusScreen={onNavigateToBonusScreen}
       isFocused={isFocused}
+      focusRef={focusRef}
     />
   );
 };

@@ -9,11 +9,7 @@ const FareZoneSearchTexts = {
     ),
   },
   header: {
-    title: _(
-      'Søk etter holdeplass/sone',
-      'Search for stop/zone',
-      'Søk etter haldeplass/sone',
-    ),
+    title: _('Velg sone/holdeplass', 'Select zone/stop', 'Vel sone/haldeplass'),
   },
   zones: {
     heading: _('Soner', 'Zones', 'Soner'),

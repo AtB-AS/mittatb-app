@@ -26,7 +26,7 @@ import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 
-const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
 type Props = RootStackScreenProps<'Root_LoginConfirmCodeScreen'>;
 type LoginErrorCode = ConfirmationErrorCode | PhoneSignInErrorCode;
@@ -75,8 +75,8 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
   return (
     <View style={styles.container}>
       <FullScreenHeader
+        showBorder={false}
         leftButton={{type: 'back'}}
-        color={themeColor}
         title={t(LoginTexts.logInOptions.title)}
         globalMessageContext={GlobalMessageContextEnum.appLoginPhone}
       />
@@ -175,7 +175,6 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   mainView: {

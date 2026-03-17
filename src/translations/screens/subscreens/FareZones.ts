@@ -4,14 +4,14 @@ const FareZonesTexts = {
   header: {
     title: {
       singleZone: _(
-        'Velg holdeplass/sone',
-        'Select stop/zone',
-        'Vel haldeplass/sone',
+        'Velg sone/holdeplass',
+        'Select zone/stop',
+        'Vel sone/haldeplass',
       ),
       multipleZone: _(
-        'Velg holdeplasser/soner',
-        'Select stops/zones',
-        'Vel haldeplassar/soner',
+        'Velg soner/holdeplasser',
+        'Select zones/stops',
+        'Vel soner/haldeplassar',
       ),
     },
   },
