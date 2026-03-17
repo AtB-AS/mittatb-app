@@ -5,9 +5,9 @@ import {LocationIcon} from '@atb/components/location-icon';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import React, {useMemo} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {GeoLocation, Location, SearchLocation} from '@atb/modules/favorites';
-import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {
   LocationSearchTexts,
   TranslateFunction,
@@ -19,6 +19,7 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {useReverseGeocoderQuery} from '@atb/modules/geocoder';
 import {RequestError} from '@atb/api/utils';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   coordinates?: Coordinates;
@@ -97,14 +98,10 @@ const Icon: React.FC<{
   isLoading: boolean;
   hasError: boolean;
 }> = ({isLoading, location, hasError}) => {
-  const {theme} = useThemeContext();
   return (
     <View style={{marginHorizontal: 12}}>
       {isLoading ? (
-        <ActivityIndicator
-          animating={true}
-          color={getBackgroundColor(theme).foreground.primary}
-        />
+        <Loading animating={true} />
       ) : location ? (
         <LocationIcon location={location} />
       ) : hasError ? (

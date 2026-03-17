@@ -70,9 +70,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();
 
   const backgroundColor = themeColor.background;
-  const borderBottomColor = !!textOpacity
-    ? theme.color.background.neutral[2].background
-    : 'transparent';
+  const borderBottomColor = !!textOpacity ? backgroundColor : 'transparent';
 
   const leftIcon = leftButton ? (
     <HeaderButton color={themeColor} {...leftButton} testID="lhb" />

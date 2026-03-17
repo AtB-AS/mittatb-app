@@ -11,7 +11,7 @@ import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {dictionary, TravelTokenTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
 import React, {Ref, useCallback, useEffect, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {RadioGroupSection} from '@atb/components/sections';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {getDeviceNameWithUnitInfo} from './utils';
@@ -20,6 +20,7 @@ import {useTokenToggleDetailsQuery} from '@atb/modules/mobile-token';
 import {useOnboardingContext} from '@atb/modules/onboarding';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
+import {Loading} from '@atb/components/loading';
 
 type Props = {onAfterSave: () => void; focusRef: Ref<any>; isFocused: boolean};
 
@@ -185,7 +186,7 @@ export const SelectTravelTokenScreenComponent = ({
           />
         )}
         {toggleMutation.isPending ? (
-          <ActivityIndicator size="large" />
+          <Loading size="large" />
         ) : (
           <Button
             expanded={true}

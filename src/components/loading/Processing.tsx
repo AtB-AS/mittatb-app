@@ -1,21 +1,17 @@
 import React from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
+import {Loading} from './Loading';
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[0];
 
 export const Processing: React.FC<{message: string}> = ({message}) => {
   const styles = useStyles();
-  const {theme} = useThemeContext();
-  const themeColor = getThemeColor(theme);
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator
-        color={themeColor.foreground.primary}
-        style={styles.indicator}
-      />
+      <Loading style={styles.indicator} />
       <ThemeText>{message}</ThemeText>
     </View>
   );
