@@ -23,7 +23,7 @@ if [[
     exit 1
 else
 
-    VARIANT="$(echo ${APP_FLAVOR}${APP_ENVIRONMENT^})"
+    VARIANT="${APP_FLAVOR}${APP_ENVIRONMENT^}"
     BUNDLE_DIR="android/app/build/generated/assets/react/$VARIANT"
     SOURCEMAP_DIR="android/app/build/intermediates/sourcemaps/react/$VARIANT"
     mkdir -p "$BUNDLE_DIR" "$SOURCEMAP_DIR"

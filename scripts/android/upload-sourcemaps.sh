@@ -4,13 +4,11 @@ if [[
     -z "${BUGSNAG_API_KEY}"
     || -z "${BUILD_ID}"
     || -z "${APP_VERSION}"
-    || -z "${APP_FLAVOR}"
    ]]; then
     echo "Argument error!"
     echo "Expected env variables:
   - APP_VERSION
   - BUILD_ID
-  - APP_FLAVOR
   - BUGSNAG_API_KEY"
 
     exit 1
