@@ -15,6 +15,8 @@ import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
 import {BikeStationIntegration} from '../BikeStationIntegration';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import {getVehicles} from '@atb/api/mobility';
+import {BikeStationNotIntegrated} from '../BicycleSheetNotIntegrated';
+import {useOperators} from '../../use-operators';
 
 type Props = {
   stationId: string;
@@ -38,10 +40,22 @@ export const BikeStationBottomSheet = ({
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
-  const {isLoading, isError, station, stationName, operatorName} =
-    useBikeStation(stationId);
+  const {
+    isLoading,
+    isError,
+    station,
+    stationName,
+    operatorName,
+    brandLogoUrl,
+    operatorId,
+    rentalAppUri,
+    appStoreUri,
+    availableBikes,
+  } = useBikeStation(stationId);
   const [loadingSelectedVehicle, setLoadingSelectedVehicle] = useState(false);
   const [selectedVehicleError, setSelectedVehicleError] = useState(false);
+  const operator = useOperators().byId(operatorId);
+  const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
 
   useDoOnceOnItemReceived(onStationReceived, station);
 
@@ -115,13 +129,34 @@ export const BikeStationBottomSheet = ({
           />
         </View>
       )}
-      {!isLoading && !loadingSelectedVehicle && !isError && station && (
-        <BikeStationIntegration
-          station={station}
-          navigateSupportCallback={navigateSupportCallback}
-          onPressVehicleType={onPressVehicleType}
-        />
-      )}
+      {operatorIsIntegrationEnabled &&
+        !isLoading &&
+        !loadingSelectedVehicle &&
+        !isError &&
+        station && (
+          <BikeStationIntegration
+            station={station}
+            navigateSupportCallback={navigateSupportCallback}
+            onPressVehicleType={onPressVehicleType}
+          />
+        )}
+      {!operatorIsIntegrationEnabled &&
+        !isLoading &&
+        !loadingSelectedVehicle &&
+        !isError &&
+        station && (
+          <BikeStationNotIntegrated
+            numDocksAvailable={station.numDocksAvailable}
+            onStationReceived={onStationReceived}
+            rentalAppUri={rentalAppUri ?? undefined}
+            appStoreUri={appStoreUri ?? undefined}
+            operatorId={operatorId}
+            operatorName={operatorName}
+            brandLogoUrl={brandLogoUrl ?? undefined}
+            stationName={stationName}
+            availableBikes={availableBikes}
+          />
+        )}
     </MapBottomSheet>
   );
 };
