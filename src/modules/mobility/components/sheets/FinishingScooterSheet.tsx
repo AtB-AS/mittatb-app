@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -32,6 +32,13 @@ export const FinishingScooterSheet = ({
   locationArrowOnPress,
   navigateToScanQrCode,
 }: Props) => {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setShow(true);
+    }, 3000);
+    return () => clearTimeout(timeoutId);
+  });
   const isFocusedAndActive = useIsFocusedAndActive();
   const {
     data: activeBooking,
@@ -64,6 +71,10 @@ export const FinishingScooterSheet = ({
     logEvent,
     photoNavigation,
   ]);
+
+  if (!show) {
+    return undefined;
+  }
 
   return (
     <MapBottomSheet

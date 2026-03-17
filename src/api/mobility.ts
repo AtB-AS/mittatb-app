@@ -87,7 +87,7 @@ export const sendShmoBookingEvent = (
   const eventToSend =
     finishImmediately && isStartFinishing
       ? {
-          event: ShmoBookingEventType.FINISH,
+          event: ShmoBookingEventType.START_FINISHING,
           fileName: 'evidence.png',
           fileType: 'image/png',
           fileData:
@@ -111,7 +111,7 @@ export const sendShmoBookingEvent = (
         data = {
           ...data,
           state: ShmoBookingState.FINISHING,
-          arrivalTime: new Date(),
+          // arrivalTime: new Date(),
         };
       }
 

@@ -202,10 +202,9 @@ export const Map = (props: MapProps) => {
       const featuresAtClick = e.features;
       if (!featuresAtClick || featuresAtClick.length === 0) return;
       const featureToSelect = featuresAtClick[0]; // currently ignore the ones behind
-
       const code = featureToSelect.properties?.code ?? 'allowed';
       const stationParking =
-        featureToSelect.properties?.stationParking ?? false;
+        featureToSelect.properties?.station_parking ?? false;
 
       showGeofencingZoneSnackbar(code, stationParking);
     },
@@ -423,6 +422,8 @@ export const Map = (props: MapProps) => {
             }
             centerCoordinate={
               !initMapLoaded ? mapPropertiesRef.current?.center : undefined
+              // [-0.210682, 51.496203]
+              // [-0.1491752, 51.51472]
             }
             padding={
               activeShmoBooking?.bookingId
