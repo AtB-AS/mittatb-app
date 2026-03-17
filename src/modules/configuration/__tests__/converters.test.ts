@@ -58,9 +58,7 @@ describe('mapToTransportModeFilterOptions', () => {
       {id: 'invalid', text: 'wrong'},
     ]);
     expect(result).toHaveLength(1);
-    expect(result![0]).toEqual(
-      expect.objectContaining({id: 'bus'}),
-    );
+    expect(result![0]).toEqual(expect.objectContaining({id: 'bus'}));
   });
 
   it('returns an empty array when all items are invalid', () => {
