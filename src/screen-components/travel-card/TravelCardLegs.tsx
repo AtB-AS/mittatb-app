@@ -1,25 +1,16 @@
 import {WalkFill} from '@atb/assets/svg/mono-icons/transportation';
-import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
-import {SituationOrNoticeIcon} from '@atb/modules/situations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {dictionary, TripSearchTexts, useTranslation} from '@atb/translations';
+import {TripSearchTexts, useTranslation} from '@atb/translations';
 import {screenReaderHidden} from '@atb/utils/accessibility';
-import {flatMap} from '@atb/utils/array';
 import {
-  formatToClock,
   secondsBetween,
   secondsToDuration,
-  secondsToDurationShort,
   secondsToMinutes,
 } from '@atb/utils/date';
-import {
-  getQuayName,
-  getTranslatedModeName,
-} from '@atb/utils/transportation-names';
 
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useLayoutEffect, useMemo, useRef, useState} from 'react';
 import {
   AccessibilityProps,
   StyleProp,
@@ -27,18 +18,17 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import Animated, {FadeIn} from 'react-native-reanimated';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {
   getFilteredLegsByWalkOrWaitTime,
-  getNoticesForLeg,
   isLineFlexibleTransport,
   significantWaitTime,
   significantWalkTime,
 } from '@atb/screen-components/travel-details-screens';
-import {Destination} from '@atb/assets/svg/mono-icons/places';
-import {useFontScale} from '@atb/utils/use-font-scale';
 import {isSignificantDifference} from './utils';
+import {useIconSize} from '@atb/components/theme-icon';
+import {MAX_FONT_SCALE, useTypographyTextStyle} from '@atb/components/text';
+import {useFontScale} from '@atb/utils/use-font-scale';
 
 type ResultItemState = 'enabled' | 'dimmed' | 'disabled';
 
@@ -47,103 +37,61 @@ type TravelCardContentProps = {
   state: ResultItemState;
 };
 
+const MAX_WIDTH = 300;
+
 export const TravelCardLegs: React.FC<
   TravelCardContentProps & AccessibilityProps
-> = ({tripPattern, ...props}) => {
+> = ({tripPattern}) => {
   const styles = useThemeStyles();
-  const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
-  const fontScale = useFontScale();
-  const [legIconsParentWidth, setLegIconsParentWidth] = useState(0);
-  const [legIconsContentWidth, setLegIconsContentWidth] = useState(0);
-
+  const legOutputRef = useRef<View>(null);
+  const counterIconBoxRef = useRef<View>(null);
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
-
-  const [numberOfExpandedLegs, setNumberOfExpandedLegs] = useState(
-    filteredLegs.length,
-  );
-  const [hasMinimumOfExpandedLegs, setHasMinimumOfExpandedLegs] =
-    useState(false);
-
-  // Dynamically collapse legs to fit horizontally
-  useLayoutEffect(() => {
-    if (legIconsParentWidth && legIconsContentWidth) {
-      if (
-        legIconsContentWidth >= legIconsParentWidth &&
-        !hasMinimumOfExpandedLegs
-      ) {
-        setNumberOfExpandedLegs((val) => Math.max(val - 1, 1));
-      }
-    }
-  }, [legIconsParentWidth, legIconsContentWidth, hasMinimumOfExpandedLegs]);
-
-  useLayoutEffect(() => {
-    if (numberOfExpandedLegs <= 1) {
-      setHasMinimumOfExpandedLegs(true);
-    }
-  }, [numberOfExpandedLegs, setHasMinimumOfExpandedLegs]);
-
-  if (filteredLegs.length < 1) return null;
-
-  const lastLegIsFlexible = isLineFlexibleTransport(
-    filteredLegs[filteredLegs.length - 1].line,
-  );
-  const expandedLegs = filteredLegs.slice(0, numberOfExpandedLegs);
-  const collapsedLegs = filteredLegs.slice(
-    numberOfExpandedLegs,
-    filteredLegs.length,
-  );
+  const [maxWidth, setMaxWidth] = useState<number | undefined>(undefined);
 
   const staySeated = (idx: number): boolean => {
-    const previousLeg = expandedLegs[idx - 1];
+    const previousLeg = filteredLegs[idx - 1];
     return previousLeg && previousLeg.interchangeTo?.staySeated === true;
   };
 
-  const isIntermediateFootLeg = (leg: Leg, index: number): boolean => {
-    return leg.mode === 'foot' && index !== 0;
-  };
+  useLayoutEffect(() => {
+    if (filteredLegs.length < 3) return;
+    //const width = legOutputRef.current?.getBoundingClientRect().width;
+    //const counterIconBoxWidth =
+    //  counterIconBoxRef.current?.getBoundingClientRect().width;
+
+    //if (width > MAX_WIDTH) {
+    //  setMaxWidth(MAX_WIDTH);
+    //}
+  }, [filteredLegs]);
 
   return (
     <View style={styles.detailsContainer} {...screenReaderHidden}>
-      <View
-        style={styles.flexRow}
-        onLayout={(ev) => {
-          setLegIconsParentWidth(ev.nativeEvent.layout.width);
-        }}
-      >
+      <View style={styles.flexRow}>
         <View
-          style={styles.row}
-          onLayout={(ev) => {
-            setLegIconsContentWidth(ev.nativeEvent.layout.width);
-          }}
+          style={[
+            styles.row,
+            {backgroundColor: 'red', overflow: 'hidden', maxWidth: maxWidth},
+          ]}
         >
-          <View style={styles.legOutput}>
-            {expandedLegs.map((leg, i) => (
-              <View
-                key={tripPattern.compressedQuery + leg.aimedStartTime}
-                style={styles.legAndDash}
-              >
+          <View style={styles.legs} ref={legOutputRef}>
+            {filteredLegs.map((leg, i) => (
+              <View key={tripPattern.compressedQuery + leg.aimedStartTime}>
                 <View testID="tripLeg">
                   {leg.mode === 'foot' ? (
                     <FootLeg leg={leg} nextLeg={filteredLegs[i + 1]} />
                   ) : staySeated(i) ? null : (
-                    <TransportationLeg
-                      leg={leg}
-                      style={
-                        isSignificantDifference(leg)
-                          ? styles.transportationIcon_wide
-                          : undefined
-                      }
-                    />
+                    <TransportationLeg leg={leg} />
                   )}
                 </View>
               </View>
             ))}
           </View>
           <CounterIconBox
-            count={collapsedLegs.length}
+            ref={counterIconBoxRef}
+            count={0}
             spacing="standard"
             textType="body__m__strong"
+            hideIfZero={false}
           />
         </View>
       </View>
@@ -151,45 +99,63 @@ export const TravelCardLegs: React.FC<
   );
 };
 
+const useVisibleLegs = (legs: Leg[], maxWidth: number) => {
+  const {theme} = useThemeContext();
+  const styles = useThemeStyles();
+  const fontScale = useFontScale();
+  const iconSize = useIconSize();
+  const legsGap = styles.legs.gap;
+  const legHorizontalPadding = theme.spacing.small * 3; // the two sides + text and icon padding
+  const typographyTextStyle = useTypographyTextStyle('body__m__strong');
+  const multiplier = Math.min(fontScale, MAX_FONT_SCALE);
+  const estimatedTextWidthPerCharacter =
+    typographyTextStyle.fontSize! * multiplier;
+
+  return useMemo(() => {
+    let totalWidth = 0;
+
+    for (let i = 0; i < legs.length; i++) {
+      const leg = legs[i];
+
+      let textWidth = 0;
+      if (leg.mode === 'foot') {
+        const minutes = secondsToMinutes(leg.duration).toString();
+        textWidth =
+          minutes.length * (theme.typography.body__m__strong.fontSize * 0.5);
+      } else if (leg.line?.publicCode) {
+        textWidth =
+          leg.line.publicCode.length *
+            (theme.typography.body__m__strong.fontSize * 0.6) +
+          theme.spacing.xSmall;
+      }
+
+      const legWidth = iconSize + padding + textWidth;
+      const gapWidth = i > 0 ? gap : 0;
+
+      // Reserve space for "+N" counter
+      const counterReserve = i < legs.length - 1 ? 50 : 0; // ~50px for "+N"
+
+      if (totalWidth + legWidth + gapWidth + counterReserve > maxWidth) {
+        return {
+          visibleCount: i,
+          hiddenCount: legs.length - i,
+        };
+      }
+
+      totalWidth += legWidth + gapWidth;
+    }
+
+    return {
+      visibleCount: legs.length,
+      hiddenCount: 0,
+    };
+  }, [legs, maxWidth, theme]);
+};
+
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   detailsContainer: {
     flex: 1,
     flexDirection: 'row',
-  },
-  lineContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    flexGrow: 1,
-  },
-  rightLegLine: {
-    marginRight: theme.spacing.xSmall,
-  },
-  destinationLineContainer_grow: {
-    justifyContent: 'center',
-    flexGrow: 1,
-  },
-  destinationLineContainer: {
-    justifyContent: 'center',
-    width: theme.spacing.large,
-  },
-  destinationLine_grow: {
-    backgroundColor: theme.color.background.neutral[3].background,
-    marginLeft: theme.spacing.xSmall,
-    borderBottomLeftRadius: theme.border.radius.regular,
-    borderTopLeftRadius: theme.border.radius.regular,
-  },
-  destinationLine: {
-    backgroundColor: theme.color.background.neutral[3].background,
-    marginRight: theme.spacing.xSmall,
-    borderBottomRightRadius: theme.border.radius.regular,
-    borderTopRightRadius: theme.border.radius.regular,
-  },
-  iconContainer: {
-    backgroundColor: theme.color.background.neutral[2].background,
-    paddingVertical: theme.spacing.small,
-    paddingHorizontal: theme.spacing.small,
-    borderRadius: theme.border.radius.regular,
-    alignItems: 'center',
   },
   walkContainer: {
     backgroundColor: theme.color.background.neutral[2].background,
@@ -204,11 +170,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginLeft: -2,
     color: theme.color.foreground.dynamic.primary,
   },
-  resultHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
   row: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -218,55 +179,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
   },
-  transportationIcon_wide: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  dashContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  legOutput: {
+  legs: {
     flexDirection: 'row',
     gap: theme.spacing.xSmall,
-  },
-  legAndDash: {flexDirection: 'row'},
-  departureTimes: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    marginTop: theme.spacing.xSmall,
-    marginHorizontal: theme.spacing.xSmall,
-  },
-  scheduledTime: {
-    marginLeft: theme.spacing.xSmall,
-  },
-  resultFooter: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderTopColor: theme.color.border.primary.background,
-    borderTopWidth: theme.border.width.slim,
-    paddingHorizontal: theme.spacing.medium,
-    paddingVertical: theme.spacing.small,
-  },
-  footerNotice: {flex: 1},
-  fromPlaceText: {
-    flex: 3,
-  },
-  detailsTextWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingLeft: theme.spacing.medium,
-  },
-  detailsIcon: {
-    marginLeft: theme.spacing.xSmall,
-  },
-  durationContainer: {
-    flex: 1,
-    alignItems: 'flex-end',
-  },
-  warningIcon: {
-    marginLeft: theme.spacing.small,
   },
 }));
 
@@ -321,8 +236,4 @@ const TransportationLeg = ({
       testID={`${leg.mode}Leg`}
     />
   );
-};
-
-const DestinationIcon = ({style}: {style?: StyleProp<ViewStyle>}) => {
-  return <ThemeIcon style={style} svg={Destination} />;
 };

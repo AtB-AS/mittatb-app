@@ -1,4 +1,4 @@
-export {ThemeText} from './ThemeText';
+export {ThemeText, useTypographyTextStyle} from './ThemeText';
 export type {ThemeTextProps} from './ThemeText';
 export {AccessibleText} from './AccessibleText';
 export {screenReaderPause, MAX_FONT_SCALE} from './utils';

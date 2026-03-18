@@ -13,20 +13,24 @@ export const CounterIconBox = ({
   textType,
   size = 'normal',
   spacing = 'compact',
+  hideIfZero = true,
   style,
+  ref,
 }: {
   count: number;
   textType: TextNames;
   size?: keyof Theme['icon']['size'];
   spacing?: 'compact' | 'standard';
+  hideIfZero?: boolean;
   style?: StyleProp<ViewStyle>;
+  ref?: React.Ref<View>;
 }) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const fontScale = useFontScale();
   const lineHeight = theme.icon.size[size];
 
-  if (count < 1) return null;
+  if (hideIfZero && count < 1) return null;
 
   return (
     <View
@@ -40,6 +44,7 @@ export const CounterIconBox = ({
         },
       ]}
       importantForAccessibility="no-hide-descendants"
+      ref={ref}
     >
       <ThemeText
         color={getTransportColor(theme).secondary}
