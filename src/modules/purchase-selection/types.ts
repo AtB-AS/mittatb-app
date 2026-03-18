@@ -14,7 +14,7 @@ import type {SupplementProductWithCount} from '@atb/modules/fare-contracts';
 
 export type ExistingTicket = {
   product: PreassignedFareProduct;
-  endDate: Date;
+  endDate: string; // Needs to be serializable
 };
 
 export type PurchaseSelectionType = {

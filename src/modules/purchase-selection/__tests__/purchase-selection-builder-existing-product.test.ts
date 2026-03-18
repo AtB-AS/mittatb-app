@@ -12,7 +12,7 @@ describe('PurchaseSelectionBuilder existingProduct', () => {
   test('should add an existing product to the selection', () => {
     const existingTicket: ExistingTicket = {
       product: {...TEST_PRODUCT, id: 'EP1'},
-      endDate: new Date(),
+      endDate: new Date().toISOString(),
     };
     const selection = builder
       .forType('single')
@@ -25,7 +25,7 @@ describe('PurchaseSelectionBuilder existingProduct', () => {
   test('should keep existing product when using fromSelection', () => {
     const existingTicket: ExistingTicket = {
       product: {...TEST_PRODUCT, id: 'EP1'},
-      endDate: new Date(),
+      endDate: new Date().toISOString(),
     };
     const initialSelection = {...TEST_SELECTION, existingTicket};
 
@@ -48,11 +48,11 @@ describe('PurchaseSelectionBuilder existingProduct', () => {
   test('should overwrite a previously set existing product', () => {
     const oneExistingTicket: ExistingTicket = {
       product: {...TEST_PRODUCT, id: 'EP1'},
-      endDate: new Date(),
+      endDate: new Date().toISOString(),
     };
     const anotherExistingTicket: ExistingTicket = {
       product: {...TEST_PRODUCT, id: 'EP2'},
-      endDate: new Date(),
+      endDate: new Date().toISOString(),
     };
 
     const selection = builder
@@ -67,7 +67,7 @@ describe('PurchaseSelectionBuilder existingProduct', () => {
   test('should retain other properties when adding an existing product', () => {
     const existingTicket: ExistingTicket = {
       product: {...TEST_PRODUCT, id: 'EP1'},
-      endDate: new Date(),
+      endDate: new Date().toISOString(),
     };
     const selection = builder
       .forType('single')

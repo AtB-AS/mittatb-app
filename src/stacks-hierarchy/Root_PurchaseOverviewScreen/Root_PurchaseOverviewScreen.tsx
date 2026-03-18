@@ -324,7 +324,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             selection={selection}
             setSelection={setSelection}
             style={styles.selectionComponent}
-            latestStartTime={selection.existingTicket?.endDate}
           />
 
           {isFree ? (

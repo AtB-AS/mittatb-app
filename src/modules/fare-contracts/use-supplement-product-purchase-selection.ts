@@ -65,7 +65,7 @@ export function useSupplementProductPurchaseSelection({
       .product(supplementProductFareProduct) // This is necessary because we might have several supplement products, so getDefaultProduct in .forType can default to another.
       .existingTicket({
         product,
-        endDate: travelRight.endDateTime,
+        endDate: travelRight.endDateTime.toISOString(),
       })
       .supplementProducts([{...supplementProduct, count: 1}])
       .userProfiles(userProfile ? [{...userProfile, count: 1}] : [])
