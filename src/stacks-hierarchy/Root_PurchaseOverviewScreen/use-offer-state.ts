@@ -231,7 +231,7 @@ export function useOfferState(
             userType: t.userTypeString,
             count: t.count,
             productIds: selection?.existingTicket
-              ? [selection.existingTicket?.product.id]
+              ? [selection.existingTicket.product.id]
               : [],
           })) ?? [];
 

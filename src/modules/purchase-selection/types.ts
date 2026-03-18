@@ -139,7 +139,7 @@ export type PurchaseSelectionBuilder = {
   /**
    * Apply an existing ticket to the purchase selection. This is used when
    * purchasing a supplementProduct to an existing Fare Contract.
-   * @param p The product from the existing Fare Contract
+   * @param p The information from the existing Fare Contract
    */
   existingTicket: (p?: ExistingTicket) => PurchaseSelectionBuilder;
 
