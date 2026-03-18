@@ -16,22 +16,20 @@ import {
 } from '@atb/modules/on-behalf-of';
 import {useState} from 'react';
 import phoneValidator from 'phone';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {ContrastColor} from '@atb/theme/colors';
+import {Loading} from '@atb/components/loading';
 
 export const SubmitButton = ({
   state: {settingPhone, settingName, recipient, phone, prefix, name, error},
   onSubmit,
   onError,
-  themeColor,
 }: {
   state: RecipientSelectionState;
   onSubmit: (r: TicketRecipientType) => void;
   onError: (c?: OnBehalfOfErrorCode) => void;
-  themeColor: ContrastColor;
 }) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
@@ -123,9 +121,7 @@ export const SubmitButton = ({
 
   return (
     <View style={styles.container}>
-      {isSubmitting && (
-        <ActivityIndicator size="large" color={themeColor.foreground.primary} />
-      )}
+      {isSubmitting && <Loading size="large" style={styles.loading} />}
 
       {error === 'unknown_error' && !isSubmitting && (
         <MessageInfoBox
@@ -158,6 +154,7 @@ export const SubmitButton = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {marginTop: theme.spacing.xLarge},
+  container: {marginTop: theme.spacing.xLarge, alignItems: 'center'},
+  loading: {marginBottom: theme.spacing.medium},
   errorMessage: {marginBottom: theme.spacing.medium},
 }));

@@ -1,11 +1,11 @@
 import React from 'react';
-import {AccessibilityProps, ActivityIndicator} from 'react-native';
+import {AccessibilityProps} from 'react-native';
 import {Location} from '@atb/modules/favorites';
-import {useThemeContext} from '@atb/theme';
 import {screenReaderPause} from '@atb/components/text';
 import {ButtonSectionItem, ButtonSectionItemProps} from './ButtonSectionItem';
 import {SectionTexts} from '@atb/translations';
 import {useTranslation} from '@atb/translations';
+import {Loading} from '@atb/components/loading';
 
 type Props = Omit<ButtonSectionItemProps, 'value'> & {
   location?: Location;
@@ -21,7 +21,6 @@ export function LocationInputSectionItem({
 }: Props) {
   const {t} = useTranslation();
 
-  const {theme} = useThemeContext();
   const currentValueLabel =
     location?.resultType == 'geolocation'
       ? t(SectionTexts.LocationInputSectionItem.myPosition)
@@ -47,13 +46,7 @@ export function LocationInputSectionItem({
           ? t(SectionTexts.LocationInputSectionItem.updatingLocation)
           : t(SectionTexts.LocationInputSectionItem.placeholder)
       }
-      icon={
-        updatingLocation ? (
-          <ActivityIndicator color={theme.color.foreground.dynamic.primary} />
-        ) : (
-          inputIcon
-        )
-      }
+      icon={updatingLocation ? <Loading /> : inputIcon}
       onIconPress={updatingLocation ? undefined : onIconPress}
       testID="searchFromButton"
       {...props}

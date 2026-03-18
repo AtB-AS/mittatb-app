@@ -10,7 +10,7 @@ import {
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useVehicle} from '../../use-vehicle';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -34,6 +34,7 @@ import {
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {PriceDetailsCard} from '../PriceDetailsCard';
+import {Loading} from '@atb/components/loading';
 
 type ScooterHelpParams = {operatorId: string} & (
   | {vehicleId: string}
@@ -112,11 +113,11 @@ export const ScooterSheet = ({
     >
       {(isLoading || shmoReqIsLoading) && (
         <View
-          style={styles.activityIndicator}
+          style={styles.loading}
           accessibilityRole="progressbar"
           accessibilityLiveRegion="polite"
         >
-          <ActivityIndicator size="large" />
+          <Loading size="large" />
         </View>
       )}
       {!isLoading && (isError || !vehicle) && (
@@ -219,7 +220,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     vehicleContent: {
       gap: theme.spacing.small,
     },
-    activityIndicator: {
+    loading: {
       marginBottom: theme.spacing.medium,
     },
     operatorBenefit: {

@@ -43,6 +43,7 @@ export const ShmoTripCard = ({shmoBooking, isFocused}: ShmoTripCardProps) => {
             : new Date(shmoBooking?.arrivalTime ?? '')
         }
         totalAmount={shmoBooking?.pricing.currentAmount.toString() ?? ''}
+        currency={shmoBooking?.pricingPlan.currency}
         withHeader={false}
       />
     </Section>

@@ -58,9 +58,41 @@ export const NotificationContextProvider = ({children}: Props) => {
   const {authStatus} = useAuthContext();
 
   const getFcmToken = useCallback(async () => {
-    const token = await messaging().getToken();
-    setFcmToken(token);
-    return token;
+    try {
+      // Ensures device is registered to Apple for remote messages
+      // It should be automatically registered in our workflow
+      // but if there are cases where it fails, this should safeguard it.
+      // Safe to call on Android, no need to do a platform check.
+      if (!messaging().isDeviceRegisteredForRemoteMessages) {
+        await messaging().registerDeviceForRemoteMessages();
+      }
+
+      // On iOS, wait for the APNs token to be available before requesting
+      // the FCM token. registerDeviceForRemoteMessages resolves before the
+      // APNs token callback fires, so getToken() can fail without this.
+      if (Platform.OS === 'ios') {
+        let apnsToken = await messaging().getAPNSToken();
+        if (!apnsToken) {
+          for (let i = 0; i < 5; i++) {
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            apnsToken = await messaging().getAPNSToken();
+            if (apnsToken) break;
+          }
+          if (!apnsToken) {
+            throw new Error('APNs token not available after waiting');
+          }
+        }
+      }
+
+      const token = await messaging().getToken();
+      setFcmToken(token);
+      return token;
+    } catch (e) {
+      Bugsnag.notify(
+        e instanceof Error ? e : new Error(`Failed to get FCM token: ${e}`),
+      );
+      return undefined;
+    }
   }, []);
 
   const register = useCallback(
@@ -136,11 +168,6 @@ export const NotificationContextProvider = ({children}: Props) => {
     if (isPushNotificationsEnabled && authStatus === 'authenticated')
       checkPermissions();
   }, [isPushNotificationsEnabled, checkPermissions, authStatus]);
-
-  // Get FCM token when component mounts
-  useEffect(() => {
-    getFcmToken();
-  }, [getFcmToken]);
 
   return (
     <NotificationContext.Provider

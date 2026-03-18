@@ -10,6 +10,7 @@ type ExpressionField = Expression[1];
 import {PinType} from '../mapbox-styles/pin-types';
 import {SelectedMapItemProperties} from '../types';
 import {getIconZoomTransitionStyle} from '../utils';
+import {PropulsionType} from '@atb/api/types/generated/mobility-types_v2';
 
 export const scaleTransitionZoomRange = 0.4;
 const opacityTransitionExtraZoomRange = scaleTransitionZoomRange / 8;
@@ -94,6 +95,16 @@ export const useMapSymbolStyles = ({
     'get',
     'vehicle_type_form_factor',
   ];
+  const vehicle_type_propulsion_type: Expression = [
+    'get',
+    'vehicle_type_propulsion_type',
+  ];
+  const isElectric: Expression = [
+    'in',
+    vehicle_type_propulsion_type,
+    ['literal', [PropulsionType.Electric, PropulsionType.ElectricAssist]],
+  ];
+
   const iconCode: Expression = [
     'case',
     ...stopPlacesExpression,
@@ -102,7 +113,7 @@ export const useMapSymbolStyles = ({
     ['==', vehicle_type_form_factor, 'SCOOTER_STANDING'],
     'scooter',
     ['==', vehicle_type_form_factor, 'BICYCLE'],
-    'citybike',
+    ['case', isElectric, 'ebike', 'citybike'],
     ['==', vehicle_type_form_factor, 'CAR'],
     'sharedcar',
     'non-existing-icon',
@@ -127,7 +138,16 @@ export const useMapSymbolStyles = ({
 
   const suffix: Expression =
     pinType === 'vehicle'
-      ? ['case', ['==', iconCode, 'scooter'], transportOperator, '']
+      ? [
+          'case',
+          [
+            'any',
+            ['==', iconCode, 'scooter'],
+            ['all', ['==', iconCode, 'ebike'], ['!', isCluster]],
+          ],
+          transportOperator,
+          '',
+        ]
       : mapItemIconNonClusterState;
 
   // should make this easier to understand, perhaps rename images to achieve it
@@ -145,6 +165,8 @@ export const useMapSymbolStyles = ({
             'case',
             ['==', iconCode, 'citybike'],
             'bikes',
+            ['==', iconCode, 'ebike'],
+            'bikes',
             ['==', iconCode, 'sharedcar'],
             'cars',
             'bikes',
@@ -154,14 +176,6 @@ export const useMapSymbolStyles = ({
     '_',
     themeName,
   ];
-
-  const iconStyle: SymbolLayerStyleProps = {
-    iconImage,
-    iconOffset: [0, 0],
-    iconAllowOverlap: true,
-    iconOpacity,
-    iconSize,
-  };
 
   const textOffsetXFactor = pinType == 'vehicle' ? 1 : 1.045;
   const numberOfUnits = pinType == 'vehicle' ? count : numVehiclesAvailable;
@@ -173,6 +187,32 @@ export const useMapSymbolStyles = ({
     '99+',
     numberOfUnits,
   ];
+
+  const symbolSortKey: Expression = [
+    '+',
+    [
+      'case',
+      ['==', iconCode, 'ebike'],
+      2000, // Bikes get priority
+      ['==', iconCode, 'scooter'],
+      1000, // Scooters stay below
+      0, // Default
+    ],
+    ['case', isCluster, 3000, 0], // Clusters get priority
+
+    // Also give priority to clusters/stations with higher count.
+    // Location data is not accessible in style expressions, so uniqueness requires an id. Using numberOfUnits resolves this for all cases apart from when numberOfUnits is the same.
+    ['coalesce', numberOfUnits, 0],
+  ];
+
+  const iconStyle: SymbolLayerStyleProps = {
+    iconImage,
+    iconOffset: [0, 0],
+    iconAllowOverlap: true,
+    iconOpacity,
+    iconSize,
+    symbolSortKey,
+  };
 
   const textField: Expression =
     pinType == 'station'

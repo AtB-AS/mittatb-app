@@ -2,7 +2,7 @@ import DeviceBrightness from '@adrianso/react-native-device-brightness';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ValidityStatus} from '../utils';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {FareContractType} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
@@ -10,7 +10,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
 import QRCode from 'qrcode';
 import React, {RefObject, useEffect, useRef, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {SvgXml} from 'react-native-svg';
 import {GenericSectionItem} from '@atb/components/sections';
@@ -29,6 +29,7 @@ import {
   BottomSheetHeaderType,
   BottomSheetModal,
 } from '@atb/components/bottom-sheet';
+import {Loading} from '@atb/components/loading';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -218,13 +219,9 @@ const DeviceNotInspectable = () => {
 };
 
 const LoadingBarcode = () => {
-  const {theme} = useThemeContext();
   return (
-    <View style={{flex: 1}}>
-      <ActivityIndicator
-        animating={true}
-        color={theme.color.foreground.dynamic.primary}
-      />
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Loading size="large" animating={true} />
     </View>
   );
 };
