@@ -18,19 +18,20 @@ export const useGeofencingZoneContent = () => {
 
   const getGeofencingZoneContent = useCallback(
     (geofencingZoneCode?: GeofencingZoneCode, isStationParking?: boolean) => {
-      const title = t(
-        GeofencingZoneExplanations[geofencingZoneCode || 'unspecified'].title,
-      );
+      const key =
+        geofencingZoneCode && geofencingZoneCode in GeofencingZoneExplanations
+          ? geofencingZoneCode
+          : 'unspecified';
+
+      const title = t(GeofencingZoneExplanations[key].title);
 
       const isStationParkingPostfix = isStationParking
         ? '. ' + t(GeofencingZoneExtraExplanations.isStationParking)
         : '';
 
       const description =
-        t(
-          GeofencingZoneExplanations[geofencingZoneCode || 'unspecified']
-            .description,
-        ) + isStationParkingPostfix;
+        t(GeofencingZoneExplanations[key].description) +
+        isStationParkingPostfix;
 
       const iconNode = geofencingZoneCode ? (
         <GeofencingZoneIconBox geofencingZoneCode={geofencingZoneCode} />

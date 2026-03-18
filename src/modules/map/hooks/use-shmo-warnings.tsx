@@ -88,7 +88,9 @@ export const useShmoWarnings = (
         'allowed'
       ) {
         const geofencingZoneContent = getGeofencingZoneContent(
-          featureToSelect?.properties?.geofencingZoneCustomProps,
+          featureToSelect?.properties?.geofencingZoneCustomProps?.code,
+          featureToSelect?.properties?.geofencingZoneCustomProps
+            ?.isStationParking,
         );
         setGeofencingZoneWarning(geofencingZoneContent);
       } else {
