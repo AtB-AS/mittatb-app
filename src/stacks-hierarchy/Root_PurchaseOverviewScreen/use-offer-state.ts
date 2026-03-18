@@ -242,7 +242,7 @@ export function useOfferState(
           .map((bp) => ({
             id: bp.baggageType,
             // Must be a valid user profile ref, and we are unsure if Entur supports 'ANYONE' yet for baggage products.
-            // Doesn't actually have an affect on the purchased product.
+            // Doesn't actually have an affect on the purchased productte
             userType: 'ADULT',
             baggageTypes: [bp.baggageType],
             count: bp.count,
