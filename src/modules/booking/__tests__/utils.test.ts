@@ -51,4 +51,63 @@ describe('tripPatternDisplayTimeFilter', () => {
     } as TripPatternWithBooking;
     expect(tripPatternDisplayTimeFilter(tripPattern, travelDate)).toBe(false);
   });
+
+  it('returns true when latestDate is not provided and trip is within the day', () => {
+    const tripPattern: TripPatternWithBooking = {
+      expectedStartTime: '2023-10-01T18:00:00.000Z',
+    } as TripPatternWithBooking;
+    expect(tripPatternDisplayTimeFilter(tripPattern, travelDate)).toBe(true);
+  });
+
+  it('returns true when trip is before latestDate', () => {
+    const tripPattern: TripPatternWithBooking = {
+      expectedStartTime: '2023-10-01T10:00:00.000Z',
+    } as TripPatternWithBooking;
+    expect(
+      tripPatternDisplayTimeFilter(
+        tripPattern,
+        travelDate,
+        '2023-10-01T12:00:00.000Z',
+      ),
+    ).toBe(true);
+  });
+
+  it('returns false when trip is after latestDate', () => {
+    const tripPattern: TripPatternWithBooking = {
+      expectedStartTime: '2023-10-01T14:00:00.000Z',
+    } as TripPatternWithBooking;
+    expect(
+      tripPatternDisplayTimeFilter(
+        tripPattern,
+        travelDate,
+        '2023-10-01T12:00:00.000Z',
+      ),
+    ).toBe(false);
+  });
+
+  it('returns false when trip is exactly at latestDate', () => {
+    const tripPattern: TripPatternWithBooking = {
+      expectedStartTime: '2023-10-01T12:00:00.000Z',
+    } as TripPatternWithBooking;
+    expect(
+      tripPatternDisplayTimeFilter(
+        tripPattern,
+        travelDate,
+        '2023-10-01T12:00:00.000Z',
+      ),
+    ).toBe(false);
+  });
+
+  it('returns false when trip is before travelDate even if before latestDate', () => {
+    const tripPattern: TripPatternWithBooking = {
+      expectedStartTime: '2023-09-30T23:00:00.000Z',
+    } as TripPatternWithBooking;
+    expect(
+      tripPatternDisplayTimeFilter(
+        tripPattern,
+        travelDate,
+        '2023-10-01T12:00:00.000Z',
+      ),
+    ).toBe(false);
+  });
 });
