@@ -168,7 +168,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     if (isBookingRequired) {
       navigation.push('Root_TripSelectionScreen', {
         ...rootPurchaseConfirmationScreenParams,
-        purchaseDeadline: params.purchaseDeadline,
       });
       return;
     }
