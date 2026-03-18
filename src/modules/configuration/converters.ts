@@ -96,6 +96,10 @@ export const mapToFlexibleTransportOption = (
 export const mapToTransportModeFilterOptions = (
   filters: any,
 ): TransportModeFilterOptionType[] | undefined => {
+  if (filters === undefined || filters === null) {
+    return;
+  }
+
   if (!isArray(filters)) {
     Bugsnag.notify(`Transport mode filters should be of type "array"`);
     return;
