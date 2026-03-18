@@ -47,6 +47,9 @@ import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {WithOverlayButton} from '@atb/components/overlay-button';
 import {KnownProgramId, useIsEnrolled} from '@atb/modules/enrollment';
 
+const RESULT_KEY_FROM = 'Dashboard_RootScreen--fromLocation';
+const RESULT_KEY_TO = 'Dashboard_RootScreen--toLocation';
+
 type RootProps = DashboardScreenProps<'Dashboard_RootScreen'>;
 
 export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
@@ -62,10 +65,10 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
 
   const {pendingResult, clearPendingResult} = usePendingLocationSearchStore();
   useEffect(() => {
-    if (pendingResult?.key === 'Dashboard_RootScreen/fromLocation') {
+    if (pendingResult?.key === RESULT_KEY_FROM) {
       navigation.setParams({fromLocation: pendingResult.location});
       clearPendingResult();
-    } else if (pendingResult?.key === 'Dashboard_RootScreen/toLocation') {
+    } else if (pendingResult?.key === RESULT_KEY_TO) {
       navigation.setParams({toLocation: pendingResult.location});
       clearPendingResult();
     }
@@ -128,16 +131,14 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
   );
 
   const openLocationSearch = (
-    callerRouteParam: 'fromLocation' | 'toLocation',
+    resultKey: typeof RESULT_KEY_FROM | typeof RESULT_KEY_TO,
     initialLocation: Location | undefined,
   ) => {
     clearPendingResult();
     navigation.navigate('Root_LocationSearchByTextScreen', {
-      resultKey: `Dashboard_RootScreen/${callerRouteParam}`,
+      resultKey,
       label:
-        callerRouteParam === 'fromLocation'
-          ? t(SharedTexts.from)
-          : t(SharedTexts.to),
+        resultKey === RESULT_KEY_FROM ? t(SharedTexts.from) : t(SharedTexts.to),
       initialLocation,
       includeJourneyHistory: true,
       onlyStopPlacesCheckboxInitialState: false,
@@ -253,7 +254,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
                 }
                 location={from}
                 label={t(SharedTexts.from)}
-                onPress={() => openLocationSearch('fromLocation', from)}
+                onPress={() => openLocationSearch(RESULT_KEY_FROM, from)}
                 testID="searchFromButton"
               />
               <LocationInputSectionItem
@@ -262,7 +263,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
                 )}
                 label={t(SharedTexts.to)}
                 location={to}
-                onPress={() => openLocationSearch('toLocation', to)}
+                onPress={() => openLocationSearch(RESULT_KEY_TO, to)}
                 testID="searchToButton"
               />
             </Section>
