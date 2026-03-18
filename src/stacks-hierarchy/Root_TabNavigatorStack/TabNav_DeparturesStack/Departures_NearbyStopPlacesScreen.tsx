@@ -1,13 +1,18 @@
 import {StopPlace} from '@atb/api/types/departures';
-import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+import {
+  usePendingLocationSearchStore,
+  useOnlySingleLocation,
+} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {DeparturesStackProps} from './navigation-types';
 import {NearbyStopPlacesScreenComponent} from '@atb/screen-components/nearby-stop-places';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import SharedTexts from '@atb/translations/shared';
 import {useThemeContext} from '@atb/theme';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+
+const RESULT_KEY = 'Departures_NearbyStopPlacesScreen--location';
 
 type Props = DeparturesStackProps<'Departures_NearbyStopPlacesScreen'>;
 
@@ -19,6 +24,16 @@ export const Departures_NearbyStopPlacesScreen = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const focusRef = useFocusOnLoad(navigation);
+  const {pendingResult, clearPendingResult} = usePendingLocationSearchStore();
+
+  useEffect(() => {
+    if (pendingResult?.key === RESULT_KEY) {
+      if (pendingResult.location?.resultType !== 'journey') {
+        navigation.setParams({location: pendingResult.location});
+      }
+      clearPendingResult();
+    }
+  }, [pendingResult, clearPendingResult, navigation]);
 
   return (
     <NearbyStopPlacesScreenComponent
@@ -31,29 +46,15 @@ export const Departures_NearbyStopPlacesScreen = ({
         color: theme.color.background.neutral[1],
       }}
       isLargeTitle={true}
-      onPressLocationSearch={(location) =>
+      onPressLocationSearch={(location) => {
+        clearPendingResult();
         navigation.navigate('Root_LocationSearchByTextScreen', {
+          resultKey: RESULT_KEY,
           label: t(SharedTexts.from),
-          callerRouteConfig: {
-            route: [
-              'Root_TabNavigatorStack',
-              {
-                screen: 'TabNav_DeparturesStack',
-                params: {
-                  screen: 'Departures_NearbyStopPlacesScreen',
-                  params: {
-                    location: route.params?.location,
-                  },
-                  merge: true,
-                },
-              },
-            ],
-            locationRouteParam: 'location',
-          },
           initialLocation: location,
           onlyStopPlacesCheckboxInitialState: true,
-        })
-      }
+        });
+      }}
       onSelectStopPlace={useCallback(
         (place: StopPlace) => {
           navigation.navigate('Departures_PlaceScreen', {

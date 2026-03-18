@@ -8,7 +8,7 @@ import {StyleSheet} from '@atb/theme';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {updateCallerRouteParams} from './navigation-types';
+import {usePendingLocationSearchStore} from './use-location-search-store';
 
 type Props = RootStackScreenProps<'Root_LocationSearchByTextScreen'>;
 
@@ -16,7 +16,7 @@ export const Root_LocationSearchByTextScreen = ({
   navigation,
   route: {
     params: {
-      callerRouteConfig,
+      resultKey,
       label,
       favoriteChipTypes,
       initialLocation,
@@ -27,24 +27,21 @@ export const Root_LocationSearchByTextScreen = ({
 }: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const {setPendingResult} = usePendingLocationSearchStore();
 
   const onSelect = useCallback(
     (location: SelectableLocationType) => {
-      const callerRoute = updateCallerRouteParams(
-        callerRouteConfig.route,
-        callerRouteConfig.locationRouteParam,
-        location,
-      );
-      navigation.popTo(...callerRoute);
+      setPendingResult(resultKey, location);
+      navigation.goBack();
     },
-    [callerRouteConfig, navigation],
+    [resultKey, setPendingResult, navigation],
   );
 
   const onMapSelection = () => {
     navigation.navigate({
       name: 'Root_LocationSearchByMapScreen',
       params: {
-        callerRouteConfig,
+        resultKey,
         initialLocation,
       },
       merge: true,
