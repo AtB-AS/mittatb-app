@@ -141,10 +141,10 @@ const createBuilder = (
       };
       return builder;
     },
-    existingProduct(existingProduct) {
+    originFareContract(originFareContract) {
       currentSelection = {
         ...currentSelection,
-        existingProduct: existingProduct,
+        originFareContract,
       };
       return builder;
     },

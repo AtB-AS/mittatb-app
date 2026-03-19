@@ -8,7 +8,7 @@ import {
   isInThePast,
   parseISOFromCET,
 } from '@atb/utils/date';
-import {addDays, isToday, parseISO} from 'date-fns';
+import {addDays, isAfter, isToday, parseISO} from 'date-fns';
 import React, {useRef} from 'react';
 import {View} from 'react-native';
 import {DatePickerSheet} from './DatePickerSheet';
@@ -24,18 +24,23 @@ type DateSelectionProps = {
   searchTime: DepartureSearchTime;
   setSearchTime: (searchTime: DepartureSearchTime) => void;
   backgroundColor: ContrastColor;
+  latestDate?: string;
 };
 
 export const DateSelection = ({
   searchTime,
   setSearchTime,
   backgroundColor,
+  latestDate,
 }: DateSelectionProps): React.JSX.Element => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const disablePreviousDayNavigation = isToday(
     parseISOFromCET(searchTime.date),
   );
+  const disableNextDayNavigation = latestDate
+    ? isAfter(changeDay(searchTime, 1).date, latestDate)
+    : false;
   const onCloseFocusRef = useRef<View | null>(null);
   const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
 
@@ -117,6 +122,7 @@ export const DateSelection = ({
               : undefined
           }
           type="small"
+          disabled={disableNextDayNavigation}
           mode="tertiary"
           style={styles.nextPrevButtons}
           rightIcon={{svg: ArrowRight}}
@@ -136,6 +142,7 @@ export const DateSelection = ({
         }))}
         bottomSheetModalRef={bottomSheetModalRef}
         onCloseFocusRef={onCloseFocusRef}
+        maximumDate={latestDate}
       />
     </>
   );

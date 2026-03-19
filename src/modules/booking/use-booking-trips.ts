@@ -42,7 +42,7 @@ export function useBookingTrips({
     searchTime.toISOString(),
     userProfilesWithCount.map((up) => up.id),
     productAlternatives.map((p) => p.id),
-    selection.existingProduct,
+    selection.originFareContract,
   ];
 
   const {data, isFetching, isSuccess, isError, isLoading, refetch} = useQuery({
@@ -52,15 +52,15 @@ export function useBookingTrips({
         fromStopPlaceId: stopPlaces?.from?.id!,
         toStopPlaceId: stopPlaces?.to?.id!,
         searchTime: searchTime.toISOString(),
-        products: selection.existingProduct
+        products: selection.originFareContract
           ? []
           : productAlternatives.map((p) => p.id),
         travellers: userProfilesWithCount.map((p) => ({
           id: p.id,
           userType: p.userTypeString,
           count: p.count,
-          productIds: selection.existingProduct
-            ? [selection.existingProduct.id]
+          productIds: selection.originFareContract
+            ? [selection.originFareContract.product.id]
             : [],
         })),
         supplementProducts: selection.supplementProductsWithCount.map(
@@ -80,6 +80,7 @@ export function useBookingTrips({
           tripPatternDisplayTimeFilter(
             tp,
             travelDate ?? new Date().toISOString(),
+            selection.originFareContract?.endDate,
           ),
         )
     : [];

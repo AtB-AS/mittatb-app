@@ -166,10 +166,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const onPressBuy = () => {
     if (isBookingRequired) {
-      navigation.push(
-        'Root_TripSelectionScreen',
-        rootPurchaseConfirmationScreenParams,
-      );
+      navigation.push('Root_TripSelectionScreen', {
+        ...rootPurchaseConfirmationScreenParams,
+      });
       return;
     }
     if (selection.isOnBehalfOf) {
