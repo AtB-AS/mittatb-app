@@ -9,6 +9,8 @@ import {StoredTripPattern, storedTripPatterns} from './storage';
 import {TripPattern} from '@atb/api/types/trips';
 import {getTripPatternKey} from './utils';
 import {wrapWithExperimentalFeatureToggledComponent} from '@atb/modules/experimental';
+import {ONE_MINUTE_MS} from '@atb/utils/durations';
+import {useTimeContext} from '@atb/modules/time';
 
 export type StoredTripPatternsContextState = {
   tripPatterns: StoredTripPattern[];
@@ -29,6 +31,7 @@ export const StoredTripPatternsContextProvider =
       const [tripPatterns, setTripPatternsState] = useState<
         StoredTripPattern[]
       >([]);
+      const {serverNow} = useTimeContext(ONE_MINUTE_MS);
 
       const populateTripPatterns = useCallback(async () => {
         const tripPatterns = await storedTripPatterns.getTripPatterns();
@@ -75,6 +78,16 @@ export const StoredTripPatternsContextProvider =
       const canAddTripPattern = useCallback((tripPattern: TripPattern) => {
         return tripPattern && tripPattern.legs.filter((l) => l.id).length > 0;
       }, []);
+
+      const removeTripPatternsOlderThan = useCallback(async (date: Date) => {
+        const newTripPatterns =
+          await storedTripPatterns.removeTripPatternsOlderThan(date);
+        setTripPatternsState(newTripPatterns);
+      }, []);
+
+      useEffect(() => {
+        removeTripPatternsOlderThan(new Date(serverNow));
+      }, [serverNow, removeTripPatternsOlderThan]);
 
       const contextValue: StoredTripPatternsContextState = {
         tripPatterns,
