@@ -1,5 +1,4 @@
 import {
-  PreassignedFareProduct,
   FareZone,
   useFirestoreConfigurationContext,
   UserProfile,
@@ -26,6 +25,7 @@ import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
 import type {BaggageProduct} from '@atb-as/config-specs';
 import {SupplementPurchaseButton} from '@atb/modules/fare-contracts';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 
 export type FareContractInfoProps = {
   status: ValidityStatus;

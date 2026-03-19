@@ -318,7 +318,12 @@ describe('purchaseSelectionBuilder - forType', () => {
     const input = {
       ...TEST_INPUT,
       preassignedFareProducts: [
-        {...TEST_PRODUCT, limitations: {userProfileRefs: ['UP3']}},
+        {
+          ...TEST_PRODUCT,
+          limitations: {
+            userProfiles: [{userProfileRef: 'UP3'}],
+          },
+        },
       ],
       userProfiles: [
         {...TEST_USER_PROFILE, id: 'UP1', userTypeString: 'ADULT'},

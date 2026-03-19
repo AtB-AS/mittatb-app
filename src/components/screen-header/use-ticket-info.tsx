@@ -1,10 +1,8 @@
-import {
-  PreassignedFareProduct,
-  findReferenceDataById,
-} from '@atb/modules/configuration';
+import {findReferenceDataById} from '@atb/modules/configuration';
 import {
   useGetFareProductsQuery,
   useTicketingContext,
+  type PreassignedFareProduct,
 } from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 

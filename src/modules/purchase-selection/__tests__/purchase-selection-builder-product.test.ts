@@ -122,7 +122,7 @@ describe('purchaseSelectionBuilder - product', () => {
         ...TEST_PRODUCT,
         limitations: {
           ...TEST_PRODUCT.limitations,
-          userProfileRefs: ['UP2', 'UP3'],
+          userProfiles: [{userProfileRef: 'UP2'}, {userProfileRef: 'UP3'}],
         },
         id: 'P2',
       })
@@ -156,7 +156,7 @@ describe('purchaseSelectionBuilder - product', () => {
         ...TEST_SELECTION.preassignedFareProduct,
         limitations: {
           ...TEST_SELECTION.preassignedFareProduct.limitations,
-          userProfileRefs: ['UP2', 'UP3'],
+          userProfiles: [{userProfileRef: 'UP2'}, {userProfileRef: 'UP3'}],
         },
         id: 'P2',
       })

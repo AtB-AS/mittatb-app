@@ -5,10 +5,10 @@ import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {
-  PreassignedFareProduct,
   ProductTypeTransportModes,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {Moon, Student, Youth} from '@atb/assets/svg/mono-icons/ticketing';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {getTransportModeSvg} from '@atb/components/icon-box';

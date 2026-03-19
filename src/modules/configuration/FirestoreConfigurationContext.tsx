@@ -20,7 +20,6 @@ import {
   TravelSearchFiltersType,
   CityZone,
   CarPoolingZone,
-  PreassignedFareProduct,
   FareZone,
   UserProfile,
   MobilityOperatorType,
@@ -66,8 +65,6 @@ export type AppTexts = {
 };
 
 type ConfigurationContextState = {
-  /** @deprecated Use useGetFareProductsQuery instead */
-  preassignedFareProducts: PreassignedFareProduct[];
   fareProductGroups: FareProductGroupType[];
   fareZones: FareZone[];
   cityZones: CityZone[];
@@ -103,9 +100,6 @@ type Props = {
 };
 
 export const FirestoreConfigurationContextProvider = ({children}: Props) => {
-  const [preassignedFareProducts, setPreassignedFareProducts] = useState<
-    PreassignedFareProduct[]
-  >([]);
   const [fareZones, setFareZones] = useState<FareZone[]>([]);
   const [cityZones, setCityZones] = useState<CityZone[]>([]);
   const [carPoolingZones, setCarPoolingZones] = useState<CarPoolingZone[]>([]);
@@ -157,12 +151,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
       .collection('configuration')
       .onSnapshot(
         (snapshot) => {
-          const preassignedFareProducts =
-            getPreassignedFareContractsFromSnapshot(snapshot);
-          if (preassignedFareProducts) {
-            setPreassignedFareProducts(preassignedFareProducts);
-          }
-
           const fareZones = getFareZonesFromSnapshot(snapshot);
           if (fareZones) {
             setFareZones(fareZones);
@@ -290,7 +278,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
 
   const clearState = () => {
     setFirestoreConfigStatus('loading');
-    setPreassignedFareProducts([]);
     setFareZones([]);
     setCityZones([]);
     setCarPoolingZones([]);
@@ -321,7 +308,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
 
   const memoizedState = useMemo(() => {
     return {
-      preassignedFareProducts,
       fareProductGroups,
       fareZones,
       cityZones,
@@ -347,7 +333,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
       firestoreConfigStatus,
     };
   }, [
-    preassignedFareProducts,
     fareProductGroups,
     fareZones,
     cityZones,
@@ -393,25 +378,6 @@ export function useFirestoreConfigurationContext() {
     );
   }
   return context;
-}
-
-function getPreassignedFareContractsFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): PreassignedFareProduct[] | undefined {
-  const preassignedFareProductsFromFirestore = snapshot.docs
-    .find((doc) => doc.id == 'referenceData')
-    ?.get<string>('preassignedFareProducts_v2');
-
-  try {
-    if (preassignedFareProductsFromFirestore) {
-      return JSON.parse(
-        preassignedFareProductsFromFirestore,
-      ) as PreassignedFareProduct[];
-    }
-  } catch (error: any) {
-    Bugsnag.notify(error);
-  }
-  return undefined;
 }
 
 function getFareZonesFromSnapshot(

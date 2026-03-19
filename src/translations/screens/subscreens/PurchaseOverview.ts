@@ -178,11 +178,6 @@ const PurchaseOverviewTexts = {
     close: _('Lukk', 'Close', 'Lukk'),
     confirm: _('Bekreft valg', 'Confirm selection', 'Bekreft valg'),
   },
-  selectAtLeastOneTraveller: _(
-    'Velg minst én reisende',
-    'Select at least one traveller',
-    'Vel minst éin reisande',
-  ),
   startTime: {
     title: _('Oppstartstidspunkt', 'Start time', 'Starttidspunkt'),
     now: _('Nå', 'Now', 'No'),
@@ -282,6 +277,33 @@ const PurchaseOverviewTexts = {
         'Generelt om billettar',
       ),
     },
+  },
+  messages: {
+    selectAtLeastOneTraveller: _(
+      'Velg minst én reisende',
+      'Select at least one traveller',
+      'Vel minst éin reisande',
+    ),
+    loginRequired: _(
+      'Du må være innlogget',
+      'You need to be logged in',
+      'Du må vere innlogget',
+    ),
+    loginForFreeReservations: _(
+      'Logg inn for å gjøre gratis plassreservasjoner',
+      'Log in to make free seat reservations',
+      'Logg inn for å gjere gratis plassreservasjonar',
+    ),
+    multiReservationTitle: _(
+      'Vil du reservere for flere?',
+      'Do you want to reserve for multiple travellers?',
+      'Vil du reservere for flere?',
+    ),
+    multiReservation: _(
+      'Vil du ha med deg flere må du kontakte kundeservice for gruppebestilling.',
+      'If you want to bring more travellers, you need to contact the customer service for group booking.',
+      'Vil du ha med deg flere må du kontakte kundeservice for gruppebestilling.',
+    ),
   },
 };
 

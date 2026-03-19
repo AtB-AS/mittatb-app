@@ -1,5 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import {PreassignedFareProduct} from '@atb/modules/configuration';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {useAuthContext} from '@atb/modules/auth';
 import {ONE_HOUR_MS} from '@atb/utils/durations';
 import {getFareProductBenefits} from '../api/api';

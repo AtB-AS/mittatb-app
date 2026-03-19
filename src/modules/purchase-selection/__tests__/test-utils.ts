@@ -1,15 +1,15 @@
 import {
   FareProductTypeConfig,
-  PreassignedFareProduct,
   FareZone,
   UserProfile,
 } from '@atb-as/config-specs';
+import {BaggageProduct} from '@atb/modules/configuration';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import type {
   PurchaseSelectionBuilderInput,
   PurchaseSelectionType,
 } from '../types';
 import type {FareZoneWithMetadata} from '@atb/fare-zones-selector';
-import {BaggageProduct} from '@atb/modules/configuration';
 
 export const TEST_TYPE_CONFIG: FareProductTypeConfig = {
   type: 'single',
@@ -33,7 +33,13 @@ export const TEST_PRODUCT: PreassignedFareProduct = {
   name: {lang: 'no', value: 'Produkt1'},
   version: 'v1',
   limitations: {
-    userProfileRefs: ['UP1', 'UP2', 'UP3', 'UP4', 'UP5'],
+    userProfiles: [
+      {userProfileRef: 'UP1'},
+      {userProfileRef: 'UP2'},
+      {userProfileRef: 'UP3'},
+      {userProfileRef: 'UP4'},
+      {userProfileRef: 'UP5'},
+    ],
     supplementProductRefs: ['SP1', 'SP2', 'SP3', 'SP4', 'SP5'],
   },
   distributionChannel: ['app'],

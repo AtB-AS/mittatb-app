@@ -1,9 +1,8 @@
-import {useGetSupplementProductsQuery} from '@atb/modules/ticketing';
 import {
-  PreassignedFareProduct,
-  SupplementProduct,
-  BaggageProduct,
-} from '@atb/modules/configuration';
+  useGetSupplementProductsQuery,
+  type PreassignedFareProduct,
+} from '@atb/modules/ticketing';
+import {SupplementProduct, BaggageProduct} from '@atb/modules/configuration';
 import {findReferenceDataById} from '@atb/modules/configuration';
 import {isDefined} from '@atb/utils/presence';
 

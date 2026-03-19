@@ -1,4 +1,4 @@
-import {PreassignedFareProduct} from '@atb-as/config-specs';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {CustomerProfile} from '@atb/modules/ticketing';
 import {APP_VERSION} from '@env';
 import {appliesToAppVersion} from './firestore-utils';

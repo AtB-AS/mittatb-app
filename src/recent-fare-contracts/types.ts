@@ -1,10 +1,10 @@
 import {
   PointToPointValidity,
-  PreassignedFareProduct,
   FareZone,
   BaggageProduct,
 } from '@atb/modules/configuration';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {TravelRightDirection} from '@atb-as/utils';
 import {UniqueWithCount} from '@atb/utils/unique-with-count';
 
