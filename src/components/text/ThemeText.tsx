@@ -28,7 +28,7 @@ export type ThemeTextProps = TextProps & {
 };
 
 export const ThemeText: React.FC<ThemeTextProps> = ({
-  typography: fontType = 'body__m',
+  typography = 'body__m',
   type = 'primary',
   color,
   isMarkdown = false,
@@ -38,33 +38,10 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
 }) => {
   const {theme, androidSystemFont} = useThemeContext();
   const textColor = useColor(color, type);
-  const fontScale = useFontScale();
+  const textStyle = useTypographyTextStyle(typography);
 
-  const typeStyle = {
-    ...theme.typography[fontType],
-    color: textColor,
-  };
-
-  let textStyle: TextStyle = {
-    ...typeStyle,
-    ...getTextWeightStyle(androidSystemFont, typeStyle.fontWeight),
-  };
-
-  // Set specific letter spacing for android phones, as 0.4 leads to errors on newer pixel phones
-  // https://github.com/facebook/react-native/issues/35039
-  if (
-    Platform.OS === 'android' &&
-    textStyle.letterSpacing !== undefined &&
-    fontScale < 1.0
-  ) {
-    textStyle = {
-      ...textStyle,
-      letterSpacing: textStyle.letterSpacing - 0.05,
-    };
-  }
-
-  const textProps = {
-    style: [textStyle, style],
+  const textProps: TextProps = {
+    style: [textStyle, {color: textColor}, style],
     maxFontSizeMultiplier: MAX_FONT_SCALE,
     ...props,
   };
@@ -85,6 +62,33 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   }
 
   return <Text {...textProps}>{content}</Text>;
+};
+
+export const useTypographyTextStyle = (typography: TextNames): TextStyle => {
+  const {theme, androidSystemFont} = useThemeContext();
+  const fontScale = useFontScale();
+
+  const typeStyle = theme.typography[typography];
+
+  let textStyle: TextStyle = {
+    ...typeStyle,
+    ...getTextWeightStyle(androidSystemFont, typeStyle.fontWeight),
+  };
+
+  // Set specific letter spacing for android phones, as 0.4 leads to errors on newer pixel phones
+  // https://github.com/facebook/react-native/issues/35039
+  if (
+    Platform.OS === 'android' &&
+    textStyle.letterSpacing !== undefined &&
+    fontScale < 1.0
+  ) {
+    textStyle = {
+      ...textStyle,
+      letterSpacing: textStyle.letterSpacing - 0.05,
+    };
+  }
+
+  return textStyle;
 };
 
 function useColor(

@@ -4,7 +4,6 @@ import {Alert, View} from 'react-native';
 import {TripPattern} from '@atb/api/types/trips';
 import {useNow} from '@atb/utils/use-now';
 
-import {TripSearchTime} from '../../stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {useSingleTripQuery} from '@atb/modules/trip-patterns';
 import Animated, {
   Easing,
@@ -13,7 +12,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import {ContentHeading} from '@atb/components/heading';
 import {translation as _, useTranslation} from '@atb/translations';
-import {ResultRow} from '../../stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultRow';
+import {
+  TravelCard,
+  type TripSearchTime,
+} from '@atb/screen-components/travel-card';
 import {useStoredTripPatterns} from './StoredTripPatternsContext';
 import {wrapWithExperimentalFeatureToggledComponent} from '@atb/modules/experimental';
 import {RightActionKind, SwipeableResultRow} from './SwipeableResultRow';
@@ -137,7 +139,7 @@ const StoredTripPatternRow: React.FC<{
 
   return (
     <SwipeableResultRow onRightAction={onRightAction} rightActionKind="delete">
-      <ResultRow
+      <TravelCard
         tripPattern={updatedTripPattern}
         onDetailsPressed={onDetailsPressed}
         resultIndex={resultIndex}

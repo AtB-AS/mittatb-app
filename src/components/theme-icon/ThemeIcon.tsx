@@ -17,11 +17,13 @@ import {
 import React from 'react';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
+type ThemeIconSize = keyof Theme['icon']['size'];
+
 export type IconColor = ContrastColor | TextColor | Statuses | ColorValue;
 export type ThemeIconProps = {
   svg(props: SvgProps): React.JSX.Element;
   color?: IconColor;
-  size?: keyof Theme['icon']['size'];
+  size?: ThemeIconSize;
   customSize?: number;
   notification?: Omit<NotificationIndicatorProps, 'iconSize'>;
   allowFontScaling?: boolean;
@@ -37,20 +39,13 @@ export const ThemeIcon = ({
   allowFontScaling = true,
   ...props
 }: ThemeIconProps): React.JSX.Element | null => {
-  const {theme} = useThemeContext();
-  const fontScale = useFontScale();
   const fill = useColor(color);
+  const iconSize = useIconSize(size, allowFontScaling, customSize);
 
   if (!SvgComponent) {
     notifyBugsnag('Undefined SVG provided to ThemeIcon');
     return null;
   }
-
-  const unscaledIconSize = customSize ?? theme.icon.size[size];
-
-  const iconSize = allowFontScaling
-    ? unscaledIconSize * fontScale
-    : unscaledIconSize;
 
   const settings = {
     fill,
@@ -67,6 +62,17 @@ export const ThemeIcon = ({
       )}
     </View>
   );
+};
+
+export const useIconSize = (
+  size: ThemeIconSize = 'normal',
+  allowFontScaling: boolean = true,
+  customSize: number | undefined = undefined,
+): number => {
+  const {theme} = useThemeContext();
+  const fontScale = useFontScale();
+  const unscaledIconSize = customSize ?? theme.icon.size[size];
+  return allowFontScaling ? unscaledIconSize * fontScale : unscaledIconSize;
 };
 
 function useColor(color?: IconColor) {
