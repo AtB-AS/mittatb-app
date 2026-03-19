@@ -2,7 +2,6 @@ import {Button} from '@atb/components/button';
 import {
   FareZone,
   findReferenceDataById,
-  PreassignedFareProduct,
   SupplementProduct,
   useFirestoreConfigurationContext,
   UserProfile,
@@ -25,6 +24,7 @@ import {
   useFareContracts,
   useGetFareProductsQuery,
   useGetSupplementProductsQuery,
+  type PreassignedFareProduct,
 } from '@atb/modules/ticketing';
 import {FareContractInfoDetailsProps} from './sections/FareContractInfoDetailsSectionItem';
 import {FareContractType, getAccesses} from '@atb-as/utils/lib/fare-contract';

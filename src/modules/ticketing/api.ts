@@ -1,6 +1,10 @@
 import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
-import {AddPaymentMethodResponse, ReserveOfferRequest} from '.';
+import {
+  AddPaymentMethodResponse,
+  PreassignedFareProduct,
+  ReserveOfferRequest,
+} from '.';
 import {FareContractType, type TicketOffer} from '@atb-as/utils';
 import {client} from '@atb/api';
 import {
@@ -14,10 +18,7 @@ import {
   TicketRecipientType,
   ConsumableSchoolCarnetResponse,
 } from './types';
-import {
-  PreassignedFareProduct,
-  SupplementProduct,
-} from '@atb/modules/configuration';
+import {SupplementProduct} from '@atb/modules/configuration';
 import {convertIsoStringFieldsToDate} from '@atb/utils/date';
 import capitalize from 'lodash/capitalize';
 import qs from 'query-string';

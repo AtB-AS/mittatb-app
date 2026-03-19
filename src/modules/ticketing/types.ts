@@ -1,3 +1,29 @@
+import {z} from 'zod';
+import {
+  Limitations as BaseLimitations,
+  PreassignedFareProduct as BasePreassignedFareProduct,
+} from '@atb-as/config-specs';
+import {optionalNullish} from '@atb-as/config-specs/lib/utils/nullish';
+
+const UserProfileLimitation = z.object({
+  userProfileRef: z.string(),
+  maxCount: optionalNullish(z.number()),
+});
+
+export const ProductServiceLimitations = BaseLimitations.extend({
+  userProfiles: z.array(UserProfileLimitation),
+  userProfileRefs: optionalNullish(z.array(z.string())),
+  maxCountPerOrder: optionalNullish(z.number().int()),
+});
+export type ProductServiceLimitations = z.infer<
+  typeof ProductServiceLimitations
+>;
+
+export const PreassignedFareProduct = BasePreassignedFareProduct.extend({
+  limitations: ProductServiceLimitations,
+});
+export type PreassignedFareProduct = z.infer<typeof PreassignedFareProduct>;
+
 export type UsedAccessStatus = 'valid' | 'upcoming' | 'inactive';
 
 export type LastUsedAccessState = {

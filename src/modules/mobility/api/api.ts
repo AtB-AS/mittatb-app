@@ -1,7 +1,7 @@
 import {client} from '@atb/api';
 import {OperatorBenefitId} from '@atb-as/config-specs/lib/mobility';
 import {z} from 'zod';
-import {PreassignedFareProduct} from '@atb/modules/configuration';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {RequestError, isErrorResponse} from '@atb/api/utils';
 
 const VoucherBenefit = z.object({

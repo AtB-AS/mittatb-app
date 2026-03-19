@@ -1,4 +1,4 @@
-import {PreassignedFareProduct} from '@atb/modules/configuration';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import type {
   PurchaseSelectionBuilderInput,
   PurchaseSelectionType,
