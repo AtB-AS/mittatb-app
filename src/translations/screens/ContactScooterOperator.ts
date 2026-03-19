@@ -1,7 +1,7 @@
 import {SupportType} from '@atb/api/types/mobility';
 import {translation as _} from '../commons';
 
-export const ContactScooterOperatorTexts = {
+export const ContactShmoOperatorTexts = {
   title: (operatorName: string) => {
     return _(
       `Kontakt ${operatorName}`,

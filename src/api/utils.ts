@@ -132,13 +132,13 @@ export const getOperatorNameById = (
     (operator) => operator.id === operatorId,
   );
 
-  const translation = operator?.name.translations.find(
+  const translation = operator?.name.translation?.find(
     (t) => mapLanguageToLangCode(t.language) === lang,
   );
 
   if (translation) {
     return translation.value;
   } else {
-    return operator?.name.translations?.[0]?.value;
+    return operator?.name.translation?.[0]?.value;
   }
 };

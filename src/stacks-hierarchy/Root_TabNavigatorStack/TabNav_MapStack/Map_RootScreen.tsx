@@ -9,7 +9,7 @@ import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
-import {ScooterHelpScreenProps} from '@atb/stacks-hierarchy/Root_ScooterHelp/Root_ScooterHelpScreen';
+import {ShmoHelpScreenProps} from '@atb/stacks-hierarchy/Root_ShmoHelp/Root_ShmoHelpScreen';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useGetHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
@@ -88,9 +88,9 @@ export const Map_RootScreen = ({
     [navigation],
   );
 
-  const navigateToScooterSupport = useCallback(
-    (params: ScooterHelpScreenProps['route']['params']) => {
-      navigation.navigate('Root_ScooterHelpScreen', params);
+  const navigateToShmoSupport = useCallback(
+    (params: ShmoHelpScreenProps['route']['params']) => {
+      navigation.navigate('Root_ShmoHelpScreen', params);
     },
     [navigation],
   );
@@ -155,7 +155,7 @@ export const Map_RootScreen = ({
       navigateToQuay={navigateToQuay}
       navigateToDetails={navigateToDetails}
       navigateToTripSearch={navigateToTripSearch}
-      navigateToScooterSupport={navigateToScooterSupport}
+      navigateToShmoSupport={navigateToShmoSupport}
       navigateToScooterOnboarding={navigateToScooterOnboarding}
       navigateToReportParkingViolation={navigateToReportParkingViolation}
       navigateToParkingPhoto={navigateToParkingPhoto}

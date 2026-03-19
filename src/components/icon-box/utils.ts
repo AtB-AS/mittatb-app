@@ -28,6 +28,8 @@ import {
   Plane,
   Scooter,
   Metro,
+  EbikeFill,
+  Ebike,
 } from '@atb/assets/svg/mono-icons/transportation';
 import {Check} from '@atb/assets/svg/mono-icons/status';
 import {Theme} from '@atb/theme';
@@ -71,6 +73,9 @@ export function getTransportModeSvg(
     case 'car':
       return {svg: fill ? CarFill : Car, name: 'Car'};
     case 'bicycle':
+      if (subMode === 'ebicycle') {
+        return {svg: fill ? EbikeFill : Ebike, name: 'EBike'};
+      }
       return {svg: fill ? BicycleFill : Bicycle, name: 'Bicycle'};
     case 'scooter':
       return {svg: fill ? ScooterFill : Scooter, name: 'Scooter'};

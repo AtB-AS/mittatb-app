@@ -14,7 +14,7 @@ import {
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type Props = {
-  currentFuelPercent: number | undefined;
+  currentFuelPercent: number | undefined | null;
   currentRangeMeters: number;
   formFactor?: FormFactor;
 };

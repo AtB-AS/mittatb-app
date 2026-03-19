@@ -51,7 +51,7 @@ import {
   Root_ParkingViolationsPhotoScreen,
   Root_ParkingViolationsQrScreen,
   Root_ParkingViolationsSelectScreen,
-} from '@atb/stacks-hierarchy/Root_ScooterHelp';
+} from '@atb/stacks-hierarchy/Root_ShmoHelp';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
 import {Root_TicketInformationScreen} from './Root_TicketInformationScreen/Root_TicketInformationScreen';
@@ -62,10 +62,9 @@ import {useRegisterIntercomUser} from '@atb/modules/chat';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {ForceUpdateScreen} from '@atb/screen-components/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version';
-import {Root_ScooterHelpScreen} from './Root_ScooterHelp/Root_ScooterHelpScreen';
 import {Root_ShmoOnboardingScreen} from './Root_ShmoOnboardingScreen';
-import {Root_ContactScooterOperatorScreen} from './Root_ScooterHelp/Root_ContactScooterOperatorScreen';
-import {Root_ContactScooterOperatorConfirmationScreen} from './Root_ScooterHelp/Root_ContactScooterOperatorConfirmationScreen';
+import {Root_ContactShmoOperatorScreen} from './Root_ShmoHelp/Root_ContactShmoOperatorScreen';
+import {Root_ContactShmoOperatorConfirmationScreen} from './Root_ShmoHelp/Root_ContactShmoOperatorConfirmationScreen';
 import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 import {parseParamAsInt} from './utils';
 import {AnalyticsContextProvider} from '@atb/modules/analytics';
@@ -85,6 +84,7 @@ import {
   useTicketingContext,
 } from '@atb/modules/ticketing';
 import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
+import {Root_ShmoHelpScreen} from './Root_ShmoHelp/Root_ShmoHelpScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -440,20 +440,20 @@ export const RootStack = () => {
                 component={Root_ConfirmationScreen}
               />
               <Stack.Screen
-                name="Root_ScooterHelpScreen"
-                component={Root_ScooterHelpScreen}
+                name="Root_ShmoHelpScreen"
+                component={Root_ShmoHelpScreen}
               />
               <Stack.Screen
                 name="Root_ShmoOnboardingScreen"
                 component={Root_ShmoOnboardingScreen}
               />
               <Stack.Screen
-                name="Root_ContactScooterOperatorScreen"
-                component={Root_ContactScooterOperatorScreen}
+                name="Root_ContactShmoOperatorScreen"
+                component={Root_ContactShmoOperatorScreen}
               />
               <Stack.Screen
-                name="Root_ContactScooterOperatorConfirmationScreen"
-                component={Root_ContactScooterOperatorConfirmationScreen}
+                name="Root_ContactShmoOperatorConfirmationScreen"
+                component={Root_ContactShmoOperatorConfirmationScreen}
               />
               <Stack.Screen
                 name="Root_ParkingViolationsSelectScreen"

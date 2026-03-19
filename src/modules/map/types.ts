@@ -13,7 +13,6 @@ import {
   BikeStationFragment,
   CarStationFragment,
 } from '@atb/api/types/generated/fragments/stations';
-import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {z} from 'zod';
 
 // prefixes added to distinguish between geojson types and generated mobility api types, as they are not exact matches
@@ -28,6 +27,8 @@ import {
 import {TranslatedString} from '@atb/translations';
 import {GeofencingZoneCode, GeofencingZoneStyle} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
+import {ShmoHelpParams} from '@atb/stacks-hierarchy';
+import {Vehicle} from '@atb/api/types/mobility';
 
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
@@ -59,11 +60,6 @@ export type NavigateToDetailsCallback = (
   isTripCancelled?: boolean,
 ) => void;
 
-export type ScooterHelpParams = {operatorId: string} & (
-  | {vehicleId: string}
-  | {bookingId: string}
-);
-
 export type MapProps = {
   isFocused: boolean;
   tabBarHeight: number;
@@ -72,7 +68,7 @@ export type MapProps = {
   navigateToQuay: NavigateToQuayCallback;
   navigateToDetails: NavigateToDetailsCallback;
   navigateToTripSearch: NavigateToTripSearchCallback;
-  navigateToScooterSupport: (params: ScooterHelpParams) => void;
+  navigateToShmoSupport: (params: ShmoHelpParams) => void;
   navigateToScooterOnboarding: () => void;
   navigateToReportParkingViolation: () => void;
   navigateToParkingPhoto: (bookingId: string) => void;
@@ -173,7 +169,7 @@ export type SelectedFeatureIdProp = {
 };
 
 export type AutoSelectableMapItem =
-  | VehicleExtendedFragment
+  | Vehicle
   | BikeStationFragment
   | CarStationFragment;
 

@@ -30,6 +30,31 @@ export const MobilityTexts = {
         return _('Annet', 'Other', 'Anna');
     }
   },
+  bikeNameByPropulsionType: (propulsionType: PropulsionType | undefined) => {
+    switch (propulsionType) {
+      case PropulsionType.ElectricAssist:
+      case PropulsionType.Electric:
+        return _(
+          'Elektrisk bysykkel',
+          'Electric city bike',
+          'Elektrisk bysykkel',
+        );
+      case PropulsionType.Human:
+        return _('Bysykkel', 'City bike', 'Bysykkel');
+      default:
+        return _('Bysykkel', 'City bike', 'Bysykkel');
+    }
+  },
+  freeBikes: (amount: string) => {
+    return _(amount + ' ledige', amount + ' available', amount + ' ledige');
+  },
+  freeBikeParkingSpaces: (amount: string) => {
+    return _(
+      amount + ' ledige plasser',
+      amount + ' available spaces',
+      amount + ' ledige plasser',
+    );
+  },
   finishing: {
     button: _('Ta bilde', 'Take a photo', 'Ta eit bilde'),
     header: _(

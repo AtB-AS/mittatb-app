@@ -8,7 +8,10 @@ import {
 } from '@atb/translations';
 import React, {useCallback} from 'react';
 import {ScrollView, View} from 'react-native';
-import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
+import {
+  RootStackScreenProps,
+  ShmoHelpParams,
+} from '../stacks-hierarchy/navigation-types';
 import {useTimeContext} from '@atb/modules/time';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
@@ -18,7 +21,6 @@ import {ErrorBoundary} from '@atb/screen-components/error-boundary';
 import {hasShmoBookingId} from '@atb/modules/fare-contracts';
 import SvgInfo from '@atb/assets/svg/mono-icons/status/Info';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
-import type {ScooterHelpScreenProps} from '@atb/stacks-hierarchy/Root_ScooterHelp/Root_ScooterHelpScreen';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {useApplePassPresentationSuppression} from '@atb/modules/native-bridges';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
@@ -75,9 +77,9 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       transitionOverride: 'slide-from-right',
     });
 
-  const navigateToScooterSupport = useCallback(
-    (params: ScooterHelpScreenProps['route']['params']) => {
-      navigation.navigate('Root_ScooterHelpScreen', params);
+  const navigateToShmoSupport = useCallback(
+    (params: ShmoHelpParams) => {
+      navigation.navigate('Root_ShmoHelpScreen', params);
     },
     [navigation],
   );
@@ -132,7 +134,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
               now={serverNow}
               isSentFareContract={isSentFareContract}
               onReceiptNavigate={onReceiptNavigate}
-              onSupportNavigate={navigateToScooterSupport}
+              onSupportNavigate={navigateToShmoSupport}
               onNavigateToMap={onNavigateToMap}
               onNavigateToBonusScreen={onNavigateToBonusScreen}
               onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}

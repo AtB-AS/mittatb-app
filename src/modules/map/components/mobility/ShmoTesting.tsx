@@ -20,14 +20,14 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useVehicle} from '@atb/modules/mobility';
 import {useMapContext} from '../../MapContext';
-import {ScooterHelpParams} from '../../types';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 
 type ShmoTestingProps = {
-  navigateToScooterSupport: (params: ScooterHelpParams) => void;
+  navigateToShmoSupport: (params: ShmoHelpParams) => void;
 };
 
-export const ShmoTesting = ({navigateToScooterSupport}: ShmoTestingProps) => {
+export const ShmoTesting = ({navigateToShmoSupport}: ShmoTestingProps) => {
   const {mapState} = useMapContext();
   const selectedVehicleId =
     mapState.feature?.properties?.id ?? mapState.assetId ?? '';
@@ -228,12 +228,12 @@ export const ShmoTesting = ({navigateToScooterSupport}: ShmoTestingProps) => {
         accessibilityRole="button"
         onPress={() => {
           if (vehicleId) {
-            navigateToScooterSupport({
+            navigateToShmoSupport({
               vehicleId: vehicleId,
               operatorId: operatorId ?? 'YRY:Operator:Ryde',
             });
           } else if (activeShmoBooking) {
-            navigateToScooterSupport({
+            navigateToShmoSupport({
               operatorId: operatorId ?? 'YRY:Operator:Ryde',
               bookingId: activeShmoBooking.bookingId,
             });

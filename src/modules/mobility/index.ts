@@ -1,5 +1,5 @@
-export {BicycleSheet} from './components/BicycleSheet';
-export {BikeStationBottomSheet} from './components/BikeStationBottomSheet';
+export {BicycleSheet} from './components/sheets/BicycleSheet';
+export {BikeStationBottomSheet} from './components/sheets/BikeStationBottomSheet';
 export {BrandingImage} from './components/BrandingImage';
 export {CarSharingStationBottomSheet} from './components/CarSharingStationBottomSheet';
 export {MapFilter} from './components/filter/MapFilter';

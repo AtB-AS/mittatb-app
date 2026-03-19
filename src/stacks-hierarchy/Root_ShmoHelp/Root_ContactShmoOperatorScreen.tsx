@@ -11,7 +11,7 @@ import {
   TextInputSectionItem,
 } from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
-import {ContactScooterOperatorTexts} from '@atb/translations/screens/ContactScooterOperator';
+import {ContactShmoOperatorTexts} from '@atb/translations/screens/ContactScooterOperator';
 import {
   MAX_SUPPORT_COMMENT_LENGTH,
   SendSupportRequestBody,
@@ -31,17 +31,19 @@ import {CustomerProfile} from '@atb/api/types/profile';
 import {useNavigation} from '@react-navigation/native';
 import {useOperators} from '@atb/modules/mobility';
 
-export type Root_ContactScooterOperatorScreenProps =
-  RootStackScreenProps<'Root_ContactScooterOperatorScreen'>;
+export type Root_ContactShmoOperatorScreenProps =
+  RootStackScreenProps<'Root_ContactShmoOperatorScreen'>;
 
-export const Root_ContactScooterOperatorScreen = ({
+export const Root_ContactShmoOperatorScreen = ({
   route,
-}: Root_ContactScooterOperatorScreenProps) => {
+}: Root_ContactShmoOperatorScreenProps) => {
   const {operatorId} = route.params;
   const vehicleId =
     'vehicleId' in route.params ? route.params?.vehicleId : undefined;
   const bookingId =
     'bookingId' in route.params ? route.params?.bookingId : undefined;
+  const stationId =
+    'stationId' in route.params ? route.params?.stationId : undefined;
   const operators = useOperators();
   const operatorName = operators.byId(operatorId)?.name;
   const styles = useStyles();
@@ -49,7 +51,7 @@ export const Root_ContactScooterOperatorScreen = ({
   const navigation = useNavigation<RootNavigationProps>();
 
   const onSuccess = () => {
-    navigation.navigate('Root_ContactScooterOperatorConfirmationScreen', {
+    navigation.navigate('Root_ContactShmoOperatorConfirmationScreen', {
       operatorName: operatorName ?? '',
       transitionOverride: 'slide-from-right',
     });
@@ -66,10 +68,11 @@ export const Root_ContactScooterOperatorScreen = ({
     onSubmit,
     showError,
     supportRequestStatus,
-  } = useScooterContactFormController(
+  } = useShmoContactFormController(
     operatorId,
     vehicleId,
     bookingId,
+    stationId,
     onSuccess,
   );
 
@@ -77,13 +80,13 @@ export const Root_ContactScooterOperatorScreen = ({
     <View style={styles.container}>
       <FullScreenHeader
         leftButton={{type: 'back'}}
-        title={t(ContactScooterOperatorTexts.title(operatorName ?? ''))}
+        title={t(ContactShmoOperatorTexts.title(operatorName ?? ''))}
       />
       <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
         <ScrollView keyboardShouldPersistTaps="handled" centerContent={true}>
           <View style={styles.contentContainer}>
             <ContentHeading
-              text={t(ContactScooterOperatorTexts.supportType.header)}
+              text={t(ContactShmoOperatorTexts.supportType.header)}
             />
             <RadioGroupSection<SupportType>
               keyExtractor={(supportType) => supportType}
@@ -94,7 +97,7 @@ export const Root_ContactScooterOperatorScreen = ({
               }
               itemToText={(supportType) =>
                 t(
-                  ContactScooterOperatorTexts.supportType.supportTypeDescription(
+                  ContactShmoOperatorTexts.supportType.supportTypeDescription(
                     supportType,
                   ),
                 )
@@ -103,24 +106,22 @@ export const Root_ContactScooterOperatorScreen = ({
             {requestBody.supportType === SupportType.UNABLE_TO_CLOSE && (
               <MessageInfoBox
                 message={t(
-                  ContactScooterOperatorTexts.supportType.noEndInfo(
+                  ContactShmoOperatorTexts.supportType.noEndInfo(
                     operatorName ?? '',
                   ),
                 )}
                 type="info"
               />
             )}
-            <ContentHeading
-              text={t(ContactScooterOperatorTexts.comment.header)}
-            />
+            <ContentHeading text={t(ContactShmoOperatorTexts.comment.header)} />
             <Section>
               <TextInputSectionItem
                 value={requestBody.comment ?? ''}
                 onChangeText={(comment) =>
                   setRequestBody((prev) => ({...prev, comment}))
                 }
-                label={t(ContactScooterOperatorTexts.comment.label)}
-                placeholder={t(ContactScooterOperatorTexts.comment.placeholder)}
+                label={t(ContactShmoOperatorTexts.comment.label)}
+                placeholder={t(ContactShmoOperatorTexts.comment.placeholder)}
                 inlineLabel={false}
                 multiline={true}
                 maxLength={MAX_SUPPORT_COMMENT_LENGTH}
@@ -129,7 +130,7 @@ export const Root_ContactScooterOperatorScreen = ({
                 errorText={
                   !isCommentValid && showError
                     ? t(
-                        ContactScooterOperatorTexts.comment.errorMessage(
+                        ContactShmoOperatorTexts.comment.errorMessage(
                           MAX_SUPPORT_COMMENT_LENGTH,
                         ),
                       )
@@ -138,7 +139,7 @@ export const Root_ContactScooterOperatorScreen = ({
               />
             </Section>
             <ContentHeading
-              text={t(ContactScooterOperatorTexts.contactInfo.header)}
+              text={t(ContactShmoOperatorTexts.contactInfo.header)}
             />
             <Section>
               <TextInputSectionItem
@@ -152,9 +153,9 @@ export const Root_ContactScooterOperatorScreen = ({
                     },
                   }))
                 }
-                label={t(ContactScooterOperatorTexts.contactInfo.email.label)}
+                label={t(ContactShmoOperatorTexts.contactInfo.email.label)}
                 placeholder={t(
-                  ContactScooterOperatorTexts.contactInfo.email.placeholder,
+                  ContactShmoOperatorTexts.contactInfo.email.placeholder,
                 )}
                 showClear
                 inlineLabel={false}
@@ -163,12 +164,9 @@ export const Root_ContactScooterOperatorScreen = ({
                 autoCapitalize="none"
                 errorText={
                   !isEmailValid && showError
-                    ? t(
-                        ContactScooterOperatorTexts.contactInfo.email
-                          .errorMessage,
-                      )
+                    ? t(ContactShmoOperatorTexts.contactInfo.email.errorMessage)
                     : !isContactInfoPresent && showError
-                      ? t(ContactScooterOperatorTexts.contactInfo.errorMessage)
+                      ? t(ContactShmoOperatorTexts.contactInfo.errorMessage)
                       : undefined
                 }
               />
@@ -195,31 +193,28 @@ export const Root_ContactScooterOperatorScreen = ({
                   }))
                 }
                 value={requestBody.contactInformationEndUser.phoneNumber ?? ''}
-                label={t(ContactScooterOperatorTexts.contactInfo.phone.label)}
+                label={t(ContactShmoOperatorTexts.contactInfo.phone.label)}
                 placeholder={t(
-                  ContactScooterOperatorTexts.contactInfo.phone.placeholder,
+                  ContactShmoOperatorTexts.contactInfo.phone.placeholder,
                 )}
                 showClear
                 textContentType="telephoneNumber"
                 errorText={
                   !isPhoneNumberValid && showError
-                    ? t(
-                        ContactScooterOperatorTexts.contactInfo.phone
-                          .errorMessage,
-                      )
+                    ? t(ContactShmoOperatorTexts.contactInfo.phone.errorMessage)
                     : !isContactInfoPresent && showError
-                      ? t(ContactScooterOperatorTexts.contactInfo.errorMessage)
+                      ? t(ContactShmoOperatorTexts.contactInfo.errorMessage)
                       : undefined
                 }
               />
             </Section>
             <View style={styles.description}>
               <ThemeText typography="body__s">
-                {t(ContactScooterOperatorTexts.location.header)}
+                {t(ContactShmoOperatorTexts.location.header)}
               </ThemeText>
               <ThemeText typography="body__xs">
                 {t(
-                  ContactScooterOperatorTexts.location.description(
+                  ContactShmoOperatorTexts.location.description(
                     operatorName ?? '',
                   ),
                 )}
@@ -230,7 +225,7 @@ export const Root_ContactScooterOperatorScreen = ({
               showError && (
                 <MessageInfoBox
                   message={t(
-                    ContactScooterOperatorTexts.submitError(operatorName ?? ''),
+                    ContactShmoOperatorTexts.submitError(operatorName ?? ''),
                   )}
                   type="error"
                 />
@@ -239,7 +234,7 @@ export const Root_ContactScooterOperatorScreen = ({
               loading={supportRequestStatus === 'pending'}
               expanded={true}
               mode="primary"
-              text={t(ContactScooterOperatorTexts.submitButton)}
+              text={t(ContactShmoOperatorTexts.submitButton)}
               onPress={onSubmit}
             />
           </View>
@@ -273,10 +268,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
  * This controller manages the state and logic for the contact form for scooyer operator support requests.
  * It handles form validation, data submission, and integration with user profile and booking information.
  */
-const useScooterContactFormController = (
+const useShmoContactFormController = (
   operatorId: string,
   vehicleId: string | undefined,
   bookingId: string | undefined,
+  stationId: string | undefined,
   onSuccess: () => void,
 ) => {
   const {phoneNumber: authPhoneNumberWithPrefix} = useAuthContext();
@@ -326,6 +322,7 @@ const useScooterContactFormController = (
         ...validatedRequestBody,
         assetId: vehicleId,
         bookingId,
+        stationId,
         ...(currentUserCoordinates && {
           place: {
             coordinates: {

@@ -1,13 +1,7 @@
 import {client} from '@atb/api/index';
-import {
-  GetVehicleQuery,
-  GetVehiclesQuery,
-  GetVehiclesQueryVariables,
-} from '@atb/api/types/generated/VehiclesQuery';
 import {stringifyUrl} from '@atb/api/utils';
 import qs from 'query-string';
 import {AxiosRequestConfig} from 'axios';
-import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
   GetBikeStationQuery,
   GetCarStationQuery,
@@ -30,50 +24,6 @@ import {
   ViolationsVehicleLookupQuery,
   ViolationsVehicleLookupQueryResult,
 } from '../types/mobility';
-
-type VehicleRequestOpts = Pick<AxiosRequestConfig, 'signal'>;
-
-export const getVehicles = (
-  {
-    lat,
-    lon,
-    range,
-    includeBicycles,
-    bicycleOperators,
-    includeScooters,
-    scooterOperators,
-  }: GetVehiclesQueryVariables,
-  opts?: VehicleRequestOpts,
-): Promise<GetVehiclesQuery> => {
-  if (!includeBicycles && !includeScooters) return Promise.resolve({});
-  const url = '/bff/v2/mobility/vehicles_v2';
-  const query = qs.stringify({
-    lat,
-    lon,
-    range: Math.ceil(range),
-    includeBicycles,
-    bicycleOperators,
-    includeScooters,
-    scooterOperators,
-  });
-  return client
-    .get<GetVehiclesQuery>(stringifyUrl(url, query), {
-      ...opts,
-    })
-    .then((res) => res.data ?? []);
-};
-
-export const getVehicle = (
-  id?: string,
-  opts?: VehicleRequestOpts,
-): Promise<VehicleExtendedFragment | null> => {
-  if (!id || id === '') return Promise.resolve(null);
-  const url = '/bff/v2/mobility/vehicle';
-  const query = qs.stringify({ids: id});
-  return client
-    .get<GetVehicleQuery>(stringifyUrl(url, query), opts)
-    .then((res) => res.data.vehicles?.[0] || null);
-};
 
 export const getStations = (
   {
