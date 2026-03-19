@@ -80,7 +80,6 @@ export function useBookingTrips({
           tripPatternDisplayTimeFilter(
             tp,
             travelDate ?? new Date().toISOString(),
-            selection.originFareContract?.endDate,
           ),
         )
     : [];

@@ -26,6 +26,7 @@ import {
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {findAllNotices, findAllSituations} from '@atb/modules/situations';
 import {Loading} from '@atb/components/loading';
+import {isAfter} from 'date-fns';
 
 type BookingTripSelectionProps = {
   selection: PurchaseSelectionType;
@@ -67,6 +68,14 @@ export function BookingTripSelection({
             key={`booking-trip-${i}`}
             onSelect={onSelect}
             tripPattern={tp}
+            isDisabled={
+              selection.originFareContract?.endDate
+                ? isAfter(
+                    tp.expectedStartTime,
+                    selection.originFareContract?.endDate,
+                  )
+                : false
+            }
           />
         ))
       ) : (
@@ -79,9 +88,14 @@ export function BookingTripSelection({
 type BookingTripProps = {
   tripPattern: TripPatternWithBooking;
   onSelect: (legs: TripPatternLegs) => void;
+  isDisabled?: boolean;
 };
 
-export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
+export function BookingTrip({
+  tripPattern,
+  onSelect,
+  isDisabled,
+}: BookingTripProps) {
   const {theme} = useThemeContext();
   const styles = useBookingTripStyles();
   const {t, language} = useTranslation();
@@ -97,7 +111,7 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
 
   return (
     <NativeBlockButton
-      disabled={!isAvailable}
+      disabled={!isAvailable || isDisabled}
       onPress={onPress}
       style={[
         styles.container,
@@ -105,7 +119,10 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
       ]}
     >
       <View style={styles.mainContent}>
-        <TripSelectionTag bookingInfo={tripPattern.booking} />
+        <TripSelectionTag
+          bookingInfo={tripPattern.booking}
+          disabledReason={isDisabled ? 'expired_fare_contract' : undefined}
+        />
         <MemoizedResultItem
           tripPattern={tripPattern}
           key={tripPattern.compressedQuery}
@@ -189,11 +206,20 @@ function EmptyState() {
  */
 function TripSelectionTag({
   bookingInfo,
+  disabledReason,
 }: {
   bookingInfo: TripPatternWithBooking['booking'];
+  disabledReason?: 'expired_fare_contract';
 }) {
   const {t} = useTranslation();
   const availableSeats = bookingInfo?.offer?.available ?? 0;
+  if (disabledReason === 'expired_fare_contract')
+    return (
+      <Tag
+        labels={[t(TicketingTexts.booking.expiredFareContract)]}
+        tagType="warning"
+      />
+    );
   if (bookingInfo.availability === 'closed')
     return (
       <Tag labels={[t(TicketingTexts.booking.closed)]} tagType="warning" />

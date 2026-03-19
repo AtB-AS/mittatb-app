@@ -290,6 +290,11 @@ const TicketingTexts = {
       'Velg ein annan dag eller juster tidspunkt',
     ),
     select: _('Velg', 'Select', 'Velg'),
+    expiredFareContract: _(
+      'Utløpt billett',
+      'Expired ticket',
+      'Utgått billett',
+    ),
   },
 };
 

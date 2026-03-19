@@ -24,12 +24,8 @@ export function tripPatternAvailabilityFilter(
 export function tripPatternDisplayTimeFilter(
   tp: TripPatternWithBooking,
   travelDate: string,
-  latestDate?: string,
 ): boolean {
   const isAfterSearchTime = isEqualOrAfter(tp.expectedStartTime, travelDate);
   const isBeforeEndOfDay = isBefore(tp.expectedStartTime, endOfDay(travelDate));
-  const isBeforeLatestDate = latestDate
-    ? isBefore(tp.expectedStartTime, latestDate)
-    : true;
-  return isAfterSearchTime && isBeforeEndOfDay && isBeforeLatestDate;
+  return isAfterSearchTime && isBeforeEndOfDay;
 }
