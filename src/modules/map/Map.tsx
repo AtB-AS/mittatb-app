@@ -141,6 +141,8 @@ export const Map = (props: MapProps) => {
     selectedFeatureIsAVehicle ? selectedFeature?.properties?.id : undefined,
   );
 
+  const activeFeatureId =
+    activeShmoBooking?.asset.id ?? selectedFeature?.properties?.id;
   const systemId =
     vehicle?.system.id ?? activeShmoBooking?.asset.systemId ?? null;
   const vehicleTypeId =
@@ -413,6 +415,12 @@ export const Map = (props: MapProps) => {
                 ? (mapPropertiesRef.current?.zoom ?? DEFAULT_ZOOM_LEVEL)
                 : undefined
             }
+            pitch={
+              isMapPitchEnabled &&
+              activeShmoBooking?.state === ShmoBookingState.IN_USE
+                ? 60
+                : 0
+            }
             centerCoordinate={
               !initMapLoaded ? mapPropertiesRef.current?.center : undefined
             }
@@ -451,7 +459,7 @@ export const Map = (props: MapProps) => {
             ))}
 
           <NationalStopRegistryFeatures
-            selectedFeaturePropertyId={selectedFeature?.properties?.id}
+            selectedFeaturePropertyId={activeFeatureId}
             onMapItemClick={onMapItemClick}
           />
 
@@ -463,7 +471,7 @@ export const Map = (props: MapProps) => {
 
           {!!shouldShowVehiclesAndStations && (
             <VehiclesAndStations
-              selectedFeatureId={selectedFeature?.properties?.id}
+              selectedFeatureId={activeFeatureId}
               onPress={onMapItemClick}
               showVehicles={showVehicles}
               showStations={showStations}
