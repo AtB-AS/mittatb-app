@@ -4,10 +4,10 @@ import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {
   FareProductTypeConfig,
-  PreassignedFareProduct,
   FareZone,
   getReferenceDataName,
 } from '@atb/modules/configuration';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {
   GlobalMessage,
   GlobalMessageContextEnum,

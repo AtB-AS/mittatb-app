@@ -1,15 +1,15 @@
 import {
   FareProductTypeConfig,
-  PreassignedFareProduct,
   FareZone,
   UserProfile,
 } from '@atb-as/config-specs';
+import {BaggageProduct} from '@atb/modules/configuration';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import type {
   PurchaseSelectionBuilderInput,
   PurchaseSelectionType,
 } from '../types';
 import type {FareZoneWithMetadata} from '@atb/fare-zones-selector';
-import {BaggageProduct} from '@atb/modules/configuration';
 
 export const TEST_TYPE_CONFIG: FareProductTypeConfig = {
   type: 'single',

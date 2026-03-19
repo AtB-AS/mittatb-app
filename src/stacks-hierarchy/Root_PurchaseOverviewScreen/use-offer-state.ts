@@ -1,11 +1,11 @@
 import z from 'zod';
 import {CancelToken as CancelTokenStatic} from '@atb/api';
 import {toAxiosErrorKind, AxiosErrorKind} from '@atb/api/utils';
-import {PreassignedFareProduct} from '@atb/modules/configuration';
 import {
   FlexDiscountLadder,
   type OfferSearchParams,
   searchOffers,
+  type PreassignedFareProduct,
 } from '@atb/modules/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';

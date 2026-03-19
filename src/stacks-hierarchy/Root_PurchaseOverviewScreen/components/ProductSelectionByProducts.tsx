@@ -5,10 +5,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {StyleProp, View, ViewStyle} from 'react-native';
-import {
-  PreassignedFareProduct,
-  getReferenceDataName,
-} from '@atb/modules/configuration';
+import {getReferenceDataName} from '@atb/modules/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {
   HeaderSectionItem,
@@ -18,6 +15,7 @@ import {
 import {
   useGetFareProductsQuery,
   useTicketingContext,
+  type PreassignedFareProduct,
 } from '@atb/modules/ticketing';
 import {ProductDescriptionToggle} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductDescriptionToggle';
 import {usePreferencesContext} from '@atb/modules/preferences';

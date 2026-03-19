@@ -1,4 +1,5 @@
-import {PreassignedFareProduct, type FareZone} from '@atb-as/config-specs';
+import type {FareZone} from '@atb-as/config-specs';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {isSelectableZone} from './utils';
 

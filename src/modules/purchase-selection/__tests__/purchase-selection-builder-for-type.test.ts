@@ -320,7 +320,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       preassignedFareProducts: [
         {
           ...TEST_PRODUCT,
-          limitations: {userProfiles: [{userProfileRef: 'UP3'}]},
+          limitations: {
+            userProfiles: [{userProfileRef: 'UP3'}],
+          },
         },
       ],
       userProfiles: [
