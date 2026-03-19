@@ -64,6 +64,7 @@ export function useSupplementProductPurchaseSelection({
       .forType(supplementProductFareProduct.type)
       .product(supplementProductFareProduct) // This is necessary because we might have several supplement products, so getDefaultProduct in .forType can default to another.
       .originFareContract({
+        id: existingFareContract.id,
         product,
         endDate: travelRight.endDateTime.toISOString(),
       })

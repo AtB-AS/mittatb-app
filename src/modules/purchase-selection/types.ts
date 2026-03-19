@@ -13,6 +13,7 @@ import type {Leg} from '@atb/api/types/trips';
 import type {SupplementProductWithCount} from '@atb/modules/fare-contracts';
 
 export type FareContractStub = {
+  id: string;
   product: PreassignedFareProduct;
   endDate: string; // Needs to be serializable
 };

@@ -13,8 +13,9 @@ describe('PurchaseSelectionBuilder originFareContract', () => {
     builder = createEmptyBuilder(TEST_INPUT);
   });
 
-  test('should add an  to the selection', () => {
+  test('should add an origin fareContract to the selection', () => {
     const originFareContract: FareContractStub = {
+      id: 'FC1',
       product: {...TEST_PRODUCT, id: 'ET1'},
       endDate: new Date().toISOString(),
     };
@@ -28,6 +29,7 @@ describe('PurchaseSelectionBuilder originFareContract', () => {
 
   test('should keep origin fareContract when using fromSelection', () => {
     const originFareContract: FareContractStub = {
+      id: 'FC1',
       product: {...TEST_PRODUCT, id: 'ET1'},
       endDate: new Date().toISOString(),
     };
@@ -43,6 +45,7 @@ describe('PurchaseSelectionBuilder originFareContract', () => {
 
   test('calling with undefined should delete any set origin fareContract', () => {
     const originFareContract = {
+      id: 'FC1',
       product: {...TEST_PRODUCT, id: 'ET1'},
       endDate: new Date().toISOString(),
     };
@@ -60,10 +63,12 @@ describe('PurchaseSelectionBuilder originFareContract', () => {
 
   test('should overwrite a previously set origin fareContract', () => {
     const oneOriginFareContract: FareContractStub = {
+      id: 'FC1',
       product: {...TEST_PRODUCT, id: 'ET1'},
       endDate: new Date().toISOString(),
     };
     const anotherOriginFareContract: FareContractStub = {
+      id: 'FC2',
       product: {...TEST_PRODUCT, id: 'ET2'},
       endDate: new Date().toISOString(),
     };
@@ -79,6 +84,7 @@ describe('PurchaseSelectionBuilder originFareContract', () => {
 
   test('should retain other properties when adding an origin FareContract', () => {
     const originFareContract: FareContractStub = {
+      id: 'FC1',
       product: {...TEST_PRODUCT, id: 'ET1'},
       endDate: new Date().toISOString(),
     };
