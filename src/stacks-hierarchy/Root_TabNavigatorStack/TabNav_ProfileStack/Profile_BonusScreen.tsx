@@ -19,13 +19,14 @@ import {
   ThemedBonusTransaction,
   ThemedTokenPhone,
 } from '@atb/theme/ThemedAssets';
-import {ContentHeading} from '@atb/components/heading';
+import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {
   BonusPriceTag,
   UserBonusBalanceContent,
   isActive,
   useBonusBalanceQuery,
 } from '@atb/modules/bonus';
+import {useIsEnrolled, KnownProgramId} from '@atb/modules/enrollment';
 import {useAuthContext} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {
@@ -39,11 +40,13 @@ import Intercom, {Space} from '@intercom/intercom-react-native';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
-import {MapPin} from '@atb/assets/svg/mono-icons/tab-bar';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {TFunc} from '@leile/lobo-t';
+import {ThemedBonusBag} from '../../../theme/ThemedAssets';
+
+const iconSize = 60;
 
 type Props = ProfileScreenProps<'Profile_BonusScreen'>;
 
@@ -56,6 +59,7 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
   const {bonusProducts, mobilityOperators} = useFirestoreConfigurationContext();
   const fontScale = useFontScale();
 
+  const isEnrolled = useIsEnrolled(KnownProgramId.BONUS);
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
 
@@ -73,6 +77,12 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
         title: t(BonusProgramTexts.bonusProfile.header.title),
         leftButton: {type: 'back'},
       }}
+      parallaxContent={(focusRef) => (
+        <ScreenHeading
+          ref={focusRef}
+          text={t(BonusProgramTexts.bonusProfile.header.title)}
+        />
+      )}
     >
       <View style={styles.container}>
         {authenticationType !== 'phone' && (
@@ -83,37 +93,56 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
             />
           </View>
         )}
+        {!isEnrolled && (
+          <>
+            <View style={styles.wantToJoinIcon}>
+              <ThemedBonusBag height={2 * iconSize} width={2 * iconSize} />
+            </View>
+            <Section>
+              <GenericSectionItem style={{gap: theme.spacing.large}}>
+                <ThemeText typography="heading__xl" color="primary">
+                  {t(BonusProgramTexts.bonusProfile.joinProgram.title)}
+                </ThemeText>
+                <ThemeText typography="body__m" color="primary">
+                  {t(BonusProgramTexts.bonusProfile.joinProgram.description)}
+                </ThemeText>
+                <ThemeText typography="body__m" color="primary">
+                  {t(BonusProgramTexts.bonusProfile.joinProgram.footer)}
+                </ThemeText>
+              </GenericSectionItem>
+            </Section>
 
-        <Section>
-          <GenericSectionItem>
-            <UserBonusBalanceContent />
-          </GenericSectionItem>
-        </Section>
-        {isBonusBalanceError && (
-          <MessageInfoBox
-            type="error"
-            message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
-          />
+            <Button
+              expanded
+              text={t(BonusProgramTexts.bonusProfile.joinProgram.button.text)}
+              style={styles.button}
+              accessibilityHint={t(
+                BonusProgramTexts.bonusProfile.joinProgram.button.a11yHint,
+              )}
+              onPress={() =>
+                navigation.navigate('Root_OnboardingCarouselStack', {
+                  configId: KnownProgramId.BONUS,
+                })
+              }
+            />
+          </>
         )}
 
-        <Button
-          expanded
-          rightIcon={{svg: MapPin}}
-          text={t(BonusProgramTexts.bonusProfile.mapButton.text)}
-          style={styles.button}
-          accessibilityHint={t(
-            BonusProgramTexts.bonusProfile.mapButton.a11yHint,
-          )}
-          onPress={() => {
-            navigation.navigate('Root_TabNavigatorStack', {
-              screen: 'TabNav_MapStack',
-              params: {
-                screen: 'Map_RootScreen',
-                params: {},
-              },
-            });
-          }}
-        />
+        {isEnrolled && (
+          <>
+            <Section>
+              <GenericSectionItem>
+                <UserBonusBalanceContent />
+              </GenericSectionItem>
+            </Section>
+            {isBonusBalanceError && (
+              <MessageInfoBox
+                type="error"
+                message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
+              />
+            )}
+          </>
+        )}
 
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.spendPoints.heading)}
@@ -213,6 +242,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     minHeight: theme.typography['heading__xl'].lineHeight,
   },
   noAccount: {marginTop: theme.spacing.xSmall},
+  wantToJoinIcon: {
+    alignItems: 'center',
+  },
   bonusProductsContainer: {
     gap: theme.spacing.medium,
   },
@@ -246,8 +278,6 @@ const bonusProductA11yLabel = (
     ) ?? '')
   );
 };
-
-const iconSize = 61;
 
 const HowPointsWork = () => {
   const {t} = useTranslation();
