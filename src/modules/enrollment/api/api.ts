@@ -1,9 +1,9 @@
 import {client} from '@atb/api';
-import {Enrollment, EnrollmentType} from '../types';
+import {Enrollment, EnrollmentType, Program, ProgramType} from '../types';
 import z from 'zod';
 
 export async function enrollIntoProgram(code: string) {
-  const url = 'enrollment/v2';
+  const url = 'enrollment/v2/enroll';
   const body = {code: code};
 
   return await client
@@ -22,4 +22,14 @@ export async function getEnrollments() {
       authWithIdToken: true,
     })
     .then((response) => z.array(Enrollment).parse(response.data));
+}
+
+export async function getProgram(programId: string) {
+  const url = `enrollment/v2/program/${programId}`;
+
+  return await client
+    .get<ProgramType>(url, {
+      authWithIdToken: true,
+    })
+    .then((response) => Program.parse(response.data));
 }
