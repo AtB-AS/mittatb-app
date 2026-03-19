@@ -12,7 +12,7 @@ import {Coordinates} from '@atb/utils/coordinates';
 import type {Leg} from '@atb/api/types/trips';
 import type {SupplementProductWithCount} from '@atb/modules/fare-contracts';
 
-export type ExistingTicket = {
+export type FareContractStub = {
   product: PreassignedFareProduct;
   endDate: string; // Needs to be serializable
 };
@@ -37,7 +37,7 @@ export type PurchaseSelectionType = {
   travelDate: string | undefined;
   legs: Leg[];
   isOnBehalfOf: boolean;
-  existingTicket?: ExistingTicket;
+  originFareContract?: FareContractStub;
 };
 
 /**
@@ -141,7 +141,7 @@ export type PurchaseSelectionBuilder = {
    * purchasing a supplementProduct to an existing Fare Contract.
    * @param p The information from the existing Fare Contract
    */
-  existingTicket: (p?: ExistingTicket) => PurchaseSelectionBuilder;
+  originFareContract: (p?: FareContractStub) => PurchaseSelectionBuilder;
 
   /**
    * Retrieve the built purchase selection. It is the purchase selection that

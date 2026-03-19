@@ -141,10 +141,10 @@ const createBuilder = (
       };
       return builder;
     },
-    existingTicket(existingTicket) {
+    originFareContract(originFareContract) {
       currentSelection = {
         ...currentSelection,
-        existingTicket,
+        originFareContract,
       };
       return builder;
     },

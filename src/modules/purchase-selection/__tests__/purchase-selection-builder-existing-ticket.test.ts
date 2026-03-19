@@ -1,77 +1,90 @@
-import {type ExistingTicket, PurchaseSelectionEmptyBuilder} from '../types';
+import {
+  type FareContractStub,
+  PurchaseSelectionEmptyBuilder,
+  type PurchaseSelectionType,
+} from '../types';
 import {createEmptyBuilder} from '../purchase-selection-builder';
 import {TEST_INPUT, TEST_PRODUCT, TEST_SELECTION} from './test-utils';
 
-describe('PurchaseSelectionBuilder existingTicket', () => {
+describe('PurchaseSelectionBuilder originFareContract', () => {
   let builder: PurchaseSelectionEmptyBuilder;
 
   beforeEach(() => {
     builder = createEmptyBuilder(TEST_INPUT);
   });
 
-  test('should add an existing ticket to the selection', () => {
-    const existingTicket: ExistingTicket = {
+  test('should add an  to the selection', () => {
+    const originFareContract: FareContractStub = {
       product: {...TEST_PRODUCT, id: 'ET1'},
       endDate: new Date().toISOString(),
     };
     const selection = builder
       .forType('single')
-      .existingTicket(existingTicket)
+      .originFareContract(originFareContract)
       .build();
 
-    expect(selection.existingTicket).toBe(existingTicket);
+    expect(selection.originFareContract).toBe(originFareContract);
   });
 
-  test('should keep existing ticket when using fromSelection', () => {
-    const existingTicket: ExistingTicket = {
+  test('should keep origin fareContract when using fromSelection', () => {
+    const originFareContract: FareContractStub = {
       product: {...TEST_PRODUCT, id: 'ET1'},
       endDate: new Date().toISOString(),
     };
-    const initialSelection = {...TEST_SELECTION, existingTicket};
+    const initialSelection: PurchaseSelectionType = {
+      ...TEST_SELECTION,
+      originFareContract: originFareContract,
+    };
 
     const newSelection = builder.fromSelection(initialSelection).build();
 
-    expect(newSelection.existingTicket).toBe(existingTicket);
+    expect(newSelection.originFareContract).toBe(originFareContract);
   });
 
-  test('calling with undefined should delete any set existing ticket', () => {
-    const existingProduct = {...TEST_PRODUCT, id: 'ET1'};
-    const selectionWithExistingProduct = {...TEST_SELECTION, existingProduct};
-    const selection = builder
-      .fromSelection(selectionWithExistingProduct)
-      .existingTicket(undefined)
-      .build();
-
-    expect(selection.existingTicket).toBeUndefined();
-  });
-
-  test('should overwrite a previously set existing ticket', () => {
-    const oneExistingTicket: ExistingTicket = {
+  test('calling with undefined should delete any set origin fareContract', () => {
+    const originFareContract = {
       product: {...TEST_PRODUCT, id: 'ET1'},
       endDate: new Date().toISOString(),
     };
-    const anotherExistingTicket: ExistingTicket = {
+    const selectionWithOriginFareContract: PurchaseSelectionType = {
+      ...TEST_SELECTION,
+      originFareContract,
+    };
+    const selection = builder
+      .fromSelection(selectionWithOriginFareContract)
+      .originFareContract(undefined)
+      .build();
+
+    expect(selection.originFareContract).toBeUndefined();
+  });
+
+  test('should overwrite a previously set origin fareContract', () => {
+    const oneOriginFareContract: FareContractStub = {
+      product: {...TEST_PRODUCT, id: 'ET1'},
+      endDate: new Date().toISOString(),
+    };
+    const anotherOriginFareContract: FareContractStub = {
       product: {...TEST_PRODUCT, id: 'ET2'},
       endDate: new Date().toISOString(),
     };
 
     const selection = builder
       .forType('single')
-      .existingTicket(oneExistingTicket)
-      .existingTicket(anotherExistingTicket)
+      .originFareContract(oneOriginFareContract)
+      .originFareContract(anotherOriginFareContract)
       .build();
 
-    expect(selection.existingTicket).toBe(anotherExistingTicket);
+    expect(selection.originFareContract).toBe(anotherOriginFareContract);
   });
 
-  test('should retain other properties when adding an existing ticket', () => {
-    const existingTicket: ExistingTicket = {
+  test('should retain other properties when adding an origin FareContract', () => {
+    const originFareContract: FareContractStub = {
       product: {...TEST_PRODUCT, id: 'ET1'},
       endDate: new Date().toISOString(),
     };
     const selection = builder
       .forType('single')
-      .existingTicket(existingTicket)
+      .originFareContract(originFareContract)
       .build();
 
     expect(selection.fareProductTypeConfig.type).toBe('single');

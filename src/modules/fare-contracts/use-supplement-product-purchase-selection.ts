@@ -63,7 +63,7 @@ export function useSupplementProductPurchaseSelection({
     return builder
       .forType(supplementProductFareProduct.type)
       .product(supplementProductFareProduct) // This is necessary because we might have several supplement products, so getDefaultProduct in .forType can default to another.
-      .existingTicket({
+      .originFareContract({
         product,
         endDate: travelRight.endDateTime.toISOString(),
       })
