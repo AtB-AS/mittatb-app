@@ -90,6 +90,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Loading} from '@atb/components/loading';
+import {parseDuration} from '@atb/utils/durations';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -602,6 +603,9 @@ function EstimatedCallRow({
 }: TripItemProps) {
   const {t} = useTranslation();
   const styles = useStopsStyle();
+  const {
+    preferences: {debugShowEmpiricalDelay},
+  } = usePreferencesContext();
 
   const {group, isStartOfGroup, isEndOfGroup, isStartOfServiceJourney} =
     call.metadata;
@@ -655,6 +659,12 @@ function EstimatedCallRow({
             color="secondary"
           >
             {call.quay.description}
+          </ThemeText>
+        )}
+        {debugShowEmpiricalDelay && call.empiricalDelay && (
+          <ThemeText typography="body__s" color="secondary">
+            Empirical delay: p50 {parseDuration(call.empiricalDelay.p50)} p90{' '}
+            {parseDuration(call.empiricalDelay.p90)}
           </ThemeText>
         )}
 

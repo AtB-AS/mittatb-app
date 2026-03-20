@@ -28,6 +28,7 @@ export type UserPreferences = {
   journeyAidEnabled?: boolean;
   debugPredictionInaccurate?: boolean;
   debugShowProgressBetweenStops?: boolean;
+  debugShowEmpiricalDelay?: boolean;
   showShmoTesting?: boolean;
 };
 
