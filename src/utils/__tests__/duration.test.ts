@@ -1,4 +1,4 @@
-import {parseDuration} from '../durations';
+import {formatDuration, parseDuration} from '../durations';
 
 describe('parseDuration', () => {
   describe('valid durations', () => {
@@ -60,5 +60,17 @@ describe('parseDuration', () => {
       expect(parseDuration('PT1H2M-3S')).toBeUndefined();
       expect(parseDuration('XYZ')).toBeUndefined();
     });
+  });
+});
+
+describe('formatDuration', () => {
+  test('formats duration in seconds into a string"', () => {
+    expect(formatDuration(3600)).toBe('1h 0m 0s');
+    expect(formatDuration(3600 + 60)).toBe('1h 1m 0s');
+    expect(formatDuration(3600 + 60 + 1)).toBe('1h 1m 1s');
+  });
+
+  test('formats parseDuration output', () => {
+    expect(formatDuration(parseDuration('PT1H1M1S')!)).toBe('1h 1m 1s');
   });
 });
