@@ -3,6 +3,8 @@ import {TripDetailsScreenComponent} from '@atb/screen-components/travel-details-
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {getTripPatternAnalytics} from '@atb/screen-components/travel-details-screens';
 
 type Props = DashboardScreenProps<'Dashboard_TripDetailsScreen'>;
 
@@ -10,6 +12,7 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
   const analytics = useAnalyticsContext();
   const focusRef = useFocusOnLoad(navigation);
   const isFocused = useIsFocusedAndActive();
+  const {fareZones} = useFirestoreConfigurationContext();
 
   return (
     <TripDetailsScreenComponent
@@ -26,7 +29,14 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
         navigation.navigate('Dashboard_TravelDetailsMapScreen', params);
       }}
       onPressBuyTicket={(params) => {
-        analytics.logEvent('Trip details', 'Buy ticket clicked');
+        analytics.logEvent(
+          'Trip details',
+          'Buy ticket clicked',
+          getTripPatternAnalytics(
+            route.params.tripPattern,
+            fareZones,
+          ),
+        );
         navigation.navigate('Root_PurchaseOverviewScreen', params);
       }}
       onPressQuay={(stopPlace, selectedQuayId) => {
