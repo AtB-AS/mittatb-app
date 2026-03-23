@@ -34,7 +34,11 @@ export function useUniqueCountState<T>(
 
       const newState = [...prevState];
       const currentItem = newState[index];
-      const newCount = Math.max(0, countOperation(currentItem.count));
+      let newCount = Math.max(0, countOperation(currentItem.count));
+
+      if (currentItem.limit != null) {
+        newCount = Math.min(newCount, currentItem.limit);
+      }
 
       newState[index] = {
         ...currentItem,
@@ -51,11 +55,9 @@ export function useUniqueCountState<T>(
 
   const canIncrement = (item: T) => {
     const currentItem = state.find((value) => equalityPredicate(value, item));
-    return currentItem
-      ? currentItem.limit
-        ? currentItem.count < currentItem.limit
-        : true
-      : false;
+    if (!currentItem) return false;
+    if (currentItem.limit != null) return currentItem.count < currentItem.limit;
+    return true;
   };
 
   const canDecrement = (item: T) => {

@@ -231,7 +231,18 @@ export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
 
   return response.data
     .map((p) => PreassignedFareProduct.safeParse(p).data)
-    .filter(isDefined);
+    .filter(isDefined)
+    .map((p) => ({
+      ...p,
+      limitations: {
+        ...p.limitations,
+        userProfiles: p.limitations.userProfiles.map((up) =>
+          up.userProfileRef === 'TRO:UserProfile:a4ee32b1'
+            ? {...up, maxCount: 5}
+            : up,
+        ),
+      },
+    }));
 }
 
 export async function getSupplementProducts(): Promise<SupplementProduct[]> {
