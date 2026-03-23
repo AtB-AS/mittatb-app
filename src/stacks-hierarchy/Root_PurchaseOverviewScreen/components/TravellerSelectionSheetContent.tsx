@@ -48,7 +48,6 @@ export const TravellerSelectionSheetContent = ({
       )}
       {selectionMode === 'multiple' ? (
         <MultipleTravellersSelection
-          product={selection.preassignedFareProduct}
           userCountState={userCountState}
           baggageCountState={baggageCountState}
           setInfoMessage={setMessageId}
