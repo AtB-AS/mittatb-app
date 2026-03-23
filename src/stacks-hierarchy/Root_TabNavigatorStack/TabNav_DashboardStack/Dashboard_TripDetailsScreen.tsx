@@ -3,8 +3,6 @@ import {TripDetailsScreenComponent} from '@atb/screen-components/travel-details-
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {getTripPatternAnalytics} from '@atb/screen-components/travel-details-screens';
 
 type Props = DashboardScreenProps<'Dashboard_TripDetailsScreen'>;
 
@@ -12,18 +10,13 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
   const analytics = useAnalyticsContext();
   const focusRef = useFocusOnLoad(navigation);
   const isFocused = useIsFocusedAndActive();
-  const {fareZones} = useFirestoreConfigurationContext();
-  const tripAnalytics = getTripPatternAnalytics(
-    route.params.tripPattern,
-    fareZones,
-  );
 
   return (
     <TripDetailsScreenComponent
       {...route.params}
       focusRef={focusRef}
       isFocused={isFocused}
-      onPressDetailsMap={(params) => {
+      onPressDetailsMap={(params, tripAnalytics) => {
         params.vehicleWithPosition
           ? analytics.logEvent('Trip details', 'See live bus clicked', {
               fromPlace: params.fromPlace,
@@ -33,21 +26,21 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
           : analytics.logEvent('Trip details', 'Map clicked', tripAnalytics);
         navigation.navigate('Dashboard_TravelDetailsMapScreen', params);
       }}
-      onPressBuyTicket={(params) => {
+      onPressBuyTicket={(params, tripAnalytics) => {
         analytics.logEvent('Trip details', 'Buy ticket clicked', tripAnalytics);
         navigation.navigate('Root_PurchaseOverviewScreen', {
           ...params,
           tripAnalytics,
         });
       }}
-      onPressQuay={(stopPlace, selectedQuayId) => {
+      onPressQuay={(stopPlace, selectedQuayId, tripAnalytics) => {
         analytics.logEvent('Trip details', 'Stop place clicked', tripAnalytics);
         navigation.push('Dashboard_PlaceScreen', {
           place: stopPlace,
           selectedQuayId,
         });
       }}
-      onPressDeparture={(items, activeItemIndex) => {
+      onPressDeparture={(items, activeItemIndex, tripAnalytics) => {
         analytics.logEvent('Trip details', 'Departure clicked', tripAnalytics);
         navigation.navigate('Dashboard_DepartureDetailsScreen', {
           items,

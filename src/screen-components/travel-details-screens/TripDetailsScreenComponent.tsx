@@ -24,6 +24,7 @@ import {
   canSellCollabTicket,
   getNonFreeLegs,
   getTripPatternAnalytics,
+  TripAnalytics,
 } from './utils';
 import {formatToClock, secondsBetween} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
@@ -46,10 +47,24 @@ export type TripDetailsScreenParams = {
 };
 
 type Props = TripDetailsScreenParams & {
-  onPressDetailsMap: (params: TravelDetailsMapScreenParams) => void;
-  onPressBuyTicket: (params: Root_PurchaseOverviewScreenParams) => void;
-  onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
-  onPressDeparture: (items: ServiceJourneyDeparture[], index: number) => void;
+  onPressDetailsMap: (
+    params: TravelDetailsMapScreenParams,
+    tripAnalytics: TripAnalytics,
+  ) => void;
+  onPressBuyTicket: (
+    params: Root_PurchaseOverviewScreenParams,
+    tripAnalytics: TripAnalytics,
+  ) => void;
+  onPressQuay: (
+    stopPlace: StopPlaceFragment,
+    selectedQuayId: string | undefined,
+    tripAnalytics: TripAnalytics,
+  ) => void;
+  onPressDeparture: (
+    items: ServiceJourneyDeparture[],
+    index: number,
+    tripAnalytics: TripAnalytics,
+  ) => void;
   focusRef: Ref<any>;
   isFocused: boolean;
 };
@@ -76,6 +91,9 @@ export const TripDetailsScreenComponent = ({
   const updatedTripPattern = data ?? tripPattern;
 
   useTrackScreenshottedTripDetails(updatedTripPattern);
+
+  const {fareZones} = useFirestoreConfigurationContext();
+  const tripAnalytics = getTripPatternAnalytics(updatedTripPattern, fareZones);
 
   const purchaseSelection = usePurchaseSelectionFromTrip(updatedTripPattern);
   const fromToNames = getFromToName(updatedTripPattern.legs);
@@ -152,9 +170,15 @@ export const TripDetailsScreenComponent = ({
             <Trip
               tripPattern={updatedTripPattern}
               error={error ?? undefined}
-              onPressDetailsMap={onPressDetailsMap}
-              onPressDeparture={onPressDeparture}
-              onPressQuay={onPressQuay}
+              onPressDetailsMap={(params) =>
+                onPressDetailsMap(params, tripAnalytics)
+              }
+              onPressDeparture={(items, index) =>
+                onPressDeparture(items, index, tripAnalytics)
+              }
+              onPressQuay={(stopPlace, selectedQuayId) =>
+                onPressQuay(stopPlace, selectedQuayId, tripAnalytics)
+              }
             />
           </View>
         )}
@@ -168,10 +192,13 @@ export const TripDetailsScreenComponent = ({
             accessible={true}
             onPress={() => {
               analytics().logEvent('click_trip_purchase_button');
-              onPressBuyTicket({
-                selection: purchaseSelection,
-                mode: 'TravelSearch',
-              });
+              onPressBuyTicket(
+                {
+                  selection: purchaseSelection,
+                  mode: 'TravelSearch',
+                },
+                tripAnalytics,
+              );
             }}
             text={t(TripDetailsTexts.trip.buyTicket.text)}
             leftIcon={{svg: Ticket}}
