@@ -12,15 +12,6 @@ class TicketBuyPage {
   }
 
   /**
-   * Open expired tickets
-   */
-  async openExpiredTickets() {
-    const reqId = `//*[@resource-id="historicTicketsButton"]`;
-    await $(reqId).click();
-    await AppHelper.pause();
-  }
-
-  /**
    * Return the warning info for anonymous purchases
    */
   get anonymousWarning() {

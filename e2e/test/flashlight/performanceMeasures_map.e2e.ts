@@ -29,15 +29,13 @@ describe('Map performance with flashlight', () => {
       await ElementHelper.waitForElement('id', mapId);
 
       // Zoom
-      await MapPage.pinchZoomIn('small');
-      await MapPage.pinchZoomOut('small');
-      await MapPage.pinchZoomIn('small');
+      await MapPage.pinchZoomOut('large');
+      await MapPage.pinchZoomIn('large');
       await MapPage.pinchZoomOut('large');
       await MapPage.pinchZoomIn('small');
-      await MapPage.pinchZoomOut('large');
-      await MapPage.drag('right', 'short');
 
       // Move around
+      await MapPage.drag('right', 'short');
       await MapPage.drag('up', 'long');
       await MapPage.drag('down', 'long');
       await MapPage.drag('right', 'long');
@@ -45,26 +43,47 @@ describe('Map performance with flashlight', () => {
       await MapPage.drag('left', 'short');
       await MapPage.drag('left', 'long');
       await MapPage.drag('up', 'short');
+      await MapPage.drag('left', 'long');
+      await MapPage.drag('up', 'long');
+      await MapPage.drag('right', 'long');
+      await MapPage.drag('down', 'long');
 
-      // Filter and move around
-      await MapPage.drag('left', 'long');
-      await MapPage.drag('up', 'long');
-      await MapPage.drag('right', 'long');
-      await MapPage.drag('down', 'long');
+      // Toggle off
       await MapPage.toggle('car');
+      await MapPage.toggle('bicycle');
+      await MapPage.toggle('scooter');
       await MapPage.drag('left', 'long');
       await MapPage.drag('up', 'long');
-      await MapPage.toggle('bicycle');
       await MapPage.drag('right', 'long');
       await MapPage.drag('down', 'long');
       await MapPage.pinchZoomOut('small');
       await MapPage.pinchZoomOut('small');
       await MapPage.pinchZoomIn('small');
-      await MapPage.drag('right', 'long');
-      await MapPage.drag('left', 'long');
+
+      // Toggle on
+      await MapPage.toggle('bicycle');
       await MapPage.toggle('scooter');
+      await MapPage.pinchZoomIn('large');
+      await MapPage.drag('right', 'long');
+      await MapPage.drag('up', 'long');
+      await MapPage.drag('left', 'long');
+      await MapPage.drag('down', 'long');
+      await MapPage.drag('up', 'long');
+      await MapPage.drag('up', 'long');
+      await MapPage.drag('up', 'long');
+      await MapPage.drag('up', 'long');
+      await MapPage.drag('right', 'long');
+      await MapPage.drag('down', 'long');
+      await MapPage.drag('down', 'long');
+      await MapPage.drag('down', 'long');
+      await MapPage.drag('down', 'long');
+      await MapPage.pinchZoomOut('small');
+      await MapPage.pinchZoomOut('small');
+      await MapPage.pinchZoomOut('small');
+      await MapPage.pinchZoomOut('small');
       await MapPage.pinchZoomIn('small');
-      await MapPage.pinchZoomOut('large');
+      await MapPage.pinchZoomIn('small');
+      await MapPage.pinchZoomIn('small');
     } catch (errMsg) {
       await AppHelper.screenshot('error_map_interact');
       throw errMsg;
