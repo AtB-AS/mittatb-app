@@ -12,7 +12,7 @@ import {
   TextInputSectionItem,
 } from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {onlyUniquesBasedOnPredicate} from '@atb/utils/only-uniques';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {storage} from '@atb/modules/storage';
 import {HeaderOverride} from './HeaderOverride';
@@ -111,7 +111,7 @@ export function DebugServerOverrides() {
   return (
     <View ref={focusRef} style={styles.container}>
       {overrides.length ? (
-        overrides.filter(onlyUniquesBasedOnField('match')).map((o) => (
+        overrides.filter(onlyUniquesBasedOnPredicate((a, b) => a.match.source === b.match.source)).map((o) => (
           <SwipeToDelete
             key={o.match.toString()}
             onDelete={() => deleteOverride(o)}
