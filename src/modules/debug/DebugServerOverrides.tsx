@@ -15,7 +15,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {onlyUniquesBasedOnPredicate} from '@atb/utils/only-uniques';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {storage} from '@atb/modules/storage';
-import {HeaderOverride} from './HeaderOverride';
+import {HeaderOverride as HeaderOverrideComponent} from './HeaderOverride';
 import {loadDebugServerOverrides} from './debug-server-overrides-cache';
 import Swipeable, {
   SwipeableMethods,
@@ -24,17 +24,7 @@ import Swipeable, {
 import Animated, {SharedValue, useAnimatedStyle} from 'react-native-reanimated';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
-
-type HeaderOverrideEntry = {
-  key: string;
-  value: string;
-};
-
-type DebugServerOverride = {
-  match: RegExp;
-  newValue: string;
-  headers?: HeaderOverrideEntry[];
-};
+import type {DebugServerOverride, HeaderOverride} from './types';
 
 type OftenUsedOverride = DebugServerOverride & {label: string};
 
@@ -151,6 +141,10 @@ export function DebugServerOverrides() {
               updateOverride(override);
               editBottomSheetRef.current?.dismiss();
             }}
+            onDelete={() => {
+              editBottomSheetRef.current?.dismiss();
+              deleteOverride(selectedOverride);
+            }}
           />
         )}
       </BottomSheetModal>
@@ -241,11 +235,13 @@ function RightActionDelete(
 function DebugServerInput(props: {
   existingOverride?: DebugServerOverride;
   onClose: (override: DebugServerOverride) => void;
+  onDelete?: () => void;
 }) {
   const [match, setMatch] = useState<string>('');
   const [newValue, setNewValue] = useState<string>('');
-  const [headers, setHeaders] = useState<HeaderOverrideEntry[]>([]);
+  const [headers, setHeaders] = useState<HeaderOverride[]>([]);
   const styles = useStyles();
+  const {theme} = useThemeContext();
 
   function addExistingOverride(o: DebugServerOverride) {
     setMatch(o.match.source);
@@ -302,7 +298,7 @@ function DebugServerInput(props: {
       <View style={{gap: 12}}>
         <ThemeText typography="body__s">Headers (optional)</ThemeText>
         {headers.map((header, index) => (
-          <HeaderOverride
+          <HeaderOverrideComponent
             key={index}
             headerKey={header.key}
             headerValue={header.value}
@@ -348,6 +344,14 @@ function DebugServerInput(props: {
           });
         }}
       />
+      {props.onDelete && (
+        <Button
+          text="Delete Override"
+          expanded={true}
+          interactiveColor={theme.color.interactive.destructive}
+          onPress={props.onDelete}
+        />
+      )}
     </View>
   );
 }

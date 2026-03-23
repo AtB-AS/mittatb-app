@@ -1,15 +1,7 @@
 import {storage} from '@atb/modules/storage';
+import type {DebugServerOverride, HeaderOverrideEntry} from './types';
 
-type HeaderOverride = {
-  key: string;
-  value: string;
-};
-
-export type DebugServerOverride = {
-  match: RegExp;
-  newValue: string;
-  headers?: HeaderOverride[];
-};
+export type {DebugServerOverride} from './types';
 
 let cachedOverrides: DebugServerOverride[] = [];
 
