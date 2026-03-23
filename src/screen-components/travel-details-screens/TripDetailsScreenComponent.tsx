@@ -24,7 +24,7 @@ import {
   canSellCollabTicket,
   getNonFreeLegs,
   getTripPatternAnalytics,
-  TripAnalytics,
+  type TripAnalytics,
 } from './utils';
 import {formatToClock, secondsBetween} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';

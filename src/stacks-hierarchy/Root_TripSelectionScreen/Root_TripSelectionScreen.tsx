@@ -95,6 +95,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
                 params: {
                   mode: params.mode,
                   selection: newSelection,
+                  tripAnalytics: params.tripAnalytics,
                 },
                 merge: true,
               });
