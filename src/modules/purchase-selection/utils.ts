@@ -113,21 +113,11 @@ export const isSelectableProduct = (
 export const isSelectableProfile = (
   product: PreassignedFareProduct,
   profile: UserProfile | UserProfileWithCount,
-) => {
-  const allowedByRefs = !!product.limitations.userProfiles?.some(
-    (allowedProfile) => profile.id === allowedProfile.userProfileRef,
+) =>
+  !product.limitations.userProfiles ||
+  product.limitations.userProfiles.some(
+    (allowed) => profile.id === allowed.userProfileRef,
   );
-
-  const profileLimit = product.limitations.userProfiles?.find(
-    (allowedUserProfile) => profile.id === allowedUserProfile.userProfileRef,
-  );
-
-  if (profileLimit) {
-    return true;
-  }
-
-  return allowedByRefs;
-};
 
 export const isSelectableSupplementProduct = (
   currentSelection: PurchaseSelectionType,
