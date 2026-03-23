@@ -101,21 +101,27 @@ export function DebugServerOverrides() {
   return (
     <View ref={focusRef} style={styles.container}>
       {overrides.length ? (
-        overrides.filter(onlyUniquesBasedOnPredicate((a, b) => a.match.source === b.match.source)).map((o) => (
-          <SwipeToDelete
-            key={o.match.toString()}
-            onDelete={() => deleteOverride(o)}
-          >
-            <SelectionInlineSectionItem
-              label={o.match.toString()}
-              value={o.newValue}
-              onPress={() => {
-                setSelectedOverride(o);
-                editBottomSheetRef.current?.present();
-              }}
-            />
-          </SwipeToDelete>
-        ))
+        overrides
+          .filter(
+            onlyUniquesBasedOnPredicate(
+              (a, b) => a.match.source === b.match.source,
+            ),
+          )
+          .map((o) => (
+            <SwipeToDelete
+              key={o.match.toString()}
+              onDelete={() => deleteOverride(o)}
+            >
+              <SelectionInlineSectionItem
+                label={o.match.toString()}
+                value={o.newValue}
+                onPress={() => {
+                  setSelectedOverride(o);
+                  editBottomSheetRef.current?.present();
+                }}
+              />
+            </SwipeToDelete>
+          ))
       ) : (
         <ThemeText typography="body__m__strong" style={{marginVertical: 16}}>
           No server overrides set
