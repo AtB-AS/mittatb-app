@@ -90,6 +90,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Loading} from '@atb/components/loading';
+import {EmpiricalDelay} from './components/EmpiricalDelay';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -657,6 +658,7 @@ function EstimatedCallRow({
             {call.quay.description}
           </ThemeText>
         )}
+        <EmpiricalDelay call={call} />
 
         {call.cancellation && !call.metadata.isStartOfServiceJourney && (
           <AccessibleText
@@ -878,7 +880,7 @@ type EstimatedCallMetadata = {
   isStartOfGroup: boolean;
   isEndOfGroup: boolean;
 };
-type EstimatedCallWithMetadata = EstimatedCallWithQuayFragment & {
+export type EstimatedCallWithMetadata = EstimatedCallWithQuayFragment & {
   metadata: EstimatedCallMetadata;
 };
 function addMetadataToEstimatedCalls(
