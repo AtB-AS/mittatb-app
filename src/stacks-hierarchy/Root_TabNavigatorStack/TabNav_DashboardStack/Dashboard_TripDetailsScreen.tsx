@@ -13,6 +13,10 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
   const focusRef = useFocusOnLoad(navigation);
   const isFocused = useIsFocusedAndActive();
   const {fareZones} = useFirestoreConfigurationContext();
+  const tripAnalytics = getTripPatternAnalytics(
+    route.params.tripPattern,
+    fareZones,
+  );
 
   return (
     <TripDetailsScreenComponent
@@ -24,30 +28,24 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
           ? analytics.logEvent('Trip details', 'See live bus clicked', {
               fromPlace: params.fromPlace,
               toPlace: params.toPlace,
+              ...tripAnalytics,
             })
-          : analytics.logEvent('Trip details', 'Map clicked');
+          : analytics.logEvent('Trip details', 'Map clicked', tripAnalytics);
         navigation.navigate('Dashboard_TravelDetailsMapScreen', params);
       }}
       onPressBuyTicket={(params) => {
-        analytics.logEvent(
-          'Trip details',
-          'Buy ticket clicked',
-          getTripPatternAnalytics(
-            route.params.tripPattern,
-            fareZones,
-          ),
-        );
+        analytics.logEvent('Trip details', 'Buy ticket clicked', tripAnalytics);
         navigation.navigate('Root_PurchaseOverviewScreen', params);
       }}
       onPressQuay={(stopPlace, selectedQuayId) => {
-        analytics.logEvent('Trip details', 'Stop place clicked');
+        analytics.logEvent('Trip details', 'Stop place clicked', tripAnalytics);
         navigation.push('Dashboard_PlaceScreen', {
           place: stopPlace,
           selectedQuayId,
         });
       }}
       onPressDeparture={(items, activeItemIndex) => {
-        analytics.logEvent('Trip details', 'Departure clicked');
+        analytics.logEvent('Trip details', 'Departure clicked', tripAnalytics);
         navigation.navigate('Dashboard_DepartureDetailsScreen', {
           items,
           activeItemIndex,
