@@ -1,5 +1,5 @@
 import {storage} from '@atb/modules/storage';
-import type {DebugServerOverride, HeaderOverrideEntry} from './types';
+import type {DebugServerOverride, HeaderOverride} from './types';
 
 export type {DebugServerOverride} from './types';
 
@@ -7,7 +7,7 @@ let cachedOverrides: DebugServerOverride[] = [];
 
 /**
  * Load debug server overrides from storage into the in-memory cache.
- * Should be called at app startup and whenever overrides are changed.
+ * Should be called at app startup.
  */
 export async function loadDebugServerOverrides(): Promise<void> {
   const raw = await storage.get('@ATB_debug_server_overrides');
@@ -28,10 +28,21 @@ export async function loadDebugServerOverrides(): Promise<void> {
         return;
       }
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.warn('Failed to parse debug server overrides from storage', e);
     }
   }
   cachedOverrides = [];
+}
+
+/**
+ * Update the in-memory cache directly. Use this when overrides are changed
+ * at runtime to ensure the cache is immediately consistent.
+ */
+export function setDebugServerOverrides(
+  overrides: DebugServerOverride[],
+): void {
+  cachedOverrides = overrides;
 }
 
 /**

@@ -16,7 +16,7 @@ import {onlyUniquesBasedOnPredicate} from '@atb/utils/only-uniques';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {storage} from '@atb/modules/storage';
 import {HeaderOverride as HeaderOverrideComponent} from './HeaderOverride';
-import {loadDebugServerOverrides} from './debug-server-overrides-cache';
+import {setDebugServerOverrides} from './debug-server-overrides-cache';
 import Swipeable, {
   SwipeableMethods,
   SwipeDirection,
@@ -375,12 +375,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 }));
 
 function saveOverridesToStorage(overrides: DebugServerOverride[]) {
-  storage
-    .set(
-      '@ATB_debug_server_overrides',
-      JSON.stringify(overrides.map((o) => ({...o, match: o.match.source}))), // RegExp objects can't be directly stringified, so we store the source string and recreate the RegExp when loading
-    )
-    .then(() => loadDebugServerOverrides());
+  // Update in-memory cache immediately so requests use the new overrides
+  setDebugServerOverrides(overrides);
+  // Persist to storage in the background
+  storage.set(
+    '@ATB_debug_server_overrides',
+    JSON.stringify(overrides.map((o) => ({...o, match: o.match.source}))),
+  );
 }
 
 async function getOverridesFromStorage(): Promise<DebugServerOverride[]> {
