@@ -66,6 +66,7 @@ export function useSupplementProductPurchaseSelection({
       .originFareContract({
         id: existingFareContract.id,
         product,
+        startDate: travelRight.startDateTime.toISOString(),
         endDate: travelRight.endDateTime.toISOString(),
       })
       .supplementProducts([{...supplementProduct, count: 1}])

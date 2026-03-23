@@ -290,6 +290,11 @@ const TicketingTexts = {
       'Velg ein annan dag eller juster tidspunkt',
     ),
     select: _('Velg', 'Select', 'Velg'),
+    beforeStartOfFareContract: _(
+      'Før oppstart av billett',
+      'Before start of ticket',
+      'Før oppstart av billett',
+    ),
     expiredFareContract: _(
       'Utløpt billett',
       'Expired ticket',

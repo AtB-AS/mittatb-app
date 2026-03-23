@@ -2,7 +2,7 @@ import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {bookingAvailabilitySearch} from '@atb/api/bff/trips';
 import {useQuery} from '@tanstack/react-query';
 import type {TripPatternWithBooking} from '@atb/api/types/trips';
-import {startOfDay} from 'date-fns';
+import {isAfter, isBefore, startOfDay} from 'date-fns';
 import {useMemo} from 'react';
 import {
   isValidSelection,
@@ -10,6 +10,7 @@ import {
   tripPatternDisplayTimeFilter,
 } from './utils';
 import {useProductAlternatives} from '@atb/modules/ticketing';
+import type {TripPatternDisabledReason} from './types';
 
 type BookingTripsType = {
   tripPatterns: TripPatternWithBooking[];
@@ -82,6 +83,16 @@ export function useBookingTrips({
             travelDate ?? new Date().toISOString(),
           ),
         )
+        .map((tp) => ({
+          ...tp,
+          booking: {
+            ...tp.booking,
+            disabledReason: mapToDisabledReason(
+              selection.originFareContract,
+              tp,
+            ),
+          },
+        }))
     : [];
 
   return {
@@ -100,4 +111,27 @@ export function useBookingTrips({
     isError: isError,
     isEmpty: !isFetching && tripPatterns.length === 0,
   };
+}
+
+function mapToDisabledReason(
+  originFareContract: PurchaseSelectionType['originFareContract'],
+  tp: TripPatternWithBooking,
+) {
+  if (
+    tp.booking.availability === 'closed' ||
+    tp.booking.availability === 'sold_out'
+  )
+    return tp.booking.availability;
+  if (
+    originFareContract?.endDate &&
+    isAfter(tp.expectedStartTime, originFareContract.endDate)
+  ) {
+    return 'expired_fare_contract' as TripPatternDisabledReason;
+  }
+  if (
+    originFareContract?.startDate &&
+    isBefore(tp.expectedStartTime, originFareContract?.startDate)
+  ) {
+    return 'before_start_of_fare_contract' as TripPatternDisabledReason;
+  }
 }
