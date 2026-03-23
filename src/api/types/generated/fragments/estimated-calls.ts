@@ -17,6 +17,7 @@ export type EstimatedCallWithQuayFragment = {
   realtime: boolean;
   stopPositionInPattern: number;
   destinationDisplay?: {frontText?: string; via?: Array<string>};
+  empiricalDelay?: {p50?: any; p90?: any};
   quay: QuayFragment;
   notices: Array<NoticeFragment>;
   situations: Array<SituationFragment>;
