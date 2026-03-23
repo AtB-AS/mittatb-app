@@ -1,6 +1,7 @@
 import {TripPattern} from '@atb/api/types/trips';
 import {storage, StorageModelTypes} from '@atb/modules/storage';
 import {getTripPatternKey} from './utils';
+import {isAfter} from 'date-fns';
 
 export type StoredTripPattern = {
   key: string;
@@ -79,6 +80,17 @@ class TripPatternStore {
       return {...tripPattern, key: getTripPatternKey(tripPattern)};
     });
     return await this._setTripPatterns(tripPatterns);
+  }
+
+  async removeTripPatternsOlderThan(date: Date): Promise<StoredTripPattern[]> {
+    const tripPatterns = await this.getTripPatterns();
+    const newTripPatterns = tripPatterns.filter((item) =>
+      isAfter(item.expectedEndTime, date),
+    );
+    if (tripPatterns.length === newTripPatterns.length) {
+      return tripPatterns;
+    }
+    return await this._setTripPatterns(newTripPatterns);
   }
 }
 

@@ -1,6 +1,7 @@
 import type {DateOptionAndValue} from '@atb/components/date-selection';
 import type {Location} from '@atb/modules/favorites';
 import {DashboardScreenProps} from './navigation-types';
+import type {SelectableLocationType} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 
 export type SearchForLocations = {
   from?: Location;
@@ -24,8 +25,8 @@ export type TripSearchCallerRoute = Parameters<
 >;
 
 export type TripSearchScreenParams = {
-  fromLocation?: Location;
-  toLocation?: Location;
+  fromLocation?: SelectableLocationType;
+  toLocation?: SelectableLocationType;
   searchTime?: TripSearchTime;
   callerRoute?: TripSearchCallerRoute;
 };

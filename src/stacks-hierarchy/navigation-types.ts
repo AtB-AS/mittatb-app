@@ -1,12 +1,11 @@
 import {NavigationProp, NavigatorScreenParams} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {TabNavigatorStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack';
+import {Location, StoredLocationFavorite} from '@atb/modules/favorites';
 import {
-  Location,
-  SearchLocation,
-  StoredLocationFavorite,
-} from '@atb/modules/favorites';
-import {Root_LocationSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+  Root_LocationSearchByTextScreenParams,
+  SelectableLocationType,
+} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import {Root_PurchaseFareZonesSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseFareZonesSearchByTextScreen/navigation-types';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
@@ -17,11 +16,9 @@ import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {Root_SmartParkAndRideEditScreenParams} from '@atb/stacks-hierarchy/Root_SmartParkAndRide/navigation-types';
 import {Root_OnboardingCarouselStackParams} from './Root_OnboardingCarouselStack';
 import {UserProfileWithCountAndOffer} from './Root_PurchaseOverviewScreen/use-offer-state';
-import {CallerRouteConfig} from './Root_LocationSearchByTextScreen/navigation-types';
-
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
-  searchLocation?: SearchLocation;
+  searchLocation?: SelectableLocationType;
 };
 
 export type Root_PurchaseFareZonesSearchByMapScreenParams = {
@@ -29,7 +26,7 @@ export type Root_PurchaseFareZonesSearchByMapScreenParams = {
 };
 
 export type Root_LocationSearchByMapScreenParams = {
-  callerRouteConfig: CallerRouteConfig;
+  resultKey: string;
   initialLocation?: Location;
 };
 

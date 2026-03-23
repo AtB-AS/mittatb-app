@@ -6,26 +6,24 @@ import {View} from 'react-native';
 import {ExploreLocationMap} from '@atb/modules/map';
 import {Location} from '@atb/modules/favorites';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {updateCallerRouteParams} from './Root_LocationSearchByTextScreen/navigation-types';
+import {usePendingLocationSearchStore} from './Root_LocationSearchByTextScreen/use-location-search-store';
 
 export type Props = RootStackScreenProps<'Root_LocationSearchByMapScreen'>;
 
 export const Root_LocationSearchByMapScreen: React.FC<Props> = ({
   navigation,
   route: {
-    params: {callerRouteConfig, initialLocation},
+    params: {resultKey, initialLocation},
   },
 }) => {
+  const {setPendingResult} = usePendingLocationSearchStore();
+
   const onLocationSelect = useCallback(
     (location?: Location) => {
-      const callerRoute = updateCallerRouteParams(
-        callerRouteConfig.route,
-        callerRouteConfig.locationRouteParam,
-        location,
-      );
-      navigation.popTo(...callerRoute);
+      setPendingResult(resultKey, location);
+      navigation.popToTop();
     },
-    [callerRouteConfig, navigation],
+    [resultKey, setPendingResult, navigation],
   );
 
   const styles = useMapStyles();
