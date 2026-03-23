@@ -90,7 +90,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Loading} from '@atb/components/loading';
-import {parseDuration} from '@atb/utils/durations';
+import {EmpiricalDelay} from './components/EmpiricalDelay';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -603,9 +603,6 @@ function EstimatedCallRow({
 }: TripItemProps) {
   const {t} = useTranslation();
   const styles = useStopsStyle();
-  const {
-    preferences: {debugShowEmpiricalDelay},
-  } = usePreferencesContext();
 
   const {group, isStartOfGroup, isEndOfGroup, isStartOfServiceJourney} =
     call.metadata;
@@ -661,12 +658,7 @@ function EstimatedCallRow({
             {call.quay.description}
           </ThemeText>
         )}
-        {debugShowEmpiricalDelay && call.empiricalDelay && (
-          <ThemeText typography="body__s" color="secondary">
-            Empirical delay: p50 {parseDuration(call.empiricalDelay.p50)} p90{' '}
-            {parseDuration(call.empiricalDelay.p90)}
-          </ThemeText>
-        )}
+        <EmpiricalDelay call={call} />
 
         {call.cancellation && !call.metadata.isStartOfServiceJourney && (
           <AccessibleText
@@ -888,7 +880,7 @@ type EstimatedCallMetadata = {
   isStartOfGroup: boolean;
   isEndOfGroup: boolean;
 };
-type EstimatedCallWithMetadata = EstimatedCallWithQuayFragment & {
+export type EstimatedCallWithMetadata = EstimatedCallWithQuayFragment & {
   metadata: EstimatedCallMetadata;
 };
 function addMetadataToEstimatedCalls(
