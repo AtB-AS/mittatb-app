@@ -20,12 +20,10 @@ import type {
 } from '@atb/modules/fare-contracts';
 import {View} from 'react-native';
 import {UniqueCountState} from '@atb/utils/unique-with-count';
-import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {useAuthContext} from '@atb/modules/auth';
 import {MessageId} from '../message';
 
 type Props = {
-  product: PreassignedFareProduct;
   userCountState: UniqueCountState<UserProfile>;
   baggageCountState: UniqueCountState<BaggageProduct>;
   setInfoMessage: (messageId?: MessageId) => void;
