@@ -7,6 +7,9 @@ import {Button} from '@atb/components/button';
 import {Save, SaveFill} from '@atb/assets/svg/mono-icons/actions';
 import analytics from '@react-native-firebase/analytics';
 import {wrapWithExperimentalFeatureToggledComponent} from '@atb/modules/experimental';
+import {useAnalyticsContext} from '@atb/modules/analytics';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {getTripPatternAnalytics} from '@atb/screen-components/travel-details-screens';
 
 type SaveTripPatternButtonComponentProps = {
   tripPattern: TripPattern;
@@ -24,6 +27,8 @@ export const SaveTripPatternButtonComponent =
       } = useStoredTripPatterns();
       const {t} = useTranslation();
       const {theme} = useThemeContext();
+      const posthogAnalytics = useAnalyticsContext();
+      const {fareZones} = useFirestoreConfigurationContext();
 
       const canAdd = useMemo(() => {
         return canAddTripPattern(tripPattern);
@@ -49,9 +54,19 @@ export const SaveTripPatternButtonComponent =
           onPress={() => {
             if (isStored) {
               analytics().logEvent('click_trip_remove_button');
+              posthogAnalytics.logEvent(
+                'Trip details',
+                'Trip removed',
+                getTripPatternAnalytics(tripPattern, fareZones),
+              );
               removeTripPattern(tripPattern);
             } else {
               analytics().logEvent('click_trip_save_button');
+              posthogAnalytics.logEvent(
+                'Trip details',
+                'Trip saved',
+                getTripPatternAnalytics(tripPattern, fareZones),
+              );
               addTripPattern(tripPattern);
             }
           }}
