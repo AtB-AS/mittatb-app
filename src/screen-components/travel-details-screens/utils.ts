@@ -529,6 +529,15 @@ export function findCommonSituationId(
   );
 }
 
+export type TripAnalytics = {
+  zones: string[];
+  zoneCount: number;
+  legCount: number;
+  nonFootLegCount: number;
+  legModes: string[];
+  duration: number;
+};
+
 /**
  * Extract common analytics properties from a trip pattern for PostHog events.
  * Resolves fare zone names by matching quay tariff zones against reference data,
@@ -537,7 +546,7 @@ export function findCommonSituationId(
 export function getTripPatternAnalytics(
   tripPattern: TripPattern,
   fareZones: ConfigFareZone[],
-) {
+): TripAnalytics {
   const places = tripPattern.legs
     .map((leg) => [leg.fromPlace, leg.toPlace])
     .flat()
