@@ -12,6 +12,7 @@ export {
   getNoticesForEstimatedCall,
   getNoticesForLeg,
   getNoticesForServiceJourney,
+  getTripPatternAnalytics,
   getTripPatternBookingStatus,
   isFreeLeg,
   isLineFlexibleTransport,
@@ -26,3 +27,4 @@ export type {
   TripPatternBookingStatus,
   TripPatternWithKey,
 } from './types';
+export type {TripAnalytics} from './utils';

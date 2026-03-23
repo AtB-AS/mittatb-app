@@ -98,6 +98,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         preassignedFareProduct,
       },
       mode: params.mode,
+      tripAnalytics: params.tripAnalytics,
     };
 
   const canSelectUserProfile = isUserProfileSelectable(
