@@ -85,9 +85,13 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
             setSelection(newSelection);
 
             if (selection.isOnBehalfOf) {
-              navigation.navigate('Root_ChooseTicketRecipientScreen', {
-                selection: newSelection,
-                mode: params.mode,
+              navigation.navigate({
+                name: 'Root_ChooseTicketRecipientScreen',
+                params: {
+                  selection: newSelection,
+                  mode: params.mode,
+                  tripAnalytics: params.tripAnalytics,
+                },
               });
             } else {
               navigation.navigate({
