@@ -511,6 +511,7 @@ const PaymentButton = ({
             {
               paymentMethod: paymentMethod?.paymentType,
               mode: mode,
+              ...tripAnalytics,
             },
           );
         }
