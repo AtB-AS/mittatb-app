@@ -7,7 +7,12 @@ import {
   secondsBetween,
 } from '@atb/utils/date';
 import {Leg, Line, TripPattern} from '@atb/api/types/trips';
-import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {
+  onlyUniques,
+  onlyUniquesBasedOnField,
+  onlyUniquesBasedOnPredicate,
+} from '@atb/utils/only-uniques';
+import {FareZone as ConfigFareZone} from '@atb/modules/configuration';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 import {EstimatedCall} from '@atb/api/types/departures';
@@ -522,4 +527,40 @@ export function findCommonSituationId(
   return Array.from(candidateIds).filter((id) =>
     data.every((item) => item.situations.some((s) => s.id === id)),
   );
+}
+
+/**
+ * Extract common analytics properties from a trip pattern for PostHog events.
+ * Resolves fare zone names by matching quay tariff zones against reference data,
+ * and computes leg counts and modes for the trip.
+ */
+export function getTripPatternAnalytics(
+  tripPattern: TripPattern,
+  fareZones: ConfigFareZone[],
+) {
+  const places = tripPattern.legs
+    .map((leg) => [leg.fromPlace, leg.toPlace])
+    .flat()
+    .filter(isDefined)
+    .filter(onlyUniquesBasedOnPredicate((a, b) => a.quay?.id === b.quay?.id));
+
+  const zones = places
+    .map((place) => {
+      const match = fareZones.find((fz) =>
+        place.quay?.tariffZones?.find((tz) => tz.id === fz.id),
+      );
+      return match?.name?.value;
+    })
+    .filter(isDefined)
+    .filter(onlyUniques);
+
+  return {
+    zones,
+    zoneCount: zones.length,
+    legCount: tripPattern.legs.length,
+    nonFootLegCount: tripPattern.legs.filter((leg) => leg.mode !== Mode.Foot)
+      .length,
+    legModes: tripPattern.legs.map((leg) => leg.mode),
+    duration: tripPattern.duration,
+  };
 }
