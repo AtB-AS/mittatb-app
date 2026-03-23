@@ -46,7 +46,11 @@ import {
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {KnownProgramId, useIsEnrolled} from '@atb/modules/enrollment';
+import {
+  KnownProgramId,
+  useIsEnrolled,
+  useIsProgramOpen,
+} from '@atb/modules/enrollment';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -71,7 +75,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     isEventStreamEnabled,
     isEventStreamFareContractsEnabled,
   } = useFeatureTogglesContext();
-  const isBonusEnabled = useIsEnrolled(KnownProgramId.BONUS);
+  const isUserEnrolledToBonus = useIsEnrolled(KnownProgramId.BONUS);
+  const isBonusProgramOpen = useIsProgramOpen(KnownProgramId.BONUS);
   const unreadCount = useChatUnreadCount();
   const {theme} = useThemeContext();
   const {enable_intercom} = useRemoteConfigContext();
@@ -146,19 +151,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 testID="settingsButton"
               />
             </Section>
-            {isBonusEnabled && (
-              <Section>
-                <LinkSectionItem
-                  text={t(
-                    ProfileTexts.sections.account.linkSectionItems.bonus.label,
-                  )}
-                  leftIcon={{svg: Star}}
-                  onPress={() => navigation.navigate('Profile_BonusScreen')}
-                  testID="BonusButton"
-                  label="new"
-                />
-              </Section>
-            )}
           </View>
 
           <ContentHeading
@@ -222,6 +214,17 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   navigation.navigate('Profile_SmartParkAndRideScreen', {});
                 }}
                 testID="smartParkAndRideButton"
+              />
+            )}
+            {(isUserEnrolledToBonus || isBonusProgramOpen) && (
+              <LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.account.linkSectionItems.bonus.label,
+                )}
+                leftIcon={{svg: Star}}
+                onPress={() => navigation.navigate('Profile_BonusScreen')}
+                testID="BonusButton"
+                label="new"
               />
             )}
           </Section>
