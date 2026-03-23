@@ -146,6 +146,7 @@ export const Profile_DebugInfoScreen = () => {
     debugShowSeconds,
     debugPredictionInaccurate,
     debugShowProgressBetweenStops,
+    debugShowEmpiricalDelay,
     showShmoTesting,
   } = preferences;
 
@@ -196,6 +197,13 @@ export const Profile_DebugInfoScreen = () => {
             value={debugShowProgressBetweenStops}
             onValueChange={(debugShowProgressBetweenStops) => {
               setPreference({debugShowProgressBetweenStops});
+            }}
+          />
+          <ToggleSectionItem
+            text="Display empirical delay in departure details"
+            value={debugShowEmpiricalDelay}
+            onValueChange={(debugShowEmpiricalDelay) => {
+              setPreference({debugShowEmpiricalDelay});
             }}
           />
           <ToggleSectionItem
