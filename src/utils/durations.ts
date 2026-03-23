@@ -42,9 +42,22 @@ export function parseDuration(duration: string): number | undefined {
  * "{hours}h {minutes}m {seconds}s"
  */
 export function formatDuration(duration: number): string {
-  const hours = Math.floor(duration / 3600);
-  const minutes = Math.floor((duration % 3600) / 60);
-  const seconds = duration % 60;
+  const durationString = [];
 
-  return `${hours}h ${minutes}m ${seconds}s`;
+  const hours = Math.floor(duration / 3600);
+  if (hours > 0) {
+    durationString.push(`${hours}h`);
+  }
+
+  const minutes = Math.floor((duration % 3600) / 60);
+  if (minutes > 0) {
+    durationString.push(`${minutes}m`);
+  }
+
+  const seconds = duration % 60;
+  if (seconds > 0) {
+    durationString.push(`${seconds}s`);
+  }
+
+  return durationString.join(' ');
 }

@@ -65,9 +65,18 @@ describe('parseDuration', () => {
 
 describe('formatDuration', () => {
   test('formats duration in seconds into a string"', () => {
-    expect(formatDuration(3600)).toBe('1h 0m 0s');
-    expect(formatDuration(3600 + 60)).toBe('1h 1m 0s');
+    expect(formatDuration(3600)).toBe('1h');
+    expect(formatDuration(3600 + 60)).toBe('1h 1m');
     expect(formatDuration(3600 + 60 + 1)).toBe('1h 1m 1s');
+  });
+
+  test('formats durations less than one hour without hours', () => {
+    expect(formatDuration(60)).toBe('1m');
+    expect(formatDuration(60 + 1)).toBe('1m 1s');
+  });
+
+  test('formats durations less than one minute without minutes', () => {
+    expect(formatDuration(45)).toBe('45s');
   });
 
   test('formats parseDuration output', () => {
