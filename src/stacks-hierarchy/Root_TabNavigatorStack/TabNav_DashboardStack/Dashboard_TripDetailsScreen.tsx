@@ -35,7 +35,10 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
       }}
       onPressBuyTicket={(params) => {
         analytics.logEvent('Trip details', 'Buy ticket clicked', tripAnalytics);
-        navigation.navigate('Root_PurchaseOverviewScreen', params);
+        navigation.navigate('Root_PurchaseOverviewScreen', {
+          ...params,
+          tripAnalytics,
+        });
       }}
       onPressQuay={(stopPlace, selectedQuayId) => {
         analytics.logEvent('Trip details', 'Stop place clicked', tripAnalytics);

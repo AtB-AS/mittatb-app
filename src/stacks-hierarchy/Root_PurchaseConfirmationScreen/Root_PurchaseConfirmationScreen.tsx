@@ -60,6 +60,7 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {isNonRecurringPaymentType} from '@atb/modules/payment';
 import {startApplePayPayment} from './start-apple-pay';
 import {Loading} from '@atb/components/loading';
+import type {TripAnalytics} from '@atb/screen-components/travel-details-screens';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -349,6 +350,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           isSearchingOffer={isSearchingOffer}
           isOfferError={!!offerError}
           mode={params.mode}
+          tripAnalytics={params.tripAnalytics}
           onCloseFocusRef={onCloseFocusRef}
           totalPrice={totalPrice}
           reserveOfferResponse={reserveMutation.data}
@@ -400,6 +402,7 @@ type PaymentButtonProps = {
   isOfferError: boolean;
   totalPrice: number;
   mode: 'TravelSearch' | 'Ticket' | undefined;
+  tripAnalytics?: TripAnalytics;
   onCloseFocusRef: RefObject<any>;
   reserveOfferResponse: ReserveOfferResponse | undefined;
   reserveStatus: MutationStatus;
@@ -413,6 +416,7 @@ const PaymentButton = ({
   isOfferError,
   totalPrice,
   mode,
+  tripAnalytics,
   onCloseFocusRef,
   reserveOfferResponse,
   reserveStatus,
@@ -455,6 +459,7 @@ const PaymentButton = ({
         onPress={() => {
           analytics.logEvent('Ticketing', 'Confirm purchase clicked', {
             mode: mode,
+            ...tripAnalytics,
           });
           onSelectPaymentMethod();
         }}
