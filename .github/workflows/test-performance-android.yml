@@ -1,58 +1,84 @@
-name: Performance measures for Android
+name: Performance tests on Android
 on:
   workflow_dispatch:
     inputs:
-      test_iterations:
-        description: 'How many test iterations to run'
-        required: true
-        default: 1
-      max_retries:
-        description: 'Max retries if there is any test errors'
-        required: true
-        default: 1
-      api_level:
-        description: 'Define API level'
-        required: true
-        default: 30
       branch:
         description: 'Define branch to test'
         required: true
         default: 'master'
   schedule:
-    - cron: '0 7 * * 1-5'
+    - cron: '0 4 * * 1-5'
 
 jobs:
-  run_tests:
-    name: Performance measures for Android
-    runs-on: ubuntu-24.04
-    outputs:
-      TESTED_VERSION: ${{ steps.get-appdistribution-apk.outputs.TESTED_VERSION }}
+  check-builds:
+    name: Check for builds
+    runs-on: ubuntu-latest
     environment: atb
-    timeout-minutes: 90
-    env:
-      ENV_BRANCH: ${{ github.event.inputs.branch || 'master' }}
-      ENV_API_LEVEL: ${{ github.event.inputs.api_level || 30 }}
-      ENV_TEST_ITERATIONS: ${{ github.event.inputs.test_iterations || 1 }}
-      ENV_MAX_RETRIES: ${{ github.event.inputs.max_retries || 1 }}
+    outputs:
+      APK_IS_AVAILABLE: ${{ steps.check-output.outputs.APK_IS_AVAILABLE}}
+      TESTED_VERSION: ${{ steps.check-output.outputs.TESTED_VERSION}}
+      APK_DOWNLOAD_URL: ${{ steps.check-output.outputs.APK_DOWNLOAD_URL}}
     steps:
+      # Setup
       - name: Set env variables
         run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
       - name: Checkout project
         uses: actions/checkout@v4
         with:
-          ref: ${{ env.ENV_BRANCH }}
-
+          ref: ${{ github.event.inputs.branch || 'master' }}
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: 3.12
           cache: 'pip'
           cache-dependency-path: '**/requirements.txt'
-
       - name: Install Python packages
         run: |
           pip install -r e2e/firestore/requirements.txt
+      # Check for APK built today
+      - name: Check for Firebase AppDistribution APK
+        id: check-appdistribution-apk
+        run: python check-appdistribution-apk.py
+        working-directory: e2e/firestore
+        env:
+          CREDENTIALS_APITESTER: ${{ secrets.CREDENTIALS_APITESTER }}
+          IS_GITHUB: 'True'
+      - name: APK output
+        id: check-output
+        run: |
+          echo "APK_IS_AVAILABLE=${{ env.APK_IS_AVAILABLE }}" >> $GITHUB_OUTPUT
+          echo "TESTED_VERSION=${{ env.TESTED_VERSION }}" >> $GITHUB_OUTPUT
+          echo "APK_DOWNLOAD_URL=${{ env.APK_DOWNLOAD_URL }}" >> $GITHUB_OUTPUT
 
+  run_tests:
+    needs: check-builds
+    if: needs.check-builds.outputs.APK_IS_AVAILABLE == 'true'
+    name: Run performance tests
+    runs-on: ubuntu-latest
+    environment: atb
+    timeout-minutes: 90
+    env:
+      ENV_API_LEVEL: 30
+      ENV_SYSTEM_IMAGE: default
+    steps:
+      # Setup
+      - name: Set env variables
+        run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
+      - name: Checkout project
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || 'master' }}
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+          cache: 'pip'
+          cache-dependency-path: '**/requirements.txt'
+      - name: Install Python packages
+        run: |
+          pip install -r e2e/firestore/requirements.txt
+      - name: Clean up runner
+        uses: ./.github/actions/android-build-cleanup-runner
       # Download APK
       - name: Get Firebase AppDistribution APK
         id: get-appdistribution-apk
@@ -60,7 +86,8 @@ jobs:
         working-directory: e2e/firestore
         env:
           CREDENTIALS_APITESTER: ${{ secrets.CREDENTIALS_APITESTER }}
-          IS_GITHUB: "True"
+          TESTED_VERSION: ${{ needs.check-builds.outputs.TESTED_VERSION }}
+          APK_DOWNLOAD_URL: ${{ needs.check-builds.outputs.APK_DOWNLOAD_URL }}
 
       # E2E init
       - name: Enable KVM
@@ -68,43 +95,44 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      - name: Install Flashlight
-        run: curl https://get.flashlight.dev | bash
-      - name: Setup Python and its dependencies
-        uses: ./.github/actions/python-setup
+      #  run: npm install -g appium
+      #  run: appium driver install uiautomator2
+      - name: Add Entur private registry credentials
+        run: bash ./scripts/add-entur-private-registry.sh
+        env:
+          ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Install E2E tests
+        working-directory: e2e
         run: yarn install
-        working-directory: e2e
-      - name: tsc
-        working-directory: e2e
-        run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
 
       # Emulator cache
       - name: Gradle cache
+        if: env.ENV_SYSTEM_IMAGE == 'default'
         uses: gradle/actions/setup-gradle@v3
       - name: AVD cache
+        if: env.ENV_SYSTEM_IMAGE == 'default'
         uses: actions/cache@v4
         id: avd-cache
         with:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-pixel_5-default-${{ env.ENV_API_LEVEL }}
+          key: avd-pixel_5-${{ env.ENV_SYSTEM_IMAGE }}-${{ env.ENV_API_LEVEL }}
       - name: create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true'
+        if: steps.avd-cache.outputs.cache-hit != 'true' || env.ENV_SYSTEM_IMAGE != 'default'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          avd-name: emulator-api${{ env.ENV_API_LEVEL }}
+          avd-name: emulator-${{ env.ENV_SYSTEM_IMAGE }}-api${{ env.ENV_API_LEVEL }}
           api-level: ${{ env.ENV_API_LEVEL }}
           arch: x86_64
-          target: default
+          target: ${{ env.ENV_SYSTEM_IMAGE }}
           profile: pixel_5
           emulator-build: 12414864
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          disable-animations: false
           script: echo "Generated AVD snapshot for caching."
 
       # E2E run
@@ -117,13 +145,13 @@ jobs:
           avd-name: emulator-api${{ env.ENV_API_LEVEL }}
           api-level: ${{ env.ENV_API_LEVEL }}
           arch: x86_64
-          target: default
+          target: ${{ env.ENV_SYSTEM_IMAGE }}
           profile: pixel_5
           emulator-build: 12414864
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          disable-animations: true
-          script: ./scripts/run-flashlight-tests.sh ${{ env.ENV_TEST_ITERATIONS }} ${{ env.ENV_MAX_RETRIES }}
+          #disable-animations: true
+          script: ./scripts/run-flashlight-tests.sh 1 1
           pre-emulator-launch-script: ./scripts/remove-navigation-bar.sh
           working-directory: e2e
         env:
@@ -131,25 +159,21 @@ jobs:
           IS_CI: "true"
           TESTED_VERSION: ${{ env.TESTED_VERSION }}
 
-      # Results
-      #- name: Check for performance report
-      #  run: |
-      #    if [ ! -f ./e2e/performance_measures_*.json ];
-      #    then
-      #      exit 1
-      #    else
-      #      cp -f ./e2e/performance_measures_*.json ./e2e/performance/performance_measures.json
-      #    fi
-      #- name: Create performance summary
-      #  working-directory: e2e/performance
-      #  run: npx tsx createPerformanceSummary.ts
-      #  env:
-      #    TESTED_VERSION: ${{ steps.get-appdistribution-apk.outputs.TESTED_VERSION }}
-      #- name: Print performance summary
-      #  working-directory: e2e/performance
-      #  run: cat performance_measures_summary.json | jq .
+      # Slack
+      - name: Notify Slack - success
+        if: success()
+        working-directory: e2e/performance
+        run: |
+          ./slack_notification.sh ${{ secrets.ATB_SLACK_TOKEN }} e2e_tests ${{ github.run_id }} ${{ needs.check-builds.outputs.TESTED_VERSION }} SUCCESS
 
-      # Uploads
+      # Slack
+      - name: Notify Slack - errors
+        if: failure()
+        working-directory: e2e/performance
+        run: |
+          ./slack_notification.sh ${{ secrets.ATB_SLACK_TOKEN }} e2e_tests ${{ github.run_id }} smoke ${{ needs.check-builds.outputs.TESTED_VERSION }} ERROR
+
+      # Upload results
       - name: Upload performance reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -157,15 +181,15 @@ jobs:
           name: performance_measures
           path: |
             ./e2e/performance_measures_*.json
-          retention-days: 1
+          retention-days: 2
       - name: Upload performance summary
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: performance_measures_summary
           path: |
-            ./e2e/performance_measures_summary_*.json
-          retention-days: 1
+            ./e2e/performance_measures_summary.json
+          retention-days: 2
       - name: Upload screenshots
         if: failure()
         uses: actions/upload-artifact@v4
