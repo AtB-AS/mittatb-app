@@ -72,6 +72,7 @@ export function ToggleSectionItem({
       accessibilityState={{checked: checked, disabled: disabled}}
       accessibilityActions={[{name: 'activate'}]}
       onAccessibilityAction={() => onChange(!checked)}
+      onAccessibilityTap={() => onChange(!checked)}
       accessibilityHint={
         disabled ? t(SectionTexts.toggleInput.disabled) : undefined
       }
