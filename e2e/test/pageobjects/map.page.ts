@@ -1,6 +1,7 @@
 import ElementHelper from '../utils/element.helper.ts';
 import AppHelper from '../utils/app.helper.js';
 import {driver} from '@wdio/globals';
+import NavigationHelper from '../utils/navigation.helper.js';
 
 // The map view element
 const mapId: string = 'mapView';
@@ -37,7 +38,8 @@ class MapPage {
     const reqId = `//*[@resource-id="${mode}Toggle"]`;
     await $(reqId).click();
     await AppHelper.pause(50);
-    await this.confirmFilter.click();
+    await NavigationHelper.closeBottomSheet();
+    //await this.confirmFilter.click();
   }
 
   /**
@@ -55,7 +57,7 @@ class MapPage {
       height: 1000,
       percent: pinchPct,
     });
-    await AppHelper.pause(300);
+    await AppHelper.pause(200);
   }
 
   /**
@@ -73,7 +75,7 @@ class MapPage {
       height: 1000,
       percent: pinchPct,
     });
-    await AppHelper.pause(300);
+    await AppHelper.pause(200);
   }
 
   /**
@@ -113,7 +115,7 @@ class MapPage {
       endX: endX,
       endY: endY,
     });
-    await AppHelper.pause(300);
+    await AppHelper.pause(100);
   }
 }
 

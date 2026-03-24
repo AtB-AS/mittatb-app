@@ -55,6 +55,15 @@ class TicketActivePage {
     await AppHelper.pause(200);
     await ElementHelper.waitForElement('id', 'ticket0');
   }
+
+  /**
+   * Open expired tickets
+   */
+  async openExpiredTickets() {
+    const reqId = `//*[@resource-id="historicTicketsButton"]`;
+    await $(reqId).click();
+    await AppHelper.pause();
+  }
 }
 
 export default new TicketActivePage();
