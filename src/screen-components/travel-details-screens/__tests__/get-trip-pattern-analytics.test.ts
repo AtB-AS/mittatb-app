@@ -2,6 +2,12 @@ import {TripPattern} from '@atb/api/types/trips';
 import {FareZone} from '@atb/modules/configuration';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {getTripPatternAnalytics} from '../utils';
+import {ONE_HOUR_MS} from '@atb/utils/durations';
+
+// "now" is the current time
+const NOW = Date.now();
+// in one hour
+const EXPECTED_START_TIME = new Date(NOW + ONE_HOUR_MS);
 
 function makeLeg(
   mode: Mode,
@@ -32,8 +38,9 @@ function makeFareZone(id: string, name: string): FareZone {
 function makeTripPattern(
   legs: ReturnType<typeof makeLeg>[],
   duration: number,
+  expectedStartTime: Date = EXPECTED_START_TIME,
 ): TripPattern {
-  return {legs, duration} as unknown as TripPattern;
+  return {legs, duration, expectedStartTime} as unknown as TripPattern;
 }
 
 describe('getTripPatternAnalytics', () => {
@@ -55,7 +62,7 @@ describe('getTripPatternAnalytics', () => {
       600,
     );
 
-    const result = getTripPatternAnalytics(tripPattern, fareZones);
+    const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
 
     expect(result).toEqual({
       zones: ['Zone A', 'Zone B'],
@@ -64,6 +71,7 @@ describe('getTripPatternAnalytics', () => {
       nonFootLegCount: 1,
       legModes: [Mode.Bus],
       duration: 600,
+      secondsUntilStart: 3600,
     });
   });
 
@@ -89,7 +97,7 @@ describe('getTripPatternAnalytics', () => {
       1200,
     );
 
-    const result = getTripPatternAnalytics(tripPattern, fareZones);
+    const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
 
     expect(result.legCount).toBe(3);
     expect(result.nonFootLegCount).toBe(1);
@@ -108,7 +116,7 @@ describe('getTripPatternAnalytics', () => {
       300,
     );
 
-    const result = getTripPatternAnalytics(tripPattern, fareZones);
+    const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
 
     expect(result.zones).toEqual(['Zone A']);
     expect(result.zoneCount).toBe(1);
@@ -131,7 +139,7 @@ describe('getTripPatternAnalytics', () => {
       900,
     );
 
-    const result = getTripPatternAnalytics(tripPattern, fareZones);
+    const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
 
     expect(result.zones).toEqual(['Zone A', 'Zone B', 'Zone C']);
     expect(result.zoneCount).toBe(3);
@@ -152,7 +160,7 @@ describe('getTripPatternAnalytics', () => {
       400,
     );
 
-    const result = getTripPatternAnalytics(tripPattern, fareZones);
+    const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
 
     expect(result.zones).toEqual(['Zone A']);
     expect(result.zoneCount).toBe(1);
@@ -175,7 +183,7 @@ describe('getTripPatternAnalytics', () => {
       120,
     );
 
-    const result = getTripPatternAnalytics(tripPattern, fareZones);
+    const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
 
     expect(result.zones).toEqual(['Zone A']);
     expect(result.zoneCount).toBe(1);
@@ -209,7 +217,7 @@ describe('getTripPatternAnalytics', () => {
       3600,
     );
 
-    const result = getTripPatternAnalytics(tripPattern, fareZones);
+    const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
 
     expect(result).toEqual({
       zones: ['Zone A', 'Zone B', 'Zone C'],
@@ -218,13 +226,14 @@ describe('getTripPatternAnalytics', () => {
       nonFootLegCount: 2,
       legModes: [Mode.Foot, Mode.Bus, Mode.Rail, Mode.Foot],
       duration: 3600,
+      secondsUntilStart: 3600,
     });
   });
 
   it('should handle trip with no legs', () => {
     const tripPattern = makeTripPattern([], 0);
 
-    const result = getTripPatternAnalytics(tripPattern, fareZones);
+    const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
 
     expect(result).toEqual({
       zones: [],
@@ -233,6 +242,7 @@ describe('getTripPatternAnalytics', () => {
       nonFootLegCount: 0,
       legModes: [],
       duration: 0,
+      secondsUntilStart: 3600,
     });
   });
 
@@ -248,7 +258,7 @@ describe('getTripPatternAnalytics', () => {
       500,
     );
 
-    const result = getTripPatternAnalytics(tripPattern, []);
+    const result = getTripPatternAnalytics(tripPattern, [], NOW);
 
     expect(result.zones).toEqual([]);
     expect(result.zoneCount).toBe(0);
@@ -268,7 +278,7 @@ describe('getTripPatternAnalytics', () => {
       300,
     );
 
-    const result = getTripPatternAnalytics(tripPattern, fareZones);
+    const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
 
     expect(result.zones).toEqual(['Zone A', 'Zone C']);
     expect(result.zoneCount).toBe(2);
@@ -286,7 +296,7 @@ describe('getTripPatternAnalytics', () => {
       200,
     );
 
-    const result = getTripPatternAnalytics(tripPattern, fareZones);
+    const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
 
     expect(result.zones).toEqual([]);
     expect(result.zoneCount).toBe(0);
@@ -311,7 +321,7 @@ describe('getTripPatternAnalytics', () => {
       300,
     );
 
-    const result = getTripPatternAnalytics(tripPattern, fareZones);
+    const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
 
     expect(result.zones).toEqual(['Zone A']);
     expect(result.zoneCount).toBe(1);
@@ -334,9 +344,45 @@ describe('getTripPatternAnalytics', () => {
       300,
     );
 
-    const result = getTripPatternAnalytics(tripPattern, fareZones);
+    const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
 
     expect(result.zones).toEqual(['Zone B']);
     expect(result.zoneCount).toBe(1);
+  });
+
+  it('should handle trip with expectedStartTime in the future', () => {
+    const tripPattern = makeTripPattern(
+      [
+        makeLeg(
+          Mode.Bus,
+          {quayId: 'q1', tariffZoneIds: ['zone-a']},
+          {quayId: 'q2', tariffZoneIds: ['zone-b']},
+        ),
+      ],
+      300,
+      new Date(NOW + 2 * ONE_HOUR_MS), // two hours from now
+    );
+
+    const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
+
+    expect(result.secondsUntilStart).toBe((2 * ONE_HOUR_MS) / 1000); // two hours in seconds
+  });
+
+  it('should handle trip with expectedStartTime in the past', () => {
+    const tripPattern = makeTripPattern(
+      [
+        makeLeg(
+          Mode.Bus,
+          {quayId: 'q1', tariffZoneIds: ['zone-a']},
+          {quayId: 'q2', tariffZoneIds: ['zone-b']},
+        ),
+      ],
+      300,
+      new Date(NOW - ONE_HOUR_MS), // one hour ago
+    );
+
+    const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
+
+    expect(result.secondsUntilStart).toBe(-ONE_HOUR_MS / 1000); // negative one hour in seconds
   });
 });
