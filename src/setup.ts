@@ -5,12 +5,14 @@ import {v4 as uuid} from 'uuid';
 import {setInstallId as setApiInstallId} from './api/client';
 import {loadLocalConfig} from './local-config';
 import {storage} from '@atb/modules/storage';
+import {loadDebugServerOverrides} from '@atb/modules/debug';
 
 export async function setupConfig() {
   await ensureFirstTimeSetup();
   const {installId} = await loadLocalConfig();
   Bugsnag.setUser(installId);
   setApiInstallId(installId);
+  await loadDebugServerOverrides();
 }
 
 export async function ensureFirstTimeSetup() {

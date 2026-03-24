@@ -25,6 +25,7 @@ import {
   getIdTokenValidityStatus,
 } from '@atb/modules/auth';
 import {useEffect, useState} from 'react';
+import {getDebugServerOverrides} from '@atb/modules/debug';
 
 export const client = createClient(API_BASE_URL);
 
@@ -45,6 +46,7 @@ export function createClient(baseUrl: string | undefined) {
     errorMsg: 'Inner error',
   });
   client.interceptors.request.use(requestHandler, undefined);
+  client.interceptors.request.use(debugServerOverrideHandler);
   client.interceptors.request.use(requestIdTokenHandler);
   client.interceptors.response.use(undefined, responseErrorHandler);
   return client;
@@ -92,6 +94,29 @@ async function requestIdTokenHandler(config: InternalAxiosRequestConfig) {
       }
     }
   }
+  return config;
+}
+
+function debugServerOverrideHandler(
+  config: InternalAxiosRequestConfig,
+): InternalAxiosRequestConfig {
+  const overrides = getDebugServerOverrides();
+  const fullUrl = (config.baseURL ?? '') + (config.url ?? '');
+
+  for (const override of overrides) {
+    if (override.match.test(fullUrl)) {
+      config.baseURL = override.newValue;
+      if (override.headers) {
+        for (const header of override.headers) {
+          if (header.key) {
+            config.headers[header.key] = header.value;
+          }
+        }
+      }
+      break;
+    }
+  }
+
   return config;
 }
 
