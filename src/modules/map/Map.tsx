@@ -448,6 +448,7 @@ export const Map = (props: MapProps) => {
                 <GeofencingZoneIconsAsTiles
                   systemId={systemId}
                   vehicleTypeId={vehicleTypeId}
+                  iconOnPress={geofencingZoneOnPress}
                 />
               </>
             ) : (

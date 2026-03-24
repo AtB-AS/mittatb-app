@@ -10,6 +10,7 @@ import {getIconZoomTransitionStyle} from '../../utils';
 import {Expression} from 'node_modules/@rnmapbox/maps/lib/typescript/src/utils/MapboxStyles';
 import {useThemeContext} from '@atb/theme/ThemeContext';
 import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
+import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
 
 export const geofencingZoneIconsVectorSourceId = 'geofencing-zone-icons-source';
 
@@ -23,11 +24,13 @@ export const geofencingZoneIconLayerId = 'geofencing-zone-icon-layer';
 type GeofencingZoneIconsAsTilesProps = {
   systemId: string | null;
   vehicleTypeId: string | null;
+  iconOnPress: (e: OnPressEvent) => void;
 };
 
 export const GeofencingZoneIconsAsTiles = ({
   systemId,
   vehicleTypeId,
+  iconOnPress,
 }: GeofencingZoneIconsAsTilesProps) => {
   const {themeName} = useThemeContext();
   const {isGeofencingZonesEnabled, isGeofencingZonesAsTilesEnabled} =
@@ -63,6 +66,7 @@ export const GeofencingZoneIconsAsTiles = ({
       tileUrlTemplates={tileUrlTemplates}
       minZoomLevel={minZoomLevel}
       maxZoomLevel={maxZoomLevel}
+      onPress={iconOnPress}
     >
       <MapboxGL.SymbolLayer
         id={geofencingZoneIconLayerId}
