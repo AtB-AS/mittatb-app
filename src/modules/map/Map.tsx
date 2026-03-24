@@ -68,7 +68,6 @@ import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {usePreferencesContext} from '../preferences';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {GeofencingZonesAsTiles} from './components/mobility/GeofencingZonesAsTiles';
-import {GeofencingZoneIconsAsTiles} from './components/mobility/GeofencingZoneIconsAsTiles';
 
 const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -439,18 +438,11 @@ export const Map = (props: MapProps) => {
             !vehicleError &&
             !vehicleIsLoading &&
             (isGeofencingZonesAsTilesEnabled ? (
-              <>
-                <GeofencingZonesAsTiles
-                  systemId={systemId}
-                  vehicleTypeId={vehicleTypeId}
-                  geofencingZoneOnPress={geofencingZoneOnPress}
-                />
-                <GeofencingZoneIconsAsTiles
-                  systemId={systemId}
-                  vehicleTypeId={vehicleTypeId}
-                  iconOnPress={geofencingZoneOnPress}
-                />
-              </>
+              <GeofencingZonesAsTiles
+                systemId={systemId}
+                vehicleTypeId={vehicleTypeId}
+                geofencingZoneOnPress={geofencingZoneOnPress}
+              />
             ) : (
               <GeofencingZones
                 systemId={systemId}
