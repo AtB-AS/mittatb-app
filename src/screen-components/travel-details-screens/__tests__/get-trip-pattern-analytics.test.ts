@@ -8,6 +8,7 @@ import {ONE_HOUR_MS} from '@atb/utils/durations';
 const NOW = Date.now();
 // in one hour
 const EXPECTED_START_TIME = new Date(NOW + ONE_HOUR_MS);
+const ONE_HOUR_IN_SECONDS = ONE_HOUR_MS / 1000;
 
 function makeLeg(
   mode: Mode,
@@ -71,7 +72,7 @@ describe('getTripPatternAnalytics', () => {
       nonFootLegCount: 1,
       legModes: [Mode.Bus],
       duration: 600,
-      secondsUntilStart: 3600,
+      secondsUntilStart: ONE_HOUR_IN_SECONDS,
     });
   });
 
@@ -214,7 +215,7 @@ describe('getTripPatternAnalytics', () => {
           {quayId: 'q5', tariffZoneIds: ['zone-c']},
         ),
       ],
-      3600,
+      ONE_HOUR_IN_SECONDS,
     );
 
     const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
@@ -225,8 +226,8 @@ describe('getTripPatternAnalytics', () => {
       legCount: 4,
       nonFootLegCount: 2,
       legModes: [Mode.Foot, Mode.Bus, Mode.Rail, Mode.Foot],
-      duration: 3600,
-      secondsUntilStart: 3600,
+      duration: ONE_HOUR_IN_SECONDS,
+      secondsUntilStart: ONE_HOUR_IN_SECONDS,
     });
   });
 
@@ -242,7 +243,7 @@ describe('getTripPatternAnalytics', () => {
       nonFootLegCount: 0,
       legModes: [],
       duration: 0,
-      secondsUntilStart: 3600,
+      secondsUntilStart: ONE_HOUR_IN_SECONDS,
     });
   });
 
@@ -365,7 +366,7 @@ describe('getTripPatternAnalytics', () => {
 
     const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
 
-    expect(result.secondsUntilStart).toBe((2 * ONE_HOUR_MS) / 1000); // two hours in seconds
+    expect(result.secondsUntilStart).toBe(2 * ONE_HOUR_IN_SECONDS); // two hours in seconds
   });
 
   it('should handle trip with expectedStartTime in the past', () => {
@@ -383,6 +384,6 @@ describe('getTripPatternAnalytics', () => {
 
     const result = getTripPatternAnalytics(tripPattern, fareZones, NOW);
 
-    expect(result.secondsUntilStart).toBe(-ONE_HOUR_MS / 1000); // negative one hour in seconds
+    expect(result.secondsUntilStart).toBe(-ONE_HOUR_IN_SECONDS); // negative one hour in seconds
   });
 });
