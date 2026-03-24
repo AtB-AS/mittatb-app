@@ -26,7 +26,6 @@ type Props<T extends string> = {
   onSave: (optionAndValue: DateOptionAndValue<T>) => void;
   bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
   onCloseFocusRef: RefObject<View | null>;
-  maximumDate?: string;
 };
 
 /**
@@ -46,7 +45,6 @@ export const DatePickerSheet = <T extends string>({
   onSave,
   bottomSheetModalRef,
   onCloseFocusRef,
-  maximumDate,
 }: Props<T>) => {
   const keyboardHeight = useKeyboardHeight();
   const styles = useStyles();
@@ -114,7 +112,6 @@ export const DatePickerSheet = <T extends string>({
                 parseDate(date),
               )}
               theme={themeName}
-              maximumDate={maximumDate ? parseDate(maximumDate) : undefined}
             />
           </GestureDetector>
         )}

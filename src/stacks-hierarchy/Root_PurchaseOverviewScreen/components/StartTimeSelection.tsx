@@ -102,7 +102,6 @@ export function StartTimeSelection({
         initialDate={selection.travelDate}
         onCloseFocusRef={onCloseFocusRef}
         bottomSheetModalRef={bottomSheetModalRef}
-        maximumDate={selection.originFareContract?.endDate}
       />
     </>
   );
