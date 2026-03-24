@@ -1,6 +1,6 @@
 import * as Types from './generated/TripsQuery';
 import {BookingAvailabilityType, type TicketOffer} from '@atb-as/utils';
-import type {TripPatternDisabledReason} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/types';
+import type {BookingDisabledReason} from '@atb/modules/booking';
 
 export type TripsQuery = Types.TripsQuery;
 export type Trip = Types.TripsQuery['trip'];
@@ -36,7 +36,7 @@ export type TripPatternWithBooking = TripPattern & {
   booking: {
     availability: BookingAvailabilityType;
     offer: TicketOffer;
-    disabledReason?: TripPatternDisabledReason;
+    disabledReason?: BookingDisabledReason;
   };
 };
 

@@ -17,6 +17,7 @@ describe('PurchaseSelectionBuilder originFareContract', () => {
     const originFareContract: FareContractStub = {
       id: 'FC1',
       product: {...TEST_PRODUCT, id: 'ET1'},
+      startDate: new Date().toISOString(),
       endDate: new Date().toISOString(),
     };
     const selection = builder
@@ -31,6 +32,7 @@ describe('PurchaseSelectionBuilder originFareContract', () => {
     const originFareContract: FareContractStub = {
       id: 'FC1',
       product: {...TEST_PRODUCT, id: 'ET1'},
+      startDate: new Date().toISOString(),
       endDate: new Date().toISOString(),
     };
     const initialSelection: PurchaseSelectionType = {
@@ -47,6 +49,7 @@ describe('PurchaseSelectionBuilder originFareContract', () => {
     const originFareContract = {
       id: 'FC1',
       product: {...TEST_PRODUCT, id: 'ET1'},
+      startDate: new Date().toISOString(),
       endDate: new Date().toISOString(),
     };
     const selectionWithOriginFareContract: PurchaseSelectionType = {
@@ -65,11 +68,13 @@ describe('PurchaseSelectionBuilder originFareContract', () => {
     const oneOriginFareContract: FareContractStub = {
       id: 'FC1',
       product: {...TEST_PRODUCT, id: 'ET1'},
+      startDate: new Date().toISOString(),
       endDate: new Date().toISOString(),
     };
     const anotherOriginFareContract: FareContractStub = {
       id: 'FC2',
       product: {...TEST_PRODUCT, id: 'ET2'},
+      startDate: new Date().toISOString(),
       endDate: new Date().toISOString(),
     };
 
@@ -86,6 +91,7 @@ describe('PurchaseSelectionBuilder originFareContract', () => {
     const originFareContract: FareContractStub = {
       id: 'FC1',
       product: {...TEST_PRODUCT, id: 'ET1'},
+      startDate: new Date().toISOString(),
       endDate: new Date().toISOString(),
     };
     const selection = builder

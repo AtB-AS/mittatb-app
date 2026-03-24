@@ -291,15 +291,27 @@ const TicketingTexts = {
     ),
     select: _('Velg', 'Select', 'Velg'),
     beforeStartOfFareContract: _(
-      'Før oppstart av billett',
-      'Before start of ticket',
-      'Før oppstart av billett',
+      'Billett ikke aktiv',
+      'Ticket not active',
+      'Billett ikkje aktiv',
     ),
     expiredFareContract: _(
-      'Utløpt billett',
-      'Expired ticket',
-      'Utgått billett',
+      'Billett utløpt',
+      'Ticket expired',
+      'Billett utgått',
     ),
+    ticketStartsAt: (startTime: string) =>
+      _(
+        `Billetten din er gyldig fra ${startTime}`,
+        `Your ticket is valid from ${startTime}`,
+        `Billetten din er gyldig fra ${startTime}`,
+      ),
+    ticketExpiresAt: (expiryTime: string) =>
+      _(
+        `Billetten din er gyldig til ${expiryTime}`,
+        `Your ticket is valid until ${expiryTime}`,
+        `Billetten din er gyldig til ${expiryTime}`,
+      ),
   },
 };
 

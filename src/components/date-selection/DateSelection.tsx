@@ -24,14 +24,12 @@ type DateSelectionProps = {
   searchTime: DepartureSearchTime;
   setSearchTime: (searchTime: DepartureSearchTime) => void;
   backgroundColor: ContrastColor;
-  latestDate?: string;
 };
 
 export const DateSelection = ({
   searchTime,
   setSearchTime,
   backgroundColor,
-  latestDate,
 }: DateSelectionProps): React.JSX.Element => {
   const styles = useStyles();
   const {t, language} = useTranslation();

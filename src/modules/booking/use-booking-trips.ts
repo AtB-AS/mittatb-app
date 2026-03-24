@@ -10,7 +10,7 @@ import {
   tripPatternDisplayTimeFilter,
 } from './utils';
 import {useProductAlternatives} from '@atb/modules/ticketing';
-import type {TripPatternDisabledReason} from './types';
+import type {BookingDisabledReason} from '@atb/modules/booking';
 
 type BookingTripsType = {
   tripPatterns: TripPatternWithBooking[];
@@ -116,7 +116,7 @@ export function useBookingTrips({
 function mapToDisabledReason(
   originFareContract: PurchaseSelectionType['originFareContract'],
   tp: TripPatternWithBooking,
-) {
+): BookingDisabledReason | undefined {
   if (
     tp.booking.availability === 'closed' ||
     tp.booking.availability === 'sold_out'
@@ -126,12 +126,12 @@ function mapToDisabledReason(
     originFareContract?.endDate &&
     isAfter(tp.expectedStartTime, originFareContract.endDate)
   ) {
-    return 'expired_fare_contract' as TripPatternDisabledReason;
+    return 'expired_fare_contract';
   }
   if (
     originFareContract?.startDate &&
-    isBefore(tp.expectedStartTime, originFareContract?.startDate)
+    isBefore(tp.expectedStartTime, originFareContract.startDate)
   ) {
-    return 'before_start_of_fare_contract' as TripPatternDisabledReason;
+    return 'inactive_fare_contract';
   }
 }

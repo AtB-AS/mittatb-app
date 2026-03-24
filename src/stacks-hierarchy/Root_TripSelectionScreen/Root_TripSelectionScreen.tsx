@@ -73,7 +73,6 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
             setSelection(newSelection);
           }}
           backgroundColor={theme.color.background.neutral[1]}
-          latestDate={selection.originFareContract?.endDate}
         />
       </View>
       <GenericSectionItem style={styles.content}>

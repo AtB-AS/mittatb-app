@@ -14,6 +14,7 @@ import {
   useGetSupplementProductsQuery,
 } from '@atb/modules/ticketing';
 import {SupplementProduct} from '@atb-as/config-specs';
+import {isBefore, startOfDay} from 'date-fns';
 
 type Props = {
   existingFareContract: FareContractType;
@@ -60,20 +61,37 @@ export function useSupplementProductPurchaseSelection({
     const fromHarbor = harbors.find((h) => h.id === travelRight.startPointRef);
     const toHarbor = harbors.find((h) => h.id === travelRight.endPointRef);
 
-    return builder
-      .forType(supplementProductFareProduct.type)
-      .product(supplementProductFareProduct) // This is necessary because we might have several supplement products, so getDefaultProduct in .forType can default to another.
-      .originFareContract({
-        id: existingFareContract.id,
-        product,
-        startDate: travelRight.startDateTime.toISOString(),
-        endDate: travelRight.endDateTime.toISOString(),
-      })
-      .supplementProducts([{...supplementProduct, count: 1}])
-      .userProfiles(userProfile ? [{...userProfile, count: 1}] : [])
-      .fromStopPlace(fromHarbor)
-      .toStopPlace(toHarbor)
-      .build();
+    return (
+      builder
+        .forType(supplementProductFareProduct.type)
+        /*
+         * This is necessary because we might have several supplement products,
+         * so getDefaultProduct in .forType can default to another.
+         */
+        .product(supplementProductFareProduct)
+        .originFareContract({
+          id: existingFareContract.id,
+          product,
+          startDate: travelRight.startDateTime.toISOString(),
+          endDate: travelRight.endDateTime.toISOString(),
+        })
+        /*
+         * If the travel right has not yet started, we set the search time to the start
+         * date of the travel right since reservations can't be made before that time.
+         * The user can choose to navigate back in time in the UI to explore departures.
+         * If the travel right has already started, we default to now.
+         */
+        .date(
+          isBefore(new Date(), travelRight.startDateTime)
+            ? startOfDay(travelRight.startDateTime).toISOString()
+            : undefined,
+        )
+        .supplementProducts([{...supplementProduct, count: 1}])
+        .userProfiles(userProfile ? [{...userProfile, count: 1}] : [])
+        .fromStopPlace(fromHarbor)
+        .toStopPlace(toHarbor)
+        .build()
+    );
 
     // We disable the exhaustive-deps rule here because we know builder is not
     // referentially stable. See documentation in usePurchaseSelectionBuilder.
@@ -95,7 +113,6 @@ function useSupplementProducts() {
   const {data: supplementProducts} = useGetSupplementProductsQuery();
   return supplementProducts
     .map((sp) => SupplementProduct.safeParse(sp))
-    .filter((sp) => sp.success)
     .filter((sp) => sp.success)
     .map((sp) => sp.data);
 }

@@ -1,3 +1,3 @@
 export {useBookingTrips} from './use-booking-trips';
 export {isValidSelection} from './utils';
-export type {TripPatternDisabledReason} from './types';
+export {type TripPatternDisabledReason, type BookingDisabledReason} from './types';
