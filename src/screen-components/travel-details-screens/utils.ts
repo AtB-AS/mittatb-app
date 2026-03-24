@@ -536,6 +536,7 @@ export type TripAnalytics = {
   nonFootLegCount: number;
   legModes: string[];
   duration: number;
+  secondsUntilStart: number;
 };
 
 /**
@@ -546,6 +547,7 @@ export type TripAnalytics = {
 export function getTripPatternAnalytics(
   tripPattern: TripPattern,
   fareZones: ConfigFareZone[],
+  now: number,
 ): TripAnalytics {
   const places = tripPattern.legs
     .map((leg) => [leg.fromPlace, leg.toPlace])
@@ -571,5 +573,9 @@ export function getTripPatternAnalytics(
       .length,
     legModes: tripPattern.legs.map((leg) => leg.mode),
     duration: tripPattern.duration,
+    secondsUntilStart: secondsBetween(
+      new Date(now),
+      tripPattern.expectedStartTime,
+    ),
   };
 }

@@ -14,12 +14,13 @@ import {AccessibilityInfo} from 'react-native';
 
 type SaveTripPatternButtonComponentProps = {
   tripPattern: TripPattern;
+  now: number;
 };
 
 export const SaveTripPatternButtonComponent =
   wrapWithExperimentalFeatureToggledComponent<SaveTripPatternButtonComponentProps>(
     'render-nothing-if-disabled',
-    ({tripPattern}) => {
+    ({tripPattern, now}) => {
       const {
         addTripPattern,
         removeTripPattern,
@@ -60,7 +61,7 @@ export const SaveTripPatternButtonComponent =
               posthogAnalytics.logEvent(
                 'Trip details',
                 'Trip removed',
-                getTripPatternAnalytics(tripPattern, fareZones),
+                getTripPatternAnalytics(tripPattern, fareZones, now),
               );
               removeTripPattern(tripPattern);
               setTimeout(
@@ -78,7 +79,7 @@ export const SaveTripPatternButtonComponent =
               posthogAnalytics.logEvent(
                 'Trip details',
                 'Trip saved',
-                getTripPatternAnalytics(tripPattern, fareZones),
+                getTripPatternAnalytics(tripPattern, fareZones, now),
               );
               addTripPattern(tripPattern);
               setTimeout(

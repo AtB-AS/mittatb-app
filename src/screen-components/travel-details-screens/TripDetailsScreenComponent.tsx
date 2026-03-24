@@ -41,6 +41,7 @@ import {
 import {useSingleTripQuery} from '@atb/modules/trip-patterns';
 import {getPosthogClientGlobal} from '@atb/modules/analytics';
 import {useScreenshotAware} from 'react-native-screenshot-aware';
+import {useTimeContext} from '@atb/modules/time';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -90,10 +91,15 @@ export const TripDetailsScreenComponent = ({
 
   const updatedTripPattern = data ?? tripPattern;
 
-  useTrackScreenshottedTripDetails(updatedTripPattern);
+  const {serverNow} = useTimeContext();
+  useTrackScreenshottedTripDetails(updatedTripPattern, serverNow);
 
   const {fareZones} = useFirestoreConfigurationContext();
-  const tripAnalytics = getTripPatternAnalytics(updatedTripPattern, fareZones);
+  const tripAnalytics = getTripPatternAnalytics(
+    updatedTripPattern,
+    fareZones,
+    serverNow,
+  );
 
   const purchaseSelection = usePurchaseSelectionFromTrip(updatedTripPattern);
   const fromToNames = getFromToName(updatedTripPattern.legs);
@@ -179,6 +185,7 @@ export const TripDetailsScreenComponent = ({
               onPressQuay={(stopPlace, selectedQuayId) =>
                 onPressQuay(stopPlace, selectedQuayId, tripAnalytics)
               }
+              now={serverNow}
             />
           </View>
         )}
@@ -449,12 +456,15 @@ function getFirstFareZoneWeSellTicketFor(
   return matchingZones[0];
 }
 
-function useTrackScreenshottedTripDetails(tripPattern: TripPattern) {
+function useTrackScreenshottedTripDetails(
+  tripPattern: TripPattern,
+  now: number,
+) {
   const {fareZones} = useFirestoreConfigurationContext();
 
   const screenshotCallback = useCallback(() => {
-    trackScreenshottedTripDetails(tripPattern, fareZones);
-  }, [tripPattern, fareZones]);
+    trackScreenshottedTripDetails(tripPattern, fareZones, now);
+  }, [tripPattern, fareZones, now]);
 
   useScreenshotAware(screenshotCallback);
 }
@@ -462,13 +472,14 @@ function useTrackScreenshottedTripDetails(tripPattern: TripPattern) {
 function trackScreenshottedTripDetails(
   tripPattern: TripPattern,
   fareZones: FareZone[],
+  now: number,
 ) {
   const posthogClient = getPosthogClientGlobal();
   if (!posthogClient) return;
 
   posthogClient.capture(
     'TripDetailsScreenshotTaken',
-    getTripPatternAnalytics(tripPattern, fareZones),
+    getTripPatternAnalytics(tripPattern, fareZones, now),
   );
 }
 
