@@ -29,18 +29,14 @@ import {getBaggageProducts} from '../get-baggage-products';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
 import {useTicketAccessibilityLabel} from '../use-ticket-accessibility-label';
-import {SupplementPurchaseButton} from '@atb/modules/fare-contracts';
-import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type Props = {
   fc: FareContractType;
-  onNavigateToPurchaseFlow?: (selection: PurchaseSelectionType) => void;
   now: number;
 };
 
 export const TravelInfoSectionItem = ({
   fc,
-  onNavigateToPurchaseFlow,
   now,
 }: Props) => {
   const {t, language} = useTranslation();
@@ -168,10 +164,6 @@ export const TravelInfoSectionItem = ({
       </View>
 
       <SentOrReceivedMessageBox fc={fc} />
-      <SupplementPurchaseButton
-        existingFareContract={fc}
-        navigateToPurchaseFlow={onNavigateToPurchaseFlow}
-      />
     </View>
   );
 };
