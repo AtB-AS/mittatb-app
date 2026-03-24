@@ -7,13 +7,13 @@ import {optionalNullish} from '@atb-as/config-specs/lib/utils/nullish';
 
 const UserProfileLimitation = z.object({
   userProfileRef: z.string(),
-  maxCount: optionalNullish(z.number()),
+  maxCount: optionalNullish(z.number().int().nonnegative()),
 });
 
 export const ProductServiceLimitations = BaseLimitations.extend({
   userProfiles: z.array(UserProfileLimitation),
   userProfileRefs: optionalNullish(z.array(z.string())),
-  maxCountPerOrder: optionalNullish(z.number().int()),
+  maxCountPerOrder: optionalNullish(z.number().int().nonnegative()),
 });
 export type ProductServiceLimitations = z.infer<
   typeof ProductServiceLimitations
