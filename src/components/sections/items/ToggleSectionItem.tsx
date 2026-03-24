@@ -66,9 +66,11 @@ export function ToggleSectionItem({
 
   const tapAction = Platform.select({
     ios: {
+      // only works on iOS
       onAccessibilityTap: () => onChange(!checked),
     },
     default: {
+      // onAccessibilityAction with activate (aka tap gesture) seems to be broken on iOS
       accessibilityActions: [{name: 'activate'}],
       onAccessibilityAction: () => onChange(!checked),
     },
