@@ -304,7 +304,7 @@ const TicketingTexts = {
       _(
         `Billetten din er gyldig fra ${startTime}`,
         `Your ticket is valid from ${startTime}`,
-        `Billetten din er gyldig fra ${startTime}`,
+        `Billetten din er gyldig frå ${startTime}`,
       ),
     ticketExpiresAt: (expiryTime: string) =>
       _(

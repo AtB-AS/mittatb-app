@@ -2,7 +2,7 @@ import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {bookingAvailabilitySearch} from '@atb/api/bff/trips';
 import {useQuery} from '@tanstack/react-query';
 import type {TripPatternWithBooking} from '@atb/api/types/trips';
-import {isAfter, isBefore, startOfDay} from 'date-fns';
+import {isAfter, isBefore} from '@atb/utils/date';
 import {useMemo} from 'react';
 import {
   isValidSelection,
@@ -10,7 +10,8 @@ import {
   tripPatternDisplayTimeFilter,
 } from './utils';
 import {useProductAlternatives} from '@atb/modules/ticketing';
-import type {BookingDisabledReason} from '@atb/modules/booking';
+import type {BookingDisabledReason} from './types';
+import {startOfDay} from 'date-fns';
 
 type BookingTripsType = {
   tripPatterns: TripPatternWithBooking[];

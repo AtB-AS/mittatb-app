@@ -17,9 +17,8 @@ export function tripPatternAvailabilityFilter(
 }
 
 /**
- * Returns true for trip patterns that should be displayed to the user.
- * That is trip patterns for the selected day (midnight to midnight),
- * and trip patterns with departure after now but before latestDate
+ * Returns true for trip patterns with expected departure on or after the
+ * given travelDate and before the end of that same day.
  */
 export function tripPatternDisplayTimeFilter(
   tp: TripPatternWithBooking,
