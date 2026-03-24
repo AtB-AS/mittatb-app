@@ -10,6 +10,7 @@ import {wrapWithExperimentalFeatureToggledComponent} from '@atb/modules/experime
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getTripPatternAnalytics} from '@atb/screen-components/travel-details-screens';
+import {AccessibilityInfo} from 'react-native';
 
 type SaveTripPatternButtonComponentProps = {
   tripPattern: TripPattern;
@@ -48,11 +49,6 @@ export const SaveTripPatternButtonComponent =
 
       return (
         <Button
-          accessibilityLabel={
-            isStored
-              ? t(SaveTripPatternButtonComponentTexts.removeTrip.a11yLabel)
-              : t(SaveTripPatternButtonComponentTexts.saveTrip.a11yLabel)
-          }
           accessibilityHint={
             isStored
               ? t(SaveTripPatternButtonComponentTexts.removeTrip.a11yHint)
@@ -67,6 +63,16 @@ export const SaveTripPatternButtonComponent =
                 getTripPatternAnalytics(tripPattern, fareZones),
               );
               removeTripPattern(tripPattern);
+              setTimeout(
+                () =>
+                  AccessibilityInfo.announceForAccessibility(
+                    t(
+                      SaveTripPatternButtonComponentTexts.removeTrip
+                        .a11yAnnouncement,
+                    ),
+                  ),
+                100,
+              );
             } else {
               analytics().logEvent('click_trip_save_button');
               posthogAnalytics.logEvent(
@@ -75,6 +81,16 @@ export const SaveTripPatternButtonComponent =
                 getTripPatternAnalytics(tripPattern, fareZones),
               );
               addTripPattern(tripPattern);
+              setTimeout(
+                () =>
+                  AccessibilityInfo.announceForAccessibility(
+                    t(
+                      SaveTripPatternButtonComponentTexts.saveTrip
+                        .a11yAnnouncement,
+                    ),
+                  ),
+                100,
+              );
             }
           }}
           text={
@@ -100,24 +116,28 @@ export const SaveTripPatternButtonComponent =
 const SaveTripPatternButtonComponentTexts = {
   saveTrip: {
     text: _('Lagre reise', 'Save trip', 'Lagre reise'),
-    a11yLabel: _('Lagre reise', 'Save trip', 'Lagre reise'),
     a11yHint: _(
       'Reise er ikke lagret. Aktivér for å lagre reise',
       'Trip is not saved. Activate to save trip',
       'Reise er ikke lagret. Aktivér for å lagre reise',
     ),
+    a11yAnnouncement: _(
+      'Reise lagret. Aktivér igjen for å fjern lagret reise',
+      'Trip saved. Activate again to remove saved trip',
+      'Reise lagret. Aktivér igjen for å fjern lagret reise',
+    ),
   },
   removeTrip: {
     text: _('Fjern lagret reise', 'Remove saved trip', 'Fjern lagret reise'),
-    a11yLabel: _(
-      'Fjern lagret reise',
-      'Remove saved trip',
-      'Fjern lagret reise',
-    ),
     a11yHint: _(
       'Reise er lagret. Aktivér for å fjern lagret reise',
       'Activate to remove saved trip',
       'Reise er lagret. Aktivér for å fjern lagret reise',
+    ),
+    a11yAnnouncement: _(
+      'Reise fjernet. Aktivér igjen for å lagre reise',
+      'Trip removed. Activate again to save trip',
+      'Reise fjernet. Aktivér igjen for å lagre reise',
     ),
   },
 };
