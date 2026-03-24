@@ -167,10 +167,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const onPressBuy = () => {
     if (isBookingRequired) {
-      navigation.push(
-        'Root_TripSelectionScreen',
-        rootPurchaseConfirmationScreenParams,
-      );
+      navigation.push('Root_TripSelectionScreen', {
+        ...rootPurchaseConfirmationScreenParams,
+      });
       return;
     }
     if (selection.isOnBehalfOf) {
@@ -322,11 +321,16 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             ref={focusRefs}
           />
 
-          <StartTimeSelection
-            selection={selection}
-            setSelection={setSelection}
-            style={styles.selectionComponent}
-          />
+          {
+            // When booking is enabled, the next step is selecting the departure (implicitly the time)
+            !selection.preassignedFareProduct.isBookingEnabled && (
+              <StartTimeSelection
+                selection={selection}
+                setSelection={setSelection}
+                style={styles.selectionComponent}
+              />
+            )
+          }
 
           {isFree ? (
             <MessageInfoBox

@@ -17,16 +17,14 @@ export function tripPatternAvailabilityFilter(
 }
 
 /**
- * Returns true for trip patterns that should be displayed to the user.
- * That is trip patterns for the selected day (midnight to midnight),
- * and trip patterns with departure after now
+ * Returns true for trip patterns with expected departure on or after the
+ * given travelDate and before the end of that same day.
  */
 export function tripPatternDisplayTimeFilter(
   tp: TripPatternWithBooking,
   travelDate: string,
 ): boolean {
-  return (
-    isEqualOrAfter(tp.expectedStartTime, travelDate) &&
-    isBefore(tp.expectedStartTime, endOfDay(travelDate))
-  );
+  const isAfterSearchTime = isEqualOrAfter(tp.expectedStartTime, travelDate);
+  const isBeforeEndOfDay = isBefore(tp.expectedStartTime, endOfDay(travelDate));
+  return isAfterSearchTime && isBeforeEndOfDay;
 }

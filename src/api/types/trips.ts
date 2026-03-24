@@ -1,5 +1,6 @@
 import * as Types from './generated/TripsQuery';
 import {BookingAvailabilityType, type TicketOffer} from '@atb-as/utils';
+import type {BookingDisabledReason} from '@atb/modules/booking';
 
 export type TripsQuery = Types.TripsQuery;
 export type Trip = Types.TripsQuery['trip'];
@@ -35,6 +36,7 @@ export type TripPatternWithBooking = TripPattern & {
   booking: {
     availability: BookingAvailabilityType;
     offer: TicketOffer;
+    disabledReason?: BookingDisabledReason;
   };
 };
 

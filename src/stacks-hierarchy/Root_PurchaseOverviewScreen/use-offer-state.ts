@@ -230,8 +230,8 @@ export function useOfferState(
             id: t.userTypeString,
             userType: t.userTypeString,
             count: t.count,
-            productIds: selection?.existingProduct
-              ? [selection.existingProduct.id]
+            productIds: selection?.originFareContract
+              ? [selection.originFareContract.product.id]
               : [],
           })) ?? [];
 
@@ -242,7 +242,7 @@ export function useOfferState(
           .map((bp) => ({
             id: bp.baggageType,
             // Must be a valid user profile ref, and we are unsure if Entur supports 'ANYONE' yet for baggage products.
-            // Doesn't actually have an affect on the purchased product.
+            // Doesn't actually have an affect on the purchased product
             userType: 'ADULT',
             baggageTypes: [bp.baggageType],
             count: bp.count,
@@ -269,8 +269,8 @@ export function useOfferState(
           if (selection?.legs.length) {
             const params: OfferSearchParams = {
               travellers: allTravellers,
-              products: selection.existingProduct
-                ? [] // existingProduct means we are purchasing supplementProduct. products should be empty.
+              products: selection.originFareContract
+                ? [] // non-null originFareContract means we are purchasing supplementProduct. products should be empty.
                 : preassignedFareProductAlternatives.map((p) => p.id),
               supplementProducts:
                 selection?.supplementProductsWithCount.map((sp) => sp.id) ?? [],

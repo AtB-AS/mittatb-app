@@ -66,10 +66,12 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
           searchTime={searchTime}
           setSearchTime={(searchTime) => {
             setSearchTime(searchTime);
-            setSelection((prev) => ({
-              ...prev,
-              travelDate: searchTime.date,
-            }));
+            setSelection((prevSelection) =>
+              builder
+                .fromSelection(prevSelection)
+                .date(searchTime.date)
+                .build(),
+            );
           }}
           backgroundColor={theme.color.background.neutral[1]}
         />
