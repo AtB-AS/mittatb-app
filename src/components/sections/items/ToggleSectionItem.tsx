@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {AccessibilityProps, View} from 'react-native';
+import {AccessibilityProps, Platform, View} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {useSectionItem} from '../use-section-item';
@@ -64,19 +64,27 @@ export function ToggleSectionItem({
   if (label) a11yLabel += ` ${t(TagInfoTexts.labels[label].a11y)}`;
   if (subtext) a11yLabel += `, ${subtext}`;
 
+  const tapAction = Platform.select({
+    ios: {
+      onAccessibilityTap: () => onChange(!checked),
+    },
+    default: {
+      accessibilityActions: [{name: 'activate'}],
+      onAccessibilityAction: () => onChange(!checked),
+    },
+  });
+
   return (
     <View
       style={topContainer}
       accessible={true}
       accessibilityRole="switch"
       accessibilityState={{checked: checked, disabled: disabled}}
-      accessibilityActions={[{name: 'activate'}]}
-      onAccessibilityAction={() => onChange(!checked)}
-      onAccessibilityTap={() => onChange(!checked)}
       accessibilityHint={
         disabled ? t(SectionTexts.toggleInput.disabled) : undefined
       }
       accessibilityLabel={a11yLabel}
+      {...tapAction}
       {...accessibility}
       testID="toggleItem"
     >
