@@ -72,7 +72,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
       <AnimatedGestureHandlerScrollView
         contentContainerStyle={styles.content}
         onScroll={scrollHandler}
-        scrollEventThrottle={10}
+        scrollEventThrottle={16}
         refreshControl={
           <RefreshControl
             refreshing={isRefetchingAvailableFareContracts}

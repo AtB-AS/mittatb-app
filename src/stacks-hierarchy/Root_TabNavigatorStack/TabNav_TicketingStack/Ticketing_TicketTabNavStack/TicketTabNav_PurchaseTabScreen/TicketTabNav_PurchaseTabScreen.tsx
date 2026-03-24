@@ -121,7 +121,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   return authenticationType !== 'none' ? (
     <AnimatedGestureHandlerScrollView
       onScroll={scrollHandler}
-      scrollEventThrottle={10}
+      scrollEventThrottle={16}
       refreshControl={
         <RefreshControl
           refreshing={isRefetchingPreassignedFareProducts}

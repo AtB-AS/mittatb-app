@@ -17,6 +17,7 @@ import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
   useAnimatedStyle,
+  useDerivedValue,
   SharedValue,
 } from 'react-native-reanimated';
 import {scheduleOnUI} from 'react-native-worklets';
@@ -37,16 +38,22 @@ const TabScrollContext = createContext<TabScrollContextType | undefined>(
 // Used to handle the scroll state of both tabs
 export const useTabScrollHandler = (tabIndex: number) => {
   const ctx = useContext(TabScrollContext);
+  // Destructure individual SharedValue references so the worklet closure
+  // captures stable references rather than the context object identity.
+  const scrollY = ctx?.scrollY;
+  const tabOffset0 = ctx?.tabOffset0;
+  const tabOffset1 = ctx?.tabOffset1;
+  const activeTab = ctx?.activeTab;
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
-      if (ctx && ctx.activeTab.value === tabIndex) {
+      if (activeTab && activeTab.value === tabIndex) {
         const y = event.contentOffset.y;
-        ctx.scrollY.value = y;
-        if (tabIndex === 0) {
-          ctx.tabOffset0.value = y;
-        } else {
-          ctx.tabOffset1.value = y;
+        if (scrollY) scrollY.value = y;
+        if (tabIndex === 0 && tabOffset0) {
+          tabOffset0.value = y;
+        } else if (tabOffset1) {
+          tabOffset1.value = y;
         }
       }
     },
@@ -69,9 +76,13 @@ export const Ticketing_TicketTabNavStack = () => {
   );
   const color = theme.color.background.neutral[3].background;
 
+  // Instead of tracking scrollY value to determine border,
+  // only trigger the change when needed (scroll Y value 0 vs not 0)
+  const showBorder = useDerivedValue(() => (scrollY.value > 0 ? 1 : 0));
+
   const borderStyle = useAnimatedStyle(() => ({
     borderBottomWidth: 1,
-    borderBottomColor: scrollY.value > 0 ? color : 'transparent',
+    borderBottomColor: showBorder.value ? color : 'transparent',
   }));
 
   const onTabSwitch = useMemo(
