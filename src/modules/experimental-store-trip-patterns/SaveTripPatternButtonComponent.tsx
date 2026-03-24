@@ -48,9 +48,16 @@ export const SaveTripPatternButtonComponent =
 
       return (
         <Button
-          accessibilityLabel={t(
-            SaveTripPatternButtonComponentTexts.removeTrip.a11yLabel,
-          )}
+          accessibilityLabel={
+            isStored
+              ? t(SaveTripPatternButtonComponentTexts.removeTrip.a11yLabel)
+              : t(SaveTripPatternButtonComponentTexts.saveTrip.a11yLabel)
+          }
+          accessibilityHint={
+            isStored
+              ? t(SaveTripPatternButtonComponentTexts.removeTrip.a11yHint)
+              : t(SaveTripPatternButtonComponentTexts.saveTrip.a11yHint)
+          }
           onPress={() => {
             if (isStored) {
               analytics().logEvent('click_trip_remove_button');
@@ -93,18 +100,24 @@ export const SaveTripPatternButtonComponent =
 const SaveTripPatternButtonComponentTexts = {
   saveTrip: {
     text: _('Lagre reise', 'Save trip', 'Lagre reise'),
-    a11yLabel: _(
-      'Aktiver for å lagre reise',
-      'Activate to save trip',
-      'Aktiver for å lagre reise',
+    a11yLabel: _('Lagre reise', 'Save trip', 'Lagre reise'),
+    a11yHint: _(
+      'Reise er ikke lagret. Aktivér for å lagre reise',
+      'Trip is not saved. Activate to save trip',
+      'Reise er ikke lagret. Aktivér for å lagre reise',
     ),
   },
   removeTrip: {
     text: _('Fjern lagret reise', 'Remove saved trip', 'Fjern lagret reise'),
     a11yLabel: _(
-      'Aktiver for å fjern lagret reise',
+      'Fjern lagret reise',
+      'Remove saved trip',
+      'Fjern lagret reise',
+    ),
+    a11yHint: _(
+      'Reise er lagret. Aktivér for å fjern lagret reise',
       'Activate to remove saved trip',
-      'Aktiver for å fjern lagret reise',
+      'Reise er lagret. Aktivér for å fjern lagret reise',
     ),
   },
 };
