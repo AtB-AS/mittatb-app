@@ -85,24 +85,24 @@ export const SaveTripPatternButtonComponent =
 const SaveTripPatternButtonComponentTexts = {
   saveTrip: {
     text: _('Lagre reise', 'Save trip', 'Lagre reise'),
-    a11yLabel: _(
-      'Reise er ikke lagret.',
-      'Trip is not saved.',
-      'Reise er ikkje lagret.',
-    ),
+    a11yLabel: _('Lagre reise', 'Save trip', 'Lagre reise'),
     a11yHint: _(
-      'Aktivér for å lagre reise',
-      'Activate to save trip',
-      'Aktivér for å lagre reise',
+      'Reise er ikke lagret. Aktivér for å lagre reise',
+      'Trip is not saved. Activate to save trip',
+      'Reise er ikke lagret. Aktivér for å lagre reise',
     ),
   },
   removeTrip: {
     text: _('Fjern lagret reise', 'Remove saved trip', 'Fjern lagret reise'),
-    a11yLabel: _('Reise er lagret.', 'Trip is saved.', 'Reise er lagret.'),
+    a11yLabel: _(
+      'Fjern lagret reise',
+      'Remove saved trip',
+      'Fjern lagret reise',
+    ),
     a11yHint: _(
-      'Aktivér for å fjern lagret reise',
+      'Reise er lagret. Aktivér for å fjern lagret reise',
       'Activate to remove saved trip',
-      'Aktivér for å fjern lagret reise',
+      'Reise er lagret. Aktivér for å fjern lagret reise',
     ),
   },
 };
