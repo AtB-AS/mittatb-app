@@ -15,17 +15,24 @@ import {fareContractValidityUnits} from '../fare-contract-validity-units';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useAuthContext} from '@atb/modules/auth';
 import type {FareContractType} from '@atb-as/utils';
+import {useTimeContext} from '@atb/modules/time';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 
 type Props = {
   fc: FareContractType;
   now: number;
 };
 
-export const ValidityTime = ({fc, now}: Props) => {
+export const ValidityTime = ({fc, now: parentNow}: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {isInspectable} = useMobileTokenContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
+
+  // Use own per-second timer for the countdown display, so the parent tree
+  // does not need to re-render every second just for this text to update.
+  const {serverNow: localNow} = useTimeContext(ONE_SECOND_MS);
+  const now = localNow ?? parentNow;
 
   const {validityStatus, validFrom, validTo} = getFareContractInfo(
     now,
