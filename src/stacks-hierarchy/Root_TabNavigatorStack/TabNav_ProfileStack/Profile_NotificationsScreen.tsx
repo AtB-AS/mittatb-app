@@ -99,8 +99,8 @@ export const Profile_NotificationsScreen = ({
           ProfileTexts.sections.settings.linkSectionItems.notifications.heading,
         ),
       }}
-      parallaxContent={(focusRef) => (
-        <View style={style.parallaxContent} ref={focusRef} accessible={true}>
+      headerContent={(focusRef) => (
+        <View style={style.headerContent} ref={focusRef} accessible={true}>
           <ThemeText color={themeColor} typography="heading__l">
             {t(
               ProfileTexts.sections.settings.linkSectionItems.notifications
@@ -280,7 +280,7 @@ export const Profile_NotificationsScreen = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  parallaxContent: {
+  headerContent: {
     marginHorizontal: theme.spacing.medium,
   },
   content: {

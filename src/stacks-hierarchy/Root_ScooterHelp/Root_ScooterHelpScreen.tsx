@@ -46,7 +46,7 @@ export const Root_ScooterHelpScreen = ({
         title: t(ScooterHelpTexts.title),
         rightButton: {type: 'close'},
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading ref={focusRef} text={t(ScooterHelpTexts.title)} />
       )}
     >

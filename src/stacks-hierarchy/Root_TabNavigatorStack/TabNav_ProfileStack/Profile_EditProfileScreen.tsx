@@ -131,8 +131,8 @@ export const Profile_EditProfileScreen = ({
         title: t(EditProfileTexts.header.title),
         leftButton: {type: 'back'},
       }}
-      parallaxContent={(focusRef) => (
-        <View style={styles.parallaxContent} ref={focusRef} accessible={true}>
+      headerContent={(focusRef) => (
+        <View style={styles.headerContent} ref={focusRef} accessible={true}>
           <ThemeText
             typography="heading__l"
             color={themeColor}
@@ -369,7 +369,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacing.medium,
     marginVertical: theme.spacing.xLarge,
   },
-  parallaxContent: {marginHorizontal: theme.spacing.medium},
+  headerContent: {marginHorizontal: theme.spacing.medium},
   profileError: {
     marginHorizontal: theme.spacing.medium,
     marginBottom: theme.spacing.medium,

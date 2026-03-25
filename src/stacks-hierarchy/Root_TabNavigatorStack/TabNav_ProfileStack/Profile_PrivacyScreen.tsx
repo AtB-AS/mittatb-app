@@ -34,7 +34,7 @@ export const Profile_PrivacyScreen = ({navigation}: Props) => {
         title: t(ProfileTexts.sections.privacy.heading),
         leftButton: {type: 'back'},
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
           text={t(ProfileTexts.sections.privacy.heading)}

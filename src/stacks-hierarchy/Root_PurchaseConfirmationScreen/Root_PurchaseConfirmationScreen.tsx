@@ -260,7 +260,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         },
         globalMessageContext: GlobalMessageContextEnum.appTicketing,
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
           text={t(PurchaseConfirmationTexts.title)}

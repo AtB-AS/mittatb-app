@@ -297,7 +297,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           },
         }}
         refreshControlProps={refreshControlProps}
-        parallaxContent={() => (
+        headerContent={() => (
           <View style={styles.searchHeader}>
             <WithOverlayButton
               svgIcon={Swap}

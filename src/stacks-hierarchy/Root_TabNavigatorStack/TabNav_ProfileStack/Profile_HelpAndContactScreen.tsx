@@ -59,7 +59,7 @@ export const Profile_HelpAndContactScreen = ({navigation}: Props) => {
           title: t(ProfileTexts.sections.contact.heading),
           leftButton: {type: 'back'},
         }}
-        parallaxContent={(focusRef) => (
+        headerContent={(focusRef) => (
           <ScreenHeading
             ref={focusRef}
             text={t(ProfileTexts.sections.contact.helpAndContact)}

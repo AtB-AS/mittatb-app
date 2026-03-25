@@ -131,7 +131,7 @@ export const NearbyStopPlacesScreenComponent = ({
     <FullScreenView
       headerProps={{...headerProps}}
       focusRef={focusRef}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <>
           <ScreenHeading
             ref={focusRef}

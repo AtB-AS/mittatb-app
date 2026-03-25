@@ -216,7 +216,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
         globalMessageContext: GlobalMessageContextEnum.appAssistant,
         color: theme.color.background.neutral[1],
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
           text={t(DashboardTexts.header.title)}

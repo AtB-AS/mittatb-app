@@ -92,7 +92,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           title: t(ProfileTexts.header.title),
           color: neutralContrastColor,
         }}
-        parallaxContent={(focusRef) => (
+        headerContent={(focusRef) => (
           <ScreenHeading
             ref={focusRef}
             text={t(ProfileTexts.header.title)}
