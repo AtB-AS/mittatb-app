@@ -41,6 +41,7 @@ type Props = {
   now: number;
   fareContract: FareContractType;
   isStatic?: boolean;
+  isFocused?: boolean;
   onPressDetails?: () => void;
   onNavigateToBonusScreen: () => void;
   onNavigateToPurchaseFlow?: (
@@ -53,6 +54,7 @@ export const FareContractView: React.FC<Props> = ({
   now,
   fareContract,
   isStatic,
+  isFocused,
   onPressDetails,
   onNavigateToBonusScreen,
   onNavigateToPurchaseFlow,
@@ -112,7 +114,7 @@ export const FareContractView: React.FC<Props> = ({
         />
       ) : (
         <GenericSectionItem style={styles.header}>
-          <WithValidityLine fc={fareContract} now={now}>
+          <WithValidityLine fc={fareContract} now={now} animate={isFocused}>
             <ProductName fc={fareContract} />
             <ValidityTime fc={fareContract} now={now} />
             <Description fc={fareContract} />

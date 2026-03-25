@@ -15,6 +15,7 @@ type Props = PropsWithChildren<
   (
     | {
         fc: FareContractType;
+        animate?: boolean;
       }
     | ({reservation: Reservation} & {enabledLine?: boolean})
   ) & {now: number}
@@ -55,6 +56,7 @@ export const WithValidityLine = (props: Props) => {
         <ValidityLine
           status={validityStatus}
           fareProductType={preassignedFareProduct?.type}
+          animate={props.animate}
         />
         {!!props.children ? (
           <View style={styles.content}>{props.children}</View>
