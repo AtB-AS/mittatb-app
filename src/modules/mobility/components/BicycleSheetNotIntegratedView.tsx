@@ -37,7 +37,7 @@ type Props = {
   numDocksAvailable?: number;
 };
 
-export const BikeStationNotIntegrated = ({
+export const BikeStationNotIntegratedView = ({
   rentalAppUri,
   appStoreUri,
   operatorId,

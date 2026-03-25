@@ -6,16 +6,15 @@ import {
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
-import {dictionary, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {BicycleTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import React, {useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import {useBikeStation} from '../../use-bike-station';
 import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
-import {BikeStationIntegration} from '../BikeStationIntegration';
+import {BikeStationIntegrationView} from '../BikeStationIntegrationView';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
-import {getVehicles} from '@atb/api/mobility';
-import {BikeStationNotIntegrated} from '../BicycleSheetNotIntegrated';
+import {BikeStationNotIntegratedView} from '../BicycleSheetNotIntegratedView';
 import {useOperators} from '../../use-operators';
 import {Loading} from '@atb/components/loading';
 
@@ -53,39 +52,10 @@ export const BikeStationBottomSheet = ({
     appStoreUri,
     availableBikes,
   } = useBikeStation(stationId);
-  const [loadingSelectedVehicle, setLoadingSelectedVehicle] = useState(false);
-  const [selectedVehicleError, setSelectedVehicleError] = useState(false);
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
 
   useDoOnceOnItemReceived(onStationReceived, station);
-
-  const onPressVehicleType = async (propulsionType: string) => {
-    setLoadingSelectedVehicle(true);
-    setSelectedVehicleError(false);
-    try {
-      const vehicles = await getVehicles({
-        stationId: station?.id,
-        propulsionType,
-        sort: '-currentRangeMeters',
-        maxCount: 1,
-      });
-
-      if (vehicles.length === 0) {
-        console.warn('No vehicles available for this type');
-        setSelectedVehicleError(true);
-        return;
-      }
-
-      const vehicleId = vehicles[0].id;
-      onVehicleTypeSelected(vehicleId);
-    } catch (error) {
-      console.warn('Failed to fetch vehicles for selected type', error);
-      setSelectedVehicleError(true);
-    } finally {
-      setLoadingSelectedVehicle(false);
-    }
-  };
 
   return (
     <MapBottomSheet
@@ -109,12 +79,12 @@ export const BikeStationBottomSheet = ({
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >
-      {(isLoading || loadingSelectedVehicle) && (
+      {isLoading && (
         <View style={styles.loading}>
           <Loading size="large" />
         </View>
       )}
-      {!isLoading && !loadingSelectedVehicle && (isError || !station) && (
+      {!isLoading && (isError || !station) && (
         <View style={styles.footer}>
           <MessageInfoBox
             type="error"
@@ -122,42 +92,27 @@ export const BikeStationBottomSheet = ({
           />
         </View>
       )}
-      {!isLoading && !loadingSelectedVehicle && selectedVehicleError && (
-        <View style={styles.footer}>
-          <MessageInfoBox
-            type="error"
-            message={t(dictionary.genericErrorMsg)}
-          />
-        </View>
+
+      {!operatorIsIntegrationEnabled && !isLoading && !isError && station && (
+        <BikeStationIntegrationView
+          station={station}
+          navigateSupportCallback={navigateSupportCallback}
+          onPressVehicleType={onVehicleTypeSelected}
+        />
       )}
-      {operatorIsIntegrationEnabled &&
-        !isLoading &&
-        !loadingSelectedVehicle &&
-        !isError &&
-        station && (
-          <BikeStationIntegration
-            station={station}
-            navigateSupportCallback={navigateSupportCallback}
-            onPressVehicleType={onPressVehicleType}
-          />
-        )}
-      {!operatorIsIntegrationEnabled &&
-        !isLoading &&
-        !loadingSelectedVehicle &&
-        !isError &&
-        station && (
-          <BikeStationNotIntegrated
-            numDocksAvailable={station.numDocksAvailable}
-            onStationReceived={onStationReceived}
-            rentalAppUri={rentalAppUri ?? undefined}
-            appStoreUri={appStoreUri ?? undefined}
-            operatorId={operatorId}
-            operatorName={operatorName}
-            brandLogoUrl={brandLogoUrl ?? undefined}
-            stationName={stationName}
-            availableBikes={availableBikes}
-          />
-        )}
+      {operatorIsIntegrationEnabled && !isLoading && !isError && station && (
+        <BikeStationNotIntegratedView
+          numDocksAvailable={station.numDocksAvailable}
+          onStationReceived={onStationReceived}
+          rentalAppUri={rentalAppUri ?? undefined}
+          appStoreUri={appStoreUri ?? undefined}
+          operatorId={operatorId}
+          operatorName={operatorName}
+          brandLogoUrl={brandLogoUrl ?? undefined}
+          stationName={stationName}
+          availableBikes={availableBikes}
+        />
+      )}
     </MapBottomSheet>
   );
 };

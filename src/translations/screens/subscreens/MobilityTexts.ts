@@ -52,7 +52,7 @@ export const MobilityTexts = {
     return _(
       amount + ' ledige plasser',
       amount + ' available spaces',
-      amount + ' ledige plasser',
+      amount + ' ledige plassar',
     );
   },
   finishing: {
@@ -406,6 +406,11 @@ export const BicycleTexts = {
     'Vi fant ikke denne sykkelen',
     "We couldn't find this bike",
     'Vi fann ikkje denne sykkelen',
+  ),
+  loadingFailedBicyclesStations: _(
+    'Feil ved innlastning av sykler på denne stasjonen',
+    'Error loading bikes at this station',
+    'Feil ved innlastning av sykler på denne stasjonen',
   ),
 };
 

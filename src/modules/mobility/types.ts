@@ -16,3 +16,5 @@ export type FormattedRatePerUnit = {
   rate: number;
   perUnit: string;
 };
+
+export type VehicleSortOptions = 'currentRangeMeters' | '-currentRangeMeters';
