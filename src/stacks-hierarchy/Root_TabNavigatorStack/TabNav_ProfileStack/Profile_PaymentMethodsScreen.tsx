@@ -55,7 +55,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
         leftButton: {type: 'back'},
       }}
       refreshControlProps={refreshControlProps}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
           text={t(PaymentMethodsTexts.header.title)}

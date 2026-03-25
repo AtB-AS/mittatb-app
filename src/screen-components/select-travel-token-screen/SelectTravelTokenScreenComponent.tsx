@@ -88,7 +88,7 @@ export const SelectTravelTokenScreenComponent = ({
         title,
         rightButton: {type: 'cancel'},
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading ref={focusRef} text={title} />
       )}
       testID="selectTravelTokenView"

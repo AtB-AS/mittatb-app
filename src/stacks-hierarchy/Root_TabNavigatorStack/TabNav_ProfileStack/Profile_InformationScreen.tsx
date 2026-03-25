@@ -42,7 +42,7 @@ export const Profile_InformationScreen = ({navigation}: Props) => {
         title: t(ProfileTexts.sections.information.label),
         leftButton: {type: 'back'},
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
           text={t(ProfileTexts.sections.information.label)}

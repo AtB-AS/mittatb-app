@@ -130,8 +130,8 @@ export const TripDetailsScreenComponent = ({
           refreshing: isFetching && isManualRefresh,
           onRefresh: onManualRefresh,
         }}
-        parallaxContent={(focusRef) => (
-          <View style={styles.parallaxContent}>
+        headerContent={(focusRef) => (
+          <View style={styles.headerContent}>
             <View accessible={true} ref={focusRef}>
               <ThemeText
                 color={themeColor}
@@ -489,7 +489,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.color.background.neutral[1].background,
   },
   heading: {marginBottom: theme.spacing.medium},
-  parallaxContent: {marginHorizontal: theme.spacing.medium},
+  headerContent: {marginHorizontal: theme.spacing.medium},
   paddedContainer: {
     padding: theme.spacing.medium,
   },

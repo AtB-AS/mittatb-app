@@ -10,20 +10,20 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
 import * as React from 'react';
 import {Ref, useState} from 'react';
-import {ParallaxScroll} from '@atb/components/parallax-scroll';
 import {FullScreenFooter} from '../screen-footer';
 import {ContrastColor} from '@atb/theme/colors';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {useLayout} from '@atb/utils/use-layout';
 
 type Props = {
   headerProps: ScreenHeaderProps;
   /**
    * JSX content that will be displayed between header and children, and will
-   * disappear with a parallax effect when scrolling.
+   * disappear when scrolling.
    */
-  parallaxContent?: (focusRef?: Ref<any>) => React.ReactNode;
+  headerContent?: (focusRef?: Ref<any>) => React.ReactNode;
   /**
-   * When `parallaxContent` is set, the header text will appear gradually as the
+   * When `headerContent` is set, the header text will appear gradually as the
    * user scrolls. If `titleAlwaysVisible` is true, it will make the header text
    * always visible instead.
    */
@@ -44,8 +44,8 @@ type Props = {
   focusRef: Ref<any> | undefined;
 };
 
-type PropsWithParallaxContent = Props &
-  Required<Pick<Props, 'parallaxContent'>>;
+type PropsWithHeaderContent = Props &
+  Required<Pick<Props, 'headerContent'>>;
 
 export function FullScreenView(props: Props) {
   const {top} = useSafeAreaInsets();
@@ -59,7 +59,7 @@ export function FullScreenView(props: Props) {
   const titleShouldAnimate =
     props.titleAlwaysVisible || isScreenReaderEnabled
       ? false
-      : !!props.parallaxContent;
+      : !!props.headerContent;
   const [opacity, setOpacity] = useState(titleShouldAnimate ? 0 : 1);
 
   const handleScroll = (scrollPercentage: number) => {
@@ -71,8 +71,8 @@ export function FullScreenView(props: Props) {
     }
   };
 
-  const contentComponent = hasParallaxContent(props) ? (
-    <ChildrenWithParallaxScrollContent
+  const contentComponent = hasHeaderContent(props) ? (
+    <ChildrenWithHeaderContent
       {...props}
       handleScroll={handleScroll}
       headerColor={backgroundColor}
@@ -113,36 +113,56 @@ export function FullScreenView(props: Props) {
   );
 }
 
-const hasParallaxContent = (props: Props): props is PropsWithParallaxContent =>
-  !!props.parallaxContent;
+const hasHeaderContent = (props: Props): props is PropsWithHeaderContent =>
+  !!props.headerContent;
 
-const ChildrenWithParallaxScrollContent = ({
-  parallaxContent,
+const ChildrenWithHeaderContent = ({
+  headerContent,
   refreshControlProps,
   children,
   headerColor,
   handleScroll,
   titleAlwaysVisible,
   focusRef,
-}: PropsWithParallaxContent & {headerColor: string}) => {
+}: PropsWithHeaderContent & {
+  headerColor: string;
+  handleScroll: (scrollPercentage: number) => void;
+}) => {
   const styles = useStyles();
+  const {onLayout, height: headerHeight} = useLayout();
+  const headerHeightRef = React.useRef(headerHeight);
+
+  React.useEffect(() => {
+    headerHeightRef.current = headerHeight;
+  }, [headerHeight]);
+
   return (
-    <View style={styles.container}>
-      <ParallaxScroll
-        headerColor={headerColor}
-        header={
-          <View style={{backgroundColor: headerColor}}>
-            <View style={styles.childrenContainer}>
-              {parallaxContent(!titleAlwaysVisible ? focusRef : undefined)}
-            </View>
-          </View>
+    <ScrollView
+      scrollEventThrottle={16}
+      refreshControl={
+        refreshControlProps ? (
+          <RefreshControl {...refreshControlProps} />
+        ) : undefined
+      }
+      onScroll={(event) => {
+        if (headerHeightRef.current > 0) {
+          handleScroll(
+            (event.nativeEvent.contentOffset.y / headerHeightRef.current) * 100,
+          );
         }
-        refreshControlProps={refreshControlProps}
-        handleScroll={handleScroll}
+      }}
+      contentContainerStyle={{flexGrow: 1}}
+    >
+      <View
+        onLayout={onLayout}
+        style={{backgroundColor: headerColor}}
       >
-        {children}
-      </ParallaxScroll>
-    </View>
+        <View style={styles.childrenContainer}>
+          {headerContent(!titleAlwaysVisible ? focusRef : undefined)}
+        </View>
+      </View>
+      {children}
+    </ScrollView>
   );
 };
 
@@ -169,9 +189,6 @@ const ChildrenInNormalScrollView = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    flex: 1,
-  },
   headerContainer: {
     paddingHorizontal: theme.spacing.medium,
   },

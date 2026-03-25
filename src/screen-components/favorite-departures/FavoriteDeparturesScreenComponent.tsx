@@ -50,7 +50,7 @@ export const FavoriteDeparturesScreenComponent = ({
         title: t(FavoriteDeparturesTexts.header.title),
         leftButton: {type: 'back'},
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
           text={t(FavoriteDeparturesTexts.header.title)}

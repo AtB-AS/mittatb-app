@@ -60,7 +60,7 @@ export const Root_TicketInformationScreen = ({navigation, route}: Props) => {
         ),
         leftButton: {type: 'back'},
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
           text={t(

@@ -84,7 +84,7 @@ export const PurchaseHistoryScreenComponent = ({
         title: t(TicketingTexts.purchaseHistory.title),
         leftButton: {type: 'back'},
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
           text={t(TicketingTexts.purchaseHistory.title)}

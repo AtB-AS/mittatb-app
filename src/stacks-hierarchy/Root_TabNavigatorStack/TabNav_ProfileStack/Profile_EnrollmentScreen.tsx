@@ -65,7 +65,7 @@ export const Profile_EnrollmentScreen = ({navigation}: Props) => {
           title: t(EnrollmentTexts.header),
           leftButton: {type: 'back'},
         }}
-        parallaxContent={(focusRef) => (
+        headerContent={(focusRef) => (
           <ScreenHeading ref={focusRef} text={t(EnrollmentTexts.header)} />
         )}
       >

@@ -293,8 +293,8 @@ export const DepartureDetailsScreenComponent = ({
           leftButton: {type: 'back'},
           title: t(DepartureDetailsTexts.header.alternateTitle),
         }}
-        parallaxContent={(focusRef) => (
-          <View style={styles.parallaxContent}>
+        headerContent={(focusRef) => (
+          <View style={styles.headerContent}>
             <View
               style={styles.headerContainer}
               ref={focusRef}
@@ -943,7 +943,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     marginRight: theme.spacing.medium,
   },
-  parallaxContent: {marginHorizontal: theme.spacing.medium},
+  headerContent: {marginHorizontal: theme.spacing.medium},
   date: {
     alignItems: 'center',
   },

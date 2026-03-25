@@ -114,7 +114,7 @@ export const Root_SmartParkAndRideEditScreen = ({
         leftButton: {type: 'back'},
         color: theme.color.background.neutral[1],
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
           text={t(SmartParkAndRideTexts.edit.header.title)}

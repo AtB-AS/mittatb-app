@@ -52,7 +52,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
         title: t(TripSelectionTexts.header),
         leftButton: {type: 'back'},
       }}
-      parallaxContent={
+      headerContent={
         screenHeaderTitle
           ? (focusRef) => (
               <ScreenHeading ref={focusRef} text={screenHeaderTitle} />
