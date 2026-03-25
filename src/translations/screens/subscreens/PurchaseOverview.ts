@@ -297,7 +297,7 @@ const PurchaseOverviewTexts = {
     multiReservationTitle: _(
       'Vil du reservere for flere?',
       'Do you want to reserve for multiple travellers?',
-      'Vil du reservere for flere?',
+      'Vil du reservere for fleire?',
     ),
     multiReservation: _(
       'Vil du ha med deg flere må du kontakte kundeservice for gruppebestilling.',
