@@ -302,7 +302,7 @@ const PurchaseOverviewTexts = {
     multiReservation: _(
       'Vil du ha med deg flere må du kontakte kundeservice for gruppebestilling.',
       'If you want to bring more travellers, you need to contact the customer service for group booking.',
-      'Vil du ha med deg flere må du kontakte kundeservice for gruppebestilling.',
+      'Vil du ha med deg fleire må du kontakte kundeservice for gruppebestilling.',
     ),
   },
 };
