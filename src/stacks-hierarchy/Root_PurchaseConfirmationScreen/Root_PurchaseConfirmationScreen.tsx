@@ -221,7 +221,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     }
 
     if (paymentMethod?.paymentType === PaymentType.ApplePay) {
-      analytics.logEvent('Ticketing', 'Apple Pay selected');
+      analytics.logEvent('Ticketing', 'Apple Pay selected', {
+        paymentMethod: paymentMethod?.paymentType,
+      });
       startApplePayPayment({
         userProfilesWithCountAndOffer,
         supplementProductsWithCountAndOffer,
@@ -231,7 +233,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       });
     } else {
       analytics.logEvent('Ticketing', 'Pay with card selected', {
-        paymentMethod,
+        paymentMethod: paymentMethod?.paymentType,
       });
       reserveMutation.mutate();
     }
@@ -457,7 +459,7 @@ const PaymentButton = ({
           PurchaseConfirmationTexts.choosePaymentMethod.a11yHint,
         )}
         onPress={() => {
-          analytics.logEvent('Ticketing', 'Confirm purchase clicked', {
+          analytics.logEvent('Ticketing', 'Choose payment method clicked', {
             mode: mode,
             ...tripAnalytics,
           });
@@ -505,15 +507,11 @@ const PaymentButton = ({
       disabled={!!isOfferError || reserveStatus === 'success'}
       onPress={() => {
         if (paymentMethod) {
-          analytics.logEvent(
-            'Ticketing',
-            'Pay with previous payment method clicked',
-            {
-              paymentMethod: paymentMethod?.paymentType,
-              mode: mode,
-              ...tripAnalytics,
-            },
-          );
+          analytics.logEvent('Ticketing', 'Confirm payment button clicked', {
+            paymentMethod: paymentMethod?.paymentType,
+            mode: mode,
+            ...tripAnalytics,
+          });
         }
         onGoToPayment();
       }}
