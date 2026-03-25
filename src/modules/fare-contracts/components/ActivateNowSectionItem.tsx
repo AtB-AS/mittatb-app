@@ -1,6 +1,6 @@
 import {TicketValid} from '@atb/assets/svg/mono-icons/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {ActivateNowBottomSheet} from './ActivateNowBottomSheet';
 import {useThemeContext} from '@atb/theme';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
@@ -25,9 +25,14 @@ export function ActivateNowSectionItem({
   const {theme} = useThemeContext();
   const onCloseFocusRef = useRef<View | null>(null);
   const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const [hasBeenPresented, setHasBeenPresented] = useState(false);
 
   const onPress = () => {
-    bottomSheetModalRef.current?.present();
+    setHasBeenPresented(true);
+    // Present after the bottom sheet mounts on next render
+    requestAnimationFrame(() => {
+      bottomSheetModalRef.current?.present();
+    });
   };
 
   return (
@@ -43,12 +48,14 @@ export function ActivateNowSectionItem({
         ref={onCloseFocusRef}
         style={{width: '100%'}} // Without this the GenericSectionItem squishes the button
       />
-      <ActivateNowBottomSheet
-        fareContractId={fareContractId}
-        fareProductType={fareProductType}
-        bottomSheetModalRef={bottomSheetModalRef}
-        onCloseFocusRef={onCloseFocusRef}
-      />
+      {hasBeenPresented && (
+        <ActivateNowBottomSheet
+          fareContractId={fareContractId}
+          fareProductType={fareProductType}
+          bottomSheetModalRef={bottomSheetModalRef}
+          onCloseFocusRef={onCloseFocusRef}
+        />
+      )}
     </GenericSectionItem>
   );
 }

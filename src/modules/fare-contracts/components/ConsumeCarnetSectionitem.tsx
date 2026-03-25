@@ -1,7 +1,7 @@
 import {TicketValid} from '@atb/assets/svg/mono-icons/ticketing';
 import {useThemeContext} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {ConsumeCarnetBottomSheet} from './ConsumeCarnetBottomSheet';
 import {View} from 'react-native';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
@@ -26,9 +26,14 @@ export function ConsumeCarnetSectionitem({
   const interactiveColor = theme.color.interactive[0];
   const onCloseFocusRef = useRef<View | null>(null);
   const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const [hasBeenPresented, setHasBeenPresented] = useState(false);
 
   const onPress = () => {
-    bottomSheetModalRef.current?.present();
+    setHasBeenPresented(true);
+    // Present after the bottom sheet mounts on next render
+    requestAnimationFrame(() => {
+      bottomSheetModalRef.current?.present();
+    });
   };
 
   return (
@@ -42,12 +47,14 @@ export function ConsumeCarnetSectionitem({
         expanded={true}
         style={{width: '100%'}} // Without this the GenericSectionItem squishes the button
       />
-      <ConsumeCarnetBottomSheet
-        fareContractId={fareContractId}
-        fareProductType={fareProductType}
-        bottomSheetModalRef={bottomSheetModalRef}
-        onCloseFocusRef={onCloseFocusRef}
-      />
+      {hasBeenPresented && (
+        <ConsumeCarnetBottomSheet
+          fareContractId={fareContractId}
+          fareProductType={fareProductType}
+          bottomSheetModalRef={bottomSheetModalRef}
+          onCloseFocusRef={onCloseFocusRef}
+        />
+      )}
     </GenericSectionItem>
   );
 }
