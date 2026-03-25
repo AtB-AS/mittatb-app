@@ -62,7 +62,7 @@ export const StoredTripPatternsDashboardComponent =
                   analytics.logEvent(
                     'Dashboard',
                     'Trip removed',
-                    getTripPatternAnalytics(tripPattern, fareZones),
+                    getTripPatternAnalytics(tripPattern, fareZones, now),
                   );
                   removeTripPattern(tripPattern);
                 },
@@ -70,7 +70,7 @@ export const StoredTripPatternsDashboardComponent =
             ],
           );
         },
-        [removeTripPattern, t, analytics, fareZones],
+        [removeTripPattern, t, analytics, fareZones, now],
       );
 
       if (!tripPatterns.length) {
