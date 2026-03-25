@@ -287,7 +287,7 @@ const PurchaseOverviewTexts = {
     loginRequired: _(
       'Du må være innlogget',
       'You need to be logged in',
-      'Du må vere innlogget',
+      'Du må vere innlogga',
     ),
     loginForFreeReservations: _(
       'Logg inn for å gjøre gratis plassreservasjoner',
