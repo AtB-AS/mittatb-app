@@ -2,7 +2,7 @@ import {Onboarding4} from '@atb/assets/svg/color/images';
 import {ExtendedOnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {extendedOnboardingId} from '.';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {
   OnboardingCarouselScreenProps,
   OnboardingScreenComponent,
@@ -33,7 +33,7 @@ export const ExtendedOnboarding_GoodToKnowScreen = ({
         onPress: navigateToNextScreen,
         text: t(ExtendedOnboardingTexts.goodToKnow.mainButton),
         expanded: true,
-        rightIcon: {svg: ArrowRight},
+        rightIcon: {svg: ChevronRight},
         testID: 'nextButtonGoodToKnowOnboarding',
       }}
       testID="goodToKnowExtendedOnboarding"

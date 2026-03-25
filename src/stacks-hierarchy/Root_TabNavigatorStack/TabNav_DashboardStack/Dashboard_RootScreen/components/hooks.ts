@@ -2,7 +2,7 @@ import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {getTextForLanguage} from '@atb/translations';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {DashboardTexts} from '@atb/translations';
 import {AccessibilityRole, Linking} from 'react-native';
 import Bugsnag from '@bugsnag/react-native';
@@ -66,7 +66,7 @@ export const useActionButtonProps = (
     rightIcon:
       button.actionType === ActionType.external
         ? {svg: ExternalLink}
-        : {svg: ArrowRight},
+        : {svg: ChevronRight},
     text:
       getTextForLanguage(button.label, language) ??
       t(DashboardTexts.announcements.buttonAction.defaultLabel(summaryTitle)),

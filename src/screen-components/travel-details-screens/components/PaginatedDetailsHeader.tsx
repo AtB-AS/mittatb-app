@@ -1,4 +1,4 @@
-import {ArrowLeft, ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ArrowLeft, ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {StyleSheet} from '@atb/theme';
 import {PaginationTexts, useTranslation} from '@atb/translations';
 import {fullDateTime} from '@atb/utils/date';
@@ -66,7 +66,7 @@ export const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
               type="small"
               mode="tertiary"
               disabled={!hasNext}
-              rightIcon={{svg: ArrowRight}}
+              rightIcon={{svg: ChevronRight}}
               onPress={() => onNavigate(page + 1)}
               text={t(PaginationTexts.next.label)}
               testID="nextTripButton"

@@ -9,7 +9,7 @@ import {MapLabel} from './MapLabel';
 import {MapRoute} from './MapRoute';
 import {createMapLines, getMapBounds, pointOf} from '../utils';
 import {Coordinates} from '@atb/utils/coordinates';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {NativeBlockButton} from '@atb/components/native-button';
@@ -101,7 +101,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
         <ThemeText typography="body__s__strong" color="primary">
           {buttonText}
         </ThemeText>
-        <ThemeIcon svg={ArrowRight} />
+        <ThemeIcon svg={ChevronRight} />
       </NativeBlockButton>
     </View>
   );

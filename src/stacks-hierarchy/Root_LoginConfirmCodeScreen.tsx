@@ -12,7 +12,7 @@ import {ThemeText} from '@atb/components/text';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {NativeBorderlessButton} from '@atb/components/native-button';
@@ -136,7 +136,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
                   onPress={onLogin}
                   text={t(LoginTexts.confirmCode.mainButton)}
                   disabled={!code || isRateLimited}
-                  rightIcon={{svg: ArrowRight}}
+                  rightIcon={{svg: ChevronRight}}
                   style={styles.submitButton}
                   testID="submitButton"
                 />

@@ -1,4 +1,4 @@
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import SvgError from '@atb/assets/svg/mono-icons/status/Error';
 import SvgInfo from '@atb/assets/svg/mono-icons/status/Info';
 import {LocationIcon} from '@atb/components/location-icon';
@@ -84,7 +84,7 @@ export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
           </View>
           {!isLoading && !!location && (
             <View style={styles.button}>
-              <ThemeIcon svg={ArrowRight} />
+              <ThemeIcon svg={ChevronRight} />
             </View>
           )}
         </View>
