@@ -44,8 +44,7 @@ type Props = {
   focusRef: Ref<any> | undefined;
 };
 
-type PropsWithHeaderContent = Props &
-  Required<Pick<Props, 'headerContent'>>;
+type PropsWithHeaderContent = Props & Required<Pick<Props, 'headerContent'>>;
 
 export function FullScreenView(props: Props) {
   const {top} = useSafeAreaInsets();
@@ -153,10 +152,7 @@ const ChildrenWithHeaderContent = ({
       }}
       contentContainerStyle={{flexGrow: 1}}
     >
-      <View
-        onLayout={onLayout}
-        style={{backgroundColor: headerColor}}
-      >
+      <View onLayout={onLayout} style={{backgroundColor: headerColor}}>
         <View style={styles.childrenContainer}>
           {headerContent(!titleAlwaysVisible ? focusRef : undefined)}
         </View>
