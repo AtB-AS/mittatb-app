@@ -67,6 +67,16 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
     [navigation],
   );
 
+  const navigateToFareContractDetails = useCallback(
+    (fareContractId: string) => {
+      navigation.navigate('Root_FareContractDetailsScreen', {
+        fareContractId,
+        transitionOverride: 'slide-from-right',
+      });
+    },
+    [navigation],
+  );
+
   return (
     <View style={styles.container}>
       <AnimatedGestureHandlerScrollView
@@ -100,14 +110,10 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
           reservations={reservations}
           fareContracts={availableFareContracts}
           now={serverNow}
+          isFocused={isFocused}
           onNavigateToBonusScreen={navigateToBonusScreen}
           onNavigateToPurchaseFlow={navigateToBookingPurchaseFlow}
-          onPressFareContract={(fareContractId) =>
-            navigation.navigate('Root_FareContractDetailsScreen', {
-              fareContractId,
-              transitionOverride: 'slide-from-right',
-            })
-          }
+          onPressFareContract={navigateToFareContractDetails}
           emptyStateConfig={{
             title: t(
               TicketingTexts.availableFareProductsAndReservationsTab

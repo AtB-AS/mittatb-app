@@ -60,22 +60,25 @@ export const PurchaseHistoryScreenComponent = ({
     [fareContractsToShow, reservationsToShow],
   );
 
+  const handlePressFareContract = useCallback(
+    (id: string) => {
+      analytics.logEvent('Ticketing', 'Ticket details clicked');
+      onPressFareContract(id);
+    },
+    [analytics, onPressFareContract],
+  );
+
   const renderItem = useCallback(
     ({item, index}: {item: Reservation | FareContractType; index: number}) => (
       <FareContractOrReservation
         onNavigateToBonusScreen={onNavigateToBonusScreen}
         now={serverNow}
-        onPressFareContract={() => {
-          if ('id' in item) {
-            analytics.logEvent('Ticketing', 'Ticket details clicked');
-            onPressFareContract(item.id);
-          }
-        }}
+        onPressFareContract={handlePressFareContract}
         fcOrReservation={item}
         index={index}
       />
     ),
-    [analytics, onNavigateToBonusScreen, onPressFareContract, serverNow],
+    [handlePressFareContract, onNavigateToBonusScreen, serverNow],
   );
 
   return (

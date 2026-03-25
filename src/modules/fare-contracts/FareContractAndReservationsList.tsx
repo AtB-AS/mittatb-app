@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {FareContractOrReservation} from './FareContractOrReservation';
 import {Reservation} from '@atb/modules/ticketing';
 import {useAnalyticsContext} from '@atb/modules/analytics';
@@ -14,6 +14,7 @@ type Props = {
   reservations: Reservation[];
   fareContracts: FareContractType[];
   now: number;
+  isFocused?: boolean;
   onPressFareContract: (orderId: string) => void;
   onNavigateToBonusScreen: () => void;
   onNavigateToPurchaseFlow: (newSelection: PurchaseSelectionType) => void;
@@ -27,6 +28,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   fareContracts,
   reservations,
   now,
+  isFocused,
   onPressFareContract,
   onNavigateToBonusScreen,
   onNavigateToPurchaseFlow,
@@ -35,10 +37,19 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   const styles = useStyles();
   const analytics = useAnalyticsContext();
 
-  const fcAndReservations = getSortedFareContractsAndReservations(
-    fareContracts,
-    reservations,
-    now,
+  // Memoize to only recompute when the list actually changes
+  const fcAndReservations = useMemo(
+    () =>
+      getSortedFareContractsAndReservations(fareContracts, reservations, now),
+    [fareContracts, reservations, now],
+  );
+
+  const handlePressFareContract = useCallback(
+    (id: string) => {
+      analytics.logEvent('Ticketing', 'Ticket details clicked');
+      onPressFareContract(id);
+    },
+    [analytics, onPressFareContract],
   );
 
   return (
@@ -49,14 +60,8 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
       {fcAndReservations?.map((fcOrReservation, index) => (
         <FareContractOrReservation
           now={now}
-          onPressFareContract={() => {
-            // Reservations don't have `id`, but also don't show the link to
-            // ticket details.
-            if ('id' in fcOrReservation) {
-              analytics.logEvent('Ticketing', 'Ticket details clicked');
-              onPressFareContract(fcOrReservation.id);
-            }
-          }}
+          isFocused={isFocused}
+          onPressFareContract={handlePressFareContract}
           onNavigateToBonusScreen={onNavigateToBonusScreen}
           onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
           key={
