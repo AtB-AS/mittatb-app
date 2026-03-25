@@ -143,8 +143,8 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
               }
               rightIcon={!isLoggedIn ? {svg: LogIn} : undefined}
               style={styles.button}
-              accessibilityHint={t(
-                BonusProgramTexts.bonusProfile.joinProgram.button.a11yHint,
+              accessibilityLabel={t(
+                BonusProgramTexts.bonusProfile.joinProgram.button.a11yLabel,
               )}
               onPress={() => {
                 if (isLoggedIn) {

@@ -65,11 +65,6 @@ const BonusProgramTexts = {
         ),
       button: {
         text: _('Bli med', 'Join', 'Bli med'),
-        a11yHint: _(
-          'Bli med og teste Poeng!',
-          'Join and test Points!',
-          'Bli med og teste Poeng!',
-        ),
       },
     },
 
@@ -206,7 +201,7 @@ const BonusProgramTexts = {
 
     button: {
       text: _('Godta', 'Accept', 'Godta'),
-      a11yHint: _(
+      a11yLabel: _(
         'Godta vilkårene og bli med',
         'Accept the terms and join',
         'Godta vilkårene og bli med',

@@ -35,7 +35,6 @@ export const BonusOnboarding_JoinScreen = () => {
       footerButton={{
         onPress,
         text: t(BonusProgramTexts.terms.button.text),
-        accessibilityLabel: t(BonusProgramTexts.terms.button.a11yHint),
         expanded: true,
       }}
       illustration={<ThemedBonusBagCarry width={120} height={120} />}
