@@ -1150,7 +1150,7 @@ export const Profile_DesignSystemScreen = ({
             label="Label"
             placeholder="My very long placeholder over here. Yes over multiple lines"
             onPress={() => {}}
-            icon="arrow-left"
+            icon="chevron-left"
           />
 
           <LinkSectionItem
