@@ -1,6 +1,7 @@
 import {useTranslation} from '@atb/translations';
 import {useAuthContext} from '@atb/modules/auth';
 import {
+  isCanBeActivatedNowFareContract,
   useGetFareProductsQuery,
   useGetSupplementProductsQuery,
 } from '@atb/modules/ticketing';
@@ -13,6 +14,7 @@ import {
   getFareContractInfo,
   getTravellersIcon,
   getTravellersText,
+  hasReservationTypeSupplementProduct,
   mapToUserProfilesWithCount,
 } from '../utils';
 import {InspectionSymbol} from './InspectionSymbol';
@@ -29,15 +31,21 @@ import {getBaggageProducts} from '../get-baggage-products';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
 import {useTicketAccessibilityLabel} from '../use-ticket-accessibility-label';
+import {SupplementPurchaseButton} from './SupplementPurchaseButton';
+import {ActivateNowButton} from './ActivateNowSectionItem';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 type Props = {
   fc: FareContractType;
   now: number;
+  onNavigateToPurchaseFlow?: (selection: PurchaseSelectionType) => void;
 };
 
 export const TravelInfoSectionItem = ({
   fc,
   now,
+  onNavigateToPurchaseFlow,
 }: Props) => {
   const {t, language} = useTranslation();
   const {abtCustomerId: currentUserId} = useAuthContext();
@@ -95,6 +103,25 @@ export const TravelInfoSectionItem = ({
     baggageProductsWithCount,
     language,
   );
+
+  const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
+
+  const shouldShowSupplementPurchase =
+    !!onNavigateToPurchaseFlow &&
+    hasReservationTypeSupplementProduct(
+      fc,
+      preassignedFareProducts,
+      allSupplementProducts,
+    );
+
+  const shouldShowActivateNow =
+    isActivateTicketNowEnabled &&
+    isCanBeActivatedNowFareContract(
+      fc,
+      now,
+      currentUserId,
+      preassignedFareProduct?.isBookingEnabled,
+    );
 
   const styles = useStyles();
   const {theme} = useThemeContext();
@@ -164,6 +191,22 @@ export const TravelInfoSectionItem = ({
       </View>
 
       <SentOrReceivedMessageBox fc={fc} />
+      {(shouldShowSupplementPurchase || shouldShowActivateNow) && (
+        <View style={styles.buttons}>
+          {shouldShowSupplementPurchase && (
+            <SupplementPurchaseButton
+              existingFareContract={fc}
+              navigateToPurchaseFlow={onNavigateToPurchaseFlow}
+            />
+          )}
+          {shouldShowActivateNow && (
+            <ActivateNowButton
+              fareContractId={fc.id}
+              fareProductType={preassignedFareProduct?.type}
+            />
+          )}
+        </View>
+      )}
     </View>
   );
 };
@@ -177,6 +220,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   fareContractDetailItems: {
     flex: 1,
+    gap: theme.spacing.medium,
+  },
+  buttons: {
     gap: theme.spacing.medium,
   },
 }));

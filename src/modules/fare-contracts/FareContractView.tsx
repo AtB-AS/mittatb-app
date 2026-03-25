@@ -1,4 +1,4 @@
-import {getFareContractInfo, hasReservationTypeSupplementProduct, hasShmoBookingId} from './utils';
+import {getFareContractInfo, hasShmoBookingId} from './utils';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -11,17 +11,12 @@ import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {
   isCanBeConsumedNowFareContract,
-  isCanBeActivatedNowFareContract,
   useGetFareProductsQuery,
-  useGetSupplementProductsQuery,
   useSchoolCarnetInfoQuery,
 } from '@atb/modules/ticketing';
 import {FareContractType, getAccesses} from '@atb-as/utils';
 import {ConsumeCarnetSectionitem} from './components/ConsumeCarnetSectionitem';
 import {StyleSheet} from '@atb/theme';
-import {ActivateNowButton} from './components/ActivateNowSectionItem';
-import {SupplementPurchaseButton} from './components/SupplementPurchaseButton';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {ProductName} from './components/ProductName';
 import {Description} from './components/FareContractDescription';
 import {WithValidityLine} from './components/WithValidityLine';
@@ -62,7 +57,6 @@ export const FareContractView: React.FC<Props> = ({
 }) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
   const {isInspectable} = useMobileTokenContext();
-  const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
 
   const {t} = useTranslation();
 
@@ -105,24 +99,6 @@ export const FareContractView: React.FC<Props> = ({
 
   const accesses = getAccesses(fareContract);
 
-  const {data: supplementProducts} = useGetSupplementProductsQuery();
-  const shouldShowSupplementPurchase =
-    !!onNavigateToPurchaseFlow &&
-    hasReservationTypeSupplementProduct(
-      fareContract,
-      preassignedFareProducts,
-      supplementProducts,
-    );
-
-  const shouldShowActivateNow =
-    isActivateTicketNowEnabled &&
-    isCanBeActivatedNowFareContract(
-      fareContract,
-      now,
-      currentUserId,
-      preassignedFareProduct?.isBookingEnabled,
-    );
-
   return (
     <Section testID={testID}>
       {hasShmoBookingId(fareContract) ? (
@@ -152,6 +128,7 @@ export const FareContractView: React.FC<Props> = ({
         <TravelInfoSectionItem
           fc={fareContract}
           now={now}
+          onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
         />
       )}
 
@@ -181,22 +158,6 @@ export const FareContractView: React.FC<Props> = ({
         </GenericSectionItem>
       )}
 
-      {(shouldShowSupplementPurchase || shouldShowActivateNow) && (
-        <GenericSectionItem>
-          {shouldShowSupplementPurchase && (
-            <SupplementPurchaseButton
-              existingFareContract={fareContract}
-              navigateToPurchaseFlow={onNavigateToPurchaseFlow}
-            />
-          )}
-          {shouldShowActivateNow && (
-            <ActivateNowButton
-              fareContractId={fareContract.id}
-              fareProductType={preassignedFareProduct?.type}
-            />
-          )}
-        </GenericSectionItem>
-      )}
       {isCanBeConsumedNowFareContract(
         fareContract,
         now,
