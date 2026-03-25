@@ -48,14 +48,14 @@ const BonusProgramTexts = {
 
     joinProgram: {
       title: _(
-        'Vil du tjene Poeng?',
+        'Vil du samle Poeng?',
         'Do you want to earn Points?',
-        'Vil du tene Poeng?',
+        'Vil du samle Poeng?',
       ),
       description: _(
-        'Du tjener poeng hver gang du kjøper en enkeltbillett for voksen eller student i sone A. Poengene kan du bruke til å betale for enkeltbilletter, eller til turer med bysykkel, elsparkesykkel og Hyre-biler.',
-        'You earn points each time you buy a single ticket for adults or students in Zone A. You can use the points to pay for single tickets, or for trips with city bikes, e-scooters, and Hyre cars.',
-        'Du tjener poeng hver gang du kjøper en enkeltbillett for voksen eller student i sone A. Poengene kan du bruke til å betale for enkeltbilletter, eller til turer med bysykkel, elsparkesykkel og Hyre leigebiler.',
+        'Kjøp enkeltbilletter for voksen eller student i sone A og få Poeng. Bruk Poeng på nye enkeltbilletter eller på turer med bysykkel, elsparkesykkel og Hyre-biler.',
+        'Buy single tickets for adults or students in zone A and earn Points. Use the Points on new single tickets or for trips with city bikes, e-scooters, and Hyre cars.',
+        'Kjøp enkeltbilletter for vaksen eller student i sone A og få Poeng. Bruk Poeng på nye enkeltbilletter eller på turer med bysykkel, elsparkesykkel og Hyre-biler.',
       ),
       footer: (endDate: string) =>
         _(
@@ -101,9 +101,9 @@ const BonusProgramTexts = {
     ),
 
     noProfile: _(
-      'Du må logge inn før du kan bli med i poeng',
-      'You need to log in before you can join points',
-      'Du må logga inn før du kan bli med i poeng',
+      'Du må logge inn før du kan bli med i Poeng',
+      'You need to log in before you can join Points',
+      'Du må logga inn før du kan bli med i Poeng',
     ),
     noBonusBalance: _(
       'Vi klarer ikke vise poengene dine akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
@@ -181,9 +181,9 @@ const BonusProgramTexts = {
       'Vilkår for Poeng',
     ),
     term1: _(
-      'Du kan kun bruke Poengene som betalingsmiddel i AtB-appen.',
-      'You can only use the Points as a means of payment in the AtB app.',
-      'Du kan kun bruke Poenga som betalingsmiddel i AtB-appen.',
+      'Du kan kun bruke Poeng i AtB-appen.',
+      'You can only use Points in the AtB app.',
+      'Du kan kun bruke Poeng i AtB-appen.',
     ),
     term2: _(
       'Gjenværende Poeng slettes etter testperioden.',
@@ -191,9 +191,9 @@ const BonusProgramTexts = {
       'Gjenværende Poeng slettes etter testperioden.',
     ),
     term3: _(
-      'AtB kan kontakte deg for å be om tilbakemeldinger underveis i testen',
-      'AtB may contact you to ask for feedback during the test',
-      'AtB kan kontakta deg for å be om tilbakemelding undervegs i testen',
+      'AtB kan kontakte deg for å be om tilbakemeldinger underveis i testen.',
+      'AtB may contact you to ask for feedback during the test.',
+      'AtB kan kontakta deg for å be om tilbakemelding undervegs i testen.',
     ),
     error: {
       title: _('Noe gikk galt', 'Something went wrong', 'Noe gikk galt'),
