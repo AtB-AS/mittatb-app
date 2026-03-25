@@ -2,7 +2,7 @@ import {Statuses} from '@atb/theme';
 import type {UniqueCountState} from '@atb/utils/unique-with-count';
 import {BaggageProduct, UserProfile} from '@atb/modules/configuration';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 
 export enum MessageId {
   loginRequired = 'loginRequired',
@@ -21,16 +21,15 @@ export function useMessage(
   baggageCountState: UniqueCountState<BaggageProduct>,
 ): {message?: Message; setMessageId: (messageId?: MessageId) => void} {
   const {t} = useTranslation();
-  const [messageId, setMessageId] = useState<MessageId>();
+  const [externalMessageId, setMessageId] = useState<MessageId>();
 
-  useEffect(() => {
-    const nothingSelected =
-      userCountState.state.every((u) => !u.count) &&
-      baggageCountState.state.every((sp) => !sp.count);
-    if (nothingSelected) {
-      setMessageId(MessageId.nothingSelected);
-    } else setMessageId(undefined);
-  }, [userCountState, baggageCountState]);
+  const nothingSelected =
+    userCountState.state.every((u) => !u.count) &&
+    baggageCountState.state.every((sp) => !sp.count);
+
+  const messageId = nothingSelected
+    ? MessageId.nothingSelected
+    : externalMessageId;
 
   const message: Message | undefined = (() => {
     switch (messageId) {
