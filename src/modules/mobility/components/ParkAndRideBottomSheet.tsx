@@ -78,20 +78,24 @@ export const ParkAndRideBottomSheet = ({
       navigateToScanQrCode={navigateToScanQrCode}
     >
       <View style={styles.buttonsContainer}>
-        <Button
-          expanded={true}
-          text={t(DeparturesDialogSheetTexts.travelFrom.title)}
-          onPress={() => navigateToTripSearch(searchLocation, 'fromLocation')}
-          mode="primary"
-          style={styles.travelButton}
-        />
-        <Button
-          expanded={true}
-          text={t(DeparturesDialogSheetTexts.travelTo.title)}
-          onPress={() => navigateToTripSearch(searchLocation, 'toLocation')}
-          mode="primary"
-          style={styles.travelButton}
-        />
+        <View style={styles.travelButton}>
+          <Button
+            expanded={true}
+            text={t(DeparturesDialogSheetTexts.travelFrom.title)}
+            onPress={() => navigateToTripSearch(searchLocation, 'fromLocation')}
+            mode="primary"
+            style={styles.travelButton}
+          />
+        </View>
+        <View style={styles.travelButton}>
+          <Button
+            expanded={true}
+            text={t(DeparturesDialogSheetTexts.travelTo.title)}
+            onPress={() => navigateToTripSearch(searchLocation, 'toLocation')}
+            mode="primary"
+            style={styles.travelButton}
+          />
+        </View>
       </View>
       <View style={styles.container}>
         <Section>
