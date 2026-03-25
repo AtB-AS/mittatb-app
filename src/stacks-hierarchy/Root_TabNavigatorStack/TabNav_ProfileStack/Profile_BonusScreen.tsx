@@ -51,7 +51,6 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {TFunc} from '@leile/lobo-t';
-import {ThemedBonusBag} from '../../../theme/ThemedAssets';
 import {formatToDate} from '@atb/utils/date';
 import {MessageInfoText} from '@atb/components/message-info-text';
 
