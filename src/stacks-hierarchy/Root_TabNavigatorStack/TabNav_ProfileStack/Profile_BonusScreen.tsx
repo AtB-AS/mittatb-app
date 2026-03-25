@@ -9,6 +9,7 @@ import {
   dictionary,
   getTextForLanguage,
   Language,
+  ProfileTexts,
   useTranslation,
 } from '@atb/translations';
 import {Linking, Platform, View} from 'react-native';
@@ -26,7 +27,11 @@ import {
   isActive,
   useBonusBalanceQuery,
 } from '@atb/modules/bonus';
-import {useIsEnrolled, KnownProgramId} from '@atb/modules/enrollment';
+import {
+  useIsEnrolled,
+  useProgram,
+  KnownProgramId,
+} from '@atb/modules/enrollment';
 import {useAuthContext} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {
@@ -36,8 +41,10 @@ import {
 import {BrandingImage, findOperatorBrandImageUrl} from '@atb/modules/mobility';
 import {isDefined} from '@atb/utils/presence';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import {LogIn} from '@atb/assets/svg/mono-icons/profile';
 import Intercom, {Space} from '@intercom/intercom-react-native';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
@@ -45,6 +52,8 @@ import {ProfileScreenProps} from './navigation-types';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {TFunc} from '@leile/lobo-t';
 import {ThemedBonusBag} from '../../../theme/ThemedAssets';
+import {formatToDate} from '@atb/utils/date';
+import {MessageInfoText} from '@atb/components/message-info-text';
 
 const iconSize = 60;
 
@@ -56,10 +65,16 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
+  const {enable_vipps_login} = useRemoteConfigContext();
+  const isLoggedIn = authenticationType === 'phone';
   const {bonusProducts, mobilityOperators} = useFirestoreConfigurationContext();
   const fontScale = useFontScale();
 
   const isEnrolled = useIsEnrolled(KnownProgramId.BONUS);
+  const bonusProgram = useProgram(KnownProgramId.BONUS);
+  const endDateString = bonusProgram?.endAt
+    ? formatToDate(bonusProgram.endAt, language)
+    : '';
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
 
@@ -85,18 +100,13 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
       )}
     >
       <View style={styles.container}>
-        {authenticationType !== 'phone' && (
-          <View style={styles.noAccount}>
-            <MessageInfoBox
-              type="warning"
-              message={t(BonusProgramTexts.bonusProfile.noProfile)}
-            />
-          </View>
-        )}
         {!isEnrolled && (
           <>
             <View style={styles.wantToJoinIcon}>
-              <ThemedBonusBag height={2 * iconSize} width={2 * iconSize} />
+              <ThemedBonusTransaction
+                height={2 * iconSize}
+                width={2 * iconSize}
+              />
             </View>
             <Section>
               <GenericSectionItem style={{gap: theme.spacing.large}}>
@@ -107,23 +117,50 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
                   {t(BonusProgramTexts.bonusProfile.joinProgram.description)}
                 </ThemeText>
                 <ThemeText typography="body__m" color="primary">
-                  {t(BonusProgramTexts.bonusProfile.joinProgram.footer)}
+                  {t(
+                    BonusProgramTexts.bonusProfile.joinProgram.footer(
+                      endDateString,
+                    ),
+                  )}
                 </ThemeText>
               </GenericSectionItem>
             </Section>
-
+            {!isLoggedIn && (
+              <MessageInfoText
+                style={styles.messageInfo}
+                type="warning"
+                message={t(BonusProgramTexts.bonusProfile.noProfile)}
+              />
+            )}
             <Button
               expanded
-              text={t(BonusProgramTexts.bonusProfile.joinProgram.button.text)}
+              text={
+                isLoggedIn
+                  ? t(BonusProgramTexts.bonusProfile.joinProgram.button.text)
+                  : t(
+                      ProfileTexts.sections.account.linkSectionItems.login
+                        .label,
+                    )
+              }
+              rightIcon={!isLoggedIn ? {svg: LogIn} : undefined}
               style={styles.button}
               accessibilityHint={t(
                 BonusProgramTexts.bonusProfile.joinProgram.button.a11yHint,
               )}
-              onPress={() =>
-                navigation.navigate('Root_OnboardingCarouselStack', {
-                  configId: KnownProgramId.BONUS,
-                })
-              }
+              onPress={() => {
+                if (isLoggedIn) {
+                  navigation.navigate('Root_OnboardingCarouselStack', {
+                    configId: KnownProgramId.BONUS,
+                  });
+                } else if (enable_vipps_login) {
+                  navigation.navigate('Root_LoginOptionsScreen', {
+                    showGoBack: true,
+                    transitionOverride: 'slide-from-bottom',
+                  });
+                } else {
+                  navigation.navigate('Root_LoginPhoneInputScreen', {});
+                }
+              }}
             />
           </>
         )}
@@ -257,6 +294,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.xSmall,
   },
   button: {
+    marginTop: theme.spacing.small,
+  },
+  messageInfo: {
     marginTop: theme.spacing.small,
   },
 }));

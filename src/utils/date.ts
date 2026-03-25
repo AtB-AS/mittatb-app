@@ -398,6 +398,12 @@ export function fullDateTime(isoDate: string | Date, language: Language) {
   });
 }
 
+export function formatToDate(date: Date | string, language: Language) {
+  return format(parseIfNeeded(date), 'dd. MMMM', {
+    locale: languageToLocale(language),
+  });
+}
+
 export function formatToShortDate(date: Date | string, language: Language) {
   return format(parseIfNeeded(date), 'dd. MMM', {
     locale: languageToLocale(language),

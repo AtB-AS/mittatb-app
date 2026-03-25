@@ -57,11 +57,12 @@ const BonusProgramTexts = {
         'You earn points each time you buy a single ticket for adults or students in Zone A. You can use the points to pay for single tickets, or for trips with city bikes, e-scooters, and Hyre cars.',
         'Du tjener poeng hver gang du kjøper en enkeltbillett for voksen eller student i sone A. Poengene kan du bruke til å betale for enkeltbilletter, eller til turer med bysykkel, elsparkesykkel og Hyre leigebiler.',
       ),
-      footer: _(
-        'Dette er et testprosjekt som varer til yy.yy.',
-        'This is a test project that runs until yy.yy.',
-        'Dette er eit testprosjekt som varer til yy.yy.',
-      ),
+      footer: (endDate: string) =>
+        _(
+          `Dette er et testprosjekt som varer til ${endDate}.`,
+          `This is a test project that runs until ${endDate}.`,
+          `Dette er eit testprosjekt som varer til ${endDate}.`,
+        ),
       button: {
         text: _('Bli med', 'Join', 'Bli med'),
         a11yHint: _(
@@ -100,9 +101,9 @@ const BonusProgramTexts = {
     ),
 
     noProfile: _(
-      'Logg inn for å tjene og bruke poeng',
-      'Log in to earn and spend points',
-      'Logg inn for å tene og bruke poeng',
+      'Du må logge inn før du kan bli med i poeng',
+      'You need to log in before you can join points',
+      'Du må logga inn før du kan bli med i poeng',
     ),
     noBonusBalance: _(
       'Vi klarer ikke vise poengene dine akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
