@@ -30,11 +30,17 @@ export const useIntercomMetadata = () => {
   const updateMetadata = useCallback(
     async function (metadata: Partial<Metadata>) {
       if (enable_intercom) {
-        await Intercom.updateUser({
-          customAttributes: pickBy(metadata, (v) => v !== undefined) as {
-            [key: string]: string;
-          },
-        });
+        try {
+          await Intercom.updateUser({
+            customAttributes: pickBy(metadata, (v) => v !== undefined) as {
+              [key: string]: string;
+            },
+          });
+        } catch (error) {
+          // This is not critical, so we just log a warning and continue
+          // Can happen a lot when network is not available
+          console.warn('Unable to update Intercom metadata', error);
+        }
       }
     },
     [enable_intercom],
