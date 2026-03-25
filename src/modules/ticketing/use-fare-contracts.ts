@@ -1,7 +1,7 @@
 import {useTicketingContext} from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {getFareContracts} from '@atb/modules/ticketing';
 import {useAuthContext} from '@atb/modules/auth';
 import {getAvailabilityStatus, AvailabilityStatus} from '@atb-as/utils';
@@ -59,11 +59,25 @@ export const useFareContracts = (
     });
   };
 
-  const filteredFareContracts = getFilterdFareContracts(
-    fareContracts,
-    availabilityStatus,
-    now,
-  );
+  // Stabilize the array reference so downstream components only re-render
+  // when the actual set of fare contracts changes (by id), not every second
+  // when `now` ticks and .filter() returns a new array with the same items.
+  const prevRef = useRef<FareContractType[]>([]);
+  const filteredFareContracts = useMemo(() => {
+    const next = getFilterdFareContracts(
+      fareContracts,
+      availabilityStatus,
+      now,
+    );
+    if (
+      next.length === prevRef.current.length &&
+      next.every((fc, i) => fc.id === prevRef.current[i]?.id)
+    ) {
+      return prevRef.current;
+    }
+    prevRef.current = next;
+    return next;
+  }, [fareContracts, availabilityStatus, now]);
 
   return {fareContracts: filteredFareContracts, refetch, isRefetching};
 };
