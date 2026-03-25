@@ -11,7 +11,7 @@ const UserProfileLimitation = z.object({
 });
 
 export const ProductServiceLimitations = BaseLimitations.extend({
-  userProfiles: z.array(UserProfileLimitation),
+  userProfiles: optionalNullish(z.array(UserProfileLimitation)),
   userProfileRefs: optionalNullish(z.array(z.string())),
   maxCountPerOrder: optionalNullish(z.number().int().nonnegative()),
 });

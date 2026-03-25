@@ -18,7 +18,7 @@ export function useUserCountState(selection: PurchaseSelectionType) {
     ...u,
     count:
       selection.userProfilesWithCount.find(({id}) => id === u.id)?.count ?? 0,
-    limit: upls.find((upl) => upl.userProfileRef === u.id)?.maxCount,
+    limit: upls?.find((upl) => upl.userProfileRef === u.id)?.maxCount,
   }));
 
   return useUniqueCountState<UserProfile>(
