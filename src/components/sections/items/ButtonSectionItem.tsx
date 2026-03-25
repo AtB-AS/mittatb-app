@@ -76,7 +76,7 @@ export function ButtonSectionItem({
     isStringText(value) || !value ? (
       <ThemeText
         numberOfLines={1}
-        typography={value && highlighted ? 'body__m__strong' : 'body__m'}
+        typography="body__m"
         style={!value && styles.faded}
       >
         {value ?? placeholder}
@@ -91,7 +91,12 @@ export function ButtonSectionItem({
     <View>
       <NativeBlockButton
         onPress={onPress}
-        style={[topContainer, styles.container, containerPadding]}
+        style={[
+          topContainer,
+          styles.container,
+          containerPadding,
+          highlighted && styles.highlighted,
+        ]}
         ref={focusRef}
         {...props}
       >
@@ -135,6 +140,10 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   },
   faded: {
     color: theme.color.foreground.dynamic.secondary,
+  },
+  highlighted: {
+    borderWidth: theme.border.width.slim,
+    borderColor: theme.color.border.focus.background,
   },
   inlineValueStyle: {
     paddingTop: theme.spacing.xSmall,

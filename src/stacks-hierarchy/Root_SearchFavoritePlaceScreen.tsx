@@ -24,6 +24,7 @@ export const Root_SearchFavoritePlaceScreen = ({navigation}: Props) => {
   return (
     <View style={styles.container}>
       <FullScreenHeader
+        showBorder={false}
         title={t(AddEditFavoriteTexts.header.title)}
         rightButton={{type: 'close'}}
       />
@@ -42,9 +43,8 @@ export const Root_SearchFavoritePlaceScreen = ({navigation}: Props) => {
   );
 };
 
-const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+const useThemeStyles = StyleSheet.createThemeHook(() => ({
   container: {
-    backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
 }));

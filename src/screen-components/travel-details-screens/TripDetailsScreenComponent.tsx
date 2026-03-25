@@ -82,7 +82,7 @@ export const TripDetailsScreenComponent = ({
   const {t, language} = useTranslation();
   const styles = useStyle();
   const {theme} = useThemeContext();
-  const themeColor = theme.color.background.accent[0];
+  const themeColor = theme.color.background.neutral[1];
 
   const {data, error, isFetching, refetch} = useSingleTripQuery(
     tripPattern.compressedQuery,
@@ -486,7 +486,7 @@ function trackScreenshottedTripDetails(
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.background.neutral[1].background,
   },
   heading: {marginBottom: theme.spacing.medium},
   parallaxContent: {marginHorizontal: theme.spacing.medium},

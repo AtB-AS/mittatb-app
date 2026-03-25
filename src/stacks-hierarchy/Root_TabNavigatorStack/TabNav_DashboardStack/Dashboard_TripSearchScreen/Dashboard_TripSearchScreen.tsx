@@ -76,7 +76,7 @@ const RESULT_KEY_TO = 'Dashboard_TripSearchScreen--toLocation';
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
 const getHeaderBackgroundColor = (theme: Theme) =>
-  theme.color.background.accent[0];
+  theme.color.background.neutral[1];
 const getResultsBackgroundColor = (theme: Theme) =>
   theme.color.background.neutral[1];
 
@@ -690,10 +690,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: getResultsBackgroundColor(theme).background,
     flex: 1,
   },
-  scrollView: {
-    paddingBottom: theme.spacing.medium,
-    backgroundColor: getResultsBackgroundColor(theme).background,
-  },
   searchParametersButtons: {
     marginTop: theme.spacing.medium,
     flexDirection: 'row',
@@ -702,6 +698,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   searchTimeButton: {flexGrow: 1},
   searchHeader: {
     marginHorizontal: theme.spacing.medium,
+    marginTop: theme.spacing.medium,
     backgroundColor: getHeaderBackgroundColor(theme).background,
   },
   loadingIndicator: {

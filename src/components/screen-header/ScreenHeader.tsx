@@ -50,6 +50,7 @@ export type ScreenHeaderProps = {
   color?: ContrastColor;
   textOpacity?: number;
   focusRef?: Ref<any>;
+  showBorder?: boolean;
 };
 
 export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
@@ -62,15 +63,19 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   rightButton,
   textOpacity = 1,
   focusRef,
+  showBorder = true,
 }) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
-  const themeColor = color ?? theme.color.background.accent[0];
+  const themeColor = color ?? theme.color.background.neutral[1];
 
   const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();
 
   const backgroundColor = themeColor.background;
-  const borderBottomColor = !!textOpacity ? backgroundColor : 'transparent';
+  const borderBottomColor =
+    showBorder && !!textOpacity
+      ? theme.color.background.neutral[2].background
+      : 'transparent';
 
   const leftIcon = leftButton ? (
     <HeaderButton color={themeColor} {...leftButton} testID="lhb" />

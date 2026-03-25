@@ -17,7 +17,7 @@ import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
 
-const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
 type Props =
   RootStackScreenProps<'Root_LoginAvailableFareContractWarningScreen'>;
@@ -72,6 +72,7 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
       <FullScreenHeader
         leftButton={{type: 'back'}}
         color={themeColor}
+        showBorder={false}
         title={t(LoginTexts.availableFareContractPrompt.header)}
       />
 

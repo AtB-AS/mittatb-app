@@ -28,6 +28,7 @@ import type {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {RequestError, toAxiosErrorKind} from '@atb/api/utils';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Loading} from '@atb/components/loading';
+import {useScrollBorder} from '@atb/utils/use-scroll-border';
 
 type Props = RootStackScreenProps<'Root_PurchaseFareZonesSearchByTextScreen'>;
 
@@ -41,6 +42,7 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
   const styles = useThemeStyles();
   const selectionBuilder = usePurchaseSelectionBuilder();
   const {bottom} = useSafeAreaInsets();
+  const {onScroll, borderStyle} = useScrollBorder();
 
   const [text, setText] = useState('');
   const debouncedText = useDebounce(text, 200);
@@ -138,40 +140,41 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
+        showBorder={false}
         title={t(FareZoneSearchTexts.header.title)}
         leftButton={{type: 'back'}}
       />
 
-      <View style={styles.header}>
-        <View style={styles.withMargin}>
-          <TextInputSectionItem
-            ref={inputRef}
-            radius="top-bottom"
-            label={
-              fromOrTo === 'from'
-                ? t(FareZonesTexts.location.zonePicker.labelFrom)
-                : t(FareZonesTexts.location.zonePicker.labelTo)
-            }
-            value={text}
-            onChangeText={setText}
-            showClear={Boolean(text?.length)}
-            onClear={() => setText('')}
-            placeholder={t(FareZoneSearchTexts.searchField.placeholder)}
-            autoCorrect={false}
-            autoComplete="off"
-            testID="searchInput"
-          />
-        </View>
+      <View style={[styles.withPadding, borderStyle]}>
+        <TextInputSectionItem
+          ref={inputRef}
+          radius="top-bottom"
+          label={
+            fromOrTo === 'from'
+              ? t(FareZonesTexts.location.zonePicker.labelFrom)
+              : t(FareZonesTexts.location.zonePicker.labelTo)
+          }
+          value={text}
+          onChangeText={setText}
+          showClear={Boolean(text?.length)}
+          onClear={() => setText('')}
+          placeholder={t(FareZoneSearchTexts.searchField.placeholder)}
+          autoCorrect={false}
+          autoComplete="off"
+          testID="searchInput"
+        />
       </View>
 
       <ScrollView
+        onScroll={onScroll}
+        scrollEventThrottle={16}
         style={styles.scroll}
         contentContainerStyle={[styles.contentBlock, {paddingBottom: bottom}]}
         keyboardShouldPersistTaps="handled"
         onScrollBeginDrag={() => Keyboard.dismiss()}
       >
         {errorMessage && (
-          <View style={styles.withMargin}>
+          <View style={styles.withPadding}>
             <MessageInfoBox type="warning" message={errorMessage} />
           </View>
         )}
@@ -198,17 +201,13 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
-  },
-  header: {
-    backgroundColor: theme.color.background.accent[0].background,
   },
   favouriteChips: {
     marginLeft: theme.spacing.medium,
   },
-  withMargin: {
-    margin: theme.spacing.medium,
+  withPadding: {
+    padding: theme.spacing.medium,
   },
   contentBlock: {
     margin: theme.spacing.medium,

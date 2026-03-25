@@ -35,7 +35,7 @@ import {
 } from '@atb/modules/in-app-browser';
 import {Loading} from '@atb/components/loading';
 
-const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
 type Props = RootStackScreenProps<'Root_LoginOptionsScreen'>;
 
@@ -147,6 +147,7 @@ export const Root_LoginOptionsScreen = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
+        showBorder={false}
         leftButton={
           showGoBack && transitionPreset !== 'slide-from-bottom'
             ? {type: 'back'}
@@ -157,7 +158,6 @@ export const Root_LoginOptionsScreen = ({
             ? {type: 'close'}
             : undefined
         }
-        color={themeColor}
         title={t(LoginTexts.logInOptions.title)}
         globalMessageContext={GlobalMessageContextEnum.appLogin}
       />
@@ -237,7 +237,6 @@ export const Root_LoginOptionsScreen = ({
 const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     container: {
-      backgroundColor: getThemeColor(theme).background,
       flex: 1,
     },
     mainView: {

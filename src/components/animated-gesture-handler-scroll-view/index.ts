@@ -1,0 +1,1 @@
+export {AnimatedGestureHandlerScrollView} from './AnimatedGestureHandlerScrollView';

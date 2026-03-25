@@ -67,6 +67,7 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
           ? {type: 'close'}
           : undefined
       }
+      showBorder={false}
       focusRef={focusRef}
     />
   );
@@ -77,6 +78,7 @@ type AnonymousPurchaseConsequencesScreenComponentProps = {
   onPressLogin?: () => void;
   leftButton?: LeftButtonProps;
   rightButton?: RightButtonProps;
+  showBorder: boolean;
   focusRef: Ref<any>;
 };
 export const AnonymousPurchaseConsequencesScreenComponent = ({
@@ -84,6 +86,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
   onPressLogin,
   leftButton,
   rightButton,
+  showBorder,
   focusRef,
 }: AnonymousPurchaseConsequencesScreenComponentProps) => {
   const styles = useStyle();
@@ -114,7 +117,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
   return (
     <OnboardingFullScreenView
       focusRef={focusRef}
-      fullScreenHeaderProps={{leftButton, rightButton}}
+      fullScreenHeaderProps={{leftButton, rightButton, showBorder}}
       footerButton={onPressLogin ? loginButton : continueWithoutLoginButton}
       secondaryFooterButton={
         onPressLogin ? continueWithoutLoginButton : undefined
