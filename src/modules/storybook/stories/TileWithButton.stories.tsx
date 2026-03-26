@@ -8,7 +8,7 @@ import {
 } from '../ThemedStoryDecorator';
 import {Meta} from '@storybook/react';
 import {TileWithButton, TileWithButtonProps} from '@atb/components/tile';
-import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
+import SvgChevronRight from '@atb/assets/svg/mono-icons/navigation/ChevronRight';
 import {themes} from '@atb/theme/colors';
 
 type TileWithButtonMetaProps = ThemedStoryProps<
@@ -38,7 +38,7 @@ const TileWithButtonMeta: Meta<TileWithButtonMetaProps> = {
     interactiveColorType: '0',
     accessibilityLabel: 'Accessibility label',
     buttonText: 'Button text',
-    buttonSvg: SvgArrowRight,
+    buttonSvg: SvgChevronRight,
     onPress: () => {},
     ...themedStoryDefaultArgs,
   },

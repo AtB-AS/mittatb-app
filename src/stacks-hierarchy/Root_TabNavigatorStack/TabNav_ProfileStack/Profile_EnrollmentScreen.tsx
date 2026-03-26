@@ -25,7 +25,7 @@ import {ProfileScreenProps} from './navigation-types';
 import {
   isKnownProgramId,
   KnownProgramId,
-  useEnrollIntoProgramMutation,
+  useEnrollIntoProgramWithCodeMutation,
 } from '@atb/modules/enrollment';
 import {OnboardingCarouselConfigId} from '@atb/modules/onboarding';
 
@@ -120,7 +120,7 @@ export const Profile_EnrollmentScreen = ({navigation}: Props) => {
 
 export const useEnroll = () => {
   const navigation = useNavigation<RootNavigationProps>();
-  const enrollMutation = useEnrollIntoProgramMutation();
+  const enrollMutation = useEnrollIntoProgramWithCodeMutation();
 
   const onEnroll = useCallback(
     async (code: string, clearCode: () => void) => {

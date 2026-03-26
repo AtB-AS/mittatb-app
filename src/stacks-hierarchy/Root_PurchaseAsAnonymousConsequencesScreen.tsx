@@ -13,7 +13,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {
   OnboardingFullScreenView,
   useOnboardingContext,
@@ -110,7 +110,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
     accessibilityHint: t(
       AnonymousPurchasesTexts.consequences.button.accept.a11yHint,
     ),
-    rightIcon: onPressLogin ? undefined : {svg: ArrowRight},
+    rightIcon: onPressLogin ? undefined : {svg: ChevronRight},
     expanded: true,
   };
 

@@ -1,9 +1,9 @@
 import {
   FareProductTypeConfig,
-  PreassignedFareProduct,
   UserProfile,
   FareZone,
 } from '@atb/modules/configuration';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {StopPlaceFragmentWithIsFree} from '@atb/modules/harbors';

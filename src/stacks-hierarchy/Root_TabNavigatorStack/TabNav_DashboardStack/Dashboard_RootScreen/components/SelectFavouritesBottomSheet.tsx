@@ -22,7 +22,7 @@ import {
 } from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
-import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
+import SvgChevronRight from '@atb/assets/svg/mono-icons/navigation/ChevronRight';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type SelectableFavouriteDepartureData = {
@@ -120,7 +120,7 @@ const SelectFavouritesBottomSheetComponent = ({
             onEditFavouriteDeparture();
             bottomSheetModalRef.current?.dismiss();
           }}
-          rightIcon={{svg: SvgArrowRight}}
+          rightIcon={{svg: SvgChevronRight}}
           testID="editButton"
           mode="secondary"
           backgroundColor={theme.color.background.neutral[1]}

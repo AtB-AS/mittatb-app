@@ -12,6 +12,7 @@ export function useSingleTripQuery(
   return useQuery<TripPattern | null, ErrorResponse>({
     queryKey: ['singleTrip', getTripPatternKey(tripPattern)],
     queryFn: async () => {
+      if (!tripPattern.compressedQuery) return null;
       return await singleTripSearch(tripPattern.compressedQuery);
     },
     refetchInterval: ONE_SECOND_MS * 20,

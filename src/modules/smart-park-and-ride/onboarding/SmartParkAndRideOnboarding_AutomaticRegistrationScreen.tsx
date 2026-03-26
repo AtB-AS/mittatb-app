@@ -10,7 +10,7 @@ import {ThemedCarRegister} from '@atb/theme/ThemedAssets';
 import {sparOnboardingId} from './config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
@@ -84,7 +84,7 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = ({
           SmartParkAndRideTexts.onboarding.automaticRegistration.buttonText,
         ),
         expanded: true,
-        rightIcon: {svg: ArrowRight},
+        rightIcon: {svg: ChevronRight},
       }}
       testID="smartParkAndRideOnboardingAutomaticRegistration"
       focusRef={focusRef}

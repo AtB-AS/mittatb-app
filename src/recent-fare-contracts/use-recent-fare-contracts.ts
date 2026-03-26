@@ -1,5 +1,4 @@
 import {
-  PreassignedFareProduct,
   FareZone,
   UserProfile,
   FareProductTypeConfig,
@@ -11,6 +10,7 @@ import {
   RecentOrderDetails,
   useGetFareProductsQuery,
   useGetSupplementProductsQuery,
+  type PreassignedFareProduct,
 } from '@atb/modules/ticketing';
 import {TravelRightDirection} from '@atb-as/utils';
 import {useMemo} from 'react';

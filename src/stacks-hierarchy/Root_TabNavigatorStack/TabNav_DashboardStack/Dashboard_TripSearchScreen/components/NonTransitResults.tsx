@@ -10,7 +10,7 @@ import {
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TripPattern} from '@atb/api/types/trips';
 import {getTransportModeSvg} from '@atb/components/icon-box';
-import arrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
+import ChevronRight from '@atb/assets/svg/mono-icons/navigation/ChevronRight';
 import {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {useNonTransitTripsQuery} from '../use-non-transit-trips-query';
@@ -59,7 +59,7 @@ export const NonTransitResults = ({tripsProps, onDetailsPressed}: Props) => {
             interactiveColor={interactiveColor}
             text={`${modeText} ${durationShort}`}
             leftIcon={{svg: getTransportModeSvg(mode).svg}}
-            rightIcon={{svg: arrowRight}}
+            rightIcon={{svg: ChevronRight}}
             accessibilityLabel={`${modeText} ${duration}`}
             testID={
               tripPattern.legs.some((leg) => leg.rentedBike)

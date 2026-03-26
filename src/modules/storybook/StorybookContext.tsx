@@ -11,7 +11,7 @@ import {StatusBar} from 'react-native';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronLeft} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 
 type StorybookContextState = {
@@ -44,7 +44,7 @@ export const StorybookContextProvider = ({children}: {children: ReactNode}) => {
             onPress={() => setEnabled(false)}
             style={{flexDirection: 'row', padding: 8, alignItems: 'center'}}
           >
-            <ThemeIcon svg={ArrowLeft} />
+            <ThemeIcon svg={ChevronLeft} />
             <ThemeText style={{marginLeft: 4}}>Back to app</ThemeText>
           </NativeBlockButton>
           <StorybookApp />

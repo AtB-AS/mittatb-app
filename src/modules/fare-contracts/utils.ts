@@ -2,6 +2,7 @@ import {
   getLastUsedAccess,
   isSentOrReceivedFareContract,
   Reservation,
+  type PreassignedFareProduct,
 } from '@atb/modules/ticketing';
 import {
   FareContractState,
@@ -13,7 +14,6 @@ import {
   FareZone,
   findReferenceDataById,
   getReferenceDataName,
-  PreassignedFareProduct,
   useFirestoreConfigurationContext,
   UserProfile,
 } from '@atb/modules/configuration';

@@ -7,6 +7,7 @@ import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useStopsDetailsDataQuery} from '../place-screen';
 import {FavoriteLineList} from './components/FavoriteLineList';
+import {useScrollBorder} from '@atb/utils/use-scroll-border';
 
 export type SelectFavoriteDeparturesScreenParams = {
   stopPlace: StopPlace;
@@ -30,6 +31,7 @@ export const SelectFavoriteDeparturesScreenComponent = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {onScroll, isScrolled} = useScrollBorder();
 
   const {data: stopsDetailsData, isError: isStopsDetailsError} =
     useStopsDetailsDataQuery(
@@ -61,7 +63,11 @@ export const SelectFavoriteDeparturesScreenComponent = ({
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader title={stopPlace.name} leftButton={{type: 'back'}} />
+      <FullScreenHeader
+        title={stopPlace.name}
+        leftButton={{type: 'back'}}
+        showBorder={isScrolled}
+      />
       <View style={styles.quayData}>
         <FavoriteLineList
           stopPlace={stopPlace}
@@ -71,6 +77,7 @@ export const SelectFavoriteDeparturesScreenComponent = ({
           testID="lineList"
           onNavigateToQuay={onNavigateToQuay}
           onComplete={onComplete}
+          onScroll={onScroll}
         />
       </View>
     </View>

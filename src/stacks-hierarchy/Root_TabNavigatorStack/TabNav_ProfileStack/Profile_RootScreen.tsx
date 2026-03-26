@@ -49,7 +49,7 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {
   KnownProgramId,
   useIsEnrolled,
-  useIsProgramOpen,
+  useProgram,
 } from '@atb/modules/enrollment';
 
 const buildNumber = getBuildNumber();
@@ -76,7 +76,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     isEventStreamFareContractsEnabled,
   } = useFeatureTogglesContext();
   const isUserEnrolledToBonus = useIsEnrolled(KnownProgramId.BONUS);
-  const isBonusProgramOpen = useIsProgramOpen(KnownProgramId.BONUS);
+  const bonusProgram = useProgram(KnownProgramId.BONUS);
   const unreadCount = useChatUnreadCount();
   const {theme} = useThemeContext();
   const {enable_intercom} = useRemoteConfigContext();
@@ -216,7 +216,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 testID="smartParkAndRideButton"
               />
             )}
-            {(isUserEnrolledToBonus || isBonusProgramOpen) && (
+            {(isUserEnrolledToBonus || bonusProgram?.isOpen) && (
               <LinkSectionItem
                 text={t(
                   ProfileTexts.sections.account.linkSectionItems.bonus.label,

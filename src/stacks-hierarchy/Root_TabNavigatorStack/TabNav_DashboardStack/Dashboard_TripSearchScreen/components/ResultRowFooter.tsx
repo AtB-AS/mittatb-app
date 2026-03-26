@@ -4,7 +4,7 @@ import {TripSearchTexts, useTranslation} from '@atb/translations';
 import {useNow} from '@atb/utils/use-now';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {
   getTripPatternBookingStatus,
   TripPatternBookingStatus,
@@ -33,7 +33,7 @@ const ResultItemFooter: React.FC<{
         <ThemeText typography="body__s">
           {t(TripSearchTexts.results.resultItem.footer.detailsLabel)}
         </ThemeText>
-        <ThemeIcon svg={ArrowRight} />
+        <ThemeIcon svg={ChevronRight} />
       </View>
     </View>
   );

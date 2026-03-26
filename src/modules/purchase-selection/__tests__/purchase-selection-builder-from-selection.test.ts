@@ -99,7 +99,10 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
         preassignedFareProduct: {
           ...TEST_PRODUCT,
           id: 'P_X',
-          limitations: {...TEST_PRODUCT.limitations, userProfileRefs: ['U1']},
+          limitations: {
+            ...TEST_PRODUCT.limitations,
+            userProfiles: [{userProfileRef: 'U1'}],
+          },
         },
         userProfilesWithCount: [{...TEST_USER_PROFILE, id: 'U_X', count: 1}],
         travelDate: new Date().toISOString(),

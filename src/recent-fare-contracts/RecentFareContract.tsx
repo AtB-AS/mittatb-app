@@ -11,7 +11,7 @@ import {
   getReferenceDataName,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {getTransportModeText} from '@atb/components/transportation-modes';
 import {useHarborsQuery} from '@atb/queries';
 import {TileWithButton} from '@atb/components/tile';
@@ -93,7 +93,7 @@ export const RecentFareContract = ({
 
   return (
     <TileWithButton
-      buttonSvg={ArrowRight}
+      buttonSvg={ChevronRight}
       accessibilityHint={t(RecentFareContractsTexts.repeatPurchase.a11yHint)}
       accessibilityLabel={accessibilityLabel}
       buttonText={t(RecentFareContractsTexts.repeatPurchase.label)}

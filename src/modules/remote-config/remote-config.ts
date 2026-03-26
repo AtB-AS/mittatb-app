@@ -73,6 +73,7 @@ export type RemoteConfig = {
   minimum_app_version: string;
   service_disruption_url: string;
   token_timeout_in_seconds: number;
+  use_product_api_v2: boolean;
   use_trygg_overgang_qr_code: boolean;
 };
 
@@ -143,6 +144,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   minimum_app_version: '',
   service_disruption_url: '',
   token_timeout_in_seconds: 10,
+  use_product_api_v2: false,
   use_trygg_overgang_qr_code: false,
 };
 
@@ -322,6 +324,9 @@ export function getConfig(): RemoteConfig {
   const token_timeout_in_seconds =
     values['token_timeout_in_seconds']?.asNumber() ??
     defaultRemoteConfig.token_timeout_in_seconds;
+  const use_product_api_v2 =
+    values['use_product_api_v2']?.asBoolean() ??
+    defaultRemoteConfig.use_product_api_v2;
   const use_trygg_overgang_qr_code =
     values['use_trygg_overgang_qr_code']?.asBoolean() ??
     defaultRemoteConfig.use_trygg_overgang_qr_code;
@@ -387,6 +392,7 @@ export function getConfig(): RemoteConfig {
     minimum_app_version,
     service_disruption_url,
     token_timeout_in_seconds,
+    use_product_api_v2,
     use_trygg_overgang_qr_code,
   };
 }

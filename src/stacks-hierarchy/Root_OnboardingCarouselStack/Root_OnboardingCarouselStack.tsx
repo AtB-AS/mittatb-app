@@ -14,7 +14,7 @@ import {
 } from '@atb/modules/onboarding';
 
 const Tab = createMaterialTopTabNavigator<OnboardingCarouselStackParams>();
-const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
 type Props = RootStackScreenProps<'Root_OnboardingCarouselStack'>;
 
@@ -26,12 +26,14 @@ export const Root_OnboardingCarouselStack = ({route}: Props) => {
   );
   return (
     <Tab.Navigator
-      tabBar={(props: MaterialTopTabBarProps) => (
-        <PageIndicator
-          index={props.state.index}
-          count={props.state.routes.length}
-        />
-      )}
+      tabBar={(props: MaterialTopTabBarProps) =>
+        props.state.routes.length > 1 && (
+          <PageIndicator
+            index={props.state.index}
+            count={props.state.routes.length}
+          />
+        )
+      }
       tabBarPosition="bottom"
       initialRouteName={config?.onboardingScreens[0].name}
       style={styles.container}

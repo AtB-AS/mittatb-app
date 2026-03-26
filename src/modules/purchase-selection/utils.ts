@@ -1,4 +1,4 @@
-import {PreassignedFareProduct} from '@atb/modules/configuration';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import type {
   PurchaseSelectionBuilderInput,
   PurchaseSelectionType,
@@ -79,7 +79,7 @@ export const getDefaultStopPlaces = (
 
 /**
  * This implementation assumes that input.userProfiles always has at least one
- * selectable zone for the given product
+ * selectable userProfile for the given product. Otherwise it will crash.
  */
 export const getDefaultUserProfiles = (
   input: PurchaseSelectionBuilderInput,
@@ -112,12 +112,12 @@ export const isSelectableProduct = (
 
 export const isSelectableProfile = (
   product: PreassignedFareProduct,
-  profile: UserProfile,
-) => {
-  return !!product.limitations.userProfileRefs?.some(
-    (allowedProfileId) => profile.id === allowedProfileId,
+  profile: UserProfile | UserProfileWithCount,
+) =>
+  !product.limitations.userProfiles ||
+  product.limitations.userProfiles.some(
+    (allowed) => profile.id === allowed.userProfileRef,
   );
-};
 
 export const isSelectableSupplementProduct = (
   currentSelection: PurchaseSelectionType,
@@ -251,4 +251,15 @@ export const applyProductChange = (
     userProfilesWithCount: userProfiles,
     zones: newZones ?? currentSelection.zones,
   };
+};
+
+export const isWithinUserProfileMaxCount = (
+  product: PreassignedFareProduct,
+  profile: UserProfileWithCount,
+) => {
+  const maxCount = product.limitations.userProfiles?.find(
+    (allowedUserProfile) => profile.id === allowedUserProfile.userProfileRef,
+  )?.maxCount;
+
+  return profile.count <= (maxCount ?? Number.POSITIVE_INFINITY);
 };

@@ -12,7 +12,7 @@ import {NativeBlockButton} from '@atb/components/native-button';
 import {useTranslation} from '@atb/translations';
 import {TagInfoTexts} from '@atb/translations/components/TagInfo';
 import {Tag} from '@atb/components/tag';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {IconColor} from '@atb/components/theme-icon';
 
 type IconProps = {
@@ -43,7 +43,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
       subtitle,
       label,
       leftIcon,
-      rightIcon = {svg: ArrowRight},
+      rightIcon = {svg: ChevronRight},
       accessibility,
       disabled,
       textType,

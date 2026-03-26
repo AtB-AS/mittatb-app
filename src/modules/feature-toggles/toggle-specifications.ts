@@ -94,6 +94,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_posthog',
   },
   {
+    name: 'isProductApiV2Enabled',
+    remoteConfigKey: 'use_product_api_v2',
+  },
+  {
     name: 'isPushNotificationsEnabled',
     remoteConfigKey: 'enable_push_notifications',
   },

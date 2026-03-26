@@ -50,6 +50,7 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useQueryClient} from '@tanstack/react-query';
 import {useDebugUserInfoHeader} from '@atb/api';
 import {DebugServerOverrides} from '@atb/modules/debug';
+import {useScrollBorder} from '@atb/utils/use-scroll-border';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -58,6 +59,8 @@ function setClipboard(content: string) {
 
 export const Profile_DebugInfoScreen = () => {
   const styles = useStyles();
+
+  const {onScroll, isScrolled} = useScrollBorder();
 
   const {
     onboardingSections,
@@ -154,8 +157,16 @@ export const Profile_DebugInfoScreen = () => {
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader title="Debug info" leftButton={{type: 'back'}} />
-      <ScrollView testID="debugInfoScrollView">
+      <FullScreenHeader
+        title="Debug info"
+        leftButton={{type: 'back'}}
+        showBorder={isScrolled}
+      />
+      <ScrollView
+        testID="debugInfoScrollView"
+        onScroll={onScroll}
+        scrollEventThrottle={16}
+      >
         <Section style={styles.section}>
           <ButtonSectionItem
             label="Restart all onboarding sections"
