@@ -23,6 +23,7 @@ export enum GlobalMessageContextEnum {
   appServiceDisruptions = 'app-service-disruptions',
   appLogin = 'app-login',
   appLoginPhone = 'app-login-phone',
+  appPointsScreen = 'app-points-screen',
 }
 
 export type GlobalMessageRaw = {
