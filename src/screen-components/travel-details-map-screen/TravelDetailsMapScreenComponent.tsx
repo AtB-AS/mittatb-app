@@ -27,7 +27,7 @@ import {
   Position,
 } from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {Platform, View} from 'react-native';
+import {Animated, Platform, View} from 'react-native';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
@@ -153,9 +153,10 @@ export const TravelDetailsMapScreenComponent = ({
           ref={mapCameraRef}
           bounds={bounds}
           {...MapCameraConfig}
-          zoomLevel={vehicleWithPosition ? FOLLOW_ZOOM_LEVEL : undefined}
+          zoomLevel={vehicleWithPosition ? FOLLOW_ZOOM_LEVEL + 3 : undefined}
           centerCoordinate={vehicleWithPosition ? centerPosition : undefined}
           animationDuration={0}
+          pitch={70}
         />
         <MapboxGL.Models
           models={{
@@ -268,22 +269,70 @@ const LiveVehicleMarker = ({
     true,
   );
 
-  const PointFeatureCollection: FeatureCollection<Point, GeoJsonProperties> = {
+  const animatedCoords = useRef(
+    new Animated.ValueXY({
+      x: vehicle.location?.longitude ?? 0,
+      y: vehicle.location?.latitude ?? 0,
+    }),
+  ).current;
+
+  // 2. Update the animation whenever the vehicle location changes
+  useEffect(() => {
+    if (vehicle.location?.longitude && vehicle.location?.latitude) {
+      Animated.timing(animatedCoords, {
+        toValue: {
+          x: vehicle.location.longitude,
+          y: vehicle.location.latitude,
+        },
+        duration: 1000, // Match this roughly to your data update interval
+        useNativeDriver: false, // Must be false for layout/props mapping
+      }).start();
+    }
+  }, [vehicle.location?.longitude, vehicle.location?.latitude, animatedCoords]);
+
+  // 3. Create a state to "listen" to the animation for the GeoJSON
+  const [currentPos, setCurrentPos] = useState<Position>([
+    vehicle.location?.longitude ?? 0,
+    vehicle.location?.latitude ?? 0,
+  ]);
+
+  useEffect(() => {
+    const listenerId = animatedCoords.addListener((value) => {
+      setCurrentPos([value.x, value.y]);
+    });
+    return () => animatedCoords.removeListener(listenerId);
+  }, [animatedCoords]);
+
+  const PointFeatureCollection: FeatureCollection<Point> = {
     type: 'FeatureCollection',
     features: [
       {
         type: 'Feature',
         geometry: {
           type: 'Point',
-          coordinates: [
-            vehicle.location?.longitude ?? 0,
-            vehicle.location?.latitude ?? 0,
-          ],
+          coordinates: currentPos, // Use the interpolated position
         },
         properties: {},
       },
     ],
   };
+
+  // const PointFeatureCollection: FeatureCollection<Point, GeoJsonProperties> = {
+  //   type: 'FeatureCollection',
+  //   features: [
+  //     {
+  //       type: 'Feature',
+  //       geometry: {
+  //         type: 'Point',
+  //         coordinates: [
+  //           vehicle.location?.longitude ?? 0,
+  //           vehicle.location?.latitude ?? 0,
+  //         ],
+  //       },
+  //       properties: {},
+  //     },
+  //   ],
+  // };
 
   const {iconImage, arrowImage} = getVehiclePinSpriteNames(
     isStale,
@@ -336,10 +385,11 @@ const LiveVehicleMarker = ({
         existing
         style={{
           modelId: 'bus-model',
-          modelScale: [2, 2, 2], // Scale on [x, y, z] axes
+          modelScale: [2.2, 2.2, 2.2], // Scale on [x, y, z] axes
           // modelRotation: [0, 0, ['get', 'heading']], // Rotate based on feature property
           modelRotation: [0, 0, (vehicle.bearing ?? 0) + 180], // Rotate based on feature property
           modelType: 'common-3d',
+          modelCastShadows: false,
         }}
         // style={{
         //   iconImage: arrowImage,
