@@ -130,6 +130,7 @@ export const TripDetailsScreenComponent = ({
           refreshing: isFetching && isManualRefresh,
           onRefresh: onManualRefresh,
         }}
+        contentColor={theme.color.background.neutral[0]}
         headerContent={(focusRef) => (
           <View style={styles.headerContent}>
             <View accessible={true} ref={focusRef}>

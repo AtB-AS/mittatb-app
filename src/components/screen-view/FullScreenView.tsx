@@ -142,7 +142,6 @@ const ChildrenWithHeaderContent = ({
   onScrolledChange: (isScrolled: boolean) => void;
 }) => {
   const styles = useStyles();
-  const {theme} = useThemeContext();
   const {onLayout, height: headerHeight} = useLayout();
   const headerHeightRef = React.useRef(headerHeight);
   const isScrolledRef = React.useRef(false);
@@ -151,9 +150,7 @@ const ChildrenWithHeaderContent = ({
     headerHeightRef.current = headerHeight;
   }, [headerHeight]);
 
-  const childrenBackgroundColor =
-    contentColor?.background ??
-    theme.color.background.neutral[0].background;
+  const childrenBackgroundColor = contentColor?.background;
 
   return (
     <View style={{flex: 1, backgroundColor: headerColor}}>
@@ -182,9 +179,13 @@ const ChildrenWithHeaderContent = ({
             {headerContent(!titleAlwaysVisible ? focusRef : undefined)}
           </View>
         </View>
-        <View style={{flex: 1, backgroundColor: childrenBackgroundColor}}>
-          {children}
-        </View>
+        {childrenBackgroundColor ? (
+          <View style={{flex: 1, backgroundColor: childrenBackgroundColor}}>
+            {children}
+          </View>
+        ) : (
+          children
+        )}
       </ScrollView>
     </View>
   );
