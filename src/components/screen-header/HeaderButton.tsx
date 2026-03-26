@@ -6,7 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import {AccessibilityProps, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronLeft} from '@atb/assets/svg/mono-icons/navigation';
 import {StyleSheet} from '@atb/theme';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {
@@ -83,7 +83,7 @@ const useHeaderButton = (
       return {
         children: (
           <View style={styles.headerButtonContainer}>
-            <ThemeIcon svg={ArrowLeft} color={color} />
+            <ThemeIcon svg={ChevronLeft} color={color} />
             <ThemeText color={color}>
               {t(ScreenHeaderTexts.headerButton[type].text)}
             </ThemeText>

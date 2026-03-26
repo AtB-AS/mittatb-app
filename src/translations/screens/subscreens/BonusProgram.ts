@@ -45,6 +45,29 @@ const BonusProgramTexts = {
     header: {
       title: _('Poeng', 'Points', 'Poeng'),
     },
+
+    joinProgram: {
+      title: _(
+        'Vil du samle Poeng?',
+        'Do you want to earn Points?',
+        'Vil du samle Poeng?',
+      ),
+      description: _(
+        'Kjøp enkeltbilletter for voksen eller student i sone A og få Poeng. Bruk Poeng på nye enkeltbilletter eller på turer med bysykkel, elsparkesykkel og Hyre-biler.',
+        'Buy single tickets for adults or students in zone A and earn Points. Use the Points on new single tickets or for trips with city bikes, e-scooters, and Hyre cars.',
+        'Kjøp enkeltbilletter for vaksen eller student i sone A og få Poeng. Bruk Poeng på nye enkeltbilletter eller på turer med bysykkel, elsparkesykkel og Hyre-biler.',
+      ),
+      footer: (endDate: string) =>
+        _(
+          `Dette er et testprosjekt som varer til ${endDate}.`,
+          `This is a test project that runs until ${endDate}.`,
+          `Dette er eit testprosjekt som varer til ${endDate}.`,
+        ),
+      button: {
+        text: _('Bli med', 'Join', 'Bli med'),
+      },
+    },
+
     yourPoints: _('Dine poeng', 'Your points', 'Poenga dine'),
 
     mapButton: {
@@ -73,9 +96,9 @@ const BonusProgramTexts = {
     ),
 
     noProfile: _(
-      'Logg inn for å tjene og bruke poeng',
-      'Log in to earn and spend points',
-      'Logg inn for å tene og bruke poeng',
+      'Du må logge inn før du kan bli med i Poeng',
+      'You need to log in before you can join Points',
+      'Du må logga inn før du kan bli med i Poeng',
     ),
     noBonusBalance: _(
       'Vi klarer ikke vise poengene dine akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
@@ -145,6 +168,47 @@ const BonusProgramTexts = {
       ),
     },
   },
+
+  terms: {
+    title: _(
+      'Vilkår for Poeng',
+      'Terms and conditions for Points',
+      'Vilkår for Poeng',
+    ),
+    term1: _(
+      'Du kan kun bruke Poeng i AtB-appen.',
+      'You can only use Points in the AtB app.',
+      'Du kan kun bruke Poeng i AtB-appen.',
+    ),
+    term2: _(
+      'Gjenværende Poeng slettes etter testperioden.',
+      'Remaining Points will be deleted after the test period.',
+      'Gjenværende Poeng slettes etter testperioden.',
+    ),
+    term3: _(
+      'AtB kan kontakte deg for å be om tilbakemeldinger underveis i testen.',
+      'AtB may contact you to ask for feedback during the test.',
+      'AtB kan kontakta deg for å be om tilbakemelding undervegs i testen.',
+    ),
+    error: {
+      title: _('Noe gikk galt', 'Something went wrong', 'Noe gikk galt'),
+      description: _(
+        'Du ble ikke innmeldt i Poeng. Prøv igjen senere.',
+        'You were not enrolled in Points. Please try again later.',
+        'Du ble ikkje innmeldt i Poeng. Prøv igjen seinare.',
+      ),
+    },
+
+    button: {
+      text: _('Godta', 'Accept', 'Godta'),
+      a11yLabel: _(
+        'Godta vilkårene og bli med',
+        'Accept the terms and join',
+        'Godta vilkårene og bli med',
+      ),
+    },
+  },
+
   onboarding: {
     welcome: {
       title: _(

@@ -2,12 +2,12 @@ import AppHelper from '../utils/app.helper.ts';
 import OnboardingPage from '../pageobjects/onboarding.page.ts';
 import NavigationHelper from '../utils/navigation.helper.ts';
 import ElementHelper from '../utils/element.helper.ts';
-import TicketPage from '../pageobjects/ticket.buy.page.js';
 import AuthenticationPage from '../pageobjects/authentication.page.js';
 import MyProfilePage from '../pageobjects/profile.page.js';
 import {formatPhoneNumber} from '../utils/utils.js';
 import Config from '../conf/config.js';
 import ProfilePage from '../pageobjects/profile.page.js';
+import TicketActivePage from '../pageobjects/ticket.active.page.js';
 
 /**
  * Travel search interactions. Used together with '$ flashlight measure/test' to get performance metrics
@@ -55,7 +55,7 @@ describe('Travel search performance with flashlight', () => {
         await AppHelper.pause(waitingTime);
 
         // Open expired tickets
-        await TicketPage.openExpiredTickets();
+        await TicketActivePage.openExpiredTickets();
         for (let i = 0; i < 3; i++) {
           await AppHelper.scrollDown('ticketHistoryScrollView');
         }

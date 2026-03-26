@@ -48,7 +48,7 @@ export const Root_ShmoHelpScreen = ({
         title: t(ShmoHelpTexts.title),
         rightButton: {type: 'close'},
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading ref={focusRef} text={t(ShmoHelpTexts.title)} />
       )}
     >

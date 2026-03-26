@@ -16,8 +16,9 @@ runs:
     - name: Set sourcemaps directory
       shell: bash
       run: |
-        echo "BUNDLE_PATH=android/app/build/generated/assets/react/$(echo ${APP_FLAVOR}${APP_ENVIRONMENT^})/index.android.bundle" >> $GITHUB_ENV
-        echo "SOURCEMAP_PATH=android/app/build/generated/sourcemaps/react/$(echo $APP_FLAVOR${APP_ENVIRONMENT^})/index.android.bundle.map" >> $GITHUB_ENV
+        VARIANT="${APP_FLAVOR}${APP_ENVIRONMENT^}"
+        echo "BUNDLE_PATH=android/app/build/generated/assets/react/${VARIANT}/index.android.bundle" >> $GITHUB_ENV
+        echo "SOURCEMAP_PATH=android/app/build/intermediates/sourcemaps/react/${VARIANT}/index.android.bundle.packager.map" >> $GITHUB_ENV
     - name: Upload JS bundle and source maps
       continue-on-error: true
       shell: bash

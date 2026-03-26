@@ -32,7 +32,7 @@ type NavigationIconProps = {
   mode?: NavigationIconTypes;
 } & Omit<ThemeIconProps, 'svg'>;
 export function NavigationIcon({
-  mode = 'arrow-right',
+  mode = 'chevron-right',
   ...props
 }: NavigationIconProps) {
   return <ThemeIcon svg={mapMode(mode)} {...props} />;
@@ -65,6 +65,6 @@ function mapMode(mode: NavigationIconTypes) {
     case 'unfold-more':
       return UnfoldMore;
     default:
-      return ArrowRight;
+      return ChevronRight;
   }
 }

@@ -64,6 +64,7 @@ export type TripProps = {
     activeItemIndex: number,
   ) => void;
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
+  now: number;
 };
 export const Trip: React.FC<TripProps> = ({
   tripPattern,
@@ -71,6 +72,7 @@ export const Trip: React.FC<TripProps> = ({
   onPressDetailsMap,
   onPressDeparture,
   onPressQuay,
+  now,
 }) => {
   const styles = useStyle();
   const {t, language} = useTranslation();
@@ -232,7 +234,7 @@ export const Trip: React.FC<TripProps> = ({
           }}
         />
       )}
-      <SaveTripPatternButtonComponent tripPattern={tripPattern} />
+      <SaveTripPatternButtonComponent tripPattern={tripPattern} now={now} />
       <TripSummary {...tripPattern} />
     </View>
   );

@@ -102,6 +102,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   return (
     <View style={styles.container}>
       <FullScreenHeader
+        showBorder={false}
         leftButton={{type: 'back'}}
         rightButton={
           enable_ticket_information && !hasShmoBookingId(fareContract)
@@ -149,7 +150,6 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.color.background.neutral[2].background,
   },
   content: {
     padding: theme.spacing.medium,

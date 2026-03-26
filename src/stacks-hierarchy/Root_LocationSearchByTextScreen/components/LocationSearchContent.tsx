@@ -33,6 +33,7 @@ import {useGeocoderQuery} from '@atb/modules/geocoder';
 import {RequestError, toAxiosErrorKind} from '@atb/api/utils';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Loading} from '@atb/components/loading';
+import {useScrollBorder} from '@atb/utils/use-scroll-border';
 
 type LocationSearchContentProps = {
   label: string;
@@ -48,7 +49,7 @@ type LocationSearchContentProps = {
   onAddFavoritePlace: () => void;
 };
 
-const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
 export function LocationSearchContent({
   label,
@@ -70,6 +71,7 @@ export function LocationSearchContent({
   const analytics = useAnalyticsContext();
   const {theme} = useThemeContext();
   const {bottom} = useSafeAreaInsets();
+  const {onScroll, borderStyle} = useScrollBorder();
 
   const [text, setText] = useState<string>(defaultText ?? '');
   const debouncedText = useDebounce(text, 200);
@@ -138,7 +140,7 @@ export function LocationSearchContent({
 
   return (
     <>
-      <View style={styles.header}>
+      <View style={[styles.header, borderStyle]}>
         <ScreenReaderAnnouncement message={errorMessage} />
         <Section style={styles.contentBlock}>
           <TextInputSectionItem
@@ -201,6 +203,8 @@ export function LocationSearchContent({
         contentContainerStyle={[styles.contentBlock, {paddingBottom: bottom}]}
         keyboardShouldPersistTaps="handled"
         onScrollBeginDrag={() => Keyboard.dismiss()}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
         testID="historyAndResultsScrollView"
       >
         {isLoading && <Loading style={styles.withMargin} />}

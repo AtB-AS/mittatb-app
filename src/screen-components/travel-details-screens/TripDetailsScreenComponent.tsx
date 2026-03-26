@@ -20,7 +20,12 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/screen-components/travel-details-map-screen';
 import {ServiceJourneyDeparture} from './types';
-import {canSellCollabTicket, getNonFreeLegs} from './utils';
+import {
+  canSellCollabTicket,
+  getNonFreeLegs,
+  getTripPatternAnalytics,
+  type TripAnalytics,
+} from './utils';
 import {formatToClock, secondsBetween} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
@@ -35,23 +40,32 @@ import {
 } from '@atb/modules/purchase-selection';
 import {useSingleTripQuery} from '@atb/modules/trip-patterns';
 import {getPosthogClientGlobal} from '@atb/modules/analytics';
-import {isDefined} from '@atb/utils/presence';
-import {
-  onlyUniques,
-  onlyUniquesBasedOnPredicate,
-} from '@atb/utils/only-uniques';
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {useScreenshotAware} from 'react-native-screenshot-aware';
+import {useTimeContext} from '@atb/modules/time';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
 };
 
 type Props = TripDetailsScreenParams & {
-  onPressDetailsMap: (params: TravelDetailsMapScreenParams) => void;
-  onPressBuyTicket: (params: Root_PurchaseOverviewScreenParams) => void;
-  onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
-  onPressDeparture: (items: ServiceJourneyDeparture[], index: number) => void;
+  onPressDetailsMap: (
+    params: TravelDetailsMapScreenParams,
+    tripAnalytics: TripAnalytics,
+  ) => void;
+  onPressBuyTicket: (
+    params: Root_PurchaseOverviewScreenParams,
+    tripAnalytics: TripAnalytics,
+  ) => void;
+  onPressQuay: (
+    stopPlace: StopPlaceFragment,
+    selectedQuayId: string | undefined,
+    tripAnalytics: TripAnalytics,
+  ) => void;
+  onPressDeparture: (
+    items: ServiceJourneyDeparture[],
+    index: number,
+    tripAnalytics: TripAnalytics,
+  ) => void;
   focusRef: Ref<any>;
   isFocused: boolean;
 };
@@ -68,7 +82,7 @@ export const TripDetailsScreenComponent = ({
   const {t, language} = useTranslation();
   const styles = useStyle();
   const {theme} = useThemeContext();
-  const themeColor = theme.color.background.accent[0];
+  const themeColor = theme.color.background.neutral[1];
 
   const {data, error, isFetching, refetch} = useSingleTripQuery(
     tripPattern.compressedQuery,
@@ -77,7 +91,15 @@ export const TripDetailsScreenComponent = ({
 
   const updatedTripPattern = data ?? tripPattern;
 
-  useTrackScreenshottedTripDetails(updatedTripPattern);
+  const {serverNow} = useTimeContext();
+  useTrackScreenshottedTripDetails(updatedTripPattern, serverNow);
+
+  const {fareZones} = useFirestoreConfigurationContext();
+  const tripAnalytics = getTripPatternAnalytics(
+    updatedTripPattern,
+    fareZones,
+    serverNow,
+  );
 
   const purchaseSelection = usePurchaseSelectionFromTrip(updatedTripPattern);
   const fromToNames = getFromToName(updatedTripPattern.legs);
@@ -108,8 +130,8 @@ export const TripDetailsScreenComponent = ({
           refreshing: isFetching && isManualRefresh,
           onRefresh: onManualRefresh,
         }}
-        parallaxContent={(focusRef) => (
-          <View style={styles.parallaxContent}>
+        headerContent={(focusRef) => (
+          <View style={styles.headerContent}>
             <View accessible={true} ref={focusRef}>
               <ThemeText
                 color={themeColor}
@@ -154,9 +176,16 @@ export const TripDetailsScreenComponent = ({
             <Trip
               tripPattern={updatedTripPattern}
               error={error ?? undefined}
-              onPressDetailsMap={onPressDetailsMap}
-              onPressDeparture={onPressDeparture}
-              onPressQuay={onPressQuay}
+              onPressDetailsMap={(params) =>
+                onPressDetailsMap(params, tripAnalytics)
+              }
+              onPressDeparture={(items, index) =>
+                onPressDeparture(items, index, tripAnalytics)
+              }
+              onPressQuay={(stopPlace, selectedQuayId) =>
+                onPressQuay(stopPlace, selectedQuayId, tripAnalytics)
+              }
+              now={serverNow}
             />
           </View>
         )}
@@ -170,10 +199,13 @@ export const TripDetailsScreenComponent = ({
             accessible={true}
             onPress={() => {
               analytics().logEvent('click_trip_purchase_button');
-              onPressBuyTicket({
-                selection: purchaseSelection,
-                mode: 'TravelSearch',
-              });
+              onPressBuyTicket(
+                {
+                  selection: purchaseSelection,
+                  mode: 'TravelSearch',
+                },
+                tripAnalytics,
+              );
             }}
             text={t(TripDetailsTexts.trip.buyTicket.text)}
             leftIcon={{svg: Ticket}}
@@ -424,12 +456,15 @@ function getFirstFareZoneWeSellTicketFor(
   return matchingZones[0];
 }
 
-function useTrackScreenshottedTripDetails(tripPattern: TripPattern) {
+function useTrackScreenshottedTripDetails(
+  tripPattern: TripPattern,
+  now: number,
+) {
   const {fareZones} = useFirestoreConfigurationContext();
 
   const screenshotCallback = useCallback(() => {
-    trackScreenshottedTripDetails(tripPattern, fareZones);
-  }, [tripPattern, fareZones]);
+    trackScreenshottedTripDetails(tripPattern, fareZones, now);
+  }, [tripPattern, fareZones, now]);
 
   useScreenshotAware(screenshotCallback);
 }
@@ -437,39 +472,24 @@ function useTrackScreenshottedTripDetails(tripPattern: TripPattern) {
 function trackScreenshottedTripDetails(
   tripPattern: TripPattern,
   fareZones: FareZone[],
+  now: number,
 ) {
   const posthogClient = getPosthogClientGlobal();
   if (!posthogClient) return;
 
-  const places = tripPattern.legs
-    .map((leg) => [leg.fromPlace, leg.toPlace])
-    .flat()
-    .filter(isDefined)
-    .filter(onlyUniquesBasedOnPredicate((a, b) => a.quay?.id === b.quay?.id));
-
-  const zones = places
-    .map((quay) => getFareZoneWithMetadata(quay, fareZones)?.name?.value)
-    .filter(isDefined)
-    .filter(onlyUniques);
-
-  posthogClient.capture('TripDetailsScreenshotTaken', {
-    zones,
-    zoneCount: zones.length,
-    legCount: tripPattern.legs.length,
-    nonFootLegCount: tripPattern.legs.filter((leg) => leg.mode !== Mode.Foot)
-      .length,
-    legModes: tripPattern.legs.map((leg) => leg.mode),
-    duration: tripPattern.duration,
-  });
+  posthogClient.capture(
+    'TripDetailsScreenshotTaken',
+    getTripPatternAnalytics(tripPattern, fareZones, now),
+  );
 }
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.background.neutral[1].background,
   },
   heading: {marginBottom: theme.spacing.medium},
-  parallaxContent: {marginHorizontal: theme.spacing.medium},
+  headerContent: {marginHorizontal: theme.spacing.medium},
   paddedContainer: {
     padding: theme.spacing.medium,
   },

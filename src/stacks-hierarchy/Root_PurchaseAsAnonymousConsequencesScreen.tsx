@@ -13,7 +13,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {
   OnboardingFullScreenView,
   useOnboardingContext,
@@ -67,6 +67,7 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
           ? {type: 'close'}
           : undefined
       }
+      showBorder={false}
       focusRef={focusRef}
     />
   );
@@ -77,6 +78,7 @@ type AnonymousPurchaseConsequencesScreenComponentProps = {
   onPressLogin?: () => void;
   leftButton?: LeftButtonProps;
   rightButton?: RightButtonProps;
+  showBorder: boolean;
   focusRef: Ref<any>;
 };
 export const AnonymousPurchaseConsequencesScreenComponent = ({
@@ -84,6 +86,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
   onPressLogin,
   leftButton,
   rightButton,
+  showBorder,
   focusRef,
 }: AnonymousPurchaseConsequencesScreenComponentProps) => {
   const styles = useStyle();
@@ -107,14 +110,14 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
     accessibilityHint: t(
       AnonymousPurchasesTexts.consequences.button.accept.a11yHint,
     ),
-    rightIcon: onPressLogin ? undefined : {svg: ArrowRight},
+    rightIcon: onPressLogin ? undefined : {svg: ChevronRight},
     expanded: true,
   };
 
   return (
     <OnboardingFullScreenView
       focusRef={focusRef}
-      fullScreenHeaderProps={{leftButton, rightButton}}
+      fullScreenHeaderProps={{leftButton, rightButton, showBorder}}
       footerButton={onPressLogin ? loginButton : continueWithoutLoginButton}
       secondaryFooterButton={
         onPressLogin ? continueWithoutLoginButton : undefined

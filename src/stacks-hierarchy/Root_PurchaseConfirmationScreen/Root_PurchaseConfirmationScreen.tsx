@@ -60,6 +60,7 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {isNonRecurringPaymentType} from '@atb/modules/payment';
 import {startApplePayPayment} from './start-apple-pay';
 import {Loading} from '@atb/components/loading';
+import type {TripAnalytics} from '@atb/screen-components/travel-details-screens';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -220,7 +221,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     }
 
     if (paymentMethod?.paymentType === PaymentType.ApplePay) {
-      analytics.logEvent('Ticketing', 'Apple Pay selected');
+      analytics.logEvent('Ticketing', 'Apple Pay selected', {
+        paymentMethod: paymentMethod?.paymentType,
+      });
       startApplePayPayment({
         userProfilesWithCountAndOffer,
         supplementProductsWithCountAndOffer,
@@ -230,7 +233,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       });
     } else {
       analytics.logEvent('Ticketing', 'Pay with card selected', {
-        paymentMethod,
+        paymentMethod: paymentMethod?.paymentType,
       });
       reserveMutation.mutate();
     }
@@ -259,7 +262,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         },
         globalMessageContext: GlobalMessageContextEnum.appTicketing,
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
           text={t(PurchaseConfirmationTexts.title)}
@@ -349,6 +352,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           isSearchingOffer={isSearchingOffer}
           isOfferError={!!offerError}
           mode={params.mode}
+          tripAnalytics={params.tripAnalytics}
           onCloseFocusRef={onCloseFocusRef}
           totalPrice={totalPrice}
           reserveOfferResponse={reserveMutation.data}
@@ -400,6 +404,7 @@ type PaymentButtonProps = {
   isOfferError: boolean;
   totalPrice: number;
   mode: 'TravelSearch' | 'Ticket' | undefined;
+  tripAnalytics?: TripAnalytics;
   onCloseFocusRef: RefObject<any>;
   reserveOfferResponse: ReserveOfferResponse | undefined;
   reserveStatus: MutationStatus;
@@ -413,6 +418,7 @@ const PaymentButton = ({
   isOfferError,
   totalPrice,
   mode,
+  tripAnalytics,
   onCloseFocusRef,
   reserveOfferResponse,
   reserveStatus,
@@ -453,8 +459,9 @@ const PaymentButton = ({
           PurchaseConfirmationTexts.choosePaymentMethod.a11yHint,
         )}
         onPress={() => {
-          analytics.logEvent('Ticketing', 'Confirm purchase clicked', {
+          analytics.logEvent('Ticketing', 'Choose payment method clicked', {
             mode: mode,
+            ...tripAnalytics,
           });
           onSelectPaymentMethod();
         }}
@@ -500,14 +507,11 @@ const PaymentButton = ({
       disabled={!!isOfferError || reserveStatus === 'success'}
       onPress={() => {
         if (paymentMethod) {
-          analytics.logEvent(
-            'Ticketing',
-            'Pay with previous payment method clicked',
-            {
-              paymentMethod: paymentMethod?.paymentType,
-              mode: mode,
-            },
-          );
+          analytics.logEvent('Ticketing', 'Confirm payment button clicked', {
+            paymentMethod: paymentMethod?.paymentType,
+            mode: mode,
+            ...tripAnalytics,
+          });
         }
         onGoToPayment();
       }}

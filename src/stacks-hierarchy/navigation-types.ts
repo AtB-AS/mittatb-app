@@ -13,6 +13,7 @@ import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_
 import {ParkingViolationType, ShmoBooking} from '@atb/api/types/mobility';
 import {Root_ChooseTicketRecipientScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/navigation-types';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import type {TripAnalytics} from '@atb/screen-components/travel-details-screens';
 import {Root_SmartParkAndRideEditScreenParams} from '@atb/stacks-hierarchy/Root_SmartParkAndRide/navigation-types';
 import {Root_OnboardingCarouselStackParams} from './Root_OnboardingCarouselStack';
 import {UserProfileWithCountAndOffer} from './Root_PurchaseOverviewScreen/use-offer-state';
@@ -98,6 +99,7 @@ type Root_ConfirmationScreenParams = {
 type Root_TripSearchScreenParams = {
   selection: PurchaseSelectionType;
   mode?: 'Ticket' | 'TravelSearch';
+  tripAnalytics?: TripAnalytics;
 };
 
 export type NextScreenParams<

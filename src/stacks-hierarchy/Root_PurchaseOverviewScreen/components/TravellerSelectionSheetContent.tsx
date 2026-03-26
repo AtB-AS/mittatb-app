@@ -1,4 +1,3 @@
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import React, {useEffect} from 'react';
 import {StyleSheet} from '@atb/theme';
@@ -9,7 +8,8 @@ import {useBaggageCountState} from './Travellers/use-baggage-count-state';
 import {type PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {MessageSectionItem, Section} from '@atb/components/sections';
 import {UniqueWithCount} from '@atb/utils/unique-with-count';
-import {UserProfile, BaggageProduct} from '@atb/modules/configuration';
+import {BaggageProduct, UserProfile} from '@atb/modules/configuration';
+import {useMessage} from './message';
 
 type TravellerSelectionSheetProps = {
   selection: PurchaseSelectionType;
@@ -17,14 +17,11 @@ type TravellerSelectionSheetProps = {
     userProfiles: UniqueWithCount<UserProfile>[],
     baggageProducts: UniqueWithCount<BaggageProduct>[],
   ) => void;
-  showNothingSelectedWarning: boolean;
 };
 export const TravellerSelectionSheetContent = ({
   selection,
   updateCurrentSelection,
-  showNothingSelectedWarning,
 }: TravellerSelectionSheetProps) => {
-  const {t} = useTranslation();
   const styles = useStyles();
 
   const selectionMode =
@@ -32,6 +29,7 @@ export const TravellerSelectionSheetContent = ({
 
   const userCountState = useUserCountState(selection);
   const baggageCountState = useBaggageCountState(selection);
+  const {message, setMessageId} = useMessage(userCountState, baggageCountState);
 
   useEffect(() => {
     updateCurrentSelection(userCountState.state, baggageCountState.state);
@@ -39,11 +37,12 @@ export const TravellerSelectionSheetContent = ({
 
   return (
     <View style={styles.container}>
-      {showNothingSelectedWarning && (
+      {!!message && (
         <Section style={styles.messageContainer}>
           <MessageSectionItem
-            message={t(PurchaseOverviewTexts.selectAtLeastOneTraveller)}
-            messageType="error"
+            title={message.title}
+            message={message.text}
+            messageType={message.messageType}
           />
         </Section>
       )}
@@ -51,6 +50,7 @@ export const TravellerSelectionSheetContent = ({
         <MultipleTravellersSelection
           userCountState={userCountState}
           baggageCountState={baggageCountState}
+          setInfoMessage={setMessageId}
         />
       ) : (
         <SingleTravellerSelection {...userCountState} />

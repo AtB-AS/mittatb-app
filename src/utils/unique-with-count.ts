@@ -3,12 +3,14 @@ import {ReferenceDataNames} from '@atb/modules/configuration';
 import {Language} from '@atb/translations';
 import {getReferenceDataName} from '@atb/modules/configuration';
 
-export type UniqueWithCount<T> = T & {count: number};
+export type UniqueWithCount<T> = T & {count: number; limit?: number};
 
 export type UniqueCountState<T> = {
   state: UniqueWithCount<T>[];
   increment: (item: T) => void;
   decrement: (item: T) => void;
+  canIncrement: (item: T) => boolean;
+  canDecrement: (item: T) => boolean;
 };
 
 const addCount = (count: number) => count + 1;
@@ -32,7 +34,11 @@ export function useUniqueCountState<T>(
 
       const newState = [...prevState];
       const currentItem = newState[index];
-      const newCount = Math.max(0, countOperation(currentItem.count));
+      let newCount = Math.max(0, countOperation(currentItem.count));
+
+      if (currentItem.limit != null) {
+        newCount = Math.min(newCount, currentItem.limit);
+      }
 
       newState[index] = {
         ...currentItem,
@@ -47,6 +53,18 @@ export function useUniqueCountState<T>(
     setItemCount(item, addCount);
   };
 
+  const canIncrement = (item: T) => {
+    const currentItem = state.find((value) => equalityPredicate(value, item));
+    if (!currentItem) return false;
+    if (currentItem.limit != null) return currentItem.count < currentItem.limit;
+    return true;
+  };
+
+  const canDecrement = (item: T) => {
+    const currentItem = state.find((value) => equalityPredicate(value, item));
+    return currentItem ? currentItem.count > 0 : false;
+  };
+
   const decrement = (item: T) => {
     setItemCount(item, subtractCount);
   };
@@ -54,7 +72,9 @@ export function useUniqueCountState<T>(
   return {
     state,
     increment,
+    canIncrement,
     decrement,
+    canDecrement,
   };
 }
 

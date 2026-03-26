@@ -153,6 +153,7 @@ type AuthContextState = {
   signOut: () => Promise<void>;
   confirmCode: (code: string) => Promise<ConfirmationErrorCode | undefined>;
   authenticationType: AuthenticationType;
+  isLoggedIn: boolean;
   signInWithCustomToken: (
     token: string,
   ) => Promise<VippsSignInErrorCode | undefined>;
@@ -208,6 +209,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
           await auth().signInAnonymously();
         }, []),
         authenticationType: mapAuthenticationType(state.user),
+        isLoggedIn: mapAuthenticationType(state.user) === 'phone',
         signInWithCustomToken: useCallback(authSignInWithCustomToken, []),
         retryAuth,
         debug: {

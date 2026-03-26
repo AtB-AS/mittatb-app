@@ -88,7 +88,7 @@ export const SelectTravelTokenScreenComponent = ({
         title,
         rightButton: {type: 'cancel'},
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading ref={focusRef} text={title} />
       )}
       testID="selectTravelTokenView"
@@ -180,7 +180,7 @@ export const SelectTravelTokenScreenComponent = ({
         )}
         {data?.toggleLimit !== undefined && (
           <TokenToggleInfo
-            textColor={theme.color.background.accent[0]}
+            textColor={theme.color.background.neutral[1]}
             toggleLimit={toggleLimit}
             isLoading={isLoading}
           />

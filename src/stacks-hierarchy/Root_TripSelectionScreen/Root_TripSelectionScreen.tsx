@@ -52,7 +52,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
         title: t(TripSelectionTexts.header),
         leftButton: {type: 'back'},
       }}
-      parallaxContent={
+      headerContent={
         screenHeaderTitle
           ? (focusRef) => (
               <ScreenHeading ref={focusRef} text={screenHeaderTitle} />
@@ -66,10 +66,12 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
           searchTime={searchTime}
           setSearchTime={(searchTime) => {
             setSearchTime(searchTime);
-            setSelection((prev) => ({
-              ...prev,
-              travelDate: searchTime.date,
-            }));
+            setSelection((prevSelection) =>
+              builder
+                .fromSelection(prevSelection)
+                .date(searchTime.date)
+                .build(),
+            );
           }}
           backgroundColor={theme.color.background.neutral[1]}
         />
@@ -85,9 +87,13 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
             setSelection(newSelection);
 
             if (selection.isOnBehalfOf) {
-              navigation.navigate('Root_ChooseTicketRecipientScreen', {
-                selection: newSelection,
-                mode: params.mode,
+              navigation.navigate({
+                name: 'Root_ChooseTicketRecipientScreen',
+                params: {
+                  selection: newSelection,
+                  mode: params.mode,
+                  tripAnalytics: params.tripAnalytics,
+                },
               });
             } else {
               navigation.navigate({
@@ -95,6 +101,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
                 params: {
                   mode: params.mode,
                   selection: newSelection,
+                  tripAnalytics: params.tripAnalytics,
                 },
                 merge: true,
               });

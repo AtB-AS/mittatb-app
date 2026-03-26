@@ -37,7 +37,7 @@ export const OnboardingFullScreenView = ({
 }: OnboardingFullScreenViewProps) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
-  const themeColor = theme.color.background.accent[0];
+  const themeColor = theme.color.background.neutral[1];
   const interactiveColor = theme.color.interactive[0];
 
   return (

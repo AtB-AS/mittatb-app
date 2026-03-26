@@ -25,7 +25,10 @@ import queryString from 'query-string';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Button} from '@atb/components/button';
-import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {
+  ChevronRight,
+  ExternalLink,
+} from '@atb/assets/svg/mono-icons/navigation';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useOnboardingContext} from '@atb/modules/onboarding';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
@@ -35,7 +38,7 @@ import {
 } from '@atb/modules/in-app-browser';
 import {Loading} from '@atb/components/loading';
 
-const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
 type Props = RootStackScreenProps<'Root_LoginOptionsScreen'>;
 
@@ -147,6 +150,7 @@ export const Root_LoginOptionsScreen = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
+        showBorder={false}
         leftButton={
           showGoBack && transitionPreset !== 'slide-from-bottom'
             ? {type: 'back'}
@@ -157,7 +161,6 @@ export const Root_LoginOptionsScreen = ({
             ? {type: 'close'}
             : undefined
         }
-        color={themeColor}
         title={t(LoginTexts.logInOptions.title)}
         globalMessageContext={GlobalMessageContextEnum.appLogin}
       />
@@ -195,7 +198,7 @@ export const Root_LoginOptionsScreen = ({
               LoginTexts.logInOptions.options.phoneAndCode.a11yLabel,
             )}
             disabled={isLoading}
-            rightIcon={{svg: ArrowRight}}
+            rightIcon={{svg: ChevronRight}}
             testID="chooseLoginPhoneButton"
           />
           <Button
@@ -212,7 +215,7 @@ export const Root_LoginOptionsScreen = ({
               LoginTexts.logInOptions.options.anonymous.a11yLabel,
             )}
             disabled={isLoading}
-            rightIcon={{svg: ArrowRight}}
+            rightIcon={{svg: ChevronRight}}
             testID="useAppAnonymouslyButton"
           />
         </View>
@@ -237,7 +240,6 @@ export const Root_LoginOptionsScreen = ({
 const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
   return {
     container: {
-      backgroundColor: getThemeColor(theme).background,
       flex: 1,
     },
     mainView: {

@@ -10,7 +10,7 @@ import {useVehicle} from '../../use-vehicle';
 import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useOperatorBenefit} from '../../use-operator-benefit';
 import {OperatorBenefit} from '../OperatorBenefit';
 import {OperatorActionButton} from '../OperatorActionButton';
@@ -191,7 +191,7 @@ export const ScooterSheet = ({
                   text={t(MobilityTexts.reportParkingViolation)}
                   mode="secondary"
                   onPress={onReportParkingViolation}
-                  rightIcon={{svg: ArrowRight}}
+                  rightIcon={{svg: ChevronRight}}
                   backgroundColor={theme.color.background.neutral[1]}
                 />
               )}

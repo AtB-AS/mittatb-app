@@ -98,6 +98,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         preassignedFareProduct,
       },
       mode: params.mode,
+      tripAnalytics: params.tripAnalytics,
     };
 
   const canSelectUserProfile = isUserProfileSelectable(
@@ -166,10 +167,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const onPressBuy = () => {
     if (isBookingRequired) {
-      navigation.push(
-        'Root_TripSelectionScreen',
-        rootPurchaseConfirmationScreenParams,
-      );
+      navigation.push('Root_TripSelectionScreen', {
+        ...rootPurchaseConfirmationScreenParams,
+      });
       return;
     }
     if (selection.isOnBehalfOf) {
@@ -208,7 +208,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         },
         globalMessageContext: GlobalMessageContextEnum.appTicketing,
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <FareProductHeader
           ref={params.onFocusElement ? undefined : focusRef}
           style={styles.header}
@@ -321,11 +321,16 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             ref={focusRefs}
           />
 
-          <StartTimeSelection
-            selection={selection}
-            setSelection={setSelection}
-            style={styles.selectionComponent}
-          />
+          {
+            // When booking is enabled, the next step is selecting the departure (implicitly the time)
+            !selection.preassignedFareProduct.isBookingEnabled && (
+              <StartTimeSelection
+                selection={selection}
+                setSelection={setSelection}
+                style={styles.selectionComponent}
+              />
+            )
+          }
 
           {isFree ? (
             <MessageInfoBox

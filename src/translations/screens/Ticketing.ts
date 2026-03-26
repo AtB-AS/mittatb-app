@@ -7,7 +7,7 @@ const TicketingTexts = {
     title: _('Billetter', 'Tickets', 'Billettar'),
   },
   purchaseTab: {
-    label: _('Kjøp', 'Buy', 'Kjøp'),
+    label: _('Kjøp billett', 'Buy ticket', 'Kjøp billett'),
     a11yLabel: _('Kjøp billetter', 'Buy tickets', 'Kjøp billettar'),
     button: {
       single: {
@@ -290,6 +290,28 @@ const TicketingTexts = {
       'Velg ein annan dag eller juster tidspunkt',
     ),
     select: _('Velg', 'Select', 'Velg'),
+    beforeStartOfFareContract: _(
+      'Billett ikke aktiv',
+      'Ticket not active',
+      'Billett ikkje aktiv',
+    ),
+    expiredFareContract: _(
+      'Billett utløpt',
+      'Ticket expired',
+      'Billett utgått',
+    ),
+    ticketStartsAt: (startTime: string) =>
+      _(
+        `Billetten din er gyldig fra ${startTime}`,
+        `Your ticket is valid from ${startTime}`,
+        `Billetten din er gyldig frå ${startTime}`,
+      ),
+    ticketExpiresAt: (expiryTime: string) =>
+      _(
+        `Billetten din er gyldig til ${expiryTime}`,
+        `Your ticket is valid until ${expiryTime}`,
+        `Billetten din er gyldig til ${expiryTime}`,
+      ),
   },
 };
 

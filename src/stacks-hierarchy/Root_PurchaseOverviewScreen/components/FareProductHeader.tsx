@@ -22,7 +22,7 @@ export const FareProductHeader = forwardRef<View, Props>(
   ({fareProductTypeConfig, onTicketInfoButtonPress, style}: Props, ref) => {
     const {t, language} = useTranslation();
     const {theme} = useThemeContext();
-    const themeColor = theme.color.background.accent[0];
+    const themeColor = theme.color.background.neutral[1];
     const styles = useStyle();
     const {isTicketInformationEnabled} = useFeatureTogglesContext();
 

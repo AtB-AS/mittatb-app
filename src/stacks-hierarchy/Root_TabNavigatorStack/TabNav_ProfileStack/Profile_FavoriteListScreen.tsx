@@ -45,7 +45,7 @@ export const Profile_FavoriteListScreen = ({navigation}: Props) => {
         title: t(FavoriteListTexts.header.title),
         leftButton: {type: 'back'},
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
           text={t(FavoriteListTexts.header.title)}

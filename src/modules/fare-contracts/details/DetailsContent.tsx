@@ -35,7 +35,7 @@ import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
 } from '@atb/modules/configuration';
-import {PreassignedFareProduct} from '@atb/modules/configuration';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {Barcode} from './Barcode';
 import {MapFilterType} from '@atb/modules/map';
 import {useAuthContext} from '@atb/modules/auth';

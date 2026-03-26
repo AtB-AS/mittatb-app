@@ -1,5 +1,5 @@
 import {formatNumberToString} from '@atb-as/utils';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {Loading} from '@atb/components/loading';
 import {ThemeText} from '@atb/components/text';
@@ -75,7 +75,7 @@ export function Summary({
         text={summaryButtonText}
         disabled={isDisabled || isLoading || isFree}
         onPress={toPaymentFunction}
-        rightIcon={{svg: ArrowRight}}
+        rightIcon={{svg: ChevronRight}}
         testID="goToPaymentButton"
         style={styles.button}
       />

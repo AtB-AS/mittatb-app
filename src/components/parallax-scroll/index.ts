@@ -1,1 +1,0 @@
-export {ParallaxScroll} from './ParallaxScroll';

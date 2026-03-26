@@ -49,6 +49,7 @@ import {format} from 'date-fns';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useQueryClient} from '@tanstack/react-query';
 import {useDebugUserInfoHeader} from '@atb/api';
+import {DebugServerOverrides} from '@atb/modules/debug';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -135,6 +136,7 @@ export const Profile_DebugInfoScreen = () => {
         `https://console.firebase.google.com/u/1/project/atb-mobility-platform-staging/firestore/data/~2Fcustomers~2F${userId}`,
       );
   }
+
   function copyIdToken() {
     const idToken = getIdTokenGlobal();
     if (idToken) setClipboard(idToken);
@@ -618,6 +620,13 @@ export const Profile_DebugInfoScreen = () => {
                 />
               </View>
             }
+          />
+        </Section>
+        <Section style={styles.section}>
+          <ExpandableSectionItem
+            text="Server overrides"
+            expandContent={<DebugServerOverrides />}
+            showIconText={true}
           />
         </Section>
       </ScrollView>

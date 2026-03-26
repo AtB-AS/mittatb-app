@@ -16,28 +16,32 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
       {...route.params}
       focusRef={focusRef}
       isFocused={isFocused}
-      onPressDetailsMap={(params) => {
+      onPressDetailsMap={(params, tripAnalytics) => {
         params.vehicleWithPosition
           ? analytics.logEvent('Trip details', 'See live bus clicked', {
               fromPlace: params.fromPlace,
               toPlace: params.toPlace,
+              ...tripAnalytics,
             })
-          : analytics.logEvent('Trip details', 'Map clicked');
+          : analytics.logEvent('Trip details', 'Map clicked', tripAnalytics);
         navigation.navigate('Dashboard_TravelDetailsMapScreen', params);
       }}
-      onPressBuyTicket={(params) => {
-        analytics.logEvent('Trip details', 'Buy ticket clicked');
-        navigation.navigate('Root_PurchaseOverviewScreen', params);
+      onPressBuyTicket={(params, tripAnalytics) => {
+        analytics.logEvent('Trip details', 'Buy ticket clicked', tripAnalytics);
+        navigation.navigate('Root_PurchaseOverviewScreen', {
+          ...params,
+          tripAnalytics,
+        });
       }}
-      onPressQuay={(stopPlace, selectedQuayId) => {
-        analytics.logEvent('Trip details', 'Stop place clicked');
+      onPressQuay={(stopPlace, selectedQuayId, tripAnalytics) => {
+        analytics.logEvent('Trip details', 'Stop place clicked', tripAnalytics);
         navigation.push('Dashboard_PlaceScreen', {
           place: stopPlace,
           selectedQuayId,
         });
       }}
-      onPressDeparture={(items, activeItemIndex) => {
-        analytics.logEvent('Trip details', 'Departure clicked');
+      onPressDeparture={(items, activeItemIndex, tripAnalytics) => {
+        analytics.logEvent('Trip details', 'Departure clicked', tripAnalytics);
         navigation.navigate('Dashboard_DepartureDetailsScreen', {
           items,
           activeItemIndex,

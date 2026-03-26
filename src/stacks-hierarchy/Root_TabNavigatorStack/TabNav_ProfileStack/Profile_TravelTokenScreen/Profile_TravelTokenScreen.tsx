@@ -39,7 +39,7 @@ export const Profile_TravelTokenScreen = ({navigation}: Props) => {
         title,
         leftButton: {type: 'back'},
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading ref={focusRef} text={title} />
       )}
     >

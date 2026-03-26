@@ -1,18 +1,20 @@
 #!/bin/bash
 
-if [ "$#" -ne 4 ]
+if [ "$#" -ne 5 ]
 then
     echo "Argument error!"
     echo "First argument should be the Slack token"
     echo "Second argument should be the Slack channel"
     echo "Third argument should be the GitHub run id"
     echo "Fourth argument should be type of test"
+    echo "Fifth argument should be tested app version"
     exit 1
 else
     SLACK_TOKEN=$1
     SLACK_CHANNEL=$2
     GH_RUN_ID=$3
     TEST_TYPE=$4
+    TESTED_VERSION=$5
     GH_REF="https://github.com/AtB-AS/mittatb-app/actions/runs/${GH_RUN_ID}"
 
     # Create error file if any errors in the test
@@ -48,7 +50,7 @@ else
         text: $text
       }')
 
-      PAYLOAD="{\"channel\": \"${SLACK_CHANNEL}\", \"blocks\": [{\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \"\n\"}}, {\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \":warning: *Errors in E2E App ${TEST_TYPE} tests (<${GH_REF}|GH action>)*\"}}]}"
+      PAYLOAD="{\"channel\": \"${SLACK_CHANNEL}\", \"blocks\": [{\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \"\n\"}}, {\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \":warning: *Errors in E2E App ${TEST_TYPE} tests - version ${TESTED_VERSION} (<${GH_REF}|GH action>)*\"}}]}"
 
       # Send slack notification
       curl -X POST https://slack.com/api/chat.postMessage \
@@ -64,7 +66,7 @@ else
       echo ""
       echo "** Slack notification sent: error details **"
     else
-      PAYLOAD="{\"channel\": \"${SLACK_CHANNEL}\", \"blocks\": [{\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \"\n\"}}, {\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \":white_check_mark: *All good for E2E App ${TEST_TYPE} tests (<${GH_REF}|GH action>)*\"}}]}"
+      PAYLOAD="{\"channel\": \"${SLACK_CHANNEL}\", \"blocks\": [{\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \"\n\"}}, {\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \":white_check_mark: *All good for E2E App ${TEST_TYPE} tests - version ${TESTED_VERSION} (<${GH_REF}|GH action>)*\"}}]}"
 
       # Send slack notification
       curl -X POST https://slack.com/api/chat.postMessage \

@@ -1,12 +1,13 @@
 import type {FareContractType} from '@atb-as/utils';
 import {useMemo} from 'react';
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import type {
-  FareProductTypeConfig,
-  PreassignedFareProduct,
-} from '@atb-as/config-specs';
+import type {FareProductTypeConfig} from '@atb-as/config-specs';
 import {isDefined} from '@atb/utils/presence';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {
+  useGetFareProductsQuery,
+  type PreassignedFareProduct,
+} from '@atb/modules/ticketing';
 
 export function useSupplementProductPurchaseButtonConfig(
   existingFareContract: FareContractType,
@@ -14,8 +15,8 @@ export function useSupplementProductPurchaseButtonConfig(
   buttonText: string;
   buttonMode: 'primary' | 'secondary';
 } {
-  const {fareProductTypeConfigs, preassignedFareProducts: products} =
-    useFirestoreConfigurationContext();
+  const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
+  const {data: products} = useGetFareProductsQuery();
   const {t} = useTranslation();
 
   return useMemo(() => {

@@ -53,7 +53,7 @@ export const Profile_LanguageScreen = ({navigation}: Props) => {
         title: t(LanguageSettingsTexts.header.title),
         leftButton: {type: 'back'},
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
           text={t(LanguageSettingsTexts.header.title)}

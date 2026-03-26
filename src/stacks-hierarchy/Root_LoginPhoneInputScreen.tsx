@@ -7,7 +7,7 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {KeyboardAvoidingView, ScrollView, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 
 import {PhoneInputSectionItem, Section} from '@atb/components/sections';
 import {Button} from '@atb/components/button';
@@ -17,7 +17,7 @@ import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 import {Loading} from '@atb/components/loading';
 
-const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
 type Props = RootStackScreenProps<'Root_LoginPhoneInputScreen'>;
 
@@ -79,6 +79,7 @@ export const Root_LoginPhoneInputScreen = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
+        showBorder={false}
         leftButton={
           params?.transitionOverride !== 'slide-from-bottom'
             ? {type: 'back'}
@@ -90,7 +91,6 @@ export const Root_LoginPhoneInputScreen = ({
             : undefined
         }
         focusRef={focusRef}
-        color={themeColor}
         title={t(LoginTexts.phoneInput.title)}
         globalMessageContext={GlobalMessageContextEnum.appLoginPhone}
       />
@@ -154,7 +154,7 @@ export const Root_LoginPhoneInputScreen = ({
                 text={t(LoginTexts.phoneInput.mainButton)}
                 disabled={!isValidPhoneNumber || isRateLimited}
                 testID="sendCodeButton"
-                rightIcon={{svg: ArrowRight}}
+                rightIcon={{svg: ChevronRight}}
               />
             )}
           </View>
@@ -166,7 +166,6 @@ export const Root_LoginPhoneInputScreen = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   mainView: {

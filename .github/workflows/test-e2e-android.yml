@@ -9,6 +9,9 @@ on:
   schedule:
     - cron: '0 3 * * 1-5'
 
+permissions:
+  contents: read
+
 jobs:
   check-builds:
     name: Check for builds
@@ -163,7 +166,7 @@ jobs:
         if: always()
         working-directory: e2e/results
         run: |
-          ./slack_notification.sh ${{ secrets.ATB_SLACK_TOKEN }} e2e_tests ${{ github.run_id }} smoke
+          ./slack_notification.sh ${{ secrets.ATB_SLACK_TOKEN }} e2e_tests ${{ github.run_id }} smoke ${{ needs.check-builds.outputs.TESTED_VERSION }}
 
       # Results
       - name: Fail on any errors

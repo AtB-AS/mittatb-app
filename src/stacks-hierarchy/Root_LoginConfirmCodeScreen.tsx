@@ -12,7 +12,7 @@ import {ThemeText} from '@atb/components/text';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {NativeBorderlessButton} from '@atb/components/native-button';
@@ -22,7 +22,7 @@ import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {Loading} from '@atb/components/loading';
 
-const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
 type Props = RootStackScreenProps<'Root_LoginConfirmCodeScreen'>;
 type LoginErrorCode = ConfirmationErrorCode | PhoneSignInErrorCode;
@@ -71,8 +71,8 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
   return (
     <View style={styles.container}>
       <FullScreenHeader
+        showBorder={false}
         leftButton={{type: 'back'}}
-        color={themeColor}
         title={t(LoginTexts.logInOptions.title)}
         globalMessageContext={GlobalMessageContextEnum.appLoginPhone}
       />
@@ -136,7 +136,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
                   onPress={onLogin}
                   text={t(LoginTexts.confirmCode.mainButton)}
                   disabled={!code || isRateLimited}
-                  rightIcon={{svg: ArrowRight}}
+                  rightIcon={{svg: ChevronRight}}
                   style={styles.submitButton}
                   testID="submitButton"
                 />
@@ -165,7 +165,6 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   mainView: {

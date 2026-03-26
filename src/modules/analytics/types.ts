@@ -1,6 +1,7 @@
 export type AnalyticsEventContext =
   | 'Contact'
   | 'Dashboard'
+  | 'Departures'
   | 'Departure details'
   | 'Favorites'
   | 'Flexible transport'

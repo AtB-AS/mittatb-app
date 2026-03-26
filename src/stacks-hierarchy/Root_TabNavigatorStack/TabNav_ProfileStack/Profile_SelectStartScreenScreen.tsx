@@ -51,7 +51,7 @@ export const Profile_SelectStartScreenScreen = ({navigation}: Props) => {
         title: t(SelectStartScreenTexts.header.title),
         leftButton: {type: 'back'},
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
           text={t(SelectStartScreenTexts.header.title)}

@@ -46,7 +46,11 @@ import {
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {KnownProgramId, useIsEnrolled} from '@atb/modules/enrollment';
+import {
+  KnownProgramId,
+  useIsEnrolled,
+  useProgram,
+} from '@atb/modules/enrollment';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -71,7 +75,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     isEventStreamEnabled,
     isEventStreamFareContractsEnabled,
   } = useFeatureTogglesContext();
-  const isBonusEnabled = useIsEnrolled(KnownProgramId.BONUS);
+  const isUserEnrolledToBonus = useIsEnrolled(KnownProgramId.BONUS);
+  const bonusProgram = useProgram(KnownProgramId.BONUS);
   const unreadCount = useChatUnreadCount();
   const {theme} = useThemeContext();
   const {enable_intercom} = useRemoteConfigContext();
@@ -87,7 +92,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           title: t(ProfileTexts.header.title),
           color: neutralContrastColor,
         }}
-        parallaxContent={(focusRef) => (
+        headerContent={(focusRef) => (
           <ScreenHeading
             ref={focusRef}
             text={t(ProfileTexts.header.title)}
@@ -146,19 +151,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 testID="settingsButton"
               />
             </Section>
-            {isBonusEnabled && (
-              <Section>
-                <LinkSectionItem
-                  text={t(
-                    ProfileTexts.sections.account.linkSectionItems.bonus.label,
-                  )}
-                  leftIcon={{svg: Star}}
-                  onPress={() => navigation.navigate('Profile_BonusScreen')}
-                  testID="BonusButton"
-                  label="new"
-                />
-              </Section>
-            )}
           </View>
 
           <ContentHeading
@@ -224,9 +216,20 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 testID="smartParkAndRideButton"
               />
             )}
+            {(isUserEnrolledToBonus || bonusProgram?.isOpen) && (
+              <LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.account.linkSectionItems.bonus.label,
+                )}
+                leftIcon={{svg: Star}}
+                onPress={() => navigation.navigate('Profile_BonusScreen')}
+                testID="BonusButton"
+                label="new"
+              />
+            )}
           </Section>
           {enable_ticketing && (
-            <View>
+            <View style={style.mediumGap}>
               <ContentHeading
                 text={t(ProfileTexts.sections.information.heading)}
               />
@@ -276,7 +279,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           {(!!JSON.parse(IS_QA_ENV || 'false') ||
             __DEV__ ||
             customerProfile?.debug) && (
-            <View>
+            <View style={style.mediumGap}>
               <ContentHeading text="Developer menu" />
               <Section>
                 <LinkSectionItem

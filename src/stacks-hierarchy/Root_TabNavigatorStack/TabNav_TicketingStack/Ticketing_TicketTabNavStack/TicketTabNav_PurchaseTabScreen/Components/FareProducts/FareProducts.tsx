@@ -6,8 +6,8 @@ import {
   FareProductTypeConfig,
   LanguageAndTextType,
   ProductTypeTransportModes,
-  PreassignedFareProduct,
 } from '@atb/modules/configuration';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {flatMap} from '@atb/utils/array';
 import {
   TicketingTexts,

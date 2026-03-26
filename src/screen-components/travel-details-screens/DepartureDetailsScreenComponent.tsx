@@ -116,8 +116,8 @@ export const DepartureDetailsScreenComponent = ({
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[1];
   const ctaColor = theme.color.interactive[0];
-  const backgroundColor = theme.color.background.neutral[0];
-  const themeColor = theme.color.background.accent[0];
+  const backgroundColor = theme.color.background.neutral[1];
+  const themeColor = theme.color.background.neutral[1];
 
   const analytics = useAnalyticsContext();
   const {enable_ticketing} = useRemoteConfigContext();
@@ -293,8 +293,8 @@ export const DepartureDetailsScreenComponent = ({
           leftButton: {type: 'back'},
           title: t(DepartureDetailsTexts.header.alternateTitle),
         }}
-        parallaxContent={(focusRef) => (
-          <View style={styles.parallaxContent}>
+        headerContent={(focusRef) => (
+          <View style={styles.headerContent}>
             <View
               style={styles.headerContainer}
               ref={focusRef}
@@ -943,7 +943,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     marginRight: theme.spacing.medium,
   },
-  parallaxContent: {marginHorizontal: theme.spacing.medium},
+  headerContent: {marginHorizontal: theme.spacing.medium},
   date: {
     alignItems: 'center',
   },
@@ -953,14 +953,14 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   headerSubSection: {
     marginTop: theme.spacing.medium,
     borderTopWidth: theme.border.width.slim,
-    borderTopColor: theme.color.background.neutral[0].background,
+    borderTopColor: theme.color.background.neutral[3].background,
     paddingTop: theme.spacing.medium,
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
   },
   border: {
-    borderColor: theme.color.background.neutral[3].background,
+    borderColor: theme.color.background.neutral[1].background,
     marginVertical: theme.spacing.medium,
   },
   passedSection: {

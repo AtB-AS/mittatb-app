@@ -13,6 +13,17 @@ export const Enrollment = z.object({
 
 export type EnrollmentType = z.infer<typeof Enrollment>;
 
+export const Program = z.object({
+  id: z.string(),
+  title: z.array(LanguageAndTextSchema),
+  startAt: z.coerce.date(),
+  endAt: z.coerce.date(),
+  isActive: z.boolean(),
+  isOpen: z.boolean(),
+});
+
+export type ProgramType = z.infer<typeof Program>;
+
 export enum KnownProgramId {
   BONUS = 'bonus',
 }

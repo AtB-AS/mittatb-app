@@ -17,6 +17,9 @@ import {ResultRow} from '../../stacks-hierarchy/Root_TabNavigatorStack/TabNav_Da
 import {useStoredTripPatterns} from './StoredTripPatternsContext';
 import {wrapWithExperimentalFeatureToggledComponent} from '@atb/modules/experimental';
 import {RightActionKind, SwipeableResultRow} from './SwipeableResultRow';
+import {useAnalyticsContext} from '@atb/modules/analytics';
+import {getTripPatternAnalytics} from '@atb/screen-components/travel-details-screens';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 
 type Props = {
   onDetailsPressed(tripPattern: TripPattern): void;
@@ -30,6 +33,8 @@ export const StoredTripPatternsDashboardComponent =
       const styles = useThemeStyles();
       const now = useNow(30000);
       const {t} = useTranslation();
+      const {fareZones} = useFirestoreConfigurationContext();
+      const analytics = useAnalyticsContext();
 
       const searchTime = useMemo<TripSearchTime>(
         () => ({option: 'now', date: new Date(now).toISOString()}),
@@ -53,12 +58,19 @@ export const StoredTripPatternsDashboardComponent =
               {
                 text: t(RemoveStoredTripPatternAlertTexts.removeButton.text),
                 style: 'destructive',
-                onPress: () => removeTripPattern(tripPattern),
+                onPress: () => {
+                  analytics.logEvent(
+                    'Dashboard',
+                    'Trip removed',
+                    getTripPatternAnalytics(tripPattern, fareZones, now),
+                  );
+                  removeTripPattern(tripPattern);
+                },
               },
             ],
           );
         },
-        [removeTripPattern, t],
+        [removeTripPattern, t, analytics, fareZones, now],
       );
 
       if (!tripPatterns.length) {

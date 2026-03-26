@@ -2,8 +2,11 @@ import {type PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {View} from 'react-native';
 import React from 'react';
 import {MemoizedResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
-import {useBookingTrips} from '@atb/modules/booking';
-import type {TripPatternLegs} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/types';
+import {
+  type BookingDisabledReason,
+  useBookingTrips,
+} from '@atb/modules/booking';
+import type {TripPatternLegs} from '../types';
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {SectionSeparator} from '@atb/components/sections';
@@ -18,7 +21,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {
   getMessageTypeForSituation,
   getSituationOrNoticeA11yLabel,
@@ -26,6 +29,7 @@ import {
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {findAllNotices, findAllSituations} from '@atb/modules/situations';
 import {Loading} from '@atb/components/loading';
+import {BookingValidityInfoBox} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/components/BookingValidityInfoBox';
 
 type BookingTripSelectionProps = {
   selection: PurchaseSelectionType;
@@ -61,6 +65,10 @@ export function BookingTripSelection({
 
   return (
     <View style={styles.container}>
+      <BookingValidityInfoBox
+        tripPatterns={tripPatterns}
+        originFareContract={selection.originFareContract}
+      />
       {!isEmpty ? (
         tripPatterns.map((tp, i) => (
           <BookingTrip
@@ -87,17 +95,20 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
   const {t, language} = useTranslation();
 
   const onPress = () => {
-    onSelect(tripPattern.legs);
+    if (isAvailable && !tripPattern.booking.disabledReason) {
+      onSelect(tripPattern.legs);
+    }
   };
 
-  const isAvailable = tripPattern.booking.availability === 'available';
+  const isAvailable =
+    tripPattern.booking.availability === 'available' &&
+    !tripPattern.booking.disabledReason;
 
   const notices = findAllNotices(tripPattern);
   const situations = findAllSituations(tripPattern);
 
   return (
     <NativeBlockButton
-      disabled={!isAvailable}
       onPress={onPress}
       style={[
         styles.container,
@@ -105,7 +116,10 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
       ]}
     >
       <View style={styles.mainContent}>
-        <TripSelectionTag bookingInfo={tripPattern.booking} />
+        <TripSelectionTag
+          bookingInfo={tripPattern.booking}
+          disabledReason={tripPattern.booking.disabledReason}
+        />
         <MemoizedResultItem
           tripPattern={tripPattern}
           key={tripPattern.compressedQuery}
@@ -153,7 +167,7 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
               onPress={onPress}
               backgroundColor={theme.color.interactive[2].default}
               style={{marginLeft: 'auto'}}
-              rightIcon={{svg: ArrowRight}}
+              rightIcon={{svg: ChevronRight}}
             />
           </View>
         </>
@@ -189,11 +203,27 @@ function EmptyState() {
  */
 function TripSelectionTag({
   bookingInfo,
+  disabledReason,
 }: {
   bookingInfo: TripPatternWithBooking['booking'];
+  disabledReason?: BookingDisabledReason;
 }) {
   const {t} = useTranslation();
   const availableSeats = bookingInfo?.offer?.available ?? 0;
+  if (disabledReason === 'expired_fare_contract')
+    return (
+      <Tag
+        labels={[t(TicketingTexts.booking.expiredFareContract)]}
+        tagType="info"
+      />
+    );
+  if (disabledReason === 'inactive_fare_contract')
+    return (
+      <Tag
+        labels={[t(TicketingTexts.booking.beforeStartOfFareContract)]}
+        tagType="info"
+      />
+    );
   if (bookingInfo.availability === 'closed')
     return (
       <Tag labels={[t(TicketingTexts.booking.closed)]} tagType="warning" />

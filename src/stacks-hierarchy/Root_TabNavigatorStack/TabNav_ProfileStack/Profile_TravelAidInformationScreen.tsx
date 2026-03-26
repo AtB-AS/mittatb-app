@@ -37,7 +37,7 @@ export const Profile_TravelAidInformationScreen = ({navigation}: Props) => {
         title: t(TravelAidSettingsTexts.header.howTo.title),
         leftButton: {type: 'back'},
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
           text={t(TravelAidSettingsTexts.header.howTo.title)}

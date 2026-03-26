@@ -1,9 +1,9 @@
 import {
   FareProductTypeConfig,
-  PreassignedFareProduct,
   UserProfile,
   FareZone,
 } from '@atb/modules/configuration';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {StopPlaceFragmentWithIsFree} from '@atb/modules/harbors';
@@ -11,6 +11,13 @@ import {CustomerProfile} from '@atb/modules/ticketing';
 import {Coordinates} from '@atb/utils/coordinates';
 import type {Leg} from '@atb/api/types/trips';
 import type {SupplementProductWithCount} from '@atb/modules/fare-contracts';
+
+export type FareContractStub = {
+  id: string;
+  product: PreassignedFareProduct;
+  startDate: string;
+  endDate: string;
+};
 
 export type PurchaseSelectionType = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -32,7 +39,7 @@ export type PurchaseSelectionType = {
   travelDate: string | undefined;
   legs: Leg[];
   isOnBehalfOf: boolean;
-  existingProduct?: PreassignedFareProduct;
+  originFareContract?: FareContractStub;
 };
 
 /**
@@ -132,11 +139,11 @@ export type PurchaseSelectionBuilder = {
   isOnBehalfOf: (isOnBehalfOf: boolean) => PurchaseSelectionBuilder;
 
   /**
-   * Apply an existing product to the purchase selection. This is used when
+   * Apply an existing ticket to the purchase selection. This is used when
    * purchasing a supplementProduct to an existing Fare Contract.
-   * @param p The product from the existing Fare Contract
+   * @param p The information from the existing Fare Contract
    */
-  existingProduct: (p?: PreassignedFareProduct) => PurchaseSelectionBuilder;
+  originFareContract: (p?: FareContractStub) => PurchaseSelectionBuilder;
 
   /**
    * Retrieve the built purchase selection. It is the purchase selection that
