@@ -1,14 +1,10 @@
-import {
-  PreassignedFareProduct,
-  FareZone,
-  UserProfile,
-  SupplementProduct,
-} from './types';
+import {FareZone, UserProfile, SupplementProduct} from './types';
 import {
   getTextForLanguage,
   Language,
   LanguageAndTextType,
 } from '@atb/translations';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 
 export type ReferenceDataNames = {
   name: LanguageAndTextType;

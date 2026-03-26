@@ -69,7 +69,7 @@ describe('purchaseSelectionBuilder - userProfiles', () => {
         ...TEST_PRODUCT,
         limitations: {
           ...TEST_PRODUCT.limitations,
-          userProfileRefs: ['UP1', 'UP2'],
+          userProfiles: [{userProfileRef: 'UP1'}, {userProfileRef: 'UP2'}],
         },
       },
     };
@@ -79,6 +79,89 @@ describe('purchaseSelectionBuilder - userProfiles', () => {
       .userProfiles([
         {...TEST_USER_PROFILE, id: 'UP2', count: 2},
         {...TEST_USER_PROFILE, id: 'UP3', count: 1},
+      ])
+      .build();
+
+    expect(selection).toBe(originalSelection);
+  });
+
+  it('Should apply user profiles when limitations.userProfiles include them (with maxCount)', () => {
+    const originalSelection: PurchaseSelectionType = {
+      ...TEST_SELECTION,
+      preassignedFareProduct: {
+        ...TEST_PRODUCT,
+        limitations: {
+          ...TEST_PRODUCT.limitations,
+          userProfiles: [
+            {userProfileRef: 'UP2', maxCount: 2},
+            {userProfileRef: 'UP3', maxCount: 1},
+          ],
+        },
+      },
+    };
+
+    const selection = createEmptyBuilder(TEST_INPUT)
+      .fromSelection(originalSelection)
+      .userProfiles([
+        {...TEST_USER_PROFILE, id: 'UP2', count: 2},
+        {...TEST_USER_PROFILE, id: 'UP3', count: 1},
+      ])
+      .build();
+
+    expect(selection.userProfilesWithCount).toHaveLength(2);
+    expect(
+      selection.userProfilesWithCount.find((u) => u.id === 'UP2')?.count,
+    ).toBe(2);
+    expect(
+      selection.userProfilesWithCount.find((u) => u.id === 'UP3')?.count,
+    ).toBe(1);
+  });
+
+  it('Should not apply user profiles not listed in limitations.userProfiles (with maxCount)', () => {
+    const originalSelection: PurchaseSelectionType = {
+      ...TEST_SELECTION,
+      userProfilesWithCount: [{...TEST_USER_PROFILE, id: 'UP2', count: 1}],
+      preassignedFareProduct: {
+        ...TEST_PRODUCT,
+        limitations: {
+          ...TEST_PRODUCT.limitations,
+          userProfiles: [{userProfileRef: 'UP2', maxCount: 1}],
+        },
+      },
+    };
+
+    const selection = createEmptyBuilder(TEST_INPUT)
+      .fromSelection(originalSelection)
+      .userProfiles([
+        {...TEST_USER_PROFILE, id: 'UP2', count: 1},
+        {...TEST_USER_PROFILE, id: 'UP3', count: 1},
+      ])
+      .build();
+
+    expect(selection).toBe(originalSelection);
+  });
+
+  it('Should not apply user profiles when count exceeds maxCount', () => {
+    const originalSelection: PurchaseSelectionType = {
+      ...TEST_SELECTION,
+      userProfilesWithCount: [{...TEST_USER_PROFILE, id: 'UP2', count: 1}],
+      preassignedFareProduct: {
+        ...TEST_PRODUCT,
+        limitations: {
+          ...TEST_PRODUCT.limitations,
+          userProfiles: [{userProfileRef: 'UP2', maxCount: 1}],
+        },
+      },
+    };
+
+    const selection = createEmptyBuilder(TEST_INPUT)
+      .fromSelection(originalSelection)
+      .userProfiles([
+        {
+          ...TEST_USER_PROFILE,
+          id: 'UP2',
+          count: 2,
+        },
       ])
       .build();
 
