@@ -21,7 +21,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {
   getMessageTypeForSituation,
   getSituationOrNoticeA11yLabel,
@@ -167,7 +167,7 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
               onPress={onPress}
               backgroundColor={theme.color.interactive[2].default}
               style={{marginLeft: 'auto'}}
-              rightIcon={{svg: ArrowRight}}
+              rightIcon={{svg: ChevronRight}}
             />
           </View>
         </>

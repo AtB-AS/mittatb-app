@@ -25,7 +25,10 @@ import queryString from 'query-string';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Button} from '@atb/components/button';
-import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {
+  ChevronRight,
+  ExternalLink,
+} from '@atb/assets/svg/mono-icons/navigation';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useOnboardingContext} from '@atb/modules/onboarding';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
@@ -195,7 +198,7 @@ export const Root_LoginOptionsScreen = ({
               LoginTexts.logInOptions.options.phoneAndCode.a11yLabel,
             )}
             disabled={isLoading}
-            rightIcon={{svg: ArrowRight}}
+            rightIcon={{svg: ChevronRight}}
             testID="chooseLoginPhoneButton"
           />
           <Button
@@ -212,7 +215,7 @@ export const Root_LoginOptionsScreen = ({
               LoginTexts.logInOptions.options.anonymous.a11yLabel,
             )}
             disabled={isLoading}
-            rightIcon={{svg: ArrowRight}}
+            rightIcon={{svg: ChevronRight}}
             testID="useAppAnonymouslyButton"
           />
         </View>

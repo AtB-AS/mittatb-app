@@ -91,7 +91,7 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
         title: t(BonusProgramTexts.bonusProfile.header.title),
         leftButton: {type: 'back'},
       }}
-      parallaxContent={(focusRef) => (
+      headerContent={(focusRef) => (
         <ScreenHeading
           ref={focusRef}
           text={t(BonusProgramTexts.bonusProfile.header.title)}

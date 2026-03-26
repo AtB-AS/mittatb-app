@@ -1,4 +1,4 @@
-import {ArrowLeft, ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronLeft, ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Date as DateIcon} from '@atb/assets/svg/mono-icons/time';
 import {Button} from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
@@ -78,7 +78,7 @@ export const DateSelection = ({
           mode="tertiary"
           type="small"
           style={styles.nextPrevButtons}
-          leftIcon={{svg: ArrowLeft}}
+          leftIcon={{svg: ChevronLeft}}
           disabled={disablePreviousDayNavigation}
           accessibilityHint={
             disablePreviousDayNavigation
@@ -119,7 +119,7 @@ export const DateSelection = ({
           type="small"
           mode="tertiary"
           style={styles.nextPrevButtons}
-          rightIcon={{svg: ArrowRight}}
+          rightIcon={{svg: ChevronRight}}
           accessibilityHint={t(DeparturesTexts.dateNavigation.a11yNextDayHint)}
           testID="nextDayButton"
           backgroundColor={backgroundColor}

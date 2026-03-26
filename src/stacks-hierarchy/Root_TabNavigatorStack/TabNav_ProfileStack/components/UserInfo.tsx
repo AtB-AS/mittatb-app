@@ -15,7 +15,7 @@ import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {View} from 'react-native';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {forwardRef} from 'react';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {
   ThemedProfileCardLoggedIn,
   ThemedProfileCardLoggedOut,
@@ -127,7 +127,7 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
               )}
             </View>
           </View>
-          <ThemeIcon svg={ArrowRight} />
+          <ThemeIcon svg={ChevronRight} />
         </View>
       </NativeBlockButton>
     );

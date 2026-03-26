@@ -6,7 +6,7 @@ import {
   OnboardingScreenComponent,
 } from '@atb/modules/onboarding';
 import {ThemedCarValidTicket} from '@atb/theme/ThemedAssets';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useOnboardingCarouselNavigation} from '@atb/modules/onboarding';
 import {sparOnboardingId} from './config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
@@ -49,7 +49,7 @@ export const SmartParkAndRideOnboarding_InformationScreen = ({
         },
         text: t(SmartParkAndRideTexts.onboarding.information.buttonText),
         expanded: true,
-        rightIcon: {svg: ArrowRight},
+        rightIcon: {svg: ChevronRight},
       }}
       testID="smartParkAndRideOnboardingInformation"
       focusRef={focusRef}

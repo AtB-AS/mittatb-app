@@ -19,7 +19,7 @@ import phoneValidator from 'phone';
 import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Loading} from '@atb/components/loading';
 
 export const SubmitButton = ({
@@ -146,7 +146,7 @@ export const SubmitButton = ({
           onPress={onPress}
           text={t(PurchaseOverviewTexts.summary.button.payment)}
           testID="toPaymentButton"
-          rightIcon={{svg: ArrowRight}}
+          rightIcon={{svg: ChevronRight}}
         />
       )}
     </View>

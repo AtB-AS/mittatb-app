@@ -7,7 +7,7 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {KeyboardAvoidingView, ScrollView, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 
 import {PhoneInputSectionItem, Section} from '@atb/components/sections';
 import {Button} from '@atb/components/button';
@@ -154,7 +154,7 @@ export const Root_LoginPhoneInputScreen = ({
                 text={t(LoginTexts.phoneInput.mainButton)}
                 disabled={!isValidPhoneNumber || isRateLimited}
                 testID="sendCodeButton"
-                rightIcon={{svg: ArrowRight}}
+                rightIcon={{svg: ChevronRight}}
               />
             )}
           </View>
