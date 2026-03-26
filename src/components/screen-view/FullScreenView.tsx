@@ -169,6 +169,17 @@ const ChildrenWithHeaderContent = ({
       contentContainerStyle={{flexGrow: 1}}
     >
       <View onLayout={onLayout} style={{backgroundColor: headerColor}}>
+        {/* hack for iOS overscroll to show the same color as header */}
+        <View
+          style={{
+            position: 'absolute',
+            top: -1000,
+            left: 0,
+            right: 0,
+            height: 1000,
+            backgroundColor: headerColor,
+          }}
+        />
         <View style={styles.childrenContainer}>
           {headerContent(!titleAlwaysVisible ? focusRef : undefined)}
         </View>
