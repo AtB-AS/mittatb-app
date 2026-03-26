@@ -26,14 +26,14 @@ export const Root_OnboardingCarouselStack = ({route}: Props) => {
   );
   return (
     <Tab.Navigator
-      tabBar={(props: MaterialTopTabBarProps) => (
+      tabBar={(props: MaterialTopTabBarProps) =>
         props.state.routes.length > 1 && (
           <PageIndicator
             index={props.state.index}
             count={props.state.routes.length}
           />
         )
-      )}
+      }
       tabBarPosition="bottom"
       initialRouteName={config?.onboardingScreens[0].name}
       style={styles.container}
