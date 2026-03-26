@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
@@ -18,7 +18,7 @@ import SvgParking from '@atb/assets/svg/mono-icons/places/Parking';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
-import {useVehiclesByPropulsionTypesQuery} from '../queries/use-vehicles-by-propulsion-types-query';
+import {useVehiclesByPropulsionTypesQueries} from '../queries/use-vehicles-by-propulsion-types-queries';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Loading} from '@atb/components/loading';
 
@@ -35,15 +35,19 @@ export const BikeStationIntegrationView = ({
 }: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const queries = useVehiclesByPropulsionTypesQuery(
-    station?.id, // stationId
-    '-currentRangeMeters', // sort
-    1, // maxCount
-  );
-  const [noVehicleFound, setNoVehicleFound] = useState(false);
+  const {humanQuery, electricQuery, electricAssistQuery} =
+    useVehiclesByPropulsionTypesQueries(
+      station?.id, // stationId
+      '-currentRangeMeters', // sort
+      1, // maxCount
+    );
 
-  const isLoading = queries.some((q) => q.isLoading);
-  const isError = queries.some((q) => q.isError);
+  const isLoading = [humanQuery, electricQuery, electricAssistQuery].some(
+    (q) => q.isLoading,
+  );
+  const isError = [humanQuery, electricQuery, electricAssistQuery].some(
+    (q) => q.isError,
+  );
 
   if (isLoading) {
     return (
@@ -55,7 +59,7 @@ export const BikeStationIntegrationView = ({
 
   return (
     <>
-      {!isLoading && (isError || noVehicleFound) && (
+      {!isLoading && isError && (
         <View style={styles.error}>
           <MessageInfoBox
             type="error"
@@ -66,55 +70,65 @@ export const BikeStationIntegrationView = ({
 
       <View style={styles.container}>
         <Section>
-          {station?.vehicleTypesAvailable?.map((e, index) => (
-            <LinkSectionItem
-              key={index}
-              text={t(
-                MobilityTexts.bikeNameByPropulsionType(
-                  e.vehicleType.propulsionType,
-                ),
-              )}
-              subtitle={t(MobilityTexts.freeBikes(e.count.toString()))}
-              leftElement={
-                <TransportationIconBox
-                  mode="bicycle"
-                  subMode={
-                    e.vehicleType.propulsionType ===
-                      PropulsionType.ElectricAssist ||
-                    e.vehicleType.propulsionType === PropulsionType.Electric
-                      ? 'ebicycle'
-                      : undefined
-                  }
-                  isFlexible={false}
-                  size="normal"
-                  type="compact"
-                  overrideBorderRadius="50%"
-                />
-              }
-              onPress={() => {
-                setNoVehicleFound(false);
-                const [humanQuery, electricQuery, electricAssistQuery] =
-                  queries;
-                const vehicle = (() => {
-                  switch (e.vehicleType.propulsionType) {
-                    case PropulsionType.Human:
-                      return humanQuery.data?.[0];
-                    case PropulsionType.Electric:
-                      return electricQuery.data?.[0];
-                    case PropulsionType.ElectricAssist:
-                      return electricAssistQuery.data?.[0];
-                  }
-                })();
+          {station?.vehicleTypesAvailable
+            ?.filter((e) => {
+              if (e.count === 0) return false;
 
-                if (vehicle?.id) {
-                  onPressVehicleType(vehicle.id);
-                } else {
-                  setNoVehicleFound(true);
+              switch (e.vehicleType.propulsionType) {
+                case PropulsionType.Human:
+                  return (humanQuery.data?.length ?? 0) > 0;
+                case PropulsionType.Electric:
+                  return (electricQuery.data?.length ?? 0) > 0;
+                case PropulsionType.ElectricAssist:
+                  return (electricAssistQuery.data?.length ?? 0) > 0;
+                default:
+                  return false;
+              }
+            })
+            .map((e, index) => (
+              <LinkSectionItem
+                key={index}
+                text={t(
+                  MobilityTexts.bikeNameByPropulsionType(
+                    e.vehicleType.propulsionType,
+                  ),
+                )}
+                subtitle={t(MobilityTexts.freeBikes(e.count.toString()))}
+                leftElement={
+                  <TransportationIconBox
+                    mode="bicycle"
+                    subMode={
+                      e.vehicleType.propulsionType ===
+                        PropulsionType.ElectricAssist ||
+                      e.vehicleType.propulsionType === PropulsionType.Electric
+                        ? 'ebicycle'
+                        : undefined
+                    }
+                    isFlexible={false}
+                    size="normal"
+                    type="compact"
+                    overrideBorderRadius="50%"
+                  />
                 }
-              }}
-              disabled={e.count === 0}
-            />
-          ))}
+                onPress={() => {
+                  const vehicle = (() => {
+                    switch (e.vehicleType.propulsionType) {
+                      case PropulsionType.Human:
+                        return humanQuery.data?.[0];
+                      case PropulsionType.Electric:
+                        return electricQuery.data?.[0];
+                      case PropulsionType.ElectricAssist:
+                        return electricAssistQuery.data?.[0];
+                    }
+                  })();
+
+                  if (vehicle?.id) {
+                    // sanity check, already handled in the filter, but atleast prevents crashes if something unexpected happens
+                    onPressVehicleType(vehicle.id);
+                  }
+                }}
+              />
+            ))}
         </Section>
         <Section>
           <GenericSectionItem style={styles.freeParkingSection}>

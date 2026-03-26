@@ -408,9 +408,9 @@ export const BicycleTexts = {
     'Vi fann ikkje denne sykkelen',
   ),
   loadingFailedBicyclesStations: _(
-    'Feil ved innlastning av sykler på denne stasjonen',
+    'Feil ved innlasting av sykler på denne stasjonen',
     'Error loading bikes at this station',
-    'Feil ved innlastning av sykler på denne stasjonen',
+    'Feil ved innlasting av syklar på denne stasjonen',
   ),
 };
 

@@ -93,26 +93,28 @@ export const BikeStationBottomSheet = ({
         </View>
       )}
 
-      {!operatorIsIntegrationEnabled && !isLoading && !isError && station && (
-        <BikeStationIntegrationView
-          station={station}
-          navigateSupportCallback={navigateSupportCallback}
-          onPressVehicleType={onVehicleTypeSelected}
-        />
-      )}
-      {operatorIsIntegrationEnabled && !isLoading && !isError && station && (
-        <BikeStationNotIntegratedView
-          numDocksAvailable={station.numDocksAvailable}
-          onStationReceived={onStationReceived}
-          rentalAppUri={rentalAppUri ?? undefined}
-          appStoreUri={appStoreUri ?? undefined}
-          operatorId={operatorId}
-          operatorName={operatorName}
-          brandLogoUrl={brandLogoUrl ?? undefined}
-          stationName={stationName}
-          availableBikes={availableBikes}
-        />
-      )}
+      {!isLoading &&
+        !isError &&
+        station &&
+        (operatorIsIntegrationEnabled ? (
+          <BikeStationIntegrationView
+            station={station}
+            navigateSupportCallback={navigateSupportCallback}
+            onPressVehicleType={onVehicleTypeSelected}
+          />
+        ) : (
+          <BikeStationNotIntegratedView
+            numDocksAvailable={station.numDocksAvailable}
+            onStationReceived={onStationReceived}
+            rentalAppUri={rentalAppUri ?? undefined}
+            appStoreUri={appStoreUri ?? undefined}
+            operatorId={operatorId}
+            operatorName={operatorName}
+            brandLogoUrl={brandLogoUrl ?? undefined}
+            stationName={stationName}
+            availableBikes={availableBikes}
+          />
+        ))}
     </MapBottomSheet>
   );
 };
