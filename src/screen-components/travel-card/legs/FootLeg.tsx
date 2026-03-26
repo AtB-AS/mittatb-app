@@ -1,5 +1,5 @@
 import {Leg} from '@atb/api/types/trips';
-import {TripSearchTexts, useTranslation} from '@atb/translations';
+import {TravelCardTexts, useTranslation} from '@atb/translations';
 import {
   secondsBetween,
   secondsToDuration,
@@ -31,18 +31,23 @@ export const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   const a11yText =
     mustWalk && mustWait
       ? t(
-          TripSearchTexts.results.resultItem.footLeg.walkAndWaitLabel(
+          TravelCardTexts.legs.foot.walkAndWaitLabel(
             walkDuration,
             waitDuration,
           ),
         )
       : mustWait
-        ? t(TripSearchTexts.results.resultItem.footLeg.waitLabel(waitDuration))
-        : t(TripSearchTexts.results.resultItem.footLeg.walkLabel(walkDuration));
+        ? t(TravelCardTexts.legs.foot.waitLabel(waitDuration))
+        : t(TravelCardTexts.legs.foot.walkLabel(walkDuration));
 
   return (
-    <View style={styles.walkContainer} testID="footLeg">
-      <ThemeIcon accessibilityLabel={a11yText} svg={WalkFill} />
+    <View
+      accessibilityLabel={a11yText}
+      style={styles.walkContainer}
+      accessible={true}
+      testID="footLeg"
+    >
+      <ThemeIcon svg={WalkFill} />
       <ThemeText style={styles.walkDuration}>
         {secondsToMinutes(leg.duration)}
       </ThemeText>

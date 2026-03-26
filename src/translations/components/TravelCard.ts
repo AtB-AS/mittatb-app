@@ -86,6 +86,34 @@ const TravelCardTexts = {
         ),
     },
   },
+  legs: {
+    foot: {
+      walkAndWaitLabel: (walkTime: string, waitTime: string) =>
+        _(
+          `Gå ${walkTime}. Vent ${waitTime}.`,
+          `Walk ${walkTime}. Wait ${waitTime}.`,
+          `Gå ${walkTime}. Vent ${waitTime}.`,
+        ),
+      walkLabel: (time: string) =>
+        _(`Gå ${time}.`, `Walk ${time}.`, `Gå ${time}.`),
+      walkToStopLabel: (distance: string, stopPlace: string) =>
+        _(
+          `Gå til ${stopPlace}.`,
+          `Walk ${distance} to ${stopPlace}.`,
+          `Gå ${distance} til ${stopPlace}.`,
+        ),
+      waitLabel: (time: string) =>
+        _(`Vent ${time}.`, `Wait ${time}.`, `Vent ${time}.`),
+    },
+    transportation: {
+      a11yLabel: (modeName: string, publicCode: string) =>
+        _(
+          `Ta ${modeName} ${publicCode}.`,
+          `Take ${modeName} ${publicCode}.`,
+          `Ta ${modeName} ${publicCode}.`,
+        ),
+    },
+  },
 };
 
 export default TravelCardTexts;

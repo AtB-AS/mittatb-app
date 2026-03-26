@@ -10,6 +10,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {TravelCardTexts, useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
+import {PrefixAccessibilityLabel} from './PrefixAccessibilityLabel';
 
 export type TravelCardType = 'trip-search' | 'saved-trip';
 
@@ -75,20 +76,6 @@ export const TravelCard: React.FC<TravelCardProps> = ({
         </View>
       </NativeBlockButton>
     </Animated.View>
-  );
-};
-
-const PrefixAccessibilityLabel = ({
-  accessibilityLabel,
-}: {
-  accessibilityLabel: string;
-}) => {
-  return (
-    <View
-      accessible={true}
-      accessibilityLabel={accessibilityLabel}
-      style={{position: 'absolute'}}
-    />
   );
 };
 
