@@ -78,6 +78,7 @@ export function FullScreenView(props: Props) {
       {...props}
       handleScroll={handleScroll}
       headerColor={backgroundColor}
+      contentColor={props.contentColor}
       onScrolledChange={setIsScrolled}
     />
   ) : (
@@ -129,16 +130,19 @@ const ChildrenWithHeaderContent = ({
   refreshControlProps,
   children,
   headerColor,
+  contentColor,
   handleScroll,
   titleAlwaysVisible,
   focusRef,
   onScrolledChange,
 }: PropsWithHeaderContent & {
   headerColor: string;
+  contentColor?: ContrastColor;
   handleScroll: (scrollPercentage: number) => void;
   onScrolledChange: (isScrolled: boolean) => void;
 }) => {
   const styles = useStyles();
+  const {theme} = useThemeContext();
   const {onLayout, height: headerHeight} = useLayout();
   const headerHeightRef = React.useRef(headerHeight);
   const isScrolledRef = React.useRef(false);
@@ -147,45 +151,42 @@ const ChildrenWithHeaderContent = ({
     headerHeightRef.current = headerHeight;
   }, [headerHeight]);
 
+  const childrenBackgroundColor =
+    contentColor?.background ??
+    theme.color.background.neutral[0].background;
+
   return (
-    <ScrollView
-      scrollEventThrottle={16}
-      refreshControl={
-        refreshControlProps ? (
-          <RefreshControl {...refreshControlProps} />
-        ) : undefined
-      }
-      onScroll={(event) => {
-        const offsetY = event.nativeEvent.contentOffset.y;
-        const scrolled = offsetY > 0;
-        if (scrolled !== isScrolledRef.current) {
-          isScrolledRef.current = scrolled;
-          onScrolledChange(scrolled);
+    <View style={{flex: 1, backgroundColor: headerColor}}>
+      <ScrollView
+        scrollEventThrottle={16}
+        refreshControl={
+          refreshControlProps ? (
+            <RefreshControl {...refreshControlProps} />
+          ) : undefined
         }
-        if (headerHeightRef.current > 0) {
-          handleScroll((offsetY / headerHeightRef.current) * 100);
-        }
-      }}
-      contentContainerStyle={{flexGrow: 1}}
-    >
-      <View onLayout={onLayout} style={{backgroundColor: headerColor}}>
-        {/* hack for iOS overscroll to show the same color as header */}
-        <View
-          style={{
-            position: 'absolute',
-            top: -1000,
-            left: 0,
-            right: 0,
-            height: 1000,
-            backgroundColor: headerColor,
-          }}
-        />
-        <View style={styles.childrenContainer}>
-          {headerContent(!titleAlwaysVisible ? focusRef : undefined)}
+        onScroll={(event) => {
+          const offsetY = event.nativeEvent.contentOffset.y;
+          const scrolled = offsetY > 0;
+          if (scrolled !== isScrolledRef.current) {
+            isScrolledRef.current = scrolled;
+            onScrolledChange(scrolled);
+          }
+          if (headerHeightRef.current > 0) {
+            handleScroll((offsetY / headerHeightRef.current) * 100);
+          }
+        }}
+        contentContainerStyle={{flexGrow: 1}}
+      >
+        <View onLayout={onLayout} style={{backgroundColor: headerColor}}>
+          <View style={styles.childrenContainer}>
+            {headerContent(!titleAlwaysVisible ? focusRef : undefined)}
+          </View>
         </View>
-      </View>
-      {children}
-    </ScrollView>
+        <View style={{flex: 1, backgroundColor: childrenBackgroundColor}}>
+          {children}
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
