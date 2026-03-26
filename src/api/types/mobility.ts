@@ -198,10 +198,12 @@ const VehicleTypeSchema = z.object({
 
 export type VehicleType = z.infer<typeof VehicleTypeSchema>;
 
-const RentalUrisSchema = z.object({
-  android: z.string().nullable().optional(),
-  ios: z.string().nullable().optional(),
-});
+const RentalUrisSchema = z
+  .object({
+    android: z.string().nullable().optional(),
+    ios: z.string().nullable().optional(),
+  })
+  .nullable();
 
 export type RentalUris = z.infer<typeof RentalUrisSchema>;
 
