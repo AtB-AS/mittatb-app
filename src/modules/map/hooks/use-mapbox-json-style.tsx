@@ -32,6 +32,24 @@ const slotLayers = slotLayerIds.map((slotLayerId) => ({
   type: 'slot',
 }));
 
+const modelLayers = [
+  {
+    id: 'custom-building-model-layer',
+    type: 'model',
+    // source: 'custom-building-model',
+    source: 'liveIconSource_BUS',
+    slot: 'middle',
+    paint: {
+      // tweak these to fit your footprint
+      // 'model-scale': [100, 100, 100],
+      'model-scale': [1, 1, 1],
+      'model-rotation': [0, 0, 0],
+      // lift it up/down if needed (meters)
+      'model-translation': [0, 0, 0],
+    },
+  },
+];
+
 export const useMapboxJsonStyle: (
   includeVehiclesAndStationsVectorSource: boolean,
   shouldShowGeofencingZonesLayers: boolean,
@@ -80,6 +98,7 @@ export const useMapboxJsonStyle: (
       ...themedLayers,
       ...geofencingZonesLayers,
       ...slotLayers,
+      ...modelLayers,
     ];
 
     const extendedSources: StyleJsonVectorSourcesObj = {
@@ -126,6 +145,7 @@ export const useMapboxJsonStyle: (
                   showTransitLabels: false,
                   showPedestrianRoads: true,
                   showRoadLabels: false,
+                  show3dObjects: true,
                 },
                 'color-theme': colorTheme,
               },
@@ -163,5 +183,9 @@ export type StyleJsonVectorSource = {
   tiles?: string[];
   url?: string;
   volatile?: boolean;
+
+  // Allow 'data' for geojson sources
+  data?: any;
+  models?: any;
 };
 type StyleJsonVectorSourcesObj = Record<string, StyleJsonVectorSource>;

@@ -40,6 +40,7 @@ import {debugProgressBetweenStopsText} from '../travel-details-screens/utils';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {TRANSPORT_SUB_MODES_BOAT} from '@atb/components/icon-box';
+import {MapSlotLayerId} from '@atb/modules/map/hooks/use-mapbox-json-style';
 
 export type TravelDetailsMapScreenParams = {
   serviceJourneyPolylines: ServiceJourneyPolyline[];
@@ -102,7 +103,8 @@ export const TravelDetailsMapScreenComponent = ({
     enabled: isFocusedAndActive,
   });
 
-  const [shouldTrack, setShouldTrack] = useState<boolean>(true);
+  const [_shouldTrack, setShouldTrack] = useState<boolean>(true);
+  const shouldTrack = true;
 
   /* adding onCameraChanged to <MapView> caused an internal mapbox error in the iOS stage build version, so use the deprecated onRegionIsChanging instead for now and hope the error will be fixed when onRegionIsChanging is removed in the next mapbox version*/
   /* on Android, onRegionIsChanging is very laggy, so use the correct onCameraChanged instead */
@@ -142,7 +144,7 @@ export const TravelDetailsMapScreenComponent = ({
       <MapboxGL.MapView
         ref={mapViewRef}
         style={styles.map}
-        pitchEnabled={false}
+        pitchEnabled={true}
         {...mapViewConfig}
         {...mapCameraTrackingMethod}
         onDidFinishLoadingMap={() => setLoadedMap(true)}
@@ -154,6 +156,15 @@ export const TravelDetailsMapScreenComponent = ({
           zoomLevel={vehicleWithPosition ? FOLLOW_ZOOM_LEVEL : undefined}
           centerCoordinate={vehicleWithPosition ? centerPosition : undefined}
           animationDuration={0}
+        />
+        <MapboxGL.Models
+          models={{
+            'bus-model': {
+              uri: 'https://storage.googleapis.com/atb-mobility-platform-staging--shared-assets/map-assets/3d/bus.glb',
+              // uri: 'http://localhost:8082/bus.glb',
+              // uri: 'http://localhost:8082/blender/bus2.glb',
+            },
+          }}
         />
         <NationalStopRegistryFeatures
           selectedFeaturePropertyId={undefined}
@@ -283,34 +294,63 @@ const LiveVehicleMarker = ({
   );
 
   const layers = useMemo<React.ReactElement[]>(() => {
-    const result: React.ReactElement[] = [
-      <MapboxGL.SymbolLayer
-        id={`liveVehicleIcon_${vehicle.mode}`}
-        key={`liveVehicleIcon_${vehicle.mode}`}
-        style={{
-          iconImage,
-          iconAllowOverlap: true,
-          iconIgnorePlacement: true,
-        }}
-      />,
-    ];
+    const result: React.ReactElement[] = [];
+    //   <MapboxGL.SymbolLayer
+    //     id={`liveVehicleIcon_${vehicle.mode}`}
+    //     key={`liveVehicleIcon_${vehicle.mode}`}
+    //     style={{
+    //       iconImage,
+    //       iconAllowOverlap: true,
+    //       iconIgnorePlacement: true,
+    //     }}
+    //   />,
+    // ];
 
-    if (!isError && !isStale && vehicle.bearing != null) {
-      result.push(
-        <MapboxGL.SymbolLayer
-          id={`liveDirectionArrow_${vehicle.mode}`}
-          key={`liveDirectionArrow_${vehicle.mode}`}
-          style={{
-            iconImage: arrowImage,
-            iconAllowOverlap: true,
-            iconIgnorePlacement: true,
-            iconRotationAlignment: 'map',
-            iconRotate: vehicle.bearing,
-            iconOffset: [0, -ARROW_OFFSET],
-          }}
-        />,
-      );
-    }
+    // if (!isError && !isStale && vehicle.bearing != null) {
+    //   result.push(
+    //     <MapboxGL.SymbolLayer
+    //       id={`liveDirectionArrow_${vehicle.mode}`}
+    //       key={`liveDirectionArrow_${vehicle.mode}`}
+    //       style={{
+    //         iconImage: arrowImage,
+    //         iconAllowOverlap: true,
+    //         iconIgnorePlacement: true,
+    //         iconRotationAlignment: 'map',
+    //         iconRotate: vehicle.bearing,
+    //         iconOffset: [0, -ARROW_OFFSET],
+    //       }}
+    //     />,
+    //   );
+    // }
+
+    result.push(
+      <MapboxGL.ModelLayer
+        id="custom-building-model-layer"
+        // sourceID="custom-building-model"
+        // sourceID={`liveIconSource_${vehicle.mode}`}
+        // sourceID="liveIconSource_BUS"
+        // source: 'custom-building-model',
+        // id={`modelOfVehicle_${vehicle.mode}`}
+        key={`modelOfVehicle_${vehicle.mode}`}
+        aboveLayerID={MapSlotLayerId.SelectedFeature}
+        existing
+        style={{
+          modelId: 'bus-model',
+          modelScale: [2, 2, 2], // Scale on [x, y, z] axes
+          // modelRotation: [0, 0, ['get', 'heading']], // Rotate based on feature property
+          modelRotation: [0, 0, (vehicle.bearing ?? 0) + 180], // Rotate based on feature property
+          modelType: 'common-3d',
+        }}
+        // style={{
+        //   iconImage: arrowImage,
+        //   iconAllowOverlap: true,
+        //   iconIgnorePlacement: true,
+        //   iconRotationAlignment: 'map',
+        //   iconRotate: vehicle.bearing,
+        //   iconOffset: [0, -ARROW_OFFSET],
+        // }}
+      />,
+    );
 
     return result;
   }, [

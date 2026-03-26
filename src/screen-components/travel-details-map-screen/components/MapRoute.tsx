@@ -5,6 +5,7 @@ import hexToRgba from 'hex-to-rgba';
 import React from 'react';
 import {View} from 'react-native';
 import {MapLine, pointOf} from '../utils';
+import {MapSlotLayerId} from '@atb/modules/map/hooks/use-mapbox-json-style';
 
 export const MapRoute: React.FC<{lines: MapLine[]}> = ({lines}) => {
   return (
@@ -48,6 +49,7 @@ function MapLineItem({line, index}: MapLineItemProps) {
       <MapboxGL.ShapeSource id={'shape-' + index} shape={line.geometry}>
         <MapboxGL.LineLayer
           id={'line-' + index}
+          belowLayerID={MapSlotLayerId.SelectedFeature}
           style={{
             lineWidth: 4,
             lineOffset: -1,
