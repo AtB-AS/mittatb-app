@@ -14,11 +14,13 @@ import {useAuthContext} from '@atb/modules/auth';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import {ProfileScreenProps} from './navigation-types';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {useScrollBorder} from '@atb/utils/use-scroll-border';
 
 type Props = ProfileScreenProps<'Profile_FareContractsScreen'>;
 
 export const Profile_FareContractsScreen = ({navigation}: Props) => {
   const styles = useStyles();
+  const {onScroll, isScrolled} = useScrollBorder();
 
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const getPreassignedFareProduct = (fcRef: string) =>
@@ -211,10 +213,16 @@ export const Profile_FareContractsScreen = ({navigation}: Props) => {
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader title="Fare Contracts" leftButton={{type: 'back'}} />
+      <FullScreenHeader
+        title="Fare Contracts"
+        leftButton={{type: 'back'}}
+        showBorder={isScrolled}
+      />
       <ScrollView
         style={styles.content}
         contentContainerStyle={styles.contentContainer}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
       >
         <ThemeText typography="heading__2xl">Reservation</ThemeText>
         <FareContractOrReservation

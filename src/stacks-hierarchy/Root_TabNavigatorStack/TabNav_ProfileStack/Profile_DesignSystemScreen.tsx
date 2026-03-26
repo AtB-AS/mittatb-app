@@ -17,6 +17,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {dictionary, useTranslation} from '@atb/translations';
 import {BusFill} from '@atb/assets/svg/mono-icons/transportation';
 import {useFontScale} from '@atb/utils/use-font-scale';
+import {useScrollBorder} from '@atb/utils/use-scroll-border';
 import {
   RadioSectionItem,
   ButtonSectionItem,
@@ -59,6 +60,7 @@ export const Profile_DesignSystemScreen = ({
   const {theme} = useThemeContext();
   const {t} = useTranslation();
   const [selected, setSelected] = useState(false);
+  const {onScroll, isScrolled} = useScrollBorder();
 
   const {appearanceSelection, setAppearanceSelection} = useThemeContext();
 
@@ -189,6 +191,7 @@ export const Profile_DesignSystemScreen = ({
       <FullScreenHeader
         title="Design System"
         leftButton={{type: 'back'}}
+        showBorder={isScrolled}
         rightButton={{
           type: 'custom',
           onPress: () => bottomSheetModalRef.current?.present(),
@@ -197,7 +200,7 @@ export const Profile_DesignSystemScreen = ({
         }}
       />
 
-      <ScrollView>
+      <ScrollView onScroll={onScroll} scrollEventThrottle={16}>
         <Section style={styles.section}>
           <HeaderSectionItem
             text={'Current font scale: ' + fontScale.toFixed(3)}
