@@ -2,12 +2,23 @@ import {client} from '@atb/api';
 import {Enrollment, EnrollmentType, Program, ProgramType} from '../types';
 import z from 'zod';
 
-export async function enrollIntoProgram(code: string) {
+export async function enrollIntoProgramWithCode(code: string) {
   const url = 'enrollment/v2/enroll';
   const body = {code: code};
 
   return await client
     .post<EnrollmentType>(url, body, {
+      authWithIdToken: true,
+      skipErrorLogging: (error) => error.response?.status === 422,
+    })
+    .then((response) => Enrollment.parse(response.data));
+}
+
+export async function enrollIntoProgramWithId(programId: string) {
+  const url = `enrollment/v2/enroll/${programId}`;
+
+  return await client
+    .post<EnrollmentType>(url, undefined, {
       authWithIdToken: true,
       skipErrorLogging: (error) => error.response?.status === 422,
     })

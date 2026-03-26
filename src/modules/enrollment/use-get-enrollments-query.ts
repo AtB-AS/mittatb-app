@@ -10,5 +10,6 @@ export const useGetEnrollmentsQuery = () => {
     queryFn: getEnrollments,
     staleTime: 5 * ONE_HOUR_MS,
     gcTime: 5 * ONE_HOUR_MS,
+    refetchOnWindowFocus: 'always',
   });
 };
