@@ -60,6 +60,7 @@ export function FullScreenView(props: Props) {
       ? false
       : !!props.headerContent;
   const [opacity, setOpacity] = useState(titleShouldAnimate ? 0 : 1);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const handleScroll = (scrollPercentage: number) => {
     if (!titleShouldAnimate) return;
@@ -70,14 +71,21 @@ export function FullScreenView(props: Props) {
     }
   };
 
+  const showBorder = props.headerProps.showBorder ?? isScrolled;
+
   const contentComponent = hasHeaderContent(props) ? (
     <ChildrenWithHeaderContent
       {...props}
       handleScroll={handleScroll}
       headerColor={backgroundColor}
+      onScrolledChange={setIsScrolled}
     />
   ) : (
-    <ChildrenInNormalScrollView {...props} contentColor={props.contentColor} />
+    <ChildrenInNormalScrollView
+      {...props}
+      contentColor={props.contentColor}
+      onScrolledChange={setIsScrolled}
+    />
   );
 
   return (
@@ -91,6 +99,7 @@ export function FullScreenView(props: Props) {
       >
         <ScreenHeader
           {...props.headerProps}
+          showBorder={showBorder}
           textOpacity={opacity}
           focusRef={isScreenReaderEnabled ? props.focusRef : undefined}
         />
@@ -123,13 +132,16 @@ const ChildrenWithHeaderContent = ({
   handleScroll,
   titleAlwaysVisible,
   focusRef,
+  onScrolledChange,
 }: PropsWithHeaderContent & {
   headerColor: string;
   handleScroll: (scrollPercentage: number) => void;
+  onScrolledChange: (isScrolled: boolean) => void;
 }) => {
   const styles = useStyles();
   const {onLayout, height: headerHeight} = useLayout();
   const headerHeightRef = React.useRef(headerHeight);
+  const isScrolledRef = React.useRef(false);
 
   React.useEffect(() => {
     headerHeightRef.current = headerHeight;
@@ -144,10 +156,14 @@ const ChildrenWithHeaderContent = ({
         ) : undefined
       }
       onScroll={(event) => {
+        const offsetY = event.nativeEvent.contentOffset.y;
+        const scrolled = offsetY > 0;
+        if (scrolled !== isScrolledRef.current) {
+          isScrolledRef.current = scrolled;
+          onScrolledChange(scrolled);
+        }
         if (headerHeightRef.current > 0) {
-          handleScroll(
-            (event.nativeEvent.contentOffset.y / headerHeightRef.current) * 100,
-          );
+          handleScroll((offsetY / headerHeightRef.current) * 100);
         }
       }}
       contentContainerStyle={{flexGrow: 1}}
@@ -166,16 +182,29 @@ const ChildrenInNormalScrollView = ({
   refreshControlProps,
   children,
   contentColor,
-}: Props & {contentColor?: ContrastColor}) => {
+  onScrolledChange,
+}: Props & {
+  contentColor?: ContrastColor;
+  onScrolledChange: (isScrolled: boolean) => void;
+}) => {
   const backgroundColor = contentColor?.background;
+  const isScrolledRef = React.useRef(false);
 
   return (
     <ScrollView
+      scrollEventThrottle={16}
       refreshControl={
         refreshControlProps ? (
           <RefreshControl {...refreshControlProps} />
         ) : undefined
       }
+      onScroll={(event) => {
+        const scrolled = event.nativeEvent.contentOffset.y > 0;
+        if (scrolled !== isScrolledRef.current) {
+          isScrolledRef.current = scrolled;
+          onScrolledChange(scrolled);
+        }
+      }}
       contentContainerStyle={{flexGrow: 1}}
       style={{backgroundColor}}
     >

@@ -53,15 +53,15 @@ const BonusProgramTexts = {
         'Vil du samle Poeng?',
       ),
       description: _(
-        'Kjøp enkeltbilletter for voksen eller student i sone A og få Poeng. Bruk Poeng på nye enkeltbilletter eller på turer med bysykkel, elsparkesykkel og Hyre-biler.',
-        'Buy single tickets for adults or students in zone A and earn Points. Use the Points on new single tickets or for trips with city bikes, e-scooters, and Hyre cars.',
-        'Kjøp enkeltbilletter for vaksen eller student i sone A og få Poeng. Bruk Poeng på nye enkeltbilletter eller på turer med bysykkel, elsparkesykkel og Hyre-biler.',
+        'Kjøp enkeltbilletter for voksen eller student i sone A og få Poeng. Bruk Poeng på turer med bysykkel og Hyre-biler.',
+        'Buy single tickets for adults or students in zone A and earn Points. Use the Points on trips with city bikes and Hyre cars.',
+        'Kjøp enkeltbilletter for vaksen eller student i sone A og få Poeng. Bruk Poeng på turer med bysykkel og Hyre-biler.',
       ),
       footer: (endDate: string) =>
         _(
-          `Dette er et testprosjekt som varer til ${endDate}.`,
-          `This is a test project that runs until ${endDate}.`,
-          `Dette er eit testprosjekt som varer til ${endDate}.`,
+          `Dette er et prøveprosjekt som varer til ${endDate}.`,
+          `This is a pilot project that runs until ${endDate}.`,
+          `Dette er eit prøveprosjekt som varer til ${endDate}.`,
         ),
       button: {
         text: _('Bli med', 'Join', 'Bli med'),

@@ -27,6 +27,7 @@ import {useSendSupportRequestMutation} from '@atb/modules/mobility';
 import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {useProfileQuery} from '@atb/queries';
 import {FullScreenHeader} from '@atb/components/screen-header';
+import {useScrollBorder} from '@atb/utils/use-scroll-border';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useNavigation} from '@react-navigation/native';
 import {useOperators} from '@atb/modules/mobility';
@@ -49,6 +50,7 @@ export const Root_ContactShmoOperatorScreen = ({
   const styles = useStyles();
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
+  const {onScroll, isScrolled} = useScrollBorder();
 
   const onSuccess = () => {
     navigation.navigate('Root_ContactShmoOperatorConfirmationScreen', {
@@ -81,9 +83,15 @@ export const Root_ContactShmoOperatorScreen = ({
       <FullScreenHeader
         leftButton={{type: 'back'}}
         title={t(ContactShmoOperatorTexts.title(operatorName ?? ''))}
+        showBorder={isScrolled}
       />
       <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
-        <ScrollView keyboardShouldPersistTaps="handled" centerContent={true}>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          centerContent={true}
+          onScroll={onScroll}
+          scrollEventThrottle={16}
+        >
           <View style={styles.contentContainer}>
             <ContentHeading
               text={t(ContactShmoOperatorTexts.supportType.header)}

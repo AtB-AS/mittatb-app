@@ -14,7 +14,7 @@ import {
 } from '@atb/modules/onboarding';
 
 const Tab = createMaterialTopTabNavigator<OnboardingCarouselStackParams>();
-const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
+const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
 type Props = RootStackScreenProps<'Root_OnboardingCarouselStack'>;
 

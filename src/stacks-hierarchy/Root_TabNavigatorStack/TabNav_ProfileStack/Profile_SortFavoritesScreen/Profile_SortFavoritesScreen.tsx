@@ -6,6 +6,7 @@ import {FavoriteListTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {SortableList} from './SortableList';
+import {useScrollBorder} from '@atb/utils/use-scroll-border';
 
 export const Profile_SortFavoritesScreen = () => {
   const styles = useStyles();
@@ -14,12 +15,14 @@ export const Profile_SortFavoritesScreen = () => {
   const [sortedItems, setSortedItems] = useState(items);
   const [error, setError] = useState(false);
   const {t} = useTranslation();
+  const {onScroll, isScrolled} = useScrollBorder();
 
   return (
     <View style={styles.container}>
       <FullScreenHeader
         title={t(FavoriteListTexts.sortableScreen.title)}
         leftButton={{type: 'back'}}
+        showBorder={isScrolled}
       />
       {error && (
         <MessageInfoBox
@@ -36,6 +39,7 @@ export const Profile_SortFavoritesScreen = () => {
             .then(() => setError(false))
             .catch(() => setError(true));
         }}
+        onScroll={onScroll}
       />
     </View>
   );
