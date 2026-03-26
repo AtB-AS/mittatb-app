@@ -25,7 +25,8 @@ import TravelCardTexts from '@atb/translations/components/TravelCard';
 export const TravelCardHeader: React.FC<{
   tripPattern: TripPattern;
   includeDayInfo?: boolean;
-}> = ({tripPattern, includeDayInfo = true}) => {
+  includeFromToInfo?: boolean;
+}> = ({tripPattern, includeDayInfo = true, includeFromToInfo = true}) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   let start = tripPattern.legs[0];
@@ -89,21 +90,23 @@ export const TravelCardHeader: React.FC<{
           </AccessibleText>
         </View>
       </View>
-      <View style={styles.startEndContainer}>
-        <ThemeText typography="body__m">
-          {startName
-            ? startName
-            : startLegIsFlexibleTransport && publicCode
-              ? t(
-                  TripSearchTexts.results.resultItem.header.flexTransportTitle(
-                    publicCode,
-                  ),
-                )
-              : transportName}
-        </ThemeText>
-        <ThemeIcon svg={ArrowRight} />
-        <ThemeText typography="body__m">{endName}</ThemeText>
-      </View>
+      {includeFromToInfo && (
+        <View style={styles.fromToContainer}>
+          <ThemeText typography="body__m">
+            {startName
+              ? startName
+              : startLegIsFlexibleTransport && publicCode
+                ? t(
+                    TripSearchTexts.results.resultItem.header.flexTransportTitle(
+                      publicCode,
+                    ),
+                  )
+                : transportName}
+          </ThemeText>
+          <ThemeIcon svg={ArrowRight} />
+          <ThemeText typography="body__m">{endName}</ThemeText>
+        </View>
+      )}
     </View>
   );
 };
@@ -216,7 +219,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexShrink: 0,
     alignItems: 'flex-end',
   },
-  startEndContainer: {
+  fromToContainer: {
     flexDirection: 'row',
     gap: theme.spacing.xSmall,
     alignItems: 'center',
