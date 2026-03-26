@@ -217,7 +217,7 @@ export const VehicleSchema = z.object({
   pricingPlan: ShmoPricingPlanSchema,
   system: SystemSchema,
   station: z.object({id: z.string()}).nullable().optional(),
-  rentalUris: RentalUrisSchema.optional(),
+  rentalUris: RentalUrisSchema.nullable().optional(),
   vehicleType: VehicleTypeSchema,
 });
 

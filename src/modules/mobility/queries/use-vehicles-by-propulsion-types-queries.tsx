@@ -3,7 +3,7 @@ import {useQueries} from '@tanstack/react-query';
 import {getVehicles} from '@atb/api/mobility';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 
-export const vehiclesQueryKey = (
+export const getVehiclesQueryKey = (
   propulsionType?: PropulsionType,
   stationId?: string,
   sort?: string,
@@ -21,7 +21,7 @@ export const useVehiclesByPropulsionTypesQueries = (
       PropulsionType.Electric,
       PropulsionType.ElectricAssist,
     ].map((propulsionType) => ({
-      queryKey: vehiclesQueryKey(propulsionType, stationId, sort, maxCount),
+      queryKey: getVehiclesQueryKey(propulsionType, stationId, sort, maxCount),
       queryFn: ({signal}) =>
         getVehicles({propulsionType, stationId, sort, maxCount}, {signal}),
       gcTime: ONE_MINUTE_MS,
