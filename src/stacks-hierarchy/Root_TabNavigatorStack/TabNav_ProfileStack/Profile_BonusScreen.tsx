@@ -143,9 +143,6 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
               }
               rightIcon={!isLoggedIn ? {svg: LogIn} : undefined}
               style={styles.button}
-              accessibilityLabel={t(
-                BonusProgramTexts.bonusProfile.joinProgram.button.a11yLabel,
-              )}
               onPress={() => {
                 if (isLoggedIn) {
                   navigation.navigate('Root_OnboardingCarouselStack', {
