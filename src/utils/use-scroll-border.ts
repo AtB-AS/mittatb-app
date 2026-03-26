@@ -31,5 +31,5 @@ export function useScrollBorder() {
     borderBottomColor: isScrolled ? color : 'transparent',
   };
 
-  return {onScroll, borderStyle} as const;
+  return {onScroll, borderStyle, isScrolled} as const;
 }

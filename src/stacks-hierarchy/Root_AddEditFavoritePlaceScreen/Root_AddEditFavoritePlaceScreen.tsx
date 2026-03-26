@@ -18,6 +18,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Alert, Keyboard, ScrollView, View} from 'react-native';
 import {EmojiSheet} from './EmojiSheet';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {useScrollBorder} from '@atb/utils/use-scroll-border';
 import {
   ButtonSectionItem,
   LocationInputSectionItem,
@@ -35,6 +36,7 @@ const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
 export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
   const styles = useStyles();
+  const {onScroll, isScrolled} = useScrollBorder();
   const {
     addFavoriteLocation: addFavorite,
     removeFavoriteLocation: removeFavorite,
@@ -137,6 +139,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
             ? t(AddEditFavoriteTexts.header.titleEdit)
             : t(AddEditFavoriteTexts.header.title)
         }
+        showBorder={isScrolled}
         rightButton={
           route.params.transitionOverride !== 'slide-from-right'
             ? {type: 'close'}
@@ -149,7 +152,11 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
         }
       />
 
-      <ScrollView style={styles.innerContainer}>
+      <ScrollView
+        style={styles.innerContainer}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
+      >
         <ScreenReaderAnnouncement message={errorMessage} />
         {errorMessage && (
           <MessageInfoBox

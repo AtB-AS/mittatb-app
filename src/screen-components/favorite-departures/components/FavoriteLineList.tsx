@@ -1,7 +1,13 @@
 import {EstimatedCall, Quay, StopPlace} from '@atb/api/types/departures';
 import {StyleSheet} from '@atb/theme';
 import React, {RefObject, useEffect, useMemo, useRef, useState} from 'react';
-import {SectionList, SectionListData, View} from 'react-native';
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  SectionList,
+  SectionListData,
+  View,
+} from 'react-native';
 import {useDepartures} from '@atb/screen-components/place-screen';
 import {
   DeparturesTexts,
@@ -35,6 +41,7 @@ type Props = {
   addedFavoritesVisibleOnDashboard?: boolean;
   onNavigateToQuay: (quay: Quay) => void;
   onComplete: () => void;
+  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 };
 
 export const FavoriteLineList = ({
@@ -45,6 +52,7 @@ export const FavoriteLineList = ({
   testID,
   onNavigateToQuay,
   onComplete,
+  onScroll,
 }: Props) => {
   const stopPlaceAndQuays: StopPlaceAndQuay[] = useMemo(
     () =>
@@ -87,6 +95,8 @@ export const FavoriteLineList = ({
     <SectionList
       sections={quayListData}
       testID={testID}
+      onScroll={onScroll}
+      scrollEventThrottle={16}
       keyExtractor={(item) => item.quay.id}
       renderItem={({item, index}) => (
         <QuayLineSection

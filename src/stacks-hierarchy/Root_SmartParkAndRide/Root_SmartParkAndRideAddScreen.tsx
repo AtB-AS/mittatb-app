@@ -45,7 +45,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
       });
     });
 
-    const themeColor = theme.color.background.accent[0];
+    const themeColor = theme.color.background.neutral[1];
 
     const contentNode = (
       <View style={styles.container}>

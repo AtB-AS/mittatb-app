@@ -6,8 +6,7 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {Linking, Platform, View} from 'react-native';
-import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   dictionary,
   getTextForLanguage,
@@ -23,7 +22,7 @@ import {
 } from '@atb/modules/notifications';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {NotificationConfigGroup} from '@atb/modules/notifications';
-import {ContentHeading} from '@atb/components/heading';
+import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useProfileQuery} from '@atb/queries';
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
 import {useAuthContext} from '@atb/modules/auth';
@@ -38,8 +37,6 @@ export const Profile_NotificationsScreen = ({
 }: NotificationsScreenProps) => {
   const style = useStyles();
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
-  const themeColor = theme.color.background.accent[0];
   const isFocusedAndActive = useIsFocusedAndActive();
   const {
     permissionStatus,
@@ -100,14 +97,13 @@ export const Profile_NotificationsScreen = ({
         ),
       }}
       headerContent={(focusRef) => (
-        <View style={style.headerContent} ref={focusRef} accessible={true}>
-          <ThemeText color={themeColor} typography="heading__l">
-            {t(
-              ProfileTexts.sections.settings.linkSectionItems.notifications
-                .heading,
-            )}
-          </ThemeText>
-        </View>
+        <ScreenHeading
+          ref={focusRef}
+          text={t(
+            ProfileTexts.sections.settings.linkSectionItems.notifications
+              .heading,
+          )}
+        />
       )}
     >
       {permissionStatus === 'loading' || profileQuery.isLoading ? (
@@ -280,11 +276,8 @@ export const Profile_NotificationsScreen = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  headerContent: {
-    marginHorizontal: theme.spacing.medium,
-  },
   content: {
     margin: theme.spacing.medium,
-    rowGap: theme.spacing.medium,
+    rowGap: theme.spacing.small,
   },
 }));

@@ -15,16 +15,26 @@ import {
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {insets} from '@atb/utils/insets';
 import React, {useCallback} from 'react';
-import {FlatList, View} from 'react-native';
+import {
+  FlatList,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  View,
+} from 'react-native';
 import {immutableMove} from './sort-utils';
 import {NativeBlockButton} from '@atb/components/native-button';
 
 type SortableListFallbackProps = {
   data: UserFavorites;
   onSort: (newData: UserFavorites) => void;
+  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 };
 
-export function SortableList({data, onSort}: SortableListFallbackProps) {
+export function SortableList({
+  data,
+  onSort,
+  onScroll,
+}: SortableListFallbackProps) {
   const styles = useListStyle();
   const length = data.length;
 
@@ -42,6 +52,8 @@ export function SortableList({data, onSort}: SortableListFallbackProps) {
     <FlatList
       data={data}
       contentContainerStyle={styles.container}
+      onScroll={onScroll}
+      scrollEventThrottle={16}
       renderItem={(obj) => (
         <Item
           {...obj}
