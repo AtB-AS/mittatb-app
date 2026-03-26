@@ -6,7 +6,7 @@ import {View} from 'react-native';
 import {TripPattern} from '@atb/api/types/trips';
 import {getFilteredLegsByWalkOrWaitTime} from '@atb/screen-components/travel-details-screens';
 import {OverflowContainer} from '@atb/components/overflow-container';
-import {TransportationLeg, FootLeg} from './legs';
+import {TransportationLeg, FootLeg, WaitAccessibilityLabel} from './legs';
 
 type TravelCardContentProps = {
   tripPattern: TripPattern;
@@ -45,10 +45,14 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
               {filteredLegs.map((leg, i) => (
                 <View key={`leg-${leg.id ?? i}`}>
                   {leg.mode === 'foot' ? (
-                    <FootLeg leg={leg} nextLeg={filteredLegs[i + 1]} />
+                    <FootLeg leg={leg} />
                   ) : staySeated(i) ? null : (
                     <TransportationLeg leg={leg} />
                   )}
+                  <WaitAccessibilityLabel
+                    currentLeg={leg}
+                    nextLeg={filteredLegs[i + 1]}
+                  />
                 </View>
               ))}
             </OverflowContainer>
