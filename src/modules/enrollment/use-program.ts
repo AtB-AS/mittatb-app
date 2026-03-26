@@ -11,6 +11,7 @@ export function useProgram(programId: KnownProgramId): ProgramType | undefined {
     queryFn: () => getProgram(programId),
     staleTime: ONE_HOUR_MS,
     gcTime: ONE_HOUR_MS,
+    refetchOnWindowFocus: 'always',
   });
 
   return data;
