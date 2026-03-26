@@ -53,6 +53,10 @@ import {useFontScale} from '@atb/utils/use-font-scale';
 import {TFunc} from '@leile/lobo-t';
 import {formatToDate} from '@atb/utils/date';
 import {MessageInfoText} from '@atb/components/message-info-text';
+import {
+  GlobalMessage,
+  GlobalMessageContextEnum,
+} from '@atb/modules/global-messages';
 
 const iconSize = 60;
 
@@ -99,6 +103,10 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
       )}
     >
       <View style={styles.container}>
+        <GlobalMessage
+          globalMessageContext={GlobalMessageContextEnum.appPointsScreen}
+          textColor={theme.color.background.neutral[0]}
+        />
         {!isEnrolled && (
           <>
             <View style={styles.wantToJoinIcon}>
