@@ -129,6 +129,7 @@ function useTimeLabel(
     dateLabel = t(TravelCardTexts.header.day.dayAfterTomorrow);
   }
 
+  // Format: [date (if not today)], [start time rounded down]  - [end time rounded up]
   return `${includeDayInfo && !isToday ? dateLabel + ', ' : ''}${formatToClock(expectedStartTime, language, 'floor')} - ${formatToClock(expectedEndTime, language, 'ceil')}`;
 }
 
@@ -154,14 +155,19 @@ const computeAimedStartEndTimes = (tripPattern: TripPattern) => {
   let aimedStartTime = firstLeg.aimedStartTime;
   let aimedEndTime = lastLeg.aimedEndTime;
 
+  // Could there be other cases than foot legs where we have no aimed start/end times?
   if (tripPattern.legs.some((leg) => leg.mode === 'foot')) {
     if (!hasQuay(firstLeg)) {
+      // Find the first leg with a quay
       const firstLegWithQuayIndex = tripPattern.legs.findIndex(hasQuay);
       if (firstLegWithQuayIndex) {
         const firstLegWithQuay = tripPattern.legs[firstLegWithQuayIndex];
+        // Compute the duration up to the first leg with a quay
         const durationUpTillQuay = tripPattern.legs
           .slice(0, firstLegWithQuayIndex)
           .reduce((acc, leg) => acc + leg.duration, 0);
+        // Subtract the duration from the aimed start time of the first leg with a quay
+        // to get the actual aimed start time of the first leg
         aimedStartTime = addSeconds(
           firstLegWithQuay.aimedStartTime,
           -durationUpTillQuay,
@@ -171,12 +177,16 @@ const computeAimedStartEndTimes = (tripPattern: TripPattern) => {
 
     if (!hasQuay(lastLeg)) {
       const reversedLegs = [...tripPattern.legs].reverse();
+      // Find the last leg with a quay
       const lastLegWithQuayIndex = reversedLegs.findIndex(hasQuay);
       if (lastLegWithQuayIndex) {
         const lastLegWithQuay = reversedLegs[lastLegWithQuayIndex];
+        // Compute the duration after the last leg with a quay
         const durationAfterQuay = reversedLegs
           .slice(0, lastLegWithQuayIndex)
           .reduce((acc, leg) => acc + leg.duration, 0);
+        // Add the duration after the last leg with a quay to get
+        // the actual aimed end time of the last leg
         aimedEndTime = addSeconds(
           lastLegWithQuay.aimedEndTime,
           durationAfterQuay,
