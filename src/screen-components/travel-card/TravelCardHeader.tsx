@@ -54,7 +54,11 @@ export const TravelCardHeader: React.FC<{
     includeDayInfo,
   );
 
-  const aimedTimeLabel = useTimeLabel(aimedStartTime, aimedEndTime, isInPast);
+  const aimedTimeLabel = useTimeLabel(
+    aimedStartTime,
+    aimedEndTime,
+    isInPast && includeDayInfo,
+  );
 
   const areTimesEquivalentInMinutes =
     differenceInMinutes(expectedStartTime, aimedStartTime) < 1 &&
