@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 
-export const PrefixAccessibilityLabel = ({
+export const HiddenAccessibilityLabel = ({
   accessibilityLabel,
 }: {
   accessibilityLabel: string;

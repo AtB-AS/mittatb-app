@@ -10,7 +10,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {TravelCardTexts, useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
-import {PrefixAccessibilityLabel} from './PrefixAccessibilityLabel';
+import {HiddenAccessibilityLabel} from './HiddenAccessibilityLabel';
 
 export type TravelCardType = 'trip-search' | 'saved-trip';
 
@@ -38,12 +38,14 @@ export const TravelCard: React.FC<TravelCardProps> = ({
   const includeDayInfo = type === 'saved-trip';
   const includeFromToInfo = type === 'saved-trip';
 
-  const accessibilityLabel = useAccessibilityLabel(
-    tripPattern,
-    type,
-    cardIndex,
-    numberOfCards,
+  const uniqueModes = Array.from(
+    new Set(tripPattern.legs.map((leg) => leg.mode)),
   );
+  const modes = uniqueModes.map((mode) => t(getTranslatedModeName(mode)));
+
+  const a11yLabel = `${t(
+    TravelCardTexts.card.typePrefix(type, cardIndex, numberOfCards),
+  )}. ${t(TravelCardTexts.card.modesPrefix(modes))}.`;
 
   return (
     <Animated.View entering={FadeIn}>
@@ -55,7 +57,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
         onPress={() => onDetailsPressed(tripPattern, cardIndex)}
         testID={testID}
       >
-        <PrefixAccessibilityLabel accessibilityLabel={accessibilityLabel} />
+        <HiddenAccessibilityLabel accessibilityLabel={a11yLabel} />
         <TravelCardHeader
           tripPattern={tripPattern}
           includeDayInfo={includeDayInfo}
@@ -77,23 +79,6 @@ export const TravelCard: React.FC<TravelCardProps> = ({
       </NativeBlockButton>
     </Animated.View>
   );
-};
-
-const useAccessibilityLabel = (
-  tripPattern: TripPattern,
-  type: TravelCardType,
-  cardIndex: number,
-  numberOfCards: number,
-) => {
-  const {t} = useTranslation();
-  const uniqueModes = Array.from(
-    new Set(tripPattern.legs.map((leg) => leg.mode)),
-  );
-  const modes = uniqueModes.map((mode) => t(getTranslatedModeName(mode)));
-
-  return `${t(
-    TravelCardTexts.card.typePrefix(type, cardIndex, numberOfCards),
-  )}. ${t(TravelCardTexts.card.modesPrefix(modes))}.`;
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({

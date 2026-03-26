@@ -42,22 +42,41 @@ export const TravelCardHeader: React.FC<{
     differenceInMinutes(expectedStartTime, aimedStartTime) < 1 &&
     differenceInMinutes(expectedEndTime, aimedEndTime) < 1;
 
-  const accessibilityLabel = useAccessibilityLabel(
-    fromName,
-    toName,
-    expectedStartTimeLabel,
-    expectedEndTimeLabel,
-    aimedStartTimeLabel,
-    aimedEndTimeLabel,
-    tripPattern.duration,
-    isInPast,
-  );
+  const showAimedTime = !areTimesEquivalentInMinutes || isInPast;
+
+  const a11yLabel = `
+    ${includeFromToInfo ? t(TravelCardTexts.header.fromToInfo.a11yLabel(fromName, toName)) : ''}
+    ${
+      isInPast
+        ? t(TravelCardTexts.header.pastTime)
+        : t(
+            TravelCardTexts.header.expectedTime.a11yLabel(
+              expectedStartTimeLabel,
+              expectedEndTimeLabel,
+            ),
+          )
+    }
+    ${
+      showAimedTime
+        ? t(
+            TravelCardTexts.header.aimedTime.a11yLabel(
+              aimedStartTimeLabel,
+              aimedEndTimeLabel,
+            ),
+          )
+        : ''
+    }
+    ${t(
+      TravelCardTexts.header.duration.a11yLabel(
+        secondsToDuration(tripPattern.duration, language),
+      ),
+    )}`;
 
   return (
     <View
       style={styles.container}
       accessible={true}
-      accessibilityLabel={accessibilityLabel}
+      accessibilityLabel={a11yLabel}
     >
       <View style={styles.resultHeader}>
         <View style={styles.timeContainer}>
@@ -93,42 +112,6 @@ export const TravelCardHeader: React.FC<{
       )}
     </View>
   );
-};
-
-const useAccessibilityLabel = (
-  fromName: string,
-  toName: string,
-  expectedStartTimeLabel: string,
-  expectedEndTimeLabel: string,
-  aimedStartTimeLabel: string,
-  aimedEndTimeLabel: string,
-  duration: number,
-  isInPast: boolean,
-) => {
-  const {t, language} = useTranslation();
-  return `
-${t(TravelCardTexts.header.fromToInfo.a11yLabel(fromName, toName))}
-${
-  isInPast
-    ? t(TravelCardTexts.header.pastTime)
-    : t(
-        TravelCardTexts.header.expectedTime.a11yLabel(
-          expectedStartTimeLabel,
-          expectedEndTimeLabel,
-        ),
-      )
-}
-${t(
-  TravelCardTexts.header.aimedTime.a11yLabel(
-    aimedStartTimeLabel,
-    aimedEndTimeLabel,
-  ),
-)}
-${t(
-  TravelCardTexts.header.duration.a11yLabel(
-    secondsToDuration(duration, language),
-  ),
-)}`;
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
