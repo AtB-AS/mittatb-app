@@ -52,7 +52,7 @@ const TravelCardTexts = {
       dayAfterTomorrow: _(`I overmorgen`, `Day after tomorrow`, `I overmorgon`),
     },
     originalTime: _('Opprinnelig', 'Original', 'Opprinnelig'),
-    pastTime: _('Avreise passert', 'Departure passed', 'Avreise passert'),
+    pastTime: _('Avreise passert.', 'Departure passed.', 'Avreise passert.'),
     fromToInfo: {
       a11yLabel: (fromPlace: string, toPlace: string) =>
         _(

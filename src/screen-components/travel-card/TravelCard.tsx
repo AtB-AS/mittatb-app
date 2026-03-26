@@ -46,7 +46,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
   );
 
   return (
-    <Animated.View entering={FadeIn} accessible={false}>
+    <Animated.View entering={FadeIn}>
       <NativeBlockButton
         style={styles.container}
         accessible={true}
@@ -86,15 +86,14 @@ const useAccessibilityLabel = (
   numberOfCards: number,
 ) => {
   const {t} = useTranslation();
-  const prefix = t(
-    TravelCardTexts.card.typePrefix(type, cardIndex, numberOfCards),
-  );
   const uniqueModes = Array.from(
     new Set(tripPattern.legs.map((leg) => leg.mode)),
   );
   const modes = uniqueModes.map((mode) => t(getTranslatedModeName(mode)));
 
-  return `${prefix}. ${t(TravelCardTexts.card.modesPrefix(modes))}.`;
+  return `${t(
+    TravelCardTexts.card.typePrefix(type, cardIndex, numberOfCards),
+  )}. ${t(TravelCardTexts.card.modesPrefix(modes))}.`;
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
