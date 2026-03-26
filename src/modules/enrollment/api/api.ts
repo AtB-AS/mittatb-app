@@ -14,8 +14,8 @@ export async function enrollIntoProgramWithCode(code: string) {
     .then((response) => Enrollment.parse(response.data));
 }
 
-export async function enrollIntoProgramWithId(id: string) {
-  const url = `enrollment/v2/enroll/${id}`;
+export async function enrollIntoProgramWithId(programId: string) {
+  const url = `enrollment/v2/enroll/${programId}`;
 
   return await client
     .post<EnrollmentType>(url, undefined, {

@@ -26,8 +26,12 @@ export const BonusOnboarding_JoinScreen = () => {
   const enrollMutation = useEnrollIntoProgramWithIdMutation();
 
   const onPress = async () => {
-    await enrollMutation.mutateAsync(KnownProgramId.BONUS);
-    navigation.goBack();
+    try {
+      await enrollMutation.mutateAsync(KnownProgramId.BONUS);
+      navigation.goBack();
+    } catch {
+      // Error state is handled via enrollMutation.error and shown in the UI
+    }
   };
 
   return (
