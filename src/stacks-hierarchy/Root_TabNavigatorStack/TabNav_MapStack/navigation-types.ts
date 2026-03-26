@@ -14,6 +14,7 @@ export type MapStackParams = StackParams<{
   Map_DepartureDetailsScreen: DepartureDetailsScreenParams;
   Map_TravelDetailsMapScreen: TravelDetailsMapScreenParams;
   Map_TravelAidScreen: TravelAidScreenParams;
+  Map_CityBikeStartTripScreen: undefined;
 }>;
 
 type RootMapScreenProps = TabNavigatorScreenProps<'TabNav_MapStack'>;
