@@ -20,7 +20,11 @@ export function ContentHeading({
   const styles = useStyles();
 
   return (
-    <View style={[styles.container, style]}>
+    <View
+      style={[styles.container, style]}
+      accessible
+      accessibilityRole="header"
+    >
       <ThemeText
         typography="body__s"
         color={color}

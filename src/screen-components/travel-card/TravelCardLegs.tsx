@@ -1,25 +1,12 @@
-import {WalkFill} from '@atb/assets/svg/mono-icons/transportation';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
+import {CounterIconBox} from '@atb/components/icon-box';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {TripSearchTexts, useTranslation} from '@atb/translations';
 import {screenReaderHidden} from '@atb/utils/accessibility';
-import {
-  secondsBetween,
-  secondsToDuration,
-  secondsToMinutes,
-} from '@atb/utils/date';
 import React from 'react';
-import {StyleProp, View, ViewStyle} from 'react-native';
-import {Leg, TripPattern} from '@atb/api/types/trips';
-import {
-  getFilteredLegsByWalkOrWaitTime,
-  isLineFlexibleTransport,
-  significantWaitTime,
-  significantWalkTime,
-} from '@atb/screen-components/travel-details-screens';
-import {ThemeText} from '@atb/components/text';
+import {View} from 'react-native';
+import {TripPattern} from '@atb/api/types/trips';
+import {getFilteredLegsByWalkOrWaitTime} from '@atb/screen-components/travel-details-screens';
 import {OverflowContainer} from '@atb/components/overflow-container';
+import {TransportationLeg, FootLeg} from './legs';
 
 type TravelCardContentProps = {
   tripPattern: TripPattern;
@@ -104,58 +91,3 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexWrap: 'wrap',
   },
 }));
-
-const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
-  const styles = useThemeStyles();
-  const showWaitTime = Boolean(nextLeg);
-  const {t, language} = useTranslation();
-  const waitTimeInSeconds = !nextLeg
-    ? 0
-    : secondsBetween(leg.expectedEndTime, nextLeg?.expectedStartTime);
-  const waitDuration = secondsToDuration(waitTimeInSeconds, language);
-  const walkDuration = secondsToDuration(leg.duration ?? 0, language);
-
-  const mustWalk = significantWalkTime(leg.duration);
-  const mustWait = showWaitTime && significantWaitTime(waitTimeInSeconds);
-
-  const a11yText =
-    mustWalk && mustWait
-      ? t(
-          TripSearchTexts.results.resultItem.footLeg.walkAndWaitLabel(
-            walkDuration,
-            waitDuration,
-          ),
-        )
-      : mustWait
-        ? t(TripSearchTexts.results.resultItem.footLeg.waitLabel(waitDuration))
-        : t(TripSearchTexts.results.resultItem.footLeg.walkLabel(walkDuration));
-
-  return (
-    <View style={styles.walkContainer} testID="footLeg">
-      <ThemeIcon accessibilityLabel={a11yText} svg={WalkFill} />
-      <ThemeText style={styles.walkDuration}>
-        {secondsToMinutes(leg.duration)}
-      </ThemeText>
-    </View>
-  );
-};
-
-const TransportationLeg = ({
-  leg,
-  style,
-}: {
-  leg: Leg;
-  style?: StyleProp<ViewStyle>;
-}) => {
-  return (
-    <TransportationIconBox
-      style={style}
-      mode={leg.mode}
-      subMode={leg.line?.transportSubmode}
-      isFlexible={isLineFlexibleTransport(leg.line)}
-      lineNumber={leg.line?.publicCode}
-      type="standard"
-      testID={`${leg.mode}Leg`}
-    />
-  );
-};

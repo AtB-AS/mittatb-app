@@ -88,6 +88,7 @@ export const StoredTripPatternsDashboardComponent =
                 tripPattern={tripPattern}
                 onDetailsPressed={onDetailsPressed}
                 resultIndex={i}
+                length={tripPatterns.length}
                 updateTripPattern={updateTripPattern}
                 setTripPatternToRemove={setTripPatternToRemove}
                 isFocused={isFocused}
@@ -103,6 +104,7 @@ const StoredTripPatternRow: React.FC<{
   tripPattern: TripPattern;
   onDetailsPressed: (tripPattern: TripPattern) => void;
   resultIndex: number;
+  length: number;
   updateTripPattern: (tripPattern: TripPattern) => void;
   setTripPatternToRemove: (
     tripPattern: TripPattern,
@@ -113,6 +115,7 @@ const StoredTripPatternRow: React.FC<{
   tripPattern,
   onDetailsPressed,
   resultIndex,
+  length,
   updateTripPattern,
   setTripPatternToRemove,
   isFocused,
@@ -140,8 +143,10 @@ const StoredTripPatternRow: React.FC<{
       <TravelCard
         tripPattern={updatedTripPattern}
         onDetailsPressed={onDetailsPressed}
-        resultIndex={resultIndex}
+        cardIndex={resultIndex}
+        numberOfCards={length}
         testID={'tripSearchSearchResult' + resultIndex}
+        type="saved-trip"
       />
     </SwipeableResultRow>
   );

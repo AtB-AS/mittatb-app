@@ -8,22 +8,41 @@ import {TravelCardHeader} from './TravelCardHeader';
 import {LayoutChangeEvent, View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
+import {TravelCardTexts, useTranslation} from '@atb/translations';
+import {getTranslatedModeName} from '@atb/utils/transportation-names';
+
+export type TravelCardType = 'trip-search' | 'saved-trip';
 
 type TravelCardProps = {
   tripPattern: TripPattern;
   onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
-  resultIndex: number;
+  cardIndex: number;
+  numberOfCards: number;
   testID?: string;
+  type: TravelCardType;
 };
 
 export const TravelCard: React.FC<TravelCardProps> = ({
   tripPattern,
   onDetailsPressed,
-  resultIndex,
+  cardIndex,
+  numberOfCards,
   testID,
+  type,
 }) => {
   const styles = useThemeStyles();
   const [maxWidth, setMaxWidth] = useState(0);
+  const {t} = useTranslation();
+
+  const includeDayInfo = type === 'saved-trip';
+  const includeFromToInfo = type === 'saved-trip';
+
+  const accessibilityLabel = useAccessibilityLabel(
+    tripPattern,
+    type,
+    cardIndex,
+    numberOfCards,
+  );
 
   return (
     <Animated.View entering={FadeIn} accessible={false}>
@@ -31,10 +50,16 @@ export const TravelCard: React.FC<TravelCardProps> = ({
         style={styles.container}
         accessible={true}
         accessibilityRole="button"
-        onPress={() => onDetailsPressed(tripPattern, resultIndex)}
+        accessibilityHint={t(TravelCardTexts.card.a11yHint)}
+        onPress={() => onDetailsPressed(tripPattern, cardIndex)}
         testID={testID}
       >
-        <TravelCardHeader tripPattern={tripPattern} />
+        <PrefixAccessibilityLabel accessibilityLabel={accessibilityLabel} />
+        <TravelCardHeader
+          tripPattern={tripPattern}
+          includeDayInfo={includeDayInfo}
+          includeFromToInfo={includeFromToInfo}
+        />
         <View style={styles.legsContainer}>
           <View
             style={styles.legsArea}
@@ -51,6 +76,38 @@ export const TravelCard: React.FC<TravelCardProps> = ({
       </NativeBlockButton>
     </Animated.View>
   );
+};
+
+const PrefixAccessibilityLabel = ({
+  accessibilityLabel,
+}: {
+  accessibilityLabel: string;
+}) => {
+  return (
+    <View
+      accessible={true}
+      accessibilityLabel={accessibilityLabel}
+      style={{position: 'absolute'}}
+    />
+  );
+};
+
+const useAccessibilityLabel = (
+  tripPattern: TripPattern,
+  type: TravelCardType,
+  cardIndex: number,
+  numberOfCards: number,
+) => {
+  const {t} = useTranslation();
+  const prefix = t(
+    TravelCardTexts.card.typePrefix(type, cardIndex, numberOfCards),
+  );
+  const uniqueModes = Array.from(
+    new Set(tripPattern.legs.map((leg) => leg.mode)),
+  );
+  const modes = uniqueModes.map((mode) => t(getTranslatedModeName(mode)));
+
+  return `${prefix}. ${t(TravelCardTexts.card.modesPrefix(modes))}.`;
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({

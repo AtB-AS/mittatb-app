@@ -1,2 +1,2 @@
-export {TravelCard} from './TravelCard';
+export {TravelCard, type TravelCardType} from './TravelCard';
 export {TravelCardHeader} from './TravelCardHeader';
