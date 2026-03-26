@@ -19,7 +19,6 @@ import {
   significantWalkTime,
 } from '@atb/screen-components/travel-details-screens';
 import {ThemeText} from '@atb/components/text';
-import Animated, {Easing, FadeIn} from 'react-native-reanimated';
 import {OverflowContainer} from '@atb/components/overflow-container';
 
 type TravelCardContentProps = {
@@ -58,18 +57,11 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
             >
               {filteredLegs.map((leg, i) => (
                 <View key={`leg-${leg.id ?? i}`}>
-                  <Animated.View
-                    entering={FadeIn.duration(200).easing(
-                      Easing.inOut(Easing.ease),
-                    )}
-                    testID="tripLeg"
-                  >
-                    {leg.mode === 'foot' ? (
-                      <FootLeg leg={leg} nextLeg={filteredLegs[i + 1]} />
-                    ) : staySeated(i) ? null : (
-                      <TransportationLeg leg={leg} />
-                    )}
-                  </Animated.View>
+                  {leg.mode === 'foot' ? (
+                    <FootLeg leg={leg} nextLeg={filteredLegs[i + 1]} />
+                  ) : staySeated(i) ? null : (
+                    <TransportationLeg leg={leg} />
+                  )}
                 </View>
               ))}
             </OverflowContainer>

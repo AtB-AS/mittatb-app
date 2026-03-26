@@ -1,5 +1,5 @@
 import {AccessibleText, ThemeText} from '@atb/components/text';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {TripSearchTexts, useTranslation} from '@atb/translations';
 import {
   daysBetween,
@@ -27,7 +27,6 @@ export const TravelCardHeader: React.FC<{
   includeDayInfo?: boolean;
 }> = ({tripPattern, includeDayInfo = true}) => {
   const styles = useThemeStyles();
-  const {theme} = useThemeContext();
   const {t, language} = useTranslation();
   let start = tripPattern.legs[0];
   let startName = start.fromPlace.name;
@@ -62,13 +61,9 @@ export const TravelCardHeader: React.FC<{
     differenceInMinutes(expectedEndTime, aimedEndTime) < 1;
 
   return (
-    <View
-      style={{
-        gap: theme.spacing.small,
-      }}
-    >
+    <View style={styles.container}>
       <View style={styles.resultHeader}>
-        <View style={{flex: 1, flexShrink: 1, gap: theme.spacing.xSmall}}>
+        <View style={styles.timeContainer}>
           <ThemeText typography="body__m__strong">
             {isInPast ? t(TravelCardTexts.header.pastTime) : expectedTimeLabel}
           </ThemeText>
@@ -90,13 +85,7 @@ export const TravelCardHeader: React.FC<{
           </AccessibleText>
         </View>
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          gap: theme.spacing.xSmall,
-          alignItems: 'center',
-        }}
-      >
+      <View style={styles.startEndContainer}>
         <ThemeText typography="body__m">
           {startName
             ? startName
@@ -199,6 +188,10 @@ const hasQuay = (leg: Leg) => {
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    gap: theme.spacing.small,
+  },
+  timeContainer: {flex: 1, flexShrink: 1, gap: theme.spacing.xSmall},
   resultHeader: {
     flex: 1,
     flexDirection: 'row',
@@ -208,6 +201,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   durationContainer: {
     flexShrink: 0,
     alignItems: 'flex-end',
+  },
+  startEndContainer: {
+    flexDirection: 'row',
+    gap: theme.spacing.xSmall,
+    alignItems: 'center',
   },
   warningIcon: {
     marginLeft: theme.spacing.small,
