@@ -5,12 +5,13 @@ import {TripPattern} from '@atb/api/types/trips';
 import {ErrorResponse} from '@atb-as/utils';
 
 export function useSingleTripQuery(
-  compressedQuery: string,
+  compressedQuery: string | undefined,
   enabled: boolean = true,
 ) {
   return useQuery<TripPattern | null, ErrorResponse>({
     queryKey: ['singleTrip', compressedQuery],
     queryFn: async () => {
+      if (!compressedQuery) return null;
       return await singleTripSearch(compressedQuery);
     },
     refetchInterval: ONE_SECOND_MS * 20,
