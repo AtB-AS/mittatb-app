@@ -186,12 +186,12 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
               <MessageInfoBox
                 type="valid"
                 title={
-                  userBonusBalance && userBonusBalance > 0
+                  !!userBonusBalance
                     ? t(BonusProgramTexts.bonusProfile.joined.title)
                     : undefined
                 }
                 message={t(
-                  userBonusBalance && userBonusBalance > 0
+                  !!userBonusBalance
                     ? BonusProgramTexts.bonusProfile.joined.welcomeGiftDescription(
                         userBonusBalance,
                       )
