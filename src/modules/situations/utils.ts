@@ -15,6 +15,7 @@ import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import type {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import type {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 import type {Leg} from '@atb/api/types/trips';
+import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 export function findAllNoticesFromLeg(leg: Leg): NoticeFragment[] {
   const notices: NoticeFragment[] = [];
@@ -132,6 +133,58 @@ export const getSvgForMostCriticalSituationOrNotice = (
     cancellation,
   );
   return msgType && statusTypeToIcon(msgType, true, themeName);
+};
+
+/**
+ * Get the most critical message type for a leg, considering situations, notices,
+ * and special transport submodes like RailReplacementBus.
+ */
+const getMsgTypeForLeg = (leg: Leg): Exclude<Statuses, 'valid'> | undefined => {
+  const situations = findAllSituationsFromLeg(leg);
+  const notices = findAllNoticesFromLeg(leg);
+  const msgType = getMsgTypeForMostCriticalSituationOrNotice(
+    situations,
+    notices,
+  );
+  const railReplacementBusMsgType: Exclude<Statuses, 'valid'> | undefined =
+    leg.transportSubmode === TransportSubmode.RailReplacementBus
+      ? 'warning'
+      : undefined;
+  return toMostCriticalStatus(msgType, railReplacementBusMsgType);
+};
+
+/**
+ * Get the notification SVG for a single leg based on its situations, notices,
+ * and transport submode.
+ */
+export const getNotificationSvgForLeg = (leg: Leg, themeName: Mode) => {
+  const msgType = getMsgTypeForLeg(leg);
+  return msgType && statusTypeToIcon(msgType, true, themeName);
+};
+
+/**
+ * Get the most critical notification SVG across multiple legs.
+ */
+export const getNotificationSvgForLegs = (legs: Leg[], themeName: Mode) => {
+  const msgType = legs
+    .map(getMsgTypeForLeg)
+    .reduce<
+      Exclude<Statuses, 'valid'> | undefined
+    >(toMostCriticalStatus, undefined);
+  return msgType && statusTypeToIcon(msgType, true, themeName);
+};
+
+/**
+ * Get an accessibility label describing situations, notices, or special
+ * transport submodes (e.g. RailReplacementBus) for a single leg.
+ * Returns undefined if there is nothing to announce.
+ */
+export const getA11yLabelForLeg = (
+  leg: Leg,
+  t: TranslateFunction,
+): string | undefined => {
+  const msgType = getMsgTypeForLeg(leg);
+  return msgType ? t(SituationsTexts.a11yLabel[msgType]) : undefined;
 };
 
 export const getSituationOrNoticeA11yLabel = (

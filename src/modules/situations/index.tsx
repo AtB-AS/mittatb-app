@@ -12,4 +12,7 @@ export {
   findAllNotices,
   findAllSituationsFromLeg,
   findAllSituations,
+  getNotificationSvgForLeg,
+  getNotificationSvgForLegs,
+  getA11yLabelForLeg,
 } from './utils';
