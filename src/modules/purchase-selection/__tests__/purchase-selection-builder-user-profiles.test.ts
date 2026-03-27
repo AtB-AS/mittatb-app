@@ -424,4 +424,3 @@ describe('isSelectableSupplementProduct - undefined limitations', () => {
     );
   });
 });
-
