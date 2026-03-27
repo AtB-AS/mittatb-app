@@ -3,7 +3,7 @@ import {
   tripPatternDisplayTimeFilter,
 } from '../utils';
 import type {TripPatternWithBooking} from '@atb/api/types/trips';
-import {endOfDay} from 'date-fns';
+import {endOfDay, subSeconds} from 'date-fns';
 
 describe('tripPatternAvailabilityFilter', () => {
   it('returns true for supported booking availability', () => {
@@ -50,5 +50,50 @@ describe('tripPatternDisplayTimeFilter', () => {
       expectedStartTime: endOfDay(travelDate).toISOString(),
     } as TripPatternWithBooking;
     expect(tripPatternDisplayTimeFilter(tripPattern, travelDate)).toBe(false);
+  });
+
+  describe('with gracePeriodSeconds', () => {
+    it('returns true for trip 5 minutes before travelDate with 600s grace period', () => {
+      const tripPattern = {
+        expectedStartTime: subSeconds(
+          new Date(travelDate),
+          300,
+        ).toISOString(),
+      } as TripPatternWithBooking;
+      expect(tripPatternDisplayTimeFilter(tripPattern, travelDate, 600)).toBe(
+        true,
+      );
+    });
+
+    it('returns false for trip 11 minutes before travelDate with 600s grace period', () => {
+      const tripPattern = {
+        expectedStartTime: subSeconds(
+          new Date(travelDate),
+          660,
+        ).toISOString(),
+      } as TripPatternWithBooking;
+      expect(tripPatternDisplayTimeFilter(tripPattern, travelDate, 600)).toBe(
+        false,
+      );
+    });
+
+    it('returns true for trip exactly 10 minutes before travelDate with 600s grace period', () => {
+      const tripPattern = {
+        expectedStartTime: subSeconds(
+          new Date(travelDate),
+          600,
+        ).toISOString(),
+      } as TripPatternWithBooking;
+      expect(tripPatternDisplayTimeFilter(tripPattern, travelDate, 600)).toBe(
+        true,
+      );
+    });
+
+    it('returns false for trip before travelDate with default (0s) grace period', () => {
+      const tripPattern = {
+        expectedStartTime: subSeconds(new Date(travelDate), 1).toISOString(),
+      } as TripPatternWithBooking;
+      expect(tripPatternDisplayTimeFilter(tripPattern, travelDate)).toBe(false);
+    });
   });
 });
