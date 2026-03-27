@@ -30,7 +30,7 @@ export const computeAimedStartEndTimes = (tripPattern: TripPattern) => {
     if (!hasQuay(firstLeg)) {
       // Find the first leg with a quay
       const firstLegWithQuayIndex = tripPattern.legs.findIndex(hasQuay);
-      if (firstLegWithQuayIndex) {
+      if (firstLegWithQuayIndex !== -1) {
         const firstLegWithQuay = tripPattern.legs[firstLegWithQuayIndex];
         // Compute the duration up to the first leg with a quay
         const durationUpTillQuay = tripPattern.legs
@@ -49,7 +49,7 @@ export const computeAimedStartEndTimes = (tripPattern: TripPattern) => {
       const reversedLegs = [...tripPattern.legs].reverse();
       // Find the last leg with a quay
       const lastLegWithQuayIndex = reversedLegs.findIndex(hasQuay);
-      if (lastLegWithQuayIndex) {
+      if (lastLegWithQuayIndex !== -1) {
         const lastLegWithQuay = reversedLegs[lastLegWithQuayIndex];
         // Compute the duration after the last leg with a quay
         const durationAfterQuay = reversedLegs
