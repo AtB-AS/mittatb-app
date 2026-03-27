@@ -105,6 +105,19 @@ const BonusProgramTexts = {
       'We are unable to display your points right now. You will still earn points as usual.',
       'Me klarer ikkje visa poenga dine akkurat no. Du vil framleis tena poeng som vanleg.',
     ),
+    joined: {
+      title: _(
+        'Du er med i Poeng!',
+        'You have joined Points!',
+        'Du er med i Poeng!',
+      ),
+      welcomeGiftDescription: (points: number) =>
+        _(
+          `Du har fått ${points} Poeng i velkomstgave!`,
+          `You have received ${points} Points as a welcome gift!`,
+          `Du har fått ${points} Poeng i velkomstgåve!`,
+        ),
+    },
     noBonusProducts: _(
       'Vi klarer ikke vise fordelene akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
       'We are unable to display the benefits right now. You will still earn points as usual.',
