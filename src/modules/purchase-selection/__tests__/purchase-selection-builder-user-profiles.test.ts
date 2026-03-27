@@ -404,6 +404,30 @@ describe('isSelectableProfile with userProfileRefs', () => {
     };
     expect(isSelectableProfile(product, TEST_USER_PROFILE)).toBe(false);
   });
+
+  it('Should not apply user profiles where some are not in userProfileRefs', () => {
+    const originalSelection: PurchaseSelectionType = {
+      ...TEST_SELECTION,
+      preassignedFareProduct: {
+        ...TEST_PRODUCT,
+        limitations: {
+          ...TEST_PRODUCT.limitations,
+          userProfiles: undefined,
+          userProfileRefs: ['UP1', 'UP2'],
+        },
+      },
+    };
+
+    const selection = createEmptyBuilder(TEST_INPUT)
+      .fromSelection(originalSelection)
+      .userProfiles([
+        {...TEST_USER_PROFILE, id: 'UP2', count: 2},
+        {...TEST_USER_PROFILE, id: 'UP3', count: 1},
+      ])
+      .build();
+
+    expect(selection).toBe(originalSelection);
+  });
 });
 
 describe('isSelectableSupplementProduct - undefined limitations', () => {
