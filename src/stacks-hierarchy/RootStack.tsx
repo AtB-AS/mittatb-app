@@ -262,6 +262,30 @@ export const RootStack = () => {
                   ],
                 } as ResultState;
               }
+              if (path.includes('points')) {
+                return {
+                  routes: [
+                    {
+                      name: 'Root_TabNavigatorStack',
+                      state: {
+                        routes: [
+                          {
+                            name: 'TabNav_ProfileStack',
+                            state: {
+                              routes: [
+                                {name: 'Profile_RootScreen'},
+                                {
+                                  name: 'Profile_BonusScreen',
+                                },
+                              ],
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                } as ResultState;
+              }
               if (path.includes('purchase-overview')) {
                 const params = new URLSearchParams(path.split('?')[1]);
                 const type = params.get('type');
