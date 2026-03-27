@@ -82,6 +82,7 @@ export function useBookingTrips({
           tripPatternDisplayTimeFilter(
             tp,
             travelDate ?? new Date().toISOString(),
+            600,
           ),
         )
         .map((tp) => ({
