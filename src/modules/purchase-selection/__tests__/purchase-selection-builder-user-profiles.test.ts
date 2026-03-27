@@ -7,7 +7,11 @@ import {
   TEST_USER_PROFILE,
 } from './test-utils';
 import {PurchaseSelectionType} from '../types';
-import {isSelectableSupplementProduct} from '../utils';
+import {
+  isSelectableSupplementProduct,
+  isSelectableProfile,
+  isWithinUserProfileMaxCount,
+} from '../utils';
 
 describe('purchaseSelectionBuilder - userProfiles', () => {
   it('Should apply valid user profiles', () => {
@@ -303,4 +307,144 @@ it('Should apply zero count user profile with multiple supplement products', () 
   expect(
     selection.supplementProductsWithCount.find((s) => s.id === 'SP2')?.count,
   ).toBe(1);
+});
+
+describe('isWithinUserProfileMaxCount', () => {
+  it('returns true when count is within maxCount', () => {
+    const product = {
+      ...TEST_PRODUCT,
+      limitations: {
+        ...TEST_PRODUCT.limitations,
+        userProfiles: [{userProfileRef: 'UP1', maxCount: 3}],
+      },
+    };
+    expect(
+      isWithinUserProfileMaxCount(product, {...TEST_USER_PROFILE, count: 2}),
+    ).toBe(true);
+  });
+
+  it('returns true when count equals maxCount', () => {
+    const product = {
+      ...TEST_PRODUCT,
+      limitations: {
+        ...TEST_PRODUCT.limitations,
+        userProfiles: [{userProfileRef: 'UP1', maxCount: 2}],
+      },
+    };
+    expect(
+      isWithinUserProfileMaxCount(product, {...TEST_USER_PROFILE, count: 2}),
+    ).toBe(true);
+  });
+
+  it('returns false when count exceeds maxCount', () => {
+    const product = {
+      ...TEST_PRODUCT,
+      limitations: {
+        ...TEST_PRODUCT.limitations,
+        userProfiles: [{userProfileRef: 'UP1', maxCount: 1}],
+      },
+    };
+    expect(
+      isWithinUserProfileMaxCount(product, {...TEST_USER_PROFILE, count: 2}),
+    ).toBe(false);
+  });
+
+  it('returns true when userProfiles limitations is undefined (no maxCount)', () => {
+    const product = {
+      ...TEST_PRODUCT,
+      limitations: {
+        ...TEST_PRODUCT.limitations,
+        userProfiles: undefined,
+      },
+    };
+    expect(
+      isWithinUserProfileMaxCount(product, {...TEST_USER_PROFILE, count: 100}),
+    ).toBe(true);
+  });
+
+  it('returns true when profile is not found in limitations (no maxCount applies)', () => {
+    const product = {
+      ...TEST_PRODUCT,
+      limitations: {
+        ...TEST_PRODUCT.limitations,
+        userProfiles: [{userProfileRef: 'UP2', maxCount: 1}],
+      },
+    };
+    expect(
+      isWithinUserProfileMaxCount(product, {
+        ...TEST_USER_PROFILE,
+        id: 'UP1',
+        count: 100,
+      }),
+    ).toBe(true);
+  });
+});
+
+describe('isSelectableProfile with userProfileRefs', () => {
+  it('returns true when profile id is in userProfileRefs', () => {
+    const product = {
+      ...TEST_PRODUCT,
+      limitations: {
+        ...TEST_PRODUCT.limitations,
+        userProfiles: undefined,
+        userProfileRefs: ['UP1', 'UP2'],
+      },
+    };
+    expect(isSelectableProfile(product, TEST_USER_PROFILE)).toBe(true);
+  });
+
+  it('returns false when profile id is not in userProfileRefs', () => {
+    const product = {
+      ...TEST_PRODUCT,
+      limitations: {
+        ...TEST_PRODUCT.limitations,
+        userProfiles: undefined,
+        userProfileRefs: ['UP2', 'UP3'],
+      },
+    };
+    expect(isSelectableProfile(product, TEST_USER_PROFILE)).toBe(false);
+  });
+
+  it('Should not apply user profiles where some are not in userProfileRefs', () => {
+    const originalSelection: PurchaseSelectionType = {
+      ...TEST_SELECTION,
+      preassignedFareProduct: {
+        ...TEST_PRODUCT,
+        limitations: {
+          ...TEST_PRODUCT.limitations,
+          userProfiles: undefined,
+          userProfileRefs: ['UP1', 'UP2'],
+        },
+      },
+    };
+
+    const selection = createEmptyBuilder(TEST_INPUT)
+      .fromSelection(originalSelection)
+      .userProfiles([
+        {...TEST_USER_PROFILE, id: 'UP2', count: 2},
+        {...TEST_USER_PROFILE, id: 'UP3', count: 1},
+      ])
+      .build();
+
+    expect(selection).toBe(originalSelection);
+  });
+});
+
+describe('isSelectableSupplementProduct - undefined limitations', () => {
+  it('returns true when supplementProductRefs is undefined', () => {
+    const selection: PurchaseSelectionType = {
+      ...TEST_SELECTION,
+      preassignedFareProduct: {
+        ...TEST_PRODUCT,
+        limitations: {
+          ...TEST_PRODUCT.limitations,
+          supplementProductRefs: undefined,
+        },
+      },
+    };
+    const supplementProduct = {...TEST_SUPPLEMENT_PRODUCT, id: 'SP99'};
+    expect(isSelectableSupplementProduct(selection, supplementProduct)).toBe(
+      true,
+    );
+  });
 });
