@@ -50,20 +50,20 @@ export const CounterIconBox = ({
             ]}
             importantForAccessibility="no-hide-descendants"
           >
-          <ThemeText
-            color={getTransportColor(theme).secondary}
-            typography={textType}
-            testID="tripLegMore"
-            style={{
-              height: lineHeight * fontScale,
-              minWidth: lineHeight * fontScale,
-              lineHeight: lineHeight,
-              textAlign: 'center',
-            }}
-          >
-            +{count}
-          </ThemeText>
-        </View>
+            <ThemeText
+              color={getTransportColor(theme).secondary}
+              typography={textType}
+              testID="tripLegMore"
+              style={{
+                height: lineHeight * fontScale,
+                minWidth: lineHeight * fontScale,
+                lineHeight: lineHeight,
+                textAlign: 'center',
+              }}
+            >
+              +{count}
+            </ThemeText>
+          </View>
         );
       }}
     </WithNotificationBadge>

@@ -6,7 +6,10 @@ import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {View} from 'react-native';
 import {useThemeContext} from '@atb/theme';
 import React from 'react';
-import {getNotificationSvgForLeg, getA11yLabelForLeg} from '@atb/modules/situations';
+import {
+  getNotificationSvgForLeg,
+  getA11yLabelForLeg,
+} from '@atb/modules/situations';
 import {isDefined} from '@atb/utils/presence';
 
 export const TransportationLeg = ({leg}: {leg: Leg}) => {
@@ -17,7 +20,9 @@ export const TransportationLeg = ({leg}: {leg: Leg}) => {
   );
   const publicCode = leg.line?.publicCode;
   const a11yLabel = [
-    t(TravelCardTexts.legs.transportation.a11yLabel(modeName, publicCode ?? '')),
+    t(
+      TravelCardTexts.legs.transportation.a11yLabel(modeName, publicCode ?? ''),
+    ),
     getA11yLabelForLeg(leg, t),
   ]
     .filter(isDefined)
