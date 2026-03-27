@@ -61,7 +61,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   ) : null;
 
   return (
-    <WithNotificationBadge notification={notification} style={style}>
+    <WithNotificationBadge notification={notification}>
       {({extraPaddingRight}) => (
         <View
           style={[
@@ -76,6 +76,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
                   ? theme.spacing.small
                   : theme.spacing.xSmall) + extraPaddingRight,
             },
+            style,
           ]}
         >
           <ThemeIcon

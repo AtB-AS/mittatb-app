@@ -41,12 +41,12 @@ export const CounterIconBox = ({
           <View
             style={[
               styles.counterContainer,
-              style,
               {
                 padding: basePadding,
                 paddingRight: basePadding + extraPaddingRight,
                 borderRadius: getIconBoxBorderRadius(size, theme),
               },
+              style,
             ]}
             importantForAccessibility="no-hide-descendants"
           >

@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleProp, View, ViewStyle} from 'react-native';
+import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {SvgProps} from 'react-native-svg';
@@ -15,7 +15,6 @@ type NotificationChildProps = {
 
 type WithNotificationBadgeProps = {
   notification?: (props: SvgProps) => React.JSX.Element;
-  style?: StyleProp<ViewStyle>;
   children: (props: NotificationChildProps) => React.ReactNode;
 };
 
@@ -27,7 +26,6 @@ type WithNotificationBadgeProps = {
 export const WithNotificationBadge: React.FC<WithNotificationBadgeProps> = ({
   children,
   notification,
-  style,
 }) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
@@ -38,10 +36,12 @@ export const WithNotificationBadge: React.FC<WithNotificationBadgeProps> = ({
    */
   const extraPaddingRight = theme.icon.size.small / 2;
 
-  if (!notification) return <>{children({extraPaddingRight: 0})}</>;
+  if (!notification) {
+    return <>{children({extraPaddingRight: 0})}</>;
+  }
 
   return (
-    <View style={[styles.wrapper, style]}>
+    <View style={styles.wrapper}>
       {children({extraPaddingRight})}
       <View style={styles.badge}>
         <View style={styles.badgeBackground}>
