@@ -11,15 +11,12 @@ import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {
   isCanBeConsumedNowFareContract,
-  isCanBeActivatedNowFareContract,
   useGetFareProductsQuery,
   useSchoolCarnetInfoQuery,
 } from '@atb/modules/ticketing';
 import {FareContractType, getAccesses} from '@atb-as/utils';
 import {ConsumeCarnetSectionitem} from './components/ConsumeCarnetSectionitem';
 import {StyleSheet} from '@atb/theme';
-import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {ProductName} from './components/ProductName';
 import {Description} from './components/FareContractDescription';
 import {WithValidityLine} from './components/WithValidityLine';
@@ -60,7 +57,6 @@ export const FareContractView: React.FC<Props> = ({
 }) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
   const {isInspectable} = useMobileTokenContext();
-  const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
 
   const {t} = useTranslation();
 
@@ -131,8 +127,8 @@ export const FareContractView: React.FC<Props> = ({
       ) : (
         <TravelInfoSectionItem
           fc={fareContract}
-          onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
           now={now}
+          onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
         />
       )}
 
@@ -162,18 +158,6 @@ export const FareContractView: React.FC<Props> = ({
         </GenericSectionItem>
       )}
 
-      {isActivateTicketNowEnabled &&
-        isCanBeActivatedNowFareContract(
-          fareContract,
-          now,
-          currentUserId,
-          preassignedFareProduct?.isBookingEnabled,
-        ) && (
-          <ActivateNowSectionItem
-            fareContractId={fareContract.id}
-            fareProductType={preassignedFareProduct?.type}
-          />
-        )}
       {isCanBeConsumedNowFareContract(
         fareContract,
         now,

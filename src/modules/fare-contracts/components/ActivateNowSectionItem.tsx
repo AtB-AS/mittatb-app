@@ -11,15 +11,14 @@ import {
   type SectionItemProps,
 } from '@atb/components/sections';
 
-type ActivateNowButtonProps = SectionItemProps<{
+type ActivateNowButtonProps = {
   fareContractId: string;
   fareProductType: string | undefined;
-}>;
+};
 
-export function ActivateNowSectionItem({
+export function ActivateNowButton({
   fareContractId,
   fareProductType,
-  ...sectionProps
 }: ActivateNowButtonProps): React.JSX.Element {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -31,7 +30,7 @@ export function ActivateNowSectionItem({
   };
 
   return (
-    <GenericSectionItem {...sectionProps}>
+    <>
       <Button
         expanded={true}
         text={t(FareContractTexts.activateNow.startNow)}
@@ -41,13 +40,30 @@ export function ActivateNowSectionItem({
           svg: TicketValid,
         }}
         ref={onCloseFocusRef}
-        style={{width: '100%'}} // Without this the GenericSectionItem squishes the button
+        style={{width: '100%'}}
       />
       <ActivateNowBottomSheet
         fareContractId={fareContractId}
         fareProductType={fareProductType}
         bottomSheetModalRef={bottomSheetModalRef}
         onCloseFocusRef={onCloseFocusRef}
+      />
+    </>
+  );
+}
+
+type ActivateNowSectionItemProps = SectionItemProps<ActivateNowButtonProps>;
+
+export function ActivateNowSectionItem({
+  fareContractId,
+  fareProductType,
+  ...sectionProps
+}: ActivateNowSectionItemProps): React.JSX.Element {
+  return (
+    <GenericSectionItem {...sectionProps}>
+      <ActivateNowButton
+        fareContractId={fareContractId}
+        fareProductType={fareProductType}
       />
     </GenericSectionItem>
   );
