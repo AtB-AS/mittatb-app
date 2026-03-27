@@ -11,6 +11,7 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useTripPatternInfo} from './use-trip-pattern-info';
 import {differenceInMinutes} from 'date-fns';
 import {useTimeLabels} from './utils';
+import {useAccessibilityLabelContribution} from '@atb/modules/composite-accessibility';
 
 export const TravelCardHeader: React.FC<{
   tripPattern: TripPattern;
@@ -45,7 +46,7 @@ export const TravelCardHeader: React.FC<{
   const showAimedTime = !areTimesEquivalentInMinutes || isInPast;
 
   const a11yLabel = `
-    ${includeFromToInfo ? t(TravelCardTexts.header.fromToInfo.a11yLabel(fromName, toName)) : ''}
+    ${includeFromToInfo ? t(TravelCardTexts.header.fromToInfo.a11yLabel(fromName, toName)) : ''}. 
     ${
       isInPast
         ? t(TravelCardTexts.header.pastTime)
@@ -55,7 +56,7 @@ export const TravelCardHeader: React.FC<{
               expectedEndTimeLabel,
             ),
           )
-    }
+    }. 
     ${
       showAimedTime
         ? t(
@@ -65,19 +66,17 @@ export const TravelCardHeader: React.FC<{
             ),
           )
         : ''
-    }
+    }. 
     ${t(
       TravelCardTexts.header.duration.a11yLabel(
         secondsToDuration(tripPattern.duration, language),
       ),
-    )}`;
+    )}.`;
+
+  useAccessibilityLabelContribution('header', a11yLabel);
 
   return (
-    <View
-      style={styles.container}
-      accessible={true}
-      accessibilityLabel={a11yLabel}
-    >
+    <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.timeContainer}>
           <ThemeText typography="body__m__strong">
