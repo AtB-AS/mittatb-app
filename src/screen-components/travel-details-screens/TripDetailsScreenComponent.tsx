@@ -85,7 +85,7 @@ export const TripDetailsScreenComponent = ({
   const themeColor = theme.color.background.neutral[1];
 
   const {data, error, isFetching, refetch} = useSingleTripQuery(
-    tripPattern.compressedQuery,
+    tripPattern,
     isFocused,
   );
 

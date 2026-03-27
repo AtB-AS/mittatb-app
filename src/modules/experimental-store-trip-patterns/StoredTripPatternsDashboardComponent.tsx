@@ -1,10 +1,8 @@
 import {StyleSheet} from '@atb/theme';
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {Alert, View} from 'react-native';
 import {TripPattern} from '@atb/api/types/trips';
-import {useNow} from '@atb/utils/use-now';
 
-import {TripSearchTime} from '../../stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {useSingleTripQuery} from '@atb/modules/trip-patterns';
 import Animated, {
   Easing,
@@ -13,13 +11,14 @@ import Animated, {
 } from 'react-native-reanimated';
 import {ContentHeading} from '@atb/components/heading';
 import {translation as _, useTranslation} from '@atb/translations';
-import {ResultRow} from '../../stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultRow';
+import {TravelCard} from '@atb/screen-components/travel-card';
 import {useStoredTripPatterns} from './StoredTripPatternsContext';
 import {wrapWithExperimentalFeatureToggledComponent} from '@atb/modules/experimental';
 import {RightActionKind, SwipeableResultRow} from './SwipeableResultRow';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {getTripPatternAnalytics} from '@atb/screen-components/travel-details-screens';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {useTimeContext} from '../time';
 
 type Props = {
   onDetailsPressed(tripPattern: TripPattern): void;
@@ -31,15 +30,10 @@ export const StoredTripPatternsDashboardComponent =
     'render-nothing-if-disabled',
     ({onDetailsPressed, isFocused}) => {
       const styles = useThemeStyles();
-      const now = useNow(30000);
       const {t} = useTranslation();
       const {fareZones} = useFirestoreConfigurationContext();
       const analytics = useAnalyticsContext();
-
-      const searchTime = useMemo<TripSearchTime>(
-        () => ({option: 'now', date: new Date(now).toISOString()}),
-        [now],
-      );
+      const {serverNow} = useTimeContext(30000);
 
       const {tripPatterns, updateTripPattern, removeTripPattern} =
         useStoredTripPatterns();
@@ -62,7 +56,7 @@ export const StoredTripPatternsDashboardComponent =
                   analytics.logEvent(
                     'Dashboard',
                     'Trip removed',
-                    getTripPatternAnalytics(tripPattern, fareZones, now),
+                    getTripPatternAnalytics(tripPattern, fareZones, serverNow),
                   );
                   removeTripPattern(tripPattern);
                 },
@@ -70,7 +64,7 @@ export const StoredTripPatternsDashboardComponent =
             ],
           );
         },
-        [removeTripPattern, t, analytics, fareZones, now],
+        [removeTripPattern, t, analytics, fareZones, serverNow],
       );
 
       if (!tripPatterns.length) {
@@ -94,7 +88,7 @@ export const StoredTripPatternsDashboardComponent =
                 tripPattern={tripPattern}
                 onDetailsPressed={onDetailsPressed}
                 resultIndex={i}
-                searchTime={searchTime}
+                length={tripPatterns.length}
                 updateTripPattern={updateTripPattern}
                 setTripPatternToRemove={setTripPatternToRemove}
                 isFocused={isFocused}
@@ -110,7 +104,7 @@ const StoredTripPatternRow: React.FC<{
   tripPattern: TripPattern;
   onDetailsPressed: (tripPattern: TripPattern) => void;
   resultIndex: number;
-  searchTime: TripSearchTime;
+  length: number;
   updateTripPattern: (tripPattern: TripPattern) => void;
   setTripPatternToRemove: (
     tripPattern: TripPattern,
@@ -121,17 +115,14 @@ const StoredTripPatternRow: React.FC<{
   tripPattern,
   onDetailsPressed,
   resultIndex,
-  searchTime,
+  length,
   updateTripPattern,
   setTripPatternToRemove,
   isFocused,
 }) => {
-  const {data} = useSingleTripQuery(tripPattern.compressedQuery, isFocused);
+  const {data} = useSingleTripQuery(tripPattern, isFocused);
 
-  const updatedTripPattern = useMemo(
-    () => data ?? tripPattern,
-    [data, tripPattern],
-  );
+  const updatedTripPattern = data ?? tripPattern;
 
   useEffect(() => {
     if (!data) return;
@@ -149,12 +140,13 @@ const StoredTripPatternRow: React.FC<{
 
   return (
     <SwipeableResultRow onRightAction={onRightAction} rightActionKind="delete">
-      <ResultRow
+      <TravelCard
         tripPattern={updatedTripPattern}
         onDetailsPressed={onDetailsPressed}
-        resultIndex={resultIndex}
-        searchTime={searchTime}
+        cardIndex={resultIndex}
+        numberOfCards={length}
         testID={'tripSearchSearchResult' + resultIndex}
+        type="saved-trip"
       />
     </SwipeableResultRow>
   );

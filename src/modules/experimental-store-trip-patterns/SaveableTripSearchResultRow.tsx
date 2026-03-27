@@ -5,7 +5,7 @@ import {
   wrapWithExperimentalFeatureToggledComponent,
 } from '@atb/modules/experimental';
 import {RightActionKind, SwipeableResultRow} from './SwipeableResultRow';
-import {getTripPatternKey} from './utils';
+import {getTripPatternKey} from '../trip-patterns/utils';
 import {TripPattern} from '@atb/api/types/trips';
 import {SaveFill} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';

@@ -1,6 +1,6 @@
 import {TripPattern} from '@atb/api/types/trips';
 import {storage, StorageModelTypes} from '@atb/modules/storage';
-import {getTripPatternKey} from './utils';
+import {getTripPatternKey} from '../trip-patterns/utils';
 import {isAfter} from 'date-fns';
 
 export type StoredTripPattern = {

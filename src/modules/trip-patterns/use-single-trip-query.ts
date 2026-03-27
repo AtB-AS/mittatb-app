@@ -3,16 +3,17 @@ import {ONE_HOUR_MS, ONE_SECOND_MS} from '@atb/utils/durations';
 import {singleTripSearch} from '@atb/api/bff/trips';
 import {TripPattern} from '@atb/api/types/trips';
 import {ErrorResponse} from '@atb-as/utils';
+import {getTripPatternKey} from './utils';
 
 export function useSingleTripQuery(
-  compressedQuery: string | undefined,
+  tripPattern: TripPattern,
   enabled: boolean = true,
 ) {
   return useQuery<TripPattern | null, ErrorResponse>({
-    queryKey: ['singleTrip', compressedQuery],
+    queryKey: ['singleTrip', getTripPatternKey(tripPattern)],
     queryFn: async () => {
-      if (!compressedQuery) return null;
-      return await singleTripSearch(compressedQuery);
+      if (!tripPattern.compressedQuery) return null;
+      return await singleTripSearch(tripPattern.compressedQuery);
     },
     refetchInterval: ONE_SECOND_MS * 20,
     staleTime: ONE_HOUR_MS,
