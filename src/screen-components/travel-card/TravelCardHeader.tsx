@@ -78,7 +78,7 @@ export const TravelCardHeader: React.FC<{
       accessible={true}
       accessibilityLabel={a11yLabel}
     >
-      <View style={styles.resultHeader}>
+      <View style={styles.header}>
         <View style={styles.timeContainer}>
           <ThemeText typography="body__m__strong">
             {isInPast
@@ -119,7 +119,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.small,
   },
   timeContainer: {flex: 1, flexShrink: 1, gap: theme.spacing.xSmall},
-  resultHeader: {
+  header: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -133,6 +133,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     gap: theme.spacing.xSmall,
     alignItems: 'center',
+    flexWrap: 'wrap',
   },
   warningIcon: {
     marginLeft: theme.spacing.small,
