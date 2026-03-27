@@ -4,3 +4,4 @@ export {
   useBonusAmountEarnedQuery,
   getBonusAmountEarnedQueryKey,
 } from './use-bonus-amount-earned-query';
+export {useProductPointsQuery} from './use-product-points-query';

@@ -17,6 +17,7 @@ import {Linking, Platform, View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {
+  ThemedBonusBag,
   ThemedBonusMap,
   ThemedBonusTransaction,
   ThemedTokenPhone,
@@ -58,6 +59,7 @@ import {
   GlobalMessage,
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
+import {BonusFaqSection} from './BonusFaqSection';
 
 const iconSize = 60;
 
@@ -212,6 +214,7 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
             )}
           </>
         )}
+        <HowPointsWork />
 
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.spendPoints.heading)}
@@ -273,7 +276,10 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
             </Section>
           </View>
         )}
-        <HowPointsWork />
+        <ContentHeading
+          text={t(BonusProgramTexts.bonusProfile.faq.heading)}
+        />
+        <BonusFaqSection />
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.feedback.heading)}
         />
@@ -423,7 +429,7 @@ const HowPointsWork = () => {
             BonusProgramTexts.bonusProfile.readMore.spendPoints.description,
           )}
           SymbolComponent={
-            <ThemedBonusMap height={iconSize} width={iconSize} />
+            <ThemedBonusBag height={iconSize} width={iconSize} />
           }
         />
       </Section>

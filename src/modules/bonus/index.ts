@@ -11,6 +11,7 @@ export {
   useBuyValueCodeWithBonusPointsMutation,
   useBonusAmountEarnedQuery,
   getBonusAmountEarnedQueryKey,
+  useProductPointsQuery,
 } from './queries';
 export {
   bonusOnboardingCarouselConfig,
