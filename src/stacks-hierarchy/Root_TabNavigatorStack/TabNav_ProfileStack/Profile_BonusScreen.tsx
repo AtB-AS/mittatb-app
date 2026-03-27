@@ -12,6 +12,7 @@ import {
   ProfileTexts,
   useTranslation,
 } from '@atb/translations';
+import React, {useEffect, useRef, useState} from 'react';
 import {Linking, Platform, View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
@@ -74,6 +75,16 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
   const fontScale = useFontScale();
 
   const isEnrolled = useIsEnrolled(KnownProgramId.BONUS);
+  const wasEnrolledRef = useRef(isEnrolled);
+  const [hasJustEnrolled, setHasJustEnrolled] = useState(false);
+
+  useEffect(() => {
+    if (!wasEnrolledRef.current && isEnrolled) {
+      setHasJustEnrolled(true);
+    }
+    wasEnrolledRef.current = isEnrolled;
+  }, [isEnrolled]);
+
   const bonusProgram = useProgram(KnownProgramId.BONUS);
   const endDateString = bonusProgram?.endAt
     ? formatToDate(bonusProgram.endAt, language)
@@ -171,6 +182,23 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
 
         {isEnrolled && (
           <>
+            {hasJustEnrolled && (
+              <MessageInfoBox
+                type="valid"
+                title={
+                  userBonusBalance && userBonusBalance > 0
+                    ? t(BonusProgramTexts.bonusProfile.joined.title)
+                    : undefined
+                }
+                message={t(
+                  userBonusBalance && userBonusBalance > 0
+                    ? BonusProgramTexts.bonusProfile.joined.welcomeGiftDescription(
+                        userBonusBalance,
+                      )
+                    : BonusProgramTexts.bonusProfile.joined.title,
+                )}
+              />
+            )}
             <Section>
               <GenericSectionItem>
                 <UserBonusBalanceContent />
