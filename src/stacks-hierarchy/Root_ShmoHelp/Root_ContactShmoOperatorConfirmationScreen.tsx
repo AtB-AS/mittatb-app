@@ -1,17 +1,17 @@
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useTranslation} from '@atb/translations';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {ConfirmationScreenComponent} from '@atb/stacks-hierarchy/Root_ScooterHelp/components/ConfirmationScreenComponent';
-import {ContactScooterOperatorTexts} from '@atb/translations/screens/ContactScooterOperator';
+import {ConfirmationScreenComponent} from '@atb/stacks-hierarchy/Root_ShmoHelp/components/ConfirmationScreenComponent';
+import {ContactShmoOperatorTexts} from '@atb/translations/screens/ContactScooterOperator';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
-export type ContactScooterOperatorConfirmationScreenProps =
-  RootStackScreenProps<'Root_ContactScooterOperatorConfirmationScreen'>;
+export type ContactShmoOperatorConfirmationScreenProps =
+  RootStackScreenProps<'Root_ContactShmoOperatorConfirmationScreen'>;
 
-export const Root_ContactScooterOperatorConfirmationScreen = ({
+export const Root_ContactShmoOperatorConfirmationScreen = ({
   navigation,
   route: {params},
-}: ContactScooterOperatorConfirmationScreenProps) => {
+}: ContactShmoOperatorConfirmationScreenProps) => {
   const {t} = useTranslation();
   const analytics = useAnalyticsContext();
   const focusRef = useFocusOnLoad(navigation);
@@ -23,12 +23,10 @@ export const Root_ContactScooterOperatorConfirmationScreen = ({
   return (
     <ConfirmationScreenComponent
       title={t(
-        ContactScooterOperatorTexts.confirmation.title(params.operatorName),
+        ContactShmoOperatorTexts.confirmation.title(params.operatorName),
       )}
       description={t(
-        ContactScooterOperatorTexts.confirmation.description(
-          params.operatorName,
-        ),
+        ContactShmoOperatorTexts.confirmation.description(params.operatorName),
       )}
       onClose={closeReporting}
       focusRef={focusRef}

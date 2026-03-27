@@ -76,7 +76,7 @@ export const Map = (props: MapProps) => {
     includeSnackbar,
     isFocused,
     tabBarHeight,
-    navigateToScooterSupport,
+    navigateToShmoSupport,
     navigateToScooterOnboarding,
     navigateToReportParkingViolation,
     navigateToParkingPhoto,
@@ -493,7 +493,7 @@ export const Map = (props: MapProps) => {
           />
         )}
         {!!showShmoTesting && (
-          <ShmoTesting navigateToScooterSupport={navigateToScooterSupport} />
+          <ShmoTesting navigateToShmoSupport={navigateToShmoSupport} />
         )}
       </View>
       <MapBottomSheets
@@ -501,7 +501,7 @@ export const Map = (props: MapProps) => {
         mapCameraRef={mapCameraRef}
         mapProps={props}
         tabBarHeight={tabBarHeight}
-        navigateToScooterSupport={navigateToScooterSupport}
+        navigateToShmoSupport={navigateToShmoSupport}
         navigateToScooterOnboarding={navigateToScooterOnboarding}
         navigateToReportParkingViolation={navigateToReportParkingViolation}
         navigateToParkingPhoto={navigateToParkingPhoto}

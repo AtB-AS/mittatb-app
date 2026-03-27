@@ -30,6 +30,31 @@ export const MobilityTexts = {
         return _('Annet', 'Other', 'Anna');
     }
   },
+  bikeNameByPropulsionType: (propulsionType: PropulsionType | undefined) => {
+    switch (propulsionType) {
+      case PropulsionType.ElectricAssist:
+      case PropulsionType.Electric:
+        return _(
+          'Elektrisk bysykkel',
+          'Electric city bike',
+          'Elektrisk bysykkel',
+        );
+      case PropulsionType.Human:
+        return _('Bysykkel', 'City bike', 'Bysykkel');
+      default:
+        return _('Bysykkel', 'City bike', 'Bysykkel');
+    }
+  },
+  freeBikes: (amount: string) => {
+    return _(amount + ' ledige', amount + ' available', amount + ' ledige');
+  },
+  freeBikeParkingSpaces: (amount: string) => {
+    return _(
+      amount + ' ledige plasser',
+      amount + ' available spaces',
+      amount + ' ledige plassar',
+    );
+  },
   finishing: {
     button: _('Ta bilde', 'Take a photo', 'Ta eit bilde'),
     header: _(
@@ -381,6 +406,11 @@ export const BicycleTexts = {
     'Vi fant ikke denne sykkelen',
     "We couldn't find this bike",
     'Vi fann ikkje denne sykkelen',
+  ),
+  loadingFailedBicyclesStations: _(
+    'Feil ved innlasting av sykler på denne stasjonen',
+    'Error loading bikes at this station',
+    'Feil ved innlasting av syklar på denne stasjonen',
   ),
 };
 

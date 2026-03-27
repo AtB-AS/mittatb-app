@@ -1,4 +1,4 @@
-import React, {forwardRef} from 'react';
+import React, {forwardRef, ReactNode} from 'react';
 import {AccessibilityProps, View} from 'react-native';
 import {ThemeText, screenReaderPause} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -28,6 +28,7 @@ type Props = SectionItemProps<{
   label?: LabelType;
   onPress?(): void;
   leftIcon?: IconProps;
+  leftElement?: ReactNode;
   rightIcon?: IconProps;
   disabled?: boolean;
   accessibility?: AccessibilityProps;
@@ -48,6 +49,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
       disabled,
       textType,
       testID,
+      leftElement,
       ...props
     },
     forwardedRef,
@@ -63,6 +65,13 @@ export const LinkSectionItem = forwardRef<any, Props>(
     const accessibilityLabel =
       accessibilityWithOverrides?.accessibilityLabel ??
       text + screenReaderPause + (subtitle ? subtitle + screenReaderPause : '');
+
+    const leftAccessory =
+      leftElement ??
+      (leftIcon ? (
+        <Icon icon={leftIcon} interactiveColor={interactiveColor} />
+      ) : null);
+
     return (
       <NativeBlockButton
         accessible
@@ -81,20 +90,22 @@ export const LinkSectionItem = forwardRef<any, Props>(
         {...accessibilityWithOverrides}
       >
         <View style={[style.spaceBetween, linkSectionItemStyle.gap]}>
-          {leftIcon && (
-            <Icon icon={leftIcon} interactiveColor={interactiveColor} />
-          )}
-          <View style={linkSectionItemStyle.textContainer}>
+          {leftAccessory}
+          <View style={[linkSectionItemStyle.textContainer, contentContainer]}>
             <ThemeText
-              style={[
-                contentContainer,
-                {color: interactiveColor.default.foreground.primary},
-              ]}
+              style={{color: interactiveColor.default.foreground.primary}}
               typography={textType}
               isMarkdown={props.isMarkdown}
             >
               {text}
             </ThemeText>
+            {subtitle && (
+              <View>
+                <ThemeText color="secondary" typography="body__s">
+                  {subtitle}
+                </ThemeText>
+              </View>
+            )}
           </View>
           {label && (
             <Tag
@@ -107,13 +118,6 @@ export const LinkSectionItem = forwardRef<any, Props>(
             <Icon icon={rightIcon} interactiveColor={interactiveColor} />
           )}
         </View>
-        {subtitle && (
-          <View>
-            <ThemeText color="secondary" typography="body__s">
-              {subtitle}
-            </ThemeText>
-          </View>
-        )}
       </NativeBlockButton>
     );
   },

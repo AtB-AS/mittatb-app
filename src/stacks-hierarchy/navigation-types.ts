@@ -73,14 +73,15 @@ type Root_ParkingPhotoScreenParams = {
   bookingId: ShmoBooking['bookingId'];
 };
 
-type ScooterHelpParams = {operatorId: string} & (
-  | {vehicleId: string}
-  | {bookingId: string}
+export type ShmoHelpParams = {operatorId: string} & (
+  | {vehicleId: string | undefined}
+  | {bookingId: string | undefined}
+  | {stationId: string | undefined}
 );
-type Root_ScooterHelpScreenParams = ScooterHelpParams;
-type Root_ContactScooterOperatorScreenParams = ScooterHelpParams;
+type Root_ShmoHelpScreenParams = ShmoHelpParams;
+type Root_ContactShmoOperatorScreenParams = ShmoHelpParams;
 
-type Root_ContactScooterOperatorConfirmationScreenParams = {
+type Root_ContactShmoOperatorConfirmationScreenParams = {
   operatorName: string;
 };
 
@@ -138,10 +139,10 @@ export type RootStackParamList = StackParams<{
   Root_ParkingViolationsPhotoScreen: Root_ParkingViolationsPhotoParams;
   Root_ParkingViolationsQrScreen: Root_ParkingViolationsQrParams;
   Root_ParkingViolationsConfirmationScreen: Root_ParkingViolationsConfirmationParams;
-  Root_ScooterHelpScreen: Root_ScooterHelpScreenParams;
+  Root_ShmoHelpScreen: Root_ShmoHelpScreenParams;
   Root_ShmoOnboardingScreen: undefined;
-  Root_ContactScooterOperatorScreen: Root_ContactScooterOperatorScreenParams;
-  Root_ContactScooterOperatorConfirmationScreen: Root_ContactScooterOperatorConfirmationScreenParams;
+  Root_ContactShmoOperatorScreen: Root_ContactShmoOperatorScreenParams;
+  Root_ContactShmoOperatorConfirmationScreen: Root_ContactShmoOperatorConfirmationScreenParams;
   Root_NotificationPermissionScreen: undefined;
   Root_LocationWhenInUsePermissionScreen: undefined;
   Root_ChooseTicketRecipientScreen: Root_ChooseTicketRecipientScreenParams;

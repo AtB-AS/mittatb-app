@@ -13,6 +13,9 @@ import {
   ShmoBookingSchema,
   OperatorsResponse,
   OperatorsResponseSchema,
+  VehiclesRequestBody,
+  VehicleSchema,
+  Vehicle,
 } from './types/mobility';
 
 export const getActiveShmoBooking = (
@@ -111,3 +114,42 @@ export const getOperators = (
       ...opts,
     })
     .then((response) => OperatorsResponseSchema.parse(response.data));
+
+type VehicleRequestOpts = Pick<AxiosRequestConfig, 'signal'>;
+
+export const getVehicles = (
+  reqBody?: VehiclesRequestBody,
+  opts?: AxiosRequestConfig,
+): Promise<Vehicle[]> => {
+  const filteredParams = Object.fromEntries(
+    Object.entries(reqBody || {}).filter(
+      ([_, v]) => v !== undefined && v !== null,
+    ),
+  );
+  const url = `/mobility/v1/vehicles`;
+  return client
+    .get(url, {
+      params: filteredParams,
+      ...opts,
+    })
+    .then((response) => VehicleSchema.array().parse(response.data));
+};
+
+export const getVehicle = (
+  id?: string,
+  opts?: VehicleRequestOpts,
+): Promise<Vehicle | null> => {
+  if (!id || id === '') return Promise.resolve(null);
+  return client
+    .get(`/mobility/v1/vehicles/${id}`, {
+      ...opts,
+    })
+    .then((response) => {
+      const result = VehicleSchema.safeParse(response.data);
+      if (!result.success) {
+        console.error(result.error.format());
+        throw result.error;
+      }
+      return result.data;
+    });
+};

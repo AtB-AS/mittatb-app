@@ -23,7 +23,7 @@ import {
 } from './utils';
 import MapboxGL from '@rnmapbox/maps';
 import {ShmoBookingState} from '@atb/api/types/mobility';
-import {MapFilterType, MapProps, ScooterHelpParams} from './types';
+import {MapFilterType, MapProps} from './types';
 import {ExternalRealtimeMapSheet} from './components/external-realtime-map/ExternalRealtimeMapSheet';
 import {DeparturesDialogSheet} from './components/DeparturesDialogSheet';
 
@@ -36,6 +36,7 @@ import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {MapBottomSheetType, useMapContext} from './MapContext';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 
 type MapBottomSheetsProps = {
   mapViewRef: RefObject<MapboxGL.MapView | null>;
@@ -43,7 +44,7 @@ type MapBottomSheetsProps = {
   mapProps: MapProps;
   locationArrowOnPress: () => void;
   tabBarHeight: number;
-  navigateToScooterSupport: (params: ScooterHelpParams) => void;
+  navigateToShmoSupport: (params: ShmoHelpParams) => void;
   navigateToScooterOnboarding: () => void;
   navigateToReportParkingViolation: () => void;
   navigateToParkingPhoto: (bookingId: string) => void;
@@ -58,7 +59,7 @@ export const MapBottomSheets = ({
   mapProps,
   locationArrowOnPress,
   tabBarHeight,
-  navigateToScooterSupport,
+  navigateToShmoSupport,
   navigateToScooterOnboarding,
   navigateToReportParkingViolation,
   navigateToParkingPhoto,
@@ -172,7 +173,7 @@ export const MapBottomSheets = ({
             onClose={handleCloseSheet}
             onReportParkingViolation={onReportParkingViolation}
             startOnboardingCallback={navigateToScooterOnboarding}
-            navigateToSupport={navigateToScooterSupport}
+            navigateToSupport={navigateToShmoSupport}
             navigateToLogin={navigateToLogin}
             locationArrowOnPress={locationArrowOnPress}
             navigateToScanQrCode={navigateToScanQrCode}
@@ -201,7 +202,7 @@ export const MapBottomSheets = ({
           mapViewRef={mapViewRef}
           onForceClose={handleCloseSheet}
           navigateSupportCallback={() => {
-            navigateToScooterSupport({
+            navigateToShmoSupport({
               operatorId: activeBooking.asset.operator.id,
               bookingId: activeBooking.bookingId,
             });
@@ -233,7 +234,7 @@ export const MapBottomSheets = ({
             onClose={handleCloseSheet}
             navigateSupportCallback={(operatorId, bookingId) => {
               handleCloseSheet();
-              navigateToScooterSupport({
+              navigateToShmoSupport({
                 operatorId,
                 bookingId,
               });
@@ -260,6 +261,9 @@ export const MapBottomSheets = ({
           }}
           locationArrowOnPress={locationArrowOnPress}
           navigateToScanQrCode={navigateToScanQrCode}
+          navigateToLogin={navigateToLogin}
+          navigateToSupport={navigateToShmoSupport}
+          selectPaymentMethod={selectPaymentMethod}
         />
       )}
 
@@ -282,6 +286,13 @@ export const MapBottomSheets = ({
           }}
           locationArrowOnPress={locationArrowOnPress}
           navigateToScanQrCode={navigateToScanQrCode}
+          navigateSupportCallback={navigateToShmoSupport}
+          onVehicleTypeSelected={(vehicleId: string) =>
+            dispatchMapState({
+              type: MapStateActionType.BicycleScanned,
+              assetId: vehicleId,
+            })
+          }
         />
       )}
       {mapState.bottomSheetType === MapBottomSheetType.CarStation && (

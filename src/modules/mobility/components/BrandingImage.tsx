@@ -7,7 +7,7 @@ import {isSvgUrl} from '../utils';
 const DEFAULT_LOGO_SIZE = 50;
 
 type BrandingImageProps = {
-  logoUrl: string | undefined;
+  logoUrl: string | undefined | null;
   fallback?: React.JSX.Element;
   style?: StyleProp<ViewStyle>;
   logoSize?: number;

@@ -8,7 +8,7 @@ type OpeningHours = {
 };
 
 export const useOpeningHours = (
-  openingHours: string | undefined,
+  openingHours: string | undefined | null,
 ): OpeningHours => {
   const now = useNow(30000);
   if (!openingHours) {

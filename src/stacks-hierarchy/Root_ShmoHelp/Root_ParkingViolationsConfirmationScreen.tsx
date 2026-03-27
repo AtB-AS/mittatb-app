@@ -2,7 +2,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {ConfirmationScreenComponent} from '@atb/stacks-hierarchy/Root_ScooterHelp/components/ConfirmationScreenComponent';
+import {ConfirmationScreenComponent} from '@atb/stacks-hierarchy/Root_ShmoHelp/components/ConfirmationScreenComponent';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export type ConfirmationScreenProps =

@@ -7,16 +7,16 @@ import {Unlock, PricePerTime} from '@atb/assets/svg/mono-icons/mobility';
 import {VehicleCardStat} from './VehicleCardStat';
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {formatRatePerUnit} from '../utils';
-import {PricingPlanFragment} from '@atb/api/types/generated/fragments/mobility-shared';
 import {formatNumberToString} from '@atb-as/utils';
 import {
   PriceAdjustmentEnum,
   PriceAdjustmentType,
 } from '@atb-as/config-specs/lib/mobility';
 import {getCurrencySymbol} from '@atb/translations/currency';
+import {ShmoPricingPlan} from '@atb/api/types/mobility';
 
 type Props = {
-  pricingPlan: PricingPlanFragment;
+  pricingPlan: ShmoPricingPlan;
   priceAdjustments?: PriceAdjustmentType[];
   systemId: string;
 };
