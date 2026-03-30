@@ -6,7 +6,8 @@ import {View} from 'react-native';
 import {TripPattern} from '@atb/api/types/trips';
 import {getFilteredLegsByWalkOrWaitTime} from '@atb/screen-components/travel-details-screens';
 import {OverflowContainer} from '@atb/components/overflow-container';
-import {TransportationLeg, FootLeg, WaitAccessibilityLabel} from './legs';
+import {getNotificationSvgForLegs} from '@atb/modules/situations';
+import {FootLeg, TransportationLeg, WaitAccessibilityLabel} from './legs';
 
 type TravelCardContentProps = {
   tripPattern: TripPattern;
@@ -17,10 +18,9 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
   tripPattern,
   maxWidth,
 }) => {
-  const {theme} = useThemeContext();
+  const {theme, themeName} = useThemeContext();
   const styles = useThemeStyles();
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
-
   const staySeated = (idx: number): boolean => {
     const previousLeg = filteredLegs[idx - 1];
     return previousLeg && previousLeg.interchangeTo?.staySeated === true;
@@ -34,13 +34,20 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
             <OverflowContainer
               maxWidth={maxWidth}
               gap={theme.spacing.xSmall}
-              overflow={(n) => (
-                <CounterIconBox
-                  count={n}
-                  spacing="standard"
-                  textType="body__m__strong"
-                />
-              )}
+              overflow={(n) => {
+                const overflowNotification = getNotificationSvgForLegs(
+                  filteredLegs.slice(-n),
+                  themeName,
+                );
+                return (
+                  <CounterIconBox
+                    count={n}
+                    spacing="standard"
+                    textType="body__m__strong"
+                    notification={overflowNotification}
+                  />
+                );
+              }}
             >
               {filteredLegs.map((leg, i) => (
                 <View key={`leg-${leg.id ?? i}`}>
