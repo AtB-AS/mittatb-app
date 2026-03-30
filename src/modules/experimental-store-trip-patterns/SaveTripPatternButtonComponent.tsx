@@ -107,7 +107,7 @@ export const SaveTripPatternButtonComponent =
           backgroundColor={
             isStored
               ? theme.color.interactive[0].active
-              : theme.color.background.neutral[0]
+              : theme.color.background.neutral[1]
           }
         />
       );
