@@ -8,7 +8,24 @@ import {
 } from 'react';
 import {AccessibilityProps} from 'react-native';
 
-type Registration = {update: (label: string) => void; unregister: () => void};
+type Registration = {
+  /**
+   * Update the label for the given name.
+   * @param label - The new label to set.
+   */
+  update: (label: string) => void;
+  /**
+   * Unregister the label for the given name.
+   */
+  unregister: () => void;
+};
+
+/**
+ * Register a new label for a given name. This must match the name of a label in the order parameter.
+ * @param name - The name of the label.
+ * @param label - The initial label to register.
+ * @returns The registration object which can be used to update or unregister the label.
+ */
 type RegisterFn = (name: string, label: string) => Registration;
 
 const RegisterContext = createContext<RegisterFn | null>(null);
@@ -119,6 +136,12 @@ export const useCompositeAccessibilityProps = (): AccessibilityProps => {
   return {accessible: true, accessibilityLabel};
 };
 
+/**
+ * Contribute a label to the composite accessibility label.
+ * **Must be used within a CompositeAccessibilityProvider.**
+ * @param name - The name of the label. Must match the name of a label in the order parameter for the CompositeAccessibilityProvider.
+ * @param label - The label to contribute.
+ */
 export const useAccessibilityLabelContribution = (
   name: string,
   label: string,
