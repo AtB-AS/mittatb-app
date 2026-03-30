@@ -64,9 +64,9 @@ const TravelCardTexts = {
     expectedTime: {
       a11yLabel: (startTime: string, endTime: string, hasAimedTime: boolean) =>
         _(
-          `${hasAimedTime ? 'Sanntid fra' : 'Fra'} ${startTime} til ${endTime}`,
-          `${hasAimedTime ? 'Real-time from' : 'From'} ${startTime} to ${endTime}`,
-          `${hasAimedTime ? 'Sanntid fra' : 'Fra'} ${startTime} til ${endTime}`,
+          `${hasAimedTime ? 'Ny tid fra' : 'Fra'} ${startTime} til ${endTime}`,
+          `${hasAimedTime ? 'New time from' : 'From'} ${startTime} to ${endTime}`,
+          `${hasAimedTime ? 'Ny tid fra' : 'Fra'} ${startTime} til ${endTime}`,
         ),
     },
     aimedTime: {
