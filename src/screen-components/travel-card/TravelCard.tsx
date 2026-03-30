@@ -50,8 +50,8 @@ export const TravelCard: React.FC<TravelCardProps> = ({
   return (
     <Animated.View entering={FadeIn}>
       <CompositeAccessibilityProvider
-        ownedLabels={{parent: a11yLabel}}
-        order={['parent', 'header', 'legs']}
+        parentLabels={{cardPrefix: a11yLabel}}
+        order={['cardPrefix', 'header', 'legs']}
       >
         {(accessibilityProps) => (
           <NativeBlockButton
