@@ -130,6 +130,7 @@ export const TripDetailsScreenComponent = ({
           refreshing: isFetching && isManualRefresh,
           onRefresh: onManualRefresh,
         }}
+        contentColor={theme.color.background.neutral[0]}
         headerContent={(focusRef) => (
           <View style={styles.headerContent}>
             <View accessible={true} ref={focusRef}>
@@ -486,7 +487,7 @@ function trackScreenshottedTripDetails(
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.color.background.neutral[1].background,
+    backgroundColor: theme.color.background.neutral[0].background,
   },
   heading: {marginBottom: theme.spacing.medium},
   headerContent: {marginHorizontal: theme.spacing.medium},
