@@ -23,7 +23,7 @@ import type {TripSearchTime} from '../../types';
 import {ResultRow} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultRow';
 import {SaveableTripSearchResultRow} from '@atb/modules/experimental-store-trip-patterns';
 import {useIsExperimentalEnabled} from '@atb/modules/experimental';
-import {TravelCard} from '@atb/screen-components/travel-card/TravelCard';
+import {TravelCard} from '@atb/screen-components/travel-card';
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
