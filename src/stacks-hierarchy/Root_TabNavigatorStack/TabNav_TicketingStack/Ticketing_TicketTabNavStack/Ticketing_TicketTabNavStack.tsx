@@ -214,6 +214,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     margin: theme.spacing.medium,
     gap: theme.spacing.small,
+    backgroundColor: theme.color.background.neutral[0].background,
+    borderRadius: theme.border.radius.circle,
+    padding: theme.spacing.xSmall,
   },
   button: {
     flex: 1,
