@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/secrets/**)",
+      "Read(**/env/**)",
+      "Read(**/.netrc)",
+      "Read(**/*.key)",
+      "Read(**/*.plist)",
+      "Read(**/google-services.json)",
+      "Read(**/*.xcconfig)"
+    ]
+  }
+}
