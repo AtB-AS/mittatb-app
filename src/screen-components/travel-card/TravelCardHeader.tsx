@@ -4,7 +4,7 @@ import {TravelCardTexts, useTranslation} from '@atb/translations';
 import {secondsToDuration, secondsToDurationShort} from '@atb/utils/date';
 
 import React from 'react';
-import {View} from 'react-native';
+import {AccessibilityProps, View} from 'react-native';
 import {TripPattern} from '@atb/api/types/trips';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -13,11 +13,18 @@ import {differenceInMinutes} from 'date-fns';
 import {useTimeLabels} from './utils';
 import {useAccessibilityLabelContribution} from '@atb/modules/composite-accessibility';
 
-export const TravelCardHeader: React.FC<{
-  tripPattern: TripPattern;
-  includeDayInfo?: boolean;
-  includeFromToInfo?: boolean;
-}> = ({tripPattern, includeDayInfo = true, includeFromToInfo = true}) => {
+export const TravelCardHeader: React.FC<
+  AccessibilityProps & {
+    tripPattern: TripPattern;
+    includeDayInfo?: boolean;
+    includeFromToInfo?: boolean;
+  }
+> = ({
+  tripPattern,
+  includeDayInfo = true,
+  includeFromToInfo = true,
+  ...accessibilityProps
+}) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
 
@@ -77,7 +84,7 @@ export const TravelCardHeader: React.FC<{
   useAccessibilityLabelContribution('header', a11yLabel);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} {...accessibilityProps}>
       <View style={styles.header}>
         <View style={styles.timeContainer}>
           <ThemeText typography="body__m__strong">
