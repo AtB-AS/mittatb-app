@@ -1,2 +1,8 @@
 export {TravelCard, type TravelCardType} from './TravelCard';
-export {TravelCardHeader} from './TravelCardHeader';
+import {withCompositeAccessibility} from '@atb/modules/composite-accessibility';
+import {TravelCardHeader as TravelCardHeaderComponent} from './TravelCardHeader';
+
+export const TravelCardHeader = withCompositeAccessibility(
+  TravelCardHeaderComponent,
+  ['header'],
+);

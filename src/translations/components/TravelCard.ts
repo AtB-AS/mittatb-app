@@ -52,56 +52,56 @@ const TravelCardTexts = {
       dayAfterTomorrow: _(`I overmorgen`, `Day after tomorrow`, `I overmorgon`),
     },
     originalTime: _('Opprinnelig', 'Original', 'Opprinnelig'),
-    pastTime: _('Avreise passert.', 'Departure passed.', 'Avreise passert.'),
+    pastTime: _('Avreise passert', 'Departure passed', 'Avreise passert'),
     fromToInfo: {
       a11yLabel: (fromPlace: string, toPlace: string) =>
         _(
-          `Fra ${fromPlace} til ${toPlace}.`,
-          `From ${fromPlace} to ${toPlace}.`,
-          `Frå ${fromPlace} til ${toPlace}.`,
+          `Fra ${fromPlace} til ${toPlace}`,
+          `From ${fromPlace} to ${toPlace}`,
+          `Frå ${fromPlace} til ${toPlace}`,
         ),
     },
     expectedTime: {
-      a11yLabel: (startTime: string, endTime: string) =>
+      a11yLabel: (startTime: string, endTime: string, hasAimedTime: boolean) =>
         _(
-          `Sanntid fra ${startTime} til ${endTime}.`,
-          `Real-time from ${startTime} to ${endTime}.`,
-          `Sanntid fra ${startTime} til ${endTime}.`,
+          `${hasAimedTime ? 'Ny tid fra' : 'Fra'} ${startTime} til ${endTime}`,
+          `${hasAimedTime ? 'New time from' : 'From'} ${startTime} to ${endTime}`,
+          `${hasAimedTime ? 'Ny tid fra' : 'Fra'} ${startTime} til ${endTime}`,
         ),
     },
     aimedTime: {
       a11yLabel: (startTime: string, endTime: string) =>
         _(
-          `Opprinnelig fra ${startTime} til ${endTime}.`,
-          `Originally scheduled from ${startTime} to ${endTime}.`,
-          `Opprinnelig fra ${startTime} til ${endTime}.`,
+          `Opprinnelig fra ${startTime} til ${endTime}`,
+          `Originally scheduled from ${startTime} to ${endTime}`,
+          `Opprinnelig fra ${startTime} til ${endTime}`,
         ),
     },
     duration: {
       a11yLabel: (duration: string) =>
         _(
-          `Total reisetid ${duration}.`,
-          `Total journey time ${duration}.`,
-          `Total reisetid ${duration}.`,
+          `Total reisetid ${duration}`,
+          `Total journey time ${duration}`,
+          `Total reisetid ${duration}`,
         ),
     },
   },
   legs: {
     foot: {
       a11yLabel: (time: string) =>
-        _(`Gå ${time}.`, `Walk ${time}.`, `Gå ${time}.`),
+        _(`Gå ${time}`, `Walk ${time}`, `Gå ${time}`),
     },
     transportation: {
       a11yLabel: (modeName: string, publicCode: string) =>
         _(
-          `Ta ${modeName} ${publicCode}.`,
-          `Take ${modeName} ${publicCode}.`,
-          `Ta ${modeName} ${publicCode}.`,
+          `Ta ${modeName} ${publicCode}`,
+          `Take ${modeName} ${publicCode}`,
+          `Ta ${modeName} ${publicCode}`,
         ),
     },
     wait: {
       a11yLabel: (time: string) =>
-        _(`Vent ${time}.`, `Wait ${time}.`, `Vent ${time}.`),
+        _(`Vent ${time}`, `Wait ${time}`, `Vent ${time}`),
     },
   },
 };

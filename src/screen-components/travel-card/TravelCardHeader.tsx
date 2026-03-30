@@ -4,19 +4,27 @@ import {TravelCardTexts, useTranslation} from '@atb/translations';
 import {secondsToDuration, secondsToDurationShort} from '@atb/utils/date';
 
 import React from 'react';
-import {View} from 'react-native';
+import {AccessibilityProps, View} from 'react-native';
 import {TripPattern} from '@atb/api/types/trips';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useTripPatternInfo} from './use-trip-pattern-info';
 import {differenceInMinutes} from 'date-fns';
 import {useTimeLabels} from './utils';
+import {useAccessibilityLabelContribution} from '@atb/modules/composite-accessibility';
 
-export const TravelCardHeader: React.FC<{
-  tripPattern: TripPattern;
-  includeDayInfo?: boolean;
-  includeFromToInfo?: boolean;
-}> = ({tripPattern, includeDayInfo = true, includeFromToInfo = true}) => {
+export const TravelCardHeader: React.FC<
+  AccessibilityProps & {
+    tripPattern: TripPattern;
+    includeDayInfo?: boolean;
+    includeFromToInfo?: boolean;
+  }
+> = ({
+  tripPattern,
+  includeDayInfo = true,
+  includeFromToInfo = true,
+  ...accessibilityProps
+}) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
 
@@ -45,7 +53,7 @@ export const TravelCardHeader: React.FC<{
   const showAimedTime = !areTimesEquivalentInMinutes || isInPast;
 
   const a11yLabel = `
-    ${includeFromToInfo ? t(TravelCardTexts.header.fromToInfo.a11yLabel(fromName, toName)) : ''}
+    ${includeFromToInfo ? t(TravelCardTexts.header.fromToInfo.a11yLabel(fromName, toName)) : ''}. 
     ${
       isInPast
         ? t(TravelCardTexts.header.pastTime)
@@ -53,9 +61,10 @@ export const TravelCardHeader: React.FC<{
             TravelCardTexts.header.expectedTime.a11yLabel(
               expectedStartTimeLabel,
               expectedEndTimeLabel,
+              showAimedTime,
             ),
           )
-    }
+    }. 
     ${
       showAimedTime
         ? t(
@@ -65,20 +74,18 @@ export const TravelCardHeader: React.FC<{
             ),
           )
         : ''
-    }
+    }. 
     ${t(
       TravelCardTexts.header.duration.a11yLabel(
         secondsToDuration(tripPattern.duration, language),
       ),
-    )}`;
+    )}.`;
+
+  useAccessibilityLabelContribution('header', a11yLabel);
 
   return (
-    <View
-      style={styles.container}
-      accessible={true}
-      accessibilityLabel={a11yLabel}
-    >
-      <View style={styles.resultHeader}>
+    <View style={styles.container} {...accessibilityProps}>
+      <View style={styles.header}>
         <View style={styles.timeContainer}>
           <ThemeText typography="body__m__strong">
             {isInPast
@@ -119,7 +126,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.small,
   },
   timeContainer: {flex: 1, flexShrink: 1, gap: theme.spacing.xSmall},
-  resultHeader: {
+  header: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -133,6 +140,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     gap: theme.spacing.xSmall,
     alignItems: 'center',
+    flexWrap: 'wrap',
   },
   warningIcon: {
     marginLeft: theme.spacing.small,

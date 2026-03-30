@@ -1,13 +1,23 @@
 import {CounterIconBox} from '@atb/components/icon-box';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {screenReaderHidden} from '@atb/utils/accessibility';
 import React from 'react';
 import {View} from 'react-native';
-import {TripPattern} from '@atb/api/types/trips';
-import {getFilteredLegsByWalkOrWaitTime} from '@atb/screen-components/travel-details-screens';
+import {Leg, TripPattern} from '@atb/api/types/trips';
+import {
+  getFilteredLegsByWalkOrWaitTime,
+  significantWaitTime,
+} from '@atb/screen-components/travel-details-screens';
 import {OverflowContainer} from '@atb/components/overflow-container';
-import {getNotificationSvgForLegs} from '@atb/modules/situations';
-import {FootLeg, TransportationLeg, WaitAccessibilityLabel} from './legs';
+import {
+  getNotificationSvgForLegs,
+  getA11yLabelForLeg as getSituationsA11yLabel,
+} from '@atb/modules/situations';
+import {TransportationLeg, FootLeg} from './legs';
+import {TravelCardTexts, useTranslation} from '@atb/translations';
+import {secondsBetween, secondsToDuration} from '@atb/utils/date';
+import {useAccessibilityLabelContribution} from '@atb/modules/composite-accessibility';
+import {getTranslatedModeName} from '@atb/utils/transportation-names';
+import {isDefined} from '@atb/utils/presence';
 
 type TravelCardContentProps = {
   tripPattern: TripPattern;
@@ -26,8 +36,11 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
     return previousLeg && previousLeg.interchangeTo?.staySeated === true;
   };
 
+  const a11yLabel = useA11yLabel(filteredLegs);
+  useAccessibilityLabelContribution('legs', a11yLabel);
+
   return (
-    <View style={styles.detailsContainer} {...screenReaderHidden}>
+    <View style={styles.detailsContainer}>
       <View style={styles.flexRow}>
         <View style={styles.row}>
           <View style={styles.legs}>
@@ -56,10 +69,6 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
                   ) : staySeated(i) ? null : (
                     <TransportationLeg leg={leg} />
                   )}
-                  <WaitAccessibilityLabel
-                    currentLeg={leg}
-                    nextLeg={filteredLegs[i + 1]}
-                  />
                 </View>
               ))}
             </OverflowContainer>
@@ -68,6 +77,55 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
       </View>
     </View>
   );
+};
+
+const useA11yLabel = (legs: Leg[]) => {
+  const {t, language} = useTranslation();
+  return legs
+    .map((leg, idx) => {
+      const waitTime = getWaitTime(leg, legs[idx + 1]);
+      const isFootLeg = leg.mode === 'foot';
+      const labels = [
+        isFootLeg
+          ? t(
+              TravelCardTexts.legs.foot.a11yLabel(
+                secondsToDuration(leg.duration ?? 0, language),
+              ),
+            )
+          : t(
+              TravelCardTexts.legs.transportation.a11yLabel(
+                t(getTranslatedModeName(leg.mode, leg.line?.transportSubmode)),
+                leg.line?.publicCode ?? '',
+              ),
+            ),
+        isFootLeg ? undefined : getSituationsA11yLabel(leg, t),
+        waitTime.mustWait
+          ? t(
+              TravelCardTexts.legs.wait.a11yLabel(
+                secondsToDuration(waitTime.duration, language),
+              ),
+            )
+          : undefined,
+      ];
+      return labels.filter(isDefined).join('. ');
+    })
+    .join();
+};
+
+const getWaitTime = (leg: Leg, nextLeg?: Leg) => {
+  if (!nextLeg) {
+    return {duration: 0, mustWait: false};
+  }
+
+  const waitTimeInSeconds = secondsBetween(
+    leg.expectedEndTime,
+    nextLeg.expectedStartTime,
+  );
+
+  return {
+    duration: waitTimeInSeconds,
+    mustWait: significantWaitTime(waitTimeInSeconds),
+  };
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({

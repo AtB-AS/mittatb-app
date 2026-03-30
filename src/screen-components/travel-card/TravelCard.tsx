@@ -10,7 +10,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {TravelCardTexts, useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
-import {HiddenAccessibilityLabel} from './HiddenAccessibilityLabel';
+import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
 
 export type TravelCardType = 'trip-search' | 'saved-trip';
 
@@ -49,34 +49,40 @@ export const TravelCard: React.FC<TravelCardProps> = ({
 
   return (
     <Animated.View entering={FadeIn}>
-      <NativeBlockButton
-        style={styles.container}
-        accessible={true}
-        accessibilityRole="button"
-        accessibilityHint={t(TravelCardTexts.card.a11yHint)}
-        onPress={() => onDetailsPressed(tripPattern, cardIndex)}
-        testID={testID}
+      <CompositeAccessibilityProvider
+        parentLabels={{cardPrefix: a11yLabel}}
+        order={['cardPrefix', 'header', 'legs']}
       >
-        <HiddenAccessibilityLabel accessibilityLabel={a11yLabel} />
-        <TravelCardHeader
-          tripPattern={tripPattern}
-          includeDayInfo={includeDayInfo}
-          includeFromToInfo={includeFromToInfo}
-        />
-        <View style={styles.legsContainer}>
-          <View
-            style={styles.legsArea}
-            onLayout={(e: LayoutChangeEvent) =>
-              setMaxWidth(e.nativeEvent.layout.width)
-            }
+        {(accessibilityProps) => (
+          <NativeBlockButton
+            onPress={() => onDetailsPressed(tripPattern, cardIndex)}
+            testID={testID}
+            style={styles.container}
+            accessibilityRole="button"
+            accessibilityHint={t(TravelCardTexts.card.a11yHint)}
+            {...accessibilityProps}
           >
-            <TravelCardLegs tripPattern={tripPattern} maxWidth={maxWidth} />
-          </View>
-          <View>
-            <ThemeIcon svg={ChevronRight} />
-          </View>
-        </View>
-      </NativeBlockButton>
+            <TravelCardHeader
+              tripPattern={tripPattern}
+              includeDayInfo={includeDayInfo}
+              includeFromToInfo={includeFromToInfo}
+            />
+            <View style={styles.legsContainer}>
+              <View
+                style={styles.legsArea}
+                onLayout={(e: LayoutChangeEvent) =>
+                  setMaxWidth(e.nativeEvent.layout.width)
+                }
+              >
+                <TravelCardLegs tripPattern={tripPattern} maxWidth={maxWidth} />
+              </View>
+              <View>
+                <ThemeIcon svg={ChevronRight} />
+              </View>
+            </View>
+          </NativeBlockButton>
+        )}
+      </CompositeAccessibilityProvider>
     </Animated.View>
   );
 };
