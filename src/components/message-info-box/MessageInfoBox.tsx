@@ -17,6 +17,7 @@ import {
 } from '@atb/components/screen-reader-announcement';
 import {isDefined} from '@atb/utils/presence';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
+import {useLocalConfig} from '@atb/utils/use-local-config';
 
 /**
  * Configuration for how the onPress on the message box should work. The
@@ -45,6 +46,7 @@ export type MessageInfoBoxProps = {
   a11yLabel?: string;
   focusRef?: React.Ref<any>;
   testID?: string;
+  hideDebugInfo?: boolean;
 };
 export const MessageInfoBox = ({
   noStatusIcon,
@@ -59,10 +61,12 @@ export const MessageInfoBox = ({
   a11yLabel,
   focusRef,
   testID,
+  hideDebugInfo = false,
 }: MessageInfoBoxProps) => {
   const {theme, themeName} = useThemeContext();
   const styles = useStyles(type)();
   const {t} = useTranslation();
+  const config = useLocalConfig();
   const iconColorProps = {
     color: theme.color.status[type].secondary.foreground.primary,
   };
@@ -159,6 +163,16 @@ export const MessageInfoBox = ({
           </NativeBorderlessButton>
         </View>
       )}
+      {type === 'error' && config?.installId && !hideDebugInfo && (
+        <ThemeText
+          style={styles.installId}
+          typography="body__xs"
+          color="secondary"
+          allowFontScaling={false}
+        >
+          id: {config.installId}
+        </ThemeText>
+      )}
     </NativeButtonOrView>
   );
 };
@@ -184,5 +198,11 @@ const useStyles = (type: Statuses) =>
     },
     title: {
       marginBottom: theme.spacing.small,
+    },
+    installId: {
+      position: 'absolute',
+      bottom: -1,
+      right: 5,
+      fontSize: 6,
     },
   }));

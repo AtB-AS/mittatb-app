@@ -136,6 +136,7 @@ export const SubmitButton = ({
           style={styles.errorMessage}
           type="error"
           message={t(OnBehalfOfTexts.errors[error])}
+          hideDebugInfo={true}
         />
       )}
 

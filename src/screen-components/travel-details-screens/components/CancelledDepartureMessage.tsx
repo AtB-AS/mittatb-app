@@ -18,6 +18,7 @@ export const CancelledDepartureMessage = ({
       style={styles.cancellationContainer}
       message={t(CancelledDepartureTexts.message)}
       a11yLiveRegion={a11yLiveRegion}
+      hideDebugInfo={true}
     />
   );
 };

@@ -126,6 +126,7 @@ export const TravelAidScreenComponent = ({
             <MessageInfoBox
               type="error"
               message={t(TravelAidTexts.noEstimatedCallsError.message)}
+              hideDebugInfo={true}
             />
           </View>
         )}
