@@ -166,8 +166,9 @@ export const MessageInfoBox = ({
           style={styles.installId}
           typography="body__xs"
           color="secondary"
+          allowFontScaling={false}
         >
-          {config.installId}
+          id: {config.installId}
         </ThemeText>
       )}
     </NativeButtonOrView>
