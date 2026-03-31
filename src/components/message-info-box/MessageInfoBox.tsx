@@ -46,6 +46,7 @@ export type MessageInfoBoxProps = {
   a11yLabel?: string;
   focusRef?: React.Ref<any>;
   testID?: string;
+  hideDebugInfo?: boolean;
 };
 export const MessageInfoBox = ({
   noStatusIcon,
@@ -60,6 +61,7 @@ export const MessageInfoBox = ({
   a11yLabel,
   focusRef,
   testID,
+  hideDebugInfo = false,
 }: MessageInfoBoxProps) => {
   const {theme, themeName} = useThemeContext();
   const styles = useStyles(type)();
@@ -161,7 +163,7 @@ export const MessageInfoBox = ({
           </NativeBorderlessButton>
         </View>
       )}
-      {type === 'error' && config?.installId && (
+      {type === 'error' && config?.installId && !hideDebugInfo && (
         <ThemeText
           style={styles.installId}
           typography="body__xs"
