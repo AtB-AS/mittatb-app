@@ -18,6 +18,7 @@ import {
 import {isDefined} from '@atb/utils/presence';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
 import {useLocalConfig} from '@atb/utils/use-local-config';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 /**
  * Configuration for how the onPress on the message box should work. The
@@ -67,6 +68,7 @@ export const MessageInfoBox = ({
   const styles = useStyles(type)();
   const {t} = useTranslation();
   const config = useLocalConfig();
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const iconColorProps = {
     color: theme.color.status[type].secondary.foreground.primary,
   };
@@ -163,16 +165,19 @@ export const MessageInfoBox = ({
           </NativeBorderlessButton>
         </View>
       )}
-      {type === 'error' && config?.installId && !hideDebugInfo && (
-        <ThemeText
-          style={styles.installId}
-          typography="body__xs"
-          color="secondary"
-          allowFontScaling={false}
-        >
-          id: {config.installId}
-        </ThemeText>
-      )}
+      {type === 'error' &&
+        config?.installId &&
+        !hideDebugInfo &&
+        !isScreenReaderEnabled && (
+          <ThemeText
+            style={styles.installId}
+            typography="body__xs"
+            color="secondary"
+            allowFontScaling={false}
+          >
+            id: {config.installId}
+          </ThemeText>
+        )}
     </NativeButtonOrView>
   );
 };
