@@ -95,6 +95,7 @@ const GlobalMessage = ({
               }
               onPressConfig={onPressAction}
               testID="globalMessage"
+              hideDebugInfo={true}
             />
           );
         })}
