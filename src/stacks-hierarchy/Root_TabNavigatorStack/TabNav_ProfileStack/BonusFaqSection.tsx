@@ -4,6 +4,7 @@ import React from 'react';
 import {ExpandableSectionItem, Section} from '@atb/components/sections';
 import {useProgram, KnownProgramId} from '@atb/modules/enrollment';
 import {useProductPointsQuery} from '@atb/modules/bonus';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {formatToDate} from '@atb/utils/date';
 
 export const BonusFaqSection = () => {
@@ -12,11 +13,14 @@ export const BonusFaqSection = () => {
   const endDateString = bonusProgram?.endAt
     ? formatToDate(bonusProgram.endAt, language)
     : '';
+  const {bonusSources} = useFirestoreConfigurationContext();
   const {data: productPoints} = useProductPointsQuery();
+  const fareProductId = bonusSources?.find(
+    (s) => s.id === 'single-ticket',
+  )?.preassignedFareProductId;
+
   const pointsPerTicket =
-    productPoints?.find(
-      (p) => p.fareProduct === 'ATB:PreassignedFareProduct:8808c360', //TODO: get this value from _somewhere_ else.
-    )?.value ?? 0;
+    productPoints?.find((p) => p.fareProduct === fareProductId)?.value ?? 0;
 
   const faqContext = {
     endDate: endDateString,
