@@ -8,12 +8,19 @@ import {
 } from '../../hooks/use-tile-url-template';
 import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {geofencingZoneCodes} from '../../utils';
+import {geofencingZoneCodes, getIconZoomTransitionStyle} from '../../utils';
+import {Expression} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
+import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
+import {useThemeContext} from '@atb/theme';
 
 export const geofencingZonesVectorSourceId = 'geofencing-zones-source';
 export const sourceLayerId = 'geofencing_zones_features';
 export const minZoomLevel = 9;
 const maxZoomLevel = 12;
+
+const geofencingZonesFeaturesLayerId = 'geofencing_zones_features';
+
+const geofencingZonesIconSourceLayerId = 'geofencing_zones_icons';
 
 export const geofencingZonesLayers = geofencingZoneCodes
   .map((geofencingZoneCode) =>
@@ -40,7 +47,10 @@ export const GeofencingZonesAsTiles = ({
   const {isGeofencingZonesEnabled, isGeofencingZonesAsTilesEnabled} =
     useFeatureTogglesContext();
 
-  const tileLayerNames: TileLayerName[] = ['geofencing_zones_features'];
+  const tileLayerNames: TileLayerName[] = [
+    'geofencing_zones_features',
+    'geofencing_zones_icons',
+  ];
   const tileUrlTemplate = useTileUrlTemplate(tileLayerNames, {
     systemId: systemId ?? '',
     vehicleTypeId: vehicleTypeId ?? '',
@@ -50,10 +60,18 @@ export const GeofencingZonesAsTiles = ({
     [tileUrlTemplate],
   );
 
+  const {themeName} = useThemeContext();
+
   const enabled = isGeofencingZonesEnabled && isGeofencingZonesAsTilesEnabled;
   if (!enabled || !systemId || !vehicleTypeId) {
     return null;
   }
+
+  const iconFilter: Expression = [
+    '!=',
+    ['downcase', ['get', 'code']],
+    'allowed',
+  ];
 
   return (
     <MapboxGL.VectorSource
@@ -68,12 +86,65 @@ export const GeofencingZonesAsTiles = ({
       <>
         {geofencingZonesLayers.map(({type, id}) =>
           type === 'fill' ? (
-            <MapboxGL.FillLayer key={id} id={id} existing />
+            <MapboxGL.FillLayer
+              key={id}
+              id={id}
+              existing
+              sourceLayerID={geofencingZonesFeaturesLayerId}
+            />
           ) : (
-            <MapboxGL.LineLayer key={id} id={id} existing />
+            <MapboxGL.LineLayer
+              key={id}
+              id={id}
+              existing
+              sourceLayerID={geofencingZonesFeaturesLayerId}
+            />
           ),
         )}
       </>
+
+      <MapboxGL.SymbolLayer
+        id="geofencing-zone-icon-layer"
+        sourceLayerID={geofencingZonesIconSourceLayerId}
+        style={geofencingZoneIconLayerStyle(themeName)}
+        filter={iconFilter}
+        aboveLayerID={MapSlotLayerId.GeofencingZones}
+      />
     </MapboxGL.VectorSource>
   );
+};
+
+const iconReachFullScaleAtZoomLevel = 15.5;
+const iconFullSize = 0.85;
+const iconScaleTransitionZoomRange = 1.5;
+const iconOpacityTransitionExtraZoomRange = iconScaleTransitionZoomRange / 8;
+
+const geofencingZoneIconLayerStyle = (themeName: string) => {
+  const code: Expression = ['get', 'code'];
+
+  const lowerCaseCode: Expression = ['downcase', code];
+
+  const iconImage: Expression = [
+    'concat',
+    'geofencingzone_',
+    lowerCaseCode,
+    '_',
+    themeName,
+  ];
+
+  const {iconOpacity, iconSize} = getIconZoomTransitionStyle(
+    iconReachFullScaleAtZoomLevel,
+    iconFullSize,
+    iconScaleTransitionZoomRange,
+    iconOpacityTransitionExtraZoomRange,
+  );
+
+  return {
+    iconAllowOverlap: true,
+    iconIgnorePlacement: true,
+    iconImage,
+    iconOpacity,
+    iconSize,
+    iconEmissiveStrength: 1,
+  };
 };

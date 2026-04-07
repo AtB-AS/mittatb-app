@@ -12,7 +12,7 @@ import {useGeofencingZonesLayers} from './use-geofencing-zones-layers';
 
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
-  GeofencingZones = 'geofencingZones', // can be removed once support for GeofencingZones not as tiles is removed
+  GeofencingZones = 'geofencingZones',
   Vehicles = 'vehicles',
   Stations = 'stations',
   NSRItems = 'nsrItems',
