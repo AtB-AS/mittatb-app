@@ -20,7 +20,7 @@ const maxZoomLevel = 12;
 
 const geofencingZonesFeaturesLayerId = 'geofencing_zones_features';
 
-const iconSourceLayerId = 'geofencing_zones_icons';
+const geofencingZonesIconSourceLayerId = 'geofencing_zones_icons';
 
 export const geofencingZonesLayers = geofencingZoneCodes
   .map((geofencingZoneCode) =>
@@ -105,7 +105,7 @@ export const GeofencingZonesAsTiles = ({
 
       <MapboxGL.SymbolLayer
         id="geofencing-zone-icon-layer"
-        sourceLayerID={iconSourceLayerId}
+        sourceLayerID={geofencingZonesIconSourceLayerId}
         style={geofencingZoneIconLayerStyle(themeName)}
         filter={iconFilter}
         aboveLayerID={MapSlotLayerId.GeofencingZones}
@@ -119,7 +119,7 @@ const iconFullSize = 0.85;
 const iconScaleTransitionZoomRange = 1.5;
 const iconOpacityTransitionExtraZoomRange = iconScaleTransitionZoomRange / 8;
 
-export const geofencingZoneIconLayerStyle = (themeName: string) => {
+const geofencingZoneIconLayerStyle = (themeName: string) => {
   const code: Expression = ['get', 'code'];
 
   const lowerCaseCode: Expression = ['downcase', code];
