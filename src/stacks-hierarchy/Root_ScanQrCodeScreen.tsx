@@ -1,5 +1,5 @@
 import {MapTexts, useTranslation} from '@atb/translations';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Camera, CameraScreenContainer} from '@atb/components/camera';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
@@ -27,6 +27,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   const isFocused = useIsFocusedAndActive();
   const {dispatchMapState} = useMapContext();
   const [hasCapturedQr, setHasCapturedQr] = useState(false);
+  const isProcessingQr = useRef(false);
   const analytics = useMapSelectionAnalytics();
 
   const {
@@ -112,6 +113,8 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
 
   const onQrCodeScanned = useCallback(
     async (qr: string) => {
+      if (isProcessingQr.current) return;
+      isProcessingQr.current = true;
       setHasCapturedQr(true);
 
       const coordinates = getCurrentCoordinatesGlobal();
@@ -127,7 +130,10 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   );
 
   useEffect(() => {
-    isFocused && setHasCapturedQr(false);
+    if (isFocused) {
+      setHasCapturedQr(false);
+      isProcessingQr.current = false;
+    }
   }, [isFocused]);
 
   useEffect(() => {
