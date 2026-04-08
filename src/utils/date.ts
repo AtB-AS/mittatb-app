@@ -693,3 +693,9 @@ export const getTimeZoneOffsetInMinutes = (date: Date) => {
   const offsetMs = getTimezoneOffset(CET, date);
   return offsetMs / ONE_MINUTE_MS;
 };
+
+const SHORT_TRANSFER_TIME_LIMIT_IN_MINUTES = 3;
+
+export function timeIsShort(seconds: number) {
+  return seconds / 60 <= SHORT_TRANSFER_TIME_LIMIT_IN_MINUTES;
+}

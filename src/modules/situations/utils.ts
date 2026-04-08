@@ -139,7 +139,9 @@ export const getSvgForMostCriticalSituationOrNotice = (
  * Get the most critical message type for a leg, considering situations, notices,
  * special transport submodes like RailReplacementBus, and booking requirements.
  */
-const getMsgTypeForLeg = (leg: Leg): Exclude<Statuses, 'valid'> | undefined => {
+export const getMsgTypeForLeg = (
+  leg: Leg,
+): Exclude<Statuses, 'valid'> | undefined => {
   const situations = findAllSituationsFromLeg(leg);
   const notices = findAllNoticesFromLeg(leg);
   const msgType = getMsgTypeForMostCriticalSituationOrNotice(
@@ -152,19 +154,10 @@ const getMsgTypeForLeg = (leg: Leg): Exclude<Statuses, 'valid'> | undefined => {
       : undefined;
   const bookingMsgType: Exclude<Statuses, 'valid'> | undefined =
     leg.bookingArrangements ? 'warning' : undefined;
-  return toMostCriticalStatus(
-    toMostCriticalStatus(msgType, railReplacementBusMsgType),
-    bookingMsgType,
+  return [msgType, railReplacementBusMsgType, bookingMsgType].reduce(
+    toMostCriticalStatus,
+    undefined,
   );
-};
-
-/**
- * Get the notification SVG for a single leg based on its situations, notices,
- * and transport submode.
- */
-export const getNotificationSvgForLeg = (leg: Leg, themeName: Mode) => {
-  const msgType = getMsgTypeForLeg(leg);
-  return msgType && statusTypeToIcon(msgType, true, themeName);
 };
 
 /**
@@ -212,12 +205,12 @@ export const getSituationOrNoticeA11yLabel = (
 };
 
 /**
- * Get a generic trip-level accessibility label summarizing situations, notices,
- * and rail replacement bus across all legs. Classifies into warnings vs notices
+ * Get a generic legs accessibility label summarizing situations, notices,
+ * rail replacement bus and booking across all legs. Classifies into warnings vs notices
  * and returns a short summary like "Reisen har advarsler" with an action prompt.
  * Returns undefined if there is nothing to announce.
  */
-export const getTripNotificationA11yLabel = (
+export const getLegsNotificationA11yLabel = (
   legs: Leg[],
   t: TranslateFunction,
 ): string | undefined => {

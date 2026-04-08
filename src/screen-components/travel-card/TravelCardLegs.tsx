@@ -1,5 +1,6 @@
 import {CounterIconBox} from '@atb/components/icon-box';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet, useThemeContext, Statuses} from '@atb/theme';
+import {Mode} from '@atb-as/theme';
 import React from 'react';
 import {View} from 'react-native';
 import {Leg, TripPattern} from '@atb/api/types/trips';
@@ -10,11 +11,15 @@ import {
 import {OverflowContainer} from '@atb/components/overflow-container';
 import {
   getNotificationSvgForLegs,
-  getTripNotificationA11yLabel,
+  getLegsNotificationA11yLabel,
+  getMsgTypeForLeg,
+  toMostCriticalStatus,
 } from '@atb/modules/situations';
+import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
+import {secondsBetween, timeIsShort} from '@atb/utils/date';
 import {TransportationLeg, FootLeg} from './legs';
 import {TravelCardTexts, useTranslation} from '@atb/translations';
-import {secondsBetween, secondsToDuration} from '@atb/utils/date';
+import {secondsToDuration} from '@atb/utils/date';
 import {useAccessibilityLabelContribution} from '@atb/modules/composite-accessibility';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {isDefined} from '@atb/utils/presence';
@@ -67,7 +72,15 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
                   {leg.mode === 'foot' ? (
                     <FootLeg leg={leg} />
                   ) : staySeated(i) ? null : (
-                    <TransportationLeg leg={leg} />
+                    <TransportationLeg
+                      leg={leg}
+                      notification={getNotificationForLeg(
+                        leg,
+                        filteredLegs,
+                        i,
+                        themeName,
+                      )}
+                    />
                   )}
                 </View>
               ))}
@@ -81,6 +94,8 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
 
 const useA11yLabel = (legs: Leg[]) => {
   const {t, language} = useTranslation();
+
+  if (legs.length === 0) return '';
 
   const legLabel = (leg: Leg): string => {
     if (leg.mode === 'foot') {
@@ -108,18 +123,19 @@ const useA11yLabel = (legs: Leg[]) => {
     );
   };
 
-  const notificationLabel = getTripNotificationA11yLabel(legs, t);
-  const parts = legs.map((leg, idx) =>
-    [legLabel(leg), waitLabel(leg, legs[idx + 1])].filter(isDefined).join('. '),
-  );
-  if (notificationLabel) {
-    parts.unshift(notificationLabel);
-  }
-
-  if (parts.length === 0) return '';
-
+  const notificationLabel = getLegsNotificationA11yLabel(legs, t);
   const prefix = t(TravelCardTexts.legs.prefix);
-  return `${prefix}: ${parts.join(', ')}`;
+  const legsLabel = legs
+    .map((leg, idx) =>
+      [legLabel(leg), waitLabel(leg, legs[idx + 1])]
+        .filter(isDefined)
+        .join('. '),
+    )
+    .join(', ');
+
+  return [notificationLabel, `${prefix}: ${legsLabel}`]
+    .filter(isDefined)
+    .join(', ');
 };
 
 const getWaitTime = (leg: Leg, nextLeg?: Leg) => {
@@ -137,6 +153,27 @@ const getWaitTime = (leg: Leg, nextLeg?: Leg) => {
     mustWait: significantWaitTime(waitTimeInSeconds),
   };
 };
+
+function getNotificationForLeg(
+  leg: Leg,
+  legs: Leg[],
+  index: number,
+  themeName: Mode,
+) {
+  const previousLeg = legs[index - 1];
+  const shortTransferMsgType: Exclude<Statuses, 'valid'> | undefined =
+    previousLeg &&
+    timeIsShort(
+      secondsBetween(previousLeg.expectedEndTime, leg.expectedStartTime),
+    )
+      ? 'info'
+      : undefined;
+  const msgType = toMostCriticalStatus(
+    getMsgTypeForLeg(leg),
+    shortTransferMsgType,
+  );
+  return msgType && statusTypeToIcon(msgType, true, themeName);
+}
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   detailsContainer: {
