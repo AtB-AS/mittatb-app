@@ -114,9 +114,12 @@ export const isSelectableProfile = (
   product: PreassignedFareProduct,
   profile: UserProfile | UserProfileWithCount,
 ) =>
-  !product.limitations.userProfiles ||
-  product.limitations.userProfiles.some(
+  (!product.limitations.userProfiles && !product.limitations.userProfileRefs) ||
+  product.limitations.userProfiles?.some(
     (allowed) => profile.id === allowed.userProfileRef,
+  ) ||
+  product.limitations.userProfileRefs?.some(
+    (allowedRef) => profile.id === allowedRef,
   );
 
 export const isSelectableSupplementProduct = (
