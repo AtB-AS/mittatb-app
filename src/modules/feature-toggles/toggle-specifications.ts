@@ -114,6 +114,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_shmo_deep_integration',
   },
   {
+    name: 'isShmoDeepIntegrationCitybikeEnabled',
+    remoteConfigKey: 'enable_shmo_deep_integration_citybike',
+  },
+  {
     name: 'isShowValidTimeInfoEnabled',
     remoteConfigKey: 'enable_show_valid_time_info',
   },

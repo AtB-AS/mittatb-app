@@ -17,6 +17,7 @@ import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import {BikeStationNotIntegratedView} from '../BicycleSheetNotIntegratedView';
 import {useOperators} from '../../use-operators';
 import {Loading} from '@atb/components/loading';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type Props = {
   stationId: string;
@@ -54,6 +55,7 @@ export const BikeStationBottomSheet = ({
   } = useBikeStation(stationId);
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
+  const {isShmoDeepIntegrationCitybikeEnabled} = useFeatureTogglesContext();
 
   useDoOnceOnItemReceived(onStationReceived, station);
 
@@ -96,7 +98,8 @@ export const BikeStationBottomSheet = ({
       {!isLoading &&
         !isError &&
         station &&
-        (operatorIsIntegrationEnabled ? (
+        (operatorIsIntegrationEnabled &&
+        isShmoDeepIntegrationCitybikeEnabled ? (
           <BikeStationIntegrationView
             station={station}
             navigateSupportCallback={navigateSupportCallback}
