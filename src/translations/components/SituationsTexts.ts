@@ -17,14 +17,14 @@ const SituationsTexts = {
       'Reisa har åtvaringar',
     ),
     notices: _(
-      'Reisen har merknader',
-      'The trip has notices',
-      'Reisa har merknader',
+      'Reisen har ekstra info',
+      'The trip has extra information',
+      'Reisa har ekstra info',
     ),
     warningsAndNotices: _(
-      'Reisen har advarsler og merknader',
-      'The trip has warnings and notices',
-      'Reisa har åtvaringar og merknader',
+      'Reisen har advarsler og ekstra info',
+      'The trip has warnings and extra information',
+      'Reisa har åtvaringar og ekstra info',
     ),
     openDetailsForMoreInfo: _(
       'Åpne detaljer for mer informasjon',

@@ -108,13 +108,12 @@ const useA11yLabel = (legs: Leg[]) => {
     );
   };
 
-  const parts: string[] = legs.map((leg, idx) =>
+  const notificationLabel = getTripNotificationA11yLabel(legs, t);
+  const parts = legs.map((leg, idx) =>
     [legLabel(leg), waitLabel(leg, legs[idx + 1])].filter(isDefined).join('. '),
   );
-
-  const notificationLabel = getTripNotificationA11yLabel(legs, t);
   if (notificationLabel) {
-    parts.push(notificationLabel);
+    parts.unshift(notificationLabel);
   }
 
   if (parts.length === 0) return '';
