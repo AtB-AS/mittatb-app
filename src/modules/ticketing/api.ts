@@ -25,6 +25,8 @@ import qs from 'query-string';
 import {isDefined} from '@atb/utils/presence';
 import {Language} from '@atb/translations/commons';
 import type {OfferSearchLeg} from '@atb/api/types/sales';
+import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
+import {ZodError} from 'zod';
 
 export async function listRecentFareContracts(): Promise<RecentOrderDetails[]> {
   const url = 'sales/v1/order/recent';
@@ -262,9 +264,18 @@ export async function getFareContracts(
   const fareContracts = response.data.fareContracts.map(
     convertIsoStringFieldsToDate,
   );
-  return fareContracts.filter(
-    (fc: any) => FareContractType.safeParse(fc).success,
-  );
+  const zodErrors: ZodError[] = [];
+  const validFareContracts = fareContracts.filter((fc: any) => {
+    const result = FareContractType.safeParse(fc);
+    if (!result.success) zodErrors.push(result.error);
+    return result.success;
+  });
+
+  if (zodErrors.length > 0) {
+    notifyBugsnag('Failed to Zod parse fare contracts', {metadata: zodErrors});
+  }
+
+  return validFareContracts;
 }
 
 export async function getRefundOptions(orderId: string) {
