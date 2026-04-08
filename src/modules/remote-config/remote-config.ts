@@ -48,6 +48,7 @@ export type RemoteConfig = {
   enable_refunds: boolean;
   enable_server_time: boolean;
   enable_shmo_deep_integration: boolean;
+  enable_shmo_deep_integration_citybike: boolean;
   enable_show_valid_time_info: boolean;
   enable_ticket_information: boolean;
   enable_ticketing: boolean;
@@ -117,6 +118,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_refunds: true,
   enable_server_time: true,
   enable_shmo_deep_integration: false,
+  enable_shmo_deep_integration_citybike: false,
   enable_show_valid_time_info: true,
   enable_ticket_information: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
@@ -251,6 +253,9 @@ export function getConfig(): RemoteConfig {
   const enable_shmo_deep_integration =
     values['enable_shmo_deep_integration']?.asBoolean() ??
     defaultRemoteConfig.enable_shmo_deep_integration;
+  const enable_shmo_deep_integration_citybike =
+    values['enable_shmo_deep_integration_citybike']?.asBoolean() ??
+    defaultRemoteConfig.enable_shmo_deep_integration_citybike;
   const enable_show_valid_time_info =
     values['enable_show_valid_time_info']?.asBoolean() ??
     defaultRemoteConfig.enable_show_valid_time_info;
@@ -367,6 +372,7 @@ export function getConfig(): RemoteConfig {
     enable_refunds,
     enable_server_time,
     enable_shmo_deep_integration,
+    enable_shmo_deep_integration_citybike,
     enable_show_valid_time_info,
     enable_ticket_information,
     enable_ticketing,

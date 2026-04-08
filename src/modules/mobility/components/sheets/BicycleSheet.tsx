@@ -98,7 +98,8 @@ export const BicycleSheet = ({
 
   const priceAdjustments = operator?.priceAdjustments?.[FormFactor.Bicycle];
 
-  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
+  const {isShmoDeepIntegrationEnabled, isShmoDeepIntegrationCitybikeEnabled} =
+    useFeatureTogglesContext();
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
@@ -176,6 +177,7 @@ export const BicycleSheet = ({
           </View>
 
           {isShmoDeepIntegrationEnabled &&
+          isShmoDeepIntegrationCitybikeEnabled &&
           operatorId &&
           operatorIsIntegrationEnabled ? (
             <>
