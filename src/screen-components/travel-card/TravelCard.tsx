@@ -53,35 +53,40 @@ export const TravelCard: React.FC<TravelCardProps> = ({
         parentLabels={{cardPrefix: a11yLabel}}
         order={['cardPrefix', 'header', 'legs']}
       >
-        {(accessibilityProps) => (
-          <NativeBlockButton
-            onPress={() => onDetailsPressed(tripPattern, cardIndex)}
-            testID={testID}
-            style={styles.container}
-            accessibilityRole="button"
-            accessibilityHint={t(TravelCardTexts.card.a11yHint)}
-            {...accessibilityProps}
-          >
-            <TravelCardHeader
-              tripPattern={tripPattern}
-              includeDayInfo={includeDayInfo}
-              includeFromToInfo={includeFromToInfo}
-            />
-            <View style={styles.legsContainer}>
-              <View
-                style={styles.legsArea}
-                onLayout={(e: LayoutChangeEvent) =>
-                  setMaxWidth(e.nativeEvent.layout.width)
-                }
-              >
-                <TravelCardLegs tripPattern={tripPattern} maxWidth={maxWidth} />
+        {(accessibilityProps) => {
+          return (
+            <NativeBlockButton
+              onPress={() => onDetailsPressed(tripPattern, cardIndex)}
+              testID={testID}
+              style={styles.container}
+              accessibilityRole="button"
+              accessibilityHint={t(TravelCardTexts.card.a11yHint)}
+              {...accessibilityProps}
+            >
+              <TravelCardHeader
+                tripPattern={tripPattern}
+                includeDayInfo={includeDayInfo}
+                includeFromToInfo={includeFromToInfo}
+              />
+              <View style={styles.legsContainer}>
+                <View
+                  style={styles.legsArea}
+                  onLayout={(e: LayoutChangeEvent) =>
+                    setMaxWidth(e.nativeEvent.layout.width)
+                  }
+                >
+                  <TravelCardLegs
+                    tripPattern={tripPattern}
+                    maxWidth={maxWidth}
+                  />
+                </View>
+                <View>
+                  <ThemeIcon svg={ChevronRight} />
+                </View>
               </View>
-              <View>
-                <ThemeIcon svg={ChevronRight} />
-              </View>
-            </View>
-          </NativeBlockButton>
-        )}
+            </NativeBlockButton>
+          );
+        }}
       </CompositeAccessibilityProvider>
     </Animated.View>
   );

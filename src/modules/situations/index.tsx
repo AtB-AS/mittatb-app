@@ -15,4 +15,5 @@ export {
   getNotificationSvgForLeg,
   getNotificationSvgForLegs,
   getA11yLabelForLeg,
+  getTripNotificationA11yLabel,
 } from './utils';

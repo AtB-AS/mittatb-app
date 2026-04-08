@@ -10,7 +10,7 @@ import {
 import {OverflowContainer} from '@atb/components/overflow-container';
 import {
   getNotificationSvgForLegs,
-  getA11yLabelForLeg as getSituationsA11yLabel,
+  getTripNotificationA11yLabel,
 } from '@atb/modules/situations';
 import {TransportationLeg, FootLeg} from './legs';
 import {TravelCardTexts, useTranslation} from '@atb/translations';
@@ -81,35 +81,46 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
 
 const useA11yLabel = (legs: Leg[]) => {
   const {t, language} = useTranslation();
-  return legs
-    .map((leg, idx) => {
-      const waitTime = getWaitTime(leg, legs[idx + 1]);
-      const isFootLeg = leg.mode === 'foot';
-      const labels = [
-        isFootLeg
-          ? t(
-              TravelCardTexts.legs.foot.a11yLabel(
-                secondsToDuration(leg.duration ?? 0, language),
-              ),
-            )
-          : t(
-              TravelCardTexts.legs.transportation.a11yLabel(
-                t(getTranslatedModeName(leg.mode, leg.line?.transportSubmode)),
-                leg.line?.publicCode ?? '',
-              ),
-            ),
-        isFootLeg ? undefined : getSituationsA11yLabel(leg, t),
-        waitTime.mustWait
-          ? t(
-              TravelCardTexts.legs.wait.a11yLabel(
-                secondsToDuration(waitTime.duration, language),
-              ),
-            )
-          : undefined,
-      ];
-      return labels.filter(isDefined).join('. ');
-    })
-    .join();
+
+  const legLabel = (leg: Leg): string => {
+    if (leg.mode === 'foot') {
+      return t(
+        TravelCardTexts.legs.foot.a11yLabel(
+          secondsToDuration(leg.duration ?? 0, language),
+        ),
+      );
+    }
+    return t(
+      TravelCardTexts.legs.transportation.a11yLabel(
+        t(getTranslatedModeName(leg.mode, leg.line?.transportSubmode)),
+        leg.line?.publicCode ?? '',
+      ),
+    );
+  };
+
+  const waitLabel = (leg: Leg, nextLeg?: Leg): string | undefined => {
+    const waitTime = getWaitTime(leg, nextLeg);
+    if (!waitTime.mustWait) return undefined;
+    return t(
+      TravelCardTexts.legs.wait.a11yLabel(
+        secondsToDuration(waitTime.duration, language),
+      ),
+    );
+  };
+
+  const parts: string[] = legs.map((leg, idx) =>
+    [legLabel(leg), waitLabel(leg, legs[idx + 1])].filter(isDefined).join('. '),
+  );
+
+  const notificationLabel = getTripNotificationA11yLabel(legs, t);
+  if (notificationLabel) {
+    parts.push(notificationLabel);
+  }
+
+  if (parts.length === 0) return '';
+
+  const prefix = t(TravelCardTexts.legs.prefix);
+  return `${prefix}: ${parts.join(', ')}`;
 };
 
 const getWaitTime = (leg: Leg, nextLeg?: Leg) => {
