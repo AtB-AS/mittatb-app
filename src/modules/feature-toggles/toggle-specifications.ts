@@ -122,6 +122,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_shmo_deep_integration_citybike',
   },
   {
+    name: 'isShowCancelledDeparturesEnabled',
+    remoteConfigKey: 'enable_show_cancelled_departures',
+  },
+  {
     name: 'isShowValidTimeInfoEnabled',
     remoteConfigKey: 'enable_show_valid_time_info',
   },
