@@ -264,10 +264,10 @@ export async function getFareContracts(
   const fareContracts = response.data.fareContracts.map(
     convertIsoStringFieldsToDate,
   );
-  const zodErrors: ZodError[] = [];
+  const zodErrors: {id?: any; error: ZodError}[] = [];
   const validFareContracts = fareContracts.filter((fc: any) => {
     const result = FareContractType.safeParse(fc);
-    if (!result.success) zodErrors.push(result.error);
+    if (!result.success) zodErrors.push({id: fc.id, error: result.error});
     return result.success;
   });
 
