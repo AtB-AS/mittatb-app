@@ -5,6 +5,7 @@ import {
   iso8601DurationToSeconds,
   minutesBetween,
   secondsBetween,
+  timeIsShort,
 } from '@atb/utils/date';
 import {Leg, Line, TripPattern} from '@atb/api/types/trips';
 import {
@@ -83,10 +84,6 @@ export const TIME_LIMIT_IN_MINUTES = 3;
 
 const MIN_SIGNIFICANT_WALK_IN_SECONDS = 30;
 const MIN_SIGNIFICANT_WAIT_IN_SECONDS = 30;
-
-export function timeIsShort(seconds: number) {
-  return seconds / 60 <= TIME_LIMIT_IN_MINUTES;
-}
 
 export function significantWalkTime(seconds: number) {
   return seconds > MIN_SIGNIFICANT_WALK_IN_SECONDS;

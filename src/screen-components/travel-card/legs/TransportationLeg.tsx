@@ -1,22 +1,23 @@
 import {Leg} from '@atb/api/types/trips';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {isLineFlexibleTransport} from '@atb/screen-components/travel-details-screens';
-import {useThemeContext} from '@atb/theme';
 import React from 'react';
-import {getNotificationSvgForLeg} from '@atb/modules/situations';
+import {SvgProps} from 'react-native-svg';
 
-export const TransportationLeg = ({leg}: {leg: Leg}) => {
-  const {themeName} = useThemeContext();
-  const notification = getNotificationSvgForLeg(leg, themeName);
-  return (
-    <TransportationIconBox
-      mode={leg.mode}
-      subMode={leg.line?.transportSubmode}
-      isFlexible={isLineFlexibleTransport(leg.line)}
-      lineNumber={leg.line?.publicCode}
-      type="standard"
-      testID={`${leg.mode}Leg`}
-      notification={notification}
-    />
-  );
-};
+export const TransportationLeg = ({
+  leg,
+  notification,
+}: {
+  leg: Leg;
+  notification?: (props: SvgProps) => React.JSX.Element;
+}) => (
+  <TransportationIconBox
+    mode={leg.mode}
+    subMode={leg.line?.transportSubmode}
+    isFlexible={isLineFlexibleTransport(leg.line)}
+    lineNumber={leg.line?.publicCode}
+    type="standard"
+    testID={`${leg.mode}Leg`}
+    notification={notification}
+  />
+);
