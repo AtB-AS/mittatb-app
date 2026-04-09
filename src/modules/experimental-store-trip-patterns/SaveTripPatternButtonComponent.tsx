@@ -6,7 +6,7 @@ import {useStoredTripPatterns} from './StoredTripPatternsContext';
 import {Button} from '@atb/components/button';
 import {Save, SaveFill} from '@atb/assets/svg/mono-icons/actions';
 import analytics from '@react-native-firebase/analytics';
-import {wrapWithExperimentalFeatureToggledComponent} from '@atb/modules/experimental';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getTripPatternAnalytics} from '@atb/screen-components/travel-details-screens';
@@ -17,102 +17,100 @@ type SaveTripPatternButtonComponentProps = {
   now: number;
 };
 
-export const SaveTripPatternButtonComponent =
-  wrapWithExperimentalFeatureToggledComponent<SaveTripPatternButtonComponentProps>(
-    'render-nothing-if-disabled',
-    ({tripPattern, now}) => {
-      const {
-        addTripPattern,
-        removeTripPattern,
-        isTripPatternStored,
-        canAddTripPattern,
-      } = useStoredTripPatterns();
-      const {t} = useTranslation();
-      const {theme} = useThemeContext();
-      const posthogAnalytics = useAnalyticsContext();
-      const {fareZones} = useFirestoreConfigurationContext();
+export const SaveTripPatternButtonComponent: React.FC<
+  SaveTripPatternButtonComponentProps
+> = ({tripPattern, now}) => {
+  const {isSaveTripsEnabled} = useFeatureTogglesContext();
+  const {
+    addTripPattern,
+    removeTripPattern,
+    isTripPatternStored,
+    canAddTripPattern,
+  } = useStoredTripPatterns();
+  const {t} = useTranslation();
+  const {theme} = useThemeContext();
+  const posthogAnalytics = useAnalyticsContext();
+  const {fareZones} = useFirestoreConfigurationContext();
 
-      const canAdd = useMemo(() => {
-        return canAddTripPattern(tripPattern);
-      }, [tripPattern, canAddTripPattern]);
+  const canAdd = useMemo(() => {
+    return canAddTripPattern(tripPattern);
+  }, [tripPattern, canAddTripPattern]);
 
-      const isStored = useMemo(() => {
-        if (!canAdd) {
-          return false;
-        }
+  const isStored = useMemo(() => {
+    if (!canAdd) {
+      return false;
+    }
 
-        return isTripPatternStored(tripPattern);
-      }, [tripPattern, isTripPatternStored, canAdd]);
+    return isTripPatternStored(tripPattern);
+  }, [tripPattern, isTripPatternStored, canAdd]);
 
-      if (!canAdd) {
-        return null;
+  if (!isSaveTripsEnabled || !canAdd) {
+    return null;
+  }
+
+  return (
+    <Button
+      accessibilityHint={
+        isStored
+          ? t(SaveTripPatternButtonComponentTexts.removeTrip.a11yHint)
+          : t(SaveTripPatternButtonComponentTexts.saveTrip.a11yHint)
       }
-
-      return (
-        <Button
-          accessibilityHint={
-            isStored
-              ? t(SaveTripPatternButtonComponentTexts.removeTrip.a11yHint)
-              : t(SaveTripPatternButtonComponentTexts.saveTrip.a11yHint)
-          }
-          onPress={() => {
-            if (isStored) {
-              analytics().logEvent('click_trip_remove_button');
-              posthogAnalytics.logEvent(
-                'Trip details',
-                'Trip removed',
-                getTripPatternAnalytics(tripPattern, fareZones, now),
-              );
-              removeTripPattern(tripPattern);
-              setTimeout(
-                () =>
-                  AccessibilityInfo.announceForAccessibility(
-                    t(
-                      SaveTripPatternButtonComponentTexts.removeTrip
-                        .a11yAnnouncement,
-                    ),
-                  ),
-                100,
-              );
-            } else {
-              analytics().logEvent('click_trip_save_button');
-              posthogAnalytics.logEvent(
-                'Trip details',
-                'Trip saved',
-                getTripPatternAnalytics(tripPattern, fareZones, now),
-              );
-              addTripPattern(tripPattern);
-              setTimeout(
-                () =>
-                  AccessibilityInfo.announceForAccessibility(
-                    t(
-                      SaveTripPatternButtonComponentTexts.saveTrip
-                        .a11yAnnouncement,
-                    ),
-                  ),
-                100,
-              );
-            }
-          }}
-          text={
-            isStored
-              ? t(SaveTripPatternButtonComponentTexts.removeTrip.text)
-              : t(SaveTripPatternButtonComponentTexts.saveTrip.text)
-          }
-          leftIcon={isStored ? {svg: SaveFill} : {svg: Save}}
-          expanded={true}
-          accessibilityRole="button"
-          accessible={true}
-          mode="secondary"
-          backgroundColor={
-            isStored
-              ? theme.color.interactive[0].active
-              : theme.color.background.neutral[0]
-          }
-        />
-      );
-    },
+      onPress={() => {
+        if (isStored) {
+          analytics().logEvent('click_trip_remove_button');
+          posthogAnalytics.logEvent(
+            'Trip details',
+            'Trip removed',
+            getTripPatternAnalytics(tripPattern, fareZones, now),
+          );
+          removeTripPattern(tripPattern);
+          setTimeout(
+            () =>
+              AccessibilityInfo.announceForAccessibility(
+                t(
+                  SaveTripPatternButtonComponentTexts.removeTrip
+                    .a11yAnnouncement,
+                ),
+              ),
+            100,
+          );
+        } else {
+          analytics().logEvent('click_trip_save_button');
+          posthogAnalytics.logEvent(
+            'Trip details',
+            'Trip saved',
+            getTripPatternAnalytics(tripPattern, fareZones, now),
+          );
+          addTripPattern(tripPattern);
+          setTimeout(
+            () =>
+              AccessibilityInfo.announceForAccessibility(
+                t(
+                  SaveTripPatternButtonComponentTexts.saveTrip.a11yAnnouncement,
+                ),
+              ),
+            100,
+          );
+        }
+      }}
+      text={
+        isStored
+          ? t(SaveTripPatternButtonComponentTexts.removeTrip.text)
+          : t(SaveTripPatternButtonComponentTexts.saveTrip.text)
+      }
+      leftIcon={isStored ? {svg: SaveFill} : {svg: Save}}
+      expanded={true}
+      accessibilityRole="button"
+      accessible={true}
+      mode="secondary"
+      backgroundColor={
+        isStored
+          ? theme.color.interactive[0].active
+          : theme.color.background.neutral[0]
+      }
+    />
   );
+};
 
 const SaveTripPatternButtonComponentTexts = {
   saveTrip: {

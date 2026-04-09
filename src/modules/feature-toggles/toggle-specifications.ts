@@ -106,6 +106,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_refunds',
   },
   {
+    name: 'isSaveTripsEnabled',
+    remoteConfigKey: 'enable_save_trips',
+  },
+  {
     name: 'isServerTimeEnabled',
     remoteConfigKey: 'enable_server_time',
   },
