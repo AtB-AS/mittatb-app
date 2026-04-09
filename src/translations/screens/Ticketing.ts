@@ -6,6 +6,11 @@ const TicketingTexts = {
   header: {
     title: _('Billetter', 'Tickets', 'Billettar'),
   },
+  a11yHint: _(
+    'Aktivér for å velge denne fanen.',
+    'Activate to select this tab.',
+    'Aktiver for å velje denne fana.',
+  ),
   purchaseTab: {
     label: _('Kjøp billett', 'Buy ticket', 'Kjøp billett'),
     a11yLabel: _('Kjøp billetter', 'Buy tickets', 'Kjøp billettar'),

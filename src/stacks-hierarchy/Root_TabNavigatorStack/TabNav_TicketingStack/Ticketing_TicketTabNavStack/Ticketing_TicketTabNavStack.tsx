@@ -119,7 +119,7 @@ export const Ticketing_TicketTabNavStack = () => {
           component={TicketTabNav_PurchaseTabScreen}
           options={{
             tabBarLabel: t(TicketingTexts.purchaseTab.label),
-            tabBarAccessibilityLabel: t(TicketingTexts.purchaseTab.a11yLabel),
+            tabBarAccessibilityLabel: t(TicketingTexts.a11yHint),
             tabBarButtonTestID: 'purchaseTab',
           }}
         />
@@ -130,6 +130,7 @@ export const Ticketing_TicketTabNavStack = () => {
             tabBarLabel: t(
               TicketingTexts.availableFareProductsAndReservationsTab.label,
             ),
+            tabBarAccessibilityLabel: t(TicketingTexts.a11yHint),
             tabBarButtonTestID: 'activeTicketsTab',
           }}
         />
@@ -198,7 +199,7 @@ const TabBar: React.FC<
               interactiveColor={theme.theme.color.interactive[2]}
               accessibilityRole="tab"
               accessibilityState={isFocused ? {selected: true} : {}}
-              accessibilityLabel={options.tabBarAccessibilityLabel}
+              accessibilityHint={options.tabBarAccessibilityLabel}
               testID={options.tabBarButtonTestID}
               style={styles.button}
             />
