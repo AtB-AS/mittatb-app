@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleProp, View, ViewStyle} from 'react-native';
+import {View} from 'react-native';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
@@ -19,7 +19,6 @@ export type TransportationIconBoxProps = {
   iconSize?: keyof Theme['icon']['size'];
   type?: 'compact' | 'standard';
   displayType?: 'rounded' | 'square';
-  style?: StyleProp<ViewStyle>;
   disabled?: boolean;
   testID?: string;
   notification?: (props: SvgProps) => React.JSX.Element;
@@ -33,7 +32,6 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   iconSize = 'normal',
   type = 'compact',
   displayType = 'square',
-  style,
   disabled,
   testID,
   notification,
@@ -66,7 +64,6 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
                   ? theme.spacing.small
                   : theme.spacing.xSmall) + extraPaddingRight,
             },
-            style,
           ]}
         >
           <ThemeIcon

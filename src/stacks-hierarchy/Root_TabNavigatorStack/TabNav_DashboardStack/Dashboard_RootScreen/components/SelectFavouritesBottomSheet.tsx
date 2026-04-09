@@ -52,11 +52,12 @@ const SelectableFavouriteDeparture = ({
 
   return (
     <View style={styles.selectableDeparture} accessible={false}>
-      <TransportationIconBox
-        style={styles.lineModeIcon}
-        mode={lineTransportationMode}
-        subMode={favorite.lineTransportationSubMode}
-      />
+      <View style={styles.lineModeIcon}>
+        <TransportationIconBox
+          mode={lineTransportationMode}
+          subMode={favorite.lineTransportationSubMode}
+        />
+      </View>
       <View style={styles.selectableDepartureTextView} accessible>
         <ThemeText typography="body__m" style={styles.lineIdentifierText}>
           {lineIdentifier} {lineName}

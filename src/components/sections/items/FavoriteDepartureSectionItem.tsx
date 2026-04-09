@@ -65,11 +65,12 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
   const {t} = useTranslation();
   return (
     <View style={[sectionStyle.spaceBetween, topContainer, styles.flexStart]}>
-      <TransportationIconBox
-        style={styles.transportation__icon}
-        mode={favorite.lineTransportationMode}
-        subMode={favorite.lineTransportationSubMode}
-      />
+      <View style={styles.transportation__icon}>
+        <TransportationIconBox
+          mode={favorite.lineTransportationMode}
+          subMode={favorite.lineTransportationSubMode}
+        />
+      </View>
       <View style={contentContainer}>
         <ThemeText>
           {favorite.lineLineNumber}{' '}
