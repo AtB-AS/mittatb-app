@@ -87,6 +87,7 @@ const TravelCardTexts = {
     },
   },
   legs: {
+    prefix: _('Reisedetaljer', 'Journey details', 'Reisedetaljar'),
     foot: {
       a11yLabel: (time: string) =>
         _(`Gå ${time}`, `Walk ${time}`, `Gå ${time}`),

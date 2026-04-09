@@ -10,6 +10,28 @@ const SituationsTexts = {
     warning: _('Med advarsler', 'With warnings', 'Med merknader'),
     info: _('Med ekstra info', 'With extra information', 'Med ekstra info'),
   },
+  tripSummary: {
+    warnings: _(
+      'Reisen har advarsler',
+      'The trip has warnings',
+      'Reisa har åtvaringar',
+    ),
+    notices: _(
+      'Reisen har ekstra info',
+      'The trip has extra information',
+      'Reisa har ekstra info',
+    ),
+    warningsAndNotices: _(
+      'Reisen har advarsler og ekstra info',
+      'The trip has warnings and extra information',
+      'Reisa har åtvaringar og ekstra info',
+    ),
+    openDetailsForMoreInfo: _(
+      'Åpne detaljer for mer informasjon',
+      'Open details for more information',
+      'Opne detaljar for meir informasjon',
+    ),
+  },
   bottomSheet: {
     title: {
       info: _('Informasjon', 'Information', 'Informasjon'),

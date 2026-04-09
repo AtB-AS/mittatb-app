@@ -137,9 +137,11 @@ export const getSvgForMostCriticalSituationOrNotice = (
 
 /**
  * Get the most critical message type for a leg, considering situations, notices,
- * and special transport submodes like RailReplacementBus.
+ * special transport submodes like RailReplacementBus, and booking requirements.
  */
-const getMsgTypeForLeg = (leg: Leg): Exclude<Statuses, 'valid'> | undefined => {
+export const getMsgTypeForLeg = (
+  leg: Leg,
+): Exclude<Statuses, 'valid'> | undefined => {
   const situations = findAllSituationsFromLeg(leg);
   const notices = findAllNoticesFromLeg(leg);
   const msgType = getMsgTypeForMostCriticalSituationOrNotice(
@@ -150,16 +152,12 @@ const getMsgTypeForLeg = (leg: Leg): Exclude<Statuses, 'valid'> | undefined => {
     leg.transportSubmode === TransportSubmode.RailReplacementBus
       ? 'warning'
       : undefined;
-  return toMostCriticalStatus(msgType, railReplacementBusMsgType);
-};
-
-/**
- * Get the notification SVG for a single leg based on its situations, notices,
- * and transport submode.
- */
-export const getNotificationSvgForLeg = (leg: Leg, themeName: Mode) => {
-  const msgType = getMsgTypeForLeg(leg);
-  return msgType && statusTypeToIcon(msgType, true, themeName);
+  const bookingMsgType: Exclude<Statuses, 'valid'> | undefined =
+    leg.bookingArrangements ? 'warning' : undefined;
+  return [msgType, railReplacementBusMsgType, bookingMsgType].reduce(
+    toMostCriticalStatus,
+    undefined,
+  );
 };
 
 /**
@@ -204,6 +202,56 @@ export const getSituationOrNoticeA11yLabel = (
       'info',
     );
   return t(SituationsTexts.a11yLabel[messageType]);
+};
+
+/**
+ * Get a generic legs accessibility label summarizing situations, notices,
+ * rail replacement bus and booking across all legs. Classifies into warnings vs notices
+ * and returns a short summary like "Reisen har advarsler" with an action prompt.
+ * Returns undefined if there is nothing to announce.
+ */
+export const getLegsNotificationA11yLabel = (
+  legs: Leg[],
+  t: TranslateFunction,
+): string | undefined => {
+  let hasWarnings = false;
+  let hasNotices = false;
+
+  for (const leg of legs) {
+    if (leg.transportSubmode === TransportSubmode.RailReplacementBus) {
+      hasWarnings = true;
+    }
+
+    if (leg.bookingArrangements) {
+      hasWarnings = true;
+    }
+
+    for (const situation of leg.situations ?? []) {
+      if (getMessageTypeForSituation(situation) === 'warning') {
+        hasWarnings = true;
+      } else {
+        hasNotices = true;
+      }
+    }
+
+    const notices = findAllNoticesFromLeg(leg);
+    if (notices.length > 0) {
+      hasNotices = true;
+    }
+
+    if (hasWarnings && hasNotices) break;
+  }
+
+  if (!hasWarnings && !hasNotices) return undefined;
+
+  const summaryText =
+    hasWarnings && hasNotices
+      ? t(SituationsTexts.tripSummary.warningsAndNotices)
+      : hasWarnings
+        ? t(SituationsTexts.tripSummary.warnings)
+        : t(SituationsTexts.tripSummary.notices);
+
+  return `${summaryText}. ${t(SituationsTexts.tripSummary.openDetailsForMoreInfo)}`;
 };
 
 /**
