@@ -1,7 +1,4 @@
-import {
-  TransportModePair,
-  getTransportModeText,
-} from '@atb/components/transportation-modes';
+import {getTransportModeText} from '@atb/components/transportation-modes';
 import {TransportationIconBox} from './TransportationIconBox';
 import {useTranslation} from '@atb/translations';
 import React from 'react';
@@ -9,6 +6,14 @@ import {getTransportModeSvg} from './utils';
 import {StyleSheet, Theme} from '@atb/theme';
 import {CounterIconBox} from './CounterIconBox';
 import {AccessibilityProps, View} from 'react-native';
+import {TransportModeType, TransportSubmodeType} from '@atb-as/config-specs';
+
+export const TRANSPORTATION_ICON_BOX_LIST_MAX_ITEMS = 2;
+
+export type TransportModePair = {
+  mode: TransportModeType;
+  subMode?: TransportSubmodeType;
+};
 
 type Props = {
   modes: TransportModePair[];
@@ -19,7 +24,6 @@ type Props = {
 
 export const TransportationIconBoxList = ({
   modes,
-  maxNumberOfBoxes = 2,
   iconSize,
   disabled,
   ...props
@@ -27,9 +31,9 @@ export const TransportationIconBoxList = ({
   const styles = useStyles({iconSize})();
   const {t} = useTranslation();
   const numberOfModes: number = modes.length;
-  const hasOverflow = numberOfModes > maxNumberOfBoxes;
+  const hasOverflow = numberOfModes > TRANSPORTATION_ICON_BOX_LIST_MAX_ITEMS;
   const numberOfModesToDisplay = hasOverflow
-    ? maxNumberOfBoxes - 1
+    ? TRANSPORTATION_ICON_BOX_LIST_MAX_ITEMS - 1
     : numberOfModes;
   const modesToDisplay = modes
     .filter(removeDuplicatesByIconNameFilter)
@@ -39,12 +43,11 @@ export const TransportationIconBoxList = ({
     <View
       accessible={true}
       accessibilityLabel={getTransportModeText(modes, t)}
-      style={{flexDirection: 'row'}}
+      style={styles.container}
       {...props}
     >
       {modesToDisplay.map(({mode, subMode}) => (
         <TransportationIconBox
-          style={styles.icon}
           key={mode + subMode}
           mode={mode}
           subMode={subMode}
@@ -55,7 +58,6 @@ export const TransportationIconBoxList = ({
       {hasOverflow && (
         <CounterIconBox
           count={numberOfModes - numberOfModesToDisplay}
-          style={styles.icon}
           size={iconSize}
           textType={iconSize === 'xSmall' ? 'heading__xs' : 'body__s'}
         />
@@ -66,9 +68,9 @@ export const TransportationIconBoxList = ({
 
 const useStyles = ({iconSize}: Pick<Props, 'iconSize'>) =>
   StyleSheet.createThemeHook((theme) => ({
-    icon: {
-      marginRight:
-        iconSize === 'xSmall' ? theme.spacing.xSmall : theme.spacing.small,
+    container: {
+      flexDirection: 'row',
+      gap: iconSize === 'xSmall' ? theme.spacing.xSmall : theme.spacing.small,
     },
   }));
 
