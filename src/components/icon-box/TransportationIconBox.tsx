@@ -19,7 +19,6 @@ export type TransportationIconBoxProps = {
   iconSize?: keyof Theme['icon']['size'];
   type?: 'compact' | 'standard';
   displayType?: 'rounded' | 'square';
-  disabled?: boolean;
   testID?: string;
   notification?: (props: SvgProps) => React.JSX.Element;
 };
@@ -32,16 +31,12 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   iconSize = 'normal',
   type = 'compact',
   displayType = 'square',
-  disabled,
   testID,
   notification,
 }) => {
   const {t} = useTranslation();
   const transportColor = useTransportColor(mode, subMode, isFlexible);
   const transportationColor = transportColor.primary;
-  const backgroundColor = disabled
-    ? transportationColor.foreground.disabled
-    : transportationColor.background;
   const {svg} = getTransportModeSvg(mode, subMode);
   const styles = useStyles();
   const {theme} = useThemeContext();
@@ -54,7 +49,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
             styles.transportationIconBox,
             type === 'standard' && styles.standardTransportationIconBox,
             {
-              backgroundColor,
+              backgroundColor: transportationColor.background,
               borderRadius:
                 displayType === 'rounded'
                   ? theme.border.radius.circle

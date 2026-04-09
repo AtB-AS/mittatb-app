@@ -19,13 +19,11 @@ type Props = {
   modes: TransportModePair[];
   maxNumberOfBoxes?: number;
   iconSize?: keyof Theme['icon']['size'];
-  disabled?: boolean;
 } & AccessibilityProps;
 
 export const TransportationIconBoxList = ({
   modes,
   iconSize,
-  disabled,
   ...props
 }: Props) => {
   const styles = useStyles({iconSize})();
@@ -52,7 +50,6 @@ export const TransportationIconBoxList = ({
           mode={mode}
           subMode={subMode}
           iconSize={iconSize}
-          disabled={disabled}
         />
       ))}
       {hasOverflow && (
