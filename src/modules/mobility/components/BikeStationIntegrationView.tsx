@@ -104,7 +104,7 @@ export const BikeStationIntegrationView = ({
                         ? 'ebicycle'
                         : undefined
                     }
-                    displayType="rounded"
+                    rounded={true}
                   />
                 }
                 onPress={() => {

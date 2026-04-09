@@ -18,7 +18,7 @@ export type TransportationIconBoxProps = {
   lineNumber?: string;
   iconSize?: keyof Theme['icon']['size'];
   spacious?: boolean;
-  displayType?: 'rounded' | 'square';
+  rounded?: boolean;
   testID?: string;
   notification?: (props: SvgProps) => React.JSX.Element;
 };
@@ -30,7 +30,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   lineNumber,
   iconSize = 'normal',
   spacious,
-  displayType = 'square',
+  rounded,
   testID,
   notification,
 }) => {
@@ -50,10 +50,9 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
             spacious && styles.standardTransportationIconBox,
             {
               backgroundColor: transportationColor.background,
-              borderRadius:
-                displayType === 'rounded'
-                  ? theme.border.radius.circle
-                  : getIconBoxBorderRadius(iconSize, theme),
+              borderRadius: rounded
+                ? theme.border.radius.circle
+                : getIconBoxBorderRadius(iconSize, theme),
               paddingRight:
                 (spacious ? theme.spacing.small : theme.spacing.xSmall) +
                 extraPaddingRight,

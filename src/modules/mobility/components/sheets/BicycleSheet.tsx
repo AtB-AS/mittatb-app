@@ -118,7 +118,7 @@ export const BicycleSheet = ({
       )}
       subText={operatorName}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      logoIcon={<TransportationIconBox mode="bicycle" displayType="rounded" />}
+      logoIcon={<TransportationIconBox mode="bicycle" rounded={true} />}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >
