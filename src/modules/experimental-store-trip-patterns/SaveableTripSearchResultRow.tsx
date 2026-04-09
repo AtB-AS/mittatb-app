@@ -1,9 +1,6 @@
 import React, {useCallback, useMemo} from 'react';
 import {useStoredTripPatterns} from './StoredTripPatternsContext';
-import {
-  useIsExperimentalEnabled,
-  wrapWithExperimentalFeatureToggledComponent,
-} from '@atb/modules/experimental';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {RightActionKind, SwipeableResultRow} from './SwipeableResultRow';
 import {getTripPatternKey} from '../trip-patterns/utils';
 import {TripPattern} from '@atb/api/types/trips';
@@ -14,81 +11,80 @@ import {getTripPatternAnalytics} from '@atb/screen-components/travel-details-scr
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useTimeContext} from '../time';
 
-export const SaveableTripSearchResultRow =
-  wrapWithExperimentalFeatureToggledComponent<
-    React.PropsWithChildren<{
-      tripPattern: TripPattern;
-    }>
-  >('render-children-if-disabled', ({children, tripPattern}) => {
-    const isExperimentalEnabled = useIsExperimentalEnabled();
-    const {tripPatterns, addTripPattern, removeTripPattern, canAddTripPattern} =
-      useStoredTripPatterns();
-    const {fareZones} = useFirestoreConfigurationContext();
-    const analytics = useAnalyticsContext();
-    const {serverNow} = useTimeContext(30000);
+export const SaveableTripSearchResultRow: React.FC<
+  React.PropsWithChildren<{
+    tripPattern: TripPattern;
+  }>
+> = ({children, tripPattern}) => {
+  const {isSaveTripsEnabled} = useFeatureTogglesContext();
+  const {tripPatterns, addTripPattern, removeTripPattern, canAddTripPattern} =
+    useStoredTripPatterns();
+  const {fareZones} = useFirestoreConfigurationContext();
+  const analytics = useAnalyticsContext();
+  const {serverNow} = useTimeContext(30000);
 
-    const canAdd = useMemo(() => {
-      return canAddTripPattern(tripPattern);
-    }, [tripPattern, canAddTripPattern]);
+  const canAdd = useMemo(() => {
+    return canAddTripPattern(tripPattern);
+  }, [tripPattern, canAddTripPattern]);
 
-    const isStored = useMemo(
-      () =>
-        canAdd &&
-        tripPatterns.some((tp) => tp.key === getTripPatternKey(tripPattern)),
-      [tripPattern, tripPatterns, canAdd],
-    );
+  const isStored = useMemo(
+    () =>
+      canAdd &&
+      tripPatterns.some((tp) => tp.key === getTripPatternKey(tripPattern)),
+    [tripPattern, tripPatterns, canAdd],
+  );
 
-    const rightActionKind = useMemo<RightActionKind>(
-      () => (isStored ? 'delete' : 'save'),
-      [isStored],
-    );
+  const rightActionKind = useMemo<RightActionKind>(
+    () => (isStored ? 'delete' : 'save'),
+    [isStored],
+  );
 
-    const onRightAction = useCallback(
-      (actionKind: RightActionKind, closeSwipeable: () => void) => {
-        closeSwipeable();
-        if (actionKind === 'delete') {
-          analytics.logEvent(
-            'Trip search',
-            'Trip removed',
-            getTripPatternAnalytics(tripPattern, fareZones, serverNow),
-          );
-          removeTripPattern(tripPattern);
-        } else {
-          analytics.logEvent(
-            'Trip search',
-            'Trip saved',
-            getTripPatternAnalytics(tripPattern, fareZones, serverNow),
-          );
-          addTripPattern(tripPattern);
-        }
-      },
-      [
-        tripPattern,
-        addTripPattern,
-        removeTripPattern,
-        analytics,
-        fareZones,
-        serverNow,
-      ],
-    );
+  const onRightAction = useCallback(
+    (actionKind: RightActionKind, closeSwipeable: () => void) => {
+      closeSwipeable();
+      if (actionKind === 'delete') {
+        analytics.logEvent(
+          'Trip search',
+          'Trip removed',
+          getTripPatternAnalytics(tripPattern, fareZones, serverNow),
+        );
+        removeTripPattern(tripPattern);
+      } else {
+        analytics.logEvent(
+          'Trip search',
+          'Trip saved',
+          getTripPatternAnalytics(tripPattern, fareZones, serverNow),
+        );
+        addTripPattern(tripPattern);
+      }
+    },
+    [
+      tripPattern,
+      addTripPattern,
+      removeTripPattern,
+      analytics,
+      fareZones,
+      serverNow,
+    ],
+  );
 
-    if (!isExperimentalEnabled || !canAdd) {
-      return children;
-    }
+  if (!isSaveTripsEnabled || !canAdd) {
+    return children;
+  }
 
-    return (
-      <SwipeableResultRow
-        onRightAction={onRightAction}
-        rightActionKind={rightActionKind}
-      >
-        {children}
-        {isStored && (
-          <ThemeIcon
-            svg={SaveFill}
-            color="secondary"
-            style={{position: 'absolute', right: 20, top: 2}}
-          />
-        )}
-      </SwipeableResultRow>
-    );
-  });
+  return (
+    <SwipeableResultRow
+      onRightAction={onRightAction}
+      rightActionKind={rightActionKind}
+    >
+      {children}
+      {isStored && (
+        <ThemeIcon
+          svg={SaveFill}
+          color="secondary"
+          style={{position: 'absolute', right: 20, top: 2}}
+        />
+      )}
+    </SwipeableResultRow>
+  );
+};

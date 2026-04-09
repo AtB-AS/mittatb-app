@@ -13,92 +13,88 @@ import {ContentHeading} from '@atb/components/heading';
 import {translation as _, useTranslation} from '@atb/translations';
 import {TravelCard} from '@atb/screen-components/travel-card';
 import {useStoredTripPatterns} from './StoredTripPatternsContext';
-import {wrapWithExperimentalFeatureToggledComponent} from '@atb/modules/experimental';
 import {RightActionKind, SwipeableResultRow} from './SwipeableResultRow';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {getTripPatternAnalytics} from '@atb/screen-components/travel-details-screens';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useTimeContext} from '../time';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type Props = {
   onDetailsPressed(tripPattern: TripPattern): void;
   isFocused: boolean;
 };
 
-export const StoredTripPatternsDashboardComponent =
-  wrapWithExperimentalFeatureToggledComponent<Props>(
-    'render-nothing-if-disabled',
-    ({onDetailsPressed, isFocused}) => {
-      const styles = useThemeStyles();
-      const {t} = useTranslation();
-      const {fareZones} = useFirestoreConfigurationContext();
-      const analytics = useAnalyticsContext();
-      const {serverNow} = useTimeContext(30000);
+export const StoredTripPatternsDashboardComponent: React.FC<Props> = ({
+  onDetailsPressed,
+  isFocused,
+}) => {
+  const {isSaveTripsEnabled} = useFeatureTogglesContext();
+  const styles = useThemeStyles();
+  const {t} = useTranslation();
+  const {fareZones} = useFirestoreConfigurationContext();
+  const analytics = useAnalyticsContext();
+  const {serverNow} = useTimeContext(30000);
 
-      const {tripPatterns, updateTripPattern, removeTripPattern} =
-        useStoredTripPatterns();
+  const {tripPatterns, updateTripPattern, removeTripPattern} =
+    useStoredTripPatterns();
 
-      const setTripPatternToRemove = useCallback(
-        (tripPattern: TripPattern, cancelRemove: () => void) => {
-          Alert.alert(
-            t(RemoveStoredTripPatternAlertTexts.header.text),
-            undefined,
-            [
-              {
-                text: t(RemoveStoredTripPatternAlertTexts.cancelButton.text),
-                style: 'cancel',
-                onPress: cancelRemove,
-              },
-              {
-                text: t(RemoveStoredTripPatternAlertTexts.removeButton.text),
-                style: 'destructive',
-                onPress: () => {
-                  analytics.logEvent(
-                    'Dashboard',
-                    'Trip removed',
-                    getTripPatternAnalytics(tripPattern, fareZones, serverNow),
-                  );
-                  removeTripPattern(tripPattern);
-                },
-              },
-            ],
-          );
+  const setTripPatternToRemove = useCallback(
+    (tripPattern: TripPattern, cancelRemove: () => void) => {
+      Alert.alert(t(RemoveStoredTripPatternAlertTexts.header.text), undefined, [
+        {
+          text: t(RemoveStoredTripPatternAlertTexts.cancelButton.text),
+          style: 'cancel',
+          onPress: cancelRemove,
         },
-        [removeTripPattern, t, analytics, fareZones, serverNow],
-      );
-
-      if (!tripPatterns.length) {
-        return null;
-      }
-
-      return (
-        <View testID="storedTripPatternsContentView">
-          <ContentHeading
-            style={styles.contentHeading}
-            text={t(StoredTripPatternsDashboardComponentTexts.header)}
-          />
-          {tripPatterns.map((tripPattern, i) => (
-            <Animated.View
-              key={tripPattern.key}
-              exiting={ZoomOut.easing(Easing.inOut(Easing.ease))}
-              layout={LinearTransition} // https://github.com/software-mansion/react-native-reanimated/discussions/5857#discussioncomment-9992457
-              style={{zIndex: 999}} // This is to make the animation appear above content which is not animating
-            >
-              <StoredTripPatternRow
-                tripPattern={tripPattern}
-                onDetailsPressed={onDetailsPressed}
-                resultIndex={i}
-                length={tripPatterns.length}
-                updateTripPattern={updateTripPattern}
-                setTripPatternToRemove={setTripPatternToRemove}
-                isFocused={isFocused}
-              />
-            </Animated.View>
-          ))}
-        </View>
-      );
+        {
+          text: t(RemoveStoredTripPatternAlertTexts.removeButton.text),
+          style: 'destructive',
+          onPress: () => {
+            analytics.logEvent(
+              'Dashboard',
+              'Trip removed',
+              getTripPatternAnalytics(tripPattern, fareZones, serverNow),
+            );
+            removeTripPattern(tripPattern);
+          },
+        },
+      ]);
     },
+    [removeTripPattern, t, analytics, fareZones, serverNow],
   );
+
+  if (!isSaveTripsEnabled || !tripPatterns.length) {
+    return null;
+  }
+
+  return (
+    <View testID="storedTripPatternsContentView">
+      <ContentHeading
+        style={styles.contentHeading}
+        text={t(StoredTripPatternsDashboardComponentTexts.header)}
+      />
+      {tripPatterns.map((tripPattern, i) => (
+        <Animated.View
+          key={tripPattern.key}
+          exiting={ZoomOut.easing(Easing.inOut(Easing.ease))}
+          layout={LinearTransition}
+          style={{zIndex: 999}}
+        >
+          <StoredTripPatternRow
+            tripPattern={tripPattern}
+            onDetailsPressed={onDetailsPressed}
+            resultIndex={i}
+            length={tripPatterns.length}
+            updateTripPattern={updateTripPattern}
+            setTripPatternToRemove={setTripPatternToRemove}
+            isFocused={isFocused}
+          />
+        </Animated.View>
+      ))}
+    </View>
+  );
+};
 
 const StoredTripPatternRow: React.FC<{
   tripPattern: TripPattern;
