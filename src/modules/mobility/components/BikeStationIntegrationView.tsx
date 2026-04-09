@@ -104,9 +104,6 @@ export const BikeStationIntegrationView = ({
                         ? 'ebicycle'
                         : undefined
                     }
-                    isFlexible={false}
-                    size="normal"
-                    type="compact"
                     displayType="rounded"
                   />
                 }
