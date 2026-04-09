@@ -99,6 +99,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       flexDirection: 'row',
       padding: theme.spacing.xSmall,
       alignItems: 'center',
+      justifyContent: 'center',
     },
     standardTransportationIconBox: {
       padding: theme.spacing.small,
