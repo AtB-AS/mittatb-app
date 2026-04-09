@@ -107,7 +107,7 @@ export const BikeStationIntegrationView = ({
                     isFlexible={false}
                     size="normal"
                     type="compact"
-                    overrideBorderRadius="50%"
+                    displayType="rounded"
                   />
                 }
                 onPress={() => {

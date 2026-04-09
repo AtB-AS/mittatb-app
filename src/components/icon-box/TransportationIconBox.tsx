@@ -1,6 +1,5 @@
 import React from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
-
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
@@ -19,9 +18,9 @@ export type TransportationIconBoxProps = {
   lineNumber?: string;
   size?: keyof Theme['icon']['size'];
   type?: 'compact' | 'standard';
+  displayType?: 'rounded' | 'square';
   style?: StyleProp<ViewStyle>;
   disabled?: boolean;
-  overrideBorderRadius?: string;
   testID?: string;
   notification?: (props: SvgProps) => React.JSX.Element;
 };
@@ -33,9 +32,9 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   lineNumber,
   size = 'normal',
   type = 'compact',
+  displayType = 'square',
   style,
   disabled,
-  overrideBorderRadius,
   testID,
   notification,
 }) => {
@@ -59,7 +58,9 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
             {
               backgroundColor,
               borderRadius:
-                overrideBorderRadius ?? getIconBoxBorderRadius(size, theme),
+                displayType === 'rounded'
+                  ? theme.border.radius.circle
+                  : getIconBoxBorderRadius(size, theme),
               paddingRight:
                 (type === 'standard'
                   ? theme.spacing.small

@@ -124,7 +124,7 @@ export const BicycleSheet = ({
           isFlexible={false}
           size="normal"
           type="compact"
-          overrideBorderRadius="50%"
+          displayType="rounded"
         />
       }
       locationArrowOnPress={locationArrowOnPress}
