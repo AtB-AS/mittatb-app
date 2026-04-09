@@ -56,8 +56,8 @@ export function LegsSummary({
           <View style={styles.legSectionItem}>
             <View style={[styles.sectionItemSpacing, styles.centered]}>
               <TransportationIconBox
-                type="standard"
                 mode={leg.mode}
+                spacious={true}
                 subMode={leg.transportSubmode}
                 lineNumber={leg.line?.publicCode}
               />

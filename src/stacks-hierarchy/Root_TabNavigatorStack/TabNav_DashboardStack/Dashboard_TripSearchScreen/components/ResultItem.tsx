@@ -212,7 +212,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                         subMode={leg.line?.transportSubmode}
                         isFlexible={isLineFlexibleTransport(leg.line)}
                         lineNumber={leg.line?.publicCode}
-                        type="standard"
+                        spacious={true}
                         testID={`${leg.mode}Leg`}
                       />
                     )}
