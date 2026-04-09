@@ -48,7 +48,7 @@ export const TransportationIconBoxList = ({
           key={mode + subMode}
           mode={mode}
           subMode={subMode}
-          size={iconSize}
+          iconSize={iconSize}
           disabled={disabled}
         />
       ))}

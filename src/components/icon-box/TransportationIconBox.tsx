@@ -16,7 +16,7 @@ export type TransportationIconBoxProps = {
   subMode?: AnySubMode;
   isFlexible?: boolean;
   lineNumber?: string;
-  size?: keyof Theme['icon']['size'];
+  iconSize?: keyof Theme['icon']['size'];
   type?: 'compact' | 'standard';
   displayType?: 'rounded' | 'square';
   style?: StyleProp<ViewStyle>;
@@ -30,7 +30,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   subMode,
   isFlexible = false,
   lineNumber,
-  size = 'normal',
+  iconSize = 'normal',
   type = 'compact',
   displayType = 'square',
   style,
@@ -60,7 +60,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
               borderRadius:
                 displayType === 'rounded'
                   ? theme.border.radius.circle
-                  : getIconBoxBorderRadius(size, theme),
+                  : getIconBoxBorderRadius(iconSize, theme),
               paddingRight:
                 (type === 'standard'
                   ? theme.spacing.small
@@ -70,7 +70,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
           ]}
         >
           <ThemeIcon
-            size={size}
+            size={iconSize}
             svg={svg}
             color={transportationColor.foreground.primary}
             accessibilityLabel={t(getTranslatedModeName(mode))}
