@@ -49,17 +49,6 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   const styles = useStyles();
   const {theme} = useThemeContext();
 
-  const lineNumberElement = lineNumber ? (
-    <ThemeText
-      typography="body__m__strong"
-      color={transportationColor}
-      style={styles.lineNumberText}
-      testID="lineNumber"
-    >
-      {lineNumber}
-    </ThemeText>
-  ) : null;
-
   return (
     <WithNotificationBadge notification={notification}>
       {({extraPaddingRight}) => (
@@ -86,7 +75,16 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
             accessibilityLabel={t(getTranslatedModeName(mode))}
             testID={testID}
           />
-          {lineNumberElement}
+          {lineNumber && (
+            <ThemeText
+              typography="body__m__strong"
+              color={transportationColor}
+              style={styles.lineNumberText}
+              testID="lineNumber"
+            >
+              {lineNumber}
+            </ThemeText>
+          )}
         </View>
       )}
     </WithNotificationBadge>
