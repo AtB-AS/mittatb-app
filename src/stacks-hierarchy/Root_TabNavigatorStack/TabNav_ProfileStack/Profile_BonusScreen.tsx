@@ -18,7 +18,6 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {
   ThemedBonusBag,
-  ThemedBonusMap,
   ThemedBonusTransaction,
   ThemedTokenPhone,
 } from '@atb/theme/ThemedAssets';
@@ -276,9 +275,7 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
             </Section>
           </View>
         )}
-        <ContentHeading
-          text={t(BonusProgramTexts.bonusProfile.faq.heading)}
-        />
+        <ContentHeading text={t(BonusProgramTexts.bonusProfile.faq.heading)} />
         <BonusFaqSection />
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.feedback.heading)}
