@@ -20,7 +20,7 @@ import {
 } from './types';
 import {SupplementProduct} from '@atb/modules/configuration';
 import {convertIsoStringFieldsToDate} from '@atb/utils/date';
-import capitalize from 'lodash/capitalize';
+import {capitalize} from 'lodash';
 import qs from 'query-string';
 import {isDefined} from '@atb/utils/presence';
 import {Language} from '@atb/translations/commons';

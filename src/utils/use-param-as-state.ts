@@ -1,5 +1,5 @@
 import {type Dispatch, type SetStateAction, useEffect, useState} from 'react';
-import isEqual from 'lodash.isequal';
+import {isEqual} from 'lodash';
 
 /**
  * Utility hook to sync a parameter to React state. If the parameter changes it

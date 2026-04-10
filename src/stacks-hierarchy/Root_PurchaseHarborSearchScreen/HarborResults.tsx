@@ -8,7 +8,7 @@ import {View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {BoatFill} from '@atb/assets/svg/mono-icons/transportation';
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
-import sortBy from 'lodash.sortby';
+import {sortBy} from 'lodash';
 import {GeoLocation} from '@atb/modules/favorites';
 import haversine from 'haversine-distance';
 import {MessageInfoBox} from '@atb/components/message-info-box';

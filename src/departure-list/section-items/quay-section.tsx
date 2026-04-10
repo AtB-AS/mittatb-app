@@ -3,7 +3,7 @@ import {Section} from '@atb/components/sections';
 import {useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import haversineDistance from 'haversine-distance';
-import sortBy from 'lodash.sortby';
+import {sortBy} from 'lodash';
 import React, {Fragment, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {hasNoGroupsWithDepartures, isValidDeparture} from '../utils';

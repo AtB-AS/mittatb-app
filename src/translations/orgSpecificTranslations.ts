@@ -1,4 +1,4 @@
-import merge from 'lodash.merge';
+import {merge} from 'lodash';
 import {AppOrgs} from '../../types/app-orgs';
 import {APP_ORG} from '@env';
 

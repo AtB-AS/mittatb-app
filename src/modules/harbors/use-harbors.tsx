@@ -6,7 +6,7 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {useHarborConnectionOverrides} from './use-harbor-connection-overrides';
 import {useHarborsQuery} from '@atb/queries';
 import {isDefined} from '@atb/utils/presence';
-import _ from 'lodash';
+import {unionBy} from 'lodash';
 import {StopPlaceFragmentWithIsFree} from './types';
 import {useConnectionsQuery} from '@atb/queries/use-connections-query';
 
@@ -76,7 +76,7 @@ function applyOverrides(
   );
 
   // Add the extra stop places (override harbors) to the list of existing connections.
-  return _.unionBy(overrideHarbors, connections ?? [], 'id');
+  return unionBy(overrideHarbors, connections ?? [], 'id');
 }
 
 function mapOverridesToStopPlaceFragment(

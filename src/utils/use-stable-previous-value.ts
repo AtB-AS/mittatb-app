@@ -1,5 +1,5 @@
 import {useState, useEffect, useRef} from 'react';
-import isEqual from 'lodash.isequal';
+import {isEqual} from 'lodash';
 
 /**
  * Custom hook to keep track of the previous value of a state or prop in a stable manner.

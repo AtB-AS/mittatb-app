@@ -23,7 +23,7 @@ import {
 import {useUpdateAuthLanguageOnChange} from './use-update-auth-language-on-change';
 import {useFetchIdTokenWithCustomClaims} from './use-fetch-id-token-with-custom-claims';
 import Bugsnag from '@bugsnag/react-native';
-import isEqual from 'lodash.isequal';
+import {isEqual} from 'lodash';
 import {mapAuthenticationType} from './utils';
 import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
 import {useUpdateIntercomOnUserChange} from '@atb/modules/auth';

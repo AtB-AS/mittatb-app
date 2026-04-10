@@ -2,7 +2,7 @@ import {
   GeofencingZoneCustomProps,
   PreProcessedGeofencingZones,
 } from '@atb/modules/map';
-import sortBy from 'lodash.sortby';
+import {sortBy} from 'lodash';
 import {toGeoJSON} from '@mapbox/polyline';
 import {
   Feature,
