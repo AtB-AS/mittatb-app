@@ -15,8 +15,7 @@ import {
   Statuses,
   TextColor,
   TextNames,
-  isStatusColor,
-  isTextColor,
+  resolveColorValue,
 } from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
 
@@ -37,7 +36,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   ...props
 }) => {
   const {theme, androidSystemFont} = useThemeContext();
-  const textColor = useColor(color, type);
+  const textColor = resolveColorValue(color, type, theme);
   const fontScale = useFontScale();
 
   const typeStyle = {
@@ -86,19 +85,3 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
 
   return <Text {...textProps}>{content}</Text>;
 };
-
-function useColor(
-  color: ContrastColor | TextColor | Statuses | ColorValue | undefined,
-  type: keyof ContrastColor['foreground'],
-) {
-  const {theme} = useThemeContext();
-  if (typeof color === 'object') {
-    return color.foreground[type];
-  } else if (isStatusColor(color, theme)) {
-    return theme.color.status[color].secondary.foreground[type];
-  } else if (isTextColor(color, theme) || color === undefined) {
-    return theme.color.foreground.dynamic[color ?? 'primary'];
-  } else {
-    return color;
-  }
-}
