@@ -1,4 +1,5 @@
 export {
+  BonusBalanceButton,
   BonusPriceTag,
   EarnedBonusPointsSectionItem,
   PayWithBonusPointsCheckbox,

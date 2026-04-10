@@ -3,3 +3,4 @@ export {BonusPriceTag} from './BonusPriceTag';
 export {UserBonusBalance} from './UserBonusBalance';
 export {EarnedBonusPointsSectionItem} from './EarnedBonusPointsSectionItem';
 export {UserBonusBalanceContent} from './UserBonusBalanceContent';
+export {BonusBalanceButton} from './BonusBalanceButton';
