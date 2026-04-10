@@ -5,8 +5,12 @@ import {
   iso8601DurationToSeconds,
   minutesBetween,
   secondsBetween,
-  timeIsShort,
 } from '@atb/utils/date';
+// eslint-disable-next-line no-restricted-imports
+import {
+  isShortWaitTime,
+  significantWaitTime,
+} from '@atb/modules/trip-patterns/utils';
 import {Leg, Line, TripPattern} from '@atb/api/types/trips';
 import {
   onlyUniques,
@@ -80,17 +84,10 @@ export const filterNotices = (
     .filter(onlyUniquesBasedOnField('id'))
     .sort((s1, s2) => s1.id.localeCompare(s2.id));
 
-export const TIME_LIMIT_IN_MINUTES = 3;
-
 const MIN_SIGNIFICANT_WALK_IN_SECONDS = 30;
-const MIN_SIGNIFICANT_WAIT_IN_SECONDS = 30;
 
 export function significantWalkTime(seconds: number) {
   return seconds > MIN_SIGNIFICANT_WALK_IN_SECONDS;
-}
-
-export function significantWaitTime(seconds: number) {
-  return seconds > MIN_SIGNIFICANT_WAIT_IN_SECONDS;
 }
 
 export function formatDestinationDisplay(
@@ -149,8 +146,7 @@ export function hasShortWaitTime(legs: Leg[]) {
         parseDateIfString(pair.current.expectedEndTime),
       );
     })
-    .filter((waitTime) => waitTime > 0)
-    .some((waitTime) => timeIsShort(waitTime));
+    .some((waitTime) => isShortWaitTime(waitTime));
 }
 
 export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
@@ -173,7 +169,10 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
         parseDateIfString(state.prevEndTime),
       );
 
-      if (timeIsShort(waitTime) && state.prevInterchangeGuaranteed === false) {
+      if (
+        isShortWaitTime(waitTime) &&
+        state.prevInterchangeGuaranteed === false
+      ) {
         return {conclusion: true};
       }
 

@@ -3,7 +3,8 @@ import {ThemeText} from '@atb/components/text';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
-import {secondsToDuration, timeIsShort} from '@atb/utils/date';
+import {isShortWaitTime} from '@atb/modules/trip-patterns';
+import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
 import {TripLegDecoration} from './TripLegDecoration';
@@ -20,7 +21,7 @@ export const WaitSection: React.FC<WaitDetails> = (wait) => {
   const style = useSectionStyles();
   const {t, language} = useTranslation();
   const waitTime = secondsToDuration(wait.waitTimeInSeconds, language);
-  const shortWait = timeIsShort(wait.waitTimeInSeconds);
+  const shortWait = isShortWaitTime(wait.waitTimeInSeconds);
   const legColor = useTransportColor();
 
   return (
