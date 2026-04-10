@@ -28,7 +28,6 @@ import {
   FirestoreConfigStatus,
   NotificationConfigType,
   BonusProductType,
-  BonusSourceType,
   BonusTextsType,
   ScooterConsentLineType,
 } from './types';
@@ -41,7 +40,6 @@ import {
   mapToMobilityOperators,
   mapToScooterFaqs,
   mapToBonusProducts,
-  mapToBonusSources,
   mapToBonusTexts,
   mapToBenefitIdsRequiringValueCode,
   mapToNotificationConfig,
@@ -84,7 +82,6 @@ type ConfigurationContextState = {
   scooterFaqs: ScooterFaqType[] | undefined;
   scooterConsentLines: ScooterConsentLineType[] | undefined;
   bonusProducts: BonusProductType[] | undefined;
-  bonusSources: BonusSourceType[] | undefined;
   bonusTexts: BonusTextsType | undefined;
   benefitIdsRequiringValueCode: OperatorBenefitIdType[] | undefined;
   harborConnectionOverrides: HarborConnectionOverrideType[] | undefined;
@@ -134,7 +131,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     ScooterConsentLineType[]
   >([]);
   const [bonusProducts, setBonusProducts] = useState<BonusProductType[]>([]);
-  const [bonusSources, setBonusSources] = useState<BonusSourceType[]>([]);
   const [bonusTexts, setBonusTexts] = useState<BonusTextsType>();
   const [benefitIdsRequiringValueCode, setBenefitIdsRequiringValueCode] =
     useState<OperatorBenefitIdType[]>([]);
@@ -243,11 +239,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
             setBonusProducts(bonusProducts);
           }
 
-          const bonusSources = getBonusSourcesFromSnapshot(snapshot);
-          if (bonusSources) {
-            setBonusSources(bonusSources);
-          }
-
           const bonusTexts = getBonusTextsFromSnapshot(snapshot);
           if (bonusTexts) {
             setBonusTexts(bonusTexts);
@@ -334,7 +325,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
       scooterFaqs,
       scooterConsentLines,
       bonusProducts,
-      bonusSources,
       bonusTexts,
       benefitIdsRequiringValueCode,
       harborConnectionOverrides,
@@ -360,7 +350,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     scooterFaqs,
     scooterConsentLines,
     bonusProducts,
-    bonusSources,
     bonusTexts,
     benefitIdsRequiringValueCode,
     harborConnectionOverrides,
@@ -684,13 +673,6 @@ function getBonusProductsFromSnapshot(
 ): BonusProductType[] | undefined {
   const products = snapshot.docs.find((doc) => doc.id == 'mobility');
   return mapToBonusProducts(products?.get('bonusProducts'));
-}
-
-function getBonusSourcesFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): BonusSourceType[] | undefined {
-  const sources = snapshot.docs.find((doc) => doc.id == 'mobility');
-  return mapToBonusSources(sources?.get('bonusSources'));
 }
 
 function getBonusTextsFromSnapshot(

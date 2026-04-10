@@ -10,7 +10,6 @@ import {
   ScooterFaq,
   BonusProduct,
   BonusTexts,
-  BonusSource,
   ScooterConsentLine,
 } from './types';
 import {LanguageAndTextType} from '@atb/translations/types';
@@ -237,24 +236,6 @@ export function mapToBonusTexts(bonusTexts?: any) {
     return;
   }
   return parseResult.data;
-}
-
-export function mapToBonusSources(bonusSources?: any) {
-  if (!bonusSources) return;
-  if (!Array.isArray(bonusSources)) return;
-  return bonusSources
-    .map((bonusSource) => {
-      const parseResult = BonusSource.safeParse(bonusSource);
-      if (!parseResult.success) {
-        console.warn(
-          `mapToBonusSources with id ${bonusSource?.id} failed safeParsing:\n`,
-          parseResult.error,
-        );
-        return;
-      }
-      return parseResult.data;
-    })
-    .filter(isDefined);
 }
 
 export function mapToBenefitIdsRequiringValueCode(

@@ -2,7 +2,7 @@ import {translation as _} from '../../commons';
 
 export type BonusFaqContext = {
   endDate: string;
-  pointsPerTicket: number;
+  pointsPerProduct: string;
 };
 
 const BonusProgramTexts = {
@@ -183,28 +183,15 @@ const BonusProgramTexts = {
       faqs: [
         {
           question: _(
-            'Hvilke billetter tjener jeg Poeng på?',
-            'Which tickets do I earn Points on?',
-            'Kva billettar tener eg Poeng på?',
+            'Hvordan tjener jeg Poeng?',
+            'How do I earn Points?',
+            'Korleis tener eg Poeng?',
           ),
-          answer: () =>
+          answer: ({pointsPerProduct}: BonusFaqContext) =>
             _(
-              'Du får Poeng når du kjøper enkeltbilletter for voksen eller student i sone A.',
-              'You earn Points when you buy single tickets for adults or students in zone A.',
-              'Du får Poeng når du kjøper enkeltbilletter for vaksen eller student i sone A.',
-            ),
-        },
-        {
-          question: _(
-            'Hvor mange Poeng får jeg?',
-            'How many Points do I get?',
-            'Kor mange Poeng får eg?',
-          ),
-          answer: ({pointsPerTicket}: BonusFaqContext) =>
-            _(
-              `Du får ${pointsPerTicket} Poeng hver gang du kjøper en enkeltbillett for voksen eller student i sone A.`,
-              `You earn ${pointsPerTicket} Points each time you buy a single ticket for adults or students in zone A.`,
-              `Du får ${pointsPerTicket} Poeng kvar gong du kjøper ein enkeltbillett for vaksen eller student i sone A.`,
+              `Du får ${pointsPerProduct} for voksen eller student i sone A.`,
+              `You earn ${pointsPerProduct} for adults or students in zone A.`,
+              `Du får ${pointsPerProduct} for vaksen eller student i sone A.`,
             ),
         },
         {
@@ -234,6 +221,12 @@ const BonusProgramTexts = {
             ),
         },
       ],
+      pointsPerProductLabel: (value: number, productName: string) =>
+        _(
+          `${value} Poeng hver gang du kjøper en ${productName}`,
+          `${value} Points every time you buy a ${productName}`,
+          `${value} Poeng kvar gong du kjøper ein ${productName}`,
+        ),
     },
   },
 
