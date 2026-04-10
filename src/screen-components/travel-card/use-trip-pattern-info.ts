@@ -36,6 +36,7 @@ export const useTripPatternInfo = (tripPattern: TripPattern) => {
   const {aimedStartTime, aimedEndTime} = computeAimedStartEndTimes(tripPattern);
 
   const isInPast = isInThePast(expectedStartTime);
+  const isEnded = isInThePast(expectedEndTime);
 
   return {
     fromName,
@@ -45,5 +46,6 @@ export const useTripPatternInfo = (tripPattern: TripPattern) => {
     aimedStartTime,
     aimedEndTime,
     isInPast,
+    isEnded,
   };
 };
