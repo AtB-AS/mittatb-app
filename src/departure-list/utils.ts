@@ -49,7 +49,9 @@ export function updateStopsWithRealtime(
 
 function filterOutOutdatedDepartures(quayGroup: QuayGroup) {
   const newDepartureGroups = quayGroup.group.map(function (group) {
-    const newDepartures = group.departures.filter(isValidDeparture);
+    const newDepartures = group.departures.filter((departure) =>
+      isValidDeparture(departure),
+    );
     // Optimization to avoid having to sort list to often.
     // If after filtering it has the same length it means we could
     // just use the previous departure list.
@@ -148,12 +150,8 @@ export function hasNoDeparturesOnGroup(group: DepartureGroup) {
   );
 }
 
-export function isValidDeparture(departure: DepartureTime, now?: number) {
-  return !isNumberOfMinutesInThePast(
-    departure.time,
-    HIDE_AFTER_NUM_MINUTES,
-    now,
-  );
+export function isValidDeparture(departure: DepartureTime) {
+  return !isNumberOfMinutesInThePast(departure.time, HIDE_AFTER_NUM_MINUTES);
 }
 
 export function isValidDepartureTime(time: string, now?: number) {
