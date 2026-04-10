@@ -1,5 +1,5 @@
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TravelCardTexts, useTranslation} from '@atb/translations';
 import {secondsToDuration, secondsToDurationShort} from '@atb/utils/date';
 
@@ -8,6 +8,8 @@ import {AccessibilityProps, View} from 'react-native';
 import {TripPattern} from '@atb/api/types/trips';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {Duration} from '@atb/assets/svg/mono-icons/time';
 import {useTripPatternInfo} from './use-trip-pattern-info';
 import {differenceInMinutes} from 'date-fns';
 import {useTimeLabels} from './utils';
@@ -27,6 +29,7 @@ export const TravelCardHeader: React.FC<
 }) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
+  const {theme} = useThemeContext();
 
   const {
     fromName,
@@ -36,6 +39,7 @@ export const TravelCardHeader: React.FC<
     aimedStartTime,
     aimedEndTime,
     isInPast,
+    isEnded,
   } = useTripPatternInfo(tripPattern);
 
   const {
@@ -55,15 +59,29 @@ export const TravelCardHeader: React.FC<
   const a11yLabel = `
     ${includeFromToInfo ? t(TravelCardTexts.header.fromToInfo.a11yLabel(fromName, toName)) : ''}. 
     ${
-      isInPast
-        ? t(TravelCardTexts.header.pastTime)
-        : t(
+      isEnded
+        ? `${t(TravelCardTexts.header.notPossible)}. ${t(
             TravelCardTexts.header.expectedTime.a11yLabel(
               expectedStartTimeLabel,
               expectedEndTimeLabel,
               showAimedTime,
             ),
-          )
+          )}`
+        : isInPast
+          ? `${t(TravelCardTexts.header.tripStarted)}. ${t(
+              TravelCardTexts.header.expectedTime.a11yLabel(
+                expectedStartTimeLabel,
+                expectedEndTimeLabel,
+                showAimedTime,
+              ),
+            )}`
+          : t(
+              TravelCardTexts.header.expectedTime.a11yLabel(
+                expectedStartTimeLabel,
+                expectedEndTimeLabel,
+                showAimedTime,
+              ),
+            )
     }. 
     ${
       showAimedTime
@@ -87,10 +105,27 @@ export const TravelCardHeader: React.FC<
     <View style={styles.container} {...accessibilityProps}>
       <View style={styles.header}>
         <View style={styles.timeContainer}>
+          {isEnded && (
+            <View style={styles.statusContainer}>
+              <ThemeIcon svg={Close} color="error" size="xSmall" />
+              <ThemeText typography="body__s__strong" color="error">
+                {t(TravelCardTexts.header.notPossible)}
+              </ThemeText>
+            </View>
+          )}
+          {isInPast && !isEnded && (
+            <View style={styles.statusContainer}>
+              <ThemeIcon svg={Duration} color="info" size="xSmall" />
+              <ThemeText
+                typography="body__s__strong"
+                color={theme.color.foreground.emphasis.info}
+              >
+                {t(TravelCardTexts.header.tripStarted)}
+              </ThemeText>
+            </View>
+          )}
           <ThemeText typography="body__m__strong">
-            {isInPast
-              ? t(TravelCardTexts.header.pastTime)
-              : `${expectedStartTimeLabel} - ${expectedEndTimeLabel}`}
+            {`${expectedStartTimeLabel} - ${expectedEndTimeLabel}`}
           </ThemeText>
           {(!areTimesEquivalentInMinutes || isInPast) && (
             <ThemeText typography="body__s" color="secondary">
@@ -126,6 +161,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.small,
   },
   timeContainer: {flex: 1, flexShrink: 1, gap: theme.spacing.xSmall},
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.xSmall,
+  },
   header: {
     flex: 1,
     flexDirection: 'row',

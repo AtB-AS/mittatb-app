@@ -53,6 +53,12 @@ const TravelCardTexts = {
     },
     originalTime: _('Opprinnelig', 'Original', 'Opprinnelig'),
     pastTime: _('Avreise passert', 'Departure passed', 'Avreise passert'),
+    notPossible: _(
+      'Ikke lenger mulig',
+      'No longer possible',
+      'Ikkje lenger mogleg',
+    ),
+    tripStarted: _('Reisen har begynt', 'Trip has started', 'Reisa har begynt'),
     fromToInfo: {
       a11yLabel: (fromPlace: string, toPlace: string) =>
         _(
