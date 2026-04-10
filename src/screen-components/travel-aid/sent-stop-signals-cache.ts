@@ -1,5 +1,4 @@
-import isEqual from 'lodash/isEqual';
-import pick from 'lodash/pick';
+import {pick, isEqual} from 'lodash';
 import type {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 
 type ServiceJourneyDepartureRelevantFields = Pick<

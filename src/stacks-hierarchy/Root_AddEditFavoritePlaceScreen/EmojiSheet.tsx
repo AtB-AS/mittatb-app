@@ -7,9 +7,7 @@
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import emoji from 'emoji-datasource';
-import groupBy from 'lodash.groupby';
-import mapValues from 'lodash.mapvalues';
-import orderBy from 'lodash.orderby';
+import {groupBy, mapValues, orderBy} from 'lodash';
 import React, {useEffect, useState} from 'react';
 import {
   Dimensions,

@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import _ from 'lodash';
+import {times} from 'lodash';
 import React from 'react';
 
 type PageIndicatorProps = {
@@ -12,7 +12,7 @@ export function PageIndicator({index, count}: PageIndicatorProps) {
   const styles = useThemeStyles();
   return (
     <View style={styles.pageIndicator}>
-      {_.times(count, (i) => (
+      {times(count, (i) => (
         <View
           key={i}
           style={[styles.pageDot, index === i && styles.activeDot]}
