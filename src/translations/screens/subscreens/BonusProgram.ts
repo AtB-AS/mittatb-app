@@ -12,9 +12,9 @@ const BonusProgramTexts = {
 
   yourBonusBalanceA11yLabel: (bonusBalance: number | null) => {
     return _(
-      `Du har ${bonusBalance ?? 'ukjent antall'} bonuspoeng`,
-      `You have ${bonusBalance ?? 'unknown number of'} bonus points`,
-      `Du har ${bonusBalance ?? 'ukjent mengde'} bonuspoeng`,
+      `Du har ${bonusBalance == null ? 'ukjent antall' : bonusBalance} poeng`,
+      `You have ${bonusBalance == null ? 'unknown number of' : bonusBalance} points`,
+      `Du har ${bonusBalance == null ? 'ukjent mengde' : bonusBalance} poeng`,
     );
   },
 
