@@ -384,6 +384,7 @@ export const Map = (props: MapProps) => {
     <View style={{flex: 1}}>
       <View style={{flex: 1}}>
         <MapView
+          id="mainMap"
           ref={mapViewRef}
           style={{
             flex: 1,

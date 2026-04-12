@@ -84,6 +84,7 @@ export const MapTilePreloader = forwardRef<MapState, MapTilePreloaderProps>(
     const {width, height} = Dimensions.get('window');
     return (
       <MapView
+        id="preloaderOnlyMap"
         surfaceView={false} // android won't render more than 1 map with surfaceView
         style={{
           pointerEvents: 'none',
@@ -92,6 +93,9 @@ export const MapTilePreloader = forwardRef<MapState, MapTilePreloaderProps>(
           left: -width - 100,
           height: height - tabBarHeight,
           width: width,
+          transform: [
+            {scale: 0.01}, // Shrinks the visual output to a sub-pixel
+          ],
           opacity: 0,
           // useful for development/inspection:
           // top: 0,
