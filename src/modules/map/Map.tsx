@@ -11,6 +11,7 @@ import {
   Viewport,
   Camera,
   MapView,
+  MapState,
 } from '@rnmapbox/maps';
 
 import {Feature} from 'geojson';
@@ -56,7 +57,11 @@ import {useMapContext} from '@atb/modules/map';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
 import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
-import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
+import {
+  StationsWithClusters,
+  VehiclesAndStations,
+  VehiclesWithClusters,
+} from './components/mobility/VehiclesAndStations';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
@@ -68,8 +73,9 @@ import {ShmoTesting} from './components/mobility/ShmoTesting';
 import {usePreferencesContext} from '../preferences';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {GeofencingZonesAsTiles} from './components/mobility/GeofencingZonesAsTiles';
+import {MapTilePreloader} from './components/MapTilePreloader';
 
-const DEFAULT_ZOOM_LEVEL = 14.5;
+export const DEFAULT_ZOOM_LEVEL = 14.5;
 
 export const Map = (props: MapProps) => {
   const {
@@ -92,6 +98,7 @@ export const Map = (props: MapProps) => {
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<Camera>(null);
   const mapViewRef = useRef<MapView>(null);
+  const mapStateRef = useRef<MapState | null>(null);
   const [initMapLoaded, setInitMapLoaded] = useState(false);
   const {bottomSheetMapRef} = useBottomSheetContext();
   const onPressStartRef = useRef<boolean>(false);
@@ -120,6 +127,7 @@ export const Map = (props: MapProps) => {
     isGeofencingZonesEnabled,
     isGeofencingZonesAsTilesEnabled,
     isMapPitchEnabled,
+    isMapTilePreloadingEnabled,
   } = useFeatureTogglesContext();
 
   const {getGeofencingZoneContent} = useGeofencingZoneContent();
@@ -387,6 +395,7 @@ export const Map = (props: MapProps) => {
             onPressStartRef.current = true;
           }}
           onCameraChanged={(state) => {
+            mapStateRef.current = {...state};
             // If a collapse is pending and the camera moves, collapse immediately
             if (onPressStartRef.current && state.gestures.isGestureActive) {
               onPressStartRef.current = false;
@@ -510,6 +519,27 @@ export const Map = (props: MapProps) => {
         navigateToPaymentMethods={navigateToPaymentMethods}
         locationArrowOnPress={locationArrowOnPress}
       />
+      {isMapTilePreloadingEnabled && (
+        <MapTilePreloader
+          startingCoordinates={startingCoordinates}
+          tabBarHeight={tabBarHeight}
+          ref={mapStateRef}
+        >
+          {!!showVehicles && (
+            <VehiclesWithClusters
+              selectedFeatureId={undefined}
+              hideSymbols={true}
+            />
+          )}
+          {!!showStations && (
+            <StationsWithClusters
+              selectedFeatureId={undefined}
+              showNonVirtualStations={true}
+              hideSymbols={true}
+            />
+          )}
+        </MapTilePreloader>
+      )}
     </View>
   );
 };

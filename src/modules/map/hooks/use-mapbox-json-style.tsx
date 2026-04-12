@@ -35,9 +35,11 @@ const slotLayers = slotLayerIds.map((slotLayerId) => ({
 export const useMapboxJsonStyle: (
   includeVehiclesAndStationsVectorSource: boolean,
   shouldShowGeofencingZonesLayers: boolean,
+  includeBasemapStyle: boolean,
 ) => string | undefined = (
   includeVehiclesAndStationsVectorSource,
   shouldShowGeofencingZonesLayers,
+  includeBasemapStyle,
 ) => {
   const {themeName} = useThemeContext();
   const {mapbox_user_name, mapbox_nsr_tileset_id} = useRemoteConfigContext();
@@ -113,30 +115,32 @@ export const useMapboxJsonStyle: (
         ...themedStyleWithExtendedSourcesAndSlotLayers,
         sprite: (mapboxSpriteUrl ?? '') + themeName,
         projection: {name: 'mercator'}, // Using 'globe' instead looks pretty cool, but there is an initial frame flicker with zoom 0. Might be possible to fix somehow.
-        imports: isMap3dEnabled
-          ? [
-              {
-                id: 'basemap',
-                // url must be absolute for this to work
-                url: `https://api.mapbox.com/styles/v1/mapbox/standard?access_token=${MAPBOX_API_TOKEN}`,
-                config: {
-                  lightPreset: themeName === 'dark' ? 'night' : 'day',
-                  showPlaceLabels: true,
-                  showPointOfInterestLabels: false,
-                  showTransitLabels: false,
-                  showPedestrianRoads: true,
-                  showRoadLabels: false,
+        imports:
+          isMap3dEnabled && includeBasemapStyle
+            ? [
+                {
+                  id: 'basemap',
+                  // url must be absolute for this to work
+                  url: `https://api.mapbox.com/styles/v1/mapbox/standard?access_token=${MAPBOX_API_TOKEN}`,
+                  config: {
+                    lightPreset: themeName === 'dark' ? 'night' : 'day',
+                    showPlaceLabels: true,
+                    showPointOfInterestLabels: false,
+                    showTransitLabels: false,
+                    showPedestrianRoads: true,
+                    showRoadLabels: false,
+                  },
+                  'color-theme': colorTheme,
                 },
-                'color-theme': colorTheme,
-              },
-            ]
-          : [],
+              ]
+            : [],
       }),
     [
       themedStyleWithExtendedSourcesAndSlotLayers,
       mapboxSpriteUrl,
       themeName,
       isMap3dEnabled,
+      includeBasemapStyle,
     ],
   );
 
