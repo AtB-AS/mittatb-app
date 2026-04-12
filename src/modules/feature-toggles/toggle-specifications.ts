@@ -66,6 +66,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_map_pitch',
   },
   {
+    name: 'isMapTilePreloadingEnabled',
+    remoteConfigKey: 'enable_map_tile_preloading',
+  },
+  {
     name: 'isNonTransitTripSearchEnabled',
     remoteConfigKey: 'enable_non_transit_trip_search',
   },
