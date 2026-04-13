@@ -17,14 +17,14 @@ import {useVehicle} from '@atb/modules/mobility';
 import {throttle} from '@atb/utils/throttle';
 import {Coordinates} from '@atb/utils/coordinates';
 import {useOpeningHours} from './use-opening-hours';
-import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {GeofencingZoneCode} from '@atb-as/theme';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export const useShmoWarnings = (
   vehicleId: string,
   mapViewRef?: RefObject<MapView | null>,
 ) => {
-  const {enable_geofencing_zones_as_tiles} = useRemoteConfigContext();
+  const {isGeofencingZonesAsTilesEnabled} = useFeatureTogglesContext();
   const {t} = useTranslation();
   const [geofencingZoneWarning, setGeofencingZoneWarning] =
     useState<GeofencingZoneContent | null>(null);
@@ -68,7 +68,7 @@ export const useShmoWarnings = (
       );
 
       const geofencingZoneFeatures = featuresAtLocation?.filter((feature) =>
-        enable_geofencing_zones_as_tiles
+        isGeofencingZonesAsTilesEnabled
           ? isFeatureGeofencingZoneAsTiles(feature)
           : isFeatureGeofencingZone(feature) &&
             feature?.properties?.geofencingZoneCustomProps?.code,
@@ -86,13 +86,13 @@ export const useShmoWarnings = (
 
       const featProps = featureToSelect?.properties;
       const code: GeofencingZoneCode =
-        (enable_geofencing_zones_as_tiles
+        (isGeofencingZonesAsTilesEnabled
           ? featProps?.code
           : featProps?.geofencingZoneCustomProps?.code) ?? 'allowed';
 
       if (code !== 'allowed') {
         const isStationParking: boolean =
-          (enable_geofencing_zones_as_tiles
+          (isGeofencingZonesAsTilesEnabled
             ? featProps?.stationParking
             : featProps?.geofencingZoneCustomProps?.isStationParking) ?? false;
 
