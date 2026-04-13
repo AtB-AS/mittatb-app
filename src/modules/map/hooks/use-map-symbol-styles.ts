@@ -12,9 +12,9 @@ import {SelectedMapItemProperties} from '../types';
 import {getIconZoomTransitionStyle} from '../utils';
 import {PropulsionType} from '@atb/api/types/generated/mobility-types_v2';
 
-export const scaleTransitionZoomRange = 0.4;
-const opacityTransitionExtraZoomRange = scaleTransitionZoomRange / 8;
-const smallestAllowedSizeFactor = 0.3;
+export const scaleTransitionZoomRange = 0.3;
+const opacityTransitionExtraZoomRange = scaleTransitionZoomRange / 4;
+export const smallestAllowedSizeFactor = 0.3;
 
 type MapSymbolStylesProps = {
   selectedFeaturePropertyId: SelectedMapItemProperties['id'];
@@ -71,7 +71,31 @@ export const useMapSymbolStyles = ({
     ['!', isMinimized],
   ];
 
-  const iconFullSize: Expression = ['case', reduceIconSize, 0.855, 1];
+  const textOffsetXFactor = pinType == 'vehicle' ? 1 : 1.045;
+  const numberOfUnits = pinType == 'vehicle' ? count : numVehiclesAvailable;
+  const numberOfUnitsLimitedAt99Plus: Expression = [
+    'case',
+    isMinimized,
+    '+',
+    ['>', numberOfUnits, 99],
+    '99+',
+    numberOfUnits,
+  ];
+
+  const countAdjustmentMaxFactorIncrease = 0.2;
+  const countAdjustedSizeFactor = [
+    'step',
+    numberOfUnits,
+    ['+', 1, ['*', numberOfUnits, countAdjustmentMaxFactorIncrease / 100]],
+    100,
+    1 + countAdjustmentMaxFactorIncrease,
+  ];
+
+  const iconFullSize: Expression = [
+    '*',
+    ['case', reduceIconSize, 0.855, 1],
+    countAdjustedSizeFactor,
+  ];
 
   const {iconOpacity, iconSize} = getIconZoomTransitionStyle(
     reachFullScaleAtZoomLevel,
@@ -175,17 +199,6 @@ export const useMapSymbolStyles = ({
     suffix,
     '_',
     themeName,
-  ];
-
-  const textOffsetXFactor = pinType == 'vehicle' ? 1 : 1.045;
-  const numberOfUnits = pinType == 'vehicle' ? count : numVehiclesAvailable;
-  const numberOfUnitsLimitedAt99Plus: Expression = [
-    'case',
-    isMinimized,
-    '+',
-    ['>', numberOfUnits, 99],
-    '99+',
-    numberOfUnits,
   ];
 
   const symbolSortKey: Expression = [
