@@ -18,6 +18,7 @@ import {throttle} from '@atb/utils/throttle';
 import {Coordinates} from '@atb/utils/coordinates';
 import {useOpeningHours} from './use-opening-hours';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {GeofencingZoneCode} from '@atb-as/theme';
 
 export const useShmoWarnings = (
   vehicleId: string,
@@ -83,14 +84,21 @@ export const useShmoWarnings = (
         coordinates.latitude,
       ]);
 
-      if (
-        featureToSelect?.properties?.geofencingZoneCustomProps?.code !==
-        'allowed'
-      ) {
+      const featProps = featureToSelect?.properties;
+      const code: GeofencingZoneCode =
+        (enable_geofencing_zones_as_tiles
+          ? featProps?.code
+          : featProps?.geofencingZoneCustomProps?.code) ?? 'allowed';
+
+      if (code !== 'allowed') {
+        const isStationParking: boolean =
+          (enable_geofencing_zones_as_tiles
+            ? featProps?.stationParking
+            : featProps?.geofencingZoneCustomProps?.isStationParking) ?? false;
+
         const geofencingZoneContent = getGeofencingZoneContent(
-          featureToSelect?.properties?.geofencingZoneCustomProps?.code,
-          featureToSelect?.properties?.geofencingZoneCustomProps
-            ?.isStationParking,
+          code,
+          isStationParking,
         );
         setGeofencingZoneWarning(geofencingZoneContent);
       } else {
