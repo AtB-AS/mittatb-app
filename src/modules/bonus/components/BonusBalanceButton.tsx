@@ -1,10 +1,10 @@
 import React from 'react';
 import {Button} from '@atb/components/button';
 import {useThemeContext} from '@atb/theme';
-import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
 import {BonusProgramTexts, useTranslation} from '@atb/translations';
 import {useBonusBalanceQuery} from '../queries';
 import {useIsEnrolled, KnownProgramId} from '@atb/modules/enrollment';
+import {BonusStarFill} from './BonusStarFill';
 
 type BonusBalanceButtonProps = {
   onPress: () => void;
@@ -25,7 +25,7 @@ export const BonusBalanceButton = ({onPress}: BonusBalanceButtonProps) => {
       type="large"
       expanded={false}
       interactiveColor={theme.color.interactive[2]}
-      leftIcon={{svg: StarFill}}
+      leftIcon={{svg: BonusStarFill}}
       hasShadow={true}
       accessibilityLabel={t(
         BonusProgramTexts.yourBonusBalanceA11yLabel(bonusBalance),
