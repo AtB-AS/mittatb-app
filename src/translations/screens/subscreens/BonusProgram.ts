@@ -144,19 +144,23 @@ const BonusProgramTexts = {
         ),
       },
       earnPoints: {
-        title: _('Samle Poeng', 'Earn Points', 'Samle Poeng'),
+        title: _(
+          'Tjen Poeng på enkeltbilletter',
+          'Earn Points on single tickets',
+          'Tjen Poeng på enkeltbilletter',
+        ),
         description: _(
-          'Kjøp enkeltbilletter for voksen eller student i sone A og få Poeng.',
-          'Buy single tickets for adults or students in zone A and earn Points.',
-          'Kjøp enkeltbilletter for vaksen eller student i sone A og få Poeng.',
+          'Du tjener Poeng hver gang du kjøper en enkeltbillett for voksen eller student i sone A.',
+          'You earn Points every time you buy a single ticket for adults or students in zone A.',
+          'Du får Poeng kvar gong du kjøper ein enkeltbillett for vaksen eller student i sone A.',
         ),
       },
       spendPoints: {
         title: _('Bruk poeng', 'Spend Points', 'Bruk poeng'),
         description: _(
-          'Bruk Poeng på turer med bysykkel og Hyre-biler.',
-          'You can spend points on trips with city bikes and Hyre cars.',
-          'Du kan bruke poenga på turar med bysykkel og Hyre-bilar.',
+          'Poengene kan du bruke til å betale for  turer med bysykkel og Hyre-biler.',
+          'You can spend the points to pay for trips with city bikes and Hyre cars.',
+          'Poenga kan du bruke til å betale for turer med bysykkel og Hyre-biler.',
         ),
       },
       downloadOperator: (operator: string) =>

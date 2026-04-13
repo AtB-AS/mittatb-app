@@ -275,8 +275,6 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
             </Section>
           </View>
         )}
-        <ContentHeading text={t(BonusProgramTexts.bonusProfile.faq.heading)} />
-        <BonusFaqSection />
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.feedback.heading)}
         />
@@ -290,6 +288,8 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
             }}
           />
         </Section>
+        <ContentHeading text={t(BonusProgramTexts.bonusProfile.faq.heading)} />
+        <BonusFaqSection />
       </View>
     </FullScreenView>
   );
