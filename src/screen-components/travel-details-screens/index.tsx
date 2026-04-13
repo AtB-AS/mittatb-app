@@ -16,7 +16,6 @@ export {
   getTripPatternBookingStatus,
   isFreeLeg,
   isLineFlexibleTransport,
-  significantWaitTime,
   significantWalkTime,
 } from './utils';
 

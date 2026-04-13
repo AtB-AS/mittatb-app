@@ -1,6 +1,6 @@
 import {addMinutes} from 'date-fns';
 import {Leg} from '@atb/api/types/trips';
-import {hasShortWaitTime, TIME_LIMIT_IN_MINUTES} from '../utils';
+import {hasShortWaitTime} from '../utils';
 
 describe('Short wait time evaluator', () => {
   const nowDate = Date.now();
@@ -10,12 +10,12 @@ describe('Short wait time evaluator', () => {
   } as Leg;
 
   const Leg2: Leg = {
-    expectedStartTime: addMinutes(nowDate, 5 + TIME_LIMIT_IN_MINUTES - 1),
+    expectedStartTime: addMinutes(nowDate, 7),
     expectedEndTime: addMinutes(nowDate, 10),
   } as Leg;
 
   const Leg3: Leg = {
-    expectedStartTime: addMinutes(nowDate, 5 + TIME_LIMIT_IN_MINUTES + 1),
+    expectedStartTime: addMinutes(nowDate, 9),
     expectedEndTime: addMinutes(nowDate, 10),
   } as Leg;
 

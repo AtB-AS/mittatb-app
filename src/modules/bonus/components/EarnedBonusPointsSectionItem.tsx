@@ -1,7 +1,7 @@
 import {BonusProgramTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {LinkSectionItem, SectionItemProps} from '@atb/components/sections';
-import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
+import {BonusStarFill} from './BonusStarFill';
 
 type Props = SectionItemProps<{
   amount: number;
@@ -19,7 +19,7 @@ export const EarnedBonusPointsSectionItem = ({
     <LinkSectionItem
       {...props}
       isMarkdown={true}
-      leftIcon={{svg: StarFill}}
+      leftIcon={{svg: BonusStarFill}}
       text={t(BonusProgramTexts.fareContract.youEarned(amount))}
       accessibility={{
         accessibilityLabel: t(

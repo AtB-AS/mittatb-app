@@ -4,10 +4,7 @@ import {Mode} from '@atb-as/theme';
 import React from 'react';
 import {View} from 'react-native';
 import {Leg, TripPattern} from '@atb/api/types/trips';
-import {
-  getFilteredLegsByWalkOrWaitTime,
-  significantWaitTime,
-} from '@atb/screen-components/travel-details-screens';
+import {getFilteredLegsByWalkOrWaitTime} from '@atb/screen-components/travel-details-screens';
 import {OverflowContainer} from '@atb/components/overflow-container';
 import {
   getNotificationSvgForLegs,
@@ -16,7 +13,8 @@ import {
   toMostCriticalStatus,
 } from '@atb/modules/situations';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
-import {secondsBetween, timeIsShort} from '@atb/utils/date';
+import {isShortWaitTime, significantWaitTime} from '@atb/modules/trip-patterns';
+import {secondsBetween} from '@atb/utils/date';
 import {TransportationLeg, FootLeg} from './legs';
 import {TravelCardTexts, useTranslation} from '@atb/translations';
 import {secondsToDuration} from '@atb/utils/date';
@@ -161,13 +159,11 @@ function getNotificationForLeg(
   themeName: Mode,
 ) {
   const previousLeg = legs[index - 1];
+  const waitTimeInSeconds = previousLeg
+    ? secondsBetween(previousLeg.expectedEndTime, leg.expectedStartTime)
+    : 0;
   const shortTransferMsgType: Exclude<Statuses, 'valid'> | undefined =
-    previousLeg &&
-    timeIsShort(
-      secondsBetween(previousLeg.expectedEndTime, leg.expectedStartTime),
-    )
-      ? 'info'
-      : undefined;
+    isShortWaitTime(waitTimeInSeconds) ? 'info' : undefined;
   const msgType = toMostCriticalStatus(
     getMsgTypeForLeg(leg),
     shortTransferMsgType,

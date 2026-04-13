@@ -34,9 +34,9 @@ import {
   getFilteredLegsByWalkOrWaitTime,
   getNoticesForLeg,
   isLineFlexibleTransport,
-  significantWaitTime,
   significantWalkTime,
 } from '@atb/screen-components/travel-details-screens';
+import {significantWaitTime} from '@atb/modules/trip-patterns';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {isSignificantDifference} from '../utils';
