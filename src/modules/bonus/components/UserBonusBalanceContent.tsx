@@ -5,7 +5,7 @@ import {useBonusBalanceQuery} from '../queries';
 import {View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {UserBonusBalance} from './UserBonusBalance';
-import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
+import {BonusStarFill} from './BonusStarFill';
 import {ThemeText} from '@atb/components/text';
 import {ThemedBonusBagHug} from '@atb/theme/ThemedAssets';
 
@@ -32,7 +32,7 @@ export function UserBonusBalanceContent(): React.JSX.Element {
         <View style={styles.currentBalanceDisplay}>
           <ThemeIcon
             color={theme.color.foreground.dynamic.primary}
-            svg={StarFill}
+            svg={BonusStarFill}
             size="large"
           />
           <UserBonusBalance
