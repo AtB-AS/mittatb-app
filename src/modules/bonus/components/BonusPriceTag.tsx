@@ -1,5 +1,5 @@
 import React, {ComponentProps} from 'react';
-import {StarFill} from '@atb/assets/svg/mono-icons/bonus';
+import {BonusStarFill} from './BonusStarFill';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
@@ -20,7 +20,7 @@ export const BonusPriceTag = ({amount, ...props}: Props) => {
       accessibilityLabel={t(BonusProgramTexts.costA11yLabel(amount))}
     >
       <ThemeText>{amount}</ThemeText>
-      <ThemeIcon svg={StarFill} size="small" />
+      <ThemeIcon svg={BonusStarFill} size="small" />
     </View>
   );
 };
