@@ -30,9 +30,9 @@ import {
   getPublicCodeFromLeg,
   isLineFlexibleTransport,
   getBookingStatus,
-  significantWaitTime,
   significantWalkTime,
 } from '../utils';
+import {significantWaitTime} from '@atb/modules/trip-patterns';
 import {Time} from './Time';
 import {TripLegDecoration} from './TripLegDecoration';
 import {TripRow} from './TripRow';
