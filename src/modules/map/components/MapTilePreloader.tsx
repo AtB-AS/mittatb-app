@@ -94,7 +94,7 @@ export const MapTilePreloader = forwardRef<MapState, MapTilePreloaderProps>(
           height: height - tabBarHeight,
           width: width,
           transform: [
-            {scale: 0.01}, // Shrinks the visual output to a sub-pixel
+            {scale: 0.01}, // minimize rendering work, preloading is the only purpose
           ],
           opacity: 0,
           // useful for development/inspection:
