@@ -56,7 +56,8 @@ type ResultItemProps = {
 
 const ResultItemHeader: React.FC<{
   tripPattern: TripPattern;
-}> = ({tripPattern}) => {
+  isCancelled: boolean;
+}> = ({tripPattern, isCancelled}) => {
   const {themeName} = useThemeContext();
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
@@ -68,10 +69,6 @@ const ResultItemHeader: React.FC<{
   } else if (tripPattern.legs[0].mode !== 'foot') {
     startName = getQuayName(start.fromPlace.quay);
   }
-
-  const isCancelled = tripPattern.legs.some(
-    (leg) => leg.fromEstimatedCall?.cancellation,
-  );
 
   const cancelledText = t(CancelledDepartureTexts.cancelled);
   const startLegIsFlexibleTransport = isLineFlexibleTransport(start.line);
@@ -136,6 +133,7 @@ const ResultItemHeader: React.FC<{
         <ThemeIcon
           style={styles.warningIcon}
           svg={statusTypeToIcon('error', true, themeName)}
+          accessibilityLabel={cancelledText}
         />
       )}
     </View>
@@ -215,7 +213,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       {...props}
       accessible={false}
     >
-      <ResultItemHeader tripPattern={tripPattern} />
+      <ResultItemHeader tripPattern={tripPattern} isCancelled={isCancelled} />
       <View style={styles.detailsContainer} {...screenReaderHidden}>
         <View
           style={styles.flexRow}
@@ -327,9 +325,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     flexGrow: 1,
-  },
-  icon: {
-    marginRight: theme.spacing.small,
   },
   rightLegLine: {
     marginRight: theme.spacing.xSmall,

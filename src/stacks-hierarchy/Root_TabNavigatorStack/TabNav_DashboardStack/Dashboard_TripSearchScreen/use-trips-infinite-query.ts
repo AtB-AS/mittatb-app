@@ -83,7 +83,7 @@ export function createTripsQuery(
     when: searchTime?.date,
     arriveBy,
     modes: journeySearchModes,
-    includeCancellations: includeCancellations,
+    includeCancellations,
   };
 
   if (travelSearchFiltersSelection?.transportModes) {
