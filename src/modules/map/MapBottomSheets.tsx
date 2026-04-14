@@ -215,17 +215,18 @@ export const MapBottomSheets = ({
           navigateToScanQrCode={navigateToScanQrCode}
         />
       )}
-      {activeBooking?.state === ShmoBookingState.FINISHING && (
-        <FinishingScooterSheet
-          onForceClose={handleCloseSheet}
-          photoNavigation={() => {
-            handleCloseSheet();
-            navigateToParkingPhoto(activeBooking.bookingId);
-          }}
-          locationArrowOnPress={locationArrowOnPress}
-          navigateToScanQrCode={navigateToScanQrCode}
-        />
-      )}
+      {activeBooking?.state === ShmoBookingState.FINISHING &&
+        isFocusedAndActive && (
+          <FinishingScooterSheet
+            onForceClose={handleCloseSheet}
+            photoNavigation={() => {
+              handleCloseSheet();
+              navigateToParkingPhoto(activeBooking.bookingId);
+            }}
+            locationArrowOnPress={locationArrowOnPress}
+            navigateToScanQrCode={navigateToScanQrCode}
+          />
+        )}
 
       {mapState.bottomSheetType === MapBottomSheetType.FinishedBooking &&
         !!mapState.bookingId && (
