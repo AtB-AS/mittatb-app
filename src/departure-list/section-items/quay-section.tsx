@@ -27,6 +27,7 @@ export type QuaySectionProps = {
     items: ServiceJourneyDeparture[],
     activeIndex: number,
   ) => void;
+  now: number;
 };
 
 export const QuaySection = React.memo(function QuaySection({
@@ -36,6 +37,7 @@ export const QuaySection = React.memo(function QuaySection({
   searchDate,
   testID,
   onPressDeparture,
+  now,
 }: QuaySectionProps) {
   const [limit, setLimit] = useState(LIMIT_SIZE);
   const {t} = useTranslation();
@@ -46,9 +48,9 @@ export const QuaySection = React.memo(function QuaySection({
   }, [quayGroup.quay.id]);
 
   const sorted = useMemo(
-    () => sortAndLimit(quayGroup, limit),
+    () => sortAndLimit(quayGroup, limit, now),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [quayGroup, limit, lastUpdated],
+    [quayGroup, limit, lastUpdated, now],
   );
 
   if (!sorted) {
@@ -77,6 +79,7 @@ export const QuaySection = React.memo(function QuaySection({
             searchDate={searchDate}
             testID={'lineItem' + i}
             onPressDeparture={onPressDeparture}
+            now={now}
           />
         ))}
       </Section>
@@ -85,13 +88,13 @@ export const QuaySection = React.memo(function QuaySection({
   );
 });
 
-function sortAndLimit(quayGroup: QuayGroup, limit: number) {
-  if (hasNoGroupsWithDepartures([quayGroup])) {
+function sortAndLimit(quayGroup: QuayGroup, limit: number, now: number) {
+  if (hasNoGroupsWithDepartures([quayGroup], now)) {
     return null;
   }
   const sorted = sortBy(
     quayGroup.group,
-    (v) => v.departures.find(isValidDeparture)?.time,
+    (v) => v.departures.find((d) => isValidDeparture(d, now))?.time,
   ).slice(0, limit);
   return sorted;
 }
