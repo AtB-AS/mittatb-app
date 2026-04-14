@@ -19,7 +19,6 @@ const LIMIT_SIZE = 5;
 export type QuaySectionProps = {
   quayGroup: QuayGroup;
   locationOrStopPlace?: Location | StopPlace;
-  lastUpdated?: Date;
   hidden?: Date;
   searchDate: string;
   testID?: string;
@@ -33,7 +32,6 @@ export type QuaySectionProps = {
 export const QuaySection = React.memo(function QuaySection({
   quayGroup,
   locationOrStopPlace,
-  lastUpdated,
   searchDate,
   testID,
   onPressDeparture,
@@ -49,8 +47,7 @@ export const QuaySection = React.memo(function QuaySection({
 
   const sorted = useMemo(
     () => sortAndLimit(quayGroup, limit, now),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [quayGroup, limit, lastUpdated, now],
+    [quayGroup, limit, now],
   );
 
   if (!sorted) {
