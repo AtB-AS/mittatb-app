@@ -502,3 +502,23 @@ describe('isNumberOfMinutesInThePast', () => {
     expect(isNumberOfMinutesInThePast(pastDate, 1, now.valueOf())).toBe(false);
   });
 });
+
+describe('minutesBetween', () => {
+  test('calculates minutes between two dates correctly', () => {
+    const start = new Date('2024-09-01T12:00:00Z');
+    const end = new Date('2024-09-01T12:30:00Z');
+    expect(minutesBetween(start, end)).toBe(30);
+  });
+
+  test('rounds down', () => {
+    const start = new Date('2024-09-01T12:00:00Z');
+    const end = new Date('2024-09-01T12:30:59Z');
+    expect(minutesBetween(start, end)).toBe(30);
+  });
+
+  test('handles seconds', () => {
+    const start = new Date('2024-09-01T12:00:20Z');
+    const end = new Date('2024-09-01T12:30:19Z');
+    expect(minutesBetween(start, end)).toBe(29);
+  });
+});
