@@ -51,6 +51,7 @@ export type RemoteConfig = {
   enable_shmo_deep_integration: boolean;
   enable_shmo_deep_integration_citybike: boolean;
   enable_show_valid_time_info: boolean;
+  enable_surface_view_map: boolean;
   enable_ticket_information: boolean;
   enable_ticketing: boolean;
   enable_tips_and_information: boolean;
@@ -122,6 +123,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_shmo_deep_integration: false,
   enable_shmo_deep_integration_citybike: false,
   enable_show_valid_time_info: true,
+  enable_surface_view_map: false,
   enable_ticket_information: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
   enable_event_stream: false,
@@ -264,6 +266,9 @@ export function getConfig(): RemoteConfig {
   const enable_show_valid_time_info =
     values['enable_show_valid_time_info']?.asBoolean() ??
     defaultRemoteConfig.enable_show_valid_time_info;
+  const enable_surface_view_map =
+    values['enable_surface_view_map']?.asBoolean() ??
+    defaultRemoteConfig.enable_surface_view_map;
   const enable_ticket_information =
     values['enable_ticket_information']?.asBoolean() ??
     defaultRemoteConfig.enable_ticket_information;
@@ -380,6 +385,7 @@ export function getConfig(): RemoteConfig {
     enable_shmo_deep_integration,
     enable_shmo_deep_integration_citybike,
     enable_show_valid_time_info,
+    enable_surface_view_map,
     enable_ticket_information,
     enable_ticketing,
     enable_tips_and_information,
