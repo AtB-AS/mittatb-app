@@ -48,3 +48,23 @@ Check @package.json for complete information along with actual version number
 
 ### Final verification
 - `yarn check-all` - runs `yarn tsc && yarn lint && yarn test --coverage --coverageReporters && yarn prettier`
+
+### Code Intelligence
+
+Prefer LSP over Grep/Glob/Read for code navigation, the only exception is `workspaceSymbol`,
+use Grep/Glob/Read instead for that function, otherwise use the following LSP tool:
+
+- `goToDefinition` / `goToImplementation` to jump to source
+- `findReferences` to see all usages across the codebase
+- `documentSymbol` to list all symbols in a file
+- `hover` for type info without reading the file
+- `incomingCalls` / `outgoingCalls` for call hierarchy
+
+Before renaming or changing a function signature, use
+`findReferences` to find all call sites first.
+
+Use Grep/Glob only for text/pattern searches (comments,
+strings, config values) where LSP doesn't help.
+
+After writing or editing code, check LSP diagnostics before
+moving on. Fix any type errors or missing imports immediately.
