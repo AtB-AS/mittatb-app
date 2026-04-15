@@ -247,12 +247,11 @@ const tripSummary = (
     passedTripText,
     startText,
     modeAndNumberText,
-    realTimeText,
   ];
 
   const detailTexts = isCancelled
     ? [cancelledText]
-    : [numberOfFootLegsText, walkDistanceText, traveltimesText];
+    : [realTimeText, numberOfFootLegsText, walkDistanceText, traveltimesText];
 
   return [...commonTexts, ...detailTexts]
     .filter((text) => text !== undefined)
