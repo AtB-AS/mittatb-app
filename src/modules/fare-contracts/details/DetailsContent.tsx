@@ -157,7 +157,12 @@ export const DetailsContent: React.FC<Props> = ({
   const shouldShowLegs =
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;
 
-  const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(fc.orderId);
+  const {isPointsEnabled} = useFeatureTogglesContext();
+  const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(
+    fc.orderId,
+    !isPointsEnabled,
+  );
+
   const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(fc, validityStatus);
 
   return (
@@ -235,7 +240,7 @@ export const DetailsContent: React.FC<Props> = ({
           onNavigateToMap={onNavigateToMap}
         />
       )}
-      {bonusAmountEarned != undefined && bonusAmountEarned.amount > 0 && (
+      {!!bonusAmountEarned?.amount && (
         <EarnedBonusPointsSectionItem
           amount={bonusAmountEarned.amount}
           navigateToBonusScreen={onNavigateToBonusScreen}

@@ -90,6 +90,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_parking_violations_reporting',
   },
   {
+    name: 'isPointsEnabled',
+    remoteConfigKey: 'enable_points',
+  },
+  {
     name: 'isPosthogEnabled',
     remoteConfigKey: 'enable_posthog',
   },

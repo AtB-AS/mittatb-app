@@ -75,12 +75,16 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     isEventStreamEnabled,
     isEventStreamFareContractsEnabled,
   } = useFeatureTogglesContext();
-  const isUserEnrolledToBonus = useIsEnrolled(KnownProgramId.BONUS);
-  const bonusProgram = useProgram(KnownProgramId.BONUS);
   const unreadCount = useChatUnreadCount();
   const {theme} = useThemeContext();
   const {enable_intercom} = useRemoteConfigContext();
   const neutralContrastColor = theme.color.background.neutral[1];
+
+  const isUserEnrolledToBonus = useIsEnrolled(KnownProgramId.BONUS);
+  const bonusProgram = useProgram(KnownProgramId.BONUS);
+  const {isPointsEnabled} = useFeatureTogglesContext();
+  const showBonusSection =
+    (isUserEnrolledToBonus || bonusProgram?.isOpen) && isPointsEnabled;
 
   const focusRef = useFocusOnLoad(navigation);
 
@@ -216,7 +220,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 testID="smartParkAndRideButton"
               />
             )}
-            {(isUserEnrolledToBonus || bonusProgram?.isOpen) && (
+            {showBonusSection && (
               <LinkSectionItem
                 text={t(
                   ProfileTexts.sections.account.linkSectionItems.bonus.label,

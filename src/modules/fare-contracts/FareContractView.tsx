@@ -33,6 +33,7 @@ import {useFareContractLegs} from './use-fare-contract-legs';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {CarnetFooter} from './carnet/CarnetFooter';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {useFeatureTogglesContext} from '../feature-toggles';
 
 type Props = {
   now: number;
@@ -82,15 +83,18 @@ export const FareContractView: React.FC<Props> = ({
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
-  const shouldShowBonusAmountEarned =
-    validityStatus === 'valid' || validityStatus === 'upcoming';
+  const {isPointsEnabled} = useFeatureTogglesContext();
+
+  const shouldGetBonusAmountEarned =
+    (validityStatus === 'valid' || validityStatus === 'upcoming') &&
+    isPointsEnabled;
 
   const shouldShowLegs =
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;
 
   const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(
     fareContract.orderId,
-    !shouldShowBonusAmountEarned,
+    !shouldGetBonusAmountEarned,
   );
   const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(
     fareContract,
@@ -145,7 +149,7 @@ export const FareContractView: React.FC<Props> = ({
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
       )}
 
-      {shouldShowBonusAmountEarned && !!bonusAmountEarned?.amount && (
+      {!!bonusAmountEarned?.amount && (
         <EarnedBonusPointsSectionItem
           amount={bonusAmountEarned.amount}
           navigateToBonusScreen={onNavigateToBonusScreen}
