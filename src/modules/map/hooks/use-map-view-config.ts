@@ -1,6 +1,7 @@
 import {Platform} from 'react-native';
 import {useMapboxJsonStyle} from './use-mapbox-json-style';
 import {useMemo} from 'react';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 const MapViewStaticConfig = {
   compassEnabled: true,
@@ -37,12 +38,14 @@ export const useMapViewConfig = (
     () => ({styleJSON: mapboxJsonStyle}),
     [mapboxJsonStyle],
   );
+  const {enable_surface_view_map} = useRemoteConfigContext();
 
   return useMemo(
     () => ({
       ...MapViewStaticConfig,
       ...configMap,
+      surfaceView: enable_surface_view_map,
     }),
-    [configMap],
+    [configMap, enable_surface_view_map],
   );
 };

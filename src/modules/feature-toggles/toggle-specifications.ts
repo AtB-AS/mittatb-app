@@ -130,6 +130,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_show_valid_time_info',
   },
   {
+    name: 'isSurfaceViewMapEnabled',
+    remoteConfigKey: 'enable_surface_view_map',
+  },
+  {
     name: 'isTicketInformationEnabled',
     remoteConfigKey: 'enable_ticket_information',
   },
