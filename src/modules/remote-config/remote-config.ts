@@ -123,7 +123,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_shmo_deep_integration: false,
   enable_shmo_deep_integration_citybike: false,
   enable_show_valid_time_info: true,
-  enable_surface_view_map: false,
+  enable_surface_view_map: true,
   enable_ticket_information: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
   enable_event_stream: false,
