@@ -31,7 +31,6 @@ export function useSubscription({
       const overriddenUrl = applyDebugServerOverride(url, {
         forWebSocket: true,
       });
-      console.log('Subscribing to WebSocket with url:', overriddenUrl);
       const ws = new WebSocket(overriddenUrl);
 
       ws.onmessage = (event) => {
