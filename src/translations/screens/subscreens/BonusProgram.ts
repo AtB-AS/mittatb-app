@@ -144,15 +144,11 @@ const BonusProgramTexts = {
         ),
       },
       earnPoints: {
-        title: _(
-          'Tjen Poeng på enkeltbilletter',
-          'Earn Points on single tickets',
-          'Tjen Poeng på enkeltbilletter',
-        ),
+        title: _('Samle Poeng', 'Earn Points', 'Samle Poeng'),
         description: _(
-          'Du tjener Poeng hver gang du kjøper en enkeltbillett for voksen eller student i sone A.',
-          'You earn Points every time you buy a single ticket for adults or students in zone A.',
-          'Du får Poeng kvar gong du kjøper ein enkeltbillett for vaksen eller student i sone A.',
+          'Kjøp enkeltbilletter for voksen eller student i sone A og få Poeng.',
+          'Buy single tickets for adults or students in zone A and earn Points.',
+          'Kjøp enkeltbilletter for vaksen eller student i sone A og få Poeng.',
         ),
       },
       spendPoints: {

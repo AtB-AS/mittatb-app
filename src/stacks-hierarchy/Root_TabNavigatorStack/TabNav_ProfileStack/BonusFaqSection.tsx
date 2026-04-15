@@ -73,7 +73,7 @@ const buildPointsPerProductString = (
       return t(
         BonusProgramTexts.bonusProfile.faq.pointsPerProductLabel(
           pp.value,
-          name,
+          name.toLowerCase(),
         ),
       );
     })

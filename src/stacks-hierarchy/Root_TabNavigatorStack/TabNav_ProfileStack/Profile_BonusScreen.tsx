@@ -378,6 +378,24 @@ const HowPointsWork = () => {
       />
       <Section>
         <BonusInfoSectionItem
+          title={t(BonusProgramTexts.bonusProfile.readMore.earnPoints.title)}
+          description={t(
+            BonusProgramTexts.bonusProfile.readMore.earnPoints.description,
+          )}
+          SymbolComponent={
+            <ThemedBonusTransaction height={iconSize} width={iconSize} />
+          }
+        />
+        <BonusInfoSectionItem
+          title={t(BonusProgramTexts.bonusProfile.readMore.spendPoints.title)}
+          description={t(
+            BonusProgramTexts.bonusProfile.readMore.spendPoints.description,
+          )}
+          SymbolComponent={
+            <ThemedBonusBag height={iconSize} width={iconSize} />
+          }
+        />
+        <BonusInfoSectionItem
           title={t(BonusProgramTexts.bonusProfile.readMore.download.title)}
           description={t(
             BonusProgramTexts.bonusProfile.readMore.download.description,
@@ -410,25 +428,6 @@ const HowPointsWork = () => {
             );
           }
         })}
-
-        <BonusInfoSectionItem
-          title={t(BonusProgramTexts.bonusProfile.readMore.earnPoints.title)}
-          description={t(
-            BonusProgramTexts.bonusProfile.readMore.earnPoints.description,
-          )}
-          SymbolComponent={
-            <ThemedBonusTransaction height={iconSize} width={iconSize} />
-          }
-        />
-        <BonusInfoSectionItem
-          title={t(BonusProgramTexts.bonusProfile.readMore.spendPoints.title)}
-          description={t(
-            BonusProgramTexts.bonusProfile.readMore.spendPoints.description,
-          )}
-          SymbolComponent={
-            <ThemedBonusBag height={iconSize} width={iconSize} />
-          }
-        />
       </Section>
     </>
   );
