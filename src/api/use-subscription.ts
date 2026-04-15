@@ -1,5 +1,6 @@
 import Bugsnag from '@bugsnag/react-native';
 import {MutableRefObject, useEffect, useRef} from 'react';
+import {applyDebugServerOverride} from '@atb/modules/debug';
 
 const RETRY_INTERVAL_CAP_IN_SECONDS = 10;
 
@@ -27,7 +28,10 @@ export function useSubscription({
     let retryTimeout: NodeJS.Timeout | null = null;
     let resetRetryCountTimeout: NodeJS.Timeout | null = null;
     const connect = () => {
-      const ws = new WebSocket(url);
+      const overriddenUrl = applyDebugServerOverride(url, {
+        forWebSocket: true,
+      });
+      const ws = new WebSocket(overriddenUrl);
 
       ws.onmessage = (event) => {
         onMessage?.(event);

@@ -51,3 +51,38 @@ export function setDebugServerOverrides(
 export function getDebugServerOverrides(): DebugServerOverride[] {
   return cachedOverrides;
 }
+
+/**
+ * Apply debug server overrides to a URL. If a matching override is found, the
+ * origin (scheme+host+port) of the URL is replaced with the override's
+ * newValue while preserving the path and query string.
+ *
+ * When `forWebSocket` is true, `http://` and `https://` in the override value
+ * are converted to `ws://` and `wss://` respectively, since overrides are
+ * typically entered as HTTP URLs.
+ *
+ * Header overrides are not supported for WebSocket connections.
+ */
+export function applyDebugServerOverride(
+  url: string,
+  options?: {forWebSocket?: boolean},
+): string {
+  const overrides = getDebugServerOverrides();
+
+  for (const override of overrides) {
+    if (override.match.test(url)) {
+      let newBaseUrl = override.newValue;
+      if (options?.forWebSocket) {
+        newBaseUrl = newBaseUrl
+          .replace(/^http:\/\//, 'ws://')
+          .replace(/^https:\/\//, 'wss://');
+      }
+
+      const urlObj = new URL(url);
+      const pathAndQuery = urlObj.pathname + urlObj.search;
+      return newBaseUrl.replace(/\/+$/, '') + pathAndQuery;
+    }
+  }
+
+  return url;
+}
