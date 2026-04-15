@@ -50,6 +50,9 @@ export const ResultRow: React.FC<ResultRowProps> = ({
     isInThePast(tripPattern.legs[0].expectedStartTime) &&
     searchTime?.option !== 'now';
 
+  const isCancelled =
+    tripPattern.legs[0].fromEstimatedCall?.cancellation ?? false;
+
   return (
     <Section style={styles.container}>
       <GenericClickableSectionItem
@@ -59,6 +62,7 @@ export const ResultRow: React.FC<ResultRowProps> = ({
           language,
           isInPast,
           resultNumber,
+          isCancelled,
         )}
         accessibilityHint={t(
           TripSearchTexts.results.resultItem.footer.detailsHint,
@@ -103,6 +107,7 @@ const tripSummary = (
   language: Language,
   isInPast: boolean,
   listPosition: number,
+  isCancelled: boolean,
 ) => {
   const distance = Math.round(tripPattern.legs[0].distance);
   let humanizedDistance;
@@ -138,6 +143,9 @@ const tripSummary = (
       );
     }
   }
+
+  const cancelledText =
+    isCancelled && t(TripSearchTexts.results.resultItem.tripCancelled);
 
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
   const firstLeg = nonFootLegs.length > 0 ? nonFootLegs[0] : undefined;
@@ -233,17 +241,19 @@ const tripSummary = (
   const tripPatternBookingStatus = getTripPatternBookingStatus(tripPattern);
   const bookingText = getTripPatternBookingText(tripPatternBookingStatus, t);
 
-  const texts = [
+  const commonTexts = [
     resultNumberText,
     bookingText,
     passedTripText,
     startText,
     modeAndNumberText,
-    realTimeText,
-    numberOfFootLegsText,
-    walkDistanceText,
-    traveltimesText,
-  ].filter((text) => text !== undefined);
+  ];
 
-  return texts.join(screenReaderPause);
+  const detailTexts = isCancelled
+    ? [cancelledText]
+    : [realTimeText, numberOfFootLegsText, walkDistanceText, traveltimesText];
+
+  return [...commonTexts, ...detailTexts]
+    .filter((text) => text !== undefined)
+    .join(screenReaderPause);
 };
