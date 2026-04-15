@@ -219,6 +219,7 @@ const TripSearchTexts = {
             `Frå klokka ${startTime}, til klokka ${endTime}`,
           ),
       },
+      tripCancelled: _('Reisen innstilt', 'Trip cancelled', 'Reisa innstilt'),
       hasSituationsTip: _(
         'Denne reisen har driftsmeldinger. Se detaljer for mer info',
         'There are service messages affecting your journey. See details for more info ',
