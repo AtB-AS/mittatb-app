@@ -10,7 +10,7 @@ import {
   BottomSheetHeaderType,
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
-import {Linking} from 'react-native';
+import {openUrl} from '@atb/utils/open-url';
 
 type ExternalRealtimeMapLinkSheetProps = {
   onClose: () => void;
@@ -51,7 +51,7 @@ export const ExternalRealtimeMapSheet = ({
           expanded={true}
           text={t(MapTexts.externalRealtimeMap.bottomSheet.button)}
           onPress={() => {
-            Linking.openURL(url);
+            openUrl(url, 'Could not open realtime map URL');
             onClose();
           }}
           rightIcon={{svg: ExternalLink}}

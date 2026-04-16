@@ -1,5 +1,6 @@
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
-import {Alert, Linking, View} from 'react-native';
+import {Alert, View} from 'react-native';
+import {openUrl} from '@atb/utils/open-url';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import React, {useEffect, useState} from 'react';
 import {dictionary, useTranslation} from '@atb/translations';
@@ -100,14 +101,9 @@ export const Profile_EditProfileScreen = ({
 
   const handleOpenVippsApp = async () => {
     const deepLink = __DEV__ ? 'vippsMT://' : 'vipps://';
-
-    const canOpen = await Linking.canOpenURL(deepLink);
-
-    if (canOpen) {
-      await Linking.openURL(deepLink);
-    } else {
-      Alert.alert(t(EditProfileTexts.personalDetails.birthdate.openVippsError));
-    }
+    await openUrl(deepLink, 'Could not open Vipps for birthdate', () =>
+      Alert.alert(t(EditProfileTexts.personalDetails.birthdate.openVippsError)),
+    );
   };
 
   useEffect(() => {

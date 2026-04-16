@@ -4,8 +4,9 @@ import {getTextForLanguage} from '@atb/translations';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {DashboardTexts} from '@atb/translations';
-import {AccessibilityRole, Linking} from 'react-native';
+import {AccessibilityRole} from 'react-native';
 import Bugsnag from '@bugsnag/react-native';
+import {openUrl} from '@atb/utils/open-url';
 import {SvgProps} from 'react-native-svg';
 import {RefObject, useCallback} from 'react';
 import {
@@ -58,7 +59,7 @@ export const useActionButtonProps = (
       await openInAppBrowser(url, 'close');
     },
     [ActionType.deeplink]: async (url: string) => {
-      await Linking.openURL(url);
+      await openUrl(url, 'Could not open deeplink URL');
     },
   };
 

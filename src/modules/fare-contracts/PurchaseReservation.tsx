@@ -7,9 +7,9 @@ import {
   useTicketingContext,
 } from '@atb/modules/ticketing';
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import Bugsnag from '@bugsnag/react-native';
+import {openUrl} from '@atb/utils/open-url';
 import React from 'react';
-import {Linking, View} from 'react-native';
+import {View} from 'react-native';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import {NativeBlockButton} from '@atb/components/native-button';
@@ -29,11 +29,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
   const {theme} = useThemeContext();
 
   async function openVippsUrl(vippsUrl: string) {
-    try {
-      await Linking.openURL(vippsUrl);
-    } catch (err: any) {
-      Bugsnag.notify(err);
-    }
+    await openUrl(vippsUrl, 'Could not open Vipps URL');
   }
 
   const isSubAccountReservation = customerProfile?.subAccounts?.some(

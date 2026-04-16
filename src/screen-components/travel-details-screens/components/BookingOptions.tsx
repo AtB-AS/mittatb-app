@@ -1,7 +1,8 @@
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
-import {Linking, View} from 'react-native';
+import {View} from 'react-native';
+import {openUrl} from '@atb/utils/open-url';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {BookingMethod} from '@atb/api/types/generated/journey_planner_v3_types';
@@ -60,7 +61,9 @@ export const BookingOptions = ({bookingArrangements}: Props) => {
             text={t(
               TripDetailsTexts.flexibleTransport.bookByPhone(bookingPhone),
             )}
-            onPress={() => Linking.openURL(`tel:${bookingPhone}`)}
+            onPress={() =>
+              openUrl(`tel:${bookingPhone}`, 'Could not open phone for booking')
+            }
             type="small"
             expanded={false}
             interactiveColor={theme.color.interactive[3]}

@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
-import {Linking} from 'react-native';
 import {PaymentType} from '@atb/modules/ticketing';
+import {openUrl} from '@atb/utils/open-url';
 
 /**
  * Open Vipps after successful reservation if the payment type is Vipps.
@@ -12,7 +12,7 @@ export const useOpenVippsAfterReservation = (
 ) => {
   useEffect(() => {
     if (paymentType === PaymentType.Vipps && url) {
-      Linking.openURL(url).catch(onErrorCallback);
+      openUrl(url, 'Could not open Vipps for payment', onErrorCallback);
     }
   }, [paymentType, url, onErrorCallback]);
 };

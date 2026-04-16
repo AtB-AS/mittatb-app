@@ -13,7 +13,8 @@ import {
   useTranslation,
 } from '@atb/translations';
 import React, {useEffect, useRef, useState} from 'react';
-import {Linking, Platform, View} from 'react-native';
+import {Platform, View} from 'react-native';
+import {openUrl} from '@atb/utils/open-url';
 import {FullScreenView} from '@atb/components/screen-view';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {
@@ -412,7 +413,9 @@ const HowPointsWork = () => {
               <LinkSectionItem
                 key={product.operatorId}
                 rightIcon={{svg: ExternalLink}}
-                onPress={() => Linking.openURL(appUrl)}
+                onPress={() =>
+                  openUrl(appUrl, 'Could not open operator app URL')
+                }
                 text={t(
                   BonusProgramTexts.bonusProfile.readMore.downloadOperator(
                     getOperatorName(product.operatorId),

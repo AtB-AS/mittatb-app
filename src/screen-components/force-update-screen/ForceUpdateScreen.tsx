@@ -1,7 +1,8 @@
 import {ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
 import {Logo} from '@atb/assets/svg/mono-icons/logo';
-import {Linking, Platform, ScrollView, View} from 'react-native';
+import {Platform, ScrollView, View} from 'react-native';
+import {openUrl} from '@atb/utils/open-url';
 import React, {useState} from 'react';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
@@ -11,7 +12,6 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
@@ -63,14 +63,8 @@ export const ForceUpdateScreen = () => {
                 default: '',
               });
               setError(false);
-              Linking.canOpenURL(link).then(
-                (supported) => {
-                  supported && Linking.openURL(link);
-                },
-                (err) => {
-                  Bugsnag.notify(err);
-                  setError(true);
-                },
+              openUrl(link, 'Could not open app store for update', () =>
+                setError(true),
               );
             }}
             text={t(ForceUpdateTexts.externalButton)}
