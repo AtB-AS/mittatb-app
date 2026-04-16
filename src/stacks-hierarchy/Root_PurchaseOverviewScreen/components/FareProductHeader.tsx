@@ -63,6 +63,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: theme.spacing.small,
   },
   headerText: {
     flexShrink: 1,
