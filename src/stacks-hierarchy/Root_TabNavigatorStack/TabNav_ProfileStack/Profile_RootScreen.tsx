@@ -46,11 +46,8 @@ import {
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {
-  KnownProgramId,
-  useIsEnrolled,
-  useProgram,
-} from '@atb/modules/enrollment';
+import {KnownProgramId, useProgram} from '@atb/modules/enrollment';
+import {useIsBonusActiveForUser} from '@atb/modules/bonus';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -80,11 +77,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {enable_intercom} = useRemoteConfigContext();
   const neutralContrastColor = theme.color.background.neutral[1];
 
-  const isUserEnrolledToBonus = useIsEnrolled(KnownProgramId.BONUS);
-  const bonusProgram = useProgram(KnownProgramId.BONUS);
   const {isPointsEnabled} = useFeatureTogglesContext();
+  const isBonusActiveForUser = useIsBonusActiveForUser();
+  const bonusProgram = useProgram(KnownProgramId.BONUS, !isPointsEnabled);
   const showBonusSection =
-    (isUserEnrolledToBonus || bonusProgram?.isOpen) && isPointsEnabled;
+    isBonusActiveForUser || (bonusProgram?.isOpen && isPointsEnabled);
 
   const focusRef = useFocusOnLoad(navigation);
 

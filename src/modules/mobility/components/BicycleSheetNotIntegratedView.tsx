@@ -23,7 +23,7 @@ import {MobilityStats} from './MobilityStats';
 import {OperatorActionButton} from './OperatorActionButton';
 import {OperatorBenefit} from './OperatorBenefit';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
-import {KnownProgramId, useIsEnrolled} from '@atb/modules/enrollment';
+import {useIsBonusActiveForUser} from '@atb/modules/bonus';
 
 type Props = {
   onStationReceived?: (station: BikeStationFragment) => void;
@@ -51,7 +51,7 @@ export const BikeStationNotIntegratedView = ({
   const styles = useSheetStyle();
 
   const {operatorBenefit} = useOperatorBenefit(operatorId);
-  const isBonusEnabled = useIsEnrolled(KnownProgramId.BONUS);
+  const isBonusActiveForUser = useIsBonusActiveForUser();
   const {bonusProducts} = useFirestoreConfigurationContext();
   const bonusProduct = findRelevantBonusProduct(
     bonusProducts,
@@ -114,7 +114,7 @@ export const BikeStationNotIntegratedView = ({
             </View>
           </GenericSectionItem>
         </Section>
-        {isBonusEnabled && bonusProduct && (
+        {isBonusActiveForUser && bonusProduct && (
           <PayWithBonusPointsCheckbox
             bonusProduct={bonusProduct}
             operatorName={operatorName}

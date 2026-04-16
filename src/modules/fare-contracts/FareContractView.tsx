@@ -33,7 +33,6 @@ import {useFareContractLegs} from './use-fare-contract-legs';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {CarnetFooter} from './carnet/CarnetFooter';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
-import {useFeatureTogglesContext} from '../feature-toggles';
 
 type Props = {
   now: number;
@@ -83,11 +82,8 @@ export const FareContractView: React.FC<Props> = ({
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
-  const {isPointsEnabled} = useFeatureTogglesContext();
-
   const shouldGetBonusAmountEarned =
-    (validityStatus === 'valid' || validityStatus === 'upcoming') &&
-    isPointsEnabled;
+    validityStatus === 'valid' || validityStatus === 'upcoming';
 
   const shouldShowLegs =
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;

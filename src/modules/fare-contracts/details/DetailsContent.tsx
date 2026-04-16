@@ -157,11 +157,7 @@ export const DetailsContent: React.FC<Props> = ({
   const shouldShowLegs =
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;
 
-  const {isPointsEnabled} = useFeatureTogglesContext();
-  const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(
-    fc.orderId,
-    !isPointsEnabled,
-  );
+  const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(fc.orderId);
 
   const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(fc, validityStatus);
 
