@@ -66,7 +66,7 @@ export function QuaySection({
   const now = useNow(5 * ONE_SECOND_MS);
 
   const departuresToDisplay = departures.filter((departure) =>
-    isValidDepartureTime(departure.expectedDepartureTime, now),
+    isValidDepartureTime(departure, now),
   );
 
   const navigateToQuayEnabled = !!navigateToQuay;

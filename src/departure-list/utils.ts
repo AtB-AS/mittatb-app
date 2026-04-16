@@ -156,6 +156,7 @@ export function hasNoDeparturesOnGroup(group: DepartureGroup, now: number) {
 }
 
 export function isValidDeparture(departure: DepartureTime, now: number) {
+  if (departure.actualTime) return false;
   return !isNumberOfMinutesInThePast(
     departure.time,
     HIDE_AFTER_NUM_MINUTES,
@@ -163,6 +164,14 @@ export function isValidDeparture(departure: DepartureTime, now: number) {
   );
 }
 
-export function isValidDepartureTime(time: string, now?: number) {
-  return !isNumberOfMinutesInThePast(time, HIDE_AFTER_NUM_MINUTES, now);
+export function isValidDepartureTime(
+  estimatedCall: EstimatedCall,
+  now?: number,
+) {
+  if (estimatedCall.actualDepartureTime) return false;
+  return !isNumberOfMinutesInThePast(
+    estimatedCall.expectedDepartureTime,
+    HIDE_AFTER_NUM_MINUTES,
+    now,
+  );
 }
