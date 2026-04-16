@@ -13,6 +13,8 @@ import {
   isBefore,
   isBetween,
   isEqualOrAfter,
+  isNumberOfMinutesInThePast,
+  minutesBetween,
   secondsToDuration,
 } from '../date'; // Adjust the path if needed
 
@@ -466,5 +468,57 @@ describe('secondsToDuration', () => {
         expect(isBetween('2026-02-10', '2026-02-09', '2026-02-11')).toBe(true);
       });
     });
+  });
+});
+
+describe('isNumberOfMinutesInThePast', () => {
+  test('true when slightly more than the specified minutes ahead', () => {
+    const pastDate = new Date('2024-09-01T12:00:00Z');
+    const now = new Date('2024-09-01T12:01:01Z');
+    expect(isNumberOfMinutesInThePast(pastDate, 1, now.valueOf())).toBe(true);
+  });
+
+  test('true when exactly the specified minutes ahead', () => {
+    const pastDate = new Date('2024-09-01T12:00:00Z');
+    const now = new Date('2024-09-01T12:01:00Z');
+    expect(isNumberOfMinutesInThePast(pastDate, 1, now.valueOf())).toBe(true);
+  });
+
+  test('false when slightly less than the specified minutes ahead', () => {
+    const pastDate = new Date('2024-09-01T12:00:00Z');
+    const now = new Date('2024-09-01T12:00:59Z');
+    expect(isNumberOfMinutesInThePast(pastDate, 1, now.valueOf())).toBe(false);
+  });
+
+  test('handles non-round dates', () => {
+    const pastDate = new Date('2024-09-01T12:00:10Z');
+    const now = new Date('2024-09-01T12:01:11Z');
+    expect(isNumberOfMinutesInThePast(pastDate, 1, now.valueOf())).toBe(true);
+  });
+
+  test('handles non-round dates', () => {
+    const pastDate = new Date('2024-09-01T12:00:10Z');
+    const now = new Date('2024-09-01T12:01:09Z');
+    expect(isNumberOfMinutesInThePast(pastDate, 1, now.valueOf())).toBe(false);
+  });
+});
+
+describe('minutesBetween', () => {
+  test('calculates minutes between two dates correctly', () => {
+    const start = new Date('2024-09-01T12:00:00Z');
+    const end = new Date('2024-09-01T12:30:00Z');
+    expect(minutesBetween(start, end)).toBe(30);
+  });
+
+  test('rounds down', () => {
+    const start = new Date('2024-09-01T12:00:00Z');
+    const end = new Date('2024-09-01T12:30:59Z');
+    expect(minutesBetween(start, end)).toBe(30);
+  });
+
+  test('handles seconds', () => {
+    const start = new Date('2024-09-01T12:00:20Z');
+    const end = new Date('2024-09-01T12:30:19Z');
+    expect(minutesBetween(start, end)).toBe(29);
   });
 });

@@ -14,6 +14,7 @@ export type TripsQueryVariables = Types.Exact<{
   walkReluctance?: Types.Maybe<Types.Scalars['Float']['input']>;
   walkSpeed?: Types.Maybe<Types.Scalars['Float']['input']>;
   modes?: Types.Modes;
+  includeCancellations: Types.Scalars['Boolean']['input'];
 }>;
 
 export type TripsQuery = {
@@ -28,6 +29,7 @@ export type NonTransitTripsQueryVariables = Omit<
   | 'walkReluctance'
   | 'numTripPatterns'
   | 'modes'
+  | 'includeCancellations'
 > & {
   directModes: StreetMode[];
 };

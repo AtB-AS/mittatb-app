@@ -50,12 +50,14 @@ export type LineItemProps = SectionItemProps<{
   group: DepartureGroup;
   searchDate: string;
   onPressDeparture: QuaySectionProps['onPressDeparture'];
+  now: number;
 }>;
 export function LineItem({
   group,
   searchDate,
   testID,
   onPressDeparture,
+  now,
   ...props
 }: LineItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -63,7 +65,7 @@ export function LineItem({
   const styles = useItemStyles();
   const {t, language} = useTranslation();
 
-  if (hasNoDeparturesOnGroup(group)) {
+  if (hasNoDeparturesOnGroup(group, now)) {
     return null;
   }
 
@@ -81,7 +83,7 @@ export function LineItem({
   }));
 
   // we know we have a departure as we've checked hasNoDeparturesOnGroup
-  const nextValids = group.departures.filter(isValidDeparture);
+  const nextValids = group.departures.filter((d) => isValidDeparture(d, now));
 
   return (
     <View style={[topContainer, {paddingVertical: 0, paddingHorizontal: 0}]}>
@@ -104,11 +106,12 @@ export function LineItem({
           )}
           testID={testID}
         >
-          <TransportationIconBox
-            style={styles.transportationMode}
-            mode={group.lineInfo?.transportMode}
-            subMode={group.lineInfo?.transportSubmode}
-          />
+          <View style={styles.transportationMode}>
+            <TransportationIconBox
+              mode={group.lineInfo?.transportMode}
+              subMode={group.lineInfo?.transportSubmode}
+            />
+          </View>
           <ThemeText style={{flex: 1}} testID="title">
             {title}
           </ThemeText>
@@ -128,6 +131,7 @@ export function LineItem({
             onPress={() => onPressDeparture(items, i)}
             searchDate={searchDate}
             testID={'depTime' + i}
+            now={now}
           />
         ))}
       </ScrollView>
@@ -223,6 +227,7 @@ type DepartureTimeItemProps = {
   departure: DepartureTime;
   onPress(departure: DepartureTime): void;
   searchDate: string;
+  now: number;
   testID?: string;
 };
 function DepartureTimeItem({
@@ -230,6 +235,7 @@ function DepartureTimeItem({
   onPress,
   searchDate,
   testID,
+  now,
 }: DepartureTimeItemProps) {
   const styles = useItemStyles();
   const {t, language} = useTranslation();
@@ -243,7 +249,7 @@ function DepartureTimeItem({
         : RealtimeLight
       : undefined;
 
-  if (!isValidDeparture(departure)) {
+  if (!isValidDeparture(departure, now)) {
     return null;
   }
   return (

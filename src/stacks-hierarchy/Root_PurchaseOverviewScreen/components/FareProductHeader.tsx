@@ -31,7 +31,6 @@ export const FareProductHeader = forwardRef<View, Props>(
         <View style={styles.header} ref={ref} accessible={true}>
           <TransportationIconBoxList
             modes={fareProductTypeConfig.transportModes}
-            iconSize="normal"
           />
           <ThemeText
             typography="heading__l"

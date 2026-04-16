@@ -6,8 +6,14 @@ import {View} from 'react-native';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {FareProductTile} from './FareProductTile';
 import React from 'react';
-import {StyleSheet, useThemeContext} from '@atb/theme';
-import {TransportModes} from '@atb/components/transportation-modes';
+import {StyleSheet} from '@atb/theme';
+import {
+  TransportationIconBoxList,
+  TransportModePair,
+} from '@atb/components/icon-box';
+import {getTransportModeText} from '@atb/components/transportation-modes';
+import {ThemeText} from '@atb/components/text';
+import {TRANSPORTATION_ICON_BOX_LIST_MAX_ITEMS} from '@atb/components/icon-box';
 
 type Props = {
   heading?: string | undefined;
@@ -23,8 +29,6 @@ export const FareProductGroup = ({
   onProductSelect,
 }: Props) => {
   const styles = useStyles();
-  const {t} = useTranslation();
-  const {theme} = useThemeContext();
 
   /*
   Group by two and two, as two fare products are shown side by side on each row
@@ -39,43 +43,12 @@ export const FareProductGroup = ({
 
   return (
     <View>
-      {heading ? (
-        <TransportModes
+      <View style={styles.heading}>
+        <TransportModesWithHeading
           modes={transportModes}
-          iconSize="xSmall"
-          style={styles.heading}
-          textType="body__s"
-          textColor={{
-            foreground: {
-              primary: theme.color.foreground.dynamic.primary,
-              secondary: '',
-              disabled: '',
-            },
-            background: '',
-          }}
-          customTransportModeText={heading}
+          headingOverride={heading}
         />
-      ) : (
-        <TransportModes
-          modes={transportModes}
-          iconSize="xSmall"
-          style={styles.heading}
-          textType="body__s"
-          textColor={{
-            foreground: {
-              primary: theme.color.foreground.dynamic.primary,
-              secondary: '',
-              disabled: '',
-            },
-            background: '',
-          }}
-          customTransportModeText={
-            transportModes.length === 0
-              ? t(FareContractTexts.otherFareContracts)
-              : undefined
-          }
-        />
-      )}
+      </View>
       {groupedConfigs.map(([firstConfig, secondConfig], i) => (
         <View
           style={[
@@ -104,7 +77,65 @@ export const FareProductGroup = ({
   );
 };
 
+export const TransportModesWithHeading = ({
+  modes,
+  headingOverride,
+}: {
+  modes: TransportModePair[];
+  headingOverride?: string;
+}) => {
+  const styles = useStyles();
+  const {t} = useTranslation();
+
+  const transportModeText: string = getTransportModeText(modes, t);
+
+  const heading = (() => {
+    if (headingOverride) return headingOverride;
+    if (modes.length === 0) return t(FareContractTexts.otherFareContracts);
+    if (modes.length > TRANSPORTATION_ICON_BOX_LIST_MAX_ITEMS)
+      return t(FareContractTexts.transportModes.more);
+    return transportModeText;
+  })();
+
+  const a11yLabel = (() => {
+    if (modes.length > 0 && headingOverride) {
+      return t(
+        FareContractTexts.transportModes.a11yLabelWithCustomText(
+          transportModeText,
+          headingOverride,
+        ),
+      );
+    }
+    if (modes.length > 0)
+      return t(FareContractTexts.transportModes.a11yLabel(transportModeText));
+    if (headingOverride) return headingOverride;
+    return t(FareContractTexts.otherFareContracts);
+  })();
+
+  return (
+    <View
+      style={styles.transportationModesContainer}
+      accessibilityLabel={a11yLabel}
+      accessible={true}
+    >
+      {modes.length > 0 && (
+        <TransportationIconBoxList modes={modes} iconSize="xSmall" />
+      )}
+      <ThemeText typography="body__s">{heading}</ThemeText>
+    </View>
+  );
+};
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  transportationModesContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: theme.spacing.xSmall,
+  },
+  transportationIcon: {
+    marginRight: theme.spacing.xSmall,
+  },
   heading: {
     margin: theme.spacing.medium,
     marginLeft: theme.spacing.xLarge,

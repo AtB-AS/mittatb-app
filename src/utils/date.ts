@@ -318,9 +318,10 @@ export function isNumberOfMinutesInThePast(
   minutes: number,
   now?: number,
 ) {
-  return (
-    differenceInMinutesStrings(isoDate, new Date(now ?? Date.now())) < -minutes
-  );
+  const seconds = minutes * 60;
+  const nowDate = new Date(now ?? Date.now());
+  const difference = differenceInSeconds(parseIfNeeded(isoDate), nowDate);
+  return difference <= -seconds;
 }
 
 export function formatToLongDateTime(
@@ -571,13 +572,6 @@ export function dateWithReplacedTime(
     minutes: getMinutes(parsedTime),
     seconds: getSeconds(parsedTime),
   });
-}
-
-export function differenceInMinutesStrings(
-  dateLeft: string | Date,
-  dateRight: string | Date,
-) {
-  return differenceInMinutes(parseIfNeeded(dateLeft), parseIfNeeded(dateRight));
 }
 
 export const addMinutes = (date: string | Date, minutes: number): Date =>

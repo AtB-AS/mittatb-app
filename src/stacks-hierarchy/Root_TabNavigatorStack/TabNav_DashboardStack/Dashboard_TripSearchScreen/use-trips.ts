@@ -26,6 +26,7 @@ export type TripsProps = {
   arriveBy: boolean;
   searchTime: TripSearchTime;
   travelSearchFiltersSelection?: TravelSearchFiltersSelectionType;
+  includeCancellations: boolean;
 };
 
 /**

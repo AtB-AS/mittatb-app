@@ -1,4 +1,10 @@
 import {translation as _} from '../../commons';
+
+export type BonusFaqContext = {
+  endDate: string;
+  pointsPerProduct: string;
+};
+
 const BonusProgramTexts = {
   points: _('poeng', 'points', 'poeng'),
   costA11yLabel: (amount: number) =>
@@ -124,16 +130,12 @@ const BonusProgramTexts = {
       'Me klarer ikkje visa fordelane akkurat no. Du vil framleis tene poeng som vanleg.',
     ),
     readMore: {
-      heading: _(
-        'Slik fungerer poeng',
-        'How points work',
-        'Slik fungerer poeng',
-      ),
+      heading: _('Slik funker det', 'How it works', 'Slik funkar det'),
       download: {
         title: _(
-          '1. Last ned appene først',
-          '1. Download the apps first',
-          '1. Last ned appane fyrst',
+          'Last ned appene først',
+          'Download the apps first',
+          'Last ned appane fyrst',
         ),
         description: _(
           'Du må laste ned og logge inn i appene til Hyre og Trondheim Bysykkel før du bruker Poeng.',
@@ -142,27 +144,19 @@ const BonusProgramTexts = {
         ),
       },
       earnPoints: {
-        title: _(
-          '2. Kjøp billett, tjen poeng',
-          '2. Buy tickets, earn points',
-          '2. Kjøp billett, tjen poeng',
-        ),
+        title: _('Samle Poeng', 'Earn Points', 'Samle Poeng'),
         description: _(
-          'Du tjener poeng hver gang du kjøper enkeltbillett i sone A - for voksen eller student.',
-          'You earn points each time you buy a single ticket in Zone A - for adults or students.',
-          'Du tener poeng kvar gong du kjøper enkeltbillett i sone A - for vaksen eller student.',
+          'Kjøp enkeltbilletter for voksen eller student i sone A og få Poeng.',
+          'Buy single tickets for adults or students in zone A and earn Points.',
+          'Kjøp enkeltbilletter for vaksen eller student i sone A og få Poeng.',
         ),
       },
       spendPoints: {
-        title: _(
-          '3. Bruk poeng i kartet',
-          '3. Spend points in the map',
-          '3. Bruk poeng i kartet',
-        ),
+        title: _('Bruk poeng', 'Spend Points', 'Bruk poeng'),
         description: _(
-          'Du kan bruke poengene i kartet når du velger stasjoner fra Hyre eller Trondheim Bysykkel.',
-          'You can spend points in the map when selecting stations from Hyre or Trondheim City Bike.',
-          'Du kan bruke poenga i kartet når du vel å vel stasjonar frå Hyre eller Trondheim Bysykkel.',
+          'Poengene kan du bruke til å betale for  turer med bysykkel og Hyre-biler.',
+          'You can spend the points to pay for trips with city bikes and Hyre cars.',
+          'Poenga kan du bruke til å betale for turer med bysykkel og Hyre-biler.',
         ),
       },
       downloadOperator: (operator: string) =>
@@ -173,12 +167,66 @@ const BonusProgramTexts = {
         ),
     },
     feedback: {
-      heading: _('Chat', 'Chat', 'Chat'),
+      heading: _('Tilbakemelding', 'Feedback', 'Tilbakemelding'),
       button: _(
-        'Har du tilbakemelding?',
-        'Do you have feedback?',
-        'Har du tilbakemelding?',
+        'Har du noe på hjertet?',
+        'Do you have something on your mind?',
+        'Har du noko på hjartet?',
       ),
+    },
+    faq: {
+      heading: _(
+        'Spørsmål og svar',
+        'Questions and answers',
+        'Spørsmål og svar',
+      ),
+      faqs: [
+        {
+          question: _(
+            'Hvordan tjener jeg Poeng?',
+            'How do I earn Points?',
+            'Korleis tener eg Poeng?',
+          ),
+          answer: ({pointsPerProduct}: BonusFaqContext) =>
+            _(
+              `Du får ${pointsPerProduct} for voksen eller student i sone A.`,
+              `You earn ${pointsPerProduct} for adults or students in zone A.`,
+              `Du får ${pointsPerProduct} for vaksen eller student i sone A.`,
+            ),
+        },
+        {
+          question: _(
+            'Hvordan bruker jeg Poengene?',
+            'How do I use the Points?',
+            'Korleis brukar eg Poenga?',
+          ),
+          answer: () =>
+            _(
+              'Når du har samlet nok Poeng kan du bruke dem på turer med bysykkel og Hyre-biler. Du kan velge å bruke Poeng der du vanligvis betaler.',
+              'When you have collected enough Points, you can use them on trips with city bikes and Hyre cars. You can choose to use Points where you usually pay.',
+              'Når du har samla nok Poeng kan du bruke dei på turar med bysykkel og Hyre-bilar. Du kan velje å bruke Poeng der du vanlegvis betalar.',
+            ),
+        },
+        {
+          question: _(
+            'Hvor lenge varer prøveprosjektet?',
+            'How long does the pilot project last?',
+            'Kor lenge varer prøveprosjektet?',
+          ),
+          answer: ({endDate}: BonusFaqContext) =>
+            _(
+              `Prøveprosjektet varer frem til ${endDate}. Etter dette slettes resten av Poengene dine.`,
+              `The pilot project lasts until ${endDate}. After this, the remaining Points will be deleted.`,
+              `Prøveprosjektet varer fram til ${endDate}. Etter dette slettes resten av Poenga dine.`,
+            ),
+        },
+      ],
+      pointsPerProductLabel: (value: number, productName: string) =>
+        _(
+          `${value} Poeng hver gang du kjøper en ${productName}`,
+          `${value} Points every time you buy a ${productName}`,
+          `${value} Poeng kvar gong du kjøper ein ${productName}`,
+        ),
     },
   },
 

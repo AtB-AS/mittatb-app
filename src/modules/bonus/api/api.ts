@@ -43,3 +43,22 @@ export const getBonusAmountEarned = async (
 
   return BonusAmountEarnedSchema.parse(response.data);
 };
+
+const ProductPointsItemSchema = z.object({
+  fareProduct: z.string(),
+  value: z.number(),
+});
+
+const ProductPointsResponseSchema = z.object({
+  data: z.array(ProductPointsItemSchema),
+});
+
+export type ProductPointsItem = z.infer<typeof ProductPointsItemSchema>;
+
+export const getProductPoints = async (): Promise<ProductPointsItem[]> => {
+  const response = await client.get(`/bonus/v2/product-points`, {
+    authWithIdToken: true,
+  });
+
+  return ProductPointsResponseSchema.parse(response.data).data;
+};

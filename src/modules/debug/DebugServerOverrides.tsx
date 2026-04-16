@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {Alert, View} from 'react-native';
+import {Alert, Platform, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
 import {
@@ -28,11 +28,22 @@ import type {DebugServerOverride, HeaderOverride} from './types';
 
 type OftenUsedOverride = DebugServerOverride & {label: string};
 
+// The Android emulator runs in a VM where "localhost" refers to the emulator
+// itself, not the host machine. 10.0.2.2 is Android's special alias for the
+// host loopback interface. iOS Simulator shares the host network stack, so
+// "localhost" works directly.
+const localBffHost = Platform.OS === 'android' ? '10.0.2.2' : 'localhost';
+
 const oftenUsedOverrides: OftenUsedOverride[] = [
   {
     label: 'Local BFF',
     match: RegExp('/.*/bff\/?.*/'),
-    newValue: 'http://localhost:8080/',
+    newValue: `http://${localBffHost}:8080/`,
+  },
+  {
+    label: 'Local BFF WebSocket',
+    match: RegExp('/.*(ws|stream)\/?.*/'),
+    newValue: `http://${localBffHost}:8080/`,
   },
 ];
 

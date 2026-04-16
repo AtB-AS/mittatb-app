@@ -60,6 +60,7 @@ import {AUTHORITY} from '@env';
 import {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
 import {getRealtimeState, type TimeValues} from '@atb/utils/realtime';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {CancelledDepartureMessage} from './CancelledDepartureMessage';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -256,6 +257,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 {t(TripDetailsTexts.flexibleTransport.onDemandTransportLabel)}
               </ThemeText>
             )}
+          </TripRow>
+        )}
+        {leg.fromEstimatedCall?.cancellation && (
+          <TripRow>
+            <CancelledDepartureMessage />
           </TripRow>
         )}
         {leg.situations.map((situation) => (
