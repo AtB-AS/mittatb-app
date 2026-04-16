@@ -24,9 +24,9 @@ const MapTexts = {
         'Posisjon utilgjengeleg',
       ),
       description: _(
-        'Posisjon er påkrevd for å skanne en QR-kode for delingsmobilitet.',
-        'Location is required to scan a QR code for shared mobility.',
-        'Posisjon er påkravd for å skanne ein QR-kode for delingsmobilitet.',
+        'Posisjon er påkrevd for å skanne en QR-kode.',
+        'Location is required to scan a QR code.',
+        'Posisjon er påkravd for å skanne ein QR-kode.',
       ),
     },
   },
