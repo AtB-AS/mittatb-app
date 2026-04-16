@@ -6,7 +6,7 @@ import haversineDistance from 'haversine-distance';
 import {sortBy} from 'lodash';
 import React, {Fragment, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
-import {hasNoGroupsWithDepartures, isValidDeparture} from '../utils';
+import {hasNoGroupsWithDepartures, isUpcomingDepartureTime} from '../utils';
 import {LineItem} from './line';
 import {QuayHeaderItem} from './quay-header';
 import {Location} from '@atb/modules/favorites';
@@ -91,7 +91,7 @@ function sortAndLimit(quayGroup: QuayGroup, limit: number, now: number) {
   }
   const sorted = sortBy(
     quayGroup.group,
-    (v) => v.departures.find((d) => isValidDeparture(d, now))?.time,
+    (v) => v.departures.find((d) => isUpcomingDepartureTime(d, now))?.time,
   ).slice(0, limit);
   return sorted;
 }

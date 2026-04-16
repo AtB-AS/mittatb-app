@@ -19,7 +19,7 @@ import {
   SituationSectionItem,
 } from '@atb/modules/situations';
 import {EstimatedCallList} from './EstimatedCallList';
-import {isValidDepartureTime} from '@atb/departure-list/utils';
+import {isUpcomingEstimatedCall} from '@atb/departure-list/utils';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {useNow} from '@atb/utils/use-now';
 import {Loading} from '@atb/components/loading';
@@ -66,7 +66,7 @@ export function QuaySection({
   const now = useNow(5 * ONE_SECOND_MS);
 
   const departuresToDisplay = departures.filter((departure) =>
-    isValidDepartureTime(departure, now),
+    isUpcomingEstimatedCall(departure, now),
   );
 
   const navigateToQuayEnabled = !!navigateToQuay;
