@@ -17,7 +17,7 @@ import {isDefined} from '@atb/utils/presence';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 const FAVORITE_DEPARTURES_REFETCH_INTERVAL_SECONDS = 30;
-const FAVORITE_DEPARTURES_FULL_REFRESH_INTERVAL_MINUTES = 10;
+const FAVORITE_DEPARTURES_FULL_REFRESH_INTERVAL_MINUTES = 5;
 
 type FavoriteDeparturesData = {
   data: DepartureGroupMetadata['data'];
