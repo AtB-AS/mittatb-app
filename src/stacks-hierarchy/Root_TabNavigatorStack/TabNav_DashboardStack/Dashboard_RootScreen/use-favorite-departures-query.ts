@@ -66,7 +66,7 @@ export const useFavoriteDeparturesQuery = (enabled: boolean) => {
 
       const fullRefresh =
         !existingData ||
-        minutesBetween(existingData.startTime, new Date()) >
+        minutesBetween(existingData.startTime, new Date()) >=
           FAVORITE_DEPARTURES_FULL_REFRESH_INTERVAL_MINUTES;
 
       if (fullRefresh) {
