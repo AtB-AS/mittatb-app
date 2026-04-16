@@ -12,8 +12,8 @@ import {StopPlaces} from './components/StopPlaces';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
-import React, {Ref, useEffect, useMemo} from 'react';
-import {Platform, ScrollView, View} from 'react-native';
+import React, {Ref, useEffect} from 'react';
+import {ScrollView, View} from 'react-native';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
@@ -22,6 +22,7 @@ import SharedTexts from '@atb/translations/shared';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {useNearestStopPlaceNodesQuery} from './use-nearest-stop-place-nodes-query';
+import {useUserRefreshControlProps} from '@atb/utils/use-user-refresh-props';
 
 export type NearbyStopPlacesScreenParams = {
   location: Location | undefined;
@@ -112,20 +113,15 @@ export const NearbyStopPlacesScreenComponent = ({
           location.name
         : undefined;
 
-  const refreshControlProps = useMemo(() => {
-    // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
-    return isFocused || Platform.OS === 'android'
-      ? {
-          refreshing: Platform.OS === 'ios' ? false : isLoading,
-          onRefresh: () =>
-            onUpdateLocation(
-              location?.resultType === 'geolocation'
-                ? (geolocation ?? undefined)
-                : location,
-            ),
-        }
-      : undefined;
-  }, [isFocused, isLoading, location, geolocation, onUpdateLocation]);
+  const refreshControlProps = useUserRefreshControlProps({
+    refreshing: isLoading,
+    onRefresh: () =>
+      onUpdateLocation(
+        location?.resultType === 'geolocation'
+          ? (geolocation ?? undefined)
+          : location,
+      ),
+  });
 
   return (
     <FullScreenView

@@ -13,8 +13,8 @@ import {humanizePaymentType, RecurringPayment} from '@atb/modules/ticketing';
 import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import React, {useMemo} from 'react';
-import {RefreshControlProps, View} from 'react-native';
+import React from 'react';
+import {View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
@@ -22,6 +22,7 @@ import {ExpiryMessage, PaymentBrand} from '@atb/modules/payment';
 import {useRecurringPayment} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
+import {useUserRefreshControlProps} from '@atb/utils/use-user-refresh-props';
 
 type Props = ProfileScreenProps<'Profile_PaymentMethodsScreen'>;
 
@@ -40,12 +41,10 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
 
   const focusRef = useFocusOnLoad(navigation);
 
-  const refreshControlProps: RefreshControlProps = useMemo(() => {
-    return {
-      refreshing: recurringPaymentLoading,
-      onRefresh: refetchRecurringPayment,
-    };
-  }, [recurringPaymentLoading, refetchRecurringPayment]);
+  const refreshControlProps = useUserRefreshControlProps({
+    refreshing: recurringPaymentLoading,
+    onRefresh: refetchRecurringPayment,
+  });
 
   return (
     <FullScreenView

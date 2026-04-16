@@ -24,9 +24,10 @@ import {ThemedCarRegister} from '@atb/theme/ThemedAssets';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useMemo, useState} from 'react';
+import {useState} from 'react';
 import {ProfileScreenProps} from './navigation-types';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useUserRefreshControlProps} from '@atb/utils/use-user-refresh-props';
 
 const MAX_VEHICLE_REGISTRATIONS = 2;
 
@@ -70,12 +71,10 @@ export const Profile_SmartParkAndRideScreen = ({route, navigation}: Props) => {
     }
   };
 
-  const refreshControlProps = useMemo(() => {
-    return {
-      refreshing: vehicleRegistrationsIsFetching,
-      onRefresh: refetchVehicleRegistrations,
-    };
-  }, [vehicleRegistrationsIsFetching, refetchVehicleRegistrations]);
+  const refreshControlProps = useUserRefreshControlProps({
+    refreshing: vehicleRegistrationsIsFetching,
+    onRefresh: refetchVehicleRegistrations,
+  });
 
   const focusRef = useFocusOnLoad(navigation);
 
