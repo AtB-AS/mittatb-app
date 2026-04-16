@@ -35,6 +35,7 @@ export type RemoteConfig = {
   enable_loading_screen: boolean;
   enable_map_3d: boolean;
   enable_map_pitch: boolean;
+  enable_map_tile_preloading: boolean;
   enable_non_transit_trip_search: boolean;
   enable_nynorsk: boolean;
   enable_new_token_barcode: boolean;
@@ -108,6 +109,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_loading_screen: true,
   enable_map_3d: true,
   enable_map_pitch: false,
+  enable_map_tile_preloading: false,
   enable_non_transit_trip_search: true,
   enable_new_token_barcode: false,
   enable_new_token_barcode_base64: false,
@@ -223,6 +225,9 @@ export function getConfig(): RemoteConfig {
   const enable_map_pitch =
     values['enable_map_pitch']?.asBoolean() ??
     defaultRemoteConfig.enable_map_pitch;
+  const enable_map_tile_preloading =
+    values['enable_map_tile_preloading']?.asBoolean() ??
+    defaultRemoteConfig.enable_map_tile_preloading;
   const enable_non_transit_trip_search =
     values['enable_non_transit_trip_search']?.asBoolean() ??
     defaultRemoteConfig.enable_non_transit_trip_search;
@@ -374,6 +379,7 @@ export function getConfig(): RemoteConfig {
     enable_loading_screen,
     enable_map_3d,
     enable_map_pitch,
+    enable_map_tile_preloading,
     enable_non_transit_trip_search,
     enable_new_token_barcode,
     enable_new_token_barcode_base64,
