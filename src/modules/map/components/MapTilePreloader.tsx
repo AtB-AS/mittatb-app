@@ -1,5 +1,5 @@
 import {Camera, MapState, MapView} from '@rnmapbox/maps';
-import {Dimensions} from 'react-native';
+import {useWindowDimensions} from 'react-native';
 import {useMapViewConfig} from '../hooks/use-map-view-config';
 import {ForwardedRef, forwardRef, useRef} from 'react';
 import {DEFAULT_ZOOM_LEVEL} from '../Map';
@@ -81,7 +81,8 @@ export const MapTilePreloader = forwardRef<MapState, MapTilePreloaderProps>(
       100, // Refresh rate. Might be lower for slow devices. No need for very short interval, this is "just for preloading behind the scenes".
     );
 
-    const {width, height} = Dimensions.get('window');
+    const {width, height} = useWindowDimensions();
+
     return (
       <MapView
         id="preloaderOnlyMap"
