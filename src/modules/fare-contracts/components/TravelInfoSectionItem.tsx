@@ -2,6 +2,7 @@ import {useTranslation} from '@atb/translations';
 import {useAuthContext} from '@atb/modules/auth';
 import {
   isCanBeActivatedNowFareContract,
+  isSentOrReceivedFareContract,
   useGetFareProductsQuery,
   useGetSupplementProductsQuery,
 } from '@atb/modules/ticketing';
@@ -190,7 +191,8 @@ export const TravelInfoSectionItem = ({
         )}
       </View>
 
-      <SentOrReceivedMessageBox fc={fc} />
+      {isSentOrReceivedFareContract(fc) && <SentOrReceivedMessageBox fc={fc} />}
+
       {(shouldShowSupplementPurchase || shouldShowActivateNow) && (
         <View style={styles.buttons}>
           {shouldShowSupplementPurchase && (
