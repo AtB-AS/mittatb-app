@@ -1,55 +1,16 @@
-# OSX
-.DS_Store
-
 # Xcode
 build/
-*.pbxuser
-!default.pbxuser
-*.mode1v3
-!default.mode1v3
-*.mode2v3
-!default.mode2v3
-*.perspectivev3
-!default.perspectivev3
-xcuserdata
-*.xccheckout
-*.moved-aside
 DerivedData
-*.hmap
-*.ipa
-*.xcuserstate
-project.xcworkspace
-**/.xcode.env.local
-*.xcconfig
 
 # Android/IntelliJ
 build/
 .idea
 .gradle
-local.properties
-env.properties
-*.iml
-ic_launcher*
-*.hprof
-.project
 
 # Node.js
 node_modules/
 npm-debug.log
 yarn-error.log
-
-# BUCK
-buck-out/
-.buckd/
-*.keystore
-!debug.keystore
-.kotlin/
-
-# fastlane
-*/fastlane/report.xml
-*/fastlane/Preview.html
-*/fastlane/screenshots
-**/fastlane/test_output
 
 # Bundle artifact
 *.jsbundle
@@ -60,65 +21,24 @@ buck-out/
 ios/atb/Images.xcassets/AppIcon.appiconset/*.png
 ios/departureWidget/Assets.xcassets/AppIcon.appiconset/*.png
 
-# VSCode
-.vscode/.react
-
-# Firebase
-ui-debug.log
-firebase-debug.log
-
 # Env & Config
 .env
 .env.*
 /.env
 /icons
-ios/Configs/Config.xcconfig
-/ios/ios-devices.txt
-
-# Build splash assets
-android/app/src/**/res/**/bootsplash_logo.png
-android/app/src/**/res/values/colors.xml
-assets/bootsplash_logo*.png
-assets/bootsplash/
-ios/atb/BootSplash.storyboard
-ios/atb/Images.xcassets/BootSplashLogo.imageset/bootsplash_logo*.png
-ios/atb/Images.xcassets/BootSplashLogo-*.imageset
-ios/atb/Colors.xcassets/BootSplashBackground-*.colorset
+**/ios-devices.txt
 
 # Service files
 android/app/google-services.json
-ios/atb/GoogleService-Info.plist
-google-services.json
+**/GoogleService-Info.plist
+**/google-services.json
 *.plist
 
 # Credentials
 .netrc
-*.key
-secrets/
+*.keystore
 env/
-
-# Vendor
-vendor/bundle
-
-# Design system
-assets/design-assets
-src/assets/svg
 
 # Yalc
 .yalc/
 yalc.lock
-
-# Metro
-.cxx/
-.metro-health-check*
-
-# Coverage
-/coverage
-
-# Yarn
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
