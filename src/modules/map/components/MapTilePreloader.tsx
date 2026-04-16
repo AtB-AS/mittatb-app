@@ -86,7 +86,6 @@ export const MapTilePreloader = forwardRef<MapState, MapTilePreloaderProps>(
     return (
       <MapView
         id="preloaderOnlyMap"
-        surfaceView={false} // android won't render more than 1 map with surfaceView
         style={{
           pointerEvents: 'none',
           position: 'absolute',
@@ -108,6 +107,7 @@ export const MapTilePreloader = forwardRef<MapState, MapTilePreloaderProps>(
         }}
         pitchEnabled={false}
         {...mapViewConfig}
+        surfaceView={false} // android won't render more than 1 map with surfaceView
         attributionEnabled={false}
         compassEnabled={false}
         logoEnabled={false}
