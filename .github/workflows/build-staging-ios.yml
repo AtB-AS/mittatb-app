@@ -69,9 +69,6 @@ jobs:
             ios/Pods
             ~/Library/Caches/CocoaPods
           key: pods-${{ hashFiles('yarn.lock') }}-${{ hashFiles('ios/Podfile.lock') }}
-          restore-keys: |
-            pods-${{ hashFiles('yarn.lock') }}-
-            pods-
       - name: Cache node_modules
         uses: actions/cache@v4
         id: modules-cache
