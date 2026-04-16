@@ -70,14 +70,7 @@ export const BikeStationBottomSheet = ({
       heading={stationName}
       subText={operatorName}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      logoIcon={
-        <TransportationIconBox
-          mode="bicycle"
-          isFlexible={false}
-          size="normal"
-          type="compact"
-        />
-      }
+      logoIcon={<TransportationIconBox mode="bicycle" />}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >

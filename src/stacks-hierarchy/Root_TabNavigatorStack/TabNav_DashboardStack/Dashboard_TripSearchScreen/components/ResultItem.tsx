@@ -237,13 +237,13 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                     {leg.mode === 'foot' ? (
                       <FootLeg leg={leg} nextLeg={filteredLegs[i + 1]} />
                     ) : staySeated(i) ? null : (
-                      <TransportationLeg
-                        leg={leg}
-                        style={
-                          isSignificantDifference(leg)
-                            ? styles.transportationIcon_wide
-                            : undefined
-                        }
+                      <TransportationIconBox
+                        mode={leg.mode}
+                        subMode={leg.line?.transportSubmode}
+                        isFlexible={isLineFlexibleTransport(leg.line)}
+                        lineNumber={leg.line?.publicCode}
+                        spacious={true}
+                        testID={`${leg.mode}Leg`}
                       />
                     )}
                     <View style={styles.departureTimes}>
@@ -383,10 +383,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
   },
-  transportationIcon_wide: {
-    flex: 1,
-    justifyContent: 'center',
-  },
   dashContainer: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -465,26 +461,6 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       <ThemeIcon accessibilityLabel={a11yText} svg={WalkFill} />
       <Text style={styles.walkDuration}>{secondsToMinutes(leg.duration)}</Text>
     </View>
-  );
-};
-
-const TransportationLeg = ({
-  leg,
-  style,
-}: {
-  leg: Leg;
-  style?: StyleProp<ViewStyle>;
-}) => {
-  return (
-    <TransportationIconBox
-      style={style}
-      mode={leg.mode}
-      subMode={leg.line?.transportSubmode}
-      isFlexible={isLineFlexibleTransport(leg.line)}
-      lineNumber={leg.line?.publicCode}
-      type="standard"
-      testID={`${leg.mode}Leg`}
-    />
   );
 };
 

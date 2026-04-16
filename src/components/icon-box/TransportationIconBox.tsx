@@ -1,6 +1,5 @@
 import React from 'react';
-import {StyleProp, View, ViewStyle} from 'react-native';
-
+import {View} from 'react-native';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
@@ -17,11 +16,9 @@ export type TransportationIconBoxProps = {
   subMode?: AnySubMode;
   isFlexible?: boolean;
   lineNumber?: string;
-  size?: keyof Theme['icon']['size'];
-  type?: 'compact' | 'standard';
-  style?: StyleProp<ViewStyle>;
-  disabled?: boolean;
-  overrideBorderRadius?: string;
+  iconSize?: keyof Theme['icon']['size'];
+  spacious?: boolean;
+  rounded?: boolean;
   testID?: string;
   notification?: (props: SvgProps) => React.JSX.Element;
 };
@@ -31,34 +28,18 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   subMode,
   isFlexible = false,
   lineNumber,
-  size = 'normal',
-  type = 'compact',
-  style,
-  disabled,
-  overrideBorderRadius,
+  iconSize = 'normal',
+  spacious,
+  rounded,
   testID,
   notification,
 }) => {
   const {t} = useTranslation();
   const transportColor = useTransportColor(mode, subMode, isFlexible);
   const transportationColor = transportColor.primary;
-  const backgroundColor = disabled
-    ? transportationColor.foreground.disabled
-    : transportationColor.background;
   const {svg} = getTransportModeSvg(mode, subMode);
   const styles = useStyles();
   const {theme} = useThemeContext();
-
-  const lineNumberElement = lineNumber ? (
-    <ThemeText
-      typography="body__m__strong"
-      color={transportationColor}
-      style={styles.lineNumberText}
-      testID="lineNumber"
-    >
-      {lineNumber}
-    </ThemeText>
-  ) : null;
 
   return (
     <WithNotificationBadge notification={notification}>
@@ -66,27 +47,35 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
         <View
           style={[
             styles.transportationIconBox,
-            type === 'standard' && styles.standardTransportationIconBox,
+            spacious && styles.standardTransportationIconBox,
             {
-              backgroundColor,
-              borderRadius:
-                overrideBorderRadius ?? getIconBoxBorderRadius(size, theme),
+              backgroundColor: transportationColor.background,
+              borderRadius: rounded
+                ? theme.border.radius.circle
+                : getIconBoxBorderRadius(iconSize, theme),
               paddingRight:
-                (type === 'standard'
-                  ? theme.spacing.small
-                  : theme.spacing.xSmall) + extraPaddingRight,
+                (spacious ? theme.spacing.small : theme.spacing.xSmall) +
+                extraPaddingRight,
             },
-            style,
           ]}
         >
           <ThemeIcon
-            size={size}
+            size={iconSize}
             svg={svg}
             color={transportationColor.foreground.primary}
             accessibilityLabel={t(getTranslatedModeName(mode))}
             testID={testID}
           />
-          {lineNumberElement}
+          {lineNumber && (
+            <ThemeText
+              typography="body__m__strong"
+              color={transportationColor}
+              style={styles.lineNumberText}
+              testID="lineNumber"
+            >
+              {lineNumber}
+            </ThemeText>
+          )}
         </View>
       )}
     </WithNotificationBadge>
@@ -99,6 +88,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       display: 'flex',
       flexDirection: 'row',
       padding: theme.spacing.xSmall,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     standardTransportationIconBox: {
       padding: theme.spacing.small,

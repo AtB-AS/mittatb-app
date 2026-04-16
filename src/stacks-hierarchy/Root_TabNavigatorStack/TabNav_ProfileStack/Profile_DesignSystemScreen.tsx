@@ -49,6 +49,7 @@ import {
 } from '@atb/components/bottom-sheet';
 import {BottomSheetModalMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
 import {Settings} from '@atb/assets/svg/mono-icons/profile';
+import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 
 type DesignSystemScreenProps = ProfileScreenProps<'Profile_DesignSystemScreen'>;
 
@@ -57,7 +58,7 @@ export const Profile_DesignSystemScreen = ({
 }: DesignSystemScreenProps) => {
   const styles = useStyles();
   const fontScale = useFontScale();
-  const {theme} = useThemeContext();
+  const {theme, themeName} = useThemeContext();
   const {t} = useTranslation();
   const [selected, setSelected] = useState(false);
   const {onScroll, isScrolled} = useScrollBorder();
@@ -298,19 +299,56 @@ export const Profile_DesignSystemScreen = ({
                 }}
               />
             </View>
+
+            <View style={styles.contentContainer}>
+              {Object.values(Mode).map((mode) => (
+                <TransportationIconBox key={mode} mode={mode} />
+              ))}
+            </View>
+
+            <View style={styles.contentContainer}>
+              <TransportationIconBox mode={Mode.Bus} iconSize="xSmall" />
+              <TransportationIconBox mode={Mode.Bus} iconSize="small" />
+              <TransportationIconBox mode={Mode.Bus} iconSize="normal" />
+              <TransportationIconBox mode={Mode.Bus} iconSize="large" />
+            </View>
+
             <View style={styles.contentContainer}>
               <TransportationIconBox
-                style={styles.transportationIcon}
+                mode={Mode.Bicycle}
+                iconSize="xSmall"
+                rounded
+              />
+              <TransportationIconBox
+                mode={Mode.Rail}
+                iconSize="xSmall"
+                notification={statusTypeToIcon('warning', true, themeName)}
+              />
+              <TransportationIconBox
                 mode={Mode.Bus}
                 subMode={TransportSubmode.LocalBus}
+                iconSize="small"
+                lineNumber="1"
               />
-              {Object.values(Mode).map((mode) => (
-                <TransportationIconBox
-                  key={mode}
-                  style={styles.transportationIcon}
-                  mode={mode}
-                />
-              ))}
+              <TransportationIconBox
+                mode={Mode.Water}
+                iconSize="normal"
+                rounded={true}
+                lineNumber="RE 10"
+              />
+              <TransportationIconBox
+                mode={Mode.Car}
+                iconSize="large"
+                rounded
+                notification={statusTypeToIcon('info', true, themeName)}
+              />
+              <TransportationIconBox
+                mode={Mode.Rail}
+                iconSize="large"
+                notification={statusTypeToIcon('valid', true, themeName)}
+                spacious={true}
+                lineNumber="99"
+              />
             </View>
           </GenericSectionItem>
         </Section>
@@ -1388,13 +1426,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   buttonContainer: {
     gap: theme.spacing.small,
   },
-  transportationIcon: {
-    marginRight: theme.spacing.xSmall,
-  },
   contentContainer: {
     flexDirection: 'row',
     marginBottom: theme.spacing.small,
     flexWrap: 'wrap',
+    alignItems: 'center',
   },
   section: {
     marginTop: theme.spacing.large,
