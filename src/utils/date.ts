@@ -178,8 +178,8 @@ export function secondsBetween(
 }
 
 /**
- * Return minutes between start and end. If end is before start the returned
- * value will be negative.
+ * Return minutes between start and end, rounded down. If end is before start,
+ * the returned value will be negative.
  */
 export function minutesBetween(
   start: string | Date,

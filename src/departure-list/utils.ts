@@ -50,7 +50,7 @@ export function updateStopsWithRealtime(
 function filterOutOutdatedDepartures(quayGroup: QuayGroup) {
   const newDepartureGroups = quayGroup.group.map(function (group) {
     const newDepartures = group.departures.filter((departure) =>
-      isValidDeparture(departure, Date.now()),
+      isUpcomingDepartureTime(departure, Date.now()),
     );
     // Optimization to avoid having to sort list to often.
     // If after filtering it has the same length it means we could
@@ -151,11 +151,12 @@ export function hasNoGroupsWithDepartures(
 export function hasNoDeparturesOnGroup(group: DepartureGroup, now: number) {
   return (
     group.departures.length === 0 ||
-    group.departures.every((d) => !isValidDeparture(d, now))
+    group.departures.every((d) => !isUpcomingDepartureTime(d, now))
   );
 }
 
-export function isValidDeparture(departure: DepartureTime, now: number) {
+export function isUpcomingDepartureTime(departure: DepartureTime, now: number) {
+  if (departure.actualTime) return false;
   return !isNumberOfMinutesInThePast(
     departure.time,
     HIDE_AFTER_NUM_MINUTES,
@@ -163,6 +164,14 @@ export function isValidDeparture(departure: DepartureTime, now: number) {
   );
 }
 
-export function isValidDepartureTime(time: string, now?: number) {
-  return !isNumberOfMinutesInThePast(time, HIDE_AFTER_NUM_MINUTES, now);
+export function isUpcomingEstimatedCall(
+  estimatedCall: EstimatedCall,
+  now?: number,
+) {
+  if (estimatedCall.actualDepartureTime) return false;
+  return !isNumberOfMinutesInThePast(
+    estimatedCall.expectedDepartureTime,
+    HIDE_AFTER_NUM_MINUTES,
+    now,
+  );
 }

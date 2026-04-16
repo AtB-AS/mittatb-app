@@ -27,7 +27,7 @@ import {insets} from '@atb/utils/insets';
 import {TFunc} from '@leile/lobo-t';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
-import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
+import {hasNoDeparturesOnGroup, isUpcomingDepartureTime} from '../utils';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {
@@ -83,7 +83,9 @@ export function LineItem({
   }));
 
   // we know we have a departure as we've checked hasNoDeparturesOnGroup
-  const nextValids = group.departures.filter((d) => isValidDeparture(d, now));
+  const nextValids = group.departures.filter((d) =>
+    isUpcomingDepartureTime(d, now),
+  );
 
   return (
     <View style={[topContainer, {paddingVertical: 0, paddingHorizontal: 0}]}>
@@ -249,7 +251,7 @@ function DepartureTimeItem({
         : RealtimeLight
       : undefined;
 
-  if (!isValidDeparture(departure, now)) {
+  if (!isUpcomingDepartureTime(departure, now)) {
     return null;
   }
   return (
