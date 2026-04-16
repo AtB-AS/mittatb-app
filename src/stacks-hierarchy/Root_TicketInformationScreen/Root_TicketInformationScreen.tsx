@@ -141,6 +141,7 @@ const useStyle = StyleSheet.createThemeHook((theme, {bottom}) => {
     descriptionHeading: {
       flexDirection: 'row',
       alignItems: 'center',
+      gap: theme.spacing.xSmall,
       marginBottom: theme.spacing.small,
       flexShrink: 1,
     },
