@@ -5,7 +5,10 @@ import {ONE_HOUR_MS} from '@atb/utils/durations';
 
 export const GET_PROGRAM_KEY = 'GET_PROGRAM';
 
-export function useProgram(programId: KnownProgramId, disabled: boolean = false): ProgramType | undefined {
+export function useProgram(
+  programId: KnownProgramId,
+  disabled: boolean = false,
+): ProgramType | undefined {
   const {data} = useQuery({
     queryKey: [GET_PROGRAM_KEY, programId],
     queryFn: () => getProgram(programId),
