@@ -52,6 +52,7 @@ function MapLineItem({line, index}: MapLineItemProps) {
             lineWidth: 4,
             lineOffset: -1,
             lineColor,
+            lineEmissiveStrength: 1,
             ...customStyle,
           }}
         />
@@ -69,6 +70,7 @@ function MapLineItem({line, index}: MapLineItemProps) {
           style={{
             circleRadius: 7.5,
             circleColor: lineColor,
+            circleEmissiveStrength: 1,
           }}
         />
       </MapboxGL.ShapeSource>

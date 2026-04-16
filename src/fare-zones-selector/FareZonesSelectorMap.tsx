@@ -161,6 +161,7 @@ const FareZonesSelectorMap = ({
                       : 'transparent',
                     'transparent',
                   ],
+                  fillEmissiveStrength: 1,
                 }}
               />
               <MapboxGL.LineLayer
@@ -168,6 +169,7 @@ const FareZonesSelectorMap = ({
                 style={{
                   lineWidth: 1,
                   lineColor: '#666666',
+                  lineEmissiveStrength: 1,
                 }}
               />
             </MapboxGL.ShapeSource>
@@ -184,6 +186,7 @@ const FareZonesSelectorMap = ({
                     textField: f.properties!.name,
                     textHaloColor: 'white',
                     textHaloWidth: 2,
+                    iconEmissiveStrength: 1,
                   }}
                 />
               </MapboxGL.ShapeSource>

@@ -52,6 +52,7 @@ export const useGeofencingZonesLayers = (
               'fill-opacity': geofencingZoneStyle.fillOpacity,
               'fill-antialias': true,
               visibility,
+              'fill-emissive-strength': 1,
             },
             filter: filterByGfzCode,
           },
