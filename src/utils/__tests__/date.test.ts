@@ -14,6 +14,7 @@ import {
   isBetween,
   isEqualOrAfter,
   isNumberOfMinutesInThePast,
+  isValidDateTimeString,
   minutesBetween,
   secondsToDuration,
 } from '../date'; // Adjust the path if needed
@@ -520,5 +521,55 @@ describe('minutesBetween', () => {
     const start = new Date('2024-09-01T12:00:20Z');
     const end = new Date('2024-09-01T12:30:19Z');
     expect(minutesBetween(start, end)).toBe(29);
+  });
+});
+
+describe('convertIsoStringFieldsToDate', () => {
+  test('converts ISO string fields to Date objects', () => {
+    const input = {
+      string: 'Hello world!',
+      date: '2024-01-01T00:00:00.000Z',
+      dateWithTimeZone: '2024-01-01T00:00:00.000+01:00',
+      year: '2026',
+      partialDate: '2024-01-01',
+      number: 42,
+      orderId: '41ABC5123',
+      nested: {
+        string: 'Nested string',
+        date: '2024-02-01T00:00:00.000Z',
+      },
+      array: [{date: '2024-04-01T00:00:00.000Z'}],
+    };
+    const expectedOutput = {
+      string: 'Hello world!',
+      date: new Date('2024-01-01T00:00:00.000Z'),
+      dateWithTimeZone: new Date('2024-01-01T00:00:00.000+01:00'),
+      year: '2026',
+      partialDate: '2024-01-01',
+      number: 42,
+      orderId: '41ABC5123',
+      nested: {
+        string: 'Nested string',
+        date: new Date('2024-02-01T00:00:00.000Z'),
+      },
+      array: [{date: new Date('2024-04-01T00:00:00.000Z')}],
+    };
+    const result = convertIsoStringFieldsToDate(input);
+
+    expect(result).toEqual(expectedOutput);
+  });
+});
+
+describe('isValidDateString', () => {
+  test('ISO strings are valid', () => {
+    expect(isValidDateTimeString('2024-09-01T12:00:00.000Z')).toBe(true);
+    expect(isValidDateTimeString('2024-09-01T12:00:00.000+01:00')).toBe(true);
+    expect(isValidDateTimeString('2024-09-01T12:00:00.000-01:00')).toBe(true);
+  });
+  test('non-ISO strings are invalid', () => {
+    expect(isValidDateTimeString('2024')).toBe(false);
+    expect(isValidDateTimeString('2024-09-01')).toBe(false);
+    expect(isValidDateTimeString('12:00')).toBe(false);
+    expect(isValidDateTimeString('41ABCD5E')).toBe(false);
   });
 });
