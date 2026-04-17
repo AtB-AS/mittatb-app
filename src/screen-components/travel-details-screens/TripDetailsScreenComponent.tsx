@@ -16,7 +16,7 @@ import {useRemoteConfigContext} from '@atb/modules/remote-config';
 // eslint-disable-next-line no-restricted-imports
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {ContrastColor, StyleSheet, useThemeContext} from '@atb/theme';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/screen-components/travel-details-map-screen';
 import {ServiceJourneyDeparture} from './types';
@@ -42,6 +42,8 @@ import {useSingleTripQuery} from '@atb/modules/trip-patterns';
 import {getPosthogClientGlobal} from '@atb/modules/analytics';
 import {useScreenshotAware} from 'react-native-screenshot-aware';
 import {useTimeContext} from '@atb/modules/time';
+import {useIsExperimentalEnabled} from '@atb/modules/experimental';
+import {TravelCardHeader} from '../travel-card';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -79,7 +81,7 @@ export const TripDetailsScreenComponent = ({
   focusRef,
   isFocused,
 }: Props) => {
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const styles = useStyle();
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.neutral[1];
@@ -102,8 +104,6 @@ export const TripDetailsScreenComponent = ({
   );
 
   const purchaseSelection = usePurchaseSelectionFromTrip(updatedTripPattern);
-  const fromToNames = getFromToName(updatedTripPattern.legs);
-  const startEndTime = getStartEndTime(updatedTripPattern, language);
 
   const [isManualRefresh, setIsManualRefresh] = useState(false);
   const onManualRefresh = useCallback(() => {
@@ -133,42 +133,11 @@ export const TripDetailsScreenComponent = ({
         contentColor={theme.color.background.neutral[0]}
         headerContent={(focusRef) => (
           <View style={styles.headerContent}>
-            <View accessible={true} ref={focusRef}>
-              <ThemeText
-                color={themeColor}
-                typography="heading__l"
-                style={styles.heading}
-                accessibilityLabel={
-                  fromToNames
-                    ? t(
-                        TripDetailsTexts.header.titleFromToA11yLabel(
-                          fromToNames,
-                        ),
-                      )
-                    : undefined
-                }
-              >
-                {fromToNames
-                  ? t(TripDetailsTexts.header.titleFromTo(fromToNames))
-                  : t(TripDetailsTexts.header.title)}
-              </ThemeText>
-            </View>
-            <View style={{flexDirection: 'row'}} accessible={true}>
-              <ThemeIcon
-                svg={SvgDuration}
-                style={styles.durationIcon}
-                color={themeColor}
-              />
-              <ThemeText
-                typography="body__s"
-                color={themeColor}
-                accessibilityLabel={t(
-                  TripDetailsTexts.header.startEndTimeA11yLabel(startEndTime),
-                )}
-              >
-                {t(TripDetailsTexts.header.startEndTime(startEndTime))}
-              </ThemeText>
-            </View>
+            <HeaderContent
+              tripPattern={updatedTripPattern}
+              focusRef={focusRef}
+              themeColor={themeColor}
+            />
           </View>
         )}
       >
@@ -215,6 +184,71 @@ export const TripDetailsScreenComponent = ({
         </View>
       )}
     </View>
+  );
+};
+
+const HeaderContent = ({
+  tripPattern,
+  focusRef,
+  themeColor,
+}: {
+  tripPattern: TripPattern;
+  focusRef?: Ref<any>;
+  themeColor: ContrastColor;
+}) => {
+  const styles = useStyle();
+  const {t, language} = useTranslation();
+  const isExperimental = useIsExperimentalEnabled();
+
+  const fromToNames = getFromToName(tripPattern.legs);
+  const startEndTime = getStartEndTime(tripPattern, language);
+
+  if (isExperimental) {
+    return (
+      <TravelCardHeader
+        tripPattern={tripPattern}
+        includeDayInfo={true}
+        includeFromToInfo={true}
+        type="large"
+      />
+    );
+  }
+
+  return (
+    <>
+      <View accessible={true} ref={focusRef}>
+        <ThemeText
+          color={themeColor}
+          typography="heading__l"
+          style={styles.heading}
+          accessibilityLabel={
+            fromToNames
+              ? t(TripDetailsTexts.header.titleFromToA11yLabel(fromToNames))
+              : undefined
+          }
+        >
+          {fromToNames
+            ? t(TripDetailsTexts.header.titleFromTo(fromToNames))
+            : t(TripDetailsTexts.header.title)}
+        </ThemeText>
+      </View>
+      <View style={{flexDirection: 'row'}} accessible={true}>
+        <ThemeIcon
+          svg={SvgDuration}
+          style={styles.durationIcon}
+          color={themeColor}
+        />
+        <ThemeText
+          typography="body__s"
+          color={themeColor}
+          accessibilityLabel={t(
+            TripDetailsTexts.header.startEndTimeA11yLabel(startEndTime),
+          )}
+        >
+          {t(TripDetailsTexts.header.startEndTime(startEndTime))}
+        </ThemeText>
+      </View>
+    </>
   );
 };
 
