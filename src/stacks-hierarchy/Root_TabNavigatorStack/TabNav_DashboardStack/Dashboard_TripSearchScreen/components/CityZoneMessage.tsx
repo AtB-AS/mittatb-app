@@ -178,7 +178,7 @@ const useActionButtons = (cityZone?: CityZone) => {
           name: 'book_by_phone_action',
           phoneNumber: phoneNumber,
         });
-        openUrl(`tel:${phoneNumber}`, 'Could not open phone for booking');
+        openUrl(`tel:${phoneNumber}`);
       },
     });
   }

@@ -63,9 +63,7 @@ export const ForceUpdateScreen = () => {
                 default: '',
               });
               setError(false);
-              openUrl(link, 'Could not open app store for update', () =>
-                setError(true),
-              );
+              openUrl(link, () => setError(true));
             }}
             text={t(ForceUpdateTexts.externalButton)}
           />

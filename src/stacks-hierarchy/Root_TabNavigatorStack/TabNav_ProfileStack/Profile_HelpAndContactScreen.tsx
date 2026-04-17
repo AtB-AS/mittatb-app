@@ -141,12 +141,7 @@ export const Profile_HelpAndContactScreen = ({navigation}: Props) => {
                 rightIcon={{svg: Support}}
                 accessibilityRole="button"
                 testID="contactCustomerServiceButton"
-                onPress={async () =>
-                  openUrl(
-                    `tel:${contactPhoneNumber}`,
-                    'Could not call customer service',
-                  )
-                }
+                onPress={async () => openUrl(`tel:${contactPhoneNumber}`)}
               />
             </View>
           )}

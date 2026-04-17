@@ -29,7 +29,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
   const {theme} = useThemeContext();
 
   async function openVippsUrl(vippsUrl: string) {
-    await openUrl(vippsUrl, 'Could not open Vipps URL');
+    await openUrl(vippsUrl);
   }
 
   const isSubAccountReservation = customerProfile?.subAccounts?.some(

@@ -51,7 +51,7 @@ export const ExternalRealtimeMapSheet = ({
           expanded={true}
           text={t(MapTexts.externalRealtimeMap.bottomSheet.button)}
           onPress={() => {
-            openUrl(url, 'Could not open realtime map URL');
+            openUrl(url);
             onClose();
           }}
           rightIcon={{svg: ExternalLink}}

@@ -20,7 +20,7 @@ describe('openUrl', () => {
   it('should call Linking.openURL with the provided url', async () => {
     (Linking.openURL as jest.Mock).mockResolvedValue(undefined);
 
-    await openUrl('https://example.com', 'Test message');
+    await openUrl('https://example.com');
 
     expect(Linking.openURL).toHaveBeenCalledWith('https://example.com');
   });
@@ -28,7 +28,7 @@ describe('openUrl', () => {
   it('should not call notifyBugsnag on success', async () => {
     (Linking.openURL as jest.Mock).mockResolvedValue(undefined);
 
-    await openUrl('https://example.com', 'Test message');
+    await openUrl('https://example.com');
 
     expect(notifyBugsnag).not.toHaveBeenCalled();
   });
@@ -37,12 +37,11 @@ describe('openUrl', () => {
     const error = new Error('Cannot open URL');
     (Linking.openURL as jest.Mock).mockRejectedValue(error);
 
-    await openUrl('https://example.com', 'Could not open URL');
+    await openUrl('https://example.com');
 
     expect(notifyBugsnag).toHaveBeenCalledWith(error, {
       metadata: {
         url: 'https://example.com',
-        bugsnagMessage: 'Could not open URL',
       },
       errorGroupHash: 'linkingOpenUrl',
     });
@@ -52,7 +51,7 @@ describe('openUrl', () => {
     (Linking.openURL as jest.Mock).mockRejectedValue(new Error('fail'));
     const onError = jest.fn();
 
-    await openUrl('https://example.com', 'Test message', onError);
+    await openUrl('https://example.com', onError);
 
     expect(onError).toHaveBeenCalled();
   });
@@ -60,8 +59,6 @@ describe('openUrl', () => {
   it('should not throw if onError is not provided', async () => {
     (Linking.openURL as jest.Mock).mockRejectedValue(new Error('fail'));
 
-    await expect(
-      openUrl('https://example.com', 'Test message'),
-    ).resolves.toBeUndefined();
+    await expect(openUrl('https://example.com')).resolves.toBeUndefined();
   });
 });

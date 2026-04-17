@@ -59,7 +59,7 @@ export const useActionButtonProps = (
       await openInAppBrowser(url, 'close');
     },
     [ActionType.deeplink]: async (url: string) => {
-      await openUrl(url, 'Could not open deeplink URL');
+      await openUrl(url);
     },
   };
 

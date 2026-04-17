@@ -11,14 +11,13 @@ import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
  */
 export async function openUrl(
   url: string,
-  bugsnagMessage: string,
   onError?: () => void,
 ): Promise<void> {
   try {
     await Linking.openURL(url);
   } catch (error: any) {
     notifyBugsnag(error, {
-      metadata: {url, bugsnagMessage},
+      metadata: {url},
       errorGroupHash: 'linkingOpenUrl',
     });
     onError?.();

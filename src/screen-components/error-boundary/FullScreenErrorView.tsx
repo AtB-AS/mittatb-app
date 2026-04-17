@@ -42,9 +42,7 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
           expanded={true}
           text={getContactButtonText(CUSTOMER_SERVICE_URL)}
           rightIcon={{svg: ExternalLink}}
-          onPress={() =>
-            openUrl(CUSTOMER_SERVICE_URL, 'Could not open customer service URL')
-          }
+          onPress={() => openUrl(CUSTOMER_SERVICE_URL)}
           style={styles.button}
         />
       </View>

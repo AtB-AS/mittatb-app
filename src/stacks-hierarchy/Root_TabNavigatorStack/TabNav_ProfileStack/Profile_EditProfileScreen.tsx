@@ -101,7 +101,7 @@ export const Profile_EditProfileScreen = ({
 
   const handleOpenVippsApp = async () => {
     const deepLink = __DEV__ ? 'vippsMT://' : 'vipps://';
-    await openUrl(deepLink, 'Could not open Vipps for birthdate', () =>
+    await openUrl(deepLink, () =>
       Alert.alert(t(EditProfileTexts.personalDetails.birthdate.openVippsError)),
     );
   };

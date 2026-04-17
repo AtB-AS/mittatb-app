@@ -107,12 +107,7 @@ const ContactInfoContent = () => {
 
         <GenericSectionItem>
           <NativeBlockButton
-            onPress={async () =>
-              openUrl(
-                `tel:${telephoneNumbers['parking']}`,
-                'Could not call parking number',
-              )
-            }
+            onPress={async () => openUrl(`tel:${telephoneNumbers['parking']}`)}
             accessibilityRole="link"
           >
             <ThemeText
@@ -149,12 +144,7 @@ const ContactInfoContent = () => {
         </GenericSectionItem>
         <GenericSectionItem>
           <NativeBlockButton
-            onPress={async () =>
-              openUrl(
-                `tel:${telephoneNumbers['project']}`,
-                'Could not call project number',
-              )
-            }
+            onPress={async () => openUrl(`tel:${telephoneNumbers['project']}`)}
             accessibilityRole="link"
           >
             <ThemeText

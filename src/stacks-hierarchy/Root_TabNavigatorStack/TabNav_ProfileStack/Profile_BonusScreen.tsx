@@ -413,9 +413,7 @@ const HowPointsWork = () => {
               <LinkSectionItem
                 key={product.operatorId}
                 rightIcon={{svg: ExternalLink}}
-                onPress={() =>
-                  openUrl(appUrl, 'Could not open operator app URL')
-                }
+                onPress={() => openUrl(appUrl)}
                 text={t(
                   BonusProgramTexts.bonusProfile.readMore.downloadOperator(
                     getOperatorName(product.operatorId),

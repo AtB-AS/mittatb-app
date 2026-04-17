@@ -546,9 +546,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
             TripDetailsTexts.trip.leg.buyTicketFromA11yLabel(name),
           )}
           leftIcon={{svg: ExternalLink}}
-          onPress={() =>
-            url && openUrl(url, 'Could not open ticket purchase URL')
-          }
+          onPress={() => url && openUrl(url)}
           mode="primary"
           type="small"
           expanded={false}

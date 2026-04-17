@@ -12,7 +12,7 @@ export const useOpenVippsAfterReservation = (
 ) => {
   useEffect(() => {
     if (paymentType === PaymentType.Vipps && url) {
-      openUrl(url, 'Could not open Vipps for payment', onErrorCallback);
+      openUrl(url, onErrorCallback);
     }
   }, [paymentType, url, onErrorCallback]);
 };

@@ -61,9 +61,7 @@ export const BookingOptions = ({bookingArrangements}: Props) => {
             text={t(
               TripDetailsTexts.flexibleTransport.bookByPhone(bookingPhone),
             )}
-            onPress={() =>
-              openUrl(`tel:${bookingPhone}`, 'Could not open phone for booking')
-            }
+            onPress={() => openUrl(`tel:${bookingPhone}`)}
             type="small"
             expanded={false}
             interactiveColor={theme.color.interactive[3]}

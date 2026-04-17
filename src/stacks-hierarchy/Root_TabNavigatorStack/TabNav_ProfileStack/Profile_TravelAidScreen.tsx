@@ -94,10 +94,7 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
                   testID="travelAidContactCustomerServiceButton"
                   onPress={async () => {
                     const phoneNumber = `tel:${contactPhoneNumber}`;
-                    await openUrl(
-                      phoneNumber,
-                      'Could not open phone for travel aid',
-                    );
+                    await openUrl(phoneNumber);
                   }}
                 />
               </View>
