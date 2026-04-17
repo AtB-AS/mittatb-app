@@ -63,6 +63,7 @@ class TicketActivePage {
     const reqId = `//*[@resource-id="historicTicketsButton"]`;
     await $(reqId).click();
     await AppHelper.pause();
+    await ElementHelper.waitForElement('id', 'ticket0');
   }
 }
 
