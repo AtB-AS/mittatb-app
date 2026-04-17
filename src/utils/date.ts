@@ -26,6 +26,7 @@ import {
   set,
   isValid,
   intervalToDuration,
+  parseJSON as parseJSONDate,
 } from 'date-fns';
 import {
   FormatOptionsWithTZ,
@@ -660,8 +661,19 @@ function getHumanizer(
   return humanizer(ms, opts);
 }
 
-export const isValidDateString = (dateString: string) => {
-  const parsedDate = parseISO(dateString);
+/**
+ * Validates that the input string is a valid ISO date and time string on the
+ * format `YYYY-MM-DDTHH:mm:ss.sssZ` or `YYYY-MM-DDTHH:mm:ss.sss±hh:mm`
+ *
+ * @example
+ * assert(isValidDateTimeString('2024-09-01T12:00:00.000Z') === true);
+ * assert(isValidDateTimeString('2024-09-01T12:00:00.000+01:00') === true);
+ * assert(isValidDateTimeString('2024-09-01T12:00:00.000-01:00') === true);
+ * assert(isValidDateTimeString('2024') === false);
+ * assert(isValidDateTimeString('2024-09-01') === false);
+ */
+export const isValidDateTimeString = (dateString: string) => {
+  const parsedDate = parseJSONDate(dateString);
   return isValid(parsedDate);
 };
 
@@ -677,8 +689,8 @@ export const convertIsoStringFieldsToDate = (value: any): any => {
       acc[key] = convertIsoStringFieldsToDate(fieldValue);
       return acc;
     }, {});
-  } else if (typeof value === 'string' && isValidDateString(value)) {
-    return parseISO(value);
+  } else if (typeof value === 'string' && isValidDateTimeString(value)) {
+    return parseJSONDate(value);
   }
   return value;
 };
