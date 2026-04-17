@@ -111,22 +111,20 @@ const createSummary = (): void => {
     results: {},
   };
 
-  if (testStatus === 'SUCCESS') {
-    summary.results = {
-      cpu: {
-        avg: getAvgCPU(),
-        threads: {
-          RN_JS: getAvgProcessCPU('mqt_v_js'),
-          RN_Native: getAvgProcessCPU('mqt_v_native'),
-          Render: getAvgProcessCPU('RenderThread'),
-          UI: getAvgProcessCPU('UI Thread'),
-        },
+  summary.results = {
+    cpu: {
+      avg: getAvgCPU(),
+      threads: {
+        RN_JS: getAvgProcessCPU('mqt_v_js'),
+        RN_Native: getAvgProcessCPU('mqt_v_native'),
+        Render: getAvgProcessCPU('RenderThread'),
+        UI: getAvgProcessCPU('UI Thread'),
       },
-      fps: getAvgFPS(),
-      ram: getAvgRAM(),
-      score: getTestScore(performanceMeasures),
-    };
-  }
+    },
+    fps: getAvgFPS(),
+    ram: getAvgRAM(),
+    score: getTestScore(performanceMeasures),
+  };
 
   fs.writeFile(
     'performance_measures_summary.json',
