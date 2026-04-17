@@ -247,7 +247,7 @@ export const useMapSymbolStyles = ({
       numberOfUnits,
       [0.82 * textOffsetXFactor, 0],
       100,
-      [1.0 * textOffsetXFactor, 0],
+      [1.2 * textOffsetXFactor, 0],
     ],
   ];
 
