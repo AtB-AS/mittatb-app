@@ -9,7 +9,8 @@ import {
 import {ThemedContact} from '@atb/theme/ThemedAssets';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 
-import {Linking, View} from 'react-native';
+import {View} from 'react-native';
+import {openUrl} from '@atb/utils/open-url';
 import {sparOnboardingId} from './config';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemeText} from '@atb/components/text';
@@ -106,9 +107,7 @@ const ContactInfoContent = () => {
 
         <GenericSectionItem>
           <NativeBlockButton
-            onPress={async () =>
-              Linking.openURL(`tel:${telephoneNumbers['parking']}`)
-            }
+            onPress={async () => openUrl(`tel:${telephoneNumbers['parking']}`)}
             accessibilityRole="link"
           >
             <ThemeText
@@ -145,9 +144,7 @@ const ContactInfoContent = () => {
         </GenericSectionItem>
         <GenericSectionItem>
           <NativeBlockButton
-            onPress={async () =>
-              Linking.openURL(`tel:${telephoneNumbers['project']}`)
-            }
+            onPress={async () => openUrl(`tel:${telephoneNumbers['project']}`)}
             accessibilityRole="link"
           >
             <ThemeText
