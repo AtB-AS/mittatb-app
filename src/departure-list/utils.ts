@@ -130,6 +130,7 @@ export function getDeparturesAugmentedWithRealtimeData(
       return {
         ...departure,
         expectedDepartureTime: departureRealtime.timeData.expectedDepartureTime,
+        actualDepartureTime: departureRealtime.timeData.actualDepartureTime,
         realtime: departureRealtime.timeData.realtime,
       };
     })
