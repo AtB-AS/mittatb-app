@@ -7,9 +7,9 @@ import {
   useTicketingContext,
 } from '@atb/modules/ticketing';
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import Bugsnag from '@bugsnag/react-native';
+import {openUrl} from '@atb/utils/open-url';
 import React from 'react';
-import {Linking, View} from 'react-native';
+import {View} from 'react-native';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import {NativeBlockButton} from '@atb/components/native-button';
@@ -27,14 +27,6 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
   const {customerProfile} = useTicketingContext();
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
-
-  async function openVippsUrl(vippsUrl: string) {
-    try {
-      await Linking.openURL(vippsUrl);
-    } catch (err: any) {
-      Bugsnag.notify(err);
-    }
-  }
 
   const isSubAccountReservation = customerProfile?.subAccounts?.some(
     (id) => id === reservation.customerAccountId,
@@ -90,7 +82,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
               <View style={styles.vippsLinkContainer}>
                 <Button
                   expanded={true}
-                  onPress={() => openVippsUrl(reservation.url)}
+                  onPress={async () => await openUrl(reservation.url)}
                   accessibilityRole="link"
                   text={t(TicketingTexts.reservation.goToVipps)}
                   mode="tertiary"

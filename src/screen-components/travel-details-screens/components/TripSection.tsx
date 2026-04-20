@@ -23,7 +23,8 @@ import {
 } from '@atb/utils/transportation-names';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 import React from 'react';
-import {Linking, View} from 'react-native';
+import {View} from 'react-native';
+import {openUrl} from '@atb/utils/open-url';
 import {
   getLineName,
   getNoticesForLeg,
@@ -545,7 +546,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
             TripDetailsTexts.trip.leg.buyTicketFromA11yLabel(name),
           )}
           leftIcon={{svg: ExternalLink}}
-          onPress={() => url && Linking.openURL(url)}
+          onPress={() => url && openUrl(url)}
           mode="primary"
           type="small"
           expanded={false}

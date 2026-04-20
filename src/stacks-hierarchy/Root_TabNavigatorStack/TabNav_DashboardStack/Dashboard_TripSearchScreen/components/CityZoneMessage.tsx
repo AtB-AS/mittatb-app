@@ -4,7 +4,8 @@ import {
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
-import {Linking, View} from 'react-native';
+import {View} from 'react-native';
+import {openUrl} from '@atb/utils/open-url';
 import {Location} from '@atb/modules/favorites';
 import {SvgProps} from 'react-native-svg';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -177,7 +178,7 @@ const useActionButtons = (cityZone?: CityZone) => {
           name: 'book_by_phone_action',
           phoneNumber: phoneNumber,
         });
-        Linking.openURL(`tel:${phoneNumber}`);
+        openUrl(`tel:${phoneNumber}`);
       },
     });
   }
