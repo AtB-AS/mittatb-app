@@ -34,6 +34,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
     mutateAsync: getAssetFromQrCode,
     isPending: getAssetFromQrCodeIsLoading,
     isError: getAssetFromQrCodeIsError,
+    error: getAssetFromQrCodeError,
   } = useGetAssetFromQrCodeMutation();
 
   const onGoBack = useCallback(() => {
@@ -44,9 +45,21 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
     dispatchMapState({
       type: MapStateActionType.None,
     });
+
+    const isLocationRequired =
+      getAssetFromQrCodeError?.kind === 'LOCATION_REQUIRED';
+
     Alert.alert(
-      tGlobal(MapTexts.qr.notFound.title),
-      tGlobal(MapTexts.qr.notFound.description),
+      tGlobal(
+        isLocationRequired
+          ? MapTexts.qr.locationRequired.title
+          : MapTexts.qr.notFound.title,
+      ),
+      tGlobal(
+        isLocationRequired
+          ? MapTexts.qr.locationRequired.description
+          : MapTexts.qr.notFound.description,
+      ),
       [
         {
           text: tGlobal(MapTexts.qr.notFound.ok),
@@ -55,7 +68,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
         },
       ],
     );
-  }, [dispatchMapState, onGoBack]);
+  }, [dispatchMapState, onGoBack, getAssetFromQrCodeError]);
 
   const assetFromQrCodeReceivedHandler = useCallback(
     (assetFromQrCode: AssetFromQrCodeResponse) => {
@@ -118,11 +131,13 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
       setHasCapturedQr(true);
 
       const coordinates = getCurrentCoordinatesGlobal();
+      const locationParams = coordinates
+        ? {latitude: coordinates.latitude, longitude: coordinates.longitude}
+        : {};
 
       const assetFromQrCode = await getAssetFromQrCode({
         qrCodeUrl: qr,
-        latitude: coordinates?.latitude ?? 0,
-        longitude: coordinates?.longitude ?? 0,
+        ...locationParams,
       });
       assetFromQrCodeReceivedHandler(assetFromQrCode);
     },
