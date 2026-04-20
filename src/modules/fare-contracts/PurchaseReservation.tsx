@@ -28,10 +28,6 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
 
-  async function openVippsUrl(vippsUrl: string) {
-    await openUrl(vippsUrl);
-  }
-
   const isSubAccountReservation = customerProfile?.subAccounts?.some(
     (id) => id === reservation.customerAccountId,
   );
@@ -86,7 +82,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
               <View style={styles.vippsLinkContainer}>
                 <Button
                   expanded={true}
-                  onPress={() => openVippsUrl(reservation.url)}
+                  onPress={async () => await openUrl(reservation.url)}
                   accessibilityRole="link"
                   text={t(TicketingTexts.reservation.goToVipps)}
                   mode="tertiary"
