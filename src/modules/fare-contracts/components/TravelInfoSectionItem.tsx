@@ -191,6 +191,7 @@ export const TravelInfoSectionItem = ({
       </View>
 
       <SentOrReceivedMessageBox fc={fc} />
+
       {(shouldShowSupplementPurchase || shouldShowActivateNow) && (
         <View style={styles.buttons}>
           {shouldShowSupplementPurchase && (

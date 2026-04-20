@@ -17,9 +17,11 @@ export const SentOrReceivedMessageBox = ({fc}: {fc: FareContractType}) => {
 
   const displayUserId = isSent ? fc.customerAccountId : fc.purchasedBy;
 
-  const {data: phoneNumber} = useGetPhoneByAccountIdQuery(displayUserId);
+  const {data: phoneNumber} = useGetPhoneByAccountIdQuery(
+    isSentOrReceived ? displayUserId : undefined,
+  );
   const {data: onBehalfOfAccounts} = useFetchOnBehalfOfAccountsQuery({
-    enabled: !!phoneNumber,
+    enabled: isSentOrReceived && !!phoneNumber,
   });
 
   if (!isSentOrReceived || !phoneNumber) return null;
