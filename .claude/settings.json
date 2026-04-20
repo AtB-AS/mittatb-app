@@ -1,12 +1,23 @@
 {
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Edit|Write|MultiEdit|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protect-files.sh"
+          }
+        ]
+      }
+    ]
+  },
   "permissions": {
     "allow": [
       "Bash(cat:*)",
       "Bash(find:*)",
       "Bash(ls:*)",
-      "Bash(grep:*)",
       "Bash(tree:*)",
-      "Bash(rg:*)",
       "Bash(sed:*)",
       "Bash(awk:*)",
       "Bash(head:*)",
@@ -16,7 +27,7 @@
       "Bash(file:*)",
       "Bash(pwd:*)",
       "Bash(realpath:*)",
-      
+
       "Bash(git status:*)",
       "Bash(git log:*)",
       "Bash(git show:*)",
@@ -34,12 +45,37 @@
       "Read(**/.env)",
       "Read(**/.env.*)",
       "Read(**/secrets/**)",
-      "Read(**/env/**)",
+      "Read(**/credentials/**)",
+      "Read(**/.ssh/**)",
+      "Read(**/.aws/credentials)",
+      "Read(**/.aws/config)",
+      "Read(**/.kube/config)",
+      "Read(**/.docker/config.json)",
+      "Read(**/.npmrc)",
+      "Read(**/.pypirc)",
       "Read(**/.netrc)",
+      "Read(**/.pgpass)",
+      "Read(**/*.pem)",
       "Read(**/*.key)",
-      "Read(**/*.plist)",
+      "Read(**/*.p12)",
+      "Read(**/*.pfx)",
+      "Read(**/*.jks)",
       "Read(**/google-services.json)",
-      "Read(**/*.xcconfig)"
+      "Read(**/GoogleService-Info.plist)",
+      "Read(**/*.xcconfig)",
+      "Read(**/*.tfstate)",
+      "Read(**/*.tfstate.backup)",
+      "Read(**/terraform.tfvars)",
+      "Edit(**/.env)",
+      "Edit(**/.env.*)",
+      "Edit(**/secrets/**)",
+      "Edit(**/credentials/**)",
+      "Edit(**/.ssh/**)",
+      "Write(**/.env)",
+      "Write(**/.env.*)",
+      "Write(**/secrets/**)",
+      "Write(**/credentials/**)",
+      "Write(**/.ssh/**)"
     ]
   },
   "enabledPlugins": {
