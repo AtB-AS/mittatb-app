@@ -53,19 +53,23 @@ describe('mapToTransportModeFilterOptions', () => {
   });
 
   it('filters out invalid items from the array', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
     const result = mapToTransportModeFilterOptions([
       validFilter,
       {id: 'invalid', text: 'wrong'},
     ]);
     expect(result).toHaveLength(1);
     expect(result![0]).toEqual(expect.objectContaining({id: 'bus'}));
+    warnSpy.mockRestore();
   });
 
   it('returns an empty array when all items are invalid', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
     const result = mapToTransportModeFilterOptions([
       {id: 'invalid'},
       {text: 'wrong'},
     ]);
     expect(result).toEqual([]);
+    warnSpy.mockRestore();
   });
 });

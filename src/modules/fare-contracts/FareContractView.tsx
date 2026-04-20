@@ -82,7 +82,7 @@ export const FareContractView: React.FC<Props> = ({
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
-  const shouldShowBonusAmountEarned =
+  const shouldGetBonusAmountEarned =
     validityStatus === 'valid' || validityStatus === 'upcoming';
 
   const shouldShowLegs =
@@ -90,7 +90,7 @@ export const FareContractView: React.FC<Props> = ({
 
   const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(
     fareContract.orderId,
-    !shouldShowBonusAmountEarned,
+    !shouldGetBonusAmountEarned,
   );
   const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(
     fareContract,
@@ -145,7 +145,7 @@ export const FareContractView: React.FC<Props> = ({
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
       )}
 
-      {shouldShowBonusAmountEarned && !!bonusAmountEarned?.amount && (
+      {!!bonusAmountEarned?.amount && (
         <EarnedBonusPointsSectionItem
           amount={bonusAmountEarned.amount}
           navigateToBonusScreen={onNavigateToBonusScreen}

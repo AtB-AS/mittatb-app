@@ -44,6 +44,7 @@ export type RemoteConfig = {
   enable_onboarding_login: boolean;
   enable_only_stop_places_checkbox: boolean;
   enable_parking_violations_reporting: boolean;
+  enable_points: boolean;
   enable_posthog: boolean;
   enable_push_notifications: boolean;
   enable_refunds: boolean;
@@ -118,6 +119,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_onboarding_login: true,
   enable_only_stop_places_checkbox: false,
   enable_parking_violations_reporting: false,
+  enable_points: false,
   enable_posthog: false,
   enable_push_notifications: false,
   enable_refunds: true,
@@ -251,6 +253,8 @@ export function getConfig(): RemoteConfig {
   const enable_parking_violations_reporting =
     values['enable_parking_violations_reporting']?.asBoolean() ??
     defaultRemoteConfig.enable_parking_violations_reporting;
+  const enable_points =
+    values['enable_points']?.asBoolean() ?? defaultRemoteConfig.enable_points;
   const enable_posthog =
     values['enable_posthog']?.asBoolean() ?? defaultRemoteConfig.enable_posthog;
   const enable_push_notifications =
@@ -388,6 +392,7 @@ export function getConfig(): RemoteConfig {
     enable_onboarding_login,
     enable_only_stop_places_checkbox,
     enable_parking_violations_reporting,
+    enable_points,
     enable_posthog,
     enable_push_notifications,
     enable_refunds,
