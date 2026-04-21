@@ -204,6 +204,16 @@ android {
     }
 }
 
+configurations.all {
+    // Exclude protobuf-java (full) — conflicts with protobuf-javalite used by Firebase/RN
+    exclude group: 'com.google.protobuf', module: 'protobuf-java'
+    // Exclude proto-google-common-protos (non-lite) — conflicts with abt-protobuf-lite-rpc
+    exclude group: 'com.google.api.grpc', module: 'proto-google-common-protos'
+    // Exclude protolite-well-known-types — duplicates com.google.rpc.* from abt-protobuf-lite-rpc
+    // com.google.type.LatLng is provided by libs/google-type-lite.jar instead
+    exclude group: 'com.google.firebase', module: 'protolite-well-known-types'
+}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${KOTLIN_VERSION}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KOTLIN_VERSION}"

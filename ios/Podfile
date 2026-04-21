@@ -67,6 +67,15 @@ target 'app' do
 
   pre_install do |installer|
     $RNMapboxMaps.pre_install(installer)
+
+    # Fix conflicting 'grpc' framework name between gRPC-Swift and gRPC-C++
+    installer.pod_targets.each do |pod|
+      if pod.name == 'gRPC-C++' || pod.name == 'gRPC-Core'
+        def pod.build_type
+          Pod::BuildType.static_library
+        end
+      end
+    end
   end
 
 end
