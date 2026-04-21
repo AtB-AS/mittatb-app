@@ -46,7 +46,7 @@ import {
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {KnownProgramId, useProgram} from '@atb/modules/enrollment';
+import {KnownProgramId, useProgramQuery} from '@atb/modules/enrollment';
 import {useIsBonusActiveForUser} from '@atb/modules/bonus';
 
 const buildNumber = getBuildNumber();
@@ -79,7 +79,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
   const {isBonusEnabled} = useFeatureTogglesContext();
   const isBonusActiveForUser = useIsBonusActiveForUser();
-  const bonusProgram = useProgram(KnownProgramId.BONUS, !isBonusEnabled);
+  const bonusProgram = useProgramQuery(KnownProgramId.BONUS, !isBonusEnabled);
   const showBonusSection =
     isBonusActiveForUser || (bonusProgram?.isOpen && isBonusEnabled);
 

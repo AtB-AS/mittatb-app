@@ -5,7 +5,7 @@ import {ONE_HOUR_MS} from '@atb/utils/durations';
 
 export const GET_PROGRAM_KEY = 'GET_PROGRAM';
 
-export function useProgram(
+export function useProgramQuery(
   programId: KnownProgramId,
   disabled: boolean = false,
 ): ProgramType | undefined {

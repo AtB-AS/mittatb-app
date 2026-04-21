@@ -2,7 +2,7 @@ import {BonusProgramTexts, dictionary, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {ExpandableSectionItem, Section} from '@atb/components/sections';
-import {useProgram, KnownProgramId} from '@atb/modules/enrollment';
+import {useProgramQuery, KnownProgramId} from '@atb/modules/enrollment';
 import {useProductPointsQuery} from '@atb/modules/bonus';
 import type {ProductPointsItem} from '@atb/modules/bonus';
 import {useGetFareProductsQuery} from '@atb/modules/ticketing';
@@ -13,7 +13,7 @@ import type {Language, TranslateFunction} from '@atb/translations';
 
 export const BonusFaqSection = () => {
   const {t, language} = useTranslation();
-  const bonusProgram = useProgram(KnownProgramId.BONUS);
+  const bonusProgram = useProgramQuery(KnownProgramId.BONUS);
   const endDateString = bonusProgram?.endAt
     ? formatToVerboseFullDate(bonusProgram.endAt, language)
     : '';

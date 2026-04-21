@@ -30,7 +30,7 @@ import {
 } from '@atb/modules/bonus';
 import {
   useIsEnrolled,
-  useProgram,
+  useProgramQuery,
   KnownProgramId,
 } from '@atb/modules/enrollment';
 import {useAuthContext} from '@atb/modules/auth';
@@ -86,7 +86,7 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
     wasEnrolledRef.current = isEnrolled;
   }, [isEnrolled]);
 
-  const bonusProgram = useProgram(KnownProgramId.BONUS);
+  const bonusProgram = useProgramQuery(KnownProgramId.BONUS);
   const endDateString = bonusProgram?.endAt
     ? formatToDate(bonusProgram.endAt, language)
     : '';
