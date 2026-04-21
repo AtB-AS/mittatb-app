@@ -4,7 +4,10 @@ import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts'
 import React, {useCallback} from 'react';
 import {useShmoRequirements} from '../use-shmo-requirements.tsx';
 import {ButtonInfoTextCombo} from './ButtonInfoTextCombo.tsx';
-import {InitShmoOneStopBookingRequestBody} from '@atb/api/types/mobility';
+import {
+  InitShmoOneStopBookingRequestBody,
+  ShmoBookingState,
+} from '@atb/api/types/mobility';
 import {useInitShmoOneStopBookingMutation} from '../queries/use-init-shmo-one-stop-booking-mutation.tsx';
 import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -17,10 +20,13 @@ import {useShmoWarnings} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {AgeVerificationEnum} from '../queries/use-get-age-verification-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {MOCK_VEHICLE_ID} from '../queries/use-vehicle-query.tsx';
+import {useVehicle} from '../use-vehicle.tsx';
 
 type ShmoActionButtonProps = {
   onStartOnboarding: () => void;
   loginCallback: () => void;
+  onNotStartedBookingState?: () => void;
   vehicleId: string;
   operatorId: string;
   paymentMethod: PaymentMethod | undefined;
@@ -32,6 +38,7 @@ export const ShmoActionButton = ({
   operatorId,
   paymentMethod,
   loginCallback,
+  onNotStartedBookingState,
 }: ShmoActionButtonProps) => {
   const {authenticationType, userId} = useAuthContext();
   const {hasBlockers, numberOfBlockers, ageVerification, operatorAgeLimit} =
@@ -42,6 +49,9 @@ export const ShmoActionButton = ({
   const coordinates = getCurrentCoordinatesGlobal();
   const {warningMessage} = useShmoWarnings(vehicleId);
   const {logEvent} = useAnalyticsContext();
+  const {vehicle} = useVehicle(vehicleId);
+
+  const isStationBasedBooking = vehicleId === MOCK_VEHICLE_ID;
 
   const {
     mutateAsync: initShmoOneStopBooking,
@@ -57,8 +67,10 @@ export const ShmoActionButton = ({
         latitude: coordinates?.latitude ?? 0,
         longitude: coordinates?.longitude ?? 0,
       },
-      assetId: vehicleId ?? '',
+      assetId: isStationBasedBooking ? undefined : vehicleId,
+      stationId: isStationBasedBooking ? vehicle?.station?.id : undefined,
       operatorId: operatorId,
+      vehicleTypeId: vehicle?.vehicleType.id,
     };
     const res = await initShmoOneStopBooking(initReqBody);
     logEvent('Mobility', 'Shmo booking started', {
@@ -72,16 +84,23 @@ export const ShmoActionButton = ({
         paymentMethod?.recurringPayment?.id,
       );
     }
+    if (res.state === ShmoBookingState.NOT_STARTED) {
+      onNotStartedBookingState?.();
+    }
   }, [
     paymentMethod?.recurringPayment?.id,
     paymentMethod?.paymentType,
     coordinates?.latitude,
     coordinates?.longitude,
+    isStationBasedBooking,
     vehicleId,
+    vehicle?.station?.id,
+    vehicle?.vehicleType.id,
     operatorId,
     initShmoOneStopBooking,
     logEvent,
     userId,
+    onNotStartedBookingState,
   ]);
 
   if (authenticationType != 'phone') {

@@ -13,7 +13,10 @@ import {
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {PropulsionType} from '@atb/api/types/generated/mobility-types_v2';
+import {
+  FormFactor,
+  PropulsionType,
+} from '@atb/api/types/generated/mobility-types_v2';
 import SvgParking from '@atb/assets/svg/mono-icons/places/Parking';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -21,6 +24,10 @@ import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import {useVehiclesByPropulsionTypesQueries} from '../queries/use-vehicles-by-propulsion-types-queries';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Loading} from '@atb/components/loading';
+import {useQueryClient} from '@tanstack/react-query';
+import {Vehicle} from '@atb/api/types/mobility';
+import {MOCK_VEHICLE_ID} from '../queries/use-vehicle-query';
+import {SupportButton} from './SupportButton';
 
 type Props = {
   station: BikeStationFragment;
@@ -34,6 +41,7 @@ export const BikeStationIntegrationView = ({
   onPressVehicleType,
 }: Props) => {
   const {t} = useTranslation();
+  const queryClient = useQueryClient();
   const styles = useStyles();
   const {humanQuery, electricQuery, electricAssistQuery} =
     useVehiclesByPropulsionTypesQueries(
@@ -72,18 +80,7 @@ export const BikeStationIntegrationView = ({
         <Section>
           {station?.vehicleTypesAvailable
             ?.filter((e) => {
-              if (e.count === 0) return false;
-
-              switch (e.vehicleType.propulsionType) {
-                case PropulsionType.Human:
-                  return (humanQuery.data?.length ?? 0) > 0;
-                case PropulsionType.Electric:
-                  return (electricQuery.data?.length ?? 0) > 0;
-                case PropulsionType.ElectricAssist:
-                  return (electricAssistQuery.data?.length ?? 0) > 0;
-                default:
-                  return false;
-              }
+              if (e.count > 0) return true;
             })
             .map((e, index) => (
               <LinkSectionItem
@@ -91,6 +88,7 @@ export const BikeStationIntegrationView = ({
                 text={t(
                   MobilityTexts.bikeNameByPropulsionType(
                     e.vehicleType.propulsionType,
+                    e.vehicleType.formFactor ?? FormFactor.Other,
                   ),
                 )}
                 subtitle={t(MobilityTexts.freeBikes(e.count.toString()))}
@@ -123,8 +121,36 @@ export const BikeStationIntegrationView = ({
                   })();
 
                   if (vehicle?.id) {
-                    // sanity check, already handled in the filter, but atleast prevents crashes if something unexpected happens
                     onPressVehicleType(vehicle.id);
+                  } else {
+                    const mockVehicle: Vehicle = {
+                      id: MOCK_VEHICLE_ID,
+                      lat: station.lat,
+                      lon: station.lon,
+                      currentRangeMeters: 1000,
+                      isReserved: false,
+                      isDisabled: false,
+                      pricingPlan: e.vehicleType.pricingPlans?.[0] ?? {
+                        price: 0,
+                        currency: 'NOK',
+                      },
+                      system: {
+                        id: station.system.id,
+                        name: station.system.name,
+                        operator: {
+                          id: station.system.operator.id,
+                          name: station.system.operator.name,
+                        },
+                      },
+                      station: {id: station.id},
+                      vehicleType: {...e.vehicleType, name: {}},
+                    };
+
+                    queryClient.setQueryData(
+                      ['getVehicle', MOCK_VEHICLE_ID],
+                      mockVehicle,
+                    );
+                    onPressVehicleType(MOCK_VEHICLE_ID);
                   }
                 }}
               />
@@ -143,14 +169,13 @@ export const BikeStationIntegrationView = ({
           </GenericSectionItem>
         </Section>
         <Section>
-          <LinkSectionItem
-            text={t(MobilityTexts.helpText)}
-            onPress={() =>
+          <SupportButton
+            navigateToSupport={() => {
               navigateSupportCallback({
                 operatorId: station?.system.operator.id ?? '',
                 stationId: station?.id ?? '',
-              })
-            }
+              });
+            }}
           />
         </Section>
       </View>

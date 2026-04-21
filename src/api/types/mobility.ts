@@ -112,6 +112,8 @@ const PropulsionTypeSchema = z.enum([
   'COMBINED',
 ]);
 
+export type PropulsionTypeBooking = z.infer<typeof PropulsionTypeSchema>;
+
 export enum ShmoBookingState {
   NOT_STARTED = 'NOT_STARTED',
   IN_USE = 'IN_USE',
@@ -236,6 +238,7 @@ export const AssetSchema = z.object({
   stateOfCharge: z.number().int().nullish(),
   currentRangeKm: z.number().int().nullish(),
   formFactor: FormFactorSchema.nullish(),
+  propulsionType: PropulsionTypeSchema.nullish(),
 });
 
 export const ShmoBookingSchema = z.object({
@@ -273,8 +276,11 @@ export const InitShmoOneStopBookingRequestBodySchema = z.object({
   assetId: z
     .string()
     .nullish()
+    .optional()
     .describe('This is the same id as vehicleId from the mobility API'),
   operatorId: z.string(),
+  vehicleTypeId: z.string().nullish().optional(),
+  stationId: z.string().nullish().optional(),
 });
 
 export type InitShmoOneStopBookingRequestBody = z.infer<

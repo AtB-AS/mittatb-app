@@ -10,6 +10,7 @@ import {
 } from '@atb/modules/map';
 import {formatNumberToString} from '@atb-as/utils';
 import {getCurrencySymbol} from '@atb/translations/currency';
+import { PropulsionTypeBooking } from '@atb/api/types/mobility';
 
 export const MobilityTexts = {
   formFactor: (formFactor: FormFactor, isPlural: boolean = false) => {
@@ -30,19 +31,27 @@ export const MobilityTexts = {
         return _('Annet', 'Other', 'Anna');
     }
   },
-  bikeNameByPropulsionType: (propulsionType: PropulsionType | undefined) => {
-    switch (propulsionType) {
-      case PropulsionType.ElectricAssist:
-      case PropulsionType.Electric:
-        return _(
+  bikeNameByPropulsionType: (propulsionType: PropulsionTypeBooking | undefined, formFactor: FormFactor) => {
+    switch (formFactor) {
+      case FormFactor.Bicycle:
+        if(propulsionType === PropulsionType.ElectricAssist || propulsionType === PropulsionType.Electric) {
+          return _(
           'Elektrisk bysykkel',
           'Electric city bike',
           'Elektrisk bysykkel',
         );
-      case PropulsionType.Human:
+        } else if(propulsionType === PropulsionType.Human) {
+          return _('Bysykkel', 'City bike', 'Bysykkel');
+        }
         return _('Bysykkel', 'City bike', 'Bysykkel');
+        
+      case FormFactor.Scooter:
+        if(propulsionType === PropulsionType.ElectricAssist || propulsionType === PropulsionType.Electric) {
+          return _('Elektrisk sparkesykkel', 'Electric scooter', 'Elektrisk sparkesykkel');
+        }
+        return _('Elsparkesykkel', 'E-scooter', 'Elsparkesykkel');
       default:
-        return _('Bysykkel', 'City bike', 'Bysykkel');
+        return _('Kjøretøy', 'Vehicle', 'Kjøretøy');
     }
   },
   freeBikes: (amount: string) => {
@@ -55,6 +64,29 @@ export const MobilityTexts = {
       amount + ' ledige plassar',
     );
   },
+  cityBike: {
+    location: (position: number) =>
+      _(`Plass ${position}`, `Dock ${position}`, `Plass ${position}`),
+    startTripView: {
+      title: _(
+        'Trykk på knappen på styret',
+        'Press the button on the handlebar',
+        'Trykk på knappen på styret',
+      ),
+      description: _(
+        'Når knappen lyser grønt og sykkelen lager lyd kan du ta den ut av stativet og sykle av sted.',
+        'When the button lights up green and the bike makes a sound, you can take it out of the dock and start riding.',
+        'Når knappen lyser grønt og sykkelen lagar lyd kan du ta den ut av stativet og sykle av stad.',
+      ),
+      safeTrip: _('God tur!', 'Have a nice trip!', 'God tur!'),
+      header: _('Start tur', 'Start trip', 'Start tur'),
+    },
+  },
+  loadingBookingFailed: _(
+    'Ops! Vi kunne ikke hente informasjon om turen',
+    "Ops! We couldn't fetch the trip information",
+    'Ops! Vi kunne ikkje hente informasjon om turen',
+  ),
   finishing: {
     button: _('Ta bilde', 'Take a photo', 'Ta eit bilde'),
     header: _(

@@ -18,7 +18,10 @@ import {
 } from '@atb/api/types/mobility';
 import {useSendShmoBookingEventMutation} from '../../queries/use-send-shmo-booking-event-mutation';
 import {ShmoTripCard} from '../ShmoTripCard';
-import {formatFriendlyShmoErrorMessage} from '../../utils';
+import {
+  formatFriendlyShmoErrorMessage,
+  getTrasportModeAndSubModeByFormFactorAndPropulsionType,
+} from '../../utils';
 import {MapView} from '@rnmapbox/maps';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useShmoWarnings} from '@atb/modules/map';
@@ -32,6 +35,11 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemeText} from '@atb/components/text';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Loading} from '@atb/components/loading';
+import {TransportationIconBox} from '@atb/components/icon-box';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {PriceDetailsCard} from '../PriceDetailsCard';
+import {useOperators} from '../../use-operators';
+import {SupportButton} from '../SupportButton';
 
 type Props = {
   navigateSupportCallback: () => void;
@@ -42,7 +50,7 @@ type Props = {
   navigateToScanQrCode: () => void;
 };
 
-export const ActiveScooterSheet = ({
+export const ActiveShmoSheet = ({
   navigateSupportCallback,
   photoNavigation,
   onForceClose,
@@ -58,6 +66,19 @@ export const ActiveScooterSheet = ({
     isError,
   } = useActiveShmoBookingQuery(isFocusedAndActive, ONE_SECOND_MS * 10);
   const {logEvent} = useAnalyticsContext();
+
+  const {mode, subMode} =
+    getTrasportModeAndSubModeByFormFactorAndPropulsionType(
+      activeBooking?.asset?.formFactor,
+      activeBooking?.asset?.propulsionType,
+    );
+  const operator = useOperators().byId(activeBooking?.asset.operator.id);
+
+  const priceAdjustments = activeBooking?.asset?.formFactor
+    ? operator?.priceAdjustments?.[
+        activeBooking.asset.formFactor as keyof typeof operator.priceAdjustments
+      ]
+    : [];
 
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -135,10 +156,30 @@ export const ActiveScooterSheet = ({
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
-      heading={activeBooking?.asset.operator.name}
+      heading={
+        activeBooking?.asset?.propulsionType
+          ? t(
+              MobilityTexts.bikeNameByPropulsionType(
+                activeBooking?.asset?.propulsionType,
+                activeBooking?.asset?.formFactor ?? FormFactor.Other,
+              ),
+            )
+          : undefined
+      }
+      subText={activeBooking?.asset?.operator?.name}
       enablePanDownToClose={false}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
+      logoIcon={
+        <TransportationIconBox
+          mode={mode}
+          subMode={subMode}
+          isFlexible={false}
+          size="normal"
+          type="compact"
+          overrideBorderRadius="50%"
+        />
+      }
       headerNode={
         activeBooking ? (
           <ShmoTripCard
@@ -159,14 +200,21 @@ export const ActiveScooterSheet = ({
           {!isLoading && !isError && activeBooking && (
             <>
               <View style={styles.container}>
-                <VehicleCard
-                  currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
-                  currentRangeMeters={
-                    activeBooking.asset?.currentRangeKm
-                      ? activeBooking.asset.currentRangeKm * 1000
-                      : 0
-                  }
-                  formFactor={activeBooking.asset.formFactor ?? undefined}
+                {!!activeBooking?.asset?.stateOfCharge && (
+                  <VehicleCard
+                    currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
+                    currentRangeMeters={
+                      activeBooking.asset?.currentRangeKm
+                        ? activeBooking.asset.currentRangeKm * 1000
+                        : 0
+                    }
+                    formFactor={activeBooking.asset.formFactor ?? undefined}
+                  />
+                )}
+                <PriceDetailsCard
+                  pricingPlan={activeBooking.pricingPlan}
+                  priceAdjustments={priceAdjustments}
+                  systemId={activeBooking.asset.systemId ?? ''}
                 />
               </View>
               <View style={styles.footer}>
@@ -210,13 +258,7 @@ export const ActiveScooterSheet = ({
                     }
                   />
                 </View>
-                <Button
-                  expanded={true}
-                  onPress={navigateSupportCallback}
-                  text={t(MobilityTexts.helpText)}
-                  mode="secondary"
-                  backgroundColor={theme.color.background.neutral[1]}
-                />
+                <SupportButton navigateToSupport={navigateSupportCallback} />
               </View>
             </>
           )}
@@ -245,6 +287,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     container: {
       paddingHorizontal: theme.spacing.medium,
       marginBottom: theme.spacing.medium,
+      gap: theme.spacing.small,
     },
     footer: {
       marginBottom: theme.spacing.medium,

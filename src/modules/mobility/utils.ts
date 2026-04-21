@@ -10,7 +10,10 @@ import difference from '@turf/difference';
 import {featureCollection} from '@turf/helpers';
 
 import {Platform} from 'react-native';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {
+  FormFactor,
+  PropulsionType,
+} from '@atb/api/types/generated/mobility-types_v2';
 import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {VehicleTypeAvailabilityBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {dictionary, Language} from '@atb/translations';
@@ -24,6 +27,7 @@ import {
   BatteryMedium,
 } from '@atb/assets/svg/mono-icons/miscellaneous';
 import {
+  PropulsionTypeBooking,
   RentalUris,
   ShmoPricingPlan,
   StationFeature,
@@ -301,21 +305,26 @@ export const findOperatorBrandImageUrl = (
   mobilityOperators?.find((op) => op.id === operatorId)?.brandAssets
     ?.brandImageUrl;
 
-export const getModeAndSubModeFromFormFactor = (
-  formFactor: FormFactor,
-): {
-  mode: AnyMode;
-  subMode?: AnySubMode;
-} => {
+export const getTrasportModeAndSubModeByFormFactorAndPropulsionType = (
+  formFactor: FormFactor | undefined | null,
+  propulsionType?: PropulsionTypeBooking | undefined | null,
+): {mode: AnyMode; subMode: AnySubMode | undefined} => {
   switch (formFactor) {
-    case FormFactor.Scooter:
-      return {mode: 'scooter', subMode: 'escooter'};
     case FormFactor.Bicycle:
-      return {mode: 'bicycle'};
+      if (
+        propulsionType === PropulsionType.Electric ||
+        propulsionType === PropulsionType.ElectricAssist
+      ) {
+        return {mode: 'bicycle', subMode: 'ebicycle'};
+      }
+      return {mode: 'bicycle', subMode: undefined};
+    case FormFactor.Scooter:
+    case FormFactor.ScooterStanding:
+      return {mode: 'scooter', subMode: 'escooter'};
     case FormFactor.Car:
-      return {mode: 'car'};
+      return {mode: 'car', subMode: undefined};
     default:
-      return {mode: 'unknown'};
+      return {mode: 'unknown', subMode: undefined};
   }
 };
 

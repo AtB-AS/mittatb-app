@@ -143,6 +143,10 @@ export const Map_RootScreen = ({
     navigation.navigate('Root_TabNavigatorStack', paymentMethodsScreenParams);
   }, [navigation, paymentMethodsScreenParams]);
 
+  const navigateToStartCityBikeTripWaitingScreen = useCallback(() => {
+    navigation.navigate('Map_CityBikeStartTripScreen');
+  }, [navigation]);
+
   const focusRef = useFocusOnLoad(navigation);
 
   if (isScreenReaderEnabled)
@@ -162,6 +166,9 @@ export const Map_RootScreen = ({
       navigateToScanQrCode={navigateToScanQrCode}
       navigateToLogin={navigateToLogin}
       navigateToPaymentMethods={navigateToPaymentMethods}
+      navigateToStartCityBikeTripWaitingScreen={
+        navigateToStartCityBikeTripWaitingScreen
+      }
       includeSnackbar={true}
     />
   );

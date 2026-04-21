@@ -1,10 +1,10 @@
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {
-  ActiveScooterSheet,
+  ActiveShmoSheet,
   BicycleSheet,
   BikeStationBottomSheet,
   CarSharingStationBottomSheet,
-  FinishedScooterSheet,
+  FinishedShmoSheet,
   FinishingScooterSheet,
   MapFilterSheet,
   ParkAndRideBottomSheet,
@@ -51,6 +51,7 @@ type MapBottomSheetsProps = {
   navigateToScanQrCode: () => void;
   navigateToLogin: () => void;
   navigateToPaymentMethods: () => void;
+  navigateToStartCityBikeTripWaitingScreen: () => void;
 };
 
 export const MapBottomSheets = ({
@@ -66,6 +67,7 @@ export const MapBottomSheets = ({
   navigateToScanQrCode,
   navigateToLogin,
   navigateToPaymentMethods,
+  navigateToStartCityBikeTripWaitingScreen,
 }: MapBottomSheetsProps) => {
   const [openPaymentType, setOpenPaymentType] = useState<boolean>(false);
   const {
@@ -198,7 +200,7 @@ export const MapBottomSheets = ({
       )}
 
       {activeBooking?.state === ShmoBookingState.IN_USE && (
-        <ActiveScooterSheet
+        <ActiveShmoSheet
           mapViewRef={mapViewRef}
           onForceClose={handleCloseSheet}
           navigateSupportCallback={() => {
@@ -230,7 +232,7 @@ export const MapBottomSheets = ({
 
       {mapState.bottomSheetType === MapBottomSheetType.FinishedBooking &&
         !!mapState.bookingId && (
-          <FinishedScooterSheet
+          <FinishedShmoSheet
             bookingId={mapState.bookingId}
             onClose={handleCloseSheet}
             navigateSupportCallback={(operatorId, bookingId) => {
@@ -244,29 +246,35 @@ export const MapBottomSheets = ({
             navigateToScanQrCode={navigateToScanQrCode}
           />
         )}
-      {mapState.bottomSheetType === MapBottomSheetType.Bicycle && (
-        <BicycleSheet
-          vehicleId={mapState.feature?.properties?.id ?? mapState.assetId ?? ''}
-          onClose={handleCloseSheet}
-          onVehicleReceived={(item) => {
-            if (mapState.assetIsScanned) {
-              const feature: Feature<Point, GeoJsonProperties> =
-                getFeatureFromScan(item, mapState.bottomSheetType);
-
-              dispatchMapState({
-                type: MapStateActionType.Bicycle,
-                feature: feature,
-                customZoomLevel: CUSTOM_SCAN_ZOOM_LEVEL,
-              });
+      {mapState.bottomSheetType === MapBottomSheetType.Bicycle &&
+        !openPaymentType &&
+        !activeBooking?.bookingId && (
+          <BicycleSheet
+            vehicleId={
+              mapState.feature?.properties?.id ?? mapState.assetId ?? ''
             }
-          }}
-          locationArrowOnPress={locationArrowOnPress}
-          navigateToScanQrCode={navigateToScanQrCode}
-          navigateToLogin={navigateToLogin}
-          navigateToSupport={navigateToShmoSupport}
-          selectPaymentMethod={selectPaymentMethod}
-        />
-      )}
+            onClose={handleCloseSheet}
+            onVehicleReceived={(item) => {
+              if (mapState.assetIsScanned) {
+                const feature: Feature<Point, GeoJsonProperties> =
+                  getFeatureFromScan(item, mapState.bottomSheetType);
+
+                dispatchMapState({
+                  type: MapStateActionType.Bicycle,
+                  feature: feature,
+                  customZoomLevel: CUSTOM_SCAN_ZOOM_LEVEL,
+                });
+              }
+            }}
+            locationArrowOnPress={locationArrowOnPress}
+            navigateToScanQrCode={navigateToScanQrCode}
+            navigateToLogin={navigateToLogin}
+            navigateToSupport={navigateToShmoSupport}
+            selectPaymentMethod={selectPaymentMethod}
+            onNotStartedBookingState={navigateToStartCityBikeTripWaitingScreen}
+            startOnboardingCallback={navigateToScooterOnboarding} // TODO: need to adapt onboarding flow for bikes
+          />
+        )}
 
       {mapState.bottomSheetType === MapBottomSheetType.BikeStation && (
         <BikeStationBottomSheet
@@ -288,12 +296,14 @@ export const MapBottomSheets = ({
           locationArrowOnPress={locationArrowOnPress}
           navigateToScanQrCode={navigateToScanQrCode}
           navigateSupportCallback={navigateToShmoSupport}
-          onVehicleTypeSelected={(vehicleId: string) =>
-            dispatchMapState({
-              type: MapStateActionType.BicycleScanned,
-              assetId: vehicleId,
-            })
-          }
+          onVehicleTypeSelected={(vehicleId) => {
+            if (vehicleId) {
+              dispatchMapState({
+                type: MapStateActionType.BicycleScanned,
+                assetId: vehicleId,
+              });
+            }
+          }}
         />
       )}
       {mapState.bottomSheetType === MapBottomSheetType.CarStation && (

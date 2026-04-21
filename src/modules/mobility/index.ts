@@ -12,9 +12,9 @@ export {AgeVerificationScreenComponent} from './components/onboarding/AgeVerific
 export {PaymentScreenComponent} from './components/onboarding/PaymentScreenComponent';
 export {RulesScreenComponent} from './components/onboarding/RulesScreenComponent';
 export {ParkAndRideBottomSheet} from './components/ParkAndRideBottomSheet';
-export {ActiveScooterSheet} from './components/sheets/ActiveScooterSheet';
+export {ActiveShmoSheet} from './components/sheets/ActiveShmoSheet';
 export {FinishingScooterSheet} from './components/sheets/FinishingScooterSheet';
-export {FinishedScooterSheet} from './components/sheets/FinishedScooterSheet';
+export {FinishedShmoSheet} from './components/sheets/FinishedShmoSheet';
 export {ScooterSheet} from './components/sheets/ScooterSheet';
 export {SelectShmoPaymentMethodSheet} from './components/sheets/SelectShmoPaymentMethodsSheet';
 export {ShmoTripDetailsSectionItem} from './components/ShmoTripDetailsSectionItem';

@@ -20,6 +20,9 @@ import {
 } from '@atb/components/bottom-sheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Loading} from '@atb/components/loading';
+import {TransportationIconBox} from '@atb/components/icon-box';
+import {getTrasportModeAndSubModeByFormFactorAndPropulsionType} from '../../utils';
+import {SupportButton} from '../SupportButton';
 
 type Props = {
   onClose: () => void;
@@ -29,7 +32,7 @@ type Props = {
   locationArrowOnPress: () => void;
 };
 
-export const FinishedScooterSheet = ({
+export const FinishedShmoSheet = ({
   onClose,
   navigateSupportCallback,
   navigateToScanQrCode,
@@ -46,6 +49,11 @@ export const FinishedScooterSheet = ({
     isError,
   } = useShmoBookingQuery(isFocusedAndActive, bookingId);
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
+  const {mode, subMode} =
+    getTrasportModeAndSubModeByFormFactorAndPropulsionType(
+      shmoBooking?.asset?.formFactor,
+      shmoBooking?.asset?.propulsionType,
+    );
 
   return (
     <MapBottomSheet
@@ -53,7 +61,27 @@ export const FinishedScooterSheet = ({
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
-      heading={t(MobilityTexts.formFactor(FormFactor.Scooter))}
+      heading={
+        shmoBooking?.asset?.propulsionType
+          ? t(
+              MobilityTexts.bikeNameByPropulsionType(
+                shmoBooking?.asset?.propulsionType,
+                shmoBooking?.asset?.formFactor ?? FormFactor.Other,
+              ),
+            )
+          : undefined
+      }
+      subText={shmoBooking?.asset.operator.name}
+      logoIcon={
+        <TransportationIconBox
+          mode={mode}
+          subMode={subMode}
+          isFlexible={false}
+          size="normal"
+          type="compact"
+          overrideBorderRadius="50%"
+        />
+      }
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
@@ -97,17 +125,14 @@ export const FinishedScooterSheet = ({
                   onPress={onClose}
                   text={t(MobilityTexts.trip.button.finishTrip)}
                 />
-                <Button
-                  expanded={true}
-                  onPress={() =>
+
+                <SupportButton
+                  navigateToSupport={() => {
                     navigateSupportCallback(
                       shmoBooking.asset.operator.id,
                       shmoBooking.bookingId,
-                    )
-                  }
-                  text={t(MobilityTexts.helpText)}
-                  mode="secondary"
-                  backgroundColor={theme.color.background.neutral[1]}
+                    );
+                  }}
                 />
               </View>
             </>

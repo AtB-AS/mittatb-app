@@ -34,6 +34,7 @@ import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import {Vehicle} from '@atb/api/types/mobility';
 import {PriceDetailsCard} from '../PriceDetailsCard';
 import {Loading} from '@atb/components/loading';
+import {SupportButton} from '../SupportButton';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -97,8 +98,13 @@ export const ScooterSheet = ({
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
-      heading={operatorName}
-      subText={t(MobilityTexts.formFactor(FormFactor.Scooter))}
+      heading={t(
+        MobilityTexts.bikeNameByPropulsionType(
+          vehicle?.vehicleType?.propulsionType,
+          FormFactor.Scooter,
+        ),
+      )}
+      subText={operatorName}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
       logoUrl={brandLogoUrl ?? ''}
       locationArrowOnPress={locationArrowOnPress}
@@ -165,14 +171,10 @@ export const ScooterSheet = ({
                 </Section>
               )}
 
-              <Button
-                expanded={true}
-                onPress={() => {
+              <SupportButton
+                navigateToSupport={() => {
                   navigateToSupport({vehicleId: id, operatorId});
                 }}
-                text={t(MobilityTexts.helpText)}
-                mode="secondary"
-                backgroundColor={theme.color.background.neutral[1]}
               />
             </>
           ) : (
