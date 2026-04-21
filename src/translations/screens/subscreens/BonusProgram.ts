@@ -13,6 +13,9 @@ const BonusProgramTexts = {
       `Costs ${amount} Points`,
       `Kostar ${amount} Poeng`,
     ),
+  spend: _('Bruk', 'Use', 'Bruk'),
+  amountPoints: (amount: number) =>
+    _(`${amount} Poeng`, `${amount} Points`, `${amount} Poeng`),
 
   youHave: _('Du har', 'You have', 'Du har'),
 
@@ -76,11 +79,19 @@ const BonusProgramTexts = {
 
     yourPoints: _('Dine Poeng', 'Your Points', 'Poenga dine'),
 
+    mapButton: {
+      a11yLabel: _('Vis i kart', 'Show in map', 'Vis i kart'),
+      a11yHint: _(
+        'Kartet er ikke tilgjengelig med skjermleser.',
+        'The map is not accessible with screen reader.',
+        'Kartet er ikkje tilgjengeleg med skjermlesar.',
+      ),
+    },
     spendPoints: {
       heading: _(
-        'Dette kan du få for Poeng',
-        'This is what you can get for Points',
-        'Dette kan du få for Poeng',
+        'Dette kan du bruke Poeng på',
+        'This is what you can use Points for',
+        'Dette kan du bruke Poeng på',
       ),
     },
     noData: _(
