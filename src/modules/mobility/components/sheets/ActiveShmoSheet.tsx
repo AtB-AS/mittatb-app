@@ -171,14 +171,7 @@ export const ActiveShmoSheet = ({
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
       logoIcon={
-        <TransportationIconBox
-          mode={mode}
-          subMode={subMode}
-          isFlexible={false}
-          size="normal"
-          type="compact"
-          overrideBorderRadius="50%"
-        />
+        <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
       }
       headerNode={
         activeBooking ? (

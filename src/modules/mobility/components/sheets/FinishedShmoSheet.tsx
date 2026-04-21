@@ -73,14 +73,7 @@ export const FinishedShmoSheet = ({
       }
       subText={shmoBooking?.asset.operator.name}
       logoIcon={
-        <TransportationIconBox
-          mode={mode}
-          subMode={subMode}
-          isFlexible={false}
-          size="normal"
-          type="compact"
-          overrideBorderRadius="50%"
-        />
+        <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
       }
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
       locationArrowOnPress={locationArrowOnPress}

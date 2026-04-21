@@ -10,7 +10,7 @@ import {
 } from '@atb/modules/map';
 import {formatNumberToString} from '@atb-as/utils';
 import {getCurrencySymbol} from '@atb/translations/currency';
-import { PropulsionTypeBooking } from '@atb/api/types/mobility';
+import {PropulsionTypeBooking} from '@atb/api/types/mobility';
 
 export const MobilityTexts = {
   formFactor: (formFactor: FormFactor, isPlural: boolean = false) => {
@@ -31,23 +31,36 @@ export const MobilityTexts = {
         return _('Annet', 'Other', 'Anna');
     }
   },
-  bikeNameByPropulsionType: (propulsionType: PropulsionTypeBooking | undefined, formFactor: FormFactor) => {
+  bikeNameByPropulsionType: (
+    propulsionType: PropulsionTypeBooking | undefined,
+    formFactor: FormFactor,
+  ) => {
     switch (formFactor) {
       case FormFactor.Bicycle:
-        if(propulsionType === PropulsionType.ElectricAssist || propulsionType === PropulsionType.Electric) {
+        if (
+          propulsionType === PropulsionType.ElectricAssist ||
+          propulsionType === PropulsionType.Electric
+        ) {
           return _(
-          'Elektrisk bysykkel',
-          'Electric city bike',
-          'Elektrisk bysykkel',
-        );
-        } else if(propulsionType === PropulsionType.Human) {
+            'Elektrisk bysykkel',
+            'Electric city bike',
+            'Elektrisk bysykkel',
+          );
+        } else if (propulsionType === PropulsionType.Human) {
           return _('Bysykkel', 'City bike', 'Bysykkel');
         }
         return _('Bysykkel', 'City bike', 'Bysykkel');
-        
+
       case FormFactor.Scooter:
-        if(propulsionType === PropulsionType.ElectricAssist || propulsionType === PropulsionType.Electric) {
-          return _('Elektrisk sparkesykkel', 'Electric scooter', 'Elektrisk sparkesykkel');
+        if (
+          propulsionType === PropulsionType.ElectricAssist ||
+          propulsionType === PropulsionType.Electric
+        ) {
+          return _(
+            'Elektrisk sparkesykkel',
+            'Electric scooter',
+            'Elektrisk sparkesykkel',
+          );
         }
         return _('Elsparkesykkel', 'E-scooter', 'Elsparkesykkel');
       default:

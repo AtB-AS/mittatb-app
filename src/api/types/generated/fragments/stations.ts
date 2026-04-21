@@ -9,7 +9,7 @@ import * as Types from '../mobility-types_v2';
 export type VehicleTypeAvailabilityBasicFragment = {
   count: number;
   vehicleType: {
-    id: string,
+    id: string;
     formFactor: Types.FormFactor;
     propulsionType: Types.PropulsionType;
     pricingPlans?: Array<PricingPlanFragment>;
