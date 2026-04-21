@@ -20,6 +20,7 @@ export type RemoteConfig = {
    * transaction.
    */
   enable_auto_sale: boolean;
+  enable_bonus: boolean;
   enable_car_sharing_in_map: boolean;
   enable_city_bikes_in_map: boolean;
   enable_event_stream: boolean;
@@ -43,7 +44,6 @@ export type RemoteConfig = {
   enable_onboarding_login: boolean;
   enable_only_stop_places_checkbox: boolean;
   enable_parking_violations_reporting: boolean;
-  enable_points: boolean;
   enable_posthog: boolean;
   enable_push_notifications: boolean;
   enable_refunds: boolean;
@@ -96,6 +96,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_activate_ticket_now: false,
   enable_apple_pay: false,
   enable_auto_sale: false,
+  enable_bonus: false,
   enable_car_sharing_in_map: false,
   enable_city_bikes_in_map: false,
   enable_extended_onboarding: false,
@@ -117,7 +118,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_onboarding_login: true,
   enable_only_stop_places_checkbox: false,
   enable_parking_violations_reporting: false,
-  enable_points: false,
   enable_posthog: false,
   enable_push_notifications: false,
   enable_refunds: true,
@@ -183,6 +183,8 @@ export function getConfig(): RemoteConfig {
   const enable_auto_sale =
     values['enable_auto_sale']?.asBoolean() ??
     defaultRemoteConfig.enable_auto_sale;
+  const enable_bonus =
+    values['enable_bonus']?.asBoolean() ?? defaultRemoteConfig.enable_bonus;
   const enable_car_sharing_in_map =
     values['enable_car_sharing_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_car_sharing_in_map;
@@ -248,8 +250,6 @@ export function getConfig(): RemoteConfig {
   const enable_parking_violations_reporting =
     values['enable_parking_violations_reporting']?.asBoolean() ??
     defaultRemoteConfig.enable_parking_violations_reporting;
-  const enable_points =
-    values['enable_points']?.asBoolean() ?? defaultRemoteConfig.enable_points;
   const enable_posthog =
     values['enable_posthog']?.asBoolean() ?? defaultRemoteConfig.enable_posthog;
   const enable_push_notifications =
@@ -363,6 +363,7 @@ export function getConfig(): RemoteConfig {
     enable_activate_ticket_now,
     enable_apple_pay,
     enable_auto_sale,
+    enable_bonus,
     enable_car_sharing_in_map,
     enable_city_bikes_in_map,
     enable_event_stream,
@@ -386,7 +387,6 @@ export function getConfig(): RemoteConfig {
     enable_onboarding_login,
     enable_only_stop_places_checkbox,
     enable_parking_violations_reporting,
-    enable_points,
     enable_posthog,
     enable_push_notifications,
     enable_refunds,

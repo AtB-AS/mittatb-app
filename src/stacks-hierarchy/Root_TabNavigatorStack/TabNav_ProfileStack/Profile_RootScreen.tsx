@@ -77,11 +77,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {enable_intercom} = useRemoteConfigContext();
   const neutralContrastColor = theme.color.background.neutral[1];
 
-  const {isPointsEnabled} = useFeatureTogglesContext();
+  const {isBonusEnabled} = useFeatureTogglesContext();
   const isBonusActiveForUser = useIsBonusActiveForUser();
-  const bonusProgram = useProgram(KnownProgramId.BONUS, !isPointsEnabled);
+  const bonusProgram = useProgram(KnownProgramId.BONUS, !isBonusEnabled);
   const showBonusSection =
-    isBonusActiveForUser || (bonusProgram?.isOpen && isPointsEnabled);
+    isBonusActiveForUser || (bonusProgram?.isOpen && isBonusEnabled);
 
   const focusRef = useFocusOnLoad(navigation);
 
