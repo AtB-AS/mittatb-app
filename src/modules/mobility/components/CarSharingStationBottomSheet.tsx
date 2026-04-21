@@ -28,13 +28,13 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {
   findRelevantBonusProduct,
   PayWithBonusPointsCheckbox,
+  useIsBonusActiveForUser,
 } from '@atb/modules/bonus';
 import {
   BottomSheetHeaderType,
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {KnownProgramId, useIsEnrolled} from '@atb/modules/enrollment';
 import {Loading} from '@atb/components/loading';
 
 type Props = {
@@ -70,7 +70,7 @@ export const CarSharingStationBottomSheet = ({
   } = useCarSharingStation(stationId);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
-  const isBonusEnabled = useIsEnrolled(KnownProgramId.BONUS);
+  const isBonusActiveForUser = useIsBonusActiveForUser();
   const {bonusProducts} = useFirestoreConfigurationContext();
   const bonusProduct = findRelevantBonusProduct(
     bonusProducts,
@@ -148,7 +148,7 @@ export const CarSharingStationBottomSheet = ({
                   </View>
                 </GenericSectionItem>
               </Section>
-              {isBonusEnabled && bonusProduct && (
+              {isBonusActiveForUser && bonusProduct && (
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
                   operatorName={operatorName}

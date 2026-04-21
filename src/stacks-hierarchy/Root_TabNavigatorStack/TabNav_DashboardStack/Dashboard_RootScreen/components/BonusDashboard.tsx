@@ -9,12 +9,18 @@ import {DashboardTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import {ContentHeading} from '@atb/components/heading';
-import {UserBonusBalanceContent} from '@atb/modules/bonus';
+import {
+  UserBonusBalanceContent,
+  useIsBonusActiveForUser,
+} from '@atb/modules/bonus';
 
 export const BonusDashboard = ({onPress}: {onPress: () => void}) => {
   const style = useStyle();
   const {t} = useTranslation();
   const analytics = useAnalyticsContext();
+
+  const isBonusActiveForUser = useIsBonusActiveForUser();
+  if (!isBonusActiveForUser) return null;
 
   return (
     <View style={style.contentSection}>
