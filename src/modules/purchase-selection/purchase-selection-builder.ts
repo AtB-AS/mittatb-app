@@ -17,7 +17,7 @@ import {
   isValidSelection,
   isWithinUserProfileMaxCount,
 } from './utils';
-import {isValidDateString} from '@atb/utils/date';
+import {isValidDateTimeString} from '@atb/utils/date';
 import {isSameDay} from 'date-fns';
 import type {SupplementProductWithCount} from '@atb/modules/fare-contracts';
 
@@ -115,7 +115,7 @@ const createBuilder = (
       return builder;
     },
     date: (travelDate) => {
-      if (!travelDate || isValidDateString(travelDate)) {
+      if (!travelDate || isValidDateTimeString(travelDate)) {
         currentSelection = {...currentSelection, travelDate};
       }
       return builder;

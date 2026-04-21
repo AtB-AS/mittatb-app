@@ -2,6 +2,7 @@ import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 import type {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import type {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import type {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
+import {LineFragment} from './fragments/lines';
 
 export type DeparturesQuery = {
   quays: Array<{
@@ -13,6 +14,7 @@ export type DeparturesQuery = {
       date: any;
       expectedDepartureTime: any;
       aimedDepartureTime: any;
+      actualDepartureTime?: any;
       realtime: boolean;
       predictionInaccurate: boolean;
       cancellation: boolean;
@@ -23,14 +25,7 @@ export type DeparturesQuery = {
         id: string;
         transportMode?: Types.TransportMode;
         transportSubmode?: Types.TransportSubmode;
-        line: {
-          id: string;
-          description?: string;
-          publicCode?: string;
-          transportMode?: Types.TransportMode;
-          transportSubmode?: Types.TransportSubmode;
-          notices: Array<NoticeFragment>;
-        };
+        line: {description?: string} & LineFragment;
         journeyPattern?: {notices: Array<NoticeFragment>};
         notices: Array<NoticeFragment>;
       };

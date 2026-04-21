@@ -105,8 +105,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const timePickerBottomSheetModalRef = useRef<BottomSheetModal | null>(null);
   const timePickerCloseRef = useRef<View | null>(null);
 
-  const {isFlexibleTransportEnabled: isFlexibleTransportEnabledInRemoteConfig} =
-    useFeatureTogglesContext();
+  const {
+    isFlexibleTransportEnabled: isFlexibleTransportEnabledInRemoteConfig,
+    isShowCancelledDeparturesEnabled,
+  } = useFeatureTogglesContext();
 
   const {location} = useGeolocationContext();
 
@@ -142,8 +144,16 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       searchTime: sanitizedSearchTime,
       arriveBy,
       travelSearchFiltersSelection: filtersState.filtersSelection,
+      includeCancellations: isShowCancelledDeparturesEnabled,
     }),
-    [from, to, sanitizedSearchTime, arriveBy, filtersState.filtersSelection],
+    [
+      from,
+      to,
+      sanitizedSearchTime,
+      arriveBy,
+      filtersState.filtersSelection,
+      isShowCancelledDeparturesEnabled,
+    ],
   );
 
   const {

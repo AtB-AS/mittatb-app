@@ -13,11 +13,12 @@ import {
   useTranslation,
 } from '@atb/translations';
 import React, {useEffect, useRef, useState} from 'react';
-import {Linking, Platform, View} from 'react-native';
+import {Platform, View} from 'react-native';
+import {openUrl} from '@atb/utils/open-url';
 import {FullScreenView} from '@atb/components/screen-view';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {
-  ThemedBonusMap,
+  ThemedBonusBag,
   ThemedBonusTransaction,
   ThemedTokenPhone,
 } from '@atb/theme/ThemedAssets';
@@ -58,6 +59,7 @@ import {
   GlobalMessage,
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
+import {BonusFaqSection} from './BonusFaqSection';
 
 const iconSize = 60;
 
@@ -212,6 +214,7 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
             )}
           </>
         )}
+        <HowPointsWork />
 
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.spendPoints.heading)}
@@ -273,7 +276,6 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
             </Section>
           </View>
         )}
-        <HowPointsWork />
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.feedback.heading)}
         />
@@ -287,6 +289,8 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
             }}
           />
         </Section>
+        <ContentHeading text={t(BonusProgramTexts.bonusProfile.faq.heading)} />
+        <BonusFaqSection />
       </View>
     </FullScreenView>
   );
@@ -375,6 +379,24 @@ const HowPointsWork = () => {
       />
       <Section>
         <BonusInfoSectionItem
+          title={t(BonusProgramTexts.bonusProfile.readMore.earnPoints.title)}
+          description={t(
+            BonusProgramTexts.bonusProfile.readMore.earnPoints.description,
+          )}
+          SymbolComponent={
+            <ThemedBonusTransaction height={iconSize} width={iconSize} />
+          }
+        />
+        <BonusInfoSectionItem
+          title={t(BonusProgramTexts.bonusProfile.readMore.spendPoints.title)}
+          description={t(
+            BonusProgramTexts.bonusProfile.readMore.spendPoints.description,
+          )}
+          SymbolComponent={
+            <ThemedBonusBag height={iconSize} width={iconSize} />
+          }
+        />
+        <BonusInfoSectionItem
           title={t(BonusProgramTexts.bonusProfile.readMore.download.title)}
           description={t(
             BonusProgramTexts.bonusProfile.readMore.download.description,
@@ -391,7 +413,7 @@ const HowPointsWork = () => {
               <LinkSectionItem
                 key={product.operatorId}
                 rightIcon={{svg: ExternalLink}}
-                onPress={() => Linking.openURL(appUrl)}
+                onPress={() => openUrl(appUrl)}
                 text={t(
                   BonusProgramTexts.bonusProfile.readMore.downloadOperator(
                     getOperatorName(product.operatorId),
@@ -407,25 +429,6 @@ const HowPointsWork = () => {
             );
           }
         })}
-
-        <BonusInfoSectionItem
-          title={t(BonusProgramTexts.bonusProfile.readMore.earnPoints.title)}
-          description={t(
-            BonusProgramTexts.bonusProfile.readMore.earnPoints.description,
-          )}
-          SymbolComponent={
-            <ThemedBonusTransaction height={iconSize} width={iconSize} />
-          }
-        />
-        <BonusInfoSectionItem
-          title={t(BonusProgramTexts.bonusProfile.readMore.spendPoints.title)}
-          description={t(
-            BonusProgramTexts.bonusProfile.readMore.spendPoints.description,
-          )}
-          SymbolComponent={
-            <ThemedBonusMap height={iconSize} width={iconSize} />
-          }
-        />
       </Section>
     </>
   );

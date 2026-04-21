@@ -1,36 +1,42 @@
 import {translation as _} from '../../commons';
+
+export type BonusFaqContext = {
+  endDate: string;
+  pointsPerProduct: string;
+};
+
 const BonusProgramTexts = {
-  points: _('poeng', 'points', 'poeng'),
+  points: _('Poeng', 'Points', 'Poeng'),
   costA11yLabel: (amount: number) =>
     _(
-      `Koster ${amount} poeng`,
-      `Costs ${amount} points`,
-      `Kostar ${amount} poeng`,
+      `Koster ${amount} Poeng`,
+      `Costs ${amount} Points`,
+      `Kostar ${amount} Poeng`,
     ),
 
   youHave: _('Du har', 'You have', 'Du har'),
 
   yourBonusBalanceA11yLabel: (bonusBalance: number | null) => {
     return _(
-      `Du har ${bonusBalance == null ? 'ukjent antall' : bonusBalance} poeng`,
-      `You have ${bonusBalance == null ? 'unknown number of' : bonusBalance} points`,
-      `Du har ${bonusBalance == null ? 'ukjent mengde' : bonusBalance} poeng`,
+      `Du har ${bonusBalance == null ? 'ukjent antall' : bonusBalance} Poeng`,
+      `You have ${bonusBalance == null ? 'unknown number of' : bonusBalance} Points`,
+      `Du har ${bonusBalance == null ? 'ukjent mengde' : bonusBalance} Poeng`,
     );
   },
 
   fareContract: {
     youEarned: (bonusPointsEarned: number) =>
       _(
-        `Du tjente **${bonusPointsEarned} poeng**!`,
-        `You earned **${bonusPointsEarned} point${bonusPointsEarned === 1 ? '' : 's'}**!`,
-        `Du tente **${bonusPointsEarned} poeng**!`,
+        `Du tjente **${bonusPointsEarned} Poeng**!`,
+        `You earned **${bonusPointsEarned} Point${bonusPointsEarned === 1 ? '' : 's'}**!`,
+        `Du tente **${bonusPointsEarned} Poeng**!`,
       ),
 
     youEarnedA11yLabel: (bonusPointsEarned: number) =>
       _(
-        `Du tjente ${bonusPointsEarned} poeng!`,
-        `You earned ${bonusPointsEarned} point${bonusPointsEarned === 1 ? '' : 's'}!`,
-        `Du tente ${bonusPointsEarned} poeng!`,
+        `Du tjente ${bonusPointsEarned} Poeng!`,
+        `You earned ${bonusPointsEarned} Point${bonusPointsEarned === 1 ? '' : 's'}!`,
+        `Du tente ${bonusPointsEarned} Poeng!`,
       ),
   },
 
@@ -68,25 +74,13 @@ const BonusProgramTexts = {
       },
     },
 
-    yourPoints: _('Dine poeng', 'Your points', 'Poenga dine'),
+    yourPoints: _('Dine Poeng', 'Your Points', 'Poenga dine'),
 
-    mapButton: {
-      text: _(
-        'Bruk poeng i kartet',
-        'Spend points in the map',
-        'Bruk poeng i kartet',
-      ),
-      a11yHint: _(
-        'Kartet er ikke tilgjengelig med skjermleser.',
-        'The map is not accessible with screen reader.',
-        'Kartet er ikkje tilgjengeleg med skjermlesar.',
-      ),
-    },
     spendPoints: {
       heading: _(
-        'Dette kan du få for poeng',
-        'This is what you can get for points',
-        'Dette kan du få for poeng',
+        'Dette kan du få for Poeng',
+        'This is what you can get for Points',
+        'Dette kan du få for Poeng',
       ),
     },
     noData: _(
@@ -101,9 +95,9 @@ const BonusProgramTexts = {
       'Du må logga inn før du kan bli med i Poeng',
     ),
     noBonusBalance: _(
-      'Vi klarer ikke vise poengene dine akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
-      'We are unable to display your points right now. You will still earn points as usual.',
-      'Me klarer ikkje visa poenga dine akkurat no. Du vil framleis tena poeng som vanleg.',
+      'Vi klarer ikke vise Poengene dine akkurat nå. Du vil fortsatt tjene Poeng som vanlig.',
+      'We are unable to display your Points right now. You will still earn Points as usual.',
+      'Me klarer ikkje visa Poenga dine akkurat no. Du vil framleis tena Poeng som vanleg.',
     ),
     joined: {
       title: _(
@@ -119,21 +113,17 @@ const BonusProgramTexts = {
         ),
     },
     noBonusProducts: _(
-      'Vi klarer ikke vise fordelene akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
-      'We are unable to display the benefits right now. You will still earn points as usual.',
-      'Me klarer ikkje visa fordelane akkurat no. Du vil framleis tene poeng som vanleg.',
+      'Vi klarer ikke vise fordelene akkurat nå. Du vil fortsatt tjene Poeng som vanlig.',
+      'We are unable to display the benefits right now. You will still earn Points as usual.',
+      'Me klarer ikkje visa fordelane akkurat no. Du vil framleis tene Poeng som vanleg.',
     ),
     readMore: {
-      heading: _(
-        'Slik fungerer poeng',
-        'How points work',
-        'Slik fungerer poeng',
-      ),
+      heading: _('Slik funker det', 'How it works', 'Slik funkar det'),
       download: {
         title: _(
-          '1. Last ned appene først',
-          '1. Download the apps first',
-          '1. Last ned appane fyrst',
+          'Last ned appene først',
+          'Download the apps first',
+          'Last ned appane fyrst',
         ),
         description: _(
           'Du må laste ned og logge inn i appene til Hyre og Trondheim Bysykkel før du bruker Poeng.',
@@ -142,27 +132,19 @@ const BonusProgramTexts = {
         ),
       },
       earnPoints: {
-        title: _(
-          '2. Kjøp billett, tjen poeng',
-          '2. Buy tickets, earn points',
-          '2. Kjøp billett, tjen poeng',
-        ),
+        title: _('Samle Poeng', 'Earn Points', 'Samle Poeng'),
         description: _(
-          'Du tjener poeng hver gang du kjøper enkeltbillett i sone A - for voksen eller student.',
-          'You earn points each time you buy a single ticket in Zone A - for adults or students.',
-          'Du tener poeng kvar gong du kjøper enkeltbillett i sone A - for vaksen eller student.',
+          'Kjøp enkeltbilletter for voksen eller student i sone A og få Poeng.',
+          'Buy single tickets for adults or students in zone A and earn Points.',
+          'Kjøp enkeltbilletter for vaksen eller student i sone A og få Poeng.',
         ),
       },
       spendPoints: {
-        title: _(
-          '3. Bruk poeng i kartet',
-          '3. Spend points in the map',
-          '3. Bruk poeng i kartet',
-        ),
+        title: _('Bruk Poeng', 'Spend Points', 'Bruk Poeng'),
         description: _(
-          'Du kan bruke poengene i kartet når du velger stasjoner fra Hyre eller Trondheim Bysykkel.',
-          'You can spend points in the map when selecting stations from Hyre or Trondheim City Bike.',
-          'Du kan bruke poenga i kartet når du vel å vel stasjonar frå Hyre eller Trondheim Bysykkel.',
+          'Poengene kan du bruke til å betale for  turer med bysykkel og Hyre-biler.',
+          'You can spend the points to pay for trips with city bikes and Hyre cars.',
+          'Poenga kan du bruke til å betale for turer med bysykkel og Hyre-biler.',
         ),
       },
       downloadOperator: (operator: string) =>
@@ -173,12 +155,66 @@ const BonusProgramTexts = {
         ),
     },
     feedback: {
-      heading: _('Chat', 'Chat', 'Chat'),
+      heading: _('Tilbakemelding', 'Feedback', 'Tilbakemelding'),
       button: _(
-        'Har du tilbakemelding?',
-        'Do you have feedback?',
-        'Har du tilbakemelding?',
+        'Har du noe på hjertet?',
+        'Do you have something on your mind?',
+        'Har du noko på hjartet?',
       ),
+    },
+    faq: {
+      heading: _(
+        'Spørsmål og svar',
+        'Questions and answers',
+        'Spørsmål og svar',
+      ),
+      faqs: [
+        {
+          question: _(
+            'Hvordan tjener jeg Poeng?',
+            'How do I earn Points?',
+            'Korleis tener eg Poeng?',
+          ),
+          answer: ({pointsPerProduct}: BonusFaqContext) =>
+            _(
+              `Du får ${pointsPerProduct} for voksen eller student i sone A.`,
+              `You earn ${pointsPerProduct} for adults or students in zone A.`,
+              `Du får ${pointsPerProduct} for vaksen eller student i sone A.`,
+            ),
+        },
+        {
+          question: _(
+            'Hvordan bruker jeg Poengene?',
+            'How do I use the Points?',
+            'Korleis brukar eg Poenga?',
+          ),
+          answer: () =>
+            _(
+              'Når du har samlet nok Poeng, kan du bruke dem på turer med bysykkel og Hyre-bil som du finner i kartet. For å bruke Poeng i kartet, trykker du på ikonet for bysykkel eller Hyre-bil, og krysser av for at du vil bruke Poeng før du starter turen.',
+              'When you have collected enough Points, you can use them on trips with city bikes and Hyre cars that you find in the map. To use Points in the map, tap on the icon for city bike or Hyre car, and check the box that you want to use Points before you start the trip.',
+              'Når du har samla nok Poeng, kan du bruke dem på turer med bysykkel og Hyre-bil som du finn i kartet. For å bruke Poeng i kartet, trykker du på ikonet for bysykkel eller Hyre-bil, og krysser av for at du vil bruke Poeng før du startar turen.',
+            ),
+        },
+        {
+          question: _(
+            'Hvor lenge varer prøveprosjektet?',
+            'How long does the pilot project last?',
+            'Kor lenge varer prøveprosjektet?',
+          ),
+          answer: ({endDate}: BonusFaqContext) =>
+            _(
+              `Prøveprosjektet varer frem til ${endDate}. Etter dette slettes resten av Poengene dine.`,
+              `The pilot project lasts until ${endDate}. After this, the remaining Points will be deleted.`,
+              `Prøveprosjektet varer fram til ${endDate}. Etter dette slettes resten av Poenga dine.`,
+            ),
+        },
+      ],
+      pointsPerProductLabel: (value: number, productName: string) =>
+        _(
+          `${value} Poeng hver gang du kjøper en ${productName}`,
+          `${value} Points every time you buy a ${productName}`,
+          `${value} Poeng kvar gong du kjøper ein ${productName}`,
+        ),
     },
   },
 
@@ -219,65 +255,6 @@ const BonusProgramTexts = {
         'Accept the terms and join',
         'Godta vilkårene og bli med',
       ),
-    },
-  },
-
-  onboarding: {
-    welcome: {
-      title: _(
-        'Velkommen til Bonus!',
-        'Welcome to Bonus!',
-        'Velkommen til Bonus!',
-      ),
-      description: _(
-        'Takk for at du deltar i prøveprosjektet! Vi er i testfasen av Bonus og lærer underveis. Del gjerne tilbakemeldinger via Bonus-siden under Profil.',
-        "Thank you for taking part in the pilot! We're currently testing Bonus and learning as we go. Feel free to share your feedback via the Bonus page under Profile.",
-        'Takk for at du deltek i prøveprosjektet! Me er i testfasen av Bonus og lærer undervegs. Del gjerne tilbakemeldingar via Bonus-sida under Profil.',
-      ),
-      buttonText: _('Få poeng', 'Earn points', 'Få poeng'),
-    },
-    buyTickets: {
-      title: _(
-        'Kjøp billett, få poeng',
-        'Buy tickets, earn points',
-        'Kjøp billett, få poeng',
-      ),
-      description: _(
-        'Med Bonus får du poeng når du kjøper enkeltbillett for buss eller trikk i sone A - som voksen eller student.\n\nDu må være logget inn for å få tilgang til Bonus.',
-        'With Bonus, you earn points when you buy a single ticket for bus or tram in Zone A - whether you travel as an adult or a student.\n\nYou need to be logged in to access Bonus.',
-        'Med Bonus får du poeng når du kjøper enkeltbillett for buss eller trikk i sone A - som vaksen eller student.\n\nDu må vera logga inn for å få tilgang til Bonus.',
-      ),
-      buttonText: _(
-        'Flere reisemåter',
-        'More ways to ride',
-        'Fleire reisemåtar',
-      ),
-    },
-    moreTravelMethods: {
-      title: _(
-        'Flere reisemåter - gratis!',
-        'More ways to travel - for free!',
-        'Fleire reisemåtar - gratis!',
-      ),
-      description: _(
-        'Poengene kan brukes på turer med Trondheim bysykkel og Hyre leiebil.',
-        'You can use the points for trips with Trondheim City Bike and Hyre car rental.',
-        'Poenga kan brukast på turar med Trondheim bysykkel og Hyre leigebil.',
-      ),
-      buttonText: _('Før du starter', 'Before you start', 'Før du startar'),
-    },
-    download: {
-      title: _(
-        'Last ned Hyre og Trondheim Bysykkel!',
-        'Download Hyre and Trondheim City Bike!',
-        'Last ned Hyre og Trondheim Bysykkel!',
-      ),
-      description: _(
-        'For at Bonus skal fungere med Hyre og Trondheim Bysykkel, må du først laste ned og logge inn i appene deres.\n\nLast ned og logg inn:',
-        'To use Bonus with Hyre and Trondheim City Bike, you need to download and log in to their apps.\n\nDownload and log in:',
-        'For at Bonus skal fungera med Hyre og Trondheim Bysykkel, må du først lasta ned og logga inn i appane deira.\n\n Last ned og logg inn:',
-      ),
-      buttonText: _('Skjønner', 'Got it!', 'Skjønner'),
     },
   },
 };

@@ -165,18 +165,11 @@ jobs:
           TESTED_VERSION: ${{ env.TESTED_VERSION }}
 
       # Slack
-      - name: Notify Slack - success
-        if: success()
-        working-directory: e2e/performance
+      - name: Notify Slack
+        if: always()
+        working-directory: e2e
         run: |
-          ./slack_notification.sh ${{ secrets.ATB_SLACK_TOKEN }} e2e_tests ${{ github.run_id }} ${{ needs.check-builds.outputs.TESTED_VERSION }} SUCCESS
-
-      # Slack
-      - name: Notify Slack - errors
-        if: failure()
-        working-directory: e2e/performance
-        run: |
-          ./slack_notification.sh ${{ secrets.ATB_SLACK_TOKEN }} e2e_tests ${{ github.run_id }} smoke ${{ needs.check-builds.outputs.TESTED_VERSION }} ERROR
+          ./performance/slack_notification.sh ${{ secrets.ATB_SLACK_TOKEN }} e2e_tests ${{ github.run_id }} ${{ needs.check-builds.outputs.TESTED_VERSION }}
 
       # Upload results
       - name: Upload performance reports

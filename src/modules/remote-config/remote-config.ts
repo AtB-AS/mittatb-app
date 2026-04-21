@@ -35,6 +35,7 @@ export type RemoteConfig = {
   enable_loading_screen: boolean;
   enable_map_3d: boolean;
   enable_map_pitch: boolean;
+  enable_map_tile_preloading: boolean;
   enable_non_transit_trip_search: boolean;
   enable_nynorsk: boolean;
   enable_new_token_barcode: boolean;
@@ -50,7 +51,9 @@ export type RemoteConfig = {
   enable_server_time: boolean;
   enable_shmo_deep_integration: boolean;
   enable_shmo_deep_integration_citybike: boolean;
+  enable_show_cancelled_departures: boolean;
   enable_show_valid_time_info: boolean;
+  enable_surface_view_map: boolean;
   enable_ticket_information: boolean;
   enable_ticketing: boolean;
   enable_tips_and_information: boolean;
@@ -106,6 +109,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_loading_screen: true,
   enable_map_3d: true,
   enable_map_pitch: false,
+  enable_map_tile_preloading: false,
   enable_non_transit_trip_search: true,
   enable_new_token_barcode: false,
   enable_new_token_barcode_base64: false,
@@ -121,7 +125,9 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_server_time: true,
   enable_shmo_deep_integration: false,
   enable_shmo_deep_integration_citybike: false,
+  enable_show_cancelled_departures: false,
   enable_show_valid_time_info: true,
+  enable_surface_view_map: true,
   enable_ticket_information: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
   enable_event_stream: false,
@@ -219,6 +225,9 @@ export function getConfig(): RemoteConfig {
   const enable_map_pitch =
     values['enable_map_pitch']?.asBoolean() ??
     defaultRemoteConfig.enable_map_pitch;
+  const enable_map_tile_preloading =
+    values['enable_map_tile_preloading']?.asBoolean() ??
+    defaultRemoteConfig.enable_map_tile_preloading;
   const enable_non_transit_trip_search =
     values['enable_non_transit_trip_search']?.asBoolean() ??
     defaultRemoteConfig.enable_non_transit_trip_search;
@@ -261,9 +270,15 @@ export function getConfig(): RemoteConfig {
   const enable_shmo_deep_integration_citybike =
     values['enable_shmo_deep_integration_citybike']?.asBoolean() ??
     defaultRemoteConfig.enable_shmo_deep_integration_citybike;
+  const enable_show_cancelled_departures =
+    values['enable_show_cancelled_departures']?.asBoolean() ??
+    defaultRemoteConfig.enable_show_cancelled_departures;
   const enable_show_valid_time_info =
     values['enable_show_valid_time_info']?.asBoolean() ??
     defaultRemoteConfig.enable_show_valid_time_info;
+  const enable_surface_view_map =
+    values['enable_surface_view_map']?.asBoolean() ??
+    defaultRemoteConfig.enable_surface_view_map;
   const enable_ticket_information =
     values['enable_ticket_information']?.asBoolean() ??
     defaultRemoteConfig.enable_ticket_information;
@@ -364,6 +379,7 @@ export function getConfig(): RemoteConfig {
     enable_loading_screen,
     enable_map_3d,
     enable_map_pitch,
+    enable_map_tile_preloading,
     enable_non_transit_trip_search,
     enable_new_token_barcode,
     enable_new_token_barcode_base64,
@@ -379,7 +395,9 @@ export function getConfig(): RemoteConfig {
     enable_server_time,
     enable_shmo_deep_integration,
     enable_shmo_deep_integration_citybike,
+    enable_show_cancelled_departures,
     enable_show_valid_time_info,
+    enable_surface_view_map,
     enable_ticket_information,
     enable_ticketing,
     enable_tips_and_information,

@@ -7,11 +7,11 @@ import {
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
-import {Linking, View} from 'react-native';
+import {View} from 'react-native';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {Button} from '@atb/components/button';
-import Bugsnag from '@bugsnag/react-native';
+import {openUrl} from '@atb/utils/open-url';
 import {Support} from '@atb/assets/svg/mono-icons/actions';
 import {CustomerServiceText} from '@atb/translations/screens/subscreens/CustomerService';
 import {ThemedContactIllustration} from '@atb/theme/ThemedAssets';
@@ -141,9 +141,7 @@ export const Profile_HelpAndContactScreen = ({navigation}: Props) => {
                 rightIcon={{svg: Support}}
                 accessibilityRole="button"
                 testID="contactCustomerServiceButton"
-                onPress={async () =>
-                  Linking.openURL(`tel:${contactPhoneNumber}`)
-                }
+                onPress={async () => openUrl(`tel:${contactPhoneNumber}`)}
               />
             </View>
           )}
@@ -154,11 +152,7 @@ export const Profile_HelpAndContactScreen = ({navigation}: Props) => {
 };
 
 const openLink = async (url: string) => {
-  if (await Linking.canOpenURL(url)) {
-    openInAppBrowser(url, 'close');
-  } else {
-    Bugsnag.notify(new Error(`Could not open URL: ${url}`));
-  }
+  openInAppBrowser(url, 'close');
 };
 
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({

@@ -47,6 +47,7 @@ export const useNsrCircleLayers = (
           circleStrokeColor: themeName === 'light' ? '#ffffff' : '#000000',
           circleStrokeWidth: 1.1,
           circleTranslate: [0, 0] as const,
+          circleEmissiveStrength: 1,
         };
 
         const circleLayerProps: SymbolLayerProps = {

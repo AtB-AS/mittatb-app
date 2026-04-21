@@ -38,10 +38,12 @@ export type TripPatternFragment = {
       destinationDisplay?: {frontText?: string; via?: Array<string>};
       quay: {publicCode?: string; name: string};
       notices: Array<NoticeFragment>;
+      cancellation: boolean;
     };
     toEstimatedCall?: {
       stopPositionInPattern: number;
       notices: Array<NoticeFragment>;
+      cancellation: boolean;
     };
     situations: Array<SituationFragment>;
     fromPlace: {
@@ -110,6 +112,7 @@ export type TripPatternFragment = {
       expectedDepartureTime: any;
       predictionInaccurate: boolean;
       quay: {name: string};
+      cancellation: boolean;
     }>;
     bookingArrangements?: BookingArrangementFragment;
     datedServiceJourney?: {

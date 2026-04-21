@@ -17,6 +17,18 @@ const MapTexts = {
       ),
       ok: _('OK', 'OK', 'OK'),
     },
+    locationRequired: {
+      title: _(
+        'Posisjon utilgjengelig',
+        'Location unavailable',
+        'Posisjon utilgjengeleg',
+      ),
+      description: _(
+        'Posisjon er påkrevd for å skanne en QR-kode.',
+        'Location is required to scan a QR code.',
+        'Posisjon er påkravd for å skanne ein QR-kode.',
+      ),
+    },
   },
   exitButton: {
     a11yLabel: _('Gå tilbake', 'Go back', 'Gå tilbake'),

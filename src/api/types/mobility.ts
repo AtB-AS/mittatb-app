@@ -389,8 +389,8 @@ export const AssetFromQrCodeQuerySchema = z.object({
   qrCodeUrl: z
     .string()
     .min(1, {message: 'qrCodeUrl must be at least 1 character long'}),
-  longitude,
-  latitude,
+  longitude: longitude.optional(),
+  latitude: latitude.optional(),
 });
 
 export type AssetFromQrCodeQuery = z.infer<typeof AssetFromQrCodeQuerySchema>;

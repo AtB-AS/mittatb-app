@@ -66,6 +66,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_map_pitch',
   },
   {
+    name: 'isMapTilePreloadingEnabled',
+    remoteConfigKey: 'enable_map_tile_preloading',
+  },
+  {
     name: 'isNonTransitTripSearchEnabled',
     remoteConfigKey: 'enable_non_transit_trip_search',
   },
@@ -122,8 +126,16 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_shmo_deep_integration_citybike',
   },
   {
+    name: 'isShowCancelledDeparturesEnabled',
+    remoteConfigKey: 'enable_show_cancelled_departures',
+  },
+  {
     name: 'isShowValidTimeInfoEnabled',
     remoteConfigKey: 'enable_show_valid_time_info',
+  },
+  {
+    name: 'isSurfaceViewMapEnabled',
+    remoteConfigKey: 'enable_surface_view_map',
   },
   {
     name: 'isTicketInformationEnabled',

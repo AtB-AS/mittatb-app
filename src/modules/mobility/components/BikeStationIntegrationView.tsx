@@ -102,10 +102,7 @@ export const BikeStationIntegrationView = ({
                         ? 'ebicycle'
                         : undefined
                     }
-                    isFlexible={false}
-                    size="normal"
-                    type="compact"
-                    overrideBorderRadius="50%"
+                    rounded={true}
                   />
                 }
                 onPress={() => {

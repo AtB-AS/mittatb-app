@@ -129,14 +129,7 @@ export const BicycleSheet = ({
       subText={operatorName}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
       logoIcon={
-        <TransportationIconBox
-          mode={mode}
-          subMode={subMode}
-          isFlexible={false}
-          size="normal"
-          type="compact"
-          overrideBorderRadius="50%"
-        />
+        <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
       }
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}

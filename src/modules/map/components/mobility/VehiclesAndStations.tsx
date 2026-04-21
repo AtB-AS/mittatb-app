@@ -31,7 +31,8 @@ const vehiclesAndStationsVectorSourceId =
 
 export const VehiclesWithClusters = ({
   selectedFeatureId,
-}: SelectedFeatureIdProp) => {
+  hideSymbols = false,
+}: SelectedFeatureIdProp & {hideSymbols?: boolean}) => {
   const minZoomLevel = 14;
   const {isSelected, iconStyle, textStyle} = useMapSymbolStyles({
     selectedFeaturePropertyId: selectedFeatureId,
@@ -39,9 +40,12 @@ export const VehiclesWithClusters = ({
     reachFullScaleAtZoomLevel: minZoomLevel + scaleTransitionZoomRange + 0.3,
   });
 
-  const filter: FilterExpression = useMemo(
-    () => ['all', ['!', isSelected], hideItemsInTheDistanceFilter],
-    [isSelected],
+  const filter: {filter: FilterExpression} | undefined = useMemo(
+    () =>
+      hideSymbols
+        ? undefined
+        : {filter: ['all', ['!', isSelected], hideItemsInTheDistanceFilter]},
+    [isSelected, hideSymbols],
   );
 
   const style = useMemo(
@@ -54,13 +58,15 @@ export const VehiclesWithClusters = ({
 
   return (
     <MapboxGL.SymbolLayer
-      id="vehicles-clustered-symbol-layer"
+      id={`vehicles-clustered-symbol-layer-${
+        hideSymbols ? 'hidden' : 'visible'
+      }`}
       sourceID={vehiclesAndStationsVectorSourceId}
       sourceLayerID="combined_layer"
       minZoomLevel={minZoomLevel}
       aboveLayerID={MapSlotLayerId.Vehicles}
-      filter={filter}
-      style={style}
+      style={hideSymbols ? {} : style}
+      {...filter}
     />
   );
 };
@@ -68,8 +74,10 @@ export const VehiclesWithClusters = ({
 export const StationsWithClusters = ({
   selectedFeatureId,
   showNonVirtualStations,
+  hideSymbols = false,
 }: SelectedFeatureIdProp & {
   showNonVirtualStations: boolean;
+  hideSymbols?: boolean;
 }) => {
   const showVirtualStations = false; // not supported yet. Also – consider using a virtualStationsFilter prop instead
   const minZoomLevel = 14;
@@ -83,41 +91,46 @@ export const StationsWithClusters = ({
   const showCityBikes = mapFilter?.mobility.BICYCLE?.showAll ?? false;
   const showSharedCars = mapFilter?.mobility.CAR?.showAll ?? false;
 
-  const filter: FilterExpression = useMemo(() => {
+  const filter: {filter: FilterExpression} | undefined = useMemo(() => {
     const isVirtualStation: Expression = ['get', 'is_virtual_station'];
     const vehicle_type_form_factor: Expression = [
       'get',
       'vehicle_type_form_factor',
     ];
-    return [
-      'all',
-      ['!', isSelected],
-      [
-        'any',
-        ['==', isVirtualStation, showVirtualStations],
-        ['!=', isVirtualStation, showNonVirtualStations],
-      ],
-      [
-        'any',
-        [
-          'all',
-          ['==', vehicle_type_form_factor, 'BICYCLE'],
-          ['!', !showCityBikes],
-        ],
-        [
-          'all',
-          ['==', vehicle_type_form_factor, 'CAR'],
-          ['!', !showSharedCars],
-        ],
-      ],
-      hideItemsInTheDistanceFilter,
-    ];
+    return hideSymbols
+      ? undefined
+      : {
+          filter: [
+            'all',
+            ['!', isSelected],
+            [
+              'any',
+              ['==', isVirtualStation, showVirtualStations],
+              ['!=', isVirtualStation, showNonVirtualStations],
+            ],
+            [
+              'any',
+              [
+                'all',
+                ['==', vehicle_type_form_factor, 'BICYCLE'],
+                ['!', !showCityBikes],
+              ],
+              [
+                'all',
+                ['==', vehicle_type_form_factor, 'CAR'],
+                ['!', !showSharedCars],
+              ],
+            ],
+            hideItemsInTheDistanceFilter,
+          ],
+        };
   }, [
     isSelected,
     showVirtualStations,
     showNonVirtualStations,
     showCityBikes,
     showSharedCars,
+    hideSymbols,
   ]);
 
   const style = useMemo(
@@ -131,13 +144,15 @@ export const StationsWithClusters = ({
 
   return (
     <MapboxGL.SymbolLayer
-      id="stations-symbol-layer"
+      id={`stations-clustered-symbol-layer-${
+        hideSymbols ? 'hidden' : 'visible'
+      }`}
       sourceID={vehiclesAndStationsVectorSourceId}
       sourceLayerID="combined_stations_layer"
       minZoomLevel={minZoomLevel}
       aboveLayerID={MapSlotLayerId.Stations}
-      filter={filter}
-      style={style}
+      style={hideSymbols ? {} : style}
+      {...filter}
     />
   );
 };

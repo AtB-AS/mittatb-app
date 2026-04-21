@@ -1,6 +1,7 @@
 import {Platform} from 'react-native';
 import {useMapboxJsonStyle} from './use-mapbox-json-style';
 import {useMemo} from 'react';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 const MapViewStaticConfig = {
   compassEnabled: true,
@@ -20,6 +21,7 @@ const MapViewStaticConfig = {
 type MapViewConfigOptions = {
   includeVehiclesAndStationsVectorSource?: boolean;
   shouldShowGeofencingZonesLayers?: boolean;
+  includeBasemapStyle?: boolean;
 };
 
 export const useMapViewConfig = (
@@ -28,21 +30,25 @@ export const useMapViewConfig = (
   const {
     includeVehiclesAndStationsVectorSource = false,
     shouldShowGeofencingZonesLayers = false,
+    includeBasemapStyle = true,
   } = mapViewConfigOptions || {};
   const mapboxJsonStyle = useMapboxJsonStyle(
     includeVehiclesAndStationsVectorSource,
     shouldShowGeofencingZonesLayers,
+    includeBasemapStyle,
   );
   const configMap = useMemo(
     () => ({styleJSON: mapboxJsonStyle}),
     [mapboxJsonStyle],
   );
+  const {enable_surface_view_map} = useRemoteConfigContext();
 
   return useMemo(
     () => ({
       ...MapViewStaticConfig,
       ...configMap,
+      surfaceView: enable_surface_view_map,
     }),
-    [configMap],
+    [configMap, enable_surface_view_map],
   );
 };
