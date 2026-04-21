@@ -1,7 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {useAuthContext} from '@atb/modules/auth';
 import {getBonusBalance} from '../api/api';
-import {useIsBonusActiveForUser} from '../use-is-bonus-active';
+import {useIsBonusActiveForUser} from '../use-is-bonus-active-for-user';
 
 export const getBonusBalanceQueryKey = (userId: string | undefined) => {
   return ['bonusUserBalance', userId];
