@@ -93,7 +93,7 @@ export const useShmoWarnings = (
       if (code !== 'allowed') {
         const isStationParking: boolean =
           (isGeofencingZonesAsTilesEnabled
-            ? featProps?.stationParking
+            ? featProps?.station_parking
             : featProps?.geofencingZoneCustomProps?.isStationParking) ?? false;
 
         const geofencingZoneContent = getGeofencingZoneContent(
