@@ -8,20 +8,11 @@ import {TravelCardHeader} from './TravelCardHeader';
 import {LayoutChangeEvent, View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
-import {
-  getTextForLanguage,
-  TravelCardTexts,
-  useTranslation,
-} from '@atb/translations';
+import {TravelCardTexts, useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
-import {
-  findAllNotices,
-  findAllSituations,
-  getDetailedSituationOrNoticeA11yLabel,
-  getMessageTypeForSituation,
-} from '@atb/modules/situations';
-import {MessageInfoText} from '@atb/components/message-info-text';
+import {getDetailedSituationOrNoticeA11yLabel} from '@atb/modules/situations';
+import {TravelCardNotices} from './TravelCardNotices';
 
 export type TravelCardType = 'trip-search' | 'saved-trip' | 'booking';
 
@@ -59,9 +50,6 @@ export const TravelCard: React.FC<TravelCardProps> = ({
     new Set(tripPattern.legs.map((leg) => leg.mode)),
   );
   const modes = uniqueModes.map((mode) => t(getTranslatedModeName(mode)));
-
-  const notices = findAllNotices(tripPattern);
-  const situations = findAllSituations(tripPattern);
 
   const prefixA11yLabel = `${t(
     TravelCardTexts.card.typePrefix(type, cardIndex, numberOfCards),
@@ -122,23 +110,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
                 <ThemeIcon svg={ChevronRight} />
               </View>
             </View>
-            <View aria-hidden={true}>
-              {situations.map((situation) => (
-                <MessageInfoText
-                  type={getMessageTypeForSituation(situation)}
-                  message={
-                    getTextForLanguage(situation.description, language) ?? ''
-                  }
-                />
-              ))}
-              {notices.map((notice) => (
-                <MessageInfoText
-                  type="info"
-                  message={notice.text ?? ''}
-                  key={notice.id}
-                />
-              ))}
-            </View>
+            <TravelCardNotices tripPattern={tripPattern} language={language} />
           </NativeBlockButton>
         )}
       </CompositeAccessibilityProvider>
