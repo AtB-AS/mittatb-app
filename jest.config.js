@@ -6,6 +6,7 @@ module.exports = {
     '^@atb/(.*)$': '<rootDir>/src/$1',
   },
   globalSetup: './__tests__/test-setup.js',
+  setupFiles: ['./jest.setup.js'],
   coverageThreshold: {
     './src/modules/purchase-selection/': {
       branches: 100,

@@ -86,6 +86,7 @@ export const TEST_INPUT: PurchaseSelectionBuilderInput = {
   currentCoordinates: undefined,
   appVersion: '1.0',
   defaultUserTypeString: undefined,
+  previousZoneIds: undefined,
 };
 
 export const TEST_SELECTION: PurchaseSelectionType = {

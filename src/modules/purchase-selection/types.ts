@@ -55,6 +55,7 @@ export type PurchaseSelectionBuilderInput = {
   appVersion: string;
   defaultUserTypeString: string | undefined;
   currentCoordinates: Coordinates | undefined;
+  previousZoneIds: {from: string; to: string} | undefined;
 };
 
 export type PurchaseSelectionEmptyBuilder = {

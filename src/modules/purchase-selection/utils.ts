@@ -46,7 +46,8 @@ export const getDefaultZones = (
     isSelectableZone(product, zone),
   );
 
-  let zoneWithMetadata: FareZoneWithMetadata | undefined = undefined;
+  let fromZoneWithMetadata: FareZoneWithMetadata | undefined = undefined;
+  let toZoneWithMetadata: FareZoneWithMetadata | undefined = undefined;
   if (input.currentCoordinates) {
     const {longitude, latitude} = input.currentCoordinates;
     const zoneFromLocation = selectableZones.find((t) =>
@@ -56,18 +57,36 @@ export const getDefaultZones = (
       ),
     );
     if (zoneFromLocation) {
-      zoneWithMetadata = {...zoneFromLocation, resultType: 'geolocation'};
+      fromZoneWithMetadata = {...zoneFromLocation, resultType: 'geolocation'};
+      toZoneWithMetadata = fromZoneWithMetadata;
     }
   }
 
-  if (!zoneWithMetadata) {
+  if (!fromZoneWithMetadata || !toZoneWithMetadata) {
+    // Fall back to the user's previously selected zones when both are still
+    // selectable for the current product.
+    const previousFrom = input.previousZoneIds
+      ? selectableZones.find((z) => z.id === input.previousZoneIds?.from)
+      : undefined;
+    const previousTo = input.previousZoneIds
+      ? selectableZones.find((z) => z.id === input.previousZoneIds?.to)
+      : undefined;
+    if (previousFrom && previousTo) {
+      fromZoneWithMetadata = {...previousFrom, resultType: 'zone'};
+      toZoneWithMetadata = {...previousTo, resultType: 'zone'};
+    }
+  }
+
+  if (!fromZoneWithMetadata || !toZoneWithMetadata) {
     const zone = selectableZones.reduce((selected, current) =>
       current.isDefault ? current : selected,
     );
-    zoneWithMetadata = {...zone, resultType: 'zone'};
+    const defaultZone: FareZoneWithMetadata = {...zone, resultType: 'zone'};
+    fromZoneWithMetadata = defaultZone;
+    toZoneWithMetadata = defaultZone;
   }
 
-  return {from: zoneWithMetadata, to: zoneWithMetadata};
+  return {from: fromZoneWithMetadata, to: toZoneWithMetadata};
 };
 
 export const getDefaultStopPlaces = (
