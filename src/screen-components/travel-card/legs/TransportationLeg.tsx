@@ -16,7 +16,8 @@ export const TransportationLeg = ({
     subMode={leg.line?.transportSubmode}
     isFlexible={isLineFlexibleTransport(leg.line)}
     lineNumber={leg.line?.publicCode}
-    spacious={true}
+    rounded
+    spacious
     testID={`${leg.mode}Leg`}
     notification={notification}
   />
