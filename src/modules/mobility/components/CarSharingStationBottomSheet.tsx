@@ -11,10 +11,7 @@ import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useCarSharingStation} from '../use-car-sharing-station';
 import {ThemeText} from '@atb/components/text';
-import {
-  CarAvailabilityFragment,
-  CarStationFragment,
-} from '@atb/api/types/generated/fragments/stations';
+import {Station, StationVehicleTypeAvailability} from '@atb/api/types/mobility';
 import {useOperatorBenefit} from '../use-operator-benefit';
 import {OperatorActionButton} from './OperatorActionButton';
 import {OperatorBenefit} from './OperatorBenefit';
@@ -41,7 +38,7 @@ type Props = {
   stationId: string;
   distance: number | undefined;
   onClose: () => void;
-  onStationReceived?: (station: CarStationFragment) => void;
+  onStationReceived?: (station: Station) => void;
   locationArrowOnPress: () => void;
   navigateToScanQrCode: () => void;
 };
@@ -236,7 +233,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
 });
 
 const totalAvailableCars = (
-  vehicleTypesAvailable: CarAvailabilityFragment[] | undefined,
+  vehicleTypesAvailable: StationVehicleTypeAvailability[] | undefined,
 ) =>
   vehicleTypesAvailable
     ?.map((v) => v.count)

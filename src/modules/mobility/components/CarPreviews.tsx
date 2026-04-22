@@ -1,4 +1,4 @@
-import {CarAvailabilityFragment} from '@atb/api/types/generated/fragments/stations';
+import {StationVehicleTypeAvailability} from '@atb/api/types/mobility';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {View} from 'react-native';
 import {CarImage} from './CarImage';
@@ -6,7 +6,7 @@ import {ThemeText} from '@atb/components/text';
 
 type Props = {
   stationCapacity: number;
-  vehicleTypesAvailable: Array<CarAvailabilityFragment>;
+  vehicleTypesAvailable: Array<StationVehicleTypeAvailability>;
 };
 
 export const CarPreviews = ({
@@ -103,12 +103,12 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
  *  - If the station capacity is 3 or more : show 1 car image and the plus text
  *
  *  @param stationCapacity: Station capacity
- *  @param vehicleTypesAvailable: Types of available cars, array of CarAvailabilityFragment
+ *  @param vehicleTypesAvailable: Types of available cars
  *  @returns array of vehicle types to show
  */
 function createPreviewArray(
   stationCapacity: number,
-  vehicleTypesAvailable: CarAvailabilityFragment[],
-): CarAvailabilityFragment[] {
+  vehicleTypesAvailable: StationVehicleTypeAvailability[],
+): StationVehicleTypeAvailability[] {
   return vehicleTypesAvailable.slice(stationCapacity == 2 ? -2 : -1);
 }
