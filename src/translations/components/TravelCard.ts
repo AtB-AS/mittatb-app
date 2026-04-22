@@ -28,6 +28,12 @@ const TravelCardTexts = {
             `Saved trip${index}.`,
             `Lagret reise${index}.`,
           );
+        case 'booking':
+          return _(
+            `Bestillingsalternativ${index}.`,
+            `Booking option${index}.`,
+            `Bestillingsalternativ${index}.`,
+          );
       }
     },
     modesPrefix: (modes: string[]) => {
