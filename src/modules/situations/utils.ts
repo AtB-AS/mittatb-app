@@ -16,6 +16,7 @@ import type {SituationFragment} from '@atb/api/types/generated/fragments/situati
 import type {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 import type {Leg} from '@atb/api/types/trips';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {getTranslatedModeName} from '@atb/utils/transportation-names';
 
 export function findAllNoticesFromLeg(leg: Leg): NoticeFragment[] {
   const notices: NoticeFragment[] = [];
@@ -272,3 +273,53 @@ export const isSituationValidAtDate =
     }
     return true;
   };
+
+/**
+ * Build a detailed accessibility label that reads out each transit leg's
+ * situations and notices with the originating line.
+ *
+ * Example output: "Bus 1: Bus stop has moved. Bus 11: Does not stop at Prinsens Gate."
+ *
+ * Returns undefined when there is nothing to announce.
+ */
+export const getDetailedSituationOrNoticeA11yLabel = (
+  tripPattern: TripPatternFragment,
+  language: Language,
+  t: TranslateFunction,
+): string | undefined => {
+  const fragments: string[] = [];
+
+  for (const leg of tripPattern.legs) {
+    if (leg.mode === 'foot') continue;
+
+    const situations = findAllSituationsFromLeg(leg);
+    const notices = findAllNoticesFromLeg(leg);
+
+    if (situations.length === 0 && notices.length === 0) continue;
+
+    const modeName = t(
+      getTranslatedModeName(leg.mode, leg.line?.transportSubmode),
+    );
+    const publicCode = leg.line?.publicCode ?? '';
+    const legPrefix = `${modeName} ${publicCode}`.trim();
+
+    const texts: string[] = [];
+
+    for (const situation of situations) {
+      const text = getTextForLanguage(situation.description, language);
+      if (text) texts.push(text);
+    }
+
+    for (const notice of notices) {
+      if (notice.text) texts.push(notice.text);
+    }
+
+    if (texts.length > 0) {
+      fragments.push(`${legPrefix}: ${texts.join(', ')}`);
+    }
+  }
+
+  return fragments.length > 0
+    ? `. ${t(SituationsTexts.tripSummary.detailedPrefix)}. ${fragments.join('. ')}`
+    : undefined;
+};

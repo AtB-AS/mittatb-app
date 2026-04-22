@@ -11,6 +11,11 @@ const SituationsTexts = {
     info: _('Med ekstra info', 'With extra information', 'Med ekstra info'),
   },
   tripSummary: {
+    detailedPrefix: _(
+      'Denne reisen har følgende meldinger',
+      'This trip has the following notices',
+      'Denne reisa har følgjande meldingar',
+    ),
     warnings: _(
       'Reisen har advarsler',
       'The trip has warnings',
