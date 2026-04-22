@@ -9,7 +9,7 @@ import {
   FareZonesSelectorMap,
 } from '@atb/fare-zones-selector';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
-import {usePreviousZonesStore} from '@atb/modules/purchase-selection/use-previous-zones-store';
+import {usePreviousZonesStore} from '@atb/modules/purchase-selection';
 
 type Props = RootStackScreenProps<'Root_PurchaseFareZonesSearchByMapScreen'>;
 
