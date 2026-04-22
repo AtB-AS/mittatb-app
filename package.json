@@ -7,6 +7,7 @@
     "android": "sh ./scripts/android/run-android.sh",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "switch": "sh scripts/switch.sh",
     "test": "jest",
     "lint": "eslint . --ext .ts,.tsx",
     "prettier": "prettier -c src",
