@@ -14,7 +14,7 @@ import {
 } from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet} from '@atb/theme';
-import {getTrasportModeAndSubModeByFormFactorAndPropulsionType} from '@atb/modules/mobility';
+import {getTransportModeAndSubMode} from '@atb/modules/mobility';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -74,10 +74,9 @@ export const BonusProductList = ({bonusProducts, onNavigateToMap}: Props) => {
             <GenericSectionItem>
               <View style={styles.horizontalContainer}>
                 {(() => {
-                  const {mode, subMode} =
-                    getTrasportModeAndSubModeByFormFactorAndPropulsionType(
-                      bonusProduct.formFactors[0] as FormFactor,
-                    );
+                  const {mode, subMode} = getTransportModeAndSubMode(
+                    bonusProduct.formFactors[0] as FormFactor,
+                  );
                   return (
                     <TransportationIconBox
                       mode={mode}

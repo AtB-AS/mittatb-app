@@ -20,7 +20,6 @@ import {useShmoWarnings} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {AgeVerificationEnum} from '../queries/use-get-age-verification-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {MOCK_VEHICLE_ID} from '../queries/use-vehicle-query.tsx';
 import {useVehicle} from '../use-vehicle.tsx';
 
 type ShmoActionButtonProps = {
@@ -30,6 +29,7 @@ type ShmoActionButtonProps = {
   vehicleId: string;
   operatorId: string;
   paymentMethod: PaymentMethod | undefined;
+  isStationBasedBooking: boolean;
 };
 
 export const ShmoActionButton = ({
@@ -39,6 +39,7 @@ export const ShmoActionButton = ({
   paymentMethod,
   loginCallback,
   onNotStartedBookingState,
+  isStationBasedBooking,
 }: ShmoActionButtonProps) => {
   const {authenticationType, userId} = useAuthContext();
   const {hasBlockers, numberOfBlockers, ageVerification, operatorAgeLimit} =
@@ -49,9 +50,7 @@ export const ShmoActionButton = ({
   const coordinates = getCurrentCoordinatesGlobal();
   const {warningMessage} = useShmoWarnings(vehicleId);
   const {logEvent} = useAnalyticsContext();
-  const {vehicle} = useVehicle(vehicleId);
-
-  const isStationBasedBooking = vehicleId === MOCK_VEHICLE_ID;
+  const {vehicle} = useVehicle(vehicleId, isStationBasedBooking);
 
   const {
     mutateAsync: initShmoOneStopBooking,

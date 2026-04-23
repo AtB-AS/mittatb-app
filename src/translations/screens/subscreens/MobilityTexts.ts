@@ -10,16 +10,16 @@ import {
 } from '@atb/modules/map';
 import {formatNumberToString} from '@atb-as/utils';
 import {getCurrencySymbol} from '@atb/translations/currency';
-import {PropulsionTypeBooking} from '@atb/api/types/mobility';
 
 export const MobilityTexts = {
   vehicleName: (
     formFactor: FormFactor,
     isPlural: boolean = false,
-    propulsionType?: PropulsionTypeBooking,
+    propulsionType?: PropulsionType,
   ) => {
     switch (formFactor) {
       case FormFactor.Scooter:
+      case FormFactor.ScooterStanding:
         if (
           propulsionType === PropulsionType.ElectricAssist ||
           propulsionType === PropulsionType.Electric

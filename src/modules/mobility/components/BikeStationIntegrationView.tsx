@@ -26,13 +26,19 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Loading} from '@atb/components/loading';
 import {useQueryClient} from '@tanstack/react-query';
 import {Vehicle} from '@atb/api/types/mobility';
-import {MOCK_VEHICLE_ID} from '../queries/use-vehicle-query';
+import {
+  getVehicleQueryKey,
+  MOCK_VEHICLE_ID,
+} from '../queries/use-vehicle-query';
 import {SupportButton} from './SupportButton';
 
 type Props = {
   station: Station;
   navigateSupportCallback: (params: ShmoHelpParams) => void;
-  onPressVehicleType: (vehicleId: string) => void;
+  onPressVehicleType: (
+    vehicleId: string,
+    isStationBasedBooking: boolean,
+  ) => void;
 };
 
 export const BikeStationIntegrationView = ({
@@ -119,7 +125,7 @@ export const BikeStationIntegrationView = ({
                   })();
 
                   if (vehicle?.id) {
-                    onPressVehicleType(vehicle.id);
+                    onPressVehicleType(vehicle.id, false);
                   } else {
                     const mockVehicle: Vehicle = {
                       id: MOCK_VEHICLE_ID,
@@ -132,23 +138,16 @@ export const BikeStationIntegrationView = ({
                         price: 0,
                         currency: 'NOK',
                       },
-                      system: {
-                        id: station.system.id,
-                        name: station.system.name,
-                        operator: {
-                          id: station.system.operator.id,
-                          name: station.system.operator.name,
-                        },
-                      },
+                      system: station.system,
                       station: {id: station.id},
                       vehicleType: {...e.vehicleType, name: {}},
                     };
 
                     queryClient.setQueryData(
-                      ['getVehicle', MOCK_VEHICLE_ID],
+                      getVehicleQueryKey(mockVehicle.id),
                       mockVehicle,
                     );
-                    onPressVehicleType(MOCK_VEHICLE_ID);
+                    onPressVehicleType(mockVehicle.id, true);
                   }
                 }}
               />

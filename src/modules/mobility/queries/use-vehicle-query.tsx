@@ -4,11 +4,16 @@ import {getVehicle} from '@atb/api/mobility';
 
 export const MOCK_VEHICLE_ID = 'mock-vehicle-id';
 
-export const useVehicleQuery = (id?: string) =>
+export const getVehicleQueryKey = (id?: string) => ['GET_VEHICLE', id];
+
+export const useVehicleQuery = (
+  id?: string,
+  isStationBasedBooking: boolean = false,
+) =>
   useQuery({
-    queryKey: ['getVehicle', id],
+    queryKey: getVehicleQueryKey(id),
     queryFn: ({signal}) => getVehicle(id, {signal}),
     gcTime: ONE_MINUTE_MS,
-    refetchOnMount: id === MOCK_VEHICLE_ID ? false : 'always',
+    refetchOnMount: isStationBasedBooking ? false : 'always',
     retry: 5,
   });

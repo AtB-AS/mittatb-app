@@ -11,7 +11,7 @@ import {useOperators} from '../../use-operators';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {FormFactorFilterType} from '@atb/modules/map';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {getTrasportModeAndSubModeByFormFactorAndPropulsionType} from './../../utils';
+import {getTransportModeAndSubMode} from './../../utils';
 import {View} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
@@ -44,14 +44,8 @@ export const FormFactorFilterSectionItem = (
       <View style={{flexDirection: 'row'}}>
         <View style={styles.leftImageContainer}>
           <TransportationIconBox
-            mode={
-              getTrasportModeAndSubModeByFormFactorAndPropulsionType(formFactor)
-                .mode
-            }
-            subMode={
-              getTrasportModeAndSubModeByFormFactorAndPropulsionType(formFactor)
-                ?.subMode
-            }
+            mode={getTransportModeAndSubMode(formFactor).mode}
+            subMode={getTransportModeAndSubMode(formFactor)?.subMode}
           />
         </View>
         <View style={styles.contentContainer}>

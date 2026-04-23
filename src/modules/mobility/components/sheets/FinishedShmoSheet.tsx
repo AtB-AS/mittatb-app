@@ -21,8 +21,10 @@ import {
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Loading} from '@atb/components/loading';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {getTrasportModeAndSubModeByFormFactorAndPropulsionType} from '../../utils';
+import {getTransportModeAndSubMode} from '../../utils';
 import {SupportButton} from '../SupportButton';
+import {useOperators} from '../../use-operators';
+import {BrandingImage} from '../BrandingImage';
 
 type Props = {
   onClose: () => void;
@@ -49,11 +51,13 @@ export const FinishedShmoSheet = ({
     isError,
   } = useShmoBookingQuery(isFocusedAndActive, bookingId);
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
-  const {mode, subMode} =
-    getTrasportModeAndSubModeByFormFactorAndPropulsionType(
-      shmoBooking?.asset?.formFactor,
-      shmoBooking?.asset?.propulsionType,
-    );
+  const {mode, subMode} = getTransportModeAndSubMode(
+    shmoBooking?.asset?.formFactor,
+    shmoBooking?.asset?.propulsionType,
+  );
+
+  const operator = useOperators().byId(shmoBooking?.asset.operator.id);
+  const operatorLogo = operator?.brandAssets?.brandImageUrl;
 
   return (
     <MapBottomSheet
@@ -74,7 +78,11 @@ export const FinishedShmoSheet = ({
       }
       subText={shmoBooking?.asset.operator.name}
       logoIcon={
-        <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
+        operatorLogo ? (
+          <BrandingImage logoUrl={operatorLogo} logoSize={28} rounded={true} />
+        ) : (
+          <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
+        )
       }
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
       locationArrowOnPress={locationArrowOnPress}

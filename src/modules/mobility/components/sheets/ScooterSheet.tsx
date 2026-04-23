@@ -37,7 +37,7 @@ import {Loading} from '@atb/components/loading';
 import {SupportButton} from '../SupportButton';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {BrandingImage} from '../BrandingImage';
-import {getTrasportModeAndSubModeByFormFactorAndPropulsionType} from '../../utils';
+import {getTransportModeAndSubMode} from '../../utils';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -82,11 +82,10 @@ export const ScooterSheet = ({
   const priceAdjustments = operator?.priceAdjustments?.[FormFactor.Scooter];
   const operatorLogo = operator?.brandAssets?.brandImageUrl;
 
-  const {mode, subMode} =
-    getTrasportModeAndSubModeByFormFactorAndPropulsionType(
-      vehicle?.vehicleType.formFactor,
-      vehicle?.vehicleType.propulsionType,
-    );
+  const {mode, subMode} = getTransportModeAndSubMode(
+    vehicle?.vehicleType.formFactor,
+    vehicle?.vehicleType.propulsionType,
+  );
 
   const {isLoading: shmoReqIsLoading, hasBlockers} =
     useShmoRequirements(operatorId);
@@ -177,6 +176,7 @@ export const ScooterSheet = ({
                 vehicleId={id}
                 operatorId={operatorId}
                 paymentMethod={selectedPaymentMethod}
+                isStationBasedBooking={false}
               />
               <View style={styles.helpButtons}>
                 {selectedPaymentMethod && !hasBlockers && (

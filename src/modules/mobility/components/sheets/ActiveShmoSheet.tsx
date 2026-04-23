@@ -20,7 +20,8 @@ import {useSendShmoBookingEventMutation} from '../../queries/use-send-shmo-booki
 import {ShmoTripCard} from '../ShmoTripCard';
 import {
   formatFriendlyShmoErrorMessage,
-  getTrasportModeAndSubModeByFormFactorAndPropulsionType,
+  getTransportModeAndSubMode,
+  isValidKey,
 } from '../../utils';
 import {MapView} from '@rnmapbox/maps';
 import {MessageInfoText} from '@atb/components/message-info-text';
@@ -71,20 +72,20 @@ export const ActiveShmoSheet = ({
   } = useActiveShmoBookingQuery(isFocusedAndActive, ONE_SECOND_MS * 10);
   const {logEvent} = useAnalyticsContext();
 
-  const {mode, subMode} =
-    getTrasportModeAndSubModeByFormFactorAndPropulsionType(
-      activeBooking?.asset?.formFactor,
-      activeBooking?.asset?.propulsionType,
-    );
+  const {mode, subMode} = getTransportModeAndSubMode(
+    activeBooking?.asset?.formFactor,
+    activeBooking?.asset?.propulsionType,
+  );
 
   const operator = useOperators().byId(activeBooking?.asset.operator.id);
   const operatorLogo = operator?.brandAssets?.brandImageUrl;
 
-  const priceAdjustments = activeBooking?.asset?.formFactor
-    ? operator?.priceAdjustments?.[
-        activeBooking.asset.formFactor as keyof typeof operator.priceAdjustments
-      ]
-    : [];
+  const priceAdjustments =
+    operator?.priceAdjustments &&
+    activeBooking?.asset?.formFactor &&
+    isValidKey(operator.priceAdjustments, activeBooking.asset.formFactor)
+      ? operator.priceAdjustments[activeBooking.asset.formFactor]
+      : [];
 
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -155,8 +156,6 @@ export const ActiveShmoSheet = ({
       ],
     );
   };
-
-  console.log(activeBooking);
 
   return (
     <MapBottomSheet

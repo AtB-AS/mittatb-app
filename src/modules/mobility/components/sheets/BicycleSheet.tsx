@@ -43,7 +43,7 @@ import {
 } from '@atb/modules/payment';
 import {Section} from '@atb/components/sections';
 import {Loading} from '@atb/components/loading';
-import {getTrasportModeAndSubModeByFormFactorAndPropulsionType} from '../../utils';
+import {getTransportModeAndSubMode} from '../../utils';
 import {SupportButton} from '../SupportButton';
 
 type Props = {
@@ -57,6 +57,7 @@ type Props = {
   selectPaymentMethod: () => void;
   onNotStartedBookingState: () => void;
   startOnboardingCallback: () => void;
+  isStationBasedBooking: boolean;
 };
 export const BicycleSheet = ({
   vehicleId: id,
@@ -69,6 +70,7 @@ export const BicycleSheet = ({
   selectPaymentMethod,
   onNotStartedBookingState,
   startOnboardingCallback,
+  isStationBasedBooking,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -80,7 +82,7 @@ export const BicycleSheet = ({
     operatorName,
     rentalAppUri,
     appStoreUri,
-  } = useVehicle(id);
+  } = useVehicle(id, isStationBasedBooking);
 
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
@@ -98,11 +100,10 @@ export const BicycleSheet = ({
     operatorId,
     FormFactor.Bicycle,
   );
-  const {mode, subMode} =
-    getTrasportModeAndSubModeByFormFactorAndPropulsionType(
-      FormFactor.Bicycle,
-      vehicle?.vehicleType.propulsionType,
-    );
+  const {mode, subMode} = getTransportModeAndSubMode(
+    FormFactor.Bicycle,
+    vehicle?.vehicleType.propulsionType,
+  );
 
   const priceAdjustments = operator?.priceAdjustments?.[FormFactor.Bicycle];
 
@@ -194,6 +195,7 @@ export const BicycleSheet = ({
                 operatorId={operatorId}
                 paymentMethod={selectedPaymentMethod}
                 onNotStartedBookingState={onNotStartedBookingState}
+                isStationBasedBooking={isStationBasedBooking}
               />
               <View style={styles.helpButtons}>
                 {selectedPaymentMethod && !hasBlockers && (
@@ -230,7 +232,7 @@ export const BicycleSheet = ({
                   />
                 </View>
               )}
-              {isBonusActiveForUser && bonusProduct && (
+              {!!isBonusActiveForUser && bonusProduct && (
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
                   operatorName={operatorName}

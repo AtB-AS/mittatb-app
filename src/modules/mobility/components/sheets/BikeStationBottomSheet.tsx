@@ -27,7 +27,10 @@ type Props = {
   locationArrowOnPress: () => void;
   navigateToScanQrCode: () => void;
   navigateSupportCallback: (params: ShmoHelpParams) => void;
-  onVehicleTypeSelected: (vehicleId: string) => void;
+  onVehicleTypeSelected: (
+    vehicleId: string,
+    isStationBasedBooking: boolean,
+  ) => void;
 };
 
 export const BikeStationBottomSheet = ({
@@ -90,7 +93,7 @@ export const BikeStationBottomSheet = ({
 
       {!isLoading &&
         !isError &&
-        station &&
+        !!station &&
         (operatorIsIntegrationEnabled &&
         isShmoDeepIntegrationCitybikeEnabled ? (
           <BikeStationIntegrationView

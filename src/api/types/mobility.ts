@@ -107,12 +107,14 @@ const FormFactorSchema = z.enum(
   Object.values(FormFactor) as [FormFactor, ...FormFactor[]],
 );
 
-const PropulsionTypeSchema = z.enum([
+const PropulsionTypeSchema = z.enum(
+  Object.values(PropulsionType) as [PropulsionType, ...PropulsionType[]],
+);
+
+const MapItemPropulsionTypeSchema = z.enum([
   ...(Object.values(PropulsionType) as [PropulsionType, ...PropulsionType[]]),
   'COMBINED',
 ]);
-
-export type PropulsionTypeBooking = z.infer<typeof PropulsionTypeSchema>;
 
 export enum ShmoBookingState {
   NOT_STARTED = 'NOT_STARTED',
@@ -237,7 +239,7 @@ const StationVehicleTypeSchema = z.object({
   model: z.string().nullable().optional(),
   vehicleImage: z.string().nullable().optional(),
   name: LocalizedStringSchema.nullable().optional(),
-  pricingPlans: z.array(ShmoPricingPlanSchema).optional(),
+  pricingPlans: z.array(ShmoPricingPlanSchema).nullable().optional(),
 });
 
 const VehicleTypeAvailabilitySchema = z.object({
@@ -465,7 +467,7 @@ export const StationFeaturePropertiesSchema = z.object({
   id: z.string(),
   system_id: z.string(),
   vehicle_type_form_factor: FormFactorSchema,
-  vehicle_type_propulsion_type: PropulsionTypeSchema,
+  vehicle_type_propulsion_type: MapItemPropulsionTypeSchema,
   num_vehicles_available: z.number(),
   capacity: z.number(),
   count: z.literal(1),
@@ -485,7 +487,7 @@ export type StationFeature = z.infer<typeof StationFeatureSchema>;
 export const ClusterPropertiesBaseSchema = z.object({
   count: z.number().gt(1),
   vehicle_type_form_factor: FormFactorSchema,
-  vehicle_type_propulsion_type: PropulsionTypeSchema,
+  vehicle_type_propulsion_type: MapItemPropulsionTypeSchema,
   cluster_extent_meters: z.number().optional(),
 });
 
@@ -510,7 +512,7 @@ export const VehicleFeaturePropertiesSchema = z.object({
   system_id: z.string(),
   count: z.literal(1),
   vehicle_type_form_factor: FormFactorSchema,
-  vehicle_type_propulsion_type: PropulsionTypeSchema,
+  vehicle_type_propulsion_type: MapItemPropulsionTypeSchema,
   num_vehicles_available: z.never().optional(), // to differenciate from station features, which have this field
 });
 

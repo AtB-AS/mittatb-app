@@ -15,7 +15,6 @@ import {
   PropulsionType,
 } from '@atb/api/types/generated/mobility-types_v2';
 import {AnyMode, AnySubMode} from '@atb/components/icon-box';
-import {VehicleTypeAvailabilityBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {dictionary, Language} from '@atb/translations';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
@@ -27,13 +26,13 @@ import {
   BatteryMedium,
 } from '@atb/assets/svg/mono-icons/miscellaneous';
 import {
-  PropulsionTypeBooking,
   RentalUris,
   ShmoPricingPlan,
   StationFeature,
   StationFeatureSchema,
   StationsClusteredFeature,
   StationsClusteredFeatureSchema,
+  StationVehicleTypeAvailability,
   VehicleFeature,
   VehicleFeatureSchema,
   VehiclesClusteredFeature,
@@ -104,7 +103,7 @@ export const isCarStation = (
   feature.properties?.vehicle_type_form_factor === FormFactor.Car;
 
 export const getAvailableVehicles = (
-  types: VehicleTypeAvailabilityBasicFragment[] | undefined,
+  types: StationVehicleTypeAvailability[] | undefined,
   formFactor: FormFactor,
 ) =>
   types
@@ -305,9 +304,9 @@ export const findOperatorBrandImageUrl = (
   mobilityOperators?.find((op) => op.id === operatorId)?.brandAssets
     ?.brandImageUrl;
 
-export const getTrasportModeAndSubModeByFormFactorAndPropulsionType = (
+export const getTransportModeAndSubMode = (
   formFactor: FormFactor | undefined | null,
-  propulsionType?: PropulsionTypeBooking | undefined | null,
+  propulsionType?: PropulsionType | undefined | null,
 ): {mode: AnyMode; subMode: AnySubMode | undefined} => {
   switch (formFactor) {
     case FormFactor.Bicycle:
@@ -346,4 +345,11 @@ export function getThemedIllustrationForFormFactor(formFactor: FormFactor) {
     default:
       return null;
   }
+}
+
+export function isValidKey<T extends object>(
+  obj: T,
+  key: PropertyKey,
+): key is keyof T {
+  return key in obj;
 }

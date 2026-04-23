@@ -148,6 +148,7 @@ export const Map = (props: MapProps) => {
     isError: vehicleError,
   } = useVehicleQuery(
     selectedFeatureIsAVehicle ? selectedFeature?.properties?.id : undefined,
+    mapState.isStationBasedBooking,
   );
 
   const activeFeatureId =
@@ -524,7 +525,7 @@ export const Map = (props: MapProps) => {
           navigateToStartCityBikeTripWaitingScreen
         }
       />
-      {isMapTilePreloadingEnabled && (
+      {!!isMapTilePreloadingEnabled && (
         <MapTilePreloader
           startingCoordinates={startingCoordinates}
           tabBarHeight={tabBarHeight}
