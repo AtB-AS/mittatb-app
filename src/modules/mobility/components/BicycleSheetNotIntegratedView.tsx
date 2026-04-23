@@ -1,4 +1,4 @@
-import {BikeStationFragment} from '@atb/api/types/generated/fragments/stations';
+import {Station} from '@atb/api/types/mobility';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
 import {BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
@@ -26,7 +26,7 @@ import {OperatorNameAndLogo} from './OperatorNameAndLogo';
 import {useIsBonusActiveForUser} from '@atb/modules/bonus';
 
 type Props = {
-  onStationReceived?: (station: BikeStationFragment) => void;
+  onStationReceived?: (station: Station) => void;
   rentalAppUri?: string;
   appStoreUri?: string;
   operatorId?: string;

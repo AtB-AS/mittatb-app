@@ -1,11 +1,11 @@
 import {useQuery} from '@tanstack/react-query';
-import {getBikeStation} from '@atb/api/bff/mobility';
+import {getStation} from '@atb/api/mobility';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 
-export const useBikeStationQuery = (id: string) =>
+export const useStationQuery = (id: string) =>
   useQuery({
-    queryKey: ['getBikeStation', id],
-    queryFn: ({signal}) => getBikeStation(id, {signal}),
+    queryKey: ['getStation', id],
+    queryFn: ({signal}) => getStation(id, {signal}),
     staleTime: ONE_MINUTE_MS,
     gcTime: ONE_MINUTE_MS,
     refetchOnMount: 'always',
