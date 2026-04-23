@@ -10,6 +10,7 @@ import {
   ProfileTexts,
   useTranslation,
 } from '@atb/translations';
+import type {Language, TranslateFunction} from '@atb/translations';
 import React, {useEffect, useRef, useState} from 'react';
 import {Platform, View} from 'react-native';
 import {openUrl} from '@atb/utils/open-url';
@@ -25,8 +26,10 @@ import {
   UserBonusBalanceContent,
   isActive,
   useBonusBalanceQuery,
+  useProductPointsQuery,
   BonusProductList,
 } from '@atb/modules/bonus';
+import type {ProductPointsItem} from '@atb/modules/bonus';
 import {
   useIsEnrolled,
   useProgramQuery,
@@ -34,7 +37,10 @@ import {
 } from '@atb/modules/enrollment';
 import {useAuthContext} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {
+  useFirestoreConfigurationContext,
+  getReferenceDataName,
+} from '@atb/modules/configuration';
 import {isDefined} from '@atb/utils/presence';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {LogIn} from '@atb/assets/svg/mono-icons/profile';
@@ -45,6 +51,8 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
+import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {formatToDate} from '@atb/utils/date';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {
@@ -233,6 +241,9 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
             />
           )
         )}
+        <ContentHeading text={t(BonusProgramTexts.bonusProfile.faq.heading)} />
+        <BonusFaqSection />
+
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.feedback.heading)}
         />
@@ -246,8 +257,6 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
             }}
           />
         </Section>
-        <ContentHeading text={t(BonusProgramTexts.bonusProfile.faq.heading)} />
-        <BonusFaqSection />
       </View>
     </FullScreenView>
   );
@@ -263,7 +272,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: theme.spacing.medium,
+    gap: theme.spacing.large,
   },
   currentBalanceDisplay: {
     flexDirection: 'row',
@@ -295,8 +304,17 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 }));
 
 const HowPointsWork = () => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {bonusProducts, mobilityOperators} = useFirestoreConfigurationContext();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const {data: productPoints} = useProductPointsQuery();
+
+  const pointsPerProduct = buildPointsPerProductString(
+    productPoints ?? [],
+    preassignedFareProducts ?? [],
+    language,
+    t,
+  );
 
   const getOperatorName = (operatorId: string) => {
     return (
@@ -320,7 +338,9 @@ const HowPointsWork = () => {
         <BonusInfoSectionItem
           title={t(BonusProgramTexts.bonusProfile.readMore.earnPoints.title)}
           description={t(
-            BonusProgramTexts.bonusProfile.readMore.earnPoints.description,
+            BonusProgramTexts.bonusProfile.readMore.earnPoints.description(
+              pointsPerProduct,
+            ),
           )}
           SymbolComponent={
             <ThemedBonusTransaction height={iconSize} width={iconSize} />
@@ -398,5 +418,37 @@ const BonusInfoSectionItem = ({
         {SymbolComponent}
       </View>
     </GenericSectionItem>
+  );
+};
+
+const buildPointsPerProductString = (
+  productPoints: ProductPointsItem[],
+  fareProducts: PreassignedFareProduct[],
+  language: Language,
+  t: TranslateFunction,
+): string => {
+  const parts = productPoints
+    .map((productPoint) => {
+      const fareProduct = fareProducts.find(
+        (fareProduct) => fareProduct.id === productPoint.fareProduct,
+      );
+      if (!fareProduct) return null;
+      const name = getReferenceDataName(fareProduct, language);
+      return t(
+        BonusProgramTexts.bonusProfile.faq.pointsPerProductLabel(
+          productPoint.value,
+          name.toLowerCase(),
+        ),
+      );
+    })
+    .filter(Boolean);
+
+  if (parts.length <= 1) return parts.join('');
+  return (
+    parts.slice(0, -1).join(', ') +
+    ' ' +
+    t(dictionary.listConcatWord) +
+    ' ' +
+    parts[parts.length - 1]
   );
 };

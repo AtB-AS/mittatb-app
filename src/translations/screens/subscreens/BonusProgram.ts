@@ -2,7 +2,6 @@ import {translation as _} from '../../commons';
 
 export type BonusFaqContext = {
   endDate: string;
-  pointsPerProduct: string;
 };
 
 const BonusProgramTexts = {
@@ -57,14 +56,14 @@ const BonusProgramTexts = {
 
     joinProgram: {
       title: _(
-        'Vil du samle Poeng?',
-        'Do you want to earn Points?',
-        'Vil du samle Poeng?',
+        'Tjen poeng på enkeltbilletter!',
+        'Earn Points on single tickets!',
+        'Tjen poeng på enkeltbilletter!',
       ),
       description: _(
-        'Kjøp enkeltbilletter for voksen eller student i sone A og få Poeng. Bruk Poeng på turer med bysykkel og Hyre-biler.',
-        'Buy single tickets for adults or students in zone A and earn Points. Use the Points on trips with city bikes and Hyre cars.',
-        'Kjøp enkeltbilletter for vaksen eller student i sone A og få Poeng. Bruk Poeng på turer med bysykkel og Hyre-biler.',
+        'Du tjener Poeng hver gang du kjøper en enkeltbillett for voksen eller student i sone A. Bruk Poeng på turer med bysykler og Hyre-biler.',
+        'You earn Points every time you buy a single ticket for adults or students in zone A. Use the Points on trips with city bikes and Hyre cars.',
+        'Du tener Poeng kvar gong du kjøper ein enkeltbillett for vaksen eller student i sone A. Bruk Poeng på turer med bysykkler og Hyre-biler.',
       ),
       footer: (endDate: string) =>
         _(
@@ -137,25 +136,32 @@ const BonusProgramTexts = {
           'Last ned appane fyrst',
         ),
         description: _(
-          'Du må laste ned og logge inn i appene til Hyre og Trondheim Bysykkel før du bruker Poeng.',
-          'You need to download and log in to the apps for Hyre and Trondheim City Bike before using Points.',
-          'Du må lasta ned og logga inn i appane til Hyre og Trondheim Bysykkel før du brukar Poeng.',
+          'Du må laste ned og logge inn i appene til Trondheim Bysykkel og Hyre før du bruker Poeng.',
+          'You need to download and log in to the apps for Trondheim City Bike and Hyre before using Points.',
+          'Du må lasta ned og logga inn i appane til Trondheim Bysykkel og Hyre før du brukar Poeng.',
         ),
       },
       earnPoints: {
-        title: _('Samle Poeng', 'Earn Points', 'Samle Poeng'),
-        description: _(
-          'Kjøp enkeltbilletter for voksen eller student i sone A og få Poeng.',
-          'Buy single tickets for adults or students in zone A and earn Points.',
-          'Kjøp enkeltbilletter for vaksen eller student i sone A og få Poeng.',
-        ),
+        title: _('Tjen Poeng', 'Earn Points', 'Tjen Poeng'),
+        description: (pointsPerProduct: string) =>
+          pointsPerProduct
+            ? _(
+                `Du tjener ${pointsPerProduct} for voksen eller student i sone A.`,
+                `You earn ${pointsPerProduct} for adults or students in zone A.`,
+                `Du tjener ${pointsPerProduct} for vaksen eller student i sone A.`,
+              )
+            : _(
+                'Du tjener Poeng hver gang du kjøper en enkeltbillett for voksen eller student i sone A.',
+                'You earn Points every time you buy a single ticket for adults or students in zone A.',
+                'Du tener Poeng kvar gong du kjøper ein enkeltbillett for vaksen eller student i sone A.',
+              ),
       },
       spendPoints: {
         title: _('Bruk Poeng', 'Spend Points', 'Bruk Poeng'),
         description: _(
-          'Poengene kan du bruke til å betale for  turer med bysykkel og Hyre-biler.',
-          'You can spend the points to pay for trips with city bikes and Hyre cars.',
-          'Poenga kan du bruke til å betale for turer med bysykkel og Hyre-biler.',
+          'Du kan bruke Poeng på turer med bysykler og Hyre-biler.',
+          'You may use Points on trips with city bikes and Hyre cars.',
+          'Du kan bruke Poeng på turer med bysykler og Hyre-biler.',
         ),
       },
       downloadOperator: (operator: string) =>
@@ -182,28 +188,15 @@ const BonusProgramTexts = {
       faqs: [
         {
           question: _(
-            'Hvordan tjener jeg Poeng?',
-            'How do I earn Points?',
-            'Korleis tener eg Poeng?',
-          ),
-          answer: ({pointsPerProduct}: BonusFaqContext) =>
-            _(
-              `Du får ${pointsPerProduct} for voksen eller student i sone A.`,
-              `You earn ${pointsPerProduct} for adults or students in zone A.`,
-              `Du får ${pointsPerProduct} for vaksen eller student i sone A.`,
-            ),
-        },
-        {
-          question: _(
-            'Hvordan bruker jeg Poengene?',
-            'How do I use the Points?',
-            'Korleis brukar eg Poenga?',
+            'Hvordan bruker jeg Poeng?',
+            'How do I use Points?',
+            'Korleis brukar eg Poeng?',
           ),
           answer: () =>
             _(
-              'Når du har samlet nok Poeng, kan du bruke dem på turer med bysykkel og Hyre-bil som du finner i kartet. For å bruke Poeng i kartet, trykker du på ikonet for bysykkel eller Hyre-bil, og krysser av for at du vil bruke Poeng før du starter turen.',
+              'Når du har samlet nok Poeng, kan du bruke dem på turer med bysykler og Hyre-biler som du finner i kartet. For å bruke Poeng i kartet, trykker du på ikonet for bysykkel eller Hyre-bil, og krysser av for at du vil bruke Poeng før du starter turen.',
               'When you have collected enough Points, you can use them on trips with city bikes and Hyre cars that you find in the map. To use Points in the map, tap on the icon for city bike or Hyre car, and check the box that you want to use Points before you start the trip.',
-              'Når du har samla nok Poeng, kan du bruke dem på turer med bysykkel og Hyre-bil som du finn i kartet. For å bruke Poeng i kartet, trykker du på ikonet for bysykkel eller Hyre-bil, og krysser av for at du vil bruke Poeng før du startar turen.',
+              'Når du har samla nok Poeng, kan du bruke dem på turer med bysykler og Hyre-biler som du finn i kartet. For å bruke Poeng i kartet, trykker du på ikonet for bysykkel eller Hyre-bil, og krysser av for at du vil bruke Poeng før du startar turen.',
             ),
         },
         {
