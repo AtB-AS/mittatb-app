@@ -59,6 +59,11 @@ const TravelCardTexts = {
       'Ikkje lenger mogleg',
     ),
     tripStarted: _('Reisen har begynt', 'Trip has started', 'Reisa har begynt'),
+    staleTrip: _(
+      'Kan ikke oppdateres',
+      'Unable to update',
+      'Kan ikkje oppdaterast',
+    ),
     fromToInfo: {
       a11yLabel: (fromPlace: string, toPlace: string) =>
         _(

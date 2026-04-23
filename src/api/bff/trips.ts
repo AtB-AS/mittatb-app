@@ -3,6 +3,7 @@ import {AxiosRequestConfig} from 'axios';
 import {
   type BookingAvailabilityQueryVariables,
   type BookingTripsResult,
+  type RefreshedTripPattern,
   TripPattern,
   TripsQuery,
 } from '@atb/api/types/trips';
@@ -121,6 +122,30 @@ export async function singleTripSearch(
 ): Promise<TripPattern> {
   const url = '/bff/v2/singleTrip';
   return await post<TripPattern>(url, {compressedQuery}, opts);
+}
+
+export async function refreshSingleTrip(
+  tripPattern: TripPattern,
+  opts?: AxiosRequestConfig,
+): Promise<RefreshedTripPattern> {
+  const url = '/bff/v3/singleTrip';
+  const legStubs = tripPattern.legs.map((leg) =>
+    leg.id
+      ? {id: leg.id}
+      : {
+          mode: leg.mode,
+          duration: leg.duration,
+          distance: leg.distance,
+          aimedStartTime: leg.aimedStartTime,
+          aimedEndTime: leg.aimedEndTime,
+          expectedStartTime: leg.expectedStartTime,
+          expectedEndTime: leg.expectedEndTime,
+          fromPlace: leg.fromPlace,
+          toPlace: leg.toPlace,
+          pointsOnLink: leg.pointsOnLink,
+        },
+  );
+  return await post<RefreshedTripPattern>(url, {legStubs}, opts);
 }
 
 async function post<T>(
