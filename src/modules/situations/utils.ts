@@ -35,39 +35,36 @@ export function findAllNotices(tp: TripPatternFragment): NoticeFragment[] {
     .filter(onlyUniquesBasedOnField('id'));
 }
 
+/**
+ * Get all relevant situations for a leg. All sources (`leg.situations`,
+ * `fromEstimatedCall.situations`, `toEstimatedCall.situations`) are
+ * pre-filtered by Entur Journey Planner to only include situations valid
+ * for that specific leg's time and stops, so no additional validity
+ * filtering is needed.
+ *
+ * Note: `leg.fromPlace.quay?.situations` and `leg.toPlace.quay?.situations`
+ * are not used here as they are quay-level situations not scoped to
+ * this leg's time window.
+ */
 export function findAllSituationsFromLeg(leg: Leg): SituationFragment[] {
-  const situations: SituationFragment[] = [];
-  if (leg.situations) {
-    leg.situations.forEach((situation) => {
-      if (situation) {
-        situations.push(situation);
-      }
-    });
-  }
-  if (leg.fromPlace.quay?.situations) {
-    leg.fromPlace.quay.situations.forEach((situation) => {
-      if (situation) {
-        situations.push(situation);
-      }
-    });
-  }
-  if (leg.toPlace.quay?.situations) {
-    leg.toPlace.quay.situations.forEach((situation) => {
-      if (situation) {
-        situations.push(situation);
-      }
-    });
-  }
-  return situations;
+  return [
+    leg.situations,
+    leg.fromEstimatedCall?.situations ?? [],
+    leg.toEstimatedCall?.situations ?? [],
+  ].flat();
 }
 
+/**
+ * Get all unique situations across all legs of a trip pattern.
+ * Since `findAllSituationsFromLeg` returns only situations pre-filtered by
+ * Entur Journey Planner, no additional validity filtering is needed here.
+ */
 export function findAllSituations(
   tp: TripPatternFragment,
 ): SituationFragment[] {
   return tp.legs
     .map(findAllSituationsFromLeg)
     .flat()
-    .filter(isSituationValidAtDate(tp.expectedStartTime))
     .filter(onlyUniquesBasedOnField('id'));
 }
 
@@ -226,7 +223,7 @@ export const getLegsNotificationA11yLabel = (
       hasWarnings = true;
     }
 
-    for (const situation of leg.situations ?? []) {
+    for (const situation of findAllSituationsFromLeg(leg)) {
       if (getMessageTypeForSituation(situation) === 'warning') {
         hasWarnings = true;
       } else {

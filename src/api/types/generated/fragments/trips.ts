@@ -35,15 +35,17 @@ export type TripPatternFragment = {
       aimedDepartureTime: any;
       expectedDepartureTime: any;
       stopPositionInPattern: number;
+      cancellation: boolean;
       destinationDisplay?: {frontText?: string; via?: Array<string>};
       quay: {publicCode?: string; name: string};
       notices: Array<NoticeFragment>;
-      cancellation: boolean;
+      situations: Array<SituationFragment>;
     };
     toEstimatedCall?: {
       stopPositionInPattern: number;
-      notices: Array<NoticeFragment>;
       cancellation: boolean;
+      notices: Array<NoticeFragment>;
+      situations: Array<SituationFragment>;
     };
     situations: Array<SituationFragment>;
     fromPlace: {
@@ -111,8 +113,8 @@ export type TripPatternFragment = {
       aimedDepartureTime: any;
       expectedDepartureTime: any;
       predictionInaccurate: boolean;
-      quay: {name: string};
       cancellation: boolean;
+      quay: {name: string};
     }>;
     bookingArrangements?: BookingArrangementFragment;
     datedServiceJourney?: {
