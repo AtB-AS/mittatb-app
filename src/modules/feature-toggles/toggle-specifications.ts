@@ -14,6 +14,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_apple_pay',
   },
   {
+    name: 'isBonusEnabled',
+    remoteConfigKey: 'enable_bonus',
+  },
+  {
     name: 'isCarSharingInMapEnabled',
     remoteConfigKey: 'enable_car_sharing_in_map',
   },
@@ -64,6 +68,10 @@ export const toggleSpecifications = [
   {
     name: 'isMapPitchEnabled',
     remoteConfigKey: 'enable_map_pitch',
+  },
+  {
+    name: 'isMapTilePreloadingEnabled',
+    remoteConfigKey: 'enable_map_tile_preloading',
   },
   {
     name: 'isNonTransitTripSearchEnabled',
@@ -122,8 +130,16 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_shmo_deep_integration_citybike',
   },
   {
+    name: 'isShowCancelledDeparturesEnabled',
+    remoteConfigKey: 'enable_show_cancelled_departures',
+  },
+  {
     name: 'isShowValidTimeInfoEnabled',
     remoteConfigKey: 'enable_show_valid_time_info',
+  },
+  {
+    name: 'isSurfaceViewMapEnabled',
+    remoteConfigKey: 'enable_surface_view_map',
   },
   {
     name: 'isTicketInformationEnabled',

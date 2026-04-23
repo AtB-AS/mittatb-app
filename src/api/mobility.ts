@@ -16,6 +16,8 @@ import {
   VehiclesRequestBody,
   VehicleSchema,
   Vehicle,
+  StationSchema,
+  Station,
 } from './types/mobility';
 
 export const getActiveShmoBooking = (
@@ -152,4 +154,14 @@ export const getVehicle = (
       }
       return result.data;
     });
+};
+
+export const getStation = (
+  id: string,
+  opts?: AxiosRequestConfig,
+): Promise<Station | null> => {
+  return client
+    .get<Station>(`/mobility/v1/stations/${id}`, opts)
+    .then((res) => StationSchema.parse(res.data))
+    .catch(() => null);
 };

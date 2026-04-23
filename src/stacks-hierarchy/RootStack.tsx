@@ -58,6 +58,7 @@ import {Root_TicketInformationScreen} from './Root_TicketInformationScreen/Root_
 import {Root_ChooseTicketRecipientScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingContext, useOnboardingFlow} from '@atb/modules/onboarding';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useRegisterIntercomUser} from '@atb/modules/chat';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {ForceUpdateScreen} from '@atb/screen-components/force-update-screen';
@@ -114,6 +115,7 @@ export const RootStack = () => {
   const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {customerProfile} = useTicketingContext();
+  const {isBonusEnabled} = useFeatureTogglesContext();
 
   useTestIds();
   useSetupReactQueryWindowFocus();
@@ -262,7 +264,7 @@ export const RootStack = () => {
                   ],
                 } as ResultState;
               }
-              if (path.includes('points')) {
+              if (path.includes('points') && isBonusEnabled) {
                 return {
                   routes: [
                     {

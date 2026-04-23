@@ -13,6 +13,9 @@ import {
   isBefore,
   isBetween,
   isEqualOrAfter,
+  isNumberOfMinutesInThePast,
+  isValidDateTimeString,
+  minutesBetween,
   secondsToDuration,
 } from '../date'; // Adjust the path if needed
 
@@ -466,5 +469,107 @@ describe('secondsToDuration', () => {
         expect(isBetween('2026-02-10', '2026-02-09', '2026-02-11')).toBe(true);
       });
     });
+  });
+});
+
+describe('isNumberOfMinutesInThePast', () => {
+  test('true when slightly more than the specified minutes ahead', () => {
+    const pastDate = new Date('2024-09-01T12:00:00Z');
+    const now = new Date('2024-09-01T12:01:01Z');
+    expect(isNumberOfMinutesInThePast(pastDate, 1, now.valueOf())).toBe(true);
+  });
+
+  test('true when exactly the specified minutes ahead', () => {
+    const pastDate = new Date('2024-09-01T12:00:00Z');
+    const now = new Date('2024-09-01T12:01:00Z');
+    expect(isNumberOfMinutesInThePast(pastDate, 1, now.valueOf())).toBe(true);
+  });
+
+  test('false when slightly less than the specified minutes ahead', () => {
+    const pastDate = new Date('2024-09-01T12:00:00Z');
+    const now = new Date('2024-09-01T12:00:59Z');
+    expect(isNumberOfMinutesInThePast(pastDate, 1, now.valueOf())).toBe(false);
+  });
+
+  test('handles non-round dates', () => {
+    const pastDate = new Date('2024-09-01T12:00:10Z');
+    const now = new Date('2024-09-01T12:01:11Z');
+    expect(isNumberOfMinutesInThePast(pastDate, 1, now.valueOf())).toBe(true);
+  });
+
+  test('handles non-round dates', () => {
+    const pastDate = new Date('2024-09-01T12:00:10Z');
+    const now = new Date('2024-09-01T12:01:09Z');
+    expect(isNumberOfMinutesInThePast(pastDate, 1, now.valueOf())).toBe(false);
+  });
+});
+
+describe('minutesBetween', () => {
+  test('calculates minutes between two dates correctly', () => {
+    const start = new Date('2024-09-01T12:00:00Z');
+    const end = new Date('2024-09-01T12:30:00Z');
+    expect(minutesBetween(start, end)).toBe(30);
+  });
+
+  test('rounds down', () => {
+    const start = new Date('2024-09-01T12:00:00Z');
+    const end = new Date('2024-09-01T12:30:59Z');
+    expect(minutesBetween(start, end)).toBe(30);
+  });
+
+  test('handles seconds', () => {
+    const start = new Date('2024-09-01T12:00:20Z');
+    const end = new Date('2024-09-01T12:30:19Z');
+    expect(minutesBetween(start, end)).toBe(29);
+  });
+});
+
+describe('convertIsoStringFieldsToDate', () => {
+  test('converts ISO string fields to Date objects', () => {
+    const input = {
+      string: 'Hello world!',
+      date: '2024-01-01T00:00:00.000Z',
+      dateWithTimeZone: '2024-01-01T00:00:00.000+01:00',
+      year: '2026',
+      partialDate: '2024-01-01',
+      number: 42,
+      orderId: '41ABC5123',
+      nested: {
+        string: 'Nested string',
+        date: '2024-02-01T00:00:00.000Z',
+      },
+      array: [{date: '2024-04-01T00:00:00.000Z'}],
+    };
+    const expectedOutput = {
+      string: 'Hello world!',
+      date: new Date('2024-01-01T00:00:00.000Z'),
+      dateWithTimeZone: new Date('2024-01-01T00:00:00.000+01:00'),
+      year: '2026',
+      partialDate: '2024-01-01',
+      number: 42,
+      orderId: '41ABC5123',
+      nested: {
+        string: 'Nested string',
+        date: new Date('2024-02-01T00:00:00.000Z'),
+      },
+      array: [{date: new Date('2024-04-01T00:00:00.000Z')}],
+    };
+    const result = convertIsoStringFieldsToDate(input);
+
+    expect(result).toEqual(expectedOutput);
+  });
+});
+
+describe('isValidDateString', () => {
+  test('ISO strings are valid', () => {
+    expect(isValidDateTimeString('2024-09-01T12:00:00.000Z')).toBe(true);
+    expect(isValidDateTimeString('2024-09-01T12:00:00.000+01:00')).toBe(true);
+    expect(isValidDateTimeString('2024-09-01T12:00:00.000-01:00')).toBe(true);
+  });
+  test('non-ISO strings are invalid', () => {
+    expect(isValidDateTimeString('2024')).toBe(false);
+    expect(isValidDateTimeString('2024-09-01')).toBe(false);
+    expect(isValidDateTimeString('12:00')).toBe(false);
+    expect(isValidDateTimeString('41ABCD5E')).toBe(false);
   });
 });

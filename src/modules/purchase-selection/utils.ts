@@ -12,7 +12,7 @@ import {
   type SupplementProduct,
   UserProfile,
 } from '@atb-as/config-specs';
-import {isValidDateString} from '@atb/utils/date';
+import {isValidDateTimeString} from '@atb/utils/date';
 import {decodePolylineEncodedGeometry} from '@atb/utils/decode-polyline-geometry';
 import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 
@@ -186,7 +186,7 @@ export const isValidSelection = (
   if (!isToZoneValid) return false;
 
   const isDateValid = selection.travelDate
-    ? isValidDateString(selection.travelDate)
+    ? isValidDateTimeString(selection.travelDate)
     : true;
   if (!isDateValid) return false;
 

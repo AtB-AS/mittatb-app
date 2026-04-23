@@ -30,6 +30,8 @@ import {ContentHeading} from '@atb/components/heading';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Loading} from '@atb/components/loading';
+import {useNow} from '@atb/utils/use-now';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 
 type Props = {
   onEditFavouriteDeparture: () => void;
@@ -47,6 +49,8 @@ export const DeparturesWidget = ({
   const styles = useStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
+  const now = useNow(10 * ONE_SECOND_MS);
+
   const themeColor = theme.color.background.neutral[1];
   const {favoriteDepartures} = useFavoritesContext();
   const {location} = useGeolocationContext();
@@ -114,6 +118,7 @@ export const DeparturesWidget = ({
               locationOrStopPlace={location || undefined}
               onPressDeparture={onPressDeparture}
               testID="stopPlace"
+              now={now}
             />
           ))}
         </View>

@@ -88,6 +88,8 @@ export const NotificationContextProvider = ({children}: Props) => {
       setFcmToken(token);
       return token;
     } catch (e) {
+      // Error is expected in simulator, since push notifications are not supported.
+      if (__DEV__) return undefined;
       Bugsnag.notify(
         e instanceof Error ? e : new Error(`Failed to get FCM token: ${e}`),
       );

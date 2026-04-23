@@ -23,7 +23,7 @@ export function UserBonusBalanceContent(): React.JSX.Element {
         accessible
         accessibilityLabel={t(
           BonusProgramTexts.yourBonusBalanceA11yLabel(
-            userBonusBalance && userBonusBalanceStatus === 'success'
+            userBonusBalance != null && userBonusBalanceStatus === 'success'
               ? userBonusBalance
               : null,
           ),

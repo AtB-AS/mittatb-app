@@ -64,6 +64,7 @@ export function createTripsQuery(
     arriveBy,
     travelSearchFiltersSelection,
     journeySearchModes,
+    includeCancellations,
   } = tripsInfiniteQueryProps;
 
   const from = {
@@ -82,6 +83,7 @@ export function createTripsQuery(
     when: searchTime?.date,
     arriveBy,
     modes: journeySearchModes,
+    includeCancellations,
   };
 
   if (travelSearchFiltersSelection?.transportModes) {

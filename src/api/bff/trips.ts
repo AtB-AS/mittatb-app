@@ -37,6 +37,7 @@ function cleanQuery(query: TripsQueryVariables) {
     walkReluctance: query.walkReluctance,
     walkSpeed: query.walkSpeed,
     modes: query.modes,
+    includeCancellations: query.includeCancellations,
   };
   return cleanQuery;
 }

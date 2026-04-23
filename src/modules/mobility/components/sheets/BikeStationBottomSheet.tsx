@@ -1,4 +1,4 @@
-import {BikeStationFragment} from '@atb/api/types/generated/fragments/stations';
+import {Station} from '@atb/api/types/mobility';
 import {
   BottomSheetHeaderType,
   MapBottomSheet,
@@ -23,7 +23,7 @@ type Props = {
   stationId: string;
   distance: number | undefined;
   onClose: () => void;
-  onStationReceived?: (station: BikeStationFragment) => void;
+  onStationReceived?: (station: Station) => void;
   locationArrowOnPress: () => void;
   navigateToScanQrCode: () => void;
   navigateSupportCallback: (params: ShmoHelpParams) => void;
@@ -70,14 +70,7 @@ export const BikeStationBottomSheet = ({
       heading={stationName}
       subText={operatorName}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      logoIcon={
-        <TransportationIconBox
-          mode="bicycle"
-          isFlexible={false}
-          size="normal"
-          type="compact"
-        />
-      }
+      logoIcon={<TransportationIconBox mode="bicycle" />}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >

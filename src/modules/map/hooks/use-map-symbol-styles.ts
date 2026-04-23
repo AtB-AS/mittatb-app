@@ -212,6 +212,7 @@ export const useMapSymbolStyles = ({
     iconOpacity,
     iconSize,
     symbolSortKey,
+    iconEmissiveStrength: 1,
   };
 
   const textField: Expression =

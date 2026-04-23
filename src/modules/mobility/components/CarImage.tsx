@@ -5,7 +5,7 @@ import {CarFill} from '@atb/assets/svg/mono-icons/transportation';
 import {StyleSheet} from '@atb/theme';
 
 type Props = {
-  uri: string | undefined;
+  uri: string | null | undefined;
 };
 
 export const CarImage = ({uri}: Props) => {

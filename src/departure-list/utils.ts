@@ -50,7 +50,7 @@ export function updateStopsWithRealtime(
 function filterOutOutdatedDepartures(quayGroup: QuayGroup) {
   const newDepartureGroups = quayGroup.group.map(function (group) {
     const newDepartures = group.departures.filter((departure) =>
-      isValidDeparture(departure),
+      isUpcomingDepartureTime(departure, Date.now()),
     );
     // Optimization to avoid having to sort list to often.
     // If after filtering it has the same length it means we could
@@ -97,6 +97,7 @@ function updateDeparturesWithRealtime(
       return {
         ...departure,
         time: departureRealtime.timeData.expectedDepartureTime,
+        actualTime: departureRealtime.timeData.actualDepartureTime,
         realtime: departureRealtime.timeData.realtime,
       };
     });
@@ -130,6 +131,7 @@ export function getDeparturesAugmentedWithRealtimeData(
       return {
         ...departure,
         expectedDepartureTime: departureRealtime.timeData.expectedDepartureTime,
+        actualDepartureTime: departureRealtime.timeData.actualDepartureTime,
         realtime: departureRealtime.timeData.realtime,
       };
     })
@@ -140,20 +142,38 @@ export function getDeparturesAugmentedWithRealtimeData(
     });
 }
 
-export function hasNoGroupsWithDepartures(departures: QuayGroup[]) {
-  return departures.every((q) => q.group.every(hasNoDeparturesOnGroup));
+export function hasNoGroupsWithDepartures(
+  departures: QuayGroup[],
+  now: number,
+) {
+  return departures.every((q) =>
+    q.group.every((group) => hasNoDeparturesOnGroup(group, now)),
+  );
 }
-export function hasNoDeparturesOnGroup(group: DepartureGroup) {
+export function hasNoDeparturesOnGroup(group: DepartureGroup, now: number) {
   return (
     group.departures.length === 0 ||
-    group.departures.every((d) => !isValidDeparture(d))
+    group.departures.every((d) => !isUpcomingDepartureTime(d, now))
   );
 }
 
-export function isValidDeparture(departure: DepartureTime) {
-  return !isNumberOfMinutesInThePast(departure.time, HIDE_AFTER_NUM_MINUTES);
+export function isUpcomingDepartureTime(departure: DepartureTime, now: number) {
+  if (departure.actualTime) return false;
+  return !isNumberOfMinutesInThePast(
+    departure.time,
+    HIDE_AFTER_NUM_MINUTES,
+    now,
+  );
 }
 
-export function isValidDepartureTime(time: string, now?: number) {
-  return !isNumberOfMinutesInThePast(time, HIDE_AFTER_NUM_MINUTES, now);
+export function isUpcomingEstimatedCall(
+  estimatedCall: EstimatedCall,
+  now?: number,
+) {
+  if (estimatedCall.actualDepartureTime) return false;
+  return !isNumberOfMinutesInThePast(
+    estimatedCall.expectedDepartureTime,
+    HIDE_AFTER_NUM_MINUTES,
+    now,
+  );
 }

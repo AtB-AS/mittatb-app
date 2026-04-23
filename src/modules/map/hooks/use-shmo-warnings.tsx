@@ -17,13 +17,14 @@ import {useVehicle} from '@atb/modules/mobility';
 import {throttle} from '@atb/utils/throttle';
 import {Coordinates} from '@atb/utils/coordinates';
 import {useOpeningHours} from './use-opening-hours';
-import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {GeofencingZoneCode} from '@atb-as/theme';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export const useShmoWarnings = (
   vehicleId: string,
   mapViewRef?: RefObject<MapView | null>,
 ) => {
-  const {enable_geofencing_zones_as_tiles} = useRemoteConfigContext();
+  const {isGeofencingZonesAsTilesEnabled} = useFeatureTogglesContext();
   const {t} = useTranslation();
   const [geofencingZoneWarning, setGeofencingZoneWarning] =
     useState<GeofencingZoneContent | null>(null);
@@ -67,7 +68,7 @@ export const useShmoWarnings = (
       );
 
       const geofencingZoneFeatures = featuresAtLocation?.filter((feature) =>
-        enable_geofencing_zones_as_tiles
+        isGeofencingZonesAsTilesEnabled
           ? isFeatureGeofencingZoneAsTiles(feature)
           : isFeatureGeofencingZone(feature) &&
             feature?.properties?.geofencingZoneCustomProps?.code,
@@ -83,14 +84,21 @@ export const useShmoWarnings = (
         coordinates.latitude,
       ]);
 
-      if (
-        featureToSelect?.properties?.geofencingZoneCustomProps?.code !==
-        'allowed'
-      ) {
+      const featProps = featureToSelect?.properties;
+      const code: GeofencingZoneCode =
+        (isGeofencingZonesAsTilesEnabled
+          ? featProps?.code
+          : featProps?.geofencingZoneCustomProps?.code) ?? 'allowed';
+
+      if (code !== 'allowed') {
+        const isStationParking: boolean =
+          (isGeofencingZonesAsTilesEnabled
+            ? featProps?.station_parking
+            : featProps?.geofencingZoneCustomProps?.isStationParking) ?? false;
+
         const geofencingZoneContent = getGeofencingZoneContent(
-          featureToSelect?.properties?.geofencingZoneCustomProps?.code,
-          featureToSelect?.properties?.geofencingZoneCustomProps
-            ?.isStationParking,
+          code,
+          isStationParking,
         );
         setGeofencingZoneWarning(geofencingZoneContent);
       } else {

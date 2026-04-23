@@ -1,0 +1,44 @@
+# Xcode
+build/
+DerivedData
+
+# Android/IntelliJ
+build/
+.idea
+.gradle
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Bundle artifact
+*.jsbundle
+/ios/bundle/
+
+# CocoaPods
+**/Pods/
+ios/atb/Images.xcassets/AppIcon.appiconset/*.png
+ios/departureWidget/Assets.xcassets/AppIcon.appiconset/*.png
+
+# Env & Config
+.env
+.env.*
+/.env
+/icons
+**/ios-devices.txt
+
+# Service files
+android/app/google-services.json
+**/GoogleService-Info.plist
+**/google-services.json
+*.plist
+
+# Credentials
+.netrc
+*.keystore
+env/
+
+# Yalc
+.yalc/
+yalc.lock

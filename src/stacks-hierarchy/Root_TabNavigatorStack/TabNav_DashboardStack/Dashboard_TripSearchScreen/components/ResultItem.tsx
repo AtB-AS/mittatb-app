@@ -4,7 +4,12 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
 import {SituationOrNoticeIcon} from '@atb/modules/situations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {dictionary, TripSearchTexts, useTranslation} from '@atb/translations';
+import {
+  CancelledDepartureTexts,
+  dictionary,
+  TripSearchTexts,
+  useTranslation,
+} from '@atb/translations';
 import {screenReaderHidden} from '@atb/utils/accessibility';
 import {flatMap} from '@atb/utils/array';
 import {
@@ -40,6 +45,7 @@ import {significantWaitTime} from '@atb/modules/trip-patterns';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {isSignificantDifference} from '../utils';
+import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 
 type ResultItemState = 'enabled' | 'dimmed' | 'disabled';
 
@@ -50,7 +56,9 @@ type ResultItemProps = {
 
 const ResultItemHeader: React.FC<{
   tripPattern: TripPattern;
-}> = ({tripPattern}) => {
+  isCancelled: boolean;
+}> = ({tripPattern, isCancelled}) => {
+  const {themeName} = useThemeContext();
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   let start = tripPattern.legs[0];
@@ -61,11 +69,32 @@ const ResultItemHeader: React.FC<{
   } else if (tripPattern.legs[0].mode !== 'foot') {
     startName = getQuayName(start.fromPlace.quay);
   }
+
+  const cancelledText = t(CancelledDepartureTexts.cancelled);
   const startLegIsFlexibleTransport = isLineFlexibleTransport(start.line);
   const publicCode = start.fromPlace.quay?.publicCode || start.line?.publicCode;
 
   const durationText = secondsToDurationShort(tripPattern.duration, language);
   const transportName = t(getTranslatedModeName(start.mode));
+
+  const routeName = startName
+    ? t(
+        TripSearchTexts.results.resultItem.header.title(
+          transportName,
+          startName,
+        ),
+      )
+    : startLegIsFlexibleTransport && publicCode
+      ? t(
+          TripSearchTexts.results.resultItem.header.flexTransportTitle(
+            publicCode,
+          ),
+        )
+      : transportName;
+
+  const displayName = isCancelled
+    ? `${routeName} - ${cancelledText}`
+    : routeName;
 
   return (
     <View style={styles.resultHeader}>
@@ -74,20 +103,7 @@ const ResultItemHeader: React.FC<{
         typography="body__s__strong"
         testID="resultDeparturePlace"
       >
-        {startName
-          ? t(
-              TripSearchTexts.results.resultItem.header.title(
-                transportName,
-                startName,
-              ),
-            )
-          : startLegIsFlexibleTransport && publicCode
-            ? t(
-                TripSearchTexts.results.resultItem.header.flexTransportTitle(
-                  publicCode,
-                ),
-              )
-            : transportName}
+        {displayName}
       </ThemeText>
       <View style={styles.durationContainer}>
         <AccessibleText
@@ -102,14 +118,24 @@ const ResultItemHeader: React.FC<{
 
       <RailReplacementBusMessage tripPattern={tripPattern} />
 
-      <SituationOrNoticeIcon
-        situations={flatMap(tripPattern.legs, (leg) => leg.situations)}
-        notices={flatMap(tripPattern.legs, getNoticesForLeg)}
-        accessibilityLabel={t(
-          TripSearchTexts.results.resultItem.hasSituationsTip,
-        )}
-        style={styles.warningIcon}
-      />
+      {!isCancelled && (
+        <SituationOrNoticeIcon
+          situations={flatMap(tripPattern.legs, (leg) => leg.situations)}
+          notices={flatMap(tripPattern.legs, getNoticesForLeg)}
+          accessibilityLabel={t(
+            TripSearchTexts.results.resultItem.hasSituationsTip,
+          )}
+          style={styles.warningIcon}
+        />
+      )}
+
+      {isCancelled && (
+        <ThemeIcon
+          style={styles.warningIcon}
+          svg={statusTypeToIcon('error', true, themeName)}
+          accessibilityLabel={cancelledText}
+        />
+      )}
     </View>
   );
 };
@@ -176,6 +202,10 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     return leg.mode === 'foot' && index !== 0;
   };
 
+  const isCancelled = tripPattern.legs.some(
+    (leg) => leg.fromEstimatedCall?.cancellation,
+  );
+
   return (
     <Animated.View
       entering={FadeIn}
@@ -183,7 +213,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       {...props}
       accessible={false}
     >
-      <ResultItemHeader tripPattern={tripPattern} />
+      <ResultItemHeader tripPattern={tripPattern} isCancelled={isCancelled} />
       <View style={styles.detailsContainer} {...screenReaderHidden}>
         <View
           style={styles.flexRow}
@@ -207,19 +237,21 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                     {leg.mode === 'foot' ? (
                       <FootLeg leg={leg} nextLeg={filteredLegs[i + 1]} />
                     ) : staySeated(i) ? null : (
-                      <TransportationLeg
-                        leg={leg}
-                        style={
-                          isSignificantDifference(leg)
-                            ? styles.transportationIcon_wide
-                            : undefined
-                        }
+                      <TransportationIconBox
+                        mode={leg.mode}
+                        subMode={leg.line?.transportSubmode}
+                        isFlexible={isLineFlexibleTransport(leg.line)}
+                        lineNumber={leg.line?.publicCode}
+                        spacious={true}
+                        testID={`${leg.mode}Leg`}
                       />
                     )}
                     <View style={styles.departureTimes}>
                       {staySeated(i) || isIntermediateFootLeg(leg, i) ? null : (
                         <ThemeText
-                          typography="body__xs"
+                          typography={
+                            isCancelled ? 'body__xs__strike' : 'body__xs'
+                          }
                           color="primary"
                           testID={'schTime' + i}
                         >
@@ -264,7 +296,11 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         <View>
           <DestinationIcon style={styles.iconContainer} />
           <View style={styles.departureTimes}>
-            <ThemeText typography="body__xs" color="primary" testID="endTime">
+            <ThemeText
+              typography={isCancelled ? 'body__xs__strike' : 'body__xs'}
+              color="primary"
+              testID="endTime"
+            >
               {(lastLegIsFlexible ? t(dictionary.missingRealTimePrefix) : '') +
                 formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
             </ThemeText>
@@ -347,10 +383,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
   },
-  transportationIcon_wide: {
-    flex: 1,
-    justifyContent: 'center',
-  },
   dashContainer: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -429,26 +461,6 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       <ThemeIcon accessibilityLabel={a11yText} svg={WalkFill} />
       <Text style={styles.walkDuration}>{secondsToMinutes(leg.duration)}</Text>
     </View>
-  );
-};
-
-const TransportationLeg = ({
-  leg,
-  style,
-}: {
-  leg: Leg;
-  style?: StyleProp<ViewStyle>;
-}) => {
-  return (
-    <TransportationIconBox
-      style={style}
-      mode={leg.mode}
-      subMode={leg.line?.transportSubmode}
-      isFlexible={isLineFlexibleTransport(leg.line)}
-      lineNumber={leg.line?.publicCode}
-      type="standard"
-      testID={`${leg.mode}Leg`}
-    />
   );
 };
 

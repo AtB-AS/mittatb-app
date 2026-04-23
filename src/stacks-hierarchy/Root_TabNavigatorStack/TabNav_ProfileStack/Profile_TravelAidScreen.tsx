@@ -1,5 +1,6 @@
 import React from 'react';
-import {Linking, View} from 'react-native';
+import {View} from 'react-native';
+import {openUrl} from '@atb/utils/open-url';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -12,7 +13,6 @@ import {
 } from '@atb/components/sections';
 import {Button} from '@atb/components/button';
 import {usePreferencesContext} from '@atb/modules/preferences';
-import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
@@ -94,16 +94,7 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
                   testID="travelAidContactCustomerServiceButton"
                   onPress={async () => {
                     const phoneNumber = `tel:${contactPhoneNumber}`;
-                    if (await Linking.canOpenURL(phoneNumber)) {
-                      Linking.openURL(phoneNumber);
-                    } else {
-                      Bugsnag.notify(
-                        new Error(
-                          'Could not open phone number in accessiblity settings' +
-                            contactPhoneNumber,
-                        ),
-                      );
-                    }
+                    await openUrl(phoneNumber);
                   }}
                 />
               </View>

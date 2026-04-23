@@ -54,13 +54,14 @@ export function LegsSummary({
           key={`leg-${i}`}
         >
           <View style={styles.legSectionItem}>
-            <TransportationIconBox
-              style={[styles.sectionItemSpacing, styles.centered]}
-              type="standard"
-              mode={leg.mode}
-              subMode={leg.transportSubmode}
-              lineNumber={leg.line?.publicCode}
-            />
+            <View style={[styles.sectionItemSpacing, styles.centered]}>
+              <TransportationIconBox
+                mode={leg.mode}
+                spacious={true}
+                subMode={leg.transportSubmode}
+                lineNumber={leg.line?.publicCode}
+              />
+            </View>
             <ThemeText
               typography="body__m"
               style={[styles.legName, styles.centered]}

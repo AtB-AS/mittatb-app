@@ -2,6 +2,7 @@ import {Platform} from 'react-native';
 import {useMapboxJsonStyle} from './use-mapbox-json-style';
 import {useMemo} from 'react';
 import {useFontScale} from '@atb/utils/use-font-scale';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 const COMPASS_BASE_TOP = 50;
 
@@ -17,6 +18,7 @@ const mapViewStaticConfig = {
 type MapViewConfigOptions = {
   includeVehiclesAndStationsVectorSource?: boolean;
   shouldShowGeofencingZonesLayers?: boolean;
+  includeBasemapStyle?: boolean;
 };
 
 export const useMapViewConfig = (
@@ -25,16 +27,19 @@ export const useMapViewConfig = (
   const {
     includeVehiclesAndStationsVectorSource = false,
     shouldShowGeofencingZonesLayers = false,
+    includeBasemapStyle = true,
   } = mapViewConfigOptions || {};
   const fontScale = useFontScale();
   const mapboxJsonStyle = useMapboxJsonStyle(
     includeVehiclesAndStationsVectorSource,
     shouldShowGeofencingZonesLayers,
+    includeBasemapStyle,
   );
   const configMap = useMemo(
     () => ({styleJSON: mapboxJsonStyle}),
     [mapboxJsonStyle],
   );
+  const {enable_surface_view_map} = useRemoteConfigContext();
 
   // `mapbox` (v10) Adds compass offset `compassViewMargins` is still supported but generates issues:
   // Mapbox error fireEvent failed: <rnmapbox_maps.RCTMGLEvent: 0x6000028a0fe0>
@@ -51,7 +56,8 @@ export const useMapViewConfig = (
       ...mapViewStaticConfig,
       compassPosition,
       ...configMap,
+      surfaceView: enable_surface_view_map,
     }),
-    [compassPosition, configMap],
+    [compassPosition, configMap, enable_surface_view_map],
   );
 };

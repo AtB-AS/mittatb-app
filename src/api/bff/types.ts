@@ -51,6 +51,7 @@ export type DeparturesWithLineName = DeparturesQuery & {
 export type DepartureTime = {
   time: string;
   aimedTime: string;
+  actualTime?: string;
   realtime?: boolean;
   predictionInaccurate?: boolean;
   situations: SituationFragment[];

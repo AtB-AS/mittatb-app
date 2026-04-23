@@ -26,6 +26,7 @@ import {
   set,
   isValid,
   intervalToDuration,
+  parseJSON as parseJSONDate,
 } from 'date-fns';
 import {
   FormatOptionsWithTZ,
@@ -178,8 +179,8 @@ export function secondsBetween(
 }
 
 /**
- * Return minutes between start and end. If end is before start the returned
- * value will be negative.
+ * Return minutes between start and end, rounded down. If end is before start,
+ * the returned value will be negative.
  */
 export function minutesBetween(
   start: string | Date,
@@ -318,9 +319,10 @@ export function isNumberOfMinutesInThePast(
   minutes: number,
   now?: number,
 ) {
-  return (
-    differenceInMinutesStrings(isoDate, new Date(now ?? Date.now())) < -minutes
-  );
+  const seconds = minutes * 60;
+  const nowDate = new Date(now ?? Date.now());
+  const difference = differenceInSeconds(parseIfNeeded(isoDate), nowDate);
+  return difference <= -seconds;
 }
 
 export function formatToLongDateTime(
@@ -573,13 +575,6 @@ export function dateWithReplacedTime(
   });
 }
 
-export function differenceInMinutesStrings(
-  dateLeft: string | Date,
-  dateRight: string | Date,
-) {
-  return differenceInMinutes(parseIfNeeded(dateLeft), parseIfNeeded(dateRight));
-}
-
 export const addMinutes = (date: string | Date, minutes: number): Date =>
   fnsAddMinutes(parseIfNeeded(date), minutes);
 
@@ -666,8 +661,19 @@ function getHumanizer(
   return humanizer(ms, opts);
 }
 
-export const isValidDateString = (dateString: string) => {
-  const parsedDate = parseISO(dateString);
+/**
+ * Validates that the input string is a valid ISO date and time string on the
+ * format `YYYY-MM-DDTHH:mm:ss.sssZ` or `YYYY-MM-DDTHH:mm:ss.sss±hh:mm`
+ *
+ * @example
+ * assert(isValidDateTimeString('2024-09-01T12:00:00.000Z') === true);
+ * assert(isValidDateTimeString('2024-09-01T12:00:00.000+01:00') === true);
+ * assert(isValidDateTimeString('2024-09-01T12:00:00.000-01:00') === true);
+ * assert(isValidDateTimeString('2024') === false);
+ * assert(isValidDateTimeString('2024-09-01') === false);
+ */
+export const isValidDateTimeString = (dateString: string) => {
+  const parsedDate = parseJSONDate(dateString);
   return isValid(parsedDate);
 };
 
@@ -683,8 +689,8 @@ export const convertIsoStringFieldsToDate = (value: any): any => {
       acc[key] = convertIsoStringFieldsToDate(fieldValue);
       return acc;
     }, {});
-  } else if (typeof value === 'string' && isValidDateString(value)) {
-    return parseISO(value);
+  } else if (typeof value === 'string' && isValidDateTimeString(value)) {
+    return parseJSONDate(value);
   }
   return value;
 };

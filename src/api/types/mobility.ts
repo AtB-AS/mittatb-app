@@ -225,6 +225,42 @@ export const VehicleSchema = z.object({
 
 export type Vehicle = z.infer<typeof VehicleSchema>;
 
+const StationVehicleTypeSchema = z.object({
+  id: z.string(),
+  formFactor: z.enum(FormFactor),
+  propulsionType: z.enum(PropulsionType),
+  maxRangeMeters: z.number().nullable().optional(),
+  riderCapacity: z.number().nullable().optional(),
+  make: z.string().nullable().optional(),
+  model: z.string().nullable().optional(),
+  vehicleImage: z.string().nullable().optional(),
+  name: LocalizedStringSchema.nullable().optional(),
+});
+
+const VehicleTypeAvailabilitySchema = z.object({
+  count: z.number(),
+  vehicleType: StationVehicleTypeSchema,
+});
+
+export type StationVehicleTypeAvailability = z.infer<
+  typeof VehicleTypeAvailabilitySchema
+>;
+
+export const StationSchema = z.object({
+  id: z.string(),
+  lat: z.number(),
+  lon: z.number(),
+  capacity: z.number(),
+  numDocksAvailable: z.number().optional(),
+  name: LocalizedStringSchema,
+  system: SystemSchema,
+  rentalUris: RentalUrisSchema.optional(),
+  vehicleTypesAvailable: z.array(VehicleTypeAvailabilitySchema).optional(),
+  pricingPlans: z.array(ShmoPricingPlanSchema).optional(),
+});
+
+export type Station = z.infer<typeof StationSchema>;
+
 export const AssetSchema = z.object({
   id: z.string().nullish(),
   operator: ShmoOperatorSchema,
@@ -383,8 +419,8 @@ export const AssetFromQrCodeQuerySchema = z.object({
   qrCodeUrl: z
     .string()
     .min(1, {message: 'qrCodeUrl must be at least 1 character long'}),
-  longitude,
-  latitude,
+  longitude: longitude.optional(),
+  latitude: latitude.optional(),
 });
 
 export type AssetFromQrCodeQuery = z.infer<typeof AssetFromQrCodeQuerySchema>;

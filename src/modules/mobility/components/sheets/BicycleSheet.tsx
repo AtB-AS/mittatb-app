@@ -26,10 +26,10 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {
   findRelevantBonusProduct,
   PayWithBonusPointsCheckbox,
+  useIsBonusActiveForUser,
 } from '@atb/modules/bonus';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {Vehicle} from '@atb/api/types/mobility';
-import {KnownProgramId, useIsEnrolled} from '@atb/modules/enrollment';
 import {VehicleCard} from '../VehicleCard';
 import {PriceDetailsCard} from '../PriceDetailsCard';
 import {useOperators} from '../../use-operators';
@@ -88,7 +88,6 @@ export const BicycleSheet = ({
   const {operatorBenefit} = useOperatorBenefit(operatorId);
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
   const {logEvent} = useAnalyticsContext();
-  const isBonusEnabled = useIsEnrolled(KnownProgramId.BONUS);
   const {bonusProducts} = useFirestoreConfigurationContext();
   const bonusProduct = findRelevantBonusProduct(
     bonusProducts,
@@ -100,6 +99,8 @@ export const BicycleSheet = ({
 
   const {isShmoDeepIntegrationEnabled, isShmoDeepIntegrationCitybikeEnabled} =
     useFeatureTogglesContext();
+
+  const isBonusActiveForUser = useIsBonusActiveForUser();
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
@@ -118,15 +119,7 @@ export const BicycleSheet = ({
       )}
       subText={operatorName}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      logoIcon={
-        <TransportationIconBox
-          mode="bicycle"
-          isFlexible={false}
-          size="normal"
-          type="compact"
-          overrideBorderRadius="50%"
-        />
-      }
+      logoIcon={<TransportationIconBox mode="bicycle" rounded={true} />}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >
@@ -222,7 +215,7 @@ export const BicycleSheet = ({
                   />
                 </View>
               )}
-              {isBonusEnabled && bonusProduct && (
+              {isBonusActiveForUser && bonusProduct && (
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
                   operatorName={operatorName}

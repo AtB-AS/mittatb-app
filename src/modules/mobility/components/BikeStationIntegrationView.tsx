@@ -2,7 +2,7 @@ import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
-import {BikeStationFragment} from '@atb/api/types/generated/fragments/stations';
+import {Station} from '@atb/api/types/mobility';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -23,7 +23,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Loading} from '@atb/components/loading';
 
 type Props = {
-  station: BikeStationFragment;
+  station: Station;
   navigateSupportCallback: (params: ShmoHelpParams) => void;
   onPressVehicleType: (vehicleId: string) => void;
 };
@@ -104,10 +104,7 @@ export const BikeStationIntegrationView = ({
                         ? 'ebicycle'
                         : undefined
                     }
-                    isFlexible={false}
-                    size="normal"
-                    type="compact"
-                    overrideBorderRadius="50%"
+                    rounded={true}
                   />
                 }
                 onPress={() => {

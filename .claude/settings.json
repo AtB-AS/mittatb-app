@@ -1,15 +1,85 @@
 {
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Edit|Write|MultiEdit|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protect-files.sh"
+          }
+        ]
+      }
+    ]
+  },
   "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(tree:*)",
+      "Bash(sed:*)",
+      "Bash(awk:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(stat:*)",
+      "Bash(file:*)",
+      "Bash(pwd:*)",
+      "Bash(realpath:*)",
+
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git diff:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh search prs:*)",
+
+      "Bash(yarn lint:*)",
+      "Bash(yarn tsc:*)",
+      "Bash(yarn prettier:*)"
+    ],
     "deny": [
       "Read(**/.env)",
       "Read(**/.env.*)",
       "Read(**/secrets/**)",
-      "Read(**/env/**)",
+      "Read(**/credentials/**)",
+      "Read(**/.ssh/**)",
+      "Read(**/.aws/credentials)",
+      "Read(**/.aws/config)",
+      "Read(**/.kube/config)",
+      "Read(**/.docker/config.json)",
+      "Read(**/.npmrc)",
+      "Read(**/.pypirc)",
       "Read(**/.netrc)",
+      "Read(**/.pgpass)",
+      "Read(**/*.pem)",
       "Read(**/*.key)",
-      "Read(**/*.plist)",
+      "Read(**/*.p12)",
+      "Read(**/*.pfx)",
+      "Read(**/*.jks)",
       "Read(**/google-services.json)",
-      "Read(**/*.xcconfig)"
+      "Read(**/GoogleService-Info.plist)",
+      "Read(**/*.xcconfig)",
+      "Read(**/*.tfstate)",
+      "Read(**/*.tfstate.backup)",
+      "Read(**/terraform.tfvars)",
+      "Edit(**/.env)",
+      "Edit(**/.env.*)",
+      "Edit(**/secrets/**)",
+      "Edit(**/credentials/**)",
+      "Edit(**/.ssh/**)",
+      "Write(**/.env)",
+      "Write(**/.env.*)",
+      "Write(**/secrets/**)",
+      "Write(**/credentials/**)",
+      "Write(**/.ssh/**)"
     ]
-  }
+  },
+  "enabledPlugins": {
+    "typescript-lsp@claude-plugins-official": true
+  },
+  "env": {"ENABLE_LSP_TOOL": "1"}
 }
