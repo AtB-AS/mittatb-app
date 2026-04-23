@@ -3,19 +3,12 @@ import {stringifyUrl} from '@atb/api/utils';
 import qs from 'query-string';
 import {AxiosRequestConfig} from 'axios';
 import {
-  GetBikeStationQuery,
-  GetCarStationQuery,
   GetStationsQuery,
   GetStationsQueryVariables,
 } from '@atb/api/types/generated/StationsQuery';
 
 import {GeofencingZones} from '@atb/api/types/generated/mobility-types_v2';
 import {GetGeofencingZonesQuery} from '@atb/api/types/generated/GeofencingZonesQuery';
-
-import {
-  BikeStationFragment,
-  CarStationFragment,
-} from '@atb/api/types/generated/fragments/stations';
 import {
   ViolationsReportQuery,
   ViolationsReportQueryResult,
@@ -51,28 +44,6 @@ export const getStations = (
   return client
     .get<GetStationsQuery>(stringifyUrl(url, query), opts)
     .then((res) => res.data ?? []);
-};
-
-export const getBikeStation = (
-  id: string,
-  opts?: AxiosRequestConfig,
-): Promise<BikeStationFragment | null> => {
-  const url = '/bff/v2/mobility/station/bike';
-  const query = qs.stringify({ids: id});
-  return client
-    .get<GetBikeStationQuery>(stringifyUrl(url, query), opts)
-    .then((res) => res.data.stations?.[0] ?? null);
-};
-
-export const getCarStation = (
-  id: string,
-  opts?: AxiosRequestConfig,
-): Promise<CarStationFragment | null> => {
-  const url = '/bff/v2/mobility/station/car';
-  const query = qs.stringify({ids: id});
-  return client
-    .get<GetCarStationQuery>(stringifyUrl(url, query), opts)
-    .then((res) => res.data.stations?.[0] ?? null);
 };
 
 export const getGeofencingZones = (

@@ -46,11 +46,8 @@ import {
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {
-  KnownProgramId,
-  useIsEnrolled,
-  useProgram,
-} from '@atb/modules/enrollment';
+import {KnownProgramId, useProgramQuery} from '@atb/modules/enrollment';
+import {useIsBonusActiveForUser} from '@atb/modules/bonus';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -75,12 +72,16 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     isEventStreamEnabled,
     isEventStreamFareContractsEnabled,
   } = useFeatureTogglesContext();
-  const isUserEnrolledToBonus = useIsEnrolled(KnownProgramId.BONUS);
-  const bonusProgram = useProgram(KnownProgramId.BONUS);
   const unreadCount = useChatUnreadCount();
   const {theme} = useThemeContext();
   const {enable_intercom} = useRemoteConfigContext();
   const neutralContrastColor = theme.color.background.neutral[1];
+
+  const {isBonusEnabled} = useFeatureTogglesContext();
+  const isBonusActiveForUser = useIsBonusActiveForUser();
+  const bonusProgram = useProgramQuery(KnownProgramId.BONUS, !isBonusEnabled);
+  const showBonusSection =
+    isBonusActiveForUser || (bonusProgram?.isOpen && isBonusEnabled);
 
   const focusRef = useFocusOnLoad(navigation);
 
@@ -216,7 +217,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 testID="smartParkAndRideButton"
               />
             )}
-            {(isUserEnrolledToBonus || bonusProgram?.isOpen) && (
+            {showBonusSection && (
               <LinkSectionItem
                 text={t(
                   ProfileTexts.sections.account.linkSectionItems.bonus.label,

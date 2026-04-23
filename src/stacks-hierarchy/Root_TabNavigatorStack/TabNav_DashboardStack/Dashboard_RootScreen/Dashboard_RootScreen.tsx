@@ -45,7 +45,6 @@ import {TripPattern} from '@atb/api/types/trips';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {WithOverlayButton} from '@atb/components/overlay-button';
-import {KnownProgramId, useIsEnrolled} from '@atb/modules/enrollment';
 
 const RESULT_KEY_FROM = 'Dashboard_RootScreen--fromLocation';
 const RESULT_KEY_TO = 'Dashboard_RootScreen--toLocation';
@@ -60,7 +59,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
   const analytics = useAnalyticsContext();
 
-  const isBonusEnabled = useIsEnrolled(KnownProgramId.BONUS);
   const {locationIsAvailable, location} = useGeolocationContext();
 
   const {pendingResult, clearPendingResult} = usePendingLocationSearchStore();
@@ -320,7 +318,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
             }}
           />
         )}
-        {isBonusEnabled && <BonusDashboard onPress={navigateToBonusScreen} />}
+        <BonusDashboard onPress={navigateToBonusScreen} />
         <DeparturesWidget
           style={style.contentSection}
           onEditFavouriteDeparture={navigateToFavoriteDeparturesScreen}

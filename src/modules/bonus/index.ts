@@ -1,5 +1,6 @@
 export {
   BonusPriceTag,
+  BonusProductList,
   EarnedBonusPointsSectionItem,
   PayWithBonusPointsCheckbox,
   UserBonusBalance,
@@ -18,3 +19,4 @@ export {
   bonusOnboardingCarouselConfig,
   type BonusOnboardingScreenName,
 } from './onboarding';
+export {useIsBonusActiveForUser} from './use-is-bonus-active-for-user';

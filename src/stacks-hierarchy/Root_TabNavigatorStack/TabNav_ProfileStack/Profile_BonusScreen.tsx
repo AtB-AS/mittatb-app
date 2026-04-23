@@ -7,16 +7,15 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   BonusProgramTexts,
   dictionary,
-  getTextForLanguage,
-  Language,
   ProfileTexts,
   useTranslation,
 } from '@atb/translations';
+import type {Language, TranslateFunction} from '@atb/translations';
 import React, {useEffect, useRef, useState} from 'react';
 import {Platform, View} from 'react-native';
 import {openUrl} from '@atb/utils/open-url';
 import {FullScreenView} from '@atb/components/screen-view';
-import {screenReaderPause, ThemeText} from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {
   ThemedBonusBag,
   ThemedBonusTransaction,
@@ -24,23 +23,24 @@ import {
 } from '@atb/theme/ThemedAssets';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {
-  BonusPriceTag,
   UserBonusBalanceContent,
   isActive,
   useBonusBalanceQuery,
+  useProductPointsQuery,
+  BonusProductList,
 } from '@atb/modules/bonus';
+import type {ProductPointsItem} from '@atb/modules/bonus';
 import {
   useIsEnrolled,
-  useProgram,
+  useProgramQuery,
   KnownProgramId,
 } from '@atb/modules/enrollment';
 import {useAuthContext} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {
-  BonusProductType,
   useFirestoreConfigurationContext,
+  getReferenceDataName,
 } from '@atb/modules/configuration';
-import {BrandingImage, findOperatorBrandImageUrl} from '@atb/modules/mobility';
 import {isDefined} from '@atb/utils/presence';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {LogIn} from '@atb/assets/svg/mono-icons/profile';
@@ -51,8 +51,8 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
-import {useFontScale} from '@atb/utils/use-font-scale';
-import {TFunc} from '@leile/lobo-t';
+import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {formatToDate} from '@atb/utils/date';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {
@@ -73,8 +73,7 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
   const {authenticationType} = useAuthContext();
   const {enable_vipps_login} = useRemoteConfigContext();
   const isLoggedIn = authenticationType === 'phone';
-  const {bonusProducts, mobilityOperators} = useFirestoreConfigurationContext();
-  const fontScale = useFontScale();
+  const {bonusProducts} = useFirestoreConfigurationContext();
 
   const isEnrolled = useIsEnrolled(KnownProgramId.BONUS);
   const wasEnrolledRef = useRef(isEnrolled);
@@ -87,7 +86,7 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
     wasEnrolledRef.current = isEnrolled;
   }, [isEnrolled]);
 
-  const bonusProgram = useProgram(KnownProgramId.BONUS);
+  const bonusProgram = useProgramQuery(KnownProgramId.BONUS);
   const endDateString = bonusProgram?.endAt
     ? formatToDate(bonusProgram.endAt, language)
     : '';
@@ -227,55 +226,24 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
             />
           </View>
         ) : (
-          <View style={styles.bonusProductsContainer}>
-            <Section>
-              {activeBonusProducts?.map((bonusProduct) => (
-                <GenericSectionItem
-                  key={bonusProduct.id}
-                  style={{gap: theme.spacing.medium}}
-                  accessibility={{
-                    accessible: true,
-                    accessibilityLabel: bonusProductA11yLabel(
-                      bonusProduct,
-                      language,
-                      t,
-                    ),
-                  }}
-                >
-                  <View style={styles.horizontalContainer}>
-                    <BrandingImage
-                      logoUrl={findOperatorBrandImageUrl(
-                        bonusProduct.operatorId,
-                        mobilityOperators,
-                      )}
-                      logoSize={
-                        theme.typography['heading__xl'].fontSize * fontScale
-                      }
-                      style={styles.logo}
-                    />
-                    <ThemeText style={{flex: 1}}>
-                      {getTextForLanguage(
-                        bonusProduct.productDescription.title,
-                        language,
-                      ) ?? ''}
-                    </ThemeText>
-                    <BonusPriceTag amount={bonusProduct.price.amount} />
-                  </View>
-                  <ThemeText
-                    isMarkdown={true}
-                    typography="body__s"
-                    color="secondary"
-                  >
-                    {getTextForLanguage(
-                      bonusProduct.productDescription.description,
-                      language,
-                    ) ?? ''}
-                  </ThemeText>
-                </GenericSectionItem>
-              ))}
-            </Section>
-          </View>
+          activeBonusProducts && (
+            <BonusProductList
+              bonusProducts={activeBonusProducts}
+              onNavigateToMap={(initialFilters) =>
+                navigation.navigate('Root_TabNavigatorStack', {
+                  screen: 'TabNav_MapStack',
+                  params: {
+                    screen: 'Map_RootScreen',
+                    params: {initialFilters},
+                  },
+                })
+              }
+            />
+          )
         )}
+        <ContentHeading text={t(BonusProgramTexts.bonusProfile.faq.heading)} />
+        <BonusFaqSection />
+
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.feedback.heading)}
         />
@@ -289,8 +257,6 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
             }}
           />
         </Section>
-        <ContentHeading text={t(BonusProgramTexts.bonusProfile.faq.heading)} />
-        <BonusFaqSection />
       </View>
     </FullScreenView>
   );
@@ -306,7 +272,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: theme.spacing.medium,
+    gap: theme.spacing.large,
   },
   currentBalanceDisplay: {
     flexDirection: 'row',
@@ -337,27 +303,18 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-const bonusProductA11yLabel = (
-  bonusProduct: BonusProductType,
-  language: Language,
-  t: TFunc<typeof Language>,
-) => {
-  return (
-    (getTextForLanguage(bonusProduct.productDescription.title, language) ??
-      '') +
-    screenReaderPause +
-    t(BonusProgramTexts.costA11yLabel(bonusProduct.price.amount)) +
-    screenReaderPause +
-    (getTextForLanguage(
-      bonusProduct.productDescription.description,
-      language,
-    ) ?? '')
-  );
-};
-
 const HowPointsWork = () => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {bonusProducts, mobilityOperators} = useFirestoreConfigurationContext();
+  const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const {data: productPoints} = useProductPointsQuery();
+
+  const pointsPerProduct = buildPointsPerProductString(
+    productPoints ?? [],
+    preassignedFareProducts ?? [],
+    language,
+    t,
+  );
 
   const getOperatorName = (operatorId: string) => {
     return (
@@ -381,7 +338,9 @@ const HowPointsWork = () => {
         <BonusInfoSectionItem
           title={t(BonusProgramTexts.bonusProfile.readMore.earnPoints.title)}
           description={t(
-            BonusProgramTexts.bonusProfile.readMore.earnPoints.description,
+            BonusProgramTexts.bonusProfile.readMore.earnPoints.description(
+              pointsPerProduct,
+            ),
           )}
           SymbolComponent={
             <ThemedBonusTransaction height={iconSize} width={iconSize} />
@@ -459,5 +418,37 @@ const BonusInfoSectionItem = ({
         {SymbolComponent}
       </View>
     </GenericSectionItem>
+  );
+};
+
+const buildPointsPerProductString = (
+  productPoints: ProductPointsItem[],
+  fareProducts: PreassignedFareProduct[],
+  language: Language,
+  t: TranslateFunction,
+): string => {
+  const parts = productPoints
+    .map((productPoint) => {
+      const fareProduct = fareProducts.find(
+        (fareProduct) => fareProduct.id === productPoint.fareProduct,
+      );
+      if (!fareProduct) return null;
+      const name = getReferenceDataName(fareProduct, language);
+      return t(
+        BonusProgramTexts.bonusProfile.faq.pointsPerProductLabel(
+          productPoint.value,
+          name.toLowerCase(),
+        ),
+      );
+    })
+    .filter(Boolean);
+
+  if (parts.length <= 1) return parts.join('');
+  return (
+    parts.slice(0, -1).join(', ') +
+    ' ' +
+    t(dictionary.listConcatWord) +
+    ' ' +
+    parts[parts.length - 1]
   );
 };

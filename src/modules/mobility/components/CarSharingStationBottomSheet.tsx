@@ -11,10 +11,7 @@ import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useCarSharingStation} from '../use-car-sharing-station';
 import {ThemeText} from '@atb/components/text';
-import {
-  CarAvailabilityFragment,
-  CarStationFragment,
-} from '@atb/api/types/generated/fragments/stations';
+import {Station, StationVehicleTypeAvailability} from '@atb/api/types/mobility';
 import {useOperatorBenefit} from '../use-operator-benefit';
 import {OperatorActionButton} from './OperatorActionButton';
 import {OperatorBenefit} from './OperatorBenefit';
@@ -28,20 +25,20 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {
   findRelevantBonusProduct,
   PayWithBonusPointsCheckbox,
+  useIsBonusActiveForUser,
 } from '@atb/modules/bonus';
 import {
   BottomSheetHeaderType,
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {KnownProgramId, useIsEnrolled} from '@atb/modules/enrollment';
 import {Loading} from '@atb/components/loading';
 
 type Props = {
   stationId: string;
   distance: number | undefined;
   onClose: () => void;
-  onStationReceived?: (station: CarStationFragment) => void;
+  onStationReceived?: (station: Station) => void;
   locationArrowOnPress: () => void;
   navigateToScanQrCode: () => void;
 };
@@ -70,7 +67,7 @@ export const CarSharingStationBottomSheet = ({
   } = useCarSharingStation(stationId);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
-  const isBonusEnabled = useIsEnrolled(KnownProgramId.BONUS);
+  const isBonusActiveForUser = useIsBonusActiveForUser();
   const {bonusProducts} = useFirestoreConfigurationContext();
   const bonusProduct = findRelevantBonusProduct(
     bonusProducts,
@@ -148,7 +145,7 @@ export const CarSharingStationBottomSheet = ({
                   </View>
                 </GenericSectionItem>
               </Section>
-              {isBonusEnabled && bonusProduct && (
+              {isBonusActiveForUser && bonusProduct && (
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
                   operatorName={operatorName}
@@ -236,7 +233,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
 });
 
 const totalAvailableCars = (
-  vehicleTypesAvailable: CarAvailabilityFragment[] | undefined,
+  vehicleTypesAvailable: StationVehicleTypeAvailability[] | undefined,
 ) =>
   vehicleTypesAvailable
     ?.map((v) => v.count)

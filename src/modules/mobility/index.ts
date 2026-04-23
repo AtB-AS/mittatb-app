@@ -40,6 +40,7 @@ export {useDeleteAgeVerificationMutation} from './queries/use-remove-age-verific
 export {
   findOperatorBrandImageUrl,
   getAvailableVehicles,
+  getModeAndSubModeFromFormFactor,
   isBicycle,
   isBikeStation,
   isCarStation,

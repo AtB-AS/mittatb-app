@@ -53,7 +53,7 @@ export const Root_PurchaseFareZonesSearchByMapScreen = ({
             ? t(FareZonesTexts.header.title.singleZone)
             : t(FareZonesTexts.header.title.multipleZone)
         }
-        leftButton={{type: 'back'}}
+        leftButton={{type: 'back', onPress: onSave}}
       />
 
       <FareZonesSelectorButtons

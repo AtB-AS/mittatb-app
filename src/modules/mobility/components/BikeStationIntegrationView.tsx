@@ -2,7 +2,7 @@ import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
-import {BikeStationFragment} from '@atb/api/types/generated/fragments/stations';
+import {Station} from '@atb/api/types/mobility';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -30,7 +30,7 @@ import {MOCK_VEHICLE_ID} from '../queries/use-vehicle-query';
 import {SupportButton} from './SupportButton';
 
 type Props = {
-  station: BikeStationFragment;
+  station: Station;
   navigateSupportCallback: (params: ShmoHelpParams) => void;
   onPressVehicleType: (vehicleId: string) => void;
 };

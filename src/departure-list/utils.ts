@@ -97,6 +97,7 @@ function updateDeparturesWithRealtime(
       return {
         ...departure,
         time: departureRealtime.timeData.expectedDepartureTime,
+        actualTime: departureRealtime.timeData.actualDepartureTime,
         realtime: departureRealtime.timeData.realtime,
       };
     });

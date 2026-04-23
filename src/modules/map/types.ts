@@ -9,10 +9,6 @@ import {
 } from 'geojson';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {AnyMode} from '@atb/components/icon-box';
-import {
-  BikeStationFragment,
-  CarStationFragment,
-} from '@atb/api/types/generated/fragments/stations';
 import {z} from 'zod';
 
 // prefixes added to distinguish between geojson types and generated mobility api types, as they are not exact matches
@@ -28,7 +24,7 @@ import {TranslatedString} from '@atb/translations';
 import {GeofencingZoneCode, GeofencingZoneStyle} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
-import {Vehicle} from '@atb/api/types/mobility';
+import {Station, Vehicle} from '@atb/api/types/mobility';
 
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
@@ -169,10 +165,7 @@ export type SelectedFeatureIdProp = {
   selectedFeatureId: SelectedMapItemProperties['id'];
 };
 
-export type AutoSelectableMapItem =
-  | Vehicle
-  | BikeStationFragment
-  | CarStationFragment;
+export type AutoSelectableMapItem = Vehicle | Station;
 
 export type MapPropertiesType = {
   center: GeoJSON.Position;

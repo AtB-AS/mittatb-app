@@ -148,7 +148,7 @@ class ElementHelper {
    * @param text String to check
    */
   async expectText(text: string) {
-    await expect(this.getElementText(text)).toHaveText(
+    await expect(await this.getElementText(text)).toHaveText(
       expect.stringContaining(text),
     );
   }
@@ -157,9 +157,7 @@ class ElementHelper {
    * Returns element that contains one of the texts in the array
    * @param texts Array of text strings
    */
-  async getElementFromTextArray(
-    texts: string[],
-  ): Promise<WebdriverIO.Element | undefined> {
+  async getElementFromTextArray(texts: string[]) {
     for (let i = 0; i < texts.length; i++) {
       const textEl = await this.getElementText(texts[i]);
       const exists = await textEl.isExisting();
