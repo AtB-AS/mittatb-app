@@ -18,7 +18,7 @@ export const Root_PurchaseFareZonesSearchByMapScreen = ({
   route: {params},
 }: Props) => {
   const [selection, setSelection] = useParamAsState(params.selection);
-  const {setPreviousZoneIds: setPreviousZones} = usePreviousZonesStore();
+  const setPreviousZoneIds = usePreviousZonesStore((s) => s.setPreviousZoneIds);
 
   const selectionMode =
     selection.fareProductTypeConfig.configuration.zoneSelectionMode;
@@ -36,7 +36,7 @@ export const Root_PurchaseFareZonesSearchByMapScreen = ({
   const onSave = () => {
     if (selection.zones) {
       // Store the selected zones as the user's default for next purchase
-      setPreviousZones({
+      setPreviousZoneIds({
         from: selection.zones.from.id,
         to: selection.zones.to.id,
       });
