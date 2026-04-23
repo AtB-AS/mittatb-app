@@ -46,7 +46,7 @@ export const getDefaultZones = (
     isSelectableZone(product, zone),
   );
 
-  let zoneWithMetadata: FareZoneWithMetadata | undefined = undefined;
+  let zonesWithMetadata: PurchaseSelectionType['zones'] | undefined = undefined;
   if (input.currentCoordinates) {
     const {longitude, latitude} = input.currentCoordinates;
     const zoneFromLocation = selectableZones.find((t) =>
@@ -56,18 +56,47 @@ export const getDefaultZones = (
       ),
     );
     if (zoneFromLocation) {
-      zoneWithMetadata = {...zoneFromLocation, resultType: 'geolocation'};
+      zonesWithMetadata = {
+        from: {...zoneFromLocation, resultType: 'geolocation'},
+        to: {...zoneFromLocation, resultType: 'geolocation'},
+      };
     }
   }
 
-  if (!zoneWithMetadata) {
+  if (!zonesWithMetadata) {
+    // Fall back to the user's previously selected zones when both are still
+    // selectable for the current product.
+    const previousFrom = input.previousZoneIds
+      ? selectableZones.find((z) => z.id === input.previousZoneIds?.from)
+      : undefined;
+    const previousTo = input.previousZoneIds
+      ? selectableZones.find((z) => z.id === input.previousZoneIds?.to)
+      : undefined;
+    if (previousFrom && previousTo) {
+      if (typeConfig.configuration.zoneSelectionMode === 'single') {
+        // If only one zone is allowed, use stored from zone as both from and to
+        zonesWithMetadata = {
+          from: {...previousFrom, resultType: 'zone'},
+          to: {...previousFrom, resultType: 'zone'},
+        };
+      } else {
+        zonesWithMetadata = {
+          from: {...previousFrom, resultType: 'zone'},
+          to: {...previousTo, resultType: 'zone'},
+        };
+      }
+    }
+  }
+
+  if (!zonesWithMetadata) {
     const zone = selectableZones.reduce((selected, current) =>
       current.isDefault ? current : selected,
     );
-    zoneWithMetadata = {...zone, resultType: 'zone'};
+    const defaultZone: FareZoneWithMetadata = {...zone, resultType: 'zone'};
+    zonesWithMetadata = {from: defaultZone, to: defaultZone};
   }
 
-  return {from: zoneWithMetadata, to: zoneWithMetadata};
+  return zonesWithMetadata;
 };
 
 export const getDefaultStopPlaces = (

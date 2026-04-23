@@ -6,6 +6,7 @@ import {usePreferencesContext} from '@atb/modules/preferences';
 import {useTicketingContext} from '@atb/modules/ticketing';
 import {APP_VERSION} from '@env';
 import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import {usePreviousZonesStore} from './use-previous-zones-store';
 
 /**
  * Returns a purchase selection builder for creating or modifying a
@@ -27,6 +28,7 @@ export const usePurchaseSelectionBuilder = () => {
   } = usePreferencesContext();
   const {customerProfile} = useTicketingContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
+  const previousZoneIds = usePreviousZonesStore((s) => s.previousZoneIds);
 
   const builderInput: PurchaseSelectionBuilderInput = {
     fareProductTypeConfigs,
@@ -37,6 +39,7 @@ export const usePurchaseSelectionBuilder = () => {
     defaultUserTypeString,
     customerProfile,
     appVersion: APP_VERSION,
+    previousZoneIds,
   };
   return createEmptyBuilder(builderInput);
 };

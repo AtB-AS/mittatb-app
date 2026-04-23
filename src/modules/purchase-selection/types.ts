@@ -11,6 +11,7 @@ import {CustomerProfile} from '@atb/modules/ticketing';
 import {Coordinates} from '@atb/utils/coordinates';
 import type {Leg} from '@atb/api/types/trips';
 import type {SupplementProductWithCount} from '@atb/modules/fare-contracts';
+import {PreviousZoneIds} from './use-previous-zones-store';
 
 export type FareContractStub = {
   id: string;
@@ -55,6 +56,7 @@ export type PurchaseSelectionBuilderInput = {
   appVersion: string;
   defaultUserTypeString: string | undefined;
   currentCoordinates: Coordinates | undefined;
+  previousZoneIds: PreviousZoneIds | undefined;
 };
 
 export type PurchaseSelectionEmptyBuilder = {

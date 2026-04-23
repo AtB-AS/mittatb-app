@@ -9,6 +9,7 @@ import {
   FareZonesSelectorMap,
 } from '@atb/fare-zones-selector';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
+import {usePreviousZonesStore} from '@atb/modules/purchase-selection';
 
 type Props = RootStackScreenProps<'Root_PurchaseFareZonesSearchByMapScreen'>;
 
@@ -17,6 +18,7 @@ export const Root_PurchaseFareZonesSearchByMapScreen = ({
   route: {params},
 }: Props) => {
   const [selection, setSelection] = useParamAsState(params.selection);
+  const setPreviousZoneIds = usePreviousZonesStore((s) => s.setPreviousZoneIds);
 
   const selectionMode =
     selection.fareProductTypeConfig.configuration.zoneSelectionMode;
@@ -31,12 +33,20 @@ export const Root_PurchaseFareZonesSearchByMapScreen = ({
     isApplicableOnSingleZoneOnly ? 'from' : 'to',
   );
 
-  const onSave = () =>
+  const onSave = () => {
+    if (selection.zones) {
+      // Store the selected zones as the user's default for next purchase
+      setPreviousZoneIds({
+        from: selection.zones.from.id,
+        to: selection.zones.to.id,
+      });
+    }
     navigation.popTo('Root_PurchaseOverviewScreen', {
       mode: 'Ticket',
       selection,
       onFocusElement: 'zones',
     });
+  };
 
   const onVenueSearchClick = (fromOrTo: 'from' | 'to') =>
     navigation.navigate('Root_PurchaseFareZonesSearchByTextScreen', {

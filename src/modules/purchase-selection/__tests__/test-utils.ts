@@ -20,7 +20,7 @@ export const TEST_TYPE_CONFIG: FareProductTypeConfig = {
   configuration: {
     travellerSelectionMode: 'multiple',
     productSelectionMode: 'productAlias',
-    zoneSelectionMode: 'single',
+    zoneSelectionMode: 'multiple',
     timeSelectionMode: 'datetime',
     requiresLogin: false,
     onBehalfOfEnabled: false,
@@ -86,6 +86,7 @@ export const TEST_INPUT: PurchaseSelectionBuilderInput = {
   currentCoordinates: undefined,
   appVersion: '1.0',
   defaultUserTypeString: undefined,
+  previousZoneIds: undefined,
 };
 
 export const TEST_SELECTION: PurchaseSelectionType = {

@@ -172,6 +172,108 @@ describe('purchaseSelectionBuilder - forType', () => {
     expect(selection.zones?.to.id).toBe('T3');
   });
 
+  it('Falls back to previous zones when geolocation is not available', () => {
+    const input: PurchaseSelectionBuilderInput = {
+      ...TEST_INPUT,
+      fareZones: [
+        {...TEST_ZONE, id: 'T1', isDefault: true},
+        {...TEST_ZONE, id: 'T2'},
+        {...TEST_ZONE, id: 'T3'},
+      ],
+      currentCoordinates: undefined,
+      previousZoneIds: {from: 'T2', to: 'T3'},
+    };
+
+    const selection = createEmptyBuilder(input).forType('single').build();
+
+    expect(selection.zones?.from.id).toBe('T2');
+    expect(selection.zones?.to.id).toBe('T3');
+    expect(selection.zones?.from.resultType).toBe('zone');
+    expect(selection.zones?.to.resultType).toBe('zone');
+  });
+
+  it('Prefers geolocation over previous zones when both are available', () => {
+    const input: PurchaseSelectionBuilderInput = {
+      ...TEST_INPUT,
+      fareZones: [
+        {...TEST_ZONE, id: 'T1'},
+        {...TEST_ZONE, id: 'T2', isDefault: true},
+        {
+          ...TEST_ZONE,
+          id: 'T3',
+          geometry: {
+            type: 'Polygon',
+            polylineEncodedCoordinates: ['_ocsF_ocsF?_gayB_gayB??~fayB~fayB?'],
+          },
+        },
+      ],
+      currentCoordinates: {latitude: 50, longitude: 50},
+      previousZoneIds: {from: 'T1', to: 'T1'},
+    };
+
+    const selection = createEmptyBuilder(input).forType('single').build();
+
+    expect(selection.zones?.from.id).toBe('T3');
+    expect(selection.zones?.to.id).toBe('T3');
+    expect(selection.zones?.from.resultType).toBe('geolocation');
+  });
+
+  it('Falls back to default zone when previous zones are not selectable for the product', () => {
+    const input: PurchaseSelectionBuilderInput = {
+      ...TEST_INPUT,
+      preassignedFareProducts: [
+        {
+          ...TEST_PRODUCT,
+          limitations: {
+            ...TEST_PRODUCT.limitations,
+            fareZoneRefs: ['T1', 'T2'],
+          },
+        },
+      ],
+      fareZones: [
+        {...TEST_ZONE, id: 'T1'},
+        {...TEST_ZONE, id: 'T2', isDefault: true},
+        {...TEST_ZONE, id: 'T3'},
+      ],
+      currentCoordinates: undefined,
+      previousZoneIds: {from: 'T3', to: 'T3'},
+    };
+
+    const selection = createEmptyBuilder(input).forType('single').build();
+
+    expect(selection.zones?.from.id).toBe('T2');
+    expect(selection.zones?.to.id).toBe('T2');
+  });
+
+  it('Picks previous from zone when in single zone mode', () => {
+    const input: PurchaseSelectionBuilderInput = {
+      ...TEST_INPUT,
+      fareZones: [
+        {...TEST_ZONE, id: 'T1', isDefault: true},
+        {...TEST_ZONE, id: 'T2'},
+        {...TEST_ZONE, id: 'T3'},
+      ],
+      currentCoordinates: undefined,
+      previousZoneIds: {from: 'T2', to: 'T3'},
+      fareProductTypeConfigs: [
+        {
+          ...TEST_TYPE_CONFIG,
+          configuration: {
+            ...TEST_TYPE_CONFIG.configuration,
+            zoneSelectionMode: 'single',
+          },
+        },
+      ],
+    };
+
+    const selection = createEmptyBuilder(input).forType('single').build();
+
+    expect(selection.zones?.from.id).toBe('T2');
+    expect(selection.zones?.to.id).toBe('T2');
+    expect(selection.zones?.from.resultType).toBe('zone');
+    expect(selection.zones?.to.resultType).toBe('zone');
+  });
+
   it('Stop places are undefined for all zoneSelectionModes which signals that zones should be selected', () => {
     const input = (mode: ZoneSelectionMode): PurchaseSelectionBuilderInput => ({
       ...TEST_INPUT,
