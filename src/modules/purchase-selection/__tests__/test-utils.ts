@@ -20,7 +20,7 @@ export const TEST_TYPE_CONFIG: FareProductTypeConfig = {
   configuration: {
     travellerSelectionMode: 'multiple',
     productSelectionMode: 'productAlias',
-    zoneSelectionMode: 'single',
+    zoneSelectionMode: 'multiple',
     timeSelectionMode: 'datetime',
     requiresLogin: false,
     onBehalfOfEnabled: false,
