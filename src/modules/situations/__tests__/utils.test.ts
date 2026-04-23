@@ -24,10 +24,7 @@ import {Language} from '@atb/translations';
 
 // --- Helpers to build test fixtures ---
 
-const makeNotice = (
-  id: string,
-  text?: string,
-): NoticeFragment => ({id, text});
+const makeNotice = (id: string, text?: string): NoticeFragment => ({id, text});
 
 const makeSituation = (
   overrides: Partial<SituationFragment> = {},
@@ -79,9 +76,7 @@ describe('findAllNoticesFromLeg', () => {
         notices: [makeNotice('n1', 'Notice 1')],
       },
     } as Partial<Leg>);
-    expect(findAllNoticesFromLeg(leg)).toEqual([
-      {id: 'n1', text: 'Notice 1'},
-    ]);
+    expect(findAllNoticesFromLeg(leg)).toEqual([{id: 'n1', text: 'Notice 1'}]);
   });
 
   it('should collect notices from toEstimatedCall', () => {
@@ -90,9 +85,7 @@ describe('findAllNoticesFromLeg', () => {
         notices: [makeNotice('n2', 'Notice 2')],
       },
     } as Partial<Leg>);
-    expect(findAllNoticesFromLeg(leg)).toEqual([
-      {id: 'n2', text: 'Notice 2'},
-    ]);
+    expect(findAllNoticesFromLeg(leg)).toEqual([{id: 'n2', text: 'Notice 2'}]);
   });
 
   it('should collect notices from both estimated calls', () => {
@@ -323,9 +316,7 @@ describe('getMsgTypeForMostCriticalSituationOrNotice', () => {
   });
 
   it('should return undefined for no situations and no notices', () => {
-    expect(
-      getMsgTypeForMostCriticalSituationOrNotice([], []),
-    ).toBeUndefined();
+    expect(getMsgTypeForMostCriticalSituationOrNotice([], [])).toBeUndefined();
   });
 
   it('should return info when only notices are present', () => {
