@@ -13,6 +13,7 @@ import {ThemeText} from '@atb/components/text';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {
   TicketingTexts,
+  TravelCardTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
@@ -110,11 +111,11 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
       <TravelCard
         tripPattern={tripPattern}
         cardIndex={0}
-        numberOfCards={1}
         onDetailsPressed={() => {
           if (isAvailable) onSelect(tripPattern.legs);
         }}
-        type="booking"
+        a11yPrefix={t(TravelCardTexts.card.a11yPrefix.bookingOption(0, 1))}
+        includeSituationNotices
         isDisabled={!isAvailable}
         extraA11yLabels={{tag: tagLabel}}
         extraA11yOrder={{after: ['tag']}}

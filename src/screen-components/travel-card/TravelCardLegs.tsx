@@ -21,18 +21,17 @@ import {secondsToDuration} from '@atb/utils/date';
 import {useAccessibilityLabelContribution} from '@atb/modules/composite-accessibility';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {isDefined} from '@atb/utils/presence';
-import type {TravelCardType} from './TravelCard';
 
 type TravelCardContentProps = {
   tripPattern: TripPattern;
   maxWidth: number;
-  type: TravelCardType;
+  includeLegNotifications?: boolean;
 };
 
 export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
   tripPattern,
   maxWidth,
-  type,
+  includeLegNotifications = false,
 }) => {
   const {theme, themeName} = useThemeContext();
   const styles = useThemeStyles();
@@ -42,7 +41,7 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
     return previousLeg && previousLeg.interchangeTo?.staySeated === true;
   };
 
-  const a11yLabel = useA11yLabel(filteredLegs, type);
+  const a11yLabel = useA11yLabel(filteredLegs, includeLegNotifications);
   useAccessibilityLabelContribution('legs', a11yLabel);
 
   return (
@@ -93,7 +92,7 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
   );
 };
 
-const useA11yLabel = (legs: Leg[], type: TravelCardType) => {
+const useA11yLabel = (legs: Leg[], includeLegNotifications: boolean) => {
   const {t, language} = useTranslation();
 
   if (legs.length === 0) return '';
@@ -124,8 +123,9 @@ const useA11yLabel = (legs: Leg[], type: TravelCardType) => {
     );
   };
 
-  const notificationLabel =
-    type !== 'booking' ? getLegsNotificationA11yLabel(legs, t) : undefined;
+  const notificationLabel = includeLegNotifications
+    ? getLegsNotificationA11yLabel(legs, t)
+    : undefined;
   const prefix = t(TravelCardTexts.legs.prefix);
   const legsLabel = legs
     .map((leg, idx) =>

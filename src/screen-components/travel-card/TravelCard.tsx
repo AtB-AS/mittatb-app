@@ -14,15 +14,16 @@ import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibili
 import {getDetailedSituationOrNoticeA11yLabel} from '@atb/modules/situations';
 import {TravelCardNotices} from './TravelCardNotices';
 
-export type TravelCardType = 'trip-search' | 'saved-trip' | 'booking';
-
 type TravelCardProps = {
   tripPattern: TripPattern;
   onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
   cardIndex: number;
-  numberOfCards: number;
   testID?: string;
-  type: TravelCardType;
+  a11yPrefix: string;
+  includeDayInfo?: boolean;
+  includeFromToInfo?: boolean;
+  includeLegNotifications?: boolean;
+  includeSituationNotices?: boolean;
   isDisabled?: boolean;
   extraA11yLabels?: Record<string, string | undefined>;
   extraA11yOrder?: {before?: string[]; after?: string[]};
@@ -32,9 +33,12 @@ export const TravelCard: React.FC<TravelCardProps> = ({
   tripPattern,
   onDetailsPressed,
   cardIndex,
-  numberOfCards,
   testID,
-  type,
+  a11yPrefix,
+  includeDayInfo = false,
+  includeFromToInfo = false,
+  includeLegNotifications = false,
+  includeSituationNotices = false,
   isDisabled = false,
   extraA11yLabels,
   extraA11yOrder,
@@ -43,20 +47,15 @@ export const TravelCard: React.FC<TravelCardProps> = ({
   const [maxWidth, setMaxWidth] = useState(0);
   const {t, language} = useTranslation();
 
-  const includeDayInfo = type === 'saved-trip';
-  const includeFromToInfo = type === 'saved-trip';
-
   const uniqueModes = Array.from(
     new Set(tripPattern.legs.map((leg) => leg.mode)),
   );
   const modes = uniqueModes.map((mode) => t(getTranslatedModeName(mode)));
 
-  const prefixA11yLabel = `${t(
-    TravelCardTexts.card.typePrefix(type, cardIndex, numberOfCards),
-  )}. ${t(TravelCardTexts.card.modesPrefix(modes))}.`;
+  const prefixA11yLabel = `${a11yPrefix}. ${t(TravelCardTexts.card.modesPrefix(modes))}.`;
 
   const situationOrNoticeA11yLabel =
-    type === 'booking' && !isDisabled
+    includeSituationNotices && !isDisabled
       ? getDetailedSituationOrNoticeA11yLabel(tripPattern, language, t)
       : undefined;
 
@@ -103,7 +102,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
                 <TravelCardLegs
                   tripPattern={tripPattern}
                   maxWidth={maxWidth}
-                  type={type}
+                  includeLegNotifications={includeLegNotifications}
                 />
               </View>
               <View>
