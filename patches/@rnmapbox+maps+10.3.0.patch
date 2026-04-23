@@ -1,3 +1,66 @@
+diff --git a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXBackgroundLayerManager.kt b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXBackgroundLayerManager.kt
+index bfbeff4..a270d5b 100644
+--- a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXBackgroundLayerManager.kt
++++ b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXBackgroundLayerManager.kt
+@@ -66,6 +66,11 @@ class RNMBXBackgroundLayerManager : ViewGroupManager<RNMBXBackgroundLayer>(),
+         layer.setFilter(filterList.asArray())
+     }
+ 
++    @ReactProp(name = "slot")
++    override fun setSlot(layer: RNMBXBackgroundLayer, slot: Dynamic) {
++        layer.setSlot(slot.asString())
++    }
++
+     companion object {
+         const val REACT_CLASS = "RNMBXBackgroundLayer"
+     }
+diff --git a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXFillExtrusionLayerManager.kt b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXFillExtrusionLayerManager.kt
+index 8f1a3ee..8ab230a 100644
+--- a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXFillExtrusionLayerManager.kt
++++ b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXFillExtrusionLayerManager.kt
+@@ -71,6 +71,11 @@ class RNMBXFillExtrusionLayerManager : ViewGroupManager<RNMBXFillExtrusionLayer>
+         layer.setFilter(filterList.asArray())
+     }
+ 
++    @ReactProp(name = "slot")
++    override fun setSlot(layer: RNMBXFillExtrusionLayer, slot: Dynamic) {
++        layer.setSlot(slot.asString())
++    }
++
+     companion object {
+         const val REACT_CLASS = "RNMBXFillExtrusionLayer"
+     }
+diff --git a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXSkyLayerManager.kt b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXSkyLayerManager.kt
+index 838851d..af2b24c 100644
+--- a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXSkyLayerManager.kt
++++ b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXSkyLayerManager.kt
+@@ -66,6 +66,11 @@ class RNMBXSkyLayerManager : ViewGroupManager<RNMBXSkyLayer>(),
+         layer.setFilter(filterList.asArray())
+     }
+ 
++    @ReactProp(name = "slot")
++    override fun setSlot(layer: RNMBXSkyLayer, slot: Dynamic) {
++        layer.setSlot(slot.asString())
++    }
++
+     companion object {
+         const val REACT_CLASS = "RNMBXSkyLayer"
+     }
+diff --git a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXFabricHelpers.h b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXFabricHelpers.h
+index 974ee24..67bbc6a 100644
+--- a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXFabricHelpers.h
++++ b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXFabricHelpers.h
+@@ -105,6 +105,10 @@ void RNMBXSetCommonLayerPropsWithoutSourceID(const T& newProps, RNMBXLayer *_vie
+     if (minZoomLevel != nil) {
+         _view.minZoomLevel = minZoomLevel;
+     }
++    id slot = RNMBXConvertFollyDynamicToId(newProps.slot);
++    if (slot != nil) {
++        _view.slot = slot;
++    }
+ }
+ 
+ template <typename T>
 diff --git a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXMapViewComponentView.mm b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXMapViewComponentView.mm
 index 6ee6808..ca7efa2 100644
 --- a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXMapViewComponentView.mm
@@ -14,3 +77,39 @@ index 6ee6808..ca7efa2 100644
      RNMBX_REMAP_OPTIONAL_PROP_NSDictionary(gestureSettings, reactGestureSettings)
  
      id preferredFramesPerSecond = RNMBXConvertFollyDynamicToId(newViewProps.preferredFramesPerSecond);
+diff --git a/node_modules/@rnmapbox/maps/src/specs/RNMBXBackgroundLayerNativeComponent.ts b/node_modules/@rnmapbox/maps/src/specs/RNMBXBackgroundLayerNativeComponent.ts
+index fb1bcc8..59cd3ea 100644
+--- a/node_modules/@rnmapbox/maps/src/specs/RNMBXBackgroundLayerNativeComponent.ts
++++ b/node_modules/@rnmapbox/maps/src/specs/RNMBXBackgroundLayerNativeComponent.ts
+@@ -21,6 +21,7 @@ export interface NativeProps extends ViewProps {
+ 
+   maxZoomLevel?: OptionalProp<Double>;
+   minZoomLevel?: OptionalProp<Double>;
++  slot?: OptionalProp<string>;
+ }
+ 
+ // @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
+diff --git a/node_modules/@rnmapbox/maps/src/specs/RNMBXFillExtrusionLayerNativeComponent.ts b/node_modules/@rnmapbox/maps/src/specs/RNMBXFillExtrusionLayerNativeComponent.ts
+index 9cced9e..5909e2b 100644
+--- a/node_modules/@rnmapbox/maps/src/specs/RNMBXFillExtrusionLayerNativeComponent.ts
++++ b/node_modules/@rnmapbox/maps/src/specs/RNMBXFillExtrusionLayerNativeComponent.ts
+@@ -22,6 +22,7 @@ export interface NativeProps extends ViewProps {
+   maxZoomLevel?: OptionalProp<Double>;
+   minZoomLevel?: OptionalProp<Double>;
+   sourceLayerID?: OptionalProp<string>;
++  slot?: OptionalProp<string>;
+ }
+ 
+ // @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
+diff --git a/node_modules/@rnmapbox/maps/src/specs/RNMBXSkyLayerNativeComponent.ts b/node_modules/@rnmapbox/maps/src/specs/RNMBXSkyLayerNativeComponent.ts
+index 27f7e2f..6e28347 100644
+--- a/node_modules/@rnmapbox/maps/src/specs/RNMBXSkyLayerNativeComponent.ts
++++ b/node_modules/@rnmapbox/maps/src/specs/RNMBXSkyLayerNativeComponent.ts
+@@ -21,6 +21,7 @@ export interface NativeProps extends ViewProps {
+ 
+   maxZoomLevel?: OptionalProp<Double>;
+   minZoomLevel?: OptionalProp<Double>;
++  slot?: OptionalProp<string>;
+ }
+ 
+ // @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
