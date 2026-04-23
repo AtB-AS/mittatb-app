@@ -1,0 +1,16 @@
+diff --git a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXMapViewComponentView.mm b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXMapViewComponentView.mm
+index 6ee6808..ca7efa2 100644
+--- a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXMapViewComponentView.mm
++++ b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXMapViewComponentView.mm
+@@ -193,6 +193,11 @@ - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &
+ 
+     RNMBX_REMAP_OPTIONAL_PROP_BOOL(pitchEnabled, reactPitchEnabled)
+   
++    id maxPitch = RNMBXConvertFollyDynamicToId(newViewProps.maxPitch);
++    if (maxPitch != nil) {
++        _view.reactMaxPitch = maxPitch;
++    }
++
+     RNMBX_REMAP_OPTIONAL_PROP_NSDictionary(gestureSettings, reactGestureSettings)
+ 
+     id preferredFramesPerSecond = RNMBXConvertFollyDynamicToId(newViewProps.preferredFramesPerSecond);
