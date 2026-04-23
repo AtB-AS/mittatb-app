@@ -482,6 +482,7 @@ export const Map = (props: MapProps) => {
           <MapButtons
             locationArrowOnPress={locationArrowOnPress}
             navigateToScanQrCode={navigateToScanQrCode}
+            navigateToBonusScreen={props.navigateToBonusScreen}
           />
         )}
         {includeSnackbar && (

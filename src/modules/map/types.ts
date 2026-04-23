@@ -75,6 +75,7 @@ export type MapProps = {
   navigateToScanQrCode: () => void;
   navigateToLogin: () => void;
   navigateToPaymentMethods: () => void;
+  navigateToBonusScreen?: () => void;
 };
 
 export type Cluster = {

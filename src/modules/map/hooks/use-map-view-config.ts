@@ -1,16 +1,13 @@
 import {Platform} from 'react-native';
 import {useMapboxJsonStyle} from './use-mapbox-json-style';
 import {useMemo} from 'react';
+import {useFontScale} from '@atb/utils/use-font-scale';
 
-const MapViewStaticConfig = {
+const COMPASS_BASE_TOP = 50;
+
+const mapViewStaticConfig = {
   compassEnabled: true,
   scaleBarEnabled: false,
-  // `mapbox` (v10) Adds compass offset `compassViewMargins` is still supported but generates issues:
-  // Mapbox error fireEvent failed: <rnmapbox_maps.RCTMGLEvent: 0x6000028a0fe0>
-  compassPosition: {
-    top: 60,
-    right: Platform.select({default: 10, android: 6}),
-  },
   attributionPosition: Platform.select({
     default: {bottom: 8, left: 95},
     android: {bottom: 5, left: 120},
@@ -29,6 +26,7 @@ export const useMapViewConfig = (
     includeVehiclesAndStationsVectorSource = false,
     shouldShowGeofencingZonesLayers = false,
   } = mapViewConfigOptions || {};
+  const fontScale = useFontScale();
   const mapboxJsonStyle = useMapboxJsonStyle(
     includeVehiclesAndStationsVectorSource,
     shouldShowGeofencingZonesLayers,
@@ -38,11 +36,22 @@ export const useMapViewConfig = (
     [mapboxJsonStyle],
   );
 
+  // `mapbox` (v10) Adds compass offset `compassViewMargins` is still supported but generates issues:
+  // Mapbox error fireEvent failed: <rnmapbox_maps.RCTMGLEvent: 0x6000028a0fe0>
+  const compassPosition = useMemo(
+    () => ({
+      top: Math.round(COMPASS_BASE_TOP + 15 * fontScale),
+      right: Platform.select({default: 10, android: 6}),
+    }),
+    [fontScale],
+  );
+
   return useMemo(
     () => ({
-      ...MapViewStaticConfig,
+      ...mapViewStaticConfig,
+      compassPosition,
       ...configMap,
     }),
-    [configMap],
+    [compassPosition, configMap],
   );
 };
