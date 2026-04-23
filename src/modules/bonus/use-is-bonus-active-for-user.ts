@@ -3,5 +3,6 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export function useIsBonusActiveForUser(): boolean {
   const {isBonusEnabled} = useFeatureTogglesContext();
-  return useIsEnrolled(KnownProgramId.BONUS, !isBonusEnabled);
+  const isEnrolled = useIsEnrolled(KnownProgramId.BONUS, !isBonusEnabled);
+  return isBonusEnabled && isEnrolled;
 }
