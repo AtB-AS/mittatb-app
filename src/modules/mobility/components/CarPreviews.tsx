@@ -103,7 +103,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
  *  - If the station capacity is 3 or more : show 1 car image and the plus text
  *
  *  @param stationCapacity: Station capacity
- *  @param vehicleTypesAvailable: Types of available cars
+ *  @param vehicleTypesAvailable: Types of available vehicles
  *  @returns array of vehicle types to show
  */
 function createPreviewArray(
