@@ -310,7 +310,7 @@ const HowPointsWork = () => {
   const {data: productPoints} = useProductPointsQuery();
 
   const pointsPerProduct = buildPointsPerProductString(
-    productPoints,
+    productPoints ?? [],
     preassignedFareProducts ?? [],
     language,
     t,
@@ -422,19 +422,21 @@ const BonusInfoSectionItem = ({
 };
 
 const buildPointsPerProductString = (
-  productPoints: ProductPointsItem[] | undefined,
+  productPoints: ProductPointsItem[],
   fareProducts: PreassignedFareProduct[],
   language: Language,
   t: TranslateFunction,
 ): string => {
-  const parts = (productPoints ?? [])
-    .map((pp) => {
-      const fareProduct = fareProducts.find((fp) => fp.id === pp.fareProduct);
+  const parts = productPoints
+    .map((productPoint) => {
+      const fareProduct = fareProducts.find(
+        (fareProduct) => fareProduct.id === productPoint.fareProduct,
+      );
       if (!fareProduct) return null;
       const name = getReferenceDataName(fareProduct, language);
       return t(
         BonusProgramTexts.bonusProfile.faq.pointsPerProductLabel(
-          pp.value,
+          productPoint.value,
           name.toLowerCase(),
         ),
       );
