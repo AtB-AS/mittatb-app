@@ -6,9 +6,8 @@ import {
   useBookingTrips,
 } from '@atb/modules/booking';
 import type {TripPatternLegs} from '../types';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet, useThemeContext, Statuses} from '@atb/theme';
 import {TripPatternWithBooking} from '@atb/api/types/trips';
-import {Tag} from '@atb/components/tag';
 import {ThemeText} from '@atb/components/text';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {
@@ -88,12 +87,11 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
     tripPattern.booking.availability === 'available' &&
     !tripPattern.booking.disabledReason;
 
-  const rawTagLabel = getBookingTagLabel(
+  const tagInfo = getBookingTagInfo(
     t,
     tripPattern.booking,
     tripPattern.booking.disabledReason,
   );
-  const tagLabel = rawTagLabel ? `. ${rawTagLabel}` : undefined;
 
   return (
     <View
@@ -102,12 +100,6 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
         isAvailable ? styles.containerAvailable : styles.containerDisabled,
       ]}
     >
-      <View aria-hidden={true}>
-        <TripSelectionTag
-          bookingInfo={tripPattern.booking}
-          disabledReason={tripPattern.booking.disabledReason}
-        />
-      </View>
       <TravelCard
         tripPattern={tripPattern}
         cardIndex={0}
@@ -117,8 +109,8 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
         a11yPrefix={t(TravelCardTexts.card.a11yPrefix.bookingOption(0, 1))}
         includeSituationNotices
         isDisabled={!isAvailable}
-        extraA11yLabels={{tag: tagLabel}}
-        extraA11yOrder={{after: ['tag']}}
+        tagLabel={tagInfo?.label}
+        tagType={tagInfo?.type}
       />
     </View>
   );
@@ -146,83 +138,32 @@ function EmptyState() {
   );
 }
 
-function getBookingTagLabel(
+function getBookingTagInfo(
   t: TranslateFunction,
   bookingInfo: TripPatternWithBooking['booking'],
   disabledReason?: BookingDisabledReason,
-): string | undefined {
+): {label: string; type: Statuses} | undefined {
   if (disabledReason === 'expired_fare_contract') {
-    return t(TicketingTexts.booking.expiredFareContract);
+    return {label: t(TicketingTexts.booking.expiredFareContract), type: 'info'};
   } else if (disabledReason === 'inactive_fare_contract') {
-    return t(TicketingTexts.booking.beforeStartOfFareContract);
+    return {
+      label: t(TicketingTexts.booking.beforeStartOfFareContract),
+      type: 'info',
+    };
   } else if (bookingInfo.availability === 'closed') {
-    return t(TicketingTexts.booking.closed);
+    return {label: t(TicketingTexts.booking.closed), type: 'warning'};
   } else if (bookingInfo.availability === 'sold_out') {
-    return t(TicketingTexts.booking.soldOut);
+    return {label: t(TicketingTexts.booking.soldOut), type: 'warning'};
   }
   const availableSeats = bookingInfo?.offer?.available ?? 0;
   if (!!availableSeats && availableSeats <= SEAT_TAG_LIMIT) {
-    return t(TicketingTexts.booking.numAvailableTickets(availableSeats));
+    return {
+      label: t(TicketingTexts.booking.numAvailableTickets(availableSeats)),
+      type: 'info',
+    };
   }
   return undefined;
 }
-
-/**
- * We only want to show one tag at a time
- */
-function TripSelectionTag({
-  bookingInfo,
-  disabledReason,
-}: {
-  bookingInfo: TripPatternWithBooking['booking'];
-  disabledReason?: BookingDisabledReason;
-}) {
-  const {t} = useTranslation();
-  const styles = useTripSelectionTagStyles();
-  const availableSeats = bookingInfo?.offer?.available ?? 0;
-
-  let tag: React.ReactNode = null;
-
-  if (disabledReason === 'expired_fare_contract') {
-    tag = (
-      <Tag
-        labels={[t(TicketingTexts.booking.expiredFareContract)]}
-        tagType="info"
-      />
-    );
-  } else if (disabledReason === 'inactive_fare_contract') {
-    tag = (
-      <Tag
-        labels={[t(TicketingTexts.booking.beforeStartOfFareContract)]}
-        tagType="info"
-      />
-    );
-  } else if (bookingInfo.availability === 'closed') {
-    tag = <Tag labels={[t(TicketingTexts.booking.closed)]} tagType="warning" />;
-  } else if (bookingInfo.availability === 'sold_out') {
-    tag = (
-      <Tag labels={[t(TicketingTexts.booking.soldOut)]} tagType="warning" />
-    );
-  } else if (!!availableSeats && availableSeats <= SEAT_TAG_LIMIT) {
-    tag = (
-      <Tag
-        labels={[t(TicketingTexts.booking.numAvailableTickets(availableSeats))]}
-        tagType="info"
-      />
-    );
-  }
-
-  if (!tag) return null;
-
-  return <View style={styles.tagContainer}>{tag}</View>;
-}
-
-const useTripSelectionTagStyles = StyleSheet.createThemeHook((theme) => ({
-  tagContainer: {
-    padding: theme.spacing.medium,
-    paddingBottom: 0,
-  },
-}));
 
 const useBookingTripStyles = StyleSheet.createThemeHook((theme) => {
   return {

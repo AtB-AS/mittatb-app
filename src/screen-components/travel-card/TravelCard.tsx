@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, Statuses} from '@atb/theme';
 import type {TripPattern} from '@atb/api/types/trips';
 import {TravelCardLegs} from './TravelCardLegs';
 import Animated, {FadeIn} from 'react-native-reanimated';
@@ -13,6 +13,7 @@ import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
 import {getDetailedSituationOrNoticeA11yLabel} from '@atb/modules/situations';
 import {TravelCardNotices} from './TravelCardNotices';
+import {Tag} from '@atb/components/tag';
 
 type TravelCardProps = {
   tripPattern: TripPattern;
@@ -25,8 +26,8 @@ type TravelCardProps = {
   includeLegNotifications?: boolean;
   includeSituationNotices?: boolean;
   isDisabled?: boolean;
-  extraA11yLabels?: Record<string, string | undefined>;
-  extraA11yOrder?: {before?: string[]; after?: string[]};
+  tagLabel?: string;
+  tagType?: Statuses;
 };
 
 export const TravelCard: React.FC<TravelCardProps> = ({
@@ -40,8 +41,8 @@ export const TravelCard: React.FC<TravelCardProps> = ({
   includeLegNotifications = false,
   includeSituationNotices = false,
   isDisabled = false,
-  extraA11yLabels,
-  extraA11yOrder,
+  tagLabel,
+  tagType = 'info',
 }) => {
   const styles = useThemeStyles();
   const [maxWidth, setMaxWidth] = useState(0);
@@ -59,22 +60,15 @@ export const TravelCard: React.FC<TravelCardProps> = ({
       ? getDetailedSituationOrNoticeA11yLabel(tripPattern, language, t)
       : undefined;
 
-  const baseOrder = ['cardPrefix', 'header', 'legs', 'situationOrNotice'];
-  const order = [
-    ...(extraA11yOrder?.before ?? []),
-    ...baseOrder,
-    ...(extraA11yOrder?.after ?? []),
-  ];
-
   return (
     <Animated.View entering={FadeIn}>
       <CompositeAccessibilityProvider
         parentLabels={{
           cardPrefix: prefixA11yLabel,
           situationOrNotice: situationOrNoticeA11yLabel,
-          ...extraA11yLabels,
+          tag: tagLabel,
         }}
-        order={order}
+        order={['cardPrefix', 'header', 'legs', 'situationOrNotice', 'tag']}
       >
         {(accessibilityProps) => (
           <NativeBlockButton
@@ -87,6 +81,11 @@ export const TravelCard: React.FC<TravelCardProps> = ({
             }
             {...accessibilityProps}
           >
+            {tagLabel && (
+              <View aria-hidden={true}>
+                <Tag labels={[tagLabel]} tagType={tagType} />
+              </View>
+            )}
             <TravelCardHeader
               tripPattern={tripPattern}
               includeDayInfo={includeDayInfo}
