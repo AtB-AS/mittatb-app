@@ -103,7 +103,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     paddingLeft: theme.spacing.medium,
     paddingRight: theme.spacing.medium,
-    paddingBottom: theme.spacing.medium,
+    paddingBottom: theme.spacing.small,
   },
   headerLeft: {
     flex: 1,

@@ -36,10 +36,14 @@ import {ThemeText} from '@atb/components/text';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Loading} from '@atb/components/loading';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {
+  FormFactor,
+  PropulsionType,
+} from '@atb/api/types/generated/mobility-types_v2';
 import {PriceDetailsCard} from '../PriceDetailsCard';
 import {useOperators} from '../../use-operators';
 import {SupportButton} from '../SupportButton';
+import {BrandingImage} from '../BrandingImage';
 
 type Props = {
   navigateSupportCallback: () => void;
@@ -72,7 +76,9 @@ export const ActiveShmoSheet = ({
       activeBooking?.asset?.formFactor,
       activeBooking?.asset?.propulsionType,
     );
+
   const operator = useOperators().byId(activeBooking?.asset.operator.id);
+  const operatorLogo = operator?.brandAssets?.brandImageUrl;
 
   const priceAdjustments = activeBooking?.asset?.formFactor
     ? operator?.priceAdjustments?.[
@@ -150,6 +156,8 @@ export const ActiveShmoSheet = ({
     );
   };
 
+  console.log(activeBooking);
+
   return (
     <MapBottomSheet
       canMinimize={true}
@@ -159,9 +167,10 @@ export const ActiveShmoSheet = ({
       heading={
         activeBooking?.asset?.propulsionType
           ? t(
-              MobilityTexts.bikeNameByPropulsionType(
-                activeBooking?.asset?.propulsionType,
+              MobilityTexts.vehicleName(
                 activeBooking?.asset?.formFactor ?? FormFactor.Other,
+                false,
+                activeBooking?.asset?.propulsionType,
               ),
             )
           : undefined
@@ -171,13 +180,19 @@ export const ActiveShmoSheet = ({
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
       logoIcon={
-        <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
+        operatorLogo ? (
+          <BrandingImage logoUrl={operatorLogo} logoSize={28} rounded={true} />
+        ) : (
+          <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
+        )
       }
       headerNode={
         activeBooking ? (
           <ShmoTripCard
             shmoBooking={activeBooking}
             isFocused={isFocusedAndActive}
+            mode={mode}
+            subMode={subMode}
           />
         ) : null
       }
@@ -193,65 +208,75 @@ export const ActiveShmoSheet = ({
           {!isLoading && !isError && activeBooking && (
             <>
               <View style={styles.container}>
-                {!!activeBooking?.asset?.stateOfCharge && (
-                  <VehicleCard
-                    currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
-                    currentRangeMeters={
-                      activeBooking.asset?.currentRangeKm
-                        ? activeBooking.asset.currentRangeKm * 1000
-                        : 0
-                    }
-                    formFactor={activeBooking.asset.formFactor ?? undefined}
-                  />
-                )}
+                {!!activeBooking?.asset?.stateOfCharge &&
+                  (activeBooking.asset.propulsionType ===
+                    PropulsionType.ElectricAssist ||
+                    activeBooking.asset.propulsionType ===
+                      PropulsionType.Electric) && (
+                    <VehicleCard
+                      currentFuelPercent={
+                        activeBooking.asset.stateOfCharge ?? 0
+                      }
+                      currentRangeMeters={
+                        activeBooking.asset?.currentRangeKm
+                          ? activeBooking.asset.currentRangeKm * 1000
+                          : 0
+                      }
+                      formFactor={activeBooking.asset.formFactor ?? undefined}
+                    />
+                  )}
                 <PriceDetailsCard
                   pricingPlan={activeBooking.pricingPlan}
                   priceAdjustments={priceAdjustments}
                   systemId={activeBooking.asset.systemId ?? ''}
                 />
-              </View>
-              <View style={styles.footer}>
-                <View style={styles.endTripWrapper}>
-                  {geofencingZoneWarning && (
-                    <View style={styles.geofencingZoneWarning}>
-                      {geofencingZoneWarning.iconNode}
-                      <View style={styles.geofencingZoneWarningText}>
-                        <ThemeText typography="body__s">
-                          {geofencingZoneWarning.description}
-                        </ThemeText>
+
+                <View style={styles.footer}>
+                  <View style={styles.endTripWrapper}>
+                    {geofencingZoneWarning && (
+                      <View style={styles.geofencingZoneWarning}>
+                        {geofencingZoneWarning.iconNode}
+                        <View style={styles.geofencingZoneWarningText}>
+                          <ThemeText typography="body__s">
+                            {geofencingZoneWarning.description}
+                          </ThemeText>
+                        </View>
                       </View>
-                    </View>
-                  )}
-                  {warningMessage && (
-                    <MessageInfoText type="warning" message={warningMessage} />
-                  )}
-                  {sendShmoBookingEventIsError && (
-                    <MessageInfoBox
-                      type="error"
-                      message={formatFriendlyShmoErrorMessage(
-                        sendShmoBookingEventError,
-                        t,
-                      )}
+                    )}
+                    {warningMessage && (
+                      <MessageInfoText
+                        type="warning"
+                        message={warningMessage}
+                      />
+                    )}
+                    {sendShmoBookingEventIsError && (
+                      <MessageInfoBox
+                        type="error"
+                        message={formatFriendlyShmoErrorMessage(
+                          sendShmoBookingEventError,
+                          t,
+                        )}
+                      />
+                    )}
+                    <Button
+                      mode="primary"
+                      active={false}
+                      disabled={sendShmoBookingEventIsLoading}
+                      interactiveColor={theme.color.interactive.destructive}
+                      expanded={true}
+                      type="large"
+                      accessibilityRole="button"
+                      onPress={showEndAlert}
+                      loading={sendShmoBookingEventIsLoading}
+                      text={
+                        sendShmoBookingEventIsLoading
+                          ? t(MobilityTexts.trip.button.endLoading)
+                          : t(MobilityTexts.trip.button.end)
+                      }
                     />
-                  )}
-                  <Button
-                    mode="primary"
-                    active={false}
-                    disabled={sendShmoBookingEventIsLoading}
-                    interactiveColor={theme.color.interactive.destructive}
-                    expanded={true}
-                    type="large"
-                    accessibilityRole="button"
-                    onPress={showEndAlert}
-                    loading={sendShmoBookingEventIsLoading}
-                    text={
-                      sendShmoBookingEventIsLoading
-                        ? t(MobilityTexts.trip.button.endLoading)
-                        : t(MobilityTexts.trip.button.end)
-                    }
-                  />
+                  </View>
+                  <SupportButton navigateToSupport={navigateSupportCallback} />
                 </View>
-                <SupportButton navigateToSupport={navigateSupportCallback} />
               </View>
             </>
           )}
@@ -280,11 +305,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     container: {
       paddingHorizontal: theme.spacing.medium,
       marginBottom: theme.spacing.medium,
-      gap: theme.spacing.small,
+      gap: theme.spacing.medium,
     },
     footer: {
-      marginBottom: theme.spacing.medium,
-      marginHorizontal: theme.spacing.medium,
       gap: theme.spacing.medium,
     },
     endTripWrapper: {

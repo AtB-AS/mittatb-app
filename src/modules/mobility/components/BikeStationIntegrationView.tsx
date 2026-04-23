@@ -86,9 +86,10 @@ export const BikeStationIntegrationView = ({
               <LinkSectionItem
                 key={index}
                 text={t(
-                  MobilityTexts.bikeNameByPropulsionType(
+                  MobilityTexts.vehicleName(
+                    e.vehicleType.formFactor ?? FormFactor.Bicycle,
+                    false,
                     e.vehicleType.propulsionType,
-                    e.vehicleType.formFactor ?? FormFactor.Other,
                   ),
                 )}
                 subtitle={t(MobilityTexts.freeBikes(e.count.toString()))}
@@ -165,7 +166,7 @@ export const BikeStationIntegrationView = ({
             </ThemeText>
           </GenericSectionItem>
         </Section>
-        <Section>
+        <Section style={styles.supportSection}>
           <SupportButton
             navigateToSupport={() => {
               navigateSupportCallback({
@@ -185,7 +186,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     container: {
       paddingHorizontal: theme.spacing.medium,
       paddingBottom: theme.spacing.medium,
-      gap: theme.spacing.medium,
+      gap: theme.spacing.small,
     },
     freeParkingSection: {
       flexDirection: 'row',
@@ -198,6 +199,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     error: {
       marginBottom: theme.spacing.medium,
       marginHorizontal: theme.spacing.medium,
+    },
+    supportSection: {
+      paddingTop: theme.spacing.xSmall,
     },
   };
 });

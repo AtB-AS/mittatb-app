@@ -33,7 +33,7 @@ export const BenefitTile = ({
   const styles = useStyles();
   const {t, language} = useTranslation();
   const title = t(
-    MobilityTexts.formFactor(benefit.formFactors[0] as FormFactor),
+    MobilityTexts.vehicleName(benefit.formFactors[0] as FormFactor),
   );
   const description = getTextForLanguage(benefit.ticketDescription, language);
 

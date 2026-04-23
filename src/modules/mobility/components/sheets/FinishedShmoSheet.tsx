@@ -64,9 +64,10 @@ export const FinishedShmoSheet = ({
       heading={
         shmoBooking?.asset?.propulsionType
           ? t(
-              MobilityTexts.bikeNameByPropulsionType(
-                shmoBooking?.asset?.propulsionType,
+              MobilityTexts.vehicleName(
                 shmoBooking?.asset?.formFactor ?? FormFactor.Other,
+                false,
+                shmoBooking?.asset?.propulsionType,
               ),
             )
           : undefined
@@ -91,8 +92,8 @@ export const FinishedShmoSheet = ({
               <View style={styles.footer}>
                 <View style={styles.container}>
                   <Section>
-                    <GenericSectionItem style={styles.finishingHeader}>
-                      <ThemeText typography="heading__xl">
+                    <GenericSectionItem>
+                      <ThemeText typography="heading__m">
                         {t(FareContractTexts.shmoDetails.tripEnded())}
                       </ThemeText>
                     </GenericSectionItem>
@@ -156,9 +157,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacing.medium,
       marginHorizontal: theme.spacing.medium,
       gap: theme.spacing.medium,
-    },
-    finishingHeader: {
-      alignItems: 'center',
     },
   };
 });

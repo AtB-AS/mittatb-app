@@ -13,60 +13,74 @@ import {getCurrencySymbol} from '@atb/translations/currency';
 import {PropulsionTypeBooking} from '@atb/api/types/mobility';
 
 export const MobilityTexts = {
-  formFactor: (formFactor: FormFactor, isPlural: boolean = false) => {
+  vehicleName: (
+    formFactor: FormFactor,
+    isPlural: boolean = false,
+    propulsionType?: PropulsionTypeBooking,
+  ) => {
     switch (formFactor) {
       case FormFactor.Scooter:
+        if (
+          propulsionType === PropulsionType.ElectricAssist ||
+          propulsionType === PropulsionType.Electric
+        ) {
+          return isPlural
+            ? _(
+                'Elektrisk sparkesykkel',
+                'Electric scooter',
+                'Elektrisk sparkesykkel',
+              )
+            : _(
+                'Elektrisk sparkesykkel',
+                'Electric scooter',
+                'Elektrisk sparkesykkel',
+              );
+        }
         return isPlural
-          ? _('Elsparkesykler', 'E-scooters', 'Elsparkesyklar')
-          : _('Elsparkesykkel', 'E-scooter', 'Elsparkesykkel');
+          ? _(
+              'Elektrisk sparkesykkel',
+              'Electric scooter',
+              'Elektrisk sparkesykkel',
+            )
+          : _(
+              'Elektrisk sparkesykkel',
+              'Electric scooter',
+              'Elektrisk sparkesykkel',
+            );
       case FormFactor.Bicycle:
+        if (
+          propulsionType === PropulsionType.ElectricAssist ||
+          propulsionType === PropulsionType.Electric
+        ) {
+          return isPlural
+            ? _(
+                'Elektriske bysykler',
+                'Electric city bikes',
+                'Elektriske bysyklar',
+              )
+            : _(
+                'Elektrisk bysykkel',
+                'Electric city bike',
+                'Elektrisk bysykkel',
+              );
+        } else if (propulsionType === PropulsionType.Human) {
+          return isPlural
+            ? _('Bysykler', 'City Bikes', 'Bysyklar')
+            : _('Bysykkel', 'City bike', 'Bysykkel');
+        }
         return isPlural
           ? _('Bysykler', 'City Bikes', 'Bysyklar')
-          : _('Bysykkel', 'City Bike', 'Bysykkel');
+          : _('Bysykkel', 'City bike', 'Bysykkel');
+
       case FormFactor.Car:
         return isPlural
-          ? _('Delebiler', 'Shared Cars', 'Delebilar')
-          : _('Delebil', 'Car sharing', 'Delebil');
+          ? _('Leiebiler', 'Rental cars', 'Leigebilar')
+          : _('Leiebil', 'Rental car', 'Leigebil');
       default:
         return _('Annet', 'Other', 'Anna');
     }
   },
-  bikeNameByPropulsionType: (
-    propulsionType: PropulsionTypeBooking | undefined,
-    formFactor: FormFactor,
-  ) => {
-    switch (formFactor) {
-      case FormFactor.Bicycle:
-        if (
-          propulsionType === PropulsionType.ElectricAssist ||
-          propulsionType === PropulsionType.Electric
-        ) {
-          return _(
-            'Elektrisk bysykkel',
-            'Electric city bike',
-            'Elektrisk bysykkel',
-          );
-        } else if (propulsionType === PropulsionType.Human) {
-          return _('Bysykkel', 'City bike', 'Bysykkel');
-        }
-        return _('Bysykkel', 'City bike', 'Bysykkel');
 
-      case FormFactor.Scooter:
-        if (
-          propulsionType === PropulsionType.ElectricAssist ||
-          propulsionType === PropulsionType.Electric
-        ) {
-          return _(
-            'Elektrisk sparkesykkel',
-            'Electric scooter',
-            'Elektrisk sparkesykkel',
-          );
-        }
-        return _('Elsparkesykkel', 'E-scooter', 'Elsparkesykkel');
-      default:
-        return _('Kjøretøy', 'Vehicle', 'Kjøretøy');
-    }
-  },
   freeBikes: (amount: string) => {
     return _(amount + ' ledige', amount + ' available', amount + ' ledige');
   },
@@ -297,7 +311,7 @@ export const MobilityTexts = {
     ),
     retry: _('Prøv på nytt', 'Try again', `Prøv på nytt`),
   },
-  totalCost: _('Totalkostnad', 'Total cost', 'Totalkostnad'),
+  cost: _('Pris', 'Cost', 'Pris'),
   time: _('Tid', 'Time', 'Tid'),
   trip: {
     button: {

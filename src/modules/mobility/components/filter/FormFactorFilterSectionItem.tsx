@@ -58,7 +58,7 @@ export const FormFactorFilterSectionItem = (
           <View style={sectionStyle.spaceBetween}>
             <View style={styles.textContainer}>
               <ThemeText>
-                {t(MobilityTexts.formFactor(formFactor, true))}
+                {t(MobilityTexts.vehicleName(formFactor, true))}
               </ThemeText>
             </View>
             <Toggle

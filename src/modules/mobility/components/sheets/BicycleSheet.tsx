@@ -122,9 +122,10 @@ export const BicycleSheet = ({
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
       heading={t(
-        MobilityTexts.bikeNameByPropulsionType(
-          vehicle?.vehicleType.propulsionType,
+        MobilityTexts.vehicleName(
           FormFactor.Bicycle,
+          false,
+          vehicle?.vehicleType.propulsionType,
         ),
       )}
       subText={operatorName}

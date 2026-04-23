@@ -237,6 +237,7 @@ const StationVehicleTypeSchema = z.object({
   model: z.string().nullable().optional(),
   vehicleImage: z.string().nullable().optional(),
   name: LocalizedStringSchema.nullable().optional(),
+  pricingPlans: z.array(ShmoPricingPlanSchema).optional(),
 });
 
 const VehicleTypeAvailabilitySchema = z.object({
