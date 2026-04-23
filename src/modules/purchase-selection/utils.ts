@@ -73,10 +73,18 @@ export const getDefaultZones = (
       ? selectableZones.find((z) => z.id === input.previousZoneIds?.to)
       : undefined;
     if (previousFrom && previousTo) {
-      zonesWithMetadata = {
-        from: {...previousFrom, resultType: 'zone'},
-        to: {...previousTo, resultType: 'zone'},
-      };
+      if (typeConfig.configuration.zoneSelectionMode === 'single') {
+        // If only one zone is allowed, use stored from zone as both from and to
+        zonesWithMetadata = {
+          from: {...previousFrom, resultType: 'zone'},
+          to: {...previousFrom, resultType: 'zone'},
+        };
+      } else {
+        zonesWithMetadata = {
+          from: {...previousFrom, resultType: 'zone'},
+          to: {...previousTo, resultType: 'zone'},
+        };
+      }
     }
   }
 
