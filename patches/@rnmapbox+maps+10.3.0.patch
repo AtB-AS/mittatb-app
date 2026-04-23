@@ -1,0 +1,307 @@
+diff --git a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXBackgroundLayerManager.kt b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXBackgroundLayerManager.kt
+index bfbeff4..a270d5b 100644
+--- a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXBackgroundLayerManager.kt
++++ b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXBackgroundLayerManager.kt
+@@ -66,6 +66,11 @@ class RNMBXBackgroundLayerManager : ViewGroupManager<RNMBXBackgroundLayer>(),
+         layer.setFilter(filterList.asArray())
+     }
+ 
++    @ReactProp(name = "slot")
++    override fun setSlot(layer: RNMBXBackgroundLayer, slot: Dynamic) {
++        layer.setSlot(slot.asString())
++    }
++
+     companion object {
+         const val REACT_CLASS = "RNMBXBackgroundLayer"
+     }
+diff --git a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXFillExtrusionLayerManager.kt b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXFillExtrusionLayerManager.kt
+index 8f1a3ee..8ab230a 100644
+--- a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXFillExtrusionLayerManager.kt
++++ b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXFillExtrusionLayerManager.kt
+@@ -71,6 +71,11 @@ class RNMBXFillExtrusionLayerManager : ViewGroupManager<RNMBXFillExtrusionLayer>
+         layer.setFilter(filterList.asArray())
+     }
+ 
++    @ReactProp(name = "slot")
++    override fun setSlot(layer: RNMBXFillExtrusionLayer, slot: Dynamic) {
++        layer.setSlot(slot.asString())
++    }
++
+     companion object {
+         const val REACT_CLASS = "RNMBXFillExtrusionLayer"
+     }
+diff --git a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXSkyLayerManager.kt b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXSkyLayerManager.kt
+index 838851d..af2b24c 100644
+--- a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXSkyLayerManager.kt
++++ b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXSkyLayerManager.kt
+@@ -66,6 +66,11 @@ class RNMBXSkyLayerManager : ViewGroupManager<RNMBXSkyLayer>(),
+         layer.setFilter(filterList.asArray())
+     }
+ 
++    @ReactProp(name = "slot")
++    override fun setSlot(layer: RNMBXSkyLayer, slot: Dynamic) {
++        layer.setSlot(slot.asString())
++    }
++
+     companion object {
+         const val REACT_CLASS = "RNMBXSkyLayer"
+     }
+diff --git a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSource.kt b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSource.kt
+index 66280ed..4e23817 100644
+--- a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSource.kt
++++ b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSource.kt
+@@ -18,6 +18,9 @@ import com.rnmapbox.rnmbx.v11compat.feature.*
+ 
+ class RNMBXVectorSource(context: Context?, private val mManager: RNMBXVectorSourceManager) :
+     RNMBXTileSource<VectorSource?>(context) {
++    
++    var volatile: Boolean? = null
++
+     override fun onPress(event: OnPressEvent?) {
+         mManager.handleEvent(FeatureClickEvent.makeVectorSourceEvent(this, event))
+     }
+@@ -35,15 +38,13 @@ class RNMBXVectorSource(context: Context?, private val mManager: RNMBXVectorSour
+             return mMap!!.getStyle()!!.getSource(DEFAULT_ID) as VectorSource
+         }
+         val configurationUrl = uRL
+-        return if (configurationUrl != null) {
+-            VectorSource(
+-                VectorSource.Builder(id)
+-                    .url(configurationUrl)
+-            )
+-        } else VectorSource(
+-            VectorSource.Builder(id)
+-                .tileSet(buildTileset())
+-        )
++        val builder = if (configurationUrl != null) {
++            VectorSource.Builder(id).url(configurationUrl)
++        } else {
++            VectorSource.Builder(id).tileSet(buildTileset())
++        }
++        volatile?.let { builder.volatile(it) }
++        return VectorSource(builder)
+     }
+ 
+     fun querySourceFeatures(
+diff --git a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSourceManager.kt b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSourceManager.kt
+index 68d619f..edc49a8 100644
+--- a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSourceManager.kt
++++ b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSourceManager.kt
+@@ -44,6 +44,11 @@ class RNMBXVectorSourceManager(reactApplicationContext: ReactApplicationContext)
+         view.mExisting = value.asBoolean()
+     }
+ 
++    @ReactProp(name = "isVolatile")
++    override fun setIsVolatile(view: RNMBXVectorSource, value: Dynamic) {
++        view.volatile = value.asBoolean()
++    }
++
+     override fun customEvents(): Map<String, String>? {
+         return eventMapOf(
+             EventKeys.VECTOR_SOURCE_LAYER_CLICK to "onMapboxVectorSourcePress",
+diff --git a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXFabricHelpers.h b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXFabricHelpers.h
+index 974ee24..67bbc6a 100644
+--- a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXFabricHelpers.h
++++ b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXFabricHelpers.h
+@@ -105,6 +105,10 @@ void RNMBXSetCommonLayerPropsWithoutSourceID(const T& newProps, RNMBXLayer *_vie
+     if (minZoomLevel != nil) {
+         _view.minZoomLevel = minZoomLevel;
+     }
++    id slot = RNMBXConvertFollyDynamicToId(newProps.slot);
++    if (slot != nil) {
++        _view.slot = slot;
++    }
+ }
+ 
+ template <typename T>
+diff --git a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXMapViewComponentView.mm b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXMapViewComponentView.mm
+index 6ee6808..ca7efa2 100644
+--- a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXMapViewComponentView.mm
++++ b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXMapViewComponentView.mm
+@@ -193,6 +193,11 @@ - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &
+ 
+     RNMBX_REMAP_OPTIONAL_PROP_BOOL(pitchEnabled, reactPitchEnabled)
+   
++    id maxPitch = RNMBXConvertFollyDynamicToId(newViewProps.maxPitch);
++    if (maxPitch != nil) {
++        _view.reactMaxPitch = maxPitch;
++    }
++
+     RNMBX_REMAP_OPTIONAL_PROP_NSDictionary(gestureSettings, reactGestureSettings)
+ 
+     id preferredFramesPerSecond = RNMBXConvertFollyDynamicToId(newViewProps.preferredFramesPerSecond);
+diff --git a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXSource.swift b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXSource.swift
+index d13af2a..317238d 100644
+--- a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXSource.swift
++++ b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXSource.swift
+@@ -29,6 +29,10 @@ public class RNMBXSource : RNMBXInteractiveElement {
+     fatalError("Subclasses should override makeSource")
+   }
+ 
++  func doAddSource(style: Style, source: Source) throws {
++    try style.addSource(source)
++  }
++  
+   // MARK: - UIView+React
+ 
+   @objc public override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
+@@ -108,7 +112,7 @@ public class RNMBXSource : RNMBXInteractiveElement {
+       self.ownsSource = true
+       self.source = source
+       logged("SyleSource.addToMap", info: {"id: \(optional: self.id)"}) {
+-        try style.addSource(source)
++        try self.doAddSource(style: style, source: source)
+       }
+     }
+ 
+diff --git a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXVectorSource.swift b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXVectorSource.swift
+index ad07b5b..8a5a134 100644
+--- a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXVectorSource.swift
++++ b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXVectorSource.swift
+@@ -8,6 +8,7 @@ public class RNMBXVectorSource : RNMBXTileSource {
+   @objc public var minZoomLevel: NSNumber?
+   @objc public var tileUrlTemplates: [String] = []
+   @objc public var tms: Bool = false
++  @objc public var isVolatile: NSNumber?
+   
+   override func sourceType() -> Source.Type {
+     return VectorSource.self
+@@ -33,10 +34,25 @@ public class RNMBXVectorSource : RNMBXTileSource {
+     if tms {
+       result.scheme = .tms
+     }
++    if let isVolatile = isVolatile {
++      result.volatile = isVolatile.boolValue
++    }
+     return result
+   }
+   
+-  
++  override func doAddSource(style: Style, source: Source) throws {
++    guard let isVolatile = isVolatile else {
++      try style.addSource(source)
++      return
++    }
++    let data = try JSONEncoder().encode(source as? VectorSource ?? VectorSource(id: self.id))
++    guard var properties = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
++      try style.addSource(source)
++      return
++    }
++    properties["volatile"] = isVolatile.boolValue
++    try style.addSource(withId: self.id, properties: properties)
++  }
+   
+   /*
+   - (nullable MGLSource*)makeSource
+diff --git a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXVectorSourceComponentView.mm b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXVectorSourceComponentView.mm
+index a8bf74c..1a406df 100644
+--- a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXVectorSourceComponentView.mm
++++ b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXVectorSourceComponentView.mm
+@@ -117,6 +117,10 @@ - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &
+     if (tms != nil) {
+         _view.tms = tms;
+     }
++    id isVolatile = RNMBXConvertFollyDynamicToId(newProps.isVolatile);
++    if (isVolatile != nil) {
++        _view.isVolatile = isVolatile;
++    }
+     id attribution = RNMBXConvertFollyDynamicToId(newProps.attribution);
+     if (attribution != nil) {
+         _view.attribution = attribution;
+diff --git a/node_modules/@rnmapbox/maps/lib/module/components/VectorSource.js b/node_modules/@rnmapbox/maps/lib/module/components/VectorSource.js
+index 72a72a9..e9523a9 100644
+--- a/node_modules/@rnmapbox/maps/lib/module/components/VectorSource.js
++++ b/node_modules/@rnmapbox/maps/lib/module/components/VectorSource.js
+@@ -69,6 +69,7 @@ class VectorSource extends AbstractSource {
+       minZoomLevel: this.props.minZoomLevel,
+       maxZoomLevel: this.props.maxZoomLevel,
+       tms: this.props.tms,
++      isVolatile: this.props.volatile,
+       attribution: this.props.attribution,
+       hitbox: this.props.hitbox,
+       hasPressListener: isFunction(this.props.onPress),
+diff --git a/node_modules/@rnmapbox/maps/lib/module/specs/RNMBXVectorSourceNativeComponent.ts b/node_modules/@rnmapbox/maps/lib/module/specs/RNMBXVectorSourceNativeComponent.ts
+index f7aa0ee..cce51af 100644
+--- a/node_modules/@rnmapbox/maps/lib/module/specs/RNMBXVectorSourceNativeComponent.ts
++++ b/node_modules/@rnmapbox/maps/lib/module/specs/RNMBXVectorSourceNativeComponent.ts
+@@ -19,6 +19,7 @@ export interface NativeProps extends ViewProps {
+   maxZoomLevel: UnsafeMixed<Double>;
+   minZoomLevel: UnsafeMixed<Double>;
+   tms: UnsafeMixed<boolean>;
++  isVolatile: UnsafeMixed<boolean>;
+   hasPressListener: UnsafeMixed<boolean>;
+   hitbox: UnsafeMixed<any>;
+   onMapboxVectorSourcePress: DirectEventHandler<OnMapboxVectorSourcePressEventType>;
+diff --git a/node_modules/@rnmapbox/maps/src/components/VectorSource.tsx b/node_modules/@rnmapbox/maps/src/components/VectorSource.tsx
+index 51afb11..9dcb4b7 100644
+--- a/node_modules/@rnmapbox/maps/src/components/VectorSource.tsx
++++ b/node_modules/@rnmapbox/maps/src/components/VectorSource.tsx
+@@ -53,6 +53,12 @@ interface Props {
+    */
+   tms?: boolean;
+ 
++  /**
++   * A setting to determine whether a source's tiles are cached locally.
++   * If true, tiles are not cached and re-requested every time they are needed.
++   */
++  volatile?: boolean;
++
+   /**
+    * An HTML or literal text string defining the buttons to be displayed in an action sheet when the
+    * source is part of a map view’s style and the map view’s attribution button is pressed.
+@@ -154,6 +160,7 @@ class VectorSource extends AbstractSource<Props, NativeProps> {
+       minZoomLevel: this.props.minZoomLevel,
+       maxZoomLevel: this.props.maxZoomLevel,
+       tms: this.props.tms,
++      isVolatile: this.props.volatile,
+       attribution: this.props.attribution,
+       hitbox: this.props.hitbox,
+       hasPressListener: isFunction(this.props.onPress),
+diff --git a/node_modules/@rnmapbox/maps/src/specs/RNMBXBackgroundLayerNativeComponent.ts b/node_modules/@rnmapbox/maps/src/specs/RNMBXBackgroundLayerNativeComponent.ts
+index fb1bcc8..59cd3ea 100644
+--- a/node_modules/@rnmapbox/maps/src/specs/RNMBXBackgroundLayerNativeComponent.ts
++++ b/node_modules/@rnmapbox/maps/src/specs/RNMBXBackgroundLayerNativeComponent.ts
+@@ -21,6 +21,7 @@ export interface NativeProps extends ViewProps {
+ 
+   maxZoomLevel?: OptionalProp<Double>;
+   minZoomLevel?: OptionalProp<Double>;
++  slot?: OptionalProp<string>;
+ }
+ 
+ // @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
+diff --git a/node_modules/@rnmapbox/maps/src/specs/RNMBXFillExtrusionLayerNativeComponent.ts b/node_modules/@rnmapbox/maps/src/specs/RNMBXFillExtrusionLayerNativeComponent.ts
+index 9cced9e..5909e2b 100644
+--- a/node_modules/@rnmapbox/maps/src/specs/RNMBXFillExtrusionLayerNativeComponent.ts
++++ b/node_modules/@rnmapbox/maps/src/specs/RNMBXFillExtrusionLayerNativeComponent.ts
+@@ -22,6 +22,7 @@ export interface NativeProps extends ViewProps {
+   maxZoomLevel?: OptionalProp<Double>;
+   minZoomLevel?: OptionalProp<Double>;
+   sourceLayerID?: OptionalProp<string>;
++  slot?: OptionalProp<string>;
+ }
+ 
+ // @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
+diff --git a/node_modules/@rnmapbox/maps/src/specs/RNMBXSkyLayerNativeComponent.ts b/node_modules/@rnmapbox/maps/src/specs/RNMBXSkyLayerNativeComponent.ts
+index 27f7e2f..6e28347 100644
+--- a/node_modules/@rnmapbox/maps/src/specs/RNMBXSkyLayerNativeComponent.ts
++++ b/node_modules/@rnmapbox/maps/src/specs/RNMBXSkyLayerNativeComponent.ts
+@@ -21,6 +21,7 @@ export interface NativeProps extends ViewProps {
+ 
+   maxZoomLevel?: OptionalProp<Double>;
+   minZoomLevel?: OptionalProp<Double>;
++  slot?: OptionalProp<string>;
+ }
+ 
+ // @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
+diff --git a/node_modules/@rnmapbox/maps/src/specs/RNMBXVectorSourceNativeComponent.ts b/node_modules/@rnmapbox/maps/src/specs/RNMBXVectorSourceNativeComponent.ts
+index f7aa0ee..cce51af 100644
+--- a/node_modules/@rnmapbox/maps/src/specs/RNMBXVectorSourceNativeComponent.ts
++++ b/node_modules/@rnmapbox/maps/src/specs/RNMBXVectorSourceNativeComponent.ts
+@@ -19,6 +19,7 @@ export interface NativeProps extends ViewProps {
+   maxZoomLevel: UnsafeMixed<Double>;
+   minZoomLevel: UnsafeMixed<Double>;
+   tms: UnsafeMixed<boolean>;
++  isVolatile: UnsafeMixed<boolean>;
+   hasPressListener: UnsafeMixed<boolean>;
+   hitbox: UnsafeMixed<any>;
+   onMapboxVectorSourcePress: DirectEventHandler<OnMapboxVectorSourcePressEventType>;
