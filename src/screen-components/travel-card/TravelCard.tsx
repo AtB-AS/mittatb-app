@@ -8,7 +8,7 @@ import {TravelCardHeader} from './TravelCardHeader';
 import {LayoutChangeEvent, View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
-import {TravelCardTexts, useTranslation} from '@atb/translations';
+import {dictionary, TravelCardTexts, useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
 import {getDetailedSituationOrNoticeA11yLabel} from '@atb/modules/situations';
@@ -60,13 +60,17 @@ export const TravelCard: React.FC<TravelCardProps> = ({
       ? getDetailedSituationOrNoticeA11yLabel(tripPattern, language, t)
       : undefined;
 
+  const tagA11yLabel = tagLabel
+    ? `.. ${t(dictionary.messageTypes[tagType])}.. ${tagLabel}`
+    : undefined;
+
   return (
     <Animated.View entering={FadeIn}>
       <CompositeAccessibilityProvider
         parentLabels={{
           cardPrefix: prefixA11yLabel,
           situationOrNotice: situationOrNoticeA11yLabel,
-          tag: tagLabel,
+          tag: tagA11yLabel,
         }}
         order={['cardPrefix', 'header', 'legs', 'situationOrNotice', 'tag']}
       >
