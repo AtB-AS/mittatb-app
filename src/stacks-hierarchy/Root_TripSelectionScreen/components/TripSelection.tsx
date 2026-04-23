@@ -33,6 +33,7 @@ export function BookingTripSelection({
   onSelect,
 }: BookingTripSelectionProps) {
   const styles = useBookingTripSelectionStyles();
+  const {t} = useTranslation();
   const {
     tripPatterns,
     isEmpty,
@@ -60,58 +61,39 @@ export function BookingTripSelection({
         originFareContract={selection.originFareContract}
       />
       {!isEmpty ? (
-        tripPatterns.map((tp, i) => (
-          <BookingTrip
-            key={`booking-trip-${i}`}
-            onSelect={onSelect}
-            tripPattern={tp}
-          />
-        ))
+        tripPatterns.map((tp, i) => {
+          const isAvailable =
+            tp.booking.availability === 'available' &&
+            !tp.booking.disabledReason;
+          const tagInfo = getBookingTagInfo(
+            t,
+            tp.booking,
+            tp.booking.disabledReason,
+          );
+          return (
+            <TravelCard
+              key={`booking-trip-${i}`}
+              tripPattern={tp}
+              cardIndex={i}
+              onDetailsPressed={() => {
+                if (isAvailable) onSelect(tp.legs);
+              }}
+              a11yPrefix={t(
+                TravelCardTexts.card.a11yPrefix.bookingOption(
+                  i,
+                  tripPatterns.length,
+                ),
+              )}
+              includeSituationNotices
+              isDisabled={!isAvailable}
+              tagLabel={tagInfo?.label}
+              tagType={tagInfo?.type}
+            />
+          );
+        })
       ) : (
         <EmptyState />
       )}
-    </View>
-  );
-}
-
-type BookingTripProps = {
-  tripPattern: TripPatternWithBooking;
-  onSelect: (legs: TripPatternLegs) => void;
-};
-
-export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
-  const styles = useBookingTripStyles();
-  const {t} = useTranslation();
-
-  const isAvailable =
-    tripPattern.booking.availability === 'available' &&
-    !tripPattern.booking.disabledReason;
-
-  const tagInfo = getBookingTagInfo(
-    t,
-    tripPattern.booking,
-    tripPattern.booking.disabledReason,
-  );
-
-  return (
-    <View
-      style={[
-        styles.container,
-        isAvailable ? styles.containerAvailable : styles.containerDisabled,
-      ]}
-    >
-      <TravelCard
-        tripPattern={tripPattern}
-        cardIndex={0}
-        onDetailsPressed={() => {
-          if (isAvailable) onSelect(tripPattern.legs);
-        }}
-        a11yPrefix={t(TravelCardTexts.card.a11yPrefix.bookingOption(0, 1))}
-        includeSituationNotices
-        isDisabled={!isAvailable}
-        tagLabel={tagInfo?.label}
-        tagType={tagInfo?.type}
-      />
     </View>
   );
 }
@@ -165,26 +147,10 @@ function getBookingTagInfo(
   return undefined;
 }
 
-const useBookingTripStyles = StyleSheet.createThemeHook((theme) => {
-  return {
-    container: {
-      borderRadius: theme.border.radius.regular,
-      overflow: 'hidden',
-    },
-    containerAvailable: {
-      backgroundColor: theme.color.interactive[2].default.background,
-    },
-    containerDisabled: {
-      backgroundColor: theme.color.background.neutral[2].background,
-    },
-  };
-});
-
-const useBookingTripSelectionStyles = StyleSheet.createThemeHook((theme) => {
+const useBookingTripSelectionStyles = StyleSheet.createThemeHook(() => {
   return {
     container: {
       width: '100%',
-      rowGap: theme.spacing.medium,
     },
   };
 });
