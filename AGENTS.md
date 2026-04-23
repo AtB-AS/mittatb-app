@@ -3,10 +3,11 @@
 This file provides guidance to AI agents when working with the code in this repository.
 
 ## Project Overview
-AtB App is a travel companion/ticketing app in Trondheim, Norway.
+
+AtB App is a whitelabel travel companion/ticketing app in Trondheim, Norway.
 
 ## Tech Stack
-Check @package.json for complete information along with actual version number
+
 - React Native
 - TypeScript
 - Tanstack React Query
@@ -46,39 +47,52 @@ Check @package.json for complete information along with actual version number
 - **Path alias**: `@atb/*` maps to `src/*` (configured in `tsconfig.json` and `jest.config.js`).
 - **Time durations**: Use seconds (not minutes) for time duration parameters, consistent with the rest of the codebase (e.g. `secondsBetween`, `significantWaitTime`).
 
-
 ## Development Commands
 
 ### Test
+
 - `yarn test` - Run Jest unit tests, can specify which tests to run using: `yarn test partlyMatchingPathOrFilename`
 
 ### Code Quality
+
 - `yarn tsc` - Run TypeScript compiler check
 - `yarn lint` - Run ESLint `eslint . --ext .ts,.tsx`
 - `yarn prettier` - Runs `prettier -c src`
 
 ### Final verification
+
 - `yarn check-all` - runs `yarn tsc && yarn lint && yarn test --coverage --coverageReporters && yarn prettier`
 
 ### Code Intelligence
 
-Prefer LSP over Grep/Glob/Read for code navigation, the only exception is `workspaceSymbol`,
-use Grep/Glob/Read instead for that function, otherwise use the following LSP tool:
+**BLOCKING: LSP for navigating or editing symbols.**
+Navigating symbols MUST use LSP! Before any Edit to a `.ts`/`.tsx` file that changes a symbol, you MUST run the corresponding LSP operation first. No exceptions — do not skip this and use Grep instead.
 
-- `goToDefinition` / `goToImplementation` to jump to source
-- `findReferences` to see all usages across the codebase
-- `documentSymbol` to list all symbols in a file
-- `hover` for type info without reading the file
-- `incomingCalls` / `outgoingCalls` for call hierarchy
+| Trigger                                                       | Required LSP operation                                   |
+| ------------------------------------------------------------- | -------------------------------------------------------- |
+| Adding, removing, or renaming a **prop**                      | `findReferences` on the prop/type to find all call sites |
+| Adding, removing, or renaming a **function/component export** | `findReferences` to find all consumers                   |
+| Changing a **type or interface** shape                        | `findReferences` on the type to find all usages          |
+| Navigating to a symbol's **definition** (to understand it)    | `goToDefinition` (not Grep, not Read + scroll)           |
+| Checking what **type** a variable/param has                   | `hover` (not opening the file to read)                   |
+| Understanding a file's **exports**                            | `documentSymbol` (not reading the whole file)            |
+| Tracing **who calls** a function                              | `incomingCalls` (not grepping the function name)         |
 
-Before renaming or changing a function signature, use
-`findReferences` to find all call sites first.
+**When an LSP call returns empty or errors, do not silently fall back to grep.** Try in order:
 
-Use Grep/Glob only for text/pattern searches (comments,
-strings, config values) where LSP doesn't help.
+1. Retry with the fully-qualified name (`Namespace.Symbol`, or the imported name in scope)
+2. `documentSymbol` on the likely file to confirm the symbol exists and check its exact name
+3. Only then grep — and say out loud why LSP didn't work
 
-After writing or editing code, check LSP diagnostics before
-moving on. Fix any type errors or missing imports immediately.
+**Grep/Glob/Read are for text, not symbols:**
+
+- String literals, error messages, log lines, comments, TODOs
+- Config keys, env var names, route paths, SQL, JSON
+- Cross-file text patterns LSP can't model
+- Project-wide symbol search: LSP `workspaceSymbol` is unreliable on large TS codebases — use `rg` with a symbol-shaped regex instead (e.g. `rg "\bfunctionName\b"`)
+
+**Diagnostics are a hard gate.**
+After every meaningful/logical unit of Edits or Writes to a `.ts` / `.tsx` / `.js` / `.jsx` file, check diagnostics on that file before the next tool call. Do not batch edits and check at the end — TS errors cascade and you'll get misleading noise. Fix type errors and missing imports immediately.
 
 ## Workflow
 
