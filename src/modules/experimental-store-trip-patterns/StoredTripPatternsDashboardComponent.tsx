@@ -144,9 +144,8 @@ const StoredTripPatternRow: React.FC<{
       <TravelCard
         tripPattern={updatedTripPattern}
         onDetailsPressed={onDetailsPressed}
-        cardIndex={resultIndex}
         testID={'tripSearchSearchResult' + resultIndex}
-        a11yPrefix={t(
+        a11yLabelPrefix={t(
           TravelCardTexts.card.a11yPrefix.savedTrip(resultIndex, length),
         )}
         includeDayInfo

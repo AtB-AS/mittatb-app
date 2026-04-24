@@ -74,11 +74,10 @@ export function BookingTripSelection({
             <TravelCard
               key={`booking-trip-${i}`}
               tripPattern={tp}
-              cardIndex={i}
               onDetailsPressed={() => {
                 if (isAvailable) onSelect(tp.legs);
               }}
-              a11yPrefix={t(
+              a11yLabelPrefix={t(
                 TravelCardTexts.card.a11yPrefix.bookingOption(
                   i,
                   tripPatterns.length,
