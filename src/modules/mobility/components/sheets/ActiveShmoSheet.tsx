@@ -21,7 +21,6 @@ import {ShmoTripCard} from '../ShmoTripCard';
 import {
   formatFriendlyShmoErrorMessage,
   getTransportModeAndSubMode,
-  isValidKey,
 } from '../../utils';
 import {MapView} from '@rnmapbox/maps';
 import {MessageInfoText} from '@atb/components/message-info-text';
@@ -45,6 +44,7 @@ import {PriceDetailsCard} from '../PriceDetailsCard';
 import {useOperators} from '../../use-operators';
 import {SupportButton} from '../SupportButton';
 import {BrandingImage} from '../BrandingImage';
+import {isValidKey} from '@atb/stacks-hierarchy';
 
 type Props = {
   navigateSupportCallback: () => void;

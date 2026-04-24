@@ -346,10 +346,3 @@ export function getThemedIllustrationForFormFactor(formFactor: FormFactor) {
       return null;
   }
 }
-
-export function isValidKey<T extends object>(
-  obj: T,
-  key: PropertyKey,
-): key is keyof T {
-  return key in obj;
-}
