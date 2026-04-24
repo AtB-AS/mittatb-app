@@ -28,3 +28,6 @@ export {useFareContractLegs} from './use-fare-contract-legs';
 export {useTicketAccessibilityLabel} from './use-ticket-accessibility-label';
 export {useSupplementProductPurchaseSelection} from './use-supplement-product-purchase-selection';
 export {SupplementPurchaseButton} from './components/SupplementPurchaseButton';
+export {RecentFareContract} from './recent/RecentFareContract';
+export type {RecentFareContractType} from './recent/types';
+export {useRecentFareContracts} from './recent/use-recent-fare-contracts';

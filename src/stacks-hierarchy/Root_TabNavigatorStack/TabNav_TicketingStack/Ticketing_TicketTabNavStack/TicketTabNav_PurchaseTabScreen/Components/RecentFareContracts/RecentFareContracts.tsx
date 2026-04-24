@@ -13,7 +13,7 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {
   RecentFareContract,
   type RecentFareContractType,
-} from '@atb/recent-fare-contracts';
+} from '@atb/modules/fare-contracts';
 import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 import {Loading} from '@atb/components/loading';
 
