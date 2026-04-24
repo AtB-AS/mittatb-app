@@ -1,11 +1,11 @@
-import {useEffect, useState} from 'react';
+import {useState, useEffect} from 'react';
 import {useGeolocationContext} from '@atb/modules/geolocation';
-import {initViolationsReporting} from '@atb/api/bff/mobility';
 import {
   ParkingViolationType,
   ViolationsReportingProvider,
 } from '@atb/api/types/mobility';
 import {Coordinates} from '@atb/utils/coordinates';
+import {useInitViolationsReportingQuery} from './queries/use-init-violations-reporting-query';
 
 type ParkingViolationsState =
   | 'loading'
@@ -14,39 +14,45 @@ type ParkingViolationsState =
   | 'violationsReportingDataError';
 
 export const useParkingViolations = () => {
+  const [coordinates, setCoordinates] = useState<Coordinates>();
   const [parkingViolationsState, setParkingViolationsState] =
     useState<ParkingViolationsState>('loading');
-
-  const [violations, setViolations] = useState<ParkingViolationType[]>([]);
-  const [providers, setProviders] = useState<ViolationsReportingProvider[]>([]);
-  const [coordinates, setCoordinates] = useState<Coordinates>();
 
   const {getCurrentCoordinates} = useGeolocationContext();
 
   useEffect(() => {
-    const getLocationAndInitReporting = async () => {
-      setParkingViolationsState('loading');
-      const coordinates = await getCurrentCoordinates(true);
-      setCoordinates(coordinates);
-      if (coordinates) {
-        try {
-          const violationsReportingData = await initViolationsReporting({
-            lat: coordinates.latitude.toString(),
-            lng: coordinates.longitude.toString(),
-          });
-          setViolations(violationsReportingData.violations);
-          setProviders(violationsReportingData.providers);
-          setParkingViolationsState('success');
-        } catch (err) {
-          console.warn(err);
-          setParkingViolationsState('violationsReportingDataError');
-        }
+    const resolveCoordinates = async () => {
+      const coords = await getCurrentCoordinates(true);
+      if (coords) {
+        setCoordinates(coords);
       } else {
         setParkingViolationsState('locationRequirementNotMet');
       }
     };
-    getLocationAndInitReporting();
+    resolveCoordinates();
   }, [getCurrentCoordinates]);
+
+  const queryParams = coordinates
+    ? {
+        lat: coordinates.latitude.toString(),
+        lng: coordinates.longitude.toString(),
+      }
+    : undefined;
+
+  const {data, isSuccess, isError} =
+    useInitViolationsReportingQuery(queryParams);
+
+  useEffect(() => {
+    if (!coordinates) return;
+    if (isSuccess) {
+      setParkingViolationsState('success');
+    } else if (isError) {
+      setParkingViolationsState('violationsReportingDataError');
+    }
+  }, [coordinates, isSuccess, isError]);
+
+  const violations: ParkingViolationType[] = data?.violations ?? [];
+  const providers: ViolationsReportingProvider[] = data?.providers ?? [];
 
   return {
     isLoading: parkingViolationsState === 'loading',

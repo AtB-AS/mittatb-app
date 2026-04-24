@@ -7,7 +7,10 @@ import {getThemeColor} from '../../components/PhotoCapture/ScreenContainer';
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
-import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/bff/mobility';
+import {
+  useLookupVehicleByQrMutation,
+  useSendViolationsReportMutation,
+} from '@atb/modules/parking-violations-reporting';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useParkingViolations} from '@atb/modules/parking-violations-reporting';
 import {useAuthContext} from '@atb/modules/auth';
@@ -36,6 +39,8 @@ export const Root_ParkingViolationsQrScreen = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const {providers, coordinates} = useParkingViolations();
+  const {mutateAsync: lookupVehicleByQr} = useLookupVehicleByQrMutation();
+  const {mutateAsync: sendViolationsReport} = useSendViolationsReportMutation();
   const {userId} = useAuthContext();
   const onCloseFocusRef = useRef<View | null>(null);
   const providerAndVehicleBottomSheetModalRef =
@@ -92,38 +97,39 @@ export const Root_ParkingViolationsQrScreen = ({
     // Nivel uses the file name suffix as imageType.
     const imageType = params.photo.split('.').pop();
 
-    sendViolationsReport({
-      appId: userId,
-      image: base64data,
-      imageType,
-      latitude: coordinates?.latitude ?? 0,
-      longitude: coordinates?.longitude ?? 0,
-      providerId,
-      qr: capturedQr,
-      violations: params.selectedViolations.map((v) => v.code),
-      timestamp: new Date().toISOString(),
-    })
-      .then(() => {
-        navigation.navigate('Root_ParkingViolationsConfirmationScreen', {
-          providerName: providers.find((p) => p.id === providerId)?.name,
-        });
-        handleFinishSubmitReport();
-      })
-      .catch((e) => {
-        console.error(e);
-        setIsError(true);
-        handleFinishSubmitReport();
+    try {
+      await sendViolationsReport({
+        appId: userId,
+        image: base64data,
+        imageType,
+        latitude: coordinates?.latitude ?? 0,
+        longitude: coordinates?.longitude ?? 0,
+        providerId,
+        qr: capturedQr,
+        violations: params.selectedViolations.map((v) => v.code),
+        timestamp: new Date().toISOString(),
       });
+      navigation.navigate('Root_ParkingViolationsConfirmationScreen', {
+        providerName: providers.find((p) => p.id === providerId)?.name,
+      });
+      handleFinishSubmitReport();
+    } catch (e) {
+      console.error(e);
+      setIsError(true);
+      handleFinishSubmitReport();
+    }
   };
 
-  const getProviderByQr = async (qr: string) =>
-    lookupVehicleByQr({qr})
-      .then(({provider_id, vehicle_id}) => {
-        const provider = providers.find((p) => p.id === provider_id);
-        if (!provider) return undefined;
-        return {provider, vehicle_id};
-      })
-      .catch(() => undefined); // If lookup fails let user select operator manually.
+  const getProviderByQr = async (qr: string) => {
+    try {
+      const {provider_id, vehicle_id} = await lookupVehicleByQr({qr});
+      const provider = providers.find((p) => p.id === provider_id);
+      if (!provider) return undefined;
+      return {provider, vehicle_id};
+    } catch {
+      return undefined; // If lookup fails let user select operator manually.
+    }
+  };
 
   const handlePhotoCapture = async (qr: string) => {
     if (!capturedQr) {
