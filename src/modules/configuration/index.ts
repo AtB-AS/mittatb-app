@@ -25,6 +25,7 @@ export type {
   TravellerSelectionMode,
   TravelSearchTransportModes,
   UserProfile,
+  CompiledKnownQrCodeUrl,
 } from './types';
 export {
   LanguageAndTextTypeArray,
