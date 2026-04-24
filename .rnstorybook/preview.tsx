@@ -1,7 +1,6 @@
 import type {Preview} from '@storybook/react';
-import {ThemeContext} from '../src/theme/ThemeContext';
-import {themes} from '../src/theme/colors';
-import React from 'react';
+import {AppearanceSelection, ThemeContext} from '../src/theme/ThemeContext';
+import {Themes, themes} from '../src/theme/colors';
 
 const preview: Preview = {
   parameters: {
@@ -14,18 +13,16 @@ const preview: Preview = {
   },
   decorators: [
     (Story, {args}) => {
-      const themeName = args.theme ?? 'light';
+      const themeName: keyof Themes = args.theme ?? 'light';
       return (
         <ThemeContext.Provider
           value={{
             theme: themes[themeName],
             themeName,
-            storedColorScheme: 'light',
-            useAndroidSystemFont: false,
-            overrideSystemAppearance: false,
-            updateThemePreference: () => {},
-            updateAndroidFontOverride: () => {},
-            overrideOSThemePreference: () => {},
+            appearanceSelection: AppearanceSelection.SYSTEM,
+            setAppearanceSelection: () => {},
+            androidSystemFont: false,
+            setAndroidSystemFont: () => {},
           }}
         >
           <Story />
