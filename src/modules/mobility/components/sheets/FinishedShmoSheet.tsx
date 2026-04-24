@@ -20,6 +20,11 @@ import {
 } from '@atb/components/bottom-sheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Loading} from '@atb/components/loading';
+import {TransportationIconBox} from '@atb/components/icon-box';
+import {getTransportModeAndSubMode} from '../../utils';
+import {SupportButton} from '../SupportButton';
+import {useOperators} from '../../use-operators';
+import {BrandingImage} from '../BrandingImage';
 
 type Props = {
   onClose: () => void;
@@ -29,7 +34,7 @@ type Props = {
   locationArrowOnPress: () => void;
 };
 
-export const FinishedScooterSheet = ({
+export const FinishedShmoSheet = ({
   onClose,
   navigateSupportCallback,
   navigateToScanQrCode,
@@ -46,6 +51,13 @@ export const FinishedScooterSheet = ({
     isError,
   } = useShmoBookingQuery(isFocusedAndActive, bookingId);
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
+  const {mode, subMode} = getTransportModeAndSubMode(
+    shmoBooking?.asset?.formFactor,
+    shmoBooking?.asset?.propulsionType,
+  );
+
+  const operator = useOperators().byId(shmoBooking?.asset.operator.id);
+  const operatorLogo = operator?.brandAssets?.brandImageUrl;
 
   return (
     <MapBottomSheet
@@ -53,7 +65,25 @@ export const FinishedScooterSheet = ({
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
-      heading={t(MobilityTexts.formFactor(FormFactor.Scooter))}
+      heading={
+        shmoBooking?.asset?.propulsionType
+          ? t(
+              MobilityTexts.vehicleName(
+                shmoBooking?.asset?.formFactor ?? FormFactor.Other,
+                false,
+                shmoBooking?.asset?.propulsionType,
+              ),
+            )
+          : undefined
+      }
+      subText={shmoBooking?.asset.operator.name}
+      logoIcon={
+        operatorLogo ? (
+          <BrandingImage logoUrl={operatorLogo} logoSize={28} rounded={true} />
+        ) : (
+          <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
+        )
+      }
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
@@ -70,8 +100,8 @@ export const FinishedScooterSheet = ({
               <View style={styles.footer}>
                 <View style={styles.container}>
                   <Section>
-                    <GenericSectionItem style={styles.finishingHeader}>
-                      <ThemeText typography="heading__xl">
+                    <GenericSectionItem>
+                      <ThemeText typography="heading__m">
                         {t(FareContractTexts.shmoDetails.tripEnded())}
                       </ThemeText>
                     </GenericSectionItem>
@@ -97,17 +127,14 @@ export const FinishedScooterSheet = ({
                   onPress={onClose}
                   text={t(MobilityTexts.trip.button.finishTrip)}
                 />
-                <Button
-                  expanded={true}
-                  onPress={() =>
+
+                <SupportButton
+                  navigateToSupport={() => {
                     navigateSupportCallback(
                       shmoBooking.asset.operator.id,
                       shmoBooking.bookingId,
-                    )
-                  }
-                  text={t(MobilityTexts.helpText)}
-                  mode="secondary"
-                  backgroundColor={theme.color.background.neutral[1]}
+                    );
+                  }}
                 />
               </View>
             </>
@@ -138,9 +165,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacing.medium,
       marginHorizontal: theme.spacing.medium,
       gap: theme.spacing.medium,
-    },
-    finishingHeader: {
-      alignItems: 'center',
     },
   };
 });

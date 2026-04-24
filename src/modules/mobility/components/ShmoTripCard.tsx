@@ -4,7 +4,7 @@ import {Section} from '@atb/components/sections';
 import {ShmoTripDetailsSectionItem} from './ShmoTripDetailsSectionItem';
 import {useTimeContext} from '@atb/modules/time';
 import {useTransportColor} from '@atb/utils/use-transport-color';
-
+import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {ShmoBooking, ShmoBookingState} from '@atb/api/types/mobility';
 import {LineWithVerticalBars} from '@atb/components/line-with-vertical-bars';
 import {View} from 'react-native';
@@ -13,14 +13,21 @@ import {ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
 type ShmoTripCardProps = {
   shmoBooking: ShmoBooking;
   isFocused: boolean;
+  mode: AnyMode;
+  subMode?: AnySubMode;
 };
 
-export const ShmoTripCard = ({shmoBooking, isFocused}: ShmoTripCardProps) => {
+export const ShmoTripCard = ({
+  shmoBooking,
+  isFocused,
+  mode,
+  subMode,
+}: ShmoTripCardProps) => {
   const styles = useStyles();
   const {serverNow} = useTimeContext(
     isFocused ? ONE_SECOND_MS : ONE_MINUTE_MS * 5,
   );
-  const backgroundColor = useTransportColor('scooter', 'escooter');
+  const backgroundColor = useTransportColor(mode, subMode);
 
   return (
     <Section>

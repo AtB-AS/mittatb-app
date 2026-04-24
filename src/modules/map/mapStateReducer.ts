@@ -29,6 +29,7 @@ export type ReducerMapState = {
   eventToDispatch?: ReducerMapStateAction;
   bookingId?: string;
   customZoomLevel?: number;
+  isStationBasedBooking?: boolean;
 };
 
 export type ReducerMapStateAction =
@@ -49,6 +50,7 @@ export type ReducerMapStateAction =
   | {
       type: MapStateActionType.BicycleScanned;
       assetId: string;
+      isStationBasedBooking?: boolean;
     }
   | {
       type: MapStateActionType.BikeStation;
@@ -125,6 +127,7 @@ export const mapStateReducer = (
         bottomSheetType: MapBottomSheetType.Bicycle,
         assetId: action.assetId,
         assetIsScanned: true,
+        isStationBasedBooking: action.isStationBasedBooking,
       };
     case MapStateActionType.BikeStation:
       return {

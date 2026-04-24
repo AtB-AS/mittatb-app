@@ -89,6 +89,7 @@ export const Map = (props: MapProps) => {
     navigateToScanQrCode,
     navigateToLogin,
     navigateToPaymentMethods,
+    navigateToStartCityBikeTripWaitingScreen,
   } = props;
 
   const {
@@ -147,6 +148,7 @@ export const Map = (props: MapProps) => {
     isError: vehicleError,
   } = useVehicleQuery(
     selectedFeatureIsAVehicle ? selectedFeature?.properties?.id : undefined,
+    mapState.isStationBasedBooking,
   );
 
   const activeFeatureId =
@@ -519,8 +521,11 @@ export const Map = (props: MapProps) => {
         navigateToLogin={navigateToLogin}
         navigateToPaymentMethods={navigateToPaymentMethods}
         locationArrowOnPress={locationArrowOnPress}
+        navigateToStartCityBikeTripWaitingScreen={
+          navigateToStartCityBikeTripWaitingScreen
+        }
       />
-      {isMapTilePreloadingEnabled && (
+      {!!isMapTilePreloadingEnabled && (
         <MapTilePreloader
           startingCoordinates={startingCoordinates}
           tabBarHeight={tabBarHeight}

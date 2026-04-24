@@ -83,3 +83,10 @@ export const parseParamAsInt = (data: any): number | undefined => {
   if (typeof data === 'number') return Math.round(data);
   return undefined;
 };
+
+export function isValidKey<T extends object>(
+  obj: T,
+  key: PropertyKey,
+): key is keyof T {
+  return key in obj;
+}

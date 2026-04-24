@@ -107,7 +107,11 @@ const FormFactorSchema = z.enum(
   Object.values(FormFactor) as [FormFactor, ...FormFactor[]],
 );
 
-const PropulsionTypeSchema = z.enum([
+const PropulsionTypeSchema = z.enum(
+  Object.values(PropulsionType) as [PropulsionType, ...PropulsionType[]],
+);
+
+const MapItemPropulsionTypeSchema = z.enum([
   ...(Object.values(PropulsionType) as [PropulsionType, ...PropulsionType[]]),
   'COMBINED',
 ]);
@@ -235,6 +239,7 @@ const StationVehicleTypeSchema = z.object({
   model: z.string().nullable().optional(),
   vehicleImage: z.string().nullable().optional(),
   name: LocalizedStringSchema.nullable().optional(),
+  pricingPlans: z.array(ShmoPricingPlanSchema).nullable().optional(),
 });
 
 const VehicleTypeAvailabilitySchema = z.object({
@@ -272,6 +277,7 @@ export const AssetSchema = z.object({
   stateOfCharge: z.number().int().nullish(),
   currentRangeKm: z.number().int().nullish(),
   formFactor: FormFactorSchema.nullish(),
+  propulsionType: PropulsionTypeSchema.nullish(),
 });
 
 export const ShmoBookingSchema = z.object({
@@ -309,8 +315,11 @@ export const InitShmoOneStopBookingRequestBodySchema = z.object({
   assetId: z
     .string()
     .nullish()
+    .optional()
     .describe('This is the same id as vehicleId from the mobility API'),
   operatorId: z.string(),
+  vehicleTypeId: z.string().nullish().optional(),
+  stationId: z.string().nullish().optional(),
 });
 
 export type InitShmoOneStopBookingRequestBody = z.infer<
@@ -458,7 +467,7 @@ export const StationFeaturePropertiesSchema = z.object({
   id: z.string(),
   system_id: z.string(),
   vehicle_type_form_factor: FormFactorSchema,
-  vehicle_type_propulsion_type: PropulsionTypeSchema,
+  vehicle_type_propulsion_type: MapItemPropulsionTypeSchema,
   num_vehicles_available: z.number(),
   capacity: z.number(),
   count: z.literal(1),
@@ -478,7 +487,7 @@ export type StationFeature = z.infer<typeof StationFeatureSchema>;
 export const ClusterPropertiesBaseSchema = z.object({
   count: z.number().gt(1),
   vehicle_type_form_factor: FormFactorSchema,
-  vehicle_type_propulsion_type: PropulsionTypeSchema,
+  vehicle_type_propulsion_type: MapItemPropulsionTypeSchema,
   cluster_extent_meters: z.number().optional(),
 });
 
@@ -503,7 +512,7 @@ export const VehicleFeaturePropertiesSchema = z.object({
   system_id: z.string(),
   count: z.literal(1),
   vehicle_type_form_factor: FormFactorSchema,
-  vehicle_type_propulsion_type: PropulsionTypeSchema,
+  vehicle_type_propulsion_type: MapItemPropulsionTypeSchema,
   num_vehicles_available: z.never().optional(), // to differenciate from station features, which have this field
 });
 

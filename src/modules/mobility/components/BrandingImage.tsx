@@ -11,6 +11,7 @@ type BrandingImageProps = {
   fallback?: React.JSX.Element;
   style?: StyleProp<ViewStyle>;
   logoSize?: number;
+  rounded?: boolean;
 };
 
 export const BrandingImage = ({
@@ -18,6 +19,7 @@ export const BrandingImage = ({
   fallback,
   style,
   logoSize = DEFAULT_LOGO_SIZE,
+  rounded = false,
 }: BrandingImageProps) => {
   const styles = useSheetStyle();
   return (
@@ -25,7 +27,7 @@ export const BrandingImage = ({
       {logoUrl ? (
         isSvgUrl(logoUrl) ? (
           <SvgCssUri
-            style={styles.logo}
+            style={{...styles.logo, borderRadius: rounded ? logoSize / 2 : 0}}
             height={logoSize}
             width={logoSize}
             uri={logoUrl}
@@ -35,6 +37,7 @@ export const BrandingImage = ({
             source={{uri: logoUrl}}
             height={logoSize}
             width={logoSize}
+            borderRadius={rounded ? logoSize / 2 : 0}
             resizeMode="contain"
           />
         )

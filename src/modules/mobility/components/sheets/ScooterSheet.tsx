@@ -34,6 +34,10 @@ import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import {Vehicle} from '@atb/api/types/mobility';
 import {PriceDetailsCard} from '../PriceDetailsCard';
 import {Loading} from '@atb/components/loading';
+import {SupportButton} from '../SupportButton';
+import {TransportationIconBox} from '@atb/components/icon-box';
+import {BrandingImage} from '../BrandingImage';
+import {getTransportModeAndSubMode} from '../../utils';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -70,13 +74,18 @@ export const ScooterSheet = ({
     operatorId,
     operatorName,
     rentalAppUri,
-    brandLogoUrl,
     appStoreUri,
   } = useVehicle(id);
 
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
   const priceAdjustments = operator?.priceAdjustments?.[FormFactor.Scooter];
+  const operatorLogo = operator?.brandAssets?.brandImageUrl;
+
+  const {mode, subMode} = getTransportModeAndSubMode(
+    vehicle?.vehicleType.formFactor,
+    vehicle?.vehicleType.propulsionType,
+  );
 
   const {isLoading: shmoReqIsLoading, hasBlockers} =
     useShmoRequirements(operatorId);
@@ -97,10 +106,22 @@ export const ScooterSheet = ({
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
-      heading={operatorName}
-      subText={t(MobilityTexts.formFactor(FormFactor.Scooter))}
+      heading={t(
+        MobilityTexts.vehicleName(
+          vehicle?.vehicleType?.formFactor ?? FormFactor.Scooter,
+          false,
+          vehicle?.vehicleType?.propulsionType,
+        ),
+      )}
+      subText={operatorName}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      logoUrl={brandLogoUrl ?? ''}
+      logoIcon={
+        operatorLogo ? (
+          <BrandingImage logoUrl={operatorLogo} logoSize={28} rounded={true} />
+        ) : (
+          <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
+        )
+      }
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >
@@ -155,25 +176,24 @@ export const ScooterSheet = ({
                 vehicleId={id}
                 operatorId={operatorId}
                 paymentMethod={selectedPaymentMethod}
+                isStationBasedBooking={false}
               />
-              {selectedPaymentMethod && !hasBlockers && (
-                <Section>
-                  <PaymentSelectionSectionItem
-                    paymentMethod={selectedPaymentMethod}
-                    onPress={selectPaymentMethod}
-                  />
-                </Section>
-              )}
+              <View style={styles.helpButtons}>
+                {selectedPaymentMethod && !hasBlockers && (
+                  <Section>
+                    <PaymentSelectionSectionItem
+                      paymentMethod={selectedPaymentMethod}
+                      onPress={selectPaymentMethod}
+                    />
+                  </Section>
+                )}
 
-              <Button
-                expanded={true}
-                onPress={() => {
-                  navigateToSupport({vehicleId: id, operatorId});
-                }}
-                text={t(MobilityTexts.helpText)}
-                mode="secondary"
-                backgroundColor={theme.color.background.neutral[1]}
-              />
+                <SupportButton
+                  navigateToSupport={() => {
+                    navigateToSupport({vehicleId: id, operatorId});
+                  }}
+                />
+              </View>
             </>
           ) : (
             <>
@@ -221,6 +241,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     messageInfo: {
       paddingBottom: theme.spacing.medium,
+    },
+    helpButtons: {
+      gap: theme.spacing.medium,
     },
   };
 });

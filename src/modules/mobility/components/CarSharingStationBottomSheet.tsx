@@ -89,7 +89,7 @@ export const CarSharingStationBottomSheet = ({
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
       heading={operatorName}
-      subText={t(MobilityTexts.formFactor(FormFactor.Car))}
+      subText={t(MobilityTexts.vehicleName(FormFactor.Car))}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
       logoUrl={brandLogoUrl ?? ''}
       locationArrowOnPress={locationArrowOnPress}
@@ -101,7 +101,7 @@ export const CarSharingStationBottomSheet = ({
             <Loading size="large" />
           </View>
         )}
-        {!isLoading && !isError && station && (
+        {!isLoading && !isError && !!station && (
           <>
             <View style={styles.container}>
               {operatorBenefit && (
@@ -136,7 +136,7 @@ export const CarSharingStationBottomSheet = ({
                         ),
                       )}** ${t(CarSharingTexts.stations.carsAvailableLabel)}`}
                     />
-                    {station.vehicleTypesAvailable && (
+                    {!!station.vehicleTypesAvailable && (
                       <CarPreviews
                         stationCapacity={station.capacity}
                         vehicleTypesAvailable={station.vehicleTypesAvailable}
@@ -145,7 +145,7 @@ export const CarSharingStationBottomSheet = ({
                   </View>
                 </GenericSectionItem>
               </Section>
-              {isBonusActiveForUser && bonusProduct && (
+              {!!isBonusActiveForUser && bonusProduct && (
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
                   operatorName={operatorName}

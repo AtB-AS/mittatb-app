@@ -5,12 +5,15 @@ import {
   TranslatedStringFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
 import * as Types from '../mobility-types_v2';
+import {ShmoPricingPlan} from '../../mobility';
 
 export type VehicleTypeAvailabilityBasicFragment = {
   count: number;
   vehicleType: {
+    id: string;
     formFactor: Types.FormFactor;
     propulsionType: Types.PropulsionType;
+    pricingPlans?: Array<ShmoPricingPlan>;
   };
 };
 
@@ -25,7 +28,7 @@ export type StationBasicFragment = {
 export type BikeStationFragment = {
   numDocksAvailable?: number;
   name: TranslatedStringFragment;
-  pricingPlans: Array<PricingPlanFragment>;
+  pricingPlans: Array<ShmoPricingPlan>;
   system: SystemFragment;
   rentalUris?: RentalUrisFragment;
 } & StationBasicFragment;

@@ -31,7 +31,7 @@ export const MobilityBenefitsInfoSectionItem = ({
       .map(
         (b) =>
           b.formFactors.map((ff) =>
-            t(MobilityTexts.formFactor(toFormFactorEnum(ff))),
+            t(MobilityTexts.vehicleName(toFormFactorEnum(ff))),
           ) +
           screenReaderPause +
           getTextForLanguage(b.ticketDescription, language),
