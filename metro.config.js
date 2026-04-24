@@ -1,5 +1,5 @@
 const path = require('path');
-const withStorybook = require('@storybook/react-native/metro/withStorybook');
+const {withStorybook} = require('@storybook/react-native/metro/withStorybook');
 const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 const {
   wrapWithReanimatedMetroConfig,
