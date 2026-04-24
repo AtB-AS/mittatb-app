@@ -17,10 +17,9 @@ import {Tag} from '@atb/components/tag';
 
 type TravelCardProps = {
   tripPattern: TripPattern;
-  onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
-  cardIndex: number;
+  onDetailsPressed(tripPattern: TripPattern): void;
   testID?: string;
-  a11yPrefix: string;
+  a11yLabelPrefix: string;
   includeDayInfo?: boolean;
   includeFromToInfo?: boolean;
   includeLegNotifications?: boolean;
@@ -33,9 +32,8 @@ type TravelCardProps = {
 export const TravelCard: React.FC<TravelCardProps> = ({
   tripPattern,
   onDetailsPressed,
-  cardIndex,
   testID,
-  a11yPrefix,
+  a11yLabelPrefix,
   includeDayInfo = false,
   includeFromToInfo = false,
   includeLegNotifications = false,
@@ -53,7 +51,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
   );
   const modes = uniqueModes.map((mode) => t(getTranslatedModeName(mode)));
 
-  const prefixA11yLabel = `${a11yPrefix}. ${t(TravelCardTexts.card.modesPrefix(modes))}.`;
+  const prefixA11yLabel = `${a11yLabelPrefix}. ${t(TravelCardTexts.card.modesPrefix(modes))}.`;
 
   const situationOrNoticeA11yLabel =
     includeSituationNotices && !isDisabled
@@ -76,9 +74,10 @@ export const TravelCard: React.FC<TravelCardProps> = ({
       >
         {(accessibilityProps) => (
           <NativeBlockButton
-            onPress={() => onDetailsPressed(tripPattern, cardIndex)}
+            onPress={() => onDetailsPressed(tripPattern)}
             testID={testID}
             style={[styles.container, isDisabled && styles.containerDisabled]}
+            disabled={isDisabled}
             accessibilityRole={isDisabled ? 'none' : 'button'}
             accessibilityHint={
               isDisabled ? undefined : t(TravelCardTexts.card.a11yHint)
