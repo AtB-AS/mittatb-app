@@ -8,7 +8,7 @@ import {RecentFareContracts} from './Components/RecentFareContracts/RecentFareCo
 import {TicketTabNavScreenProps} from '../navigation-types';
 import {FareProductTypeConfig} from '@atb/modules/configuration';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
+import {FareZoneWithMetadata} from '@atb/modules/fare-zones-selector';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {FareZone} from '@atb/modules/configuration';
 import {useGetFareProductsQuery} from '@atb/modules/ticketing';

@@ -3,7 +3,7 @@ import type {
   PurchaseSelectionBuilderInput,
   PurchaseSelectionType,
 } from './types';
-import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
+import {FareZoneWithMetadata} from '@atb/modules/fare-zones-selector';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {

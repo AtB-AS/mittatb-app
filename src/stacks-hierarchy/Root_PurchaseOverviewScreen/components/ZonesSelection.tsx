@@ -8,7 +8,7 @@ import {
 } from '@atb/translations';
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
-import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
+import {FareZoneWithMetadata} from '@atb/modules/fare-zones-selector';
 import {
   GenericClickableSectionItem,
   GenericSectionItem,
