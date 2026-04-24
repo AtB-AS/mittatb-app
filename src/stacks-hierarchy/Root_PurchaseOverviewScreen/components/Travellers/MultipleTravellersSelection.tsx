@@ -49,11 +49,9 @@ export function MultipleTravellersSelection(props: Props) {
 
   const onDecrementTraveller = (userProfile: UserProfileWithCount) => {
     if (!props.userCountState.canDecrement(userProfile)) return;
-    if (userProfile.count === userProfile.limit) {
-      props.setInfoMessage(undefined);
-    }
     travellersModified.current = true;
     props.userCountState.decrement(userProfile);
+    props.setInfoMessage(undefined);
   };
 
   const onIncrementBaggage = (baggageProduct: BaggageProductWithCount) => {

@@ -24,5 +24,6 @@ export function useUserCountState(selection: PurchaseSelectionType) {
   return useUniqueCountState<UserProfile>(
     initialUserProfilesWithCount,
     findUserProfile,
+    selection.preassignedFareProduct.limitations.maxCountPerOrder,
   );
 }
