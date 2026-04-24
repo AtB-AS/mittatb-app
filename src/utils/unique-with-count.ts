@@ -19,6 +19,7 @@ const subtractCount = (count: number) => count - 1;
 export function useUniqueCountState<T>(
   initialState: UniqueWithCount<T>[],
   equalityPredicate: (a: T, b: T) => boolean,
+  totalLimit?: number,
 ): UniqueCountState<T> {
   const [state, setState] = useState<UniqueWithCount<T>[]>(initialState);
 
@@ -40,6 +41,15 @@ export function useUniqueCountState<T>(
         newCount = Math.min(newCount, currentItem.limit);
       }
 
+      if (totalLimit != null) {
+        const otherTotal = prevState.reduce(
+          (sum, item, i) => sum + (i === index ? 0 : item.count),
+          0,
+        );
+        newCount = Math.min(newCount, totalLimit - otherTotal);
+        newCount = Math.max(0, newCount);
+      }
+
       newState[index] = {
         ...currentItem,
         count: newCount,
@@ -56,7 +66,12 @@ export function useUniqueCountState<T>(
   const canIncrement = (item: T) => {
     const currentItem = state.find((value) => equalityPredicate(value, item));
     if (!currentItem) return false;
-    if (currentItem.limit != null) return currentItem.count < currentItem.limit;
+    if (currentItem.limit != null && currentItem.count >= currentItem.limit)
+      return false;
+    if (totalLimit != null) {
+      const currentTotal = state.reduce((sum, s) => sum + s.count, 0);
+      if (currentTotal >= totalLimit) return false;
+    }
     return true;
   };
 

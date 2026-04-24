@@ -295,3 +295,13 @@ export const isWithinUserProfileMaxCount = (
 
   return profile.count <= (maxCount ?? Number.POSITIVE_INFINITY);
 };
+
+export const isWithinMaxCountPerOrder = (
+  product: PreassignedFareProduct,
+  profiles: UserProfileWithCount[],
+) => {
+  const maxCountPerOrder = product.limitations.maxCountPerOrder;
+  if (maxCountPerOrder == null) return true;
+  const totalCount = profiles.reduce((sum, p) => sum + p.count, 0);
+  return totalCount <= maxCountPerOrder;
+};
