@@ -18,11 +18,15 @@ export const TravelCardHeader: React.FC<
     tripPattern: TripPattern;
     includeDayInfo?: boolean;
     includeFromToInfo?: boolean;
+    type?: 'normal' | 'large';
+    ref?: React.Ref<any>;
   }
 > = ({
   tripPattern,
+  type = 'normal',
   includeDayInfo = true,
   includeFromToInfo = true,
+  ref,
   ...accessibilityProps
 }) => {
   const styles = useThemeStyles();
@@ -84,16 +88,21 @@ export const TravelCardHeader: React.FC<
   useAccessibilityLabelContribution('header', a11yLabel);
 
   return (
-    <View style={styles.container} {...accessibilityProps}>
+    <View style={styles.container} {...accessibilityProps} ref={ref}>
       <View style={styles.header}>
         <View style={styles.timeContainer}>
-          <ThemeText typography="body__m__strong">
+          <ThemeText
+            typography={type === 'large' ? 'heading__l' : 'body__m__strong'}
+          >
             {isInPast
               ? t(TravelCardTexts.header.pastTime)
               : `${expectedStartTimeLabel} - ${expectedEndTimeLabel}`}
           </ThemeText>
           {(!areTimesEquivalentInMinutes || isInPast) && (
-            <ThemeText typography="body__s" color="secondary">
+            <ThemeText
+              typography={type === 'large' ? 'body__m' : 'body__s'}
+              color="secondary"
+            >
               {t(TravelCardTexts.header.originalTime)} {aimedStartTimeLabel} -{' '}
               {aimedEndTimeLabel}
             </ThemeText>
@@ -103,7 +112,7 @@ export const TravelCardHeader: React.FC<
         <View style={styles.durationContainer}>
           <ThemeText
             typography="body__m"
-            color="secondary"
+            color={type === 'large' ? 'primary' : 'secondary'}
             testID="resultDuration"
           >
             {secondsToDurationShort(tripPattern.duration, language)}

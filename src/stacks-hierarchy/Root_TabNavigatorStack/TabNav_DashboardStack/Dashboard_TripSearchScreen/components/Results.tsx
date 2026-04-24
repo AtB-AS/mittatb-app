@@ -22,6 +22,8 @@ import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 import type {TripSearchTime} from '../../types';
 import {ResultRow} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultRow';
 import {SaveableTripSearchResultRow} from '@atb/modules/experimental-store-trip-patterns';
+import {useIsExperimentalEnabled} from '@atb/modules/experimental';
+import {TravelCard} from '@atb/screen-components/travel-card';
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
@@ -50,6 +52,7 @@ export const Results: React.FC<Props> = ({
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const now = useNow(30000);
+  const isExperimental = useIsExperimentalEnabled();
 
   if (showEmptyScreen) {
     return null;
@@ -101,13 +104,24 @@ export const Results: React.FC<Props> = ({
               previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
             />
             <SaveableTripSearchResultRow tripPattern={tripPattern}>
-              <ResultRow
-                tripPattern={tripPattern}
-                onDetailsPressed={onDetailsPressed}
-                resultIndex={i}
-                searchTime={searchTime}
-                testID={'tripSearchSearchResult' + i}
-              />
+              {isExperimental ? (
+                <TravelCard
+                  tripPattern={tripPattern}
+                  onDetailsPressed={onDetailsPressed}
+                  cardIndex={i}
+                  numberOfCards={tripPatterns.length}
+                  testID={'tripSearchSearchResult' + i}
+                  type="trip-search"
+                />
+              ) : (
+                <ResultRow
+                  tripPattern={tripPattern}
+                  onDetailsPressed={onDetailsPressed}
+                  resultIndex={i}
+                  searchTime={searchTime}
+                  testID={'tripSearchSearchResult' + i}
+                />
+              )}
             </SaveableTripSearchResultRow>
           </Fragment>
         ))}
