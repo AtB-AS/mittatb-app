@@ -14,7 +14,9 @@ export type TripPattern =
   };
 export type TripMetadata = Required<Types.TripsQuery>['trip']['metadata'];
 export type Leg =
-  Required<Types.TripsQuery>['trip']['tripPatterns'][0]['legs'][0];
+  Required<Types.TripsQuery>['trip']['tripPatterns'][0]['legs'][0] & {
+    isStale?: boolean;
+  };
 export type Line = Required<
   Required<Types.TripsQuery>['trip']['tripPatterns'][0]['legs'][0]
 >['line'];
@@ -48,29 +50,4 @@ export type BookingTripsResult = {
   trip: {
     tripPatterns: TripPatternWithBooking[];
   };
-};
-
-// --- v3 singleTrip types ---
-
-/** A leg that could not be refetched from JourneyPlanner */
-export type StaleLeg = {
-  id: string;
-  status: 'stale';
-};
-
-export type RefreshedLeg = Leg | StaleLeg;
-
-export function isStaleLeg(leg: RefreshedLeg): leg is StaleLeg {
-  return 'status' in leg && leg.status === 'stale';
-}
-
-export type RefreshedTripPattern = {
-  status: TripPatternStatus;
-  aimedStartTime?: string;
-  aimedEndTime?: string;
-  expectedStartTime?: string;
-  expectedEndTime?: string;
-  duration?: number;
-  walkDistance?: number;
-  legs: RefreshedLeg[];
 };
