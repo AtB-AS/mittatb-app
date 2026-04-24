@@ -30,6 +30,7 @@ import {
   BonusProductType,
   BonusTextsType,
   ScooterConsentLineType,
+  CompiledKnownQrCodeUrl,
 } from './types';
 import {
   mapLanguageAndTextType,
@@ -48,6 +49,7 @@ import {
   mapToStopSignalButtonConfig,
   mapToScooterConsentLines,
   mapToAppVersionedConfigurableLinks,
+  mapToKnownQrCodeUrls,
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
@@ -88,6 +90,7 @@ type ConfigurationContextState = {
   firestoreConfigStatus: FirestoreConfigStatus;
   notificationConfig: NotificationConfigType | undefined;
   stopSignalButtonConfig: StopSignalButtonConfigType;
+  knownQrCodeUrls: CompiledKnownQrCodeUrl[];
   resubscribeFirestoreConfig: () => void;
 };
 
@@ -142,6 +145,9 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
   >();
   const [stopSignalButtonConfig, setStopSignalButtonConfig] =
     useState<StopSignalButtonConfigType>(defaultStopSignalButtonConfig);
+  const [knownQrCodeUrls, setKnownQrCodeUrls] = useState<
+    CompiledKnownQrCodeUrl[]
+  >([]);
   const [firestoreConfigStatus, setFirestoreConfigStatus] =
     useState<FirestoreConfigStatus>('loading');
   const {resubscribe, resubscribeToggle} = useResubscribeToggle();
@@ -266,6 +272,9 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
           const stopSignalButtonConfig =
             getStopSignalButtonConfigFromSnapshot(snapshot);
           setStopSignalButtonConfig(stopSignalButtonConfig);
+
+          const knownQrCodeUrls = getKnownQrCodeUrlsFromSnapshot(snapshot);
+          setKnownQrCodeUrls(knownQrCodeUrls);
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -296,6 +305,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     setHarborConnectionOverrides([]);
     setNotificationConfig(undefined);
     setStopSignalButtonConfig(defaultStopSignalButtonConfig);
+    setKnownQrCodeUrls([]);
   };
 
   useEffect(() => {
@@ -330,6 +340,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
       harborConnectionOverrides,
       notificationConfig,
       stopSignalButtonConfig,
+      knownQrCodeUrls,
       firestoreConfigStatus,
     };
   }, [
@@ -355,6 +366,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     harborConnectionOverrides,
     notificationConfig,
     stopSignalButtonConfig,
+    knownQrCodeUrls,
     firestoreConfigStatus,
   ]);
 
@@ -718,4 +730,11 @@ function getStopSignalButtonConfigFromSnapshot(
     (doc) => doc.id == 'stopSignalButtonConfig',
   );
   return mapToStopSignalButtonConfig(config?.data());
+}
+
+function getKnownQrCodeUrlsFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): CompiledKnownQrCodeUrl[] {
+  const config = snapshot.docs.find((doc) => doc.id == 'knownQrCodeUrls');
+  return mapToKnownQrCodeUrls(config?.data());
 }
