@@ -1,4 +1,4 @@
-import {useMobileTokenContext} from '@atb/modules/mobile-token';
+import {useMobileTokenContext} from '../MobileTokenContext';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 
