@@ -41,14 +41,15 @@ export const useMapViewConfig = (
     () => ({styleJSON: mapboxJsonStyle}),
     [mapboxJsonStyle],
   );
-  const {enable_surface_view_map} = useRemoteConfigContext();
+  const {enable_surface_view_map, map_max_pitch} = useRemoteConfigContext();
 
   return useMemo(
     () => ({
       ...MapViewStaticConfig,
       ...configMap,
       surfaceView: enable_surface_view_map,
+      maxPitch: map_max_pitch,
     }),
-    [configMap, enable_surface_view_map],
+    [configMap, enable_surface_view_map, map_max_pitch],
   );
 };
