@@ -25,8 +25,7 @@ type TravelCardProps = {
   includeLegNotifications?: boolean;
   includeSituationNotices?: boolean;
   isDisabled?: boolean;
-  tagLabel?: string;
-  tagType?: Statuses;
+  tag?: {label: string; type: Statuses};
 };
 
 export const TravelCard: React.FC<TravelCardProps> = ({
@@ -39,8 +38,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
   includeLegNotifications = false,
   includeSituationNotices = false,
   isDisabled = false,
-  tagLabel,
-  tagType = 'info',
+  tag,
 }) => {
   const styles = useThemeStyles();
   const [maxWidth, setMaxWidth] = useState(0);
@@ -58,8 +56,8 @@ export const TravelCard: React.FC<TravelCardProps> = ({
       ? getDetailedSituationOrNoticeA11yLabel(tripPattern, language, t)
       : undefined;
 
-  const tagA11yLabel = tagLabel
-    ? `.. ${t(dictionary.messageTypes[tagType])}.. ${tagLabel}`
+  const tagA11yLabel = tag
+    ? `.. ${t(dictionary.messageTypes[tag.type])}.. ${tag.label}`
     : undefined;
 
   return (
@@ -84,9 +82,9 @@ export const TravelCard: React.FC<TravelCardProps> = ({
             }
             {...accessibilityProps}
           >
-            {tagLabel && (
+            {tag && (
               <View aria-hidden={true}>
-                <Tag labels={[tagLabel]} tagType={tagType} />
+                <Tag labels={[tag.label]} tagType={tag.type} />
               </View>
             )}
             <TravelCardHeader

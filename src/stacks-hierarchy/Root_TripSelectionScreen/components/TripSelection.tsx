@@ -85,8 +85,7 @@ export function BookingTripSelection({
               )}
               includeSituationNotices
               isDisabled={!isAvailable}
-              tagLabel={tagInfo?.label}
-              tagType={tagInfo?.type}
+              tag={tagInfo}
             />
           );
         })
