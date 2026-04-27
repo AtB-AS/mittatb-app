@@ -21,3 +21,4 @@ export {
   type BonusOnboardingScreenName,
 } from './onboarding';
 export {useIsBonusActiveForUser} from './use-is-bonus-active-for-user';
+export {useIsBonusBalanceButtonVisible} from './use-is-bonus-balance-button-visible';
