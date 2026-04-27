@@ -16,7 +16,10 @@ import {useIsFocused} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Keyboard, TextInput as InternalTextInput, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {FareZoneResults} from '@atb/fare-zones-selector/FareZoneResults';
+import {
+  FareZoneResults,
+  type FareZoneWithMetadata,
+} from '@atb/modules/fare-zones-selector';
 import {LocationAndFareZone, VenueResults} from './VenueResults';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {translateErrorType} from '@atb/stacks-hierarchy/utils';
@@ -24,7 +27,6 @@ import {
   usePurchaseSelectionBuilder,
   useSelectableFareZones,
 } from '@atb/modules/purchase-selection';
-import type {FareZoneWithMetadata} from '@atb/fare-zones-selector';
 import {RequestError, toAxiosErrorKind} from '@atb/api/utils';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Loading} from '@atb/components/loading';

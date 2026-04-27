@@ -9,7 +9,7 @@ import type {
   PurchaseSelectionBuilderInput,
   PurchaseSelectionType,
 } from '../types';
-import type {FareZoneWithMetadata} from '@atb/fare-zones-selector';
+import type {FareZoneWithMetadata} from '@atb/modules/fare-zones-selector';
 
 export const TEST_TYPE_CONFIG: FareProductTypeConfig = {
   type: 'single',

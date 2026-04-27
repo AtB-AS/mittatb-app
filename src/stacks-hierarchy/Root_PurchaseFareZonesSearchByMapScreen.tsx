@@ -7,7 +7,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {
   FareZonesSelectorButtons,
   FareZonesSelectorMap,
-} from '@atb/fare-zones-selector';
+} from '@atb/modules/fare-zones-selector';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
 import {usePreviousZonesStore} from '@atb/modules/purchase-selection';
 

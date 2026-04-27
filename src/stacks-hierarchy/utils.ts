@@ -5,7 +5,7 @@ import {FareZone} from '@atb/modules/configuration';
 import {
   FareZoneWithMetadata,
   useFareZoneFromLocation,
-} from '@atb/fare-zones-selector';
+} from '@atb/modules/fare-zones-selector';
 import {useMemo} from 'react';
 
 //Will be used for saved payment method notifications/card expiration messages after backend implementation
