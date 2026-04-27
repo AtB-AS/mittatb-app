@@ -4,13 +4,13 @@ import {Location} from '@atb/modules/favorites';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {getVenueIconTypes} from './utils';
+import {View} from 'react-native';
+import {StyleSheet} from '@atb/theme';
+import {TransportationIconBox} from '../icon-box';
 import {
-  BusFill,
-  FerryFill,
-  PlaneFill,
-  TrainFill,
-  TramFill,
-} from '@atb/assets/svg/mono-icons/transportation';
+  TransportMode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 
 export const LocationIcon = ({
   location,
@@ -20,6 +20,8 @@ export const LocationIcon = ({
   fill?: string;
   multiple?: boolean;
 }) => {
+  const styles = useStyles();
+
   if (location.resultType === 'geolocation') {
     return <ThemeIcon svg={LocationMonoIcon} />;
   }
@@ -34,7 +36,9 @@ export const LocationIcon = ({
       }
 
       return multiple ? (
-        <>{venueIconTypes.map((it) => mapTypeToIconComponent(it))}</>
+        <View style={styles.multipleIconsContainer}>
+          {venueIconTypes.map((it) => mapTypeToIconComponent(it))}
+        </View>
       ) : (
         mapTypeToIconComponent(venueIconTypes[0])
       );
@@ -44,40 +48,27 @@ export const LocationIcon = ({
   }
 };
 
-const mapTypeToIconComponent = (iconType: VenueIconType) => {
+const mapTypeToIconComponent = (
+  iconType: ReturnType<typeof getVenueIconTypes>[number],
+) => {
   switch (iconType) {
     case 'bus':
       return (
-        <ThemeIcon
-          svg={BusFill}
-          accessibilityLabel="Bussholdeplass"
-          key="bus"
+        <TransportationIconBox
+          mode={TransportMode.Bus}
+          subMode={TransportSubmode.LocalBus}
         />
       );
     case 'tram':
-      return (
-        <ThemeIcon
-          svg={TramFill}
-          accessibilityLabel="Trikkeholdeplass"
-          key="tram"
-        />
-      );
+      return <TransportationIconBox mode={TransportMode.Tram} />;
     case 'rail':
-      return (
-        <ThemeIcon svg={TrainFill} accessibilityLabel="Togstasjon" key="rail" />
-      );
+      return <TransportationIconBox mode={TransportMode.Rail} />;
+    case 'metro':
+      return <TransportationIconBox mode={TransportMode.Metro} />;
     case 'airport':
-      return (
-        <ThemeIcon
-          svg={PlaneFill}
-          accessibilityLabel="Flyplass"
-          key="airport"
-        />
-      );
+      return <TransportationIconBox mode={TransportMode.Air} />;
     case 'boat':
-      return (
-        <ThemeIcon svg={FerryFill} accessibilityLabel="Fergeleie" key="boat" />
-      );
+      return <TransportationIconBox mode={TransportMode.Water} />;
     case 'unknown':
     default:
       return (
@@ -86,4 +77,9 @@ const mapTypeToIconComponent = (iconType: VenueIconType) => {
   }
 };
 
-type VenueIconType = 'bus' | 'tram' | 'rail' | 'airport' | 'boat' | 'unknown';
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  multipleIconsContainer: {
+    flexDirection: 'row',
+    gap: theme.spacing.small,
+  },
+}));
