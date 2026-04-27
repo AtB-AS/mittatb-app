@@ -339,6 +339,7 @@ export function isSvgUrl(url: string) {
 export function getThemedIllustrationForFormFactor(formFactor: FormFactor) {
   switch (formFactor) {
     case FormFactor.Scooter:
+    case FormFactor.ScooterStanding:
       return ThemedScooter;
     case FormFactor.Bicycle:
       return ThemedCityBike;
