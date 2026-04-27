@@ -20,6 +20,7 @@ import {Flash, NoFlash} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {SCREEN_HEIGHT} from '@gorhom/bottom-sheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {errorToMetadata, logToBugsnag} from '@atb/utils/bugsnag-utils';
+import DeviceInfo from 'react-native-device-info';
 
 type PhotoProps = {
   mode: 'photo';
@@ -53,6 +54,12 @@ export const Camera = ({
   const isFocused = useIsFocusedAndActive();
 
   const handleCapture = async () => {
+    const isEmulator = await DeviceInfo.isEmulator();
+    if (__DEV__ && isEmulator && mode === 'photo') {
+      onCapture({path: 'https://picsum.photos/1080/1920'});
+      return;
+    }
+
     if (mode === 'photo') {
       try {
         const photo: PhotoFile | undefined = await camera.current?.takePhoto({
@@ -126,24 +133,23 @@ export const Camera = ({
               rightIcon={torch === 'on' ? {svg: Flash} : {svg: NoFlash}}
               accessibilityLabel={t(CameraTexts.flashlight[torch])}
             />
-
-            {mode !== 'qr' || bottomButtonNode ? (
-              <View
-                style={styles.footerWrapper}
-                onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
-              >
-                {mode !== 'qr' && (
-                  <CaptureButton
-                    style={styles.captureButton}
-                    onCapture={handleCapture}
-                    focusRef={focusRef}
-                  />
-                )}
-                {bottomButtonNode}
-              </View>
-            ) : null}
           </View>
         )}
+        {mode !== 'qr' || bottomButtonNode ? (
+          <View
+            style={styles.footerWrapper}
+            onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
+          >
+            {mode !== 'qr' && (
+              <CaptureButton
+                style={styles.captureButton}
+                onCapture={handleCapture}
+                focusRef={focusRef}
+              />
+            )}
+            {bottomButtonNode}
+          </View>
+        ) : null}
       </>
     );
   } else {

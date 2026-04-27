@@ -9,3 +9,4 @@ export type {
   StackParams,
   ShmoHelpParams,
 } from './navigation-types';
+export {isValidKey} from './utils';

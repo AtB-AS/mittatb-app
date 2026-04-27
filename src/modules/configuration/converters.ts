@@ -1,4 +1,5 @@
 import {
+  CompiledKnownQrCodeUrl,
   FareProductTypeConfig,
   FlexibleTransportOptionType,
   HarborConnectionOverride,
@@ -20,6 +21,7 @@ import {
   AppVersionedConfigurableLink,
   AppVersionedConfigurableLinkSchema,
   FlexibleTransportOption,
+  KnownQrCodeUrl,
   NotificationConfig,
   StopSignalButtonConfig,
   type StopSignalButtonConfigType,
@@ -300,3 +302,38 @@ export const mapToStopSignalButtonConfig = (
     ? parseResult.data
     : StopSignalButtonConfig.parse({});
 };
+
+export function mapToKnownQrCodeUrls(config?: any): CompiledKnownQrCodeUrl[] {
+  if (!config) return [];
+  const rawUrls = config.urls;
+  if (!Array.isArray(rawUrls)) {
+    Bugsnag.notify(
+      `mapToKnownQrCodeUrls: expected "urls" to be an array, got ${typeof rawUrls}`,
+    );
+    return [];
+  }
+  return rawUrls
+    .map((raw) => {
+      const parseResult = KnownQrCodeUrl.safeParse(raw);
+      if (!parseResult.success) {
+        Bugsnag.notify(
+          `mapToKnownQrCodeUrls: invalid entry ${JSON.stringify(raw)}: ${parseResult.error}`,
+        );
+        return undefined;
+      }
+      const entry = parseResult.data;
+      try {
+        return {
+          id: entry.id,
+          regex: new RegExp(entry.pattern),
+          openMode: entry.openMode,
+        };
+      } catch (error) {
+        Bugsnag.notify(
+          `mapToKnownQrCodeUrls: invalid regex for entry "${entry.id}": ${error}`,
+        );
+        return undefined;
+      }
+    })
+    .filter(isDefined);
+}

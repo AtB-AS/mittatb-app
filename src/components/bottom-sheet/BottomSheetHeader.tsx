@@ -41,53 +41,49 @@ export const BottomSheetHeader = ({
   return (
     <View accessibilityRole="header" testID={`${testID}BottomSheetHeader`}>
       <View style={styles.handleIndicatorStyle} />
-      {(heading || headerData?.text || headerData?.icon) && (
-        <View style={styles.headerContainer}>
-          <View style={styles.headerContent}>
-            <View style={styles.headerLeft}>
+      <View style={styles.headerContainer}>
+        <View style={styles.headerContent}>
+          <View style={styles.headerLeft}>
+            {logoUrl ? (
+              <BrandingImage logoUrl={logoUrl} logoSize={28} />
+            ) : (
+              logoIcon && logoIcon
+            )}
+            <View style={styles.headingWrapper} accessible ref={focusRef}>
               {heading && (
-                <>
-                  {logoUrl ? (
-                    <BrandingImage logoUrl={logoUrl} logoSize={28} />
-                  ) : (
-                    logoIcon && logoIcon
-                  )}
-                  <View style={styles.headingWrapper} accessible ref={focusRef}>
-                    <ThemeText typography="heading__xl">{heading}</ThemeText>
-                    {subText && (
-                      <ThemeText
-                        typography="body__s"
-                        color={theme.color.foreground.dynamic.secondary}
-                      >
-                        {subText}
-                      </ThemeText>
-                    )}
-                  </View>
-                </>
+                <ThemeText typography="heading__xl">{heading}</ThemeText>
+              )}
+              {subText && (
+                <ThemeText
+                  typography="body__s"
+                  color={theme.color.foreground.dynamic.secondary}
+                >
+                  {subText}
+                </ThemeText>
               )}
             </View>
-
-            {(headerData?.text || headerData?.icon) && (
-              <NativeBorderlessButton
-                style={styles.headerRight}
-                testID="closeBottomSheet"
-                accessibilityRole="button"
-                onPress={() => bottomSheetRef.current?.close()}
-              >
-                {headerData?.text && (
-                  <ThemeText typography="body__s__strong">
-                    {headerData.text}
-                  </ThemeText>
-                )}
-                {headerData?.icon && <ThemeIcon svg={headerData.icon} />}
-              </NativeBorderlessButton>
-            )}
           </View>
-          {!!headerNode && (
-            <View style={styles.headerNodeContainer}>{headerNode}</View>
+
+          {(headerData?.text || headerData?.icon) && (
+            <NativeBorderlessButton
+              style={styles.headerRight}
+              testID="closeBottomSheet"
+              accessibilityRole="button"
+              onPress={() => bottomSheetRef.current?.close()}
+            >
+              {headerData?.text && (
+                <ThemeText typography="body__s__strong">
+                  {headerData.text}
+                </ThemeText>
+              )}
+              {headerData?.icon && <ThemeIcon svg={headerData.icon} />}
+            </NativeBorderlessButton>
           )}
         </View>
-      )}
+        {!!headerNode && (
+          <View style={styles.headerNodeContainer}>{headerNode}</View>
+        )}
+      </View>
     </View>
   );
 };
@@ -107,7 +103,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     paddingLeft: theme.spacing.medium,
     paddingRight: theme.spacing.medium,
-    paddingBottom: theme.spacing.medium,
+    paddingBottom: theme.spacing.small,
   },
   headerLeft: {
     flex: 1,

@@ -148,6 +148,9 @@ export const Map_RootScreen = ({
   const navigateToBonusScreen = useCallback(() => {
     navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
   }, [navigation, bonusScreenParams]);
+  const navigateToStartCityBikeTripWaitingScreen = useCallback(() => {
+    navigation.navigate('Map_CityBikeStartTripScreen');
+  }, [navigation]);
 
   const focusRef = useFocusOnLoad(navigation);
 
@@ -169,6 +172,9 @@ export const Map_RootScreen = ({
       navigateToLogin={navigateToLogin}
       navigateToPaymentMethods={navigateToPaymentMethods}
       navigateToBonusScreen={navigateToBonusScreen}
+      navigateToStartCityBikeTripWaitingScreen={
+        navigateToStartCityBikeTripWaitingScreen
+      }
       includeSnackbar={true}
     />
   );

@@ -1,4 +1,7 @@
-import {mapToTransportModeFilterOptions} from '../converters';
+import {
+  mapToKnownQrCodeUrls,
+  mapToTransportModeFilterOptions,
+} from '../converters';
 
 jest.mock('@bugsnag/react-native', () => ({
   notify: jest.fn(),
@@ -67,5 +70,67 @@ describe('mapToTransportModeFilterOptions', () => {
       {text: 'wrong'},
     ]);
     expect(result).toEqual([]);
+  });
+});
+
+describe('mapToKnownQrCodeUrls', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('returns an empty list for undefined input without notifying Bugsnag', () => {
+    expect(mapToKnownQrCodeUrls(undefined)).toEqual([]);
+    expect(Bugsnag.notify).not.toHaveBeenCalled();
+  });
+
+  it('parses and pre-compiles regex for valid entries', () => {
+    const result = mapToKnownQrCodeUrls({
+      urls: [
+        {
+          id: 'bysykkel-web',
+          pattern: '^https://bysykkel\\.mittatb\\.no/web(/.*)?$',
+          openMode: 'in-app-browser',
+        },
+      ],
+    });
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe('bysykkel-web');
+    expect(result[0].openMode).toBe('in-app-browser');
+    expect(result[0].regex).toBeInstanceOf(RegExp);
+    expect(result[0].regex.test('https://bysykkel.mittatb.no/web')).toBe(true);
+    expect(result[0].regex.test('https://evil.example.com/')).toBe(false);
+    expect(Bugsnag.notify).not.toHaveBeenCalled();
+  });
+
+  it('drops entries with invalid regex and notifies Bugsnag, keeping valid ones', () => {
+    const result = mapToKnownQrCodeUrls({
+      urls: [
+        {id: 'bad', pattern: '[unclosed', openMode: 'open-url'},
+        {
+          id: 'good',
+          pattern: '^https://example\\.com$',
+          openMode: 'open-url',
+        },
+      ],
+    });
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe('good');
+    expect(Bugsnag.notify).toHaveBeenCalledTimes(1);
+  });
+
+  it('returns an empty list and notifies Bugsnag when the shape is invalid', () => {
+    expect(mapToKnownQrCodeUrls({urls: 'not an array'})).toEqual([]);
+    expect(Bugsnag.notify).toHaveBeenCalledTimes(1);
+  });
+
+  it('drops entries with an unknown openMode', () => {
+    const result = mapToKnownQrCodeUrls({
+      urls: [
+        {id: 'bad-mode', pattern: '^x$', openMode: 'system-browser'},
+        {id: 'ok', pattern: '^x$', openMode: 'open-url'},
+      ],
+    });
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe('ok');
   });
 });

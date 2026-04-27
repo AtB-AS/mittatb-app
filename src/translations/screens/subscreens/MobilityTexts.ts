@@ -12,39 +12,75 @@ import {formatNumberToString} from '@atb-as/utils';
 import {getCurrencySymbol} from '@atb/translations/currency';
 
 export const MobilityTexts = {
-  formFactor: (formFactor: FormFactor, isPlural: boolean = false) => {
+  vehicleName: (
+    formFactor: FormFactor,
+    isPlural: boolean = false,
+    propulsionType?: PropulsionType,
+  ) => {
     switch (formFactor) {
       case FormFactor.Scooter:
+      case FormFactor.ScooterStanding:
+        if (
+          propulsionType === PropulsionType.ElectricAssist ||
+          propulsionType === PropulsionType.Electric
+        ) {
+          return isPlural
+            ? _(
+                'Elektrisk sparkesykkel',
+                'Electric scooter',
+                'Elektrisk sparkesykkel',
+              )
+            : _(
+                'Elektrisk sparkesykkel',
+                'Electric scooter',
+                'Elektrisk sparkesykkel',
+              );
+        }
         return isPlural
-          ? _('Elsparkesykler', 'E-scooters', 'Elsparkesyklar')
-          : _('Elsparkesykkel', 'E-scooter', 'Elsparkesykkel');
+          ? _(
+              'Elektrisk sparkesykkel',
+              'Electric scooter',
+              'Elektrisk sparkesykkel',
+            )
+          : _(
+              'Elektrisk sparkesykkel',
+              'Electric scooter',
+              'Elektrisk sparkesykkel',
+            );
       case FormFactor.Bicycle:
+        if (
+          propulsionType === PropulsionType.ElectricAssist ||
+          propulsionType === PropulsionType.Electric
+        ) {
+          return isPlural
+            ? _(
+                'Elektriske bysykler',
+                'Electric city bikes',
+                'Elektriske bysyklar',
+              )
+            : _(
+                'Elektrisk bysykkel',
+                'Electric city bike',
+                'Elektrisk bysykkel',
+              );
+        } else if (propulsionType === PropulsionType.Human) {
+          return isPlural
+            ? _('Bysykler', 'City Bikes', 'Bysyklar')
+            : _('Bysykkel', 'City bike', 'Bysykkel');
+        }
         return isPlural
           ? _('Bysykler', 'City Bikes', 'Bysyklar')
-          : _('Bysykkel', 'City Bike', 'Bysykkel');
+          : _('Bysykkel', 'City bike', 'Bysykkel');
+
       case FormFactor.Car:
         return isPlural
-          ? _('Delebiler', 'Shared Cars', 'Delebilar')
-          : _('Delebil', 'Car sharing', 'Delebil');
+          ? _('Leiebiler', 'Rental cars', 'Leigebilar')
+          : _('Leiebil', 'Rental car', 'Leigebil');
       default:
         return _('Annet', 'Other', 'Anna');
     }
   },
-  bikeNameByPropulsionType: (propulsionType: PropulsionType | undefined) => {
-    switch (propulsionType) {
-      case PropulsionType.ElectricAssist:
-      case PropulsionType.Electric:
-        return _(
-          'Elektrisk bysykkel',
-          'Electric city bike',
-          'Elektrisk bysykkel',
-        );
-      case PropulsionType.Human:
-        return _('Bysykkel', 'City bike', 'Bysykkel');
-      default:
-        return _('Bysykkel', 'City bike', 'Bysykkel');
-    }
-  },
+
   freeBikes: (amount: string) => {
     return _(amount + ' ledige', amount + ' available', amount + ' ledige');
   },
@@ -55,6 +91,29 @@ export const MobilityTexts = {
       amount + ' ledige plassar',
     );
   },
+  cityBike: {
+    location: (position: number) =>
+      _(`Plass ${position}`, `Dock ${position}`, `Plass ${position}`),
+    startTripView: {
+      title: _(
+        'Trykk på knappen på styret',
+        'Press the button on the handlebar',
+        'Trykk på knappen på styret',
+      ),
+      description: _(
+        'Når knappen lyser grønt og sykkelen lager lyd kan du ta den ut av stativet og sykle av sted.',
+        'When the button lights up green and the bike makes a sound, you can take it out of the dock and start riding.',
+        'Når knappen lyser grønt og sykkelen lagar lyd kan du ta den ut av stativet og sykle av stad.',
+      ),
+      safeTrip: _('God tur!', 'Have a nice trip!', 'God tur!'),
+      header: _('Start tur', 'Start trip', 'Start tur'),
+    },
+  },
+  loadingBookingFailed: _(
+    'Ops! Vi kunne ikke hente informasjon om turen',
+    "Ops! We couldn't fetch the trip information",
+    'Ops! Vi kunne ikkje hente informasjon om turen',
+  ),
   finishing: {
     button: _('Ta bilde', 'Take a photo', 'Ta eit bilde'),
     header: _(
@@ -252,7 +311,7 @@ export const MobilityTexts = {
     ),
     retry: _('Prøv på nytt', 'Try again', `Prøv på nytt`),
   },
-  totalCost: _('Totalkostnad', 'Total cost', 'Totalkostnad'),
+  cost: _('Pris', 'Cost', 'Pris'),
   time: _('Tid', 'Time', 'Tid'),
   trip: {
     button: {

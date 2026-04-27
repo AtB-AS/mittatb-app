@@ -49,7 +49,7 @@ export const ShmoTripDetailsSectionItem = ({
         style={styles.leftSection}
         accessible={true}
         accessibilityLabel={`${t(
-          MobilityTexts.totalCost,
+          MobilityTexts.cost,
         )} ${formattedTotalAmount} ${currencyMajorName}`}
       >
         {withHeader && (
@@ -70,7 +70,7 @@ export const ShmoTripDetailsSectionItem = ({
       <View
         style={styles.rightSection}
         accessible={true}
-        accessibilityLabel={`${t(MobilityTexts.totalCost)} ${totalAmount} ${currencyMajorName}`}
+        accessibilityLabel={`${t(MobilityTexts.cost)} ${totalAmount} ${currencyMajorName}`}
       >
         {withHeader && (
           <ThemeText
@@ -78,7 +78,7 @@ export const ShmoTripDetailsSectionItem = ({
             color="secondary"
             accessibilityRole="header"
           >
-            {t(MobilityTexts.totalCost)}
+            {t(MobilityTexts.cost)}
           </ThemeText>
         )}
         <ThemeText typography="heading__xl">

@@ -1,7 +1,7 @@
 import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
 import React, {useState} from 'react';
 import {useTranslation} from '@atb/translations';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   BicycleTexts,
   MobilityTexts,
@@ -35,7 +35,6 @@ import {PriceDetailsCard} from '../PriceDetailsCard';
 import {useOperators} from '../../use-operators';
 import {useShmoRequirements} from '../../use-shmo-requirements';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {Button} from '@atb/components/button';
 import {ShmoActionButton} from '../ShmoActionButton';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import {
@@ -44,6 +43,8 @@ import {
 } from '@atb/modules/payment';
 import {Section} from '@atb/components/sections';
 import {Loading} from '@atb/components/loading';
+import {getTransportModeAndSubMode} from '../../utils';
+import {SupportButton} from '../SupportButton';
 
 type Props = {
   vehicleId: VehicleId;
@@ -54,6 +55,9 @@ type Props = {
   navigateToSupport: (params: ShmoHelpParams) => void;
   navigateToLogin: () => void;
   selectPaymentMethod: () => void;
+  onNotStartedBookingState: () => void;
+  startOnboardingCallback: () => void;
+  isStationBasedBooking: boolean;
 };
 export const BicycleSheet = ({
   vehicleId: id,
@@ -64,9 +68,11 @@ export const BicycleSheet = ({
   navigateToSupport,
   navigateToLogin,
   selectPaymentMethod,
+  onNotStartedBookingState,
+  startOnboardingCallback,
+  isStationBasedBooking,
 }: Props) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const styles = useSheetStyle();
   const {
     vehicle,
@@ -76,7 +82,7 @@ export const BicycleSheet = ({
     operatorName,
     rentalAppUri,
     appStoreUri,
-  } = useVehicle(id);
+  } = useVehicle(id, isStationBasedBooking);
 
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
@@ -93,6 +99,10 @@ export const BicycleSheet = ({
     bonusProducts,
     operatorId,
     FormFactor.Bicycle,
+  );
+  const {mode, subMode} = getTransportModeAndSubMode(
+    FormFactor.Bicycle,
+    vehicle?.vehicleType.propulsionType,
   );
 
   const priceAdjustments = operator?.priceAdjustments?.[FormFactor.Bicycle];
@@ -113,13 +123,17 @@ export const BicycleSheet = ({
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
       heading={t(
-        MobilityTexts.bikeNameByPropulsionType(
-          vehicle?.vehicleType?.propulsionType,
+        MobilityTexts.vehicleName(
+          FormFactor.Bicycle,
+          false,
+          vehicle?.vehicleType.propulsionType,
         ),
       )}
       subText={operatorName}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      logoIcon={<TransportationIconBox mode="bicycle" rounded={true} />}
+      logoIcon={
+        <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
+      }
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >
@@ -175,30 +189,33 @@ export const BicycleSheet = ({
           operatorIsIntegrationEnabled ? (
             <>
               <ShmoActionButton
-                onStartOnboarding={() => {}} // need to implement onboarding flow for bikes if we want to use this
+                onStartOnboarding={startOnboardingCallback}
                 loginCallback={navigateToLogin}
                 vehicleId={id}
                 operatorId={operatorId}
                 paymentMethod={selectedPaymentMethod}
+                onNotStartedBookingState={onNotStartedBookingState}
+                isStationBasedBooking={isStationBasedBooking}
               />
-              {selectedPaymentMethod && !hasBlockers && (
-                <Section>
-                  <PaymentSelectionSectionItem
-                    paymentMethod={selectedPaymentMethod}
-                    onPress={selectPaymentMethod}
-                  />
-                </Section>
-              )}
+              <View style={styles.helpButtons}>
+                {selectedPaymentMethod && !hasBlockers && (
+                  <Section>
+                    <PaymentSelectionSectionItem
+                      paymentMethod={selectedPaymentMethod}
+                      onPress={selectPaymentMethod}
+                    />
+                  </Section>
+                )}
 
-              <Button
-                expanded={true}
-                onPress={() => {
-                  navigateToSupport({vehicleId: id, operatorId});
-                }}
-                text={t(MobilityTexts.helpText)}
-                mode="secondary"
-                backgroundColor={theme.color.background.neutral[1]}
-              />
+                <SupportButton
+                  navigateToSupport={() => {
+                    navigateToSupport({
+                      vehicleId: id,
+                      operatorId: operatorId,
+                    });
+                  }}
+                />
+              </View>
             </>
           ) : (
             <>
@@ -215,7 +232,7 @@ export const BicycleSheet = ({
                   />
                 </View>
               )}
-              {isBonusActiveForUser && bonusProduct && (
+              {!!isBonusActiveForUser && bonusProduct && (
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
                   operatorName={operatorName}
@@ -269,6 +286,9 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     payWithBonusPointsSection: {
       marginTop: theme.spacing.medium,
+    },
+    helpButtons: {
+      gap: theme.spacing.medium,
     },
   };
 });

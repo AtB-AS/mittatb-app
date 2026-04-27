@@ -13,7 +13,10 @@ import {
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {PropulsionType} from '@atb/api/types/generated/mobility-types_v2';
+import {
+  FormFactor,
+  PropulsionType,
+} from '@atb/api/types/generated/mobility-types_v2';
 import SvgParking from '@atb/assets/svg/mono-icons/places/Parking';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -21,11 +24,21 @@ import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import {useVehiclesByPropulsionTypesQueries} from '../queries/use-vehicles-by-propulsion-types-queries';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Loading} from '@atb/components/loading';
+import {useQueryClient} from '@tanstack/react-query';
+import {Vehicle} from '@atb/api/types/mobility';
+import {
+  getVehicleQueryKey,
+  MOCK_VEHICLE_ID,
+} from '../queries/use-vehicle-query';
+import {SupportButton} from './SupportButton';
 
 type Props = {
   station: Station;
   navigateSupportCallback: (params: ShmoHelpParams) => void;
-  onPressVehicleType: (vehicleId: string) => void;
+  onPressVehicleType: (
+    vehicleId: string,
+    isStationBasedBooking: boolean,
+  ) => void;
 };
 
 export const BikeStationIntegrationView = ({
@@ -34,6 +47,7 @@ export const BikeStationIntegrationView = ({
   onPressVehicleType,
 }: Props) => {
   const {t} = useTranslation();
+  const queryClient = useQueryClient();
   const styles = useStyles();
   const {humanQuery, electricQuery, electricAssistQuery} =
     useVehiclesByPropulsionTypesQueries(
@@ -72,24 +86,15 @@ export const BikeStationIntegrationView = ({
         <Section>
           {station?.vehicleTypesAvailable
             ?.filter((e) => {
-              if (e.count === 0) return false;
-
-              switch (e.vehicleType.propulsionType) {
-                case PropulsionType.Human:
-                  return (humanQuery.data?.length ?? 0) > 0;
-                case PropulsionType.Electric:
-                  return (electricQuery.data?.length ?? 0) > 0;
-                case PropulsionType.ElectricAssist:
-                  return (electricAssistQuery.data?.length ?? 0) > 0;
-                default:
-                  return false;
-              }
+              if (e.count > 0) return true;
             })
             .map((e, index) => (
               <LinkSectionItem
                 key={index}
                 text={t(
-                  MobilityTexts.bikeNameByPropulsionType(
+                  MobilityTexts.vehicleName(
+                    e.vehicleType.formFactor ?? FormFactor.Bicycle,
+                    false,
                     e.vehicleType.propulsionType,
                   ),
                 )}
@@ -120,8 +125,29 @@ export const BikeStationIntegrationView = ({
                   })();
 
                   if (vehicle?.id) {
-                    // sanity check, already handled in the filter, but atleast prevents crashes if something unexpected happens
-                    onPressVehicleType(vehicle.id);
+                    onPressVehicleType(vehicle.id, false);
+                  } else {
+                    const mockVehicle: Vehicle = {
+                      id: MOCK_VEHICLE_ID,
+                      lat: station.lat,
+                      lon: station.lon,
+                      currentRangeMeters: 1000,
+                      isReserved: false,
+                      isDisabled: false,
+                      pricingPlan: e.vehicleType.pricingPlans?.[0] ?? {
+                        price: 0,
+                        currency: 'NOK',
+                      },
+                      system: station.system,
+                      station: {id: station.id},
+                      vehicleType: {...e.vehicleType, name: {}},
+                    };
+
+                    queryClient.setQueryData(
+                      getVehicleQueryKey(mockVehicle.id),
+                      mockVehicle,
+                    );
+                    onPressVehicleType(mockVehicle.id, true);
                   }
                 }}
               />
@@ -139,15 +165,14 @@ export const BikeStationIntegrationView = ({
             </ThemeText>
           </GenericSectionItem>
         </Section>
-        <Section>
-          <LinkSectionItem
-            text={t(MobilityTexts.helpText)}
-            onPress={() =>
+        <Section style={styles.supportSection}>
+          <SupportButton
+            navigateToSupport={() => {
               navigateSupportCallback({
                 operatorId: station?.system.operator.id ?? '',
                 stationId: station?.id ?? '',
-              })
-            }
+              });
+            }}
           />
         </Section>
       </View>
@@ -160,7 +185,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     container: {
       paddingHorizontal: theme.spacing.medium,
       paddingBottom: theme.spacing.medium,
-      gap: theme.spacing.medium,
+      gap: theme.spacing.small,
     },
     freeParkingSection: {
       flexDirection: 'row',
@@ -173,6 +198,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     error: {
       marginBottom: theme.spacing.medium,
       marginHorizontal: theme.spacing.medium,
+    },
+    supportSection: {
+      paddingTop: theme.spacing.xSmall,
     },
   };
 });

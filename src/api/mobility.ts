@@ -163,5 +163,8 @@ export const getStation = (
   return client
     .get<Station>(`/mobility/v1/stations/${id}`, opts)
     .then((res) => StationSchema.parse(res.data))
-    .catch(() => null);
+    .catch((error) => {
+      console.error('Error in StationSchema parsing: ', error);
+      return null;
+    });
 };
