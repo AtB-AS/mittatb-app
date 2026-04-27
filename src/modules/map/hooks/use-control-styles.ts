@@ -36,6 +36,6 @@ export function useControlPositionsStyle(extraPaddingBottom = false) {
         right: theme.spacing.medium,
       },
     }),
-    [top, theme.spacing.medium, extraPaddingBottom, bottom],
+    [top, theme.spacing, extraPaddingBottom, bottom],
   );
 }
