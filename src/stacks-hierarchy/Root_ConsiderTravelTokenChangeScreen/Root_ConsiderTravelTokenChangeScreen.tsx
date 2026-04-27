@@ -12,7 +12,7 @@ import {
   OnboardingFullScreenView,
   useOnboardingNavigation,
 } from '@atb/modules/onboarding';
-import {TravelTokenBox} from '@atb/modules/mobile-token';
+import {TravelTokenBox} from '@atb/components/travel-token-box';
 import {LoadingScreen} from '@atb/screen-components/loading-screen';
 import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';

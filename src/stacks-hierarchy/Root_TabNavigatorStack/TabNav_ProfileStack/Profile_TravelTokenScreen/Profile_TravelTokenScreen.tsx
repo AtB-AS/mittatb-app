@@ -1,6 +1,6 @@
 import {StyleSheet, Theme} from '@atb/theme';
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
-import {TravelTokenBox} from '@atb/modules/mobile-token';
+import {TravelTokenBox} from '@atb/components/travel-token-box';
 import React from 'react';
 import {View} from 'react-native';
 import {FaqSection} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/FaqSection';

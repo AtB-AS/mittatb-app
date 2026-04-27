@@ -11,4 +11,3 @@ export {useTokenToggleDetailsQuery} from './use-token-toggle-details';
 export {DebugSabotage} from './DebugSabotage';
 export {DebugTokenServerAddress} from './DebugTokenServerAddress';
 export {CONTEXT_ID, mobileTokenClient} from './mobileTokenClient';
-export {TravelTokenBox} from './components/TravelTokenBox';
