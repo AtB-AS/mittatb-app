@@ -14,7 +14,7 @@ import {
 } from '@atb/modules/ticketing';
 import {TravelRightDirection} from '@atb-as/utils';
 import {useMemo} from 'react';
-import {RecentFareContractType} from '@atb/recent-fare-contracts/types';
+import {RecentFareContractType} from './types';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {isDefined} from '@atb/utils/presence';
