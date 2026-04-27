@@ -108,6 +108,18 @@ export const MobilityTexts = {
       safeTrip: _('God tur!', 'Have a nice trip!', 'God tur!'),
       header: _('Start tur', 'Start trip', 'Start tur'),
     },
+    endManualTrip: {
+      title: _(
+        'Skal du avslutte turen?',
+        'Are you ending your trip?',
+        'Skal du avslutte turen?',
+      ),
+      summary: _(
+        'Parker i nærmeste stativ. Husk å sjekke AtB-appen for bekreftelse.',
+        'Park at the nearest dock. Remember to check the AtB app for confirmation.',
+        'Parker i nærmeste stativ. Husk å sjekke AtB-appen for bekreftelse.',
+      ),
+    },
   },
   loadingBookingFailed: _(
     'Ops! Vi kunne ikke hente informasjon om turen',
@@ -133,11 +145,38 @@ export const MobilityTexts = {
     ),
   },
   photo: {
-    header: _(
-      'Ta bilde av elsparkesykkelen',
-      'Take a photo of the e-scooter',
-      'Ta bilete av elsparkesykkelen',
-    ),
+    header: (formFactor: FormFactor) => {
+      switch (formFactor) {
+        case FormFactor.Scooter:
+        case FormFactor.ScooterStanding:
+          return _(
+            'Ta bilde av elsparkesykkelen',
+            'Take a photo of the e-scooter',
+            'Ta bilete av elsparkesykkelen',
+          );
+
+        case FormFactor.Bicycle:
+          return _(
+            'Ta bilde av sykkelen',
+            'Take a photo of the bike',
+            'Ta bilete av sykkelen',
+          );
+
+        case FormFactor.Car:
+          return _(
+            'Ta bilde av bilen',
+            'Take a photo of the car',
+            'Ta bilete av bilen',
+          );
+
+        default:
+          return _(
+            'Ta bilde av kjøretøyet',
+            'Take a photo of the vehicle',
+            'Ta bilete av køyretøyet',
+          );
+      }
+    },
     subHeader: _(
       'Du blir ikke belastet for tiden du bruker på å ta bilde.',
       'You will not be charged for the time you spend taking the photo.',
