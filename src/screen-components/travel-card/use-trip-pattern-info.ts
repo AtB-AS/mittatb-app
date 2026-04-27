@@ -10,11 +10,11 @@ import {
 } from '@atb/utils/transportation-names';
 
 import {TripPattern} from '@atb/api/types/trips';
-import {isLineFlexibleTransport} from '@atb/screen-components/travel-details-screens';
+import {isLineFlexibleTransport, getTripPatternBookingStatus} from '@atb/screen-components/travel-details-screens';
 import type {TripPatternStatus} from './types';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {Duration} from '@atb/assets/svg/mono-icons/time';
-import {Warning} from '@atb/assets/svg/mono-icons/status';
+import {Info, Warning} from '@atb/assets/svg/mono-icons/status';
 
 export const useTripPatternInfo = (tripPattern: TripPattern) => {
   const {t} = useTranslation();
@@ -83,6 +83,24 @@ function getTripPatternStatus(
       svg: Warning,
       color: 'warning',
       text: t(TravelCardTexts.header.staleTrip),
+    };
+  }
+
+  if (tripPattern.legs.some((leg) => leg.bookingArrangements)) {
+    const bookingStatus = getTripPatternBookingStatus(tripPattern);
+    if (bookingStatus === 'late') {
+      return {
+        type: 'bookingDeadlineExceeded',
+        svg: Warning,
+        color: 'warning',
+        text: t(TravelCardTexts.header.bookingDeadlineExceeded),
+      };
+    }
+    return {
+      type: 'requiresBooking',
+      svg: Info,
+      color: 'info',
+      text: t(TravelCardTexts.header.requiresBooking),
     };
   }
 
