@@ -15,7 +15,7 @@ import {TicketTabNavScreenProps} from './navigation-types';
 import {RefreshControl} from 'react-native-gesture-handler';
 import {AnimatedGestureHandlerScrollView} from '@atb/components/animated-gesture-handler-scroll-view';
 import {useTabScrollHandler} from './Ticketing_TicketTabNavStack';
-import {TravelTokenBox} from '@atb/travel-token-box';
+import {TravelTokenBox} from '@atb/components/travel-token-box';
 import {ThemedTicketTilted} from '@atb/theme/ThemedAssets';
 import {useQueryClient} from '@tanstack/react-query';
 import {SCHOOL_CARNET_QUERY_KEY} from '@atb/modules/ticketing';
