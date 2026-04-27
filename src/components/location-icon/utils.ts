@@ -16,8 +16,9 @@ const mapLocationCategoryToVenueType = (category: FeatureCategory) => {
     case 'tramStation':
       return 'tram';
     case 'railStation':
-    case 'metroStation':
       return 'rail';
+    case 'metroStation':
+      return 'metro';
     case 'airport':
       return 'airport';
     case 'harbourPort':
