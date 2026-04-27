@@ -51,7 +51,10 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
-import {useGetFareProductsQuery} from '@atb/modules/ticketing';
+import {
+  useGetFareProductsQuery,
+  useGetHasReservationOrAvailableFareContract,
+} from '@atb/modules/ticketing';
 import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {formatToDate} from '@atb/utils/date';
 import {MessageInfoText} from '@atb/components/message-info-text';
@@ -74,6 +77,8 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
   const {enable_vipps_login} = useRemoteConfigContext();
   const isLoggedIn = authenticationType === 'phone';
   const {bonusProducts} = useFirestoreConfigurationContext();
+  const getHasReservationOrAvailableFareContract =
+    useGetHasReservationOrAvailableFareContract();
 
   const isEnrolled = useIsEnrolled(KnownProgramId.BONUS);
   const wasEnrolledRef = useRef(isEnrolled);
@@ -168,6 +173,11 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
                   navigation.navigate('Root_OnboardingCarouselStack', {
                     configId: KnownProgramId.BONUS,
                   });
+                } else if (getHasReservationOrAvailableFareContract()) {
+                  navigation.navigate(
+                    'Root_LoginAvailableFareContractWarningScreen',
+                    {},
+                  );
                 } else if (enable_vipps_login) {
                   navigation.navigate('Root_LoginOptionsScreen', {
                     showGoBack: true,
