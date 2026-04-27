@@ -6,7 +6,9 @@ export type TripPatternStatusType =
   | 'ended'
   | 'started'
   | 'impossible'
-  | 'stale';
+  | 'stale'
+  | 'requiresBooking'
+  | 'bookingDeadlineExceeded';
 
 export type TripPatternStatus = {
   type: TripPatternStatusType;

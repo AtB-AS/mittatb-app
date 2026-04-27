@@ -64,6 +64,16 @@ const TravelCardTexts = {
       'Unable to update',
       'Kan ikkje oppdaterast',
     ),
+    requiresBooking: _(
+      'Krever reservasjon',
+      'Requires booking',
+      'Krev reservasjon',
+    ),
+    bookingDeadlineExceeded: _(
+      'Reservasjonsfrist utløpt',
+      'Booking deadline exceeded',
+      'Reservasjonsfrist utløpt',
+    ),
     fromToInfo: {
       a11yLabel: (fromPlace: string, toPlace: string) =>
         _(
