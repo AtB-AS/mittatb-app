@@ -72,6 +72,7 @@ export type RemoteConfig = {
   flex_ticket_url: string;
   live_vehicle_stale_threshold: number;
   loading_screen_delay_ms: number;
+  map_max_pitch: number;
   mapbox_api_token: string;
   mapbox_nsr_source_layer_id: string;
   mapbox_nsr_tileset_id: string;
@@ -149,6 +150,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   flex_ticket_url: '',
   live_vehicle_stale_threshold: 15,
   loading_screen_delay_ms: 200,
+  map_max_pitch: 65,
   mapbox_api_token: MAPBOX_API_TOKEN,
   mapbox_nsr_source_layer_id: MAPBOX_NSR_SOURCE_LAYER_ID,
   mapbox_nsr_tileset_id: MAPBOX_NSR_TILESET_ID,
@@ -332,6 +334,13 @@ export function getConfig(): RemoteConfig {
   const loading_screen_delay_ms =
     values['loading_screen_delay_ms']?.asNumber() ??
     defaultRemoteConfig.loading_screen_delay_ms;
+  const map_max_pitch = Math.min(
+    90,
+    Math.max(
+      0,
+      values['map_max_pitch']?.asNumber() ?? defaultRemoteConfig.map_max_pitch,
+    ),
+  );
   const mapbox_api_token =
     values['mapbox_api_token']?.asString() ??
     defaultRemoteConfig.mapbox_api_token;
@@ -420,6 +429,7 @@ export function getConfig(): RemoteConfig {
     flex_ticket_url,
     live_vehicle_stale_threshold,
     loading_screen_delay_ms,
+    map_max_pitch,
     mapbox_api_token,
     mapbox_nsr_source_layer_id,
     mapbox_nsr_tileset_id,
