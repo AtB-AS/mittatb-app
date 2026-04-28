@@ -30,6 +30,10 @@ const dictionary = {
         ..._('Buss', 'Bus', `Buss`),
         definite: _('Bussen', 'The bus', 'Bussen'),
       },
+      car: {
+        ..._('Bil', 'Car', `Bil`),
+        definite: _('Bilen', 'The car', 'Bilen'),
+      },
       rail: {
         ..._('Tog', 'Train', `Tog`),
         definite: _('Toget', 'The train', 'Toget'),

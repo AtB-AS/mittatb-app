@@ -44,6 +44,9 @@ export function getTranslatedModeName(
     case 'bicycle':
       result = legModeNames.bicycle;
       break;
+    case 'car':
+      result = legModeNames.car;
+      break;
     default:
       result = legModeNames.unknown;
   }
