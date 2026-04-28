@@ -75,11 +75,14 @@ export const GeofencingZonesAsTiles = ({
     [tileUrlTemplate],
   );
 
-  const dashedCodes = useMemo(() => {
-    return geofencingZoneCodes.filter(
-      (zoneCode) => theme.color.geofencingZone[zoneCode].lineStyle === 'dashed',
-    );
-  }, [theme]);
+  const dashedCodes = useMemo(
+    () =>
+      geofencingZoneCodes.filter(
+        (zoneCode) =>
+          theme.color.geofencingZone[zoneCode].lineStyle === 'dashed',
+      ),
+    [theme],
+  );
 
   // Filters using the "logic flip" for mutual exclusivity between solid/dashed
   const dashedFilter: Expression = ['match', code, ...dashedCodes, true, false];

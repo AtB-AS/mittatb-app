@@ -111,6 +111,7 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
     >
       <MapboxGL.FillLayer
         id="geofencingZoneFill"
+        slot="middle"
         style={{
           fillAntialias: true,
           fillColor: bgColor,
@@ -127,12 +128,14 @@ const GeofencingZone = ({geofencingZone}: GeofencingZoneProps) => {
       */}
       <MapboxGL.LineLayer
         id="geofencingZoneLine"
+        slot="middle"
         filter={['!=', lineStyle, 'dashed']}
         style={lineLayerStyle}
         aboveLayerID={MapSlotLayerId.GeofencingZones}
       />
       <MapboxGL.LineLayer
         id="geofencingZoneDashedLine"
+        slot="middle"
         filter={['==', lineStyle, 'dashed']}
         style={{...lineLayerStyle, lineDasharray: [2, 2]}}
         aboveLayerID={MapSlotLayerId.GeofencingZones}
