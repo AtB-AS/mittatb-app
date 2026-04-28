@@ -7,6 +7,7 @@ export type TripPatternStatusType =
   | 'started'
   | 'impossible'
   | 'stale'
+  | 'cancelled'
   | 'requiresBooking'
   | 'bookingDeadlineExceeded';
 
