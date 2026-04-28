@@ -54,6 +54,7 @@ import {RefundSectionItem} from '../components/RefundSectionItem';
 import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
+  useIsBonusActiveForUser,
 } from '@atb/modules/bonus';
 import {useFareContractLegs} from '@atb/modules/fare-contracts';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
@@ -152,12 +153,16 @@ export const DetailsContent: React.FC<Props> = ({
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
+  const isBonusActiveForUser = useIsBonusActiveForUser();
   const accesses = getAccesses(fc);
 
   const shouldShowLegs =
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;
 
-  const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(fc.orderId);
+  const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(
+    fc.orderId,
+    !isBonusActiveForUser,
+  );
 
   const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(fc, validityStatus);
 
@@ -236,7 +241,7 @@ export const DetailsContent: React.FC<Props> = ({
           onNavigateToMap={onNavigateToMap}
         />
       )}
-      {!!bonusAmountEarned?.amount && (
+      {isBonusActiveForUser && !!bonusAmountEarned?.amount && (
         <EarnedBonusPointsSectionItem
           amount={bonusAmountEarned.amount}
           navigateToBonusScreen={onNavigateToBonusScreen}

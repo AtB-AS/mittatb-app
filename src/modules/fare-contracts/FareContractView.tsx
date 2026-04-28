@@ -28,6 +28,7 @@ import {findReferenceDataById} from '@atb/modules/configuration';
 import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
+  useIsBonusActiveForUser,
 } from '../bonus';
 import {useFareContractLegs} from './use-fare-contract-legs';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
@@ -82,8 +83,11 @@ export const FareContractView: React.FC<Props> = ({
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
+  const isBonusActiveForUser = useIsBonusActiveForUser();
+
   const shouldGetBonusAmountEarned =
-    validityStatus === 'valid' || validityStatus === 'upcoming';
+    (validityStatus === 'valid' || validityStatus === 'upcoming') &&
+    isBonusActiveForUser;
 
   const shouldShowLegs =
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;
@@ -145,7 +149,7 @@ export const FareContractView: React.FC<Props> = ({
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
       )}
 
-      {!!bonusAmountEarned?.amount && (
+      {shouldGetBonusAmountEarned && !!bonusAmountEarned?.amount && (
         <EarnedBonusPointsSectionItem
           amount={bonusAmountEarned.amount}
           navigateToBonusScreen={onNavigateToBonusScreen}
