@@ -11,7 +11,8 @@ export function useControlPositionsStyle(extraPaddingBottom = false) {
     [key in
       | 'backArrowContainer'
       | 'mapButtonsContainer'
-      | 'mapButtonsContainerRight']: ViewStyle;
+      | 'mapButtonsContainerRight'
+      | 'topRightContainer']: ViewStyle;
   }>(
     () => ({
       backArrowContainer: {
@@ -28,7 +29,13 @@ export function useControlPositionsStyle(extraPaddingBottom = false) {
       mapButtonsContainerRight: {
         right: theme.spacing.medium,
       },
+
+      topRightContainer: {
+        position: 'absolute',
+        top: top + theme.spacing.xSmall,
+        right: theme.spacing.medium,
+      },
     }),
-    [top, theme.spacing.medium, extraPaddingBottom, bottom],
+    [top, theme.spacing, extraPaddingBottom, bottom],
   );
 }

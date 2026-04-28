@@ -55,6 +55,7 @@ import {Snackbar, useSnackbar, useStableValue} from '@atb/components/snackbar';
 import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
 import {useMapContext} from '@atb/modules/map';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useIsBonusBalanceButtonVisible} from '@atb/modules/bonus';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
 import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
 import {
@@ -159,10 +160,13 @@ export const Map = (props: MapProps) => {
 
   // Always including the vector sources avoids laggy transitions for iOS (but buggy on Android, so skipped there),
   // and tile requests are only sent when they are used anyway.
+  const {isVisible: isBonusBalanceButtonVisible} =
+    useIsBonusBalanceButtonVisible();
   const mapViewConfig = useMapViewConfig({
     includeVehiclesAndStationsVectorSource:
       shouldShowVehiclesAndStations || Platform.OS !== 'android',
     shouldShowGeofencingZonesLayers: !!systemId && !!vehicleTypeId,
+    includeBonusOffset: isBonusBalanceButtonVisible,
   });
 
   const [followUserLocation, setFollowUserLocation] = useState(false);
@@ -493,6 +497,7 @@ export const Map = (props: MapProps) => {
           <MapButtons
             locationArrowOnPress={locationArrowOnPress}
             navigateToScanQrCode={navigateToScanQrCode}
+            navigateToBonusScreen={props.navigateToBonusScreen}
           />
         )}
         {includeSnackbar && (
