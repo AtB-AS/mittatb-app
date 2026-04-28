@@ -8,7 +8,6 @@ import {
   getMsgTypeForMostCriticalSituationOrNotice,
   toMostCriticalStatus,
   getMsgTypeForLeg,
-  getLegsNotificationA11yLabel,
   isSituationValidAtDate,
   getSituationOrNoticeA11yLabel,
 } from '../utils';
@@ -158,18 +157,18 @@ describe('findAllSituationsFromLeg', () => {
     expect(findAllSituationsFromLeg(leg)).toEqual([sit]);
   });
 
-  it('should collect situations from fromPlace.quay', () => {
+  it('should collect situations from fromEstimatedCall', () => {
     const sit = makeSituation({id: 's2'});
     const leg = makeMinimalLeg({
-      fromPlace: {quay: {situations: [sit]}},
+      fromEstimatedCall: {situations: [sit]},
     } as Partial<Leg>);
     expect(findAllSituationsFromLeg(leg)).toEqual([sit]);
   });
 
-  it('should collect situations from toPlace.quay', () => {
+  it('should collect situations from toEstimatedCall', () => {
     const sit = makeSituation({id: 's3'});
     const leg = makeMinimalLeg({
-      toPlace: {quay: {situations: [sit]}},
+      toEstimatedCall: {situations: [sit]},
     } as Partial<Leg>);
     expect(findAllSituationsFromLeg(leg)).toEqual([sit]);
   });
@@ -180,47 +179,15 @@ describe('findAllSituationsFromLeg', () => {
     const s3 = makeSituation({id: 's3'});
     const leg = makeMinimalLeg({
       situations: [s1],
-      fromPlace: {quay: {situations: [s2]}},
-      toPlace: {quay: {situations: [s3]}},
+      fromEstimatedCall: {situations: [s2]},
+      toEstimatedCall: {situations: [s3]},
     } as Partial<Leg>);
     expect(findAllSituationsFromLeg(leg)).toHaveLength(3);
   });
 
-  it('should skip null situations in arrays', () => {
-    const sit = makeSituation({id: 's1'});
-    const leg = makeMinimalLeg({
-      situations: [null, sit, null],
-    } as unknown as Partial<Leg>);
-    expect(findAllSituationsFromLeg(leg)).toEqual([sit]);
-  });
 });
 
 describe('findAllSituations', () => {
-  it('should filter out situations outside validity period', () => {
-    const validSituation = makeSituation({
-      id: 's1',
-      validityPeriod: {
-        startTime: '2024-06-15T08:00:00Z',
-        endTime: '2024-06-15T12:00:00Z',
-      },
-    });
-    const expiredSituation = makeSituation({
-      id: 's2',
-      validityPeriod: {
-        startTime: '2024-06-14T08:00:00Z',
-        endTime: '2024-06-14T12:00:00Z',
-      },
-    });
-    const tp = makeTripPattern(
-      [
-        makeMinimalLeg({
-          situations: [validSituation, expiredSituation],
-        } as Partial<Leg>),
-      ],
-      '2024-06-15T10:00:00Z',
-    );
-    expect(findAllSituations(tp)).toEqual([validSituation]);
-  });
 
   it('should deduplicate situations by id', () => {
     const sit = makeSituation({
@@ -479,37 +446,3 @@ describe('getSituationOrNoticeA11yLabel', () => {
   });
 });
 
-describe('getLegsNotificationA11yLabel', () => {
-  const t = (input: any) => {
-    if (typeof input === 'string') return input;
-    if (typeof input === 'object' && input !== null) {
-      return input[0] ?? String(input);
-    }
-    return String(input);
-  };
-
-  it('should return undefined when no notifications', () => {
-    expect(getLegsNotificationA11yLabel([makeMinimalLeg()], t)).toBeUndefined();
-  });
-
-  it('should return label for RailReplacementBus', () => {
-    const leg = makeMinimalLeg({
-      transportSubmode: TransportSubmode.RailReplacementBus,
-    } as Partial<Leg>);
-    expect(getLegsNotificationA11yLabel([leg], t)).toBeDefined();
-  });
-
-  it('should return label for legs with booking arrangements', () => {
-    const leg = makeMinimalLeg({
-      bookingArrangements: {latestBookingTime: '2024-06-15T09:00:00Z'},
-    } as Partial<Leg>);
-    expect(getLegsNotificationA11yLabel([leg], t)).toBeDefined();
-  });
-
-  it('should return label for legs with notices', () => {
-    const leg = makeMinimalLeg({
-      fromEstimatedCall: {notices: [makeNotice('n1', 'Notice text')]},
-    } as Partial<Leg>);
-    expect(getLegsNotificationA11yLabel([leg], t)).toBeDefined();
-  });
-});

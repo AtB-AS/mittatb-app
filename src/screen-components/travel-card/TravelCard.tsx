@@ -75,7 +75,6 @@ export const TravelCard: React.FC<TravelCardProps> = ({
             onPress={() => onDetailsPressed(tripPattern)}
             testID={testID}
             style={[styles.container, isDisabled && styles.containerDisabled]}
-            disabled={isDisabled}
             accessibilityRole={isDisabled ? 'none' : 'button'}
             accessibilityHint={
               isDisabled ? undefined : t(TravelCardTexts.card.a11yHint)

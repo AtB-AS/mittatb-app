@@ -8,7 +8,6 @@ import {getFilteredLegsByWalkOrWaitTime} from '@atb/screen-components/travel-det
 import {OverflowContainer} from '@atb/components/overflow-container';
 import {
   getNotificationSvgForLegs,
-  getLegsNotificationA11yLabel,
   getMsgTypeForLeg,
   toMostCriticalStatus,
 } from '@atb/modules/situations';
@@ -31,7 +30,6 @@ type TravelCardContentProps = {
 export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
   tripPattern,
   maxWidth,
-  includeLegNotifications = false,
 }) => {
   const {theme, themeName} = useThemeContext();
   const styles = useThemeStyles();
@@ -41,7 +39,7 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
     return previousLeg && previousLeg.interchangeTo?.staySeated === true;
   };
 
-  const a11yLabel = useA11yLabel(filteredLegs, includeLegNotifications);
+  const a11yLabel = useA11yLabel(filteredLegs);
   useAccessibilityLabelContribution('legs', a11yLabel);
 
   return (
@@ -92,7 +90,7 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
   );
 };
 
-const useA11yLabel = (legs: Leg[], includeLegNotifications: boolean) => {
+const useA11yLabel = (legs: Leg[]) => {
   const {t, language} = useTranslation();
 
   if (legs.length === 0) return '';
@@ -123,9 +121,6 @@ const useA11yLabel = (legs: Leg[], includeLegNotifications: boolean) => {
     );
   };
 
-  const notificationLabel = includeLegNotifications
-    ? getLegsNotificationA11yLabel(legs, t)
-    : undefined;
   const prefix = t(TravelCardTexts.legs.prefix);
   const legsLabel = legs
     .map((leg, idx) =>
@@ -135,9 +130,7 @@ const useA11yLabel = (legs: Leg[], includeLegNotifications: boolean) => {
     )
     .join(', ');
 
-  return [notificationLabel, `${prefix}: ${legsLabel}`]
-    .filter(isDefined)
-    .join(', ');
+  return [`${prefix}: ${legsLabel}`].filter(isDefined).join(', ');
 };
 
 const getWaitTime = (leg: Leg, nextLeg?: Leg) => {

@@ -26,7 +26,9 @@ export function findAllNoticesFromLeg(leg: Leg): NoticeFragment[] {
   if (leg.toEstimatedCall?.notices) {
     notices.push(...leg.toEstimatedCall.notices);
   }
-  return notices.filter((n) => !!n.id && (n.text?.length ?? 0) > 0);
+  return notices
+    .filter((n) => !!n.id && (n.text?.length ?? 0) > 0)
+    .filter(onlyUniquesBasedOnField('id'));
 }
 
 export function findAllNotices(tp: TripPatternFragment): NoticeFragment[] {
@@ -52,7 +54,9 @@ export function findAllSituationsFromLeg(leg: Leg): SituationFragment[] {
     leg.situations,
     leg.fromEstimatedCall?.situations ?? [],
     leg.toEstimatedCall?.situations ?? [],
-  ].flat();
+  ]
+    .flat()
+    .filter(onlyUniquesBasedOnField('id'));
 }
 
 /**
@@ -203,56 +207,6 @@ export const getSituationOrNoticeA11yLabel = (
 };
 
 /**
- * Get a generic legs accessibility label summarizing situations, notices,
- * rail replacement bus and booking across all legs. Classifies into warnings vs notices
- * and returns a short summary like "Reisen har advarsler" with an action prompt.
- * Returns undefined if there is nothing to announce.
- */
-export const getLegsNotificationA11yLabel = (
-  legs: Leg[],
-  t: TranslateFunction,
-): string | undefined => {
-  let hasWarnings = false;
-  let hasNotices = false;
-
-  for (const leg of legs) {
-    if (leg.transportSubmode === TransportSubmode.RailReplacementBus) {
-      hasWarnings = true;
-    }
-
-    if (leg.bookingArrangements) {
-      hasWarnings = true;
-    }
-
-    for (const situation of findAllSituationsFromLeg(leg)) {
-      if (getMessageTypeForSituation(situation) === 'warning') {
-        hasWarnings = true;
-      } else {
-        hasNotices = true;
-      }
-    }
-
-    const notices = findAllNoticesFromLeg(leg);
-    if (notices.length > 0) {
-      hasNotices = true;
-    }
-
-    if (hasWarnings && hasNotices) break;
-  }
-
-  if (!hasWarnings && !hasNotices) return undefined;
-
-  const summaryText =
-    hasWarnings && hasNotices
-      ? t(SituationsTexts.tripSummary.warningsAndNotices)
-      : hasWarnings
-        ? t(SituationsTexts.tripSummary.warnings)
-        : t(SituationsTexts.tripSummary.notices);
-
-  return `${summaryText}. ${t(SituationsTexts.tripSummary.openDetailsForMoreInfo)}`;
-};
-
-/**
  * Check if a situation is valid at a specific date by comparing it to the
  * validity period of the situation. If the situation has neither start time nor
  * end time it will be considered valid at all times.
@@ -292,8 +246,12 @@ export const getDetailedSituationOrNoticeA11yLabel = (
   for (const leg of tripPattern.legs) {
     if (leg.mode === 'foot') continue;
 
-    const situations = findAllSituationsFromLeg(leg);
-    const notices = findAllNoticesFromLeg(leg);
+    const situations = findAllSituationsFromLeg(leg).filter(
+      onlyUniquesBasedOnField('id'),
+    );
+    const notices = findAllNoticesFromLeg(leg).filter(
+      onlyUniquesBasedOnField('id'),
+    );
 
     if (situations.length === 0 && notices.length === 0) continue;
 
