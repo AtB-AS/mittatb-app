@@ -16,26 +16,6 @@ const SituationsTexts = {
       'This trip has the following notices',
       'Denne reisa har følgjande meldingar',
     ),
-    warnings: _(
-      'Reisen har advarsler',
-      'The trip has warnings',
-      'Reisa har åtvaringar',
-    ),
-    notices: _(
-      'Reisen har ekstra info',
-      'The trip has extra information',
-      'Reisa har ekstra info',
-    ),
-    warningsAndNotices: _(
-      'Reisen har advarsler og ekstra info',
-      'The trip has warnings and extra information',
-      'Reisa har åtvaringar og ekstra info',
-    ),
-    openDetailsForMoreInfo: _(
-      'Åpne detaljer for mer informasjon',
-      'Open details for more information',
-      'Opne detaljar for meir informasjon',
-    ),
   },
   bottomSheet: {
     title: {
@@ -43,7 +23,6 @@ const SituationsTexts = {
       warning: _('Advarsel', 'Warning', 'Advarsel'),
       error: _('Feil', 'Error', 'Feil'),
     },
-    button: _('Lukk', 'Close', 'Lukk'),
     validity: {
       from: (fromDate: string) =>
         _(

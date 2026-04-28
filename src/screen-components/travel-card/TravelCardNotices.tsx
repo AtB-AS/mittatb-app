@@ -30,6 +30,7 @@ export const TravelCardNotices: React.FC<TravelCardNoticesProps> = ({
         <MessageInfoText
           type={getMessageTypeForSituation(situation)}
           message={getTextForLanguage(situation.description, language) ?? ''}
+          key={situation.id}
         />
       ))}
       {notices.map((notice) => (
