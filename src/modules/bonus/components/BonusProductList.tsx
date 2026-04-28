@@ -85,7 +85,7 @@ export const BonusProductList = ({bonusProducts, onNavigateToMap}: Props) => {
                     />
                   );
                 })()}
-                <View style={{flex: 1}}>
+                <View style={{flex: 1}} accessible={true}>
                   <ThemeText typography="body__s__strong">
                     {bonusProduct.formFactors
                       .map((ff) =>
@@ -127,23 +127,27 @@ export const BonusProductList = ({bonusProducts, onNavigateToMap}: Props) => {
               </View>
             </GenericSectionItem>
             <GenericSectionItem>
-              <View style={styles.usePointsRow}>
-                <ThemeText>{t(BonusProgramTexts.spend)}</ThemeText>
-                <ThemeIcon svg={BonusStarFill} size="small" />
-                <ThemeText>
-                  {t(BonusProgramTexts.amountPoints(bonusProduct.price.amount))}
+              <View accessible={true}>
+                <View style={styles.usePointsRow}>
+                  <ThemeText>{t(BonusProgramTexts.spend)}</ThemeText>
+                  <ThemeIcon svg={BonusStarFill} size="small" />
+                  <ThemeText>
+                    {t(
+                      BonusProgramTexts.amountPoints(bonusProduct.price.amount),
+                    )}
+                  </ThemeText>
+                </View>
+                <ThemeText
+                  isMarkdown={true}
+                  typography="body__s"
+                  color="secondary"
+                >
+                  {getTextForLanguage(
+                    bonusProduct.productDescription.description,
+                    language,
+                  ) ?? ''}
                 </ThemeText>
               </View>
-              <ThemeText
-                isMarkdown={true}
-                typography="body__s"
-                color="secondary"
-              >
-                {getTextForLanguage(
-                  bonusProduct.productDescription.description,
-                  language,
-                ) ?? ''}
-              </ThemeText>
             </GenericSectionItem>
           </Section>
         </Pressable>
