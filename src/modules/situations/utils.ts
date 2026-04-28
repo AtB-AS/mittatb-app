@@ -246,12 +246,8 @@ export const getDetailedSituationOrNoticeA11yLabel = (
   for (const leg of tripPattern.legs) {
     if (leg.mode === 'foot') continue;
 
-    const situations = findAllSituationsFromLeg(leg).filter(
-      onlyUniquesBasedOnField('id'),
-    );
-    const notices = findAllNoticesFromLeg(leg).filter(
-      onlyUniquesBasedOnField('id'),
-    );
+    const situations = findAllSituationsFromLeg(leg);
+    const notices = findAllNoticesFromLeg(leg);
 
     if (situations.length === 0 && notices.length === 0) continue;
 
