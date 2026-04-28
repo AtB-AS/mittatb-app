@@ -10,5 +10,4 @@ export type {
   UrlActionButton,
   BottomSheetActionButton,
 } from './types';
-
 export {isBottomSheetAnnouncement, isLinkAnnouncement} from './types';

@@ -4,10 +4,7 @@ import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts'
 import React, {useCallback} from 'react';
 import {useShmoRequirements} from '../use-shmo-requirements.tsx';
 import {ButtonInfoTextCombo} from './ButtonInfoTextCombo.tsx';
-import {
-  InitShmoOneStopBookingRequestBody,
-  ShmoBookingState,
-} from '@atb/api/types/mobility';
+import {InitShmoOneStopBookingRequestBody} from '@atb/api/types/mobility';
 import {useInitShmoOneStopBookingMutation} from '../queries/use-init-shmo-one-stop-booking-mutation.tsx';
 import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -25,7 +22,6 @@ import {useVehicle} from '../use-vehicle.tsx';
 type ShmoActionButtonProps = {
   onStartOnboarding: () => void;
   loginCallback: () => void;
-  onNotStartedBookingState?: () => void;
   vehicleId: string;
   operatorId: string;
   paymentMethod: PaymentMethod | undefined;
@@ -38,7 +34,6 @@ export const ShmoActionButton = ({
   operatorId,
   paymentMethod,
   loginCallback,
-  onNotStartedBookingState,
   isStationBasedBooking,
 }: ShmoActionButtonProps) => {
   const {authenticationType, userId} = useAuthContext();
@@ -83,9 +78,6 @@ export const ShmoActionButton = ({
         paymentMethod?.recurringPayment?.id,
       );
     }
-    if (res.state === ShmoBookingState.NOT_STARTED) {
-      onNotStartedBookingState?.();
-    }
   }, [
     paymentMethod?.recurringPayment?.id,
     paymentMethod?.paymentType,
@@ -99,7 +91,6 @@ export const ShmoActionButton = ({
     initShmoOneStopBooking,
     logEvent,
     userId,
-    onNotStartedBookingState,
   ]);
 
   if (authenticationType != 'phone') {

@@ -90,7 +90,6 @@ export const Map = (props: MapProps) => {
     navigateToScanQrCode,
     navigateToLogin,
     navigateToPaymentMethods,
-    navigateToStartCityBikeTripWaitingScreen,
   } = props;
 
   const {
@@ -530,9 +529,6 @@ export const Map = (props: MapProps) => {
         navigateToLogin={navigateToLogin}
         navigateToPaymentMethods={navigateToPaymentMethods}
         locationArrowOnPress={locationArrowOnPress}
-        navigateToStartCityBikeTripWaitingScreen={
-          navigateToStartCityBikeTripWaitingScreen
-        }
       />
       {!!isMapTilePreloadingEnabled && (
         <MapTilePreloader

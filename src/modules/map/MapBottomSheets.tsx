@@ -4,6 +4,7 @@ import {
   BicycleSheet,
   BikeStationBottomSheet,
   CarSharingStationBottomSheet,
+  CityBikeStartTripOverlay,
   FinishedShmoSheet,
   FinishingScooterSheet,
   MapFilterSheet,
@@ -51,7 +52,6 @@ type MapBottomSheetsProps = {
   navigateToScanQrCode: () => void;
   navigateToLogin: () => void;
   navigateToPaymentMethods: () => void;
-  navigateToStartCityBikeTripWaitingScreen: () => void;
 };
 
 export const MapBottomSheets = ({
@@ -67,7 +67,6 @@ export const MapBottomSheets = ({
   navigateToScanQrCode,
   navigateToLogin,
   navigateToPaymentMethods,
-  navigateToStartCityBikeTripWaitingScreen,
 }: MapBottomSheetsProps) => {
   const [openPaymentType, setOpenPaymentType] = useState<boolean>(false);
   const {
@@ -153,6 +152,12 @@ export const MapBottomSheets = ({
 
   return (
     <>
+      {activeBooking?.state === ShmoBookingState.NOT_STARTED && (
+        <CityBikeStartTripOverlay
+          activeBooking={activeBooking}
+          navigateToSupport={navigateToShmoSupport}
+        />
+      )}
       {mapState.bottomSheetType === MapBottomSheetType.Scooter &&
         !openPaymentType &&
         !activeBooking?.bookingId && (
@@ -272,7 +277,6 @@ export const MapBottomSheets = ({
             navigateToLogin={navigateToLogin}
             navigateToSupport={navigateToShmoSupport}
             selectPaymentMethod={selectPaymentMethod}
-            onNotStartedBookingState={navigateToStartCityBikeTripWaitingScreen}
             startOnboardingCallback={navigateToScooterOnboarding} // TODO: need to adapt onboarding flow for bikes
           />
         )}
