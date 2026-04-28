@@ -35,7 +35,6 @@ import {
 
 import {
   GeofencingZones,
-  MapBottomSheetType,
   MapStateActionType,
   useGeofencingZoneContent,
   useMapViewConfig,
@@ -56,6 +55,7 @@ import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
 import {useMapContext} from '@atb/modules/map';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useIsBonusBalanceButtonVisible} from '@atb/modules/bonus';
+import {useThemeContext} from '@atb/theme';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
 import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
 import {
@@ -158,15 +158,20 @@ export const Map = (props: MapProps) => {
   const vehicleTypeId =
     vehicle?.vehicleType.id ?? activeShmoBooking?.asset.vehicleTypeId ?? null;
 
-  // Always including the vector sources avoids laggy transitions for iOS (but buggy on Android, so skipped there),
-  // and tile requests are only sent when they are used anyway.
+  const {theme} = useThemeContext();
   const {isVisible: isBonusBalanceButtonVisible} =
     useIsBonusBalanceButtonVisible();
+  const [bonusButtonHeight, setBonusButtonHeight] = useState(44);
+  const compassOffsetTop = isBonusBalanceButtonVisible
+    ? theme.spacing.xSmall + bonusButtonHeight + theme.spacing.small
+    : 0;
+  // Always including the vector sources avoids laggy transitions for iOS (but buggy on Android, so skipped there),
+  // and tile requests are only sent when they are used anyway.
   const mapViewConfig = useMapViewConfig({
     includeVehiclesAndStationsVectorSource:
       shouldShowVehiclesAndStations || Platform.OS !== 'android',
     shouldShowGeofencingZonesLayers: !!systemId && !!vehicleTypeId,
-    includeBonusOffset: isBonusBalanceButtonVisible,
+    compassOffsetTop,
   });
 
   const [followUserLocation, setFollowUserLocation] = useState(false);
@@ -493,13 +498,12 @@ export const Map = (props: MapProps) => {
             />
           )}
         </MapView>
-        {mapState.bottomSheetType === MapBottomSheetType.None && (
-          <MapButtons
-            locationArrowOnPress={locationArrowOnPress}
-            navigateToScanQrCode={navigateToScanQrCode}
-            navigateToBonusScreen={props.navigateToBonusScreen}
-          />
-        )}
+        <MapButtons
+          locationArrowOnPress={locationArrowOnPress}
+          navigateToScanQrCode={navigateToScanQrCode}
+          navigateToBonusScreen={props.navigateToBonusScreen}
+          onBonusButtonLayoutChange={setBonusButtonHeight}
+        />
         {includeSnackbar && (
           <Snackbar
             {...snackbarProps}
