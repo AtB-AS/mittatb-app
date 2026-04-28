@@ -1,7 +1,6 @@
 import {Platform} from 'react-native';
 import {useMapboxJsonStyle} from './use-mapbox-json-style';
 import {useMemo} from 'react';
-import {useFontScale} from '@atb/utils/use-font-scale';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 const COMPASS_BASE_TOP = 50;
@@ -19,7 +18,7 @@ type MapViewConfigOptions = {
   includeVehiclesAndStationsVectorSource?: boolean;
   shouldShowGeofencingZonesLayers?: boolean;
   includeBasemapStyle?: boolean;
-  includeBonusOffset?: boolean;
+  compassOffsetTop?: number;
 };
 
 export const useMapViewConfig = (
@@ -29,9 +28,8 @@ export const useMapViewConfig = (
     includeVehiclesAndStationsVectorSource = false,
     shouldShowGeofencingZonesLayers = false,
     includeBasemapStyle = true,
-    includeBonusOffset = false,
+    compassOffsetTop = 0,
   } = mapViewConfigOptions || {};
-  const fontScale = useFontScale();
   const mapboxJsonStyle = useMapboxJsonStyle(
     includeVehiclesAndStationsVectorSource,
     shouldShowGeofencingZonesLayers,
@@ -47,12 +45,10 @@ export const useMapViewConfig = (
   // Mapbox error fireEvent failed: <rnmapbox_maps.RCTMGLEvent: 0x6000028a0fe0>
   const compassPosition = useMemo(
     () => ({
-      top: includeBonusOffset
-        ? Math.round(COMPASS_BASE_TOP + 15 * fontScale)
-        : COMPASS_BASE_TOP,
+      top: compassOffsetTop || COMPASS_BASE_TOP,
       right: Platform.select({default: 10, android: 6}),
     }),
-    [fontScale, includeBonusOffset],
+    [compassOffsetTop],
   );
 
   return useMemo(
