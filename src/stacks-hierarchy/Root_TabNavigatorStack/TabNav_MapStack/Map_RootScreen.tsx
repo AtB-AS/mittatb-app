@@ -143,6 +143,11 @@ export const Map_RootScreen = ({
     navigation.navigate('Root_TabNavigatorStack', paymentMethodsScreenParams);
   }, [navigation, paymentMethodsScreenParams]);
 
+  const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
+
+  const navigateToBonusScreen = useCallback(() => {
+    navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
+  }, [navigation, bonusScreenParams]);
   const navigateToStartCityBikeTripWaitingScreen = useCallback(() => {
     navigation.navigate('Map_CityBikeStartTripScreen');
   }, [navigation]);
@@ -166,6 +171,7 @@ export const Map_RootScreen = ({
       navigateToScanQrCode={navigateToScanQrCode}
       navigateToLogin={navigateToLogin}
       navigateToPaymentMethods={navigateToPaymentMethods}
+      navigateToBonusScreen={navigateToBonusScreen}
       navigateToStartCityBikeTripWaitingScreen={
         navigateToStartCityBikeTripWaitingScreen
       }
