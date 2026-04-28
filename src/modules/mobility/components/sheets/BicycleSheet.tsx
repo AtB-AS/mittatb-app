@@ -55,7 +55,6 @@ type Props = {
   navigateToSupport: (params: ShmoHelpParams) => void;
   navigateToLogin: () => void;
   selectPaymentMethod: () => void;
-  onNotStartedBookingState: () => void;
   startOnboardingCallback: () => void;
   isStationBasedBooking: boolean;
 };
@@ -68,7 +67,6 @@ export const BicycleSheet = ({
   navigateToSupport,
   navigateToLogin,
   selectPaymentMethod,
-  onNotStartedBookingState,
   startOnboardingCallback,
   isStationBasedBooking,
 }: Props) => {
@@ -194,7 +192,6 @@ export const BicycleSheet = ({
                 vehicleId={id}
                 operatorId={operatorId}
                 paymentMethod={selectedPaymentMethod}
-                onNotStartedBookingState={onNotStartedBookingState}
                 isStationBasedBooking={isStationBasedBooking}
               />
               <View style={styles.helpButtons}>
