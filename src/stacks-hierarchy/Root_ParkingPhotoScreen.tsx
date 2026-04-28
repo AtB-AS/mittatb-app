@@ -2,7 +2,10 @@ import {useTranslation} from '@atb/translations';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {ShmoBookingEvent, ShmoBookingEventType} from '@atb/api/types/mobility';
-import {useSendShmoBookingEventMutation} from '@atb/modules/mobility';
+import {
+  useSendShmoBookingEventMutation,
+  useShmoBookingQuery,
+} from '@atb/modules/mobility';
 import {PhotoCapture} from '@atb/components/PhotoCapture';
 import {PhotoFile} from '@atb/components/camera';
 import {View} from 'react-native';
@@ -13,6 +16,8 @@ import {useCallback} from 'react';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {Loading} from '@atb/components/loading';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export type ParkingPhotoScreenProps =
   RootStackScreenProps<'Root_ParkingPhotoScreen'>;
@@ -26,6 +31,11 @@ export const Root_ParkingPhotoScreen = ({
   const styles = useStyles();
   const {dispatchMapState} = useMapContext();
   const {logEvent} = useAnalyticsContext();
+  const isFocusedAndActive = useIsFocusedAndActive();
+  const {data: shmoBooking} = useShmoBookingQuery(
+    isFocusedAndActive,
+    route.params.bookingId,
+  );
 
   const {mutateAsync: sendShmoBookingEvent, isPending} =
     useSendShmoBookingEventMutation();
@@ -86,7 +96,11 @@ export const Root_ParkingPhotoScreen = ({
     <PhotoCapture
       onConfirmImage={onConfirmImage}
       onGoBack={onGoBack}
-      title={t(MobilityTexts.photo.header)}
+      title={t(
+        MobilityTexts.photo.header(
+          shmoBooking?.asset?.formFactor ?? FormFactor.Other,
+        ),
+      )}
       secondaryText={t(MobilityTexts.photo.subHeader)}
       focusRef={focusRef}
     />

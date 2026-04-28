@@ -86,8 +86,7 @@ export const Map_CityBikeStartTripScreen = ({navigation}: Props) => {
           <View style={styles.title}>
             <ThemeIcon size="large" svg={Parking} />
             <ThemeText style={theme.typography.heading__xl}>
-              {t(MobilityTexts.cityBike.location(1))} // TODO: UPDATE WITH
-              LOCATION WHEN ITS ADDED TO ENTUR API
+              {t(MobilityTexts.cityBike.location(1))}
             </ThemeText>
           </View>
           <ThemedCityBike />

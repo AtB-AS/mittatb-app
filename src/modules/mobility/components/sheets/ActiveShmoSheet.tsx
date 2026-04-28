@@ -45,6 +45,10 @@ import {useOperators} from '../../use-operators';
 import {SupportButton} from '../SupportButton';
 import {BrandingImage} from '../BrandingImage';
 import {isValidKey} from '@atb/stacks-hierarchy';
+import {EndManualTripCard} from '../EndManualTripCard';
+import {ThemedCityBike} from '@atb/theme/ThemedAssets';
+import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
+import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
 
 type Props = {
   navigateSupportCallback: () => void;
@@ -71,6 +75,11 @@ export const ActiveShmoSheet = ({
     isError,
   } = useActiveShmoBookingQuery(isFocusedAndActive, ONE_SECOND_MS * 10);
   const {logEvent} = useAnalyticsContext();
+  const [endTripInfoClosed, setEndTripInfoClosed] = usePersistedBoolState(
+    storage,
+    StorageModelKeysEnum.CityBikeEndTripInfoDismissed,
+    false,
+  );
 
   const {mode, subMode} = getTransportModeAndSubMode(
     activeBooking?.asset?.formFactor,
@@ -231,32 +240,42 @@ export const ActiveShmoSheet = ({
                 />
 
                 <View style={styles.footer}>
-                  <View style={styles.endTripWrapper}>
-                    {geofencingZoneWarning && (
-                      <View style={styles.geofencingZoneWarning}>
-                        {geofencingZoneWarning.iconNode}
-                        <View style={styles.geofencingZoneWarningText}>
-                          <ThemeText typography="body__s">
-                            {geofencingZoneWarning.description}
-                          </ThemeText>
-                        </View>
+                  {geofencingZoneWarning && (
+                    <View style={styles.geofencingZoneWarning}>
+                      {geofencingZoneWarning.iconNode}
+                      <View style={styles.geofencingZoneWarningText}>
+                        <ThemeText typography="body__s">
+                          {geofencingZoneWarning.description}
+                        </ThemeText>
                       </View>
-                    )}
-                    {warningMessage && (
-                      <MessageInfoText
-                        type="warning"
-                        message={warningMessage}
-                      />
-                    )}
-                    {sendShmoBookingEventIsError && (
-                      <MessageInfoBox
-                        type="error"
-                        message={formatFriendlyShmoErrorMessage(
-                          sendShmoBookingEventError,
-                          t,
+                    </View>
+                  )}
+                  {warningMessage && (
+                    <MessageInfoText type="warning" message={warningMessage} />
+                  )}
+                  {sendShmoBookingEventIsError && (
+                    <MessageInfoBox
+                      type="error"
+                      message={formatFriendlyShmoErrorMessage(
+                        sendShmoBookingEventError,
+                        t,
+                      )}
+                    />
+                  )}
+                  {activeBooking.asset.formFactor === FormFactor.Bicycle &&
+                  activeBooking.asset.propulsionType ===
+                    PropulsionType.Human ? (
+                    !endTripInfoClosed && (
+                      <EndManualTripCard
+                        title={t(MobilityTexts.cityBike.endManualTrip.title)}
+                        summary={t(
+                          MobilityTexts.cityBike.endManualTrip.summary,
                         )}
+                        image={<ThemedCityBike height={54} width={50} />}
+                        handleDismiss={() => setEndTripInfoClosed(true)}
                       />
-                    )}
+                    )
+                  ) : (
                     <Button
                       mode="primary"
                       active={false}
@@ -273,7 +292,8 @@ export const ActiveShmoSheet = ({
                           : t(MobilityTexts.trip.button.end)
                       }
                     />
-                  </View>
+                  )}
+
                   <SupportButton navigateToSupport={navigateSupportCallback} />
                 </View>
               </View>
@@ -307,9 +327,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       gap: theme.spacing.medium,
     },
     footer: {
-      gap: theme.spacing.medium,
-    },
-    endTripWrapper: {
       gap: theme.spacing.medium,
     },
     tripWrapper: {

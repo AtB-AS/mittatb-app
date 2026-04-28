@@ -4,6 +4,7 @@ import Bugsnag from '@bugsnag/react-native';
 export enum StorageModelKeysEnum {
   PreviousPaymentMethods = '@ATB_previous_payment_methods',
   ScooterConsent = '@ATB_scooter_consent',
+  CityBikeEndTripInfoDismissed = '@ATB_city_bike_end_trip_info_dismissed',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;
