@@ -41,7 +41,7 @@ export const useMapViewConfig = (
     () => ({styleJSON: mapboxJsonStyle}),
     [mapboxJsonStyle],
   );
-  const {enable_surface_view_map} = useRemoteConfigContext();
+  const {enable_surface_view_map, map_max_pitch} = useRemoteConfigContext();
 
   // `mapbox` (v10) Adds compass offset `compassViewMargins` is still supported but generates issues:
   // Mapbox error fireEvent failed: <rnmapbox_maps.RCTMGLEvent: 0x6000028a0fe0>
@@ -61,7 +61,8 @@ export const useMapViewConfig = (
       compassPosition,
       ...configMap,
       surfaceView: enable_surface_view_map,
+      maxPitch: map_max_pitch,
     }),
-    [compassPosition, configMap, enable_surface_view_map],
+    [compassPosition, configMap, enable_surface_view_map, map_max_pitch],
   );
 };
