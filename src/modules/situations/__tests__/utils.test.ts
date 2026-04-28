@@ -184,11 +184,9 @@ describe('findAllSituationsFromLeg', () => {
     } as Partial<Leg>);
     expect(findAllSituationsFromLeg(leg)).toHaveLength(3);
   });
-
 });
 
 describe('findAllSituations', () => {
-
   it('should deduplicate situations by id', () => {
     const sit = makeSituation({
       id: 's1',
@@ -445,4 +443,3 @@ describe('getSituationOrNoticeA11yLabel', () => {
     expect(result).toBeDefined();
   });
 });
-
