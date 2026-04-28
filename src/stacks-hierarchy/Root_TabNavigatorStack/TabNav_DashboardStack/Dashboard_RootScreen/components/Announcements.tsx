@@ -10,6 +10,7 @@ import {useTimeContext} from '@atb/modules/time';
 import {useFareContracts} from '@atb/modules/ticketing';
 import {ContentHeading} from '@atb/components/heading';
 import {useStableLocation} from '@atb/modules/geolocation';
+import {useGetEnrollments} from '@atb/modules/enrollment';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {findZoneInLocation} from '@atb/utils/use-find-zone-in-location';
 import {useMemo} from 'react';
@@ -34,6 +35,8 @@ export const Announcements = ({style, isFocused}: Props) => {
   );
   const hasValidFareContract = validFareContracts.length > 0;
 
+  const enrollmentIds = useGetEnrollments().map((e) => e.programId);
+
   const styles = useStyle();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
@@ -44,6 +47,7 @@ export const Announcements = ({style, isFocused}: Props) => {
     fareZoneId: fareZone?.id ?? null,
     cityZoneId: cityZone?.id ?? null,
     carPoolingZoneId: carPoolingZone?.id ?? null,
+    enrollmentIds,
   };
 
   const filteredAnnouncements = findAnnouncements(ruleVariables).filter((a) =>

@@ -13,7 +13,7 @@ import {
 import {insets} from '@atb/utils/insets';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
-import {useFareZoneFromLocation} from '@atb/fare-zones-selector/use-fare-zone-from-location';
+import {useFareZoneFromLocation} from './use-fare-zone-from-location';
 import {NativeBlockButton} from '@atb/components/native-button';
 
 type Props = {

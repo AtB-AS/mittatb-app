@@ -3,7 +3,7 @@ import type {
   PurchaseSelectionBuilderInput,
   PurchaseSelectionType,
 } from './types';
-import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
+import {FareZoneWithMetadata} from '@atb/modules/fare-zones-selector';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {UserProfileWithCount} from '@atb/modules/fare-contracts';
 import {
@@ -294,4 +294,14 @@ export const isWithinUserProfileMaxCount = (
   )?.maxCount;
 
   return profile.count <= (maxCount ?? Number.POSITIVE_INFINITY);
+};
+
+export const isWithinMaxCountPerOrder = (
+  product: PreassignedFareProduct,
+  profiles: UserProfileWithCount[],
+) => {
+  const maxCountPerOrder = product.limitations.maxCountPerOrder;
+  if (maxCountPerOrder == null) return true;
+  const totalCount = profiles.reduce((sum, p) => sum + p.count, 0);
+  return totalCount <= maxCountPerOrder;
 };

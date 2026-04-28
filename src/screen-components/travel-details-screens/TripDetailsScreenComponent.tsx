@@ -15,7 +15,7 @@ import {
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 // eslint-disable-next-line no-restricted-imports
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
-import {FareZoneWithMetadata} from '@atb/fare-zones-selector';
+import {FareZoneWithMetadata} from '@atb/modules/fare-zones-selector';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/screen-components/travel-details-map-screen';

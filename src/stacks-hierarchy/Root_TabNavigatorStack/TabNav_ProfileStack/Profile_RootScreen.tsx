@@ -81,7 +81,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const isBonusActiveForUser = useIsBonusActiveForUser();
   const bonusProgram = useProgramQuery(KnownProgramId.BONUS, !isBonusEnabled);
   const showBonusSection =
-    isBonusActiveForUser || (bonusProgram?.isOpen && isBonusEnabled);
+    isBonusActiveForUser ||
+    (bonusProgram?.isOpen && bonusProgram?.isActive && isBonusEnabled);
 
   const focusRef = useFocusOnLoad(navigation);
 

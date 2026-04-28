@@ -15,6 +15,7 @@ import {
   isSelectableSupplementProduct,
   isSelectableZone,
   isValidSelection,
+  isWithinMaxCountPerOrder,
   isWithinUserProfileMaxCount,
 } from './utils';
 import {isValidDateTimeString} from '@atb/utils/date';
@@ -166,6 +167,10 @@ const createBuilder = (
       const areProfilesWithinMaxCount = onlyProfilesWithActualCount.every((p) =>
         isWithinUserProfileMaxCount(currentSelection.preassignedFareProduct, p),
       );
+      const isWithinOrderMax = isWithinMaxCountPerOrder(
+        currentSelection.preassignedFareProduct,
+        onlyProfilesWithActualCount,
+      );
       const areSupplementProductsValid =
         onlySupplementProductsWithActualCount.every((sp) =>
           isSelectableSupplementProduct(currentSelection, sp),
@@ -175,6 +180,7 @@ const createBuilder = (
         !anySelection ||
         !areProfilesValid ||
         !areProfilesWithinMaxCount ||
+        !isWithinOrderMax ||
         !areSupplementProductsValid
       ) {
         return currentSelection;

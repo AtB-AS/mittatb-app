@@ -11,6 +11,7 @@ import {
   isSelectableSupplementProduct,
   isSelectableProfile,
   isWithinUserProfileMaxCount,
+  isWithinMaxCountPerOrder,
 } from '../utils';
 
 describe('purchaseSelectionBuilder - userProfiles', () => {
@@ -446,5 +447,116 @@ describe('isSelectableSupplementProduct - undefined limitations', () => {
     expect(isSelectableSupplementProduct(selection, supplementProduct)).toBe(
       true,
     );
+  });
+});
+
+describe('isWithinMaxCountPerOrder', () => {
+  it('returns true when maxCountPerOrder is undefined', () => {
+    const product = {
+      ...TEST_PRODUCT,
+      limitations: {
+        ...TEST_PRODUCT.limitations,
+        maxCountPerOrder: undefined,
+      },
+    };
+    expect(
+      isWithinMaxCountPerOrder(product, [{...TEST_USER_PROFILE, count: 100}]),
+    ).toBe(true);
+  });
+
+  it('returns true when total count is within maxCountPerOrder', () => {
+    const product = {
+      ...TEST_PRODUCT,
+      limitations: {
+        ...TEST_PRODUCT.limitations,
+        maxCountPerOrder: 5,
+      },
+    };
+    expect(
+      isWithinMaxCountPerOrder(product, [
+        {...TEST_USER_PROFILE, id: 'UP1', count: 2},
+        {...TEST_USER_PROFILE, id: 'UP2', count: 2},
+      ]),
+    ).toBe(true);
+  });
+
+  it('returns true when total count equals maxCountPerOrder', () => {
+    const product = {
+      ...TEST_PRODUCT,
+      limitations: {
+        ...TEST_PRODUCT.limitations,
+        maxCountPerOrder: 3,
+      },
+    };
+    expect(
+      isWithinMaxCountPerOrder(product, [
+        {...TEST_USER_PROFILE, id: 'UP1', count: 2},
+        {...TEST_USER_PROFILE, id: 'UP2', count: 1},
+      ]),
+    ).toBe(true);
+  });
+
+  it('returns false when total count exceeds maxCountPerOrder', () => {
+    const product = {
+      ...TEST_PRODUCT,
+      limitations: {
+        ...TEST_PRODUCT.limitations,
+        maxCountPerOrder: 3,
+      },
+    };
+    expect(
+      isWithinMaxCountPerOrder(product, [
+        {...TEST_USER_PROFILE, id: 'UP1', count: 2},
+        {...TEST_USER_PROFILE, id: 'UP2', count: 2},
+      ]),
+    ).toBe(false);
+  });
+});
+
+describe('purchaseSelectionBuilder - maxCountPerOrder', () => {
+  it('Should not apply user profiles when total count exceeds maxCountPerOrder', () => {
+    const originalSelection: PurchaseSelectionType = {
+      ...TEST_SELECTION,
+      preassignedFareProduct: {
+        ...TEST_PRODUCT,
+        limitations: {
+          ...TEST_PRODUCT.limitations,
+          maxCountPerOrder: 3,
+        },
+      },
+    };
+
+    const selection = createEmptyBuilder(TEST_INPUT)
+      .fromSelection(originalSelection)
+      .userProfiles([
+        {...TEST_USER_PROFILE, id: 'UP1', count: 2},
+        {...TEST_USER_PROFILE, id: 'UP2', count: 2},
+      ])
+      .build();
+
+    expect(selection).toBe(originalSelection);
+  });
+
+  it('Should apply user profiles when total count is within maxCountPerOrder', () => {
+    const originalSelection: PurchaseSelectionType = {
+      ...TEST_SELECTION,
+      preassignedFareProduct: {
+        ...TEST_PRODUCT,
+        limitations: {
+          ...TEST_PRODUCT.limitations,
+          maxCountPerOrder: 5,
+        },
+      },
+    };
+
+    const selection = createEmptyBuilder(TEST_INPUT)
+      .fromSelection(originalSelection)
+      .userProfiles([
+        {...TEST_USER_PROFILE, id: 'UP1', count: 2},
+        {...TEST_USER_PROFILE, id: 'UP2', count: 3},
+      ])
+      .build();
+
+    expect(selection.userProfilesWithCount).toHaveLength(2);
   });
 });
