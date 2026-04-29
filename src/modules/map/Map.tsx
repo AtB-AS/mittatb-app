@@ -170,7 +170,6 @@ export const Map = (props: MapProps) => {
   const mapViewConfig = useMapViewConfig({
     includeVehiclesAndStationsVectorSource:
       shouldShowVehiclesAndStations || Platform.OS !== 'android',
-    shouldShowGeofencingZonesLayers: !!systemId && !!vehicleTypeId,
     compassOffsetTop,
   });
 

@@ -16,7 +16,6 @@ const mapViewStaticConfig = {
 
 type MapViewConfigOptions = {
   includeVehiclesAndStationsVectorSource?: boolean;
-  shouldShowGeofencingZonesLayers?: boolean;
   includeBasemapStyle?: boolean;
   compassOffsetTop?: number;
 };
@@ -26,13 +25,11 @@ export const useMapViewConfig = (
 ) => {
   const {
     includeVehiclesAndStationsVectorSource = false,
-    shouldShowGeofencingZonesLayers = false,
     includeBasemapStyle = true,
     compassOffsetTop = 0,
   } = mapViewConfigOptions || {};
   const mapboxJsonStyle = useMapboxJsonStyle(
     includeVehiclesAndStationsVectorSource,
-    shouldShowGeofencingZonesLayers,
     includeBasemapStyle,
   );
   const configMap = useMemo(
