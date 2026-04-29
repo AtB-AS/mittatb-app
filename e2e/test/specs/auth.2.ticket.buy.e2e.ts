@@ -6,40 +6,14 @@ import TicketBuyPage from '../pageobjects/ticket.buy.page.js';
 import PurchaseOverviewPage from '../pageobjects/purchase.overview.page.js';
 import PurchaseSummaryPage from '../pageobjects/purchase.summary.page.js';
 import PurchasePaymentPage from '../pageobjects/purchase.payment.page.js';
-import MyProfilePage from '../pageobjects/profile.page.js';
-import AuthenticationPage from '../pageobjects/authentication.page.js';
-import {formatPhoneNumber} from '../utils/utils.js';
-import Config from '../conf/config.js';
 
 describe('Auth Buy Ticket', () => {
-  const phoneNumber = Config.phoneNumber();
   let authorized = false;
 
   before(async () => {
     await AppHelper.waitOnLoadingScreen();
-  });
-
-  it('should login', async () => {
-    try {
-      // Log in through the onboarding
-      await AuthenticationPage.loginWithPhone(phoneNumber);
-      await OnboardingPage.denyLocationInOnboarding();
-      await OnboardingPage.waitOnTokenOnboarding(false);
-      await ElementHelper.waitForElement('text', 'Travel');
-      await AppHelper.pause(2000);
-
-      // Verify
-      await NavigationHelper.tapMenu('profile');
-      await NavigationHelper.tapMenu('profile');
-      await ElementHelper.waitForElement('text', 'Profile');
-      expect(await MyProfilePage.loggedInWithInfo).toContain(
-        formatPhoneNumber(phoneNumber),
-      );
-      authorized = true;
-    } catch (errMsg) {
-      await AppHelper.screenshot('error_auth_login');
-      throw errMsg;
-    }
+    // Login
+    authorized = await OnboardingPage.loginThroughOnboarding();
   });
 
   /*

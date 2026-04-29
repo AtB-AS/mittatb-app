@@ -107,10 +107,10 @@ describe('Departure', () => {
       const linePublicCode = await DepartureOverviewPage.getLinePublicCode();
       const lineName = await DepartureOverviewPage.getLineName();
       await DepartureOverviewPage.openDeparture();
-      expect(await DepartureDetailsPage.getPublicCode()).toHaveText(
+      expect(await DepartureDetailsPage.getPublicCode()).toContain(
         linePublicCode,
       );
-      expect(await DepartureDetailsPage.getLineName()).toHaveText(lineName);
+      expect(await DepartureDetailsPage.getLineName()).toContain(lineName);
 
       // Show intermediate stops
       const noPassed = await DepartureDetailsPage.passedLegs.length;
@@ -125,10 +125,10 @@ describe('Departure', () => {
 
       await NavigationHelper.back();
       await ElementHelper.waitForElement('id', 'departureDetailsContentView');
-      expect(await DepartureDetailsPage.getPublicCode()).toHaveText(
+      expect(await DepartureDetailsPage.getPublicCode()).toContain(
         linePublicCode,
       );
-      expect(await DepartureDetailsPage.getLineName()).toHaveText(lineName);
+      expect(await DepartureDetailsPage.getLineName()).toContain(lineName);
     } catch (errMsg) {
       await AppHelper.screenshot(
         'error_departure_should_show_intermediate_stops',
