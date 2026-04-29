@@ -3,7 +3,9 @@ import {getTripPatternStatus} from '../utils';
 
 jest.mock('@atb/screen-components/travel-details-screens', () => ({
   getTripPatternBookingStatus: (...args: unknown[]) =>
-    require('@atb/screen-components/travel-details-screens/utils').getTripPatternBookingStatus(...args),
+    require('@atb/screen-components/travel-details-screens/utils').getTripPatternBookingStatus(
+      ...args,
+    ),
 }));
 
 const futureTime = new Date(Date.now() + 3600 * 1000).toISOString();
@@ -12,6 +14,11 @@ const pastTime = new Date(Date.now() - 3600 * 1000).toISOString();
 const farPastTime = new Date(Date.now() - 7200 * 1000).toISOString();
 
 const t = ((v: any) => v) as any;
+const colors = {
+  error: '#error',
+  info: '#info',
+  interactive: '#interactive',
+};
 
 function makeLeg(overrides: Partial<Leg> = {}): Leg {
   return {
@@ -43,13 +50,14 @@ function makeTripPattern(overrides: Partial<TripPattern> = {}): TripPattern {
 
 describe('getTripPatternStatus', () => {
   it('returns undefined when no conditions are met', () => {
-    expect(getTripPatternStatus(makeTripPattern(), t)).toBeUndefined();
+    expect(getTripPatternStatus(makeTripPattern(), t, colors)).toBeUndefined();
   });
 
   it('returns impossible when status is impossible', () => {
     const result = getTripPatternStatus(
       makeTripPattern({status: 'impossible'}),
       t,
+      colors,
     );
     expect(result?.type).toBe('impossible');
   });
@@ -72,6 +80,7 @@ describe('getTripPatternStatus', () => {
         ],
       }),
       t,
+      colors,
     );
     expect(result?.type).toBe('cancelled');
   });
@@ -94,6 +103,7 @@ describe('getTripPatternStatus', () => {
         ],
       }),
       t,
+      colors,
     );
     expect(result?.type).toBe('cancelled');
   });
@@ -102,6 +112,7 @@ describe('getTripPatternStatus', () => {
     const result = getTripPatternStatus(
       makeTripPattern({status: 'stale'}),
       t,
+      colors,
     );
     expect(result?.type).toBe('stale');
   });
@@ -118,6 +129,7 @@ describe('getTripPatternStatus', () => {
         ],
       }),
       t,
+      colors,
     );
     expect(result?.type).toBe('requiresBooking');
   });
@@ -136,6 +148,7 @@ describe('getTripPatternStatus', () => {
         ],
       }),
       t,
+      colors,
     );
     expect(result?.type).toBe('bookingDeadlineExceeded');
   });
@@ -147,6 +160,7 @@ describe('getTripPatternStatus', () => {
         expectedEndTime: pastTime,
       }),
       t,
+      colors,
     );
     expect(result?.type).toBe('ended');
   });
@@ -158,6 +172,7 @@ describe('getTripPatternStatus', () => {
         expectedEndTime: farFutureTime,
       }),
       t,
+      colors,
     );
     expect(result?.type).toBe('started');
   });
@@ -180,6 +195,7 @@ describe('getTripPatternStatus', () => {
         ],
       }),
       t,
+      colors,
     );
     expect(result?.type).toBe('impossible');
   });
