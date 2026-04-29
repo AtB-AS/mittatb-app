@@ -192,7 +192,7 @@ export const GeofencingZoneIcon: React.FC<GeofencingZoneIconProps> = ({
           iconSize,
           iconEmissiveStrength: 1,
         }}
-        aboveLayerID={MapSlotLayerId.GeofencingZones}
+        aboveLayerID={MapSlotLayerId.GeofencingZonesIcons}
       />
     </MapboxGL.ShapeSource>
   );
