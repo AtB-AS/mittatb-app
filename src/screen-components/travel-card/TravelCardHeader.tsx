@@ -9,9 +9,9 @@ import {TripPattern} from '@atb/api/types/trips';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {StatusText} from './StatusText';
-import {useTripPatternInfo} from './use-trip-pattern-info';
+import {useTripPatternInfo} from './hooks';
 import {differenceInMinutes} from 'date-fns';
-import {useTimeLabels} from './utils';
+import {useTimeLabels} from './hooks';
 import {useAccessibilityLabelContribution} from '@atb/modules/composite-accessibility';
 
 export const TravelCardHeader: React.FC<
