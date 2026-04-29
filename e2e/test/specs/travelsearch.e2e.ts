@@ -29,11 +29,6 @@ describe('Find journey', () => {
   it('should do a travel search and have correct travel times in the details', async () => {
     const departure = 'Prinsens gate';
     const arrival = 'Melhus skysstasjon';
-    /*
-    Candidates for a special route
-    const departure = 'Udduvoll bru vest';
-    const arrival = 'Anders Buens gate';
-     */
 
     try {
       await ElementHelper.waitForElement('id', 'searchFromButton');

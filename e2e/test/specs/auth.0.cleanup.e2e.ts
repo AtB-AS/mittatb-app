@@ -2,51 +2,16 @@ import AppHelper from '../utils/app.helper.ts';
 import OnboardingPage from '../pageobjects/onboarding.page.ts';
 import NavigationHelper from '../utils/navigation.helper.ts';
 import ElementHelper from '../utils/element.helper.ts';
-import MyProfilePage from '../pageobjects/profile.page.js';
-import AuthenticationPage from '../pageobjects/authentication.page.js';
-import {formatPhoneNumber} from '../utils/utils.js';
 import ProfilePage from '../pageobjects/profile.page.js';
 import DebugPage from '../pageobjects/debug.page.js';
-import Config from '../conf/config.js';
 
 describe('Auth Cleanup', () => {
-  const phoneNumber = Config.phoneNumber();
   let authorized = false;
 
   before(async () => {
     await AppHelper.waitOnLoadingScreen();
-  });
-
-  it('should login', async () => {
-    try {
-      /*
-      // Log in through my profile
-      await NavigationHelper.tapMenu('profile');
-      await ElementHelper.waitForElement('text', 'Profile');
-      await MyProfilePage.login.click();
-      await AuthenticationPage.loginWithPhone(phoneNumber)
-      await ElementHelper.waitForElement('text', 'Travel');
-      await AppHelper.pause(2000);
-       */
-
-      // Log in through the onboarding
-      await AuthenticationPage.loginWithPhone(phoneNumber);
-      await OnboardingPage.denyLocationInOnboarding();
-      await OnboardingPage.waitOnTokenOnboarding(false);
-      await ElementHelper.waitForElement('text', 'Travel');
-      await AppHelper.pause(2000);
-
-      // Verify
-      await NavigationHelper.tapMenu('profile');
-      await ElementHelper.waitForElement('text', 'Profile');
-      expect(await MyProfilePage.loggedInWithInfo).toContain(
-        formatPhoneNumber(phoneNumber),
-      );
-      authorized = true;
-    } catch (errMsg) {
-      await AppHelper.screenshot('error_auth_login');
-      throw errMsg;
-    }
+    // Login
+    authorized = await OnboardingPage.loginThroughOnboarding();
   });
 
   it('should cleanup remote tokens', async () => {
