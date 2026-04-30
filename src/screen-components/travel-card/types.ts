@@ -3,7 +3,6 @@ import type {SvgProps} from 'react-native-svg';
 import {JSX} from 'react';
 
 export type TripPatternStatusType =
-  | 'ended'
   | 'started'
   | 'impossible'
   | 'stale'

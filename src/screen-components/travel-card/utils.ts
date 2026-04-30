@@ -3,10 +3,14 @@ import {getTripPatternBookingStatus} from '@atb/screen-components/travel-details
 import type {TripPatternStatus} from './types';
 import type {TranslateFunction} from '@atb/translations';
 import {TravelCardTexts} from '@atb/translations';
-import {isInThePast} from '@atb/utils/date';
+import {isInTheFuture, isInThePast} from '@atb/utils/date';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {Duration} from '@atb/assets/svg/mono-icons/time';
-import {Warning} from '@atb/assets/svg/mono-icons/status';
+import {
+  BookingClosed,
+  BookingRequired,
+  Warning,
+} from '@atb/assets/svg/mono-icons/status';
 import SvgError from '@atb/assets/svg/color/icons/status/light/Error';
 
 type StatusColors = {
@@ -20,6 +24,14 @@ export function getTripPatternStatus(
   t: TranslateFunction,
   colors: StatusColors,
 ): TripPatternStatus | undefined {
+  if (tripPattern.legs.some((leg) => leg.fromEstimatedCall?.cancellation)) {
+    return {
+      type: 'cancelled',
+      svg: SvgError,
+      color: colors.error,
+      text: t(TravelCardTexts.header.cancelled),
+    };
+  }
   if (tripPattern.status === 'impossible') {
     return {
       type: 'impossible',
@@ -29,12 +41,21 @@ export function getTripPatternStatus(
     };
   }
 
-  if (tripPattern.legs.some((leg) => leg.fromEstimatedCall?.cancellation)) {
+  if (tripPattern.legs.some((leg) => leg.bookingArrangements)) {
+    const bookingStatus = getTripPatternBookingStatus(tripPattern);
+    if (bookingStatus === 'late') {
+      return {
+        type: 'bookingDeadlineExceeded',
+        svg: BookingClosed,
+        color: colors.interactive,
+        text: t(TravelCardTexts.header.bookingDeadlineExceeded),
+      };
+    }
     return {
-      type: 'cancelled',
-      svg: SvgError,
-      color: colors.error,
-      text: t(TravelCardTexts.header.cancelled),
+      type: 'requiresBooking',
+      svg: BookingRequired,
+      color: colors.info,
+      text: t(TravelCardTexts.header.requiresBooking),
     };
   }
 
@@ -47,25 +68,10 @@ export function getTripPatternStatus(
     };
   }
 
-  if (tripPattern.legs.some((leg) => leg.bookingArrangements)) {
-    const bookingStatus = getTripPatternBookingStatus(tripPattern);
-    if (bookingStatus === 'late') {
-      return {
-        type: 'bookingDeadlineExceeded',
-        svg: ,
-        color: colors.interactive,
-        text: t(TravelCardTexts.header.bookingDeadlineExceeded),
-      };
-    }
-    return {
-      type: 'requiresBooking',
-      svg: Warning,
-      color: colors.info,
-      text: t(TravelCardTexts.header.requiresBooking),
-    };
-  }
-
-  if (isInThePast(tripPattern.expectedStartTime)) {
+  if (
+    isInThePast(tripPattern.expectedStartTime) &&
+    isInTheFuture(tripPattern.expectedEndTime)
+  ) {
     return {
       type: 'started',
       svg: Duration,
