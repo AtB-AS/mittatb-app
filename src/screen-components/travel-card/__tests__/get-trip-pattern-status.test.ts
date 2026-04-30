@@ -75,6 +75,7 @@ describe('getTripPatternStatus', () => {
               stopPositionInPattern: 0,
               quay: {name: 'A'},
               notices: [],
+              situations: [],
             },
           }),
         ],
@@ -98,6 +99,7 @@ describe('getTripPatternStatus', () => {
               stopPositionInPattern: 0,
               quay: {name: 'A'},
               notices: [],
+              situations: [],
             },
           }),
         ],
@@ -153,7 +155,7 @@ describe('getTripPatternStatus', () => {
     expect(result?.type).toBe('bookingDeadlineExceeded');
   });
 
-  it('returns ended when expectedEndTime is in the past', () => {
+  it('returns undefined when trip has ended', () => {
     const result = getTripPatternStatus(
       makeTripPattern({
         expectedStartTime: farPastTime,
@@ -162,7 +164,7 @@ describe('getTripPatternStatus', () => {
       t,
       colors,
     );
-    expect(result?.type).toBe('ended');
+    expect(result).toBeUndefined();
   });
 
   it('returns started when expectedStartTime is in the past but expectedEndTime is not', () => {
@@ -177,7 +179,7 @@ describe('getTripPatternStatus', () => {
     expect(result?.type).toBe('started');
   });
 
-  it('prioritises impossible over cancelled', () => {
+  it('prioritises cancelled over impossible', () => {
     const result = getTripPatternStatus(
       makeTripPattern({
         status: 'impossible',
@@ -190,6 +192,7 @@ describe('getTripPatternStatus', () => {
               stopPositionInPattern: 0,
               quay: {name: 'A'},
               notices: [],
+              situations: [],
             },
           }),
         ],
@@ -197,6 +200,6 @@ describe('getTripPatternStatus', () => {
       t,
       colors,
     );
-    expect(result?.type).toBe('impossible');
+    expect(result?.type).toBe('cancelled');
   });
 });
