@@ -262,9 +262,7 @@ export const ActiveShmoSheet = ({
                       )}
                     />
                   )}
-                  {activeBooking.asset.formFactor === FormFactor.Bicycle &&
-                  activeBooking.asset.propulsionType ===
-                    PropulsionType.Human ? (
+                  {activeBooking.asset.formFactor === FormFactor.Bicycle ? (
                     !endTripInfoClosed && (
                       <EndManualTripCard
                         title={t(MobilityTexts.cityBike.endManualTrip.title)}
