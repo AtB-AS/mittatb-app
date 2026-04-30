@@ -46,10 +46,7 @@ export const useMapboxJsonStyle: (
 
   const mapboxSpriteUrl = useAppVersionedConfigurableLink('mapboxSpriteUrls');
 
-  const {
-    id: vehiclesAndStationsVectorSourceId,
-    source: vehiclesAndStationsVectorSource,
-  } = useVehiclesAndStationsVectorSource();
+  const vehiclesAndStationsVectorSources = useVehiclesAndStationsVectorSource();
 
   const themedStyleWithExtendedSourcesAndSlotLayers = useMemo(() => {
     const themedStyle =
@@ -79,10 +76,7 @@ export const useMapboxJsonStyle: (
     const extendedSources: StyleJsonVectorSourcesObj = {
       ...themedStyle.sources,
       ...(includeVehiclesAndStationsVectorSource
-        ? {
-            [vehiclesAndStationsVectorSourceId]:
-              vehiclesAndStationsVectorSource,
-          }
+        ? vehiclesAndStationsVectorSources
         : undefined),
     };
 
@@ -96,8 +90,7 @@ export const useMapboxJsonStyle: (
     mapbox_nsr_tileset_id,
     mapbox_user_name,
     themeName,
-    vehiclesAndStationsVectorSource,
-    vehiclesAndStationsVectorSourceId,
+    vehiclesAndStationsVectorSources,
   ]);
 
   const mapboxJsonStyle = useMemo(

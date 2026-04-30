@@ -58,11 +58,7 @@ import {useIsBonusBalanceButtonVisible} from '@atb/modules/bonus';
 import {useThemeContext} from '@atb/theme';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
 import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
-import {
-  StationsWithClusters,
-  VehiclesAndStations,
-  VehiclesWithClusters,
-} from './components/mobility/VehiclesAndStations';
+import {VehiclesAndStations} from './components/mobility/VehiclesAndStations';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
@@ -535,19 +531,12 @@ export const Map = (props: MapProps) => {
           tabBarHeight={tabBarHeight}
           ref={mapStateRef}
         >
-          {!!showVehicles && (
-            <VehiclesWithClusters
-              selectedFeatureId={undefined}
-              hideSymbols={true}
-            />
-          )}
-          {!!showStations && (
-            <StationsWithClusters
-              selectedFeatureId={undefined}
-              showNonVirtualStations={true}
-              hideSymbols={true}
-            />
-          )}
+          <VehiclesAndStations
+            selectedFeatureId={undefined}
+            showVehicles={showVehicles}
+            showStations={showStations}
+            hideSymbols={true}
+          />
         </MapTilePreloader>
       )}
     </View>
