@@ -259,7 +259,7 @@ const PurchaseOverviewTexts = {
     sendToOthersText: _(
       'Send billetten til noen andre',
       'Send the ticket to someone else',
-      'Send biletten til nokon andre',
+      'Send billetten til nokon andre',
     ),
   },
   ticketInformation: {
