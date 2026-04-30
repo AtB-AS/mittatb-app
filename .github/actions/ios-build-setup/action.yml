@@ -114,5 +114,5 @@ runs:
           rm '/usr/local/bin/pydoc3.11'
           rm '/usr/local/bin/python3.11'
           rm '/usr/local/bin/python3.11-config'
-          brew install shared-mime-info imagemagick
+          brew install imagemagick
           yarn generate-native-assets
