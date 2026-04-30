@@ -3,15 +3,15 @@ import {getTripPatternBookingStatus} from '@atb/screen-components/travel-details
 import type {TripPatternStatus} from './types';
 import type {TranslateFunction} from '@atb/translations';
 import {TravelCardTexts} from '@atb/translations';
-import {isInTheFuture, isInThePast} from '@atb/utils/date';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {Duration} from '@atb/assets/svg/mono-icons/time';
 import {
   BookingClosed,
   BookingRequired,
   Warning,
 } from '@atb/assets/svg/mono-icons/status';
 import SvgError from '@atb/assets/svg/color/icons/status/light/Error';
+import {Duration} from '@atb/assets/svg/mono-icons/time';
+import {isInTheFuture, isInThePast} from '@atb/utils/date';
 
 type StatusColors = {
   error: string;
@@ -41,6 +41,18 @@ export function getTripPatternStatus(
     };
   }
 
+  if (
+    isInThePast(tripPattern.expectedStartTime) &&
+    isInTheFuture(tripPattern.expectedEndTime)
+  ) {
+    return {
+      type: 'started',
+      svg: Duration,
+      color: colors.info,
+      text: t(TravelCardTexts.header.tripStarted),
+    };
+  }
+
   if (tripPattern.legs.some((leg) => leg.bookingArrangements)) {
     const bookingStatus = getTripPatternBookingStatus(tripPattern);
     if (bookingStatus === 'late') {
@@ -65,18 +77,6 @@ export function getTripPatternStatus(
       svg: Warning,
       color: colors.info,
       text: t(TravelCardTexts.header.staleTrip),
-    };
-  }
-
-  if (
-    isInThePast(tripPattern.expectedStartTime) &&
-    isInTheFuture(tripPattern.expectedEndTime)
-  ) {
-    return {
-      type: 'started',
-      svg: Duration,
-      color: colors.info,
-      text: t(TravelCardTexts.header.tripStarted),
     };
   }
 
