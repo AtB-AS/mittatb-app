@@ -1,3 +1,4 @@
+import {ShmoBookingState} from '@atb/api/types/mobility';
 import {z} from 'zod';
 
 export enum EventKind {
@@ -40,6 +41,7 @@ export const StreamEventSchema = z.discriminatedUnion('event', [
     event: z.literal(EventKind.ShmoBookingUpdated),
     bookingId: z.string(),
     orderId: z.string(),
+    state: z.enum(ShmoBookingState),
   }),
 
   z.object({
