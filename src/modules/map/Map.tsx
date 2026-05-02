@@ -111,6 +111,17 @@ export const Map = (props: MapProps) => {
   const [stalePaddingBottomMap, setStalePaddingBottomMap] =
     useState(paddingBottomMap);
 
+  // Captures the first non-zero `paddingBottomMap` so the camera centers above
+  // a default bottom sheet on initial load. Held sticky so subsequent snap
+  // drags don't change the Camera's padding prop (which would yank the map).
+  const [stickyInitialPaddingBottom, setStickyInitialPaddingBottom] =
+    useState(0);
+  useEffect(() => {
+    if (stickyInitialPaddingBottom === 0 && paddingBottomMap > 0) {
+      setStickyInitialPaddingBottom(paddingBottomMap);
+    }
+  }, [paddingBottomMap, stickyInitialPaddingBottom]);
+
   const startingCoordinates = getCurrentCoordinatesGlobal() || FOCUS_ORIGIN;
 
   const showVehicles = mapFilter?.mobility.SCOOTER?.showAll ?? false;
@@ -444,13 +455,17 @@ export const Map = (props: MapProps) => {
             centerCoordinate={
               !initMapLoaded ? mapPropertiesRef.current?.center : undefined
             }
-            padding={getSlightlyRaisedMapPadding(
+            padding={
               activeShmoBooking?.bookingId
-                ? followUserLocation
-                  ? paddingBottomMap
-                  : stalePaddingBottomMap
-                : paddingBottomMap,
-            )}
+                ? getSlightlyRaisedMapPadding(
+                    followUserLocation
+                      ? paddingBottomMap
+                      : stalePaddingBottomMap,
+                  )
+                : stickyInitialPaddingBottom > 0
+                  ? getSlightlyRaisedMapPadding(stickyInitialPaddingBottom)
+                  : undefined
+            }
             {...MapCameraConfig}
             followUserLocation={
               !!activeShmoBooking &&
