@@ -1,3 +1,4 @@
+import type React from 'react';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {GeoLocation, Location, SearchLocation} from '@atb/modules/favorites';
 import {
@@ -72,6 +73,16 @@ export type MapProps = {
   navigateToLogin: () => void;
   navigateToPaymentMethods: () => void;
   navigateToBonusScreen?: () => void;
+  /**
+   * Rendered as a persistent bottom sheet when no feature sheet is active and
+   * there is no in-progress SHMO booking. Lets a host screen surface its own
+   * default content (e.g. the assistant) on top of the map. The render fn
+   * receives helpers owned by the map (currently the location-arrow handler)
+   * so the host can wire them into its sheet.
+   */
+  defaultBottomSheet?: (helpers: {
+    locationArrowOnPress: () => void;
+  }) => React.ReactNode;
 };
 
 export type Cluster = {

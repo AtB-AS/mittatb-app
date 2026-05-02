@@ -6,7 +6,6 @@ import {
 } from '@react-navigation/native';
 import {DashboardStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
 import {ProfileStackParams} from './TabNav_ProfileStack/navigation-types';
-import {MapStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_MapStack';
 import {
   BottomTabNavigationProp,
   BottomTabScreenProps,
@@ -21,7 +20,6 @@ export type TabNavigatorStackParams = StackParams<{
   TabNav_DeparturesStack: NavigatorScreenParams<DeparturesStackParams>;
   TabNav_TicketingStack: NavigatorScreenParams<TicketingStackParams>;
   TabNav_ProfileStack: NavigatorScreenParams<ProfileStackParams>;
-  TabNav_MapStack: NavigatorScreenParams<MapStackParams>;
 }>;
 
 export type TabNavigatorScreenProps<T extends keyof TabNavigatorStackParams> =

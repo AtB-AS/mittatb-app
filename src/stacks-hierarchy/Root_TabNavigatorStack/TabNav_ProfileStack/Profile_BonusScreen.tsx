@@ -241,9 +241,9 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
               bonusProducts={activeBonusProducts}
               onNavigateToMap={(initialFilters) =>
                 navigation.navigate('Root_TabNavigatorStack', {
-                  screen: 'TabNav_MapStack',
+                  screen: 'TabNav_DashboardStack',
                   params: {
-                    screen: 'Map_RootScreen',
+                    screen: 'Dashboard_RootScreen',
                     params: {initialFilters},
                   },
                 })

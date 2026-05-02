@@ -10,8 +10,11 @@ import {NearbyStopPlacesScreenParams} from '@atb/screen-components/nearby-stop-p
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
 import {TravelAidScreenParams} from '@atb/screen-components/travel-aid';
 import {SelectFavoriteDeparturesScreenParams} from './Dashboard_SelectFavoriteDeparturesScreen';
+import type {MapFilterType} from '@atb/modules/map';
 
-export type DashboardRootScreenParams = {} & TripSearchScreenParams;
+export type DashboardRootScreenParams = {
+  initialFilters?: MapFilterType;
+} & TripSearchScreenParams;
 
 type OnCompleteRouteNames =
   | 'Dashboard_FavoriteDeparturesScreen'

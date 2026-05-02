@@ -15,7 +15,6 @@ const dictionary = {
       'Activate for search assistant. Activate twice to reset search.',
       `Aktiver for reisesøk. Aktiver to gonger for å nullstille søket.`,
     ),
-    map: _(`Kart`, 'Map', `Kart`),
     nearby: _(`Av${softhyphen}ganger`, 'Departures', `Avgangar`),
     ticketing: _('Billetter', 'Tickets', `Billettar`),
     profile: _('Profil', 'Profile', `Profil`),

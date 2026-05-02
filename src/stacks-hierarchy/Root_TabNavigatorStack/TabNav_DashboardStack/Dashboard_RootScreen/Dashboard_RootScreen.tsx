@@ -45,6 +45,13 @@ import {TripPattern} from '@atb/api/types/trips';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {WithOverlayButton} from '@atb/components/overlay-button';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import {Map, NavigateToTripSearchCallback} from '@atb/modules/map';
+import type {Quay, StopPlace} from '@atb/api/types/departures';
+import {useGetHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
+import type {ShmoHelpScreenProps} from '@atb/stacks-hierarchy/Root_ShmoHelp/Root_ShmoHelpScreen';
+import {AssistantBottomSheet} from './AssistantBottomSheet';
 
 const RESULT_KEY_FROM = 'Dashboard_RootScreen--fromLocation';
 const RESULT_KEY_TO = 'Dashboard_RootScreen--toLocation';
@@ -55,11 +62,15 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
   const style = useStyle();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const {enable_ticketing} = useRemoteConfigContext();
+  const {enable_ticketing, enable_vipps_login} = useRemoteConfigContext();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
   const analytics = useAnalyticsContext();
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+  const tabBarHeight = useBottomTabBarHeight();
 
   const {locationIsAvailable, location} = useGeolocationContext();
+  const getHasReservationOrAvailableFareContract =
+    useGetHasReservationOrAvailableFareContract();
 
   const {pendingResult, clearPendingResult} = usePendingLocationSearchStore();
   useEffect(() => {
@@ -206,127 +217,254 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
     [navigation],
   );
 
-  return (
-    <FullScreenView
-      focusRef={focusRef}
-      headerProps={{
-        title: t(DashboardTexts.header.title),
-        globalMessageContext: GlobalMessageContextEnum.appAssistant,
-        color: theme.color.background.neutral[1],
-      }}
-      headerContent={(focusRef) => (
-        <ScreenHeading
-          ref={focusRef}
-          text={t(DashboardTexts.header.title)}
-          isLarge={true}
+  const navigateToQuay = useCallback(
+    (place: StopPlace, quay: Quay) => {
+      navigation.push('Dashboard_PlaceScreen', {
+        place,
+        selectedQuayId: quay.id,
+      });
+    },
+    [navigation],
+  );
+
+  const navigateToDetailsForMap = useCallback(
+    (
+      serviceJourneyId: string,
+      serviceDate: string,
+      date: string | undefined,
+      fromStopPosition: number,
+      isTripCancelled?: boolean,
+    ) => {
+      if (!serviceJourneyId || !date) return;
+      navigation.push('Dashboard_DepartureDetailsScreen', {
+        items: [
+          {
+            serviceJourneyId,
+            serviceDate,
+            date,
+            fromStopPosition,
+            isTripCancelled,
+          },
+        ],
+        activeItemIndex: 0,
+      });
+    },
+    [navigation],
+  );
+
+  const navigateToTripSearchFromMap: NavigateToTripSearchCallback = useCallback(
+    (location, destination) => {
+      navigation.push('Dashboard_TripSearchScreen', {
+        [destination]: location,
+      });
+    },
+    [navigation],
+  );
+
+  const navigateToShmoSupport = useCallback(
+    (params: ShmoHelpScreenProps['route']['params']) => {
+      navigation.navigate('Root_ShmoHelpScreen', params);
+    },
+    [navigation],
+  );
+
+  const navigateToScooterOnboarding = useCallback(() => {
+    navigation.navigate('Root_ShmoOnboardingScreen');
+  }, [navigation]);
+
+  const navigateToReportParkingViolation = useCallback(() => {
+    navigation.navigate('Root_ParkingViolationsSelectScreen');
+  }, [navigation]);
+
+  const navigateToParkingPhoto = useCallback(
+    (bookingId: string) => {
+      navigation.navigate('Root_ParkingPhotoScreen', {bookingId});
+    },
+    [navigation],
+  );
+
+  const navigateToScanQrCode = useCallback(() => {
+    navigation.navigate('Root_ScanQrCodeScreen');
+  }, [navigation]);
+
+  const navigateToLogin = useCallback(() => {
+    if (getHasReservationOrAvailableFareContract()) {
+      navigation.navigate('Root_LoginAvailableFareContractWarningScreen', {});
+    } else if (enable_vipps_login) {
+      navigation.navigate('Root_LoginOptionsScreen', {
+        showGoBack: true,
+        transitionOverride: 'slide-from-bottom',
+      });
+    } else {
+      navigation.navigate('Root_LoginPhoneInputScreen', {});
+    }
+  }, [
+    enable_vipps_login,
+    getHasReservationOrAvailableFareContract,
+    navigation,
+  ]);
+
+  const paymentMethodsScreenParams = useNestedProfileScreenParams(
+    'Profile_PaymentMethodsScreen',
+  );
+
+  const navigateToPaymentMethods = useCallback(() => {
+    navigation.navigate('Root_TabNavigatorStack', paymentMethodsScreenParams);
+  }, [navigation, paymentMethodsScreenParams]);
+
+  const dashboardWidgets = (
+    <>
+      <View style={style.searchHeader}>
+        <WithOverlayButton
+          svgIcon={Swap}
+          onPress={swap}
+          overlayPosition="right"
+          isLoading={updatingLocation && !to}
+          overlayStyleOverride={style.swapButton}
+          accessibilityLabel={
+            t(TripSearchTexts.location.swapButton.a11yLabel) + screenReaderPause
+          }
+        >
+          <Section style={[style.contentSection, style.contentSection__first]}>
+            <LocationInputSectionItem
+              accessibilityLabel={
+                t(TripSearchTexts.location.departurePicker.a11yLabel) +
+                screenReaderPause
+              }
+              accessibilityHint={
+                t(TripSearchTexts.location.departurePicker.a11yHint) +
+                screenReaderPause
+              }
+              location={from}
+              label={t(SharedTexts.from)}
+              onPress={() => openLocationSearch(RESULT_KEY_FROM, from)}
+              testID="searchFromButton"
+            />
+            <LocationInputSectionItem
+              accessibilityLabel={t(
+                TripSearchTexts.location.destinationPicker.a11yLabel,
+              )}
+              label={t(SharedTexts.to)}
+              location={to}
+              onPress={() => openLocationSearch(RESULT_KEY_TO, to)}
+              testID="searchToButton"
+            />
+          </Section>
+        </WithOverlayButton>
+
+        <FavoriteChips
+          key="favoriteChips"
+          style={style.favoriteChips}
+          chipTypes={['favorites', 'add-favorite']}
+          onSelectLocation={fillNextAvailableLocation}
+          chipActionHint={
+            t(TripSearchTexts.favorites.favoriteChip.a11yHint) +
+            t(!!from ? dictionary.toPlace : dictionary.fromPlace) +
+            screenReaderPause
+          }
+          onAddFavoritePlace={() =>
+            navigation.navigate('Root_SearchFavoritePlaceScreen')
+          }
+          backgroundColor={theme.color.background.neutral[1]}
+        />
+      </View>
+
+      <StoredTripPatternsDashboardComponent
+        onDetailsPressed={navigateToTripDetailsScreen}
+        isFocused={isFocused}
+      />
+
+      <Announcements
+        style={[style.contentSection, style.contentSection__horizontalScroll]}
+        isFocused={isFocused}
+      />
+
+      {enable_ticketing && (
+        <CompactFareContracts
+          isFocused={isFocused}
+          style={style.contentSection}
+          onPressDetails={(fareContractId: string) => {
+            return navigation.navigate({
+              name: 'Root_FareContractDetailsScreen',
+              params: {
+                fareContractId: fareContractId,
+                transitionOverride: 'slide-from-right',
+              },
+            });
+          }}
+          onPressBuy={() => {
+            analytics.logEvent('Dashboard', 'Purchase ticket button clicked');
+            navigation.navigate('TabNav_TicketingStack', {
+              screen: 'Ticketing_RootScreen',
+              params: {
+                screen: 'TicketTabNav_PurchaseTabScreen',
+              },
+            });
+          }}
         />
       )}
-    >
-      <ScrollView
-        contentContainerStyle={style.scrollView}
-        testID="dashboardScrollView"
-      >
-        <View style={style.searchHeader}>
-          <WithOverlayButton
-            svgIcon={Swap}
-            onPress={swap}
-            overlayPosition="right"
-            isLoading={updatingLocation && !to}
-            overlayStyleOverride={style.swapButton}
-            accessibilityLabel={
-              t(TripSearchTexts.location.swapButton.a11yLabel) +
-              screenReaderPause
-            }
-          >
-            <Section
-              style={[style.contentSection, style.contentSection__first]}
-            >
-              <LocationInputSectionItem
-                accessibilityLabel={
-                  t(TripSearchTexts.location.departurePicker.a11yLabel) +
-                  screenReaderPause
-                }
-                accessibilityHint={
-                  t(TripSearchTexts.location.departurePicker.a11yHint) +
-                  screenReaderPause
-                }
-                location={from}
-                label={t(SharedTexts.from)}
-                onPress={() => openLocationSearch(RESULT_KEY_FROM, from)}
-                testID="searchFromButton"
-              />
-              <LocationInputSectionItem
-                accessibilityLabel={t(
-                  TripSearchTexts.location.destinationPicker.a11yLabel,
-                )}
-                label={t(SharedTexts.to)}
-                location={to}
-                onPress={() => openLocationSearch(RESULT_KEY_TO, to)}
-                testID="searchToButton"
-              />
-            </Section>
-          </WithOverlayButton>
+      <BonusDashboard onPress={navigateToBonusScreen} />
+      <DeparturesWidget
+        style={style.contentSection}
+        onEditFavouriteDeparture={navigateToFavoriteDeparturesScreen}
+        onAddFavouriteDeparture={navigateToNearbyStopPlacesScreen}
+        onPressDeparture={navigateToDepartureDetailsScreen}
+      />
+    </>
+  );
 
-          <FavoriteChips
-            key="favoriteChips"
-            style={style.favoriteChips}
-            chipTypes={['favorites', 'add-favorite']}
-            onSelectLocation={fillNextAvailableLocation}
-            chipActionHint={
-              t(TripSearchTexts.favorites.favoriteChip.a11yHint) +
-              t(!!from ? dictionary.toPlace : dictionary.fromPlace) +
-              screenReaderPause
-            }
-            onAddFavoritePlace={() =>
-              navigation.navigate('Root_SearchFavoritePlaceScreen')
-            }
-            backgroundColor={theme.color.background.neutral[1]}
-          />
-        </View>
-
-        <StoredTripPatternsDashboardComponent
-          onDetailsPressed={navigateToTripDetailsScreen}
-          isFocused={isFocused}
-        />
-
-        <Announcements
-          style={[style.contentSection, style.contentSection__horizontalScroll]}
-          isFocused={isFocused}
-        />
-
-        {enable_ticketing && (
-          <CompactFareContracts
-            isFocused={isFocused}
-            style={style.contentSection}
-            onPressDetails={(fareContractId: string) => {
-              return navigation.navigate({
-                name: 'Root_FareContractDetailsScreen',
-                params: {
-                  fareContractId: fareContractId,
-                  transitionOverride: 'slide-from-right',
-                },
-              });
-            }}
-            onPressBuy={() => {
-              analytics.logEvent('Dashboard', 'Purchase ticket button clicked');
-              navigation.navigate('TabNav_TicketingStack', {
-                screen: 'Ticketing_RootScreen',
-                params: {
-                  screen: 'TicketTabNav_PurchaseTabScreen',
-                },
-              });
-            }}
+  if (isScreenReaderEnabled) {
+    return (
+      <FullScreenView
+        focusRef={focusRef}
+        headerProps={{
+          title: t(DashboardTexts.header.title),
+          globalMessageContext: GlobalMessageContextEnum.appAssistant,
+          color: theme.color.background.neutral[1],
+        }}
+        headerContent={(focusRef) => (
+          <ScreenHeading
+            ref={focusRef}
+            text={t(DashboardTexts.header.title)}
+            isLarge={true}
           />
         )}
-        <BonusDashboard onPress={navigateToBonusScreen} />
-        <DeparturesWidget
-          style={style.contentSection}
-          onEditFavouriteDeparture={navigateToFavoriteDeparturesScreen}
-          onAddFavouriteDeparture={navigateToNearbyStopPlacesScreen}
-          onPressDeparture={navigateToDepartureDetailsScreen}
-        />
-      </ScrollView>
-    </FullScreenView>
+      >
+        <ScrollView
+          contentContainerStyle={style.scrollView}
+          testID="dashboardScrollView"
+        >
+          {dashboardWidgets}
+        </ScrollView>
+      </FullScreenView>
+    );
+  }
+
+  return (
+    <Map
+      isFocused={isFocused}
+      tabBarHeight={tabBarHeight}
+      navigateToQuay={navigateToQuay}
+      navigateToDetails={navigateToDetailsForMap}
+      navigateToTripSearch={navigateToTripSearchFromMap}
+      navigateToShmoSupport={navigateToShmoSupport}
+      navigateToScooterOnboarding={navigateToScooterOnboarding}
+      navigateToReportParkingViolation={navigateToReportParkingViolation}
+      navigateToParkingPhoto={navigateToParkingPhoto}
+      navigateToScanQrCode={navigateToScanQrCode}
+      navigateToLogin={navigateToLogin}
+      navigateToPaymentMethods={navigateToPaymentMethods}
+      navigateToBonusScreen={navigateToBonusScreen}
+      includeSnackbar={true}
+      defaultBottomSheet={({locationArrowOnPress}) => (
+        <AssistantBottomSheet
+          locationArrowOnPress={locationArrowOnPress}
+          navigateToScanQrCode={navigateToScanQrCode}
+        >
+          {dashboardWidgets}
+        </AssistantBottomSheet>
+      )}
+    />
   );
 };
 

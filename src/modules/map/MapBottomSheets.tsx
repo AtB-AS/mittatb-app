@@ -52,6 +52,9 @@ type MapBottomSheetsProps = {
   navigateToScanQrCode: () => void;
   navigateToLogin: () => void;
   navigateToPaymentMethods: () => void;
+  defaultBottomSheet?: (helpers: {
+    locationArrowOnPress: () => void;
+  }) => React.ReactNode;
 };
 
 export const MapBottomSheets = ({
@@ -67,6 +70,7 @@ export const MapBottomSheets = ({
   navigateToScanQrCode,
   navigateToLogin,
   navigateToPaymentMethods,
+  defaultBottomSheet,
 }: MapBottomSheetsProps) => {
   const [openPaymentType, setOpenPaymentType] = useState<boolean>(false);
   const {
@@ -392,6 +396,12 @@ export const MapBottomSheets = ({
             navigateToScanQrCode={navigateToScanQrCode}
           />
         )}
+
+      {!!defaultBottomSheet &&
+        mapState.bottomSheetType === MapBottomSheetType.None &&
+        !activeBooking?.bookingId &&
+        !openPaymentType &&
+        defaultBottomSheet({locationArrowOnPress})}
     </>
   );
 };

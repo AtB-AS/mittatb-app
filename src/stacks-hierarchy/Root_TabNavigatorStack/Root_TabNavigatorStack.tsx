@@ -3,20 +3,17 @@ import {
   Assistant,
   Departures,
   DeparturesFill,
-  MapPinFill,
   Profile,
   ProfileFill,
   Ticketing,
   TicketingFill,
 } from '@atb/assets/svg/mono-icons/tab-bar';
-import {MapPin} from '../../assets/svg/mono-icons/tab-bar';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {TabNav_DashboardStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
 import {TabNav_DeparturesStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
 
-import {TabNav_MapStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_MapStack';
 import {TabNav_TicketingStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack';
 import {useThemeContext} from '@atb/theme';
 import {
@@ -119,28 +116,17 @@ export const Root_TabNavigatorStack = () => {
       <Tab.Screen
         name="TabNav_DashboardStack"
         component={TabNav_DashboardStack}
-        options={tabSettings(
-          t(dictionary.navigation.assistant),
-          t(dictionary.navigation.assistant_a11y),
-          Assistant,
-          AssistantFill,
-          lineHeight,
-          'assistantTab',
-        )}
-      />
-      <Tab.Screen
-        name="TabNav_MapStack"
-        component={TabNav_MapStack}
         options={{
           ...tabSettings(
-            t(dictionary.navigation.map),
-            t(dictionary.navigation.map),
-            MapPin,
-            MapPinFill,
+            t(dictionary.navigation.assistant),
+            t(dictionary.navigation.assistant_a11y),
+            Assistant,
+            AssistantFill,
             lineHeight,
-            'mapTab',
+            'assistantTab',
           ),
-          ...{freezeOnBlur: false}, // needed to update the map to not load tiles from the vector source
+          // needed to update the map to not load tiles from the vector source
+          freezeOnBlur: false,
         }}
       />
       <Tab.Screen
