@@ -47,6 +47,11 @@ export type BottomSheetProps = PropsWithChildren<{
   headerNode?: React.ReactNode;
   navigateToScanQrCode: () => void;
   bottomSheetHeaderType: BottomSheetHeaderType;
+  /**
+   * Initial snap index. Defaults to the second snap when `canMinimize` is true
+   * (skipping the auto-prepended minimum-header snap), otherwise the first.
+   */
+  index?: number;
 }>;
 
 export const MapBottomSheet = ({
@@ -68,6 +73,7 @@ export const MapBottomSheet = ({
   headerNode,
   navigateToScanQrCode,
   bottomSheetHeaderType,
+  index,
 }: BottomSheetProps) => {
   const styles = useBottomSheetStyles();
   const sheetTopPosition = useSharedValue(0);
@@ -216,7 +222,7 @@ export const MapBottomSheet = ({
         onClose={onClose}
         accessible={false}
         maxDynamicContentSize={screenHeight - safeAreaTop - headerHeight}
-        index={canMinimize ? 1 : 0}
+        index={index ?? (canMinimize ? 1 : 0)}
         overrideReduceMotion={ReduceMotion.Never}
       >
         <BottomSheetTopPositionBridge sheetTopPosition={sheetTopPosition} />

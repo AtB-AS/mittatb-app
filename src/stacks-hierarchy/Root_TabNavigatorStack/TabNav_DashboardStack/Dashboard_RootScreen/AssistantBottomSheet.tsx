@@ -19,12 +19,13 @@ export const AssistantBottomSheet = ({
   const styles = useStyles();
   return (
     <MapBottomSheet
-      snapPoints={['50%', '90%']}
+      snapPoints={['15%', '50%', '90%']}
+      index={1}
       enableDynamicSizing={false}
       enablePanDownToClose={false}
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
-      canMinimize={true}
+      canMinimize={false}
       bottomSheetHeaderType={BottomSheetHeaderType.None}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
