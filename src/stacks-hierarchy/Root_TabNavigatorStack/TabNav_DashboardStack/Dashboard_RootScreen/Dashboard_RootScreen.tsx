@@ -379,7 +379,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
         isFocused={isFocused}
       />
 
-      {enable_ticketing && (
+      {/* {enable_ticketing && (
         <CompactFareContracts
           isFocused={isFocused}
           style={style.contentSection}
@@ -402,7 +402,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
             });
           }}
         />
-      )}
+      )} */}
       <BonusDashboard onPress={navigateToBonusScreen} />
       <DeparturesWidget
         style={style.contentSection}
