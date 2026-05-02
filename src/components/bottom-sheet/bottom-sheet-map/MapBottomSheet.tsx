@@ -52,6 +52,22 @@ export type BottomSheetProps = PropsWithChildren<{
    * (skipping the auto-prepended minimum-header snap), otherwise the first.
    */
   index?: number;
+  /**
+   * Override the header close button's behavior. When omitted, the button
+   * actually closes the sheet (current default). When set, the button calls
+   * this callback instead — used by persistent sheets that swap content on
+   * "close" rather than dismiss.
+   */
+  onClosePress?: () => void;
+  /**
+   * When `true` (default), children are rendered inside a `BottomSheetScrollView`
+   * so heterogeneous content scrolls within the sheet. Set to `false` when the
+   * caller's content already provides its own VirtualizedList-backed scroll
+   * container (e.g. `BottomSheetSectionList`) — wrapping a virtualized list
+   * inside a same-orientation ScrollView triggers a React Native warning and
+   * can break windowing.
+   */
+  wrapInScrollView?: boolean;
 }>;
 
 export const MapBottomSheet = ({
@@ -74,6 +90,8 @@ export const MapBottomSheet = ({
   navigateToScanQrCode,
   bottomSheetHeaderType,
   index,
+  onClosePress,
+  wrapInScrollView = true,
 }: BottomSheetProps) => {
   const styles = useBottomSheetStyles();
   const sheetTopPosition = useSharedValue(0);
@@ -160,6 +178,7 @@ export const MapBottomSheet = ({
           bottomSheetRef={bottomSheetMapRef}
           headerNode={headerNode}
           bottomSheetHeaderType={bottomSheetHeaderType}
+          onClosePress={onClosePress}
         />
       </View>
     );
@@ -172,6 +191,7 @@ export const MapBottomSheet = ({
     bottomSheetMapRef,
     headerNode,
     bottomSheetHeaderType,
+    onClosePress,
   ]);
 
   const canRunCloseCallbackRef = useRef<boolean>(false);
@@ -226,7 +246,7 @@ export const MapBottomSheet = ({
         overrideReduceMotion={ReduceMotion.Never}
       >
         <BottomSheetTopPositionBridge sheetTopPosition={sheetTopPosition} />
-        {enableDynamicSizing ? (
+        {wrapInScrollView ? (
           <BottomSheetScrollView
             style={styles.contentContainer}
             keyboardShouldPersistTaps="handled"

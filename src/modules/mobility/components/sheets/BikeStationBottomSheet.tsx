@@ -1,9 +1,4 @@
 import {Station} from '@atb/api/types/mobility';
-import {
-  BottomSheetHeaderType,
-  MapBottomSheet,
-} from '@atb/components/bottom-sheet';
-import {TransportationIconBox} from '@atb/components/icon-box';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
@@ -22,10 +17,7 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 type Props = {
   stationId: string;
   distance: number | undefined;
-  onClose: () => void;
   onStationReceived?: (station: Station) => void;
-  locationArrowOnPress: () => void;
-  navigateToScanQrCode: () => void;
   navigateSupportCallback: (params: ShmoHelpParams) => void;
   onVehicleTypeSelected: (
     vehicleId: string,
@@ -35,10 +27,7 @@ type Props = {
 
 export const BikeStationBottomSheet = ({
   stationId,
-  onClose,
   onStationReceived,
-  locationArrowOnPress,
-  navigateToScanQrCode,
   navigateSupportCallback,
   onVehicleTypeSelected,
 }: Props) => {
@@ -63,20 +52,7 @@ export const BikeStationBottomSheet = ({
   useDoOnceOnItemReceived(onStationReceived, station);
 
   return (
-    <MapBottomSheet
-      canMinimize={true}
-      enablePanDownToClose={false}
-      closeCallback={onClose}
-      closeOnBackdropPress={false}
-      allowBackgroundTouch={true}
-      enableDynamicSizing={true}
-      heading={stationName}
-      subText={operatorName}
-      bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      logoIcon={<TransportationIconBox mode="bicycle" />}
-      locationArrowOnPress={locationArrowOnPress}
-      navigateToScanQrCode={navigateToScanQrCode}
-    >
+    <>
       {isLoading && (
         <View style={styles.loading}>
           <Loading size="large" />
@@ -114,7 +90,7 @@ export const BikeStationBottomSheet = ({
             availableBikes={availableBikes}
           />
         ))}
-    </MapBottomSheet>
+    </>
   );
 };
 

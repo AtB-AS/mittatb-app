@@ -2,10 +2,7 @@ import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
 import React, {useState} from 'react';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
-import {
-  BicycleTexts,
-  MobilityTexts,
-} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {BicycleTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useVehicle} from '../../use-vehicle';
 import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -17,11 +14,6 @@ import {
   PropulsionType,
 } from '@atb/api/types/generated/mobility-types_v2';
 import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
-import {
-  BottomSheetHeaderType,
-  MapBottomSheet,
-} from '@atb/components/bottom-sheet';
-import {TransportationIconBox} from '@atb/components/icon-box';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {
   findRelevantBonusProduct,
@@ -43,15 +35,11 @@ import {
 } from '@atb/modules/payment';
 import {Section} from '@atb/components/sections';
 import {Loading} from '@atb/components/loading';
-import {getTransportModeAndSubMode} from '../../utils';
 import {SupportButton} from '../SupportButton';
 
 type Props = {
   vehicleId: VehicleId;
-  onClose: () => void;
   onVehicleReceived?: (vehicle: Vehicle) => void;
-  locationArrowOnPress: () => void;
-  navigateToScanQrCode: () => void;
   navigateToSupport: (params: ShmoHelpParams) => void;
   navigateToLogin: () => void;
   selectPaymentMethod: () => void;
@@ -60,10 +48,7 @@ type Props = {
 };
 export const BicycleSheet = ({
   vehicleId: id,
-  onClose,
   onVehicleReceived,
-  locationArrowOnPress,
-  navigateToScanQrCode,
   navigateToSupport,
   navigateToLogin,
   selectPaymentMethod,
@@ -98,10 +83,6 @@ export const BicycleSheet = ({
     operatorId,
     FormFactor.Bicycle,
   );
-  const {mode, subMode} = getTransportModeAndSubMode(
-    FormFactor.Bicycle,
-    vehicle?.vehicleType.propulsionType,
-  );
 
   const priceAdjustments = operator?.priceAdjustments?.[FormFactor.Bicycle];
 
@@ -113,28 +94,7 @@ export const BicycleSheet = ({
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
   return (
-    <MapBottomSheet
-      canMinimize={true}
-      enablePanDownToClose={false}
-      closeCallback={onClose}
-      closeOnBackdropPress={false}
-      allowBackgroundTouch={true}
-      enableDynamicSizing={true}
-      heading={t(
-        MobilityTexts.vehicleName(
-          FormFactor.Bicycle,
-          false,
-          vehicle?.vehicleType.propulsionType,
-        ),
-      )}
-      subText={operatorName}
-      bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      logoIcon={
-        <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
-      }
-      locationArrowOnPress={locationArrowOnPress}
-      navigateToScanQrCode={navigateToScanQrCode}
-    >
+    <>
       {(isLoading || shmoReqIsLoading) && (
         <View
           style={styles.loading}
@@ -251,7 +211,7 @@ export const BicycleSheet = ({
           )}
         </View>
       )}
-    </MapBottomSheet>
+    </>
   );
 };
 

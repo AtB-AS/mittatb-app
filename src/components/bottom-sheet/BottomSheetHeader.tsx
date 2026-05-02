@@ -21,6 +21,14 @@ type BottomSheetHeaderProps = {
   focusRef?: Ref<any>;
   testID?: string;
   bottomSheetHeaderType: BottomSheetHeaderType;
+  /**
+   * Override the close button's behavior. When omitted, the button calls
+   * `bottomSheetRef.current?.close()` (the default — actually closes the
+   * sheet). When set, the button calls this callback instead, leaving the
+   * sheet open. Used by persistent map sheets where "close" means switching
+   * content (e.g. back to the assistant) rather than dismissing.
+   */
+  onClosePress?: () => void;
 };
 
 export const BottomSheetHeader = ({
@@ -33,6 +41,7 @@ export const BottomSheetHeader = ({
   focusRef,
   testID,
   bottomSheetHeaderType,
+  onClosePress,
 }: BottomSheetHeaderProps) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
@@ -69,7 +78,9 @@ export const BottomSheetHeader = ({
               style={styles.headerRight}
               testID="closeBottomSheet"
               accessibilityRole="button"
-              onPress={() => bottomSheetRef.current?.close()}
+              onPress={() =>
+                onClosePress ? onClosePress() : bottomSheetRef.current?.close()
+              }
             >
               {headerData?.text && (
                 <ThemeText typography="body__s__strong">

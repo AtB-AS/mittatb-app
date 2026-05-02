@@ -11,10 +11,6 @@ import {Button} from '@atb/components/button';
 import {useActiveShmoBookingQuery} from '../../queries/use-active-shmo-booking-query';
 import {ThemeText} from '@atb/components/text';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
-import {
-  BottomSheetHeaderType,
-  MapBottomSheet,
-} from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
@@ -23,15 +19,11 @@ import {Loading} from '@atb/components/loading';
 type Props = {
   photoNavigation: () => void;
   onForceClose: () => void;
-  locationArrowOnPress: () => void;
-  navigateToScanQrCode: () => void;
 };
 
 export const FinishingScooterSheet = ({
   onForceClose,
   photoNavigation,
-  locationArrowOnPress,
-  navigateToScanQrCode,
 }: Props) => {
   const isFocusedAndActive = useIsFocusedAndActive();
   const {
@@ -67,15 +59,7 @@ export const FinishingScooterSheet = ({
   ]);
 
   return (
-    <MapBottomSheet
-      closeOnBackdropPress={false}
-      allowBackgroundTouch={true}
-      enableDynamicSizing={true}
-      enablePanDownToClose={false}
-      locationArrowOnPress={locationArrowOnPress}
-      navigateToScanQrCode={navigateToScanQrCode}
-      bottomSheetHeaderType={BottomSheetHeaderType.None}
-    >
+    <>
       {isLoading && (
         <View style={styles.loading}>
           <Loading size="large" />
@@ -113,7 +97,7 @@ export const FinishingScooterSheet = ({
           />
         </View>
       )}
-    </MapBottomSheet>
+    </>
   );
 };
 

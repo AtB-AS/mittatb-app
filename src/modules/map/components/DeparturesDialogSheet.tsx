@@ -12,14 +12,9 @@ import {
   StopPlacesSheetView,
   useStopsDetailsDataQuery,
 } from '@atb/screen-components/place-screen';
-import {
-  BottomSheetHeaderType,
-  MapBottomSheet,
-} from '@atb/components/bottom-sheet';
 import {Loading} from '@atb/components/loading';
 
 type DeparturesDialogSheetProps = {
-  onClose: () => void;
   distance: number | undefined;
   stopPlaceFeature: Feature<Point>;
   navigateToQuay: (stopPlace: StopPlace, quay: Quay) => void;
@@ -31,20 +26,14 @@ type DeparturesDialogSheetProps = {
     isTripCancelled?: boolean,
   ) => void;
   navigateToTripSearch: NavigateToTripSearchCallback;
-  navigateToScanQrCode: () => void;
-  tabBarHeight: number | undefined;
-  locationArrowOnPress: () => void;
 };
 
 export const DeparturesDialogSheet = ({
-  onClose,
   distance,
   stopPlaceFeature,
   navigateToDetails,
   navigateToQuay,
   navigateToTripSearch,
-  navigateToScanQrCode,
-  locationArrowOnPress,
 }: DeparturesDialogSheetProps) => {
   const {t} = useTranslation();
   const styles = useBottomSheetStyles();
@@ -124,25 +113,7 @@ export const DeparturesDialogSheet = ({
     }
   }
 
-  return (
-    <MapBottomSheet
-      snapPoints={['50%', '90%']}
-      canMinimize={true}
-      enablePanDownToClose={false}
-      enableDynamicSizing={false}
-      closeCallback={onClose}
-      allowBackgroundTouch={true}
-      heading={
-        stopPlaceFeature.properties?.name ??
-        stopDetailsData?.stopPlaces[0]?.name
-      }
-      bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      locationArrowOnPress={locationArrowOnPress}
-      navigateToScanQrCode={navigateToScanQrCode}
-    >
-      {StopPlaceViewOrError}
-    </MapBottomSheet>
-  );
+  return <>{StopPlaceViewOrError}</>;
 };
 
 const getStopPlaceIds = (feature: Feature<Point>): string[] => {

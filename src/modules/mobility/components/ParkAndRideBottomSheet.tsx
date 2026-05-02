@@ -21,10 +21,6 @@ import {MobilityStats} from './MobilityStats';
 import {MobilityStat} from './MobilityStat';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
 import {ThemedParkAndRide} from '@atb/theme/ThemedAssets';
-import {
-  BottomSheetHeaderType,
-  MapBottomSheet,
-} from '@atb/components/bottom-sheet';
 
 type Props = {
   name: string | undefined;
@@ -32,10 +28,7 @@ type Props = {
   distance: number | undefined;
   parkingFor: ParkingVehicleTypes;
   feature: Feature<Point, ParkingType>;
-  onClose: () => void;
   navigateToTripSearch: NavigateToTripSearchCallback;
-  locationArrowOnPress: () => void;
-  navigateToScanQrCode: () => void;
 };
 export const ParkAndRideBottomSheet = ({
   name,
@@ -43,10 +36,7 @@ export const ParkAndRideBottomSheet = ({
   parkingFor,
   feature,
   distance,
-  onClose,
   navigateToTripSearch,
-  locationArrowOnPress,
-  navigateToScanQrCode,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -65,18 +55,7 @@ export const ParkAndRideBottomSheet = ({
   };
 
   return (
-    <MapBottomSheet
-      canMinimize={true}
-      enablePanDownToClose={false}
-      closeCallback={onClose}
-      closeOnBackdropPress={false}
-      allowBackgroundTouch={true}
-      enableDynamicSizing={true}
-      heading={t(ParkAndRideTexts.title)}
-      bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      locationArrowOnPress={locationArrowOnPress}
-      navigateToScanQrCode={navigateToScanQrCode}
-    >
+    <>
       <View style={styles.buttonsContainer}>
         <View style={styles.travelButton}>
           <Button
@@ -137,7 +116,7 @@ export const ParkAndRideBottomSheet = ({
           </GenericSectionItem>
         </Section>
       </View>
-    </MapBottomSheet>
+    </>
   );
 };
 

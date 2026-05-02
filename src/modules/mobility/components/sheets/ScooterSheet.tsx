@@ -26,43 +26,30 @@ import {
   PaymentSelectionSectionItem,
   useSelectedShmoPaymentMethod,
 } from '@atb/modules/payment';
-import {
-  BottomSheetHeaderType,
-  MapBottomSheet,
-} from '@atb/components/bottom-sheet';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import {Vehicle} from '@atb/api/types/mobility';
 import {PriceDetailsCard} from '../PriceDetailsCard';
 import {Loading} from '@atb/components/loading';
 import {SupportButton} from '../SupportButton';
-import {TransportationIconBox} from '@atb/components/icon-box';
-import {BrandingImage} from '../BrandingImage';
-import {getTransportModeAndSubMode} from '../../utils';
 
 type Props = {
   selectPaymentMethod: () => void;
   vehicleId: VehicleId;
-  onClose: () => void;
   onReportParkingViolation: () => void;
   onVehicleReceived?: (vehicle: Vehicle) => void;
   startOnboardingCallback: () => void;
-  locationArrowOnPress: () => void;
   navigateToSupport: (params: ShmoHelpParams) => void;
   navigateToLogin: () => void;
-  navigateToScanQrCode: () => void;
 };
 
 export const ScooterSheet = ({
   selectPaymentMethod,
   vehicleId: id,
-  onClose,
   onReportParkingViolation,
   onVehicleReceived,
   startOnboardingCallback,
-  locationArrowOnPress,
   navigateToSupport,
   navigateToLogin,
-  navigateToScanQrCode,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -80,12 +67,6 @@ export const ScooterSheet = ({
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
   const priceAdjustments = operator?.priceAdjustments?.[FormFactor.Scooter];
-  const operatorLogo = operator?.brandAssets?.brandImageUrl;
-
-  const {mode, subMode} = getTransportModeAndSubMode(
-    vehicle?.vehicleType.formFactor,
-    vehicle?.vehicleType.propulsionType,
-  );
 
   const {isLoading: shmoReqIsLoading, hasBlockers} =
     useShmoRequirements(operatorId);
@@ -99,32 +80,7 @@ export const ScooterSheet = ({
     useFeatureTogglesContext();
 
   return (
-    <MapBottomSheet
-      canMinimize={true}
-      closeCallback={onClose}
-      enablePanDownToClose={false}
-      closeOnBackdropPress={false}
-      allowBackgroundTouch={true}
-      enableDynamicSizing={true}
-      heading={t(
-        MobilityTexts.vehicleName(
-          vehicle?.vehicleType?.formFactor ?? FormFactor.Scooter,
-          false,
-          vehicle?.vehicleType?.propulsionType,
-        ),
-      )}
-      subText={operatorName}
-      bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      logoIcon={
-        operatorLogo ? (
-          <BrandingImage logoUrl={operatorLogo} logoSize={28} rounded={true} />
-        ) : (
-          <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
-        )
-      }
-      locationArrowOnPress={locationArrowOnPress}
-      navigateToScanQrCode={navigateToScanQrCode}
-    >
+    <>
       {(isLoading || shmoReqIsLoading) && (
         <View
           style={styles.loading}
@@ -219,7 +175,7 @@ export const ScooterSheet = ({
           )}
         </View>
       )}
-    </MapBottomSheet>
+    </>
   );
 };
 

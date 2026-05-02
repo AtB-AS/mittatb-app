@@ -16,27 +16,16 @@ import {
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
 import {useMutation} from '@tanstack/react-query';
-import {
-  BottomSheetHeaderType,
-  MapBottomSheet,
-} from '@atb/components/bottom-sheet';
-import {BottomSheetScrollView} from '@gorhom/bottom-sheet';
 
 type Props = {
   onSelect: () => void;
   recurringPaymentMethods?: PaymentMethod[];
-  onClose?: () => void;
   onGoToPaymentPage: () => void;
-  locationArrowOnPress: () => void;
-  navigateToScanQrCode: () => void;
 };
 
 export const SelectShmoPaymentMethodSheet = ({
   onSelect,
-  onClose,
   onGoToPaymentPage,
-  locationArrowOnPress,
-  navigateToScanQrCode,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -61,14 +50,7 @@ export const SelectShmoPaymentMethodSheet = ({
   }, [defaultPaymentMethod]);
 
   return (
-    <MapBottomSheet
-      snapPoints={['70%']}
-      closeCallback={onClose}
-      enableDynamicSizing={false}
-      bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      locationArrowOnPress={locationArrowOnPress}
-      navigateToScanQrCode={navigateToScanQrCode}
-    >
+    <>
       <View style={styles.paymentMethods}>
         <MessageInfoBox
           type="info"
@@ -79,23 +61,21 @@ export const SelectShmoPaymentMethodSheet = ({
             text: t(SelectPaymentMethodTexts.new_card_info.link_profile),
           }}
         />
-        <BottomSheetScrollView>
-          {recurringPaymentMethods?.map((method, index) => (
-            <SinglePaymentMethod
-              key={method.recurringPayment?.id}
-              paymentMethod={method}
-              selected={
-                selectedPaymentMethod?.recurringPayment?.id ===
-                method.recurringPayment?.id
-              }
-              onSelect={(val: PaymentMethod) => {
-                if (!val?.recurringPayment) return;
-                setSelectedPaymentMethod(val);
-              }}
-              index={index}
-            />
-          ))}
-        </BottomSheetScrollView>
+        {recurringPaymentMethods?.map((method, index) => (
+          <SinglePaymentMethod
+            key={method.recurringPayment?.id}
+            paymentMethod={method}
+            selected={
+              selectedPaymentMethod?.recurringPayment?.id ===
+              method.recurringPayment?.id
+            }
+            onSelect={(val: PaymentMethod) => {
+              if (!val?.recurringPayment) return;
+              setSelectedPaymentMethod(val);
+            }}
+            index={index}
+          />
+        ))}
       </View>
       <FullScreenFooter>
         <Button
@@ -127,7 +107,7 @@ export const SelectShmoPaymentMethodSheet = ({
           testID="confirmButton"
         />
       </FullScreenFooter>
-    </MapBottomSheet>
+    </>
   );
 };
 

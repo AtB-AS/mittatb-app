@@ -2,10 +2,7 @@ import {useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorNameAndLogo} from './OperatorNameAndLogo';
-import {
-  CarSharingTexts,
-  MobilityTexts,
-} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {CarSharingTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet} from '@atb/theme';
 import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -27,29 +24,19 @@ import {
   PayWithBonusPointsCheckbox,
   useIsBonusActiveForUser,
 } from '@atb/modules/bonus';
-import {
-  BottomSheetHeaderType,
-  MapBottomSheet,
-} from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {Loading} from '@atb/components/loading';
 
 type Props = {
   stationId: string;
   distance: number | undefined;
-  onClose: () => void;
   onStationReceived?: (station: Station) => void;
-  locationArrowOnPress: () => void;
-  navigateToScanQrCode: () => void;
 };
 
 export const CarSharingStationBottomSheet = ({
   stationId,
   distance,
-  onClose,
   onStationReceived,
-  locationArrowOnPress,
-  navigateToScanQrCode,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -81,114 +68,99 @@ export const CarSharingStationBottomSheet = ({
   useDoOnceOnItemReceived(onStationReceived, station);
 
   return (
-    <MapBottomSheet
-      canMinimize={true}
-      enablePanDownToClose={false}
-      closeCallback={onClose}
-      closeOnBackdropPress={false}
-      allowBackgroundTouch={true}
-      enableDynamicSizing={true}
-      heading={operatorName}
-      subText={t(MobilityTexts.vehicleName(FormFactor.Car))}
-      bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      logoUrl={brandLogoUrl ?? ''}
-      locationArrowOnPress={locationArrowOnPress}
-      navigateToScanQrCode={navigateToScanQrCode}
-    >
-      <>
-        {isLoading && (
-          <View style={styles.loading}>
-            <Loading size="large" />
-          </View>
-        )}
-        {!isLoading && !isError && !!station && (
-          <>
-            <View style={styles.container}>
-              {operatorBenefit && (
-                <OperatorBenefit
-                  benefit={operatorBenefit}
-                  formFactor={FormFactor.Car}
-                  style={styles.operatorBenefit}
-                />
-              )}
-              <Section>
-                <GenericSectionItem>
-                  <OperatorNameAndLogo
-                    operatorName={operatorName}
-                    logoUrl={brandLogoUrl}
-                    style={styles.operatorNameAndLogo}
-                  />
-                  <View style={styles.stationText}>
-                    <ThemeText typography="body__s" color="secondary">
-                      {stationName}
-                    </ThemeText>
-                    <WalkingDistance distance={distance} />
-                  </View>
-                </GenericSectionItem>
-                <GenericSectionItem>
-                  <View style={styles.carSection}>
-                    <MobilityStat
-                      svg={CarFill}
-                      text={`**${t(
-                        CarSharingTexts.stations.carsAvailable(
-                          totalAvailableCars(station.vehicleTypesAvailable),
-                          station.capacity,
-                        ),
-                      )}** ${t(CarSharingTexts.stations.carsAvailableLabel)}`}
-                    />
-                    {!!station.vehicleTypesAvailable && (
-                      <CarPreviews
-                        stationCapacity={station.capacity}
-                        vehicleTypesAvailable={station.vehicleTypesAvailable}
-                      />
-                    )}
-                  </View>
-                </GenericSectionItem>
-              </Section>
-              {!!isBonusActiveForUser && bonusProduct && (
-                <PayWithBonusPointsCheckbox
-                  bonusProduct={bonusProduct}
-                  operatorName={operatorName}
-                  isChecked={payWithBonusPoints}
-                  onPress={() =>
-                    setPayWithBonusPoints((payWithBonusPoints) => {
-                      const newState = !payWithBonusPoints;
-                      logEvent('Bonus', 'bonus points checkbox toggled', {
-                        bonusProductId: bonusProduct.id,
-                        newState: newState,
-                      });
-                      return newState;
-                    })
-                  }
-                  style={styles.payWithBonusPointsSection}
-                />
-              )}
-            </View>
-            {rentalAppUri && (
-              <View style={styles.footer}>
-                <OperatorActionButton
-                  operatorId={operatorId}
-                  operatorName={operatorName}
-                  appStoreUri={appStoreUri ?? undefined}
-                  rentalAppUri={rentalAppUri}
-                  isBonusPayment={payWithBonusPoints}
-                  setIsBonusPayment={setPayWithBonusPoints}
-                  bonusProductId={bonusProduct?.id}
-                />
-              </View>
+    <>
+      {isLoading && (
+        <View style={styles.loading}>
+          <Loading size="large" />
+        </View>
+      )}
+      {!isLoading && !isError && !!station && (
+        <>
+          <View style={styles.container}>
+            {operatorBenefit && (
+              <OperatorBenefit
+                benefit={operatorBenefit}
+                formFactor={FormFactor.Car}
+                style={styles.operatorBenefit}
+              />
             )}
-          </>
-        )}
-        {!isLoading && (isError || !station) && (
-          <View style={styles.footer}>
-            <MessageInfoBox
-              type="error"
-              message={t(CarSharingTexts.loadingFailed)}
-            />
+            <Section>
+              <GenericSectionItem>
+                <OperatorNameAndLogo
+                  operatorName={operatorName}
+                  logoUrl={brandLogoUrl}
+                  style={styles.operatorNameAndLogo}
+                />
+                <View style={styles.stationText}>
+                  <ThemeText typography="body__s" color="secondary">
+                    {stationName}
+                  </ThemeText>
+                  <WalkingDistance distance={distance} />
+                </View>
+              </GenericSectionItem>
+              <GenericSectionItem>
+                <View style={styles.carSection}>
+                  <MobilityStat
+                    svg={CarFill}
+                    text={`**${t(
+                      CarSharingTexts.stations.carsAvailable(
+                        totalAvailableCars(station.vehicleTypesAvailable),
+                        station.capacity,
+                      ),
+                    )}** ${t(CarSharingTexts.stations.carsAvailableLabel)}`}
+                  />
+                  {!!station.vehicleTypesAvailable && (
+                    <CarPreviews
+                      stationCapacity={station.capacity}
+                      vehicleTypesAvailable={station.vehicleTypesAvailable}
+                    />
+                  )}
+                </View>
+              </GenericSectionItem>
+            </Section>
+            {!!isBonusActiveForUser && bonusProduct && (
+              <PayWithBonusPointsCheckbox
+                bonusProduct={bonusProduct}
+                operatorName={operatorName}
+                isChecked={payWithBonusPoints}
+                onPress={() =>
+                  setPayWithBonusPoints((payWithBonusPoints) => {
+                    const newState = !payWithBonusPoints;
+                    logEvent('Bonus', 'bonus points checkbox toggled', {
+                      bonusProductId: bonusProduct.id,
+                      newState: newState,
+                    });
+                    return newState;
+                  })
+                }
+                style={styles.payWithBonusPointsSection}
+              />
+            )}
           </View>
-        )}
-      </>
-    </MapBottomSheet>
+          {rentalAppUri && (
+            <View style={styles.footer}>
+              <OperatorActionButton
+                operatorId={operatorId}
+                operatorName={operatorName}
+                appStoreUri={appStoreUri ?? undefined}
+                rentalAppUri={rentalAppUri}
+                isBonusPayment={payWithBonusPoints}
+                setIsBonusPayment={setPayWithBonusPoints}
+                bonusProductId={bonusProduct?.id}
+              />
+            </View>
+          )}
+        </>
+      )}
+      {!isLoading && (isError || !station) && (
+        <View style={styles.footer}>
+          <MessageInfoBox
+            type="error"
+            message={t(CarSharingTexts.loadingFailed)}
+          />
+        </View>
+      )}
+    </>
   );
 };
 

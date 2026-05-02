@@ -456,14 +456,9 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
       navigateToPaymentMethods={navigateToPaymentMethods}
       navigateToBonusScreen={navigateToBonusScreen}
       includeSnackbar={true}
-      defaultBottomSheet={({locationArrowOnPress}) => (
-        <AssistantBottomSheet
-          locationArrowOnPress={locationArrowOnPress}
-          navigateToScanQrCode={navigateToScanQrCode}
-        >
-          {dashboardWidgets}
-        </AssistantBottomSheet>
-      )}
+      defaultBottomSheet={
+        <AssistantBottomSheet>{dashboardWidgets}</AssistantBottomSheet>
+      }
     />
   );
 };

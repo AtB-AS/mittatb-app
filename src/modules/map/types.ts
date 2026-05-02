@@ -74,15 +74,11 @@ export type MapProps = {
   navigateToPaymentMethods: () => void;
   navigateToBonusScreen?: () => void;
   /**
-   * Rendered as a persistent bottom sheet when no feature sheet is active and
+   * Rendered as the bottom-sheet content when no feature sheet is active and
    * there is no in-progress SHMO booking. Lets a host screen surface its own
-   * default content (e.g. the assistant) on top of the map. The render fn
-   * receives helpers owned by the map (currently the location-arrow handler)
-   * so the host can wire them into its sheet.
+   * default content (e.g. the assistant) inside the persistent map sheet.
    */
-  defaultBottomSheet?: (helpers: {
-    locationArrowOnPress: () => void;
-  }) => React.ReactNode;
+  defaultBottomSheet?: React.ReactNode;
 };
 
 export type Cluster = {

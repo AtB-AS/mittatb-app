@@ -17,25 +17,16 @@ import {
   ShmoBookingState,
 } from '@atb/api/types/mobility';
 import {useSendShmoBookingEventMutation} from '../../queries/use-send-shmo-booking-event-mutation';
-import {ShmoTripCard} from '../ShmoTripCard';
-import {
-  formatFriendlyShmoErrorMessage,
-  getTransportModeAndSubMode,
-} from '../../utils';
+import {formatFriendlyShmoErrorMessage} from '../../utils';
 import {MapView} from '@rnmapbox/maps';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useShmoWarnings} from '@atb/modules/map';
 import {useKeepAwake} from '@sayem314/react-native-keep-awake';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
-import {
-  BottomSheetHeaderType,
-  MapBottomSheet,
-} from '@atb/components/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemeText} from '@atb/components/text';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Loading} from '@atb/components/loading';
-import {TransportationIconBox} from '@atb/components/icon-box';
 import {
   FormFactor,
   PropulsionType,
@@ -43,7 +34,6 @@ import {
 import {PriceDetailsCard} from '../PriceDetailsCard';
 import {useOperators} from '../../use-operators';
 import {SupportButton} from '../SupportButton';
-import {BrandingImage} from '../BrandingImage';
 import {isValidKey} from '@atb/stacks-hierarchy';
 import {EndManualTripCard} from '../EndManualTripCard';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets';
@@ -55,8 +45,6 @@ type Props = {
   photoNavigation: (bookingId: string) => void;
   onForceClose: () => void;
   mapViewRef: RefObject<MapView | null>;
-  locationArrowOnPress: () => void;
-  navigateToScanQrCode: () => void;
 };
 
 export const ActiveShmoSheet = ({
@@ -64,8 +52,6 @@ export const ActiveShmoSheet = ({
   photoNavigation,
   onForceClose,
   mapViewRef,
-  locationArrowOnPress,
-  navigateToScanQrCode,
 }: Props) => {
   useKeepAwake();
   const isFocusedAndActive = useIsFocusedAndActive();
@@ -81,13 +67,7 @@ export const ActiveShmoSheet = ({
     false,
   );
 
-  const {mode, subMode} = getTransportModeAndSubMode(
-    activeBooking?.asset?.formFactor,
-    activeBooking?.asset?.propulsionType,
-  );
-
   const operator = useOperators().byId(activeBooking?.asset.operator.id);
-  const operatorLogo = operator?.brandAssets?.brandImageUrl;
 
   const priceAdjustments =
     operator?.priceAdjustments &&
@@ -167,45 +147,7 @@ export const ActiveShmoSheet = ({
   };
 
   return (
-    <MapBottomSheet
-      canMinimize={true}
-      closeOnBackdropPress={false}
-      allowBackgroundTouch={true}
-      enableDynamicSizing={true}
-      heading={
-        activeBooking?.asset?.propulsionType
-          ? t(
-              MobilityTexts.vehicleName(
-                activeBooking?.asset?.formFactor ?? FormFactor.Other,
-                false,
-                activeBooking?.asset?.propulsionType,
-              ),
-            )
-          : undefined
-      }
-      subText={activeBooking?.asset?.operator?.name}
-      enablePanDownToClose={false}
-      locationArrowOnPress={locationArrowOnPress}
-      navigateToScanQrCode={navigateToScanQrCode}
-      logoIcon={
-        operatorLogo ? (
-          <BrandingImage logoUrl={operatorLogo} logoSize={28} rounded={true} />
-        ) : (
-          <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
-        )
-      }
-      headerNode={
-        activeBooking ? (
-          <ShmoTripCard
-            shmoBooking={activeBooking}
-            isFocused={isFocusedAndActive}
-            mode={mode}
-            subMode={subMode}
-          />
-        ) : null
-      }
-      bottomSheetHeaderType={BottomSheetHeaderType.None}
-    >
+    <>
       {isShmoDeepIntegrationEnabled && (
         <>
           {isLoading && (
@@ -307,7 +249,7 @@ export const ActiveShmoSheet = ({
           )}
         </>
       )}
-    </MapBottomSheet>
+    </>
   );
 };
 

@@ -534,7 +534,6 @@ export const Map = (props: MapProps) => {
         mapViewRef={mapViewRef}
         mapCameraRef={mapCameraRef}
         mapProps={props}
-        tabBarHeight={tabBarHeight}
         navigateToShmoSupport={navigateToShmoSupport}
         navigateToScooterOnboarding={navigateToScooterOnboarding}
         navigateToReportParkingViolation={navigateToReportParkingViolation}

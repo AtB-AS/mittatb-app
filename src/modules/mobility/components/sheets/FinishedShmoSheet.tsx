@@ -8,38 +8,25 @@ import {
 import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {ShmoTripDetailsSectionItem} from '../ShmoTripDetailsSectionItem';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {useShmoBookingQuery} from '../../queries/use-shmo-booking-query';
-import {
-  BottomSheetHeaderType,
-  MapBottomSheet,
-} from '@atb/components/bottom-sheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Loading} from '@atb/components/loading';
-import {TransportationIconBox} from '@atb/components/icon-box';
-import {getTransportModeAndSubMode} from '../../utils';
 import {SupportButton} from '../SupportButton';
-import {useOperators} from '../../use-operators';
-import {BrandingImage} from '../BrandingImage';
 
 type Props = {
   onClose: () => void;
   navigateSupportCallback: (operatorId: string, bookingId: string) => void;
-  navigateToScanQrCode: () => void;
   bookingId: string;
-  locationArrowOnPress: () => void;
 };
 
 export const FinishedShmoSheet = ({
   onClose,
   navigateSupportCallback,
-  navigateToScanQrCode,
   bookingId,
-  locationArrowOnPress,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -51,43 +38,9 @@ export const FinishedShmoSheet = ({
     isError,
   } = useShmoBookingQuery(isFocusedAndActive, bookingId);
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
-  const {mode, subMode} = getTransportModeAndSubMode(
-    shmoBooking?.asset?.formFactor,
-    shmoBooking?.asset?.propulsionType,
-  );
-
-  const operator = useOperators().byId(shmoBooking?.asset.operator.id);
-  const operatorLogo = operator?.brandAssets?.brandImageUrl;
 
   return (
-    <MapBottomSheet
-      closeCallback={onClose}
-      closeOnBackdropPress={false}
-      allowBackgroundTouch={true}
-      enableDynamicSizing={true}
-      heading={
-        shmoBooking?.asset?.propulsionType
-          ? t(
-              MobilityTexts.vehicleName(
-                shmoBooking?.asset?.formFactor ?? FormFactor.Other,
-                false,
-                shmoBooking?.asset?.propulsionType,
-              ),
-            )
-          : undefined
-      }
-      subText={shmoBooking?.asset.operator.name}
-      logoIcon={
-        operatorLogo ? (
-          <BrandingImage logoUrl={operatorLogo} logoSize={28} rounded={true} />
-        ) : (
-          <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
-        )
-      }
-      bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      locationArrowOnPress={locationArrowOnPress}
-      navigateToScanQrCode={navigateToScanQrCode}
-    >
+    <>
       {isShmoDeepIntegrationEnabled && (
         <>
           {isLoading && (
@@ -149,7 +102,7 @@ export const FinishedShmoSheet = ({
           )}
         </>
       )}
-    </MapBottomSheet>
+    </>
   );
 };
 
