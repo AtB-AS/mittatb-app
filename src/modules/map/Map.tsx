@@ -444,15 +444,13 @@ export const Map = (props: MapProps) => {
             centerCoordinate={
               !initMapLoaded ? mapPropertiesRef.current?.center : undefined
             }
-            padding={
+            padding={getSlightlyRaisedMapPadding(
               activeShmoBooking?.bookingId
-                ? getSlightlyRaisedMapPadding(
-                    followUserLocation
-                      ? paddingBottomMap
-                      : stalePaddingBottomMap,
-                  )
-                : undefined
-            }
+                ? followUserLocation
+                  ? paddingBottomMap
+                  : stalePaddingBottomMap
+                : paddingBottomMap,
+            )}
             {...MapCameraConfig}
             followUserLocation={
               !!activeShmoBooking &&
