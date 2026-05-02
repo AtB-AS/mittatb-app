@@ -503,6 +503,7 @@ export const Map = (props: MapProps) => {
           navigateToScanQrCode={navigateToScanQrCode}
           navigateToBonusScreen={props.navigateToBonusScreen}
           onBonusButtonLayoutChange={setBonusButtonHeight}
+          hideBottomButtons={!!defaultBottomSheet}
         />
         {includeSnackbar && (
           <Snackbar

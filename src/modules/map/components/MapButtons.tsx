@@ -20,11 +20,18 @@ export const MapButtons = ({
   locationArrowOnPress,
   navigateToBonusScreen,
   onBonusButtonLayoutChange,
+  hideBottomButtons = false,
 }: {
   navigateToScanQrCode: () => void;
   locationArrowOnPress: () => void;
   navigateToBonusScreen?: () => void;
   onBonusButtonLayoutChange?: (height: number) => void;
+  /**
+   * Hide the bottom-of-screen action buttons (scan/location/filter/etc.).
+   * Used when a persistent bottom sheet covers the bottom of the map and
+   * renders its own button overlay tied to the sheet's top position.
+   */
+  hideBottomButtons?: boolean;
 }) => {
   const controlStyles = useControlPositionsStyle(false);
   const {mapState} = useMapContext();
@@ -64,21 +71,25 @@ export const MapButtons = ({
           <BonusBalanceButton onPress={navigateToBonusScreen} />
         </View>
       )}
-      <View
-        style={[
-          controlStyles.mapButtonsContainer,
-          controlStyles.mapButtonsContainerRight,
-          mapFilterIsOpen && {bottom: 0},
-        ]}
-      >
-        <ExternalRealtimeMapButton />
+      {!hideBottomButtons && (
+        <>
+          <View
+            style={[
+              controlStyles.mapButtonsContainer,
+              controlStyles.mapButtonsContainerRight,
+              mapFilterIsOpen && {bottom: 0},
+            ]}
+          >
+            <ExternalRealtimeMapButton />
 
-        {showMapFilterButton && <MapFilter />}
+            {showMapFilterButton && <MapFilter />}
 
-        <LocationArrow onPress={locationArrowOnPress} />
-      </View>
-      {showScanButton && (
-        <ScanButton navigateToScanQrCode={navigateToScanQrCode} />
+            <LocationArrow onPress={locationArrowOnPress} />
+          </View>
+          {showScanButton && (
+            <ScanButton navigateToScanQrCode={navigateToScanQrCode} />
+          )}
+        </>
       )}
     </>
   );
