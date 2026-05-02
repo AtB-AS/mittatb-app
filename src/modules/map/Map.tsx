@@ -250,11 +250,21 @@ export const Map = (props: MapProps) => {
       setFollowUserLocation(true);
     } else {
       if (coordinates) {
+        // When a persistent default sheet is in play, the same sticky padding
+        // used for the initial centering keeps the puck above the sheet (i.e.
+        // around 75% of the visible map area, matching app-load behaviour).
+        // Otherwise fall back to the previous behaviour: padded only when a
+        // feature sheet is showing.
+        const flyToPadding =
+          stickyInitialPaddingBottom > 0
+            ? getSlightlyRaisedMapPadding(stickyInitialPaddingBottom)
+            : selectedFeature
+              ? getSlightlyRaisedMapPadding(paddingBottomMap)
+              : undefined;
+
         flyToLocation({
           coordinates,
-          padding: !selectedFeature
-            ? undefined
-            : getSlightlyRaisedMapPadding(paddingBottomMap),
+          padding: flyToPadding,
           mapCameraRef,
           mapViewRef,
           zoomLevel: DEFAULT_ZOOM_LEVEL + 2.5,
@@ -266,6 +276,7 @@ export const Map = (props: MapProps) => {
     activeShmoBooking,
     selectedFeature,
     paddingBottomMap,
+    stickyInitialPaddingBottom,
   ]);
 
   /**

@@ -1,6 +1,5 @@
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {useAnalyticsContext} from '@atb/modules/analytics';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {screenReaderPause} from '@atb/components/text';
 import {
@@ -30,7 +29,6 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {DashboardScreenProps} from '../navigation-types';
-import {CompactFareContracts} from '@atb/modules/fare-contracts';
 import {DeparturesWidget} from './components/DeparturesWidget';
 import {Announcements} from './components/Announcements';
 import SharedTexts from '@atb/translations/shared';
@@ -62,9 +60,8 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
   const style = useStyle();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const {enable_ticketing, enable_vipps_login} = useRemoteConfigContext();
+  const {enable_vipps_login} = useRemoteConfigContext();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
-  const analytics = useAnalyticsContext();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const tabBarHeight = useBottomTabBarHeight();
 
