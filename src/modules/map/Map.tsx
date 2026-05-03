@@ -129,8 +129,25 @@ export const Map = (props: MapProps) => {
     (mapFilter?.mobility.BICYCLE?.showAll ||
       mapFilter?.mobility.CAR?.showAll) ??
     false;
+
+  // Keep vehicles/stations rendered for a short grace period after losing
+  // focus so they don't "pop" off the map before the navigation transition
+  // has finished. On regain of focus we flip back immediately. Once the
+  // grace period elapses, tile requests stop (avoids leaking tile fetches
+  // when the user has actually moved on).
+  const [vehiclesAndStationsAlive, setVehiclesAndStationsAlive] =
+    useState(isFocused);
+  useEffect(() => {
+    if (isFocused) {
+      setVehiclesAndStationsAlive(true);
+      return;
+    }
+    const id = setTimeout(() => setVehiclesAndStationsAlive(false), 400);
+    return () => clearTimeout(id);
+  }, [isFocused]);
+
   const shouldShowVehiclesAndStations =
-    isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
+    vehiclesAndStationsAlive && (showVehicles || showStations);
 
   const selectedFeature = mapState.feature;
 
