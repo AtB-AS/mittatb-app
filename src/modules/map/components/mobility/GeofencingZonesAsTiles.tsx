@@ -148,54 +148,25 @@ export const GeofencingZonesAsTiles = ({
   }
 
   return (
-    <MapboxGL.VectorSource
-      id={geofencingZonesVectorSourceId}
-      tileUrlTemplates={tileUrlTemplates}
-      minZoomLevel={minZoomLevel}
-      maxZoomLevel={maxZoomLevel}
-      hitbox={hitboxCoveringIconOnly} // to not be able to hit multiple zones with one click
-      onPress={geofencingZoneOnPress}
-    >
-      <>
-        <MapboxGL.FillLayer
-          id="GeofencingZones_Fill_Consolidated"
-          sourceID={geofencingZonesVectorSourceId}
-          sourceLayerID={geofencingZonesFeaturesLayerId}
-          aboveLayerID={MapSlotLayerId.GeofencingZones}
-          minZoomLevel={minZoomLevel}
-          slot="middle"
-          style={{
-            fillSortKey: sortKey,
-            fillColor,
-            fillOpacity,
-            fillAntialias: true,
-            fillEmissiveStrength: 1,
-          }}
-        />
-
-        {lineLayerConfigs.map(({id, filter, dashArray}) => (
-          <MapboxGL.LineLayer
-            key={id}
-            id={id}
-            aboveLayerID={MapSlotLayerId.GeofencingZones}
-            sourceID={geofencingZonesVectorSourceId}
-            sourceLayerID={geofencingZonesFeaturesLayerId}
-            minZoomLevel={minZoomLevel}
-            slot="middle"
-            filter={filter}
-            style={{
-              lineSortKey: sortKey,
-              lineColor: fillColor,
-              lineOpacity: lineOpacity,
-              lineEmissiveStrength: 1,
-              lineCap: 'round',
-              lineJoin: 'round',
-              lineWidth: lineWidth,
-              lineDasharray: dashArray,
-            }}
-          />
-        ))}
-
+    <>
+      {/*
+        The icon layer is the only child of the source so that source-level
+        `onPress` (the fast path) only fires for taps on icons. Fill and line
+        layers are rendered as siblings — they still reference the same vector
+        source via `sourceID`, but because they aren't React children of the
+        source, taps on them fall through to MapView.onPress (handled via
+        `isFeatureGeofencingZone` in `onFeatureClick`). Without this,
+        full-fill polygons would claim every tap and shadow vehicle/stop
+        sources that overlap the zone.
+      */}
+      <MapboxGL.VectorSource
+        id={geofencingZonesVectorSourceId}
+        tileUrlTemplates={tileUrlTemplates}
+        minZoomLevel={minZoomLevel}
+        maxZoomLevel={maxZoomLevel}
+        hitbox={hitboxCoveringIconOnly} // to not be able to hit multiple zones with one click
+        onPress={geofencingZoneOnPress}
+      >
         <MapboxGL.SymbolLayer
           id="geofencing-zone-icon-layer"
           slot="top"
@@ -214,7 +185,46 @@ export const GeofencingZonesAsTiles = ({
           filter={iconFilter}
           aboveLayerID={MapSlotLayerId.GeofencingZonesIcons}
         />
-      </>
-    </MapboxGL.VectorSource>
+      </MapboxGL.VectorSource>
+
+      <MapboxGL.FillLayer
+        id="GeofencingZones_Fill_Consolidated"
+        sourceID={geofencingZonesVectorSourceId}
+        sourceLayerID={geofencingZonesFeaturesLayerId}
+        aboveLayerID={MapSlotLayerId.GeofencingZones}
+        minZoomLevel={minZoomLevel}
+        slot="middle"
+        style={{
+          fillSortKey: sortKey,
+          fillColor,
+          fillOpacity,
+          fillAntialias: true,
+          fillEmissiveStrength: 1,
+        }}
+      />
+
+      {lineLayerConfigs.map(({id, filter, dashArray}) => (
+        <MapboxGL.LineLayer
+          key={id}
+          id={id}
+          aboveLayerID={MapSlotLayerId.GeofencingZones}
+          sourceID={geofencingZonesVectorSourceId}
+          sourceLayerID={geofencingZonesFeaturesLayerId}
+          minZoomLevel={minZoomLevel}
+          slot="middle"
+          filter={filter}
+          style={{
+            lineSortKey: sortKey,
+            lineColor: fillColor,
+            lineOpacity: lineOpacity,
+            lineEmissiveStrength: 1,
+            lineCap: 'round',
+            lineJoin: 'round',
+            lineWidth: lineWidth,
+            lineDasharray: dashArray,
+          }}
+        />
+      ))}
+    </>
   );
 };

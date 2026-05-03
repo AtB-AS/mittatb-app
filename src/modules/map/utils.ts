@@ -79,6 +79,20 @@ export const geofencingZoneCodes: GeofencingZoneCode[] = [
   'noParking',
   'noEntry',
 ];
+
+/**
+ * Tile-sourced geofencing zone features carry the zone code on
+ * `properties.code` directly (no `geofencingZoneCustomProps` wrapper). Used
+ * to detect zone taps that come through `MapView.onPress` (i.e. fill/line
+ * area taps that aren't handled by the source-level icon `onPress`).
+ */
+export const isFeatureTileGeofencingZone = (f: Feature): boolean => {
+  const code = f.properties?.code;
+  return (
+    typeof code === 'string' &&
+    (geofencingZoneCodes as readonly string[]).includes(code)
+  );
+};
 const GeofencingZonePropsSchema = z.object({
   code: z.enum(geofencingZoneCodes),
   systemId: z.string(),

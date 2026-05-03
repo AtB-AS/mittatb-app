@@ -30,6 +30,7 @@ import {
   isParkAndRide,
   isStopPlace,
   isFeatureGeofencingZone,
+  isFeatureTileGeofencingZone,
   isClusterFeature,
 } from './utils';
 
@@ -329,10 +330,24 @@ export const Map = (props: MapProps) => {
         // - select a stop place with the clicked quay sorted on top
         // - have a bottom sheet with departures just for the clicked quay
         return; // currently - do nothing
-      } else if (isFeatureGeofencingZone(featureToSelect)) {
-        if (isGeofencingZonesAsTilesEnabled) return; // Handled directly with geofencingZoneOnPress instead in this case
-        const gfzProps = featureToSelect?.properties?.geofencingZoneCustomProps;
-        showGeofencingZoneSnackbar(gfzProps?.code, gfzProps.isStationParking);
+      } else if (
+        isFeatureGeofencingZone(featureToSelect) ||
+        isFeatureTileGeofencingZone(featureToSelect)
+      ) {
+        // The two zone shapes carry the code in different places: legacy
+        // (polyline-encoded multipolygon) under `geofencingZoneCustomProps`,
+        // and tile-sourced features directly on `properties`. Read through
+        // a loose record to handle both without fighting the type guard.
+        const props = featureToSelect.properties as
+          | Record<string, any>
+          | undefined;
+        const gfzProps = props?.geofencingZoneCustomProps;
+        const code = (gfzProps?.code ?? props?.code) as
+          | GeofencingZoneCode
+          | undefined;
+        const isStationParking =
+          gfzProps?.isStationParking ?? Boolean(props?.stationParking);
+        showGeofencingZoneSnackbar(code, isStationParking);
       } else if (isScooter(selectedFeature) && !isActiveTrip) {
         // outside of operational area, rules unspecified
         showGeofencingZoneSnackbar(undefined);
@@ -342,7 +357,6 @@ export const Map = (props: MapProps) => {
       activeShmoBooking?.state,
       showGeofencingZones,
       hideSnackbar,
-      isGeofencingZonesAsTilesEnabled,
       selectedFeature,
       showGeofencingZoneSnackbar,
     ],
