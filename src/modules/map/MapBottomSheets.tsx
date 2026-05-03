@@ -19,6 +19,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import {
@@ -224,6 +225,15 @@ export const MapBottomSheets = ({
     handleCloseSheet();
   }, [openPaymentType, handleCloseSheet]);
 
+  // Track the sheet's current snap index so we can restore the user's chosen
+  // height on the Default sheet when they return to it after a feature sheet.
+  const DEFAULT_SNAP_INDEX = 1; // 50% — middle of ['10%', '50%', '90%'].
+  const currentSnapIndexRef = useRef<number>(DEFAULT_SNAP_INDEX);
+  const lastDefaultSnapIndexRef = useRef<number>(DEFAULT_SNAP_INDEX);
+  const onSnapChange = useCallback((idx: number) => {
+    currentSnapIndexRef.current = idx;
+  }, []);
+
   // Crossfade rendering state: the current (live) inputs determine when to
   // start a transition; the lagged `rendered` state determines what the user
   // actually sees, so the old content stays in place during the fade-out and
@@ -258,10 +268,26 @@ export const MapBottomSheets = ({
 
   useEffect(() => {
     if (liveKey === renderedKey) return;
-    // Snap the sheet to its default open position (50%) so the new content
-    // is fully visible when the fade-in completes, even if the user had
-    // dragged the previous sheet down to the minimised stop.
-    bottomSheetMapRef.current?.snapToIndex(1);
+
+    // If we are leaving the Default sheet, remember the user's chosen snap so
+    // we can come back to it after the feature sheet closes. (Don't overwrite
+    // it on Default→Default transitions.)
+    const leavingDefault =
+      rendered.variant === 'Default' && variant !== 'Default';
+    const enteringDefault =
+      rendered.variant !== 'Default' && variant === 'Default';
+
+    if (leavingDefault) {
+      lastDefaultSnapIndexRef.current = currentSnapIndexRef.current;
+    }
+
+    // New variant → snap to its default open position (50%). When returning
+    // to the Default sheet, restore the user's previously chosen snap (which
+    // may be minimised at 10%) instead of forcing 50%.
+    const targetSnap = enteringDefault
+      ? lastDefaultSnapIndexRef.current
+      : DEFAULT_SNAP_INDEX;
+    bottomSheetMapRef.current?.snapToIndex(targetSnap);
 
     opacity.value = withTiming(0, {duration: 120}, (finished) => {
       if (finished) {
@@ -288,7 +314,7 @@ export const MapBottomSheets = ({
 
       {rendered.variant && (
         <MapBottomSheet
-          snapPoints={['10%', '50%', '90%']}
+          snapPoints={['14%', '50%', '90%']}
           index={1}
           enableDynamicSizing={false}
           canMinimize={false}
@@ -300,6 +326,7 @@ export const MapBottomSheets = ({
           locationArrowOnPress={locationArrowOnPress}
           navigateToScanQrCode={navigateToScanQrCode}
           onClosePress={onClosePress}
+          onSnapChange={onSnapChange}
           // StopPlace's content uses `BottomSheetSectionList` (a VirtualizedList)
           // as its own scroll container; wrapping that in another scroll view
           // would trigger RN's "VirtualizedList nested in ScrollView" warning.

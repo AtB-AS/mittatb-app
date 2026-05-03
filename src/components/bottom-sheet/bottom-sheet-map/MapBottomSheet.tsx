@@ -68,6 +68,12 @@ export type BottomSheetProps = PropsWithChildren<{
    * can break windowing.
    */
   wrapInScrollView?: boolean;
+  /**
+   * Called whenever the sheet is about to animate to a new snap index (>= 0).
+   * Lets callers track the user's current snap position — useful for restoring
+   * a previously chosen height when content swaps in/out.
+   */
+  onSnapChange?: (index: number) => void;
 }>;
 
 export const MapBottomSheet = ({
@@ -92,6 +98,7 @@ export const MapBottomSheet = ({
   index,
   onClosePress,
   wrapInScrollView = true,
+  onSnapChange,
 }: BottomSheetProps) => {
   const styles = useBottomSheetStyles();
   const sheetTopPosition = useSharedValue(0);
@@ -235,6 +242,7 @@ export const MapBottomSheet = ({
           if (toIndex >= 0) {
             onOpen();
             setPaddingBottomMap(screenHeight - toPosition + tabBarMinHeight);
+            onSnapChange?.(toIndex);
           } else if (toIndex === -1) {
             onClose();
           }
