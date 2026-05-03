@@ -61,6 +61,7 @@ export const VehiclesWithClusters = ({
       id={`vehicles-clustered-symbol-layer-${
         hideSymbols ? 'hidden' : 'visible'
       }`}
+      slot="top"
       sourceID={vehiclesAndStationsVectorSourceId}
       sourceLayerID="combined_layer"
       minZoomLevel={minZoomLevel}
@@ -147,6 +148,7 @@ export const StationsWithClusters = ({
       id={`stations-clustered-symbol-layer-${
         hideSymbols ? 'hidden' : 'visible'
       }`}
+      slot="top"
       sourceID={vehiclesAndStationsVectorSourceId}
       sourceLayerID="combined_stations_layer"
       minZoomLevel={minZoomLevel}

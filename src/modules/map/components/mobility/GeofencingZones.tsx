@@ -183,6 +183,7 @@ export const GeofencingZoneIcon: React.FC<GeofencingZoneIconProps> = ({
     >
       <MapboxGL.SymbolLayer
         id="geofencingZoneIcon"
+        slot="top"
         filter={hideItemsInTheDistanceFilter}
         style={{
           iconAllowOverlap: true,

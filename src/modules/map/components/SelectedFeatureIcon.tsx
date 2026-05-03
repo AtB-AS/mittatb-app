@@ -72,6 +72,7 @@ export const SelectedFeatureIcon = ({
     >
       <MapboxGL.SymbolLayer
         id="selected-vehicle-symbol-layer"
+        slot="top"
         aboveLayerID={MapSlotLayerId.SelectedFeature}
         style={{
           ...customTextStyle,

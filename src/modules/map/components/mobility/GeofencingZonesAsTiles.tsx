@@ -198,6 +198,7 @@ export const GeofencingZonesAsTiles = ({
 
         <MapboxGL.SymbolLayer
           id="geofencing-zone-icon-layer"
+          slot="top"
           sourceID={geofencingZonesVectorSourceId}
           sourceLayerID={geofencingZonesIconSourceLayerId}
           minZoomLevel={minZoomLevel}

@@ -36,6 +36,7 @@ export const NationalStopRegistryFeatures = ({
         {nsrCircleLayers.map((nsrCircleLayer, i) => (
           <MapboxGL.CircleLayer
             key={nsrCircleLayer.id}
+            slot="top"
             {...nsrCircleLayer}
             belowLayerID={getPreviousLayerId(nsrCircleLayers, i)}
           />
@@ -43,6 +44,7 @@ export const NationalStopRegistryFeatures = ({
         {nsrSymbolLayers.map((nsrSymbolLayer, i) => (
           <MapboxGL.SymbolLayer
             key={nsrSymbolLayer.id}
+            slot="top"
             {...nsrSymbolLayer}
             aboveLayerID={getPreviousLayerId(nsrSymbolLayers, i)}
           />
