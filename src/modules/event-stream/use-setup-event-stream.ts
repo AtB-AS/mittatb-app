@@ -75,9 +75,6 @@ export const useSetupEventStream = () => {
         handleFinishedBookingEvent,
       );
 
-      if (streamEvent.event === EventKind.ShmoBookingUpdated) {
-        streamEvent.bookingId;
-      }
     },
     [
       addToEventLog,
