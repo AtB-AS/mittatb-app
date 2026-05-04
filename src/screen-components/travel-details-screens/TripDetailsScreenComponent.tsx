@@ -152,7 +152,7 @@ export const TripDetailsScreenComponent = ({
               </ThemeText>
             </View>
             {showAimedTimes && aimedStartEndTime && (
-              <ThemeText typography="body__s" color={themeColor}>
+              <ThemeText typography="body__s" type='secondary' color={themeColor}>
                 {t(
                   TripDetailsTexts.header.aimedStartEndTime(aimedStartEndTime),
                 )}
