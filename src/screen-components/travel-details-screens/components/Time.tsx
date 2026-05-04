@@ -39,6 +39,7 @@ export const Time: React.FC<{
         <View style={{flexDirection: 'column', alignItems: 'flex-end'}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <AccessibleText
+              typography="body__m__strong"
               prefix={t(dictionary.travel.time.expectedPrefix)}
               testID="expTime"
             >
@@ -58,12 +59,12 @@ export const Time: React.FC<{
       );
     }
     case 'no-realtime': {
-      return <ThemeText testID="schCaTime">{scheduled}</ThemeText>;
+      return <ThemeText typography="body__m__strong" testID="schCaTime">{scheduled}</ThemeText>;
     }
     default: {
       return (
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <ThemeText testID="schTime">{expected}</ThemeText>
+          <ThemeText typography="body__m__strong" testID="schTime">{expected}</ThemeText>
         </View>
       );
     }
