@@ -9,15 +9,22 @@ import {
 } from '../auth';
 import Bugsnag from '@bugsnag/react-native';
 import {handleStreamEvent} from './handle-stream-event';
-import {StreamEventLog, StreamEvent, StreamEventSchema} from './types';
+import {
+  StreamEventLog,
+  StreamEvent,
+  StreamEventSchema,
+  EventKind,
+} from './types';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {jsonStringToObject} from '@atb/utils/object';
+import {MapStateActionType, useMapContext} from '../map';
 
 export const useSetupEventStream = () => {
   const queryClient = useQueryClient();
   const {userId, authStatus} = useAuthContext();
   const {isEventStreamEnabled, isEventStreamFareContractsEnabled} =
     useFeatureTogglesContext();
+  const {dispatchMapState} = useMapContext();
 
   // Keep a list of events to use for debugging. In memory only, so this will be
   // reset when reloading the app.
@@ -35,7 +42,7 @@ export const useSetupEventStream = () => {
   const enabled = isEventStreamEnabled && isIdTokenRefreshEnabled(authStatus);
 
   const onMessage = useCallback(
-    (event: WebSocketMessageEvent) => {
+    async (event: WebSocketMessageEvent) => {
       const message = StreamEventSchema.safeParse(
         jsonStringToObject(event.data),
       );
@@ -49,12 +56,33 @@ export const useSetupEventStream = () => {
       Bugsnag.leaveBreadcrumb('Received event from stream', {
         data: event.data,
       });
+
+      const handleFinishedBookingEvent = async (bookingId: string) => {
+        dispatchMapState({
+          type: MapStateActionType.FinishedBooking,
+          bookingId: bookingId,
+        });
+      };
+
       addToEventLog({streamEvent});
-      handleStreamEvent(streamEvent, queryClient, userId, {
-        isEventStreamFareContractsEnabled,
-      });
+      handleStreamEvent(
+        streamEvent,
+        queryClient,
+        userId,
+        {
+          isEventStreamFareContractsEnabled,
+        },
+        handleFinishedBookingEvent,
+      );
+
     },
-    [queryClient, isEventStreamFareContractsEnabled, userId, addToEventLog],
+    [
+      addToEventLog,
+      queryClient,
+      userId,
+      isEventStreamFareContractsEnabled,
+      dispatchMapState,
+    ],
   );
 
   const onOpen = useCallback(

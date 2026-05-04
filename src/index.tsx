@@ -96,19 +96,19 @@ export const App = () => {
                     <FeatureTogglesContextProvider>
                       <AuthContextProvider>
                         <TimeContextProvider>
-                          <EventStreamContextProvider>
-                            <AccessibilityContextProvider>
-                              <ThemeContextProvider>
-                                <FavoritesContextProvider>
-                                  <FiltersContextProvider>
-                                    <SearchHistoryContextProvider>
-                                      <FirestoreConfigurationContextProvider>
-                                        <TicketingContextProvider>
-                                          <StoredTripPatternsContextProvider>
-                                            <MobileTokenContextProvider>
-                                              <AppLanguageContextProvider>
-                                                <GeolocationContextProvider>
-                                                  <MapContextProvider>
+                          <AccessibilityContextProvider>
+                            <ThemeContextProvider>
+                              <FavoritesContextProvider>
+                                <FiltersContextProvider>
+                                  <SearchHistoryContextProvider>
+                                    <FirestoreConfigurationContextProvider>
+                                      <TicketingContextProvider>
+                                        <StoredTripPatternsContextProvider>
+                                          <MobileTokenContextProvider>
+                                            <AppLanguageContextProvider>
+                                              <GeolocationContextProvider>
+                                                <MapContextProvider>
+                                                  <EventStreamContextProvider>
                                                     <GlobalMessagesContextProvider>
                                                       <AnnouncementsContextProvider>
                                                         <NotificationContextProvider>
@@ -122,19 +122,19 @@ export const App = () => {
                                                         </NotificationContextProvider>
                                                       </AnnouncementsContextProvider>
                                                     </GlobalMessagesContextProvider>
-                                                  </MapContextProvider>
-                                                </GeolocationContextProvider>
-                                              </AppLanguageContextProvider>
-                                            </MobileTokenContextProvider>
-                                          </StoredTripPatternsContextProvider>
-                                        </TicketingContextProvider>
-                                      </FirestoreConfigurationContextProvider>
-                                    </SearchHistoryContextProvider>
-                                  </FiltersContextProvider>
-                                </FavoritesContextProvider>
-                              </ThemeContextProvider>
-                            </AccessibilityContextProvider>
-                          </EventStreamContextProvider>
+                                                  </EventStreamContextProvider>
+                                                </MapContextProvider>
+                                              </GeolocationContextProvider>
+                                            </AppLanguageContextProvider>
+                                          </MobileTokenContextProvider>
+                                        </StoredTripPatternsContextProvider>
+                                      </TicketingContextProvider>
+                                    </FirestoreConfigurationContextProvider>
+                                  </SearchHistoryContextProvider>
+                                </FiltersContextProvider>
+                              </FavoritesContextProvider>
+                            </ThemeContextProvider>
+                          </AccessibilityContextProvider>
                         </TimeContextProvider>
                       </AuthContextProvider>
                     </FeatureTogglesContextProvider>
