@@ -481,50 +481,48 @@ const IntermediateInfo = ({
 };
 const WalkSection = (leg: Leg) => {
   const {t, language} = useTranslation();
+  const style = useSectionStyles();
   const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
 
   return (
-    <TripRow
-      rowLabel={
+    <TripRow testID="footLeg">
+      <View style={style.transportLine}>
         <TransportationIconBox
           mode={leg.mode}
           subMode={leg.line?.transportSubmode}
         />
-      }
-      testID="footLeg"
-    >
-      <ThemeText typography="body__s" type="secondary">
-        {isWalkTimeOfSignificance
-          ? t(
-              TripDetailsTexts.trip.leg.walk.label(
-                secondsToDuration(leg.duration ?? 0, language),
-              ),
-            )
-          : t(TripDetailsTexts.trip.leg.shortWalk)}
-      </ThemeText>
+        <ThemeText typography="body__s" color="secondary">
+          {isWalkTimeOfSignificance
+            ? t(
+                TripDetailsTexts.trip.leg.walk.label(
+                  secondsToDuration(leg.duration ?? 0, language),
+                ),
+              )
+            : t(TripDetailsTexts.trip.leg.shortWalk)}
+        </ThemeText>
+      </View>
     </TripRow>
   );
 };
 const BikeSection = (leg: Leg) => {
   const {t, language} = useTranslation();
+  const style = useSectionStyles();
 
   return (
-    <TripRow
-      rowLabel={
+    <TripRow testID="bikeLeg">
+      <View style={style.transportLine}>
         <TransportationIconBox
           mode={leg.mode}
           subMode={leg.line?.transportSubmode}
         />
-      }
-      testID="bikeLeg"
-    >
-      <ThemeText typography="body__s" type="secondary">
-        {t(
-          TripDetailsTexts.trip.leg.bicycle.label(
-            secondsToDuration(leg.duration ?? 0, language),
-          ),
-        )}
-      </ThemeText>
+        <ThemeText typography="body__s" color="secondary">
+          {t(
+            TripDetailsTexts.trip.leg.bicycle.label(
+              secondsToDuration(leg.duration ?? 0, language),
+            ),
+          )}
+        </ThemeText>
+      </View>
     </TripRow>
   );
 };
