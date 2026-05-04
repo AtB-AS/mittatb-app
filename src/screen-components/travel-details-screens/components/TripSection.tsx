@@ -7,7 +7,6 @@ import {
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {ServiceJourneyDeparture} from '../types';
 import {SituationMessageBox} from '@atb/modules/situations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -22,7 +21,7 @@ import {
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
 import {useTransportColor} from '@atb/utils/use-transport-color';
-import React from 'react';
+import React, {useState} from 'react';
 import {View} from 'react-native';
 import {openUrl} from '@atb/utils/open-url';
 import {useHumanizeDistance} from '@atb/utils/location';
@@ -58,7 +57,12 @@ import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {ExternalLink, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
+import {
+  ExternalLink,
+  ExpandLess,
+  ExpandMore,
+} from '@atb/assets/svg/mono-icons/navigation';
+import {animateNextChange} from '@atb/utils/animation';
 import {AUTHORITY} from '@env';
 import {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
 import {getRealtimeState, type TimeValues} from '@atb/utils/realtime';
@@ -354,11 +358,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {leg.intermediateEstimatedCalls.length > 0 && (
-          <IntermediateInfo
-            leg={leg}
-            onPressDeparture={onPressDeparture}
-            testID={testID}
-          />
+          <IntermediateInfo leg={leg} testID={testID} />
         )}
         {showTo && (
           <TripRow
@@ -422,34 +422,17 @@ export const TripSection: React.FC<TripSectionProps> = ({
     onPressQuay(stopPlace, quay.id);
   }
 };
-const IntermediateInfo = ({
-  leg,
-  onPressDeparture,
-  testID,
-}: {
-  leg: Leg;
-  onPressDeparture: TripProps['onPressDeparture'];
-  testID?: string;
-}) => {
+const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
   const {t, language} = useTranslation();
+  const {theme} = useThemeContext();
+  const [expanded, setExpanded] = useState(false);
 
   const numberOfIntermediateCalls = leg.intermediateEstimatedCalls.length;
 
-  const navigateToDeparture = () => {
-    if (leg.serviceJourney?.id) {
-      const departureData: ServiceJourneyDeparture = {
-        serviceJourneyId: leg.serviceJourney.id,
-        date: leg.expectedStartTime,
-        serviceDate: leg.intermediateEstimatedCalls[0].date,
-        fromStopPosition: leg.fromEstimatedCall?.stopPositionInPattern || 0,
-        toStopPosition: leg.toEstimatedCall?.stopPositionInPattern,
-      };
-      onPressDeparture([departureData], 0);
-    }
-    return null;
+  const toggleExpanded = () => {
+    animateNextChange();
+    setExpanded(!expanded);
   };
-
-  const {theme} = useThemeContext();
 
   return (
     <TripRow testID={`${testID}IntermediateStops`} accessible={false}>
@@ -458,14 +441,14 @@ const IntermediateInfo = ({
         expanded={false}
         mode="secondary"
         backgroundColor={theme.color.background.neutral[1]}
-        rightIcon={{svg: ExpandMore}}
+        rightIcon={{svg: expanded ? ExpandLess : ExpandMore}}
         text={t(
           TripDetailsTexts.trip.leg.intermediateStops.label(
             numberOfIntermediateCalls,
             secondsToDuration(leg.duration, language),
           ),
         )}
-        onPress={navigateToDeparture}
+        onPress={toggleExpanded}
         accessibilityLabel={
           t(
             TripDetailsTexts.trip.leg.intermediateStops.a11yLabel(
