@@ -6,9 +6,9 @@ const TripDetailsTexts = {
     title: _('Reisedetaljer', 'Trip details', 'Reisedetaljar'),
     titleFromTo: ({fromName, toName}: {fromName: string; toName: string}) =>
       _(
-        `${fromName}  -  ${toName}`,
-        `${fromName}  -  ${toName}`,
-        `${fromName}  -  ${toName}`,
+        `${fromName} → ${toName}`,
+        `${fromName} → ${toName}`,
+        `${fromName} → ${toName}`,
       ),
     titleFromToA11yLabel: ({
       fromName,
@@ -33,6 +33,18 @@ const TripDetailsTexts = {
         `${startTime} - ${endTime}`,
         `${startTime} - ${endTime}`,
         `${startTime} - ${endTime}`,
+      ),
+    aimedStartEndTime: ({
+      startTime,
+      endTime,
+    }: {
+      startTime: string;
+      endTime: string;
+    }) =>
+      _(
+        `Opprinnelig ${startTime} - ${endTime}`,
+        `Originally ${startTime} - ${endTime}`,
+        `Opphavleg ${startTime} - ${endTime}`,
       ),
     startEndTimeA11yLabel: ({
       startTime,

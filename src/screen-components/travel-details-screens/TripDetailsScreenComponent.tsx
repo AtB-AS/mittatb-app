@@ -1,11 +1,9 @@
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {Leg, Place, TripPattern} from '@atb/api/types/trips';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
-import SvgDuration from '@atb/assets/svg/mono-icons/time/Duration';
 import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {hasLegsWeCantSellTicketsFor} from '@atb/modules/operator-config';
 import {
   FareProductTypeConfig,
@@ -26,7 +24,11 @@ import {
   getTripPatternAnalytics,
   type TripAnalytics,
 } from './utils';
-import {formatToClock, secondsBetween} from '@atb/utils/date';
+import {
+  formatToClock,
+  secondsBetween,
+  secondsToDuration,
+} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
 import React, {Ref, useCallback} from 'react';
@@ -105,6 +107,16 @@ export const TripDetailsScreenComponent = ({
   const purchaseSelection = usePurchaseSelectionFromTrip(updatedTripPattern);
   const fromToNames = getFromToName(updatedTripPattern.legs);
   const startEndTime = getStartEndTime(updatedTripPattern, language);
+  const aimedStartEndTime = getAimedStartEndTime(updatedTripPattern, language);
+  const durationText = secondsToDuration(
+    updatedTripPattern.duration ?? 0,
+    language,
+  );
+  const showAimedTimes =
+    aimedStartEndTime &&
+    (aimedStartEndTime.startTime !== startEndTime.startTime ||
+      aimedStartEndTime.endTime !== startEndTime.endTime);
+  const headerTimeText = t(TripDetailsTexts.header.startEndTime(startEndTime));
 
   const refreshControlProps = useManualRefreshControlProps({
     refreshing: isFetching,
@@ -117,49 +129,37 @@ export const TripDetailsScreenComponent = ({
         focusRef={focusRef}
         headerProps={{
           leftButton: {type: 'back'},
-          title: t(TripDetailsTexts.header.title),
+          title: headerTimeText,
           color: themeColor,
         }}
         refreshControlProps={refreshControlProps}
         contentColor={theme.color.background.neutral[1]}
         headerContent={(focusRef) => (
           <View style={styles.headerContent}>
-            <View accessible={true} ref={focusRef}>
-              <ThemeText
-                color={themeColor}
-                typography="heading__l"
-                style={styles.heading}
-                accessibilityLabel={
-                  fromToNames
-                    ? t(
-                        TripDetailsTexts.header.titleFromToA11yLabel(
-                          fromToNames,
-                        ),
-                      )
-                    : undefined
-                }
-              >
-                {fromToNames
-                  ? t(TripDetailsTexts.header.titleFromTo(fromToNames))
-                  : t(TripDetailsTexts.header.title)}
+            <View style={styles.headerTimeRow} accessible={true} ref={focusRef}>
+              <ThemeText color={themeColor} typography="heading__l">
+                {headerTimeText}
+              </ThemeText>
+              <ThemeText color={themeColor} typography="body__m">
+                {durationText}
               </ThemeText>
             </View>
-            <View style={{flexDirection: 'row'}} accessible={true}>
-              <ThemeIcon
-                svg={SvgDuration}
-                style={styles.durationIcon}
-                color={themeColor}
-              />
-              <ThemeText
-                typography="body__s"
-                color={themeColor}
-                accessibilityLabel={t(
-                  TripDetailsTexts.header.startEndTimeA11yLabel(startEndTime),
+            {showAimedTimes && aimedStartEndTime && (
+              <ThemeText typography="body__s" color={themeColor}>
+                {t(
+                  TripDetailsTexts.header.aimedStartEndTime(aimedStartEndTime),
                 )}
-              >
-                {t(TripDetailsTexts.header.startEndTime(startEndTime))}
               </ThemeText>
-            </View>
+            )}
+            {fromToNames && (
+              <ThemeText
+                color={themeColor}
+                typography="body__m"
+                style={styles.headerFromTo}
+              >
+                {t(TripDetailsTexts.header.titleFromTo(fromToNames))}
+              </ThemeText>
+            )}
           </View>
         )}
       >
@@ -416,6 +416,18 @@ function getStartEndTime(tripPattern: TripPattern, language: Language) {
   return {startTime, endTime};
 }
 
+function getAimedStartEndTime(tripPattern: TripPattern, language: Language) {
+  const legs = tripPattern.legs;
+  if (legs.length === 0) return;
+  const startTime = formatToClock(legs[0].aimedStartTime, language, 'floor');
+  const endTime = formatToClock(
+    legs[legs.length - 1].aimedEndTime,
+    language,
+    'ceil',
+  );
+  return {startTime, endTime};
+}
+
 function totalWaitTimeIsMoreThanAnHour(legs: Leg[]) {
   return (
     legs.reduce(
@@ -480,8 +492,18 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.color.background.neutral[1].background,
   },
-  heading: {marginBottom: theme.spacing.medium},
-  headerContent: {marginHorizontal: theme.spacing.medium},
+  headerContent: {
+    marginHorizontal: theme.spacing.medium,
+    rowGap: theme.spacing.xSmall,
+  },
+  headerTimeRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+  },
+  headerFromTo: {
+    marginTop: theme.spacing.xSmall,
+  },
   paddedContainer: {
     padding: theme.spacing.medium,
   },
@@ -504,5 +526,4 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     borderTopColor: theme.color.border.primary.background,
     borderTopWidth: theme.border.width.slim,
   },
-  durationIcon: {marginRight: theme.spacing.small},
 }));
