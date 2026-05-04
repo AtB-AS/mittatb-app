@@ -229,13 +229,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
                   t(TripDetailsTexts.flexibleTransport.onDemandTransportLabel)
                 : '')
             }
-            rowLabel={
-              <TransportationIconBox
-                mode={leg.mode}
-                subMode={leg.line?.transportSubmode}
-                isFlexible={isFlexible}
-              />
-            }
           >
             {leg.transportSubmode === TransportSubmode.NightBus && (
               <ThemeText
@@ -246,9 +239,17 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 {t(getTranslatedModeName(leg.mode, leg.line?.transportSubmode))}
               </ThemeText>
             )}
-            <ThemeText typography="body__m__strong">
-              {getLineName(t, leg)}
-            </ThemeText>
+            <View style={style.transportLine}>
+              <TransportationIconBox
+                mode={leg.mode}
+                subMode={leg.line?.transportSubmode}
+                isFlexible={isFlexible}
+                lineNumber={publicCode}
+              />
+              <ThemeText typography="body__m__strong">
+                {getLineName(t, leg)}
+              </ThemeText>
+            </View>
             {isFlexible && (
               <ThemeText
                 type="secondary"
@@ -698,6 +699,11 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
     top: -theme.spacing.medium,
     left: 0,
     width: '100%',
+  },
+  transportLine: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.small,
   },
   onDemandTransportLabel: {
     paddingTop: theme.spacing.xSmall,
