@@ -8,7 +8,6 @@ import {
 import React, {useCallback, useRef} from 'react';
 import {View} from 'react-native';
 import {getPlaceName, InterchangeDetails, TripSection} from './TripSection';
-import {TripSummary} from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '../types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
@@ -235,7 +234,6 @@ export const Trip: React.FC<TripProps> = ({
         />
       )}
       <SaveTripPatternButtonComponent tripPattern={tripPattern} now={now} />
-      <TripSummary {...tripPattern} />
     </View>
   );
 };
