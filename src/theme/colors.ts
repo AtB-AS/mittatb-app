@@ -47,7 +47,7 @@ const androidOrIos = Platform.OS === 'android' ? 'android' : 'ios';
 export const textTypeStyles = createTextTypeStyles(androidOrIos);
 
 const tripLegDetail = {
-  labelWidth: 80,
+  labelWidth: 64,
   decorationContainerWidth: 20,
   decorationLineEndWidth: 12,
   decorationLineWidth: 4,
