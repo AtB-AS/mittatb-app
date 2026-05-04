@@ -7,6 +7,7 @@ import {
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
+import {ServiceJourneyDeparture} from '../types';
 import {SituationMessageBox} from '@atb/modules/situations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -238,6 +239,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                   t(TripDetailsTexts.flexibleTransport.onDemandTransportLabel)
                 : '')
             }
+            onPress={() => handleDeparturePress(leg)}
           >
             {leg.transportSubmode === TransportSubmode.NightBus && (
               <ThemeText
@@ -415,6 +417,20 @@ export const TripSection: React.FC<TripSectionProps> = ({
     </>
   );
 
+  function handleDeparturePress(pressedLeg: Leg) {
+    if (pressedLeg.serviceJourney?.id) {
+      const departureData: ServiceJourneyDeparture = {
+        serviceJourneyId: pressedLeg.serviceJourney.id,
+        date: pressedLeg.expectedStartTime,
+        serviceDate: pressedLeg.intermediateEstimatedCalls[0]?.date,
+        fromStopPosition:
+          pressedLeg.fromEstimatedCall?.stopPositionInPattern || 0,
+        toStopPosition: pressedLeg.toEstimatedCall?.stopPositionInPattern,
+      };
+      onPressDeparture([departureData], 0);
+    }
+  }
+
   async function handleQuayPress(quay: Quay | undefined) {
     const stopPlace = quay?.stopPlace;
     if (!stopPlace) return;
@@ -425,7 +441,10 @@ export const TripSection: React.FC<TripSectionProps> = ({
 const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
+  const style = useSectionStyles();
   const [expanded, setExpanded] = useState(false);
+  const legColor = useTransportColor(leg.mode, leg.line?.transportSubmode)
+    .secondary.background;
 
   const numberOfIntermediateCalls = leg.intermediateEstimatedCalls.length;
 
@@ -435,33 +454,46 @@ const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
   };
 
   return (
-    <TripRow testID={`${testID}IntermediateStops`} accessible={false}>
-      <Button
-        type="small"
-        expanded={false}
-        mode="secondary"
-        backgroundColor={theme.color.background.neutral[1]}
-        rightIcon={{svg: expanded ? ExpandLess : ExpandMore}}
-        text={t(
-          TripDetailsTexts.trip.leg.intermediateStops.label(
-            numberOfIntermediateCalls,
-            secondsToDuration(leg.duration, language),
-          ),
-        )}
-        onPress={toggleExpanded}
-        accessibilityLabel={
-          t(
-            TripDetailsTexts.trip.leg.intermediateStops.a11yLabel(
+    <>
+      <TripRow testID={`${testID}IntermediateStops`} accessible={false}>
+        <Button
+          type="small"
+          expanded={false}
+          mode="secondary"
+          backgroundColor={theme.color.background.neutral[1]}
+          rightIcon={{svg: expanded ? ExpandLess : ExpandMore}}
+          text={t(
+            TripDetailsTexts.trip.leg.intermediateStops.label(
               numberOfIntermediateCalls,
               secondsToDuration(leg.duration, language),
             ),
-          ) + screenReaderPause
-        }
-        accessibilityHint={t(
-          TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
-        )}
-      />
-    </TripRow>
+          )}
+          onPress={toggleExpanded}
+          accessibilityLabel={
+            t(
+              TripDetailsTexts.trip.leg.intermediateStops.a11yLabel(
+                numberOfIntermediateCalls,
+                secondsToDuration(leg.duration, language),
+              ),
+            ) + screenReaderPause
+          }
+          accessibilityHint={t(
+            TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
+          )}
+        />
+      </TripRow>
+      {expanded &&
+        leg.intermediateEstimatedCalls.map((call, index) => (
+          <View key={call.quay.id ?? index} style={style.intermediateStop}>
+            <TripLegDecoration color={legColor} hasCenter />
+            <TripRow>
+              <ThemeText typography="body__m__strong">
+                {call.quay.name}
+              </ThemeText>
+            </TripRow>
+          </View>
+        ))}
+    </>
   );
 };
 const WalkSection = (leg: Leg) => {
@@ -729,5 +761,8 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   interchangeSection: {
     marginBottom: theme.spacing.large,
+  },
+  intermediateStop: {
+    flex: 1,
   },
 }));
