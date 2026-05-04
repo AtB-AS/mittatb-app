@@ -26,6 +26,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {openUrl} from '@atb/utils/open-url';
 import {
+  formatDestinationDisplay,
   getLineName,
   getNoticesForLeg,
   getPublicCodeFromLeg,
@@ -250,7 +251,12 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 lineNumber={publicCode}
               />
               <ThemeText typography="body__m__strong">
-                {getLineName(t, leg)}
+                {formatDestinationDisplay(
+                  t,
+                  leg.fromEstimatedCall?.destinationDisplay,
+                ) ??
+                  leg.line?.name ??
+                  ''}
               </ThemeText>
             </View>
             {isFlexible && (
