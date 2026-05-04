@@ -25,6 +25,7 @@ import {useTransportColor} from '@atb/utils/use-transport-color';
 import React from 'react';
 import {View} from 'react-native';
 import {openUrl} from '@atb/utils/open-url';
+import {useHumanizeDistance} from '@atb/utils/location';
 import {
   formatDestinationDisplay,
   getLineName,
@@ -57,7 +58,7 @@ import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {ExternalLink, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {AUTHORITY} from '@env';
 import {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
 import {getRealtimeState, type TimeValues} from '@atb/utils/realtime';
@@ -331,9 +332,10 @@ export const TripSection: React.FC<TripSectionProps> = ({
             <Button
               type="small"
               expanded={false}
+              mode="secondary"
               leftIcon={{svg: Map}}
               text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
-              interactiveColor={theme.color.interactive[3]}
+              backgroundColor={theme.color.background.neutral[1]}
               onPress={() => onPressShowLive(serviceJourneyPolyline)}
             />
           </TripRow>
@@ -452,30 +454,35 @@ const IntermediateInfo = ({
     return null;
   };
 
+  const {theme} = useThemeContext();
+
   return (
-    <TripRow
-      testID={`${testID}IntermediateStops`}
-      onPress={navigateToDeparture}
-      accessibilityLabel={
-        t(
-          TripDetailsTexts.trip.leg.intermediateStops.a11yLabel(
-            numberOfIntermediateCalls,
-            secondsToDuration(leg.duration, language),
-          ),
-        ) + screenReaderPause
-      }
-      accessibilityHint={t(
-        TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
-      )}
-    >
-      <ThemeText typography="body__s" type="secondary">
-        {t(
+    <TripRow testID={`${testID}IntermediateStops`} accessible={false}>
+      <Button
+        type="small"
+        expanded={false}
+        mode="secondary"
+        backgroundColor={theme.color.background.neutral[1]}
+        rightIcon={{svg: ExpandMore}}
+        text={t(
           TripDetailsTexts.trip.leg.intermediateStops.label(
             numberOfIntermediateCalls,
             secondsToDuration(leg.duration, language),
           ),
         )}
-      </ThemeText>
+        onPress={navigateToDeparture}
+        accessibilityLabel={
+          t(
+            TripDetailsTexts.trip.leg.intermediateStops.a11yLabel(
+              numberOfIntermediateCalls,
+              secondsToDuration(leg.duration, language),
+            ),
+          ) + screenReaderPause
+        }
+        accessibilityHint={t(
+          TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
+        )}
+      />
     </TripRow>
   );
 };
@@ -483,6 +490,8 @@ const WalkSection = (leg: Leg) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
   const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
+  const humanizedDistance = useHumanizeDistance(leg.distance);
+  const durationText = secondsToDuration(leg.duration ?? 0, language);
 
   return (
     <TripRow testID="footLeg">
@@ -492,13 +501,16 @@ const WalkSection = (leg: Leg) => {
           subMode={leg.line?.transportSubmode}
         />
         <ThemeText typography="body__s" color="secondary">
-          {isWalkTimeOfSignificance
+          {isWalkTimeOfSignificance && humanizedDistance
             ? t(
-                TripDetailsTexts.trip.leg.walk.label(
-                  secondsToDuration(leg.duration ?? 0, language),
+                TripDetailsTexts.trip.leg.walk.labelWithDistance(
+                  durationText,
+                  humanizedDistance,
                 ),
               )
-            : t(TripDetailsTexts.trip.leg.shortWalk)}
+            : isWalkTimeOfSignificance
+              ? t(TripDetailsTexts.trip.leg.walk.label(durationText))
+              : t(TripDetailsTexts.trip.leg.shortWalk)}
         </ThemeText>
       </View>
     </TripRow>

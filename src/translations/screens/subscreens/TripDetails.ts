@@ -150,11 +150,11 @@ const TripDetailsTexts = {
           ),
         label: (count: number, duration: string) =>
           _(
-            `${count} mellomstopp \n${duration}`,
+            `${count} mellomstopp (${duration})`,
             count > 1
-              ? `${count} intermediate stops \n${duration}`
-              : `${count} intermediate stop \n${duration}`,
-            `${count} mellomstopp \n${duration}`,
+              ? `${count} intermediate stops (${duration})`
+              : `${count} intermediate stop (${duration})`,
+            `${count} mellomstopp (${duration})`,
           ),
         a11yHint: _(
           'Aktivér for å vise alle mellomstopp.',
@@ -165,6 +165,12 @@ const TripDetailsTexts = {
       walk: {
         label: (duration: string) =>
           _(`Gå i ${duration}`, `Walk for ${duration}`, `Gå i ${duration}`),
+        labelWithDistance: (duration: string, distance: string) =>
+          _(
+            `Gå i ${duration} (${distance})`,
+            `Walk for ${duration} (${distance})`,
+            `Gå i ${duration} (${distance})`,
+          ),
       },
       bicycle: {
         label: (duration: string) =>
