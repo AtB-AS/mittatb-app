@@ -226,48 +226,6 @@ const TripDetailsTexts = {
       showTripInMap: {
         label: _('Se reiserute', 'Show trip', 'Sjå reiserute'),
       },
-      travelTime: {
-        label: (time: string) =>
-          _(
-            `Total reisetid: ${time}`,
-            `Total trip time: ${time}`,
-            `Total reisetid: ${time}`,
-          ),
-        a11yLabel: (time: string) =>
-          _(
-            `Total reisetid: ${time}`,
-            `Total trip time: ${time}`,
-            `Total reisetid: ${time}`,
-          ),
-      },
-      walkDistance: {
-        label: (distance: string) =>
-          _(
-            `Total gangavstand: ${distance}`,
-            `Total walking distance: ${distance}`,
-            `Total gangavstand: ${distance}`,
-          ),
-        a11yLabel: (distanceInMetres: string) =>
-          _(
-            `Total gangavstand: ${distanceInMetres}`,
-            `Total walking distance: ${distanceInMetres}`,
-            `Total gangavstand: ${distanceInMetres}`,
-          ),
-      },
-      bikeDistance: {
-        label: (distance: string) =>
-          _(
-            `Total sykkelavstand: ${distance}`,
-            `Total biking distance: ${distance}`,
-            `Total sykkelavstand: ${distance}`,
-          ),
-        a11yLabel: (distanceInMetres: string) =>
-          _(
-            `Total sykkelavstand: ${distanceInMetres}`,
-            `Total biking distance: ${distanceInMetres}`,
-            `Total sykkelavstand: ${distanceInMetres}`,
-          ),
-      },
     },
     buyTicket: {
       text: _('Kjøp billett', 'Buy ticket', 'Kjøp billett'),
