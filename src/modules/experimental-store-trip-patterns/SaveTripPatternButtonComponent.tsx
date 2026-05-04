@@ -106,7 +106,7 @@ export const SaveTripPatternButtonComponent: React.FC<
       backgroundColor={
         isStored
           ? theme.color.interactive[0].active
-          : theme.color.background.neutral[0]
+          : theme.color.background.neutral[1]
       }
     />
   );
