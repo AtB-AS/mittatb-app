@@ -18,6 +18,12 @@ import {
   Vehicle,
   StationSchema,
   Station,
+  ViolationsReportingInitQuery,
+  ViolationsReportingInitQueryResult,
+  ViolationsVehicleLookupQuery,
+  ViolationsVehicleLookupQueryResult,
+  ViolationsReportQuery,
+  ViolationsReportQueryResult,
 } from './types/mobility';
 
 export const getActiveShmoBooking = (
@@ -167,4 +173,43 @@ export const getStation = (
       console.error('Error in StationSchema parsing: ', error);
       return null;
     });
+};
+
+export const initViolationsReporting = (
+  params: ViolationsReportingInitQuery,
+  opts?: AxiosRequestConfig,
+): Promise<ViolationsReportingInitQueryResult> => {
+  const query = qs.stringify(params);
+  return client
+    .get<ViolationsReportingInitQueryResult>(
+      stringifyUrl('/mobility/v1/violations-reporting/init', query),
+      opts,
+    )
+    .then((res) => res.data);
+};
+
+export const lookupVehicleByQr = (
+  params: ViolationsVehicleLookupQuery,
+  opts?: AxiosRequestConfig,
+): Promise<ViolationsVehicleLookupQueryResult> => {
+  const query = qs.stringify(params);
+  return client
+    .get<ViolationsVehicleLookupQueryResult>(
+      stringifyUrl('/mobility/v1/violations-reporting/vehicle', query),
+      opts,
+    )
+    .then((res) => res.data);
+};
+
+export const sendViolationsReport = (
+  data: ViolationsReportQuery,
+  opts?: AxiosRequestConfig,
+): Promise<ViolationsReportQueryResult> => {
+  return client
+    .post<ViolationsReportQueryResult>(
+      '/mobility/v1/violations-reporting/report',
+      data,
+      opts,
+    )
+    .then((res) => res.data);
 };
