@@ -113,11 +113,16 @@ export function formatDestinationDisplay(
   return frontText + ` ${t(dictionary.via)} ` + viaNames;
 }
 
-export function getLineName(t: TranslateFunction, leg: Leg) {
-  const name =
+export function getLineDestinationName(t: TranslateFunction, leg: Leg) {
+  return (
     formatDestinationDisplay(t, leg.fromEstimatedCall?.destinationDisplay) ??
     leg.line?.name ??
-    '';
+    ''
+  );
+}
+
+export function getLineName(t: TranslateFunction, leg: Leg) {
+  const name = getLineDestinationName(t, leg);
   return leg.line?.publicCode
     ? isLineFlexibleTransport(leg.line)
       ? leg.line.publicCode

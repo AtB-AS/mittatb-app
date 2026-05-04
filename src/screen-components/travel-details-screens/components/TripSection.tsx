@@ -27,7 +27,7 @@ import {View} from 'react-native';
 import {openUrl} from '@atb/utils/open-url';
 import {useHumanizeDistance} from '@atb/utils/location';
 import {
-  formatDestinationDisplay,
+  getLineDestinationName,
   getLineName,
   getNoticesForLeg,
   getPublicCodeFromLeg,
@@ -252,12 +252,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 lineNumber={publicCode}
               />
               <ThemeText typography="body__m__strong">
-                {formatDestinationDisplay(
-                  t,
-                  leg.fromEstimatedCall?.destinationDisplay,
-                ) ??
-                  leg.line?.name ??
-                  ''}
+                {getLineDestinationName(t, leg)}
               </ThemeText>
             </View>
             {isFlexible && (
