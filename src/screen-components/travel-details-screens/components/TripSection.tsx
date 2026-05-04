@@ -483,14 +483,34 @@ const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
         />
       </TripRow>
       {expanded &&
-        leg.intermediateEstimatedCalls.map((call, index) => (
-          <View key={call.quay.id ?? index} style={style.intermediateStop}>
-            <TripLegDecoration color={legColor} hasCenter />
-            <TripRow alignChildren="center" style={style.intermediateStopRow}>
-              <ThemeText>{call.quay.name}</ThemeText>
-            </TripRow>
-          </View>
-        ))}
+        leg.intermediateEstimatedCalls.map((call, index) => {
+          const sjCall = leg.serviceJourneyEstimatedCalls.find(
+            (c) => c.quay.name === call.quay.name,
+          );
+          return (
+            <View key={call.quay.id ?? index} style={style.intermediateStop}>
+              <TripLegDecoration color={legColor} hasCenter />
+              <TripRow
+                alignChildren="center"
+                style={style.intermediateStopRow}
+                rowLabel={
+                  sjCall ? (
+                    <Time
+                      timeValues={{
+                        aimedTime: sjCall.aimedDepartureTime,
+                        expectedTime: sjCall.expectedDepartureTime,
+                        isRealtime: sjCall.realtime,
+                      }}
+                      roundingMethod="floor"
+                    />
+                  ) : undefined
+                }
+              >
+                <ThemeText>{call.quay.name}</ThemeText>
+              </TripRow>
+            </View>
+          );
+        })}
     </>
   );
 };
