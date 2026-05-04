@@ -136,7 +136,14 @@ export const TripDetailsScreenComponent = ({
         contentColor={theme.color.background.neutral[1]}
         headerContent={(focusRef) => (
           <View style={styles.headerContent}>
-            <View style={styles.headerTimeRow} accessible={true} ref={focusRef}>
+            <View
+              style={styles.headerTimeRow}
+              accessible={true}
+              ref={focusRef}
+              accessibilityLabel={t(
+                TripDetailsTexts.header.startEndTimeA11yLabel(startEndTime),
+              )}
+            >
               <ThemeText color={themeColor} typography="heading__l">
                 {headerTimeText}
               </ThemeText>
@@ -156,6 +163,9 @@ export const TripDetailsScreenComponent = ({
                 color={themeColor}
                 typography="body__m"
                 style={styles.headerFromTo}
+                accessibilityLabel={t(
+                  TripDetailsTexts.header.titleFromToA11yLabel(fromToNames),
+                )}
               >
                 {t(TripDetailsTexts.header.titleFromTo(fromToNames))}
               </ThemeText>
