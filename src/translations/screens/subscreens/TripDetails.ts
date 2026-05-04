@@ -3,7 +3,6 @@ import {translation as _} from '../../commons';
 
 const TripDetailsTexts = {
   header: {
-    title: _('Reisedetaljer', 'Trip details', 'Reisedetaljar'),
     titleFromTo: ({fromName, toName}: {fromName: string; toName: string}) =>
       _(
         `${fromName} → ${toName}`,
