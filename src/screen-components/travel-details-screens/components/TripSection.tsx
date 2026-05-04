@@ -194,7 +194,10 @@ export const TripSection: React.FC<TripSectionProps> = ({
             onPress={() => handleQuayPress(leg.fromPlace.quay)}
             testID={`${testID}FromPlace`}
           >
-            <ThemeText typography="body__m__strong" testID={`${testID}FromPlaceName`}>
+            <ThemeText
+              typography="body__m__strong"
+              testID={`${testID}FromPlaceName`}
+            >
               {getPlaceName(leg.fromPlace)}
             </ThemeText>
             {showQuayDescription && (
@@ -375,7 +378,10 @@ export const TripSection: React.FC<TripSectionProps> = ({
             onPress={() => handleQuayPress(leg.toPlace.quay)}
             testID={`${testID}ToPlace`}
           >
-            <ThemeText typography="body__m__strong" testID={`${testID}ToPlaceName`}>
+            <ThemeText
+              typography="body__m__strong"
+              testID={`${testID}ToPlaceName`}
+            >
               {getPlaceName(leg.toPlace)}
             </ThemeText>
           </TripRow>
