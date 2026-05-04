@@ -8,7 +8,6 @@ import {getFilteredLegsByWalkOrWaitTime} from '@atb/screen-components/travel-det
 import {OverflowContainer} from '@atb/components/overflow-container';
 import {
   getNotificationSvgForLegs,
-  getLegsNotificationA11yLabel,
   getMsgTypeForLeg,
   toMostCriticalStatus,
 } from '@atb/modules/situations';
@@ -25,6 +24,7 @@ import {isDefined} from '@atb/utils/presence';
 type TravelCardContentProps = {
   tripPattern: TripPattern;
   maxWidth: number;
+  includeLegNotifications?: boolean;
 };
 
 export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
@@ -121,7 +121,6 @@ const useA11yLabel = (legs: Leg[]) => {
     );
   };
 
-  const notificationLabel = getLegsNotificationA11yLabel(legs, t);
   const prefix = t(TravelCardTexts.legs.prefix);
   const legsLabel = legs
     .map((leg, idx) =>
@@ -131,9 +130,7 @@ const useA11yLabel = (legs: Leg[]) => {
     )
     .join(', ');
 
-  return [notificationLabel, `${prefix}: ${legsLabel}`]
-    .filter(isDefined)
-    .join(', ');
+  return [`${prefix}: ${legsLabel}`].filter(isDefined).join(', ');
 };
 
 const getWaitTime = (leg: Leg, nextLeg?: Leg) => {

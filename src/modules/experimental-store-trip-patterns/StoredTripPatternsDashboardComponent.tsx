@@ -10,7 +10,11 @@ import Animated, {
   ZoomOut,
 } from 'react-native-reanimated';
 import {ContentHeading} from '@atb/components/heading';
-import {translation as _, useTranslation} from '@atb/translations';
+import {
+  translation as _,
+  TravelCardTexts,
+  useTranslation,
+} from '@atb/translations';
 import {TravelCard} from '@atb/screen-components/travel-card';
 import {useStoredTripPatterns} from './StoredTripPatternsContext';
 import {RightActionKind, SwipeableResultRow} from './SwipeableResultRow';
@@ -117,6 +121,7 @@ const StoredTripPatternRow: React.FC<{
   isFocused,
 }) => {
   const {data} = useSingleTripQuery(tripPattern, isFocused);
+  const {t} = useTranslation();
 
   const updatedTripPattern = data ?? tripPattern;
 
@@ -139,10 +144,13 @@ const StoredTripPatternRow: React.FC<{
       <TravelCard
         tripPattern={updatedTripPattern}
         onDetailsPressed={onDetailsPressed}
-        cardIndex={resultIndex}
-        numberOfCards={length}
         testID={'tripSearchSearchResult' + resultIndex}
-        type="saved-trip"
+        a11yLabelPrefix={t(
+          TravelCardTexts.card.a11yPrefix.savedTrip(resultIndex, length),
+        )}
+        includeDayInfo
+        includeFromToInfo
+        includeSituationNotices
       />
     </SwipeableResultRow>
   );
