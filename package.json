@@ -33,8 +33,8 @@
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
     "@atb-as/config-specs": "^9.6.1",
-    "@atb-as/generate-assets": "^18.11.0",
-    "@atb-as/theme": "^15.0.1",
+    "@atb-as/generate-assets": "18.12.0",
+    "@atb-as/theme": "15.1.1",
     "@atb-as/utils": "^6.1.0",
     "@babel/plugin-transform-export-namespace-from": "^7.27.1",
     "@bam.tech/react-native-image-resizer": "^3.0.11",

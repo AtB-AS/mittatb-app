@@ -38,7 +38,7 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
-import {useSingleTripQuery} from '@atb/modules/trip-patterns';
+import {useRefreshTripQuery} from '@atb/modules/trip-patterns';
 import {getPosthogClientGlobal} from '@atb/modules/analytics';
 import {useScreenshotAware} from 'react-native-screenshot-aware';
 import {useTimeContext} from '@atb/modules/time';
@@ -84,7 +84,7 @@ export const TripDetailsScreenComponent = ({
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.neutral[1];
 
-  const {data, error, isFetching, refetch} = useSingleTripQuery(
+  const {data, error, isFetching, refetch} = useRefreshTripQuery(
     tripPattern,
     isFocused,
   );

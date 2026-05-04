@@ -53,6 +53,28 @@ const TravelCardTexts = {
     },
     originalTime: _('Opprinnelig', 'Original', 'Opprinnelig'),
     pastTime: _('Avreise passert', 'Departure passed', 'Avreise passert'),
+    notPossible: _(
+      'Ikke lenger mulig',
+      'No longer possible',
+      'Ikkje lenger mogleg',
+    ),
+    tripStarted: _('Reisen har begynt', 'Trip has started', 'Reisa har begynt'),
+    staleTrip: _(
+      'Kan ikke oppdateres',
+      'Unable to update',
+      'Kan ikkje oppdaterast',
+    ),
+    cancelled: _('Innstilt', 'Cancelled', 'Innstilt'),
+    requiresBooking: _(
+      'Krever reservasjon',
+      'Requires booking',
+      'Krev reservasjon',
+    ),
+    bookingDeadlineExceeded: _(
+      'Reservasjonsfrist utløpt',
+      'Booking deadline exceeded',
+      'Reservasjonsfrist utløpt',
+    ),
     fromToInfo: {
       a11yLabel: (fromPlace: string, toPlace: string) =>
         _(

@@ -3,7 +3,7 @@ import React, {useCallback, useEffect} from 'react';
 import {Alert, View} from 'react-native';
 import {TripPattern} from '@atb/api/types/trips';
 
-import {useSingleTripQuery} from '@atb/modules/trip-patterns';
+import {useRefreshTripQuery} from '@atb/modules/trip-patterns';
 import Animated, {
   Easing,
   LinearTransition,
@@ -116,7 +116,7 @@ const StoredTripPatternRow: React.FC<{
   setTripPatternToRemove,
   isFocused,
 }) => {
-  const {data} = useSingleTripQuery(tripPattern, isFocused);
+  const {data} = useRefreshTripQuery(tripPattern, isFocused);
 
   const updatedTripPattern = data ?? tripPattern;
 

@@ -4,13 +4,19 @@ import type {BookingDisabledReason} from '@atb/modules/booking';
 
 export type TripsQuery = Types.TripsQuery;
 export type Trip = Types.TripsQuery['trip'];
+export type TripPatternStatus = 'valid' | 'impossible' | 'stale';
 export type TripPattern =
   Required<Types.TripsQuery>['trip']['tripPatterns'][0] & {
     compressedQuery?: string;
+    status?: TripPatternStatus;
+    aimedStartTime?: string;
+    aimedEndTime?: string;
   };
 export type TripMetadata = Required<Types.TripsQuery>['trip']['metadata'];
 export type Leg =
-  Required<Types.TripsQuery>['trip']['tripPatterns'][0]['legs'][0];
+  Required<Types.TripsQuery>['trip']['tripPatterns'][0]['legs'][0] & {
+    isStale?: boolean;
+  };
 export type Line = Required<
   Required<Types.TripsQuery>['trip']['tripPatterns'][0]['legs'][0]
 >['line'];

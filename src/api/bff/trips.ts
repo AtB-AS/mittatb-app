@@ -123,6 +123,14 @@ export async function singleTripSearch(
   return await post<TripPattern>(url, {compressedQuery}, opts);
 }
 
+export async function refreshSingleTrip(
+  tripPattern: TripPattern,
+  opts?: AxiosRequestConfig,
+): Promise<TripPattern> {
+  const url = '/bff/v3/singleTrip';
+  return await post<TripPattern>(url, tripPattern, opts);
+}
+
 async function post<T>(
   url: string,
   query: any,
