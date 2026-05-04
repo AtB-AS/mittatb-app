@@ -486,10 +486,8 @@ const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
         leg.intermediateEstimatedCalls.map((call, index) => (
           <View key={call.quay.id ?? index} style={style.intermediateStop}>
             <TripLegDecoration color={legColor} hasCenter />
-            <TripRow>
-              <ThemeText typography="body__m__strong">
-                {call.quay.name}
-              </ThemeText>
+            <TripRow alignChildren="center" style={style.intermediateStopRow}>
+              <ThemeText>{call.quay.name}</ThemeText>
             </TripRow>
           </View>
         ))}
@@ -745,6 +743,9 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   flexBookingOptions: {
     paddingVertical: theme.spacing.medium / 2,
+  },
+  intermediateStopRow: {
+    minHeight: 60,
   },
   realtime: {
     flexDirection: 'row',
