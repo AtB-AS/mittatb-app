@@ -137,7 +137,6 @@ export const Trip: React.FC<TripProps> = ({
           <ThemeText typography="body__s" type="secondary" style={styles.date}>
             {formatToVerboseFullDate(tripPattern.expectedStartTime, language)}
           </ThemeText>
-          <Divider />
         </>
       )}
       {shortWaitTime && (
