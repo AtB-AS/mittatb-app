@@ -29,7 +29,8 @@ import {
   useIsBonusActiveForUser,
 } from '@atb/modules/bonus';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {Vehicle} from '@atb/api/types/mobility';
+import {ShmoPricingPlan, Vehicle} from '@atb/api/types/mobility';
+import {PriceAdjustmentType} from '@atb-as/config-specs/lib/mobility';
 import {VehicleCard} from '../VehicleCard';
 import {PriceDetailsCard} from '../PriceDetailsCard';
 import {useOperators} from '../../use-operators';
@@ -57,6 +58,10 @@ type Props = {
   selectPaymentMethod: () => void;
   startOnboardingCallback: () => void;
   isStationBasedBooking: boolean;
+  navigateToPricingDetails: (
+    pricingPlan: ShmoPricingPlan,
+    priceAdjustments: PriceAdjustmentType[] | undefined,
+  ) => void;
 };
 export const BicycleSheet = ({
   vehicleId: id,
@@ -69,6 +74,7 @@ export const BicycleSheet = ({
   selectPaymentMethod,
   startOnboardingCallback,
   isStationBasedBooking,
+  navigateToPricingDetails,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -178,6 +184,7 @@ export const BicycleSheet = ({
               pricingPlan={vehicle.pricingPlan}
               priceAdjustments={priceAdjustments}
               systemId={vehicle.system.id}
+              onNavigatePricingDetails={navigateToPricingDetails}
             />
           </View>
 

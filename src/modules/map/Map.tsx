@@ -90,6 +90,7 @@ export const Map = (props: MapProps) => {
     navigateToScanQrCode,
     navigateToLogin,
     navigateToPaymentMethods,
+    navigateToPricingDetails,
   } = props;
 
   const {
@@ -527,6 +528,7 @@ export const Map = (props: MapProps) => {
         navigateToScanQrCode={navigateToScanQrCode}
         navigateToLogin={navigateToLogin}
         navigateToPaymentMethods={navigateToPaymentMethods}
+        navigateToPricingDetails={navigateToPricingDetails}
         locationArrowOnPress={locationArrowOnPress}
       />
       {!!isMapTilePreloadingEnabled && (

@@ -31,7 +31,8 @@ import {
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
-import {Vehicle} from '@atb/api/types/mobility';
+import {ShmoPricingPlan, Vehicle} from '@atb/api/types/mobility';
+import {PriceAdjustmentType} from '@atb-as/config-specs/lib/mobility';
 import {PriceDetailsCard} from '../PriceDetailsCard';
 import {Loading} from '@atb/components/loading';
 import {SupportButton} from '../SupportButton';
@@ -50,6 +51,10 @@ type Props = {
   navigateToSupport: (params: ShmoHelpParams) => void;
   navigateToLogin: () => void;
   navigateToScanQrCode: () => void;
+  navigateToPricingDetails: (
+    pricingPlan: ShmoPricingPlan,
+    priceAdjustments: PriceAdjustmentType[] | undefined,
+  ) => void;
 };
 
 export const ScooterSheet = ({
@@ -63,6 +68,7 @@ export const ScooterSheet = ({
   navigateToSupport,
   navigateToLogin,
   navigateToScanQrCode,
+  navigateToPricingDetails,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -163,6 +169,7 @@ export const ScooterSheet = ({
               pricingPlan={vehicle.pricingPlan}
               priceAdjustments={priceAdjustments}
               systemId={vehicle.system.id}
+              onNavigatePricingDetails={navigateToPricingDetails}
             />
           </View>
 
