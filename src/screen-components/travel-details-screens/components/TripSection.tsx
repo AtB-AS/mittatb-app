@@ -306,8 +306,10 @@ export const TripSection: React.FC<TripSectionProps> = ({
               (isFlexible
                 ? screenReaderPause +
                   t(TripDetailsTexts.flexibleTransport.onDemandTransportLabel)
-                : '')
+                : '') +
+              (realtimeText ? screenReaderPause + realtimeText : '')
             }
+            accessibilityHint={t(TripDetailsTexts.trip.leg.transport.a11yHint)}
             onPress={() => handleDeparturePress(leg)}
           >
             {leg.transportSubmode === TransportSubmode.NightBus && (
@@ -411,22 +413,27 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         ) : null}
         {realtimeText && (
-          <TripRow>
-            <View style={style.realtime}>
-              <ThemeIcon
-                svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
-                size="xSmall"
-                style={style.realtimeIcon}
-              />
-              <ThemeText
-                style={style.realtimeText}
-                typography="body__s"
-                type="secondary"
-              >
-                {realtimeText}
-              </ThemeText>
-            </View>
-          </TripRow>
+          <View
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+          >
+            <TripRow>
+              <View style={style.realtime}>
+                <ThemeIcon
+                  svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
+                  size="xSmall"
+                  style={style.realtimeIcon}
+                />
+                <ThemeText
+                  style={style.realtimeText}
+                  typography="body__s"
+                  type="secondary"
+                >
+                  {realtimeText}
+                </ThemeText>
+              </View>
+            </TripRow>
+          </View>
         )}
         {leg.intermediateEstimatedCalls.length > 0 && (
           <IntermediateInfo leg={leg} testID={testID} />
