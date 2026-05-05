@@ -21,11 +21,10 @@ import {CarPreviews} from './CarPreviews';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {MobilityStat} from './MobilityStat';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {
-  findRelevantBonusProduct,
   PayWithBonusPointsCheckbox,
   useIsBonusActiveForUser,
+  useRelevantBonusProduct,
 } from '@atb/modules/bonus';
 import {
   BottomSheetHeaderType,
@@ -68,12 +67,7 @@ export const CarSharingStationBottomSheet = ({
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
-  const {bonusProducts} = useFirestoreConfigurationContext();
-  const bonusProduct = findRelevantBonusProduct(
-    bonusProducts,
-    operatorId,
-    FormFactor.Car,
-  );
+  const bonusProduct = useRelevantBonusProduct(operatorId, FormFactor.Car);
 
   const {logEvent} = useAnalyticsContext();
 
@@ -145,7 +139,7 @@ export const CarSharingStationBottomSheet = ({
                   </View>
                 </GenericSectionItem>
               </Section>
-              {!!isBonusActiveForUser && bonusProduct && (
+              {isBonusActiveForUser && !!bonusProduct && (
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
                   operatorName={operatorName}

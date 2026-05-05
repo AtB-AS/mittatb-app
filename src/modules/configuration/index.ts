@@ -3,7 +3,6 @@ export {
   FirestoreConfigurationContextProvider,
 } from './FirestoreConfigurationContext';
 export type {
-  BonusProductType,
   CityZone,
   FareProductTypeConfig,
   FirestoreConfigStatus,

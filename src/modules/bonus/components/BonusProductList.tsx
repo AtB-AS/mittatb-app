@@ -3,10 +3,8 @@ import {Pressable, View} from 'react-native';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {BonusStarFill} from './BonusStarFill';
-import {
-  BonusProductType,
-  useFirestoreConfigurationContext,
-} from '@atb/modules/configuration';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {BonusProductType} from '@atb/modules/bonus';
 import {
   BonusProgramTexts,
   getTextForLanguage,
@@ -94,9 +92,13 @@ export const BonusProductList = ({bonusProducts, onNavigateToMap}: Props) => {
                       .join(', ')}
                   </ThemeText>
                   <ThemeText typography="body__s" color="secondary">
-                    {mobilityOperators?.find(
-                      (op) => op.id === bonusProduct.operatorId,
-                    )?.name ?? bonusProduct.operatorId}
+                    {bonusProduct.operatorIds
+                      .map(
+                        (id) =>
+                          mobilityOperators?.find((op) => op.id === id)?.name ??
+                          id,
+                      )
+                      .join(', ')}
                   </ThemeText>
                 </View>
                 {onNavigateToMap && shouldShowMapButton(bonusProduct) && (
@@ -132,9 +134,7 @@ export const BonusProductList = ({bonusProducts, onNavigateToMap}: Props) => {
                   <ThemeText>{t(BonusProgramTexts.spend)}</ThemeText>
                   <ThemeIcon svg={BonusStarFill} size="small" />
                   <ThemeText>
-                    {t(
-                      BonusProgramTexts.amountPoints(bonusProduct.price.amount),
-                    )}
+                    {t(BonusProgramTexts.amountPoints(bonusProduct.price))}
                   </ThemeText>
                 </View>
                 <ThemeText
@@ -142,10 +142,7 @@ export const BonusProductList = ({bonusProducts, onNavigateToMap}: Props) => {
                   typography="body__s"
                   color="secondary"
                 >
-                  {getTextForLanguage(
-                    bonusProduct.productDescription.description,
-                    language,
-                  ) ?? ''}
+                  {getTextForLanguage(bonusProduct.description, language) ?? ''}
                 </ThemeText>
               </View>
             </GenericSectionItem>
