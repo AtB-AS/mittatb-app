@@ -17,7 +17,6 @@ import {
 import {Feature} from 'geojson';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Platform, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MapCameraConfig, getSlightlyRaisedMapPadding} from './MapConfig';
 import {MapPropertiesType, MapProps} from './types';
 
@@ -160,15 +159,11 @@ export const Map = (props: MapProps) => {
     vehicle?.vehicleType.id ?? activeShmoBooking?.asset.vehicleTypeId ?? null;
 
   const {theme} = useThemeContext();
-  const {top: safeAreaTop} = useSafeAreaInsets();
   const {isVisible: isBonusBalanceButtonVisible} =
     useIsBonusBalanceButtonVisible();
   const [bonusButtonHeight, setBonusButtonHeight] = useState(44);
   const compassOffsetTop = isBonusBalanceButtonVisible
-    ? Platform.select({android: safeAreaTop, default: 0}) +
-      theme.spacing.xSmall +
-      bonusButtonHeight +
-      theme.spacing.small
+    ? theme.spacing.xSmall + bonusButtonHeight + theme.spacing.small
     : 0;
   // Always including the vector sources avoids laggy transitions for iOS (but buggy on Android, so skipped there),
   // and tile requests are only sent when they are used anyway.
