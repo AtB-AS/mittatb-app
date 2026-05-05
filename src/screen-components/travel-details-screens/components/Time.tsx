@@ -50,7 +50,11 @@ export const Time: React.FC<{
             typography="body__xs"
             type="secondary"
             prefix={t(dictionary.travel.time.aimedPrefix)}
-            style={{textDecorationLine: 'line-through'}}
+            style={{
+              textDecorationLine: 'line-through',
+              position: 'absolute',
+              top: '100%',
+            }}
             testID="aimTime"
           >
             {scheduled}
