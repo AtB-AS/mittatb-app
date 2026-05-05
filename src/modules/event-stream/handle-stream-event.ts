@@ -8,7 +8,7 @@ import {languageGlobal} from '../locale';
 import {getBonusBalanceQueryKey} from '../bonus/queries/use-bonus-balance-query';
 import {ShmoBooking, ShmoBookingState} from '@atb/api/types/mobility';
 
-export const handleStreamEvent = async (
+export const handleStreamEvent = (
   streamEvent: StreamEvent,
   queryClient: QueryClient,
   userId: string | undefined,
@@ -34,7 +34,7 @@ export const handleStreamEvent = async (
         existingBooking?.state !== ShmoBookingState.FINISHED &&
         streamEvent.state === ShmoBookingState.FINISHED
       ) {
-        await handleFinishedBookingEvent(streamEvent.bookingId);
+        handleFinishedBookingEvent(streamEvent.bookingId);
       }
 
       queryClient.invalidateQueries({
