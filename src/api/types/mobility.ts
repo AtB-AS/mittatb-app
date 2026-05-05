@@ -103,7 +103,7 @@ const ShmoPricingPlanSchema = z.object({
 
 export type ShmoPricingPlan = z.infer<typeof ShmoPricingPlanSchema>;
 
-const FormFactorSchema = z.enum(
+export const FormFactorSchema = z.enum(
   Object.values(FormFactor) as [FormFactor, ...FormFactor[]],
 );
 
