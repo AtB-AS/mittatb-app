@@ -39,14 +39,13 @@ export const WaitSection: React.FC<WaitDetails> = (wait) => {
           />
         </TripRow>
       )}
-      <TripRow
-        rowLabel={
+      <TripRow>
+        <View style={style.waitLine}>
           <ThemeIcon svg={Time} color={legColor.secondary.background} />
-        }
-      >
-        <ThemeText typography="body__s" type="secondary">
-          {t(TripDetailsTexts.trip.leg.wait.label(waitTime))}
-        </ThemeText>
+          <ThemeText typography="body__s" type="secondary">
+            {t(TripDetailsTexts.trip.leg.wait.label(waitTime))}
+          </ThemeText>
+        </View>
       </TripRow>
     </View>
   );
@@ -55,5 +54,10 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   section: {
     flex: 1,
     marginBottom: theme.spacing.large,
+  },
+  waitLine: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.small,
   },
 }));
