@@ -2,70 +2,8 @@ import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations
 import {translation as _} from '../../commons';
 
 const TripDetailsTexts = {
-  header: {
-    titleFromTo: ({fromName, toName}: {fromName: string; toName: string}) =>
-      _(
-        `${fromName} → ${toName}`,
-        `${fromName} → ${toName}`,
-        `${fromName} → ${toName}`,
-      ),
-    titleFromToA11yLabel: ({
-      fromName,
-      toName,
-    }: {
-      fromName: string;
-      toName: string;
-    }) =>
-      _(
-        `Fra ${fromName} til ${toName}`,
-        `From ${fromName} to ${toName}`,
-        `Frå ${fromName} til ${toName}`,
-      ),
-    startEndTime: ({
-      startTime,
-      endTime,
-    }: {
-      startTime: string;
-      endTime: string;
-    }) =>
-      _(
-        `${startTime} - ${endTime}`,
-        `${startTime} - ${endTime}`,
-        `${startTime} - ${endTime}`,
-      ),
-    aimedStartEndTime: ({
-      startTime,
-      endTime,
-    }: {
-      startTime: string;
-      endTime: string;
-    }) =>
-      _(
-        `Opprinnelig ${startTime} - ${endTime}`,
-        `Originally ${startTime} - ${endTime}`,
-        `Opphavleg ${startTime} - ${endTime}`,
-      ),
-    startEndTimeA11yLabel: ({
-      startTime,
-      endTime,
-    }: {
-      startTime: string;
-      endTime: string;
-    }) =>
-      _(
-        `Varighet: Fra ${startTime} til ${endTime}`,
-        `Duration: From ${startTime} to ${endTime}`,
-        `Varigheit: Frå ${startTime} til ${endTime}`,
-      ),
-  },
   trip: {
     leg: {
-      a11yHelper: (stepNumber: number, travelMode: string) =>
-        _(
-          `Steg ${stepNumber}, ${travelMode}`,
-          `Step ${stepNumber}, ${travelMode}`,
-          `Steg ${stepNumber}, ${travelMode}`,
-        ),
       lastPassedStop: (quayName: string, time: string) =>
         _(
           `Passerte ${quayName} kl. ${time}`,
@@ -204,6 +142,12 @@ const TripDetailsTexts = {
             `Sykle i ${duration}`,
             `Ride for ${duration}`,
             `Sykle i ${duration}`,
+          ),
+        labelWithDistance: (duration: string, distance: string) =>
+          _(
+            `Sykle i ${duration} (${distance})`,
+            `Ride for ${duration} (${distance})`,
+            `Sykle i ${duration} (${distance})`,
           ),
         a11yLabel: {
           base: (
