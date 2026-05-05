@@ -1,6 +1,6 @@
 import {ExperimentalFeature} from '@atb/modules/native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {useTicketingContext} from '../ticketing/TicketingContext';
+import {useTicketingContext} from '@atb/modules/ticketing';
 import type {FeatureToggleNames} from '@atb/modules/feature-toggles';
 
 /**
