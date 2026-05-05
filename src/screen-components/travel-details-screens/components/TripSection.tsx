@@ -154,6 +154,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const showQuayDescription =
     !!leg.fromPlace.quay?.description && !isWalkSection && !isBikeSection;
 
+  const walkA11yLabel = useWalkA11yLabel(leg, wait);
+  const bikeA11yLabel = useBikeA11yLabel(leg, wait);
+  const isWalkOrBike = isWalkSection || isBikeSection;
+  const fromRowAbsorbsLegA11y = isWalkOrBike && showFrom;
+
   const sectionOutput = (
     <>
       <View style={style.tripSection} testID={testID}>
@@ -165,17 +170,23 @@ export const TripSection: React.FC<TripSectionProps> = ({
         {showFrom && (
           <TripRow
             alignChildren="flex-start"
-            accessibilityLabel={getStopRowA11yTranslated(
-              'start',
-              getPlaceName(leg.fromPlace) +
-                (showQuayDescription
-                  ? ` ${leg.fromPlace.quay?.description}`
-                  : ''),
-              startTimes,
-              timesAreApproximations,
-              language,
-              t,
-            )}
+            accessibilityLabel={
+              fromRowAbsorbsLegA11y
+                ? isWalkSection
+                  ? walkA11yLabel
+                  : bikeA11yLabel
+                : getStopRowA11yTranslated(
+                    'start',
+                    getPlaceName(leg.fromPlace) +
+                      (showQuayDescription
+                        ? ` ${leg.fromPlace.quay?.description}`
+                        : ''),
+                    startTimes,
+                    timesAreApproximations,
+                    language,
+                    t,
+                  )
+            }
             rowLabel={
               <Time
                 timeValues={startTimes}
@@ -183,7 +194,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 timeIsApproximation={timesAreApproximations}
               />
             }
-            onPress={() => handleQuayPress(leg.fromPlace.quay)}
+            onPress={
+              isWalkOrBike
+                ? undefined
+                : () => handleQuayPress(leg.fromPlace.quay)
+            }
             testID={`${testID}FromPlace`}
           >
             <ThemeText
@@ -204,9 +219,23 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {isWalkSection ? (
-          <WalkSection leg={leg} wait={wait} />
+          <View
+            accessibilityElementsHidden={fromRowAbsorbsLegA11y}
+            importantForAccessibility={
+              fromRowAbsorbsLegA11y ? 'no-hide-descendants' : 'auto'
+            }
+          >
+            <WalkSection leg={leg} wait={wait} />
+          </View>
         ) : isBikeSection ? (
-          <BikeSection leg={leg} wait={wait} />
+          <View
+            accessibilityElementsHidden={fromRowAbsorbsLegA11y}
+            importantForAccessibility={
+              fromRowAbsorbsLegA11y ? 'no-hide-descendants' : 'auto'
+            }
+          >
+            <BikeSection leg={leg} wait={wait} />
+          </View>
         ) : (
           <TripRow
             testID={`${testID}Mode`}
@@ -499,14 +528,8 @@ const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
     </>
   );
 };
-type WalkSectionProps = {
-  leg: Leg;
-  wait?: WaitDetails;
-};
-
-const WalkSection = ({leg, wait}: WalkSectionProps) => {
+function useWalkA11yLabel(leg: Leg, wait?: WaitDetails): string {
   const {t, language} = useTranslation();
-  const style = useSectionStyles();
   const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
   const humanizedDistance = useHumanizeDistance(leg.distance);
   const durationText = secondsToDuration(leg.duration ?? 0, language);
@@ -514,10 +537,10 @@ const WalkSection = ({leg, wait}: WalkSectionProps) => {
   const fromPlace = getPlaceName(leg.fromPlace);
   const toPlace = getPlaceName(leg.toPlace);
 
-  const a11yParts: string[] = [];
+  const parts: string[] = [];
 
   if (isWalkTimeOfSignificance) {
-    a11yParts.push(
+    parts.push(
       t(
         TripDetailsTexts.trip.leg.walk.a11yLabel.base(
           time,
@@ -528,7 +551,7 @@ const WalkSection = ({leg, wait}: WalkSectionProps) => {
       ),
     );
   } else {
-    a11yParts.push(
+    parts.push(
       t(
         TripDetailsTexts.trip.leg.walk.a11yLabel.baseShortWalk(
           time,
@@ -540,13 +563,13 @@ const WalkSection = ({leg, wait}: WalkSectionProps) => {
   }
 
   if (humanizedDistance) {
-    a11yParts.push(
+    parts.push(
       t(TripDetailsTexts.trip.leg.walk.a11yLabel.distance(humanizedDistance)),
     );
   }
 
   if (wait?.mustWaitForNextLeg && significantWaitTime(wait.waitTimeInSeconds)) {
-    a11yParts.push(
+    parts.push(
       t(
         TripDetailsTexts.trip.leg.walk.a11yLabel.waitTime(
           secondsToDuration(wait.waitTimeInSeconds, language),
@@ -555,8 +578,64 @@ const WalkSection = ({leg, wait}: WalkSectionProps) => {
     );
   }
 
+  return parts.join('. ') + '.';
+}
+
+function useBikeA11yLabel(leg: Leg, wait?: WaitDetails): string {
+  const {t, language} = useTranslation();
+  const durationText = secondsToDuration(leg.duration ?? 0, language);
+  const time = formatToClock(leg.expectedStartTime, language, 'floor');
+  const fromPlace = getPlaceName(leg.fromPlace);
+  const toPlace = getPlaceName(leg.toPlace);
+  const humanizedDistance = useHumanizeDistance(leg.distance);
+
+  const parts: string[] = [
+    t(
+      TripDetailsTexts.trip.leg.bicycle.a11yLabel.base(
+        time,
+        durationText,
+        fromPlace,
+        toPlace,
+      ),
+    ),
+  ];
+
+  if (humanizedDistance) {
+    parts.push(
+      t(
+        TripDetailsTexts.trip.leg.bicycle.a11yLabel.distance(humanizedDistance),
+      ),
+    );
+  }
+
+  if (wait?.mustWaitForNextLeg && significantWaitTime(wait.waitTimeInSeconds)) {
+    parts.push(
+      t(
+        TripDetailsTexts.trip.leg.bicycle.a11yLabel.waitTime(
+          secondsToDuration(wait.waitTimeInSeconds, language),
+        ),
+      ),
+    );
+  }
+
+  return parts.join('. ') + '.';
+}
+
+type WalkSectionProps = {
+  leg: Leg;
+  wait?: WaitDetails;
+};
+
+const WalkSection = ({leg, wait}: WalkSectionProps) => {
+  const {t, language} = useTranslation();
+  const style = useSectionStyles();
+  const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
+  const humanizedDistance = useHumanizeDistance(leg.distance);
+  const durationText = secondsToDuration(leg.duration ?? 0, language);
+  const a11yLabel = useWalkA11yLabel(leg, wait);
+
   return (
-    <TripRow testID="footLeg" accessibilityLabel={a11yParts.join('. ') + '.'}>
+    <TripRow testID="footLeg" accessibilityLabel={a11yLabel}>
       <View style={style.transportLine}>
         <TransportationIconBox
           mode={leg.mode}
@@ -578,6 +657,7 @@ const WalkSection = ({leg, wait}: WalkSectionProps) => {
     </TripRow>
   );
 };
+
 type BikeSectionProps = {
   leg: Leg;
   wait?: WaitDetails;
@@ -587,49 +667,25 @@ const BikeSection = ({leg, wait}: BikeSectionProps) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
   const durationText = secondsToDuration(leg.duration ?? 0, language);
-  const time = formatToClock(leg.expectedStartTime, language, 'floor');
-  const fromPlace = getPlaceName(leg.fromPlace);
-  const toPlace = getPlaceName(leg.toPlace);
   const humanizedDistance = useHumanizeDistance(leg.distance);
-
-  const a11yParts: string[] = [
-    t(
-      TripDetailsTexts.trip.leg.bicycle.a11yLabel.base(
-        time,
-        durationText,
-        fromPlace,
-        toPlace,
-      ),
-    ),
-  ];
-
-  if (humanizedDistance) {
-    a11yParts.push(
-      t(
-        TripDetailsTexts.trip.leg.bicycle.a11yLabel.distance(humanizedDistance),
-      ),
-    );
-  }
-
-  if (wait?.mustWaitForNextLeg && significantWaitTime(wait.waitTimeInSeconds)) {
-    a11yParts.push(
-      t(
-        TripDetailsTexts.trip.leg.bicycle.a11yLabel.waitTime(
-          secondsToDuration(wait.waitTimeInSeconds, language),
-        ),
-      ),
-    );
-  }
+  const a11yLabel = useBikeA11yLabel(leg, wait);
 
   return (
-    <TripRow testID="bikeLeg" accessibilityLabel={a11yParts.join('. ') + '.'}>
+    <TripRow testID="bikeLeg" accessibilityLabel={a11yLabel}>
       <View style={style.transportLine}>
         <TransportationIconBox
           mode={leg.mode}
           subMode={leg.line?.transportSubmode}
         />
         <ThemeText typography="body__s" color="secondary">
-          {t(TripDetailsTexts.trip.leg.bicycle.label(durationText))}
+          {humanizedDistance
+            ? t(
+                TripDetailsTexts.trip.leg.bicycle.labelWithDistance(
+                  durationText,
+                  humanizedDistance,
+                ),
+              )
+            : t(TripDetailsTexts.trip.leg.bicycle.label(durationText))}
         </ThemeText>
       </View>
     </TripRow>
@@ -812,12 +868,6 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   tripSection: {
     flex: 1,
     marginBottom: theme.spacing.large,
-  },
-  a11yHelper: {
-    position: 'absolute',
-    top: -theme.spacing.medium,
-    left: 0,
-    width: '100%',
   },
   transportLine: {
     flexDirection: 'row',
