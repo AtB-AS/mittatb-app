@@ -9,12 +9,7 @@ import {
 } from '../auth';
 import Bugsnag from '@bugsnag/react-native';
 import {handleStreamEvent} from './handle-stream-event';
-import {
-  StreamEventLog,
-  StreamEvent,
-  StreamEventSchema,
-  EventKind,
-} from './types';
+import {StreamEventLog, StreamEvent, StreamEventSchema} from './types';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {jsonStringToObject} from '@atb/utils/object';
 import {MapStateActionType, useMapContext} from '../map';
@@ -74,7 +69,6 @@ export const useSetupEventStream = () => {
         },
         handleFinishedBookingEvent,
       );
-
     },
     [
       addToEventLog,
