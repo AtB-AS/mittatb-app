@@ -12,7 +12,11 @@ import {
   TripDetailsTexts,
   useTranslation,
 } from '@atb/translations';
-import {formatToClock, secondsToDuration} from '@atb/utils/date';
+import {
+  formatToClock,
+  secondsToDuration,
+  secondsToDurationShort,
+} from '@atb/utils/date';
 import {
   getQuayName,
   getTranslatedModeName,
@@ -483,7 +487,7 @@ const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
           text={t(
             TripDetailsTexts.trip.leg.intermediateStops.label(
               numberOfIntermediateCalls,
-              secondsToDuration(leg.duration, language),
+              secondsToDurationShort(leg.duration, language),
             ),
           )}
           onPress={toggleExpanded}
