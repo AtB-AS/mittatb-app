@@ -16,6 +16,7 @@ export const CounterIconBox = ({
   size = 'normal',
   spacing = 'compact',
   style,
+  rounded,
   notification,
 }: {
   count: number;
@@ -23,6 +24,7 @@ export const CounterIconBox = ({
   size?: keyof Theme['icon']['size'];
   spacing?: 'compact' | 'standard';
   style?: StyleProp<ViewStyle>;
+  rounded?: boolean;
   notification?: (props: SvgProps) => React.JSX.Element;
 }) => {
   const styles = useStyles();
@@ -44,7 +46,9 @@ export const CounterIconBox = ({
               {
                 padding: basePadding,
                 paddingRight: basePadding + extraPaddingRight,
-                borderRadius: getIconBoxBorderRadius(size, theme),
+                borderRadius: rounded
+                  ? theme.border.radius.circle
+                  : getIconBoxBorderRadius(size, theme),
               },
               style,
             ]}

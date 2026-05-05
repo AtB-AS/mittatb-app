@@ -11,7 +11,7 @@ import {
 import {LocationArrow} from './LocationArrow';
 import {ScanButton} from './ScanButton';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {View} from 'react-native';
+import {LayoutChangeEvent, View} from 'react-native';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {BonusBalanceButton} from '@atb/modules/bonus';
 
@@ -19,10 +19,12 @@ export const MapButtons = ({
   navigateToScanQrCode,
   locationArrowOnPress,
   navigateToBonusScreen,
+  onBonusButtonLayoutChange,
 }: {
   navigateToScanQrCode: () => void;
   locationArrowOnPress: () => void;
   navigateToBonusScreen?: () => void;
+  onBonusButtonLayoutChange?: (height: number) => void;
 }) => {
   const controlStyles = useControlPositionsStyle(false);
   const {mapState} = useMapContext();
@@ -53,7 +55,12 @@ export const MapButtons = ({
   return (
     <>
       {navigateToBonusScreen && (
-        <View style={controlStyles.topRightContainer}>
+        <View
+          style={controlStyles.topRightContainer}
+          onLayout={(e: LayoutChangeEvent) =>
+            onBonusButtonLayoutChange?.(e.nativeEvent.layout.height)
+          }
+        >
           <BonusBalanceButton onPress={navigateToBonusScreen} />
         </View>
       )}

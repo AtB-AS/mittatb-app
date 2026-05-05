@@ -25,7 +25,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacing.small,
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: theme.border.radius.regular,
+    borderRadius: theme.border.radius.circle,
   },
   walkDuration: {
     color: theme.color.foreground.dynamic.primary,

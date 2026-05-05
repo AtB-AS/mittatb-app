@@ -61,6 +61,7 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
                     spacing="standard"
                     textType="body__m__strong"
                     notification={overflowNotification}
+                    rounded
                   />
                 );
               }}

@@ -1,9 +1,8 @@
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {getTransportModeSvg} from '@atb/components/icon-box';
+import {TransportationIconBox} from '@atb/components/icon-box';
 import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import {DeparturesTexts} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
@@ -16,6 +15,10 @@ import {
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
+import {
+  TransportMode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type StopPlaceItemProps = {
   stopPlaceNode: NearestStopPlaceNode;
@@ -85,14 +88,19 @@ export const StopPlaceItem = ({
             )}
           </View>
           <SituationOrNoticeIcon situations={allQuaySituations} />
-          {place.transportMode?.map((mode) => (
-            <ThemeIcon
-              key={mode}
-              style={styles.stopPlaceIcon}
-              size="large"
-              svg={getTransportModeSvg(mode).svg}
-            />
-          ))}
+          <View style={styles.stopPlaceIcons}>
+            {place.transportMode?.map((mode) => (
+              <TransportationIconBox
+                key={mode}
+                mode={mode}
+                subMode={
+                  mode === TransportMode.Bus
+                    ? TransportSubmode.LocalBus
+                    : undefined
+                }
+              />
+            ))}
+          </View>
         </View>
       </GenericClickableSectionItem>
     </Section>
@@ -114,7 +122,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   stopDescription: {
     marginVertical: theme.spacing.xSmall,
   },
-  stopPlaceIcon: {
-    marginLeft: theme.spacing.medium,
+  stopPlaceIcons: {
+    flexDirection: 'row',
+    gap: theme.spacing.small,
   },
 }));

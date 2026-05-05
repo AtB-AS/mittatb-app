@@ -91,40 +91,70 @@ class TimeHelper {
     return today.toDateString().split(' ');
   }
 
+  // Anonymous Gregorian algorithm for Easter Sunday
+  private easterSunday(year: number): Date {
+    const a = year % 19;
+    const b = Math.floor(year / 100);
+    const c = year % 100;
+    const d = Math.floor(b / 4);
+    const e = b % 4;
+    const f = Math.floor((b + 8) / 25);
+    const g = Math.floor((b - f + 1) / 3);
+    const h = (19 * a + b - d - g + 15) % 30;
+    const i = Math.floor(c / 4);
+    const k = c % 4;
+    const l = (32 + 2 * e + 2 * i - h - k) % 7;
+    const m = Math.floor((a + 11 * h + 22 * l) / 451);
+    const month = Math.floor((h + l - 7 * m + 114) / 31);
+    const day = ((h + l - 7 * m + 114) % 31) + 1;
+    return new Date(Date.UTC(year, month - 1, day));
+  }
+
+  private addDays(date: Date, days: number): Date {
+    const d = new Date(date);
+    d.setUTCDate(d.getUTCDate() + days);
+    return d;
+  }
+
+  private toISODate(date: Date): string {
+    return date.toISOString().split('T')[0];
+  }
+
+  private norwegianHolidays(year: number): Set<string> {
+    const easter = this.easterSunday(year);
+    const holidays = new Set<string>();
+
+    // Fixed public holidays
+    holidays.add(`${year}-01-01`); // New Year's Day
+    holidays.add(`${year}-05-01`); // Labour Day
+    holidays.add(`${year}-05-17`); // Constitution Day
+    holidays.add(`${year}-12-25`); // Christmas Day
+    holidays.add(`${year}-12-26`); // Second Day of Christmas
+
+    // Easter-relative public holidays
+    holidays.add(this.toISODate(this.addDays(easter, -3))); // Maundy Thursday
+    holidays.add(this.toISODate(this.addDays(easter, -2))); // Good Friday
+    holidays.add(this.toISODate(easter)); // Easter Sunday
+    holidays.add(this.toISODate(this.addDays(easter, 1))); // Easter Monday
+    holidays.add(this.toISODate(this.addDays(easter, 39))); // Ascension Day
+    holidays.add(this.toISODate(this.addDays(easter, 50))); // Whit Monday
+
+    // Christmas/New Year period with weekend transit schedules
+    holidays.add(`${year}-12-24`);
+    for (let day = 27; day <= 31; day++) {
+      holidays.add(`${year}-12-${day}`);
+    }
+
+    return holidays;
+  }
+
   /**
-   * Check if a given date is a holiday
+   * Check if a given date is a Norwegian public holiday or has weekend transit schedules
    * @param testDate format YYYY-MM-DD
    */
   isHoliday = (testDate: string): boolean => {
-    // List of holidays, i.e. days with either routes as a Saturday or a Sunday
-    const holidays = [
-      '2024-12-24',
-      '2024-12-25',
-      '2024-12-26',
-      '2024-12-27',
-      '2024-12-28',
-      '2024-12-29',
-      '2024-12-30',
-      '2024-12-31',
-      '2025-01-01',
-      '2025-04-16',
-      '2025-04-17',
-      '2025-04-18',
-      '2025-04-21',
-      '2025-05-01',
-      '2025-05-29',
-      '2025-06-09',
-      '2025-12-24',
-      '2025-12-25',
-      '2025-12-26',
-      '2025-12-27',
-      '2025-12-28',
-      '2025-12-29',
-      '2025-12-30',
-      '2025-12-31',
-      '2026-01-01',
-    ];
-    return holidays.includes(testDate);
+    const year = parseInt(testDate.split('-')[0]);
+    return this.norwegianHolidays(year).has(testDate);
   };
 }
 

@@ -8,7 +8,6 @@ import {colorTheme} from '../mapbox-styles/mapbox-color-theme';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useAppVersionedConfigurableLink} from '@atb/utils/use-app-versioned-configurable-link';
-import {useGeofencingZonesLayers} from './use-geofencing-zones-layers';
 
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
@@ -16,6 +15,7 @@ export enum MapSlotLayerId {
   Vehicles = 'vehicles',
   Stations = 'stations',
   NSRItems = 'nsrItems',
+  GeofencingZonesIcons = 'GeofencingZonesIcons',
   SelectedFeature = 'selectedFeature',
 }
 
@@ -25,6 +25,7 @@ const slotLayerIds: MapSlotLayerId[] = [
   MapSlotLayerId.Vehicles,
   MapSlotLayerId.Stations,
   MapSlotLayerId.NSRItems,
+  MapSlotLayerId.GeofencingZonesIcons,
   MapSlotLayerId.SelectedFeature,
 ];
 const slotLayers = slotLayerIds.map((slotLayerId) => ({
@@ -34,11 +35,9 @@ const slotLayers = slotLayerIds.map((slotLayerId) => ({
 
 export const useMapboxJsonStyle: (
   includeVehiclesAndStationsVectorSource: boolean,
-  shouldShowGeofencingZonesLayers: boolean,
   includeBasemapStyle: boolean,
 ) => string | undefined = (
   includeVehiclesAndStationsVectorSource,
-  shouldShowGeofencingZonesLayers,
   includeBasemapStyle,
 ) => {
   const {themeName} = useThemeContext();
@@ -46,9 +45,6 @@ export const useMapboxJsonStyle: (
   const {isMap3dEnabled} = useFeatureTogglesContext();
 
   const mapboxSpriteUrl = useAppVersionedConfigurableLink('mapboxSpriteUrls');
-  const geofencingZonesLayers = useGeofencingZonesLayers(
-    shouldShowGeofencingZonesLayers,
-  );
 
   const {
     id: vehiclesAndStationsVectorSourceId,
@@ -78,11 +74,7 @@ export const useMapboxJsonStyle: (
       },
     }));
 
-    const themedLayersWithSlots = [
-      ...themedLayers,
-      ...geofencingZonesLayers,
-      ...slotLayers,
-    ];
+    const themedLayersWithSlots = [...themedLayers, ...slotLayers];
 
     const extendedSources: StyleJsonVectorSourcesObj = {
       ...themedStyle.sources,
@@ -100,7 +92,6 @@ export const useMapboxJsonStyle: (
       layers: themedLayersWithSlots,
     };
   }, [
-    geofencingZonesLayers,
     includeVehiclesAndStationsVectorSource,
     mapbox_nsr_tileset_id,
     mapbox_user_name,

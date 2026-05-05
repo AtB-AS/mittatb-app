@@ -5,10 +5,6 @@ import ElementHelper from '../utils/element.helper.ts';
 import TicketBuyPage from '../pageobjects/ticket.buy.page.ts';
 import PurchaseOverviewPage from '../pageobjects/purchase.overview.page.ts';
 import PurchaseSummaryPage from '../pageobjects/purchase.summary.page.ts';
-import Config from '../conf/config.js';
-import MyProfilePage from '../pageobjects/profile.page.js';
-import AuthenticationPage from '../pageobjects/authentication.page.js';
-import {formatPhoneNumber} from '../utils/utils.js';
 import TokenPage from '../pageobjects/token.page.js';
 import TicketActivePage from '../pageobjects/ticket.active.page.js';
 import {performancetotal} from 'wdio-performancetotal-service';
@@ -18,36 +14,14 @@ import FrontPagePage from '../pageobjects/frontpage.page.js';
 import TicketFrontpagePage from '../pageobjects/ticket.frontpage.page.js';
 
 describe('Auth Ticket', () => {
-  const phoneNumber = Config.phoneNumber();
   let authorized = false;
   let hasMobileTokenOnThisDevice = false;
   let hasMobileTokenOnOtherDevice = false;
 
   before(async () => {
     await AppHelper.waitOnLoadingScreen();
-  });
-
-  it('should login', async () => {
-    try {
-      // Log in through the onboarding
-      await AuthenticationPage.loginWithPhone(phoneNumber);
-      await OnboardingPage.denyLocationInOnboarding();
-      await OnboardingPage.waitOnTokenOnboarding(false);
-      await ElementHelper.waitForElement('text', 'Travel');
-      await AppHelper.pause(2000);
-
-      // Verify
-      await NavigationHelper.tapMenu('profile');
-      await NavigationHelper.tapMenu('profile');
-      await ElementHelper.waitForElement('text', 'Profile');
-      expect(await MyProfilePage.loggedInWithInfo).toContain(
-        formatPhoneNumber(phoneNumber),
-      );
-      authorized = true;
-    } catch (errMsg) {
-      await AppHelper.screenshot('error_auth_login');
-      throw errMsg;
-    }
+    // Login
+    authorized = await OnboardingPage.loginThroughOnboarding();
   });
 
   // Check type of mobile token for use in the ticket details

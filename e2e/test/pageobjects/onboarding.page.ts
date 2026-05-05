@@ -1,6 +1,11 @@
 import ElementHelper from '../utils/element.helper.ts';
 import AppHelper from '../utils/app.helper.ts';
 import TokenPage from './token.page.js';
+import AuthenticationPage from "./authentication.page.js";
+import NavigationHelper from "../utils/navigation.helper.js";
+import MyProfilePage from "./profile.page.js";
+import {formatPhoneNumber} from "../utils/utils.js";
+import Config from "../conf/config.js";
 
 class OnboardingPage {
   /**
@@ -114,6 +119,42 @@ class OnboardingPage {
       await this.denyLocationInOnboarding();
     } catch (errMsg) {
       await AppHelper.screenshot(`error_${testName}_skipOnboarding`);
+      throw errMsg;
+    }
+  }
+
+  /**
+   * Login through the onboarding
+   */
+  async loginThroughOnboarding(): Promise<boolean> {
+    /*
+      // Log in through my profile
+      await NavigationHelper.tapMenu('profile');
+      await ElementHelper.waitForElement('text', 'Profile');
+      await MyProfilePage.login.click();
+      await AuthenticationPage.loginWithPhone(phoneNumber)
+      await ElementHelper.waitForElement('text', 'Travel');
+      await AppHelper.pause(2000);
+       */
+    try {
+      // Log in through the onboarding
+      await AuthenticationPage.loginWithPhone(Config.phoneNumber());
+      await this.denyLocationInOnboarding();
+      await this.waitOnTokenOnboarding(false);
+      await ElementHelper.waitForElement('text', 'Travel');
+      await AppHelper.pause(2000);
+
+      // Verify
+      await NavigationHelper.tapMenu('profile');
+      await NavigationHelper.tapMenu('profile');
+      await ElementHelper.waitForElement('text', 'Profile');
+      expect(await MyProfilePage.loggedInWithInfo).toContain(
+          formatPhoneNumber(Config.phoneNumber()),
+      );
+      // Successful login
+      return true
+    } catch (errMsg) {
+      await AppHelper.screenshot('error_auth_login');
       throw errMsg;
     }
   }

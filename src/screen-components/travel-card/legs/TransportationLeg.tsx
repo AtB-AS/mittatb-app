@@ -19,5 +19,6 @@ export const TransportationLeg = ({
     spacious={true}
     testID={`${leg.mode}Leg`}
     notification={notification}
+    rounded={true}
   />
 );
