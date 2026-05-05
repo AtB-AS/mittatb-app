@@ -17,6 +17,11 @@ const TripDetailsTexts = {
             `${modeName} line ${lineName}`,
             `${modeName} linje ${lineName}`,
           ),
+        a11yHint: _(
+          'Aktiver for å se detaljer om linjen',
+          'Activate to see line details',
+          'Aktiver for å sjå detaljar om linja',
+        ),
         a11yLabel: {
           base: (
             time: string,
