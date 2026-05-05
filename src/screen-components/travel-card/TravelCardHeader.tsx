@@ -13,14 +13,18 @@ import {differenceInMinutes} from 'date-fns';
 import {useTimeLabels} from './utils';
 import {useAccessibilityLabelContribution} from '@atb/modules/composite-accessibility';
 
+export type TravelCardHeaderSize = 'standard' | 'large';
+
 export const TravelCardHeader: React.FC<
   AccessibilityProps & {
     tripPattern: TripPattern;
+    size?: TravelCardHeaderSize;
     includeDayInfo?: boolean;
     includeFromToInfo?: boolean;
   }
 > = ({
   tripPattern,
+  size = 'standard',
   includeDayInfo = true,
   includeFromToInfo = true,
   ...accessibilityProps
@@ -85,9 +89,13 @@ export const TravelCardHeader: React.FC<
 
   return (
     <View style={styles.container} {...accessibilityProps}>
-      <View style={styles.header}>
+      <View
+        style={[styles.header, size === 'large' && {alignItems: 'baseline'}]}
+      >
         <View style={styles.timeContainer}>
-          <ThemeText typography="body__m__strong">
+          <ThemeText
+            typography={size === 'large' ? 'heading__l' : 'body__m__strong'}
+          >
             {isInPast
               ? t(TravelCardTexts.header.pastTime)
               : `${expectedStartTimeLabel} - ${expectedEndTimeLabel}`}
