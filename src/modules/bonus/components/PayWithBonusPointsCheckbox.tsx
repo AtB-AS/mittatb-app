@@ -114,14 +114,14 @@ export const PayWithBonusPointsCheckbox = ({
       )}
       {isChecked &&
         bonusProduct.productType === BonusProductTypeEnum.enum.VOUCHER && (
-        <MessageInfoBox
-          style={styles.infoMessage}
-          type="warning"
-          message={t(
-            BonusProgramTexts.log_in_operator_app_warning(operatorName),
-          )}
-        />
-      )}
+          <MessageInfoBox
+            style={styles.infoMessage}
+            type="warning"
+            message={t(
+              BonusProgramTexts.log_in_operator_app_warning(operatorName),
+            )}
+          />
+        )}
     </>
   );
 };

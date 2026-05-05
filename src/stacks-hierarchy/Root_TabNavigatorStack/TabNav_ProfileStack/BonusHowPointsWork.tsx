@@ -1,4 +1,8 @@
-import {GenericSectionItem, LinkSectionItem, Section} from '@atb/components/sections';
+import {
+  GenericSectionItem,
+  LinkSectionItem,
+  Section,
+} from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
@@ -7,11 +11,7 @@ import {
   ThemedBonusTransaction,
   ThemedTokenPhone,
 } from '@atb/theme/ThemedAssets';
-import {
-  BonusProgramTexts,
-  dictionary,
-  useTranslation,
-} from '@atb/translations';
+import {BonusProgramTexts, dictionary, useTranslation} from '@atb/translations';
 import type {Language, TranslateFunction} from '@atb/translations';
 import {
   useActiveBonusProductsQuery,

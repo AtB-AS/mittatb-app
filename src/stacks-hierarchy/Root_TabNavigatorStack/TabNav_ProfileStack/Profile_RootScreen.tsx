@@ -46,7 +46,10 @@ import {
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {useIsBonusActiveForUser, useIsBonusEnrollable} from '@atb/modules/bonus';
+import {
+  useIsBonusActiveForUser,
+  useIsBonusEnrollable,
+} from '@atb/modules/bonus';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();

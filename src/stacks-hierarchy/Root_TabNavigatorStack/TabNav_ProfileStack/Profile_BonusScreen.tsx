@@ -4,7 +4,11 @@ import {
   Section,
 } from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {BonusProgramTexts, ProfileTexts, useTranslation} from '@atb/translations';
+import {
+  BonusProgramTexts,
+  ProfileTexts,
+  useTranslation,
+} from '@atb/translations';
 import React, {useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
