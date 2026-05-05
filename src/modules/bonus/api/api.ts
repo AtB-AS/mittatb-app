@@ -1,4 +1,5 @@
 import {client} from '@atb/api';
+import {BonusProductSchema, BonusProductType} from '../types';
 import {z} from 'zod';
 
 export const getBonusBalance = async (): Promise<number> => {
@@ -61,4 +62,13 @@ export const getProductPoints = async (): Promise<ProductPointsItem[]> => {
   });
 
   return ProductPointsResponseSchema.parse(response.data).data;
+};
+
+export const getActiveBonusProducts = async (): Promise<BonusProductType[]> => {
+  const response = await client.get(`/bonus/v2/products`, {
+    params: {isActive: true},
+    authWithIdToken: true,
+  });
+
+  return z.array(BonusProductSchema).parse(response.data);
 };

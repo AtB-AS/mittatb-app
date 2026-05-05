@@ -1,4 +1,8 @@
-import {BonusPriceTag, useBonusBalanceQuery} from '@atb/modules/bonus';
+import {
+  BonusPriceTag,
+  useBonusBalanceQuery,
+  BonusProductTypeEnum,
+} from '@atb/modules/bonus';
 import {Checkbox} from '@atb/components/checkbox';
 import {
   GenericClickableSectionItem,
@@ -6,7 +10,7 @@ import {
   SectionProps,
 } from '@atb/components/sections';
 import {ThemeText, screenReaderPause} from '@atb/components/text';
-import {BonusProductType} from '@atb/modules/configuration';
+import {BonusProductType} from '@atb/modules/bonus';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   BonusProgramTexts,
@@ -44,12 +48,12 @@ export const PayWithBonusPointsCheckbox = ({
     Number.isNaN(userBonusBalance) ||
     userBonusBalanceStatus === 'error';
 
-  const isDisabled = isError || userBonusBalance < bonusProduct.price.amount;
+  const isDisabled = isError || userBonusBalance < bonusProduct.price;
 
   const a11yLabel =
     (getTextForLanguage(bonusProduct.paymentDescription, language) ?? '') +
     screenReaderPause +
-    t(BonusProgramTexts.costA11yLabel(bonusProduct.price.amount)) +
+    t(BonusProgramTexts.costA11yLabel(bonusProduct.price)) +
     screenReaderPause +
     t(
       BonusProgramTexts.yourBonusBalanceA11yLabel(
@@ -95,7 +99,7 @@ export const PayWithBonusPointsCheckbox = ({
               </View>
             </View>
             <BonusPriceTag
-              amount={bonusProduct.price.amount}
+              amount={bonusProduct.price}
               style={{alignSelf: 'flex-start'}}
             />
           </View>
@@ -108,15 +112,16 @@ export const PayWithBonusPointsCheckbox = ({
           message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
         />
       )}
-      {isChecked && (
-        <MessageInfoBox
-          style={styles.infoMessage}
-          type="warning"
-          message={t(
-            BonusProgramTexts.log_in_operator_app_warning(operatorName),
-          )}
-        />
-      )}
+      {isChecked &&
+        bonusProduct.productType === BonusProductTypeEnum.enum.VOUCHER && (
+          <MessageInfoBox
+            style={styles.infoMessage}
+            type="warning"
+            message={t(
+              BonusProgramTexts.log_in_operator_app_warning(operatorName),
+            )}
+          />
+        )}
     </>
   );
 };

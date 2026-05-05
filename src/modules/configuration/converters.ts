@@ -9,7 +9,6 @@ import {
   FareProductGroupType,
   OperatorBenefitId,
   ScooterFaq,
-  BonusProduct,
   BonusTexts,
   ScooterConsentLine,
 } from './types';
@@ -203,24 +202,6 @@ export function mapToScooterConsentLines(scooterConsentLines?: any) {
       if (!parseResult.success) {
         console.warn(
           `mapToScooterConsentLines with id ${scooterConsentLine?.id} failed safeParsing:\n`,
-          parseResult.error,
-        );
-        return;
-      }
-      return parseResult.data;
-    })
-    .filter(isDefined);
-}
-
-export function mapToBonusProducts(bonusProducts?: any) {
-  if (!bonusProducts) return;
-  if (!Array.isArray(bonusProducts)) return;
-  return bonusProducts
-    .map((bonusProduct) => {
-      const parseResult = BonusProduct.safeParse(bonusProduct);
-      if (!parseResult.success) {
-        console.warn(
-          `mapToBonusProducts with id ${bonusProduct?.id} failed safeParsing:\n`,
           parseResult.error,
         );
         return;
