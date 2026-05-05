@@ -175,8 +175,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 ? isWalkSection
                   ? walkA11yLabel
                   : bikeA11yLabel
-                : getStopRowA11yTranslated(
-                    'start',
+                : getStartPlaceA11yLabel(
                     getPlaceName(leg.fromPlace) +
                       (showQuayDescription
                         ? ` ${leg.fromPlace.quay?.description}`
@@ -379,13 +378,18 @@ export const TripSection: React.FC<TripSectionProps> = ({
         {showTo && (
           <TripRow
             alignChildren="flex-end"
-            accessibilityLabel={getStopRowA11yTranslated(
-              'end',
-              getPlaceName(leg.toPlace),
-              endTimes,
-              timesAreApproximations,
-              language,
-              t,
+            accessibilityLabel={t(
+              TripDetailsTexts.trip.leg.end.a11yLabel(
+                getPlaceName(leg.toPlace),
+                formatToClock(
+                  endTimes.expectedTime ?? endTimes.aimedTime,
+                  language,
+                  'ceil',
+                ),
+              ),
+            )}
+            accessibilityHint={t(
+              TripDetailsTexts.trip.leg.end.a11yHint(getPlaceName(leg.toPlace)),
             )}
             rowLabel={
               <Time
@@ -823,8 +827,7 @@ export function mapLegToTimeValues(leg: Leg) {
   };
 }
 
-function getStopRowA11yTranslated(
-  key: 'start' | 'end',
+function getStartPlaceA11yLabel(
   placeName: string,
   values: TimeValues,
   timesAreApproximations: boolean,
@@ -842,7 +845,7 @@ function getStopRowA11yTranslated(
   switch (timeType) {
     case 'no-realtime':
       return t(
-        TripDetailsTexts.trip.leg[key].a11yLabel.noRealTime(
+        TripDetailsTexts.trip.leg.start.a11yLabel.noRealTime(
           placeName,
           aimedTime,
           timesAreApproximations,
@@ -850,11 +853,11 @@ function getStopRowA11yTranslated(
       );
     case 'no-significant-difference':
       return t(
-        TripDetailsTexts.trip.leg[key].a11yLabel.singularTime(placeName, time),
+        TripDetailsTexts.trip.leg.start.a11yLabel.singularTime(placeName, time),
       );
     case 'significant-difference':
       return t(
-        TripDetailsTexts.trip.leg[key].a11yLabel.realAndAimed(
+        TripDetailsTexts.trip.leg.start.a11yLabel.realAndAimed(
           placeName,
           time,
           aimedTime,
