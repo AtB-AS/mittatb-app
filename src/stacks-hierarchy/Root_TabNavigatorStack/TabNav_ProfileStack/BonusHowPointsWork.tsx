@@ -18,6 +18,7 @@ import {
   useProductPointsQuery,
   BonusProductTypeEnum,
 } from '@atb/modules/bonus';
+
 import type {ProductPointsItem} from '@atb/modules/bonus';
 import {
   useFirestoreConfigurationContext,
@@ -101,18 +102,20 @@ const VoucherOperatorLinks = () => {
     return (Platform.OS === 'ios' ? appUrl?.ios : appUrl?.android) ?? undefined;
   };
 
+  const uniqueVoucherOperatorIds = [
+    ...new Set(
+      (activeBonusProducts ?? [])
+        .filter(
+          (product) =>
+            product.productType === BonusProductTypeEnum.enum.VOUCHER,
+        )
+        .flatMap((product) => product.operatorIds),
+    ),
+  ];
+
   return (
     <>
-      {[
-        ...new Set(
-          activeBonusProducts
-            ?.filter(
-              (product) =>
-                product.productType === BonusProductTypeEnum.enum.VOUCHER,
-            )
-            .flatMap((product) => product.operatorIds) ?? [],
-        ),
-      ]
+      {uniqueVoucherOperatorIds
         .map((operatorId) => ({
           operatorId,
           appUrl: getPlatformAppUrl(operatorId),

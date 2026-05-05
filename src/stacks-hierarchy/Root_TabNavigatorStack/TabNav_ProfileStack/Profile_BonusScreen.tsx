@@ -35,6 +35,7 @@ import Intercom, {Space} from '@intercom/intercom-react-native';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {Button} from '@atb/components/button';
+import {Loading} from '@atb/components/loading';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
 import {useGetHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
@@ -59,7 +60,11 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
   const {authenticationType} = useAuthContext();
   const {enable_vipps_login} = useRemoteConfigContext();
   const isLoggedIn = authenticationType === 'phone';
-  const {data: activeBonusProducts} = useActiveBonusProductsQuery();
+  const {
+    data: activeBonusProducts,
+    isLoading: isBonusProductsLoading,
+    isError: isBonusProductsError,
+  } = useActiveBonusProductsQuery();
   const getHasReservationOrAvailableFareContract =
     useGetHasReservationOrAvailableFareContract();
 
@@ -210,7 +215,9 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.spendPoints.heading)}
         />
-        {activeBonusProducts?.length === 0 ? (
+        {isBonusProductsLoading ? (
+          <Loading size="large" />
+        ) : isBonusProductsError || activeBonusProducts?.length === 0 ? (
           <View style={styles.noAccount}>
             <MessageInfoBox
               type="error"

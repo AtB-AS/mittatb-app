@@ -3,12 +3,12 @@ import {getActiveBonusProducts} from '../api/api';
 import {useIsBonusActiveForUser} from '../use-is-bonus-active-for-user';
 import {useIsBonusEnrollable} from '../use-is-bonus-enrollable';
 
-export const useActiveBonusProductsQuery = () => {
+export const useActiveBonusProductsQuery = (enabled: boolean = true) => {
   const isBonusActiveForUser = useIsBonusActiveForUser();
   const isBonusEnrollable = useIsBonusEnrollable();
 
   return useQuery({
-    enabled: isBonusActiveForUser || isBonusEnrollable,
+    enabled: enabled && (isBonusActiveForUser || isBonusEnrollable),
     queryKey: ['activeBonusProducts'],
     queryFn: getActiveBonusProducts,
   });
