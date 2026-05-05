@@ -48,7 +48,7 @@ export const textTypeStyles = createTextTypeStyles(androidOrIos);
 
 const tripLegDetail = {
   labelWidth: 64,
-  decorationContainerWidth: 20,
+  decorationContainerWidth: 42,
   decorationLineEndWidth: 12,
   decorationLineWidth: 4,
 };
