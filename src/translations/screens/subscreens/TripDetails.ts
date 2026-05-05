@@ -170,6 +170,33 @@ const TripDetailsTexts = {
             `Walk for ${duration} (${distance})`,
             `Gå i ${duration} (${distance})`,
           ),
+        a11yLabel: {
+          base: (
+            time: string,
+            duration: string,
+            fromPlace: string,
+            toPlace: string,
+          ) =>
+            _(
+              `Klokken ${time}, gå i ${duration} fra ${fromPlace} til ${toPlace}`,
+              `At ${time}, walk for ${duration} from ${fromPlace} to ${toPlace}`,
+              `Klokka ${time}, gå i ${duration} frå ${fromPlace} til ${toPlace}`,
+            ),
+          baseShortWalk: (time: string, fromPlace: string, toPlace: string) =>
+            _(
+              `Klokken ${time}, gå i mindre enn ett minutt fra ${fromPlace} til ${toPlace}`,
+              `At ${time}, walk for less than a minute from ${fromPlace} to ${toPlace}`,
+              `Klokka ${time}, gå i mindre enn eitt minutt frå ${fromPlace} til ${toPlace}`,
+            ),
+          distance: (distance: string) =>
+            _(`${distance} gange`, `${distance} walking`, `${distance} gange`),
+          waitTime: (waitTime: string) =>
+            _(
+              `Vent i opptil ${waitTime}`,
+              `Wait for up to ${waitTime}`,
+              `Vent i opptil ${waitTime}`,
+            ),
+        },
       },
       bicycle: {
         label: (duration: string) =>
@@ -178,6 +205,31 @@ const TripDetailsTexts = {
             `Ride for ${duration}`,
             `Sykle i ${duration}`,
           ),
+        a11yLabel: {
+          base: (
+            time: string,
+            duration: string,
+            fromPlace: string,
+            toPlace: string,
+          ) =>
+            _(
+              `Klokken ${time}, sykle i ${duration} fra ${fromPlace} til ${toPlace}`,
+              `At ${time}, ride for ${duration} from ${fromPlace} to ${toPlace}`,
+              `Klokka ${time}, sykle i ${duration} frå ${fromPlace} til ${toPlace}`,
+            ),
+          distance: (distance: string) =>
+            _(
+              `${distance} sykling`,
+              `${distance} cycling`,
+              `${distance} sykling`,
+            ),
+          waitTime: (waitTime: string) =>
+            _(
+              `Vent i opptil ${waitTime}`,
+              `Wait for up to ${waitTime}`,
+              `Vent i opptil ${waitTime}`,
+            ),
+        },
       },
       shortWalk: _(
         `Gå i mindre enn ett minutt`,
