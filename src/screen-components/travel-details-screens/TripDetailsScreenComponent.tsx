@@ -3,7 +3,6 @@ import {Leg, Place, TripPattern} from '@atb/api/types/trips';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
-import {ThemeText} from '@atb/components/text';
 import {hasLegsWeCantSellTicketsFor} from '@atb/modules/operator-config';
 import {
   FareProductTypeConfig,
@@ -15,7 +14,7 @@ import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import {FareZoneWithMetadata} from '@atb/modules/fare-zones-selector';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
+import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/screen-components/travel-details-map-screen';
 import {ServiceJourneyDeparture} from './types';
 import {
@@ -24,11 +23,7 @@ import {
   getTripPatternAnalytics,
   type TripAnalytics,
 } from './utils';
-import {
-  formatToClock,
-  secondsBetween,
-  secondsToDuration,
-} from '@atb/utils/date';
+import {formatToClock, secondsBetween} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
 import React, {Ref, useCallback} from 'react';
@@ -45,6 +40,8 @@ import {getPosthogClientGlobal} from '@atb/modules/analytics';
 import {useScreenshotAware} from 'react-native-screenshot-aware';
 import {useTimeContext} from '@atb/modules/time';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
+import {TravelCardHeaderComponent as TravelCardHeader} from '@atb/screen-components/travel-card';
+import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -105,18 +102,7 @@ export const TripDetailsScreenComponent = ({
   );
 
   const purchaseSelection = usePurchaseSelectionFromTrip(updatedTripPattern);
-  const fromToNames = getFromToName(updatedTripPattern.legs);
-  const startEndTime = getStartEndTime(updatedTripPattern, language);
-  const aimedStartEndTime = getAimedStartEndTime(updatedTripPattern, language);
-  const durationText = secondsToDuration(
-    updatedTripPattern.duration ?? 0,
-    language,
-  );
-  const showAimedTimes =
-    aimedStartEndTime &&
-    (aimedStartEndTime.startTime !== startEndTime.startTime ||
-      aimedStartEndTime.endTime !== startEndTime.endTime);
-  const headerTimeText = t(TripDetailsTexts.header.startEndTime(startEndTime));
+  const headerTitle = `${formatToClock(updatedTripPattern.expectedStartTime, language, 'floor')} - ${formatToClock(updatedTripPattern.expectedEndTime, language, 'ceil')}`;
 
   const refreshControlProps = useManualRefreshControlProps({
     refreshing: isFetching,
@@ -129,48 +115,26 @@ export const TripDetailsScreenComponent = ({
         focusRef={focusRef}
         headerProps={{
           leftButton: {type: 'back'},
-          title: headerTimeText,
+          title: headerTitle,
           color: themeColor,
         }}
         refreshControlProps={refreshControlProps}
         contentColor={theme.color.background.neutral[1]}
         headerContent={(focusRef) => (
-          <View style={styles.headerContent}>
-            <View
-              style={styles.headerTimeRow}
-              accessible={true}
-              ref={focusRef}
-              accessibilityLabel={t(
-                TripDetailsTexts.header.startEndTimeA11yLabel(startEndTime),
-              )}
-            >
-              <ThemeText color={themeColor} typography="heading__l">
-                {headerTimeText}
-              </ThemeText>
-              <ThemeText color={themeColor} typography="body__m">
-                {durationText}
-              </ThemeText>
-            </View>
-            {showAimedTimes && aimedStartEndTime && (
-              <ThemeText typography="body__s" type='secondary' color={themeColor}>
-                {t(
-                  TripDetailsTexts.header.aimedStartEndTime(aimedStartEndTime),
-                )}
-              </ThemeText>
-            )}
-            {fromToNames && (
-              <ThemeText
-                color={themeColor}
-                typography="body__m"
-                style={styles.headerFromTo}
-                accessibilityLabel={t(
-                  TripDetailsTexts.header.titleFromToA11yLabel(fromToNames),
-                )}
+          <CompositeAccessibilityProvider order={['header']}>
+            {(accessibilityProps) => (
+              <View
+                ref={focusRef}
+                style={styles.headerContent}
+                {...accessibilityProps}
               >
-                {t(TripDetailsTexts.header.titleFromTo(fromToNames))}
-              </ThemeText>
+                <TravelCardHeader
+                  tripPattern={updatedTripPattern}
+                  size="large"
+                />
+              </View>
             )}
-          </View>
+          </CompositeAccessibilityProvider>
         )}
       >
         {updatedTripPattern && (
@@ -408,36 +372,6 @@ function getFareZoneWithMetadata(place: Place, fareZones: FareZone[]) {
   return fareZoneWithMetadata;
 }
 
-function getFromToName(legs: Leg[]) {
-  if (legs.length === 0) return;
-  const fromName = legs[0].fromPlace.name;
-  const toName = legs[legs.length - 1].toPlace.name;
-  if (!fromName || !toName) return;
-  return {fromName, toName};
-}
-
-function getStartEndTime(tripPattern: TripPattern, language: Language) {
-  const startTime = formatToClock(
-    tripPattern.expectedStartTime,
-    language,
-    'floor',
-  );
-  const endTime = formatToClock(tripPattern.expectedEndTime, language, 'ceil');
-  return {startTime, endTime};
-}
-
-function getAimedStartEndTime(tripPattern: TripPattern, language: Language) {
-  const legs = tripPattern.legs;
-  if (legs.length === 0) return;
-  const startTime = formatToClock(legs[0].aimedStartTime, language, 'floor');
-  const endTime = formatToClock(
-    legs[legs.length - 1].aimedEndTime,
-    language,
-    'ceil',
-  );
-  return {startTime, endTime};
-}
-
 function totalWaitTimeIsMoreThanAnHour(legs: Leg[]) {
   return (
     legs.reduce(
@@ -504,15 +438,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   headerContent: {
     marginHorizontal: theme.spacing.medium,
-    rowGap: theme.spacing.xSmall,
-  },
-  headerTimeRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'baseline',
-  },
-  headerFromTo: {
-    marginTop: theme.spacing.xSmall,
   },
   paddedContainer: {
     padding: theme.spacing.medium,
