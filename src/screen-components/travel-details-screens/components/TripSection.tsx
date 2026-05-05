@@ -1,8 +1,5 @@
 import {Leg, Place, Quay} from '@atb/api/types/trips';
-import {
-  screenReaderPause,
-  ThemeText,
-} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
@@ -50,6 +47,7 @@ import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
 import {useServiceJourneyPolylineQuery} from '../use-service-journey-polyline-query';
 import {useRealtimeText} from '../use-realtime-text';
 import {useNow} from '@atb/utils/use-now';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {BookingOptions} from './BookingOptions';
 import {FlexibleTransportBookingDetailsSheet} from './FlexibleTransportBookingDetailsSheet';
@@ -100,6 +98,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const {t, language} = useTranslation();
   const style = useSectionStyles();
   const {theme, themeName} = useThemeContext();
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const onCloseFocusRef = React.useRef(null);
   const bottomSheetModalRef = React.useRef<BottomSheetModal | null>(null);
 
@@ -314,7 +313,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {leg.authority && <AuthorityRow {...leg.authority} />}
-        {onPressShowLive && serviceJourneyPolyline ? (
+        {onPressShowLive && serviceJourneyPolyline && !isScreenReaderEnabled ? (
           <TripRow>
             <Button
               type="small"
