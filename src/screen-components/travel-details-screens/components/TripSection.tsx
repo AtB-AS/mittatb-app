@@ -1,6 +1,5 @@
 import {Leg, Place, Quay} from '@atb/api/types/trips';
 import {
-  AccessibleText,
   screenReaderPause,
   ThemeText,
 } from '@atb/components/text';
@@ -74,7 +73,6 @@ type TripSectionProps = {
   isLast?: boolean;
   wait?: WaitDetails;
   isFirst?: boolean;
-  step?: number;
   interchangeDetails?: InterchangeDetails;
   leg: Leg;
   testID?: string;
@@ -92,7 +90,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
   isLast,
   isFirst,
   wait,
-  step,
   interchangeDetails,
   leg,
   testID,
@@ -161,17 +158,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const sectionOutput = (
     <>
       <View style={style.tripSection} testID={testID}>
-        {!!step && leg.mode && (
-          <AccessibleText
-            style={style.a11yHelper}
-            prefix={t(
-              TripDetailsTexts.trip.leg.a11yHelper(
-                step,
-                t(getTranslatedModeName(leg.mode)),
-              ),
-            )}
-          />
-        )}
         <TripLegDecoration
           color={legColor}
           hasStart={showFrom}
@@ -219,9 +205,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {isWalkSection ? (
-          <WalkSection {...leg} />
+          <WalkSection leg={leg} wait={wait} />
         ) : isBikeSection ? (
-          <BikeSection {...leg} />
+          <BikeSection leg={leg} wait={wait} />
         ) : (
           <TripRow
             testID={`${testID}Mode`}
@@ -514,15 +500,64 @@ const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
     </>
   );
 };
-const WalkSection = (leg: Leg) => {
+type WalkSectionProps = {
+  leg: Leg;
+  wait?: WaitDetails;
+};
+
+const WalkSection = ({leg, wait}: WalkSectionProps) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
   const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
   const humanizedDistance = useHumanizeDistance(leg.distance);
   const durationText = secondsToDuration(leg.duration ?? 0, language);
+  const time = formatToClock(leg.expectedStartTime, language, 'floor');
+  const fromPlace = getPlaceName(leg.fromPlace);
+  const toPlace = getPlaceName(leg.toPlace);
+
+  const a11yParts: string[] = [];
+
+  if (isWalkTimeOfSignificance) {
+    a11yParts.push(
+      t(
+        TripDetailsTexts.trip.leg.walk.a11yLabel.base(
+          time,
+          durationText,
+          fromPlace,
+          toPlace,
+        ),
+      ),
+    );
+  } else {
+    a11yParts.push(
+      t(
+        TripDetailsTexts.trip.leg.walk.a11yLabel.baseShortWalk(
+          time,
+          fromPlace,
+          toPlace,
+        ),
+      ),
+    );
+  }
+
+  if (humanizedDistance) {
+    a11yParts.push(
+      t(TripDetailsTexts.trip.leg.walk.a11yLabel.distance(humanizedDistance)),
+    );
+  }
+
+  if (wait?.mustWaitForNextLeg && significantWaitTime(wait.waitTimeInSeconds)) {
+    a11yParts.push(
+      t(
+        TripDetailsTexts.trip.leg.walk.a11yLabel.waitTime(
+          secondsToDuration(wait.waitTimeInSeconds, language),
+        ),
+      ),
+    );
+  }
 
   return (
-    <TripRow testID="footLeg">
+    <TripRow testID="footLeg" accessibilityLabel={a11yParts.join('. ') + '.'}>
       <View style={style.transportLine}>
         <TransportationIconBox
           mode={leg.mode}
@@ -544,23 +579,58 @@ const WalkSection = (leg: Leg) => {
     </TripRow>
   );
 };
-const BikeSection = (leg: Leg) => {
+type BikeSectionProps = {
+  leg: Leg;
+  wait?: WaitDetails;
+};
+
+const BikeSection = ({leg, wait}: BikeSectionProps) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
+  const durationText = secondsToDuration(leg.duration ?? 0, language);
+  const time = formatToClock(leg.expectedStartTime, language, 'floor');
+  const fromPlace = getPlaceName(leg.fromPlace);
+  const toPlace = getPlaceName(leg.toPlace);
+  const humanizedDistance = useHumanizeDistance(leg.distance);
+
+  const a11yParts: string[] = [
+    t(
+      TripDetailsTexts.trip.leg.bicycle.a11yLabel.base(
+        time,
+        durationText,
+        fromPlace,
+        toPlace,
+      ),
+    ),
+  ];
+
+  if (humanizedDistance) {
+    a11yParts.push(
+      t(
+        TripDetailsTexts.trip.leg.bicycle.a11yLabel.distance(humanizedDistance),
+      ),
+    );
+  }
+
+  if (wait?.mustWaitForNextLeg && significantWaitTime(wait.waitTimeInSeconds)) {
+    a11yParts.push(
+      t(
+        TripDetailsTexts.trip.leg.bicycle.a11yLabel.waitTime(
+          secondsToDuration(wait.waitTimeInSeconds, language),
+        ),
+      ),
+    );
+  }
 
   return (
-    <TripRow testID="bikeLeg">
+    <TripRow testID="bikeLeg" accessibilityLabel={a11yParts.join('. ') + '.'}>
       <View style={style.transportLine}>
         <TransportationIconBox
           mode={leg.mode}
           subMode={leg.line?.transportSubmode}
         />
         <ThemeText typography="body__s" color="secondary">
-          {t(
-            TripDetailsTexts.trip.leg.bicycle.label(
-              secondsToDuration(leg.duration ?? 0, language),
-            ),
-          )}
+          {t(TripDetailsTexts.trip.leg.bicycle.label(durationText))}
         </ThemeText>
       </View>
     </TripRow>
