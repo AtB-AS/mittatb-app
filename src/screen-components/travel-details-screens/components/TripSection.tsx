@@ -6,12 +6,7 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {ServiceJourneyDeparture} from '../types';
 import {SituationMessageBox} from '@atb/modules/situations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {
-  Language,
-  TranslateFunction,
-  TripDetailsTexts,
-  useTranslation,
-} from '@atb/translations';
+import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {
   formatToClock,
   secondsToDuration,
@@ -67,7 +62,6 @@ import {
 import {animateNextChange} from '@atb/utils/animation';
 import {AUTHORITY} from '@env';
 import {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
-import {getRealtimeState, type TimeValues} from '@atb/utils/realtime';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {CancelledDepartureMessage} from './CancelledDepartureMessage';
 
@@ -161,6 +155,64 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const walkA11yLabel = useWalkA11yLabel(leg, wait);
   const bikeA11yLabel = useBikeA11yLabel(leg, wait);
   const isWalkOrBike = isWalkSection || isBikeSection;
+
+  const warningCount =
+    leg.situations.length +
+    (leg.transportSubmode === TransportSubmode.RailReplacementBus ? 1 : 0);
+  const errorCount = leg.fromEstimatedCall?.cancellation ? 1 : 0;
+  const noticeCount = notices.length;
+
+  const transportA11yLabel = (() => {
+    const parts: string[] = [
+      t(
+        TripDetailsTexts.trip.leg.transport.a11yLabel.base(
+          formatToClock(leg.expectedStartTime, language, 'floor'),
+          t(getTranslatedModeName(leg.mode, leg.line?.transportSubmode)),
+          getLineName(t, leg),
+          getPlaceName(leg.fromPlace),
+          getPlaceName(leg.toPlace),
+        ),
+      ),
+    ];
+
+    if (leg.intermediateEstimatedCalls.length > 0) {
+      parts.push(
+        t(
+          TripDetailsTexts.trip.leg.transport.a11yLabel.intermediateStops(
+            leg.intermediateEstimatedCalls.length,
+          ),
+        ),
+      );
+    }
+
+    parts.push(
+      t(
+        TripDetailsTexts.trip.leg.transport.a11yLabel.arrival(
+          getPlaceName(leg.toPlace),
+          formatToClock(leg.expectedEndTime, language, 'ceil'),
+        ),
+      ),
+    );
+
+    if (noticeCount > 0) {
+      parts.push(
+        t(TripDetailsTexts.trip.leg.transport.a11yLabel.notices(noticeCount)),
+      );
+    }
+    if (warningCount > 0) {
+      parts.push(
+        t(TripDetailsTexts.trip.leg.transport.a11yLabel.warnings(warningCount)),
+      );
+    }
+    if (errorCount > 0) {
+      parts.push(
+        t(TripDetailsTexts.trip.leg.transport.a11yLabel.errors(errorCount)),
+      );
+    }
+
+    return parts.join('. ') + '.';
+  })();
+
   const fromRowAbsorbsLegA11y = isWalkOrBike && showFrom;
 
   const sectionOutput = (
@@ -179,15 +231,15 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 ? isWalkSection
                   ? walkA11yLabel
                   : bikeA11yLabel
-                : getStartPlaceA11yLabel(
-                    getPlaceName(leg.fromPlace) +
-                      (showQuayDescription
-                        ? ` ${leg.fromPlace.quay?.description}`
-                        : ''),
-                    startTimes,
-                    timesAreApproximations,
-                    language,
-                    t,
+                : transportA11yLabel
+            }
+            accessibilityHint={
+              isWalkOrBike
+                ? undefined
+                : t(
+                    TripDetailsTexts.trip.leg.transport.a11yLabel.hint(
+                      getPlaceName(leg.fromPlace),
+                    ),
                   )
             }
             rowLabel={
@@ -829,46 +881,6 @@ export function mapLegToTimeValues(leg: Leg) {
       isRealtime: leg.realtime,
     },
   };
-}
-
-function getStartPlaceA11yLabel(
-  placeName: string,
-  values: TimeValues,
-  timesAreApproximations: boolean,
-  language: Language,
-  t: TranslateFunction,
-): string {
-  const timeType = getRealtimeState(values);
-  const time = formatToClock(
-    values.expectedTime ?? values.aimedTime,
-    language,
-    'floor',
-  );
-  const aimedTime = formatToClock(values.aimedTime, language, 'floor');
-
-  switch (timeType) {
-    case 'no-realtime':
-      return t(
-        TripDetailsTexts.trip.leg.start.a11yLabel.noRealTime(
-          placeName,
-          aimedTime,
-          timesAreApproximations,
-        ),
-      );
-    case 'no-significant-difference':
-      return t(
-        TripDetailsTexts.trip.leg.start.a11yLabel.singularTime(placeName, time),
-      );
-    case 'significant-difference':
-      return t(
-        TripDetailsTexts.trip.leg.start.a11yLabel.realAndAimed(
-          placeName,
-          time,
-          aimedTime,
-          timesAreApproximations,
-        ),
-      );
-  }
 }
 
 const useSectionStyles = StyleSheet.createThemeHook((theme) => ({

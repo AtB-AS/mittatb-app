@@ -10,49 +10,6 @@ const TripDetailsTexts = {
           `Passed ${quayName} at ${time}`,
           `Passerte ${quayName} kl. ${time}`,
         ),
-      start: {
-        a11yLabel: {
-          noRealTime: (
-            placeName: string,
-            aimedTime: string,
-            timeIsApproximation: boolean,
-          ) =>
-            _(
-              `Fra ${placeName},${
-                timeIsApproximation ? ' cirka' : ''
-              } klokken ${aimedTime}`,
-              `From ${placeName},${
-                timeIsApproximation ? ' circa' : ''
-              } time ${aimedTime}`,
-              `Frå ${placeName},${
-                timeIsApproximation ? ' cirka' : ''
-              } klokka ${aimedTime}`,
-            ),
-          singularTime: (placeName: string, time: string) =>
-            _(
-              `Fra ${placeName}, sanntid klokken ${time}`,
-              `From ${placeName}, realtime ${time}`,
-              `Frå ${placeName}, sanntid klokka ${time}`,
-            ),
-          realAndAimed: (
-            placeName: string,
-            realTime: string,
-            aimedTime: string,
-            timeIsApproximation: boolean,
-          ) =>
-            _(
-              `Fra ${placeName}, sanntid klokken ${realTime}. Rutetid klokken${
-                timeIsApproximation ? ' cirka' : ''
-              } ${aimedTime}.`,
-              `From ${placeName}, realtime ${realTime}. Route time${
-                timeIsApproximation ? ' circa' : ''
-              } ${aimedTime}.`,
-              `Frå ${placeName}, sanntid klokka ${realTime}. Rutetid klokka${
-                timeIsApproximation ? ' cirka' : ''
-              } ${aimedTime}.`,
-            ),
-        },
-      },
       transport: {
         a11ylabel: (modeName: string, lineName: string) =>
           _(
@@ -60,6 +17,58 @@ const TripDetailsTexts = {
             `${modeName} line ${lineName}`,
             `${modeName} linje ${lineName}`,
           ),
+        a11yLabel: {
+          base: (
+            time: string,
+            modeName: string,
+            lineName: string,
+            fromPlace: string,
+            toPlace: string,
+          ) =>
+            _(
+              `Klokken ${time}, ta ${modeName} ${lineName} fra ${fromPlace} til ${toPlace}`,
+              `At ${time}, take ${modeName} ${lineName} from ${fromPlace} to ${toPlace}`,
+              `Klokka ${time}, ta ${modeName} ${lineName} frå ${fromPlace} til ${toPlace}`,
+            ),
+          intermediateStops: (count: number) =>
+            _(
+              count === 1 ? `${count} mellomstopp` : `${count} mellomstopp`,
+              count === 1
+                ? `${count} intermediate stop`
+                : `${count} intermediate stops`,
+              count === 1 ? `${count} mellomstopp` : `${count} mellomstopp`,
+            ),
+          arrival: (toPlace: string, time: string) =>
+            _(
+              `Ankomst ${toPlace} klokken ${time}`,
+              `Arrival ${toPlace} at ${time}`,
+              `Framkomst ${toPlace} klokka ${time}`,
+            ),
+          notices: (count: number) =>
+            _(
+              count === 1 ? `${count} merknad` : `${count} merknader`,
+              count === 1 ? `${count} notice` : `${count} notices`,
+              count === 1 ? `${count} merknad` : `${count} merknader`,
+            ),
+          warnings: (count: number) =>
+            _(
+              count === 1 ? `${count} advarsel` : `${count} advarsler`,
+              count === 1 ? `${count} warning` : `${count} warnings`,
+              count === 1 ? `${count} åtvaring` : `${count} åtvaringar`,
+            ),
+          errors: (count: number) =>
+            _(
+              count === 1 ? `${count} feil` : `${count} feil`,
+              count === 1 ? `${count} error` : `${count} errors`,
+              count === 1 ? `${count} feil` : `${count} feil`,
+            ),
+          hint: (fromPlace: string) =>
+            _(
+              `Aktiver for å se alle avganger fra ${fromPlace}`,
+              `Activate to see all departures from ${fromPlace}`,
+              `Aktiver for å sjå alle avgangar frå ${fromPlace}`,
+            ),
+        },
       },
       buyTicketFrom: _(
         'Billett kan kjøpes fra',
