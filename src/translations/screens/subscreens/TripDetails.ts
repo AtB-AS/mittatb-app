@@ -192,30 +192,18 @@ const TripDetailsTexts = {
         },
       },
       end: {
-        a11yLabel: {
-          noRealTime: (placeName: string, aimedTime: string) =>
-            _(
-              `Avslutter på ${placeName}, ca. klokken ${aimedTime}`,
-              `Ending at ${placeName}, appr. time ${aimedTime}`,
-              `Avsluttar på ${placeName}, ca. klokka ${aimedTime}`,
-            ),
-          singularTime: (placeName: string, time: string) =>
-            _(
-              `Avslutter på ${placeName}, klokken ${time}`,
-              `Ending at ${placeName}, time ${time}`,
-              `Avsluttar på ${placeName}, klokka ${time}`,
-            ),
-          realAndAimed: (
-            placeName: string,
-            realTime: string,
-            aimedTime: string,
-          ) =>
-            _(
-              `Avslutter på ${placeName}, forventet tid klokken ${realTime}. Rutetid klokken ${aimedTime}.`,
-              `Ending at ${placeName}, ETA ${realTime}. Route time ${aimedTime}.`,
-              `Avsluttar på ${placeName}, forventa tid klokka ${realTime}. Rutetid klokka ${aimedTime}.`,
-            ),
-        },
+        a11yLabel: (placeName: string, time: string) =>
+          _(
+            `Ankomst ${placeName} klokken ${time}`,
+            `Arrival ${placeName} at ${time}`,
+            `Framkomst ${placeName} klokka ${time}`,
+          ),
+        a11yHint: (placeName: string) =>
+          _(
+            `Aktiver for å se alle avganger fra ${placeName}`,
+            `Activate to see all departures from ${placeName}`,
+            `Aktiver for å sjå alle avgangar frå ${placeName}`,
+          ),
       },
     },
     summary: {
