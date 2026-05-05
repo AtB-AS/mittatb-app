@@ -62,7 +62,7 @@ describe('getTripPatternStatus', () => {
     expect(result?.type).toBe('impossible');
   });
 
-  it('returns cancelled when any leg has fromEstimatedCall.cancellation', () => {
+  it('returns impossible when any leg has fromEstimatedCall.cancellation', () => {
     const result = getTripPatternStatus(
       makeTripPattern({
         legs: [
@@ -83,10 +83,10 @@ describe('getTripPatternStatus', () => {
       t,
       colors,
     );
-    expect(result?.type).toBe('cancelled');
+    expect(result?.type).toBe('impossible');
   });
 
-  it('returns cancelled over stale when both apply', () => {
+  it('returns impossible over stale when both apply', () => {
     const result = getTripPatternStatus(
       makeTripPattern({
         status: 'stale',
@@ -107,7 +107,7 @@ describe('getTripPatternStatus', () => {
       t,
       colors,
     );
-    expect(result?.type).toBe('cancelled');
+    expect(result?.type).toBe('impossible');
   });
 
   it('returns stale when status is stale', () => {
@@ -177,29 +177,5 @@ describe('getTripPatternStatus', () => {
       colors,
     );
     expect(result?.type).toBe('started');
-  });
-
-  it('prioritises cancelled over impossible', () => {
-    const result = getTripPatternStatus(
-      makeTripPattern({
-        status: 'impossible',
-        legs: [
-          makeLeg({
-            fromEstimatedCall: {
-              cancellation: true,
-              aimedDepartureTime: futureTime,
-              expectedDepartureTime: futureTime,
-              stopPositionInPattern: 0,
-              quay: {name: 'A'},
-              notices: [],
-              situations: [],
-            },
-          }),
-        ],
-      }),
-      t,
-      colors,
-    );
-    expect(result?.type).toBe('cancelled');
   });
 });

@@ -9,7 +9,6 @@ import {
   BookingRequired,
   Warning,
 } from '@atb/assets/svg/mono-icons/status';
-import SvgError from '@atb/assets/svg/color/icons/status/light/Error';
 import {Duration} from '@atb/assets/svg/mono-icons/time';
 import {isInTheFuture, isInThePast} from '@atb/utils/date';
 
@@ -24,15 +23,10 @@ export function getTripPatternStatus(
   t: TranslateFunction,
   colors: StatusColors,
 ): TripPatternStatus | undefined {
-  if (tripPattern.legs.some((leg) => leg.fromEstimatedCall?.cancellation)) {
-    return {
-      type: 'cancelled',
-      svg: SvgError,
-      color: colors.error,
-      text: t(TravelCardTexts.header.cancelled),
-    };
-  }
-  if (tripPattern.status === 'impossible') {
+  if (
+    tripPattern.status === 'impossible' ||
+    tripPattern.legs.some((l) => l.fromEstimatedCall?.cancellation)
+  ) {
     return {
       type: 'impossible',
       svg: Close,

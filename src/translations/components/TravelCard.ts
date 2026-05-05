@@ -67,7 +67,6 @@ const TravelCardTexts = {
       'Unable to update',
       'Kan ikkje oppdaterast',
     ),
-    cancelled: _('Innstilt', 'Cancelled', 'Innstilt'),
     requiresBooking: _(
       'Krever reservasjon',
       'Requires booking',
