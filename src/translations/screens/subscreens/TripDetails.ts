@@ -11,7 +11,7 @@ const TripDetailsTexts = {
           `Passerte ${quayName} kl. ${time}`,
         ),
       transport: {
-        a11ylabel: (modeName: string, lineName: string) =>
+        lineA11yLabel: (modeName: string, lineName: string) =>
           _(
             `${modeName} linje ${lineName}`,
             `${modeName} line ${lineName}`,
