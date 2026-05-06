@@ -16,7 +16,7 @@ export function useManualRefreshControlProps({
   const [isUserRefreshing, setIsUserRefreshing] = useState(false);
 
   useEffect(() => {
-    if (refreshing && isUserRefreshing) setIsUserRefreshing(false);
+    if (!refreshing && isUserRefreshing) setIsUserRefreshing(false);
   }, [refreshing, isUserRefreshing]);
 
   return {
