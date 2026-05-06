@@ -207,11 +207,11 @@ const TripDetailsTexts = {
             ),
           intermediateStops: (count: number) =>
             _(
-              count === 1 ? `${count} mellomstopp` : `${count} mellomstopp`,
+              `${count} mellomstopp`,
               count === 1
                 ? `${count} intermediate stop`
                 : `${count} intermediate stops`,
-              count === 1 ? `${count} mellomstopp` : `${count} mellomstopp`,
+              `${count} mellomstopp`,
             ),
           arrival: (toPlace: string, time: string) =>
             _(
