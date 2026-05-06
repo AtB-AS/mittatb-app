@@ -1,4 +1,4 @@
-import {Time} from '@atb/assets/svg/mono-icons/time';
+import {Time as TimeIcon} from '@atb/assets/svg/mono-icons/time';
 import {ThemeText} from '@atb/components/text';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
@@ -7,22 +7,17 @@ import {isShortWaitTime} from '@atb/modules/trip-patterns';
 import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
-import {TripLegDecoration} from './TripLegDecoration';
-import {DimensionOverrides, TripRow} from './TripRow';
+import {LegacyTripLegDecoration} from './TripLegDecoration';
+import {TripRow} from '../components/TripRow';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useTransportColor} from '@atb/utils/use-transport-color';
-
-const NEW_DIMENSIONS: DimensionOverrides = {
-  labelWidth: 64,
-  decorationContainerWidth: 42,
-};
 
 export type WaitDetails = {
   mustWaitForNextLeg: boolean;
   waitTimeInSeconds: number;
 };
 
-export const WaitSection: React.FC<WaitDetails> = (wait) => {
+export const LegacyWaitSection: React.FC<WaitDetails> = (wait) => {
   const style = useSectionStyles();
   const {t, language} = useTranslation();
   const waitTime = secondsToDuration(wait.waitTimeInSeconds, language);
@@ -31,27 +26,27 @@ export const WaitSection: React.FC<WaitDetails> = (wait) => {
 
   return (
     <View style={style.section}>
-      <TripLegDecoration
-        dimensionOverrides={NEW_DIMENSIONS}
+      <LegacyTripLegDecoration
         color={legColor.secondary.background}
         hasStart={false}
         hasEnd={false}
       />
       {shortWait && (
-        <TripRow dimensionOverrides={NEW_DIMENSIONS}>
+        <TripRow>
           <MessageInfoBox
             type="info"
             message={t(TripDetailsTexts.trip.leg.wait.messages.shortTime)}
           />
         </TripRow>
       )}
-      <TripRow dimensionOverrides={NEW_DIMENSIONS}>
-        <View style={style.waitLine}>
-          <ThemeIcon svg={Time} color={legColor.secondary.background} />
-          <ThemeText typography="body__s" type="secondary">
-            {t(TripDetailsTexts.trip.leg.wait.label(waitTime))}
-          </ThemeText>
-        </View>
+      <TripRow
+        rowLabel={
+          <ThemeIcon svg={TimeIcon} color={legColor.secondary.background} />
+        }
+      >
+        <ThemeText typography="body__s" color="secondary">
+          {t(TripDetailsTexts.trip.leg.wait.label(waitTime))}
+        </ThemeText>
       </TripRow>
     </View>
   );
@@ -60,10 +55,5 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   section: {
     flex: 1,
     marginBottom: theme.spacing.large,
-  },
-  waitLine: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.small,
   },
 }));

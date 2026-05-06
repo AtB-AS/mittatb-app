@@ -1,5 +1,5 @@
 import {MapCameraConfig, useMapViewConfig} from '@atb/modules/map';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
@@ -14,6 +14,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
+import {useNewTripDetailScreenEnabled} from '@atb/screen-components/travel-details-screens';
 
 export type MapProps = {
   serviceJourneyPolylines: ServiceJourneyPolyline[];
@@ -31,6 +32,8 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   onExpand,
 }) => {
   const {t} = useTranslation();
+  const {theme} = useThemeContext();
+  const isNewTripDetailScreen = useNewTripDetailScreenEnabled();
   const cameraRef = useRef<MapboxGL.Camera>(null);
 
   const features = useMemo(
@@ -94,7 +97,12 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
         </MapboxGL.MapView>
       </View>
       <NativeBlockButton
-        style={styles.button}
+        style={[
+          styles.button,
+          isNewTripDetailScreen && {
+            backgroundColor: theme.color.background.neutral[0].background,
+          },
+        ]}
         onPress={onExpand}
         accessibilityRole="button"
       >
@@ -117,7 +125,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: theme.spacing.medium,
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.background.neutral[1].background,
     borderBottomRightRadius: theme.border.radius.regular,
     borderBottomLeftRadius: theme.border.radius.regular,
   },

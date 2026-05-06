@@ -1,0 +1,1 @@
+export {LegacyTripDetailsScreenComponent} from './TripDetailsScreenContent';

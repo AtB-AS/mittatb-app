@@ -1,6 +1,7 @@
 export {CancelledDepartureMessage} from './components/CancelledDepartureMessage';
 export {DepartureDetailsScreenComponent} from './DepartureDetailsScreenComponent';
 export {TripDetailsScreenComponent} from './TripDetailsScreenComponent';
+export {useNewTripDetailScreenEnabled} from './use-new-trip-detail-screen-enabled';
 export {
   bookingStatusToMsgType,
   filterNotices,

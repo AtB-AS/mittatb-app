@@ -33,8 +33,13 @@ import {
 import {significantWaitTime} from '@atb/modules/trip-patterns';
 import {Time} from './Time';
 import {TripLegDecoration} from './TripLegDecoration';
-import {TripRow} from './TripRow';
+import {DimensionOverrides, TripRow} from './TripRow';
 import {BookingInfoBox} from './BookingInfoBox';
+
+const NEW_DIMENSIONS: DimensionOverrides = {
+  labelWidth: 64,
+  decorationContainerWidth: 42,
+};
 
 import {WaitDetails, WaitSection} from './WaitSection';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
@@ -220,12 +225,14 @@ export const TripSection: React.FC<TripSectionProps> = ({
     <>
       <View style={style.tripSection} testID={testID}>
         <TripLegDecoration
+          dimensionOverrides={NEW_DIMENSIONS}
           color={legColor}
           hasStart={showFrom}
           hasEnd={showTo}
         />
         {showFrom && (
           <TripRow
+            dimensionOverrides={NEW_DIMENSIONS}
             alignChildren="flex-start"
             accessibilityLabel={
               fromRowAbsorbsLegA11y
@@ -302,6 +309,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </View>
         ) : (
           <TripRow
+            dimensionOverrides={NEW_DIMENSIONS}
             testID={`${testID}Mode`}
             accessibilityLabel={
               t(
@@ -353,22 +361,22 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {leg.fromEstimatedCall?.cancellation && (
-          <TripRow>
+          <TripRow dimensionOverrides={NEW_DIMENSIONS}>
             <CancelledDepartureMessage />
           </TripRow>
         )}
         {leg.situations.map((situation) => (
-          <TripRow key={situation.id}>
+          <TripRow dimensionOverrides={NEW_DIMENSIONS} key={situation.id}>
             <SituationMessageBox situation={situation} />
           </TripRow>
         ))}
         {notices.map((notice) => (
-          <TripRow key={notice.id}>
+          <TripRow dimensionOverrides={NEW_DIMENSIONS} key={notice.id}>
             <MessageInfoBox type="info" message={notice.text} />
           </TripRow>
         ))}
         {bookingStatus !== 'none' && (
-          <TripRow accessible={false}>
+          <TripRow dimensionOverrides={NEW_DIMENSIONS} accessible={false}>
             <BookingInfoBox
               bookingArrangements={leg.bookingArrangements}
               aimedStartTime={leg.aimedStartTime}
@@ -391,14 +399,14 @@ export const TripSection: React.FC<TripSectionProps> = ({
         )}
         {bookingStatus === 'bookable' && (
           <View style={style.flexBookingOptions}>
-            <TripRow accessible={false}>
+            <TripRow dimensionOverrides={NEW_DIMENSIONS} accessible={false}>
               <BookingOptions bookingArrangements={leg.bookingArrangements} />
             </TripRow>
           </View>
         )}
 
         {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
-          <TripRow>
+          <TripRow dimensionOverrides={NEW_DIMENSIONS}>
             <MessageInfoBox
               type="warning"
               message={t(
@@ -409,7 +417,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
         )}
         {leg.authority && <AuthorityRow {...leg.authority} />}
         {onPressShowLive && serviceJourneyPolyline && !isScreenReaderEnabled ? (
-          <TripRow>
+          <TripRow dimensionOverrides={NEW_DIMENSIONS}>
             <Button
               type="small"
               expanded={false}
@@ -426,7 +434,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             accessibilityElementsHidden
             importantForAccessibility="no-hide-descendants"
           >
-            <TripRow>
+            <TripRow dimensionOverrides={NEW_DIMENSIONS}>
               <View style={style.realtime}>
                 <ThemeIcon
                   svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
@@ -449,6 +457,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
         )}
         {showTo && (
           <TripRow
+            dimensionOverrides={NEW_DIMENSIONS}
             alignChildren="flex-end"
             accessibilityLabel={t(
               TripDetailsTexts.trip.leg.end.a11yLabel(
@@ -545,7 +554,11 @@ const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
 
   return (
     <>
-      <TripRow testID={`${testID}IntermediateStops`} accessible={true}>
+      <TripRow
+        dimensionOverrides={NEW_DIMENSIONS}
+        testID={`${testID}IntermediateStops`}
+        accessible={true}
+      >
         <Button
           type="small"
           expanded={false}
@@ -579,8 +592,13 @@ const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
           );
           return (
             <View key={call.quay.id ?? index} style={style.intermediateStop}>
-              <TripLegDecoration color={legColor} hasCenter />
+              <TripLegDecoration
+                dimensionOverrides={NEW_DIMENSIONS}
+                color={legColor}
+                hasCenter
+              />
               <TripRow
+                dimensionOverrides={NEW_DIMENSIONS}
                 alignChildren="center"
                 style={style.intermediateStopRow}
                 rowLabel={
@@ -720,7 +738,11 @@ const WalkSection = ({leg, wait, timeRounding = 'floor'}: WalkSectionProps) => {
   const a11yLabel = useWalkA11yLabel(leg, wait, timeRounding);
 
   return (
-    <TripRow testID="footLeg" accessibilityLabel={a11yLabel}>
+    <TripRow
+      dimensionOverrides={NEW_DIMENSIONS}
+      testID="footLeg"
+      accessibilityLabel={a11yLabel}
+    >
       <View style={style.transportLine}>
         <TransportationIconBox
           mode={leg.mode}
@@ -757,7 +779,11 @@ const BikeSection = ({leg, wait, timeRounding = 'floor'}: BikeSectionProps) => {
   const a11yLabel = useBikeA11yLabel(leg, wait, timeRounding);
 
   return (
-    <TripRow testID="bikeLeg" accessibilityLabel={a11yLabel}>
+    <TripRow
+      dimensionOverrides={NEW_DIMENSIONS}
+      testID="bikeLeg"
+      accessibilityLabel={a11yLabel}
+    >
       <View style={style.transportLine}>
         <TransportationIconBox
           mode={leg.mode}
@@ -787,7 +813,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   if (id === AUTHORITY) return null;
   if (!url) {
     return (
-      <TripRow>
+      <TripRow dimensionOverrides={NEW_DIMENSIONS}>
         <View style={style.authoritySection}>
           <ThemeText typography="body__s" type="secondary">
             {t(TripDetailsTexts.trip.leg.buyTicketFrom) + ' ' + name}
@@ -797,7 +823,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
     );
   }
   return (
-    <TripRow accessible={false}>
+    <TripRow dimensionOverrides={NEW_DIMENSIONS} accessible={false}>
       <View style={style.authoritySection}>
         <ThemeText typography="body__s" type="secondary" accessible={false}>
           {t(TripDetailsTexts.trip.leg.buyTicketFrom)}
@@ -878,11 +904,12 @@ function InterchangeSection({
   return (
     <View style={style.interchangeSection}>
       <TripLegDecoration
+        dimensionOverrides={NEW_DIMENSIONS}
         color={legColor.background}
         hasStart={false}
         hasEnd={false}
       />
-      <TripRow>
+      <TripRow dimensionOverrides={NEW_DIMENSIONS}>
         <MessageInfoBox type="info" message={text} />
       </TripRow>
     </View>
