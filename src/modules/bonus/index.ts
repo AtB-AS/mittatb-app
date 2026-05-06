@@ -11,7 +11,7 @@ export {useRelevantBonusProduct} from './use-relevant-bonus-product';
 export type {ProductPointsItem} from './api/api';
 export {
   useBonusBalanceQuery,
-  useBuyValueCodeWithBonusPointsMutation,
+  useClaimBonusProductVoucherMutation,
   useBonusAmountEarnedQuery,
   getBonusAmountEarnedQueryKey,
   useProductPointsQuery,

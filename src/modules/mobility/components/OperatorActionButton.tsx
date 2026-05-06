@@ -9,7 +9,7 @@ import {useValueCodeMutation} from '../queries/use-value-code-mutation';
 import {useIsEligibleForBenefit} from '../use-is-eligible-for-benefit';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useThemeContext} from '@atb/theme';
-import {useBuyValueCodeWithBonusPointsMutation} from '@atb/modules/bonus';
+import {useClaimBonusProductVoucherMutation} from '@atb/modules/bonus';
 import {stringifyUrl} from '@atb/api/utils';
 import {useOperators} from '../use-operators';
 import {useOperatorBenefit} from '../use-operator-benefit';
@@ -57,10 +57,10 @@ export const OperatorActionButton = ({
   } = useValueCodeMutation(operatorId);
 
   const {
-    mutateAsync: buyBonusProduct,
-    isPending: isBuyingValueCode,
-    isError: isBuyingValueCodeError,
-  } = useBuyValueCodeWithBonusPointsMutation(bonusProductId);
+    mutateAsync: claimBonusProductVoucher,
+    isPending: isClaimingVoucher,
+    isError: isClaimingVoucherError,
+  } = useClaimBonusProductVoucherMutation(bonusProductId, operatorId);
 
   const needsValueCode =
     (isUserEligibleForBenefit || isBonusPayment) &&
@@ -68,10 +68,10 @@ export const OperatorActionButton = ({
   const isLoading =
     isLoadingEligible ||
     (needsValueCode &&
-      (isBonusPayment ? isBuyingValueCode : isFetchingValueCode));
+      (isBonusPayment ? isClaimingVoucher : isFetchingValueCode));
   const hasError =
     needsValueCode &&
-    (isBonusPayment ? isBuyingValueCodeError : isFetchingValueCodeError);
+    (isBonusPayment ? isClaimingVoucherError : isFetchingValueCodeError);
 
   const buttonText =
     isUserEligibleForBenefit && operatorBenefit?.callToAction?.name
@@ -126,7 +126,9 @@ export const OperatorActionButton = ({
 
   const buttonOnPress = useCallback(async () => {
     if (needsValueCode) {
-      const getValueCode = isBonusPayment ? buyBonusProduct : fetchValueCode;
+      const getValueCode = isBonusPayment
+        ? claimBonusProductVoucher
+        : fetchValueCode;
       const valueCode = await getValueCode();
 
       if (valueCode) {
@@ -142,7 +144,7 @@ export const OperatorActionButton = ({
   }, [
     needsValueCode,
     isBonusPayment,
-    buyBonusProduct,
+    claimBonusProductVoucher,
     fetchValueCode,
     buildUrlWithValueCode,
     openAppURL,

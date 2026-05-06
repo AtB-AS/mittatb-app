@@ -14,19 +14,21 @@ export const getBonusBalance = async (): Promise<number> => {
   return value;
 };
 
-export const buyValueCodeWithBonusPoints = async (
-  bonusProductId: string | undefined,
-): Promise<string | null> => {
-  if (!bonusProductId) return null;
+const ClaimBonusVoucherResponseSchema = z.object({
+  code: z.string(),
+});
+
+export const claimBonusProductVoucher = async (
+  productId: string,
+  operatorId: string,
+): Promise<string> => {
   const response = await client.post(
-    `/bonus/v2/buy-product/value-code/${bonusProductId}`,
-    undefined,
-    {
-      authWithIdToken: true,
-    },
+    `/bonus/v2/claim/voucher`,
+    {productId, operatorId},
+    {authWithIdToken: true},
   );
 
-  return String(response.data.code);
+  return ClaimBonusVoucherResponseSchema.parse(response.data).code;
 };
 
 const BonusAmountEarnedSchema = z.object({

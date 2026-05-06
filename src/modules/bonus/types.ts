@@ -2,11 +2,11 @@ import {FormFactorSchema} from '@atb/api/types/mobility';
 import {LanguageAndTextTypeArray} from '@atb/modules/configuration';
 import {z} from 'zod';
 
-export const BonusProductTypeEnum = z.enum([
-  'VOUCHER',
-  'TICKET',
-  'SHARED_MOBILITY',
-]);
+export enum BonusProductTypeEnum {
+  VOUCHER = 'VOUCHER',
+  TICKET = 'TICKET',
+  SHARED_MOBILITY = 'SHARED_MOBILITY',
+}
 
 export const BonusProductSchema = z.object({
   id: z.string(),
@@ -14,7 +14,7 @@ export const BonusProductSchema = z.object({
   operatorIds: z.array(z.string()),
   formFactors: z.array(FormFactorSchema),
   price: z.number(),
-  productType: BonusProductTypeEnum,
+  productType: z.enum(BonusProductTypeEnum),
   description: LanguageAndTextTypeArray,
   paymentDescription: LanguageAndTextTypeArray,
 });
