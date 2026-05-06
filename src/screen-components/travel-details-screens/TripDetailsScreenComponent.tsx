@@ -29,7 +29,7 @@ import {
 import {formatToClock, secondsBetween} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
-import React, {Ref, useCallback, useEffect, useState} from 'react';
+import React, {Ref, useCallback} from 'react';
 import {View} from 'react-native';
 import {Trip} from './components/Trip';
 import {useHarbors} from '@atb/modules/harbors';
@@ -42,6 +42,7 @@ import {useSingleTripQuery} from '@atb/modules/trip-patterns';
 import {getPosthogClientGlobal} from '@atb/modules/analytics';
 import {useScreenshotAware} from 'react-native-screenshot-aware';
 import {useTimeContext} from '@atb/modules/time';
+import {useUserRefreshControlProps} from '@atb/utils/use-user-refresh-props';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -105,17 +106,10 @@ export const TripDetailsScreenComponent = ({
   const fromToNames = getFromToName(updatedTripPattern.legs);
   const startEndTime = getStartEndTime(updatedTripPattern, language);
 
-  const [isManualRefresh, setIsManualRefresh] = useState(false);
-  const onManualRefresh = useCallback(() => {
-    setIsManualRefresh(true);
-    refetch();
-  }, [refetch]);
-
-  useEffect(() => {
-    if (!isFetching && isManualRefresh) {
-      setIsManualRefresh(false);
-    }
-  }, [isFetching, isManualRefresh]);
+  const refreshControlProps = useUserRefreshControlProps({
+    refreshing: isFetching,
+    onRefresh: refetch,
+  });
 
   return (
     <View style={styles.container}>
@@ -126,10 +120,7 @@ export const TripDetailsScreenComponent = ({
           title: t(TripDetailsTexts.header.title),
           color: themeColor,
         }}
-        refreshControlProps={{
-          refreshing: isFetching && isManualRefresh,
-          onRefresh: onManualRefresh,
-        }}
+        refreshControlProps={refreshControlProps}
         contentColor={theme.color.background.neutral[0]}
         headerContent={(focusRef) => (
           <View style={styles.headerContent}>
