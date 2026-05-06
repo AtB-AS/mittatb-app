@@ -327,8 +327,14 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 : '') +
               (realtimeText ? screenReaderPause + realtimeText : '')
             }
-            accessibilityHint={hasIntermediateStops ? t(TripDetailsTexts.trip.leg.transport.a11yHint) : undefined}
-            onPress={hasIntermediateStops ? () => handleDeparturePress(leg) : undefined}
+            accessibilityHint={
+              hasIntermediateStops
+                ? t(TripDetailsTexts.trip.leg.transport.a11yHint)
+                : undefined
+            }
+            onPress={
+              hasIntermediateStops ? () => handleDeparturePress(leg) : undefined
+            }
           >
             {leg.transportSubmode === TransportSubmode.NightBus && (
               <ThemeText
@@ -453,9 +459,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             </TripRow>
           </View>
         )}
-        {hasIntermediateStops && (
-          <IntermediateInfo leg={leg} testID={testID} />
-        )}
+        {hasIntermediateStops && <IntermediateInfo leg={leg} testID={testID} />}
         {showTo && (
           <TripRow
             dimensionOverrides={NEW_DIMENSIONS}
