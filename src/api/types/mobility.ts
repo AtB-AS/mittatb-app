@@ -6,6 +6,7 @@ import {
 import {isValidPhoneNumber} from 'libphonenumber-js';
 import {isValidEmail} from '@atb/utils/validation';
 import {Feature, Point} from 'geojson';
+import {Base64ImageSchema} from '@atb/utils/image';
 
 export const ViolationsReportingInitQuerySchema = z.object({
   lng: z.string(),
@@ -63,7 +64,7 @@ export const ViolationsReportQuerySchema = z.object({
   providerId: z.number().optional(),
   longitude: z.number(),
   latitude: z.number(),
-  image: z.string().optional(), // base64-encoded image blob
+  image: Base64ImageSchema.optional(),
   imageType: z.string().optional(),
   qr: z.string().optional(),
   appId: z.string().optional(),
