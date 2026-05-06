@@ -24,11 +24,10 @@ import {
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {
-  findRelevantBonusProduct,
   PayWithBonusPointsCheckbox,
   useIsBonusActiveForUser,
+  useRelevantBonusProduct,
 } from '@atb/modules/bonus';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {ShmoPricingPlan, Vehicle} from '@atb/api/types/mobility';
 import {PriceAdjustmentType} from '@atb-as/config-specs/lib/mobility';
 import {VehicleCard} from '../VehicleCard';
@@ -98,12 +97,7 @@ export const BicycleSheet = ({
   const {operatorBenefit} = useOperatorBenefit(operatorId);
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
   const {logEvent} = useAnalyticsContext();
-  const {bonusProducts} = useFirestoreConfigurationContext();
-  const bonusProduct = findRelevantBonusProduct(
-    bonusProducts,
-    operatorId,
-    FormFactor.Bicycle,
-  );
+  const bonusProduct = useRelevantBonusProduct(operatorId, FormFactor.Bicycle);
   const {mode, subMode} = getTransportModeAndSubMode(
     FormFactor.Bicycle,
     vehicle?.vehicleType.propulsionType,
@@ -236,7 +230,7 @@ export const BicycleSheet = ({
                   />
                 </View>
               )}
-              {!!isBonusActiveForUser && bonusProduct && (
+              {isBonusActiveForUser && !!bonusProduct && (
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
                   operatorName={operatorName}

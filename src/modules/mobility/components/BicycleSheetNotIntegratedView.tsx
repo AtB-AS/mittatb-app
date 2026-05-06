@@ -7,9 +7,8 @@ import {ThemeText} from '@atb/components/text';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {
   PayWithBonusPointsCheckbox,
-  findRelevantBonusProduct,
+  useRelevantBonusProduct,
 } from '@atb/modules/bonus';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {StyleSheet} from '@atb/theme';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 import {useTranslation} from '@atb/translations';
@@ -52,12 +51,7 @@ export const BikeStationNotIntegratedView = ({
 
   const {operatorBenefit} = useOperatorBenefit(operatorId);
   const isBonusActiveForUser = useIsBonusActiveForUser();
-  const {bonusProducts} = useFirestoreConfigurationContext();
-  const bonusProduct = findRelevantBonusProduct(
-    bonusProducts,
-    operatorId,
-    FormFactor.Bicycle,
-  );
+  const bonusProduct = useRelevantBonusProduct(operatorId, FormFactor.Bicycle);
   const {logEvent} = useAnalyticsContext();
 
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
@@ -114,7 +108,7 @@ export const BikeStationNotIntegratedView = ({
             </View>
           </GenericSectionItem>
         </Section>
-        {isBonusActiveForUser && bonusProduct && (
+        {isBonusActiveForUser && !!bonusProduct && (
           <PayWithBonusPointsCheckbox
             bonusProduct={bonusProduct}
             operatorName={operatorName}

@@ -7,7 +7,7 @@ export {
   UserBonusBalance,
   UserBonusBalanceContent,
 } from './components';
-export {isActive, findRelevantBonusProduct} from './utils';
+export {useRelevantBonusProduct} from './use-relevant-bonus-product';
 export type {ProductPointsItem} from './api/api';
 export {
   useBonusBalanceQuery,
@@ -15,10 +15,14 @@ export {
   useBonusAmountEarnedQuery,
   getBonusAmountEarnedQueryKey,
   useProductPointsQuery,
+  useActiveBonusProductsQuery,
 } from './queries';
+export {BonusProductTypeEnum} from './types';
+export type {BonusProductType} from './types';
 export {
   bonusOnboardingCarouselConfig,
   type BonusOnboardingScreenName,
 } from './onboarding';
 export {useIsBonusActiveForUser} from './use-is-bonus-active-for-user';
+export {useIsBonusEnrollable} from './use-is-bonus-enrollable';
 export {useIsBonusBalanceButtonVisible} from './use-is-bonus-balance-button-visible';

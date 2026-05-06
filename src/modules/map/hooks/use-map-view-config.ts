@@ -1,4 +1,5 @@
 import {Platform} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useMapboxJsonStyle} from './use-mapbox-json-style';
 import {useMemo} from 'react';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
@@ -38,14 +39,20 @@ export const useMapViewConfig = (
   );
   const {enable_surface_view_map, map_max_pitch} = useRemoteConfigContext();
 
+  const {top: safeAreaTop} = useSafeAreaInsets();
+  const androidSafeAreaTop = Platform.select({
+    android: safeAreaTop,
+    default: 0,
+  });
+
   // `mapbox` (v10) Adds compass offset `compassViewMargins` is still supported but generates issues:
   // Mapbox error fireEvent failed: <rnmapbox_maps.RCTMGLEvent: 0x6000028a0fe0>
   const compassPosition = useMemo(
     () => ({
-      top: compassOffsetTop || COMPASS_BASE_TOP,
+      top: (compassOffsetTop || COMPASS_BASE_TOP) + androidSafeAreaTop,
       right: Platform.select({default: 10, android: 6}),
     }),
-    [compassOffsetTop],
+    [compassOffsetTop, androidSafeAreaTop],
   );
 
   return useMemo(
