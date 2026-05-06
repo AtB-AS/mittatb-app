@@ -4,8 +4,7 @@ import {
   Statuses,
   TextColor,
   Theme,
-  isStatusColor,
-  isTextColor,
+  resolveColorValue,
 } from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 import {useFontScale} from '@atb/utils/use-font-scale';
@@ -39,7 +38,7 @@ export const ThemeIcon = ({
 }: ThemeIconProps): React.JSX.Element | null => {
   const {theme} = useThemeContext();
   const fontScale = useFontScale();
-  const fill = useColor(color);
+  const fill = resolveColorValue(color, 'primary', theme);
 
   if (!SvgComponent) {
     notifyBugsnag('Undefined SVG provided to ThemeIcon');
@@ -68,16 +67,3 @@ export const ThemeIcon = ({
     </View>
   );
 };
-
-function useColor(color?: IconColor) {
-  const {theme} = useThemeContext();
-  if (typeof color === 'object') {
-    return color.foreground.primary;
-  } else if (isStatusColor(color, theme)) {
-    return theme.color.status[color].primary.background;
-  } else if (isTextColor(color, theme) || color === undefined) {
-    return theme.color.foreground.dynamic[color ?? 'primary'];
-  } else {
-    return color;
-  }
-}
