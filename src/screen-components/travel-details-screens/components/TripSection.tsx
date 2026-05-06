@@ -157,6 +157,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const showQuayDescription =
     !!leg.fromPlace.quay?.description && !isWalkSection && !isBikeSection;
 
+  const hasIntermediateStops = hasIntermediateStops;
   const walkBikeRounding = isFirst ? 'floor' : 'ceil';
   const walkA11yLabel = useWalkA11yLabel(leg, wait, walkBikeRounding);
   const bikeA11yLabel = useBikeA11yLabel(leg, wait, walkBikeRounding);
@@ -181,7 +182,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
       ),
     ];
 
-    if (leg.intermediateEstimatedCalls.length > 0) {
+    if (hasIntermediateStops) {
       parts.push(
         t(
           TripDetailsTexts.trip.leg.transport.a11yLabel.intermediateStops(
@@ -326,8 +327,8 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 : '') +
               (realtimeText ? screenReaderPause + realtimeText : '')
             }
-            accessibilityHint={t(TripDetailsTexts.trip.leg.transport.a11yHint)}
-            onPress={() => handleDeparturePress(leg)}
+            accessibilityHint={hasIntermediateStops ? t(TripDetailsTexts.trip.leg.transport.a11yHint) : undefined}
+            onPress={hasIntermediateStops ? () => handleDeparturePress(leg) : undefined}
           >
             {leg.transportSubmode === TransportSubmode.NightBus && (
               <ThemeText
@@ -452,7 +453,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             </TripRow>
           </View>
         )}
-        {leg.intermediateEstimatedCalls.length > 0 && (
+        {hasIntermediateStops && (
           <IntermediateInfo leg={leg} testID={testID} />
         )}
         {showTo && (
