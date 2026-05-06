@@ -2,6 +2,176 @@ import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations
 import {translation as _} from '../../commons';
 
 const TripDetailsTexts = {
+  legacy: {
+    header: {
+      title: _('Reisedetaljer', 'Trip details', 'Reisedetaljar'),
+      titleFromTo: ({fromName, toName}: {fromName: string; toName: string}) =>
+        _(
+          `${fromName}  -  ${toName}`,
+          `${fromName}  -  ${toName}`,
+          `${fromName}  -  ${toName}`,
+        ),
+      titleFromToA11yLabel: ({
+        fromName,
+        toName,
+      }: {
+        fromName: string;
+        toName: string;
+      }) =>
+        _(
+          `Fra ${fromName} til ${toName}`,
+          `From ${fromName} to ${toName}`,
+          `Frå ${fromName} til ${toName}`,
+        ),
+      startEndTime: ({
+        startTime,
+        endTime,
+      }: {
+        startTime: string;
+        endTime: string;
+      }) =>
+        _(
+          `${startTime} - ${endTime}`,
+          `${startTime} - ${endTime}`,
+          `${startTime} - ${endTime}`,
+        ),
+      startEndTimeA11yLabel: ({
+        startTime,
+        endTime,
+      }: {
+        startTime: string;
+        endTime: string;
+      }) =>
+        _(
+          `Varighet: Fra ${startTime} til ${endTime}`,
+          `Duration: From ${startTime} to ${endTime}`,
+          `Varigheit: Frå ${startTime} til ${endTime}`,
+        ),
+    },
+    trip: {
+      leg: {
+        a11yHelper: (stepNumber: number, travelMode: string) =>
+          _(
+            `Steg ${stepNumber}, ${travelMode}`,
+            `Step ${stepNumber}, ${travelMode}`,
+            `Steg ${stepNumber}, ${travelMode}`,
+          ),
+        start: {
+          a11yLabel: {
+            noRealTime: (
+              placeName: string,
+              aimedTime: string,
+              timeIsApproximation: boolean,
+            ) =>
+              _(
+                `Fra ${placeName},${
+                  timeIsApproximation ? ' cirka' : ''
+                } klokken ${aimedTime}`,
+                `From ${placeName},${
+                  timeIsApproximation ? ' circa' : ''
+                } time ${aimedTime}`,
+                `Frå ${placeName},${
+                  timeIsApproximation ? ' cirka' : ''
+                } klokka ${aimedTime}`,
+              ),
+            singularTime: (placeName: string, time: string) =>
+              _(
+                `Fra ${placeName}, sanntid klokken ${time}`,
+                `From ${placeName}, realtime ${time}`,
+                `Frå ${placeName}, sanntid klokka ${time}`,
+              ),
+            realAndAimed: (
+              placeName: string,
+              realTime: string,
+              aimedTime: string,
+              timeIsApproximation: boolean,
+            ) =>
+              _(
+                `Fra ${placeName}, sanntid klokken ${realTime}. Rutetid klokken${
+                  timeIsApproximation ? ' cirka' : ''
+                } ${aimedTime}.`,
+                `From ${placeName}, realtime ${realTime}. Route time${
+                  timeIsApproximation ? ' circa' : ''
+                } ${aimedTime}.`,
+                `Frå ${placeName}, sanntid klokka ${realTime}. Rutetid klokka${
+                  timeIsApproximation ? ' cirka' : ''
+                } ${aimedTime}.`,
+              ),
+          },
+        },
+        end: {
+          a11yLabel: {
+            noRealTime: (placeName: string, aimedTime: string) =>
+              _(
+                `Avslutter på ${placeName}, ca. klokken ${aimedTime}`,
+                `Ending at ${placeName}, appr. time ${aimedTime}`,
+                `Avsluttar på ${placeName}, ca. klokka ${aimedTime}`,
+              ),
+            singularTime: (placeName: string, time: string) =>
+              _(
+                `Avslutter på ${placeName}, klokken ${time}`,
+                `Ending at ${placeName}, time ${time}`,
+                `Avsluttar på ${placeName}, klokka ${time}`,
+              ),
+            realAndAimed: (
+              placeName: string,
+              realTime: string,
+              aimedTime: string,
+            ) =>
+              _(
+                `Avslutter på ${placeName}, forventet tid klokken ${realTime}. Rutetid klokken ${aimedTime}.`,
+                `Ending at ${placeName}, ETA ${realTime}. Route time ${aimedTime}.`,
+                `Avsluttar på ${placeName}, forventa tid klokka ${realTime}. Rutetid klokka ${aimedTime}.`,
+              ),
+          },
+        },
+      },
+      summary: {
+        travelTime: {
+          label: (time: string) =>
+            _(
+              `Total reisetid: ${time}`,
+              `Total trip time: ${time}`,
+              `Total reisetid: ${time}`,
+            ),
+          a11yLabel: (time: string) =>
+            _(
+              `Total reisetid: ${time}`,
+              `Total trip time: ${time}`,
+              `Total reisetid: ${time}`,
+            ),
+        },
+        walkDistance: {
+          label: (distance: string) =>
+            _(
+              `Total gangavstand: ${distance}`,
+              `Total walking distance: ${distance}`,
+              `Total gangavstand: ${distance}`,
+            ),
+          a11yLabel: (distanceInMetres: string) =>
+            _(
+              `Total gangavstand: ${distanceInMetres}`,
+              `Total walking distance: ${distanceInMetres}`,
+              `Total gangavstand: ${distanceInMetres}`,
+            ),
+        },
+        bikeDistance: {
+          label: (distance: string) =>
+            _(
+              `Total sykkelavstand: ${distance}`,
+              `Total biking distance: ${distance}`,
+              `Total sykkelavstand: ${distance}`,
+            ),
+          a11yLabel: (distanceInMetres: string) =>
+            _(
+              `Total sykkelavstand: ${distanceInMetres}`,
+              `Total biking distance: ${distanceInMetres}`,
+              `Total sykkelavstand: ${distanceInMetres}`,
+            ),
+        },
+      },
+    },
+  },
   trip: {
     leg: {
       lastPassedStop: (quayName: string, time: string) =>

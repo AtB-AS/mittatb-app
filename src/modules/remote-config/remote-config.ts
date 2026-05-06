@@ -43,6 +43,7 @@ export type RemoteConfig = {
   enable_new_token_barcode_base64: boolean;
   enable_new_travel_card_booking: boolean;
   enable_new_travel_card_in_trip_search: boolean;
+  enable_new_trip_detail_screen: boolean;
   enable_on_behalf_of: boolean;
   enable_onboarding_login: boolean;
   enable_only_stop_places_checkbox: boolean;
@@ -122,6 +123,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_new_token_barcode_base64: false,
   enable_new_travel_card_booking: false,
   enable_new_travel_card_in_trip_search: false,
+  enable_new_trip_detail_screen: false,
   enable_nynorsk: true,
   enable_on_behalf_of: false,
   enable_onboarding_login: true,
@@ -257,6 +259,9 @@ export function getConfig(): RemoteConfig {
   const enable_new_travel_card_in_trip_search =
     values['enable_new_travel_card_in_trip_search']?.asBoolean() ??
     defaultRemoteConfig.enable_new_travel_card_in_trip_search;
+  const enable_new_trip_detail_screen =
+    values['enable_new_trip_detail_screen']?.asBoolean() ??
+    defaultRemoteConfig.enable_new_trip_detail_screen;
   const enable_nynorsk =
     values['enable_nynorsk']?.asBoolean() ?? defaultRemoteConfig.enable_nynorsk;
   const enable_on_behalf_of =
@@ -419,6 +424,7 @@ export function getConfig(): RemoteConfig {
     enable_new_token_barcode_base64,
     enable_new_travel_card_booking,
     enable_new_travel_card_in_trip_search,
+    enable_new_trip_detail_screen,
     enable_nynorsk,
     enable_on_behalf_of,
     enable_onboarding_login,

@@ -1,8 +1,11 @@
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {Leg, Place, TripPattern} from '@atb/api/types/trips';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
+import SvgDuration from '@atb/assets/svg/mono-icons/time/Duration';
 import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
+import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {hasLegsWeCantSellTicketsFor} from '@atb/modules/operator-config';
 import {
   FareProductTypeConfig,
@@ -14,21 +17,21 @@ import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import {FareZoneWithMetadata} from '@atb/modules/fare-zones-selector';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/screen-components/travel-details-map-screen';
-import {ServiceJourneyDeparture} from './types';
+import {ServiceJourneyDeparture} from '../types';
 import {
   canSellCollabTicket,
   getNonFreeLegs,
   getTripPatternAnalytics,
   type TripAnalytics,
-} from './utils';
+} from '../utils';
 import {formatToClock, secondsBetween} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
-import React, {Ref, useCallback} from 'react';
+import React, {Ref, useCallback, useEffect, useState} from 'react';
 import {View} from 'react-native';
-import {Trip} from './components/Trip';
+import {LegacyTrip} from './Trip';
 import {useHarbors} from '@atb/modules/harbors';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
@@ -39,17 +42,9 @@ import {useSingleTripQuery} from '@atb/modules/trip-patterns';
 import {getPosthogClientGlobal} from '@atb/modules/analytics';
 import {useScreenshotAware} from 'react-native-screenshot-aware';
 import {useTimeContext} from '@atb/modules/time';
-import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
-import {TravelCardHeaderComponent as TravelCardHeader} from '@atb/screen-components/travel-card';
-import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
-import {useNewTripDetailScreenEnabled} from './use-new-trip-detail-screen-enabled';
-import {LegacyTripDetailsScreenComponent} from './legacy';
 
-export type TripDetailsScreenParams = {
+type Props = {
   tripPattern: TripPattern;
-};
-
-type Props = TripDetailsScreenParams & {
   onPressDetailsMap: (
     params: TravelDetailsMapScreenParams,
     tripAnalytics: TripAnalytics,
@@ -72,16 +67,7 @@ type Props = TripDetailsScreenParams & {
   isFocused: boolean;
 };
 
-export const TripDetailsScreenComponent = (props: Props) => {
-  const isNewScreen = useNewTripDetailScreenEnabled();
-  return isNewScreen ? (
-    <NewTripDetailsScreenComponent {...props} />
-  ) : (
-    <LegacyTripDetailsScreenComponent {...props} />
-  );
-};
-
-const NewTripDetailsScreenComponent = ({
+export const LegacyTripDetailsScreenComponent = ({
   tripPattern,
   onPressDetailsMap,
   onPressBuyTicket,
@@ -113,12 +99,20 @@ const NewTripDetailsScreenComponent = ({
   );
 
   const purchaseSelection = usePurchaseSelectionFromTrip(updatedTripPattern);
-  const headerTitle = `${formatToClock(updatedTripPattern.expectedStartTime, language, 'floor')} - ${formatToClock(updatedTripPattern.expectedEndTime, language, 'ceil')}`;
+  const fromToNames = getFromToName(updatedTripPattern.legs);
+  const startEndTime = getStartEndTime(updatedTripPattern, language);
 
-  const refreshControlProps = useManualRefreshControlProps({
-    refreshing: isFetching,
-    onRefresh: refetch,
-  });
+  const [isManualRefresh, setIsManualRefresh] = useState(false);
+  const onManualRefresh = useCallback(() => {
+    setIsManualRefresh(true);
+    refetch();
+  }, [refetch]);
+
+  useEffect(() => {
+    if (!isFetching && isManualRefresh) {
+      setIsManualRefresh(false);
+    }
+  }, [isFetching, isManualRefresh]);
 
   return (
     <View style={styles.container}>
@@ -126,31 +120,60 @@ const NewTripDetailsScreenComponent = ({
         focusRef={focusRef}
         headerProps={{
           leftButton: {type: 'back'},
-          title: headerTitle,
+          title: t(TripDetailsTexts.legacy.header.title),
           color: themeColor,
         }}
-        refreshControlProps={refreshControlProps}
-        contentColor={theme.color.background.neutral[1]}
+        refreshControlProps={{
+          refreshing: isFetching && isManualRefresh,
+          onRefresh: onManualRefresh,
+        }}
+        contentColor={theme.color.background.neutral[0]}
         headerContent={(focusRef) => (
-          <CompositeAccessibilityProvider order={['header']}>
-            {(accessibilityProps) => (
-              <View
-                ref={focusRef}
-                style={styles.headerContent}
-                {...accessibilityProps}
+          <View style={styles.headerContent}>
+            <View accessible={true} ref={focusRef}>
+              <ThemeText
+                color={themeColor}
+                typography="heading__l"
+                style={styles.heading}
+                accessibilityLabel={
+                  fromToNames
+                    ? t(
+                        TripDetailsTexts.legacy.header.titleFromToA11yLabel(
+                          fromToNames,
+                        ),
+                      )
+                    : undefined
+                }
               >
-                <TravelCardHeader
-                  tripPattern={updatedTripPattern}
-                  size="large"
-                />
-              </View>
-            )}
-          </CompositeAccessibilityProvider>
+                {fromToNames
+                  ? t(TripDetailsTexts.legacy.header.titleFromTo(fromToNames))
+                  : t(TripDetailsTexts.legacy.header.title)}
+              </ThemeText>
+            </View>
+            <View style={{flexDirection: 'row'}} accessible={true}>
+              <ThemeIcon
+                svg={SvgDuration}
+                style={styles.durationIcon}
+                color={themeColor}
+              />
+              <ThemeText
+                typography="body__s"
+                color={themeColor}
+                accessibilityLabel={t(
+                  TripDetailsTexts.legacy.header.startEndTimeA11yLabel(
+                    startEndTime,
+                  ),
+                )}
+              >
+                {t(TripDetailsTexts.legacy.header.startEndTime(startEndTime))}
+              </ThemeText>
+            </View>
+          </View>
         )}
       >
         {updatedTripPattern && (
           <View style={styles.paddedContainer} testID="tripDetailsContentView">
-            <Trip
+            <LegacyTrip
               tripPattern={updatedTripPattern}
               error={error ?? undefined}
               onPressDetailsMap={(params) =>
@@ -219,7 +242,6 @@ function usePurchaseSelectionFromTrip(
   const nonFreeLegs = getNonFreeLegs(tripPattern.legs);
 
   if (!nonFreeLegs.length) {
-    // Non-transit route, so no tickets needed.
     return;
   }
 
@@ -242,7 +264,6 @@ function usePurchaseSelectionFromTrip(
   }
 
   if (!isFromTravelSearchToTicketBoatEnabled) {
-    // Boat ticket is disabled, avoid returning any ticket info
     return;
   }
 
@@ -383,6 +404,24 @@ function getFareZoneWithMetadata(place: Place, fareZones: FareZone[]) {
   return fareZoneWithMetadata;
 }
 
+function getFromToName(legs: Leg[]) {
+  if (legs.length === 0) return;
+  const fromName = legs[0].fromPlace.name;
+  const toName = legs[legs.length - 1].toPlace.name;
+  if (!fromName || !toName) return;
+  return {fromName, toName};
+}
+
+function getStartEndTime(tripPattern: TripPattern, language: Language) {
+  const startTime = formatToClock(
+    tripPattern.expectedStartTime,
+    language,
+    'floor',
+  );
+  const endTime = formatToClock(tripPattern.expectedEndTime, language, 'ceil');
+  return {startTime, endTime};
+}
+
 function totalWaitTimeIsMoreThanAnHour(legs: Leg[]) {
   return (
     legs.reduce(
@@ -405,7 +444,6 @@ function getFirstFareZoneWeSellTicketFor(
 ): FareZone | undefined {
   if (!tripFareZones) return;
 
-  // match fare zone to zones in reference data to find zones we sell tickets for
   const matchingZones = fareZones.filter((referenceFareZone) =>
     tripFareZones.find((z2) => referenceFareZone.id === z2.id),
   );
@@ -445,11 +483,10 @@ function trackScreenshottedTripDetails(
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.color.background.neutral[1].background,
+    backgroundColor: theme.color.background.neutral[0].background,
   },
-  headerContent: {
-    marginHorizontal: theme.spacing.medium,
-  },
+  heading: {marginBottom: theme.spacing.medium},
+  headerContent: {marginHorizontal: theme.spacing.medium},
   paddedContainer: {
     padding: theme.spacing.medium,
   },
@@ -461,4 +498,5 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     borderTopColor: theme.color.border.primary.background,
     borderTopWidth: theme.border.width.slim,
   },
+  durationIcon: {marginRight: theme.spacing.small},
 }));
