@@ -106,8 +106,7 @@ const VoucherOperatorLinks = () => {
     ...new Set(
       (activeBonusProducts ?? [])
         .filter(
-          (product) =>
-            product.productType === BonusProductTypeEnum.enum.VOUCHER,
+          (product) => product.productType === BonusProductTypeEnum.VOUCHER,
         )
         .flatMap((product) => product.operatorIds),
     ),

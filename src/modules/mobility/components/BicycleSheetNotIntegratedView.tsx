@@ -55,7 +55,7 @@ export const BikeStationNotIntegratedView = ({
   const bonusProduct = useRelevantBonusProduct(
     operatorId,
     FormFactor.Bicycle,
-    BonusProductTypeEnum.enum.VOUCHER,
+    BonusProductTypeEnum.VOUCHER,
   );
   const {logEvent} = useAnalyticsContext();
 

@@ -1,11 +1,11 @@
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useActiveBonusProductsQuery} from './queries';
-import {BonusProductType} from './types';
+import {BonusProductTypeEnum} from './types';
 
 export const useRelevantBonusProduct = (
   operatorId: string | undefined,
   formFactor: FormFactor,
-  productType?: BonusProductType['productType'],
+  productType?: BonusProductTypeEnum,
 ) => {
   const {data: activeBonusProducts} = useActiveBonusProductsQuery(
     Boolean(operatorId),

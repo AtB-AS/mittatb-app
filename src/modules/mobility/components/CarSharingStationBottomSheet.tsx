@@ -71,7 +71,7 @@ export const CarSharingStationBottomSheet = ({
   const bonusProduct = useRelevantBonusProduct(
     operatorId,
     FormFactor.Car,
-    BonusProductTypeEnum.enum.VOUCHER,
+    BonusProductTypeEnum.VOUCHER,
   );
 
   const {logEvent} = useAnalyticsContext();

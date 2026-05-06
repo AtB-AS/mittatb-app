@@ -113,7 +113,7 @@ export const PayWithBonusPointsCheckbox = ({
         />
       )}
       {isChecked &&
-        bonusProduct.productType === BonusProductTypeEnum.enum.VOUCHER && (
+        bonusProduct.productType === BonusProductTypeEnum.VOUCHER && (
           <MessageInfoBox
             style={styles.infoMessage}
             type="warning"
