@@ -23,6 +23,7 @@ import {useRecurringPayment} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
+import {Loading} from '@atb/components/loading';
 
 type Props = ProfileScreenProps<'Profile_PaymentMethodsScreen'>;
 
@@ -30,7 +31,8 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {
-    recurringPaymentLoading,
+    recurringPaymentFetching,
+    recurringPaymentIsLoading,
     recurringPayment,
     refetchRecurringPayment,
     deleteRecurringPayment,
@@ -42,7 +44,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
   const focusRef = useFocusOnLoad(navigation);
 
   const refreshControlProps = useManualRefreshControlProps({
-    refreshing: recurringPaymentLoading,
+    refreshing: recurringPaymentFetching,
     onRefresh: refetchRecurringPayment,
   });
 
@@ -69,6 +71,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
             message={t(PaymentMethodsTexts.genericError)}
           />
         )}
+        {recurringPaymentIsLoading && <Loading />}
         {recurringPayment && recurringPayment.length > 0 && (
           <Section>
             {recurringPayment.map((card) => (
@@ -84,7 +87,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
           </Section>
         )}
         {!recurringPaymentError &&
-          !recurringPaymentLoading &&
+          !recurringPaymentFetching &&
           (!recurringPayment || recurringPayment?.length == 0) && (
             <NoCardsInfo />
           )}

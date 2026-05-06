@@ -28,6 +28,7 @@ import {useState} from 'react';
 import {ProfileScreenProps} from './navigation-types';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
+import {Loading} from '@atb/components/loading';
 
 const MAX_VEHICLE_REGISTRATIONS = 2;
 
@@ -49,6 +50,7 @@ export const Profile_SmartParkAndRideScreen = ({route, navigation}: Props) => {
     data: vehicleRegistrations,
     refetch: refetchVehicleRegistrations,
     isFetching: vehicleRegistrationsIsFetching,
+    isLoading: vehicleRegistrationsIsLoading,
   } = useVehicleRegistrationsQuery();
   const {authenticationType} = useAuthContext();
   const analytics = useAnalyticsContext();
@@ -88,6 +90,7 @@ export const Profile_SmartParkAndRideScreen = ({route, navigation}: Props) => {
       refreshControlProps={refreshControlProps}
     >
       <View style={styles.container}>
+        {vehicleRegistrationsIsLoading && <Loading />}
         <ContentHeading
           text={t(
             SmartParkAndRideTexts.content.heading(

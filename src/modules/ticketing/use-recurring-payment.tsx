@@ -25,7 +25,8 @@ export const useRecurringPayment = () => {
     data: recurringPayment,
     refetch: refetchRecurringPayment,
     isError: recurringPaymentError,
-    isFetching: recurringPaymentLoading,
+    isFetching: recurringPaymentFetching,
+    isLoading: recurringPaymentIsLoading,
   } = useListRecurringPaymentsQuery();
 
   const {
@@ -89,7 +90,8 @@ export const useRecurringPayment = () => {
     recurringPayment,
     onAddRecurringPayment,
     isError,
-    recurringPaymentLoading,
+    recurringPaymentFetching,
+    recurringPaymentIsLoading,
     refetchRecurringPayment,
     deleteRecurringPayment,
     recurringPaymentError,
