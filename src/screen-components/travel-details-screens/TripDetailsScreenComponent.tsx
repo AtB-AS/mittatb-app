@@ -42,7 +42,7 @@ import {useSingleTripQuery} from '@atb/modules/trip-patterns';
 import {getPosthogClientGlobal} from '@atb/modules/analytics';
 import {useScreenshotAware} from 'react-native-screenshot-aware';
 import {useTimeContext} from '@atb/modules/time';
-import {useUserRefreshControlProps} from '@atb/utils/use-user-refresh-props';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -106,7 +106,7 @@ export const TripDetailsScreenComponent = ({
   const fromToNames = getFromToName(updatedTripPattern.legs);
   const startEndTime = getStartEndTime(updatedTripPattern, language);
 
-  const refreshControlProps = useUserRefreshControlProps({
+  const refreshControlProps = useManualRefreshControlProps({
     refreshing: isFetching,
     onRefresh: refetch,
   });

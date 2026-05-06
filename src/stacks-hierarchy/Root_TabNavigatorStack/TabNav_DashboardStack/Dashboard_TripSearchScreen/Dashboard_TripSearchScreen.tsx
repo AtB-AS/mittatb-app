@@ -68,7 +68,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {WithOverlayButton} from '@atb/components/overlay-button';
 import {Loading} from '@atb/components/loading';
-import {useUserRefreshControlProps} from '@atb/utils/use-user-refresh-props';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 
 const RESULT_KEY_FROM = 'Dashboard_TripSearchScreen--fromLocation';
 const RESULT_KEY_TO = 'Dashboard_TripSearchScreen--toLocation';
@@ -270,7 +270,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     refetchTrips();
   }, [from, to, currentLocation, searchTime, navigation, refetchTrips]);
 
-  const refreshControlProps = useUserRefreshControlProps({
+  const refreshControlProps = useManualRefreshControlProps({
     refreshing: tripsSearchState === 'searching' && !tripPatterns.length,
     onRefresh: forceRefresh,
   });

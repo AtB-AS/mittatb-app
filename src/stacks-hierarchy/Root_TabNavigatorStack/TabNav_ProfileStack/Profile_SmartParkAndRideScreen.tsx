@@ -27,7 +27,7 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useState} from 'react';
 import {ProfileScreenProps} from './navigation-types';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {useUserRefreshControlProps} from '@atb/utils/use-user-refresh-props';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 
 const MAX_VEHICLE_REGISTRATIONS = 2;
 
@@ -71,7 +71,7 @@ export const Profile_SmartParkAndRideScreen = ({route, navigation}: Props) => {
     }
   };
 
-  const refreshControlProps = useUserRefreshControlProps({
+  const refreshControlProps = useManualRefreshControlProps({
     refreshing: vehicleRegistrationsIsFetching,
     onRefresh: refetchVehicleRegistrations,
   });

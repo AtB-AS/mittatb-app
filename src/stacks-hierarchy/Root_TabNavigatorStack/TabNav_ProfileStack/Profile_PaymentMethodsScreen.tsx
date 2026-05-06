@@ -22,7 +22,7 @@ import {ExpiryMessage, PaymentBrand} from '@atb/modules/payment';
 import {useRecurringPayment} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
-import {useUserRefreshControlProps} from '@atb/utils/use-user-refresh-props';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 
 type Props = ProfileScreenProps<'Profile_PaymentMethodsScreen'>;
 
@@ -41,7 +41,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
 
   const focusRef = useFocusOnLoad(navigation);
 
-  const refreshControlProps = useUserRefreshControlProps({
+  const refreshControlProps = useManualRefreshControlProps({
     refreshing: recurringPaymentLoading,
     onRefresh: refetchRecurringPayment,
   });

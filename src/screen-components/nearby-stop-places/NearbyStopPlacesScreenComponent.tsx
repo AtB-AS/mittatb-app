@@ -22,7 +22,7 @@ import SharedTexts from '@atb/translations/shared';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {useNearestStopPlaceNodesQuery} from './use-nearest-stop-place-nodes-query';
-import {useUserRefreshControlProps} from '@atb/utils/use-user-refresh-props';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 
 export type NearbyStopPlacesScreenParams = {
   location: Location | undefined;
@@ -113,7 +113,7 @@ export const NearbyStopPlacesScreenComponent = ({
           location.name
         : undefined;
 
-  const refreshControlProps = useUserRefreshControlProps({
+  const refreshControlProps = useManualRefreshControlProps({
     refreshing: isLoading,
     onRefresh: () =>
       onUpdateLocation(

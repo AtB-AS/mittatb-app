@@ -6,7 +6,7 @@ import {RefreshControlProps} from 'react-native';
  * that the refreshing indicator is only shown when the user initiates a
  * pull-to-refresh and not when the refresh is triggered programmatically.
  */
-export function useUserRefreshControlProps({
+export function useManualRefreshControlProps({
   onRefresh,
   refreshing,
 }: {
