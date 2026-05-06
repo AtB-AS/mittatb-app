@@ -157,7 +157,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const showQuayDescription =
     !!leg.fromPlace.quay?.description && !isWalkSection && !isBikeSection;
 
-  const hasIntermediateStops = hasIntermediateStops;
+  const hasIntermediateStops = leg.intermediateEstimatedCalls.length > 0;
   const walkBikeRounding = isFirst ? 'floor' : 'ceil';
   const walkA11yLabel = useWalkA11yLabel(leg, wait, walkBikeRounding);
   const bikeA11yLabel = useBikeA11yLabel(leg, wait, walkBikeRounding);
