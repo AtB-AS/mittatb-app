@@ -20,10 +20,13 @@ import {
   Station,
   ViolationsReportingInitQuery,
   ViolationsReportingInitQueryResult,
+  ViolationsReportingInitQueryResultSchema,
   ViolationsVehicleLookupQuery,
   ViolationsVehicleLookupQueryResult,
+  ViolationsVehicleLookupQueryResultSchema,
   ViolationsReportQuery,
   ViolationsReportQueryResult,
+  ViolationsReportQueryResultSchema,
 } from './types/mobility';
 
 export const getActiveShmoBooking = (
@@ -181,11 +184,17 @@ export const initViolationsReporting = (
 ): Promise<ViolationsReportingInitQueryResult> => {
   const query = qs.stringify(params);
   return client
-    .get<ViolationsReportingInitQueryResult>(
-      stringifyUrl('/mobility/v1/violations-reporting/init', query),
-      opts,
-    )
-    .then((res) => res.data);
+    .get(stringifyUrl('/mobility/v1/violations-reporting/init', query), opts)
+    .then((res) => {
+      const result = ViolationsReportingInitQueryResultSchema.safeParse(
+        res.data,
+      );
+      if (!result.success) {
+        console.error(result.error.format());
+        throw result.error;
+      }
+      return result.data;
+    });
 };
 
 export const lookupVehicleByQr = (
@@ -194,11 +203,17 @@ export const lookupVehicleByQr = (
 ): Promise<ViolationsVehicleLookupQueryResult> => {
   const query = qs.stringify(params);
   return client
-    .get<ViolationsVehicleLookupQueryResult>(
-      stringifyUrl('/mobility/v1/violations-reporting/vehicle', query),
-      opts,
-    )
-    .then((res) => res.data);
+    .get(stringifyUrl('/mobility/v1/violations-reporting/vehicle', query), opts)
+    .then((res) => {
+      const result = ViolationsVehicleLookupQueryResultSchema.safeParse(
+        res.data,
+      );
+      if (!result.success) {
+        console.error(result.error.format());
+        throw result.error;
+      }
+      return result.data;
+    });
 };
 
 export const sendViolationsReport = (
@@ -206,10 +221,13 @@ export const sendViolationsReport = (
   opts?: AxiosRequestConfig,
 ): Promise<ViolationsReportQueryResult> => {
   return client
-    .post<ViolationsReportQueryResult>(
-      '/mobility/v1/violations-reporting/report',
-      data,
-      opts,
-    )
-    .then((res) => res.data);
+    .post('/mobility/v1/violations-reporting/report', data, opts)
+    .then((res) => {
+      const result = ViolationsReportQueryResultSchema.safeParse(res.data);
+      if (!result.success) {
+        console.error(result.error.format());
+        throw result.error;
+      }
+      return result.data;
+    });
 };
