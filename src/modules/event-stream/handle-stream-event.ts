@@ -15,7 +15,7 @@ export const handleStreamEvent = (
   featureToggles: {
     isEventStreamFareContractsEnabled?: boolean;
   },
-  handleFinishedBookingEvent: (bookingId: string) => Promise<void>,
+  handleFinishedBookingEvent: (bookingId: string) => void,
 ) => {
   switch (streamEvent.event) {
     case EventKind.FareContract:

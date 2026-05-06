@@ -37,7 +37,7 @@ export const useSetupEventStream = () => {
   const enabled = isEventStreamEnabled && isIdTokenRefreshEnabled(authStatus);
 
   const onMessage = useCallback(
-    async (event: WebSocketMessageEvent) => {
+    (event: WebSocketMessageEvent) => {
       const message = StreamEventSchema.safeParse(
         jsonStringToObject(event.data),
       );
@@ -52,7 +52,7 @@ export const useSetupEventStream = () => {
         data: event.data,
       });
 
-      const handleFinishedBookingEvent = async (bookingId: string) => {
+      const handleFinishedBookingEvent = (bookingId: string) => {
         dispatchMapState({
           type: MapStateActionType.FinishedBooking,
           bookingId: bookingId,
