@@ -51,7 +51,7 @@ export const BottomSheetHeader = ({
             )}
             <View style={styles.headingWrapper} accessible ref={focusRef}>
               {heading && (
-                <ThemeText typography="heading__xl">{heading}</ThemeText>
+                <ThemeText typography="heading__l">{heading}</ThemeText>
               )}
               {subText && (
                 <ThemeText
@@ -65,19 +65,21 @@ export const BottomSheetHeader = ({
           </View>
 
           {(headerData?.text || headerData?.icon) && (
-            <NativeBorderlessButton
-              style={styles.headerRight}
-              testID="closeBottomSheet"
-              accessibilityRole="button"
-              onPress={() => bottomSheetRef.current?.close()}
-            >
-              {headerData?.text && (
-                <ThemeText typography="body__s__strong">
-                  {headerData.text}
-                </ThemeText>
-              )}
-              {headerData?.icon && <ThemeIcon svg={headerData.icon} />}
-            </NativeBorderlessButton>
+            <View style={styles.headerRight}>
+              <NativeBorderlessButton
+                style={styles.dismissButton}
+                testID="closeBottomSheet"
+                accessibilityRole="button"
+                onPress={() => bottomSheetRef.current?.close()}
+              >
+                {headerData?.text && (
+                  <ThemeText typography="body__s__strong">
+                    {headerData.text}
+                  </ThemeText>
+                )}
+                {headerData?.icon && <ThemeIcon svg={headerData.icon} />}
+              </NativeBorderlessButton>
+            </View>
           )}
         </View>
         {!!headerNode && (
@@ -114,11 +116,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   headingWrapper: {
     gap: theme.spacing.xSmall,
+    flexShrink: 1,
   },
   headerRight: {
-    flexDirection: 'row',
+    paddingHorizontal: theme.spacing.medium,
+    paddingVertical: theme.spacing.xSmall,
+    alignSelf: 'flex-start',
+  },
+  dismissButton: {
     gap: theme.spacing.xSmall,
-    paddingRight: theme.spacing.medium,
+    flexDirection: 'row',
   },
   handleIndicatorStyle: {
     backgroundColor: theme.color.foreground.inverse.secondary,
