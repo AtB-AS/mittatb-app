@@ -305,7 +305,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             testID={`${testID}Mode`}
             accessibilityLabel={
               t(
-                TripDetailsTexts.trip.leg.transport.a11ylabel(
+                TripDetailsTexts.trip.leg.transport.lineA11yLabel(
                   t(
                     getTranslatedModeName(leg.mode, leg.line?.transportSubmode),
                   ),
