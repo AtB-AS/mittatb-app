@@ -84,7 +84,7 @@ export function useBookingTrips({
           tripPatternDisplayTimeFilter(
             tp,
             travelDate ?? new Date().toISOString(),
-            booking_grace_period_seconds,
+            travelDate ? 0 : booking_grace_period_seconds,
           ),
         )
         .map((tp) => ({
