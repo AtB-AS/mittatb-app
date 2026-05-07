@@ -55,10 +55,7 @@ describe('tripPatternDisplayTimeFilter', () => {
   describe('with gracePeriodSeconds', () => {
     it('returns true for trip 5 minutes before travelDate with 600s grace period', () => {
       const tripPattern = {
-        expectedStartTime: subSeconds(
-          new Date(travelDate),
-          300,
-        ).toISOString(),
+        expectedStartTime: subSeconds(new Date(travelDate), 300).toISOString(),
       } as TripPatternWithBooking;
       expect(tripPatternDisplayTimeFilter(tripPattern, travelDate, 600)).toBe(
         true,
@@ -67,10 +64,7 @@ describe('tripPatternDisplayTimeFilter', () => {
 
     it('returns false for trip 11 minutes before travelDate with 600s grace period', () => {
       const tripPattern = {
-        expectedStartTime: subSeconds(
-          new Date(travelDate),
-          660,
-        ).toISOString(),
+        expectedStartTime: subSeconds(new Date(travelDate), 660).toISOString(),
       } as TripPatternWithBooking;
       expect(tripPatternDisplayTimeFilter(tripPattern, travelDate, 600)).toBe(
         false,
@@ -79,10 +73,7 @@ describe('tripPatternDisplayTimeFilter', () => {
 
     it('returns true for trip exactly 10 minutes before travelDate with 600s grace period', () => {
       const tripPattern = {
-        expectedStartTime: subSeconds(
-          new Date(travelDate),
-          600,
-        ).toISOString(),
+        expectedStartTime: subSeconds(new Date(travelDate), 600).toISOString(),
       } as TripPatternWithBooking;
       expect(tripPatternDisplayTimeFilter(tripPattern, travelDate, 600)).toBe(
         true,
