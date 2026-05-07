@@ -99,10 +99,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
       </View>
       <NativeBlockButton
         // TODO(new-trip-detail): Remove toggle check when legacy screen is deleted
-        style={[
-          styles.button,
-          isNewTripDetailScreen && styles.buttonNewDesign,
-        ]}
+        style={[styles.button, isNewTripDetailScreen && styles.buttonNewDesign]}
         onPress={onExpand}
         accessibilityRole="button"
       >
