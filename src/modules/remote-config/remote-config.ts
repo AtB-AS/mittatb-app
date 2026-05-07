@@ -148,7 +148,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_in_app_review_for_announcements: false,
   enable_smart_park_and_ride: false,
   enable_harbor_distances_api: false,
-  booking_grace_period_seconds: 600,
+  booking_grace_period_seconds: 0,
   flex_booking_number_of_days_available: 7,
   flex_ticket_url: '',
   live_vehicle_stale_threshold: 15,
