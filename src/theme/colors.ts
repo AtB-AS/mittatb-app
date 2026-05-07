@@ -51,7 +51,7 @@ const tripLegDetail = {
   decorationContainerWidth: 20,
   decorationLineEndWidth: 12,
   decorationLineWidth: 4,
-  decorationLineInset: 16
+  decorationLineInset: 16,
 };
 
 type AppThemeExtension = {
