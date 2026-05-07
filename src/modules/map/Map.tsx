@@ -148,7 +148,6 @@ export const Map = (props: MapProps) => {
     isError: vehicleError,
   } = useVehicleQuery(
     selectedFeatureIsAVehicle ? selectedFeature?.properties?.id : undefined,
-    mapState.isStationBasedBooking,
   );
 
   const activeFeatureId =

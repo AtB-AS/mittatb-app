@@ -121,6 +121,7 @@ export const mapStateReducer = (
         bottomSheetType: MapBottomSheetType.Bicycle,
         feature: action.feature,
         customZoomLevel: action?.customZoomLevel,
+        isStationBasedBooking: mapState.isStationBasedBooking,
       };
     case MapStateActionType.BicycleScanned:
       return {

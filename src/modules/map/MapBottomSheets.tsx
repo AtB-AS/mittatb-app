@@ -262,7 +262,6 @@ export const MapBottomSheets = ({
             vehicleId={
               mapState.feature?.properties?.id ?? mapState.assetId ?? ''
             }
-            isStationBasedBooking={mapState.isStationBasedBooking ?? false}
             onClose={handleCloseSheet}
             onVehicleReceived={(item) => {
               if (mapState.assetIsScanned) {
