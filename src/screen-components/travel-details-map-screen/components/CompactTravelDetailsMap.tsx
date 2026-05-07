@@ -1,5 +1,5 @@
 import {MapCameraConfig, useMapViewConfig} from '@atb/modules/map';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
@@ -32,7 +32,6 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   onExpand,
 }) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const isNewTripDetailScreen = useIsExperimentalEnabled(
     'isNewTripDetailScreenEnabled',
   );
@@ -99,11 +98,10 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
         </MapboxGL.MapView>
       </View>
       <NativeBlockButton
+        // TODO(new-trip-detail): Remove toggle check when legacy screen is deleted
         style={[
           styles.button,
-          isNewTripDetailScreen && {
-            backgroundColor: theme.color.background.neutral[0].background,
-          },
+          isNewTripDetailScreen && styles.buttonNewDesign,
         ]}
         onPress={onExpand}
         accessibilityRole="button"
@@ -130,6 +128,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.color.background.neutral[1].background,
     borderBottomRightRadius: theme.border.radius.regular,
     borderBottomLeftRadius: theme.border.radius.regular,
+  },
+  // TODO(new-trip-detail): Merge into `button` when legacy screen is deleted
+  buttonNewDesign: {
+    backgroundColor: theme.color.background.neutral[0].background,
   },
   map: {
     width: '100%',
