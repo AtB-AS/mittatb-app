@@ -13,7 +13,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {formatFriendlyShmoErrorMessage} from '../utils.ts';
 import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {PaymentMethod, savePreviousPayment} from '@atb/modules/payment';
-import {useShmoWarnings} from '@atb/modules/map';
+import {useMapContext, useShmoWarnings} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {AgeVerificationEnum} from '../queries/use-get-age-verification-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
@@ -25,7 +25,6 @@ type ShmoActionButtonProps = {
   vehicleId: string;
   operatorId: string;
   paymentMethod: PaymentMethod | undefined;
-  isStationBasedBooking: boolean;
 };
 
 export const ShmoActionButton = ({
@@ -34,7 +33,6 @@ export const ShmoActionButton = ({
   operatorId,
   paymentMethod,
   loginCallback,
-  isStationBasedBooking,
 }: ShmoActionButtonProps) => {
   const {authenticationType, userId} = useAuthContext();
   const {hasBlockers, numberOfBlockers, ageVerification, operatorAgeLimit} =
@@ -45,7 +43,8 @@ export const ShmoActionButton = ({
   const coordinates = getCurrentCoordinatesGlobal();
   const {warningMessage} = useShmoWarnings(vehicleId);
   const {logEvent} = useAnalyticsContext();
-  const {vehicle} = useVehicle(vehicleId, isStationBasedBooking);
+  const {vehicle} = useVehicle(vehicleId);
+  const {mapState} = useMapContext();
 
   const {
     mutateAsync: initShmoOneStopBooking,
@@ -61,8 +60,10 @@ export const ShmoActionButton = ({
         latitude: coordinates?.latitude ?? 0,
         longitude: coordinates?.longitude ?? 0,
       },
-      assetId: isStationBasedBooking ? undefined : vehicleId,
-      stationId: isStationBasedBooking ? vehicle?.station?.id : undefined,
+      assetId: mapState.isStationBasedBooking ? undefined : vehicleId,
+      stationId: mapState.isStationBasedBooking
+        ? vehicle?.station?.id
+        : undefined,
       operatorId: operatorId,
       vehicleTypeId: vehicle?.vehicleType.id,
     };
@@ -83,7 +84,7 @@ export const ShmoActionButton = ({
     paymentMethod?.paymentType,
     coordinates?.latitude,
     coordinates?.longitude,
-    isStationBasedBooking,
+    mapState.isStationBasedBooking,
     vehicleId,
     vehicle?.station?.id,
     vehicle?.vehicleType.id,

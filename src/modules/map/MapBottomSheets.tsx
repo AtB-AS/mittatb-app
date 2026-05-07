@@ -150,6 +150,26 @@ export const MapBottomSheets = ({
     setCurrentBottomSheet,
   ]);
 
+  if (
+    mapState.bottomSheetType === MapBottomSheetType.FinishedBooking &&
+    mapState.bookingId
+  ) {
+    return (
+      <FinishedShmoSheet
+        bookingId={mapState.bookingId}
+        onClose={handleCloseSheet}
+        navigateSupportCallback={(operatorId, bookingId) => {
+          handleCloseSheet();
+          navigateToShmoSupport({
+            operatorId,
+            bookingId,
+          });
+        }}
+        locationArrowOnPress={locationArrowOnPress}
+        navigateToScanQrCode={navigateToScanQrCode}
+      />
+    );
+  }
   return (
     <>
       {activeBooking?.state === ShmoBookingState.NOT_STARTED && (
@@ -235,22 +255,6 @@ export const MapBottomSheets = ({
           />
         )}
 
-      {mapState.bottomSheetType === MapBottomSheetType.FinishedBooking &&
-        !!mapState.bookingId && (
-          <FinishedShmoSheet
-            bookingId={mapState.bookingId}
-            onClose={handleCloseSheet}
-            navigateSupportCallback={(operatorId, bookingId) => {
-              handleCloseSheet();
-              navigateToShmoSupport({
-                operatorId,
-                bookingId,
-              });
-            }}
-            locationArrowOnPress={locationArrowOnPress}
-            navigateToScanQrCode={navigateToScanQrCode}
-          />
-        )}
       {mapState.bottomSheetType === MapBottomSheetType.Bicycle &&
         !openPaymentType &&
         !activeBooking?.bookingId && (
@@ -258,7 +262,6 @@ export const MapBottomSheets = ({
             vehicleId={
               mapState.feature?.properties?.id ?? mapState.assetId ?? ''
             }
-            isStationBasedBooking={mapState.isStationBasedBooking ?? false}
             onClose={handleCloseSheet}
             onVehicleReceived={(item) => {
               if (mapState.assetIsScanned) {

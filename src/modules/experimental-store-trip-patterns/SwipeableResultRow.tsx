@@ -8,6 +8,7 @@ import Animated, {SharedValue, useAnimatedStyle} from 'react-native-reanimated';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Delete, Save} from '@atb/assets/svg/mono-icons/actions';
 import {SvgProps} from 'react-native-svg';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 export type RightActionKind = 'delete' | 'save';
 
@@ -21,6 +22,7 @@ export const SwipeableResultRow: React.FC<
   }>
 > = ({children, onRightAction, rightActionKind}) => {
   const swipeableRef = useRef<SwipeableMethods | null>(null);
+  const {save_trip_swipe_threshold} = useRemoteConfigContext();
 
   const closeSwipeable = useCallback(() => {
     swipeableRef.current?.close();
@@ -45,10 +47,10 @@ export const SwipeableResultRow: React.FC<
   return (
     <Swipeable
       ref={swipeableRef}
-      friction={1}
+      friction={2}
       overshootFriction={8}
       enableTrackpadTwoFingerGesture
-      rightThreshold={20}
+      rightThreshold={save_trip_swipe_threshold}
       renderRightActions={RightAction}
       onSwipeableOpen={handleSwipe}
     >

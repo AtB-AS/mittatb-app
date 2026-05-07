@@ -50,7 +50,6 @@ type Props = {
   navigateToLogin: () => void;
   selectPaymentMethod: () => void;
   startOnboardingCallback: () => void;
-  isStationBasedBooking: boolean;
 };
 export const BicycleSheet = ({
   vehicleId: id,
@@ -62,7 +61,6 @@ export const BicycleSheet = ({
   navigateToLogin,
   selectPaymentMethod,
   startOnboardingCallback,
-  isStationBasedBooking,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -74,7 +72,7 @@ export const BicycleSheet = ({
     operatorName,
     rentalAppUri,
     appStoreUri,
-  } = useVehicle(id, isStationBasedBooking);
+  } = useVehicle(id);
 
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
@@ -176,7 +174,6 @@ export const BicycleSheet = ({
                 vehicleId={id}
                 operatorId={operatorId}
                 paymentMethod={selectedPaymentMethod}
-                isStationBasedBooking={isStationBasedBooking}
               />
               <View style={styles.helpButtons}>
                 {selectedPaymentMethod && !hasBlockers && (
