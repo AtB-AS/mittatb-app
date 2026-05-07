@@ -14,7 +14,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
-import {useNewTripDetailScreenEnabled} from '@atb/screen-components/travel-details-screens';
+import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 
 export type MapProps = {
   serviceJourneyPolylines: ServiceJourneyPolyline[];
@@ -33,7 +33,9 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
 }) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const isNewTripDetailScreen = useNewTripDetailScreenEnabled();
+  const isNewTripDetailScreen = useIsExperimentalEnabled(
+    'isNewTripDetailScreenEnabled',
+  );
   const cameraRef = useRef<MapboxGL.Camera>(null);
 
   const features = useMemo(

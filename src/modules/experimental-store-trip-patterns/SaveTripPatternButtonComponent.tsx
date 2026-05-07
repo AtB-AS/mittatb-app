@@ -8,10 +8,10 @@ import {Save, SaveFill} from '@atb/assets/svg/mono-icons/actions';
 import analytics from '@react-native-firebase/analytics';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useNewTripDetailScreenEnabled} from '@atb/screen-components/travel-details-screens';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getTripPatternAnalytics} from '@atb/screen-components/travel-details-screens';
 import {AccessibilityInfo} from 'react-native';
+import {useIsExperimentalEnabled} from '../experimental/use-is-experimental-enabled';
 
 type SaveTripPatternButtonComponentProps = {
   tripPattern: TripPattern;
@@ -30,7 +30,9 @@ export const SaveTripPatternButtonComponent: React.FC<
   } = useStoredTripPatterns();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const isNewTripDetailScreen = useNewTripDetailScreenEnabled();
+  const isNewTripDetailScreen = useIsExperimentalEnabled(
+    'isNewTripDetailScreenEnabled',
+  );
   const posthogAnalytics = useAnalyticsContext();
   const {fareZones} = useFirestoreConfigurationContext();
 
