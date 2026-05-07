@@ -949,6 +949,7 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   transportLine: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'wrap',
     gap: theme.spacing.small,
   },
   onDemandTransportLabel: {
