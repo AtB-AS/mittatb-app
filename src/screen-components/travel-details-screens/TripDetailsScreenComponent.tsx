@@ -42,8 +42,8 @@ import {useTimeContext} from '@atb/modules/time';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 import {TravelCardHeaderComponent as TravelCardHeader} from '@atb/screen-components/travel-card';
 import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
-import {useNewTripDetailScreenEnabled} from './use-new-trip-detail-screen-enabled';
 import {LegacyTripDetailsScreenComponent} from './legacy';
+import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -73,7 +73,7 @@ type Props = TripDetailsScreenParams & {
 };
 
 export const TripDetailsScreenComponent = (props: Props) => {
-  const isNewScreen = useNewTripDetailScreenEnabled();
+  const isNewScreen = useIsExperimentalEnabled('isNewTripDetailScreenEnabled');
   return isNewScreen ? (
     <NewTripDetailsScreenComponent {...props} />
   ) : (
