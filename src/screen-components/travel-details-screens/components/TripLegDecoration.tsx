@@ -94,9 +94,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     bottom: 0,
   },
   decorationWithStart: {
-    top: 16,
+    top: theme.tripLegDetail.decorationLineInset,
   },
   decorationWithEnd: {
-    bottom: 16,
+    bottom: theme.tripLegDetail.decorationLineInset,
   },
 }));
