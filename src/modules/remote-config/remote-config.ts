@@ -68,6 +68,7 @@ export type RemoteConfig = {
   enable_in_app_review_for_announcements: boolean;
   enable_smart_park_and_ride: boolean;
   enable_harbor_distances_api: boolean;
+  booking_grace_period_seconds: number;
   flex_booking_number_of_days_available: number;
   flex_ticket_url: string;
   live_vehicle_stale_threshold: number;
@@ -147,6 +148,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_in_app_review_for_announcements: false,
   enable_smart_park_and_ride: false,
   enable_harbor_distances_api: false,
+  booking_grace_period_seconds: 600,
   flex_booking_number_of_days_available: 7,
   flex_ticket_url: '',
   live_vehicle_stale_threshold: 15,
@@ -324,6 +326,9 @@ export function getConfig(): RemoteConfig {
   const enable_harbor_distances_api =
     values['enable_harbor_distances_api']?.asBoolean() ??
     defaultRemoteConfig.enable_harbor_distances_api;
+  const booking_grace_period_seconds =
+    values['booking_grace_period_seconds']?.asNumber() ??
+    defaultRemoteConfig.booking_grace_period_seconds;
   const flex_booking_number_of_days_available =
     values['flex_booking_number_of_days_available']?.asNumber() ??
     defaultRemoteConfig.flex_booking_number_of_days_available;
@@ -430,6 +435,7 @@ export function getConfig(): RemoteConfig {
     enable_in_app_review_for_announcements,
     enable_smart_park_and_ride,
     enable_harbor_distances_api,
+    booking_grace_period_seconds,
     flex_booking_number_of_days_available,
     flex_ticket_url,
     live_vehicle_stale_threshold,

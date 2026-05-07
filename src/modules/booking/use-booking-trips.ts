@@ -10,6 +10,7 @@ import {
   tripPatternDisplayTimeFilter,
 } from './utils';
 import {useProductAlternatives} from '@atb/modules/ticketing';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import type {BookingDisabledReason} from './types';
 import {startOfDay} from 'date-fns';
 
@@ -29,6 +30,7 @@ export function useBookingTrips({
 }): BookingTripsType {
   const {stopPlaces, travelDate, userProfilesWithCount} = selection;
   const productAlternatives = useProductAlternatives(selection);
+  const {booking_grace_period_seconds} = useRemoteConfigContext();
 
   // We always search from the start of the day to ensure we get all trips for that day
   // The trip search in BFF searches 24 hours from searchTime
@@ -82,7 +84,7 @@ export function useBookingTrips({
           tripPatternDisplayTimeFilter(
             tp,
             travelDate ?? new Date().toISOString(),
-            600,
+            booking_grace_period_seconds,
           ),
         )
         .map((tp) => ({
