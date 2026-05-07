@@ -176,7 +176,6 @@ export const ScooterSheet = ({
                 vehicleId={id}
                 operatorId={operatorId}
                 paymentMethod={selectedPaymentMethod}
-                isStationBasedBooking={false}
               />
               <View style={styles.helpButtons}>
                 {selectedPaymentMethod && !hasBlockers && (
