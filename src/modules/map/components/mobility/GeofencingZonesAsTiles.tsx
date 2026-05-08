@@ -18,6 +18,7 @@ import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
 const geofencingZonesVectorSourceId = 'geofencing-zones-source';
 const geofencingZonesFeaturesLayerId = 'geofencing_zones_features';
 const geofencingZonesIconSourceLayerId = 'geofencing_zones_icons';
+const virtualStationsSourceLayerId = 'virtual_stations';
 
 const minZoomLevel = 9;
 const maxZoomLevel = 12;
@@ -36,6 +37,7 @@ const sortKey: Expression = [
 const tileLayerNames: TileLayerName[] = [
   'geofencing_zones_features',
   'geofencing_zones_icons',
+  'virtual_stations',
 ];
 
 const iconReachFullScaleAtZoomLevel = 15.5;
@@ -198,6 +200,7 @@ export const GeofencingZonesAsTiles = ({
 
         <MapboxGL.SymbolLayer
           id="geofencing-zone-icon-layer"
+          slot="top"
           sourceID={geofencingZonesVectorSourceId}
           sourceLayerID={geofencingZonesIconSourceLayerId}
           minZoomLevel={minZoomLevel}
@@ -212,6 +215,22 @@ export const GeofencingZonesAsTiles = ({
           }}
           filter={iconFilter}
           aboveLayerID={MapSlotLayerId.GeofencingZonesIcons}
+        />
+
+        <MapboxGL.SymbolLayer
+          id="virtual-stations-layer"
+          slot="top"
+          sourceID={geofencingZonesVectorSourceId}
+          sourceLayerID={virtualStationsSourceLayerId}
+          minZoomLevel={minZoomLevel}
+          style={{
+            iconOpacity,
+            iconSize,
+            iconAllowOverlap: true,
+            iconIgnorePlacement: true,
+            iconEmissiveStrength: 1,
+            iconImage: 'geofencingzone_parking_' + themeName,
+          }}
         />
       </>
     </MapboxGL.VectorSource>
