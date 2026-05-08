@@ -55,6 +55,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {useDebugUserInfoHeader} from '@atb/api';
 import {DebugServerOverrides} from '@atb/modules/debug';
 import {useScrollBorder} from '@atb/utils/use-scroll-border';
+import MapboxGL from '@rnmapbox/maps';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -311,6 +312,34 @@ export const Profile_DebugInfoScreen = () => {
           <LinkSectionItem
             text="Reset user map filters"
             onPress={() => storage.set('@ATB_user_map_filters', '')}
+          />
+
+          <LinkSectionItem
+            text="Clear locally stored map tiles"
+            onPress={() =>
+              Alert.alert(
+                'Clear locally stored map tiles?',
+                'Clears the Mapbox disk tile cache.',
+                [
+                  {text: 'Cancel', style: 'cancel'},
+                  {
+                    text: 'Clear',
+                    style: 'destructive',
+                    onPress: async () => {
+                      try {
+                        await MapboxGL.clearData();
+                        Alert.alert('Cleared', 'Map tile cache cleared.');
+                      } catch (e: any) {
+                        Alert.alert(
+                          'Failed',
+                          e?.message ?? 'Could not clear tile cache.',
+                        );
+                      }
+                    },
+                  },
+                ],
+              )
+            }
           />
 
           <LinkSectionItem
