@@ -71,7 +71,7 @@ export const PurchaseHistoryScreenComponent = ({
       <SectionList
         contentContainerStyle={styles.sectionListContent}
         sections={sections}
-        keyExtractor={(item) => item.created + item.orderId}
+        keyExtractor={(item) => `${item.created.getTime()}-${item.orderId}`}
         renderItem={renderItem}
         renderSectionHeader={({section}) => (
           <ContentHeading text={section.year.toString()} />
@@ -125,7 +125,7 @@ const useSectionsByYear = (serverNow: number): YearSection[] => {
     let currentSection: YearSection | null = null;
 
     for (const item of sortedItems) {
-      const year = new Date(item.created).getFullYear();
+      const year = item.created.getFullYear();
       if (!currentSection || currentSection.year !== year) {
         currentSection = {year, data: []};
         sections.push(currentSection);
