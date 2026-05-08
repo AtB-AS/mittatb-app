@@ -25,6 +25,7 @@ type ShmoActionButtonProps = {
   vehicleId: string;
   operatorId: string;
   paymentMethod: PaymentMethod | undefined;
+  bonusProductId?: string;
 };
 
 export const ShmoActionButton = ({
@@ -33,6 +34,7 @@ export const ShmoActionButton = ({
   operatorId,
   paymentMethod,
   loginCallback,
+  bonusProductId,
 }: ShmoActionButtonProps) => {
   const {authenticationType, userId} = useAuthContext();
   const {hasBlockers, numberOfBlockers, ageVerification, operatorAgeLimit} =
@@ -66,6 +68,7 @@ export const ShmoActionButton = ({
         : undefined,
       operatorId: operatorId,
       vehicleTypeId: vehicle?.vehicleType.id,
+      bonusProductId: bonusProductId,
     };
     const res = await initShmoOneStopBooking(initReqBody);
     logEvent('Mobility', 'Shmo booking started', {
@@ -92,6 +95,7 @@ export const ShmoActionButton = ({
     initShmoOneStopBooking,
     logEvent,
     userId,
+    bonusProductId,
   ]);
 
   if (authenticationType != 'phone') {

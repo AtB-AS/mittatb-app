@@ -1,5 +1,5 @@
 import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
-import React from 'react';
+import React, {useState} from 'react';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -38,6 +38,13 @@ import {SupportButton} from '../SupportButton';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {BrandingImage} from '../BrandingImage';
 import {getTransportModeAndSubMode} from '../../utils';
+import {
+  BonusProductTypeEnum,
+  PayWithBonusPointsCheckbox,
+  useIsBonusActiveForUser,
+  useRelevantBonusProduct,
+} from '@atb/modules/bonus';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -97,6 +104,15 @@ export const ScooterSheet = ({
 
   const {isParkingViolationsReportingEnabled, isShmoDeepIntegrationEnabled} =
     useFeatureTogglesContext();
+
+  const isBonusActiveForUser = useIsBonusActiveForUser();
+  const bonusProduct = useRelevantBonusProduct(
+    operatorId,
+    FormFactor.Scooter,
+    BonusProductTypeEnum.SHARED_MOBILITY,
+  );
+  const {logEvent} = useAnalyticsContext();
+  const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
 
   return (
     <MapBottomSheet
@@ -161,7 +177,11 @@ export const ScooterSheet = ({
 
             <PriceDetailsCard
               pricingPlan={vehicle.pricingPlan}
-              priceAdjustments={priceAdjustments}
+              priceAdjustments={
+                payWithBonusPoints && bonusProduct?.priceAdjustments
+                  ? bonusProduct.priceAdjustments
+                  : priceAdjustments
+              }
               systemId={vehicle.system.id}
             />
           </View>
@@ -170,12 +190,32 @@ export const ScooterSheet = ({
           operatorId &&
           operatorIsIntegrationEnabled ? (
             <>
+              {isBonusActiveForUser && !!bonusProduct && (
+                <PayWithBonusPointsCheckbox
+                  bonusProduct={bonusProduct}
+                  operatorName={operatorName}
+                  isChecked={payWithBonusPoints}
+                  onPress={() =>
+                    setPayWithBonusPoints((prev) => {
+                      const newState = !prev;
+                      logEvent('Bonus', 'bonus points checkbox toggled', {
+                        bonusProductId: bonusProduct.id,
+                        newState,
+                      });
+                      return newState;
+                    })
+                  }
+                />
+              )}
               <ShmoActionButton
                 onStartOnboarding={startOnboardingCallback}
                 loginCallback={navigateToLogin}
                 vehicleId={id}
                 operatorId={operatorId}
                 paymentMethod={selectedPaymentMethod}
+                bonusProductId={
+                  payWithBonusPoints ? bonusProduct?.id : undefined
+                }
               />
               <View style={styles.helpButtons}>
                 {selectedPaymentMethod && !hasBlockers && (
