@@ -111,6 +111,8 @@ export const GeofencingZonesAsTiles = ({
     ...backgroundMap,
     'rgba(0,0,0,0)',
   ];
+  const virtualStationAreaColor =
+    theme.color.geofencingZone.allowed.color.background;
   const fillOpacity: Expression = ['match', code, ...fillOpacityMap, 0];
   const lineOpacity: Expression = ['match', code, ...strokeOpacityMap, 0];
   const lineWidth: Expression = [
@@ -198,6 +200,38 @@ export const GeofencingZonesAsTiles = ({
           />
         ))}
 
+        <MapboxGL.FillLayer
+          id="virtual-station-area-fill"
+          sourceID={geofencingZonesVectorSourceId}
+          sourceLayerID={virtualStationsSourceLayerId}
+          aboveLayerID={lineLayerConfigs[0].id}
+          minZoomLevel={minZoomLevel}
+          slot="middle"
+          style={{
+            fillColor: virtualStationAreaColor,
+            fillOpacity: 0.5,
+            fillAntialias: true,
+            fillEmissiveStrength: 1,
+          }}
+        />
+
+        <MapboxGL.LineLayer
+          id="virtual-station-area-line"
+          sourceID={geofencingZonesVectorSourceId}
+          sourceLayerID={virtualStationsSourceLayerId}
+          aboveLayerID={lineLayerConfigs[0].id}
+          minZoomLevel={minZoomLevel}
+          slot="middle"
+          style={{
+            lineColor: virtualStationAreaColor,
+            lineOpacity: 0.8,
+            lineEmissiveStrength: 1,
+            lineCap: 'round',
+            lineJoin: 'round',
+            lineWidth,
+          }}
+        />
+
         <MapboxGL.SymbolLayer
           id="geofencing-zone-icon-layer"
           slot="top"
@@ -231,6 +265,7 @@ export const GeofencingZonesAsTiles = ({
             iconEmissiveStrength: 1,
             iconImage: 'geofencingzone_parking_' + themeName,
           }}
+          filter={['==', ['geometry-type'], 'Point']}
         />
       </>
     </MapboxGL.VectorSource>

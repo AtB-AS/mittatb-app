@@ -664,6 +664,15 @@ export const GeofencingZoneExtraExplanations = {
   ),
 };
 
+export const StationParkingExplanation = {
+  title: _('Parker her', 'Park here', 'Parker her'),
+  description: _(
+    'Dette er et passende sted å parkere',
+    'This is a suitable place to park',
+    'Dette er ein passande stad å parkere',
+  ),
+};
+
 export const ShmoWarnings = {
   scooterDisabled: _(
     'Denne el-sparkesykkelen er ikke tilgjengelig akkurat nå ',

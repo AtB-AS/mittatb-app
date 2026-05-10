@@ -2,8 +2,12 @@ import {useTranslation} from '@atb/translations';
 import {
   GeofencingZoneExplanations,
   GeofencingZoneExtraExplanations,
+  StationParkingExplanation,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {GeofencingZoneIconBox} from '@atb/components/icon-box';
+import {
+  GeofencingZoneIconBox,
+  StationParkingIconBox,
+} from '@atb/components/icon-box';
 import {useCallback} from 'react';
 import {GeofencingZoneCode} from '@atb-as/theme';
 
@@ -17,7 +21,10 @@ export const useGeofencingZoneContent = () => {
   const {t} = useTranslation();
 
   const getGeofencingZoneContent = useCallback(
-    (geofencingZoneCode?: GeofencingZoneCode, isStationParking?: boolean) => {
+    (
+      geofencingZoneCode?: GeofencingZoneCode,
+      isStationParking?: boolean,
+    ): GeofencingZoneContent => {
       const key =
         geofencingZoneCode && geofencingZoneCode in GeofencingZoneExplanations
           ? geofencingZoneCode
@@ -46,7 +53,17 @@ export const useGeofencingZoneContent = () => {
     [t],
   );
 
+  const getStationParkingContent = useCallback(
+    (): GeofencingZoneContent => ({
+      title: t(StationParkingExplanation.title),
+      description: t(StationParkingExplanation.description),
+      iconNode: <StationParkingIconBox />,
+    }),
+    [t],
+  );
+
   return {
     getGeofencingZoneContent,
+    getStationParkingContent,
   };
 };

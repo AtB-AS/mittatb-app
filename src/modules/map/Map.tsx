@@ -131,7 +131,8 @@ export const Map = (props: MapProps) => {
     isMapTilePreloadingEnabled,
   } = useFeatureTogglesContext();
 
-  const {getGeofencingZoneContent} = useGeofencingZoneContent();
+  const {getGeofencingZoneContent, getStationParkingContent} =
+    useGeofencingZoneContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
   const {data: activeShmoBooking} = useActiveShmoBookingQuery(isFocused);
@@ -219,13 +220,17 @@ export const Map = (props: MapProps) => {
       if (!featuresAtClick || featuresAtClick.length === 0) return;
       const featureToSelect = featuresAtClick[0]; // currently ignore the ones behind
 
+      if (featureToSelect.properties?.type === 'station') {
+        showSnackbar({content: getStationParkingContent(), position: 'top'});
+        return;
+      }
+
       const code = featureToSelect.properties?.code ?? 'allowed';
       const stationParking =
         featureToSelect.properties?.stationParking ?? false;
-
       showGeofencingZoneSnackbar(code, stationParking);
     },
-    [showGeofencingZoneSnackbar],
+    [showGeofencingZoneSnackbar, showSnackbar, getStationParkingContent],
   );
 
   const locationArrowOnPress = useCallback(async () => {
