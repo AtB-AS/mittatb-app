@@ -23,6 +23,7 @@ import {useFavoritesContext} from '@atb/modules/favorites';
 import {hasFavorites} from '../utils';
 import {DeparturesProps, useDepartures} from '../hooks/use-departures';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
 
@@ -98,6 +99,11 @@ export function QuayView({
     if (!placeHasFavorites) setShowOnlyFavorites(false);
   }, [placeHasFavorites, setShowOnlyFavorites]);
 
+  const refreshControlProps = useManualRefreshControlProps({
+    onRefresh: refetchDepartures,
+    refreshing: departuresIsLoading,
+  });
+
   return (
     <SectionList
       onScroll={onScroll}
@@ -132,11 +138,7 @@ export function QuayView({
         </>
       }
       refreshControl={
-        <RefreshControl
-          refreshing={departuresIsLoading}
-          onRefresh={refetchDepartures}
-          testID="isLoading"
-        />
+        <RefreshControl {...refreshControlProps} testID="isLoading" />
       }
       sections={quayListData}
       testID={testID}

@@ -20,6 +20,7 @@ import {
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import {AnimatedGestureHandlerScrollView} from '@atb/components/animated-gesture-handler-scroll-view';
 import {useTabScrollHandler} from '../Ticketing_TicketTabNavStack';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -120,23 +121,23 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     });
   };
 
+  const refreshControlProps = useManualRefreshControlProps({
+    onRefresh: () => {
+      recentFareContractsRefetch();
+      refetchPreassignedFareProducts();
+      analytics.logEvent('Ticketing', 'Pull to refresh products', {
+        fareProductsCount: preassignedFareProducts.length,
+        isPlaceholderData,
+      });
+    },
+    refreshing: isRefetchingPreassignedFareProducts,
+  });
+
   return authenticationType !== 'none' ? (
     <AnimatedGestureHandlerScrollView
       onScroll={scrollHandler}
       scrollEventThrottle={16}
-      refreshControl={
-        <RefreshControl
-          refreshing={isRefetchingPreassignedFareProducts}
-          onRefresh={() => {
-            recentFareContractsRefetch();
-            refetchPreassignedFareProducts();
-            analytics.logEvent('Ticketing', 'Pull to refresh products', {
-              fareProductsCount: preassignedFareProducts.length,
-              isPlaceholderData,
-            });
-          }}
-        />
-      }
+      refreshControl={<RefreshControl {...refreshControlProps} />}
     >
       <ErrorWithAccountMessage style={styles.accountWrongMessage} />
       <RecentFareContracts

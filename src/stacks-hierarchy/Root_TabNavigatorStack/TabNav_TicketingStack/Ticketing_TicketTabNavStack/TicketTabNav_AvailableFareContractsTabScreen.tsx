@@ -23,6 +23,7 @@ import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 
 type Props =
   TicketTabNavScreenProps<'TicketTabNav_AvailableFareContractsTabScreen'>;
@@ -67,28 +68,28 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
     [navigation],
   );
 
+  const refreshControlProps = useManualRefreshControlProps({
+    onRefresh: () => {
+      refetchAvailableFareContracts();
+      refetchPreassignedFareProducts();
+      queryClient.invalidateQueries({
+        queryKey: [SCHOOL_CARNET_QUERY_KEY],
+      });
+      analytics.logEvent('Ticketing', 'Pull to refresh tickets', {
+        reservationsCount: reservations.length,
+        availableFareContractsCount: availableFareContracts.length,
+      });
+    },
+    refreshing: isRefetchingAvailableFareContracts,
+  });
+
   return (
     <View style={styles.container}>
       <AnimatedGestureHandlerScrollView
         contentContainerStyle={styles.content}
         onScroll={scrollHandler}
         scrollEventThrottle={16}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefetchingAvailableFareContracts}
-            onRefresh={() => {
-              refetchAvailableFareContracts();
-              refetchPreassignedFareProducts();
-              queryClient.invalidateQueries({
-                queryKey: [SCHOOL_CARNET_QUERY_KEY],
-              });
-              analytics.logEvent('Ticketing', 'Pull to refresh tickets', {
-                reservationsCount: reservations.length,
-                availableFareContractsCount: availableFareContracts.length,
-              });
-            }}
-          />
-        }
+        refreshControl={<RefreshControl {...refreshControlProps} />}
         testID="availableFCScrollView"
       >
         <TravelTokenBox
