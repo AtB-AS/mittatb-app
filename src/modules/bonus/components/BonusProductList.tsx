@@ -4,7 +4,7 @@ import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {BonusStarFill} from './BonusStarFill';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {BonusProductType} from '@atb/modules/bonus';
+import {BonusProductGroupType, BonusProductType} from '@atb/modules/bonus';
 import {
   BonusProgramTexts,
   getTextForLanguage,
@@ -21,17 +21,17 @@ import {MapPin} from '@atb/assets/svg/mono-icons/tab-bar';
 import {MapFilterType, useMapContext} from '@atb/modules/map';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
-const shouldShowMapButton = (bonusProduct: BonusProductType) =>
-  bonusProduct.formFactors.some(
-    (ff) => (ff as FormFactor) !== FormFactor.Other,
-  );
-
 type Props = {
+  bonusProductGroups: BonusProductGroupType[];
   bonusProducts: BonusProductType[];
   onNavigateToMap?: (initialFilters: MapFilterType) => void;
 };
 
-export const BonusProductList = ({bonusProducts, onNavigateToMap}: Props) => {
+export const BonusProductList = ({
+  bonusProductGroups,
+  bonusProducts,
+  onNavigateToMap,
+}: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {mobilityOperators} = useFirestoreConfigurationContext();
@@ -39,10 +39,10 @@ export const BonusProductList = ({bonusProducts, onNavigateToMap}: Props) => {
   const analytics = useAnalyticsContext();
 
   const handleNavigateToMap = useCallback(
-    (bonusProduct: BonusProductType) => {
+    (formFactors: FormFactor[]) => {
       if (!onNavigateToMap || !mapFilter?.mobility) return;
       const updatedMobility = {...mapFilter.mobility};
-      bonusProduct.formFactors.forEach((ff) => {
+      formFactors.forEach((ff) => {
         updatedMobility[ff] = {
           operators: updatedMobility[ff]?.operators ?? [],
           showAll: true,
@@ -57,100 +57,109 @@ export const BonusProductList = ({bonusProducts, onNavigateToMap}: Props) => {
 
   return (
     <View style={styles.container}>
-      {bonusProducts.map((bonusProduct) => (
-        <Pressable
-          key={bonusProduct.id}
-          onPress={() =>
-            analytics.logEvent('Bonus', 'Bonus product pressed', {
-              productId: bonusProduct.id,
-            })
-          }
-          accessible={false}
-          importantForAccessibility="no"
-        >
-          <Section>
-            <GenericSectionItem>
-              <View style={styles.horizontalContainer}>
-                {(() => {
-                  const {mode, subMode} = getTransportModeAndSubMode(
-                    bonusProduct.formFactors[0] as FormFactor,
-                  );
-                  return (
-                    <TransportationIconBox
-                      mode={mode}
-                      subMode={subMode}
-                      rounded
-                    />
-                  );
-                })()}
-                <View style={{flex: 1}} accessible={true}>
-                  <ThemeText typography="body__s__strong">
-                    {[
-                      ...new Set(
-                        bonusProduct.formFactors.map((ff) =>
-                          t(MobilityTexts.vehicleName(ff as FormFactor)),
-                        ),
-                      ),
-                    ].join(', ')}
-                  </ThemeText>
-                  <ThemeText typography="body__s" color="secondary">
-                    {bonusProduct.operatorIds
-                      .map(
-                        (id) =>
-                          mobilityOperators?.find((op) => op.id === id)?.name ??
-                          id,
-                      )
-                      .join(', ')}
-                  </ThemeText>
+      {bonusProductGroups.map((group) => {
+        const memberProducts = bonusProducts.filter(
+          (bp) => bp.bonusProductGroupId === group.id,
+        );
+        const formFactors = [
+          ...new Set(memberProducts.flatMap((bp) => bp.formFactors)),
+        ] as FormFactor[];
+        const operatorNames = memberProducts
+          .map(
+            (bp) =>
+              mobilityOperators?.find((op) => op.id === bp.operatorId)?.name ??
+              bp.operatorId,
+          )
+          .join(', ');
+        const showMapButton =
+          !!onNavigateToMap &&
+          formFactors.some((ff) => ff !== FormFactor.Other);
+
+        return (
+          <Pressable
+            key={group.id}
+            onPress={() =>
+              analytics.logEvent('Bonus', 'Bonus product group pressed', {
+                bonusProductGroupId: group.id,
+              })
+            }
+            accessible={false}
+            importantForAccessibility="no"
+          >
+            <Section>
+              <GenericSectionItem>
+                <View style={styles.horizontalContainer}>
+                  {(() => {
+                    const {mode, subMode} = getTransportModeAndSubMode(
+                      formFactors[0],
+                    );
+                    return (
+                      <TransportationIconBox
+                        mode={mode}
+                        subMode={subMode}
+                        rounded
+                      />
+                    );
+                  })()}
+                  <View style={{flex: 1}} accessible={true}>
+                    <ThemeText typography="body__s__strong">
+                      {formFactors
+                        .map((ff) => t(MobilityTexts.vehicleName(ff)))
+                        .join(', ')}
+                    </ThemeText>
+                    <ThemeText typography="body__s" color="secondary">
+                      {operatorNames}
+                    </ThemeText>
+                  </View>
+                  {showMapButton && (
+                    <Pressable
+                      onPress={() => {
+                        analytics.logEvent(
+                          'Bonus',
+                          'Map button on bonus product group clicked',
+                          {
+                            bonusProductGroupId: group.id,
+                          },
+                        );
+                        handleNavigateToMap(formFactors);
+                      }}
+                      style={styles.mapButton}
+                      accessibilityRole="button"
+                      accessibilityLabel={t(
+                        BonusProgramTexts.bonusProfile.mapButton.a11yLabel,
+                      )}
+                      accessibilityHint={t(
+                        BonusProgramTexts.bonusProfile.mapButton.a11yHint,
+                      )}
+                    >
+                      <ThemeIcon svg={MapPin} />
+                      <ThemeIcon svg={ChevronRight} />
+                    </Pressable>
+                  )}
                 </View>
-                {onNavigateToMap && shouldShowMapButton(bonusProduct) && (
-                  <Pressable
-                    onPress={() => {
-                      analytics.logEvent(
-                        'Bonus',
-                        'Map button on bonus product clicked',
-                        {
-                          productId: bonusProduct.id,
-                        },
-                      );
-                      handleNavigateToMap(bonusProduct);
-                    }}
-                    style={styles.mapButton}
-                    accessibilityRole="button"
-                    accessibilityLabel={t(
-                      BonusProgramTexts.bonusProfile.mapButton.a11yLabel,
-                    )}
-                    accessibilityHint={t(
-                      BonusProgramTexts.bonusProfile.mapButton.a11yHint,
-                    )}
+              </GenericSectionItem>
+              <GenericSectionItem>
+                <View accessible={true}>
+                  <View style={styles.usePointsRow}>
+                    <ThemeText>{t(BonusProgramTexts.spend)}</ThemeText>
+                    <ThemeIcon svg={BonusStarFill} size="small" />
+                    <ThemeText>
+                      {t(BonusProgramTexts.amountPoints(group.price.amount))}
+                    </ThemeText>
+                  </View>
+                  <ThemeText
+                    isMarkdown={true}
+                    typography="body__s"
+                    color="secondary"
                   >
-                    <ThemeIcon svg={MapPin} />
-                    <ThemeIcon svg={ChevronRight} />
-                  </Pressable>
-                )}
-              </View>
-            </GenericSectionItem>
-            <GenericSectionItem>
-              <View accessible={true}>
-                <View style={styles.usePointsRow}>
-                  <ThemeText>{t(BonusProgramTexts.spend)}</ThemeText>
-                  <ThemeIcon svg={BonusStarFill} size="small" />
-                  <ThemeText>
-                    {t(BonusProgramTexts.amountPoints(bonusProduct.price))}
+                    {getTextForLanguage(group.description, language) ?? ''}
                   </ThemeText>
                 </View>
-                <ThemeText
-                  isMarkdown={true}
-                  typography="body__s"
-                  color="secondary"
-                >
-                  {getTextForLanguage(bonusProduct.description, language) ?? ''}
-                </ThemeText>
-              </View>
-            </GenericSectionItem>
-          </Section>
-        </Pressable>
-      ))}
+              </GenericSectionItem>
+            </Section>
+          </Pressable>
+        );
+      })}
     </View>
   );
 };

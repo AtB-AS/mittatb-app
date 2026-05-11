@@ -19,6 +19,7 @@ import {
   UserBonusBalanceContent,
   useBonusBalanceQuery,
   useActiveBonusProductsQuery,
+  useActiveBonusProductGroupsQuery,
   BonusProductList,
 } from '@atb/modules/bonus';
 import {
@@ -65,6 +66,11 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
     isLoading: isBonusProductsLoading,
     isError: isBonusProductsError,
   } = useActiveBonusProductsQuery();
+  const {
+    data: activeBonusProductGroups,
+    isLoading: isBonusGroupsLoading,
+    isError: isBonusGroupsError,
+  } = useActiveBonusProductGroupsQuery();
   const getHasReservationOrAvailableFareContract =
     useGetHasReservationOrAvailableFareContract();
 
@@ -215,9 +221,11 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.spendPoints.heading)}
         />
-        {isBonusProductsLoading ? (
+        {isBonusProductsLoading || isBonusGroupsLoading ? (
           <Loading size="large" />
-        ) : isBonusProductsError || activeBonusProducts?.length === 0 ? (
+        ) : isBonusProductsError ||
+          isBonusGroupsError ||
+          activeBonusProductGroups?.length === 0 ? (
           <View style={styles.noAccount}>
             <MessageInfoBox
               type="error"
@@ -225,8 +233,10 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
             />
           </View>
         ) : (
+          activeBonusProductGroups &&
           activeBonusProducts && (
             <BonusProductList
+              bonusProductGroups={activeBonusProductGroups}
               bonusProducts={activeBonusProducts}
               onNavigateToMap={(initialFilters) =>
                 navigation.navigate('Root_TabNavigatorStack', {

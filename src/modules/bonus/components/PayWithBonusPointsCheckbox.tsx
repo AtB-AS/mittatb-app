@@ -48,12 +48,12 @@ export const PayWithBonusPointsCheckbox = ({
     Number.isNaN(userBonusBalance) ||
     userBonusBalanceStatus === 'error';
 
-  const isDisabled = isError || userBonusBalance < bonusProduct.price;
+  const isDisabled = isError || userBonusBalance < bonusProduct.price.amount;
 
   const a11yLabel =
     (getTextForLanguage(bonusProduct.paymentDescription, language) ?? '') +
     screenReaderPause +
-    t(BonusProgramTexts.costA11yLabel(bonusProduct.price)) +
+    t(BonusProgramTexts.costA11yLabel(bonusProduct.price.amount)) +
     screenReaderPause +
     t(
       BonusProgramTexts.yourBonusBalanceA11yLabel(
@@ -99,7 +99,7 @@ export const PayWithBonusPointsCheckbox = ({
               </View>
             </View>
             <BonusPriceTag
-              amount={bonusProduct.price}
+              amount={bonusProduct.price.amount}
               style={{alignSelf: 'flex-start'}}
             />
           </View>

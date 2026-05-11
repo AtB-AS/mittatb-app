@@ -9,6 +9,11 @@ export enum BonusProductTypeEnum {
   SHARED_MOBILITY = 'SHARED_MOBILITY',
 }
 
+const PriceSchema = z.object({
+  amount: z.number(),
+  currency: z.string(),
+});
+
 const BonusPriceAdjustmentSchema = z
   .object({
     amount: z.number(),
@@ -24,9 +29,10 @@ const BonusPriceAdjustmentSchema = z
 export const BonusProductSchema = z.object({
   id: z.string(),
   isActive: z.boolean(),
-  operatorIds: z.array(z.string()),
+  bonusProductGroupId: z.string(),
+  operatorId: z.string(),
   formFactors: z.array(FormFactorSchema),
-  price: z.number(),
+  price: PriceSchema,
   productType: z.enum(BonusProductTypeEnum),
   description: LanguageAndTextTypeArray,
   paymentDescription: LanguageAndTextTypeArray,
@@ -34,3 +40,11 @@ export const BonusProductSchema = z.object({
 });
 
 export type BonusProductType = z.infer<typeof BonusProductSchema>;
+
+export const BonusProductGroupSchema = z.object({
+  id: z.string(),
+  description: LanguageAndTextTypeArray,
+  price: PriceSchema,
+});
+
+export type BonusProductGroupType = z.infer<typeof BonusProductGroupSchema>;
