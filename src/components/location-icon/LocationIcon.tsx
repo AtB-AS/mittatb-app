@@ -1,5 +1,8 @@
 import {Pin} from '@atb/assets/svg/mono-icons/map';
-import {Location as LocationMonoIcon} from '@atb/assets/svg/mono-icons/places';
+import {
+  House,
+  Location as LocationMonoIcon,
+} from '@atb/assets/svg/mono-icons/places';
 import {Location} from '@atb/modules/favorites';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -27,6 +30,9 @@ export const LocationIcon = ({
   }
   switch (location.layer) {
     case 'address':
+      if (location.housenumber) {
+        return <ThemeIcon svg={House} />;
+      }
       return <ThemeIcon svg={Pin} />;
     case 'venue':
       const venueIconTypes = getVenueIconTypes(location.category);
