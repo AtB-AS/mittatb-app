@@ -343,6 +343,7 @@ export const InitShmoOneStopBookingRequestBodySchema = z.object({
   operatorId: z.string(),
   vehicleTypeId: z.string().nullish().optional(),
   stationId: z.string().nullish().optional(),
+  bonusProductId: z.string().nullish().optional(),
 });
 
 export type InitShmoOneStopBookingRequestBody = z.infer<
