@@ -57,18 +57,29 @@ const mapTypeToIconComponent = (
         <TransportationIconBox
           mode={TransportMode.Bus}
           subMode={TransportSubmode.LocalBus}
+          iconSize="small"
         />
       );
     case 'tram':
-      return <TransportationIconBox mode={TransportMode.Tram} />;
+      return (
+        <TransportationIconBox mode={TransportMode.Tram} iconSize="small" />
+      );
     case 'rail':
-      return <TransportationIconBox mode={TransportMode.Rail} />;
+      return (
+        <TransportationIconBox mode={TransportMode.Rail} iconSize="small" />
+      );
     case 'metro':
-      return <TransportationIconBox mode={TransportMode.Metro} />;
+      return (
+        <TransportationIconBox mode={TransportMode.Metro} iconSize="small" />
+      );
     case 'airport':
-      return <TransportationIconBox mode={TransportMode.Air} />;
+      return (
+        <TransportationIconBox mode={TransportMode.Air} iconSize="small" />
+      );
     case 'boat':
-      return <TransportationIconBox mode={TransportMode.Water} />;
+      return (
+        <TransportationIconBox mode={TransportMode.Water} iconSize="small" />
+      );
     case 'unknown':
     default:
       return (
