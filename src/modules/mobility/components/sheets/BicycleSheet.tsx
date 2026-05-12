@@ -1,5 +1,5 @@
 import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
-import React, {useState} from 'react';
+import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -22,12 +22,6 @@ import {
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {useAnalyticsContext} from '@atb/modules/analytics';
-import {
-  PayWithBonusPointsCheckbox,
-  useIsBonusActiveForUser,
-  useRelevantBonusProduct,
-} from '@atb/modules/bonus';
 import {ShmoPricingPlan, Vehicle} from '@atb/api/types/mobility';
 import {PriceAdjustmentType} from '@atb-as/config-specs/lib/mobility';
 import {VehicleCard} from '../VehicleCard';
@@ -56,11 +50,11 @@ type Props = {
   navigateToLogin: () => void;
   selectPaymentMethod: () => void;
   startOnboardingCallback: () => void;
-  isStationBasedBooking: boolean;
   navigateToPricingDetails: (
     pricingPlan: ShmoPricingPlan,
     priceAdjustments: PriceAdjustmentType[] | undefined,
   ) => void;
+
 };
 export const BicycleSheet = ({
   vehicleId: id,
@@ -72,7 +66,6 @@ export const BicycleSheet = ({
   navigateToLogin,
   selectPaymentMethod,
   startOnboardingCallback,
-  isStationBasedBooking,
   navigateToPricingDetails,
 }: Props) => {
   const {t} = useTranslation();
@@ -85,7 +78,7 @@ export const BicycleSheet = ({
     operatorName,
     rentalAppUri,
     appStoreUri,
-  } = useVehicle(id, isStationBasedBooking);
+  } = useVehicle(id);
 
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
@@ -95,9 +88,6 @@ export const BicycleSheet = ({
   const selectedPaymentMethod = useSelectedShmoPaymentMethod();
 
   const {operatorBenefit} = useOperatorBenefit(operatorId);
-  const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
-  const {logEvent} = useAnalyticsContext();
-  const bonusProduct = useRelevantBonusProduct(operatorId, FormFactor.Bicycle);
   const {mode, subMode} = getTransportModeAndSubMode(
     FormFactor.Bicycle,
     vehicle?.vehicleType.propulsionType,
@@ -107,8 +97,6 @@ export const BicycleSheet = ({
 
   const {isShmoDeepIntegrationEnabled, isShmoDeepIntegrationCitybikeEnabled} =
     useFeatureTogglesContext();
-
-  const isBonusActiveForUser = useIsBonusActiveForUser();
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
@@ -193,7 +181,6 @@ export const BicycleSheet = ({
                 vehicleId={id}
                 operatorId={operatorId}
                 paymentMethod={selectedPaymentMethod}
-                isStationBasedBooking={isStationBasedBooking}
               />
               <View style={styles.helpButtons}>
                 {selectedPaymentMethod && !hasBlockers && (
@@ -224,29 +211,8 @@ export const BicycleSheet = ({
                     operatorName={operatorName}
                     appStoreUri={appStoreUri ?? undefined}
                     rentalAppUri={rentalAppUri}
-                    isBonusPayment={payWithBonusPoints}
-                    setIsBonusPayment={setPayWithBonusPoints}
-                    bonusProductId={bonusProduct?.id}
                   />
                 </View>
-              )}
-              {isBonusActiveForUser && !!bonusProduct && (
-                <PayWithBonusPointsCheckbox
-                  bonusProduct={bonusProduct}
-                  operatorName={operatorName}
-                  isChecked={payWithBonusPoints}
-                  onPress={() =>
-                    setPayWithBonusPoints((payWithBonusPoints) => {
-                      const newState = !payWithBonusPoints;
-                      logEvent('Bonus', 'bonus points checkbox toggled', {
-                        bonusProductId: bonusProduct.id,
-                        newState: newState,
-                      });
-                      return newState;
-                    })
-                  }
-                  style={styles.payWithBonusPointsSection}
-                />
               )}
             </>
           )}
@@ -281,9 +247,6 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     operatorNameAndLogo: {
       flexDirection: 'row',
-    },
-    payWithBonusPointsSection: {
-      marginTop: theme.spacing.medium,
     },
     helpButtons: {
       gap: theme.spacing.medium,

@@ -33,7 +33,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {TFunc} from '@leile/lobo-t';
 import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Platform, View} from 'react-native';
+import {View} from 'react-native';
 import {DashboardScreenProps} from '../navigation-types';
 import {
   type SearchForLocations,
@@ -49,7 +49,6 @@ import {TripPattern} from '@atb/api/types/trips';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
 import {NativeBlockButton} from '@atb/components/native-button';
-import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {
   areDefaultFiltersSelected,
   getSearchTimeLabel,
@@ -69,6 +68,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {WithOverlayButton} from '@atb/components/overlay-button';
 import {Loading} from '@atb/components/loading';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 
 const RESULT_KEY_FROM = 'Dashboard_TripSearchScreen--fromLocation';
 const RESULT_KEY_TO = 'Dashboard_TripSearchScreen--toLocation';
@@ -98,7 +98,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const {language, t} = useTranslation();
   const [updatingLocation] = useState<boolean>(false);
   const analytics = useAnalyticsContext();
-  const isFocused = useIsFocusedAndActive();
   const filterButtonWrapperRef = useRef(null);
   const filterButtonRef = useRef(null);
   const travelSearchBottomSheetModalRef = useRef<BottomSheetModal | null>(null);
@@ -271,18 +270,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     refetchTrips();
   }, [from, to, currentLocation, searchTime, navigation, refetchTrips]);
 
-  const refreshControlProps = useMemo(() => {
-    // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
-    return isFocused || Platform.OS === 'android'
-      ? {
-          refreshing:
-            Platform.OS === 'ios'
-              ? false
-              : tripsSearchState === 'searching' && !tripPatterns.length,
-          onRefresh: forceRefresh,
-        }
-      : undefined;
-  }, [tripsSearchState, tripPatterns.length, forceRefresh, isFocused]);
+  const refreshControlProps = useManualRefreshControlProps({
+    refreshing: tripsSearchState === 'searching' && !tripPatterns.length,
+    onRefresh: forceRefresh,
+  });
 
   return (
     <View style={styles.container}>

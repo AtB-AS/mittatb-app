@@ -3,31 +3,11 @@ import {LanguageAndTextTypeArray} from '@atb/modules/configuration';
 import {AppPlatform} from '@atb/modules/global-messages';
 import {Timestamp} from '@react-native-firebase/firestore';
 import {Rule} from '@atb/modules/rule-engine';
+import {Base64ImageSchema} from '@atb/utils/image';
 
 const TimestampSchema = z
   .custom<Timestamp>((value) => value instanceof Timestamp)
   .transform((ts) => new Date(ts.toMillis()));
-
-const Base64ImageSchema = z
-  .string()
-  .max(700000) // images should not be too large
-  .regex(/^data:image\/(png|jpeg|jpg);base64,.+$/, {
-    message: 'Invalid image data URI',
-  })
-  .refine(
-    (imgStr) => {
-      const base64Part = imgStr.split(',')[1];
-      if (!base64Part || base64Part.length % 4 !== 0) return false;
-      // Due to performance concerns, only validate the start and end as base64 data
-      const numberOfChars = 4 * 10; // must be divisible by 4
-      const start = base64Part.slice(0, numberOfChars);
-      const end = base64Part.slice(-numberOfChars);
-      return [start, end].every(
-        (part) => z.string().base64().safeParse(part).success,
-      );
-    },
-    {message: 'Invalid base64 payload'},
-  );
 
 export enum ActionType {
   external = 'external',

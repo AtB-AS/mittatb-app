@@ -85,11 +85,13 @@ export const BonusProductList = ({bonusProducts, onNavigateToMap}: Props) => {
                 })()}
                 <View style={{flex: 1}} accessible={true}>
                   <ThemeText typography="body__s__strong">
-                    {bonusProduct.formFactors
-                      .map((ff) =>
-                        t(MobilityTexts.vehicleName(ff as FormFactor)),
-                      )
-                      .join(', ')}
+                    {[
+                      ...new Set(
+                        bonusProduct.formFactors.map((ff) =>
+                          t(MobilityTexts.vehicleName(ff as FormFactor)),
+                        ),
+                      ),
+                    ].join(', ')}
                   </ThemeText>
                   <ThemeText typography="body__s" color="secondary">
                     {bonusProduct.operatorIds

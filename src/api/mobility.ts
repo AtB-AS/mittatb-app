@@ -18,6 +18,15 @@ import {
   Vehicle,
   StationSchema,
   Station,
+  ViolationsReportingInitQuery,
+  ViolationsReportingInitQueryResult,
+  ViolationsReportingInitQueryResultSchema,
+  ViolationsVehicleLookupQuery,
+  ViolationsVehicleLookupQueryResult,
+  ViolationsVehicleLookupQueryResultSchema,
+  ViolationsReportQuery,
+  ViolationsReportQueryResult,
+  ViolationsReportQueryResultSchema,
 } from './types/mobility';
 
 export const getActiveShmoBooking = (
@@ -166,5 +175,59 @@ export const getStation = (
     .catch((error) => {
       console.error('Error in StationSchema parsing: ', error);
       return null;
+    });
+};
+
+export const initViolationsReporting = (
+  params: ViolationsReportingInitQuery,
+  opts?: AxiosRequestConfig,
+): Promise<ViolationsReportingInitQueryResult> => {
+  const query = qs.stringify(params);
+  return client
+    .get(stringifyUrl('/mobility/v1/violations-reporting/init', query), opts)
+    .then((res) => {
+      const result = ViolationsReportingInitQueryResultSchema.safeParse(
+        res.data,
+      );
+      if (!result.success) {
+        console.error(result.error.format());
+        throw result.error;
+      }
+      return result.data;
+    });
+};
+
+export const lookupVehicleByQr = (
+  params: ViolationsVehicleLookupQuery,
+  opts?: AxiosRequestConfig,
+): Promise<ViolationsVehicleLookupQueryResult> => {
+  const query = qs.stringify(params);
+  return client
+    .get(stringifyUrl('/mobility/v1/violations-reporting/vehicle', query), opts)
+    .then((res) => {
+      const result = ViolationsVehicleLookupQueryResultSchema.safeParse(
+        res.data,
+      );
+      if (!result.success) {
+        console.error(result.error.format());
+        throw result.error;
+      }
+      return result.data;
+    });
+};
+
+export const sendViolationsReport = (
+  data: ViolationsReportQuery,
+  opts?: AxiosRequestConfig,
+): Promise<ViolationsReportQueryResult> => {
+  return client
+    .post('/mobility/v1/violations-reporting/report', data, opts)
+    .then((res) => {
+      const result = ViolationsReportQueryResultSchema.safeParse(res.data);
+      if (!result.success) {
+        console.error(result.error.format());
+        throw result.error;
+      }
+      return result.data;
     });
 };

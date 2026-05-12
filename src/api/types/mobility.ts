@@ -6,56 +6,79 @@ import {
 import {isValidPhoneNumber} from 'libphonenumber-js';
 import {isValidEmail} from '@atb/utils/validation';
 import {Feature, Point} from 'geojson';
+import {Base64ImageSchema} from '@atb/utils/image';
 
-export type ViolationsReportingInitQuery = {
-  lng: string;
-  lat: string;
-};
+export const ViolationsReportingInitQuerySchema = z.object({
+  lng: z.string(),
+  lat: z.string(),
+});
+export type ViolationsReportingInitQuery = z.infer<
+  typeof ViolationsReportingInitQuerySchema
+>;
 
-export type ViolationsReportingProvider = {
-  id?: number;
-  name: string;
-  image?: {
-    type: string;
-    base64: string;
-  };
-};
+export const ViolationsReportingProviderSchema = z.object({
+  id: z.number().optional(),
+  name: z.string(),
+  image: z
+    .object({
+      type: z.string(),
+      base64: z.string(),
+    })
+    .optional(),
+});
+export type ViolationsReportingProvider = z.infer<
+  typeof ViolationsReportingProviderSchema
+>;
 
-export type ParkingViolationType = {
-  code: string;
+export const ParkingViolationTypeSchema = z.object({
+  code: z.string(),
   /** @deprecated Icon is only used by the app in v. 1.61 and earlier */
-  icon: string;
-};
+  icon: z.string(),
+});
+export type ParkingViolationType = z.infer<typeof ParkingViolationTypeSchema>;
 
-export type ViolationsReportingInitQueryResult = {
-  providers: ViolationsReportingProvider[];
-  violations: ParkingViolationType[];
-};
+export const ViolationsReportingInitQueryResultSchema = z.object({
+  providers: z.array(ViolationsReportingProviderSchema),
+  violations: z.array(ParkingViolationTypeSchema),
+});
+export type ViolationsReportingInitQueryResult = z.infer<
+  typeof ViolationsReportingInitQueryResultSchema
+>;
 
-export type ViolationsVehicleLookupQuery = {
-  qr: string;
-};
+export const ViolationsVehicleLookupQuerySchema = z.object({
+  qr: z.string(),
+});
+export type ViolationsVehicleLookupQuery = z.infer<
+  typeof ViolationsVehicleLookupQuerySchema
+>;
 
-export type ViolationsVehicleLookupQueryResult = {
-  provider_id: number;
-  vehicle_id: string;
-};
+export const ViolationsVehicleLookupQueryResultSchema = z.object({
+  provider_id: z.number(),
+  vehicle_id: z.string(),
+});
+export type ViolationsVehicleLookupQueryResult = z.infer<
+  typeof ViolationsVehicleLookupQueryResultSchema
+>;
 
-export type ViolationsReportQuery = {
-  providerId: ViolationsReportingProvider['id'];
-  longitude: number;
-  latitude: number;
-  image?: string; //base64 encoded image blob
-  imageType?: string; // file name suffix;
-  qr?: string;
-  appId?: string; // Unique id identifying the customer
-  violations?: ParkingViolationType['code'][];
-  timestamp: string;
-};
+export const ViolationsReportQuerySchema = z.object({
+  providerId: z.number().optional(),
+  longitude: z.number(),
+  latitude: z.number(),
+  image: Base64ImageSchema.optional(),
+  imageType: z.string().optional(),
+  qr: z.string().optional(),
+  appId: z.string().optional(),
+  violations: z.array(z.string()).optional(),
+  timestamp: z.string(),
+});
+export type ViolationsReportQuery = z.infer<typeof ViolationsReportQuerySchema>;
 
-export type ViolationsReportQueryResult = {
-  status: 'OK';
-};
+export const ViolationsReportQueryResultSchema = z.object({
+  status: z.literal('OK'),
+});
+export type ViolationsReportQueryResult = z.infer<
+  typeof ViolationsReportQueryResultSchema
+>;
 
 /** Note: The shared mobility types below come from the `mobility` and `entur-client` crates in the mobility service. */
 
@@ -320,6 +343,7 @@ export const InitShmoOneStopBookingRequestBodySchema = z.object({
   operatorId: z.string(),
   vehicleTypeId: z.string().nullish().optional(),
   stationId: z.string().nullish().optional(),
+  bonusProductId: z.string().nullish().optional(),
 });
 
 export type InitShmoOneStopBookingRequestBody = z.infer<

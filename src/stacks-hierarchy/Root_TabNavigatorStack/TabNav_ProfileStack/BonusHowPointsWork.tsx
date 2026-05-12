@@ -37,6 +37,8 @@ export const HowPointsWork = () => {
   const {t, language} = useTranslation();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {data: productPoints} = useProductPointsQuery();
+  const {mobilityOperators} = useFirestoreConfigurationContext();
+  const {data: activeBonusProducts} = useActiveBonusProductsQuery();
 
   const pointsPerProduct = buildPointsPerProductString(
     productPoints ?? [],
@@ -44,6 +46,28 @@ export const HowPointsWork = () => {
     language,
     t,
   );
+
+  const voucherOperatorLinks = [
+    ...new Set(
+      (activeBonusProducts ?? [])
+        .filter(
+          (product) => product.productType === BonusProductTypeEnum.VOUCHER,
+        )
+        .flatMap((product) => product.operatorIds),
+    ),
+  ]
+    .map((operatorId) => {
+      const operator = mobilityOperators?.find((op) => op.id === operatorId);
+      const appUrl = operator?.appUrl;
+      const platformUrl =
+        (Platform.OS === 'ios' ? appUrl?.ios : appUrl?.android) ?? undefined;
+      return {
+        operatorId,
+        name: operator?.name ?? operatorId,
+        appUrl: platformUrl,
+      };
+    })
+    .filter(({appUrl}) => appUrl);
 
   return (
     <>
@@ -80,56 +104,13 @@ export const HowPointsWork = () => {
             <ThemedTokenPhone height={iconSize} width={iconSize} />
           }
         />
-
-        <VoucherOperatorLinks />
-      </Section>
-    </>
-  );
-};
-
-const VoucherOperatorLinks = () => {
-  const {t} = useTranslation();
-  const {mobilityOperators} = useFirestoreConfigurationContext();
-  const {data: activeBonusProducts} = useActiveBonusProductsQuery();
-
-  const getOperatorName = (operatorId: string) =>
-    mobilityOperators?.find((op) => op.id === operatorId)?.name ?? operatorId;
-
-  const getPlatformAppUrl = (operatorId: string) => {
-    const appUrl = mobilityOperators?.find(
-      (op) => op.id === operatorId,
-    )?.appUrl;
-    return (Platform.OS === 'ios' ? appUrl?.ios : appUrl?.android) ?? undefined;
-  };
-
-  const uniqueVoucherOperatorIds = [
-    ...new Set(
-      (activeBonusProducts ?? [])
-        .filter(
-          (product) =>
-            product.productType === BonusProductTypeEnum.enum.VOUCHER,
-        )
-        .flatMap((product) => product.operatorIds),
-    ),
-  ];
-
-  return (
-    <>
-      {uniqueVoucherOperatorIds
-        .map((operatorId) => ({
-          operatorId,
-          appUrl: getPlatformAppUrl(operatorId),
-        }))
-        .filter(({appUrl}) => appUrl)
-        .map(({operatorId, appUrl}) => (
+        {voucherOperatorLinks.map(({operatorId, name, appUrl}) => (
           <LinkSectionItem
             key={operatorId}
             rightIcon={{svg: ExternalLink}}
             onPress={() => openUrl(appUrl!)}
             text={t(
-              BonusProgramTexts.bonusProfile.readMore.downloadOperator(
-                getOperatorName(operatorId),
-              ),
+              BonusProgramTexts.bonusProfile.readMore.downloadOperator(name),
             )}
             accessibility={{
               accessibilityHint: t(
@@ -139,6 +120,7 @@ const VoucherOperatorLinks = () => {
             }}
           />
         ))}
+      </Section>
     </>
   );
 };

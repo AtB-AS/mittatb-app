@@ -24,9 +24,11 @@ import {ThemedCarRegister} from '@atb/theme/ThemedAssets';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAuthContext} from '@atb/modules/auth';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useMemo, useState} from 'react';
+import {useState} from 'react';
 import {ProfileScreenProps} from './navigation-types';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
+import {Loading} from '@atb/components/loading';
 
 const MAX_VEHICLE_REGISTRATIONS = 2;
 
@@ -48,6 +50,7 @@ export const Profile_SmartParkAndRideScreen = ({route, navigation}: Props) => {
     data: vehicleRegistrations,
     refetch: refetchVehicleRegistrations,
     isFetching: vehicleRegistrationsIsFetching,
+    isLoading: vehicleRegistrationsIsLoading,
   } = useVehicleRegistrationsQuery();
   const {authenticationType} = useAuthContext();
   const analytics = useAnalyticsContext();
@@ -70,12 +73,10 @@ export const Profile_SmartParkAndRideScreen = ({route, navigation}: Props) => {
     }
   };
 
-  const refreshControlProps = useMemo(() => {
-    return {
-      refreshing: vehicleRegistrationsIsFetching,
-      onRefresh: refetchVehicleRegistrations,
-    };
-  }, [vehicleRegistrationsIsFetching, refetchVehicleRegistrations]);
+  const refreshControlProps = useManualRefreshControlProps({
+    refreshing: vehicleRegistrationsIsFetching,
+    onRefresh: refetchVehicleRegistrations,
+  });
 
   const focusRef = useFocusOnLoad(navigation);
 
@@ -89,6 +90,7 @@ export const Profile_SmartParkAndRideScreen = ({route, navigation}: Props) => {
       refreshControlProps={refreshControlProps}
     >
       <View style={styles.container}>
+        {vehicleRegistrationsIsLoading && <Loading />}
         <ContentHeading
           text={t(
             SmartParkAndRideTexts.content.heading(

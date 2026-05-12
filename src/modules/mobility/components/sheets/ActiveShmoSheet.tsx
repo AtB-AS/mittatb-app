@@ -40,11 +40,9 @@ import {
   FormFactor,
   PropulsionType,
 } from '@atb/api/types/generated/mobility-types_v2';
-import {PriceDetailsCard} from '../PriceDetailsCard';
 import {useOperators} from '../../use-operators';
 import {SupportButton} from '../SupportButton';
 import {BrandingImage} from '../BrandingImage';
-import {isValidKey} from '@atb/stacks-hierarchy';
 import {EndManualTripCard} from '../EndManualTripCard';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
@@ -88,13 +86,6 @@ export const ActiveShmoSheet = ({
 
   const operator = useOperators().byId(activeBooking?.asset.operator.id);
   const operatorLogo = operator?.brandAssets?.brandImageUrl;
-
-  const priceAdjustments =
-    operator?.priceAdjustments &&
-    activeBooking?.asset?.formFactor &&
-    isValidKey(operator.priceAdjustments, activeBooking.asset.formFactor)
-      ? operator.priceAdjustments[activeBooking.asset.formFactor]
-      : [];
 
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -233,12 +224,6 @@ export const ActiveShmoSheet = ({
                       formFactor={activeBooking.asset.formFactor ?? undefined}
                     />
                   )}
-                <PriceDetailsCard
-                  pricingPlan={activeBooking.pricingPlan}
-                  priceAdjustments={priceAdjustments}
-                  systemId={activeBooking.asset.systemId ?? ''}
-                />
-
                 <View style={styles.footer}>
                   {geofencingZoneWarning && (
                     <View style={styles.geofencingZoneWarning}>
