@@ -46,6 +46,7 @@ export type OfferSearchParams = {
   from?: string;
   to?: string;
   legs?: OfferSearchLeg[];
+  bonusProductId?: string;
 };
 
 type Traveller = {

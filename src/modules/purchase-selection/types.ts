@@ -41,6 +41,7 @@ export type PurchaseSelectionType = {
   legs: Leg[];
   isOnBehalfOf: boolean;
   originFareContract?: FareContractStub;
+  bonusProductId?: string;
 };
 
 /**
@@ -146,6 +147,12 @@ export type PurchaseSelectionBuilder = {
    * @param p The information from the existing Fare Contract
    */
   originFareContract: (p?: FareContractStub) => PurchaseSelectionBuilder;
+
+  /**
+   * Apply the bonus product id to opt in to paying with bonus points.
+   * Pass undefined to opt out.
+   */
+  bonusProductId: (id?: string) => PurchaseSelectionBuilder;
 
   /**
    * Retrieve the built purchase selection. It is the purchase selection that

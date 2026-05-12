@@ -42,6 +42,10 @@ import {useOnBehalfOf} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/u
 import {useBookingTrips} from '@atb/modules/booking';
 import {isValidSelection} from '@atb/modules/booking';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {
+  PayWithBonusPointsCheckbox,
+  useRelevantTicketBonusProduct,
+} from '@atb/modules/bonus';
 
 type PurchaseOverviewError = OfferError | {type: 'booking-error'};
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
@@ -140,6 +144,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const {isBookingRequired, isError: isBookingError} = useBookingTrips({
     selection,
   });
+
+  const relevantTicketBonusProduct = useRelevantTicketBonusProduct(selection);
 
   const canProceed = (() => {
     const hasOffer =
@@ -360,6 +366,28 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 }}
               />
             </View>
+          )}
+
+          {relevantTicketBonusProduct && !isFree && !isBookingRequired && (
+            <PayWithBonusPointsCheckbox
+              bonusProduct={relevantTicketBonusProduct}
+              operatorName=""
+              isChecked={
+                selection.bonusProductId === relevantTicketBonusProduct.id
+              }
+              onPress={() => {
+                const isSelected =
+                  selection.bonusProductId === relevantTicketBonusProduct.id;
+                const next = builder
+                  .fromSelection(selection)
+                  .bonusProductId(
+                    isSelected ? undefined : relevantTicketBonusProduct.id,
+                  )
+                  .build();
+                setSelection(next);
+              }}
+              style={styles.selectionComponent}
+            />
           )}
 
           <Summary

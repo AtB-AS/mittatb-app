@@ -8,6 +8,7 @@ export {
   UserBonusBalanceContent,
 } from './components';
 export {useRelevantBonusProduct} from './use-relevant-bonus-product';
+export {useRelevantTicketBonusProduct} from './use-relevant-ticket-bonus-product';
 export type {ProductPointsItem} from './api/api';
 export {
   useBonusBalanceQuery,
@@ -19,7 +20,11 @@ export {
   useActiveBonusProductGroupsQuery,
 } from './queries';
 export {BonusProductTypeEnum} from './types';
-export type {BonusProductType, BonusProductGroupType} from './types';
+export type {
+  BonusProductType,
+  BonusProductGroupType,
+  TicketRuleType,
+} from './types';
 export {
   bonusOnboardingCarouselConfig,
   type BonusOnboardingScreenName,
