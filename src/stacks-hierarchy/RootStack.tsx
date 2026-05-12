@@ -34,6 +34,7 @@ import {Root_PurchaseFareZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Ro
 import {Root_PurchaseHarborSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen';
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
+import {Root_RefundConfirmationScreen} from '@atb/stacks-hierarchy/Root_RefundConfirmationScreen';
 import {Root_ReceiptScreen} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
 import {Root_LoginAvailableFareContractWarningScreen} from '@atb/stacks-hierarchy/Root_LoginAvailableFareContractWarningScreen';
 import {Root_LoginOptionsScreen} from '@atb/stacks-hierarchy/Root_LoginOptionsScreen';
@@ -422,6 +423,11 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_FareContractDetailsScreen"
                 component={Root_FareContractDetailsScreen}
+              />
+              <Stack.Screen
+                name="Root_RefundConfirmationScreen"
+                component={Root_RefundConfirmationScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
               />
               <Stack.Screen
                 name="Root_TicketInformationScreen"

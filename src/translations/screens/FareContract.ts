@@ -222,33 +222,32 @@ const FareContractTexts = {
     ),
   },
   refund: {
-    cancel: _('Avbryt', 'Cancel', 'Avbryt'),
     refund: _('Angre kjøp', 'Cancel purchase', 'Angre kjøp'),
-    bottomSheetTitle: _(
-      'Vil du angre billettkjøpet?',
-      'Do you want to cancel the ticket purchase?',
-      'Vil du angre billettkjøpet?',
-    ),
-    bottomSheetDescription: _(
-      'Her kan du angre kjøpet av billetten og få pengene tilbake. Pengene er tilbake på konto innen få virkedager.',
-      'Here you can cancel the ticket purchase and get your money back. The money will be back in your account within a few business days.',
-      'Her kan du angre kjøpet av billetten og få pengane tilbake. Pengane er tilbake på kontoen din innen få virkedagar.',
+    description: _(
+      'Angre kjøpet for å få pengene tilbake. Beløpet vil være på konto innen få virkedager.',
+      'Cancel the ticket purchase and get your money back. The money will be back in your account within a few business days.',
+      'Angre kjøpet av billetten og få pengane tilbake. Beløpet er tilbake på kontoen din innan få virkedagar.',
     ),
     confirm: _('Angre kjøp', 'Cancel purchase', 'Angre kjøp'),
+    refundReasonTitle: _(
+      'Velg en årsak (obligatorisk)',
+      'Select a reason (required)',
+      'Vel ein årsak (obligatorisk)',
+    ),
+    missingCauseError: _(
+      'Du må velge en årsak før du kan angre kjøpet.',
+      'You need to select a reason before cancelling the purchase.',
+      'Du må velje ein årsak før du kan angre kjøpet.',
+    ),
     genericError: _(
       'Vi får ikke til å angre dette kjøpet. Prøv igjen eller kontakt kundeservice.',
       'We are unable to cancel this purchase. Please try again or contact customer service.',
       'Vi får ikkje til å angre dette kjøpet. Prøv igjen eller ta kontakt med kundeservice.',
     ),
-    readMore: _(
-      'Les mer om refusjonsregler',
-      'Read more about refund rules',
-      'Les meir om refusjonsreglar',
-    ),
-    readMoreA11yLabel: _(
-      'Les mer om refusjonsregler, åpner side i nettleser',
-      'Read more about refund rules, opens page in browser',
-      'Les meir om refusjonreglar, åpner side i nettlesar',
+    genericErrorLink: _(
+      'Kontakt kundeservice',
+      'Contact customer support',
+      'Kontakt kundeservice',
     ),
   },
   carnet: {
