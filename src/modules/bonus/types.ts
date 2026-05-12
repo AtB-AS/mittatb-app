@@ -26,6 +26,14 @@ const BonusPriceAdjustmentSchema = z
     type: adjustmentType,
   }));
 
+const TicketRuleSchema = z.object({
+  preassignedFareProductIds: z.array(z.string()).nullish(),
+  userProfiles: z.array(z.string()).nullish(),
+  zoneIds: z.array(z.string()).nullish(),
+});
+
+export type TicketRuleType = z.infer<typeof TicketRuleSchema>;
+
 export const BonusProductSchema = z.object({
   id: z.string(),
   isActive: z.boolean(),
@@ -37,6 +45,7 @@ export const BonusProductSchema = z.object({
   description: LanguageAndTextTypeArray,
   paymentDescription: LanguageAndTextTypeArray,
   priceAdjustments: z.array(BonusPriceAdjustmentSchema).optional(),
+  ticketRule: TicketRuleSchema.optional(),
 });
 
 export type BonusProductType = z.infer<typeof BonusProductSchema>;
