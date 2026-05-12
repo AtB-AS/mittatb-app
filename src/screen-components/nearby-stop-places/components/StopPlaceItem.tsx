@@ -114,6 +114,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     width: '100%',
     flexGrow: 1,
+    gap: theme.spacing.small,
   },
   stopPlaceInfo: {
     flexShrink: 1,
