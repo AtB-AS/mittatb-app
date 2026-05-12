@@ -54,7 +54,6 @@ type Props = {
     pricingPlan: ShmoPricingPlan,
     priceAdjustments: PriceAdjustmentType[] | undefined,
   ) => void;
-
 };
 export const BicycleSheet = ({
   vehicleId: id,
