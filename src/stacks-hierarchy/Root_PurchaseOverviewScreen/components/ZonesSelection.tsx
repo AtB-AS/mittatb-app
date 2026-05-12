@@ -1,5 +1,5 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   Language,
   PurchaseOverviewTexts,
@@ -33,6 +33,7 @@ type ZonesSelectionProps = {
 export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
   ({selection, selectionMode, onSelect, style}: ZonesSelectionProps, ref) => {
     const styles = useStyles();
+    const {theme} = useThemeContext();
     const {t, language} = useTranslation();
 
     const zonesRef = useRef<typeof NativeBlockButton>(null);
@@ -98,7 +99,13 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
             </>
           )}
         </View>
-        {canSelectZone && <ThemeIcon svg={Edit} size="normal" />}
+        {canSelectZone && (
+          <ThemeIcon
+            svg={Edit}
+            size="normal"
+            color={theme.color.interactive[0].default.background}
+          />
+        )}
       </View>
     );
 

@@ -12,7 +12,7 @@ import {
   Section,
 } from '@atb/components/sections';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TravellerSelectionSheet} from './TravellerSelectionSheet';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
@@ -38,6 +38,7 @@ export function TravellerSelection({
   style,
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
+  const {theme} = useThemeContext();
   const styles = useStyles();
   const onCloseFocusRef = useRef<View | null>(null);
   const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
@@ -113,7 +114,13 @@ export function TravellerSelection({
         )}
       </View>
 
-      {canSelectUserProfile && <ThemeIcon svg={Edit} size="normal" />}
+      {canSelectUserProfile && (
+        <ThemeIcon
+          svg={Edit}
+          size="normal"
+          color={theme.color.interactive[0].default.background}
+        />
+      )}
     </View>
   );
 
