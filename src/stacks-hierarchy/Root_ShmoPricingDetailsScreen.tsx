@@ -83,27 +83,29 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
       contentColor={contentColor}
     >
       <ScrollView contentContainerStyle={styles.container}>
-        <Section>
-          <GenericSectionItem>
-            <View style={styles.row}>
-              <ThemeText>{t(MobilityTexts.pricingDetails.unlock)}</ThemeText>
-              <ThemeText>{`${formatNumberToString(pricingPlan.price, language)} ${currency}`}</ThemeText>
-            </View>
-          </GenericSectionItem>
-          {pricingPlan.perMinPricing?.map((perMinPricingPlan, index) => (
-            <GenericSectionItem key={index}>
+        {!hasCampaign && (
+          <Section style={styles.normalPricingSection}>
+            <GenericSectionItem>
               <View style={styles.row}>
-                <ThemeText>
-                  {getMinuteSegmentLabel(
-                    perMinPricingPlan,
-                    perMinPricingPlan.start,
-                  )}
-                </ThemeText>
-                <ThemeText>{`${formatNumberToString(perMinPricingPlan.rate, language)} ${currency}/min`}</ThemeText>
+                <ThemeText>{t(MobilityTexts.pricingDetails.unlock)}</ThemeText>
+                <ThemeText>{`${formatNumberToString(pricingPlan.price, language)} ${currency}`}</ThemeText>
               </View>
             </GenericSectionItem>
-          ))}
-        </Section>
+            {pricingPlan.perMinPricing?.map((perMinPricingPlan, index) => (
+              <GenericSectionItem key={index}>
+                <View style={styles.row}>
+                  <ThemeText>
+                    {getMinuteSegmentLabel(
+                      perMinPricingPlan,
+                      perMinPricingPlan.start,
+                    )}
+                  </ThemeText>
+                  <ThemeText>{`${formatNumberToString(perMinPricingPlan.rate, language)} ${currency}/min`}</ThemeText>
+                </View>
+              </GenericSectionItem>
+            ))}
+          </Section>
+        )}
 
         {hasCampaign && (
           <View style={styles.campaignSection}>
@@ -165,8 +167,11 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    padding: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.medium,
     gap: theme.spacing.large,
+  },
+  normalPricingSection: {
+    paddingTop: theme.spacing.medium,
   },
   row: {
     flex: 1,
