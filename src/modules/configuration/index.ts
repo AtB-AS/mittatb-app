@@ -17,6 +17,7 @@ export type {
   ProductTypeTransportModes,
   ConsentLineType,
   FareZone,
+  RefundReasonType,
   TimeSelectionMode,
   TransportModeFilterOptionType,
   TransportModeType,

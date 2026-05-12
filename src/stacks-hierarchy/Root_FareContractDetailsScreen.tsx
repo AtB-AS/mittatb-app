@@ -77,6 +77,14 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       transitionOverride: 'slide-from-right',
     });
 
+  const onRefundNavigate = () =>
+    fareContract &&
+    navigation.navigate('Root_RefundConfirmationScreen', {
+      orderId: fareContract.orderId,
+      fareProductType: preassignedFareProduct?.type,
+      state: fareContract.state,
+    });
+
   const navigateToShmoSupport = useCallback(
     (params: ShmoHelpParams) => {
       navigation.navigate('Root_ShmoHelpScreen', params);
@@ -135,6 +143,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
               now={serverNow}
               isSentFareContract={isSentFareContract}
               onReceiptNavigate={onReceiptNavigate}
+              onRefundNavigate={onRefundNavigate}
               onSupportNavigate={navigateToShmoSupport}
               onNavigateToMap={onNavigateToMap}
               onNavigateToBonusScreen={onNavigateToBonusScreen}
