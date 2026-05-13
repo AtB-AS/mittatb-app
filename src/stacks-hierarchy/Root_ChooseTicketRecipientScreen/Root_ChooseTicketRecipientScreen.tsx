@@ -2,7 +2,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {OnBehalfOfTexts, useTranslation} from '@atb/translations';
 import {useCallback, useRef} from 'react';
-import {KeyboardAvoidingView, View} from 'react-native';
+import {View} from 'react-native';
 import {animateNextChange} from '@atb/utils/animation';
 import {useRecipientSelectionState} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-recipient-selection-state';
 import {SubmitButton} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/components/SubmitButton';
@@ -53,63 +53,62 @@ export const Root_ChooseTicketRecipientScreen = ({
       }}
       refreshControlProps={refreshControlProps}
       focusRef={focusRef}
+      avoidKeyboard={true}
     >
-      <KeyboardAvoidingView behavior="position">
-        <View style={styles.container}>
-          <TitleAndDescription themeColor={themeColor} ref={onDeleteRef} />
+      <View style={styles.container}>
+        <TitleAndDescription themeColor={themeColor} ref={onDeleteRef} />
 
-          <ExistingRecipientsList
-            state={state}
-            onSelect={(recipient) => {
-              animateNextChange();
-              dispatch({type: 'SELECT_RECIPIENT', recipient});
-            }}
-            onEmptyRecipients={useCallback(() => {
-              animateNextChange();
-              dispatch({type: 'SELECT_SEND_TO_OTHER'});
-            }, [dispatch])}
-            onDelete={useCallback(() => giveFocus(onDeleteRef), [])}
-          />
-          <SendToOtherButton
-            state={state}
-            onPress={() => {
-              animateNextChange();
-              dispatch({type: 'SELECT_SEND_TO_OTHER'});
-            }}
-            themeColor={themeColor}
-          />
+        <ExistingRecipientsList
+          state={state}
+          onSelect={(recipient) => {
+            animateNextChange();
+            dispatch({type: 'SELECT_RECIPIENT', recipient});
+          }}
+          onEmptyRecipients={useCallback(() => {
+            animateNextChange();
+            dispatch({type: 'SELECT_SEND_TO_OTHER'});
+          }, [dispatch])}
+          onDelete={useCallback(() => giveFocus(onDeleteRef), [])}
+        />
+        <SendToOtherButton
+          state={state}
+          onPress={() => {
+            animateNextChange();
+            dispatch({type: 'SELECT_SEND_TO_OTHER'});
+          }}
+          themeColor={themeColor}
+        />
 
-          <PhoneAndNameInputSection
-            state={state}
-            onChangePrefix={(v) => dispatch({type: 'SET_PREFIX', prefix: v})}
-            onChangePhone={(v) => dispatch({type: 'SET_PHONE', phoneNumber: v})}
-            onChangeName={(v) => dispatch({type: 'SET_NAME', name: v})}
-            themeColor={themeColor}
-          />
-          <SaveRecipientToggle
-            state={state}
-            onPress={() => {
-              animateNextChange();
-              dispatch({type: 'TOGGLE_SAVE_RECIPIENT'});
-            }}
-            themeColor={themeColor}
-          />
+        <PhoneAndNameInputSection
+          state={state}
+          onChangePrefix={(v) => dispatch({type: 'SET_PREFIX', prefix: v})}
+          onChangePhone={(v) => dispatch({type: 'SET_PHONE', phoneNumber: v})}
+          onChangeName={(v) => dispatch({type: 'SET_NAME', name: v})}
+          themeColor={themeColor}
+        />
+        <SaveRecipientToggle
+          state={state}
+          onPress={() => {
+            animateNextChange();
+            dispatch({type: 'TOGGLE_SAVE_RECIPIENT'});
+          }}
+          themeColor={themeColor}
+        />
 
-          <SubmitButton
-            state={state}
-            onSubmit={(recipient) =>
-              navigation.navigate('Root_PurchaseConfirmationScreen', {
-                ...params,
-                recipient,
-              })
-            }
-            onError={(e) => {
-              animateNextChange();
-              dispatch({type: 'SET_ERROR', error: e});
-            }}
-          />
-        </View>
-      </KeyboardAvoidingView>
+        <SubmitButton
+          state={state}
+          onSubmit={(recipient) =>
+            navigation.navigate('Root_PurchaseConfirmationScreen', {
+              ...params,
+              recipient,
+            })
+          }
+          onError={(e) => {
+            animateNextChange();
+            dispatch({type: 'SET_ERROR', error: e});
+          }}
+        />
+      </View>
     </FullScreenView>
   );
 };
