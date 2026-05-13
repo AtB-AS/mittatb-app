@@ -113,8 +113,9 @@ export const Root_ChooseTicketRecipientScreen = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => ({
   container: {
     padding: theme.spacing.medium,
+    paddingBottom: bottom + theme.spacing.medium,
   },
 }));
