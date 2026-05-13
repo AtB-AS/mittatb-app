@@ -11,7 +11,10 @@ import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {dictionary, TravelCardTexts, useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
-import {getDetailedSituationOrNoticeA11yLabel} from '@atb/modules/situations';
+import {
+  getDetailedSituationOrNoticeA11yLabel,
+  getLegNotificationsA11yLabel,
+} from '@atb/modules/situations';
 import {TravelCardNotices} from './TravelCardNotices';
 import {Tag} from '@atb/components/tag';
 
@@ -56,6 +59,11 @@ export const TravelCard: React.FC<TravelCardProps> = ({
       ? getDetailedSituationOrNoticeA11yLabel(tripPattern, language, t)
       : undefined;
 
+  const legNotificationsA11yLabel =
+    includeLegNotifications && !isDisabled
+      ? getLegNotificationsA11yLabel(tripPattern, t)
+      : undefined;
+
   const tagA11yLabel = tag
     ? `.. ${t(dictionary.messageTypes[tag.type])}.. ${tag.label}`
     : undefined;
@@ -66,9 +74,17 @@ export const TravelCard: React.FC<TravelCardProps> = ({
         parentLabels={{
           cardPrefix: prefixA11yLabel,
           situationOrNotice: situationOrNoticeA11yLabel,
+          legNotifications: legNotificationsA11yLabel,
           tag: tagA11yLabel,
         }}
-        order={['cardPrefix', 'header', 'legs', 'situationOrNotice', 'tag']}
+        order={[
+          'cardPrefix',
+          'header',
+          'legs',
+          'situationOrNotice',
+          'legNotifications',
+          'tag',
+        ]}
       >
         {(accessibilityProps) => (
           <NativeBlockButton
@@ -98,18 +114,19 @@ export const TravelCard: React.FC<TravelCardProps> = ({
                   setMaxWidth(e.nativeEvent.layout.width)
                 }
               >
-                <TravelCardLegs
-                  tripPattern={tripPattern}
-                  maxWidth={maxWidth}
-                  includeLegNotifications={includeLegNotifications}
-                />
+                <TravelCardLegs tripPattern={tripPattern} maxWidth={maxWidth} />
               </View>
               <View>
                 <ThemeIcon svg={ChevronRight} />
               </View>
             </View>
-            {includeSituationNotices && (
-              <TravelCardNotices tripPattern={tripPattern} language={language} />
+            {(includeSituationNotices || includeLegNotifications) && (
+              <TravelCardNotices
+                tripPattern={tripPattern}
+                language={language}
+                includeSituationNotices={includeSituationNotices}
+                includeLegNotifications={includeLegNotifications}
+              />
             )}
           </NativeBlockButton>
         )}

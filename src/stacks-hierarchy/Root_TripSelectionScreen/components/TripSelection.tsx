@@ -83,6 +83,7 @@ export function BookingTripSelection({
                   tripPatterns.length,
                 ),
               )}
+              includeLegNotifications
               includeSituationNotices
               isDisabled={!isAvailable}
               tag={tagInfo}

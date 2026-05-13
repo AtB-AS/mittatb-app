@@ -3,6 +3,8 @@ import {
   getTextForLanguage,
   Language,
   SituationsTexts,
+  TripDetailsTexts,
+  TripSearchTexts,
   TranslateFunction,
 } from '@atb/translations';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
@@ -276,4 +278,51 @@ export const getDetailedSituationOrNoticeA11yLabel = (
   return fragments.length > 0
     ? `. ${t(SituationsTexts.tripSummary.detailedPrefix)}. ${fragments.join('. ')}`
     : undefined;
+};
+
+/**
+ * Build an accessibility label for leg-level notifications (rail replacement
+ * bus, booking requirements) that aren't situations or notices.
+ *
+ * Example: "Bus 1: Rail replacement bus. Bus 11: Requires booking."
+ *
+ * Returns undefined when there is nothing to announce.
+ */
+export const getLegNotificationsA11yLabel = (
+  tripPattern: TripPatternFragment,
+  t: TranslateFunction,
+): string | undefined => {
+  const fragments: string[] = [];
+
+  for (const leg of tripPattern.legs) {
+    if (leg.mode === 'foot') continue;
+
+    const isRailReplacementBus =
+      leg.transportSubmode === TransportSubmode.RailReplacementBus;
+    const hasBooking = !!leg.bookingArrangements;
+
+    if (!isRailReplacementBus && !hasBooking) continue;
+
+    const modeName = t(
+      getTranslatedModeName(leg.mode, leg.line?.transportSubmode),
+    );
+    const publicCode = leg.line?.publicCode ?? '';
+    const legPrefix = `${modeName} ${publicCode}`.trim();
+
+    const texts: string[] = [];
+
+    if (isRailReplacementBus) {
+      texts.push(t(TripDetailsTexts.messages.departureIsRailReplacementBus));
+    }
+
+    if (hasBooking) {
+      texts.push(t(TripSearchTexts.results.resultItem.footer.requiresBooking));
+    }
+
+    if (texts.length > 0) {
+      fragments.push(`${legPrefix}: ${texts.join(', ')}`);
+    }
+  }
+
+  return fragments.length > 0 ? fragments.join('. ') : undefined;
 };

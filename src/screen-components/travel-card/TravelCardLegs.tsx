@@ -24,7 +24,6 @@ import {isDefined} from '@atb/utils/presence';
 type TravelCardContentProps = {
   tripPattern: TripPattern;
   maxWidth: number;
-  includeLegNotifications?: boolean;
 };
 
 export const TravelCardLegs: React.FC<TravelCardContentProps> = ({

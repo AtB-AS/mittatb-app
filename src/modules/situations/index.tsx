@@ -16,4 +16,5 @@ export {
   getMsgTypeForLeg,
   getA11yLabelForLeg,
   getDetailedSituationOrNoticeA11yLabel,
+  getLegNotificationsA11yLabel,
 } from './utils';
