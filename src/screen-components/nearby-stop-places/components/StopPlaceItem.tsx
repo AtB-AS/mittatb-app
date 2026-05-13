@@ -98,6 +98,7 @@ export const StopPlaceItem = ({
                     ? TransportSubmode.LocalBus
                     : undefined
                 }
+                iconSize="small"
               />
             ))}
           </View>

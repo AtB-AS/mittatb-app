@@ -24,6 +24,7 @@ export type SearchLocation = {
   label?: string;
   postalcode?: string;
   tariff_zones?: string[];
+  housenumber?: string;
 } & (
   | {resultType: 'search'}
   | {
