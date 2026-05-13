@@ -276,7 +276,7 @@ export const getDetailedSituationOrNoticeA11yLabel = (
   }
 
   return fragments.length > 0
-    ? `. ${t(SituationsTexts.tripSummary.detailedPrefix)}. ${fragments.join('. ')}`
+    ? `${t(SituationsTexts.tripSummary.detailedPrefix)}. ${fragments.join('. ')}`
     : undefined;
 };
 
