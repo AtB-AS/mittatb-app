@@ -69,6 +69,7 @@ import {AUTHORITY} from '@env';
 import {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {CancelledDepartureMessage} from './CancelledDepartureMessage';
+import {WalkFill} from '@atb/assets/svg/mono-icons/transportation';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -351,6 +352,8 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 subMode={leg.line?.transportSubmode}
                 isFlexible={isFlexible}
                 lineNumber={publicCode}
+                spacious
+                rounded
               />
               <ThemeText typography="body__m__strong">
                 {getLineDestinationName(t, leg)}
@@ -749,9 +752,10 @@ const WalkSection = ({leg, wait, timeRounding = 'floor'}: WalkSectionProps) => {
       accessibilityLabel={a11yLabel}
     >
       <View style={style.transportLine}>
-        <TransportationIconBox
-          mode={leg.mode}
-          subMode={leg.line?.transportSubmode}
+        <ThemeIcon
+          size="normal"
+          svg={WalkFill}
+          accessibilityLabel={t(getTranslatedModeName('foot'))}
         />
         <ThemeText typography="body__s" color="secondary">
           {isWalkTimeOfSignificance && humanizedDistance
@@ -793,6 +797,8 @@ const BikeSection = ({leg, wait, timeRounding = 'floor'}: BikeSectionProps) => {
         <TransportationIconBox
           mode={leg.mode}
           subMode={leg.line?.transportSubmode}
+          spacious
+          rounded
         />
         <ThemeText typography="body__s" color="secondary">
           {humanizedDistance
