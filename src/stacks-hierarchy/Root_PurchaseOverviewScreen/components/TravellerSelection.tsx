@@ -14,7 +14,6 @@ import {
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TravellerSelectionSheet} from './TravellerSelectionSheet';
-
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ContentHeading} from '@atb/components/heading';
@@ -25,6 +24,7 @@ import {
 } from '@atb/modules/purchase-selection';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {formatToNonBreakingSpaces} from '@atb/utils/text';
+import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
 
 type TravellerSelectionProps = {
   selection: PurchaseSelectionType;
@@ -63,9 +63,22 @@ export function TravellerSelection({
     ...selection.userProfilesWithCount,
     ...selection.supplementProductsWithCount,
   ]
-    .map((t) => `${t.count} ${getReferenceDataName(t, language)}`)
+    .map(
+      (t) =>
+        `${t.count > 1 ? t.count + ' ' : ''}${getReferenceDataName(t, language)}`,
+    )
     .map((t) => formatToNonBreakingSpaces(t))
     .join(', ');
+
+  const travellerCount =
+    selection.userProfilesWithCount.reduce(
+      (sum, current) => sum + current.count,
+      0,
+    ) +
+    selection.supplementProductsWithCount.reduce(
+      (sum, current) => sum + current.count,
+      0,
+    );
 
   const travellerInfo = !canSelectUserProfile
     ? getTextForLanguage(
@@ -103,10 +116,20 @@ export function TravellerSelection({
 
   const content = (
     <View style={styles.sectionContentContainer}>
+      <ThemeIcon svg={Travellers} />
       <View style={{flex: 1}}>
-        <ThemeText typography="body__m__strong" testID="selectedTravellers">
-          {travellersDetailsText}
-        </ThemeText>
+        <View style={styles.textWrapper}>
+          <ThemeText typography="body__m__strong">
+            {t(
+              PurchaseOverviewTexts.travellerSelection.travellerCount(
+                travellerCount,
+              ),
+            )}
+          </ThemeText>
+          <ThemeText typography="body__m" testID="selectedTravellers">
+            ({travellersDetailsText})
+          </ThemeText>
+        </View>
         {!canSelectUserProfile && (
           <ThemeText typography="body__s" type="secondary">
             {travellerInfo}
@@ -168,5 +191,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    gap: theme.spacing.small,
+  },
+  textWrapper: {
+    flexDirection: 'row',
+    gap: theme.spacing.xSmall,
+    flexWrap: 'wrap',
   },
 }));

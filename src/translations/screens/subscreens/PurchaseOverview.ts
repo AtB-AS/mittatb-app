@@ -150,6 +150,12 @@ const PurchaseOverviewTexts = {
   travellerSelection: {
     titleSingle: _('Reisende', 'Traveller', 'Reisande'),
     titleMultiple: _('Reisende', 'Travellers', 'Reisande'),
+    travellerCount: (count: number) =>
+      _(
+        `${count} reisende`,
+        count === 1 ? `${count} traveller` : `${count} travellers`,
+        `${count} reisande`,
+      ),
     a11yLabelPrefixSingle: _(
       'Valgt reisende:',
       'Selected traveller:',
