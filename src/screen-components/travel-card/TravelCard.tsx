@@ -65,7 +65,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
       : undefined;
 
   const tagA11yLabel = tag
-    ? `.. ${t(dictionary.messageTypes[tag.type])}.. ${tag.label}`
+    ? `. ${t(dictionary.messageTypes[tag.type])}. ${tag.label}`
     : undefined;
 
   return (
