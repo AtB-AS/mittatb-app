@@ -112,7 +112,7 @@ export const Results: React.FC<Props> = ({
                   testID={'tripSearchSearchResult' + i}
                   a11yLabelPrefix={t(
                     TravelCardTexts.card.a11yPrefix.tripSuggestion(
-                      i + 1,
+                      i,
                       tripPatterns.length,
                     ),
                   )}
