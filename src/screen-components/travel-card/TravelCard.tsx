@@ -108,7 +108,9 @@ export const TravelCard: React.FC<TravelCardProps> = ({
                 <ThemeIcon svg={ChevronRight} />
               </View>
             </View>
-            <TravelCardNotices tripPattern={tripPattern} language={language} />
+            {includeSituationNotices && (
+              <TravelCardNotices tripPattern={tripPattern} language={language} />
+            )}
           </NativeBlockButton>
         )}
       </CompositeAccessibilityProvider>

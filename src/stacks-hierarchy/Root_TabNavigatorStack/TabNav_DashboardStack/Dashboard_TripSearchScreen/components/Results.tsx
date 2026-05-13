@@ -5,6 +5,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
 import {
   TranslateFunction,
+  TravelCardTexts,
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
@@ -108,10 +109,16 @@ export const Results: React.FC<Props> = ({
                 <TravelCard
                   tripPattern={tripPattern}
                   onDetailsPressed={onDetailsPressed}
-                  cardIndex={i}
-                  numberOfCards={tripPatterns.length}
                   testID={'tripSearchSearchResult' + i}
-                  type="trip-search"
+                  a11yLabelPrefix={t(
+                    TravelCardTexts.card.a11yPrefix.tripSuggestion(
+                      i + 1,
+                      tripPatterns.length,
+                    ),
+                  )}
+                  includeDayInfo
+                  includeFromToInfo
+                  includeSituationNotices
                 />
               ) : (
                 <ResultRow
