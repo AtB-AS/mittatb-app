@@ -25,8 +25,10 @@ type MapContextState = {
   dispatchMapState: React.Dispatch<ReducerMapStateAction>;
   paddingBottomMap: number;
   setPaddingBottomMap: (value: number) => void;
-  givenShmoConsent: boolean;
-  setGivenShmoConsent: (value: boolean) => void;
+  givenScooterConsent: boolean;
+  setGivenScooterConsent: (value: boolean) => void;
+  givenBicycleConsent: boolean;
+  setGivenBicycleConsent: (value: boolean) => void;
   currentBottomSheet: {
     bottomSheetType: MapBottomSheetType;
     feature: Feature<Point, GeoJsonProperties> | null;
@@ -68,9 +70,15 @@ export const MapContextProvider = ({children}: Props) => {
     bottomSheetType: MapBottomSheetType.None,
   });
 
-  const [givenShmoConsent, setGivenShmoConsent] = usePersistedBoolState(
+  const [givenScooterConsent, setGivenScooterConsent] = usePersistedBoolState(
     storage,
     StorageModelKeysEnum.ScooterConsent,
+    false,
+  );
+
+  const [givenBicycleConsent, setGivenBicycleConsent] = usePersistedBoolState(
+    storage,
+    StorageModelKeysEnum.BicycleConsent,
     false,
   );
 
@@ -95,8 +103,10 @@ export const MapContextProvider = ({children}: Props) => {
         dispatchMapState,
         paddingBottomMap,
         setPaddingBottomMap,
-        givenShmoConsent,
-        setGivenShmoConsent,
+        givenScooterConsent,
+        setGivenScooterConsent,
+        givenBicycleConsent,
+        setGivenBicycleConsent,
         currentBottomSheet,
         setCurrentBottomSheet,
       }}
