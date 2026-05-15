@@ -94,14 +94,22 @@ export const getSearchPlace = (location?: Location) => {
     : undefined;
 };
 
+export const getSearchTime = (
+  searchTime: TripSearchTime,
+  timeOfLastSearch: string,
+  language: Language,
+) => {
+  const date = searchTime.option === 'now' ? timeOfLastSearch : searchTime.date;
+  return formatToLongDateTime(date, language);
+};
+
 export function getSearchTimeLabel(
   searchTime: TripSearchTime,
   timeOfLastSearch: string,
   t: TranslateFunction,
   language: Language,
 ) {
-  const date = searchTime.option === 'now' ? timeOfLastSearch : searchTime.date;
-  const time = formatToLongDateTime(date, language);
+  const time = getSearchTime(searchTime, timeOfLastSearch, language);
 
   switch (searchTime.option) {
     case 'now':
