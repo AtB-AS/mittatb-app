@@ -16,9 +16,10 @@ export {
   getBonusAmountEarnedQueryKey,
   useProductPointsQuery,
   useActiveBonusProductsQuery,
+  useActiveBonusProductGroupsQuery,
 } from './queries';
 export {BonusProductTypeEnum} from './types';
-export type {BonusProductType} from './types';
+export type {BonusProductType, BonusProductGroupType} from './types';
 export {
   bonusOnboardingCarouselConfig,
   type BonusOnboardingScreenName,

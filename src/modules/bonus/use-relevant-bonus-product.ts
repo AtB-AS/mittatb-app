@@ -14,7 +14,7 @@ export const useRelevantBonusProduct = (
   return activeBonusProducts?.find(
     (bonusProduct) =>
       bonusProduct.formFactors.includes(formFactor) &&
-      bonusProduct.operatorIds.includes(operatorId) &&
+      bonusProduct.operatorId === operatorId &&
       (!productType || bonusProduct.productType === productType),
   );
 };

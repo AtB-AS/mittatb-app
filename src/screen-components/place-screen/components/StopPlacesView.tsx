@@ -28,6 +28,7 @@ import {
 } from '../utils';
 import {DeparturesProps, useDepartures} from '../hooks/use-departures';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 
 type Props = {
   stopPlaces: StopPlace[];
@@ -131,6 +132,11 @@ export const StopPlacesView = (props: Props) => {
     if (!placeHasFavorites) setShowOnlyFavorites(false);
   }, [placeHasFavorites, setShowOnlyFavorites]);
 
+  const refreshControlProps = useManualRefreshControlProps({
+    onRefresh: refetchDepartures,
+    refreshing: departuresIsLoading,
+  });
+
   return (
     <SectionList
       onScroll={onScroll}
@@ -168,12 +174,7 @@ export const StopPlacesView = (props: Props) => {
           ) : null}
         </>
       }
-      refreshControl={
-        <RefreshControl
-          refreshing={departuresIsLoading}
-          onRefresh={refetchDepartures}
-        />
-      }
+      refreshControl={<RefreshControl {...refreshControlProps} />}
       sections={quayListData}
       testID={testID}
       keyExtractor={(item) => item.quay.id}

@@ -44,11 +44,10 @@ export const LocationResults: React.FC<Props> = ({
             <View style={styles.locationButtonContainer}>
               <NativeBlockButton
                 accessible={true}
-                accessibilityLabel={
-                  getLocationIconAccessibilityLabel(searchResult.location, t) +
-                  searchResult.location.label +
-                  screenReaderPause
-                }
+                accessibilityLabel={[
+                  searchResult.location.label,
+                  getLocationIconAccessibilityLabel(searchResult.location, t),
+                ].join(screenReaderPause)}
                 accessibilityHint={t(
                   LocationSearchTexts.locationResults.a11y.activateToUse,
                 )}
@@ -58,17 +57,6 @@ export const LocationResults: React.FC<Props> = ({
                 style={styles.locationButton}
                 testID={testIDItemPrefix + idx}
               >
-                <View style={{flexDirection: 'column'}}>
-                  {searchResult.emoji ? (
-                    <FavoriteIcon favorite={searchResult} />
-                  ) : (
-                    <LocationIcon
-                      location={searchResult.location}
-                      fill={String(styles.locationIcon.backgroundColor)}
-                      multiple={true}
-                    />
-                  )}
-                </View>
                 <View style={styles.locationTextContainer}>
                   <ThemeText
                     typography="body__m__strong"
@@ -80,6 +68,15 @@ export const LocationResults: React.FC<Props> = ({
                     {searchResult.subtext}
                   </ThemeText>
                 </View>
+                {searchResult.emoji ? (
+                  <FavoriteIcon favorite={searchResult} />
+                ) : (
+                  <LocationIcon
+                    location={searchResult.location}
+                    fill={String(styles.locationIcon.backgroundColor)}
+                    multiple={true}
+                  />
+                )}
               </NativeBlockButton>
             </View>
           </View>
@@ -124,7 +121,7 @@ const getLocationIconAccessibilityLabel = (
     case 'venue':
       return getVenueIconTypes(category)
         .map((c) => t(LocationSearchTexts.locationResults.category[c]))
-        .join(',');
+        .join(screenReaderPause);
     case 'address':
     default:
       return t(LocationSearchTexts.locationResults.category.location);
@@ -147,9 +144,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   locationButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: theme.spacing.small,
   },
   locationTextContainer: {
-    marginLeft: theme.spacing.medium,
+    flex: 1,
+    justifyContent: 'space-between',
   },
   locality: {
     marginTop: theme.spacing.xSmall,

@@ -1,10 +1,8 @@
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {OnBehalfOfTexts, useTranslation} from '@atb/translations';
 import {useCallback, useRef} from 'react';
-import {KeyboardAvoidingView, RefreshControl, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {KeyboardAvoidingView, View} from 'react-native';
 import {animateNextChange} from '@atb/utils/animation';
 import {useRecipientSelectionState} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-recipient-selection-state';
 import {SubmitButton} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/components/SubmitButton';
@@ -17,6 +15,8 @@ import {Theme} from '@atb/theme/colors';
 import {SendToOtherButton} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/components/SendToOtherButton';
 import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/modules/on-behalf-of';
 import {giveFocus, useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
+import {FullScreenView} from '@atb/components/screen-view';
 
 type Props = RootStackScreenProps<'Root_ChooseTicketRecipientScreen'>;
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
@@ -37,31 +37,25 @@ export const Root_ChooseTicketRecipientScreen = ({
 
   const onDeleteRef = useRef(undefined);
 
+  const refreshControlProps = useManualRefreshControlProps({
+    onRefresh: () =>
+      queryClient.resetQueries({
+        queryKey: [FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY],
+      }),
+    refreshing: false,
+  });
+
   return (
-    <View style={styles.container}>
-      <FullScreenHeader
-        showBorder={false}
-        leftButton={{type: 'back'}}
-        title={t(OnBehalfOfTexts.chooseReceiver.header)}
-        focusRef={focusRef}
-      />
-      <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={styles.contentContainerStyle}
-          refreshControl={
-            <RefreshControl
-              onRefresh={() =>
-                queryClient.resetQueries({
-                  queryKey: [FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY],
-                })
-              }
-              refreshing={false}
-              tintColor={themeColor.foreground.primary}
-              colors={[themeColor.foreground.primary]}
-            />
-          }
-        >
+    <FullScreenView
+      headerProps={{
+        leftButton: {type: 'back'},
+        title: t(OnBehalfOfTexts.chooseReceiver.header),
+      }}
+      refreshControlProps={refreshControlProps}
+      focusRef={focusRef}
+    >
+      <KeyboardAvoidingView behavior="position">
+        <View style={styles.container}>
           <TitleAndDescription themeColor={themeColor} ref={onDeleteRef} />
 
           <ExistingRecipientsList
@@ -114,17 +108,14 @@ export const Root_ChooseTicketRecipientScreen = ({
               dispatch({type: 'SET_ERROR', error: e});
             }}
           />
-        </ScrollView>
+        </View>
       </KeyboardAvoidingView>
-    </View>
+    </FullScreenView>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: getThemeColor(theme).background,
-    flex: 1,
+    padding: theme.spacing.medium,
   },
-  mainView: {flex: 1},
-  contentContainerStyle: {padding: theme.spacing.medium},
 }));

@@ -53,7 +53,7 @@ export const HowPointsWork = () => {
         .filter(
           (product) => product.productType === BonusProductTypeEnum.VOUCHER,
         )
-        .flatMap((product) => product.operatorIds),
+        .map((product) => product.operatorId),
     ),
   ]
     .map((operatorId) => {
