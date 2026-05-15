@@ -46,7 +46,7 @@ export const CameraScreenContainer = ({
           />
           <View style={styles.header} ref={focusRef}>
             <NativeBorderlessButton onPress={onGoBack} style={styles.back}>
-              <ThemeIcon svg={SvgChevronLeft} color="white" />
+              <ThemeIcon svg={SvgChevronLeft} color="#ffffff" />
               <ThemeText typography="body__s__strong" color="#ffffff">
                 {t(ScreenHeaderTexts.headerButton.back.text)}
               </ThemeText>
