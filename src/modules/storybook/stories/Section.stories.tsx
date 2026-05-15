@@ -3,6 +3,7 @@ import {
   RadioSectionItem,
   ButtonSectionItem,
   CounterSectionItem,
+  EditActionSectionItem,
   ExpandableSectionItem,
   FavoriteDepartureSectionItem,
   FavoriteSectionItem,
@@ -35,7 +36,6 @@ import {Warning} from '@atb/assets/svg/mono-icons/status';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Edit, Filter} from '@atb/assets/svg/mono-icons/actions';
 import {Time} from '@atb/assets/svg/mono-icons/time';
-import {EditActionSectionItem} from '@atb/components/sections';
 import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
 
 type SectionMetaProps = ThemedStoryProps<SectionProps>;
