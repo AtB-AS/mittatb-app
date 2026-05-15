@@ -16,6 +16,7 @@ import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
 import {computeFreeMinuteCount} from '@atb/modules/mobility';
 
 type Props = RootStackScreenProps<'Root_ShmoPricingDetailsScreen'>;
+type PricingRow = {label: string; value: string};
 
 export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
   const {pricingPlan, priceAdjustments} = route.params;
@@ -25,6 +26,7 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
   const {theme} = useThemeContext();
   const contentColor = theme.color.background.neutral[1];
   const currency = getCurrencySymbol(pricingPlan.currency);
+  const rows: PricingRow[] = [];
   const hasMultiplePerMinPricingPlans =
     (pricingPlan.perMinPricing?.length ?? 0) > 1;
 
@@ -51,21 +53,47 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
     perMinPricingSegment: ShmoPricingSegment,
     effectiveStartMinute: number,
   ): string => {
-    if (hasMultiplePerMinPricingPlans && perMinPricingSegment.end != null) {
-      return t(
-        MobilityTexts.pricingDetails.minutePriceRange(
-          effectiveStartMinute,
-          perMinPricingSegment.end,
-        ),
-      );
-    }
     if (hasMultiplePerMinPricingPlans) {
-      return t(
-        MobilityTexts.pricingDetails.minutePriceFrom(effectiveStartMinute),
-      );
+      if (perMinPricingSegment.end != null) {
+        return t(
+          MobilityTexts.pricingDetails.minutePriceRange(
+            effectiveStartMinute,
+            perMinPricingSegment.end,
+          ),
+        );
+      } else {
+        return t(
+          MobilityTexts.pricingDetails.minutePriceFrom(effectiveStartMinute),
+        );
+      }
     }
     return t(MobilityTexts.pricingDetails.minutePrice);
   };
+
+  rows.push({
+    label: t(MobilityTexts.pricingDetails.unlock),
+    value:
+      hasCampaign && freeUnlockPriceAdjustment
+        ? `0 ${currency}`
+        : `${formatNumberToString(pricingPlan.price, language)} ${currency}`,
+  });
+
+  if (hasCampaign && freeMinutesPriceAdjustment && freeMinCount > 0) {
+    rows.push({
+      label: t(MobilityTexts.pricingDetails.minutePriceRange(0, freeMinCount)),
+      value: `0 ${currency}/min`,
+    });
+  }
+
+  pricingPlan.perMinPricing?.forEach((seg) => {
+    rows.push({
+      label: getMinuteSegmentLabel(
+        seg,
+        hasCampaign ? Math.max(freeMinCount, seg.start) : seg.start,
+      ),
+      value: `${formatNumberToString(seg.rate, language)} ${currency}/min`,
+    });
+  });
 
   return (
     <FullScreenView
@@ -83,83 +111,25 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
       contentColor={contentColor}
     >
       <ScrollView contentContainerStyle={styles.container}>
-        {!hasCampaign && (
-          <Section style={styles.normalPricingSection}>
-            <GenericSectionItem>
+        {hasCampaign && (
+          <ThemeText
+            typography="body__s"
+            color="secondary"
+            style={styles.sectionLabel}
+          >
+            {t(MobilityTexts.pricingDetails.campaignPrice)}
+          </ThemeText>
+        )}
+        <Section style={!hasCampaign ? styles.sectionTopPadding : undefined}>
+          {rows.map(({label, value}, index) => (
+            <GenericSectionItem key={index}>
               <View style={styles.row}>
-                <ThemeText>{t(MobilityTexts.pricingDetails.unlock)}</ThemeText>
-                <ThemeText>{`${formatNumberToString(pricingPlan.price, language)} ${currency}`}</ThemeText>
+                <ThemeText>{label}</ThemeText>
+                <ThemeText>{value}</ThemeText>
               </View>
             </GenericSectionItem>
-            {pricingPlan.perMinPricing?.map((perMinPricingPlan, index) => (
-              <GenericSectionItem key={index}>
-                <View style={styles.row}>
-                  <ThemeText>
-                    {getMinuteSegmentLabel(
-                      perMinPricingPlan,
-                      perMinPricingPlan.start,
-                    )}
-                  </ThemeText>
-                  <ThemeText>{`${formatNumberToString(perMinPricingPlan.rate, language)} ${currency}/min`}</ThemeText>
-                </View>
-              </GenericSectionItem>
-            ))}
-          </Section>
-        )}
-
-        {hasCampaign && (
-          <View style={styles.campaignSection}>
-            <ThemeText
-              typography="body__s"
-              color="secondary"
-              style={styles.sectionLabel}
-            >
-              {t(MobilityTexts.pricingDetails.campaignPrice)}
-            </ThemeText>
-            <Section>
-              <GenericSectionItem>
-                <View style={styles.row}>
-                  <ThemeText>
-                    {t(MobilityTexts.pricingDetails.unlock)}
-                  </ThemeText>
-                  <ThemeText>
-                    {freeUnlockPriceAdjustment
-                      ? `0 ${currency}`
-                      : `${formatNumberToString(pricingPlan.price, language)} ${currency}`}
-                  </ThemeText>
-                </View>
-              </GenericSectionItem>
-              {!!freeMinutesPriceAdjustment && freeMinCount > 0 && (
-                <GenericSectionItem>
-                  <View style={styles.row}>
-                    <ThemeText>
-                      {t(
-                        MobilityTexts.pricingDetails.minutePriceRange(
-                          0,
-                          freeMinCount,
-                        ),
-                      )}
-                    </ThemeText>
-                    <ThemeText>{`0 ${currency}/min`}</ThemeText>
-                  </View>
-                </GenericSectionItem>
-              )}
-              {pricingPlan.perMinPricing?.map((perMinPricingPlan, index) => (
-                <GenericSectionItem key={index}>
-                  <View style={styles.row}>
-                    <ThemeText>
-                      {getMinuteSegmentLabel(
-                        perMinPricingPlan,
-                        Math.max(freeMinCount, perMinPricingPlan.start),
-                      )}
-                    </ThemeText>
-                    <ThemeText>{`${formatNumberToString(perMinPricingPlan.rate, language)} ${currency}/min`}</ThemeText>
-                  </View>
-                </GenericSectionItem>
-              ))}
-            </Section>
-          </View>
-        )}
+          ))}
+        </Section>
       </ScrollView>
     </FullScreenView>
   );
@@ -168,9 +138,10 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacing.medium,
-    gap: theme.spacing.large,
+    paddingBottom: theme.spacing.medium,
+    gap: theme.spacing.medium,
   },
-  normalPricingSection: {
+  sectionTopPadding: {
     paddingTop: theme.spacing.medium,
   },
   row: {
@@ -180,8 +151,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   sectionLabel: {
     marginLeft: theme.spacing.small,
-  },
-  campaignSection: {
-    gap: theme.spacing.medium,
   },
 }));
