@@ -37,6 +37,8 @@ export const TripLegDecoration: React.FC<TripLegDecorationProps> = ({
         colorStyle,
         hasStart && style.decorationWithStart,
         hasEnd && style.decorationWithEnd,
+        !hasStart && style.decorationRoundedTop,
+        !hasEnd && style.decorationRoundedBottom,
         leftOverride,
       ]}
     >
@@ -98,5 +100,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   decorationWithEnd: {
     bottom: theme.tripLegDetail.decorationLineInset,
+  },
+  decorationRoundedTop: {
+    borderTopLeftRadius: theme.tripLegDetail.decorationLineWidth / 2,
+    borderTopRightRadius: theme.tripLegDetail.decorationLineWidth / 2,
+  },
+  decorationRoundedBottom: {
+    borderBottomLeftRadius: theme.tripLegDetail.decorationLineWidth / 2,
+    borderBottomRightRadius: theme.tripLegDetail.decorationLineWidth / 2,
   },
 }));
