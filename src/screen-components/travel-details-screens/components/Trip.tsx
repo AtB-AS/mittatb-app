@@ -218,7 +218,7 @@ export const Trip: React.FC<TripProps> = ({
           })}
       </View>
       <Divider />
-      {tripPatternLegs && (
+      {!isScreenReaderEnabled && tripPatternLegs && (
         <CompactTravelDetailsMap
           serviceJourneyPolylines={tripPatternLegs}
           fromPlace={tripPatternLegs[0]?.fromPlace}
