@@ -10,12 +10,12 @@ import {
 } from 'react-native';
 import {renderMarkdown} from './markdown-renderer';
 import {getTextWeightStyle, MAX_FONT_SCALE} from './utils';
-import {ContrastColor, TextNames} from '@atb/theme/colors';
+import {ContrastColor, ForegroundType, TextNames} from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
 
 export type ThemeTextProps = TextProps & {
   typography?: TextNames;
-  type?: keyof ContrastColor['foreground'];
+  type?: ForegroundType;
   color?: ContrastColor | ColorValue;
   isMarkdown?: boolean;
 };

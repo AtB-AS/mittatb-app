@@ -85,10 +85,11 @@ export const isTextColor = (color: unknown, theme: Theme): color is TextColor =>
 
 export type Themes = typeof themes;
 export type Theme = Themes['light'];
+export type ForegroundType = keyof ContrastColor['foreground'];
 
 export function resolveColorValue(
   color: ContrastColor | StatusColorName | TextColor | ColorValue | undefined,
-  type: keyof ContrastColor['foreground'],
+  type: ForegroundType,
   theme: Theme,
 ): string {
   if (typeof color === 'object') {
