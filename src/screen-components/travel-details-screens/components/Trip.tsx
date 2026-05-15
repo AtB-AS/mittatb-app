@@ -196,7 +196,7 @@ export const Trip: React.FC<TripProps> = ({
                 leg={leg}
                 testID={'leg' + index}
                 onPressShowLive={
-                  legVehiclePosition
+                  !isScreenReaderEnabled && legVehiclePosition
                     ? (serviceJourneyPolylines: ServiceJourneyPolylines) => {
                         shouldShowRequestReview.current = true;
                         onPressDetailsMap({
