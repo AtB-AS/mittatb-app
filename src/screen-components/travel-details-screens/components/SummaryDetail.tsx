@@ -23,7 +23,7 @@ export const SummaryDetail = ({
     <View style={styles.summaryDetail}>
       <ThemeIcon color="secondary" style={styles.leftIcon} svg={icon} />
       <ThemeText
-        color="secondary"
+        type="secondary"
         accessible={true}
         style={styles.detailText}
         accessibilityLabel={accessibilityLabel}

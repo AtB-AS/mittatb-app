@@ -150,7 +150,7 @@ export const EstimatedCallList = ({
                 radius={!shouldShowMoreItemsLink ? 'bottom' : undefined}
               >
                 <ThemeText
-                  color="secondary"
+                  type="secondary"
                   typography="body__s"
                   style={{textAlign: 'center', width: '100%'}}
                 >

@@ -100,7 +100,7 @@ export function RadioSectionItem({
           {subtext && (
             <ThemeText
               typography="body__s"
-              color="secondary"
+              type="secondary"
               style={{marginTop: theme.spacing.small}}
               testID={`${testID}SubText`}
             >

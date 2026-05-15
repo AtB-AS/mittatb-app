@@ -353,7 +353,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             />
           )}
           <View style={style.debugInfoContainer}>
-            <ThemeText typography="body__s" color="secondary">
+            <ThemeText typography="body__s" type="secondary">
               v{version} ({buildNumber}){' '}
               {isEventStreamEnabled && isEventStreamFareContractsEnabled && 'S'}
             </ThemeText>
@@ -364,7 +364,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                     <ScreenReaderAnnouncement
                       message={t(ProfileTexts.installId.wasCopiedAlert)}
                     />
-                    <ThemeText typography="body__s" color="secondary">
+                    <ThemeText typography="body__s" type="secondary">
                       ✅ {t(ProfileTexts.installId.wasCopiedAlert)}
                     </ThemeText>
                   </>
@@ -375,14 +375,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 )}
                 accessibilityHint={t(ProfileTexts.installId.a11yHint)}
               >
-                <ThemeText typography="body__s" color="secondary">
+                <ThemeText typography="body__s" type="secondary">
                   {t(ProfileTexts.installId.label(config.installId))}
                 </ThemeText>
               </ClickableCopy>
             )}
             <ThemeText
               typography="body__s"
-              color="secondary"
+              type="secondary"
               accessibilityLabel={t(
                 ProfileTexts.orgNumberA11yLabel(APP_ORG_NUMBER),
               )}

@@ -189,7 +189,7 @@ export function QuayLineSection({
             <View style={styles.stopPlaceHeaderText}>
               <ThemeText
                 typography="body__s__strong"
-                color="secondary"
+                type="secondary"
                 style={styles.rightMargin}
                 testID={testID + 'Name'}
               >
@@ -201,7 +201,7 @@ export function QuayLineSection({
                 <ThemeText
                   style={styles.rightMargin}
                   typography="body__s"
-                  color="secondary"
+                  type="secondary"
                   testID={testID + 'Description'}
                 >
                   {quay.description}
@@ -213,7 +213,7 @@ export function QuayLineSection({
         {sortedDepartures.length === 0 && !isLoading && !didLoadingDataFail && (
           <GenericSectionItem>
             <ThemeText
-              color="secondary"
+              type="secondary"
               typography="body__s"
               style={{textAlign: 'center', width: '100%'}}
             >
@@ -238,7 +238,7 @@ export function QuayLineSection({
         {didLoadingDataFail && !isLoading && (
           <GenericSectionItem>
             <View style={styles.messageBox}>
-              <ThemeText typography="body__s" color="secondary">
+              <ThemeText typography="body__s" type="secondary">
                 {t(DeparturesTexts.message.noData)}
               </ThemeText>
             </View>

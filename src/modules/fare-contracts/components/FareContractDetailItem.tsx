@@ -2,7 +2,6 @@ import {StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
-import {useThemeContext} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {SvgProps} from 'react-native-svg';
 import {Size, getContentTypography} from '../utils';
@@ -21,14 +20,11 @@ export function FareContractDetailItem({
   style?: StyleProp<ViewStyle>;
 }) {
   const styles = useStyles();
-  const {theme} = useThemeContext();
-
-  const headerTextColor = theme.color.foreground.dynamic.secondary;
 
   return (
     <View style={[styles.container, style]}>
       {header && (
-        <ThemeText typography="body__s" color={headerTextColor}>
+        <ThemeText typography="body__s" type="secondary">
           {header}
         </ThemeText>
       )}

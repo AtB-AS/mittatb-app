@@ -1,5 +1,5 @@
 import React from 'react';
-import {useThemeContext} from '@atb/theme';
+import {resolveColorValue, useThemeContext} from '@atb/theme';
 import {
   ColorValue,
   Platform,
@@ -10,19 +10,13 @@ import {
 } from 'react-native';
 import {renderMarkdown} from './markdown-renderer';
 import {getTextWeightStyle, MAX_FONT_SCALE} from './utils';
-import {
-  ContrastColor,
-  Statuses,
-  TextColor,
-  TextNames,
-  resolveColorValue,
-} from '@atb/theme/colors';
+import {ContrastColor, TextNames} from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
 
 export type ThemeTextProps = TextProps & {
   typography?: TextNames;
   type?: keyof ContrastColor['foreground'];
-  color?: ContrastColor | Statuses | TextColor | ColorValue;
+  color?: ContrastColor | ColorValue;
   isMarkdown?: boolean;
 };
 

@@ -1,10 +1,10 @@
 import {useThemeContext} from '@atb/theme';
 import {
   ContrastColor,
+  resolveColorValue,
   Statuses,
   TextColor,
   Theme,
-  resolveColorValue,
 } from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 import {useFontScale} from '@atb/utils/use-font-scale';

@@ -33,7 +33,7 @@ export const OrderDetailsSectionItem = ({
   return (
     <View style={[topContainer, styles.container]} accessible={true}>
       {!hasShmoBookingId(fareContract) && (
-        <ThemeText typography="body__s" color="secondary">
+        <ThemeText typography="body__s" type="secondary">
           {t(
             FareContractTexts.details.purchaseTime(
               fullDateTime(
@@ -45,7 +45,7 @@ export const OrderDetailsSectionItem = ({
         </ThemeText>
       )}
 
-      <ThemeText typography="body__s" color="secondary">
+      <ThemeText typography="body__s" type="secondary">
         {hasShmoBookingId(fareContract)
           ? t(
               FareContractTexts.shmoDetails.tripStarted(
@@ -59,7 +59,7 @@ export const OrderDetailsSectionItem = ({
             )}
       </ThemeText>
 
-      <ThemeText typography="body__s" color="secondary">
+      <ThemeText typography="body__s" type="secondary">
         {hasShmoBookingId(fareContract)
           ? t(
               FareContractTexts.shmoDetails.tripEnded(
@@ -74,20 +74,20 @@ export const OrderDetailsSectionItem = ({
       </ThemeText>
 
       {fareContract.state !== FareContractState.Refunded && priceString && (
-        <ThemeText typography="body__s" color="secondary">
+        <ThemeText typography="body__s" type="secondary">
           {t(FareContractTexts.details.totalPrice(priceString))}
         </ThemeText>
       )}
 
       {!!fareContract.paymentType.length &&
         fareContract.state !== FareContractState.Refunded && (
-          <ThemeText typography="body__s" color="secondary">
+          <ThemeText typography="body__s" type="secondary">
             {t(FareContractTexts.details.paymentMethod)}
             {fareContract.paymentType.map(humanizePaymentTypeString).join(', ')}
           </ThemeText>
         )}
       {hasShmoBookingId(fareContract) && (
-        <ThemeText typography="body__s" color="secondary">
+        <ThemeText typography="body__s" type="secondary">
           {t(FareContractTexts.details.bookingId(fareContract.bookingId ?? ''))}
         </ThemeText>
       )}

@@ -69,7 +69,7 @@ export const Terms = ({error}: {error: Error | null}) => {
             />
             <ThemeText
               typography="body__m"
-              color="primary"
+              type="primary"
               style={styles.termDescription}
             >
               {t(BonusProgramTexts.terms.term1)}
@@ -86,7 +86,7 @@ export const Terms = ({error}: {error: Error | null}) => {
             />
             <ThemeText
               typography="body__m"
-              color="primary"
+              type="primary"
               style={styles.termDescription}
             >
               {t(BonusProgramTexts.terms.term2)}
@@ -103,7 +103,7 @@ export const Terms = ({error}: {error: Error | null}) => {
             />
             <ThemeText
               typography="body__m"
-              color="primary"
+              type="primary"
               style={styles.termDescription}
             >
               {t(BonusProgramTexts.terms.term3)}

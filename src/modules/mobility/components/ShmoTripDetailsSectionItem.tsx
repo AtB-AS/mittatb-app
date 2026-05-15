@@ -55,7 +55,7 @@ export const ShmoTripDetailsSectionItem = ({
         {withHeader && (
           <ThemeText
             typography="body__s"
-            color="secondary"
+            type="secondary"
             accessibilityRole="header"
           >
             {t(MobilityTexts.time)}
@@ -75,7 +75,7 @@ export const ShmoTripDetailsSectionItem = ({
         {withHeader && (
           <ThemeText
             typography="body__s"
-            color="secondary"
+            type="secondary"
             accessibilityRole="header"
           >
             {t(MobilityTexts.cost)}

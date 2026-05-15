@@ -102,8 +102,13 @@ describe('resolveColorValue', () => {
   });
 
   describe('undefined', () => {
-    it('should fall back to foreground.dynamic.primary', () => {
+    it('should fall back to foreground.dynamic.primary when type is primary', () => {
       expect(resolveColorValue(undefined, 'primary', theme)).toBe('#000000');
+    });
+
+    it('should use type as fallback when color is undefined', () => {
+      expect(resolveColorValue(undefined, 'secondary', theme)).toBe('#415058');
+      expect(resolveColorValue(undefined, 'disabled', theme)).toBe('#73848c');
     });
   });
 

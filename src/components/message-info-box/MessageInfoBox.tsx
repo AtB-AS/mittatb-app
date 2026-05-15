@@ -172,7 +172,7 @@ export const MessageInfoBox = ({
           <ThemeText
             style={styles.installId}
             typography="body__xs"
-            color="secondary"
+            type="secondary"
             allowFontScaling={false}
           >
             id: {config.installId}

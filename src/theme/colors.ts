@@ -1,5 +1,4 @@
-import {Platform, StatusBarProps} from 'react-native';
-import type {ColorValue} from 'react-native';
+import {type ColorValue, Platform, StatusBarProps} from 'react-native';
 import {APP_ORG} from '@env';
 
 import {
@@ -97,8 +96,13 @@ export function resolveColorValue(
   } else if (isStatusColor(color, theme)) {
     return theme.color.status[color].primary.background;
   } else if (isTextColor(color, theme) || color === undefined) {
-    return theme.color.foreground.dynamic[color ?? 'primary'];
+    return theme.color.foreground.dynamic[color ?? type];
   } else {
+    if (typeof color === 'string' && !color.startsWith('#')) {
+      console.warn(
+        `[resolveColorValue] Expected hex color, got: "${String(color)}"`,
+      );
+    }
     return color as string;
   }
 }

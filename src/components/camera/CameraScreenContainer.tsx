@@ -47,17 +47,17 @@ export const CameraScreenContainer = ({
           <View style={styles.header} ref={focusRef}>
             <NativeBorderlessButton onPress={onGoBack} style={styles.back}>
               <ThemeIcon svg={SvgChevronLeft} color="white" />
-              <ThemeText typography="body__s__strong" color="white">
+              <ThemeText typography="body__s__strong" color="#ffffff">
                 {t(ScreenHeaderTexts.headerButton.back.text)}
               </ThemeText>
             </NativeBorderlessButton>
           </View>
           <View style={styles.content}>
-            <ThemeText typography="heading__l" color="white">
+            <ThemeText typography="heading__l" color="#ffffff">
               {title}
             </ThemeText>
             {!!secondaryText && (
-              <ThemeText typography="body__s" color="white">
+              <ThemeText typography="body__s" color="#ffffff">
                 {secondaryText}
               </ThemeText>
             )}

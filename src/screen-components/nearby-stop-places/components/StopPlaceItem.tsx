@@ -82,7 +82,7 @@ export const StopPlaceItem = ({
               {description}
             </ThemeText>
             {humanizedDistance && (
-              <ThemeText typography="body__s" color="secondary">
+              <ThemeText typography="body__s" type="secondary">
                 {humanizedDistance}
               </ThemeText>
             )}

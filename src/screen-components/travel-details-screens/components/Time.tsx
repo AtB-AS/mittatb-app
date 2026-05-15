@@ -47,7 +47,7 @@ export const Time: React.FC<{
           </View>
           <AccessibleText
             typography="body__xs"
-            color="secondary"
+            type="secondary"
             prefix={t(dictionary.travel.time.aimedPrefix)}
             style={{textDecorationLine: 'line-through'}}
             testID="aimTime"

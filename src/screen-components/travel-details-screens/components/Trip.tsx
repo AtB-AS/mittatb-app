@@ -135,7 +135,7 @@ export const Trip: React.FC<TripProps> = ({
     <View style={styles.container}>
       {shouldShowDate && (
         <>
-          <ThemeText typography="body__s" color="secondary" style={styles.date}>
+          <ThemeText typography="body__s" type="secondary" style={styles.date}>
             {formatToVerboseFullDate(tripPattern.expectedStartTime, language)}
           </ThemeText>
           <Divider />
