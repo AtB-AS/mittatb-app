@@ -166,11 +166,6 @@ const TripSearchTexts = {
         'Ingen kollektivreiser passar til søket ditt',
       ),
       emptySearchResultsDetails: _(
-        'Prøv å justere på sted eller tidspunkt.',
-        'Try adjusting your time or location input.',
-        'Prøv å justere på stad eller tidspunkt.',
-      ),
-      emptySearchResultsDetailsWithFilters: _(
         'Prøv å justere på sted, filter eller tidspunkt.',
         'Try adjusting your time, filters or location input.',
         'Prøv å justere på stad, filter eller tidspunkt.',

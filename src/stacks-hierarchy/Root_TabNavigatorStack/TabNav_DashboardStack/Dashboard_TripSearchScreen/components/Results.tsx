@@ -36,7 +36,6 @@ type Props = {
   tripsIsError: boolean;
   tripsIsNetworkError: boolean;
   searchTime: TripSearchTime;
-  anyFiltersApplied: boolean;
 };
 
 export const Results: React.FC<Props> = ({
@@ -48,7 +47,6 @@ export const Results: React.FC<Props> = ({
   tripsIsError,
   tripsIsNetworkError,
   searchTime,
-  anyFiltersApplied,
 }) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
@@ -82,11 +80,7 @@ export const Results: React.FC<Props> = ({
       <View style={styles.emptyStateContainer}>
         <EmptyState
           title={t(TripSearchTexts.results.info.emptySearchResultsTitle)}
-          details={getDetailsTextForEmptyResult(
-            resultReasons,
-            anyFiltersApplied,
-            t,
-          )}
+          details={getDetailsTextForEmptyResult(resultReasons, t)}
           illustrationComponent={<ThemedOnBehalfOf height={113} width={113} />}
           testID="searchResults"
         />
@@ -137,14 +131,11 @@ export const Results: React.FC<Props> = ({
 
 const getDetailsTextForEmptyResult = (
   resultReasons: string[],
-  anyFiltersApplied: boolean,
   t: TranslateFunction,
 ) => {
   let text = '';
   if (!resultReasons?.length) {
-    text += anyFiltersApplied
-      ? t(TripSearchTexts.results.info.emptySearchResultsDetailsWithFilters)
-      : t(TripSearchTexts.results.info.emptySearchResultsDetails);
+    text += t(TripSearchTexts.results.info.emptySearchResultsDetails);
   } else if (resultReasons.length === 1) {
     text += resultReasons[0];
   } else {
