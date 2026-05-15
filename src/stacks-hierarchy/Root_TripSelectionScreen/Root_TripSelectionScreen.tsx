@@ -1,5 +1,5 @@
-import {GenericSectionItem} from '@atb/components/sections';
 import React, {useState} from 'react';
+import {View} from 'react-native';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
 import type {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -12,7 +12,6 @@ import {
 import {ScreenHeading} from '@atb/components/heading';
 import TripSelectionTexts from '@atb/translations/screens/TripSelectionScreen';
 import {useTranslation} from '@atb/translations';
-import {View} from 'react-native';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
@@ -76,7 +75,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
           backgroundColor={theme.color.background.neutral[1]}
         />
       </View>
-      <GenericSectionItem style={styles.content}>
+      <View style={styles.content}>
         <BookingTripSelection
           selection={selection}
           onSelect={(legs) => {
@@ -108,7 +107,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
             }
           }}
         />
-      </GenericSectionItem>
+      </View>
     </FullScreenView>
   );
 };
@@ -119,6 +118,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   content: {
     backgroundColor: theme.color.background.neutral[1].background,
-    borderWidth: 0,
   },
 }));
