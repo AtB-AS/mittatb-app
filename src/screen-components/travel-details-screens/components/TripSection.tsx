@@ -426,19 +426,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {leg.authority && <AuthorityRow {...leg.authority} />}
-        {onPressShowLive && serviceJourneyPolyline && !isScreenReaderEnabled ? (
-          <TripRow dimensionOverrides={NEW_DIMENSIONS}>
-            <Button
-              type="small"
-              expanded={false}
-              mode="secondary"
-              leftIcon={{svg: Map}}
-              text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
-              backgroundColor={theme.color.background.neutral[1]}
-              onPress={() => onPressShowLive(serviceJourneyPolyline)}
-            />
-          </TripRow>
-        ) : null}
         {realtimeText && (
           <View
             accessibilityElementsHidden
@@ -462,6 +449,19 @@ export const TripSection: React.FC<TripSectionProps> = ({
             </TripRow>
           </View>
         )}
+        {onPressShowLive && serviceJourneyPolyline && !isScreenReaderEnabled ? (
+          <TripRow dimensionOverrides={NEW_DIMENSIONS}>
+            <Button
+              type="small"
+              expanded={false}
+              mode="secondary"
+              leftIcon={{svg: Map}}
+              text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
+              backgroundColor={theme.color.background.neutral[1]}
+              onPress={() => onPressShowLive(serviceJourneyPolyline)}
+            />
+          </TripRow>
+        ) : null}
         {hasIntermediateStops && <IntermediateInfo leg={leg} testID={testID} />}
         {showTo && (
           <TripRow
