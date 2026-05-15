@@ -115,16 +115,8 @@ export const getGeofencingZoneCodeIconColor = (
 };
 
 export const getIconBoxBorderRadius = (
-  size: keyof Theme['icon']['size'],
   theme: Theme,
+  rounded?: boolean,
 ): number => {
-  switch (size) {
-    case 'xSmall':
-    case 'small':
-      return theme.border.radius.small;
-    case 'normal':
-    case 'large':
-    default:
-      return theme.border.radius.regular;
-  }
+  return rounded ? theme.border.radius.circle : theme.border.radius.small;
 };

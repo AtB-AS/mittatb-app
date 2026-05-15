@@ -57,6 +57,7 @@ const LocationSearchTexts = {
       bus: _('Bussholdeplass', 'Bus stop', 'Busshaldeplass'),
       tram: _('Trikkeholdeplass', 'Tram stop', 'Trikkehaldeplass'),
       rail: _('Togstasjon', 'Train station', 'Togstasjon'),
+      metro: _('T-banestasjon', 'Metro station', 'T-banestasjon'),
       airport: _('Flyplass', 'Airport', 'Flyplass'),
       boat: _('Fergeleie', 'Ferry stop', 'Ferjekai'),
       unknown: _('Lokasjon', 'Location', 'Stad'),

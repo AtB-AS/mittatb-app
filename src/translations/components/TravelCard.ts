@@ -1,4 +1,3 @@
-import {type TravelCardType} from '@atb/screen-components/travel-card';
 import {translation as _} from '../commons';
 
 const TravelCardTexts = {
@@ -8,27 +7,31 @@ const TravelCardTexts = {
       'Activate to see trip details.',
       'Aktivér for å se detaljer om reisen.',
     ),
-    typePrefix: (
-      type: TravelCardType,
-      cardIndex: number,
-      numberOfCards: number,
-    ) => {
-      const singular = numberOfCards === 1;
-      const index = singular ? '' : ` ${cardIndex + 1}`;
-      switch (type) {
-        case 'trip-search':
-          return _(
-            `Reiseforslag${index}.`,
-            `Trip suggestion${index}.`,
-            `Reiseforslag${index}.`,
-          );
-        case 'saved-trip':
-          return _(
-            `Lagret reise${index}.`,
-            `Saved trip${index}.`,
-            `Lagret reise${index}.`,
-          );
-      }
+    a11yPrefix: {
+      tripSuggestion: (cardIndex: number, numberOfCards: number) => {
+        const index = numberOfCards === 1 ? '' : ` ${cardIndex + 1}`;
+        return _(
+          `Reiseforslag${index}.`,
+          `Trip suggestion${index}.`,
+          `Reiseforslag${index}.`,
+        );
+      },
+      savedTrip: (cardIndex: number, numberOfCards: number) => {
+        const index = numberOfCards === 1 ? '' : ` ${cardIndex + 1}`;
+        return _(
+          `Lagret reise${index}.`,
+          `Saved trip${index}.`,
+          `Lagret reise${index}.`,
+        );
+      },
+      bookingOption: (cardIndex: number, numberOfCards: number) => {
+        const index = numberOfCards === 1 ? '' : ` ${cardIndex + 1}`;
+        return _(
+          `Bestillingsalternativ${index}.`,
+          `Booking option${index}.`,
+          `Bestillingsalternativ${index}.`,
+        );
+      },
     },
     modesPrefix: (modes: string[]) => {
       return _(

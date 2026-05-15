@@ -1,7 +1,9 @@
 import {Platform, StatusBarProps} from 'react-native';
+import type {ColorValue} from 'react-native';
 import {APP_ORG} from '@env';
 
 import {
+  ContrastColor,
   createExtendedThemes,
   createTextTypeStyles,
   createThemesFor,
@@ -84,3 +86,19 @@ export const isTextColor = (color: unknown, theme: Theme): color is TextColor =>
 
 export type Themes = typeof themes;
 export type Theme = Themes['light'];
+
+export function resolveColorValue(
+  color: ContrastColor | StatusColorName | TextColor | ColorValue | undefined,
+  type: keyof ContrastColor['foreground'],
+  theme: Theme,
+): string {
+  if (typeof color === 'object') {
+    return color.foreground[type];
+  } else if (isStatusColor(color, theme)) {
+    return theme.color.status[color].primary.background;
+  } else if (isTextColor(color, theme) || color === undefined) {
+    return theme.color.foreground.dynamic[color ?? 'primary'];
+  } else {
+    return color as string;
+  }
+}
