@@ -16,6 +16,13 @@ import {useFontScale} from '@atb/utils/use-font-scale';
 export type ThemeTextProps = TextProps & {
   typography?: TextNames;
   type?: ForegroundType;
+  /**
+   * Pass a ContrastColor from the theme for semantic color resolution.
+   * The foreground tier is selected via the `type` prop.
+   * Use a resolved hex string only for explicit color overrides.
+   * Do NOT pass TextColor strings like 'primary' or 'secondary' —
+   * use the `type` prop instead.
+   */
   color?: ContrastColor | ColorValue;
   isMarkdown?: boolean;
 };
