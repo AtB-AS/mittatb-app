@@ -39,7 +39,7 @@ export const EditActionSectionItem = forwardRef<any, Props>(
         <View style={styles.textContainer}>
           <ThemeText typography="body__m__strong">{text}</ThemeText>
           {subText && (
-            <ThemeText typography="body__m" color="secondary">
+            <ThemeText typography="body__m" type="secondary">
               {subText}
             </ThemeText>
           )}
