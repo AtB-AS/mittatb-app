@@ -24,7 +24,8 @@ import {TranslatedString} from '@atb/translations';
 import {GeofencingZoneCode, GeofencingZoneStyle} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
-import {Station, Vehicle} from '@atb/api/types/mobility';
+import {ShmoPricingPlan, Station, Vehicle} from '@atb/api/types/mobility';
+import {PriceAdjustmentType} from '@atb-as/config-specs/lib/mobility';
 
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
@@ -72,6 +73,10 @@ export type MapProps = {
   navigateToLogin: () => void;
   navigateToPaymentMethods: () => void;
   navigateToBonusScreen?: () => void;
+  navigateToPricingDetails: (
+    pricingPlan: ShmoPricingPlan,
+    priceAdjustments: PriceAdjustmentType[] | undefined,
+  ) => void;
 };
 
 export type Cluster = {

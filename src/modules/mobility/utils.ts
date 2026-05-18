@@ -17,7 +17,11 @@ import {
 import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {dictionary, Language} from '@atb/translations';
 import {enumFromString} from '@atb/utils/enum-from-string';
-import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
+import {
+  MobilityOperatorType,
+  PriceAdjustmentEnum,
+  PriceAdjustmentType,
+} from '@atb-as/config-specs/lib/mobility';
 import {
   BatteryEmpty,
   BatteryFull,
@@ -237,6 +241,31 @@ export const isShowAll = (
 
 export const toFormFactorEnum = (str: string): FormFactor =>
   enumFromString(FormFactor, str) || FormFactor.Other;
+
+export const getFreeUnlock = (
+  priceAdjustments: PriceAdjustmentType[] | undefined,
+  systemId: string,
+): PriceAdjustmentType | undefined =>
+  priceAdjustments?.find(
+    (e) =>
+      e.type === PriceAdjustmentEnum.enum.FREE_UNLOCK &&
+      e.systemIds.includes(systemId),
+  );
+
+export const getFreeMinutes = (
+  priceAdjustments: PriceAdjustmentType[] | undefined,
+  systemId: string,
+): PriceAdjustmentType | undefined =>
+  priceAdjustments?.find(
+    (e) =>
+      e.type === PriceAdjustmentEnum.enum.FREE_MINUTES &&
+      e.systemIds.includes(systemId),
+  );
+
+export const computeFreeMinuteCount = (
+  freeMinutes: PriceAdjustmentType,
+  rate: number,
+): number => Math.floor(Math.abs(freeMinutes.amount) / rate);
 
 export const getNewFilterState = (
   isChecked: boolean,

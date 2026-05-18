@@ -86,6 +86,7 @@ import {
 } from '@atb/modules/ticketing';
 import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 import {Root_ShmoHelpScreen} from './Root_ShmoHelp/Root_ShmoHelpScreen';
+import {Root_ShmoPricingDetailsScreen} from './Root_ShmoPricingDetailsScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -472,6 +473,10 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_ShmoOnboardingScreen"
                 component={Root_ShmoOnboardingScreen}
+              />
+              <Stack.Screen
+                name="Root_ShmoPricingDetailsScreen"
+                component={Root_ShmoPricingDetailsScreen}
               />
               <Stack.Screen
                 name="Root_ContactShmoOperatorScreen"

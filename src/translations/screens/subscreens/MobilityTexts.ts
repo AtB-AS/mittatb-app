@@ -80,7 +80,29 @@ export const MobilityTexts = {
         return _('Annet', 'Other', 'Anna');
     }
   },
-
+  pricingDetails: {
+    priceInfo: _('Prisinformasjon', 'Price information', 'Prisinformasjon'),
+    unlock: _('Opplåsing', 'Unlock', 'Opplåsing'),
+    minutePrice: _('Minuttpris', 'Minute price', 'Minuttpris'),
+    minutePriceRange: (start: number, end: number) =>
+      _(
+        `Minuttpris ${start}-${end} min`,
+        `Minute price ${start}-${end} min`,
+        `Minuttpris ${start}-${end} min`,
+      ),
+    minutePriceFrom: (start: number) =>
+      _(
+        `Minuttpris etter ${start} min`,
+        `Minute price after ${start} min`,
+        `Minuttpris etter ${start} min`,
+      ),
+    maxRentalTime: _(
+      'Makstid for leie',
+      'Max rental time',
+      'Makstid for leige',
+    ),
+    campaignPrice: _('Kampanjepris', 'Campaign price', 'Kampanjepris'),
+  },
   freeBikes: (amount: string) => {
     return _(amount + ' ledige', amount + ' available', amount + ' ledige');
   },
