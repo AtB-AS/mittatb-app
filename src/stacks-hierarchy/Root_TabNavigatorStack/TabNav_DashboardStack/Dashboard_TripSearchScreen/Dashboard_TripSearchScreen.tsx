@@ -455,9 +455,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 tripsIsError={tripsIsError}
                 tripsIsNetworkError={tripsIsNetworkError}
                 searchTime={searchTime}
-                anyFiltersApplied={
-                  filtersState.enabled && filtersState.anyFiltersApplied
-                }
               />
             </View>
           )}
