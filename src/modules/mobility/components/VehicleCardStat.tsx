@@ -32,10 +32,10 @@ export const VehicleCardStat = ({
     >
       <ThemeIcon svg={icon} color="primary" size="large" />
       <View>
-        <ThemeText typography="body__m__strong" color="primary">
+        <ThemeText typography="body__m__strong" type="primary">
           {stat}
         </ThemeText>
-        <ThemeText typography="body__s" color="secondary">
+        <ThemeText typography="body__s" type="secondary">
           {description}
         </ThemeText>
       </View>

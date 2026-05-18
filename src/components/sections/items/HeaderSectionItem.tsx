@@ -31,7 +31,7 @@ export function HeaderSectionItem({
       {subtitle && (
         <ThemeText
           style={[styles.subtitle, contentContainer]}
-          color="secondary"
+          type="secondary"
           typography={mode === 'heading' ? 'body__s' : 'body__xs'}
         >
           {subtitle}

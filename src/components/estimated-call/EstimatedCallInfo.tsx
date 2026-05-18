@@ -42,7 +42,7 @@ export function EstimatedCallInfo({
       )}
       <ThemeText
         typography={departure.cancellation ? 'body__m__strike' : 'body__m'}
-        color={departure.cancellation ? 'secondary' : 'primary'}
+        type={departure.cancellation ? 'secondary' : 'primary'}
         style={styles.lineName}
         testID="lineName"
       >

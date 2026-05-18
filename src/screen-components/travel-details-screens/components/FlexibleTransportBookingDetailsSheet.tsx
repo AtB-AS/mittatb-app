@@ -125,7 +125,7 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
             )}
           >
             <ThemeText
-              color="secondary"
+              type="secondary"
               style={style.linkText}
               typography="body__m__underline"
             >

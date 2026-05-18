@@ -383,7 +383,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           <ScreenReaderAnnouncement message={searchStateMessage} />
           {(!from || !to) && (
             <ThemeText
-              color="secondary"
+              type="secondary"
               style={styles.missingLocationText}
               testID="missingLocation"
             >
@@ -478,12 +478,12 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                           marginRight: theme.spacing.medium,
                         }}
                       />
-                      <ThemeText color="secondary" testID="searchingForResults">
+                      <ThemeText type="secondary" testID="searchingForResults">
                         {t(TripSearchTexts.results.fetchingMore)}
                       </ThemeText>
                     </>
                   ) : (
-                    <ThemeText color="secondary" testID="searchingForResults">
+                    <ThemeText type="secondary" testID="searchingForResults">
                       {t(TripSearchTexts.searchState.searching)}
                     </ThemeText>
                   )}
@@ -497,7 +497,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                         svg={ExpandMore}
                         size="normal"
                       />
-                      <ThemeText color="secondary" testID="resultsLoaded">
+                      <ThemeText type="secondary" testID="resultsLoaded">
                         {' '}
                         {t(TripSearchTexts.results.fetchMore)}
                       </ThemeText>

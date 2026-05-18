@@ -685,7 +685,7 @@ function MapValue({value}: {value: any}) {
               <MapEntry key={key} title={key} value={value} />
             ))
           ) : (
-            <ThemeText color="secondary">Empty object</ThemeText>
+            <ThemeText type="secondary">Empty object</ThemeText>
           )}
         </View>
       );
@@ -713,7 +713,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
           style={{flexDirection: 'row'}}
           onPress={() => setIsExpanded(!isExpanded)}
         >
-          <ThemeText typography="heading__m" color="secondary">
+          <ThemeText typography="heading__m" type="secondary">
             {title}
           </ThemeText>
           <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />

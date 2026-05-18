@@ -107,7 +107,7 @@ export const BonusProductList = ({
                         .map((ff) => t(MobilityTexts.vehicleName(ff)))
                         .join(', ')}
                     </ThemeText>
-                    <ThemeText typography="body__s" color="secondary">
+                    <ThemeText typography="body__s" type="secondary">
                       {operatorNames}
                     </ThemeText>
                   </View>
@@ -150,7 +150,7 @@ export const BonusProductList = ({
                   <ThemeText
                     isMarkdown={true}
                     typography="body__s"
-                    color="secondary"
+                    type="secondary"
                   >
                     {getTextForLanguage(group.description, language) ?? ''}
                   </ThemeText>

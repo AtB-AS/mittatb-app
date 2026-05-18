@@ -87,7 +87,7 @@ export const BenefitTile = ({
         </ThemeText>
         <ThemeText
           typography="body__xs"
-          color="secondary"
+          type="secondary"
           style={styles.description}
         >
           {description}

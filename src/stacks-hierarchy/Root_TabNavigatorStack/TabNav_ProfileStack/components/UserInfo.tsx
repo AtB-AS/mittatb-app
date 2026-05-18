@@ -106,7 +106,7 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
               {formattedPhoneNumber && (
                 <ThemeText
                   typography="body__s"
-                  color="secondary"
+                  type="secondary"
                   testID="loggedInWith"
                 >
                   {t(
@@ -117,7 +117,7 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
                 </ThemeText>
               )}
               {customerNumber !== undefined && (
-                <ThemeText typography="body__s" color="secondary">
+                <ThemeText typography="body__s" type="secondary">
                   {t(
                     ProfileTexts.sections.account.infoItems.customerNumber(
                       customerNumber,
@@ -147,7 +147,7 @@ const LoggedOutInfoSectionItem = ({...props}) => {
           {t(ProfileTexts.sections.account.infoItems.notLoggedInHeading)}
         </ThemeText>
         {customerNumber !== undefined && (
-          <ThemeText typography="body__s" color="secondary">
+          <ThemeText typography="body__s" type="secondary">
             {t(
               ProfileTexts.sections.account.infoItems.customerNumber(
                 customerNumber,

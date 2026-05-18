@@ -66,7 +66,7 @@ export const TicketingTile = ({
           <ThemeText
             typography="body__xs"
             style={styles.description}
-            color="secondary"
+            type="secondary"
           >
             {description}
           </ThemeText>

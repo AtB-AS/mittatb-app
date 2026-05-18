@@ -17,12 +17,12 @@ export function EmpiricalDelay({call}: {call: EstimatedCallWithMetadata}) {
   return (
     <View>
       {!!p50 && (
-        <ThemeText typography="body__xs" color="secondary">
+        <ThemeText typography="body__xs" type="secondary">
           p50 = {formatDuration(p50)}
         </ThemeText>
       )}
       {!!p90 && (
-        <ThemeText typography="body__xs" color="secondary">
+        <ThemeText typography="body__xs" type="secondary">
           p90 = {formatDuration(p90)}
         </ThemeText>
       )}

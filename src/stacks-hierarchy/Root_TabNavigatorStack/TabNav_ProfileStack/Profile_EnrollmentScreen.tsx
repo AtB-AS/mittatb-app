@@ -81,7 +81,7 @@ export const Profile_EnrollmentScreen = ({navigation}: Props) => {
                   }}
                 />
                 <View style={styles.headerTextContainer}>
-                  <ThemeText typography="body__s" color="secondary">
+                  <ThemeText typography="body__s" type="secondary">
                     {t(EnrollmentTexts.info)}
                   </ThemeText>
                 </View>

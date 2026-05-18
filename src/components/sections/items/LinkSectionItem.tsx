@@ -101,7 +101,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
             </ThemeText>
             {subtitle && (
               <View>
-                <ThemeText color="secondary" typography="body__s">
+                <ThemeText type="secondary" typography="body__s">
                   {subtitle}
                 </ThemeText>
               </View>

@@ -213,21 +213,14 @@ function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
 }
 
 function EmptyState() {
-  const {theme} = useThemeContext();
   const {t} = useTranslation();
   return (
     <View style={{justifyContent: 'center', alignItems: 'center'}}>
       <ThemedOnBehalfOf />
-      <ThemeText
-        typography="body__m__strong"
-        color={theme.color.foreground.dynamic.secondary}
-      >
+      <ThemeText typography="body__m__strong" type="secondary">
         {t(TicketingTexts.booking.cannotFindDepartures)}
       </ThemeText>
-      <ThemeText
-        typography="body__s"
-        color={theme.color.foreground.dynamic.secondary}
-      >
+      <ThemeText typography="body__s" type="secondary">
         {t(TicketingTexts.booking.adjustTime)}
       </ThemeText>
     </View>
