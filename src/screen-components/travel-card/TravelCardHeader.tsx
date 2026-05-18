@@ -89,9 +89,7 @@ export const TravelCardHeader: React.FC<
 
   return (
     <View style={styles.container} {...accessibilityProps}>
-      <View
-        style={[styles.header, size === 'large' && {alignItems: 'baseline'}]}
-      >
+      <View style={[styles.header, size === 'large' && styles.headerLarge]}>
         <View style={styles.timeContainer}>
           <ThemeText
             typography={size === 'large' ? 'heading__l' : 'body__m__strong'}
@@ -139,6 +137,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+  },
+  headerLarge: {
+    alignItems: 'baseline',
   },
   durationContainer: {
     flexShrink: 0,
