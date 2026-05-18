@@ -150,6 +150,13 @@ const createBuilder = (
       };
       return builder;
     },
+    bonusProductId(bonusProductId) {
+      currentSelection = {
+        ...currentSelection,
+        bonusProductId,
+      };
+      return builder;
+    },
 
     build: () => {
       const onlyProfilesWithActualCount =
