@@ -4,6 +4,7 @@ import {
   PreassignedFareProduct as BasePreassignedFareProduct,
 } from '@atb-as/config-specs';
 import {optionalNullish} from '@atb-as/config-specs/lib/utils/nullish';
+import {LanguageAndTextType} from '@atb/translations/types';
 
 const UserProfileLimitation = z.object({
   userProfileRef: z.string(),
@@ -190,12 +191,18 @@ export type AddPaymentMethodResponse = {
   terminalUrl: string;
 };
 
+export type RefundCause = {
+  id: string;
+  name: LanguageAndTextType[];
+};
+
 /**
  * Defined by RefundOptionsResponse in
  * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/refund.rs
  */
 export type RefundOptions = {
   isRefundable: boolean;
+  causes?: RefundCause[];
 };
 
 /**

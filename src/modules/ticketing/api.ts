@@ -278,16 +278,83 @@ export async function getFareContracts(
   return validFareContracts;
 }
 
-export async function getRefundOptions(orderId: string) {
-  const url = `sales/v1/refund/options/${orderId}`;
-  const response = await client.get<RefundOptions>(url, {
-    authWithIdToken: true,
-  });
+export async function getRefundOptions(
+  _orderId: string,
+): Promise<RefundOptions> {
+  // const url = `sales/v1/refund/options/${orderId}`;
+  // const response = await client.get<RefundOptions>(url, {
+  //   authWithIdToken: true,
+  // });
+  const response = {data: {} as any};
+  // TODO: Remove mock causes
+  response.data.isRefundable = true;
+  response.data.causes = [
+    {
+      id: 'wrong_zone_or_route',
+      name: [
+        {language: 'nob', value: 'Feil sone eller strekning'},
+        {language: 'eng', value: 'Wrong zone or route'},
+      ],
+    },
+    {
+      id: 'wrong_passenger_category',
+      name: [
+        {language: 'nob', value: 'Feil passasjerkategori'},
+        {language: 'eng', value: 'Wrong passenger category'},
+      ],
+    },
+    {
+      id: 'wrong_start_time',
+      name: [
+        {language: 'nob', value: 'Feil starttidspunkt'},
+        {language: 'eng', value: 'Wrong start time'},
+      ],
+    },
+    {
+      id: 'wrong_number_of_tickets',
+      name: [
+        {language: 'nob', value: 'Feil antall billetter'},
+        {language: 'eng', value: 'Wrong number of tickets'},
+      ],
+    },
+    {
+      id: 'dont_need_ticket',
+      name: [
+        {language: 'nob', value: 'Trenger ikke billett likevel'},
+        {language: 'eng', value: "Don't need a ticket after all"},
+      ],
+    },
+    {
+      id: 'wrong_ticket_type',
+      name: [
+        {language: 'nob', value: 'Feil billetttype'},
+        {language: 'eng', value: 'Wrong ticket type'},
+      ],
+    },
+    {
+      id: 'wrong_payment',
+      name: [
+        {language: 'nob', value: 'Feil med betaling'},
+        {language: 'eng', value: 'Wrong payment'},
+      ],
+    },
+    {
+      id: 'should_buy_for_someone_else',
+      name: [
+        {language: 'nob', value: 'Skulle kjøpe til noen andre'},
+        {language: 'eng', value: 'Should buy for someone else'},
+      ],
+    },
+  ];
   return response.data;
 }
 
-export async function refundFareContract(orderId: string) {
+export async function refundFareContract(orderId: string, causeId?: string) {
   const url = `sales/v1/refund`;
-  const response = await client.post(url, {orderId}, {authWithIdToken: true});
+  const response = await client.post(
+    url,
+    {orderId, ...(causeId ? {causeId} : {})},
+    {authWithIdToken: true},
+  );
   return response.data;
 }

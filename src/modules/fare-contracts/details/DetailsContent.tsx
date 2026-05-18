@@ -50,7 +50,6 @@ import {ShmoTripDetailsSectionItem} from '@atb/modules/mobility';
 import {FareContractHeaderSectionItem} from '../sections/FareContractHeaderSectionItem';
 import {FareContractShmoHeaderSectionItem} from '../sections/FareContractShmoHeaderSectionItem';
 import {isDefined} from '@atb/utils/presence';
-import {RefundSectionItem} from '../components/RefundSectionItem';
 import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
@@ -64,12 +63,14 @@ import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {SentOrReceivedMessageBox} from '../components/SentOrReceivedMessageBox';
 import {Mail} from '@atb/assets/svg/mono-icons/profile';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
+import {TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
 
 type Props = {
   fareContract: FareContractType;
   preassignedFareProduct?: PreassignedFareProduct;
   now: number;
   onReceiptNavigate: () => void;
+  onRefundNavigate: () => void;
   onSupportNavigate: (params: ShmoHelpParams) => void;
   onNavigateToMap: (initialFilters: MapFilterType) => void;
   onNavigateToBonusScreen: () => void;
@@ -83,6 +84,7 @@ export const DetailsContent: React.FC<Props> = ({
   preassignedFareProduct,
   now,
   onReceiptNavigate,
+  onRefundNavigate,
   onSupportNavigate,
   onNavigateToMap,
   onNavigateToBonusScreen,
@@ -304,10 +306,10 @@ export const DetailsContent: React.FC<Props> = ({
         />
       )}
       {refundOptions?.isRefundable && (
-        <RefundSectionItem
-          orderId={fc.orderId}
-          fareProductType={preassignedFareProduct?.type}
-          state={fc.state}
+        <LinkSectionItem
+          text={t(FareContractTexts.refund.refund)}
+          onPress={onRefundNavigate}
+          rightIcon={{svg: TicketInvalid}}
         />
       )}
     </Section>

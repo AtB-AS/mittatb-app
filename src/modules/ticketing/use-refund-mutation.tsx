@@ -5,7 +5,8 @@ import {RequestError} from '@atb/api/utils';
 
 export const useRefundFareContractMutation = () => {
   return useMutation({
-    mutationFn: (orderId: string) => refundFareContract(orderId),
+    mutationFn: ({orderId, causeId}: {orderId: string; causeId?: string}) =>
+      refundFareContract(orderId, causeId),
     onError: (error: RequestError) => {
       const httpCode = error.http?.code ?? 'UNKNOWN';
       Bugsnag.notify({
