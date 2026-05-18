@@ -10,7 +10,7 @@ import {
   OperatorBenefitId,
   ScooterFaq,
   BonusTexts,
-  ScooterConsentLine,
+  ConsentLine,
 } from './types';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
@@ -198,10 +198,28 @@ export function mapToScooterConsentLines(scooterConsentLines?: any) {
   if (!Array.isArray(scooterConsentLines)) return;
   return scooterConsentLines
     .map((scooterConsentLine) => {
-      const parseResult = ScooterConsentLine.safeParse(scooterConsentLine);
+      const parseResult = ConsentLine.safeParse(scooterConsentLine);
       if (!parseResult.success) {
         console.warn(
           `mapToScooterConsentLines with id ${scooterConsentLine?.id} failed safeParsing:\n`,
+          parseResult.error,
+        );
+        return;
+      }
+      return parseResult.data;
+    })
+    .filter(isDefined);
+}
+
+export function mapToBicycleConsentLines(bicycleConsentLines?: any) {
+  if (!bicycleConsentLines) return;
+  if (!Array.isArray(bicycleConsentLines)) return;
+  return bicycleConsentLines
+    .map((bicycleConsentLine) => {
+      const parseResult = ConsentLine.safeParse(bicycleConsentLine);
+      if (!parseResult.success) {
+        console.warn(
+          `mapToBicycleConsentLines with id ${bicycleConsentLine?.id} failed safeParsing:\n`,
           parseResult.error,
         );
         return;
