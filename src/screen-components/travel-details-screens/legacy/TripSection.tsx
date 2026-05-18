@@ -201,7 +201,7 @@ export const LegacyTripSection: React.FC<TripSectionProps> = ({
               <ThemeText
                 testID={`${testID}FromPlaceQuayDescription`}
                 typography="body__s"
-                color="secondary"
+                type="secondary"
               >
                 {leg.fromPlace.quay?.description}
               </ThemeText>
@@ -239,7 +239,7 @@ export const LegacyTripSection: React.FC<TripSectionProps> = ({
           >
             {leg.transportSubmode === TransportSubmode.NightBus && (
               <ThemeText
-                color="secondary"
+                type="secondary"
                 typography="body__s"
                 style={style.secondaryTransportLabel}
               >
@@ -251,7 +251,7 @@ export const LegacyTripSection: React.FC<TripSectionProps> = ({
             </ThemeText>
             {isFlexible && (
               <ThemeText
-                color="secondary"
+                type="secondary"
                 typography="body__s"
                 style={style.onDemandTransportLabel}
               >
@@ -339,7 +339,7 @@ export const LegacyTripSection: React.FC<TripSectionProps> = ({
               <ThemeText
                 style={style.realtimeText}
                 typography="body__s"
-                color="secondary"
+                type="secondary"
               >
                 {realtimeText}
               </ThemeText>
@@ -455,7 +455,7 @@ const IntermediateInfo = ({
         TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
       )}
     >
-      <ThemeText typography="body__s" color="secondary">
+      <ThemeText typography="body__s" type="secondary">
         {t(
           TripDetailsTexts.trip.leg.intermediateStops.label(
             numberOfIntermediateCalls,
@@ -480,7 +480,7 @@ const WalkSection = (leg: Leg) => {
       }
       testID="footLeg"
     >
-      <ThemeText typography="body__s" color="secondary">
+      <ThemeText typography="body__s" type="secondary">
         {isWalkTimeOfSignificance
           ? t(
               TripDetailsTexts.trip.leg.walk.label(
@@ -505,7 +505,7 @@ const BikeSection = (leg: Leg) => {
       }
       testID="bikeLeg"
     >
-      <ThemeText typography="body__s" color="secondary">
+      <ThemeText typography="body__s" type="secondary">
         {t(
           TripDetailsTexts.trip.leg.bicycle.label(
             secondsToDuration(leg.duration ?? 0, language),
@@ -527,7 +527,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
     return (
       <TripRow>
         <View style={style.authoritySection}>
-          <ThemeText typography="body__s" color="secondary">
+          <ThemeText typography="body__s" type="secondary">
             {t(TripDetailsTexts.trip.leg.buyTicketFrom) + ' ' + name}
           </ThemeText>
         </View>
@@ -537,7 +537,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   return (
     <TripRow accessible={false}>
       <View style={style.authoritySection}>
-        <ThemeText typography="body__s" color="secondary" accessible={false}>
+        <ThemeText typography="body__s" type="secondary" accessible={false}>
           {t(TripDetailsTexts.trip.leg.buyTicketFrom)}
         </ThemeText>
         <Button
