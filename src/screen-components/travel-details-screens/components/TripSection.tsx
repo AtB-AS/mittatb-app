@@ -51,7 +51,6 @@ import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
 import {useServiceJourneyPolylineQuery} from '../use-service-journey-polyline-query';
 import {useRealtimeText} from '../use-realtime-text';
 import {useNow} from '@atb/utils/use-now';
-import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {BookingOptions} from './BookingOptions';
 import {FlexibleTransportBookingDetailsSheet} from './FlexibleTransportBookingDetailsSheet';
@@ -102,7 +101,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const {t, language} = useTranslation();
   const style = useSectionStyles();
   const {theme, themeName} = useThemeContext();
-  const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const onCloseFocusRef = React.useRef(null);
   const bottomSheetModalRef = React.useRef<BottomSheetModal | null>(null);
 
@@ -449,7 +447,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             </TripRow>
           </View>
         )}
-        {onPressShowLive && serviceJourneyPolyline && !isScreenReaderEnabled ? (
+        {onPressShowLive && serviceJourneyPolyline ? (
           <TripRow dimensionOverrides={NEW_DIMENSIONS}>
             <Button
               type="small"
