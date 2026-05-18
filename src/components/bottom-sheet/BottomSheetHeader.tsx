@@ -2,7 +2,7 @@ import {View} from 'react-native';
 import {NativeBorderlessButton} from '../native-button';
 import {ThemeText} from '../text';
 import {ThemeIcon} from '../theme-icon';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import BottomSheet, {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {BrandingImage} from '@atb/modules/mobility';
 import {Ref} from 'react';
@@ -37,6 +37,7 @@ export const BottomSheetHeader = ({
 }: BottomSheetHeaderProps) => {
   const styles = useStyles();
   const headerData = useBottomSheetHeaderType(bottomSheetHeaderType);
+  const {theme} = useThemeContext();
 
   return (
     <View accessibilityRole="header" testID={`${testID}BottomSheetHeader`}>
