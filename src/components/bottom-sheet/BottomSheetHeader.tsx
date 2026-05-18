@@ -10,6 +10,7 @@ import {
   BottomSheetHeaderType,
   useBottomSheetHeaderType,
 } from './use-bottom-sheet-header-type';
+import {insets} from '@atb/utils/insets';
 
 type BottomSheetHeaderProps = {
   heading?: string;
@@ -71,6 +72,7 @@ export const BottomSheetHeader = ({
                 testID="closeBottomSheet"
                 accessibilityRole="button"
                 onPress={() => bottomSheetRef.current?.close()}
+                hitSlop={insets.all(theme.spacing.small)}
               >
                 {headerData?.text && (
                   <ThemeText typography="body__s__strong">
