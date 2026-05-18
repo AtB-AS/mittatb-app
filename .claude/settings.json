@@ -39,7 +39,12 @@
 
       "Bash(yarn lint:*)",
       "Bash(yarn tsc:*)",
-      "Bash(yarn prettier:*)"
+      "Bash(yarn prettier:*)",
+      "Bash(rtk tsc *)",
+      "Bash(rtk ls:*)",
+      "Bash(rtk grep:*)",
+      "Bash(rtk find:*)",
+      "Bash(rtk tsc *)"
     ],
     "deny": [
       "Read(**/.env)",
@@ -81,5 +86,13 @@
   "enabledPlugins": {
     "typescript-lsp@claude-plugins-official": true
   },
-  "env": {"ENABLE_LSP_TOOL": "1"}
+  "env": {
+    "ENABLE_LSP_TOOL": "1",
+    "ANTHROPIC_BASE_URL": "http://localhost:4141",
+    "ANTHROPIC_AUTH_TOKEN": "sk-dummy",
+    "ANTHROPIC_MODEL": "claude-opus-4.6",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "gpt-4o-mini",
+    "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
+  }
 }

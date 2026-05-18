@@ -49,6 +49,7 @@ AtB App is a whitelabel travel companion/ticketing app in Trondheim, Norway.
 
 ## Development Commands
 
+
 ### Test
 
 - `yarn test` - Run Jest unit tests, can specify which tests to run using: `yarn test partlyMatchingPathOrFilename`
@@ -94,6 +95,11 @@ Navigating symbols MUST use LSP! Before any Edit to a `.ts`/`.tsx` file that cha
 **Diagnostics are a hard gate.**
 After every meaningful/logical unit of Edits or Writes to a `.ts` / `.tsx` / `.js` / `.jsx` file, check diagnostics on that file before the next tool call. Do not batch edits and check at the end — TS errors cascade and you'll get misleading noise. Fix type errors and missing imports immediately.
 
+## Plan Mode
+
+- Make the plan extremely concise. Sacrifice grammar for the sake of concision.
+- At the end of each plan, give me a list of unresolved questions to answer, if any.
+
 ## Workflow
 
 Treat every task as a structured pair programming session. No "vibe coding" — do not implement large chunks of code autonomously and hope for the best.
@@ -101,15 +107,28 @@ Treat every task as a structured pair programming session. No "vibe coding" — 
 ### Before implementing
 
 1. **Understand the problem**: Read the relevant code and understand how it relates to the task.
-2. **Explain your understanding**: Show the developer what you think the problem is and which code is involved.
+2. **Explain your understanding**: Show the developer what you think the problem is and which code is involved. State your assumptions explicitly. If uncertain, ask.
 3. **Confirm understanding**: Ask the developer if they agree before planning.
+  - If multiple interpretations exist, present them - don't pick silently.
+  - If something is unclear, stop. Name what's confusing. Ask.
 4. **Propose a plan**: Suggest solutions (multiple if relevant), broken into small steps.
+  - If a simpler approach exists, say so. Push back when warranted.
+  - Keep plans extremely concise. Sacrifice grammar for brevity.
+  - End each plan with a list of unresolved questions, if any.
 5. **Confirm the plan**: Never start implementing before getting developer confirmation.
+
+Don't assume. Don't hide confusion. Surface tradeoffs.
 
 ### During implementation
 
-1. **One step at a time**: Give the developer time to review before moving to the next step.
-2. **Share new findings**: As your understanding expands, keep the developer in the loop about new problems or needed adjustments.
-3. **Report progress**: After each step, explain what was done, what remains, and any blockers/concerns/questions.
-4. **Build and test often**: Show proof that the app builds and tests pass.
-5. **Never proceed** to the next step without developer confirmation.
+1. **One step at a time:** Give the developer time to review before moving to the next step.
+2. **Touch only what you must:** Every changed line should trace directly to the task.
+  - Don't "improve" adjacent code, comments, or formatting.
+  - Don't refactor things that aren't broken.
+  - Match existing style, even if you'd do it differently.
+  - If you notice unrelated issues, mention them — don't fix them.
+3. **Clean up only your own mess:** Remove imports/variables/functions that YOUR changes made unused. Don't remove pre-existing dead code unless asked.
+4. **Share new findings:** Keep the developer in the loop about new problems or needed adjustments.
+5. **Report progress:** After each step, explain what was done, what remains, and any blockers/concerns/questions.
+6. **Build and test often:** Show proof that the app builds and tests pass.
+7. **Never proceed** to the next step without developer confirmation.
