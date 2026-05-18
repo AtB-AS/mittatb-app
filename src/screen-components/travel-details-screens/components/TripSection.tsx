@@ -1,31 +1,28 @@
 import {Leg, Place, Quay} from '@atb/api/types/trips';
-import {
-  AccessibleText,
-  screenReaderPause,
-  ThemeText,
-} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {ServiceJourneyDeparture} from '../types';
 import {SituationMessageBox} from '@atb/modules/situations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
+import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {
-  Language,
-  TranslateFunction,
-  TripDetailsTexts,
-  useTranslation,
-} from '@atb/translations';
-import {formatToClock, secondsToDuration} from '@atb/utils/date';
+  formatToClock,
+  secondsToDuration,
+  secondsToDurationShort,
+} from '@atb/utils/date';
 import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
 import {useTransportColor} from '@atb/utils/use-transport-color';
-import React from 'react';
+import React, {useState} from 'react';
 import {View} from 'react-native';
 import {openUrl} from '@atb/utils/open-url';
+import {useHumanizeDistance} from '@atb/utils/location';
 import {
+  getLineDestinationName,
   getLineName,
   getNoticesForLeg,
   getPublicCodeFromLeg,
@@ -36,8 +33,13 @@ import {
 import {significantWaitTime} from '@atb/modules/trip-patterns';
 import {Time} from './Time';
 import {TripLegDecoration} from './TripLegDecoration';
-import {TripRow} from './TripRow';
+import {DimensionOverrides, TripRow} from './TripRow';
 import {BookingInfoBox} from './BookingInfoBox';
+
+const NEW_DIMENSIONS: DimensionOverrides = {
+  labelWidth: 64,
+  decorationContainerWidth: 42,
+};
 
 import {WaitDetails, WaitSection} from './WaitSection';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
@@ -56,18 +58,22 @@ import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {
+  ExternalLink,
+  ExpandLess,
+  ExpandMore,
+} from '@atb/assets/svg/mono-icons/navigation';
+import {animateNextChange} from '@atb/utils/animation';
 import {AUTHORITY} from '@env';
 import {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
-import {getRealtimeState, type TimeValues} from '@atb/utils/realtime';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {CancelledDepartureMessage} from './CancelledDepartureMessage';
+import {WalkFill} from '@atb/assets/svg/mono-icons/transportation';
 
 type TripSectionProps = {
   isLast?: boolean;
   wait?: WaitDetails;
   isFirst?: boolean;
-  step?: number;
   interchangeDetails?: InterchangeDetails;
   leg: Leg;
   testID?: string;
@@ -85,7 +91,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
   isLast,
   isFirst,
   wait,
-  step,
   interchangeDetails,
   leg,
   testID,
@@ -151,39 +156,100 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const showQuayDescription =
     !!leg.fromPlace.quay?.description && !isWalkSection && !isBikeSection;
 
+  const hasIntermediateStops = leg.intermediateEstimatedCalls.length > 0;
+  const walkBikeRounding = isFirst ? 'floor' : 'ceil';
+  const walkA11yLabel = useWalkA11yLabel(leg, wait, walkBikeRounding);
+  const bikeA11yLabel = useBikeA11yLabel(leg, wait, walkBikeRounding);
+  const isWalkOrBike = isWalkSection || isBikeSection;
+
+  const warningCount =
+    leg.situations.length +
+    (leg.transportSubmode === TransportSubmode.RailReplacementBus ? 1 : 0);
+  const errorCount = leg.fromEstimatedCall?.cancellation ? 1 : 0;
+  const noticeCount = notices.length;
+
+  const transportA11yLabel = (() => {
+    const parts: string[] = [
+      t(
+        TripDetailsTexts.trip.leg.transport.a11yLabel.base(
+          formatToClock(leg.expectedStartTime, language, 'floor'),
+          t(getTranslatedModeName(leg.mode, leg.line?.transportSubmode)),
+          getLineName(t, leg),
+          getPlaceName(leg.fromPlace),
+          getPlaceName(leg.toPlace),
+        ),
+      ),
+    ];
+
+    if (hasIntermediateStops) {
+      parts.push(
+        t(
+          TripDetailsTexts.trip.leg.transport.a11yLabel.intermediateStops(
+            leg.intermediateEstimatedCalls.length,
+          ),
+        ),
+      );
+    }
+
+    parts.push(
+      t(
+        TripDetailsTexts.trip.leg.transport.a11yLabel.arrival(
+          getPlaceName(leg.toPlace),
+          formatToClock(leg.expectedEndTime, language, 'ceil'),
+        ),
+      ),
+    );
+
+    if (noticeCount > 0) {
+      parts.push(
+        t(TripDetailsTexts.trip.leg.transport.a11yLabel.notices(noticeCount)),
+      );
+    }
+    if (warningCount > 0) {
+      parts.push(
+        t(TripDetailsTexts.trip.leg.transport.a11yLabel.warnings(warningCount)),
+      );
+    }
+    if (errorCount > 0) {
+      parts.push(
+        t(TripDetailsTexts.trip.leg.transport.a11yLabel.errors(errorCount)),
+      );
+    }
+
+    return parts.join('. ') + '.';
+  })();
+
+  const fromRowAbsorbsLegA11y = isWalkOrBike && showFrom;
+
   const sectionOutput = (
     <>
       <View style={style.tripSection} testID={testID}>
-        {!!step && leg.mode && (
-          <AccessibleText
-            style={style.a11yHelper}
-            prefix={t(
-              TripDetailsTexts.trip.leg.a11yHelper(
-                step,
-                t(getTranslatedModeName(leg.mode)),
-              ),
-            )}
-          />
-        )}
         <TripLegDecoration
+          dimensionOverrides={NEW_DIMENSIONS}
           color={legColor}
           hasStart={showFrom}
           hasEnd={showTo}
         />
         {showFrom && (
           <TripRow
+            dimensionOverrides={NEW_DIMENSIONS}
             alignChildren="flex-start"
-            accessibilityLabel={getStopRowA11yTranslated(
-              'start',
-              getPlaceName(leg.fromPlace) +
-                (showQuayDescription
-                  ? ` ${leg.fromPlace.quay?.description}`
-                  : ''),
-              startTimes,
-              timesAreApproximations,
-              language,
-              t,
-            )}
+            accessibilityLabel={
+              fromRowAbsorbsLegA11y
+                ? isWalkSection
+                  ? walkA11yLabel
+                  : bikeA11yLabel
+                : transportA11yLabel
+            }
+            accessibilityHint={
+              isWalkOrBike
+                ? undefined
+                : t(
+                    TripDetailsTexts.trip.leg.transport.a11yLabel.hint(
+                      getPlaceName(leg.fromPlace),
+                    ),
+                  )
+            }
             rowLabel={
               <Time
                 timeValues={startTimes}
@@ -191,10 +257,17 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 timeIsApproximation={timesAreApproximations}
               />
             }
-            onPress={() => handleQuayPress(leg.fromPlace.quay)}
+            onPress={
+              isWalkOrBike
+                ? undefined
+                : () => handleQuayPress(leg.fromPlace.quay)
+            }
             testID={`${testID}FromPlace`}
           >
-            <ThemeText testID={`${testID}FromPlaceName`}>
+            <ThemeText
+              typography="body__m__strong"
+              testID={`${testID}FromPlaceName`}
+            >
               {getPlaceName(leg.fromPlace)}
             </ThemeText>
             {showQuayDescription && (
@@ -209,15 +282,38 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {isWalkSection ? (
-          <WalkSection {...leg} />
+          <View
+            accessibilityElementsHidden={fromRowAbsorbsLegA11y}
+            importantForAccessibility={
+              fromRowAbsorbsLegA11y ? 'no-hide-descendants' : 'auto'
+            }
+          >
+            <WalkSection
+              leg={leg}
+              wait={wait}
+              timeRounding={walkBikeRounding}
+            />
+          </View>
         ) : isBikeSection ? (
-          <BikeSection {...leg} />
+          <View
+            accessibilityElementsHidden={fromRowAbsorbsLegA11y}
+            importantForAccessibility={
+              fromRowAbsorbsLegA11y ? 'no-hide-descendants' : 'auto'
+            }
+          >
+            <BikeSection
+              leg={leg}
+              wait={wait}
+              timeRounding={walkBikeRounding}
+            />
+          </View>
         ) : (
           <TripRow
+            dimensionOverrides={NEW_DIMENSIONS}
             testID={`${testID}Mode`}
             accessibilityLabel={
               t(
-                TripDetailsTexts.trip.leg.transport.a11ylabel(
+                TripDetailsTexts.trip.leg.transport.lineA11yLabel(
                   t(
                     getTranslatedModeName(leg.mode, leg.line?.transportSubmode),
                   ),
@@ -227,14 +323,16 @@ export const TripSection: React.FC<TripSectionProps> = ({
               (isFlexible
                 ? screenReaderPause +
                   t(TripDetailsTexts.flexibleTransport.onDemandTransportLabel)
-                : '')
+                : '') +
+              (realtimeText ? screenReaderPause + realtimeText : '')
             }
-            rowLabel={
-              <TransportationIconBox
-                mode={leg.mode}
-                subMode={leg.line?.transportSubmode}
-                isFlexible={isFlexible}
-              />
+            accessibilityHint={
+              hasIntermediateStops
+                ? t(TripDetailsTexts.trip.leg.transport.a11yHint)
+                : undefined
+            }
+            onPress={
+              hasIntermediateStops ? () => handleDeparturePress(leg) : undefined
             }
           >
             {leg.transportSubmode === TransportSubmode.NightBus && (
@@ -246,9 +344,19 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 {t(getTranslatedModeName(leg.mode, leg.line?.transportSubmode))}
               </ThemeText>
             )}
-            <ThemeText typography="body__m__strong">
-              {getLineName(t, leg)}
-            </ThemeText>
+            <View style={style.transportLine}>
+              <TransportationIconBox
+                mode={leg.mode}
+                subMode={leg.line?.transportSubmode}
+                isFlexible={isFlexible}
+                lineNumber={publicCode}
+                spacious
+                rounded
+              />
+              <ThemeText typography="body__m__strong">
+                {getLineDestinationName(t, leg)}
+              </ThemeText>
+            </View>
             {isFlexible && (
               <ThemeText
                 type="secondary"
@@ -261,22 +369,22 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {leg.fromEstimatedCall?.cancellation && (
-          <TripRow>
+          <TripRow dimensionOverrides={NEW_DIMENSIONS}>
             <CancelledDepartureMessage />
           </TripRow>
         )}
         {leg.situations.map((situation) => (
-          <TripRow key={situation.id}>
+          <TripRow dimensionOverrides={NEW_DIMENSIONS} key={situation.id}>
             <SituationMessageBox situation={situation} />
           </TripRow>
         ))}
         {notices.map((notice) => (
-          <TripRow key={notice.id}>
+          <TripRow dimensionOverrides={NEW_DIMENSIONS} key={notice.id}>
             <MessageInfoBox type="info" message={notice.text} />
           </TripRow>
         ))}
         {bookingStatus !== 'none' && (
-          <TripRow accessible={false}>
+          <TripRow dimensionOverrides={NEW_DIMENSIONS} accessible={false}>
             <BookingInfoBox
               bookingArrangements={leg.bookingArrangements}
               aimedStartTime={leg.aimedStartTime}
@@ -299,14 +407,14 @@ export const TripSection: React.FC<TripSectionProps> = ({
         )}
         {bookingStatus === 'bookable' && (
           <View style={style.flexBookingOptions}>
-            <TripRow accessible={false}>
+            <TripRow dimensionOverrides={NEW_DIMENSIONS} accessible={false}>
               <BookingOptions bookingArrangements={leg.bookingArrangements} />
             </TripRow>
           </View>
         )}
 
         {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
-          <TripRow>
+          <TripRow dimensionOverrides={NEW_DIMENSIONS}>
             <MessageInfoBox
               type="warning"
               message={t(
@@ -316,53 +424,59 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {leg.authority && <AuthorityRow {...leg.authority} />}
+        {realtimeText && (
+          <View
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+          >
+            <TripRow dimensionOverrides={NEW_DIMENSIONS}>
+              <View style={style.realtime}>
+                <ThemeIcon
+                  svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
+                  size="xSmall"
+                  style={style.realtimeIcon}
+                />
+                <ThemeText
+                  style={style.realtimeText}
+                  typography="body__s"
+                  type="secondary"
+                >
+                  {realtimeText}
+                </ThemeText>
+              </View>
+            </TripRow>
+          </View>
+        )}
         {onPressShowLive && serviceJourneyPolyline ? (
-          <TripRow>
+          <TripRow dimensionOverrides={NEW_DIMENSIONS}>
             <Button
               type="small"
               expanded={false}
+              mode="secondary"
               leftIcon={{svg: Map}}
               text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
-              interactiveColor={theme.color.interactive[3]}
+              backgroundColor={theme.color.background.neutral[1]}
               onPress={() => onPressShowLive(serviceJourneyPolyline)}
             />
           </TripRow>
         ) : null}
-        {realtimeText && (
-          <TripRow>
-            <View style={style.realtime}>
-              <ThemeIcon
-                svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
-                size="xSmall"
-                style={style.realtimeIcon}
-              />
-              <ThemeText
-                style={style.realtimeText}
-                typography="body__s"
-                type="secondary"
-              >
-                {realtimeText}
-              </ThemeText>
-            </View>
-          </TripRow>
-        )}
-        {leg.intermediateEstimatedCalls.length > 0 && (
-          <IntermediateInfo
-            leg={leg}
-            onPressDeparture={onPressDeparture}
-            testID={testID}
-          />
-        )}
+        {hasIntermediateStops && <IntermediateInfo leg={leg} testID={testID} />}
         {showTo && (
           <TripRow
+            dimensionOverrides={NEW_DIMENSIONS}
             alignChildren="flex-end"
-            accessibilityLabel={getStopRowA11yTranslated(
-              'end',
-              getPlaceName(leg.toPlace),
-              endTimes,
-              timesAreApproximations,
-              language,
-              t,
+            accessibilityLabel={t(
+              TripDetailsTexts.trip.leg.end.a11yLabel(
+                getPlaceName(leg.toPlace),
+                formatToClock(
+                  endTimes.expectedTime ?? endTimes.aimedTime,
+                  language,
+                  'ceil',
+                ),
+              ),
+            )}
+            accessibilityHint={t(
+              TripDetailsTexts.trip.leg.end.a11yHint(getPlaceName(leg.toPlace)),
             )}
             rowLabel={
               <Time
@@ -374,7 +488,10 @@ export const TripSection: React.FC<TripSectionProps> = ({
             onPress={() => handleQuayPress(leg.toPlace.quay)}
             testID={`${testID}ToPlace`}
           >
-            <ThemeText testID={`${testID}ToPlaceName`}>
+            <ThemeText
+              typography="body__m__strong"
+              testID={`${testID}ToPlaceName`}
+            >
               {getPlaceName(leg.toPlace)}
             </ThemeText>
           </TripRow>
@@ -405,6 +522,20 @@ export const TripSection: React.FC<TripSectionProps> = ({
     </>
   );
 
+  function handleDeparturePress(pressedLeg: Leg) {
+    if (pressedLeg.serviceJourney?.id) {
+      const departureData: ServiceJourneyDeparture = {
+        serviceJourneyId: pressedLeg.serviceJourney.id,
+        date: pressedLeg.expectedStartTime,
+        serviceDate: pressedLeg.intermediateEstimatedCalls[0]?.date,
+        fromStopPosition:
+          pressedLeg.fromEstimatedCall?.stopPositionInPattern || 0,
+        toStopPosition: pressedLeg.toEstimatedCall?.stopPositionInPattern,
+      };
+      onPressDeparture([departureData], 0);
+    }
+  }
+
   async function handleQuayPress(quay: Quay | undefined) {
     const stopPlace = quay?.stopPlace;
     if (!stopPlace) return;
@@ -412,106 +543,272 @@ export const TripSection: React.FC<TripSectionProps> = ({
     onPressQuay(stopPlace, quay.id);
   }
 };
-const IntermediateInfo = ({
-  leg,
-  onPressDeparture,
-  testID,
-}: {
-  leg: Leg;
-  onPressDeparture: TripProps['onPressDeparture'];
-  testID?: string;
-}) => {
+const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
   const {t, language} = useTranslation();
+  const {theme} = useThemeContext();
+  const style = useSectionStyles();
+  const [expanded, setExpanded] = useState(false);
+  const legColor = useTransportColor(leg.mode, leg.line?.transportSubmode)
+    .secondary.background;
 
   const numberOfIntermediateCalls = leg.intermediateEstimatedCalls.length;
 
-  const navigateToDeparture = () => {
-    if (leg.serviceJourney?.id) {
-      const departureData: ServiceJourneyDeparture = {
-        serviceJourneyId: leg.serviceJourney.id,
-        date: leg.expectedStartTime,
-        serviceDate: leg.intermediateEstimatedCalls[0].date,
-        fromStopPosition: leg.fromEstimatedCall?.stopPositionInPattern || 0,
-        toStopPosition: leg.toEstimatedCall?.stopPositionInPattern,
-      };
-      onPressDeparture([departureData], 0);
-    }
-    return null;
+  const toggleExpanded = () => {
+    animateNextChange();
+    setExpanded(!expanded);
   };
 
   return (
-    <TripRow
-      testID={`${testID}IntermediateStops`}
-      onPress={navigateToDeparture}
-      accessibilityLabel={
-        t(
-          TripDetailsTexts.trip.leg.intermediateStops.a11yLabel(
-            numberOfIntermediateCalls,
-            secondsToDuration(leg.duration, language),
-          ),
-        ) + screenReaderPause
-      }
-      accessibilityHint={t(
-        TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
-      )}
-    >
-      <ThemeText typography="body__s" type="secondary">
-        {t(
-          TripDetailsTexts.trip.leg.intermediateStops.label(
-            numberOfIntermediateCalls,
-            secondsToDuration(leg.duration, language),
-          ),
-        )}
-      </ThemeText>
-    </TripRow>
+    <>
+      <TripRow
+        dimensionOverrides={NEW_DIMENSIONS}
+        testID={`${testID}IntermediateStops`}
+        accessible={true}
+      >
+        <Button
+          type="small"
+          expanded={false}
+          mode="secondary"
+          backgroundColor={theme.color.background.neutral[1]}
+          rightIcon={{svg: expanded ? ExpandLess : ExpandMore}}
+          text={t(
+            TripDetailsTexts.trip.leg.intermediateStops.label(
+              numberOfIntermediateCalls,
+              secondsToDurationShort(leg.duration, language),
+            ),
+          )}
+          onPress={toggleExpanded}
+          accessibilityLabel={
+            t(
+              TripDetailsTexts.trip.leg.intermediateStops.a11yLabel(
+                numberOfIntermediateCalls,
+                secondsToDuration(leg.duration, language),
+              ),
+            ) + screenReaderPause
+          }
+          accessibilityHint={t(
+            TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
+          )}
+        />
+      </TripRow>
+      {expanded &&
+        leg.intermediateEstimatedCalls.map((call, index) => {
+          const sjCall = leg.serviceJourneyEstimatedCalls.find(
+            (c) => c.quay.name === call.quay.name,
+          );
+          return (
+            <View key={call.quay.id ?? index} style={style.intermediateStop}>
+              <TripLegDecoration
+                dimensionOverrides={NEW_DIMENSIONS}
+                color={legColor}
+                hasCenter
+              />
+              <TripRow
+                dimensionOverrides={NEW_DIMENSIONS}
+                alignChildren="center"
+                style={style.intermediateStopRow}
+                rowLabel={
+                  sjCall ? (
+                    <Time
+                      timeValues={{
+                        aimedTime: sjCall.aimedDepartureTime,
+                        expectedTime: sjCall.expectedDepartureTime,
+                        isRealtime: sjCall.realtime,
+                      }}
+                      roundingMethod="floor"
+                    />
+                  ) : undefined
+                }
+              >
+                <ThemeText>{call.quay.name}</ThemeText>
+              </TripRow>
+            </View>
+          );
+        })}
+    </>
   );
 };
-const WalkSection = (leg: Leg) => {
+function useWalkA11yLabel(
+  leg: Leg,
+  wait?: WaitDetails,
+  roundingMethod: 'floor' | 'ceil' = 'floor',
+): string {
   const {t, language} = useTranslation();
   const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
+  const humanizedDistance = useHumanizeDistance(leg.distance);
+  const durationText = secondsToDuration(leg.duration ?? 0, language);
+  const time = formatToClock(leg.expectedStartTime, language, roundingMethod);
+  const fromPlace = getPlaceName(leg.fromPlace);
+  const toPlace = getPlaceName(leg.toPlace);
+
+  const parts: string[] = [];
+
+  if (isWalkTimeOfSignificance) {
+    parts.push(
+      t(
+        TripDetailsTexts.trip.leg.walk.a11yLabel.base(
+          time,
+          durationText,
+          fromPlace,
+          toPlace,
+        ),
+      ),
+    );
+  } else {
+    parts.push(
+      t(
+        TripDetailsTexts.trip.leg.walk.a11yLabel.baseShortWalk(
+          time,
+          fromPlace,
+          toPlace,
+        ),
+      ),
+    );
+  }
+
+  if (humanizedDistance) {
+    parts.push(
+      t(TripDetailsTexts.trip.leg.walk.a11yLabel.distance(humanizedDistance)),
+    );
+  }
+
+  if (wait?.mustWaitForNextLeg && significantWaitTime(wait.waitTimeInSeconds)) {
+    parts.push(
+      t(
+        TripDetailsTexts.trip.leg.walk.a11yLabel.waitTime(
+          secondsToDuration(wait.waitTimeInSeconds, language),
+        ),
+      ),
+    );
+  }
+
+  return parts.join('. ') + '.';
+}
+
+function useBikeA11yLabel(
+  leg: Leg,
+  wait?: WaitDetails,
+  roundingMethod: 'floor' | 'ceil' = 'floor',
+): string {
+  const {t, language} = useTranslation();
+  const durationText = secondsToDuration(leg.duration ?? 0, language);
+  const time = formatToClock(leg.expectedStartTime, language, roundingMethod);
+  const fromPlace = getPlaceName(leg.fromPlace);
+  const toPlace = getPlaceName(leg.toPlace);
+  const humanizedDistance = useHumanizeDistance(leg.distance);
+
+  const parts: string[] = [
+    t(
+      TripDetailsTexts.trip.leg.bicycle.a11yLabel.base(
+        time,
+        durationText,
+        fromPlace,
+        toPlace,
+      ),
+    ),
+  ];
+
+  if (humanizedDistance) {
+    parts.push(
+      t(
+        TripDetailsTexts.trip.leg.bicycle.a11yLabel.distance(humanizedDistance),
+      ),
+    );
+  }
+
+  if (wait?.mustWaitForNextLeg && significantWaitTime(wait.waitTimeInSeconds)) {
+    parts.push(
+      t(
+        TripDetailsTexts.trip.leg.bicycle.a11yLabel.waitTime(
+          secondsToDuration(wait.waitTimeInSeconds, language),
+        ),
+      ),
+    );
+  }
+
+  return parts.join('. ') + '.';
+}
+
+type WalkSectionProps = {
+  leg: Leg;
+  wait?: WaitDetails;
+  timeRounding?: 'floor' | 'ceil';
+};
+
+const WalkSection = ({leg, wait, timeRounding = 'floor'}: WalkSectionProps) => {
+  const {t, language} = useTranslation();
+  const style = useSectionStyles();
+  const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
+  const humanizedDistance = useHumanizeDistance(leg.distance);
+  const durationText = secondsToDuration(leg.duration ?? 0, language);
+  const a11yLabel = useWalkA11yLabel(leg, wait, timeRounding);
 
   return (
     <TripRow
-      rowLabel={
-        <TransportationIconBox
-          mode={leg.mode}
-          subMode={leg.line?.transportSubmode}
-        />
-      }
+      dimensionOverrides={NEW_DIMENSIONS}
       testID="footLeg"
+      accessibilityLabel={a11yLabel}
     >
-      <ThemeText typography="body__s" type="secondary">
-        {isWalkTimeOfSignificance
-          ? t(
-              TripDetailsTexts.trip.leg.walk.label(
-                secondsToDuration(leg.duration ?? 0, language),
-              ),
-            )
-          : t(TripDetailsTexts.trip.leg.shortWalk)}
-      </ThemeText>
+      <View style={style.transportLine}>
+        <ThemeIcon
+          size="normal"
+          svg={WalkFill}
+          accessibilityLabel={t(getTranslatedModeName('foot'))}
+        />
+        <ThemeText typography="body__s" type="secondary">
+          {isWalkTimeOfSignificance && humanizedDistance
+            ? t(
+                TripDetailsTexts.trip.leg.walk.labelWithDistance(
+                  durationText,
+                  humanizedDistance,
+                ),
+              )
+            : isWalkTimeOfSignificance
+              ? t(TripDetailsTexts.trip.leg.walk.label(durationText))
+              : t(TripDetailsTexts.trip.leg.shortWalk)}
+        </ThemeText>
+      </View>
     </TripRow>
   );
 };
-const BikeSection = (leg: Leg) => {
+
+type BikeSectionProps = {
+  leg: Leg;
+  wait?: WaitDetails;
+  timeRounding?: 'floor' | 'ceil';
+};
+
+const BikeSection = ({leg, wait, timeRounding = 'floor'}: BikeSectionProps) => {
   const {t, language} = useTranslation();
+  const style = useSectionStyles();
+  const durationText = secondsToDuration(leg.duration ?? 0, language);
+  const humanizedDistance = useHumanizeDistance(leg.distance);
+  const a11yLabel = useBikeA11yLabel(leg, wait, timeRounding);
 
   return (
     <TripRow
-      rowLabel={
+      dimensionOverrides={NEW_DIMENSIONS}
+      testID="bikeLeg"
+      accessibilityLabel={a11yLabel}
+    >
+      <View style={style.transportLine}>
         <TransportationIconBox
           mode={leg.mode}
           subMode={leg.line?.transportSubmode}
+          spacious
+          rounded
         />
-      }
-      testID="bikeLeg"
-    >
-      <ThemeText typography="body__s" type="secondary">
-        {t(
-          TripDetailsTexts.trip.leg.bicycle.label(
-            secondsToDuration(leg.duration ?? 0, language),
-          ),
-        )}
-      </ThemeText>
+        <ThemeText typography="body__s" type="secondary">
+          {humanizedDistance
+            ? t(
+                TripDetailsTexts.trip.leg.bicycle.labelWithDistance(
+                  durationText,
+                  humanizedDistance,
+                ),
+              )
+            : t(TripDetailsTexts.trip.leg.bicycle.label(durationText))}
+        </ThemeText>
+      </View>
     </TripRow>
   );
 };
@@ -525,7 +822,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   if (id === AUTHORITY) return null;
   if (!url) {
     return (
-      <TripRow>
+      <TripRow dimensionOverrides={NEW_DIMENSIONS}>
         <View style={style.authoritySection}>
           <ThemeText typography="body__s" type="secondary">
             {t(TripDetailsTexts.trip.leg.buyTicketFrom) + ' ' + name}
@@ -535,7 +832,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
     );
   }
   return (
-    <TripRow accessible={false}>
+    <TripRow dimensionOverrides={NEW_DIMENSIONS} accessible={false}>
       <View style={style.authoritySection}>
         <ThemeText typography="body__s" type="secondary" accessible={false}>
           {t(TripDetailsTexts.trip.leg.buyTicketFrom)}
@@ -616,11 +913,12 @@ function InterchangeSection({
   return (
     <View style={style.interchangeSection}>
       <TripLegDecoration
+        dimensionOverrides={NEW_DIMENSIONS}
         color={legColor.background}
         hasStart={false}
         hasEnd={false}
       />
-      <TripRow>
+      <TripRow dimensionOverrides={NEW_DIMENSIONS}>
         <MessageInfoBox type="info" message={text} />
       </TripRow>
     </View>
@@ -647,57 +945,16 @@ export function mapLegToTimeValues(leg: Leg) {
   };
 }
 
-function getStopRowA11yTranslated(
-  key: 'start' | 'end',
-  placeName: string,
-  values: TimeValues,
-  timesAreApproximations: boolean,
-  language: Language,
-  t: TranslateFunction,
-): string {
-  const timeType = getRealtimeState(values);
-  const time = formatToClock(
-    values.expectedTime ?? values.aimedTime,
-    language,
-    'floor',
-  );
-  const aimedTime = formatToClock(values.aimedTime, language, 'floor');
-
-  switch (timeType) {
-    case 'no-realtime':
-      return t(
-        TripDetailsTexts.trip.leg[key].a11yLabel.noRealTime(
-          placeName,
-          aimedTime,
-          timesAreApproximations,
-        ),
-      );
-    case 'no-significant-difference':
-      return t(
-        TripDetailsTexts.trip.leg[key].a11yLabel.singularTime(placeName, time),
-      );
-    case 'significant-difference':
-      return t(
-        TripDetailsTexts.trip.leg[key].a11yLabel.realAndAimed(
-          placeName,
-          time,
-          aimedTime,
-          timesAreApproximations,
-        ),
-      );
-  }
-}
-
 const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   tripSection: {
     flex: 1,
     marginBottom: theme.spacing.large,
   },
-  a11yHelper: {
-    position: 'absolute',
-    top: -theme.spacing.medium,
-    left: 0,
-    width: '100%',
+  transportLine: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: theme.spacing.small,
   },
   onDemandTransportLabel: {
     paddingTop: theme.spacing.xSmall,
@@ -707,6 +964,9 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   flexBookingOptions: {
     paddingVertical: theme.spacing.medium / 2,
+  },
+  intermediateStopRow: {
+    minHeight: 60,
   },
   realtime: {
     flexDirection: 'row',
@@ -723,5 +983,8 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   interchangeSection: {
     marginBottom: theme.spacing.large,
+  },
+  intermediateStop: {
+    flex: 1,
   },
 }));
