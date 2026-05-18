@@ -12,7 +12,7 @@ import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 
 type StartTimeSelectionProps = {
@@ -27,6 +27,7 @@ export function StartTimeSelection({
   style,
 }: StartTimeSelectionProps) {
   const {t, language} = useTranslation();
+  const {theme} = useThemeContext();
   const styles = useStyles();
   const selectionBuilder = usePurchaseSelectionBuilder();
   const onCloseFocusRef = useRef<View | null>(null);
@@ -69,7 +70,11 @@ export function StartTimeSelection({
                     )
                   : t(PurchaseOverviewTexts.startTime.now)}
               </ThemeText>
-              <ThemeIcon svg={Edit} size="normal" />
+              <ThemeIcon
+                svg={Edit}
+                size="normal"
+                color={theme.color.interactive[0].default.background}
+              />
             </View>
           </GenericClickableSectionItem>
         </Section>

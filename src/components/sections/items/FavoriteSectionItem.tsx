@@ -3,7 +3,7 @@ import {AccessibilityProps, View} from 'react-native';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {FavoriteIcon} from '@atb/modules/favorites';
 import {StoredLocationFavorite} from '@atb/modules/favorites';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {screenReaderPause} from '@atb/components/text';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -52,6 +52,7 @@ function withOnPress(a: any): a is WithOnPress {
 
 function FavoriteItemContent({favorite, icon, testID, ...props}: BaseProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
+  const {theme} = useThemeContext();
   const style = useSectionStyle();
 
   return (
@@ -64,7 +65,12 @@ function FavoriteItemContent({favorite, icon, testID, ...props}: BaseProps) {
           {favorite.name ?? favorite.location.name}
         </ThemeText>
       </View>
-      {icon ?? <ThemeIcon svg={Edit} />}
+      {icon ?? (
+        <ThemeIcon
+          svg={Edit}
+          color={theme.color.interactive[0].default.background}
+        />
+      )}
     </View>
   );
 }
