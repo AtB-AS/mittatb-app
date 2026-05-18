@@ -4,6 +4,7 @@ import type {TripPatternStatus} from './types';
 import type {TranslateFunction} from '@atb/translations';
 import {TravelCardTexts} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
+import SvgError from '@atb/assets/svg/color/icons/status/light/Error';
 import {
   BookingClosed,
   BookingRequired,
@@ -23,10 +24,16 @@ export function getTripPatternStatus(
   t: TranslateFunction,
   colors: StatusColors,
 ): TripPatternStatus | undefined {
-  if (
-    tripPattern.status === 'impossible' ||
-    tripPattern.legs.some((l) => l.fromEstimatedCall?.cancellation)
-  ) {
+  if (tripPattern.legs.some((l) => l.fromEstimatedCall?.cancellation)) {
+    return {
+      type: 'cancelled',
+      svg: SvgError,
+      color: colors.error,
+      text: t(TravelCardTexts.header.cancelled),
+    };
+  }
+
+  if (tripPattern.status === 'impossible') {
     return {
       type: 'impossible',
       svg: Close,

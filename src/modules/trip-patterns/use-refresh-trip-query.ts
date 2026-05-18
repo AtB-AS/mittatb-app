@@ -15,7 +15,6 @@ export function useRefreshTripQuery(
       return await refreshSingleTrip(tripPattern);
     },
     refetchInterval: ONE_SECOND_MS * 20,
-    staleTime: ONE_HOUR_MS,
     gcTime: ONE_HOUR_MS,
     enabled,
   });

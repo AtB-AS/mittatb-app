@@ -61,6 +61,7 @@ const TravelCardTexts = {
       'No longer possible',
       'Ikkje lenger mogleg',
     ),
+    cancelled: _('Innstilt', 'Cancelled', 'Innstilt'),
     tripStarted: _('Reisen har begynt', 'Trip has started', 'Reisa har begynt'),
     staleTrip: _(
       'Kan ikke oppdateres',
