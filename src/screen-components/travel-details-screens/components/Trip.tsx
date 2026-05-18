@@ -168,11 +168,17 @@ export const Trip: React.FC<TripProps> = ({
             .filter(isDefined),
         }}
       />
-      {error && (
+      {error && isNetworkError(error) && (
         <>
           <ScreenReaderAnnouncement message={translatedError(error, t)} />
           <MessageInfoBox type="warning" message={translatedError(error, t)} />
         </>
+      )}
+      {tripPattern.status === 'stale' && (
+        <MessageInfoBox
+          type="warning"
+          message={t(TripDetailsTexts.messages.errorDefault)}
+        />
       )}
       <View style={styles.trip}>
         {tripPattern &&
@@ -285,12 +291,10 @@ function getInterchangeDetails(
   return undefined;
 }
 
+function isNetworkError(error: ErrorResponse): boolean {
+  return error.kind === 'AXIOS_NETWORK_ERROR' || error.kind === 'AXIOS_TIMEOUT';
+}
+
 function translatedError(error: ErrorResponse, t: TranslateFunction): string {
-  switch (error.kind) {
-    case 'AXIOS_NETWORK_ERROR':
-    case 'AXIOS_TIMEOUT':
-      return t(TripDetailsTexts.messages.errorNetwork);
-    default:
-      return t(TripDetailsTexts.messages.errorDefault);
-  }
+  return t(TripDetailsTexts.messages.errorNetwork);
 }
