@@ -24,6 +24,7 @@ AtB App is a whitelabel travel companion/ticketing app in Trondheim, Norway.
   - components/: Reusable React UI components (buttons, inputs, headers, loading indicators, etc.)
   - stacks-hierarchy/: Navigation structure — React Navigation stacks and screen definitions (root stacks, tab navigators, individual screens)
   - translations/: i18n / localization resources, organized per screen/feature
+  - modules/: Feature modules (auth, situations, etc.)
   - utils/: Shared utility functions (date formatting, debounce, validation, etc.)
 - ./android/: Android native project (Gradle configs, APK build)
 - ./ios/: iOS native project (Xcode configs, scripts)
@@ -39,7 +40,7 @@ AtB App is a whitelabel travel companion/ticketing app in Trondheim, Norway.
 
 ## Key Conventions
 
-- **Code formatting**: All generated code must conform to the project's Prettier configuration. After writing or editing code, always run `yarn prettier --write` on the changed files to auto-fix formatting, then verify with `yarn prettier`. `yarn lint` and `yarn prettier` should never fail on generated code.
+- **Code formatting**: All generated code must conform to the project's Prettier configuration. Run `yarn prettier --write` on changed files before the Final gate (step 8) — not necessarily after every individual edit. `yarn lint` and `yarn prettier` should never fail on generated code.
 - **No `TouchableOpacity`**: Use `PressableOpacity` instead (enforced by ESLint).
 - **No default exports** (except SVG assets, translation files, and Storybook stories).
 - **No Firebase Auth imports outside `src/modules/auth/`** (enforced by ESLint).
@@ -84,15 +85,15 @@ Navigating symbols MUST use LSP! Before any Edit to a `.ts`/`.tsx` file that cha
 2. `documentSymbol` on the likely file to confirm the symbol exists and check its exact name
 3. Only then grep — and say out loud why LSP didn't work
 
-**Grep/Glob/Read are for text, not symbols:**
+**Grep/Glob/Read are for text (and project-wide symbol fallback):**
 
 - String literals, error messages, log lines, comments, TODOs
 - Config keys, env var names, route paths, SQL, JSON
 - Cross-file text patterns LSP can't model
-- Project-wide symbol search: LSP `workspaceSymbol` is unreliable on large TS codebases — use `rg` with a symbol-shaped regex instead (e.g. `rg "\bfunctionName\b"`)
+- Project-wide symbol search (fallback): Don't use LSP `workspaceSymbol` (unreliable on large TS codebases) — use `rg` with a symbol-shaped regex instead (e.g. `rg "\bfunctionName\b"`)
 
 **Diagnostics are a hard gate.**
-After every meaningful/logical unit of Edits or Writes to a `.ts` / `.tsx` / `.js` / `.jsx` file, check diagnostics on that file before the next tool call. Do not batch edits and check at the end — TS errors cascade and you'll get misleading noise. Fix type errors and missing imports immediately.
+After every meaningful/logical unit of Edits or Writes to a `.ts` / `.tsx` / `.js` / `.jsx` file, check LSP diagnostics on the changed file(s) immediately. Do not batch edits and check at the end — TS errors cascade and you'll get misleading noise. Fix type errors and missing imports immediately. For project-wide verification beyond single-file diagnostics, see the Final gate (step 8) in the Workflow section.
 
 ## Workflow
 
@@ -101,15 +102,29 @@ Treat every task as a structured pair programming session. No "vibe coding" — 
 ### Before implementing
 
 1. **Understand the problem**: Read the relevant code and understand how it relates to the task.
-2. **Explain your understanding**: Show the developer what you think the problem is and which code is involved.
+2. **Explain your understanding**: Show the developer what you think the problem is and which code is involved. State your assumptions explicitly. If uncertain, ask.
 3. **Confirm understanding**: Ask the developer if they agree before planning.
+  - If multiple interpretations exist, present them - don't pick silently.
+  - If something is unclear, stop. Name what's confusing. Ask.
 4. **Propose a plan**: Suggest solutions (multiple if relevant), broken into small steps.
+  - If a simpler approach exists, say so. Push back when warranted.
+  - Keep plans extremely concise. Sacrifice grammar for brevity.
+  - End each plan with a list of unresolved questions, if any.
 5. **Confirm the plan**: Never start implementing before getting developer confirmation.
+
+Don't assume. Don't hide confusion. Surface tradeoffs.
 
 ### During implementation
 
-1. **One step at a time**: Give the developer time to review before moving to the next step.
-2. **Share new findings**: As your understanding expands, keep the developer in the loop about new problems or needed adjustments.
-3. **Report progress**: After each step, explain what was done, what remains, and any blockers/concerns/questions.
-4. **Build and test often**: Show proof that the app builds and tests pass.
-5. **Never proceed** to the next step without developer confirmation.
+1. **One step at a time:** Pause for review between steps. Exception: purely mechanical changes (rename across files, updating imports) may be batched into one step if the logic is obvious.
+2. **Touch only what you must:** Every changed line should trace directly to the task.
+  - Don't "improve" adjacent code, comments, or formatting.
+  - Don't refactor things that aren't broken.
+  - Match existing style, even if you'd do it differently.
+  - If you notice unrelated issues, mention them — don't fix them.
+3. **Clean up only your own mess:** Remove imports/variables/functions that YOUR changes made unused. Don't remove pre-existing dead code unless asked.
+4. **Share new findings:** Keep the developer in the loop about new problems or needed adjustments.
+5. **Report progress:** After each step, explain what was done, what remains, and any blockers/concerns/questions.
+6. **Build and test often:** After each logical step, run `yarn test <relevantPath>` to catch regressions early. LSP diagnostics handle type errors per-step; `yarn tsc` runs as part of the Final gate. This doesn't require developer confirmation — treat it as part of the step.
+7. **Never proceed** to the next *logical* step without developer confirmation.
+8. **Final gate:** After the last step is confirmed, run `yarn check-all`. No confirmation needed — this is a post-condition, not a step.
