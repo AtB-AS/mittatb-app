@@ -196,7 +196,7 @@ export const Trip: React.FC<TripProps> = ({
                 leg={leg}
                 testID={'leg' + index}
                 onPressShowLive={
-                  legVehiclePosition
+                  !isScreenReaderEnabled && legVehiclePosition
                     ? (serviceJourneyPolylines: ServiceJourneyPolylines) => {
                         shouldShowRequestReview.current = true;
                         onPressDetailsMap({
@@ -218,7 +218,7 @@ export const Trip: React.FC<TripProps> = ({
           })}
       </View>
       <Divider />
-      {tripPatternLegs && (
+      {!isScreenReaderEnabled && tripPatternLegs && (
         <CompactTravelDetailsMap
           serviceJourneyPolylines={tripPatternLegs}
           fromPlace={tripPatternLegs[0]?.fromPlace}
