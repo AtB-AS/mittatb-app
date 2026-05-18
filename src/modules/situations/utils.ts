@@ -53,7 +53,7 @@ export function findAllNotices(tp: TripPatternFragment): NoticeFragment[] {
  */
 export function findAllSituationsFromLeg(leg: Leg): SituationFragment[] {
   return [
-    leg.situations,
+    leg.situations ?? [],
     leg.fromEstimatedCall?.situations ?? [],
     leg.toEstimatedCall?.situations ?? [],
   ]
