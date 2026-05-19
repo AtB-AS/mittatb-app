@@ -36,10 +36,10 @@
     js-yaml "^4.1.0"
     yargs "^17.7.1"
 
-"@atb-as/generate-assets@^18.11.0":
-  version "18.11.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-18.11.0.tgz#50dc5093a58c7b64fbb5c90bb3c60adf6bcfeceb"
-  integrity sha512-k5Ok/jJlKXEQjd7BpHlu6ykmYlM6pb1UXKfYCvBzIesgJ3Chlu4H8U2Bqo66ok81BxrayHVM8Xf7AnA7y9VELA==
+"@atb-as/generate-assets@^18.14.0":
+  version "18.14.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-18.14.0.tgz#05367351b4f8c8a2b45d8260d8b826a5f8dda720"
+  integrity sha512-IyotQkhAfLIFq6JDz5n1YbiAe7+qq3WYqYg/dogQmhWf8bvjW08a5lSHhnkCgn2rI2Z4hdJbTvrzAuXl4uhvEg==
   dependencies:
     "@atb-as/theme" "14.0.1"
     commander "^9.4.0"
@@ -57,12 +57,12 @@
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
 
-"@atb-as/theme@^15.0.1":
-  version "15.0.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-15.0.1.tgz#dcfd05881e99ffc8201da729c5b4e150d49242a2"
-  integrity sha512-16glXVBwzQgTJ4OGWzjUS6QPf2jKC0IouLD0kk0p+8gJHWx7JtPvseATgxWYMkiOKcYU3bkK1n2W0O9LI042GQ==
+"@atb-as/theme@^15.2.0":
+  version "15.2.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-15.2.0.tgz#867ae81ff5f6dac0970675f9c3e293e99620e797"
+  integrity sha512-/4ibKj1fjZG0To1yP69fe5VQFBj/mVFB1w4K54BdB261fTK7C3dPGGF941PYqNHq82BE77pASbu6WBXLFGog+g==
   dependencies:
-    "@tfk-samf/figma-to-dtcg" "0.4.0"
+    "@tfk-samf/figma-to-dtcg" "0.4.4"
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
 
@@ -3995,6 +3995,11 @@
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@tfk-samf/figma-to-dtcg/-/figma-to-dtcg-0.4.0.tgz#6ee320293b89d9d64499b9c058cc34c630ad1453"
   integrity sha512-B8PTx1nP0YyWhTavBUEh/+FDJhctoMzBD3WZe2NPaxOCx+eibLc7/a12cMPpAaxTqqdreEnyL5es7JZRdldtlg==
+
+"@tfk-samf/figma-to-dtcg@0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@tfk-samf/figma-to-dtcg/-/figma-to-dtcg-0.4.4.tgz#7471525b5242890e84c44a9da1ddf66f21899d0e"
+  integrity sha512-V0joTCKFWGgsOEgXPi0A6Ru43e8KCOdKUfhUIIBJYjSVDfUR4CPv8ak6zfADk5WaUh2yd5B/NSh0F2ddlQKkMg==
 
 "@tmcp/adapter-valibot@^0.1.4", "@tmcp/adapter-valibot@^0.1.5":
   version "0.1.5"

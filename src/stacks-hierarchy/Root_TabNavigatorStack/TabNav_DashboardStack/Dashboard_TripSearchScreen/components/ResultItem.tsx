@@ -108,7 +108,7 @@ const ResultItemHeader: React.FC<{
       <View style={styles.durationContainer}>
         <AccessibleText
           typography="body__s"
-          color="secondary"
+          type="secondary"
           testID="resultDuration"
           prefix={t(TripSearchTexts.results.resultItem.header.totalDuration)}
         >
@@ -252,7 +252,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                           typography={
                             isCancelled ? 'body__xs__strike' : 'body__xs'
                           }
-                          color="primary"
+                          type="primary"
                           testID={'schTime' + i}
                         >
                           {(isLineFlexibleTransport(leg.line)
@@ -269,7 +269,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                         <ThemeText
                           style={styles.scheduledTime}
                           typography="body__xs__strike"
-                          color="secondary"
+                          type="secondary"
                           testID={'aimTime' + i}
                         >
                           {formatToClock(leg.aimedStartTime, language, 'floor')}
@@ -298,7 +298,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
           <View style={styles.departureTimes}>
             <ThemeText
               typography={isCancelled ? 'body__xs__strike' : 'body__xs'}
-              color="primary"
+              type="primary"
               testID="endTime"
             >
               {(lastLegIsFlexible ? t(dictionary.missingRealTimePrefix) : '') +

@@ -46,9 +46,7 @@ export const CounterIconBox = ({
               {
                 padding: basePadding,
                 paddingRight: basePadding + extraPaddingRight,
-                borderRadius: rounded
-                  ? theme.border.radius.circle
-                  : getIconBoxBorderRadius(size, theme),
+                borderRadius: getIconBoxBorderRadius(theme, rounded),
               },
               style,
             ]}

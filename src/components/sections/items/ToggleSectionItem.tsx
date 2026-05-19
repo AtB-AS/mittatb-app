@@ -118,7 +118,7 @@ export function ToggleSectionItem({
             />
           </View>
           {subtext && (
-            <ThemeText typography="body__s" color="secondary">
+            <ThemeText typography="body__s" type="secondary">
               {subtext}
             </ThemeText>
           )}

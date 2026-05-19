@@ -1,5 +1,5 @@
 import React from 'react';
-import {useThemeContext} from '@atb/theme';
+import {resolveColorValue, useThemeContext} from '@atb/theme';
 import {
   ColorValue,
   Platform,
@@ -10,20 +10,20 @@ import {
 } from 'react-native';
 import {renderMarkdown} from './markdown-renderer';
 import {getTextWeightStyle, MAX_FONT_SCALE} from './utils';
-import {
-  ContrastColor,
-  Statuses,
-  TextColor,
-  TextNames,
-  isStatusColor,
-  isTextColor,
-} from '@atb/theme/colors';
+import {ContrastColor, ForegroundType, TextNames} from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
 
 export type ThemeTextProps = TextProps & {
   typography?: TextNames;
-  type?: keyof ContrastColor['foreground'];
-  color?: ContrastColor | Statuses | TextColor | ColorValue;
+  type?: ForegroundType;
+  /**
+   * Pass a ContrastColor from the theme for semantic color resolution.
+   * The foreground tier is selected via the `type` prop.
+   * Use a resolved hex string only for explicit color overrides.
+   * Do NOT pass TextColor strings like 'primary' or 'secondary' —
+   * use the `type` prop instead.
+   */
+  color?: ContrastColor | ColorValue;
   isMarkdown?: boolean;
 };
 
@@ -37,7 +37,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   ...props
 }) => {
   const {theme, androidSystemFont} = useThemeContext();
-  const textColor = useColor(color, type);
+  const textColor = resolveColorValue(color, type, theme);
   const fontScale = useFontScale();
 
   const typeStyle = {
@@ -86,19 +86,3 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
 
   return <Text {...textProps}>{content}</Text>;
 };
-
-function useColor(
-  color: ContrastColor | TextColor | Statuses | ColorValue | undefined,
-  type: keyof ContrastColor['foreground'],
-) {
-  const {theme} = useThemeContext();
-  if (typeof color === 'object') {
-    return color.foreground[type];
-  } else if (isStatusColor(color, theme)) {
-    return theme.color.status[color].secondary.foreground[type];
-  } else if (isTextColor(color, theme) || color === undefined) {
-    return theme.color.foreground.dynamic[color ?? 'primary'];
-  } else {
-    return color;
-  }
-}

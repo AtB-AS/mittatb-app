@@ -56,7 +56,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
         </GenericSectionItem>
         <GenericSectionItem accessibility={{accessible: true}}>
           {status == 'rejected' && (
-            <ThemeText typography="body__s" color="secondary">
+            <ThemeText typography="body__s" type="secondary">
               {t(
                 TicketingTexts.reservation.orderDate(
                   formatToLongDateTime(
@@ -69,7 +69,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
           )}
           <ThemeText
             typography="body__s"
-            color="secondary"
+            type="secondary"
             style={styles.detail}
           >
             {t(TicketingTexts.reservation.paymentMethod(paymentType))}

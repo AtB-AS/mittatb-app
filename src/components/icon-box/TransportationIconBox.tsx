@@ -50,9 +50,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
             spacious && styles.standardTransportationIconBox,
             {
               backgroundColor: transportationColor.background,
-              borderRadius: rounded
-                ? theme.border.radius.circle
-                : getIconBoxBorderRadius(iconSize, theme),
+              borderRadius: getIconBoxBorderRadius(theme, rounded),
               paddingRight:
                 (spacious ? theme.spacing.small : theme.spacing.xSmall) +
                 extraPaddingRight,

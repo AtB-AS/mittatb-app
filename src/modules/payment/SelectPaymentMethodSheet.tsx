@@ -115,7 +115,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
         <View>
           {recurringPaymentMethods && recurringPaymentMethods?.length > 0 && (
             <View style={styles.listHeading}>
-              <ThemeText color="secondary">
+              <ThemeText type="secondary">
                 {t(SelectPaymentMethodTexts.saved_cards.text)}
               </ThemeText>
             </View>
@@ -139,7 +139,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
         <View>
           {recurringPaymentMethods && recurringPaymentMethods?.length > 0 && (
             <View style={styles.listHeading}>
-              <ThemeText color="secondary">
+              <ThemeText type="secondary">
                 {t(SelectPaymentMethodTexts.other_cards.text)}
               </ThemeText>
             </View>

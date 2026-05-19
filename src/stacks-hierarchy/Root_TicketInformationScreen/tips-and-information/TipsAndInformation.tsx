@@ -48,7 +48,7 @@ export const TipsAndInformation = () => {
             expandContent={
               <ThemeText
                 typography="body__s"
-                color="secondary"
+                type="secondary"
                 isMarkdown={true}
               >
                 {description}

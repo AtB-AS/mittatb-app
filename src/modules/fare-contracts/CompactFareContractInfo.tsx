@@ -91,31 +91,31 @@ const CompactFareContractInfoTexts = (
         {timeUntilExpire}
       </ThemeText>
       {firstTravelRight.travelerName ? (
-        <ThemeText typography="body__s" color="secondary">
+        <ThemeText typography="body__s" type="secondary">
           {firstTravelRight.travelerName}
         </ThemeText>
       ) : (
         userProfilesWithCount
           .map((u) => (
-            <ThemeText key={u.id} typography="body__s" color="secondary">
+            <ThemeText key={u.id} typography="body__s" type="secondary">
               {toCountAndReferenceDataName(u, language)}
             </ThemeText>
           ))
           .concat(
             baggageProductsWithCount.map((p) => (
-              <ThemeText key={p.id} typography="body__s" color="secondary">
+              <ThemeText key={p.id} typography="body__s" type="secondary">
                 {toCountAndReferenceDataName(p, language)}
               </ThemeText>
             )),
           )
       )}
       {productName && (
-        <ThemeText typography="body__s" color="secondary" testID="productName">
+        <ThemeText typography="body__s" type="secondary" testID="productName">
           {productName}
         </ThemeText>
       )}
       {fareZoneSummary && (
-        <ThemeText typography="body__s" color="secondary">
+        <ThemeText typography="body__s" type="secondary">
           {fareZoneSummary}
         </ThemeText>
       )}

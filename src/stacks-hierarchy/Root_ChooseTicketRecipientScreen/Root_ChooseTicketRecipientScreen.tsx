@@ -1,10 +1,8 @@
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {OnBehalfOfTexts, useTranslation} from '@atb/translations';
 import {useCallback, useRef} from 'react';
-import {KeyboardAvoidingView, RefreshControl, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {View} from 'react-native';
 import {animateNextChange} from '@atb/utils/animation';
 import {useRecipientSelectionState} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-recipient-selection-state';
 import {SubmitButton} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/components/SubmitButton';
@@ -18,6 +16,7 @@ import {SendToOtherButton} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipien
 import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/modules/on-behalf-of';
 import {giveFocus, useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
+import {FullScreenView} from '@atb/components/screen-view';
 
 type Props = RootStackScreenProps<'Root_ChooseTicketRecipientScreen'>;
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
@@ -47,82 +46,76 @@ export const Root_ChooseTicketRecipientScreen = ({
   });
 
   return (
-    <View style={styles.container}>
-      <FullScreenHeader
-        showBorder={false}
-        leftButton={{type: 'back'}}
-        title={t(OnBehalfOfTexts.chooseReceiver.header)}
-        focusRef={focusRef}
-      />
-      <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={styles.contentContainerStyle}
-          refreshControl={<RefreshControl {...refreshControlProps} />}
-        >
-          <TitleAndDescription themeColor={themeColor} ref={onDeleteRef} />
+    <FullScreenView
+      headerProps={{
+        leftButton: {type: 'back'},
+        title: t(OnBehalfOfTexts.chooseReceiver.header),
+      }}
+      refreshControlProps={refreshControlProps}
+      focusRef={focusRef}
+      avoidKeyboard={true}
+    >
+      <View style={styles.container}>
+        <TitleAndDescription themeColor={themeColor} ref={onDeleteRef} />
 
-          <ExistingRecipientsList
-            state={state}
-            onSelect={(recipient) => {
-              animateNextChange();
-              dispatch({type: 'SELECT_RECIPIENT', recipient});
-            }}
-            onEmptyRecipients={useCallback(() => {
-              animateNextChange();
-              dispatch({type: 'SELECT_SEND_TO_OTHER'});
-            }, [dispatch])}
-            onDelete={useCallback(() => giveFocus(onDeleteRef), [])}
-          />
-          <SendToOtherButton
-            state={state}
-            onPress={() => {
-              animateNextChange();
-              dispatch({type: 'SELECT_SEND_TO_OTHER'});
-            }}
-            themeColor={themeColor}
-          />
+        <ExistingRecipientsList
+          state={state}
+          onSelect={(recipient) => {
+            animateNextChange();
+            dispatch({type: 'SELECT_RECIPIENT', recipient});
+          }}
+          onEmptyRecipients={useCallback(() => {
+            animateNextChange();
+            dispatch({type: 'SELECT_SEND_TO_OTHER'});
+          }, [dispatch])}
+          onDelete={useCallback(() => giveFocus(onDeleteRef), [])}
+        />
+        <SendToOtherButton
+          state={state}
+          onPress={() => {
+            animateNextChange();
+            dispatch({type: 'SELECT_SEND_TO_OTHER'});
+          }}
+          themeColor={themeColor}
+        />
 
-          <PhoneAndNameInputSection
-            state={state}
-            onChangePrefix={(v) => dispatch({type: 'SET_PREFIX', prefix: v})}
-            onChangePhone={(v) => dispatch({type: 'SET_PHONE', phoneNumber: v})}
-            onChangeName={(v) => dispatch({type: 'SET_NAME', name: v})}
-            themeColor={themeColor}
-          />
-          <SaveRecipientToggle
-            state={state}
-            onPress={() => {
-              animateNextChange();
-              dispatch({type: 'TOGGLE_SAVE_RECIPIENT'});
-            }}
-            themeColor={themeColor}
-          />
+        <PhoneAndNameInputSection
+          state={state}
+          onChangePrefix={(v) => dispatch({type: 'SET_PREFIX', prefix: v})}
+          onChangePhone={(v) => dispatch({type: 'SET_PHONE', phoneNumber: v})}
+          onChangeName={(v) => dispatch({type: 'SET_NAME', name: v})}
+          themeColor={themeColor}
+        />
+        <SaveRecipientToggle
+          state={state}
+          onPress={() => {
+            animateNextChange();
+            dispatch({type: 'TOGGLE_SAVE_RECIPIENT'});
+          }}
+          themeColor={themeColor}
+        />
 
-          <SubmitButton
-            state={state}
-            onSubmit={(recipient) =>
-              navigation.navigate('Root_PurchaseConfirmationScreen', {
-                ...params,
-                recipient,
-              })
-            }
-            onError={(e) => {
-              animateNextChange();
-              dispatch({type: 'SET_ERROR', error: e});
-            }}
-          />
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </View>
+        <SubmitButton
+          state={state}
+          onSubmit={(recipient) =>
+            navigation.navigate('Root_PurchaseConfirmationScreen', {
+              ...params,
+              recipient,
+            })
+          }
+          onError={(e) => {
+            animateNextChange();
+            dispatch({type: 'SET_ERROR', error: e});
+          }}
+        />
+      </View>
+    </FullScreenView>
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => ({
   container: {
-    backgroundColor: getThemeColor(theme).background,
-    flex: 1,
+    padding: theme.spacing.medium,
+    paddingBottom: bottom + theme.spacing.medium,
   },
-  mainView: {flex: 1},
-  contentContainerStyle: {padding: theme.spacing.medium},
 }));

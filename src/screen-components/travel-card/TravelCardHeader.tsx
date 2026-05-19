@@ -93,7 +93,7 @@ export const TravelCardHeader: React.FC<
               : `${expectedStartTimeLabel} - ${expectedEndTimeLabel}`}
           </ThemeText>
           {(!areTimesEquivalentInMinutes || isInPast) && (
-            <ThemeText typography="body__s" color="secondary">
+            <ThemeText typography="body__s" type="secondary">
               {t(TravelCardTexts.header.originalTime)} {aimedStartTimeLabel} -{' '}
               {aimedEndTimeLabel}
             </ThemeText>
@@ -103,7 +103,7 @@ export const TravelCardHeader: React.FC<
         <View style={styles.durationContainer}>
           <ThemeText
             typography="body__m"
-            color="secondary"
+            type="secondary"
             testID="resultDuration"
           >
             {secondsToDurationShort(tripPattern.duration, language)}

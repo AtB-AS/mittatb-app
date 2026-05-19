@@ -26,7 +26,7 @@ export const BonusFaqSection = () => {
               text={t(question)}
               showIconText={false}
               expandContent={
-                <ThemeText isMarkdown={false} color="secondary">
+                <ThemeText isMarkdown={false} type="secondary">
                   {t(answer(faqContext))}
                 </ThemeText>
               }

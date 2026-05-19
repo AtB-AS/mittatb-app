@@ -127,13 +127,13 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
             </View>
             <Section>
               <GenericSectionItem style={{gap: theme.spacing.large}}>
-                <ThemeText typography="heading__xl" color="primary">
+                <ThemeText typography="heading__xl" type="primary">
                   {t(BonusProgramTexts.bonusProfile.joinProgram.title)}
                 </ThemeText>
-                <ThemeText typography="body__m" color="primary">
+                <ThemeText typography="body__m" type="primary">
                   {t(BonusProgramTexts.bonusProfile.joinProgram.description)}
                 </ThemeText>
-                <ThemeText typography="body__m" color="primary">
+                <ThemeText typography="body__m" type="primary">
                   {t(
                     BonusProgramTexts.bonusProfile.joinProgram.footer(
                       endDateString,

@@ -77,7 +77,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
             <>
               <View style={styles.fromZone}>
                 <ThemeText
-                  color="secondary"
+                  type="secondary"
                   typography="body__s"
                   style={styles.toFromLabel}
                 >
@@ -87,7 +87,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
               </View>
               <View style={styles.toZone}>
                 <ThemeText
-                  color="secondary"
+                  type="secondary"
                   typography="body__s"
                   style={styles.toFromLabel}
                 >

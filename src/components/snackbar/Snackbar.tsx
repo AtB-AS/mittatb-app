@@ -122,7 +122,7 @@ const SnackbarInstance = ({
             {activeContent?.title && (
               <ThemeText
                 typography="body__m__strong"
-                color="primary"
+                type="primary"
                 numberOfLines={4} // max limit, should normally not come into play
               >
                 {activeContent?.title}
@@ -131,7 +131,7 @@ const SnackbarInstance = ({
             {activeContent?.description && (
               <ThemeText
                 typography="body__m"
-                color={activeContent?.title ? 'secondary' : 'primary'}
+                type={activeContent?.title ? 'secondary' : 'primary'}
                 numberOfLines={7} // max limit, should normally not come into play
               >
                 {activeContent?.description}

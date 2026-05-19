@@ -78,6 +78,14 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_non_transit_trip_search',
   },
   {
+    name: 'isNewTravelCardBookingEnabled',
+    remoteConfigKey: 'enable_new_travel_card_booking',
+  },
+  {
+    name: 'isNewTravelCardInTripSearchEnabled',
+    remoteConfigKey: 'enable_new_travel_card_in_trip_search',
+  },
+  {
     name: 'isNynorskEnabled',
     remoteConfigKey: 'enable_nynorsk',
   },

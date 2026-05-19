@@ -120,7 +120,6 @@ const SecondaryTag: React.FC<
 > = ({labels, a11yLabel, size = 'regular', icon, customStyle}) => {
   const commonStyles = useCommonTagStyles();
   const styles = useSecondaryTagStyles();
-  const {theme} = useThemeContext();
 
   const sizeDependentStyle =
     size === 'small'
@@ -142,7 +141,7 @@ const SecondaryTag: React.FC<
       )}
       {labels.map((content) => (
         <ThemeText
-          color={theme.color.foreground.dynamic.primary}
+          type="primary"
           typography="body__xs"
           key={content}
           style={commonStyles.text}
@@ -165,7 +164,7 @@ const useSecondaryTagStyles = StyleSheet.createThemeHook((theme) => ({
 const SemanticTag: React.FC<
   BaseTagProps & {tagType: Exclude<TagStatuses, 'primary' | 'secondary'>}
 > = ({labels, a11yLabel, tagType, size = 'regular', customStyle}) => {
-  const {theme, themeName} = useThemeContext();
+  const {themeName} = useThemeContext();
   const commonStyles = useCommonTagStyles();
   const styles = useSemanticTagStyles();
 
@@ -190,7 +189,7 @@ const SemanticTag: React.FC<
       )}
       {labels.map((content) => (
         <ThemeText
-          color={theme.color.foreground.dynamic.primary}
+          type="primary"
           typography="body__xs"
           key={content}
           style={commonStyles.text}
