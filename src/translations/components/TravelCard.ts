@@ -2,34 +2,46 @@ import {translation as _} from '../commons';
 
 const TravelCardTexts = {
   card: {
-    a11yHint: _(
-      'Aktivér for å se detaljer om reisen.',
-      'Activate to see trip details.',
-      'Aktivér for å se detaljer om reisen.',
-    ),
+    a11yHint: {
+      tripDetails: _(
+        'Aktivér for å se reisedetaljer.',
+        'Activate to see trip details.',
+        'Aktivér for å sjå reisedetaljar.',
+      ),
+      ticketSummary: _(
+        'Aktivér for å se billettsammendrag.',
+        'Activate to see ticket summary.',
+        'Aktivér for å sjå billettsamandrag.',
+      ),
+      chooseRecipient: _(
+        'Aktivér for å velge mottaker.',
+        'Activate to choose recipient.',
+        'Aktivér for å velje mottakar.',
+      ),
+    },
     a11yPrefix: {
       tripSuggestion: (cardIndex: number, numberOfCards: number) => {
         const index = numberOfCards === 1 ? '' : ` ${cardIndex + 1}`;
         return _(
-          `Reiseforslag${index}.`,
-          `Trip suggestion${index}.`,
-          `Reiseforslag${index}.`,
+          `Reiseforslag${index}`,
+          `Trip suggestion${index}`,
+          `Reiseforslag${index}`,
         );
       },
       savedTrip: (cardIndex: number, numberOfCards: number) => {
         const index = numberOfCards === 1 ? '' : ` ${cardIndex + 1}`;
         return _(
-          `Lagret reise${index}.`,
-          `Saved trip${index}.`,
-          `Lagret reise${index}.`,
+          `Lagret reise${index}`,
+          `Saved trip${index}`,
+          `Lagret reise${index}`,
         );
       },
       bookingOption: (cardIndex: number, numberOfCards: number) => {
         const index = numberOfCards === 1 ? '' : ` ${cardIndex + 1}`;
         return _(
-          `Bestillingsalternativ${index}.`,
-          `Booking option${index}.`,
-          `Bestillingsalternativ${index}.`,
+          `Bestillingsalternativ${index}`,
+          `Booking option${index}`,
+          `Bestillingsalternativ${index}`,
         );
       },
     },
