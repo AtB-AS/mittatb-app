@@ -272,7 +272,8 @@ export const computeFreeMinuteCount = (
   let total = 0;
   for (const segment of perMinPricing) {
     if (budget <= 0 || segment.rate <= 0) break;
-    const segLength = segment.end != null ? segment.end - segment.start : Infinity;
+    const segLength =
+      segment.end != null ? segment.end - segment.start : Infinity;
     const minutes = Math.min(Math.floor(budget / segment.rate), segLength);
     total += minutes;
     budget -= minutes * segment.rate;
