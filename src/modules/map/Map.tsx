@@ -214,21 +214,6 @@ export const Map = (props: MapProps) => {
     [showSnackbar, getGeofencingZoneContent],
   );
 
-  const geofencingZoneOnPress = useCallback(
-    (e: OnPressEvent) => {
-      const featuresAtClick = e.features;
-      if (!featuresAtClick || featuresAtClick.length === 0) return;
-      const featureToSelect = featuresAtClick[0]; // currently ignore the ones behind
-
-      const code = featureToSelect.properties?.code ?? 'allowed';
-      const stationParking =
-        featureToSelect.properties?.stationParking ?? false;
-
-      showGeofencingZoneSnackbar(code, stationParking);
-    },
-    [showGeofencingZoneSnackbar],
-  );
-
   const locationArrowOnPress = useCallback(async () => {
     const coordinates = await getCurrentCoordinates(true);
     if (
@@ -470,7 +455,6 @@ export const Map = (props: MapProps) => {
               <GeofencingZonesAsTiles
                 systemId={systemId}
                 vehicleTypeId={vehicleTypeId}
-                geofencingZoneOnPress={geofencingZoneOnPress}
               />
             ) : (
               <GeofencingZones

@@ -298,15 +298,19 @@ export function getFeatureWeight(
   positionClicked: Position,
 ): number {
   if (isFeaturePoint(feature)) {
-    return isStopPlace(feature) ||
+    if (
+      isStopPlace(feature) ||
       isVehicleCluster(feature) ||
       isScooter(feature) ||
       isBicycle(feature) ||
       isStation(feature) ||
       isCarStation(feature) ||
       isParkAndRide(feature)
-      ? 3
-      : 1;
+    ) {
+      return 4;
+    }
+    if (isFeatureGeofencingZoneAsTiles(feature)) return 3;
+    return 1;
   } else if (isFeatureGeofencingZoneAsTiles(feature)) {
     return 2;
   } else if (isFeatureGeofencingZone(feature)) {
