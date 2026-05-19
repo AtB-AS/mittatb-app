@@ -37,7 +37,7 @@ export const TravelCardHeader: React.FC<
     aimedStartTime,
     aimedEndTime,
     isInPast,
-    status,
+    statusTextConfig,
   } = useTripPatternInfo(tripPattern);
 
   const {
@@ -58,7 +58,7 @@ export const TravelCardHeader: React.FC<
     includeFromToInfo
       ? t(TravelCardTexts.header.fromToInfo.a11yLabel(fromName, toName))
       : undefined,
-    status?.text,
+    statusTextConfig?.text,
     t(
       TravelCardTexts.header.expectedTime.a11yLabel(
         expectedStartTimeLabel,
@@ -89,11 +89,11 @@ export const TravelCardHeader: React.FC<
     <View style={styles.container} {...accessibilityProps}>
       <View style={styles.header}>
         <View style={styles.timeContainer}>
-          {status && (
+          {statusTextConfig && (
             <StatusText
-              svg={status.svg}
-              color={status.color}
-              text={status.text}
+              svg={statusTextConfig.svg}
+              color={statusTextConfig.color}
+              text={statusTextConfig.text}
             />
           )}
           <ThemeText typography="body__m__strong">

@@ -12,7 +12,7 @@ import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
-import {getTripPatternStatus} from './utils';
+import {getStatusTextConfig} from './utils';
 
 export const useTripPatternInfo = (tripPattern: TripPattern) => {
   const {t} = useTranslation();
@@ -49,7 +49,7 @@ export const useTripPatternInfo = (tripPattern: TripPattern) => {
   const isInPast = isInThePast(expectedStartTime);
   const isEnded = isInThePast(expectedEndTime);
 
-  const status = getTripPatternStatus(
+  const statusTextConfig = getStatusTextConfig(
     tripPattern,
     t,
     theme.color.foreground.emphasis,
@@ -64,7 +64,7 @@ export const useTripPatternInfo = (tripPattern: TripPattern) => {
     aimedEndTime,
     isInPast,
     isEnded,
-    status,
+    statusTextConfig,
   };
 };
 

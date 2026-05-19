@@ -1,5 +1,5 @@
 import {TripPattern, Leg} from '@atb/api/types/trips';
-import {getTripPatternStatus} from '../utils';
+import {getStatusTextConfig} from '../utils';
 
 jest.mock('@atb/screen-components/travel-details-screens', () => ({
   getTripPatternBookingStatus: (...args: unknown[]) =>
@@ -48,13 +48,13 @@ function makeTripPattern(overrides: Partial<TripPattern> = {}): TripPattern {
   } as TripPattern;
 }
 
-describe('getTripPatternStatus', () => {
+describe('getStatusTextConfig', () => {
   it('returns undefined when no conditions are met', () => {
-    expect(getTripPatternStatus(makeTripPattern(), t, colors)).toBeUndefined();
+    expect(getStatusTextConfig(makeTripPattern(), t, colors)).toBeUndefined();
   });
 
   it('returns impossible when status is impossible', () => {
-    const result = getTripPatternStatus(
+    const result = getStatusTextConfig(
       makeTripPattern({status: 'impossible'}),
       t,
       colors,
@@ -63,7 +63,7 @@ describe('getTripPatternStatus', () => {
   });
 
   it('returns cancelled when any leg has fromEstimatedCall.cancellation', () => {
-    const result = getTripPatternStatus(
+    const result = getStatusTextConfig(
       makeTripPattern({
         legs: [
           makeLeg(),
@@ -87,7 +87,7 @@ describe('getTripPatternStatus', () => {
   });
 
   it('returns cancelled over stale when both apply', () => {
-    const result = getTripPatternStatus(
+    const result = getStatusTextConfig(
       makeTripPattern({
         status: 'stale',
         legs: [
@@ -111,7 +111,7 @@ describe('getTripPatternStatus', () => {
   });
 
   it('returns cancelled over impossible when both apply', () => {
-    const result = getTripPatternStatus(
+    const result = getStatusTextConfig(
       makeTripPattern({
         status: 'impossible',
         legs: [
@@ -135,7 +135,7 @@ describe('getTripPatternStatus', () => {
   });
 
   it('returns stale when status is stale', () => {
-    const result = getTripPatternStatus(
+    const result = getStatusTextConfig(
       makeTripPattern({status: 'stale'}),
       t,
       colors,
@@ -144,7 +144,7 @@ describe('getTripPatternStatus', () => {
   });
 
   it('returns requiresBooking when leg has bookingArrangements and booking is not late', () => {
-    const result = getTripPatternStatus(
+    const result = getStatusTextConfig(
       makeTripPattern({
         legs: [
           makeLeg({
@@ -161,7 +161,7 @@ describe('getTripPatternStatus', () => {
   });
 
   it('returns bookingDeadlineExceeded when leg has bookingArrangements and booking is late', () => {
-    const result = getTripPatternStatus(
+    const result = getStatusTextConfig(
       makeTripPattern({
         legs: [
           makeLeg({
@@ -180,7 +180,7 @@ describe('getTripPatternStatus', () => {
   });
 
   it('returns ended when trip has ended', () => {
-    const result = getTripPatternStatus(
+    const result = getStatusTextConfig(
       makeTripPattern({
         expectedStartTime: farPastTime,
         expectedEndTime: pastTime,
@@ -192,7 +192,7 @@ describe('getTripPatternStatus', () => {
   });
 
   it('returns started when expectedStartTime is in the past but expectedEndTime is not', () => {
-    const result = getTripPatternStatus(
+    const result = getStatusTextConfig(
       makeTripPattern({
         expectedStartTime: pastTime,
         expectedEndTime: farFutureTime,
