@@ -683,7 +683,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   searchParametersButtons: {
-    marginTop: theme.spacing.medium,
+    marginTop: theme.spacing.small,
     flexDirection: 'row',
     gap: theme.spacing.small,
   },
