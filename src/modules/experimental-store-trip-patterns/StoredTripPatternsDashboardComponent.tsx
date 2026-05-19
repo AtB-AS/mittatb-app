@@ -150,8 +150,6 @@ const StoredTripPatternRow: React.FC<{
         )}
         includeDayInfo
         includeFromToInfo
-        includeLegNotifications
-        includeSituationNotices
       />
     </SwipeableResultRow>
   );
