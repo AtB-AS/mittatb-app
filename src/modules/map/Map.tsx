@@ -71,6 +71,10 @@ import {MapBottomSheets} from './MapBottomSheets';
 import {MapButtons} from './components/MapButtons';
 import {GeofencingZoneCode} from '@atb-as/theme';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
+import {TariffZoneLinesAndLabels} from './components/TariffZoneLinesAndLabels';
+import {mapZonesToPolygonCollection} from './zone-utils';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {useTranslation} from '@atb/translations';
 import {usePreferencesContext} from '../preferences';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {GeofencingZonesAsTiles} from './components/mobility/GeofencingZonesAsTiles';
@@ -96,6 +100,10 @@ export const Map = (props: MapProps) => {
     preferences: {showShmoTesting},
   } = usePreferencesContext();
 
+  const {fareZones} = useFirestoreConfigurationContext();
+  const {language} = useTranslation();
+  const fareZonePolygons = mapZonesToPolygonCollection(fareZones, language);
+
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<Camera>(null);
   const mapViewRef = useRef<MapView>(null);
@@ -117,6 +125,7 @@ export const Map = (props: MapProps) => {
     (mapFilter?.mobility.BICYCLE?.showAll ||
       mapFilter?.mobility.CAR?.showAll) ??
     false;
+  const showZones = mapFilter?.showZones ?? true;
   const shouldShowVehiclesAndStations =
     isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
 
@@ -475,6 +484,10 @@ export const Map = (props: MapProps) => {
                 vehicleTypeId={vehicleTypeId}
               />
             ))}
+
+          {showZones && (
+            <TariffZoneLinesAndLabels polygonCollection={fareZonePolygons} />
+          )}
 
           <NationalStopRegistryFeatures
             selectedFeaturePropertyId={activeFeatureId}

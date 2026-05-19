@@ -2,7 +2,7 @@ import {FareZoneResultType, type FareZoneWithMetadata} from './types';
 import {FareZoneResults} from './FareZoneResults';
 import {View} from 'react-native';
 import {Button} from '@atb/components/button';
-import {Language, FareZonesTexts, useTranslation} from '@atb/translations';
+import {FareZonesTexts, useTranslation} from '@atb/translations';
 import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
 
 import {
@@ -12,15 +12,14 @@ import {
   NationalStopRegistryFeatures,
   LocationArrow,
   useMapViewConfig,
+  TariffZoneLinesAndLabels,
+  mapZonesToPolygonCollection,
 } from '@atb/modules/map';
 import hexToRgba from 'hex-to-rgba';
 import React, {useRef} from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useAccessibilityContext} from '@atb/modules/accessibility';
-import {getReferenceDataName, FareZone} from '@atb/modules/configuration';
-import {FeatureCollection, Polygon} from 'geojson';
-import turfCentroid from '@turf/centroid';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
 import {useInitialCoordinates} from '@atb/utils/use-initial-coordinates';
@@ -29,7 +28,6 @@ import {
   usePurchaseSelectionBuilder,
   useSelectableFareZones,
 } from '@atb/modules/purchase-selection';
-import {decodePolylineEncodedGeometry} from '@atb/utils/decode-polyline-geometry';
 import {Loading} from '@atb/components/loading';
 
 type Props = {
@@ -68,7 +66,7 @@ const FareZonesSelectorMap = ({
     updateSelectedZones(feature.id as string);
   };
 
-  const featureCollection = mapZonesToFeatureCollection(fareZones, language);
+  const featureCollection = mapZonesToPolygonCollection(fareZones, language);
 
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
 
@@ -141,7 +139,7 @@ const FareZonesSelectorMap = ({
             />
 
             <MapboxGL.ShapeSource
-              id="tariffZonesShape"
+              id="tariffZonesFillShape"
               shape={featureCollection}
               hitbox={hitboxCoveringIconOnly} // to not be able to hit multiple zones with one click
               onPress={selectFeature}
@@ -164,33 +162,11 @@ const FareZonesSelectorMap = ({
                   fillEmissiveStrength: 1,
                 }}
               />
-              <MapboxGL.LineLayer
-                id="tariffZonesLine"
-                style={{
-                  lineWidth: 1,
-                  lineColor: '#666666',
-                  lineEmissiveStrength: 1,
-                }}
-              />
             </MapboxGL.ShapeSource>
-            {featureCollection.features.map((f) => (
-              <MapboxGL.ShapeSource
-                key={String(f.id)}
-                id={`label-shape-${f.id}`}
-                shape={f.properties!.midPoint}
-              >
-                <MapboxGL.SymbolLayer
-                  id={`label-symbol-${f.id}`}
-                  style={{
-                    textSize: 20,
-                    textField: f.properties!.name,
-                    textHaloColor: 'white',
-                    textHaloWidth: 2,
-                    iconEmissiveStrength: 1,
-                  }}
-                />
-              </MapboxGL.ShapeSource>
-            ))}
+            <TariffZoneLinesAndLabels
+              polygonCollection={featureCollection}
+              showLabelsAtAllZoom
+            />
             <MapboxGL.Camera
               ref={mapCameraRef}
               zoomLevel={6}
@@ -238,26 +214,6 @@ const FareZonesSelectorMap = ({
     </>
   );
 };
-const mapZonesToFeatureCollection = (
-  zones: FareZone[],
-  language: Language,
-): FeatureCollection<Polygon> => ({
-  type: 'FeatureCollection',
-  features: zones.map((t) => {
-    const geometry = decodePolylineEncodedGeometry(t.geometry);
-    return {
-      type: 'Feature',
-      id: t.id,
-      properties: {
-        name: getReferenceDataName(t, language),
-        midPoint: turfCentroid(geometry, {
-          properties: {name: getReferenceDataName(t, language)},
-        }),
-      },
-      geometry: geometry,
-    };
-  }),
-});
 
 export {FareZonesSelectorMap};
 

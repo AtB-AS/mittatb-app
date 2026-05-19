@@ -9,6 +9,7 @@ import {
 } from '@atb/modules/map';
 import {StyleSheet} from '@atb/theme';
 import {MobilityFilters} from './MobilityFilters';
+import {ZoneFilters} from './ZoneFilters';
 import {
   BottomSheetHeaderType,
   MapBottomSheet,
@@ -46,6 +47,12 @@ export const MapFilterSheet = ({
     onFilterChanged(tempFilter);
   };
 
+  const onShowZonesChanged = (showZones: boolean) => {
+    const tempFilter = {...mapFilter, showZones};
+    setMapFilter(tempFilter);
+    onFilterChanged(tempFilter);
+  };
+
   return (
     <MapBottomSheet
       closeCallback={onClose}
@@ -60,6 +67,10 @@ export const MapFilterSheet = ({
         <MobilityFilters
           filter={initialFilterRef.current.mobility}
           onFilterChanged={onMobilityFilterChanged}
+        />
+        <ZoneFilters
+          showZones={initialFilterRef.current.showZones ?? true}
+          onFilterChanged={onShowZonesChanged}
         />
       </View>
     </MapBottomSheet>

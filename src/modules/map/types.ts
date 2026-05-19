@@ -101,6 +101,7 @@ export type MobilityMapFilterType = z.infer<typeof MobilityMapFilter>;
 
 export const MapFilter = z.object({
   mobility: MobilityMapFilter,
+  showZones: z.boolean().default(true),
 });
 export type MapFilterType = z.infer<typeof MapFilter>;
 
