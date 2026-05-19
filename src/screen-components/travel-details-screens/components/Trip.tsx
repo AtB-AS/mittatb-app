@@ -26,11 +26,7 @@ import {
 import {useGetServiceJourneyVehiclesQuery} from '../use-get-service-journey-vehicles';
 import {MapFilterType} from '@atb/modules/map';
 import {Divider} from '@atb/components/divider';
-import {
-  TranslateFunction,
-  TripDetailsTexts,
-  useTranslation,
-} from '@atb/translations';
+import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
@@ -170,8 +166,13 @@ export const Trip: React.FC<TripProps> = ({
       />
       {error && isNetworkError(error) && (
         <>
-          <ScreenReaderAnnouncement message={translatedError(error, t)} />
-          <MessageInfoBox type="warning" message={translatedError(error, t)} />
+          <ScreenReaderAnnouncement
+            message={t(TripDetailsTexts.messages.errorNetwork)}
+          />
+          <MessageInfoBox
+            type="warning"
+            message={t(TripDetailsTexts.messages.errorNetwork)}
+          />
         </>
       )}
       {tripPattern.status === 'stale' && (
@@ -293,8 +294,4 @@ function getInterchangeDetails(
 
 function isNetworkError(error: ErrorResponse): boolean {
   return error.kind === 'AXIOS_NETWORK_ERROR' || error.kind === 'AXIOS_TIMEOUT';
-}
-
-function translatedError(error: ErrorResponse, t: TranslateFunction): string {
-  return t(TripDetailsTexts.messages.errorNetwork);
 }
