@@ -81,10 +81,13 @@ export const geofencingZoneCodes: GeofencingZoneCode[] = [
 ];
 const GeofencingZonePropsSchema = z.object({
   code: z.enum(geofencingZoneCodes),
-  systemId: z.string(),
+  system_id: z.string(),
+  station_parking: z.boolean().optional(),
 });
 export type GeofencingZoneProps = z.infer<typeof GeofencingZonePropsSchema>;
-export const isFeatureGeofencingZoneAsTiles = (feature: Feature) =>
+export const isFeatureGeofencingZoneAsTiles = (
+  feature: Feature,
+): feature is Feature<Geometry, GeofencingZoneProps> =>
   GeofencingZonePropsSchema.safeParse(feature.properties).success;
 
 export const isClusterFeatureV2 = (
@@ -304,9 +307,9 @@ export function getFeatureWeight(
       isParkAndRide(feature)
       ? 3
       : 1;
+  } else if (isFeatureGeofencingZoneAsTiles(feature)) {
+    return 2;
   } else if (isFeatureGeofencingZone(feature)) {
-    // note: This case never happens when enable_geofencing_zones_as_tiles is true.
-    // Can just return 0 after removing the old solution
     const positionClickedIsInsideGeofencingZone = turfBooleanPointInPolygon(
       positionClicked,
       feature.geometry,

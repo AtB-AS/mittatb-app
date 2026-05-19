@@ -148,54 +148,15 @@ export const GeofencingZonesAsTiles = ({
   }
 
   return (
-    <MapboxGL.VectorSource
-      id={geofencingZonesVectorSourceId}
-      tileUrlTemplates={tileUrlTemplates}
-      minZoomLevel={minZoomLevel}
-      maxZoomLevel={maxZoomLevel}
-      hitbox={hitboxCoveringIconOnly} // to not be able to hit multiple zones with one click
-      onPress={geofencingZoneOnPress}
-    >
-      <>
-        <MapboxGL.FillLayer
-          id="GeofencingZones_Fill_Consolidated"
-          sourceID={geofencingZonesVectorSourceId}
-          sourceLayerID={geofencingZonesFeaturesLayerId}
-          aboveLayerID={MapSlotLayerId.GeofencingZones}
-          minZoomLevel={minZoomLevel}
-          slot="middle"
-          style={{
-            fillSortKey: sortKey,
-            fillColor,
-            fillOpacity,
-            fillAntialias: true,
-            fillEmissiveStrength: 1,
-          }}
-        />
-
-        {lineLayerConfigs.map(({id, filter, dashArray}) => (
-          <MapboxGL.LineLayer
-            key={id}
-            id={id}
-            aboveLayerID={MapSlotLayerId.GeofencingZones}
-            sourceID={geofencingZonesVectorSourceId}
-            sourceLayerID={geofencingZonesFeaturesLayerId}
-            minZoomLevel={minZoomLevel}
-            slot="middle"
-            filter={filter}
-            style={{
-              lineSortKey: sortKey,
-              lineColor: fillColor,
-              lineOpacity: lineOpacity,
-              lineEmissiveStrength: 1,
-              lineCap: 'round',
-              lineJoin: 'round',
-              lineWidth: lineWidth,
-              lineDasharray: dashArray,
-            }}
-          />
-        ))}
-
+    <>
+      <MapboxGL.VectorSource
+        id={geofencingZonesVectorSourceId}
+        tileUrlTemplates={tileUrlTemplates}
+        minZoomLevel={minZoomLevel}
+        maxZoomLevel={maxZoomLevel}
+        hitbox={hitboxCoveringIconOnly} // to not be able to hit multiple zones with one click
+        onPress={geofencingZoneOnPress}
+      >
         <MapboxGL.SymbolLayer
           id="geofencing-zone-icon-layer"
           sourceID={geofencingZonesVectorSourceId}
@@ -213,7 +174,46 @@ export const GeofencingZonesAsTiles = ({
           filter={iconFilter}
           aboveLayerID={MapSlotLayerId.GeofencingZonesIcons}
         />
-      </>
-    </MapboxGL.VectorSource>
+      </MapboxGL.VectorSource>
+
+      <MapboxGL.FillLayer
+        id="GeofencingZones_Fill_Consolidated"
+        sourceID={geofencingZonesVectorSourceId}
+        sourceLayerID={geofencingZonesFeaturesLayerId}
+        aboveLayerID={MapSlotLayerId.GeofencingZones}
+        minZoomLevel={minZoomLevel}
+        slot="middle"
+        style={{
+          fillSortKey: sortKey,
+          fillColor,
+          fillOpacity,
+          fillAntialias: true,
+          fillEmissiveStrength: 1,
+        }}
+      />
+
+      {lineLayerConfigs.map(({id, filter, dashArray}) => (
+        <MapboxGL.LineLayer
+          key={id}
+          id={id}
+          aboveLayerID={MapSlotLayerId.GeofencingZones}
+          sourceID={geofencingZonesVectorSourceId}
+          sourceLayerID={geofencingZonesFeaturesLayerId}
+          minZoomLevel={minZoomLevel}
+          slot="middle"
+          filter={filter}
+          style={{
+            lineSortKey: sortKey,
+            lineColor: fillColor,
+            lineOpacity: lineOpacity,
+            lineEmissiveStrength: 1,
+            lineCap: 'round',
+            lineJoin: 'round',
+            lineWidth: lineWidth,
+            lineDasharray: dashArray,
+          }}
+        />
+      ))}
+    </>
   );
 };
