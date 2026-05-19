@@ -40,12 +40,11 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
     freeUnlockPriceAdjustment || freeMinutesPriceAdjustment
   );
 
-  const firstPerMinPricingPlanRate = pricingPlan.perMinPricing?.[0]?.rate ?? 0;
   const freeMinCount =
-    freeMinutesPriceAdjustment && firstPerMinPricingPlanRate > 0
+    freeMinutesPriceAdjustment && pricingPlan.perMinPricing?.length
       ? computeFreeMinuteCount(
           freeMinutesPriceAdjustment,
-          firstPerMinPricingPlanRate,
+          pricingPlan.perMinPricing,
         )
       : 0;
 

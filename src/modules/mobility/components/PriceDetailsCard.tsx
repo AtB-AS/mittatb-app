@@ -52,9 +52,9 @@ export const PriceDetailsCard = ({
     : `${formatNumberToString(pricingPlan.price, language)} ${getCurrencySymbol(pricingPlan.currency)}`;
 
   const minutePriceStat =
-    freeMinutes && ratePrUnit?.rate
+    freeMinutes && pricingPlan.perMinPricing?.length
       ? `${formatNumberToString(
-          computeFreeMinuteCount(freeMinutes, ratePrUnit.rate),
+          computeFreeMinuteCount(freeMinutes, pricingPlan.perMinPricing),
           language,
         )} min ${t(ScooterTexts.free).toLocaleLowerCase(language)}`
       : ratePrUnit?.formattedRate;

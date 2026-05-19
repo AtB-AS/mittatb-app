@@ -32,6 +32,7 @@ import {
 import {
   RentalUris,
   ShmoPricingPlan,
+  ShmoPricingSegment,
   StationFeature,
   StationFeatureSchema,
   StationsClusteredFeature,
@@ -264,8 +265,20 @@ export const getFreeMinutes = (
 
 export const computeFreeMinuteCount = (
   freeMinutes: PriceAdjustmentType,
-  rate: number,
-): number => Math.floor(Math.abs(freeMinutes.amount) / rate);
+  perMinPricing: ShmoPricingSegment[],
+): number => {
+  //Calculating free minutes based on the per min price segments, until the budget runs out or there are no more segments with a cost
+  let budget = Math.abs(freeMinutes.amount);
+  let total = 0;
+  for (const segment of perMinPricing) {
+    if (budget <= 0 || segment.rate <= 0) break;
+    const segLength = segment.end != null ? segment.end - segment.start : Infinity;
+    const minutes = Math.min(Math.floor(budget / segment.rate), segLength);
+    total += minutes;
+    budget -= minutes * segment.rate;
+  }
+  return total;
+};
 
 export const getNewFilterState = (
   isChecked: boolean,
