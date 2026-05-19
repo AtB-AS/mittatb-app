@@ -23,6 +23,7 @@ type TravelCardProps = {
   onDetailsPressed(tripPattern: TripPattern): void;
   testID?: string;
   a11yLabelPrefix: string;
+  a11yHint: string;
   includeDayInfo?: boolean;
   includeFromToInfo?: boolean;
   includeLegNotifications?: boolean;
@@ -36,6 +37,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
   onDetailsPressed,
   testID,
   a11yLabelPrefix,
+  a11yHint,
   includeDayInfo = false,
   includeFromToInfo = false,
   includeLegNotifications = false,
@@ -65,7 +67,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
       : undefined;
 
   const tagA11yLabel = tag
-    ? `. ${t(dictionary.messageTypes[tag.type])}. ${tag.label}`
+    ? `${t(dictionary.messageTypes[tag.type])}. ${tag.label}`
     : undefined;
 
   return (
@@ -79,11 +81,11 @@ export const TravelCard: React.FC<TravelCardProps> = ({
         }}
         order={[
           'cardPrefix',
+          'tag',
           'header',
           'legs',
           'situationOrNotice',
           'legNotifications',
-          'tag',
         ]}
       >
         {(accessibilityProps) => (
@@ -92,9 +94,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
             testID={testID}
             style={[styles.container, isDisabled && styles.containerDisabled]}
             accessibilityRole={isDisabled ? 'none' : 'button'}
-            accessibilityHint={
-              isDisabled ? undefined : t(TravelCardTexts.card.a11yHint)
-            }
+            accessibilityHint={isDisabled ? undefined : a11yHint}
             {...accessibilityProps}
           >
             {tag && (
