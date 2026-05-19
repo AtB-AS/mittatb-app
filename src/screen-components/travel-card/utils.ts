@@ -8,10 +8,11 @@ import SvgError from '@atb/assets/svg/color/icons/status/light/Error';
 import {
   BookingClosed,
   BookingRequired,
+  Check,
   Warning,
 } from '@atb/assets/svg/mono-icons/status';
 import {Duration} from '@atb/assets/svg/mono-icons/time';
-import {isInTheFuture, isInThePast} from '@atb/utils/date';
+import {isInThePast} from '@atb/utils/date';
 
 type StatusColors = {
   error: string;
@@ -42,10 +43,16 @@ export function getTripPatternStatus(
     };
   }
 
-  if (
-    isInThePast(tripPattern.expectedStartTime) &&
-    isInTheFuture(tripPattern.expectedEndTime)
-  ) {
+  if (isInThePast(tripPattern.expectedEndTime)) {
+    return {
+      type: 'ended',
+      svg: Check,
+      color: colors.error,
+      text: t(TravelCardTexts.header.tripEnded),
+    };
+  }
+
+  if (isInThePast(tripPattern.expectedStartTime)) {
     return {
       type: 'started',
       svg: Duration,

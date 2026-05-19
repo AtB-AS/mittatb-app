@@ -4,6 +4,7 @@ import {JSX} from 'react';
 
 export type TripPatternStatusType =
   | 'started'
+  | 'ended'
   | 'impossible'
   | 'stale'
   | 'cancelled'

@@ -179,7 +179,7 @@ describe('getTripPatternStatus', () => {
     expect(result?.type).toBe('bookingDeadlineExceeded');
   });
 
-  it('returns undefined when trip has ended', () => {
+  it('returns ended when trip has ended', () => {
     const result = getTripPatternStatus(
       makeTripPattern({
         expectedStartTime: farPastTime,
@@ -188,7 +188,7 @@ describe('getTripPatternStatus', () => {
       t,
       colors,
     );
-    expect(result).toBeUndefined();
+    expect(result?.type).toBe('ended');
   });
 
   it('returns started when expectedStartTime is in the past but expectedEndTime is not', () => {

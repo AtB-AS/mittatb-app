@@ -63,6 +63,7 @@ const TravelCardTexts = {
     ),
     cancelled: _('Innstilt', 'Cancelled', 'Innstilt'),
     tripStarted: _('Reisen har begynt', 'Trip has started', 'Reisa har begynt'),
+    tripEnded: _('Reisen er avsluttet', 'Trip has ended', 'Reisa er avslutta'),
     staleTrip: _(
       'Kan ikke oppdateres',
       'Unable to update',
