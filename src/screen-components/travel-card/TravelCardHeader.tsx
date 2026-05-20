@@ -46,10 +46,6 @@ export const TravelCardHeader: React.FC<
   } = useTimeLabels(expectedStartTime, expectedEndTime, includeDayInfo);
 
   /**
-   * If the start time of a trip is in the past (hasStarted), and the
-   * includeDayInfo flag is true, we want to include day info in the
-   * time label.
-   *
    * See documentation in useTimeLabels for details about special
    * handling of the current day.
    */

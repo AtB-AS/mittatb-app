@@ -111,7 +111,6 @@ export const Results: React.FC<Props> = ({
                     ),
                   )}
                   a11yHint={t(TravelCardTexts.card.a11yHint.tripDetails)}
-                  includeDayInfo
                 />
               ) : (
                 <ResultRow
