@@ -36,7 +36,7 @@ export const TravelCardHeader: React.FC<
     expectedEndTime,
     aimedStartTime,
     aimedEndTime,
-    isInPast,
+    hasStarted,
     statusTextConfig,
   } = useTripPatternInfo(tripPattern);
 
@@ -45,14 +45,18 @@ export const TravelCardHeader: React.FC<
     endTimeLabel: expectedEndTimeLabel,
   } = useTimeLabels(expectedStartTime, expectedEndTime, includeDayInfo);
 
+  /**
+   * See documentation in useTimeLabels for details about special
+   * handling of the current day.
+   */
   const {startTimeLabel: aimedStartTimeLabel, endTimeLabel: aimedEndTimeLabel} =
-    useTimeLabels(aimedStartTime, aimedEndTime, isInPast && includeDayInfo);
+    useTimeLabels(aimedStartTime, aimedEndTime, hasStarted && includeDayInfo);
 
   const areTimesEquivalentInMinutes =
-    differenceInMinutes(expectedStartTime, aimedStartTime) < 1 &&
-    differenceInMinutes(expectedEndTime, aimedEndTime) < 1;
+    Math.abs(differenceInMinutes(expectedStartTime, aimedStartTime)) < 1 &&
+    Math.abs(differenceInMinutes(expectedEndTime, aimedEndTime)) < 1;
 
-  const showAimedTime = !areTimesEquivalentInMinutes || isInPast;
+  const showAimedTime = !areTimesEquivalentInMinutes;
 
   const a11yLabel = [
     includeFromToInfo
@@ -99,7 +103,7 @@ export const TravelCardHeader: React.FC<
           <ThemeText typography="body__m__strong">
             {`${expectedStartTimeLabel} - ${expectedEndTimeLabel}`}
           </ThemeText>
-          {(!areTimesEquivalentInMinutes || isInPast) && (
+          {!areTimesEquivalentInMinutes && (
             <ThemeText typography="body__s" type="secondary">
               {t(TravelCardTexts.header.originalTime)} {aimedStartTimeLabel} -{' '}
               {aimedEndTimeLabel}
