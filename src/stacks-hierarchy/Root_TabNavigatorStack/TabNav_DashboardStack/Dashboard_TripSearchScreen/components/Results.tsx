@@ -111,7 +111,6 @@ export const Results: React.FC<Props> = ({
                     ),
                   )}
                   includeDayInfo
-                  includeFromToInfo
                 />
               ) : (
                 <ResultRow
