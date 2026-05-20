@@ -331,7 +331,7 @@ const TripDetailsTexts = {
       _(
         `${publicCode} kjører på bestilling innenfor bestemte soner og tider.`,
         `${publicCode} runs on demand within specific zones and times.`,
-        `${publicCode} køyrer på bestilling innanfor bestemte sonar og tider.`,
+        `${publicCode} køyrer på bestilling innanfor bestemte soner og tider.`,
       ),
     steps: [
       _(

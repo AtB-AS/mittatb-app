@@ -318,7 +318,7 @@ export const MobilityTexts = {
         'Shared Mobility',
         'Delingsmobilitet',
       ),
-      zones: _('Soner', 'Zones', 'Soner'),
+      zones: _('Takstsoner', 'Fare zones', 'Takstsoner'),
     },
     tariffZones: _('Takstsoner', 'Fare zones', 'Takstsoner'),
   },
