@@ -193,33 +193,15 @@ export function mapToScooterFaqs(scooterFaqs?: any) {
     .filter(isDefined);
 }
 
-export function mapToScooterConsentLines(scooterConsentLines?: any) {
-  if (!scooterConsentLines) return;
-  if (!Array.isArray(scooterConsentLines)) return;
-  return scooterConsentLines
-    .map((scooterConsentLine) => {
-      const parseResult = ConsentLine.safeParse(scooterConsentLine);
+export function mapToConsentLines(consentLines?: any) {
+  if (!consentLines) return;
+  if (!Array.isArray(consentLines)) return;
+  return consentLines
+    .map((consentLine) => {
+      const parseResult = ConsentLine.safeParse(consentLine);
       if (!parseResult.success) {
         console.warn(
-          `mapToScooterConsentLines with id ${scooterConsentLine?.id} failed safeParsing:\n`,
-          parseResult.error,
-        );
-        return;
-      }
-      return parseResult.data;
-    })
-    .filter(isDefined);
-}
-
-export function mapToBicycleConsentLines(bicycleConsentLines?: any) {
-  if (!bicycleConsentLines) return;
-  if (!Array.isArray(bicycleConsentLines)) return;
-  return bicycleConsentLines
-    .map((bicycleConsentLine) => {
-      const parseResult = ConsentLine.safeParse(bicycleConsentLine);
-      if (!parseResult.success) {
-        console.warn(
-          `mapToBicycleConsentLines with id ${bicycleConsentLine?.id} failed safeParsing:\n`,
+          `mapToConsentLines with id ${consentLine?.id} failed safeParsing:\n`,
           parseResult.error,
         );
         return;

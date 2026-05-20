@@ -45,8 +45,7 @@ import {
   mapToTransportModeFilterOptions,
   mapToTravelSearchPreferences,
   mapToStopSignalButtonConfig,
-  mapToScooterConsentLines,
-  mapToBicycleConsentLines,
+  mapToConsentLines,
   mapToAppVersionedConfigurableLinks,
   mapToKnownQrCodeUrls,
 } from './converters';
@@ -679,14 +678,14 @@ function getScooterConsentLinesFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
 ): ConsentLineType[] | undefined {
   const consentLines = snapshot.docs.find((doc) => doc.id == 'mobility');
-  return mapToScooterConsentLines(consentLines?.get('scooterConsentLines'));
+  return mapToConsentLines(consentLines?.get('scooterConsentLines'));
 }
 
 function getBicycleConsentLinesFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
 ): ConsentLineType[] | undefined {
   const consentLines = snapshot.docs.find((doc) => doc.id == 'mobility');
-  return mapToBicycleConsentLines(consentLines?.get('bicycleConsentLines'));
+  return mapToConsentLines(consentLines?.get('bicycleConsentLines'));
 }
 
 function getBonusTextsFromSnapshot(
