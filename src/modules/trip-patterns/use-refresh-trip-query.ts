@@ -13,7 +13,7 @@ export function useRefreshTripQuery(
   const isEnded = getTripPatternStatus(tripPattern) === 'ended';
   return useQuery<TripPattern | null, ErrorResponse>({
     queryKey: ['refreshTrip', getTripPatternKey(tripPattern)],
-    queryFn: async () => refreshSingleTrip(tripPattern),
+    queryFn: () => refreshSingleTrip(tripPattern),
     refetchInterval: ONE_SECOND_MS * 20,
     gcTime: ONE_HOUR_MS,
     enabled: enabled && !isEnded,
