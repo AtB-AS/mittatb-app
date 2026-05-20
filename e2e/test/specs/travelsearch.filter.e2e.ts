@@ -49,11 +49,7 @@ describe('Travel search filter', () => {
       // Filter out buses
       await AppHelper.scrollUpUntilId('tripSearchContentView', 'filterButton');
       await TravelsearchFilterPage.openFilter();
-      // Not considering the 'all' option
-      const filtersAvailable =
-        (await TravelsearchFilterPage.numberOfFilters) - 1;
       await TravelsearchFilterPage.toggleTransportModeFilter('bus');
-      const filtersInUse = filtersAvailable - 1;
       await NavigationHelper.closeBottomSheet();
       await TravelsearchOverviewPage.waitForTravelSearchResults();
 
@@ -63,16 +59,12 @@ describe('Travel search filter', () => {
           numResultsToCheck,
         );
       expect(numberOfModesWithFilter).toBeLessThan(numberOfModesInitial);
-      await AppHelper.scrollUpUntilId(
-        'tripSearchContentView',
-        'selectedFilterButton',
-      );
-      await TravelsearchFilterPage.shouldShowSelectedFilter(
-        `${filtersInUse} of ${filtersAvailable}`,
-      );
 
       // Remove the selected filters
-      await TravelsearchFilterPage.removeSelectedFilter();
+      await AppHelper.scrollUpUntilId('tripSearchContentView', 'filterButton');
+      await TravelsearchFilterPage.openFilter();
+      await TravelsearchFilterPage.toggleTransportModeFilter();
+      await NavigationHelper.closeBottomSheet();
       await TravelsearchOverviewPage.waitForTravelSearchResults();
 
       // Verify
@@ -81,8 +73,6 @@ describe('Travel search filter', () => {
           numResultsToCheck,
         );
       expect(numberOfModes).toEqual(numberOfModesInitial);
-      await AppHelper.scrollUpUntilId('tripSearchContentView', 'filterButton');
-      await expect(TravelsearchFilterPage.selectedFilterButton).not.toExist();
     } catch (errMsg) {
       await AppHelper.screenshot('error_travelsearch_filter_transport_modes');
       throw errMsg;
@@ -154,19 +144,17 @@ describe('Travel search filter', () => {
       await TravelsearchOverviewPage.waitForTravelSearchResults();
       performancetotal.sampleEnd('travelSearch');
 
-      // Fallback if filters are enabled from last test
-      await TravelsearchFilterPage.removeSelectedFilterIfExists();
-
       // Filter out buses
       await TravelsearchFilterPage.openFilter();
+      expect(
+        await TravelsearchFilterPage.transportModeFilterIsChecked('bus'),
+      ).toBe('true');
       await TravelsearchFilterPage.toggleTransportModeFilter('bus');
+      expect(
+        await TravelsearchFilterPage.transportModeFilterIsChecked('bus'),
+      ).toBe('false');
       await NavigationHelper.closeBottomSheet();
       await TravelsearchOverviewPage.waitForTravelSearchResults();
-
-      // Filters are enabled
-      expect(
-        await TravelsearchFilterPage.selectedFilterButton.isExisting(),
-      ).toBe(true);
 
       await NavigationHelper.tapMenu('assistant');
       await NavigationHelper.tapMenu('assistant');
@@ -184,9 +172,11 @@ describe('Travel search filter', () => {
       performancetotal.sampleEnd('travelSearch');
 
       // Filters are NOT enabled
+      await TravelsearchFilterPage.openFilter();
       expect(
-        await TravelsearchFilterPage.selectedFilterButton.isExisting(),
-      ).toBe(false);
+        await TravelsearchFilterPage.transportModeFilterIsChecked('bus'),
+      ).toBe('true');
+      await NavigationHelper.closeBottomSheet();
     } catch (errMsg) {
       await AppHelper.screenshot('error_travelsearch_not_save_filter');
       throw errMsg;

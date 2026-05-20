@@ -87,6 +87,16 @@ export type Themes = typeof themes;
 export type Theme = Themes['light'];
 export type ForegroundType = keyof ContrastColor['foreground'];
 
+/**
+ * Resolve a color value from the polymorphic color type used by ThemeText and
+ * ThemeIcon. The resolution priority is:
+ *
+ * 1. ContrastColor object → foreground[type]
+ * 2. Status string ("info", "error", …) → status hue (primary.background)
+ * 3. TextColor string ("primary", "secondary", "disabled") → foreground.dynamic
+ * 4. Raw ColorValue → passthrough
+ * 5. undefined → foreground.dynamic.primary
+ */
 export function resolveColorValue(
   color: ContrastColor | StatusColorName | TextColor | ColorValue | undefined,
   type: ForegroundType,
