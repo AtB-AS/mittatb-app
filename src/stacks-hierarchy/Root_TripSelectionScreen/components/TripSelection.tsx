@@ -95,6 +95,11 @@ export function BookingTripSelection({
                   tripPatterns.length,
                 ),
               )}
+              a11yHint={t(
+                selection.isOnBehalfOf
+                  ? TravelCardTexts.card.a11yHint.chooseRecipient
+                  : TravelCardTexts.card.a11yHint.ticketSummary,
+              )}
               includeLegNotifications
               includeSituationNotices
               isDisabled={
@@ -202,7 +207,9 @@ function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
               mode="tertiary"
               onPress={onPress}
               backgroundColor={theme.color.interactive[2].default}
-              style={{marginLeft: 'auto'}}
+              style={{
+                marginLeft: 'auto',
+              }}
               rightIcon={{svg: ChevronRight}}
             />
           </View>
@@ -300,6 +307,8 @@ function TripSelectionTag({
 const useBookingTripStyles = StyleSheet.createThemeHook((theme) => {
   return {
     container: {
+      marginHorizontal: theme.spacing.medium,
+      marginVertical: theme.spacing.small,
       borderRadius: theme.border.radius.regular,
       overflow: 'hidden',
     },
@@ -318,6 +327,7 @@ const useBookingTripStyles = StyleSheet.createThemeHook((theme) => {
       paddingVertical: theme.spacing.small,
       justifyContent: 'space-between',
       alignItems: 'center',
+      borderRadius: theme.border.radius.regular,
     },
     footerAvailable: {
       backgroundColor: theme.color.interactive[2].default.background,

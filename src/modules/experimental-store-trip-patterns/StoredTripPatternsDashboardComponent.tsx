@@ -148,6 +148,7 @@ const StoredTripPatternRow: React.FC<{
         a11yLabelPrefix={t(
           TravelCardTexts.card.a11yPrefix.savedTrip(resultIndex, length),
         )}
+        a11yHint={t(TravelCardTexts.card.a11yHint.tripDetails)}
         includeDayInfo
         includeFromToInfo
       />
