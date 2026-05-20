@@ -110,6 +110,7 @@ export const Results: React.FC<Props> = ({
                       tripPatterns.length,
                     ),
                   )}
+                  a11yHint={t(TravelCardTexts.card.a11yHint.tripDetails)}
                   includeDayInfo
                   includeFromToInfo
                 />
