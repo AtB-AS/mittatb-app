@@ -46,7 +46,7 @@ export const useTripPatternInfo = (tripPattern: TripPattern) => {
     tripPattern.aimedEndTime ??
     tripPattern.legs[tripPattern.legs.length - 1].aimedEndTime;
 
-  const isInPast = isInThePast(expectedStartTime);
+  const hasStarted = isInThePast(expectedStartTime);
   const isEnded = isInThePast(expectedEndTime);
 
   const statusTextConfig = getStatusTextConfig(
@@ -62,7 +62,7 @@ export const useTripPatternInfo = (tripPattern: TripPattern) => {
     expectedEndTime,
     aimedStartTime,
     aimedEndTime,
-    isInPast,
+    hasStarted,
     isEnded,
     statusTextConfig,
   };
