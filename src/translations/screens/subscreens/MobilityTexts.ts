@@ -251,13 +251,13 @@ export const MobilityTexts = {
       ),
     },
     terms: {
-      title: _('Bruksvilkår', 'Terms of use', 'Bruksvilkår'),
-      buttonOne: _(
-        'Godta bruksvilkår',
-        'Accept terms of use',
-        'Godta bruksvilkår',
+      title: _('Dette godtar du', 'This is what you accept', 'Dette godtar du'),
+      buttonOne: _('Godta', 'Accept', 'Godta'),
+      privacyLink: _(
+        'Les mer om personvern',
+        'Read more about privacy',
+        'Les meir om personvern',
       ),
-      buttonTwo: _('Bruksvilkår', 'Terms of use', 'Bruksvilkår'),
     },
   },
   helpText: _('Trenger du hjelp?', 'Need help?', 'Treng du hjelp?'),

@@ -15,7 +15,7 @@ export type {
   OperatorBenefitType,
   PointToPointValidity,
   ProductTypeTransportModes,
-  ScooterConsentLineType,
+  ConsentLineType,
   FareZone,
   TimeSelectionMode,
   TransportModeFilterOptionType,
