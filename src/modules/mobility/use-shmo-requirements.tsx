@@ -9,11 +9,26 @@ import {useFeatureTogglesContext} from '../feature-toggles';
 import {useOperators} from './use-operators';
 import {useMemo} from 'react';
 import {useMapContext} from '../map';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
-export const useShmoRequirements = (operatorId?: string) => {
+export const useShmoRequirements = (
+  operatorId?: string,
+  formFactor?: FormFactor,
+) => {
   const {mobilityOperators} = useOperators();
-  const {givenShmoConsent} = useMapContext();
+  const {givenScooterConsent, givenBicycleConsent} = useMapContext();
   const operator = mobilityOperators?.find((op) => op.id === operatorId);
+  const givenConsent = (() => {
+    switch (formFactor) {
+      case FormFactor.Bicycle:
+        return givenBicycleConsent;
+      case FormFactor.Scooter:
+      case FormFactor.ScooterStanding:
+        return givenScooterConsent;
+      default:
+        return false;
+    }
+  })();
   const operatorAgeLimit = operator?.ageLimit ?? 0;
 
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
@@ -35,7 +50,7 @@ export const useShmoRequirements = (operatorId?: string) => {
       {
         requirementCode: ShmoRequirementEnum.TERMS_AND_CONDITIONS,
         isLoading: false && isShmoDeepIntegrationEnabled,
-        isBlocking: !givenShmoConsent,
+        isBlocking: !givenConsent,
       },
       {
         requirementCode: ShmoRequirementEnum.LOCATION,
@@ -52,7 +67,7 @@ export const useShmoRequirements = (operatorId?: string) => {
       ageVerifiedLoading,
       isShmoDeepIntegrationEnabled,
       ageVerification,
-      givenShmoConsent,
+      givenConsent,
       preciseLocationIsAvailable,
       paymentsLoading,
       recurringPayments,

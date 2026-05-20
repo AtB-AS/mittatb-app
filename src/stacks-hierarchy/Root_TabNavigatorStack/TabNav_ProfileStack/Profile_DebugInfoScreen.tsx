@@ -113,7 +113,7 @@ export const Profile_DebugInfoScreen = () => {
   } = useMobileTokenContext();
   const {serverNow} = useTimeContext();
   const serverTimeOffset = useMemo(() => Date.now() - serverNow, [serverNow]);
-  const {setGivenShmoConsent} = useMapContext();
+  const {setGivenScooterConsent, setGivenBicycleConsent} = useMapContext();
   const {
     fcmToken,
     permissionStatus: pushNotificationPermissionStatus,
@@ -350,7 +350,11 @@ export const Profile_DebugInfoScreen = () => {
           />
           <LinkSectionItem
             text="Reset scooter consent"
-            onPress={() => setGivenShmoConsent(false)}
+            onPress={() => setGivenScooterConsent(false)}
+          />
+          <LinkSectionItem
+            text="Reset bicycle consent"
+            onPress={() => setGivenBicycleConsent(false)}
           />
           <LinkSectionItem
             text="Reset city bike end trip info"
