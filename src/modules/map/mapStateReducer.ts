@@ -2,10 +2,8 @@ import {Feature, Point} from 'geojson';
 import {MapBottomSheetType} from './MapContext';
 
 export enum MapStateActionType {
-  Scooter = 'SCOOTER',
-  ScooterScanned = 'SCOOTER_SCANNED',
-  Bicycle = 'BICYCLE',
-  BicycleScanned = 'BICYCLE_SCANNED',
+  Vehicle = 'VEHICLE',
+  VehicleScanned = 'VEHICLE_SCANNED',
   BikeStation = 'BIKE_STATION',
   BikeStationScanned = 'BIKE_STATION_SCANNED',
   CarStation = 'CAR_STATION',
@@ -34,21 +32,12 @@ export type ReducerMapState = {
 
 export type ReducerMapStateAction =
   | {
-      type: MapStateActionType.Scooter;
+      type: MapStateActionType.Vehicle;
       feature: Feature<Point>;
       customZoomLevel?: number;
     }
   | {
-      type: MapStateActionType.ScooterScanned;
-      assetId: string;
-    }
-  | {
-      type: MapStateActionType.Bicycle;
-      feature: Feature<Point>;
-      customZoomLevel?: number;
-    }
-  | {
-      type: MapStateActionType.BicycleScanned;
+      type: MapStateActionType.VehicleScanned;
       assetId: string;
       isStationBasedBooking?: boolean;
     }
@@ -104,28 +93,15 @@ export const mapStateReducer = (
   action: ReducerMapStateAction,
 ): ReducerMapState => {
   switch (action.type) {
-    case MapStateActionType.Scooter:
+    case MapStateActionType.Vehicle:
       return {
-        bottomSheetType: MapBottomSheetType.Scooter,
+        bottomSheetType: MapBottomSheetType.Vehicle,
         feature: action.feature,
         customZoomLevel: action?.customZoomLevel,
       };
-    case MapStateActionType.ScooterScanned:
+    case MapStateActionType.VehicleScanned:
       return {
-        bottomSheetType: MapBottomSheetType.Scooter,
-        assetId: action.assetId,
-        assetIsScanned: true,
-      };
-    case MapStateActionType.Bicycle:
-      return {
-        bottomSheetType: MapBottomSheetType.Bicycle,
-        feature: action.feature,
-        customZoomLevel: action?.customZoomLevel,
-        isStationBasedBooking: mapState.isStationBasedBooking,
-      };
-    case MapStateActionType.BicycleScanned:
-      return {
-        bottomSheetType: MapBottomSheetType.Bicycle,
+        bottomSheetType: MapBottomSheetType.Vehicle,
         assetId: action.assetId,
         assetIsScanned: true,
         isStationBasedBooking: action.isStationBasedBooking,
