@@ -1,5 +1,6 @@
 import {StopPlace} from '@atb/api/types/departures';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -205,8 +206,10 @@ const Header = React.memo(function Header({
   const {theme} = useThemeContext();
   const {location: geolocation, requestLocationPermission} =
     useGeolocationContext();
+  const analytics = useAnalyticsContext();
 
   const setCurrentLocationOrRequest = () => {
+    analytics.logEvent('Departures', 'My location button clicked');
     if (geolocation) {
       setLocation({...geolocation, resultType: 'geolocation'});
     } else {
