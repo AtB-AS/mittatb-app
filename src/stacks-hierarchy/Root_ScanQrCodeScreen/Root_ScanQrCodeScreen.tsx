@@ -86,35 +86,20 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
     (assetFromQrCode: AssetFromQrCodeResponse) => {
       let type: MapStateActionType | undefined = undefined;
       let id: string | undefined = undefined;
-      if (assetFromQrCode.formFactor) {
-        if (assetFromQrCode.id) {
-          id = assetFromQrCode.id;
-          if (
-            [
-              FormFactor.Scooter,
-              FormFactor.ScooterSeated,
-              FormFactor.ScooterStanding,
-            ].includes(assetFromQrCode.formFactor)
-          ) {
-            type = MapStateActionType.ScooterScanned;
-          } else if (
-            [FormFactor.Bicycle, FormFactor.CargoBicycle].includes(
-              assetFromQrCode.formFactor,
-            )
-          ) {
-            type = MapStateActionType.BicycleScanned;
-          }
-        } else if (assetFromQrCode.stationId) {
-          id = assetFromQrCode.stationId;
-          if (
-            [FormFactor.Bicycle, FormFactor.CargoBicycle].includes(
-              assetFromQrCode.formFactor,
-            )
-          ) {
-            type = MapStateActionType.BikeStationScanned;
-          } else if ([FormFactor.Car].includes(assetFromQrCode.formFactor)) {
-            type = MapStateActionType.CarStationScanned;
-          }
+
+      if (assetFromQrCode.id) {
+        id = assetFromQrCode.id;
+        type = MapStateActionType.VehicleScanned;
+      } else if (assetFromQrCode.stationId && assetFromQrCode.formFactor) {
+        id = assetFromQrCode.stationId;
+        if (
+          [FormFactor.Bicycle, FormFactor.CargoBicycle].includes(
+            assetFromQrCode.formFactor,
+          )
+        ) {
+          type = MapStateActionType.BikeStationScanned;
+        } else if ([FormFactor.Car].includes(assetFromQrCode.formFactor)) {
+          type = MapStateActionType.CarStationScanned;
         }
       }
 
@@ -123,8 +108,9 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
           type: type,
           assetId: id,
         });
-        analytics.logEvent('Map', 'Scooter selected', {
+        analytics.logEvent('Map', 'Go to bottom sheet from qr scan', {
           id,
+          type,
         });
       } else {
         clearStateAndAlertResultError();

@@ -2,7 +2,6 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {
   ActiveShmoSheet,
-  BicycleSheet,
   BikeStationBottomSheet,
   CarSharingStationBottomSheet,
   CityBikeStartTripOverlay,
@@ -10,7 +9,7 @@ import {
   FinishingScooterSheet,
   MapFilterSheet,
   ParkAndRideBottomSheet,
-  ScooterSheet,
+  VehicleSheet,
   SelectShmoPaymentMethodSheet,
   useActiveShmoBookingQuery,
 } from '@atb/modules/mobility';
@@ -185,16 +184,20 @@ export const MapBottomSheets = ({
           navigateToSupport={navigateToShmoSupport}
         />
       )}
-      {mapState.bottomSheetType === MapBottomSheetType.Scooter &&
+      {mapState.bottomSheetType === MapBottomSheetType.Vehicle &&
         !openPaymentType &&
         !activeBooking?.bookingId && (
-          <ScooterSheet
+          <VehicleSheet
             onVehicleReceived={(item) => {
               if (mapState.assetIsScanned) {
                 const feature: Feature<Point, GeoJsonProperties> =
-                  getFeatureFromScan(item, mapState.bottomSheetType);
+                  getFeatureFromScan(
+                    item,
+                    mapState.bottomSheetType,
+                    item.vehicleType.formFactor,
+                  );
                 dispatchMapState({
-                  type: MapStateActionType.Scooter,
+                  type: MapStateActionType.Vehicle,
                   feature: feature,
                   customZoomLevel: CUSTOM_SCAN_ZOOM_LEVEL,
                 });
@@ -206,9 +209,7 @@ export const MapBottomSheets = ({
             }
             onClose={handleCloseSheet}
             onReportParkingViolation={onReportParkingViolation}
-            startOnboardingCallback={() =>
-              navigateToShmoOnboarding(FormFactor.Scooter)
-            }
+            startOnboardingCallback={navigateToShmoOnboarding}
             navigateToSupport={navigateToShmoSupport}
             navigateToLogin={navigateToLogin}
             locationArrowOnPress={locationArrowOnPress}
@@ -263,40 +264,7 @@ export const MapBottomSheets = ({
             locationArrowOnPress={locationArrowOnPress}
             navigateToScanQrCode={navigateToScanQrCode}
           />
-        )}
-
-      {mapState.bottomSheetType === MapBottomSheetType.Bicycle &&
-        !openPaymentType &&
-        !activeBooking?.bookingId && (
-          <BicycleSheet
-            vehicleId={
-              mapState.feature?.properties?.id ?? mapState.assetId ?? ''
-            }
-            onClose={handleCloseSheet}
-            onVehicleReceived={(item) => {
-              if (mapState.assetIsScanned) {
-                const feature: Feature<Point, GeoJsonProperties> =
-                  getFeatureFromScan(item, mapState.bottomSheetType);
-
-                dispatchMapState({
-                  type: MapStateActionType.Bicycle,
-                  feature: feature,
-                  customZoomLevel: CUSTOM_SCAN_ZOOM_LEVEL,
-                });
-              }
-            }}
-            locationArrowOnPress={locationArrowOnPress}
-            navigateToScanQrCode={navigateToScanQrCode}
-            navigateToLogin={navigateToLogin}
-            navigateToSupport={navigateToShmoSupport}
-            selectPaymentMethod={selectPaymentMethod}
-            navigateToPricingDetails={navigateToPricingDetails}
-            startOnboardingCallback={() =>
-              navigateToShmoOnboarding(FormFactor.Bicycle)
-            }
-          />
-        )}
-
+      )}
       {mapState.bottomSheetType === MapBottomSheetType.BikeStation && (
         <BikeStationBottomSheet
           stationId={mapState.feature?.properties?.id ?? mapState.assetId ?? ''}
@@ -320,7 +288,7 @@ export const MapBottomSheets = ({
           onVehicleTypeSelected={(vehicleId, isStationBasedBooking) => {
             if (vehicleId) {
               dispatchMapState({
-                type: MapStateActionType.BicycleScanned,
+                type: MapStateActionType.VehicleScanned,
                 assetId: vehicleId,
                 isStationBasedBooking: isStationBasedBooking,
               });

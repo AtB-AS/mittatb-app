@@ -14,7 +14,10 @@ import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useOperatorBenefit} from '../../use-operator-benefit';
 import {OperatorBenefit} from '../OperatorBenefit';
 import {OperatorActionButton} from '../OperatorActionButton';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {
+  FormFactor,
+  PropulsionType,
+} from '@atb/api/types/generated/mobility-types_v2';
 import {useDoOnceOnItemReceived} from '../../use-do-once-on-item-received';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {VehicleCard} from '../VehicleCard';
@@ -53,7 +56,7 @@ type Props = {
   onClose: () => void;
   onReportParkingViolation: () => void;
   onVehicleReceived?: (vehicle: Vehicle) => void;
-  startOnboardingCallback: () => void;
+  startOnboardingCallback: (formFactor: FormFactor) => void;
   locationArrowOnPress: () => void;
   navigateToSupport: (params: ShmoHelpParams) => void;
   navigateToLogin: () => void;
@@ -64,7 +67,7 @@ type Props = {
   ) => void;
 };
 
-export const ScooterSheet = ({
+export const VehicleSheet = ({
   selectPaymentMethod,
   vehicleId: id,
   onClose,
@@ -90,19 +93,37 @@ export const ScooterSheet = ({
     appStoreUri,
   } = useVehicle(id);
 
+  const formFactor = vehicle?.vehicleType.formFactor ?? FormFactor.Other;
+  const propulsionType = vehicle?.vehicleType.propulsionType;
+  const isBicycle =
+    formFactor === FormFactor.Bicycle || formFactor === FormFactor.CargoBicycle;
+  const isElectric =
+    propulsionType === PropulsionType.Electric ||
+    propulsionType === PropulsionType.ElectricAssist;
+
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
-  const priceAdjustments = operator?.priceAdjustments?.[FormFactor.Scooter];
+  const priceAdjustments = (() => {
+    switch (formFactor) {
+      case FormFactor.Bicycle:
+      case FormFactor.Car:
+      case FormFactor.Scooter:
+      case FormFactor.ScooterStanding:
+        return operator?.priceAdjustments?.[formFactor];
+      default:
+        return undefined;
+    }
+  })();
   const operatorLogo = operator?.brandAssets?.brandImageUrl;
 
   const {mode, subMode} = getTransportModeAndSubMode(
-    vehicle?.vehicleType.formFactor,
-    vehicle?.vehicleType.propulsionType,
+    formFactor,
+    propulsionType,
   );
 
   const {isLoading: shmoReqIsLoading, hasBlockers} = useShmoRequirements(
     operatorId,
-    FormFactor.Scooter,
+    formFactor,
   );
 
   const {operatorBenefit} = useOperatorBenefit(operatorId);
@@ -110,17 +131,29 @@ export const ScooterSheet = ({
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
-  const {isParkingViolationsReportingEnabled, isShmoDeepIntegrationEnabled} =
-    useFeatureTogglesContext();
+  const {
+    isParkingViolationsReportingEnabled,
+    isShmoDeepIntegrationEnabled,
+    isShmoDeepIntegrationCitybikeEnabled,
+  } = useFeatureTogglesContext();
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
   const bonusProduct = useRelevantBonusProduct(
     operatorId,
-    FormFactor.Scooter,
+    formFactor,
     BonusProductTypeEnum.SHARED_MOBILITY,
   );
   const {logEvent} = useAnalyticsContext();
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
+
+  const isDeepIntegrationEnabled =
+    isShmoDeepIntegrationEnabled &&
+    (!isBicycle || isShmoDeepIntegrationCitybikeEnabled);
+  const showVehicleCard = !isBicycle || isElectric;
+  const showParkingViolation =
+    !isBicycle && isParkingViolationsReportingEnabled;
+  const showBonusCheckbox =
+    !isBicycle && isBonusActiveForUser && !!bonusProduct;
 
   return (
     <MapBottomSheet
@@ -130,13 +163,7 @@ export const ScooterSheet = ({
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
-      heading={t(
-        MobilityTexts.vehicleName(
-          vehicle?.vehicleType?.formFactor ?? FormFactor.Scooter,
-          false,
-          vehicle?.vehicleType?.propulsionType,
-        ),
-      )}
+      heading={t(MobilityTexts.vehicleName(formFactor, false, propulsionType))}
       subText={operatorName}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
       logoIcon={
@@ -172,16 +199,18 @@ export const ScooterSheet = ({
           {operatorBenefit && (
             <OperatorBenefit
               benefit={operatorBenefit}
-              formFactor={FormFactor.Scooter}
+              formFactor={formFactor}
               style={styles.operatorBenefit}
             />
           )}
           <View style={styles.vehicleContent}>
-            <VehicleCard
-              currentFuelPercent={vehicle.currentFuelPercent}
-              currentRangeMeters={vehicle.currentRangeMeters}
-              formFactor={vehicle.vehicleType.formFactor}
-            />
+            {showVehicleCard && (
+              <VehicleCard
+                currentFuelPercent={vehicle.currentFuelPercent}
+                currentRangeMeters={vehicle.currentRangeMeters}
+                formFactor={formFactor}
+              />
+            )}
 
             <PriceDetailsCard
               pricingPlan={vehicle.pricingPlan}
@@ -195,11 +224,11 @@ export const ScooterSheet = ({
             />
           </View>
 
-          {isShmoDeepIntegrationEnabled &&
+          {isDeepIntegrationEnabled &&
           operatorId &&
           operatorIsIntegrationEnabled ? (
             <>
-              {isBonusActiveForUser && !!bonusProduct && (
+              {showBonusCheckbox && (
                 <PayWithBonusPointsCheckbox
                   bonusProduct={bonusProduct}
                   operatorName={operatorName}
@@ -217,7 +246,7 @@ export const ScooterSheet = ({
                 />
               )}
               <ShmoActionButton
-                onStartOnboarding={startOnboardingCallback}
+                onStartOnboarding={() => startOnboardingCallback(formFactor)}
                 loginCallback={navigateToLogin}
                 vehicleId={id}
                 operatorId={operatorId}
@@ -225,7 +254,7 @@ export const ScooterSheet = ({
                 bonusProductId={
                   payWithBonusPoints ? bonusProduct?.id : undefined
                 }
-                formFactor={FormFactor.Scooter}
+                formFactor={formFactor}
               />
               <View style={styles.helpButtons}>
                 {selectedPaymentMethod && !hasBlockers && (
@@ -254,7 +283,7 @@ export const ScooterSheet = ({
                   rentalAppUri={rentalAppUri}
                 />
               )}
-              {isParkingViolationsReportingEnabled && (
+              {showParkingViolation && (
                 <Button
                   expanded={true}
                   text={t(MobilityTexts.reportParkingViolation)}
