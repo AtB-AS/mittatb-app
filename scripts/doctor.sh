@@ -105,11 +105,16 @@ case "$OS" in
 esac
 if [ -d "$ANDROID_SDK" ]; then
   pass "Android SDK at $ANDROID_SDK"
+  REQUIRED_BUILD_TOOLS=$(grep 'buildToolsVersion' "$REPO_ROOT/android/build.gradle" 2>/dev/null | awk -F'"' '{print $2}')
   LATEST_BUILD_TOOLS=$(ls "$ANDROID_SDK/build-tools/" 2>/dev/null | sort -t. -k1,1n -k2,2n -k3,3n | tail -1)
-  if [ -n "$LATEST_BUILD_TOOLS" ]; then
-    pass "build-tools $LATEST_BUILD_TOOLS"
-  else
+  if [ -z "$LATEST_BUILD_TOOLS" ]; then
     fail "Android build tools not found – see https://reactnative.dev/docs/set-up-your-environment"
+  elif [ -n "$REQUIRED_BUILD_TOOLS" ] && [ -d "$ANDROID_SDK/build-tools/$REQUIRED_BUILD_TOOLS" ]; then
+    pass "build-tools $REQUIRED_BUILD_TOOLS"
+  elif [ -n "$REQUIRED_BUILD_TOOLS" ]; then
+    fail "build-tools $REQUIRED_BUILD_TOOLS not found (latest installed: $LATEST_BUILD_TOOLS) – see https://reactnative.dev/docs/set-up-your-environment"
+  else
+    pass "build-tools $LATEST_BUILD_TOOLS"
   fi
   REQUIRED_SDK=$(grep 'compileSdkVersion\s*=' "$REPO_ROOT/android/build.gradle" 2>/dev/null | awk -F'= ' '{print $2}' | tr -d ' ')
   if [ -n "$REQUIRED_SDK" ] && [ -d "$ANDROID_SDK/platforms/android-$REQUIRED_SDK" ]; then
@@ -240,7 +245,7 @@ fi
 # iOS Certificates (setup step 6 – macOS only)
 case "$OS" in Darwin)
   section "iOS Certificates (get_ios_certs)"
-  IOS_CERT_COUNT=$(security find-identity -v -p codesigning 2>/dev/null | grep -c "valid identit")
+  IOS_CERT_COUNT=$(security find-identity -v -p codesigning 2>/dev/null | awk '/valid identit/{print $1}')
   if is_integer "$IOS_CERT_COUNT" && [ "$IOS_CERT_COUNT" -gt 0 ]; then
     pass "$IOS_CERT_COUNT codesigning identity/identities"
   else
