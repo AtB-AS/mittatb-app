@@ -267,18 +267,21 @@ export const computeFreeMinuteCount = (
   freeMinutes: PriceAdjustmentType,
   perMinPricing: ShmoPricingSegment[],
 ): number => {
-  //Calculating free minutes based on the per min price segments, until the budget runs out or there are no more segments with a cost
   let budget = Math.abs(freeMinutes.amount);
   let total = 0;
   for (const segment of perMinPricing) {
-    if (budget <= 0 || segment.rate <= 0) break;
-    const segLength =
+    if (budget <= 0) break;
+    const segLengthMin =
       segment.end != null ? segment.end - segment.start : Infinity;
-    const minutes = Math.min(Math.floor(budget / segment.rate), segLength);
+    if (segment.rate <= 0) {
+      total += segLengthMin;
+      continue;
+    }
+    const minutes = Math.min(Math.floor(budget / segment.rate), segLengthMin);
     total += minutes;
     budget -= minutes * segment.rate;
   }
-  return total;
+  return Math.min(total, 180);
 };
 
 export const getNewFilterState = (
