@@ -264,7 +264,7 @@ export const MapBottomSheets = ({
             locationArrowOnPress={locationArrowOnPress}
             navigateToScanQrCode={navigateToScanQrCode}
           />
-      )}
+        )}
       {mapState.bottomSheetType === MapBottomSheetType.BikeStation && (
         <BikeStationBottomSheet
           stationId={mapState.feature?.properties?.id ?? mapState.assetId ?? ''}

@@ -52,7 +52,7 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
     perMinPricingSegment: ShmoPricingSegment,
     effectiveStartMinute: number,
   ): string => {
-    if (hasMultiplePerMinPricingPlans) {
+    if (hasMultiplePerMinPricingPlans || effectiveStartMinute > 0) {
       if (perMinPricingSegment.end != null) {
         return t(
           MobilityTexts.pricingDetails.minutePriceRange(
@@ -113,7 +113,7 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
         {hasCampaign && (
           <ThemeText
             typography="body__s"
-            type='secondary'
+            type="secondary"
             style={styles.sectionLabel}
           >
             {t(MobilityTexts.pricingDetails.campaignPrice)}
