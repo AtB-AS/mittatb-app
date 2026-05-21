@@ -25,7 +25,7 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 
 1. Ruby v3.1.0: With something like [rbenv](https://github.com/rbenv/rbenv)
 2. See [React Native: Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment)
-   > ⓘ If bundler fails or not installed, use `gem install bundler -v <version>`, where `<version>` is the one listed at the bottom of [Gemfile.lock](./ios/Podfile.lock) (`BUNDLED WITH: 2.x.x`).
+   > ⓘ If bundler fails or not installed, use `gem install bundler -v <version>`, where `<version>` is the one listed at the bottom of [Gemfile.lock](./Gemfile.lock) (`BUNDLED WITH: 2.x.x`).
    > If encountering errors, following the suggested gem installs might solve it.
    >
    > If you experience various mysterious errors when running `yarn android` you probably have the wrong JDK. See **Common errors**** below for fix. 
