@@ -755,7 +755,7 @@ const WalkSection = ({leg, wait, timeRounding = 'floor'}: WalkSectionProps) => {
           svg={WalkFill}
           accessibilityLabel={t(getTranslatedModeName('foot'))}
         />
-        <ThemeText typography="body__s" color="secondary">
+        <ThemeText typography="body__s" type="secondary">
           {isWalkTimeOfSignificance && humanizedDistance
             ? t(
                 TripDetailsTexts.trip.leg.walk.labelWithDistance(
@@ -798,7 +798,7 @@ const BikeSection = ({leg, wait, timeRounding = 'floor'}: BikeSectionProps) => {
           spacious
           rounded
         />
-        <ThemeText typography="body__s" color="secondary">
+        <ThemeText typography="body__s" type="secondary">
           {humanizedDistance
             ? t(
                 TripDetailsTexts.trip.leg.bicycle.labelWithDistance(

@@ -104,7 +104,9 @@ export const TravelCardHeader: React.FC<
               text={statusTextConfig.text}
             />
           )}
-          <ThemeText typography={size === 'large' ? 'heading__l' : 'body__m__strong'}>
+          <ThemeText
+            typography={size === 'large' ? 'heading__l' : 'body__m__strong'}
+          >
             {`${expectedStartTimeLabel} - ${expectedEndTimeLabel}`}
           </ThemeText>
           {!areTimesEquivalentInMinutes && (
