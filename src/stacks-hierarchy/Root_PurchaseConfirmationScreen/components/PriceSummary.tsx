@@ -71,7 +71,7 @@ export const PriceSummary = ({
             <ThemeText typography="body__m">
               {t(PurchaseConfirmationTexts.totalCost.title)}
             </ThemeText>
-            <ThemeText typography="body__xs" color="secondary">
+            <ThemeText typography="body__xs" type="secondary">
               {t(
                 PurchaseConfirmationTexts.totalCost.label(
                   vatPercentString,
@@ -141,7 +141,7 @@ const PricePerTraveller = ({
     >
       <ThemeText
         style={styles.travellerCountAndName}
-        color="secondary"
+        type="secondary"
         typography="body__s"
         testID="travellerCountAndName"
       >
@@ -151,13 +151,13 @@ const PricePerTraveller = ({
         {hasFlexDiscount && (
           <ThemeText
             typography="body__xs"
-            color="secondary"
+            type="secondary"
             style={styles.travellerOriginalPriceAmount}
           >
             {originalPriceString} kr
           </ThemeText>
         )}
-        <ThemeText color="secondary" typography="body__s">
+        <ThemeText type="secondary" typography="body__s">
           {priceString} kr
         </ThemeText>
       </View>

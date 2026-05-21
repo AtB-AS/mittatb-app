@@ -34,7 +34,7 @@ export const StatWithIcon = ({svg, text}: StatWithIconProps) => {
   return (
     <View style={styles.statWithIcon}>
       {svg && <ThemeIcon svg={svg} color="secondary" style={styles.statIcon} />}
-      <ThemeText typography="body__s" color="secondary" isMarkdown={true}>
+      <ThemeText typography="body__s" type="secondary" isMarkdown={true}>
         {text}
       </ThemeText>
     </View>

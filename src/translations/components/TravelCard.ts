@@ -1,34 +1,49 @@
-import {type TravelCardType} from '@atb/screen-components/travel-card';
 import {translation as _} from '../commons';
 
 const TravelCardTexts = {
   card: {
-    a11yHint: _(
-      'Aktivér for å se detaljer om reisen.',
-      'Activate to see trip details.',
-      'Aktivér for å se detaljer om reisen.',
-    ),
-    typePrefix: (
-      type: TravelCardType,
-      cardIndex: number,
-      numberOfCards: number,
-    ) => {
-      const singular = numberOfCards === 1;
-      const index = singular ? '' : ` ${cardIndex + 1}`;
-      switch (type) {
-        case 'trip-search':
-          return _(
-            `Reiseforslag${index}.`,
-            `Trip suggestion${index}.`,
-            `Reiseforslag${index}.`,
-          );
-        case 'saved-trip':
-          return _(
-            `Lagret reise${index}.`,
-            `Saved trip${index}.`,
-            `Lagret reise${index}.`,
-          );
-      }
+    a11yHint: {
+      tripDetails: _(
+        'Aktivér for å se reisedetaljer.',
+        'Activate to see trip details.',
+        'Aktivér for å sjå reisedetaljar.',
+      ),
+      ticketSummary: _(
+        'Aktivér for å se billettsammendrag.',
+        'Activate to see ticket summary.',
+        'Aktivér for å sjå billettsamandrag.',
+      ),
+      chooseRecipient: _(
+        'Aktivér for å velge mottaker.',
+        'Activate to choose recipient.',
+        'Aktivér for å velje mottakar.',
+      ),
+    },
+    a11yPrefix: {
+      tripSuggestion: (cardIndex: number, numberOfCards: number) => {
+        const index = numberOfCards === 1 ? '' : ` ${cardIndex + 1}`;
+        return _(
+          `Reiseforslag${index}`,
+          `Trip suggestion${index}`,
+          `Reiseforslag${index}`,
+        );
+      },
+      savedTrip: (cardIndex: number, numberOfCards: number) => {
+        const index = numberOfCards === 1 ? '' : ` ${cardIndex + 1}`;
+        return _(
+          `Lagret reise${index}`,
+          `Saved trip${index}`,
+          `Lagret reise${index}`,
+        );
+      },
+      bookingOption: (cardIndex: number, numberOfCards: number) => {
+        const index = numberOfCards === 1 ? '' : ` ${cardIndex + 1}`;
+        return _(
+          `Bestillingsalternativ${index}`,
+          `Booking option${index}`,
+          `Bestillingsalternativ${index}`,
+        );
+      },
     },
     modesPrefix: (modes: string[]) => {
       return _(
@@ -53,6 +68,29 @@ const TravelCardTexts = {
     },
     originalTime: _('Opprinnelig', 'Original', 'Opprinnelig'),
     pastTime: _('Avreise passert', 'Departure passed', 'Avreise passert'),
+    notPossible: _(
+      'Ikke lenger mulig',
+      'No longer possible',
+      'Ikkje lenger mogleg',
+    ),
+    cancelled: _('Innstilt', 'Cancelled', 'Innstilt'),
+    tripStarted: _('Reisen har begynt', 'Trip has started', 'Reisa har begynt'),
+    tripEnded: _('Reisen er avsluttet', 'Trip has ended', 'Reisa er avslutta'),
+    staleTrip: _(
+      'Kan ikke oppdateres',
+      'Unable to update',
+      'Kan ikkje oppdaterast',
+    ),
+    requiresBooking: _(
+      'Krever reservasjon',
+      'Requires booking',
+      'Krev reservasjon',
+    ),
+    bookingDeadlineExceeded: _(
+      'Reservasjonsfrist utløpt',
+      'Booking deadline exceeded',
+      'Reservasjonsfrist utløpt',
+    ),
     fromToInfo: {
       a11yLabel: (fromPlace: string, toPlace: string) =>
         _(

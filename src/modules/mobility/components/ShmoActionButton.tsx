@@ -2,6 +2,7 @@ import {useAuthContext} from '@atb/modules/auth';
 import {useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import React, {useCallback} from 'react';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useShmoRequirements} from '../use-shmo-requirements.tsx';
 import {ButtonInfoTextCombo} from './ButtonInfoTextCombo.tsx';
 import {InitShmoOneStopBookingRequestBody} from '@atb/api/types/mobility';
@@ -26,6 +27,7 @@ type ShmoActionButtonProps = {
   operatorId: string;
   paymentMethod: PaymentMethod | undefined;
   bonusProductId?: string;
+  formFactor?: FormFactor;
 };
 
 export const ShmoActionButton = ({
@@ -35,10 +37,11 @@ export const ShmoActionButton = ({
   paymentMethod,
   loginCallback,
   bonusProductId,
+  formFactor,
 }: ShmoActionButtonProps) => {
   const {authenticationType, userId} = useAuthContext();
   const {hasBlockers, numberOfBlockers, ageVerification, operatorAgeLimit} =
-    useShmoRequirements(operatorId);
+    useShmoRequirements(operatorId, formFactor);
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();

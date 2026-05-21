@@ -40,7 +40,7 @@ export function InternalLabeledSectionItem({
         {subtext && (
           <ThemeText
             typography="body__s"
-            color="secondary"
+            type="secondary"
             style={itemStyle.label}
             accessible={accessibleLabel}
           >

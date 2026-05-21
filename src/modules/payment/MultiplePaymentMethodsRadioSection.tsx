@@ -108,7 +108,7 @@ export const MultiplePaymentMethodsRadioSection = ({
           <ThemeText>
             {t(SelectPaymentMethodTexts.multiple_payment.text)}
           </ThemeText>
-          <ThemeText typography="body__s" color="secondary">
+          <ThemeText typography="body__s" type="secondary">
             {t(SelectPaymentMethodTexts.multiple_payment.information)}
           </ThemeText>
           <View style={styles.saveButton}>

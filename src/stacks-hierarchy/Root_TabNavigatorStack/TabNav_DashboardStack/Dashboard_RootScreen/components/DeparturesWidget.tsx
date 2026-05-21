@@ -87,7 +87,7 @@ export const DeparturesWidget = ({
               <View style={styles.noFavouritesTextContainer}>
                 <ThemeText
                   typography="body__s"
-                  color="secondary"
+                  type="secondary"
                   style={styles.noFavouritesText}
                   testID="noFavoriteWidget"
                 >

@@ -30,6 +30,7 @@ import {
   isParkAndRide,
   isStopPlace,
   isFeatureGeofencingZone,
+  isFeatureGeofencingZoneAsTiles,
   isClusterFeature,
 } from './utils';
 
@@ -84,7 +85,7 @@ export const Map = (props: MapProps) => {
     isFocused,
     tabBarHeight,
     navigateToShmoSupport,
-    navigateToScooterOnboarding,
+    navigateToShmoOnboarding,
     navigateToReportParkingViolation,
     navigateToParkingPhoto,
     navigateToScanQrCode,
@@ -214,21 +215,6 @@ export const Map = (props: MapProps) => {
     [showSnackbar, getGeofencingZoneContent],
   );
 
-  const geofencingZoneOnPress = useCallback(
-    (e: OnPressEvent) => {
-      const featuresAtClick = e.features;
-      if (!featuresAtClick || featuresAtClick.length === 0) return;
-      const featureToSelect = featuresAtClick[0]; // currently ignore the ones behind
-
-      const code = featureToSelect.properties?.code ?? 'allowed';
-      const stationParking =
-        featureToSelect.properties?.stationParking ?? false;
-
-      showGeofencingZoneSnackbar(code, stationParking);
-    },
-    [showGeofencingZoneSnackbar],
-  );
-
   const locationArrowOnPress = useCallback(async () => {
     const coordinates = await getCurrentCoordinates(true);
     if (
@@ -289,10 +275,13 @@ export const Map = (props: MapProps) => {
         // - select a stop place with the clicked quay sorted on top
         // - have a bottom sheet with departures just for the clicked quay
         return; // currently - do nothing
+      } else if (isFeatureGeofencingZoneAsTiles(featureToSelect)) {
+        const {code, station_parking} = featureToSelect.properties;
+        showGeofencingZoneSnackbar(code, station_parking);
       } else if (isFeatureGeofencingZone(featureToSelect)) {
-        if (isGeofencingZonesAsTilesEnabled) return; // Handled directly with geofencingZoneOnPress instead in this case
-        const gfzProps = featureToSelect?.properties?.geofencingZoneCustomProps;
-        showGeofencingZoneSnackbar(gfzProps?.code, gfzProps.isStationParking);
+        const {code, isStationParking} =
+          featureToSelect.properties.geofencingZoneCustomProps;
+        showGeofencingZoneSnackbar(code, isStationParking);
       } else if (isScooter(selectedFeature) && !isActiveTrip) {
         // outside of operational area, rules unspecified
         showGeofencingZoneSnackbar(undefined);
@@ -302,7 +291,6 @@ export const Map = (props: MapProps) => {
       activeShmoBooking?.state,
       showGeofencingZones,
       hideSnackbar,
-      isGeofencingZonesAsTilesEnabled,
       selectedFeature,
       showGeofencingZoneSnackbar,
     ],
@@ -468,7 +456,6 @@ export const Map = (props: MapProps) => {
               <GeofencingZonesAsTiles
                 systemId={systemId}
                 vehicleTypeId={vehicleTypeId}
-                geofencingZoneOnPress={geofencingZoneOnPress}
               />
             ) : (
               <GeofencingZones
@@ -521,7 +508,7 @@ export const Map = (props: MapProps) => {
         mapProps={props}
         tabBarHeight={tabBarHeight}
         navigateToShmoSupport={navigateToShmoSupport}
-        navigateToScooterOnboarding={navigateToScooterOnboarding}
+        navigateToShmoOnboarding={navigateToShmoOnboarding}
         navigateToReportParkingViolation={navigateToReportParkingViolation}
         navigateToParkingPhoto={navigateToParkingPhoto}
         navigateToScanQrCode={navigateToScanQrCode}

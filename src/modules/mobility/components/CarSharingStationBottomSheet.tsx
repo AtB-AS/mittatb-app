@@ -118,7 +118,7 @@ export const CarSharingStationBottomSheet = ({
                     style={styles.operatorNameAndLogo}
                   />
                   <View style={styles.stationText}>
-                    <ThemeText typography="body__s" color="secondary">
+                    <ThemeText typography="body__s" type="secondary">
                       {stationName}
                     </ThemeText>
                     <WalkingDistance distance={distance} />

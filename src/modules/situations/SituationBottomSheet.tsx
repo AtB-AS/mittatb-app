@@ -93,7 +93,7 @@ export const SituationBottomSheet = ({
               />
               <ThemeText
                 typography="body__s"
-                color="secondary"
+                type="secondary"
                 style={styles.validityText}
               >
                 {validityPeriodText}
@@ -160,7 +160,7 @@ const InfoLink = ({infoLink}: {infoLink: InfoLinkFragment}) => {
       accessibilityRole="link"
       style={styles.infoLink}
     >
-      <ThemeText typography="body__m__underline" color="secondary">
+      <ThemeText typography="body__m__underline" type="secondary">
         {infoLink.label || t(dictionary.readMore)}
       </ThemeText>
     </NativeBlockButton>

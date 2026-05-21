@@ -8,9 +8,10 @@ import {AccessibilityProps, View} from 'react-native';
 import {TripPattern} from '@atb/api/types/trips';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useTripPatternInfo} from './use-trip-pattern-info';
+import {StatusText} from './StatusText';
+import {useTripPatternInfo} from './hooks';
 import {differenceInMinutes} from 'date-fns';
-import {useTimeLabels} from './utils';
+import {useTimeLabels} from './hooks';
 import {useAccessibilityLabelContribution} from '@atb/modules/composite-accessibility';
 
 export const TravelCardHeader: React.FC<
@@ -35,7 +36,8 @@ export const TravelCardHeader: React.FC<
     expectedEndTime,
     aimedStartTime,
     aimedEndTime,
-    isInPast,
+    hasStarted,
+    statusTextConfig,
   } = useTripPatternInfo(tripPattern);
 
   const {
@@ -43,43 +45,47 @@ export const TravelCardHeader: React.FC<
     endTimeLabel: expectedEndTimeLabel,
   } = useTimeLabels(expectedStartTime, expectedEndTime, includeDayInfo);
 
+  /**
+   * See documentation in useTimeLabels for details about special
+   * handling of the current day.
+   */
   const {startTimeLabel: aimedStartTimeLabel, endTimeLabel: aimedEndTimeLabel} =
-    useTimeLabels(aimedStartTime, aimedEndTime, isInPast && includeDayInfo);
+    useTimeLabels(aimedStartTime, aimedEndTime, hasStarted && includeDayInfo);
 
   const areTimesEquivalentInMinutes =
-    differenceInMinutes(expectedStartTime, aimedStartTime) < 1 &&
-    differenceInMinutes(expectedEndTime, aimedEndTime) < 1;
+    Math.abs(differenceInMinutes(expectedStartTime, aimedStartTime)) < 1 &&
+    Math.abs(differenceInMinutes(expectedEndTime, aimedEndTime)) < 1;
 
-  const showAimedTime = !areTimesEquivalentInMinutes || isInPast;
+  const showAimedTime = !areTimesEquivalentInMinutes;
 
-  const a11yLabel = `
-    ${includeFromToInfo ? t(TravelCardTexts.header.fromToInfo.a11yLabel(fromName, toName)) : ''}. 
-    ${
-      isInPast
-        ? t(TravelCardTexts.header.pastTime)
-        : t(
-            TravelCardTexts.header.expectedTime.a11yLabel(
-              expectedStartTimeLabel,
-              expectedEndTimeLabel,
-              showAimedTime,
-            ),
-          )
-    }. 
-    ${
-      showAimedTime
-        ? t(
-            TravelCardTexts.header.aimedTime.a11yLabel(
-              aimedStartTimeLabel,
-              aimedEndTimeLabel,
-            ),
-          )
-        : ''
-    }. 
-    ${t(
+  const a11yLabel = [
+    includeFromToInfo
+      ? t(TravelCardTexts.header.fromToInfo.a11yLabel(fromName, toName))
+      : undefined,
+    statusTextConfig?.text,
+    t(
+      TravelCardTexts.header.expectedTime.a11yLabel(
+        expectedStartTimeLabel,
+        expectedEndTimeLabel,
+        showAimedTime,
+      ),
+    ),
+    showAimedTime
+      ? t(
+          TravelCardTexts.header.aimedTime.a11yLabel(
+            aimedStartTimeLabel,
+            aimedEndTimeLabel,
+          ),
+        )
+      : undefined,
+    t(
       TravelCardTexts.header.duration.a11yLabel(
         secondsToDuration(tripPattern.duration, language),
       ),
-    )}.`;
+    ),
+  ]
+    .filter(Boolean)
+    .join('. ');
 
   useAccessibilityLabelContribution('header', a11yLabel);
 
@@ -87,13 +93,18 @@ export const TravelCardHeader: React.FC<
     <View style={styles.container} {...accessibilityProps}>
       <View style={styles.header}>
         <View style={styles.timeContainer}>
+          {statusTextConfig && (
+            <StatusText
+              svg={statusTextConfig.svg}
+              color={statusTextConfig.color}
+              text={statusTextConfig.text}
+            />
+          )}
           <ThemeText typography="body__m__strong">
-            {isInPast
-              ? t(TravelCardTexts.header.pastTime)
-              : `${expectedStartTimeLabel} - ${expectedEndTimeLabel}`}
+            {`${expectedStartTimeLabel} - ${expectedEndTimeLabel}`}
           </ThemeText>
-          {(!areTimesEquivalentInMinutes || isInPast) && (
-            <ThemeText typography="body__s" color="secondary">
+          {!areTimesEquivalentInMinutes && (
+            <ThemeText typography="body__s" type="secondary">
               {t(TravelCardTexts.header.originalTime)} {aimedStartTimeLabel} -{' '}
               {aimedEndTimeLabel}
             </ThemeText>
@@ -103,7 +114,7 @@ export const TravelCardHeader: React.FC<
         <View style={styles.durationContainer}>
           <ThemeText
             typography="body__m"
-            color="secondary"
+            type="secondary"
             testID="resultDuration"
           >
             {secondsToDurationShort(tripPattern.duration, language)}

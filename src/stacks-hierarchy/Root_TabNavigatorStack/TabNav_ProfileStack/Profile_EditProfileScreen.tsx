@@ -149,7 +149,7 @@ export const Profile_EditProfileScreen = ({
       ) : (
         <>
           <View style={styles.personalDetails}>
-            <ThemeText accessibilityRole="header" color="secondary">
+            <ThemeText accessibilityRole="header" type="secondary">
               {t(EditProfileTexts.personalDetails.header)}
             </ThemeText>
             {(isLoadingGetProfile || isRefetchingProfile) && (
@@ -202,7 +202,7 @@ export const Profile_EditProfileScreen = ({
                   <ThemeText>
                     {t(EditProfileTexts.personalDetails.email.label)}
                   </ThemeText>
-                  <ThemeText typography="body__s" color="secondary">
+                  <ThemeText typography="body__s" type="secondary">
                     {t(
                       EditProfileTexts.personalDetails.email
                         .disabledWithRemoteConfig,
@@ -236,7 +236,7 @@ export const Profile_EditProfileScreen = ({
                   <ThemeText typography="body__s">
                     {t(EditProfileTexts.personalDetails.phone.header)}
                   </ThemeText>
-                  <ThemeText typography="body__s" color="secondary">
+                  <ThemeText typography="body__s" type="secondary">
                     {t(
                       EditProfileTexts.personalDetails.phone.loggedIn(
                         phoneNumber,
@@ -258,7 +258,7 @@ export const Profile_EditProfileScreen = ({
                       year: 'numeric',
                     }).format(new Date(birthdateRes.birthdate))}
                   </ThemeText>
-                  <ThemeText typography="body__s" color="secondary">
+                  <ThemeText typography="body__s" type="secondary">
                     {t(EditProfileTexts.personalDetails.birthdate.info)}
                   </ThemeText>
 
@@ -306,7 +306,7 @@ export const Profile_EditProfileScreen = ({
             </>
           )}
           <View style={styles.profileContainer}>
-            <ThemeText color="secondary" style={styles.profileItem}>
+            <ThemeText type="secondary" style={styles.profileItem}>
               {t(EditProfileTexts.profileInfo.profile)}
             </ThemeText>
             <ThemeText>
@@ -315,7 +315,7 @@ export const Profile_EditProfileScreen = ({
             {phoneNumber && (
               <ThemeText
                 typography="body__s"
-                color="secondary"
+                type="secondary"
                 style={styles.profileItem}
               >
                 {t(EditProfileTexts.profileInfo.otp(phoneNumber))}
@@ -328,7 +328,7 @@ export const Profile_EditProfileScreen = ({
                 </ThemeText>
                 <ThemeText
                   typography="body__s"
-                  color="secondary"
+                  type="secondary"
                   accessibilityLabel={numberToAccessibilityString(
                     customerNumber,
                   )}

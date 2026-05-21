@@ -68,16 +68,16 @@ export function MessageSectionItem({
           <ThemeText
             typography="body__m__strong"
             style={styles.title}
-            color={messageType}
+            color={themeColor}
             testID="title"
           >
             {title}
           </ThemeText>
         )}
-        <ThemeText color={messageType}>{message}</ThemeText>
+        <ThemeText color={themeColor}>{message}</ThemeText>
         {onPressConfig?.text && (
           <ThemeText
-            color={messageType}
+            color={themeColor}
             style={styles.linkText}
             typography="body__m__underline"
           >

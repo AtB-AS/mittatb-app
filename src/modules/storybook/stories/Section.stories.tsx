@@ -3,6 +3,7 @@ import {
   RadioSectionItem,
   ButtonSectionItem,
   CounterSectionItem,
+  EditActionSectionItem,
   ExpandableSectionItem,
   FavoriteDepartureSectionItem,
   FavoriteSectionItem,
@@ -33,7 +34,9 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {Warning} from '@atb/assets/svg/mono-icons/status';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {Edit} from '@atb/assets/svg/mono-icons/actions';
+import {Edit, Filter} from '@atb/assets/svg/mono-icons/actions';
+import {Time} from '@atb/assets/svg/mono-icons/time';
+import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
 
 type SectionMetaProps = ThemedStoryProps<SectionProps>;
 const containerSizingType: ContainerSizingType[] = ['block', 'spacious'];
@@ -55,9 +58,10 @@ const SectionMeta: Meta<SectionMetaProps> = {
 };
 export default SectionMeta;
 
-export const ListedSectionItems: Meta<SectionMetaProps> = {
+export const AllSectionItemsList: Meta<SectionMetaProps> = {
   args: {
     style: {margin: 12},
+    storyColor: 'background neutral 1',
   },
   decorators: [
     (Story, {args}) => (
@@ -188,6 +192,12 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                   onPress={() => {}}
                   onPressIcon={Edit}
                 />
+                <EditActionSectionItem
+                  leftIcon={Time}
+                  text="EditActionSectionItem"
+                  subText="Subtext"
+                  onPress={() => {}}
+                />
               </Section>
             ),
           }}
@@ -199,10 +209,10 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
 };
 
 export const OneSectionItem: Meta<SectionMetaProps> = {
-  args: {style: {margin: 12}},
+  args: {style: {margin: 12}, storyColor: 'background neutral 1'},
   decorators: [
     (Story, {args}) => (
-      <View style={{backgroundColor: 'pink'}}>
+      <View>
         <Story
           args={{
             ...args,
@@ -218,6 +228,56 @@ export const OneSectionItem: Meta<SectionMetaProps> = {
           }}
         />
       </View>
+    ),
+    ThemedStoryDecorator,
+  ],
+};
+
+export const EditActionSectionItemStory: Meta<SectionMetaProps> = {
+  args: {style: {margin: 12}, storyColor: 'background neutral 1'},
+  decorators: [
+    (Story, {args}) => (
+      <ScrollView>
+        <Story
+          args={{
+            ...args,
+            children: (
+              <Section>
+                <EditActionSectionItem
+                  leftIcon={Time}
+                  text="With everything"
+                  subText="Subtext"
+                  onPress={() => {}}
+                />
+                <EditActionSectionItem
+                  text="Without left icon"
+                  subText="Subtext"
+                  onPress={() => {}}
+                />
+                <EditActionSectionItem
+                  leftIcon={Travellers}
+                  text="Without subtext"
+                  onPress={() => {}}
+                />
+                <EditActionSectionItem
+                  leftIcon={Travellers}
+                  text="Custom right icon"
+                  subText="Subtext"
+                  rightIcon={Filter}
+                  onPress={() => {}}
+                />
+                <EditActionSectionItem
+                  leftIcon={Travellers}
+                  text="Quite long text on this one"
+                  subText="And a pretty long subtext"
+                  rightIcon={Filter}
+                  onPress={() => {}}
+                />
+              </Section>
+            ),
+          }}
+        />
+      </ScrollView>
     ),
     ThemedStoryDecorator,
   ],

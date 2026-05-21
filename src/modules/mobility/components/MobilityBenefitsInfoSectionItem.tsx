@@ -44,7 +44,7 @@ export const MobilityBenefitsInfoSectionItem = ({
       accessible={true}
       accessibilityLabel={accessibilityLabel}
     >
-      <ThemeText typography="body__s" color="secondary">
+      <ThemeText typography="body__s" type="secondary">
         {t(MobilityTexts.includedWithTheTicket)}
       </ThemeText>
       <BorderedInfoBox

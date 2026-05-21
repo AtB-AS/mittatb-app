@@ -107,7 +107,7 @@ export function TravellerSelection({
           {travellersDetailsText}
         </ThemeText>
         {!canSelectUserProfile && (
-          <ThemeText typography="body__s" color="secondary">
+          <ThemeText typography="body__s" type="secondary">
             {travellerInfo}
           </ThemeText>
         )}

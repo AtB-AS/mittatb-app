@@ -1,5 +1,5 @@
 import React from 'react';
-import {useThemeContext} from '@atb/theme';
+import {resolveColorValue, useThemeContext} from '@atb/theme';
 import {
   ColorValue,
   Platform,
@@ -10,19 +10,20 @@ import {
 } from 'react-native';
 import {renderMarkdown} from './markdown-renderer';
 import {getTextWeightStyle, MAX_FONT_SCALE} from './utils';
-import {
-  ContrastColor,
-  Statuses,
-  TextColor,
-  TextNames,
-  resolveColorValue,
-} from '@atb/theme/colors';
+import {ContrastColor, ForegroundType, TextNames} from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
 
 export type ThemeTextProps = TextProps & {
   typography?: TextNames;
-  type?: keyof ContrastColor['foreground'];
-  color?: ContrastColor | Statuses | TextColor | ColorValue;
+  type?: ForegroundType;
+  /**
+   * Pass a ContrastColor from the theme for semantic color resolution.
+   * The foreground tier is selected via the `type` prop.
+   * Use a resolved hex string only for explicit color overrides.
+   * Do NOT pass TextColor strings like 'primary' or 'secondary' —
+   * use the `type` prop instead.
+   */
+  color?: ContrastColor | ColorValue;
   isMarkdown?: boolean;
 };
 

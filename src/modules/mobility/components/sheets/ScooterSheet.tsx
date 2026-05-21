@@ -100,8 +100,10 @@ export const ScooterSheet = ({
     vehicle?.vehicleType.propulsionType,
   );
 
-  const {isLoading: shmoReqIsLoading, hasBlockers} =
-    useShmoRequirements(operatorId);
+  const {isLoading: shmoReqIsLoading, hasBlockers} = useShmoRequirements(
+    operatorId,
+    FormFactor.Scooter,
+  );
 
   const {operatorBenefit} = useOperatorBenefit(operatorId);
   const selectedPaymentMethod = useSelectedShmoPaymentMethod();
@@ -223,6 +225,7 @@ export const ScooterSheet = ({
                 bonusProductId={
                   payWithBonusPoints ? bonusProduct?.id : undefined
                 }
+                formFactor={FormFactor.Scooter}
               />
               <View style={styles.helpButtons}>
                 {selectedPaymentMethod && !hasBlockers && (

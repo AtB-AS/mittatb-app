@@ -1,23 +1,21 @@
 import {useQuery} from '@tanstack/react-query';
 import {ONE_HOUR_MS, ONE_SECOND_MS} from '@atb/utils/durations';
-import {singleTripSearch} from '@atb/api/bff/trips';
+import {refreshSingleTrip} from '@atb/api/bff/trips';
 import {TripPattern} from '@atb/api/types/trips';
 import {ErrorResponse} from '@atb-as/utils';
 import {getTripPatternKey} from './utils';
+import {getTripPatternStatus} from '@atb/screen-components/travel-card';
 
-export function useSingleTripQuery(
+export function useRefreshTripQuery(
   tripPattern: TripPattern,
   enabled: boolean = true,
 ) {
+  const isEnded = getTripPatternStatus(tripPattern) === 'ended';
   return useQuery<TripPattern | null, ErrorResponse>({
-    queryKey: ['singleTrip', getTripPatternKey(tripPattern)],
-    queryFn: async () => {
-      if (!tripPattern.compressedQuery) return null;
-      return await singleTripSearch(tripPattern.compressedQuery);
-    },
+    queryKey: ['refreshTrip', getTripPatternKey(tripPattern)],
+    queryFn: () => refreshSingleTrip(tripPattern),
     refetchInterval: ONE_SECOND_MS * 20,
-    staleTime: ONE_HOUR_MS,
     gcTime: ONE_HOUR_MS,
-    enabled,
+    enabled: enabled && !isEnded,
   });
 }

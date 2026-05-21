@@ -41,7 +41,7 @@ export function UserBonusBalanceContent(): React.JSX.Element {
           />
         </View>
 
-        <ThemeText typography="body__s" color="secondary">
+        <ThemeText typography="body__s" type="secondary">
           {t(BonusProgramTexts.bonusProfile.yourPoints)}
         </ThemeText>
       </View>

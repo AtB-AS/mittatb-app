@@ -1,3 +1,4 @@
+import {ColorValue} from 'react-native';
 import {TextNames} from '@atb/theme';
 import {useBonusBalanceQuery} from '..';
 import {ThemeText} from '@atb/components/text';
@@ -6,7 +7,7 @@ import {Loading} from '@atb/components/loading';
 
 type Props = {
   typography: TextNames;
-  color: string;
+  color: ColorValue;
 };
 
 export const UserBonusBalance = ({color, typography}: Props) => {

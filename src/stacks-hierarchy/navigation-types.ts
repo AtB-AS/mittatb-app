@@ -22,6 +22,7 @@ import type {TripAnalytics} from '@atb/screen-components/travel-details-screens'
 import {Root_SmartParkAndRideEditScreenParams} from '@atb/stacks-hierarchy/Root_SmartParkAndRide/navigation-types';
 import {Root_OnboardingCarouselStackParams} from './Root_OnboardingCarouselStack';
 import {UserProfileWithCountAndOffer} from './Root_PurchaseOverviewScreen/use-offer-state';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
   searchLocation?: SelectableLocationType;
@@ -145,7 +146,7 @@ export type RootStackParamList = StackParams<{
   Root_ParkingViolationsQrScreen: Root_ParkingViolationsQrParams;
   Root_ParkingViolationsConfirmationScreen: Root_ParkingViolationsConfirmationParams;
   Root_ShmoHelpScreen: Root_ShmoHelpScreenParams;
-  Root_ShmoOnboardingScreen: undefined;
+  Root_ShmoOnboardingScreen: {formFactor?: FormFactor};
   Root_ShmoPricingDetailsScreen: {
     pricingPlan: ShmoPricingPlan;
     priceAdjustments?: PriceAdjustmentType[];

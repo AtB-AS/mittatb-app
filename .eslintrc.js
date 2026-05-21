@@ -194,6 +194,9 @@ module.exports = {
 
     // Error on React hooks being called inside StyleSheet.createThemeHook
     'rulesdir/no-hooks-in-create-theme-hook': 'error',
+
+    // Error on passing TextColor string literals as the color prop of ThemeText
+    'rulesdir/no-text-color-in-theme-text': 'error',
   },
   overrides: [
     // Allow 'export default' from these paths

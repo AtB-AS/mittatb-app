@@ -82,8 +82,10 @@ export const BicycleSheet = ({
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
 
-  const {isLoading: shmoReqIsLoading, hasBlockers} =
-    useShmoRequirements(operatorId);
+  const {isLoading: shmoReqIsLoading, hasBlockers} = useShmoRequirements(
+    operatorId,
+    FormFactor.Bicycle,
+  );
   const selectedPaymentMethod = useSelectedShmoPaymentMethod();
 
   const {operatorBenefit} = useOperatorBenefit(operatorId);
@@ -180,6 +182,7 @@ export const BicycleSheet = ({
                 vehicleId={id}
                 operatorId={operatorId}
                 paymentMethod={selectedPaymentMethod}
+                formFactor={FormFactor.Bicycle}
               />
               <View style={styles.helpButtons}>
                 {selectedPaymentMethod && !hasBlockers && (

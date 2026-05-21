@@ -79,7 +79,7 @@ export const BikeStationNotIntegratedView = ({
               style={styles.operatorNameAndLogo}
             />
             <View style={styles.stationText}>
-              <ThemeText typography="body__s" color="secondary">
+              <ThemeText typography="body__s" type="secondary">
                 {stationName}
               </ThemeText>
             </View>

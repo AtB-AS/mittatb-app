@@ -55,6 +55,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {useDebugUserInfoHeader} from '@atb/api';
 import {DebugServerOverrides} from '@atb/modules/debug';
 import {useScrollBorder} from '@atb/utils/use-scroll-border';
+import MapboxGL from '@rnmapbox/maps';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -112,7 +113,7 @@ export const Profile_DebugInfoScreen = () => {
   } = useMobileTokenContext();
   const {serverNow} = useTimeContext();
   const serverTimeOffset = useMemo(() => Date.now() - serverNow, [serverNow]);
-  const {setGivenShmoConsent} = useMapContext();
+  const {setGivenScooterConsent, setGivenBicycleConsent} = useMapContext();
   const {
     fcmToken,
     permissionStatus: pushNotificationPermissionStatus,
@@ -314,6 +315,34 @@ export const Profile_DebugInfoScreen = () => {
           />
 
           <LinkSectionItem
+            text="Clear locally stored map tiles"
+            onPress={() =>
+              Alert.alert(
+                'Clear locally stored map tiles?',
+                'Clears the Mapbox disk tile cache.',
+                [
+                  {text: 'Cancel', style: 'cancel'},
+                  {
+                    text: 'Clear',
+                    style: 'destructive',
+                    onPress: async () => {
+                      try {
+                        await MapboxGL.clearData();
+                        Alert.alert('Cleared', 'Map tile cache cleared.');
+                      } catch (e: any) {
+                        Alert.alert(
+                          'Failed',
+                          e?.message ?? 'Could not clear tile cache.',
+                        );
+                      }
+                    },
+                  },
+                ],
+              )
+            }
+          />
+
+          <LinkSectionItem
             text="Reset travel search filters"
             onPress={() =>
               storage.set('@ATB_user_travel_search_filters_v2', '')
@@ -321,7 +350,11 @@ export const Profile_DebugInfoScreen = () => {
           />
           <LinkSectionItem
             text="Reset scooter consent"
-            onPress={() => setGivenShmoConsent(false)}
+            onPress={() => setGivenScooterConsent(false)}
+          />
+          <LinkSectionItem
+            text="Reset bicycle consent"
+            onPress={() => setGivenBicycleConsent(false)}
           />
           <LinkSectionItem
             text="Reset city bike end trip info"
@@ -685,7 +718,7 @@ function MapValue({value}: {value: any}) {
               <MapEntry key={key} title={key} value={value} />
             ))
           ) : (
-            <ThemeText color="secondary">Empty object</ThemeText>
+            <ThemeText type="secondary">Empty object</ThemeText>
           )}
         </View>
       );
@@ -713,7 +746,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
           style={{flexDirection: 'row'}}
           onPress={() => setIsExpanded(!isExpanded)}
         >
-          <ThemeText typography="heading__m" color="secondary">
+          <ThemeText typography="heading__m" type="secondary">
             {title}
           </ThemeText>
           <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />

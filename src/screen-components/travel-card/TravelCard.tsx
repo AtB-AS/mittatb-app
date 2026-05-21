@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, Statuses} from '@atb/theme';
 import type {TripPattern} from '@atb/api/types/trips';
 import {TravelCardLegs} from './TravelCardLegs';
 import Animated, {FadeIn} from 'react-native-reanimated';
@@ -8,60 +8,100 @@ import {TravelCardHeader} from './TravelCardHeader';
 import {LayoutChangeEvent, View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
-import {TravelCardTexts, useTranslation} from '@atb/translations';
+import {dictionary, TravelCardTexts, useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
-
-export type TravelCardType = 'trip-search' | 'saved-trip';
+import {
+  getDetailedSituationOrNoticeA11yLabel,
+  getLegNotificationsA11yLabel,
+} from '@atb/modules/situations';
+import {TravelCardNotices} from './TravelCardNotices';
+import {Tag} from '@atb/components/tag';
 
 type TravelCardProps = {
   tripPattern: TripPattern;
-  onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
-  cardIndex: number;
-  numberOfCards: number;
+  onDetailsPressed(tripPattern: TripPattern): void;
   testID?: string;
-  type: TravelCardType;
+  a11yLabelPrefix: string;
+  a11yHint: string;
+  includeDayInfo?: boolean;
+  includeFromToInfo?: boolean;
+  includeLegNotifications?: boolean;
+  includeSituationNotices?: boolean;
+  isDisabled?: boolean;
+  tag?: {label: string; type: Statuses};
 };
 
 export const TravelCard: React.FC<TravelCardProps> = ({
   tripPattern,
   onDetailsPressed,
-  cardIndex,
-  numberOfCards,
   testID,
-  type,
+  a11yLabelPrefix,
+  a11yHint,
+  includeDayInfo = false,
+  includeFromToInfo = false,
+  includeLegNotifications = false,
+  includeSituationNotices = false,
+  isDisabled = false,
+  tag,
 }) => {
   const styles = useThemeStyles();
   const [maxWidth, setMaxWidth] = useState(0);
-  const {t} = useTranslation();
-
-  const includeDayInfo = type === 'saved-trip';
-  const includeFromToInfo = type === 'saved-trip';
+  const {t, language} = useTranslation();
 
   const uniqueModes = Array.from(
     new Set(tripPattern.legs.map((leg) => leg.mode)),
   );
   const modes = uniqueModes.map((mode) => t(getTranslatedModeName(mode)));
 
-  const a11yLabel = `${t(
-    TravelCardTexts.card.typePrefix(type, cardIndex, numberOfCards),
-  )}. ${t(TravelCardTexts.card.modesPrefix(modes))}.`;
+  const prefixA11yLabel = `${a11yLabelPrefix}. ${t(TravelCardTexts.card.modesPrefix(modes))}.`;
+
+  const situationOrNoticeA11yLabel =
+    includeSituationNotices && !isDisabled
+      ? getDetailedSituationOrNoticeA11yLabel(tripPattern, language, t)
+      : undefined;
+
+  const legNotificationsA11yLabel =
+    includeLegNotifications && !isDisabled
+      ? getLegNotificationsA11yLabel(tripPattern, t)
+      : undefined;
+
+  const tagA11yLabel = tag
+    ? `${t(dictionary.messageTypes[tag.type])}. ${tag.label}`
+    : undefined;
 
   return (
     <Animated.View entering={FadeIn}>
       <CompositeAccessibilityProvider
-        parentLabels={{cardPrefix: a11yLabel}}
-        order={['cardPrefix', 'header', 'legs']}
+        parentLabels={{
+          cardPrefix: prefixA11yLabel,
+          situationOrNotice: situationOrNoticeA11yLabel,
+          legNotifications: legNotificationsA11yLabel,
+          tag: tagA11yLabel,
+        }}
+        order={[
+          'cardPrefix',
+          'tag',
+          'header',
+          'legs',
+          'situationOrNotice',
+          'legNotifications',
+        ]}
       >
         {(accessibilityProps) => (
           <NativeBlockButton
-            onPress={() => onDetailsPressed(tripPattern, cardIndex)}
+            onPress={() => onDetailsPressed(tripPattern)}
             testID={testID}
-            style={styles.container}
-            accessibilityRole="button"
-            accessibilityHint={t(TravelCardTexts.card.a11yHint)}
+            style={[styles.container, isDisabled && styles.containerDisabled]}
+            accessibilityRole={isDisabled ? 'none' : 'button'}
+            accessibilityHint={isDisabled ? undefined : a11yHint}
             {...accessibilityProps}
           >
+            {tag && (
+              <View aria-hidden={true}>
+                <Tag labels={[tag.label]} tagType={tag.type} />
+              </View>
+            )}
             <TravelCardHeader
               tripPattern={tripPattern}
               includeDayInfo={includeDayInfo}
@@ -80,6 +120,14 @@ export const TravelCard: React.FC<TravelCardProps> = ({
                 <ThemeIcon svg={ChevronRight} />
               </View>
             </View>
+            {(includeSituationNotices || includeLegNotifications) && (
+              <TravelCardNotices
+                tripPattern={tripPattern}
+                language={language}
+                includeSituationNotices={includeSituationNotices}
+                includeLegNotifications={includeLegNotifications}
+              />
+            )}
           </NativeBlockButton>
         )}
       </CompositeAccessibilityProvider>
@@ -95,7 +143,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacing.medium,
     borderRadius: theme.border.radius.regular,
     marginHorizontal: theme.spacing.medium,
-    marginTop: theme.spacing.small,
+    marginVertical: theme.spacing.small,
+  },
+  containerDisabled: {
+    backgroundColor: theme.color.background.neutral[2].background,
   },
   legsContainer: {
     gap: theme.spacing.medium,

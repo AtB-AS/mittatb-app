@@ -1,4 +1,5 @@
-export {TravelCard, type TravelCardType} from './TravelCard';
+export {TravelCard} from './TravelCard';
+export {getTripPatternStatus} from './utils';
 import {withCompositeAccessibility} from '@atb/modules/composite-accessibility';
 import {TravelCardHeader as TravelCardHeaderComponent} from './TravelCardHeader';
 

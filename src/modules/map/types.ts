@@ -13,6 +13,7 @@ import {z} from 'zod';
 
 // prefixes added to distinguish between geojson types and generated mobility api types, as they are not exact matches
 import {
+  FormFactor,
   FormFactor as MobilityAPI_FormFactor,
   GeofencingZoneProperties as MobilityAPI_GeofencingZoneProperties,
   GeofencingZones as MobilityAPI_GeofencingZones,
@@ -66,7 +67,7 @@ export type MapProps = {
   navigateToDetails: NavigateToDetailsCallback;
   navigateToTripSearch: NavigateToTripSearchCallback;
   navigateToShmoSupport: (params: ShmoHelpParams) => void;
-  navigateToScooterOnboarding: () => void;
+  navigateToShmoOnboarding: (formFactor?: FormFactor) => void;
   navigateToReportParkingViolation: () => void;
   navigateToParkingPhoto: (bookingId: string) => void;
   navigateToScanQrCode: () => void;

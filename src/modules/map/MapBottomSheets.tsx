@@ -1,4 +1,5 @@
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {
   ActiveShmoSheet,
   BicycleSheet,
@@ -47,7 +48,7 @@ type MapBottomSheetsProps = {
   locationArrowOnPress: () => void;
   tabBarHeight: number;
   navigateToShmoSupport: (params: ShmoHelpParams) => void;
-  navigateToScooterOnboarding: () => void;
+  navigateToShmoOnboarding: (formFactor?: FormFactor) => void;
   navigateToReportParkingViolation: () => void;
   navigateToParkingPhoto: (bookingId: string) => void;
   navigateToScanQrCode: () => void;
@@ -66,7 +67,7 @@ export const MapBottomSheets = ({
   locationArrowOnPress,
   tabBarHeight,
   navigateToShmoSupport,
-  navigateToScooterOnboarding,
+  navigateToShmoOnboarding,
   navigateToReportParkingViolation,
   navigateToParkingPhoto,
   navigateToScanQrCode,
@@ -205,7 +206,9 @@ export const MapBottomSheets = ({
             }
             onClose={handleCloseSheet}
             onReportParkingViolation={onReportParkingViolation}
-            startOnboardingCallback={navigateToScooterOnboarding}
+            startOnboardingCallback={() =>
+              navigateToShmoOnboarding(FormFactor.Scooter)
+            }
             navigateToSupport={navigateToShmoSupport}
             navigateToLogin={navigateToLogin}
             locationArrowOnPress={locationArrowOnPress}
@@ -287,8 +290,10 @@ export const MapBottomSheets = ({
             navigateToLogin={navigateToLogin}
             navigateToSupport={navigateToShmoSupport}
             selectPaymentMethod={selectPaymentMethod}
-            startOnboardingCallback={navigateToScooterOnboarding} // TODO: need to adapt onboarding flow for bikes
             navigateToPricingDetails={navigateToPricingDetails}
+            startOnboardingCallback={() =>
+              navigateToShmoOnboarding(FormFactor.Bicycle)
+            }
           />
         )}
 
