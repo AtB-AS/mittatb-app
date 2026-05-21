@@ -47,10 +47,19 @@ if command -v node >/dev/null 2>&1; then
   if is_integer "$NODE_MAJOR" && [ "$NODE_MAJOR" -ge 22 ]; then
     pass "node $NODE_VERSION"
   else
-    fail "node $NODE_VERSION (required: >=22) – see README"
+    fail "node $NODE_VERSION (required: >=22) – see https://reactnative.dev/docs/set-up-your-environment"
   fi
 else
-  fail "node not found (required: >=22) – see README"
+  fail "node not found (required: >=22) – see https://reactnative.dev/docs/set-up-your-environment"
+fi
+
+# Watchman (recommended by React Native for both platforms)
+section "Watchman"
+if command -v watchman >/dev/null 2>&1; then
+  WATCHMAN_VERSION=$(watchman --version 2>/dev/null)
+  pass "watchman $WATCHMAN_VERSION"
+else
+  warn "watchman not found (recommended) – see https://reactnative.dev/docs/set-up-your-environment"
 fi
 
 # iOS toolchain – requirements (macOS only)
@@ -62,10 +71,16 @@ case "$OS" in Darwin)
     if xcode-select -p >/dev/null 2>&1; then
       pass "Xcode Command Line Tools"
     else
-      fail "Xcode Command Line Tools not installed – see README"
+      fail "Xcode Command Line Tools not installed – see https://reactnative.dev/docs/set-up-your-environment"
+    fi
+    if grep -q "NODE_BINARY" "$REPO_ROOT/ios/.xcode.env" 2>/dev/null || \
+       grep -q "NODE_BINARY" "$REPO_ROOT/ios/.xcode.env.local" 2>/dev/null; then
+      pass ".xcode.env NODE_BINARY configured"
+    else
+      warn ".xcode.env missing NODE_BINARY – Xcode builds may fail with NVM (see React Native docs)"
     fi
   else
-    fail "Xcode not found – see README"
+    fail "Xcode not found – see https://reactnative.dev/docs/set-up-your-environment"
   fi
 
   section "CocoaPods"
@@ -75,10 +90,10 @@ case "$OS" in Darwin)
     if [ "$POD_VERSION" = "$REQUIRED_POD" ]; then
       pass "cocoapods $POD_VERSION"
     else
-      warn "cocoapods $POD_VERSION (required: $REQUIRED_POD) – see README"
+      warn "cocoapods $POD_VERSION (required: $REQUIRED_POD) – see https://reactnative.dev/docs/set-up-your-environment"
     fi
   else
-    warn "cocoapods not found – see README"
+    warn "cocoapods not found – see https://reactnative.dev/docs/set-up-your-environment"
   fi
 esac
 
@@ -94,10 +109,16 @@ if [ -d "$ANDROID_SDK" ]; then
   if [ -n "$LATEST_BUILD_TOOLS" ]; then
     pass "build-tools $LATEST_BUILD_TOOLS"
   else
-    fail "Android build tools not found – see README"
+    fail "Android build tools not found – see https://reactnative.dev/docs/set-up-your-environment"
+  fi
+  REQUIRED_SDK=$(grep 'compileSdkVersion\s*=' "$REPO_ROOT/android/build.gradle" 2>/dev/null | awk -F'= ' '{print $2}' | tr -d ' ')
+  if [ -n "$REQUIRED_SDK" ] && [ -d "$ANDROID_SDK/platforms/android-$REQUIRED_SDK" ]; then
+    pass "Android SDK Platform $REQUIRED_SDK"
+  elif [ -n "$REQUIRED_SDK" ]; then
+    fail "Android SDK Platform $REQUIRED_SDK not found – see https://reactnative.dev/docs/set-up-your-environment"
   fi
 else
-  warn "Android SDK not found – see README"
+  warn "Android SDK not found – see https://reactnative.dev/docs/set-up-your-environment"
 fi
 
 # Java (README requirement 2 – React Native environment)
@@ -110,10 +131,10 @@ if command -v java >/dev/null 2>&1; then
   elif [ "$JAVA_MAJOR" -ge 17 ]; then
     pass "java $JAVA_VERSION"
   else
-    fail "java $JAVA_VERSION (required: >=17) – see README"
+    fail "java $JAVA_VERSION (required: >=17) – see https://reactnative.dev/docs/set-up-your-environment"
   fi
 else
-  fail "java not found (required: >=17) – see README"
+  fail "java not found (required: >=17) – see https://reactnative.dev/docs/set-up-your-environment"
 fi
 
 # Yarn (README requirement 3)
