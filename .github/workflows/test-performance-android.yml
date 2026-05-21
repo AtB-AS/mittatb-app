@@ -107,9 +107,10 @@ jobs:
         env:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+      - uses: pnpm/action-setup@v4
       - name: Install E2E tests
         working-directory: e2e
-        run: yarn install
+        run: pnpm install
 
       # Emulator cache
       - name: Gradle cache

@@ -105,9 +105,10 @@ jobs:
         env:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+      - uses: pnpm/action-setup@v4
       - name: Install E2E tests
         working-directory: e2e
-        run: yarn install
+        run: pnpm install
       - name: tsc
         working-directory: e2e
         run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
@@ -155,7 +156,7 @@ jobs:
           emulator-build: 12414864
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          script: yarn test:android:smoke
+          script: pnpm test:android:smoke
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}

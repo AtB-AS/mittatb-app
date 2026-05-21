@@ -111,15 +111,17 @@ jobs:
         with:
           lookup-only: true
           path: '**/node_modules'
-          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/patches/**.patch') }}
           restore-keys: |
             node-modules-${{ runner.os }}-
+      - uses: pnpm/action-setup@v4
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
       - name: Install node v22
         uses: actions/setup-node@v5
         if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         with:
           node-version: 22
-          cache: 'yarn'
+          cache: 'pnpm'
       - name: Add Entur private registry credentials
         shell: bash
         if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
@@ -129,7 +131,7 @@ jobs:
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Install node_modules
         if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
       # ===== Ruby & Bundler =====
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
@@ -160,7 +162,7 @@ jobs:
         id: apk-cache
         with:
           path: app-staging.apk
-          key: ${{ matrix.org }}-apk-cache-${{needs.setup.outputs.abi-filename}}-${{ hashFiles('android/**', '**/yarn.lock', '**/patches/**/*.patch', '.env') }}
+          key: ${{ matrix.org }}-apk-cache-${{needs.setup.outputs.abi-filename}}-${{ hashFiles('android/**', '**/pnpm-lock.yaml', '**/patches/**/*.patch', '.env') }}
 
       - name: Build setup
         uses: ./.github/actions/android-build-setup

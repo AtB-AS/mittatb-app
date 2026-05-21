@@ -18,7 +18,7 @@ Set up dependencies (from the ./android directory)
 ./gradlew clean
 ```
 
-Then run `yarn android` to build and launch the app on a connected device or emulator. To list connected devices, run `adb devices`.
+Then run `pnpm android` to build and launch the app on a connected device or emulator. To list connected devices, run `adb devices`.
 
 ### Generate .apk
 

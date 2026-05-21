@@ -1,0 +1,9 @@
+allowBuilds:
+  '@firebase/util': true
+  '@shopify/react-native-skia': true
+  esbuild: true
+  postinstall-postinstall: true
+  protobufjs: true
+  react-native-inappbrowser-reborn: true
+  sharp: true
+nodeLinker: 'hoisted'

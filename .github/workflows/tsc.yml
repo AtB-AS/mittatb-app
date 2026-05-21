@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - uses: pnpm/action-setup@v4
       - name: install node v22
         uses: actions/setup-node@v1
         with:
@@ -32,10 +33,10 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
-      - name: yarn install
-        run: yarn install --frozen-lockfile
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/patches/**.patch') }}
+      - name: pnpm install
+        run: pnpm install --frozen-lockfile
       - name: Install assets
         run: sh ./scripts/generate-assets.sh ${{ matrix.org }}
       - name: check-all
-        run: yarn check-all
+        run: pnpm check-all

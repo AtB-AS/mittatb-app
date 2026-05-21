@@ -68,21 +68,22 @@ jobs:
           path: |
             ios/Pods
             ~/Library/Caches/CocoaPods
-          key: pods-${{ hashFiles('yarn.lock') }}-${{ hashFiles('ios/Podfile.lock') }}
+          key: pods-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('ios/Podfile.lock') }}
       - name: Cache node_modules
         uses: actions/cache@v4
         id: modules-cache
         with:
           path: '**/node_modules'
-          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/patches/**.patch') }}
           restore-keys: |
             node-modules-${{ runner.os }}-
       # ===== Install node-modules  =====
+      - uses: pnpm/action-setup@v4
       - name: Install node v22
         uses: actions/setup-node@v5
         with:
           node-version: 22
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Add Entur private registry credentials
         shell: bash
@@ -93,7 +94,7 @@ jobs:
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Install node_modules
         if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
       # ===== Ruby & Bundler =====
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
@@ -154,9 +155,9 @@ jobs:
           path: |
             ios/Pods
             ~/Library/Caches/CocoaPods
-          key: pods-${{ hashFiles('yarn.lock') }}-${{ hashFiles('ios/Podfile.lock') }}
+          key: pods-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('ios/Podfile.lock') }}
           restore-keys: |
-            pods-${{ hashFiles('yarn.lock') }}-
+            pods-${{ hashFiles('pnpm-lock.yaml') }}-
             pods-
       - name: Disable widget
         if: ${{ env.ENABLE_WIDGET != 'true' && steps.ipa-cache.outputs.cache-hit != 'true' }}

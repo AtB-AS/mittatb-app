@@ -154,7 +154,7 @@ echo "Determined next release version: $VERSION"
 
 # --- Step 2: Create GitHub Release Draft ---
 echo "--- Step 2: Creating GitHub release draft ---"
-yarn release-draft "v$VERSION"
+pnpm release-draft "v$VERSION"
 echo "Successfully created draft release for v$VERSION."
 
 # --- Step 3: Publish GitHub Release ---
