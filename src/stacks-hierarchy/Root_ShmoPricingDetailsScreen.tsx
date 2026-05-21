@@ -113,7 +113,7 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
         {hasCampaign && (
           <ThemeText
             typography="body__s"
-            color="secondary"
+            type='secondary'
             style={styles.sectionLabel}
           >
             {t(MobilityTexts.pricingDetails.campaignPrice)}
