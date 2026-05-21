@@ -8,6 +8,11 @@ export type DimensionOverrides = {
   decorationContainerWidth?: number;
 };
 
+export const NEW_TRIP_DIMENSIONS: DimensionOverrides = {
+  labelWidth: 64,
+  decorationContainerWidth: 42,
+};
+
 type TripRowProps = {
   rowLabel?: React.ReactNode;
   alignChildren?: 'flex-start' | 'flex-end' | 'center';

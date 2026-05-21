@@ -8,14 +8,9 @@ import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
 import {TripLegDecoration} from './TripLegDecoration';
-import {DimensionOverrides, TripRow} from './TripRow';
+import {NEW_TRIP_DIMENSIONS, TripRow} from './TripRow';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useTransportColor} from '@atb/utils/use-transport-color';
-
-const NEW_DIMENSIONS: DimensionOverrides = {
-  labelWidth: 64,
-  decorationContainerWidth: 42,
-};
 
 export type WaitDetails = {
   mustWaitForNextLeg: boolean;
@@ -32,20 +27,20 @@ export const WaitSection: React.FC<WaitDetails> = (wait) => {
   return (
     <View style={style.section}>
       <TripLegDecoration
-        dimensionOverrides={NEW_DIMENSIONS}
+        dimensionOverrides={NEW_TRIP_DIMENSIONS}
         color={legColor.secondary.background}
         hasStart={false}
         hasEnd={false}
       />
       {shortWait && (
-        <TripRow dimensionOverrides={NEW_DIMENSIONS}>
+        <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS}>
           <MessageInfoBox
             type="info"
             message={t(TripDetailsTexts.trip.leg.wait.messages.shortTime)}
           />
         </TripRow>
       )}
-      <TripRow dimensionOverrides={NEW_DIMENSIONS}>
+      <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS}>
         <View style={style.waitLine}>
           <ThemeIcon svg={Time} color={legColor.secondary.background} />
           <ThemeText typography="body__s" type="secondary">
