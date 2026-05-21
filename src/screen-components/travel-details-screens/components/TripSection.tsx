@@ -458,7 +458,13 @@ export const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         ) : null}
-        {hasIntermediateStops && <IntermediateInfo leg={leg} testID={testID} />}
+        {hasIntermediateStops && (
+          <IntermediateInfo
+            leg={leg}
+            testID={testID}
+            onPressQuay={onPressQuay}
+          />
+        )}
         {showTo && (
           <TripRow
             dimensionOverrides={NEW_TRIP_DIMENSIONS}
@@ -541,7 +547,16 @@ export const TripSection: React.FC<TripSectionProps> = ({
     onPressQuay(stopPlace, quay.id);
   }
 };
-const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
+
+const IntermediateInfo = ({
+  leg,
+  testID,
+  onPressQuay,
+}: {
+  leg: Leg;
+  testID?: string;
+  onPressQuay: TripProps['onPressQuay'];
+}) => {
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const style = useSectionStyles();
@@ -554,6 +569,14 @@ const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
   const toggleExpanded = () => {
     animateNextChange();
     setExpanded(!expanded);
+  };
+
+  const handleQuayPress = (
+    quay: Leg['intermediateEstimatedCalls'][number]['quay'],
+  ) => {
+    const stopPlace = quay.stopPlace;
+    if (!stopPlace) return;
+    onPressQuay(stopPlace, quay.id);
   };
 
   return (
@@ -615,6 +638,7 @@ const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
                     roundingMethod="floor"
                   />
                 }
+                onPress={() => handleQuayPress(call.quay)}
               >
                 <ThemeText>{call.quay.name}</ThemeText>
               </TripRow>
