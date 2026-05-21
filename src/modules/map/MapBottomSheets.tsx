@@ -23,7 +23,8 @@ import {
   mapPositionToCoordinates,
 } from './utils';
 import MapboxGL from '@rnmapbox/maps';
-import {ShmoBookingState} from '@atb/api/types/mobility';
+import {ShmoBookingState, ShmoPricingPlan} from '@atb/api/types/mobility';
+import {PriceAdjustmentType} from '@atb-as/config-specs/lib/mobility';
 import {MapFilterType, MapProps} from './types';
 import {ExternalRealtimeMapSheet} from './components/external-realtime-map/ExternalRealtimeMapSheet';
 import {DeparturesDialogSheet} from './components/DeparturesDialogSheet';
@@ -52,6 +53,10 @@ type MapBottomSheetsProps = {
   navigateToScanQrCode: () => void;
   navigateToLogin: () => void;
   navigateToPaymentMethods: () => void;
+  navigateToPricingDetails: (
+    pricingPlan: ShmoPricingPlan,
+    priceAdjustments: PriceAdjustmentType[] | undefined,
+  ) => void;
 };
 
 export const MapBottomSheets = ({
@@ -67,6 +72,7 @@ export const MapBottomSheets = ({
   navigateToScanQrCode,
   navigateToLogin,
   navigateToPaymentMethods,
+  navigateToPricingDetails,
 }: MapBottomSheetsProps) => {
   const [openPaymentType, setOpenPaymentType] = useState<boolean>(false);
   const {
@@ -208,6 +214,7 @@ export const MapBottomSheets = ({
             navigateToLogin={navigateToLogin}
             locationArrowOnPress={locationArrowOnPress}
             navigateToScanQrCode={navigateToScanQrCode}
+            navigateToPricingDetails={navigateToPricingDetails}
           />
         )}
 
@@ -258,7 +265,6 @@ export const MapBottomSheets = ({
             navigateToScanQrCode={navigateToScanQrCode}
           />
         )}
-
       {mapState.bottomSheetType === MapBottomSheetType.BikeStation && (
         <BikeStationBottomSheet
           stationId={mapState.feature?.properties?.id ?? mapState.assetId ?? ''}

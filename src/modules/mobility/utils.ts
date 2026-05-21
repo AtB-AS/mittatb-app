@@ -17,7 +17,11 @@ import {
 import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {dictionary, Language} from '@atb/translations';
 import {enumFromString} from '@atb/utils/enum-from-string';
-import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
+import {
+  MobilityOperatorType,
+  PriceAdjustmentEnum,
+  PriceAdjustmentType,
+} from '@atb-as/config-specs/lib/mobility';
 import {
   BatteryEmpty,
   BatteryFull,
@@ -28,6 +32,7 @@ import {
 import {
   RentalUris,
   ShmoPricingPlan,
+  ShmoPricingSegment,
   StationFeature,
   StationFeatureSchema,
   StationsClusteredFeature,
@@ -237,6 +242,47 @@ export const isShowAll = (
 
 export const toFormFactorEnum = (str: string): FormFactor =>
   enumFromString(FormFactor, str) || FormFactor.Other;
+
+export const getFreeUnlock = (
+  priceAdjustments: PriceAdjustmentType[] | undefined,
+  systemId: string,
+): PriceAdjustmentType | undefined =>
+  priceAdjustments?.find(
+    (e) =>
+      e.type === PriceAdjustmentEnum.enum.FREE_UNLOCK &&
+      e.systemIds.includes(systemId),
+  );
+
+export const getFreeMinutes = (
+  priceAdjustments: PriceAdjustmentType[] | undefined,
+  systemId: string,
+): PriceAdjustmentType | undefined =>
+  priceAdjustments?.find(
+    (e) =>
+      e.type === PriceAdjustmentEnum.enum.FREE_MINUTES &&
+      e.systemIds.includes(systemId),
+  );
+
+export const computeFreeMinuteCount = (
+  freeMinutes: PriceAdjustmentType,
+  perMinPricing: ShmoPricingSegment[],
+): number => {
+  let budget = Math.abs(freeMinutes.amount);
+  let total = 0;
+  for (const segment of perMinPricing) {
+    if (budget <= 0) break;
+    const segLengthMin =
+      segment.end != null ? segment.end - segment.start : Infinity;
+    if (segment.rate <= 0) {
+      total += segLengthMin;
+      continue;
+    }
+    const minutes = Math.min(Math.floor(budget / segment.rate), segLengthMin);
+    total += minutes;
+    budget -= minutes * segment.rate;
+  }
+  return Math.min(total, 180);
+};
 
 export const getNewFilterState = (
   isChecked: boolean,

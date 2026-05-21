@@ -6,6 +6,8 @@ import {
 } from '@atb/modules/map';
 import {MapScreenProps} from './navigation-types';
 import {Quay, StopPlace} from '@atb/api/types/departures';
+import {ShmoPricingPlan} from '@atb/api/types/mobility';
+import {PriceAdjustmentType} from '@atb-as/config-specs/lib/mobility';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
@@ -153,6 +155,20 @@ export const Map_RootScreen = ({
     navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
   }, [navigation, bonusScreenParams]);
 
+  const navigateToPricingDetails = useCallback(
+    (
+      pricingPlan: ShmoPricingPlan,
+      priceAdjustments: PriceAdjustmentType[] | undefined,
+    ) => {
+      navigation.navigate('Root_ShmoPricingDetailsScreen', {
+        pricingPlan,
+        priceAdjustments,
+        transitionOverride: 'slide-from-right',
+      });
+    },
+    [navigation],
+  );
+
   const focusRef = useFocusOnLoad(navigation);
 
   if (isScreenReaderEnabled)
@@ -173,6 +189,7 @@ export const Map_RootScreen = ({
       navigateToLogin={navigateToLogin}
       navigateToPaymentMethods={navigateToPaymentMethods}
       navigateToBonusScreen={navigateToBonusScreen}
+      navigateToPricingDetails={navigateToPricingDetails}
       includeSnackbar={true}
     />
   );

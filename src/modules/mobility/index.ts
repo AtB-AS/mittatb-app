@@ -38,8 +38,11 @@ export {useShmoRequirements} from './use-shmo-requirements';
 export {useVehicle} from './use-vehicle';
 export {useDeleteAgeVerificationMutation} from './queries/use-remove-age-verification-mutation';
 export {
+  computeFreeMinuteCount,
   findOperatorBrandImageUrl,
   getAvailableVehicles,
+  getFreeMinutes,
+  getFreeUnlock,
   getTransportModeAndSubMode,
   isBicycle,
   isBikeStation,
