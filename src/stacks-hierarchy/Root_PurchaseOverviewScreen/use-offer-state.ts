@@ -276,7 +276,7 @@ export function useOfferState(
                 selection?.supplementProductsWithCount.map((sp) => sp.id) ?? [],
               isOnBehalfOf: false,
               legs: mapToOfferSearchLegs(selection.legs),
-              bonusProductId: selection?.bonusProductId,
+              bonusProductId: selection.bonusProductId,
             };
             const response = await searchTripPatternOffers(params);
             offers = response.offers;

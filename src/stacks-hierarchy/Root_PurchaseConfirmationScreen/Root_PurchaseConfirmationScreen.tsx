@@ -359,10 +359,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             type="error"
           />
         )}
-        {relevantTicketBonusProduct && !isFree && !isBookingFlow && (
+        {!!relevantTicketBonusProduct && !isFree && !isBookingFlow && (
           <PayWithBonusPointsCheckbox
             bonusProduct={relevantTicketBonusProduct}
-            operatorName=""
             isChecked={
               selection.bonusProductId === relevantTicketBonusProduct.id
             }
