@@ -2,6 +2,7 @@ import {FormFactorSchema} from '@atb/api/types/mobility';
 import {LanguageAndTextTypeArray} from '@atb/modules/configuration';
 import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
 import {z} from 'zod';
+import {optionalNullish} from '@atb-as/config-specs/lib/utils/nullish';
 
 export enum BonusProductTypeEnum {
   VOUCHER = 'VOUCHER',
@@ -44,8 +45,8 @@ export const BonusProductSchema = z.object({
   productType: z.enum(BonusProductTypeEnum),
   description: LanguageAndTextTypeArray,
   paymentDescription: LanguageAndTextTypeArray,
-  priceAdjustments: z.array(BonusPriceAdjustmentSchema).optional(),
-  ticketRule: TicketRuleSchema.optional(),
+  priceAdjustments: optionalNullish(z.array(BonusPriceAdjustmentSchema)),
+  ticketRule: optionalNullish(TicketRuleSchema),
 });
 
 export type BonusProductType = z.infer<typeof BonusProductSchema>;
