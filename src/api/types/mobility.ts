@@ -301,6 +301,7 @@ export const AssetSchema = z.object({
   currentRangeKm: z.number().int().nullish(),
   formFactor: FormFactorSchema.nullish(),
   propulsionType: PropulsionTypeSchema.nullish(),
+  stationSlotName: z.string().nullish(),
 });
 
 export const ShmoBookingSchema = z.object({

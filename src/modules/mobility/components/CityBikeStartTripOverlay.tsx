@@ -29,9 +29,15 @@ export const CityBikeStartTripOverlay = ({
       <View style={styles.contentWrapper}>
         <View style={styles.title}>
           <ThemeIcon size="large" svg={Parking} />
-          <ThemeText style={theme.typography.heading__xl}>
-            {t(MobilityTexts.cityBike.location(1))}
-          </ThemeText>
+          {activeBooking.asset?.stationSlotName && (
+            <ThemeText style={theme.typography.heading__xl}>
+              {t(
+                MobilityTexts.cityBike.location(
+                  activeBooking.asset?.stationSlotName,
+                ),
+              )}
+            </ThemeText>
+          )}
         </View>
         <ThemedCityBike />
         <View style={styles.content}>
