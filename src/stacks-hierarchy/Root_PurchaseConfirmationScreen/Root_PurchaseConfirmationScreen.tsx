@@ -110,7 +110,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   const builder = usePurchaseSelectionBuilder();
   const relevantTicketBonusProduct = useRelevantTicketBonusProduct(selection);
-  const isBookingFlow = selection.legs.length > 0;
+
   const isFree = totalPrice === 0;
 
   const userProfileOffers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
@@ -359,7 +359,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             type="error"
           />
         )}
-        {!!relevantTicketBonusProduct && !isFree && !isBookingFlow && (
+        {!!relevantTicketBonusProduct && !isFree && (
           <PayWithBonusPointsCheckbox
             bonusProduct={relevantTicketBonusProduct}
             isChecked={
