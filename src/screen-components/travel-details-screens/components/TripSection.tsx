@@ -592,12 +592,9 @@ const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
         />
       </TripRow>
       {expanded &&
-        leg.intermediateEstimatedCalls.map((call, index) => {
-          const sjCall = leg.serviceJourneyEstimatedCalls.find(
-            (c) => c.quay.name === call.quay.name,
-          );
+        leg.intermediateEstimatedCalls.map((call) => {
           return (
-            <View key={call.quay.id ?? index} style={style.intermediateStop}>
+            <View key={call.stopPositionInPattern} style={style.intermediateStop}>
               <TripLegDecoration
                 dimensionOverrides={NEW_DIMENSIONS}
                 color={legColor}
@@ -608,16 +605,14 @@ const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
                 alignChildren="center"
                 style={style.intermediateStopRow}
                 rowLabel={
-                  sjCall ? (
-                    <Time
+                  <Time
                       timeValues={{
-                        aimedTime: sjCall.aimedDepartureTime,
-                        expectedTime: sjCall.expectedDepartureTime,
-                        isRealtime: sjCall.realtime,
+                        aimedTime: call.aimedDepartureTime,
+                        expectedTime: call.expectedDepartureTime,
+                        isRealtime: call.realtime,
                       }}
                       roundingMethod="floor"
                     />
-                  ) : undefined
                 }
               >
                 <ThemeText>{call.quay.name}</ThemeText>

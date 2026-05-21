@@ -105,6 +105,10 @@ export type TripPatternFragment = {
     intermediateEstimatedCalls: Array<{
       date: any;
       quay: {name: string; id: string};
+      stopPositionInPattern: number;
+      realtime: boolean;
+      aimedDepartureTime: any;
+      expectedDepartureTime: any;
     }>;
     authority?: AuthorityFragment;
     serviceJourneyEstimatedCalls: Array<{
