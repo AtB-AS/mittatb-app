@@ -103,9 +103,11 @@ fi
 # Java (README requirement 2 – React Native environment)
 section "Java"
 if command -v java >/dev/null 2>&1; then
-  JAVA_VERSION=$(java -XshowSettings:property -version 2>&1 | awk '/java.version =/{print $3}')
+  JAVA_VERSION=$(java -version 2>&1 | awk -F '"' 'NR==1{print $2}')
   JAVA_MAJOR=$(echo "$JAVA_VERSION" | cut -d. -f1)
-  if is_integer "$JAVA_MAJOR" && [ "$JAVA_MAJOR" -ge 17 ]; then
+  if ! is_integer "$JAVA_MAJOR"; then
+    fail "java: could not parse version"
+  elif [ "$JAVA_MAJOR" -ge 17 ]; then
     pass "java $JAVA_VERSION"
   else
     fail "java $JAVA_VERSION (required: >=17) – see README"
