@@ -108,8 +108,9 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
           type: type,
           assetId: id,
         });
-        analytics.logEvent('Map', 'Scooter selected', {
+        analytics.logEvent('Map', 'Go to bottom sheet from qr scan', {
           id,
+          type,
         });
       } else {
         clearStateAndAlertResultError();
