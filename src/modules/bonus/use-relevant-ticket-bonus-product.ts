@@ -29,29 +29,28 @@ function matchesTicketRule(
 ): boolean {
   if (!rule) return false;
 
-  if (rule.preassignedFareProductIds?.length) {
-    if (
-      !rule.preassignedFareProductIds.includes(
-        selection.preassignedFareProduct.id,
-      )
-    ) {
-      return false;
-    }
+  const {preassignedFareProductIds, userProfiles, zoneIds} = rule;
+
+  if (
+    preassignedFareProductIds?.length &&
+    !preassignedFareProductIds.includes(selection.preassignedFareProduct.id)
+  ) {
+    return false;
   }
 
-  if (rule.userProfiles?.length) {
+  if (userProfiles?.length) {
     const selectedProfiles = selection.userProfilesWithCount.map((p) => p.id);
-    if (!selectedProfiles.every((id) => rule.userProfiles!.includes(id))) {
+    if (!selectedProfiles.every((id) => userProfiles!.includes(id))) {
       return false;
     }
   }
 
-  if (rule.zoneIds?.length) {
+  if (zoneIds?.length) {
     const selectedZones = [
       selection.zones?.from?.id,
       selection.zones?.to?.id,
-    ].filter((id): id is string => id !== undefined);
-    if (!selectedZones.every((id) => rule.zoneIds!.includes(id))) {
+    ].filter((id) => id !== undefined);
+    if (!selectedZones.every((id) => zoneIds.includes(id))) {
       return false;
     }
   }
