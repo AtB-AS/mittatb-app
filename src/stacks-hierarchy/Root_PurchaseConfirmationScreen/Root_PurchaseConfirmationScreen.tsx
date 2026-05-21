@@ -297,7 +297,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           fareProductTypeConfig={selection.fareProductTypeConfig}
           fromPlace={selection.zones?.from || selection.stopPlaces?.from}
           toPlace={selection.zones?.to || selection.stopPlaces?.to}
-          isSearchingOffer={isSearchingOffer}
           preassignedFareProduct={selection.preassignedFareProduct}
           recipient={recipient}
           travelDate={
