@@ -402,7 +402,10 @@ export const TripSection: React.FC<TripSectionProps> = ({
         )}
         {bookingStatus === 'bookable' && (
           <View style={style.flexBookingOptions}>
-            <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS} accessible={false}>
+            <TripRow
+              dimensionOverrides={NEW_TRIP_DIMENSIONS}
+              accessible={false}
+            >
               <BookingOptions bookingArrangements={leg.bookingArrangements} />
             </TripRow>
           </View>
@@ -589,7 +592,10 @@ const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
       {expanded &&
         leg.intermediateEstimatedCalls.map((call) => {
           return (
-            <View key={call.stopPositionInPattern} style={style.intermediateStop}>
+            <View
+              key={call.stopPositionInPattern}
+              style={style.intermediateStop}
+            >
               <TripLegDecoration
                 dimensionOverrides={NEW_TRIP_DIMENSIONS}
                 color={legColor}
@@ -601,13 +607,13 @@ const IntermediateInfo = ({leg, testID}: {leg: Leg; testID?: string}) => {
                 style={style.intermediateStopRow}
                 rowLabel={
                   <Time
-                      timeValues={{
-                        aimedTime: call.aimedDepartureTime,
-                        expectedTime: call.expectedDepartureTime,
-                        isRealtime: call.realtime,
-                      }}
-                      roundingMethod="floor"
-                    />
+                    timeValues={{
+                      aimedTime: call.aimedDepartureTime,
+                      expectedTime: call.expectedDepartureTime,
+                      isRealtime: call.realtime,
+                    }}
+                    roundingMethod="floor"
+                  />
                 }
               >
                 <ThemeText>{call.quay.name}</ThemeText>
