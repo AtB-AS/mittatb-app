@@ -97,10 +97,17 @@ export const VehicleSheet = ({
 
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
-  const priceAdjustments =
-    operator?.priceAdjustments?.[
-      formFactor as keyof NonNullable<typeof operator.priceAdjustments>
-    ];
+  const priceAdjustments = (() => {
+    switch (formFactor) {
+      case FormFactor.Bicycle:
+      case FormFactor.Car:
+      case FormFactor.Scooter:
+      case FormFactor.ScooterStanding:
+        return operator?.priceAdjustments?.[formFactor];
+      default:
+        return undefined;
+    }
+  })();
   const operatorLogo = operator?.brandAssets?.brandImageUrl;
 
   const {mode, subMode} = getTransportModeAndSubMode(
