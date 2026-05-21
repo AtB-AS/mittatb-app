@@ -1,34 +1,35 @@
-import {PropulsionType} from '@atb/api/types/generated/mobility-types_v2';
 import {useQueries} from '@tanstack/react-query';
 import {getVehicles} from '@atb/api/mobility';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 
 export const getVehiclesQueryKey = (
-  propulsionType?: PropulsionType,
+  vehicleTypeId?: string,
   stationId?: string,
   sort?: string,
   maxCount?: number,
-) => ['GET_VEHICLES', propulsionType, stationId, sort, maxCount];
+) => ['GET_VEHICLES', vehicleTypeId, stationId, sort, maxCount];
 
-export const useVehiclesByPropulsionTypesQueries = (
+export const useVehiclesByVehicleTypeIdsQueries = (
+  vehicleTypeIds: string[],
   stationId?: string,
   sort?: string,
   maxCount?: number,
 ) => {
-  const [humanQuery, electricQuery, electricAssistQuery] = useQueries({
-    queries: [
-      PropulsionType.Human,
-      PropulsionType.Electric,
-      PropulsionType.ElectricAssist,
-    ].map((propulsionType) => ({
-      queryKey: getVehiclesQueryKey(propulsionType, stationId, sort, maxCount),
-      queryFn: ({signal}) =>
-        getVehicles({propulsionType, stationId, sort, maxCount}, {signal}),
+  const results = useQueries({
+    queries: vehicleTypeIds.map((vehicleTypeId) => ({
+      queryKey: getVehiclesQueryKey(vehicleTypeId, stationId, sort, maxCount),
+      queryFn: ({signal}: {signal: AbortSignal}) =>
+        getVehicles(
+          {vehicleTypeIds: [vehicleTypeId], stationId, sort, maxCount},
+          {signal},
+        ),
       gcTime: ONE_MINUTE_MS,
       staleTime: 5000,
       retry: 3,
     })),
   });
 
-  return {humanQuery, electricQuery, electricAssistQuery};
+  return Object.fromEntries(
+    vehicleTypeIds.map((id, index) => [id, results[index]]),
+  ) as Record<string, (typeof results)[number]>;
 };

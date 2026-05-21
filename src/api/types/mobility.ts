@@ -373,6 +373,7 @@ export const MAX_SUPPORT_COMMENT_LENGTH = 400;
 
 export const VehiclesRequestBodySchema = z.object({
   stationId: z.string().nullish(),
+  vehicleTypeIds: z.array(z.string()).nullish(),
   propulsionType: z.string().nullish(),
   sort: z.string().nullish(),
   maxCount: z.number().int().nullish(),

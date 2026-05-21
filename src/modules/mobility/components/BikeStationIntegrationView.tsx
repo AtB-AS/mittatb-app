@@ -21,7 +21,7 @@ import SvgParking from '@atb/assets/svg/mono-icons/places/Parking';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
-import {useVehiclesByPropulsionTypesQueries} from '../queries/use-vehicles-by-propulsion-types-queries';
+import {useVehiclesByVehicleTypeIdsQueries} from '../queries/use-vehicles-by-propulsion-types-queries';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Loading} from '@atb/components/loading';
 import {useQueryClient} from '@tanstack/react-query';
@@ -49,19 +49,19 @@ export const BikeStationIntegrationView = ({
   const {t} = useTranslation();
   const queryClient = useQueryClient();
   const styles = useStyles();
-  const {humanQuery, electricQuery, electricAssistQuery} =
-    useVehiclesByPropulsionTypesQueries(
-      station?.id, // stationId
-      '-currentRangeMeters', // sort
-      1, // maxCount
-    );
+  const vehicleTypeIds = (station?.vehicleTypesAvailable ?? []).map(
+    (e) => e.vehicleType.id,
+  );
+  const queriesByVehicleTypeId = useVehiclesByVehicleTypeIdsQueries(
+    vehicleTypeIds,
+    station?.id,
+    '-currentRangeMeters',
+    1,
+  );
 
-  const isLoading = [humanQuery, electricQuery, electricAssistQuery].some(
-    (q) => q.isLoading,
-  );
-  const isError = [humanQuery, electricQuery, electricAssistQuery].some(
-    (q) => q.isError,
-  );
+  const queries = Object.values(queriesByVehicleTypeId);
+  const isLoading = queries.some((q) => q.isLoading);
+  const isError = queries.some((q) => q.isError);
 
   if (isLoading) {
     return (
@@ -113,16 +113,8 @@ export const BikeStationIntegrationView = ({
                   />
                 }
                 onPress={() => {
-                  const vehicle = (() => {
-                    switch (e.vehicleType.propulsionType) {
-                      case PropulsionType.Human:
-                        return humanQuery.data?.[0];
-                      case PropulsionType.Electric:
-                        return electricQuery.data?.[0];
-                      case PropulsionType.ElectricAssist:
-                        return electricAssistQuery.data?.[0];
-                    }
-                  })();
+                  const vehicle =
+                    queriesByVehicleTypeId[e.vehicleType.id]?.data?.[0];
 
                   if (vehicle?.id) {
                     onPressVehicleType(vehicle.id, false);
