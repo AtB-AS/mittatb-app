@@ -135,10 +135,6 @@ function mapMapBottomSheetTypeToFormFactor(
   mapBottomSheetType?: MapBottomSheetType,
 ): FormFactor | undefined {
   switch (mapBottomSheetType) {
-    case MapBottomSheetType.Bicycle:
-      return FormFactor.Bicycle;
-    case MapBottomSheetType.Scooter:
-      return FormFactor.Scooter;
     case MapBottomSheetType.BikeStation:
       return FormFactor.Bicycle;
     case MapBottomSheetType.CarStation:
@@ -151,6 +147,7 @@ function mapMapBottomSheetTypeToFormFactor(
 export const getFeatureFromScan = (
   mapItem: AutoSelectableMapItem,
   mapBottomSheetType: MapBottomSheetType,
+  formFactor?: FormFactor,
 ): Feature<Point, GeoJsonProperties> => {
   const feature: Feature<Point, GeoJsonProperties> = {
     type: 'Feature',
@@ -164,7 +161,7 @@ export const getFeatureFromScan = (
       system_id: mapItem?.system.id,
       count: 1,
       vehicle_type_form_factor:
-        mapMapBottomSheetTypeToFormFactor(mapBottomSheetType),
+        formFactor ?? mapMapBottomSheetTypeToFormFactor(mapBottomSheetType),
     },
   };
 
