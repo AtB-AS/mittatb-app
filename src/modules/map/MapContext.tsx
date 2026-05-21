@@ -42,8 +42,7 @@ type MapContextState = {
 const MapContext = createContext<MapContextState | undefined>(undefined);
 
 export enum MapBottomSheetType {
-  Scooter = 'SCOOTER',
-  Bicycle = 'BICYCLE',
+  Vehicle = 'VEHICLE',
   BikeStation = 'BIKE_STATION',
   CarStation = 'CAR_STATION',
   StopPlace = 'STOP_PLACE',

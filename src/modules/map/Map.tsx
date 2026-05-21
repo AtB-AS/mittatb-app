@@ -42,7 +42,6 @@ import {
 } from '@atb/modules/map';
 
 import {
-  isBicycle,
   isScooter,
   useVehicleQuery,
   isStation,
@@ -330,14 +329,9 @@ export const Map = (props: MapProps) => {
             mapViewRef,
             zoomLevel: toZoomLevel,
           });
-        } else if (isScooter(featureToSelect)) {
+        } else if (isVehicle(featureToSelect)) {
           dispatchMapState({
-            type: MapStateActionType.Scooter,
-            feature: featureToSelect,
-          });
-        } else if (isBicycle(featureToSelect)) {
-          dispatchMapState({
-            type: MapStateActionType.Bicycle,
+            type: MapStateActionType.Vehicle,
             feature: featureToSelect,
           });
         } else if (isCarStation(featureToSelect)) {
