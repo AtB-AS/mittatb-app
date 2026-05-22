@@ -10,7 +10,10 @@ import {
   LocationArrow,
   useControlPositionsStyle,
   useMapViewConfig,
+  TariffZoneLinesAndLabels,
+  mapZonesToPolygonCollection,
 } from '@atb/modules/map';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useThemeContext, StyleSheet} from '@atb/theme';
@@ -92,7 +95,9 @@ export const TravelDetailsMapScreenComponent = ({
       ]
     : undefined;
 
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
+  const {fareZones} = useFirestoreConfigurationContext();
+  const fareZonePolygons = mapZonesToPolygonCollection(fareZones, language);
   const controlStyles = useControlPositionsStyle();
   const styles = useStyles();
 
@@ -164,6 +169,7 @@ export const TravelDetailsMapScreenComponent = ({
           showsUserHeadingIndicator
           renderMode={UserLocationRenderMode.Native}
         />
+        <TariffZoneLinesAndLabels polygonCollection={fareZonePolygons} />
         <MapRoute lines={features} />
         {toPlace && (
           <MapLabel
