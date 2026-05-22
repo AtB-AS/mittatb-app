@@ -9,6 +9,10 @@ const labelZoomOpacity: Expression = [
   'interpolate',
   ['linear'],
   ['zoom'],
+  4.3,
+  0,
+  4.5,
+  1,
   10,
   1,
   10.5,
@@ -52,6 +56,8 @@ export const TariffZoneLinesAndLabels = ({
             textHaloWidth: 2,
             iconEmissiveStrength: 1,
             textOpacity: showLabelsAtAllZoom ? 1 : labelZoomOpacity,
+            textAllowOverlap: true,
+            textIgnorePlacement: true,
           }}
         />
       </MapboxGL.ShapeSource>
