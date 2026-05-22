@@ -49,7 +49,10 @@ export const useTripsInfiniteQuery = (
     staleTime: 30 * ONE_MINUTE_MS,
     gcTime: 30 * ONE_MINUTE_MS,
     initialPageParam: undefined,
-    getNextPageParam: (lastPage) => lastPage?.trip?.nextPageCursor,
+    getNextPageParam: (lastPage) =>
+      tripsInfiniteQueryProps.arriveBy
+        ? lastPage.trip.previousPageCursor
+        : lastPage?.trip?.nextPageCursor,
   });
 };
 
