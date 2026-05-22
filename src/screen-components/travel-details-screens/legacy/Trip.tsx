@@ -7,7 +7,12 @@ import {
 } from '@atb/utils/date';
 import React, {useCallback, useRef} from 'react';
 import {View} from 'react-native';
-import {getPlaceName, InterchangeDetails, TripSection} from './TripSection';
+import {
+  getPlaceName,
+  InterchangeDetails,
+  LegacyTripSection,
+} from './TripSection';
+import {TripSummary} from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '../types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
@@ -25,7 +30,11 @@ import {
 import {useGetServiceJourneyVehiclesQuery} from '../use-get-service-journey-vehicles';
 import {MapFilterType} from '@atb/modules/map';
 import {Divider} from '@atb/components/divider';
-import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import {
+  TranslateFunction,
+  TripDetailsTexts,
+  useTranslation,
+} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
@@ -50,7 +59,7 @@ import {ErrorResponse} from '@atb-as/utils';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {SaveTripPatternButtonComponent} from '@atb/modules/experimental-store-trip-patterns';
 
-export type TripProps = {
+export type LegacyTripProps = {
   tripPattern: TripPattern;
   error?: ErrorResponse;
   onPressDetailsMap: (params: TravelDetailsMapScreenParams) => void;
@@ -61,7 +70,7 @@ export type TripProps = {
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
   now: number;
 };
-export const Trip: React.FC<TripProps> = ({
+export const LegacyTrip: React.FC<LegacyTripProps> = ({
   tripPattern,
   error,
   onPressDetailsMap,
@@ -133,6 +142,7 @@ export const Trip: React.FC<TripProps> = ({
           <ThemeText typography="body__s" type="secondary" style={styles.date}>
             {formatToVerboseFullDate(tripPattern.expectedStartTime, language)}
           </ThemeText>
+          <Divider />
         </>
       )}
       {shortWaitTime && (
@@ -162,22 +172,11 @@ export const Trip: React.FC<TripProps> = ({
             .filter(isDefined),
         }}
       />
-      {error && isNetworkError(error) && (
+      {error && (
         <>
-          <ScreenReaderAnnouncement
-            message={t(TripDetailsTexts.messages.errorNetwork)}
-          />
-          <MessageInfoBox
-            type="warning"
-            message={t(TripDetailsTexts.messages.errorNetwork)}
-          />
+          <ScreenReaderAnnouncement message={translatedError(error, t)} />
+          <MessageInfoBox type="warning" message={translatedError(error, t)} />
         </>
-      )}
-      {tripPattern.status === 'stale' && (
-        <MessageInfoBox
-          type="warning"
-          message={t(TripDetailsTexts.messages.errorDefault)}
-        />
       )}
       <View style={styles.trip}>
         {tripPattern &&
@@ -188,7 +187,7 @@ export const Trip: React.FC<TripProps> = ({
             );
 
             return (
-              <TripSection
+              <LegacyTripSection
                 key={index}
                 isFirst={index == 0}
                 wait={legWaitDetails(index, filteredLegs)}
@@ -201,7 +200,7 @@ export const Trip: React.FC<TripProps> = ({
                 leg={leg}
                 testID={'leg' + index}
                 onPressShowLive={
-                  !isScreenReaderEnabled && legVehiclePosition
+                  legVehiclePosition
                     ? (serviceJourneyPolylines: ServiceJourneyPolylines) => {
                         shouldShowRequestReview.current = true;
                         onPressDetailsMap({
@@ -223,7 +222,7 @@ export const Trip: React.FC<TripProps> = ({
           })}
       </View>
       <Divider />
-      {!isScreenReaderEnabled && tripPatternLegs && (
+      {tripPatternLegs && (
         <CompactTravelDetailsMap
           serviceJourneyPolylines={tripPatternLegs}
           fromPlace={tripPatternLegs[0]?.fromPlace}
@@ -240,6 +239,7 @@ export const Trip: React.FC<TripProps> = ({
         />
       )}
       <SaveTripPatternButtonComponent tripPattern={tripPattern} now={now} />
+      <TripSummary {...tripPattern} />
     </View>
   );
 };
@@ -289,6 +289,12 @@ function getInterchangeDetails(
   return undefined;
 }
 
-function isNetworkError(error: ErrorResponse): boolean {
-  return error.kind === 'AXIOS_NETWORK_ERROR' || error.kind === 'AXIOS_TIMEOUT';
+function translatedError(error: ErrorResponse, t: TranslateFunction): string {
+  switch (error.kind) {
+    case 'AXIOS_NETWORK_ERROR':
+    case 'AXIOS_TIMEOUT':
+      return t(TripDetailsTexts.messages.errorNetwork);
+    default:
+      return t(TripDetailsTexts.messages.errorDefault);
+  }
 }

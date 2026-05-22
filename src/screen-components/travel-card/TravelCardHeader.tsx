@@ -14,14 +14,18 @@ import {differenceInMinutes} from 'date-fns';
 import {useTimeLabels} from './hooks';
 import {useAccessibilityLabelContribution} from '@atb/modules/composite-accessibility';
 
+export type TravelCardHeaderSize = 'standard' | 'large';
+
 export const TravelCardHeader: React.FC<
   AccessibilityProps & {
     tripPattern: TripPattern;
+    size?: TravelCardHeaderSize;
     includeDayInfo?: boolean;
     includeFromToInfo?: boolean;
   }
 > = ({
   tripPattern,
+  size = 'standard',
   includeDayInfo = true,
   includeFromToInfo = true,
   ...accessibilityProps
@@ -100,7 +104,9 @@ export const TravelCardHeader: React.FC<
               text={statusTextConfig.text}
             />
           )}
-          <ThemeText typography="body__m__strong">
+          <ThemeText
+            typography={size === 'large' ? 'heading__l' : 'body__m__strong'}
+          >
             {`${expectedStartTimeLabel} - ${expectedEndTimeLabel}`}
           </ThemeText>
           {!areTimesEquivalentInMinutes && (

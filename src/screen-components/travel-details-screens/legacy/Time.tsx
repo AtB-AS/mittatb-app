@@ -7,7 +7,6 @@ import {View} from 'react-native';
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {RoundingMethod} from 'date-fns';
 import {getRealtimeState, type TimeValues} from '@atb/utils/realtime';
-import {StyleSheet} from '@atb/theme';
 
 export const Time: React.FC<{
   timeValues: TimeValues;
@@ -34,15 +33,12 @@ export const Time: React.FC<{
       formatToClock(expectedTime, language, roundingMethod, debugShowSeconds)
     : '';
 
-  const styles = useStyles();
-
   switch (representationType) {
     case 'significant-difference': {
       return (
-        <View style={styles.columnContainer}>
-          <View style={styles.rowContainer}>
+        <View style={{flexDirection: 'column', alignItems: 'flex-end'}}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <AccessibleText
-              typography="body__m__strong"
               prefix={t(dictionary.travel.time.expectedPrefix)}
               testID="expTime"
             >
@@ -51,9 +47,9 @@ export const Time: React.FC<{
           </View>
           <AccessibleText
             typography="body__xs"
-            type="secondary"
+            color="secondary"
             prefix={t(dictionary.travel.time.aimedPrefix)}
-            style={styles.aimedTime}
+            style={{textDecorationLine: 'line-through'}}
             testID="aimTime"
           >
             {scheduled}
@@ -62,36 +58,14 @@ export const Time: React.FC<{
       );
     }
     case 'no-realtime': {
-      return (
-        <ThemeText typography="body__m__strong" testID="schCaTime">
-          {scheduled}
-        </ThemeText>
-      );
+      return <ThemeText testID="schCaTime">{scheduled}</ThemeText>;
     }
     default: {
       return (
-        <View style={styles.rowContainer}>
-          <ThemeText typography="body__m__strong" testID="schTime">
-            {expected}
-          </ThemeText>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <ThemeText testID="schTime">{expected}</ThemeText>
         </View>
       );
     }
   }
 };
-
-const useStyles = StyleSheet.createThemeHook(() => ({
-  columnContainer: {
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-  },
-  rowContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  aimedTime: {
-    textDecorationLine: 'line-through',
-    position: 'absolute',
-    top: '100%',
-  },
-}));

@@ -22,21 +22,21 @@ export const TripSummary: React.FC<TripPattern> = ({legs, duration}) => {
       <SummaryDetail
         icon={Duration}
         accessibilityLabel={t(
-          TripDetailsTexts.trip.summary.travelTime.a11yLabel(time),
+          TripDetailsTexts.legacy.trip.summary.travelTime.a11yLabel(time),
         )}
-        label={t(TripDetailsTexts.trip.summary.travelTime.label(time))}
+        label={t(TripDetailsTexts.legacy.trip.summary.travelTime.label(time))}
         testID="travelTime"
       />
       {readableWalkDistance && (
         <SummaryDetail
           icon={WalkFill}
           accessibilityLabel={t(
-            TripDetailsTexts.trip.summary.walkDistance.a11yLabel(
+            TripDetailsTexts.legacy.trip.summary.walkDistance.a11yLabel(
               readableWalkDistance,
             ),
           )}
           label={t(
-            TripDetailsTexts.trip.summary.walkDistance.label(
+            TripDetailsTexts.legacy.trip.summary.walkDistance.label(
               readableWalkDistance,
             ),
           )}
@@ -47,12 +47,12 @@ export const TripSummary: React.FC<TripPattern> = ({legs, duration}) => {
         <SummaryDetail
           icon={BicycleFill}
           accessibilityLabel={t(
-            TripDetailsTexts.trip.summary.bikeDistance.a11yLabel(
+            TripDetailsTexts.legacy.trip.summary.bikeDistance.a11yLabel(
               readableBikeDistance,
             ),
           )}
           label={t(
-            TripDetailsTexts.trip.summary.bikeDistance.label(
+            TripDetailsTexts.legacy.trip.summary.bikeDistance.label(
               readableBikeDistance,
             ),
           )}
