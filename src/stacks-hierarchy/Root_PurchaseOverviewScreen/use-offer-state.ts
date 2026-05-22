@@ -276,6 +276,7 @@ export function useOfferState(
                 selection?.supplementProductsWithCount.map((sp) => sp.id) ?? [],
               isOnBehalfOf: false,
               legs: mapToOfferSearchLegs(selection.legs),
+              bonusProductId: selection.bonusProductId,
             };
             const response = await searchTripPatternOffers(params);
             offers = response.offers;
@@ -294,6 +295,7 @@ export function useOfferState(
               supplementProducts:
                 selection?.supplementProductsWithCount.map((sp) => sp.id) ?? [],
               travelDate: selection?.travelDate,
+              bonusProductId: selection?.bonusProductId,
             };
 
             const offerEndpoint = selection?.stopPlaces

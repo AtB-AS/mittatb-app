@@ -58,6 +58,12 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useProductAlternatives} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {isNonRecurringPaymentType} from '@atb/modules/payment';
+import {
+  PayWithBonusPointsCheckbox,
+  useRelevantTicketBonusProduct,
+} from '@atb/modules/bonus';
+import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
+import {useParamAsState} from '@atb/utils/use-param-as-state';
 import {startApplePayPayment} from './start-apple-pay';
 import {Loading} from '@atb/components/loading';
 import type {TripAnalytics} from '@atb/screen-components/travel-details-screens';
@@ -87,7 +93,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
   const focusRef = useFocusOnLoad(navigation);
 
-  const {selection, recipient} = params;
+  const [selection, setSelection] = useParamAsState(params.selection);
+  const {recipient} = params;
   const productAlternatives = useProductAlternatives(selection);
 
   const {
@@ -100,6 +107,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     userProfilesWithCountAndOffer,
     supplementProductsWithCountAndOffer,
   } = useOfferState(productAlternatives, selection);
+
+  const builder = usePurchaseSelectionBuilder();
+  const relevantTicketBonusProduct = useRelevantTicketBonusProduct(selection);
+
+  const isFree = totalPrice === 0;
 
   const userProfileOffers: ReserveOffer[] = userProfilesWithCountAndOffer.map(
     ({count, offer: {offerId}}) => ({
@@ -285,7 +297,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           fareProductTypeConfig={selection.fareProductTypeConfig}
           fromPlace={selection.zones?.from || selection.stopPlaces?.from}
           toPlace={selection.zones?.to || selection.stopPlaces?.to}
-          isSearchingOffer={isSearchingOffer}
           preassignedFareProduct={selection.preassignedFareProduct}
           recipient={recipient}
           travelDate={
@@ -346,6 +357,25 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           <MessageInfoBox
             message={t(PurchaseConfirmationTexts.cancelPaymentError)}
             type="error"
+          />
+        )}
+        {!!relevantTicketBonusProduct && !isFree && (
+          <PayWithBonusPointsCheckbox
+            bonusProduct={relevantTicketBonusProduct}
+            isChecked={
+              selection.bonusProductId === relevantTicketBonusProduct.id
+            }
+            onPress={() => {
+              const isSelected =
+                selection.bonusProductId === relevantTicketBonusProduct.id;
+              const next = builder
+                .fromSelection(selection)
+                .bonusProductId(
+                  isSelected ? undefined : relevantTicketBonusProduct.id,
+                )
+                .build();
+              setSelection(next);
+            }}
           />
         )}
         <PaymentButton

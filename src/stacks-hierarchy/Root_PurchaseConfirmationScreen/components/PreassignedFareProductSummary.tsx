@@ -32,7 +32,6 @@ type Props = {
   preassignedFareProduct: PreassignedFareProduct;
   fareProductTypeConfig: FareProductTypeConfig;
   recipient?: TicketRecipientType;
-  isSearchingOffer: boolean;
   fromPlace: FareZone | StopPlaceFragment | undefined;
   toPlace: FareZone | StopPlaceFragment | undefined;
   validDurationSeconds?: number;
@@ -44,7 +43,6 @@ export const PreassignedFareContractSummary = ({
   preassignedFareProduct,
   fareProductTypeConfig,
   recipient,
-  isSearchingOffer,
   fromPlace,
   toPlace,
   validDurationSeconds,
@@ -145,8 +143,7 @@ export const PreassignedFareContractSummary = ({
               ),
             )}
           <SummaryText />
-          {!isSearchingOffer &&
-            !!validDurationSeconds &&
+          {!!validDurationSeconds &&
             isShowValidTimeInfoEnabled &&
             summary(
               t(

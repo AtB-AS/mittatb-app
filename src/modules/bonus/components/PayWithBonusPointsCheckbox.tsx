@@ -24,7 +24,7 @@ import {isDefined} from '@atb/utils/presence';
 
 type Props = SectionProps & {
   bonusProduct: BonusProductType;
-  operatorName: string;
+  operatorName?: string;
   isChecked: boolean;
   onPress: () => void;
 };
@@ -68,9 +68,7 @@ export const PayWithBonusPointsCheckbox = ({
       <Section {...props}>
         <GenericClickableSectionItem
           active={isChecked}
-          onPress={() => {
-            onPress();
-          }}
+          onPress={onPress}
           disabled={isDisabled}
           accessibilityRole="checkbox"
           accessibilityState={{checked: isChecked}}
@@ -118,7 +116,7 @@ export const PayWithBonusPointsCheckbox = ({
             style={styles.infoMessage}
             type="warning"
             message={t(
-              BonusProgramTexts.log_in_operator_app_warning(operatorName),
+              BonusProgramTexts.log_in_operator_app_warning(operatorName ?? ''),
             )}
           />
         )}

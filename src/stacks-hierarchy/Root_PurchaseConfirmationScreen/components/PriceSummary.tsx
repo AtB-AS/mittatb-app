@@ -53,6 +53,7 @@ export const PriceSummary = ({
               name={getReferenceDataName(u, language)}
               offerPrice={u.offer.price}
               count={u.count}
+              isSearchingOffer={isSearchingOffer}
             />
           ))}
           {supplementProductsWithCountAndOffer.map((sp) => (
@@ -61,6 +62,7 @@ export const PriceSummary = ({
               name={getReferenceDataName(sp, language)}
               offerPrice={sp.offer.supplementProducts[0].price}
               count={sp.count}
+              isSearchingOffer={isSearchingOffer}
             />
           ))}
         </GenericSectionItem>
@@ -81,16 +83,21 @@ export const PriceSummary = ({
             </ThemeText>
           </View>
 
-          {!isSearchingOffer ? (
-            <ThemeText typography="heading__xl" testID="totalPrice">
+          <View style={styles.priceContainer}>
+            <ThemeText
+              typography="heading__xl"
+              testID="totalPrice"
+              style={{opacity: isSearchingOffer ? 0 : 1}}
+            >
               {totalPriceString} kr
             </ThemeText>
-          ) : (
-            <Loading
-              size={theme.spacing.medium}
-              style={{margin: theme.spacing.medium}}
-            />
-          )}
+            {isSearchingOffer && (
+              <Loading
+                size={theme.spacing.medium}
+                style={styles.priceLoadingOverlay}
+              />
+            )}
+          </View>
         </View>
       </GenericSectionItem>
     </Section>
@@ -101,12 +108,14 @@ type PricePerTravellerProps = {
   name: string;
   offerPrice: SearchOfferPrice;
   count: number;
+  isSearchingOffer: boolean;
 };
 
 const PricePerTraveller = ({
   name,
   offerPrice,
   count,
+  isSearchingOffer,
 }: PricePerTravellerProps) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
@@ -147,7 +156,9 @@ const PricePerTraveller = ({
       >
         {count} {name}
       </ThemeText>
-      <View style={styles.travellerPrice}>
+      <View
+        style={[styles.travellerPrice, {opacity: isSearchingOffer ? 0 : 1}]}
+      >
         {hasFlexDiscount && (
           <ThemeText
             typography="body__xs"
@@ -190,5 +201,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   totalContainerHeadings: {
     paddingVertical: theme.spacing.xSmall,
+  },
+  priceContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  priceLoadingOverlay: {
+    position: 'absolute',
   },
 }));
