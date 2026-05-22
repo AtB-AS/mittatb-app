@@ -25,7 +25,7 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 
 1. Ruby v3.1.0: With something like [rbenv](https://github.com/rbenv/rbenv)
 2. See [React Native: Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment)
-   > ⓘ If bundler fails or not installed, use `gem install bundler -v <version>`, where `<version>` is the one listed at the bottom of [Podfile.lock](./ios/Podfile.lock) (`BUNDLED WITH: 2.x.x`).
+   > ⓘ If bundler fails or not installed, use `gem install bundler -v <version>`, where `<version>` is the one listed at the bottom of [Gemfile.lock](./Gemfile.lock) (`BUNDLED WITH: 2.x.x`).
    > If encountering errors, following the suggested gem installs might solve it.
    >
    > If you experience various mysterious errors when running `yarn android` you probably have the wrong JDK. See **Common errors**** below for fix. 
@@ -60,7 +60,6 @@ Since iOS development is only supported on MacOS, using MacOS for development is
    ```
 
    > ⓘ Access token from jfrog has a one-year expiry
-
 2. Install dependencies:
 
    a. React Native: `yarn`
@@ -89,6 +88,10 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 - Android: Run `yarn android`
   - You may select which device/emulator to use from Android Studio. You may also use Android Debug Bridge (adb).
   - When deploying on device you should check that the device is listed as `device` with `adb devices`. You may also need to use the command `adb -s <device-id> reverse tcp:8081 tcp:8081` to reverse the port needed for metro.
+
+### Verifying your environment
+
+Run `yarn doctor` at any time to check that all requirements and setup steps are in place — useful after OS upgrades, tool updates, or when something suddenly stops working.
 
 ### Common errors
 

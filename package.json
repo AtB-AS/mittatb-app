@@ -4,6 +4,7 @@
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
+    "doctor": "sh scripts/doctor.sh",
     "android": "sh ./scripts/android/run-android.sh",
     "ios": "react-native run-ios",
     "start": "react-native start",
