@@ -94,12 +94,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    gap: theme.spacing.medium,
   },
   leftSection: {
+    flex: 1,
     flexDirection: 'column',
     gap: theme.spacing.medium,
   },
   rightSection: {
+    flex: 1,
     flexDirection: 'column',
     gap: theme.spacing.medium,
     alignItems: 'flex-end',

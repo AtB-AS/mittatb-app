@@ -31,7 +31,7 @@ export const VehicleCardStat = ({
       ]}
     >
       <ThemeIcon svg={icon} color="primary" size="large" />
-      <View>
+      <View style={styles.textContainer}>
         <ThemeText typography="body__m__strong" type="primary">
           {stat}
         </ThemeText>
@@ -52,6 +52,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       gap: theme.spacing.small,
       padding: theme.spacing.small,
       borderRadius: theme.border.radius.small,
+    },
+    textContainer: {
+      flex: 1,
     },
   };
 });
