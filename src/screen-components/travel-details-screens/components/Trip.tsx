@@ -193,6 +193,7 @@ export const Trip: React.FC<TripProps> = ({
                 isFirst={index == 0}
                 wait={legWaitDetails(index, filteredLegs)}
                 isLast={index == filteredLegs.length - 1}
+                step={index + 1}
                 interchangeDetails={getInterchangeDetails(
                   filteredLegs,
                   leg.interchangeTo?.toServiceJourney?.id,

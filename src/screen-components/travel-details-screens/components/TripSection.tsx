@@ -1,5 +1,9 @@
 import {Leg, Place, Quay} from '@atb/api/types/trips';
-import {screenReaderPause, ThemeText} from '@atb/components/text';
+import {
+  AccessibleText,
+  screenReaderPause,
+  ThemeText,
+} from '@atb/components/text';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
@@ -69,6 +73,7 @@ type TripSectionProps = {
   isLast?: boolean;
   wait?: WaitDetails;
   isFirst?: boolean;
+  step?: number;
   interchangeDetails?: InterchangeDetails;
   leg: Leg;
   testID?: string;
@@ -86,6 +91,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   isLast,
   isFirst,
   wait,
+  step,
   interchangeDetails,
   leg,
   testID,
@@ -219,6 +225,17 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const sectionOutput = (
     <>
       <View style={style.tripSection} testID={testID}>
+        {!!step && leg.mode && (
+          <AccessibleText
+            style={style.a11yHelper}
+            prefix={t(
+              TripDetailsTexts.legacy.trip.leg.a11yHelper(
+                step,
+                t(getTranslatedModeName(leg.mode)),
+              ),
+            )}
+          />
+        )}
         <TripLegDecoration
           dimensionOverrides={NEW_TRIP_DIMENSIONS}
           color={legColor}
@@ -979,6 +996,12 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   tripSection: {
     flex: 1,
     marginBottom: theme.spacing.large,
+  },
+  a11yHelper: {
+    position: 'absolute',
+    top: -theme.spacing.medium,
+    left: 0,
+    width: '100%',
   },
   transportLine: {
     flexDirection: 'row',
