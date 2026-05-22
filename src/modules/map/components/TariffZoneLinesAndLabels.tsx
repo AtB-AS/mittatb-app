@@ -56,8 +56,6 @@ export const TariffZoneLinesAndLabels = ({
             textHaloWidth: 2,
             iconEmissiveStrength: 1,
             textOpacity: showLabelsAtAllZoom ? 1 : labelZoomOpacity,
-            textAllowOverlap: true,
-            textIgnorePlacement: true,
           }}
         />
       </MapboxGL.ShapeSource>
