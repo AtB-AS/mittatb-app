@@ -253,9 +253,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
               />
             }
             onPress={
-              isWalkOrBike
-                ? undefined
-                : () => handleQuayPress(leg.fromPlace.quay)
+              leg.fromPlace.quay
+                ? () => handleQuayPress(leg.fromPlace.quay)
+                : undefined
             }
             testID={`${testID}FromPlace`}
           >
@@ -496,7 +496,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
               />
             }
             onPress={
-              isWalkOrBike ? undefined : () => handleQuayPress(leg.toPlace.quay)
+              leg.toPlace.quay
+                ? () => handleQuayPress(leg.toPlace.quay)
+                : undefined
             }
             testID={`${testID}ToPlace`}
           >
