@@ -7,6 +7,7 @@ const MAP_FILTER_STORAGE_KEY = '@ATB_user_map_filters_v2';
 
 const fallback: MapFilterType = {
   mobility: {},
+  showTariffZones: true,
 };
 
 /**

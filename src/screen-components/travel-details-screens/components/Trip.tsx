@@ -99,6 +99,7 @@ export const Trip: React.FC<TripProps> = ({
         operators: [],
       },
     },
+    showTariffZones: false,
   };
 
   const shouldShowDate =

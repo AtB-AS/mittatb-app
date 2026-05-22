@@ -340,7 +340,9 @@ export const MobilityTexts = {
         'Shared Mobility',
         'Delingsmobilitet',
       ),
+      tariffZones: _('Takstsoner', 'Fare zones', 'Takstsoner'),
     },
+    tariffZones: _('Takstsoner', 'Fare zones', 'Takstsoner'),
   },
   reportParkingViolation: _(
     'Rapporter som feilparkert',

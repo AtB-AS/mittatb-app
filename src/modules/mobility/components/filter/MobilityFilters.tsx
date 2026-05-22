@@ -78,6 +78,5 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   contentHeading: {
     marginBottom: theme.spacing.small,
-    marginHorizontal: 0,
   },
 }));
