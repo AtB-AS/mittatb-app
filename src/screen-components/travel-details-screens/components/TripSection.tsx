@@ -479,9 +479,15 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 ),
               ),
             )}
-            accessibilityHint={t(
-              TripDetailsTexts.trip.leg.end.a11yHint(getPlaceName(leg.toPlace)),
-            )}
+            accessibilityHint={
+              isWalkOrBike
+                ? undefined
+                : t(
+                    TripDetailsTexts.trip.leg.transport.a11yLabel.hint(
+                      getPlaceName(leg.toPlace),
+                    ),
+                  )
+            }
             rowLabel={
               <Time
                 timeValues={endTimes}
@@ -489,7 +495,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 timeIsApproximation={timesAreApproximations}
               />
             }
-            onPress={() => handleQuayPress(leg.toPlace.quay)}
+            onPress={
+              isWalkOrBike ? undefined : () => handleQuayPress(leg.toPlace.quay)
+            }
             testID={`${testID}ToPlace`}
           >
             <ThemeText
