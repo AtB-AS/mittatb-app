@@ -114,7 +114,7 @@ export const MobilityTexts = {
     );
   },
   cityBike: {
-    location: (position: number) =>
+    location: (position: string) =>
       _(`Plass ${position}`, `Dock ${position}`, `Plass ${position}`),
     startTripView: {
       title: _(
