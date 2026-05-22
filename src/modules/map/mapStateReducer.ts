@@ -98,6 +98,7 @@ export const mapStateReducer = (
         bottomSheetType: MapBottomSheetType.Vehicle,
         feature: action.feature,
         customZoomLevel: action?.customZoomLevel,
+        isStationBasedBooking: mapState.isStationBasedBooking,
       };
     case MapStateActionType.VehicleScanned:
       return {

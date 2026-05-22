@@ -1,11 +1,11 @@
 import React from 'react';
-import {View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useTranslation} from '@atb/translations';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 import {LinkSectionItem} from '@atb/components/sections';
 import {ShmoBooking} from '@atb/api/types/mobility';
@@ -22,15 +22,17 @@ export const CityBikeStartTripOverlay = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
 
   return (
     <View style={styles.overlay}>
-      <View style={styles.contentWrapper}>
+      <ScrollView
+        contentContainerStyle={styles.contentWrapper}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.title}>
           <ThemeIcon size="large" svg={Parking} />
           {activeBooking.asset?.stationSlotName && (
-            <ThemeText style={theme.typography.heading__xl}>
+            <ThemeText typography="heading__xl" style={styles.titleText}>
               {t(
                 MobilityTexts.cityBike.location(
                   activeBooking.asset?.stationSlotName,
@@ -41,7 +43,7 @@ export const CityBikeStartTripOverlay = ({
         </View>
         <ThemedCityBike />
         <View style={styles.content}>
-          <ThemeText style={theme.typography.heading__xl}>
+          <ThemeText typography="heading__xl" style={styles.contentText}>
             {t(MobilityTexts.cityBike.startTripView.title)}
           </ThemeText>
 
@@ -52,7 +54,7 @@ export const CityBikeStartTripOverlay = ({
             {t(MobilityTexts.cityBike.startTripView.safeTrip)}
           </ThemeText>
         </View>
-      </View>
+      </ScrollView>
       <View style={styles.supportButton}>
         <LinkSectionItem
           text={t(MobilityTexts.helpText)}
@@ -78,7 +80,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     zIndex: 100,
   },
   contentWrapper: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 48,
@@ -93,6 +95,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
     gap: theme.spacing.medium,
     padding: theme.spacing.large,
+  },
+  titleText: {
+    flex: 1,
+    textAlign: 'center',
   },
   contentText: {
     textAlign: 'center',
