@@ -39,7 +39,7 @@ export const TariffZoneLinesAndLabels = ({
         <MapboxGL.LineLayer
           id="tariffZonesLine"
           style={{
-            lineWidth: 2,
+            lineWidth: 1,
             lineColor: theme.color.foreground.dynamic.secondary,
             lineEmissiveStrength: 1,
           }}
