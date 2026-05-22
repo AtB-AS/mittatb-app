@@ -9,7 +9,7 @@ import {
 } from '@atb/modules/map';
 import {StyleSheet} from '@atb/theme';
 import {MobilityFilters} from './MobilityFilters';
-import {ZoneFilters} from './ZoneFilters';
+import {TariffZoneFilters} from './TariffZoneFilters';
 import {
   BottomSheetHeaderType,
   MapBottomSheet,
@@ -47,8 +47,8 @@ export const MapFilterSheet = ({
     onFilterChanged(tempFilter);
   };
 
-  const onShowZonesChanged = (showZones: boolean) => {
-    const tempFilter = {...mapFilter, showZones};
+  const onShowTariffZonesChanged = (showTariffZones: boolean) => {
+    const tempFilter = {...mapFilter, showTariffZones};
     setMapFilter(tempFilter);
     onFilterChanged(tempFilter);
   };
@@ -68,9 +68,9 @@ export const MapFilterSheet = ({
           filter={initialFilterRef.current.mobility}
           onFilterChanged={onMobilityFilterChanged}
         />
-        <ZoneFilters
-          showZones={initialFilterRef.current.showZones ?? true}
-          onFilterChanged={onShowZonesChanged}
+        <TariffZoneFilters
+          showTariffZones={initialFilterRef.current.showTariffZones ?? true}
+          onFilterChanged={onShowTariffZonesChanged}
         />
       </View>
     </MapBottomSheet>

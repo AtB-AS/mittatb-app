@@ -7,16 +7,19 @@ import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts'
 import {StyleSheet} from '@atb/theme';
 
 type Props = {
-  showZones: boolean;
-  onFilterChanged: (showZones: boolean) => void;
+  showTariffZones: boolean;
+  onFilterChanged: (showTariffZones: boolean) => void;
 };
 
-export const ZoneFilters = ({showZones, onFilterChanged}: Props) => {
+export const TariffZoneFilters = ({
+  showTariffZones,
+  onFilterChanged,
+}: Props) => {
   const {t} = useTranslation();
-  const [zonesFilter, setZonesFilter] = useState(showZones);
+  const [shouldShow, setShouldShow] = useState(showTariffZones);
 
-  const onShowZonesChanged = (value: boolean) => {
-    setZonesFilter(value);
+  const onShowTariffZonesChanged = (value: boolean) => {
+    setShouldShow(value);
     onFilterChanged(value);
   };
 
@@ -24,12 +27,12 @@ export const ZoneFilters = ({showZones, onFilterChanged}: Props) => {
 
   return (
     <View style={styles.container}>
-      <ContentHeading text={t(MobilityTexts.filter.sectionTitle.zones)} />
+      <ContentHeading text={t(MobilityTexts.filter.sectionTitle.tariffZones)} />
       <Section>
         <ToggleSectionItem
           text={t(MobilityTexts.filter.tariffZones)}
-          value={zonesFilter}
-          onValueChange={onShowZonesChanged}
+          value={shouldShow}
+          onValueChange={onShowTariffZonesChanged}
           testID="tariffZonesToggle"
         />
       </Section>

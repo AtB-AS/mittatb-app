@@ -104,7 +104,7 @@ export const Trip: React.FC<TripProps> = ({
         operators: [],
       },
     },
-    showZones: false,
+    showTariffZones: false,
   };
 
   const shouldShowDate =

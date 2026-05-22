@@ -125,7 +125,7 @@ export const Map = (props: MapProps) => {
     (mapFilter?.mobility.BICYCLE?.showAll ||
       mapFilter?.mobility.CAR?.showAll) ??
     false;
-  const showZones = mapFilter?.showZones ?? true;
+  const showTariffZones = mapFilter?.showTariffZones ?? true;
   const shouldShowVehiclesAndStations =
     isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
 
@@ -485,7 +485,7 @@ export const Map = (props: MapProps) => {
               />
             ))}
 
-          {showZones && (
+          {showTariffZones && (
             <TariffZoneLinesAndLabels polygonCollection={fareZonePolygons} />
           )}
 
