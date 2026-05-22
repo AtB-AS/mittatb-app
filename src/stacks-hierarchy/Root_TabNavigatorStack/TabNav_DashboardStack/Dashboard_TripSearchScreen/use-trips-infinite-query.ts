@@ -51,7 +51,7 @@ export const useTripsInfiniteQuery = (
     initialPageParam: undefined,
     getNextPageParam: (lastPage) =>
       tripsInfiniteQueryProps.arriveBy
-        ? lastPage.trip.previousPageCursor
+        ? lastPage?.trip?.previousPageCursor
         : lastPage?.trip?.nextPageCursor,
   });
 };
