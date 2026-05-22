@@ -14,8 +14,8 @@ export const useVehiclesByVehicleTypeIdsQueries = (
   stationId?: string,
   sort?: string,
   maxCount?: number,
-) => {
-  const results = useQueries({
+) =>
+  useQueries({
     queries: vehicleTypeIds.map((vehicleTypeId) => ({
       queryKey: getVehiclesQueryKey(vehicleTypeId, stationId, sort, maxCount),
       queryFn: ({signal}: {signal: AbortSignal}) =>
@@ -28,8 +28,3 @@ export const useVehiclesByVehicleTypeIdsQueries = (
       retry: 3,
     })),
   });
-
-  return Object.fromEntries(
-    vehicleTypeIds.map((id, index) => [id, results[index]]),
-  ) as Record<string, (typeof results)[number]>;
-};

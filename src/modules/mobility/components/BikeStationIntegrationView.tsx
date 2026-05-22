@@ -21,7 +21,7 @@ import SvgParking from '@atb/assets/svg/mono-icons/places/Parking';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
-import {useVehiclesByVehicleTypeIdsQueries} from '../queries/use-vehicles-by-propulsion-types-queries';
+import {useVehiclesByVehicleTypeIdsQueries} from '../queries/use-vehicles-by-vehicle-type-ids-queries';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Loading} from '@atb/components/loading';
 import {useQueryClient} from '@tanstack/react-query';
@@ -52,16 +52,15 @@ export const BikeStationIntegrationView = ({
   const vehicleTypeIds = (station?.vehicleTypesAvailable ?? []).map(
     (e) => e.vehicleType.id,
   );
-  const queriesByVehicleTypeId = useVehiclesByVehicleTypeIdsQueries(
+  const vehicleQueries = useVehiclesByVehicleTypeIdsQueries(
     vehicleTypeIds,
     station?.id,
     '-currentRangeMeters',
     1,
   );
 
-  const queries = Object.values(queriesByVehicleTypeId);
-  const isLoading = queries.some((q) => q.isLoading);
-  const isError = queries.some((q) => q.isError);
+  const isLoading = vehicleQueries.some((q) => q.isLoading);
+  const isError = vehicleQueries.some((q) => q.isError);
 
   if (isLoading) {
     return (
@@ -114,9 +113,14 @@ export const BikeStationIntegrationView = ({
                 }
                 onPress={() => {
                   const vehicle =
-                    queriesByVehicleTypeId[e.vehicleType.id]?.data?.[0];
+                    vehicleQueries[vehicleTypeIds.indexOf(e.vehicleType.id)]
+                      ?.data?.[0];
 
                   if (vehicle?.id) {
+                    queryClient.setQueryData(
+                      getVehicleQueryKey(vehicle.id),
+                      vehicle,
+                    );
                     onPressVehicleType(vehicle.id, false);
                   } else {
                     const mockVehicle: Vehicle = {
