@@ -1,10 +1,9 @@
 import {ChevronLeft, ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
-import {Time} from '@atb/assets/svg/mono-icons/time';
+import {Date as DateIcon} from '@atb/assets/svg/mono-icons/time';
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {
-  formatToDate,
   formatToLongDateTime,
   isInThePast,
   parseISOFromCET,
@@ -13,24 +12,18 @@ import {addDays, isToday, parseISO} from 'date-fns';
 import React, {useRef} from 'react';
 import {View} from 'react-native';
 import {DatePickerSheet} from './DatePickerSheet';
-import type {ContrastColor} from '@atb-as/theme';
 import {DepartureDateOptions, type DepartureSearchTime} from './types';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '../theme-icon';
-import {NativeBlockButton} from '../native-button';
-import {Edit} from '@atb/assets/svg/mono-icons/actions';
+import {EditActionSectionItem, Section} from '../sections';
 
 type DateSelectionProps = {
   searchTime: DepartureSearchTime;
   setSearchTime: (searchTime: DepartureSearchTime) => void;
-  backgroundColor: ContrastColor;
 };
 
 export const DateSelection = ({
   searchTime,
   setSearchTime,
-  backgroundColor,
 }: DateSelectionProps): React.JSX.Element => {
   const styles = useStyles();
   const {t, language} = useTranslation();
@@ -79,39 +72,27 @@ export const DateSelection = ({
             testID="previousDayButton"
           />
         )}
-        <NativeBlockButton
-          onPress={onLaterTimePress}
-          testID="setDateButton"
-          accessibilityHint={t(
-            DeparturesTexts.dateNavigation.a11yChangeDateHint,
-          )}
-          ref={onCloseFocusRef}
-          style={styles.setDateButton}
-        >
-          <ThemeIcon svg={Time} color={backgroundColor} />
-          <View style={styles.textContainer}>
-            <ThemeText
-              style={styles.setDateText}
-              color={backgroundColor}
-              typography="body__m__strong"
-            >
-              {searchTime.option === 'now'
+        <Section style={styles.setDateButton}>
+          <EditActionSectionItem
+            ref={onCloseFocusRef}
+            onPress={onLaterTimePress}
+            leftIcon={DateIcon}
+            accessibilityHint={t(
+              DeparturesTexts.dateNavigation.a11yChangeDateHint,
+            )}
+            text={
+              searchTime.option === 'now'
                 ? t(DeparturesTexts.dateNavigation.leaveNow)
-                : t(DeparturesTexts.dateNavigation.leaveAt)}
-            </ThemeText>
-            <ThemeText
-              color={theme.color.background.neutral[0].foreground.secondary}
-            >
-              {searchTime.option === 'now'
-                ? formatToDate(searchTime.date, language)
-                : formatToLongDateTime(searchTime.date, language)}
-            </ThemeText>
-          </View>
-          <ThemeIcon
-            svg={Edit}
-            color={theme.color.interactive[0].default.background}
+                : t(DeparturesTexts.dateNavigation.leaveAt)
+            }
+            subText={
+              searchTime.option === 'now'
+                ? ''
+                : formatToLongDateTime(searchTime.date, language)
+            }
+            testID="setDateButton"
           />
-        </NativeBlockButton>
+        </Section>
         <Button
           expanded={false}
           onPress={() => {
@@ -172,14 +153,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   setDateButton: {
     flex: 1,
-    flexDirection: 'row',
-    gap: theme.spacing.small,
-    backgroundColor: theme.color.background.neutral[0].background,
-    borderRadius: theme.border.radius.regular,
-    padding: theme.spacing.medium,
-    alignItems: 'center',
-  },
-  setDateText: {
-    flexWrap: 'wrap',
   },
 }));
