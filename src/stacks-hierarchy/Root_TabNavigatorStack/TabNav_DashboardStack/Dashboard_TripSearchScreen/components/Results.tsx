@@ -51,7 +51,9 @@ export const Results: React.FC<Props> = ({
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const now = useNow(30000);
-  const isExperimentalEnabled = useIsExperimentalEnabled();
+  const isExperimentalEnabled = useIsExperimentalEnabled(
+    'isNewTripSearchEnabled',
+  );
 
   if (showEmptyScreen) {
     return null;

@@ -73,7 +73,7 @@ type Props = TripDetailsScreenParams & {
 };
 
 export const TripDetailsScreenComponent = (props: Props) => {
-  const isNewScreen = useIsExperimentalEnabled('isNewTripDetailScreenEnabled');
+  const isNewScreen = useIsExperimentalEnabled('isNewTripSearchEnabled');
   return isNewScreen ? (
     <NewTripDetailsScreenComponent {...props} />
   ) : (

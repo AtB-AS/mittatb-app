@@ -31,7 +31,7 @@ export const SaveTripPatternButtonComponent: React.FC<
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const isNewTripDetailScreen = useIsExperimentalEnabled(
-    'isNewTripDetailScreenEnabled',
+    'isNewTripSearchEnabled',
   );
   const posthogAnalytics = useAnalyticsContext();
   const {fareZones} = useFirestoreConfigurationContext();
