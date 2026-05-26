@@ -132,7 +132,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_posthog: false,
   enable_push_notifications: false,
   enable_refunds: true,
-  enable_save_trips: false,
+  enable_save_trips: true,
   enable_server_time: true,
   enable_shmo_deep_integration: false,
   enable_shmo_deep_integration_citybike: false,
