@@ -49,7 +49,7 @@ export function BookingTripSelection({
   const styles = useBookingTripSelectionStyles();
   const {t} = useTranslation();
   const isNewTravelCardBooking = useIsExperimentalEnabled(
-    'isNewTravelCardBookingEnabled',
+    'isNewTripSearchEnabled',
   );
   const {
     tripPatterns,

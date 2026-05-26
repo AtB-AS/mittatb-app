@@ -33,7 +33,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
 }) => {
   const {t} = useTranslation();
   const isNewTripDetailScreen = useIsExperimentalEnabled(
-    'isNewTripDetailScreenEnabled',
+    'isNewTripSearchEnabled',
   );
   const cameraRef = useRef<MapboxGL.Camera>(null);
 
