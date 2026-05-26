@@ -88,7 +88,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   title: {
     alignItems: 'center',
     flexDirection: 'row',
+    justifyContent: 'center',
     gap: theme.spacing.small,
+    width: '100%',
   },
   content: {
     alignItems: 'center',
@@ -97,7 +99,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacing.large,
   },
   titleText: {
-    flex: 1,
+    flexShrink: 1,
     textAlign: 'center',
   },
   contentText: {
