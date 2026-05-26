@@ -87,7 +87,7 @@ export const DateSelection = ({
             }
             subText={
               searchTime.option === 'now'
-                ? ''
+                ? undefined
                 : formatToLongDateTime(searchTime.date, language)
             }
             testID="setDateButton"
