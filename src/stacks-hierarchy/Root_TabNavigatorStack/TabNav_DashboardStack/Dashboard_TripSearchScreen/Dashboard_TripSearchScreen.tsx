@@ -336,11 +336,11 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 <EditActionSectionItem
                   ref={timePickerCloseRef}
                   text={t(TripSearchTexts.dateInput.options[searchTime.option])}
-                  subText={`(${getSearchTime(
+                  subText={getSearchTime(
                     searchTime,
                     timeOfLastSearch,
                     language,
-                  )})`}
+                  )}
                   accessibilityLabel={getSearchTimeLabel(
                     searchTime,
                     timeOfLastSearch,
@@ -674,7 +674,7 @@ const getFiltersSubText = (
   if (!transportModes) return undefined;
 
   const count = transportModes.filter((tm) => tm.selected).length;
-  return `(${count})`;
+  return `${count}`;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
