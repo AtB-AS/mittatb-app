@@ -49,8 +49,7 @@ const DeparturesTexts = {
     today: _('I dag', 'Today', 'I dag'),
     a11yDisabled: _('Deaktivert', 'Disabled', 'Deaktivert'),
     leaveNow: _(`Dra nå`, `Leave now`, `Dra no`),
-    leaveAt: (time: string) =>
-      _(`Avreise (${time})`, `Leave at (${time})`, `Avreise (${time})`),
+    leaveAt: _('Avreise', 'Leave at', 'Avreise'),
     a11yChangeDateHint: _(
       'Aktiver for å forandre dato',
       'Activate to change date',

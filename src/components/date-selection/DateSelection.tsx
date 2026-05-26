@@ -4,6 +4,7 @@ import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {
+  formatToDate,
   formatToLongDateTime,
   isInThePast,
   parseISOFromCET,
@@ -58,24 +59,26 @@ export const DateSelection = ({
   return (
     <>
       <View style={styles.dateNavigator}>
-        <Button
-          expanded={false}
-          onPress={() => {
-            setSearchTime(changeDay(searchTime, -1));
-          }}
-          accessibilityLabel={t(DeparturesTexts.dateNavigation.prevDay)}
-          mode="primary"
-          interactiveColor={theme.color.interactive[2]}
-          style={styles.nextPrevButtons}
-          leftIcon={{svg: ChevronLeft}}
-          disabled={disablePreviousDayNavigation}
-          accessibilityHint={
-            disablePreviousDayNavigation
-              ? t(DeparturesTexts.dateNavigation.a11yDisabled)
-              : t(DeparturesTexts.dateNavigation.a11yPreviousDayHint)
-          }
-          testID="previousDayButton"
-        />
+        {!disablePreviousDayNavigation && (
+          <Button
+            expanded={false}
+            onPress={() => {
+              setSearchTime(changeDay(searchTime, -1));
+            }}
+            accessibilityLabel={t(DeparturesTexts.dateNavigation.prevDay)}
+            mode="primary"
+            interactiveColor={theme.color.interactive[2]}
+            style={styles.nextPrevButtons}
+            leftIcon={{svg: ChevronLeft}}
+            disabled={disablePreviousDayNavigation}
+            accessibilityHint={
+              disablePreviousDayNavigation
+                ? t(DeparturesTexts.dateNavigation.a11yDisabled)
+                : t(DeparturesTexts.dateNavigation.a11yPreviousDayHint)
+            }
+            testID="previousDayButton"
+          />
+        )}
         <NativeBlockButton
           onPress={onLaterTimePress}
           testID="setDateButton"
@@ -86,19 +89,24 @@ export const DateSelection = ({
           style={styles.setDateButton}
         >
           <ThemeIcon svg={Time} color={backgroundColor} />
-          <ThemeText
-            style={styles.setDateText}
-            color={backgroundColor}
-            typography="body__m__strong"
-          >
-            {searchTime.option === 'now'
-              ? t(DeparturesTexts.dateNavigation.leaveNow)
-              : t(
-                  DeparturesTexts.dateNavigation.leaveAt(
-                    formatToLongDateTime(searchTime.date, language),
-                  ),
-                )}
-          </ThemeText>
+          <View style={styles.textContainer}>
+            <ThemeText
+              style={styles.setDateText}
+              color={backgroundColor}
+              typography="body__m__strong"
+            >
+              {searchTime.option === 'now'
+                ? t(DeparturesTexts.dateNavigation.leaveNow)
+                : t(DeparturesTexts.dateNavigation.leaveAt)}
+            </ThemeText>
+            <ThemeText
+              color={theme.color.background.neutral[0].foreground.secondary}
+            >
+              {searchTime.option === 'now'
+                ? formatToDate(searchTime.date, language)
+                : formatToLongDateTime(searchTime.date, language)}
+            </ThemeText>
+          </View>
           <ThemeIcon
             svg={Edit}
             color={theme.color.interactive[0].default.background}
@@ -156,6 +164,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   nextPrevButtons: {
     alignSelf: 'center',
   },
+  textContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    flex: 1,
+    gap: theme.spacing.xSmall,
+  },
   setDateButton: {
     flex: 1,
     flexDirection: 'row',
@@ -166,7 +180,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   setDateText: {
-    flex: 1,
     flexWrap: 'wrap',
   },
 }));
