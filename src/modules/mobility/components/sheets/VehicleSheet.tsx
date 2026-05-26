@@ -11,8 +11,6 @@ import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useOperatorBenefit} from '../../use-operator-benefit';
-import {OperatorBenefit} from '../OperatorBenefit';
 import {OperatorActionButton} from '../OperatorActionButton';
 import {
   FormFactor,
@@ -126,7 +124,6 @@ export const VehicleSheet = ({
     formFactor,
   );
 
-  const {operatorBenefit} = useOperatorBenefit(operatorId);
   const selectedPaymentMethod = useSelectedShmoPaymentMethod();
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
@@ -196,13 +193,6 @@ export const VehicleSheet = ({
 
       {!isLoading && !shmoReqIsLoading && !isError && vehicle && (
         <View style={styles.container}>
-          {operatorBenefit && (
-            <OperatorBenefit
-              benefit={operatorBenefit}
-              formFactor={formFactor}
-              style={styles.operatorBenefit}
-            />
-          )}
           <View style={styles.vehicleContent}>
             {showVehicleCard && (
               <VehicleCard
@@ -221,6 +211,8 @@ export const VehicleSheet = ({
               }
               systemId={vehicle.system.id}
               onNavigatePricingDetails={navigateToPricingDetails}
+              operatorId={operatorId}
+              formFactor={formFactor}
             />
           </View>
 
@@ -312,9 +304,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       gap: theme.spacing.small,
     },
     loading: {
-      marginBottom: theme.spacing.medium,
-    },
-    operatorBenefit: {
       marginBottom: theme.spacing.medium,
     },
     messageInfo: {

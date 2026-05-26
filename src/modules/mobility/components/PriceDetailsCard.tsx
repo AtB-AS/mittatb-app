@@ -24,6 +24,9 @@ import {PriceAdjustmentType} from '@atb-as/config-specs/lib/mobility';
 import {getCurrencySymbol} from '@atb/translations/currency';
 import {ShmoPricingPlan} from '@atb/api/types/mobility';
 import SvgChevronRight from '@atb/assets/svg/mono-icons/navigation/ChevronRight';
+import {useOperatorBenefit} from '../use-operator-benefit';
+import {OperatorBenefit} from './OperatorBenefit';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type Props = {
   pricingPlan: ShmoPricingPlan;
@@ -33,6 +36,8 @@ type Props = {
     pricingPlan: ShmoPricingPlan,
     priceAdjustments: PriceAdjustmentType[] | undefined,
   ) => void;
+  operatorId: string | undefined;
+  formFactor: FormFactor;
 };
 
 export const PriceDetailsCard = ({
@@ -40,12 +45,15 @@ export const PriceDetailsCard = ({
   priceAdjustments,
   systemId,
   onNavigatePricingDetails,
+  operatorId,
+  formFactor,
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const ratePrUnit = formatRatePerUnit(pricingPlan, language);
   const freeUnlock = getFreeUnlock(priceAdjustments, systemId);
   const freeMinutes = getFreeMinutes(priceAdjustments, systemId);
+  const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   const unlockStat = freeUnlock
     ? t(ScooterTexts.free)
@@ -88,6 +96,13 @@ export const PriceDetailsCard = ({
             />
           )}
         </View>
+        {operatorBenefit && (
+          <OperatorBenefit
+            benefit={operatorBenefit}
+            formFactor={formFactor}
+            style={styles.operatorBenefit}
+          />
+        )}
       </GenericSectionItem>
 
       {onNavigatePricingDetails && (
@@ -118,6 +133,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     sectionWrapper: {
       padding: theme.spacing.small,
+    },
+    operatorBenefit: {
+      paddingVertical: theme.spacing.xSmall,
+      paddingHorizontal: theme.spacing.medium,
     },
   };
 });
