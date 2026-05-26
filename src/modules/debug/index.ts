@@ -1,5 +1,4 @@
 export {DebugServerOverrides} from './DebugServerOverrides';
-export {DebugServerOverrideBanner} from './DebugServerOverrideBanner';
 export {
   loadDebugServerOverrides,
   getDebugServerOverrides,

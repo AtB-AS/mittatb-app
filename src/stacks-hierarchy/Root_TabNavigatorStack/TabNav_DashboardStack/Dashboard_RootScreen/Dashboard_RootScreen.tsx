@@ -31,7 +31,6 @@ import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {DashboardScreenProps} from '../navigation-types';
 import {CompactFareContracts} from '@atb/modules/fare-contracts';
-import {DebugServerOverrideBanner} from '@atb/modules/debug';
 import {DeparturesWidget} from './components/DeparturesWidget';
 import {Announcements} from './components/Announcements';
 import SharedTexts from '@atb/translations/shared';
@@ -228,7 +227,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
         contentContainerStyle={style.scrollView}
         testID="dashboardScrollView"
       >
-        <DebugServerOverrideBanner style={style.contentSection} />
         <View style={style.searchHeader}>
           <WithOverlayButton
             svgIcon={Swap}
@@ -446,7 +444,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     margin: 0,
   },
   contentSection: {
-    marginVertical: theme.spacing.medium,
+    marginTop: theme.spacing.medium,
     marginHorizontal: theme.spacing.medium,
   },
   contentSection__horizontalScroll: {

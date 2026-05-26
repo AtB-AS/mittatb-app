@@ -7,6 +7,7 @@ import {
 import {LoadingOverlay} from '@atb/components/loading-overlay';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LinkSectionItem, Section} from '@atb/components/sections';
+import {NotificationIndicator} from '@atb/components/theme-icon';
 import {ThemeText} from '@atb/components/text';
 import {useAuthContext} from '@atb/modules/auth';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
@@ -40,6 +41,7 @@ import {Favorite, Parking} from '@atb/assets/svg/mono-icons/places';
 import {Info, Unknown} from '@atb/assets/svg/mono-icons/status';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {useChatUnreadCount} from '@atb/modules/chat';
+import {useDebugServerOverrides} from '@atb/modules/debug';
 import Intercom, {Space} from '@intercom/intercom-react-native';
 import {
   GlobalMessage,
@@ -82,6 +84,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const isBonusActiveForUser = useIsBonusActiveForUser();
   const isBonusEnrollable = useIsBonusEnrollable();
   const showBonusSection = isBonusActiveForUser || isBonusEnrollable;
+  const serverOverrides = useDebugServerOverrides();
 
   const focusRef = useFocusOnLoad(navigation);
 
@@ -297,6 +300,15 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 <LinkSectionItem
                   text="Debug"
                   testID="debugButton"
+                  leftElement={
+                    serverOverrides.length > 0 ? (
+                      <NotificationIndicator
+                        color={theme.color.status.error.primary}
+                        iconSize="normal"
+                        standalone
+                      />
+                    ) : undefined
+                  }
                   onPress={() => navigation.navigate('Profile_DebugInfoScreen')}
                 />
               </Section>

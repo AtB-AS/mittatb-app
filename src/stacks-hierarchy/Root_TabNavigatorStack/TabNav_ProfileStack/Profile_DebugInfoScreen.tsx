@@ -1,6 +1,6 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React, {useEffect, useMemo, useState} from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -21,7 +21,7 @@ import {
 } from '@atb/modules/remote-config';
 import {useGlobalMessagesContext} from '@atb/modules/global-messages';
 import {APP_GROUP_NAME} from '@env';
-import {ThemeIcon} from '@atb/components/theme-icon';
+import {NotificationIndicator, ThemeIcon} from '@atb/components/theme-icon';
 import {
   ArrowUpLeft,
   ExpandLess,
@@ -53,7 +53,10 @@ import {format} from 'date-fns';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useQueryClient} from '@tanstack/react-query';
 import {useDebugUserInfoHeader} from '@atb/api';
-import {DebugServerOverrides} from '@atb/modules/debug';
+import {
+  DebugServerOverrides,
+  useDebugServerOverrides,
+} from '@atb/modules/debug';
 import {useScrollBorder} from '@atb/utils/use-scroll-border';
 import MapboxGL from '@rnmapbox/maps';
 
@@ -64,6 +67,8 @@ function setClipboard(content: string) {
 
 export const Profile_DebugInfoScreen = () => {
   const styles = useStyles();
+  const {theme} = useThemeContext();
+  const serverOverrides = useDebugServerOverrides();
 
   const {onScroll, isScrolled} = useScrollBorder();
 
@@ -682,6 +687,15 @@ export const Profile_DebugInfoScreen = () => {
         <Section style={styles.section}>
           <ExpandableSectionItem
             text="Server overrides"
+            prefixNode={
+              serverOverrides.length > 0 ? (
+                <NotificationIndicator
+                  color={theme.color.status.error.primary}
+                  iconSize="normal"
+                  standalone
+                />
+              ) : undefined
+            }
             expandContent={<DebugServerOverrides />}
             showIconText={true}
           />

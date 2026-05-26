@@ -13,12 +13,15 @@ export type NotificationIndicatorProps = {
    */
   backgroundColor?: ContrastColor;
   iconSize: ThemeIconProps['size'];
+  /** When true, renders inline (relative positioning) instead of overlaying (absolute positioning). */
+  standalone?: boolean;
 };
 
 export const NotificationIndicator = ({
   color,
   backgroundColor,
   iconSize,
+  standalone = false,
 }: NotificationIndicatorProps) => {
   const styles = useStyles();
   const notificationColor = color.background;
@@ -28,13 +31,15 @@ export const NotificationIndicator = ({
   const borderWidth = (iconSize === 'xSmall' ? 1 : 2) * fontScale;
   return (
     <View
-      style={{
-        ...styles.indicator,
-        borderWidth: borderColor ? borderWidth : 0,
-        borderColor,
-        height: indicatorSize,
-        width: indicatorSize,
-      }}
+      style={[
+        standalone ? styles.indicatorStandalone : styles.indicator,
+        {
+          borderWidth: borderColor ? borderWidth : 0,
+          borderColor,
+          height: indicatorSize,
+          width: indicatorSize,
+        },
+      ]}
     >
       <View
         style={{
@@ -70,6 +75,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     top: -2,
     borderRadius: theme.border.radius.large,
     zIndex: 10,
+    overflow: 'hidden',
+  },
+  indicatorStandalone: {
+    borderRadius: theme.border.radius.large,
     overflow: 'hidden',
   },
 }));
