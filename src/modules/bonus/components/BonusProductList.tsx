@@ -62,9 +62,8 @@ export const BonusProductList = ({
               <GenericSectionItem>
                 <View style={styles.horizontalContainer}>
                   {(() => {
-                    const {mode, subMode} = getTransportModeAndSubMode(
-                      undefined,
-                    );
+                    const {mode, subMode} =
+                      getTransportModeAndSubMode(undefined);
                     return (
                       <TransportationIconBox
                         mode={mode}
