@@ -146,7 +146,7 @@ export type Feature = {
     source: string;
     source_id: string;
     street: string;
-    fare_zones?: string[];
+    tariff_zones?: string[];
   };
 };
 

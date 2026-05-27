@@ -73,6 +73,7 @@ const mapFeatureToSearchLocation = ({
   ...properties,
   coordinates: {latitude, longitude},
   resultType: 'search',
+  fare_zones: properties.tariff_zones,
 });
 
 export async function autocompleteV3(
@@ -122,6 +123,8 @@ export async function reverseV3(
   return response.data.map(mapFeatureV3ToSearchLocation);
 }
 
+const featureCategories = new Set<string>(Object.values(FeatureCategory));
+
 const mapFeatureV3ToSearchLocation = ({
   geometry: {
     coordinates: [longitude, latitude],
@@ -133,10 +136,12 @@ const mapFeatureV3ToSearchLocation = ({
   label: properties.name.display,
   layer: properties.layer === 'stopPlace' ? 'venue' : 'address',
   coordinates: {latitude, longitude},
-  locality: properties.address?.locality ?? '',
-  postalcode: properties.address?.postalCode ?? '',
+  locality: properties.address?.locality,
+  postalcode: properties.address?.postalCode,
   housenumber: properties.address?.housenumber,
   fare_zones: properties.fareZones,
-  category: (properties.stopPlaceTypes ?? []) as FeatureCategory[],
+  category: (properties.stopPlaceTypes ?? []).filter(
+    (t): t is FeatureCategory => featureCategories.has(t),
+  ),
   resultType: 'search',
 });

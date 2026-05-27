@@ -19,7 +19,7 @@ export type SearchLocation = {
   name: string;
   layer: 'venue' | 'address';
   coordinates: Coordinates;
-  locality: string;
+  locality?: string;
   category: FeatureCategory[];
   label?: string;
   postalcode?: string;
