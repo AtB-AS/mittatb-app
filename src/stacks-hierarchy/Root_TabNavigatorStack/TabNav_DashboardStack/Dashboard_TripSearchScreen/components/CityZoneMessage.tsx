@@ -206,7 +206,6 @@ const useActionButtons = (cityZone?: CityZone) => {
 
 export const useStyle = StyleSheet.createThemeHook((theme) => ({
   cityZoneMessage: {
-    marginTop: theme.spacing.medium,
     marginHorizontal: theme.spacing.medium,
   },
   container: {
