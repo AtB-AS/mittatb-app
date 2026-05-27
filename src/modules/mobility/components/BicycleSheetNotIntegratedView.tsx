@@ -53,8 +53,7 @@ export const BikeStationNotIntegratedView = ({
   const {operatorBenefit} = useOperatorBenefit(operatorId);
   const isBonusActiveForUser = useIsBonusActiveForUser();
   const bonusProduct = useRelevantBonusProduct(
-    operatorId,
-    FormFactor.Bicycle,
+    undefined,
     BonusProductTypeEnum.VOUCHER,
   );
   const {logEvent} = useAnalyticsContext();

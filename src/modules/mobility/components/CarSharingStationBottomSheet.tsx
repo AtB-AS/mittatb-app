@@ -68,9 +68,10 @@ export const CarSharingStationBottomSheet = ({
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
+  const vehicleTypeId =
+    station?.vehicleTypesAvailable?.[0]?.vehicleType.id ?? undefined;
   const bonusProduct = useRelevantBonusProduct(
-    operatorId,
-    FormFactor.Car,
+    vehicleTypeId,
     BonusProductTypeEnum.VOUCHER,
   );
 

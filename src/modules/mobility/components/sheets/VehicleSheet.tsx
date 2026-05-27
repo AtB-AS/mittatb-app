@@ -49,6 +49,7 @@ import {
   useRelevantBonusProduct,
 } from '@atb/modules/bonus';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -103,17 +104,11 @@ export const VehicleSheet = ({
 
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
-  const priceAdjustments = (() => {
-    switch (formFactor) {
-      case FormFactor.Bicycle:
-      case FormFactor.Car:
-      case FormFactor.Scooter:
-      case FormFactor.ScooterStanding:
-        return operator?.priceAdjustments?.[formFactor];
-      default:
-        return undefined;
-    }
-  })();
+  const {mobilityPriceAdjustments} = useFirestoreConfigurationContext();
+  const vehicleTypeId = vehicle?.vehicleType.id;
+  const priceAdjustments = vehicleTypeId
+    ? mobilityPriceAdjustments?.[vehicleTypeId]
+    : undefined;
   const operatorLogo = operator?.brandAssets?.brandImageUrl;
 
   const {mode, subMode} = getTransportModeAndSubMode(
@@ -139,8 +134,7 @@ export const VehicleSheet = ({
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
   const bonusProduct = useRelevantBonusProduct(
-    operatorId,
-    formFactor,
+    vehicleTypeId,
     BonusProductTypeEnum.SHARED_MOBILITY,
   );
   const {logEvent} = useAnalyticsContext();
