@@ -1,20 +1,18 @@
 import {useMemo} from 'react';
 import {useTicketingContext} from '@atb/modules/ticketing';
 import {getReservationStatus} from '@atb/modules/fare-contracts';
-import {
-  getFilterdFareContracts,
-  useGetFareContractsQuery,
-} from './use-fare-contracts';
+import {getFilterdFareContracts, useFareContracts} from './use-fare-contracts';
 import {FareContractType} from '@atb-as/utils';
 import {isDefined} from '@atb/utils/presence';
+import {useTimeContext} from '../time';
 
 export const useGetHasReservationOrAvailableFareContract = () => {
   const {reservations} = useTicketingContext();
-
-  const {data: fareContracts} = useGetFareContractsQuery({
-    enabled: true,
-    availability: 'available',
-  });
+  const {serverNow} = useTimeContext();
+  const {fareContracts} = useFareContracts(
+    {availability: 'available', status: 'valid'},
+    serverNow,
+  );
 
   const hasReservationOrAvailableFareContract = useMemo(
     () => () => {
