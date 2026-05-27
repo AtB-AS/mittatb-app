@@ -52,9 +52,7 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
   const fareZones = useSelectableFareZones(selection.preassignedFareProduct);
   const getMatchingFareZone = useCallback(
     (location: SearchLocation) =>
-      fareZones.find((fareZone) =>
-        location.tariff_zones?.includes(fareZone.id),
-      ),
+      fareZones.find((fareZone) => location.fare_zones?.includes(fareZone.id)),
     [fareZones],
   );
 

@@ -146,6 +146,51 @@ export type Feature = {
     source: string;
     source_id: string;
     street: string;
-    tariff_zones?: string[];
+    fare_zones?: string[];
+  };
+};
+
+export const geocoderV3Layers = [
+  'stopPlace',
+  'address',
+  'street',
+  'groupOfStopPlaces',
+  'poi',
+  'place',
+] as const;
+
+export type GeocoderV3Layer = (typeof geocoderV3Layers)[number];
+
+export type FeatureV3 = {
+  geometry: {
+    coordinates: [number, number];
+    type: 'Point';
+  };
+  properties: {
+    id: string;
+    name: {
+      default: string;
+      display: string;
+    };
+    layer: GeocoderV3Layer;
+    address?: {
+      street?: string;
+      housenumber?: string;
+      postalCode?: string;
+      locality?: string;
+      localityId?: string;
+      county?: string;
+      countyId?: string;
+      countryCode?: string;
+    };
+    transportModes?: Array<{
+      mode: string;
+      subMode?: string;
+    }>;
+    stopPlaceTypes?: string[];
+    categories?: string[];
+    fareZones?: string[];
+    source?: string;
+    distance?: number;
   };
 };
