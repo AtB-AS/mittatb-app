@@ -7,7 +7,6 @@ import {
 import {LoadingOverlay} from '@atb/components/loading-overlay';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LinkSectionItem, Section} from '@atb/components/sections';
-import {NotificationIndicator} from '@atb/components/theme-icon';
 import {ThemeText} from '@atb/components/text';
 import {useAuthContext} from '@atb/modules/auth';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
@@ -52,6 +51,7 @@ import {
   useIsBonusActiveForUser,
   useIsBonusEnrollable,
 } from '@atb/modules/bonus';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -300,14 +300,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 <LinkSectionItem
                   text="Debug"
                   testID="debugButton"
-                  leftElement={
-                    serverOverrides.length > 0 ? (
-                      <NotificationIndicator
-                        color={theme.color.status.error.primary}
-                        iconSize="normal"
-                        standalone
-                      />
-                    ) : undefined
+                  rightIcon={
+                    serverOverrides.length
+                      ? {
+                          svg: ChevronRight,
+                          notificationColor: theme.color.status.error.primary,
+                        }
+                      : undefined
                   }
                   onPress={() => navigation.navigate('Profile_DebugInfoScreen')}
                 />

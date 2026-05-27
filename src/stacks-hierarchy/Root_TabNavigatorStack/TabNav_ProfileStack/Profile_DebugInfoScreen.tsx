@@ -687,12 +687,11 @@ export const Profile_DebugInfoScreen = () => {
         <Section style={styles.section}>
           <ExpandableSectionItem
             text="Server overrides"
-            prefixNode={
+            suffixNode={
               serverOverrides.length > 0 ? (
                 <NotificationIndicator
                   color={theme.color.status.error.primary}
                   iconSize="normal"
-                  standalone
                 />
               ) : undefined
             }
