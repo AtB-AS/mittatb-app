@@ -43,10 +43,9 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {BrandingImage} from '../BrandingImage';
 import {getTransportModeAndSubMode} from '../../utils';
 import {
-  BonusProductTypeEnum,
   PayWithBonusPointsCheckbox,
   useIsBonusActiveForUser,
-  useRelevantBonusProduct,
+  useRelevantSharedMobilityBonusProduct,
 } from '@atb/modules/bonus';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
@@ -133,10 +132,7 @@ export const VehicleSheet = ({
   } = useFeatureTogglesContext();
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
-  const bonusProduct = useRelevantBonusProduct(
-    vehicleTypeId,
-    BonusProductTypeEnum.SHARED_MOBILITY,
-  );
+  const bonusProduct = useRelevantSharedMobilityBonusProduct(vehicleTypeId);
   const {logEvent} = useAnalyticsContext();
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
 

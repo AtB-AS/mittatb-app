@@ -22,10 +22,9 @@ import {WalkingDistance} from '@atb/components/walking-distance';
 import {MobilityStat} from './MobilityStat';
 import {useDoOnceOnItemReceived} from '../use-do-once-on-item-received';
 import {
-  BonusProductTypeEnum,
   PayWithBonusPointsCheckbox,
   useIsBonusActiveForUser,
-  useRelevantBonusProduct,
+  useRelevantVoucherBonusProduct,
 } from '@atb/modules/bonus';
 import {
   BottomSheetHeaderType,
@@ -68,12 +67,7 @@ export const CarSharingStationBottomSheet = ({
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
-  const vehicleTypeId =
-    station?.vehicleTypesAvailable?.[0]?.vehicleType.id ?? undefined;
-  const bonusProduct = useRelevantBonusProduct(
-    vehicleTypeId,
-    BonusProductTypeEnum.VOUCHER,
-  );
+  const bonusProduct = useRelevantVoucherBonusProduct(operatorId);
 
   const {logEvent} = useAnalyticsContext();
 

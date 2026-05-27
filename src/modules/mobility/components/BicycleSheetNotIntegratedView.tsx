@@ -6,9 +6,8 @@ import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {
-  BonusProductTypeEnum,
   PayWithBonusPointsCheckbox,
-  useRelevantBonusProduct,
+  useRelevantVoucherBonusProduct,
 } from '@atb/modules/bonus';
 import {StyleSheet} from '@atb/theme';
 import {ThemedCityBike} from '@atb/theme/ThemedAssets';
@@ -52,10 +51,7 @@ export const BikeStationNotIntegratedView = ({
 
   const {operatorBenefit} = useOperatorBenefit(operatorId);
   const isBonusActiveForUser = useIsBonusActiveForUser();
-  const bonusProduct = useRelevantBonusProduct(
-    undefined,
-    BonusProductTypeEnum.VOUCHER,
-  );
+  const bonusProduct = useRelevantVoucherBonusProduct(operatorId);
   const {logEvent} = useAnalyticsContext();
 
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
