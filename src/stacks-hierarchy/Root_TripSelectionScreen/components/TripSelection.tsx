@@ -100,8 +100,8 @@ export function BookingTripSelection({
                   ? TravelCardTexts.card.a11yHint.chooseRecipient
                   : TravelCardTexts.card.a11yHint.ticketSummary,
               )}
-              includeLegNotifications
-              includeSituationNotices
+              includeTransportInfo
+              includeSituationsAndNotices
               isDisabled={
                 !(
                   tp.booking.availability === 'available' &&

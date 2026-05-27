@@ -11,9 +11,9 @@ import {AccessibilityProps} from 'react-native';
 type Registration = {
   /**
    * Update the label for the given name.
-   * @param label - The new label to set.
+   * @param label - The new label to set, or undefined to remove it.
    */
-  update: (label: string) => void;
+  update: (label: string | undefined) => void;
   /**
    * Unregister the label for the given name.
    */
@@ -26,7 +26,7 @@ type Registration = {
  * @param label - The initial label to register.
  * @returns The registration object which can be used to update or unregister the label.
  */
-type RegisterFn = (name: string, label: string) => Registration;
+type RegisterFn = (name: string, label: string | undefined) => Registration;
 
 const RegisterContext = createContext<RegisterFn | null>(null);
 const LabelContext = createContext<string>('');
@@ -95,11 +95,19 @@ export const CompositeAccessibilityProvider = ({
           `CompositeAccessibilityProvider: "${name}" is not in the defined order [${orderRef.current.join(', ')}] and will not be read.`,
         );
       }
-      slots.current.set(name, initialLabel);
+      if (initialLabel !== undefined) {
+        slots.current.set(name, initialLabel);
+      } else {
+        slots.current.delete(name);
+      }
       buildLabel();
       return {
         update(label) {
-          slots.current.set(name, label);
+          if (label !== undefined) {
+            slots.current.set(name, label);
+          } else {
+            slots.current.delete(name);
+          }
           buildLabel();
         },
         unregister() {
@@ -144,7 +152,7 @@ export const useCompositeAccessibilityProps = (): AccessibilityProps => {
  */
 export const useAccessibilityLabelContribution = (
   name: string,
-  label: string,
+  label: string | undefined,
 ) => {
   const register = useContext(RegisterContext);
 
