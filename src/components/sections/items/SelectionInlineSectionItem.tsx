@@ -5,7 +5,7 @@ import {
   NavigationIconTypes,
   ThemeIcon,
 } from '@atb/components/theme-icon';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React from 'react';
 import {AccessibilityProps, View} from 'react-native';
 import {SectionItemProps} from '../types';
@@ -38,6 +38,7 @@ export function SelectionInlineSectionItem({
   ...props
 }: SelectionInlineSectionItemProps) {
   const styles = useStyles();
+  const {theme} = useThemeContext();
   const {topContainer, contentContainer} = useSectionItem(props);
 
   const onPressIconSize = !!onPressLabel ? 'small' : 'normal';
@@ -46,7 +47,11 @@ export function SelectionInlineSectionItem({
     (isNavigationIcon(onPressIcon) ? (
       <NavigationIcon mode={onPressIcon} size={onPressIconSize} />
     ) : (
-      <ThemeIcon svg={onPressIcon} size={onPressIconSize} />
+      <ThemeIcon
+        svg={onPressIcon}
+        size={onPressIconSize}
+        color={theme.color.interactive[0].default.background}
+      />
     ));
 
   return (

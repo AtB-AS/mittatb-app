@@ -43,22 +43,18 @@ const DeparturesTexts = {
       'Aktiver for å gå til førre dag',
     ),
     options: {
-      now: _('Nå', 'Leave now', 'Nå'),
-      departure: _('Velg tid', 'Leave at', 'Velg tid'),
+      now: _('Nå', 'Now', 'No'),
+      departure: _('Avreise', 'Leave at', 'Avreise'),
     },
     today: _('I dag', 'Today', 'I dag'),
     a11yDisabled: _('Deaktivert', 'Disabled', 'Deaktivert'),
+    leaveNow: _(`Nå`, `Now`, `No`),
+    leaveAt: _('Avreise', 'Leave at', 'Avreise'),
     a11yChangeDateHint: _(
       'Aktiver for å forandre dato',
       'Activate to change date',
       'Aktiver for å endre dato',
     ),
-    a11ySelectedLabel: (dateTime: string) =>
-      _(
-        `Valgt dato: ${dateTime}`,
-        `Selected date, ${dateTime}`,
-        `Vald dato: ${dateTime}`,
-      ),
   },
   noDepartures: _(
     'Ingen avganger i dette tidsrommet.',
