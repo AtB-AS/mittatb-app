@@ -35,7 +35,6 @@ import {
 } from '@atb/components/bottom-sheet';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import {ShmoPricingPlan, Vehicle} from '@atb/api/types/mobility';
-import {PriceAdjustmentType} from '@atb-as/config-specs/lib/mobility';
 import {PriceDetailsCard} from '../PriceDetailsCard';
 import {Loading} from '@atb/components/loading';
 import {SupportButton} from '../SupportButton';
@@ -48,7 +47,7 @@ import {
   useRelevantSharedMobilityBonusProduct,
 } from '@atb/modules/bonus';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import type {MobilityPriceAdjustmentBenefitType} from '@atb/api/types/benefit';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -63,7 +62,7 @@ type Props = {
   navigateToScanQrCode: () => void;
   navigateToPricingDetails: (
     pricingPlan: ShmoPricingPlan,
-    priceAdjustments: PriceAdjustmentType[] | undefined,
+    benefit: MobilityPriceAdjustmentBenefitType | undefined,
   ) => void;
 };
 
@@ -103,11 +102,7 @@ export const VehicleSheet = ({
 
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
-  const {mobilityPriceAdjustments} = useFirestoreConfigurationContext();
   const vehicleTypeId = vehicle?.vehicleType.id;
-  const priceAdjustments = vehicleTypeId
-    ? mobilityPriceAdjustments?.[vehicleTypeId]
-    : undefined;
   const operatorLogo = operator?.brandAssets?.brandImageUrl;
 
   const {mode, subMode} = getTransportModeAndSubMode(
@@ -204,10 +199,15 @@ export const VehicleSheet = ({
 
             <PriceDetailsCard
               pricingPlan={vehicle.pricingPlan}
-              priceAdjustments={
+              benefit={
                 payWithBonusPoints && bonusProduct?.priceAdjustments
-                  ? bonusProduct.priceAdjustments
-                  : priceAdjustments
+                  ? ({
+                      kind: 'MOBILITY_PRICE_ADJUSTMENT' as const,
+                      vehicleTypeId: vehicleTypeId ?? '',
+                      description: '',
+                      priceAdjustments: bonusProduct.priceAdjustments,
+                    } satisfies MobilityPriceAdjustmentBenefitType)
+                  : (vehicle.benefit ?? undefined)
               }
               systemId={vehicle.system.id}
               onNavigatePricingDetails={navigateToPricingDetails}

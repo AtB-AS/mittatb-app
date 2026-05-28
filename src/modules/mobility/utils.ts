@@ -17,11 +17,12 @@ import {
 import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {dictionary, Language} from '@atb/translations';
 import {enumFromString} from '@atb/utils/enum-from-string';
-import {
-  MobilityOperatorType,
-  PriceAdjustmentEnum,
-  PriceAdjustmentType,
-} from '@atb-as/config-specs/lib/mobility';
+import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
+import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
+import type {
+  MobilityPriceAdjustmentBenefitType,
+  MobilityPriceAdjustmentType,
+} from '@atb/api/types/benefit';
 import {
   BatteryEmpty,
   BatteryFull,
@@ -244,27 +245,27 @@ export const toFormFactorEnum = (str: string): FormFactor =>
   enumFromString(FormFactor, str) || FormFactor.Other;
 
 export const getFreeUnlock = (
-  priceAdjustments: PriceAdjustmentType[] | undefined,
+  benefit: MobilityPriceAdjustmentBenefitType | undefined,
   systemId: string,
-): PriceAdjustmentType | undefined =>
-  priceAdjustments?.find(
+): MobilityPriceAdjustmentType | undefined =>
+  benefit?.priceAdjustments.find(
     (e) =>
       e.type === PriceAdjustmentEnum.enum.FREE_UNLOCK &&
       e.systemIds.includes(systemId),
   );
 
 export const getFreeMinutes = (
-  priceAdjustments: PriceAdjustmentType[] | undefined,
+  benefit: MobilityPriceAdjustmentBenefitType | undefined,
   systemId: string,
-): PriceAdjustmentType | undefined =>
-  priceAdjustments?.find(
+): MobilityPriceAdjustmentType | undefined =>
+  benefit?.priceAdjustments.find(
     (e) =>
       e.type === PriceAdjustmentEnum.enum.FREE_MINUTES &&
       e.systemIds.includes(systemId),
   );
 
 export const computeFreeMinuteCount = (
-  freeMinutes: PriceAdjustmentType,
+  freeMinutes: MobilityPriceAdjustmentType,
   perMinPricing: ShmoPricingSegment[],
 ): number => {
   let budget = Math.abs(freeMinutes.amount);

@@ -27,10 +27,6 @@ import {
   TransportModeFilterOption,
   TravelSearchPreference,
 } from '@atb-as/config-specs';
-import {
-  PriceAdjustment,
-  type PriceAdjustmentType,
-} from '@atb-as/config-specs/lib/mobility';
 import {z} from 'zod';
 
 export function mapToFareProductTypeConfigs(
@@ -289,25 +285,6 @@ export const mapToStopSignalButtonConfig = (
     : StopSignalButtonConfig.parse({});
 };
 
-const PriceAdjustmentsByVehicleTypeId = z.record(
-  z.string(),
-  z.array(PriceAdjustment),
-);
-
-export function mapToMobilityPriceAdjustments(
-  data: unknown,
-): Record<string, PriceAdjustmentType[]> | undefined {
-  if (!data) return undefined;
-  const result = PriceAdjustmentsByVehicleTypeId.safeParse(data);
-  if (!result.success) {
-    console.warn(
-      `mapToMobilityPriceAdjustments failed safeParsing:\n`,
-      result.error,
-    );
-    return undefined;
-  }
-  return result.data;
-}
 
 export function mapToKnownQrCodeUrls(config?: any): CompiledKnownQrCodeUrl[] {
   if (!config) return [];

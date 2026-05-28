@@ -48,9 +48,7 @@ import {
   mapToConsentLines,
   mapToAppVersionedConfigurableLinks,
   mapToKnownQrCodeUrls,
-  mapToMobilityPriceAdjustments,
 } from './converters';
-import {type PriceAdjustmentType} from '@atb-as/config-specs/lib/mobility';
 import {LanguageAndTextType} from '@atb/translations';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
 import {
@@ -87,7 +85,6 @@ type ConfigurationContextState = {
   bonusTexts: BonusTextsType | undefined;
   benefitIdsRequiringValueCode: OperatorBenefitIdType[] | undefined;
   harborConnectionOverrides: HarborConnectionOverrideType[] | undefined;
-  mobilityPriceAdjustments: Record<string, PriceAdjustmentType[]> | undefined;
   firestoreConfigStatus: FirestoreConfigStatus;
   notificationConfig: NotificationConfigType | undefined;
   stopSignalButtonConfig: StopSignalButtonConfigType;
@@ -143,9 +140,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
   const [harborConnectionOverrides, setHarborConnectionOverrides] = useState<
     HarborConnectionOverrideType[]
   >([]);
-  const [mobilityPriceAdjustments, setMobilityPriceAdjustments] = useState<
-    Record<string, PriceAdjustmentType[]> | undefined
-  >(undefined);
   const [notificationConfig, setNotificationConfig] = useState<
     NotificationConfigType | undefined
   >();
@@ -269,10 +263,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
             setHarborConnectionOverrides(harborConnectionOverrides);
           }
 
-          setMobilityPriceAdjustments(
-            getMobilityPriceAdjustmentsFromSnapshot(snapshot),
-          );
-
           setFirestoreConfigStatus(!snapshot.empty ? 'success' : 'loading');
 
           const notificationConfig =
@@ -350,7 +340,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
       bonusTexts,
       benefitIdsRequiringValueCode,
       harborConnectionOverrides,
-      mobilityPriceAdjustments,
       notificationConfig,
       stopSignalButtonConfig,
       knownQrCodeUrls,
@@ -377,7 +366,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     bonusTexts,
     benefitIdsRequiringValueCode,
     harborConnectionOverrides,
-    mobilityPriceAdjustments,
     notificationConfig,
     stopSignalButtonConfig,
     knownQrCodeUrls,
@@ -753,9 +741,3 @@ function getKnownQrCodeUrlsFromSnapshot(
   return mapToKnownQrCodeUrls(config?.data());
 }
 
-function getMobilityPriceAdjustmentsFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): Record<string, PriceAdjustmentType[]> | undefined {
-  const mobilityDoc = snapshot.docs.find((doc) => doc.id == 'mobility');
-  return mapToMobilityPriceAdjustments(mobilityDoc?.get('priceAdjustments'));
-}

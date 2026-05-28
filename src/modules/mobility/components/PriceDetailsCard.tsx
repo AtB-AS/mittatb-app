@@ -20,32 +20,32 @@ import {
   getFreeUnlock,
 } from '../utils';
 import {formatNumberToString} from '@atb-as/utils';
-import {PriceAdjustmentType} from '@atb-as/config-specs/lib/mobility';
 import {getCurrencySymbol} from '@atb/translations/currency';
 import {ShmoPricingPlan} from '@atb/api/types/mobility';
 import SvgChevronRight from '@atb/assets/svg/mono-icons/navigation/ChevronRight';
+import type {MobilityPriceAdjustmentBenefitType} from '@atb/api/types/benefit';
 
 type Props = {
   pricingPlan: ShmoPricingPlan;
-  priceAdjustments?: PriceAdjustmentType[];
+  benefit?: MobilityPriceAdjustmentBenefitType;
   systemId: string;
   onNavigatePricingDetails?: (
     pricingPlan: ShmoPricingPlan,
-    priceAdjustments: PriceAdjustmentType[] | undefined,
+    benefit: MobilityPriceAdjustmentBenefitType | undefined,
   ) => void;
 };
 
 export const PriceDetailsCard = ({
   pricingPlan,
-  priceAdjustments,
+  benefit,
   systemId,
   onNavigatePricingDetails,
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const ratePrUnit = formatRatePerUnit(pricingPlan, language);
-  const freeUnlock = getFreeUnlock(priceAdjustments, systemId);
-  const freeMinutes = getFreeMinutes(priceAdjustments, systemId);
+  const freeUnlock = getFreeUnlock(benefit, systemId);
+  const freeMinutes = getFreeMinutes(benefit, systemId);
 
   const unlockStat = freeUnlock
     ? t(ScooterTexts.free)
@@ -94,14 +94,7 @@ export const PriceDetailsCard = ({
         <LinkSectionItem
           rightIcon={{svg: SvgChevronRight}}
           text={t(MobilityTexts.pricingDetails.priceInfo)}
-          onPress={() =>
-            onNavigatePricingDetails(
-              pricingPlan,
-              priceAdjustments?.filter((adj) =>
-                adj.systemIds.includes(systemId),
-              ),
-            )
-          }
+          onPress={() => onNavigatePricingDetails(pricingPlan, benefit)}
         />
       )}
     </Section>
