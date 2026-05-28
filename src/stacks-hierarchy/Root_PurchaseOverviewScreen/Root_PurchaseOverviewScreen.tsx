@@ -238,7 +238,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                   PurchaseOverviewTexts.errorMessageBox.productUnavailable
                     .message,
                 )}
-                style={styles.selectionComponent}
               />
             ) : (
               <MessageInfoBox
@@ -249,7 +248,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                   action: refreshOffer,
                   text: t(dictionary.retry),
                 }}
-                style={styles.selectionComponent}
               />
             ))}
 
@@ -336,7 +334,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             <MessageInfoBox
               type="valid"
               message={t(PurchaseOverviewTexts.summary.free)}
-              style={styles.messages}
+              style={styles.isFreeMessage}
             />
           ) : (
             <View style={styles.messages}>
@@ -416,6 +414,9 @@ const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
       rowGap: theme.spacing.medium,
       margin: theme.spacing.medium,
       marginBottom: bottom + theme.spacing.medium,
+    },
+    isFreeMessage: {
+      marginTop: theme.spacing.medium,
     },
     messages: {
       rowGap: theme.spacing.medium,

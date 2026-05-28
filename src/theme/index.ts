@@ -1,4 +1,4 @@
 export * from './colors';
 
-export {StyleSheet, useStyle} from './StyleSheet';
+export {StyleSheet, useStyle, type MarginStyle} from './StyleSheet';
 export {useThemeContext} from './ThemeContext';

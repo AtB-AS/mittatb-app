@@ -175,7 +175,6 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
 
         {authenticationType !== 'phone' && (
           <MessageInfoText
-            style={styles.warningMessageAnonym}
             message={t(AnonymousPurchases.consequences.select_payment_method)}
             type="warning"
           />
@@ -202,9 +201,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   confirmButton: {
     marginTop: theme.spacing.small,
-  },
-  warningMessageAnonym: {
-    paddingTop: theme.spacing.medium,
-    paddingLeft: theme.spacing.medium,
   },
 }));
