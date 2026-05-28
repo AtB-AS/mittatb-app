@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, Statuses} from '@atb/theme';
+import {Statuses, StyleSheet} from '@atb/theme';
 import type {TripPattern} from '@atb/api/types/trips';
 import {TravelCardLegs} from './TravelCardLegs';
 import Animated, {FadeIn} from 'react-native-reanimated';
@@ -119,8 +119,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.color.background.neutral[0].background,
     padding: theme.spacing.medium,
     borderRadius: theme.border.radius.regular,
-    marginHorizontal: theme.spacing.medium,
-    marginVertical: theme.spacing.small,
   },
   containerDisabled: {
     backgroundColor: theme.color.background.neutral[2].background,

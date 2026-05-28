@@ -50,7 +50,7 @@ export function DayLabel({
 }
 const useDayTextStyle = StyleSheet.createThemeHook((theme) => ({
   title: {
-    paddingHorizontal: theme.spacing.xLarge,
+    paddingHorizontal: theme.spacing.medium,
     color: theme.color.foreground.dynamic.secondary,
   },
 }));
