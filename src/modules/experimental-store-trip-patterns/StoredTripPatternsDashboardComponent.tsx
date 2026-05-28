@@ -182,7 +182,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   storedTripsList: {
     marginTop: theme.spacing.small,
-    gap: theme.spacing.medium,
+    gap: theme.spacing.small,
   },
   errorContainer: {
     paddingBottom: theme.spacing.medium,
