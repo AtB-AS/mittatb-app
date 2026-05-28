@@ -43,7 +43,11 @@ export const LocationIcon = ({
 
       return multiple ? (
         <View style={styles.multipleIconsContainer}>
-          {venueIconTypes.map((it) => mapTypeToIconComponent(it))}
+          {venueIconTypes.map((it) => (
+            <React.Fragment key={it}>
+              {mapTypeToIconComponent(it)}
+            </React.Fragment>
+          ))}
         </View>
       ) : (
         mapTypeToIconComponent(venueIconTypes[0])
@@ -88,9 +92,7 @@ const mapTypeToIconComponent = (
       );
     case 'unknown':
     default:
-      return (
-        <ThemeIcon svg={Pin} accessibilityLabel="Lokasjon" key="unknown" />
-      );
+      return <ThemeIcon svg={Pin} accessibilityLabel="Lokasjon" />;
   }
 };
 
