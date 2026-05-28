@@ -5,6 +5,15 @@ export type {DebugServerOverride} from './types';
 
 let cachedOverrides: DebugServerOverride[] = [];
 
+const listeners = new Set<() => void>();
+
+export function subscribeToDebugServerOverrides(
+  listener: () => void,
+): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
 /**
  * Load debug server overrides from storage into the in-memory cache.
  * Should be called at app startup.
@@ -25,6 +34,7 @@ export async function loadDebugServerOverrides(): Promise<void> {
             match: new RegExp(o.match),
           }),
         );
+        listeners.forEach((l) => l());
         return;
       }
     } catch (e) {
@@ -33,6 +43,7 @@ export async function loadDebugServerOverrides(): Promise<void> {
     }
   }
   cachedOverrides = [];
+  listeners.forEach((l) => l());
 }
 
 /**
@@ -43,6 +54,7 @@ export function setDebugServerOverrides(
   overrides: DebugServerOverride[],
 ): void {
   cachedOverrides = overrides;
+  listeners.forEach((l) => l());
 }
 
 /**
