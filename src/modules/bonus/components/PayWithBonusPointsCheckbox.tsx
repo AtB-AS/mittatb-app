@@ -2,6 +2,7 @@ import {useBonusBalanceQuery, BonusProductTypeEnum} from '@atb/modules/bonus';
 import {Checkbox} from '@atb/components/checkbox';
 import {
   GenericClickableSectionItem,
+  GenericSectionItem,
   Section,
   SectionProps,
 } from '@atb/components/sections';
@@ -18,6 +19,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {isDefined} from '@atb/utils/presence';
 import {BonusStarFill} from './BonusStarFill';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {MessageInfoText} from '@atb/components/message-info-text';
 
 type Props = SectionProps & {
   bonusProduct: BonusProductType;
@@ -44,7 +46,8 @@ export const PayWithBonusPointsCheckbox = ({
     Number.isNaN(userBonusBalance) ||
     userBonusBalanceStatus === 'error';
 
-  const isDisabled = isError || userBonusBalance < bonusProduct.price.amount;
+  const hasInsufficientBalance =
+    !isError && userBonusBalance < bonusProduct.price.amount;
 
   const a11yLabel =
     (getTextForLanguage(bonusProduct.paymentDescription, language) ?? '') +
@@ -59,37 +62,49 @@ export const PayWithBonusPointsCheckbox = ({
       ),
     );
 
+  const content = (
+    <View style={styles.container}>
+      {!hasInsufficientBalance && <Checkbox checked={isChecked} />}
+      <View style={styles.textContainer}>
+        <View style={styles.horizontalRow}>
+          <ThemeText>{t(BonusProgramTexts.spend)}</ThemeText>
+          <ThemeIcon svg={BonusStarFill} size="small" />
+          <ThemeText>
+            {t(BonusProgramTexts.amountPoints(bonusProduct.price.amount))}
+          </ThemeText>
+        </View>
+
+        <ThemeText type="secondary" style={styles.horizontalRow}>
+          {getTextForLanguage(bonusProduct.paymentDescription, language) ?? ''}
+        </ThemeText>
+
+        {hasInsufficientBalance && (
+          <MessageInfoText
+            type="info"
+            message={t(BonusProgramTexts.notEnoughPoints)}
+          />
+        )}
+      </View>
+    </View>
+  );
+
   return (
     <>
       <Section {...props}>
-        <GenericClickableSectionItem
-          active={isChecked}
-          onPress={onPress}
-          disabled={isDisabled}
-          accessibilityRole="checkbox"
-          accessibilityState={{checked: isChecked}}
-          accessibilityLabel={a11yLabel}
-        >
-          <View style={styles.container}>
-            <Checkbox checked={isChecked} />
-            <View style={styles.textContainer}>
-              <View style={styles.horizontalRow}>
-                <ThemeText>{t(BonusProgramTexts.spend)}</ThemeText>
-                <ThemeIcon svg={BonusStarFill} size="small" />
-                <ThemeText>
-                  {t(BonusProgramTexts.amountPoints(bonusProduct.price.amount))}
-                </ThemeText>
-              </View>
-
-              <ThemeText type="secondary" style={styles.horizontalRow}>
-                {getTextForLanguage(
-                  bonusProduct.paymentDescription,
-                  language,
-                ) ?? ''}
-              </ThemeText>
-            </View>
-          </View>
-        </GenericClickableSectionItem>
+        {hasInsufficientBalance ? (
+          <GenericSectionItem>{content}</GenericSectionItem>
+        ) : (
+          <GenericClickableSectionItem
+            active={isChecked}
+            onPress={onPress}
+            disabled={isError}
+            accessibilityRole="checkbox"
+            accessibilityState={{checked: isChecked}}
+            accessibilityLabel={a11yLabel}
+          >
+            {content}
+          </GenericClickableSectionItem>
+        )}
       </Section>
       {isError && (
         <MessageInfoBox
@@ -100,7 +115,7 @@ export const PayWithBonusPointsCheckbox = ({
       )}
       {isChecked &&
         bonusProduct.productType === BonusProductTypeEnum.VOUCHER && (
-          <MessageInfoBox
+          <MessageInfoText
             style={styles.infoMessage}
             type="warning"
             message={t(

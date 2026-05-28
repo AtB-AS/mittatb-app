@@ -49,6 +49,12 @@ const BonusProgramTexts = {
       `Få kampanjepris hos ${operatorName}`,
     ),
 
+  notEnoughPoints: _(
+    'Du har ikke nok poeng',
+    "You don't have enough points",
+    'Du har ikkje nok poeng',
+  ),
+
   log_in_operator_app_warning: (operatorName: string) =>
     _(
       `Du må være logget inn i ${operatorName}-appen før du bruker kampanjeprisen.`,

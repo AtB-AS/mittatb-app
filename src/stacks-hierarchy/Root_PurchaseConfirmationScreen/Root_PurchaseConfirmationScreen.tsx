@@ -61,6 +61,7 @@ import {isNonRecurringPaymentType} from '@atb/modules/payment';
 import {
   PayWithBonusPointsCheckbox,
   useRelevantTicketBonusProduct,
+  useIsBonusActiveForUser,
 } from '@atb/modules/bonus';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
@@ -110,6 +111,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   const builder = usePurchaseSelectionBuilder();
   const relevantTicketBonusProduct = useRelevantTicketBonusProduct(selection);
+  const isBonusActiveForUser = useIsBonusActiveForUser();
 
   const isFree = totalPrice === 0;
 
@@ -359,7 +361,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             type="error"
           />
         )}
-        {!!relevantTicketBonusProduct && !isFree && (
+        {!!relevantTicketBonusProduct && !isFree && isBonusActiveForUser && (
           <PayWithBonusPointsCheckbox
             bonusProduct={relevantTicketBonusProduct}
             isChecked={
