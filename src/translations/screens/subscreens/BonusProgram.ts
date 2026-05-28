@@ -42,11 +42,18 @@ const BonusProgramTexts = {
       ),
   },
 
+  getCampaignPriceAt: (operatorName: string) =>
+    _(
+      `Få kampanjepris hos ${operatorName}`,
+      `Get campaign price at ${operatorName}`,
+      `Få kampanjepris hos ${operatorName}`,
+    ),
+
   log_in_operator_app_warning: (operatorName: string) =>
     _(
-      `Du må være logget inn i ${operatorName}-appen før du bruker bonusen.`,
-      `You must be logged in to the ${operatorName} app before using the bonus.`,
-      `Du må vera logga inn i ${operatorName}-appen før du brukar bonusen.`,
+      `Du må være logget inn i ${operatorName}-appen før du bruker kampanjeprisen.`,
+      `You must be logged in to the ${operatorName} app before using the campaign price.`,
+      `Du må vera logga inn i ${operatorName}-appen før du brukar kampanjeprisen.`,
     ),
 
   bonusProfile: {
@@ -56,14 +63,14 @@ const BonusProgramTexts = {
 
     joinProgram: {
       title: _(
-        'Tjen poeng på enkeltbilletter!',
-        'Earn Points on single tickets!',
-        'Tjen poeng på enkeltbilletter!',
+        'Reis billigere med AtB Bonus!',
+        'Travel cheaper with AtB Bonus!',
+        'Reis billegare med AtB Bonus!',
       ),
       description: _(
-        'Du tjener Poeng hver gang du kjøper en enkeltbillett for voksen eller student i sone A. Bruk Poeng på turer med bysykler og Hyre-biler.',
-        'You earn Points every time you buy a single ticket for adults or students in zone A. Use the Points on trips with city bikes and Hyre cars.',
-        'Du tener Poeng kvar gong du kjøper ein enkeltbillett for vaksen eller student i sone A. Bruk Poeng på turer med bysykkler og Hyre-biler.',
+        'Bli med og tjen poeng hver gang du kjøper en enkeltbillett (voksen/student, sone A). Bruk poengene dine og få kampanjepris på enkeltbilletter, bysykler, elsparkesykler og Hyrebiler.',
+        'Sign up and earn points every time you buy a single ticket (adult/student, zone A). Use your points and get campaign prices on single tickets, city bikes, electric scooters and Hyre cars.',
+        'Bli med og ten poeng kvar gong du kjøper ein enkeltbillett (vaksen/student, sone A). Bruk poenga dine og få kampanjepris på enkeltbillettar, bysyklar, elsparkesyklar og Hyrebilar.',
       ),
       footer: (endDate: string) =>
         _(
@@ -76,7 +83,7 @@ const BonusProgramTexts = {
       },
     },
 
-    yourPoints: _('Dine Poeng', 'Your Points', 'Poenga dine'),
+    yourPoints: _('Dine poeng', 'Your points', 'Poenga dine'),
 
     mapButton: {
       a11yLabel: _('Vis i kart', 'Show in map', 'Vis i kart'),
@@ -88,9 +95,9 @@ const BonusProgramTexts = {
     },
     spendPoints: {
       heading: _(
-        'Dette kan du bruke Poeng på',
-        'This is what you can use Points for',
-        'Dette kan du bruke Poeng på',
+        'Dette får du for poeng',
+        'This is what you get for points',
+        'Dette får du for poeng',
       ),
     },
     noData: _(
@@ -100,9 +107,9 @@ const BonusProgramTexts = {
     ),
 
     noProfile: _(
-      'Du må logge inn før du kan bli med i Poeng',
-      'You need to log in before you can join Points',
-      'Du må logga inn før du kan bli med i Poeng',
+      'Du må logge inn før for du kan bli med i AtB Bonus',
+      'You need to log in before you can join AtB Bonus',
+      'Du må logga inn før du kan bli med i AtB Bonus',
     ),
     noBonusBalance: _(
       'Vi klarer ikke vise Poengene dine akkurat nå. Du vil fortsatt tjene Poeng som vanlig.',
@@ -111,9 +118,9 @@ const BonusProgramTexts = {
     ),
     joined: {
       title: _(
-        'Du er med i Poeng!',
-        'You have joined Points!',
-        'Du er med i Poeng!',
+        'Du er med i AtB Bonus!',
+        'You have joined AtB Bonus!',
+        'Du er med i AtB Bonus!',
       ),
       welcomeGiftDescription: (points: number) =>
         _(
@@ -130,38 +137,34 @@ const BonusProgramTexts = {
     readMore: {
       heading: _('Slik funker det', 'How it works', 'Slik funkar det'),
       download: {
-        title: _(
-          'Last ned appene først',
-          'Download the apps first',
-          'Last ned appane fyrst',
-        ),
+        title: _('Last ned appene', 'Download the apps', 'Last ned appane'),
         description: _(
-          'Du må laste ned og logge inn i appene til Trondheim Bysykkel og Hyre før du bruker Poeng.',
-          'You need to download and log in to the apps for Trondheim City Bike and Hyre before using Points.',
-          'Du må lasta ned og logga inn i appane til Trondheim Bysykkel og Hyre før du brukar Poeng.',
+          'Du må laste ned og logge inn i appene til Trondheim Bysykkel og Hyre før du bruker poeng på deres tjenester.',
+          'You need to download and log in to the apps for Trondheim City Bike and Hyre before using points on their services.',
+          'Du må lasta ned og logga inn i appane til Trondheim Bysykkel og Hyre før du brukar poeng på tenestene deira.',
         ),
       },
       earnPoints: {
-        title: _('Tjen Poeng', 'Earn Points', 'Tjen Poeng'),
+        title: _('Tjen poeng', 'Earn points', 'Tjen poeng'),
         description: (pointsPerProduct: string) =>
           pointsPerProduct
             ? _(
-                `Du tjener ${pointsPerProduct} for voksen eller student i sone A.`,
-                `You earn ${pointsPerProduct} for adults or students in zone A.`,
-                `Du tjener ${pointsPerProduct} for vaksen eller student i sone A.`,
+                `Du tjener ${pointsPerProduct} (voksen/student, sone A).`,
+                `You earn ${pointsPerProduct} (adult/student, zone A).`,
+                `Du tjener ${pointsPerProduct} (vaksen/student, sone A).`,
               )
             : _(
-                'Du tjener Poeng hver gang du kjøper en enkeltbillett for voksen eller student i sone A.',
-                'You earn Points every time you buy a single ticket for adults or students in zone A.',
-                'Du tener Poeng kvar gong du kjøper ein enkeltbillett for vaksen eller student i sone A.',
+                'Du tjener poeng hver gang du kjøper en enkeltbillett (voksen/student, sone A).',
+                'You earn points every time you buy a single ticket (adult/student, zone A).',
+                'Du tener poeng kvar gong du kjøper ein enkeltbillett (vaksen/student, sone A).',
               ),
       },
       spendPoints: {
-        title: _('Bruk Poeng', 'Spend Points', 'Bruk Poeng'),
+        title: _('Bruk poeng', 'Spend points', 'Bruk poeng'),
         description: _(
-          'Du kan bruke Poeng på turer med bysykler og Hyre-biler.',
-          'You may use Points on trips with city bikes and Hyre cars.',
-          'Du kan bruke Poeng på turer med bysykler og Hyre-biler.',
+          'Du kan bruke poeng på turer med bysykler og Hyre-biler.',
+          'You may use points on trips with city bikes and Hyre cars.',
+          'Du kan bruke poeng på turer med bysykler og Hyre-biler.',
         ),
       },
       downloadOperator: (operator: string) =>
@@ -188,15 +191,15 @@ const BonusProgramTexts = {
       faqs: [
         {
           question: _(
-            'Hvordan bruker jeg Poeng?',
-            'How do I use Points?',
-            'Korleis brukar eg Poeng?',
+            'Hvordan bruker jeg poengene?',
+            'How do I use the points?',
+            'Korleis brukar eg poenga?',
           ),
           answer: () =>
             _(
-              'Når du har samlet nok Poeng, kan du bruke dem på turer med bysykler og Hyre-biler som du finner i kartet. For å bruke Poeng i kartet, trykker du på ikonet for bysykkel eller Hyre-bil, og krysser av for at du vil bruke Poeng før du starter turen.',
-              'When you have collected enough Points, you can use them on trips with city bikes and Hyre cars that you find in the map. To use Points in the map, tap on the icon for city bike or Hyre car, and check the box that you want to use Points before you start the trip.',
-              'Når du har samla nok Poeng, kan du bruke dem på turer med bysykler og Hyre-biler som du finn i kartet. For å bruke Poeng i kartet, trykker du på ikonet for bysykkel eller Hyre-bil, og krysser av for at du vil bruke Poeng før du startar turen.',
+              'På bysykkel, elsparkesykkel eller Hyrebil:\nFinn kjøretøyet i kartet, trykk på ikonet og huk av for at du vil bruke poeng før du starter turen.',
+              'On city bikes, electric scooters, or Hyre cars:\nFind the vehicle on the map, tap the icon, and check the box to use points before starting the trip.',
+              'På bysykkel, elsparkesykkel eller Hyrebil:\nFinn kjøretøyet i kartet, trykk på ikonet og huk av for at du vil bruke poeng før du starter turen.',
             ),
         },
         {
@@ -207,41 +210,41 @@ const BonusProgramTexts = {
           ),
           answer: ({endDate}: BonusFaqContext) =>
             _(
-              `Prøveprosjektet varer frem til ${endDate}. Etter dette slettes resten av Poengene dine.`,
-              `The pilot project lasts until ${endDate}. After this, the remaining Points will be deleted.`,
-              `Prøveprosjektet varer fram til ${endDate}. Etter dette slettes resten av Poenga dine.`,
+              `Prøveprosjektet varer frem til ${endDate}. Etter dette slettes resten av poengene dine.`,
+              `The pilot project lasts until ${endDate}. After this, the remaining points will be deleted.`,
+              `Prøveprosjektet varer fram til ${endDate}. Etter dette slettes resten av poenga dine.`,
             ),
         },
       ],
       pointsPerProductLabel: (value: number, productName: string) =>
         _(
-          `${value} Poeng hver gang du kjøper en ${productName}`,
-          `${value} Points every time you buy a ${productName}`,
-          `${value} Poeng kvar gong du kjøper ein ${productName}`,
+          `${value} poeng hver gang du kjøper en ${productName}`,
+          `${value} points every time you buy a ${productName}`,
+          `${value} poeng kvar gong du kjøper ein ${productName}`,
         ),
     },
   },
 
   terms: {
     title: _(
-      'Vilkår for Poeng',
-      'Terms and conditions for Points',
-      'Vilkår for Poeng',
+      'Vilkår for AtB Bonus',
+      'Terms and conditions for AtB Bonus',
+      'Vilkår for AtB Bonus',
     ),
     term1: _(
-      'Du kan kun bruke Poeng i AtB-appen.',
-      'You can only use Points in the AtB app.',
-      'Du kan kun bruke Poeng i AtB-appen.',
+      'Poeng brukes kun i AtB-appen.',
+      'Points can only be used in the AtB app.',
+      'Poeng kan kun brukast i AtB-appen.',
     ),
     term2: _(
-      'Gjenværende Poeng slettes etter testperioden.',
-      'Remaining Points will be deleted after the test period.',
-      'Gjenværende Poeng slettes etter testperioden.',
+      'Ubrukte Poeng slettes når prøveperioden er over.',
+      'Unused Points will be deleted when the pilot period is over.',
+      'Ubrukte Poeng slettes når prøveperioden er over.',
     ),
     term3: _(
-      'AtB kan kontakte deg for å be om tilbakemeldinger underveis i testen.',
-      'AtB may contact you to ask for feedback during the test.',
-      'AtB kan kontakta deg for å be om tilbakemelding undervegs i testen.',
+      'Vi kan kontakte deg for tilbakemeldinger i prøveperioden.',
+      'AtB may contact you to ask for feedback during the pilot period.',
+      'AtB kan kontakta deg for tilbakemeldingar i prøveperioden.',
     ),
     error: {
       title: _('Noe gikk galt', 'Something went wrong', 'Noe gikk galt'),

@@ -1,6 +1,5 @@
 export {
   BonusBalanceButton,
-  BonusPriceTag,
   BonusProductList,
   EarnedBonusPointsSectionItem,
   PayWithBonusPointsCheckbox,

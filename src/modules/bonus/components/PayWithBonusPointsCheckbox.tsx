@@ -1,8 +1,4 @@
-import {
-  BonusPriceTag,
-  useBonusBalanceQuery,
-  BonusProductTypeEnum,
-} from '@atb/modules/bonus';
+import {useBonusBalanceQuery, BonusProductTypeEnum} from '@atb/modules/bonus';
 import {Checkbox} from '@atb/components/checkbox';
 import {
   GenericClickableSectionItem,
@@ -11,7 +7,7 @@ import {
 } from '@atb/components/sections';
 import {ThemeText, screenReaderPause} from '@atb/components/text';
 import {BonusProductType} from '@atb/modules/bonus';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   BonusProgramTexts,
   getTextForLanguage,
@@ -19,8 +15,9 @@ import {
 } from '@atb/translations';
 import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {UserBonusBalance} from './UserBonusBalance';
 import {isDefined} from '@atb/utils/presence';
+import {BonusStarFill} from './BonusStarFill';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 type Props = SectionProps & {
   bonusProduct: BonusProductType;
@@ -37,7 +34,6 @@ export const PayWithBonusPointsCheckbox = ({
   ...props
 }: Props) => {
   const styles = useStyles();
-  const {theme} = useThemeContext();
   const {t, language} = useTranslation();
 
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
@@ -77,29 +73,21 @@ export const PayWithBonusPointsCheckbox = ({
           <View style={styles.container}>
             <Checkbox checked={isChecked} />
             <View style={styles.textContainer}>
-              <ThemeText>
+              <View style={styles.horizontalRow}>
+                <ThemeText>{t(BonusProgramTexts.spend)}</ThemeText>
+                <ThemeIcon svg={BonusStarFill} size="small" />
+                <ThemeText>
+                  {t(BonusProgramTexts.amountPoints(bonusProduct.price.amount))}
+                </ThemeText>
+              </View>
+
+              <ThemeText type="secondary" style={styles.horizontalRow}>
                 {getTextForLanguage(
                   bonusProduct.paymentDescription,
                   language,
                 ) ?? ''}
               </ThemeText>
-              <View style={styles.currentPointsRow}>
-                <ThemeText typography="body__s" type="secondary">
-                  {t(BonusProgramTexts.youHave)}
-                </ThemeText>
-                <UserBonusBalance
-                  typography="body__s"
-                  color={theme.color.foreground.dynamic.secondary}
-                />
-                <ThemeText typography="body__s" type="secondary">
-                  {t(BonusProgramTexts.points)}
-                </ThemeText>
-              </View>
             </View>
-            <BonusPriceTag
-              amount={bonusProduct.price.amount}
-              style={{alignSelf: 'flex-start'}}
-            />
           </View>
         </GenericClickableSectionItem>
       </Section>
@@ -130,14 +118,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     gap: theme.spacing.medium,
+    flex: 1,
   },
-  currentPointsRow: {
+  horizontalRow: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.xSmall,
   },
-  textContainer: {flex: 1},
+  textContainer: {gap: theme.spacing.small, flex: 1},
   infoMessage: {
     marginTop: theme.spacing.medium,
   },
