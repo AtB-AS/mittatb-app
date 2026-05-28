@@ -115,6 +115,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     margin: theme.spacing.medium,
   },
   content: {
-    backgroundColor: theme.color.background.neutral[1].background,
+    paddingTop: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
 }));

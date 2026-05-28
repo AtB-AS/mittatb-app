@@ -78,47 +78,52 @@ export function BookingTripSelection({
         originFareContract={selection.originFareContract}
       />
       {!isEmpty ? (
-        tripPatterns.map((tp, i) =>
-          isNewTravelCardBooking ? (
-            <TravelCard
-              key={`booking-trip-${i}`}
-              tripPattern={tp}
-              onDetailsPressed={() => {
-                const isAvailable =
-                  tp.booking.availability === 'available' &&
-                  !tp.booking.disabledReason;
-                if (isAvailable) onSelect(tp.legs);
-              }}
-              a11yLabelPrefix={t(
-                TravelCardTexts.card.a11yPrefix.bookingOption(
-                  i,
-                  tripPatterns.length,
-                ),
-              )}
-              a11yHint={t(
-                selection.isOnBehalfOf
-                  ? TravelCardTexts.card.a11yHint.chooseRecipient
-                  : TravelCardTexts.card.a11yHint.ticketSummary,
-              )}
-              includeTransportInfo
-              includeSituationsAndNotices
-              isDisabled={
-                !(
-                  tp.booking.availability === 'available' &&
-                  !tp.booking.disabledReason
-                )
-              }
-              tag={getBookingTagInfo(t, tp.booking, tp.booking.disabledReason)}
-              style={styles.travelCard}
-            />
-          ) : (
-            <BookingTrip
-              key={`booking-trip-${i}`}
-              onSelect={onSelect}
-              tripPattern={tp}
-            />
-          ),
-        )
+        <View style={styles.travelCardsList}>
+          {tripPatterns.map((tp, i) =>
+            isNewTravelCardBooking ? (
+              <TravelCard
+                key={`booking-trip-${i}`}
+                tripPattern={tp}
+                onDetailsPressed={() => {
+                  const isAvailable =
+                    tp.booking.availability === 'available' &&
+                    !tp.booking.disabledReason;
+                  if (isAvailable) onSelect(tp.legs);
+                }}
+                a11yLabelPrefix={t(
+                  TravelCardTexts.card.a11yPrefix.bookingOption(
+                    i,
+                    tripPatterns.length,
+                  ),
+                )}
+                a11yHint={t(
+                  selection.isOnBehalfOf
+                    ? TravelCardTexts.card.a11yHint.chooseRecipient
+                    : TravelCardTexts.card.a11yHint.ticketSummary,
+                )}
+                includeTransportInfo
+                includeSituationsAndNotices
+                isDisabled={
+                  !(
+                    tp.booking.availability === 'available' &&
+                    !tp.booking.disabledReason
+                  )
+                }
+                tag={getBookingTagInfo(
+                  t,
+                  tp.booking,
+                  tp.booking.disabledReason,
+                )}
+              />
+            ) : (
+              <BookingTrip
+                key={`booking-trip-${i}`}
+                onSelect={onSelect}
+                tripPattern={tp}
+              />
+            ),
+          )}
+        </View>
       ) : (
         <EmptyState />
       )}
@@ -342,11 +347,10 @@ const useBookingTripStyles = StyleSheet.createThemeHook((theme) => {
 const useBookingTripSelectionStyles = StyleSheet.createThemeHook((theme) => {
   return {
     container: {
-      width: '100%',
+      gap: theme.spacing.medium,
     },
-    travelCard: {
-      marginHorizontal: theme.spacing.medium,
-      marginVertical: theme.spacing.small,
+    travelCardsList: {
+      gap: theme.spacing.small,
     },
   };
 });

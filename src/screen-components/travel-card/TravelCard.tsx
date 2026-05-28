@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import {StyleSheet, Statuses} from '@atb/theme';
+import {Statuses, StyleSheet} from '@atb/theme';
 import type {TripPattern} from '@atb/api/types/trips';
 import {TravelCardLegs} from './TravelCardLegs';
 import Animated, {FadeIn} from 'react-native-reanimated';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {TravelCardHeader} from './TravelCardHeader';
-import {LayoutChangeEvent, StyleProp, View, ViewStyle} from 'react-native';
+import {LayoutChangeEvent, View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {dictionary, TravelCardTexts, useTranslation} from '@atb/translations';
@@ -26,7 +26,6 @@ type TravelCardProps = {
   includeTransportInfo?: boolean;
   isDisabled?: boolean;
   tag?: {label: string; type: Statuses};
-  style?: StyleProp<ViewStyle>;
 };
 
 export const TravelCard: React.FC<TravelCardProps> = ({
@@ -41,7 +40,6 @@ export const TravelCard: React.FC<TravelCardProps> = ({
   includeTransportInfo = false,
   isDisabled = false,
   tag,
-  style,
 }) => {
   const styles = useThemeStyles();
   const [maxWidth, setMaxWidth] = useState(0);
@@ -59,7 +57,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
     : undefined;
 
   return (
-    <Animated.View entering={FadeIn} style={style}>
+    <Animated.View entering={FadeIn}>
       <CompositeAccessibilityProvider
         parentLabels={{
           cardPrefix: prefixA11yLabel,
