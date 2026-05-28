@@ -27,7 +27,6 @@ import {
   TransportModeFilterOption,
   TravelSearchPreference,
 } from '@atb-as/config-specs';
-import {z} from 'zod';
 
 export function mapToFareProductTypeConfigs(
   config: any,
@@ -284,7 +283,6 @@ export const mapToStopSignalButtonConfig = (
     ? parseResult.data
     : StopSignalButtonConfig.parse({});
 };
-
 
 export function mapToKnownQrCodeUrls(config?: any): CompiledKnownQrCodeUrl[] {
   if (!config) return [];

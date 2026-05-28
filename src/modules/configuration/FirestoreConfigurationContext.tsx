@@ -740,4 +740,3 @@ function getKnownQrCodeUrlsFromSnapshot(
   const config = snapshot.docs.find((doc) => doc.id == 'knownQrCodeUrls');
   return mapToKnownQrCodeUrls(config?.data());
 }
-
