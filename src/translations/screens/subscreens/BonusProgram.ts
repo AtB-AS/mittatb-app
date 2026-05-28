@@ -113,7 +113,7 @@ const BonusProgramTexts = {
     ),
 
     noProfile: _(
-      'Du må logge inn før for du kan bli med i AtB Bonus',
+      'Du må logge inn før du kan bli med i AtB Bonus',
       'You need to log in before you can join AtB Bonus',
       'Du må logga inn før du kan bli med i AtB Bonus',
     ),
@@ -249,8 +249,8 @@ const BonusProgramTexts = {
     ),
     term3: _(
       'Vi kan kontakte deg for tilbakemeldinger i prøveperioden.',
-      'AtB may contact you to ask for feedback during the pilot period.',
-      'AtB kan kontakta deg for tilbakemeldingar i prøveperioden.',
+      'We may contact you to ask for feedback during the pilot period.',
+      'Vi kan kontakta deg for tilbakemeldingar i prøveperioden.',
     ),
     error: {
       title: _('Noe gikk galt', 'Something went wrong', 'Noe gikk galt'),
