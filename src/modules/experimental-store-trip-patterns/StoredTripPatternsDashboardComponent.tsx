@@ -77,26 +77,24 @@ export const StoredTripPatternsDashboardComponent: React.FC<Props> = ({
       <ContentHeading
         text={t(StoredTripPatternsDashboardComponentTexts.header)}
       />
-      <View style={styles.storedTripsList}>
-        {tripPatterns.map((tripPattern, i) => (
-          <Animated.View
-            key={tripPattern.key}
-            exiting={ZoomOut.easing(Easing.inOut(Easing.ease))}
-            layout={LinearTransition}
-            style={{zIndex: 999}}
-          >
-            <StoredTripPatternRow
-              tripPattern={tripPattern}
-              onDetailsPressed={onDetailsPressed}
-              resultIndex={i}
-              length={tripPatterns.length}
-              updateTripPattern={updateTripPattern}
-              setTripPatternToRemove={setTripPatternToRemove}
-              isFocused={isFocused}
-            />
-          </Animated.View>
-        ))}
-      </View>
+      {tripPatterns.map((tripPattern, i) => (
+        <Animated.View
+          key={tripPattern.key}
+          exiting={ZoomOut.easing(Easing.inOut(Easing.ease))}
+          layout={LinearTransition}
+          style={{zIndex: 999}}
+        >
+          <StoredTripPatternRow
+            tripPattern={tripPattern}
+            onDetailsPressed={onDetailsPressed}
+            resultIndex={i}
+            length={tripPatterns.length}
+            updateTripPattern={updateTripPattern}
+            setTripPatternToRemove={setTripPatternToRemove}
+            isFocused={isFocused}
+          />
+        </Animated.View>
+      ))}
     </View>
   );
 };
@@ -179,9 +177,6 @@ const RemoveStoredTripPatternAlertTexts = {
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     marginHorizontal: theme.spacing.medium,
-  },
-  storedTripsList: {
-    marginTop: theme.spacing.small,
     gap: theme.spacing.small,
   },
   errorContainer: {
