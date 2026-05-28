@@ -11,11 +11,7 @@ import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {dictionary, TravelCardTexts, useTranslation} from '@atb/translations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
-import {
-  getDetailedSituationOrNoticeA11yLabel,
-  getLegNotificationsA11yLabel,
-} from '@atb/modules/situations';
-import {TravelCardNotices} from './TravelCardNotices';
+import {TravelCardNotifications} from './TravelCardNotifications';
 import {Tag} from '@atb/components/tag';
 
 type TravelCardProps = {
@@ -26,8 +22,8 @@ type TravelCardProps = {
   a11yHint: string;
   includeDayInfo?: boolean;
   includeFromToInfo?: boolean;
-  includeLegNotifications?: boolean;
-  includeSituationNotices?: boolean;
+  includeSituationsAndNotices?: boolean;
+  includeTransportInfo?: boolean;
   isDisabled?: boolean;
   tag?: {label: string; type: Statuses};
 };
@@ -40,8 +36,8 @@ export const TravelCard: React.FC<TravelCardProps> = ({
   a11yHint,
   includeDayInfo = false,
   includeFromToInfo = false,
-  includeLegNotifications = false,
-  includeSituationNotices = false,
+  includeSituationsAndNotices = false,
+  includeTransportInfo = false,
   isDisabled = false,
   tag,
 }) => {
@@ -56,16 +52,6 @@ export const TravelCard: React.FC<TravelCardProps> = ({
 
   const prefixA11yLabel = `${a11yLabelPrefix}. ${t(TravelCardTexts.card.modesPrefix(modes))}.`;
 
-  const situationOrNoticeA11yLabel =
-    includeSituationNotices && !isDisabled
-      ? getDetailedSituationOrNoticeA11yLabel(tripPattern, language, t)
-      : undefined;
-
-  const legNotificationsA11yLabel =
-    includeLegNotifications && !isDisabled
-      ? getLegNotificationsA11yLabel(tripPattern, t)
-      : undefined;
-
   const tagA11yLabel = tag
     ? `${t(dictionary.messageTypes[tag.type])}. ${tag.label}`
     : undefined;
@@ -75,18 +61,9 @@ export const TravelCard: React.FC<TravelCardProps> = ({
       <CompositeAccessibilityProvider
         parentLabels={{
           cardPrefix: prefixA11yLabel,
-          situationOrNotice: situationOrNoticeA11yLabel,
-          legNotifications: legNotificationsA11yLabel,
           tag: tagA11yLabel,
         }}
-        order={[
-          'cardPrefix',
-          'tag',
-          'header',
-          'legs',
-          'situationOrNotice',
-          'legNotifications',
-        ]}
+        order={['cardPrefix', 'tag', 'header', 'legs', 'notifications']}
       >
         {(accessibilityProps) => (
           <NativeBlockButton
@@ -120,12 +97,12 @@ export const TravelCard: React.FC<TravelCardProps> = ({
                 <ThemeIcon svg={ChevronRight} />
               </View>
             </View>
-            {(includeSituationNotices || includeLegNotifications) && (
-              <TravelCardNotices
+            {!isDisabled && (
+              <TravelCardNotifications
                 tripPattern={tripPattern}
                 language={language}
-                includeSituationNotices={includeSituationNotices}
-                includeLegNotifications={includeLegNotifications}
+                includeSituationsAndNotices={includeSituationsAndNotices}
+                includeTransportInfo={includeTransportInfo}
               />
             )}
           </NativeBlockButton>

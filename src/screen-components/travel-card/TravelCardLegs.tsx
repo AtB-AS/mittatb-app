@@ -130,7 +130,7 @@ const useA11yLabel = (legs: Leg[]) => {
     )
     .join(', ');
 
-  return [`${prefix}: ${legsLabel}`].filter(isDefined).join(', ');
+  return `${prefix}: ${legsLabel}`;
 };
 
 const getWaitTime = (leg: Leg, nextLeg?: Leg) => {
