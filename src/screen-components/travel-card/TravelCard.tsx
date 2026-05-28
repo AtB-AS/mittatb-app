@@ -5,7 +5,7 @@ import {TravelCardLegs} from './TravelCardLegs';
 import Animated, {FadeIn} from 'react-native-reanimated';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {TravelCardHeader} from './TravelCardHeader';
-import {LayoutChangeEvent, View} from 'react-native';
+import {LayoutChangeEvent, StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {dictionary, TravelCardTexts, useTranslation} from '@atb/translations';
@@ -30,6 +30,7 @@ type TravelCardProps = {
   includeSituationNotices?: boolean;
   isDisabled?: boolean;
   tag?: {label: string; type: Statuses};
+  style?: StyleProp<ViewStyle>;
 };
 
 export const TravelCard: React.FC<TravelCardProps> = ({
@@ -44,6 +45,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
   includeSituationNotices = false,
   isDisabled = false,
   tag,
+  style,
 }) => {
   const styles = useThemeStyles();
   const [maxWidth, setMaxWidth] = useState(0);
@@ -71,7 +73,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
     : undefined;
 
   return (
-    <Animated.View entering={FadeIn}>
+    <Animated.View entering={FadeIn} style={style}>
       <CompositeAccessibilityProvider
         parentLabels={{
           cardPrefix: prefixA11yLabel,
@@ -142,8 +144,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.color.background.neutral[0].background,
     padding: theme.spacing.medium,
     borderRadius: theme.border.radius.regular,
-    marginHorizontal: theme.spacing.medium,
-    marginVertical: theme.spacing.small,
   },
   containerDisabled: {
     backgroundColor: theme.color.background.neutral[2].background,

@@ -109,6 +109,7 @@ export function BookingTripSelection({
                 )
               }
               tag={getBookingTagInfo(t, tp.booking, tp.booking.disabledReason)}
+              style={styles.travelCard}
             />
           ) : (
             <BookingTrip
@@ -338,10 +339,14 @@ const useBookingTripStyles = StyleSheet.createThemeHook((theme) => {
   };
 });
 
-const useBookingTripSelectionStyles = StyleSheet.createThemeHook(() => {
+const useBookingTripSelectionStyles = StyleSheet.createThemeHook((theme) => {
   return {
     container: {
       width: '100%',
+    },
+    travelCard: {
+      marginHorizontal: theme.spacing.medium,
+      marginVertical: theme.spacing.small,
     },
   };
 });

@@ -148,6 +148,8 @@ const getDetailsTextForEmptyResult = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
+    gap: theme.spacing.small,
+    marginHorizontal: theme.spacing.medium,
     paddingBottom: theme.spacing.medium,
   },
   errorContainer: {

@@ -73,29 +73,30 @@ export const StoredTripPatternsDashboardComponent: React.FC<Props> = ({
   }
 
   return (
-    <View testID="storedTripPatternsContentView">
+    <View testID="storedTripPatternsContentView" style={styles.container}>
       <ContentHeading
-        style={styles.contentHeading}
         text={t(StoredTripPatternsDashboardComponentTexts.header)}
       />
-      {tripPatterns.map((tripPattern, i) => (
-        <Animated.View
-          key={tripPattern.key}
-          exiting={ZoomOut.easing(Easing.inOut(Easing.ease))}
-          layout={LinearTransition}
-          style={{zIndex: 999}}
-        >
-          <StoredTripPatternRow
-            tripPattern={tripPattern}
-            onDetailsPressed={onDetailsPressed}
-            resultIndex={i}
-            length={tripPatterns.length}
-            updateTripPattern={updateTripPattern}
-            setTripPatternToRemove={setTripPatternToRemove}
-            isFocused={isFocused}
-          />
-        </Animated.View>
-      ))}
+      <View style={styles.storedTripsList}>
+        {tripPatterns.map((tripPattern, i) => (
+          <Animated.View
+            key={tripPattern.key}
+            exiting={ZoomOut.easing(Easing.inOut(Easing.ease))}
+            layout={LinearTransition}
+            style={{zIndex: 999}}
+          >
+            <StoredTripPatternRow
+              tripPattern={tripPattern}
+              onDetailsPressed={onDetailsPressed}
+              resultIndex={i}
+              length={tripPatterns.length}
+              updateTripPattern={updateTripPattern}
+              setTripPatternToRemove={setTripPatternToRemove}
+              isFocused={isFocused}
+            />
+          </Animated.View>
+        ))}
+      </View>
     </View>
   );
 };
@@ -176,8 +177,12 @@ const RemoveStoredTripPatternAlertTexts = {
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  contentHeading: {
-    marginHorizontal: theme.spacing.xLarge,
+  container: {
+    marginHorizontal: theme.spacing.medium,
+  },
+  storedTripsList: {
+    marginTop: theme.spacing.small,
+    gap: theme.spacing.medium,
   },
   errorContainer: {
     paddingBottom: theme.spacing.medium,
