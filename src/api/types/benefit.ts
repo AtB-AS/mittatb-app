@@ -1,9 +1,14 @@
 import {z} from 'zod';
 
+export const MobilityPriceAdjustmentTypeEnum = z.enum([
+  'FREE_UNLOCK',
+  'FREE_MINUTES',
+]);
+
 export const MobilityPriceAdjustmentSchema = z
   .object({
     amount: z.number(),
-    adjustmentType: z.enum(['FREE_UNLOCK', 'FREE_MINUTES']),
+    adjustmentType: MobilityPriceAdjustmentTypeEnum,
     description: z.string(),
   })
   .transform((x) => ({

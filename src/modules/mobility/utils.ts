@@ -18,11 +18,11 @@ import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {dictionary, Language} from '@atb/translations';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
-import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
 import type {
   MobilityPriceAdjustmentBenefitType,
   MobilityPriceAdjustmentType,
 } from '@atb/api/types/benefit';
+import {MobilityPriceAdjustmentTypeEnum} from '@atb/api/types/benefit';
 import {
   BatteryEmpty,
   BatteryFull,
@@ -250,7 +250,7 @@ export const getFreeUnlock = (
 ): MobilityPriceAdjustmentType | undefined => {
   if (!benefit?.systemIds.includes(systemId)) return undefined;
   return benefit.priceAdjustments.find(
-    (e) => e.type === PriceAdjustmentEnum.enum.FREE_UNLOCK,
+    (e) => e.type === MobilityPriceAdjustmentTypeEnum.enum.FREE_UNLOCK,
   );
 };
 
@@ -260,7 +260,7 @@ export const getFreeMinutes = (
 ): MobilityPriceAdjustmentType | undefined => {
   if (!benefit?.systemIds.includes(systemId)) return undefined;
   return benefit.priceAdjustments.find(
-    (e) => e.type === PriceAdjustmentEnum.enum.FREE_MINUTES,
+    (e) => e.type === MobilityPriceAdjustmentTypeEnum.enum.FREE_MINUTES,
   );
 };
 
