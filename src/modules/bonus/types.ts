@@ -1,5 +1,5 @@
 import {LanguageAndTextTypeArray} from '@atb/modules/configuration';
-import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
+import {MobilityPriceAdjustmentTypeEnum} from '@atb/api/types/benefit';
 import {z} from 'zod';
 import {optionalNullish} from '@atb-as/config-specs/lib/utils/nullish';
 
@@ -18,7 +18,7 @@ const BonusPriceAdjustmentSchema = z
   .object({
     amount: z.number(),
     description: z.string(),
-    adjustmentType: PriceAdjustmentEnum,
+    adjustmentType: MobilityPriceAdjustmentTypeEnum,
     systemIds: z.array(z.string()),
   })
   .transform(({adjustmentType, ...rest}) => ({

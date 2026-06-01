@@ -219,7 +219,7 @@ export const VehicleSheet = ({
                         }),
                       ),
                     }
-                  : vehicle.benefit ?? undefined
+                  : (vehicle.benefit ?? undefined)
               }
               systemId={vehicle.system.id}
               onNavigatePricingDetails={navigateToPricingDetails}
