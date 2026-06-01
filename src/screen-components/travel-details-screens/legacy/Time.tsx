@@ -58,7 +58,7 @@ export const Time: React.FC<{
       );
     }
     case 'no-realtime': {
-      return <ThemeText testID="schCaTime">{scheduled}</ThemeText>;
+      return <ThemeText testID="schCaTime">{expected || scheduled}</ThemeText>;
     }
     default: {
       return (
