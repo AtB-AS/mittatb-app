@@ -64,7 +64,7 @@ export const Time: React.FC<{
     case 'no-realtime': {
       return (
         <ThemeText typography="body__m__strong" testID="schCaTime">
-          {scheduled}
+          {expected || scheduled}
         </ThemeText>
       );
     }
