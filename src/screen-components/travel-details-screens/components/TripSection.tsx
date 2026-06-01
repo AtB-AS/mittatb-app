@@ -365,7 +365,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 spacious
                 rounded
               />
-              <ThemeText typography="body__m__strong">
+              <ThemeText>
                 {getLineDestinationName(t, leg)}
               </ThemeText>
             </View>
