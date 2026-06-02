@@ -50,9 +50,9 @@ export const PayWithBonusPointsCheckbox = ({
     !isError && userBonusBalance < bonusProduct.price.amount;
 
   const a11yLabel =
-    (getTextForLanguage(bonusProduct.paymentDescription, language) ?? '') +
-    screenReaderPause +
     t(BonusProgramTexts.costA11yLabel(bonusProduct.price.amount)) +
+    screenReaderPause +
+    (getTextForLanguage(bonusProduct.paymentDescription, language) ?? '') +
     screenReaderPause +
     t(
       BonusProgramTexts.yourBonusBalanceA11yLabel(
@@ -92,7 +92,9 @@ export const PayWithBonusPointsCheckbox = ({
     <>
       <Section {...props}>
         {hasInsufficientBalance ? (
-          <GenericSectionItem>{content}</GenericSectionItem>
+          <GenericSectionItem accessibility={{accessibilityLabel: a11yLabel}}>
+            {content}
+          </GenericSectionItem>
         ) : (
           <GenericClickableSectionItem
             active={isChecked}

@@ -5,40 +5,36 @@ export type BonusFaqContext = {
 };
 
 const BonusProgramTexts = {
-  points: _('Poeng', 'Points', 'Poeng'),
+  points: _('poeng', 'points', 'poeng'),
   costA11yLabel: (amount: number) =>
-    _(
-      `Koster ${amount} Poeng`,
-      `Costs ${amount} Points`,
-      `Kostar ${amount} Poeng`,
-    ),
+    _(`Bruk ${amount} poeng`, `Bruk ${amount} points`, `Bruk ${amount} poeng`),
   spend: _('Bruk', 'Use', 'Bruk'),
   amountPoints: (amount: number) =>
-    _(`${amount} Poeng`, `${amount} Points`, `${amount} Poeng`),
+    _(`${amount} poeng`, `${amount} points`, `${amount} poeng`),
 
   youHave: _('Du har', 'You have', 'Du har'),
 
   yourBonusBalanceA11yLabel: (bonusBalance: number | null) => {
     return _(
-      `Du har ${bonusBalance == null ? 'ukjent antall' : bonusBalance} Poeng`,
-      `You have ${bonusBalance == null ? 'unknown number of' : bonusBalance} Points`,
-      `Du har ${bonusBalance == null ? 'ukjent mengde' : bonusBalance} Poeng`,
+      `Du har ${bonusBalance == null ? 'ukjent antall' : bonusBalance} poeng`,
+      `You have ${bonusBalance == null ? 'unknown number of' : bonusBalance} points`,
+      `Du har ${bonusBalance == null ? 'ukjent mengde' : bonusBalance} poeng`,
     );
   },
 
   fareContract: {
     youEarned: (bonusPointsEarned: number) =>
       _(
-        `Du tjente **${bonusPointsEarned} Poeng**!`,
-        `You earned **${bonusPointsEarned} Point${bonusPointsEarned === 1 ? '' : 's'}**!`,
-        `Du tente **${bonusPointsEarned} Poeng**!`,
+        `Du tjente **${bonusPointsEarned} poeng**!`,
+        `You earned **${bonusPointsEarned} point${bonusPointsEarned === 1 ? '' : 's'}**!`,
+        `Du tente **${bonusPointsEarned} poeng**!`,
       ),
 
     youEarnedA11yLabel: (bonusPointsEarned: number) =>
       _(
-        `Du tjente ${bonusPointsEarned} Poeng!`,
-        `You earned ${bonusPointsEarned} Point${bonusPointsEarned === 1 ? '' : 's'}!`,
-        `Du tente ${bonusPointsEarned} Poeng!`,
+        `Du tjente ${bonusPointsEarned} poeng!`,
+        `You earned ${bonusPointsEarned} point${bonusPointsEarned === 1 ? '' : 's'}!`,
+        `Du tente ${bonusPointsEarned} poeng!`,
       ),
   },
 
@@ -64,7 +60,7 @@ const BonusProgramTexts = {
 
   bonusProfile: {
     header: {
-      title: _('Poeng', 'Points', 'Poeng'),
+      title: _('AtB Bonus', 'AtB Bonus', 'AtB Bonus'),
     },
 
     joinProgram: {
@@ -89,7 +85,7 @@ const BonusProgramTexts = {
       },
     },
 
-    yourPoints: _('Dine poeng', 'Your points', 'Poenga dine'),
+    yourPoints: _('Dine poeng', 'Your points', 'poenga dine'),
 
     mapButton: {
       a11yLabel: _('Vis i kart', 'Show in map', 'Vis i kart'),
@@ -107,9 +103,9 @@ const BonusProgramTexts = {
       ),
     },
     noData: _(
-      'Vi klarer ikke hente informasjon om Poeng. Sjekk om du har internett og prøv på nytt.',
-      'We are unable to fetch information about Points. Check your internet connection and try again.',
-      'Me klarar ikkje hente informasjon om Poeng. Sjekk om du har internett og prøv på nytt.',
+      'Vi klarer ikke hente informasjon om AtB Bonus. Sjekk om du har internett og prøv på nytt.',
+      'We are unable to fetch information about AtB Bonus. Check your internet connection and try again.',
+      'Me klarar ikkje hente informasjon om AtB Bonus. Sjekk om du har internett og prøv på nytt.',
     ),
 
     noProfile: _(
@@ -118,9 +114,9 @@ const BonusProgramTexts = {
       'Du må logga inn før du kan bli med i AtB Bonus',
     ),
     noBonusBalance: _(
-      'Vi klarer ikke vise Poengene dine akkurat nå. Du vil fortsatt tjene Poeng som vanlig.',
-      'We are unable to display your Points right now. You will still earn Points as usual.',
-      'Me klarer ikkje visa Poenga dine akkurat no. Du vil framleis tena Poeng som vanleg.',
+      'Vi klarer ikke vise poengene dine akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
+      'We are unable to display your points right now. You will still earn points as usual.',
+      'Me klarer ikkje visa poenga dine akkurat no. Du vil framleis tena poeng som vanleg.',
     ),
     joined: {
       title: _(
@@ -130,15 +126,15 @@ const BonusProgramTexts = {
       ),
       welcomeGiftDescription: (points: number) =>
         _(
-          `Du har fått ${points} Poeng i velkomstgave!`,
-          `You have received ${points} Points as a welcome gift!`,
-          `Du har fått ${points} Poeng i velkomstgåve!`,
+          `Du har fått ${points} p i velkomstgave!`,
+          `You have received ${points} points as a welcome gift!`,
+          `Du har fått ${points} poeng i velkomstgåve!`,
         ),
     },
     noBonusProducts: _(
-      'Vi klarer ikke vise fordelene akkurat nå. Du vil fortsatt tjene Poeng som vanlig.',
-      'We are unable to display the benefits right now. You will still earn Points as usual.',
-      'Me klarer ikkje visa fordelane akkurat no. Du vil framleis tene Poeng som vanleg.',
+      'Vi klarer ikke dette akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
+      'We are unable to display this right now. You will still earn points as usual.',
+      'Me klarer ikkje visa dette akkurat no. Du vil framleis tene poeng som vanleg.',
     ),
     readMore: {
       heading: _('Slik funker det', 'How it works', 'Slik funkar det'),
@@ -243,9 +239,9 @@ const BonusProgramTexts = {
       'Poeng kan kun brukast i AtB-appen.',
     ),
     term2: _(
-      'Ubrukte Poeng slettes når prøveperioden er over.',
-      'Unused Points will be deleted when the pilot period is over.',
-      'Ubrukte Poeng slettes når prøveperioden er over.',
+      'Ubrukte poeng slettes når prøveperioden er over.',
+      'Unused points will be deleted when the pilot period is over.',
+      'Ubrukte poeng slettes når prøveperioden er over.',
     ),
     term3: _(
       'Vi kan kontakte deg for tilbakemeldinger i prøveperioden.',
@@ -255,9 +251,9 @@ const BonusProgramTexts = {
     error: {
       title: _('Noe gikk galt', 'Something went wrong', 'Noe gikk galt'),
       description: _(
-        'Du ble ikke innmeldt i Poeng. Prøv igjen senere.',
-        'You were not enrolled in Points. Please try again later.',
-        'Du ble ikkje innmeldt i Poeng. Prøv igjen seinare.',
+        'Du ble ikke innmeldt i AtB Bonus. Prøv igjen senere.',
+        'You were not enrolled in AtB Bonus. Please try again later.',
+        'Du ble ikkje innmeldt i AtB Bonus. Prøv igjen seinare.',
       ),
     },
 

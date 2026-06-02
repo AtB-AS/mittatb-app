@@ -19,7 +19,7 @@ export const BonusBalanceButton = ({onPress}: BonusBalanceButtonProps) => {
   return (
     <Button
       onPress={onPress}
-      text={`${bonusInfo.bonusBalance} ${t(BonusProgramTexts.bonusProfile.header.title)}`}
+      text={`${bonusInfo.bonusBalance} ${t(BonusProgramTexts.points)}`}
       type="large"
       expanded={false}
       interactiveColor={theme.color.interactive[2]}
