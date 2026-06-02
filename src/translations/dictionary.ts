@@ -62,6 +62,10 @@ const dictionary = {
         ..._('Sykkel', 'Bicycle', `Sykkel`),
         definite: _('Sykkelen', 'The bicycle', 'Sykkelen'),
       },
+      scooter: {
+        ..._('Sparkesykkel', 'Scooter', `Sparkesykkel`),
+        definite: _('Sparkesykkelen', 'The scooter', 'Sparkesykkelen'),
+      },
       unknown: {
         ..._(
           'Ukjent transportmiddel',
@@ -79,6 +83,30 @@ const dictionary = {
       nightBus: {
         ..._('Nattbuss', 'Night bus', `Nattbuss`),
         definite: _('Nattbussen', 'The night bus', 'Nattbussen'),
+      },
+      escooter: {
+        ..._(
+          'Elektrisk sparkesykkel',
+          'Electric scooter',
+          'Elektrisk sparkesykkel',
+        ),
+        definite: _(
+          'Den elektriske sparkesykkelen',
+          'The electric scooter',
+          'Den elektriske sparkesykkelen',
+        ),
+      },
+      ebicycle: {
+        ..._('Elektrisk bysykkel', 'Electric city bike', 'Elektrisk bysykkel'),
+        definite: _(
+          'Den elektriske bysykkelen',
+          'The electric city bike',
+          'Den elektriske bysykkelen',
+        ),
+      },
+      hireCycle: {
+        ..._('Bysykkel', 'City bike', 'Bysykkel'),
+        definite: _('Bysykkelen', 'The city bike', 'Bysykkelen'),
       },
     },
     line: _('Linje', 'Line', 'Linje'),
