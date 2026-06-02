@@ -365,9 +365,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 spacious
                 rounded
               />
-              <ThemeText>
-                {getLineDestinationName(t, leg)}
-              </ThemeText>
+              <ThemeText>{getLineDestinationName(t, leg)}</ThemeText>
             </View>
             {isFlexible && (
               <ThemeText
