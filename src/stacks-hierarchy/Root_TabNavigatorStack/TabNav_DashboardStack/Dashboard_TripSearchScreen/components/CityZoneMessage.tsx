@@ -95,9 +95,7 @@ const CityZoneBox = ({message, actionButtons, onDismiss}: CityZoneBoxProps) => {
   return (
     <View style={[styles.container, {backgroundColor}]} accessible={false}>
       <View style={styles.content}>
-        <ThemeText style={styles.message} color={generalColor}>
-          {message}
-        </ThemeText>
+        <ThemeText color={generalColor}>{message}</ThemeText>
         {actionButtons && (
           <View style={styles.actions}>
             {actionButtons.map((actionButton) => (
@@ -108,7 +106,6 @@ const CityZoneBox = ({message, actionButtons, onDismiss}: CityZoneBoxProps) => {
                 interactiveColor={actionButton.interactiveColor}
                 text={actionButton.text}
                 onPress={actionButton.onPress}
-                style={styles.action}
                 accessibilityLabel={actionButton.text}
                 accessibilityRole="link"
                 accessibilityHint={actionButton.accessibilityHint}
@@ -212,22 +209,15 @@ export const useStyle = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacing.medium,
     borderRadius: theme.border.radius.regular,
     flexDirection: 'row',
-  },
-  icon: {
-    marginRight: theme.spacing.medium,
+    gap: theme.spacing.medium,
   },
   content: {
     flex: 1,
-  },
-  message: {
-    paddingRight: theme.spacing.small,
-  },
-  action: {
-    marginTop: theme.spacing.medium,
-    marginRight: theme.spacing.medium,
+    gap: theme.spacing.medium,
   },
   actions: {
     flexWrap: 'wrap',
     flexDirection: 'row',
+    gap: theme.spacing.medium,
   },
 }));
