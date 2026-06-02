@@ -881,9 +881,11 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   return (
     <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS} accessible={false}>
       <View style={style.authoritySection}>
-        <ThemeText typography="body__s" type="secondary" accessible={false}>
-          {t(TripDetailsTexts.trip.leg.buyTicketFrom)}
-        </ThemeText>
+        <View aria-hidden accessible={false}>
+          <ThemeText typography="body__s" type="secondary">
+            {t(TripDetailsTexts.trip.leg.buyTicketFrom)}
+          </ThemeText>
+        </View>
         <Button
           accessibilityRole="link"
           accessibilityLabel={t(
