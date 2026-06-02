@@ -386,12 +386,20 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {leg.situations.map((situation) => (
-          <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS} key={situation.id}>
+          <TripRow
+            dimensionOverrides={NEW_TRIP_DIMENSIONS}
+            key={situation.id}
+            accessible={false}
+          >
             <SituationMessageBox situation={situation} />
           </TripRow>
         ))}
         {notices.map((notice) => (
-          <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS} key={notice.id}>
+          <TripRow
+            dimensionOverrides={NEW_TRIP_DIMENSIONS}
+            key={notice.id}
+            accessible={false}
+          >
             <MessageInfoBox type="info" message={notice.text} />
           </TripRow>
         ))}
