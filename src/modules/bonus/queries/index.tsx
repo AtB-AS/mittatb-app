@@ -7,3 +7,4 @@ export {
 export {useProductPointsQuery} from './use-product-points-query';
 export {useActiveBonusProductsQuery} from './use-active-bonus-products-query';
 export {useActiveBonusProductGroupsQuery} from './use-active-bonus-product-groups-query';
+export {useBonusVouchersQuery} from './use-bonus-vouchers-query';

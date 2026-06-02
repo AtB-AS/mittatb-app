@@ -207,6 +207,13 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
               <GenericSectionItem>
                 <UserBonusBalanceContent />
               </GenericSectionItem>
+              <LinkSectionItem
+                text={t(BonusProgramTexts.myCouponCodes.linkText)}
+                onPress={() => {
+                  analytics.logEvent('Bonus', 'My coupon codes clicked');
+                  navigation.navigate('Profile_BonusCouponCodesScreen');
+                }}
+              />
             </Section>
             {isBonusBalanceError && (
               <MessageInfoBox

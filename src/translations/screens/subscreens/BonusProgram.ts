@@ -266,5 +266,23 @@ const BonusProgramTexts = {
       ),
     },
   },
+
+  myCouponCodes: {
+    linkText: _('Mine kampanjekoder', 'My coupon codes', 'Mine kampanjekodar'),
+    title: _('Mine kampanjekoder', 'My coupon codes', 'Mine kampanjekodar'),
+    emptyState: _(
+      'Du har ingen kampanjekoder enda. Bruk poengene dine for å få en kampanjekode.',
+      "You don't have any coupon codes yet. Use your points to get a coupon code.",
+      'Du har ingen kampanjekodar enno. Bruk poenga dine for å få ein kampanjekode.',
+    ),
+    copy: _('Kopier', 'Copy', 'Kopier'),
+    copied: _('Kopiert!', 'Copied!', 'Kopiert!'),
+    errorMessage: _(
+      'Vi klarte ikke å hente kampanjekodene dine. Prøv igjen senere.',
+      'We could not load your coupon codes. Please try again later.',
+      'Vi klarte ikkje å hente kampanjekodane dine. Prøv igjen seinare.',
+    ),
+    retry: _('Prøv igjen', 'Try again', 'Prøv igjen'),
+  },
 };
 export default BonusProgramTexts;
