@@ -3,6 +3,7 @@ import {showAppMissingAlert} from '../show-app-missing-alert';
 import React, {useCallback} from 'react';
 import {Button} from '@atb/components/button';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import BonusProgramTexts from '@atb/translations/screens/subscreens/BonusProgram';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Linking} from 'react-native';
 import {useValueCodeMutation} from '../queries/use-value-code-mutation';
@@ -73,11 +74,15 @@ export const OperatorActionButton = ({
     needsValueCode &&
     (isBonusPayment ? isClaimingVoucherError : isFetchingValueCodeError);
 
-  const buttonText =
-    isUserEligibleForBenefit && operatorBenefit?.callToAction?.name
-      ? (getTextForLanguage(operatorBenefit.callToAction.name, language) ??
-        t(MobilityTexts.operatorAppSwitchButton(operatorName)))
-      : t(MobilityTexts.operatorAppSwitchButton(operatorName));
+  const defaultButtonText = t(
+    MobilityTexts.operatorAppSwitchButton(operatorName),
+  );
+
+  const buttonText = isBonusPayment
+    ? t(BonusProgramTexts.getCampaignPriceAt(operatorName))
+    : ((isUserEligibleForBenefit
+        ? getTextForLanguage(operatorBenefit?.callToAction?.name, language)
+        : null) ?? defaultButtonText);
 
   const openAppURL = useCallback(
     async (url: string, valueCode?: string) => {

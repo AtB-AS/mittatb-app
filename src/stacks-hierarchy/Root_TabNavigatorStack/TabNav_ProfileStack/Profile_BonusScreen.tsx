@@ -142,13 +142,6 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
                 </ThemeText>
               </GenericSectionItem>
             </Section>
-            {!isLoggedIn && (
-              <MessageInfoText
-                style={styles.messageInfo}
-                type="warning"
-                message={t(BonusProgramTexts.bonusProfile.noProfile)}
-              />
-            )}
             <Button
               expanded
               text={
@@ -181,6 +174,13 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
                 }
               }}
             />
+            {!isLoggedIn && (
+              <MessageInfoText
+                style={styles.messageInfo}
+                type="warning"
+                message={t(BonusProgramTexts.bonusProfile.noProfile)}
+              />
+            )}
           </>
         )}
 
@@ -214,9 +214,9 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
                 message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
               />
             )}
+            <HowPointsWork />
           </>
         )}
-        <HowPointsWork />
 
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.spendPoints.heading)}

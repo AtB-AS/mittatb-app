@@ -147,11 +147,7 @@ export const BonusProductList = ({
                       {t(BonusProgramTexts.amountPoints(group.price.amount))}
                     </ThemeText>
                   </View>
-                  <ThemeText
-                    isMarkdown={true}
-                    typography="body__s"
-                    type="secondary"
-                  >
+                  <ThemeText isMarkdown={true} type="secondary">
                     {getTextForLanguage(group.description, language) ?? ''}
                   </ThemeText>
                 </View>
