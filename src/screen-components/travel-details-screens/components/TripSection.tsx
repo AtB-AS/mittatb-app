@@ -611,7 +611,7 @@ const IntermediateInfo = ({
       <TripRow
         dimensionOverrides={NEW_TRIP_DIMENSIONS}
         testID={`${testID}IntermediateStops`}
-        accessible={true}
+        accessible={false}
       >
         <Button
           type="small"
@@ -635,8 +635,9 @@ const IntermediateInfo = ({
             ) + screenReaderPause
           }
           accessibilityHint={t(
-            TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
+            TripDetailsTexts.trip.leg.intermediateStops.a11yHint(expanded),
           )}
+          accessibilityState={{expanded}}
         />
       </TripRow>
       {expanded &&

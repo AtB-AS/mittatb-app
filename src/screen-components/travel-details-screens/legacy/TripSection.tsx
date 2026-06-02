@@ -452,7 +452,7 @@ const IntermediateInfo = ({
         ) + screenReaderPause
       }
       accessibilityHint={t(
-        TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
+        TripDetailsTexts.trip.leg.intermediateStops.a11yHint(false),
       )}
     >
       <ThemeText typography="body__s" type="secondary">
