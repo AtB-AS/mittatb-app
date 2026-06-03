@@ -98,7 +98,17 @@ export const MessageInfoBox = ({
     <NativeButtonOrView
       onClick={onPress}
       style={[styles.container, style]}
-      accessible={false}
+      accessible={onPressConfig ? true : false}
+      accessibilityRole={
+        onPressConfig && ('action' in onPressConfig ? 'button' : 'link')
+      }
+      accessibilityLabel={onPressConfig ? a11yLabelInternal : undefined}
+      accessibilityHint={
+        onPressConfig &&
+        ('action' in onPressConfig
+          ? t(MessageBoxTexts.a11yHintActionPrefix)
+          : t(MessageBoxTexts.a11yHintUrlPrefix)) + onPressConfig.text
+      }
       testID={testID}
       focusRef={focusRef}
       type="block"
@@ -110,19 +120,7 @@ export const MessageInfoBox = ({
           {...iconColorProps}
         />
       )}
-      <View
-        style={styles.content}
-        accessibilityRole={
-          onPressConfig && ('action' in onPressConfig ? 'button' : 'link')
-        }
-        accessibilityHint={
-          onPressConfig &&
-          ('action' in onPressConfig
-            ? t(MessageBoxTexts.a11yHintActionPrefix)
-            : t(MessageBoxTexts.a11yHintUrlPrefix)) + onPressConfig.text
-        }
-        {...liveRegionA11yProps}
-      >
+      <View style={styles.content} {...liveRegionA11yProps}>
         {title && (
           <ThemeText
             typography="body__m__strong"
