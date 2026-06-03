@@ -8,11 +8,8 @@ import {
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
 import {DatePickerSheet} from '@atb/components/date-selection';
-import {GenericClickableSectionItem, Section} from '@atb/components/sections';
-import {screenReaderPause, ThemeText} from '@atb/components/text';
-import {Edit} from '@atb/assets/svg/mono-icons/actions';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {EditActionSectionItem, Section} from '@atb/components/sections';
+import {screenReaderPause} from '@atb/components/text';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 
@@ -28,8 +25,6 @@ export function StartTimeSelection({
   style,
 }: StartTimeSelectionProps) {
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
-  const styles = useStyles();
   const selectionBuilder = usePurchaseSelectionBuilder();
   const onCloseFocusRef = useRef<View | null>(null);
   const bottomSheetModalRef = useRef<GorhomBottomSheetModal | null>(null);
@@ -49,8 +44,19 @@ export function StartTimeSelection({
       <View style={style}>
         <ContentHeading text={t(PurchaseOverviewTexts.startTime.title)} />
         <Section>
-          <GenericClickableSectionItem
+          <EditActionSectionItem
             ref={onCloseFocusRef}
+            leftIcon={Time}
+            text={
+              selection.travelDate
+                ? t(PurchaseOverviewTexts.startTime.laterTime)
+                : t(PurchaseOverviewTexts.startTime.now)
+            }
+            subText={
+              selection.travelDate
+                ? formatToLongDateTime(selection.travelDate, language)
+                : undefined
+            }
             onPress={openDatePickerSheet}
             accessibilityLabel={
               selection.travelDate
@@ -61,28 +67,7 @@ export function StartTimeSelection({
             }
             accessibilityHint={t(PurchaseOverviewTexts.startTime.a11yLaterHint)}
             testID="startTimeButton"
-          >
-            <View style={styles.sectionContent}>
-              <ThemeIcon svg={Time} />
-              <View style={styles.textContainer}>
-                <ThemeText typography="body__m__strong">
-                  {selection.travelDate
-                    ? t(PurchaseOverviewTexts.startTime.laterTime)
-                    : t(PurchaseOverviewTexts.startTime.now)}
-                </ThemeText>
-                {selection.travelDate && (
-                  <ThemeText>
-                    {formatToLongDateTime(selection.travelDate, language)}
-                  </ThemeText>
-                )}
-              </View>
-              <ThemeIcon
-                svg={Edit}
-                size="normal"
-                color={theme.color.interactive[0].default.background}
-              />
-            </View>
-          </GenericClickableSectionItem>
+          />
         </Section>
       </View>
       <DatePickerSheet
@@ -117,18 +102,3 @@ export function StartTimeSelection({
     </>
   );
 }
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  sectionContent: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.small,
-  },
-  textContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    gap: theme.spacing.xSmall,
-    flexWrap: 'wrap',
-  },
-}));
