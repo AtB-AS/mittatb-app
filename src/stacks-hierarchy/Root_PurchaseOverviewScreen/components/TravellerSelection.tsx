@@ -121,8 +121,8 @@ export function TravellerSelection({
 
   const content = (
     <View style={styles.sectionContentContainer}>
-      <ThemeIcon svg={Travellers} />
-      <View style={{flex: 1}}>
+      {canSelectUserProfile && <ThemeIcon svg={Travellers} />}
+      <View style={styles.textDescriptionWrapper}>
         <View style={styles.textWrapper}>
           <ThemeText typography="body__m__strong">
             {t(
@@ -213,6 +213,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: theme.spacing.small,
+  },
+  textDescriptionWrapper: {
+    flex: 1,
+    gap: theme.spacing.xSmall,
   },
   textWrapper: {
     flexDirection: 'row',
