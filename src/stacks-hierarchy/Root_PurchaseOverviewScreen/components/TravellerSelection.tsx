@@ -10,6 +10,7 @@ import {
   GenericClickableSectionItem,
   GenericSectionItem,
   Section,
+  ToggleSectionItem,
 } from '@atb/components/sections';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -20,11 +21,13 @@ import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from '../utils';
 import {
   type PurchaseSelectionType,
+  usePurchaseSelectionBuilder,
   useSelectableUserProfiles,
 } from '@atb/modules/purchase-selection';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {formatToNonBreakingSpaces} from '@atb/utils/text';
 import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
+import {useOnBehalfOf} from '../use-on-behalf-of';
 
 type TravellerSelectionProps = {
   selection: PurchaseSelectionType;
@@ -42,6 +45,7 @@ export function TravellerSelection({
   const styles = useStyles();
   const onCloseFocusRef = useRef<View | null>(null);
   const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const builder = usePurchaseSelectionBuilder();
 
   const selectionMode =
     selection.fareProductTypeConfig.configuration.travellerSelectionMode;
@@ -50,12 +54,13 @@ export function TravellerSelection({
     selection.preassignedFareProduct,
   );
 
+  const {isAllowed: isOnBehalfOfAllowed} = useOnBehalfOf(selection);
   const canSelectUserProfile = isUserProfileSelectable(
     selectionMode,
     selectableUserProfiles,
   );
 
-  if (selectionMode === 'none') {
+  if (selectionMode === 'none' && !isOnBehalfOfAllowed) {
     return null;
   }
 
@@ -147,17 +152,20 @@ export function TravellerSelection({
     </View>
   );
 
+  const heading = (() => {
+    if (selectionMode === 'none') {
+      return t(PurchaseOverviewTexts.onBehalfOf.sectionTitle);
+    }
+    return selectionMode == 'multiple'
+      ? t(PurchaseOverviewTexts.travellerSelection.titleMultiple)
+      : t(PurchaseOverviewTexts.travellerSelection.titleSingle);
+  })();
+
   return (
     <View style={style}>
-      <ContentHeading
-        text={
-          selectionMode == 'multiple'
-            ? t(PurchaseOverviewTexts.travellerSelection.titleMultiple)
-            : t(PurchaseOverviewTexts.travellerSelection.titleSingle)
-        }
-      />
+      <ContentHeading text={heading} />
       <Section {...accessibility}>
-        {canSelectUserProfile ? (
+        {selectionMode === 'none' ? undefined : canSelectUserProfile ? (
           <GenericClickableSectionItem
             onPress={travellerSelectionOnPress}
             ref={onCloseFocusRef}
@@ -168,6 +176,19 @@ export function TravellerSelection({
         ) : (
           <GenericSectionItem>{content}</GenericSectionItem>
         )}
+        <ToggleSectionItem
+          text={t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
+          value={selection.isOnBehalfOf}
+          onValueChange={(newValue) => {
+            const newSelection = builder
+              .fromSelection(selection)
+              .isOnBehalfOf(newValue)
+              .build();
+            onSave(newSelection);
+          }}
+          testID="onBehalfOfToggle"
+          type="slim"
+        />
       </Section>
       <TravellerSelectionSheet
         selection={selection}
