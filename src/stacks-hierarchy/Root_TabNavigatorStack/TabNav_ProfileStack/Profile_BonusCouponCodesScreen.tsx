@@ -11,6 +11,7 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {Loading} from '@atb/components/loading';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
+import {ThemedBonusTransaction, ThemedBonusBag} from '@atb/theme/ThemedAssets';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {formatToVerboseFullDate} from '@atb/utils/date';
@@ -85,13 +86,6 @@ export const Profile_BonusCouponCodesScreen = ({navigation}: Props) => {
               onPress={() => refetch()}
             />
           </View>
-        ) : sections.length === 0 ? (
-          <View style={styles.message}>
-            <MessageInfoBox
-              type="info"
-              message={t(BonusProgramTexts.myCouponCodes.emptyState)}
-            />
-          </View>
         ) : (
           <SectionList
             contentContainerStyle={styles.sectionListContent}
@@ -102,10 +96,54 @@ export const Profile_BonusCouponCodesScreen = ({navigation}: Props) => {
               <VoucherSectionHeading date={section.date} />
             )}
             stickySectionHeadersEnabled={false}
+            ListEmptyComponent={<EmptyState />}
+            ListFooterComponent={<HowItWorksCard />}
           />
         )}
       </View>
     </FullScreenView>
+  );
+};
+
+const EmptyState = () => {
+  const {t} = useTranslation();
+  const styles = useStyles();
+  return (
+    <View style={styles.emptyState}>
+      <ThemedBonusTransaction height={120} width={120} />
+      <ThemeText typography="heading__m" style={styles.emptyTitle}>
+        {t(BonusProgramTexts.myCouponCodes.emptyTitle)}
+      </ThemeText>
+      <ThemeText
+        typography="body__m"
+        type="secondary"
+        style={styles.emptySubtitle}
+      >
+        {t(BonusProgramTexts.myCouponCodes.emptyState)}
+      </ThemeText>
+    </View>
+  );
+};
+
+const HowItWorksCard = () => {
+  const {t} = useTranslation();
+  const styles = useStyles();
+  return (
+    <Section style={styles.howItWorksSection}>
+      <GenericSectionItem>
+        <View style={styles.horizontalContainer}>
+          <View style={styles.howItWorksText}>
+            <ThemeText typography="body__m__strong">
+              {t(BonusProgramTexts.myCouponCodes.howItWorksTitle)}
+            </ThemeText>
+            <ThemeText typography="body__s" type="secondary">
+              {t(BonusProgramTexts.myCouponCodes.howItWorksBody)}
+            </ThemeText>
+          </View>
+          <ThemedBonusBag height={60} width={60} />
+        </View>
+      </GenericSectionItem>
+    </Section>
   );
 };
 
@@ -184,6 +222,31 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   sectionListContent: {
     gap: theme.spacing.medium,
+    flexGrow: 1,
+  },
+  emptyState: {
+    alignItems: 'center',
+    gap: theme.spacing.medium,
+    paddingVertical: theme.spacing.xLarge,
+  },
+  emptyTitle: {
+    textAlign: 'center',
+  },
+  emptySubtitle: {
+    textAlign: 'center',
+  },
+  howItWorksSection: {
+    marginTop: theme.spacing.medium,
+  },
+  horizontalContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: theme.spacing.large,
+  },
+  howItWorksText: {
+    flex: 1,
+    gap: theme.spacing.xSmall,
   },
   sectionHeading: {
     marginTop: theme.spacing.medium,

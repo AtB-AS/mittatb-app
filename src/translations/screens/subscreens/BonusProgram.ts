@@ -270,10 +270,25 @@ const BonusProgramTexts = {
   myCouponCodes: {
     linkText: _('Mine kampanjekoder', 'My coupon codes', 'Mine kampanjekodar'),
     title: _('Mine kampanjekoder', 'My coupon codes', 'Mine kampanjekodar'),
+    emptyTitle: _(
+      'Ingen kampanjekoder',
+      'No coupon codes',
+      'Ingen kampanjekodar',
+    ),
     emptyState: _(
-      'Du har ingen kampanjekoder enda. Bruk poengene dine for å få en kampanjekode.',
-      "You don't have any coupon codes yet. Use your points to get a coupon code.",
-      'Du har ingen kampanjekodar enno. Bruk poenga dine for å få ein kampanjekode.',
+      'Når du aktiverer en kampanjekode, vil den vises her.',
+      'When you activate a coupon code, it will appear here.',
+      'Når du aktiverer ein kampanjekode, vil den visast her.',
+    ),
+    howItWorksTitle: _(
+      'Hvordan fungerer kampanjekoden?',
+      'How does the coupon code work?',
+      'Korleis fungerer kampanjekoden?',
+    ),
+    howItWorksBody: _(
+      'Når du huker av for å bruke poeng, legges kampanjekoden automatisk til i Hyre- eller Bysykkelappen. Hvis dette ikke skjer, for eksempel fordi du ikke var logget inn, kan du legge den til manuelt i deres app eller prøve å aktivere den på nytt.',
+      "When you choose to use points, the coupon code is automatically added to the Hyre or City Bike app. If this doesn't happen, for example because you weren't logged in, you can add it manually in their app or try to activate it again.",
+      'Når du hukar av for å bruke poeng, blir kampanjekoden automatisk lagt til i Hyre- eller Bysykkelappen. Viss dette ikkje skjer, til dømes fordi du ikkje var logga inn, kan du leggje den til manuelt i appen deira eller prøve å aktivere den på nytt.',
     ),
     copy: _('Kopier', 'Copy', 'Kopier'),
     copied: _('Kopiert!', 'Copied!', 'Kopiert!'),
