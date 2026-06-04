@@ -28,17 +28,10 @@ import {useFocusRefs} from '@atb/utils/use-focus-refs';
 import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
-import {ToggleSectionItem} from '@atb/components/sections';
 import {useProductAlternatives} from '@atb/modules/ticketing';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
-import {
-  usePurchaseSelectionBuilder,
-  useSelectableUserProfiles,
-} from '@atb/modules/purchase-selection';
-import {ContentHeading} from '@atb/components/heading';
-import {isUserProfileSelectable} from './utils';
-import {useOnBehalfOf} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-on-behalf-of';
+import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import {useBookingTrips} from '@atb/modules/booking';
 import {isValidSelection} from '@atb/modules/booking';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
@@ -61,15 +54,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const isFree = params.selection.stopPlaces?.to?.isFree || false;
 
   const preassignedFareProductAlternatives = useProductAlternatives(selection);
-  const selectableUserProfiles = useSelectableUserProfiles(
-    selection.preassignedFareProduct,
-  );
   const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
 
   const analytics = useAnalyticsContext();
 
-  const {travellerSelectionMode, zoneSelectionMode} =
-    selection.fareProductTypeConfig.configuration;
+  const {zoneSelectionMode} = selection.fareProductTypeConfig.configuration;
 
   const {
     isSearchingOffer,
@@ -101,11 +90,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       tripAnalytics: params.tripAnalytics,
     };
 
-  const canSelectUserProfile = isUserProfileSelectable(
-    travellerSelectionMode,
-    selectableUserProfiles,
-  );
-
   const handleTicketInfoButtonPress = () => {
     const parameters: RootStackParamList['Root_TicketInformationScreen'] = {
       preassignedFareProductId: preassignedFareProduct.id,
@@ -134,8 +118,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const userTypeStrings = userProfilesWithCountAndOffer
     .filter((u) => u.count > 0)
     .map((u) => u.userTypeString);
-
-  const {isAllowed: isOnBehalfOfAllowed} = useOnBehalfOf(selection);
 
   const {isBookingRequired, isError: isBookingError} = useBookingTrips({
     selection,
@@ -266,31 +248,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             }}
             style={styles.selectionComponent}
           />
-
-          {isOnBehalfOfAllowed && (
-            <View style={styles.selectionComponent}>
-              {!canSelectUserProfile && (
-                <ContentHeading
-                  text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
-                />
-              )}
-              <ToggleSectionItem
-                text={t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
-                value={selection.isOnBehalfOf}
-                onValueChange={(newValue) => {
-                  const newSelection = builder
-                    .fromSelection(selection)
-                    .isOnBehalfOf(newValue)
-                    .build();
-                  setSelection(newSelection);
-                }}
-                testID="onBehalfOfToggle"
-                type="slim"
-                radiusSize="regular"
-                radius="top-bottom"
-              />
-            </View>
-          )}
 
           <FromToSelection
             selection={selection}
