@@ -15,7 +15,7 @@ Whenever a new change is merged to `master`, through Pull Requests or similar, w
 ## Normal flow
 
 1. Do continuous changes on master through PR
-1. When you want to do an alpha release, run the following on the `master` branch (from project root): `yarn release-draft`
+1. When you want to do an alpha release, run the following on the `master` branch (from project root): `pnpm release-draft`
 1. Revise and review the release draft on Github
 1. Publish the release when you want to trigger the `store` build and distribute to our alpha-channels
 
