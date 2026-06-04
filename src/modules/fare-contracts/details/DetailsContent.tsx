@@ -218,7 +218,6 @@ export const DetailsContent: React.FC<Props> = ({
               }
               textColor={theme.color.background.neutral[0]}
               ruleVariables={globalMessageRuleVariables}
-              style={styles.globalMessages}
             />
           </View>
         </GenericSectionItem>

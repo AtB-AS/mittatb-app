@@ -1,10 +1,11 @@
 import {useAuthContext} from '@atb/modules/auth';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {StyleProp, ViewStyle} from 'react-native';
+import {StyleProp} from 'react-native';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import type {MarginStyle} from '@atb/theme';
 
-type Props = {style?: StyleProp<ViewStyle>};
+type Props = {style?: StyleProp<MarginStyle>};
 
 export const ErrorWithAccountMessage = ({style}: Props) => {
   const {authStatus, retryAuth} = useAuthContext();

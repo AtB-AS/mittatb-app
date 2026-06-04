@@ -1,6 +1,11 @@
 import React from 'react';
-import {ColorValue, StyleProp, View, ViewStyle} from 'react-native';
-import {Statuses, StyleSheet, useThemeContext} from '@atb/theme';
+import {ColorValue, StyleProp, View} from 'react-native';
+import {
+  type MarginStyle,
+  Statuses,
+  StyleSheet,
+  useThemeContext,
+} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
@@ -10,7 +15,7 @@ export type MessageInfoTextProps = {
   type: Statuses;
   message: string;
   a11yLabel?: string;
-  style?: StyleProp<ViewStyle>;
+  style?: StyleProp<MarginStyle>;
   testID?: string;
   iconPosition?: 'right' | 'left';
   textColor?: ContrastColor | ColorValue;

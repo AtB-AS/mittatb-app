@@ -1,6 +1,11 @@
 import React from 'react';
-import {StyleProp, View, ViewStyle} from 'react-native';
-import {Statuses, StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleProp, View} from 'react-native';
+import {
+  type MarginStyle,
+  Statuses,
+  StyleSheet,
+  useThemeContext,
+} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
@@ -41,7 +46,7 @@ export type MessageInfoBoxProps = {
   noStatusIcon?: boolean;
   onDismiss?: () => void;
   isMarkdown?: boolean;
-  style?: StyleProp<ViewStyle>;
+  style?: StyleProp<MarginStyle>;
   onPressConfig?: OnPressConfig;
   a11yLiveRegion?: A11yLiveRegion;
   a11yLabel?: string;
