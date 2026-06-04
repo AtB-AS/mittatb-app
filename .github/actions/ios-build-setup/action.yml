@@ -62,17 +62,7 @@ runs:
           ruby-version: 3.1.0
           cache-version: 2
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Get cached node_modules
-        uses: actions/cache@v4
-        if: inputs.force-build != 'true'
-        id: modules-cache
-        with:
-          path: '**/node_modules'
-          key: node-modules-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/patches/**.patch') }}
-          restore-keys: |
-            node-modules-${{ runner.os }}-
       - name: Install node_modules
-        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         shell: bash
         run: pnpm install --frozen-lockfile
       - name: Setup Xcode version
