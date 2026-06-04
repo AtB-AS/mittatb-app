@@ -81,8 +81,17 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   // If markdown is enabled, we need to wrap the content in a <View></View> to properly align the <Text></Text> elements,
   // by doing this we also avoid to wrap the list elements inside the markdown render in a Text component, which is not allowed.
   if (isMarkdown) {
-    return <View>{content}</View>;
+    return <View key={fontScale}>{content}</View>;
   }
 
-  return <Text {...textProps}>{content}</Text>;
+  return (
+    <Text
+      {...textProps}
+      // Trigger re-renders on `fontScale` changes to avoid a react-native bug
+      // where text size is updated, but the text container isn't.
+      key={fontScale}
+    >
+      {content}
+    </Text>
+  );
 };
