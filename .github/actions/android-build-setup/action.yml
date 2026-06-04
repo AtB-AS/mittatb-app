@@ -63,10 +63,10 @@ runs:
 
     - uses: pnpm/action-setup@v4
 
-    - name: Install node v22
+    - name: Install node
       uses: actions/setup-node@v5
       with:
-        node-version: 22
+        node-version-file: '.nvmrc'
         cache: 'pnpm'
 
     - name: Install node_modules

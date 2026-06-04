@@ -116,11 +116,11 @@ jobs:
             node-modules-${{ runner.os }}-
       - uses: pnpm/action-setup@v4
         if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
-      - name: Install node v22
+      - name: Install node
         uses: actions/setup-node@v5
         if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         with:
-          node-version: 22
+          node-version-file: '.nvmrc'
           cache: 'pnpm'
       - name: Add Entur private registry credentials
         shell: bash
