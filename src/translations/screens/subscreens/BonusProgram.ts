@@ -70,16 +70,15 @@ const BonusProgramTexts = {
         'Reis billegare med AtB Bonus!',
       ),
       description: _(
-        'Bli med og tjen poeng hver gang du kjøper en enkeltbillett (voksen/student, sone A). Bruk poengene dine og få kampanjepris på enkeltbilletter, bysykler, elsparkesykler og Hyrebiler.',
-        'Sign up and earn points every time you buy a single ticket (adult/student, zone A). Use your points and get campaign prices on single tickets, city bikes, electric scooters and Hyre cars.',
-        'Bli med og ten poeng kvar gong du kjøper ein enkeltbillett (vaksen/student, sone A). Bruk poenga dine og få kampanjepris på enkeltbillettar, bysyklar, elsparkesyklar og Hyrebilar.',
+        'Bli med og tjen poeng hver gang du kjøper en enkeltbillett (voksen/student, sone A). Bruk poengene dine og få kampanjepris på bysykler og Hyrebiler.',
+        'Sign up and earn points every time you buy a single ticket (adult/student, zone A). Use your points and get campaign prices on city bikes and Hyre cars.',
+        'Bli med og ten poeng kvar gong du kjøper ein enkeltbillett (vaksen/student, sone A). Bruk poenga dine og få kampanjepris på bysyklar og Hyrebilar.',
       ),
-      footer: (endDate: string) =>
-        _(
-          `Dette er et prøveprosjekt som varer til ${endDate}.`,
-          `This is a pilot project that runs until ${endDate}.`,
-          `Dette er eit prøveprosjekt som varer til ${endDate}.`,
-        ),
+      footer: _(
+        'Dette er et prøveprosjekt.',
+        'This is a pilot project.',
+        'Dette er eit prøveprosjekt.',
+      ),
       button: {
         text: _('Bli med', 'Join', 'Bli med'),
       },
