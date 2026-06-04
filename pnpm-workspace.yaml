@@ -6,3 +6,5 @@ allowBuilds:
   react-native-inappbrowser-reborn: true
   sharp: true
 nodeLinker: 'hoisted'
+minimumReleaseAgeExclude:
+- '@atb-as/*'
