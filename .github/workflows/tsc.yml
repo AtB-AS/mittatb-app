@@ -22,18 +22,15 @@ jobs:
       - uses: actions/checkout@v1
       - uses: pnpm/action-setup@v4
       - name: install node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v5
         with:
           node-version-file: '.nvmrc'
+          cache: 'pnpm'
       - name: Add Entur private registry credentials
         run: sh ./scripts/add-entur-private-registry.sh
         env:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
-      - uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: pnpm install
         run: pnpm install --frozen-lockfile
       - name: Install assets
