@@ -24,6 +24,7 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 import {Loading} from '@atb/components/loading';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type Props = ProfileScreenProps<'Profile_PaymentMethodsScreen'>;
 
@@ -40,6 +41,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
     recurringPaymentError,
     onAddRecurringPayment,
   } = useRecurringPayment();
+  const {isApplePayEnabled} = useFeatureTogglesContext();
 
   const focusRef = useFocusOnLoad(navigation);
 
@@ -99,8 +101,13 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
             rightIcon={{svg: Add}}
           />
         </Section>
+
         <MessageInfoBox
-          message={t(PaymentMethodsTexts.vippsInfo)}
+          message={
+            isApplePayEnabled
+              ? t(PaymentMethodsTexts.vippsAndApplePayInfo)
+              : t(PaymentMethodsTexts.vippsInfo)
+          }
           type="info"
         />
       </View>
