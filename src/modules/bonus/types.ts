@@ -64,3 +64,11 @@ export const BonusProductGroupSchema = z.object({
 });
 
 export type BonusProductGroupType = z.infer<typeof BonusProductGroupSchema>;
+
+export const BonusVoucherSchema = z.object({
+  operator: z.string(),
+  code: z.string(),
+  claimDate: z.string(),
+});
+
+export type BonusVoucher = z.infer<typeof BonusVoucherSchema>;
