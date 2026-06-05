@@ -208,7 +208,7 @@ const BonusProgramTexts = {
           answer: () =>
             _(
               `Prøveprosjektet varer frem til slutten av året. Etter dette slettes resten av poengene dine.`,
-              `The pilot project lasts until the end of the year. After this, the remaining points will be deleted.`,
+              `The pilot project lasts until the end of the year. After this, your remaining points will be deleted.`,
               `Prøveprosjektet varer fram til slutten av året. Etter dette slettes resten av poenga dine.`,
             ),
         },
