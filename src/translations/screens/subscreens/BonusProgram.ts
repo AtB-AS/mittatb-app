@@ -1,9 +1,5 @@
 import {translation as _} from '../../commons';
 
-export type BonusFaqContext = {
-  endDate: string;
-};
-
 const BonusProgramTexts = {
   points: _('poeng', 'points', 'poeng'),
   costA11yLabel: (amount: number) =>
