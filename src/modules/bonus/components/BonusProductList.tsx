@@ -66,9 +66,9 @@ export const BonusProductList = ({
         const operatorNames = memberProducts
           .map(
             (bp) =>
-              mobilityOperators?.find((op) => op.id === bp.operatorId)?.name ??
-              bp.operatorId,
+              mobilityOperators?.find((op) => op.id === bp.operatorId)?.name,
           )
+          .filter(Boolean)
           .join(', ');
         const showMapButton =
           !!onNavigateToMap &&
@@ -102,9 +102,11 @@ export const BonusProductList = ({
                         ),
                       )}
                     </ThemeText>
-                    <ThemeText typography="body__s" type="secondary">
-                      {operatorNames}
-                    </ThemeText>
+                    {!!operatorNames && (
+                      <ThemeText typography="body__s" type="secondary">
+                        {operatorNames}
+                      </ThemeText>
+                    )}
                   </View>
                   {showMapButton && (
                     <Pressable
