@@ -1,8 +1,8 @@
 import React, {useMemo} from 'react';
-import {SectionList, View} from 'react-native';
+import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {BonusProgramTexts, useTranslation} from '@atb/translations';
-import {getTranslatedModeName} from '@atb/utils/transportation-names';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {ThemeText} from '@atb/components/text';
@@ -14,7 +14,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemedBonusTransaction, ThemedBonusBag} from '@atb/theme/ThemedAssets';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {formatToVerboseFullDate} from '@atb/utils/date';
+import {formatToDate} from '@atb/utils/date';
 import {BonusVoucher, useBonusVouchersQuery} from '@atb/modules/bonus';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getTransportModeAndSubMode} from '@atb/modules/mobility';
@@ -86,19 +86,26 @@ export const Profile_BonusCouponCodesScreen = ({navigation}: Props) => {
               onPress={() => refetch()}
             />
           </View>
+        ) : sections.length === 0 ? (
+          <>
+            <EmptyState />
+            <HowItWorksCard />
+          </>
         ) : (
-          <SectionList
-            contentContainerStyle={styles.sectionListContent}
-            sections={sections}
-            keyExtractor={(item) => `${item.claimDate}-${item.code}`}
-            renderItem={({item}) => <VoucherCard voucher={item} />}
-            renderSectionHeader={({section}) => (
-              <VoucherSectionHeading date={section.date} />
-            )}
-            stickySectionHeadersEnabled={false}
-            ListEmptyComponent={<EmptyState />}
-            ListFooterComponent={<HowItWorksCard />}
-          />
+          <>
+            {sections.map((section) => (
+              <View key={section.date} style={styles.voucherSection}>
+                <VoucherSectionHeading date={section.date} />
+                {section.data.map((voucher) => (
+                  <VoucherCard
+                    key={`${voucher.claimDate}-${voucher.code}`}
+                    voucher={voucher}
+                  />
+                ))}
+              </View>
+            ))}
+            <HowItWorksCard />
+          </>
         )}
       </View>
     </FullScreenView>
@@ -151,8 +158,12 @@ const VoucherSectionHeading = ({date}: {date: number}) => {
   const {language} = useTranslation();
   const styles = useStyles();
   return (
-    <ThemeText typography="body__s__strong" style={styles.sectionHeading}>
-      {formatToVerboseFullDate(new Date(date), language)}
+    <ThemeText
+      typography="body__s"
+      type="secondary"
+      style={styles.sectionHeading}
+    >
+      {formatToDate(new Date(date), language)}
     </ThemeText>
   );
 };
@@ -165,7 +176,9 @@ const VoucherCard = ({voucher}: {voucher: BonusVoucher}) => {
   const operator = mobilityOperators?.find((op) => op.id === voucher.operator);
   const formFactor = operator?.formFactors[0] as FormFactor | undefined;
   const {mode, subMode} = getTransportModeAndSubMode(formFactor);
-  const modeName = t(getTranslatedModeName(mode, subMode));
+  const modeName = formFactor
+    ? t(MobilityTexts.vehicleName(formFactor))
+    : (operator?.name ?? voucher.operator);
 
   return (
     <Section>
@@ -190,15 +203,20 @@ const VoucherCard = ({voucher}: {voucher: BonusVoucher}) => {
                   <ScreenReaderAnnouncement
                     message={t(BonusProgramTexts.myCouponCodes.copied)}
                   />
-                  <ThemeText typography="body__s" type="secondary">
-                    {t(BonusProgramTexts.myCouponCodes.copied)}
-                  </ThemeText>
+
+                  <View style={styles.copyButton}>
+                    <ThemeText typography="body__s">
+                      {t(BonusProgramTexts.myCouponCodes.copied)}
+                    </ThemeText>
+                  </View>
                 </>
               }
             >
-              <ThemeText typography="body__s" type="secondary">
-                {t(BonusProgramTexts.myCouponCodes.copy)}
-              </ThemeText>
+              <View style={styles.copyButton}>
+                <ThemeText typography="body__s">
+                  {t(BonusProgramTexts.myCouponCodes.copy)}
+                </ThemeText>
+              </View>
             </ClickableCopy>
           </View>
         </View>
@@ -210,19 +228,15 @@ const VoucherCard = ({voucher}: {voucher: BonusVoucher}) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    rowGap: theme.spacing.small,
-    marginTop: theme.spacing.large,
+    gap: theme.spacing.medium,
     margin: theme.spacing.medium,
+    marginTop: 0,
   },
   message: {
     rowGap: theme.spacing.small,
   },
   retryButton: {
     marginTop: theme.spacing.small,
-  },
-  sectionListContent: {
-    gap: theme.spacing.medium,
-    flexGrow: 1,
   },
   emptyState: {
     alignItems: 'center',
@@ -235,21 +249,25 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   emptySubtitle: {
     textAlign: 'center',
   },
-  howItWorksSection: {
-    marginTop: theme.spacing.medium,
-  },
   horizontalContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: theme.spacing.large,
   },
+  howItWorksSection: {
+    marginTop: theme.spacing.large,
+  },
   howItWorksText: {
     flex: 1,
     gap: theme.spacing.xSmall,
   },
+  voucherSection: {
+    gap: theme.spacing.xSmall,
+  },
   sectionHeading: {
-    marginTop: theme.spacing.medium,
+    marginTop: theme.spacing.small,
+    marginLeft: theme.spacing.medium,
   },
   cardRow: {
     flexDirection: 'row',
@@ -267,7 +285,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   cardCode: {
-    alignItems: 'flex-end',
-    gap: theme.spacing.xSmall,
+    alignItems: 'center',
+    gap: theme.spacing.medium,
+    flexDirection: 'row',
+  },
+  copyButton: {
+    borderRadius: theme.border.radius.circle,
+    borderWidth: theme.border.width.slim,
+    borderColor: theme.color.background.neutral[2].foreground.primary,
+    paddingHorizontal: theme.spacing.medium,
+    paddingVertical: theme.spacing.xSmall,
   },
 }));
