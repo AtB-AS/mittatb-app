@@ -132,8 +132,8 @@ const mapFeatureV3ToSearchLocation = ({
   properties,
 }: FeatureV3): SearchLocation => ({
   id: properties.id,
-  name: properties.name.default,
-  label: properties.name.display,
+  name: properties.names.default,
+  label: properties.names.display,
   layer: properties.layer === 'stopPlace' ? 'venue' : 'address',
   coordinates: {latitude, longitude},
   locality: properties.address?.locality,

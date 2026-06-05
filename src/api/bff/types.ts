@@ -168,7 +168,7 @@ export type FeatureV3 = {
   };
   properties: {
     id: string;
-    name: {
+    names: {
       default: string;
       display: string;
     };
