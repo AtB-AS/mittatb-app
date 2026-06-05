@@ -1,9 +1,5 @@
 import {translation as _} from '../../commons';
 
-export type BonusFaqContext = {
-  endDate: string;
-};
-
 const BonusProgramTexts = {
   points: _('poeng', 'points', 'poeng'),
   costA11yLabel: (amount: number) =>
@@ -53,9 +49,9 @@ const BonusProgramTexts = {
 
   log_in_operator_app_warning: (operatorName: string) =>
     _(
-      `Du må være logget inn i ${operatorName}-appen før du bruker kampanjeprisen.`,
-      `You must be logged in to the ${operatorName} app before using the campaign price.`,
-      `Du må vera logga inn i ${operatorName}-appen før du brukar kampanjeprisen.`,
+      `Du må være logget inn i ${operatorName}-appen for å få kampanjeprisen.`,
+      `You must be logged in to the ${operatorName} app to get the campaign price.`,
+      `Du må vera logga inn i ${operatorName}-appen for å få kampanjeprisen.`,
     ),
 
   bonusProfile: {
@@ -70,16 +66,15 @@ const BonusProgramTexts = {
         'Reis billegare med AtB Bonus!',
       ),
       description: _(
-        'Bli med og tjen poeng hver gang du kjøper en enkeltbillett (voksen/student, sone A). Bruk poengene dine og få kampanjepris på enkeltbilletter, bysykler, elsparkesykler og Hyrebiler.',
-        'Sign up and earn points every time you buy a single ticket (adult/student, zone A). Use your points and get campaign prices on single tickets, city bikes, electric scooters and Hyre cars.',
-        'Bli med og ten poeng kvar gong du kjøper ein enkeltbillett (vaksen/student, sone A). Bruk poenga dine og få kampanjepris på enkeltbillettar, bysyklar, elsparkesyklar og Hyrebilar.',
+        'Bli med og tjen poeng hver gang du kjøper en enkeltbillett (voksen/student, sone A). Bruk poengene dine og få kampanjepris på ulike transportmidler i AtB-appen.',
+        'Join and earn points every time you buy a single ticket (adult/student, zone A). Use your points and get campaign prices on various means of transport in the AtB app.',
+        'Bli med og ten poeng kvar gong du kjøper ein enkeltbillett (vaksen/student, sone A). Bruk poenga dine og få kampanjepris på ulike transportmiddel i AtB-appen.',
       ),
-      footer: (endDate: string) =>
-        _(
-          `Dette er et prøveprosjekt som varer til ${endDate}.`,
-          `This is a pilot project that runs until ${endDate}.`,
-          `Dette er eit prøveprosjekt som varer til ${endDate}.`,
-        ),
+      footer: _(
+        'Dette er et prøveprosjekt som varer til slutten av året.',
+        'This is a pilot project that will last until the end of the year.',
+        'Dette er eit prøveprosjekt som varer til slutten av året.',
+      ),
       button: {
         text: _('Bli med', 'Join', 'Bli med'),
       },
@@ -164,9 +159,9 @@ const BonusProgramTexts = {
       spendPoints: {
         title: _('Bruk poeng', 'Spend points', 'Bruk poeng'),
         description: _(
-          'Du kan bruke poeng på turer med bysykler og Hyre-biler.',
-          'You may use points on trips with city bikes and Hyre cars.',
-          'Du kan bruke poeng på turer med bysykler og Hyre-biler.',
+          'Du kan bruke poeng på turer med ulike transportmidler. Se listen under.',
+          'You may use points on trips with different transport modes. See the list below.',
+          'Du kan bruka poeng på turar med ulike transportmiddel. Sjå lista under.',
         ),
       },
       downloadOperator: (operator: string) =>
@@ -193,15 +188,15 @@ const BonusProgramTexts = {
       faqs: [
         {
           question: _(
-            'Hvordan bruker jeg poengene?',
-            'How do I use the points?',
-            'Korleis brukar eg poenga?',
+            'Hvordan bruker jeg poengene mine?',
+            'How do I use my points?',
+            'Korleis brukar eg poenga mine?',
           ),
           answer: () =>
             _(
-              'På bysykkel, elsparkesykkel eller Hyrebil:\nFinn kjøretøyet i kartet, trykk på ikonet og huk av for at du vil bruke poeng før du starter turen.',
-              'On city bikes, electric scooters, or Hyre cars:\nFind the vehicle on the map, tap the icon, and check the box to use points before starting the trip.',
-              'På bysykkel, elsparkesykkel eller Hyrebil:\nFinn kjøretøyet i kartet, trykk på ikonet og huk av for at du vil bruke poeng før du starter turen.',
+              'Når du er inne på et transportmiddel som støtter poeng, kan du velge å bruke poengene dine og få kampanjepris.',
+              'When you are on a mode of transportation that supports points, you can choose to use your points and get campaign price.',
+              'Når du er inne på eit transportmiddel som støttar poeng, kan du velja å bruka poenga dine og få kampanjepris.',
             ),
         },
         {
@@ -210,11 +205,11 @@ const BonusProgramTexts = {
             'How long does the pilot project last?',
             'Kor lenge varer prøveprosjektet?',
           ),
-          answer: ({endDate}: BonusFaqContext) =>
+          answer: () =>
             _(
-              `Prøveprosjektet varer frem til ${endDate}. Etter dette slettes resten av poengene dine.`,
-              `The pilot project lasts until ${endDate}. After this, the remaining points will be deleted.`,
-              `Prøveprosjektet varer fram til ${endDate}. Etter dette slettes resten av poenga dine.`,
+              `Prøveprosjektet varer frem til slutten av året. Etter dette slettes resten av poengene dine.`,
+              `The pilot project lasts until the end of the year. After this, the remaining points will be deleted.`,
+              `Prøveprosjektet varer fram til slutten av året. Etter dette slettes resten av poenga dine.`,
             ),
         },
       ],
