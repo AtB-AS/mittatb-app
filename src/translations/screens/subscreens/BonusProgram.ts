@@ -1,3 +1,4 @@
+import {spellOut} from '@atb/utils/accessibility';
 import {translation as _} from '../../commons';
 
 const BonusProgramTexts = {
@@ -286,6 +287,17 @@ const BonusProgramTexts = {
       'Når du hukar av for å bruke poeng, blir kampanjekoden automatisk lagt til i Hyre- eller Bysykkelappen. Viss dette ikkje skjer, til dømes fordi du ikkje var logga inn, kan du leggje den til manuelt i appen deira.',
     ),
     copy: _('Kopier', 'Copy', 'Kopier'),
+    copyA11yHint: _(
+      'Klikk for å kopiere kampanjekoden',
+      'Press to copy the coupon code',
+      'Klikk for å kopiere kampanjekoden',
+    ),
+    codeA11yLabel: (code: string) =>
+      _(
+        `Kode ${spellOut(code)}`,
+        `Code ${spellOut(code)}`,
+        `Kode ${spellOut(code)}`,
+      ),
     copied: _('Kopiert!', 'Copied!', 'Kopiert!'),
     errorMessage: _(
       'Vi klarte ikke å hente kampanjekodene dine. Prøv igjen senere.',

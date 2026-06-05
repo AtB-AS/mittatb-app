@@ -194,10 +194,22 @@ const VoucherCard = ({voucher}: {voucher: BonusVoucher}) => {
             </View>
           </View>
           <View style={styles.cardCode}>
-            <ThemeText typography="body__s__strong">{voucher.code}</ThemeText>
+            <ThemeText
+              typography="body__s__strong"
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+            >
+              {voucher.code}
+            </ThemeText>
             <ClickableCopy
               copyContent={voucher.code}
-              accessibilityLabel={t(BonusProgramTexts.myCouponCodes.copy)}
+              accessibilityRole="button"
+              accessibilityLabel={t(
+                BonusProgramTexts.myCouponCodes.codeA11yLabel(voucher.code),
+              )}
+              accessibilityHint={t(
+                BonusProgramTexts.myCouponCodes.copyA11yHint,
+              )}
               successElement={
                 <>
                   <ScreenReaderAnnouncement
@@ -271,6 +283,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   cardRow: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: theme.spacing.medium,
@@ -279,7 +292,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.medium,
-    flex: 1,
+    flexGrow: 1,
+    flexShrink: 1,
+    minWidth: '40%',
   },
   cardText: {
     flex: 1,
@@ -288,6 +303,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     gap: theme.spacing.medium,
     flexDirection: 'row',
+    flexShrink: 0,
   },
   copyButton: {
     borderRadius: theme.border.radius.circle,
