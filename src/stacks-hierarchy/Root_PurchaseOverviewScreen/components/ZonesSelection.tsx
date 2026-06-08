@@ -199,7 +199,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.small,
     flex: 1,
     flexShrink: 1,
-    flexWrap: 'wrap',
   },
   zoneContainer: {
     gap: theme.spacing.small,
