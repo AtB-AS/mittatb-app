@@ -14,26 +14,30 @@ import {ThemedContactIllustration} from '@atb/theme/ThemedAssets';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {openUrl} from '@atb/utils/open-url';
 import {MobilityOperatorType} from '@atb/modules/configuration';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type Props = {
   operatorName: string | undefined;
   operatorLogoUrl: string | undefined;
   contactInfo: MobilityOperatorType['support'];
+  formFactor: FormFactor | undefined;
   onContactFormPress: () => void;
+  onReportParkingPress: () => void;
 };
 
-export const BicycleContactSection = ({
+export const ShmoContactSection = ({
   operatorName,
   operatorLogoUrl,
   contactInfo,
+  formFactor,
   onContactFormPress,
+  onReportParkingPress,
 }: Props) => {
   const {t} = useTranslation();
   const style = useStyles();
 
-  const chatDomain = contactInfo?.chatUrl
-    ? extractDomain(contactInfo.chatUrl)
-    : undefined;
+  const isBicycle = formFactor === FormFactor.Bicycle;
+
   const websiteDomain = contactInfo?.websiteUrl
     ? extractDomain(contactInfo.websiteUrl)
     : undefined;
@@ -80,17 +84,25 @@ export const BicycleContactSection = ({
           onPress={onContactFormPress}
         />
 
-        {!!contactInfo?.chatUrl && !!chatDomain && (
+        {!!contactInfo?.chatUrl && (
           <LinkSectionItem
-            text={t(ShmoHelpTexts.chatInBrowser(chatDomain))}
+            text={t(ShmoHelpTexts.chatInBrowser)}
             rightIcon={{svg: ExternalLink}}
             onPress={() => openUrl(contactInfo.chatUrl!)}
           />
         )}
 
+        {!isBicycle && (
+          <LinkSectionItem
+            text={t(ShmoHelpTexts.reportParking)}
+            rightIcon={{svg: ArrowRight}}
+            onPress={onReportParkingPress}
+          />
+        )}
+
         {!!contactInfo?.websiteUrl && !!websiteDomain && (
           <LinkSectionItem
-            text={t(ShmoHelpTexts.readMoreAbout(websiteDomain))}
+            text={t(ShmoHelpTexts.readMoreAt(websiteDomain))}
             rightIcon={{svg: ExternalLink}}
             onPress={() => openUrl(contactInfo.websiteUrl!)}
           />

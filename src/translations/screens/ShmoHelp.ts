@@ -2,17 +2,6 @@ import {translation as _} from '../commons';
 
 export const ShmoHelpTexts = {
   title: _('Hjelp', 'Help', 'Hjelp'),
-  contactAndReport: _(
-    'Kontakt og rapporter',
-    'Contact and report',
-    'Kontakt og rapporter',
-  ),
-  contactOperator: (operatorName: string) =>
-    _(
-      `Kontakt ${operatorName}`,
-      `Contact ${operatorName}`,
-      `Kontakt ${operatorName}`,
-    ),
   contactOptions: _(
     'Kontaktalternativer',
     'Contact options',
@@ -20,17 +9,12 @@ export const ShmoHelpTexts = {
   ),
   phone: _('Telefon', 'Phone', 'Telefon'),
   contactForm: _('Kontaktskjema', 'Contact form', 'Kontaktskjema'),
-  chatInBrowser: (domain: string) =>
+  chatInBrowser: _('Chat i nettleser', 'Chat in browser', 'Chat i nettlesar'),
+  readMoreAt: (domain: string) =>
     _(
-      `Chat i nettleser (${domain})`,
-      `Chat in browser (${domain})`,
-      `Chat i nettlesar (${domain})`,
-    ),
-  readMoreAbout: (operatorName: string) =>
-    _(
-      `Les mer om ${operatorName}`,
-      `Read more about ${operatorName}`,
-      `Les meir om ${operatorName}`,
+      `Les mer på ${domain}`,
+      `Read more at ${domain}`,
+      `Les meir på ${domain}`,
     ),
   reportParking: _(
     'Rapporter feilparkering',

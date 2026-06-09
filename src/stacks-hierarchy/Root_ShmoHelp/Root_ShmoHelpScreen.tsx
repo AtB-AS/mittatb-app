@@ -12,8 +12,7 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {useOperators} from '@atb/modules/mobility';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {ScooterContactSection} from './components/ScooterContactSection';
-import {BicycleContactSection} from './components/BicycleContactSection';
+import {ShmoContactSection} from './components/ShmoContactSection';
 
 export type ShmoHelpScreenProps = RootStackScreenProps<'Root_ShmoHelpScreen'>;
 
@@ -76,24 +75,18 @@ export const Root_ShmoHelpScreen = ({
       )}
     >
       <View style={style.container}>
-        {isBicycle ? (
-          <BicycleContactSection
-            operatorName={operatorName}
-            operatorLogoUrl={operator?.brandAssets?.brandImageUrl}
-            contactInfo={contactInfo}
-            onContactFormPress={navigateToContactForm}
-          />
-        ) : (
-          <ScooterContactSection
-            operatorName={operatorName}
-            onContactFormPress={navigateToContactForm}
-            onReportParkingPress={() =>
-              navigation.navigate('Root_ParkingViolationsSelectScreen', {
-                transitionOverride: 'slide-from-right',
-              })
-            }
-          />
-        )}
+        <ShmoContactSection
+          operatorName={operatorName}
+          operatorLogoUrl={operator?.brandAssets?.brandImageUrl}
+          contactInfo={contactInfo}
+          formFactor={formFactor}
+          onContactFormPress={navigateToContactForm}
+          onReportParkingPress={() =>
+            navigation.navigate('Root_ParkingViolationsSelectScreen', {
+              transitionOverride: 'slide-from-right',
+            })
+          }
+        />
 
         <ContentHeading text={t(ShmoHelpTexts.faq)} />
         <Section>
