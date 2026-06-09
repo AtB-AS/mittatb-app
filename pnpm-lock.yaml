@@ -12,8 +12,8 @@ importers:
         specifier: ^1.2.7
         version: 1.2.7
       '@atb-as/config-specs':
-        specifier: ^10.0.0
-        version: 10.0.0(zod@4.1.11)
+        specifier: ^11.0.0
+        version: 11.0.0(zod@4.1.11)
       '@atb-as/generate-assets':
         specifier: ^18.14.0
         version: 18.14.0
@@ -493,8 +493,8 @@ packages:
   '@adrianso/react-native-device-brightness@1.2.7':
     resolution: {integrity: sha512-q3OTFGohAh04R8cBka7/eNXaeSD8bAZocMsifLIR3oDF5N9cNH2UVEjzJaFXW8DHFEsODpljpT+eyGWIhKlkow==}
 
-  '@atb-as/config-specs@10.0.0':
-    resolution: {integrity: sha512-Kftez996+nyIDzJcsjkY4XsYfnOAPmlGIvm6PVIUzkxnNtrrYG45OzFnefIjGQKjmABgBhao8MYfD8zF59er5g==}
+  '@atb-as/config-specs@11.0.0':
+    resolution: {integrity: sha512-+UgU07MeJvSTX9gfjEIGrcbT3F/+rHaPgbukj0MxWoEMIymOtJlICmrCUJmyBzFoMO2S5br1BSW97+inuzEyTg==}
     hasBin: true
     peerDependencies:
       zod: ^4.1.11
@@ -7310,7 +7310,7 @@ snapshots:
 
   '@adrianso/react-native-device-brightness@1.2.7': {}
 
-  '@atb-as/config-specs@10.0.0(zod@4.1.11)':
+  '@atb-as/config-specs@11.0.0(zod@4.1.11)':
     dependencies:
       ajv: 8.17.1
       ajv-formats: 3.0.1(ajv@8.17.1)
