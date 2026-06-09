@@ -87,7 +87,7 @@ jobs:
 
       - name: Add Entur private registry credentials
         shell: bash
-        if: steps.modules-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         run: bash ./scripts/add-entur-private-registry.sh
         env:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
