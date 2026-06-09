@@ -8,7 +8,7 @@ import {
   FareProductGroup,
   FareProductGroupType,
   OperatorBenefitId,
-  ScooterFaq,
+  ShmoFaq,
   BonusTexts,
   ConsentLine,
 } from './types';
@@ -175,15 +175,15 @@ export function mapToMobilityOperators(operators?: any) {
     .filter(isDefined);
 }
 
-export function mapToScooterFaqs(scooterFaqs?: any) {
-  if (!scooterFaqs) return;
-  if (!Array.isArray(scooterFaqs)) return;
-  return scooterFaqs
-    .map((scooterFaq) => {
-      const parseResult = ScooterFaq.safeParse(scooterFaq);
+export function mapToShmoFaqs(faqs?: any) {
+  if (!faqs) return;
+  if (!Array.isArray(faqs)) return;
+  return faqs
+    .map((faq) => {
+      const parseResult = ShmoFaq.safeParse(faq);
       if (!parseResult.success) {
         console.warn(
-          `mapToScooterFaqs with id ${scooterFaq?.id} failed safeParsing:\n`,
+          `mapToShmoFaqs with id ${faq?.id} failed safeParsing:\n`,
           parseResult.error,
         );
         return;

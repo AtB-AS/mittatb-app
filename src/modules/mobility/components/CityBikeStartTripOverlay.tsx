@@ -10,6 +10,7 @@ import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 import {LinkSectionItem} from '@atb/components/sections';
 import {ShmoBooking} from '@atb/api/types/mobility';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type Props = {
   activeBooking: ShmoBooking;
@@ -62,6 +63,7 @@ export const CityBikeStartTripOverlay = ({
             navigateToSupport({
               bookingId: activeBooking.bookingId,
               operatorId: activeBooking.asset.operator.id,
+              formFactor: FormFactor.Bicycle,
             });
           }}
           radius="top-bottom"

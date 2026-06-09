@@ -28,7 +28,11 @@ import {BrandingImage} from '../BrandingImage';
 
 type Props = {
   onClose: () => void;
-  navigateSupportCallback: (operatorId: string, bookingId: string) => void;
+  navigateSupportCallback: (
+    operatorId: string,
+    bookingId: string,
+    formFactor?: FormFactor,
+  ) => void;
   navigateToScanQrCode: () => void;
   bookingId: string;
   locationArrowOnPress: () => void;
@@ -133,6 +137,7 @@ export const FinishedShmoSheet = ({
                     navigateSupportCallback(
                       shmoBooking.asset.operator.id,
                       shmoBooking.bookingId,
+                      shmoBooking.asset.formFactor ?? undefined,
                     );
                   }}
                 />
