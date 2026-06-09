@@ -49,11 +49,13 @@ export const useTripPatternInfo = (tripPattern: TripPattern) => {
   const hasStarted = isInThePast(expectedStartTime);
   const isEnded = isInThePast(expectedEndTime);
 
-  const statusTextConfig = getStatusTextConfig(
-    tripPattern,
-    t,
-    theme.color.foreground.emphasis,
+  const isOnlyFootOrBicycle = tripPattern.legs.every(
+    (leg) => leg.mode === 'foot' || leg.mode === 'bicycle',
   );
+
+  const statusTextConfig = isOnlyFootOrBicycle
+    ? undefined
+    : getStatusTextConfig(tripPattern, t, theme.color.foreground.emphasis);
 
   return {
     fromName,
