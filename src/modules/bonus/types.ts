@@ -1,6 +1,10 @@
 import {FormFactorSchema} from '@atb/api/types/mobility';
 import {LanguageAndTextTypeArray} from '@atb/modules/configuration';
 import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
+import {
+  TransportModeType,
+  TransportSubmodeType,
+} from '@atb-as/config-specs/lib/common';
 import {z} from 'zod';
 import {optionalNullish} from '@atb-as/config-specs/lib/utils/nullish';
 
@@ -55,6 +59,16 @@ export const BonusProductGroupSchema = z.object({
   id: z.string(),
   description: LanguageAndTextTypeArray,
   price: PriceSchema,
+  transportMode: TransportModeType,
+  transportSubMode: optionalNullish(TransportSubmodeType),
 });
 
 export type BonusProductGroupType = z.infer<typeof BonusProductGroupSchema>;
+
+export const BonusVoucherSchema = z.object({
+  operator: z.string(),
+  code: z.string(),
+  claimDate: z.string(),
+});
+
+export type BonusVoucher = z.infer<typeof BonusVoucherSchema>;

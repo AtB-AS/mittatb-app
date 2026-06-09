@@ -26,6 +26,7 @@ import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {Profile_TravelAidScreen} from './Profile_TravelAidScreen';
 import {Profile_TravelAidInformationScreen} from './Profile_TravelAidInformationScreen.tsx';
 import {Profile_BonusScreen} from './Profile_BonusScreen.tsx';
+import {Profile_BonusCouponCodesScreen} from './Profile_BonusCouponCodesScreen.tsx';
 import {Profile_SmartParkAndRideScreen} from './Profile_SmartParkAndRideScreen';
 import {Profile_SettingsScreen} from './Profile_SettingsScreen';
 import {Profile_FavoriteScreen} from './Profile_FavoriteScreen';
@@ -50,6 +51,10 @@ export const TabNav_ProfileStack = () => {
       <Stack.Screen
         name="Profile_BonusScreen"
         component={Profile_BonusScreen}
+      />
+      <Stack.Screen
+        name="Profile_BonusCouponCodesScreen"
+        component={Profile_BonusCouponCodesScreen}
       />
       <Stack.Screen
         name="Profile_SmartParkAndRideScreen"

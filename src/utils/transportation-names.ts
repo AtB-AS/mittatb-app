@@ -42,7 +42,22 @@ export function getTranslatedModeName(
       result = legModeNames.metro;
       break;
     case 'bicycle':
+      if (subMode === 'ebicycle') {
+        result = legSubModeNames.ebicycle;
+        break;
+      }
+      if (subMode === 'hireCycle') {
+        result = legSubModeNames.hireCycle;
+        break;
+      }
       result = legModeNames.bicycle;
+      break;
+    case 'scooter':
+      if (subMode === 'escooter') {
+        result = legSubModeNames.escooter;
+        break;
+      }
+      result = legModeNames.scooter;
       break;
     case 'car':
       result = legModeNames.car;

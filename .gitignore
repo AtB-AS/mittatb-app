@@ -38,8 +38,8 @@ ic_launcher*
 # node.js
 #
 node_modules/
-npm-debug.log
-yarn-error.log
+*-debug.log
+*-error.log
 
 # BUCK
 buck-out/

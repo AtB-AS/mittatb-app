@@ -168,14 +168,14 @@ export type FeatureV3 = {
   };
   properties: {
     id: string;
-    name: {
+    names: {
       default: string;
       display: string;
     };
     layer: GeocoderV3Layer;
     address?: {
-      street?: string;
-      housenumber?: string;
+      streetName?: string;
+      houseNumber?: string;
       postalCode?: string;
       locality?: string;
       localityId?: string;

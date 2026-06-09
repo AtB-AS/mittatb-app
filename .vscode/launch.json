@@ -31,7 +31,7 @@
       "cwd": "${workspaceFolder}",
       "type": "node-terminal",
       "request": "launch",
-      "command": "yarn test"
+      "command": "pnpm test"
     }
   ]
 }

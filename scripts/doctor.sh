@@ -142,19 +142,18 @@ else
   fail "java not found (required: >=17) – see https://reactnative.dev/docs/set-up-your-environment"
 fi
 
-# Yarn (README requirement 3)
-section "Yarn"
-if command -v yarn >/dev/null 2>&1; then
-  YARN_VERSION=$(yarn --version)
-  YARN_MAJOR=$(echo "$YARN_VERSION" | cut -d. -f1)
-  YARN_MINOR=$(echo "$YARN_VERSION" | cut -d. -f2)
-  if [ "$YARN_MAJOR" = "1" ] && is_integer "$YARN_MINOR" && [ "$YARN_MINOR" -ge 22 ]; then
-    pass "yarn $YARN_VERSION"
+# pnpm (README requirement 3)
+section "pnpm"
+if command -v pnpm >/dev/null 2>&1; then
+  PNPM_VERSION=$(pnpm --version)
+  PNPM_MAJOR=$(echo "$PNPM_VERSION" | cut -d. -f1)
+  if is_integer "$PNPM_MAJOR" && [ "$PNPM_MAJOR" = "11" ]; then
+    pass "pnpm $PNPM_VERSION"
   else
-    fail "yarn $YARN_VERSION (required: >=1.22, <2) – see README"
+    fail "pnpm $PNPM_VERSION (required: 11.x) – see README"
   fi
 else
-  fail "yarn not found (required: >=1.22, <2) – see README"
+  fail "pnpm not found (required: 11.x) – see README"
 fi
 
 # git-crypt installed + unlocked (README requirement 4 / setup step 3)

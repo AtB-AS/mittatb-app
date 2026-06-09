@@ -10,9 +10,8 @@ import {
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
-import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet} from '@atb/theme';
-import {getTransportModeAndSubMode} from '@atb/modules/mobility';
+import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -67,9 +66,9 @@ export const BonusProductList = ({
         const operatorNames = memberProducts
           .map(
             (bp) =>
-              mobilityOperators?.find((op) => op.id === bp.operatorId)?.name ??
-              bp.operatorId,
+              mobilityOperators?.find((op) => op.id === bp.operatorId)?.name,
           )
+          .filter(Boolean)
           .join(', ');
         const showMapButton =
           !!onNavigateToMap &&
@@ -89,27 +88,25 @@ export const BonusProductList = ({
             <Section>
               <GenericSectionItem>
                 <View style={styles.horizontalContainer}>
-                  {(() => {
-                    const {mode, subMode} = getTransportModeAndSubMode(
-                      formFactors[0],
-                    );
-                    return (
-                      <TransportationIconBox
-                        mode={mode}
-                        subMode={subMode}
-                        rounded
-                      />
-                    );
-                  })()}
+                  <TransportationIconBox
+                    mode={group.transportMode}
+                    subMode={group.transportSubMode ?? undefined}
+                    rounded
+                  />
                   <View style={{flex: 1}} accessible={true}>
                     <ThemeText typography="body__s__strong">
-                      {formFactors
-                        .map((ff) => t(MobilityTexts.vehicleName(ff)))
-                        .join(', ')}
+                      {t(
+                        getTranslatedModeName(
+                          group.transportMode,
+                          group.transportSubMode ?? undefined,
+                        ),
+                      )}
                     </ThemeText>
-                    <ThemeText typography="body__s" type="secondary">
-                      {operatorNames}
-                    </ThemeText>
+                    {!!operatorNames && (
+                      <ThemeText typography="body__s" type="secondary">
+                        {operatorNames}
+                      </ThemeText>
+                    )}
                   </View>
                   {showMapButton && (
                     <Pressable
@@ -147,11 +144,7 @@ export const BonusProductList = ({
                       {t(BonusProgramTexts.amountPoints(group.price.amount))}
                     </ThemeText>
                   </View>
-                  <ThemeText
-                    isMarkdown={true}
-                    typography="body__s"
-                    type="secondary"
-                  >
+                  <ThemeText isMarkdown={true} type="secondary">
                     {getTextForLanguage(group.description, language) ?? ''}
                   </ThemeText>
                 </View>

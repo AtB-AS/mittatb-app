@@ -365,9 +365,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 spacious
                 rounded
               />
-              <ThemeText typography="body__m__strong">
-                {getLineDestinationName(t, leg)}
-              </ThemeText>
+              <ThemeText>{getLineDestinationName(t, leg)}</ThemeText>
             </View>
             {isFlexible && (
               <ThemeText
@@ -386,12 +384,20 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {leg.situations.map((situation) => (
-          <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS} key={situation.id}>
+          <TripRow
+            dimensionOverrides={NEW_TRIP_DIMENSIONS}
+            key={situation.id}
+            accessible={false}
+          >
             <SituationMessageBox situation={situation} />
           </TripRow>
         ))}
         {notices.map((notice) => (
-          <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS} key={notice.id}>
+          <TripRow
+            dimensionOverrides={NEW_TRIP_DIMENSIONS}
+            key={notice.id}
+            accessible={false}
+          >
             <MessageInfoBox type="info" message={notice.text} />
           </TripRow>
         ))}
@@ -611,7 +617,7 @@ const IntermediateInfo = ({
       <TripRow
         dimensionOverrides={NEW_TRIP_DIMENSIONS}
         testID={`${testID}IntermediateStops`}
-        accessible={true}
+        accessible={false}
       >
         <Button
           type="small"
@@ -635,8 +641,9 @@ const IntermediateInfo = ({
             ) + screenReaderPause
           }
           accessibilityHint={t(
-            TripDetailsTexts.trip.leg.intermediateStops.a11yHint,
+            TripDetailsTexts.trip.leg.intermediateStops.a11yHint(expanded),
           )}
+          accessibilityState={{expanded}}
         />
       </TripRow>
       {expanded &&
@@ -881,9 +888,11 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   return (
     <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS} accessible={false}>
       <View style={style.authoritySection}>
-        <ThemeText typography="body__s" type="secondary" accessible={false}>
-          {t(TripDetailsTexts.trip.leg.buyTicketFrom)}
-        </ThemeText>
+        <View aria-hidden accessible={false}>
+          <ThemeText typography="body__s" type="secondary">
+            {t(TripDetailsTexts.trip.leg.buyTicketFrom)}
+          </ThemeText>
+        </View>
         <Button
           accessibilityRole="link"
           accessibilityLabel={t(

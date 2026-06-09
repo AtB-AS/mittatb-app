@@ -11,7 +11,7 @@ AtB App is a whitelabel travel companion/ticketing app in Trondheim, Norway.
 - React Native
 - TypeScript
 - Tanstack React Query
-- Yarn
+- pnpm
 - ESLint
 - Jest
 - RNMapBox
@@ -40,7 +40,7 @@ AtB App is a whitelabel travel companion/ticketing app in Trondheim, Norway.
 
 ## Key Conventions
 
-- **Code formatting**: All generated code must conform to the project's Prettier configuration. Run `yarn prettier --write` on changed files before the Final gate (step 8) — not necessarily after every individual edit. `yarn lint` and `yarn prettier` should never fail on generated code.
+- **Code formatting**: All generated code must conform to the project's Prettier configuration. Run `pnpm prettier --write` on changed files before the Final gate (step 8) — not necessarily after every individual edit. `pnpm lint` and `pnpm prettier` should never fail on generated code.
 - **No `TouchableOpacity`**: Use `PressableOpacity` instead (enforced by ESLint).
 - **No default exports** (except SVG assets, translation files, and Storybook stories).
 - **No Firebase Auth imports outside `src/modules/auth/`** (enforced by ESLint).
@@ -52,17 +52,17 @@ AtB App is a whitelabel travel companion/ticketing app in Trondheim, Norway.
 
 ### Test
 
-- `yarn test` - Run Jest unit tests, can specify which tests to run using: `yarn test partlyMatchingPathOrFilename`
+- `pnpm test` - Run Jest unit tests, can specify which tests to run using: `pnpm test partlyMatchingPathOrFilename`
 
 ### Code Quality
 
-- `yarn tsc` - Run TypeScript compiler check
-- `yarn lint` - Run ESLint `eslint . --ext .ts,.tsx`
-- `yarn prettier` - Runs `prettier -c src`
+- `pnpm tsc` - Run TypeScript compiler check
+- `pnpm lint` - Run ESLint `eslint . --ext .ts,.tsx`
+- `pnpm prettier` - Runs `prettier -c src`
 
 ### Final verification
 
-- `yarn check-all` - runs `yarn tsc && yarn lint && yarn test --coverage --coverageReporters && yarn prettier`
+- `pnpm check-all` - runs `pnpm tsc && pnpm lint && pnpm test --coverage --coverageReporters && pnpm prettier`
 
 ### Code Intelligence
 

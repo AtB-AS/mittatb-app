@@ -165,18 +165,6 @@ export const getMsgTypeForLeg = (
 };
 
 /**
- * Get the most critical notification SVG across multiple legs.
- */
-export const getNotificationSvgForLegs = (legs: Leg[], themeName: Mode) => {
-  const msgType = legs
-    .map(getMsgTypeForLeg)
-    .reduce<
-      Exclude<Statuses, 'valid'> | undefined
-    >(toMostCriticalStatus, undefined);
-  return msgType && statusTypeToIcon(msgType, true, themeName);
-};
-
-/**
  * Get an accessibility label describing situations, notices, or special
  * transport submodes (e.g. RailReplacementBus) for a single leg.
  * Returns undefined if there is nothing to announce.

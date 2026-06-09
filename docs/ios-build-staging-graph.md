@@ -51,7 +51,7 @@ flowchart TD
         entur_s --> yarn_check{"force-build = true
         OR cache miss?"}
 
-        yarn_check -- Yes --> yarn_s["yarn install --frozen-lockfile"]
+        yarn_check -- Yes --> yarn_s["pnpm install --frozen-lockfile"]
         yarn_check -- No --> ruby_s
 
         yarn_s --> ruby_s["Setup Ruby 3.1.0 + Bundler"]
@@ -109,7 +109,7 @@ flowchart TD
 
     ruby --> nm_check{"force-build = true?"}
 
-    nm_check -- Yes --> yarn_install["yarn install --frozen-lockfile"]
+    nm_check -- Yes --> yarn_install["pnpm install --frozen-lockfile"]
     nm_check -- No --> nm_cache{"node_modules
     cache hit?"}
 
@@ -143,7 +143,7 @@ flowchart TD
     heavy_check -- No --> gen_assets["Generate native assets
     remove Python symlinks
     brew install imagemagick
-    yarn generate-native-assets"]
+    pnpm generate-native-assets"]
 
     gen_assets --> done(["ios-build-setup done"])
     heavy_check -- Yes --> done

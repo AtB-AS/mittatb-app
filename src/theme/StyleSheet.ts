@@ -13,9 +13,17 @@ export type NamedStyles<T> = {
 };
 export type ThemedStyles<T> = (theme: Theme, insets: EdgeInsets) => T;
 
+// MarginStyle is a subset of ViewStyle containing only margin-related
+// fields, e.g. 'margin', 'marginTop', 'marginHorizontal', etc. All other
+// ViewStyle fields are typed as `never`, so they cannot be set.
+type MarginKeys = Extract<keyof ViewStyle, `margin${string}`>;
+export type MarginStyle = Pick<ViewStyle, MarginKeys> & {
+  [K in Exclude<keyof ViewStyle, MarginKeys>]?: never;
+};
+
 type StyleSheetType = typeof StyleSheetNative;
 interface ExtendedStyleSheet extends StyleSheetType {
-  createThemeHook<T>(input: ThemedStyles<NamedStyles<T>>): () => NamedStyles<T>;
+  createThemeHook<T extends NamedStyles<T>>(input: ThemedStyles<T>): () => T;
 }
 
 export function useStyle<T extends NamedStyles<T>>(
@@ -35,9 +43,7 @@ function isThemedStyles<T>(style: any): style is ThemedStyles<T> {
 
 export const StyleSheet: ExtendedStyleSheet = {
   ...StyleSheetNative,
-  createThemeHook<T>(
-    input: ThemedStyles<NamedStyles<T>>,
-  ): () => NamedStyles<T> {
+  createThemeHook<T extends NamedStyles<T>>(input: ThemedStyles<T>): () => T {
     return function useThemeStyle() {
       return useStyle(input);
     };

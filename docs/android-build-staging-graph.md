@@ -50,7 +50,7 @@ flowchart TD
         modules_cache -- "Hit AND not force-build" --> ruby_s
 
         install_node_s --> entur_s["Add Entur registry credentials"]
-        entur_s --> yarn_s["yarn install --frozen-lockfile"]
+        entur_s --> yarn_s["pnpm install --frozen-lockfile"]
         yarn_s --> ruby_s["Setup Ruby 3.1.0 + Bundler"]
 
         ruby_s --> setup_out(["Outputs:
@@ -112,11 +112,11 @@ flowchart TD
     heavy_check2 -- "true" --> node
 
     imagemagick --> node["Install Node v22
-    with yarn cache"]
+    with pnpm cache"]
 
-    node --> yarn["yarn install --frozen-lockfile"]
+    node --> pnpm_install["pnpm install --frozen-lockfile"]
 
-    yarn --> ruby["Setup Ruby 3.1.0 + Bundler"]
+    pnpm_install --> ruby["Setup Ruby 3.1.0 + Bundler"]
 
     ruby --> set_env["Set environment
     override-environment.sh"]
@@ -133,7 +133,7 @@ flowchart TD
     decode_ks --> heavy_check3{"skip-heavy-steps?"}
 
     heavy_check3 -- "false" --> gen_assets["Generate native assets
-    yarn generate-native-assets"]
+    pnpm generate-native-assets"]
     heavy_check3 -- "true" --> done
 
     gen_assets --> done(["android-build-setup done"])
