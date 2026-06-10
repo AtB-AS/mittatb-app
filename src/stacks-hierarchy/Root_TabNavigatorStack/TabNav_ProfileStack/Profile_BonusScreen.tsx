@@ -9,7 +9,7 @@ import {
   ProfileTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {useEffect, useRef, useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
@@ -70,15 +70,6 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
     useGetHasReservationOrAvailableFareContract();
 
   const isEnrolled = useIsEnrolled(KnownProgramId.BONUS);
-  const wasEnrolledRef = useRef(isEnrolled);
-  const [hasJustEnrolled, setHasJustEnrolled] = useState(false);
-
-  useEffect(() => {
-    if (!wasEnrolledRef.current && isEnrolled) {
-      setHasJustEnrolled(true);
-    }
-    wasEnrolledRef.current = isEnrolled;
-  }, [isEnrolled]);
 
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
@@ -173,23 +164,6 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
 
         {isEnrolled && (
           <>
-            {hasJustEnrolled && (
-              <MessageInfoBox
-                type="valid"
-                title={
-                  !!userBonusBalance
-                    ? t(BonusProgramTexts.bonusProfile.joined.title)
-                    : undefined
-                }
-                message={t(
-                  !!userBonusBalance
-                    ? BonusProgramTexts.bonusProfile.joined.welcomeGiftDescription(
-                        userBonusBalance,
-                      )
-                    : BonusProgramTexts.bonusProfile.joined.title,
-                )}
-              />
-            )}
             <Section>
               <GenericSectionItem>
                 <UserBonusBalanceContent />

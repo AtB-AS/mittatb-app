@@ -114,19 +114,6 @@ const BonusProgramTexts = {
       'We are unable to display your points right now. You will still earn points as usual.',
       'Me klarer ikkje visa poenga dine akkurat no. Du vil framleis tena poeng som vanleg.',
     ),
-    joined: {
-      title: _(
-        'Du er med i AtB Bonus!',
-        'You have joined AtB Bonus!',
-        'Du er med i AtB Bonus!',
-      ),
-      welcomeGiftDescription: (points: number) =>
-        _(
-          `Du har fått ${points} p i velkomstgave!`,
-          `You have received ${points} points as a welcome gift!`,
-          `Du har fått ${points} poeng i velkomstgåve!`,
-        ),
-    },
     noBonusProducts: _(
       'Vi klarer ikke dette akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
       'We are unable to display this right now. You will still earn points as usual.',
