@@ -179,7 +179,7 @@ export const MapBottomSheets = ({
   }
   return (
     <>
-      {activeBooking?.state === ShmoBookingState.NOT_STARTED && (
+      {activeBooking?.state === ShmoBookingState.PREPARING && (
         <CityBikeStartTripOverlay
           activeBooking={activeBooking}
           navigateToSupport={navigateToShmoSupport}

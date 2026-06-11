@@ -141,6 +141,7 @@ const MapItemPropulsionTypeSchema = z.enum([
 
 export enum ShmoBookingState {
   NOT_STARTED = 'NOT_STARTED',
+  PREPARING = 'PREPARING',
   IN_USE = 'IN_USE',
   PAUSED = 'PAUSED',
   FINISHING = 'FINISHING',
