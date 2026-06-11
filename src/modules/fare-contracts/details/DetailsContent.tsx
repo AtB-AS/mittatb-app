@@ -154,6 +154,12 @@ export const DetailsContent: React.FC<Props> = ({
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
+  const shouldShowBonusAmountEarned =
+    (validityStatus === 'valid' ||
+      validityStatus === 'upcoming' ||
+      validityStatus === 'expired') &&
+    isBonusActiveForUser;
+
   const accesses = getAccesses(fc);
 
   const shouldShowLegs =
@@ -240,7 +246,7 @@ export const DetailsContent: React.FC<Props> = ({
           onNavigateToMap={onNavigateToMap}
         />
       )}
-      {isBonusActiveForUser && !!bonusAmountEarned?.amount && (
+      {shouldShowBonusAmountEarned && !!bonusAmountEarned?.amount && (
         <EarnedBonusPointsSectionItem
           amount={bonusAmountEarned.amount}
           navigateToBonusScreen={onNavigateToBonusScreen}
