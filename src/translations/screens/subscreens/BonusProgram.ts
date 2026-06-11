@@ -211,11 +211,7 @@ const BonusProgramTexts = {
   },
 
   terms: {
-    title: _(
-      'Vilkår for AtB Bonus',
-      'Terms and conditions for AtB Bonus',
-      'Vilkår for AtB Bonus',
-    ),
+    title: _('Dette godtar du', 'You agree to this', 'Dette godtar du'),
     term1: _(
       'Poeng brukes kun i AtB-appen.',
       'Points can only be used in the AtB app.',
