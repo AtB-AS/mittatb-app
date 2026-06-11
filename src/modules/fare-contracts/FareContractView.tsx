@@ -11,6 +11,7 @@ import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {
   isCanBeConsumedNowFareContract,
+  isSentOrReceivedFareContract,
   useGetFareProductsQuery,
   useSchoolCarnetInfoQuery,
 } from '@atb/modules/ticketing';
@@ -85,9 +86,14 @@ export const FareContractView: React.FC<Props> = ({
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
 
+  const isReceived =
+    isSentOrReceivedFareContract(fareContract) &&
+    fareContract.purchasedBy != currentUserId;
+
   const shouldGetBonusAmountEarned =
     (validityStatus === 'valid' || validityStatus === 'upcoming') &&
-    isBonusActiveForUser;
+    isBonusActiveForUser &&
+    !isReceived;
 
   const shouldShowLegs =
     preassignedFareProduct?.isBookingEnabled && !!legs?.length;

@@ -211,11 +211,7 @@ const BonusProgramTexts = {
   },
 
   terms: {
-    title: _(
-      'Vilkår for AtB Bonus',
-      'Terms and conditions for AtB Bonus',
-      'Vilkår for AtB Bonus',
-    ),
+    title: _('Dette godtar du', 'You agree to this', 'Dette godtar du'),
     term1: _(
       'Poeng brukes kun i AtB-appen.',
       'Points can only be used in the AtB app.',
@@ -230,6 +226,16 @@ const BonusProgramTexts = {
       'Vi kan kontakte deg for tilbakemeldinger i prøveperioden.',
       'We may contact you to ask for feedback during the pilot period.',
       'Vi kan kontakta deg for tilbakemeldingar i prøveperioden.',
+    ),
+    term4: _(
+      'Data deles med Transportøkonomisk institutt.',
+      'Data is shared with Institute of Transport Economics.',
+      'Data blir delte med Transportøkonomisk institutt.',
+    ),
+    termsLink: _(
+      'Vilkår for AtB sine prøveprosjekt',
+      "Terms for AtB's pilot projects",
+      'Vilkår for AtB sine prøveprosjekt',
     ),
     error: {
       title: _('Noe gikk galt', 'Something went wrong', 'Noe gikk galt'),
