@@ -240,7 +240,7 @@ export const DetailsContent: React.FC<Props> = ({
           onNavigateToMap={onNavigateToMap}
         />
       )}
-      {isBonusActiveForUser && !!bonusAmountEarned?.amount && (
+      {isBonusActiveForUser && !isReceived && !!bonusAmountEarned?.amount && (
         <EarnedBonusPointsSectionItem
           amount={bonusAmountEarned.amount}
           navigateToBonusScreen={onNavigateToBonusScreen}
