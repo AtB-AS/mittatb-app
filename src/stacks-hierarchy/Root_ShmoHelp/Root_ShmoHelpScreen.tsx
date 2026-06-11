@@ -46,13 +46,16 @@ export const Root_ShmoHelpScreen = ({
   const [currentlyOpenFaqIndex, setCurrentlyOpenFaqIndex] = useState<number>();
   const focusRef = useFocusOnLoad(navigation);
 
-  const contactParams = vehicleId
-    ? {operatorId, vehicleId}
-    : bookingId
-      ? {operatorId, bookingId}
-      : stationId
-        ? {operatorId, stationId}
-        : {operatorId, vehicleId: undefined};
+  const contactParams = {
+    operatorId,
+    ...(vehicleId
+      ? {vehicleId}
+      : bookingId
+        ? {bookingId}
+        : stationId
+          ? {stationId}
+          : {vehicleId: undefined}),
+  };
 
   const navigateToContactForm = () =>
     navigation.navigate(
