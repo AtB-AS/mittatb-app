@@ -23,7 +23,7 @@ import {
   FareZone,
   UserProfile,
   MobilityOperatorType,
-  ScooterFaqType,
+  ShmoFaqType,
   OperatorBenefitIdType,
   FirestoreConfigStatus,
   NotificationConfigType,
@@ -38,7 +38,7 @@ import {
   mapToFlexibleTransportOption,
   mapToHarborConnectionOverride,
   mapToMobilityOperators,
-  mapToScooterFaqs,
+  mapToShmoFaqs,
   mapToBonusTexts,
   mapToBenefitIdsRequiringValueCode,
   mapToNotificationConfig,
@@ -79,7 +79,8 @@ type ConfigurationContextState = {
   appTexts: AppTexts | undefined;
   configurableLinks: ConfigurableLinks | undefined;
   mobilityOperators: MobilityOperatorType[] | undefined;
-  scooterFaqs: ScooterFaqType[] | undefined;
+  scooterFaqs: ShmoFaqType[] | undefined;
+  bicycleFaqs: ShmoFaqType[] | undefined;
   scooterConsentLines: ConsentLineType[] | undefined;
   bicycleConsentLines: ConsentLineType[] | undefined;
   bonusTexts: BonusTextsType | undefined;
@@ -127,7 +128,8 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
   const [mobilityOperators, setMobilityOperators] = useState<
     MobilityOperatorType[]
   >([]);
-  const [scooterFaqs, setScooterFaqs] = useState<ScooterFaqType[]>([]);
+  const [scooterFaqs, setScooterFaqs] = useState<ShmoFaqType[]>([]);
+  const [bicycleFaqs, setBicycleFaqs] = useState<ShmoFaqType[]>([]);
   const [scooterConsentLines, setScooterConsentLines] = useState<
     ConsentLineType[]
   >([]);
@@ -234,6 +236,11 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
             setScooterFaqs(scooterFaqs);
           }
 
+          const bicycleFaqs = getBicycleFaqsFromSnapshot(snapshot);
+          if (bicycleFaqs) {
+            setBicycleFaqs(bicycleFaqs);
+          }
+
           const scooterConsentLines =
             getScooterConsentLinesFromSnapshot(snapshot);
           if (scooterConsentLines) {
@@ -334,6 +341,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
       configurableLinks,
       mobilityOperators,
       scooterFaqs,
+      bicycleFaqs,
       scooterConsentLines,
       bicycleConsentLines,
       bonusTexts,
@@ -360,6 +368,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     configurableLinks,
     mobilityOperators,
     scooterFaqs,
+    bicycleFaqs,
     scooterConsentLines,
     bicycleConsentLines,
     bonusTexts,
@@ -669,9 +678,16 @@ function getMobilityOperatorsFromSnapshot(
 
 function getScooterFaqsFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): ScooterFaqType[] | undefined {
+): ShmoFaqType[] | undefined {
   const faqs = snapshot.docs.find((doc) => doc.id == 'mobility');
-  return mapToScooterFaqs(faqs?.get('scooterFaqs'));
+  return mapToShmoFaqs(faqs?.get('scooterFaqs'));
+}
+
+function getBicycleFaqsFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): ShmoFaqType[] | undefined {
+  const faqs = snapshot.docs.find((doc) => doc.id == 'mobility');
+  return mapToShmoFaqs(faqs?.get('bicycleFaqs'));
 }
 
 function getScooterConsentLinesFromSnapshot(

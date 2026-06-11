@@ -268,7 +268,7 @@ export const VehicleSheet = ({
 
                 <SupportButton
                   navigateToSupport={() => {
-                    navigateToSupport({vehicleId: id, operatorId});
+                    navigateToSupport({vehicleId: id, operatorId, formFactor});
                   }}
                 />
               </View>

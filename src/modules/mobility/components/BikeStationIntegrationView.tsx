@@ -167,6 +167,7 @@ export const BikeStationIntegrationView = ({
               navigateSupportCallback({
                 operatorId: station?.system.operator.id ?? '',
                 stationId: station?.id ?? '',
+                formFactor: FormFactor.Bicycle,
               });
             }}
           />
