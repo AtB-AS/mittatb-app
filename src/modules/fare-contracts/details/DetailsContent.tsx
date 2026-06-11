@@ -56,7 +56,10 @@ import {
   useBonusAmountEarnedQuery,
   useIsBonusActiveForUser,
 } from '@atb/modules/bonus';
-import {useFareContractLegs} from '@atb/modules/fare-contracts';
+import {
+  isRelativeValidityStatus,
+  useFareContractLegs,
+} from '@atb/modules/fare-contracts';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
@@ -154,6 +157,9 @@ export const DetailsContent: React.FC<Props> = ({
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
+  const shouldShowBonusAmountEarned =
+    isRelativeValidityStatus(validityStatus) && isBonusActiveForUser;
+
   const accesses = getAccesses(fc);
 
   const shouldShowLegs =
@@ -240,12 +246,15 @@ export const DetailsContent: React.FC<Props> = ({
           onNavigateToMap={onNavigateToMap}
         />
       )}
-      {isBonusActiveForUser && !isReceived && !!bonusAmountEarned?.amount && (
-        <EarnedBonusPointsSectionItem
-          amount={bonusAmountEarned.amount}
-          navigateToBonusScreen={onNavigateToBonusScreen}
-        />
-      )}
+
+      {shouldShowBonusAmountEarned &&
+        !isReceived &&
+        !!bonusAmountEarned?.amount && (
+          <EarnedBonusPointsSectionItem
+            amount={bonusAmountEarned.amount}
+            navigateToBonusScreen={onNavigateToBonusScreen}
+          />
+        )}
       {!!usedAccesses?.length && (
         <UsedAccessesSectionItem usedAccesses={usedAccesses} />
       )}
