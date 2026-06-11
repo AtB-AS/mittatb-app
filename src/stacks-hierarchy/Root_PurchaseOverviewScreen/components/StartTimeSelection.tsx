@@ -9,7 +9,6 @@ import {
 } from '@atb/modules/purchase-selection';
 import {DatePickerSheet} from '@atb/components/date-selection';
 import {EditActionSectionItem, Section} from '@atb/components/sections';
-import {screenReaderPause} from '@atb/components/text';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 
@@ -49,22 +48,10 @@ export function StartTimeSelection({
             leftIcon={Time}
             text={
               selection.travelDate
-                ? t(PurchaseOverviewTexts.startTime.laterTime)
-                : t(PurchaseOverviewTexts.startTime.now)
-            }
-            subText={
-              selection.travelDate
                 ? formatToLongDateTime(selection.travelDate, language)
-                : undefined
+                : t(PurchaseOverviewTexts.startTime.now)
             }
             onPress={openDatePickerSheet}
-            accessibilityLabel={
-              selection.travelDate
-                ? t(PurchaseOverviewTexts.startTime.laterTime) +
-                  screenReaderPause +
-                  formatToLongDateTime(selection.travelDate, language)
-                : t(PurchaseOverviewTexts.startTime.now)
-            }
             accessibilityHint={t(PurchaseOverviewTexts.startTime.a11yLaterHint)}
             testID="startTimeButton"
           />
@@ -95,6 +82,7 @@ export function StartTimeSelection({
             .build();
           setSelection(newSelection);
         }}
+        heading={t(PurchaseOverviewTexts.startTime.bottomSheetTitle)}
         initialDate={selection.travelDate}
         onCloseFocusRef={onCloseFocusRef}
         bottomSheetModalRef={bottomSheetModalRef}
