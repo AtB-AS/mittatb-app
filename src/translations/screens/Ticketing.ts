@@ -70,6 +70,16 @@ const TicketingTexts = {
       'Something went wrong. Try again.',
       'Noko gjekk gale. Prøv igjen.',
     ),
+    successMessage: _(
+      'Koden ble godkjent! Billetten dukker snart opp under Mine billetter.',
+      'The code was accepted! The ticket will soon appear under My tickets.',
+      'Koden vart godkjend! Billetten dukkar snart opp under Mine billettar.',
+    ),
+    goToTickets: _(
+      'Gå til Mine billetter',
+      'Go to My tickets',
+      'Gå til Mine billettar',
+    ),
     infoTitle: _(
       'Hva er en hentekode?',
       'What is a transfer code?',
