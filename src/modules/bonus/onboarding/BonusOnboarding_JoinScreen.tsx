@@ -1,13 +1,19 @@
-import {BonusProgramTexts, useTranslation} from '@atb/translations';
+import {BonusProgramTexts, dictionary, useTranslation} from '@atb/translations';
 import React from 'react';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ThemedBonusBagCarry} from '@atb/theme/ThemedAssets';
 import {View} from 'react-native';
-import {GenericSectionItem, Section} from '@atb/components/sections';
+import {
+  GenericSectionItem,
+  LinkSectionItem,
+  Section,
+} from '@atb/components/sections';
 import {useThemeContext} from '@atb/theme/ThemeContext';
 import {StyleSheet} from '@atb/theme/StyleSheet';
 import {Star} from '@atb/assets/svg/mono-icons/bonus';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 import {Delete, Feedback} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -18,6 +24,7 @@ import {
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {Activity} from '@atb/assets/svg/mono-icons/miscellaneous';
 
 export const BonusOnboarding_JoinScreen = () => {
   const focusRef = useFocusOnLoad();
@@ -59,7 +66,7 @@ export const Terms = ({error}: {error: Error | null}) => {
 
   return (
     <>
-      <Section style={{marginTop: theme.spacing.medium}}>
+      <Section style={styles.topSpacing}>
         <GenericSectionItem>
           <View style={styles.horizontalContainer}>
             <ThemeIcon
@@ -110,10 +117,45 @@ export const Terms = ({error}: {error: Error | null}) => {
             </ThemeText>
           </View>
         </GenericSectionItem>
+
+        <GenericSectionItem>
+          <View style={styles.horizontalContainer}>
+            <ThemeIcon
+              color={theme.color.foreground.dynamic.primary}
+              svg={Activity}
+              size="large"
+            />
+            <ThemeText
+              typography="body__m"
+              type="primary"
+              style={styles.termDescription}
+            >
+              {t(BonusProgramTexts.terms.term4)}
+            </ThemeText>
+          </View>
+        </GenericSectionItem>
+      </Section>
+      <Section style={styles.topSpacing}>
+        <LinkSectionItem
+          text={t(BonusProgramTexts.terms.termsLink)}
+          rightIcon={{svg: ExternalLink}}
+          onPress={() =>
+            openInAppBrowser(
+              'https://www.atb.no/vilkar/personvernerklaering-for-kundetjenester/',
+              'close',
+            )
+          }
+          accessibility={{
+            accessibilityHint: t(
+              dictionary.appNavigation.a11yHintForExternalContent,
+            ),
+            accessibilityRole: 'link',
+          }}
+        />
       </Section>
       {error && (
         <MessageInfoBox
-          style={styles.infoMessage}
+          style={styles.topSpacing}
           type="error"
           title={t(BonusProgramTexts.terms.error.title)}
           message={t(BonusProgramTexts.terms.error.description)}
@@ -133,7 +175,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   termDescription: {
     flex: 1,
   },
-  infoMessage: {
+  topSpacing: {
     marginTop: theme.spacing.medium,
   },
 }));
