@@ -6,7 +6,7 @@ import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
 export type TicketTabNavStackParams = StackParams<{
   TicketTabNav_PurchaseTabScreen: undefined;
-  TicketTabNav_AvailableFareContractsTabScreen: undefined;
+  TicketTabNav_AvailableFareContractsTabScreen: {refreshTickets?: boolean};
   TicketTabNav_TripSelectionScreen: {
     selection: PurchaseSelectionType;
   };

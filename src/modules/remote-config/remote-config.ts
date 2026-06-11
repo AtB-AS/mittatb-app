@@ -58,6 +58,7 @@ export type RemoteConfig = {
   enable_show_valid_time_info: boolean;
   enable_surface_view_map: boolean;
   enable_ticket_information: boolean;
+  enable_ticket_transfer: boolean;
   enable_ticketing: boolean;
   enable_tips_and_information: boolean;
   enable_token_fallback_on_timeout: boolean;
@@ -139,6 +140,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_show_valid_time_info: true,
   enable_surface_view_map: true,
   enable_ticket_information: false,
+  enable_ticket_transfer: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
   enable_event_stream: false,
   enable_event_stream_fare_contracts: false,
@@ -304,6 +306,9 @@ export function getConfig(): RemoteConfig {
   const enable_ticket_information =
     values['enable_ticket_information']?.asBoolean() ??
     defaultRemoteConfig.enable_ticket_information;
+  const enable_ticket_transfer =
+    values['enable_ticket_transfer']?.asBoolean() ??
+    defaultRemoteConfig.enable_ticket_transfer;
   const enable_ticketing = values['enable_ticketing']?.asBoolean() ?? false;
   const enable_tips_and_information =
     values['enable_tips_and_information']?.asBoolean() ??
@@ -440,6 +445,7 @@ export function getConfig(): RemoteConfig {
     enable_show_valid_time_info,
     enable_surface_view_map,
     enable_ticket_information,
+    enable_ticket_transfer,
     enable_ticketing,
     enable_tips_and_information,
     enable_token_fallback_on_timeout,

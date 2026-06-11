@@ -154,6 +154,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_ticket_information',
   },
   {
+    name: 'isTicketTransferEnabled',
+    remoteConfigKey: 'enable_ticket_transfer',
+  },
+  {
     name: 'isTipsAndInformationEnabled',
     remoteConfigKey: 'enable_tips_and_information',
   },

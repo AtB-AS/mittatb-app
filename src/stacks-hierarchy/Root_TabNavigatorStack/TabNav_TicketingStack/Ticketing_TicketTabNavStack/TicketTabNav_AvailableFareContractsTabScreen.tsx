@@ -4,7 +4,7 @@ import {
   useGetFareProductsQuery,
   useTicketingContext,
 } from '@atb/modules/ticketing';
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/modules/fare-contracts';
 import {useTranslation, TicketingTexts} from '@atb/translations';
@@ -30,6 +30,7 @@ type Props =
 
 export const TicketTabNav_AvailableFareContractsTabScreen = ({
   navigation,
+  route,
 }: Props) => {
   const isFocused = useIsFocusedAndActive();
   const {reservations} = useTicketingContext();
@@ -67,6 +68,15 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
     },
     [navigation],
   );
+
+  const refreshTickets = route.params?.refreshTickets;
+  useEffect(() => {
+    if (refreshTickets) {
+      refetchAvailableFareContracts();
+      navigation.setParams({refreshTickets: undefined});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshTickets, navigation]);
 
   const refreshControlProps = useManualRefreshControlProps({
     onRefresh: () => {

@@ -1,9 +1,13 @@
 import {useAuthContext} from '@atb/modules/auth';
 import {AnonymousPurchaseWarning} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/AnonymousPurchaseWarning';
 import {FareProducts} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProducts';
-import {StyleSheet} from '@atb/theme';
-import React from 'react';
+import {StyleSheet, useThemeContext} from '@atb/theme';
+import React, {useRef} from 'react';
 import {RefreshControl, View} from 'react-native';
+import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {TicketingTexts, useTranslation} from '@atb/translations';
+import {TransferCodeBottomSheet} from './Components/TransferCodeBottomSheet';
 import {RecentFareContracts} from './Components/RecentFareContracts/RecentFareContracts';
 import {TicketTabNavScreenProps} from '../navigation-types';
 import {FareProductTypeConfig} from '@atb/modules/configuration';
@@ -21,6 +25,8 @@ import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import {AnimatedGestureHandlerScrollView} from '@atb/components/animated-gesture-handler-scroll-view';
 import {useTabScrollHandler} from '../Ticketing_TicketTabNavStack';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
+import {TicketingTile} from '../../TicketingTile';
+import {useTransportColor} from '@atb/utils/use-transport-color';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -40,8 +46,21 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const selectionBuilder = usePurchaseSelectionBuilder();
 
   const styles = useStyles();
+  const {t} = useTranslation();
   const analytics = useAnalyticsContext();
   const {scrollHandler} = useTabScrollHandler(0);
+  const {isTicketTransferEnabled} = useFeatureTogglesContext();
+  const transferCodeButtonRef = useRef<View>(null);
+  const transferCodeSheetRef = useRef<GorhomBottomSheetModal>(null);
+
+  const onTicketsReceived = () => {
+    analytics.logEvent('Ticketing', 'Ticket received with transfer code');
+    navigation.navigate('TicketTabNav_AvailableFareContractsTabScreen', {
+      refreshTickets: true,
+    });
+  };
+
+  const transferCodeTransportColor = useTransportColor('unknown', 'unknown');
 
   const onProductSelect = (fareProductTypeConfig: FareProductTypeConfig) => {
     analytics.logEvent('Ticketing', 'Fare product selected', {
@@ -164,6 +183,27 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
           fareProducts={preassignedFareProducts}
           onProductSelect={onProductSelect}
         />
+
+        {isTicketTransferEnabled && (
+          <>
+            <View style={styles.transferCode}>
+              <TicketingTile
+                title={t(TicketingTexts.transferCode.trigger)}
+                description={t(TicketingTexts.transferCode.infoBody)}
+                onPress={() => transferCodeSheetRef.current?.present()}
+                testID="transferCodeTile"
+                accented={false}
+                illustrationName="ticketMultiple"
+                transportColor={transferCodeTransportColor}
+              />
+            </View>
+            <TransferCodeBottomSheet
+              bottomSheetModalRef={transferCodeSheetRef}
+              onCloseFocusRef={transferCodeButtonRef}
+              onTicketsReceived={onTicketsReceived}
+            />
+          </>
+        )}
       </View>
     </AnimatedGestureHandlerScrollView>
   ) : null;
@@ -181,5 +221,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   accountWrongMessage: {
     marginTop: theme.spacing.medium,
     marginHorizontal: theme.spacing.medium,
+  },
+  transferCode: {
+    padding: theme.spacing.medium,
   },
 }));

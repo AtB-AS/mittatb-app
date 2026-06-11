@@ -50,6 +50,37 @@ const TicketingTexts = {
       ),
     },
   },
+  transferCode: {
+    trigger: _('Bruk hentekode', 'Use transfer code', 'Bruk hentekode'),
+    triggerA11yHint: _(
+      'Aktivér for å hente en billett med hentekode',
+      'Activate to fetch a ticket with a transfer code',
+      'Aktiver for å hente ein billett med hentekode',
+    ),
+    heading: _('Hentekode', 'Transfer code', 'Hentekode'),
+    inputLabel: _('Kode', 'Code', 'Kode'),
+    submit: _('Hent billett', 'Fetch ticket', 'Hent billett'),
+    errorNotFound: _(
+      'Fant ingen billett med denne koden',
+      'No ticket found for this code',
+      'Fann ingen billett med denne koden',
+    ),
+    errorGeneric: _(
+      'Noe gikk galt. Prøv igjen.',
+      'Something went wrong. Try again.',
+      'Noko gjekk gale. Prøv igjen.',
+    ),
+    infoTitle: _(
+      'Hva er en hentekode?',
+      'What is a transfer code?',
+      'Kva er ein hentekode?',
+    ),
+    infoBody: _(
+      'En hentekode kan brukes til å hente en billett i appen. Vanligvis er det noen andre som har sendt deg koden, for eksempel skolen eller arbeidsgiveren din.',
+      'A transfer code can be used to fetch a ticket in the app. Usually someone else has sent you the code, for example your school or employer.',
+      'Ein hentekode kan brukast til å hente ein billett i appen. Vanlegvis er det nokon andre som har sendt deg koden, til dømes skulen eller arbeidsgivaren din.',
+    ),
+  },
   availableFareProductsAndReservationsTab: {
     label: _('Mine billetter', 'My tickets', 'Mine billettar'),
     noActiveTicketsTitle: _(
