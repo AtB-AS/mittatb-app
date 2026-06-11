@@ -1,7 +1,7 @@
 import {useAuthContext} from '@atb/modules/auth';
 import {AnonymousPurchaseWarning} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/AnonymousPurchaseWarning';
 import {FareProducts} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProducts';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import React, {useRef} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
