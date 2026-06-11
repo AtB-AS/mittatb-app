@@ -231,6 +231,16 @@ const BonusProgramTexts = {
       'We may contact you to ask for feedback during the pilot period.',
       'Vi kan kontakta deg for tilbakemeldingar i prøveperioden.',
     ),
+    term4: _(
+      'Data deles med Transportøkonomisk institutt.',
+      'Data is shared with Institute of Transport Economics.',
+      'Data blir delte med Transportøkonomisk institutt.',
+    ),
+    termsLink: _(
+      'Vilkår for AtB sine prøveprosjekt',
+      "Terms for AtB's pilot projects",
+      'Vilkår for AtB sine prøveprosjekt',
+    ),
     error: {
       title: _('Noe gikk galt', 'Something went wrong', 'Noe gikk galt'),
       description: _(
