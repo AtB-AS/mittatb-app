@@ -57,6 +57,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     analytics.logEvent('Ticketing', 'Ticket received with transfer code');
     navigation.navigate('TicketTabNav_AvailableFareContractsTabScreen', {
       refreshTickets: true,
+      showTransferCodeSuccess: true,
     });
   };
 

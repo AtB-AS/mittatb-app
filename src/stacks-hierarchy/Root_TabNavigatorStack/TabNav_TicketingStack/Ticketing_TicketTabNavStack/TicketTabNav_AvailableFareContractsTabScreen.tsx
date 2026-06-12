@@ -4,7 +4,7 @@ import {
   useGetFareProductsQuery,
   useTicketingContext,
 } from '@atb/modules/ticketing';
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/modules/fare-contracts';
 import {useTranslation, TicketingTexts} from '@atb/translations';
@@ -24,6 +24,7 @@ import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 type Props =
   TicketTabNavScreenProps<'TicketTabNav_AvailableFareContractsTabScreen'>;
@@ -78,6 +79,24 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshTickets, navigation]);
 
+  const [showTransferCodeSuccess, setShowTransferCodeSuccess] = useState(false);
+  const showTransferCodeSuccessParam = route.params?.showTransferCodeSuccess;
+  useEffect(() => {
+    if (showTransferCodeSuccessParam) {
+      setShowTransferCodeSuccess(true);
+      navigation.setParams({showTransferCodeSuccess: undefined});
+    }
+  }, [showTransferCodeSuccessParam, navigation]);
+
+  useEffect(() => {
+    if (!showTransferCodeSuccess) return;
+    const timeout = setTimeout(
+      () => setShowTransferCodeSuccess(false),
+      10 * ONE_SECOND_MS,
+    );
+    return () => clearTimeout(timeout);
+  }, [showTransferCodeSuccess]);
+
   const refreshControlProps = useManualRefreshControlProps({
     onRefresh: () => {
       refetchAvailableFareContracts();
@@ -102,6 +121,13 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
         refreshControl={<RefreshControl {...refreshControlProps} />}
         testID="availableFCScrollView"
       >
+        {showTransferCodeSuccess && (
+          <MessageInfoBox
+            type="valid"
+            message={t(TicketingTexts.transferCode.successMessage)}
+            onDismiss={() => setShowTransferCodeSuccess(false)}
+          />
+        )}
         <TravelTokenBox
           showIfThisDevice={false}
           alwaysShowErrors={false}

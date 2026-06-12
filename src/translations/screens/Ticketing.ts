@@ -79,16 +79,6 @@ const TicketingTexts = {
         'Something went wrong. Try again.',
         'Noko gjekk gale. Prøv igjen.',
       ),
-      successMessage: _(
-        'Koden ble godkjent! Billetten dukker snart opp under Mine billetter.',
-        'The code was accepted! The ticket will soon appear under My tickets.',
-        'Koden vart godkjend! Billetten dukkar snart opp under Mine billettar.',
-      ),
-      goToTickets: _(
-        'Gå til Mine billetter',
-        'Go to My tickets',
-        'Gå til Mine billettar',
-      ),
       infoTitle: _(
         'Hva er en hentekode?',
         'What is a transfer code?',
@@ -100,6 +90,11 @@ const TicketingTexts = {
         'Ein hentekode kan brukast til å hente ein billett i appen. Vanlegvis er det nokon andre som har sendt deg koden, til dømes skulen eller arbeidsgivaren din.',
       ),
     },
+    successMessage: _(
+      'Vi har lagt til billetten din!',
+      'We have added your ticket!',
+      'Vi har lagt til billetten din!',
+    ),
   },
   availableFareProductsAndReservationsTab: {
     label: _('Mine billetter', 'My tickets', 'Mine billettar'),

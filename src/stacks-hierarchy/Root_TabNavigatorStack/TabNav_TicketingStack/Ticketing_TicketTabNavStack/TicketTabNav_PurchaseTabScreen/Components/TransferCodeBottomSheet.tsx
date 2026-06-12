@@ -6,7 +6,6 @@ import {TicketingTexts, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {MessageInfoBox} from '@atb/components/message-info-box';
 import {TextInputSectionItem} from '@atb/components/sections';
 import {useAcceptTicketTransferMutation} from '@atb/modules/ticketing';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
@@ -34,15 +33,15 @@ export const TransferCodeBottomSheet = ({
   const {theme} = useThemeContext();
   const styles = useStyles();
   const [code, setCode] = useState('');
-  const {mutate, isPending, isSuccess, error, reset} =
-    useAcceptTicketTransferMutation();
+  const {mutate, isPending, error, reset} = useAcceptTicketTransferMutation();
 
-  const onSubmit = () => mutate(code);
-
-  const onGoToTickets = () => {
-    bottomSheetModalRef.current?.dismiss();
-    onTicketsReceived();
-  };
+  const onSubmit = () =>
+    mutate(code, {
+      onSuccess: () => {
+        bottomSheetModalRef.current?.dismiss();
+        onTicketsReceived();
+      },
+    });
 
   const errorText = error
     ? isErrorResponse(error) && error.http.code === 404
@@ -63,68 +62,48 @@ export const TransferCodeBottomSheet = ({
       testID="transferCodeBottomSheet"
     >
       <View style={styles.container}>
-        {isSuccess ? (
-          <>
-            <MessageInfoBox
-              type="valid"
-              message={t(
-                TicketingTexts.transferCode.bottomSheet.successMessage,
-              )}
-            />
-            <Button
-              expanded={true}
-              interactiveColor={theme.color.interactive[0]}
-              text={t(TicketingTexts.transferCode.bottomSheet.goToTickets)}
-              onPress={onGoToTickets}
-              testID="transferCodeGoToTicketsButton"
-            />
-          </>
-        ) : (
-          <>
-            <Section>
-              <TextInputSectionItem
-                label={t(TicketingTexts.transferCode.bottomSheet.inputLabel)}
-                placeholder={t(
-                  TicketingTexts.transferCode.bottomSheet.inputPlaceholder,
-                )}
-                inlineLabel={false}
-                value={code}
-                onChangeText={(newCode) => {
-                  setCode(newCode.trim());
-                  if (error) reset();
-                }}
-                showClear={true}
-                autoCapitalize="none"
-                autoCorrect={false}
-                errorText={errorText}
-                testID="transferCodeInput"
-              />
-            </Section>
-            <Button
-              expanded={true}
-              interactiveColor={theme.color.interactive[0]}
-              text={t(TicketingTexts.transferCode.bottomSheet.submit)}
-              onPress={onSubmit}
-              disabled={code.length < MIN_CODE_LENGTH}
-              loading={isPending}
-              testID="transferCodeSubmitButton"
-            />
-            <Section>
-              <GenericSectionItem>
-                <View style={styles.infoContainer}>
-                  <View style={styles.infoText}>
-                    <ThemeText typography="body__m__strong">
-                      {t(TicketingTexts.transferCode.bottomSheet.infoTitle)}
-                    </ThemeText>
-                    <ThemeText typography="body__s" type="secondary">
-                      {t(TicketingTexts.transferCode.bottomSheet.infoBody)}
-                    </ThemeText>
-                  </View>
-                </View>
-              </GenericSectionItem>
-            </Section>
-          </>
-        )}
+        <Section>
+          <TextInputSectionItem
+            label={t(TicketingTexts.transferCode.bottomSheet.inputLabel)}
+            placeholder={t(
+              TicketingTexts.transferCode.bottomSheet.inputPlaceholder,
+            )}
+            inlineLabel={false}
+            value={code}
+            onChangeText={(newCode) => {
+              setCode(newCode.trim());
+              if (error) reset();
+            }}
+            showClear={true}
+            autoCapitalize="none"
+            autoCorrect={false}
+            errorText={errorText}
+            testID="transferCodeInput"
+          />
+        </Section>
+        <Button
+          expanded={true}
+          interactiveColor={theme.color.interactive[0]}
+          text={t(TicketingTexts.transferCode.bottomSheet.submit)}
+          onPress={onSubmit}
+          disabled={code.length < MIN_CODE_LENGTH}
+          loading={isPending}
+          testID="transferCodeSubmitButton"
+        />
+        <Section>
+          <GenericSectionItem>
+            <View style={styles.infoContainer}>
+              <View style={styles.infoText}>
+                <ThemeText typography="body__m__strong">
+                  {t(TicketingTexts.transferCode.bottomSheet.infoTitle)}
+                </ThemeText>
+                <ThemeText typography="body__s" type="secondary">
+                  {t(TicketingTexts.transferCode.bottomSheet.infoBody)}
+                </ThemeText>
+              </View>
+            </View>
+          </GenericSectionItem>
+        </Section>
       </View>
     </BottomSheetModal>
   );
