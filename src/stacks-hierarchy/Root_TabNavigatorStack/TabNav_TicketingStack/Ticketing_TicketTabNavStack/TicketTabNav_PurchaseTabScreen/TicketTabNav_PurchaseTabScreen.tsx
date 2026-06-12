@@ -184,9 +184,9 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         />
 
         {isTicketTransferEnabled && (
-          <>
+          <View style={styles.transferCode}>
             <ContentHeading text={t(TicketingTexts.transferCode.heading)} />
-            <Section style={styles.transferCode}>
+            <Section style={styles.transferCodeSection}>
               <LinkSectionItem
                 text={t(TicketingTexts.transferCode.trigger)}
                 accessibility={{
@@ -202,7 +202,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
               onCloseFocusRef={transferCodeButtonRef}
               onTicketsReceived={onTicketsReceived}
             />
-          </>
+          </View>
         )}
       </View>
     </AnimatedGestureHandlerScrollView>
@@ -224,5 +224,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   transferCode: {
     padding: theme.spacing.medium,
+  },
+  transferCodeSection: {
+    marginVertical: theme.spacing.small,
   },
 }));
