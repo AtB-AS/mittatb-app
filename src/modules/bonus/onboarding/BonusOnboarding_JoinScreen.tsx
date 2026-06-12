@@ -20,22 +20,28 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   KnownProgramId,
   useEnrollIntoProgramWithIdMutation,
+  useIsEnrolled,
 } from '@atb/modules/enrollment';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {Activity} from '@atb/assets/svg/mono-icons/miscellaneous';
+import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 
 export const BonusOnboarding_JoinScreen = () => {
   const focusRef = useFocusOnLoad();
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
   const enrollMutation = useEnrollIntoProgramWithIdMutation();
+  const isEnrolled = useIsEnrolled(KnownProgramId.BONUS);
+  const bonusScreenParams = useNestedProfileScreenParams('Profile_BonusScreen');
 
   const onPress = async () => {
     try {
-      await enrollMutation.mutateAsync(KnownProgramId.BONUS);
-      navigation.goBack();
+      if (!isEnrolled) {
+        await enrollMutation.mutateAsync(KnownProgramId.BONUS);
+      }
+      navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
     } catch {
       // Error state is handled via enrollMutation.error and shown in the UI
     }
