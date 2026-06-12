@@ -25,7 +25,6 @@ import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import {AnimatedGestureHandlerScrollView} from '@atb/components/animated-gesture-handler-scroll-view';
 import {useTabScrollHandler} from '../Ticketing_TicketTabNavStack';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
-import {useTransportColor} from '@atb/utils/use-transport-color';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
 
