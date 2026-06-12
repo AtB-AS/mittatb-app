@@ -308,6 +308,18 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           }
           validDurationSeconds={validDurationSeconds}
           legs={selection.legs}
+          onEdit={
+            params.allowEdit
+              ? () => {
+                  navigation.navigate('Root_PurchaseOverviewScreen', {
+                    selection,
+                    mode: params.mode,
+                    tripAnalytics: params.tripAnalytics,
+                    transitionOverride: 'slide-from-right',
+                  });
+                }
+              : undefined
+          }
         />
         <PriceSummary
           fareProductTypeConfig={selection.fareProductTypeConfig}

@@ -75,7 +75,6 @@ const PaymentMethodsTexts = {
     'When you buy a ticket you can also pay with Vipps or Apple Pay',
     'Når du kjøper billettar kan du også betale med Vipps eller Apple Pay',
   ),
-  editPaymentMethod: _('Endre', 'Edit', 'Endre'),
   expiryMessages: {
     cardExpired: _(
       'Kortet er utløpt',
