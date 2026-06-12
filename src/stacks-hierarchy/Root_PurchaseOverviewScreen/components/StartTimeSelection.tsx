@@ -1,5 +1,9 @@
 import React, {useRef} from 'react';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {
+  dictionary,
+  PurchaseOverviewTexts,
+  useTranslation,
+} from '@atb/translations';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {formatToLongDateTime, isInThePast} from '@atb/utils/date';
 import {ContentHeading} from '@atb/components/heading';
@@ -49,7 +53,7 @@ export function StartTimeSelection({
             text={
               selection.travelDate
                 ? formatToLongDateTime(selection.travelDate, language)
-                : t(PurchaseOverviewTexts.startTime.now)
+                : t(dictionary.date.units.now)
             }
             onPress={openDatePickerSheet}
             accessibilityHint={t(PurchaseOverviewTexts.startTime.a11yLaterHint)}
@@ -61,12 +65,12 @@ export function StartTimeSelection({
         options={[
           {
             option: 'now',
-            text: t(PurchaseOverviewTexts.startTime.now),
+            text: t(dictionary.date.units.now),
             selected: !selection.travelDate,
           },
           {
             option: 'later',
-            text: t(PurchaseOverviewTexts.startTime.laterOption),
+            text: t(dictionary.date.units.later),
             selected: !!selection.travelDate,
           },
         ]}
