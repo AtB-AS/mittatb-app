@@ -17,6 +17,8 @@ import {
 } from '@atb/components/bottom-sheet';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 
+const MIN_CODE_LENGTH = 8;
+
 type Props = {
   bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
   onCloseFocusRef: React.RefObject<View | null>;
@@ -35,7 +37,7 @@ export const TransferCodeBottomSheet = ({
   const {mutate, isPending, isSuccess, error, reset} =
     useAcceptTicketTransferMutation();
 
-  const onSubmit = () => mutate(code.trim());
+  const onSubmit = () => mutate(code);
 
   const onGoToTickets = () => {
     bottomSheetModalRef.current?.dismiss();
@@ -97,7 +99,7 @@ export const TransferCodeBottomSheet = ({
                 inlineLabel={false}
                 value={code}
                 onChangeText={(newCode) => {
-                  setCode(newCode);
+                  setCode(newCode.trim());
                   if (error) reset();
                 }}
                 showClear={true}
@@ -112,7 +114,7 @@ export const TransferCodeBottomSheet = ({
               interactiveColor={theme.color.interactive[0]}
               text={t(TicketingTexts.transferCode.submit)}
               onPress={onSubmit}
-              disabled={!code.trim()}
+              disabled={code.length < MIN_CODE_LENGTH}
               loading={isPending}
               testID="transferCodeSubmitButton"
             />
