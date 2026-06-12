@@ -158,7 +158,9 @@ export const DetailsContent: React.FC<Props> = ({
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
   const shouldShowBonusAmountEarned =
-    isRelativeValidityStatus(validityStatus) && isBonusActiveForUser;
+    isBonusActiveForUser &&
+    !isReceived &&
+    (isRelativeValidityStatus(validityStatus) || validityStatus === 'sent');
 
   const accesses = getAccesses(fc);
 
@@ -247,14 +249,12 @@ export const DetailsContent: React.FC<Props> = ({
         />
       )}
 
-      {shouldShowBonusAmountEarned &&
-        !isReceived &&
-        !!bonusAmountEarned?.amount && (
-          <EarnedBonusPointsSectionItem
-            amount={bonusAmountEarned.amount}
-            navigateToBonusScreen={onNavigateToBonusScreen}
-          />
-        )}
+      {shouldShowBonusAmountEarned && !!bonusAmountEarned?.amount && (
+        <EarnedBonusPointsSectionItem
+          amount={bonusAmountEarned.amount}
+          navigateToBonusScreen={onNavigateToBonusScreen}
+        />
+      )}
       {!!usedAccesses?.length && (
         <UsedAccessesSectionItem usedAccesses={usedAccesses} />
       )}
