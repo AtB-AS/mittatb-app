@@ -15,6 +15,7 @@ import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {openUrl} from '@atb/utils/open-url';
 import {MobilityOperatorType} from '@atb/modules/configuration';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 type Props = {
   operatorName: string | undefined;
@@ -35,6 +36,7 @@ export const ShmoContactSection = ({
 }: Props) => {
   const {t} = useTranslation();
   const style = useStyles();
+  const {isParkingViolationsReportingEnabled} = useFeatureTogglesContext();
 
   const isBicycle = formFactor === FormFactor.Bicycle;
 
@@ -92,7 +94,7 @@ export const ShmoContactSection = ({
           />
         )}
 
-        {!isBicycle && (
+        {!isBicycle && isParkingViolationsReportingEnabled && (
           <LinkSectionItem
             text={t(ShmoHelpTexts.reportParking)}
             rightIcon={{svg: ArrowRight}}
