@@ -25,8 +25,9 @@ import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import {AnimatedGestureHandlerScrollView} from '@atb/components/animated-gesture-handler-scroll-view';
 import {useTabScrollHandler} from '../Ticketing_TicketTabNavStack';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
-import {TicketingTile} from '../../TicketingTile';
 import {useTransportColor} from '@atb/utils/use-transport-color';
+import {LinkSectionItem, Section} from '@atb/components/sections';
+import {ContentHeading} from '@atb/components/heading';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -59,8 +60,6 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       refreshTickets: true,
     });
   };
-
-  const transferCodeTransportColor = useTransportColor('unknown', 'unknown');
 
   const onProductSelect = (fareProductTypeConfig: FareProductTypeConfig) => {
     analytics.logEvent('Ticketing', 'Fare product selected', {
@@ -186,17 +185,18 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
         {isTicketTransferEnabled && (
           <>
-            <View style={styles.transferCode}>
-              <TicketingTile
-                title={t(TicketingTexts.transferCode.trigger)}
-                description={t(TicketingTexts.transferCode.infoBody)}
+            <ContentHeading text={t(TicketingTexts.transferCode.heading)} />
+            <Section style={styles.transferCode}>
+              <LinkSectionItem
+                text={t(TicketingTexts.transferCode.trigger)}
+                accessibility={{
+                  accessibilityLabel: t(
+                    TicketingTexts.transferCode.triggerA11yHint,
+                  ),
+                }}
                 onPress={() => transferCodeSheetRef.current?.present()}
-                testID="transferCodeTile"
-                accented={false}
-                illustrationName="ticketMultiple"
-                transportColor={transferCodeTransportColor}
               />
-            </View>
+            </Section>
             <TransferCodeBottomSheet
               bottomSheetModalRef={transferCodeSheetRef}
               onCloseFocusRef={transferCodeButtonRef}
