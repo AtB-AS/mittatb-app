@@ -1,6 +1,4 @@
-import {he} from 'zod/v4/locales';
 import {translation as _} from '../commons';
-import {head} from 'lodash';
 
 const bulletPoint = '\u2022';
 
