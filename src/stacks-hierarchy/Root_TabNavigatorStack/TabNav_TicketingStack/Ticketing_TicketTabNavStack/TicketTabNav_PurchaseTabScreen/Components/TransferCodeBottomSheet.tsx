@@ -46,14 +46,14 @@ export const TransferCodeBottomSheet = ({
 
   const errorText = error
     ? isErrorResponse(error) && error.http.code === 404
-      ? t(TicketingTexts.transferCode.errorNotFound)
-      : t(TicketingTexts.transferCode.errorGeneric)
+      ? t(TicketingTexts.transferCode.bottomSheet.errorNotFound)
+      : t(TicketingTexts.transferCode.bottomSheet.errorGeneric)
     : undefined;
 
   return (
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
-      heading={t(TicketingTexts.transferCode.heading)}
+      heading={t(TicketingTexts.transferCode.bottomSheet.heading)}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
       closeCallback={() => {
         giveFocus(onCloseFocusRef);
@@ -67,12 +67,14 @@ export const TransferCodeBottomSheet = ({
           <>
             <MessageInfoBox
               type="valid"
-              message={t(TicketingTexts.transferCode.successMessage)}
+              message={t(
+                TicketingTexts.transferCode.bottomSheet.successMessage,
+              )}
             />
             <Button
               expanded={true}
               interactiveColor={theme.color.interactive[0]}
-              text={t(TicketingTexts.transferCode.goToTickets)}
+              text={t(TicketingTexts.transferCode.bottomSheet.goToTickets)}
               onPress={onGoToTickets}
               testID="transferCodeGoToTicketsButton"
             />
@@ -80,22 +82,11 @@ export const TransferCodeBottomSheet = ({
         ) : (
           <>
             <Section>
-              <GenericSectionItem>
-                <View style={styles.infoContainer}>
-                  <View style={styles.infoText}>
-                    <ThemeText typography="body__m__strong">
-                      {t(TicketingTexts.transferCode.infoTitle)}
-                    </ThemeText>
-                    <ThemeText typography="body__s" type="secondary">
-                      {t(TicketingTexts.transferCode.infoBody)}
-                    </ThemeText>
-                  </View>
-                </View>
-              </GenericSectionItem>
-            </Section>
-            <Section>
               <TextInputSectionItem
-                label={t(TicketingTexts.transferCode.inputLabel)}
+                label={t(TicketingTexts.transferCode.bottomSheet.inputLabel)}
+                placeholder={t(
+                  TicketingTexts.transferCode.bottomSheet.inputPlaceholder,
+                )}
                 inlineLabel={false}
                 value={code}
                 onChangeText={(newCode) => {
@@ -112,12 +103,26 @@ export const TransferCodeBottomSheet = ({
             <Button
               expanded={true}
               interactiveColor={theme.color.interactive[0]}
-              text={t(TicketingTexts.transferCode.submit)}
+              text={t(TicketingTexts.transferCode.bottomSheet.submit)}
               onPress={onSubmit}
               disabled={code.length < MIN_CODE_LENGTH}
               loading={isPending}
               testID="transferCodeSubmitButton"
             />
+            <Section>
+              <GenericSectionItem>
+                <View style={styles.infoContainer}>
+                  <View style={styles.infoText}>
+                    <ThemeText typography="body__m__strong">
+                      {t(TicketingTexts.transferCode.bottomSheet.infoTitle)}
+                    </ThemeText>
+                    <ThemeText typography="body__s" type="secondary">
+                      {t(TicketingTexts.transferCode.bottomSheet.infoBody)}
+                    </ThemeText>
+                  </View>
+                </View>
+              </GenericSectionItem>
+            </Section>
           </>
         )}
       </View>

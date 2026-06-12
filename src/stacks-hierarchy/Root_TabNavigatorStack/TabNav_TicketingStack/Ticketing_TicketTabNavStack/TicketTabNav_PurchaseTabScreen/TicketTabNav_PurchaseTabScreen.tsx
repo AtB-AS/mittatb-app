@@ -184,13 +184,15 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
         {isTicketTransferEnabled && (
           <View style={styles.transferCode}>
-            <ContentHeading text={t(TicketingTexts.transferCode.heading)} />
+            <ContentHeading
+              text={t(TicketingTexts.transferCode.link.heading)}
+            />
             <Section style={styles.transferCodeSection}>
               <LinkSectionItem
-                text={t(TicketingTexts.transferCode.trigger)}
+                text={t(TicketingTexts.transferCode.link.text)}
                 accessibility={{
                   accessibilityLabel: t(
-                    TicketingTexts.transferCode.triggerA11yHint,
+                    TicketingTexts.transferCode.link.a11yLabel,
                   ),
                 }}
                 onPress={() => transferCodeSheetRef.current?.present()}
