@@ -27,7 +27,8 @@ export const CityBikeStartTripOverlay = ({
   return (
     <View style={styles.overlay}>
       <ScrollView
-        contentContainerStyle={styles.contentWrapper}
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.title}>
@@ -47,7 +48,6 @@ export const CityBikeStartTripOverlay = ({
           <ThemeText typography="heading__xl" style={styles.contentText}>
             {t(MobilityTexts.cityBike.startTripView.title)}
           </ThemeText>
-
           <ThemeText style={styles.contentText}>
             {t(MobilityTexts.cityBike.startTripView.description)}
           </ThemeText>
@@ -81,11 +81,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: theme.spacing.xLarge,
     zIndex: 100,
   },
-  contentWrapper: {
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 48,
+    gap: theme.spacing.xLarge,
   },
   title: {
     alignItems: 'center',
@@ -96,7 +99,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   content: {
     alignItems: 'center',
-    flexDirection: 'column',
     gap: theme.spacing.medium,
     padding: theme.spacing.large,
   },
@@ -109,6 +111,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   supportButton: {
     width: '100%',
-    marginTop: 'auto',
   },
 }));
