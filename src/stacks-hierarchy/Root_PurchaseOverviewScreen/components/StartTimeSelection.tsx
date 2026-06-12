@@ -1,5 +1,9 @@
 import React, {useRef} from 'react';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {
+  dictionary,
+  PurchaseOverviewTexts,
+  useTranslation,
+} from '@atb/translations';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {formatToLongDateTime, isInThePast} from '@atb/utils/date';
 import {ContentHeading} from '@atb/components/heading';
@@ -9,7 +13,6 @@ import {
 } from '@atb/modules/purchase-selection';
 import {DatePickerSheet} from '@atb/components/date-selection';
 import {EditActionSectionItem, Section} from '@atb/components/sections';
-import {screenReaderPause} from '@atb/components/text';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 
@@ -49,22 +52,10 @@ export function StartTimeSelection({
             leftIcon={Time}
             text={
               selection.travelDate
-                ? t(PurchaseOverviewTexts.startTime.laterTime)
-                : t(PurchaseOverviewTexts.startTime.now)
-            }
-            subText={
-              selection.travelDate
                 ? formatToLongDateTime(selection.travelDate, language)
-                : undefined
+                : t(dictionary.date.units.now)
             }
             onPress={openDatePickerSheet}
-            accessibilityLabel={
-              selection.travelDate
-                ? t(PurchaseOverviewTexts.startTime.laterTime) +
-                  screenReaderPause +
-                  formatToLongDateTime(selection.travelDate, language)
-                : t(PurchaseOverviewTexts.startTime.now)
-            }
             accessibilityHint={t(PurchaseOverviewTexts.startTime.a11yLaterHint)}
             testID="startTimeButton"
           />
@@ -74,12 +65,12 @@ export function StartTimeSelection({
         options={[
           {
             option: 'now',
-            text: t(PurchaseOverviewTexts.startTime.now),
+            text: t(dictionary.date.units.now),
             selected: !selection.travelDate,
           },
           {
             option: 'later',
-            text: t(PurchaseOverviewTexts.startTime.laterOption),
+            text: t(dictionary.date.units.later),
             selected: !!selection.travelDate,
           },
         ]}
@@ -95,6 +86,7 @@ export function StartTimeSelection({
             .build();
           setSelection(newSelection);
         }}
+        heading={t(PurchaseOverviewTexts.startTime.bottomSheetTitle)}
         initialDate={selection.travelDate}
         onCloseFocusRef={onCloseFocusRef}
         bottomSheetModalRef={bottomSheetModalRef}

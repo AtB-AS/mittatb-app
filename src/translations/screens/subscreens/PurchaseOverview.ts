@@ -186,9 +186,11 @@ const PurchaseOverviewTexts = {
   },
   startTime: {
     title: _('Oppstartstidspunkt', 'Start time', 'Starttidspunkt'),
-    now: _('Oppstart nå', 'Start now', 'Oppstart no'),
-    laterTime: _('Oppstart senere', 'Start later', 'Start seinare'),
-    laterOption: _('Oppstart senere', 'Start later', 'Start seinare'),
+    bottomSheetTitle: _(
+      'Velg oppstartstidspunkt',
+      'Select start time',
+      'Vel oppstartstidspunkt',
+    ),
     a11yLaterHint: _(
       'Aktiver for å velge oppstartstidspunkt',
       'Activate to select start time',

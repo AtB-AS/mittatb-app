@@ -23,6 +23,7 @@ type Props<T extends string> = {
   initialDate?: string;
   initialOption?: T;
   options: DateOptionAndText<T>[];
+  heading?: string;
   onSave: (optionAndValue: DateOptionAndValue<T>) => void;
   bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
   onCloseFocusRef: RefObject<View | null>;
@@ -42,6 +43,7 @@ export const DatePickerSheet = <T extends string>({
   initialDate,
   initialOption,
   options,
+  heading,
   onSave,
   bottomSheetModalRef,
   onCloseFocusRef,
@@ -72,7 +74,7 @@ export const DatePickerSheet = <T extends string>({
   return (
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
-      heading={t(DatePickerSheetTexts.heading)}
+      heading={heading ?? t(DatePickerSheetTexts.heading)}
       bottomSheetHeaderType={BottomSheetHeaderType.Confirm}
       closeCallback={() => {
         onSave({option: selectedOptionId, date});
