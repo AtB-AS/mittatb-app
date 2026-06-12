@@ -44,7 +44,7 @@ import {useOperators} from '../../use-operators';
 import {SupportButton} from '../SupportButton';
 import {BrandingImage} from '../BrandingImage';
 import {EndManualTripCard} from '../EndManualTripCard';
-import {ThemedCityBike} from '@atb/theme/ThemedAssets';
+import {ThemedCityBikeStation} from '@atb/theme/ThemedAssets';
 import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
 import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
 
@@ -254,7 +254,7 @@ export const ActiveShmoSheet = ({
                         summary={t(
                           MobilityTexts.cityBike.endManualTrip.summary,
                         )}
-                        image={<ThemedCityBike height={54} width={50} />}
+                        image={<ThemedCityBikeStation height={54} width={90} />}
                         handleDismiss={() => setEndTripInfoClosed(true)}
                       />
                     )
