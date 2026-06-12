@@ -15,6 +15,7 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {FullScreenView} from '@atb/components/screen-view';
 import {useOperators} from '@atb/modules/mobility';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export type ShmoHelpScreenProps = RootStackScreenProps<'Root_ShmoHelpScreen'>;
 
@@ -38,6 +39,7 @@ export const Root_ShmoHelpScreen = ({
   const style = useStyles();
   const {t, language} = useTranslation();
   const {scooterFaqs} = useFirestoreConfigurationContext();
+  const {isParkingViolationsReportingEnabled} = useFeatureTogglesContext();
   const [currentlyOpenFaqIndex, setCurrentlyOpenFaqIndex] = useState<number>();
   const focusRef = useFocusOnLoad(navigation);
 
@@ -81,14 +83,16 @@ export const Root_ShmoHelpScreen = ({
               }}
             />
           )}
-          <LinkSectionItem
-            text={t(ShmoHelpTexts.reportParking)}
-            onPress={() =>
-              navigation.navigate('Root_ParkingViolationsSelectScreen', {
-                transitionOverride: 'slide-from-right',
-              })
-            }
-          />
+          {isParkingViolationsReportingEnabled && (
+            <LinkSectionItem
+              text={t(ShmoHelpTexts.reportParking)}
+              onPress={() =>
+                navigation.navigate('Root_ParkingViolationsSelectScreen', {
+                  transitionOverride: 'slide-from-right',
+                })
+              }
+            />
+          )}
         </Section>
         <ContentHeading text={t(ShmoHelpTexts.faq)} />
         <Section>
