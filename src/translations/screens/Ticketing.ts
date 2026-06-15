@@ -90,6 +90,14 @@ const TicketingTexts = {
         'Ein hentekode kan brukast til å hente ein billett i appen. Vanlegvis er det nokon andre som har sendt deg koden, til dømes skulen eller arbeidsgivaren din.',
       ),
     },
+    loginRequired: {
+      title: _('Du må logge inn', 'You must log in', 'Du må logge inn'),
+      text: _(
+        'Du må logge inn for å bruke en hentekode.',
+        'You must log in to use a transfer code.',
+        'Du må logge inn for å bruke en hentekode.',
+      ),
+    },
     successMessage: _(
       'Vi har lagt til billetten din!',
       'We have added your ticket!',

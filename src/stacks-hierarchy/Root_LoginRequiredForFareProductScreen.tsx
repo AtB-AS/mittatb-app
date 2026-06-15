@@ -16,7 +16,10 @@ const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
 
 type Props = RootStackScreenProps<'Root_LoginRequiredForFareProductScreen'>;
 
-export const Root_LoginRequiredForFareProductScreen = ({navigation}: Props) => {
+export const Root_LoginRequiredForFareProductScreen = ({
+  navigation,
+  route,
+}: Props) => {
   const {enable_vipps_login} = useRemoteConfigContext();
   const {t} = useTranslation();
   const styles = useThemeStyles();
@@ -27,6 +30,8 @@ export const Root_LoginRequiredForFareProductScreen = ({navigation}: Props) => {
 
   const getHasReservationOrAvailableFareContract =
     useGetHasReservationOrAvailableFareContract();
+
+  const {title, text} = route.params;
 
   const onNext = () => {
     if (getHasReservationOrAvailableFareContract()) {
@@ -55,7 +60,7 @@ export const Root_LoginRequiredForFareProductScreen = ({navigation}: Props) => {
             style={styles.title}
             color={themeColor}
           >
-            {t(LoginTexts.onboarding.title)}
+            {title ?? t(LoginTexts.onboarding.title)}
           </ThemeText>
         </View>
         <View accessible={true}>
@@ -64,7 +69,7 @@ export const Root_LoginRequiredForFareProductScreen = ({navigation}: Props) => {
             color={themeColor}
             testID="logInPurchaseDescription"
           >
-            {t(LoginTexts.onboarding.description)}
+            {text ?? t(LoginTexts.onboarding.description)}
           </ThemeText>
         </View>
       </View>

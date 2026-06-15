@@ -61,6 +61,18 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     });
   };
 
+  const onOpenTransferCodeSheet = () => {
+    if (authenticationType !== 'phone') {
+      navigation.navigate('Root_LoginRequiredForFareProductScreen', {
+        title: t(TicketingTexts.transferCode.loginRequired.title),
+        text: t(TicketingTexts.transferCode.loginRequired.text),
+      });
+      return;
+    } else {
+      transferCodeSheetRef.current?.present();
+    }
+  };
+
   const onProductSelect = (fareProductTypeConfig: FareProductTypeConfig) => {
     analytics.logEvent('Ticketing', 'Fare product selected', {
       type: fareProductTypeConfig.type,
@@ -74,9 +86,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       authenticationType !== 'phone' &&
       fareProductTypeConfig.configuration.requiresLogin
     ) {
-      navigation.navigate('Root_LoginRequiredForFareProductScreen', {
-        selection,
-      });
+      navigation.navigate('Root_LoginRequiredForFareProductScreen', {});
       return;
     }
 
@@ -196,7 +206,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
                     TicketingTexts.transferCode.link.a11yLabel,
                   ),
                 }}
-                onPress={() => transferCodeSheetRef.current?.present()}
+                onPress={onOpenTransferCodeSheet}
               />
             </Section>
             <TransferCodeBottomSheet
