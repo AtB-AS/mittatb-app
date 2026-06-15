@@ -14,7 +14,10 @@ import {
   BottomSheetHeaderType,
   BottomSheetModal,
 } from '@atb/components/bottom-sheet';
-import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {
+  BottomSheetModal as GorhomBottomSheetModal,
+  BottomSheetTextInput,
+} from '@gorhom/bottom-sheet';
 import {ThemedTicketTilted} from '@atb/theme/ThemedAssets';
 
 const MIN_CODE_LENGTH = 8;
@@ -55,6 +58,7 @@ export const TransferCodeBottomSheet = ({
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(TicketingTexts.transferCode.bottomSheet.heading)}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
+      keyboardBlurBehavior="restore"
       closeCallback={() => {
         giveFocus(onCloseFocusRef);
         setCode('');
@@ -65,6 +69,7 @@ export const TransferCodeBottomSheet = ({
       <View style={styles.container}>
         <Section>
           <TextInputSectionItem
+            InputComponent={BottomSheetTextInput}
             label={t(TicketingTexts.transferCode.bottomSheet.inputLabel)}
             placeholder={t(
               TicketingTexts.transferCode.bottomSheet.inputPlaceholder,
