@@ -99,7 +99,6 @@ export const TravelCardHeader: React.FC<
         <View style={styles.timeContainer}>
           {statusTextConfig && (
             <StatusText
-              svg={statusTextConfig.svg}
               color={statusTextConfig.color}
               text={statusTextConfig.text}
             />
