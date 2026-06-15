@@ -3,6 +3,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useMapboxJsonStyle} from './use-mapbox-json-style';
 import {useMemo} from 'react';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 const COMPASS_BASE_TOP = 50;
 
@@ -37,7 +38,8 @@ export const useMapViewConfig = (
     () => ({styleJSON: mapboxJsonStyle}),
     [mapboxJsonStyle],
   );
-  const {enable_surface_view_map, map_max_pitch} = useRemoteConfigContext();
+  const {map_max_pitch} = useRemoteConfigContext();
+  const {isSurfaceViewMapEnabled} = useFeatureTogglesContext();
 
   const {top: safeAreaTop} = useSafeAreaInsets();
   const androidSafeAreaTop = Platform.select({
@@ -60,9 +62,9 @@ export const useMapViewConfig = (
       ...mapViewStaticConfig,
       compassPosition,
       ...configMap,
-      surfaceView: enable_surface_view_map,
+      surfaceView: isSurfaceViewMapEnabled,
       maxPitch: map_max_pitch,
     }),
-    [compassPosition, configMap, enable_surface_view_map, map_max_pitch],
+    [compassPosition, configMap, isSurfaceViewMapEnabled, map_max_pitch],
   );
 };
