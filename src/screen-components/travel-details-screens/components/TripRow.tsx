@@ -6,12 +6,14 @@ import {NativeBlockButton} from '@atb/components/native-button';
 export type DimensionOverrides = {
   labelWidth?: number;
   decorationContainerWidth?: number;
+  labelAlignment?: 'flex-start' | 'flex-end';
 };
 
 // TODO: Remove / rename once old trip details are removed
 export const NEW_TRIP_DIMENSIONS: DimensionOverrides = {
-  labelWidth: 64,
+  labelWidth: 42,
   decorationContainerWidth: 42,
+  labelAlignment: 'flex-start',
 };
 
 type TripRowProps = {
@@ -40,6 +42,9 @@ export const TripRow: React.FC<TripRowProps> = ({
           styles.leftColumn,
           dimensionOverrides?.labelWidth != null && {
             minWidth: dimensionOverrides.labelWidth,
+          },
+          dimensionOverrides?.labelAlignment != null && {
+            justifyContent: dimensionOverrides.labelAlignment,
           },
         ]}
       >
