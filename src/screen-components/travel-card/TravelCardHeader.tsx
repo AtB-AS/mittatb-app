@@ -22,12 +22,14 @@ export const TravelCardHeader: React.FC<
     size?: TravelCardHeaderSize;
     includeDayInfo?: boolean;
     includeFromToInfo?: boolean;
+    isSaved?: boolean;
   }
 > = ({
   tripPattern,
   size = 'standard',
   includeDayInfo = true,
   includeFromToInfo = true,
+  isSaved = false,
   ...accessibilityProps
 }) => {
   const styles = useThemeStyles();
@@ -116,7 +118,12 @@ export const TravelCardHeader: React.FC<
           )}
         </View>
 
-        <View style={styles.durationContainer}>
+        <View
+          style={[
+            styles.durationContainer,
+            isSaved && styles.durationContainerSaved,
+          ]}
+        >
           <ThemeText
             typography="body__m"
             type="secondary"
@@ -151,6 +158,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   durationContainer: {
     flexShrink: 0,
     alignItems: 'flex-end',
+  },
+  durationContainerSaved: {
+    paddingTop: theme.spacing.medium,
   },
   fromToContainer: {
     flexDirection: 'row',

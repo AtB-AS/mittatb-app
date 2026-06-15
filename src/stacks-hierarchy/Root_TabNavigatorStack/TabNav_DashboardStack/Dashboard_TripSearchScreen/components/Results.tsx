@@ -101,28 +101,31 @@ export const Results: React.FC<Props> = ({
               previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
             />
             <SaveableTripSearchResultRow tripPattern={tripPattern}>
-              {isExperimentalEnabled ? (
-                <TravelCard
-                  tripPattern={tripPattern}
-                  onDetailsPressed={onDetailsPressed}
-                  testID={'tripSearchSearchResult' + i}
-                  a11yLabelPrefix={t(
-                    TravelCardTexts.card.a11yPrefix.tripSuggestion(
-                      i,
-                      tripPatterns.length,
-                    ),
-                  )}
-                  a11yHint={t(TravelCardTexts.card.a11yHint.tripDetails)}
-                />
-              ) : (
-                <ResultRow
-                  tripPattern={tripPattern}
-                  onDetailsPressed={onDetailsPressed}
-                  resultIndex={i}
-                  searchTime={searchTime}
-                  testID={'tripSearchSearchResult' + i}
-                />
-              )}
+              {(isSaved) =>
+                isExperimentalEnabled ? (
+                  <TravelCard
+                    tripPattern={tripPattern}
+                    onDetailsPressed={onDetailsPressed}
+                    testID={'tripSearchSearchResult' + i}
+                    a11yLabelPrefix={t(
+                      TravelCardTexts.card.a11yPrefix.tripSuggestion(
+                        i,
+                        tripPatterns.length,
+                      ),
+                    )}
+                    a11yHint={t(TravelCardTexts.card.a11yHint.tripDetails)}
+                    isSaved={isSaved}
+                  />
+                ) : (
+                  <ResultRow
+                    tripPattern={tripPattern}
+                    onDetailsPressed={onDetailsPressed}
+                    resultIndex={i}
+                    searchTime={searchTime}
+                    testID={'tripSearchSearchResult' + i}
+                  />
+                )
+              }
             </SaveableTripSearchResultRow>
           </Fragment>
         ))}
