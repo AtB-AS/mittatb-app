@@ -60,7 +60,8 @@ export type Root_LoginConfirmCodeScreenParams = {
 };
 
 export type Root_LoginRequiredForFareProductScreenParams = {
-  selection: PurchaseSelectionType;
+  title?: string;
+  text?: string;
 };
 
 type Root_ParkingViolationsPhotoParams = {
