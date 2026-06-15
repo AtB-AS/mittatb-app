@@ -63,6 +63,7 @@ export const Root_TabNavigatorStack = () => {
         screen: 'Ticketing_RootScreen',
         params: {
           screen: 'TicketTabNav_AvailableFareContractsTabScreen',
+          params: {},
         },
       },
     });
