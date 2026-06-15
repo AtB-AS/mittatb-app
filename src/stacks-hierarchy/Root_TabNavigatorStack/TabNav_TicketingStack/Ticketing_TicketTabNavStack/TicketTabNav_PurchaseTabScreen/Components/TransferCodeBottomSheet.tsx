@@ -15,6 +15,7 @@ import {
   BottomSheetModal,
 } from '@atb/components/bottom-sheet';
 import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {ThemedTicketTilted} from '@atb/theme/ThemedAssets';
 
 const MIN_CODE_LENGTH = 8;
 
@@ -101,6 +102,7 @@ export const TransferCodeBottomSheet = ({
                   {t(TicketingTexts.transferCode.bottomSheet.infoBody)}
                 </ThemeText>
               </View>
+              <ThemedTicketTilted width={96} height={96} />
             </View>
           </GenericSectionItem>
         </Section>
