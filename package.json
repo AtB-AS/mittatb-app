@@ -43,7 +43,7 @@
     "@dr.pogodin/react-native-fs": "^2.37.0",
     "@entur-private/abt-mobile-barcode-javascript-lib": "3.4.8",
     "@entur-private/abt-mobile-client-sdk": "3.4.8",
-    "@gorhom/bottom-sheet": "^5.2.8",
+    "@gorhom/bottom-sheet": "^5.2.14",
     "@intercom/intercom-react-native": "9.4.0",
     "@leile/lobo-t": "^1.0.5",
     "@mapbox/polyline": "^1.2.1",
