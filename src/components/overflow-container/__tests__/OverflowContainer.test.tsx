@@ -101,10 +101,7 @@ describe('OverflowContainer', () => {
 
   // Expected behaviour: a change to the child set re-runs the measure pass,
   // remounting the children so their new widths can be measured.
-  //
-  // TODO: remove `.failing` once OverflowContainer remounts its measure pass on
-  // child-count changes.
-  it.failing('remounts the measure pass when the child count changes', () => {
+  it('remounts the measure pass when the child count changes', () => {
     const view = render(
       <OverflowContainer maxWidth={200} overflow={overflowNode}>
         {legs(4)}
