@@ -1,6 +1,6 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {RefObject, useRef, useState} from 'react';
-import {Linking, Platform, View} from 'react-native';
+import {Dimensions, Linking, Platform, View} from 'react-native';
 import {Processing} from '../loading';
 import {MessageInfoBox} from '../message-info-box';
 import {CaptureButton} from './CaptureButton';
@@ -17,7 +17,6 @@ import {
 } from 'react-native-vision-camera';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Flash, NoFlash} from '@atb/assets/svg/mono-icons/miscellaneous';
-import {SCREEN_HEIGHT} from '@gorhom/bottom-sheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {errorToMetadata, logToBugsnag} from '@atb/utils/bugsnag-utils';
 import DeviceInfo from 'react-native-device-info';
@@ -182,7 +181,7 @@ const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
     qrFrame: {
       position: 'absolute',
       alignSelf: 'center',
-      bottom: SCREEN_HEIGHT / 2,
+      bottom: Dimensions.get('window').height / 2,
       transform: [{translateY: 100}],
       width: 200,
       height: 200,

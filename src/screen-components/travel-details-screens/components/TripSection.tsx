@@ -65,7 +65,7 @@ import {
 import {animateNextChange} from '@atb/utils/animation';
 import {AUTHORITY} from '@env';
 import {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {CancelledDepartureMessage} from './CancelledDepartureMessage';
 import {WalkFill} from '@atb/assets/svg/mono-icons/transportation';
 
@@ -103,7 +103,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const style = useSectionStyles();
   const {theme, themeName} = useThemeContext();
   const onCloseFocusRef = React.useRef(null);
-  const bottomSheetModalRef = React.useRef<BottomSheetModal | null>(null);
+  const bottomSheetModalRef = React.useRef<BottomSheetModalMethods | null>(
+    null,
+  );
 
   const isWalkSection = leg.mode === Mode.Foot;
   const isBikeSection = leg.mode === Mode.Bicycle;

@@ -27,7 +27,7 @@ import {
   Section,
 } from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Loading} from '@atb/components/loading';
 import {useNow} from '@atb/utils/use-now';
@@ -58,7 +58,7 @@ export const DeparturesWidget = ({
   const {data: favoriteDeparturesData, isLoading: favoriteDeparturesIsLoading} =
     useFavoriteDeparturesQuery(isFocused);
   const onCloseFocusRef = useRef<View>(null);
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const bottomSheetRef = useRef<BottomSheetModalMethods>(null);
 
   async function openFrontpageFavouritesBottomSheet() {
     bottomSheetRef.current?.present();

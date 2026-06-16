@@ -19,9 +19,9 @@ import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
+  BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
 import {RefObject} from '@testing-library/react-native/build/types';
-import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
@@ -29,7 +29,7 @@ type Props = {
   orderId: string;
   fareProductType: string | undefined;
   state: FareContractState;
-  bottomSheetModalRef: RefObject<GorhomBottomSheetModal | null>;
+  bottomSheetModalRef: RefObject<BottomSheetModalMethods | null>;
   onCloseFocusRef: RefObject<View | null>;
 };
 

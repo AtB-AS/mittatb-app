@@ -5,15 +5,18 @@ import {Image, View} from 'react-native';
 import {Coordinates} from '@atb/utils/coordinates';
 import {UserCoordinatesMap} from '../../stacks-hierarchy/Root_ShmoHelp/components/UserCoordinatesMap';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {BottomSheetHeaderType, BottomSheetModal} from '../bottom-sheet';
-import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {
+  BottomSheetHeaderType,
+  BottomSheetModal,
+  BottomSheetModalMethods,
+} from '../bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type Props = {
   file: string;
   coordinates: Coordinates | undefined;
   onConfirm: () => void;
-  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  bottomSheetModalRef: React.RefObject<BottomSheetModalMethods | null>;
   onCloseFocusRef: React.RefObject<View | null>;
 };
 

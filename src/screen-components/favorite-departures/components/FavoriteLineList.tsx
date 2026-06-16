@@ -28,7 +28,7 @@ import {
   StoredFavoriteDeparture,
   useOnMarkFavouriteDepartures,
 } from '@atb/modules/favorites';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Loading} from '@atb/components/loading';
@@ -141,7 +141,7 @@ export function QuayLineSection({
   const styles = useStyles();
   const departures = getDeparturesForQuay(data, quay);
   const {t} = useTranslation();
-  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
 
   const sortedDepartures = departures.sort((a, b) =>
     compareByLineNameAndDesc(t, a, b),

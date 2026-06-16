@@ -59,7 +59,7 @@ import {onlyUniques} from '@atb/utils/only-uniques';
 import {DatePickerSheet} from '@atb/components/date-selection';
 import SharedTexts from '@atb/translations/shared';
 import {TravelSearchFiltersBottomSheet} from './components/TravelSearchFiltersBottomSheet';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {WithOverlayButton} from '@atb/components/overlay-button';
 import {Loading} from '@atb/components/loading';
@@ -94,8 +94,11 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const analytics = useAnalyticsContext();
   const filterButtonWrapperRef = useRef(null);
   const filterButtonRef = useRef(null);
-  const travelSearchBottomSheetModalRef = useRef<BottomSheetModal | null>(null);
-  const timePickerBottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const travelSearchBottomSheetModalRef =
+    useRef<BottomSheetModalMethods | null>(null);
+  const timePickerBottomSheetModalRef = useRef<BottomSheetModalMethods | null>(
+    null,
+  );
   const timePickerCloseRef = useRef<View | null>(null);
 
   const {

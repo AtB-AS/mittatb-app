@@ -26,7 +26,7 @@ import {
   TextInputSectionItem,
 } from '@atb/components/sections';
 import {FullScreenFooter} from '@atb/components/screen-footer';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 
 export type Props = RootStackScreenProps<'Root_AddEditFavoritePlaceScreen'>;
 
@@ -57,7 +57,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
     'searchLocation',
     editItem?.location,
   );
-  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
   const onCloseFocusRef = useRef<View | null>(null);
   const {pendingResult, clearPendingResult} = usePendingLocationSearchStore();
 

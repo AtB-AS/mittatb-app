@@ -13,17 +13,15 @@ import {useThemeContext} from '@atb/theme';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
+  BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
-import {
-  BottomSheetModal as GorhomBottomSheetModal,
-  BottomSheetTextInput,
-} from '@gorhom/bottom-sheet';
+import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
 import {ThemedTicketTilted} from '@atb/theme/ThemedAssets';
 
 const MIN_CODE_LENGTH = 8;
 
 type Props = {
-  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  bottomSheetModalRef: React.RefObject<BottomSheetModalMethods | null>;
   onCloseFocusRef: React.RefObject<View | null>;
   onTicketsReceived: () => void;
 };
