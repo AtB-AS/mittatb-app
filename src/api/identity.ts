@@ -19,6 +19,11 @@ export type FeideConnectResponse = {
   hasNin: boolean;
 };
 
+export type FeideConnectionStatus = {
+  connected: boolean;
+  feideSub?: string;
+};
+
 export const getServerTime = async () => {
   const response = await client.get('/identity/v1/time', {
     authWithIdToken: false,
@@ -211,6 +216,21 @@ export const connectFeide = async (
         ...opts,
       },
     )
+    .then((res) => res.data);
+};
+
+/**
+ * Whether the logged-in customer is connected to Feide (and with which sub).
+ * Mirrors getAgeVerification.
+ */
+export const getFeideConnection = (
+  opts?: AxiosRequestConfig,
+): Promise<FeideConnectionStatus> => {
+  return client
+    .get<FeideConnectionStatus>('/identity/v1/feide/connection', {
+      ...opts,
+      authWithIdToken: true,
+    })
     .then((res) => res.data);
 };
 

@@ -14,6 +14,14 @@ const FeideConnectionTexts = {
     'Koble til Feide for å hente skuleskyssbilletten din i appen. Du loggar inn med Feide, og vi koplar den til kontoen din.',
   ),
   connectButton: _('Koble til Feide', 'Connect with Feide', 'Koble til Feide'),
+  connected: {
+    title: _('Tilkoblet Feide', 'Connected to Feide', 'Tilkopla Feide'),
+    message: _(
+      'Kontoen din er koblet til Feide.',
+      'Your account is connected to Feide.',
+      'Kontoen din er kopla til Feide.',
+    ),
+  },
   success: {
     title: _('Feide tilkoblet', 'Feide connected', 'Feide tilkopla'),
     message: (name: string) =>

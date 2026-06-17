@@ -18,6 +18,7 @@ import {closeInAppBrowseriOS} from '@atb/modules/in-app-browser';
 import {storage} from '@atb/modules/storage';
 import {
   useConnectFeideMutation,
+  useGetFeideConnectionQuery,
   useInitFeideConnectMutation,
 } from '@atb/modules/feide';
 import {ProfileScreenProps} from './navigation-types';
@@ -38,10 +39,11 @@ export const Profile_FeideConnectionScreen = ({navigation}: Props) => {
   const {
     mutate: connectFeide,
     isPending: isConnecting,
-    isSuccess,
-    data,
     error: connectError,
   } = useConnectFeideMutation();
+
+  const {data: connection} = useGetFeideConnectionQuery();
+  const isConnected = !!connection?.connected;
 
   const hasError = localError || !!connectError;
 
@@ -86,15 +88,11 @@ export const Profile_FeideConnectionScreen = ({navigation}: Props) => {
       <View style={style.container}>
         <ThemeText>{t(FeideConnectionTexts.description)}</ThemeText>
 
-        {isSuccess && (
+        {isConnected && (
           <MessageInfoBox
             type="valid"
-            title={t(FeideConnectionTexts.success.title)}
-            message={
-              data?.name
-                ? t(FeideConnectionTexts.success.message(data.name))
-                : t(FeideConnectionTexts.success.messageNoName)
-            }
+            title={t(FeideConnectionTexts.connected.title)}
+            message={t(FeideConnectionTexts.connected.message)}
           />
         )}
 
