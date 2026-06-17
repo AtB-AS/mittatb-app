@@ -1,4 +1,4 @@
-import {Dimensions, StyleProp, View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {useAnnouncementsContext} from '@atb/modules/announcements';
 import {ScrollView} from 'react-native-gesture-handler';
 import {AnnouncementSection} from './AnnouncementSection';

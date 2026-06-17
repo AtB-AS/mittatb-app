@@ -9,6 +9,7 @@ import {
 import {Theme} from './colors';
 import {useThemeContext} from './ThemeContext';
 import {useSafeAreaInsets, EdgeInsets} from 'react-native-safe-area-context';
+import {MAX_FONT_SCALE} from '@atb/components/text';
 
 export type NamedStyles<T> = {
   [P in keyof T]: ViewStyle | TextStyle | ImageStyle;
@@ -38,6 +39,7 @@ export function useStyle<T extends NamedStyles<T>>(
   const {theme} = useThemeContext();
   const insets = useSafeAreaInsets();
   const dimensions = useWindowDimensions();
+  dimensions.fontScale = Math.min(dimensions.fontScale, MAX_FONT_SCALE);
   if (!isThemedStyles<T>(style)) {
     return style;
   }
