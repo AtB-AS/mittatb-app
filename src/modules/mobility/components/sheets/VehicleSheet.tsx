@@ -203,8 +203,8 @@ export const VehicleSheet = ({
                 payWithBonusPoints && bonusProduct?.priceAdjustments
                   ? ({
                       kind: 'MOBILITY_PRICE_ADJUSTMENT' as const,
-                      vehicleTypeId: vehicleTypeId ?? '',
-                      description: '',
+                      vehicleTypeIds: vehicleTypeId ? [vehicleTypeId] : [],
+                      systemIds: [],
                       priceAdjustments: bonusProduct.priceAdjustments,
                     } satisfies MobilityPriceAdjustmentBenefitType)
                   : (vehicle.benefit ?? undefined)
