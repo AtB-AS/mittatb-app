@@ -61,6 +61,7 @@ import {isNonRecurringPaymentType} from '@atb/modules/payment';
 import {
   PayWithBonusPointsCheckbox,
   useRelevantTicketBonusProduct,
+  useIsBonusActiveForUser,
 } from '@atb/modules/bonus';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
@@ -110,6 +111,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   const builder = usePurchaseSelectionBuilder();
   const relevantTicketBonusProduct = useRelevantTicketBonusProduct(selection);
+  const isBonusActiveForUser = useIsBonusActiveForUser();
 
   const isFree = totalPrice === 0;
 
@@ -191,7 +193,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       screen: 'TabNav_TicketingStack',
       params: {
         screen: 'Ticketing_RootScreen',
-        params: {screen: 'TicketTabNav_AvailableFareContractsTabScreen'},
+        params: {
+          screen: 'TicketTabNav_AvailableFareContractsTabScreen',
+          params: {},
+        },
       },
     });
   }, [
@@ -359,7 +364,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             type="error"
           />
         )}
-        {!!relevantTicketBonusProduct && !isFree && (
+        {!!relevantTicketBonusProduct && !isFree && isBonusActiveForUser && (
           <PayWithBonusPointsCheckbox
             bonusProduct={relevantTicketBonusProduct}
             isChecked={
@@ -551,10 +556,11 @@ const PaymentButton = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => ({
   container: {
     padding: theme.spacing.medium,
     rowGap: theme.spacing.medium,
+    paddingBottom: bottom + theme.spacing.medium,
   },
   waitingForPayment: {
     flexDirection: 'row',

@@ -164,11 +164,12 @@ export const MapBottomSheets = ({
       <FinishedShmoSheet
         bookingId={mapState.bookingId}
         onClose={handleCloseSheet}
-        navigateSupportCallback={(operatorId, bookingId) => {
+        navigateSupportCallback={(operatorId, bookingId, formFactor) => {
           handleCloseSheet();
           navigateToShmoSupport({
             operatorId,
             bookingId,
+            formFactor,
           });
         }}
         locationArrowOnPress={locationArrowOnPress}
@@ -178,7 +179,7 @@ export const MapBottomSheets = ({
   }
   return (
     <>
-      {activeBooking?.state === ShmoBookingState.NOT_STARTED && (
+      {activeBooking?.state === ShmoBookingState.PREPARING && (
         <CityBikeStartTripOverlay
           activeBooking={activeBooking}
           navigateToSupport={navigateToShmoSupport}
@@ -243,6 +244,7 @@ export const MapBottomSheets = ({
             navigateToShmoSupport({
               operatorId: activeBooking.asset.operator.id,
               bookingId: activeBooking.bookingId,
+              formFactor: activeBooking.asset.formFactor ?? undefined,
             });
           }}
           photoNavigation={() => {

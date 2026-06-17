@@ -86,9 +86,10 @@ jobs:
         env:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+      - uses: pnpm/action-setup@v4
       - name: Install E2E tests
         working-directory: e2e
-        run: yarn install
+        run: pnpm install
       - name: tsc
         working-directory: e2e
         run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
@@ -136,7 +137,7 @@ jobs:
           emulator-boot-timeout: 900
           disable-spellchecker: true
           disable-animations: true
-          script: yarn test:android --spec test/visualTests/specs/visual.${{ env.ENV_VISUAL_TEST }}.e2e.ts
+          script: pnpm test:android --spec test/visualTests/specs/visual.${{ env.ENV_VISUAL_TEST }}.e2e.ts
           pre-emulator-launch-script: ./scripts/remove-navigation-bar.sh
           working-directory: e2e
         env:

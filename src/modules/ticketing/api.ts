@@ -111,6 +111,20 @@ export async function getSchoolCarnetInfo(fareContractId: string) {
   return response.data;
 }
 
+export type AcceptTicketTransferResponse = {
+  addedFareContractRefs: string[];
+};
+
+export async function acceptTicketTransfer(transferId: string) {
+  const url = `ticket/v4/accept-transfer`;
+  const response = await client.post<AcceptTicketTransferResponse>(
+    url,
+    {transferId},
+    {authWithIdToken: true},
+  );
+  return response.data;
+}
+
 export async function activateFareContractNow(fareContractId: string) {
   const url = `ticket/v4/start-time`;
   const response = await client.put<void>(

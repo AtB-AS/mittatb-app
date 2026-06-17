@@ -6,10 +6,11 @@ import {useTranslation} from '@atb/translations';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
 import {StyleSheet} from '@atb/theme';
-import {ThemedCityBike} from '@atb/theme/ThemedAssets';
+import {ThemedStartCityBike} from '@atb/theme/ThemedAssets';
 import {LinkSectionItem} from '@atb/components/sections';
 import {ShmoBooking} from '@atb/api/types/mobility';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type Props = {
   activeBooking: ShmoBooking;
@@ -26,7 +27,8 @@ export const CityBikeStartTripOverlay = ({
   return (
     <View style={styles.overlay}>
       <ScrollView
-        contentContainerStyle={styles.contentWrapper}
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.title}>
@@ -41,12 +43,11 @@ export const CityBikeStartTripOverlay = ({
             </ThemeText>
           )}
         </View>
-        <ThemedCityBike />
+        <ThemedStartCityBike />
         <View style={styles.content}>
           <ThemeText typography="heading__xl" style={styles.contentText}>
             {t(MobilityTexts.cityBike.startTripView.title)}
           </ThemeText>
-
           <ThemeText style={styles.contentText}>
             {t(MobilityTexts.cityBike.startTripView.description)}
           </ThemeText>
@@ -62,6 +63,7 @@ export const CityBikeStartTripOverlay = ({
             navigateToSupport({
               bookingId: activeBooking.bookingId,
               operatorId: activeBooking.asset.operator.id,
+              formFactor: FormFactor.Bicycle,
             });
           }}
           radius="top-bottom"
@@ -79,25 +81,29 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: theme.spacing.xLarge,
     zIndex: 100,
   },
-  contentWrapper: {
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 48,
+    gap: theme.spacing.xLarge,
   },
   title: {
     alignItems: 'center',
     flexDirection: 'row',
+    justifyContent: 'center',
     gap: theme.spacing.small,
+    width: '100%',
   },
   content: {
     alignItems: 'center',
-    flexDirection: 'column',
     gap: theme.spacing.medium,
     padding: theme.spacing.large,
   },
   titleText: {
-    flex: 1,
+    flexShrink: 1,
     textAlign: 'center',
   },
   contentText: {
@@ -105,6 +111,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   supportButton: {
     width: '100%',
-    marginTop: 'auto',
   },
 }));

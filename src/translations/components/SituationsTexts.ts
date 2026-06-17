@@ -16,6 +16,23 @@ const SituationsTexts = {
       'This trip has the following notices',
       'Denne reisa har følgjande meldingar',
     ),
+    withSuggestion: {
+      error: _(
+        'Denne reisen har kritiske advarsler. Se detaljer for mer info.',
+        'This trip has critical warnings. See details for more information.',
+        'Denne reisa har kritiske merknader. Sjå detaljar for meir info.',
+      ),
+      warning: _(
+        'Denne reisen har advarsler. Se detaljer for mer info.',
+        'This trip has warnings. See details for more information.',
+        'Denne reisa har merknader. Sjå detaljar for meir info.',
+      ),
+      info: _(
+        'Denne reisen har ekstra informasjon. Se detaljer for mer info.',
+        'This trip has extra information. See details for more information.',
+        'Denne reisa har ekstra informasjon. Sjå detaljar for meir info.',
+      ),
+    },
   },
   bottomSheet: {
     title: {

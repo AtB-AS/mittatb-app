@@ -61,7 +61,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   currentBalanceDisplay: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.medium,
+    gap: theme.spacing.xSmall,
     minHeight: theme.typography['heading__xl'].lineHeight,
   },
 }));

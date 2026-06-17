@@ -40,7 +40,7 @@ export const EditActionSectionItem = forwardRef<any, Props>(
           <ThemeText typography="body__m__strong">{text}</ThemeText>
           {subText && (
             <ThemeText typography="body__m" type="secondary">
-              {subText}
+              ({subText})
             </ThemeText>
           )}
         </View>
@@ -55,12 +55,18 @@ export const EditActionSectionItem = forwardRef<any, Props>(
 );
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  button: {flex: 1, flexDirection: 'row', gap: theme.spacing.small},
+  button: {
+    flex: 1,
+    flexDirection: 'row',
+    gap: theme.spacing.small,
+    alignItems: 'center',
+  },
   gap: {gap: theme.spacing.small, alignItems: 'flex-start'},
   textContainer: {
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: theme.spacing.xSmall,
+    alignSelf: 'center',
   },
 }));

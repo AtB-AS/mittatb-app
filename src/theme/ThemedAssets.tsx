@@ -46,6 +46,14 @@ import {
   BundlingCarSharingActive as BundlingCarSharingActiveDark,
   BundlingCityBikeActive as BundlingCityBikeActiveDark,
   CityBike as CityBikeDark,
+  CityBikeRide as CityBikeRideDark,
+  CityBikeStation as CityBikeStationDark,
+  CityBikeStationPerson as CityBikeStationPersonDark,
+  ElectricCityBike as ElectricCityBikeDark,
+  ElectricCityBikeRide as ElectricCityBikeRideDark,
+  ElectricCityBikeStation as ElectricCityBikeStationDark,
+  ElectricCityBikeStationPerson as ElectricCityBikeStationPersonDark,
+  StartCityBike as StartCityBikeDark,
   ParkAndRide as ParkAndRideDark,
   BabyOnScooter as BabyOnScooterDark,
   Scooter as ScooterDark,
@@ -55,6 +63,14 @@ import {
   BundlingCarSharingActive as BundlingCarSharingActiveLight,
   BundlingCityBikeActive as BundlingCityBikeActiveLight,
   CityBike as CityBikeLight,
+  CityBikeRide as CityBikeRideLight,
+  CityBikeStation as CityBikeStationLight,
+  CityBikeStationPerson as CityBikeStationPersonLight,
+  ElectricCityBike as ElectricCityBikeLight,
+  ElectricCityBikeRide as ElectricCityBikeRideLight,
+  ElectricCityBikeStation as ElectricCityBikeStationLight,
+  ElectricCityBikeStationPerson as ElectricCityBikeStationPersonLight,
+  StartCityBike as StartCityBikeLight,
   ParkAndRide as ParkAndRideLight,
   BabyOnScooter as BabyOnScooterLight,
   Scooter as ScooterLight,
@@ -64,6 +80,7 @@ import {
   BonusBagCarry as BonusBagCarryLight,
   BonusBagHug as BonusBagHugLight,
   BonusMap as BonusMapLight,
+  BonusStar as BonusStarLight,
   BonusTransaction as BonusTransactionLight,
   BonusTrashCan as BonusTrashCanLight,
 } from '@atb/assets/svg/color/images/bonus/light';
@@ -72,6 +89,7 @@ import {
   BonusBagCarry as BonusBagCarryDark,
   BonusBagHug as BonusBagHugDark,
   BonusMap as BonusMapDark,
+  BonusStar as BonusStarDark,
   BonusTransaction as BonusTransactionDark,
   BonusTrashCan as BonusTrashCanDark,
 } from '@atb/assets/svg/color/images/bonus/dark';
@@ -132,6 +150,38 @@ export const ThemedBundlingCityBikeActive = getThemedAsset(
   BundlingCityBikeActiveLight,
   BundlingCityBikeActiveDark,
 );
+export const ThemedElectricCityBike = getThemedAsset(
+  ElectricCityBikeLight,
+  ElectricCityBikeDark,
+);
+export const ThemedCityBikeRide = getThemedAsset(
+  CityBikeRideLight,
+  CityBikeRideDark,
+);
+export const ThemedElectricCityBikeRide = getThemedAsset(
+  ElectricCityBikeRideLight,
+  ElectricCityBikeRideDark,
+);
+export const ThemedCityBikeStation = getThemedAsset(
+  CityBikeStationLight,
+  CityBikeStationDark,
+);
+export const ThemedElectricCityBikeStation = getThemedAsset(
+  ElectricCityBikeStationLight,
+  ElectricCityBikeStationDark,
+);
+export const ThemedCityBikeStationPerson = getThemedAsset(
+  CityBikeStationPersonLight,
+  CityBikeStationPersonDark,
+);
+export const ThemedElectricCityBikeStationPerson = getThemedAsset(
+  ElectricCityBikeStationPersonLight,
+  ElectricCityBikeStationPersonDark,
+);
+export const ThemedStartCityBike = getThemedAsset(
+  StartCityBikeLight,
+  StartCityBikeDark,
+);
 export const ThemedFlexibleTransport = getThemedAsset(
   FlexibleTransportLight,
   FlexibleTransportDark,
@@ -171,6 +221,7 @@ export const ThemedBonusBagHug = getThemedAsset(
   BonusBagHugDark,
 );
 export const ThemedBonusMap = getThemedAsset(BonusMapLight, BonusMapDark);
+export const ThemedBonusStar = getThemedAsset(BonusStarLight, BonusStarDark);
 export const ThemedBonusTransaction = getThemedAsset(
   BonusTransactionLight,
   BonusTransactionDark,

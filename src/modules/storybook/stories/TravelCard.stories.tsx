@@ -189,8 +189,8 @@ type TravelCardMetaProps = ThemedStoryProps<{
   hasTag: boolean;
   includeDayInfo: boolean;
   includeFromToInfo: boolean;
-  includeLegNotifications: boolean;
-  includeSituationNotices: boolean;
+  includeTransportInfo: boolean;
+  includeSituationsAndNotices: boolean;
   isDisabled: boolean;
   includeAimedTime: boolean;
 }>;
@@ -202,8 +202,8 @@ const TravelCardMeta: Meta = {
     hasTag: {control: 'boolean'},
     includeDayInfo: {control: 'boolean'},
     includeFromToInfo: {control: 'boolean'},
-    includeLegNotifications: {control: 'boolean'},
-    includeSituationNotices: {control: 'boolean'},
+    includeTransportInfo: {control: 'boolean'},
+    includeSituationsAndNotices: {control: 'boolean'},
     isDisabled: {control: 'boolean'},
     includeAimedTime: {control: 'boolean'},
     ...themedStoryControls,
@@ -212,8 +212,8 @@ const TravelCardMeta: Meta = {
     hasTag: false,
     includeDayInfo: false,
     includeFromToInfo: false,
-    includeLegNotifications: false,
-    includeSituationNotices: false,
+    includeTransportInfo: false,
+    includeSituationsAndNotices: false,
     isDisabled: false,
     includeAimedTime: false,
     ...themedStoryDefaultArgs,
@@ -258,8 +258,8 @@ const TravelCardStory = (args: TravelCardMetaProps) => {
               a11yHint={t(TravelCardTexts.card.a11yHint.tripDetails)}
               includeDayInfo={args.includeDayInfo}
               includeFromToInfo={args.includeFromToInfo}
-              includeLegNotifications={args.includeLegNotifications}
-              includeSituationNotices={args.includeSituationNotices}
+              includeTransportInfo={args.includeTransportInfo}
+              includeSituationsAndNotices={args.includeSituationsAndNotices}
               isDisabled={args.isDisabled}
               tag={
                 args.hasTag

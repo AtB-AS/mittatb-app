@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import {QuaySection} from './QuaySection';
 import {FavoriteToggle} from './FavoriteToggle';
-import type {ContrastColor} from '@atb-as/theme';
 import {
   DateSelection,
   type DepartureSearchTime,
@@ -46,7 +45,6 @@ type Props = {
   setShowOnlyFavorites: (enabled: boolean) => void;
   testID?: string;
   mode: StopPlacesMode;
-  backgroundColor: ContrastColor;
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 } & (
   | {
@@ -74,7 +72,6 @@ export const StopPlacesView = (props: Props) => {
     setShowOnlyFavorites,
     testID,
     mode,
-    backgroundColor,
     onScroll,
   } = props;
 
@@ -167,7 +164,6 @@ export const StopPlacesView = (props: Props) => {
                 <DateSelection
                   searchTime={searchTime}
                   setSearchTime={setSearchTime}
-                  backgroundColor={backgroundColor}
                 />
               )}
             </View>

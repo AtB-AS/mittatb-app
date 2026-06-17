@@ -1,6 +1,6 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet, type Theme, useThemeContext} from '@atb/theme';
+import {StyleSheet, type Theme} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {View} from 'react-native';
@@ -38,8 +38,6 @@ export const PlaceScreenComponent = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
-  const themeColor = getThemeColor(theme);
   const {onScroll, borderStyle} = useScrollBorder();
 
   const [searchTime, setSearchTime] = useState<DepartureSearchTime>({
@@ -134,7 +132,6 @@ export const PlaceScreenComponent = ({
             setShowOnlyFavorites={setShowOnlyFavorites}
             testID="departuresContentView"
             stopPlace={place}
-            backgroundColor={themeColor}
             onScroll={onScroll}
           />
         ) : (
@@ -148,7 +145,6 @@ export const PlaceScreenComponent = ({
             showOnlyFavorites={showOnlyFavorites}
             setShowOnlyFavorites={setShowOnlyFavorites}
             testID="departuresContentView"
-            backgroundColor={themeColor}
             onScroll={onScroll}
           />
         )}

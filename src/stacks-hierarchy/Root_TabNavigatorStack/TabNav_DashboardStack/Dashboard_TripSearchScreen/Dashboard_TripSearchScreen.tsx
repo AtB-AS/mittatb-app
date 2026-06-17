@@ -121,6 +121,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   const {from, to} = useLocations(currentLocation);
   const tripSearchEnabled = isValidTripLocations(from, to);
+  const hasLocations = !!from && !!to;
 
   const filtersState = useTravelSearchFiltersState();
 
@@ -336,11 +337,11 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 <EditActionSectionItem
                   ref={timePickerCloseRef}
                   text={t(TripSearchTexts.dateInput.options[searchTime.option])}
-                  subText={`(${getSearchTime(
+                  subText={getSearchTime(
                     searchTime,
                     timeOfLastSearch,
                     language,
-                  )})`}
+                  )}
                   accessibilityLabel={getSearchTimeLabel(
                     searchTime,
                     timeOfLastSearch,
@@ -379,9 +380,9 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           </View>
         )}
       >
-        <View>
+        <View style={styles.contentContainer}>
           <ScreenReaderAnnouncement message={searchStateMessage} />
-          {(!from || !to) && (
+          {!hasLocations && (
             <ThemeText
               type="secondary"
               style={styles.missingLocationText}
@@ -390,73 +391,70 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
             </ThemeText>
           )}
-          <View style={styles.globalMessage}>
-            <GlobalMessage
-              textColor={theme.color.background.neutral[0]}
-              globalMessageContext={GlobalMessageContextEnum.appTripResults}
-              ruleVariables={{
-                transportModes: tripPatterns
-                  .flatMap((tp) => tp.legs)
-                  .map((leg) => leg.mode)
-                  .filter(isDefined)
-                  .filter(onlyUniques),
-                transportSubmodes: tripPatterns
-                  .flatMap((tp) => tp.legs)
-                  .map((leg) => leg.transportSubmode)
-                  .filter(isDefined)
-                  .filter(onlyUniques),
-                authorities: tripPatterns
-                  .flatMap((tp) => tp.legs)
-                  .map((leg) => leg.authority?.id)
-                  .filter(isDefined)
-                  .filter(onlyUniques),
-                publicCodes: tripPatterns
-                  .flatMap((tp) => tp.legs)
-                  .map((leg) => leg.line?.publicCode)
-                  .filter(isDefined)
-                  .filter(onlyUniques),
-              }}
-            />
-          </View>
-          {from && to && (
-            <View>
-              {isFlexibleTransportEnabled &&
-                !flexibleTransportInfoDismissed &&
-                (tripPatterns.length > 0 ||
-                  tripsSearchState === 'search-empty-result') &&
-                !tripsIsError && (
-                  <CityZoneMessage
-                    from={from}
-                    to={to}
-                    onDismiss={() => {
-                      setFlexibleTransportInfoDismissed(true);
-                      analytics.logEvent(
-                        'Flexible transport',
-                        'Message box dismissed',
-                      );
-                    }}
-                  />
-                )}
-              {tripSearchEnabled && (
-                <NonTransitResults
-                  tripsProps={tripsProps}
-                  onDetailsPressed={onPressed}
-                />
-              )}
-              <Results
-                tripPatterns={tripPatterns}
-                isSearching={isSearching}
-                showEmptyScreen={showEmptyScreen}
-                isEmptyResult={isEmptyResult}
-                resultReasons={noResultReasons}
-                onDetailsPressed={(tripPattern, resultIndex) =>
-                  onPressed(tripPattern, {analyticsMetadata: {resultIndex}})
-                }
-                tripsIsError={tripsIsError}
-                tripsIsNetworkError={tripsIsNetworkError}
-                searchTime={searchTime}
+          <GlobalMessage
+            textColor={theme.color.background.neutral[0]}
+            style={styles.globalMessage}
+            globalMessageContext={GlobalMessageContextEnum.appTripResults}
+            ruleVariables={{
+              transportModes: tripPatterns
+                .flatMap((tp) => tp.legs)
+                .map((leg) => leg.mode)
+                .filter(isDefined)
+                .filter(onlyUniques),
+              transportSubmodes: tripPatterns
+                .flatMap((tp) => tp.legs)
+                .map((leg) => leg.transportSubmode)
+                .filter(isDefined)
+                .filter(onlyUniques),
+              authorities: tripPatterns
+                .flatMap((tp) => tp.legs)
+                .map((leg) => leg.authority?.id)
+                .filter(isDefined)
+                .filter(onlyUniques),
+              publicCodes: tripPatterns
+                .flatMap((tp) => tp.legs)
+                .map((leg) => leg.line?.publicCode)
+                .filter(isDefined)
+                .filter(onlyUniques),
+            }}
+          />
+          {isFlexibleTransportEnabled &&
+            !flexibleTransportInfoDismissed &&
+            (tripPatterns.length > 0 ||
+              tripsSearchState === 'search-empty-result') &&
+            !tripsIsError && (
+              <CityZoneMessage
+                from={from}
+                to={to}
+                onDismiss={() => {
+                  setFlexibleTransportInfoDismissed(true);
+                  analytics.logEvent(
+                    'Flexible transport',
+                    'Message box dismissed',
+                  );
+                }}
               />
-            </View>
+            )}
+          {tripSearchEnabled && (
+            <NonTransitResults
+              tripsProps={tripsProps}
+              onDetailsPressed={onPressed}
+            />
+          )}
+          {hasLocations && (
+            <Results
+              tripPatterns={tripPatterns}
+              isSearching={isSearching}
+              showEmptyScreen={showEmptyScreen}
+              isEmptyResult={isEmptyResult}
+              resultReasons={noResultReasons}
+              onDetailsPressed={(tripPattern, resultIndex) =>
+                onPressed(tripPattern, {analyticsMetadata: {resultIndex}})
+              }
+              tripsIsError={tripsIsError}
+              tripsIsNetworkError={tripsIsNetworkError}
+              searchTime={searchTime}
+            />
           )}
           {!tripPatterns.length && <View style={styles.emptyResultsSpacer} />}
           {!tripsIsError && isValidLocations && (
@@ -674,7 +672,7 @@ const getFiltersSubText = (
   if (!transportModes) return undefined;
 
   const count = transportModes.filter((tm) => tm.selected).length;
-  return `(${count})`;
+  return `${count}`;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
@@ -703,7 +701,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
   },
   loadMoreButton: {
-    paddingVertical: theme.spacing.xLarge,
+    paddingVertical: theme.spacing.medium,
     marginBottom: theme.spacing.xLarge,
     flex: 1,
     flexDirection: 'row',
@@ -712,8 +710,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   emptyResultsSpacer: {
     marginTop: theme.spacing.xLarge * 3,
   },
+  contentContainer: {
+    gap: theme.spacing.medium,
+    marginTop: theme.spacing.medium,
+  },
   globalMessage: {
-    paddingHorizontal: theme.spacing.medium,
-    paddingTop: theme.spacing.medium,
+    marginHorizontal: theme.spacing.medium,
   },
 }));

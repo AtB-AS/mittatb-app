@@ -2,6 +2,7 @@ export {FareContractAndReservationsList} from './FareContractAndReservationsList
 export {DetailsContent} from './details/DetailsContent';
 export {
   getValidityStatus,
+  isRelativeValidityStatus,
   getReservationStatus,
   getFareContractInfo,
   useOtherDeviceIsInspectableWarning,

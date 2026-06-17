@@ -4,6 +4,8 @@ import {
   BonusProductGroupType,
   BonusProductSchema,
   BonusProductType,
+  BonusVoucher,
+  BonusVoucherSchema,
 } from '../types';
 import {z} from 'zod';
 
@@ -88,4 +90,12 @@ export const getActiveBonusProductGroups = async (): Promise<
   });
 
   return z.array(BonusProductGroupSchema).parse(response.data);
+};
+
+export const getBonusVouchers = async (): Promise<BonusVoucher[]> => {
+  const response = await client.get(`/bonus/v2/vouchers`, {
+    authWithIdToken: true,
+  });
+
+  return z.array(BonusVoucherSchema).parse(response.data);
 };

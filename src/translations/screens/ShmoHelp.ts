@@ -2,27 +2,24 @@ import {translation as _} from '../commons';
 
 export const ShmoHelpTexts = {
   title: _('Hjelp', 'Help', 'Hjelp'),
-  contactAndReport: _(
-    'Kontakt og rapporter',
-    'Contact and report',
-    'Kontakt og rapporter',
+  contactOptions: _(
+    'Kontaktalternativer',
+    'Contact options',
+    'Kontaktalternativ',
   ),
-  contactOperator: (operatorName: string) => {
-    return _(
-      `Kontakt ${operatorName}`,
-      `Contact ${operatorName}`,
-      `Kontakt ${operatorName}`,
-    );
-  },
+  phone: _('Telefon', 'Phone', 'Telefon'),
+  contactForm: _('Kontaktskjema', 'Contact form', 'Kontaktskjema'),
+  chatInBrowser: _('Chat i nettleser', 'Chat in browser', 'Chat i nettlesar'),
+  readMoreAt: (domain: string) =>
+    _(
+      `Les mer på ${domain}`,
+      `Read more at ${domain}`,
+      `Les meir på ${domain}`,
+    ),
   reportParking: _(
     'Rapporter feilparkering',
     'Report parking violation',
     'Rapporter feilparkering',
   ),
-
-  faq: _(
-    'Ofte stilte spørsmål',
-    'Frequently asked questions',
-    'Ofte stilte spørsmål',
-  ),
+  faq: _('Vanlige spørsmål', 'Frequently asked questions', 'Vanlege spørsmål'),
 };

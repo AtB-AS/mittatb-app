@@ -60,7 +60,8 @@ export type Root_LoginConfirmCodeScreenParams = {
 };
 
 export type Root_LoginRequiredForFareProductScreenParams = {
-  selection: PurchaseSelectionType;
+  title?: string;
+  text?: string;
 };
 
 type Root_ParkingViolationsPhotoParams = {
@@ -79,13 +80,14 @@ type Root_ParkingPhotoScreenParams = {
   bookingId: ShmoBooking['bookingId'];
 };
 
-export type ShmoHelpParams = {operatorId: string} & (
+type ShmoOperatorParams = {operatorId: string} & (
   | {vehicleId: string | undefined}
   | {bookingId: string | undefined}
   | {stationId: string | undefined}
 );
+export type ShmoHelpParams = ShmoOperatorParams & {formFactor?: FormFactor};
 type Root_ShmoHelpScreenParams = ShmoHelpParams;
-type Root_ContactShmoOperatorScreenParams = ShmoHelpParams;
+type Root_ContactShmoOperatorScreenParams = ShmoOperatorParams;
 
 type Root_ContactShmoOperatorConfirmationScreenParams = {
   operatorName: string;

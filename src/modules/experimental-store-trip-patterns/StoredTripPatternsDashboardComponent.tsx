@@ -73,9 +73,8 @@ export const StoredTripPatternsDashboardComponent: React.FC<Props> = ({
   }
 
   return (
-    <View testID="storedTripPatternsContentView">
+    <View testID="storedTripPatternsContentView" style={styles.container}>
       <ContentHeading
-        style={styles.contentHeading}
         text={t(StoredTripPatternsDashboardComponentTexts.header)}
       />
       {tripPatterns.map((tripPattern, i) => (
@@ -176,8 +175,9 @@ const RemoveStoredTripPatternAlertTexts = {
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  contentHeading: {
-    marginHorizontal: theme.spacing.xLarge,
+  container: {
+    marginHorizontal: theme.spacing.medium,
+    gap: theme.spacing.small,
   },
   errorContainer: {
     paddingBottom: theme.spacing.medium,

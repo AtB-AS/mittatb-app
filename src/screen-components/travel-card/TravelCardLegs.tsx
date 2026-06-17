@@ -1,20 +1,16 @@
 import {CounterIconBox} from '@atb/components/icon-box';
 import {StyleSheet, useThemeContext, Statuses} from '@atb/theme';
-import {Mode} from '@atb-as/theme';
 import React from 'react';
 import {View} from 'react-native';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {getFilteredLegsByWalkOrWaitTime} from '@atb/screen-components/travel-details-screens';
 import {OverflowContainer} from '@atb/components/overflow-container';
-import {
-  getNotificationSvgForLegs,
-  getMsgTypeForLeg,
-  toMostCriticalStatus,
-} from '@atb/modules/situations';
+import {toMostCriticalStatus} from '@atb/modules/situations';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
-import {isShortWaitTime, significantWaitTime} from '@atb/modules/trip-patterns';
+import {significantWaitTime} from '@atb/modules/trip-patterns';
 import {secondsBetween} from '@atb/utils/date';
 import {TransportationLeg, FootLeg} from './legs';
+import {getMsgTypeForTravelCardLeg} from './utils';
 import {TravelCardTexts, useTranslation} from '@atb/translations';
 import {secondsToDuration} from '@atb/utils/date';
 import {useAccessibilityLabelContribution} from '@atb/modules/composite-accessibility';
@@ -41,6 +37,10 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
   const a11yLabel = useA11yLabel(filteredLegs);
   useAccessibilityLabelContribution('legs', a11yLabel);
 
+  const legMsgTypes = filteredLegs.map((_, i) =>
+    getMsgTypeForTravelCardLeg(filteredLegs, i),
+  );
+
   return (
     <View style={styles.detailsContainer}>
       <View style={styles.flexRow}>
@@ -50,10 +50,14 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
               maxWidth={maxWidth}
               gap={theme.spacing.xSmall}
               overflow={(n) => {
-                const overflowNotification = getNotificationSvgForLegs(
-                  filteredLegs.slice(-n),
-                  themeName,
-                );
+                const overflowMsgType = legMsgTypes
+                  .slice(-n)
+                  .reduce<
+                    Exclude<Statuses, 'valid'> | undefined
+                  >(toMostCriticalStatus, undefined);
+                const overflowNotification =
+                  overflowMsgType &&
+                  statusTypeToIcon(overflowMsgType, true, themeName);
                 return (
                   <CounterIconBox
                     count={n}
@@ -65,23 +69,23 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
                 );
               }}
             >
-              {filteredLegs.map((leg, i) => (
-                <View key={`leg-${leg.id ?? i}`}>
-                  {leg.mode === 'foot' ? (
-                    <FootLeg leg={leg} />
-                  ) : staySeated(i) ? null : (
-                    <TransportationLeg
-                      leg={leg}
-                      notification={getNotificationForLeg(
-                        leg,
-                        filteredLegs,
-                        i,
-                        themeName,
-                      )}
-                    />
-                  )}
-                </View>
-              ))}
+              {filteredLegs.map((leg, i) => {
+                const msgType = legMsgTypes[i];
+                return (
+                  <View key={`leg-${leg.id ?? i}`}>
+                    {leg.mode === 'foot' ? (
+                      <FootLeg leg={leg} />
+                    ) : staySeated(i) ? null : (
+                      <TransportationLeg
+                        leg={leg}
+                        notification={
+                          msgType && statusTypeToIcon(msgType, true, themeName)
+                        }
+                      />
+                    )}
+                  </View>
+                );
+              })}
             </OverflowContainer>
           </View>
         </View>
@@ -130,7 +134,7 @@ const useA11yLabel = (legs: Leg[]) => {
     )
     .join(', ');
 
-  return [`${prefix}: ${legsLabel}`].filter(isDefined).join(', ');
+  return `${prefix}: ${legsLabel}`;
 };
 
 const getWaitTime = (leg: Leg, nextLeg?: Leg) => {
@@ -148,25 +152,6 @@ const getWaitTime = (leg: Leg, nextLeg?: Leg) => {
     mustWait: significantWaitTime(waitTimeInSeconds),
   };
 };
-
-function getNotificationForLeg(
-  leg: Leg,
-  legs: Leg[],
-  index: number,
-  themeName: Mode,
-) {
-  const previousLeg = legs[index - 1];
-  const waitTimeInSeconds = previousLeg
-    ? secondsBetween(previousLeg.expectedEndTime, leg.expectedStartTime)
-    : 0;
-  const shortTransferMsgType: Exclude<Statuses, 'valid'> | undefined =
-    isShortWaitTime(waitTimeInSeconds) ? 'info' : undefined;
-  const msgType = toMostCriticalStatus(
-    getMsgTypeForLeg(leg),
-    shortTransferMsgType,
-  );
-  return msgType && statusTypeToIcon(msgType, true, themeName);
-}
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   detailsContainer: {

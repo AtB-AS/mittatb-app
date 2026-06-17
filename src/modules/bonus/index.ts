@@ -1,6 +1,5 @@
 export {
   BonusBalanceButton,
-  BonusPriceTag,
   BonusProductList,
   EarnedBonusPointsSectionItem,
   PayWithBonusPointsCheckbox,
@@ -21,12 +20,14 @@ export {
   useProductPointsQuery,
   useActiveBonusProductsQuery,
   useActiveBonusProductGroupsQuery,
+  useBonusVouchersQuery,
 } from './queries';
 export {BonusProductTypeEnum} from './types';
 export type {
   BonusProductType,
   BonusProductGroupType,
   TicketRuleType,
+  BonusVoucher,
 } from './types';
 export {
   bonusOnboardingCarouselConfig,

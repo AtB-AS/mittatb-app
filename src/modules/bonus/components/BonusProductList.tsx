@@ -42,9 +42,9 @@ export const BonusProductList = ({
         const operatorNames = memberProducts
           .map(
             (bp) =>
-              mobilityOperators?.find((op) => op.id === bp.operatorId)?.name ??
-              bp.operatorId,
+              mobilityOperators?.find((op) => op.id === bp.operatorId)?.name,
           )
+          .filter(Boolean)
           .join(', ');
 
         return (
@@ -76,6 +76,11 @@ export const BonusProductList = ({
                     <ThemeText typography="body__s__strong">
                       {operatorNames}
                     </ThemeText>
+                    {!!operatorNames && (
+                      <ThemeText typography="body__s" type="secondary">
+                        {operatorNames}
+                      </ThemeText>
+                    )}
                   </View>
                 </View>
               </GenericSectionItem>
@@ -88,11 +93,7 @@ export const BonusProductList = ({
                       {t(BonusProgramTexts.amountPoints(group.price.amount))}
                     </ThemeText>
                   </View>
-                  <ThemeText
-                    isMarkdown={true}
-                    typography="body__s"
-                    type="secondary"
-                  >
+                  <ThemeText isMarkdown={true} type="secondary">
                     {getTextForLanguage(group.description, language) ?? ''}
                   </ThemeText>
                 </View>

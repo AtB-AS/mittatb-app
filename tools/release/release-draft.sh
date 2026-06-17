@@ -63,7 +63,7 @@ fi
 
 
 echo 'Gathering commits and creating changelog'
-message=$(yarn --silent conventional-changelog -p angular -n ./tools/release/changelog.config.js)
+message=$(pnpm exec conventional-changelog -p angular -n ./tools/release/changelog.config.js)
 
 if [ $? -eq 0 ]; then
   if [ "$preview" = true ]; then

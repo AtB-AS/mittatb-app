@@ -1,0 +1,33 @@
+# Dependabot configuration
+#
+# Policy: security updates only.
+# We intentionally do not open PRs for routine version bumps, to minimize noise.
+# Version bumps are done as part of regular development.
+#
+# Setting `open-pull-requests-limit: 0` disables version-update PRs, while Dependabot
+# security-update PRs are still opened (the limit and `ignore` rules do not
+# apply to security updates). There is no native `dependabot.yml` option to
+# filter security PRs by severity — that lives in repo security settings.
+#
+# See docs for more info:
+# https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference#open-pull-requests-limit-
+#
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 0
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+  - package-ecosystem: "gradle"
+    directory: "/android"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 0
+    commit-message:
+      prefix: "chore"
+      include: "scope"

@@ -56,6 +56,12 @@ export type ValidityStatus =
   | 'approved'
   | 'sent';
 
+export function isRelativeValidityStatus(
+  s: ValidityStatus,
+): s is RelativeValidityStatus {
+  return s === 'upcoming' || s === 'valid' || s === 'expired';
+}
+
 export function getRelativeValidity(
   now: number,
   validFrom: number,

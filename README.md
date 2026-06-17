@@ -28,8 +28,8 @@ Since iOS development is only supported on MacOS, using MacOS for development is
    > ⓘ If bundler fails or not installed, use `gem install bundler -v <version>`, where `<version>` is the one listed at the bottom of [Gemfile.lock](./Gemfile.lock) (`BUNDLED WITH: 2.x.x`).
    > If encountering errors, following the suggested gem installs might solve it.
    >
-   > If you experience various mysterious errors when running `yarn android` you probably have the wrong JDK. See **Common errors**** below for fix. 
-3. [yarn](https://yarnpkg.com/getting-started/install) v1.22 (Currently yarn 2.0 is not supported)
+   > If you experience various mysterious errors when running `pnpm android` you probably have the wrong JDK. See **Common errors**** below for fix.
+3. [pnpm](https://pnpm.io/installation)
 4. git-crypt: `brew install git-crypt` on MacOS, and `apt install git-crypt` on Linux.
 
 ### Starting locally
@@ -37,9 +37,9 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 > [!TIP]
 > If it's been a while since the last time you ran the app, or there's recently been some changes to a unknown set of dependencies, this command should fix most problems:
 >
-> `yarn clean:install && yarn setup dev atb && cd ios && bundle exec pod install --repo-update && cd ../android && ./gradlew clean && cd .. && yarn start --reset-cache`
+> `pnpm clean:install && pnpm setup dev atb && cd ios && bundle exec pod install --repo-update && cd ../android && ./gradlew clean && cd .. && pnpm start --reset-cache`
 >
-> Then `yarn ios --list-devices` or `yarn android` to build and launch the app
+> Then `pnpm ios --list-devices` or `pnpm android` to build and launch the app
 
 #### First time setup
 
@@ -62,7 +62,7 @@ Since iOS development is only supported on MacOS, using MacOS for development is
    > ⓘ Access token from jfrog has a one-year expiry
 2. Install dependencies:
 
-   a. React Native: `yarn`
+   a. React Native: `pnpm install`
 
    b. Install Ruby dependencies `bundle install`
 
@@ -77,21 +77,21 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 
    b. Pod install: `cd ios/` and `bundle exec pod install`
 
-5. From root folder run: `yarn setup dev <organization>` where organization is either `atb`, `fram`, `nfk` or `troms`, to set root .env for local development and generate all icons and launch screens for iOS and Android.
+5. From root folder run: `pnpm setup dev <organization>` where organization is either `atb`, `fram`, `nfk` or `troms`, to set root .env for local development and generate all icons and launch screens for iOS and Android.
 
-6. Run `yarn get_ios_certs` to install certificates.
+6. Run `pnpm get_ios_certs` to install certificates.
    > ⓘ In order to be able to set up this step you must have access to the certificates's repo for the organization you are working on.
 
 #### Building and running the app
 
-- iOS: Run `yarn ios --list-devices`
-- Android: Run `yarn android`
+- iOS: Run `pnpm ios --list-devices`
+- Android: Run `pnpm android`
   - You may select which device/emulator to use from Android Studio. You may also use Android Debug Bridge (adb).
   - When deploying on device you should check that the device is listed as `device` with `adb devices`. You may also need to use the command `adb -s <device-id> reverse tcp:8081 tcp:8081` to reverse the port needed for metro.
 
 ### Verifying your environment
 
-Run `yarn doctor` at any time to check that all requirements and setup steps are in place — useful after OS upgrades, tool updates, or when something suddenly stops working.
+Run `pnpm doctor` at any time to check that all requirements and setup steps are in place — useful after OS upgrades, tool updates, or when something suddenly stops working.
 
 ### Common errors
 
@@ -117,7 +117,7 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 #### Mysterious, unexplainable build errors when building the android app
  *Example:* `Could not resolve all files for configuration ':adrianso_react-native-device-brightness:androidJdkImage'.`
 
- Run this command to check if you have the correct JDK: 
+ Run this command to check if you have the correct JDK:
 ```sh
 npx react-native doctor
 ```
@@ -150,18 +150,18 @@ You might be missing iOS dependencies (Cocopods). See dependency step in [Starti
 
 ## Design system and assets
 
-Assets such as icons, logos, and illustrations are set up by running `yarn setup` in the terminal. Assets will be outputted in `./assets/design-assets` and converted from SVGs to TypeScript React Native files.
+Assets such as icons, logos, and illustrations are set up by running `pnpm setup` in the terminal. Assets will be outputted in `./assets/design-assets` and converted from SVGs to TypeScript React Native files.
 
 When adding or changing assets in the design system, run setup again:
 
 ```
-yarn setup dev <organization>
+pnpm setup dev <organization>
 ```
 
 Then restart metro and clear cache:
 
 ```
-yarn start --reset-cache
+pnpm start --reset-cache
 ```
 
 See the [design system](https://github.com/AtB-AS/design-system) and [`@atb-as/generate-assets`](https://github.com/AtB-AS/design-system/tree/main/packages/assets) for more details.
@@ -174,7 +174,7 @@ For test devices and developer devices we do continuous distribution through dir
 
 Storybook for the app can be viewed in debug build of the app through the developer section in 'Profile'.
 
-When adding or removing stories, the command `yarn storybook-generate` must be used to update the references in the `storybook.requires.js` file.
+When adding or removing stories, the command `pnpm storybook-generate` must be used to update the references in the `storybook.requires.js` file.
 
 ## Using with other organizations
 
@@ -184,7 +184,7 @@ See documentation on setting up other environments.
 
 ## Find unused dependencies
 
-`yarn unimported`
+`pnpm unimported`
 
 ## License
 

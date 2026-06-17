@@ -27,6 +27,14 @@ type TextProps = SectionItemProps<
     showClear?: boolean;
     onClear?: () => void;
     errorText?: string;
+    /**
+     * The underlying text input component to render. Defaults to react-native's
+     * `TextInput`. Pass `@gorhom/bottom-sheet`'s `BottomSheetTextInput` when used
+     * inside a bottom sheet so the sheet reacts to the keyboard appearance.
+     */
+    InputComponent?: React.ComponentType<
+      InternalTextInputProps & React.RefAttributes<any>
+    >;
   }
 >;
 
@@ -41,6 +49,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
       showClear,
       onClear,
       style,
+      InputComponent = InternalTextInput,
       ...props
     },
     forwardedRef,
@@ -131,7 +140,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
             inlineLabel ? contentContainer : undefined,
           ]}
         >
-          <InternalTextInput
+          <InputComponent
             ref={combinedRef}
             style={[
               styles.input,

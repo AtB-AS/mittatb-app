@@ -41,6 +41,7 @@ import {
 import {useAuthContext} from '@atb/modules/auth';
 import {isDefined} from '@atb/utils/presence';
 import {useChatUnreadCount} from '@atb/modules/chat';
+import {useDebugServerOverrides} from '@atb/modules/debug';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -62,6 +63,7 @@ export const Root_TabNavigatorStack = () => {
         screen: 'Ticketing_RootScreen',
         params: {
           screen: 'TicketTabNav_AvailableFareContractsTabScreen',
+          params: {},
         },
       },
     });
@@ -74,6 +76,7 @@ export const Root_TabNavigatorStack = () => {
   const {goToScreen} = useOnboardingNavigation();
   const {customerNumber} = useAuthContext();
   const unreadCount = useChatUnreadCount();
+  const serverOverrides = useDebugServerOverrides();
 
   useEffect(() => {
     if (
@@ -92,7 +95,11 @@ export const Root_TabNavigatorStack = () => {
   ]);
 
   const getProfileNotification = (): ThemeIconProps['notification'] => {
-    if (customerNumber === undefined || unreadCount) {
+    if (
+      customerNumber === undefined ||
+      unreadCount ||
+      serverOverrides.length > 0
+    ) {
       return {
         color: theme.color.status.error.primary,
         backgroundColor: interactiveColor.default,

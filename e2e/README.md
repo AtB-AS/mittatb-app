@@ -13,7 +13,7 @@ WebdriverIO/Appium. Read more about it [here](#flashlight-performance-measure).
 
 ```bash
 ## install WebdriverIO and dependencies
-$ yarn install
+$ pnpm install
 ```
 
 ## Test on GH action
@@ -23,7 +23,7 @@ Firebase App Distribution and run tests against it. The Android APK will be down
 `e2e/apk/app-staging.apk`.
 ```bash
 ## run tests
-$ APP_PATH=<absolute-path-to-root> yarn test:android
+$ APP_PATH=<absolute-path-to-root> pnpm test:android
 ```
 
 ## Test locally
@@ -37,7 +37,7 @@ Two alternatives.
 $ emulator -netdelay none -netspeed full -no-snapshot-load -avd Pixel_5_API_30
 
 ## run tests
-$ yarn test:android:local:firebase
+$ pnpm test:android:local:firebase
 ```
 2) Start the app in developer mode with Metro. To avoid error messages, the `index.js` should be replaced
 ```bash
@@ -45,16 +45,16 @@ $ yarn test:android:local:firebase
 $ ./e2e/scripts/removeLogsFromDevApp.sh
 
 ## set dev mode
-$ yarn setup dev atb
+$ pnpm setup dev atb
 
 ## start emulator (name of the AVD is here 'Pixel_5_API_30')
 $ emulator -netdelay none -netspeed full -no-snapshot-load -avd Pixel_5_API_30
 
 ## start app locally
-$ yarn android
+$ pnpm android
 
 ## run tests
-yarn test:android:local:dev
+pnpm test:android:local:dev
 ```
 
 ## Errors and reporting
@@ -86,10 +86,10 @@ $ curl https://get.flashlight.dev | bash
 $ flashlight measure
 
 ## Start measurements with test script
-$ flashlight test --bundleId no.mittatb.debug --testCommand "yarn test:android:local:dev --spec e2e/test/flashlight/performanceMeasures.e2e.ts" --resultsTitle performanceMeasures --iterationCount 1 --maxRetries 1
+$ flashlight test --bundleId no.mittatb.debug --testCommand "pnpm test:android:local:dev --spec e2e/test/flashlight/performanceMeasures.e2e.ts" --resultsTitle performanceMeasures --iterationCount 1 --maxRetries 1
 
-## Start measurements with yarn
-$ yarn test:android:local:perfMeasure
+## Start measurements with pnpm
+$ pnpm test:android:local:perfMeasure
 
 ## Generate HTML-report after test
 $ flashlight report <path-to-file>/<test-results>.json

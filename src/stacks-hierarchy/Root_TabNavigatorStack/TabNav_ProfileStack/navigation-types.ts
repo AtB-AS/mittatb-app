@@ -11,6 +11,7 @@ export type ProfileStackParams = StackParams<{
   Profile_PaymentMethodsScreen: undefined;
   Profile_PurchaseHistoryScreen: undefined;
   Profile_BonusScreen: undefined;
+  Profile_BonusCouponCodesScreen: undefined;
   Profile_SmartParkAndRideScreen: SmartParkAndRideScreenParams;
   Profile_DeleteProfileScreen: undefined;
   Profile_EditProfileScreen: undefined;

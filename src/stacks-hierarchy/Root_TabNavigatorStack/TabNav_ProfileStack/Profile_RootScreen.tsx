@@ -40,6 +40,7 @@ import {Favorite, Parking} from '@atb/assets/svg/mono-icons/places';
 import {Info, Unknown} from '@atb/assets/svg/mono-icons/status';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {useChatUnreadCount} from '@atb/modules/chat';
+import {useDebugServerOverrides} from '@atb/modules/debug';
 import Intercom, {Space} from '@intercom/intercom-react-native';
 import {
   GlobalMessage,
@@ -50,6 +51,7 @@ import {
   useIsBonusActiveForUser,
   useIsBonusEnrollable,
 } from '@atb/modules/bonus';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -82,6 +84,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const isBonusActiveForUser = useIsBonusActiveForUser();
   const isBonusEnrollable = useIsBonusEnrollable();
   const showBonusSection = isBonusActiveForUser || isBonusEnrollable;
+  const serverOverrides = useDebugServerOverrides();
 
   const focusRef = useFocusOnLoad(navigation);
 
@@ -297,6 +300,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 <LinkSectionItem
                   text="Debug"
                   testID="debugButton"
+                  rightIcon={
+                    serverOverrides.length
+                      ? {
+                          svg: ChevronRight,
+                          notificationColor: theme.color.status.error.primary,
+                        }
+                      : undefined
+                  }
                   onPress={() => navigation.navigate('Profile_DebugInfoScreen')}
                 />
               </Section>

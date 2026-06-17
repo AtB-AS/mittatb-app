@@ -154,6 +154,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_ticket_information',
   },
   {
+    name: 'isTicketTransferEnabled',
+    remoteConfigKey: 'enable_ticket_transfer',
+  },
+  {
     name: 'isTipsAndInformationEnabled',
     remoteConfigKey: 'enable_tips_and_information',
   },
@@ -184,6 +188,10 @@ export const toggleSpecifications = [
   {
     name: 'isHarborDistancesApiEnabled',
     remoteConfigKey: 'enable_harbor_distances_api',
+  },
+  {
+    name: 'isGeocoderV3Enabled',
+    remoteConfigKey: 'use_geocoder_v3',
   },
 ] as const satisfies readonly FeatureToggleSpecification[];
 

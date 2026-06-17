@@ -277,11 +277,18 @@ const TripDetailsTexts = {
               : `${count} intermediate stop (${duration})`,
             `${count} mellomstopp (${duration})`,
           ),
-        a11yHint: _(
-          'Aktivér for å vise alle mellomstopp.',
-          'Activate to show intermediate stops',
-          'Aktiver for å vise alle mellomstopp',
-        ),
+        a11yHint: (expanded: boolean) =>
+          expanded
+            ? _(
+                'Aktivér for å skjule alle mellomstopp.',
+                'Activate to hide intermediate stops',
+                'Aktiver for å skjule alle mellomstopp',
+              )
+            : _(
+                'Aktivér for å vise alle mellomstopp.',
+                'Activate to show intermediate stops',
+                'Aktiver for å vise alle mellomstopp',
+              ),
       },
       walk: {
         label: (duration: string) =>

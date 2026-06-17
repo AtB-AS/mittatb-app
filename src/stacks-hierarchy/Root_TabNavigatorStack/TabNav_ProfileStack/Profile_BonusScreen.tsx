@@ -9,7 +9,7 @@ import {
   ProfileTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {useEffect, useRef, useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
@@ -22,11 +22,7 @@ import {
   useActiveBonusProductGroupsQuery,
   BonusProductList,
 } from '@atb/modules/bonus';
-import {
-  useIsEnrolled,
-  useProgramQuery,
-  KnownProgramId,
-} from '@atb/modules/enrollment';
+import {useIsEnrolled, KnownProgramId} from '@atb/modules/enrollment';
 import {useAuthContext} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {isDefined} from '@atb/utils/presence';
@@ -40,7 +36,6 @@ import {Loading} from '@atb/components/loading';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
 import {useGetHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
-import {formatToDate} from '@atb/utils/date';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {
   GlobalMessage,
@@ -55,7 +50,7 @@ type Props = ProfileScreenProps<'Profile_BonusScreen'>;
 
 export const Profile_BonusScreen = ({navigation}: Props) => {
   const focusRef = useFocusOnLoad(navigation);
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
@@ -75,20 +70,7 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
     useGetHasReservationOrAvailableFareContract();
 
   const isEnrolled = useIsEnrolled(KnownProgramId.BONUS);
-  const wasEnrolledRef = useRef(isEnrolled);
-  const [hasJustEnrolled, setHasJustEnrolled] = useState(false);
 
-  useEffect(() => {
-    if (!wasEnrolledRef.current && isEnrolled) {
-      setHasJustEnrolled(true);
-    }
-    wasEnrolledRef.current = isEnrolled;
-  }, [isEnrolled]);
-
-  const bonusProgram = useProgramQuery(KnownProgramId.BONUS);
-  const endDateString = bonusProgram?.endAt
-    ? formatToDate(bonusProgram.endAt, language)
-    : '';
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
 
@@ -134,21 +116,10 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
                   {t(BonusProgramTexts.bonusProfile.joinProgram.description)}
                 </ThemeText>
                 <ThemeText typography="body__m" type="primary">
-                  {t(
-                    BonusProgramTexts.bonusProfile.joinProgram.footer(
-                      endDateString,
-                    ),
-                  )}
+                  {t(BonusProgramTexts.bonusProfile.joinProgram.footer)}
                 </ThemeText>
               </GenericSectionItem>
             </Section>
-            {!isLoggedIn && (
-              <MessageInfoText
-                style={styles.messageInfo}
-                type="warning"
-                message={t(BonusProgramTexts.bonusProfile.noProfile)}
-              />
-            )}
             <Button
               expanded
               text={
@@ -181,32 +152,29 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
                 }
               }}
             />
+            {!isLoggedIn && (
+              <MessageInfoText
+                style={styles.messageInfo}
+                type="warning"
+                message={t(BonusProgramTexts.bonusProfile.noProfile)}
+              />
+            )}
           </>
         )}
 
         {isEnrolled && (
           <>
-            {hasJustEnrolled && (
-              <MessageInfoBox
-                type="valid"
-                title={
-                  !!userBonusBalance
-                    ? t(BonusProgramTexts.bonusProfile.joined.title)
-                    : undefined
-                }
-                message={t(
-                  !!userBonusBalance
-                    ? BonusProgramTexts.bonusProfile.joined.welcomeGiftDescription(
-                        userBonusBalance,
-                      )
-                    : BonusProgramTexts.bonusProfile.joined.title,
-                )}
-              />
-            )}
             <Section>
               <GenericSectionItem>
                 <UserBonusBalanceContent />
               </GenericSectionItem>
+              <LinkSectionItem
+                text={t(BonusProgramTexts.myCouponCodes.linkText)}
+                onPress={() => {
+                  analytics.logEvent('Bonus', 'My coupon codes clicked');
+                  navigation.navigate('Profile_BonusCouponCodesScreen');
+                }}
+              />
             </Section>
             {isBonusBalanceError && (
               <MessageInfoBox
@@ -214,9 +182,9 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
                 message={t(BonusProgramTexts.bonusProfile.noBonusBalance)}
               />
             )}
+            <HowPointsWork />
           </>
         )}
-        <HowPointsWork />
 
         <ContentHeading
           text={t(BonusProgramTexts.bonusProfile.spendPoints.heading)}

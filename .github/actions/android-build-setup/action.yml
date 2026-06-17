@@ -61,15 +61,17 @@ runs:
       shell: bash
       run: sudo apt-get update && sudo apt-get install imagemagick
 
-    - name: Install node v22
+    - uses: pnpm/action-setup@v4
+
+    - name: Install node
       uses: actions/setup-node@v5
       with:
-        node-version: 22
-        cache: 'yarn'
+        node-version-file: '.nvmrc'
+        cache: 'pnpm'
 
     - name: Install node_modules
       shell: bash
-      run: yarn install --frozen-lockfile
+      run: pnpm install --frozen-lockfile
 
     - name: Setup ruby and bundle install
       uses: ruby/setup-ruby@v1
@@ -99,4 +101,4 @@ runs:
     - name: Generate native assets
       if: inputs.skip-heavy-steps != 'true'
       shell: bash
-      run: yarn generate-native-assets
+      run: pnpm generate-native-assets

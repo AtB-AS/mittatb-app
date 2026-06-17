@@ -106,7 +106,7 @@ const TripSearchTexts = {
   },
   dateInput: {
     options: {
-      now: _('Dra nå', 'Leave now', 'Dra no'),
+      now: _('Nå', 'Now', 'No'),
       departure: _('Avreise', 'Leave at', 'Avreise'),
       arrival: _('Ankomst', 'Arrive by', 'Ankomst'),
     },

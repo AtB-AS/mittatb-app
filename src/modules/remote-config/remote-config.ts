@@ -58,6 +58,7 @@ export type RemoteConfig = {
   enable_show_valid_time_info: boolean;
   enable_surface_view_map: boolean;
   enable_ticket_information: boolean;
+  enable_ticket_transfer: boolean;
   enable_ticketing: boolean;
   enable_tips_and_information: boolean;
   enable_token_fallback_on_timeout: boolean;
@@ -84,6 +85,7 @@ export type RemoteConfig = {
   service_disruption_url: string;
   save_trip_swipe_threshold: number;
   token_timeout_in_seconds: number;
+  use_geocoder_v3: boolean;
   use_product_api_v2: boolean;
   use_trygg_overgang_qr_code: boolean;
 };
@@ -130,7 +132,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_posthog: false,
   enable_push_notifications: false,
   enable_refunds: true,
-  enable_save_trips: false,
+  enable_save_trips: true,
   enable_server_time: true,
   enable_shmo_deep_integration: false,
   enable_shmo_deep_integration_citybike: false,
@@ -138,6 +140,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_show_valid_time_info: true,
   enable_surface_view_map: true,
   enable_ticket_information: false,
+  enable_ticket_transfer: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
   enable_event_stream: false,
   enable_event_stream_fare_contracts: false,
@@ -166,6 +169,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   service_disruption_url: '',
   save_trip_swipe_threshold: 40,
   token_timeout_in_seconds: 10,
+  use_geocoder_v3: false,
   use_product_api_v2: false,
   use_trygg_overgang_qr_code: false,
 };
@@ -302,6 +306,9 @@ export function getConfig(): RemoteConfig {
   const enable_ticket_information =
     values['enable_ticket_information']?.asBoolean() ??
     defaultRemoteConfig.enable_ticket_information;
+  const enable_ticket_transfer =
+    values['enable_ticket_transfer']?.asBoolean() ??
+    defaultRemoteConfig.enable_ticket_transfer;
   const enable_ticketing = values['enable_ticketing']?.asBoolean() ?? false;
   const enable_tips_and_information =
     values['enable_tips_and_information']?.asBoolean() ??
@@ -382,6 +389,9 @@ export function getConfig(): RemoteConfig {
   const token_timeout_in_seconds =
     values['token_timeout_in_seconds']?.asNumber() ??
     defaultRemoteConfig.token_timeout_in_seconds;
+  const use_geocoder_v3 =
+    values['use_geocoder_v3']?.asBoolean() ??
+    defaultRemoteConfig.use_geocoder_v3;
   const use_product_api_v2 =
     values['use_product_api_v2']?.asBoolean() ??
     defaultRemoteConfig.use_product_api_v2;
@@ -435,6 +445,7 @@ export function getConfig(): RemoteConfig {
     enable_show_valid_time_info,
     enable_surface_view_map,
     enable_ticket_information,
+    enable_ticket_transfer,
     enable_ticketing,
     enable_tips_and_information,
     enable_token_fallback_on_timeout,
@@ -461,6 +472,7 @@ export function getConfig(): RemoteConfig {
     service_disruption_url,
     save_trip_swipe_threshold,
     token_timeout_in_seconds,
+    use_geocoder_v3,
     use_product_api_v2,
     use_trygg_overgang_qr_code,
   };

@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
 import type {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {FullScreenView} from '@atb/components/screen-view';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {BookingTripSelection} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/components/TripSelection';
 import {
   DateSelection,
@@ -34,7 +34,6 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
         },
   );
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const styles = useStyles();
   const builder = usePurchaseSelectionBuilder();
 
@@ -72,7 +71,6 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
                 .build(),
             );
           }}
-          backgroundColor={theme.color.background.neutral[1]}
         />
       </View>
       <View style={styles.content}>
@@ -114,9 +112,10 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
-    marginTop: theme.spacing.medium,
+    margin: theme.spacing.medium,
   },
   content: {
-    backgroundColor: theme.color.background.neutral[1].background,
+    paddingTop: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
 }));

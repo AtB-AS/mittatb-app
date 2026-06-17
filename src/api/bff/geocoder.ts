@@ -4,7 +4,7 @@ import {client} from '../client';
 import qs from 'query-string';
 import {stringifyUrl} from '../utils';
 import {AxiosRequestConfig} from 'axios';
-import {Feature} from './types';
+import {Feature, FeatureCategory, FeatureV3} from './types';
 import {SearchLocation} from '@atb/modules/favorites';
 
 export const FOCUS_ORIGIN: Coordinates = {
@@ -72,5 +72,76 @@ const mapFeatureToSearchLocation = ({
 }: Feature): SearchLocation => ({
   ...properties,
   coordinates: {latitude, longitude},
+  resultType: 'search',
+  fare_zones: properties.tariff_zones,
+});
+
+export async function autocompleteV3(
+  text: string,
+  coordinates: Coordinates | null,
+  onlyLocalFareZoneAuthority: boolean = false,
+  onlyStopPlaces: boolean = false,
+  config?: AxiosRequestConfig,
+): Promise<SearchLocation[]> {
+  const url = 'bff/v2/geocoder/features';
+  const query = qs.stringify(
+    {
+      query: text,
+      lat: coordinates?.latitude ?? FOCUS_ORIGIN.latitude,
+      lon: coordinates?.longitude ?? FOCUS_ORIGIN.longitude,
+      limit: 10,
+      fareZoneAuthorities: onlyLocalFareZoneAuthority
+        ? TARIFF_ZONE_AUTHORITY
+        : null,
+      layers: onlyStopPlaces ? ['stopPlace'] : undefined,
+      multimodal: 'parent',
+    },
+    {skipNull: true},
+  );
+
+  const response = await client.get<FeatureV3[]>(
+    stringifyUrl(url, query),
+    config,
+  );
+  return response.data.map(mapFeatureV3ToSearchLocation);
+}
+
+export async function reverseV3(
+  coordinates: Coordinates | null,
+  config?: AxiosRequestConfig,
+): Promise<SearchLocation[]> {
+  const url = 'bff/v2/geocoder/reverse';
+  const query = qs.stringify({
+    lat: coordinates?.latitude,
+    lon: coordinates?.longitude,
+  });
+
+  const response = await client.get<FeatureV3[]>(
+    stringifyUrl(url, query),
+    config,
+  );
+  return response.data.map(mapFeatureV3ToSearchLocation);
+}
+
+const featureCategories = new Set<string>(Object.values(FeatureCategory));
+
+const mapFeatureV3ToSearchLocation = ({
+  geometry: {
+    coordinates: [longitude, latitude],
+  },
+  properties,
+}: FeatureV3): SearchLocation => ({
+  id: properties.id,
+  name: properties.names.default,
+  label: properties.names.display,
+  layer: properties.layer === 'stopPlace' ? 'venue' : 'address',
+  coordinates: {latitude, longitude},
+  locality: properties.address?.locality,
+  postalcode: properties.address?.postalCode,
+  housenumber: properties.address?.houseNumber,
+  fare_zones: properties.fareZones,
+  category: (properties.stopPlaceTypes ?? []).filter(
+    (t): t is FeatureCategory => featureCategories.has(t),
+  ),
   resultType: 'search',
 });
