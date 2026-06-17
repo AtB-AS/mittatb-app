@@ -41,11 +41,15 @@ export const Root_PurchaseFareZonesSearchByMapScreen = ({
         to: selection.zones.to.id,
       });
     }
-    navigation.popTo('Root_PurchaseOverviewScreen', {
-      mode: 'Ticket',
-      selection,
-      onFocusElement: 'zones',
-    });
+    navigation.popTo(
+      'Root_PurchaseOverviewScreen',
+      {
+        mode: 'Ticket',
+        selection,
+        onFocusElement: 'zones',
+      },
+      {merge: true},
+    );
   };
 
   const onVenueSearchClick = (fromOrTo: 'from' | 'to') =>
