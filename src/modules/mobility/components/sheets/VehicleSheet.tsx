@@ -204,8 +204,10 @@ export const VehicleSheet = ({
                   ? ({
                       kind: 'MOBILITY_PRICE_ADJUSTMENT' as const,
                       vehicleTypeIds: vehicleTypeId ? [vehicleTypeId] : [],
-                      systemIds: [],
-                      priceAdjustments: bonusProduct.priceAdjustments,
+                      systemIds: [vehicle.system.id],
+                      priceAdjustments: bonusProduct.priceAdjustments.filter(
+                        (pa) => pa.systemIds.includes(vehicle.system.id),
+                      ),
                     } satisfies MobilityPriceAdjustmentBenefitType)
                   : (vehicle.benefit ?? undefined)
               }

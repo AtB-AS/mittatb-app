@@ -244,37 +244,28 @@ export const isShowAll = (
 export const toFormFactorEnum = (str: string): FormFactor =>
   enumFromString(FormFactor, str) || FormFactor.Other;
 
-// A mobility benefit carries its `systemIds` at the benefit level (and is
-// already system-filtered server-side). The bonus-product path instead builds a
-// synthetic benefit with empty benefit-level `systemIds` and the constraint on
-// each adjustment, so match against either.
-const adjustmentAppliesToSystem = (
-  benefit: MobilityPriceAdjustmentBenefitType,
-  adjustment: MobilityPriceAdjustmentType,
-  systemId: string,
-): boolean =>
-  benefit.systemIds.includes(systemId) ||
-  (adjustment.systemIds?.includes(systemId) ?? false);
-
+// A mobility benefit carries its `systemIds` at the benefit level. The real
+// mobility path is already system-filtered server-side; the bonus-product path
+// sets the benefit-level `systemIds` when building its synthetic benefit.
 export const getFreeUnlock = (
   benefit: MobilityPriceAdjustmentBenefitType | undefined,
   systemId: string,
 ): MobilityPriceAdjustmentType | undefined =>
-  benefit?.priceAdjustments.find(
-    (e) =>
-      e.type === PriceAdjustmentEnum.enum.FREE_UNLOCK &&
-      adjustmentAppliesToSystem(benefit, e, systemId),
-  );
+  benefit?.systemIds.includes(systemId)
+    ? benefit.priceAdjustments.find(
+        (e) => e.type === PriceAdjustmentEnum.enum.FREE_UNLOCK,
+      )
+    : undefined;
 
 export const getFreeMinutes = (
   benefit: MobilityPriceAdjustmentBenefitType | undefined,
   systemId: string,
 ): MobilityPriceAdjustmentType | undefined =>
-  benefit?.priceAdjustments.find(
-    (e) =>
-      e.type === PriceAdjustmentEnum.enum.FREE_MINUTES &&
-      adjustmentAppliesToSystem(benefit, e, systemId),
-  );
+  benefit?.systemIds.includes(systemId)
+    ? benefit.priceAdjustments.find(
+        (e) => e.type === PriceAdjustmentEnum.enum.FREE_MINUTES,
+      )
+    : undefined;
 
 export const computeFreeMinuteCount = (
   freeMinutes: MobilityPriceAdjustmentType,

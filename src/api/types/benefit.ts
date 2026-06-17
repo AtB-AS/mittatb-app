@@ -6,15 +6,11 @@ export const MobilityPriceAdjustmentSchema = z
     amount: z.number(),
     adjustmentType: PriceAdjustmentEnum,
     description: z.string().default(''),
-    // `systemIds` lives at the benefit level for mobility benefits; it is only
-    // present per-adjustment on the bonus-product path (see modules/bonus).
-    systemIds: z.array(z.string()).optional(),
   })
   .transform((x) => ({
     amount: x.amount,
     type: x.adjustmentType,
     description: x.description,
-    systemIds: x.systemIds,
   }));
 
 export const MobilityPriceAdjustmentBenefitSchema = z.object({
