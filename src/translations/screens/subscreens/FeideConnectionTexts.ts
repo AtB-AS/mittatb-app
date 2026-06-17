@@ -2,7 +2,11 @@ import {translation as _} from '../../commons';
 
 const FeideConnectionTexts = {
   header: {
-    title: _('Feide og skoleskyss', 'Feide and school transport', 'Feide og skuleskyss'),
+    title: _(
+      'Feide og skoleskyss',
+      'Feide and school transport',
+      'Feide og skuleskyss',
+    ),
   },
   description: _(
     'Koble til Feide for å hente skoleskyssbilletten din i appen. Du logger inn med Feide, og vi kobler den til kontoen din.',
