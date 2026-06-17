@@ -142,6 +142,9 @@ const TravelCardTexts = {
       a11yLabel: (time: string) =>
         _(`Vent ${time}`, `Wait ${time}`, `Vent ${time}`),
     },
+    interchange: {
+      a11yLabel: _('Korrespondanse', 'Correspondance', 'Korrespondanse'),
+    },
   },
 };
 

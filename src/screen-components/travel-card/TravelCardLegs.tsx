@@ -16,6 +16,8 @@ import {secondsToDuration} from '@atb/utils/date';
 import {useAccessibilityLabelContribution} from '@atb/modules/composite-accessibility';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {isDefined} from '@atb/utils/presence';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {Connection} from '@atb/assets/svg/mono-icons/miscellaneous';
 
 type TravelCardContentProps = {
   tripPattern: TripPattern;
@@ -71,8 +73,12 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
             >
               {filteredLegs.map((leg, i) => {
                 const msgType = legMsgTypes[i];
+                const showInterchange =
+                  leg.interchangeFrom?.guaranteed &&
+                  !leg.interchangeFrom?.staySeated;
                 return (
-                  <View key={`leg-${leg.id ?? i}`}>
+                  <View key={`leg-${leg.id ?? i}`} style={styles.legGroup}>
+                    {showInterchange && <ThemeIcon svg={Connection} />}
                     {leg.mode === 'foot' ? (
                       <FootLeg leg={leg} />
                     ) : staySeated(i) ? null : (
@@ -125,10 +131,17 @@ const useA11yLabel = (legs: Leg[]) => {
     );
   };
 
+  const interchangeLabel = (leg: Leg): string | undefined => {
+    if (leg.interchangeFrom?.guaranteed && !leg.interchangeFrom.staySeated) {
+      return t(TravelCardTexts.legs.interchange.a11yLabel);
+    }
+    return undefined;
+  };
+
   const prefix = t(TravelCardTexts.legs.prefix);
   const legsLabel = legs
     .map((leg, idx) =>
-      [legLabel(leg), waitLabel(leg, legs[idx + 1])]
+      [interchangeLabel(leg), legLabel(leg), waitLabel(leg, legs[idx + 1])]
         .filter(isDefined)
         .join('. '),
     )
@@ -183,5 +196,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     gap: theme.spacing.xSmall,
     flexWrap: 'wrap',
+  },
+  legGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.xSmall,
   },
 }));
