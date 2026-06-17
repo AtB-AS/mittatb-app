@@ -200,7 +200,6 @@ export const VehicleSheet = ({
             <OperatorBenefit
               benefit={operatorBenefit}
               formFactor={formFactor}
-              style={styles.operatorBenefit}
             />
           )}
           <View style={styles.vehicleContent}>
@@ -312,9 +311,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       gap: theme.spacing.small,
     },
     loading: {
-      marginBottom: theme.spacing.medium,
-    },
-    operatorBenefit: {
       marginBottom: theme.spacing.medium,
     },
     messageInfo: {
