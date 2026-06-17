@@ -24,7 +24,7 @@ import {
   usePurchaseSelectionBuilder,
   useSelectableUserProfiles,
 } from '@atb/modules/purchase-selection';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {formatToNonBreakingSpaces} from '@atb/utils/text';
 import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
 import {useOnBehalfOf} from '../use-on-behalf-of';
@@ -44,7 +44,7 @@ export function TravellerSelection({
   const {theme} = useThemeContext();
   const styles = useStyles();
   const onCloseFocusRef = useRef<View | null>(null);
-  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
   const builder = usePurchaseSelectionBuilder();
 
   const selectionMode =

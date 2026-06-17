@@ -5,7 +5,7 @@ import {ImageConfirmationBottomSheet} from './ImageConfirmationBottomSheet';
 import {Coordinates} from '@atb/utils/coordinates';
 import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {View} from 'react-native';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 
 type PhotoCaptureProps = {
   onConfirmImage: (file: PhotoFile) => void;
@@ -29,7 +29,7 @@ export const PhotoCapture = ({
   const isFocused = useIsFocusedAndActive();
 
   const onCloseFocusRef = useRef<View | null>(null);
-  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
   const [file, setFile] = useState<PhotoFile | null>(null);
   const userCoordinates = getCurrentCoordinatesGlobal();
 

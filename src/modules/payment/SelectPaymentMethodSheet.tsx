@@ -23,8 +23,8 @@ import {MultiplePaymentMethodsRadioSection} from './MultiplePaymentMethodsRadioS
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
+  BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
-import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {isNonRecurringPaymentType} from './utils';
 
@@ -38,7 +38,7 @@ type Props = {
     paymentMethod?: PaymentMethod;
   };
   recurringPaymentMethods?: PaymentMethod[];
-  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  bottomSheetModalRef: React.RefObject<BottomSheetModalMethods | null>;
   onCloseFocusRef: React.RefObject<View | null>;
 };
 

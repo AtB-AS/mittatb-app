@@ -4,7 +4,7 @@ import {FareProducts} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_
 import {StyleSheet} from '@atb/theme';
 import React, {useRef} from 'react';
 import {RefreshControl, View} from 'react-native';
-import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TransferCodeBottomSheet} from './Components/TransferCodeBottomSheet';
@@ -51,7 +51,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {scrollHandler} = useTabScrollHandler(0);
   const {isTicketTransferEnabled} = useFeatureTogglesContext();
   const transferCodeButtonRef = useRef<View>(null);
-  const transferCodeSheetRef = useRef<GorhomBottomSheetModal>(null);
+  const transferCodeSheetRef = useRef<BottomSheetModalMethods>(null);
 
   const onTicketsReceived = () => {
     analytics.logEvent('Ticketing', 'Ticket received with transfer code');

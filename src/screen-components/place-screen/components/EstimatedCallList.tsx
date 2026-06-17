@@ -18,7 +18,7 @@ import {
 } from '@atb/modules/favorites';
 import {QuaySectionProps} from './QuaySection';
 import {secondsBetween} from '@atb/utils/date';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 
 type EstimatedCallRenderItem = {
@@ -48,7 +48,7 @@ export const EstimatedCallList = ({
   testID,
 }: Props) => {
   const {t} = useTranslation();
-  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
   const [selectedDeparture, setSelectedDeparture] = useState<{
     departure: EstimatedCall;
     existingFavorite: StoredFavoriteDeparture | undefined;

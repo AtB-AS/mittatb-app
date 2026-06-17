@@ -12,17 +12,17 @@ import React, {useState} from 'react';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
+  BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {View} from 'react-native';
 import {RefObject} from '@testing-library/react-native/build/types';
-import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   fareContractId: string;
   fareProductType: string | undefined;
-  bottomSheetModalRef: RefObject<GorhomBottomSheetModal | null>;
+  bottomSheetModalRef: RefObject<BottomSheetModalMethods | null>;
   onCloseFocusRef: RefObject<View | null>;
 };
 

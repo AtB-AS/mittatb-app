@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {Keyboard, View} from 'react-native';
 import {isErrorResponse} from '@atb/api/utils';
 import {StyleSheet} from '@atb/theme';
 import {TicketingTexts, useTranslation} from '@atb/translations';
@@ -13,17 +13,15 @@ import {useThemeContext} from '@atb/theme';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
+  BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
-import {
-  BottomSheetModal as GorhomBottomSheetModal,
-  BottomSheetTextInput,
-} from '@gorhom/bottom-sheet';
+import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
 import {ThemedTicketTilted} from '@atb/theme/ThemedAssets';
 
 const MIN_CODE_LENGTH = 8;
 
 type Props = {
-  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  bottomSheetModalRef: React.RefObject<BottomSheetModalMethods | null>;
   onCloseFocusRef: React.RefObject<View | null>;
   onTicketsReceived: () => void;
 };
@@ -37,6 +35,7 @@ export const TransferCodeBottomSheet = ({
   const {theme} = useThemeContext();
   const styles = useStyles();
   const [code, setCode] = useState('');
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const {mutate, isPending, error, reset} = useAcceptTicketTransferMutation();
 
   const onSubmit = () =>
@@ -58,8 +57,10 @@ export const TransferCodeBottomSheet = ({
       bottomSheetModalRef={bottomSheetModalRef}
       heading={t(TicketingTexts.transferCode.bottomSheet.heading)}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
+      keyboardBehavior="interactive"
       keyboardBlurBehavior="restore"
       closeCallback={() => {
+        Keyboard.dismiss();
         giveFocus(onCloseFocusRef);
         setCode('');
         reset();
@@ -84,6 +85,8 @@ export const TransferCodeBottomSheet = ({
             autoCapitalize="none"
             autoCorrect={false}
             errorText={errorText}
+            onFocus={() => setIsInputFocused(true)}
+            onBlur={() => setIsInputFocused(false)}
             testID="transferCodeInput"
           />
         </Section>
@@ -96,21 +99,23 @@ export const TransferCodeBottomSheet = ({
           loading={isPending}
           testID="transferCodeSubmitButton"
         />
-        <Section>
-          <GenericSectionItem>
-            <View style={styles.infoContainer}>
-              <View style={styles.infoText}>
-                <ThemeText typography="body__m__strong">
-                  {t(TicketingTexts.transferCode.bottomSheet.infoTitle)}
-                </ThemeText>
-                <ThemeText typography="body__s" type="secondary">
-                  {t(TicketingTexts.transferCode.bottomSheet.infoBody)}
-                </ThemeText>
+        {!isInputFocused && (
+          <Section>
+            <GenericSectionItem>
+              <View style={styles.infoContainer}>
+                <View style={styles.infoText}>
+                  <ThemeText typography="body__m__strong">
+                    {t(TicketingTexts.transferCode.bottomSheet.infoTitle)}
+                  </ThemeText>
+                  <ThemeText typography="body__s" type="secondary">
+                    {t(TicketingTexts.transferCode.bottomSheet.infoBody)}
+                  </ThemeText>
+                </View>
+                <ThemedTicketTilted width={96} height={96} />
               </View>
-              <ThemedTicketTilted width={96} height={96} />
-            </View>
-          </GenericSectionItem>
-        </Section>
+            </GenericSectionItem>
+          </Section>
+        )}
       </View>
     </BottomSheetModal>
   );

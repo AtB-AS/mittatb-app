@@ -18,7 +18,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {compressImageToBase64} from '@atb/utils/image';
 import {View} from 'react-native';
-import {BottomSheetModal as GorhamBottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {ViolationsReportingProvider} from '@atb/api/types/mobility';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
@@ -44,9 +44,9 @@ export const Root_ParkingViolationsQrScreen = ({
   const {userId} = useAuthContext();
   const onCloseFocusRef = useRef<View | null>(null);
   const providerAndVehicleBottomSheetModalRef =
-    useRef<GorhamBottomSheetModal | null>(null);
+    useRef<BottomSheetModalMethods | null>(null);
   const selectProviderBottomSheetModalRef =
-    useRef<GorhamBottomSheetModal | null>(null);
+    useRef<BottomSheetModalMethods | null>(null);
   const [providerAndVehicleId, setProviderAndVehicleId] = useState<{
     provider: ViolationsReportingProvider;
     vehicle_id: string | undefined;

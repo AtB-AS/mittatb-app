@@ -13,7 +13,7 @@ import {
 } from '@atb/modules/purchase-selection';
 import {DatePickerSheet} from '@atb/components/date-selection';
 import {EditActionSectionItem, Section} from '@atb/components/sections';
-import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 
 type StartTimeSelectionProps = {
@@ -30,7 +30,7 @@ export function StartTimeSelection({
   const {t, language} = useTranslation();
   const selectionBuilder = usePurchaseSelectionBuilder();
   const onCloseFocusRef = useRef<View | null>(null);
-  const bottomSheetModalRef = useRef<GorhomBottomSheetModal | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
 
   if (
     selection.fareProductTypeConfig.configuration.timeSelectionMode === 'none'

@@ -17,7 +17,6 @@ import {
 } from 'react-native-vision-camera';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Flash, NoFlash} from '@atb/assets/svg/mono-icons/miscellaneous';
-import {SCREEN_HEIGHT} from '@gorhom/bottom-sheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {errorToMetadata, logToBugsnag} from '@atb/utils/bugsnag-utils';
 import DeviceInfo from 'react-native-device-info';
@@ -169,7 +168,7 @@ export const Camera = ({
   }
 };
 
-const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}, {height}) => {
   return {
     container: {
       flex: 1,
@@ -182,7 +181,7 @@ const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
     qrFrame: {
       position: 'absolute',
       alignSelf: 'center',
-      bottom: SCREEN_HEIGHT / 2,
+      bottom: height / 2,
       transform: [{translateY: 100}],
       width: 200,
       height: 200,

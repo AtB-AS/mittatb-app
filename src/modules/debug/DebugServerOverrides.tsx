@@ -5,6 +5,7 @@ import {Button} from '@atb/components/button';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
+  BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
 import {
   SectionSeparator,
@@ -23,7 +24,6 @@ import Swipeable, {
 } from 'react-native-gesture-handler/ReanimatedSwipeable';
 import Animated, {SharedValue, useAnimatedStyle} from 'react-native-reanimated';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import type {DebugServerOverride, HeaderOverride} from './types';
 
 type OftenUsedOverride = DebugServerOverride & {label: string};
@@ -50,8 +50,8 @@ const oftenUsedOverrides: OftenUsedOverride[] = [
 export function DebugServerOverrides() {
   const [overrides, setOverrides] = React.useState<DebugServerOverride[]>([]);
   const focusRef = useRef<View>(null);
-  const editBottomSheetRef = useRef<GorhomBottomSheetModal>(null);
-  const addBottomSheetRef = useRef<GorhomBottomSheetModal>(null);
+  const editBottomSheetRef = useRef<BottomSheetModalMethods>(null);
+  const addBottomSheetRef = useRef<BottomSheetModalMethods>(null);
   const [selectedOverride, setSelectedOverride] = useState<
     DebugServerOverride | undefined
   >(undefined);
