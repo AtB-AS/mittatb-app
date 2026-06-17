@@ -7,7 +7,7 @@ import {
 } from '@atb/utils/date';
 import React, {useCallback, useRef} from 'react';
 import {View} from 'react-native';
-import {getPlaceName, InterchangeDetails, TripSection} from './TripSection';
+import {TripSection} from './TripSection';
 import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '../types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
@@ -195,10 +195,6 @@ export const Trip: React.FC<TripProps> = ({
                 wait={legWaitDetails(index, filteredLegs)}
                 isLast={index == filteredLegs.length - 1}
                 step={index + 1}
-                interchangeDetails={getInterchangeDetails(
-                  filteredLegs,
-                  leg.interchangeTo?.toServiceJourney?.id,
-                )}
                 leg={leg}
                 testID={'leg' + index}
                 onPressShowLive={
@@ -271,24 +267,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacing.medium,
   },
 }));
-
-function getInterchangeDetails(
-  legs: Leg[],
-  id: string | undefined,
-): InterchangeDetails | undefined {
-  if (!id) return undefined;
-  const interchangeLeg = legs.find(
-    (leg) => leg.line && leg.serviceJourney?.id === id,
-  );
-
-  if (interchangeLeg?.line?.publicCode) {
-    return {
-      publicCode: interchangeLeg.line.publicCode,
-      fromPlace: getPlaceName(interchangeLeg.fromPlace),
-    };
-  }
-  return undefined;
-}
 
 function isNetworkError(error: ErrorResponse): boolean {
   return error.kind === 'AXIOS_NETWORK_ERROR' || error.kind === 'AXIOS_TIMEOUT';

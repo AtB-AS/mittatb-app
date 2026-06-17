@@ -1,6 +1,7 @@
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 import type {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
 import type {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
+import type {InterchangeFragment} from '@atb/api/types/generated/fragments/interchanges';
 import type {LineFragment} from '@atb/api/types/generated/fragments/lines';
 import type {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import type {SituationFragment} from '@atb/api/types/generated/fragments/situations';
@@ -76,12 +77,8 @@ export type LegFragment = {
     notices: Array<NoticeFragment>;
     journeyPattern?: {notices: Array<NoticeFragment>};
   };
-  interchangeTo?: {
-    guaranteed?: boolean;
-    maximumWaitTime?: number;
-    staySeated?: boolean;
-    toServiceJourney?: {id: string};
-  };
+  interchangeTo?: InterchangeFragment;
+  interchangeFrom?: InterchangeFragment;
   pointsOnLink?: {points?: string; length?: number};
   intermediateEstimatedCalls: Array<{
     date: any;

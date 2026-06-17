@@ -68,13 +68,13 @@ import {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {CancelledDepartureMessage} from './CancelledDepartureMessage';
 import {WalkFill} from '@atb/assets/svg/mono-icons/transportation';
+import {InterchangeSection} from './InterchangeSection';
 
 type TripSectionProps = {
   isLast?: boolean;
   wait?: WaitDetails;
   isFirst?: boolean;
   step?: number;
-  interchangeDetails?: InterchangeDetails;
   leg: Leg;
   testID?: string;
   onPressShowLive?(serviceJourneyPolylines: ServiceJourneyPolylines): void;
@@ -82,17 +82,11 @@ type TripSectionProps = {
   onPressQuay: TripProps['onPressQuay'];
 };
 
-export type InterchangeDetails = {
-  publicCode: string;
-  fromPlace: string;
-};
-
 export const TripSection: React.FC<TripSectionProps> = ({
   isLast,
   isFirst,
   wait,
   step,
-  interchangeDetails,
   leg,
   testID,
   onPressShowLive,
@@ -150,9 +144,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
   }
 
   const translatedModeName = getTranslatedModeName(leg.mode);
-
-  const showInterchangeSection =
-    leg.interchangeTo?.guaranteed && interchangeDetails && leg.line;
 
   const showQuayDescription =
     !!leg.fromPlace.quay?.description && !isWalkSection && !isBikeSection;
@@ -224,6 +215,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const sectionOutput = (
     <>
+      <InterchangeSection leg={leg} />
       <View style={style.tripSection} testID={testID}>
         {!!step && leg.mode && (
           <AccessibleText
@@ -534,14 +526,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
       </View>
-      {showInterchangeSection && (
-        <InterchangeSection
-          publicCode={publicCode}
-          interchangeDetails={interchangeDetails}
-          maximumWaitTime={leg.interchangeTo?.maximumWaitTime}
-          staySeated={leg.interchangeTo?.staySeated}
-        />
-      )}
       <FlexibleTransportBookingDetailsSheet
         leg={leg}
         bottomSheetModalRef={bottomSheetModalRef}
@@ -911,76 +895,6 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   );
 };
 
-type InterchangeSectionProps = {
-  publicCode: string;
-  interchangeDetails: InterchangeDetails;
-  maximumWaitTime?: number;
-  staySeated?: boolean;
-};
-
-function InterchangeSection({
-  publicCode,
-  interchangeDetails,
-  maximumWaitTime,
-  staySeated,
-}: InterchangeSectionProps) {
-  const {t, language} = useTranslation();
-  const style = useSectionStyles();
-  const legColor = useTransportColor().secondary;
-
-  let text = '';
-  if (publicCode && staySeated) {
-    text = t(
-      TripDetailsTexts.messages.lineChangeStaySeated(
-        publicCode,
-        interchangeDetails.publicCode,
-      ),
-    );
-  } else if (publicCode) {
-    text = t(
-      TripDetailsTexts.messages.interchange(
-        publicCode,
-        interchangeDetails.publicCode,
-        interchangeDetails.fromPlace,
-      ),
-    );
-  } else {
-    text = t(
-      TripDetailsTexts.messages.interchangeWithUnknownFromPublicCode(
-        interchangeDetails.publicCode,
-        interchangeDetails.fromPlace,
-      ),
-    );
-  }
-
-  // If maximum wait time is defined or over 0, append it to the message.
-  // In some cases with missing data the maximum wait time can be -1.
-  if (maximumWaitTime && maximumWaitTime > 0 && !staySeated) {
-    text =
-      text +
-      ' ' +
-      t(
-        TripDetailsTexts.messages.interchangeMaxWait(
-          secondsToDuration(maximumWaitTime, language),
-        ),
-      );
-  }
-
-  return (
-    <View style={style.interchangeSection}>
-      <TripLegDecoration
-        dimensionOverrides={NEW_TRIP_DIMENSIONS}
-        color={legColor.background}
-        hasStart={false}
-        hasEnd={false}
-      />
-      <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS}>
-        <MessageInfoBox type="info" message={text} />
-      </TripRow>
-    </View>
-  );
-}
-
 export function getPlaceName(place: Place): string {
   const fallback = place.name ?? '';
   return place.quay ? (getQuayName(place.quay) ?? fallback) : fallback;
@@ -1042,9 +956,6 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   authoritySection: {
     rowGap: theme.spacing.medium,
-  },
-  interchangeSection: {
-    marginBottom: theme.spacing.large,
   },
   intermediateStop: {
     flex: 1,
