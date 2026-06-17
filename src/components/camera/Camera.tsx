@@ -1,6 +1,6 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {RefObject, useRef, useState} from 'react';
-import {Dimensions, Linking, Platform, View} from 'react-native';
+import {Linking, Platform, View} from 'react-native';
 import {Processing} from '../loading';
 import {MessageInfoBox} from '../message-info-box';
 import {CaptureButton} from './CaptureButton';
@@ -168,7 +168,7 @@ export const Camera = ({
   }
 };
 
-const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}, {height}) => {
   return {
     container: {
       flex: 1,
@@ -181,7 +181,7 @@ const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
     qrFrame: {
       position: 'absolute',
       alignSelf: 'center',
-      bottom: Dimensions.get('window').height / 2,
+      bottom: height / 2,
       transform: [{translateY: 100}],
       width: 200,
       height: 200,
