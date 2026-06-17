@@ -43,6 +43,7 @@ export {default as BonusProgramTexts} from './screens/subscreens/BonusProgram';
 export {default as LanguageSettingsTexts} from './screens/subscreens/LanguageSettingsTexts';
 export {default as UserProfileSettingsTexts} from './screens/subscreens/UserProfileSettingsTexts';
 export {default as LoginTexts} from './screens/subscreens/Login';
+export {default as FeideConnectionTexts} from './screens/subscreens/FeideConnectionTexts';
 export {default as dictionary} from './dictionary';
 export {default as TravelTokenTexts} from './screens/subscreens/TravelToken';
 export {default as ConsiderTravelTokenChangeTexts} from './screens/ConsiderTravelTokenChangeScreen';

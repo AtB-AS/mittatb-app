@@ -38,6 +38,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_experimental_features',
   },
   {
+    name: 'isFeideConnectionEnabled',
+    remoteConfigKey: 'enable_feide_connection',
+  },
+  {
     name: 'isFlexibleTransportEnabled',
     remoteConfigKey: 'enable_flexible_transport',
   },

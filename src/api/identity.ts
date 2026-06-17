@@ -12,6 +12,12 @@ import {v4 as uuid} from 'uuid';
 import {DateResponse, DateResponseSchema} from './types/mobility';
 
 export const VIPPS_CALLBACK_URL = `${APP_SCHEME}://auth/vipps`;
+export const FEIDE_CALLBACK_URL = `${APP_SCHEME}://auth/feide`;
+
+export type FeideConnectResponse = {
+  name?: string;
+  hasNin: boolean;
+};
 
 export const getServerTime = async () => {
   const response = await client.get('/identity/v1/time', {
@@ -159,5 +165,63 @@ async function generateState() {
 async function generateNonce() {
   const nonce = uuid();
   await storage.set('vipps_nonce', nonce);
+  return nonce;
+}
+
+/**
+ * Start Feide-connection: Get authorization-URL from identity og open it in
+ * in-app browser. Redirect catched via deep-link in screen which calls this.
+ * Mirrors initAgeVerification (Vipps connect-while-logged-in).
+ */
+export const initFeideConnect = async (
+  opts?: AxiosRequestConfig,
+): Promise<void> => {
+  const state = await generateFeideState();
+  const nonce = await generateFeideNonce();
+  return client
+    .get(
+      `/identity/v1/feide/authorization-url?callbackUrl=${FEIDE_CALLBACK_URL}`,
+      {
+        ...opts,
+      },
+    )
+    .then(async (response) => {
+      const authorisationUrl = response.data;
+      openInAppBrowser(
+        `${authorisationUrl}&state=${state}&nonce=${nonce}`,
+        'cancel',
+      );
+    });
+};
+
+/**
+ * Complete Feide-connection: trade authorization code with userinfo server-side, and
+ * connect Feide-user to logged in Firebase-user
+ */
+export const connectFeide = async (
+  authorizationCode: string,
+  opts?: AxiosRequestConfig,
+): Promise<FeideConnectResponse> => {
+  return client
+    .post<FeideConnectResponse>(
+      `/identity/v1/feide/connect?callbackUrl=${FEIDE_CALLBACK_URL}`,
+      {authorizationCode},
+      {
+        authWithIdToken: true,
+        ...opts,
+      },
+    )
+    .then((res) => res.data);
+};
+
+async function generateFeideState() {
+  const state = uuid();
+  await storage.set('feide_state', state);
+  return state;
+}
+
+async function generateFeideNonce() {
+  const nonce = uuid();
+  await storage.set('feide_nonce', nonce);
   return nonce;
 }
