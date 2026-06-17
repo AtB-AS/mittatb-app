@@ -1,4 +1,3 @@
-import {GenericSectionItem, Section} from '@atb/components/sections';
 import {View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
@@ -38,26 +37,19 @@ export const OperatorBenefit = ({benefit, formFactor, style}: Props) => {
     ) ?? '';
 
   return (
-    <View style={style}>
-      <Section>
-        <GenericSectionItem>
-          <View style={styles.benefitContainer}>
-            <BenefitImage
-              eligible={isUserEligibleForBenefit}
-              formFactor={formFactor}
-              style={styles.benefitImage}
-            />
-            <View style={styles.benefitContent}>
-              {heading && (
-                <ThemeText typography="body__m__strong">{heading}</ThemeText>
-              )}
-              <ThemeText typography="body__s" type="secondary">
-                {text}
-              </ThemeText>
-            </View>
-          </View>
-        </GenericSectionItem>
-      </Section>
+    <View style={[style, styles.benefitContainer]}>
+      <BenefitImage
+        eligible={isUserEligibleForBenefit}
+        formFactor={formFactor}
+      />
+      <View style={styles.benefitContent}>
+        {heading && (
+          <ThemeText typography="body__m__strong">{heading}</ThemeText>
+        )}
+        <ThemeText typography="body__s" type="secondary">
+          {text}
+        </ThemeText>
+      </View>
     </View>
   );
 };
@@ -66,11 +58,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   benefitContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: theme.spacing.medium,
   },
   benefitContent: {
     flex: 4,
-  },
-  benefitImage: {
-    marginEnd: theme.spacing.medium,
   },
 }));

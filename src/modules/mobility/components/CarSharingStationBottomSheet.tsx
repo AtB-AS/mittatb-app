@@ -104,11 +104,15 @@ export const CarSharingStationBottomSheet = ({
           <>
             <View style={styles.container}>
               {operatorBenefit && (
-                <OperatorBenefit
-                  benefit={operatorBenefit}
-                  formFactor={FormFactor.Car}
-                  style={styles.operatorBenefit}
-                />
+                <Section>
+                  <GenericSectionItem>
+                    <OperatorBenefit
+                      benefit={operatorBenefit}
+                      formFactor={FormFactor.Car}
+                      style={styles.operatorBenefit}
+                    />
+                  </GenericSectionItem>
+                </Section>
               )}
               <Section>
                 <GenericSectionItem>

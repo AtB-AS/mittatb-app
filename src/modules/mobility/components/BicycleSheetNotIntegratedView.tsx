@@ -65,11 +65,15 @@ export const BikeStationNotIntegratedView = ({
     <>
       <View style={styles.container}>
         {operatorBenefit && (
-          <OperatorBenefit
-            benefit={operatorBenefit}
-            formFactor={FormFactor.Bicycle}
-            style={styles.operatorBenefit}
-          />
+          <Section>
+            <GenericSectionItem>
+              <OperatorBenefit
+                benefit={operatorBenefit}
+                formFactor={FormFactor.Bicycle}
+                style={styles.operatorBenefit}
+              />
+            </GenericSectionItem>
+          </Section>
         )}
         <Section>
           <GenericSectionItem>
