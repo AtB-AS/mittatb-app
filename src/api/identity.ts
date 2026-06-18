@@ -10,6 +10,7 @@ import {stringifyUrl} from './utils';
 import {AgeVerificationEnum} from '@atb/modules/mobility';
 import {v4 as uuid} from 'uuid';
 import {DateResponse, DateResponseSchema} from './types/mobility';
+import {generatePkcePair} from './pkce';
 
 export const VIPPS_CALLBACK_URL = `${APP_SCHEME}://auth/vipps`;
 export const FEIDE_CALLBACK_URL = `${APP_SCHEME}://auth/feide`;
@@ -183,6 +184,8 @@ export const initFeideConnect = async (
 ): Promise<void> => {
   const state = await generateFeideState();
   const nonce = await generateFeideNonce();
+  const {verifier, challenge} = generatePkcePair();
+  await storage.set('feide_code_verifier', verifier);
   return client
     .get(
       `/identity/v1/feide/authorization-url?callbackUrl=${FEIDE_CALLBACK_URL}`,
@@ -193,7 +196,7 @@ export const initFeideConnect = async (
     .then(async (response) => {
       const authorisationUrl = response.data;
       openInAppBrowser(
-        `${authorisationUrl}&state=${state}&nonce=${nonce}`,
+        `${authorisationUrl}&state=${state}&nonce=${nonce}&code_challenge=${challenge}&code_challenge_method=S256`,
         'cancel',
       );
     });
@@ -203,14 +206,20 @@ export const initFeideConnect = async (
  * Complete Feide-connection: trade authorization code with userinfo server-side, and
  * connect Feide-user to logged in Firebase-user
  */
+export type ConnectFeideParams = {
+  authorizationCode: string;
+  codeVerifier: string;
+  nonce: string;
+};
+
 export const connectFeide = async (
-  authorizationCode: string,
+  {authorizationCode, codeVerifier, nonce}: ConnectFeideParams,
   opts?: AxiosRequestConfig,
 ): Promise<FeideConnectResponse> => {
   return client
     .post<FeideConnectResponse>(
       `/identity/v1/feide/connect?callbackUrl=${FEIDE_CALLBACK_URL}`,
-      {authorizationCode},
+      {authorizationCode, codeVerifier, nonce},
       {
         authWithIdToken: true,
         ...opts,
@@ -227,7 +236,7 @@ export const getFeideConnection = (
   opts?: AxiosRequestConfig,
 ): Promise<FeideConnectionStatus> => {
   return client
-    .get<FeideConnectionStatus>('/identity/v1/feide/connection', {
+    .get<FeideConnectionStatus>(`/identity/v1/feide/connection`, {
       ...opts,
       authWithIdToken: true,
     })

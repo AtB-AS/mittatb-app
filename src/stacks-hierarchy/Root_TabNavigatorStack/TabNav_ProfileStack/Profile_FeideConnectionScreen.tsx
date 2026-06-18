@@ -57,10 +57,17 @@ export const Profile_FeideConnectionScreen = ({navigation}: Props) => {
         const initialState = await storage.get('feide_state');
 
         if (code && state && state === initialState) {
-          setLocalError(false);
-          connectFeide(code);
+          const codeVerifier = await storage.get('feide_code_verifier');
+          const nonce = await storage.get('feide_nonce');
+          if (codeVerifier && nonce) {
+            setLocalError(false);
+            connectFeide({authorizationCode: code, codeVerifier, nonce});
+          } else {
+            setLocalError(true);
+          }
           await storage.set('feide_state', '');
           await storage.set('feide_nonce', '');
+          await storage.set('feide_code_verifier', '');
         } else if (parsed.searchParams.get('error')) {
           setLocalError(true);
         }
