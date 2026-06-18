@@ -17,7 +17,6 @@ export type TransportModePair = {
 
 type Props = {
   modes: TransportModePair[];
-  maxNumberOfBoxes?: number;
   iconSize?: keyof Theme['icon']['size'];
 } & AccessibilityProps;
 
@@ -28,14 +27,12 @@ export const TransportationIconBoxList = ({
 }: Props) => {
   const styles = useStyles({iconSize})();
   const {t} = useTranslation();
-  const numberOfModes: number = modes.length;
-  const hasOverflow = numberOfModes > TRANSPORTATION_ICON_BOX_LIST_MAX_ITEMS;
-  const numberOfModesToDisplay = hasOverflow
-    ? TRANSPORTATION_ICON_BOX_LIST_MAX_ITEMS - 1
-    : numberOfModes;
-  const modesToDisplay = modes
-    .filter(removeDuplicatesByIconNameFilter)
-    .slice(0, numberOfModesToDisplay);
+  const deduplicatedModes = modes.filter(removeDuplicatesByIconNameFilter);
+  const modesToDisplay =
+    deduplicatedModes.length > TRANSPORTATION_ICON_BOX_LIST_MAX_ITEMS
+      ? deduplicatedModes.slice(0, TRANSPORTATION_ICON_BOX_LIST_MAX_ITEMS - 1)
+      : deduplicatedModes;
+  const overflowCount = deduplicatedModes.length - modesToDisplay.length;
 
   return (
     <View
@@ -52,9 +49,9 @@ export const TransportationIconBoxList = ({
           iconSize={iconSize}
         />
       ))}
-      {hasOverflow && (
+      {overflowCount > 0 && (
         <CounterIconBox
-          count={numberOfModes - numberOfModesToDisplay}
+          count={overflowCount}
           size={iconSize}
           textType={iconSize === 'xSmall' ? 'heading__xs' : 'body__s'}
         />
