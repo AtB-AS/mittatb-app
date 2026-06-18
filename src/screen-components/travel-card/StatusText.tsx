@@ -6,7 +6,7 @@ import {StyleSheet} from '@atb/theme';
 import {SvgProps} from 'react-native-svg';
 
 type StatusTextProps = {
-  svg: (props: SvgProps) => React.JSX.Element;
+  svg?: (props: SvgProps) => React.JSX.Element;
   color: IconColor;
   text: string;
 };
@@ -15,7 +15,7 @@ export const StatusText: React.FC<StatusTextProps> = ({svg, color, text}) => {
   const styles = useStyles();
   return (
     <View style={styles.container}>
-      <ThemeIcon svg={svg} color={color} size="xSmall" />
+      {svg && <ThemeIcon svg={svg} color={color} size="xSmall" />}
       <ThemeText typography="body__s__strong" color={color}>
         {text}
       </ThemeText>
