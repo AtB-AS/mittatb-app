@@ -111,7 +111,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params?.refreshOffer]);
 
-  const closeModal = () => navigation.popToTop();
+  const closeModal = () => navigation.pop();
 
   const focusRefs = useFocusRefs(params.onFocusElement);
 

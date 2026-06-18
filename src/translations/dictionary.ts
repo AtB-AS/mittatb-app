@@ -202,6 +202,7 @@ const dictionary = {
   },
   confirm: _('Bekreft', 'Confirm', `Bekreft`),
   retry: _('Prøv på nytt', 'Try again', `Prøv på nytt`),
+  edit: _('Endre', 'Edit', 'Endre'),
   cancel: _('Avbryt', 'Cancel', `Avbryt`),
   remove: _('Fjern', 'Remove', `Fjern`),
   seeMore: _('Vis mer', 'See more', `Vis meir`),

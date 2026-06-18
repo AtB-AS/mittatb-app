@@ -138,15 +138,20 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
      *  If booking is enabled we need the user to select a departure, and
      *  thus cannot send them directly to the confirmation screen.
      */
-    const targetScreen = rfc.preassignedFareProduct.isBookingEnabled
-      ? 'Root_PurchaseOverviewScreen'
-      : 'Root_PurchaseConfirmationScreen';
-
-    navigation.navigate(targetScreen, {
-      selection,
-      mode: 'Ticket',
-      transitionOverride: 'slide-from-right',
-    });
+    if (rfc.preassignedFareProduct.isBookingEnabled) {
+      navigation.navigate('Root_PurchaseOverviewScreen', {
+        selection,
+        mode: 'Ticket',
+        transitionOverride: 'slide-from-right',
+      });
+    } else {
+      navigation.navigate('Root_PurchaseConfirmationScreen', {
+        selection,
+        mode: 'Ticket',
+        transitionOverride: 'slide-from-right',
+        allowEdit: true,
+      });
+    }
   };
 
   const refreshControlProps = useManualRefreshControlProps({

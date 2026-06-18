@@ -12,21 +12,25 @@ import {
   GlobalMessage,
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   Language,
   PurchaseConfirmationTexts,
   getTextForLanguage,
   useTranslation,
+  dictionary,
 } from '@atb/translations';
 import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import React from 'react';
 import {View} from 'react-native';
+import {NativeBlockButton} from '@atb/components/native-button';
 import {TicketRecipientType} from '@atb/modules/ticketing';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
 import type {Leg} from '@atb/api/types/trips';
+import SvgEdit from '@atb/assets/svg/mono-icons/actions/Edit';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -37,6 +41,7 @@ type Props = {
   validDurationSeconds?: number;
   travelDate?: string;
   legs?: Leg[];
+  onEdit?: () => void;
 };
 
 export const PreassignedFareContractSummary = ({
@@ -48,6 +53,7 @@ export const PreassignedFareContractSummary = ({
   validDurationSeconds,
   travelDate,
   legs,
+  onEdit,
 }: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
@@ -65,6 +71,8 @@ export const PreassignedFareContractSummary = ({
         ),
       )
     : t(PurchaseConfirmationTexts.travelDate.now);
+
+  const {theme} = useThemeContext();
 
   function summary(text?: string) {
     if (!text) return null;
@@ -116,60 +124,80 @@ export const PreassignedFareContractSummary = ({
   return (
     <Section>
       <GenericSectionItem>
-        <View accessible={true} style={styles.ticketInfoContainer}>
-          <ThemeText>
-            {getReferenceDataName(preassignedFareProduct, language)}
-          </ThemeText>
-          {recipient && (
-            <ThemeText
-              typography="body__s"
-              type="secondary"
-              style={styles.sendingToText}
-              testID="onBehalfOfText"
-            >
-              {t(
-                PurchaseConfirmationTexts.sendingTo(
-                  recipient.name || formatPhoneNumber(recipient.phoneNumber),
+        <View style={styles.ticketInfoContainer}>
+          <View style={styles.headerRow}>
+            <ThemeText>
+              {getReferenceDataName(preassignedFareProduct, language)}
+            </ThemeText>
+            {onEdit && (
+              <NativeBlockButton
+                onPress={onEdit}
+                style={styles.editButton}
+                accessibilityRole="button"
+                accessibilityLabel={t(dictionary.edit)}
+              >
+                <ThemeText color={theme.color.foreground.emphasis.interactive}>
+                  {t(dictionary.edit)}
+                </ThemeText>
+                <ThemeIcon
+                  svg={SvgEdit}
+                  color={theme.color.foreground.emphasis.interactive}
+                />
+              </NativeBlockButton>
+            )}
+          </View>
+          <View accessible={true}>
+            {recipient && (
+              <ThemeText
+                typography="body__s"
+                type="secondary"
+                style={styles.sendingToText}
+                testID="onBehalfOfText"
+              >
+                {t(
+                  PurchaseConfirmationTexts.sendingTo(
+                    recipient.name || formatPhoneNumber(recipient.phoneNumber),
+                  ),
+                )}
+              </ThemeText>
+            )}
+            {fareProductTypeConfig.direction &&
+              summary(
+                t(
+                  PurchaseConfirmationTexts.validityTexts.direction[
+                    fareProductTypeConfig.direction
+                  ](fromPlaceName, toPlaceName),
                 ),
               )}
-            </ThemeText>
-          )}
-          {fareProductTypeConfig.direction &&
-            summary(
-              t(
-                PurchaseConfirmationTexts.validityTexts.direction[
-                  fareProductTypeConfig.direction
-                ](fromPlaceName, toPlaceName),
-              ),
-            )}
-          <SummaryText />
-          {!!validDurationSeconds &&
-            isShowValidTimeInfoEnabled &&
-            summary(
-              t(
-                PurchaseConfirmationTexts.validityTexts.time(
-                  secondsToDuration(validDurationSeconds, language),
+            <SummaryText />
+            {!!validDurationSeconds &&
+              isShowValidTimeInfoEnabled &&
+              summary(
+                t(
+                  PurchaseConfirmationTexts.validityTexts.time(
+                    secondsToDuration(validDurationSeconds, language),
+                  ),
                 ),
-              ),
-            )}
-          <GlobalMessage
-            style={styles.globalMessage}
-            globalMessageContext={
-              GlobalMessageContextEnum.appPurchaseConfirmation
-            }
-            textColor="secondary"
-            ruleVariables={{
-              preassignedFareProductType: preassignedFareProduct.type,
-            }}
-          />
-          {!fareProductTypeConfig.isCollectionOfAccesses && (
-            <MessageInfoText
-              style={styles.smallTopMargin}
-              type="info"
-              message={travelDateText}
+              )}
+            <GlobalMessage
+              style={styles.globalMessage}
+              globalMessageContext={
+                GlobalMessageContextEnum.appPurchaseConfirmation
+              }
               textColor="secondary"
+              ruleVariables={{
+                preassignedFareProductType: preassignedFareProduct.type,
+              }}
             />
-          )}
+            {!fareProductTypeConfig.isCollectionOfAccesses && (
+              <MessageInfoText
+                style={styles.smallTopMargin}
+                type="info"
+                message={travelDateText}
+                textColor="secondary"
+              />
+            )}
+          </View>
         </View>
       </GenericSectionItem>
       {!!legs?.length && (
@@ -193,6 +221,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   ticketInfoContainer: {
     flex: 1,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  editButton: {
+    flexDirection: 'row',
+    gap: theme.spacing.small,
   },
   globalMessage: {
     marginTop: theme.spacing.small,

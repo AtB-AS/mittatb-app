@@ -7,4 +7,5 @@ export type Root_PurchaseConfirmationScreenParams = {
   mode?: 'TravelSearch' | 'Ticket';
   recipient?: TicketRecipientType;
   tripAnalytics?: TripAnalytics;
+  allowEdit?: boolean;
 };
