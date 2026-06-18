@@ -10,7 +10,7 @@ import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/T
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useAuthContext} from '@atb/modules/auth';
 import {AccesstbilityCircle} from '@atb/assets/svg/mono-icons/miscellaneous';
-import {Travellers} from '@atb/assets/svg/mono-icons/ticketing';
+import {Student, Travellers} from '@atb/assets/svg/mono-icons/ticketing';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {Profile} from '@atb/assets/svg/mono-icons/tab-bar';
 import {
@@ -30,6 +30,7 @@ export const Profile_SettingsScreen = ({navigation}: ProfileProps) => {
   const {isPushNotificationsEnabled} = useFeatureTogglesContext();
   const {disable_travelcard} = useRemoteConfigContext();
   const {isTravelAidEnabled} = useFeatureTogglesContext();
+  const {isFeideConnectionEnabled} = useFeatureTogglesContext();
   const {enable_ticketing} = useRemoteConfigContext();
   const {authenticationType} = useAuthContext();
 
@@ -109,6 +110,18 @@ export const Profile_SettingsScreen = ({navigation}: ProfileProps) => {
               )}
               leftIcon={{svg: Profile}}
               onPress={() => navigation.navigate('Profile_EditProfileScreen')}
+            />
+          )}
+          {isFeideConnectionEnabled && authenticationType === 'phone' && (
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.settings.linkSectionItems.feide.label,
+              )}
+              leftIcon={{svg: Student}}
+              onPress={() =>
+                navigation.navigate('Profile_FeideConnectionScreen')
+              }
+              testID="feideConnectionButton"
             />
           )}
         </Section>

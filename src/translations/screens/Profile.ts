@@ -106,6 +106,13 @@ const ProfileTexts = {
             'Standard reisande',
           ),
         },
+        feide: {
+          label: _(
+            'Feide og skoleskyss',
+            'Feide and school transport',
+            'Feide og skuleskyss',
+          ),
+        },
         travelToken: {
           label: _(
             'Flytt billett mellom t:kort og mobil',
