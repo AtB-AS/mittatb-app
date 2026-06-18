@@ -175,31 +175,26 @@ async function generateNonce() {
 }
 
 /**
- * Start Feide-connection: Get authorization-URL from identity og open it in
- * in-app browser. Redirect catched via deep-link in screen which calls this.
- * Mirrors initAgeVerification (Vipps connect-while-logged-in).
+ * Start Feide-connection: Get authorization-URL from identity and return the
+ * full URL (with state, nonce and PKCE challenge) for the caller to open in an
+ * in-app browser. Redirect catched via deep-link in screen.
+ * Mirrors authorizeVippsUser (Vipps login).
  */
 export const initFeideConnect = async (
   opts?: AxiosRequestConfig,
-): Promise<void> => {
+): Promise<string> => {
   const state = await generateFeideState();
   const nonce = await generateFeideNonce();
   const {verifier, challenge} = generatePkcePair();
   await storage.set('feide_code_verifier', verifier);
-  return client
-    .get(
-      `/identity/v1/feide/authorization-url?callbackUrl=${FEIDE_CALLBACK_URL}`,
-      {
-        ...opts,
-      },
-    )
-    .then(async (response) => {
-      const authorisationUrl = response.data;
-      openInAppBrowser(
-        `${authorisationUrl}&state=${state}&nonce=${nonce}&code_challenge=${challenge}&code_challenge_method=S256`,
-        'cancel',
-      );
-    });
+  const response = await client.get(
+    `/identity/v1/feide/authorization-url?callbackUrl=${FEIDE_CALLBACK_URL}`,
+    {
+      ...opts,
+    },
+  );
+  const authorisationUrl = response.data;
+  return `${authorisationUrl}&state=${state}&nonce=${nonce}&code_challenge=${challenge}&code_challenge_method=S256`;
 };
 
 /**

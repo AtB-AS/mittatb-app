@@ -12,7 +12,6 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {FEIDE_CALLBACK_URL} from '@atb/api/identity';
 import {closeInAppBrowseriOS} from '@atb/modules/in-app-browser';
 import {storage} from '@atb/modules/storage';
@@ -28,7 +27,6 @@ type Props = ProfileScreenProps<'Profile_FeideConnectionScreen'>;
 export const Profile_FeideConnectionScreen = ({navigation}: Props) => {
   const style = useStyle();
   const {t} = useTranslation();
-  const appStatus = useAppStateStatus();
   const focusRef = useFocusOnLoad(navigation);
 
   const [localError, setLocalError] = useState(false);
@@ -76,7 +74,7 @@ export const Profile_FeideConnectionScreen = ({navigation}: Props) => {
 
     const subscription = Linking.addEventListener('url', handleUrl);
     return () => subscription.remove();
-  }, [appStatus, connectFeide]);
+  }, [connectFeide]);
 
   return (
     <FullScreenView
