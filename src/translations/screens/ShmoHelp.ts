@@ -10,6 +10,8 @@ export const ShmoHelpTexts = {
   phone: _('Telefon', 'Phone', 'Telefon'),
   contactForm: _('Kontaktskjema', 'Contact form', 'Kontaktskjema'),
   chatInBrowser: _('Chat i nettleser', 'Chat in browser', 'Chat i nettlesar'),
+  telephonePrefix: _('tlf.', 'tel.', 'tlf.'),
+  readMoreAtPrefix: _('Les mer på', 'Read more at', 'Les meir på'),
   readMoreAt: (domain: string) =>
     _(
       `Les mer på ${domain}`,

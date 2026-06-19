@@ -1,6 +1,6 @@
 import React from 'react';
-import {Pressable, View} from 'react-native';
-import {StyleSheet, Theme} from '@atb/theme';
+import {View} from 'react-native';
+import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
 import {ShmoHelpTexts} from '@atb/translations/screens/ShmoHelp';
@@ -12,10 +12,13 @@ import {
 import {BrandingImage} from '@atb/modules/mobility';
 import {ThemedContactIllustration} from '@atb/theme/ThemedAssets';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {NativeBlockButton} from '@atb/components/native-button';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {openUrl} from '@atb/utils/open-url';
 import {MobilityOperatorType} from '@atb/modules/configuration';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {Signalling} from '@atb/assets/svg/mono-icons/status';
 
 type Props = {
   operatorName: string | undefined;
@@ -36,6 +39,7 @@ export const ShmoContactSection = ({
 }: Props) => {
   const {t} = useTranslation();
   const style = useStyles();
+  const {theme} = useThemeContext();
   const {isParkingViolationsReportingEnabled} = useFeatureTogglesContext();
 
   const isBicycle = formFactor === FormFactor.Bicycle;
@@ -57,26 +61,34 @@ export const ShmoContactSection = ({
                 <View style={style.operatorHeader}>
                   {!!operatorLogoUrl && (
                     <View style={style.operatorLogo}>
-                      <BrandingImage logoUrl={operatorLogoUrl} logoSize={40} />
+                      <BrandingImage logoUrl={operatorLogoUrl} logoSize={28} />
                     </View>
                   )}
-                  <ThemeText typography="heading__m">{operatorName}</ThemeText>
+                  <ThemeText typography="heading__xl">{operatorName}</ThemeText>
                 </View>
               )}
-              {!!contactInfo?.phone && (
-                <Pressable
-                  accessibilityRole="button"
-                  onPress={() => openUrl(`tel:${contactInfo.phone}`)}
-                >
-                  <ThemeText typography="body__xs" type="secondary">
-                    {t(ShmoHelpTexts.phone)}
-                  </ThemeText>
-                  <ThemeText typography="body__m">
-                    {contactInfo.phone}
-                  </ThemeText>
-                </Pressable>
-              )}
             </View>
+          </GenericSectionItem>
+        )}
+
+        {contactInfo?.phone && (
+          <GenericSectionItem>
+            <NativeBlockButton
+              onPress={onContactFormPress}
+              accessibilityRole="link"
+              style={style.linkRow}
+            >
+              <ThemeText style={style.linkText}>
+                {t(ShmoHelpTexts.telephonePrefix)}{' '}
+                <ThemeText
+                  typography="body__m__underline"
+                  color={theme.color.interactive[0].default.background}
+                >
+                  {contactInfo.phone}
+                </ThemeText>
+              </ThemeText>
+              <ThemeIcon svg={Signalling} size="normal" />
+            </NativeBlockButton>
           </GenericSectionItem>
         )}
 
@@ -103,11 +115,24 @@ export const ShmoContactSection = ({
         )}
 
         {!!contactInfo?.websiteUrl && !!websiteDomain && (
-          <LinkSectionItem
-            text={t(ShmoHelpTexts.readMoreAt(websiteDomain))}
-            rightIcon={{svg: ExternalLink}}
-            onPress={() => openUrl(contactInfo.websiteUrl!)}
-          />
+          <GenericSectionItem>
+            <NativeBlockButton
+              onPress={() => openUrl(contactInfo.websiteUrl!)}
+              accessibilityRole="link"
+              style={style.linkRow}
+            >
+              <ThemeText style={style.linkText}>
+                {t(ShmoHelpTexts.readMoreAtPrefix)}{' '}
+                <ThemeText
+                  typography="body__m__underline"
+                  color={theme.color.interactive[0].default.background}
+                >
+                  {websiteDomain}
+                </ThemeText>
+              </ThemeText>
+              <ThemeIcon svg={ExternalLink} size="normal" />
+            </NativeBlockButton>
+          </GenericSectionItem>
         )}
       </Section>
     </>
@@ -138,5 +163,13 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   operatorLogo: {
     borderRadius: theme.border.radius.regular,
     overflow: 'hidden',
+  },
+  linkRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.small,
+  },
+  linkText: {
+    flex: 1,
   },
 }));
