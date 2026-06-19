@@ -14,8 +14,8 @@ import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
+  BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
-import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 
 type Props = {
   lineNumber: string;
@@ -23,7 +23,7 @@ type Props = {
   addFavorite: (forSpecificLineName: boolean) => void;
   quayName: string;
   onCloseFocusRef: React.RefObject<View | null>;
-  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  bottomSheetModalRef: React.RefObject<BottomSheetModalMethods | null>;
   onCloseCallback?: () => void;
 };
 

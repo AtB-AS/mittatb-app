@@ -23,11 +23,11 @@ import {
 } from '@entur-private/abt-token-state-react-native-lib';
 import {CONTEXT_ID} from '@atb/modules/mobile-token';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
-import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
+  BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
 import {Loading} from '@atb/components/loading';
 
@@ -231,7 +231,7 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
   const {t} = useTranslation();
   const [aztecXml, setAztecXml] = useState<string>();
   const onCloseFocusRef = useRef<View | null>(null);
-  const bottomSheetModalRef = useRef<GorhomBottomSheetModal | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
 
   useEffect(() => {
     if (fc.qrCode) {
@@ -270,7 +270,7 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
   const {t} = useTranslation();
   const [qrCodeSvg, setQrCodeSvg] = useState<string>();
   const onCloseFocusRef = useRef<View | null>(null);
-  const bottomSheetModalRef = useRef<GorhomBottomSheetModal | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
 
   useEffect(() => {
     if (fc.qrCode) {
@@ -348,7 +348,7 @@ const StaticBarcodeBottomSheet = ({
 }: {
   qrCodeSvg: string | undefined;
   onCloseFocusRef: RefObject<View | null>;
-  bottomSheetModalRef: RefObject<GorhomBottomSheetModal | null>;
+  bottomSheetModalRef: RefObject<BottomSheetModalMethods | null>;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();

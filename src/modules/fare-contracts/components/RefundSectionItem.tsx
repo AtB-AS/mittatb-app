@@ -4,7 +4,7 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import React, {useRef} from 'react';
 import {RefundBottomSheet} from './RefundBottomSheet';
 import {FareContractState} from '@atb-as/utils';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {View} from 'react-native';
 
 type RefundSectionItemProps = SectionItemProps<{
@@ -21,7 +21,7 @@ export function RefundSectionItem({
 }: RefundSectionItemProps): React.JSX.Element {
   const {t} = useTranslation();
   const onCloseFocusRef = useRef<View | null>(null);
-  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
 
   const onPress = () => {
     bottomSheetModalRef.current?.present();

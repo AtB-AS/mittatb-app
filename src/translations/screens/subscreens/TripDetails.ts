@@ -438,6 +438,26 @@ const TripDetailsTexts = {
       'Rail replacement bus',
       'Buss for tog',
     ),
+    interchangeMainText: _(
+      'Korrespondanse',
+      'Correspondence',
+      'Korrespondanse',
+    ),
+    interchangeSubText: (maxWaitTime?: string) =>
+      _(
+        `Ved forsinkelser vil avgangen vente${maxWaitTime ? ` inntil ${maxWaitTime}` : ''}`,
+        `In case of delays, the departure will wait${maxWaitTime ? ` up to ${maxWaitTime}` : ''}`,
+        `Ved forseinkingar vil avgangen vente${maxWaitTime ? ` i opp til ${maxWaitTime}` : ''}`,
+      ),
+    staySeatedMainText: _(`Bli sittende`, `Stay seated`, `Bli sittande`),
+    staySeatedSubText: (fromPublicCode?: string, toPublicCode?: string) => {
+      const hasCodes = !!fromPublicCode && !!toPublicCode;
+      return _(
+        `Linjenummeret endres${hasCodes ? ` fra ${fromPublicCode} til ${toPublicCode}` : ''} på dette stoppet.`,
+        `The line number is changing${hasCodes ? ` from ${fromPublicCode} to ${toPublicCode}` : ''} at this stop.`,
+        `Linjenummeret endrar seg${hasCodes ? ` frå ${fromPublicCode} til ${toPublicCode}` : ''} på dette stoppet.`,
+      );
+    },
     interchange: (
       fromPublicCode: string,
       toPublicCode: string,

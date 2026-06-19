@@ -15,10 +15,10 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
+  BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
@@ -83,7 +83,7 @@ const SelectableFavouriteDeparture = ({
 
 type SelectFavouritesBottomSheetProps = {
   onEditFavouriteDeparture: () => void;
-  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  bottomSheetModalRef: React.RefObject<BottomSheetModalMethods | null>;
   onCloseFocusRef: RefObject<View | null>;
 };
 

@@ -46,7 +46,7 @@ import {
 import {TFunc} from '@leile/lobo-t';
 import {ErrorResponse, formatNumberToString} from '@atb-as/utils';
 import {FormattedRatePerUnit} from './types';
-import {ThemedCityBike, ThemedScooter} from '@atb/theme/ThemedAssets';
+import {ThemedElectricCityBike, ThemedScooter} from '@atb/theme/ThemedAssets';
 import {getCurrencySymbol} from '@atb/translations/currency';
 
 export const isStationCluster = (
@@ -388,7 +388,7 @@ export function getThemedIllustrationForFormFactor(formFactor: FormFactor) {
     case FormFactor.ScooterStanding:
       return ThemedScooter;
     case FormFactor.Bicycle:
-      return ThemedCityBike;
+      return ThemedElectricCityBike;
     default:
       return null;
   }

@@ -77,6 +77,7 @@ export const ShmoActionButton = ({
     logEvent('Mobility', 'Shmo booking started', {
       operatorId,
       bookingId: res.bookingId,
+      paidWithBonusPoints: !!bonusProductId,
     });
     if (res.bookingId) {
       savePreviousPayment(

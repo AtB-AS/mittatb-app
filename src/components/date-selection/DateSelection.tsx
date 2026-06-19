@@ -13,7 +13,7 @@ import React, {useRef} from 'react';
 import {View} from 'react-native';
 import {DatePickerSheet} from './DatePickerSheet';
 import {DepartureDateOptions, type DepartureSearchTime} from './types';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {EditActionSectionItem, Section} from '../sections';
 
 type DateSelectionProps = {
@@ -32,7 +32,7 @@ export const DateSelection = ({
     parseISOFromCET(searchTime.date),
   );
   const onCloseFocusRef = useRef<View | null>(null);
-  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
 
   const onSetSearchTime = (time: DepartureSearchTime) => {
     if (isInThePast(time.date)) {

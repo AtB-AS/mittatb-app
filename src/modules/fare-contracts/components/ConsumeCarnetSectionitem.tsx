@@ -4,7 +4,7 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import React, {useRef} from 'react';
 import {ConsumeCarnetBottomSheet} from './ConsumeCarnetBottomSheet';
 import {View} from 'react-native';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {
   GenericSectionItem,
@@ -25,7 +25,7 @@ export function ConsumeCarnetSectionitem({
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[0];
   const onCloseFocusRef = useRef<View | null>(null);
-  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
 
   const onPress = () => {
     bottomSheetModalRef.current?.present();

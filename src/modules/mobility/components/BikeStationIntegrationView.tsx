@@ -31,6 +31,7 @@ import {
   MOCK_VEHICLE_ID,
 } from '../queries/use-vehicle-query';
 import {SupportButton} from './SupportButton';
+import {ThemedCityBikeStation} from '@atb/theme/ThemedAssets';
 
 type Props = {
   station: Station;
@@ -82,6 +83,9 @@ export const BikeStationIntegrationView = ({
       )}
 
       <View style={styles.container}>
+        <View style={styles.illustration}>
+          <ThemedCityBikeStation />
+        </View>
         <Section>
           {station?.vehicleTypesAvailable
             ?.filter((e) => {
@@ -183,6 +187,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       paddingHorizontal: theme.spacing.medium,
       paddingBottom: theme.spacing.medium,
       gap: theme.spacing.small,
+    },
+    illustration: {
+      alignItems: 'center',
     },
     freeParkingSection: {
       flexDirection: 'row',

@@ -21,9 +21,9 @@ import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
+  BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
-import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 
 // Polyfill for Android
 require('string.fromcodepoint');
@@ -180,7 +180,7 @@ type Props = Omit<EmojiCategory, 'category'> & {
   clearButtonStyle?: ViewStyle;
   clearButtonText?: string;
   value: string | null;
-  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  bottomSheetModalRef: React.RefObject<BottomSheetModalMethods | null>;
   onCloseFocusRef: React.RefObject<View | null>;
 };
 export const EmojiSheet = ({

@@ -5,6 +5,7 @@ import {
   ThemeText,
 } from '@atb/components/text';
 import {MessageInfoBox} from '@atb/components/message-info-box';
+import {MessageInfoText} from '@atb/components/message-info-text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {ServiceJourneyDeparture} from '../types';
@@ -28,7 +29,9 @@ import {useHumanizeDistance} from '@atb/utils/location';
 import {
   getLineDestinationName,
   getLineName,
-  getNoticesForLeg,
+  getNoticesForFromEstimatedCall,
+  getNoticesForRoute,
+  getNoticesForToEstimatedCall,
   getPublicCodeFromLeg,
   isLineFlexibleTransport,
   getBookingStatus,
@@ -65,16 +68,16 @@ import {
 import {animateNextChange} from '@atb/utils/animation';
 import {AUTHORITY} from '@env';
 import {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {CancelledDepartureMessage} from './CancelledDepartureMessage';
 import {WalkFill} from '@atb/assets/svg/mono-icons/transportation';
+import {InterchangeSection} from './InterchangeSection';
 
 type TripSectionProps = {
   isLast?: boolean;
   wait?: WaitDetails;
   isFirst?: boolean;
   step?: number;
-  interchangeDetails?: InterchangeDetails;
   leg: Leg;
   testID?: string;
   onPressShowLive?(serviceJourneyPolylines: ServiceJourneyPolylines): void;
@@ -82,17 +85,11 @@ type TripSectionProps = {
   onPressQuay: TripProps['onPressQuay'];
 };
 
-export type InterchangeDetails = {
-  publicCode: string;
-  fromPlace: string;
-};
-
 export const TripSection: React.FC<TripSectionProps> = ({
   isLast,
   isFirst,
   wait,
   step,
-  interchangeDetails,
   leg,
   testID,
   onPressShowLive,
@@ -103,7 +100,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const style = useSectionStyles();
   const {theme, themeName} = useThemeContext();
   const onCloseFocusRef = React.useRef(null);
-  const bottomSheetModalRef = React.useRef<BottomSheetModal | null>(null);
+  const bottomSheetModalRef = React.useRef<BottomSheetModalMethods | null>(
+    null,
+  );
 
   const isWalkSection = leg.mode === Mode.Foot;
   const isBikeSection = leg.mode === Mode.Bicycle;
@@ -120,7 +119,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const {startTimes, endTimes} = mapLegToTimeValues(leg);
 
-  const notices = getNoticesForLeg(leg);
+  const fromEstimatedCallNotices = getNoticesForFromEstimatedCall(leg);
+  const routeNotices = getNoticesForRoute(leg);
+  const toEstimatedCallNotices = getNoticesForToEstimatedCall(leg);
 
   const realtimeText = useRealtimeText(leg.serviceJourneyEstimatedCalls);
 
@@ -151,9 +152,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const translatedModeName = getTranslatedModeName(leg.mode);
 
-  const showInterchangeSection =
-    leg.interchangeTo?.guaranteed && interchangeDetails && leg.line;
-
   const showQuayDescription =
     !!leg.fromPlace.quay?.description && !isWalkSection && !isBikeSection;
 
@@ -167,7 +165,10 @@ export const TripSection: React.FC<TripSectionProps> = ({
     leg.situations.length +
     (leg.transportSubmode === TransportSubmode.RailReplacementBus ? 1 : 0);
   const errorCount = leg.fromEstimatedCall?.cancellation ? 1 : 0;
-  const noticeCount = notices.length;
+  const noticeCount =
+    fromEstimatedCallNotices.length +
+    routeNotices.length +
+    toEstimatedCallNotices.length;
 
   const transportA11yLabel = (() => {
     const parts: string[] = [
@@ -224,6 +225,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const sectionOutput = (
     <>
+      <InterchangeSection leg={leg} />
       <View style={style.tripSection} testID={testID}>
         {!!step && leg.mode && (
           <AccessibleText
@@ -236,312 +238,334 @@ export const TripSection: React.FC<TripSectionProps> = ({
             )}
           />
         )}
-        <TripLegDecoration
-          dimensionOverrides={NEW_TRIP_DIMENSIONS}
-          color={legColor}
-          hasStart={showFrom}
-          hasEnd={showTo}
-        />
-        {showFrom && (
-          <TripRow
+        <View style={style.legPath}>
+          <TripLegDecoration
             dimensionOverrides={NEW_TRIP_DIMENSIONS}
-            alignChildren="flex-start"
-            accessibilityLabel={
-              fromRowAbsorbsLegA11y
-                ? isWalkSection
-                  ? walkA11yLabel
-                  : bikeA11yLabel
-                : transportA11yLabel
-            }
-            accessibilityHint={
-              isWalkOrBike
-                ? undefined
-                : t(
-                    TripDetailsTexts.trip.leg.transport.a11yLabel.hint(
-                      getPlaceName(leg.fromPlace),
-                    ),
-                  )
-            }
-            rowLabel={
-              <Time
-                timeValues={startTimes}
-                roundingMethod="floor"
-                timeIsApproximation={timesAreApproximations}
-              />
-            }
-            onPress={
-              leg.fromPlace.quay
-                ? () => handleQuayPress(leg.fromPlace.quay)
-                : undefined
-            }
-            testID={`${testID}FromPlace`}
-          >
-            <ThemeText
-              typography="body__m__strong"
-              testID={`${testID}FromPlaceName`}
+            color={legColor}
+            hasStart={showFrom}
+            hasEnd={showTo}
+          />
+          {showFrom && (
+            <TripRow
+              dimensionOverrides={NEW_TRIP_DIMENSIONS}
+              alignChildren="flex-start"
+              accessibilityLabel={
+                fromRowAbsorbsLegA11y
+                  ? isWalkSection
+                    ? walkA11yLabel
+                    : bikeA11yLabel
+                  : transportA11yLabel
+              }
+              accessibilityHint={
+                isWalkOrBike
+                  ? undefined
+                  : t(
+                      TripDetailsTexts.trip.leg.transport.a11yLabel.hint(
+                        getPlaceName(leg.fromPlace),
+                      ),
+                    )
+              }
+              rowLabel={
+                <Time
+                  timeValues={startTimes}
+                  roundingMethod="floor"
+                  timeIsApproximation={timesAreApproximations}
+                />
+              }
+              onPress={
+                leg.fromPlace.quay
+                  ? () => handleQuayPress(leg.fromPlace.quay)
+                  : undefined
+              }
+              testID={`${testID}FromPlace`}
             >
-              {getPlaceName(leg.fromPlace)}
-            </ThemeText>
-            {showQuayDescription && (
               <ThemeText
-                testID={`${testID}FromPlaceQuayDescription`}
-                typography="body__s"
-                type="secondary"
+                typography="body__m__strong"
+                testID={`${testID}FromPlaceName`}
               >
-                {leg.fromPlace.quay?.description}
+                {getPlaceName(leg.fromPlace)}
               </ThemeText>
-            )}
-          </TripRow>
-        )}
-        {isWalkSection ? (
-          <View
-            accessibilityElementsHidden={fromRowAbsorbsLegA11y}
-            importantForAccessibility={
-              fromRowAbsorbsLegA11y ? 'no-hide-descendants' : 'auto'
-            }
-          >
-            <WalkSection
-              leg={leg}
-              wait={wait}
-              timeRounding={walkBikeRounding}
-            />
-          </View>
-        ) : isBikeSection ? (
-          <View
-            accessibilityElementsHidden={fromRowAbsorbsLegA11y}
-            importantForAccessibility={
-              fromRowAbsorbsLegA11y ? 'no-hide-descendants' : 'auto'
-            }
-          >
-            <BikeSection
-              leg={leg}
-              wait={wait}
-              timeRounding={walkBikeRounding}
-            />
-          </View>
-        ) : (
-          <TripRow
-            dimensionOverrides={NEW_TRIP_DIMENSIONS}
-            testID={`${testID}Mode`}
-            accessibilityLabel={
-              t(
-                TripDetailsTexts.trip.leg.transport.lineA11yLabel(
-                  t(
-                    getTranslatedModeName(leg.mode, leg.line?.transportSubmode),
-                  ),
-                  getLineName(t, leg),
-                ),
-              ) +
-              (isFlexible
-                ? screenReaderPause +
-                  t(TripDetailsTexts.flexibleTransport.onDemandTransportLabel)
-                : '') +
-              (realtimeText ? screenReaderPause + realtimeText : '')
-            }
-            accessibilityHint={
-              hasIntermediateStops
-                ? t(TripDetailsTexts.trip.leg.transport.a11yHint)
-                : undefined
-            }
-            onPress={
-              hasIntermediateStops ? () => handleDeparturePress(leg) : undefined
-            }
-          >
-            {leg.transportSubmode === TransportSubmode.NightBus && (
-              <ThemeText
-                type="secondary"
-                typography="body__s"
-                style={style.secondaryTransportLabel}
-              >
-                {t(getTranslatedModeName(leg.mode, leg.line?.transportSubmode))}
-              </ThemeText>
-            )}
-            <View style={style.transportLine}>
-              <TransportationIconBox
-                mode={leg.mode}
-                subMode={leg.line?.transportSubmode}
-                isFlexible={isFlexible}
-                lineNumber={publicCode}
-                spacious
-                rounded
+              {showQuayDescription && (
+                <ThemeText
+                  testID={`${testID}FromPlaceQuayDescription`}
+                  typography="body__s"
+                  type="secondary"
+                >
+                  {leg.fromPlace.quay?.description}
+                </ThemeText>
+              )}
+            </TripRow>
+          )}
+          {fromEstimatedCallNotices.map((notice) => (
+            <TripRow
+              dimensionOverrides={NEW_TRIP_DIMENSIONS}
+              key={notice.id}
+              accessible={false}
+            >
+              <MessageInfoText type="info" message={notice.text} />
+            </TripRow>
+          ))}
+          {isWalkSection ? (
+            <View
+              accessibilityElementsHidden={fromRowAbsorbsLegA11y}
+              importantForAccessibility={
+                fromRowAbsorbsLegA11y ? 'no-hide-descendants' : 'auto'
+              }
+            >
+              <WalkSection
+                leg={leg}
+                wait={wait}
+                timeRounding={walkBikeRounding}
               />
-              <ThemeText>{getLineDestinationName(t, leg)}</ThemeText>
             </View>
-            {isFlexible && (
-              <ThemeText
-                type="secondary"
-                typography="body__s"
-                style={style.onDemandTransportLabel}
+          ) : isBikeSection ? (
+            <View
+              accessibilityElementsHidden={fromRowAbsorbsLegA11y}
+              importantForAccessibility={
+                fromRowAbsorbsLegA11y ? 'no-hide-descendants' : 'auto'
+              }
+            >
+              <BikeSection
+                leg={leg}
+                wait={wait}
+                timeRounding={walkBikeRounding}
+              />
+            </View>
+          ) : (
+            <TripRow
+              dimensionOverrides={NEW_TRIP_DIMENSIONS}
+              testID={`${testID}Mode`}
+              accessibilityLabel={
+                t(
+                  TripDetailsTexts.trip.leg.transport.lineA11yLabel(
+                    t(
+                      getTranslatedModeName(
+                        leg.mode,
+                        leg.line?.transportSubmode,
+                      ),
+                    ),
+                    getLineName(t, leg),
+                  ),
+                ) +
+                (isFlexible
+                  ? screenReaderPause +
+                    t(TripDetailsTexts.flexibleTransport.onDemandTransportLabel)
+                  : '') +
+                (realtimeText ? screenReaderPause + realtimeText : '')
+              }
+              accessibilityHint={
+                hasIntermediateStops
+                  ? t(TripDetailsTexts.trip.leg.transport.a11yHint)
+                  : undefined
+              }
+              onPress={
+                hasIntermediateStops
+                  ? () => handleDeparturePress(leg)
+                  : undefined
+              }
+            >
+              {leg.transportSubmode === TransportSubmode.NightBus && (
+                <ThemeText
+                  type="secondary"
+                  typography="body__s"
+                  style={style.secondaryTransportLabel}
+                >
+                  {t(
+                    getTranslatedModeName(leg.mode, leg.line?.transportSubmode),
+                  )}
+                </ThemeText>
+              )}
+              <View style={style.transportLine}>
+                <TransportationIconBox
+                  mode={leg.mode}
+                  subMode={leg.line?.transportSubmode}
+                  isFlexible={isFlexible}
+                  lineNumber={publicCode}
+                  spacious
+                  rounded
+                />
+                <ThemeText>{getLineDestinationName(t, leg)}</ThemeText>
+              </View>
+              {isFlexible && (
+                <ThemeText
+                  type="secondary"
+                  typography="body__s"
+                  style={style.onDemandTransportLabel}
+                >
+                  {t(TripDetailsTexts.flexibleTransport.onDemandTransportLabel)}
+                </ThemeText>
+              )}
+            </TripRow>
+          )}
+          {leg.fromEstimatedCall?.cancellation && (
+            <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS}>
+              <CancelledDepartureMessage />
+            </TripRow>
+          )}
+          {leg.situations.map((situation) => (
+            <TripRow
+              dimensionOverrides={NEW_TRIP_DIMENSIONS}
+              key={situation.id}
+              accessible={false}
+            >
+              <SituationMessageBox situation={situation} />
+            </TripRow>
+          ))}
+          {routeNotices.map((notice) => (
+            <TripRow
+              dimensionOverrides={NEW_TRIP_DIMENSIONS}
+              key={notice.id}
+              accessible={false}
+            >
+              <MessageInfoText type="info" message={notice.text} />
+            </TripRow>
+          ))}
+          {bookingStatus !== 'none' && (
+            <TripRow
+              dimensionOverrides={NEW_TRIP_DIMENSIONS}
+              accessible={false}
+            >
+              <BookingInfoBox
+                bookingArrangements={leg.bookingArrangements}
+                aimedStartTime={leg.aimedStartTime}
+                now={now}
+                focusRef={onCloseFocusRef}
+                onPressConfig={
+                  shouldShowButtonForOpeningFlexBottomSheet
+                    ? {
+                        text: t(
+                          TripDetailsTexts.flexibleTransport.needsBookingWhatIsThis(
+                            publicCode,
+                          ),
+                        ),
+                        action: openBookingDetails,
+                      }
+                    : undefined
+                }
+              />
+            </TripRow>
+          )}
+          {bookingStatus === 'bookable' && (
+            <View style={style.flexBookingOptions}>
+              <TripRow
+                dimensionOverrides={NEW_TRIP_DIMENSIONS}
+                accessible={false}
               >
-                {t(TripDetailsTexts.flexibleTransport.onDemandTransportLabel)}
+                <BookingOptions bookingArrangements={leg.bookingArrangements} />
+              </TripRow>
+            </View>
+          )}
+
+          {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
+            <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS}>
+              <MessageInfoBox
+                type="warning"
+                message={t(
+                  TripDetailsTexts.messages.departureIsRailReplacementBus,
+                )}
+              />
+            </TripRow>
+          )}
+          {leg.authority && <AuthorityRow {...leg.authority} />}
+          {realtimeText && (
+            <View
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+            >
+              <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS}>
+                <View style={style.realtime}>
+                  <ThemeIcon
+                    svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
+                    size="xSmall"
+                    style={style.realtimeIcon}
+                  />
+                  <ThemeText
+                    style={style.realtimeText}
+                    typography="body__s"
+                    type="secondary"
+                  >
+                    {realtimeText}
+                  </ThemeText>
+                </View>
+              </TripRow>
+            </View>
+          )}
+          {onPressShowLive && serviceJourneyPolyline ? (
+            <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS}>
+              <Button
+                type="small"
+                expanded={false}
+                mode="secondary"
+                leftIcon={{svg: Map}}
+                text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
+                backgroundColor={theme.color.background.neutral[1]}
+                onPress={() => onPressShowLive(serviceJourneyPolyline)}
+              />
+            </TripRow>
+          ) : null}
+          {hasIntermediateStops && (
+            <IntermediateInfo
+              leg={leg}
+              testID={testID}
+              onPressQuay={onPressQuay}
+            />
+          )}
+          {showTo && (
+            <TripRow
+              dimensionOverrides={NEW_TRIP_DIMENSIONS}
+              alignChildren="flex-end"
+              accessibilityLabel={t(
+                TripDetailsTexts.trip.leg.end.a11yLabel(
+                  getPlaceName(leg.toPlace),
+                  formatToClock(
+                    endTimes.expectedTime ?? endTimes.aimedTime,
+                    language,
+                    'ceil',
+                  ),
+                ),
+              )}
+              accessibilityHint={
+                isWalkOrBike
+                  ? undefined
+                  : t(
+                      TripDetailsTexts.trip.leg.transport.a11yLabel.hint(
+                        getPlaceName(leg.toPlace),
+                      ),
+                    )
+              }
+              rowLabel={
+                <Time
+                  timeValues={endTimes}
+                  roundingMethod="ceil"
+                  timeIsApproximation={timesAreApproximations}
+                />
+              }
+              onPress={
+                leg.toPlace.quay
+                  ? () => handleQuayPress(leg.toPlace.quay)
+                  : undefined
+              }
+              testID={`${testID}ToPlace`}
+            >
+              <ThemeText
+                typography="body__m__strong"
+                testID={`${testID}ToPlaceName`}
+              >
+                {getPlaceName(leg.toPlace)}
               </ThemeText>
-            )}
-          </TripRow>
-        )}
-        {leg.fromEstimatedCall?.cancellation && (
-          <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS}>
-            <CancelledDepartureMessage />
-          </TripRow>
-        )}
-        {leg.situations.map((situation) => (
-          <TripRow
-            dimensionOverrides={NEW_TRIP_DIMENSIONS}
-            key={situation.id}
-            accessible={false}
-          >
-            <SituationMessageBox situation={situation} />
-          </TripRow>
-        ))}
-        {notices.map((notice) => (
+            </TripRow>
+          )}
+        </View>
+        {toEstimatedCallNotices.map((notice) => (
           <TripRow
             dimensionOverrides={NEW_TRIP_DIMENSIONS}
             key={notice.id}
             accessible={false}
           >
-            <MessageInfoBox type="info" message={notice.text} />
+            <MessageInfoText type="info" message={notice.text} />
           </TripRow>
         ))}
-        {bookingStatus !== 'none' && (
-          <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS} accessible={false}>
-            <BookingInfoBox
-              bookingArrangements={leg.bookingArrangements}
-              aimedStartTime={leg.aimedStartTime}
-              now={now}
-              focusRef={onCloseFocusRef}
-              onPressConfig={
-                shouldShowButtonForOpeningFlexBottomSheet
-                  ? {
-                      text: t(
-                        TripDetailsTexts.flexibleTransport.needsBookingWhatIsThis(
-                          publicCode,
-                        ),
-                      ),
-                      action: openBookingDetails,
-                    }
-                  : undefined
-              }
-            />
-          </TripRow>
-        )}
-        {bookingStatus === 'bookable' && (
-          <View style={style.flexBookingOptions}>
-            <TripRow
-              dimensionOverrides={NEW_TRIP_DIMENSIONS}
-              accessible={false}
-            >
-              <BookingOptions bookingArrangements={leg.bookingArrangements} />
-            </TripRow>
-          </View>
-        )}
-
-        {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
-          <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS}>
-            <MessageInfoBox
-              type="warning"
-              message={t(
-                TripDetailsTexts.messages.departureIsRailReplacementBus,
-              )}
-            />
-          </TripRow>
-        )}
-        {leg.authority && <AuthorityRow {...leg.authority} />}
-        {realtimeText && (
-          <View
-            accessibilityElementsHidden
-            importantForAccessibility="no-hide-descendants"
-          >
-            <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS}>
-              <View style={style.realtime}>
-                <ThemeIcon
-                  svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
-                  size="xSmall"
-                  style={style.realtimeIcon}
-                />
-                <ThemeText
-                  style={style.realtimeText}
-                  typography="body__s"
-                  type="secondary"
-                >
-                  {realtimeText}
-                </ThemeText>
-              </View>
-            </TripRow>
-          </View>
-        )}
-        {onPressShowLive && serviceJourneyPolyline ? (
-          <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS}>
-            <Button
-              type="small"
-              expanded={false}
-              mode="secondary"
-              leftIcon={{svg: Map}}
-              text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
-              backgroundColor={theme.color.background.neutral[1]}
-              onPress={() => onPressShowLive(serviceJourneyPolyline)}
-            />
-          </TripRow>
-        ) : null}
-        {hasIntermediateStops && (
-          <IntermediateInfo
-            leg={leg}
-            testID={testID}
-            onPressQuay={onPressQuay}
-          />
-        )}
-        {showTo && (
-          <TripRow
-            dimensionOverrides={NEW_TRIP_DIMENSIONS}
-            alignChildren="flex-end"
-            accessibilityLabel={t(
-              TripDetailsTexts.trip.leg.end.a11yLabel(
-                getPlaceName(leg.toPlace),
-                formatToClock(
-                  endTimes.expectedTime ?? endTimes.aimedTime,
-                  language,
-                  'ceil',
-                ),
-              ),
-            )}
-            accessibilityHint={
-              isWalkOrBike
-                ? undefined
-                : t(
-                    TripDetailsTexts.trip.leg.transport.a11yLabel.hint(
-                      getPlaceName(leg.toPlace),
-                    ),
-                  )
-            }
-            rowLabel={
-              <Time
-                timeValues={endTimes}
-                roundingMethod="ceil"
-                timeIsApproximation={timesAreApproximations}
-              />
-            }
-            onPress={
-              leg.toPlace.quay
-                ? () => handleQuayPress(leg.toPlace.quay)
-                : undefined
-            }
-            testID={`${testID}ToPlace`}
-          >
-            <ThemeText
-              typography="body__m__strong"
-              testID={`${testID}ToPlaceName`}
-            >
-              {getPlaceName(leg.toPlace)}
-            </ThemeText>
-          </TripRow>
-        )}
       </View>
-      {showInterchangeSection && (
-        <InterchangeSection
-          publicCode={publicCode}
-          interchangeDetails={interchangeDetails}
-          maximumWaitTime={leg.interchangeTo?.maximumWaitTime}
-          staySeated={leg.interchangeTo?.staySeated}
-        />
-      )}
       <FlexibleTransportBookingDetailsSheet
         leg={leg}
         bottomSheetModalRef={bottomSheetModalRef}
@@ -911,76 +935,6 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   );
 };
 
-type InterchangeSectionProps = {
-  publicCode: string;
-  interchangeDetails: InterchangeDetails;
-  maximumWaitTime?: number;
-  staySeated?: boolean;
-};
-
-function InterchangeSection({
-  publicCode,
-  interchangeDetails,
-  maximumWaitTime,
-  staySeated,
-}: InterchangeSectionProps) {
-  const {t, language} = useTranslation();
-  const style = useSectionStyles();
-  const legColor = useTransportColor().secondary;
-
-  let text = '';
-  if (publicCode && staySeated) {
-    text = t(
-      TripDetailsTexts.messages.lineChangeStaySeated(
-        publicCode,
-        interchangeDetails.publicCode,
-      ),
-    );
-  } else if (publicCode) {
-    text = t(
-      TripDetailsTexts.messages.interchange(
-        publicCode,
-        interchangeDetails.publicCode,
-        interchangeDetails.fromPlace,
-      ),
-    );
-  } else {
-    text = t(
-      TripDetailsTexts.messages.interchangeWithUnknownFromPublicCode(
-        interchangeDetails.publicCode,
-        interchangeDetails.fromPlace,
-      ),
-    );
-  }
-
-  // If maximum wait time is defined or over 0, append it to the message.
-  // In some cases with missing data the maximum wait time can be -1.
-  if (maximumWaitTime && maximumWaitTime > 0 && !staySeated) {
-    text =
-      text +
-      ' ' +
-      t(
-        TripDetailsTexts.messages.interchangeMaxWait(
-          secondsToDuration(maximumWaitTime, language),
-        ),
-      );
-  }
-
-  return (
-    <View style={style.interchangeSection}>
-      <TripLegDecoration
-        dimensionOverrides={NEW_TRIP_DIMENSIONS}
-        color={legColor.background}
-        hasStart={false}
-        hasEnd={false}
-      />
-      <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS}>
-        <MessageInfoBox type="info" message={text} />
-      </TripRow>
-    </View>
-  );
-}
-
 export function getPlaceName(place: Place): string {
   const fallback = place.name ?? '';
   return place.quay ? (getQuayName(place.quay) ?? fallback) : fallback;
@@ -1005,6 +959,9 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   tripSection: {
     flex: 1,
     marginBottom: theme.spacing.large,
+  },
+  legPath: {
+    flex: 1,
   },
   a11yHelper: {
     position: 'absolute',
@@ -1042,9 +999,6 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   authoritySection: {
     rowGap: theme.spacing.medium,
-  },
-  interchangeSection: {
-    marginBottom: theme.spacing.large,
   },
   intermediateStop: {
     flex: 1,

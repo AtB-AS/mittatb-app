@@ -91,8 +91,11 @@ export const OverflowContainer: React.FC<Props> = ({
   return (
     <View style={[styles.row, {gap}]}>
       {!fitResult && (
+        // Key includes the child count so a count change remounts this pass and
+        // every child re-fires onLayout — reused views don't re-measure, which
+        // would otherwise leave the row blank.
         <View
-          key={maxWidth}
+          key={`${maxWidth}-${children.length}`}
           style={[styles.measureWrapper, {width: maxWidth}]}
           pointerEvents="none"
         >

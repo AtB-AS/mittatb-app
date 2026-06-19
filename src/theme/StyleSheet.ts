@@ -3,15 +3,22 @@ import {
   ViewStyle,
   TextStyle,
   ImageStyle,
+  useWindowDimensions,
+  ScaledSize,
 } from 'react-native';
 import {Theme} from './colors';
 import {useThemeContext} from './ThemeContext';
 import {useSafeAreaInsets, EdgeInsets} from 'react-native-safe-area-context';
+import {MAX_FONT_SCALE} from '@atb/components/text';
 
 export type NamedStyles<T> = {
   [P in keyof T]: ViewStyle | TextStyle | ImageStyle;
 };
-export type ThemedStyles<T> = (theme: Theme, insets: EdgeInsets) => T;
+export type ThemedStyles<T> = (
+  theme: Theme,
+  insets: EdgeInsets,
+  dimensions: ScaledSize,
+) => T;
 
 // MarginStyle is a subset of ViewStyle containing only margin-related
 // fields, e.g. 'margin', 'marginTop', 'marginHorizontal', etc. All other
@@ -31,10 +38,12 @@ export function useStyle<T extends NamedStyles<T>>(
 ): T {
   const {theme} = useThemeContext();
   const insets = useSafeAreaInsets();
+  const dimensions = useWindowDimensions();
+  dimensions.fontScale = Math.min(dimensions.fontScale, MAX_FONT_SCALE);
   if (!isThemedStyles<T>(style)) {
     return style;
   }
-  return style(theme, insets);
+  return style(theme, insets, dimensions);
 }
 
 function isThemedStyles<T>(style: any): style is ThemedStyles<T> {

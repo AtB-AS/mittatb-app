@@ -25,6 +25,7 @@ type TravelCardProps = {
   includeSituationsAndNotices?: boolean;
   includeTransportInfo?: boolean;
   isDisabled?: boolean;
+  isSaved?: boolean;
   tag?: {label: string; type: Statuses};
 };
 
@@ -39,6 +40,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
   includeSituationsAndNotices = false,
   includeTransportInfo = false,
   isDisabled = false,
+  isSaved = false,
   tag,
 }) => {
   const styles = useThemeStyles();
@@ -83,6 +85,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
               tripPattern={tripPattern}
               includeDayInfo={includeDayInfo}
               includeFromToInfo={includeFromToInfo}
+              isSaved={isSaved}
             />
             <View style={styles.legsContainer}>
               <View

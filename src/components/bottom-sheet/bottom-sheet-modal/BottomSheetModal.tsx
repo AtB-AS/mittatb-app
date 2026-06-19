@@ -44,6 +44,7 @@ type BottomSheetModalProps<T extends any> = {
   snapPoints?: Array<string | number>;
   enableDynamicSizing?: boolean;
   keyboardBehavior?: 'extend' | 'interactive' | 'fillParent';
+  keyboardBlurBehavior?: 'none' | 'restore';
   closeCallback?: () => void;
   fullyDismissedCallback?: () => void;
   Footer?: React.FC;
@@ -63,6 +64,7 @@ export const BottomSheetModal = <T extends any>({
   snapPoints,
   enableDynamicSizing = true,
   keyboardBehavior = Platform.OS === 'ios' ? 'interactive' : 'extend',
+  keyboardBlurBehavior,
   closeCallback,
   fullyDismissedCallback,
   Footer,
@@ -192,6 +194,7 @@ export const BottomSheetModal = <T extends any>({
       enableDismissOnClose={true}
       backdropComponent={renderBackdrop}
       keyboardBehavior={keyboardBehavior}
+      keyboardBlurBehavior={keyboardBlurBehavior}
       onAnimate={(_fromIndex, toIndex, _fromPosition, _toPosition) => {
         if (toIndex >= 0) {
           onOpen();

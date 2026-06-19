@@ -28,7 +28,7 @@ Since iOS development is only supported on MacOS, using MacOS for development is
    > ⓘ If bundler fails or not installed, use `gem install bundler -v <version>`, where `<version>` is the one listed at the bottom of [Gemfile.lock](./Gemfile.lock) (`BUNDLED WITH: 2.x.x`).
    > If encountering errors, following the suggested gem installs might solve it.
    >
-   > If you experience various mysterious errors when running `pnpm android` you probably have the wrong JDK. See **Common errors**** below for fix. 
+   > If you experience various mysterious errors when running `pnpm android` you probably have the wrong JDK. See **Common errors**** below for fix.
 3. [pnpm](https://pnpm.io/installation)
 4. git-crypt: `brew install git-crypt` on MacOS, and `apt install git-crypt` on Linux.
 
@@ -91,7 +91,7 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 
 ### Verifying your environment
 
-Run `yarn doctor` at any time to check that all requirements and setup steps are in place — useful after OS upgrades, tool updates, or when something suddenly stops working.
+Run `pnpm doctor` at any time to check that all requirements and setup steps are in place — useful after OS upgrades, tool updates, or when something suddenly stops working.
 
 ### Common errors
 
@@ -117,7 +117,7 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 #### Mysterious, unexplainable build errors when building the android app
  *Example:* `Could not resolve all files for configuration ':adrianso_react-native-device-brightness:androidJdkImage'.`
 
- Run this command to check if you have the correct JDK: 
+ Run this command to check if you have the correct JDK:
 ```sh
 npx react-native doctor
 ```

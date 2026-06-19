@@ -60,7 +60,7 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {AUTHORITY} from '@env';
 import {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
 import {getRealtimeState, type TimeValues} from '@atb/utils/realtime';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {CancelledDepartureMessage} from '../components/CancelledDepartureMessage';
 
 type TripSectionProps = {
@@ -97,7 +97,9 @@ export const LegacyTripSection: React.FC<TripSectionProps> = ({
   const style = useSectionStyles();
   const {theme, themeName} = useThemeContext();
   const onCloseFocusRef = React.useRef(null);
-  const bottomSheetModalRef = React.useRef<BottomSheetModal | null>(null);
+  const bottomSheetModalRef = React.useRef<BottomSheetModalMethods | null>(
+    null,
+  );
 
   const isWalkSection = leg.mode === Mode.Foot;
   const isBikeSection = leg.mode === Mode.Bicycle;

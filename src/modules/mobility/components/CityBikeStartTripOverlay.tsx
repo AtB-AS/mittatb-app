@@ -6,7 +6,7 @@ import {useTranslation} from '@atb/translations';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
 import {StyleSheet} from '@atb/theme';
-import {ThemedCityBike} from '@atb/theme/ThemedAssets';
+import {ThemedStartCityBike} from '@atb/theme/ThemedAssets';
 import {LinkSectionItem} from '@atb/components/sections';
 import {ShmoBooking} from '@atb/api/types/mobility';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
@@ -27,7 +27,8 @@ export const CityBikeStartTripOverlay = ({
   return (
     <View style={styles.overlay}>
       <ScrollView
-        contentContainerStyle={styles.contentWrapper}
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.title}>
@@ -42,12 +43,11 @@ export const CityBikeStartTripOverlay = ({
             </ThemeText>
           )}
         </View>
-        <ThemedCityBike />
+        <ThemedStartCityBike />
         <View style={styles.content}>
           <ThemeText typography="heading__xl" style={styles.contentText}>
             {t(MobilityTexts.cityBike.startTripView.title)}
           </ThemeText>
-
           <ThemeText style={styles.contentText}>
             {t(MobilityTexts.cityBike.startTripView.description)}
           </ThemeText>
@@ -81,11 +81,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: theme.spacing.xLarge,
     zIndex: 100,
   },
-  contentWrapper: {
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 48,
+    gap: theme.spacing.xLarge,
   },
   title: {
     alignItems: 'center',
@@ -96,7 +99,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   content: {
     alignItems: 'center',
-    flexDirection: 'column',
     gap: theme.spacing.medium,
     padding: theme.spacing.large,
   },
@@ -109,6 +111,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   supportButton: {
     width: '100%',
-    marginTop: 'auto',
   },
 }));
