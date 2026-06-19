@@ -30,7 +30,10 @@ import {
   MOCK_VEHICLE_ID,
 } from '../queries/use-vehicle-query';
 import {SupportButton} from './SupportButton';
-import {ThemedCityBikeStation, ThemedParkingIcon} from '@atb/theme/ThemedAssets';
+import {
+  ThemedCityBikeStation,
+  ThemedParkingIcon,
+} from '@atb/theme/ThemedAssets';
 
 type Props = {
   station: Station;
