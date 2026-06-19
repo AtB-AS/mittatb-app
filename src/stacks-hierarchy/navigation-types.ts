@@ -15,7 +15,7 @@ import {
   ShmoBooking,
   ShmoPricingPlan,
 } from '@atb/api/types/mobility';
-import {PriceAdjustmentType} from '@atb-as/config-specs/lib/mobility';
+import type {MobilityPriceAdjustmentBenefitType} from '@atb/api/types/benefit';
 import {Root_ChooseTicketRecipientScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/navigation-types';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import type {TripAnalytics} from '@atb/screen-components/travel-details-screens';
@@ -151,7 +151,7 @@ export type RootStackParamList = StackParams<{
   Root_ShmoOnboardingScreen: {formFactor?: FormFactor};
   Root_ShmoPricingDetailsScreen: {
     pricingPlan: ShmoPricingPlan;
-    priceAdjustments?: PriceAdjustmentType[];
+    benefit?: MobilityPriceAdjustmentBenefitType;
   };
   Root_ContactShmoOperatorScreen: Root_ContactShmoOperatorScreenParams;
   Root_ContactShmoOperatorConfirmationScreen: Root_ContactShmoOperatorConfirmationScreenParams;

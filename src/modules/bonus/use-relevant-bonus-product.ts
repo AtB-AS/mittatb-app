@@ -1,11 +1,22 @@
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useActiveBonusProductsQuery} from './queries';
 import {BonusProductTypeEnum} from './types';
 
-export const useRelevantBonusProduct = (
+export const useRelevantSharedMobilityBonusProduct = (
+  vehicleTypeId: string | undefined,
+) => {
+  const {data: activeBonusProducts} = useActiveBonusProductsQuery(
+    Boolean(vehicleTypeId),
+  );
+  if (!vehicleTypeId) return undefined;
+  return activeBonusProducts?.find(
+    (bonusProduct) =>
+      bonusProduct.productType === BonusProductTypeEnum.SHARED_MOBILITY &&
+      bonusProduct.vehicleTypeIds.includes(vehicleTypeId),
+  );
+};
+
+export const useRelevantVoucherBonusProduct = (
   operatorId: string | undefined,
-  formFactor: FormFactor,
-  productType?: BonusProductTypeEnum,
 ) => {
   const {data: activeBonusProducts} = useActiveBonusProductsQuery(
     Boolean(operatorId),
@@ -13,8 +24,7 @@ export const useRelevantBonusProduct = (
   if (!operatorId) return undefined;
   return activeBonusProducts?.find(
     (bonusProduct) =>
-      bonusProduct.formFactors.includes(formFactor) &&
-      bonusProduct.operatorId === operatorId &&
-      (!productType || bonusProduct.productType === productType),
+      bonusProduct.productType === BonusProductTypeEnum.VOUCHER &&
+      bonusProduct.operatorId === operatorId,
   );
 };
