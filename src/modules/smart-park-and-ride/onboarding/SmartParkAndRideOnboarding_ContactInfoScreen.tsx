@@ -115,11 +115,7 @@ const ContactInfoContent = () => {
               typography="body__m__underline"
               color={theme.color.interactive[0].default.background}
             >
-              {t(
-                dictionary.telephone(
-                  telephoneNumbers['parking'],
-                ),
-              )}
+              {t(dictionary.telephone(telephoneNumbers['parking']))}
             </ThemeText>
           </NativeBlockButton>
         </GenericSectionItem>
@@ -152,11 +148,7 @@ const ContactInfoContent = () => {
               typography="body__m__underline"
               color={theme.color.interactive[0].default.background}
             >
-              {t(
-                dictionary.telephone(
-                  telephoneNumbers['project'],
-                ),
-              )}
+              {t(dictionary.telephone(telephoneNumbers['project']))}
             </ThemeText>
           </NativeBlockButton>
         </GenericSectionItem>
