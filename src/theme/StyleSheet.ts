@@ -38,8 +38,11 @@ export function useStyle<T extends NamedStyles<T>>(
 ): T {
   const {theme} = useThemeContext();
   const insets = useSafeAreaInsets();
-  const dimensions = useWindowDimensions();
-  dimensions.fontScale = Math.min(dimensions.fontScale, MAX_FONT_SCALE);
+  const rawDimensions = useWindowDimensions();
+  const dimensions = {
+    ...rawDimensions,
+    fontScale: Math.min(rawDimensions.fontScale, MAX_FONT_SCALE),
+  };
   if (!isThemedStyles<T>(style)) {
     return style;
   }
