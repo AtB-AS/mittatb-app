@@ -17,7 +17,6 @@ import {
   FormFactor,
   PropulsionType,
 } from '@atb/api/types/generated/mobility-types_v2';
-import SvgParking from '@atb/assets/svg/mono-icons/places/Parking';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
@@ -31,7 +30,10 @@ import {
   MOCK_VEHICLE_ID,
 } from '../queries/use-vehicle-query';
 import {SupportButton} from './SupportButton';
-import {ThemedCityBikeStation} from '@atb/theme/ThemedAssets';
+import {
+  ThemedCityBikeStation,
+  ThemedParkingIcon,
+} from '@atb/theme/ThemedAssets';
 
 type Props = {
   station: Station;
@@ -155,7 +157,7 @@ export const BikeStationIntegrationView = ({
         </Section>
         <Section>
           <GenericSectionItem style={styles.freeParkingSection}>
-            <ThemeIcon svg={SvgParking} size="large" />
+            <ThemeIcon svg={ThemedParkingIcon} size="large" />
             <ThemeText>
               {t(
                 MobilityTexts.freeBikeParkingSpaces(
