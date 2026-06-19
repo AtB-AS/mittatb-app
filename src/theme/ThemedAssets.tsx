@@ -103,6 +103,8 @@ import {
   CarRegister as CarRegisterDark,
   CarValidTicket as CarValidTicketDark,
 } from '@atb/assets/svg/color/images/smart-park-and-ride/dark';
+import {Parking as ParkingLight} from '@atb/assets/svg/color/icons/vehicles/light';
+import {Parking as ParkingDark} from '@atb/assets/svg/color/icons/vehicles/dark';
 import {useThemeContext} from '@atb/theme/ThemeContext';
 import {SvgProps} from 'react-native-svg';
 
@@ -251,3 +253,4 @@ export const ThemedCarValidTicket = getThemedAsset(
   CarValidTicketLight,
   CarValidTicketDark,
 );
+export const ThemedParkingIcon = getThemedAsset(ParkingLight, ParkingDark);

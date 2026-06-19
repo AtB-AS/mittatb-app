@@ -30,8 +30,7 @@ import {
   MOCK_VEHICLE_ID,
 } from '../queries/use-vehicle-query';
 import {SupportButton} from './SupportButton';
-import {ThemedCityBikeStation} from '@atb/theme/ThemedAssets';
-import Parking from '@atb/assets/svg/color/icons/vehicles/light/Parking';
+import {ThemedCityBikeStation, ThemedParkingIcon} from '@atb/theme/ThemedAssets';
 
 type Props = {
   station: Station;
@@ -155,7 +154,7 @@ export const BikeStationIntegrationView = ({
         </Section>
         <Section>
           <GenericSectionItem style={styles.freeParkingSection}>
-            <ThemeIcon svg={Parking} size="large" />
+            <ThemeIcon svg={ThemedParkingIcon} size="large" />
             <ThemeText>
               {t(
                 MobilityTexts.freeBikeParkingSpaces(
