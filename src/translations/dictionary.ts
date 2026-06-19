@@ -220,6 +220,7 @@ const dictionary = {
     `Noko gjekk gale`,
   ),
   zone: _('Sone', 'Zone', 'Sone'),
+  telephone: (tel: string) => _(`tlf. ${tel}`, `tel. ${tel}`, `tlf. ${tel}`),
 };
 
 export default orgSpecificTranslations(dictionary, {
