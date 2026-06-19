@@ -47,6 +47,20 @@ export const getNoticesForLeg = (leg: Leg) =>
     ...(leg.toEstimatedCall?.notices || []),
   ]);
 
+/** Get notices on "route" level: ServiceJourney, JourneyPatter, Line */
+export const getNoticesForRoute = (leg: Leg) =>
+  filterNotices([
+    ...(leg.line?.notices || []),
+    ...(leg.serviceJourney?.notices || []),
+    ...(leg.serviceJourney?.journeyPattern?.notices || []),
+  ]);
+
+export const getNoticesForFromEstimatedCall = (leg: Leg) =>
+  filterNotices(leg.fromEstimatedCall?.notices || []);
+
+export const getNoticesForToEstimatedCall = (leg: Leg) =>
+  filterNotices(leg.toEstimatedCall?.notices || []);
+
 export const getNoticesForServiceJourney = (
   serviceJourney: ServiceJourneyWithEstCallsFragment,
   fromStopPosition: number,
