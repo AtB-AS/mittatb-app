@@ -87,6 +87,7 @@ export type LegFragment = {
     expectedDepartureTime: any;
     realtime: boolean;
     quay: {name: string; id: string; stopPlace?: StopPlaceFragment};
+    notices: Array<NoticeFragment>;
   }>;
   authority?: AuthorityFragment;
   serviceJourneyEstimatedCalls: Array<{

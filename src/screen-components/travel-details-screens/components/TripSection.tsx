@@ -27,6 +27,7 @@ import {View} from 'react-native';
 import {openUrl} from '@atb/utils/open-url';
 import {useHumanizeDistance} from '@atb/utils/location';
 import {
+  filterNotices,
   getLineDestinationName,
   getLineName,
   getNoticesForFromEstimatedCall,
@@ -675,6 +676,7 @@ const IntermediateInfo = ({
       </TripRow>
       {expanded &&
         leg.intermediateEstimatedCalls.map((call) => {
+          const callNotices = filterNotices(call.notices ?? []);
           return (
             <View
               key={call.stopPositionInPattern}
@@ -703,6 +705,27 @@ const IntermediateInfo = ({
               >
                 <ThemeText>{call.quay.name}</ThemeText>
               </TripRow>
+              {callNotices.length > 0 && (
+                <TripRow
+                  dimensionOverrides={NEW_TRIP_DIMENSIONS}
+                  accessible={false}
+                  style={[style.notice, style.intermediateNotices]}
+                >
+                  <View style={style.intermediateNoticesContainer}>
+                    {callNotices.map((notice) => (
+                      <ThemeText
+                        key={notice.id}
+                        typography="body__m"
+                        type="secondary"
+                      >
+                        {callNotices.length > 1
+                          ? `• ${notice.text}`
+                          : notice.text}
+                      </ThemeText>
+                    ))}
+                  </View>
+                </TripRow>
+              )}
             </View>
           );
         })}
@@ -1011,5 +1034,11 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   noticeFirst: {
     marginTop: -theme.spacing.xSmall,
+  },
+  intermediateNotices: {
+    marginTop: -theme.spacing.medium,
+  },
+  intermediateNoticesContainer: {
+    gap: theme.spacing.xSmall,
   },
 }));
