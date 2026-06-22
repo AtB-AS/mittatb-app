@@ -1,5 +1,5 @@
 import React from 'react';
-import {useTranslation} from '@atb/translations';
+import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {
   GenericSectionItem,
@@ -9,6 +9,8 @@ import {
 import {View} from 'react-native';
 import {Unlock, PricePerTime} from '@atb/assets/svg/mono-icons/mobility';
 import {VehicleCardStat} from './VehicleCardStat';
+import {ThemeText} from '@atb/components/text';
+import {BenefitIllustration} from './BenefitIllustration';
 import {
   MobilityTexts,
   ScooterTexts,
@@ -69,8 +71,34 @@ export const PriceDetailsCard = ({
       )
     : t(ScooterTexts.per.unit(ratePrUnit?.perUnit ?? ''));
 
+  const benefitTitle = getTextForLanguage(benefit?.title, language);
+  const benefitDescription = getTextForLanguage(benefit?.description, language);
+  const hasBenefitInfo = !!benefitTitle || !!benefitDescription;
+
   return (
     <Section>
+      {hasBenefitInfo && (
+        <GenericSectionItem>
+          <View style={styles.benefitContainer}>
+            <BenefitIllustration
+              illustration={benefit?.illustration}
+              style={styles.benefitIllustration}
+            />
+            <View style={styles.benefitContent}>
+              {benefitTitle && (
+                <ThemeText typography="body__m__strong">
+                  {benefitTitle}
+                </ThemeText>
+              )}
+              {benefitDescription && (
+                <ThemeText typography="body__s" type="secondary">
+                  {benefitDescription}
+                </ThemeText>
+              )}
+            </View>
+          </View>
+        </GenericSectionItem>
+      )}
       <GenericSectionItem style={styles.sectionWrapper}>
         <View style={styles.content}>
           <VehicleCardStat
@@ -111,6 +139,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     sectionWrapper: {
       padding: theme.spacing.small,
+    },
+    benefitContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    benefitIllustration: {
+      marginEnd: theme.spacing.medium,
+    },
+    benefitContent: {
+      flex: 1,
     },
   };
 });
