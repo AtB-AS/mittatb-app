@@ -296,11 +296,12 @@ export const TripSection: React.FC<TripSectionProps> = ({
               )}
             </TripRow>
           )}
-          {fromEstimatedCallNotices.map((notice) => (
+          {fromEstimatedCallNotices.map((notice, index) => (
             <TripRow
               dimensionOverrides={NEW_TRIP_DIMENSIONS}
               key={notice.id}
               accessible={false}
+              style={[style.notice, index === 0 && style.noticeFirst]}
             >
               <MessageInfoText type="info" message={notice.text} />
             </TripRow>
@@ -416,6 +417,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               dimensionOverrides={NEW_TRIP_DIMENSIONS}
               key={notice.id}
               accessible={false}
+              style={style.notice}
             >
               <MessageInfoText type="info" message={notice.text} />
             </TripRow>
@@ -556,11 +558,12 @@ export const TripSection: React.FC<TripSectionProps> = ({
             </TripRow>
           )}
         </View>
-        {toEstimatedCallNotices.map((notice) => (
+        {toEstimatedCallNotices.map((notice, index) => (
           <TripRow
             dimensionOverrides={NEW_TRIP_DIMENSIONS}
             key={notice.id}
             accessible={false}
+            style={[style.notice, index === 0 && style.noticeFirst]}
           >
             <MessageInfoText type="info" message={notice.text} />
           </TripRow>
@@ -1002,5 +1005,11 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   intermediateStop: {
     flex: 1,
+  },
+  notice: {
+    paddingTop: 0,
+  },
+  noticeFirst: {
+    marginTop: -theme.spacing.xSmall,
   },
 }));
