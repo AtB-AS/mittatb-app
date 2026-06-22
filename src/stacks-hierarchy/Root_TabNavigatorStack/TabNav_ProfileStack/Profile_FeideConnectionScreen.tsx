@@ -43,6 +43,7 @@ export const Profile_FeideConnectionScreen = ({navigation}: Props) => {
   const {data: connection} = useGetFeideConnectionQuery();
   const isConnected = !!connection?.connected;
 
+  const isAlreadyConnectedError = connectError?.http?.code === 409;
   const hasError = localError || !!connectError;
 
   useEffect(() => {
@@ -101,16 +102,28 @@ export const Profile_FeideConnectionScreen = ({navigation}: Props) => {
           />
         )}
 
-        {hasError && (
-          <MessageInfoBox
-            type="error"
-            message={
-              connectError
-                ? t(dictionary.genericErrorMsg)
-                : t(FeideConnectionTexts.error)
-            }
-          />
-        )}
+        {hasError &&
+          (isAlreadyConnectedError ? (
+            <MessageInfoBox
+              type="error"
+              title={t(FeideConnectionTexts.alreadyConnectedError.title)}
+              message={t(FeideConnectionTexts.alreadyConnectedError.message)}
+              onPressConfig={{
+                action: () =>
+                  navigation.navigate('Profile_HelpAndContactScreen'),
+                text: t(FeideConnectionTexts.alreadyConnectedError.contactLink),
+              }}
+            />
+          ) : (
+            <MessageInfoBox
+              type="error"
+              message={
+                connectError
+                  ? t(dictionary.genericErrorMsg)
+                  : t(FeideConnectionTexts.error)
+              }
+            />
+          ))}
 
         <Button
           onPress={() => {

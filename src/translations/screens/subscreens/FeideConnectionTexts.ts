@@ -41,6 +41,23 @@ const FeideConnectionTexts = {
     'We could not connect with Feide. Please try again.',
     'Vi klarte ikkje å koble til Feide. Prøv igjen.',
   ),
+  alreadyConnectedError: {
+    title: _(
+      'Feide er allerede i bruk',
+      'Feide already in use',
+      'Feide er allereie i bruk',
+    ),
+    message: _(
+      'En annen konto er allerede koblet til denne Feide-brukeren. Ta kontakt med kundeservice for hjelp med Feide-tilkobling og skoleskyssbilletter.',
+      'Another account is already connected to this Feide user. Contact customer support for help with Feide connection and school transport tickets.',
+      'Ein annan konto er allereie kopla til denne Feide-brukaren. Ta kontakt med kundeservice for hjelp med Feide-tilkopling og skuleskyssbillettar.',
+    ),
+    contactLink: _(
+      'Kontakt kundeservice',
+      'Contact customer support',
+      'Kontakt kundeservice',
+    ),
+  },
 };
 
 export default FeideConnectionTexts;
