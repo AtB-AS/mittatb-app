@@ -13,6 +13,7 @@
     "test:android:local:perfMeasure": "flashlight test --bundleId no.mittatb.debug --testCommand \"APP_ENV=debug pnpm test:android:local:dev --spec test/flashlight/performanceMeasures.e2e.ts\" --resultsTitle performanceMeasures --iterationCount 1 --maxRetries 1"
   },
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
     "@perf-profiler/reporter": "0.9.0",
     "@perf-profiler/types": "0.8.0",
     "@types/node": ">=18",
