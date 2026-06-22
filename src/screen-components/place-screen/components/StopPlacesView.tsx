@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import {QuaySection} from './QuaySection';
 import {FavoriteToggle} from './FavoriteToggle';
-import type {ContrastColor} from '@atb-as/theme';
 import {
   DateSelection,
   type DepartureSearchTime,
@@ -28,6 +27,7 @@ import {
 } from '../utils';
 import {DeparturesProps, useDepartures} from '../hooks/use-departures';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 
 type Props = {
   stopPlaces: StopPlace[];
@@ -45,7 +45,6 @@ type Props = {
   setShowOnlyFavorites: (enabled: boolean) => void;
   testID?: string;
   mode: StopPlacesMode;
-  backgroundColor: ContrastColor;
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 } & (
   | {
@@ -73,7 +72,6 @@ export const StopPlacesView = (props: Props) => {
     setShowOnlyFavorites,
     testID,
     mode,
-    backgroundColor,
     onScroll,
   } = props;
 
@@ -131,6 +129,11 @@ export const StopPlacesView = (props: Props) => {
     if (!placeHasFavorites) setShowOnlyFavorites(false);
   }, [placeHasFavorites, setShowOnlyFavorites]);
 
+  const refreshControlProps = useManualRefreshControlProps({
+    onRefresh: refetchDepartures,
+    refreshing: departuresIsLoading,
+  });
+
   return (
     <SectionList
       onScroll={onScroll}
@@ -161,19 +164,13 @@ export const StopPlacesView = (props: Props) => {
                 <DateSelection
                   searchTime={searchTime}
                   setSearchTime={setSearchTime}
-                  backgroundColor={backgroundColor}
                 />
               )}
             </View>
           ) : null}
         </>
       }
-      refreshControl={
-        <RefreshControl
-          refreshing={departuresIsLoading}
-          onRefresh={refetchDepartures}
-        />
-      }
+      refreshControl={<RefreshControl {...refreshControlProps} />}
       sections={quayListData}
       testID={testID}
       keyExtractor={(item) => item.quay.id}

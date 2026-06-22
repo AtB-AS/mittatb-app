@@ -38,6 +38,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_experimental_features',
   },
   {
+    name: 'isFeideConnectionEnabled',
+    remoteConfigKey: 'enable_feide_connection',
+  },
+  {
     name: 'isFlexibleTransportEnabled',
     remoteConfigKey: 'enable_flexible_transport',
   },
@@ -76,6 +80,14 @@ export const toggleSpecifications = [
   {
     name: 'isNonTransitTripSearchEnabled',
     remoteConfigKey: 'enable_non_transit_trip_search',
+  },
+  {
+    name: 'isNewTravelCardBookingEnabled',
+    remoteConfigKey: 'enable_new_travel_card_booking',
+  },
+  {
+    name: 'isNewTripSearchEnabled',
+    remoteConfigKey: 'enable_new_trip_search',
   },
   {
     name: 'isNynorskEnabled',
@@ -146,6 +158,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_ticket_information',
   },
   {
+    name: 'isTicketTransferEnabled',
+    remoteConfigKey: 'enable_ticket_transfer',
+  },
+  {
     name: 'isTipsAndInformationEnabled',
     remoteConfigKey: 'enable_tips_and_information',
   },
@@ -176,6 +192,10 @@ export const toggleSpecifications = [
   {
     name: 'isHarborDistancesApiEnabled',
     remoteConfigKey: 'enable_harbor_distances_api',
+  },
+  {
+    name: 'isGeocoderV3Enabled',
+    remoteConfigKey: 'use_geocoder_v3',
   },
 ] as const satisfies readonly FeatureToggleSpecification[];
 

@@ -77,7 +77,7 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
           {formatDestinationDisplay(t, favorite.destinationDisplay) ??
             t(SectionTexts.favoriteDeparture.allVariations)}
         </ThemeText>
-        <ThemeText typography="body__s" color="secondary">
+        <ThemeText typography="body__s" type="secondary">
           {t(SectionTexts.favoriteDeparture.from)} {favorite.quayName}{' '}
           {favorite.quayPublicCode ?? ''}
         </ThemeText>

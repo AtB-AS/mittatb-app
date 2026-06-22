@@ -20,9 +20,9 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
+  BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
-import {BottomSheetModal as GorhamBottomSheetModal} from '@gorhom/bottom-sheet';
 
 export const TravelSearchFiltersBottomSheet = ({
   filtersSelection,
@@ -32,7 +32,7 @@ export const TravelSearchFiltersBottomSheet = ({
 }: {
   filtersSelection: TravelSearchFiltersSelectionType;
   onSave: (t: TravelSearchFiltersSelectionType) => void;
-  bottomSheetModalRef: React.RefObject<GorhamBottomSheetModal | null>;
+  bottomSheetModalRef: React.RefObject<BottomSheetModalMethods | null>;
   onCloseFocusRef: React.RefObject<View | null>;
 }) => {
   const {t, language} = useTranslation();

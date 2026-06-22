@@ -1,5 +1,6 @@
 import {StopPlace} from '@atb/api/types/departures';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -12,8 +13,8 @@ import {StopPlaces} from './components/StopPlaces';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
-import React, {Ref, useEffect, useMemo} from 'react';
-import {Platform, ScrollView, View} from 'react-native';
+import React, {Ref, useEffect} from 'react';
+import {ScrollView, View} from 'react-native';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
@@ -22,6 +23,7 @@ import SharedTexts from '@atb/translations/shared';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {useNearestStopPlaceNodesQuery} from './use-nearest-stop-place-nodes-query';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 
 export type NearbyStopPlacesScreenParams = {
   location: Location | undefined;
@@ -112,20 +114,15 @@ export const NearbyStopPlacesScreenComponent = ({
           location.name
         : undefined;
 
-  const refreshControlProps = useMemo(() => {
-    // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
-    return isFocused || Platform.OS === 'android'
-      ? {
-          refreshing: Platform.OS === 'ios' ? false : isLoading,
-          onRefresh: () =>
-            onUpdateLocation(
-              location?.resultType === 'geolocation'
-                ? (geolocation ?? undefined)
-                : location,
-            ),
-        }
-      : undefined;
-  }, [isFocused, isLoading, location, geolocation, onUpdateLocation]);
+  const refreshControlProps = useManualRefreshControlProps({
+    refreshing: isLoading,
+    onRefresh: () =>
+      onUpdateLocation(
+        location?.resultType === 'geolocation'
+          ? (geolocation ?? undefined)
+          : location,
+      ),
+  });
 
   return (
     <FullScreenView
@@ -209,8 +206,10 @@ const Header = React.memo(function Header({
   const {theme} = useThemeContext();
   const {location: geolocation, requestLocationPermission} =
     useGeolocationContext();
+  const analytics = useAnalyticsContext();
 
   const setCurrentLocationOrRequest = () => {
+    analytics.logEvent('Departures', 'My location button clicked');
     if (geolocation) {
       setLocation({...geolocation, resultType: 'geolocation'});
     } else {

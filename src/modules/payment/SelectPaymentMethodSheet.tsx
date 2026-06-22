@@ -23,8 +23,8 @@ import {MultiplePaymentMethodsRadioSection} from './MultiplePaymentMethodsRadioS
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
+  BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
-import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {isNonRecurringPaymentType} from './utils';
 
@@ -38,7 +38,7 @@ type Props = {
     paymentMethod?: PaymentMethod;
   };
   recurringPaymentMethods?: PaymentMethod[];
-  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  bottomSheetModalRef: React.RefObject<BottomSheetModalMethods | null>;
   onCloseFocusRef: React.RefObject<View | null>;
 };
 
@@ -115,7 +115,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
         <View>
           {recurringPaymentMethods && recurringPaymentMethods?.length > 0 && (
             <View style={styles.listHeading}>
-              <ThemeText color="secondary">
+              <ThemeText type="secondary">
                 {t(SelectPaymentMethodTexts.saved_cards.text)}
               </ThemeText>
             </View>
@@ -139,7 +139,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
         <View>
           {recurringPaymentMethods && recurringPaymentMethods?.length > 0 && (
             <View style={styles.listHeading}>
-              <ThemeText color="secondary">
+              <ThemeText type="secondary">
                 {t(SelectPaymentMethodTexts.other_cards.text)}
               </ThemeText>
             </View>
@@ -175,7 +175,6 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
 
         {authenticationType !== 'phone' && (
           <MessageInfoText
-            style={styles.warningMessageAnonym}
             message={t(AnonymousPurchases.consequences.select_payment_method)}
             type="warning"
           />
@@ -202,9 +201,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   confirmButton: {
     marginTop: theme.spacing.small,
-  },
-  warningMessageAnonym: {
-    paddingTop: theme.spacing.medium,
-    paddingLeft: theme.spacing.medium,
   },
 }));

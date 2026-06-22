@@ -11,11 +11,10 @@ import {getTripPatternAnalytics} from '@atb/screen-components/travel-details-scr
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useTimeContext} from '../time';
 
-export const SaveableTripSearchResultRow: React.FC<
-  React.PropsWithChildren<{
-    tripPattern: TripPattern;
-  }>
-> = ({children, tripPattern}) => {
+export const SaveableTripSearchResultRow: React.FC<{
+  tripPattern: TripPattern;
+  children: (isStored: boolean) => React.ReactNode;
+}> = ({children, tripPattern}) => {
   const {isSaveTripsEnabled} = useFeatureTogglesContext();
   const {tripPatterns, addTripPattern, removeTripPattern, canAddTripPattern} =
     useStoredTripPatterns();
@@ -69,7 +68,7 @@ export const SaveableTripSearchResultRow: React.FC<
   );
 
   if (!isSaveTripsEnabled || !canAdd) {
-    return children;
+    return children(false);
   }
 
   return (
@@ -77,7 +76,7 @@ export const SaveableTripSearchResultRow: React.FC<
       onRightAction={onRightAction}
       rightActionKind={rightActionKind}
     >
-      {children}
+      {children(isStored)}
       {isStored && (
         <ThemeIcon
           svg={SaveFill}

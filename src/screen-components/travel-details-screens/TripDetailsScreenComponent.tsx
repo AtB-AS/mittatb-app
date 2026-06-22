@@ -1,11 +1,8 @@
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {Leg, Place, TripPattern} from '@atb/api/types/trips';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
-import SvgDuration from '@atb/assets/svg/mono-icons/time/Duration';
 import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
-import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {hasLegsWeCantSellTicketsFor} from '@atb/modules/operator-config';
 import {
   FareProductTypeConfig,
@@ -17,7 +14,7 @@ import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import {FareZoneWithMetadata} from '@atb/modules/fare-zones-selector';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
+import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/screen-components/travel-details-map-screen';
 import {ServiceJourneyDeparture} from './types';
 import {
@@ -29,7 +26,7 @@ import {
 import {formatToClock, secondsBetween} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
-import React, {Ref, useCallback, useEffect, useState} from 'react';
+import React, {Ref, useCallback} from 'react';
 import {View} from 'react-native';
 import {Trip} from './components/Trip';
 import {useHarbors} from '@atb/modules/harbors';
@@ -38,10 +35,15 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
-import {useSingleTripQuery} from '@atb/modules/trip-patterns';
+import {useRefreshTripQuery} from '@atb/modules/trip-patterns';
 import {getPosthogClientGlobal} from '@atb/modules/analytics';
 import {useScreenshotAware} from 'react-native-screenshot-aware';
 import {useTimeContext} from '@atb/modules/time';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
+import {TravelCardHeaderComponent as TravelCardHeader} from '@atb/screen-components/travel-card';
+import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
+import {LegacyTripDetailsScreenComponent} from './legacy';
+import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -70,7 +72,16 @@ type Props = TripDetailsScreenParams & {
   isFocused: boolean;
 };
 
-export const TripDetailsScreenComponent = ({
+export const TripDetailsScreenComponent = (props: Props) => {
+  const isNewScreen = useIsExperimentalEnabled('isNewTripSearchEnabled');
+  return isNewScreen ? (
+    <NewTripDetailsScreenComponent {...props} />
+  ) : (
+    <LegacyTripDetailsScreenComponent {...props} />
+  );
+};
+
+const NewTripDetailsScreenComponent = ({
   tripPattern,
   onPressDetailsMap,
   onPressBuyTicket,
@@ -84,7 +95,7 @@ export const TripDetailsScreenComponent = ({
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.neutral[1];
 
-  const {data, error, isFetching, refetch} = useSingleTripQuery(
+  const {data, error, isFetching, refetch} = useRefreshTripQuery(
     tripPattern,
     isFocused,
   );
@@ -102,20 +113,12 @@ export const TripDetailsScreenComponent = ({
   );
 
   const purchaseSelection = usePurchaseSelectionFromTrip(updatedTripPattern);
-  const fromToNames = getFromToName(updatedTripPattern.legs);
-  const startEndTime = getStartEndTime(updatedTripPattern, language);
+  const headerTitle = `${formatToClock(updatedTripPattern.expectedStartTime, language, 'floor')} - ${formatToClock(updatedTripPattern.expectedEndTime, language, 'ceil')}`;
 
-  const [isManualRefresh, setIsManualRefresh] = useState(false);
-  const onManualRefresh = useCallback(() => {
-    setIsManualRefresh(true);
-    refetch();
-  }, [refetch]);
-
-  useEffect(() => {
-    if (!isFetching && isManualRefresh) {
-      setIsManualRefresh(false);
-    }
-  }, [isFetching, isManualRefresh]);
+  const refreshControlProps = useManualRefreshControlProps({
+    refreshing: isFetching,
+    onRefresh: refetch,
+  });
 
   return (
     <View style={styles.container}>
@@ -123,53 +126,26 @@ export const TripDetailsScreenComponent = ({
         focusRef={focusRef}
         headerProps={{
           leftButton: {type: 'back'},
-          title: t(TripDetailsTexts.header.title),
+          title: headerTitle,
           color: themeColor,
         }}
-        refreshControlProps={{
-          refreshing: isFetching && isManualRefresh,
-          onRefresh: onManualRefresh,
-        }}
-        contentColor={theme.color.background.neutral[0]}
+        refreshControlProps={refreshControlProps}
+        contentColor={theme.color.background.neutral[1]}
         headerContent={(focusRef) => (
-          <View style={styles.headerContent}>
-            <View accessible={true} ref={focusRef}>
-              <ThemeText
-                color={themeColor}
-                typography="heading__l"
-                style={styles.heading}
-                accessibilityLabel={
-                  fromToNames
-                    ? t(
-                        TripDetailsTexts.header.titleFromToA11yLabel(
-                          fromToNames,
-                        ),
-                      )
-                    : undefined
-                }
+          <CompositeAccessibilityProvider order={['header']}>
+            {(accessibilityProps) => (
+              <View
+                ref={focusRef}
+                style={styles.headerContent}
+                {...accessibilityProps}
               >
-                {fromToNames
-                  ? t(TripDetailsTexts.header.titleFromTo(fromToNames))
-                  : t(TripDetailsTexts.header.title)}
-              </ThemeText>
-            </View>
-            <View style={{flexDirection: 'row'}} accessible={true}>
-              <ThemeIcon
-                svg={SvgDuration}
-                style={styles.durationIcon}
-                color={themeColor}
-              />
-              <ThemeText
-                typography="body__s"
-                color={themeColor}
-                accessibilityLabel={t(
-                  TripDetailsTexts.header.startEndTimeA11yLabel(startEndTime),
-                )}
-              >
-                {t(TripDetailsTexts.header.startEndTime(startEndTime))}
-              </ThemeText>
-            </View>
-          </View>
+                <TravelCardHeader
+                  tripPattern={updatedTripPattern}
+                  size="large"
+                />
+              </View>
+            )}
+          </CompositeAccessibilityProvider>
         )}
       >
         {updatedTripPattern && (
@@ -407,24 +383,6 @@ function getFareZoneWithMetadata(place: Place, fareZones: FareZone[]) {
   return fareZoneWithMetadata;
 }
 
-function getFromToName(legs: Leg[]) {
-  if (legs.length === 0) return;
-  const fromName = legs[0].fromPlace.name;
-  const toName = legs[legs.length - 1].toPlace.name;
-  if (!fromName || !toName) return;
-  return {fromName, toName};
-}
-
-function getStartEndTime(tripPattern: TripPattern, language: Language) {
-  const startTime = formatToClock(
-    tripPattern.expectedStartTime,
-    language,
-    'floor',
-  );
-  const endTime = formatToClock(tripPattern.expectedEndTime, language, 'ceil');
-  return {startTime, endTime};
-}
-
 function totalWaitTimeIsMoreThanAnHour(legs: Leg[]) {
   return (
     legs.reduce(
@@ -487,23 +445,13 @@ function trackScreenshottedTripDetails(
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.background.neutral[1].background,
   },
-  heading: {marginBottom: theme.spacing.medium},
-  headerContent: {marginHorizontal: theme.spacing.medium},
+  headerContent: {
+    marginHorizontal: theme.spacing.medium,
+  },
   paddedContainer: {
     padding: theme.spacing.medium,
-  },
-  purchaseButton: {
-    position: 'absolute',
-    marginHorizontal: theme.spacing.large,
-    marginBottom: theme.spacing.large,
-    bottom: 0,
-    right: 0,
-    shadowRadius: theme.spacing.small,
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.25,
-    elevation: 3,
   },
   purchaseButtonAccessible: {
     marginHorizontal: theme.spacing.medium,
@@ -513,5 +461,4 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     borderTopColor: theme.color.border.primary.background,
     borderTopWidth: theme.border.width.slim,
   },
-  durationIcon: {marginRight: theme.spacing.small},
 }));

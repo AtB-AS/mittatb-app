@@ -7,8 +7,7 @@ import {
 } from '@atb/utils/date';
 import React, {useCallback, useRef} from 'react';
 import {View} from 'react-native';
-import {getPlaceName, InterchangeDetails, TripSection} from './TripSection';
-import {TripSummary} from './TripSummary';
+import {TripSection} from './TripSection';
 import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '../types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
@@ -26,11 +25,7 @@ import {
 import {useGetServiceJourneyVehiclesQuery} from '../use-get-service-journey-vehicles';
 import {MapFilterType} from '@atb/modules/map';
 import {Divider} from '@atb/components/divider';
-import {
-  TranslateFunction,
-  TripDetailsTexts,
-  useTranslation,
-} from '@atb/translations';
+import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
@@ -104,6 +99,7 @@ export const Trip: React.FC<TripProps> = ({
         operators: [],
       },
     },
+    showTariffZones: false,
   };
 
   const shouldShowDate =
@@ -135,10 +131,9 @@ export const Trip: React.FC<TripProps> = ({
     <View style={styles.container}>
       {shouldShowDate && (
         <>
-          <ThemeText typography="body__s" color="secondary" style={styles.date}>
+          <ThemeText typography="body__s" type="secondary" style={styles.date}>
             {formatToVerboseFullDate(tripPattern.expectedStartTime, language)}
           </ThemeText>
-          <Divider />
         </>
       )}
       {shortWaitTime && (
@@ -168,11 +163,22 @@ export const Trip: React.FC<TripProps> = ({
             .filter(isDefined),
         }}
       />
-      {error && (
+      {error && isNetworkError(error) && (
         <>
-          <ScreenReaderAnnouncement message={translatedError(error, t)} />
-          <MessageInfoBox type="warning" message={translatedError(error, t)} />
+          <ScreenReaderAnnouncement
+            message={t(TripDetailsTexts.messages.errorNetwork)}
+          />
+          <MessageInfoBox
+            type="warning"
+            message={t(TripDetailsTexts.messages.errorNetwork)}
+          />
         </>
+      )}
+      {tripPattern.status === 'stale' && (
+        <MessageInfoBox
+          type="warning"
+          message={t(TripDetailsTexts.messages.errorDefault)}
+        />
       )}
       <View style={styles.trip}>
         {tripPattern &&
@@ -189,14 +195,10 @@ export const Trip: React.FC<TripProps> = ({
                 wait={legWaitDetails(index, filteredLegs)}
                 isLast={index == filteredLegs.length - 1}
                 step={index + 1}
-                interchangeDetails={getInterchangeDetails(
-                  filteredLegs,
-                  leg.interchangeTo?.toServiceJourney?.id,
-                )}
                 leg={leg}
                 testID={'leg' + index}
                 onPressShowLive={
-                  legVehiclePosition
+                  !isScreenReaderEnabled && legVehiclePosition
                     ? (serviceJourneyPolylines: ServiceJourneyPolylines) => {
                         shouldShowRequestReview.current = true;
                         onPressDetailsMap({
@@ -218,7 +220,7 @@ export const Trip: React.FC<TripProps> = ({
           })}
       </View>
       <Divider />
-      {tripPatternLegs && (
+      {!isScreenReaderEnabled && tripPatternLegs && (
         <CompactTravelDetailsMap
           serviceJourneyPolylines={tripPatternLegs}
           fromPlace={tripPatternLegs[0]?.fromPlace}
@@ -235,7 +237,6 @@ export const Trip: React.FC<TripProps> = ({
         />
       )}
       <SaveTripPatternButtonComponent tripPattern={tripPattern} now={now} />
-      <TripSummary {...tripPattern} />
     </View>
   );
 };
@@ -267,30 +268,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-function getInterchangeDetails(
-  legs: Leg[],
-  id: string | undefined,
-): InterchangeDetails | undefined {
-  if (!id) return undefined;
-  const interchangeLeg = legs.find(
-    (leg) => leg.line && leg.serviceJourney?.id === id,
-  );
-
-  if (interchangeLeg?.line?.publicCode) {
-    return {
-      publicCode: interchangeLeg.line.publicCode,
-      fromPlace: getPlaceName(interchangeLeg.fromPlace),
-    };
-  }
-  return undefined;
-}
-
-function translatedError(error: ErrorResponse, t: TranslateFunction): string {
-  switch (error.kind) {
-    case 'AXIOS_NETWORK_ERROR':
-    case 'AXIOS_TIMEOUT':
-      return t(TripDetailsTexts.messages.errorNetwork);
-    default:
-      return t(TripDetailsTexts.messages.errorDefault);
-  }
+function isNetworkError(error: ErrorResponse): boolean {
+  return error.kind === 'AXIOS_NETWORK_ERROR' || error.kind === 'AXIOS_TIMEOUT';
 }

@@ -18,6 +18,11 @@ import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {dictionary, Language} from '@atb/translations';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
+import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
+import type {
+  MobilityPriceAdjustmentBenefitType,
+  MobilityPriceAdjustmentType,
+} from '@atb/api/types/benefit';
 import {
   BatteryEmpty,
   BatteryFull,
@@ -28,6 +33,7 @@ import {
 import {
   RentalUris,
   ShmoPricingPlan,
+  ShmoPricingSegment,
   StationFeature,
   StationFeatureSchema,
   StationsClusteredFeature,
@@ -41,7 +47,7 @@ import {
 import {TFunc} from '@leile/lobo-t';
 import {ErrorResponse, formatNumberToString} from '@atb-as/utils';
 import {FormattedRatePerUnit} from './types';
-import {ThemedCityBike, ThemedScooter} from '@atb/theme/ThemedAssets';
+import {ThemedElectricCityBike, ThemedScooter} from '@atb/theme/ThemedAssets';
 import {getCurrencySymbol} from '@atb/translations/currency';
 
 export const isStationCluster = (
@@ -238,6 +244,50 @@ export const isShowAll = (
 export const toFormFactorEnum = (str: string): FormFactor =>
   enumFromString(FormFactor, str) || FormFactor.Other;
 
+// A mobility benefit carries its `systemIds` at the benefit level. The real
+// mobility path is already system-filtered server-side; the bonus-product path
+// sets the benefit-level `systemIds` when building its synthetic benefit.
+export const getFreeUnlock = (
+  benefit: MobilityPriceAdjustmentBenefitType | undefined,
+  systemId: string,
+): MobilityPriceAdjustmentType | undefined =>
+  benefit?.systemIds.includes(systemId)
+    ? benefit.priceAdjustments.find(
+        (e) => e.type === PriceAdjustmentEnum.enum.FREE_UNLOCK,
+      )
+    : undefined;
+
+export const getFreeMinutes = (
+  benefit: MobilityPriceAdjustmentBenefitType | undefined,
+  systemId: string,
+): MobilityPriceAdjustmentType | undefined =>
+  benefit?.systemIds.includes(systemId)
+    ? benefit.priceAdjustments.find(
+        (e) => e.type === PriceAdjustmentEnum.enum.FREE_MINUTES,
+      )
+    : undefined;
+
+export const computeFreeMinuteCount = (
+  freeMinutes: MobilityPriceAdjustmentType,
+  perMinPricing: ShmoPricingSegment[],
+): number => {
+  let budget = Math.abs(freeMinutes.amount);
+  let total = 0;
+  for (const segment of perMinPricing) {
+    if (budget <= 0) break;
+    const segLengthMin =
+      segment.end != null ? segment.end - segment.start : Infinity;
+    if (segment.rate <= 0) {
+      total += segLengthMin;
+      continue;
+    }
+    const minutes = Math.min(Math.floor(budget / segment.rate), segLengthMin);
+    total += minutes;
+    budget -= minutes * segment.rate;
+  }
+  return Math.min(total, 180);
+};
+
 export const getNewFilterState = (
   isChecked: boolean,
   selectedOperator: string,
@@ -342,7 +392,7 @@ export function getThemedIllustrationForFormFactor(formFactor: FormFactor) {
     case FormFactor.ScooterStanding:
       return ThemedScooter;
     case FormFactor.Bicycle:
-      return ThemedCityBike;
+      return ThemedElectricCityBike;
     default:
       return null;
   }

@@ -18,11 +18,11 @@ import {QuaySection} from './QuaySection';
 import {StopPlacesMode} from '@atb/screen-components/nearby-stop-places';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
-import type {ContrastColor} from '@atb-as/theme';
 import {useFavoritesContext} from '@atb/modules/favorites';
 import {hasFavorites} from '../utils';
 import {DeparturesProps, useDepartures} from '../hooks/use-departures';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
 
@@ -41,7 +41,6 @@ export type QuayViewProps = {
   testID?: string;
   stopPlace: StopPlace;
   mode: StopPlacesMode;
-  backgroundColor: ContrastColor;
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 };
 
@@ -55,7 +54,6 @@ export function QuayView({
   testID,
   stopPlace,
   mode,
-  backgroundColor,
   onScroll,
 }: QuayViewProps) {
   const styles = useStyles();
@@ -98,6 +96,11 @@ export function QuayView({
     if (!placeHasFavorites) setShowOnlyFavorites(false);
   }, [placeHasFavorites, setShowOnlyFavorites]);
 
+  const refreshControlProps = useManualRefreshControlProps({
+    onRefresh: refetchDepartures,
+    refreshing: departuresIsLoading,
+  });
+
   return (
     <SectionList
       onScroll={onScroll}
@@ -126,17 +129,12 @@ export function QuayView({
             <DateSelection
               searchTime={searchTime}
               setSearchTime={setSearchTime}
-              backgroundColor={backgroundColor}
             />
           </View>
         </>
       }
       refreshControl={
-        <RefreshControl
-          refreshing={departuresIsLoading}
-          onRefresh={refetchDepartures}
-          testID="isLoading"
-        />
+        <RefreshControl {...refreshControlProps} testID="isLoading" />
       }
       sections={quayListData}
       testID={testID}

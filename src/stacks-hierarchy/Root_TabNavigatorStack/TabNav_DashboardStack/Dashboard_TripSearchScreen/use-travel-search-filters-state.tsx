@@ -11,7 +11,6 @@ type TravelSearchFiltersState =
       setFiltersSelection: React.Dispatch<
         React.SetStateAction<TravelSearchFiltersSelectionType>
       >;
-      anyFiltersApplied: boolean;
       resetTransportModes: () => void;
     }
   | {
@@ -66,9 +65,6 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
     enabled: true,
     filtersSelection,
     setFiltersSelection,
-    anyFiltersApplied: !!filtersSelection.transportModes?.some(
-      (m) => !m.selected,
-    ),
     resetTransportModes: () => {
       const filtersWithInitialTransportModes = {
         ...filtersSelection,

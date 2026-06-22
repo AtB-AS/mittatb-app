@@ -11,26 +11,28 @@ const SituationsTexts = {
     info: _('Med ekstra info', 'With extra information', 'Med ekstra info'),
   },
   tripSummary: {
-    warnings: _(
-      'Reisen har advarsler',
-      'The trip has warnings',
-      'Reisa har åtvaringar',
+    detailedPrefix: _(
+      'Denne reisen har følgende meldinger',
+      'This trip has the following notices',
+      'Denne reisa har følgjande meldingar',
     ),
-    notices: _(
-      'Reisen har ekstra info',
-      'The trip has extra information',
-      'Reisa har ekstra info',
-    ),
-    warningsAndNotices: _(
-      'Reisen har advarsler og ekstra info',
-      'The trip has warnings and extra information',
-      'Reisa har åtvaringar og ekstra info',
-    ),
-    openDetailsForMoreInfo: _(
-      'Åpne detaljer for mer informasjon',
-      'Open details for more information',
-      'Opne detaljar for meir informasjon',
-    ),
+    withSuggestion: {
+      error: _(
+        'Denne reisen har kritiske advarsler. Se detaljer for mer info.',
+        'This trip has critical warnings. See details for more information.',
+        'Denne reisa har kritiske merknader. Sjå detaljar for meir info.',
+      ),
+      warning: _(
+        'Denne reisen har advarsler. Se detaljer for mer info.',
+        'This trip has warnings. See details for more information.',
+        'Denne reisa har merknader. Sjå detaljar for meir info.',
+      ),
+      info: _(
+        'Denne reisen har ekstra informasjon. Se detaljer for mer info.',
+        'This trip has extra information. See details for more information.',
+        'Denne reisa har ekstra informasjon. Sjå detaljar for meir info.',
+      ),
+    },
   },
   bottomSheet: {
     title: {
@@ -38,7 +40,6 @@ const SituationsTexts = {
       warning: _('Advarsel', 'Warning', 'Advarsel'),
       error: _('Feil', 'Error', 'Feil'),
     },
-    button: _('Lukk', 'Close', 'Lukk'),
     validity: {
       from: (fromDate: string) =>
         _(

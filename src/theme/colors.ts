@@ -1,7 +1,8 @@
-import {Platform, StatusBarProps} from 'react-native';
+import {type ColorValue, Platform, StatusBarProps} from 'react-native';
 import {APP_ORG} from '@env';
 
 import {
+  ContrastColor,
   createExtendedThemes,
   createTextTypeStyles,
   createThemesFor,
@@ -50,6 +51,7 @@ const tripLegDetail = {
   decorationContainerWidth: 20,
   decorationLineEndWidth: 12,
   decorationLineWidth: 4,
+  decorationLineInset: 16,
 };
 
 type AppThemeExtension = {
@@ -84,3 +86,35 @@ export const isTextColor = (color: unknown, theme: Theme): color is TextColor =>
 
 export type Themes = typeof themes;
 export type Theme = Themes['light'];
+export type ForegroundType = keyof ContrastColor['foreground'];
+
+/**
+ * Resolve a color value from the polymorphic color type used by ThemeText and
+ * ThemeIcon. The resolution priority is:
+ *
+ * 1. ContrastColor object → foreground[type]
+ * 2. Status string ("info", "error", …) → status hue (primary.background)
+ * 3. TextColor string ("primary", "secondary", "disabled") → foreground.dynamic
+ * 4. Raw ColorValue → passthrough
+ * 5. undefined → foreground.dynamic.primary
+ */
+export function resolveColorValue(
+  color: ContrastColor | StatusColorName | TextColor | ColorValue | undefined,
+  type: ForegroundType,
+  theme: Theme,
+): string {
+  if (typeof color === 'object') {
+    return color.foreground[type];
+  } else if (isStatusColor(color, theme)) {
+    return theme.color.status[color].primary.background;
+  } else if (isTextColor(color, theme) || color === undefined) {
+    return theme.color.foreground.dynamic[color ?? type];
+  } else {
+    if (typeof color === 'string' && !color.startsWith('#')) {
+      console.warn(
+        `[resolveColorValue] Expected hex color, got: "${String(color)}"`,
+      );
+    }
+    return color as string;
+  }
+}

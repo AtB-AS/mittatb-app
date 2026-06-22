@@ -1,5 +1,5 @@
 import React from 'react';
-import {useThemeContext} from '@atb/theme';
+import {resolveColorValue, useThemeContext} from '@atb/theme';
 import {
   ColorValue,
   Platform,
@@ -10,20 +10,20 @@ import {
 } from 'react-native';
 import {renderMarkdown} from './markdown-renderer';
 import {getTextWeightStyle, MAX_FONT_SCALE} from './utils';
-import {
-  ContrastColor,
-  Statuses,
-  TextColor,
-  TextNames,
-  isStatusColor,
-  isTextColor,
-} from '@atb/theme/colors';
+import {ContrastColor, ForegroundType, TextNames} from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
 
 export type ThemeTextProps = TextProps & {
   typography?: TextNames;
-  type?: keyof ContrastColor['foreground'];
-  color?: ContrastColor | Statuses | TextColor | ColorValue;
+  type?: ForegroundType;
+  /**
+   * Pass a ContrastColor from the theme for semantic color resolution.
+   * The foreground tier is selected via the `type` prop.
+   * Use a resolved hex string only for explicit color overrides.
+   * Do NOT pass TextColor strings like 'primary' or 'secondary' —
+   * use the `type` prop instead.
+   */
+  color?: ContrastColor | ColorValue;
   isMarkdown?: boolean;
 };
 
@@ -37,7 +37,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   ...props
 }) => {
   const {theme, androidSystemFont} = useThemeContext();
-  const textColor = useColor(color, type);
+  const textColor = resolveColorValue(color, type, theme);
   const fontScale = useFontScale();
 
   const typeStyle = {
@@ -81,24 +81,17 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   // If markdown is enabled, we need to wrap the content in a <View></View> to properly align the <Text></Text> elements,
   // by doing this we also avoid to wrap the list elements inside the markdown render in a Text component, which is not allowed.
   if (isMarkdown) {
-    return <View>{content}</View>;
+    return <View key={fontScale}>{content}</View>;
   }
 
-  return <Text {...textProps}>{content}</Text>;
+  return (
+    <Text
+      {...textProps}
+      // Trigger re-renders on `fontScale` changes to avoid a react-native bug
+      // where text size is updated, but the text container isn't.
+      key={fontScale}
+    >
+      {content}
+    </Text>
+  );
 };
-
-function useColor(
-  color: ContrastColor | TextColor | Statuses | ColorValue | undefined,
-  type: keyof ContrastColor['foreground'],
-) {
-  const {theme} = useThemeContext();
-  if (typeof color === 'object') {
-    return color.foreground[type];
-  } else if (isStatusColor(color, theme)) {
-    return theme.color.status[color].secondary.foreground[type];
-  } else if (isTextColor(color, theme) || color === undefined) {
-    return theme.color.foreground.dynamic[color ?? 'primary'];
-  } else {
-    return color;
-  }
-}

@@ -95,7 +95,7 @@ const ContactInfoContent = () => {
                   SmartParkAndRideTexts.onboarding.contactInfo.parking.heading,
                 )}
               </ThemeText>
-              <ThemeText typography="body__s" color="secondary">
+              <ThemeText typography="body__s" type="secondary">
                 {t(
                   SmartParkAndRideTexts.onboarding.contactInfo.parking
                     .subheading,
@@ -133,7 +133,7 @@ const ContactInfoContent = () => {
                   SmartParkAndRideTexts.onboarding.contactInfo.project.heading,
                 )}
               </ThemeText>
-              <ThemeText typography="body__s" color="secondary">
+              <ThemeText typography="body__s" type="secondary">
                 {t(
                   SmartParkAndRideTexts.onboarding.contactInfo.project
                     .subheading,

@@ -18,7 +18,7 @@ import {
 } from '@atb/modules/announcements';
 import {AnalyticsEventContext} from '@atb/modules/analytics';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
 type ActionButtonProps = {
@@ -33,7 +33,7 @@ export const useActionButtonProps = (
   announcement: Announcement,
   button: UrlActionButton | BottomSheetActionButton | undefined,
   logContext: AnalyticsEventContext,
-  bottomSheetModalRef: RefObject<BottomSheetModal | null>,
+  bottomSheetModalRef: RefObject<BottomSheetModalMethods | null>,
 ): ActionButtonProps | undefined => {
   const {language, t} = useTranslation();
   const analytics = useAnalyticsContext();

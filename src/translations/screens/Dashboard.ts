@@ -49,8 +49,8 @@ const DashboardTexts = {
     },
   },
   bonus: {
-    header: _('Poeng', 'Points', 'Poeng'),
-    button: _('Mer om Poeng', 'More about Points', 'Meir om Poeng'),
+    header: _('AtB Bonus', 'AtB Bonus', 'AtB Bonus'),
+    button: _('Til AtB Bonus', 'To AtB Bonus', 'Til AtB Bonus'),
   },
 };
 

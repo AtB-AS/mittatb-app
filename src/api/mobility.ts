@@ -184,7 +184,10 @@ export const initViolationsReporting = (
 ): Promise<ViolationsReportingInitQueryResult> => {
   const query = qs.stringify(params);
   return client
-    .get(stringifyUrl('/mobility/v1/violations-reporting/init', query), opts)
+    .get(stringifyUrl('/mobility/v1/violations-reporting/init', query), {
+      ...opts,
+      authWithIdToken: true,
+    })
     .then((res) => {
       const result = ViolationsReportingInitQueryResultSchema.safeParse(
         res.data,
@@ -203,7 +206,10 @@ export const lookupVehicleByQr = (
 ): Promise<ViolationsVehicleLookupQueryResult> => {
   const query = qs.stringify(params);
   return client
-    .get(stringifyUrl('/mobility/v1/violations-reporting/vehicle', query), opts)
+    .get(stringifyUrl('/mobility/v1/violations-reporting/vehicle', query), {
+      ...opts,
+      authWithIdToken: true,
+    })
     .then((res) => {
       const result = ViolationsVehicleLookupQueryResultSchema.safeParse(
         res.data,
@@ -221,7 +227,10 @@ export const sendViolationsReport = (
   opts?: AxiosRequestConfig,
 ): Promise<ViolationsReportQueryResult> => {
   return client
-    .post('/mobility/v1/violations-reporting/report', data, opts)
+    .post('/mobility/v1/violations-reporting/report', data, {
+      ...opts,
+      authWithIdToken: true,
+    })
     .then((res) => {
       const result = ViolationsReportQueryResultSchema.safeParse(res.data);
       if (!result.success) {

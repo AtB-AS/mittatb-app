@@ -149,3 +149,48 @@ export type Feature = {
     tariff_zones?: string[];
   };
 };
+
+export const geocoderV3Layers = [
+  'stopPlace',
+  'address',
+  'street',
+  'groupOfStopPlaces',
+  'poi',
+  'place',
+] as const;
+
+export type GeocoderV3Layer = (typeof geocoderV3Layers)[number];
+
+export type FeatureV3 = {
+  geometry: {
+    coordinates: [number, number];
+    type: 'Point';
+  };
+  properties: {
+    id: string;
+    names: {
+      default: string;
+      display: string;
+    };
+    layer: GeocoderV3Layer;
+    address?: {
+      streetName?: string;
+      houseNumber?: string;
+      postalCode?: string;
+      locality?: string;
+      localityId?: string;
+      county?: string;
+      countyId?: string;
+      countryCode?: string;
+    };
+    transportModes?: Array<{
+      mode: string;
+      subMode?: string;
+    }>;
+    stopPlaceTypes?: string[];
+    categories?: string[];
+    fareZones?: string[];
+    source?: string;
+    distance?: number;
+  };
+};

@@ -8,15 +8,17 @@ import {PaymentScreenComponent} from '@atb/modules/mobility';
 import {ShmoRequirementEnum} from '@atb/modules/mobility';
 import {useShmoRequirements} from '@atb/modules/mobility';
 import {RootStackScreenProps} from './navigation-types';
-import {useMapContext} from '@atb/modules/map';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_ShmoOnboardingScreen'>;
 
-export const Root_ShmoOnboardingScreen = ({navigation}: Props) => {
+export const Root_ShmoOnboardingScreen = ({navigation, route}: Props) => {
   const focusRef = useFocusOnLoad(navigation);
-  const {requirements, hasBlockers} = useShmoRequirements();
-  const {setGivenShmoConsent} = useMapContext();
+  const formFactor = route.params?.formFactor;
+  const {requirements, hasBlockers} = useShmoRequirements(
+    undefined,
+    formFactor,
+  );
 
   useEffect(() => {
     if (!hasBlockers) {
@@ -37,12 +39,7 @@ export const Root_ShmoOnboardingScreen = ({navigation}: Props) => {
       (e) => e.requirementCode === ShmoRequirementEnum.TERMS_AND_CONDITIONS,
     )?.isBlocking
   ) {
-    return (
-      <RulesScreenComponent
-        onGiveConsent={setGivenShmoConsent}
-        focusRef={focusRef}
-      />
-    );
+    return <RulesScreenComponent focusRef={focusRef} formFactor={formFactor} />;
   }
 
   if (

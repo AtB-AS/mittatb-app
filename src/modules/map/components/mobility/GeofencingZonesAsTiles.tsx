@@ -1,7 +1,6 @@
 import MapboxGL from '@rnmapbox/maps';
 import {useMemo} from 'react';
 
-import {hitboxCoveringIconOnly} from '@atb/modules/map';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useThemeContext} from '@atb/theme';
 
@@ -13,7 +12,6 @@ import {geofencingZoneCodes, getIconZoomTransitionStyle} from '../../utils';
 import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
 
 import {Expression} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
-import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
 
 const geofencingZonesVectorSourceId = 'geofencing-zones-source';
 const geofencingZonesFeaturesLayerId = 'geofencing_zones_features';
@@ -55,13 +53,11 @@ const {iconOpacity, iconSize} = getIconZoomTransitionStyle(
 type GeofencingZonesAsTilesProps = {
   systemId: string | null;
   vehicleTypeId: string | null;
-  geofencingZoneOnPress: (e: OnPressEvent) => void;
 };
 
 export const GeofencingZonesAsTiles = ({
   systemId,
   vehicleTypeId,
-  geofencingZoneOnPress,
 }: GeofencingZonesAsTilesProps) => {
   const {isGeofencingZonesEnabled, isGeofencingZonesAsTilesEnabled} =
     useFeatureTogglesContext();
@@ -157,8 +153,6 @@ export const GeofencingZonesAsTiles = ({
       tileUrlTemplates={tileUrlTemplates}
       minZoomLevel={minZoomLevel}
       maxZoomLevel={maxZoomLevel}
-      hitbox={hitboxCoveringIconOnly} // to not be able to hit multiple zones with one click
-      onPress={geofencingZoneOnPress}
     >
       <>
         <MapboxGL.FillLayer

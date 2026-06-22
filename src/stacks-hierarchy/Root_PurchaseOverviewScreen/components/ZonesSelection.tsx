@@ -1,5 +1,5 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   Language,
   PurchaseOverviewTexts,
@@ -22,6 +22,7 @@ import {FocusRefsType} from '@atb/utils/use-focus-refs';
 import {ContentHeading} from '@atb/components/heading';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {NativeBlockButton} from '@atb/components/native-button';
+import {MapPin} from '@atb/assets/svg/mono-icons/tab-bar';
 
 type ZonesSelectionProps = {
   selection: PurchaseSelectionType;
@@ -33,6 +34,7 @@ type ZonesSelectionProps = {
 export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
   ({selection, selectionMode, onSelect, style}: ZonesSelectionProps, ref) => {
     const styles = useStyles();
+    const {theme} = useThemeContext();
     const {t, language} = useTranslation();
 
     const zonesRef = useRef<typeof NativeBlockButton>(null);
@@ -70,14 +72,17 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
 
     const content = (
       <View style={styles.sectionContentContainer}>
-        <View>
+        <View style={styles.zoneRows}>
           {displayAsOneZone ? (
-            <ZoneLabel fareZone={fromFareZone} />
+            <View style={styles.zoneContainer}>
+              <ThemeIcon svg={MapPin} />
+              <ZoneLabel fareZone={fromFareZone} />
+            </View>
           ) : (
             <>
-              <View style={styles.fromZone}>
+              <View style={styles.zoneContainer}>
                 <ThemeText
-                  color="secondary"
+                  type="secondary"
                   typography="body__s"
                   style={styles.toFromLabel}
                 >
@@ -85,9 +90,9 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
                 </ThemeText>
                 <ZoneLabel fareZone={fromFareZone} />
               </View>
-              <View style={styles.toZone}>
+              <View style={styles.zoneContainer}>
                 <ThemeText
-                  color="secondary"
+                  type="secondary"
                   typography="body__s"
                   style={styles.toFromLabel}
                 >
@@ -98,7 +103,13 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
             </>
           )}
         </View>
-        {canSelectZone && <ThemeIcon svg={Edit} size="normal" />}
+        {canSelectZone && (
+          <ThemeIcon
+            svg={Edit}
+            size="normal"
+            color={theme.color.interactive[0].default.background}
+          />
+        )}
       </View>
     );
 
@@ -136,16 +147,17 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
 
 const ZoneLabel = ({fareZone}: {fareZone: FareZoneWithMetadata}) => {
   const {t, language} = useTranslation();
+  const styles = useStyles();
   const zoneName = getReferenceDataName(fareZone, language);
   const zoneLabel = t(PurchaseOverviewTexts.zones.zoneName(zoneName));
 
   return fareZone.venueName ? (
-    <ThemeText style={{flexShrink: 1}} testID="selectedStationAndZone">
+    <View style={styles.zoneLabel} testID="selectedStationAndZone">
       <ThemeText typography="body__m__strong" testID="selectedStation">
-        {fareZone.venueName + ' '}
+        {fareZone.venueName}
       </ThemeText>
-      ({zoneLabel})
-    </ThemeText>
+      <ThemeText style={{flexWrap: 'wrap'}}>({zoneLabel})</ThemeText>
+    </View>
   ) : (
     <ThemeText typography="body__m__strong" testID="selectedZone">
       {zoneLabel}
@@ -183,25 +195,25 @@ const a11yLabel = (
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  subtitleStyle: {
-    paddingTop: theme.spacing.xSmall,
+  zoneRows: {
+    gap: theme.spacing.small,
+    flex: 1,
+    flexShrink: 1,
   },
-  sectionText: {
-    marginBottom: theme.spacing.medium,
-  },
-  fromZone: {
+  zoneContainer: {
+    gap: theme.spacing.small,
     flexDirection: 'row',
   },
-  toZone: {
+  zoneLabel: {
+    flex: 1,
     flexDirection: 'row',
-    marginTop: theme.spacing.small,
+    flexWrap: 'wrap',
+    gap: theme.spacing.xSmall,
   },
   toFromLabel: {
     minWidth: 40,
-    marginRight: theme.spacing.small,
   },
   sectionContentContainer: {
-    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

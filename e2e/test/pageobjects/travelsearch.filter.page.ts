@@ -1,6 +1,5 @@
 import ElementHelper from '../utils/element.helper.ts';
 import AppHelper from '../utils/app.helper.ts';
-import TravelsearchOverviewPage from './travelsearch.overview.page.js';
 import {$} from '@wdio/globals';
 
 class TravelSearchFilterPage {
@@ -62,6 +61,16 @@ class TravelSearchFilterPage {
   }
 
   /**
+   * Check if filter is toggled on/off
+   * @param type type of filter to check (default: allModes)
+   * @return string "true" | "false"
+   */
+  async transportModeFilterIsChecked(type: string = 'allModes') {
+    const reqId = `//*[@resource-id="${type}Toggle"]`;
+    return await $(reqId).getAttribute('checked');
+  }
+
+  /**
    * Set the walk speed
    * @param speed type of walk speed to use in search
    */
@@ -79,46 +88,6 @@ class TravelSearchFilterPage {
     const reqId = `//*[@resource-id="${speed}Button"]`;
     await ElementHelper.waitForElement('id', `${speed}Button`);
     expect(await $(reqId).isEnabled()).toBe(true);
-  }
-
-  /**
-   * Confirm the chosen filter options
-   */
-  async confirmFilter() {
-    const reqId = `//*[@resource-id="confirmButton"]`;
-    await $(reqId).click();
-    await AppHelper.pause();
-  }
-
-  /**
-   * Check that filters are changed and a "filter-box" is shown
-   * @param expectedText text that should be contained in the "filter-box"
-   */
-  async shouldShowSelectedFilter(expectedText: string) {
-    const reqId = `//*[@resource-id="selectedFilterButton"]`;
-    const textId = `//*[@resource-id="buttonText"]`;
-    await ElementHelper.waitForElement('id', `selectedFilterButton`);
-    await expect(await $(reqId).$(textId).getText()).toContain(expectedText);
-  }
-
-  /**
-   * Remove the selected filter, i.e. the "filter-box"
-   */
-  async removeSelectedFilter() {
-    const reqId = `//*[@resource-id="selectedFilterButton"]`;
-    await $(reqId).click();
-  }
-
-  /**
-   * Remove the selected filter - if it exists, i.e. the "filter-box"
-   */
-  async removeSelectedFilterIfExists() {
-    const reqId = `//*[@resource-id="selectedFilterButton"]`;
-    const exists: boolean = await $(reqId).isExisting();
-    if (exists) {
-      await $(reqId).click();
-      await TravelsearchOverviewPage.waitForTravelSearchResults();
-    }
   }
 }
 export default new TravelSearchFilterPage();

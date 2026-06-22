@@ -5,7 +5,7 @@
 
 Follow the steps in [README.md](../README.md) to set up the development environment, while keeping the following in mind:
 
-- Use Git Bash to run any bash scripts and `yarn` commands
+- Use Git Bash to run any bash scripts and `pnpm` commands
 - `git-crypt` can be used through WSL
 - Install ImageMagick from [here](https://imagemagick.org/script/download.php).
   - Check `Install legacy utilities (e.g. convert)` during the installation.
@@ -16,5 +16,5 @@ Follow the steps in [README.md](../README.md) to set up the development environm
 Since we're only building the Android app, you can skip any iOS specific steps:
 
 - Installing iOS Pods
-- Running `yarn get_ios_certs`
-- And `yarn ios`
+- Running `pnpm get_ios_certs`
+- And `pnpm ios`

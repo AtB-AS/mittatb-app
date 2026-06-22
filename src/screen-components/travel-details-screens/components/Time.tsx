@@ -7,6 +7,7 @@ import {View} from 'react-native';
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {RoundingMethod} from 'date-fns';
 import {getRealtimeState, type TimeValues} from '@atb/utils/realtime';
+import {StyleSheet} from '@atb/theme';
 
 export const Time: React.FC<{
   timeValues: TimeValues;
@@ -33,12 +34,15 @@ export const Time: React.FC<{
       formatToClock(expectedTime, language, roundingMethod, debugShowSeconds)
     : '';
 
+  const styles = useStyles();
+
   switch (representationType) {
     case 'significant-difference': {
       return (
-        <View style={{flexDirection: 'column', alignItems: 'flex-end'}}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={styles.columnContainer}>
+          <View style={styles.rowContainer}>
             <AccessibleText
+              typography="body__m__strong"
               prefix={t(dictionary.travel.time.expectedPrefix)}
               testID="expTime"
             >
@@ -47,9 +51,9 @@ export const Time: React.FC<{
           </View>
           <AccessibleText
             typography="body__xs"
-            color="secondary"
+            type="secondary"
             prefix={t(dictionary.travel.time.aimedPrefix)}
-            style={{textDecorationLine: 'line-through'}}
+            style={styles.aimedTime}
             testID="aimTime"
           >
             {scheduled}
@@ -57,15 +61,28 @@ export const Time: React.FC<{
         </View>
       );
     }
-    case 'no-realtime': {
-      return <ThemeText testID="schCaTime">{scheduled}</ThemeText>;
-    }
     default: {
       return (
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <ThemeText testID="schTime">{expected}</ThemeText>
-        </View>
+        <ThemeText typography="body__m__strong" testID="schTime">
+          {expected || scheduled}
+        </ThemeText>
       );
     }
   }
 };
+
+const useStyles = StyleSheet.createThemeHook(() => ({
+  columnContainer: {
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  aimedTime: {
+    textDecorationLine: 'line-through',
+    position: 'absolute',
+    top: '100%',
+  },
+}));

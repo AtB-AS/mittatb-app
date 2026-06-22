@@ -65,3 +65,5 @@ export {
 export {MapStateActionType} from './mapStateReducer.ts';
 export {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics.tsx';
 export {MapButtons} from './components/MapButtons.tsx';
+export {TariffZoneLinesAndLabels} from './components/TariffZoneLinesAndLabels';
+export {mapZonesToPolygonCollection} from './zone-utils';

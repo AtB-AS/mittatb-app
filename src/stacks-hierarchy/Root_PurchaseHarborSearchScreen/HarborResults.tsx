@@ -56,7 +56,7 @@ export const HarborResults: React.FC<Props> = ({
             message={t(HarborSearchTexts.messages.emptyResult)}
           />
         ) : (
-          <ThemeText typography="body__s" color="secondary">
+          <ThemeText typography="body__s" type="secondary">
             {getHeading(t, searchText, fromHarborName, currentLocation)}
           </ThemeText>
         )}

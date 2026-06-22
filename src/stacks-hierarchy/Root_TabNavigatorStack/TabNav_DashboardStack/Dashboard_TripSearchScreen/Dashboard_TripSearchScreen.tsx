@@ -1,7 +1,6 @@
 import {Filter, Swap} from '@atb/assets/svg/mono-icons/actions';
 import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import {Button} from '@atb/components/button';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -33,28 +32,23 @@ import Bugsnag from '@bugsnag/react-native';
 import {TFunc} from '@leile/lobo-t';
 import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Platform, View} from 'react-native';
+import {View} from 'react-native';
 import {DashboardScreenProps} from '../navigation-types';
 import {
   type SearchForLocations,
   TripDateOptions,
   type TripSearchTime,
 } from '../types';
-import {Time} from '@atb/assets/svg/mono-icons/time';
+import {EditActionSectionItem} from '@atb/components/sections';
 import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-state';
-import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/SelectedFiltersButtons';
+
 import {FullScreenView} from '@atb/components/screen-view';
 import {CityZoneMessage} from './components/CityZoneMessage';
 import {TripPattern} from '@atb/api/types/trips';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
 import {NativeBlockButton} from '@atb/components/native-button';
-import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {
-  areDefaultFiltersSelected,
-  getSearchTimeLabel,
-  sanitizeSearchTime,
-} from './utils';
+import {getSearchTime, getSearchTimeLabel, sanitizeSearchTime} from './utils';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   GlobalMessage,
@@ -65,10 +59,12 @@ import {onlyUniques} from '@atb/utils/only-uniques';
 import {DatePickerSheet} from '@atb/components/date-selection';
 import SharedTexts from '@atb/translations/shared';
 import {TravelSearchFiltersBottomSheet} from './components/TravelSearchFiltersBottomSheet';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {WithOverlayButton} from '@atb/components/overlay-button';
 import {Loading} from '@atb/components/loading';
+import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
+import type {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 
 const RESULT_KEY_FROM = 'Dashboard_TripSearchScreen--fromLocation';
 const RESULT_KEY_TO = 'Dashboard_TripSearchScreen--toLocation';
@@ -87,8 +83,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const {callerRoute} = route.params;
   const styles = useStyles();
   const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[1];
-  const statusColor = theme.color.status.info.primary;
   const [searchTime, setSearchTime] = useState<TripSearchTime>({
     option: 'now',
     date: new Date().toISOString(),
@@ -98,11 +92,13 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const {language, t} = useTranslation();
   const [updatingLocation] = useState<boolean>(false);
   const analytics = useAnalyticsContext();
-  const isFocused = useIsFocusedAndActive();
   const filterButtonWrapperRef = useRef(null);
   const filterButtonRef = useRef(null);
-  const travelSearchBottomSheetModalRef = useRef<BottomSheetModal | null>(null);
-  const timePickerBottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const travelSearchBottomSheetModalRef =
+    useRef<BottomSheetModalMethods | null>(null);
+  const timePickerBottomSheetModalRef = useRef<BottomSheetModalMethods | null>(
+    null,
+  );
   const timePickerCloseRef = useRef<View | null>(null);
 
   const {
@@ -128,6 +124,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   const {from, to} = useLocations(currentLocation);
   const tripSearchEnabled = isValidTripLocations(from, to);
+  const hasLocations = !!from && !!to;
 
   const filtersState = useTravelSearchFiltersState();
 
@@ -271,18 +268,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     refetchTrips();
   }, [from, to, currentLocation, searchTime, navigation, refetchTrips]);
 
-  const refreshControlProps = useMemo(() => {
-    // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
-    return isFocused || Platform.OS === 'android'
-      ? {
-          refreshing:
-            Platform.OS === 'ios'
-              ? false
-              : tripsSearchState === 'searching' && !tripPatterns.length,
-          onRefresh: forceRefresh,
-        }
-      : undefined;
-  }, [tripsSearchState, tripPatterns.length, forceRefresh, isFocused]);
+  const refreshControlProps = useManualRefreshControlProps({
+    refreshing: tripsSearchState === 'searching' && !tripPatterns.length,
+    onRefresh: forceRefresh,
+  });
 
   return (
     <View style={styles.container}>
@@ -347,144 +336,128 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               </Section>
             </WithOverlayButton>
             <View style={styles.searchParametersButtons}>
-              <Button
-                expanded={true}
-                text={getSearchTimeLabel(
-                  searchTime,
-                  timeOfLastSearch,
-                  t,
-                  language,
-                )}
-                accessibilityHint={t(TripSearchTexts.dateInput.a11yHint)}
-                mode="primary"
-                interactiveColor={interactiveColor}
-                type="small"
-                style={styles.searchTimeButton}
-                ref={timePickerCloseRef}
-                onPress={onSearchTimePress}
-                testID="dashboardDateTimePicker"
-                rightIcon={{
-                  svg: Time,
-                  notificationColor:
-                    searchTime.option !== 'now' ? statusColor : undefined,
-                }}
-              />
+              <Section style={styles.searchTimeSection}>
+                <EditActionSectionItem
+                  ref={timePickerCloseRef}
+                  text={t(TripSearchTexts.dateInput.options[searchTime.option])}
+                  subText={getSearchTime(
+                    searchTime,
+                    timeOfLastSearch,
+                    language,
+                  )}
+                  accessibilityLabel={getSearchTimeLabel(
+                    searchTime,
+                    timeOfLastSearch,
+                    t,
+                    language,
+                  )}
+                  accessibilityHint={t(TripSearchTexts.dateInput.a11yHint)}
+                  onPress={onSearchTimePress}
+                  testID="dashboardDateTimePicker"
+                />
+              </Section>
               {filtersState.enabled && (
-                <View ref={filterButtonWrapperRef} collapsable={false}>
-                  <Button
-                    expanded={false}
-                    text={t(TripSearchTexts.filterButton.text)}
-                    accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
-                    mode="primary"
-                    interactiveColor={interactiveColor}
-                    type="small"
-                    onPress={() =>
-                      travelSearchBottomSheetModalRef.current?.present()
-                    }
-                    testID="filterButton"
-                    ref={filterButtonRef}
-                    rightIcon={{
-                      svg: Filter,
-                      notificationColor: !areDefaultFiltersSelected(
-                        filtersState.filtersSelection?.transportModes,
-                      )
-                        ? statusColor
-                        : undefined,
-                    }}
-                  />
+                <View
+                  ref={filterButtonWrapperRef}
+                  collapsable={false}
+                  style={styles.filterSection}
+                >
+                  <Section>
+                    <EditActionSectionItem
+                      ref={filterButtonRef}
+                      rightIcon={Filter}
+                      text={t(TripSearchTexts.filterButton.text)}
+                      subText={getFiltersSubText(filtersState.filtersSelection)}
+                      accessibilityHint={t(
+                        TripSearchTexts.filterButton.a11yHint,
+                      )}
+                      onPress={() =>
+                        travelSearchBottomSheetModalRef.current?.present()
+                      }
+                      testID="filterButton"
+                    />
+                  </Section>
                 </View>
               )}
             </View>
           </View>
         )}
       >
-        <View>
+        <View style={styles.contentContainer}>
           <ScreenReaderAnnouncement message={searchStateMessage} />
-          {(!from || !to) && (
+          {!hasLocations && (
             <ThemeText
-              color="secondary"
+              type="secondary"
               style={styles.missingLocationText}
               testID="missingLocation"
             >
               {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
             </ThemeText>
           )}
-          <View style={styles.globalMessage}>
-            <GlobalMessage
-              textColor={theme.color.background.neutral[0]}
-              globalMessageContext={GlobalMessageContextEnum.appTripResults}
-              ruleVariables={{
-                transportModes: tripPatterns
-                  .flatMap((tp) => tp.legs)
-                  .map((leg) => leg.mode)
-                  .filter(isDefined)
-                  .filter(onlyUniques),
-                transportSubmodes: tripPatterns
-                  .flatMap((tp) => tp.legs)
-                  .map((leg) => leg.transportSubmode)
-                  .filter(isDefined)
-                  .filter(onlyUniques),
-                authorities: tripPatterns
-                  .flatMap((tp) => tp.legs)
-                  .map((leg) => leg.authority?.id)
-                  .filter(isDefined)
-                  .filter(onlyUniques),
-                publicCodes: tripPatterns
-                  .flatMap((tp) => tp.legs)
-                  .map((leg) => leg.line?.publicCode)
-                  .filter(isDefined)
-                  .filter(onlyUniques),
-              }}
-            />
-          </View>
-          {from && to && (
-            <View>
-              {filtersState.enabled && (
-                <SelectedFiltersButtons
-                  filtersSelection={filtersState.filtersSelection}
-                  resetTransportModes={filtersState.resetTransportModes}
-                />
-              )}
-              {isFlexibleTransportEnabled &&
-                !flexibleTransportInfoDismissed &&
-                (tripPatterns.length > 0 ||
-                  tripsSearchState === 'search-empty-result') &&
-                !tripsIsError && (
-                  <CityZoneMessage
-                    from={from}
-                    to={to}
-                    onDismiss={() => {
-                      setFlexibleTransportInfoDismissed(true);
-                      analytics.logEvent(
-                        'Flexible transport',
-                        'Message box dismissed',
-                      );
-                    }}
-                  />
-                )}
-              {tripSearchEnabled && (
-                <NonTransitResults
-                  tripsProps={tripsProps}
-                  onDetailsPressed={onPressed}
-                />
-              )}
-              <Results
-                tripPatterns={tripPatterns}
-                isSearching={isSearching}
-                showEmptyScreen={showEmptyScreen}
-                isEmptyResult={isEmptyResult}
-                resultReasons={noResultReasons}
-                onDetailsPressed={(tripPattern, resultIndex) =>
-                  onPressed(tripPattern, {analyticsMetadata: {resultIndex}})
-                }
-                tripsIsError={tripsIsError}
-                tripsIsNetworkError={tripsIsNetworkError}
-                searchTime={searchTime}
-                anyFiltersApplied={
-                  filtersState.enabled && filtersState.anyFiltersApplied
-                }
+          <GlobalMessage
+            textColor={theme.color.background.neutral[0]}
+            style={styles.globalMessage}
+            globalMessageContext={GlobalMessageContextEnum.appTripResults}
+            ruleVariables={{
+              transportModes: tripPatterns
+                .flatMap((tp) => tp.legs)
+                .map((leg) => leg.mode)
+                .filter(isDefined)
+                .filter(onlyUniques),
+              transportSubmodes: tripPatterns
+                .flatMap((tp) => tp.legs)
+                .map((leg) => leg.transportSubmode)
+                .filter(isDefined)
+                .filter(onlyUniques),
+              authorities: tripPatterns
+                .flatMap((tp) => tp.legs)
+                .map((leg) => leg.authority?.id)
+                .filter(isDefined)
+                .filter(onlyUniques),
+              publicCodes: tripPatterns
+                .flatMap((tp) => tp.legs)
+                .map((leg) => leg.line?.publicCode)
+                .filter(isDefined)
+                .filter(onlyUniques),
+            }}
+          />
+          {isFlexibleTransportEnabled &&
+            !flexibleTransportInfoDismissed &&
+            (tripPatterns.length > 0 ||
+              tripsSearchState === 'search-empty-result') &&
+            !tripsIsError && (
+              <CityZoneMessage
+                from={from}
+                to={to}
+                onDismiss={() => {
+                  setFlexibleTransportInfoDismissed(true);
+                  analytics.logEvent(
+                    'Flexible transport',
+                    'Message box dismissed',
+                  );
+                }}
               />
-            </View>
+            )}
+          {tripSearchEnabled && (
+            <NonTransitResults
+              tripsProps={tripsProps}
+              onDetailsPressed={onPressed}
+            />
+          )}
+          {hasLocations && (
+            <Results
+              tripPatterns={tripPatterns}
+              isSearching={isSearching}
+              showEmptyScreen={showEmptyScreen}
+              isEmptyResult={isEmptyResult}
+              resultReasons={noResultReasons}
+              onDetailsPressed={(tripPattern, resultIndex) =>
+                onPressed(tripPattern, {analyticsMetadata: {resultIndex}})
+              }
+              tripsIsError={tripsIsError}
+              tripsIsNetworkError={tripsIsNetworkError}
+              searchTime={searchTime}
+            />
           )}
           {!tripPatterns.length && <View style={styles.emptyResultsSpacer} />}
           {!tripsIsError && isValidLocations && (
@@ -503,12 +476,12 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                           marginRight: theme.spacing.medium,
                         }}
                       />
-                      <ThemeText color="secondary" testID="searchingForResults">
+                      <ThemeText type="secondary" testID="searchingForResults">
                         {t(TripSearchTexts.results.fetchingMore)}
                       </ThemeText>
                     </>
                   ) : (
-                    <ThemeText color="secondary" testID="searchingForResults">
+                    <ThemeText type="secondary" testID="searchingForResults">
                       {t(TripSearchTexts.searchState.searching)}
                     </ThemeText>
                   )}
@@ -522,7 +495,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                         svg={ExpandMore}
                         size="normal"
                       />
-                      <ThemeText color="secondary" testID="resultsLoaded">
+                      <ThemeText type="secondary" testID="resultsLoaded">
                         {' '}
                         {t(TripSearchTexts.results.fetchMore)}
                       </ThemeText>
@@ -695,17 +668,28 @@ function computeNoResultReasons(
   return reasons;
 }
 
+const getFiltersSubText = (
+  filtersSelection?: TravelSearchFiltersSelectionType,
+) => {
+  const transportModes = filtersSelection?.transportModes;
+  if (!transportModes) return undefined;
+
+  const count = transportModes.filter((tm) => tm.selected).length;
+  return `${count}`;
+};
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: getResultsBackgroundColor(theme).background,
     flex: 1,
   },
   searchParametersButtons: {
-    marginTop: theme.spacing.medium,
+    marginTop: theme.spacing.small,
     flexDirection: 'row',
     gap: theme.spacing.small,
   },
-  searchTimeButton: {flexGrow: 1},
+  searchTimeSection: {flex: 2},
+  filterSection: {flex: 1},
   searchHeader: {
     marginHorizontal: theme.spacing.medium,
     marginTop: theme.spacing.medium,
@@ -720,7 +704,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
   },
   loadMoreButton: {
-    paddingVertical: theme.spacing.xLarge,
+    paddingVertical: theme.spacing.medium,
     marginBottom: theme.spacing.xLarge,
     flex: 1,
     flexDirection: 'row',
@@ -729,8 +713,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   emptyResultsSpacer: {
     marginTop: theme.spacing.xLarge * 3,
   },
+  contentContainer: {
+    gap: theme.spacing.medium,
+    marginTop: theme.spacing.medium,
+  },
   globalMessage: {
-    paddingHorizontal: theme.spacing.medium,
-    paddingTop: theme.spacing.medium,
+    marginHorizontal: theme.spacing.medium,
   },
 }));

@@ -3,7 +3,7 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import React, {useRef} from 'react';
 import {ActivateNowBottomSheet} from './ActivateNowBottomSheet';
 import {useThemeContext} from '@atb/theme';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {
@@ -23,7 +23,7 @@ export function ActivateNowButton({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const onCloseFocusRef = useRef<View | null>(null);
-  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
 
   const onPress = () => {
     bottomSheetModalRef.current?.present();

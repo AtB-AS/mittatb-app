@@ -1,13 +1,16 @@
 export {
   BonusBalanceButton,
-  BonusPriceTag,
   BonusProductList,
   EarnedBonusPointsSectionItem,
   PayWithBonusPointsCheckbox,
   UserBonusBalance,
   UserBonusBalanceContent,
 } from './components';
-export {useRelevantBonusProduct} from './use-relevant-bonus-product';
+export {
+  useRelevantSharedMobilityBonusProduct,
+  useRelevantVoucherBonusProduct,
+} from './use-relevant-bonus-product';
+export {useRelevantTicketBonusProduct} from './use-relevant-ticket-bonus-product';
 export type {ProductPointsItem} from './api/api';
 export {
   useBonusBalanceQuery,
@@ -16,9 +19,16 @@ export {
   getBonusAmountEarnedQueryKey,
   useProductPointsQuery,
   useActiveBonusProductsQuery,
+  useActiveBonusProductGroupsQuery,
+  useBonusVouchersQuery,
 } from './queries';
 export {BonusProductTypeEnum} from './types';
-export type {BonusProductType} from './types';
+export type {
+  BonusProductType,
+  BonusProductGroupType,
+  TicketRuleType,
+  BonusVoucher,
+} from './types';
 export {
   bonusOnboardingCarouselConfig,
   type BonusOnboardingScreenName,

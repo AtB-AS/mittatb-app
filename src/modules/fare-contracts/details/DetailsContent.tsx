@@ -56,7 +56,10 @@ import {
   useBonusAmountEarnedQuery,
   useIsBonusActiveForUser,
 } from '@atb/modules/bonus';
-import {useFareContractLegs} from '@atb/modules/fare-contracts';
+import {
+  isRelativeValidityStatus,
+  useFareContractLegs,
+} from '@atb/modules/fare-contracts';
 import {LegsSummary} from '@atb/components/journey-legs-summary';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
@@ -154,6 +157,11 @@ export const DetailsContent: React.FC<Props> = ({
     benefits && benefits.length > 0 && validityStatus === 'valid';
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
+  const shouldShowBonusAmountEarned =
+    isBonusActiveForUser &&
+    !isReceived &&
+    (isRelativeValidityStatus(validityStatus) || validityStatus === 'sent');
+
   const accesses = getAccesses(fc);
 
   const shouldShowLegs =
@@ -218,7 +226,6 @@ export const DetailsContent: React.FC<Props> = ({
               }
               textColor={theme.color.background.neutral[0]}
               ruleVariables={globalMessageRuleVariables}
-              style={styles.globalMessages}
             />
           </View>
         </GenericSectionItem>
@@ -241,7 +248,8 @@ export const DetailsContent: React.FC<Props> = ({
           onNavigateToMap={onNavigateToMap}
         />
       )}
-      {isBonusActiveForUser && !!bonusAmountEarned?.amount && (
+
+      {shouldShowBonusAmountEarned && !!bonusAmountEarned?.amount && (
         <EarnedBonusPointsSectionItem
           amount={bonusAmountEarned.amount}
           navigateToBonusScreen={onNavigateToBonusScreen}

@@ -24,7 +24,7 @@ import {animateNextChange} from '@atb/utils/animation';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useActionButtonProps} from './hooks';
 import {useRef} from 'react';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {AnnouncementSheet} from './AnnouncementSheet';
 
 type Props = {
@@ -39,7 +39,7 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
   const {theme} = useThemeContext();
   const analytics = useAnalyticsContext();
   const {dismissAnnouncement} = useAnnouncementsContext();
-  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
 
   const actionButtonProps = useActionButtonProps(
     announcement,

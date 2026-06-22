@@ -11,6 +11,7 @@ export type ProfileStackParams = StackParams<{
   Profile_PaymentMethodsScreen: undefined;
   Profile_PurchaseHistoryScreen: undefined;
   Profile_BonusScreen: undefined;
+  Profile_BonusCouponCodesScreen: undefined;
   Profile_SmartParkAndRideScreen: SmartParkAndRideScreenParams;
   Profile_DeleteProfileScreen: undefined;
   Profile_EditProfileScreen: undefined;
@@ -33,6 +34,7 @@ export type ProfileStackParams = StackParams<{
   Profile_TravelAidScreen: undefined;
   Profile_TravelAidInformationScreen: undefined;
   Profile_SettingsScreen: undefined;
+  Profile_FeideConnectionScreen: undefined;
   Profile_FavoriteScreen: undefined;
   Profile_InformationScreen: undefined;
   Profile_HelpAndContactScreen: undefined;

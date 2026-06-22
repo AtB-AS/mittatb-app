@@ -10,13 +10,19 @@ import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_Purc
 import {Root_PurchaseFareZonesSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseFareZonesSearchByTextScreen/navigation-types';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
-import {ParkingViolationType, ShmoBooking} from '@atb/api/types/mobility';
+import {
+  ParkingViolationType,
+  ShmoBooking,
+  ShmoPricingPlan,
+} from '@atb/api/types/mobility';
+import type {MobilityPriceAdjustmentBenefitType} from '@atb/api/types/benefit';
 import {Root_ChooseTicketRecipientScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/navigation-types';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import type {TripAnalytics} from '@atb/screen-components/travel-details-screens';
 import {Root_SmartParkAndRideEditScreenParams} from '@atb/stacks-hierarchy/Root_SmartParkAndRide/navigation-types';
 import {Root_OnboardingCarouselStackParams} from './Root_OnboardingCarouselStack';
 import {UserProfileWithCountAndOffer} from './Root_PurchaseOverviewScreen/use-offer-state';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
   searchLocation?: SelectableLocationType;
@@ -54,7 +60,8 @@ export type Root_LoginConfirmCodeScreenParams = {
 };
 
 export type Root_LoginRequiredForFareProductScreenParams = {
-  selection: PurchaseSelectionType;
+  title?: string;
+  text?: string;
 };
 
 type Root_ParkingViolationsPhotoParams = {
@@ -73,13 +80,14 @@ type Root_ParkingPhotoScreenParams = {
   bookingId: ShmoBooking['bookingId'];
 };
 
-export type ShmoHelpParams = {operatorId: string} & (
+type ShmoOperatorParams = {operatorId: string} & (
   | {vehicleId: string | undefined}
   | {bookingId: string | undefined}
   | {stationId: string | undefined}
 );
+export type ShmoHelpParams = ShmoOperatorParams & {formFactor?: FormFactor};
 type Root_ShmoHelpScreenParams = ShmoHelpParams;
-type Root_ContactShmoOperatorScreenParams = ShmoHelpParams;
+type Root_ContactShmoOperatorScreenParams = ShmoOperatorParams;
 
 type Root_ContactShmoOperatorConfirmationScreenParams = {
   operatorName: string;
@@ -140,7 +148,11 @@ export type RootStackParamList = StackParams<{
   Root_ParkingViolationsQrScreen: Root_ParkingViolationsQrParams;
   Root_ParkingViolationsConfirmationScreen: Root_ParkingViolationsConfirmationParams;
   Root_ShmoHelpScreen: Root_ShmoHelpScreenParams;
-  Root_ShmoOnboardingScreen: undefined;
+  Root_ShmoOnboardingScreen: {formFactor?: FormFactor};
+  Root_ShmoPricingDetailsScreen: {
+    pricingPlan: ShmoPricingPlan;
+    benefit?: MobilityPriceAdjustmentBenefitType;
+  };
   Root_ContactShmoOperatorScreen: Root_ContactShmoOperatorScreenParams;
   Root_ContactShmoOperatorConfirmationScreen: Root_ContactShmoOperatorConfirmationScreenParams;
   Root_NotificationPermissionScreen: undefined;

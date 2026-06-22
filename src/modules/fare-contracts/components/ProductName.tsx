@@ -6,7 +6,7 @@ import {
   getReferenceDataName,
 } from '@atb/modules/configuration';
 import {useTranslation} from '@atb/translations';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 
 type Props = {
@@ -16,7 +16,6 @@ type Props = {
 export const ProductName = ({fc}: Props) => {
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {language} = useTranslation();
-  const {theme} = useThemeContext();
   const styles = useStyles();
 
   const travelRight = fc.travelRights[0];
@@ -32,7 +31,7 @@ export const ProductName = ({fc}: Props) => {
       typography="body__s__strong"
       accessibilityLabel={productName + screenReaderPause}
       testID="productName"
-      color={theme.color.foreground.dynamic.secondary}
+      type="secondary"
       style={styles.text}
     >
       {productName}

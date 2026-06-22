@@ -66,11 +66,15 @@ const PaymentMethodsTexts = {
     'Legg til betalingskort',
   ),
   vippsInfo: _(
-    'Betaling med Vipps er tilgjengelig ved kjøp av billett',
-    'Payment with Vipps is available when purchasing a ticket',
-    'Betaling med Vipps er tilgjengeleg ved kjøp av billett',
+    'Når du kjøper billetter kan du også bruke Vipps',
+    'When you buy a ticket you can also use Vipps',
+    'Når du kjøper billettar kan du også bruke Vipps',
   ),
-  editPaymentMethod: _('Endre', 'Edit', 'Endre'),
+  vippsAndApplePayInfo: _(
+    'Når du kjøper billetter kan du også betale med Vipps eller Apple Pay',
+    'When you buy a ticket you can also pay with Vipps or Apple Pay',
+    'Når du kjøper billettar kan du også betale med Vipps eller Apple Pay',
+  ),
   expiryMessages: {
     cardExpired: _(
       'Kortet er utløpt',

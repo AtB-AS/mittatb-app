@@ -20,16 +20,16 @@ import {openInAppBrowser} from '@atb/modules/in-app-browser';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
+  BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
-import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 
 const {width, height} = Dimensions.get('window');
 const isSmallScreen = width < 320 || height < 568;
 
 type FlexibleTransportBookingDetailsProps = {
   leg: Leg;
-  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  bottomSheetModalRef: React.RefObject<BottomSheetModalMethods | null>;
   onCloseFocusRef: React.RefObject<View | null>;
 };
 
@@ -125,7 +125,7 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
             )}
           >
             <ThemeText
-              color="secondary"
+              type="secondary"
               style={style.linkText}
               typography="body__m__underline"
             >

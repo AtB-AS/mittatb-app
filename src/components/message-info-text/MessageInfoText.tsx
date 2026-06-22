@@ -1,19 +1,24 @@
 import React from 'react';
-import {StyleProp, View, ViewStyle} from 'react-native';
-import {Statuses, StyleSheet, useThemeContext} from '@atb/theme';
+import {ColorValue, StyleProp, View} from 'react-native';
+import {
+  type MarginStyle,
+  Statuses,
+  StyleSheet,
+  useThemeContext,
+} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
-import {ContrastColor, TextColor} from '@atb/theme/colors';
+import {ContrastColor} from '@atb/theme/colors';
 
 export type MessageInfoTextProps = {
   type: Statuses;
   message: string;
   a11yLabel?: string;
-  style?: StyleProp<ViewStyle>;
+  style?: StyleProp<MarginStyle>;
   testID?: string;
   iconPosition?: 'right' | 'left';
-  textColor?: ContrastColor | TextColor;
+  textColor?: ContrastColor | ColorValue;
   isMarkdown?: boolean;
 };
 

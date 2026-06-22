@@ -8,7 +8,7 @@ import {
 } from '@atb/modules/booking';
 import type {TripPatternLegs} from '../types';
 import {Button} from '@atb/components/button';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet, useThemeContext, Statuses} from '@atb/theme';
 import {SectionSeparator} from '@atb/components/sections';
 import {TripPatternWithBooking} from '@atb/api/types/trips';
 import {Tag} from '@atb/components/tag';
@@ -18,6 +18,8 @@ import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {
   getTextForLanguage,
   TicketingTexts,
+  TravelCardTexts,
+  TranslateFunction,
   useTranslation,
 } from '@atb/translations';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
@@ -30,6 +32,8 @@ import {MessageInfoText} from '@atb/components/message-info-text';
 import {findAllNotices, findAllSituations} from '@atb/modules/situations';
 import {Loading} from '@atb/components/loading';
 import {BookingValidityInfoBox} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/components/BookingValidityInfoBox';
+import {TravelCard} from '@atb/screen-components/travel-card';
+import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 
 type BookingTripSelectionProps = {
   selection: PurchaseSelectionType;
@@ -43,6 +47,10 @@ export function BookingTripSelection({
   onSelect,
 }: BookingTripSelectionProps) {
   const styles = useBookingTripSelectionStyles();
+  const {t} = useTranslation();
+  const isNewTravelCardBooking = useIsExperimentalEnabled(
+    'isNewTravelCardBookingEnabled',
+  );
   const {
     tripPatterns,
     isEmpty,
@@ -70,13 +78,52 @@ export function BookingTripSelection({
         originFareContract={selection.originFareContract}
       />
       {!isEmpty ? (
-        tripPatterns.map((tp, i) => (
-          <BookingTrip
-            key={`booking-trip-${i}`}
-            onSelect={onSelect}
-            tripPattern={tp}
-          />
-        ))
+        <View style={styles.travelCardsList}>
+          {tripPatterns.map((tp, i) =>
+            isNewTravelCardBooking ? (
+              <TravelCard
+                key={`booking-trip-${i}`}
+                tripPattern={tp}
+                onDetailsPressed={() => {
+                  const isAvailable =
+                    tp.booking.availability === 'available' &&
+                    !tp.booking.disabledReason;
+                  if (isAvailable) onSelect(tp.legs);
+                }}
+                a11yLabelPrefix={t(
+                  TravelCardTexts.card.a11yPrefix.bookingOption(
+                    i,
+                    tripPatterns.length,
+                  ),
+                )}
+                a11yHint={t(
+                  selection.isOnBehalfOf
+                    ? TravelCardTexts.card.a11yHint.chooseRecipient
+                    : TravelCardTexts.card.a11yHint.ticketSummary,
+                )}
+                includeTransportInfo
+                includeSituationsAndNotices
+                isDisabled={
+                  !(
+                    tp.booking.availability === 'available' &&
+                    !tp.booking.disabledReason
+                  )
+                }
+                tag={getBookingTagInfo(
+                  t,
+                  tp.booking,
+                  tp.booking.disabledReason,
+                )}
+              />
+            ) : (
+              <BookingTrip
+                key={`booking-trip-${i}`}
+                onSelect={onSelect}
+                tripPattern={tp}
+              />
+            ),
+          )}
+        </View>
       ) : (
         <EmptyState />
       )}
@@ -89,7 +136,7 @@ type BookingTripProps = {
   onSelect: (legs: TripPatternLegs) => void;
 };
 
-export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
+function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
   const {theme} = useThemeContext();
   const styles = useBookingTripStyles();
   const {t, language} = useTranslation();
@@ -166,7 +213,9 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
               mode="tertiary"
               onPress={onPress}
               backgroundColor={theme.color.interactive[2].default}
-              style={{marginLeft: 'auto'}}
+              style={{
+                marginLeft: 'auto',
+              }}
               rightIcon={{svg: ChevronRight}}
             />
           </View>
@@ -177,25 +226,45 @@ export function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
 }
 
 function EmptyState() {
-  const {theme} = useThemeContext();
   const {t} = useTranslation();
   return (
     <View style={{justifyContent: 'center', alignItems: 'center'}}>
       <ThemedOnBehalfOf />
-      <ThemeText
-        typography="body__m__strong"
-        color={theme.color.foreground.dynamic.secondary}
-      >
+      <ThemeText typography="body__m__strong" type="secondary">
         {t(TicketingTexts.booking.cannotFindDepartures)}
       </ThemeText>
-      <ThemeText
-        typography="body__s"
-        color={theme.color.foreground.dynamic.secondary}
-      >
+      <ThemeText typography="body__s" type="secondary">
         {t(TicketingTexts.booking.adjustTime)}
       </ThemeText>
     </View>
   );
+}
+
+function getBookingTagInfo(
+  t: TranslateFunction,
+  bookingInfo: TripPatternWithBooking['booking'],
+  disabledReason?: BookingDisabledReason,
+): {label: string; type: Statuses} | undefined {
+  if (disabledReason === 'expired_fare_contract') {
+    return {label: t(TicketingTexts.booking.expiredFareContract), type: 'info'};
+  } else if (disabledReason === 'inactive_fare_contract') {
+    return {
+      label: t(TicketingTexts.booking.beforeStartOfFareContract),
+      type: 'info',
+    };
+  } else if (bookingInfo.availability === 'closed') {
+    return {label: t(TicketingTexts.booking.closed), type: 'warning'};
+  } else if (bookingInfo.availability === 'sold_out') {
+    return {label: t(TicketingTexts.booking.soldOut), type: 'warning'};
+  }
+  const availableSeats = bookingInfo?.offer?.available ?? 0;
+  if (!!availableSeats && availableSeats <= SEAT_TAG_LIMIT) {
+    return {
+      label: t(TicketingTexts.booking.numAvailableTickets(availableSeats)),
+      type: 'info',
+    };
+  }
+  return undefined;
 }
 
 /**
@@ -244,6 +313,8 @@ function TripSelectionTag({
 const useBookingTripStyles = StyleSheet.createThemeHook((theme) => {
   return {
     container: {
+      marginHorizontal: theme.spacing.medium,
+      marginVertical: theme.spacing.small,
       borderRadius: theme.border.radius.regular,
       overflow: 'hidden',
     },
@@ -262,6 +333,7 @@ const useBookingTripStyles = StyleSheet.createThemeHook((theme) => {
       paddingVertical: theme.spacing.small,
       justifyContent: 'space-between',
       alignItems: 'center',
+      borderRadius: theme.border.radius.regular,
     },
     footerAvailable: {
       backgroundColor: theme.color.interactive[2].default.background,
@@ -275,8 +347,10 @@ const useBookingTripStyles = StyleSheet.createThemeHook((theme) => {
 const useBookingTripSelectionStyles = StyleSheet.createThemeHook((theme) => {
   return {
     container: {
-      width: '100%',
-      rowGap: theme.spacing.medium,
+      gap: theme.spacing.medium,
+    },
+    travelCardsList: {
+      gap: theme.spacing.small,
     },
   };
 });

@@ -65,7 +65,7 @@ export function CounterSectionItem({
         {subtext && (
           <ThemeText
             typography="body__s"
-            color="secondary"
+            type="secondary"
             style={counterStyles.infoSubtext}
           >
             {subtext}

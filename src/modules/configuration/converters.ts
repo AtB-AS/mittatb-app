@@ -8,9 +8,9 @@ import {
   FareProductGroup,
   FareProductGroupType,
   OperatorBenefitId,
-  ScooterFaq,
+  ShmoFaq,
   BonusTexts,
-  ScooterConsentLine,
+  ConsentLine,
 } from './types';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
@@ -175,15 +175,15 @@ export function mapToMobilityOperators(operators?: any) {
     .filter(isDefined);
 }
 
-export function mapToScooterFaqs(scooterFaqs?: any) {
-  if (!scooterFaqs) return;
-  if (!Array.isArray(scooterFaqs)) return;
-  return scooterFaqs
-    .map((scooterFaq) => {
-      const parseResult = ScooterFaq.safeParse(scooterFaq);
+export function mapToShmoFaqs(faqs?: any) {
+  if (!faqs) return;
+  if (!Array.isArray(faqs)) return;
+  return faqs
+    .map((faq) => {
+      const parseResult = ShmoFaq.safeParse(faq);
       if (!parseResult.success) {
         console.warn(
-          `mapToScooterFaqs with id ${scooterFaq?.id} failed safeParsing:\n`,
+          `mapToShmoFaqs with id ${faq?.id} failed safeParsing:\n`,
           parseResult.error,
         );
         return;
@@ -193,15 +193,15 @@ export function mapToScooterFaqs(scooterFaqs?: any) {
     .filter(isDefined);
 }
 
-export function mapToScooterConsentLines(scooterConsentLines?: any) {
-  if (!scooterConsentLines) return;
-  if (!Array.isArray(scooterConsentLines)) return;
-  return scooterConsentLines
-    .map((scooterConsentLine) => {
-      const parseResult = ScooterConsentLine.safeParse(scooterConsentLine);
+export function mapToConsentLines(consentLines?: any) {
+  if (!consentLines) return;
+  if (!Array.isArray(consentLines)) return;
+  return consentLines
+    .map((consentLine) => {
+      const parseResult = ConsentLine.safeParse(consentLine);
       if (!parseResult.success) {
         console.warn(
-          `mapToScooterConsentLines with id ${scooterConsentLine?.id} failed safeParsing:\n`,
+          `mapToConsentLines with id ${consentLine?.id} failed safeParsing:\n`,
           parseResult.error,
         );
         return;

@@ -30,6 +30,7 @@ import {
   isParkAndRide,
   isStopPlace,
   isFeatureGeofencingZone,
+  isFeatureGeofencingZoneAsTiles,
   isClusterFeature,
 } from './utils';
 
@@ -41,7 +42,6 @@ import {
 } from '@atb/modules/map';
 
 import {
-  isBicycle,
   isScooter,
   useVehicleQuery,
   isStation,
@@ -71,6 +71,10 @@ import {MapBottomSheets} from './MapBottomSheets';
 import {MapButtons} from './components/MapButtons';
 import {GeofencingZoneCode} from '@atb-as/theme';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
+import {TariffZoneLinesAndLabels} from './components/TariffZoneLinesAndLabels';
+import {mapZonesToPolygonCollection} from './zone-utils';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {useTranslation} from '@atb/translations';
 import {usePreferencesContext} from '../preferences';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {GeofencingZonesAsTiles} from './components/mobility/GeofencingZonesAsTiles';
@@ -84,17 +88,22 @@ export const Map = (props: MapProps) => {
     isFocused,
     tabBarHeight,
     navigateToShmoSupport,
-    navigateToScooterOnboarding,
+    navigateToShmoOnboarding,
     navigateToReportParkingViolation,
     navigateToParkingPhoto,
     navigateToScanQrCode,
     navigateToLogin,
     navigateToPaymentMethods,
+    navigateToPricingDetails,
   } = props;
 
   const {
     preferences: {showShmoTesting},
   } = usePreferencesContext();
+
+  const {fareZones} = useFirestoreConfigurationContext();
+  const {language} = useTranslation();
+  const fareZonePolygons = mapZonesToPolygonCollection(fareZones, language);
 
   const {getCurrentCoordinates} = useGeolocationContext();
   const mapCameraRef = useRef<Camera>(null);
@@ -117,6 +126,7 @@ export const Map = (props: MapProps) => {
     (mapFilter?.mobility.BICYCLE?.showAll ||
       mapFilter?.mobility.CAR?.showAll) ??
     false;
+  const showTariffZones = mapFilter?.showTariffZones ?? true;
   const shouldShowVehiclesAndStations =
     isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
 
@@ -214,25 +224,6 @@ export const Map = (props: MapProps) => {
     [showSnackbar, getGeofencingZoneContent],
   );
 
-  const geofencingZoneOnPress = useCallback(
-    (e: OnPressEvent) => {
-      const featuresAtClick = e.features;
-      if (!featuresAtClick || featuresAtClick.length === 0) return;
-      const featureToSelect = featuresAtClick[0]; // currently ignore the ones behind
-
-      if (featureToSelect.properties?.type === 'station') {
-        showSnackbar({content: getStationParkingContent(), position: 'top'});
-        return;
-      }
-
-      const code = featureToSelect.properties?.code ?? 'allowed';
-      const stationParking =
-        featureToSelect.properties?.stationParking ?? false;
-      showGeofencingZoneSnackbar(code, stationParking);
-    },
-    [showGeofencingZoneSnackbar, showSnackbar, getStationParkingContent],
-  );
-
   const locationArrowOnPress = useCallback(async () => {
     const coordinates = await getCurrentCoordinates(true);
     if (
@@ -293,10 +284,13 @@ export const Map = (props: MapProps) => {
         // - select a stop place with the clicked quay sorted on top
         // - have a bottom sheet with departures just for the clicked quay
         return; // currently - do nothing
+      } else if (isFeatureGeofencingZoneAsTiles(featureToSelect)) {
+        const {code, station_parking} = featureToSelect.properties;
+        showGeofencingZoneSnackbar(code, station_parking);
       } else if (isFeatureGeofencingZone(featureToSelect)) {
-        if (isGeofencingZonesAsTilesEnabled) return; // Handled directly with geofencingZoneOnPress instead in this case
-        const gfzProps = featureToSelect?.properties?.geofencingZoneCustomProps;
-        showGeofencingZoneSnackbar(gfzProps?.code, gfzProps.isStationParking);
+        const {code, isStationParking} =
+          featureToSelect.properties.geofencingZoneCustomProps;
+        showGeofencingZoneSnackbar(code, isStationParking);
       } else if (isScooter(selectedFeature) && !isActiveTrip) {
         // outside of operational area, rules unspecified
         showGeofencingZoneSnackbar(undefined);
@@ -306,7 +300,6 @@ export const Map = (props: MapProps) => {
       activeShmoBooking?.state,
       showGeofencingZones,
       hideSnackbar,
-      isGeofencingZonesAsTilesEnabled,
       selectedFeature,
       showGeofencingZoneSnackbar,
     ],
@@ -347,14 +340,9 @@ export const Map = (props: MapProps) => {
             mapViewRef,
             zoomLevel: toZoomLevel,
           });
-        } else if (isScooter(featureToSelect)) {
+        } else if (isVehicle(featureToSelect)) {
           dispatchMapState({
-            type: MapStateActionType.Scooter,
-            feature: featureToSelect,
-          });
-        } else if (isBicycle(featureToSelect)) {
-          dispatchMapState({
-            type: MapStateActionType.Bicycle,
+            type: MapStateActionType.Vehicle,
             feature: featureToSelect,
           });
         } else if (isCarStation(featureToSelect)) {
@@ -472,7 +460,6 @@ export const Map = (props: MapProps) => {
               <GeofencingZonesAsTiles
                 systemId={systemId}
                 vehicleTypeId={vehicleTypeId}
-                geofencingZoneOnPress={geofencingZoneOnPress}
               />
             ) : (
               <GeofencingZones
@@ -480,6 +467,10 @@ export const Map = (props: MapProps) => {
                 vehicleTypeId={vehicleTypeId}
               />
             ))}
+
+          {showTariffZones && (
+            <TariffZoneLinesAndLabels polygonCollection={fareZonePolygons} />
+          )}
 
           <NationalStopRegistryFeatures
             selectedFeaturePropertyId={activeFeatureId}
@@ -525,12 +516,13 @@ export const Map = (props: MapProps) => {
         mapProps={props}
         tabBarHeight={tabBarHeight}
         navigateToShmoSupport={navigateToShmoSupport}
-        navigateToScooterOnboarding={navigateToScooterOnboarding}
+        navigateToShmoOnboarding={navigateToShmoOnboarding}
         navigateToReportParkingViolation={navigateToReportParkingViolation}
         navigateToParkingPhoto={navigateToParkingPhoto}
         navigateToScanQrCode={navigateToScanQrCode}
         navigateToLogin={navigateToLogin}
         navigateToPaymentMethods={navigateToPaymentMethods}
+        navigateToPricingDetails={navigateToPricingDetails}
         locationArrowOnPress={locationArrowOnPress}
       />
       {!!isMapTilePreloadingEnabled && (

@@ -1,4 +1,3 @@
-export {BicycleSheet} from './components/sheets/BicycleSheet';
 export {CityBikeStartTripOverlay} from './components/CityBikeStartTripOverlay';
 export {BikeStationBottomSheet} from './components/sheets/BikeStationBottomSheet';
 export {BrandingImage} from './components/BrandingImage';
@@ -16,7 +15,7 @@ export {ParkAndRideBottomSheet} from './components/ParkAndRideBottomSheet';
 export {ActiveShmoSheet} from './components/sheets/ActiveShmoSheet';
 export {FinishingScooterSheet} from './components/sheets/FinishingScooterSheet';
 export {FinishedShmoSheet} from './components/sheets/FinishedShmoSheet';
-export {ScooterSheet} from './components/sheets/ScooterSheet';
+export {VehicleSheet} from './components/sheets/VehicleSheet';
 export {SelectShmoPaymentMethodSheet} from './components/sheets/SelectShmoPaymentMethodsSheet';
 export {ShmoTripDetailsSectionItem} from './components/ShmoTripDetailsSectionItem';
 export {useActiveShmoBookingQuery} from './queries/use-active-shmo-booking-query';
@@ -39,8 +38,11 @@ export {useShmoRequirements} from './use-shmo-requirements';
 export {useVehicle} from './use-vehicle';
 export {useDeleteAgeVerificationMutation} from './queries/use-remove-age-verification-mutation';
 export {
+  computeFreeMinuteCount,
   findOperatorBrandImageUrl,
   getAvailableVehicles,
+  getFreeMinutes,
+  getFreeUnlock,
   getTransportModeAndSubMode,
   isBicycle,
   isBikeStation,

@@ -46,6 +46,7 @@ export type OfferSearchParams = {
   from?: string;
   to?: string;
   legs?: OfferSearchLeg[];
+  bonusProductId?: string;
 };
 
 type Traveller = {
@@ -107,6 +108,20 @@ export async function getSchoolCarnetInfo(fareContractId: string) {
   const response = await client.get<ConsumableSchoolCarnetResponse>(url, {
     authWithIdToken: true,
   });
+  return response.data;
+}
+
+export type AcceptTicketTransferResponse = {
+  addedFareContractRefs: string[];
+};
+
+export async function acceptTicketTransfer(transferId: string) {
+  const url = `ticket/v4/accept-transfer`;
+  const response = await client.post<AcceptTicketTransferResponse>(
+    url,
+    {transferId},
+    {authWithIdToken: true},
+  );
   return response.data;
 }
 

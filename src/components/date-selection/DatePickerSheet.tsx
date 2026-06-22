@@ -12,10 +12,9 @@ import type {
 import {default as RNDatePicker} from 'react-native-date-picker';
 import {getTimeZoneOffsetInMinutes, parseDate} from '@atb/utils/date';
 import {useLocaleContext} from '@atb/modules/locale';
-import {BottomSheetModal} from '../bottom-sheet';
+import {BottomSheetModal, BottomSheetModalMethods} from '../bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {RefObject} from '@testing-library/react-native/build/types';
-import {BottomSheetModal as GorhomBottomSheetModal} from '@gorhom/bottom-sheet';
 import {BottomSheetHeaderType} from '../bottom-sheet/use-bottom-sheet-header-type';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 
@@ -23,8 +22,9 @@ type Props<T extends string> = {
   initialDate?: string;
   initialOption?: T;
   options: DateOptionAndText<T>[];
+  heading?: string;
   onSave: (optionAndValue: DateOptionAndValue<T>) => void;
-  bottomSheetModalRef: React.RefObject<GorhomBottomSheetModal | null>;
+  bottomSheetModalRef: React.RefObject<BottomSheetModalMethods | null>;
   onCloseFocusRef: RefObject<View | null>;
 };
 
@@ -42,6 +42,7 @@ export const DatePickerSheet = <T extends string>({
   initialDate,
   initialOption,
   options,
+  heading,
   onSave,
   bottomSheetModalRef,
   onCloseFocusRef,
@@ -72,7 +73,7 @@ export const DatePickerSheet = <T extends string>({
   return (
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
-      heading={t(DatePickerSheetTexts.heading)}
+      heading={heading ?? t(DatePickerSheetTexts.heading)}
       bottomSheetHeaderType={BottomSheetHeaderType.Confirm}
       closeCallback={() => {
         onSave({option: selectedOptionId, date});

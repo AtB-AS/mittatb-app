@@ -80,7 +80,29 @@ export const MobilityTexts = {
         return _('Annet', 'Other', 'Anna');
     }
   },
-
+  pricingDetails: {
+    priceInfo: _('Prisinformasjon', 'Price information', 'Prisinformasjon'),
+    unlock: _('Opplåsing', 'Unlock', 'Opplåsing'),
+    minutePrice: _('Minuttpris', 'Minute price', 'Minuttpris'),
+    minutePriceRange: (start: number, end: number) =>
+      _(
+        `Minuttpris ${start}-${end} min`,
+        `Minute price ${start}-${end} min`,
+        `Minuttpris ${start}-${end} min`,
+      ),
+    minutePriceFrom: (start: number) =>
+      _(
+        `Minuttpris etter ${start} min`,
+        `Minute price after ${start} min`,
+        `Minuttpris etter ${start} min`,
+      ),
+    maxRentalTime: _(
+      'Makstid for leie',
+      'Max rental time',
+      'Makstid for leige',
+    ),
+    campaignPrice: _('Kampanjepris', 'Campaign price', 'Kampanjepris'),
+  },
   freeBikes: (amount: string) => {
     return _(amount + ' ledige', amount + ' available', amount + ' ledige');
   },
@@ -92,7 +114,7 @@ export const MobilityTexts = {
     );
   },
   cityBike: {
-    location: (position: number) =>
+    location: (position: string) =>
       _(`Plass ${position}`, `Dock ${position}`, `Plass ${position}`),
     startTripView: {
       title: _(
@@ -251,13 +273,13 @@ export const MobilityTexts = {
       ),
     },
     terms: {
-      title: _('Bruksvilkår', 'Terms of use', 'Bruksvilkår'),
-      buttonOne: _(
-        'Godta bruksvilkår',
-        'Accept terms of use',
-        'Godta bruksvilkår',
+      title: _('Dette godtar du', 'This is what you accept', 'Dette godtar du'),
+      buttonOne: _('Godta', 'Accept', 'Godta'),
+      privacyLink: _(
+        'Les mer om personvern',
+        'Read more about privacy',
+        'Les meir om personvern',
       ),
-      buttonTwo: _('Bruksvilkår', 'Terms of use', 'Bruksvilkår'),
     },
   },
   helpText: _('Trenger du hjelp?', 'Need help?', 'Treng du hjelp?'),
@@ -318,7 +340,9 @@ export const MobilityTexts = {
         'Shared Mobility',
         'Delingsmobilitet',
       ),
+      tariffZones: _('Takstsoner', 'Fare zones', 'Takstsoner'),
     },
+    tariffZones: _('Takstsoner', 'Fare zones', 'Takstsoner'),
   },
   reportParkingViolation: _(
     'Rapporter som feilparkert',

@@ -1,6 +1,6 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React, {useEffect, useMemo, useState} from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -21,7 +21,7 @@ import {
 } from '@atb/modules/remote-config';
 import {useGlobalMessagesContext} from '@atb/modules/global-messages';
 import {APP_GROUP_NAME} from '@env';
-import {ThemeIcon} from '@atb/components/theme-icon';
+import {NotificationIndicator, ThemeIcon} from '@atb/components/theme-icon';
 import {
   ArrowUpLeft,
   ExpandLess,
@@ -53,7 +53,10 @@ import {format} from 'date-fns';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useQueryClient} from '@tanstack/react-query';
 import {useDebugUserInfoHeader} from '@atb/api';
-import {DebugServerOverrides} from '@atb/modules/debug';
+import {
+  DebugServerOverrides,
+  useDebugServerOverrides,
+} from '@atb/modules/debug';
 import {useScrollBorder} from '@atb/utils/use-scroll-border';
 import MapboxGL from '@rnmapbox/maps';
 
@@ -64,6 +67,8 @@ function setClipboard(content: string) {
 
 export const Profile_DebugInfoScreen = () => {
   const styles = useStyles();
+  const {theme} = useThemeContext();
+  const serverOverrides = useDebugServerOverrides();
 
   const {onScroll, isScrolled} = useScrollBorder();
 
@@ -113,7 +118,7 @@ export const Profile_DebugInfoScreen = () => {
   } = useMobileTokenContext();
   const {serverNow} = useTimeContext();
   const serverTimeOffset = useMemo(() => Date.now() - serverNow, [serverNow]);
-  const {setGivenShmoConsent} = useMapContext();
+  const {setGivenScooterConsent, setGivenBicycleConsent} = useMapContext();
   const {
     fcmToken,
     permissionStatus: pushNotificationPermissionStatus,
@@ -350,7 +355,11 @@ export const Profile_DebugInfoScreen = () => {
           />
           <LinkSectionItem
             text="Reset scooter consent"
-            onPress={() => setGivenShmoConsent(false)}
+            onPress={() => setGivenScooterConsent(false)}
+          />
+          <LinkSectionItem
+            text="Reset bicycle consent"
+            onPress={() => setGivenBicycleConsent(false)}
           />
           <LinkSectionItem
             text="Reset city bike end trip info"
@@ -678,6 +687,14 @@ export const Profile_DebugInfoScreen = () => {
         <Section style={styles.section}>
           <ExpandableSectionItem
             text="Server overrides"
+            suffixNode={
+              serverOverrides.length > 0 ? (
+                <NotificationIndicator
+                  color={theme.color.status.error.primary}
+                  iconSize="normal"
+                />
+              ) : undefined
+            }
             expandContent={<DebugServerOverrides />}
             showIconText={true}
           />
@@ -714,7 +731,7 @@ function MapValue({value}: {value: any}) {
               <MapEntry key={key} title={key} value={value} />
             ))
           ) : (
-            <ThemeText color="secondary">Empty object</ThemeText>
+            <ThemeText type="secondary">Empty object</ThemeText>
           )}
         </View>
       );
@@ -742,7 +759,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
           style={{flexDirection: 'row'}}
           onPress={() => setIsExpanded(!isExpanded)}
         >
-          <ThemeText typography="heading__m" color="secondary">
+          <ThemeText typography="heading__m" type="secondary">
             {title}
           </ThemeText>
           <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />

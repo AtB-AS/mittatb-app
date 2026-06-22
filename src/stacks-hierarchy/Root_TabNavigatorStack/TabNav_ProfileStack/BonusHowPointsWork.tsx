@@ -53,7 +53,7 @@ export const HowPointsWork = () => {
         .filter(
           (product) => product.productType === BonusProductTypeEnum.VOUCHER,
         )
-        .flatMap((product) => product.operatorIds),
+        .map((product) => product.operatorId),
     ),
   ]
     .map((operatorId) => {
@@ -143,7 +143,7 @@ const BonusInfoSectionItem = ({
       <View style={styles.horizontalContainer}>
         <View style={styles.bonusProgramDescription}>
           <ThemeText typography="body__m__strong">{title}</ThemeText>
-          <ThemeText typography="body__s" color="secondary">
+          <ThemeText typography="body__s" type="secondary">
             {description}
           </ThemeText>
         </View>

@@ -28,7 +28,7 @@ import {
   StoredFavoriteDeparture,
   useOnMarkFavouriteDepartures,
 } from '@atb/modules/favorites';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Loading} from '@atb/components/loading';
@@ -141,7 +141,7 @@ export function QuayLineSection({
   const styles = useStyles();
   const departures = getDeparturesForQuay(data, quay);
   const {t} = useTranslation();
-  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
 
   const sortedDepartures = departures.sort((a, b) =>
     compareByLineNameAndDesc(t, a, b),
@@ -189,7 +189,7 @@ export function QuayLineSection({
             <View style={styles.stopPlaceHeaderText}>
               <ThemeText
                 typography="body__s__strong"
-                color="secondary"
+                type="secondary"
                 style={styles.rightMargin}
                 testID={testID + 'Name'}
               >
@@ -201,7 +201,7 @@ export function QuayLineSection({
                 <ThemeText
                   style={styles.rightMargin}
                   typography="body__s"
-                  color="secondary"
+                  type="secondary"
                   testID={testID + 'Description'}
                 >
                   {quay.description}
@@ -213,7 +213,7 @@ export function QuayLineSection({
         {sortedDepartures.length === 0 && !isLoading && !didLoadingDataFail && (
           <GenericSectionItem>
             <ThemeText
-              color="secondary"
+              type="secondary"
               typography="body__s"
               style={{textAlign: 'center', width: '100%'}}
             >
@@ -238,7 +238,7 @@ export function QuayLineSection({
         {didLoadingDataFail && !isLoading && (
           <GenericSectionItem>
             <View style={styles.messageBox}>
-              <ThemeText typography="body__s" color="secondary">
+              <ThemeText typography="body__s" type="secondary">
                 {t(DeparturesTexts.message.noData)}
               </ThemeText>
             </View>

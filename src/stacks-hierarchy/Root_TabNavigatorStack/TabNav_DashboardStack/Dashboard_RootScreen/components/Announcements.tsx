@@ -1,4 +1,4 @@
-import {Dimensions, StyleProp, View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {useAnnouncementsContext} from '@atb/modules/announcements';
 import {ScrollView} from 'react-native-gesture-handler';
 import {AnnouncementSection} from './AnnouncementSection';
@@ -88,7 +88,7 @@ export const Announcements = ({style, isFocused}: Props) => {
   );
 };
 
-const useStyle = StyleSheet.createThemeHook((theme) => ({
+const useStyle = StyleSheet.createThemeHook((theme, _, {width}) => ({
   container: {
     rowGap: theme.spacing.small,
   },
@@ -100,7 +100,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.medium,
   },
   announcement: {
-    width: Dimensions.get('window').width * 0.9 - 2 * theme.spacing.medium,
+    width: width * 0.9 - 2 * theme.spacing.medium,
   },
 }));
 

@@ -27,6 +27,7 @@ import {
   isValid,
   intervalToDuration,
   parseJSON as parseJSONDate,
+  isFuture,
 } from 'date-fns';
 import {
   FormatOptionsWithTZ,
@@ -293,6 +294,10 @@ export function formatLocaleTime(
 
 export function isInThePast(isoDate: string | Date) {
   return isPast(parseIfNeeded(isoDate));
+}
+
+export function isInTheFuture(isoDate: string | Date) {
+  return isFuture(parseIfNeeded(isoDate));
 }
 
 export const isBetween = (

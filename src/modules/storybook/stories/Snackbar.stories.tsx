@@ -80,7 +80,7 @@ const SnackbarMeta: Meta<SnackbarMetaProps> = {
           }}
         />
         <ThemeText
-          color="secondary"
+          type="secondary"
           style={{
             width: '50%',
             textAlign: 'center',

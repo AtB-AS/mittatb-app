@@ -3,7 +3,7 @@ import React from 'react';
 import {type FareContractType} from '@atb-as/utils';
 import {findReferenceDataById} from '@atb/modules/configuration';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {useGetFareProductsQuery} from '@atb/modules/ticketing';
 
 type Props = {
@@ -13,7 +13,6 @@ type Props = {
 export const Description = ({fc}: Props) => {
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {language} = useTranslation();
-  const {theme} = useThemeContext();
   const styles = useStyles();
 
   const travelRight = fc.travelRights[0];
@@ -29,7 +28,7 @@ export const Description = ({fc}: Props) => {
     <ThemeText
       typography="body__s"
       accessibilityLabel={description + screenReaderPause}
-      color={theme.color.foreground.dynamic.secondary}
+      type="secondary"
       style={styles.text}
     >
       {description}

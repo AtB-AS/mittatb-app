@@ -106,7 +106,7 @@ const TripSearchTexts = {
   },
   dateInput: {
     options: {
-      now: _('Dra nå', 'Leave now', 'Dra no'),
+      now: _('Nå', 'Now', 'No'),
       departure: _('Avreise', 'Leave at', 'Avreise'),
       arrival: _('Ankomst', 'Arrive by', 'Ankomst'),
     },
@@ -166,11 +166,6 @@ const TripSearchTexts = {
         'Ingen kollektivreiser passar til søket ditt',
       ),
       emptySearchResultsDetails: _(
-        'Prøv å justere på sted eller tidspunkt.',
-        'Try adjusting your time or location input.',
-        'Prøv å justere på stad eller tidspunkt.',
-      ),
-      emptySearchResultsDetailsWithFilters: _(
         'Prøv å justere på sted, filter eller tidspunkt.',
         'Try adjusting your time, filters or location input.',
         'Prøv å justere på stad, filter eller tidspunkt.',

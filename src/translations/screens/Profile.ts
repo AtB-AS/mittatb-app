@@ -33,7 +33,7 @@ const ProfileTexts = {
           label: _('Kjøpshistorikk', 'Purchase history', 'Kjøpshistorikk'),
         },
         bonus: {
-          label: _('Poeng', 'Points', 'Poeng'),
+          label: _('AtB Bonus', 'AtB Bonus', 'AtB Bonus'),
         },
         smartParkAndRide: {
           label: _('Innfartsparkering', 'Park and ride', 'Innfartsparkering'),
@@ -104,6 +104,13 @@ const ProfileTexts = {
             'Standard reisende',
             'Default traveller',
             'Standard reisande',
+          ),
+        },
+        feide: {
+          label: _(
+            'Feide og skoleskyss',
+            'Feide and school transport',
+            'Feide og skuleskyss',
           ),
         },
         travelToken: {

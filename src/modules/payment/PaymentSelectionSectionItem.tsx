@@ -1,7 +1,7 @@
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {humanizePaymentType} from '@atb/modules/ticketing';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import React, {forwardRef} from 'react';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
@@ -81,7 +81,7 @@ export const PaymentSelectionSectionItem = forwardRef<
             )}
         </View>
         <View style={style.actionButton}>
-          <ThemeText>{t(PaymentMethodsTexts.editPaymentMethod)}</ThemeText>
+          <ThemeText>{t(dictionary.edit)}</ThemeText>
           <ThemeIcon svg={SvgEdit} />
         </View>
       </View>

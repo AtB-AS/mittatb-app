@@ -86,7 +86,7 @@ import {
 // eslint-disable-next-line rulesdir/navigation-only-in-screens
 import {useFocusEffect} from '@react-navigation/native';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Loading} from '@atb/components/loading';
@@ -393,7 +393,7 @@ export const DepartureDetailsScreenComponent = ({
           ) : !isWithinSameDate(new Date(), activeItem.date) ? (
             <>
               <View style={styles.date}>
-                <ThemeText typography="body__m" color="secondary">
+                <ThemeText typography="body__m" type="secondary">
                   {formatToVerboseFullDate(activeItem.date, language)}
                 </ThemeText>
               </View>
@@ -653,7 +653,7 @@ function EstimatedCallRow({
           <ThemeText
             testID="quayDescription"
             typography="body__s"
-            color="secondary"
+            type="secondary"
           >
             {call.quay.description}
           </ThemeText>
@@ -663,7 +663,7 @@ function EstimatedCallRow({
         {call.cancellation && !call.metadata.isStartOfServiceJourney && (
           <AccessibleText
             typography="body__s"
-            color="secondary"
+            type="secondary"
             style={styles.boardingInfo}
             pause="before"
           >
@@ -679,7 +679,7 @@ function EstimatedCallRow({
           !call.metadata.isStartOfServiceJourney && (
             <AccessibleText
               typography="body__s"
-              color="secondary"
+              type="secondary"
               style={styles.boardingInfo}
               pause="before"
             >
@@ -691,7 +691,7 @@ function EstimatedCallRow({
           !call.metadata.isEndOfServiceJourney && (
             <AccessibleText
               typography="body__s"
-              color="secondary"
+              type="secondary"
               style={styles.boardingInfo}
               pause="before"
             >
@@ -753,7 +753,7 @@ function CollapseButtonRow({
 }: CollapseButtonRowProps) {
   const styles = useCollapseButtonStyle();
   const text = (
-    <ThemeText color="secondary" style={styles.text}>
+    <ThemeText type="secondary" style={styles.text}>
       {label}
     </ThemeText>
   );
@@ -790,7 +790,7 @@ const FavoriteButton = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const analytics = useAnalyticsContext();
-  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
 
   const {getFavoriteDeparture} = useFavoritesContext();
 

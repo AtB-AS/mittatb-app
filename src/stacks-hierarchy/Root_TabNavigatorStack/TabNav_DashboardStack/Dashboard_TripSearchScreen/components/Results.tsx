@@ -5,6 +5,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
 import {
   TranslateFunction,
+  TravelCardTexts,
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
@@ -35,7 +36,6 @@ type Props = {
   tripsIsError: boolean;
   tripsIsNetworkError: boolean;
   searchTime: TripSearchTime;
-  anyFiltersApplied: boolean;
 };
 
 export const Results: React.FC<Props> = ({
@@ -47,12 +47,13 @@ export const Results: React.FC<Props> = ({
   tripsIsError,
   tripsIsNetworkError,
   searchTime,
-  anyFiltersApplied,
 }) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const now = useNow(30000);
-  const isExperimentalEnabled = useIsExperimentalEnabled();
+  const isExperimentalEnabled = useIsExperimentalEnabled(
+    'isNewTripSearchEnabled',
+  );
 
   if (showEmptyScreen) {
     return null;
@@ -81,11 +82,7 @@ export const Results: React.FC<Props> = ({
       <View style={styles.emptyStateContainer}>
         <EmptyState
           title={t(TripSearchTexts.results.info.emptySearchResultsTitle)}
-          details={getDetailsTextForEmptyResult(
-            resultReasons,
-            anyFiltersApplied,
-            t,
-          )}
+          details={getDetailsTextForEmptyResult(resultReasons, t)}
           illustrationComponent={<ThemedOnBehalfOf height={113} width={113} />}
           testID="searchResults"
         />
@@ -104,24 +101,31 @@ export const Results: React.FC<Props> = ({
               previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
             />
             <SaveableTripSearchResultRow tripPattern={tripPattern}>
-              {isExperimentalEnabled ? (
-                <TravelCard
-                  tripPattern={tripPattern}
-                  onDetailsPressed={onDetailsPressed}
-                  cardIndex={i}
-                  numberOfCards={tripPatterns.length}
-                  testID={'tripSearchSearchResult' + i}
-                  type="trip-search"
-                />
-              ) : (
-                <ResultRow
-                  tripPattern={tripPattern}
-                  onDetailsPressed={onDetailsPressed}
-                  resultIndex={i}
-                  searchTime={searchTime}
-                  testID={'tripSearchSearchResult' + i}
-                />
-              )}
+              {(isSaved) =>
+                isExperimentalEnabled ? (
+                  <TravelCard
+                    tripPattern={tripPattern}
+                    onDetailsPressed={onDetailsPressed}
+                    testID={'tripSearchSearchResult' + i}
+                    a11yLabelPrefix={t(
+                      TravelCardTexts.card.a11yPrefix.tripSuggestion(
+                        i,
+                        tripPatterns.length,
+                      ),
+                    )}
+                    a11yHint={t(TravelCardTexts.card.a11yHint.tripDetails)}
+                    isSaved={isSaved}
+                  />
+                ) : (
+                  <ResultRow
+                    tripPattern={tripPattern}
+                    onDetailsPressed={onDetailsPressed}
+                    resultIndex={i}
+                    searchTime={searchTime}
+                    testID={'tripSearchSearchResult' + i}
+                  />
+                )
+              }
             </SaveableTripSearchResultRow>
           </Fragment>
         ))}
@@ -131,14 +135,11 @@ export const Results: React.FC<Props> = ({
 
 const getDetailsTextForEmptyResult = (
   resultReasons: string[],
-  anyFiltersApplied: boolean,
   t: TranslateFunction,
 ) => {
   let text = '';
   if (!resultReasons?.length) {
-    text += anyFiltersApplied
-      ? t(TripSearchTexts.results.info.emptySearchResultsDetailsWithFilters)
-      : t(TripSearchTexts.results.info.emptySearchResultsDetails);
+    text += t(TripSearchTexts.results.info.emptySearchResultsDetails);
   } else if (resultReasons.length === 1) {
     text += resultReasons[0];
   } else {
@@ -150,6 +151,8 @@ const getDetailsTextForEmptyResult = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
+    gap: theme.spacing.small,
+    marginHorizontal: theme.spacing.medium,
     paddingBottom: theme.spacing.medium,
   },
   errorContainer: {

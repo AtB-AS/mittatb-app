@@ -7,6 +7,7 @@ import {isValidPhoneNumber} from 'libphonenumber-js';
 import {isValidEmail} from '@atb/utils/validation';
 import {Feature, Point} from 'geojson';
 import {Base64ImageSchema} from '@atb/utils/image';
+import {MobilityPriceAdjustmentBenefitSchema} from '@atb/api/types/benefit';
 
 export const ViolationsReportingInitQuerySchema = z.object({
   lng: z.string(),
@@ -141,6 +142,7 @@ const MapItemPropulsionTypeSchema = z.enum([
 
 export enum ShmoBookingState {
   NOT_STARTED = 'NOT_STARTED',
+  PREPARING = 'PREPARING',
   IN_USE = 'IN_USE',
   PAUSED = 'PAUSED',
   FINISHING = 'FINISHING',
@@ -248,6 +250,7 @@ export const VehicleSchema = z.object({
   station: z.object({id: z.string()}).nullable().optional(),
   rentalUris: RentalUrisSchema.nullable().optional(),
   vehicleType: VehicleTypeSchema,
+  benefit: MobilityPriceAdjustmentBenefitSchema.nullable().optional(),
 });
 
 export type Vehicle = z.infer<typeof VehicleSchema>;
@@ -301,6 +304,7 @@ export const AssetSchema = z.object({
   currentRangeKm: z.number().int().nullish(),
   formFactor: FormFactorSchema.nullish(),
   propulsionType: PropulsionTypeSchema.nullish(),
+  stationSlotName: z.string().nullish(),
 });
 
 export const ShmoBookingSchema = z.object({
@@ -343,6 +347,7 @@ export const InitShmoOneStopBookingRequestBodySchema = z.object({
   operatorId: z.string(),
   vehicleTypeId: z.string().nullish().optional(),
   stationId: z.string().nullish().optional(),
+  bonusProductId: z.string().nullish().optional(),
 });
 
 export type InitShmoOneStopBookingRequestBody = z.infer<
@@ -372,6 +377,7 @@ export const MAX_SUPPORT_COMMENT_LENGTH = 400;
 
 export const VehiclesRequestBodySchema = z.object({
   stationId: z.string().nullish(),
+  vehicleTypeIds: z.array(z.string()).nullish(),
   propulsionType: z.string().nullish(),
   sort: z.string().nullish(),
   maxCount: z.number().int().nullish(),

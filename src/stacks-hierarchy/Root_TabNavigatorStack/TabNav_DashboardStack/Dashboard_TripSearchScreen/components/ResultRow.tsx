@@ -89,8 +89,6 @@ export const ResultRow: React.FC<ResultRowProps> = ({
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    marginTop: theme.spacing.small,
-    marginHorizontal: theme.spacing.medium,
   },
   separator: {
     flexGrow: 0,

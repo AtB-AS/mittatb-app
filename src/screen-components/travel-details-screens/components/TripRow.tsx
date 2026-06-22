@@ -3,10 +3,24 @@ import {View, ViewProps} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {NativeBlockButton} from '@atb/components/native-button';
 
+export type DimensionOverrides = {
+  labelWidth?: number;
+  decorationContainerWidth?: number;
+  labelAlignment?: 'flex-start' | 'flex-end';
+};
+
+// TODO: Remove / rename once old trip details are removed
+export const NEW_TRIP_DIMENSIONS: DimensionOverrides = {
+  labelWidth: 42,
+  decorationContainerWidth: 42,
+  labelAlignment: 'flex-start',
+};
+
 type TripRowProps = {
   rowLabel?: React.ReactNode;
   alignChildren?: 'flex-start' | 'flex-end' | 'center';
   onPress?(): void;
+  dimensionOverrides?: DimensionOverrides;
 } & ViewProps;
 export const TripRow: React.FC<TripRowProps> = ({
   rowLabel,
@@ -14,6 +28,7 @@ export const TripRow: React.FC<TripRowProps> = ({
   alignChildren = 'center',
   style,
   onPress,
+  dimensionOverrides,
   ...props
 }) => {
   const styles = useStyles();
@@ -22,8 +37,27 @@ export const TripRow: React.FC<TripRowProps> = ({
 
   const rowContent = (
     <>
-      <View style={styles.leftColumn}>{rowLabel}</View>
-      <View style={styles.decorationPlaceholder} />
+      <View
+        style={[
+          styles.leftColumn,
+          dimensionOverrides?.labelWidth != null && {
+            minWidth: dimensionOverrides.labelWidth,
+          },
+          dimensionOverrides?.labelAlignment != null && {
+            justifyContent: dimensionOverrides.labelAlignment,
+          },
+        ]}
+      >
+        {rowLabel}
+      </View>
+      <View
+        style={[
+          styles.decorationPlaceholder,
+          dimensionOverrides?.decorationContainerWidth != null && {
+            width: dimensionOverrides.decorationContainerWidth,
+          },
+        ]}
+      />
       <View style={styles.rightColumn}>{children}</View>
     </>
   );

@@ -6,6 +6,8 @@ import {
 } from '@atb/modules/map';
 import {MapScreenProps} from './navigation-types';
 import {Quay, StopPlace} from '@atb/api/types/departures';
+import {ShmoPricingPlan} from '@atb/api/types/mobility';
+import type {MobilityPriceAdjustmentBenefitType} from '@atb/api/types/benefit';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
@@ -16,6 +18,7 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import {TripSearchCallerRoute} from '../TabNav_DashboardStack/types';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export type MapScreenParams = {
   initialFilters?: MapFilterType;
@@ -95,9 +98,12 @@ export const Map_RootScreen = ({
     [navigation],
   );
 
-  const navigateToScooterOnboarding = useCallback(() => {
-    navigation.navigate('Root_ShmoOnboardingScreen');
-  }, [navigation]);
+  const navigateToShmoOnboarding = useCallback(
+    (formFactor?: FormFactor) => {
+      navigation.navigate('Root_ShmoOnboardingScreen', {formFactor});
+    },
+    [navigation],
+  );
 
   const navigateToReportParkingViolation = useCallback(() => {
     navigation.navigate('Root_ParkingViolationsSelectScreen');
@@ -149,6 +155,20 @@ export const Map_RootScreen = ({
     navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
   }, [navigation, bonusScreenParams]);
 
+  const navigateToPricingDetails = useCallback(
+    (
+      pricingPlan: ShmoPricingPlan,
+      benefit: MobilityPriceAdjustmentBenefitType | undefined,
+    ) => {
+      navigation.navigate('Root_ShmoPricingDetailsScreen', {
+        pricingPlan,
+        benefit,
+        transitionOverride: 'slide-from-right',
+      });
+    },
+    [navigation],
+  );
+
   const focusRef = useFocusOnLoad(navigation);
 
   if (isScreenReaderEnabled)
@@ -162,13 +182,14 @@ export const Map_RootScreen = ({
       navigateToDetails={navigateToDetails}
       navigateToTripSearch={navigateToTripSearch}
       navigateToShmoSupport={navigateToShmoSupport}
-      navigateToScooterOnboarding={navigateToScooterOnboarding}
+      navigateToShmoOnboarding={navigateToShmoOnboarding}
       navigateToReportParkingViolation={navigateToReportParkingViolation}
       navigateToParkingPhoto={navigateToParkingPhoto}
       navigateToScanQrCode={navigateToScanQrCode}
       navigateToLogin={navigateToLogin}
       navigateToPaymentMethods={navigateToPaymentMethods}
       navigateToBonusScreen={navigateToBonusScreen}
+      navigateToPricingDetails={navigateToPricingDetails}
       includeSnackbar={true}
     />
   );

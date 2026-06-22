@@ -148,6 +148,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
       newFrom: translateLocation(to),
       newTo: translateLocation(from),
     });
+    analytics.logEvent('Trip search', 'Locations to/from swapped');
     navigation.setParams({fromLocation: to, toLocation: from});
   }
 

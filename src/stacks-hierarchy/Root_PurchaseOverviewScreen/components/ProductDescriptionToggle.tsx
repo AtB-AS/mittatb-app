@@ -17,7 +17,7 @@ export function ProductDescriptionToggle({title}: {title: string}) {
   return (
     <View style={styles.container}>
       <View style={{flexShrink: 1}}>
-        <ThemeText typography="body__s" color="secondary">
+        <ThemeText typography="body__s" type="secondary">
           {title}
         </ThemeText>
       </View>

@@ -1,53 +1,60 @@
 import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
-import {GenericSectionItem, Section} from '@atb/components/sections';
+import {
+  GenericSectionItem,
+  LinkSectionItem,
+  Section,
+} from '@atb/components/sections';
 import {View} from 'react-native';
 import {Unlock, PricePerTime} from '@atb/assets/svg/mono-icons/mobility';
 import {VehicleCardStat} from './VehicleCardStat';
-import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {formatRatePerUnit} from '../utils';
-import {formatNumberToString} from '@atb-as/utils';
 import {
-  PriceAdjustmentEnum,
-  PriceAdjustmentType,
-} from '@atb-as/config-specs/lib/mobility';
+  MobilityTexts,
+  ScooterTexts,
+} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {
+  computeFreeMinuteCount,
+  formatRatePerUnit,
+  getFreeMinutes,
+  getFreeUnlock,
+} from '../utils';
+import {formatNumberToString} from '@atb-as/utils';
 import {getCurrencySymbol} from '@atb/translations/currency';
 import {ShmoPricingPlan} from '@atb/api/types/mobility';
+import SvgChevronRight from '@atb/assets/svg/mono-icons/navigation/ChevronRight';
+import type {MobilityPriceAdjustmentBenefitType} from '@atb/api/types/benefit';
 
 type Props = {
   pricingPlan: ShmoPricingPlan;
-  priceAdjustments?: PriceAdjustmentType[];
+  benefit?: MobilityPriceAdjustmentBenefitType;
   systemId: string;
+  onNavigatePricingDetails?: (
+    pricingPlan: ShmoPricingPlan,
+    benefit: MobilityPriceAdjustmentBenefitType | undefined,
+  ) => void;
 };
 
 export const PriceDetailsCard = ({
   pricingPlan,
-  priceAdjustments,
+  benefit,
   systemId,
+  onNavigatePricingDetails,
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const ratePrUnit = formatRatePerUnit(pricingPlan, language);
-  const freeUnlock = priceAdjustments?.find(
-    (e) =>
-      e.type === PriceAdjustmentEnum.enum.FREE_UNLOCK &&
-      e.systemIds.includes(systemId),
-  );
-  const freeMinutes = priceAdjustments?.find(
-    (e) =>
-      e.type === PriceAdjustmentEnum.enum.FREE_MINUTES &&
-      e.systemIds.includes(systemId),
-  );
+  const freeUnlock = getFreeUnlock(benefit, systemId);
+  const freeMinutes = getFreeMinutes(benefit, systemId);
 
   const unlockStat = freeUnlock
     ? t(ScooterTexts.free)
     : `${formatNumberToString(pricingPlan.price, language)} ${getCurrencySymbol(pricingPlan.currency)}`;
 
   const minutePriceStat =
-    freeMinutes && ratePrUnit?.rate
+    freeMinutes && pricingPlan.perMinPricing?.length
       ? `${formatNumberToString(
-          Math.floor(Math.abs(freeMinutes.amount) / ratePrUnit.rate),
+          computeFreeMinuteCount(freeMinutes, pricingPlan.perMinPricing),
           language,
         )} min ${t(ScooterTexts.free).toLocaleLowerCase(language)}`
       : ratePrUnit?.formattedRate;
@@ -82,6 +89,14 @@ export const PriceDetailsCard = ({
           )}
         </View>
       </GenericSectionItem>
+
+      {onNavigatePricingDetails && (
+        <LinkSectionItem
+          rightIcon={{svg: SvgChevronRight}}
+          text={t(MobilityTexts.pricingDetails.priceInfo)}
+          onPress={() => onNavigatePricingDetails(pricingPlan, benefit)}
+        />
+      )}
     </Section>
   );
 };

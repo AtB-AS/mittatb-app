@@ -10,6 +10,7 @@ import {
   BottomSheetHeaderType,
   useBottomSheetHeaderType,
 } from './use-bottom-sheet-header-type';
+import {insets} from '@atb/utils/insets';
 
 type BottomSheetHeaderProps = {
   heading?: string;
@@ -35,8 +36,8 @@ export const BottomSheetHeader = ({
   bottomSheetHeaderType,
 }: BottomSheetHeaderProps) => {
   const styles = useStyles();
-  const {theme} = useThemeContext();
   const headerData = useBottomSheetHeaderType(bottomSheetHeaderType);
+  const {theme} = useThemeContext();
 
   return (
     <View accessibilityRole="header" testID={`${testID}BottomSheetHeader`}>
@@ -54,10 +55,7 @@ export const BottomSheetHeader = ({
                 <ThemeText typography="heading__l">{heading}</ThemeText>
               )}
               {subText && (
-                <ThemeText
-                  typography="body__s"
-                  color={theme.color.foreground.dynamic.secondary}
-                >
+                <ThemeText typography="body__s" type="secondary">
                   {subText}
                 </ThemeText>
               )}
@@ -71,6 +69,7 @@ export const BottomSheetHeader = ({
                 testID="closeBottomSheet"
                 accessibilityRole="button"
                 onPress={() => bottomSheetRef.current?.close()}
+                hitSlop={insets.all(theme.spacing.small)}
               >
                 {headerData?.text && (
                   <ThemeText typography="body__s__strong">

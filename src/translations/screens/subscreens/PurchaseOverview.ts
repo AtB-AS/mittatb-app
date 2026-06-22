@@ -150,6 +150,12 @@ const PurchaseOverviewTexts = {
   travellerSelection: {
     titleSingle: _('Reisende', 'Traveller', 'Reisande'),
     titleMultiple: _('Reisende', 'Travellers', 'Reisande'),
+    travellerCount: (count: number) =>
+      _(
+        `${count} reisende`,
+        count === 1 ? `${count} traveller` : `${count} travellers`,
+        `${count} reisande`,
+      ),
     a11yLabelPrefixSingle: _(
       'Valgt reisende:',
       'Selected traveller:',
@@ -180,16 +186,11 @@ const PurchaseOverviewTexts = {
   },
   startTime: {
     title: _('Oppstartstidspunkt', 'Start time', 'Starttidspunkt'),
-    now: _('Nå', 'Now', 'No'),
-    laterTime: (time: string) =>
-      _(`Oppstart ${time}`, `Start ${time}`, `Start ${time}`),
-    laterOption: _('Senere', 'Later', 'Seinare'),
-    a11yLabel: (time?: string) =>
-      _(
-        `Valgt oppstartstidspunkt: ${time || 'nå'}`,
-        `Selected start time:  ${time || 'now'}`,
-        `Vald starttidspunkt:  ${time || 'no'}`,
-      ),
+    bottomSheetTitle: _(
+      'Velg oppstartstidspunkt',
+      'Select start time',
+      'Vel oppstartstidspunkt',
+    ),
     a11yLaterHint: _(
       'Aktiver for å velge oppstartstidspunkt',
       'Activate to select start time',

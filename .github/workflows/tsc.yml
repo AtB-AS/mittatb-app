@@ -20,22 +20,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: install node v22
-        uses: actions/setup-node@v1
+      - uses: pnpm/action-setup@v4
+      - name: install node
+        uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
       - name: Add Entur private registry credentials
         run: sh ./scripts/add-entur-private-registry.sh
         env:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
-      - uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
-      - name: yarn install
-        run: yarn install --frozen-lockfile
+      - name: pnpm install
+        run: pnpm install --frozen-lockfile
       - name: Install assets
         run: sh ./scripts/generate-assets.sh ${{ matrix.org }}
       - name: check-all
-        run: yarn check-all
+        run: pnpm check-all

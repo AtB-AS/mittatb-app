@@ -11,7 +11,7 @@ APP_SCHEMA=abt-staging
 After changing the `APP_SCHEMA` you should run setup again. Example:
 
 ```
-yarn setup staging atb
+pnpm setup staging atb
 ```
 
 ### Testing schema

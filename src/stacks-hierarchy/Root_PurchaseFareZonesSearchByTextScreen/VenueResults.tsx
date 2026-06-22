@@ -29,7 +29,7 @@ export const VenueResults: React.FC<Props> = ({
   return (
     <>
       <View accessibilityRole="header" style={styles.subHeader}>
-        <ThemeText typography="body__s" color="secondary">
+        <ThemeText typography="body__s" type="secondary">
           {t(FareZoneSearchTexts.results.heading)}
         </ThemeText>
       </View>

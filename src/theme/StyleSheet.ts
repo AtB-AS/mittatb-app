@@ -3,19 +3,34 @@ import {
   ViewStyle,
   TextStyle,
   ImageStyle,
+  useWindowDimensions,
+  ScaledSize,
 } from 'react-native';
 import {Theme} from './colors';
 import {useThemeContext} from './ThemeContext';
 import {useSafeAreaInsets, EdgeInsets} from 'react-native-safe-area-context';
+import {MAX_FONT_SCALE} from '@atb/components/text';
 
 export type NamedStyles<T> = {
   [P in keyof T]: ViewStyle | TextStyle | ImageStyle;
 };
-export type ThemedStyles<T> = (theme: Theme, insets: EdgeInsets) => T;
+export type ThemedStyles<T> = (
+  theme: Theme,
+  insets: EdgeInsets,
+  dimensions: ScaledSize,
+) => T;
+
+// MarginStyle is a subset of ViewStyle containing only margin-related
+// fields, e.g. 'margin', 'marginTop', 'marginHorizontal', etc. All other
+// ViewStyle fields are typed as `never`, so they cannot be set.
+type MarginKeys = Extract<keyof ViewStyle, `margin${string}`>;
+export type MarginStyle = Pick<ViewStyle, MarginKeys> & {
+  [K in Exclude<keyof ViewStyle, MarginKeys>]?: never;
+};
 
 type StyleSheetType = typeof StyleSheetNative;
 interface ExtendedStyleSheet extends StyleSheetType {
-  createThemeHook<T>(input: ThemedStyles<NamedStyles<T>>): () => NamedStyles<T>;
+  createThemeHook<T extends NamedStyles<T>>(input: ThemedStyles<T>): () => T;
 }
 
 export function useStyle<T extends NamedStyles<T>>(
@@ -23,10 +38,15 @@ export function useStyle<T extends NamedStyles<T>>(
 ): T {
   const {theme} = useThemeContext();
   const insets = useSafeAreaInsets();
+  const rawDimensions = useWindowDimensions();
+  const dimensions = {
+    ...rawDimensions,
+    fontScale: Math.min(rawDimensions.fontScale, MAX_FONT_SCALE),
+  };
   if (!isThemedStyles<T>(style)) {
     return style;
   }
-  return style(theme, insets);
+  return style(theme, insets, dimensions);
 }
 
 function isThemedStyles<T>(style: any): style is ThemedStyles<T> {
@@ -35,9 +55,7 @@ function isThemedStyles<T>(style: any): style is ThemedStyles<T> {
 
 export const StyleSheet: ExtendedStyleSheet = {
   ...StyleSheetNative,
-  createThemeHook<T>(
-    input: ThemedStyles<NamedStyles<T>>,
-  ): () => NamedStyles<T> {
+  createThemeHook<T extends NamedStyles<T>>(input: ThemedStyles<T>): () => T {
     return function useThemeStyle() {
       return useStyle(input);
     };

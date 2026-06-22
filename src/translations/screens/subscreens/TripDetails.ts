@@ -2,115 +2,248 @@ import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations
 import {translation as _} from '../../commons';
 
 const TripDetailsTexts = {
-  header: {
-    title: _('Reisedetaljer', 'Trip details', 'Reisedetaljar'),
-    titleFromTo: ({fromName, toName}: {fromName: string; toName: string}) =>
-      _(
-        `${fromName}  -  ${toName}`,
-        `${fromName}  -  ${toName}`,
-        `${fromName}  -  ${toName}`,
-      ),
-    titleFromToA11yLabel: ({
-      fromName,
-      toName,
-    }: {
-      fromName: string;
-      toName: string;
-    }) =>
-      _(
-        `Fra ${fromName} til ${toName}`,
-        `From ${fromName} to ${toName}`,
-        `Frå ${fromName} til ${toName}`,
-      ),
-    startEndTime: ({
-      startTime,
-      endTime,
-    }: {
-      startTime: string;
-      endTime: string;
-    }) =>
-      _(
-        `${startTime} - ${endTime}`,
-        `${startTime} - ${endTime}`,
-        `${startTime} - ${endTime}`,
-      ),
-    startEndTimeA11yLabel: ({
-      startTime,
-      endTime,
-    }: {
-      startTime: string;
-      endTime: string;
-    }) =>
-      _(
-        `Varighet: Fra ${startTime} til ${endTime}`,
-        `Duration: From ${startTime} to ${endTime}`,
-        `Varigheit: Frå ${startTime} til ${endTime}`,
-      ),
+  legacy: {
+    header: {
+      title: _('Reisedetaljer', 'Trip details', 'Reisedetaljar'),
+      titleFromTo: ({fromName, toName}: {fromName: string; toName: string}) =>
+        _(
+          `${fromName}  -  ${toName}`,
+          `${fromName}  -  ${toName}`,
+          `${fromName}  -  ${toName}`,
+        ),
+      titleFromToA11yLabel: ({
+        fromName,
+        toName,
+      }: {
+        fromName: string;
+        toName: string;
+      }) =>
+        _(
+          `Fra ${fromName} til ${toName}`,
+          `From ${fromName} to ${toName}`,
+          `Frå ${fromName} til ${toName}`,
+        ),
+      startEndTime: ({
+        startTime,
+        endTime,
+      }: {
+        startTime: string;
+        endTime: string;
+      }) =>
+        _(
+          `${startTime} - ${endTime}`,
+          `${startTime} - ${endTime}`,
+          `${startTime} - ${endTime}`,
+        ),
+      startEndTimeA11yLabel: ({
+        startTime,
+        endTime,
+      }: {
+        startTime: string;
+        endTime: string;
+      }) =>
+        _(
+          `Varighet: Fra ${startTime} til ${endTime}`,
+          `Duration: From ${startTime} to ${endTime}`,
+          `Varigheit: Frå ${startTime} til ${endTime}`,
+        ),
+    },
+    trip: {
+      leg: {
+        a11yHelper: (stepNumber: number, travelMode: string) =>
+          _(
+            `Steg ${stepNumber}, ${travelMode}`,
+            `Step ${stepNumber}, ${travelMode}`,
+            `Steg ${stepNumber}, ${travelMode}`,
+          ),
+        start: {
+          a11yLabel: {
+            noRealTime: (
+              placeName: string,
+              aimedTime: string,
+              timeIsApproximation: boolean,
+            ) =>
+              _(
+                `Fra ${placeName},${
+                  timeIsApproximation ? ' cirka' : ''
+                } klokken ${aimedTime}`,
+                `From ${placeName},${
+                  timeIsApproximation ? ' circa' : ''
+                } time ${aimedTime}`,
+                `Frå ${placeName},${
+                  timeIsApproximation ? ' cirka' : ''
+                } klokka ${aimedTime}`,
+              ),
+            singularTime: (placeName: string, time: string) =>
+              _(
+                `Fra ${placeName}, sanntid klokken ${time}`,
+                `From ${placeName}, realtime ${time}`,
+                `Frå ${placeName}, sanntid klokka ${time}`,
+              ),
+            realAndAimed: (
+              placeName: string,
+              realTime: string,
+              aimedTime: string,
+              timeIsApproximation: boolean,
+            ) =>
+              _(
+                `Fra ${placeName}, sanntid klokken ${realTime}. Rutetid klokken${
+                  timeIsApproximation ? ' cirka' : ''
+                } ${aimedTime}.`,
+                `From ${placeName}, realtime ${realTime}. Route time${
+                  timeIsApproximation ? ' circa' : ''
+                } ${aimedTime}.`,
+                `Frå ${placeName}, sanntid klokka ${realTime}. Rutetid klokka${
+                  timeIsApproximation ? ' cirka' : ''
+                } ${aimedTime}.`,
+              ),
+          },
+        },
+        end: {
+          a11yLabel: {
+            noRealTime: (placeName: string, aimedTime: string) =>
+              _(
+                `Avslutter på ${placeName}, ca. klokken ${aimedTime}`,
+                `Ending at ${placeName}, appr. time ${aimedTime}`,
+                `Avsluttar på ${placeName}, ca. klokka ${aimedTime}`,
+              ),
+            singularTime: (placeName: string, time: string) =>
+              _(
+                `Avslutter på ${placeName}, klokken ${time}`,
+                `Ending at ${placeName}, time ${time}`,
+                `Avsluttar på ${placeName}, klokka ${time}`,
+              ),
+            realAndAimed: (
+              placeName: string,
+              realTime: string,
+              aimedTime: string,
+            ) =>
+              _(
+                `Avslutter på ${placeName}, forventet tid klokken ${realTime}. Rutetid klokken ${aimedTime}.`,
+                `Ending at ${placeName}, ETA ${realTime}. Route time ${aimedTime}.`,
+                `Avsluttar på ${placeName}, forventa tid klokka ${realTime}. Rutetid klokka ${aimedTime}.`,
+              ),
+          },
+        },
+      },
+      summary: {
+        travelTime: {
+          label: (time: string) =>
+            _(
+              `Total reisetid: ${time}`,
+              `Total trip time: ${time}`,
+              `Total reisetid: ${time}`,
+            ),
+          a11yLabel: (time: string) =>
+            _(
+              `Total reisetid: ${time}`,
+              `Total trip time: ${time}`,
+              `Total reisetid: ${time}`,
+            ),
+        },
+        walkDistance: {
+          label: (distance: string) =>
+            _(
+              `Total gangavstand: ${distance}`,
+              `Total walking distance: ${distance}`,
+              `Total gangavstand: ${distance}`,
+            ),
+          a11yLabel: (distanceInMetres: string) =>
+            _(
+              `Total gangavstand: ${distanceInMetres}`,
+              `Total walking distance: ${distanceInMetres}`,
+              `Total gangavstand: ${distanceInMetres}`,
+            ),
+        },
+        bikeDistance: {
+          label: (distance: string) =>
+            _(
+              `Total sykkelavstand: ${distance}`,
+              `Total biking distance: ${distance}`,
+              `Total sykkelavstand: ${distance}`,
+            ),
+          a11yLabel: (distanceInMetres: string) =>
+            _(
+              `Total sykkelavstand: ${distanceInMetres}`,
+              `Total biking distance: ${distanceInMetres}`,
+              `Total sykkelavstand: ${distanceInMetres}`,
+            ),
+        },
+      },
+    },
   },
   trip: {
     leg: {
-      a11yHelper: (stepNumber: number, travelMode: string) =>
-        _(
-          `Steg ${stepNumber}, ${travelMode}`,
-          `Step ${stepNumber}, ${travelMode}`,
-          `Steg ${stepNumber}, ${travelMode}`,
-        ),
       lastPassedStop: (quayName: string, time: string) =>
         _(
           `Passerte ${quayName} kl. ${time}`,
           `Passed ${quayName} at ${time}`,
           `Passerte ${quayName} kl. ${time}`,
         ),
-      start: {
-        a11yLabel: {
-          noRealTime: (
-            placeName: string,
-            aimedTime: string,
-            timeIsApproximation: boolean,
-          ) =>
-            _(
-              `Fra ${placeName},${
-                timeIsApproximation ? ' cirka' : ''
-              } klokken ${aimedTime}`,
-              `From ${placeName},${
-                timeIsApproximation ? ' circa' : ''
-              } time ${aimedTime}`,
-              `Frå ${placeName},${
-                timeIsApproximation ? ' cirka' : ''
-              } klokka ${aimedTime}`,
-            ),
-          singularTime: (placeName: string, time: string) =>
-            _(
-              `Fra ${placeName}, sanntid klokken ${time}`,
-              `From ${placeName}, realtime ${time}`,
-              `Frå ${placeName}, sanntid klokka ${time}`,
-            ),
-          realAndAimed: (
-            placeName: string,
-            realTime: string,
-            aimedTime: string,
-            timeIsApproximation: boolean,
-          ) =>
-            _(
-              `Fra ${placeName}, sanntid klokken ${realTime}. Rutetid klokken${
-                timeIsApproximation ? ' cirka' : ''
-              } ${aimedTime}.`,
-              `From ${placeName}, realtime ${realTime}. Route time${
-                timeIsApproximation ? ' circa' : ''
-              } ${aimedTime}.`,
-              `Frå ${placeName}, sanntid klokka ${realTime}. Rutetid klokka${
-                timeIsApproximation ? ' cirka' : ''
-              } ${aimedTime}.`,
-            ),
-        },
-      },
       transport: {
-        a11ylabel: (modeName: string, lineName: string) =>
+        lineA11yLabel: (modeName: string, lineName: string) =>
           _(
             `${modeName} linje ${lineName}`,
             `${modeName} line ${lineName}`,
             `${modeName} linje ${lineName}`,
           ),
+        a11yHint: _(
+          'Aktiver for å se detaljer om linjen',
+          'Activate to see line details',
+          'Aktiver for å sjå detaljar om linja',
+        ),
+        a11yLabel: {
+          base: (
+            time: string,
+            modeName: string,
+            lineName: string,
+            fromPlace: string,
+            toPlace: string,
+          ) =>
+            _(
+              `Klokken ${time}, ta ${modeName} ${lineName} fra ${fromPlace} til ${toPlace}`,
+              `At ${time}, take ${modeName} ${lineName} from ${fromPlace} to ${toPlace}`,
+              `Klokka ${time}, ta ${modeName} ${lineName} frå ${fromPlace} til ${toPlace}`,
+            ),
+          intermediateStops: (count: number) =>
+            _(
+              `${count} mellomstopp`,
+              count === 1
+                ? `${count} intermediate stop`
+                : `${count} intermediate stops`,
+              `${count} mellomstopp`,
+            ),
+          arrival: (toPlace: string, time: string) =>
+            _(
+              `Ankomst ${toPlace} klokken ${time}`,
+              `Arrival ${toPlace} at ${time}`,
+              `Framkomst ${toPlace} klokka ${time}`,
+            ),
+          notices: (count: number) =>
+            _(
+              count === 1 ? `${count} merknad` : `${count} merknader`,
+              count === 1 ? `${count} notice` : `${count} notices`,
+              count === 1 ? `${count} merknad` : `${count} merknader`,
+            ),
+          warnings: (count: number) =>
+            _(
+              count === 1 ? `${count} advarsel` : `${count} advarsler`,
+              count === 1 ? `${count} warning` : `${count} warnings`,
+              count === 1 ? `${count} åtvaring` : `${count} åtvaringar`,
+            ),
+          errors: (count: number) =>
+            _(
+              count === 1 ? `${count} feil` : `${count} feil`,
+              count === 1 ? `${count} error` : `${count} errors`,
+              count === 1 ? `${count} feil` : `${count} feil`,
+            ),
+          hint: (fromPlace: string) =>
+            _(
+              `Aktiver for å se alle avganger fra ${fromPlace}`,
+              `Activate to see all departures from ${fromPlace}`,
+              `Aktiver for å sjå alle avgangar frå ${fromPlace}`,
+            ),
+        },
       },
       buyTicketFrom: _(
         'Billett kan kjøpes fra',
@@ -138,21 +271,61 @@ const TripDetailsTexts = {
           ),
         label: (count: number, duration: string) =>
           _(
-            `${count} mellomstopp \n${duration}`,
+            `${count} mellomstopp (${duration})`,
             count > 1
-              ? `${count} intermediate stops \n${duration}`
-              : `${count} intermediate stop \n${duration}`,
-            `${count} mellomstopp \n${duration}`,
+              ? `${count} intermediate stops (${duration})`
+              : `${count} intermediate stop (${duration})`,
+            `${count} mellomstopp (${duration})`,
           ),
-        a11yHint: _(
-          'Aktivér for å vise alle mellomstopp.',
-          'Activate to show intermediate stops',
-          'Aktiver for å vise alle mellomstopp',
-        ),
+        a11yHint: (expanded: boolean) =>
+          expanded
+            ? _(
+                'Aktivér for å skjule alle mellomstopp.',
+                'Activate to hide intermediate stops',
+                'Aktiver for å skjule alle mellomstopp',
+              )
+            : _(
+                'Aktivér for å vise alle mellomstopp.',
+                'Activate to show intermediate stops',
+                'Aktiver for å vise alle mellomstopp',
+              ),
       },
       walk: {
         label: (duration: string) =>
           _(`Gå i ${duration}`, `Walk for ${duration}`, `Gå i ${duration}`),
+        labelWithDistance: (duration: string, distance: string) =>
+          _(
+            `Gå i ${duration} (${distance})`,
+            `Walk for ${duration} (${distance})`,
+            `Gå i ${duration} (${distance})`,
+          ),
+        a11yLabel: {
+          base: (
+            time: string,
+            duration: string,
+            fromPlace: string,
+            toPlace: string,
+          ) =>
+            _(
+              `Klokken ${time}, gå i ${duration} fra ${fromPlace} til ${toPlace}`,
+              `At ${time}, walk for ${duration} from ${fromPlace} to ${toPlace}`,
+              `Klokka ${time}, gå i ${duration} frå ${fromPlace} til ${toPlace}`,
+            ),
+          baseShortWalk: (time: string, fromPlace: string, toPlace: string) =>
+            _(
+              `Klokken ${time}, gå i mindre enn ett minutt fra ${fromPlace} til ${toPlace}`,
+              `At ${time}, walk for less than a minute from ${fromPlace} to ${toPlace}`,
+              `Klokka ${time}, gå i mindre enn eitt minutt frå ${fromPlace} til ${toPlace}`,
+            ),
+          distance: (distance: string) =>
+            _(`${distance} gange`, `${distance} walking`, `${distance} gange`),
+          waitTime: (waitTime: string) =>
+            _(
+              `Vent i opptil ${waitTime}`,
+              `Wait for up to ${waitTime}`,
+              `Vent i opptil ${waitTime}`,
+            ),
+        },
       },
       bicycle: {
         label: (duration: string) =>
@@ -161,6 +334,37 @@ const TripDetailsTexts = {
             `Ride for ${duration}`,
             `Sykle i ${duration}`,
           ),
+        labelWithDistance: (duration: string, distance: string) =>
+          _(
+            `Sykle i ${duration} (${distance})`,
+            `Ride for ${duration} (${distance})`,
+            `Sykle i ${duration} (${distance})`,
+          ),
+        a11yLabel: {
+          base: (
+            time: string,
+            duration: string,
+            fromPlace: string,
+            toPlace: string,
+          ) =>
+            _(
+              `Klokken ${time}, sykle i ${duration} fra ${fromPlace} til ${toPlace}`,
+              `At ${time}, ride for ${duration} from ${fromPlace} to ${toPlace}`,
+              `Klokka ${time}, sykle i ${duration} frå ${fromPlace} til ${toPlace}`,
+            ),
+          distance: (distance: string) =>
+            _(
+              `${distance} sykling`,
+              `${distance} cycling`,
+              `${distance} sykling`,
+            ),
+          waitTime: (waitTime: string) =>
+            _(
+              `Vent i opptil ${waitTime}`,
+              `Wait for up to ${waitTime}`,
+              `Vent i opptil ${waitTime}`,
+            ),
+        },
       },
       shortWalk: _(
         `Gå i mindre enn ett minutt`,
@@ -179,77 +383,23 @@ const TripDetailsTexts = {
         },
       },
       end: {
-        a11yLabel: {
-          noRealTime: (placeName: string, aimedTime: string) =>
-            _(
-              `Avslutter på ${placeName}, ca. klokken ${aimedTime}`,
-              `Ending at ${placeName}, appr. time ${aimedTime}`,
-              `Avsluttar på ${placeName}, ca. klokka ${aimedTime}`,
-            ),
-          singularTime: (placeName: string, time: string) =>
-            _(
-              `Avslutter på ${placeName}, klokken ${time}`,
-              `Ending at ${placeName}, time ${time}`,
-              `Avsluttar på ${placeName}, klokka ${time}`,
-            ),
-          realAndAimed: (
-            placeName: string,
-            realTime: string,
-            aimedTime: string,
-          ) =>
-            _(
-              `Avslutter på ${placeName}, forventet tid klokken ${realTime}. Rutetid klokken ${aimedTime}.`,
-              `Ending at ${placeName}, ETA ${realTime}. Route time ${aimedTime}.`,
-              `Avsluttar på ${placeName}, forventa tid klokka ${realTime}. Rutetid klokka ${aimedTime}.`,
-            ),
-        },
+        a11yLabel: (placeName: string, time: string) =>
+          _(
+            `Ankomst ${placeName} klokken ${time}`,
+            `Arrival ${placeName} at ${time}`,
+            `Framkomst ${placeName} klokka ${time}`,
+          ),
+        a11yHint: (placeName: string) =>
+          _(
+            `Aktiver for å se alle avganger fra ${placeName}`,
+            `Activate to see all departures from ${placeName}`,
+            `Aktiver for å sjå alle avgangar frå ${placeName}`,
+          ),
       },
     },
     summary: {
       showTripInMap: {
         label: _('Se reiserute', 'Show trip', 'Sjå reiserute'),
-      },
-      travelTime: {
-        label: (time: string) =>
-          _(
-            `Total reisetid: ${time}`,
-            `Total trip time: ${time}`,
-            `Total reisetid: ${time}`,
-          ),
-        a11yLabel: (time: string) =>
-          _(
-            `Total reisetid: ${time}`,
-            `Total trip time: ${time}`,
-            `Total reisetid: ${time}`,
-          ),
-      },
-      walkDistance: {
-        label: (distance: string) =>
-          _(
-            `Total gangavstand: ${distance}`,
-            `Total walking distance: ${distance}`,
-            `Total gangavstand: ${distance}`,
-          ),
-        a11yLabel: (distanceInMetres: string) =>
-          _(
-            `Total gangavstand: ${distanceInMetres}`,
-            `Total walking distance: ${distanceInMetres}`,
-            `Total gangavstand: ${distanceInMetres}`,
-          ),
-      },
-      bikeDistance: {
-        label: (distance: string) =>
-          _(
-            `Total sykkelavstand: ${distance}`,
-            `Total biking distance: ${distance}`,
-            `Total sykkelavstand: ${distance}`,
-          ),
-        a11yLabel: (distanceInMetres: string) =>
-          _(
-            `Total sykkelavstand: ${distanceInMetres}`,
-            `Total biking distance: ${distanceInMetres}`,
-            `Total sykkelavstand: ${distanceInMetres}`,
-          ),
       },
     },
     buyTicket: {
@@ -288,6 +438,26 @@ const TripDetailsTexts = {
       'Rail replacement bus',
       'Buss for tog',
     ),
+    interchangeMainText: _(
+      'Korrespondanse',
+      'Correspondence',
+      'Korrespondanse',
+    ),
+    interchangeSubText: (maxWaitTime?: string) =>
+      _(
+        `Ved forsinkelser vil avgangen vente${maxWaitTime ? ` inntil ${maxWaitTime}` : ''}`,
+        `In case of delays, the departure will wait${maxWaitTime ? ` up to ${maxWaitTime}` : ''}`,
+        `Ved forseinkingar vil avgangen vente${maxWaitTime ? ` i opp til ${maxWaitTime}` : ''}`,
+      ),
+    staySeatedMainText: _(`Bli sittende`, `Stay seated`, `Bli sittande`),
+    staySeatedSubText: (fromPublicCode?: string, toPublicCode?: string) => {
+      const hasCodes = !!fromPublicCode && !!toPublicCode;
+      return _(
+        `Linjenummeret endres${hasCodes ? ` fra ${fromPublicCode} til ${toPublicCode}` : ''} på dette stoppet.`,
+        `The line number is changing${hasCodes ? ` from ${fromPublicCode} to ${toPublicCode}` : ''} at this stop.`,
+        `Linjenummeret endrar seg${hasCodes ? ` frå ${fromPublicCode} til ${toPublicCode}` : ''} på dette stoppet.`,
+      );
+    },
     interchange: (
       fromPublicCode: string,
       toPublicCode: string,
@@ -331,7 +501,7 @@ const TripDetailsTexts = {
       _(
         `${publicCode} kjører på bestilling innenfor bestemte soner og tider.`,
         `${publicCode} runs on demand within specific zones and times.`,
-        `${publicCode} køyrer på bestilling innanfor bestemte sonar og tider.`,
+        `${publicCode} køyrer på bestilling innanfor bestemte soner og tider.`,
       ),
     steps: [
       _(

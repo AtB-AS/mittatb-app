@@ -1,9 +1,9 @@
-import {GenericSectionItem} from '@atb/components/sections';
 import React, {useState} from 'react';
+import {View} from 'react-native';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
 import type {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {FullScreenView} from '@atb/components/screen-view';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {BookingTripSelection} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/components/TripSelection';
 import {
   DateSelection,
@@ -12,7 +12,6 @@ import {
 import {ScreenHeading} from '@atb/components/heading';
 import TripSelectionTexts from '@atb/translations/screens/TripSelectionScreen';
 import {useTranslation} from '@atb/translations';
-import {View} from 'react-native';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
@@ -35,7 +34,6 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
         },
   );
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const styles = useStyles();
   const builder = usePurchaseSelectionBuilder();
 
@@ -73,10 +71,9 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
                 .build(),
             );
           }}
-          backgroundColor={theme.color.background.neutral[1]}
         />
       </View>
-      <GenericSectionItem style={styles.content}>
+      <View style={styles.content}>
         <BookingTripSelection
           selection={selection}
           onSelect={(legs) => {
@@ -108,17 +105,17 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
             }
           }}
         />
-      </GenericSectionItem>
+      </View>
     </FullScreenView>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
-    marginTop: theme.spacing.medium,
+    margin: theme.spacing.medium,
   },
   content: {
-    backgroundColor: theme.color.background.neutral[1].background,
-    borderWidth: 0,
+    paddingTop: theme.spacing.medium,
+    paddingHorizontal: theme.spacing.medium,
   },
 }));

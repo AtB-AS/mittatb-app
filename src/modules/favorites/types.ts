@@ -19,11 +19,12 @@ export type SearchLocation = {
   name: string;
   layer: 'venue' | 'address';
   coordinates: Coordinates;
-  locality: string;
+  locality?: string;
   category: FeatureCategory[];
   label?: string;
   postalcode?: string;
-  tariff_zones?: string[];
+  fare_zones?: string[];
+  housenumber?: string;
 } & (
   | {resultType: 'search'}
   | {

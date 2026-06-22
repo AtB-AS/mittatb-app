@@ -41,6 +41,8 @@ export type RemoteConfig = {
   enable_nynorsk: boolean;
   enable_new_token_barcode: boolean;
   enable_new_token_barcode_base64: boolean;
+  enable_new_travel_card_booking: boolean;
+  enable_new_trip_search: boolean;
   enable_on_behalf_of: boolean;
   enable_onboarding_login: boolean;
   enable_only_stop_places_checkbox: boolean;
@@ -56,7 +58,9 @@ export type RemoteConfig = {
   enable_show_valid_time_info: boolean;
   enable_surface_view_map: boolean;
   enable_ticket_information: boolean;
+  enable_ticket_transfer: boolean;
   enable_ticketing: boolean;
+  enable_feide_connection: boolean;
   enable_tips_and_information: boolean;
   enable_token_fallback_on_timeout: boolean;
   enable_token_fallback: boolean;
@@ -68,6 +72,7 @@ export type RemoteConfig = {
   enable_in_app_review_for_announcements: boolean;
   enable_smart_park_and_ride: boolean;
   enable_harbor_distances_api: boolean;
+  booking_grace_period_seconds: number;
   flex_booking_number_of_days_available: number;
   flex_ticket_url: string;
   live_vehicle_stale_threshold: number;
@@ -81,6 +86,7 @@ export type RemoteConfig = {
   service_disruption_url: string;
   save_trip_swipe_threshold: number;
   token_timeout_in_seconds: number;
+  use_geocoder_v3: boolean;
   use_product_api_v2: boolean;
   use_trygg_overgang_qr_code: boolean;
 };
@@ -117,6 +123,8 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_non_transit_trip_search: true,
   enable_new_token_barcode: false,
   enable_new_token_barcode_base64: false,
+  enable_new_travel_card_booking: false,
+  enable_new_trip_search: false,
   enable_nynorsk: true,
   enable_on_behalf_of: false,
   enable_onboarding_login: true,
@@ -125,7 +133,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_posthog: false,
   enable_push_notifications: false,
   enable_refunds: true,
-  enable_save_trips: false,
+  enable_save_trips: true,
   enable_server_time: true,
   enable_shmo_deep_integration: false,
   enable_shmo_deep_integration_citybike: false,
@@ -133,7 +141,9 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_show_valid_time_info: true,
   enable_surface_view_map: true,
   enable_ticket_information: false,
+  enable_ticket_transfer: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
+  enable_feide_connection: false,
   enable_event_stream: false,
   enable_event_stream_fare_contracts: false,
   enable_tips_and_information: false,
@@ -147,6 +157,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_in_app_review_for_announcements: false,
   enable_smart_park_and_ride: false,
   enable_harbor_distances_api: false,
+  booking_grace_period_seconds: 0,
   flex_booking_number_of_days_available: 7,
   flex_ticket_url: '',
   live_vehicle_stale_threshold: 15,
@@ -160,6 +171,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   service_disruption_url: '',
   save_trip_swipe_threshold: 40,
   token_timeout_in_seconds: 10,
+  use_geocoder_v3: false,
   use_product_api_v2: false,
   use_trygg_overgang_qr_code: false,
 };
@@ -245,6 +257,12 @@ export function getConfig(): RemoteConfig {
   const enable_new_token_barcode_base64 =
     values['enable_new_token_barcode_base64']?.asBoolean() ??
     defaultRemoteConfig.enable_new_token_barcode_base64;
+  const enable_new_travel_card_booking =
+    values['enable_new_travel_card_booking']?.asBoolean() ??
+    defaultRemoteConfig.enable_new_travel_card_booking;
+  const enable_new_trip_search =
+    values['enable_new_trip_search']?.asBoolean() ??
+    defaultRemoteConfig.enable_new_trip_search;
   const enable_nynorsk =
     values['enable_nynorsk']?.asBoolean() ?? defaultRemoteConfig.enable_nynorsk;
   const enable_on_behalf_of =
@@ -290,7 +308,13 @@ export function getConfig(): RemoteConfig {
   const enable_ticket_information =
     values['enable_ticket_information']?.asBoolean() ??
     defaultRemoteConfig.enable_ticket_information;
+  const enable_ticket_transfer =
+    values['enable_ticket_transfer']?.asBoolean() ??
+    defaultRemoteConfig.enable_ticket_transfer;
   const enable_ticketing = values['enable_ticketing']?.asBoolean() ?? false;
+  const enable_feide_connection =
+    values['enable_feide_connection']?.asBoolean() ??
+    defaultRemoteConfig.enable_feide_connection;
   const enable_tips_and_information =
     values['enable_tips_and_information']?.asBoolean() ??
     defaultRemoteConfig.enable_tips_and_information;
@@ -324,6 +348,9 @@ export function getConfig(): RemoteConfig {
   const enable_harbor_distances_api =
     values['enable_harbor_distances_api']?.asBoolean() ??
     defaultRemoteConfig.enable_harbor_distances_api;
+  const booking_grace_period_seconds =
+    values['booking_grace_period_seconds']?.asNumber() ??
+    defaultRemoteConfig.booking_grace_period_seconds;
   const flex_booking_number_of_days_available =
     values['flex_booking_number_of_days_available']?.asNumber() ??
     defaultRemoteConfig.flex_booking_number_of_days_available;
@@ -367,6 +394,9 @@ export function getConfig(): RemoteConfig {
   const token_timeout_in_seconds =
     values['token_timeout_in_seconds']?.asNumber() ??
     defaultRemoteConfig.token_timeout_in_seconds;
+  const use_geocoder_v3 =
+    values['use_geocoder_v3']?.asBoolean() ??
+    defaultRemoteConfig.use_geocoder_v3;
   const use_product_api_v2 =
     values['use_product_api_v2']?.asBoolean() ??
     defaultRemoteConfig.use_product_api_v2;
@@ -402,6 +432,8 @@ export function getConfig(): RemoteConfig {
     enable_non_transit_trip_search,
     enable_new_token_barcode,
     enable_new_token_barcode_base64,
+    enable_new_travel_card_booking,
+    enable_new_trip_search,
     enable_nynorsk,
     enable_on_behalf_of,
     enable_onboarding_login,
@@ -418,7 +450,9 @@ export function getConfig(): RemoteConfig {
     enable_show_valid_time_info,
     enable_surface_view_map,
     enable_ticket_information,
+    enable_ticket_transfer,
     enable_ticketing,
+    enable_feide_connection,
     enable_tips_and_information,
     enable_token_fallback_on_timeout,
     enable_token_fallback,
@@ -430,6 +464,7 @@ export function getConfig(): RemoteConfig {
     enable_in_app_review_for_announcements,
     enable_smart_park_and_ride,
     enable_harbor_distances_api,
+    booking_grace_period_seconds,
     flex_booking_number_of_days_available,
     flex_ticket_url,
     live_vehicle_stale_threshold,
@@ -443,6 +478,7 @@ export function getConfig(): RemoteConfig {
     service_disruption_url,
     save_trip_swipe_threshold,
     token_timeout_in_seconds,
+    use_geocoder_v3,
     use_product_api_v2,
     use_trygg_overgang_qr_code,
   };

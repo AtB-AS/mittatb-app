@@ -11,6 +11,7 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {getTripPatternAnalytics} from '@atb/screen-components/travel-details-screens';
 import {AccessibilityInfo} from 'react-native';
+import {useIsExperimentalEnabled} from '../experimental/use-is-experimental-enabled';
 
 type SaveTripPatternButtonComponentProps = {
   tripPattern: TripPattern;
@@ -29,6 +30,9 @@ export const SaveTripPatternButtonComponent: React.FC<
   } = useStoredTripPatterns();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
+  const isNewTripDetailScreen = useIsExperimentalEnabled(
+    'isNewTripSearchEnabled',
+  );
   const posthogAnalytics = useAnalyticsContext();
   const {fareZones} = useFirestoreConfigurationContext();
 
@@ -106,7 +110,9 @@ export const SaveTripPatternButtonComponent: React.FC<
       backgroundColor={
         isStored
           ? theme.color.interactive[0].active
-          : theme.color.background.neutral[0]
+          : isNewTripDetailScreen
+            ? theme.color.background.neutral[1]
+            : theme.color.background.neutral[0]
       }
     />
   );

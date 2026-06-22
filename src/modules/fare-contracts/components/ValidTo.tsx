@@ -5,7 +5,6 @@ import {ThemeText} from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {fullDateTime} from '@atb/utils/date';
 import {getValidityStatus} from '@atb/modules/fare-contracts';
-import {useThemeContext} from '@atb/theme';
 import {getAccesses} from '@atb-as/utils';
 
 type Props = {
@@ -15,7 +14,6 @@ type Props = {
 
 export const ValidTo = ({fc, now}: Props) => {
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
   const firstTravelRight = fc.travelRights[0];
   if (getValidityStatus(now, fc) !== 'valid') return null;
 
@@ -32,11 +30,7 @@ export const ValidTo = ({fc, now}: Props) => {
   }
 
   return (
-    <ThemeText
-      typography="body__s"
-      color={theme.color.foreground.dynamic.secondary}
-      style={{}}
-    >
+    <ThemeText typography="body__s" type="secondary" style={{}}>
       {t(
         FareContractTexts.details.validTo(fullDateTime(endDateTime, language)),
       )}

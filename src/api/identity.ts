@@ -10,8 +10,20 @@ import {stringifyUrl} from './utils';
 import {AgeVerificationEnum} from '@atb/modules/mobility';
 import {v4 as uuid} from 'uuid';
 import {DateResponse, DateResponseSchema} from './types/mobility';
+import {generatePkcePair} from './pkce';
 
 export const VIPPS_CALLBACK_URL = `${APP_SCHEME}://auth/vipps`;
+export const FEIDE_CALLBACK_URL = `${APP_SCHEME}://auth/feide`;
+
+export type FeideConnectResponse = {
+  name?: string;
+  hasNin: boolean;
+};
+
+export type FeideConnectionStatus = {
+  connected: boolean;
+  feideSub?: string;
+};
 
 export const getServerTime = async () => {
   const response = await client.get('/identity/v1/time', {
@@ -159,5 +171,81 @@ async function generateState() {
 async function generateNonce() {
   const nonce = uuid();
   await storage.set('vipps_nonce', nonce);
+  return nonce;
+}
+
+/**
+ * Start Feide-connection: Get authorization-URL from identity and return the
+ * full URL (with state, nonce and PKCE challenge) for the caller to open in an
+ * in-app browser. Redirect catched via deep-link in screen.
+ * Mirrors authorizeVippsUser (Vipps login).
+ */
+export const initFeideConnect = async (
+  opts?: AxiosRequestConfig,
+): Promise<string> => {
+  const state = await generateFeideState();
+  const nonce = await generateFeideNonce();
+  const {verifier, challenge} = generatePkcePair();
+  await storage.set('feide_code_verifier', verifier);
+  const response = await client.get(
+    `/identity/v1/feide/authorization-url?callbackUrl=${FEIDE_CALLBACK_URL}`,
+    {
+      ...opts,
+    },
+  );
+  const authorisationUrl = response.data;
+  return `${authorisationUrl}&state=${state}&nonce=${nonce}&code_challenge=${challenge}&code_challenge_method=S256`;
+};
+
+/**
+ * Complete Feide-connection: trade authorization code with userinfo server-side, and
+ * connect Feide-user to logged in Firebase-user
+ */
+export type ConnectFeideParams = {
+  authorizationCode: string;
+  codeVerifier: string;
+  nonce: string;
+};
+
+export const connectFeide = async (
+  {authorizationCode, codeVerifier, nonce}: ConnectFeideParams,
+  opts?: AxiosRequestConfig,
+): Promise<FeideConnectResponse> => {
+  return client
+    .post<FeideConnectResponse>(
+      `/identity/v1/feide/connect?callbackUrl=${FEIDE_CALLBACK_URL}`,
+      {authorizationCode, codeVerifier, nonce},
+      {
+        authWithIdToken: true,
+        ...opts,
+      },
+    )
+    .then((res) => res.data);
+};
+
+/**
+ * Whether the logged-in customer is connected to Feide (and with which sub).
+ * Mirrors getAgeVerification.
+ */
+export const getFeideConnection = (
+  opts?: AxiosRequestConfig,
+): Promise<FeideConnectionStatus> => {
+  return client
+    .get<FeideConnectionStatus>(`/identity/v1/feide/connection`, {
+      ...opts,
+      authWithIdToken: true,
+    })
+    .then((res) => res.data);
+};
+
+async function generateFeideState() {
+  const state = uuid();
+  await storage.set('feide_state', state);
+  return state;
+}
+
+async function generateFeideNonce() {
+  const nonce = uuid();
+  await storage.set('feide_nonce', nonce);
   return nonce;
 }

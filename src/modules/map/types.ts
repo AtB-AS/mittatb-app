@@ -13,6 +13,7 @@ import {z} from 'zod';
 
 // prefixes added to distinguish between geojson types and generated mobility api types, as they are not exact matches
 import {
+  FormFactor,
   FormFactor as MobilityAPI_FormFactor,
   GeofencingZoneProperties as MobilityAPI_GeofencingZoneProperties,
   GeofencingZones as MobilityAPI_GeofencingZones,
@@ -24,7 +25,8 @@ import {TranslatedString} from '@atb/translations';
 import {GeofencingZoneCode, GeofencingZoneStyle} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
-import {Station, Vehicle} from '@atb/api/types/mobility';
+import {ShmoPricingPlan, Station, Vehicle} from '@atb/api/types/mobility';
+import type {MobilityPriceAdjustmentBenefitType} from '@atb/api/types/benefit';
 
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
@@ -65,13 +67,17 @@ export type MapProps = {
   navigateToDetails: NavigateToDetailsCallback;
   navigateToTripSearch: NavigateToTripSearchCallback;
   navigateToShmoSupport: (params: ShmoHelpParams) => void;
-  navigateToScooterOnboarding: () => void;
+  navigateToShmoOnboarding: (formFactor?: FormFactor) => void;
   navigateToReportParkingViolation: () => void;
   navigateToParkingPhoto: (bookingId: string) => void;
   navigateToScanQrCode: () => void;
   navigateToLogin: () => void;
   navigateToPaymentMethods: () => void;
   navigateToBonusScreen?: () => void;
+  navigateToPricingDetails: (
+    pricingPlan: ShmoPricingPlan,
+    benefit: MobilityPriceAdjustmentBenefitType | undefined,
+  ) => void;
 };
 
 export type Cluster = {
@@ -101,6 +107,7 @@ export type MobilityMapFilterType = z.infer<typeof MobilityMapFilter>;
 
 export const MapFilter = z.object({
   mobility: MobilityMapFilter,
+  showTariffZones: z.boolean().default(true),
 });
 export type MapFilterType = z.infer<typeof MapFilter>;
 

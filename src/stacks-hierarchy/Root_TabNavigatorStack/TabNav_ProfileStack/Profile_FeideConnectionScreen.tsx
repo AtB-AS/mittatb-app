@@ -1,0 +1,149 @@
+import React, {useEffect, useState} from 'react';
+import {Linking, View} from 'react-native';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ScreenHeading} from '@atb/components/heading';
+import {ThemeText} from '@atb/components/text';
+import {Button} from '@atb/components/button';
+import {MessageInfoBox} from '@atb/components/message-info-box';
+import {StyleSheet, Theme} from '@atb/theme';
+import {
+  dictionary,
+  FeideConnectionTexts,
+  useTranslation,
+} from '@atb/translations';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {FEIDE_CALLBACK_URL} from '@atb/api/identity';
+import {closeInAppBrowseriOS} from '@atb/modules/in-app-browser';
+import {storage} from '@atb/modules/storage';
+import {
+  useConnectFeideMutation,
+  useGetFeideConnectionQuery,
+  useInitFeideConnectMutation,
+} from '@atb/modules/feide';
+import {ProfileScreenProps} from './navigation-types';
+
+type Props = ProfileScreenProps<'Profile_FeideConnectionScreen'>;
+
+export const Profile_FeideConnectionScreen = ({navigation}: Props) => {
+  const style = useStyle();
+  const {t} = useTranslation();
+  const focusRef = useFocusOnLoad(navigation);
+
+  const [localError, setLocalError] = useState(false);
+
+  const {mutateAsync: initFeideConnect, isPending: isInitting} =
+    useInitFeideConnectMutation();
+
+  const {
+    mutate: connectFeide,
+    isPending: isConnecting,
+    error: connectError,
+  } = useConnectFeideMutation();
+
+  const {data: connection} = useGetFeideConnectionQuery();
+  const isConnected = !!connection?.connected;
+
+  const isAlreadyConnectedError = connectError?.http?.code === 409;
+  const hasError = localError || !!connectError;
+
+  useEffect(() => {
+    const handleUrl = async ({url}: {url: string}) => {
+      if (url.includes(FEIDE_CALLBACK_URL)) {
+        closeInAppBrowseriOS();
+        const parsed = new URL(url);
+        const code = parsed.searchParams.get('code');
+        const state = parsed.searchParams.get('state');
+        const initialState = await storage.get('feide_state');
+
+        if (code && state && state === initialState) {
+          const codeVerifier = await storage.get('feide_code_verifier');
+          const nonce = await storage.get('feide_nonce');
+          if (codeVerifier && nonce) {
+            setLocalError(false);
+            connectFeide({authorizationCode: code, codeVerifier, nonce});
+          } else {
+            setLocalError(true);
+          }
+          await storage.set('feide_state', '');
+          await storage.set('feide_nonce', '');
+          await storage.set('feide_code_verifier', '');
+        } else if (parsed.searchParams.get('error')) {
+          setLocalError(true);
+        }
+      }
+    };
+
+    const subscription = Linking.addEventListener('url', handleUrl);
+    return () => subscription.remove();
+  }, [connectFeide]);
+
+  return (
+    <FullScreenView
+      focusRef={focusRef}
+      headerProps={{
+        title: t(FeideConnectionTexts.header.title),
+        leftButton: {type: 'back'},
+      }}
+      headerContent={(focusRef) => (
+        <ScreenHeading
+          ref={focusRef}
+          text={t(FeideConnectionTexts.header.title)}
+        />
+      )}
+    >
+      <View style={style.container}>
+        <ThemeText>{t(FeideConnectionTexts.description)}</ThemeText>
+
+        {isConnected && (
+          <MessageInfoBox
+            type="valid"
+            title={t(FeideConnectionTexts.connected.title)}
+            message={t(FeideConnectionTexts.connected.message)}
+          />
+        )}
+
+        {hasError &&
+          (isAlreadyConnectedError ? (
+            <MessageInfoBox
+              type="error"
+              title={t(FeideConnectionTexts.alreadyConnectedError.title)}
+              message={t(FeideConnectionTexts.alreadyConnectedError.message)}
+              onPressConfig={{
+                action: () =>
+                  navigation.navigate('Profile_HelpAndContactScreen'),
+                text: t(FeideConnectionTexts.alreadyConnectedError.contactLink),
+              }}
+            />
+          ) : (
+            <MessageInfoBox
+              type="error"
+              message={
+                connectError
+                  ? t(dictionary.genericErrorMsg)
+                  : t(FeideConnectionTexts.error)
+              }
+            />
+          ))}
+
+        <Button
+          onPress={() => {
+            setLocalError(false);
+            initFeideConnect();
+          }}
+          text={t(FeideConnectionTexts.connectButton)}
+          expanded={true}
+          loading={isInitting || isConnecting}
+          disabled={isInitting || isConnecting}
+          testID="connectFeideButton"
+        />
+      </View>
+    </FullScreenView>
+  );
+};
+
+const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+  container: {
+    margin: theme.spacing.medium,
+    rowGap: theme.spacing.medium,
+  },
+}));

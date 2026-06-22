@@ -8,7 +8,7 @@ import {dictionary, useTranslation} from '@atb/translations';
 import {SituationType} from './types';
 import type {A11yLiveRegion} from '@atb/components/screen-reader-announcement';
 import {SituationBottomSheet} from './SituationBottomSheet';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 
 export type Props = {
   situation: SituationType;
@@ -25,7 +25,9 @@ export const SituationMessageBox = ({
 }: Props) => {
   const {language} = useTranslation();
   const onCloseFocusRef = React.useRef(null);
-  const bottomSheetModalRef = React.useRef<BottomSheetModal | null>(null);
+  const bottomSheetModalRef = React.useRef<BottomSheetModalMethods | null>(
+    null,
+  );
   const messageType = getMessageTypeForSituation(situation);
   const text = getSituationSummary(situation, language);
   const {t} = useTranslation();

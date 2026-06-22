@@ -37,7 +37,6 @@ export const NonTransitResults = ({tripsProps, onDetailsPressed}: Props) => {
   return (
     <ScrollView
       horizontal={true}
-      style={style.scrollView}
       contentContainerStyle={style.container}
       showsHorizontalScrollIndicator={false}
     >
@@ -93,9 +92,6 @@ const getMode = (
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
-  scrollView: {
-    marginTop: theme.spacing.medium,
-  },
   container: {
     paddingHorizontal: theme.spacing.medium,
   },

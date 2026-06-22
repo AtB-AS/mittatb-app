@@ -6,6 +6,7 @@ export {SectionSeparator} from './SectionSeparator';
 export {InternalLabeledSectionItem} from './items/InternalLabeledSectionItem';
 
 // Links and actions
+export {EditActionSectionItem} from './items/EditActionSectionItem';
 export {LinkSectionItem} from './items/LinkSectionItem';
 export {HeaderSectionItem} from './items/HeaderSectionItem';
 export {RadioSectionItem} from './items/RadioSectionItem.tsx';

@@ -42,7 +42,7 @@ export function LegsSummary({
   return (
     <View style={styles.legSection}>
       {!compact && (
-        <ThemeText typography="body__m" color="secondary">
+        <ThemeText typography="body__m" type="secondary">
           {t(PurchaseConfirmationTexts.confirmations.onlyValidDeparture)}
         </ThemeText>
       )}
@@ -81,21 +81,21 @@ export function LegsSummary({
               <View style={styles.legSectionItem}>
                 <ThemeText
                   typography="body__s"
-                  color="secondary"
+                  type="secondary"
                   style={styles.legLabel}
                 >
                   {t(SharedTexts.from)}:
                 </ThemeText>
                 <ThemeText
                   typography="body__s"
-                  color="secondary"
+                  type="secondary"
                   style={styles.legName}
                 >
                   {leg.fromPlace.quay?.stopPlace?.name}
                 </ThemeText>
                 <ThemeText
                   typography="body__s"
-                  color="secondary"
+                  type="secondary"
                   style={styles.legSectionItemTime}
                 >
                   {!!leg.expectedStartTime &&
@@ -105,21 +105,21 @@ export function LegsSummary({
               <View style={styles.legSectionItem}>
                 <ThemeText
                   typography="body__s"
-                  color="secondary"
+                  type="secondary"
                   style={styles.legLabel}
                 >
                   {t(SharedTexts.to)}:
                 </ThemeText>
                 <ThemeText
                   typography="body__s"
-                  color="secondary"
+                  type="secondary"
                   style={styles.legName}
                 >
                   {leg.toPlace.quay?.stopPlace?.name}
                 </ThemeText>
                 <ThemeText
                   typography="body__s"
-                  color="secondary"
+                  type="secondary"
                   style={styles.legSectionItemTime}
                 >
                   {!!leg.expectedEndTime &&
