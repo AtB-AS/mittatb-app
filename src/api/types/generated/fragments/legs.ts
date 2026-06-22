@@ -86,6 +86,8 @@ export type LegFragment = {
     aimedDepartureTime: any;
     expectedDepartureTime: any;
     realtime: boolean;
+    forAlighting: boolean;
+    forBoarding: boolean;
     quay: {name: string; id: string; stopPlace?: StopPlaceFragment};
     notices: Array<NoticeFragment>;
   }>;

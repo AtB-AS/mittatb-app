@@ -20,6 +20,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   DepartureDetailsTexts,
   DeparturesTexts,
+  dictionary,
   FavoriteDeparturesTexts,
   TripDetailsTexts,
   useTranslation,
@@ -683,7 +684,7 @@ function EstimatedCallRow({
               style={styles.boardingInfo}
               pause="before"
             >
-              {t(DepartureDetailsTexts.messages.noAlighting)}
+              {t(dictionary.travel.noAlighting)}
             </AccessibleText>
           )}
         {!call.cancellation &&
@@ -695,7 +696,7 @@ function EstimatedCallRow({
               style={styles.boardingInfo}
               pause="before"
             >
-              {t(DepartureDetailsTexts.messages.noBoarding)}
+              {t(dictionary.travel.noBoarding)}
             </AccessibleText>
           )}
       </TripRow>
