@@ -1,23 +1,27 @@
 import React from 'react';
 import {View, ViewStyle} from 'react-native';
 import {SvgProps} from 'react-native-svg';
-import {
-  ThemedBonusBag,
-  ThemedBonusStar,
-  ThemedTicket,
-} from '@atb/theme/ThemedAssets';
+// eslint-disable-next-line no-restricted-syntax -- resolve a themed asset dynamically by its server-driven name
+import * as ThemedAssets from '@atb/theme/ThemedAssets';
 
 type ThemedAsset = (props: SvgProps) => React.JSX.Element;
 
+const themedAssets = ThemedAssets as unknown as Record<
+  string,
+  ThemedAsset | undefined
+>;
+
 /**
- * Maps the open-enum `illustration` string from the vehicle benefit to an asset.
- * The set of values is server-driven, so unknown values fall back to nothing
- * rather than crashing.
+ * Resolves the server-driven `illustration` string to a themed asset by name,
+ * e.g. "BonusStar" -> ThemedBonusStar. Any existing themed asset can be used
+ * without maintaining a registry; unknown values render nothing.
  */
-const ILLUSTRATION_REGISTRY: Record<string, ThemedAsset> = {
-  TicketValid: ThemedTicket,
-  Bonus: ThemedBonusStar,
-  BonusBag: ThemedBonusBag,
+const resolveIllustration = (
+  illustration: string | undefined,
+): ThemedAsset | undefined => {
+  if (!illustration) return undefined;
+  const asset = themedAssets[`Themed${illustration}`];
+  return typeof asset === 'function' ? asset : undefined;
 };
 
 type BenefitIllustrationProps = {
@@ -29,7 +33,7 @@ export const BenefitIllustration = ({
   illustration,
   style,
 }: BenefitIllustrationProps): React.JSX.Element | null => {
-  const Asset = illustration ? ILLUSTRATION_REGISTRY[illustration] : undefined;
+  const Asset = resolveIllustration(illustration);
   if (!Asset) return null;
   return (
     <View style={style}>
