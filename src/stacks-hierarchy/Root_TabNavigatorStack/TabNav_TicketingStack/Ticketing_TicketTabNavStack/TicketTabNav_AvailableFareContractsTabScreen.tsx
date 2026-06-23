@@ -25,6 +25,7 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 import {MessageInfoBox} from '@atb/components/message-info-box';
+import {useNeedsRefreshStore} from '@atb/modules/ticketing';
 
 type Props =
   TicketTabNavScreenProps<'TicketTabNav_AvailableFareContractsTabScreen'>;
@@ -113,6 +114,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
     onRefresh,
     refreshing: isFetchingAvailableFareContracts,
   });
+  const needsRefresh = useNeedsRefreshStore((state) => state.needsRefresh);
 
   return (
     <View style={styles.container}>
@@ -135,18 +137,21 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
           alwaysShowErrors={false}
           onPressChangeButton={onPressChangeButton}
         />
-        {isErrorAvailableFareContracts && !isFetchingAvailableFareContracts && (
-          <MessageInfoBox
-            message={t(
-              TicketingTexts.availableFareProductsAndReservationsTab.loadError,
-            )}
-            type="error"
-            onPressConfig={{
-              action: onRefresh,
-              text: t(dictionary.retry),
-            }}
-          />
-        )}
+        {isErrorAvailableFareContracts &&
+          needsRefresh &&
+          !isFetchingAvailableFareContracts && (
+            <MessageInfoBox
+              message={t(
+                TicketingTexts.availableFareProductsAndReservationsTab
+                  .loadError,
+              )}
+              type="error"
+              onPressConfig={{
+                action: onRefresh,
+                text: t(dictionary.retry),
+              }}
+            />
+          )}
         <FareContractAndReservationsList
           reservations={reservations}
           fareContracts={availableFareContracts}
