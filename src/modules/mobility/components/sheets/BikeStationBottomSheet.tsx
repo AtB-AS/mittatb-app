@@ -28,8 +28,10 @@ type Props = {
   navigateToScanQrCode: () => void;
   navigateSupportCallback: (params: ShmoHelpParams) => void;
   onVehicleTypeSelected: (
-    vehicleId: string,
     isStationBasedBooking: boolean,
+    vehicleId?: string,
+    vehicleTypeId?: string,
+    stationId?: string,
   ) => void;
 };
 

@@ -1,20 +1,24 @@
 import {useQuery} from '@tanstack/react-query';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 import {getVehicle} from '@atb/api/mobility';
-import {useMapContext} from '@atb/modules/map';
 
-export const MOCK_VEHICLE_ID = 'mock-vehicle-id';
+export const getVehicleQueryKey = (
+  vehicleId?: string,
+  vehicleTypeId?: string,
+  stationId?: string,
+) => ['GET_VEHICLE', [vehicleId, vehicleTypeId, stationId]];
 
-export const getVehicleQueryKey = (id?: string) => ['GET_VEHICLE', id];
-
-export const useVehicleQuery = (id?: string) => {
-  const {mapState} = useMapContext();
+export const useVehicleQuery = (
+  vehicleId?: string,
+  vehicleTypeId?: string,
+  stationId?: string,
+) => {
   return useQuery({
-    queryKey: getVehicleQueryKey(id),
-    queryFn: ({signal}) => getVehicle(id, {signal}),
+    queryKey: getVehicleQueryKey(vehicleId, vehicleTypeId, stationId),
+    queryFn: ({signal}) =>
+      getVehicle(vehicleId, vehicleTypeId, stationId, {signal}),
     gcTime: ONE_MINUTE_MS,
-    refetchOnMount: mapState.isStationBasedBooking ? false : 'always',
-    enabled: !mapState.isStationBasedBooking,
+    refetchOnMount: 'always',
     retry: 5,
   });
 };

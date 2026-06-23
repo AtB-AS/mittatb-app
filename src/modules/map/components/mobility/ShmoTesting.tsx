@@ -18,7 +18,7 @@ import {TextInput, useWindowDimensions, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useVehicle} from '@atb/modules/mobility';
+import {useMapVehicle} from '@atb/modules/mobility';
 import {useMapContext} from '../../MapContext';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
@@ -37,7 +37,7 @@ export const ShmoTesting = ({navigateToShmoSupport}: ShmoTestingProps) => {
     selectedVehicleId,
   );
   const [vehicleCode, setVehicleCode] = useState<string>('146030');
-  const {operatorId} = useVehicle(vehicleId ?? '');
+  const {operatorId} = useMapVehicle(vehicleId ?? '');
 
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];

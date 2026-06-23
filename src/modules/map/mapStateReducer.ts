@@ -28,6 +28,8 @@ export type ReducerMapState = {
   bookingId?: string;
   customZoomLevel?: number;
   isStationBasedBooking?: boolean;
+  vehicleTypeId?: string;
+  stationId?: string;
 };
 
 export type ReducerMapStateAction =
@@ -35,11 +37,15 @@ export type ReducerMapStateAction =
       type: MapStateActionType.Vehicle;
       feature: Feature<Point>;
       customZoomLevel?: number;
+      vehicleTypeId?: string;
+      stationId?: string;
     }
   | {
       type: MapStateActionType.VehicleScanned;
-      assetId: string;
+      assetId?: string;
       isStationBasedBooking?: boolean;
+      vehicleTypeId?: string;
+      stationId?: string;
     }
   | {
       type: MapStateActionType.BikeStation;
@@ -99,6 +105,8 @@ export const mapStateReducer = (
         feature: action.feature,
         customZoomLevel: action?.customZoomLevel,
         isStationBasedBooking: mapState.isStationBasedBooking,
+        vehicleTypeId: mapState.vehicleTypeId,
+        stationId: mapState.stationId,
       };
     case MapStateActionType.VehicleScanned:
       return {
@@ -106,6 +114,8 @@ export const mapStateReducer = (
         assetId: action.assetId,
         assetIsScanned: true,
         isStationBasedBooking: action.isStationBasedBooking,
+        vehicleTypeId: action.vehicleTypeId,
+        stationId: action.stationId,
       };
     case MapStateActionType.BikeStation:
       return {

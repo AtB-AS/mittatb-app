@@ -18,7 +18,7 @@ import {useMapContext, useShmoWarnings} from '@atb/modules/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {AgeVerificationEnum} from '../queries/use-get-age-verification-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useVehicle} from '../use-vehicle.tsx';
+import {useMapVehicle} from '../use-map-vehicle.tsx';
 
 type ShmoActionButtonProps = {
   onStartOnboarding: () => void;
@@ -48,7 +48,7 @@ export const ShmoActionButton = ({
   const coordinates = getCurrentCoordinatesGlobal();
   const {warningMessage} = useShmoWarnings(vehicleId);
   const {logEvent} = useAnalyticsContext();
-  const {vehicle} = useVehicle(vehicleId);
+  const {vehicle} = useMapVehicle();
   const {mapState} = useMapContext();
 
   const {
