@@ -7,7 +7,7 @@ import {
 import React, {useCallback, useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/modules/fare-contracts';
-import {useTranslation, TicketingTexts} from '@atb/translations';
+import {useTranslation, TicketingTexts, dictionary} from '@atb/translations';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useTimeContext} from '@atb/modules/time';
 import {LinkSectionItem, Section} from '@atb/components/sections';
@@ -44,7 +44,8 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
   const {
     fareContracts: availableFareContracts,
     refetch: refetchAvailableFareContracts,
-    isRefetching: isRefetchingAvailableFareContracts,
+    isFetching: isFetchingAvailableFareContracts,
+    isError: isErrorAvailableFareContracts,
   } = useFareContracts({availability: 'available'}, serverNow);
   const {refetch: refetchPreassignedFareProducts} = useGetFareProductsQuery();
 
@@ -97,19 +98,20 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
     return () => clearTimeout(timeout);
   }, [showTransferCodeSuccess]);
 
+  const onRefresh = () => {
+    refetchAvailableFareContracts();
+    refetchPreassignedFareProducts();
+    queryClient.invalidateQueries({
+      queryKey: [SCHOOL_CARNET_QUERY_KEY],
+    });
+    analytics.logEvent('Ticketing', 'Pull to refresh tickets', {
+      reservationsCount: reservations.length,
+      availableFareContractsCount: availableFareContracts.length,
+    });
+  };
   const refreshControlProps = useManualRefreshControlProps({
-    onRefresh: () => {
-      refetchAvailableFareContracts();
-      refetchPreassignedFareProducts();
-      queryClient.invalidateQueries({
-        queryKey: [SCHOOL_CARNET_QUERY_KEY],
-      });
-      analytics.logEvent('Ticketing', 'Pull to refresh tickets', {
-        reservationsCount: reservations.length,
-        availableFareContractsCount: availableFareContracts.length,
-      });
-    },
-    refreshing: isRefetchingAvailableFareContracts,
+    onRefresh,
+    refreshing: isFetchingAvailableFareContracts,
   });
 
   return (
@@ -133,6 +135,18 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
           alwaysShowErrors={false}
           onPressChangeButton={onPressChangeButton}
         />
+        {isErrorAvailableFareContracts && !isFetchingAvailableFareContracts && (
+          <MessageInfoBox
+            message={t(
+              TicketingTexts.availableFareProductsAndReservationsTab.loadError,
+            )}
+            type="error"
+            onPressConfig={{
+              action: onRefresh,
+              text: t(dictionary.retry),
+            }}
+          />
+        )}
         <FareContractAndReservationsList
           reservations={reservations}
           fareContracts={availableFareContracts}

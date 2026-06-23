@@ -8,6 +8,8 @@ import {getAvailabilityStatus, AvailabilityStatus} from '@atb-as/utils';
 import {isDefined} from '@atb/utils/presence';
 import {ONE_WEEK_MS} from '@atb/utils/durations';
 import {getServerNowGlobal} from '../time';
+import {useFeatureTogglesContext} from '../feature-toggles';
+import {useRemoteConfigContext} from '../remote-config';
 
 type AvailabilityStatusInput = {
   availability: Exclude<AvailabilityStatus['availability'], 'invalid'>;
@@ -28,14 +30,24 @@ export const useFareContracts = (
 ): {
   fareContracts: FareContractType[];
   refetch: () => void;
-  isRefetching: boolean;
+  isFetching: boolean;
+  isError: boolean;
 } => {
   const {fareContracts: fareContractsFromFirestore} = useTicketingContext();
-  const {refetch: getFareContractsFromBackend, isRefetching} =
-    useGetFareContractsQuery({
-      enabled: false,
-      availability: availabilityStatus.availability,
-    });
+  const {enable_ticketing} = useRemoteConfigContext();
+  const {isEventStreamEnabled, isEventStreamFareContractsEnabled} =
+    useFeatureTogglesContext();
+  const {
+    refetch: getFareContractsFromBackend,
+    isFetching,
+    isError,
+  } = useGetFareContractsQuery({
+    enabled:
+      enable_ticketing &&
+      isEventStreamEnabled &&
+      isEventStreamFareContractsEnabled,
+    availability: availabilityStatus.availability,
+  });
 
   const [fareContracts, setFareContracts] = useState(
     fareContractsFromFirestore,
@@ -65,7 +77,12 @@ export const useFareContracts = (
     now,
   );
 
-  return {fareContracts: filteredFareContracts, refetch, isRefetching};
+  return {
+    fareContracts: filteredFareContracts,
+    refetch,
+    isFetching,
+    isError,
+  };
 };
 export const fareContractsQueryKey = 'FETCH_FARE_CONTRACTS';
 export const useGetFareContractsQuery = (props: {
