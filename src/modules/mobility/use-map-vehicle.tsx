@@ -1,36 +1,18 @@
-import {useSystem} from './use-system';
-import {getRentalAppUri} from './utils';
-import {useVehicleQuery} from './queries/use-vehicle-query';
 import {useMapContext} from '../map';
+import {useVehicle} from './use-vehicle';
+import {isVehicle} from './utils';
 
-export const useMapVehicle = (testVehicleId?: string) => {
+export const useMapVehicle = () => {
   const {mapState} = useMapContext();
-  const vehicleId = mapState.isStationBasedBooking
-    ? undefined
-    : (testVehicleId ??
-      mapState.feature?.properties?.id ??
-      mapState.assetId ??
-      '');
 
-  const {
-    data: vehicle,
-    isLoading,
-    isError,
-  } = useVehicleQuery(vehicleId, mapState.vehicleTypeId, mapState.stationId);
+  let vehicleId = '';
+  if (!mapState.isStationBasedBooking) {
+    if (isVehicle(mapState.feature)) {
+      vehicleId = mapState.feature?.properties?.id;
+    } else {
+      vehicleId = mapState.assetId ?? '';
+    }
+  }
 
-  const {appStoreUri, brandLogoUrl, operatorId, operatorName} = useSystem(
-    vehicle,
-    vehicle?.system.operator.name,
-  );
-
-  return {
-    vehicle,
-    isLoading,
-    isError,
-    appStoreUri,
-    brandLogoUrl,
-    operatorId,
-    operatorName,
-    rentalAppUri: getRentalAppUri(vehicle),
-  };
+  return useVehicle(vehicleId, mapState.vehicleTypeId, mapState.stationId);
 };

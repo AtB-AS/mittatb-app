@@ -46,10 +46,12 @@ export const ShmoActionButton = ({
   const {theme} = useThemeContext();
   const styles = useStyles();
   const coordinates = getCurrentCoordinatesGlobal();
-  const {warningMessage} = useShmoWarnings(vehicleId);
   const {logEvent} = useAnalyticsContext();
   const {vehicle} = useMapVehicle();
   const {mapState} = useMapContext();
+  const {warningMessage} = useShmoWarnings(
+    mapState.isStationBasedBooking ? undefined : vehicleId,
+  );
 
   const {
     mutateAsync: initShmoOneStopBooking,
