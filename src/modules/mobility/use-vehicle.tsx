@@ -7,7 +7,6 @@ export const useVehicle = (
   vehicleTypeId?: string,
   stationId?: string,
 ) => {
-  console.log('vehicleId', vehicleId);
   const {
     data: vehicle,
     isLoading,
