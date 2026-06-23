@@ -35,7 +35,10 @@ import {
   isStationCluster,
 } from '@atb/modules/mobility';
 import {MapBottomSheetType} from './MapContext';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {
+  FormFactor,
+  PropulsionType,
+} from '@atb/api/types/generated/mobility-types_v2';
 import z from 'zod';
 import {GeofencingZoneCode} from '@atb-as/theme';
 
@@ -148,6 +151,7 @@ export const getFeatureFromScan = (
   mapItem: AutoSelectableMapItem,
   mapBottomSheetType: MapBottomSheetType,
   formFactor?: FormFactor,
+  propulsionType?: PropulsionType,
 ): Feature<Point, GeoJsonProperties> => {
   const feature: Feature<Point, GeoJsonProperties> = {
     type: 'Feature',
@@ -162,6 +166,7 @@ export const getFeatureFromScan = (
       count: 1,
       vehicle_type_form_factor:
         formFactor ?? mapMapBottomSheetTypeToFormFactor(mapBottomSheetType),
+      vehicle_type_propulsion_type: propulsionType,
     },
   };
 

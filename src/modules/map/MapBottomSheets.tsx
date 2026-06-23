@@ -196,6 +196,7 @@ export const MapBottomSheets = ({
                     item,
                     mapState.bottomSheetType,
                     item.vehicleType.formFactor,
+                    item.vehicleType.propulsionType,
                   );
                 dispatchMapState({
                   type: MapStateActionType.Vehicle,
