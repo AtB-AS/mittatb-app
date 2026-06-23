@@ -1,7 +1,7 @@
-diff --git a/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.h b/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.h
+diff --git a/ios/RNCAsyncStorage.h b/ios/RNCAsyncStorage.h
 index 24b09eb..20a04e0 100644
---- a/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.h
-+++ b/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.h
+--- a/ios/RNCAsyncStorage.h
++++ b/ios/RNCAsyncStorage.h
 @@ -62,6 +62,8 @@ NS_ASSUME_NONNULL_BEGIN
  // Interface for natively fetching all the keys from the storage data.
  - (void)getAllKeys:(RCTResponseSenderBlock)callback;
@@ -11,10 +11,10 @@ index 24b09eb..20a04e0 100644
  @end
  
  NS_ASSUME_NONNULL_END
-diff --git a/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.mm b/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.mm
+diff --git a/ios/RNCAsyncStorage.mm b/ios/RNCAsyncStorage.mm
 index fa3bb04..ef02130 100644
---- a/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.mm
-+++ b/node_modules/@react-native-async-storage/async-storage/ios/RNCAsyncStorage.mm
+--- a/ios/RNCAsyncStorage.mm
++++ b/ios/RNCAsyncStorage.mm
 @@ -19,6 +19,7 @@
  static NSString *const RCTExpoStorageDirectory = @"RCTAsyncLocalStorage";
  static NSString *const RCTManifestFileName = @"manifest.json";
