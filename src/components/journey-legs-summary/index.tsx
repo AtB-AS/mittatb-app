@@ -1,1 +1,0 @@
-export {LegsSummary} from './LegsSummary';

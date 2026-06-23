@@ -12,32 +12,38 @@ import {formatLocaleTime} from '@atb/utils/date';
 import SharedTexts from '@atb/translations/shared';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
-import type {Leg} from '@atb/api/types/trips';
 import {MessageInfoText} from '@atb/components/message-info-text';
-import {
-  findAllNoticesFromLeg,
-  findAllSituationsFromLeg,
-  getMessageTypeForSituation,
-} from '@atb/modules/situations';
+import {getMessageTypeForSituation} from '@atb/modules/situations';
 import type {SituationFragment} from '@atb/api/types/generated/fragments/situations';
-import {isDefined} from '@atb/utils/presence';
 import type {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
+import type {
+  Mode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
+import {isDefined} from '@atb/utils/presence';
 
-export function LegsSummary({
-  legs,
+export type BookingJourneySegment = {
+  mode: Mode;
+  transportSubmode?: TransportSubmode;
+  line?: {publicCode?: string; name?: string};
+  expectedStartTime?: string;
+  expectedEndTime?: string;
+  fromStopName?: string;
+  toStopName?: string;
+  situations: SituationFragment[];
+  notices: NoticeFragment[];
+};
+
+export function BookingSummary({
+  segments,
   compact = false,
 }: {
-  legs?: Leg[];
+  segments?: BookingJourneySegment[];
   compact: boolean;
 }) {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  if (!legs || legs.length === 0) return null;
-  const legsAndMessages = legs.map((leg) => ({
-    leg,
-    situations: findAllSituationsFromLeg(leg),
-    notices: findAllNoticesFromLeg(leg),
-  }));
+  if (!segments || segments.length === 0) return null;
 
   return (
     <View style={styles.legSection}>
@@ -46,34 +52,34 @@ export function LegsSummary({
           {t(PurchaseConfirmationTexts.confirmations.onlyValidDeparture)}
         </ThemeText>
       )}
-      {legsAndMessages.map(({leg, situations, notices}, i) => (
+      {segments.map((segment, i) => (
         <View
           accessible={true}
           style={styles.legSection}
-          id={leg.line?.publicCode}
-          key={`leg-${i}`}
+          id={segment.line?.publicCode}
+          key={`segment-${i}`}
         >
           <View style={styles.legSectionItem}>
             <View style={[styles.sectionItemSpacing, styles.centered]}>
               <TransportationIconBox
-                mode={leg.mode}
+                mode={segment.mode}
                 spacious={true}
-                subMode={leg.transportSubmode}
-                lineNumber={leg.line?.publicCode}
+                subMode={segment.transportSubmode}
+                lineNumber={segment.line?.publicCode}
               />
             </View>
             <ThemeText
               typography="body__m"
               style={[styles.legName, styles.centered]}
             >
-              {leg.line?.name}
+              {segment.line?.name}
             </ThemeText>
             <ThemeText
               typography="body__m__strong"
               style={[styles.legSectionItemTime, styles.centered]}
             >
-              {!!leg.expectedStartTime &&
-                formatLocaleTime(leg.expectedStartTime, language)}
+              {!!segment.expectedStartTime &&
+                formatLocaleTime(segment.expectedStartTime, language)}
             </ThemeText>
           </View>
           {!compact && (
@@ -91,15 +97,15 @@ export function LegsSummary({
                   type="secondary"
                   style={styles.legName}
                 >
-                  {leg.fromPlace.quay?.stopPlace?.name}
+                  {segment.fromStopName}
                 </ThemeText>
                 <ThemeText
                   typography="body__s"
                   type="secondary"
                   style={styles.legSectionItemTime}
                 >
-                  {!!leg.expectedStartTime &&
-                    formatLocaleTime(leg.expectedStartTime, language)}
+                  {!!segment.expectedStartTime &&
+                    formatLocaleTime(segment.expectedStartTime, language)}
                 </ThemeText>
               </View>
               <View style={styles.legSectionItem}>
@@ -115,20 +121,20 @@ export function LegsSummary({
                   type="secondary"
                   style={styles.legName}
                 >
-                  {leg.toPlace.quay?.stopPlace?.name}
+                  {segment.toStopName}
                 </ThemeText>
                 <ThemeText
                   typography="body__s"
                   type="secondary"
                   style={styles.legSectionItemTime}
                 >
-                  {!!leg.expectedEndTime &&
-                    formatLocaleTime(leg.expectedEndTime, language)}
+                  {!!segment.expectedEndTime &&
+                    formatLocaleTime(segment.expectedEndTime, language)}
                 </ThemeText>
               </View>
             </View>
           )}
-          {situations.map((situation) => (
+          {segment.situations.map((situation) => (
             <MessageInfoText
               type={getMessageTypeForSituation(situation)}
               message={
@@ -137,7 +143,7 @@ export function LegsSummary({
               a11yLabel={getA11yLabelForSituation(situation, t)}
             />
           ))}
-          {notices.map((notice) => (
+          {segment.notices.map((notice) => (
             <MessageInfoText
               type="info"
               message={notice.text ?? ''}

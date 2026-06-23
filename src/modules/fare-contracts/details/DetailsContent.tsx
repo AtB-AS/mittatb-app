@@ -58,9 +58,9 @@ import {
 } from '@atb/modules/bonus';
 import {
   isRelativeValidityStatus,
-  useFareContractLegs,
+  useFareContractBookingSegments,
 } from '@atb/modules/fare-contracts';
-import {LegsSummary} from '@atb/components/journey-legs-summary';
+import {BookingSummary} from '@atb/components/booking-summary';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
@@ -116,7 +116,9 @@ export const DetailsContent: React.FC<Props> = ({
   const {benefits} = useOperatorBenefitsForFareProduct(
     preassignedFareProduct?.id,
   );
-  const legs = useFareContractLegs(firstTravelRight.datedServiceJourneys?.[0]);
+  const bookingSegments = useFareContractBookingSegments(
+    firstTravelRight.datedServiceJourneys?.[0],
+  );
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
     fc.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
@@ -164,8 +166,8 @@ export const DetailsContent: React.FC<Props> = ({
 
   const accesses = getAccesses(fc);
 
-  const shouldShowLegs =
-    preassignedFareProduct?.isBookingEnabled && !!legs?.length;
+  const shouldShowBookingSummary =
+    preassignedFareProduct?.isBookingEnabled && !!bookingSegments.length;
 
   const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(
     fc.orderId,
@@ -236,9 +238,9 @@ export const DetailsContent: React.FC<Props> = ({
         </GenericSectionItem>
       )}
 
-      {shouldShowLegs && (
+      {shouldShowBookingSummary && (
         <GenericSectionItem>
-          <LegsSummary compact={false} legs={legs} />
+          <BookingSummary compact={false} segments={bookingSegments} />
         </GenericSectionItem>
       )}
 
