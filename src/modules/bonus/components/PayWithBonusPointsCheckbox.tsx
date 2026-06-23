@@ -68,7 +68,7 @@ export const PayWithBonusPointsCheckbox = ({
     hasSufficientBalance: boolean,
     newState?: boolean,
   ) => {
-logEvent('Bonus', 'bonus points checkbox toggled', {
+    logEvent('Bonus', 'bonus points checkbox toggled', {
       bonusProductId: bonusProduct.id,
       hasSufficientBalance,
       ...(newState !== undefined && {newState}),
@@ -111,7 +111,13 @@ logEvent('Bonus', 'bonus points checkbox toggled', {
               <Pressable
                 onPress={() => logCheckboxEvent(false)}
                 accessible={false}
-                style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                }}
               />
             </View>
           </GenericSectionItem>
