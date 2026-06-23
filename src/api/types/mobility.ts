@@ -582,6 +582,9 @@ export const VehicleFeaturePropertiesSchema = z.object({
   vehicle_type_propulsion_type: MapItemPropulsionTypeSchema,
   num_vehicles_available: z.never().optional(), // to differenciate from station features, which have this field
 });
+export type VehicleFeatureProperties = z.infer<
+  typeof VehicleFeaturePropertiesSchema
+>;
 
 export const VehicleFeatureSchema =
   GeoJsonFeatureWithPointGeometrySchema.extend({
