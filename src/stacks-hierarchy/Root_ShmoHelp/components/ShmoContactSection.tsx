@@ -51,7 +51,7 @@ export const ShmoContactSection = ({
         <ThemedContactIllustration width={130} height={130} />
       </View>
       <Section>
-        {(!!operatorName || !!contactInfo?.phone) && (
+        {!!operatorName && (
           <GenericSectionItem>
             <View style={style.operatorInfoContainer}>
               {!!operatorName && (
@@ -68,7 +68,7 @@ export const ShmoContactSection = ({
           </GenericSectionItem>
         )}
 
-        {contactInfo?.phone && (
+        {!!contactInfo?.phone && (
           <LinkSectionItem
             text={t(dictionary.telephone(contactInfo.phone))}
             rightIcon={{svg: Signalling}}
