@@ -213,8 +213,6 @@ const SmartParkAndRideTexts = {
     },
     contactInfo: {
       title: _('Spørsmål?', 'Questions?', 'Spørsmål?'),
-      telephone: (tel: string) =>
-        _(`tlf. ${tel}`, `tel. ${tel}`, `tlf. ${tel}`),
       parking: {
         heading: _('Om parkeringen', 'About the parking', 'Om parkeringa'),
         subheading: _(
