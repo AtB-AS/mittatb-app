@@ -72,7 +72,7 @@ export const ShmoContactSection = ({
           <LinkSectionItem
             text={t(dictionary.telephone(contactInfo.phone))}
             rightIcon={{svg: Signalling}}
-            onPress={onContactFormPress}
+            onPress={() => openUrl(`tel:${contactInfo.phone}`)}
           />
         )}
 
