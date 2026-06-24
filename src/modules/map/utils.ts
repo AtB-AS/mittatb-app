@@ -31,6 +31,8 @@ import {
   isCarStation,
   isScooter,
   isStation,
+  isVirtualStation,
+  isVirtualStationArea,
   isVehicleCluster,
   isStationCluster,
 } from '@atb/modules/mobility';
@@ -301,13 +303,16 @@ export function getFeatureWeight(
       isScooter(feature) ||
       isBicycle(feature) ||
       isStation(feature) ||
+      isVirtualStation(feature) ||
       isCarStation(feature) ||
       isParkAndRide(feature)
     ) {
-      return 4;
+      return 5;
     }
     if (isFeatureGeofencingZoneAsTiles(feature)) return 3;
     return 1;
+  } else if (isVirtualStationArea(feature)) {
+    return 4;
   } else if (isFeatureGeofencingZoneAsTiles(feature)) {
     return 2;
   } else if (isFeatureGeofencingZone(feature)) {

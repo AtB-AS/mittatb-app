@@ -5,7 +5,7 @@ import {
 } from '@atb/api/types/generated/mobility-types_v2';
 import {isValidPhoneNumber} from 'libphonenumber-js';
 import {isValidEmail} from '@atb/utils/validation';
-import {Feature, Point} from 'geojson';
+import {Feature, Point, Polygon} from 'geojson';
 import {Base64ImageSchema} from '@atb/utils/image';
 import {MobilityPriceAdjustmentBenefitSchema} from '@atb/api/types/benefit';
 
@@ -491,6 +491,16 @@ const GeoJsonFeatureWithPointGeometrySchema = z.object({
   properties: z.object({}).passthrough(),
 }) satisfies z.ZodType<Feature<Point>>;
 
+const GeoJsonFeatureWithPolygonGeometrySchema = z.object({
+  type: z.literal('Feature'),
+  geometry: z.object({
+    type: z.literal('Polygon'),
+    coordinates: z.array(z.array(GeoJsonCoordinatesSchema)),
+  }),
+  // properties placeholder — empty object by default
+  properties: z.object({}).passthrough(),
+}) satisfies z.ZodType<Feature<Polygon>>;
+
 // See martin.yaml -> stations, in the tile server
 export const StationFeaturePropertiesSchema = z.object({
   id: z.string(),
@@ -567,6 +577,28 @@ export const StationsClusteredFeatureSchema =
   });
 export type StationsClusteredFeature = z.infer<
   typeof StationsClusteredFeatureSchema
+>;
+
+export const VirtualStationFeaturePropertiesSchema = z.object({
+  id: z.string(),
+  system_id: z.string(),
+  type: z.literal('station'),
+  is_virtual: z.literal(true),
+  num_spaces_available: z.number().optional(),
+});
+
+export const VirtualStationFeatureSchema =
+  GeoJsonFeatureWithPointGeometrySchema.extend({
+    properties: VirtualStationFeaturePropertiesSchema,
+  });
+export type VirtualStationFeature = z.infer<typeof VirtualStationFeatureSchema>;
+
+export const VirtualStationAreaFeatureSchema =
+  GeoJsonFeatureWithPolygonGeometrySchema.extend({
+    properties: VirtualStationFeaturePropertiesSchema,
+  });
+export type VirtualStationAreaFeature = z.infer<
+  typeof VirtualStationAreaFeatureSchema
 >;
 
 export const DateResponseSchema = z.object({

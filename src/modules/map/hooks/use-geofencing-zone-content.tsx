@@ -2,7 +2,6 @@ import {useTranslation} from '@atb/translations';
 import {
   GeofencingZoneExplanations,
   GeofencingZoneExtraExplanations,
-  StationParkingExplanation,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {
   GeofencingZoneIconBox,
@@ -55,8 +54,8 @@ export const useGeofencingZoneContent = () => {
 
   const getStationParkingContent = useCallback(
     (): GeofencingZoneContent => ({
-      title: t(StationParkingExplanation.title),
-      description: t(StationParkingExplanation.description),
+      title: t(GeofencingZoneExplanations.parking.title),
+      description: t(GeofencingZoneExplanations.parking.description),
       iconNode: <StationParkingIconBox />,
     }),
     [t],

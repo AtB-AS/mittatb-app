@@ -1,9 +1,9 @@
 import React from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 
-import {StyleSheet, useThemeContext} from '@atb/theme';
-import {Parking as ParkingLight} from '@atb/assets/svg/color/icons/vehicles/light';
-import {Parking as ParkingDark} from '@atb/assets/svg/color/icons/vehicles/dark';
+import {StyleSheet} from '@atb/theme';
+import {ThemeIcon} from '../theme-icon';
+import {ThemedParkingIcon} from '@atb/theme/ThemedAssets';
 
 export type StationParkingIconBoxProps = {
   style?: StyleProp<ViewStyle>;
@@ -12,19 +12,11 @@ export type StationParkingIconBoxProps = {
 export const StationParkingIconBox: React.FC<StationParkingIconBoxProps> = ({
   style,
 }) => {
-  const {theme, themeName} = useThemeContext();
   const styles = useStyles();
-  const Parking = themeName === 'light' ? ParkingLight : ParkingDark;
 
   return (
-    <View
-      style={[
-        styles.iconBox,
-        style,
-        {backgroundColor: theme.color.status.valid.primary.background},
-      ]}
-    >
-      <Parking />
+    <View style={[styles.iconBox, style]}>
+      <ThemeIcon svg={ThemedParkingIcon} size="large" />
     </View>
   );
 };

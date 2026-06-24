@@ -631,17 +631,16 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
     ),
   },
 
-  /*** future features, pending support from Entur's Mobility API: ***/
-  // https://github.com/entur/lamassu/issues/448
-  // Parking: {
-  //   title: _('Parkeringssone', 'Parking Zone', 'Parkeringssone'),
-  //   description: _(
-  //     'Dette er et passende sted å parkere',
-  //     'This is a suitable place to park',
-  //     'Dette er ein passande stad å parkere',
-  //   ),
-  // },
-  // BonusParking: {
+  parking: {
+    title: _('Parkeringssone', 'Parking Zone', 'Parkeringssone'),
+    description: _(
+      'Du kan parkere her',
+      'You can park here',
+      'Du kan parkere her',
+    ),
+  },
+
+  // bonusParking: {
   //   title: _(
   //     'Bonusparkeringssone',
   //     'Bonus Parking Zone',
@@ -685,15 +684,6 @@ export const GeofencingZoneExtraExplanations = {
     'Se etter parkeringssoner i kartet.',
     'Look for parking zones on the map.',
     'Sjå etter parkeringssoner i kartet.',
-  ),
-};
-
-export const StationParkingExplanation = {
-  title: _('Parker her', 'Park here', 'Parker her'),
-  description: _(
-    'Dette er et passende sted å parkere',
-    'This is a suitable place to park',
-    'Dette er ein passande stad å parkere',
   ),
 };
 

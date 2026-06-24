@@ -48,6 +48,8 @@ export {
   isBikeStation,
   isCarStation,
   isScooter,
+  isVirtualStation,
+  isVirtualStationArea,
   isStation,
   isVehicle,
   isVehicleCluster,
