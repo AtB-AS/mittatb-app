@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {SkeletonBlock} from '../SkeletonBlock';
+import {SkeletonBlock} from './SkeletonBlock';
 
 const PILL_COUNT = 4;
 const PULSE_STAGGER = 150;

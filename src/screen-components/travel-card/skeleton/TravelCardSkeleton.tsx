@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
-import {LegsSkeleton} from './legs';
+import {LegsSkeleton} from './LegsSkeleton';
 import {SkeletonBlock} from './SkeletonBlock';
 
 /**
