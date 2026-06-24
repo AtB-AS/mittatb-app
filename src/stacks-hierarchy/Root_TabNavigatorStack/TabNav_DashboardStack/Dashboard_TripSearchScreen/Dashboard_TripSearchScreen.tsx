@@ -50,6 +50,7 @@ import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/Ta
 import {NativeBlockButton} from '@atb/components/native-button';
 import {getSearchTime, getSearchTimeLabel, sanitizeSearchTime} from './utils';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import {
   GlobalMessage,
   GlobalMessageContextEnum,
@@ -164,6 +165,9 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   } = useTrips(tripsProps, tripSearchEnabled);
 
   const isSearching = tripsSearchState === 'searching';
+  // In the experimental new trip search, loading is shown via skeleton cards
+  // (in Results) instead of the inline "Laster søkeresultater" text/spinner.
+  const isNewTripSearch = useIsExperimentalEnabled('isNewTripSearchEnabled');
   const showEmptyScreen = !tripPatterns && !isSearching && !tripsIsError;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
@@ -460,51 +464,56 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             />
           )}
           {!tripPatterns.length && <View style={styles.emptyResultsSpacer} />}
-          {!tripsIsError && isValidLocations && (
-            <NativeBlockButton
-              onPress={loadMoreTrips}
-              disabled={tripsSearchState === 'searching'}
-              style={[styles.loadMoreButton, {opacity: 1}]}
-              testID="loadMoreButton"
-            >
-              {tripsSearchState === 'searching' ? (
-                <View style={styles.loadingIndicator}>
-                  {tripPatterns.length ? (
-                    <>
-                      <Loading
-                        style={{
-                          marginRight: theme.spacing.medium,
-                        }}
-                      />
+          {!tripsIsError &&
+            isValidLocations &&
+            !(isNewTripSearch && isSearching) && (
+              <NativeBlockButton
+                onPress={loadMoreTrips}
+                disabled={isSearching}
+                style={[styles.loadMoreButton, {opacity: 1}]}
+                testID="loadMoreButton"
+              >
+                {isSearching ? (
+                  <View style={styles.loadingIndicator}>
+                    {tripPatterns.length ? (
+                      <>
+                        <Loading
+                          style={{
+                            marginRight: theme.spacing.medium,
+                          }}
+                        />
+                        <ThemeText
+                          type="secondary"
+                          testID="searchingForResults"
+                        >
+                          {t(TripSearchTexts.results.fetchingMore)}
+                        </ThemeText>
+                      </>
+                    ) : (
                       <ThemeText type="secondary" testID="searchingForResults">
-                        {t(TripSearchTexts.results.fetchingMore)}
+                        {t(TripSearchTexts.searchState.searching)}
                       </ThemeText>
-                    </>
-                  ) : (
-                    <ThemeText type="secondary" testID="searchingForResults">
-                      {t(TripSearchTexts.searchState.searching)}
-                    </ThemeText>
-                  )}
-                </View>
-              ) : (
-                <>
-                  {loadMoreTrips ? (
-                    <>
-                      <ThemeIcon
-                        color="secondary"
-                        svg={ExpandMore}
-                        size="normal"
-                      />
-                      <ThemeText type="secondary" testID="resultsLoaded">
-                        {' '}
-                        {t(TripSearchTexts.results.fetchMore)}
-                      </ThemeText>
-                    </>
-                  ) : null}
-                </>
-              )}
-            </NativeBlockButton>
-          )}
+                    )}
+                  </View>
+                ) : (
+                  <>
+                    {loadMoreTrips ? (
+                      <>
+                        <ThemeIcon
+                          color="secondary"
+                          svg={ExpandMore}
+                          size="normal"
+                        />
+                        <ThemeText type="secondary" testID="resultsLoaded">
+                          {' '}
+                          {t(TripSearchTexts.results.fetchMore)}
+                        </ThemeText>
+                      </>
+                    ) : null}
+                  </>
+                )}
+              </NativeBlockButton>
+            )}
         </View>
       </FullScreenView>
       {filtersState.filtersSelection && (

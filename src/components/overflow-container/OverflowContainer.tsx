@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {LayoutChangeEvent, StyleSheet, View} from 'react-native';
 import Animated, {Easing, FadeIn} from 'react-native-reanimated';
 import {computeFit, FitResult} from './compute-fit';
@@ -9,6 +9,9 @@ type Props = {
   maxWidth: number;
   gap?: number;
   revealDuration?: number;
+  // Fired once the fitted row is measured and revealed, so a parent can swap a
+  // placeholder (e.g. a skeleton) for the real content.
+  onReady?: () => void;
 };
 
 export const OverflowContainer: React.FC<Props> = ({
@@ -17,6 +20,7 @@ export const OverflowContainer: React.FC<Props> = ({
   maxWidth,
   gap = 0,
   revealDuration = 200,
+  onReady,
 }) => {
   const [widthByKey, setWidthByKey] = useState<Record<string, number>>({});
   const [overflowWidth, setOverflowWidth] = useState<number>();
@@ -36,6 +40,13 @@ export const OverflowContainer: React.FC<Props> = ({
     widths.length === orderedKeys.length
       ? computeFit({widths, overflowWidth, maxWidth, gap})
       : null;
+
+  const onReadyMemo = useCallback(() => onReady?.(), [onReady]);
+  useEffect(() => {
+    if (fitResult != null) {
+      onReadyMemo();
+    }
+  }, [fitResult, onReadyMemo]);
 
   const entering = FadeIn.duration(revealDuration).easing(
     Easing.out(Easing.ease),

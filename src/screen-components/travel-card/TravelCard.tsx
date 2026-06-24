@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {Statuses, StyleSheet} from '@atb/theme';
 import type {TripPattern} from '@atb/api/types/trips';
 import {TravelCardLegs} from './TravelCardLegs';
-import Animated, {FadeIn} from 'react-native-reanimated';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {TravelCardHeader} from './TravelCardHeader';
 import {LayoutChangeEvent, View} from 'react-native';
@@ -13,6 +12,7 @@ import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
 import {TravelCardNotifications} from './TravelCardNotifications';
 import {Tag} from '@atb/components/tag';
+import Animated, {FadeIn} from 'react-native-reanimated';
 
 type TravelCardProps = {
   tripPattern: TripPattern;
@@ -27,6 +27,8 @@ type TravelCardProps = {
   isDisabled?: boolean;
   isSaved?: boolean;
   tag?: {label: string; type: Statuses};
+  // Fired once the legs are measured.
+  onReady?: () => void;
 };
 
 export const TravelCard: React.FC<TravelCardProps> = ({
@@ -42,6 +44,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
   isDisabled = false,
   isSaved = false,
   tag,
+  onReady,
 }) => {
   const styles = useThemeStyles();
   const [maxWidth, setMaxWidth] = useState(0);
@@ -94,7 +97,11 @@ export const TravelCard: React.FC<TravelCardProps> = ({
                   setMaxWidth(e.nativeEvent.layout.width)
                 }
               >
-                <TravelCardLegs tripPattern={tripPattern} maxWidth={maxWidth} />
+                <TravelCardLegs
+                  tripPattern={tripPattern}
+                  maxWidth={maxWidth}
+                  onReady={onReady}
+                />
               </View>
               <View>
                 <ThemeIcon svg={ChevronRight} />
