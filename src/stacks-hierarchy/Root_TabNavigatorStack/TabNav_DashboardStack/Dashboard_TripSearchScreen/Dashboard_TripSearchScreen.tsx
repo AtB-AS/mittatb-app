@@ -165,8 +165,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   } = useTrips(tripsProps, tripSearchEnabled);
 
   const isSearching = tripsSearchState === 'searching';
-  // In the experimental new trip search, loading is shown via skeleton cards
-  // (in Results) instead of the inline "Laster søkeresultater" text/spinner.
   const isNewTripSearch = useIsExperimentalEnabled('isNewTripSearchEnabled');
   const showEmptyScreen = !tripPatterns && !isSearching && !tripsIsError;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
