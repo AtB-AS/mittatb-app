@@ -35,12 +35,6 @@ const sortKey: Expression = [
   geofencingZoneCodes.length,
 ];
 
-const tileLayerNames: TileLayerName[] = [
-  'geofencing_zones_features',
-  'geofencing_zones_icons',
-  'virtual_stations',
-];
-
 const iconReachFullScaleAtZoomLevel = 15.5;
 const iconFullSize = 0.85;
 const iconScaleTransitionZoomRange = 1.5;
@@ -62,9 +56,18 @@ export const GeofencingZonesAsTiles = ({
   systemId,
   vehicleTypeId,
 }: GeofencingZonesAsTilesProps) => {
-  const {isGeofencingZonesEnabled, isGeofencingZonesAsTilesEnabled} =
-    useFeatureTogglesContext();
+  const {
+    isGeofencingZonesEnabled,
+    isGeofencingZonesAsTilesEnabled,
+    isVirtualStationsEnabled,
+  } = useFeatureTogglesContext();
   const {theme, themeName} = useThemeContext();
+  const virtualStationsTileLayerName: TileLayerName = 'virtual_stations';
+  const tileLayerNames: TileLayerName[] = [
+    'geofencing_zones_features',
+    'geofencing_zones_icons',
+    ...(isVirtualStationsEnabled ? [virtualStationsTileLayerName] : []),
+  ];
 
   const tileUrlTemplate = useTileUrlTemplate(tileLayerNames, {
     systemId: systemId ?? '',
@@ -172,6 +175,7 @@ export const GeofencingZonesAsTiles = ({
   return (
     <MapboxGL.VectorSource
       id={geofencingZonesVectorSourceId}
+      key={tileUrlTemplate}
       tileUrlTemplates={tileUrlTemplates}
       minZoomLevel={minZoomLevel}
       maxZoomLevel={maxZoomLevel}
@@ -212,36 +216,6 @@ export const GeofencingZonesAsTiles = ({
           />
         ))}
 
-        <MapboxGL.FillLayer
-          id="virtual-station-area-fill"
-          sourceID={geofencingZonesVectorSourceId}
-          sourceLayerID={virtualStationsSourceLayerId}
-          aboveLayerID={lineLayerConfigs[0].id}
-          minZoomLevel={minZoomLevel}
-          slot="middle"
-          style={{
-            ...fillBaseStyle,
-            fillColor: parkingStyle.color.background,
-            fillOpacity: parkingStyle.fillOpacity,
-          }}
-        />
-
-        <MapboxGL.LineLayer
-          id="virtual-station-area-line"
-          sourceID={geofencingZonesVectorSourceId}
-          sourceLayerID={virtualStationsSourceLayerId}
-          aboveLayerID={lineLayerConfigs[0].id}
-          minZoomLevel={minZoomLevel}
-          slot="middle"
-          style={{
-            ...lineBaseStyle,
-            lineColor: parkingStyle.color.background,
-            lineOpacity: parkingStyle.strokeOpacity,
-            lineDasharray:
-              parkingStyle.lineStyle === 'solid' ? undefined : dashedArray,
-          }}
-        />
-
         <MapboxGL.SymbolLayer
           id="geofencing-zone-icon-layer"
           slot="top"
@@ -259,20 +233,53 @@ export const GeofencingZonesAsTiles = ({
           aboveLayerID={MapSlotLayerId.GeofencingZonesIcons}
         />
 
-        <MapboxGL.SymbolLayer
-          id="virtual-stations-layer"
-          slot="top"
-          sourceID={geofencingZonesVectorSourceId}
-          sourceLayerID={virtualStationsSourceLayerId}
-          minZoomLevel={minZoomLevel}
-          style={{
-            ...symbolBaseStyle,
-            iconOpacity,
-            iconSize,
-            iconImage: 'geofencingzone_parking_' + themeName,
-          }}
-          filter={['==', ['geometry-type'], 'Point']}
-        />
+        {!!isVirtualStationsEnabled && (
+          <>
+            <MapboxGL.FillLayer
+              id="virtual-station-area-fill"
+              sourceID={geofencingZonesVectorSourceId}
+              sourceLayerID={virtualStationsSourceLayerId}
+              aboveLayerID={MapSlotLayerId.VirtualStationAreas}
+              minZoomLevel={minZoomLevel}
+              slot="middle"
+              style={{
+                ...fillBaseStyle,
+                fillColor: parkingStyle.color.background,
+                fillOpacity: parkingStyle.fillOpacity,
+              }}
+            />
+            <MapboxGL.LineLayer
+              id="virtual-station-area-line"
+              sourceID={geofencingZonesVectorSourceId}
+              sourceLayerID={virtualStationsSourceLayerId}
+              aboveLayerID={MapSlotLayerId.VirtualStationAreas}
+              minZoomLevel={minZoomLevel}
+              slot="middle"
+              style={{
+                ...lineBaseStyle,
+                lineColor: parkingStyle.color.background,
+                lineOpacity: parkingStyle.strokeOpacity,
+                lineDasharray:
+                  parkingStyle.lineStyle === 'solid' ? undefined : dashedArray,
+              }}
+            />
+            <MapboxGL.SymbolLayer
+              id="virtual-stations-layer"
+              slot="top"
+              sourceID={geofencingZonesVectorSourceId}
+              sourceLayerID={virtualStationsSourceLayerId}
+              minZoomLevel={minZoomLevel}
+              style={{
+                ...symbolBaseStyle,
+                iconOpacity,
+                iconSize,
+                iconImage: 'geofencingzone_parking_' + themeName,
+              }}
+              filter={['==', ['geometry-type'], 'Point']}
+              aboveLayerID={MapSlotLayerId.VirtualStationIcons}
+            />
+          </>
+        )}
       </>
     </MapboxGL.VectorSource>
   );
