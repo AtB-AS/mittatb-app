@@ -107,8 +107,8 @@ export const GeofencingZonesAsTiles = ({
     ...backgroundMap,
     'rgba(0,0,0,0)',
   ];
-  const virtualStationAreaColor =
-    theme.color.geofencingZone.allowed.color.background;
+  const parkingStyle = theme.color.geofencingZone.parking;
+
   const fillOpacity: Expression = ['match', code, ...fillOpacityMap, 0];
   const lineOpacity: Expression = ['match', code, ...strokeOpacityMap, 0];
   const lineWidth: Expression = [
@@ -202,8 +202,8 @@ export const GeofencingZonesAsTiles = ({
           minZoomLevel={minZoomLevel}
           slot="middle"
           style={{
-            fillColor: virtualStationAreaColor,
-            fillOpacity: 0.5,
+            fillColor: parkingStyle.color.background,
+            fillOpacity: parkingStyle.fillOpacity,
             fillAntialias: true,
             fillEmissiveStrength: 1,
           }}
@@ -217,8 +217,8 @@ export const GeofencingZonesAsTiles = ({
           minZoomLevel={minZoomLevel}
           slot="middle"
           style={{
-            lineColor: virtualStationAreaColor,
-            lineOpacity: 0.8,
+            lineColor: parkingStyle.color.background,
+            lineOpacity: parkingStyle.strokeOpacity,
             lineEmissiveStrength: 1,
             lineCap: 'round',
             lineJoin: 'round',
