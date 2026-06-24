@@ -114,6 +114,16 @@ module.exports = {
     // Error on using curly braces for strings, e.g. field={'whatever'}
     'react/jsx-curly-brace-presence': [2, 'never'],
 
+    // Error on missing key prop in lists rendered from iterators (.map etc.)
+    'react/jsx-key': [
+      2,
+      {
+        checkFragmentShorthand: true,
+        checkKeyMustBeforeSpread: true,
+        warnOnDuplicates: true,
+      },
+    ],
+
     // Warning on arrays with single elements in style prop, as the array is recreated on every render
     'react-native/no-single-element-style-arrays': 1,
 

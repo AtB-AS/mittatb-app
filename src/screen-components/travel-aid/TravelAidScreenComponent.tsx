@@ -238,6 +238,7 @@ const TravelAidSection = ({
                 (notice) =>
                   notice.text && (
                     <MessageInfoBox
+                      key={notice.id}
                       type="info"
                       message={notice.text}
                       a11yLiveRegion="polite"
