@@ -16,6 +16,7 @@ import {
 import {ContentHeading} from '@atb/components/heading';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {
+  type PurchaseSelectionBuildResult,
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
@@ -24,14 +25,14 @@ import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 type Props = {
   color: InteractiveColor;
   selection: PurchaseSelectionType;
-  setSelection: (s: PurchaseSelectionType) => void;
+  onProductChange: (result: PurchaseSelectionBuildResult) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export function ProductSelectionByAlias({
   color,
   selection,
-  setSelection,
+  onProductChange,
   style,
 }: Props) {
   const {t, language} = useTranslation();
@@ -76,11 +77,11 @@ export function ProductSelectionByAlias({
                   : selection.preassignedFareProduct.id === fp.id
               }
               onPress={() => {
-                const newSelection = selectionBuilder
+                const result = selectionBuilder
                   .fromSelection(selection)
                   .product(fp)
-                  .build();
-                setSelection(newSelection);
+                  .buildWithForcedChanges();
+                onProductChange(result);
               }}
               key={i}
             />

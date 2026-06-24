@@ -20,6 +20,23 @@ export type FareContractStub = {
   endDate: string;
 };
 
+/**
+ * Categories of selection fields that the builder may forcibly change
+ * (currently only via `.product()` / `applyProductChange`) when the current
+ * selection is not applicable for a newly applied product.
+ */
+export type ForcedSelectionChange = 'userProfile' | 'zone';
+
+/**
+ * Result of `PurchaseSelectionBuilder.buildWithForcedChanges()`. Carries the
+ * built selection along with any forced changes the builder applied during the
+ * chain.
+ */
+export type PurchaseSelectionBuildResult = {
+  selection: PurchaseSelectionType;
+  forcedChanges: ForcedSelectionChange[];
+};
+
 export type PurchaseSelectionType = {
   fareProductTypeConfig: FareProductTypeConfig;
   preassignedFareProduct: PreassignedFareProduct;
@@ -159,4 +176,13 @@ export type PurchaseSelectionBuilder = {
    * should be passed around between components and screens, not the builder.
    */
   build: () => PurchaseSelectionType;
+
+  /**
+   * Retrieve the built purchase selection along with the list of forced
+   * changes the builder applied during the chain (e.g. when a product change
+   * forced a swap of traveller or zone because the previous selection wasn't
+   * applicable for the new product). Use this in call sites that want to
+   * notify the user about the forced change.
+   */
+  buildWithForcedChanges: () => PurchaseSelectionBuildResult;
 };

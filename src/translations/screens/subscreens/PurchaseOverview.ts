@@ -146,6 +146,23 @@ const PurchaseOverviewTexts = {
       'Activate to select ticket',
       'Aktivér for å velje billett',
     ),
+    forcedChange: {
+      title: _(
+        'Andre valg ble endret',
+        'Other selections were changed',
+        'Andre val vart endra',
+      ),
+      message: (changedItems: string) =>
+        _(
+          `Valgene for ${changedItems} ble endret fordi valgene ikke er tilgjengelige for den valgte billetten.`,
+          `The selections for ${changedItems} were changed because they are not available for the selected ticket.`,
+          `Vala for ${changedItems} vart endra fordi vala ikkje er tilgjengelege for den valde billetten.`,
+        ),
+      items: {
+        userProfile: _('reisende', 'travellers', 'reisande'),
+        zone: _('soner', 'zones', 'soner'),
+      },
+    },
   },
   travellerSelection: {
     titleSingle: _('Reisende', 'Traveller', 'Reisande'),
