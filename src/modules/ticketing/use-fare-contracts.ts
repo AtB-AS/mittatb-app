@@ -43,6 +43,8 @@ export const useFareContracts = (
     isFetching,
     isError,
     status,
+    isFetchedAfterMount,
+    dataUpdatedAt,
   } = useGetFareContractsQuery({
     enabled:
       enable_ticketing &&
@@ -55,8 +57,12 @@ export const useFareContracts = (
     (state) => state.setNeedsRefresh,
   );
   useEffect(() => {
-    if (status === 'success') setNeedsRefresh(false);
-  }, [status, setNeedsRefresh]);
+    // Whenever data is updated (`dataUpdatedAt` changes), we should reset the
+    // needsRefresh flag if
+    // 1. the query was successful
+    // 2. the data is fresh and not from cache (`isFetchedAfterMount`)
+    if (status === 'success' && isFetchedAfterMount) setNeedsRefresh(false);
+  }, [status, isFetchedAfterMount, setNeedsRefresh, dataUpdatedAt]);
 
   const [fareContracts, setFareContracts] = useState(
     fareContractsFromFirestore,
