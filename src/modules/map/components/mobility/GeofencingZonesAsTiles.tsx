@@ -11,7 +11,10 @@ import {
 import {geofencingZoneCodes, getIconZoomTransitionStyle} from '../../utils';
 import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
 
-import {Expression} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
+import {
+  AllLayerStyleProps,
+  Expression,
+} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 
 const geofencingZonesVectorSourceId = 'geofencing-zones-source';
 const geofencingZonesFeaturesLayerId = 'geofencing_zones_features';
@@ -129,6 +132,25 @@ export const GeofencingZonesAsTiles = ({
     themeName,
   ];
 
+  const lineBaseStyle: AllLayerStyleProps = {
+    lineEmissiveStrength: 1,
+    lineCap: 'round',
+    lineJoin: 'round',
+    lineWidth: lineWidth,
+  };
+
+  const fillBaseStyle: AllLayerStyleProps = {
+    fillAntialias: true,
+    fillEmissiveStrength: 1,
+  };
+
+  const symbolBaseStyle: AllLayerStyleProps = {
+    iconAllowOverlap: true,
+    iconIgnorePlacement: true,
+    iconEmissiveStrength: 1,
+  };
+
+  const dashedArray: [number, number] = [2, 2];
   const lineLayerConfigs = [
     {
       id: 'GeofencingZones_Line_Solid',
@@ -138,7 +160,7 @@ export const GeofencingZonesAsTiles = ({
     {
       id: 'GeofencingZones_Line_Dashed',
       filter: dashedFilter,
-      dashArray: [2, 2] as [number, number],
+      dashArray: dashedArray,
     },
   ];
 
@@ -163,11 +185,10 @@ export const GeofencingZonesAsTiles = ({
           minZoomLevel={minZoomLevel}
           slot="middle"
           style={{
+            ...fillBaseStyle,
             fillSortKey: sortKey,
             fillColor,
             fillOpacity,
-            fillAntialias: true,
-            fillEmissiveStrength: 1,
           }}
         />
 
@@ -182,13 +203,10 @@ export const GeofencingZonesAsTiles = ({
             slot="middle"
             filter={filter}
             style={{
+              ...lineBaseStyle,
               lineSortKey: sortKey,
               lineColor: fillColor,
               lineOpacity: lineOpacity,
-              lineEmissiveStrength: 1,
-              lineCap: 'round',
-              lineJoin: 'round',
-              lineWidth: lineWidth,
               lineDasharray: dashArray,
             }}
           />
@@ -202,10 +220,9 @@ export const GeofencingZonesAsTiles = ({
           minZoomLevel={minZoomLevel}
           slot="middle"
           style={{
+            ...fillBaseStyle,
             fillColor: parkingStyle.color.background,
             fillOpacity: parkingStyle.fillOpacity,
-            fillAntialias: true,
-            fillEmissiveStrength: 1,
           }}
         />
 
@@ -217,12 +234,11 @@ export const GeofencingZonesAsTiles = ({
           minZoomLevel={minZoomLevel}
           slot="middle"
           style={{
+            ...lineBaseStyle,
             lineColor: parkingStyle.color.background,
             lineOpacity: parkingStyle.strokeOpacity,
-            lineEmissiveStrength: 1,
-            lineCap: 'round',
-            lineJoin: 'round',
-            lineWidth,
+            lineDasharray:
+              parkingStyle.lineStyle === 'solid' ? undefined : dashedArray,
           }}
         />
 
@@ -233,12 +249,10 @@ export const GeofencingZonesAsTiles = ({
           sourceLayerID={geofencingZonesIconSourceLayerId}
           minZoomLevel={minZoomLevel}
           style={{
+            ...symbolBaseStyle,
             symbolSortKey: sortKey,
             iconOpacity,
             iconSize,
-            iconAllowOverlap: true,
-            iconIgnorePlacement: true,
-            iconEmissiveStrength: 1,
             iconImage,
           }}
           filter={iconFilter}
@@ -252,11 +266,9 @@ export const GeofencingZonesAsTiles = ({
           sourceLayerID={virtualStationsSourceLayerId}
           minZoomLevel={minZoomLevel}
           style={{
+            ...symbolBaseStyle,
             iconOpacity,
             iconSize,
-            iconAllowOverlap: true,
-            iconIgnorePlacement: true,
-            iconEmissiveStrength: 1,
             iconImage: 'geofencingzone_parking_' + themeName,
           }}
           filter={['==', ['geometry-type'], 'Point']}
