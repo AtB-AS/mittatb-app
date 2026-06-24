@@ -9,7 +9,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {InfoLinkFragment} from '@atb/api/types/generated/fragments/shared';
 import {StyleSheet} from '@atb/theme';
-import {SituationType} from './types';
+import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {SituationOrNoticeIcon} from './SituationOrNoticeIcon';
 import {daysBetween, formatToLongDateTime} from '@atb/utils/date';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -27,7 +27,7 @@ import {
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type Props = {
-  situation: SituationType;
+  situation: SituationFragment;
   bottomSheetModalRef: React.RefObject<BottomSheetModalMethods | null>;
   onCloseFocusRef: React.RefObject<View | null>;
 };
@@ -112,7 +112,9 @@ const filterInfoLinks = (
     (il: Partial<InfoLinkFragment>): il is InfoLinkFragment => !!il.uri,
   ) || [];
 
-const useValidityPeriodText = (period?: SituationType['validityPeriod']) => {
+const useValidityPeriodText = (
+  period?: SituationFragment['validityPeriod'],
+) => {
   const {t, language} = useTranslation();
 
   const endTime = validateEndTime(period?.endTime);

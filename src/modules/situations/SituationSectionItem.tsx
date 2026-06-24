@@ -2,13 +2,13 @@ import React from 'react';
 import {dictionary, useTranslation} from '@atb/translations';
 import {MessageSectionItem, SectionItemProps} from '@atb/components/sections';
 import {getMessageTypeForSituation, getSituationSummary} from './utils';
-import {SituationType} from './types';
+import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {SituationBottomSheet} from './SituationBottomSheet';
 import {View} from 'react-native';
 import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 
 type Props = SectionItemProps<{
-  situation: SituationType;
+  situation: SituationFragment;
 }>;
 
 export const SituationSectionItem = ({situation, ...sectionProps}: Props) => {
