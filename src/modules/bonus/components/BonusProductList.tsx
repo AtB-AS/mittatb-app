@@ -40,7 +40,7 @@ export const BonusProductList = ({
 
   const handleNavigateToMap = useCallback(
     (formFactors: FormFactor[]) => {
-      if (!onNavigateToMap || !mapFilter?.mobility) return;
+      if (!onNavigateToMap || !mapFilter) return;
       const updatedMobility = {...mapFilter.mobility};
       formFactors.forEach((ff) => {
         updatedMobility[ff] = {
