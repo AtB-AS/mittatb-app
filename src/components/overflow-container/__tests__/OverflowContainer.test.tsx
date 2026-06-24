@@ -88,4 +88,17 @@ describe('OverflowContainer', () => {
 
     expect(isRevealed(view, 'leg-0')).toBe(true);
   });
+
+  it('fires onReady once the row is measured and revealed', () => {
+    const onReady = jest.fn();
+    const view = render(
+      <OverflowContainer maxWidth={200} overflow={overflow} onReady={onReady}>
+        {legs(3)}
+      </OverflowContainer>,
+    );
+
+    expect(onReady).not.toHaveBeenCalled();
+    reportWidths(view);
+    expect(onReady).toHaveBeenCalledTimes(1);
+  });
 });

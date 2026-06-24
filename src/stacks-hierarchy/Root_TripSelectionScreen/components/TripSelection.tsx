@@ -32,15 +32,19 @@ import {MessageInfoText} from '@atb/components/message-info-text';
 import {findAllNotices, findAllSituations} from '@atb/modules/situations';
 import {Loading} from '@atb/components/loading';
 import {BookingValidityInfoBox} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/components/BookingValidityInfoBox';
-import {TravelCard} from '@atb/screen-components/travel-card';
+import {
+  TravelCard,
+  WithTravelCardSkeleton,
+} from '@atb/screen-components/travel-card';
 import {useIsExperimentalEnabled} from '@atb/modules/experimental';
+
+const BOOKING_SKELETON_COUNT = 3;
+const SEAT_TAG_LIMIT = 15;
 
 type BookingTripSelectionProps = {
   selection: PurchaseSelectionType;
   onSelect: (legs: TripPatternLegs) => void;
 };
-
-const SEAT_TAG_LIMIT = 15;
 
 export function BookingTripSelection({
   selection,
@@ -63,69 +67,97 @@ export function BookingTripSelection({
   // Refetch in case the availability has changed
   useDoOnceWhen(reload, true, true);
 
-  if (isLoading) {
+  if (!isNewTravelCardBooking) {
+    if (isLoading) {
+      return (
+        <View style={styles.container}>
+          <Loading size="large" />
+        </View>
+      );
+    }
     return (
       <View style={styles.container}>
-        <Loading size="large" />
-      </View>
-    );
-  }
-
-  return (
-    <View style={styles.container}>
-      <BookingValidityInfoBox
-        tripPatterns={tripPatterns}
-        originFareContract={selection.originFareContract}
-      />
-      {!isEmpty ? (
-        <View style={styles.travelCardsList}>
-          {tripPatterns.map((tp, i) =>
-            isNewTravelCardBooking ? (
-              <TravelCard
-                key={`booking-trip-${i}`}
-                tripPattern={tp}
-                onDetailsPressed={() => {
-                  const isAvailable =
-                    tp.booking.availability === 'available' &&
-                    !tp.booking.disabledReason;
-                  if (isAvailable) onSelect(tp.legs);
-                }}
-                a11yLabelPrefix={t(
-                  TravelCardTexts.card.a11yPrefix.bookingOption(
-                    i,
-                    tripPatterns.length,
-                  ),
-                )}
-                a11yHint={t(
-                  selection.isOnBehalfOf
-                    ? TravelCardTexts.card.a11yHint.chooseRecipient
-                    : TravelCardTexts.card.a11yHint.ticketSummary,
-                )}
-                includeTransportInfo
-                includeSituationsAndNotices
-                isDisabled={
-                  !(
-                    tp.booking.availability === 'available' &&
-                    !tp.booking.disabledReason
-                  )
-                }
-                tag={getBookingTagInfo(
-                  t,
-                  tp.booking,
-                  tp.booking.disabledReason,
-                )}
-              />
-            ) : (
+        <BookingValidityInfoBox
+          tripPatterns={tripPatterns}
+          originFareContract={selection.originFareContract}
+        />
+        {!isEmpty ? (
+          <View style={styles.travelCardsList}>
+            {tripPatterns.map((tp, i) => (
               <BookingTrip
                 key={`booking-trip-${i}`}
                 onSelect={onSelect}
                 tripPattern={tp}
               />
-            ),
-          )}
-        </View>
-      ) : (
+            ))}
+          </View>
+        ) : (
+          <EmptyState />
+        )}
+      </View>
+    );
+  }
+
+  // Index-keyed so the slot (and its skeleton) persists from loading through
+  // measure, keeping the shimmer continuous.
+  const slotCount =
+    tripPatterns.length || (isLoading ? BOOKING_SKELETON_COUNT : 0);
+
+  return (
+    <View style={styles.container}>
+      {!isLoading && (
+        <BookingValidityInfoBox
+          tripPatterns={tripPatterns}
+          originFareContract={selection.originFareContract}
+        />
+      )}
+      {!isLoading && isEmpty ? (
         <EmptyState />
+      ) : (
+        <View style={styles.travelCardsList}>
+          {Array.from({length: slotCount}, (_, i) => {
+            const tp = tripPatterns[i];
+            return (
+              <WithTravelCardSkeleton key={i}>
+                {tp &&
+                  (({onReady}) => (
+                    <TravelCard
+                      tripPattern={tp}
+                      onDetailsPressed={() => {
+                        const isAvailable =
+                          tp.booking.availability === 'available' &&
+                          !tp.booking.disabledReason;
+                        if (isAvailable) onSelect(tp.legs);
+                      }}
+                      a11yLabelPrefix={t(
+                        TravelCardTexts.card.a11yPrefix.bookingOption(
+                          i,
+                          tripPatterns.length,
+                        ),
+                      )}
+                      a11yHint={t(
+                        selection.isOnBehalfOf
+                          ? TravelCardTexts.card.a11yHint.chooseRecipient
+                          : TravelCardTexts.card.a11yHint.ticketSummary,
+                      )}
+                      includeTransportInfo
+                      includeSituationsAndNotices
+                      isDisabled={
+                        tp.booking.availability !== 'available' ||
+                        !!tp.booking.disabledReason
+                      }
+                      tag={getBookingTagInfo(
+                        t,
+                        tp.booking,
+                        tp.booking.disabledReason,
+                      )}
+                      onReady={onReady}
+                    />
+                  ))}
+              </WithTravelCardSkeleton>
+            );
+          })}
+        </View>
       )}
     </View>
   );
