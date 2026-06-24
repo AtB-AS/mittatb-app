@@ -12,7 +12,6 @@ import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
 import {TravelCardNotifications} from './TravelCardNotifications';
 import {Tag} from '@atb/components/tag';
-import Animated, {FadeIn} from 'react-native-reanimated';
 
 type TravelCardProps = {
   tripPattern: TripPattern;
@@ -62,63 +61,61 @@ export const TravelCard: React.FC<TravelCardProps> = ({
     : undefined;
 
   return (
-    <Animated.View entering={FadeIn}>
-      <CompositeAccessibilityProvider
-        parentLabels={{
-          cardPrefix: prefixA11yLabel,
-          tag: tagA11yLabel,
-        }}
-        order={['cardPrefix', 'tag', 'header', 'legs', 'notifications']}
-      >
-        {(accessibilityProps) => (
-          <NativeBlockButton
-            onPress={() => onDetailsPressed(tripPattern)}
-            testID={testID}
-            style={[styles.container, isDisabled && styles.containerDisabled]}
-            accessibilityRole={isDisabled ? 'none' : 'button'}
-            accessibilityHint={isDisabled ? undefined : a11yHint}
-            {...accessibilityProps}
-          >
-            {tag && (
-              <View aria-hidden={true}>
-                <Tag labels={[tag.label]} tagType={tag.type} />
-              </View>
-            )}
-            <TravelCardHeader
-              tripPattern={tripPattern}
-              includeDayInfo={includeDayInfo}
-              includeFromToInfo={includeFromToInfo}
-              isSaved={isSaved}
-            />
-            <View style={styles.legsContainer}>
-              <View
-                style={styles.legsArea}
-                onLayout={(e: LayoutChangeEvent) =>
-                  setMaxWidth(e.nativeEvent.layout.width)
-                }
-              >
-                <TravelCardLegs
-                  tripPattern={tripPattern}
-                  maxWidth={maxWidth}
-                  onReady={onReady}
-                />
-              </View>
-              <View>
-                <ThemeIcon svg={ChevronRight} />
-              </View>
+    <CompositeAccessibilityProvider
+      parentLabels={{
+        cardPrefix: prefixA11yLabel,
+        tag: tagA11yLabel,
+      }}
+      order={['cardPrefix', 'tag', 'header', 'legs', 'notifications']}
+    >
+      {(accessibilityProps) => (
+        <NativeBlockButton
+          onPress={() => onDetailsPressed(tripPattern)}
+          testID={testID}
+          style={[styles.container, isDisabled && styles.containerDisabled]}
+          accessibilityRole={isDisabled ? 'none' : 'button'}
+          accessibilityHint={isDisabled ? undefined : a11yHint}
+          {...accessibilityProps}
+        >
+          {tag && (
+            <View aria-hidden={true}>
+              <Tag labels={[tag.label]} tagType={tag.type} />
             </View>
-            {!isDisabled && (
-              <TravelCardNotifications
+          )}
+          <TravelCardHeader
+            tripPattern={tripPattern}
+            includeDayInfo={includeDayInfo}
+            includeFromToInfo={includeFromToInfo}
+            isSaved={isSaved}
+          />
+          <View style={styles.legsContainer}>
+            <View
+              style={styles.legsArea}
+              onLayout={(e: LayoutChangeEvent) =>
+                setMaxWidth(e.nativeEvent.layout.width)
+              }
+            >
+              <TravelCardLegs
                 tripPattern={tripPattern}
-                language={language}
-                includeSituationsAndNotices={includeSituationsAndNotices}
-                includeTransportInfo={includeTransportInfo}
+                maxWidth={maxWidth}
+                onReady={onReady}
               />
-            )}
-          </NativeBlockButton>
-        )}
-      </CompositeAccessibilityProvider>
-    </Animated.View>
+            </View>
+            <View>
+              <ThemeIcon svg={ChevronRight} />
+            </View>
+          </View>
+          {!isDisabled && (
+            <TravelCardNotifications
+              tripPattern={tripPattern}
+              language={language}
+              includeSituationsAndNotices={includeSituationsAndNotices}
+              includeTransportInfo={includeTransportInfo}
+            />
+          )}
+        </NativeBlockButton>
+      )}
+    </CompositeAccessibilityProvider>
   );
 };
 
