@@ -1,7 +1,7 @@
-diff --git a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXBackgroundLayerManager.kt b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXBackgroundLayerManager.kt
+diff --git a/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXBackgroundLayerManager.kt b/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXBackgroundLayerManager.kt
 index bfbeff4..a270d5b 100644
---- a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXBackgroundLayerManager.kt
-+++ b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXBackgroundLayerManager.kt
+--- a/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXBackgroundLayerManager.kt
++++ b/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXBackgroundLayerManager.kt
 @@ -66,6 +66,11 @@ class RNMBXBackgroundLayerManager : ViewGroupManager<RNMBXBackgroundLayer>(),
          layer.setFilter(filterList.asArray())
      }
@@ -14,10 +14,10 @@ index bfbeff4..a270d5b 100644
      companion object {
          const val REACT_CLASS = "RNMBXBackgroundLayer"
      }
-diff --git a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXFillExtrusionLayerManager.kt b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXFillExtrusionLayerManager.kt
+diff --git a/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXFillExtrusionLayerManager.kt b/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXFillExtrusionLayerManager.kt
 index 8f1a3ee..8ab230a 100644
---- a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXFillExtrusionLayerManager.kt
-+++ b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXFillExtrusionLayerManager.kt
+--- a/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXFillExtrusionLayerManager.kt
++++ b/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXFillExtrusionLayerManager.kt
 @@ -71,6 +71,11 @@ class RNMBXFillExtrusionLayerManager : ViewGroupManager<RNMBXFillExtrusionLayer>
          layer.setFilter(filterList.asArray())
      }
@@ -30,10 +30,10 @@ index 8f1a3ee..8ab230a 100644
      companion object {
          const val REACT_CLASS = "RNMBXFillExtrusionLayer"
      }
-diff --git a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXSkyLayerManager.kt b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXSkyLayerManager.kt
+diff --git a/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXSkyLayerManager.kt b/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXSkyLayerManager.kt
 index 838851d..af2b24c 100644
---- a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXSkyLayerManager.kt
-+++ b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXSkyLayerManager.kt
+--- a/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXSkyLayerManager.kt
++++ b/android/src/main/java/com/rnmapbox/rnmbx/components/styles/layers/RNMBXSkyLayerManager.kt
 @@ -66,6 +66,11 @@ class RNMBXSkyLayerManager : ViewGroupManager<RNMBXSkyLayer>(),
          layer.setFilter(filterList.asArray())
      }
@@ -46,10 +46,10 @@ index 838851d..af2b24c 100644
      companion object {
          const val REACT_CLASS = "RNMBXSkyLayer"
      }
-diff --git a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSource.kt b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSource.kt
+diff --git a/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSource.kt b/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSource.kt
 index 66280ed..4e23817 100644
---- a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSource.kt
-+++ b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSource.kt
+--- a/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSource.kt
++++ b/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSource.kt
 @@ -18,6 +18,9 @@ import com.rnmapbox.rnmbx.v11compat.feature.*
  
  class RNMBXVectorSource(context: Context?, private val mManager: RNMBXVectorSourceManager) :
@@ -83,10 +83,10 @@ index 66280ed..4e23817 100644
      }
  
      fun querySourceFeatures(
-diff --git a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSourceManager.kt b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSourceManager.kt
+diff --git a/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSourceManager.kt b/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSourceManager.kt
 index 68d619f..edc49a8 100644
---- a/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSourceManager.kt
-+++ b/node_modules/@rnmapbox/maps/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSourceManager.kt
+--- a/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSourceManager.kt
++++ b/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSourceManager.kt
 @@ -44,6 +44,11 @@ class RNMBXVectorSourceManager(reactApplicationContext: ReactApplicationContext)
          view.mExisting = value.asBoolean()
      }
@@ -99,10 +99,10 @@ index 68d619f..edc49a8 100644
      override fun customEvents(): Map<String, String>? {
          return eventMapOf(
              EventKeys.VECTOR_SOURCE_LAYER_CLICK to "onMapboxVectorSourcePress",
-diff --git a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXFabricHelpers.h b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXFabricHelpers.h
+diff --git a/ios/RNMBX/RNMBXFabricHelpers.h b/ios/RNMBX/RNMBXFabricHelpers.h
 index 974ee24..67bbc6a 100644
---- a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXFabricHelpers.h
-+++ b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXFabricHelpers.h
+--- a/ios/RNMBX/RNMBXFabricHelpers.h
++++ b/ios/RNMBX/RNMBXFabricHelpers.h
 @@ -105,6 +105,10 @@ void RNMBXSetCommonLayerPropsWithoutSourceID(const T& newProps, RNMBXLayer *_vie
      if (minZoomLevel != nil) {
          _view.minZoomLevel = minZoomLevel;
@@ -114,10 +114,10 @@ index 974ee24..67bbc6a 100644
  }
  
  template <typename T>
-diff --git a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXMapViewComponentView.mm b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXMapViewComponentView.mm
+diff --git a/ios/RNMBX/RNMBXMapViewComponentView.mm b/ios/RNMBX/RNMBXMapViewComponentView.mm
 index 6ee6808..ca7efa2 100644
---- a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXMapViewComponentView.mm
-+++ b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXMapViewComponentView.mm
+--- a/ios/RNMBX/RNMBXMapViewComponentView.mm
++++ b/ios/RNMBX/RNMBXMapViewComponentView.mm
 @@ -193,6 +193,11 @@ - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &
  
      RNMBX_REMAP_OPTIONAL_PROP_BOOL(pitchEnabled, reactPitchEnabled)
@@ -130,10 +130,10 @@ index 6ee6808..ca7efa2 100644
      RNMBX_REMAP_OPTIONAL_PROP_NSDictionary(gestureSettings, reactGestureSettings)
  
      id preferredFramesPerSecond = RNMBXConvertFollyDynamicToId(newViewProps.preferredFramesPerSecond);
-diff --git a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXSource.swift b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXSource.swift
+diff --git a/ios/RNMBX/RNMBXSource.swift b/ios/RNMBX/RNMBXSource.swift
 index d13af2a..317238d 100644
---- a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXSource.swift
-+++ b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXSource.swift
+--- a/ios/RNMBX/RNMBXSource.swift
++++ b/ios/RNMBX/RNMBXSource.swift
 @@ -29,6 +29,10 @@ public class RNMBXSource : RNMBXInteractiveElement {
      fatalError("Subclasses should override makeSource")
    }
@@ -154,10 +154,10 @@ index d13af2a..317238d 100644
        }
      }
  
-diff --git a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXVectorSource.swift b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXVectorSource.swift
+diff --git a/ios/RNMBX/RNMBXVectorSource.swift b/ios/RNMBX/RNMBXVectorSource.swift
 index ad07b5b..8a5a134 100644
---- a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXVectorSource.swift
-+++ b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXVectorSource.swift
+--- a/ios/RNMBX/RNMBXVectorSource.swift
++++ b/ios/RNMBX/RNMBXVectorSource.swift
 @@ -8,6 +8,7 @@ public class RNMBXVectorSource : RNMBXTileSource {
    @objc public var minZoomLevel: NSNumber?
    @objc public var tileUrlTemplates: [String] = []
@@ -193,10 +193,10 @@ index ad07b5b..8a5a134 100644
    
    /*
    - (nullable MGLSource*)makeSource
-diff --git a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXVectorSourceComponentView.mm b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXVectorSourceComponentView.mm
+diff --git a/ios/RNMBX/RNMBXVectorSourceComponentView.mm b/ios/RNMBX/RNMBXVectorSourceComponentView.mm
 index a8bf74c..1a406df 100644
---- a/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXVectorSourceComponentView.mm
-+++ b/node_modules/@rnmapbox/maps/ios/RNMBX/RNMBXVectorSourceComponentView.mm
+--- a/ios/RNMBX/RNMBXVectorSourceComponentView.mm
++++ b/ios/RNMBX/RNMBXVectorSourceComponentView.mm
 @@ -117,6 +117,10 @@ - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &
      if (tms != nil) {
          _view.tms = tms;
@@ -208,10 +208,10 @@ index a8bf74c..1a406df 100644
      id attribution = RNMBXConvertFollyDynamicToId(newProps.attribution);
      if (attribution != nil) {
          _view.attribution = attribution;
-diff --git a/node_modules/@rnmapbox/maps/lib/module/components/VectorSource.js b/node_modules/@rnmapbox/maps/lib/module/components/VectorSource.js
+diff --git a/lib/module/components/VectorSource.js b/lib/module/components/VectorSource.js
 index 72a72a9..e9523a9 100644
---- a/node_modules/@rnmapbox/maps/lib/module/components/VectorSource.js
-+++ b/node_modules/@rnmapbox/maps/lib/module/components/VectorSource.js
+--- a/lib/module/components/VectorSource.js
++++ b/lib/module/components/VectorSource.js
 @@ -69,6 +69,7 @@ class VectorSource extends AbstractSource {
        minZoomLevel: this.props.minZoomLevel,
        maxZoomLevel: this.props.maxZoomLevel,
@@ -220,10 +220,10 @@ index 72a72a9..e9523a9 100644
        attribution: this.props.attribution,
        hitbox: this.props.hitbox,
        hasPressListener: isFunction(this.props.onPress),
-diff --git a/node_modules/@rnmapbox/maps/lib/module/specs/RNMBXVectorSourceNativeComponent.ts b/node_modules/@rnmapbox/maps/lib/module/specs/RNMBXVectorSourceNativeComponent.ts
+diff --git a/lib/module/specs/RNMBXVectorSourceNativeComponent.ts b/lib/module/specs/RNMBXVectorSourceNativeComponent.ts
 index f7aa0ee..cce51af 100644
---- a/node_modules/@rnmapbox/maps/lib/module/specs/RNMBXVectorSourceNativeComponent.ts
-+++ b/node_modules/@rnmapbox/maps/lib/module/specs/RNMBXVectorSourceNativeComponent.ts
+--- a/lib/module/specs/RNMBXVectorSourceNativeComponent.ts
++++ b/lib/module/specs/RNMBXVectorSourceNativeComponent.ts
 @@ -19,6 +19,7 @@ export interface NativeProps extends ViewProps {
    maxZoomLevel: UnsafeMixed<Double>;
    minZoomLevel: UnsafeMixed<Double>;
@@ -232,10 +232,10 @@ index f7aa0ee..cce51af 100644
    hasPressListener: UnsafeMixed<boolean>;
    hitbox: UnsafeMixed<any>;
    onMapboxVectorSourcePress: DirectEventHandler<OnMapboxVectorSourcePressEventType>;
-diff --git a/node_modules/@rnmapbox/maps/src/components/VectorSource.tsx b/node_modules/@rnmapbox/maps/src/components/VectorSource.tsx
+diff --git a/src/components/VectorSource.tsx b/src/components/VectorSource.tsx
 index 51afb11..9dcb4b7 100644
---- a/node_modules/@rnmapbox/maps/src/components/VectorSource.tsx
-+++ b/node_modules/@rnmapbox/maps/src/components/VectorSource.tsx
+--- a/src/components/VectorSource.tsx
++++ b/src/components/VectorSource.tsx
 @@ -53,6 +53,12 @@ interface Props {
     */
    tms?: boolean;
@@ -257,10 +257,10 @@ index 51afb11..9dcb4b7 100644
        attribution: this.props.attribution,
        hitbox: this.props.hitbox,
        hasPressListener: isFunction(this.props.onPress),
-diff --git a/node_modules/@rnmapbox/maps/src/specs/RNMBXBackgroundLayerNativeComponent.ts b/node_modules/@rnmapbox/maps/src/specs/RNMBXBackgroundLayerNativeComponent.ts
+diff --git a/src/specs/RNMBXBackgroundLayerNativeComponent.ts b/src/specs/RNMBXBackgroundLayerNativeComponent.ts
 index fb1bcc8..59cd3ea 100644
---- a/node_modules/@rnmapbox/maps/src/specs/RNMBXBackgroundLayerNativeComponent.ts
-+++ b/node_modules/@rnmapbox/maps/src/specs/RNMBXBackgroundLayerNativeComponent.ts
+--- a/src/specs/RNMBXBackgroundLayerNativeComponent.ts
++++ b/src/specs/RNMBXBackgroundLayerNativeComponent.ts
 @@ -21,6 +21,7 @@ export interface NativeProps extends ViewProps {
  
    maxZoomLevel?: OptionalProp<Double>;
@@ -269,10 +269,10 @@ index fb1bcc8..59cd3ea 100644
  }
  
  // @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
-diff --git a/node_modules/@rnmapbox/maps/src/specs/RNMBXFillExtrusionLayerNativeComponent.ts b/node_modules/@rnmapbox/maps/src/specs/RNMBXFillExtrusionLayerNativeComponent.ts
+diff --git a/src/specs/RNMBXFillExtrusionLayerNativeComponent.ts b/src/specs/RNMBXFillExtrusionLayerNativeComponent.ts
 index 9cced9e..5909e2b 100644
---- a/node_modules/@rnmapbox/maps/src/specs/RNMBXFillExtrusionLayerNativeComponent.ts
-+++ b/node_modules/@rnmapbox/maps/src/specs/RNMBXFillExtrusionLayerNativeComponent.ts
+--- a/src/specs/RNMBXFillExtrusionLayerNativeComponent.ts
++++ b/src/specs/RNMBXFillExtrusionLayerNativeComponent.ts
 @@ -22,6 +22,7 @@ export interface NativeProps extends ViewProps {
    maxZoomLevel?: OptionalProp<Double>;
    minZoomLevel?: OptionalProp<Double>;
@@ -281,10 +281,10 @@ index 9cced9e..5909e2b 100644
  }
  
  // @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
-diff --git a/node_modules/@rnmapbox/maps/src/specs/RNMBXSkyLayerNativeComponent.ts b/node_modules/@rnmapbox/maps/src/specs/RNMBXSkyLayerNativeComponent.ts
+diff --git a/src/specs/RNMBXSkyLayerNativeComponent.ts b/src/specs/RNMBXSkyLayerNativeComponent.ts
 index 27f7e2f..6e28347 100644
---- a/node_modules/@rnmapbox/maps/src/specs/RNMBXSkyLayerNativeComponent.ts
-+++ b/node_modules/@rnmapbox/maps/src/specs/RNMBXSkyLayerNativeComponent.ts
+--- a/src/specs/RNMBXSkyLayerNativeComponent.ts
++++ b/src/specs/RNMBXSkyLayerNativeComponent.ts
 @@ -21,6 +21,7 @@ export interface NativeProps extends ViewProps {
  
    maxZoomLevel?: OptionalProp<Double>;
@@ -293,10 +293,10 @@ index 27f7e2f..6e28347 100644
  }
  
  // @ts-ignore-error - Codegen requires single cast but TypeScript prefers double cast
-diff --git a/node_modules/@rnmapbox/maps/src/specs/RNMBXVectorSourceNativeComponent.ts b/node_modules/@rnmapbox/maps/src/specs/RNMBXVectorSourceNativeComponent.ts
+diff --git a/src/specs/RNMBXVectorSourceNativeComponent.ts b/src/specs/RNMBXVectorSourceNativeComponent.ts
 index f7aa0ee..cce51af 100644
---- a/node_modules/@rnmapbox/maps/src/specs/RNMBXVectorSourceNativeComponent.ts
-+++ b/node_modules/@rnmapbox/maps/src/specs/RNMBXVectorSourceNativeComponent.ts
+--- a/src/specs/RNMBXVectorSourceNativeComponent.ts
++++ b/src/specs/RNMBXVectorSourceNativeComponent.ts
 @@ -19,6 +19,7 @@ export interface NativeProps extends ViewProps {
    maxZoomLevel: UnsafeMixed<Double>;
    minZoomLevel: UnsafeMixed<Double>;
