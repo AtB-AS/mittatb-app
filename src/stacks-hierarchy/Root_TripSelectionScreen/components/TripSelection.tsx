@@ -182,6 +182,7 @@ function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
         >
           {situations.map((situation) => (
             <MessageInfoText
+              key={situation.id}
               type={getMessageTypeForSituation(situation)}
               message={
                 getTextForLanguage(situation.description, language) ?? ''

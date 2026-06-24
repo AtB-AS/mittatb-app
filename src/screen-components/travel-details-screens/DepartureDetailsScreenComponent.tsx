@@ -426,6 +426,7 @@ export const DepartureDetailsScreenComponent = ({
             (notice) =>
               notice.text && (
                 <MessageInfoBox
+                  key={notice.id}
                   type="info"
                   message={notice.text}
                   style={styles.messageBox}
