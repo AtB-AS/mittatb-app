@@ -22,6 +22,8 @@ import {
   FlexibleTransportOption,
   KnownQrCodeUrl,
   NotificationConfig,
+  RefundReason,
+  type RefundReasonType,
   StopSignalButtonConfig,
   type StopSignalButtonConfigType,
   TransportModeFilterOption,
@@ -283,6 +285,26 @@ export const mapToStopSignalButtonConfig = (
     ? parseResult.data
     : StopSignalButtonConfig.parse({});
 };
+
+export function mapToRefundReasons(
+  reasons?: any,
+): RefundReasonType[] | undefined {
+  if (!reasons) return;
+  if (!Array.isArray(reasons)) return;
+  return reasons
+    .map((reason) => {
+      const parseResult = RefundReason.safeParse(reason);
+      if (!parseResult.success) {
+        console.warn(
+          `mapToRefundReasons with id ${reason?.id} failed safeParsing:\n`,
+          parseResult.error,
+        );
+        return;
+      }
+      return parseResult.data;
+    })
+    .filter(isDefined);
+}
 
 export function mapToKnownQrCodeUrls(config?: any): CompiledKnownQrCodeUrl[] {
   if (!config) return [];
