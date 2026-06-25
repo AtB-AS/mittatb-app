@@ -114,6 +114,8 @@ const dictionary = {
       aimedPrefix: _('Rutetid', 'Route time', `Rutetid`),
       expectedPrefix: _('Sanntid', 'Realtime', `Sanntid`),
     },
+    noAlighting: _('Ingen avstigning', 'No disembarking', 'Ingen avstiging'),
+    noBoarding: _('Ingen påstigning', 'No boarding', 'Ingen påstiging'),
   },
   appNavigation: {
     close: {
@@ -220,6 +222,7 @@ const dictionary = {
     `Noko gjekk gale`,
   ),
   zone: _('Sone', 'Zone', 'Sone'),
+  telephone: (tel: string) => _(`tlf. ${tel}`, `tel. ${tel}`, `tlf. ${tel}`),
 };
 
 export default orgSpecificTranslations(dictionary, {

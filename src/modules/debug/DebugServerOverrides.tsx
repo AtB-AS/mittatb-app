@@ -25,6 +25,7 @@ import Swipeable, {
 import Animated, {SharedValue, useAnimatedStyle} from 'react-native-reanimated';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import type {DebugServerOverride, HeaderOverride} from './types';
+import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
 
 type OftenUsedOverride = DebugServerOverride & {label: string};
 
@@ -149,6 +150,8 @@ export function DebugServerOverrides() {
       <BottomSheetModal
         bottomSheetModalRef={editBottomSheetRef}
         heading="Edit debug override"
+        keyboardBehavior="interactive"
+        keyboardBlurBehavior="restore"
         bottomSheetHeaderType={BottomSheetHeaderType.Close}
       >
         {selectedOverride && (
@@ -298,6 +301,7 @@ function DebugServerInput(props: {
       <View>
         <ThemeText typography="body__s">New override</ThemeText>
         <TextInputSectionItem
+          InputComponent={BottomSheetTextInput}
           label="Regex"
           placeholder=".*"
           value={match}
@@ -305,6 +309,7 @@ function DebugServerInput(props: {
           autoCapitalize="none"
         />
         <TextInputSectionItem
+          InputComponent={BottomSheetTextInput}
           label="New baseURL"
           placeholder="http://your-url-here:7000"
           onChangeText={setNewValue}

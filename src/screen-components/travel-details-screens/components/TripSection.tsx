@@ -11,7 +11,12 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {ServiceJourneyDeparture} from '../types';
 import {SituationMessageBox} from '@atb/modules/situations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import {
+  dictionary,
+  type TranslateFunction,
+  TripDetailsTexts,
+  useTranslation,
+} from '@atb/translations';
 import {
   formatToClock,
   secondsToDuration,
@@ -26,7 +31,9 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {openUrl} from '@atb/utils/open-url';
 import {useHumanizeDistance} from '@atb/utils/location';
+import {isDefined} from '@atb/utils/presence';
 import {
+  filterNotices,
   getLineDestinationName,
   getLineName,
   getNoticesForFromEstimatedCall,
@@ -675,6 +682,7 @@ const IntermediateInfo = ({
       </TripRow>
       {expanded &&
         leg.intermediateEstimatedCalls.map((call) => {
+          const intermediateInfoTexts = getIntermediateInfoTexts(call, t);
           return (
             <View
               key={call.stopPositionInPattern}
@@ -703,12 +711,56 @@ const IntermediateInfo = ({
               >
                 <ThemeText>{call.quay.name}</ThemeText>
               </TripRow>
+              {intermediateInfoTexts.length > 0 && (
+                <TripRow
+                  dimensionOverrides={NEW_TRIP_DIMENSIONS}
+                  accessibilityLabel={intermediateInfoTexts
+                    .map((l) => l.text)
+                    .join(screenReaderPause)}
+                  style={[style.notice, style.intermediateNotices]}
+                >
+                  <View style={style.intermediateNoticesContainer}>
+                    {intermediateInfoTexts.map(({key, text}) => (
+                      <ThemeText
+                        key={key}
+                        typography="body__m"
+                        type="secondary"
+                      >
+                        {intermediateInfoTexts.length > 1 ? `• ${text}` : text}
+                      </ThemeText>
+                    ))}
+                  </View>
+                </TripRow>
+              )}
             </View>
           );
         })}
     </>
   );
 };
+
+const getIntermediateInfoTexts = (
+  call: Leg['intermediateEstimatedCalls'][number],
+  t: TranslateFunction,
+): {key: string; text: string}[] => {
+  const callNotices = filterNotices(call.notices ?? []);
+  return [
+    call.forAlighting
+      ? undefined
+      : {
+          key: 'noAlighting',
+          text: t(dictionary.travel.noAlighting),
+        },
+    call.forBoarding
+      ? undefined
+      : {
+          key: 'noBoarding',
+          text: t(dictionary.travel.noBoarding),
+        },
+    ...callNotices.map((n) => ({key: n.id, text: n.text})),
+  ].filter(isDefined);
+};
+
 function useWalkA11yLabel(
   leg: Leg,
   wait?: WaitDetails,
@@ -1011,5 +1063,11 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   noticeFirst: {
     marginTop: -theme.spacing.xSmall,
+  },
+  intermediateNotices: {
+    marginTop: -theme.spacing.medium,
+  },
+  intermediateNoticesContainer: {
+    gap: theme.spacing.xSmall,
   },
 }));

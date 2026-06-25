@@ -1,3 +1,4 @@
+import type {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import type {
   TransportMode,
   TransportSubmode,
@@ -15,6 +16,7 @@ export type DatedServiceJourneyQuery = {
       transportMode?: TransportMode;
       transportSubmode?: TransportSubmode;
       line: {publicCode?: string; name?: string};
+      situations: Array<SituationFragment>;
     };
   };
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import {getSvgForMostCriticalSituationOrNotice} from './utils';
-import {SituationType} from './types';
+import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {StyleProp, ViewStyle} from 'react-native';
@@ -11,7 +11,7 @@ type Props = {
   accessibilityLabel?: string;
   notices?: NoticeFragment[];
   cancellation?: boolean;
-} & ({situations: SituationType[]} | {situation: SituationType});
+} & ({situations: SituationFragment[]} | {situation: SituationFragment});
 
 export const SituationOrNoticeIcon = ({
   style,

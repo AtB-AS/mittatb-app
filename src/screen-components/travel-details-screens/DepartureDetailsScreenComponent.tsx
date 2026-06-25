@@ -20,6 +20,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   DepartureDetailsTexts,
   DeparturesTexts,
+  dictionary,
   FavoriteDeparturesTexts,
   TripDetailsTexts,
   useTranslation,
@@ -426,6 +427,7 @@ export const DepartureDetailsScreenComponent = ({
             (notice) =>
               notice.text && (
                 <MessageInfoBox
+                  key={notice.id}
                   type="info"
                   message={notice.text}
                   style={styles.messageBox}
@@ -683,7 +685,7 @@ function EstimatedCallRow({
               style={styles.boardingInfo}
               pause="before"
             >
-              {t(DepartureDetailsTexts.messages.noAlighting)}
+              {t(dictionary.travel.noAlighting)}
             </AccessibleText>
           )}
         {!call.cancellation &&
@@ -695,7 +697,7 @@ function EstimatedCallRow({
               style={styles.boardingInfo}
               pause="before"
             >
-              {t(DepartureDetailsTexts.messages.noBoarding)}
+              {t(dictionary.travel.noBoarding)}
             </AccessibleText>
           )}
       </TripRow>

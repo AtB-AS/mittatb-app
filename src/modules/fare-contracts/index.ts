@@ -25,7 +25,7 @@ export {CompactFareContractInfo} from './CompactFareContractInfo';
 export {CompactFareContracts} from './CompactFareContracts';
 export {FareContractDetailItem} from './components/FareContractDetailItem';
 export {FareContractFromTo} from './components/FareContractFromTo';
-export {useFareContractLegs} from './use-fare-contract-legs';
+export {useFareContractBookingSegments} from './use-fare-contract-booking-segments';
 export {useTicketAccessibilityLabel} from './use-ticket-accessibility-label';
 export {useSupplementProductPurchaseSelection} from './use-supplement-product-purchase-selection';
 export {SupplementPurchaseButton} from './components/SupplementPurchaseButton';
