@@ -114,6 +114,8 @@ const dictionary = {
       aimedPrefix: _('Rutetid', 'Route time', `Rutetid`),
       expectedPrefix: _('Sanntid', 'Realtime', `Sanntid`),
     },
+    noAlighting: _('Ingen avstigning', 'No disembarking', 'Ingen avstiging'),
+    noBoarding: _('Ingen påstigning', 'No boarding', 'Ingen påstiging'),
   },
   appNavigation: {
     close: {
