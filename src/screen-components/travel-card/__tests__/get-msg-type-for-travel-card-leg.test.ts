@@ -28,6 +28,7 @@ const makeSituation = (
   validityPeriod: overrides.validityPeriod,
   situationNumber: overrides.situationNumber,
   infoLinks: overrides.infoLinks,
+  affects: overrides.affects ?? [],
 });
 
 const makeLeg = (overrides: Partial<Leg> = {}): Leg =>

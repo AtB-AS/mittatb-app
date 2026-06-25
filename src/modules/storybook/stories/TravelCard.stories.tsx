@@ -151,6 +151,7 @@ const TRIP_SCENARIOS = {
             summary: [{value: 'Forsinkelse'}],
             description: [{value: 'Det er forsinkelser grunnet trafikk'}],
             advice: [],
+            affects: [],
           },
         ],
       }),
