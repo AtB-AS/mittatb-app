@@ -169,6 +169,11 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const [flexibleTransportInfoDismissed, setFlexibleTransportInfoDismissed] =
     useState(false);
   const isFlexibleTransportEnabled = isFlexibleTransportEnabledInRemoteConfig;
+  const shouldShowCityZoneMessage =
+    isFlexibleTransportEnabled &&
+    !flexibleTransportInfoDismissed &&
+    (tripPatterns.length > 0 || tripsSearchState === 'search-empty-result') &&
+    !tripsIsError;
 
   const [searchStateMessage, setSearchStateMessage] = useState<
     string | undefined
@@ -418,23 +423,19 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 .filter(onlyUniques),
             }}
           />
-          {isFlexibleTransportEnabled &&
-            !flexibleTransportInfoDismissed &&
-            (tripPatterns.length > 0 ||
-              tripsSearchState === 'search-empty-result') &&
-            !tripsIsError && (
-              <CityZoneMessage
-                from={from}
-                to={to}
-                onDismiss={() => {
-                  setFlexibleTransportInfoDismissed(true);
-                  analytics.logEvent(
-                    'Flexible transport',
-                    'Message box dismissed',
-                  );
-                }}
-              />
-            )}
+          {shouldShowCityZoneMessage && (
+            <CityZoneMessage
+              from={from}
+              to={to}
+              onDismiss={() => {
+                setFlexibleTransportInfoDismissed(true);
+                analytics.logEvent(
+                  'Flexible transport',
+                  'Message box dismissed',
+                );
+              }}
+            />
+          )}
           {tripSearchEnabled && (
             <NonTransitResults
               tripsProps={tripsProps}
