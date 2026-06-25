@@ -35,7 +35,7 @@ import {Check} from '@atb/assets/svg/mono-icons/status';
 import {Theme} from '@atb/theme';
 import {NoParking} from '@atb/assets/svg/mono-icons/mobility';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {Parking} from '@atb/assets/svg/mono-icons/places';
+import {ParkingThick} from '@atb/assets/svg/mono-icons/places';
 
 export const TRANSPORT_SUB_MODES_BOAT: AnySubMode[] = [
   TransportSubmode.HighSpeedPassengerService,
@@ -97,7 +97,7 @@ export const getGeofencingZoneCodeSvg = (code: GeofencingZoneCode) => {
     case 'noParking':
       return {svg: NoParking};
     case 'parking':
-      return {svg: Parking};
+      return {svg: ParkingThick};
   }
 };
 

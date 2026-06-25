@@ -15,8 +15,8 @@ importers:
         specifier: ^11.0.0
         version: 11.0.0(zod@4.1.11)
       '@atb-as/generate-assets':
-        specifier: ^18.16.0
-        version: 18.16.0
+        specifier: ^18.18.0
+        version: 18.18.0
       '@atb-as/theme':
         specifier: ^15.3.0
         version: 15.3.0
@@ -502,8 +502,8 @@ packages:
     peerDependencies:
       zod: ^4.1.11
 
-  '@atb-as/generate-assets@18.16.0':
-    resolution: {integrity: sha512-0+IqmDI2Ya8PYHyV2fl04BhkjQ4Bq5dUY0g6xLDnVx9rpubeYqO8Rl1Ebfl0+btgyQIujmc2GbDEJ/0lHzovmA==}
+  '@atb-as/generate-assets@18.18.0':
+    resolution: {integrity: sha512-/+eEQslDr9FLFOWPFDTL/fIIejybk9dsI/lSwv/sb/9xI1HFOGgcDYPJzs/D77EG9NhZNYV8qXXtDThWTE0ufA==}
     hasBin: true
 
   '@atb-as/theme@14.0.1':
@@ -3972,8 +3972,8 @@ packages:
   electron-to-chromium@1.5.213:
     resolution: {integrity: sha512-xr9eRzSLNa4neDO0xVFrkXu3vyIzG4Ay08dApecw42Z1NbmCt+keEpXdvlYGVe0wtvY5dhW0Ay0lY0IOfsCg0Q==}
 
-  electron-to-chromium@1.5.377:
-    resolution: {integrity: sha512-cH1jZgJHoezfTnKfKwnScpHywTFVnJUNITDPREFdhNjiuD502+QFpG0Qk7G8jhsV/f+CEAFlIrzP1fT+IMb92g==}
+  electron-to-chromium@1.5.378:
+    resolution: {integrity: sha512-VinvOAuuPmdD1guEgGv5f2Qp7/vlfqOrUOMYNnOD4wj3pit8kRsQHzfIf6teyUGWo15Tg5+bOJaRunvyltpVWQ==}
 
   emittery@0.13.1:
     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
@@ -5589,8 +5589,8 @@ packages:
   node-releases@2.0.19:
     resolution: {integrity: sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==}
 
-  node-releases@2.0.48:
-    resolution: {integrity: sha512-1uz8041X6LoI6ZSdZacM9lVY28vuzDlSKitnpbSNK0RfKoIJkX29NBPVEFXhnuSuEOA9Ww0xnPJ+ILWbGAv8DA==}
+  node-releases@2.0.49:
+    resolution: {integrity: sha512-f06bl1D+8ZDkn2oOQQKAh5/otFWqVnM1Q5oerA8Pex7UfT66Tx4IPHIqVVFKqFT3FUtaDstdgkM7yT7JWhqxfw==}
     engines: {node: '>=18'}
 
   node-stream-zip@1.15.0:
@@ -7399,7 +7399,7 @@ snapshots:
       yargs: 17.7.2
       zod: 4.1.11
 
-  '@atb-as/generate-assets@18.16.0':
+  '@atb-as/generate-assets@18.18.0':
     dependencies:
       '@atb-as/theme': 14.0.1
       commander: 9.5.0
@@ -11151,8 +11151,8 @@ snapshots:
     dependencies:
       baseline-browser-mapping: 2.10.38
       caniuse-lite: 1.0.30001799
-      electron-to-chromium: 1.5.377
-      node-releases: 2.0.48
+      electron-to-chromium: 1.5.378
+      node-releases: 2.0.49
       update-browserslist-db: 1.2.3(browserslist@4.28.2)
 
   bs-logger@0.2.6:
@@ -11733,7 +11733,7 @@ snapshots:
 
   electron-to-chromium@1.5.213: {}
 
-  electron-to-chromium@1.5.377: {}
+  electron-to-chromium@1.5.378: {}
 
   emittery@0.13.1: {}
 
@@ -12872,7 +12872,7 @@ snapshots:
 
   istanbul-lib-source-maps@4.0.1:
     dependencies:
-      debug: 4.4.1
+      debug: 4.4.3
       istanbul-lib-coverage: 3.2.0
       source-map: 0.6.1
     transitivePeerDependencies:
@@ -13768,7 +13768,7 @@ snapshots:
 
   node-releases@2.0.19: {}
 
-  node-releases@2.0.48: {}
+  node-releases@2.0.49: {}
 
   node-stream-zip@1.15.0: {}
 
