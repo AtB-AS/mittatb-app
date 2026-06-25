@@ -9,7 +9,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {InfoLinkFragment} from '@atb/api/types/generated/fragments/shared';
 import {StyleSheet} from '@atb/theme';
-import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
+import type {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {SituationOrNoticeIcon} from './SituationOrNoticeIcon';
 import {daysBetween, formatToLongDateTime} from '@atb/utils/date';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -17,7 +17,10 @@ import {Time} from '@atb/assets/svg/mono-icons/time';
 import {screenReaderPause} from '@atb/components/text';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {NativeBlockButton} from '@atb/components/native-button';
-import {getMsgTypeForMostCriticalSituationOrNotice} from './utils';
+import {
+  getAffectedStopNames,
+  getMsgTypeForMostCriticalSituationOrNotice,
+} from './utils';
 import {openInAppBrowser} from '../in-app-browser';
 import {
   BottomSheetHeaderType,
@@ -25,6 +28,7 @@ import {
   BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {isDefined} from '@atb/utils/presence';
 
 type Props = {
   situation: SituationFragment;
@@ -44,6 +48,7 @@ export const SituationBottomSheet = ({
   const description = getTextForLanguage(situation.description, language);
   const advice = getTextForLanguage(situation.advice, language);
   const infoLinks = filterInfoLinks(situation.infoLinks);
+  const affectedStopsText = useAffectedStopNamesText(situation.affects);
   const validityPeriodText = useValidityPeriodText(situation.validityPeriod);
   const msgType = getMsgTypeForMostCriticalSituationOrNotice([situation]);
 
@@ -57,9 +62,14 @@ export const SituationBottomSheet = ({
       <Section style={styles.section}>
         <GenericSectionItem type="spacious">
           <View
-            accessibilityLabel={[summary, description, advice].join(
-              screenReaderPause,
-            )}
+            accessibilityLabel={[
+              summary,
+              description,
+              advice,
+              affectedStopsText,
+            ]
+              .filter(isDefined)
+              .join(screenReaderPause)}
             accessible={true}
             style={styles.textContainer}
           >
@@ -76,6 +86,11 @@ export const SituationBottomSheet = ({
               <ThemeText style={styles.description}>{description}</ThemeText>
             )}
             {advice && <ThemeText style={styles.advice}>{advice}</ThemeText>}
+            {affectedStopsText && (
+              <ThemeText style={styles.affectedStops}>
+                {affectedStopsText}
+              </ThemeText>
+            )}
           </View>
           {infoLinks?.length ? (
             <View style={styles.infoLinksContainer}>
@@ -111,6 +126,38 @@ const filterInfoLinks = (
   infoLinks?.filter(
     (il: Partial<InfoLinkFragment>): il is InfoLinkFragment => !!il.uri,
   ) || [];
+
+/**
+ * Build the text for listing affected stop places. Up to 10 names are
+ * shown in full; beyond that the list is truncated to 8 names followed by an
+ * "N other stops" tail. Returns undefined if no stop places are affected.
+ */
+const useAffectedStopNamesText = (
+  affects: SituationFragment['affects'],
+): string | undefined => {
+  const {t} = useTranslation();
+  const names = getAffectedStopNames(affects);
+  if (names.length === 0) return undefined;
+
+  const displayItems =
+    names.length > 10
+      ? [
+          ...names.slice(0, 8),
+          t(
+            SituationsTexts.bottomSheet.affectedStopPlaces.otherStops(
+              names.length - 8,
+            ),
+          ),
+        ]
+      : names;
+
+  const list =
+    displayItems.length > 1
+      ? `${displayItems.slice(0, -1).join(', ')} ${t(dictionary.listConcatWord)} ${displayItems[displayItems.length - 1]}`
+      : displayItems[0];
+
+  return `${t(SituationsTexts.bottomSheet.affectedStopPlaces.header)}: ${list}`;
+};
 
 const useValidityPeriodText = (
   period?: SituationFragment['validityPeriod'],
@@ -179,6 +226,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   advice: {marginTop: theme.spacing.medium},
   infoLinksContainer: {marginTop: theme.spacing.medium, flexDirection: 'row'},
   infoLink: {marginRight: theme.spacing.medium},
+  affectedStops: {marginTop: theme.spacing.medium},
   validityContainer: {flexDirection: 'row', marginTop: theme.spacing.medium},
   validityIcon: {marginRight: theme.spacing.small},
   validityText: {flex: 1},

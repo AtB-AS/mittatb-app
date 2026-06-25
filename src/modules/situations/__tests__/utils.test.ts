@@ -3,6 +3,7 @@ import {
   findAllNotices,
   findAllSituationsFromLeg,
   findAllSituations,
+  getAffectedStopNames,
   getSituationSummary,
   getMessageTypeForSituation,
   getMsgTypeForMostCriticalSituationOrNotice,
@@ -36,6 +37,7 @@ const makeSituation = (
   validityPeriod: overrides.validityPeriod,
   situationNumber: overrides.situationNumber,
   infoLinks: overrides.infoLinks,
+  affects: overrides.affects ?? [],
 });
 
 const makeMinimalLeg = (overrides: Partial<Leg> = {}): Leg =>
@@ -441,5 +443,56 @@ describe('getSituationOrNoticeA11yLabel', () => {
       t,
     );
     expect(result).toBeDefined();
+  });
+});
+
+describe('getAffectedStopNames', () => {
+  type Affects = SituationFragment['affects'];
+
+  it('returns empty array when affects is empty', () => {
+    expect(getAffectedStopNames([])).toEqual([]);
+  });
+
+  it('extracts names from all stop-place variants, preferring stopPlace over quay', () => {
+    const affects: Affects = [
+      {
+        __typename: 'AffectedStopPlace',
+        stopPlace: {name: 'Stop'},
+        quay: {name: 'Quay'},
+      },
+      {
+        __typename: 'AffectedStopPlaceOnLine',
+        quay: {name: 'On line quay'},
+      },
+      {
+        __typename: 'AffectedStopPlaceOnServiceJourney',
+        stopPlace: {name: 'On journey stop'},
+      },
+    ];
+    expect(getAffectedStopNames(affects)).toEqual([
+      'Stop',
+      'On line quay',
+      'On journey stop',
+    ]);
+  });
+
+  it('skips non stop-place variants and entries without stopPlace or quay', () => {
+    const affects: Affects = [
+      {__typename: 'AffectedLine'},
+      {__typename: 'AffectedServiceJourney'},
+      {__typename: 'AffectedUnknown'},
+      {__typename: 'AffectedStopPlace'},
+      {__typename: 'AffectedStopPlace', stopPlace: {name: 'Kept'}},
+    ];
+    expect(getAffectedStopNames(affects)).toEqual(['Kept']);
+  });
+
+  it('deduplicates names', () => {
+    const affects: Affects = [
+      {__typename: 'AffectedStopPlace', stopPlace: {name: 'A'}},
+      {__typename: 'AffectedStopPlace', stopPlace: {name: 'B'}},
+      {__typename: 'AffectedStopPlaceOnLine', stopPlace: {name: 'A'}},
+    ];
+    expect(getAffectedStopNames(affects)).toEqual(['A', 'B']);
   });
 });

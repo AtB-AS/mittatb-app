@@ -40,6 +40,15 @@ const SituationsTexts = {
       warning: _('Advarsel', 'Warning', 'Advarsel'),
       error: _('Feil', 'Error', 'Feil'),
     },
+    affectedStopPlaces: {
+      header: _('Påvirker', 'Affects', 'Påverkar'),
+      otherStops: (count: number) =>
+        _(
+          `${count} andre stopp`,
+          `${count} other stops`,
+          `${count} andre stopp`,
+        ),
+    },
     validity: {
       from: (fromDate: string) =>
         _(
