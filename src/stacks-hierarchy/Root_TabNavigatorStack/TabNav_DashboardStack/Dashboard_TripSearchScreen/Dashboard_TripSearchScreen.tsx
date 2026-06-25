@@ -48,14 +48,17 @@ import {TripPattern} from '@atb/api/types/trips';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
 import {NativeBlockButton} from '@atb/components/native-button';
-import {getSearchTime, getSearchTimeLabel, sanitizeSearchTime} from './utils';
+import {
+  getSearchTime,
+  getSearchTimeLabel,
+  sanitizeSearchTime,
+  uniqueLegValues,
+} from './utils';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   GlobalMessage,
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
-import {isDefined} from '@atb/utils/presence';
-import {onlyUniques} from '@atb/utils/only-uniques';
 import {DatePickerSheet} from '@atb/components/date-selection';
 import SharedTexts from '@atb/translations/shared';
 import {TravelSearchFiltersBottomSheet} from './components/TravelSearchFiltersBottomSheet';
@@ -401,26 +404,19 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             style={styles.globalMessage}
             globalMessageContext={GlobalMessageContextEnum.appTripResults}
             ruleVariables={{
-              transportModes: tripPatterns
-                .flatMap((tp) => tp.legs)
-                .map((leg) => leg.mode)
-                .filter(isDefined)
-                .filter(onlyUniques),
-              transportSubmodes: tripPatterns
-                .flatMap((tp) => tp.legs)
-                .map((leg) => leg.transportSubmode)
-                .filter(isDefined)
-                .filter(onlyUniques),
-              authorities: tripPatterns
-                .flatMap((tp) => tp.legs)
-                .map((leg) => leg.authority?.id)
-                .filter(isDefined)
-                .filter(onlyUniques),
-              publicCodes: tripPatterns
-                .flatMap((tp) => tp.legs)
-                .map((leg) => leg.line?.publicCode)
-                .filter(isDefined)
-                .filter(onlyUniques),
+              transportModes: uniqueLegValues(tripPatterns, (leg) => leg.mode),
+              transportSubmodes: uniqueLegValues(
+                tripPatterns,
+                (leg) => leg.transportSubmode,
+              ),
+              authorities: uniqueLegValues(
+                tripPatterns,
+                (leg) => leg.authority?.id,
+              ),
+              publicCodes: uniqueLegValues(
+                tripPatterns,
+                (leg) => leg.line?.publicCode,
+              ),
             }}
           />
           {shouldShowCityZoneMessage && (
