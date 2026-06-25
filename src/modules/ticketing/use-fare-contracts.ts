@@ -75,7 +75,7 @@ export const useFareContracts = (
   const refetch = () => {
     // On refetch, also invalidate queries with availability !== 'available' to
     // ensure consistency throughout the app.
-    queryClient.invalidateQueries({queryKey: [fareContractsQueryKey]});
+    invalidateFareContractsQuery(queryClient);
     getFareContractsFromBackend().then(({data, isSuccess}) => {
       if (isSuccess) {
         const parsedFareContracts = data
