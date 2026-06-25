@@ -143,8 +143,7 @@ export const Map = (props: MapProps) => {
     isMapTilePreloadingEnabled,
   } = useFeatureTogglesContext();
 
-  const {getGeofencingZoneContent, getStationParkingContent} =
-    useGeofencingZoneContent();
+  const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
   const {data: activeShmoBooking} = useActiveShmoBookingQuery(isFocused);
@@ -290,7 +289,10 @@ export const Map = (props: MapProps) => {
         isVirtualStation(featureToSelect) ||
         isVirtualStationArea(featureToSelect)
       ) {
-        showSnackbar({content: getStationParkingContent(), position: 'top'});
+        showSnackbar({
+          content: getGeofencingZoneContent('parking'),
+          position: 'top',
+        });
       } else if (isFeatureGeofencingZoneAsTiles(featureToSelect)) {
         const {code, station_parking} = featureToSelect.properties;
         showGeofencingZoneSnackbar(code, station_parking);
@@ -310,7 +312,7 @@ export const Map = (props: MapProps) => {
       selectedFeature,
       showGeofencingZoneSnackbar,
       showSnackbar,
-      getStationParkingContent,
+      getGeofencingZoneContent,
     ],
   );
 
