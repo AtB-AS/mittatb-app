@@ -90,7 +90,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const focusRef = useFocusOnLoad(navigation);
 
   const {language, t} = useTranslation();
-  const [updatingLocation] = useState<boolean>(false);
   const analytics = useAnalyticsContext();
   const filterButtonWrapperRef = useRef(null);
   const filterButtonRef = useRef(null);
@@ -167,7 +166,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const showEmptyScreen = !tripPatterns && !isSearching && !tripsIsError;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
-  const isValidLocations = isValidTripLocations(from, to);
   const [flexibleTransportInfoDismissed, setFlexibleTransportInfoDismissed] =
     useState(false);
   const isFlexibleTransportEnabled = isFlexibleTransportEnabledInRemoteConfig;
@@ -302,7 +300,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               svgIcon={Swap}
               onPress={swap}
               overlayPosition="right"
-              isLoading={updatingLocation && !to}
               accessibilityLabel={
                 t(TripSearchTexts.location.swapButton.a11yLabel) +
                 screenReaderPause
@@ -460,7 +457,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             />
           )}
           {!tripPatterns.length && <View style={styles.emptyResultsSpacer} />}
-          {!tripsIsError && isValidLocations && (
+          {!tripsIsError && tripSearchEnabled && (
             <NativeBlockButton
               onPress={loadMoreTrips}
               disabled={tripsSearchState === 'searching'}
