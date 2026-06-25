@@ -5,7 +5,7 @@ import {
 } from '@atb/api/types/generated/mobility-types_v2';
 import {isValidPhoneNumber} from 'libphonenumber-js';
 import {isValidEmail} from '@atb/utils/validation';
-import {Feature, Point, Polygon} from 'geojson';
+import {Feature, MultiPolygon, Point, Polygon} from 'geojson';
 import {Base64ImageSchema} from '@atb/utils/image';
 import {MobilityPriceAdjustmentBenefitSchema} from '@atb/api/types/benefit';
 
@@ -491,16 +491,6 @@ const GeoJsonFeatureWithPointGeometrySchema = z.object({
   properties: z.object({}).passthrough(),
 }) satisfies z.ZodType<Feature<Point>>;
 
-const GeoJsonFeatureWithPolygonGeometrySchema = z.object({
-  type: z.literal('Feature'),
-  geometry: z.object({
-    type: z.literal('Polygon'),
-    coordinates: z.array(z.array(GeoJsonCoordinatesSchema)),
-  }),
-  // properties placeholder — empty object by default
-  properties: z.object({}).passthrough(),
-}) satisfies z.ZodType<Feature<Polygon>>;
-
 // See martin.yaml -> stations, in the tile server
 export const StationFeaturePropertiesSchema = z.object({
   id: z.string(),
@@ -593,10 +583,22 @@ export const VirtualStationFeatureSchema =
   });
 export type VirtualStationFeature = z.infer<typeof VirtualStationFeatureSchema>;
 
-export const VirtualStationAreaFeatureSchema =
-  GeoJsonFeatureWithPolygonGeometrySchema.extend({
-    properties: VirtualStationFeaturePropertiesSchema,
-  });
+// MVT decoders collapse a MULTIPOLYGON with a single polygon to "Polygon",
+// so the wire geometry can be either shape.
+export const VirtualStationAreaFeatureSchema = z.object({
+  type: z.literal('Feature'),
+  geometry: z.discriminatedUnion('type', [
+    z.object({
+      type: z.literal('Polygon'),
+      coordinates: z.array(z.array(GeoJsonCoordinatesSchema)),
+    }),
+    z.object({
+      type: z.literal('MultiPolygon'),
+      coordinates: z.array(z.array(z.array(GeoJsonCoordinatesSchema))),
+    }),
+  ]),
+  properties: VirtualStationFeaturePropertiesSchema,
+}) satisfies z.ZodType<Feature<Polygon | MultiPolygon>>;
 export type VirtualStationAreaFeature = z.infer<
   typeof VirtualStationAreaFeatureSchema
 >;
