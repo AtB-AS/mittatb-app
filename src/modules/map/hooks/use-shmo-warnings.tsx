@@ -13,7 +13,7 @@ import {
 } from './use-geofencing-zone-content';
 import {ShmoWarnings} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useTranslation} from '@atb/translations';
-import {useVehicle} from '@atb/modules/mobility';
+import {isVirtualStationArea, useVehicle} from '@atb/modules/mobility';
 import {throttle} from '@atb/utils/throttle';
 import {Coordinates} from '@atb/utils/coordinates';
 import {useOpeningHours} from './use-opening-hours';
@@ -69,7 +69,8 @@ export const useShmoWarnings = (
 
       const geofencingZoneFeatures = featuresAtLocation?.filter((feature) =>
         isGeofencingZonesAsTilesEnabled
-          ? isFeatureGeofencingZoneAsTiles(feature)
+          ? isFeatureGeofencingZoneAsTiles(feature) ||
+            isVirtualStationArea(feature)
           : isFeatureGeofencingZone(feature) &&
             feature?.properties?.geofencingZoneCustomProps?.code,
       );
@@ -87,7 +88,9 @@ export const useShmoWarnings = (
       const featProps = featureToSelect?.properties;
       const code: GeofencingZoneCode =
         (isGeofencingZonesAsTilesEnabled
-          ? featProps?.code
+          ? isVirtualStationArea(featureToSelect)
+            ? 'parking'
+            : featProps?.code
           : featProps?.geofencingZoneCustomProps?.code) ?? 'allowed';
 
       if (code !== 'allowed') {

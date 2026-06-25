@@ -43,6 +43,10 @@ import {
   VehicleFeatureSchema,
   VehiclesClusteredFeature,
   VehiclesClusteredFeatureSchema,
+  VirtualStationAreaFeature,
+  VirtualStationAreaFeatureSchema,
+  VirtualStationFeature,
+  VirtualStationFeatureSchema,
 } from '@atb/api/types/mobility';
 import {TFunc} from '@leile/lobo-t';
 import {ErrorResponse, formatNumberToString} from '@atb-as/utils';
@@ -91,6 +95,16 @@ export const isClusteredStation = (
 export const isStation = (
   feature: Feature<Point> | undefined,
 ): feature is StationFeature => StationFeatureSchema.safeParse(feature).success;
+
+export const isVirtualStation = (
+  feature: Feature | undefined,
+): feature is VirtualStationFeature =>
+  VirtualStationFeatureSchema.safeParse(feature).success;
+
+export const isVirtualStationArea = (
+  feature: Feature | undefined,
+): feature is VirtualStationAreaFeature =>
+  VirtualStationAreaFeatureSchema.safeParse(feature).success;
 
 export const isBikeStation = (
   feature: Feature<Point> | undefined,
