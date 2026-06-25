@@ -1,9 +1,7 @@
 import {Filter, Swap} from '@atb/assets/svg/mono-icons/actions';
-import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   GeoLocation,
   Location,
@@ -44,10 +42,10 @@ import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigat
 
 import {FullScreenView} from '@atb/components/screen-view';
 import {CityZoneMessage} from './components/CityZoneMessage';
+import {LoadMoreButton} from './components/LoadMoreButton';
 import {TripPattern} from '@atb/api/types/trips';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
-import {NativeBlockButton} from '@atb/components/native-button';
 import {
   getSearchTime,
   getSearchTimeLabel,
@@ -65,7 +63,6 @@ import {TravelSearchFiltersBottomSheet} from './components/TravelSearchFiltersBo
 import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {WithOverlayButton} from '@atb/components/overlay-button';
-import {Loading} from '@atb/components/loading';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 import type {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 
@@ -454,51 +451,13 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             />
           )}
           {!tripPatterns.length && <View style={styles.emptyResultsSpacer} />}
-          {!tripsIsError && tripSearchEnabled && (
-            <NativeBlockButton
-              onPress={loadMoreTrips}
-              disabled={tripsSearchState === 'searching'}
-              style={[styles.loadMoreButton, {opacity: 1}]}
-              testID="loadMoreButton"
-            >
-              {tripsSearchState === 'searching' ? (
-                <View style={styles.loadingIndicator}>
-                  {tripPatterns.length ? (
-                    <>
-                      <Loading
-                        style={{
-                          marginRight: theme.spacing.medium,
-                        }}
-                      />
-                      <ThemeText type="secondary" testID="searchingForResults">
-                        {t(TripSearchTexts.results.fetchingMore)}
-                      </ThemeText>
-                    </>
-                  ) : (
-                    <ThemeText type="secondary" testID="searchingForResults">
-                      {t(TripSearchTexts.searchState.searching)}
-                    </ThemeText>
-                  )}
-                </View>
-              ) : (
-                <>
-                  {loadMoreTrips ? (
-                    <>
-                      <ThemeIcon
-                        color="secondary"
-                        svg={ExpandMore}
-                        size="normal"
-                      />
-                      <ThemeText type="secondary" testID="resultsLoaded">
-                        {' '}
-                        {t(TripSearchTexts.results.fetchMore)}
-                      </ThemeText>
-                    </>
-                  ) : null}
-                </>
-              )}
-            </NativeBlockButton>
-          )}
+          <LoadMoreButton
+            loadMoreTrips={loadMoreTrips}
+            isSearching={isSearching}
+            hasResults={tripPatterns.length > 0}
+            tripsIsError={tripsIsError}
+            tripSearchEnabled={tripSearchEnabled}
+          />
         </View>
       </FullScreenView>
       {filtersState.filtersSelection && (
@@ -689,20 +648,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacing.medium,
     backgroundColor: getHeaderBackgroundColor(theme).background,
   },
-  loadingIndicator: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   missingLocationText: {
     padding: theme.spacing.xLarge,
     textAlign: 'center',
-  },
-  loadMoreButton: {
-    paddingVertical: theme.spacing.medium,
-    marginBottom: theme.spacing.xLarge,
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
   },
   emptyResultsSpacer: {
     marginTop: theme.spacing.xLarge * 3,
