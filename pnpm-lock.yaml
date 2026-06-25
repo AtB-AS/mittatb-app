@@ -22,8 +22,8 @@ importers:
         specifier: ^11.0.0
         version: 11.0.0(zod@4.1.11)
       '@atb-as/generate-assets':
-        specifier: ^18.16.0
-        version: 18.16.0
+        specifier: ^18.17.0
+        version: 18.17.0
       '@atb-as/theme':
         specifier: ^15.2.0
         version: 15.2.0
@@ -506,8 +506,8 @@ packages:
     peerDependencies:
       zod: ^4.1.11
 
-  '@atb-as/generate-assets@18.16.0':
-    resolution: {integrity: sha512-0+IqmDI2Ya8PYHyV2fl04BhkjQ4Bq5dUY0g6xLDnVx9rpubeYqO8Rl1Ebfl0+btgyQIujmc2GbDEJ/0lHzovmA==}
+  '@atb-as/generate-assets@18.17.0':
+    resolution: {integrity: sha512-Bjoi1SouMZh3VT3/a+7M1FkHJjzOtjrmIbGPeXZigRsURlmQt7tTkhqZhUT6ZF+7Wb/vP2R6H8KhGPAOR5LoHQ==}
     hasBin: true
 
   '@atb-as/theme@14.0.1':
@@ -7357,7 +7357,7 @@ snapshots:
       yargs: 17.7.2
       zod: 4.1.11
 
-  '@atb-as/generate-assets@18.16.0':
+  '@atb-as/generate-assets@18.17.0':
     dependencies:
       '@atb-as/theme': 14.0.1
       commander: 9.5.0
@@ -12815,7 +12815,7 @@ snapshots:
 
   istanbul-lib-source-maps@4.0.1:
     dependencies:
-      debug: 4.4.1
+      debug: 4.4.3
       istanbul-lib-coverage: 3.2.0
       source-map: 0.6.1
     transitivePeerDependencies:
