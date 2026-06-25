@@ -22,6 +22,7 @@ import type {TripAnalytics} from '@atb/screen-components/travel-details-screens'
 import {Root_SmartParkAndRideEditScreenParams} from '@atb/stacks-hierarchy/Root_SmartParkAndRide/navigation-types';
 import {Root_OnboardingCarouselStackParams} from './Root_OnboardingCarouselStack';
 import {UserProfileWithCountAndOffer} from './Root_PurchaseOverviewScreen/use-offer-state';
+import {FareContractState} from '@atb-as/utils';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
@@ -44,6 +45,12 @@ type ReceiptScreenRouteParams = {
 
 type FareContractDetailsRouteParams = {
   fareContractId: string;
+};
+
+type Root_RefundConfirmationScreenParams = {
+  orderId: string;
+  fareProductType: string | undefined;
+  state: FareContractState;
 };
 
 type TicketInformationScreenParams = {
@@ -136,6 +143,7 @@ export type RootStackParamList = StackParams<{
   Root_PurchaseHarborSearchScreen: Root_PurchaseHarborSearchScreenParams;
   Root_PurchaseAsAnonymousConsequencesScreen: Root_PurchaseAsAnonymousConsequencesScreenParams;
   Root_FareContractDetailsScreen: FareContractDetailsRouteParams;
+  Root_RefundConfirmationScreen: Root_RefundConfirmationScreenParams;
   Root_ReceiptScreen: ReceiptScreenRouteParams;
   Root_TicketInformationScreen: TicketInformationScreenParams;
   Root_LoginAvailableFareContractWarningScreen: undefined;

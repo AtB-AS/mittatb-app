@@ -301,8 +301,12 @@ export async function getRefundOptions(orderId: string) {
   return response.data;
 }
 
-export async function refundFareContract(orderId: string) {
+export async function refundFareContract(orderId: string, reasonId?: string) {
   const url = `sales/v1/refund`;
-  const response = await client.post(url, {orderId}, {authWithIdToken: true});
+  const response = await client.post(
+    url,
+    {orderId, ...(reasonId ? {reason: reasonId} : {})},
+    {authWithIdToken: true},
+  );
   return response.data;
 }

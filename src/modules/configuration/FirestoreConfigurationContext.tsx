@@ -30,6 +30,7 @@ import {
   BonusTextsType,
   ConsentLineType,
   CompiledKnownQrCodeUrl,
+  RefundReasonType,
 } from './types';
 import {
   mapLanguageAndTextType,
@@ -48,6 +49,7 @@ import {
   mapToConsentLines,
   mapToAppVersionedConfigurableLinks,
   mapToKnownQrCodeUrls,
+  mapToRefundReasons,
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
@@ -90,6 +92,7 @@ type ConfigurationContextState = {
   notificationConfig: NotificationConfigType | undefined;
   stopSignalButtonConfig: StopSignalButtonConfigType;
   knownQrCodeUrls: CompiledKnownQrCodeUrl[];
+  refundReasons: RefundReasonType[] | undefined;
   resubscribeFirestoreConfig: () => void;
 };
 
@@ -150,6 +153,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
   const [knownQrCodeUrls, setKnownQrCodeUrls] = useState<
     CompiledKnownQrCodeUrl[]
   >([]);
+  const [refundReasons, setRefundReasons] = useState<RefundReasonType[]>();
   const [firestoreConfigStatus, setFirestoreConfigStatus] =
     useState<FirestoreConfigStatus>('loading');
   const {resubscribe, resubscribeToggle} = useResubscribeToggle();
@@ -283,6 +287,9 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
 
           const knownQrCodeUrls = getKnownQrCodeUrlsFromSnapshot(snapshot);
           setKnownQrCodeUrls(knownQrCodeUrls);
+
+          const refundReasons = getRefundReasonsFromSnapshot(snapshot);
+          setRefundReasons(refundReasons);
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -314,6 +321,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     setNotificationConfig(undefined);
     setStopSignalButtonConfig(defaultStopSignalButtonConfig);
     setKnownQrCodeUrls([]);
+    setRefundReasons(undefined);
   };
 
   useEffect(() => {
@@ -350,6 +358,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
       notificationConfig,
       stopSignalButtonConfig,
       knownQrCodeUrls,
+      refundReasons,
       firestoreConfigStatus,
     };
   }, [
@@ -377,6 +386,7 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     notificationConfig,
     stopSignalButtonConfig,
     knownQrCodeUrls,
+    refundReasons,
     firestoreConfigStatus,
   ]);
 
@@ -754,4 +764,13 @@ function getKnownQrCodeUrlsFromSnapshot(
 ): CompiledKnownQrCodeUrl[] {
   const config = snapshot.docs.find((doc) => doc.id == 'knownQrCodeUrls');
   return mapToKnownQrCodeUrls(config?.data());
+}
+
+function getRefundReasonsFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): RefundReasonType[] | undefined {
+  const refundReasonsDoc = snapshot.docs.find(
+    (doc) => doc.id == 'refundReasons',
+  );
+  return mapToRefundReasons(refundReasonsDoc?.get('refundReasons'));
 }
