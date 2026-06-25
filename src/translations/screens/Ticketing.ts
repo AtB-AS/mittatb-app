@@ -111,6 +111,11 @@ const TicketingTexts = {
       'No active tickets',
       'Ingen aktive billettar',
     ),
+    loadError: _(
+      'Vi klarte ikke å hente oppdatert informasjon om billettene dine.',
+      'We were unable to fetch updated information about your tickets.',
+      'Vi klarte ikkje å hente oppdatert informasjon om billettane dine.',
+    ),
     noActiveTicketsDetails: _(
       'Når du kjøper en billett, vil den vises her.',
       'When you buy a ticket, it will show up here. ',
