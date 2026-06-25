@@ -14,6 +14,7 @@ import {
   CrashSmall as CrashSmallLight,
   TicketTilted as TicketTiltedLight,
   Ticket as TicketLight,
+  TicketValid as TicketValidLight,
   HoldingHands as HoldingHandsLight,
   PushNotification as PushNotificationLight,
   MyLocation as MyLocationLight,
@@ -32,6 +33,7 @@ import {
   CrashSmall as CrashSmallDark,
   TicketTilted as TicketTiltedDark,
   Ticket as TicketDark,
+  TicketValid as TicketValidDark,
   HoldingHands as HoldingHandsDark,
   PushNotification as PushNotificationDark,
   MyLocation as MyLocationDark,
@@ -231,6 +233,10 @@ export const ThemedBonusTransaction = getThemedAsset(
 export const ThemedBonusTrashCan = getThemedAsset(
   BonusTrashCanLight,
   BonusTrashCanDark,
+);
+export const ThemedTicketValid = getThemedAsset(
+  TicketValidLight,
+  TicketValidDark,
 );
 export const ThemedContactIllustration = getThemedAsset(
   ContactIllustrationLight,
