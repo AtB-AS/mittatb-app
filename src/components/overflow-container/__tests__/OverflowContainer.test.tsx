@@ -8,18 +8,6 @@ import {
 import type {ReactTestInstance} from 'react-test-renderer';
 import {OverflowContainer} from '../OverflowContainer';
 
-// Minimal mock for the reveal animation OverflowContainer imports from reanimated.
-jest.mock('react-native-reanimated', () => {
-  const RN = require('react-native');
-  const entering = {duration: () => entering, easing: () => entering};
-  return {
-    __esModule: true,
-    default: {View: RN.View},
-    FadeIn: entering,
-    Easing: {out: () => 0, ease: 0},
-  };
-});
-
 const legs = (count: number) =>
   Array.from({length: count}, (_, i) => (
     <View key={`leg-${i}`} testID={`leg-${i}`} />

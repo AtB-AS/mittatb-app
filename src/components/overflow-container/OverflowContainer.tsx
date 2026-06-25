@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {LayoutChangeEvent, StyleSheet, View} from 'react-native';
-import Animated, {Easing, FadeIn} from 'react-native-reanimated';
 import {computeFit, FitResult} from './compute-fit';
 
 type Props = {
@@ -8,7 +7,6 @@ type Props = {
   overflow: (hiddenCount: number) => React.ReactNode;
   maxWidth: number;
   gap?: number;
-  revealDuration?: number;
   // Fired once the fitted row is measured and revealed, so a parent can swap a
   // placeholder (e.g. a skeleton) for the real content.
   onReady?: () => void;
@@ -19,7 +17,6 @@ export const OverflowContainer: React.FC<Props> = ({
   overflow,
   maxWidth,
   gap = 0,
-  revealDuration = 200,
   onReady,
 }) => {
   const [widthByKey, setWidthByKey] = useState<Record<string, number>>({});
@@ -47,10 +44,6 @@ export const OverflowContainer: React.FC<Props> = ({
       onReadyMemo();
     }
   }, [fitResult, onReadyMemo]);
-
-  const entering = FadeIn.duration(revealDuration).easing(
-    Easing.out(Easing.ease),
-  );
 
   const hiddenCount = items.length - (fitResult?.visibleCount ?? 0);
 
@@ -92,12 +85,12 @@ export const OverflowContainer: React.FC<Props> = ({
       </View>
 
       {fitResult && (
-        <Animated.View style={[styles.row, {gap}]} entering={entering}>
+        <View style={[styles.row, {gap}]}>
           {items.slice(0, fitResult.visibleCount).map((child, i) => (
             <View key={orderedKeys[i]}>{child}</View>
           ))}
           {fitResult.needsOverflow && overflow(hiddenCount)}
-        </Animated.View>
+        </View>
       )}
     </View>
   );
