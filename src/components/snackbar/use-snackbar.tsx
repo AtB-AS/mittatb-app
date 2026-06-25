@@ -23,8 +23,8 @@ export const useSnackbar = () => {
     [messageKey, snackbarProps?.content],
   );
 
-  const snackbarPropsWithContent = useMemo(
-    () => ({...snackbarProps, snackbarContent: snackbarContent}),
+  const snackbarPropsWithContent = useMemo<SnackbarProps>(
+    () => ({...snackbarProps, content: snackbarContent}),
     [snackbarProps, snackbarContent],
   );
   return {

@@ -1,6 +1,6 @@
 import {QueryClient} from '@tanstack/react-query';
 import {EventKind, StreamEvent} from './types';
-import {fareContractsQueryKey} from '../ticketing/use-fare-contracts';
+import {invalidateFareContractsQuery} from '../ticketing/use-fare-contracts';
 import {getBonusAmountEarnedQueryKey} from '../bonus';
 import {getActiveShmoBookingQueryKey} from '../mobility/queries/use-active-shmo-booking-query';
 import {getShmoBookingQueryKey} from '../mobility/queries/use-shmo-booking-query';
@@ -20,9 +20,7 @@ export const handleStreamEvent = (
   switch (streamEvent.event) {
     case EventKind.FareContract:
       if (featureToggles.isEventStreamFareContractsEnabled) {
-        queryClient.invalidateQueries({
-          queryKey: [fareContractsQueryKey],
-        });
+        invalidateFareContractsQuery(queryClient);
       }
       break;
     case EventKind.ShmoBookingUpdated:
