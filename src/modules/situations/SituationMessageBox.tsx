@@ -5,13 +5,13 @@ import {
 import React from 'react';
 import {getMessageTypeForSituation, getSituationSummary} from './utils';
 import {dictionary, useTranslation} from '@atb/translations';
-import {SituationType} from './types';
+import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import type {A11yLiveRegion} from '@atb/components/screen-reader-announcement';
 import {SituationBottomSheet} from './SituationBottomSheet';
 import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 
 export type Props = {
-  situation: SituationType;
+  situation: SituationFragment;
   noStatusIcon?: MessageInfoBoxProps['noStatusIcon'];
   style?: MessageInfoBoxProps['style'];
   a11yLiveRegion?: A11yLiveRegion;
