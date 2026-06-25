@@ -8,9 +8,7 @@ import {
   BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
 import {
-  GenericSectionItem,
   Section,
-  SectionSeparator,
   SelectionInlineSectionItem,
   TextInputSectionItem,
 } from '@atb/components/sections';
