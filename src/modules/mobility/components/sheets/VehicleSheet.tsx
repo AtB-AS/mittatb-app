@@ -35,6 +35,7 @@ import {
 } from '@atb/components/bottom-sheet';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import {ShmoPricingPlan, Vehicle} from '@atb/api/types/mobility';
+import {PriceAdjustmentType} from '@atb-as/config-specs/lib/mobility';
 import {PriceDetailsCard} from '../PriceDetailsCard';
 import {Loading} from '@atb/components/loading';
 import {SupportButton} from '../SupportButton';
@@ -42,12 +43,12 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {BrandingImage} from '../BrandingImage';
 import {getTransportModeAndSubMode} from '../../utils';
 import {
+  BonusProductTypeEnum,
   PayWithBonusPointsCheckbox,
   useIsBonusActiveForUser,
-  useRelevantSharedMobilityBonusProduct,
+  useRelevantBonusProduct,
 } from '@atb/modules/bonus';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import type {MobilityPriceAdjustmentBenefitType} from '@atb/api/types/benefit';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -62,7 +63,7 @@ type Props = {
   navigateToScanQrCode: () => void;
   navigateToPricingDetails: (
     pricingPlan: ShmoPricingPlan,
-    benefit: MobilityPriceAdjustmentBenefitType | undefined,
+    priceAdjustments: PriceAdjustmentType[] | undefined,
   ) => void;
 };
 
@@ -102,7 +103,17 @@ export const VehicleSheet = ({
 
   const operator = useOperators().byId(operatorId);
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
-  const vehicleTypeId = vehicle?.vehicleType.id;
+  const priceAdjustments = (() => {
+    switch (formFactor) {
+      case FormFactor.Bicycle:
+      case FormFactor.Car:
+      case FormFactor.Scooter:
+      case FormFactor.ScooterStanding:
+        return operator?.priceAdjustments?.[formFactor];
+      default:
+        return undefined;
+    }
+  })();
   const operatorLogo = operator?.brandAssets?.brandImageUrl;
 
   const {mode, subMode} = getTransportModeAndSubMode(
@@ -127,7 +138,11 @@ export const VehicleSheet = ({
   } = useFeatureTogglesContext();
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
-  const bonusProduct = useRelevantSharedMobilityBonusProduct(vehicleTypeId);
+  const bonusProduct = useRelevantBonusProduct(
+    operatorId,
+    formFactor,
+    BonusProductTypeEnum.SHARED_MOBILITY,
+  );
   const {logEvent} = useAnalyticsContext();
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
 
@@ -198,17 +213,10 @@ export const VehicleSheet = ({
 
             <PriceDetailsCard
               pricingPlan={vehicle.pricingPlan}
-              benefit={
+              priceAdjustments={
                 payWithBonusPoints && bonusProduct?.priceAdjustments
-                  ? ({
-                      kind: 'MOBILITY_PRICE_ADJUSTMENT' as const,
-                      vehicleTypeIds: vehicleTypeId ? [vehicleTypeId] : [],
-                      systemIds: [vehicle.system.id],
-                      priceAdjustments: bonusProduct.priceAdjustments.filter(
-                        (pa) => pa.systemIds.includes(vehicle.system.id),
-                      ),
-                    } satisfies MobilityPriceAdjustmentBenefitType)
-                  : (vehicle.benefit ?? undefined)
+                  ? bonusProduct.priceAdjustments
+                  : priceAdjustments
               }
               systemId={vehicle.system.id}
               onNavigatePricingDetails={navigateToPricingDetails}

@@ -26,7 +26,7 @@ import {GeofencingZoneCode, GeofencingZoneStyle} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import {ShmoPricingPlan, Station, Vehicle} from '@atb/api/types/mobility';
-import type {MobilityPriceAdjustmentBenefitType} from '@atb/api/types/benefit';
+import {PriceAdjustmentType} from '@atb-as/config-specs/lib/mobility';
 
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
@@ -76,7 +76,7 @@ export type MapProps = {
   navigateToBonusScreen?: () => void;
   navigateToPricingDetails: (
     pricingPlan: ShmoPricingPlan,
-    benefit: MobilityPriceAdjustmentBenefitType | undefined,
+    priceAdjustments: PriceAdjustmentType[] | undefined,
   ) => void;
 };
 

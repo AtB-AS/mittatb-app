@@ -1,3 +1,4 @@
+import {FormFactorSchema} from '@atb/api/types/mobility';
 import {LanguageAndTextTypeArray} from '@atb/modules/configuration';
 import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
 import {
@@ -43,7 +44,7 @@ export const BonusProductSchema = z.object({
   isActive: z.boolean(),
   bonusProductGroupId: z.string(),
   operatorId: z.string(),
-  vehicleTypeIds: z.array(z.string()),
+  formFactors: z.array(FormFactorSchema),
   price: PriceSchema,
   productType: z.enum(BonusProductTypeEnum),
   description: LanguageAndTextTypeArray,

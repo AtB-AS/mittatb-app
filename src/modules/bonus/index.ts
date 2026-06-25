@@ -6,10 +6,7 @@ export {
   UserBonusBalance,
   UserBonusBalanceContent,
 } from './components';
-export {
-  useRelevantSharedMobilityBonusProduct,
-  useRelevantVoucherBonusProduct,
-} from './use-relevant-bonus-product';
+export {useRelevantBonusProduct} from './use-relevant-bonus-product';
 export {useRelevantTicketBonusProduct} from './use-relevant-ticket-bonus-product';
 export type {ProductPointsItem} from './api/api';
 export {

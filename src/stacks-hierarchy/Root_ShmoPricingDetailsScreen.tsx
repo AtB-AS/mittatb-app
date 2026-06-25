@@ -13,14 +13,13 @@ import {formatNumberToString} from '@atb-as/utils';
 import {getCurrencySymbol} from '@atb/translations/currency';
 import {ShmoPricingSegment} from '@atb/api/types/mobility';
 import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
-import type {MobilityPriceAdjustmentType} from '@atb/api/types/benefit';
 import {computeFreeMinuteCount} from '@atb/modules/mobility';
 
 type Props = RootStackScreenProps<'Root_ShmoPricingDetailsScreen'>;
 type PricingRow = {label: string; value: string};
 
 export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
-  const {pricingPlan, benefit} = route.params;
+  const {pricingPlan, priceAdjustments} = route.params;
   const focusRef = useFocusOnLoad(navigation);
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -31,13 +30,11 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
   const hasMultiplePerMinPricingPlans =
     (pricingPlan.perMinPricing?.length ?? 0) > 1;
 
-  const freeUnlockPriceAdjustment = benefit?.priceAdjustments.find(
-    (adj: MobilityPriceAdjustmentType) =>
-      adj.type === PriceAdjustmentEnum.enum.FREE_UNLOCK,
+  const freeUnlockPriceAdjustment = priceAdjustments?.find(
+    (adj) => adj.type === PriceAdjustmentEnum.enum.FREE_UNLOCK,
   );
-  const freeMinutesPriceAdjustment = benefit?.priceAdjustments.find(
-    (adj: MobilityPriceAdjustmentType) =>
-      adj.type === PriceAdjustmentEnum.enum.FREE_MINUTES,
+  const freeMinutesPriceAdjustment = priceAdjustments?.find(
+    (adj) => adj.type === PriceAdjustmentEnum.enum.FREE_MINUTES,
   );
   const hasCampaign = !!(
     freeUnlockPriceAdjustment || freeMinutesPriceAdjustment

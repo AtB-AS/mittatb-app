@@ -269,7 +269,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
           if (harborConnectionOverrides) {
             setHarborConnectionOverrides(harborConnectionOverrides);
           }
-
           setFirestoreConfigStatus(!snapshot.empty ? 'success' : 'loading');
 
           const notificationConfig =

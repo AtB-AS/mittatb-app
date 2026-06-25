@@ -7,7 +7,6 @@ import {isValidPhoneNumber} from 'libphonenumber-js';
 import {isValidEmail} from '@atb/utils/validation';
 import {Feature, Point} from 'geojson';
 import {Base64ImageSchema} from '@atb/utils/image';
-import {MobilityPriceAdjustmentBenefitSchema} from '@atb/api/types/benefit';
 
 export const ViolationsReportingInitQuerySchema = z.object({
   lng: z.string(),
@@ -250,7 +249,6 @@ export const VehicleSchema = z.object({
   station: z.object({id: z.string()}).nullable().optional(),
   rentalUris: RentalUrisSchema.nullable().optional(),
   vehicleType: VehicleTypeSchema,
-  benefit: MobilityPriceAdjustmentBenefitSchema.nullable().optional(),
 });
 
 export type Vehicle = z.infer<typeof VehicleSchema>;

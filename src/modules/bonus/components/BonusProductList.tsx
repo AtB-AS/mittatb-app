@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Pressable, View} from 'react-native';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
@@ -11,10 +11,13 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
-import {getTransportModeAndSubMode} from '@atb/modules/mobility';
+import {getTranslatedModeName} from '@atb/utils/transportation-names';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {MapFilterType} from '@atb/modules/map';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
+import {MapPin} from '@atb/assets/svg/mono-icons/tab-bar';
+import {MapFilterType, useMapContext} from '@atb/modules/map';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
@@ -26,12 +29,30 @@ type Props = {
 export const BonusProductList = ({
   bonusProductGroups,
   bonusProducts,
-  onNavigateToMap: _onNavigateToMap,
+  onNavigateToMap,
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {mobilityOperators} = useFirestoreConfigurationContext();
+  const {mapFilter, setMapFilter} = useMapContext();
   const analytics = useAnalyticsContext();
+
+  const handleNavigateToMap = useCallback(
+    (formFactors: FormFactor[]) => {
+      if (!onNavigateToMap || !mapFilter?.mobility) return;
+      const updatedMobility = {...mapFilter.mobility};
+      formFactors.forEach((ff) => {
+        updatedMobility[ff] = {
+          operators: updatedMobility[ff]?.operators ?? [],
+          showAll: true,
+        };
+      });
+      const updatedFilter = {...mapFilter, mobility: updatedMobility};
+      setMapFilter(updatedFilter);
+      onNavigateToMap(updatedFilter);
+    },
+    [onNavigateToMap, mapFilter, setMapFilter],
+  );
 
   return (
     <View style={styles.container}>
@@ -39,6 +60,9 @@ export const BonusProductList = ({
         const memberProducts = bonusProducts.filter(
           (bp) => bp.bonusProductGroupId === group.id,
         );
+        const formFactors = [
+          ...new Set(memberProducts.flatMap((bp) => bp.formFactors)),
+        ] as FormFactor[];
         const operatorNames = memberProducts
           .map(
             (bp) =>
@@ -46,6 +70,9 @@ export const BonusProductList = ({
           )
           .filter(Boolean)
           .join(', ');
+        const showMapButton =
+          !!onNavigateToMap &&
+          formFactors.some((ff) => ff !== FormFactor.Other);
 
         return (
           <Pressable
@@ -61,20 +88,19 @@ export const BonusProductList = ({
             <Section>
               <GenericSectionItem>
                 <View style={styles.horizontalContainer}>
-                  {(() => {
-                    const {mode, subMode} =
-                      getTransportModeAndSubMode(undefined);
-                    return (
-                      <TransportationIconBox
-                        mode={mode}
-                        subMode={subMode}
-                        rounded
-                      />
-                    );
-                  })()}
+                  <TransportationIconBox
+                    mode={group.transportMode}
+                    subMode={group.transportSubMode ?? undefined}
+                    rounded
+                  />
                   <View style={{flex: 1}} accessible={true}>
                     <ThemeText typography="body__s__strong">
-                      {operatorNames}
+                      {t(
+                        getTranslatedModeName(
+                          group.transportMode,
+                          group.transportSubMode ?? undefined,
+                        ),
+                      )}
                     </ThemeText>
                     {!!operatorNames && (
                       <ThemeText typography="body__s" type="secondary">
@@ -82,6 +108,31 @@ export const BonusProductList = ({
                       </ThemeText>
                     )}
                   </View>
+                  {showMapButton && (
+                    <Pressable
+                      onPress={() => {
+                        analytics.logEvent(
+                          'Bonus',
+                          'Map button on bonus product group clicked',
+                          {
+                            bonusProductGroupId: group.id,
+                          },
+                        );
+                        handleNavigateToMap(formFactors);
+                      }}
+                      style={styles.mapButton}
+                      accessibilityRole="button"
+                      accessibilityLabel={t(
+                        BonusProgramTexts.bonusProfile.mapButton.a11yLabel,
+                      )}
+                      accessibilityHint={t(
+                        BonusProgramTexts.bonusProfile.mapButton.a11yHint,
+                      )}
+                    >
+                      <ThemeIcon svg={MapPin} />
+                      <ThemeIcon svg={ChevronRight} />
+                    </Pressable>
+                  )}
                 </View>
               </GenericSectionItem>
               <GenericSectionItem>
