@@ -53,24 +53,23 @@ export const useOnboardingFlow = (assumeUserCreationOnboarded = false) => {
   /**
    * add defaultInitialRouteName as root when userCreationOnboarded
    * this allows goBack from an onboarding screen when used as initial screen
-   * @returns navigation state object
+   * @returns navigation state object, or undefined when there is no onboarding
+   * to show so that deep links can take effect on cold start
    */
   const getInitialNavigationContainerState = useCallback(() => {
     const defaultInitialRouteName = 'Root_TabNavigatorStack';
     const nextOnboardingSection = getNextOnboardingSection(); // dont rely on effects as it will be too late for initialState
     const initialOnboardingScreen = nextOnboardingSection?.initialScreen;
+    if (!initialOnboardingScreen?.name) return undefined;
     const initialOnboardingRoute = {
-      name: initialOnboardingScreen?.name ?? defaultInitialRouteName,
-      params: initialOnboardingScreen?.params,
+      name: initialOnboardingScreen.name,
+      params: initialOnboardingScreen.params,
     };
 
     const routes: PartialRoute<
       Route<keyof RootStackParamList, object | undefined>
     >[] = [initialOnboardingRoute];
-    if (
-      !nextOnboardingSection?.shouldShowBeforeUserCreated &&
-      initialOnboardingScreen?.name
-    ) {
+    if (!nextOnboardingSection?.shouldShowBeforeUserCreated) {
       routes.unshift({name: defaultInitialRouteName});
     }
     return {routes};
