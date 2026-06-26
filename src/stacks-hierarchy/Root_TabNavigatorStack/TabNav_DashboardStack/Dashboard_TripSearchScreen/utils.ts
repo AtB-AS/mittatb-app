@@ -21,6 +21,7 @@ import {getRealtimeState} from '@atb/utils/realtime';
 import {TravelSearchTransportModesType} from '@atb-as/config-specs';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {isDefined} from '@atb/utils/presence';
+import {onlyUniques} from '@atb/utils/only-uniques';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 
 export type TimeSearch = {
@@ -144,3 +145,18 @@ export function isSignificantDifference(leg: Leg) {
     }) === 'significant-difference'
   );
 }
+
+/**
+ * Collects a single value from every leg across all trip patterns, dropping
+ * nullish values and de-duplicating the result. Used to derive rule-engine
+ * inputs (transport modes, authorities, etc.) from a set of trip patterns.
+ */
+export const uniqueLegValues = <T>(
+  tripPatterns: {legs: Leg[]}[],
+  selector: (leg: Leg) => T | undefined | null,
+): NonNullable<T>[] =>
+  tripPatterns
+    .flatMap((tp) => tp.legs)
+    .map(selector)
+    .filter(isDefined)
+    .filter(onlyUniques);

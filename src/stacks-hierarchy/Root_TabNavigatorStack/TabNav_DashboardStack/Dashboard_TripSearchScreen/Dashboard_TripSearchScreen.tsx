@@ -1,9 +1,7 @@
 import {Filter, Swap} from '@atb/assets/svg/mono-icons/actions';
-import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   GeoLocation,
   Location,
@@ -44,25 +42,27 @@ import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigat
 
 import {FullScreenView} from '@atb/components/screen-view';
 import {CityZoneMessage} from './components/CityZoneMessage';
+import {LoadMoreButton} from './components/LoadMoreButton';
 import {TripPattern} from '@atb/api/types/trips';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
-import {NativeBlockButton} from '@atb/components/native-button';
-import {getSearchTime, getSearchTimeLabel, sanitizeSearchTime} from './utils';
+import {
+  getSearchTime,
+  getSearchTimeLabel,
+  sanitizeSearchTime,
+  uniqueLegValues,
+} from './utils';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   GlobalMessage,
   GlobalMessageContextEnum,
 } from '@atb/modules/global-messages';
-import {isDefined} from '@atb/utils/presence';
-import {onlyUniques} from '@atb/utils/only-uniques';
 import {DatePickerSheet} from '@atb/components/date-selection';
 import SharedTexts from '@atb/translations/shared';
 import {TravelSearchFiltersBottomSheet} from './components/TravelSearchFiltersBottomSheet';
 import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {WithOverlayButton} from '@atb/components/overlay-button';
-import {Loading} from '@atb/components/loading';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 import type {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 
@@ -90,7 +90,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const focusRef = useFocusOnLoad(navigation);
 
   const {language, t} = useTranslation();
-  const [updatingLocation] = useState<boolean>(false);
   const analytics = useAnalyticsContext();
   const filterButtonWrapperRef = useRef(null);
   const filterButtonRef = useRef(null);
@@ -167,10 +166,14 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const showEmptyScreen = !tripPatterns && !isSearching && !tripsIsError;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
-  const isValidLocations = isValidTripLocations(from, to);
   const [flexibleTransportInfoDismissed, setFlexibleTransportInfoDismissed] =
     useState(false);
   const isFlexibleTransportEnabled = isFlexibleTransportEnabledInRemoteConfig;
+  const shouldShowCityZoneMessage =
+    isFlexibleTransportEnabled &&
+    !flexibleTransportInfoDismissed &&
+    (tripPatterns.length > 0 || tripsSearchState === 'search-empty-result') &&
+    !tripsIsError;
 
   const [searchStateMessage, setSearchStateMessage] = useState<
     string | undefined
@@ -302,7 +305,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               svgIcon={Swap}
               onPress={swap}
               overlayPosition="right"
-              isLoading={updatingLocation && !to}
               accessibilityLabel={
                 t(TripSearchTexts.location.swapButton.a11yLabel) +
                 screenReaderPause
@@ -399,45 +401,34 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             style={styles.globalMessage}
             globalMessageContext={GlobalMessageContextEnum.appTripResults}
             ruleVariables={{
-              transportModes: tripPatterns
-                .flatMap((tp) => tp.legs)
-                .map((leg) => leg.mode)
-                .filter(isDefined)
-                .filter(onlyUniques),
-              transportSubmodes: tripPatterns
-                .flatMap((tp) => tp.legs)
-                .map((leg) => leg.transportSubmode)
-                .filter(isDefined)
-                .filter(onlyUniques),
-              authorities: tripPatterns
-                .flatMap((tp) => tp.legs)
-                .map((leg) => leg.authority?.id)
-                .filter(isDefined)
-                .filter(onlyUniques),
-              publicCodes: tripPatterns
-                .flatMap((tp) => tp.legs)
-                .map((leg) => leg.line?.publicCode)
-                .filter(isDefined)
-                .filter(onlyUniques),
+              transportModes: uniqueLegValues(tripPatterns, (leg) => leg.mode),
+              transportSubmodes: uniqueLegValues(
+                tripPatterns,
+                (leg) => leg.transportSubmode,
+              ),
+              authorities: uniqueLegValues(
+                tripPatterns,
+                (leg) => leg.authority?.id,
+              ),
+              publicCodes: uniqueLegValues(
+                tripPatterns,
+                (leg) => leg.line?.publicCode,
+              ),
             }}
           />
-          {isFlexibleTransportEnabled &&
-            !flexibleTransportInfoDismissed &&
-            (tripPatterns.length > 0 ||
-              tripsSearchState === 'search-empty-result') &&
-            !tripsIsError && (
-              <CityZoneMessage
-                from={from}
-                to={to}
-                onDismiss={() => {
-                  setFlexibleTransportInfoDismissed(true);
-                  analytics.logEvent(
-                    'Flexible transport',
-                    'Message box dismissed',
-                  );
-                }}
-              />
-            )}
+          {shouldShowCityZoneMessage && (
+            <CityZoneMessage
+              from={from}
+              to={to}
+              onDismiss={() => {
+                setFlexibleTransportInfoDismissed(true);
+                analytics.logEvent(
+                  'Flexible transport',
+                  'Message box dismissed',
+                );
+              }}
+            />
+          )}
           {tripSearchEnabled && (
             <NonTransitResults
               tripsProps={tripsProps}
@@ -460,51 +451,13 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             />
           )}
           {!tripPatterns.length && <View style={styles.emptyResultsSpacer} />}
-          {!tripsIsError && isValidLocations && (
-            <NativeBlockButton
-              onPress={loadMoreTrips}
-              disabled={tripsSearchState === 'searching'}
-              style={[styles.loadMoreButton, {opacity: 1}]}
-              testID="loadMoreButton"
-            >
-              {tripsSearchState === 'searching' ? (
-                <View style={styles.loadingIndicator}>
-                  {tripPatterns.length ? (
-                    <>
-                      <Loading
-                        style={{
-                          marginRight: theme.spacing.medium,
-                        }}
-                      />
-                      <ThemeText type="secondary" testID="searchingForResults">
-                        {t(TripSearchTexts.results.fetchingMore)}
-                      </ThemeText>
-                    </>
-                  ) : (
-                    <ThemeText type="secondary" testID="searchingForResults">
-                      {t(TripSearchTexts.searchState.searching)}
-                    </ThemeText>
-                  )}
-                </View>
-              ) : (
-                <>
-                  {loadMoreTrips ? (
-                    <>
-                      <ThemeIcon
-                        color="secondary"
-                        svg={ExpandMore}
-                        size="normal"
-                      />
-                      <ThemeText type="secondary" testID="resultsLoaded">
-                        {' '}
-                        {t(TripSearchTexts.results.fetchMore)}
-                      </ThemeText>
-                    </>
-                  ) : null}
-                </>
-              )}
-            </NativeBlockButton>
-          )}
+          <LoadMoreButton
+            loadMoreTrips={loadMoreTrips}
+            isSearching={isSearching}
+            hasResults={tripPatterns.length > 0}
+            tripsIsError={tripsIsError}
+            tripSearchEnabled={tripSearchEnabled}
+          />
         </View>
       </FullScreenView>
       {filtersState.filtersSelection && (
@@ -695,20 +648,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacing.medium,
     backgroundColor: getHeaderBackgroundColor(theme).background,
   },
-  loadingIndicator: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   missingLocationText: {
     padding: theme.spacing.xLarge,
     textAlign: 'center',
-  },
-  loadMoreButton: {
-    paddingVertical: theme.spacing.medium,
-    marginBottom: theme.spacing.xLarge,
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
   },
   emptyResultsSpacer: {
     marginTop: theme.spacing.xLarge * 3,
