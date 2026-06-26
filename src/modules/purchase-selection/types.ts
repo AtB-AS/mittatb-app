@@ -22,8 +22,8 @@ export type FareContractStub = {
 
 /**
  * Categories of selection fields that the builder may forcibly change
- * (currently only via `.product()` / `applyProductChange`) when the current
- * selection is not applicable for a newly applied product.
+ * (currently only via `.product()`) when the current selection is not
+ * applicable for a newly applied product.
  */
 export type ForcedSelectionChange = 'userProfile' | 'zone';
 
