@@ -260,8 +260,8 @@ export const applyProductChange = (
   selection: PurchaseSelectionType;
   forcedChanges: ForcedSelectionChange[];
 } => {
-  const userCount = currentSelection.userProfilesWithCount.filter((up) =>
-    isSelectableProfile(product, up),
+  const selectableProfiles = currentSelection.userProfilesWithCount.filter(
+    (up) => isSelectableProfile(product, up),
   );
   const supplementProductCount =
     currentSelection.supplementProductsWithCount.filter((sp) =>
@@ -282,13 +282,13 @@ export const applyProductChange = (
     : getDefaultZones(input, currentSelection.fareProductTypeConfig, product);
 
   const userProfiles =
-    !userCount.length && !supplementProductCount.length
+    !selectableProfiles.length && !supplementProductCount.length
       ? getDefaultUserProfiles(input, product)
-      : userCount;
+      : selectableProfiles;
 
   const forcedChanges: ForcedSelectionChange[] = [];
   if (
-    !userProfilesWithCountEqual(
+    !isUserProfilesWithCountEqual(
       currentSelection.userProfilesWithCount,
       userProfiles,
     )
@@ -310,7 +310,7 @@ export const applyProductChange = (
   };
 };
 
-const userProfilesWithCountEqual = (
+const isUserProfilesWithCountEqual = (
   a: UserProfileWithCount[],
   b: UserProfileWithCount[],
 ): boolean => {
