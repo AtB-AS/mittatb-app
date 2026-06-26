@@ -1,13 +1,29 @@
-import {createContext, useContext} from 'react';
-import {useSetupEventStream} from './use-setup-event-stream';
-import {StreamEventLog} from './types';
+import {createContext, useContext, useEffect} from 'react';
+import {
+  StreamEventListener,
+  useSetupEventStream,
+} from './use-setup-event-stream';
+import {EventKind, StreamEvent, StreamEventLog} from './types';
+import {useQueryClient} from '@tanstack/react-query';
+import {getBonusBalanceQueryKey} from '../bonus/queries/use-bonus-balance-query';
+import {getBonusAmountEarnedQueryKey} from '../bonus';
+import {useAuthContext} from '../auth';
+import {getShmoBookingQueryKey} from '../mobility/queries/use-shmo-booking-query';
+import {languageGlobal} from '../locale';
+import {getActiveShmoBookingQueryKey} from '../mobility/queries/use-active-shmo-booking-query';
+import {invalidateFareContractsQuery} from '../ticketing/use-fare-contracts';
+import {useFeatureTogglesContext} from '../feature-toggles';
 
 interface EventStreamContextValue {
   eventLog: StreamEventLog;
+  subscribe: (listener: StreamEventListener) => void;
+  unsubscribe: (id: string) => void;
 }
 
 export const EventStreamContext = createContext<EventStreamContextValue>({
   eventLog: [],
+  subscribe: () => {},
+  unsubscribe: () => {},
 });
 
 export function useEventStreamContext() {
@@ -25,12 +41,85 @@ type Props = {
 };
 
 export const EventStreamContextProvider = ({children}: Props) => {
-  const {eventLog} = useSetupEventStream();
+  const {eventLog, subscribe, unsubscribe} = useSetupEventStream();
+  const queryClient = useQueryClient();
+  const {userId} = useAuthContext();
+  const {isEventStreamFareContractsEnabled} = useFeatureTogglesContext();
+
+  useEffect(() => {
+    const fareContractListenerId = 'fare-contract-listener';
+    subscribe({
+      id: fareContractListenerId,
+      eventKind: EventKind.FareContract,
+      callback: () => {
+        if (isEventStreamFareContractsEnabled) {
+          invalidateFareContractsQuery(queryClient);
+        }
+      },
+    });
+    return () => {
+      unsubscribe(fareContractListenerId);
+    };
+  }, [subscribe, unsubscribe, queryClient, isEventStreamFareContractsEnabled]);
+
+  useEffect(() => {
+    const shmoBookingListenerId = 'shmo-booking-updated-listener';
+    subscribe({
+      id: shmoBookingListenerId,
+      eventKind: EventKind.ShmoBookingUpdated,
+      callback: (streamEvent: StreamEvent) => {
+        if (streamEvent.event === EventKind.ShmoBookingUpdated) {
+          queryClient.invalidateQueries({
+            queryKey: getActiveShmoBookingQueryKey(languageGlobal),
+          });
+          queryClient.invalidateQueries({
+            queryKey: getShmoBookingQueryKey(
+              streamEvent.bookingId,
+              languageGlobal,
+            ),
+          });
+        }
+      },
+    });
+    return () => {
+      unsubscribe(shmoBookingListenerId);
+    };
+  }, [
+    subscribe,
+    unsubscribe,
+    queryClient,
+    userId,
+    isEventStreamFareContractsEnabled,
+  ]);
+
+  useEffect(() => {
+    const personalisationProgramPointListenerId =
+      'personalisation-program-point-listener';
+    subscribe({
+      id: personalisationProgramPointListenerId,
+      eventKind: EventKind.PersonalisationProgramPoint,
+      callback: (streamEvent: StreamEvent) => {
+        if (streamEvent.event === EventKind.PersonalisationProgramPoint) {
+          queryClient.invalidateQueries({
+            queryKey: getBonusBalanceQueryKey(userId),
+          });
+          queryClient.invalidateQueries({
+            queryKey: getBonusAmountEarnedQueryKey(userId, streamEvent.orderId),
+          });
+        }
+      },
+    });
+    return () => {
+      unsubscribe(personalisationProgramPointListenerId);
+    };
+  }, [subscribe, unsubscribe, queryClient, userId]);
 
   return (
     <EventStreamContext.Provider
       value={{
         eventLog,
+        subscribe,
+        unsubscribe,
       }}
     >
       {children}

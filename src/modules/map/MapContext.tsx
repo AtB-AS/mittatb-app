@@ -8,6 +8,7 @@ import React, {
 import {MapFilterType} from '@atb/modules/map';
 import {useUserMapFilters} from './hooks/use-map-filter';
 import {
+  MapStateActionType,
   mapStateReducer,
   ReducerMapState,
   ReducerMapStateAction,
@@ -17,6 +18,12 @@ import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import MapboxGL from '@rnmapbox/maps';
 import {useRemoteConfigContext} from '../remote-config';
+import {EventKind, StreamEvent} from '../event-stream/types';
+import {ShmoBooking, ShmoBookingState} from '@atb/api/types/mobility';
+import {useQueryClient} from '@tanstack/react-query';
+import {getShmoBookingQueryKey} from '../mobility/queries/use-shmo-booking-query';
+import {languageGlobal} from '../locale';
+import {useEventStreamContext} from '../event-stream';
 
 type MapContextState = {
   mapFilter?: MapFilterType;
@@ -61,6 +68,8 @@ type Props = {
 
 export const MapContextProvider = ({children}: Props) => {
   const {mapbox_api_token} = useRemoteConfigContext();
+  const {subscribe, unsubscribe} = useEventStreamContext();
+  const queryClient = useQueryClient();
   useEffect(() => {
     MapboxGL.setAccessToken(mapbox_api_token);
   }, [mapbox_api_token]);
@@ -68,6 +77,34 @@ export const MapContextProvider = ({children}: Props) => {
   const [mapState, dispatchMapState] = useReducer(mapStateReducer, {
     bottomSheetType: MapBottomSheetType.None,
   });
+
+  useEffect(() => {
+    const listenerId = 'shmo-booking-updated-map-listener';
+    subscribe({
+      id: listenerId,
+      eventKind: EventKind.ShmoBookingUpdated,
+      callback: (streamEvent: StreamEvent) => {
+        if (streamEvent.event === EventKind.ShmoBookingUpdated) {
+          const existingBooking: ShmoBooking | undefined =
+            queryClient.getQueryData(
+              getShmoBookingQueryKey(streamEvent.bookingId, languageGlobal),
+            );
+          if (
+            existingBooking?.state !== ShmoBookingState.FINISHED &&
+            streamEvent.state === ShmoBookingState.FINISHED
+          ) {
+            dispatchMapState({
+              type: MapStateActionType.FinishedBooking,
+              bookingId: streamEvent.bookingId,
+            });
+          }
+        }
+      },
+    });
+    return () => {
+      unsubscribe(listenerId);
+    };
+  }, [queryClient, subscribe, unsubscribe]);
 
   const [givenScooterConsent, setGivenScooterConsent] = usePersistedBoolState(
     storage,

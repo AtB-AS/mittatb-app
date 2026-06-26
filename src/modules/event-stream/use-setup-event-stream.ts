@@ -1,5 +1,4 @@
 import {useSubscription} from '@atb/api/use-subscription';
-import {useQueryClient} from '@tanstack/react-query';
 import {useCallback, useState} from 'react';
 import {WS_API_BASE_URL} from '@env';
 import {
@@ -8,18 +7,25 @@ import {
   useAuthContext,
 } from '../auth';
 import Bugsnag from '@bugsnag/react-native';
-import {handleStreamEvent} from './handle-stream-event';
-import {StreamEventLog, StreamEvent, StreamEventSchema} from './types';
+import {
+  StreamEventLog,
+  StreamEvent,
+  StreamEventSchema,
+  EventKind,
+} from './types';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {jsonStringToObject} from '@atb/utils/object';
-import {MapStateActionType, useMapContext} from '../map';
+
+export type StreamEventListener = {
+  id: string;
+  eventKind: EventKind;
+  callback: (streamEvent: StreamEvent) => void;
+};
 
 export const useSetupEventStream = () => {
-  const queryClient = useQueryClient();
-  const {userId, authStatus} = useAuthContext();
-  const {isEventStreamEnabled, isEventStreamFareContractsEnabled} =
-    useFeatureTogglesContext();
-  const {dispatchMapState} = useMapContext();
+  const {authStatus} = useAuthContext();
+  const {isEventStreamEnabled} = useFeatureTogglesContext();
+  const [listeners, setListeners] = useState<StreamEventListener[]>([]);
 
   // Keep a list of events to use for debugging. In memory only, so this will be
   // reset when reloading the app.
@@ -52,31 +58,12 @@ export const useSetupEventStream = () => {
         data: event.data,
       });
 
-      const handleFinishedBookingEvent = (bookingId: string) => {
-        dispatchMapState({
-          type: MapStateActionType.FinishedBooking,
-          bookingId: bookingId,
-        });
-      };
-
       addToEventLog({streamEvent});
-      handleStreamEvent(
-        streamEvent,
-        queryClient,
-        userId,
-        {
-          isEventStreamFareContractsEnabled,
-        },
-        handleFinishedBookingEvent,
-      );
+      listeners
+        .filter((listener) => listener.eventKind === streamEvent.event)
+        .forEach((listener) => listener.callback(streamEvent));
     },
-    [
-      addToEventLog,
-      queryClient,
-      userId,
-      isEventStreamFareContractsEnabled,
-      dispatchMapState,
-    ],
+    [addToEventLog, listeners],
   );
 
   const onOpen = useCallback(
@@ -102,7 +89,24 @@ export const useSetupEventStream = () => {
     onClose,
   });
 
-  return {eventLog};
+  const subscribe = useCallback(
+    (listener: StreamEventListener) => {
+      addToEventLog({
+        meta: `SUBSCRIBE (${listener.eventKind}): ${listener.id}`,
+      });
+      setListeners((prev) => [...prev, listener]);
+    },
+    [addToEventLog],
+  );
+  const unsubscribe = useCallback(
+    (id: string) => {
+      addToEventLog({meta: `UNSUBSCRIBE: ${id}`});
+      setListeners((prev) => prev.filter((listener) => listener.id !== id));
+    },
+    [addToEventLog],
+  );
+
+  return {eventLog, subscribe, unsubscribe};
 };
 
 /**
