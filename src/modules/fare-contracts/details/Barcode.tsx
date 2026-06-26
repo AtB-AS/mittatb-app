@@ -98,8 +98,16 @@ function useScreenBrightnessIncrease() {
 const BarcodeInspectionView = () => {
   const styles = useStyles();
   const {enable_new_token_barcode_base64} = useRemoteConfigContext();
+  const isFocusedAndActive = useIsFocusedAndActive();
 
   useEffect(() => {
+    // Only run inspection while the screen is focused and the app is in the
+    // foreground. Re-running when the app becomes active again (e.g. after the
+    // phone is unlocked) forces an immediate barcode refresh: the native ~30s
+    // update timer is suspended while backgrounded, so the displayed barcode
+    // would otherwise stay frozen and expire until the next tick fires.
+    if (!isFocusedAndActive) return;
+
     // Prepare data for RNBarcodeInspectionView
     beginInspection(CONTEXT_ID, {
       visualInspectionNonces: undefined,
@@ -116,10 +124,11 @@ const BarcodeInspectionView = () => {
       notifyBugsnag('Error beginning inspection', {metadata: {error}});
     });
     return () => {
-      // Stop updating data for RNBarcodeInspectionView on unmount
+      // Stop updating data for RNBarcodeInspectionView when backgrounded,
+      // navigated away, or unmounted.
       endInspection();
     };
-  }, [enable_new_token_barcode_base64]);
+  }, [enable_new_token_barcode_base64, isFocusedAndActive]);
 
   return (
     <View style={styles.barcodeInspectionContainer}>
