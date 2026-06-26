@@ -28,49 +28,44 @@ export const LoadMoreButton = ({
 
   if (tripsIsError || !tripSearchEnabled) return null;
 
-  const renderContent = () => {
-    if (isSearching && hasResults) {
-      return (
+  if (isSearching && hasResults) {
+    return (
+      <View style={styles.loadMoreButton}>
         <View style={styles.loadingIndicator}>
           <Loading style={styles.loadingSpinner} />
           <ThemeText type="secondary" testID="searchingForResults">
             {t(TripSearchTexts.results.fetchingMore)}
           </ThemeText>
         </View>
-      );
-    }
+      </View>
+    );
+  }
 
-    if (isSearching) {
-      return (
+  if (isSearching) {
+    return (
+      <View style={styles.loadMoreButton}>
         <View style={styles.loadingIndicator}>
           <ThemeText type="secondary" testID="searchingForResults">
             {t(TripSearchTexts.searchState.searching)}
           </ThemeText>
         </View>
-      );
-    }
-
-    if (!loadMoreTrips) return null;
-
-    return (
-      <>
-        <ThemeIcon color="secondary" svg={ExpandMore} size="normal" />
-        <ThemeText type="secondary" testID="resultsLoaded">
-          {' '}
-          {t(TripSearchTexts.results.fetchMore)}
-        </ThemeText>
-      </>
+      </View>
     );
-  };
+  }
+
+  if (!loadMoreTrips) return null;
 
   return (
     <NativeBlockButton
       onPress={loadMoreTrips}
-      disabled={isSearching}
-      style={[styles.loadMoreButton, {opacity: 1}]}
+      style={styles.loadMoreButton}
       testID="loadMoreButton"
     >
-      {renderContent()}
+      <ThemeIcon color="secondary" svg={ExpandMore} size="normal" />
+      <ThemeText type="secondary" testID="resultsLoaded">
+        {' '}
+        {t(TripSearchTexts.results.fetchMore)}
+      </ThemeText>
     </NativeBlockButton>
   );
 };
