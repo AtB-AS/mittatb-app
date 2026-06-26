@@ -90,7 +90,7 @@ export function ProductSelectionByProducts({
               const result = selectionBuilder
                 .fromSelection(selection)
                 .product(p)
-                .buildWithForcedChanges();
+                .build();
               onProductChange(result);
             }}
             accessibilityHint={t(

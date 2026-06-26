@@ -80,7 +80,7 @@ export function ProductSelectionByAlias({
                 const result = selectionBuilder
                   .fromSelection(selection)
                   .product(fp)
-                  .buildWithForcedChanges();
+                  .build();
                 onProductChange(result);
               }}
               key={i}

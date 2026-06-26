@@ -299,7 +299,7 @@ export const RootStack = () => {
                       isProductSellableInApp(product, customerProfile),
                   );
                   if (isSellable) {
-                    const selection = purchaseSelectionBuilder
+                    const {selection} = purchaseSelectionBuilder
                       .forType(type)
                       .build();
                     return {

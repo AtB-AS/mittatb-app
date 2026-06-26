@@ -13,7 +13,7 @@ describe('purchaseSelectionBuilder - product', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
       .product({...TEST_SELECTION.preassignedFareProduct, id: 'P2'})
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe('P2');
   });
@@ -30,7 +30,7 @@ describe('purchaseSelectionBuilder - product', () => {
           appVersionMax: '1.46',
         },
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe('P2');
   });
@@ -43,7 +43,7 @@ describe('purchaseSelectionBuilder - product', () => {
         id: 'P2',
         type: 'other-type',
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe(
       TEST_SELECTION.preassignedFareProduct.id,
@@ -62,7 +62,7 @@ describe('purchaseSelectionBuilder - product', () => {
           appVersionMin: '1.46',
         },
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe(
       TEST_SELECTION.preassignedFareProduct.id,
@@ -81,7 +81,7 @@ describe('purchaseSelectionBuilder - product', () => {
           appVersionMax: '1.44',
         },
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe(
       TEST_SELECTION.preassignedFareProduct.id,
@@ -97,7 +97,7 @@ describe('purchaseSelectionBuilder - product', () => {
         id: 'P2',
         distributionChannel: ['web'],
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe(
       TEST_SELECTION.preassignedFareProduct.id,
@@ -126,7 +126,7 @@ describe('purchaseSelectionBuilder - product', () => {
         },
         id: 'P2',
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe('P2');
     expect(selection.userProfilesWithCount.length).toBe(1);
@@ -160,7 +160,7 @@ describe('purchaseSelectionBuilder - product', () => {
         },
         id: 'P2',
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe('P2');
     expect(selection.userProfilesWithCount.length).toBe(1);
@@ -194,7 +194,7 @@ describe('purchaseSelectionBuilder - product', () => {
           fareZoneRefs: ['T2', 'T3'],
         },
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe('P2');
     expect(selection.zones?.from.id).toBe('T2');
@@ -216,7 +216,7 @@ describe('purchaseSelectionBuilder - product', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(selectionWithSupplement)
       .product({...TEST_SELECTION.preassignedFareProduct, id: 'P2'})
-      .build();
+      .build().selection;
 
     expect(selection.supplementProductsWithCount).toEqual(
       testSupplementProductWithCount,
@@ -246,7 +246,7 @@ describe('purchaseSelectionBuilder - product', () => {
       .fromSelection(TEST_SELECTION)
       .product(productWithLimitations)
       .supplementProducts(testBaggageProductWithCount)
-      .build();
+      .build().selection;
 
     expect(selection.supplementProductsWithCount).toEqual([]);
     expect(selection.preassignedFareProduct.id).toBe('P2');
@@ -274,7 +274,7 @@ describe('purchaseSelectionBuilder - product', () => {
       .fromSelection(TEST_SELECTION)
       .product(productWithLimitations)
       .supplementProducts(testBaggageProductWithCount)
-      .build();
+      .build().selection;
 
     expect(selection.supplementProductsWithCount).toEqual(
       testBaggageProductWithCount,
@@ -288,7 +288,7 @@ describe('purchaseSelectionBuilder - product forced changes', () => {
     const {forcedChanges} = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
       .product({...TEST_SELECTION.preassignedFareProduct, id: 'P2'})
-      .buildWithForcedChanges();
+      .build();
 
     expect(forcedChanges).toEqual([]);
   });
@@ -301,7 +301,7 @@ describe('purchaseSelectionBuilder - product forced changes', () => {
         id: 'P2',
         type: 'other-type',
       })
-      .buildWithForcedChanges();
+      .build();
 
     expect(forcedChanges).toEqual([]);
   });
@@ -327,7 +327,7 @@ describe('purchaseSelectionBuilder - product forced changes', () => {
         },
         id: 'P2',
       })
-      .buildWithForcedChanges();
+      .build();
 
     expect(selection.userProfilesWithCount[0].id).toBe('UP3');
     expect(forcedChanges).toEqual(['userProfile']);
@@ -360,7 +360,7 @@ describe('purchaseSelectionBuilder - product forced changes', () => {
         },
         id: 'P2',
       })
-      .buildWithForcedChanges();
+      .build();
 
     expect(forcedChanges).toEqual(['userProfile']);
   });
@@ -391,7 +391,7 @@ describe('purchaseSelectionBuilder - product forced changes', () => {
           fareZoneRefs: ['T2', 'T3'],
         },
       })
-      .buildWithForcedChanges();
+      .build();
 
     expect(forcedChanges).toEqual(['zone']);
   });
@@ -429,7 +429,7 @@ describe('purchaseSelectionBuilder - product forced changes', () => {
           fareZoneRefs: ['T2', 'T3'],
         },
       })
-      .buildWithForcedChanges();
+      .build();
 
     expect(forcedChanges).toEqual(['userProfile', 'zone']);
   });
@@ -463,7 +463,7 @@ describe('purchaseSelectionBuilder - product forced changes', () => {
       .fromSelection(TEST_SELECTION)
       .product(productWithLimitations) // forces userProfile change
       .product(productWithoutLimitations) // no forced change
-      .buildWithForcedChanges();
+      .build();
 
     expect(forcedChanges).toEqual([]);
     expect(selection.userProfilesWithCount[0].id).toBe('UP1');

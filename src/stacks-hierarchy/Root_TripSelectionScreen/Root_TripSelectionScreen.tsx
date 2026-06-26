@@ -64,11 +64,12 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
           searchTime={searchTime}
           setSearchTime={(searchTime) => {
             setSearchTime(searchTime);
-            setSelection((prevSelection) =>
-              builder
-                .fromSelection(prevSelection)
-                .date(searchTime.date)
-                .build(),
+            setSelection(
+              (prevSelection) =>
+                builder
+                  .fromSelection(prevSelection)
+                  .date(searchTime.date)
+                  .build().selection,
             );
           }}
         />
@@ -77,7 +78,7 @@ export const Root_TripSelectionScreen: React.FC<Props> = ({
         <BookingTripSelection
           selection={selection}
           onSelect={(legs) => {
-            const newSelection = builder
+            const {selection: newSelection} = builder
               .fromSelection(selection)
               .legs(legs)
               .build();

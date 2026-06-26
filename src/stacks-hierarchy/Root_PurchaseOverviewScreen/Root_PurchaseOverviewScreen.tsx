@@ -287,7 +287,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               selection={selection}
               style={styles.selectionComponent}
               onSelect={(selection) => {
-                const newSelection = builder
+                const {selection: newSelection} = builder
                   .fromSelection(selection)
                   .fromStopPlace(selection.stopPlaces?.from)
                   .toStopPlace(selection.stopPlaces?.to)
@@ -302,7 +302,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 );
               }}
               onSwap={() => {
-                const newSelection = builder
+                const {selection: newSelection} = builder
                   .fromSelection(selection)
                   .fromStopPlace(selection.stopPlaces?.to)
                   .toStopPlace(selection.stopPlaces?.from)

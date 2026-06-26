@@ -180,7 +180,7 @@ export function TravellerSelection({
           text={t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
           value={selection.isOnBehalfOf}
           onValueChange={(newValue) => {
-            const newSelection = builder
+            const {selection: newSelection} = builder
               .fromSelection(selection)
               .isOnBehalfOf(newValue)
               .build();

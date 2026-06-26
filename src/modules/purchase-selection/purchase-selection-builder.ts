@@ -194,20 +194,21 @@ const createBuilder = (
         !isWithinOrderMax ||
         !areSupplementProductsValid
       ) {
-        return currentSelection;
+        return {
+          selection: currentSelection,
+          forcedChanges,
+        };
       }
 
       return {
-        ...currentSelection,
-        userProfilesWithCount: onlyProfilesWithActualCount,
-        supplementProductsWithCount: onlySupplementProductsWithActualCount,
+        selection: {
+          ...currentSelection,
+          userProfilesWithCount: onlyProfilesWithActualCount,
+          supplementProductsWithCount: onlySupplementProductsWithActualCount,
+        },
+        forcedChanges,
       };
     },
-
-    buildWithForcedChanges: () => ({
-      selection: builder.build(),
-      forcedChanges: [...forcedChanges],
-    }),
   };
 
   return builder;

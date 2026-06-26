@@ -385,7 +385,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             onPress={() => {
               const isSelected =
                 selection.bonusProductId === relevantTicketBonusProduct.id;
-              const next = builder
+              const {selection: next} = builder
                 .fromSelection(selection)
                 .bonusProductId(
                   isSelected ? undefined : relevantTicketBonusProduct.id,

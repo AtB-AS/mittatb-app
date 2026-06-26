@@ -106,7 +106,7 @@ describe('purchaseSelectionBuilder - legs', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(selectionWithTravelDate)
       .legs(validLegs)
-      .build();
+      .build().selection;
 
     expect(selection.legs).toHaveLength(2);
     expect(selection.legs?.[0].fromPlace.quay?.stopPlace?.id).toBe('SP1');
@@ -170,7 +170,7 @@ describe('purchaseSelectionBuilder - legs', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(selectionWithTravelDate)
       .legs(invalidLegs)
-      .build();
+      .build().selection;
 
     expect(selection.legs).toHaveLength(0);
   });
@@ -227,7 +227,7 @@ describe('purchaseSelectionBuilder - legs', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection({...TEST_SELECTION, travelDate: undefined}) // No travel date set
       .legs(validLegs)
-      .build();
+      .build().selection;
 
     expect(selection.legs).toHaveLength(1);
   });
@@ -236,7 +236,7 @@ describe('purchaseSelectionBuilder - legs', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
       .legs([])
-      .build();
+      .build().selection;
 
     expect(selection.legs).toHaveLength(0);
   });
@@ -245,7 +245,7 @@ describe('purchaseSelectionBuilder - legs', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
       .legs(TEST_SELECTION.legs)
-      .build();
+      .build().selection;
 
     expect(selection.legs).toEqual(TEST_SELECTION.legs);
   });
@@ -352,7 +352,7 @@ describe('purchaseSelectionBuilder - legs', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(selectionWithTravelDate)
       .legs(mixedLegs)
-      .build();
+      .build().selection;
 
     expect(selection.legs).toHaveLength(2);
     expect(selection.legs?.[0].fromPlace.quay?.stopPlace?.id).toBe('SP1');
@@ -362,7 +362,7 @@ describe('purchaseSelectionBuilder - legs', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
       .legs([])
-      .build();
+      .build().selection;
 
     expect(selection.legs).toEqual(TEST_SELECTION.legs);
   });

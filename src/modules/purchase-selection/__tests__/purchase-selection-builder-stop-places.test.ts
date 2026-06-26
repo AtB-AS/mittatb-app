@@ -10,7 +10,7 @@ describe('purchaseSelectionBuilder - stop places', () => {
         stopPlaces: {from: undefined, to: undefined},
       })
       .fromStopPlace({id: 'a-stop-id', name: 'Trondheim Kai'})
-      .build();
+      .build().selection;
 
     expect(selection.stopPlaces?.from?.id).toBe('a-stop-id');
     expect(selection.stopPlaces?.to?.id).toBe(undefined);
@@ -24,7 +24,7 @@ describe('purchaseSelectionBuilder - stop places', () => {
         stopPlaces: {from: undefined, to: undefined},
       })
       .toStopPlace({id: 'a-stop-id', name: 'Trondheim Kai'})
-      .build();
+      .build().selection;
 
     expect(selection.stopPlaces?.from?.id).toBe(undefined);
     expect(selection.stopPlaces?.to?.id).toBe('a-stop-id');
@@ -34,7 +34,7 @@ describe('purchaseSelectionBuilder - stop places', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
       .fromStopPlace({id: 'a-stop-id', name: 'Trondheim Kai'})
-      .build();
+      .build().selection;
 
     expect(selection.stopPlaces?.from?.id).toBe(undefined);
     expect(selection.stopPlaces?.to?.id).toBe(undefined);
@@ -44,7 +44,7 @@ describe('purchaseSelectionBuilder - stop places', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
       .toStopPlace({id: 'a-stop-id', name: 'Trondheim Kai'})
-      .build();
+      .build().selection;
 
     expect(selection.stopPlaces?.from?.id).toBe(undefined);
     expect(selection.stopPlaces?.to?.id).toBe(undefined);

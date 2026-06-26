@@ -22,7 +22,7 @@ describe('purchaseSelectionBuilder - userProfiles', () => {
         {...TEST_USER_PROFILE, id: 'UP2', count: 2},
         {...TEST_USER_PROFILE, id: 'UP3', count: 1},
       ])
-      .build();
+      .build().selection;
 
     expect(selection.userProfilesWithCount).toHaveLength(2);
     expect(
@@ -42,7 +42,7 @@ describe('purchaseSelectionBuilder - userProfiles', () => {
         {...TEST_USER_PROFILE, id: 'UP4', count: 1},
         {...TEST_USER_PROFILE, id: 'UP5', count: 0},
       ])
-      .build();
+      .build().selection;
 
     expect(selection.userProfilesWithCount).toHaveLength(2);
     expect(
@@ -62,7 +62,7 @@ describe('purchaseSelectionBuilder - userProfiles', () => {
         {...TEST_USER_PROFILE, id: 'UP4', count: 0},
         {...TEST_USER_PROFILE, id: 'UP5', count: 0},
       ])
-      .build();
+      .build().selection;
 
     expect(selection).toBe(TEST_SELECTION);
   });
@@ -85,7 +85,7 @@ describe('purchaseSelectionBuilder - userProfiles', () => {
         {...TEST_USER_PROFILE, id: 'UP2', count: 2},
         {...TEST_USER_PROFILE, id: 'UP3', count: 1},
       ])
-      .build();
+      .build().selection;
 
     expect(selection).toBe(originalSelection);
   });
@@ -111,7 +111,7 @@ describe('purchaseSelectionBuilder - userProfiles', () => {
         {...TEST_USER_PROFILE, id: 'UP2', count: 2},
         {...TEST_USER_PROFILE, id: 'UP3', count: 1},
       ])
-      .build();
+      .build().selection;
 
     expect(selection.userProfilesWithCount).toHaveLength(2);
     expect(
@@ -141,7 +141,7 @@ describe('purchaseSelectionBuilder - userProfiles', () => {
         {...TEST_USER_PROFILE, id: 'UP2', count: 1},
         {...TEST_USER_PROFILE, id: 'UP3', count: 1},
       ])
-      .build();
+      .build().selection;
 
     expect(selection).toBe(originalSelection);
   });
@@ -168,7 +168,7 @@ describe('purchaseSelectionBuilder - userProfiles', () => {
           count: 2,
         },
       ])
-      .build();
+      .build().selection;
 
     expect(selection).toBe(originalSelection);
   });
@@ -235,7 +235,7 @@ it('Should not apply supplement products with zero count', () => {
       {...TEST_SUPPLEMENT_PRODUCT, id: 'SP2', count: 3},
       {...TEST_SUPPLEMENT_PRODUCT, id: 'SP3', count: 0},
     ])
-    .build();
+    .build().selection;
 
   expect(selection.supplementProductsWithCount).toHaveLength(1);
   expect(selection.supplementProductsWithCount[0].id).toBe('SP2');
@@ -253,7 +253,7 @@ it('Should not apply any user profiles or supplement products if all have zero c
       {...TEST_SUPPLEMENT_PRODUCT, id: 'SP1', count: 0},
       {...TEST_SUPPLEMENT_PRODUCT, id: 'SP2', count: 0},
     ])
-    .build();
+    .build().selection;
 
   expect(selection.userProfilesWithCount).toHaveLength(1);
   expect(selection.supplementProductsWithCount).toHaveLength(0);
@@ -271,7 +271,7 @@ it('Should apply both user profiles and supplement products with positive count'
       {...TEST_SUPPLEMENT_PRODUCT, id: 'SP1', count: 2},
       {...TEST_SUPPLEMENT_PRODUCT, id: 'SP2', count: 1},
     ])
-    .build();
+    .build().selection;
 
   expect(selection.userProfilesWithCount).toHaveLength(2);
   expect(selection.supplementProductsWithCount).toHaveLength(2);
@@ -282,7 +282,7 @@ it('Should apply zero count user profile with existing supplement product', () =
     .fromSelection(TEST_SELECTION)
     .supplementProducts([{...TEST_SUPPLEMENT_PRODUCT, id: 'SP1', count: 2}])
     .userProfiles([{...TEST_USER_PROFILE, id: 'UP2', count: 0}])
-    .build();
+    .build().selection;
 
   expect(selection.userProfilesWithCount).toHaveLength(0);
   expect(selection.supplementProductsWithCount).toHaveLength(1);
@@ -298,7 +298,7 @@ it('Should apply zero count user profile with multiple supplement products', () 
       {...TEST_SUPPLEMENT_PRODUCT, id: 'SP2', count: 1},
     ])
     .userProfiles([{...TEST_USER_PROFILE, id: 'UP2', count: 0}])
-    .build();
+    .build().selection;
 
   expect(selection.userProfilesWithCount).toHaveLength(0);
   expect(selection.supplementProductsWithCount).toHaveLength(2);
@@ -425,7 +425,7 @@ describe('isSelectableProfile with userProfileRefs', () => {
         {...TEST_USER_PROFILE, id: 'UP2', count: 2},
         {...TEST_USER_PROFILE, id: 'UP3', count: 1},
       ])
-      .build();
+      .build().selection;
 
     expect(selection).toBe(originalSelection);
   });
@@ -532,7 +532,7 @@ describe('purchaseSelectionBuilder - maxCountPerOrder', () => {
         {...TEST_USER_PROFILE, id: 'UP1', count: 2},
         {...TEST_USER_PROFILE, id: 'UP2', count: 2},
       ])
-      .build();
+      .build().selection;
 
     expect(selection).toBe(originalSelection);
   });
@@ -555,7 +555,7 @@ describe('purchaseSelectionBuilder - maxCountPerOrder', () => {
         {...TEST_USER_PROFILE, id: 'UP1', count: 2},
         {...TEST_USER_PROFILE, id: 'UP2', count: 3},
       ])
-      .build();
+      .build().selection;
 
     expect(selection.userProfilesWithCount).toHaveLength(2);
   });
