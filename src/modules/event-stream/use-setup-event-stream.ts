@@ -93,7 +93,7 @@ export const useSetupEventStream = () => {
   const subscribe = useCallback(
     <K extends EventKind>(listener: StreamEventListener<K>) => {
       addToEventLog({
-        meta: `SUBSCRIBE (${listener.eventKind}): ${listener.id}`,
+        meta: `SUBSCRIBE: ${listener.id}`,
       });
       setListeners((prev) => [...prev, listener] as StreamEventListener[]);
     },

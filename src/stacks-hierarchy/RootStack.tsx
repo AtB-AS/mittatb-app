@@ -88,6 +88,7 @@ import {
 import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 import {Root_ShmoHelpScreen} from './Root_ShmoHelp/Root_ShmoHelpScreen';
 import {Root_ShmoPricingDetailsScreen} from './Root_ShmoPricingDetailsScreen';
+import {useGlobalEventStreamListeners} from '@atb/modules/event-stream';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -124,6 +125,8 @@ export const RootStack = () => {
 
   // init Intercom user
   useRegisterIntercomUser();
+
+  useGlobalEventStreamListeners();
 
   if (isLoadingAppState) {
     return null;
