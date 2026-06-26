@@ -14,7 +14,7 @@ import {
 import Bugsnag from '@bugsnag/react-native';
 import {useFeatureTogglesContext} from '../feature-toggles';
 import {isDefined} from '@atb/utils/presence';
-import {EventKind, useEventStreamListener} from '../event-stream';
+import {EventKind, useEventStreamContext} from '../event-stream';
 import {useQueryClient} from '@tanstack/react-query';
 
 type TicketingReducerState = {
@@ -150,9 +150,10 @@ export const TicketingContextProvider = ({children}: Props) => {
   const {enable_ticketing} = useRemoteConfigContext();
   const {isEventStreamEnabled, isEventStreamFareContractsEnabled} =
     useFeatureTogglesContext();
+  const {useStreamEventListener} = useEventStreamContext();
   const queryClient = useQueryClient();
 
-  useEventStreamListener(EventKind.FareContract, () => {
+  useStreamEventListener(EventKind.FareContract, () => {
     if (isEventStreamFareContractsEnabled) {
       invalidateFareContractsQuery(queryClient);
     }

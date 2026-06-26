@@ -23,7 +23,7 @@ import {ShmoBooking, ShmoBookingState} from '@atb/api/types/mobility';
 import {useQueryClient} from '@tanstack/react-query';
 import {getShmoBookingQueryKey} from '../mobility/queries/use-shmo-booking-query';
 import {languageGlobal} from '../locale';
-import {useEventStreamListener} from '../event-stream';
+import {useEventStreamContext} from '../event-stream';
 
 type MapContextState = {
   mapFilter?: MapFilterType;
@@ -68,6 +68,7 @@ type Props = {
 
 export const MapContextProvider = ({children}: Props) => {
   const {mapbox_api_token} = useRemoteConfigContext();
+  const {useStreamEventListener} = useEventStreamContext();
   const queryClient = useQueryClient();
   useEffect(() => {
     MapboxGL.setAccessToken(mapbox_api_token);
@@ -101,7 +102,7 @@ export const MapContextProvider = ({children}: Props) => {
 
   const [paddingBottomMap, setPaddingBottomMap] = useState(0);
 
-  useEventStreamListener(EventKind.ShmoBookingUpdated, (streamEvent) => {
+  useStreamEventListener(EventKind.ShmoBookingUpdated, (streamEvent) => {
     const existingBooking: ShmoBooking | undefined = queryClient.getQueryData(
       getShmoBookingQueryKey(streamEvent.bookingId, languageGlobal),
     );

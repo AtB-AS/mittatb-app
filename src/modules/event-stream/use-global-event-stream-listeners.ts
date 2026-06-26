@@ -1,12 +1,12 @@
 import {useQueryClient} from '@tanstack/react-query';
 import {EventKind} from './types';
-import {useEventStreamListener} from './use-event-stream-listener';
 import {getActiveShmoBookingQueryKey} from '../mobility/queries/use-active-shmo-booking-query';
 import {getShmoBookingQueryKey} from '../mobility/queries/use-shmo-booking-query';
 import {languageGlobal} from '../locale';
 import {getBonusBalanceQueryKey} from '../bonus/queries/use-bonus-balance-query';
 import {getBonusAmountEarnedQueryKey} from '../bonus';
 import {useAuthContext} from '../auth';
+import {useEventStreamContext} from './EventStreamContext';
 
 /**
  * Registers app-wide event stream listeners that aren't tied to a specific
@@ -15,8 +15,9 @@ import {useAuthContext} from '../auth';
 export function useGlobalEventStreamListeners() {
   const queryClient = useQueryClient();
   const {userId} = useAuthContext();
+  const {useStreamEventListener} = useEventStreamContext();
 
-  useEventStreamListener(EventKind.ShmoBookingUpdated, (streamEvent) => {
+  useStreamEventListener(EventKind.ShmoBookingUpdated, (streamEvent) => {
     queryClient.invalidateQueries({
       queryKey: getActiveShmoBookingQueryKey(languageGlobal),
     });
@@ -25,7 +26,7 @@ export function useGlobalEventStreamListeners() {
     });
   });
 
-  useEventStreamListener(
+  useStreamEventListener(
     EventKind.PersonalisationProgramPoint,
     (streamEvent) => {
       queryClient.invalidateQueries({
