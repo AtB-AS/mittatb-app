@@ -18,7 +18,7 @@ import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import MapboxGL from '@rnmapbox/maps';
 import {useRemoteConfigContext} from '../remote-config';
-import {EventKind, StreamEvent} from '../event-stream/types';
+import {EventKind} from '../event-stream/types';
 import {ShmoBooking, ShmoBookingState} from '@atb/api/types/mobility';
 import {useQueryClient} from '@tanstack/react-query';
 import {getShmoBookingQueryKey} from '../mobility/queries/use-shmo-booking-query';
@@ -83,21 +83,19 @@ export const MapContextProvider = ({children}: Props) => {
     subscribe({
       id: listenerId,
       eventKind: EventKind.ShmoBookingUpdated,
-      callback: (streamEvent: StreamEvent) => {
-        if (streamEvent.event === EventKind.ShmoBookingUpdated) {
-          const existingBooking: ShmoBooking | undefined =
-            queryClient.getQueryData(
-              getShmoBookingQueryKey(streamEvent.bookingId, languageGlobal),
-            );
-          if (
-            existingBooking?.state !== ShmoBookingState.FINISHED &&
-            streamEvent.state === ShmoBookingState.FINISHED
-          ) {
-            dispatchMapState({
-              type: MapStateActionType.FinishedBooking,
-              bookingId: streamEvent.bookingId,
-            });
-          }
+      callback: (streamEvent) => {
+        const existingBooking: ShmoBooking | undefined =
+          queryClient.getQueryData(
+            getShmoBookingQueryKey(streamEvent.bookingId, languageGlobal),
+          );
+        if (
+          existingBooking?.state !== ShmoBookingState.FINISHED &&
+          streamEvent.state === ShmoBookingState.FINISHED
+        ) {
+          dispatchMapState({
+            type: MapStateActionType.FinishedBooking,
+            bookingId: streamEvent.bookingId,
+          });
         }
       },
     });

@@ -10,16 +10,17 @@ import Bugsnag from '@bugsnag/react-native';
 import {
   StreamEventLog,
   StreamEvent,
+  StreamEventOfKind,
   StreamEventSchema,
   EventKind,
 } from './types';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {jsonStringToObject} from '@atb/utils/object';
 
-export type StreamEventListener = {
+export type StreamEventListener<K extends EventKind = EventKind> = {
   id: string;
-  eventKind: EventKind;
-  callback: (streamEvent: StreamEvent) => void;
+  eventKind: K;
+  callback: (streamEvent: StreamEventOfKind<K>) => void;
 };
 
 export const useSetupEventStream = () => {
@@ -90,11 +91,11 @@ export const useSetupEventStream = () => {
   });
 
   const subscribe = useCallback(
-    (listener: StreamEventListener) => {
+    <K extends EventKind>(listener: StreamEventListener<K>) => {
       addToEventLog({
         meta: `SUBSCRIBE (${listener.eventKind}): ${listener.id}`,
       });
-      setListeners((prev) => [...prev, listener]);
+      setListeners((prev) => [...prev, listener] as StreamEventListener[]);
     },
     [addToEventLog],
   );

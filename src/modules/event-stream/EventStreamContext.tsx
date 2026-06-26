@@ -3,7 +3,7 @@ import {
   StreamEventListener,
   useSetupEventStream,
 } from './use-setup-event-stream';
-import {EventKind, StreamEvent, StreamEventLog} from './types';
+import {EventKind, StreamEventLog} from './types';
 import {useQueryClient} from '@tanstack/react-query';
 import {getBonusBalanceQueryKey} from '../bonus/queries/use-bonus-balance-query';
 import {getBonusAmountEarnedQueryKey} from '../bonus';
@@ -16,7 +16,7 @@ import {useFeatureTogglesContext} from '../feature-toggles';
 
 interface EventStreamContextValue {
   eventLog: StreamEventLog;
-  subscribe: (listener: StreamEventListener) => void;
+  subscribe: <K extends EventKind>(listener: StreamEventListener<K>) => void;
   unsubscribe: (id: string) => void;
 }
 
@@ -67,18 +67,16 @@ export const EventStreamContextProvider = ({children}: Props) => {
     subscribe({
       id: shmoBookingListenerId,
       eventKind: EventKind.ShmoBookingUpdated,
-      callback: (streamEvent: StreamEvent) => {
-        if (streamEvent.event === EventKind.ShmoBookingUpdated) {
-          queryClient.invalidateQueries({
-            queryKey: getActiveShmoBookingQueryKey(languageGlobal),
-          });
-          queryClient.invalidateQueries({
-            queryKey: getShmoBookingQueryKey(
-              streamEvent.bookingId,
-              languageGlobal,
-            ),
-          });
-        }
+      callback: (streamEvent) => {
+        queryClient.invalidateQueries({
+          queryKey: getActiveShmoBookingQueryKey(languageGlobal),
+        });
+        queryClient.invalidateQueries({
+          queryKey: getShmoBookingQueryKey(
+            streamEvent.bookingId,
+            languageGlobal,
+          ),
+        });
       },
     });
     return () => {
@@ -98,15 +96,13 @@ export const EventStreamContextProvider = ({children}: Props) => {
     subscribe({
       id: personalisationProgramPointListenerId,
       eventKind: EventKind.PersonalisationProgramPoint,
-      callback: (streamEvent: StreamEvent) => {
-        if (streamEvent.event === EventKind.PersonalisationProgramPoint) {
-          queryClient.invalidateQueries({
-            queryKey: getBonusBalanceQueryKey(userId),
-          });
-          queryClient.invalidateQueries({
-            queryKey: getBonusAmountEarnedQueryKey(userId, streamEvent.orderId),
-          });
-        }
+      callback: (streamEvent) => {
+        queryClient.invalidateQueries({
+          queryKey: getBonusBalanceQueryKey(userId),
+        });
+        queryClient.invalidateQueries({
+          queryKey: getBonusAmountEarnedQueryKey(userId, streamEvent.orderId),
+        });
       },
     });
     return () => {
