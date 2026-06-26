@@ -154,9 +154,9 @@ const PurchaseOverviewTexts = {
       ),
       message: (changedItems: string) =>
         _(
-          `Valgene for ${changedItems} ble endret fordi valgene ikke er tilgjengelige for den valgte billetten.`,
+          `Valgene for ${changedItems} ble endret fordi de ikke er tilgjengelige for den valgte billetten.`,
           `The selections for ${changedItems} were changed because they are not available for the selected ticket.`,
-          `Vala for ${changedItems} vart endra fordi vala ikkje er tilgjengelege for den valde billetten.`,
+          `Vala for ${changedItems} vart endra fordi dei ikkje er tilgjengelege for den valde billetten.`,
         ),
       items: {
         userProfile: _('reisende', 'travellers', 'reisande'),
