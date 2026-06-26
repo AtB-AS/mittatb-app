@@ -123,11 +123,15 @@ export const StopPlacesView = (props: Props) => {
     refetchDepartures,
   } = useDepartures(departuresProps);
 
+  const allQuaysLoaded = stopPlaces.every((sp) => sp.quays !== undefined);
+
   // If all favorites are removed while setShowOnlyFavorites is true, reset the
-  // value to false
+  // value to false. Skip while quays are still loading so we don't clobber a
+  // deep-linked showOnlyFavoritesByDefault before favorites can be evaluated.
   useEffect(() => {
+    if (!allQuaysLoaded) return;
     if (!placeHasFavorites) setShowOnlyFavorites(false);
-  }, [placeHasFavorites, setShowOnlyFavorites]);
+  }, [allQuaysLoaded, placeHasFavorites, setShowOnlyFavorites]);
 
   const refreshControlProps = useManualRefreshControlProps({
     onRefresh: refetchDepartures,
