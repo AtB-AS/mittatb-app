@@ -75,7 +75,7 @@ export function StartTimeSelection({
           },
         ]}
         onSave={(selectedOption) => {
-          const newSelection = selectionBuilder
+          const {selection: newSelection} = selectionBuilder
             .fromSelection(selection)
             .date(
               selectedOption.option === 'now' ||

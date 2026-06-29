@@ -13,7 +13,7 @@ describe('purchaseSelectionBuilder - product', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
       .product({...TEST_SELECTION.preassignedFareProduct, id: 'P2'})
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe('P2');
   });
@@ -30,7 +30,7 @@ describe('purchaseSelectionBuilder - product', () => {
           appVersionMax: '1.46',
         },
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe('P2');
   });
@@ -43,7 +43,7 @@ describe('purchaseSelectionBuilder - product', () => {
         id: 'P2',
         type: 'other-type',
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe(
       TEST_SELECTION.preassignedFareProduct.id,
@@ -62,7 +62,7 @@ describe('purchaseSelectionBuilder - product', () => {
           appVersionMin: '1.46',
         },
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe(
       TEST_SELECTION.preassignedFareProduct.id,
@@ -81,7 +81,7 @@ describe('purchaseSelectionBuilder - product', () => {
           appVersionMax: '1.44',
         },
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe(
       TEST_SELECTION.preassignedFareProduct.id,
@@ -97,7 +97,7 @@ describe('purchaseSelectionBuilder - product', () => {
         id: 'P2',
         distributionChannel: ['web'],
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe(
       TEST_SELECTION.preassignedFareProduct.id,
@@ -126,7 +126,7 @@ describe('purchaseSelectionBuilder - product', () => {
         },
         id: 'P2',
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe('P2');
     expect(selection.userProfilesWithCount.length).toBe(1);
@@ -160,7 +160,7 @@ describe('purchaseSelectionBuilder - product', () => {
         },
         id: 'P2',
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe('P2');
     expect(selection.userProfilesWithCount.length).toBe(1);
@@ -194,7 +194,7 @@ describe('purchaseSelectionBuilder - product', () => {
           fareZoneRefs: ['T2', 'T3'],
         },
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe('P2');
     expect(selection.zones?.from.id).toBe('T2');
@@ -216,7 +216,7 @@ describe('purchaseSelectionBuilder - product', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(selectionWithSupplement)
       .product({...TEST_SELECTION.preassignedFareProduct, id: 'P2'})
-      .build();
+      .build().selection;
 
     expect(selection.supplementProductsWithCount).toEqual(
       testSupplementProductWithCount,
@@ -246,7 +246,7 @@ describe('purchaseSelectionBuilder - product', () => {
       .fromSelection(TEST_SELECTION)
       .product(productWithLimitations)
       .supplementProducts(testBaggageProductWithCount)
-      .build();
+      .build().selection;
 
     expect(selection.supplementProductsWithCount).toEqual([]);
     expect(selection.preassignedFareProduct.id).toBe('P2');
@@ -274,11 +274,198 @@ describe('purchaseSelectionBuilder - product', () => {
       .fromSelection(TEST_SELECTION)
       .product(productWithLimitations)
       .supplementProducts(testBaggageProductWithCount)
-      .build();
+      .build().selection;
 
     expect(selection.supplementProductsWithCount).toEqual(
       testBaggageProductWithCount,
     );
     expect(selection.preassignedFareProduct.id).toBe('P2');
+  });
+});
+
+describe('purchaseSelectionBuilder - product forced changes', () => {
+  it('Should report no forced changes for a fully compatible product change', () => {
+    const {forcedChanges} = createEmptyBuilder(TEST_INPUT)
+      .fromSelection(TEST_SELECTION)
+      .product({...TEST_SELECTION.preassignedFareProduct, id: 'P2'})
+      .build();
+
+    expect(forcedChanges).toEqual([]);
+  });
+
+  it('Should report no forced changes when the product is rejected', () => {
+    const {forcedChanges} = createEmptyBuilder(TEST_INPUT)
+      .fromSelection(TEST_SELECTION)
+      .product({
+        ...TEST_SELECTION.preassignedFareProduct,
+        id: 'P2',
+        type: 'other-type',
+      })
+      .build();
+
+    expect(forcedChanges).toEqual([]);
+  });
+
+  it('Should report userProfile when the user profile is swapped to default', () => {
+    const input = {
+      ...TEST_INPUT,
+      userProfiles: [
+        {...TEST_USER_PROFILE, id: 'UP1', userTypeString: 'ADULT'},
+        {...TEST_USER_PROFILE, id: 'UP2', userTypeString: 'CHILD'},
+        {...TEST_USER_PROFILE, id: 'UP3', userTypeString: 'SENIOR'},
+      ],
+      defaultUserTypeString: 'SENIOR',
+    };
+
+    const {selection, forcedChanges} = createEmptyBuilder(input)
+      .fromSelection(TEST_SELECTION)
+      .product({
+        ...TEST_PRODUCT,
+        limitations: {
+          ...TEST_PRODUCT.limitations,
+          userProfiles: [{userProfileRef: 'UP2'}, {userProfileRef: 'UP3'}],
+        },
+        id: 'P2',
+      })
+      .build();
+
+    expect(selection.userProfilesWithCount[0].id).toBe('UP3');
+    expect(forcedChanges).toEqual(['userProfile']);
+  });
+
+  it('Should report userProfile when invalid profiles are filtered out', () => {
+    const input = {
+      ...TEST_INPUT,
+      userProfiles: [
+        {...TEST_USER_PROFILE, id: 'UP1', userTypeString: 'ADULT'},
+        {...TEST_USER_PROFILE, id: 'UP2', userTypeString: 'CHILD'},
+        {...TEST_USER_PROFILE, id: 'UP3', userTypeString: 'SENIOR'},
+      ],
+      defaultUserTypeString: 'SENIOR',
+    };
+
+    const {forcedChanges} = createEmptyBuilder(input)
+      .fromSelection({
+        ...TEST_SELECTION,
+        userProfilesWithCount: [
+          {...TEST_USER_PROFILE, id: 'UP1', count: 2},
+          {...TEST_USER_PROFILE, id: 'UP2', count: 3},
+        ],
+      })
+      .product({
+        ...TEST_SELECTION.preassignedFareProduct,
+        limitations: {
+          ...TEST_SELECTION.preassignedFareProduct.limitations,
+          userProfiles: [{userProfileRef: 'UP2'}, {userProfileRef: 'UP3'}],
+        },
+        id: 'P2',
+      })
+      .build();
+
+    expect(forcedChanges).toEqual(['userProfile']);
+  });
+
+  it('Should report zone when zones are auto-corrected', () => {
+    const input = {
+      ...TEST_INPUT,
+      fareZones: [
+        {...TEST_ZONE, id: 'T1'},
+        {...TEST_ZONE, id: 'T2', isDefault: true},
+        {...TEST_ZONE, id: 'T3'},
+      ],
+    };
+
+    const {forcedChanges} = createEmptyBuilder(input)
+      .fromSelection({
+        ...TEST_SELECTION,
+        zones: {
+          from: {...TEST_ZONE, id: 'T3', resultType: 'zone'},
+          to: {...TEST_ZONE, id: 'T1', resultType: 'zone'},
+        },
+      })
+      .product({
+        ...TEST_PRODUCT,
+        id: 'P2',
+        limitations: {
+          ...TEST_PRODUCT.limitations,
+          fareZoneRefs: ['T2', 'T3'],
+        },
+      })
+      .build();
+
+    expect(forcedChanges).toEqual(['zone']);
+  });
+
+  it('Should report both userProfile and zone when both are auto-corrected', () => {
+    const input = {
+      ...TEST_INPUT,
+      userProfiles: [
+        {...TEST_USER_PROFILE, id: 'UP1', userTypeString: 'ADULT'},
+        {...TEST_USER_PROFILE, id: 'UP2', userTypeString: 'CHILD'},
+        {...TEST_USER_PROFILE, id: 'UP3', userTypeString: 'SENIOR'},
+      ],
+      defaultUserTypeString: 'SENIOR',
+      fareZones: [
+        {...TEST_ZONE, id: 'T1'},
+        {...TEST_ZONE, id: 'T2', isDefault: true},
+        {...TEST_ZONE, id: 'T3'},
+      ],
+    };
+
+    const {forcedChanges} = createEmptyBuilder(input)
+      .fromSelection({
+        ...TEST_SELECTION,
+        zones: {
+          from: {...TEST_ZONE, id: 'T1', resultType: 'zone'},
+          to: {...TEST_ZONE, id: 'T1', resultType: 'zone'},
+        },
+      })
+      .product({
+        ...TEST_PRODUCT,
+        id: 'P2',
+        limitations: {
+          ...TEST_PRODUCT.limitations,
+          userProfiles: [{userProfileRef: 'UP2'}, {userProfileRef: 'UP3'}],
+          fareZoneRefs: ['T2', 'T3'],
+        },
+      })
+      .build();
+
+    expect(forcedChanges).toEqual(['userProfile', 'zone']);
+  });
+
+  it('Should replace, not accumulate, forced changes across multiple product calls', () => {
+    const input = {
+      ...TEST_INPUT,
+      userProfiles: [
+        {...TEST_USER_PROFILE, id: 'UP1', userTypeString: 'ADULT'},
+        {...TEST_USER_PROFILE, id: 'UP2', userTypeString: 'CHILD'},
+        {...TEST_USER_PROFILE, id: 'UP3', userTypeString: 'SENIOR'},
+      ],
+      defaultUserTypeString: 'SENIOR',
+    };
+
+    const productWithLimitations = {
+      ...TEST_PRODUCT,
+      id: 'P2',
+      limitations: {
+        ...TEST_PRODUCT.limitations,
+        userProfiles: [{userProfileRef: 'UP2'}, {userProfileRef: 'UP3'}],
+      },
+    };
+
+    const productWithoutLimitations = {
+      ...TEST_PRODUCT,
+      id: 'P3',
+    };
+
+    const {selection, forcedChanges} = createEmptyBuilder(input)
+      .fromSelection(TEST_SELECTION)
+      .product(productWithLimitations) // forces userProfile change
+      .product(productWithoutLimitations) // no forced change
+      .build();
+
+    expect(forcedChanges).toEqual([]);
+    expect(selection.userProfilesWithCount[0].id).toBe('UP1');
   });
 });

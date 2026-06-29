@@ -2,6 +2,7 @@ import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import type {
   PurchaseSelectionBuilderInput,
   PurchaseSelectionType,
+  ForcedSelectionChange,
 } from './types';
 import {FareZoneWithMetadata} from '@atb/modules/fare-zones-selector';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
@@ -245,14 +246,22 @@ export const getPlaceSelectionMode = (
  * the new product applied, and also the existing user profiles and zones
  * selection are validated in regard to limitations on the new product. If the
  * current profiles/zones are not applicable, then defaults are applied.
+ *
+ * Returns the resulting selection along with a list of forced changes applied
+ * (e.g. user profiles or zones that were swapped because they aren't available
+ * for the new product). Call sites can use the list to notify the user about
+ * the changes.
  */
 export const applyProductChange = (
   input: PurchaseSelectionBuilderInput,
   currentSelection: PurchaseSelectionType,
   product: PreassignedFareProduct,
-): PurchaseSelectionType => {
-  const userCount = currentSelection.userProfilesWithCount.filter((up) =>
-    isSelectableProfile(product, up),
+): {
+  selection: PurchaseSelectionType;
+  forcedChanges: ForcedSelectionChange[];
+} => {
+  const selectableProfiles = currentSelection.userProfilesWithCount.filter(
+    (up) => isSelectableProfile(product, up),
   );
   const supplementProductCount =
     currentSelection.supplementProductsWithCount.filter((sp) =>
@@ -273,16 +282,41 @@ export const applyProductChange = (
     : getDefaultZones(input, currentSelection.fareProductTypeConfig, product);
 
   const userProfiles =
-    !userCount.length && !supplementProductCount.length
+    !selectableProfiles.length && !supplementProductCount.length
       ? getDefaultUserProfiles(input, product)
-      : userCount;
+      : selectableProfiles;
+
+  const forcedChanges: ForcedSelectionChange[] = [];
+  if (
+    !isUserProfilesWithCountEqual(
+      currentSelection.userProfilesWithCount,
+      userProfiles,
+    )
+  ) {
+    forcedChanges.push('userProfile');
+  }
+  if (!bothZonesValid) {
+    forcedChanges.push('zone');
+  }
 
   return {
-    ...currentSelection,
-    preassignedFareProduct: product,
-    userProfilesWithCount: userProfiles,
-    zones: newZones ?? currentSelection.zones,
+    selection: {
+      ...currentSelection,
+      preassignedFareProduct: product,
+      userProfilesWithCount: userProfiles,
+      zones: newZones ?? currentSelection.zones,
+    },
+    forcedChanges,
   };
+};
+
+const isUserProfilesWithCountEqual = (
+  a: UserProfileWithCount[],
+  b: UserProfileWithCount[],
+): boolean => {
+  if (a.length !== b.length) return false;
+  const aById = new Map(a.map((p) => [p.id, p.count]));
+  return b.every((p) => aById.get(p.id) === p.count);
 };
 
 export const isWithinUserProfileMaxCount = (

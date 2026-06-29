@@ -59,7 +59,7 @@ export const TravellerSelectionSheet = ({
     if (currentSelection?.baggageProducts)
       builder.supplementProducts(currentSelection.baggageProducts);
 
-    const newSelection = builder.build();
+    const {selection: newSelection} = builder.build();
     onSave(newSelection);
   };
 

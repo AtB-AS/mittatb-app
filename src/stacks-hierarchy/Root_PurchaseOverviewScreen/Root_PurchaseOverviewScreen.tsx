@@ -26,15 +26,21 @@ import {
 } from '@atb/modules/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
 import {FullScreenView} from '@atb/components/screen-view';
+import {Snackbar, useSnackbar} from '@atb/components/snackbar';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {useProductAlternatives} from '@atb/modules/ticketing';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
-import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
+import {
+  type ForcedSelectionChange,
+  usePurchaseSelectionBuilder,
+} from '@atb/modules/purchase-selection';
 import {useBookingTrips} from '@atb/modules/booking';
 import {isValidSelection} from '@atb/modules/booking';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 
 type PurchaseOverviewError = OfferError | {type: 'booking-error'};
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
@@ -46,10 +52,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const focusRef = useFocusOnLoad(navigation);
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
+  const {theme, themeName} = useThemeContext();
 
   const builder = usePurchaseSelectionBuilder();
   const [selection, setSelection] = useParamAsState(params.selection);
+  const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
   const isFree = params.selection.stopPlaces?.to?.isFree || false;
 
@@ -166,6 +173,29 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       rootPurchaseConfirmationScreenParams,
     );
   };
+
+  const showForcedChangeSnackbar = (forcedChanges: ForcedSelectionChange[]) => {
+    const items = forcedChanges.map((c) =>
+      t(PurchaseOverviewTexts.productSelection.forcedChange.items[c]),
+    );
+    const conjunction = t(dictionary.listConcatWord);
+    const list =
+      items.length === 1
+        ? items[0]
+        : `${items.slice(0, -1).join(', ')} ${conjunction} ${items.at(-1)}`;
+    showSnackbar({
+      content: {
+        iconNode: <ThemeIcon svg={statusTypeToIcon('info', true, themeName)} />,
+        title: t(PurchaseOverviewTexts.productSelection.forcedChange.title),
+        description: t(
+          PurchaseOverviewTexts.productSelection.forcedChange.message(list),
+        ),
+      },
+      position: 'top',
+      isDismissable: true,
+    });
+  };
+
   const summaryButtonText = () => {
     if (isBookingRequired) {
       return t(PurchaseOverviewTexts.summary.button.selectDeparture);
@@ -177,188 +207,196 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   };
 
   return (
-    <FullScreenView
-      focusRef={focusRef}
-      headerProps={{
-        title: getTextForLanguage(
-          selection.fareProductTypeConfig.name,
-          language,
-        ),
-        leftButton: {
-          type: 'back',
-          onPress: closeModal,
-        },
-        globalMessageContext: GlobalMessageContextEnum.appTicketing,
-      }}
-      headerContent={(focusRef) => (
-        <FareProductHeader
-          ref={params.onFocusElement ? undefined : focusRef}
-          style={styles.header}
-          fareProductTypeConfig={selection.fareProductTypeConfig}
-          onTicketInfoButtonPress={handleTicketInfoButtonPress}
-        />
-      )}
-    >
-      <ScrollView testID="purchaseOverviewScrollView">
-        <View style={styles.contentContainer}>
-          {params.mode === 'TravelSearch' && (
-            <MessageInfoBox
-              type="valid"
-              message={t(PurchaseOverviewTexts.travelSearchInfo)}
-            />
-          )}
-          {!!error &&
-            (error?.type === 'not-available' ? (
+    <>
+      <FullScreenView
+        focusRef={focusRef}
+        headerProps={{
+          title: getTextForLanguage(
+            selection.fareProductTypeConfig.name,
+            language,
+          ),
+          leftButton: {
+            type: 'back',
+            onPress: closeModal,
+          },
+          globalMessageContext: GlobalMessageContextEnum.appTicketing,
+        }}
+        headerContent={(focusRef) => (
+          <FareProductHeader
+            ref={params.onFocusElement ? undefined : focusRef}
+            style={styles.header}
+            fareProductTypeConfig={selection.fareProductTypeConfig}
+            onTicketInfoButtonPress={handleTicketInfoButtonPress}
+          />
+        )}
+      >
+        <ScrollView testID="purchaseOverviewScrollView">
+          <View style={styles.contentContainer}>
+            {params.mode === 'TravelSearch' && (
               <MessageInfoBox
-                type="warning"
-                title={t(
-                  PurchaseOverviewTexts.errorMessageBox.productUnavailable.title(
-                    getReferenceDataName(preassignedFareProduct, language),
-                  ),
-                )}
-                message={t(
-                  PurchaseOverviewTexts.errorMessageBox.productUnavailable
-                    .message,
-                )}
+                type="valid"
+                message={t(PurchaseOverviewTexts.travelSearchInfo)}
               />
-            ) : (
-              <MessageInfoBox
-                type="error"
-                title={t(PurchaseOverviewTexts.errorMessageBox.title)}
-                message={t(PurchaseOverviewTexts.errorMessageBox.message)}
-                onPressConfig={{
-                  action: refreshOffer,
-                  text: t(dictionary.retry),
-                }}
-              />
-            ))}
-
-          <ProductSelection
-            selection={selection}
-            setSelection={setSelection}
-            style={styles.selectionComponent}
-          />
-
-          <TravellerSelection
-            selection={selection}
-            onSave={(selection) => {
-              setSelection(selection);
-            }}
-            style={styles.selectionComponent}
-          />
-
-          <FromToSelection
-            selection={selection}
-            style={styles.selectionComponent}
-            onSelect={(selection) => {
-              const newSelection = builder
-                .fromSelection(selection)
-                .fromStopPlace(selection.stopPlaces?.from)
-                .toStopPlace(selection.stopPlaces?.to)
-                .build();
-              setSelection(newSelection);
-              navigation.setParams({onFocusElement: undefined});
-              navigation.push(
-                zoneSelectionMode === 'multiple-stop-harbor'
-                  ? 'Root_PurchaseHarborSearchScreen'
-                  : 'Root_PurchaseFareZonesSearchByMapScreen',
-                {selection},
-              );
-            }}
-            onSwap={() => {
-              const newSelection = builder
-                .fromSelection(selection)
-                .fromStopPlace(selection.stopPlaces?.to)
-                .toStopPlace(selection.stopPlaces?.from)
-                .build();
-              setSelection(newSelection);
-            }}
-            ref={focusRefs}
-          />
-
-          {
-            // When booking is enabled, the next step is selecting the departure (implicitly the time)
-            !selection.preassignedFareProduct.isBookingEnabled && (
-              <StartTimeSelection
-                selection={selection}
-                setSelection={setSelection}
-                style={styles.selectionComponent}
-              />
-            )
-          }
-
-          {isFree ? (
-            <MessageInfoBox
-              type="valid"
-              message={t(PurchaseOverviewTexts.summary.free)}
-              style={styles.isFreeMessage}
-            />
-          ) : (
-            <View style={styles.messages}>
-              {inspectableTokenWarningText && (
+            )}
+            {!!error &&
+              (error?.type === 'not-available' ? (
                 <MessageInfoBox
                   type="warning"
-                  message={inspectableTokenWarningText}
-                  isMarkdown={true}
+                  title={t(
+                    PurchaseOverviewTexts.errorMessageBox.productUnavailable.title(
+                      getReferenceDataName(preassignedFareProduct, language),
+                    ),
+                  )}
+                  message={t(
+                    PurchaseOverviewTexts.errorMessageBox.productUnavailable
+                      .message,
+                  )}
                 />
-              )}
-              <GlobalMessage
-                globalMessageContext={
-                  GlobalMessageContextEnum.appPurchaseOverview
-                }
-                textColor={theme.color.background.neutral[0]}
-                ruleVariables={{
-                  preassignedFareProductType: preassignedFareProduct.type,
-                  fromFareZone: selection.zones?.from.id || 'none',
-                  toFareZone: selection.zones?.to.id || 'none',
-                  userTypes: userTypeStrings,
-                }}
-              />
-            </View>
-          )}
+              ) : (
+                <MessageInfoBox
+                  type="error"
+                  title={t(PurchaseOverviewTexts.errorMessageBox.title)}
+                  message={t(PurchaseOverviewTexts.errorMessageBox.message)}
+                  onPressConfig={{
+                    action: refreshOffer,
+                    text: t(dictionary.retry),
+                  }}
+                />
+              ))}
 
-          <Summary
-            isLoading={isBookingRequired ? false : isSearchingOffer}
-            isFree={isFree}
-            isDisabled={!!error || !canProceed}
-            originalPrice={originalPrice}
-            price={isBookingRequired ? undefined : totalPrice}
-            summaryButtonText={summaryButtonText()}
-            onPressBuy={() => {
-              analytics.logEvent('Ticketing', 'Purchase summary clicked', {
-                fareProduct: selection.fareProductTypeConfig.name,
-                fareZone: {
-                  from: selection.zones?.from.id,
-                  to: selection.zones?.to.id,
-                },
-                stopPlaces: {
-                  from: selection.stopPlaces?.from?.id,
-                  to: selection.stopPlaces?.to?.id,
-                },
-                userProfilesWithCount: selection.userProfilesWithCount.map(
-                  (t) => ({
-                    userType: t.userTypeString,
-                    count: t.count,
-                  }),
-                ),
-                baggageProductsWithCount:
-                  selection.supplementProductsWithCount.map((sp) => ({
-                    id: sp.id,
-                    count: sp.count,
-                  })),
-                preassignedFareProduct: {
-                  id: selection.preassignedFareProduct.id,
-                  name: selection.preassignedFareProduct.name.value,
-                },
-                travelDate: selection.travelDate,
-                mode: params.mode,
-              });
-              onPressBuy();
-            }}
-          />
-        </View>
-      </ScrollView>
-    </FullScreenView>
+            <ProductSelection
+              selection={selection}
+              onProductChange={({selection: newSelection, forcedChanges}) => {
+                setSelection(newSelection);
+                if (forcedChanges.length > 0) {
+                  showForcedChangeSnackbar(forcedChanges);
+                }
+              }}
+              style={styles.selectionComponent}
+            />
+
+            <TravellerSelection
+              selection={selection}
+              onSave={(selection) => {
+                setSelection(selection);
+              }}
+              style={styles.selectionComponent}
+            />
+
+            <FromToSelection
+              selection={selection}
+              style={styles.selectionComponent}
+              onSelect={(selection) => {
+                const {selection: newSelection} = builder
+                  .fromSelection(selection)
+                  .fromStopPlace(selection.stopPlaces?.from)
+                  .toStopPlace(selection.stopPlaces?.to)
+                  .build();
+                setSelection(newSelection);
+                navigation.setParams({onFocusElement: undefined});
+                navigation.push(
+                  zoneSelectionMode === 'multiple-stop-harbor'
+                    ? 'Root_PurchaseHarborSearchScreen'
+                    : 'Root_PurchaseFareZonesSearchByMapScreen',
+                  {selection},
+                );
+              }}
+              onSwap={() => {
+                const {selection: newSelection} = builder
+                  .fromSelection(selection)
+                  .fromStopPlace(selection.stopPlaces?.to)
+                  .toStopPlace(selection.stopPlaces?.from)
+                  .build();
+                setSelection(newSelection);
+              }}
+              ref={focusRefs}
+            />
+
+            {
+              // When booking is enabled, the next step is selecting the departure (implicitly the time)
+              !selection.preassignedFareProduct.isBookingEnabled && (
+                <StartTimeSelection
+                  selection={selection}
+                  setSelection={setSelection}
+                  style={styles.selectionComponent}
+                />
+              )
+            }
+
+            {isFree ? (
+              <MessageInfoBox
+                type="valid"
+                message={t(PurchaseOverviewTexts.summary.free)}
+                style={styles.isFreeMessage}
+              />
+            ) : (
+              <View style={styles.messages}>
+                {inspectableTokenWarningText && (
+                  <MessageInfoBox
+                    type="warning"
+                    message={inspectableTokenWarningText}
+                    isMarkdown={true}
+                  />
+                )}
+                <GlobalMessage
+                  globalMessageContext={
+                    GlobalMessageContextEnum.appPurchaseOverview
+                  }
+                  textColor={theme.color.background.neutral[0]}
+                  ruleVariables={{
+                    preassignedFareProductType: preassignedFareProduct.type,
+                    fromFareZone: selection.zones?.from.id || 'none',
+                    toFareZone: selection.zones?.to.id || 'none',
+                    userTypes: userTypeStrings,
+                  }}
+                />
+              </View>
+            )}
+
+            <Summary
+              isLoading={isBookingRequired ? false : isSearchingOffer}
+              isFree={isFree}
+              isDisabled={!!error || !canProceed}
+              originalPrice={originalPrice}
+              price={isBookingRequired ? undefined : totalPrice}
+              summaryButtonText={summaryButtonText()}
+              onPressBuy={() => {
+                analytics.logEvent('Ticketing', 'Purchase summary clicked', {
+                  fareProduct: selection.fareProductTypeConfig.name,
+                  fareZone: {
+                    from: selection.zones?.from.id,
+                    to: selection.zones?.to.id,
+                  },
+                  stopPlaces: {
+                    from: selection.stopPlaces?.from?.id,
+                    to: selection.stopPlaces?.to?.id,
+                  },
+                  userProfilesWithCount: selection.userProfilesWithCount.map(
+                    (t) => ({
+                      userType: t.userTypeString,
+                      count: t.count,
+                    }),
+                  ),
+                  baggageProductsWithCount:
+                    selection.supplementProductsWithCount.map((sp) => ({
+                      id: sp.id,
+                      count: sp.count,
+                    })),
+                  preassignedFareProduct: {
+                    id: selection.preassignedFareProduct.id,
+                    name: selection.preassignedFareProduct.name.value,
+                  },
+                  travelDate: selection.travelDate,
+                  mode: params.mode,
+                });
+                onPressBuy();
+              }}
+            />
+          </View>
+        </ScrollView>
+      </FullScreenView>
+      <Snackbar {...snackbarProps} onHideSnackbar={hideSnackbar} />
+    </>
   );
 };
 

@@ -3,6 +3,7 @@ import type {
   PurchaseSelectionBuilderInput,
   PurchaseSelectionEmptyBuilder,
   PurchaseSelectionType,
+  ForcedSelectionChange,
 } from './types';
 import {
   applyProductChange,
@@ -51,16 +52,19 @@ const createBuilder = (
     userProfilesWithCount: selection.userProfilesWithCount,
     supplementProductsWithCount: selection.supplementProductsWithCount,
   };
+  let forcedChanges: ForcedSelectionChange[] = [];
   const builder: PurchaseSelectionBuilder = {
     product: (preassignedFareProduct) => {
       if (
         isSelectableProduct(input, currentSelection, preassignedFareProduct)
       ) {
-        currentSelection = applyProductChange(
+        const {selection, forcedChanges: changes} = applyProductChange(
           input,
           currentSelection,
           preassignedFareProduct,
         );
+        currentSelection = selection;
+        forcedChanges = changes;
       }
 
       return builder;
@@ -190,13 +194,19 @@ const createBuilder = (
         !isWithinOrderMax ||
         !areSupplementProductsValid
       ) {
-        return currentSelection;
+        return {
+          selection: currentSelection,
+          forcedChanges,
+        };
       }
 
       return {
-        ...currentSelection,
-        userProfilesWithCount: onlyProfilesWithActualCount,
-        supplementProductsWithCount: onlySupplementProductsWithActualCount,
+        selection: {
+          ...currentSelection,
+          userProfilesWithCount: onlyProfilesWithActualCount,
+          supplementProductsWithCount: onlySupplementProductsWithActualCount,
+        },
+        forcedChanges,
       };
     },
   };
