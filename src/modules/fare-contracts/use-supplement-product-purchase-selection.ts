@@ -90,7 +90,7 @@ export function useSupplementProductPurchaseSelection({
         .userProfiles(userProfile ? [{...userProfile, count: 1}] : [])
         .fromStopPlace(fromHarbor)
         .toStopPlace(toHarbor)
-        .build()
+        .build().selection
     );
 
     // We disable the exhaustive-deps rule here because we know builder is not

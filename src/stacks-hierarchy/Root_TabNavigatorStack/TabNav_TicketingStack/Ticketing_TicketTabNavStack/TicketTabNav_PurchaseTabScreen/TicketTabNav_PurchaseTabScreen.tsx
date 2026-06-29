@@ -78,7 +78,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       type: fareProductTypeConfig.type,
     });
 
-    const selection = selectionBuilder
+    const {selection} = selectionBuilder
       .forType(fareProductTypeConfig.type)
       .build();
 
@@ -132,7 +132,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       .toStopPlace(mapPlace(rfc.pointToPointValidity?.toPlace));
     if (rfc.fromFareZone) builder.fromZone(mapZone(rfc.fromFareZone));
     if (rfc.toFareZone) builder.toZone(mapZone(rfc.toFareZone));
-    const selection = builder.build();
+    const {selection} = builder.build();
 
     /*
      *  If booking is enabled we need the user to select a departure, and

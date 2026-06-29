@@ -85,7 +85,7 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
     if (zone && (fromOrTo === 'to' || isApplicableOnSingleZoneOnly)) {
       builder.toZone(zone);
     }
-    const newSelection = builder.build();
+    const {selection: newSelection} = builder.build();
 
     navigation.popTo('Root_PurchaseFareZonesSearchByMapScreen', {
       selection: newSelection,

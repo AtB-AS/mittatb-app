@@ -2,17 +2,20 @@ import {ProductSelectionByAlias} from './ProductSelectionByAlias';
 import {ProductSelectionByProducts} from './ProductSelectionByProducts';
 import {StyleProp, ViewStyle} from 'react-native';
 import {useThemeContext} from '@atb/theme';
-import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import type {
+  PurchaseSelectionBuildResult,
+  PurchaseSelectionType,
+} from '@atb/modules/purchase-selection';
 
 type ProductSelectionProps = {
   selection: PurchaseSelectionType;
-  setSelection: (s: PurchaseSelectionType) => void;
+  onProductChange: (result: PurchaseSelectionBuildResult) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export function ProductSelection({
   selection,
-  setSelection,
+  onProductChange,
   style,
 }: ProductSelectionProps) {
   const {theme} = useThemeContext();
@@ -22,7 +25,7 @@ export function ProductSelection({
       return (
         <ProductSelectionByProducts
           selection={selection}
-          setSelection={setSelection}
+          onProductChange={onProductChange}
           style={style}
         />
       );
@@ -32,7 +35,7 @@ export function ProductSelection({
         <ProductSelectionByAlias
           color={theme.color.interactive[2]}
           selection={selection}
-          setSelection={setSelection}
+          onProductChange={onProductChange}
           style={style}
         />
       );

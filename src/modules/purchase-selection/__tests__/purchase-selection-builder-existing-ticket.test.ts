@@ -23,7 +23,7 @@ describe('PurchaseSelectionBuilder originFareContract', () => {
     const selection = builder
       .forType('single')
       .originFareContract(originFareContract)
-      .build();
+      .build().selection;
 
     expect(selection.originFareContract).toBe(originFareContract);
   });
@@ -40,7 +40,9 @@ describe('PurchaseSelectionBuilder originFareContract', () => {
       originFareContract: originFareContract,
     };
 
-    const newSelection = builder.fromSelection(initialSelection).build();
+    const newSelection = builder
+      .fromSelection(initialSelection)
+      .build().selection;
 
     expect(newSelection.originFareContract).toBe(originFareContract);
   });
@@ -59,7 +61,7 @@ describe('PurchaseSelectionBuilder originFareContract', () => {
     const selection = builder
       .fromSelection(selectionWithOriginFareContract)
       .originFareContract(undefined)
-      .build();
+      .build().selection;
 
     expect(selection.originFareContract).toBeUndefined();
   });
@@ -82,7 +84,7 @@ describe('PurchaseSelectionBuilder originFareContract', () => {
       .forType('single')
       .originFareContract(oneOriginFareContract)
       .originFareContract(anotherOriginFareContract)
-      .build();
+      .build().selection;
 
     expect(selection.originFareContract).toBe(anotherOriginFareContract);
   });
@@ -97,7 +99,7 @@ describe('PurchaseSelectionBuilder originFareContract', () => {
     const selection = builder
       .forType('single')
       .originFareContract(originFareContract)
-      .build();
+      .build().selection;
 
     expect(selection.fareProductTypeConfig.type).toBe('single');
     expect(selection.preassignedFareProduct.id).toBe('P1');

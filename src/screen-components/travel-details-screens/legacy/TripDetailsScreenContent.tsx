@@ -260,7 +260,7 @@ function usePurchaseSelectionFromTrip(
       .fromZone(ticketInfoForBus.fromPlace)
       .toZone(ticketInfoForBus.toPlace)
       .date(ticketInfoForBus.ticketStartTime)
-      .build();
+      .build().selection;
   }
 
   if (!isFromTravelSearchToTicketBoatEnabled) {
@@ -280,7 +280,7 @@ function usePurchaseSelectionFromTrip(
       .fromStopPlace(ticketInfoForBoat.fromPlace)
       .toStopPlace(ticketInfoForBoat.toPlace)
       .date(ticketInfoForBoat.ticketStartTime)
-      .build();
+      .build().selection;
   }
 }
 

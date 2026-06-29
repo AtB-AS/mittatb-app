@@ -3,7 +3,9 @@ import {TEST_INPUT} from './test-utils';
 
 describe('purchaseSelectionBuilder - bonusProductId', () => {
   it('Should be undefined by default', () => {
-    const selection = createEmptyBuilder(TEST_INPUT).forType('single').build();
+    const selection = createEmptyBuilder(TEST_INPUT)
+      .forType('single')
+      .build().selection;
     expect(selection.bonusProductId).toBeUndefined();
   });
 
@@ -11,7 +13,7 @@ describe('purchaseSelectionBuilder - bonusProductId', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .forType('single')
       .bonusProductId('some-bonus-id')
-      .build();
+      .build().selection;
     expect(selection.bonusProductId).toBe('some-bonus-id');
   });
 
@@ -19,12 +21,12 @@ describe('purchaseSelectionBuilder - bonusProductId', () => {
     const selection1 = createEmptyBuilder(TEST_INPUT)
       .forType('single')
       .bonusProductId('some-bonus-id')
-      .build();
+      .build().selection;
 
     const selection2 = createEmptyBuilder(TEST_INPUT)
       .fromSelection(selection1)
       .bonusProductId(undefined)
-      .build();
+      .build().selection;
 
     expect(selection2.bonusProductId).toBeUndefined();
   });
@@ -33,11 +35,11 @@ describe('purchaseSelectionBuilder - bonusProductId', () => {
     const selection1 = createEmptyBuilder(TEST_INPUT)
       .forType('single')
       .bonusProductId('some-bonus-id')
-      .build();
+      .build().selection;
 
     const selection2 = createEmptyBuilder(TEST_INPUT)
       .fromSelection(selection1)
-      .build();
+      .build().selection;
 
     expect(selection2.bonusProductId).toBe('some-bonus-id');
   });

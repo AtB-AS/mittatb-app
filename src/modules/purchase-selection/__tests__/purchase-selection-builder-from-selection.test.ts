@@ -14,7 +14,7 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
   it('Should return same selection unaltered', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
-      .build();
+      .build().selection;
 
     expect(selection).toStrictEqual(TEST_SELECTION);
   });
@@ -30,7 +30,7 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
 
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(originalSelection)
-      .build();
+      .build().selection;
 
     expect(selection).toStrictEqual(originalSelection);
   });
@@ -42,7 +42,7 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
         preassignedFareProduct: {...TEST_PRODUCT, id: 'P5', type: 'other'},
         travelDate: new Date().toISOString(),
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe(TEST_PRODUCT.id);
     expect(selection.travelDate).toBeUndefined();
@@ -63,7 +63,7 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
         },
         travelDate: new Date().toISOString(),
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe(TEST_PRODUCT.id);
     expect(selection.zones?.from.id).toBe(TEST_ZONE.id);
@@ -85,7 +85,7 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
         },
         travelDate: new Date().toISOString(),
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe(TEST_PRODUCT.id);
     expect(selection.zones?.to.id).toBe(TEST_ZONE.id);
@@ -107,7 +107,7 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
         userProfilesWithCount: [{...TEST_USER_PROFILE, id: 'U_X', count: 1}],
         travelDate: new Date().toISOString(),
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe(TEST_PRODUCT.id);
     expect(selection.userProfilesWithCount[0].id).toBe(TEST_USER_PROFILE.id);
@@ -121,7 +121,7 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
         preassignedFareProduct: {...TEST_PRODUCT, id: 'P5'},
         travelDate: 'whatever',
       })
-      .build();
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe(TEST_PRODUCT.id);
     expect(selection.travelDate).toBeUndefined();
@@ -133,7 +133,7 @@ describe('purchaseSelectionBuilder - fromSelection', () => {
         ...TEST_SELECTION,
         isOnBehalfOf: true,
       })
-      .build();
+      .build().selection;
 
     expect(selection.isOnBehalfOf).toBe(true);
   });
@@ -150,7 +150,7 @@ it('Should create builder with baggage products', () => {
 
   const selection = createEmptyBuilder(TEST_INPUT)
     .fromSelection(selectionWithSupplements)
-    .build();
+    .build().selection;
 
   expect(selection.supplementProductsWithCount).toHaveLength(2);
   expect(selection.supplementProductsWithCount[0].id).toBe('SP1');
@@ -195,7 +195,7 @@ it('Should build the default selection when some supplement products are not all
 
   const selection = createEmptyBuilder(TEST_INPUT)
     .fromSelection(TEST_SELECTION_WITH_PRODUCT_WITH_LIMITATIONS)
-    .build();
+    .build().selection;
 
   expect(selection.supplementProductsWithCount).toEqual([]);
   expect(selection.preassignedFareProduct.id).toBe('P1');

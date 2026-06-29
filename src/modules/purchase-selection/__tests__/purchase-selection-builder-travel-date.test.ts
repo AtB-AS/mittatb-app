@@ -7,7 +7,7 @@ describe('purchaseSelectionBuilder - travelDate', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
       .date(dateString)
-      .build();
+      .build().selection;
 
     expect(selection.travelDate).toEqual(dateString);
   });
@@ -17,7 +17,7 @@ describe('purchaseSelectionBuilder - travelDate', () => {
     const selection = builder
       .fromSelection({...TEST_SELECTION, travelDate: new Date().toISOString()})
       .date(undefined)
-      .build();
+      .build().selection;
 
     expect(selection.travelDate).toBeUndefined();
   });
@@ -27,7 +27,7 @@ describe('purchaseSelectionBuilder - travelDate', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
       .date(dateString)
-      .build();
+      .build().selection;
 
     expect(selection.travelDate).toBeUndefined();
   });
