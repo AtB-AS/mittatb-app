@@ -161,11 +161,7 @@ const PurchaseOverviewTexts = {
           `Produktet er ikkje tilgjengeleg for valt ${changedItems}, og har difor blitt endra.`,
         ),
       items: {
-        userProfile: _(
-          'reisendekategori',
-          'traveller category',
-          'reisandekategori',
-        ),
+        userProfile: _('reisekategori', 'traveller category', 'reisekategori'),
         zone: _('soner', 'zones', 'soner'),
       },
     },
