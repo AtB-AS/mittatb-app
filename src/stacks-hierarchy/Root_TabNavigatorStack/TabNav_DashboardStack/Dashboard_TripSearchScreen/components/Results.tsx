@@ -31,7 +31,7 @@ import {
   WithTravelCardSkeleton,
 } from '@atb/screen-components/travel-card';
 
-const SKELETON_COUNT = 4;
+const SKELETON_COUNT = 5;
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
