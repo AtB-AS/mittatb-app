@@ -30,7 +30,6 @@ import {
   BottomSheetHeaderType,
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
-import {useAnalyticsContext} from '@atb/modules/analytics';
 import {Loading} from '@atb/components/loading';
 
 type Props = {
@@ -68,8 +67,6 @@ export const CarSharingStationBottomSheet = ({
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
   const bonusProduct = useRelevantVoucherBonusProduct(operatorId);
-
-  const {logEvent} = useAnalyticsContext();
 
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
   useDoOnceOnItemReceived(onStationReceived, station);
@@ -144,16 +141,7 @@ export const CarSharingStationBottomSheet = ({
                   bonusProduct={bonusProduct}
                   operatorName={operatorName}
                   isChecked={payWithBonusPoints}
-                  onPress={() =>
-                    setPayWithBonusPoints((payWithBonusPoints) => {
-                      const newState = !payWithBonusPoints;
-                      logEvent('Bonus', 'bonus points checkbox toggled', {
-                        bonusProductId: bonusProduct.id,
-                        newState: newState,
-                      });
-                      return newState;
-                    })
-                  }
+                  onPress={() => setPayWithBonusPoints((prev) => !prev)}
                   style={styles.payWithBonusPointsSection}
                 />
               )}
