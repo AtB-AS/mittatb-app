@@ -53,7 +53,6 @@ import {
   uniqueLegValues,
 } from './utils';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import {
   GlobalMessage,
   GlobalMessageContextEnum,
@@ -164,7 +163,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   } = useTrips(tripsProps, tripSearchEnabled);
 
   const isSearching = tripsSearchState === 'searching';
-  const isNewTripSearch = useIsExperimentalEnabled('isNewTripSearchEnabled');
   const showEmptyScreen = !tripPatterns && !isSearching && !tripsIsError;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
@@ -453,15 +451,13 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             />
           )}
           {!tripPatterns.length && <View style={styles.emptyResultsSpacer} />}
-          {!(isNewTripSearch && isSearching) && (
-            <LoadMoreButton
-              loadMoreTrips={loadMoreTrips}
-              isSearching={isSearching}
-              hasResults={tripPatterns.length > 0}
-              tripsIsError={tripsIsError}
-              tripSearchEnabled={tripSearchEnabled}
-            />
-          )}
+          <LoadMoreButton
+            loadMoreTrips={loadMoreTrips}
+            isSearching={isSearching}
+            hasResults={tripPatterns.length > 0}
+            tripsIsError={tripsIsError}
+            tripSearchEnabled={tripSearchEnabled}
+          />
         </View>
       </FullScreenView>
       {filtersState.filtersSelection && (

@@ -7,6 +7,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {Loading} from '@atb/components/loading';
 import {TripSearchTexts, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
+import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 
 type Props = {
   loadMoreTrips?: () => void;
@@ -25,8 +26,10 @@ export const LoadMoreButton = ({
 }: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const isNewTripSearch = useIsExperimentalEnabled('isNewTripSearchEnabled');
 
-  if (tripsIsError || !tripSearchEnabled) return null;
+  if (tripsIsError || !tripSearchEnabled || (isNewTripSearch && isSearching))
+    return null;
 
   if (isSearching && hasResults) {
     return (
@@ -41,6 +44,7 @@ export const LoadMoreButton = ({
     );
   }
 
+  // Can be removed when old ResultRow code branch is deleted
   if (isSearching) {
     return (
       <View style={styles.loadMoreButton}>
