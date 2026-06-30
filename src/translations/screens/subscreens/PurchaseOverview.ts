@@ -1,3 +1,4 @@
+import {capitalizeFirstLetter} from '@atb/utils/text';
 import {translation as _} from '../../commons';
 import {orgSpecificTranslations} from '../../orgSpecificTranslations';
 
@@ -147,19 +148,20 @@ const PurchaseOverviewTexts = {
       'Aktivér for å velje billett',
     ),
     forcedChange: {
-      title: _(
-        'Andre valg ble endret',
-        'Other selections were changed',
-        'Andre val vart endra',
-      ),
+      title: (category: string) =>
+        _(
+          `OBS! ${capitalizeFirstLetter(category)} ble endret`,
+          `Note! ${capitalizeFirstLetter(category)} was changed`,
+          `OBS! ${capitalizeFirstLetter(category)} vart endra`,
+        ),
       message: (changedItems: string) =>
         _(
-          `Valgene for ${changedItems} ble endret fordi de ikke er tilgjengelige for den valgte billetten.`,
-          `The selections for ${changedItems} were changed because they are not available for the selected ticket.`,
-          `Vala for ${changedItems} vart endra fordi dei ikkje er tilgjengelege for den valde billetten.`,
+          `Produktet er ikke tilgjengelig for valgt ${changedItems}, og har derfor blitt endret.`,
+          `The product is not available for the selected ${changedItems}, and has therefore been changed.`,
+          `Produktet er ikkje tilgjengeleg for valt ${changedItems}, og har difor blitt endra.`,
         ),
       items: {
-        userProfile: _('reisende', 'travellers', 'reisande'),
+        userProfile: _('reisekategori', 'traveller category', 'reisekategori'),
         zone: _('soner', 'zones', 'soner'),
       },
     },
