@@ -186,7 +186,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     showSnackbar({
       content: {
         iconNode: <ThemeIcon svg={statusTypeToIcon('info', true, themeName)} />,
-        title: t(PurchaseOverviewTexts.productSelection.forcedChange.title),
+        title: t(
+          PurchaseOverviewTexts.productSelection.forcedChange.title(list),
+        ),
         description: t(
           PurchaseOverviewTexts.productSelection.forcedChange.message(list),
         ),
