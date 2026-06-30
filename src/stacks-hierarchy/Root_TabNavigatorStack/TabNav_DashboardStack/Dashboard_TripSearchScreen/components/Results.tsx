@@ -24,6 +24,7 @@ import type {TripSearchTime} from '../../types';
 import {ResultRow} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultRow';
 import {SaveableTripSearchResultRow} from '@atb/modules/experimental-store-trip-patterns';
 import {useIsExperimentalEnabled} from '@atb/modules/experimental';
+import {getTripPatternKey} from '@atb/modules/trip-patterns';
 import {
   TravelCard,
   SkeletonBlock,
@@ -110,7 +111,11 @@ export const Results: React.FC<Props> = ({
         {Array.from({length: slotCount}, (_, i) => {
           const tripPattern = filteredTripPatterns[i];
           return (
-            <Fragment key={i}>
+            <Fragment
+              key={
+                tripPattern ? getTripPatternKey(tripPattern) : `__skeleton_${i}`
+              }
+            >
               {tripPattern ? (
                 <DayLabel
                   departureTime={tripPattern.expectedStartTime}
