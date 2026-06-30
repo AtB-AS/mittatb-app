@@ -48,7 +48,6 @@ import {
   useIsBonusActiveForUser,
   useRelevantBonusProduct,
 } from '@atb/modules/bonus';
-import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -143,7 +142,7 @@ export const VehicleSheet = ({
     formFactor,
     BonusProductTypeEnum.SHARED_MOBILITY,
   );
-  const {logEvent} = useAnalyticsContext();
+
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
 
   const isDeepIntegrationEnabled =
@@ -232,16 +231,7 @@ export const VehicleSheet = ({
                   bonusProduct={bonusProduct}
                   operatorName={operatorName}
                   isChecked={payWithBonusPoints}
-                  onPress={() =>
-                    setPayWithBonusPoints((prev) => {
-                      const newState = !prev;
-                      logEvent('Bonus', 'bonus points checkbox toggled', {
-                        bonusProductId: bonusProduct.id,
-                        newState,
-                      });
-                      return newState;
-                    })
-                  }
+                  onPress={() => setPayWithBonusPoints((prev) => !prev)}
                 />
               )}
               <ShmoActionButton
