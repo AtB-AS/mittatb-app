@@ -157,7 +157,7 @@ const PurchaseOverviewTexts = {
       message: (changedItems: string) =>
         _(
           `Produktet er ikke tilgjengelig for valgt ${changedItems}, og har derfor blitt endret.`,
-          `The product is not available for the selected ${changedItems}, and have therefore been changed.`,
+          `The product is not available for the selected ${changedItems}, and has therefore been changed.`,
           `Produktet er ikkje tilgjengeleg for valt ${changedItems}, og har difor blitt endra.`,
         ),
       items: {
