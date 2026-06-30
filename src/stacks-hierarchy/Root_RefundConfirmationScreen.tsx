@@ -138,9 +138,10 @@ export function Root_RefundConfirmationScreen({navigation, route}: Props) {
   );
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => ({
   content: {
     padding: theme.spacing.medium,
+    paddingBottom: bottom + theme.spacing.medium,
     gap: theme.spacing.medium,
   },
   descriptionRow: {
