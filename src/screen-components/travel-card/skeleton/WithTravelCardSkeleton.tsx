@@ -17,6 +17,8 @@ export const WithTravelCardSkeleton = ({children}: Props) => {
         <View
           style={!ready ? styles.measuring : undefined}
           pointerEvents={ready ? 'auto' : 'none'}
+          accessibilityElementsHidden={!ready}
+          importantForAccessibility={ready ? 'auto' : 'no-hide-descendants'}
         >
           {children({onReady: () => setReady(true)})}
         </View>
