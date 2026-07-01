@@ -14,7 +14,10 @@ import {
   UserFavoriteDepartures,
 } from '@atb/modules/favorites';
 import {flatMap} from '@atb/utils/array';
-import {getDeparturesAugmentedWithRealtimeData} from '@atb/departure-list/utils';
+import {
+  getDeparturesAugmentedWithRealtimeData,
+  sortEstimatedCallsByExpectedTime,
+} from '@atb/departure-list/utils';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {minutesBetween} from '@atb/utils/date';
 import {getDepartureRefetchInterval} from '@atb/utils/get-departure-refetch-interval';
@@ -90,7 +93,10 @@ export const useDeparturesQuery = ({
           ? flatMap(departuresRaw.quays, (q) => q.estimatedCalls)
           : [];
         potentiallyMigrateFavoriteDepartures(departures);
-        return {departures, startTime};
+        return {
+          departures: sortEstimatedCallsByExpectedTime(departures),
+          startTime,
+        };
       } else {
         const departuresRealtimeQuery: DepartureRealtimeQuery = {
           quayIds: query.ids,
