@@ -7,10 +7,15 @@ import {differenceInMinutes} from 'date-fns';
 import {CustomerProfile} from '.';
 import {setupFirestoreListeners} from './firestore';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
-import {useGetFareContractsQuery} from './use-fare-contracts';
+import {
+  invalidateFareContractsQuery,
+  useGetFareContractsQuery,
+} from './use-fare-contracts';
 import Bugsnag from '@bugsnag/react-native';
 import {useFeatureTogglesContext} from '../feature-toggles';
 import {isDefined} from '@atb/utils/presence';
+import {EventKind, useEventStreamContext} from '../event-stream';
+import {useQueryClient} from '@tanstack/react-query';
 
 type TicketingReducerState = {
   fareContracts: FareContractType[];
@@ -145,6 +150,14 @@ export const TicketingContextProvider = ({children}: Props) => {
   const {enable_ticketing} = useRemoteConfigContext();
   const {isEventStreamEnabled, isEventStreamFareContractsEnabled} =
     useFeatureTogglesContext();
+  const {useStreamEventListener} = useEventStreamContext();
+  const queryClient = useQueryClient();
+
+  useStreamEventListener(EventKind.FareContract, () => {
+    if (isEventStreamFareContractsEnabled) {
+      invalidateFareContractsQuery(queryClient);
+    }
+  });
 
   const {data: fareContracts} = useGetFareContractsQuery({
     enabled:

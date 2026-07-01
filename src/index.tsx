@@ -95,20 +95,20 @@ export const App = () => {
                   <RemoteConfigContextProvider>
                     <FeatureTogglesContextProvider>
                       <AuthContextProvider>
-                        <TimeContextProvider>
-                          <AccessibilityContextProvider>
-                            <ThemeContextProvider>
-                              <FavoritesContextProvider>
-                                <FiltersContextProvider>
-                                  <SearchHistoryContextProvider>
-                                    <FirestoreConfigurationContextProvider>
-                                      <TicketingContextProvider>
-                                        <StoredTripPatternsContextProvider>
-                                          <MobileTokenContextProvider>
-                                            <AppLanguageContextProvider>
-                                              <GeolocationContextProvider>
-                                                <MapContextProvider>
-                                                  <EventStreamContextProvider>
+                        <EventStreamContextProvider>
+                          <TimeContextProvider>
+                            <AccessibilityContextProvider>
+                              <ThemeContextProvider>
+                                <FavoritesContextProvider>
+                                  <FiltersContextProvider>
+                                    <SearchHistoryContextProvider>
+                                      <FirestoreConfigurationContextProvider>
+                                        <TicketingContextProvider>
+                                          <StoredTripPatternsContextProvider>
+                                            <MobileTokenContextProvider>
+                                              <AppLanguageContextProvider>
+                                                <GeolocationContextProvider>
+                                                  <MapContextProvider>
                                                     <GlobalMessagesContextProvider>
                                                       <AnnouncementsContextProvider>
                                                         <NotificationContextProvider>
@@ -122,20 +122,20 @@ export const App = () => {
                                                         </NotificationContextProvider>
                                                       </AnnouncementsContextProvider>
                                                     </GlobalMessagesContextProvider>
-                                                  </EventStreamContextProvider>
-                                                </MapContextProvider>
-                                              </GeolocationContextProvider>
-                                            </AppLanguageContextProvider>
-                                          </MobileTokenContextProvider>
-                                        </StoredTripPatternsContextProvider>
-                                      </TicketingContextProvider>
-                                    </FirestoreConfigurationContextProvider>
-                                  </SearchHistoryContextProvider>
-                                </FiltersContextProvider>
-                              </FavoritesContextProvider>
-                            </ThemeContextProvider>
-                          </AccessibilityContextProvider>
-                        </TimeContextProvider>
+                                                  </MapContextProvider>
+                                                </GeolocationContextProvider>
+                                              </AppLanguageContextProvider>
+                                            </MobileTokenContextProvider>
+                                          </StoredTripPatternsContextProvider>
+                                        </TicketingContextProvider>
+                                      </FirestoreConfigurationContextProvider>
+                                    </SearchHistoryContextProvider>
+                                  </FiltersContextProvider>
+                                </FavoritesContextProvider>
+                              </ThemeContextProvider>
+                            </AccessibilityContextProvider>
+                          </TimeContextProvider>
+                        </EventStreamContextProvider>
                       </AuthContextProvider>
                     </FeatureTogglesContextProvider>
                   </RemoteConfigContextProvider>
