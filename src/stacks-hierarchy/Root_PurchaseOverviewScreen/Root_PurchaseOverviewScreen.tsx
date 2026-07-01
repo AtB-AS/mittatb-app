@@ -402,7 +402,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
+const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     header: {
       marginHorizontal: theme.spacing.medium,
@@ -410,7 +410,6 @@ const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
     contentContainer: {
       rowGap: theme.spacing.medium,
       margin: theme.spacing.medium,
-      marginBottom: bottom + theme.spacing.medium,
     },
     isFreeMessage: {
       marginTop: theme.spacing.medium,
