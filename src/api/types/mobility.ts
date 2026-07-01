@@ -545,6 +545,10 @@ export const VehicleFeaturePropertiesSchema = z.object({
   num_vehicles_available: z.never().optional(), // to differenciate from station features, which have this field
 });
 
+export type VehicleFeatureProperties = z.infer<
+  typeof VehicleFeaturePropertiesSchema
+>;
+
 export const VehicleFeatureSchema =
   GeoJsonFeatureWithPointGeometrySchema.extend({
     properties: VehicleFeaturePropertiesSchema,
