@@ -7,7 +7,7 @@ import {
 import {MapScreenProps} from './navigation-types';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {ShmoPricingPlan} from '@atb/api/types/mobility';
-import type {MobilityPriceAdjustmentBenefitType} from '@atb/api/types/benefit';
+import type {BenefitType} from '@atb/api/types/benefit';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
@@ -156,10 +156,7 @@ export const Map_RootScreen = ({
   }, [navigation, bonusScreenParams]);
 
   const navigateToPricingDetails = useCallback(
-    (
-      pricingPlan: ShmoPricingPlan,
-      benefit: MobilityPriceAdjustmentBenefitType | undefined,
-    ) => {
+    (pricingPlan: ShmoPricingPlan, benefit: BenefitType | undefined) => {
       navigation.navigate('Root_ShmoPricingDetailsScreen', {
         pricingPlan,
         benefit,

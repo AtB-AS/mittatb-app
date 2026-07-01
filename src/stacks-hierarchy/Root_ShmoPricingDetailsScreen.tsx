@@ -13,7 +13,7 @@ import {formatNumberToString} from '@atb-as/utils';
 import {getCurrencySymbol} from '@atb/translations/currency';
 import {ShmoPricingSegment} from '@atb/api/types/mobility';
 import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
-import type {MobilityPriceAdjustmentType} from '@atb/api/types/benefit';
+import type {PriceAdjustmentType} from '@atb/api/types/benefit';
 import {computeFreeMinuteCount} from '@atb/modules/mobility';
 
 type Props = RootStackScreenProps<'Root_ShmoPricingDetailsScreen'>;
@@ -32,11 +32,11 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
     (pricingPlan.perMinPricing?.length ?? 0) > 1;
 
   const freeUnlockPriceAdjustment = benefit?.priceAdjustments.find(
-    (adj: MobilityPriceAdjustmentType) =>
+    (adj: PriceAdjustmentType) =>
       adj.type === PriceAdjustmentEnum.enum.FREE_UNLOCK,
   );
   const freeMinutesPriceAdjustment = benefit?.priceAdjustments.find(
-    (adj: MobilityPriceAdjustmentType) =>
+    (adj: PriceAdjustmentType) =>
       adj.type === PriceAdjustmentEnum.enum.FREE_MINUTES,
   );
   const hasCampaign = !!(
