@@ -36,7 +36,6 @@ import {
   isVehicleCluster,
   isStationCluster,
 } from '@atb/modules/mobility';
-import {MapBottomSheetType} from './MapContext';
 import {
   FormFactor,
   PropulsionType,
@@ -136,25 +135,10 @@ export const getFeaturesAtPoint = async (
   return featuresAtPoint?.features;
 };
 
-function mapMapBottomSheetTypeToFormFactor(
-  mapBottomSheetType?: MapBottomSheetType,
-): FormFactor | undefined {
-  switch (mapBottomSheetType) {
-    case MapBottomSheetType.BikeStation:
-      return FormFactor.Bicycle;
-    case MapBottomSheetType.CarStation:
-      return FormFactor.Car;
-    default:
-      return undefined;
-  }
-}
-
 export const getFeatureFromScan = ({
-  mapBottomSheetType,
   vehicle,
   station,
 }: {
-  mapBottomSheetType: MapBottomSheetType;
   vehicle?: Vehicle;
   station?: Station;
 }): Feature<Point, GeoJsonProperties> => {
@@ -166,22 +150,17 @@ export const getFeatureFromScan = ({
       id: vehicle.id,
       system_id: vehicle.system.id,
       count: 1,
-      vehicle_type_form_factor:
-        vehicle.vehicleType.formFactor ??
-        mapMapBottomSheetTypeToFormFactor(mapBottomSheetType),
+      vehicle_type_form_factor: vehicle.vehicleType.formFactor,
       vehicle_type_propulsion_type: vehicle.vehicleType.propulsionType,
     } satisfies VehicleFeatureProperties;
   } else if (station) {
-    const vehicleType = station.vehicleTypesAvailable?.[0]?.vehicleType;
+    const vehicleType = station.vehicleTypesAvailable?.[0]?.vehicleType; // currently only supporting 1 formFactor per feature
     coordinates = [station.lon, station.lat];
     properties = {
       id: station.id,
       system_id: station.system.id,
       count: 1,
-      vehicle_type_form_factor:
-        vehicleType?.formFactor ??
-        mapMapBottomSheetTypeToFormFactor(mapBottomSheetType) ??
-        FormFactor.Other,
+      vehicle_type_form_factor: vehicleType?.formFactor ?? FormFactor.Other,
       vehicle_type_propulsion_type:
         vehicleType?.propulsionType ?? PropulsionType.Human,
       is_virtual_station: false, // lacking this info atm, assume false for now
