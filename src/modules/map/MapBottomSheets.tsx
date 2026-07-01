@@ -24,7 +24,7 @@ import {
 } from './utils';
 import MapboxGL from '@rnmapbox/maps';
 import {ShmoBookingState, ShmoPricingPlan} from '@atb/api/types/mobility';
-import type {MobilityPriceAdjustmentBenefitType} from '@atb/api/types/benefit';
+import type {BenefitType} from '@atb/api/types/benefit';
 import {MapFilterType, MapProps} from './types';
 import {ExternalRealtimeMapSheet} from './components/external-realtime-map/ExternalRealtimeMapSheet';
 import {DeparturesDialogSheet} from './components/DeparturesDialogSheet';
@@ -55,7 +55,7 @@ type MapBottomSheetsProps = {
   navigateToPaymentMethods: () => void;
   navigateToPricingDetails: (
     pricingPlan: ShmoPricingPlan,
-    benefit: MobilityPriceAdjustmentBenefitType | undefined,
+    benefit: BenefitType | undefined,
   ) => void;
 };
 
