@@ -212,7 +212,8 @@
     "ios": {
       "modulesProvider": {
         "ExperimentalFeature": "RCTExperimentalFeature",
-        "ApplePayHandler": "RCTApplePayHandler"
+        "ApplePayHandler": "RCTApplePayHandler",
+        "LiveActivities": "RCTLiveActivities"
       }
     }
   }
