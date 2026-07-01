@@ -10,10 +10,14 @@ const periodicTicketBenefits: VoucherBenefitType[] = [
   {
     operatorId: 'YTR:Operator:trondheimbysykkel',
     benefitTypes: ['free-unlock'],
+    title: [],
+    description: [],
   },
   {
     operatorId: 'HYR:Operator:Hyre',
     benefitTypes: ['single-unlock'],
+    title: [],
+    description: [],
   },
 ];
 
@@ -21,6 +25,8 @@ const freeUseBenefits: VoucherBenefitType[] = [
   {
     operatorId: 'YTR:Operator:trondheimbysykkel',
     benefitTypes: ['free-use'],
+    title: [],
+    description: [],
   },
 ];
 
