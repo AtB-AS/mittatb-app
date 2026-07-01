@@ -25,7 +25,22 @@ type OperatorActionButtonProps = {
   isBonusPayment?: boolean;
   setIsBonusPayment?: (isBonusPayment: boolean) => void;
   bonusProductId?: string;
+  /**
+   * When provided, the button is driven by the server `actionButton` of type
+   * `APP_SWITCH`: it shows `label` and mints/claims a voucher via the app-switch
+   * endpoint before opening the returned deep link. This bypasses the legacy
+   * operator-benefit value-code flow below.
+   */
+  appSwitchAction?: AppSwitchAction;
 };
+
+type AppSwitchAction = {
+  label: string;
+  onPress: () => void;
+  isLoading: boolean;
+  hasError: boolean;
+};
+
 export const OperatorActionButton = ({
   operatorId,
   operatorName,
@@ -34,6 +49,7 @@ export const OperatorActionButton = ({
   isBonusPayment,
   setIsBonusPayment,
   bonusProductId,
+  appSwitchAction,
 }: OperatorActionButtonProps) => {
   const {logEvent} = useAnalyticsContext();
   const {t, language} = useTranslation();
@@ -156,6 +172,35 @@ export const OperatorActionButton = ({
     extendedRentalAppUri,
     setIsBonusPayment,
   ]);
+
+  if (appSwitchAction) {
+    if (appSwitchAction.isLoading) {
+      return <Loading />;
+    }
+    if (appSwitchAction.hasError) {
+      return (
+        <MessageInfoBox
+          type="error"
+          message={t(MobilityTexts.errorLoadingValueCode.message)}
+          onPressConfig={{
+            action: appSwitchAction.onPress,
+            text: t(MobilityTexts.errorLoadingValueCode.retry),
+          }}
+        />
+      );
+    }
+    return (
+      <Button
+        expanded={true}
+        text={appSwitchAction.label}
+        onPress={appSwitchAction.onPress}
+        mode="primary"
+        interactiveColor={theme.color.interactive[0]}
+        rightIcon={{svg: ExternalLink}}
+        accessibilityRole="link"
+      />
+    );
+  }
 
   if (isLoading) {
     return <Loading />;
