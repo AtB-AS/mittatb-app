@@ -44,7 +44,7 @@ AtB App is a whitelabel travel companion/ticketing app in Trondheim, Norway.
 - **No `TouchableOpacity`**: Use `PressableOpacity` instead (enforced by ESLint).
 - **No default exports** (except SVG assets, translation files, and Storybook stories).
 - **No Firebase Auth imports outside `src/modules/auth/`** (enforced by ESLint).
-- **Commit messages**: Follow Conventional Commits with Angular preset (e.g. `fix(nearby): ...`, `feat(ticketing): ...`). PR title is what goes into the changelog.
+- **Commit messages**: Follow Conventional Commits (e.g. `fix: ...`, `feat: ...`). Do not use a scope. PR title is what goes into the changelog.
 - **Path alias**: `@atb/*` maps to `src/*` (configured in `tsconfig.json` and `jest.config.js`).
 - **Time durations**: Use seconds (not minutes) for time duration parameters, consistent with the rest of the codebase (e.g. `secondsBetween`, `significantWaitTime`).
 
