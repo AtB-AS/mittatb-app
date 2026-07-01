@@ -28,6 +28,7 @@ import {
   ExpandMore,
 } from '@atb/assets/svg/mono-icons/navigation';
 import {DebugOverride} from './components/DebugOverride';
+import {DebugLiveActivities} from './components/DebugLiveActivities';
 import {
   ButtonSectionItem,
   ExpandableSectionItem,
@@ -177,6 +178,7 @@ export const Profile_DebugInfoScreen = () => {
         onScroll={onScroll}
         scrollEventThrottle={16}
       >
+        <DebugLiveActivities />
         <Section style={styles.section}>
           <ButtonSectionItem
             label="Restart all onboarding sections"
