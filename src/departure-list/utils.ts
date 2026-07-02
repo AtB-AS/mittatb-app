@@ -144,7 +144,7 @@ export function sortEstimatedCallsByExpectedTime(
   estimatedCalls: EstimatedCall[],
 ): EstimatedCall[] {
   return [...estimatedCalls].sort((a, b) =>
-    a.expectedDepartureTime < b.expectedDepartureTime ? -1 : 1,
+    a.expectedDepartureTime.localeCompare(b.expectedDepartureTime),
   );
 }
 
