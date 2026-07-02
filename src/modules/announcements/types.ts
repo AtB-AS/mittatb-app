@@ -2,7 +2,7 @@ import {z} from 'zod';
 import {LanguageAndTextTypeArray} from '@atb/modules/configuration';
 import {AppPlatform} from '@atb/modules/global-messages';
 import {Timestamp} from '@react-native-firebase/firestore';
-import {Rule} from '@atb/modules/rule-engine';
+import {Rule} from '@atb-as/utils';
 import {Base64ImageSchema} from '@atb/utils/image';
 
 const TimestampSchema = z

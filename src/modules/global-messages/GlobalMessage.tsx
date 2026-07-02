@@ -7,7 +7,7 @@ import {GlobalMessageContextEnum, GlobalMessageType} from './types';
 import {getTextForLanguage} from '@atb/translations';
 import {useNow} from '@atb/utils/use-now';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
-import {RuleVariables} from '@atb/modules/rule-engine';
+import {RuleVariables} from '@atb-as/utils';
 import {ContrastColor} from '@atb/theme/colors';
 import {ColorValue} from 'react-native';
 import {MessageInfoText} from '@atb/components/message-info-text';

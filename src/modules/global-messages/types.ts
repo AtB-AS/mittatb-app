@@ -1,5 +1,5 @@
 import {LanguageAndTextSchema} from '@atb/translations';
-import {Rule} from '@atb/modules/rule-engine';
+import {Rule} from '@atb-as/utils';
 
 import {z} from 'zod';
 
