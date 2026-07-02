@@ -135,6 +135,13 @@ export const getFeaturesAtPoint = async (
   return featuresAtPoint?.features;
 };
 
+/**
+ * Builds a GeoJSON Point feature from a scanned vehicle or station, with
+ * properties matching those received from the map's onPressEvent.
+ * @param vehicle - The scanned vehicle, if a vehicle was scanned
+ * @param station - The scanned station, if a station was scanned
+ * @returns A GeoJSON Point feature representing the scanned entity
+ */
 export const getFeatureFromScan = ({
   vehicle,
   station,
