@@ -32,8 +32,6 @@ const DepartureDetailsTexts = {
   map: _('Se reiserute', 'Show trip', 'Sjå reiserute'),
   messages: {
     loading: _('Laster detaljer', 'Loading details', 'Lastar detaljar'),
-    noAlighting: _('Ingen avstigning', 'No disembarking', 'Ingen avstiging'),
-    noBoarding: _('Ingen påstigning', 'No boarding', 'Ingen påstiging'),
     notStoppingHere: (transportMode: string) =>
       _(
         `${transportMode} stopper ikke her`,

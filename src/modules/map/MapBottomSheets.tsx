@@ -193,7 +193,6 @@ export const MapBottomSheets = ({
               if (mapState.assetIsScanned) {
                 const feature: Feature<Point, GeoJsonProperties> =
                   getFeatureFromScan({
-                    mapBottomSheetType: mapState.bottomSheetType,
                     vehicle,
                   });
                 dispatchMapState({
@@ -272,7 +271,6 @@ export const MapBottomSheets = ({
             if (mapState.assetIsScanned) {
               const feature: Feature<Point, GeoJsonProperties> =
                 getFeatureFromScan({
-                  mapBottomSheetType: mapState.bottomSheetType,
                   station,
                 });
 
@@ -311,7 +309,6 @@ export const MapBottomSheets = ({
             if (mapState.assetIsScanned) {
               const feature: Feature<Point, GeoJsonProperties> =
                 getFeatureFromScan({
-                  mapBottomSheetType: mapState.bottomSheetType,
                   station,
                 });
 

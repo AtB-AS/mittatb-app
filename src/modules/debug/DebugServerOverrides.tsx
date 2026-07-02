@@ -8,7 +8,7 @@ import {
   BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
 import {
-  SectionSeparator,
+  Section,
   SelectionInlineSectionItem,
   TextInputSectionItem,
 } from '@atb/components/sections';
@@ -25,6 +25,9 @@ import Swipeable, {
 import Animated, {SharedValue, useAnimatedStyle} from 'react-native-reanimated';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import type {DebugServerOverride, HeaderOverride} from './types';
+import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
+import {ContentHeading} from '@atb/components/heading';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 type OftenUsedOverride = DebugServerOverride & {label: string};
 
@@ -149,6 +152,8 @@ export function DebugServerOverrides() {
       <BottomSheetModal
         bottomSheetModalRef={editBottomSheetRef}
         heading="Edit debug override"
+        keyboardBehavior="interactive"
+        keyboardBlurBehavior="restore"
         bottomSheetHeaderType={BottomSheetHeaderType.Close}
       >
         {selectedOverride && (
@@ -274,30 +279,28 @@ function DebugServerInput(props: {
 
   return (
     <View style={styles.overrideInput}>
-      <ThemeText typography="body__m">
-        Any request matching the regex will get its baseURL replaced by the New
-        baseURL.
-      </ThemeText>
-      <View style={styles.oftenUsedContainer}>
-        <ThemeText typography="body__s">Often used</ThemeText>
-        <View style={styles.oftenUsedOptions}>
-          {oftenUsedOverrides.map((o) => (
-            <Button
-              key={o.label}
-              type="small"
-              expanded={false}
-              onPress={() => {
-                addExistingOverride(o);
-              }}
-              text={o.label}
-            />
-          ))}
-        </View>
+      <MessageInfoBox
+        type="info"
+        message="Any request matching the regex will get its baseURL replaced by the New baseURL."
+      />
+      <ContentHeading text="Often used" />
+      <View style={styles.oftenUsedOptions}>
+        {oftenUsedOverrides.map((o) => (
+          <Button
+            key={o.label}
+            type="small"
+            expanded={false}
+            onPress={() => {
+              addExistingOverride(o);
+            }}
+            text={o.label}
+          />
+        ))}
       </View>
-      <SectionSeparator />
-      <View>
-        <ThemeText typography="body__s">New override</ThemeText>
+      <ContentHeading text="New override" />
+      <Section>
         <TextInputSectionItem
+          InputComponent={BottomSheetTextInput}
           label="Regex"
           placeholder=".*"
           value={match}
@@ -305,51 +308,50 @@ function DebugServerInput(props: {
           autoCapitalize="none"
         />
         <TextInputSectionItem
+          InputComponent={BottomSheetTextInput}
           label="New baseURL"
           placeholder="http://your-url-here:7000"
           onChangeText={setNewValue}
           value={newValue}
           autoCapitalize="none"
         />
-      </View>
-      <View style={{gap: 12}}>
-        <ThemeText typography="body__s">Headers (optional)</ThemeText>
-        {headers.map((header, index) => (
-          <HeaderOverrideComponent
-            key={index}
-            headerKey={header.key}
-            headerValue={header.value}
-            onKeyChange={(newKey) => {
-              setHeaders((prev) =>
-                prev.map((h, i) =>
-                  i === index ? {key: newKey, value: h.value} : h,
-                ),
-              );
-            }}
-            onValueChange={(newValue) => {
-              setHeaders((prev) =>
-                prev.map((h, i) =>
-                  i === index ? {key: h.key, value: newValue} : h,
-                ),
-              );
-            }}
-            onDelete={() => {
-              setHeaders((prev) => prev.filter((_, i) => i !== index));
-            }}
-          />
-        ))}
-        <Button
-          onPress={() => {
-            setHeaders((prev) => {
-              return [...prev, {key: '', value: ''}];
-            });
+      </Section>
+      <ContentHeading text="Headers (optional)" />
+      {headers.map((header, index) => (
+        <HeaderOverrideComponent
+          key={index}
+          headerKey={header.key}
+          headerValue={header.value}
+          onKeyChange={(newKey) => {
+            setHeaders((prev) =>
+              prev.map((h, i) =>
+                i === index ? {key: newKey, value: h.value} : h,
+              ),
+            );
           }}
-          expanded={false}
-          type="small"
-          text="Add header"
-          disabled={headers.some((h) => h.key === '')}
+          onValueChange={(newValue) => {
+            setHeaders((prev) =>
+              prev.map((h, i) =>
+                i === index ? {key: h.key, value: newValue} : h,
+              ),
+            );
+          }}
+          onDelete={() => {
+            setHeaders((prev) => prev.filter((_, i) => i !== index));
+          }}
         />
-      </View>
+      ))}
+      <Button
+        onPress={() => {
+          setHeaders((prev) => {
+            return [...prev, {key: '', value: ''}];
+          });
+        }}
+        expanded={false}
+        type="small"
+        text="Add header"
+        disabled={headers.some((h) => h.key === '')}
+      />
       <Button
         text="Save Override"
         expanded={true}
@@ -378,11 +380,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.medium,
   },
   overrideInput: {
-    paddingVertical: theme.spacing.large,
     paddingHorizontal: theme.spacing.medium,
-    gap: theme.spacing.medium,
-  },
-  oftenUsedContainer: {
     gap: theme.spacing.small,
   },
   oftenUsedOptions: {

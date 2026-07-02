@@ -31,10 +31,11 @@ import {
   isCarStation,
   isScooter,
   isStation,
+  isVirtualStation,
+  isVirtualStationArea,
   isVehicleCluster,
   isStationCluster,
 } from '@atb/modules/mobility';
-import {MapBottomSheetType} from './MapContext';
 import {
   FormFactor,
   PropulsionType,
@@ -134,25 +135,17 @@ export const getFeaturesAtPoint = async (
   return featuresAtPoint?.features;
 };
 
-function mapMapBottomSheetTypeToFormFactor(
-  mapBottomSheetType?: MapBottomSheetType,
-): FormFactor | undefined {
-  switch (mapBottomSheetType) {
-    case MapBottomSheetType.BikeStation:
-      return FormFactor.Bicycle;
-    case MapBottomSheetType.CarStation:
-      return FormFactor.Car;
-    default:
-      return undefined;
-  }
-}
-
+/**
+ * Builds a GeoJSON Point feature from a scanned vehicle or station, with
+ * properties matching those received from the map's onPressEvent.
+ * @param vehicle - The scanned vehicle, if a vehicle was scanned
+ * @param station - The scanned station, if a station was scanned
+ * @returns A GeoJSON Point feature representing the scanned entity
+ */
 export const getFeatureFromScan = ({
-  mapBottomSheetType,
   vehicle,
   station,
 }: {
-  mapBottomSheetType: MapBottomSheetType;
   vehicle?: Vehicle;
   station?: Station;
 }): Feature<Point, GeoJsonProperties> => {
@@ -164,22 +157,17 @@ export const getFeatureFromScan = ({
       id: vehicle.id,
       system_id: vehicle.system.id,
       count: 1,
-      vehicle_type_form_factor:
-        vehicle.vehicleType.formFactor ??
-        mapMapBottomSheetTypeToFormFactor(mapBottomSheetType),
+      vehicle_type_form_factor: vehicle.vehicleType.formFactor,
       vehicle_type_propulsion_type: vehicle.vehicleType.propulsionType,
     } satisfies VehicleFeatureProperties;
   } else if (station) {
-    const vehicleType = station.vehicleTypesAvailable?.[0]?.vehicleType;
+    const vehicleType = station.vehicleTypesAvailable?.[0]?.vehicleType; // currently only supporting 1 formFactor per feature
     coordinates = [station.lon, station.lat];
     properties = {
       id: station.id,
       system_id: station.system.id,
       count: 1,
-      vehicle_type_form_factor:
-        vehicleType?.formFactor ??
-        mapMapBottomSheetTypeToFormFactor(mapBottomSheetType) ??
-        FormFactor.Other,
+      vehicle_type_form_factor: vehicleType?.formFactor ?? FormFactor.Other,
       vehicle_type_propulsion_type:
         vehicleType?.propulsionType ?? PropulsionType.Human,
       is_virtual_station: false, // lacking this info atm, assume false for now
@@ -335,13 +323,16 @@ export function getFeatureWeight(
       isScooter(feature) ||
       isBicycle(feature) ||
       isStation(feature) ||
+      isVirtualStation(feature) ||
       isCarStation(feature) ||
       isParkAndRide(feature)
     ) {
-      return 4;
+      return 5;
     }
     if (isFeatureGeofencingZoneAsTiles(feature)) return 3;
     return 1;
+  } else if (isVirtualStationArea(feature)) {
+    return 4;
   } else if (isFeatureGeofencingZoneAsTiles(feature)) {
     return 2;
   } else if (isFeatureGeofencingZone(feature)) {

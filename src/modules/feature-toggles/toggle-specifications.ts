@@ -178,6 +178,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_vehicles_in_map',
   },
   {
+    name: 'isVirtualStationsEnabled',
+    remoteConfigKey: 'enable_virtual_stations',
+  },
+  {
     name: 'isInAppReviewEnabled',
     remoteConfigKey: 'enable_in_app_review',
   },

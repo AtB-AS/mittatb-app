@@ -3,21 +3,19 @@ import {ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
 import {getDatedServiceJourney} from '@atb/api/bff/servicejourney';
 import type {DatedServiceJourneyRefsType} from '@atb-as/utils';
 import {
-  type DatedServiceJourney,
   Mode,
   TransportMode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import type {Leg} from '@atb/api/types/trips';
+import type {DatedServiceJourney} from '@atb/api/bff/types';
+import type {BookingJourneySegment} from '@atb/components/booking-summary';
 
 /**
- * When we have a DatedServiceJourneyRef, use it to fetch the
- * entire DatedServiceJourney and map it to SalesTripPatternLegs
- * which we then use
- * @param dsjRefs
+ * Fetches the DatedServiceJourney referenced by a fare contract's travel right
+ * and maps it to a single BookingJourneySegment to be rendered by BookingSummary.
  */
-export function useFareContractLegs(
+export function useFareContractBookingSegments(
   dsjRefs: DatedServiceJourneyRefsType | undefined,
-) {
+): BookingJourneySegment[] {
   const {data} = useQuery({
     queryKey: ['datedServiceJourneys', dsjRefs?.datedServiceJourneyRef],
     queryFn: async () =>
@@ -29,73 +27,48 @@ export function useFareContractLegs(
     enabled: !!dsjRefs,
   });
 
-  if (!!data) {
-    const leg = mapToLeg(
+  if (data?.data) {
+    const segment = mapToBookingJourneySegment(
       data.data,
       dsjRefs?.startPointRef,
       dsjRefs?.endPointRef,
     );
-    if (!!leg) return [leg];
+    if (segment) return [segment];
   }
   return [];
 }
 
-function mapToLeg(
+function mapToBookingJourneySegment(
   datedServiceJourney: DatedServiceJourney,
   startPointId?: string,
   endPointId?: string,
-): Leg | undefined {
+): BookingJourneySegment | undefined {
   const estimatedCalls = datedServiceJourney.estimatedCalls;
   if (!estimatedCalls || estimatedCalls.length < 2) return undefined;
-  const [fromCallIndex, toCallIndex] = [
-    estimatedCalls.findIndex(
-      (call) => call.quay.stopPlace?.id === startPointId,
-    ),
-    estimatedCalls.findIndex((call) => call.quay.stopPlace?.id === endPointId),
-  ];
-  const [fromCall, toCall] = [
-    estimatedCalls[fromCallIndex],
-    estimatedCalls[toCallIndex],
-  ];
+  const fromCall = estimatedCalls.find(
+    (call) => call.quay.stopPlace?.id === startPointId,
+  );
+  const toCall = estimatedCalls.find(
+    (call) => call.quay.stopPlace?.id === endPointId,
+  );
 
   return {
-    distance: 0, // Distance is not provided in the DatedServiceJourney
-    duration: 0, // Duration is not provided in the DatedServiceJourney
-    aimedStartTime: fromCall?.aimedDepartureTime,
-    expectedStartTime: fromCall?.expectedDepartureTime,
-    aimedEndTime: toCall?.aimedArrivalTime,
-    expectedEndTime: toCall?.expectedArrivalTime,
-    fromPlace: {
-      quay: fromCall?.quay,
-      longitude: fromCall?.quay.stopPlace?.longitude ?? 0,
-      latitude: fromCall?.quay.stopPlace?.latitude ?? 0,
-    },
-    toPlace: {
-      quay: toCall?.quay,
-      longitude: toCall?.quay.stopPlace?.longitude ?? 0,
-      latitude: toCall?.quay.stopPlace?.latitude ?? 0,
-    },
-    datedServiceJourney,
     mode:
       mapTransportModeToMode(
         datedServiceJourney.serviceJourney.transportMode,
       ) ?? Mode.Water,
-    serviceJourney: datedServiceJourney.serviceJourney,
-    realtime: false,
-    situations: datedServiceJourney.serviceJourney.situations,
-    intermediateEstimatedCalls: estimatedCalls.slice(
-      fromCallIndex + 1,
-      toCallIndex,
-    ),
-    serviceJourneyEstimatedCalls: estimatedCalls,
-    fromEstimatedCall: fromCall,
-    toEstimatedCall: toCall,
+    transportSubmode: datedServiceJourney.serviceJourney.transportSubmode,
     line: datedServiceJourney.serviceJourney.line,
+    expectedStartTime: fromCall?.expectedDepartureTime,
+    expectedEndTime: toCall?.expectedArrivalTime,
+    fromStopName: fromCall?.quay.stopPlace?.name,
+    toStopName: toCall?.quay.stopPlace?.name,
+    situations: datedServiceJourney.serviceJourney.situations,
+    notices: [],
   };
 }
 
-// Utility function to map TransportMode to Mode
-export function mapTransportModeToMode(mode?: TransportMode): Mode | undefined {
+function mapTransportModeToMode(mode?: TransportMode): Mode | undefined {
   switch (mode) {
     case TransportMode.Bus:
       return Mode.Bus;

@@ -14,12 +14,13 @@ import {
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
-import {View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {isDefined} from '@atb/utils/presence';
 import {BonusStarFill} from './BonusStarFill';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {MessageInfoText} from '@atb/components/message-info-text';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = SectionProps & {
   bonusProduct: BonusProductType;
@@ -37,6 +38,7 @@ export const PayWithBonusPointsCheckbox = ({
 }: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const {logEvent} = useAnalyticsContext();
 
   const {data: userBonusBalance, status: userBonusBalanceStatus} =
     useBonusBalanceQuery();
@@ -61,6 +63,17 @@ export const PayWithBonusPointsCheckbox = ({
           : null,
       ),
     );
+
+  const logCheckboxEvent = (
+    hasSufficientBalance: boolean,
+    newState?: boolean,
+  ) => {
+    logEvent('Bonus', 'bonus points checkbox toggled', {
+      bonusProductId: bonusProduct.id,
+      hasSufficientBalance,
+      ...(newState !== undefined && {newState}),
+    });
+  };
 
   const content = (
     <View style={styles.container}>
@@ -92,13 +105,29 @@ export const PayWithBonusPointsCheckbox = ({
     <>
       <Section {...props}>
         {hasInsufficientBalance ? (
-          <GenericSectionItem accessibility={{accessibilityLabel: a11yLabel}}>
-            {content}
+          <GenericSectionItem>
+            <View style={{flex: 1}}>
+              {content}
+              <Pressable
+                onPress={() => logCheckboxEvent(false)}
+                accessible={false}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                }}
+              />
+            </View>
           </GenericSectionItem>
         ) : (
           <GenericClickableSectionItem
             active={isChecked}
-            onPress={onPress}
+            onPress={() => {
+              logCheckboxEvent(true, !isChecked);
+              onPress();
+            }}
             disabled={isError}
             accessibilityRole="checkbox"
             accessibilityState={{checked: isChecked}}

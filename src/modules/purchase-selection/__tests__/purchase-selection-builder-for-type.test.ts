@@ -12,7 +12,7 @@ import type {ZoneSelectionMode} from '@atb-as/config-specs';
 describe('purchaseSelectionBuilder - forType', () => {
   it("Throw error if config type doesn't exist", () => {
     const fn = () =>
-      createEmptyBuilder(TEST_INPUT).forType('not-existing').build();
+      createEmptyBuilder(TEST_INPUT).forType('not-existing').build().selection;
 
     expect(fn).toThrow();
   });
@@ -27,7 +27,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       ],
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe('A');
   });
@@ -42,7 +44,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       ],
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe('B');
   });
@@ -57,7 +61,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       ],
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe('C');
   });
@@ -81,7 +87,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       appVersion: '1.20',
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe('C');
   });
@@ -96,7 +104,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       customerProfile: {debug: true},
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe('A');
   });
@@ -110,7 +120,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       ],
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.preassignedFareProduct.id).toBe('B');
   });
@@ -125,7 +137,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       ],
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.zones?.from.id).toBe('T1');
     expect(selection.zones?.to.id).toBe('T1');
@@ -142,7 +156,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       currentCoordinates: {latitude: 50, longitude: 50},
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.zones?.from.id).toBe('T2');
     expect(selection.zones?.to.id).toBe('T2');
@@ -166,7 +182,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       currentCoordinates: {latitude: 50, longitude: 50},
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.zones?.from.id).toBe('T3');
     expect(selection.zones?.to.id).toBe('T3');
@@ -184,7 +202,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       previousZoneIds: {from: 'T2', to: 'T3'},
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.zones?.from.id).toBe('T2');
     expect(selection.zones?.to.id).toBe('T3');
@@ -211,7 +231,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       previousZoneIds: {from: 'T1', to: 'T1'},
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.zones?.from.id).toBe('T3');
     expect(selection.zones?.to.id).toBe('T3');
@@ -239,7 +261,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       previousZoneIds: {from: 'T3', to: 'T3'},
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.zones?.from.id).toBe('T2');
     expect(selection.zones?.to.id).toBe('T2');
@@ -266,7 +290,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       ],
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.zones?.from.id).toBe('T2');
     expect(selection.zones?.to.id).toBe('T2');
@@ -290,30 +316,32 @@ describe('purchaseSelectionBuilder - forType', () => {
 
     let selection = createEmptyBuilder(input('single'))
       .forType('single')
-      .build();
+      .build().selection;
     expect(selection.stopPlaces).toBe(undefined);
 
     selection = createEmptyBuilder(input('single-zone'))
       .forType('single')
-      .build();
+      .build().selection;
     expect(selection.stopPlaces).toBe(undefined);
 
     selection = createEmptyBuilder(input('single-stop'))
       .forType('single')
-      .build();
+      .build().selection;
     expect(selection.stopPlaces).toBe(undefined);
 
-    selection = createEmptyBuilder(input('multiple')).forType('single').build();
+    selection = createEmptyBuilder(input('multiple'))
+      .forType('single')
+      .build().selection;
     expect(selection.stopPlaces).toBe(undefined);
 
     selection = createEmptyBuilder(input('multiple-zone'))
       .forType('single')
-      .build();
+      .build().selection;
     expect(selection.stopPlaces).toBe(undefined);
 
     selection = createEmptyBuilder(input('multiple-stop'))
       .forType('single')
-      .build();
+      .build().selection;
     expect(selection.stopPlaces).toBe(undefined);
   });
 
@@ -333,7 +361,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       ],
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.zones?.from.id).toBe('T3');
     expect(selection.zones?.to.id).toBe('T3');
@@ -354,7 +384,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       ],
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.stopPlaces?.from?.id).toBe(undefined);
     expect(selection.stopPlaces?.to?.id).toBe(undefined);
@@ -375,7 +407,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       ],
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.stopPlaces).toBe(undefined);
     expect(selection.zones).toBe(undefined);
@@ -391,7 +425,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       ],
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.userProfilesWithCount).toHaveLength(1);
     expect(selection.userProfilesWithCount[0].id).toBe('UP1');
@@ -409,7 +445,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       defaultUserTypeString: 'CHILD',
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.userProfilesWithCount).toHaveLength(1);
     expect(selection.userProfilesWithCount[0].id).toBe('UP2');
@@ -435,7 +473,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       defaultUserTypeString: 'CHILD',
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.userProfilesWithCount).toHaveLength(1);
     expect(selection.userProfilesWithCount[0].id).toBe('UP3');
@@ -443,7 +483,9 @@ describe('purchaseSelectionBuilder - forType', () => {
   });
 
   it('Travel date should be undefined', () => {
-    const selection = createEmptyBuilder(TEST_INPUT).forType('single').build();
+    const selection = createEmptyBuilder(TEST_INPUT)
+      .forType('single')
+      .build().selection;
 
     expect(selection.travelDate).toBeUndefined();
   });
@@ -453,7 +495,9 @@ describe('purchaseSelectionBuilder - forType', () => {
       ...TEST_INPUT,
     };
 
-    const selection = createEmptyBuilder(input).forType('single').build();
+    const selection = createEmptyBuilder(input)
+      .forType('single')
+      .build().selection;
 
     expect(selection.isOnBehalfOf).toBe(false);
   });

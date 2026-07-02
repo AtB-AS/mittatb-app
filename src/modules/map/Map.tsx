@@ -48,6 +48,7 @@ import {
   isCarStation,
   isBikeStation,
   isVehicle,
+  isVirtualStation,
 } from '@atb/modules/mobility';
 
 import {Snackbar, useSnackbar, useStableValue} from '@atb/components/snackbar';
@@ -79,6 +80,7 @@ import {usePreferencesContext} from '../preferences';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {GeofencingZonesAsTiles} from './components/mobility/GeofencingZonesAsTiles';
 import {MapTilePreloader} from './components/MapTilePreloader';
+import {isVirtualStationArea} from '../mobility/utils';
 
 export const DEFAULT_ZOOM_LEVEL = 14.5;
 
@@ -281,6 +283,14 @@ export const Map = (props: MapProps) => {
         // - select a stop place with the clicked quay sorted on top
         // - have a bottom sheet with departures just for the clicked quay
         return; // currently - do nothing
+      } else if (
+        isVirtualStation(featureToSelect) ||
+        isVirtualStationArea(featureToSelect)
+      ) {
+        showSnackbar({
+          content: getGeofencingZoneContent('parking'),
+          position: 'top',
+        });
       } else if (isFeatureGeofencingZoneAsTiles(featureToSelect)) {
         const {code, station_parking} = featureToSelect.properties;
         showGeofencingZoneSnackbar(code, station_parking);
@@ -299,6 +309,8 @@ export const Map = (props: MapProps) => {
       hideSnackbar,
       selectedFeature,
       showGeofencingZoneSnackbar,
+      showSnackbar,
+      getGeofencingZoneContent,
     ],
   );
 

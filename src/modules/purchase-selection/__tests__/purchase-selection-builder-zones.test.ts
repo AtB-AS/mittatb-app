@@ -12,7 +12,7 @@ describe('purchaseSelectionBuilder - zones', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
       .fromZone({...TEST_ZONE_WITH_MD, id: 'T2'})
-      .build();
+      .build().selection;
 
     expect(selection.zones?.from.id).toBe('T2');
     expect(selection.zones?.to.id).toBe(TEST_SELECTION.zones?.to.id);
@@ -22,7 +22,7 @@ describe('purchaseSelectionBuilder - zones', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(TEST_SELECTION)
       .toZone({...TEST_ZONE_WITH_MD, id: 'T2'})
-      .build();
+      .build().selection;
 
     expect(selection.zones?.from.id).toBe(TEST_SELECTION.zones?.from.id);
     expect(selection.zones?.to.id).toBe('T2');
@@ -32,7 +32,7 @@ describe('purchaseSelectionBuilder - zones', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection({...TEST_SELECTION, zones: undefined})
       .fromZone({...TEST_ZONE_WITH_MD, id: 'T2'})
-      .build();
+      .build().selection;
 
     expect(selection.zones?.from.id).toBe(undefined);
     expect(selection.zones?.to.id).toBe(undefined);
@@ -42,7 +42,7 @@ describe('purchaseSelectionBuilder - zones', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection({...TEST_SELECTION, zones: undefined})
       .toZone({...TEST_ZONE_WITH_MD, id: 'T2'})
-      .build();
+      .build().selection;
 
     expect(selection.zones?.from.id).toBe(undefined);
     expect(selection.zones?.to.id).toBe(undefined);
@@ -63,7 +63,7 @@ describe('purchaseSelectionBuilder - zones', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(originalSelection)
       .fromZone({...TEST_ZONE_WITH_MD, id: 'T2'})
-      .build();
+      .build().selection;
 
     expect(selection).toStrictEqual(originalSelection);
   });
@@ -83,7 +83,7 @@ describe('purchaseSelectionBuilder - zones', () => {
     const selection = createEmptyBuilder(TEST_INPUT)
       .fromSelection(originalSelection)
       .toZone({...TEST_ZONE_WITH_MD, id: 'T2'})
-      .build();
+      .build().selection;
 
     expect(selection).toStrictEqual(originalSelection);
   });

@@ -367,9 +367,8 @@ export const Profile_DesignSystemScreen = ({
             <ThemeText>Custom color</ThemeText>
             <View style={styles.contentContainer}>
               {interactiveColorKeys.map((key) => (
-                <>
+                <React.Fragment key={key}>
                   <Loading
-                    key={key + 'large'}
                     size="large"
                     donutColor={
                       theme.color.interactive[key].default.foreground.primary
@@ -377,14 +376,13 @@ export const Profile_DesignSystemScreen = ({
                     arcColor={theme.color.interactive[key].default.background}
                   />
                   <Loading
-                    key={key + 'small'}
                     size="small"
                     donutColor={
                       theme.color.interactive[key].default.foreground.primary
                     }
                     arcColor={theme.color.interactive[key].default.background}
                   />
-                </>
+                </React.Fragment>
               ))}
             </View>
           </GenericSectionItem>

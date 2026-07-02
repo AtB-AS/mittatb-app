@@ -34,6 +34,7 @@ import {Root_PurchaseFareZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Ro
 import {Root_PurchaseHarborSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen';
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
+import {Root_RefundConfirmationScreen} from '@atb/stacks-hierarchy/Root_RefundConfirmationScreen';
 import {Root_ReceiptScreen} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
 import {Root_LoginAvailableFareContractWarningScreen} from '@atb/stacks-hierarchy/Root_LoginAvailableFareContractWarningScreen';
 import {Root_LoginOptionsScreen} from '@atb/stacks-hierarchy/Root_LoginOptionsScreen';
@@ -87,6 +88,7 @@ import {
 import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 import {Root_ShmoHelpScreen} from './Root_ShmoHelp/Root_ShmoHelpScreen';
 import {Root_ShmoPricingDetailsScreen} from './Root_ShmoPricingDetailsScreen';
+import {useGlobalEventStreamListeners} from '@atb/modules/event-stream';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -123,6 +125,8 @@ export const RootStack = () => {
 
   // init Intercom user
   useRegisterIntercomUser();
+
+  useGlobalEventStreamListeners();
 
   if (isLoadingAppState) {
     return null;
@@ -299,7 +303,7 @@ export const RootStack = () => {
                       isProductSellableInApp(product, customerProfile),
                   );
                   if (isSellable) {
-                    const selection = purchaseSelectionBuilder
+                    const {selection} = purchaseSelectionBuilder
                       .forType(type)
                       .build();
                     return {
@@ -423,6 +427,11 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_FareContractDetailsScreen"
                 component={Root_FareContractDetailsScreen}
+              />
+              <Stack.Screen
+                name="Root_RefundConfirmationScreen"
+                component={Root_RefundConfirmationScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
               />
               <Stack.Screen
                 name="Root_TicketInformationScreen"

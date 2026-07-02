@@ -4,6 +4,7 @@ import {
   TranslateFunction,
 } from '@atb/translations';
 import {TransportModePair} from '@atb/components/icon-box';
+import {capitalizeFirstLetter} from '@atb/utils/text';
 
 const removeDuplicateStringsFilter = (
   val: string,
@@ -24,7 +25,7 @@ export const getTransportModeText = (
     .filter(removeDuplicateStringsFilter)
     .map((str, i, arr) => {
       if (i === 0) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
+        return capitalizeFirstLetter(str);
       } else if (i === arr.length - 1) {
         return ` ${t(dictionary.listConcatWord)} ${str}`;
       }

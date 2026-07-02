@@ -6,7 +6,12 @@ import {
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {DeparturesQuery} from '../types/generated/DeparturesQuery';
+import {DatedServiceJourneyQuery} from '../types/generated/DatedServiceJourneyQuery';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
+
+export type DatedServiceJourney = NonNullable<
+  DatedServiceJourneyQuery['datedServiceJourney']
+>;
 
 type Notice = {text?: string};
 

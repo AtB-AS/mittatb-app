@@ -22,6 +22,7 @@ import {usePreferencesContext} from '@atb/modules/preferences';
 import {ContentHeading} from '@atb/components/heading';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {
+  type PurchaseSelectionBuildResult,
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
@@ -29,13 +30,13 @@ import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 
 type ProductSelectionByProductsProps = {
   selection: PurchaseSelectionType;
-  setSelection: (s: PurchaseSelectionType) => void;
+  onProductChange: (result: PurchaseSelectionBuildResult) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export function ProductSelectionByProducts({
   selection,
-  setSelection,
+  onProductChange,
   style,
 }: ProductSelectionByProductsProps) {
   const {t, language} = useTranslation();
@@ -86,11 +87,11 @@ export function ProductSelectionByProducts({
             }
             selected={selection.preassignedFareProduct}
             onSelect={(p) => {
-              const newSelection = selectionBuilder
+              const result = selectionBuilder
                 .fromSelection(selection)
                 .product(p)
                 .build();
-              setSelection(newSelection);
+              onProductChange(result);
             }}
             accessibilityHint={t(
               PurchaseOverviewTexts.productSelection.a11yTitle,

@@ -8,7 +8,8 @@ export type TileLayerName =
   | 'vehicles_clustered_v2'
   | 'stations_clustered_v2'
   | 'geofencing_zones_features'
-  | 'geofencing_zones_icons';
+  | 'geofencing_zones_icons'
+  | 'virtual_stations';
 
 /**
  * Returns a tile URL template for fetching map tiles or undefined if unavailable.

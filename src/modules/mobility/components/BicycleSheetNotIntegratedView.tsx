@@ -4,7 +4,6 @@ import {Parking} from '@atb/assets/svg/mono-icons/places';
 import {BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {useAnalyticsContext} from '@atb/modules/analytics';
 import {
   PayWithBonusPointsCheckbox,
   useRelevantVoucherBonusProduct,
@@ -52,8 +51,6 @@ export const BikeStationNotIntegratedView = ({
   const {operatorBenefit} = useOperatorBenefit(operatorId);
   const isBonusActiveForUser = useIsBonusActiveForUser();
   const bonusProduct = useRelevantVoucherBonusProduct(operatorId);
-  const {logEvent} = useAnalyticsContext();
-
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
 
   return (
@@ -113,16 +110,7 @@ export const BikeStationNotIntegratedView = ({
             bonusProduct={bonusProduct}
             operatorName={operatorName}
             isChecked={payWithBonusPoints}
-            onPress={() =>
-              setPayWithBonusPoints((payWithBonusPoints) => {
-                const newState = !payWithBonusPoints;
-                logEvent('Bonus', 'bonus points checkbox toggled', {
-                  bonusProductId: bonusProduct.id,
-                  newState: newState,
-                });
-                return newState;
-              })
-            }
+            onPress={() => setPayWithBonusPoints((prev) => !prev)}
             style={styles.payWithBonusPointsSection}
           />
         )}

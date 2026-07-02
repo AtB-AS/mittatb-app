@@ -51,10 +51,10 @@ import {
   useIsBonusActiveForUser,
   useRelevantSharedMobilityBonusProduct,
 } from '@atb/modules/bonus';
-import {useAnalyticsContext} from '@atb/modules/analytics';
 import type {MobilityPriceAdjustmentBenefitType} from '@atb/api/types/benefit';
 import {useAppSwitchMutation} from '../../queries/use-app-switch-mutation';
 import {showAppMissingAlert} from '../../show-app-missing-alert';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -271,16 +271,7 @@ export const VehicleSheet = ({
                   bonusProduct={clientBonusProduct}
                   operatorName={operatorName}
                   isChecked={payWithBonusPoints}
-                  onPress={() =>
-                    setPayWithBonusPoints((prev) => {
-                      const newState = !prev;
-                      logEvent('Bonus', 'bonus points checkbox toggled', {
-                        bonusProductId: selectedBonusProductId,
-                        newState,
-                      });
-                      return newState;
-                    })
-                  }
+                  onPress={() => setPayWithBonusPoints((prev) => !prev)}
                 />
               )}
               <ShmoActionButton

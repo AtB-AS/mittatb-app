@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@jest/globals':
+        specifier: ^29.7.0
+        version: 29.7.0
       '@perf-profiler/reporter':
         specifier: 0.9.0
         version: 0.9.0

@@ -3,7 +3,7 @@ export {
   useTicketingContext,
 } from './TicketingContext';
 export {useGetHasReservationOrAvailableFareContract} from './use-get-has-reservation-or-available-fare-contract';
-export {useFareContracts} from './use-fare-contracts';
+export {useFareContracts, useNeedsRefreshStore} from './use-fare-contracts';
 export {useListRecurringPaymentsQuery} from './use-list-recurring-payments-query';
 export {useRefundFareContractMutation} from './use-refund-mutation';
 export {useActivateFareContractNowMutation} from './use-activate-fare-contract-now-mutation';

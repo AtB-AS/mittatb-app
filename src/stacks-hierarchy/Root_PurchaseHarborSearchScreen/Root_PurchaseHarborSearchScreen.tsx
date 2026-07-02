@@ -37,7 +37,7 @@ export const Root_PurchaseHarborSearchScreen = ({
     const builder = selectionBuilder.fromSelection(selection);
     if (!selection.stopPlaces?.from) builder.fromStopPlace(selectedStopPlace);
     if (selection.stopPlaces?.from) builder.toStopPlace(selectedStopPlace);
-    const newSelection = builder.build();
+    const {selection: newSelection} = builder.build();
     navigation.popTo(
       'Root_PurchaseOverviewScreen',
       {

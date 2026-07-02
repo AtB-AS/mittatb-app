@@ -112,10 +112,10 @@ export const BenefitTiles = ({
     <View style={[styles.benefits, style]}>
       {benefits.map((benefit, i) => (
         <BenefitTile
+          key={i}
           {...props}
           style={styles.benefitCard}
           benefit={benefit}
-          key={i}
         />
       ))}
     </View>

@@ -31,8 +31,8 @@ import {
   useBonusAmountEarnedQuery,
   useIsBonusActiveForUser,
 } from '../bonus';
-import {useFareContractLegs} from './use-fare-contract-legs';
-import {LegsSummary} from '@atb/components/journey-legs-summary';
+import {useFareContractBookingSegments} from './use-fare-contract-booking-segments';
+import {BookingSummary} from '@atb/components/booking-summary';
 import {CarnetFooter} from './carnet/CarnetFooter';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 
@@ -79,7 +79,9 @@ export const FareContractView: React.FC<Props> = ({
   const {benefits} = useOperatorBenefitsForFareProduct(
     firstTravelRight.fareProductRef,
   );
-  const legs = useFareContractLegs(firstTravelRight?.datedServiceJourneys?.[0]);
+  const bookingSegments = useFareContractBookingSegments(
+    firstTravelRight?.datedServiceJourneys?.[0],
+  );
 
   const shouldShowBundlingInfo =
     benefits && benefits.length > 0 && validityStatus === 'valid';
@@ -95,8 +97,8 @@ export const FareContractView: React.FC<Props> = ({
     isBonusActiveForUser &&
     !isReceived;
 
-  const shouldShowLegs =
-    preassignedFareProduct?.isBookingEnabled && !!legs?.length;
+  const shouldShowBookingSummary =
+    preassignedFareProduct?.isBookingEnabled && !!bookingSegments.length;
 
   const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(
     fareContract.orderId,
@@ -162,9 +164,9 @@ export const FareContractView: React.FC<Props> = ({
         />
       )}
 
-      {shouldShowLegs && (
+      {shouldShowBookingSummary && (
         <GenericSectionItem>
-          <LegsSummary legs={legs} compact={true} />
+          <BookingSummary segments={bookingSegments} compact={true} />
         </GenericSectionItem>
       )}
 

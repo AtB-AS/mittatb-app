@@ -1,5 +1,6 @@
 import {useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
+import {dictionary} from '@atb/translations';
 import React from 'react';
 import {
   OnboardingCarouselScreenProps,
@@ -114,11 +115,7 @@ const ContactInfoContent = () => {
               typography="body__m__underline"
               color={theme.color.interactive[0].default.background}
             >
-              {t(
-                SmartParkAndRideTexts.onboarding.contactInfo.telephone(
-                  telephoneNumbers['parking'],
-                ),
-              )}
+              {t(dictionary.telephone(telephoneNumbers['parking']))}
             </ThemeText>
           </NativeBlockButton>
         </GenericSectionItem>
@@ -151,11 +148,7 @@ const ContactInfoContent = () => {
               typography="body__m__underline"
               color={theme.color.interactive[0].default.background}
             >
-              {t(
-                SmartParkAndRideTexts.onboarding.contactInfo.telephone(
-                  telephoneNumbers['project'],
-                ),
-              )}
+              {t(dictionary.telephone(telephoneNumbers['project']))}
             </ThemeText>
           </NativeBlockButton>
         </GenericSectionItem>

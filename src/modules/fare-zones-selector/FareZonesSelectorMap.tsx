@@ -85,7 +85,7 @@ const FareZonesSelectorMap = ({
     if (selectNext === 'from') builder.fromZone(zone);
     if (selectNext === 'to' || isApplicableOnSingleZoneOnly)
       builder.toZone(zone);
-    const newSelection = builder.build();
+    const {selection: newSelection} = builder.build();
     onSelect(newSelection);
   };
 

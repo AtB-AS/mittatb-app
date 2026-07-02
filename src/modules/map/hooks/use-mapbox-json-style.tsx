@@ -12,20 +12,24 @@ import {useAppVersionedConfigurableLink} from '@atb/utils/use-app-versioned-conf
 // since layerIndex doesn't work in mapbox, but aboveLayerId does, add some slot layer ids to use
 export enum MapSlotLayerId {
   GeofencingZones = 'geofencingZones',
+  VirtualStationAreas = 'virtualStationAreas',
   Vehicles = 'vehicles',
   Stations = 'stations',
   NSRItems = 'nsrItems',
   GeofencingZonesIcons = 'GeofencingZonesIcons',
+  VirtualStationIcons = 'virtualStationIcons',
   SelectedFeature = 'selectedFeature',
 }
 
 // the order of this list, determines which layers render on top. Last is on top.
 const slotLayerIds: MapSlotLayerId[] = [
   MapSlotLayerId.GeofencingZones,
+  MapSlotLayerId.VirtualStationAreas,
   MapSlotLayerId.Vehicles,
   MapSlotLayerId.Stations,
   MapSlotLayerId.NSRItems,
   MapSlotLayerId.GeofencingZonesIcons,
+  MapSlotLayerId.VirtualStationIcons,
   MapSlotLayerId.SelectedFeature,
 ];
 const slotLayers = slotLayerIds.map((slotLayerId) => ({

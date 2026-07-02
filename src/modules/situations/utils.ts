@@ -1,4 +1,3 @@
-import {SituationType} from './types';
 import {
   getTextForLanguage,
   Language,
@@ -13,7 +12,8 @@ import {statusComparator} from '@atb/utils/status-comparator';
 import {Statuses} from '@atb/theme';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {Mode} from '@atb-as/theme';
-import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {onlyUniques, onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {isDefined} from '@atb/utils/presence';
 import type {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import type {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 import type {Leg} from '@atb/api/types/trips';
@@ -79,7 +79,7 @@ export function findAllSituations(
  * Get the situation summary, with a fallback to the description.
  */
 export const getSituationSummary = (
-  situation: SituationType,
+  situation: SituationFragment,
   language: Language,
 ): string | undefined => {
   let text = getTextForLanguage(situation.summary, language);
@@ -90,12 +90,12 @@ export const getSituationSummary = (
 };
 
 export const getMessageTypeForSituation = (
-  situation: SituationType,
+  situation: SituationFragment,
 ): Extract<Statuses, 'warning' | 'info'> =>
   situation.reportType === 'incident' ? 'warning' : 'info';
 
 export const getMsgTypeForMostCriticalSituationOrNotice = (
-  situations: SituationType[],
+  situations: SituationFragment[],
   notices?: NoticeFragment[],
   cancellation: boolean = false,
 ): Exclude<Statuses, 'valid'> | undefined => {
@@ -126,7 +126,7 @@ export const toMostCriticalStatus = <T extends Statuses | undefined>(
 };
 
 export const getSvgForMostCriticalSituationOrNotice = (
-  situations: SituationType[],
+  situations: SituationFragment[],
   themeName: Mode,
   notices?: NoticeFragment[],
   cancellation: boolean = false,
@@ -178,7 +178,7 @@ export const getA11yLabelForLeg = (
 };
 
 export const getSituationOrNoticeA11yLabel = (
-  situations: SituationType[],
+  situations: SituationFragment[],
   notices: NoticeFragment[],
   cancellation: boolean = false,
   t: TranslateFunction,
@@ -197,6 +197,26 @@ export const getSituationOrNoticeA11yLabel = (
 };
 
 /**
+ * Extract unique stop place / quay names from a situation's affects list.
+ */
+export const getAffectedStopNames = (
+  affects: SituationFragment['affects'],
+): string[] =>
+  affects
+    .map((affect) => {
+      switch (affect.__typename) {
+        case 'AffectedStopPlace':
+        case 'AffectedStopPlaceOnServiceJourney':
+        case 'AffectedStopPlaceOnLine':
+          return affect.stopPlace?.name ?? affect.quay?.name;
+        default:
+          return undefined;
+      }
+    })
+    .filter(isDefined)
+    .filter(onlyUniques);
+
+/**
  * Check if a situation is valid at a specific date by comparing it to the
  * validity period of the situation. If the situation has neither start time nor
  * end time it will be considered valid at all times.
@@ -206,7 +226,7 @@ export const getSituationOrNoticeA11yLabel = (
  */
 export const isSituationValidAtDate =
   (date: string | Date = new Date()) =>
-  (situation: SituationType) => {
+  (situation: SituationFragment) => {
     const {startTime, endTime} = situation.validityPeriod || {};
     if (startTime && endTime) {
       return isBetween(date, startTime, endTime);

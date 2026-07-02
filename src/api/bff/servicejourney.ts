@@ -4,7 +4,7 @@ import {stringifyUrl} from '../utils';
 import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 import {AxiosRequestConfig} from 'axios';
-import type {DatedServiceJourney} from '@atb/api/types/generated/journey_planner_v3_types';
+import type {DatedServiceJourney} from './types';
 
 /**
  * @param id Service Journey ID
@@ -42,5 +42,5 @@ export async function getDatedServiceJourney(
 ) {
   if (!id) return null;
   const url = `bff/v2/servicejourney/datedservicejourney/${id}`;
-  return await client.get<DatedServiceJourney>(url, opts);
+  return await client.get<DatedServiceJourney | null>(url, opts);
 }

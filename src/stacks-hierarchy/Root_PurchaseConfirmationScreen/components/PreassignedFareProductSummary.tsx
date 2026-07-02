@@ -27,8 +27,15 @@ import {View} from 'react-native';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {TicketRecipientType} from '@atb/modules/ticketing';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {LegsSummary} from '@atb/components/journey-legs-summary';
+import {
+  BookingSummary,
+  type BookingJourneySegment,
+} from '@atb/components/booking-summary';
 import type {Leg} from '@atb/api/types/trips';
+import {
+  findAllNoticesFromLeg,
+  findAllSituationsFromLeg,
+} from '@atb/modules/situations';
 import SvgEdit from '@atb/assets/svg/mono-icons/actions/Edit';
 import {ThemeIcon} from '@atb/components/theme-icon';
 
@@ -202,7 +209,10 @@ export const PreassignedFareContractSummary = ({
       </GenericSectionItem>
       {!!legs?.length && (
         <GenericSectionItem>
-          <LegsSummary legs={legs} compact={false} />
+          <BookingSummary
+            segments={legs.map(legToBookingJourneySegment)}
+            compact={false}
+          />
         </GenericSectionItem>
       )}
     </Section>
@@ -213,6 +223,22 @@ function getPlaceName(place: FareZone | StopPlaceFragment, language: Language) {
   return 'geometry' in place
     ? getReferenceDataName(place, language)
     : place.name;
+}
+
+function legToBookingJourneySegment(leg: Leg): BookingJourneySegment {
+  return {
+    mode: leg.mode,
+    transportSubmode: leg.transportSubmode,
+    line: leg.line
+      ? {publicCode: leg.line.publicCode, name: leg.line.name}
+      : undefined,
+    expectedStartTime: leg.expectedStartTime,
+    expectedEndTime: leg.expectedEndTime,
+    fromStopName: leg.fromPlace.quay?.stopPlace?.name,
+    toStopName: leg.toPlace.quay?.stopPlace?.name,
+    situations: findAllSituationsFromLeg(leg),
+    notices: findAllNoticesFromLeg(leg),
+  };
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

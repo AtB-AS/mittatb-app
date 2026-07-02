@@ -50,7 +50,6 @@ import {ShmoTripDetailsSectionItem} from '@atb/modules/mobility';
 import {FareContractHeaderSectionItem} from '../sections/FareContractHeaderSectionItem';
 import {FareContractShmoHeaderSectionItem} from '../sections/FareContractShmoHeaderSectionItem';
 import {isDefined} from '@atb/utils/presence';
-import {RefundSectionItem} from '../components/RefundSectionItem';
 import {
   EarnedBonusPointsSectionItem,
   useBonusAmountEarnedQuery,
@@ -58,21 +57,23 @@ import {
 } from '@atb/modules/bonus';
 import {
   isRelativeValidityStatus,
-  useFareContractLegs,
+  useFareContractBookingSegments,
 } from '@atb/modules/fare-contracts';
-import {LegsSummary} from '@atb/components/journey-legs-summary';
+import {BookingSummary} from '@atb/components/booking-summary';
 import {mapUniqueWithCount} from '@atb/utils/unique-with-count';
 import {getBaggageProducts} from '../get-baggage-products';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {SentOrReceivedMessageBox} from '../components/SentOrReceivedMessageBox';
 import {Mail} from '@atb/assets/svg/mono-icons/profile';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
+import {TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
 
 type Props = {
   fareContract: FareContractType;
   preassignedFareProduct?: PreassignedFareProduct;
   now: number;
   onReceiptNavigate: () => void;
+  onRefundNavigate: () => void;
   onSupportNavigate: (params: ShmoHelpParams) => void;
   onNavigateToMap: (initialFilters: MapFilterType) => void;
   onNavigateToBonusScreen: () => void;
@@ -86,6 +87,7 @@ export const DetailsContent: React.FC<Props> = ({
   preassignedFareProduct,
   now,
   onReceiptNavigate,
+  onRefundNavigate,
   onSupportNavigate,
   onNavigateToMap,
   onNavigateToBonusScreen,
@@ -116,7 +118,9 @@ export const DetailsContent: React.FC<Props> = ({
   const {benefits} = useOperatorBenefitsForFareProduct(
     preassignedFareProduct?.id,
   );
-  const legs = useFareContractLegs(firstTravelRight.datedServiceJourneys?.[0]);
+  const bookingSegments = useFareContractBookingSegments(
+    firstTravelRight.datedServiceJourneys?.[0],
+  );
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
     fc.travelRights.map((tr) => tr.userProfileRef).filter(isDefined),
@@ -164,8 +168,8 @@ export const DetailsContent: React.FC<Props> = ({
 
   const accesses = getAccesses(fc);
 
-  const shouldShowLegs =
-    preassignedFareProduct?.isBookingEnabled && !!legs?.length;
+  const shouldShowBookingSummary =
+    preassignedFareProduct?.isBookingEnabled && !!bookingSegments.length;
 
   const {data: bonusAmountEarned} = useBonusAmountEarnedQuery(
     fc.orderId,
@@ -236,9 +240,9 @@ export const DetailsContent: React.FC<Props> = ({
         </GenericSectionItem>
       )}
 
-      {shouldShowLegs && (
+      {shouldShowBookingSummary && (
         <GenericSectionItem>
-          <LegsSummary compact={false} legs={legs} />
+          <BookingSummary compact={false} segments={bookingSegments} />
         </GenericSectionItem>
       )}
 
@@ -312,10 +316,10 @@ export const DetailsContent: React.FC<Props> = ({
         />
       )}
       {refundOptions?.isRefundable && (
-        <RefundSectionItem
-          orderId={fc.orderId}
-          fareProductType={preassignedFareProduct?.type}
-          state={fc.state}
+        <LinkSectionItem
+          text={t(FareContractTexts.refund.refund)}
+          onPress={onRefundNavigate}
+          rightIcon={{svg: TicketInvalid}}
         />
       )}
     </Section>
