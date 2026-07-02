@@ -116,30 +116,36 @@ export function getDeparturesAugmentedWithRealtimeData(
   if (!estimatedCalls) return [];
   if (!realtimeDeparturesData) return estimatedCalls;
 
-  return estimatedCalls
-    .map((departure) => {
-      const serviceJourneyId = departure.serviceJourney?.id;
-      const quayId = departure.quay?.id;
-      if (!serviceJourneyId || !quayId) return departure;
+  const augmentedCalls = estimatedCalls.map((departure) => {
+    const serviceJourneyId = departure.serviceJourney?.id;
+    const quayId = departure.quay?.id;
+    if (!serviceJourneyId || !quayId) return departure;
 
-      const quayRealtime = realtimeDeparturesData[quayId];
-      if (!quayRealtime) return departure;
+    const quayRealtime = realtimeDeparturesData[quayId];
+    if (!quayRealtime) return departure;
 
-      const departureRealtime = quayRealtime.departures[serviceJourneyId];
-      if (!departureRealtime) return departure;
+    const departureRealtime = quayRealtime.departures[serviceJourneyId];
+    if (!departureRealtime) return departure;
 
-      return {
-        ...departure,
-        expectedDepartureTime: departureRealtime.timeData.expectedDepartureTime,
-        actualDepartureTime: departureRealtime.timeData.actualDepartureTime,
-        realtime: departureRealtime.timeData.realtime,
-      };
-    })
-    .sort((a, b) => {
-      // Sort departures based on expectedDepartureTime, for cases where a
-      // realtime update shows that a departure has passed another.
-      return a.expectedDepartureTime < b.expectedDepartureTime ? -1 : 1;
-    });
+    return {
+      ...departure,
+      expectedDepartureTime: departureRealtime.timeData.expectedDepartureTime,
+      actualDepartureTime: departureRealtime.timeData.actualDepartureTime,
+      realtime: departureRealtime.timeData.realtime,
+    };
+  });
+
+  return sortEstimatedCallsByExpectedTime(augmentedCalls);
+}
+
+// Sort departures based on expectedDepartureTime, for cases where a
+// realtime update shows that a departure has passed another.
+export function sortEstimatedCallsByExpectedTime(
+  estimatedCalls: EstimatedCall[],
+): EstimatedCall[] {
+  return [...estimatedCalls].sort((a, b) =>
+    a.expectedDepartureTime.localeCompare(b.expectedDepartureTime),
+  );
 }
 
 export function hasNoGroupsWithDepartures(
