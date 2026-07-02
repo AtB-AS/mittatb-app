@@ -91,10 +91,12 @@ export function QuayView({
   );
 
   // If all favorites are removed while setShowOnlyFavorites is true, reset the
-  // value to false
+  // value to false. Skip while quays are still loading so we don't clobber a
+  // deep-linked showOnlyFavoritesByDefault before favorites can be evaluated.
   useEffect(() => {
+    if (stopPlace.quays === undefined) return;
     if (!placeHasFavorites) setShowOnlyFavorites(false);
-  }, [placeHasFavorites, setShowOnlyFavorites]);
+  }, [stopPlace.quays, placeHasFavorites, setShowOnlyFavorites]);
 
   const refreshControlProps = useManualRefreshControlProps({
     onRefresh: refetchDepartures,
