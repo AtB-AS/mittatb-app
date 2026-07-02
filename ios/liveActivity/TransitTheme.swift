@@ -2,44 +2,45 @@ import SwiftUI
 
 /// AtB design tokens replicated for the Live Activity.
 ///
-/// Values mirror `@atb-as/theme` (AtB "light"/"dark" mode). A Live Activity is a
-/// separate bundle, so it cannot reach the JS theme — these are hardcoded for the
-/// PoC. When we roll this out for real / to other flavors, generate these from the
+/// Values mirror `@atb-as/theme` (AtB light mode). A Live Activity is a separate
+/// bundle, so it cannot reach the JS theme — these are hardcoded for the PoC.
+/// When rolling this out for real / to other flavors, generate these from the
 /// theme package instead of hardcoding.
 enum BrandColor {
-  /// Card background for the Live Activity surface (dark, brand neutral).
-  static let background = Color(hex: 0x2B353A)
-  /// Slightly raised surface (e.g. a chip background).
-  static let surface = Color(hex: 0x37424A)
-
-  /// Primary text on the dark card.
-  static let text = Color.white
+  // MARK: Light lock-screen card
+  /// Card background (the lock-screen banner is a white card).
+  static let card = Color.white
+  /// Primary text on the card.
+  static let title = Color(hex: 0x11242B)
   /// Secondary / muted text.
-  static let textSecondary = Color(hex: 0xB6C2C8)
+  static let subtitle = Color(hex: 0x62727A)
+  /// Hairline divider between the two rows.
+  static let divider = Color(hex: 0xE2E8EB)
 
-  /// AtB primary (olive/green).
-  static let primary = Color(hex: 0x86B200)
-  /// Alert / "stopping now" red (status error, dark variant).
-  static let alert = Color(hex: 0xEC576B)
+  // MARK: Line badge (AtB city bus green)
+  static let badge = Color(hex: 0x557A2A)
+  static let onBadge = Color.white
+  /// Fallback illustration tile (until a real artwork asset is added).
+  static let illustrationBg = Color(hex: 0x3F5D1F)
+  static let illustrationFg = Color(hex: 0xCFE39A)
 
-  /// Foreground color that reads well on a colored line badge.
-  static let onBadge = Color(hex: 0x11242B)
+  // MARK: Dynamic Island (always on a dark system background)
+  static let diText = Color.white
+  static let diSubtitle = Color(hex: 0xAEB9BF)
+  static let accent = Color(hex: 0x86B200)
 
-  /// Blue of the Norwegian bus-stop sign shown next to stop names.
-  static let stopSign = Color(hex: 0x3A7BD5)
-
-  /// Accent color for a given transport mode (used to tint the line badge + icon).
+  /// Accent color for a transport mode (tints the badge / DI icon).
   static func mode(_ mode: TransitActivityAttributes.ContentState.Mode) -> Color {
     switch mode {
-    case .bus: return Color(hex: 0xA9D22D) // city bus green
-    case .tram: return Color(hex: 0xE07C39) // tram orange
-    case .rail: return Color(hex: 0x8E5FB0) // rail purple
-    case .water: return Color(hex: 0x279BC4) // boat blue
-    case .walk: return Color(hex: 0xB6C2C8)
+    case .bus: return badge
+    case .tram: return Color(hex: 0xE07C39)
+    case .rail: return Color(hex: 0x8E5FB0)
+    case .water: return Color(hex: 0x279BC4)
+    case .walk: return Color(hex: 0x62727A)
     }
   }
 
-  /// SF Symbol name for a given transport mode.
+  /// SF Symbol for a transport mode.
   static func icon(_ mode: TransitActivityAttributes.ContentState.Mode) -> String {
     switch mode {
     case .bus: return "bus.fill"

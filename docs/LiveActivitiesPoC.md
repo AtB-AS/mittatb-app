@@ -94,7 +94,8 @@ automatically (no `.pbxproj` entry needed):
   mandatory: if it were only in the extension, `Activity.request` would succeed
   but nothing would render.
 - `TransitLiveActivity.swift` — `Widget` with `ActivityConfiguration` + `DynamicIsland`.
-- `TransitLockScreenView.swift` — the three lock-screen layouts + shared subviews.
+- `TransitLockScreenView.swift` — the two-row light card + shared subviews
+  (`LineBadge`, `IllustrationIcon`, `TimeText`).
 - `TransitTheme.swift` — AtB colors/fonts/icons (hardcoded for the PoC).
 - `LiveActivityBundle.swift` — `@main WidgetBundle`.
 - `Info.plist`, `liveActivity.entitlements`, `liveActivityDebug.entitlements`.
@@ -114,11 +115,23 @@ The `liveActivity` Xcode target was added by
 
 ### Data model
 
+The lock screen is a **two-row light card** (matching the AtB reference design):
+
+```
+┌────────────────────────────────────────────┐
+│ [illustration]  6 stopp igjen               │  row 1: title
+│                 Du skal av på Nidarosdomen   │          subtitle
+│ ──────────────────────────────────────────  │
+│ ( 🚌 3 )        3 Lohove                     │  row 2: "lineNumber lineName"
+│                 Ankommer Nidarosdomen 08:30  │          footnote + time
+└────────────────────────────────────────────┘
+```
+
 `TransitActivityAttributes` (static, fixed per activity):
 
 | field | meaning |
 |---|---|
-| `toName` | final destination, e.g. "Festplassen" |
+| `toName` | final destination, e.g. "Nidarosdomen" |
 | `brandLabel` | operator label, e.g. "AtB" |
 | `tripId` | stable trip id |
 
@@ -126,14 +139,17 @@ The `liveActivity` Xcode target was added by
 
 | field | meaning |
 |---|---|
-| `phase` | `walking` \| `waiting` \| `onboard` \| `getOff` — selects the layout |
-| `mode` | `bus` \| `tram` \| `rail` \| `water` \| `walk` — icon + accent color |
-| `lineNumber`, `lineName` | line badge, e.g. "42 Sentrum" |
-| `fromStopName`, `toStopName` | board / alight (or walk-to) stops |
-| `headline`, `secondaryText` | instruction labels, e.g. "Gå av på" / "Neste stopp" |
-| `eventTime` (ISO-8601) | departure/arrival time used for the clock/countdown |
+| `mode` | `bus` \| `tram` \| `rail` \| `water` \| `walk` — badge icon + accent |
+| `lineNumber`, `lineName` | badge number + row-2 title, e.g. "3" / "Lohove" |
+| `title` | row-1 bold line, e.g. "6 stopp igjen" |
+| `subtitle` | row-1 secondary, e.g. "Du skal av på Nidarosdomen" |
+| `footnote` | row-2 secondary prefix, e.g. "Ankommer Nidarosdomen" (time appended) |
+| `eventTime` (ISO-8601) | arrival/departure time for the clock/countdown |
 | `eventIsCountdown` | render `eventTime` as a live countdown vs absolute clock |
-| `alert`, `alertText` | emphasis + badge (e.g. "STOPPER") |
+
+Text (`title`/`subtitle`/`footnote`) is passed **pre-formatted/localized from JS**,
+so the widget stays dumb. The row-1 illustration is a placeholder tile
+(`IllustrationIcon`) — drop a real artwork image into the extension and swap it.
 
 **Store an absolute `Date`, not a minute count.** The widget self-ticks with
 `Text(timerInterval:)` / `Text(date, style: .timer)`; widgets can't run timers, so
