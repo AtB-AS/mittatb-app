@@ -41,6 +41,7 @@ export {
   computeFreeMinuteCount,
   findOperatorBrandImageUrl,
   getAvailableVehicles,
+  getFormFactorsFromTransportMode,
   getFreeMinutes,
   getFreeUnlock,
   getTransportModeAndSubMode,

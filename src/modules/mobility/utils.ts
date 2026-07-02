@@ -19,6 +19,7 @@ import {dictionary, Language} from '@atb/translations';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
 import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
+import {TransportModeType} from '@atb-as/config-specs/lib/common';
 import type {
   MobilityPriceAdjustmentBenefitType,
   MobilityPriceAdjustmentType,
@@ -388,6 +389,27 @@ export const getTransportModeAndSubMode = (
       return {mode: 'car', subMode: undefined};
     default:
       return {mode: 'unknown', subMode: undefined};
+  }
+};
+
+/**
+ * Maps a transport mode to the mobility form factors it represents. Inverse of
+ * the form-factor → mode mapping in `getTransportModeAndSubMode`. Used to drive
+ * the map filter (keyed by form factor) from a bonus product group's transport
+ * mode. Returns an empty array for modes with no mobility form factor.
+ */
+export const getFormFactorsFromTransportMode = (
+  transportMode: TransportModeType,
+): FormFactor[] => {
+  switch (transportMode) {
+    case 'bicycle':
+      return [FormFactor.Bicycle];
+    case 'scooter':
+      return [FormFactor.Scooter, FormFactor.ScooterStanding];
+    case 'car':
+      return [FormFactor.Car];
+    default:
+      return [];
   }
 };
 
