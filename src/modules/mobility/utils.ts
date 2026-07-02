@@ -19,10 +19,7 @@ import {dictionary, Language} from '@atb/translations';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
 import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
-import type {
-  MobilityPriceAdjustmentBenefitType,
-  MobilityPriceAdjustmentType,
-} from '@atb/api/types/benefit';
+import type {BenefitType, PriceAdjustmentType} from '@atb/api/types/benefit';
 import {
   BatteryEmpty,
   BatteryFull,
@@ -258,31 +255,24 @@ export const isShowAll = (
 export const toFormFactorEnum = (str: string): FormFactor =>
   enumFromString(FormFactor, str) || FormFactor.Other;
 
-// A mobility benefit carries its `systemIds` at the benefit level. The real
-// mobility path is already system-filtered server-side; the bonus-product path
-// sets the benefit-level `systemIds` when building its synthetic benefit.
+// The benefit is already resolved and system-filtered server-side, so the app
+// just reads the relevant price adjustment off it.
 export const getFreeUnlock = (
-  benefit: MobilityPriceAdjustmentBenefitType | undefined,
-  systemId: string,
-): MobilityPriceAdjustmentType | undefined =>
-  benefit?.systemIds.includes(systemId)
-    ? benefit.priceAdjustments.find(
-        (e) => e.type === PriceAdjustmentEnum.enum.FREE_UNLOCK,
-      )
-    : undefined;
+  benefit: BenefitType | undefined,
+): PriceAdjustmentType | undefined =>
+  benefit?.priceAdjustments.find(
+    (e) => e.type === PriceAdjustmentEnum.enum.FREE_UNLOCK,
+  );
 
 export const getFreeMinutes = (
-  benefit: MobilityPriceAdjustmentBenefitType | undefined,
-  systemId: string,
-): MobilityPriceAdjustmentType | undefined =>
-  benefit?.systemIds.includes(systemId)
-    ? benefit.priceAdjustments.find(
-        (e) => e.type === PriceAdjustmentEnum.enum.FREE_MINUTES,
-      )
-    : undefined;
+  benefit: BenefitType | undefined,
+): PriceAdjustmentType | undefined =>
+  benefit?.priceAdjustments.find(
+    (e) => e.type === PriceAdjustmentEnum.enum.FREE_MINUTES,
+  );
 
 export const computeFreeMinuteCount = (
-  freeMinutes: MobilityPriceAdjustmentType,
+  freeMinutes: PriceAdjustmentType,
   perMinPricing: ShmoPricingSegment[],
 ): number => {
   let budget = Math.abs(freeMinutes.amount);

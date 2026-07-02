@@ -7,7 +7,8 @@ import {isValidPhoneNumber} from 'libphonenumber-js';
 import {isValidEmail} from '@atb/utils/validation';
 import {Feature, MultiPolygon, Point, Polygon} from 'geojson';
 import {Base64ImageSchema} from '@atb/utils/image';
-import {MobilityPriceAdjustmentBenefitSchema} from '@atb/api/types/benefit';
+import {BenefitSchema, PriceAdjustmentSchema} from '@atb/api/types/benefit';
+import {LanguageAndTextTypeArray} from '@atb-as/config-specs/lib/common';
 
 export const ViolationsReportingInitQuerySchema = z.object({
   lng: z.string(),
@@ -236,6 +237,33 @@ const RentalUrisSchema = z
 
 export type RentalUris = z.infer<typeof RentalUrisSchema>;
 
+export const BonusOfferSchema = z.object({
+  bonusProductId: z.string(),
+  bonusProductPrice: z.object({
+    amount: z.number(),
+    currencyCode: z.string(),
+  }),
+  priceAdjustments: z.array(PriceAdjustmentSchema),
+});
+
+export type BonusOffer = z.infer<typeof BonusOfferSchema>;
+
+export enum ActionButtonType {
+  START_TRIP = 'START_TRIP',
+  APP_SWITCH = 'APP_SWITCH',
+}
+
+export const ActionButtonSchema = z.discriminatedUnion('type', [
+  z.object({type: z.literal(ActionButtonType.START_TRIP)}),
+  z.object({
+    type: z.literal(ActionButtonType.APP_SWITCH),
+    url: z.string(),
+    label: LanguageAndTextTypeArray.default([]),
+  }),
+]);
+
+export type ActionButton = z.infer<typeof ActionButtonSchema>;
+
 export const VehicleSchema = z.object({
   id: z.string(),
   lat: z.number(),
@@ -250,7 +278,11 @@ export const VehicleSchema = z.object({
   station: z.object({id: z.string()}).nullable().optional(),
   rentalUris: RentalUrisSchema.nullable().optional(),
   vehicleType: VehicleTypeSchema,
-  benefit: MobilityPriceAdjustmentBenefitSchema.nullable().optional(),
+  // Tolerant: a malformed/unknown benefit shape degrades to undefined rather
+  // than failing the whole vehicle parse.
+  benefit: BenefitSchema.nullable().optional().catch(undefined),
+  bonusOffer: BonusOfferSchema.nullable().optional(),
+  actionButton: ActionButtonSchema.nullable().optional(),
 });
 
 export type Vehicle = z.infer<typeof VehicleSchema>;

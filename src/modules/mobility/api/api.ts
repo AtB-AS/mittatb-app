@@ -1,5 +1,6 @@
 import {client} from '@atb/api';
 import {OperatorBenefitId} from '@atb-as/config-specs/lib/mobility';
+import {LanguageAndTextTypeArray} from '@atb-as/config-specs/lib/common';
 import {z} from 'zod';
 import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {RequestError, isErrorResponse} from '@atb/api/utils';
@@ -7,6 +8,9 @@ import {RequestError, isErrorResponse} from '@atb/api/utils';
 const VoucherBenefit = z.object({
   operatorId: z.string(),
   benefitTypes: OperatorBenefitId.array(),
+  title: LanguageAndTextTypeArray.default([]),
+  description: LanguageAndTextTypeArray.default([]),
+  illustrationName: z.string().optional(),
 });
 export type VoucherBenefitType = z.infer<typeof VoucherBenefit>;
 
