@@ -1,6 +1,4 @@
-import {Statuses} from '@atb/theme';
-import {LanguageAndTextType} from '@atb/translations';
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
+import {LanguageAndTextSchema} from '@atb/translations';
 import {Rule} from '@atb/modules/rule-engine';
 
 import {z} from 'zod';
@@ -26,26 +24,22 @@ export enum GlobalMessageContextEnum {
   appPointsScreen = 'app-points-screen',
 }
 
-export type GlobalMessageRaw = {
-  id: string;
-  active: boolean;
-  title?: LanguageAndTextType[];
-  body: LanguageAndTextType[];
-  link?: LanguageAndTextType[];
-  linkText?: LanguageAndTextType[];
-  type: Statuses;
-  subtle?: boolean;
-  context: GlobalMessageContextEnum[];
-  isDismissable?: boolean;
-  appPlatforms: AppPlatform[];
-  appVersionMin: string;
-  appVersionMax: string;
-  startDate?: FirebaseFirestoreTypes.Timestamp;
-  endDate?: FirebaseFirestoreTypes.Timestamp;
-  rules?: Rule[];
-};
-
-export type GlobalMessageType = Omit<
-  GlobalMessageRaw,
-  'appPlatforms' | 'appVersionMin' | 'appVersionMax' | 'startDate' | 'endDate'
-> & {startDate?: number; endDate?: number};
+export const GlobalMessageSchema = z.object({
+  id: z.string(),
+  active: z.boolean(),
+  title: z.array(LanguageAndTextSchema).optional(),
+  body: z.array(LanguageAndTextSchema),
+  link: z.array(LanguageAndTextSchema).optional(),
+  linkText: z.array(LanguageAndTextSchema).optional(),
+  type: z.enum(['error', 'valid', 'info', 'warning']),
+  subtle: z.boolean().optional(),
+  context: z.array(z.nativeEnum(GlobalMessageContextEnum)),
+  isDismissable: z.boolean().optional(),
+  appPlatforms: z.array(AppPlatform).optional(),
+  appVersionMin: z.string().optional(),
+  appVersionMax: z.string().optional(),
+  startDate: z.number().optional(),
+  endDate: z.number().optional(),
+  rules: z.array(Rule).optional(),
+});
+export type GlobalMessageType = z.infer<typeof GlobalMessageSchema>;
