@@ -65,6 +65,14 @@ describe('sortEstimatedCallsByExpectedTime', () => {
       '2024-01-01T07:03:00Z',
     ]);
   });
+  it('keeps relative order when expectedDepartureTime is equal', () => {
+    const result = sortEstimatedCallsByExpectedTime([
+      call('a', '2024-01-01T07:05:00Z'),
+      call('b', '2024-01-01T07:05:00Z'),
+    ]);
+
+    expect(result.map((c) => c.serviceJourney.id)).toEqual(['sj-a', 'sj-b']);
+  });
 });
 
 describe('getDeparturesAugmentedWithRealtimeData', () => {
