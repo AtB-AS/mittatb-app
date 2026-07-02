@@ -15,12 +15,12 @@ import {
   Polygon,
   Position,
 } from 'geojson';
+import {ParkingType, GeofencingZoneCustomProps} from './types';
 import {
-  ParkingType,
-  AutoSelectableMapItem,
-  GeofencingZoneCustomProps,
-} from './types';
-import {
+  Station,
+  StationFeatureProperties,
+  Vehicle,
+  VehicleFeatureProperties,
   VehiclesClusteredProperties,
   VehiclesClusteredPropertiesSchema,
 } from '@atb/api/types/mobility';
@@ -36,8 +36,10 @@ import {
   isVehicleCluster,
   isStationCluster,
 } from '@atb/modules/mobility';
-import {MapBottomSheetType} from './MapContext';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {
+  FormFactor,
+  PropulsionType,
+} from '@atb/api/types/generated/mobility-types_v2';
 import z from 'zod';
 import {GeofencingZoneCode} from '@atb-as/theme';
 
@@ -133,38 +135,56 @@ export const getFeaturesAtPoint = async (
   return featuresAtPoint?.features;
 };
 
-function mapMapBottomSheetTypeToFormFactor(
-  mapBottomSheetType?: MapBottomSheetType,
-): FormFactor | undefined {
-  switch (mapBottomSheetType) {
-    case MapBottomSheetType.BikeStation:
-      return FormFactor.Bicycle;
-    case MapBottomSheetType.CarStation:
-      return FormFactor.Car;
-    default:
-      return undefined;
+/**
+ * Builds a GeoJSON Point feature from a scanned vehicle or station, with
+ * properties matching those received from the map's onPressEvent.
+ * @param vehicle - The scanned vehicle, if a vehicle was scanned
+ * @param station - The scanned station, if a station was scanned
+ * @returns A GeoJSON Point feature representing the scanned entity
+ */
+export const getFeatureFromScan = ({
+  vehicle,
+  station,
+}: {
+  vehicle?: Vehicle;
+  station?: Station;
+}): Feature<Point, GeoJsonProperties> => {
+  let coordinates: Position = [];
+  let properties: GeoJsonProperties = {}; // properties should match the one received from the map onPressEvent
+  if (vehicle) {
+    coordinates = [vehicle.lon, vehicle.lat];
+    properties = {
+      id: vehicle.id,
+      system_id: vehicle.system.id,
+      count: 1,
+      vehicle_type_form_factor: vehicle.vehicleType.formFactor,
+      vehicle_type_propulsion_type: vehicle.vehicleType.propulsionType,
+    } satisfies VehicleFeatureProperties;
+  } else if (station) {
+    const vehicleType = station.vehicleTypesAvailable?.[0]?.vehicleType; // currently only supporting 1 formFactor per feature
+    coordinates = [station.lon, station.lat];
+    properties = {
+      id: station.id,
+      system_id: station.system.id,
+      count: 1,
+      vehicle_type_form_factor: vehicleType?.formFactor ?? FormFactor.Other,
+      vehicle_type_propulsion_type:
+        vehicleType?.propulsionType ?? PropulsionType.Human,
+      is_virtual_station: false, // lacking this info atm, assume false for now
+      num_vehicles_available: Math.max(
+        station.capacity - (station?.numDocksAvailable ?? 0),
+        0,
+      ), // should get this without calculation too
+      capacity: station.capacity,
+    } satisfies StationFeatureProperties;
   }
-}
-
-export const getFeatureFromScan = (
-  mapItem: AutoSelectableMapItem,
-  mapBottomSheetType: MapBottomSheetType,
-  formFactor?: FormFactor,
-): Feature<Point, GeoJsonProperties> => {
   const feature: Feature<Point, GeoJsonProperties> = {
     type: 'Feature',
     geometry: {
       type: 'Point',
-      coordinates: [mapItem?.lon, mapItem?.lat],
+      coordinates,
     },
-    // properties should match the one received from the map onPressEvent
-    properties: {
-      id: mapItem.id,
-      system_id: mapItem?.system.id,
-      count: 1,
-      vehicle_type_form_factor:
-        formFactor ?? mapMapBottomSheetTypeToFormFactor(mapBottomSheetType),
-    },
+    properties,
   };
 
   return feature;

@@ -189,14 +189,12 @@ export const MapBottomSheets = ({
         !openPaymentType &&
         !activeBooking?.bookingId && (
           <VehicleSheet
-            onVehicleReceived={(item) => {
+            onVehicleReceived={(vehicle) => {
               if (mapState.assetIsScanned) {
                 const feature: Feature<Point, GeoJsonProperties> =
-                  getFeatureFromScan(
-                    item,
-                    mapState.bottomSheetType,
-                    item.vehicleType.formFactor,
-                  );
+                  getFeatureFromScan({
+                    vehicle,
+                  });
                 dispatchMapState({
                   type: MapStateActionType.Vehicle,
                   feature: feature,
@@ -272,10 +270,12 @@ export const MapBottomSheets = ({
           stationId={mapState.feature?.properties?.id ?? mapState.assetId ?? ''}
           distance={undefined}
           onClose={handleCloseSheet}
-          onStationReceived={(item) => {
+          onStationReceived={(station) => {
             if (mapState.assetIsScanned) {
               const feature: Feature<Point, GeoJsonProperties> =
-                getFeatureFromScan(item, mapState.bottomSheetType);
+                getFeatureFromScan({
+                  station,
+                });
 
               dispatchMapState({
                 type: MapStateActionType.BikeStation,
@@ -303,10 +303,12 @@ export const MapBottomSheets = ({
           stationId={mapState.feature?.properties?.id ?? mapState.assetId ?? ''}
           distance={undefined}
           onClose={handleCloseSheet}
-          onStationReceived={(item) => {
+          onStationReceived={(station) => {
             if (mapState.assetIsScanned) {
               const feature: Feature<Point, GeoJsonProperties> =
-                getFeatureFromScan(item, mapState.bottomSheetType);
+                getFeatureFromScan({
+                  station,
+                });
 
               dispatchMapState({
                 type: MapStateActionType.CarStation,

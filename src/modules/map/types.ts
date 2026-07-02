@@ -25,7 +25,7 @@ import {TranslatedString} from '@atb/translations';
 import {GeofencingZoneCode, GeofencingZoneStyle} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
-import {ShmoPricingPlan, Station, Vehicle} from '@atb/api/types/mobility';
+import {ShmoPricingPlan} from '@atb/api/types/mobility';
 import type {MobilityPriceAdjustmentBenefitType} from '@atb/api/types/benefit';
 
 export type SelectionLocationCallback = (
@@ -171,8 +171,6 @@ export type SelectedMapItemProperties = GeoJsonProperties & {
 export type SelectedFeatureIdProp = {
   selectedFeatureId: SelectedMapItemProperties['id'];
 };
-
-export type AutoSelectableMapItem = Vehicle | Station;
 
 export type MapPropertiesType = {
   center: GeoJSON.Position;
