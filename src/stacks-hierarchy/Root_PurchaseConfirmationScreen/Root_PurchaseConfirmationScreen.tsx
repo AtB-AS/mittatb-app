@@ -568,11 +568,10 @@ const PaymentButton = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: theme.spacing.medium,
     rowGap: theme.spacing.medium,
-    paddingBottom: bottom + theme.spacing.medium,
   },
   waitingForPayment: {
     flexDirection: 'row',
