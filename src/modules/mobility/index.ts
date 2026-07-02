@@ -35,6 +35,7 @@ export {ShmoRequirementEnum} from './types';
 export {useOperatorBenefitsForFareProduct} from './use-operator-benefits-for-fare-product';
 export {useOperators} from './use-operators';
 export {useShmoRequirements} from './use-shmo-requirements';
+export {useMapVehicle} from './use-map-vehicle';
 export {useVehicle} from './use-vehicle';
 export {useDeleteAgeVerificationMutation} from './queries/use-remove-age-verification-mutation';
 export {

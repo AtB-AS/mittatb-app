@@ -1,13 +1,12 @@
-import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
-import React, {useState} from 'react';
-import {useTranslation} from '@atb/translations';
+import React, {useCallback, useState} from 'react';
+import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {useVehicle} from '../../use-vehicle';
-import {View} from 'react-native';
+import {useMapVehicle} from '../../use-map-vehicle';
+import {Linking, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -34,7 +33,12 @@ import {
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
-import {ShmoPricingPlan, Vehicle} from '@atb/api/types/mobility';
+import {
+  ActionButtonType,
+  BonusOffer,
+  ShmoPricingPlan,
+  Vehicle,
+} from '@atb/api/types/mobility';
 import {PriceDetailsCard} from '../PriceDetailsCard';
 import {Loading} from '@atb/components/loading';
 import {SupportButton} from '../SupportButton';
@@ -42,15 +46,18 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {BrandingImage} from '../BrandingImage';
 import {getTransportModeAndSubMode} from '../../utils';
 import {
+  BonusProductType,
   PayWithBonusPointsCheckbox,
   useIsBonusActiveForUser,
   useRelevantSharedMobilityBonusProduct,
 } from '@atb/modules/bonus';
 import type {MobilityPriceAdjustmentBenefitType} from '@atb/api/types/benefit';
+import {useAppSwitchMutation} from '../../queries/use-app-switch-mutation';
+import {showAppMissingAlert} from '../../show-app-missing-alert';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
   selectPaymentMethod: () => void;
-  vehicleId: VehicleId;
   onClose: () => void;
   onReportParkingViolation: () => void;
   onVehicleReceived?: (vehicle: Vehicle) => void;
@@ -67,7 +74,6 @@ type Props = {
 
 export const VehicleSheet = ({
   selectPaymentMethod,
-  vehicleId: id,
   onClose,
   onReportParkingViolation,
   onVehicleReceived,
@@ -78,7 +84,7 @@ export const VehicleSheet = ({
   navigateToScanQrCode,
   navigateToPricingDetails,
 }: Props) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
   const {
@@ -89,7 +95,7 @@ export const VehicleSheet = ({
     operatorName,
     rentalAppUri,
     appStoreUri,
-  } = useVehicle(id);
+  } = useMapVehicle();
 
   const formFactor = vehicle?.vehicleType.formFactor ?? FormFactor.Other;
   const propulsionType = vehicle?.vehicleType.propulsionType;
@@ -126,8 +132,48 @@ export const VehicleSheet = ({
   } = useFeatureTogglesContext();
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
-  const bonusProduct = useRelevantSharedMobilityBonusProduct(vehicleTypeId);
+  // Prefer the server-provided bonus offer; fall back to the client-side
+  // lookup only when the vehicle response omits it.
+  const clientBonusProduct =
+    useRelevantSharedMobilityBonusProduct(vehicleTypeId);
+  const serverBonusOffer = vehicle?.bonusOffer ?? undefined;
+  const hasBonusOffer = !!serverBonusOffer || !!clientBonusProduct;
+  const selectedBonusProductId =
+    serverBonusOffer?.bonusProductId ?? clientBonusProduct?.id;
+  const {logEvent} = useAnalyticsContext();
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
+
+  const {
+    mutateAsync: getAppSwitchUrl,
+    isPending: isAppSwitchPending,
+    isError: isAppSwitchError,
+  } = useAppSwitchMutation();
+
+  const actionButton = vehicle?.actionButton ?? undefined;
+
+  const onAppSwitchPress = useCallback(async () => {
+    if (!vehicleTypeId) return;
+    const {url} = await getAppSwitchUrl({
+      vehicleTypeId,
+      bonusProductId: payWithBonusPoints ? selectedBonusProductId : undefined,
+    });
+    logEvent('Mobility', 'Open operator app', {
+      operatorId,
+      paidWithBonusPoints: payWithBonusPoints,
+    });
+    await Linking.openURL(url).catch(() =>
+      showAppMissingAlert(operatorName, appStoreUri ?? undefined),
+    );
+  }, [
+    vehicleTypeId,
+    getAppSwitchUrl,
+    payWithBonusPoints,
+    selectedBonusProductId,
+    logEvent,
+    operatorId,
+    operatorName,
+    appStoreUri,
+  ]);
 
   const isDeepIntegrationEnabled =
     isShmoDeepIntegrationEnabled &&
@@ -136,7 +182,17 @@ export const VehicleSheet = ({
   const showParkingViolation =
     !isBicycle && isParkingViolationsReportingEnabled;
   const showBonusCheckbox =
-    !isBicycle && isBonusActiveForUser && !!bonusProduct;
+    !isBicycle && isBonusActiveForUser && hasBonusOffer && !!clientBonusProduct;
+
+  // Drive the CTA from the server `actionButton` when present, otherwise fall
+  // back to the existing deep-integration / operator branching.
+  const showStartTrip = actionButton
+    ? actionButton.type === ActionButtonType.START_TRIP
+    : isDeepIntegrationEnabled &&
+      !!operatorId &&
+      !!operatorIsIntegrationEnabled;
+  const showAppSwitchAction =
+    actionButton?.type === ActionButtonType.APP_SWITCH;
 
   return (
     <MapBottomSheet
@@ -196,30 +252,23 @@ export const VehicleSheet = ({
 
             <PriceDetailsCard
               pricingPlan={vehicle.pricingPlan}
-              benefit={
-                payWithBonusPoints && bonusProduct?.priceAdjustments
-                  ? ({
-                      kind: 'MOBILITY_PRICE_ADJUSTMENT' as const,
-                      vehicleTypeIds: vehicleTypeId ? [vehicleTypeId] : [],
-                      systemIds: [vehicle.system.id],
-                      priceAdjustments: bonusProduct.priceAdjustments.filter(
-                        (pa) => pa.systemIds.includes(vehicle.system.id),
-                      ),
-                    } satisfies MobilityPriceAdjustmentBenefitType)
-                  : (vehicle.benefit ?? undefined)
-              }
+              benefit={getDisplayedBenefit({
+                payWithBonusPoints,
+                vehicle,
+                vehicleTypeId,
+                serverBonusOffer,
+                clientBonusProduct,
+              })}
               systemId={vehicle.system.id}
               onNavigatePricingDetails={navigateToPricingDetails}
             />
           </View>
 
-          {isDeepIntegrationEnabled &&
-          operatorId &&
-          operatorIsIntegrationEnabled ? (
+          {showStartTrip && operatorId ? (
             <>
-              {showBonusCheckbox && (
+              {showBonusCheckbox && !!clientBonusProduct && (
                 <PayWithBonusPointsCheckbox
-                  bonusProduct={bonusProduct}
+                  bonusProduct={clientBonusProduct}
                   operatorName={operatorName}
                   isChecked={payWithBonusPoints}
                   onPress={() => setPayWithBonusPoints((prev) => !prev)}
@@ -228,11 +277,11 @@ export const VehicleSheet = ({
               <ShmoActionButton
                 onStartOnboarding={() => startOnboardingCallback(formFactor)}
                 loginCallback={navigateToLogin}
-                vehicleId={id}
+                vehicleId={vehicle.id}
                 operatorId={operatorId}
                 paymentMethod={selectedPaymentMethod}
                 bonusProductId={
-                  payWithBonusPoints ? bonusProduct?.id : undefined
+                  payWithBonusPoints ? selectedBonusProductId : undefined
                 }
                 formFactor={formFactor}
               />
@@ -248,11 +297,34 @@ export const VehicleSheet = ({
 
                 <SupportButton
                   navigateToSupport={() => {
-                    navigateToSupport({vehicleId: id, operatorId, formFactor});
+                    navigateToSupport({
+                      vehicleId: vehicle.id,
+                      operatorId,
+                      formFactor,
+                    });
                   }}
                 />
               </View>
             </>
+          ) : showAppSwitchAction && rentalAppUri ? (
+            <OperatorActionButton
+              operatorId={operatorId}
+              operatorName={operatorName}
+              appStoreUri={appStoreUri ?? ''}
+              rentalAppUri={rentalAppUri}
+              appSwitchAction={{
+                label:
+                  getTextForLanguage(
+                    actionButton?.type === ActionButtonType.APP_SWITCH
+                      ? actionButton.label
+                      : undefined,
+                    language,
+                  ) ?? t(MobilityTexts.operatorAppSwitchButton(operatorName)),
+                onPress: onAppSwitchPress,
+                isLoading: isAppSwitchPending,
+                hasError: isAppSwitchError,
+              }}
+            />
           ) : (
             <>
               {rentalAppUri && (
@@ -279,6 +351,54 @@ export const VehicleSheet = ({
       )}
     </MapBottomSheet>
   );
+};
+
+/**
+ * Resolves which benefit drives the price display. Benefit and bonus offer never
+ * stack: the server benefit applies by default, and choosing to pay with bonus
+ * points overrides it with the bonus offer's price adjustments. The server bonus
+ * offer wins over the client-side product when both are present.
+ */
+const getDisplayedBenefit = ({
+  payWithBonusPoints,
+  vehicle,
+  vehicleTypeId,
+  serverBonusOffer,
+  clientBonusProduct,
+}: {
+  payWithBonusPoints: boolean;
+  vehicle: Vehicle;
+  vehicleTypeId: string | undefined;
+  serverBonusOffer: BonusOffer | undefined;
+  clientBonusProduct: BonusProductType | undefined;
+}): MobilityPriceAdjustmentBenefitType | undefined => {
+  if (!payWithBonusPoints) return vehicle.benefit ?? undefined;
+
+  const systemId = vehicle.system.id;
+  const bonusPriceAdjustments = serverBonusOffer
+    ? serverBonusOffer.priceAdjustments
+        .filter((pa) => pa.systemIds.includes(systemId))
+        .map((pa) => ({
+          amount: pa.amount,
+          type: pa.adjustmentType,
+          description: pa.description,
+        }))
+    : (clientBonusProduct?.priceAdjustments
+        ?.filter((pa) => pa.systemIds.includes(systemId))
+        .map((pa) => ({
+          amount: pa.amount,
+          type: pa.type,
+          description: pa.description,
+        })) ?? []);
+
+  return {
+    kind: 'MOBILITY_PRICE_ADJUSTMENT',
+    title: [],
+    description: [],
+    vehicleTypeIds: vehicleTypeId ? [vehicleTypeId] : [],
+    systemIds: [systemId],
+    priceAdjustments: bonusPriceAdjustments,
+  };
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
