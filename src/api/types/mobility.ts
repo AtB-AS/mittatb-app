@@ -586,10 +586,6 @@ export type VehicleFeatureProperties = z.infer<
   typeof VehicleFeaturePropertiesSchema
 >;
 
-export type VehicleFeatureProperties = z.infer<
-  typeof VehicleFeaturePropertiesSchema
->;
-
 export const VehicleFeatureSchema =
   GeoJsonFeatureWithPointGeometrySchema.extend({
     properties: VehicleFeaturePropertiesSchema,
