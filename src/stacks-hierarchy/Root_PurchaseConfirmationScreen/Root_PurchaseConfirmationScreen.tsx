@@ -6,10 +6,8 @@ import {
   getReservationStatus,
   useOtherDeviceIsInspectableWarning,
 } from '@atb/modules/fare-contracts';
-import {
-  GlobalMessage,
-  GlobalMessageContextEnum,
-} from '@atb/modules/global-messages';
+import {GlobalMessage} from '@atb/modules/global-messages';
+import {GlobalMessageContextEnum} from '@atb-as/utils';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {

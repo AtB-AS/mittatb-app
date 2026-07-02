@@ -17,7 +17,7 @@ import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {NativeBorderlessButton} from '@atb/components/native-button';
 import {useOnboardingContext} from '@atb/modules/onboarding';
-import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
+import {GlobalMessageContextEnum} from '@atb-as/utils';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {Loading} from '@atb/components/loading';

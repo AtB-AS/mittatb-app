@@ -12,7 +12,7 @@ import {
   getDismissedMessagesFromStore,
   setDismissedMessagesInStore,
 } from './storage';
-import {GlobalMessageContextEnum, GlobalMessageType} from './types';
+import {GlobalMessageContextEnum, GlobalMessageType} from '@atb-as/utils';
 import {checkRules} from '@atb/modules/rule-engine';
 import {RuleVariables} from '@atb-as/utils';
 

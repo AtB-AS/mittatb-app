@@ -8,10 +8,8 @@ import {
   getReferenceDataName,
 } from '@atb/modules/configuration';
 import type {PreassignedFareProduct} from '@atb/modules/ticketing';
-import {
-  GlobalMessage,
-  GlobalMessageContextEnum,
-} from '@atb/modules/global-messages';
+import {GlobalMessage} from '@atb/modules/global-messages';
+import {GlobalMessageContextEnum} from '@atb-as/utils';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   Language,

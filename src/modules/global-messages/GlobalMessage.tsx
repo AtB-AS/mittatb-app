@@ -3,7 +3,7 @@ import {useTranslation} from '@atb/translations';
 import {useGlobalMessagesContext} from './GlobalMessagesContext';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleProp} from 'react-native';
-import {GlobalMessageContextEnum, GlobalMessageType} from './types';
+import {GlobalMessageContextEnum, GlobalMessageType} from '@atb-as/utils';
 import {getTextForLanguage} from '@atb/translations';
 import {useNow} from '@atb/utils/use-now';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';

@@ -10,7 +10,7 @@ import {
   UserFavorites,
   useFavoritesContext,
 } from '@atb/modules/favorites';
-import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
+import {GlobalMessageContextEnum} from '@atb-as/utils';
 import {
   SelectableLocationType,
   useLocationSearchValue,

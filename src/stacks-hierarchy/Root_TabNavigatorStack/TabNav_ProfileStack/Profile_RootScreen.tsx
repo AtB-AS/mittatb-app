@@ -42,10 +42,8 @@ import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {useChatUnreadCount} from '@atb/modules/chat';
 import {useDebugServerOverrides} from '@atb/modules/debug';
 import Intercom, {Space} from '@intercom/intercom-react-native';
-import {
-  GlobalMessage,
-  GlobalMessageContextEnum,
-} from '@atb/modules/global-messages';
+import {GlobalMessage} from '@atb/modules/global-messages';
+import {GlobalMessageContextEnum} from '@atb-as/utils';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {
   useIsBonusActiveForUser,

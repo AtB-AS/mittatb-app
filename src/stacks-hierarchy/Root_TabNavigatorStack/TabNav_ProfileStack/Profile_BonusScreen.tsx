@@ -37,10 +37,8 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
 import {useGetHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {MessageInfoText} from '@atb/components/message-info-text';
-import {
-  GlobalMessage,
-  GlobalMessageContextEnum,
-} from '@atb/modules/global-messages';
+import {GlobalMessage} from '@atb/modules/global-messages';
+import {GlobalMessageContextEnum} from '@atb-as/utils';
 import {BonusFaqSection} from './BonusFaqSection';
 import {HowPointsWork} from './BonusHowPointsWork';
 
