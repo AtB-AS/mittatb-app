@@ -1,6 +1,8 @@
 import React from 'react';
-import {ScrollView} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {Button} from '@atb/components/button';
+import {SkeletonBlock} from '@atb/screen-components/travel-card';
+import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import {secondsToDuration, secondsToDurationShort} from '@atb/utils/date';
 import {
   TranslateFunction,
@@ -30,8 +32,18 @@ export const NonTransitResults = ({tripsProps, onDetailsPressed}: Props) => {
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
   const style = useStyle();
+  const isNewTripSearch = useIsExperimentalEnabled('isNewTripSearchEnabled');
+  const {data: tripPatterns, isLoading} = useNonTransitTripsQuery(tripsProps);
 
-  const {data: tripPatterns} = useNonTransitTripsQuery(tripsProps);
+  if (isNewTripSearch && isLoading) {
+    return (
+      <View style={[style.container, style.skeletonContainer]}>
+        <SkeletonBlock style={style.skeletonPill} />
+        <SkeletonBlock style={style.skeletonPill} delay={150} />
+      </View>
+    );
+  }
+
   if (!tripPatterns?.length) return null;
 
   return (
@@ -91,11 +103,22 @@ const getMode = (
   return {mode, modeText: text};
 };
 
-const useStyle = StyleSheet.createThemeHook((theme) => ({
+const useStyle = StyleSheet.createThemeHook((theme, _, {fontScale}) => ({
   container: {
     paddingHorizontal: theme.spacing.medium,
   },
   tripMode: {
+    marginRight: theme.spacing.small,
+  },
+  skeletonContainer: {
+    flexDirection: 'row',
+  },
+  skeletonPill: {
+    width: 150,
+    height:
+      theme.typography.body__s.lineHeight * fontScale +
+      theme.spacing.xSmall * 2,
+    borderRadius: theme.border.radius.circle,
     marginRight: theme.spacing.small,
   },
 }));

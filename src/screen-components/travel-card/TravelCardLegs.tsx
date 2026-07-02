@@ -22,11 +22,13 @@ import {Connection} from '@atb/assets/svg/mono-icons/miscellaneous';
 type TravelCardContentProps = {
   tripPattern: TripPattern;
   maxWidth: number;
+  onReady?: () => void;
 };
 
 export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
   tripPattern,
   maxWidth,
+  onReady,
 }) => {
   const {theme, themeName} = useThemeContext();
   const styles = useThemeStyles();
@@ -51,6 +53,7 @@ export const TravelCardLegs: React.FC<TravelCardContentProps> = ({
             <OverflowContainer
               maxWidth={maxWidth}
               gap={theme.spacing.xSmall}
+              onReady={onReady}
               overflow={(n) => {
                 const overflowMsgType = legMsgTypes
                   .slice(-n)
