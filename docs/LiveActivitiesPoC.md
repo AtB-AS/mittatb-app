@@ -204,31 +204,96 @@ ActivityKit updates the activity from **APNs**, even when the app is suspended.
 - The token can rotate — always send the latest. Register it server-side keyed by
   trip/activity.
 
-**b) The APNs push**
+**b) The APNs push — the backend calls APNs directly**
 
-- Endpoint: APNs (token-based auth, `.p8` key). Environment must match the build:
-  **sandbox** for dev/TestFlight-dev, **production** otherwise — mismatched
-  environment is the #1 "push silently does nothing" cause.
-- Headers:
-  - `apns-push-type: liveactivity`
-  - `apns-topic: <app-bundle-id>.push-type.liveactivity`
-  - `apns-priority: 10` (immediate) or `5` (throttled/low-power)
-- Payload:
-  ```jsonc
-  {
-    "aps": {
-      "timestamp": 1712345678,
-      "event": "update",              // or "start" (17.2+) / "end"
-      "content-state": { /* exactly the ContentState JSON */ },
-      "stale-date": 1712349278,       // when the content should be considered stale
-      "relevance-score": 100,          // Dynamic Island ordering when several exist
-      "dismissal-date": 1712349278,    // for event:"end"
-      "alert": { "title": "…", "body": "…" } // optional: also alerts the user
-    }
+> ⚠️ **FCM does not forward `liveactivity` pushes.** Even though the app uses
+> Firebase, the backend must speak the **APNs HTTP/2 protocol itself** for Live
+> Activity updates — a separate path from the normal notification flow (same
+> `.p8` key, different push type/topic).
+
+"Directly" means: one HTTP/2 `POST` per update to Apple's push gateway.
+
+**Endpoint**
+```
+POST https://api.push.apple.com/3/device/<PUSH_TOKEN_HEX>       # production
+POST https://api.sandbox.push.apple.com/3/device/<PUSH_TOKEN_HEX>  # dev builds
+```
+- HTTP/2 is mandatory (APNs rejects HTTP/1.1).
+- `<PUSH_TOKEN_HEX>` = the **per-activity token from `activity.pushTokenUpdates`**
+  (or the `pushToStartTokenUpdates` token for `event:"start"`). **Not** the FCM
+  token, **not** the normal APNs device token.
+- Environment must match the build: **sandbox** for dev/TestFlight-dev,
+  **production** otherwise — mismatch is the #1 "push silently does nothing" cause.
+
+**Auth (token-based, recommended)**
+- Apple Developer portal → create an **APNs Auth Key** → download `.p8` (EC P-256
+  private key) + note **Key ID** + **Team ID**. One key covers all team apps.
+- Build a JWT, **ES256**-signed with the `.p8`:
+  - header `{ "alg":"ES256", "kid":"<KeyID>" }`
+  - claims `{ "iss":"<TeamID>", "iat": <now-unix> }`
+- Send as `authorization: bearer <JWT>`. **Reuse it; refresh < 60 min** (APNs
+  rejects tokens > 1h old and 429s if you mint one per request).
+- Store `.p8` + Key ID + Team ID in the secret manager.
+
+**Headers**
+```
+authorization:  bearer <JWT>
+apns-push-type: liveactivity
+apns-topic:     <app-bundle-id>.push-type.liveactivity
+apns-priority:  10        # or 5 for routine ticks
+apns-expiration: 0
+```
+
+**Body — must match `ContentState` exactly**
+```jsonc
+{
+  "aps": {
+    "timestamp": 1751443260,          // REQUIRED, unix seconds; orders/dedups updates
+    "event": "update",                 // "update" | "end"  ("start" for push-to-start)
+    "content-state": {                 // EXACT Codable shape of our ContentState
+      "mode": "bus",
+      "lineNumber": "3",
+      "lineName": "Lohove",
+      "title": "2 stopp igjen",
+      "subtitle": "Du skal av på Nidarosdomen",
+      "footnote": "Ankommer Nidarosdomen",
+      "eventTime": "2026-07-02T09:41:00.000Z",  // ISO string — our decoder expects ISO8601
+      "eventIsCountdown": false
+    },
+    "stale-date": 1751443560,          // grey out if no fresh update by then
+    "relevance-score": 100,            // Dynamic Island ordering when several exist
+    "dismissal-date": 1751443560       // only for event:"end"
+    // "alert": { "title": "…", "body": "…" }   // optional: also notify the user
   }
-  ```
-- `content-state` must be **exactly** the `Codable` shape of `ContentState`
-  (including the `eventTime` date encoding the app expects).
+}
+```
+- `content-state` field names **and date encoding** must match the app's
+  `JSONDecoder`. `LiveActivitiesImpl.swift` decodes `eventTime` as ISO-8601, so the
+  backend sends an ISO string (not a unix number). Payload limit ~4 KB.
+
+**Responses to handle**
+- `200` = accepted (not a delivery guarantee).
+- `400 BadDeviceToken` / `403` (bad JWT) → fix config.
+- `410` → token dead: **stop pushing it, prune from DB**.
+- `429` / `413` → back off / shrink payload.
+
+**End-to-end**
+```
+app:  Activity.request(pushType:.token)
+        └ pushTokenUpdates → hex ──► POST /our-api {activityId, tripId, token, env}
+backend: store token ↔ trip ↔ user
+  on real-time event (delay / next stop / arrival):
+        build JWT → HTTP/2 POST api.push.apple.com/3/device/<token> (headers + body)
+  on arrival: event:"end"
+app:  token rotates → re-POST the new token   (must be handled)
+```
+
+**Rust backend (Axum)** — two options:
+- **Thin & full control:** `reqwest` (HTTP/2) + `jsonwebtoken` (ES256 with the
+  `.p8`); set the `apns-push-type`/`apns-topic` headers + body yourself. Simplest
+  for the custom `liveactivity` type.
+- **Crate:** `a2` (async APNs, token auth) — set the custom topic/push-type;
+  verify it exposes `liveactivity`.
 
 **c) Push-to-start (iOS 17.2+)**
 
