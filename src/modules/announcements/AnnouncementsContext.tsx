@@ -13,7 +13,7 @@ import {
   getDismissedAnnouncementsFromStore,
   setDismissedAnnouncementInStore,
 } from './storage';
-import {checkRules} from '@atb/modules/rule-engine';
+import {checkRules} from '@atb-as/utils';
 import {RuleVariables} from '@atb-as/utils';
 
 type AnnouncementsContextState = {

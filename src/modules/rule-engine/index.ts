@@ -1,1 +1,0 @@
-export {checkRules} from './rules';
