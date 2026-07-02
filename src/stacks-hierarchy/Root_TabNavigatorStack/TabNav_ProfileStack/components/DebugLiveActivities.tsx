@@ -12,12 +12,11 @@ import {NativeLiveActivities} from '@atb/modules/native';
 /**
  * Debug-menu interface for the iOS Live Activities PoC.
  *
- * Fires real Live Activities with mock preset data so the SwiftUI designs can be
+ * Fires real Live Activities with mock preset data so the SwiftUI design can be
  * seen on the lock screen / Dynamic Island. Hooking these up to real trip data
  * is a later step — this only exercises the native module + widget.
  */
 
-type Phase = 'walking' | 'waiting' | 'onboard' | 'getOff';
 type Mode = 'bus' | 'tram' | 'rail' | 'water' | 'walk';
 
 type TransitAttributes = {
@@ -27,86 +26,70 @@ type TransitAttributes = {
 };
 
 type TransitContentState = {
-  phase: Phase;
   mode: Mode;
   lineNumber: string;
   lineName: string;
-  fromStopName: string;
-  toStopName: string;
-  headline: string;
-  secondaryText: string;
+  /** Row-1 bold line, e.g. "6 stopp igjen". */
+  title: string;
+  /** Row-1 secondary line, e.g. "Du skal av på Nidarosdomen". */
+  subtitle: string;
+  /** Row-2 secondary prefix; the time is appended, e.g. "Ankommer Nidarosdomen". */
+  footnote: string;
   /** ISO-8601 timestamp. */
   eventTime: string;
   eventIsCountdown: boolean;
-  alert: boolean;
-  alertText: string;
 };
 
 const inMinutes = (m: number) =>
   new Date(Date.now() + m * 60_000).toISOString();
 
 const ATTRIBUTES: TransitAttributes = {
-  toName: 'Festplassen',
+  toName: 'Nidarosdomen',
   brandLabel: 'AtB',
   tripId: 'poc-trip-1',
 };
 
+const BASE = {
+  mode: 'bus' as Mode,
+  lineNumber: '3',
+  lineName: 'Lohove',
+  footnote: 'Ankommer Nidarosdomen',
+  eventIsCountdown: false,
+};
+
 const SCENARIOS: Record<string, TransitContentState> = {
+  getOff6: {
+    ...BASE,
+    title: '6 stopp igjen',
+    subtitle: 'Du skal av på Nidarosdomen',
+    eventTime: inMinutes(18),
+  },
+  getOff2: {
+    ...BASE,
+    title: '2 stopp igjen',
+    subtitle: 'Du skal av på Nidarosdomen',
+    eventTime: inMinutes(6),
+  },
+  getOffNow: {
+    ...BASE,
+    title: 'Neste stopp',
+    subtitle: 'Gå av på Nidarosdomen',
+    eventTime: inMinutes(1),
+  },
   walking: {
-    phase: 'walking',
-    mode: 'bus',
-    lineNumber: '42',
-    lineName: 'Sentrum',
-    fromStopName: 'Prinsens gate',
-    toStopName: 'Prinsens gate',
-    headline: 'Gå til',
-    secondaryText: 'Ta buss',
-    eventTime: inMinutes(2),
-    eventIsCountdown: true,
-    alert: false,
-    alertText: '',
+    ...BASE,
+    mode: 'walk',
+    title: 'Gå til holdeplass',
+    subtitle: 'Prinsens gate',
+    footnote: 'Avgang Prinsens gate',
+    eventTime: inMinutes(4),
   },
   departure: {
-    phase: 'waiting',
-    mode: 'bus',
-    lineNumber: '459',
-    lineName: 'Skogsskiftet',
-    fromStopName: 'Hammarslandsdalen',
-    toStopName: 'Hammarslandsdalen',
-    headline: 'Ta buss',
-    secondaryText: 'Avgang',
+    ...BASE,
+    title: 'Neste avgang',
+    subtitle: 'Fra Prinsens gate',
+    footnote: 'Avgang',
     eventTime: inMinutes(9),
-    eventIsCountdown: false,
-    alert: false,
-    alertText: '',
-  },
-  onboard: {
-    phase: 'onboard',
-    mode: 'bus',
-    lineNumber: '42',
-    lineName: 'Sentrum',
-    fromStopName: 'Prinsens gate',
-    toStopName: 'Studentersamfundet',
-    headline: 'Gå av på',
-    secondaryText: 'Neste stopp',
-    eventTime: inMinutes(4),
-    eventIsCountdown: true,
-    alert: false,
-    alertText: '',
-  },
-  getOff: {
-    phase: 'getOff',
-    mode: 'bus',
-    lineNumber: '42',
-    lineName: 'Sentrum',
-    fromStopName: 'Prinsens gate',
-    toStopName: 'Fiskepiren',
-    headline: 'Gå av på',
-    secondaryText: 'Neste stopp',
-    eventTime: inMinutes(1),
-    eventIsCountdown: true,
-    alert: true,
-    alertText: 'STOPPER',
   },
 };
 
@@ -202,37 +185,37 @@ export const DebugLiveActivities = () => {
       )}
       {available && (
         <LinkSectionItem
+          text="Start – Get off (6 stopp igjen)"
+          subtitle="Du skal av på Nidarosdomen · 3 Lohove"
+          onPress={() => start('getOff6')}
+        />
+      )}
+      {available && (
+        <LinkSectionItem
           text="Start – Walk to stop"
-          subtitle="Gå til Prinsens gate · ta buss 42"
+          subtitle="Gå til holdeplass Prinsens gate"
           onPress={() => start('walking')}
         />
       )}
       {available && (
         <LinkSectionItem
-          text="Start – Departure (Entur-style)"
-          subtitle="Reisen din til Festplassen · avgang"
+          text="Start – Departure"
+          subtitle="Neste avgang fra Prinsens gate"
           onPress={() => start('departure')}
         />
       )}
       {available && (
         <LinkSectionItem
-          text="Start – Onboard (next stop)"
-          subtitle="Gå av på Studentersamfundet"
-          onPress={() => start('onboard')}
+          text="Update → 2 stopp igjen"
+          subtitle="Requires an active activity"
+          onPress={() => update('getOff2')}
         />
       )}
       {available && (
         <LinkSectionItem
-          text="Update → Get off now (STOPPER)"
+          text="Update → Neste stopp (get off now)"
           subtitle="Requires an active activity"
-          onPress={() => update('getOff')}
-        />
-      )}
-      {available && (
-        <LinkSectionItem
-          text="Update → Next stop"
-          subtitle="Requires an active activity"
-          onPress={() => update('onboard')}
+          onPress={() => update('getOffNow')}
         />
       )}
       {available && <LinkSectionItem text="End activity" onPress={end} />}

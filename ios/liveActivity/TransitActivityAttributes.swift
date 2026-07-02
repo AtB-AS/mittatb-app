@@ -8,62 +8,40 @@ import ActivityKit
 /// `liveActivity` widget-extension target (so the SwiftUI views can render it).
 /// If it is only in the extension, `Activity.request` succeeds but nothing shows.
 ///
-/// Attributes = static data, fixed for the lifetime of the activity.
-/// ContentState = dynamic data, updated as the trip progresses.
+/// The lock screen renders two rows:
+///   row 1: illustration + `title` + `subtitle`   (e.g. "6 stopp igjen" / "Du skal av på Nidarosdomen")
+///   row 2: line badge + "`lineNumber` `lineName`" + `footnote` + time  (e.g. "3 Lohove" / "Ankommer Nidarosdomen 08:30")
 struct TransitActivityAttributes: ActivityAttributes {
-  /// Where the whole journey ends, e.g. "Festplassen". Used for the header
-  /// ("Reisen din til Festplassen").
+  /// Where the whole journey ends (kept for future use / deep links).
   var toName: String
-  /// Brand/operator label shown top-right, e.g. "AtB".
+  /// Brand/operator label, e.g. "AtB".
   var brandLabel: String
   /// Stable id for the underlying trip (not the ActivityKit activity id).
   var tripId: String
 
   struct ContentState: Codable, Hashable {
-    /// Which step of the trip we are in. Drives which lock-screen layout is shown.
-    enum Phase: String, Codable, Hashable {
-      case walking // walk to the boarding stop
-      case waiting // at the stop, waiting for departure
-      case onboard // on the vehicle, heading to the alight stop
-      case getOff  // alight now / next stop is yours
-    }
-
-    /// Transport mode. Drives icon + accent color.
+    /// Transport mode. Drives the badge/icon.
     enum Mode: String, Codable, Hashable {
-      case bus
-      case tram
-      case rail
-      case water
-      case walk
+      case bus, tram, rail, water, walk
     }
 
-    var phase: Phase
     var mode: Mode
 
-    /// Public line number, e.g. "42" / "459". Empty for walk-only steps.
+    /// Public line number shown in the badge + row-2 title, e.g. "3".
     var lineNumber: String
-    /// Line headsign / destination, e.g. "Sandnes".
+    /// Line headsign / destination, e.g. "Lohove".
     var lineName: String
 
-    /// The stop we depart from / board at, e.g. "Hammarslandsdalen".
-    var fromStopName: String
-    /// The stop the current instruction points at (walk-to / alight-at),
-    /// e.g. "Koppholen" / "Fiskepiren" / "Prinsens gate".
-    var toStopName: String
+    /// Row-1 bold line, e.g. "6 stopp igjen".
+    var title: String
+    /// Row-1 secondary line, e.g. "Du skal av på Nidarosdomen".
+    var subtitle: String
+    /// Row-2 secondary prefix, e.g. "Ankommer Nidarosdomen" (time is appended).
+    var footnote: String
 
-    /// Primary instruction, localized, e.g. "Gå av på" / "Gå til" / "Ta buss".
-    var headline: String
-    /// Secondary label, e.g. "Neste stopp" / "Avgang".
-    var secondaryText: String
-
-    /// The relevant time (departure or arrival) used for the clock/countdown.
+    /// The relevant time (arrival/departure) for the clock/countdown.
     var eventTime: Date
     /// true → render `eventTime` as a live countdown; false → absolute clock time.
     var eventIsCountdown: Bool
-
-    /// Emphasis / alert state, e.g. bus is stopping at your stop now.
-    var alert: Bool
-    /// Badge text shown when `alert` is true, e.g. "STOPPER".
-    var alertText: String
   }
 }
