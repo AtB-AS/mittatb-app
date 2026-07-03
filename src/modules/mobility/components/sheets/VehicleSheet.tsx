@@ -1,4 +1,3 @@
-import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
 import React, {useCallback, useState} from 'react';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -6,7 +5,7 @@ import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {useVehicle} from '../../use-vehicle';
+import {useMapVehicle} from '../../use-map-vehicle';
 import {Linking, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
@@ -59,7 +58,6 @@ import {showAppMissingAlert} from '../../show-app-missing-alert';
 
 type Props = {
   selectPaymentMethod: () => void;
-  vehicleId: VehicleId;
   onClose: () => void;
   onReportParkingViolation: () => void;
   onVehicleReceived?: (vehicle: Vehicle) => void;
@@ -76,7 +74,6 @@ type Props = {
 
 export const VehicleSheet = ({
   selectPaymentMethod,
-  vehicleId: id,
   onClose,
   onReportParkingViolation,
   onVehicleReceived,
@@ -98,7 +95,7 @@ export const VehicleSheet = ({
     operatorName,
     rentalAppUri,
     appStoreUri,
-  } = useVehicle(id);
+  } = useMapVehicle();
 
   const formFactor = vehicle?.vehicleType.formFactor ?? FormFactor.Other;
   const propulsionType = vehicle?.vehicleType.propulsionType;
@@ -278,7 +275,7 @@ export const VehicleSheet = ({
               <ShmoActionButton
                 onStartOnboarding={() => startOnboardingCallback(formFactor)}
                 loginCallback={navigateToLogin}
-                vehicleId={id}
+                vehicleId={vehicle.id}
                 operatorId={operatorId}
                 paymentMethod={selectedPaymentMethod}
                 bonusProductId={
@@ -298,7 +295,11 @@ export const VehicleSheet = ({
 
                 <SupportButton
                   navigateToSupport={() => {
-                    navigateToSupport({vehicleId: id, operatorId, formFactor});
+                    navigateToSupport({
+                      vehicleId: vehicle.id,
+                      operatorId,
+                      formFactor,
+                    });
                   }}
                 />
               </View>

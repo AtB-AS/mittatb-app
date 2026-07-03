@@ -24,5 +24,3 @@ export type VehicleExtendedFragment = {
   rentalUris?: RentalUrisFragment;
   vehicleType: VehicleTypeFragment;
 } & VehicleBasicFragment;
-
-export type VehicleId = string;
