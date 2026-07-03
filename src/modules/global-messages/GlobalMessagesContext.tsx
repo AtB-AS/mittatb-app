@@ -12,8 +12,8 @@ import {
   getDismissedMessagesFromStore,
   setDismissedMessagesInStore,
 } from './storage';
-import {GlobalMessageType, checkRules, RuleVariables} from '@atb-as/utils';
-import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
+import {checkRules, RuleVariables} from '@atb-as/utils';
+import {GlobalMessageContextEnum, GlobalMessageType} from './types';
 
 type GlobalMessageContextState = {
   findGlobalMessages: (

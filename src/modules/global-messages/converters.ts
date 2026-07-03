@@ -1,12 +1,9 @@
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import {
-  AppPlatform,
-  GlobalMessageSchema,
-  GlobalMessageType,
-} from '@atb-as/utils';
+import {AppPlatform} from '@atb-as/utils';
 import {appliesToAppVersion} from '@atb/utils/firestore-utils';
 import {isDefined} from '@atb/utils/presence';
 import {Platform} from 'react-native';
+import {GlobalMessageSchema, GlobalMessageType} from './types';
 
 export function mapToGlobalMessages(
   result: FirebaseFirestoreTypes.QueryDocumentSnapshot<any>[],
