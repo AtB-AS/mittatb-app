@@ -7,7 +7,7 @@ import {DeparturesTexts, useTranslation} from '@atb/translations';
 import React, {useCallback, useEffect} from 'react';
 import {DeparturesStackProps} from './navigation-types';
 import {NearbyStopPlacesScreenComponent} from '@atb/screen-components/nearby-stop-places';
-import {GlobalMessageContextEnum} from '@atb-as/utils';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import SharedTexts from '@atb/translations/shared';
 import {useThemeContext} from '@atb/theme';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';

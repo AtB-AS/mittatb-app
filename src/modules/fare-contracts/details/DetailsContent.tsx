@@ -28,7 +28,7 @@ import {
   GlobalMessage,
   useGlobalMessagesContext,
 } from '@atb/modules/global-messages';
-import {GlobalMessageContextEnum} from '@atb-as/utils';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {

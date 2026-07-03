@@ -7,7 +7,7 @@ import {
   useOtherDeviceIsInspectableWarning,
 } from '@atb/modules/fare-contracts';
 import {GlobalMessage} from '@atb/modules/global-messages';
-import {GlobalMessageContextEnum} from '@atb-as/utils';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {

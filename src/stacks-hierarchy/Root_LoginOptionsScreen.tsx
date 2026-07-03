@@ -31,7 +31,7 @@ import {
 } from '@atb/assets/svg/mono-icons/navigation';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useOnboardingContext} from '@atb/modules/onboarding';
-import {GlobalMessageContextEnum} from '@atb-as/utils';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {
   closeInAppBrowseriOS,
   openInAppBrowser,

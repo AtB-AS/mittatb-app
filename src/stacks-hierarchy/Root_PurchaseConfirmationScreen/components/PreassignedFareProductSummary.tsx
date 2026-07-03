@@ -9,7 +9,7 @@ import {
 } from '@atb/modules/configuration';
 import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {GlobalMessage} from '@atb/modules/global-messages';
-import {GlobalMessageContextEnum} from '@atb-as/utils';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   Language,

@@ -3,7 +3,7 @@ import {TicketingTexts, useTranslation} from '@atb/translations';
 import React, {useCallback} from 'react';
 import {View} from 'react-native';
 import {Ticketing_TicketTabNavStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack';
-import {GlobalMessageContextEnum} from '@atb-as/utils';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {ScreenHeading} from '@atb/components/heading';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';

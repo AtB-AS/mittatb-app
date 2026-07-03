@@ -7,6 +7,7 @@ import {
 import {appliesToAppVersion} from '@atb/utils/firestore-utils';
 import {isDefined} from '@atb/utils/presence';
 import {Platform} from 'react-native';
+
 export function mapToGlobalMessages(
   result: FirebaseFirestoreTypes.QueryDocumentSnapshot<any>[],
 ): GlobalMessageType[] {

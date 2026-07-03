@@ -43,7 +43,7 @@ import {useChatUnreadCount} from '@atb/modules/chat';
 import {useDebugServerOverrides} from '@atb/modules/debug';
 import Intercom, {Space} from '@intercom/intercom-react-native';
 import {GlobalMessage} from '@atb/modules/global-messages';
-import {GlobalMessageContextEnum} from '@atb-as/utils';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {
   useIsBonusActiveForUser,

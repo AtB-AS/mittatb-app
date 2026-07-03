@@ -38,7 +38,7 @@ import {ProfileScreenProps} from './navigation-types';
 import {useGetHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {GlobalMessage} from '@atb/modules/global-messages';
-import {GlobalMessageContextEnum} from '@atb-as/utils';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {BonusFaqSection} from './BonusFaqSection';
 import {HowPointsWork} from './BonusHowPointsWork';
 

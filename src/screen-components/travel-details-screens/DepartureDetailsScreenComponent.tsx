@@ -52,7 +52,7 @@ import {useServiceJourneyPolylineQuery} from './use-service-journey-polyline-que
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
 import {GlobalMessage} from '@atb/modules/global-messages';
-import {GlobalMessageContextEnum} from '@atb-as/utils';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {canSellTicketsForSubMode} from '@atb/modules/operator-config';

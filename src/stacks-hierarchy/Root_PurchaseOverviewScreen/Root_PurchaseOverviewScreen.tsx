@@ -21,7 +21,7 @@ import {
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
 import {GlobalMessage} from '@atb/modules/global-messages';
-import {GlobalMessageContextEnum} from '@atb-as/utils';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
 import {FullScreenView} from '@atb/components/screen-view';
 import {Snackbar, useSnackbar} from '@atb/components/snackbar';
