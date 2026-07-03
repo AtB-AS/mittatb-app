@@ -7,9 +7,11 @@ import {
   RefreshControlProps,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+// eslint-disable-next-line rulesdir/navigation-only-in-screens
+import {BottomTabBarHeightContext} from '@react-navigation/bottom-tabs';
 import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
 import * as React from 'react';
-import {Ref, useState} from 'react';
+import {Ref, useContext, useState} from 'react';
 import {FullScreenFooter} from '../screen-footer';
 import {ContrastColor} from '@atb/theme/colors';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
@@ -47,7 +49,7 @@ type Props = {
 type PropsWithHeaderContent = Props & Required<Pick<Props, 'headerContent'>>;
 
 export function FullScreenView(props: Props) {
-  const {top} = useSafeAreaInsets();
+  const {top, bottom} = useSafeAreaInsets();
   const {theme} = useThemeContext();
   const themeColor =
     props.headerProps.color ?? theme.color.background.neutral[1];
@@ -71,6 +73,11 @@ export function FullScreenView(props: Props) {
     }
   };
 
+  // Checks if there is a bottom tab bar on the current screen. If there isn't,
+  // we need to handle safe area inset for the bottom of the screen.
+  const hasTabBar = useContext(BottomTabBarHeightContext) !== undefined;
+  const bottomInset = props.footer || hasTabBar ? 0 : bottom;
+
   const showBorder = props.headerProps.showBorder ?? isScrolled;
 
   const contentComponent = hasHeaderContent(props) ? (
@@ -80,12 +87,14 @@ export function FullScreenView(props: Props) {
       headerColor={backgroundColor}
       contentColor={props.contentColor}
       onScrolledChange={setIsScrolled}
+      bottomInset={bottomInset}
     />
   ) : (
     <ChildrenInNormalScrollView
       {...props}
       contentColor={props.contentColor}
       onScrolledChange={setIsScrolled}
+      bottomInset={bottomInset}
     />
   );
 
@@ -135,11 +144,13 @@ const ChildrenWithHeaderContent = ({
   titleAlwaysVisible,
   focusRef,
   onScrolledChange,
+  bottomInset,
 }: PropsWithHeaderContent & {
   headerColor: string;
   contentColor?: ContrastColor;
   handleScroll: (scrollPercentage: number) => void;
   onScrolledChange: (isScrolled: boolean) => void;
+  bottomInset: number;
 }) => {
   const styles = useStyles();
   const {onLayout, height: headerHeight} = useLayout();
@@ -172,7 +183,7 @@ const ChildrenWithHeaderContent = ({
             handleScroll((offsetY / headerHeightRef.current) * 100);
           }
         }}
-        contentContainerStyle={{flexGrow: 1}}
+        contentContainerStyle={{flexGrow: 1, paddingBottom: bottomInset}}
       >
         <View onLayout={onLayout} style={{backgroundColor: headerColor}}>
           <View style={styles.childrenContainer}>
@@ -196,9 +207,11 @@ const ChildrenInNormalScrollView = ({
   children,
   contentColor,
   onScrolledChange,
+  bottomInset,
 }: Props & {
   contentColor?: ContrastColor;
   onScrolledChange: (isScrolled: boolean) => void;
+  bottomInset: number;
 }) => {
   const backgroundColor = contentColor?.background;
   const isScrolledRef = React.useRef(false);
@@ -218,7 +231,7 @@ const ChildrenInNormalScrollView = ({
           onScrolledChange(scrolled);
         }
       }}
-      contentContainerStyle={{flexGrow: 1}}
+      contentContainerStyle={{flexGrow: 1, paddingBottom: bottomInset}}
       style={{backgroundColor}}
     >
       {children}

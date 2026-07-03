@@ -202,10 +202,9 @@ export const SelectTravelTokenScreenComponent = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme: Theme, {bottom}) => {
+const useStyles = StyleSheet.createThemeHook((theme: Theme) => {
   return {
     container: {
-      paddingBottom: bottom,
       margin: theme.spacing.medium,
       gap: theme.spacing.medium,
     },
