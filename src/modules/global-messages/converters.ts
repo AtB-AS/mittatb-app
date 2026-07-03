@@ -20,24 +20,15 @@ function mapToGlobalMessage(
 ): GlobalMessageType | undefined {
   if (!result) return;
   result.id = id;
-  if (result.endDate?.toMillis) {
-    result.endDate = (
-      result.endDate as FirebaseFirestoreTypes.Timestamp
-    ).toMillis();
-  }
-  if (result.startDate?.toMillis) {
-    result.startDate = (
-      result.startDate as FirebaseFirestoreTypes.Timestamp
-    ).toMillis();
-  }
+  result.endDate = firestoreTimestampToMillis(result.endDate);
+  result.startDate = firestoreTimestampToMillis(result.startDate);
 
   const parseResult = GlobalMessageSchema.safeParse(result);
 
   if (!parseResult.success) {
     console.warn(
-      `GlobalMessageRaw validation failed for id: ${id}, errors: ${JSON.stringify(
-        parseResult.error.message,
-      )}`,
+      `Validation failed for global message with id '${id}':`,
+      parseResult.error.message,
     );
     return;
   }
@@ -62,4 +53,8 @@ function mapToGlobalMessage(
 function isAppPlatformValid(platforms: AppPlatform[]) {
   if (!platforms) return true;
   return !!platforms.find((platform) => platform === Platform.OS);
+}
+
+function firestoreTimestampToMillis(timestamp: any) {
+  return timestamp?.toMillis?.();
 }
