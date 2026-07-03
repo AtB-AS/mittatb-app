@@ -166,7 +166,6 @@ export const getVehicle = (
         : `/mobility/v1/stations/${stationId}/mock-vehicles/${vehicleTypeId}`,
       {
         ...opts,
-        ...{baseURL: 'http://localhost:8080'},
       },
     )
     .then((response) => {
