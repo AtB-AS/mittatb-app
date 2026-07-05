@@ -1,18 +1,16 @@
 import {View} from 'react-native';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
-import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import {BenefitImageAsset} from './BenefitImage';
+import {BenefitIllustration} from './BenefitIllustration';
 import React from 'react';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
-import {toFormFactorEnum} from '../utils';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {useFontScale} from '@atb/utils/use-font-scale';
+import type {FareProductBenefitType} from '../use-operator-benefits-for-fare-product';
 
 type Props = SectionItemProps<{
-  benefits: OperatorBenefitType[];
+  benefits: FareProductBenefitType[];
 }>;
 
 export const MobilityBenefitsInfoSectionItem = ({
@@ -28,13 +26,13 @@ export const MobilityBenefitsInfoSectionItem = ({
     t(MobilityTexts.includedWithTheTicket) +
     screenReaderPause +
     benefits
-      .map(
-        (b) =>
-          b.formFactors.map((ff) =>
-            t(MobilityTexts.vehicleName(toFormFactorEnum(ff))),
-          ) +
-          screenReaderPause +
-          getTextForLanguage(b.ticketDescription, language),
+      .map((b) =>
+        [
+          getTextForLanguage(b.title, language),
+          getTextForLanguage(b.description, language),
+        ]
+          .filter(Boolean)
+          .join(screenReaderPause),
       )
       .join(screenReaderPause);
 
@@ -54,7 +52,7 @@ export const MobilityBenefitsInfoSectionItem = ({
       >
         <View style={styles.borderedInfoBoxContent}>
           {benefits.map((b) => (
-            <BenefitInfo benefit={b} key={b.id + b.callToAction.url} />
+            <BenefitInfo benefit={b} key={b.operatorId} />
           ))}
         </View>
       </BorderedInfoBox>
@@ -63,29 +61,25 @@ export const MobilityBenefitsInfoSectionItem = ({
 };
 
 const BenefitInfo = ({
-  benefit: {formFactors, ticketDescription},
+  benefit: {illustrationName, title, description},
 }: {
-  benefit: OperatorBenefitType;
+  benefit: FareProductBenefitType;
 }) => {
   const {language} = useTranslation();
   const styles = useStyles();
-  const fontScale = useFontScale();
+  const titleText = getTextForLanguage(title, language);
+  const descriptionText = getTextForLanguage(description, language);
   return (
     <View style={styles.benefitInfo}>
-      {!!formFactors.length && (
-        <View style={{height: 18 * fontScale, width: 28 * fontScale}}>
-          {formFactors.map((ff) => (
-            <BenefitImageAsset
-              formFactor={toFormFactorEnum(ff)}
-              svgProps={{height: '100%', width: '100%'}}
-              key={ff}
-            />
-          ))}
-        </View>
-      )}
-      <ThemeText typography="body__xs" style={styles.benefitText}>
-        {getTextForLanguage(ticketDescription, language)}
-      </ThemeText>
+      <BenefitIllustration illustrationName={illustrationName} />
+      <View style={styles.benefitText}>
+        {!!titleText && (
+          <ThemeText typography="body__s__strong">{titleText}</ThemeText>
+        )}
+        {!!descriptionText && (
+          <ThemeText typography="body__xs">{descriptionText}</ThemeText>
+        )}
+      </View>
     </View>
   );
 };
@@ -94,7 +88,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     borderedInfoBox: {marginTop: theme.spacing.small},
     borderedInfoBoxContent: {gap: theme.spacing.small},
-    benefitInfo: {flexDirection: 'row', flex: 1, gap: theme.spacing.small},
-    benefitText: {flex: 1},
+    benefitInfo: {
+      flexDirection: 'row',
+      flex: 1,
+      gap: theme.spacing.small,
+      alignItems: 'center',
+    },
+    benefitText: {flex: 1, gap: theme.spacing.xSmall},
   };
 });
