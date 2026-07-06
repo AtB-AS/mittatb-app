@@ -85,7 +85,6 @@ export type RemoteConfig = {
   mapbox_user_name: string;
   minimum_app_version: string;
   service_disruption_url: string;
-  save_trip_swipe_threshold: number;
   token_timeout_in_seconds: number;
   use_geocoder_v3: boolean;
   use_product_api_v2: boolean;
@@ -171,7 +170,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   mapbox_user_name: MAPBOX_USER_NAME,
   minimum_app_version: '',
   service_disruption_url: '',
-  save_trip_swipe_threshold: 40,
   token_timeout_in_seconds: 10,
   use_geocoder_v3: false,
   use_product_api_v2: false,
@@ -393,9 +391,6 @@ export function getConfig(): RemoteConfig {
   const service_disruption_url =
     values['service_disruption_url']?.asString() ??
     defaultRemoteConfig.service_disruption_url;
-  const save_trip_swipe_threshold =
-    values['save_trip_swipe_threshold']?.asNumber() ??
-    defaultRemoteConfig.save_trip_swipe_threshold;
   const token_timeout_in_seconds =
     values['token_timeout_in_seconds']?.asNumber() ??
     defaultRemoteConfig.token_timeout_in_seconds;
@@ -482,7 +477,6 @@ export function getConfig(): RemoteConfig {
     mapbox_user_name,
     minimum_app_version,
     service_disruption_url,
-    save_trip_swipe_threshold,
     token_timeout_in_seconds,
     use_geocoder_v3,
     use_product_api_v2,
