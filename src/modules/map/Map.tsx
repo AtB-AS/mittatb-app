@@ -43,7 +43,7 @@ import {
 
 import {
   isScooter,
-  useVehicleQuery,
+  useMapVehicle,
   isStation,
   isCarStation,
   isBikeStation,
@@ -155,12 +155,10 @@ export const Map = (props: MapProps) => {
         activeShmoBooking.state === ShmoBookingState.IN_USE));
 
   const {
-    data: vehicle,
+    vehicle,
     isLoading: vehicleIsLoading,
     isError: vehicleError,
-  } = useVehicleQuery(
-    selectedFeatureIsAVehicle ? selectedFeature?.properties?.id : undefined,
-  );
+  } = useMapVehicle();
 
   const activeFeatureId =
     activeShmoBooking?.asset.id ?? selectedFeature?.properties?.id;

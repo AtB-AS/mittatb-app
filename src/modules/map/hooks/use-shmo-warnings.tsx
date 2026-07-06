@@ -21,7 +21,7 @@ import {GeofencingZoneCode} from '@atb-as/theme';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export const useShmoWarnings = (
-  vehicleId: string,
+  vehicleId?: string,
   mapViewRef?: RefObject<MapView | null>,
 ) => {
   const {isGeofencingZonesAsTilesEnabled} = useFeatureTogglesContext();

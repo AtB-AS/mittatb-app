@@ -24,11 +24,7 @@ import {useVehiclesByVehicleTypeIdsQueries} from '../queries/use-vehicles-by-veh
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Loading} from '@atb/components/loading';
 import {useQueryClient} from '@tanstack/react-query';
-import {Vehicle} from '@atb/api/types/mobility';
-import {
-  getVehicleQueryKey,
-  MOCK_VEHICLE_ID,
-} from '../queries/use-vehicle-query';
+import {getVehicleQueryKey} from '../queries/use-vehicle-query';
 import {SupportButton} from './SupportButton';
 import {
   ThemedCityBikeStation,
@@ -39,8 +35,10 @@ type Props = {
   station: Station;
   navigateSupportCallback: (params: ShmoHelpParams) => void;
   onPressVehicleType: (
-    vehicleId: string,
     isStationBasedBooking: boolean,
+    vehicleId?: string,
+    vehicleTypeId?: string,
+    stationId?: string,
   ) => void;
 };
 
@@ -127,29 +125,14 @@ export const BikeStationIntegrationView = ({
                       getVehicleQueryKey(vehicle.id),
                       vehicle,
                     );
-                    onPressVehicleType(vehicle.id, false);
+                    onPressVehicleType(false, vehicle.id);
                   } else {
-                    const mockVehicle: Vehicle = {
-                      id: MOCK_VEHICLE_ID,
-                      lat: station.lat,
-                      lon: station.lon,
-                      currentRangeMeters: 1000,
-                      isReserved: false,
-                      isDisabled: false,
-                      pricingPlan: e.vehicleType.pricingPlans?.[0] ?? {
-                        price: 0,
-                        currency: 'NOK',
-                      },
-                      system: station.system,
-                      station: {id: station.id},
-                      vehicleType: {...e.vehicleType, name: {}},
-                    };
-
-                    queryClient.setQueryData(
-                      getVehicleQueryKey(mockVehicle.id),
-                      mockVehicle,
+                    onPressVehicleType(
+                      true,
+                      undefined,
+                      e.vehicleType.id,
+                      station.id,
                     );
-                    onPressVehicleType(mockVehicle.id, true);
                   }
                 }}
               />

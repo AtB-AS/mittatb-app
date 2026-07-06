@@ -203,9 +203,6 @@ export const MapBottomSheets = ({
               }
             }}
             selectPaymentMethod={selectPaymentMethod}
-            vehicleId={
-              mapState.feature?.properties?.id ?? mapState.assetId ?? ''
-            }
             onClose={handleCloseSheet}
             onReportParkingViolation={onReportParkingViolation}
             startOnboardingCallback={navigateToShmoOnboarding}
@@ -287,14 +284,19 @@ export const MapBottomSheets = ({
           locationArrowOnPress={locationArrowOnPress}
           navigateToScanQrCode={navigateToScanQrCode}
           navigateSupportCallback={navigateToShmoSupport}
-          onVehicleTypeSelected={(vehicleId, isStationBasedBooking) => {
-            if (vehicleId) {
-              dispatchMapState({
-                type: MapStateActionType.VehicleScanned,
-                assetId: vehicleId,
-                isStationBasedBooking: isStationBasedBooking,
-              });
-            }
+          onVehicleTypeSelected={(
+            isStationBasedBooking,
+            vehicleId,
+            vehicleTypeId,
+            stationId,
+          ) => {
+            dispatchMapState({
+              type: MapStateActionType.VehicleScanned,
+              assetId: vehicleId,
+              isStationBasedBooking,
+              vehicleTypeId,
+              stationId,
+            });
           }}
         />
       )}

@@ -152,14 +152,22 @@ export const getVehicles = (
 };
 
 export const getVehicle = (
-  id?: string,
+  vehicleId?: string,
+  vehicleTypeId?: string,
+  stationId?: string,
   opts?: VehicleRequestOpts,
 ): Promise<Vehicle | null> => {
-  if (!id || id === '') return Promise.resolve(null);
+  if (!vehicleId && (!vehicleTypeId || !stationId))
+    return Promise.resolve(null);
   return client
-    .get(`/mobility/v1/vehicles/${id}`, {
-      ...opts,
-    })
+    .get(
+      !!vehicleId
+        ? `/mobility/v1/vehicles/${vehicleId}`
+        : `/mobility/v1/stations/${stationId}/mock-vehicles/${vehicleTypeId}`,
+      {
+        ...opts,
+      },
+    )
     .then((response) => {
       const result = VehicleSchema.safeParse(response.data);
       if (!result.success) {
