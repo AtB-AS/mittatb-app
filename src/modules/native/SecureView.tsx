@@ -3,10 +3,9 @@ import {Platform, View, ViewProps} from 'react-native';
 import SecureViewNativeComponent from './SecureViewNativeComponent';
 
 /**
- * Hides its children from iOS screenshots and screen recordings while keeping
- * them visible on screen. On iOS the children are mounted inside a native
- * `secureTextEntry` canvas; on all other platforms this is a passthrough
- * `View`, so the content is rendered normally with no capture protection.
+ * View that wraps its children in a "secure text entry" canvas on iOS,
+ * preventing them from being captured in screenshots or screen recordings. On
+ * Android, it behaves as a regular `View`.
  */
 export function SecureView({children, ...props}: PropsWithChildren<ViewProps>) {
   if (Platform.OS === 'ios') {

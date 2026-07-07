@@ -1,12 +1,11 @@
 import Foundation
 import UIKit
 
-/// UIKit implementation backing the `RCTSecureView` Fabric component.
+/// UIKit implementation of the RCTSecureView component.
 ///
-/// React children are mounted into `contentView`, whose layer is re-parented
-/// under a `isSecureTextEntry` UITextField's canvas layer. iOS omits that layer
-/// subtree from screenshots and screen recordings, while the view hierarchy is
-/// left intact so hit-testing/touch keep working.
+/// React children are placed under a UITextField canvas layer with
+/// `isSecureTextEntry` enabled. iOS omits that layer subtree from screenshots
+/// and screen recordings.
 @objc(SecureViewImpl)
 final class SecureViewImpl: NSObject {
   private let contentView = UIView()
@@ -17,7 +16,7 @@ final class SecureViewImpl: NSObject {
   override init() {
     super.init()
     secureTextField.isSecureTextEntry = true
-    // The field must not intercept touches meant for the content.
+    // Don't intercept touches meant for the content.
     secureTextField.isUserInteractionEnabled = false
   }
 
@@ -45,20 +44,38 @@ final class SecureViewImpl: NSObject {
     applySecureIfPossible()
   }
 
-  /// The secure canvas is the last sublayer of a `secureTextEntry` UITextField
-  /// (backing its private `_UITextLayoutCanvasView`). It is created lazily by
-  /// UIKit, so this bails and is retried on the next layout pass if it isn't
-  /// available yet. Lifting the field's layer to the content view's superlayer
-  /// and re-homing the content layer under the canvas redirects only the
-  /// rendering — the view hierarchy stays intact.
+  /// Moves the content view's rendering (layers) under the text field's secure
+  /// canvas.
+  ///
+  /// Layer tree before (created in `attachToHostView`):
+  /// ```
+  /// hostView
+  /// ├── contentView                  ← React children mounted here (in `mountChild`)
+  /// └── secureTextField              ← UITextField with isSecureTextEntry
+  ///     ├── [UITextField layers...]
+  ///     └── secureCanvas             ← last sublayer, which iOS excludes from captures
+  /// ```
+  ///
+  /// Layer tree after:
+  /// ```
+  /// hostView
+  /// └── secureTextField
+  ///     ├── [UITextField layers...]
+  ///     └── secureCanvas
+  ///         └── contentView          ← React children render here, omitted from captures
+  /// ```
+  ///
+  /// This rewires the *layer* tree only; the *view* tree is untouched
+  /// (`contentView` stays a subview of `hostView`), which is why hit-testing
+  /// and touches keep working.
   @objc func applySecureIfPossible() {
     guard !isSecured,
       contentView.window != nil,
-      let superlayer = contentView.layer.superlayer,
+      let hostViewLayer = contentView.layer.superlayer, // Resolves to hostView.layer when mounted
       let secureCanvas = secureTextField.layer.sublayers?.last
     else { return }
 
-    superlayer.addSublayer(secureTextField.layer)
+    hostViewLayer.addSublayer(secureTextField.layer)
     secureCanvas.addSublayer(contentView.layer)
     isSecured = true
   }
