@@ -1,13 +1,3 @@
-import {Statuses} from '@atb/theme';
-import {LanguageAndTextType} from '@atb/translations';
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import {Rule} from '@atb/modules/rule-engine';
-
-import {z} from 'zod';
-
-export const AppPlatform = z.enum(['ios', 'android']);
-export type AppPlatform = z.infer<typeof AppPlatform>;
-
 export enum GlobalMessageContextEnum {
   appAssistant = 'app-assistant',
   appDepartures = 'app-departures',
@@ -25,27 +15,3 @@ export enum GlobalMessageContextEnum {
   appLoginPhone = 'app-login-phone',
   appPointsScreen = 'app-points-screen',
 }
-
-export type GlobalMessageRaw = {
-  id: string;
-  active: boolean;
-  title?: LanguageAndTextType[];
-  body: LanguageAndTextType[];
-  link?: LanguageAndTextType[];
-  linkText?: LanguageAndTextType[];
-  type: Statuses;
-  subtle?: boolean;
-  context: GlobalMessageContextEnum[];
-  isDismissable?: boolean;
-  appPlatforms: AppPlatform[];
-  appVersionMin: string;
-  appVersionMax: string;
-  startDate?: FirebaseFirestoreTypes.Timestamp;
-  endDate?: FirebaseFirestoreTypes.Timestamp;
-  rules?: Rule[];
-};
-
-export type GlobalMessageType = Omit<
-  GlobalMessageRaw,
-  'appPlatforms' | 'appVersionMin' | 'appVersionMax' | 'startDate' | 'endDate'
-> & {startDate?: number; endDate?: number};

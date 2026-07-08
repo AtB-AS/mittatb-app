@@ -26,9 +26,9 @@ import {
 } from '@atb/components/sections';
 import {
   GlobalMessage,
-  GlobalMessageContextEnum,
   useGlobalMessagesContext,
 } from '@atb/modules/global-messages';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {View} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {

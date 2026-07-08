@@ -3,11 +3,11 @@ import {useTranslation} from '@atb/translations';
 import {useGlobalMessagesContext} from './GlobalMessagesContext';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleProp} from 'react-native';
-import {GlobalMessageContextEnum, GlobalMessageType} from './types';
+import {GlobalMessageContextEnum} from './types';
 import {getTextForLanguage} from '@atb/translations';
 import {useNow} from '@atb/utils/use-now';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
-import {RuleVariables} from '@atb/modules/rule-engine';
+import {RuleVariables, GlobalMessageType} from '@atb-as/utils';
 import {ContrastColor} from '@atb/theme/colors';
 import {ColorValue} from 'react-native';
 import {MessageInfoText} from '@atb/components/message-info-text';
@@ -15,7 +15,7 @@ import {useAuthContext} from '@atb/modules/auth';
 import type {MarginStyle} from '@atb/theme';
 
 type Props = {
-  globalMessageContext?: GlobalMessageContextEnum;
+  globalMessageContext: GlobalMessageContextEnum;
   style?: StyleProp<MarginStyle>;
   includeDismissed?: boolean;
   ruleVariables?: RuleVariables;
@@ -37,8 +37,6 @@ const GlobalMessage = ({
     dismissedGlobalMessages,
     addDismissedGlobalMessages,
   } = useGlobalMessagesContext();
-
-  if (!globalMessageContext) return null;
 
   const globalRuleVariables: RuleVariables = {
     authenticationType,

@@ -53,10 +53,8 @@ import {
   uniqueLegValues,
 } from './utils';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {
-  GlobalMessage,
-  GlobalMessageContextEnum,
-} from '@atb/modules/global-messages';
+import {GlobalMessage} from '@atb/modules/global-messages';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {DatePickerSheet} from '@atb/components/date-selection';
 import SharedTexts from '@atb/translations/shared';
 import {TravelSearchFiltersBottomSheet} from './components/TravelSearchFiltersBottomSheet';

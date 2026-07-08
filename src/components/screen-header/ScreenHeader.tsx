@@ -7,10 +7,8 @@ import {
 import React, {Ref, useMemo, useState} from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {HeaderButton, HeaderButtonProps} from './HeaderButton';
-import {
-  GlobalMessage,
-  GlobalMessageContextEnum,
-} from '@atb/modules/global-messages';
+import {GlobalMessage} from '@atb/modules/global-messages';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {ThemeText} from '@atb/components/text';
 import {ContrastColor} from '@atb/theme/colors';
 
@@ -131,11 +129,13 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
         <View onLayout={setLayoutFor('leftButton')}>{leftIcon}</View>
         <View onLayout={setLayoutFor('rightButton')}>{rightIcon}</View>
       </View>
-      <GlobalMessage
-        globalMessageContext={globalMessageContext}
-        style={styles.globalMessageBox}
-        textColor={themeColor}
-      />
+      {globalMessageContext && (
+        <GlobalMessage
+          globalMessageContext={globalMessageContext}
+          style={styles.globalMessageBox}
+          textColor={themeColor}
+        />
+      )}
     </View>
   );
 };

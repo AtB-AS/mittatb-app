@@ -1,4 +1,4 @@
-import {AppPlatform} from '@atb/modules/global-messages';
+import {AppPlatform} from '@atb-as/utils';
 import {Platform} from 'react-native';
 import {APP_VERSION} from '@env';
 import {compareVersion} from '@atb/utils/compare-version';

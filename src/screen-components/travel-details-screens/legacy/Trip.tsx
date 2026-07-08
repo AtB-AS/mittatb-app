@@ -38,10 +38,8 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
-import {
-  GlobalMessage,
-  GlobalMessageContextEnum,
-} from '@atb/modules/global-messages';
+import {GlobalMessage} from '@atb/modules/global-messages';
+import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {hasLegsWeCantSellTicketsFor} from '@atb/modules/operator-config';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
