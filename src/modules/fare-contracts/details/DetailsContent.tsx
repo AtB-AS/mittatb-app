@@ -179,7 +179,7 @@ export const DetailsContent: React.FC<Props> = ({
   const {data: schoolCarnetInfo} = useSchoolCarnetInfoQuery(fc, validityStatus);
 
   return (
-    <Section style={styles.section}>
+    <Section>
       {hasShmoBookingId(fc) ? (
         <FareContractShmoHeaderSectionItem fareContract={fc} now={now} />
       ) : (
@@ -326,18 +326,10 @@ export const DetailsContent: React.FC<Props> = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
+const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     globalMessages: {
       flex: 1,
-      rowGap: theme.spacing.medium,
-    },
-    section: {
-      marginBottom: bottom,
-    },
-    fareContractDetails: {
-      flex: 1,
-      paddingBottom: theme.spacing.large,
       rowGap: theme.spacing.medium,
     },
     enlargedWhiteBarcodePaddingView: {
