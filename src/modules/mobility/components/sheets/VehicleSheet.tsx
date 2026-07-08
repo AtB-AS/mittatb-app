@@ -182,7 +182,7 @@ export const VehicleSheet = ({
   const showParkingViolation =
     !isBicycle && isParkingViolationsReportingEnabled;
   const showBonusCheckbox =
-    !isBicycle && isBonusActiveForUser && hasBonusOffer && !!clientBonusProduct;
+    isBonusActiveForUser && hasBonusOffer && !!clientBonusProduct;
 
   // Drive the CTA from the server `actionButton` when present, otherwise fall
   // back to the existing deep-integration / operator branching.
