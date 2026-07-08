@@ -27,7 +27,7 @@ export const Ticketing_RootScreen = ({navigation}: Props) => {
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        textOpacity={0}
+        showBorder={false}
         globalMessageContext={GlobalMessageContextEnum.appTicketing}
       />
       <View style={styles.headingContainer}>
