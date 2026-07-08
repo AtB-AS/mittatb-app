@@ -12,8 +12,8 @@ import {
   getDismissedMessagesFromStore,
   setDismissedMessagesInStore,
 } from './storage';
-import {checkRules, RuleVariables} from '@atb-as/utils';
-import {GlobalMessageContextEnum, GlobalMessageType} from './types';
+import {checkRules, RuleVariables, GlobalMessageType} from '@atb-as/utils';
+import {GlobalMessageContextEnum} from './types';
 
 type GlobalMessageContextState = {
   findGlobalMessages: (
@@ -61,7 +61,7 @@ const GlobalMessagesContextProvider = ({children}: Props) => {
   useEffect(
     () =>
       firestore()
-        .collection<GlobalMessageType>('globalMessagesV2')
+        .collection<any>('globalMessagesV2')
         .where('active', '==', true)
         .where(
           'context',

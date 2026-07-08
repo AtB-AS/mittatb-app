@@ -1,9 +1,3 @@
-import {
-  createGlobalMessageSchema,
-  GenericGlobalMessageType,
-} from '@atb-as/utils';
-import {z} from 'zod';
-
 export enum GlobalMessageContextEnum {
   appAssistant = 'app-assistant',
   appDepartures = 'app-departures',
@@ -21,11 +15,3 @@ export enum GlobalMessageContextEnum {
   appLoginPhone = 'app-login-phone',
   appPointsScreen = 'app-points-screen',
 }
-const GlobalMessageContextSchema = z.enum(GlobalMessageContextEnum);
-
-export const GlobalMessageSchema = createGlobalMessageSchema(
-  GlobalMessageContextSchema,
-);
-export type GlobalMessageType = GenericGlobalMessageType<
-  typeof GlobalMessageContextSchema
->;

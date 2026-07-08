@@ -1,5 +1,5 @@
 import {storage} from '@atb/modules/storage';
-import {GlobalMessageType} from './types';
+import {GlobalMessageType} from '@atb-as/utils';
 
 export const DISMISSED_GLOBAL_MESSAGES_KEY =
   '@ATB_user_dismissed_global_messages';
