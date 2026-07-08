@@ -15,7 +15,7 @@ import {useAuthContext} from '@atb/modules/auth';
 import type {MarginStyle} from '@atb/theme';
 
 type Props = {
-  globalMessageContext?: GlobalMessageContextEnum;
+  globalMessageContext: GlobalMessageContextEnum;
   style?: StyleProp<MarginStyle>;
   includeDismissed?: boolean;
   ruleVariables?: RuleVariables;
@@ -37,8 +37,6 @@ const GlobalMessage = ({
     dismissedGlobalMessages,
     addDismissedGlobalMessages,
   } = useGlobalMessagesContext();
-
-  if (!globalMessageContext) return null;
 
   const globalRuleVariables: RuleVariables = {
     authenticationType,

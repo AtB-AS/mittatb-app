@@ -129,11 +129,13 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
         <View onLayout={setLayoutFor('leftButton')}>{leftIcon}</View>
         <View onLayout={setLayoutFor('rightButton')}>{rightIcon}</View>
       </View>
-      <GlobalMessage
-        globalMessageContext={globalMessageContext}
-        style={styles.globalMessageBox}
-        textColor={themeColor}
-      />
+      {globalMessageContext && (
+        <GlobalMessage
+          globalMessageContext={globalMessageContext}
+          style={styles.globalMessageBox}
+          textColor={themeColor}
+        />
+      )}
     </View>
   );
 };
