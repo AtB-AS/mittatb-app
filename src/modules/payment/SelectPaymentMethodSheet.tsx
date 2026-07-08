@@ -89,7 +89,6 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
     <FullScreenFooter>
       <Button
         expanded={true}
-        style={styles.confirmButton}
         interactiveColor={theme.color.interactive[0]}
         text={t(SelectPaymentMethodTexts.confirm_button.text)}
         accessibilityHint={t(SelectPaymentMethodTexts.confirm_button.a11yhint)}
@@ -198,8 +197,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     padding: theme.spacing.medium,
     borderRadius: theme.border.radius.regular,
-  },
-  confirmButton: {
-    marginTop: theme.spacing.small,
   },
 }));
