@@ -51,7 +51,7 @@ export const Announcements = ({style, isFocused}: Props) => {
   };
 
   const filteredAnnouncements = findAnnouncements(ruleVariables).filter((a) =>
-    isWithinTimeRange({startDate: a.startDate, endDate: a.endDate}, serverNow),
+    isWithinTimeRange(a, serverNow),
   );
 
   if (filteredAnnouncements.length === 0) return null;
