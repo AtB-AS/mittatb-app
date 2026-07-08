@@ -2,7 +2,8 @@
 
 The e2e-tests are run on an Android emulator with the test automation protocol [WebdriverIO](https://webdriver.io/docs/gettingstarted/)
 as the underlying protocol for mobile automation with [Appium](http://appium.io/). The WebdriverIO interaction is
-through APIs defined in [WebdriverIO API](https://webdriver.io/docs/api).
+through APIs defined in [WebdriverIO API](https://webdriver.io/docs/api). It's also possible to use Claude Code with a [WebdriverIO MCP server](https://github.com/webdriverio/mcp).
+See below for how to add.
 
 In order to measure the app's performance, there is also added a script for this that relies on [Flashlight](https://docs.flashlight.dev/). 
 Flashlight is a stand-alone command line tool that will measure FPS, CPU, CPU per thread and memory usage while the app
@@ -13,8 +14,21 @@ WebdriverIO/Appium. Read more about it [here](#flashlight-performance-measure).
 
 ```bash
 ## install WebdriverIO and dependencies
-$ pnpm install
+e2e$ pnpm install
 ```
+
+## Explore and make test script with MCP
+
+Start to explore using Claude Code and the WebdriverIO MCP with
+```bash
+# Terminal 1 — start Appium (no tests run)
+$ cd e2e && pnpm appium:start
+
+# Terminal 2 — open Claude Code from e2e dir
+$ cd e2e && claude
+```
+The MCP server will use `android.conf.mcp.ts` which has the correct debug APK capabilities, headless off, and specs: [] so nothing
+executes automatically. Claude can then drive the app interactively via the WebdriverIO MCP tools. Read more on https://github.com/webdriverio/mcp.
 
 ## Test on GH action
 
@@ -23,7 +37,7 @@ Firebase App Distribution and run tests against it. The Android APK will be down
 `e2e/apk/app-staging.apk`.
 ```bash
 ## run tests
-$ APP_PATH=<absolute-path-to-root> pnpm test:android
+e2e$ APP_PATH=<absolute-path-to-root> pnpm test:android
 ```
 
 ## Test locally
@@ -37,7 +51,7 @@ Two alternatives.
 $ emulator -netdelay none -netspeed full -no-snapshot-load -avd Pixel_5_API_30
 
 ## run tests
-$ pnpm test:android:local:firebase
+e2e$ pnpm test:android:local:firebase
 ```
 2) Start the app in developer mode with Metro. To avoid error messages, the `index.js` should be replaced
 ```bash
@@ -54,7 +68,7 @@ $ emulator -netdelay none -netspeed full -no-snapshot-load -avd Pixel_5_API_30
 $ pnpm android
 
 ## run tests
-pnpm test:android:local:dev
+e2e$ pnpm test:android:local:dev
 ```
 
 ## Errors and reporting
