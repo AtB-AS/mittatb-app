@@ -124,7 +124,7 @@ jobs:
         if: inputs.proxy == 'true'
         run: |
           docker run -d \
-            --name wiremock-e2e \
+            --name wiremock \
             -p 8080:8080 \
             -e "JAVA_OPTS=--add-opens java.base/sun.security.x509=ALL-UNNAMED" \
             -v "${{ github.workspace }}/e2e/wiremock/mappings:/home/wiremock/mappings" \
