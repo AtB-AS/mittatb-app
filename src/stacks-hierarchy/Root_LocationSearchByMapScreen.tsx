@@ -33,6 +33,7 @@ export const Root_LocationSearchByMapScreen: React.FC<Props> = ({
       <FullScreenHeader
         title={t(LocationSearchTexts.mapSelection.header.title)}
         leftButton={{type: 'back'}}
+        showBorder={false}
       />
       <ExploreLocationMap
         onLocationSelect={onLocationSelect}

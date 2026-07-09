@@ -18,7 +18,7 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 import {useLayout} from '@atb/utils/use-layout';
 
 type Props = {
-  headerProps: ScreenHeaderProps;
+  headerProps: Omit<ScreenHeaderProps, 'showBorder' | 'textOpacity'>;
   /**
    * JSX content that will be displayed between header and children, and will
    * disappear when scrolling.
@@ -78,7 +78,7 @@ export function FullScreenView(props: Props) {
   const hasTabBar = useContext(BottomTabBarHeightContext) !== undefined;
   const bottomInset = props.footer || hasTabBar ? 0 : bottom;
 
-  const showBorder = props.headerProps.showBorder ?? isScrolled;
+  const showBorder = isScrolled;
 
   const contentComponent = hasHeaderContent(props) ? (
     <ChildrenWithHeaderContent
