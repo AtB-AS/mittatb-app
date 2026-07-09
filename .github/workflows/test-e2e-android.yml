@@ -6,6 +6,10 @@ on:
         description: 'Define branch to test'
         required: true
         default: 'master'
+      proxy:
+        description: "Run tests with Wiremock"
+        required: true
+        default: 'false'
   schedule:
     - cron: '0 3 * * 1-5'
 
@@ -112,6 +116,24 @@ jobs:
       - name: tsc
         working-directory: e2e
         run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
+      - name: Unzip Wiremock mappings
+        if: inputs.proxy == 'true'
+        working-directory: e2e
+        run: bash ./scripts/unzip-wiremock-mappings.sh
+      - name: Run Wiremock in Docker
+        if: inputs.proxy == 'true'
+        run: |
+          docker run -d \
+            --name wiremock-e2e \
+            -p 8080:8080 \
+            -e "JAVA_OPTS=--add-opens java.base/sun.security.x509=ALL-UNNAMED" \
+            -v "${{ github.workspace }}/e2e/wiremock/mappings:/home/wiremock/mappings" \
+            -v "${{ github.workspace }}/e2e/wiremock/__files:/home/wiremock/__files" \
+            wiremock/wiremock:3.13.2 \
+            --enable-browser-proxying
+          for i in $(seq 1 20); do
+            curl -sf http://localhost:8080/__admin/ && break || sleep 1
+          done
 
       # Emulator cache
       - name: Gradle cache
@@ -144,6 +166,7 @@ jobs:
 
       # E2E run
       - name: Run tests on Android emulator
+        if: inputs.proxy != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           force-avd-creation: false
@@ -162,12 +185,33 @@ jobs:
           APP_PATH: ${{ github.workspace }}
           IS_CI: 'true'
 
+      # E2E run with Wiremock
+      - name: Run tests on Android emulator
+        if: inputs.proxy == 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -writable-system -wipe-data -camera-back none
+          avd-name: emulator-api${{ env.ENV_API_LEVEL }}
+          api-level: ${{ env.ENV_API_LEVEL }}
+          arch: x86_64
+          target: ${{ env.ENV_SYSTEM_IMAGE }}
+          profile: pixel_5
+          emulator-build: 12414864
+          emulator-boot-timeout: 900
+          disable-spellchecker: true
+          script: ./scripts/add-emulator-certificate.sh && pnpm test:android:proxy
+          working-directory: e2e
+        env:
+          APP_PATH: ${{ github.workspace }}
+          IS_CI: 'true'
+
       # Slack
       - name: Notify Slack
         if: always()
         working-directory: e2e/results
         run: |
-          ./slack_notification.sh ${{ secrets.ATB_SLACK_TOKEN }} e2e_tests ${{ github.run_id }} smoke ${{ needs.check-builds.outputs.TESTED_VERSION }}
+          ./slack_notification.sh ${{ secrets.ATB_SLACK_TOKEN }} e2e_tests ${{ github.run_id }} proxy ${{ needs.check-builds.outputs.TESTED_VERSION }}
 
       # Results
       - name: Fail on any errors

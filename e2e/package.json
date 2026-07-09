@@ -7,11 +7,13 @@
   "type": "module",
   "scripts": {
     "test:android": "APP_ENV=staging wdio ./conf/android.conf.ts",
+    "test:android:proxy": "UPSTREAM_PROXY=http://localhost:8080 APP_ENV=staging wdio ./conf/android.conf.proxy.ts --spec test/specs/travelsearch.proxy.e2e.ts",
     "test:android:smoke": "APP_ENV=staging wdio ./conf/android.conf.ts --spec test/specs/smoke.e2e.ts",
     "test:android:local:dev": "APP_ENV=debug IS_LOCAL=true wdio ./conf/android.conf.local.dev.ts",
     "test:android:local:firebase": "APP_ENV=staging IS_LOCAL=true wdio ./conf/android.conf.local.firebase.ts",
     "test:android:local:perfMeasure": "flashlight test --bundleId no.mittatb.debug --testCommand \"APP_ENV=debug pnpm test:android:local:dev --spec test/flashlight/performanceMeasures.e2e.ts\" --resultsTitle performanceMeasures --iterationCount 1 --maxRetries 1",
-    "appium:start": "appium --port 4723 --allow-insecure '*:session_discovery' --allow-cors"
+    "test:android:local:proxy": "UPSTREAM_PROXY=http://localhost:8080 APP_ENV=debug IS_LOCAL=true wdio conf/android.conf.local.proxy.ts",
+    "appium:start": "appium --port 4723 --allow-insecure '*:session_discovery' --allow-cors --use-plugins appium-interceptor"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
@@ -28,6 +30,7 @@
     "@wdio/visual-service": "9.2.2",
     "appium": "3.3.0",
     "appium-inspector-plugin": "2026.2.1",
+    "appium-interceptor": "1.0.3",
     "appium-uiautomator2-driver": "7.1.2",
     "expect-webdriverio": "^5.6.5",
     "jest": "^29.7.0",
