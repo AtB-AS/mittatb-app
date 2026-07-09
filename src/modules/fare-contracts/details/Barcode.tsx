@@ -10,7 +10,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
 import QRCode from 'qrcode';
 import React, {RefObject, useEffect, useRef, useState} from 'react';
-import {View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {NativeBlockButton} from '@atb/components/native-button';
 import {SvgXml} from 'react-native-svg';
 import {GenericSectionItem} from '@atb/components/sections';
@@ -30,6 +30,7 @@ import {
   BottomSheetModalMethods,
 } from '@atb/components/bottom-sheet';
 import {Loading} from '@atb/components/loading';
+import {useScreenshotAware} from 'react-native-screenshot-aware';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -37,9 +38,19 @@ type Props = {
 };
 
 export function Barcode({validityStatus, fc}: Props): React.JSX.Element | null {
+  const {t} = useTranslation();
   const {mobileTokenStatus} = useMobileTokenContext();
   const {enable_new_token_barcode} = useRemoteConfigContext();
+
   useScreenBrightnessIncrease();
+
+  useScreenshotAware(() => {
+    Alert.alert(
+      t(FareContractTexts.details.screenshotWarning.title),
+      t(FareContractTexts.details.screenshotWarning.description),
+    );
+  });
+
   if (validityStatus !== 'valid') return null;
 
   switch (mobileTokenStatus) {
