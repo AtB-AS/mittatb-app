@@ -1,5 +1,5 @@
 import MapboxGL from '@rnmapbox/maps';
-import {Expression} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
+import {Expression} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import turfCentroid from '@turf/centroid';
 import {FeatureCollection, Point, Polygon} from 'geojson';
 import React from 'react';

@@ -5,7 +5,7 @@ import {
   Expression,
   SymbolLayerStyleProps,
   FilterExpression,
-} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
+} from '@rnmapbox/maps/src/utils/MapboxStyles';
 type ExpressionField = Expression[1];
 import {PinType} from '../mapbox-styles/pin-types';
 import {SelectedMapItemProperties} from '../types';

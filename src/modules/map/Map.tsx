@@ -58,7 +58,7 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useIsBonusBalanceButtonVisible} from '@atb/modules/bonus';
 import {useThemeContext} from '@atb/theme';
 import {NationalStopRegistryFeatures} from './components/national-stop-registry-features';
-import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
+import {OnPressEvent} from '@rnmapbox/maps/src/types/OnPressEvent';
 import {
   StationsWithClusters,
   VehiclesAndStations,

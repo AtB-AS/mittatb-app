@@ -4,9 +4,8 @@
   "exclude": ["**/node_modules", "**/Pods", "e2e"],
 
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "@atb/*": ["src/*/index", "src/*"]
+      "@atb/*": ["./src/*/index", "./src/*"],
     },
     "types": ["jest"]
   },

@@ -3,7 +3,7 @@ import MapboxGL, {CameraAnimationMode, CameraPadding} from '@rnmapbox/maps';
 import {
   Expression,
   SymbolLayerStyleProps,
-} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
+} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   Feature,

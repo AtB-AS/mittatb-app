@@ -21,7 +21,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {useAccessibilityContext} from '@atb/modules/accessibility';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
+import {OnPressEvent} from '@rnmapbox/maps/src/types/OnPressEvent';
 import {useInitialCoordinates} from '@atb/utils/use-initial-coordinates';
 import {
   type PurchaseSelectionType,

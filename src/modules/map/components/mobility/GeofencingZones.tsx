@@ -16,7 +16,7 @@ import {hideItemsInTheDistanceFilter} from '../../hooks/use-map-symbol-styles';
 import {
   AllLayerStyleProps,
   Expression,
-} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
+} from '@rnmapbox/maps/src/utils/MapboxStyles';
 
 type GeofencingZonesProps = {
   systemId: string | null;

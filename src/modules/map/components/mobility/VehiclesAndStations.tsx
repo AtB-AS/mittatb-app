@@ -6,7 +6,7 @@ import {
   useMapSymbolStyles,
 } from '@atb/modules/map';
 import {SelectedFeatureIdProp} from '../../types';
-import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
+import {OnPressEvent} from '@rnmapbox/maps/src/types/OnPressEvent';
 
 import {
   TileLayerName,
@@ -19,7 +19,7 @@ import {
 import {
   Expression,
   FilterExpression,
-} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
+} from '@rnmapbox/maps/src/utils/MapboxStyles';
 
 import {
   hideItemsInTheDistanceFilter,
