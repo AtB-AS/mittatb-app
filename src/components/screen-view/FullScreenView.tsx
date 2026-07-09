@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   RefreshControl,
   RefreshControlProps,
+  Platform,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 // eslint-disable-next-line rulesdir/navigation-only-in-screens
@@ -116,7 +117,10 @@ export function FullScreenView(props: Props) {
       </View>
 
       {props.avoidKeyboard ? (
-        <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'android' ? undefined : 'padding'}
+          style={{flex: 1}}
+        >
           {contentComponent}
         </KeyboardAvoidingView>
       ) : (
