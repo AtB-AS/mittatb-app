@@ -1,0 +1,37 @@
+appId: ${APP_ID}
+name: 'Show purchasable tickets'
+tags:
+  - smoke
+onFlowStart:
+  - runFlow:
+      file: ../elements/loadElements.yaml
+      label: 'Load elements'
+  - launchApp:
+      clearState: true
+      permissions:
+        location: deny
+onFlowComplete:
+  - stopApp
+---
+# Onboarding
+- runFlow:
+    file: ../common/onboarding.yaml
+    label: 'Onboarding'
+
+- extendedWaitUntil:
+    visible:
+      id: ${output.nav.menu.tickets}
+    timeout: 10000
+    label: 'Wait for Tickets tab'
+- tapOn:
+    id: ${output.nav.menu.tickets}
+    label: 'Navigate to Tickets tab'
+
+- extendedWaitUntil:
+    visible:
+      id: ${output.tickets.fareProduct('single')}
+    timeout: 10000
+    label: 'Verify purchasable tickets are shown'
+- takeScreenshot:
+    path: tickets
+    label: Take a screenshot
