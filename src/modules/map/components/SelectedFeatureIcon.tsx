@@ -3,7 +3,7 @@ import MapboxGL from '@rnmapbox/maps';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {hitboxCoveringIconOnly, useMapSymbolStyles} from '@atb/modules/map';
 import {Expression} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
-import {PinType} from '../mapbox-styles/pin-types';
+import {PinType} from '@atb-as/mapbox-shared';
 import {MapSlotLayerId} from '../hooks/use-mapbox-json-style';
 import {
   StationFeaturePropertiesSchema,

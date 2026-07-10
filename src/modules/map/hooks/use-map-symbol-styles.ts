@@ -1,15 +1,17 @@
 import {useThemeContext} from '@atb/theme';
 
-import {nsrSymbolLayers} from '../components/national-stop-registry-features/nsr-layers';
+import {
+  nsrSymbolLayers,
+  PinType,
+  getIconZoomTransitionStyle,
+} from '@atb-as/mapbox-shared';
 import {
   Expression,
   SymbolLayerStyleProps,
   FilterExpression,
 } from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 type ExpressionField = Expression[1];
-import {PinType} from '../mapbox-styles/pin-types';
 import {SelectedMapItemProperties} from '../types';
-import {getIconZoomTransitionStyle} from '../utils';
 import {PropulsionType} from '@atb/api/types/generated/mobility-types_v2';
 
 export const scaleTransitionZoomRange = 0.4;
