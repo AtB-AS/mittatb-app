@@ -106,7 +106,6 @@ export const VehicleSheet = ({
     propulsionType === PropulsionType.ElectricAssist;
 
   const operator = useOperators().byId(operatorId);
-  const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
   const vehicleTypeId = vehicle?.vehicleType.id;
   const operatorLogo = operator?.brandAssets?.brandImageUrl;
 
@@ -125,11 +124,7 @@ export const VehicleSheet = ({
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
-  const {
-    isParkingViolationsReportingEnabled,
-    isShmoDeepIntegrationEnabled,
-    isShmoDeepIntegrationCitybikeEnabled,
-  } = useFeatureTogglesContext();
+  const {isParkingViolationsReportingEnabled} = useFeatureTogglesContext();
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
   // Prefer the server-provided bonus offer; fall back to the client-side
@@ -175,22 +170,13 @@ export const VehicleSheet = ({
     appStoreUri,
   ]);
 
-  const isDeepIntegrationEnabled =
-    isShmoDeepIntegrationEnabled &&
-    (!isBicycle || isShmoDeepIntegrationCitybikeEnabled);
   const showVehicleCard = !isBicycle || isElectric;
   const showParkingViolation =
     !isBicycle && isParkingViolationsReportingEnabled;
   const showBonusCheckbox =
     isBonusActiveForUser && hasBonusOffer && !!clientBonusProduct;
 
-  // Drive the CTA from the server `actionButton` when present, otherwise fall
-  // back to the existing deep-integration / operator branching.
-  const showStartTrip = actionButton
-    ? actionButton.type === ActionButtonType.START_TRIP
-    : isDeepIntegrationEnabled &&
-      !!operatorId &&
-      !!operatorIsIntegrationEnabled;
+  const showStartTrip = actionButton?.type === ActionButtonType.START_TRIP;
   const showAppSwitchAction =
     actionButton?.type === ActionButtonType.APP_SWITCH;
 
