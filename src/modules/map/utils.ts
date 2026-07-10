@@ -42,6 +42,7 @@ import {
 } from '@atb/api/types/generated/mobility-types_v2';
 import z from 'zod';
 import {GeofencingZoneCode} from '@atb-as/theme';
+import {smallestAllowedSizeFactor} from './hooks/use-map-symbol-styles';
 
 export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
@@ -372,7 +373,7 @@ export function getIconZoomTransitionStyle(
     ['linear'],
     ['zoom'],
     reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
-    0.3,
+    smallestAllowedSizeFactor,
     reachFullScaleAtZoomLevel,
     iconFullSize,
   ];
