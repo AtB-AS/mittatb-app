@@ -75,6 +75,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     isSmartParkAndRideEnabled,
     isEventStreamEnabled,
     isEventStreamFareContractsEnabled,
+    isShmoDeepIntegrationEnabled,
   } = useFeatureTogglesContext();
   const unreadCount = useChatUnreadCount();
   const {theme} = useThemeContext();
@@ -87,10 +88,12 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const serverOverrides = useDebugServerOverrides();
 
   const isFocused = useIsFocusedAndActive();
-  const {data: activeShmoBooking} = useActiveShmoBookingQuery(isFocused);
+  const {data: activeShmoBooking, isPending: isActiveShmoBookingPending} =
+    useActiveShmoBookingQuery(isFocused);
   const hasActiveShmoTrip = !!activeShmoBooking;
 
   const handleLogoutPress = () => {
+    if (isShmoDeepIntegrationEnabled && isActiveShmoBookingPending) return;
     if (hasActiveShmoTrip) {
       Alert.alert(
         t(ProfileTexts.sections.account.linkSectionItems.logout.label),
@@ -98,6 +101,26 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           ProfileTexts.sections.account.linkSectionItems.logout
             .unableToLogoutWithActiveShmoTrip,
         ),
+        [
+          {
+            text: t(
+              ProfileTexts.sections.account.linkSectionItems.logout.alert
+                .cancel,
+            ),
+            style: 'cancel',
+          },
+          {
+            text: t(
+              ProfileTexts.sections.account.linkSectionItems.logout
+                .showActiveTrip,
+            ),
+            onPress: () =>
+              navigation.navigate('Root_TabNavigatorStack', {
+                screen: 'TabNav_MapStack',
+                params: {screen: 'Map_RootScreen', params: {}},
+              }),
+          },
+        ],
       );
       return;
     }

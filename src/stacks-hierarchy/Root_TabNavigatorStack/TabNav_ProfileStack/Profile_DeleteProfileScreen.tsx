@@ -5,7 +5,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useFareContracts} from '@atb/modules/ticketing';
 import {useTranslation} from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
-import React from 'react';
+import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
@@ -42,6 +42,8 @@ export const Profile_DeleteProfileScreen = ({navigation}: Props) => {
   const {data: activeShmoBooking} = useActiveShmoBookingQuery(isFocused);
   const hasActiveShmoTrip = !!activeShmoBooking;
 
+  const [showErrors, setShowErrors] = useState(false);
+
   const {mutateAsync: deleteAgeVerification} =
     useDeleteAgeVerificationMutation();
 
@@ -64,6 +66,10 @@ export const Profile_DeleteProfileScreen = ({navigation}: Props) => {
   });
 
   const showDeleteAlert = async () => {
+    if (hasAvailableFareContracts || hasActiveShmoTrip) {
+      setShowErrors(true);
+      return;
+    }
     Alert.alert(
       t(DeleteProfileTexts.deleteConfirmation.title),
       t(DeleteProfileTexts.deleteConfirmation.message),
@@ -115,22 +121,6 @@ export const Profile_DeleteProfileScreen = ({navigation}: Props) => {
         style={styles.contentMargin}
       />
 
-      {hasAvailableFareContracts && (
-        <MessageInfoBox
-          message={t(DeleteProfileTexts.unableToDeleteWithFareContracts)}
-          type="warning"
-          style={{...styles.contentMargin, marginTop: 0}}
-        />
-      )}
-
-      {hasActiveShmoTrip && (
-        <MessageInfoBox
-          message={t(DeleteProfileTexts.unableToDeleteWithActiveShmoTrip)}
-          type="warning"
-          style={{...styles.contentMargin, marginTop: 0}}
-        />
-      )}
-
       <Section style={styles.section}>
         <LinkSectionItem
           subtitle={`${customerNumber}`}
@@ -141,10 +131,24 @@ export const Profile_DeleteProfileScreen = ({navigation}: Props) => {
             ),
           }}
           onPress={() => showDeleteAlert()}
-          disabled={hasAvailableFareContracts || hasActiveShmoTrip}
           rightIcon={{svg: Delete, color: 'error'}}
         />
       </Section>
+      {showErrors && hasAvailableFareContracts && (
+        <MessageInfoBox
+          message={t(DeleteProfileTexts.unableToDeleteWithFareContracts)}
+          type="error"
+          style={{...styles.contentMargin, marginTop: 0}}
+        />
+      )}
+
+      {showErrors && hasActiveShmoTrip && (
+        <MessageInfoBox
+          message={t(DeleteProfileTexts.unableToDeleteWithActiveShmoTrip)}
+          type="error"
+          style={{...styles.contentMargin, marginTop: 0}}
+        />
+      )}
     </FullScreenView>
   );
 };

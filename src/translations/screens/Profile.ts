@@ -31,7 +31,12 @@ const ProfileTexts = {
           unableToLogoutWithActiveShmoTrip: _(
             'Kan ikke logge ut mens du har en aktiv tur. Fullfør turen din først.',
             'Unable to log out while you have an active trip. Please finish your trip first.',
-            'Det er ikkje mogleg å logge ut medan du har ein aktiv tur. Fullfør turen din først.',
+            'Kan ikkje logge ut medan du har ein aktiv tur. Fullfør turen din først.',
+          ),
+          showActiveTrip: _(
+            'Vis aktiv tur',
+            'View active trip',
+            'Vis aktiv tur',
           ),
         },
         purchaseHistory: {

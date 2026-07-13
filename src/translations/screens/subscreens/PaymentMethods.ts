@@ -14,6 +14,18 @@ const PaymentMethodsTexts = {
     'An error occurred. Please try again.',
     'Det oppstod ein feil. Ver venleg og prøv igjen.',
   ),
+  deleteBlockedByActiveTrip: {
+    title: _(
+      'Kan ikke fjerne kortet nå',
+      'Unable to remove card right now',
+      'Kan ikkje fjerne kortet no',
+    ),
+    message: _(
+      'Du kan ikke fjerne kortet mens du har en aktiv tur. Fullfør turen din først.',
+      'You cannot remove the card while you have an active trip. Please complete your trip first.',
+      'Du kan ikkje fjerne kortet medan du har ein aktiv tur. Fullfør turen din først.',
+    ),
+  },
   deleteModal: {
     title: _(
       'Fjerne betalingskort?',
