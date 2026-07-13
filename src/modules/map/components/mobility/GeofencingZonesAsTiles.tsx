@@ -14,7 +14,7 @@ import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
 import {
   AllLayerStyleProps,
   Expression,
-} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
+} from '@rnmapbox/maps/src/utils/MapboxStyles';
 
 const geofencingZonesVectorSourceId = 'geofencing-zones-source';
 const geofencingZonesFeaturesLayerId = 'geofencing_zones_features';

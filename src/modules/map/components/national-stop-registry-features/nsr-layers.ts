@@ -2,7 +2,7 @@ import {
   Expression,
   FilterExpression,
   SymbolLayerStyleProps,
-} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
+} from '@rnmapbox/maps/src/utils/MapboxStyles';
 type ExpressionField = Expression[1];
 
 import {NsrPinIconCode} from '../../mapbox-styles/pin-types';

@@ -9,7 +9,7 @@ import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-scr
 import {StopPlaceAndQuaySelection} from './components/StopPlaceAndQuaySelection';
 import {QuayView} from './components/QuayView';
 import {StopPlacesView} from './components/StopPlacesView';
-import type {DepartureSearchTime} from 'src/components/date-selection';
+import type {DepartureSearchTime} from '@atb/components/date-selection';
 import {useStopsDetailsDataQuery} from './hooks/use-stops-details-data-query';
 import {useScrollBorder} from '@atb/utils/use-scroll-border';
 

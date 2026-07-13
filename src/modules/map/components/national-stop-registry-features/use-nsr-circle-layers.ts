@@ -6,8 +6,8 @@ import {
   getLayerPropsDeterminedByZoomLevel,
   getNsrLayerSourceProps,
 } from './nsr-utils';
-import {Props as SymbolLayerProps} from 'node_modules/@rnmapbox/maps/src/components/SymbolLayer';
-import {CircleLayerStyleProps} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
+import {Props as SymbolLayerProps} from '@rnmapbox/maps/src/components/SymbolLayer';
+import {CircleLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {useMemo} from 'react';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
