@@ -1,11 +1,11 @@
 import {useThemeContext} from '@atb/theme';
 import {NsrProps} from './NationalStopRegistryFeatures';
-import {nsrCircleLayers} from './nsr-layers';
 import {
   getFilterWhichAlsoHidesSelectedFeature,
   getLayerPropsDeterminedByZoomLevel,
   getNsrLayerSourceProps,
-} from './nsr-utils';
+  nsrCircleLayers,
+} from '@atb-as/mapbox-shared';
 import {Props as SymbolLayerProps} from 'node_modules/@rnmapbox/maps/src/components/SymbolLayer';
 import {CircleLayerStyleProps} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 import {useMemo} from 'react';

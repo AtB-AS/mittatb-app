@@ -8,7 +8,8 @@ import {
   TileLayerName,
   useTileUrlTemplate,
 } from '../../hooks/use-tile-url-template';
-import {geofencingZoneCodes, getIconZoomTransitionStyle} from '../../utils';
+import {geofencingZoneCodes} from '../../utils';
+import {getIconZoomTransitionStyle} from '@atb-as/mapbox-shared';
 import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
 
 import {

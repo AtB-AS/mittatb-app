@@ -1,10 +1,12 @@
 import {useThemeContext} from '@atb/theme';
 import {useMemo} from 'react';
-import {getMapboxLightStyle} from '../mapbox-styles/get-mapbox-light-style';
-import {getMapboxDarkStyle} from '../mapbox-styles/get-mapbox-dark-style';
+import {
+  colorTheme,
+  getMapboxDarkStyle,
+  getMapboxLightStyle,
+} from '@atb-as/mapbox-shared';
 import {useVehiclesAndStationsVectorSource} from '../components/mobility/VehiclesAndStations';
 import {MAPBOX_API_TOKEN} from '@env';
-import {colorTheme} from '../mapbox-styles/mapbox-color-theme';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useAppVersionedConfigurableLink} from '@atb/utils/use-app-versioned-configurable-link';
