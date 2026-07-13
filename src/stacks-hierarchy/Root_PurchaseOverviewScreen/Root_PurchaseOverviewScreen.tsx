@@ -316,6 +316,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                   .fromSelection(selection)
                   .fromStopPlace(selection.stopPlaces?.to)
                   .toStopPlace(selection.stopPlaces?.from)
+                  .legs([])
                   .build();
                 setSelection(newSelection);
               }}
