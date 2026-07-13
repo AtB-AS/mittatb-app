@@ -202,11 +202,15 @@ export const VehicleSheet = ({
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
-      heading={t(MobilityTexts.vehicleName(formFactor, false, propulsionType))}
-      subText={operatorName}
+      heading={
+        vehicle
+          ? t(MobilityTexts.vehicleName(formFactor, false, propulsionType))
+          : undefined
+      }
+      subText={vehicle ? operatorName : undefined}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
       logoIcon={
-        operatorLogo ? (
+        !vehicle ? null : operatorLogo ? (
           <BrandingImage logoUrl={operatorLogo} logoSize={28} rounded={true} />
         ) : (
           <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
