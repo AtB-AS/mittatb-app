@@ -34,7 +34,7 @@
     "@adrianso/react-native-device-brightness": "^1.2.7",
     "@atb-as/config-specs": "^11.2.0",
     "@atb-as/generate-assets": "^18.18.0",
-    "@atb-as/mapbox-shared": "^1.0.3",
+    "@atb-as/mapbox-shared": "^1.0.4",
     "@atb-as/theme": "^15.3.0",
     "@atb-as/utils": "^7.0.0",
     "@babel/plugin-transform-export-namespace-from": "^7.27.1",
