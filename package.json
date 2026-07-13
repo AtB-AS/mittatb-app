@@ -204,7 +204,7 @@
   },
   "codegenConfig": {
     "name": "AtBTurboModuleSpec",
-    "type": "modules",
+    "type": "all",
     "jsSrcsDir": "src/modules/native",
     "android": {
       "javaPackageName": "no.mittatb"
@@ -213,6 +213,9 @@
       "modulesProvider": {
         "ExperimentalFeature": "RCTExperimentalFeature",
         "ApplePayHandler": "RCTApplePayHandler"
+      },
+      "componentProvider": {
+        "SecureView": "RCTSecureView"
       }
     }
   }

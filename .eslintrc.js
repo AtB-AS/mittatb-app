@@ -216,6 +216,7 @@ module.exports = {
         'types/*',
         'src/translations/**',
         'src/modules/storybook/stories/**',
+        'src/modules/native/*NativeComponent.ts',
       ],
       rules: {
         'no-restricted-exports': [

@@ -2,6 +2,7 @@ import DeviceBrightness from '@adrianso/react-native-device-brightness';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ValidityStatus} from '../utils';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
+import {SecureView} from '@atb/modules/native';
 import {StyleSheet} from '@atb/theme';
 import {FareContractType} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
@@ -133,7 +134,9 @@ const BarcodeInspectionView = () => {
   return (
     <View style={styles.barcodeInspectionContainer}>
       <View style={styles.barcodeInspection} testID="mobileTokenBarcode">
-        <RNBarcodeInspectionView sizeInCm={3.5} />
+        <SecureView>
+          <RNBarcodeInspectionView sizeInCm={3.5} />
+        </SecureView>
       </View>
     </View>
   );
@@ -174,7 +177,9 @@ const MobileTokenAztec = ({fc}: {fc: FareContractType}) => {
       accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
       testID="mobileTokenBarcode"
     >
-      <SvgXml xml={aztecXml} width="100%" height="100%" />
+      <SecureView style={styles.secureViewFill}>
+        <SvgXml xml={aztecXml} width="100%" height="100%" />
+      </SecureView>
     </View>
   );
 };
@@ -262,7 +267,9 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
           testID="staticBarcode"
           ref={onCloseFocusRef}
         >
-          <SvgXml xml={aztecXml} width="100%" height="100%" />
+          <SecureView style={styles.secureViewFill}>
+            <SvgXml xml={aztecXml} width="100%" height="100%" />
+          </SecureView>
         </NativeBlockButton>
       </View>
       <StaticBarcodeBottomSheet
@@ -307,7 +314,9 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
           testID="staticQRCode"
           ref={onCloseFocusRef}
         >
-          <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
+          <SecureView style={styles.secureViewFill}>
+            <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
+          </SecureView>
         </NativeBlockButton>
       </View>
       <StaticBarcodeBottomSheet
@@ -330,6 +339,10 @@ const useStyles = StyleSheet.createThemeHook(() => ({
   barcodeInspection: {
     backgroundColor: 'white',
     padding: 20,
+  },
+  secureViewFill: {
+    width: '100%',
+    height: '100%',
   },
   barcodeInspectionContainer: {
     flex: 1,
@@ -381,7 +394,9 @@ const StaticBarcodeBottomSheet = ({
             )}
             testID="staticBigQRCode"
           >
-            <SvgXml xml={qrCodeSvg ?? ''} width="100%" height="100%" />
+            <SecureView style={styles.secureViewFill}>
+              <SvgXml xml={qrCodeSvg ?? ''} width="100%" height="100%" />
+            </SecureView>
           </NativeBlockButton>
         </View>
       </View>
