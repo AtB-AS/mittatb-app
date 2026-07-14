@@ -17,8 +17,12 @@ import {
   onlyUniquesBasedOnField,
   onlyUniquesBasedOnPredicate,
 } from '@atb/utils/only-uniques';
-import {FareZone as ConfigFareZone} from '@atb/modules/configuration';
+import {
+  FareProductTypeConfig,
+  FareZone as ConfigFareZone,
+} from '@atb/modules/configuration';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {iterateWithNext} from '@atb/utils/array';
@@ -592,5 +596,66 @@ export function getTripPatternAnalytics(
       new Date(now),
       tripPattern.expectedStartTime,
     ),
+  };
+}
+
+type TicketInfoForExpressBoatBookingTrip = {
+  fromPlace: StopPlaceFragment;
+  toPlace: StopPlaceFragment;
+  legs: Leg[];
+  ticketStartTime: string | undefined;
+  fareProductTypeConfig: FareProductTypeConfig;
+};
+
+function isExpressBoatLeg(leg: Leg): boolean {
+  return (
+    leg.transportSubmode === TransportSubmode.HighSpeedPassengerService ||
+    leg.transportSubmode === TransportSubmode.HighSpeedVehicleService
+  );
+}
+
+/**
+ * A booking trip is identified by a trip whose non-free legs are all express
+ * boat legs carrying a datedServiceJourney. Trips that combine express boat
+ * with other transport modes are not sold. When matched we sell a boat-single
+ * ("Enkeltbillett hurtigbåt") ticket spanning the first from-harbor to the
+ * last to-harbor.
+ */
+export function getTicketInfoForExpressBoatBookingTrip(
+  nonFreeLegs: Leg[],
+  fareProductTypeConfigs: FareProductTypeConfig[],
+  harbors: StopPlaceFragment[],
+  ticketStartTime?: string,
+): TicketInfoForExpressBoatBookingTrip | undefined {
+  const expressBoatLegs = nonFreeLegs.filter(isExpressBoatLeg);
+  if (!expressBoatLegs.length) return;
+  if (expressBoatLegs.length !== nonFreeLegs.length) return;
+
+  const isBookingTrip = expressBoatLegs.every(
+    (leg) => !!leg.datedServiceJourney,
+  );
+  if (!isBookingTrip) return;
+
+  const fromHarbor = harbors.find(
+    (harbor) => harbor.id === expressBoatLegs[0].fromPlace.quay?.stopPlace?.id,
+  );
+  const toHarbor = harbors.find(
+    (harbor) =>
+      harbor.id ===
+      expressBoatLegs[expressBoatLegs.length - 1].toPlace.quay?.stopPlace?.id,
+  );
+  if (!fromHarbor || !toHarbor) return;
+
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (config) => config.type === 'boat-single',
+  );
+  if (!fareProductTypeConfig) return;
+
+  return {
+    fromPlace: fromHarbor,
+    toPlace: toHarbor,
+    legs: expressBoatLegs,
+    ticketStartTime,
+    fareProductTypeConfig,
   };
 }
