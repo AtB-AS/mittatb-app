@@ -262,8 +262,8 @@ importers:
         specifier: ^4.23.0
         version: 4.23.0(react-native@0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0))(react@19.2.0)
       react-native-screenshot-aware:
-        specifier: ^1.3.18
-        version: 1.3.18(react-native@0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0))(react@19.2.0)
+        specifier: ^2.0.0
+        version: 2.0.0(react-native@0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0))(react@19.2.0)
       react-native-svg:
         specifier: ^15.13.0
         version: 15.13.0(react-native@0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0))(react@19.2.0)
@@ -6130,12 +6130,12 @@ packages:
       react: '*'
       react-native: '*'
 
-  react-native-screenshot-aware@1.3.18:
-    resolution: {integrity: sha512-DmYlHewDcng3idHbNq84TTLp9cUQser4rXyqZdGwfExyR3rI0tlvTv4w8qJELZS6fM9okpFLyEN5ew7/XXN70A==}
+  react-native-screenshot-aware@2.0.0:
+    resolution: {integrity: sha512-DI4fv03WpWWckIjs86vb4Cb0/3HDScNEbZxj2V7vo3BreHAFmzFjTsppPECmMr7oiJmCYCL3lYPaZ3OYLHhkgg==}
     peerDependencies:
       expo: '*'
       react: '*'
-      react-native: '>=0.76'
+      react-native: '*'
     peerDependenciesMeta:
       expo:
         optional: true
@@ -14277,7 +14277,7 @@ snapshots:
       react-native: 0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0)
       warn-once: 0.1.1
 
-  react-native-screenshot-aware@1.3.18(react-native@0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0))(react@19.2.0):
+  react-native-screenshot-aware@2.0.0(react-native@0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0))(react@19.2.0):
     dependencies:
       react: 19.2.0
       react-native: 0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0)
