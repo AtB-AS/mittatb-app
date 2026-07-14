@@ -1,8 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
+import {TravelCardTexts, useTranslation} from '@atb/translations';
 import {LegsSkeleton} from './LegsSkeleton';
 import {SkeletonBlock} from './SkeletonBlock';
 
@@ -12,22 +11,18 @@ import {SkeletonBlock} from './SkeletonBlock';
  */
 export const TravelCardSkeleton = () => {
   const styles = useThemeStyles();
+  const {t} = useTranslation();
   return (
     <View
       style={styles.container}
-      accessibilityElementsHidden
-      importantForAccessibility="no-hide-descendants"
+      accessible={true}
+      accessibilityLabel={t(TravelCardTexts.skeleton.a11yLabel)}
     >
       <View style={styles.header}>
         <SkeletonBlock style={styles.timeBlock} />
         <SkeletonBlock style={styles.durationBlock} />
       </View>
-      <View style={styles.legsContainer}>
-        <View style={styles.legsArea}>
-          <LegsSkeleton />
-        </View>
-        <ThemeIcon svg={ChevronRight} color="secondary" />
-      </View>
+      <LegsSkeleton />
     </View>
   );
 };
@@ -54,13 +49,5 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: 48,
     height: 16,
     borderRadius: theme.border.radius.small,
-  },
-  legsContainer: {
-    gap: theme.spacing.medium,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  legsArea: {
-    flex: 1,
   },
 }));
