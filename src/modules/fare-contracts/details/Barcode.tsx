@@ -41,14 +41,17 @@ export function Barcode({validityStatus, fc}: Props): React.JSX.Element | null {
   const {t} = useTranslation();
   const {mobileTokenStatus} = useMobileTokenContext();
   const {enable_new_token_barcode} = useRemoteConfigContext();
+  const isFocusedAndActive = useIsFocusedAndActive();
 
   useScreenBrightnessIncrease();
 
   useScreenshotAware(() => {
-    Alert.alert(
-      t(FareContractTexts.details.screenshotWarning.title),
-      t(FareContractTexts.details.screenshotWarning.description),
-    );
+    if (isFocusedAndActive) {
+      Alert.alert(
+        t(FareContractTexts.details.screenshotWarning.title),
+        t(FareContractTexts.details.screenshotWarning.description),
+      );
+    }
   });
 
   if (validityStatus !== 'valid') return null;
