@@ -208,9 +208,9 @@ const FareContractTexts = {
         'Skjermbilete er ikkje gyldig som billett',
       ),
       description: _(
-        'Skjermbilder kan ikke skannes i kontroll. Billetten din er lagret på telefonen og fungerer også uten internett. Vis alltid billetten direkte fra appen.',
-        'Screenshots cannot be scanned in inspection. Your ticket is stored on your phone and also works without an internet connection. Always show the ticket directly from the app.',
-        'Skjermbilete kan ikkje skannast i kontroll. Billetten din er lagra på telefonen og fungerer også utan internett. Vis alltid billetten direkte frå appen.',
+        'Skjermbilder kan ikke skannes i kontroll. Billetten din er lagret og fungerer også uten internett. Vis alltid billetten direkte fra appen.',
+        'Screenshots cannot be scanned in inspection. Your ticket is stored and also works without an internet connection. Always show the ticket directly from the app.',
+        'Skjermbilete kan ikkje skannast i kontroll. Billetten din er lagra og fungerer også utan internett. Vis alltid billetten direkte frå appen.',
       ),
     },
   },
