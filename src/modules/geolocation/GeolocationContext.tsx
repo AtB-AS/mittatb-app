@@ -4,7 +4,6 @@ import React, {
   useContext,
   useEffect,
   useReducer,
-  useRef,
   useState,
 } from 'react';
 import {Alert, Linking, Platform} from 'react-native';
@@ -235,21 +234,6 @@ export const GeolocationContextProvider = ({children}: Props) => {
       );
     }
   }, [currentLocationError, appStatus, geoLocationName]);
-
-  const previousAppStatusRef = useRef(appStatus);
-
-  useEffect(() => {
-    const cameToForeground =
-      previousAppStatusRef.current !== 'active' && appStatus === 'active';
-    previousAppStatusRef.current = appStatus;
-    if (cameToForeground && locationIsAvailable) {
-      Geolocation.getCurrentPosition(
-        (position) => updateLocation(position, geoLocationName),
-        handleLocationError,
-        {...config, timeout: 15000},
-      );
-    }
-  }, [appStatus, locationIsAvailable, geoLocationName]);
 
   useEffect(() => {
     async function checkPermission() {
