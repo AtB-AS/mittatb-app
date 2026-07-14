@@ -46,10 +46,9 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {BrandingImage} from '../BrandingImage';
 import {getTransportModeAndSubMode} from '../../utils';
 import {
-  BonusProductType,
   PayWithBonusPointsCheckbox,
+  useBonusProductById,
   useIsBonusActiveForUser,
-  useRelevantSharedMobilityBonusProduct,
 } from '@atb/modules/bonus';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import type {BenefitType} from '@atb/api/types/benefit';
@@ -132,14 +131,11 @@ export const VehicleSheet = ({
   } = useFeatureTogglesContext();
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
-  // Prefer the server-provided bonus offer; fall back to the client-side
-  // lookup only when the vehicle response omits it.
-  const clientBonusProduct =
-    useRelevantSharedMobilityBonusProduct(vehicleTypeId);
   const serverBonusOffer = vehicle?.bonusOffer ?? undefined;
-  const hasBonusOffer = !!serverBonusOffer || !!clientBonusProduct;
-  const selectedBonusProductId =
-    serverBonusOffer?.bonusProductId ?? clientBonusProduct?.id;
+  const selectedBonusProductId = serverBonusOffer?.bonusProductId;
+  // The checkbox needs the full product (paymentDescription/productType), which
+  // the server offer doesn't carry, so resolve it by id from active products.
+  const bonusProduct = useBonusProductById(selectedBonusProductId);
   const {logEvent} = useAnalyticsContext();
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
 
@@ -181,8 +177,7 @@ export const VehicleSheet = ({
   const showVehicleCard = !isBicycle || isElectric;
   const showParkingViolation =
     !isBicycle && isParkingViolationsReportingEnabled;
-  const showBonusCheckbox =
-    isBonusActiveForUser && hasBonusOffer && !!clientBonusProduct;
+  const showBonusCheckbox = isBonusActiveForUser && !!bonusProduct;
 
   // Drive the CTA from the server `actionButton` when present, otherwise fall
   // back to the existing deep-integration / operator branching.
@@ -260,7 +255,6 @@ export const VehicleSheet = ({
                 payWithBonusPoints,
                 vehicle,
                 serverBonusOffer,
-                clientBonusProduct,
               })}
               onNavigatePricingDetails={navigateToPricingDetails}
             />
@@ -268,9 +262,9 @@ export const VehicleSheet = ({
 
           {showStartTrip && operatorId ? (
             <>
-              {showBonusCheckbox && clientBonusProduct && (
+              {showBonusCheckbox && bonusProduct && (
                 <PayWithBonusPointsCheckbox
-                  bonusProduct={clientBonusProduct}
+                  bonusProduct={bonusProduct}
                   operatorName={operatorName}
                   isChecked={payWithBonusPoints}
                   onPress={() => setPayWithBonusPoints((prev) => !prev)}
@@ -358,38 +352,23 @@ export const VehicleSheet = ({
 /**
  * Resolves which benefit drives the price display. Benefit and bonus offer never
  * stack: the server benefit applies by default, and choosing to pay with bonus
- * points overrides it with the bonus offer's price adjustments. The server bonus
- * offer wins over the client-side product when both are present.
+ * points overrides it with the bonus offer's price adjustments.
  */
 const getDisplayedBenefit = ({
   payWithBonusPoints,
   vehicle,
   serverBonusOffer,
-  clientBonusProduct,
 }: {
   payWithBonusPoints: boolean;
   vehicle: Vehicle;
   serverBonusOffer: BonusOffer | undefined;
-  clientBonusProduct: BonusProductType | undefined;
 }): BenefitType | undefined => {
   if (!payWithBonusPoints) return vehicle.benefit ?? undefined;
-
-  // The server-driven offer is already scoped to the vehicle's system. The
-  // client-side product is the legacy fallback and still filters by system.
-  const bonusPriceAdjustments = serverBonusOffer
-    ? serverBonusOffer.priceAdjustments
-    : (clientBonusProduct?.priceAdjustments
-        ?.filter((pa) => pa.systemIds.includes(vehicle.system.id))
-        .map((pa) => ({
-          amount: pa.amount,
-          type: pa.type,
-          description: pa.description,
-        })) ?? []);
 
   return {
     title: [],
     description: [],
-    priceAdjustments: bonusPriceAdjustments,
+    priceAdjustments: serverBonusOffer?.priceAdjustments ?? [],
   };
 };
 
