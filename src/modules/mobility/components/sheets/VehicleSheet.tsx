@@ -147,6 +147,7 @@ export const VehicleSheet = ({
     const {url} = await getAppSwitchUrl({
       vehicleTypeId,
       bonusProductId: payWithBonusPoints ? selectedBonusProductId : undefined,
+      rentalAppUri: rentalAppUri ?? undefined,
     });
     logEvent('Mobility', 'Open operator app', {
       operatorId,
@@ -160,6 +161,7 @@ export const VehicleSheet = ({
     getAppSwitchUrl,
     payWithBonusPoints,
     selectedBonusProductId,
+    rentalAppUri,
     logEvent,
     operatorId,
     operatorName,
