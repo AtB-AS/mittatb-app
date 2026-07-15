@@ -18,7 +18,7 @@ import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG_NUMBER, IS_QA_ENV} from '@env';
 import React from 'react';
-import {View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
@@ -41,10 +41,12 @@ import {Info, Unknown} from '@atb/assets/svg/mono-icons/status';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {useChatUnreadCount} from '@atb/modules/chat';
 import {useDebugServerOverrides} from '@atb/modules/debug';
+import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
 import Intercom, {Space} from '@intercom/intercom-react-native';
 import {GlobalMessage} from '@atb/modules/global-messages';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {
   useIsBonusActiveForUser,
   useIsBonusEnrollable,
@@ -73,6 +75,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     isSmartParkAndRideEnabled,
     isEventStreamEnabled,
     isEventStreamFareContractsEnabled,
+    isShmoDeepIntegrationEnabled,
   } = useFeatureTogglesContext();
   const unreadCount = useChatUnreadCount();
   const {theme} = useThemeContext();
@@ -83,6 +86,78 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const isBonusEnrollable = useIsBonusEnrollable();
   const showBonusSection = isBonusActiveForUser || isBonusEnrollable;
   const serverOverrides = useDebugServerOverrides();
+
+  const isFocused = useIsFocusedAndActive();
+  const {data: activeShmoBooking, isPending: isActiveShmoBookingPending} =
+    useActiveShmoBookingQuery(isFocused);
+  const hasActiveShmoTrip = !!activeShmoBooking;
+
+  const handleLogoutPress = () => {
+    if (isShmoDeepIntegrationEnabled && isActiveShmoBookingPending) return;
+    if (hasActiveShmoTrip) {
+      Alert.alert(
+        t(ProfileTexts.sections.account.linkSectionItems.logout.label),
+        t(
+          ProfileTexts.sections.account.linkSectionItems.logout
+            .unableToLogoutWithActiveShmoTrip,
+        ),
+        [
+          {
+            text: t(
+              ProfileTexts.sections.account.linkSectionItems.logout.alert
+                .cancel,
+            ),
+            style: 'cancel',
+          },
+          {
+            text: t(
+              ProfileTexts.sections.account.linkSectionItems.logout
+                .showActiveTrip,
+            ),
+            onPress: () =>
+              navigation.navigate('Root_TabNavigatorStack', {
+                screen: 'TabNav_MapStack',
+                params: {screen: 'Map_RootScreen', params: {}},
+              }),
+          },
+        ],
+      );
+      return;
+    }
+    destructiveAlert({
+      alertTitleString: t(
+        ProfileTexts.sections.account.linkSectionItems.logout.confirmTitle,
+      ),
+      alertMessageString: t(
+        ProfileTexts.sections.account.linkSectionItems.logout.confirmMessage,
+      ),
+      cancelAlertString: t(
+        ProfileTexts.sections.account.linkSectionItems.logout.alert.cancel,
+      ),
+      confirmAlertString: t(
+        ProfileTexts.sections.account.linkSectionItems.logout.alert.confirm,
+      ),
+      destructiveArrowFunction: async () => {
+        Bugsnag.leaveBreadcrumb('User logging out');
+        analytics.logEvent('Profile', 'User logging out');
+        setIsLoading(true);
+        try {
+          // On logout we delete the user's token
+          await clearTokenAtLogout();
+        } catch (err: any) {
+          Bugsnag.notify(err);
+        }
+
+        try {
+          await signOut();
+        } catch (err: any) {
+          Bugsnag.notify(err);
+        } finally {
+          setIsLoading(false);
+        }
+      },
+    });
+  };
 
   const focusRef = useFocusOnLoad(navigation);
 
@@ -319,45 +394,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               rightIcon={{svg: LogOut}}
               expanded={true}
               style={style.logoutButton}
-              onPress={() =>
-                destructiveAlert({
-                  alertTitleString: t(
-                    ProfileTexts.sections.account.linkSectionItems.logout
-                      .confirmTitle,
-                  ),
-                  alertMessageString: t(
-                    ProfileTexts.sections.account.linkSectionItems.logout
-                      .confirmMessage,
-                  ),
-                  cancelAlertString: t(
-                    ProfileTexts.sections.account.linkSectionItems.logout.alert
-                      .cancel,
-                  ),
-                  confirmAlertString: t(
-                    ProfileTexts.sections.account.linkSectionItems.logout.alert
-                      .confirm,
-                  ),
-                  destructiveArrowFunction: async () => {
-                    Bugsnag.leaveBreadcrumb('User logging out');
-                    analytics.logEvent('Profile', 'User logging out');
-                    setIsLoading(true);
-                    try {
-                      // On logout we delete the user's token
-                      await clearTokenAtLogout();
-                    } catch (err: any) {
-                      Bugsnag.notify(err);
-                    }
-
-                    try {
-                      await signOut();
-                    } catch (err: any) {
-                      Bugsnag.notify(err);
-                    } finally {
-                      setIsLoading(false);
-                    }
-                  },
-                })
-              }
+              onPress={handleLogoutPress}
               testID="logoutButton"
             />
           )}

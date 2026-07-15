@@ -30,6 +30,11 @@ const DeleteProfileTexts = {
     'Unable to delete Profile while you have active tickets. Please contact customer support to refund or wait until tickets expire.',
     'Det er ikkje mogleg å slette Profil mens du har aktive billettar. Kontakt AtB kundeservice for refusjon eller vent til billettane har gått ut.',
   ),
+  unableToDeleteWithActiveShmoTrip: _(
+    'Kan ikke slette Profil mens du har en aktiv tur. Fullfør turen din først.',
+    'Unable to delete Profile while you have an active trip. Please finish your trip first.',
+    'Det er ikkje mogleg å slette Profil medan du har ein aktiv tur. Fullfør turen din først.',
+  ),
   customerNumber: _('Kundenummer', 'Customer number', 'Kundenummer'),
   deleteConfirmation: {
     title: _('Slett Profil', 'Delete Profile', 'Slett Profil'),
@@ -64,6 +69,11 @@ export default orgSpecificTranslations(DeleteProfileTexts, {
       'Kan ikke slette din bruker mens du har aktive billetter. Kontakt FRAM Kundesenter for refusjon eller vent til billettene har utløpt.',
       'Unable to delete your user while you have active tickets. Please contact FRAM Customer Centre for refund or wait until tickets expire.',
       'Kan ikkje slette brukaren din mens du har aktive billettar. Kontakt FRAM Kundesenter for refusjon eller vent til billettane har gått ut.',
+    ),
+    unableToDeleteWithActiveShmoTrip: _(
+      'Kan ikke slette din bruker mens du har en aktiv tur. Fullfør turen din først.',
+      'Unable to delete your user while you have an active trip. Please finish your trip first.',
+      'Kan ikkje slette brukaren din medan du har ein aktiv tur. Fullfør turen din først.',
     ),
     header: {
       title: _('Slett min bruker', 'Delete my user', 'Slett min brukar'),
