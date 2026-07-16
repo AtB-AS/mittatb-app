@@ -52,26 +52,36 @@ export const PlaceScreenComponent = ({
   const {data: stopsDetailsData, isError: isStopsDetailsError} =
     useStopsDetailsDataQuery(place.quays === undefined ? [place.id] : []);
 
-  let missingStopData = false;
-
   if (stopsDetailsData && place.quays === undefined) {
-    if (stopsDetailsData.stopPlaces[0].quays?.length) {
-      place = stopsDetailsData.stopPlaces[0];
-    } else {
-      missingStopData = true;
-    }
+    place = stopsDetailsData.stopPlaces[0];
   }
 
-  if (isStopsDetailsError || missingStopData) {
+  if (isStopsDetailsError) {
     return (
-      <View style={styles.container}>
-        <FullScreenHeader title={place.name} leftButton={{type: 'back'}} />
+      <FullScreenView
+        focusRef={undefined}
+        headerProps={{title: place.name, leftButton: {type: 'back'}}}
+      >
         <MessageInfoBox
           style={styles.messageBox}
           type="error"
           message={t(DeparturesTexts.message.resultNotFound)}
         />
-      </View>
+      </FullScreenView>
+    );
+  }
+  if (place.quays?.length === 0) {
+    return (
+      <FullScreenView
+        focusRef={undefined}
+        headerProps={{title: place.name, leftButton: {type: 'back'}}}
+      >
+        <MessageInfoBox
+          style={styles.messageBox}
+          type="info"
+          message={t(DeparturesTexts.message.emptyResult)}
+        />
+      </FullScreenView>
     );
   }
 
