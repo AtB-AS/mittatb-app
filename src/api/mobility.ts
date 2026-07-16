@@ -194,9 +194,10 @@ export const getStation = (
 export const getAppSwitchUrl = (
   vehicleTypeId: string,
   bonusProductId?: string,
+  rentalAppUri?: string,
 ): Promise<AppSwitchUrl> => {
   const url = `/mobility/v1/app-switch/vehicle-type/${vehicleTypeId}`;
-  const query = qs.stringify({bonusProductId});
+  const query = qs.stringify({bonusProductId, rentalAppUri});
   return client
     .post<AppSwitchUrl>(stringifyUrl(url, query), undefined, {
       authWithIdToken: true,
