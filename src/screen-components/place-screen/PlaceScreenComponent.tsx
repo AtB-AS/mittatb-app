@@ -12,6 +12,7 @@ import {StopPlacesView} from './components/StopPlacesView';
 import type {DepartureSearchTime} from 'src/components/date-selection';
 import {useStopsDetailsDataQuery} from './hooks/use-stops-details-data-query';
 import {useScrollBorder} from '@atb/utils/use-scroll-border';
+import {FullScreenView} from '@atb/components/screen-view';
 
 export type PlaceScreenParams = {
   place: StopPlace;
