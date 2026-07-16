@@ -12,7 +12,8 @@ export const useVehicle = (
     isLoading,
     isError,
   } = useVehicleQuery(vehicleId, vehicleTypeId, stationId);
-  const {appStoreUri, brandLogoUrl, operatorId, operatorName} = useSystem(vehicle);
+  const {appStoreUri, brandLogoUrl, operatorId, operatorName} =
+    useSystem(vehicle);
 
   return {
     vehicle,
