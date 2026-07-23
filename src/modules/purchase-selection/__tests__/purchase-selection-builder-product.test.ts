@@ -281,6 +281,61 @@ describe('purchaseSelectionBuilder - product', () => {
     );
     expect(selection.preassignedFareProduct.id).toBe('P2');
   });
+
+  it('Should filter supplement products against the new product limitations, not the previous product', () => {
+    // Previous product (TEST_PRODUCT) allows SP1; new product does NOT.
+    // If the filter is applied against the previous product, SP1 would be kept.
+    const newProduct = {
+      ...TEST_PRODUCT,
+      id: 'P2',
+      limitations: {
+        ...TEST_PRODUCT.limitations,
+        supplementProductRefs: ['SP2'],
+      },
+    };
+    const selectionWithSupplement = {
+      ...TEST_SELECTION,
+      supplementProductsWithCount: [
+        {...TEST_SUPPLEMENT_PRODUCT, id: 'SP1', count: 2},
+      ],
+    };
+
+    const selection = createEmptyBuilder(TEST_INPUT)
+      .fromSelection(selectionWithSupplement)
+      .product(newProduct)
+      .build().selection;
+
+    expect(selection.preassignedFareProduct.id).toBe('P2');
+    expect(selection.supplementProductsWithCount).toEqual([]);
+  });
+
+  it('Should drop only supplement products not allowed by the new product limitations', () => {
+    const newProduct = {
+      ...TEST_PRODUCT,
+      id: 'P2',
+      limitations: {
+        ...TEST_PRODUCT.limitations,
+        supplementProductRefs: ['SP1'],
+      },
+    };
+    const selectionWithSupplements = {
+      ...TEST_SELECTION,
+      supplementProductsWithCount: [
+        {...TEST_SUPPLEMENT_PRODUCT, id: 'SP1', count: 2},
+        {...TEST_SUPPLEMENT_PRODUCT, id: 'SP2', count: 1},
+      ],
+    };
+
+    const selection = createEmptyBuilder(TEST_INPUT)
+      .fromSelection(selectionWithSupplements)
+      .product(newProduct)
+      .build().selection;
+
+    expect(selection.preassignedFareProduct.id).toBe('P2');
+    expect(selection.supplementProductsWithCount).toHaveLength(1);
+    expect(selection.supplementProductsWithCount[0].id).toBe('SP1');
+    expect(selection.supplementProductsWithCount[0].count).toBe(2);
+  });
 });
 
 describe('purchaseSelectionBuilder - product forced changes', () => {
@@ -432,6 +487,52 @@ describe('purchaseSelectionBuilder - product forced changes', () => {
       .build();
 
     expect(forcedChanges).toEqual(['userProfile', 'zone']);
+  });
+
+  it('Should report supplementProduct when a supplement product is dropped', () => {
+    const newProduct = {
+      ...TEST_PRODUCT,
+      id: 'P2',
+      limitations: {
+        ...TEST_PRODUCT.limitations,
+        supplementProductRefs: ['SP2'],
+      },
+    };
+
+    const {forcedChanges} = createEmptyBuilder(TEST_INPUT)
+      .fromSelection({
+        ...TEST_SELECTION,
+        supplementProductsWithCount: [
+          {...TEST_SUPPLEMENT_PRODUCT, id: 'SP1', count: 2},
+        ],
+      })
+      .product(newProduct)
+      .build();
+
+    expect(forcedChanges).toEqual(['supplementProduct']);
+  });
+
+  it('Should not report supplementProduct when all supplement products remain valid', () => {
+    const newProduct = {
+      ...TEST_PRODUCT,
+      id: 'P2',
+      limitations: {
+        ...TEST_PRODUCT.limitations,
+        supplementProductRefs: ['SP1'],
+      },
+    };
+
+    const {forcedChanges} = createEmptyBuilder(TEST_INPUT)
+      .fromSelection({
+        ...TEST_SELECTION,
+        supplementProductsWithCount: [
+          {...TEST_SUPPLEMENT_PRODUCT, id: 'SP1', count: 2},
+        ],
+      })
+      .product(newProduct)
+      .build();
+
+    expect(forcedChanges).toEqual([]);
   });
 
   it('Should replace, not accumulate, forced changes across multiple product calls', () => {
