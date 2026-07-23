@@ -61,7 +61,6 @@ import {
   useRelevantTicketBonusProduct,
   useIsBonusActiveForUser,
 } from '@atb/modules/bonus';
-import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
 import {startApplePayPayment} from './start-apple-pay';
 import {Loading} from '@atb/components/loading';
@@ -92,7 +91,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
   const focusRef = useFocusOnLoad(navigation);
 
-  const [selection, setSelection] = useParamAsState(params.selection);
+  const [selection] = useParamAsState(params.selection);
+  const [bonusProductId, setBonusProductId] = useState<string | undefined>();
   const {recipient} = params;
   const productAlternatives = useProductAlternatives(selection);
 
@@ -105,9 +105,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     refreshOffer,
     userProfilesWithCountAndOffer,
     supplementProductsWithCountAndOffer,
-  } = useOfferState(productAlternatives, selection);
+  } = useOfferState(productAlternatives, selection, bonusProductId);
 
-  const builder = usePurchaseSelectionBuilder();
   const relevantTicketBonusProduct = useRelevantTicketBonusProduct(selection);
   const isBonusActiveForUser = useIsBonusActiveForUser();
 
@@ -377,20 +376,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         {!!relevantTicketBonusProduct && !isFree && isBonusActiveForUser && (
           <PayWithBonusPointsCheckbox
             bonusProduct={relevantTicketBonusProduct}
-            isChecked={
-              selection.bonusProductId === relevantTicketBonusProduct.id
+            isChecked={bonusProductId === relevantTicketBonusProduct.id}
+            onPress={() =>
+              setBonusProductId(
+                bonusProductId === relevantTicketBonusProduct.id
+                  ? undefined
+                  : relevantTicketBonusProduct.id,
+              )
             }
-            onPress={() => {
-              const isSelected =
-                selection.bonusProductId === relevantTicketBonusProduct.id;
-              const {selection: next} = builder
-                .fromSelection(selection)
-                .bonusProductId(
-                  isSelected ? undefined : relevantTicketBonusProduct.id,
-                )
-                .build();
-              setSelection(next);
-            }}
           />
         )}
         <PaymentButton
