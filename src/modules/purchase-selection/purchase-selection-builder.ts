@@ -184,7 +184,10 @@ const createBuilder = (
       );
       const areSupplementProductsValid =
         onlySupplementProductsWithActualCount.every((sp) =>
-          isSelectableSupplementProduct(currentSelection, sp),
+          isSelectableSupplementProduct(
+            currentSelection.preassignedFareProduct,
+            sp,
+          ),
         );
 
       if (

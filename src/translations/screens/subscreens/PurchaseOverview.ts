@@ -163,6 +163,11 @@ const PurchaseOverviewTexts = {
       items: {
         userProfile: _('reisekategori', 'traveller category', 'reisekategori'),
         zone: _('soner', 'zones', 'soner'),
+        supplementProduct: _(
+          'tilleggsprodukt',
+          'supplement product',
+          'tilleggsprodukt',
+        ),
       },
     },
   },
