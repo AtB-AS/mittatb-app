@@ -22,7 +22,13 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {addMinutes} from 'date-fns';
-import React, {RefObject, useCallback, useRef, useState} from 'react';
+import React, {
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {
@@ -109,6 +115,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   const relevantTicketBonusProduct = useRelevantTicketBonusProduct(selection);
   const isBonusActiveForUser = useIsBonusActiveForUser();
+
+  useEffect(() => {
+    if (bonusProductId && bonusProductId !== relevantTicketBonusProduct?.id) {
+      setBonusProductId(undefined);
+    }
+  }, [bonusProductId, relevantTicketBonusProduct?.id]);
 
   const isFree = totalPrice === 0;
 
