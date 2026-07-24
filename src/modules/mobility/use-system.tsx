@@ -4,12 +4,11 @@ import {Platform} from 'react-native';
 import {useThemeContext} from '@atb/theme';
 import {useGetOperatorsQuery} from './queries/use-get-operators-query';
 import {getOperatorNameById} from '@atb/api/utils';
-import {LocalizedString, System} from '@atb/api/types/mobility';
+import {System} from '@atb/api/types/mobility';
 import {SystemFragment} from '@atb/api/types/generated/fragments/mobility-shared';
 
 export const useSystem = <T extends {system: SystemFragment | System}>(
   entity: T | undefined | null,
-  operator: LocalizedString | undefined = entity?.system.name,
 ) => {
   const {t, language} = useTranslation();
   const {themeName} = useThemeContext();
@@ -32,7 +31,7 @@ export const useSystem = <T extends {system: SystemFragment | System}>(
       : entity?.system.brandAssets?.brandImageUrl;
 
   const operatorNameFallback =
-    getTextForLanguage(operator?.translation, language) ??
+    getTextForLanguage(entity?.system.name?.translation, language) ??
     t(MobilityTexts.unknownOperator) ??
     '';
 
