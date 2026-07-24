@@ -1,0 +1,52 @@
+appId: ${APP_ID}
+name: 'Location Search'
+---
+- runScript: ../elements/search.js
+- runFlow:
+    when:
+      true: ${SEARCH_TYPE == 'from'}
+    commands:
+      - extendedWaitUntil:
+          visible:
+            id: ${output.search.from}
+          timeout: 10000
+          label: 'Wait for search button'
+      - tapOn:
+          id: ${output.search.from}
+          label: 'Open location search'
+
+- runFlow:
+    when:
+      true: ${SEARCH_TYPE == 'to'}
+    commands:
+      - extendedWaitUntil:
+          visible:
+            id: ${output.search.to}
+          timeout: 10000
+          label: 'Wait for search button'
+      - tapOn:
+          id: ${output.search.to}
+          label: 'Open location search'
+
+- extendedWaitUntil:
+    visible:
+      id: ${output.search.input}
+    timeout: 5000
+    label: 'Wait for search input'
+- tapOn:
+    id: ${output.search.input}
+    label: 'Select search input'
+- inputText:
+    text: ${SEARCH_TEXT}
+    label: 'Type search query'
+
+- extendedWaitUntil:
+    visible:
+      id: ${output.search.resultItem}
+      #index: 0
+    timeout: 10000
+    label: 'Wait for search results'
+- tapOn:
+    id: ${output.search.resultItem}
+    #index: 0
+    label: 'Select first result'

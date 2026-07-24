@@ -1,0 +1,7 @@
+appId: ${APP_ID}
+---
+- runScript: onboarding.js
+- runScript: navigation.js
+- runScript: search.js
+- runScript: trips.js
+- runScript: tickets.js
