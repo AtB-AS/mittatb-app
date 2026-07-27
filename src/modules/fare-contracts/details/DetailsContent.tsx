@@ -42,6 +42,7 @@ import {useAuthContext} from '@atb/modules/auth';
 import {CarnetFooter} from '../carnet/CarnetFooter';
 import {MobilityBenefitsActionSectionItem} from '@atb/modules/mobility';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
+import {useOperators} from '@atb/modules/mobility';
 import {ConsumeCarnetSectionitem} from '../components/ConsumeCarnetSectionitem';
 import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -118,6 +119,8 @@ export const DetailsContent: React.FC<Props> = ({
   const {benefits} = useOperatorBenefitsForFareProduct(
     preassignedFareProduct?.id,
   );
+  const {byId: getOperatorById} = useOperators();
+  const operatorName = getOperatorById(fc.operatorId)?.name;
   const bookingSegments = useFareContractBookingSegments(
     firstTravelRight.datedServiceJourneys?.[0],
   );
@@ -291,11 +294,7 @@ export const DetailsContent: React.FC<Props> = ({
 
       {hasShmoBookingId(fc) && hasShmoOperatorId(fc) && (
         <LinkSectionItem
-          text={t(
-            FareContractTexts.details.askOperatorRefund(
-              preassignedFareProduct?.name.value,
-            ),
-          )}
+          text={t(FareContractTexts.details.contactOperator(operatorName))}
           onPress={() => {
             if (fc?.operatorId && fc?.bookingId && fc?.formFactor) {
               onSupportNavigate({
