@@ -1,7 +1,8 @@
 import React from 'react';
 import {FareContractType} from '@atb-as/utils';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
-import {useOperators} from '@atb/modules/mobility/use-operators';
+import {useOperators} from '@atb/modules/mobility/index';
+
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
