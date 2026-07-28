@@ -467,7 +467,8 @@ export const ScooterTexts = {
   ),
   range: _('rekkevidde', 'range', 'rekkjevidde'),
   unlock: _('opplåsning', 'unlock', 'opplåsing'),
-  free: _('Gratis', 'Free', 'Gratis'),
+  freeMinutesDescription: (minutes: number) =>
+    _(`i ${minutes} min`, `for ${minutes} min`, `i ${minutes} min`),
   per: {
     unit(unit: string) {
       switch (unit) {
