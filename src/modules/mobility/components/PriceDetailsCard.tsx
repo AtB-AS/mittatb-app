@@ -56,7 +56,9 @@ export const PriceDetailsCard = ({
 
   const hasFreeMinutes = !!(freeMinutes && pricingPlan.perMinPricing?.length);
 
-  const minutePriceStat = hasFreeMinutes ? zeroAmount : ratePrUnit?.formattedRate;
+  const minutePriceStat = hasFreeMinutes
+    ? zeroAmount
+    : ratePrUnit?.formattedRate;
 
   const minutePriceDescription = hasFreeMinutes
     ? t(
