@@ -106,11 +106,11 @@ export const MobilityTexts = {
   freeBikes: (amount: string) => {
     return _(amount + ' ledige', amount + ' available', amount + ' ledige');
   },
-  freeBikeParkingSpaces: (amount: string) => {
+  freeBikeParkingSpaces: (amount: number) => {
     return _(
-      amount + ' ledige plasser',
-      amount + ' available spaces',
-      amount + ' ledige plassar',
+      amount === 1 ? `${amount} ledig plass` : `${amount} ledige plasser`,
+      amount === 1 ? `${amount} available space` : `${amount} available spaces`,
+      amount === 1 ? `${amount} ledig plass` : `${amount} ledige plassar`,
     );
   },
   cityBike: {

@@ -2,7 +2,7 @@ import {useQuery} from '@tanstack/react-query';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 import {getVehicle} from '@atb/api/mobility';
 import {useActiveShmoBookingQuery} from './use-active-shmo-booking-query';
-import {ShmoBookingState} from '@atb/api/types/mobility';
+import {isActiveTripBooking} from '../utils';
 
 export const getVehicleQueryKey = (
   vehicleId?: string,
@@ -21,9 +21,7 @@ export const useVehicleQuery = (
   // trip, so fetching it by id (or via the station endpoint) returns 404.
   // Disable the query while a booking is active; consumers fall back to the
   // active booking's asset for vehicle details.
-  const hasActiveBooking =
-    activeShmoBooking?.state === ShmoBookingState.IN_USE ||
-    activeShmoBooking?.state === ShmoBookingState.FINISHING;
+  const hasActiveBooking = isActiveTripBooking(activeShmoBooking);
 
   return useQuery({
     queryKey: getVehicleQueryKey(vehicleId, vehicleTypeId, stationId),

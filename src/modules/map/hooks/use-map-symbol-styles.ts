@@ -23,6 +23,7 @@ type MapSymbolStylesProps = {
   pinType: PinType;
   reachFullScaleAtZoomLevel: number;
   textSizeFactor?: number;
+  showBikeStationParkingInfo?: boolean;
 };
 // Returns Mapbox Style Expressions to determine map symbol styles.
 export const useMapSymbolStyles = ({
@@ -30,9 +31,17 @@ export const useMapSymbolStyles = ({
   pinType,
   reachFullScaleAtZoomLevel,
   textSizeFactor = 1.0,
+  showBikeStationParkingInfo = false,
 }: MapSymbolStylesProps) => {
   const {themeName} = useThemeContext();
   const isDarkMode = themeName === 'dark';
+
+  // Swaps the bike icon + available-bikes count for a parking icon + free-slots count.
+  const showParkingIconsForThisLayer =
+    showBikeStationParkingInfo && pinType === 'station';
+  const bikeStationIconVariant = showParkingIconsForThisLayer
+    ? 'parking'
+    : 'bikes';
 
   const featureId: Expression = ['get', 'id'];
   const selectedFeatureId = selectedFeaturePropertyId || ''; // because mapbox style expressions don't like undefined
@@ -47,6 +56,12 @@ export const useMapSymbolStyles = ({
   const countPropName = 'count';
   const count: Expression = ['get', countPropName];
   const numVehiclesAvailable: Expression = ['get', 'num_vehicles_available'];
+  const capacity: Expression = ['to-number', ['get', 'capacity'], 0];
+  const parkingSpacesAvailable: Expression = [
+    'max',
+    0,
+    ['-', capacity, numVehiclesAvailable],
+  ];
 
   const isCluster: Expression = [
     'all',
@@ -115,7 +130,12 @@ export const useMapSymbolStyles = ({
     ['==', vehicle_type_form_factor, 'SCOOTER_STANDING'],
     'scooter',
     ['==', vehicle_type_form_factor, 'BICYCLE'],
-    ['case', isElectric, 'ebike', 'citybike'],
+    // Station pins never distinguish propulsion: e-bikes and regular bikes share the same
+    // stations, and only `stationpin_citybike_*` sprites exist (no `stationpin_ebike_*`).
+    // Vehicle pins do distinguish, and have `vehiclepin_ebike_*` sprites for it.
+    pinType === 'station'
+      ? 'citybike'
+      : ['case', isElectric, 'ebike', 'citybike'],
     ['==', vehicle_type_form_factor, 'CAR'],
     'sharedcar',
     'non-existing-icon',
@@ -166,9 +186,7 @@ export const useMapSymbolStyles = ({
         : [
             'case',
             ['==', iconCode, 'citybike'],
-            'bikes',
-            ['==', iconCode, 'ebike'],
-            'bikes',
+            bikeStationIconVariant,
             ['==', iconCode, 'sharedcar'],
             'cars',
             'bikes',
@@ -180,14 +198,22 @@ export const useMapSymbolStyles = ({
   ];
 
   const textOffsetXFactor = pinType == 'vehicle' ? 1 : 1.045;
-  const numberOfUnits = pinType == 'vehicle' ? count : numVehiclesAvailable;
+  const numberOfUnits: Expression =
+    pinType == 'vehicle'
+      ? count
+      : showParkingIconsForThisLayer
+        ? parkingSpacesAvailable
+        : numVehiclesAvailable;
   const numberOfUnitsLimitedAt99Plus: Expression = [
     'case',
     isMinimized,
     '+',
     ['>', numberOfUnits, 99],
     '99+',
-    numberOfUnits,
+    // `to-string` is required: textField only accepts formatted/string/value, so a
+    // number-typed expression (e.g. the parking-spaces arithmetic) is rejected outright,
+    // which fails the whole layer insert. `numberOfUnits` stays numeric everywhere else.
+    ['to-string', numberOfUnits],
   ];
 
   const symbolSortKey: Expression = [

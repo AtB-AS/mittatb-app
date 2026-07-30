@@ -49,10 +49,19 @@ import {
   isBikeStation,
   isVehicle,
   isVirtualStation,
+  isActiveBikeTripBooking,
+  isActiveTripBooking,
+  getStationQueryKey,
 } from '@atb/modules/mobility';
 
 import {Snackbar, useSnackbar, useStableValue} from '@atb/components/snackbar';
 import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
+import {useQueryClient} from '@tanstack/react-query';
+import {getStation} from '@atb/api/mobility';
+import {getTextForLanguage} from '@atb/translations/utils';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {ThemedParkingIcon} from '@atb/theme/ThemedAssets';
 import {useMapContext} from '@atb/modules/map';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useIsBonusBalanceButtonVisible} from '@atb/modules/bonus';
@@ -104,7 +113,7 @@ export const Map = (props: MapProps) => {
   } = usePreferencesContext();
 
   const {fareZones} = useFirestoreConfigurationContext();
-  const {language} = useTranslation();
+  const {language, t} = useTranslation();
   const fareZonePolygons = mapZonesToPolygonCollection(fareZones, language);
 
   const {getCurrentCoordinates} = useGeolocationContext();
@@ -145,8 +154,12 @@ export const Map = (props: MapProps) => {
 
   const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
+  const queryClient = useQueryClient();
 
   const {data: activeShmoBooking} = useActiveShmoBookingQuery(isFocused);
+
+  const isActiveTrip = isActiveTripBooking(activeShmoBooking);
+  const isActiveBikeTrip = isActiveBikeTripBooking(activeShmoBooking);
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&
@@ -223,6 +236,35 @@ export const Map = (props: MapProps) => {
     [showSnackbar, getGeofencingZoneContent],
   );
 
+  const showBikeStationParkingSnackbar = useCallback(
+    async (stationId: string, fallbackParkingSpacesAvailable: number) => {
+      // Always refetch (staleTime 0): dock availability changes constantly - not least
+      // from the user's own rental, so a value cached before the trip started is wrong.
+      // Going through the shared cache still keeps useStationQuery consumers in sync.
+      const station = await queryClient.fetchQuery({
+        queryKey: getStationQueryKey(stationId),
+        queryFn: ({signal}) => getStation(stationId, {signal}),
+        staleTime: 0,
+      });
+      const parkingSpacesAvailable =
+        station?.numDocksAvailable ?? fallbackParkingSpacesAvailable;
+
+      showSnackbar({
+        content: {
+          iconNode: <ThemeIcon svg={ThemedParkingIcon} size="large" />,
+          title: station
+            ? getTextForLanguage(station.name.translation, language)
+            : undefined,
+          description: t(
+            MobilityTexts.freeBikeParkingSpaces(parkingSpacesAvailable),
+          ),
+        },
+        position: 'top',
+      });
+    },
+    [queryClient, showSnackbar, language, t],
+  );
+
   const locationArrowOnPress = useCallback(async () => {
     const coordinates = await getCurrentCoordinates(true);
     if (
@@ -261,9 +303,6 @@ export const Map = (props: MapProps) => {
 
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
-      const isActiveTrip =
-        activeShmoBooking?.state === ShmoBookingState.IN_USE ||
-        activeShmoBooking?.state === ShmoBookingState.FINISHING;
       if (!isFeaturePoint(feature)) return;
       if (!showGeofencingZones && !isActiveTrip) return;
 
@@ -304,7 +343,7 @@ export const Map = (props: MapProps) => {
       }
     },
     [
-      activeShmoBooking?.state,
+      isActiveTrip,
       showGeofencingZones,
       hideSnackbar,
       selectedFeature,
@@ -318,19 +357,26 @@ export const Map = (props: MapProps) => {
     async (e: OnPressEvent) => {
       const positionClicked = [e.coordinates.longitude, e.coordinates.latitude];
       const featuresAtClick = e.features;
-      if (
-        !featuresAtClick ||
-        featuresAtClick.length === 0 ||
-        activeShmoBooking?.state === ShmoBookingState.IN_USE ||
-        activeShmoBooking?.state === ShmoBookingState.FINISHING
-      )
-        return;
+      if (!featuresAtClick || featuresAtClick.length === 0) return;
 
       const featureToSelect = getFeatureToSelect(
         featuresAtClick,
         positionClicked,
       );
       if (isFeaturePoint(featureToSelect)) {
+        if (isActiveTrip) {
+          // During a trip, tapping a bike station shows its free parking spaces
+          // instead of opening a bottom sheet. Other features stay non-interactive.
+          if (isActiveBikeTrip && isBikeStation(featureToSelect)) {
+            const {id, capacity, num_vehicles_available} =
+              featureToSelect.properties;
+            showBikeStationParkingSnackbar(
+              id,
+              Math.max(0, capacity - num_vehicles_available),
+            );
+          }
+          return;
+        }
         if (isQuayFeature(featureToSelect)) return;
         if (isClusterFeature(featureToSelect)) {
           dispatchMapState({type: MapStateActionType.None});
@@ -382,7 +428,13 @@ export const Map = (props: MapProps) => {
         }
       }
     },
-    [activeShmoBooking?.state, paddingBottomMap, dispatchMapState],
+    [
+      isActiveTrip,
+      isActiveBikeTrip,
+      showBikeStationParkingSnackbar,
+      paddingBottomMap,
+      dispatchMapState,
+    ],
   );
 
   const handleBreakFollow = useCallback(() => {
@@ -498,6 +550,7 @@ export const Map = (props: MapProps) => {
               onPress={onMapItemClick}
               showVehicles={showVehicles}
               showStations={showStations}
+              showBikeStationParkingInfo={isActiveBikeTrip}
             />
           )}
         </MapView>
