@@ -73,11 +73,12 @@ export const CityBikeStartTripOverlay = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {top: safeTopInset}) => ({
   overlay: {
     ...StyleSheet.absoluteFill,
     backgroundColor: theme.color.background.neutral[1].background,
     paddingHorizontal: theme.spacing.xLarge,
+    paddingTop: safeTopInset,
     paddingBottom: theme.spacing.xLarge,
     zIndex: 100,
   },
