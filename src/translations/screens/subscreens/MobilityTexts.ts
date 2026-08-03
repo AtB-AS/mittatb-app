@@ -123,9 +123,14 @@ export const MobilityTexts = {
         'Trykk på knappen på styret',
       ),
       description: _(
-        'Når knappen lyser grønt og sykkelen lager lyd kan du ta den ut av stativet og sykle av sted.',
-        'When the button lights up green and the bike makes a sound, you can take it out of the dock and start riding.',
-        'Når knappen lyser grønt og sykkelen lagar lyd kan du ta den ut av stativet og sykle av stad.',
+        'Deretter kan du ta sykkelen ut av stativet og sykle av sted.',
+        'Then you can take the bike out of the dock and start riding.',
+        'Deretter kan du ta sykkelen ut av stativet og sykle av stad.',
+      ),
+      electricDescription: _(
+        'Nå kan du ta sykkelen ut av stativet og sykle av sted.',
+        'Now you can take the bike out of the dock and start riding.',
+        'No kan du ta sykkelen ut av stativet og sykle av stad.',
       ),
       safeTrip: _('God tur!', 'Have a nice trip!', 'God tur!'),
       header: _('Start tur', 'Start trip', 'Start tur'),
