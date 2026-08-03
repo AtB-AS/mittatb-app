@@ -11,9 +11,9 @@ export type DimensionOverrides = {
 
 // TODO: Remove / rename once old trip details are removed
 export const NEW_TRIP_DIMENSIONS: DimensionOverrides = {
-  labelWidth: 42,
-  decorationContainerWidth: 42,
-  labelAlignment: 'flex-start',
+  labelWidth: 72,
+  decorationContainerWidth: 28,
+  labelAlignment: 'flex-end',
 };
 
 type TripRowProps = {
@@ -41,6 +41,7 @@ export const TripRow: React.FC<TripRowProps> = ({
         style={[
           styles.leftColumn,
           dimensionOverrides?.labelWidth != null && {
+            width: dimensionOverrides.labelWidth,
             minWidth: dimensionOverrides.labelWidth,
           },
           dimensionOverrides?.labelAlignment != null && {
