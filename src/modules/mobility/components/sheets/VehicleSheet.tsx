@@ -222,7 +222,7 @@ export const VehicleSheet = ({
 
       {!isLoading && !shmoReqIsLoading && !isError && vehicle && (
         <View style={styles.container}>
-          {operatorBenefit && (
+          {operatorBenefit && showAppSwitchAction && (
             <OperatorBenefit
               benefit={operatorBenefit}
               formFactor={formFactor}

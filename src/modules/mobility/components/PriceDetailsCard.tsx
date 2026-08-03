@@ -47,24 +47,23 @@ export const PriceDetailsCard = ({
   const freeUnlock = getFreeUnlock(benefit);
   const freeMinutes = getFreeMinutes(benefit);
 
+  const currencySymbol = getCurrencySymbol(pricingPlan.currency);
+  const zeroAmount = `${formatNumberToString(0, language)} ${currencySymbol}`;
+
   const unlockStat = freeUnlock
-    ? t(ScooterTexts.free)
-    : `${formatNumberToString(pricingPlan.price, language)} ${getCurrencySymbol(pricingPlan.currency)}`;
+    ? zeroAmount
+    : `${formatNumberToString(pricingPlan.price, language)} ${currencySymbol}`;
 
-  const minutePriceStat =
-    freeMinutes && pricingPlan.perMinPricing?.length
-      ? `${formatNumberToString(
-          computeFreeMinuteCount(freeMinutes, pricingPlan.perMinPricing),
-          language,
-        )} min ${t(ScooterTexts.free).toLocaleLowerCase(language)}`
-      : ratePrUnit?.formattedRate;
+  const hasFreeMinutes = !!(freeMinutes && pricingPlan.perMinPricing?.length);
 
-  const minutePriceDescription = freeMinutes
+  const minutePriceStat = hasFreeMinutes
+    ? zeroAmount
+    : ratePrUnit?.formattedRate;
+
+  const minutePriceDescription = hasFreeMinutes
     ? t(
-        ScooterTexts.per.discount(
-          ratePrUnit?.perUnit ?? '',
-          ratePrUnit?.rate.toString() ?? '',
-          pricingPlan.currency,
+        ScooterTexts.freeMinutesDescription(
+          computeFreeMinuteCount(freeMinutes!, pricingPlan.perMinPricing!),
         ),
       )
     : t(ScooterTexts.per.unit(ratePrUnit?.perUnit ?? ''));
@@ -75,43 +74,44 @@ export const PriceDetailsCard = ({
 
   return (
     <Section>
-      {hasBenefitInfo && (
-        <GenericSectionItem>
-          <View style={styles.benefitContainer}>
-            <BenefitIllustration
-              illustrationName={benefit?.illustrationName}
-              style={styles.benefitIllustration}
-            />
-            <View style={styles.benefitContent}>
-              {benefitTitle && (
-                <ThemeText typography="body__m__strong">
-                  {benefitTitle}
-                </ThemeText>
-              )}
-              {benefitDescription && (
-                <ThemeText typography="body__s" type="secondary">
-                  {benefitDescription}
-                </ThemeText>
-              )}
-            </View>
-          </View>
-        </GenericSectionItem>
-      )}
       <GenericSectionItem style={styles.sectionWrapper}>
-        <View style={styles.content}>
-          <VehicleCardStat
-            icon={Unlock}
-            stat={unlockStat}
-            description={t(ScooterTexts.unlock)}
-            hasPriceAdjustment={!!freeUnlock}
-          />
-          {minutePriceStat && (
+        <View style={styles.sectionContent}>
+          <View style={styles.content}>
             <VehicleCardStat
-              icon={PricePerTime}
-              stat={minutePriceStat}
-              description={minutePriceDescription}
-              hasPriceAdjustment={!!freeMinutes}
+              icon={Unlock}
+              stat={unlockStat}
+              description={t(ScooterTexts.unlock)}
+              hasPriceAdjustment={!!freeUnlock}
             />
+            {minutePriceStat && (
+              <VehicleCardStat
+                icon={PricePerTime}
+                stat={minutePriceStat}
+                description={minutePriceDescription}
+                hasPriceAdjustment={!!freeMinutes}
+              />
+            )}
+          </View>
+
+          {hasBenefitInfo && (
+            <View style={styles.benefitContainer}>
+              <BenefitIllustration
+                illustrationName={benefit?.illustrationName}
+                style={styles.benefitIllustration}
+              />
+              <View style={styles.benefitContent}>
+                {benefitTitle && (
+                  <ThemeText typography="body__m__strong">
+                    {benefitTitle}
+                  </ThemeText>
+                )}
+                {benefitDescription && (
+                  <ThemeText typography="body__s" type="secondary">
+                    {benefitDescription}
+                  </ThemeText>
+                )}
+              </View>
+            </View>
           )}
         </View>
       </GenericSectionItem>
@@ -130,13 +130,16 @@ export const PriceDetailsCard = ({
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     content: {
-      flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
       gap: theme.spacing.small,
     },
     sectionWrapper: {
       padding: theme.spacing.small,
+    },
+    sectionContent: {
+      flex: 1,
+      gap: theme.spacing.medium,
     },
     benefitContainer: {
       flexDirection: 'row',
@@ -147,6 +150,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     benefitContent: {
       flex: 1,
+      gap: theme.spacing.xSmall,
     },
   };
 });
