@@ -10,8 +10,6 @@ import {Linking, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useOperatorBenefit} from '../../use-operator-benefit';
-import {OperatorBenefit} from '../OperatorBenefit';
 import {OperatorActionButton} from '../OperatorActionButton';
 import {
   FormFactor,
@@ -117,8 +115,6 @@ export const VehicleSheet = ({
     operatorId,
     formFactor,
   );
-
-  const {operatorBenefit} = useOperatorBenefit(operatorId);
   const selectedPaymentMethod = useSelectedShmoPaymentMethod();
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
@@ -222,12 +218,6 @@ export const VehicleSheet = ({
 
       {!isLoading && !shmoReqIsLoading && !isError && vehicle && (
         <View style={styles.container}>
-          {operatorBenefit && showAppSwitchAction && (
-            <OperatorBenefit
-              benefit={operatorBenefit}
-              formFactor={formFactor}
-            />
-          )}
           <View style={styles.vehicleContent}>
             {showVehicleCard && (
               <VehicleCard
