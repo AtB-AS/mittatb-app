@@ -390,8 +390,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             bonusProduct={relevantTicketBonusProduct}
             isChecked={bonusProductId === relevantTicketBonusProduct.id}
             onPress={() =>
-              setBonusProductId(
-                bonusProductId === relevantTicketBonusProduct.id
+              setBonusProductId((prev) =>
+                prev === relevantTicketBonusProduct.id
                   ? undefined
                   : relevantTicketBonusProduct.id,
               )
