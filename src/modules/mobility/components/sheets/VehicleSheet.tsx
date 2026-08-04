@@ -122,8 +122,8 @@ export const VehicleSheet = ({
   const {isParkingViolationsReportingEnabled} = useFeatureTogglesContext();
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
-  const serverBonusOffer = vehicle?.bonusOffer ?? undefined;
-  const selectedBonusProductId = serverBonusOffer?.bonusProductId;
+  const bonusOffer = vehicle?.bonusOffer ?? undefined;
+  const selectedBonusProductId = bonusOffer?.bonusProductId;
   // The checkbox needs the full product (paymentDescription/productType), which
   // the server offer doesn't carry, so resolve it by id from active products.
   const bonusProduct = useBonusProductById(selectedBonusProductId);
@@ -232,7 +232,7 @@ export const VehicleSheet = ({
               benefit={getDisplayedBenefit({
                 payWithBonusPoints,
                 vehicle,
-                serverBonusOffer,
+                bonusOffer,
               })}
               onNavigatePricingDetails={navigateToPricingDetails}
             />
@@ -335,18 +335,18 @@ export const VehicleSheet = ({
 const getDisplayedBenefit = ({
   payWithBonusPoints,
   vehicle,
-  serverBonusOffer,
+  bonusOffer,
 }: {
   payWithBonusPoints: boolean;
   vehicle: Vehicle;
-  serverBonusOffer: BonusOffer | undefined;
+  bonusOffer: BonusOffer | undefined;
 }): BenefitType | undefined => {
   if (!payWithBonusPoints) return vehicle.benefit ?? undefined;
 
   return {
     title: [],
     description: [],
-    priceAdjustments: serverBonusOffer?.priceAdjustments ?? [],
+    priceAdjustments: bonusOffer?.priceAdjustments ?? [],
   };
 };
 
