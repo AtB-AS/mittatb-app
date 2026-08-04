@@ -194,9 +194,9 @@ export type AddPaymentMethodResponse = {
  * Defined by RefundOptionsResponse in
  * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/refund.rs
  */
-export type RefundOptions = {
-  isRefundable: boolean;
-};
+export type RefundOptions =
+  | {isRefundable: false}
+  | {isRefundable: true; lastRefundTime?: Date};
 
 /**
  * Defined by ConsumableSchoolCarnetResponse in
