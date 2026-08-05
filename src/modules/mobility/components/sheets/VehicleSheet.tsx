@@ -10,7 +10,6 @@ import {Linking, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
-import {OperatorActionButton} from '../OperatorActionButton';
 import {
   FormFactor,
   PropulsionType,
@@ -277,38 +276,32 @@ export const VehicleSheet = ({
                 />
               </View>
             </>
-          ) : actionButton?.type === ActionButtonType.APP_SWITCH &&
-            rentalAppUri ? (
-            <AppSwitchActionButton
-              label={
-                getTextForLanguage(actionButton.label, language) ??
-                t(MobilityTexts.operatorAppSwitchButton(operatorName))
-              }
-              onPress={onAppSwitchPress}
-              isLoading={isAppSwitchPending}
-              hasError={isAppSwitchError}
-            />
           ) : (
-            <>
-              {rentalAppUri && (
-                <OperatorActionButton
-                  operatorId={operatorId}
-                  operatorName={operatorName}
-                  appStoreUri={appStoreUri ?? ''}
-                  rentalAppUri={rentalAppUri}
-                />
-              )}
-              {showParkingViolation && (
-                <Button
-                  expanded={true}
-                  text={t(MobilityTexts.reportParkingViolation)}
-                  mode="secondary"
-                  onPress={onReportParkingViolation}
-                  rightIcon={{svg: ChevronRight}}
-                  backgroundColor={theme.color.background.neutral[1]}
-                />
-              )}
-            </>
+            actionButton?.type === ActionButtonType.APP_SWITCH && (
+              <View style={styles.appSwitchActionButtons}>
+                {rentalAppUri && (
+                  <AppSwitchActionButton
+                    label={
+                      getTextForLanguage(actionButton.label, language) ??
+                      t(MobilityTexts.operatorAppSwitchButton(operatorName))
+                    }
+                    onPress={onAppSwitchPress}
+                    isLoading={isAppSwitchPending}
+                    hasError={isAppSwitchError}
+                  />
+                )}
+                {showParkingViolation && (
+                  <Button
+                    expanded={true}
+                    text={t(MobilityTexts.reportParkingViolation)}
+                    mode="secondary"
+                    onPress={onReportParkingViolation}
+                    rightIcon={{svg: ChevronRight}}
+                    backgroundColor={theme.color.background.neutral[1]}
+                  />
+                )}
+              </View>
+            )
           )}
         </View>
       )}
@@ -356,6 +349,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       paddingBottom: theme.spacing.medium,
     },
     helpButtons: {
+      gap: theme.spacing.medium,
+    },
+    appSwitchActionButtons: {
       gap: theme.spacing.medium,
     },
   };
