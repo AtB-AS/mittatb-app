@@ -163,6 +163,7 @@ export const getVehicle = (
         : `/mobility/v1/stations/${stationId}/mock-vehicles/${vehicleTypeId}`,
       {
         ...opts,
+        authWithIdToken: true,
       },
     )
     .then((response) => {
