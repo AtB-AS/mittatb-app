@@ -2,7 +2,6 @@ import {client} from '@atb/api/index';
 import {stringifyUrl} from '@atb/api/utils';
 import qs from 'query-string';
 import {AxiosRequestConfig} from 'axios';
-import {z} from 'zod';
 import {
   AssetSchema,
   AssetFromQrCodeQuery,
@@ -17,6 +16,8 @@ import {
   VehiclesRequestBody,
   VehicleSchema,
   Vehicle,
+  VehicleAppSwitchSchema,
+  VehicleAppSwitch,
   StationSchema,
   Station,
   ViolationsReportingInitQuery,
@@ -29,10 +30,6 @@ import {
   ViolationsReportQueryResult,
   ViolationsReportQueryResultSchema,
 } from './types/mobility';
-
-const AppSwitchUrlSchema = z.object({url: z.string()});
-
-export type AppSwitchUrl = z.infer<typeof AppSwitchUrlSchema>;
 
 export const getActiveShmoBooking = (
   acceptLanguage: string,
@@ -178,6 +175,19 @@ export const getVehicle = (
     });
 };
 
+export const getVehicleAppSwitch = (
+  vehicleId: string,
+  bonusProductId?: string,
+): Promise<VehicleAppSwitch> => {
+  const url = `/mobility/v1/vehicles/${vehicleId}/app-switch`;
+  const query = qs.stringify({bonusProductId});
+  return client
+    .post<VehicleAppSwitch>(stringifyUrl(url, query), undefined, {
+      authWithIdToken: true,
+    })
+    .then((response) => VehicleAppSwitchSchema.parse(response.data));
+};
+
 export const getStation = (
   id: string,
   opts?: AxiosRequestConfig,
@@ -189,20 +199,6 @@ export const getStation = (
       console.error('Error in StationSchema parsing: ', error);
       return null;
     });
-};
-
-export const getAppSwitchUrl = (
-  vehicleTypeId: string,
-  bonusProductId?: string,
-  rentalAppUri?: string,
-): Promise<AppSwitchUrl> => {
-  const url = `/mobility/v1/app-switch/vehicle-type/${vehicleTypeId}`;
-  const query = qs.stringify({bonusProductId, rentalAppUri});
-  return client
-    .post<AppSwitchUrl>(stringifyUrl(url, query), undefined, {
-      authWithIdToken: true,
-    })
-    .then((response) => AppSwitchUrlSchema.parse(response.data));
 };
 
 export const getMockVehicle = (

@@ -52,7 +52,7 @@ import {
 } from '@atb/modules/bonus';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import type {BenefitType} from '@atb/api/types/benefit';
-import {useAppSwitchMutation} from '../../queries/use-app-switch-mutation';
+import {useVehicleAppSwitchMutation} from '../../queries/use-vehicle-app-switch-mutation';
 import {showAppMissingAlert} from '../../show-app-missing-alert';
 
 type Props = {
@@ -96,6 +96,8 @@ export const VehicleSheet = ({
     appStoreUri,
   } = useMapVehicle();
 
+  const vehicleId = vehicle?.id;
+
   const formFactor = vehicle?.vehicleType.formFactor ?? FormFactor.Other;
   const propulsionType = vehicle?.vehicleType.propulsionType;
   const isBicycle =
@@ -105,7 +107,6 @@ export const VehicleSheet = ({
     propulsionType === PropulsionType.ElectricAssist;
 
   const operator = useOperators().byId(operatorId);
-  const vehicleTypeId = vehicle?.vehicleType.id;
   const operatorLogo = operator?.brandAssets?.brandImageUrl;
 
   const {mode, subMode} = getTransportModeAndSubMode(
@@ -135,19 +136,18 @@ export const VehicleSheet = ({
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
 
   const {
-    mutateAsync: getAppSwitchUrl,
+    mutateAsync: getVehicleAppSwitch,
     isPending: isAppSwitchPending,
     isError: isAppSwitchError,
-  } = useAppSwitchMutation();
+  } = useVehicleAppSwitchMutation();
 
   const actionButton = vehicle?.actionButton ?? undefined;
 
   const onAppSwitchPress = useCallback(async () => {
-    if (!vehicleTypeId) return;
-    const {url} = await getAppSwitchUrl({
-      vehicleTypeId,
+    if (!vehicleId) return;
+    const {url} = await getVehicleAppSwitch({
+      vehicleId,
       bonusProductId: payWithBonusPoints ? selectedBonusProductId : undefined,
-      rentalAppUri: rentalAppUri ?? undefined,
     });
     logEvent('Mobility', 'Open operator app', {
       operatorId,
@@ -157,11 +157,10 @@ export const VehicleSheet = ({
       showAppMissingAlert(operatorName, appStoreUri ?? undefined),
     );
   }, [
-    vehicleTypeId,
-    getAppSwitchUrl,
+    vehicleId,
+    getVehicleAppSwitch,
     payWithBonusPoints,
     selectedBonusProductId,
-    rentalAppUri,
     logEvent,
     operatorId,
     operatorName,
