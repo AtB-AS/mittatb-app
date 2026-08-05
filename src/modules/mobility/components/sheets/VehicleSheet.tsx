@@ -40,6 +40,7 @@ import {
 import {PriceDetailsCard} from '../PriceDetailsCard';
 import {Loading} from '@atb/components/loading';
 import {SupportButton} from '../SupportButton';
+import {AppSwitchActionButton} from '@atb/modules/mobility';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {BrandingImage} from '../BrandingImage';
 import {getTransportModeAndSubMode} from '../../utils';
@@ -281,23 +282,18 @@ export const VehicleSheet = ({
               </View>
             </>
           ) : showAppSwitchAction && rentalAppUri ? (
-            <OperatorActionButton
-              operatorId={operatorId}
-              operatorName={operatorName}
-              appStoreUri={appStoreUri ?? ''}
-              rentalAppUri={rentalAppUri}
-              appSwitchAction={{
-                label:
-                  getTextForLanguage(
-                    actionButton?.type === ActionButtonType.APP_SWITCH
-                      ? actionButton.label
-                      : undefined,
-                    language,
-                  ) ?? t(MobilityTexts.operatorAppSwitchButton(operatorName)),
-                onPress: onAppSwitchPress,
-                isLoading: isAppSwitchPending,
-                hasError: isAppSwitchError,
-              }}
+            <AppSwitchActionButton
+              label={
+                getTextForLanguage(
+                  actionButton?.type === ActionButtonType.APP_SWITCH
+                    ? actionButton.label
+                    : undefined,
+                  language,
+                ) ?? t(MobilityTexts.operatorAppSwitchButton(operatorName))
+              }
+              onPress={onAppSwitchPress}
+              isLoading={isAppSwitchPending}
+              hasError={isAppSwitchError}
             />
           ) : (
             <>
