@@ -261,6 +261,11 @@ const FareContractTexts = {
       'Contact customer support',
       'Kontakt kundeservice',
     ),
+    noLongerRefundable: _(
+      'Angrefristen for denne billetten har utløpt.',
+      'The refund period for this ticket has ended.',
+      'Angrefristen for denne billetten har gått ut.',
+    ),
   },
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>
