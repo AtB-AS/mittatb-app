@@ -177,15 +177,27 @@ export const getVehicle = (
 };
 
 export const getVehicleAppSwitch = (
-  vehicleId: string,
+  vehicleId?: string,
+  vehicleTypeId?: string,
+  stationId?: string,
   bonusProductId?: string,
-): Promise<VehicleAppSwitch> => {
-  const url = `/mobility/v1/vehicles/${vehicleId}/app-switch`;
+): Promise<VehicleAppSwitch | null> => {
+  if (!vehicleId && (!vehicleTypeId || !stationId))
+    return Promise.resolve(null);
   const query = qs.stringify({bonusProductId});
   return client
-    .post<VehicleAppSwitch>(stringifyUrl(url, query), undefined, {
-      authWithIdToken: true,
-    })
+    .post(
+      stringifyUrl(
+        !!vehicleId
+          ? `/mobility/v1/vehicles/${vehicleId}/app-switch`
+          : `/mobility/v1/stations/${stationId}/mock-vehicles/${vehicleTypeId}/app-switch`,
+        query,
+      ),
+      undefined,
+      {
+        authWithIdToken: true,
+      },
+    )
     .then((response) => VehicleAppSwitchSchema.parse(response.data));
 };
 

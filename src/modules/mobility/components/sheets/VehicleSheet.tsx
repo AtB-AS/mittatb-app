@@ -50,8 +50,12 @@ import {
 } from '@atb/modules/bonus';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import type {BenefitType} from '@atb/api/types/benefit';
-import {useVehicleAppSwitchMutation} from '../../queries/use-vehicle-app-switch-mutation';
+import {
+  useVehicleAppSwitchMutation,
+  VehicleAppSwitchVariables,
+} from '../../queries/use-vehicle-app-switch-mutation';
 import {showAppMissingAlert} from '../../show-app-missing-alert';
+import {useMapContext} from '@atb/modules/map';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -84,6 +88,8 @@ export const VehicleSheet = ({
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
+  const {mapState} = useMapContext();
+
   const {
     vehicle,
     isLoading,
@@ -140,20 +146,32 @@ export const VehicleSheet = ({
   const actionButton = vehicle?.actionButton ?? undefined;
 
   const onAppSwitchPress = useCallback(async () => {
-    if (!vehicleId) return;
-    const {url} = await getVehicleAppSwitch({
+    const vehicleAppSwitchVariables: VehicleAppSwitchVariables = {
       vehicleId,
+      vehicleTypeId: mapState.vehicleTypeId,
+      stationId: mapState.stationId,
       bonusProductId: payWithBonusPoints ? selectedBonusProductId : undefined,
-    });
-    logEvent('Mobility', 'Open operator app', {
+    };
+    const vehicleAppSwitch = await getVehicleAppSwitch(
+      vehicleAppSwitchVariables,
+    );
+    const logEventVariables = {
       operatorId,
-      paidWithBonusPoints: payWithBonusPoints,
-    });
-    await Linking.openURL(url).catch(() =>
+      payWithBonusPoints,
+      vehicleAppSwitchVariables,
+    };
+    if (vehicleAppSwitch === null) {
+      logEvent('Mobility', 'Failed to open operator app', logEventVariables);
+      return;
+    }
+    logEvent('Mobility', 'Open operator app', logEventVariables);
+    await Linking.openURL(vehicleAppSwitch.url).catch(() =>
       showAppMissingAlert(operatorName, appStoreUri ?? undefined),
     );
   }, [
     vehicleId,
+    mapState.vehicleTypeId,
+    mapState.stationId,
     getVehicleAppSwitch,
     payWithBonusPoints,
     selectedBonusProductId,
