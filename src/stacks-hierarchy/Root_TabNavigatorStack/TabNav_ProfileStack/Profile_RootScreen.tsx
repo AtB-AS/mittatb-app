@@ -12,7 +12,12 @@ import {useAuthContext} from '@atb/modules/auth';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
-import {ProfileTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  ProfileTexts,
+  useTranslation,
+} from '@atb/translations';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useIsLoading} from '@atb/utils/use-is-loading';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
@@ -39,6 +44,7 @@ import {Star} from '@atb/assets/svg/mono-icons/bonus';
 import {Favorite, Parking} from '@atb/assets/svg/mono-icons/places';
 import {Info, Unknown} from '@atb/assets/svg/mono-icons/status';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {useChatUnreadCount} from '@atb/modules/chat';
 import {useDebugServerOverrides} from '@atb/modules/debug';
 import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
@@ -51,7 +57,11 @@ import {
   useIsBonusActiveForUser,
   useIsBonusEnrollable,
 } from '@atb/modules/bonus';
-import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
+import {
+  ChevronRight,
+  ExternalLink,
+} from '@atb/assets/svg/mono-icons/navigation';
+import {openUrl} from '@atb/utils/open-url';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -62,7 +72,12 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {enable_ticketing, enable_vipps_login} = useRemoteConfigContext();
   const {clearTokenAtLogout} = useMobileTokenContext();
   const style = useProfileHomeStyle();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
+  const {configurableLinks} = useFirestoreConfigurationContext();
+  const externalChatUrl = getTextForLanguage(
+    configurableLinks?.externalChatUrl,
+    language,
+  );
   const analytics = useAnalyticsContext();
   const {authenticationType, signOut} = useAuthContext();
   const config = useLocalConfig();
@@ -335,7 +350,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             {enable_intercom && (
               <LinkSectionItem
                 leftIcon={{
-                  svg: Chat,
+                  svg: Phone,
                   notificationColor: unreadCount
                     ? theme.color.status.error.primary
                     : undefined,
@@ -353,6 +368,20 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               />
             )}
           </Section>
+          {externalChatUrl && (
+            <Button
+              mode="secondary"
+              text={t(ProfileTexts.sections.contact.externalChat)}
+              rightIcon={{svg: ExternalLink}}
+              expanded={true}
+              backgroundColor={neutralContrastColor}
+              onPress={() => {
+                analytics.logEvent('Profile', 'External chat clicked');
+                openUrl(externalChatUrl);
+              }}
+              testID="externalChatButton"
+            />
+          )}
           {(!!JSON.parse(IS_QA_ENV || 'false') ||
             __DEV__ ||
             customerProfile?.debug) && (
