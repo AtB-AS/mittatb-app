@@ -168,7 +168,6 @@ export const VehicleSheet = ({
   const showVehicleCard = !isBicycle || isElectric;
   const showParkingViolation =
     !isBicycle && isParkingViolationsReportingEnabled;
-  const showBonusCheckbox = isBonusActiveForUser && !!bonusProduct;
 
   return (
     <MapBottomSheet
@@ -235,16 +234,17 @@ export const VehicleSheet = ({
             />
           </View>
 
+          {isBonusActiveForUser && !!bonusProduct && (
+            <PayWithBonusPointsCheckbox
+              bonusProduct={bonusProduct}
+              operatorName={operatorName}
+              isChecked={payWithBonusPoints}
+              onPress={() => setPayWithBonusPoints((prev) => !prev)}
+            />
+          )}
+
           {actionButton?.type === ActionButtonType.START_TRIP && operatorId ? (
             <>
-              {showBonusCheckbox && bonusProduct && (
-                <PayWithBonusPointsCheckbox
-                  bonusProduct={bonusProduct}
-                  operatorName={operatorName}
-                  isChecked={payWithBonusPoints}
-                  onPress={() => setPayWithBonusPoints((prev) => !prev)}
-                />
-              )}
               <ShmoActionButton
                 onStartOnboarding={() => startOnboardingCallback(formFactor)}
                 loginCallback={navigateToLogin}
