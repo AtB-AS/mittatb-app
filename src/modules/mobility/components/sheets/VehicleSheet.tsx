@@ -170,10 +170,6 @@ export const VehicleSheet = ({
     !isBicycle && isParkingViolationsReportingEnabled;
   const showBonusCheckbox = isBonusActiveForUser && !!bonusProduct;
 
-  const showStartTrip = actionButton?.type === ActionButtonType.START_TRIP;
-  const showAppSwitchAction =
-    actionButton?.type === ActionButtonType.APP_SWITCH;
-
   return (
     <MapBottomSheet
       canMinimize={true}
@@ -239,7 +235,7 @@ export const VehicleSheet = ({
             />
           </View>
 
-          {showStartTrip && operatorId ? (
+          {actionButton?.type === ActionButtonType.START_TRIP && operatorId ? (
             <>
               {showBonusCheckbox && bonusProduct && (
                 <PayWithBonusPointsCheckbox
@@ -281,15 +277,12 @@ export const VehicleSheet = ({
                 />
               </View>
             </>
-          ) : showAppSwitchAction && rentalAppUri ? (
+          ) : actionButton?.type === ActionButtonType.APP_SWITCH &&
+            rentalAppUri ? (
             <AppSwitchActionButton
               label={
-                getTextForLanguage(
-                  actionButton?.type === ActionButtonType.APP_SWITCH
-                    ? actionButton.label
-                    : undefined,
-                  language,
-                ) ?? t(MobilityTexts.operatorAppSwitchButton(operatorName))
+                getTextForLanguage(actionButton.label, language) ??
+                t(MobilityTexts.operatorAppSwitchButton(operatorName))
               }
               onPress={onAppSwitchPress}
               isLoading={isAppSwitchPending}
