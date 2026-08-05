@@ -148,6 +148,15 @@ export const getVehicles = (
     .then((response) => VehicleSchema.array().parse(response.data));
 };
 
+const getVehiclePath = (
+  vehicleId?: string,
+  vehicleTypeId?: string,
+  stationId?: string,
+) =>
+  !!vehicleId
+    ? `/mobility/v1/vehicles/${vehicleId}`
+    : `/mobility/v1/stations/${stationId}/mock-vehicles/${vehicleTypeId}`;
+
 export const getVehicle = (
   vehicleId?: string,
   vehicleTypeId?: string,
@@ -157,15 +166,10 @@ export const getVehicle = (
   if (!vehicleId && (!vehicleTypeId || !stationId))
     return Promise.resolve(null);
   return client
-    .get(
-      !!vehicleId
-        ? `/mobility/v1/vehicles/${vehicleId}`
-        : `/mobility/v1/stations/${stationId}/mock-vehicles/${vehicleTypeId}`,
-      {
-        ...opts,
-        authWithIdToken: true,
-      },
-    )
+    .get(getVehiclePath(vehicleId, vehicleTypeId, stationId), {
+      ...opts,
+      authWithIdToken: true,
+    })
     .then((response) => {
       const result = VehicleSchema.safeParse(response.data);
       if (!result.success) {
@@ -188,9 +192,7 @@ export const getVehicleAppSwitch = (
   return client
     .post(
       stringifyUrl(
-        !!vehicleId
-          ? `/mobility/v1/vehicles/${vehicleId}/app-switch`
-          : `/mobility/v1/stations/${stationId}/mock-vehicles/${vehicleTypeId}/app-switch`,
+        `${getVehiclePath(vehicleId, vehicleTypeId, stationId)}/app-switch`,
         query,
       ),
       undefined,
@@ -211,25 +213,6 @@ export const getStation = (
     .catch((error) => {
       console.error('Error in StationSchema parsing: ', error);
       return null;
-    });
-};
-
-export const getMockVehicle = (
-  stationId: string,
-  vehicleTypeId: string,
-  opts?: VehicleRequestOpts,
-): Promise<Vehicle> => {
-  return client
-    .get(`/mobility/v1/stations/${stationId}/mock-vehicles/${vehicleTypeId}`, {
-      ...opts,
-    })
-    .then((response) => {
-      const result = VehicleSchema.safeParse(response.data);
-      if (!result.success) {
-        console.error(result.error.format());
-        throw result.error;
-      }
-      return result.data;
     });
 };
 
