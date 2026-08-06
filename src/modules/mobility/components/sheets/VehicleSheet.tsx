@@ -50,8 +50,12 @@ import {
 } from '@atb/modules/bonus';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import type {BenefitType} from '@atb/api/types/benefit';
-import {useAppSwitchMutation} from '../../queries/use-app-switch-mutation';
+import {
+  useVehicleAppSwitchMutation,
+  VehicleAppSwitchVariables,
+} from '../../queries/use-vehicle-app-switch-mutation';
 import {showAppMissingAlert} from '../../show-app-missing-alert';
+import {useMapContext} from '@atb/modules/map';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -84,6 +88,8 @@ export const VehicleSheet = ({
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
+  const {mapState} = useMapContext();
+
   const {
     vehicle,
     isLoading,
@@ -94,6 +100,8 @@ export const VehicleSheet = ({
     appStoreUri,
   } = useMapVehicle();
 
+  const vehicleId = vehicle?.id;
+
   const formFactor = vehicle?.vehicleType.formFactor ?? FormFactor.Other;
   const propulsionType = vehicle?.vehicleType.propulsionType;
   const isBicycle =
@@ -103,7 +111,6 @@ export const VehicleSheet = ({
     propulsionType === PropulsionType.ElectricAssist;
 
   const operator = useOperators().byId(operatorId);
-  const vehicleTypeId = vehicle?.vehicleType.id;
   const operatorLogo = operator?.brandAssets?.brandImageUrl;
 
   const {mode, subMode} = getTransportModeAndSubMode(
@@ -131,33 +138,43 @@ export const VehicleSheet = ({
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
 
   const {
-    mutateAsync: getAppSwitchUrl,
+    mutateAsync: getVehicleAppSwitch,
     isPending: isAppSwitchPending,
     isError: isAppSwitchError,
-  } = useAppSwitchMutation();
+  } = useVehicleAppSwitchMutation();
 
   const actionButton = vehicle?.actionButton ?? undefined;
 
   const onAppSwitchPress = useCallback(async () => {
-    if (!vehicleTypeId) return;
-    const {url} = await getAppSwitchUrl({
-      vehicleTypeId,
+    const vehicleAppSwitchVariables: VehicleAppSwitchVariables = {
+      vehicleId,
+      vehicleTypeId: mapState.vehicleTypeId,
+      stationId: mapState.stationId,
       bonusProductId: payWithBonusPoints ? selectedBonusProductId : undefined,
-      rentalAppUri: rentalAppUri ?? undefined,
-    });
-    logEvent('Mobility', 'Open operator app', {
+    };
+    const vehicleAppSwitch = await getVehicleAppSwitch(
+      vehicleAppSwitchVariables,
+    );
+    const logEventVariables = {
       operatorId,
-      paidWithBonusPoints: payWithBonusPoints,
-    });
-    await Linking.openURL(url).catch(() =>
+      payWithBonusPoints,
+      vehicleAppSwitchVariables,
+    };
+    if (vehicleAppSwitch === null) {
+      logEvent('Mobility', 'Failed to open operator app', logEventVariables);
+      return;
+    }
+    logEvent('Mobility', 'Open operator app', logEventVariables);
+    await Linking.openURL(vehicleAppSwitch.url).catch(() =>
       showAppMissingAlert(operatorName, appStoreUri ?? undefined),
     );
   }, [
-    vehicleTypeId,
-    getAppSwitchUrl,
+    vehicleId,
+    mapState.vehicleTypeId,
+    mapState.stationId,
+    getVehicleAppSwitch,
     payWithBonusPoints,
     selectedBonusProductId,
-    rentalAppUri,
     logEvent,
     operatorId,
     operatorName,
