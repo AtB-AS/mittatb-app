@@ -239,10 +239,6 @@ export type RentalUris = z.infer<typeof RentalUrisSchema>;
 
 export const BonusOfferSchema = z.object({
   bonusProductId: z.string(),
-  bonusProductPrice: z.object({
-    amount: z.number(),
-    currencyCode: z.string(),
-  }),
   priceAdjustments: z.array(PriceAdjustmentSchema),
 });
 
