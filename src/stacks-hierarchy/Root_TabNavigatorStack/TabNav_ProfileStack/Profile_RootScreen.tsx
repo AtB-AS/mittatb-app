@@ -421,7 +421,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               )}
               rightIcon={{svg: LogOut}}
               expanded={true}
-              style={style.logoutButton}
               onPress={handleLogoutPress}
               testID="logoutButton"
             />
@@ -488,9 +487,6 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   betaSectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  logoutButton: {
-    marginVertical: theme.spacing.large,
   },
   globalMessage: {
     marginVertical: theme.spacing.xSmall,
