@@ -43,7 +43,6 @@ import {Card, Receipt} from '@atb/assets/svg/mono-icons/ticketing';
 import {Star} from '@atb/assets/svg/mono-icons/bonus';
 import {Favorite, Parking} from '@atb/assets/svg/mono-icons/places';
 import {Info, Unknown} from '@atb/assets/svg/mono-icons/status';
-import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {useChatUnreadCount} from '@atb/modules/chat';
 import {useDebugServerOverrides} from '@atb/modules/debug';
@@ -474,7 +473,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   contentContainer: {
-    rowGap: theme.spacing.small,
+    rowGap: theme.spacing.medium,
     margin: theme.spacing.medium,
   },
   mediumGap: {
