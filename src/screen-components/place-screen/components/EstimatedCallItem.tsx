@@ -77,8 +77,12 @@ export const EstimatedCallItem = memo(
     );
   },
   (prev, next) => {
-    const prevMinutesUntilDeparture = prev.secondsUntilDeparture % 60;
-    const nextMinutesUntilDeparture = next.secondsUntilDeparture % 60;
+    const prevMinutesUntilDeparture = Math.floor(
+      prev.secondsUntilDeparture / 60,
+    );
+    const nextMinutesUntilDeparture = Math.floor(
+      next.secondsUntilDeparture / 60,
+    );
     if (
       nextMinutesUntilDeparture < 10 &&
       prevMinutesUntilDeparture !== nextMinutesUntilDeparture
@@ -97,7 +101,7 @@ export const EstimatedCallItem = memo(
     )
       return false;
     if (
-      destinationDisplaysAreEqual(
+      !destinationDisplaysAreEqual(
         prev.departure.destinationDisplay,
         next.departure.destinationDisplay,
       )
