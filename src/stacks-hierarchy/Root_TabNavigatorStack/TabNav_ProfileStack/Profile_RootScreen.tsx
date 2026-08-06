@@ -12,7 +12,7 @@ import {useAuthContext} from '@atb/modules/auth';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
-import {ProfileTexts, useTranslation} from '@atb/translations';
+import {dictionary, ProfileTexts, useTranslation} from '@atb/translations';
 import {useIsLoading} from '@atb/utils/use-is-loading';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
@@ -31,7 +31,7 @@ import {
   useGetHasReservationOrAvailableFareContract,
   useTicketingContext,
 } from '@atb/modules/ticketing';
-import {ClickableCopy} from './components/ClickableCopy';
+import {ClickableCopy} from '@atb/components/clickable-copy';
 import {UserInfo} from './components/UserInfo';
 import {Button} from '@atb/components/button';
 import {Card, Receipt} from '@atb/assets/svg/mono-icons/ticketing';
@@ -407,11 +407,9 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               <ClickableCopy
                 successElement={
                   <>
-                    <ScreenReaderAnnouncement
-                      message={t(ProfileTexts.installId.wasCopiedAlert)}
-                    />
+                    <ScreenReaderAnnouncement message={t(dictionary.copied)} />
                     <ThemeText typography="body__s" type="secondary">
-                      ✅ {t(ProfileTexts.installId.wasCopiedAlert)}
+                      ✅ {t(dictionary.copied)}
                     </ThemeText>
                   </>
                 }
