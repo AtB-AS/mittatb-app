@@ -79,7 +79,6 @@ describe('VehicleSchema (shmo vehicle contract v2)', () => {
       ...baseVehicle,
       bonusOffer: {
         bonusProductId: 'bonus-product-1',
-        bonusProductPrice: {amount: 50, currencyCode: 'NOK'},
         priceAdjustments: [
           {
             amount: 0,
@@ -93,9 +92,6 @@ describe('VehicleSchema (shmo vehicle contract v2)', () => {
     expect(result.success).toBe(true);
     if (result.success) {
       expect(result.data.bonusOffer?.bonusProductId).toBe('bonus-product-1');
-      expect(result.data.bonusOffer?.bonusProductPrice.currencyCode).toBe(
-        'NOK',
-      );
     }
   });
 
@@ -141,7 +137,6 @@ describe('BonusOfferSchema', () => {
   it('parses a standalone bonus offer', () => {
     const result = BonusOfferSchema.safeParse({
       bonusProductId: 'bonus-product-1',
-      bonusProductPrice: {amount: 50, currencyCode: 'NOK'},
       priceAdjustments: [],
     });
     expect(result.success).toBe(true);
