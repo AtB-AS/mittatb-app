@@ -411,11 +411,6 @@ const ProfileTexts = {
     label: (id: string) => _(`ID: ${id}`, `ID: ${id}`, `ID: ${id}`),
     a11yLabel: (id: string) =>
       _(`ID: ${spellOut(id)}`, `ID: ${spellOut(id)}`, `ID: ${spellOut(id)}`),
-    wasCopiedAlert: _(
-      'ID ble kopiert!',
-      'ID was copied to clipboard!',
-      'ID vart kopiert!',
-    ),
     a11yHint: _(
       'Klikk for å kopiere id. Denne brukes til teknisk feilsøk.',
       'Press to copy the id. This is used for technical debugging',
