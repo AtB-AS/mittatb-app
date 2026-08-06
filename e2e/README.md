@@ -71,6 +71,35 @@ $ pnpm android
 e2e$ pnpm test:android:local:dev
 ```
 
+## Test with Wiremock
+
+The Appium plugin appium-interceptor intercepts HTTPS traffic from the emulator. WireMock runs in browser-proxy 
+mode: matched stubs are served from disk, unmatched requests (Mapbox, Firebase, etc.) pass through to their real 
+hosts. No `--proxy-all` is used, so non-ATB traffic is not accidentally routed to the ATB backend.
+```
+Android app → appium-interceptor (MITM) → WireMock (forward proxy, port 8080) → real server (unmatched)
+```
+
+### Running locally
+
+_NB!_ Currently only a simple travel search case is implemented as a PoC. This script is already set in 
+`pnpm test:android:local:proxy`.
+
+```bash
+# Start WireMock
+docker run -it --rm -p 8080:8080 --name wiremock \
+  -e "JAVA_OPTS=--add-opens java.base/sun.security.x509=ALL-UNNAMED" \
+  -v "$PWD/e2e/wiremock/mappings:/home/wiremock/mappings" \
+  -v "$PWD/e2e/wiremock/__files:/home/wiremock/__files" \
+  wiremock/wiremock:3.13.2 \
+  --enable-browser-proxying
+
+# Run tests (emulator with Android <= 13 must be started with -writable-system -wipe-data)
+cd e2e && ./scripts/add-emulator-certificate.sh
+cd e2e && pnpm test:android:local:proxy
+```
+
+
 ## Errors and reporting
 
 The test results are stored as JUnit XML-files and as a Mochawesome JSON-file in `e2e/results/`. Also, any if any errors

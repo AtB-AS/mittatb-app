@@ -404,6 +404,7 @@ const ProfileTexts = {
         'Give feedback about the app',
         'Gi tilbakemelding om appen',
       ),
+      externalChat: _('Chat med oss', 'Chat with us', 'Chat med oss'),
     },
   },
   installId: {

@@ -287,6 +287,10 @@ export const VehicleSchema = z.object({
 
 export type Vehicle = z.infer<typeof VehicleSchema>;
 
+export const VehicleAppSwitchSchema = z.object({url: z.string()});
+
+export type VehicleAppSwitch = z.infer<typeof VehicleAppSwitchSchema>;
+
 const StationVehicleTypeSchema = z.object({
   id: z.string(),
   formFactor: z.enum(FormFactor),

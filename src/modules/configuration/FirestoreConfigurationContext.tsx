@@ -658,6 +658,7 @@ function getConfigurableLinksFromSnapshot(
     urls?.get('frequentlyAskedQuestionsUrl'),
   );
   const sparReadMoreUrl = mapLanguageAndTextType(urls?.get('sparReadMoreUrl'));
+  const externalChatUrl = mapLanguageAndTextType(urls?.get('externalChatUrl'));
 
   return {
     ticketingInfo,
@@ -677,6 +678,7 @@ function getConfigurableLinksFromSnapshot(
     lostAndFoundUrl,
     frequentlyAskedQuestionsUrl,
     sparReadMoreUrl,
+    externalChatUrl,
   };
 }
 
