@@ -100,7 +100,7 @@ export const VehicleSheet = ({
     appStoreUri,
   } = useMapVehicle();
 
-  const vehicleId = vehicle?.id;
+  const vehicleId = mapState.isStationBasedBooking ? undefined : vehicle?.id;
 
   const formFactor = vehicle?.vehicleType.formFactor ?? FormFactor.Other;
   const propulsionType = vehicle?.vehicleType.propulsionType;
