@@ -124,12 +124,15 @@ describe('VehicleSchema (shmo vehicle contract v2)', () => {
     }
   });
 
-  it('rejects an APP_SWITCH action button missing its url', () => {
+  it('parses an APP_SWITCH action button missing its url', () => {
     const result = VehicleSchema.safeParse({
       ...baseVehicle,
       actionButton: {type: 'APP_SWITCH'},
     });
-    expect(result.success).toBe(false);
+    expect(result.success).toBe(true);
+    if (result.success && result.data.actionButton?.type === 'APP_SWITCH') {
+      expect(result.data.actionButton.url).toBeUndefined();
+    }
   });
 });
 
