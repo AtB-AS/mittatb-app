@@ -373,6 +373,10 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               mode="secondary"
               text={t(ProfileTexts.sections.contact.externalChat)}
               rightIcon={{svg: ExternalLink}}
+              accessibilityRole="link"
+              accessibilityHint={t(
+                dictionary.appNavigation.a11yHintForExternalContent,
+              )}
               expanded={true}
               backgroundColor={neutralContrastColor}
               onPress={() => {
