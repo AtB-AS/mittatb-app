@@ -216,9 +216,6 @@ export const MapBottomSheets = ({
 
       {openPaymentType && (
         <SelectShmoPaymentMethodSheet
-          onSelect={() => {
-            setOpenPaymentType(false);
-          }}
           onClose={() => {
             setOpenPaymentType(false);
           }}
