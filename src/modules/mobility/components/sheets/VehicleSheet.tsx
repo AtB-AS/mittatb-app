@@ -151,14 +151,10 @@ export const VehicleSheet = ({
 
   const onAppSwitchPress = useCallback(async () => {
     let appSwitchUrl = '';
-    const logEventVariables = {
-      operatorId,
-      payWithBonusPoints,
-    };
-    if (!!actionButtonUrl) {
+    if (!!actionButtonUrl && !payWithBonusPoints) {
       appSwitchUrl = actionButtonUrl;
       logEvent('Mobility', 'Open operator app with direct url', {
-        ...logEventVariables,
+        operatorId,
         appSwitchUrl,
       });
     } else {
@@ -171,6 +167,11 @@ export const VehicleSheet = ({
       const vehicleAppSwitch = await getVehicleAppSwitch(
         vehicleAppSwitchVariables,
       );
+      const logEventVariables = {
+        operatorId,
+        payWithBonusPoints,
+        vehicleAppSwitchVariables,
+      };
       if (vehicleAppSwitch === null) {
         logEvent('Mobility', 'Failed to open operator app', logEventVariables);
         return;
@@ -179,10 +180,7 @@ export const VehicleSheet = ({
       logEvent(
         'Mobility',
         'Open operator app with url from app switch endpoint',
-        {
-          ...logEventVariables,
-          vehicleAppSwitchVariables,
-        },
+        logEventVariables,
       );
     }
     await Linking.openURL(appSwitchUrl).catch(() =>
