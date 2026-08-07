@@ -63,7 +63,9 @@ export const ShmoTripDetailsSectionItem = ({
         )}
         <View style={styles.timeWrapper}>
           <ThemeIcon svg={Duration} color="primary" size="large" />
-          <ThemeText typography="heading__xl">{timeUsed}</ThemeText>
+          <ThemeText typography="heading__xl" style={styles.timeText}>
+            {timeUsed}
+          </ThemeText>
         </View>
       </View>
 
@@ -81,7 +83,7 @@ export const ShmoTripDetailsSectionItem = ({
             {t(MobilityTexts.cost)}
           </ThemeText>
         )}
-        <ThemeText typography="heading__xl">
+        <ThemeText typography="heading__xl" style={styles.costText}>
           {formattedTotalAmount} {getCurrencySymbol(currency)}
         </ThemeText>
       </View>
@@ -109,7 +111,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   timeWrapper: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
     gap: theme.spacing.small,
+  },
+  timeText: {
+    flexShrink: 1,
+  },
+  costText: {
+    flexShrink: 1,
+    alignSelf: 'stretch',
+    textAlign: 'right',
   },
 }));
