@@ -253,7 +253,7 @@ export const ActionButtonSchema = z.discriminatedUnion('type', [
   z.object({type: z.literal(ActionButtonType.START_TRIP)}),
   z.object({
     type: z.literal(ActionButtonType.APP_SWITCH),
-    url: z.string(),
+    url: z.string().optional(),
     label: LanguageAndTextTypeArray.default([]),
   }),
 ]);

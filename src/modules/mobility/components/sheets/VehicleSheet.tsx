@@ -144,39 +144,58 @@ export const VehicleSheet = ({
   } = useVehicleAppSwitchMutation();
 
   const actionButton = vehicle?.actionButton ?? undefined;
+  const actionButtonUrl =
+    actionButton?.type === ActionButtonType.APP_SWITCH
+      ? actionButton.url
+      : undefined;
 
   const onAppSwitchPress = useCallback(async () => {
-    const vehicleAppSwitchVariables: VehicleAppSwitchVariables = {
-      vehicleId,
-      vehicleTypeId: mapState.vehicleTypeId,
-      stationId: mapState.stationId,
-      bonusProductId: payWithBonusPoints ? selectedBonusProductId : undefined,
-    };
-    const vehicleAppSwitch = await getVehicleAppSwitch(
-      vehicleAppSwitchVariables,
-    );
-    const logEventVariables = {
-      operatorId,
-      payWithBonusPoints,
-      vehicleAppSwitchVariables,
-    };
-    if (vehicleAppSwitch === null) {
-      logEvent('Mobility', 'Failed to open operator app', logEventVariables);
-      return;
+    let appSwitchUrl = '';
+    if (!!actionButtonUrl && !payWithBonusPoints) {
+      appSwitchUrl = actionButtonUrl;
+      logEvent('Mobility', 'Open operator app with direct url', {
+        operatorId,
+        appSwitchUrl,
+      });
+    } else {
+      const vehicleAppSwitchVariables: VehicleAppSwitchVariables = {
+        vehicleId,
+        vehicleTypeId: mapState.vehicleTypeId,
+        stationId: mapState.stationId,
+        bonusProductId: payWithBonusPoints ? selectedBonusProductId : undefined,
+      };
+      const vehicleAppSwitch = await getVehicleAppSwitch(
+        vehicleAppSwitchVariables,
+      );
+      const logEventVariables = {
+        operatorId,
+        payWithBonusPoints,
+        vehicleAppSwitchVariables,
+      };
+      if (vehicleAppSwitch === null) {
+        logEvent('Mobility', 'Failed to open operator app', logEventVariables);
+        return;
+      }
+      appSwitchUrl = vehicleAppSwitch.url;
+      logEvent(
+        'Mobility',
+        'Open operator app with url from app switch endpoint',
+        logEventVariables,
+      );
     }
-    logEvent('Mobility', 'Open operator app', logEventVariables);
-    await Linking.openURL(vehicleAppSwitch.url).catch(() =>
+    await Linking.openURL(appSwitchUrl).catch(() =>
       showAppMissingAlert(operatorName, appStoreUri ?? undefined),
     );
   }, [
+    operatorId,
+    payWithBonusPoints,
+    actionButtonUrl,
+    logEvent,
     vehicleId,
     mapState.vehicleTypeId,
     mapState.stationId,
-    getVehicleAppSwitch,
-    payWithBonusPoints,
     selectedBonusProductId,
-    logEvent,
-    operatorId,
+    getVehicleAppSwitch,
     operatorName,
     appStoreUri,
   ]);
