@@ -3,6 +3,7 @@ import {AuthReducerAction, AuthStatus} from './types';
 import {AuthReducerState} from './AuthContext';
 import {secondsToTokenExpiry} from './utils';
 import {useInterval} from '@atb/utils/use-interval';
+import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {errorToMetadata, logToBugsnag} from '@atb/utils/bugsnag-utils';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 
@@ -10,7 +11,9 @@ export const useRefreshIdTokenWhenNecessary = (
   state: AuthReducerState,
   dispatch: Dispatch<AuthReducerAction>,
 ) => {
-  const disableInterval = !isIdTokenRefreshEnabled(state.authStatus);
+  const appStateStatus = useAppStateStatus();
+  const disableInterval =
+    !isIdTokenRefreshEnabled(state.authStatus) || appStateStatus !== 'active';
 
   useInterval(
     async () => {

@@ -85,7 +85,14 @@ function requestHandler(
 
 async function requestIdTokenHandler(config: InternalAxiosRequestConfig) {
   if (config.authWithIdToken) {
-    const idToken = getIdTokenGlobal();
+    let idToken = getIdTokenGlobal();
+    if (!idToken) {
+      // Token may be briefly missing/expired around app-resume while
+      // useRefreshIdTokenWhenNecessary triggers a refresh. Wait once
+      // so the in-flight refresh has a chance to land before we give up.
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      idToken = getIdTokenGlobal();
+    }
     if (idToken) {
       config.headers[Authorization] = 'Bearer ' + idToken;
       if (addDebugUserInfoHeader) {
