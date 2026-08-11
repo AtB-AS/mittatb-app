@@ -153,7 +153,7 @@ const ProfileTexts = {
           modesHeading: _('Type varsel', 'Notification type', 'Type varsel'),
           groupsHeading: _('Varslinger', 'Notifications', 'Varslingar'),
           pushToggle: {
-            text: _('Push-varsel', 'Push notifications', 'Push-varsel'),
+            text: _('Pushvarsel', 'Push notifications', 'Pushvarsel'),
             subText: _(
               'Tillat at AtB sender varslinger til denne telefonen.',
               'Allow AtB to send notifications to this phone.',
