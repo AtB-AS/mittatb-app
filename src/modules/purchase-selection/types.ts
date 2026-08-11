@@ -25,7 +25,10 @@ export type FareContractStub = {
  * (currently only via `.product()`) when the current selection is not
  * applicable for a newly applied product.
  */
-export type ForcedSelectionChange = 'userProfile' | 'zone';
+export type ForcedSelectionChange =
+  | 'userProfile'
+  | 'zone'
+  | 'supplementProduct';
 
 /**
  * Result of `PurchaseSelectionBuilder.build()`. Carries the built selection
