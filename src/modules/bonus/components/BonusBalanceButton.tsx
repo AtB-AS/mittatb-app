@@ -24,7 +24,6 @@ export const BonusBalanceButton = ({onPress}: BonusBalanceButtonProps) => {
       expanded={false}
       interactiveColor={theme.color.interactive[2]}
       leftIcon={{svg: BonusStarFill}}
-      hasShadow={true}
       accessibilityLabel={t(
         BonusProgramTexts.yourBonusBalanceA11yLabel(bonusInfo.bonusBalance),
       )}
