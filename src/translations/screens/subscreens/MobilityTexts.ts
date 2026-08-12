@@ -124,12 +124,12 @@ export const MobilityTexts = {
       ),
       description: _(
         'Deretter kan du ta sykkelen ut av stativet og sykle av sted.',
-        'Then you can take the bike out of the dock and start riding.',
+        'Then you can undock the bike and start riding.',
         'Deretter kan du ta sykkelen ut av stativet og sykle av stad.',
       ),
       electricDescription: _(
         'Nå kan du ta sykkelen ut av stativet og sykle av sted.',
-        'Now you can take the bike out of the dock and start riding.',
+        'You can now undock the bike and start riding.',
         'No kan du ta sykkelen ut av stativet og sykle av stad.',
       ),
       safeTrip: _('God tur!', 'Have a nice trip!', 'God tur!'),
