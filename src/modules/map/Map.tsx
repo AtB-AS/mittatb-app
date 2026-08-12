@@ -58,6 +58,7 @@ import {Snackbar, useSnackbar, useStableValue} from '@atb/components/snackbar';
 import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
 import {useQueryClient} from '@tanstack/react-query';
 import {getStation} from '@atb/api/mobility';
+import {ONE_MINUTE_MS} from '@atb/utils/durations';
 import {getTextForLanguage} from '@atb/translations/utils';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -237,17 +238,16 @@ export const Map = (props: MapProps) => {
   );
 
   const showBikeStationParkingSnackbar = useCallback(
-    async (stationId: string, fallbackParkingSpacesAvailable: number) => {
-      // Always refetch (staleTime 0): dock availability changes constantly - not least
-      // from the user's own rental, so a value cached before the trip started is wrong.
-      // Going through the shared cache still keeps useStationQuery consumers in sync.
+    async (stationId: string, parkingSpacesAvailable: number) => {
+      // The count comes from the map item, which the vector source keeps refreshed, so it
+      // is never stale and always matches the number rendered on the icon. Only the station
+      // name is fetched, since the tile has no name field - and names don't change, so
+      // serving it from the cache shared with useStationQuery is safe here.
       const station = await queryClient.fetchQuery({
         queryKey: getStationQueryKey(stationId),
         queryFn: ({signal}) => getStation(stationId, {signal}),
-        staleTime: 0,
+        staleTime: ONE_MINUTE_MS,
       });
-      const parkingSpacesAvailable =
-        station?.numDocksAvailable ?? fallbackParkingSpacesAvailable;
 
       showSnackbar({
         content: {

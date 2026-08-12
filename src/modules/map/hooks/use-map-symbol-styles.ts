@@ -187,6 +187,10 @@ export const useMapSymbolStyles = ({
             'case',
             ['==', iconCode, 'citybike'],
             bikeStationIconVariant,
+            // Station iconCode can't currently be 'ebike' (see the pinType check where
+            // iconCode is built), but kept so the variant stays right if that changes.
+            ['==', iconCode, 'ebike'],
+            bikeStationIconVariant,
             ['==', iconCode, 'sharedcar'],
             'cars',
             'bikes',
