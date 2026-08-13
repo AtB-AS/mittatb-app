@@ -6,11 +6,7 @@ import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {getIdTokenGlobal, useAuthContext} from '@atb/modules/auth';
-import {
-  KeyValuePair,
-  storage,
-  StorageModelKeysEnum,
-} from '@atb/modules/storage';
+import {KeyValuePair, storage} from '@atb/modules/storage';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {usePreferencesContext, UserPreferences} from '@atb/modules/preferences';
 import {get, keys} from 'lodash';
@@ -360,15 +356,6 @@ export const Profile_DebugInfoScreen = () => {
           <LinkSectionItem
             text="Reset bicycle consent"
             onPress={() => setGivenBicycleConsent(false)}
-          />
-          <LinkSectionItem
-            text="Reset city bike end trip info"
-            onPress={() =>
-              storage.set(
-                StorageModelKeysEnum.CityBikeEndTripInfoDismissed,
-                'false',
-              )
-            }
           />
         </Section>
         <Section style={styles.section}>
