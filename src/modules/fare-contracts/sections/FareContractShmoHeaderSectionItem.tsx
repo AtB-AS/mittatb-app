@@ -1,7 +1,7 @@
 import React from 'react';
 import {FareContractType} from '@atb-as/utils';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
-import {useOperators} from '@atb/modules/mobility';
+import {useGetOperatorsQuery} from '@atb/modules/mobility';
 
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
@@ -14,6 +14,7 @@ import {getFareContractInfo} from '../utils';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {ProductName} from '../components/ProductName';
+import {getOperatorNameById} from '@atb/api/utils';
 
 type Props = {
   fareContract: FareContractType;
@@ -34,8 +35,12 @@ export const FareContractShmoHeaderSectionItem = ({
   const {validTo} = getFareContractInfo(now, fc, currentUserId);
   const dateTime = formatToLongDateTime(toDate(validTo), language);
   const label = t(FareContractTexts.shmoDetails.tripEnded(dateTime));
-  const {byId} = useOperators();
-  const operatorName = byId(fc.operatorId)?.name;
+  const {data: operatorsData} = useGetOperatorsQuery();
+  const operatorName = getOperatorNameById(
+    operatorsData,
+    fc?.operatorId,
+    language,
+  );
 
   return (
     <View style={[topContainer, styles.container]}>

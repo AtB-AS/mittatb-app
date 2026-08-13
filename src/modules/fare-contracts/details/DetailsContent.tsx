@@ -40,9 +40,11 @@ import {Barcode} from './Barcode';
 import {MapFilterType} from '@atb/modules/map';
 import {useAuthContext} from '@atb/modules/auth';
 import {CarnetFooter} from '../carnet/CarnetFooter';
-import {MobilityBenefitsActionSectionItem} from '@atb/modules/mobility';
+import {
+  MobilityBenefitsActionSectionItem,
+  useGetOperatorsQuery,
+} from '@atb/modules/mobility';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
-import {useOperators} from '@atb/modules/mobility';
 import {ConsumeCarnetSectionitem} from '../components/ConsumeCarnetSectionitem';
 import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -68,6 +70,7 @@ import {SentOrReceivedMessageBox} from '../components/SentOrReceivedMessageBox';
 import {Mail} from '@atb/assets/svg/mono-icons/profile';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import {TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
+import {getOperatorNameById} from '@atb/api/utils';
 
 type Props = {
   fareContract: FareContractType;
@@ -96,7 +99,7 @@ export const DetailsContent: React.FC<Props> = ({
 }) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
 
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
   const {findGlobalMessages} = useGlobalMessagesContext();
@@ -119,8 +122,12 @@ export const DetailsContent: React.FC<Props> = ({
   const {benefits} = useOperatorBenefitsForFareProduct(
     preassignedFareProduct?.id,
   );
-  const {byId: getOperatorById} = useOperators();
-  const operatorName = getOperatorById(fc.operatorId)?.name;
+  const {data: operatorsData} = useGetOperatorsQuery();
+  const operatorName = getOperatorNameById(
+    operatorsData,
+    fc?.operatorId,
+    language,
+  );
   const bookingSegments = useFareContractBookingSegments(
     firstTravelRight.datedServiceJourneys?.[0],
   );
