@@ -498,6 +498,7 @@ export type AssetFromQrCodeQuery = z.infer<typeof AssetFromQrCodeQuerySchema>;
 export const OperatorSchema = z.object({
   id: z.string(),
   name: LocalizedStringSchema,
+  qrScanEnabled: z.boolean().optional().default(false),
 });
 
 export const OperatorsResponseSchema = z.object({
