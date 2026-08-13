@@ -353,6 +353,11 @@ export const Map = (props: MapProps) => {
     ],
   );
 
+  const handleBreakFollow = useCallback(() => {
+    setStalePaddingBottomMap(paddingBottomMap);
+    setFollowUserLocation(false);
+  }, [paddingBottomMap]);
+
   const onMapItemClick = useCallback(
     async (e: OnPressEvent) => {
       const positionClicked = [e.coordinates.longitude, e.coordinates.latitude];
@@ -364,22 +369,15 @@ export const Map = (props: MapProps) => {
         positionClicked,
       );
       if (isFeaturePoint(featureToSelect)) {
-        if (isActiveTrip) {
-          // During a trip, tapping a bike station shows its free parking spaces
-          // instead of opening a bottom sheet. Other features stay non-interactive.
-          if (isActiveBikeTrip && isBikeStation(featureToSelect)) {
-            const {id, capacity, num_vehicles_available} =
-              featureToSelect.properties;
-            showBikeStationParkingSnackbar(
-              id,
-              Math.max(0, capacity - num_vehicles_available),
-            );
-          }
-          return;
-        }
         if (isQuayFeature(featureToSelect)) return;
+
+        // Zooming into clusters works during an active trip too, so stations inside
+        // them stay reachable.
         if (isClusterFeature(featureToSelect)) {
           dispatchMapState({type: MapStateActionType.None});
+          // Camera follows the user while a trip is in use, which would immediately
+          // override the zoom below.
+          handleBreakFollow();
           const fromZoomLevel = (await mapViewRef.current?.getZoom()) ?? 0;
           const toZoomLevel = getToZoomLevel(
             fromZoomLevel,
@@ -395,7 +393,24 @@ export const Map = (props: MapProps) => {
             mapViewRef,
             zoomLevel: toZoomLevel,
           });
-        } else if (isVehicle(featureToSelect)) {
+          return;
+        }
+
+        if (isActiveTrip) {
+          // During a trip, tapping a bike station shows its free parking spaces
+          // instead of opening a bottom sheet. Other features stay non-interactive.
+          if (isActiveBikeTrip && isBikeStation(featureToSelect)) {
+            const {id, capacity, num_vehicles_available} =
+              featureToSelect.properties;
+            showBikeStationParkingSnackbar(
+              id,
+              Math.max(0, capacity - num_vehicles_available),
+            );
+          }
+          return;
+        }
+
+        if (isVehicle(featureToSelect)) {
           dispatchMapState({
             type: MapStateActionType.Vehicle,
             feature: featureToSelect,
@@ -432,15 +447,11 @@ export const Map = (props: MapProps) => {
       isActiveTrip,
       isActiveBikeTrip,
       showBikeStationParkingSnackbar,
+      handleBreakFollow,
       paddingBottomMap,
       dispatchMapState,
     ],
   );
-
-  const handleBreakFollow = useCallback(() => {
-    setStalePaddingBottomMap(paddingBottomMap);
-    setFollowUserLocation(false);
-  }, [paddingBottomMap]);
 
   return (
     <View style={{flex: 1}}>
