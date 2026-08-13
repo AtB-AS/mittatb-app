@@ -210,6 +210,7 @@ const dictionary = {
   seeMore: _('Vis mer', 'See more', `Vis meir`),
   readMore: _('Les mer', 'Read more', `Les meir`),
   loading: _('Laster…', 'Loading…', `Lastar…`),
+  copied: _('Kopiert!', 'Copied!', 'Kopiert!'),
   listConcatWord: _('og', 'and', 'og'),
   via: _('via', 'via', 'via'),
   checked: _('avhuket', 'checked', 'avhuket'),

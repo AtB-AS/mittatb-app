@@ -293,12 +293,14 @@ export async function getFareContracts(
   return validFareContracts;
 }
 
-export async function getRefundOptions(orderId: string) {
+export async function getRefundOptions(
+  orderId: string,
+): Promise<RefundOptions> {
   const url = `sales/v1/refund/options/${orderId}`;
   const response = await client.get<RefundOptions>(url, {
     authWithIdToken: true,
   });
-  return response.data;
+  return convertIsoStringFieldsToDate(response.data);
 }
 
 export async function refundFareContract(orderId: string, reasonId?: string) {

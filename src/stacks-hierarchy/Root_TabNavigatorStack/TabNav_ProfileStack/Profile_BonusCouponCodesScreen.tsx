@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {BonusProgramTexts, useTranslation} from '@atb/translations';
+import {BonusProgramTexts, dictionary, useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
@@ -21,7 +21,7 @@ import {getTransportModeAndSubMode} from '@atb/modules/mobility';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {startOfDay} from 'date-fns';
 import {ProfileScreenProps} from './navigation-types';
-import {ClickableCopy} from './components/ClickableCopy';
+import {ClickableCopy} from '@atb/components/clickable-copy';
 
 type Props = ProfileScreenProps<'Profile_BonusCouponCodesScreen'>;
 
@@ -212,13 +212,11 @@ const VoucherCard = ({voucher}: {voucher: BonusVoucher}) => {
               )}
               successElement={
                 <>
-                  <ScreenReaderAnnouncement
-                    message={t(BonusProgramTexts.myCouponCodes.copied)}
-                  />
+                  <ScreenReaderAnnouncement message={t(dictionary.copied)} />
 
                   <View style={styles.copyButton}>
                     <ThemeText typography="body__s">
-                      {t(BonusProgramTexts.myCouponCodes.copied)}
+                      {t(dictionary.copied)}
                     </ThemeText>
                   </View>
                 </>

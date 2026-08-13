@@ -153,11 +153,11 @@ export const isSelectableProfile = (
   );
 
 export const isSelectableSupplementProduct = (
-  currentSelection: PurchaseSelectionType,
+  product: PreassignedFareProduct,
   supplementProduct: SupplementProduct,
 ) => {
   const supplementProductLimitations =
-    currentSelection.preassignedFareProduct.limitations.supplementProductRefs;
+    product.limitations.supplementProductRefs;
   if (
     !supplementProductLimitations ||
     supplementProductLimitations.length === 0
@@ -201,7 +201,7 @@ export const isValidSelection = (
 
   const areSupplementProductsValid =
     selection.supplementProductsWithCount.every((sp) =>
-      isSelectableSupplementProduct(selection, sp),
+      isSelectableSupplementProduct(selection.preassignedFareProduct, sp),
     );
   if (!areSupplementProductsValid) return false;
 
@@ -263,9 +263,9 @@ export const applyProductChange = (
   const selectableProfiles = currentSelection.userProfilesWithCount.filter(
     (up) => isSelectableProfile(product, up),
   );
-  const supplementProductCount =
+  const selectableSupplements =
     currentSelection.supplementProductsWithCount.filter((sp) =>
-      isSelectableSupplementProduct(currentSelection, sp),
+      isSelectableSupplementProduct(product, sp),
     );
 
   const isFromZoneValid =
@@ -282,7 +282,7 @@ export const applyProductChange = (
     : getDefaultZones(input, currentSelection.fareProductTypeConfig, product);
 
   const userProfiles =
-    !selectableProfiles.length && !supplementProductCount.length
+    !selectableProfiles.length && !selectableSupplements.length
       ? getDefaultUserProfiles(input, product)
       : selectableProfiles;
 
@@ -298,12 +298,19 @@ export const applyProductChange = (
   if (!bothZonesValid) {
     forcedChanges.push('zone');
   }
+  if (
+    selectableSupplements.length !==
+    currentSelection.supplementProductsWithCount.length
+  ) {
+    forcedChanges.push('supplementProduct');
+  }
 
   return {
     selection: {
       ...currentSelection,
       preassignedFareProduct: product,
       userProfilesWithCount: userProfiles,
+      supplementProductsWithCount: selectableSupplements,
       zones: newZones ?? currentSelection.zones,
     },
     forcedChanges,

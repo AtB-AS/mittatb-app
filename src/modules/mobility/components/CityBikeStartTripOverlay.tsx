@@ -6,11 +6,17 @@ import {useTranslation} from '@atb/translations';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
 import {StyleSheet} from '@atb/theme';
-import {ThemedStartCityBike} from '@atb/theme/ThemedAssets';
+import {
+  ThemedStartCityBike,
+  ThemedElectricCityBikeStationPerson,
+} from '@atb/theme/ThemedAssets';
 import {LinkSectionItem} from '@atb/components/sections';
 import {ShmoBooking} from '@atb/api/types/mobility';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {
+  FormFactor,
+  PropulsionType,
+} from '@atb/api/types/generated/mobility-types_v2';
 
 type Props = {
   activeBooking: ShmoBooking;
@@ -23,6 +29,8 @@ export const CityBikeStartTripOverlay = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
+
+  const isManual = activeBooking.asset?.propulsionType === PropulsionType.Human;
 
   return (
     <View style={styles.overlay}>
@@ -43,13 +51,21 @@ export const CityBikeStartTripOverlay = ({
             </ThemeText>
           )}
         </View>
-        <ThemedStartCityBike />
+        {isManual ? (
+          <ThemedStartCityBike />
+        ) : (
+          <ThemedElectricCityBikeStationPerson />
+        )}
         <View style={styles.content}>
-          <ThemeText typography="heading__xl" style={styles.contentText}>
-            {t(MobilityTexts.cityBike.startTripView.title)}
-          </ThemeText>
+          {isManual && (
+            <ThemeText typography="heading__xl" style={styles.contentText}>
+              {t(MobilityTexts.cityBike.startTripView.title)}
+            </ThemeText>
+          )}
           <ThemeText style={styles.contentText}>
-            {t(MobilityTexts.cityBike.startTripView.description)}
+            {isManual
+              ? t(MobilityTexts.cityBike.startTripView.description)
+              : t(MobilityTexts.cityBike.startTripView.electricDescription)}
           </ThemeText>
           <ThemeText style={styles.contentText}>
             {t(MobilityTexts.cityBike.startTripView.safeTrip)}
@@ -73,11 +89,12 @@ export const CityBikeStartTripOverlay = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {top: safeTopInset}) => ({
   overlay: {
     ...StyleSheet.absoluteFill,
     backgroundColor: theme.color.background.neutral[1].background,
     paddingHorizontal: theme.spacing.xLarge,
+    paddingTop: safeTopInset,
     paddingBottom: theme.spacing.xLarge,
     zIndex: 100,
   },

@@ -123,9 +123,14 @@ export const MobilityTexts = {
         'Trykk på knappen på styret',
       ),
       description: _(
-        'Når knappen lyser grønt og sykkelen lager lyd kan du ta den ut av stativet og sykle av sted.',
-        'When the button lights up green and the bike makes a sound, you can take it out of the dock and start riding.',
-        'Når knappen lyser grønt og sykkelen lagar lyd kan du ta den ut av stativet og sykle av stad.',
+        'Deretter kan du ta sykkelen ut av stativet og sykle av sted.',
+        'Then you can undock the bike and start riding.',
+        'Deretter kan du ta sykkelen ut av stativet og sykle av stad.',
+      ),
+      electricDescription: _(
+        'Nå kan du ta sykkelen ut av stativet og sykle av sted.',
+        'You can now undock the bike and start riding.',
+        'No kan du ta sykkelen ut av stativet og sykle av stad.',
       ),
       safeTrip: _('God tur!', 'Have a nice trip!', 'God tur!'),
       header: _('Start tur', 'Start trip', 'Start tur'),
@@ -467,7 +472,8 @@ export const ScooterTexts = {
   ),
   range: _('rekkevidde', 'range', 'rekkjevidde'),
   unlock: _('opplåsning', 'unlock', 'opplåsing'),
-  free: _('Gratis', 'Free', 'Gratis'),
+  freeMinutesDescription: (minutes: number) =>
+    _(`i ${minutes} min`, `for ${minutes} min`, `i ${minutes} min`),
   per: {
     unit(unit: string) {
       switch (unit) {

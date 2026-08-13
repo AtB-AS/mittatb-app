@@ -153,7 +153,7 @@ const ProfileTexts = {
           modesHeading: _('Type varsel', 'Notification type', 'Type varsel'),
           groupsHeading: _('Varslinger', 'Notifications', 'Varslingar'),
           pushToggle: {
-            text: _('Push-varsel', 'Push notifications', 'Push-varsel'),
+            text: _('Pushvarsel', 'Push notifications', 'Pushvarsel'),
             subText: _(
               'Tillat at AtB sender varslinger til denne telefonen.',
               'Allow AtB to send notifications to this phone.',
@@ -404,17 +404,13 @@ const ProfileTexts = {
         'Give feedback about the app',
         'Gi tilbakemelding om appen',
       ),
+      externalChat: _('Chat med oss', 'Chat with us', 'Chat med oss'),
     },
   },
   installId: {
     label: (id: string) => _(`ID: ${id}`, `ID: ${id}`, `ID: ${id}`),
     a11yLabel: (id: string) =>
       _(`ID: ${spellOut(id)}`, `ID: ${spellOut(id)}`, `ID: ${spellOut(id)}`),
-    wasCopiedAlert: _(
-      'ID ble kopiert!',
-      'ID was copied to clipboard!',
-      'ID vart kopiert!',
-    ),
     a11yHint: _(
       'Klikk for å kopiere id. Denne brukes til teknisk feilsøk.',
       'Press to copy the id. This is used for technical debugging',

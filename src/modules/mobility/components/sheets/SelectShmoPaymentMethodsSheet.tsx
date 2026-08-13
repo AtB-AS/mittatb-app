@@ -1,11 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
-import {StyleSheet, useThemeContext} from '@atb/theme';
-import {Button} from '@atb/components/button';
+import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
-import {FullScreenFooter} from '@atb/components/screen-footer';
 import {
   PaymentMethod,
   savePreviousPaymentMethodByUser,
@@ -20,10 +17,8 @@ import {
   BottomSheetHeaderType,
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
-import {BottomSheetScrollView} from '@gorhom/bottom-sheet';
 
 type Props = {
-  onSelect: () => void;
   recurringPaymentMethods?: PaymentMethod[];
   onClose?: () => void;
   onGoToPaymentPage: () => void;
@@ -32,14 +27,12 @@ type Props = {
 };
 
 export const SelectShmoPaymentMethodSheet = ({
-  onSelect,
   onClose,
   onGoToPaymentPage,
   locationArrowOnPress,
   navigateToScanQrCode,
 }: Props) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const styles = useStyles();
   const {recurringPaymentMethods} = usePreviousPaymentMethods();
   const {userId} = useAuthContext();
@@ -48,10 +41,9 @@ export const SelectShmoPaymentMethodSheet = ({
     PaymentMethod | undefined
   >();
 
-  const {mutate: savePrevPaymentMethod, isPending} = useMutation({
+  const {mutate: savePrevPaymentMethod} = useMutation({
     mutationFn: (params: {userId: string; paymentMethod: PaymentMethod}) =>
       savePreviousPaymentMethodByUser(params.userId, params.paymentMethod),
-    onSuccess: onSelect,
   });
 
   useEffect(() => {
@@ -62,10 +54,8 @@ export const SelectShmoPaymentMethodSheet = ({
 
   return (
     <MapBottomSheet
-      snapPoints={['70%']}
       closeCallback={onClose}
-      enableDynamicSizing={false}
-      bottomSheetHeaderType={BottomSheetHeaderType.Close}
+      bottomSheetHeaderType={BottomSheetHeaderType.Confirm}
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >
@@ -79,54 +69,29 @@ export const SelectShmoPaymentMethodSheet = ({
             text: t(SelectPaymentMethodTexts.new_card_info.link_profile),
           }}
         />
-        <BottomSheetScrollView>
-          {recurringPaymentMethods?.map((method, index) => (
-            <SinglePaymentMethod
-              key={method.recurringPayment?.id}
-              paymentMethod={method}
-              selected={
-                selectedPaymentMethod?.recurringPayment?.id ===
-                method.recurringPayment?.id
-              }
-              onSelect={(val: PaymentMethod) => {
-                if (!val?.recurringPayment) return;
-                setSelectedPaymentMethod(val);
-              }}
-              index={index}
-            />
-          ))}
-        </BottomSheetScrollView>
-      </View>
-      <FullScreenFooter>
-        <Button
-          expanded={true}
-          style={styles.confirmButton}
-          interactiveColor={theme.color.interactive[0]}
-          text={t(SelectPaymentMethodTexts.confirm_button.text)}
-          accessibilityHint={t(
-            SelectPaymentMethodTexts.confirm_button.a11yhint,
-          )}
-          onPress={async () => {
-            if (
-              selectedPaymentMethod &&
-              selectedPaymentMethod.recurringPayment &&
-              userId
-            ) {
+        {recurringPaymentMethods?.map((method, index) => (
+          <SinglePaymentMethod
+            key={method.recurringPayment?.id}
+            paymentMethod={method}
+            selected={
+              selectedPaymentMethod?.recurringPayment?.id ===
+              method.recurringPayment?.id
+            }
+            onSelect={(val: PaymentMethod) => {
+              if (!val?.recurringPayment || !userId) return;
+              setSelectedPaymentMethod(val);
               savePrevPaymentMethod({
                 userId,
                 paymentMethod: {
-                  paymentType: selectedPaymentMethod?.paymentType,
-                  recurringPayment: selectedPaymentMethod.recurringPayment,
+                  paymentType: val.paymentType,
+                  recurringPayment: val.recurringPayment,
                 },
               });
-            }
-          }}
-          disabled={!selectedPaymentMethod}
-          loading={isPending}
-          rightIcon={{svg: Confirm}}
-          testID="confirmButton"
-        />
-      </FullScreenFooter>
+            }}
+            index={index}
+          />
+        ))}
+      </View>
     </MapBottomSheet>
   );
 };
@@ -137,13 +102,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: theme.spacing.small,
   },
   paymentMethods: {
-    flex: 1,
     paddingHorizontal: theme.spacing.medium,
     paddingBottom: theme.spacing.medium,
     gap: theme.spacing.xSmall,
-  },
-  confirmButton: {
-    marginTop: theme.spacing.small,
   },
   warningMessageAnonym: {
     paddingTop: theme.spacing.medium,

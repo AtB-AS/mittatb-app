@@ -4,7 +4,7 @@ import {
   FareContractState,
   formatNumberToString,
 } from '@atb-as/utils';
-import {FareContractTexts, useTranslation} from '@atb/translations';
+import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {fullDateTime} from '@atb/utils/date';
@@ -13,6 +13,7 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {hasShmoBookingId} from '../utils';
+import {ClickableCopy} from '@atb/components/clickable-copy';
 
 type OrderDetailsSectionItemProps = {
   fareContract: FareContractType;
@@ -92,9 +93,18 @@ export const OrderDetailsSectionItem = ({
         </ThemeText>
       )}
       {fareContract.orderId && (
-        <ThemeText>
-          {t(FareContractTexts.details.orderId(fareContract.orderId))}
-        </ThemeText>
+        <ClickableCopy
+          successElement={
+            <ThemeText typography="body__s" type="secondary">
+              ✅ {t(dictionary.copied)}
+            </ThemeText>
+          }
+          copyContent={fareContract.orderId}
+        >
+          <ThemeText typography="body__s" type="secondary">
+            {t(FareContractTexts.details.orderId(fareContract.orderId))}
+          </ThemeText>
+        </ClickableCopy>
       )}
     </View>
   );

@@ -314,13 +314,15 @@ export const DetailsContent: React.FC<Props> = ({
           rightIcon={{svg: Mail}}
         />
       )}
-      {refundOptions?.isRefundable && (
-        <LinkSectionItem
-          text={t(FareContractTexts.refund.refund)}
-          onPress={onRefundNavigate}
-          rightIcon={{svg: TicketInvalid}}
-        />
-      )}
+      {refundOptions?.isRefundable &&
+        (!refundOptions.lastRefundTime ||
+          now < refundOptions.lastRefundTime.getTime()) && (
+          <LinkSectionItem
+            text={t(FareContractTexts.refund.refund)}
+            onPress={onRefundNavigate}
+            rightIcon={{svg: TicketInvalid}}
+          />
+        )}
     </Section>
   );
 };

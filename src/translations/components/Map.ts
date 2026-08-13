@@ -4,6 +4,12 @@ import {orgSpecificTranslations} from '../orgSpecificTranslations';
 const MapTexts = {
   qr: {
     scan: _('Skann', 'Scan', 'Skann'),
+    scannableOperators: (operators: string) =>
+      _(
+        `Du kan skanne kjøretøy fra ${operators}`,
+        `You can scan vehicles from ${operators}`,
+        `Du kan skanne køyretøy frå ${operators}`,
+      ),
     notFound: {
       title: _(
         'Kunne ikke lese QR-kode',

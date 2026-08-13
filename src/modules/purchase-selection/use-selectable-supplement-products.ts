@@ -3,7 +3,7 @@ import {useGetSupplementProductsQuery} from '../ticketing';
 import {BaggageProduct} from '@atb/modules/configuration';
 import {isSelectableSupplementProduct} from './utils';
 
-export function useSelectableBaggageProducts(
+export function useSelectableSupplementProducts(
   selection: PurchaseSelectionType,
 ): BaggageProduct[] {
   const {data: allSupplementProducts} = useGetSupplementProductsQuery();
@@ -11,5 +11,7 @@ export function useSelectableBaggageProducts(
     .map((sp) => BaggageProduct.safeParse(sp))
     .filter((sp) => sp.success)
     .map((sp) => sp.data)
-    .filter((sp) => isSelectableSupplementProduct(selection, sp));
+    .filter((sp) =>
+      isSelectableSupplementProduct(selection.preassignedFareProduct, sp),
+    );
 }
