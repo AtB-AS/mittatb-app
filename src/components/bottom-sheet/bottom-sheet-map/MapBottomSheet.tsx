@@ -215,7 +215,7 @@ export const MapBottomSheet = ({
         }}
         onClose={onClose}
         accessible={false}
-        maxDynamicContentSize={screenHeight - safeAreaTop - headerHeight}
+        maxDynamicContentSize={screenHeight - safeAreaTop - tabBarMinHeight}
         index={canMinimize ? 1 : 0}
         overrideReduceMotion={ReduceMotion.Never}
       >
