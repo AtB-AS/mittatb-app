@@ -291,7 +291,6 @@ const BonusProgramTexts = {
         `Code ${spellOut(code)}`,
         `Kode ${spellOut(code)}`,
       ),
-    copied: _('Kopiert!', 'Copied!', 'Kopiert!'),
     errorMessage: _(
       'Vi klarte ikke å hente kampanjekodene dine. Prøv igjen senere.',
       'We could not load your coupon codes. Please try again later.',

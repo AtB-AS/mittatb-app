@@ -209,6 +209,7 @@ const initialState: OfferState = {
 export function useOfferState(
   preassignedFareProductAlternatives: PreassignedFareProduct[],
   selection?: PurchaseSelectionType,
+  bonusProductId?: string,
 ) {
   const offerReducer = getOfferReducer(
     selection?.userProfilesWithCount ?? [],
@@ -276,7 +277,7 @@ export function useOfferState(
                 selection?.supplementProductsWithCount.map((sp) => sp.id) ?? [],
               isOnBehalfOf: false,
               legs: mapToOfferSearchLegs(selection.legs),
-              bonusProductId: selection.bonusProductId,
+              bonusProductId,
             };
             const response = await searchTripPatternOffers(params);
             offers = response.offers;
@@ -295,7 +296,7 @@ export function useOfferState(
               supplementProducts:
                 selection?.supplementProductsWithCount.map((sp) => sp.id) ?? [],
               travelDate: selection?.travelDate,
-              bonusProductId: selection?.bonusProductId,
+              bonusProductId,
             };
 
             const offerEndpoint = selection?.stopPlaces
@@ -341,7 +342,7 @@ export function useOfferState(
         }
       }
     },
-    [selection, preassignedFareProductAlternatives],
+    [selection, preassignedFareProductAlternatives, bonusProductId],
   );
 
   useEffect(() => {

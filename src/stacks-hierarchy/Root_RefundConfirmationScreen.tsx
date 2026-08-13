@@ -29,6 +29,8 @@ import {RootStackScreenProps} from './navigation-types';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {CUSTOMER_SERVICE_URL} from '@env';
 import {ThemedBeacons} from '@atb/theme/ThemedAssets';
+import {useTimeContext} from '@atb/modules/time';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 
 type Props = RootStackScreenProps<'Root_RefundConfirmationScreen'>;
 
@@ -41,7 +43,12 @@ export function Root_RefundConfirmationScreen({navigation, route}: Props) {
   const focusRef = useFocusOnLoad(navigation);
   const [missingReason, setMissingReason] = useState(false);
 
-  const {status: refundOptionsStatus} = useRefundOptionsQuery(orderId, state);
+  const optionsQuery = useRefundOptionsQuery(orderId, state);
+  const {serverNow} = useTimeContext(ONE_SECOND_MS * 5);
+  const noLongerRefundable =
+    optionsQuery.isSuccess &&
+    (!optionsQuery.data.isRefundable ||
+      serverNow >= (optionsQuery.data.lastRefundTime?.getTime() ?? Infinity));
 
   const {mutate: refund, status: refundStatus} =
     useRefundFareContractMutation();
@@ -124,13 +131,18 @@ export function Root_RefundConfirmationScreen({navigation, route}: Props) {
             }}
           />
         )}
+        {noLongerRefundable && (
+          <MessageInfoBox
+            message={t(FareContractTexts.refund.noLongerRefundable)}
+            type="warning"
+          />
+        )}
         <Button
           expanded={true}
           onPress={onRefund}
           text={t(FareContractTexts.refund.confirm)}
-          loading={
-            refundStatus === 'pending' || refundOptionsStatus === 'pending'
-          }
+          loading={refundStatus === 'pending' || optionsQuery.isPending}
+          disabled={noLongerRefundable}
           interactiveColor={theme.color.interactive.destructive}
         />
       </View>

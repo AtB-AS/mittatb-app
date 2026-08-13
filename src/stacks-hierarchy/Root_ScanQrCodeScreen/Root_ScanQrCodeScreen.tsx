@@ -1,10 +1,15 @@
-import {MapTexts, useTranslation} from '@atb/translations';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {dictionary, MapTexts, useTranslation} from '@atb/translations';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Camera, CameraScreenContainer} from '@atb/components/camera';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {useGetAssetFromQrCodeMutation} from '@atb/modules/mobility';
+import {
+  useGetAssetFromQrCodeMutation,
+  useGetOperatorsQuery,
+} from '@atb/modules/mobility';
+import {getOperatorNameById} from '@atb/api/utils';
+import {isDefined} from '@atb/utils/presence';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Alert, Linking} from 'react-native';
 
@@ -32,7 +37,7 @@ import {
 export type Props = RootStackScreenProps<'Root_ScanQrCodeScreen'>;
 
 export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const focusRef = useFocusOnLoad(navigation);
   const isFocused = useIsFocusedAndActive();
   const {dispatchMapState} = useMapContext();
@@ -41,6 +46,28 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   const analytics = useMapSelectionAnalytics();
   const {logEvent} = useAnalyticsContext();
   const {knownQrCodeUrls} = useFirestoreConfigurationContext();
+  const {data: operatorsData} = useGetOperatorsQuery();
+
+  const scannableOperatorsText = useMemo(() => {
+    const names = (operatorsData?.operators ?? [])
+      .filter((operator) => operator.qrScanEnabled)
+      .map((operator) =>
+        getOperatorNameById(operatorsData, operator.id, language),
+      )
+      .filter(isDefined)
+      .sort((a, b) => a.localeCompare(b));
+
+    if (!names.length) return undefined;
+
+    const operatorList =
+      names.length > 1
+        ? `${names.slice(0, -1).join(', ')} ${t(dictionary.listConcatWord)} ${
+            names[names.length - 1]
+          }`
+        : names[0];
+
+    return t(MapTexts.qr.scannableOperators(operatorList));
+  }, [operatorsData, language, t]);
 
   const {
     mutateAsync: getAssetFromQrCode,
@@ -200,7 +227,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   return (
     <CameraScreenContainer
       title={t(ParkingViolationTexts.qr.title)}
-      secondaryText={t(ParkingViolationTexts.qr.instructions)}
+      secondaryText={scannableOperatorsText}
       isLoading={getAssetFromQrCodeIsLoading}
       onGoBack={onGoBack}
       focusRef={focusRef}

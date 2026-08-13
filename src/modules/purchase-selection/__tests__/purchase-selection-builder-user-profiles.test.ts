@@ -187,9 +187,12 @@ describe('isSelectableSupplementProduct', () => {
       },
     };
     const supplementProduct = {...TEST_SUPPLEMENT_PRODUCT, id: 'SP1'};
-    expect(isSelectableSupplementProduct(selection, supplementProduct)).toBe(
-      true,
-    );
+    expect(
+      isSelectableSupplementProduct(
+        selection.preassignedFareProduct,
+        supplementProduct,
+      ),
+    ).toBe(true);
   });
 
   it('returns false if supplement product is not allowed by limitations', () => {
@@ -204,9 +207,12 @@ describe('isSelectableSupplementProduct', () => {
       },
     };
     const supplementProduct = {...TEST_SUPPLEMENT_PRODUCT, id: 'SP3'};
-    expect(isSelectableSupplementProduct(selection, supplementProduct)).toBe(
-      false,
-    );
+    expect(
+      isSelectableSupplementProduct(
+        selection.preassignedFareProduct,
+        supplementProduct,
+      ),
+    ).toBe(false);
   });
 
   it('returns true if supplementProductRefs is empty (no limitations)', () => {
@@ -221,9 +227,12 @@ describe('isSelectableSupplementProduct', () => {
       },
     };
     const supplementProduct = {...TEST_SUPPLEMENT_PRODUCT, id: 'SP3'};
-    expect(isSelectableSupplementProduct(selection, supplementProduct)).toBe(
-      true,
-    );
+    expect(
+      isSelectableSupplementProduct(
+        selection.preassignedFareProduct,
+        supplementProduct,
+      ),
+    ).toBe(true);
   });
 });
 
@@ -444,9 +453,12 @@ describe('isSelectableSupplementProduct - undefined limitations', () => {
       },
     };
     const supplementProduct = {...TEST_SUPPLEMENT_PRODUCT, id: 'SP99'};
-    expect(isSelectableSupplementProduct(selection, supplementProduct)).toBe(
-      true,
-    );
+    expect(
+      isSelectableSupplementProduct(
+        selection.preassignedFareProduct,
+        supplementProduct,
+      ),
+    ).toBe(true);
   });
 });
 

@@ -1,3 +1,4 @@
+export {AppSwitchActionButton} from './components/AppSwitchActionButton';
 export {CityBikeStartTripOverlay} from './components/CityBikeStartTripOverlay';
 export {BikeStationBottomSheet} from './components/sheets/BikeStationBottomSheet';
 export {BrandingImage} from './components/BrandingImage';

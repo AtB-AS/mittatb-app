@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {DimensionOverrides} from './TripRow';
 
 type TripLegDecorationProps = {
@@ -18,6 +18,7 @@ export const TripLegDecoration: React.FC<TripLegDecorationProps> = ({
   dimensionOverrides,
 }) => {
   const style = useStyles();
+  const {theme} = useThemeContext();
   const colorStyle = {backgroundColor: color};
 
   const leftOverride =
@@ -26,7 +27,8 @@ export const TripLegDecoration: React.FC<TripLegDecorationProps> = ({
       ? {
           left:
             dimensionOverrides.labelWidth +
-            dimensionOverrides.decorationContainerWidth / 2,
+            dimensionOverrides.decorationContainerWidth / 2 -
+            theme.tripLegDetail.decorationLineWidth / 2,
         }
       : undefined;
 
