@@ -45,8 +45,6 @@ import {SupportButton} from '../SupportButton';
 import {BrandingImage} from '../BrandingImage';
 import {EndManualTripCard} from '../EndManualTripCard';
 import {ThemedCityBikeStation} from '@atb/theme/ThemedAssets';
-import {usePersistedBoolState} from '@atb/utils/use-persisted-bool-state';
-import {storage, StorageModelKeysEnum} from '@atb/modules/storage';
 
 type Props = {
   navigateSupportCallback: () => void;
@@ -73,11 +71,6 @@ export const ActiveShmoSheet = ({
     isError,
   } = useActiveShmoBookingQuery(isFocusedAndActive, ONE_SECOND_MS * 10);
   const {logEvent} = useAnalyticsContext();
-  const [endTripInfoClosed, setEndTripInfoClosed] = usePersistedBoolState(
-    storage,
-    StorageModelKeysEnum.CityBikeEndTripInfoDismissed,
-    false,
-  );
 
   const {mode, subMode} = getTransportModeAndSubMode(
     activeBooking?.asset?.formFactor,
@@ -248,16 +241,11 @@ export const ActiveShmoSheet = ({
                     />
                   )}
                   {activeBooking.asset.formFactor === FormFactor.Bicycle ? (
-                    !endTripInfoClosed && (
-                      <EndManualTripCard
-                        title={t(MobilityTexts.cityBike.endManualTrip.title)}
-                        summary={t(
-                          MobilityTexts.cityBike.endManualTrip.summary,
-                        )}
-                        image={<ThemedCityBikeStation height={54} width={90} />}
-                        handleDismiss={() => setEndTripInfoClosed(true)}
-                      />
-                    )
+                    <EndManualTripCard
+                      title={t(MobilityTexts.cityBike.endManualTrip.title)}
+                      summary={t(MobilityTexts.cityBike.endManualTrip.summary)}
+                      image={<ThemedCityBikeStation height={54} width={90} />}
+                    />
                   ) : (
                     <Button
                       mode="primary"
