@@ -1,8 +1,6 @@
 import React from 'react';
 import {FareContractType} from '@atb-as/utils';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
-import {useGetOperatorsQuery} from '@atb/modules/mobility';
-
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
@@ -11,10 +9,11 @@ import {useAuthContext} from '@atb/modules/auth';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {toDate} from 'date-fns';
 import {getFareContractInfo} from '../utils';
+import {useGetOperatorsQuery} from '@atb/modules/mobility';
+import {getOperatorNameById} from '@atb/api/utils';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {ProductName} from '../components/ProductName';
-import {getOperatorNameById} from '@atb/api/utils';
 
 type Props = {
   fareContract: FareContractType;
