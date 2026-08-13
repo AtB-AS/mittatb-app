@@ -123,11 +123,11 @@ const FareContractTexts = {
       'Get receipt sent',
       'Få kvittering tilsendt',
     ),
-    askOperatorRefund: (operatorName?: string) =>
+    contactOperator: (operatorName?: string) =>
       _(
-        `Be ${operatorName ?? 'operatør'} om refusjon`,
-        `Ask ${operatorName ?? 'operator'} for refund`,
-        `Be ${operatorName ?? 'operatør'} om refusjon`,
+        `Kontakt ${operatorName ?? 'operatør'}`,
+        `Contact ${operatorName ?? 'operator'}`,
+        `Kontakt ${operatorName ?? 'operatør'}`,
       ),
     barcodeA11yLabel: _(
       'QR-kode. Vis frem denne koden ved billettkontroll.',

@@ -40,7 +40,10 @@ import {Barcode} from './Barcode';
 import {MapFilterType} from '@atb/modules/map';
 import {useAuthContext} from '@atb/modules/auth';
 import {CarnetFooter} from '../carnet/CarnetFooter';
-import {MobilityBenefitsActionSectionItem} from '@atb/modules/mobility';
+import {
+  MobilityBenefitsActionSectionItem,
+  useGetOperatorsQuery,
+} from '@atb/modules/mobility';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
 import {ConsumeCarnetSectionitem} from '../components/ConsumeCarnetSectionitem';
 import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
@@ -67,6 +70,7 @@ import {SentOrReceivedMessageBox} from '../components/SentOrReceivedMessageBox';
 import {Mail} from '@atb/assets/svg/mono-icons/profile';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import {TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
+import {getOperatorNameById} from '@atb/api/utils';
 
 type Props = {
   fareContract: FareContractType;
@@ -95,7 +99,7 @@ export const DetailsContent: React.FC<Props> = ({
 }) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
 
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
   const {findGlobalMessages} = useGlobalMessagesContext();
@@ -117,6 +121,12 @@ export const DetailsContent: React.FC<Props> = ({
   const {isInspectable, mobileTokenStatus} = useMobileTokenContext();
   const {benefits} = useOperatorBenefitsForFareProduct(
     preassignedFareProduct?.id,
+  );
+  const {data: operatorsData} = useGetOperatorsQuery();
+  const operatorName = getOperatorNameById(
+    operatorsData,
+    fc?.operatorId,
+    language,
   );
   const bookingSegments = useFareContractBookingSegments(
     firstTravelRight.datedServiceJourneys?.[0],
@@ -291,11 +301,7 @@ export const DetailsContent: React.FC<Props> = ({
 
       {hasShmoBookingId(fc) && hasShmoOperatorId(fc) && (
         <LinkSectionItem
-          text={t(
-            FareContractTexts.details.askOperatorRefund(
-              preassignedFareProduct?.name.value,
-            ),
-          )}
+          text={t(FareContractTexts.details.contactOperator(operatorName))}
           onPress={() => {
             if (fc?.operatorId && fc?.bookingId && fc?.formFactor) {
               onSupportNavigate({
