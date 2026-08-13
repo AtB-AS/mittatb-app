@@ -9,9 +9,9 @@ import {useAuthContext} from '@atb/modules/auth';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {toDate} from 'date-fns';
 import {getFareContractInfo} from '../utils';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useGetOperatorsQuery} from '@atb/modules/mobility';
 import {getOperatorNameById} from '@atb/api/utils';
-import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {ProductName} from '../components/ProductName';
 
