@@ -144,7 +144,7 @@ export const BikeStationIntegrationView = ({
             <ThemeText>
               {t(
                 MobilityTexts.freeBikeParkingSpaces(
-                  station?.numDocksAvailable?.toString() ?? '0',
+                  station?.numDocksAvailable ?? 0,
                 ),
               )}
             </ThemeText>

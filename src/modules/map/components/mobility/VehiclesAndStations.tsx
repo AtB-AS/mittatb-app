@@ -75,16 +75,24 @@ export const StationsWithClusters = ({
   selectedFeatureId,
   showNonVirtualStations,
   hideSymbols = false,
+  showBikeStationParkingInfo = false,
 }: SelectedFeatureIdProp & {
   showNonVirtualStations: boolean;
   hideSymbols?: boolean;
+  showBikeStationParkingInfo?: boolean;
 }) => {
   const showVirtualStations = false; // not supported yet. Also – consider using a virtualStationsFilter prop instead
   const minZoomLevel = 14;
   const {isSelected, iconStyle, textStyle} = useMapSymbolStyles({
-    selectedFeaturePropertyId: selectedFeatureId,
+    // During an active trip the selected feature id is the *rented vehicle's* id, which no
+    // station matches - that minimizes every station and blanks out its label. No station is
+    // selected in that state anyway, so deliberately pass none while showing parking info.
+    selectedFeaturePropertyId: showBikeStationParkingInfo
+      ? undefined
+      : selectedFeatureId,
     pinType: 'station',
     reachFullScaleAtZoomLevel: minZoomLevel + scaleTransitionZoomRange + 0.2,
+    showBikeStationParkingInfo,
   });
 
   const {mapFilter} = useMapContext();
@@ -163,10 +171,12 @@ export const VehiclesAndStations = ({
   onPress,
   showVehicles,
   showStations,
+  showBikeStationParkingInfo = false,
 }: SelectedFeatureIdProp & {
   onPress?: (e: OnPressEvent) => void;
   showVehicles: boolean;
   showStations: boolean;
+  showBikeStationParkingInfo?: boolean;
 }) => {
   if (!showVehicles && !showStations) return null;
 
@@ -185,6 +195,7 @@ export const VehiclesAndStations = ({
           <StationsWithClusters
             selectedFeatureId={selectedFeatureId}
             showNonVirtualStations={true}
+            showBikeStationParkingInfo={showBikeStationParkingInfo}
           />
         )}
       </>
