@@ -6,6 +6,13 @@ on:
         description: 'Define branch to test'
         required: true
         default: 'master'
+      buildId:
+        description: 'Specific build ID to test'
+        required: false
+        default: ''
+  push:
+    branches:
+      - tor/e2e-maestro
   schedule:
     - cron: '0 3 * * 1-5'
 
@@ -28,7 +35,8 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.branch || 'master' }}
+          #ref: ${{ github.event.inputs.branch || 'master' }} TODO
+          ref: tor/e2e-maestro
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -45,6 +53,7 @@ jobs:
         working-directory: e2e/firestore
         env:
           CREDENTIALS_APITESTER: ${{ secrets.CREDENTIALS_APITESTER }}
+          BUILD_ID: ${{ github.event.inputs.buildId || '' }}
           IS_GITHUB: 'True'
       - name: APK output
         id: check-output
@@ -70,7 +79,8 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.branch || 'master' }}
+          #ref: ${{ github.event.inputs.branch || 'master' }} TODO
+          ref: tor/e2e-maestro
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -155,9 +165,50 @@ jobs:
           script: adb install ${{ github.workspace }}/e2e/apk/app-staging.apk && maestro test -e APP_ID=no.mittatb.staging --test-output-dir results --format junit --output results/results.xml tests/*
           working-directory: e2e/maestro
 
-      # Slack (see test-e2e-android.yml)
+      # TEMP
+      - name: TEMP list result files
+        working-directory: e2e/maestro/results
+        run: |
+          ls -laR
 
-      # Results (see test-e2e-android.yml)
+      # Slack
+      - name: Notify Slack
+        if: always()
+        working-directory: e2e/maestro/results
+        run: |
+          ./slack_notification.sh ${{ secrets.ATB_SLACK_TOKEN }} e2e_tests ${{ github.run_id }} maestro ${{ needs.check-builds.outputs.TESTED_VERSION }}
+
+      # Results
+      - name: Fail on any errors
+        if: always()
+        working-directory: e2e/maestro/results
+        run: |
+          FAILURE_TEXT=$(python3 <<'PYEOF'
+          import xml.etree.ElementTree as ET
+          tree = ET.parse('results.xml')
+          lines = []
+          for tc in tree.getroot().iter('testcase'):
+            failures = tc.findall('failure')
+            if failures:
+              lines.append(tc.get('name'))
+              for f in failures:
+                lines.append('\t- ' + (f.text or ''))
+          print('\n'.join(lines))
+          PYEOF
+          )
+          if [ -n "$FAILURE_TEXT" ]; then
+            echo "### ⚠️  Test errors" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "$FAILURE_TEXT" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "⚠️  Errors are found, failing the job."
+            echo "$FAILURE_TEXT"
+            exit 1
+          else
+            echo "✅ All good!" >> $GITHUB_STEP_SUMMARY
+            echo "✅ All good!"
+          fi
 
       # Upload results
       - name: Upload test results
@@ -174,5 +225,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-screenshots
-          path: ./e2e/maestro/results/screenshots/*.png
+          path: ./e2e/maestro/results/**/*.png
           retention-days: 3
