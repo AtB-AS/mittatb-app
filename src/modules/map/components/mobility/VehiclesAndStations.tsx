@@ -150,6 +150,13 @@ export const StationsWithClusters = ({
     [iconStyle, textStyle],
   );
 
+  // Stations normally render below NSR items, so a nearby stop place can cover a
+  // station icon and its label. While showing parking info the free-slots count is
+  // what the user is navigating by, so stations are lifted above the stop places.
+  const slotLayerId = showBikeStationParkingInfo
+    ? MapSlotLayerId.StationsAboveNsrItems
+    : MapSlotLayerId.Stations;
+
   return (
     <MapboxGL.SymbolLayer
       id={`stations-clustered-symbol-layer-${
@@ -158,7 +165,7 @@ export const StationsWithClusters = ({
       sourceID={vehiclesAndStationsVectorSourceId}
       sourceLayerID="combined_stations_layer"
       minZoomLevel={minZoomLevel}
-      aboveLayerID={MapSlotLayerId.Stations}
+      aboveLayerID={slotLayerId}
       style={hideSymbols ? {} : style}
       {...filter}
     />
