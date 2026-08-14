@@ -134,13 +134,7 @@ export const Map = (props: MapProps) => {
   const startingCoordinates = getCurrentCoordinatesGlobal() || FOCUS_ORIGIN;
 
   const showVehicles = mapFilter?.mobility.SCOOTER?.showAll ?? false;
-  const showStations =
-    (mapFilter?.mobility.BICYCLE?.showAll ||
-      mapFilter?.mobility.CAR?.showAll) ??
-    false;
   const showTariffZones = mapFilter?.showTariffZones ?? true;
-  const shouldShowVehiclesAndStations =
-    isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
 
   const selectedFeature = mapState.feature;
 
@@ -161,6 +155,15 @@ export const Map = (props: MapProps) => {
 
   const isActiveTrip = isActiveTripBooking(activeShmoBooking);
   const isActiveBikeTrip = isActiveBikeTripBooking(activeShmoBooking);
+
+  const showCityBikeStations = mapFilter?.mobility.BICYCLE?.showAll ?? false;
+  // Shared car stations are just noise during an active city bike trip. They are
+  // not relevant for the trip, and are not interactive while a trip is in use.
+  const showSharedCarStations =
+    (mapFilter?.mobility.CAR?.showAll ?? false) && !isActiveBikeTrip;
+  const showStations = showCityBikeStations || showSharedCarStations;
+  const shouldShowVehiclesAndStations =
+    isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&
@@ -560,7 +563,8 @@ export const Map = (props: MapProps) => {
               selectedFeatureId={activeFeatureId}
               onPress={onMapItemClick}
               showVehicles={showVehicles}
-              showStations={showStations}
+              showCityBikeStations={showCityBikeStations}
+              showSharedCarStations={showSharedCarStations}
               showBikeStationParkingInfo={isActiveBikeTrip}
             />
           )}
@@ -614,6 +618,8 @@ export const Map = (props: MapProps) => {
             <StationsWithClusters
               selectedFeatureId={undefined}
               showNonVirtualStations={true}
+              showCityBikeStations={showCityBikeStations}
+              showSharedCarStations={showSharedCarStations}
               hideSymbols={true}
             />
           )}

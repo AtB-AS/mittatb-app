@@ -1,10 +1,6 @@
 import React, {useMemo} from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import {
-  hitboxCoveringIconOnly,
-  useMapContext,
-  useMapSymbolStyles,
-} from '@atb/modules/map';
+import {hitboxCoveringIconOnly, useMapSymbolStyles} from '@atb/modules/map';
 import {SelectedFeatureIdProp} from '../../types';
 import {OnPressEvent} from 'node_modules/@rnmapbox/maps/src/types/OnPressEvent';
 
@@ -74,10 +70,14 @@ export const VehiclesWithClusters = ({
 export const StationsWithClusters = ({
   selectedFeatureId,
   showNonVirtualStations,
+  showCityBikeStations,
+  showSharedCarStations,
   hideSymbols = false,
   showBikeStationParkingInfo = false,
 }: SelectedFeatureIdProp & {
   showNonVirtualStations: boolean;
+  showCityBikeStations: boolean;
+  showSharedCarStations: boolean;
   hideSymbols?: boolean;
   showBikeStationParkingInfo?: boolean;
 }) => {
@@ -94,10 +94,6 @@ export const StationsWithClusters = ({
     reachFullScaleAtZoomLevel: minZoomLevel + scaleTransitionZoomRange + 0.2,
     showBikeStationParkingInfo,
   });
-
-  const {mapFilter} = useMapContext();
-  const showCityBikes = mapFilter?.mobility.BICYCLE?.showAll ?? false;
-  const showSharedCars = mapFilter?.mobility.CAR?.showAll ?? false;
 
   const filter: {filter: FilterExpression} | undefined = useMemo(() => {
     const isVirtualStation: Expression = ['get', 'is_virtual_station'];
@@ -121,12 +117,12 @@ export const StationsWithClusters = ({
               [
                 'all',
                 ['==', vehicle_type_form_factor, 'BICYCLE'],
-                ['!', !showCityBikes],
+                ['!', !showCityBikeStations],
               ],
               [
                 'all',
                 ['==', vehicle_type_form_factor, 'CAR'],
-                ['!', !showSharedCars],
+                ['!', !showSharedCarStations],
               ],
             ],
             hideItemsInTheDistanceFilter,
@@ -136,8 +132,8 @@ export const StationsWithClusters = ({
     isSelected,
     showVirtualStations,
     showNonVirtualStations,
-    showCityBikes,
-    showSharedCars,
+    showCityBikeStations,
+    showSharedCarStations,
     hideSymbols,
   ]);
 
@@ -170,14 +166,17 @@ export const VehiclesAndStations = ({
   selectedFeatureId,
   onPress,
   showVehicles,
-  showStations,
+  showCityBikeStations,
+  showSharedCarStations,
   showBikeStationParkingInfo = false,
 }: SelectedFeatureIdProp & {
   onPress?: (e: OnPressEvent) => void;
   showVehicles: boolean;
-  showStations: boolean;
+  showCityBikeStations: boolean;
+  showSharedCarStations: boolean;
   showBikeStationParkingInfo?: boolean;
 }) => {
+  const showStations = showCityBikeStations || showSharedCarStations;
   if (!showVehicles && !showStations) return null;
 
   return (
@@ -195,6 +194,8 @@ export const VehiclesAndStations = ({
           <StationsWithClusters
             selectedFeatureId={selectedFeatureId}
             showNonVirtualStations={true}
+            showCityBikeStations={showCityBikeStations}
+            showSharedCarStations={showSharedCarStations}
             showBikeStationParkingInfo={showBikeStationParkingInfo}
           />
         )}
