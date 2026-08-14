@@ -1,4 +1,4 @@
-import {FullScreenHeader, useTicketInfo} from '@atb/components/screen-header';
+import {useTicketInfo} from '@atb/components/screen-header';
 import {DetailsContent} from '@atb/modules/fare-contracts';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -7,7 +7,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import React, {useCallback} from 'react';
-import {ScrollView, View} from 'react-native';
+import {View} from 'react-native';
 import {
   RootStackScreenProps,
   ShmoHelpParams,
@@ -25,6 +25,7 @@ import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {useApplePassPresentationSuppression} from '@atb/modules/native-bridges';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
+import {FullScreenView} from '@atb/components/screen-view';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -108,11 +109,10 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   );
 
   return (
-    <View style={styles.container}>
-      <FullScreenHeader
-        showBorder={false}
-        leftButton={{type: 'back'}}
-        rightButton={
+    <FullScreenView
+      headerProps={{
+        leftButton: {type: 'back'},
+        rightButton:
           enable_ticket_information && !hasShmoBookingId(fareContract)
             ? {
                 type: 'custom',
@@ -124,11 +124,13 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
                   FareContractTexts.details.header.infoButtonA11yHint,
                 ),
               }
-            : undefined
-        }
-        title={t(FareContractTexts.details.header.title)}
-      />
-      <ScrollView contentContainerStyle={styles.content}>
+            : undefined,
+
+        title: t(FareContractTexts.details.header.title),
+      }}
+      focusRef={undefined}
+    >
+      <View style={styles.container}>
         {fareContract && (
           <ErrorBoundary
             message={t(
@@ -151,17 +153,14 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
             />
           </ErrorBoundary>
         )}
-      </ScrollView>
-    </View>
+      </View>
+    </FullScreenView>
   );
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-  },
-  content: {
-    padding: theme.spacing.medium,
-    paddingBottom: theme.spacing.xLarge,
+    margin: theme.spacing.medium,
   },
 }));

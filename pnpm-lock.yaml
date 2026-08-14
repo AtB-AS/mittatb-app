@@ -19,11 +19,14 @@ importers:
         specifier: ^1.2.7
         version: 1.2.7
       '@atb-as/config-specs':
-        specifier: ^11.2.0
-        version: 11.2.0(zod@4.1.11)
+        specifier: ^11.3.0
+        version: 11.3.0(zod@4.1.11)
       '@atb-as/generate-assets':
         specifier: ^18.18.0
         version: 18.18.0
+      '@atb-as/mapbox-shared':
+        specifier: ^1.0.4
+        version: 1.0.4(@atb-as/theme@15.3.0)
       '@atb-as/theme':
         specifier: ^15.3.0
         version: 15.3.0
@@ -259,8 +262,8 @@ importers:
         specifier: ^4.23.0
         version: 4.23.0(react-native@0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0))(react@19.2.0)
       react-native-screenshot-aware:
-        specifier: ^1.3.18
-        version: 1.3.18(react-native@0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0))(react@19.2.0)
+        specifier: ^2.0.0
+        version: 2.0.0(react-native@0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0))(react@19.2.0)
       react-native-svg:
         specifier: ^15.13.0
         version: 15.13.0(react-native@0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0))(react@19.2.0)
@@ -500,8 +503,8 @@ packages:
   '@adrianso/react-native-device-brightness@1.2.7':
     resolution: {integrity: sha512-q3OTFGohAh04R8cBka7/eNXaeSD8bAZocMsifLIR3oDF5N9cNH2UVEjzJaFXW8DHFEsODpljpT+eyGWIhKlkow==}
 
-  '@atb-as/config-specs@11.2.0':
-    resolution: {integrity: sha512-NQS+PdgK79bV2R5BNsqX3XKmIR/LnnBn94RyoJJ4xIeT7iyC2qehLYFjLwBDPEw/Q9VLRDHG9xgd/YAqu0MtMw==}
+  '@atb-as/config-specs@11.3.0':
+    resolution: {integrity: sha512-1shIwm0MF3eSR1G3V/dR1mgJlQm2oikVVHF1gUygcIP7c8Uxdtann6aEiqePGeQzGNomMrm0U3PdlhZuOS3AjQ==}
     hasBin: true
     peerDependencies:
       zod: ^4.1.11
@@ -509,6 +512,11 @@ packages:
   '@atb-as/generate-assets@18.18.0':
     resolution: {integrity: sha512-/+eEQslDr9FLFOWPFDTL/fIIejybk9dsI/lSwv/sb/9xI1HFOGgcDYPJzs/D77EG9NhZNYV8qXXtDThWTE0ufA==}
     hasBin: true
+
+  '@atb-as/mapbox-shared@1.0.4':
+    resolution: {integrity: sha512-jrH5TteMl/nvmBxJ2ik1D2H/Q5YI4KqinzF9gmJfGqcugBSGU9r2IJZ6imoSwDz9tMhj0BbvqanoulRUZ2Bk+A==}
+    peerDependencies:
+      '@atb-as/theme': '>=15'
 
   '@atb-as/theme@14.0.1':
     resolution: {integrity: sha512-NYL92rDfXfkc4OAOWZNdhMvlCrqe6RExPbLGICkXHhpFQgEK77pzJNFO85Rj43+DRYeu32nGOBtEjJsIe1rINA==}
@@ -6122,12 +6130,12 @@ packages:
       react: '*'
       react-native: '*'
 
-  react-native-screenshot-aware@1.3.18:
-    resolution: {integrity: sha512-DmYlHewDcng3idHbNq84TTLp9cUQser4rXyqZdGwfExyR3rI0tlvTv4w8qJELZS6fM9okpFLyEN5ew7/XXN70A==}
+  react-native-screenshot-aware@2.0.0:
+    resolution: {integrity: sha512-DI4fv03WpWWckIjs86vb4Cb0/3HDScNEbZxj2V7vo3BreHAFmzFjTsppPECmMr7oiJmCYCL3lYPaZ3OYLHhkgg==}
     peerDependencies:
       expo: '*'
       react: '*'
-      react-native: '>=0.76'
+      react-native: '*'
     peerDependenciesMeta:
       expo:
         optional: true
@@ -7350,7 +7358,7 @@ snapshots:
 
   '@adrianso/react-native-device-brightness@1.2.7': {}
 
-  '@atb-as/config-specs@11.2.0(zod@4.1.11)':
+  '@atb-as/config-specs@11.3.0(zod@4.1.11)':
     dependencies:
       ajv: 8.20.0
       ajv-formats: 3.0.1(ajv@8.20.0)
@@ -7367,6 +7375,10 @@ snapshots:
       micromatch: 4.0.8
       normalize-path: 3.0.0
       stream-editor: 1.11.0
+
+  '@atb-as/mapbox-shared@1.0.4(@atb-as/theme@15.3.0)':
+    dependencies:
+      '@atb-as/theme': 15.3.0
 
   '@atb-as/theme@14.0.1':
     dependencies:
@@ -14265,7 +14277,7 @@ snapshots:
       react-native: 0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0)
       warn-once: 0.1.1
 
-  react-native-screenshot-aware@1.3.18(react-native@0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0))(react@19.2.0):
+  react-native-screenshot-aware@2.0.0(react-native@0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0))(react@19.2.0):
     dependencies:
       react: 19.2.0
       react-native: 0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0)

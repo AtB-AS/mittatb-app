@@ -1,3 +1,4 @@
+export {AppSwitchActionButton} from './components/AppSwitchActionButton';
 export {CityBikeStartTripOverlay} from './components/CityBikeStartTripOverlay';
 export {BikeStationBottomSheet} from './components/sheets/BikeStationBottomSheet';
 export {BrandingImage} from './components/BrandingImage';
@@ -31,6 +32,7 @@ export {useShmoBookingQuery} from './queries/use-shmo-booking-query';
 export {useInitAgeVerificationMutation} from './queries/use-init-age-verification-mutation';
 export {useGetOperatorsQuery} from './queries/use-get-operators-query';
 export {useVehicleQuery} from './queries/use-vehicle-query';
+export {getStationQueryKey} from './queries/use-station-query';
 export {ShmoRequirementEnum} from './types';
 export {useOperatorBenefitsForFareProduct} from './use-operator-benefits-for-fare-product';
 export {useOperators} from './use-operators';
@@ -46,6 +48,8 @@ export {
   getFreeMinutes,
   getFreeUnlock,
   getTransportModeAndSubMode,
+  isActiveBikeTripBooking,
+  isActiveTripBooking,
   isBicycle,
   isBikeStation,
   isCarStation,

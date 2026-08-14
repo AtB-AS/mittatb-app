@@ -29,12 +29,16 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {tGlobal} from '@atb/modules/locale';
 import {coordinatesDistanceInMetres} from '@atb/utils/location';
 
+const LOCATION_MAX_AGE_MS = 60000;
+
 const config: GeolocationOptions = {
   enableHighAccuracy: true,
   distanceFilter: 20,
+  maximumAge: LOCATION_MAX_AGE_MS,
 };
 
 let currentCoordinatesGlobal: Coordinates | undefined = undefined;
+let currentCoordinatesUpdatedAt: number | undefined = undefined;
 export const getCurrentCoordinatesGlobal = () =>
   currentCoordinatesGlobal && {
     ...currentCoordinatesGlobal,
@@ -89,6 +93,7 @@ const geolocationReducer: GeolocationReducer = (prevState, action) => {
         action.locationName,
       );
       currentCoordinatesGlobal = location?.coordinates;
+      currentCoordinatesUpdatedAt = Date.now();
       return {
         ...prevState,
         location,
@@ -262,7 +267,10 @@ export const GeolocationContextProvider = ({children}: Props) => {
       askForPermissionIfBlocked: boolean | undefined = false,
     ): Promise<Coordinates | undefined> => {
       return new Promise(async (resolve) => {
-        if (currentCoordinatesGlobal) {
+        const coordinatesAreFresh =
+          currentCoordinatesUpdatedAt !== undefined &&
+          Date.now() - currentCoordinatesUpdatedAt < LOCATION_MAX_AGE_MS;
+        if (currentCoordinatesGlobal && coordinatesAreFresh) {
           resolve(currentCoordinatesGlobal);
         } else {
           if (state.status === 'blocked' && !askForPermissionIfBlocked) {

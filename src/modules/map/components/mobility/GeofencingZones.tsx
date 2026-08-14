@@ -11,7 +11,7 @@ import {hitboxCoveringIconOnly} from '@atb/modules/map';
 import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
 import {useGeofencingZonesQuery} from '@atb/modules/mobility';
 import {useThemeContext} from '@atb/theme';
-import {getIconZoomTransitionStyle} from '../../utils';
+import {getIconZoomTransitionStyle} from '@atb-as/mapbox-shared';
 import {hideItemsInTheDistanceFilter} from '../../hooks/use-map-symbol-styles';
 import {
   AllLayerStyleProps,

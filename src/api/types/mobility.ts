@@ -239,10 +239,6 @@ export type RentalUris = z.infer<typeof RentalUrisSchema>;
 
 export const BonusOfferSchema = z.object({
   bonusProductId: z.string(),
-  bonusProductPrice: z.object({
-    amount: z.number(),
-    currencyCode: z.string(),
-  }),
   priceAdjustments: z.array(PriceAdjustmentSchema),
 });
 
@@ -257,7 +253,7 @@ export const ActionButtonSchema = z.discriminatedUnion('type', [
   z.object({type: z.literal(ActionButtonType.START_TRIP)}),
   z.object({
     type: z.literal(ActionButtonType.APP_SWITCH),
-    url: z.string(),
+    url: z.string().optional(),
     label: LanguageAndTextTypeArray.default([]),
   }),
 ]);
@@ -286,6 +282,10 @@ export const VehicleSchema = z.object({
 });
 
 export type Vehicle = z.infer<typeof VehicleSchema>;
+
+export const VehicleAppSwitchSchema = z.object({url: z.string()});
+
+export type VehicleAppSwitch = z.infer<typeof VehicleAppSwitchSchema>;
 
 const StationVehicleTypeSchema = z.object({
   id: z.string(),
@@ -498,6 +498,7 @@ export type AssetFromQrCodeQuery = z.infer<typeof AssetFromQrCodeQuerySchema>;
 export const OperatorSchema = z.object({
   id: z.string(),
   name: LocalizedStringSchema,
+  qrScanEnabled: z.boolean().optional().default(false),
 });
 
 export const OperatorsResponseSchema = z.object({

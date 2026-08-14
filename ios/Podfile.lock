@@ -4899,7 +4899,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - ScreenshotAware (1.3.18):
+  - ScreenshotAware (2.0.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -5716,7 +5716,7 @@ SPEC CHECKSUMS:
   RNScreens: 199799bdab32fa1e17ebf938b06fec52033e81e5
   RNSVG: acb39c771c3dbb33fa8f65d1b11dc4500147189e
   RNWorklets: a3184955a41f2be46898a937e2821469c8c8da42
-  ScreenshotAware: 508d7e1a6ed436aaf4768e48f94352f472f89761
+  ScreenshotAware: 799180434cd77629c0f989b527361e2aef1d1209
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   SwiftNIO: 829958aab300642625091f82fc2f49cb7cf4ef24
   SwiftNIOConcurrencyHelpers: 697370136789b1074e4535eaae75cbd7f900370e

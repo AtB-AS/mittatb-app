@@ -1,6 +1,6 @@
 import {StyleSheet, Theme} from '@atb/theme';
 import React from 'react';
-import {KeyboardAvoidingView, View} from 'react-native';
+import {KeyboardAvoidingView, Platform, View} from 'react-native';
 
 type ScreenFooterProps = {
   children: React.ReactNode;
@@ -17,7 +17,10 @@ export function FullScreenFooter({
   const containerStyle = {...styles.container, backgroundColor: footerColor};
 
   return avoidKeyboard ? (
-    <KeyboardAvoidingView behavior="padding" style={containerStyle}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'android' ? undefined : 'padding'}
+      style={containerStyle}
+    >
       {children}
     </KeyboardAvoidingView>
   ) : (

@@ -1,9 +1,6 @@
 import {RefObject} from 'react';
 import MapboxGL, {CameraAnimationMode, CameraPadding} from '@rnmapbox/maps';
-import {
-  Expression,
-  SymbolLayerStyleProps,
-} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
+import {Expression} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   Feature,
@@ -344,41 +341,4 @@ export function getFeatureWeight(
   } else {
     return 0;
   }
-}
-
-/*
- * Standardized calculations for icon size and opacity zoom transitions.
- */
-export function getIconZoomTransitionStyle(
-  reachFullScaleAtZoomLevel: number,
-  iconFullSize: number | Expression,
-  scaleTransitionZoomRange: number,
-  opacityTransitionExtraZoomRange: number,
-): Required<Pick<SymbolLayerStyleProps, 'iconSize' | 'iconOpacity'>> {
-  const iconOpacity: Expression = [
-    'interpolate',
-    ['linear'],
-    ['zoom'],
-    reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
-    0,
-    reachFullScaleAtZoomLevel -
-      scaleTransitionZoomRange +
-      opacityTransitionExtraZoomRange,
-    1,
-  ];
-
-  const iconSize: Expression = [
-    'interpolate',
-    ['linear'],
-    ['zoom'],
-    reachFullScaleAtZoomLevel - scaleTransitionZoomRange,
-    0.3,
-    reachFullScaleAtZoomLevel,
-    iconFullSize,
-  ];
-
-  return {
-    iconSize,
-    iconOpacity,
-  };
 }

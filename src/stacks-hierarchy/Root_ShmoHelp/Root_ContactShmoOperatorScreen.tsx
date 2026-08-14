@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {KeyboardAvoidingView, ScrollView, View} from 'react-native';
+import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
@@ -26,11 +26,10 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useSendSupportRequestMutation} from '@atb/modules/mobility';
 import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {useProfileQuery} from '@atb/queries';
-import {FullScreenHeader} from '@atb/components/screen-header';
-import {useScrollBorder} from '@atb/utils/use-scroll-border';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useNavigation} from '@react-navigation/native';
 import {useOperators} from '@atb/modules/mobility';
+import {FullScreenView} from '@atb/components/screen-view';
 
 export type Root_ContactShmoOperatorScreenProps =
   RootStackScreenProps<'Root_ContactShmoOperatorScreen'>;
@@ -50,7 +49,6 @@ export const Root_ContactShmoOperatorScreen = ({
   const styles = useStyles();
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
-  const {onScroll, isScrolled} = useScrollBorder();
 
   const onSuccess = () => {
     navigation.navigate('Root_ContactShmoOperatorConfirmationScreen', {
@@ -79,176 +77,161 @@ export const Root_ContactShmoOperatorScreen = ({
   );
 
   return (
-    <View style={styles.container}>
-      <FullScreenHeader
-        leftButton={{type: 'back'}}
-        title={t(ContactShmoOperatorTexts.title(operatorName ?? ''))}
-        showBorder={isScrolled}
-      />
-      <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          centerContent={true}
-          onScroll={onScroll}
-          scrollEventThrottle={16}
-        >
-          <View style={styles.contentContainer}>
-            <ContentHeading
-              text={t(ContactShmoOperatorTexts.supportType.header)}
-            />
-            <RadioGroupSection<SupportType>
-              keyExtractor={(supportType) => supportType}
-              selected={requestBody.supportType}
-              items={Object.values(SupportType) as SupportType[]}
-              onSelect={(supportType) =>
-                setRequestBody((prev) => ({...prev, supportType}))
-              }
-              itemToText={(supportType) =>
-                t(
-                  ContactShmoOperatorTexts.supportType.supportTypeDescription(
-                    supportType,
-                  ),
-                )
-              }
-            />
-            {requestBody.supportType === SupportType.UNABLE_TO_CLOSE && (
-              <MessageInfoBox
-                message={t(
-                  ContactShmoOperatorTexts.supportType.noEndInfo(
-                    operatorName ?? '',
-                  ),
-                )}
-                type="info"
-              />
+    <FullScreenView
+      headerProps={{
+        leftButton: {type: 'back'},
+        title: t(ContactShmoOperatorTexts.title(operatorName ?? '')),
+      }}
+      avoidKeyboard={true}
+      focusRef={undefined}
+    >
+      <View style={styles.contentContainer}>
+        <ContentHeading text={t(ContactShmoOperatorTexts.supportType.header)} />
+        <RadioGroupSection<SupportType>
+          keyExtractor={(supportType) => supportType}
+          selected={requestBody.supportType}
+          items={Object.values(SupportType) as SupportType[]}
+          onSelect={(supportType) =>
+            setRequestBody((prev) => ({...prev, supportType}))
+          }
+          itemToText={(supportType) =>
+            t(
+              ContactShmoOperatorTexts.supportType.supportTypeDescription(
+                supportType,
+              ),
+            )
+          }
+        />
+        {requestBody.supportType === SupportType.UNABLE_TO_CLOSE && (
+          <MessageInfoBox
+            message={t(
+              ContactShmoOperatorTexts.supportType.noEndInfo(
+                operatorName ?? '',
+              ),
             )}
-            <ContentHeading text={t(ContactShmoOperatorTexts.comment.header)} />
-            <Section>
-              <TextInputSectionItem
-                value={requestBody.comment ?? ''}
-                onChangeText={(comment) =>
-                  setRequestBody((prev) => ({...prev, comment}))
-                }
-                label={t(ContactShmoOperatorTexts.comment.label)}
-                placeholder={t(ContactShmoOperatorTexts.comment.placeholder)}
-                inlineLabel={false}
-                multiline={true}
-                maxLength={MAX_SUPPORT_COMMENT_LENGTH}
-                scrollEnabled={false}
-                autoCapitalize="sentences"
-                errorText={
-                  !isCommentValid && showError
-                    ? t(
-                        ContactShmoOperatorTexts.comment.errorMessage(
-                          MAX_SUPPORT_COMMENT_LENGTH,
-                        ),
-                      )
-                    : undefined
-                }
-              />
-            </Section>
-            <ContentHeading
-              text={t(ContactShmoOperatorTexts.contactInfo.header)}
-            />
-            <Section>
-              <TextInputSectionItem
-                value={requestBody.contactInformationEndUser.email ?? ''}
-                onChangeText={(email) =>
-                  setRequestBody((prev) => ({
-                    ...prev,
-                    contactInformationEndUser: {
-                      ...prev.contactInformationEndUser,
-                      email,
-                    },
-                  }))
-                }
-                label={t(ContactShmoOperatorTexts.contactInfo.email.label)}
-                placeholder={t(
-                  ContactShmoOperatorTexts.contactInfo.email.placeholder,
-                )}
-                showClear
-                inlineLabel={false}
-                keyboardType="email-address"
-                autoComplete="email"
-                autoCapitalize="none"
-                errorText={
-                  !isEmailValid && showError
-                    ? t(ContactShmoOperatorTexts.contactInfo.email.errorMessage)
-                    : !isContactInfoPresent && showError
-                      ? t(ContactShmoOperatorTexts.contactInfo.errorMessage)
-                      : undefined
-                }
-              />
-            </Section>
-            <Section>
-              <PhoneInputSectionItem
-                prefix={requestBody.contactInformationEndUser.phonePrefix ?? ''}
-                onChangePrefix={(phonePrefix) =>
-                  setRequestBody((prev) => ({
-                    ...prev,
-                    contactInformationEndUser: {
-                      ...prev.contactInformationEndUser,
-                      phonePrefix,
-                    },
-                  }))
-                }
-                onChangeText={(phoneNumber) =>
-                  setRequestBody((prev) => ({
-                    ...prev,
-                    contactInformationEndUser: {
-                      ...prev.contactInformationEndUser,
-                      phoneNumber,
-                    },
-                  }))
-                }
-                value={requestBody.contactInformationEndUser.phoneNumber ?? ''}
-                label={t(ContactShmoOperatorTexts.contactInfo.phone.label)}
-                placeholder={t(
-                  ContactShmoOperatorTexts.contactInfo.phone.placeholder,
-                )}
-                showClear
-                textContentType="telephoneNumber"
-                errorText={
-                  !isPhoneNumberValid && showError
-                    ? t(ContactShmoOperatorTexts.contactInfo.phone.errorMessage)
-                    : !isContactInfoPresent && showError
-                      ? t(ContactShmoOperatorTexts.contactInfo.errorMessage)
-                      : undefined
-                }
-              />
-            </Section>
-            <View style={styles.description}>
-              <ThemeText typography="body__s">
-                {t(ContactShmoOperatorTexts.location.header)}
-              </ThemeText>
-              <ThemeText typography="body__xs">
-                {t(
-                  ContactShmoOperatorTexts.location.description(
-                    operatorName ?? '',
-                  ),
-                )}
-              </ThemeText>
-            </View>
-            {supportRequestStatus === 'error' &&
-              isAllInputValid &&
-              showError && (
-                <MessageInfoBox
-                  message={t(
-                    ContactShmoOperatorTexts.submitError(operatorName ?? ''),
-                  )}
-                  type="error"
-                />
-              )}
-            <Button
-              loading={supportRequestStatus === 'pending'}
-              expanded={true}
-              mode="primary"
-              text={t(ContactShmoOperatorTexts.submitButton)}
-              onPress={onSubmit}
-            />
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </View>
+            type="info"
+          />
+        )}
+        <ContentHeading text={t(ContactShmoOperatorTexts.comment.header)} />
+        <Section>
+          <TextInputSectionItem
+            value={requestBody.comment ?? ''}
+            onChangeText={(comment) =>
+              setRequestBody((prev) => ({...prev, comment}))
+            }
+            label={t(ContactShmoOperatorTexts.comment.label)}
+            placeholder={t(ContactShmoOperatorTexts.comment.placeholder)}
+            inlineLabel={false}
+            multiline={true}
+            maxLength={MAX_SUPPORT_COMMENT_LENGTH}
+            scrollEnabled={false}
+            autoCapitalize="sentences"
+            errorText={
+              !isCommentValid && showError
+                ? t(
+                    ContactShmoOperatorTexts.comment.errorMessage(
+                      MAX_SUPPORT_COMMENT_LENGTH,
+                    ),
+                  )
+                : undefined
+            }
+          />
+        </Section>
+        <ContentHeading text={t(ContactShmoOperatorTexts.contactInfo.header)} />
+        <Section>
+          <TextInputSectionItem
+            value={requestBody.contactInformationEndUser.email ?? ''}
+            onChangeText={(email) =>
+              setRequestBody((prev) => ({
+                ...prev,
+                contactInformationEndUser: {
+                  ...prev.contactInformationEndUser,
+                  email,
+                },
+              }))
+            }
+            label={t(ContactShmoOperatorTexts.contactInfo.email.label)}
+            placeholder={t(
+              ContactShmoOperatorTexts.contactInfo.email.placeholder,
+            )}
+            showClear
+            inlineLabel={false}
+            keyboardType="email-address"
+            autoComplete="email"
+            autoCapitalize="none"
+            errorText={
+              !isEmailValid && showError
+                ? t(ContactShmoOperatorTexts.contactInfo.email.errorMessage)
+                : !isContactInfoPresent && showError
+                  ? t(ContactShmoOperatorTexts.contactInfo.errorMessage)
+                  : undefined
+            }
+          />
+        </Section>
+        <Section>
+          <PhoneInputSectionItem
+            prefix={requestBody.contactInformationEndUser.phonePrefix ?? ''}
+            onChangePrefix={(phonePrefix) =>
+              setRequestBody((prev) => ({
+                ...prev,
+                contactInformationEndUser: {
+                  ...prev.contactInformationEndUser,
+                  phonePrefix,
+                },
+              }))
+            }
+            onChangeText={(phoneNumber) =>
+              setRequestBody((prev) => ({
+                ...prev,
+                contactInformationEndUser: {
+                  ...prev.contactInformationEndUser,
+                  phoneNumber,
+                },
+              }))
+            }
+            value={requestBody.contactInformationEndUser.phoneNumber ?? ''}
+            label={t(ContactShmoOperatorTexts.contactInfo.phone.label)}
+            placeholder={t(
+              ContactShmoOperatorTexts.contactInfo.phone.placeholder,
+            )}
+            showClear
+            textContentType="telephoneNumber"
+            errorText={
+              !isPhoneNumberValid && showError
+                ? t(ContactShmoOperatorTexts.contactInfo.phone.errorMessage)
+                : !isContactInfoPresent && showError
+                  ? t(ContactShmoOperatorTexts.contactInfo.errorMessage)
+                  : undefined
+            }
+          />
+        </Section>
+        <View style={styles.description}>
+          <ThemeText typography="body__s">
+            {t(ContactShmoOperatorTexts.location.header)}
+          </ThemeText>
+          <ThemeText typography="body__xs">
+            {t(
+              ContactShmoOperatorTexts.location.description(operatorName ?? ''),
+            )}
+          </ThemeText>
+        </View>
+        {supportRequestStatus === 'error' && isAllInputValid && showError && (
+          <MessageInfoBox
+            message={t(
+              ContactShmoOperatorTexts.submitError(operatorName ?? ''),
+            )}
+            type="error"
+          />
+        )}
+        <Button
+          loading={supportRequestStatus === 'pending'}
+          expanded={true}
+          mode="primary"
+          text={t(ContactShmoOperatorTexts.submitButton)}
+          onPress={onSubmit}
+        />
+      </View>
+    </FullScreenView>
   );
 };
 
@@ -262,7 +245,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   contentContainer: {
     rowGap: theme.spacing.small,
     margin: theme.spacing.medium,
-    paddingBottom: theme.spacing.xLarge,
   },
   description: {
     padding: theme.spacing.medium,

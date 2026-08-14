@@ -1,11 +1,12 @@
 import {useThemeContext} from '@atb/theme';
-import {nsrSymbolLayers, NsrSymbolLayerTextLocation} from './nsr-layers';
 import {
   getFilterWhichAlsoHidesSelectedFeature,
   getLayerPropsDeterminedByZoomLevel,
   getNsrLayerSourceProps,
   LayerPropsDeterminedByZoomLevelParams,
-} from './nsr-utils';
+  nsrSymbolLayers,
+  NsrSymbolLayerTextLocation,
+} from '@atb-as/mapbox-shared';
 import {NsrProps} from './NationalStopRegistryFeatures';
 import {SymbolLayerStyleProps} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 import {Props as SymbolLayerProps} from 'node_modules/@rnmapbox/maps/src/components/SymbolLayer';

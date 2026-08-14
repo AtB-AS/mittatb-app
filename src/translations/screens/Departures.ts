@@ -133,9 +133,9 @@ const DeparturesTexts = {
       'Du har ingen favorittavgangar.',
     ),
     emptyResult: _(
-      'Fant ingen avganger på valgt sted.',
-      'No departures found at the specified location',
-      'Fann ingen avgangar på valt stad.',
+      'Ingen avganger fra denne holdeplassen.',
+      'No departures from this stop place.',
+      'Ingen avgangar frå denne haldeplassen.',
     ),
     resultFailed: _(
       'Kunne ikke laste avganger.',

@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   RefreshControl,
   RefreshControlProps,
+  Platform,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 // eslint-disable-next-line rulesdir/navigation-only-in-screens
@@ -18,7 +19,7 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 import {useLayout} from '@atb/utils/use-layout';
 
 type Props = {
-  headerProps: ScreenHeaderProps;
+  headerProps: Omit<ScreenHeaderProps, 'showBorder' | 'textOpacity'>;
   /**
    * JSX content that will be displayed between header and children, and will
    * disappear when scrolling.
@@ -78,7 +79,7 @@ export function FullScreenView(props: Props) {
   const hasTabBar = useContext(BottomTabBarHeightContext) !== undefined;
   const bottomInset = props.footer || hasTabBar ? 0 : bottom;
 
-  const showBorder = props.headerProps.showBorder ?? isScrolled;
+  const showBorder = isScrolled;
 
   const contentComponent = hasHeaderContent(props) ? (
     <ChildrenWithHeaderContent
@@ -116,7 +117,10 @@ export function FullScreenView(props: Props) {
       </View>
 
       {props.avoidKeyboard ? (
-        <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'android' ? undefined : 'padding'}
+          style={{flex: 1}}
+        >
           {contentComponent}
         </KeyboardAvoidingView>
       ) : (

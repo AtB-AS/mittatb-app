@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {KeyboardAvoidingView, View} from 'react-native';
+import {View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -58,63 +58,62 @@ export const Profile_EnrollmentScreen = ({navigation}: Props) => {
   );
 
   return (
-    <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
-      <FullScreenView
-        focusRef={focusRef}
-        headerProps={{
-          title: t(EnrollmentTexts.header),
-          leftButton: {type: 'back'},
-        }}
-        headerContent={(focusRef) => (
-          <ScreenHeading ref={focusRef} text={t(EnrollmentTexts.header)} />
-        )}
-      >
-        <View style={styles.contentContainer}>
-          <Section>
-            <GenericSectionItem>
-              <View style={styles.horizontalContainer}>
-                <ThemedBeacons
-                  height={61 * fontScale}
-                  width={61 * fontScale}
-                  style={{
-                    alignSelf: 'flex-start',
-                  }}
-                />
-                <View style={styles.headerTextContainer}>
-                  <ThemeText typography="body__s" type="secondary">
-                    {t(EnrollmentTexts.info)}
-                  </ThemeText>
-                </View>
+    <FullScreenView
+      focusRef={focusRef}
+      headerProps={{
+        title: t(EnrollmentTexts.header),
+        leftButton: {type: 'back'},
+      }}
+      headerContent={(focusRef) => (
+        <ScreenHeading ref={focusRef} text={t(EnrollmentTexts.header)} />
+      )}
+      avoidKeyboard={true}
+    >
+      <View style={styles.contentContainer}>
+        <Section>
+          <GenericSectionItem>
+            <View style={styles.horizontalContainer}>
+              <ThemedBeacons
+                height={61 * fontScale}
+                width={61 * fontScale}
+                style={{
+                  alignSelf: 'flex-start',
+                }}
+              />
+              <View style={styles.headerTextContainer}>
+                <ThemeText typography="body__s" type="secondary">
+                  {t(EnrollmentTexts.info)}
+                </ThemeText>
               </View>
-            </GenericSectionItem>
-          </Section>
+            </View>
+          </GenericSectionItem>
+        </Section>
 
-          <TextInputSectionItem
-            radius="top-bottom"
-            inlineLabel={false}
-            label={t(EnrollmentTexts.label)}
-            placeholder={t(EnrollmentTexts.placeholder)}
-            value={inviteCode}
-            onChangeText={setInviteCode}
-            autoCapitalize="none"
-            errorText={hasError ? t(EnrollmentTexts.warning) : undefined}
+        <TextInputSectionItem
+          radius="top-bottom"
+          inlineLabel={false}
+          label={t(EnrollmentTexts.label)}
+          placeholder={t(EnrollmentTexts.placeholder)}
+          value={inviteCode}
+          onChangeText={setInviteCode}
+          autoCapitalize="none"
+          errorText={hasError ? t(EnrollmentTexts.warning) : undefined}
+        />
+        {isEnrolled && (
+          <MessageInfoBox
+            type="valid"
+            message={t(EnrollmentTexts.success(programTitle ?? ''))}
           />
-          {isEnrolled && (
-            <MessageInfoBox
-              type="valid"
-              message={t(EnrollmentTexts.success(programTitle ?? ''))}
-            />
-          )}
-          <Button
-            expanded={true}
-            onPress={() => onEnroll(inviteCode, () => setInviteCode(''))}
-            text={t(EnrollmentTexts.button)}
-            interactiveColor={interactiveColor}
-            loading={isLoading}
-          />
-        </View>
-      </FullScreenView>
-    </KeyboardAvoidingView>
+        )}
+        <Button
+          expanded={true}
+          onPress={() => onEnroll(inviteCode, () => setInviteCode(''))}
+          text={t(EnrollmentTexts.button)}
+          interactiveColor={interactiveColor}
+          loading={isLoading}
+        />
+      </View>
+    </FullScreenView>
   );
 };
 

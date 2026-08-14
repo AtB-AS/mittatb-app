@@ -146,6 +146,13 @@ const TravelCardTexts = {
       a11yLabel: _('Korrespondanse', 'Correspondance', 'Korrespondanse'),
     },
   },
+  skeleton: {
+    a11yLabel: _(
+      'Laster reiseforslag',
+      'Loading trip suggestion',
+      'Lastar reiseforslag',
+    ),
+  },
 };
 
 export default TravelCardTexts;

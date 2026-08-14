@@ -1,6 +1,6 @@
 {
   "name": "atb",
-  "version": "1.88.0",
+  "version": "1.89.0",
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
@@ -32,8 +32,9 @@
   },
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
-    "@atb-as/config-specs": "^11.2.0",
+    "@atb-as/config-specs": "^11.3.0",
     "@atb-as/generate-assets": "^18.18.0",
+    "@atb-as/mapbox-shared": "^1.0.4",
     "@atb-as/theme": "^15.3.0",
     "@atb-as/utils": "^7.0.0",
     "@babel/plugin-transform-export-namespace-from": "^7.27.1",
@@ -112,7 +113,7 @@
     "react-native-reanimated": "^4.2.2",
     "react-native-safe-area-context": "^5.6.2",
     "react-native-screens": "^4.23.0",
-    "react-native-screenshot-aware": "^1.3.18",
+    "react-native-screenshot-aware": "^2.0.0",
     "react-native-svg": "^15.13.0",
     "react-native-tab-view": "^4.1.3",
     "react-native-vision-camera": "^4.7.2",
@@ -204,7 +205,7 @@
   },
   "codegenConfig": {
     "name": "AtBTurboModuleSpec",
-    "type": "modules",
+    "type": "all",
     "jsSrcsDir": "src/modules/native",
     "android": {
       "javaPackageName": "no.mittatb"
@@ -213,6 +214,9 @@
       "modulesProvider": {
         "ExperimentalFeature": "RCTExperimentalFeature",
         "ApplePayHandler": "RCTApplePayHandler"
+      },
+      "componentProvider": {
+        "SecureView": "RCTSecureView"
       }
     }
   }

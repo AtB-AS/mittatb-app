@@ -20,6 +20,7 @@ import {ServiceJourneyDeparture} from './types';
 import {
   canSellCollabTicket,
   getNonFreeLegs,
+  getTicketInfoForExpressBoatBookingTrip,
   getTripPatternAnalytics,
   type TripAnalytics,
 } from './utils';
@@ -244,6 +245,23 @@ function usePurchaseSelectionFromTrip(
   if (!isFromTravelSearchToTicketBoatEnabled) {
     // Boat ticket is disabled, avoid returning any ticket info
     return;
+  }
+
+  const ticketInfoForExpressBoatBookingTrip =
+    getTicketInfoForExpressBoatBookingTrip(
+      nonFreeLegs,
+      fareProductTypeConfigs,
+      harbors,
+      ticketStartTime,
+    );
+  if (ticketInfoForExpressBoatBookingTrip) {
+    return purchaseSelectionBuilder
+      .forType(ticketInfoForExpressBoatBookingTrip.fareProductTypeConfig.type)
+      .fromStopPlace(ticketInfoForExpressBoatBookingTrip.fromPlace)
+      .toStopPlace(ticketInfoForExpressBoatBookingTrip.toPlace)
+      .legs(ticketInfoForExpressBoatBookingTrip.legs)
+      .date(ticketInfoForExpressBoatBookingTrip.ticketStartTime)
+      .build().selection;
   }
 
   const ticketInfoForBoat = getTicketInfoForBoat(

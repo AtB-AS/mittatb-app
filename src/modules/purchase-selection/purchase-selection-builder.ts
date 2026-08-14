@@ -154,14 +154,6 @@ const createBuilder = (
       };
       return builder;
     },
-    bonusProductId(bonusProductId) {
-      currentSelection = {
-        ...currentSelection,
-        bonusProductId,
-      };
-      return builder;
-    },
-
     build: () => {
       const onlyProfilesWithActualCount =
         buildState.userProfilesWithCount.filter((u) => u.count);
@@ -184,7 +176,10 @@ const createBuilder = (
       );
       const areSupplementProductsValid =
         onlySupplementProductsWithActualCount.every((sp) =>
-          isSelectableSupplementProduct(currentSelection, sp),
+          isSelectableSupplementProduct(
+            currentSelection.preassignedFareProduct,
+            sp,
+          ),
         );
 
       if (

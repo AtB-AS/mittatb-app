@@ -1,5 +1,4 @@
 import {LanguageAndTextTypeArray} from '@atb/modules/configuration';
-import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
 import {
   TransportModeType,
   TransportSubmodeType,
@@ -17,18 +16,6 @@ const PriceSchema = z.object({
   amount: z.number(),
   currency: z.string(),
 });
-
-const BonusPriceAdjustmentSchema = z
-  .object({
-    amount: z.number(),
-    description: z.string(),
-    adjustmentType: PriceAdjustmentEnum,
-    systemIds: z.array(z.string()),
-  })
-  .transform(({adjustmentType, ...rest}) => ({
-    ...rest,
-    type: adjustmentType,
-  }));
 
 const TicketRuleSchema = z.object({
   preassignedFareProductIds: z.array(z.string()).nullish(),
@@ -48,7 +35,6 @@ export const BonusProductSchema = z.object({
   productType: z.enum(BonusProductTypeEnum),
   description: LanguageAndTextTypeArray,
   paymentDescription: LanguageAndTextTypeArray,
-  priceAdjustments: optionalNullish(z.array(BonusPriceAdjustmentSchema)),
   ticketRule: optionalNullish(TicketRuleSchema),
 });
 

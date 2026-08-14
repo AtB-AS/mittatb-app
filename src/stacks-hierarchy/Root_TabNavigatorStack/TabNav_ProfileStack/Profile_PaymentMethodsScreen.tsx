@@ -13,7 +13,7 @@ import {humanizePaymentType, RecurringPayment} from '@atb/modules/ticketing';
 import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import React from 'react';
+import React, {useState} from 'react';
 import {View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -25,6 +25,8 @@ import {ProfileScreenProps} from './navigation-types';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 import {Loading} from '@atb/components/loading';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type Props = ProfileScreenProps<'Profile_PaymentMethodsScreen'>;
 
@@ -41,7 +43,15 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
     recurringPaymentError,
     onAddRecurringPayment,
   } = useRecurringPayment();
-  const {isApplePayEnabled} = useFeatureTogglesContext();
+  const {isApplePayEnabled, isShmoDeepIntegrationEnabled} =
+    useFeatureTogglesContext();
+
+  const isFocused = useIsFocusedAndActive();
+  const {data: activeShmoBooking, isPending: isActiveShmoBookingPending} =
+    useActiveShmoBookingQuery(isFocused);
+  const hasActiveShmoTrip = !!activeShmoBooking;
+
+  const [showDeleteBlockedError, setShowDeleteBlockedError] = useState(false);
 
   const focusRef = useFocusOnLoad(navigation);
 
@@ -80,9 +90,33 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
               <GenericSectionItem key={'card-' + card.id}>
                 <Card
                   card={card}
-                  removePaymentHandler={(card) =>
-                    deleteRecurringPayment(card.id)
-                  }
+                  onDeletePress={() => {
+                    if (
+                      isShmoDeepIntegrationEnabled &&
+                      isActiveShmoBookingPending
+                    )
+                      return;
+                    if (hasActiveShmoTrip) {
+                      setShowDeleteBlockedError(true);
+                      return;
+                    }
+                    destructiveAlert({
+                      alertTitleString: t(
+                        PaymentMethodsTexts.deleteModal.title,
+                      ),
+                      alertMessageString: t(
+                        PaymentMethodsTexts.deleteModal.message,
+                      ),
+                      cancelAlertString: t(
+                        PaymentMethodsTexts.deleteModal.cancelButton,
+                      ),
+                      confirmAlertString: t(
+                        PaymentMethodsTexts.deleteModal.confirmButton,
+                      ),
+                      destructiveArrowFunction: () =>
+                        deleteRecurringPayment(card.id),
+                    });
+                  }}
                 />
               </GenericSectionItem>
             ))}
@@ -110,16 +144,21 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
           }
           type="info"
         />
+
+        {showDeleteBlockedError && (
+          <MessageInfoBox
+            title={t(PaymentMethodsTexts.deleteBlockedByActiveTrip.title)}
+            message={t(PaymentMethodsTexts.deleteBlockedByActiveTrip.message)}
+            type="error"
+          />
+        )}
       </View>
     </FullScreenView>
   );
 };
 
-const Card = (props: {
-  card: RecurringPayment;
-  removePaymentHandler: (card: RecurringPayment) => void;
-}) => {
-  const {card, removePaymentHandler} = props;
+const Card = (props: {card: RecurringPayment; onDeletePress: () => void}) => {
+  const {card, onDeletePress} = props;
   const paymentName = humanizePaymentType(card.paymentType);
   const style = useStyles();
   const {theme} = useThemeContext();
@@ -151,19 +190,7 @@ const Card = (props: {
               ),
             )}
             style={style.actionButton}
-            onPress={() => {
-              destructiveAlert({
-                alertTitleString: t(PaymentMethodsTexts.deleteModal.title),
-                alertMessageString: t(PaymentMethodsTexts.deleteModal.message),
-                cancelAlertString: t(
-                  PaymentMethodsTexts.deleteModal.cancelButton,
-                ),
-                confirmAlertString: t(
-                  PaymentMethodsTexts.deleteModal.confirmButton,
-                ),
-                destructiveArrowFunction: () => removePaymentHandler(card),
-              });
-            }}
+            onPress={onDeletePress}
           >
             <ThemeText>
               {t(PaymentMethodsTexts.deleteModal.confirmButton)}

@@ -123,11 +123,11 @@ const FareContractTexts = {
       'Get receipt sent',
       'Få kvittering tilsendt',
     ),
-    askOperatorRefund: (operatorName?: string) =>
+    contactOperator: (operatorName?: string) =>
       _(
-        `Be ${operatorName ?? 'operatør'} om refusjon`,
-        `Ask ${operatorName ?? 'operator'} for refund`,
-        `Be ${operatorName ?? 'operatør'} om refusjon`,
+        `Kontakt ${operatorName ?? 'operatør'}`,
+        `Contact ${operatorName ?? 'operator'}`,
+        `Kontakt ${operatorName ?? 'operatør'}`,
       ),
     barcodeA11yLabel: _(
       'QR-kode. Vis frem denne koden ved billettkontroll.',
@@ -201,6 +201,18 @@ const FareContractTexts = {
     validIn: (zone: string) =>
       _(`Gyldig i ${zone}`, `Valid in ${zone}`, `Gyldig i ${zone}`),
     usedAccesses: _('Brukte billetter', 'Used tickets', 'Brukte billettar'),
+    screenshotWarning: {
+      title: _(
+        'Skjermbilde er ikke gyldig som billett',
+        'Screenshot is not valid as a ticket',
+        'Skjermbilete er ikkje gyldig som billett',
+      ),
+      description: _(
+        'Billetten din er lagret og fungerer også uten internett. Vis alltid billetten direkte fra appen. Om du skal gi billett til andre må du benytte "send billetten til andre" i appen.',
+        'Your ticket is stored and also works without an internet connection. Always show the ticket directly from the app. If you want to send the ticket, use "send the ticket to someone else" in the app.',
+        'Billetten din er lagra og fungerer også utan internett. Vis alltid billetten direkte frå appen. Om du skal gi billett til andre må du bruke «send billetten til andre» i appen.',
+      ),
+    },
   },
   activateNow: {
     startNow: _('Bruk billett nå', 'Use ticket now', 'Bruk billett no'),
@@ -248,6 +260,11 @@ const FareContractTexts = {
       'Kontakt kundeservice',
       'Contact customer support',
       'Kontakt kundeservice',
+    ),
+    noLongerRefundable: _(
+      'Angrefristen for denne billetten har utløpt.',
+      'The refund period for this ticket has ended.',
+      'Angrefristen for denne billetten har gått ut.',
     ),
   },
   carnet: {

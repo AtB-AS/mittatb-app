@@ -128,6 +128,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     selection,
   });
 
+  // When the trip's legs are already known (e.g. an express boat booking trip
+  // coming from travel search), the departure is already chosen, so skip the
+  // Root_TripSelectionScreen step and go straight to payment.
+  const hasPreselectedLegs = selection.legs.length > 0;
+
   const canProceed = (() => {
     const hasOffer =
       (selection.userProfilesWithCount.some((u) => u.count) &&
@@ -145,7 +150,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     if (!isBookingRequired) {
       return offerError;
     }
-    if (offerError && isBookingRequired && !isBookingError) {
+    if (
+      offerError &&
+      isBookingRequired &&
+      !isBookingError &&
+      !hasPreselectedLegs
+    ) {
       return undefined; // Do not display the error from the offer if we have trips that require booking
     }
     if (isBookingError) return {type: 'booking-error'};
@@ -153,7 +163,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   })();
 
   const onPressBuy = () => {
-    if (isBookingRequired) {
+    if (isBookingRequired && !hasPreselectedLegs) {
       navigation.push('Root_TripSelectionScreen', {
         ...rootPurchaseConfirmationScreenParams,
       });
@@ -197,7 +207,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   };
 
   const summaryButtonText = () => {
-    if (isBookingRequired) {
+    if (isBookingRequired && !hasPreselectedLegs) {
       return t(PurchaseOverviewTexts.summary.button.selectDeparture);
     }
     if (selection.isOnBehalfOf) {
@@ -306,6 +316,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                   .fromSelection(selection)
                   .fromStopPlace(selection.stopPlaces?.to)
                   .toStopPlace(selection.stopPlaces?.from)
+                  .legs([])
                   .build();
                 setSelection(newSelection);
               }}
@@ -354,11 +365,19 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             )}
 
             <Summary
-              isLoading={isBookingRequired ? false : isSearchingOffer}
+              isLoading={
+                isBookingRequired && !hasPreselectedLegs
+                  ? false
+                  : isSearchingOffer
+              }
               isFree={isFree}
               isDisabled={!!error || !canProceed}
               originalPrice={originalPrice}
-              price={isBookingRequired ? undefined : totalPrice}
+              price={
+                isBookingRequired && !hasPreselectedLegs
+                  ? undefined
+                  : totalPrice
+              }
               summaryButtonText={summaryButtonText()}
               onPressBuy={() => {
                 analytics.logEvent('Ticketing', 'Purchase summary clicked', {

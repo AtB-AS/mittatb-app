@@ -1,15 +1,21 @@
 #!/bin/bash
+set -e
 
 if [[
     -z "${GIT_CRYPT_KEY}"
    ]]; then
     echo "Argument error!"
-    echo "Expected one env variables: 
+    echo "Expected one env variables:
   - GIT_CRYPT_KEY"
     exit 1
-else 
+else
     echo "Installing pre-build dependencies"
-    brew install git-crypt 
+    if [[ "$(uname)" == "Linux" ]]; then
+        sudo apt-get update
+        sudo apt-get install -y git-crypt
+    else
+        brew install git-crypt
+    fi
     # git-crypt for decryption
 
     echo "Decoding git-crypt key"

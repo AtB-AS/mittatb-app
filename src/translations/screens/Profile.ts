@@ -28,6 +28,16 @@ const ProfileTexts = {
             cancel: _('Avbryt', 'Cancel', 'Avbryt'),
             confirm: _('Logg ut', 'Log out', 'Logg ut'),
           },
+          unableToLogoutWithActiveShmoTrip: _(
+            'Kan ikke logge ut mens du har en aktiv tur. Fullfør turen din først.',
+            'Unable to log out while you have an active trip. Please finish your trip first.',
+            'Kan ikkje logge ut medan du har ein aktiv tur. Fullfør turen din først.',
+          ),
+          showActiveTrip: _(
+            'Vis aktiv tur',
+            'View active trip',
+            'Vis aktiv tur',
+          ),
         },
         purchaseHistory: {
           label: _('Kjøpshistorikk', 'Purchase history', 'Kjøpshistorikk'),
@@ -143,7 +153,7 @@ const ProfileTexts = {
           modesHeading: _('Type varsel', 'Notification type', 'Type varsel'),
           groupsHeading: _('Varslinger', 'Notifications', 'Varslingar'),
           pushToggle: {
-            text: _('Push-varsel', 'Push notifications', 'Push-varsel'),
+            text: _('Pushvarsel', 'Push notifications', 'Pushvarsel'),
             subText: _(
               'Tillat at AtB sender varslinger til denne telefonen.',
               'Allow AtB to send notifications to this phone.',
@@ -394,17 +404,13 @@ const ProfileTexts = {
         'Give feedback about the app',
         'Gi tilbakemelding om appen',
       ),
+      externalChat: _('Chat med oss', 'Chat with us', 'Chat med oss'),
     },
   },
   installId: {
     label: (id: string) => _(`ID: ${id}`, `ID: ${id}`, `ID: ${id}`),
     a11yLabel: (id: string) =>
       _(`ID: ${spellOut(id)}`, `ID: ${spellOut(id)}`, `ID: ${spellOut(id)}`),
-    wasCopiedAlert: _(
-      'ID ble kopiert!',
-      'ID was copied to clipboard!',
-      'ID vart kopiert!',
-    ),
     a11yHint: _(
       'Klikk for å kopiere id. Denne brukes til teknisk feilsøk.',
       'Press to copy the id. This is used for technical debugging',

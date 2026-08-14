@@ -45,6 +45,7 @@ export const Time: React.FC<{
               typography="body__m__strong"
               prefix={t(dictionary.travel.time.expectedPrefix)}
               testID="expTime"
+              style={styles.timeText}
             >
               {expected}
             </AccessibleText>
@@ -63,7 +64,11 @@ export const Time: React.FC<{
     }
     default: {
       return (
-        <ThemeText typography="body__m__strong" testID="schTime">
+        <ThemeText
+          typography="body__m__strong"
+          testID="schTime"
+          style={styles.timeText}
+        >
           {expected || scheduled}
         </ThemeText>
       );
@@ -84,5 +89,8 @@ const useStyles = StyleSheet.createThemeHook(() => ({
     textDecorationLine: 'line-through',
     position: 'absolute',
     top: '100%',
+  },
+  timeText: {
+    textAlign: 'right',
   },
 }));

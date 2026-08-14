@@ -30,6 +30,8 @@ import {
 } from '@atb/assets/svg/mono-icons/miscellaneous';
 import {
   RentalUris,
+  ShmoBooking,
+  ShmoBookingState,
   ShmoPricingPlan,
   ShmoPricingSegment,
   StationFeature,
@@ -119,6 +121,18 @@ export const isCarStation = (
 } =>
   isStation(feature) &&
   feature.properties?.vehicle_type_form_factor === FormFactor.Car;
+
+export const isActiveTripBooking = (
+  booking: ShmoBooking | null | undefined,
+): boolean =>
+  booking?.state === ShmoBookingState.IN_USE ||
+  booking?.state === ShmoBookingState.FINISHING;
+
+export const isActiveBikeTripBooking = (
+  booking: ShmoBooking | null | undefined,
+): boolean =>
+  isActiveTripBooking(booking) &&
+  booking?.asset.formFactor === FormFactor.Bicycle;
 
 export const getAvailableVehicles = (
   types: StationVehicleTypeAvailability[] | undefined,

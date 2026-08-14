@@ -10,9 +10,6 @@ import {Linking, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useOperatorBenefit} from '../../use-operator-benefit';
-import {OperatorBenefit} from '../OperatorBenefit';
-import {OperatorActionButton} from '../OperatorActionButton';
 import {
   FormFactor,
   PropulsionType,
@@ -42,19 +39,23 @@ import {
 import {PriceDetailsCard} from '../PriceDetailsCard';
 import {Loading} from '@atb/components/loading';
 import {SupportButton} from '../SupportButton';
+import {AppSwitchActionButton} from '@atb/modules/mobility';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {BrandingImage} from '../BrandingImage';
 import {getTransportModeAndSubMode} from '../../utils';
 import {
-  BonusProductType,
   PayWithBonusPointsCheckbox,
+  useBonusProductById,
   useIsBonusActiveForUser,
-  useRelevantSharedMobilityBonusProduct,
 } from '@atb/modules/bonus';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import type {BenefitType} from '@atb/api/types/benefit';
-import {useAppSwitchMutation} from '../../queries/use-app-switch-mutation';
+import {
+  useVehicleAppSwitchMutation,
+  VehicleAppSwitchVariables,
+} from '../../queries/use-vehicle-app-switch-mutation';
 import {showAppMissingAlert} from '../../show-app-missing-alert';
+import {useMapContext} from '@atb/modules/map';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -87,6 +88,8 @@ export const VehicleSheet = ({
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
+  const {mapState} = useMapContext();
+
   const {
     vehicle,
     isLoading,
@@ -97,6 +100,8 @@ export const VehicleSheet = ({
     appStoreUri,
   } = useMapVehicle();
 
+  const vehicleId = mapState.isStationBasedBooking ? undefined : vehicle?.id;
+
   const formFactor = vehicle?.vehicleType.formFactor ?? FormFactor.Other;
   const propulsionType = vehicle?.vehicleType.propulsionType;
   const isBicycle =
@@ -106,8 +111,6 @@ export const VehicleSheet = ({
     propulsionType === PropulsionType.ElectricAssist;
 
   const operator = useOperators().byId(operatorId);
-  const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
-  const vehicleTypeId = vehicle?.vehicleType.id;
   const operatorLogo = operator?.brandAssets?.brandImageUrl;
 
   const {mode, subMode} = getTransportModeAndSubMode(
@@ -119,80 +122,87 @@ export const VehicleSheet = ({
     operatorId,
     formFactor,
   );
-
-  const {operatorBenefit} = useOperatorBenefit(operatorId);
   const selectedPaymentMethod = useSelectedShmoPaymentMethod();
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
-  const {
-    isParkingViolationsReportingEnabled,
-    isShmoDeepIntegrationEnabled,
-    isShmoDeepIntegrationCitybikeEnabled,
-  } = useFeatureTogglesContext();
+  const {isParkingViolationsReportingEnabled} = useFeatureTogglesContext();
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
-  // Prefer the server-provided bonus offer; fall back to the client-side
-  // lookup only when the vehicle response omits it.
-  const clientBonusProduct =
-    useRelevantSharedMobilityBonusProduct(vehicleTypeId);
-  const serverBonusOffer = vehicle?.bonusOffer ?? undefined;
-  const hasBonusOffer = !!serverBonusOffer || !!clientBonusProduct;
-  const selectedBonusProductId =
-    serverBonusOffer?.bonusProductId ?? clientBonusProduct?.id;
+  const bonusOffer = vehicle?.bonusOffer ?? undefined;
+  const selectedBonusProductId = bonusOffer?.bonusProductId;
+  // The checkbox needs the full product (paymentDescription/productType), which
+  // the server offer doesn't carry, so resolve it by id from active products.
+  const bonusProduct = useBonusProductById(selectedBonusProductId);
   const {logEvent} = useAnalyticsContext();
   const [payWithBonusPoints, setPayWithBonusPoints] = useState(false);
 
   const {
-    mutateAsync: getAppSwitchUrl,
+    mutateAsync: getVehicleAppSwitch,
     isPending: isAppSwitchPending,
     isError: isAppSwitchError,
-  } = useAppSwitchMutation();
+  } = useVehicleAppSwitchMutation();
 
   const actionButton = vehicle?.actionButton ?? undefined;
+  const actionButtonUrl =
+    actionButton?.type === ActionButtonType.APP_SWITCH
+      ? actionButton.url
+      : undefined;
 
   const onAppSwitchPress = useCallback(async () => {
-    if (!vehicleTypeId) return;
-    const {url} = await getAppSwitchUrl({
-      vehicleTypeId,
-      bonusProductId: payWithBonusPoints ? selectedBonusProductId : undefined,
-    });
-    logEvent('Mobility', 'Open operator app', {
-      operatorId,
-      paidWithBonusPoints: payWithBonusPoints,
-    });
-    await Linking.openURL(url).catch(() =>
+    let appSwitchUrl = '';
+    if (!!actionButtonUrl && !payWithBonusPoints) {
+      appSwitchUrl = actionButtonUrl;
+      logEvent('Mobility', 'Open operator app with direct url', {
+        operatorId,
+        appSwitchUrl,
+      });
+    } else {
+      const vehicleAppSwitchVariables: VehicleAppSwitchVariables = {
+        vehicleId,
+        vehicleTypeId: mapState.vehicleTypeId,
+        stationId: mapState.stationId,
+        bonusProductId: payWithBonusPoints ? selectedBonusProductId : undefined,
+      };
+      const vehicleAppSwitch = await getVehicleAppSwitch(
+        vehicleAppSwitchVariables,
+      );
+      const logEventVariables = {
+        operatorId,
+        payWithBonusPoints,
+        vehicleAppSwitchVariables,
+      };
+      if (vehicleAppSwitch === null) {
+        logEvent('Mobility', 'Failed to open operator app', logEventVariables);
+        return;
+      }
+      appSwitchUrl = vehicleAppSwitch.url;
+      logEvent(
+        'Mobility',
+        'Open operator app with url from app switch endpoint',
+        logEventVariables,
+      );
+    }
+    await Linking.openURL(appSwitchUrl).catch(() =>
       showAppMissingAlert(operatorName, appStoreUri ?? undefined),
     );
   }, [
-    vehicleTypeId,
-    getAppSwitchUrl,
-    payWithBonusPoints,
-    selectedBonusProductId,
-    logEvent,
     operatorId,
+    payWithBonusPoints,
+    actionButtonUrl,
+    logEvent,
+    vehicleId,
+    mapState.vehicleTypeId,
+    mapState.stationId,
+    selectedBonusProductId,
+    getVehicleAppSwitch,
     operatorName,
     appStoreUri,
   ]);
 
-  const isDeepIntegrationEnabled =
-    isShmoDeepIntegrationEnabled &&
-    (!isBicycle || isShmoDeepIntegrationCitybikeEnabled);
   const showVehicleCard = !isBicycle || isElectric;
   const showParkingViolation =
     !isBicycle && isParkingViolationsReportingEnabled;
-  const showBonusCheckbox =
-    isBonusActiveForUser && hasBonusOffer && !!clientBonusProduct;
-
-  // Drive the CTA from the server `actionButton` when present, otherwise fall
-  // back to the existing deep-integration / operator branching.
-  const showStartTrip = actionButton
-    ? actionButton.type === ActionButtonType.START_TRIP
-    : isDeepIntegrationEnabled &&
-      !!operatorId &&
-      !!operatorIsIntegrationEnabled;
-  const showAppSwitchAction =
-    actionButton?.type === ActionButtonType.APP_SWITCH;
 
   return (
     <MapBottomSheet
@@ -202,11 +212,15 @@ export const VehicleSheet = ({
       closeOnBackdropPress={false}
       allowBackgroundTouch={true}
       enableDynamicSizing={true}
-      heading={t(MobilityTexts.vehicleName(formFactor, false, propulsionType))}
-      subText={operatorName}
+      heading={
+        vehicle
+          ? t(MobilityTexts.vehicleName(formFactor, false, propulsionType))
+          : undefined
+      }
+      subText={vehicle ? operatorName : undefined}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
       logoIcon={
-        operatorLogo ? (
+        !vehicle ? null : operatorLogo ? (
           <BrandingImage logoUrl={operatorLogo} logoSize={28} rounded={true} />
         ) : (
           <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
@@ -235,12 +249,6 @@ export const VehicleSheet = ({
 
       {!isLoading && !shmoReqIsLoading && !isError && vehicle && (
         <View style={styles.container}>
-          {operatorBenefit && (
-            <OperatorBenefit
-              benefit={operatorBenefit}
-              formFactor={formFactor}
-            />
-          )}
           <View style={styles.vehicleContent}>
             {showVehicleCard && (
               <VehicleCard
@@ -255,23 +263,23 @@ export const VehicleSheet = ({
               benefit={getDisplayedBenefit({
                 payWithBonusPoints,
                 vehicle,
-                serverBonusOffer,
-                clientBonusProduct,
+                bonusOffer,
               })}
               onNavigatePricingDetails={navigateToPricingDetails}
             />
           </View>
 
-          {showStartTrip && operatorId ? (
+          {isBonusActiveForUser && !!bonusProduct && (
+            <PayWithBonusPointsCheckbox
+              bonusProduct={bonusProduct}
+              operatorName={operatorName}
+              isChecked={payWithBonusPoints}
+              onPress={() => setPayWithBonusPoints((prev) => !prev)}
+            />
+          )}
+
+          {actionButton?.type === ActionButtonType.START_TRIP && operatorId ? (
             <>
-              {showBonusCheckbox && clientBonusProduct && (
-                <PayWithBonusPointsCheckbox
-                  bonusProduct={clientBonusProduct}
-                  operatorName={operatorName}
-                  isChecked={payWithBonusPoints}
-                  onPress={() => setPayWithBonusPoints((prev) => !prev)}
-                />
-              )}
               <ShmoActionButton
                 onStartOnboarding={() => startOnboardingCallback(formFactor)}
                 loginCallback={navigateToLogin}
@@ -304,46 +312,32 @@ export const VehicleSheet = ({
                 />
               </View>
             </>
-          ) : showAppSwitchAction && rentalAppUri ? (
-            <OperatorActionButton
-              operatorId={operatorId}
-              operatorName={operatorName}
-              appStoreUri={appStoreUri ?? ''}
-              rentalAppUri={rentalAppUri}
-              appSwitchAction={{
-                label:
-                  getTextForLanguage(
-                    actionButton?.type === ActionButtonType.APP_SWITCH
-                      ? actionButton.label
-                      : undefined,
-                    language,
-                  ) ?? t(MobilityTexts.operatorAppSwitchButton(operatorName)),
-                onPress: onAppSwitchPress,
-                isLoading: isAppSwitchPending,
-                hasError: isAppSwitchError,
-              }}
-            />
           ) : (
-            <>
-              {rentalAppUri && (
-                <OperatorActionButton
-                  operatorId={operatorId}
-                  operatorName={operatorName}
-                  appStoreUri={appStoreUri ?? ''}
-                  rentalAppUri={rentalAppUri}
-                />
-              )}
-              {showParkingViolation && (
-                <Button
-                  expanded={true}
-                  text={t(MobilityTexts.reportParkingViolation)}
-                  mode="secondary"
-                  onPress={onReportParkingViolation}
-                  rightIcon={{svg: ChevronRight}}
-                  backgroundColor={theme.color.background.neutral[1]}
-                />
-              )}
-            </>
+            actionButton?.type === ActionButtonType.APP_SWITCH && (
+              <View style={styles.appSwitchActionButtons}>
+                {rentalAppUri && (
+                  <AppSwitchActionButton
+                    label={
+                      getTextForLanguage(actionButton.label, language) ??
+                      t(MobilityTexts.operatorAppSwitchButton(operatorName))
+                    }
+                    onPress={onAppSwitchPress}
+                    isLoading={isAppSwitchPending}
+                    hasError={isAppSwitchError}
+                  />
+                )}
+                {showParkingViolation && (
+                  <Button
+                    expanded={true}
+                    text={t(MobilityTexts.reportParkingViolation)}
+                    mode="secondary"
+                    onPress={onReportParkingViolation}
+                    rightIcon={{svg: ChevronRight}}
+                    backgroundColor={theme.color.background.neutral[1]}
+                  />
+                )}
+              </View>
+            )
           )}
         </View>
       )}
@@ -354,38 +348,23 @@ export const VehicleSheet = ({
 /**
  * Resolves which benefit drives the price display. Benefit and bonus offer never
  * stack: the server benefit applies by default, and choosing to pay with bonus
- * points overrides it with the bonus offer's price adjustments. The server bonus
- * offer wins over the client-side product when both are present.
+ * points overrides it with the bonus offer's price adjustments.
  */
 const getDisplayedBenefit = ({
   payWithBonusPoints,
   vehicle,
-  serverBonusOffer,
-  clientBonusProduct,
+  bonusOffer,
 }: {
   payWithBonusPoints: boolean;
   vehicle: Vehicle;
-  serverBonusOffer: BonusOffer | undefined;
-  clientBonusProduct: BonusProductType | undefined;
+  bonusOffer: BonusOffer | undefined;
 }): BenefitType | undefined => {
   if (!payWithBonusPoints) return vehicle.benefit ?? undefined;
-
-  // The server-driven offer is already scoped to the vehicle's system. The
-  // client-side product is the legacy fallback and still filters by system.
-  const bonusPriceAdjustments = serverBonusOffer
-    ? serverBonusOffer.priceAdjustments
-    : (clientBonusProduct?.priceAdjustments
-        ?.filter((pa) => pa.systemIds.includes(vehicle.system.id))
-        .map((pa) => ({
-          amount: pa.amount,
-          type: pa.type,
-          description: pa.description,
-        })) ?? []);
 
   return {
     title: [],
     description: [],
-    priceAdjustments: bonusPriceAdjustments,
+    priceAdjustments: bonusOffer?.priceAdjustments ?? [],
   };
 };
 
@@ -406,6 +385,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       paddingBottom: theme.spacing.medium,
     },
     helpButtons: {
+      gap: theme.spacing.medium,
+    },
+    appSwitchActionButtons: {
       gap: theme.spacing.medium,
     },
   };

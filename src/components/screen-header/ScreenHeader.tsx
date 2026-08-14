@@ -1,9 +1,4 @@
-import {
-  LayoutChangeEvent,
-  LayoutRectangle,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {LayoutChangeEvent, LayoutRectangle, View} from 'react-native';
 import React, {Ref, useMemo, useState} from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {HeaderButton, HeaderButtonProps} from './HeaderButton';
@@ -44,7 +39,6 @@ export type ScreenHeaderProps = {
    * header. If no context is specified then no alerts are shown.
    */
   globalMessageContext?: GlobalMessageContextEnum;
-  style?: ViewStyle;
   color?: ContrastColor;
   textOpacity?: number;
   focusRef?: Ref<any>;
@@ -53,7 +47,6 @@ export type ScreenHeaderProps = {
 
 export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   color,
-  style,
   title,
   titleA11yLabel,
   globalMessageContext,
@@ -87,9 +80,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   );
 
   return (
-    <View
-      style={[styles.container, style, {backgroundColor, borderBottomColor}]}
-    >
+    <View style={[styles.container, {backgroundColor, borderBottomColor}]}>
       <View
         accessibilityLabel={titleA11yLabel}
         accessible={!!title && !!textOpacity}
