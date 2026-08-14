@@ -126,8 +126,8 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
           {rows.map(({label, value}, index) => (
             <GenericSectionItem key={index}>
               <View style={styles.row}>
-                <ThemeText>{label}</ThemeText>
-                <ThemeText>{value}</ThemeText>
+                <ThemeText style={styles.label}>{label}</ThemeText>
+                <ThemeText style={styles.value}>{value}</ThemeText>
               </View>
             </GenericSectionItem>
           ))}
@@ -150,6 +150,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    gap: theme.spacing.small,
+  },
+  label: {
+    flexShrink: 1,
+  },
+  value: {
+    flexShrink: 1,
+    textAlign: 'right',
   },
   sectionLabel: {
     marginLeft: theme.spacing.small,
