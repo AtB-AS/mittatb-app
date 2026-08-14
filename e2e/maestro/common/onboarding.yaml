@@ -1,0 +1,51 @@
+appId: ${APP_ID}
+name: 'Onboarding'
+---
+- runScript: ../elements/onboarding.js
+
+- extendedWaitUntil:
+    visible:
+      id: ${output.onboarding.loading}
+    timeout: 15000
+    label: 'Wait for loading screen'
+- extendedWaitUntil:
+    notVisible:
+      id: ${output.onboarding.loading}
+    timeout: 30000
+    label: 'Wait for loading screen to dismiss'
+
+- extendedWaitUntil:
+    visible:
+      id: ${output.onboarding.anonymousLogin}
+    timeout: 10000
+    label: 'Wait for anonymous login button'
+- tapOn:
+    id: ${output.onboarding.anonymousLogin}
+    label: 'Use app anonymously'
+
+- extendedWaitUntil:
+    visible:
+      id: ${output.onboarding.acceptLimitations}
+    timeout: 10000
+    label: 'Wait for accept limitations button'
+- tapOn:
+    id: ${output.onboarding.acceptLimitations}
+    label: 'Accept limitations'
+
+- extendedWaitUntil:
+    visible:
+      id: ${output.onboarding.permissions.location}
+    timeout: 10000
+    label: 'Wait for location permission button'
+- tapOn:
+    id: ${output.onboarding.permissions.location}
+    label: 'Request location permission'
+
+- extendedWaitUntil:
+    visible:
+      text: 'Deny'
+    timeout: 5000
+    label: 'Wait for OS location dialog'
+- tapOn:
+    text: 'Deny'
+    label: 'Deny location permission'

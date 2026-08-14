@@ -1,0 +1,8 @@
+# config.yaml
+testOutputDir: results
+
+flows:
+  - tests/*
+
+excludeTags:
+  - util

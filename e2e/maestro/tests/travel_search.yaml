@@ -1,0 +1,66 @@
+appId: ${APP_ID}
+name: 'Travel Search'
+tags:
+  - smoke
+onFlowStart:
+  - runFlow:
+      file: ../elements/loadElements.yaml
+      label: 'Load elements'
+  - launchApp:
+      clearState: true
+      permissions:
+        location: deny
+onFlowComplete:
+  - stopApp
+---
+# Onboarding
+- runFlow:
+    file: ../common/onboarding.yaml
+    label: 'Onboarding'
+
+- extendedWaitUntil:
+    visible:
+      id: ${output.nav.menu.assistant}
+    timeout: 10000
+    label: 'Wait for Assistant tab'
+- tapOn:
+    id: ${output.nav.menu.assistant}
+    label: 'Navigate to Assistant tab'
+
+# Search
+- runFlow:
+    file: ../common/location_search.yaml
+    env:
+      SEARCH_TYPE: 'from'
+      SEARCH_TEXT: 'Prinsens gate'
+    label: 'Search from'
+
+- runFlow:
+    file: ../common/location_search.yaml
+    env:
+      SEARCH_TYPE: 'to'
+      SEARCH_TEXT: 'Melhus skysstasjon'
+    label: 'Search to'
+
+# Search results
+- extendedWaitUntil:
+    visible:
+      id: ${output.tripSearch.result(0)}
+    timeout: 20000
+    label: 'Wait for trip results'
+- takeScreenshot:
+    path: travelSearch
+    label: Take a screenshot
+
+- tapOn:
+    id: ${output.tripSearch.firstResult}
+    label: 'Open first trip result'
+- extendedWaitUntil:
+    visible:
+      id: ${output.tripDetails.content}
+    timeout: 10000
+    label: 'Wait for trip details'
+
+- tapOn:
+    id: ${output.nav.back}
+    label: 'Go back'
