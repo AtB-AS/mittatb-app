@@ -24,7 +24,8 @@ onFlowComplete:
     timeout: 10000
     label: 'Wait for Tickets tab'
 - tapOn:
-    id: ${output.nav.menu.tickets}
+    #id: ${output.nav.menu.tickets} TODO
+    id: ${output.nav.menu.profile}
     label: 'Navigate to Tickets tab'
 
 - extendedWaitUntil:
