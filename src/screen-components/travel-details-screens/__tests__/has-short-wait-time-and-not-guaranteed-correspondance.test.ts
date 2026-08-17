@@ -52,11 +52,11 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
         interchangeTo: {guaranteed: true},
       },
       {
-        expectedStartTime: '2024-10-31T15:02:00Z',
+        expectedStartTime: '2024-10-31T15:01:00Z',
         expectedEndTime: '2024-10-31T15:10:00Z',
       },
       {
-        expectedStartTime: '2024-10-31T15:12:00Z',
+        expectedStartTime: '2024-10-31T15:11:00Z',
         expectedEndTime: '2024-10-31T15:20:00Z',
       },
     ] as Leg[];

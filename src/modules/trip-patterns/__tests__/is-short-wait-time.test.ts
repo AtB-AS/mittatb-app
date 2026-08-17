@@ -15,24 +15,28 @@ describe('significantWaitTime', () => {
 });
 
 describe('isShortWaitTime', () => {
-  it('should be false for 0 seconds (not significant)', () => {
+  it('should be false for 0 seconds (an interchange risk, not a short wait)', () => {
     expect(isShortWaitTime(0)).toBe(false);
   });
 
-  it('should be false for 30 seconds (boundary, not significant)', () => {
-    expect(isShortWaitTime(30)).toBe(false);
+  it('should be true for 1 second', () => {
+    expect(isShortWaitTime(1)).toBe(true);
   });
 
-  it('should be true for 31 seconds (significant and short)', () => {
+  it('should be true for 30 seconds (too short to display as a duration)', () => {
+    expect(isShortWaitTime(30)).toBe(true);
+  });
+
+  it('should be true for 31 seconds', () => {
     expect(isShortWaitTime(31)).toBe(true);
   });
 
-  it('should be true for 180 seconds (significant and at the 3-min boundary)', () => {
-    expect(isShortWaitTime(180)).toBe(true);
+  it('should be true for 119 seconds (just under the 2-min boundary)', () => {
+    expect(isShortWaitTime(119)).toBe(true);
   });
 
-  it('should be false for 181 seconds (significant but not short)', () => {
-    expect(isShortWaitTime(181)).toBe(false);
+  it('should be false for 120 seconds (stated as an exact duration)', () => {
+    expect(isShortWaitTime(120)).toBe(false);
   });
 
   it('should be false for negative values', () => {
