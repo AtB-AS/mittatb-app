@@ -11,8 +11,8 @@ const mapViewStaticConfig = {
   compassEnabled: true,
   scaleBarEnabled: false,
   attributionPosition: Platform.select({
-    default: {bottom: 8, left: 95},
-    android: {bottom: 5, left: 120},
+    default: {bottom: 8, left: 85},
+    android: {bottom: 4, left: 92},
   }),
 };
 

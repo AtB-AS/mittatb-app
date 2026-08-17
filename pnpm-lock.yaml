@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@react-native-async-storage/async-storage@2.2.0': 978d0cd98900573029698cd20e58864c336768147bc65f9b0d4197e1ff8412c7
-  '@rnmapbox/maps@10.3.0': eda638edc08c2778bd0e8fa80b866381883bcf39d759d0b4beaed864f748fa7b
+  '@rnmapbox/maps@10.3.0': e80c219c5aaa8635d63177ce97e35d0c7ecdfa694c5eb6dd9e8b41c5c5bab2be
   app-icon@0.13.2: d3e7d0e029be173ad1d91a689e45ebfa9a7211c4e405dc895cd05417f6ff7ed4
   react-native-date-picker@5.0.13: 46389d5801d03db0d425e3719fd23fac2f8d0e55766bb0125e8667fb43b0377a
   react-native@0.83.5: f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1
@@ -110,7 +110,7 @@ importers:
         version: 7.6.14(23b0ccba59d827c125bdb3724b20085c)
       '@rnmapbox/maps':
         specifier: 10.3.0
-        version: 10.3.0(patch_hash=eda638edc08c2778bd0e8fa80b866381883bcf39d759d0b4beaed864f748fa7b)(react-dom@19.1.1(react@19.2.0))(react-native@0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0))(react@19.2.0)
+        version: 10.3.0(patch_hash=e80c219c5aaa8635d63177ce97e35d0c7ecdfa694c5eb6dd9e8b41c5c5bab2be)(react-dom@19.1.1(react@19.2.0))(react-native@0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0))(react@19.2.0)
       '@sayem314/react-native-keep-awake':
         specifier: ^1.4.0
         version: 1.4.0
@@ -9714,7 +9714,7 @@ snapshots:
     transitivePeerDependencies:
       - '@react-native-masked-view/masked-view'
 
-  '@rnmapbox/maps@10.3.0(patch_hash=eda638edc08c2778bd0e8fa80b866381883bcf39d759d0b4beaed864f748fa7b)(react-dom@19.1.1(react@19.2.0))(react-native@0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0))(react@19.2.0)':
+  '@rnmapbox/maps@10.3.0(patch_hash=e80c219c5aaa8635d63177ce97e35d0c7ecdfa694c5eb6dd9e8b41c5c5bab2be)(react-dom@19.1.1(react@19.2.0))(react-native@0.83.5(patch_hash=f8449f25d7efeea520cb9dc1f0db78412a7dc90223f939f164f0fcde702c8df1)(@babel/core@7.29.0)(@react-native-community/cli@20.0.2(typescript@5.9.3))(@react-native/metro-config@0.83.5(@babel/core@7.29.0))(@types/react@19.2.7)(react@19.2.0))(react@19.2.0)':
     dependencies:
       '@turf/along': 6.5.0
       '@turf/distance': 6.5.0
