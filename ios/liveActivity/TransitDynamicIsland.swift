@@ -5,7 +5,7 @@ import WidgetKit
 // MARK: - Dynamic Island layout
 
 /// Builds the expanded, compact and minimal Dynamic Island presentations.
-func transitDynamicIsland(
+func TransitDynamicIsland(
   context: ActivityViewContext<TransitActivityAttributes>
 ) -> DynamicIsland {
   let state = context.state

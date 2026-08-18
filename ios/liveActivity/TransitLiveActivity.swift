@@ -8,7 +8,7 @@ struct TransitLiveActivity: Widget {
       // Lock screen / banner presentation.
       TransitLockScreenView(context: context)
     } dynamicIsland: { context in
-      transitDynamicIsland(context: context)
+      TransitDynamicIsland(context: context)
     }
   }
 }
