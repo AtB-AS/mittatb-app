@@ -1,5 +1,5 @@
-import Foundation
 import ActivityKit
+import Foundation
 
 /// Swift implementation of the Live Activities native module.
 ///
@@ -23,17 +23,20 @@ class LiveActivitiesImpl: NSObject {
     return false
   }
 
-  @objc func startActivity(_ attributesJson: String,
-                           contentStateJson: String,
-                           resolve: @escaping (Any?) -> Void,
-                           reject: @escaping (String, String) -> Void) {
+  @objc func startActivity(
+    _ attributesJson: String,
+    contentStateJson: String,
+    resolve: @escaping (Any?) -> Void,
+    reject: @escaping (String, String) -> Void
+  ) {
     guard #available(iOS 16.2, *) else {
       reject("E_LA_UNSUPPORTED", "Live Activities require iOS 16.2 or newer.")
       return
     }
     guard ActivityAuthorizationInfo().areActivitiesEnabled else {
-      reject("E_LA_DISABLED",
-             "Live Activities are disabled. Enable them for this app in Settings.")
+      reject(
+        "E_LA_DISABLED",
+        "Live Activities are disabled. Enable them for this app in Settings.")
       return
     }
     do {
@@ -47,16 +50,20 @@ class LiveActivitiesImpl: NSObject {
     }
   }
 
-  @objc func updateActivity(_ activityId: String,
-                            contentStateJson: String,
-                            resolve: @escaping (Any?) -> Void,
-                            reject: @escaping (String, String) -> Void) {
+  @objc func updateActivity(
+    _ activityId: String,
+    contentStateJson: String,
+    resolve: @escaping (Any?) -> Void,
+    reject: @escaping (String, String) -> Void
+  ) {
     guard #available(iOS 16.2, *) else {
       reject("E_LA_UNSUPPORTED", "Live Activities require iOS 16.2 or newer.")
       return
     }
-    guard let activity = Activity<TransitActivityAttributes>.activities
-      .first(where: { $0.id == activityId }) else {
+    guard
+      let activity = Activity<TransitActivityAttributes>.activities
+        .first(where: { $0.id == activityId })
+    else {
       reject("E_LA_NOT_FOUND", "No active Live Activity with id \(activityId).")
       return
     }
@@ -71,29 +78,36 @@ class LiveActivitiesImpl: NSObject {
     }
   }
 
-  @objc func endActivity(_ activityId: String,
-                         dismissImmediately: Bool,
-                         resolve: @escaping (Any?) -> Void,
-                         reject: @escaping (String, String) -> Void) {
+  @objc func endActivity(
+    _ activityId: String,
+    dismissImmediately: Bool,
+    resolve: @escaping (Any?) -> Void,
+    reject: @escaping (String, String) -> Void
+  ) {
     guard #available(iOS 16.2, *) else {
       reject("E_LA_UNSUPPORTED", "Live Activities require iOS 16.2 or newer.")
       return
     }
-    guard let activity = Activity<TransitActivityAttributes>.activities
-      .first(where: { $0.id == activityId }) else {
+    guard
+      let activity = Activity<TransitActivityAttributes>.activities
+        .first(where: { $0.id == activityId })
+    else {
       reject("E_LA_NOT_FOUND", "No active Live Activity with id \(activityId).")
       return
     }
     Task {
       let policy: ActivityUIDismissalPolicy = dismissImmediately ? .immediate : .default
-      await activity.end(ActivityContent(state: activity.content.state, staleDate: nil),
-                         dismissalPolicy: policy)
+      await activity.end(
+        ActivityContent(state: activity.content.state, staleDate: nil),
+        dismissalPolicy: policy)
       resolve(nil)
     }
   }
 
-  @objc func endAllActivities(_ resolve: @escaping (Any?) -> Void,
-                              reject: @escaping (String, String) -> Void) {
+  @objc func endAllActivities(
+    _ resolve: @escaping (Any?) -> Void,
+    reject: @escaping (String, String) -> Void
+  ) {
     guard #available(iOS 16.2, *) else {
       reject("E_LA_UNSUPPORTED", "Live Activities require iOS 16.2 or newer.")
       return
@@ -116,10 +130,12 @@ class LiveActivitiesImpl: NSObject {
       let container = try decoder.singleValueContainer()
       let raw = try container.decode(String.self)
       if let date = LiveActivitiesImpl.iso8601WithFractional.date(from: raw)
-        ?? LiveActivitiesImpl.iso8601Plain.date(from: raw) {
+        ?? LiveActivitiesImpl.iso8601Plain.date(from: raw)
+      {
         return date
       }
-      throw DecodingError.dataCorruptedError(in: container,
+      throw DecodingError.dataCorruptedError(
+        in: container,
         debugDescription: "Invalid ISO8601 date: \(raw)")
     }
     return d
@@ -139,8 +155,9 @@ class LiveActivitiesImpl: NSObject {
 
   private func decode<T: Decodable>(_ type: T.Type, from json: String) throws -> T {
     guard let data = json.data(using: .utf8) else {
-      throw NSError(domain: LiveActivitiesImpl.errorDomain, code: 1,
-                    userInfo: [NSLocalizedDescriptionKey: "Invalid JSON string."])
+      throw NSError(
+        domain: LiveActivitiesImpl.errorDomain, code: 1,
+        userInfo: [NSLocalizedDescriptionKey: "Invalid JSON string."])
     }
     return try decoder.decode(type, from: data)
   }

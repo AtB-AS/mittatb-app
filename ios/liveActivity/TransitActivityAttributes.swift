@@ -1,5 +1,5 @@
-import Foundation
 import ActivityKit
+import Foundation
 
 /// Shared model for the transit Live Activity.
 ///

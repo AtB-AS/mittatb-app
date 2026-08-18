@@ -1,6 +1,6 @@
+import ActivityKit
 import SwiftUI
 import WidgetKit
-import ActivityKit
 
 struct TransitLiveActivity: Widget {
   var body: some WidgetConfiguration {

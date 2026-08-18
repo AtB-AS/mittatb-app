@@ -40,16 +40,16 @@ provisioning for the new target.
 
 ### Dynamic Island — presentations & gotchas
 
-A Live Activity has **four presentations**, all implemented here. The *system*
+A Live Activity has **four presentations**, all implemented here. The _system_
 (not the app) chooses which to show, based on foreground state, how many
 activities are active, and user interaction:
 
-| Presentation | When it shows | Code |
-|---|---|---|
-| Lock screen / banner | on the lock screen; slides down as a banner on start | `TransitLockScreenView` |
-| Compact | small bits hugging the pill — the idle island state with one activity | `compactLeading` + `compactTrailing` |
-| Minimal | tiny circle — when several activities are active, each collapses to this | `minimal` |
-| Expanded | the big full-width view — on long-press, and auto-pops briefly on start/update | `DynamicIslandExpandedRegion(.leading/.trailing/.bottom)` |
+| Presentation         | When it shows                                                                  | Code                                                      |
+| -------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------- |
+| Lock screen / banner | on the lock screen; slides down as a banner on start                           | `TransitLockScreenView`                                   |
+| Compact              | small bits hugging the pill — the idle island state with one activity          | `compactLeading` + `compactTrailing`                      |
+| Minimal              | tiny circle — when several activities are active, each collapses to this       | `minimal`                                                 |
+| Expanded             | the big full-width view — on long-press, and auto-pops briefly on start/update | `DynamicIslandExpandedRegion(.leading/.trailing/.bottom)` |
 
 Gotchas when testing (these are system behavior, not bugs):
 
@@ -79,7 +79,7 @@ liveActivity widget extension (SwiftUI)  ── renders lock screen + Dynamic Is
 ### Files
 
 **Native module (app target)** — lives in `ios/TurboModules/`, which is an Xcode
-*file-system-synchronized group*, so files there compile into the app
+_file-system-synchronized group_, so files there compile into the app
 automatically (no `.pbxproj` entry needed):
 
 - `LiveActivitiesImpl.swift` — ActivityKit logic (`Activity.request/update/end`,
@@ -129,23 +129,23 @@ The lock screen is a **two-row light card** (matching the AtB reference design):
 
 `TransitActivityAttributes` (static, fixed per activity):
 
-| field | meaning |
-|---|---|
-| `toName` | final destination, e.g. "Nidarosdomen" |
-| `brandLabel` | operator label, e.g. "AtB" |
-| `tripId` | stable trip id |
+| field        | meaning                                |
+| ------------ | -------------------------------------- |
+| `toName`     | final destination, e.g. "Nidarosdomen" |
+| `brandLabel` | operator label, e.g. "AtB"             |
+| `tripId`     | stable trip id                         |
 
 `ContentState` (dynamic, updated as the trip progresses):
 
-| field | meaning |
-|---|---|
-| `mode` | `bus` \| `tram` \| `rail` \| `water` \| `walk` — badge icon + accent |
-| `lineNumber`, `lineName` | badge number + row-2 title, e.g. "3" / "Lohove" |
-| `title` | row-1 bold line, e.g. "6 stopp igjen" |
-| `subtitle` | row-1 secondary, e.g. "Du skal av på Nidarosdomen" |
-| `footnote` | row-2 secondary prefix, e.g. "Ankommer Nidarosdomen" (time appended) |
-| `eventTime` (ISO-8601) | arrival/departure time for the clock/countdown |
-| `eventIsCountdown` | render `eventTime` as a live countdown vs absolute clock |
+| field                    | meaning                                                              |
+| ------------------------ | -------------------------------------------------------------------- |
+| `mode`                   | `bus` \| `tram` \| `rail` \| `water` \| `walk` — badge icon + accent |
+| `lineNumber`, `lineName` | badge number + row-2 title, e.g. "3" / "Lohove"                      |
+| `title`                  | row-1 bold line, e.g. "6 stopp igjen"                                |
+| `subtitle`               | row-1 secondary, e.g. "Du skal av på Nidarosdomen"                   |
+| `footnote`               | row-2 secondary prefix, e.g. "Ankommer Nidarosdomen" (time appended) |
+| `eventTime` (ISO-8601)   | arrival/departure time for the clock/countdown                       |
+| `eventIsCountdown`       | render `eventTime` as a live countdown vs absolute clock             |
 
 Text (`title`/`subtitle`/`footnote`) is passed **pre-formatted/localized from JS**,
 so the widget stays dumb. The row-1 illustration is a placeholder tile
@@ -169,7 +169,7 @@ This is the part that matters for the real feature. There are two mechanisms:
 - Update with `await activity.update(ActivityContent(state:staleDate:))`.
 - End with `await activity.end(_:dismissalPolicy:)` — `.immediate` removes it at
   once; `.default` keeps it on the lock screen up to ~4h; `.after(date)` is timed.
-- **System limits:** an activity can be *updated* for up to **8 hours**, then stays
+- **System limits:** an activity can be _updated_ for up to **8 hours**, then stays
   visible (not updatable) for up to **12 hours** total before the system ends it.
 - **Authorization:** `ActivityAuthorizationInfo().areActivitiesEnabled` (users can
   turn Live Activities off per-app in Settings). The PoC checks this before start.
@@ -214,10 +214,12 @@ ActivityKit updates the activity from **APNs**, even when the app is suspended.
 "Directly" means: one HTTP/2 `POST` per update to Apple's push gateway.
 
 **Endpoint**
+
 ```
 POST https://api.push.apple.com/3/device/<PUSH_TOKEN_HEX>       # production
 POST https://api.sandbox.push.apple.com/3/device/<PUSH_TOKEN_HEX>  # dev builds
 ```
+
 - HTTP/2 is mandatory (APNs rejects HTTP/1.1).
 - `<PUSH_TOKEN_HEX>` = the **per-activity token from `activity.pushTokenUpdates`**
   (or the `pushToStartTokenUpdates` token for `event:"start"`). **Not** the FCM
@@ -226,6 +228,7 @@ POST https://api.sandbox.push.apple.com/3/device/<PUSH_TOKEN_HEX>  # dev builds
   **production** otherwise — mismatch is the #1 "push silently does nothing" cause.
 
 **Auth (token-based, recommended)**
+
 - Apple Developer portal → create an **APNs Auth Key** → download `.p8` (EC P-256
   private key) + note **Key ID** + **Team ID**. One key covers all team apps.
 - Build a JWT, **ES256**-signed with the `.p8`:
@@ -236,6 +239,7 @@ POST https://api.sandbox.push.apple.com/3/device/<PUSH_TOKEN_HEX>  # dev builds
 - Store `.p8` + Key ID + Team ID in the secret manager.
 
 **Headers**
+
 ```
 authorization:  bearer <JWT>
 apns-push-type: liveactivity
@@ -245,39 +249,44 @@ apns-expiration: 0
 ```
 
 **Body — must match `ContentState` exactly**
+
 ```jsonc
 {
   "aps": {
-    "timestamp": 1751443260,          // REQUIRED, unix seconds; orders/dedups updates
-    "event": "update",                 // "update" | "end"  ("start" for push-to-start)
-    "content-state": {                 // EXACT Codable shape of our ContentState
+    "timestamp": 1751443260, // REQUIRED, unix seconds; orders/dedups updates
+    "event": "update", // "update" | "end"  ("start" for push-to-start)
+    "content-state": {
+      // EXACT Codable shape of our ContentState
       "mode": "bus",
       "lineNumber": "3",
       "lineName": "Lohove",
       "title": "2 stopp igjen",
       "subtitle": "Du skal av på Nidarosdomen",
       "footnote": "Ankommer Nidarosdomen",
-      "eventTime": "2026-07-02T09:41:00.000Z",  // ISO string — our decoder expects ISO8601
-      "eventIsCountdown": false
+      "eventTime": "2026-07-02T09:41:00.000Z", // ISO string — our decoder expects ISO8601
+      "eventIsCountdown": false,
     },
-    "stale-date": 1751443560,          // grey out if no fresh update by then
-    "relevance-score": 100,            // Dynamic Island ordering when several exist
-    "dismissal-date": 1751443560       // only for event:"end"
+    "stale-date": 1751443560, // grey out if no fresh update by then
+    "relevance-score": 100, // Dynamic Island ordering when several exist
+    "dismissal-date": 1751443560, // only for event:"end"
     // "alert": { "title": "…", "body": "…" }   // optional: also notify the user
-  }
+  },
 }
 ```
+
 - `content-state` field names **and date encoding** must match the app's
   `JSONDecoder`. `LiveActivitiesImpl.swift` decodes `eventTime` as ISO-8601, so the
   backend sends an ISO string (not a unix number). Payload limit ~4 KB.
 
 **Responses to handle**
+
 - `200` = accepted (not a delivery guarantee).
 - `400 BadDeviceToken` / `403` (bad JWT) → fix config.
 - `410` → token dead: **stop pushing it, prune from DB**.
 - `429` / `413` → back off / shrink payload.
 
 **End-to-end**
+
 ```
 app:  Activity.request(pushType:.token)
         └ pushTokenUpdates → hex ──► POST /our-api {activityId, tripId, token, env}
@@ -289,6 +298,7 @@ app:  token rotates → re-POST the new token   (must be handled)
 ```
 
 **Rust backend (Axum)** — two options:
+
 - **Thin & full control:** `reqwest` (HTTP/2) + `jsonwebtoken` (ES256 with the
   `.p8`); set the `apns-push-type`/`apns-topic` headers + body yourself. Simplest
   for the custom `liveactivity` type.
@@ -311,7 +321,7 @@ app:  token rotates → re-POST the new token   (must be handled)
   `NSSupportsLiveActivitiesFrequentUpdates = true` to the **app** Info.plist. Even
   then there is a delivery budget; use `apns-priority: 5` for routine ticks and
   `10` only for important changes (alight now, big delay). Prefer letting the
-  widget self-tick the countdown and only push when the *facts* change (delay,
+  widget self-tick the countdown and only push when the _facts_ change (delay,
   platform, next stop), not every minute.
 
 **e) Staleness & relevance**

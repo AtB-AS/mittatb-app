@@ -1,6 +1,6 @@
+import ActivityKit
 import SwiftUI
 import WidgetKit
-import ActivityKit
 
 typealias TransitState = TransitActivityAttributes.ContentState
 
@@ -52,8 +52,9 @@ struct TimeText: View {
   var body: some View {
     Group {
       if state.eventIsCountdown {
-        Text(timerInterval: Date()...max(state.eventTime, Date().addingTimeInterval(1)),
-             countsDown: true)
+        Text(
+          timerInterval: Date()...max(state.eventTime, Date().addingTimeInterval(1)),
+          countsDown: true)
       } else {
         Text(state.eventTime, style: .time)
       }
