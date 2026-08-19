@@ -73,6 +73,7 @@ import {Loading} from '@atb/components/loading';
 import type {TripAnalytics} from '@atb/screen-components/travel-details-screens';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useStoredTripPatterns} from '@atb/modules/experimental-store-trip-patterns';
+import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -104,8 +105,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {recipient} = params;
   const productAlternatives = useProductAlternatives(selection);
 
-  const {isSaveTripsEnabled, isAutoSaveTripsEnabled} =
-    useFeatureTogglesContext();
+  const {isSaveTripsEnabled} = useFeatureTogglesContext();
+  const isAutoSaveTripsEnabled = useIsExperimentalEnabled(
+    'isAutoSaveTripsEnabled',
+  );
   const {addTripPattern, canAddTripPattern} = useStoredTripPatterns();
   // `onPaymentCompleted` can be triggered by more than one of its sources for
   // the same purchase, so keep the trip from being saved and logged twice.
