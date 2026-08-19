@@ -20,7 +20,7 @@ export function significantWaitTime(seconds: number): boolean {
 const SHORT_TRANSFER_TIME_LIMIT_IN_SECONDS = 120;
 /**
  * Whether a wait time is short enough to warn the user about a tight
- * transfer — between 1 and 119 seconds (> 0 s and < 2 min). 
+ * transfer — between 1 and 119 seconds (> 0 s and < 2 min).
  */
 export function isShortWaitTime(seconds: number): boolean {
   return seconds > 0 && seconds < SHORT_TRANSFER_TIME_LIMIT_IN_SECONDS;
