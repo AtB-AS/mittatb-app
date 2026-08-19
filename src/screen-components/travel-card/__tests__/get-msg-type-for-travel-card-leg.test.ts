@@ -110,23 +110,27 @@ describe('getMsgTypeForTravelCardLeg', () => {
 
   describe('short transfer time', () => {
     it('returns info for a short wait time from the previous leg', () => {
-      expect(getMsgTypeForTravelCardLeg(makeLegPair(120), 1)).toBe('info');
+      expect(getMsgTypeForTravelCardLeg(makeLegPair(60), 1)).toBe('info');
     });
 
-    it('returns undefined for an insignificant wait time (30s or less)', () => {
-      expect(getMsgTypeForTravelCardLeg(makeLegPair(30), 1)).toBeUndefined();
+    it('returns info for a wait time too short to display as a duration', () => {
+      expect(getMsgTypeForTravelCardLeg(makeLegPair(30), 1)).toBe('info');
     });
 
-    it('returns info just above the insignificant wait time limit', () => {
-      expect(getMsgTypeForTravelCardLeg(makeLegPair(31), 1)).toBe('info');
+    it('returns info for the shortest possible wait time', () => {
+      expect(getMsgTypeForTravelCardLeg(makeLegPair(1), 1)).toBe('info');
     });
 
-    it('returns info at the short transfer time limit (180s)', () => {
-      expect(getMsgTypeForTravelCardLeg(makeLegPair(180), 1)).toBe('info');
+    it('returns info just under the short transfer time limit (119s)', () => {
+      expect(getMsgTypeForTravelCardLeg(makeLegPair(119), 1)).toBe('info');
     });
 
-    it('returns undefined just above the short transfer time limit', () => {
-      expect(getMsgTypeForTravelCardLeg(makeLegPair(181), 1)).toBeUndefined();
+    it('returns undefined at the short transfer time limit (120s)', () => {
+      expect(getMsgTypeForTravelCardLeg(makeLegPair(120), 1)).toBeUndefined();
+    });
+
+    it('returns undefined for a zero wait time', () => {
+      expect(getMsgTypeForTravelCardLeg(makeLegPair(0), 1)).toBeUndefined();
     });
 
     it('returns undefined for a negative wait time', () => {
@@ -134,7 +138,7 @@ describe('getMsgTypeForTravelCardLeg', () => {
     });
 
     it('returns undefined for the first leg regardless of times', () => {
-      expect(getMsgTypeForTravelCardLeg(makeLegPair(120), 0)).toBeUndefined();
+      expect(getMsgTypeForTravelCardLeg(makeLegPair(60), 0)).toBeUndefined();
     });
   });
 

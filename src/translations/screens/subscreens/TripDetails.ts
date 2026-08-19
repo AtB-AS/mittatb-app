@@ -319,12 +319,6 @@ const TripDetailsTexts = {
             ),
           distance: (distance: string) =>
             _(`${distance} gange`, `${distance} walking`, `${distance} gange`),
-          waitTime: (waitTime: string) =>
-            _(
-              `Vent i opptil ${waitTime}`,
-              `Wait for up to ${waitTime}`,
-              `Vent i opptil ${waitTime}`,
-            ),
         },
       },
       bicycle: {
@@ -358,12 +352,6 @@ const TripDetailsTexts = {
               `${distance} cycling`,
               `${distance} sykling`,
             ),
-          waitTime: (waitTime: string) =>
-            _(
-              `Vent i opptil ${waitTime}`,
-              `Wait for up to ${waitTime}`,
-              `Vent i opptil ${waitTime}`,
-            ),
         },
       },
       shortWalk: _(
@@ -374,12 +362,40 @@ const TripDetailsTexts = {
       wait: {
         label: (time: string) =>
           _(`Vent i ${time}`, `Wait for ${time}`, `Vent i ${time}`),
-        messages: {
-          shortTime: _(
-            'Kort byttetid',
-            'Short changeover time',
-            'Kort byttetid',
+        shortWait: (time: string) =>
+          _(
+            `Under ${time} ventetid`,
+            `Less than ${time} waiting time`,
+            `Under ${time} ventetid`,
           ),
+        messages: {
+          shortTime: _('Kort byttetid', 'Short transfer time', 'Kort byttetid'),
+          interchange: {
+            uncertain: {
+              label: _(
+                'Usikker overgang',
+                'Uncertain transfer',
+                'Usikker overgang',
+              ),
+              message: _(
+                'Det er ikke sikkert du rekker denne overgangen',
+                'You might not be able to catch the next vehicle',
+                'Det er ikkje sikkert du rekk denne overgangen',
+              ),
+            },
+            impossible: {
+              label: _(
+                'Overgang ikke lenger mulig',
+                'Transfer no longer possible',
+                'Overgang ikkje lenger mogleg',
+              ),
+              message: _(
+                'Du vil ikke rekke denne overgangen',
+                'You will not be able to catch the next vehicle',
+                'Du vil ikkje rekkje denne overgangen',
+              ),
+            },
+          },
         },
       },
       end: {
@@ -414,7 +430,7 @@ const TripDetailsTexts = {
   messages: {
     shortTime: _(
       'Vær oppmerksom på kort byttetid.',
-      'Please note short changeover time.',
+      'Please note short transfer time.',
       'Ver merksam på kort byttetid.',
     ),
     correspondenceNotGuaranteed: _('', '', ''),

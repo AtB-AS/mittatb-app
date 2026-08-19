@@ -8,6 +8,8 @@ import {
 } from '@atb/utils/date';
 // eslint-disable-next-line no-restricted-imports
 import {
+  getInterchangeRisk,
+  InterchangeRisk,
   isShortWaitTime,
   significantWaitTime,
 } from '@atb/modules/trip-patterns/utils';
@@ -207,6 +209,27 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
     },
     {conclusion: false},
   ).conclusion;
+}
+
+export function legInterchangeRisk(
+  index: number,
+  legs: Leg[],
+  waitTimeInSeconds: number,
+): InterchangeRisk | undefined {
+  const nextLeg = legs[index + 1];
+  if (!nextLeg || nextLeg.mode === 'foot') return undefined;
+
+  const previousVehicleLeg = previousNonFootLeg(index, legs);
+  if (!previousVehicleLeg) return undefined;
+  if (previousVehicleLeg.interchangeTo?.guaranteed) return undefined;
+
+  return getInterchangeRisk(waitTimeInSeconds);
+}
+
+function previousNonFootLeg(index: number, legs: Leg[]): Leg | undefined {
+  for (let i = index; i >= 0; i--) {
+    if (legs[i].mode !== 'foot') return legs[i];
+  }
 }
 
 function parseDateIfString(date: any): Date {
