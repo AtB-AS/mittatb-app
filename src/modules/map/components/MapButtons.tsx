@@ -50,6 +50,8 @@ export const MapButtons = ({
     !mapFilterIsOpen;
 
   const showMapFilterButton =
+    !activeShmoBooking &&
+    !activeShmoBookingIsLoading &&
     mapState.bottomSheetType === MapBottomSheetType.None;
 
   return (
