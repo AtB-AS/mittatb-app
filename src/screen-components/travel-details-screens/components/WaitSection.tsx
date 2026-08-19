@@ -43,11 +43,6 @@ type WaitMessage = {
   emphasis?: 'info' | 'error';
 };
 
-/**
- * How the wait itself is described. Waits under two minutes are called a short
- * transfer and stated as "under x minutes", rounded up to whole minutes, since
- * a precise duration suggests more accuracy than the real time data has.
- */
 function getWaitMessage(
   waitTimeInSeconds: number,
   t: TranslateFunction,
@@ -103,11 +98,6 @@ const WaitMessageRow = ({icon, title, message, emphasis}: WaitMessage) => {
     ? theme.color.foreground.emphasis[emphasis]
     : undefined;
 
-  /**
-   * Anchors the text on the stop place names by shrinking the label column,
-   * leaving the icon one small gap to the left of the text. Keeping it a
-   * column rather than an offset lets the icon grow with the font scale.
-   */
   const dimensionOverrides: DimensionOverrides = {
     ...NEW_TRIP_DIMENSIONS,
     labelWidth: TRIP_CONTENT_OFFSET - theme.spacing.small,

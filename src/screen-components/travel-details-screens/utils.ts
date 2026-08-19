@@ -211,17 +211,6 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
   ).conclusion;
 }
 
-/**
- * The risk of missing the next vehicle, which real time updates can cause on
- * an already started trip.
- *
- * Interchanges that involve walking are included, in which case the wait time
- * is what is left after the walk. Guaranteed interchanges are left out, as the
- * next vehicle waits for the previous one.
- *
- * Only evaluated on the leg immediately before the next vehicle, so a transfer
- * is reported once even when a foot leg splits it in two.
- */
 export function legInterchangeRisk(
   index: number,
   legs: Leg[],
@@ -237,11 +226,6 @@ export function legInterchangeRisk(
   return getInterchangeRisk(waitTimeInSeconds);
 }
 
-/**
- * The leg of the vehicle arriving at the interchange. Foot legs are skipped,
- * since both the stop place and the interchange guarantee are described on
- * the leg being transferred from.
- */
 function previousNonFootLeg(index: number, legs: Leg[]): Leg | undefined {
   for (let i = index; i >= 0; i--) {
     if (legs[i].mode !== 'foot') return legs[i];
