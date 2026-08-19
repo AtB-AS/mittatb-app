@@ -44,13 +44,12 @@ import {
   getBookingStatus,
   significantWalkTime,
 } from '../utils';
-import {significantWaitTime} from '@atb/modules/trip-patterns';
 import {Time} from './Time';
 import {TripLegDecoration} from './TripLegDecoration';
 import {NEW_TRIP_DIMENSIONS, TripRow} from './TripRow';
 import {BookingInfoBox} from './BookingInfoBox';
 
-import {WaitDetails, WaitSection} from './WaitSection';
+import {shouldShowWaitSection, WaitDetails, WaitSection} from './WaitSection';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {TripProps} from './Trip';
@@ -164,8 +163,8 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const hasIntermediateStops = leg.intermediateEstimatedCalls.length > 0;
   const walkBikeRounding = isFirst ? 'floor' : 'ceil';
-  const walkA11yLabel = useWalkA11yLabel(leg, wait, walkBikeRounding);
-  const bikeA11yLabel = useBikeA11yLabel(leg, wait, walkBikeRounding);
+  const walkA11yLabel = useWalkA11yLabel(leg, walkBikeRounding);
+  const bikeA11yLabel = useBikeA11yLabel(leg, walkBikeRounding);
   const isWalkOrBike = isWalkSection || isBikeSection;
 
   const warningCount =
@@ -320,11 +319,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 fromRowAbsorbsLegA11y ? 'no-hide-descendants' : 'auto'
               }
             >
-              <WalkSection
-                leg={leg}
-                wait={wait}
-                timeRounding={walkBikeRounding}
-              />
+              <WalkSection leg={leg} timeRounding={walkBikeRounding} />
             </View>
           ) : isBikeSection ? (
             <View
@@ -333,11 +328,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 fromRowAbsorbsLegA11y ? 'no-hide-descendants' : 'auto'
               }
             >
-              <BikeSection
-                leg={leg}
-                wait={wait}
-                timeRounding={walkBikeRounding}
-              />
+              <BikeSection leg={leg} timeRounding={walkBikeRounding} />
             </View>
           ) : (
             <TripRow
@@ -586,10 +577,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   return (
     <>
       {sectionOutput}
-      {wait?.mustWaitForNextLeg &&
-        significantWaitTime(wait.waitTimeInSeconds) && (
-          <WaitSection {...wait} />
-        )}
+      {wait && shouldShowWaitSection(wait) && <WaitSection {...wait} />}
     </>
   );
 
@@ -763,7 +751,6 @@ const getIntermediateInfoTexts = (
 
 function useWalkA11yLabel(
   leg: Leg,
-  wait?: WaitDetails,
   roundingMethod: 'floor' | 'ceil' = 'floor',
 ): string {
   const {t, language} = useTranslation();
@@ -805,22 +792,11 @@ function useWalkA11yLabel(
     );
   }
 
-  if (wait?.mustWaitForNextLeg && significantWaitTime(wait.waitTimeInSeconds)) {
-    parts.push(
-      t(
-        TripDetailsTexts.trip.leg.walk.a11yLabel.waitTime(
-          secondsToDuration(wait.waitTimeInSeconds, language),
-        ),
-      ),
-    );
-  }
-
   return parts.join('. ') + '.';
 }
 
 function useBikeA11yLabel(
   leg: Leg,
-  wait?: WaitDetails,
   roundingMethod: 'floor' | 'ceil' = 'floor',
 ): string {
   const {t, language} = useTranslation();
@@ -849,32 +825,21 @@ function useBikeA11yLabel(
     );
   }
 
-  if (wait?.mustWaitForNextLeg && significantWaitTime(wait.waitTimeInSeconds)) {
-    parts.push(
-      t(
-        TripDetailsTexts.trip.leg.bicycle.a11yLabel.waitTime(
-          secondsToDuration(wait.waitTimeInSeconds, language),
-        ),
-      ),
-    );
-  }
-
   return parts.join('. ') + '.';
 }
 
 type WalkSectionProps = {
   leg: Leg;
-  wait?: WaitDetails;
   timeRounding?: 'floor' | 'ceil';
 };
 
-const WalkSection = ({leg, wait, timeRounding = 'floor'}: WalkSectionProps) => {
+const WalkSection = ({leg, timeRounding = 'floor'}: WalkSectionProps) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
   const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
   const humanizedDistance = useHumanizeDistance(leg.distance);
   const durationText = secondsToDuration(leg.duration ?? 0, language);
-  const a11yLabel = useWalkA11yLabel(leg, wait, timeRounding);
+  const a11yLabel = useWalkA11yLabel(leg, timeRounding);
 
   return (
     <TripRow
@@ -907,16 +872,15 @@ const WalkSection = ({leg, wait, timeRounding = 'floor'}: WalkSectionProps) => {
 
 type BikeSectionProps = {
   leg: Leg;
-  wait?: WaitDetails;
   timeRounding?: 'floor' | 'ceil';
 };
 
-const BikeSection = ({leg, wait, timeRounding = 'floor'}: BikeSectionProps) => {
+const BikeSection = ({leg, timeRounding = 'floor'}: BikeSectionProps) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
   const durationText = secondsToDuration(leg.duration ?? 0, language);
   const humanizedDistance = useHumanizeDistance(leg.distance);
-  const a11yLabel = useBikeA11yLabel(leg, wait, timeRounding);
+  const a11yLabel = useBikeA11yLabel(leg, timeRounding);
 
   return (
     <TripRow

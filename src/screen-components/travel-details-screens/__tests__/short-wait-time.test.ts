@@ -10,7 +10,7 @@ describe('Short wait time evaluator', () => {
   } as Leg;
 
   const Leg2: Leg = {
-    expectedStartTime: addMinutes(nowDate, 7),
+    expectedStartTime: addMinutes(nowDate, 6),
     expectedEndTime: addMinutes(nowDate, 10),
   } as Leg;
 

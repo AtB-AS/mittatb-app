@@ -16,6 +16,7 @@ import {
   getShouldShowLiveVehicle,
   hasShortWaitTime,
   hasShortWaitTimeAndNotGuaranteedCorrespondence,
+  legInterchangeRisk,
   withinZoneIds,
 } from '../utils';
 import {
@@ -250,7 +251,11 @@ function legWaitDetails(index: number, legs: Leg[]): WaitDetails | undefined {
     );
 
     const mustWaitForNextLeg = waitTimeInSeconds > 0;
-    return {mustWaitForNextLeg, waitTimeInSeconds};
+    return {
+      mustWaitForNextLeg,
+      waitTimeInSeconds,
+      interchangeRisk: legInterchangeRisk(index, legs, waitTimeInSeconds),
+    };
   }
 }
 

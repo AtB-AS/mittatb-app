@@ -17,15 +17,31 @@ export function significantWaitTime(seconds: number): boolean {
   return seconds > MIN_SIGNIFICANT_WAIT_IN_SECONDS;
 }
 
-const SHORT_TRANSFER_TIME_LIMIT_IN_SECONDS = 180;
+const SHORT_TRANSFER_TIME_LIMIT_IN_SECONDS = 120;
 /**
- * Whether a wait time is significant but dangerously short — between 31 and
- * 180 seconds (> 30 s and ≤ 3 min). Used to warn the user about tight
- * transfers.
+ * Whether a wait time is short enough to warn the user about a tight
+ * transfer — between 1 and 119 seconds (> 0 s and < 2 min).
  */
 export function isShortWaitTime(seconds: number): boolean {
-  return (
-    significantWaitTime(seconds) &&
-    seconds <= SHORT_TRANSFER_TIME_LIMIT_IN_SECONDS
-  );
+  return seconds > 0 && seconds < SHORT_TRANSFER_TIME_LIMIT_IN_SECONDS;
+}
+
+export type InterchangeRisk = 'uncertain' | 'impossible';
+
+const IMPOSSIBLE_INTERCHANGE_LIMIT_IN_SECONDS = -120;
+
+/**
+ * How risky an interchange is when the next leg departs at or before the
+ * current leg arrives
+ *
+ * 0 to -120 seconds is 'uncertain', -121 seconds and below is 'impossible'.
+ * Returns undefined when there is time to spare.
+ */
+export function getInterchangeRisk(
+  seconds: number,
+): InterchangeRisk | undefined {
+  if (seconds > 0) return undefined;
+  return seconds < IMPOSSIBLE_INTERCHANGE_LIMIT_IN_SECONDS
+    ? 'impossible'
+    : 'uncertain';
 }
