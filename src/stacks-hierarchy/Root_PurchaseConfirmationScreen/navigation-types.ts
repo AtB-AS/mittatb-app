@@ -1,6 +1,7 @@
 import {TicketRecipientType} from '@atb/modules/ticketing';
 import {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import type {TripAnalytics} from '@atb/screen-components/travel-details-screens';
+import type {TripPattern} from '@atb/api/types/trips';
 
 export type Root_PurchaseConfirmationScreenParams = {
   selection: PurchaseSelectionType;
@@ -8,4 +9,5 @@ export type Root_PurchaseConfirmationScreenParams = {
   recipient?: TicketRecipientType;
   tripAnalytics?: TripAnalytics;
   allowEdit?: boolean;
+  tripPattern?: TripPattern;
 };

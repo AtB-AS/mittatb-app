@@ -7,8 +7,9 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {ScrollView, View} from 'react-native';
+import {isEqual} from 'lodash';
 import {ProductSelection} from './components/ProductSelection';
 import {StartTimeSelection} from './components/StartTimeSelection';
 import {Summary} from './components/Summary';
@@ -55,6 +56,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const builder = usePurchaseSelectionBuilder();
   const [selection, setSelection] = useParamAsState(params.selection);
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
+
+  const initialSelectionRef = useRef(params.selection);
+  const isSelectionEdited = !isEqual(selection, initialSelectionRef.current);
 
   const isFree = params.selection.stopPlaces?.to?.isFree || false;
 
@@ -176,10 +180,10 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       );
       return;
     }
-    navigation.navigate(
-      'Root_PurchaseConfirmationScreen',
-      rootPurchaseConfirmationScreenParams,
-    );
+    navigation.navigate('Root_PurchaseConfirmationScreen', {
+      ...rootPurchaseConfirmationScreenParams,
+      tripPattern: isSelectionEdited ? undefined : params.tripPattern,
+    });
   };
 
   const showForcedChangeSnackbar = (forcedChanges: ForcedSelectionChange[]) => {

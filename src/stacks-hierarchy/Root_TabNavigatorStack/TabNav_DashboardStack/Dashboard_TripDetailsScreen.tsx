@@ -31,6 +31,7 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
         navigation.navigate('Root_PurchaseOverviewScreen', {
           ...params,
           tripAnalytics,
+          tripPattern: route.params.tripPattern,
         });
       }}
       onPressQuay={(stopPlace, selectedQuayId, tripAnalytics) => {

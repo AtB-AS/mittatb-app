@@ -14,6 +14,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_apple_pay',
   },
   {
+    name: 'isAutoSaveTripsEnabled',
+    remoteConfigKey: 'enable_auto_save_trips',
+  },
+  {
     name: 'isBonusEnabled',
     remoteConfigKey: 'enable_bonus',
   },

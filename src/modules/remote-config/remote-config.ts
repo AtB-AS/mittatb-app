@@ -20,6 +20,11 @@ export type RemoteConfig = {
    * transaction.
    */
   enable_auto_sale: boolean;
+  /**
+   * Configuration whether a trip should be saved automatically when a ticket
+   * for it is purchased from travel search. Requires `enable_save_trips`.
+   */
+  enable_auto_save_trips: boolean;
   enable_bonus: boolean;
   enable_car_sharing_in_map: boolean;
   enable_city_bikes_in_map: boolean;
@@ -105,6 +110,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_activate_ticket_now: false,
   enable_apple_pay: false,
   enable_auto_sale: false,
+  enable_auto_save_trips: false,
   enable_bonus: false,
   enable_car_sharing_in_map: false,
   enable_city_bikes_in_map: false,
@@ -201,6 +207,9 @@ export function getConfig(): RemoteConfig {
   const enable_auto_sale =
     values['enable_auto_sale']?.asBoolean() ??
     defaultRemoteConfig.enable_auto_sale;
+  const enable_auto_save_trips =
+    values['enable_auto_save_trips']?.asBoolean() ??
+    defaultRemoteConfig.enable_auto_save_trips;
   const enable_bonus =
     values['enable_bonus']?.asBoolean() ?? defaultRemoteConfig.enable_bonus;
   const enable_car_sharing_in_map =
@@ -412,6 +421,7 @@ export function getConfig(): RemoteConfig {
     enable_activate_ticket_now,
     enable_apple_pay,
     enable_auto_sale,
+    enable_auto_save_trips,
     enable_bonus,
     enable_car_sharing_in_map,
     enable_city_bikes_in_map,
