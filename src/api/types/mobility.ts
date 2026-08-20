@@ -532,6 +532,8 @@ export const StationFeaturePropertiesSchema = z.object({
   vehicle_type_propulsion_type: MapItemPropulsionTypeSchema,
   num_vehicles_available: z.number(),
   capacity: z.number(),
+  num_docks_available: z.number().optional(),
+  name: z.string().optional(),
   count: z.literal(1),
   is_virtual_station: z.boolean(),
 });
