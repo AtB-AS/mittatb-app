@@ -87,15 +87,19 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
     });
   }
 
-  pricingPlan.perMinPricing?.forEach((seg) => {
-    rows.push({
-      label: getMinuteSegmentLabel(
-        seg,
-        hasCampaign ? Math.max(freeMinCount, seg.start) : seg.start,
-      ),
-      value: `${formatNumberToString(seg.rate, language)} ${currency}/min`,
+  pricingPlan.perMinPricing
+    // Segments entirely inside the free window are paid for by the campaign, so
+    // showing them would render an inverted range like "30-20 min".
+    ?.filter((seg) => !hasCampaign || seg.end == null || seg.end > freeMinCount)
+    .forEach((seg) => {
+      rows.push({
+        label: getMinuteSegmentLabel(
+          seg,
+          hasCampaign ? Math.max(freeMinCount, seg.start) : seg.start,
+        ),
+        value: `${formatNumberToString(seg.rate, language)} ${currency}/min`,
+      });
     });
-  });
 
   return (
     <FullScreenView
