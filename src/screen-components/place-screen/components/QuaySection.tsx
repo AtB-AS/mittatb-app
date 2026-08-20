@@ -71,11 +71,14 @@ export function QuaySection({
 
   const navigateToQuayEnabled = !!navigateToQuay;
 
-  // If the user has toggled "Show only favorites" and there are no favorites on
-  // this quay, we should minimize the quay section.
+  // Minimize the quay section when either:
+  // - "Show only favorites" is toggled on and the quay has no favorites
+  // - the quay has no departures in the selected time window (after loading).
   const hasFavorites = !!favoriteDepartures.find((f) => quay.id === f.quayId);
+  const hasNoDepartures = !!data && !isLoading && departures.length === 0;
   const shouldBeMinimized =
-    navigateToQuayEnabled && !hasFavorites && showOnlyFavorites;
+    navigateToQuayEnabled &&
+    ((!hasFavorites && showOnlyFavorites) || hasNoDepartures);
   useEffect(() => {
     setIsMinimized(shouldBeMinimized);
   }, [shouldBeMinimized]);
