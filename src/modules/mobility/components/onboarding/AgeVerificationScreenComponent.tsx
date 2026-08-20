@@ -56,16 +56,10 @@ export const AgeVerificationScreenComponent = ({focusRef}: Props) => {
         const initialState = await storage.get('vipps_state');
 
         if (code && state && state === initialState) {
-          if (initialState?.toString() !== state?.toString()) {
+          try {
+            await completeAgeVerification(code);
+          } catch {
             setError('unknown_error');
-          } else {
-            try {
-              completeAgeVerification(code);
-              await storage.set('vipps_state', '');
-              await storage.set('vipps_nonce', '');
-            } catch {
-              setError('unknown_error');
-            }
           }
         } else {
           const error = parsed.searchParams.get('error');
