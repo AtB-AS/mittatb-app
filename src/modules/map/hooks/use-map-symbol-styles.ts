@@ -56,11 +56,13 @@ export const useMapSymbolStyles = ({
   const countPropName = 'count';
   const count: Expression = ['get', countPropName];
   const numVehiclesAvailable: Expression = ['get', 'num_vehicles_available'];
-  const capacity: Expression = ['to-number', ['get', 'capacity'], 0];
+  // Cannot be derived from capacity - num_vehicles_available: docks that are out of
+  // service are neither occupied nor available. Absent when the operator doesn't report
+  // it, and 0 then errs on the safe side rather than promising space that may not exist.
   const parkingSpacesAvailable: Expression = [
-    'max',
+    'to-number',
+    ['get', 'num_docks_available'],
     0,
-    ['-', capacity, numVehiclesAvailable],
   ];
 
   const isCluster: Expression = [
