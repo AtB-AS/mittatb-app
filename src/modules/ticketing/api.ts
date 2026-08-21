@@ -171,12 +171,16 @@ export async function sendReceipt(
 ) {
   const url = 'sales/v1/receipt';
 
-  const response = await client.post<SendReceiptResponse>(url, {
-    orderId,
-    orderVersion,
-    emailAddress,
-    language: mapToReceiptLanguage(language),
-  });
+  const response = await client.post<SendReceiptResponse>(
+    url,
+    {
+      orderId,
+      orderVersion,
+      emailAddress,
+      language: mapToReceiptLanguage(language),
+    },
+    {authWithIdToken: true},
+  );
 
   return response.data;
 }
