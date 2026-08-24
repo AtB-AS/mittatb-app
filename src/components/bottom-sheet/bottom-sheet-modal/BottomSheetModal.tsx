@@ -147,8 +147,6 @@ export const BottomSheetModal = ({
 
   const {internalRef} = useInternalBottomSheetModalRef(
     bottomSheetModalRef,
-    onClose,
-    onOpen,
     overrideClose,
   );
 
@@ -245,23 +243,19 @@ const useBottomSheetContent = (
 
 const useInternalBottomSheetModalRef = (
   externalBottomSheetModalRef: React.RefObject<BottomSheetModalMethods | null>,
-  onClose: () => void,
-  onOpen: () => void,
   overrideClose: () => boolean,
 ) => {
   const internalRef = useRef<GorhomBottomSheetModalMethods>(null);
 
   useImperativeHandle(externalBottomSheetModalRef, (): BottomSheetModalMethods => {
     return {
-      present: () => internalRef.current?.present() && onOpen(),
+      present: () => internalRef.current?.present(),
       dismiss: () => {
-        if (overrideClose()) {
-          return;
-        }
-        return internalRef.current?.dismiss() && onClose();
+        if (overrideClose()) return;
+        internalRef.current?.dismiss();
       },
     };
-  }, [internalRef, onClose, onOpen, overrideClose]);
+  }, [internalRef, overrideClose]);
 
   return {internalRef};
 };
