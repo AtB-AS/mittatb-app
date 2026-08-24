@@ -1,4 +1,5 @@
 import React from 'react';
+import {StyleProp, ViewStyle} from 'react-native';
 import {Button} from '@atb/components/button';
 import {useThemeContext} from '@atb/theme';
 import {BonusProgramTexts, useTranslation} from '@atb/translations';
@@ -7,9 +8,13 @@ import {BonusStarFill} from './BonusStarFill';
 
 type BonusBalanceButtonProps = {
   onPress: () => void;
+  style?: StyleProp<ViewStyle>;
 };
 
-export const BonusBalanceButton = ({onPress}: BonusBalanceButtonProps) => {
+export const BonusBalanceButton = ({
+  onPress,
+  style,
+}: BonusBalanceButtonProps) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const bonusInfo = useIsBonusBalanceButtonVisible();
@@ -27,6 +32,7 @@ export const BonusBalanceButton = ({onPress}: BonusBalanceButtonProps) => {
       accessibilityLabel={t(
         BonusProgramTexts.yourBonusBalanceA11yLabel(bonusInfo.bonusBalance),
       )}
+      style={style}
     />
   );
 };
