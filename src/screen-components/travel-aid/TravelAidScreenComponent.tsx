@@ -33,7 +33,7 @@ import {StopSignalButton} from './components/StopSignalButton';
 import type {ServiceJourneyWithGuaranteedCalls} from './types';
 import {useStopSignalMutation} from './use-stop-signal-mutation';
 import {MutationStatus} from '@tanstack/react-query';
-import type {SendStopSignalRequestType} from '@atb/api/stop-signal';
+import type {SendStopSignalRequestType} from '@atb/api/journey';
 import type {ContrastColor} from '@atb/theme/colors';
 import {createSentStopSignalsCache} from './sent-stop-signals-cache';
 import {LiveRegionWrapper} from '@atb/components/screen-reader-announcement';
