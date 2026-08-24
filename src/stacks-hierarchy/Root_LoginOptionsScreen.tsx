@@ -93,8 +93,6 @@ export const Root_LoginOptionsScreen = ({
         if (errorCode) {
           setError(errorCode);
         }
-        await storage.set('vipps_state', '');
-        await storage.set('vipps_nonce', '');
         completeOnboardingSection('userCreation');
       } catch {
         setError('unknown_error');
