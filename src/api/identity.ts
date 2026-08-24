@@ -62,11 +62,13 @@ export const authorizeVippsUser = async (): Promise<string> => {
   try {
     const state = await generateState();
     const nonce = await generateNonce();
+    const {verifier, challenge} = generatePkcePair();
+    await storage.set('vipps_code_verifier', verifier);
     const response = await client.get(
       `/identity/v1/vipps/authorization-url?callbackUrl=${VIPPS_CALLBACK_URL}`,
     );
     const authorisationUrl = response.data;
-    return `${authorisationUrl}&state=${state}&nonce=${nonce}`;
+    return `${authorisationUrl}&state=${state}&nonce=${nonce}&code_challenge=${challenge}&code_challenge_method=S256`;
   } catch (error) {
     throw error;
   }
@@ -77,7 +79,9 @@ export const getOrCreateVippsUserCustomToken = async (
 ): Promise<{data?: string; error?: VippsSignInErrorCode}> => {
   const state = await storage.get('vipps_state');
   const nonce = await storage.get('vipps_nonce');
-  if (!state || !nonce) {
+  const codeVerifier = await storage.get('vipps_code_verifier');
+  await clearVippsStorage();
+  if (!state || !nonce || !codeVerifier) {
     throw new Error('unknown_error');
   }
   return client.post(
@@ -85,6 +89,7 @@ export const getOrCreateVippsUserCustomToken = async (
     {
       state: state,
       nonce: nonce,
+      codeVerifier: codeVerifier,
       authorizationCode: authorizationCode,
     },
   );
@@ -121,6 +126,8 @@ export const initAgeVerification = async (
 ): Promise<void> => {
   const state = await generateState();
   const nonce = await generateNonce();
+  const {verifier, challenge} = generatePkcePair();
+  await storage.set('vipps_code_verifier', verifier);
   return client
     .get(
       `/identity/v1/vipps/age-verification/init?callbackUrl=${VIPPS_CALLBACK_URL}`,
@@ -131,7 +138,7 @@ export const initAgeVerification = async (
     .then(async (response) => {
       const authorisationUrl = response.data;
       openInAppBrowser(
-        `${authorisationUrl}&state=${state}&nonce=${nonce}`,
+        `${authorisationUrl}&state=${state}&nonce=${nonce}&code_challenge=${challenge}&code_challenge_method=S256`,
         'cancel',
       );
     });
@@ -141,10 +148,16 @@ export const completeAgeVerification = async (
   authorizationCode: string,
   opts?: AxiosRequestConfig,
 ) => {
+  const codeVerifier = await storage.get('vipps_code_verifier');
+  await clearVippsStorage();
+  if (!codeVerifier) {
+    throw new Error('unknown_error');
+  }
   return client.post(
     `/identity/v1/vipps/age-verification/complete?callbackUrl=${VIPPS_CALLBACK_URL}`,
     {
       authorizationCode,
+      codeVerifier,
     },
     {
       authWithIdToken: true,
@@ -172,6 +185,12 @@ async function generateNonce() {
   const nonce = uuid();
   await storage.set('vipps_nonce', nonce);
   return nonce;
+}
+
+async function clearVippsStorage() {
+  await storage.remove('vipps_state');
+  await storage.remove('vipps_nonce');
+  await storage.remove('vipps_code_verifier');
 }
 
 /**
