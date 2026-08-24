@@ -117,7 +117,7 @@ const SnackbarInstance = ({
         onLayout={animatedViewOnLayout}
       >
         <View style={styles.snackbar}>
-          {content?.iconNode ?? null}
+          {activeContent?.iconNode ?? null}
           <View style={styles.snackbarTexts} ref={focusRef} accessible={true}>
             {activeContent?.title && (
               <ThemeText
