@@ -45,9 +45,9 @@ export const ContactShmoOperatorTexts = {
     },
     noEndInfo: (operatorName: string) => {
       return _(
-        `Alle turer avsluttes etter én time. Sett sparkesykkelen på et trygt sted og send inn dette skjemaet slik at ${operatorName} kan rette opp feilen.`,
-        `All trips end after one hour. Park the scooter in a safe spot and submit this form so that ${operatorName} can correct the error.`,
-        `Alle turar blir avslutta etter éin time. Sett sparkesykkelen på ein trygg stad og send inn dette skjemaet slik at ${operatorName} kan retta opp feilen.`,
+        `Alle turer avsluttes etter én time. Sett kjøretøyet på et trygt sted og send inn dette skjemaet slik at ${operatorName} kan rette opp feilen.`,
+        `All trips end after one hour. Park the vehicle in a safe spot and submit this form so that ${operatorName} can correct the error.`,
+        `Alle turar blir avslutta etter éin time. Sett køyretøyet på ein trygg stad og send inn dette skjemaet slik at ${operatorName} kan retta opp feilen.`,
       );
     },
   },

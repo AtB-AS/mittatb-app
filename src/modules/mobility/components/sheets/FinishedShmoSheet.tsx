@@ -1,10 +1,7 @@
 import React from 'react';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {
-  MobilityTexts,
-  ScooterTexts,
-} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
@@ -148,7 +145,7 @@ export const FinishedShmoSheet = ({
             <View style={styles.footer}>
               <MessageInfoBox
                 type="error"
-                message={t(ScooterTexts.loadingFailed)}
+                message={t(MobilityTexts.loadingFailed)}
               />
             </View>
           )}

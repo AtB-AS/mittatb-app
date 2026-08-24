@@ -1,10 +1,7 @@
 import React, {useCallback, useEffect} from 'react';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
-import {
-  MobilityTexts,
-  ScooterTexts,
-} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
@@ -109,7 +106,7 @@ export const FinishingScooterSheet = ({
         <View style={styles.container}>
           <MessageInfoBox
             type="error"
-            message={t(ScooterTexts.loadingFailed)}
+            message={t(MobilityTexts.loadingFailed)}
           />
         </View>
       )}

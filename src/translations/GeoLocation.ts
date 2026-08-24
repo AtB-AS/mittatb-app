@@ -17,14 +17,14 @@ const GeoLocationTexts = {
     message: (isPrecise: boolean) =>
       isPrecise
         ? _(
-            'Vi bruker presis posisjon til å vise din posisjon i kart og reisesøk, til å finne holdeplasser og steder i nærheten, og til å bekrefte din posisjon når du bruker sparkesykler. For å bruke presis posisjon må du endre innstillingene for appen.',
-            'We use precise location to show your location on the map and in travel search, to find stops and places nearby, and to confirm your location when using scooters. To use precise location, you must change the app settings.',
-            'Vi brukar presis posisjon for å vise posisjonen din i kart og reisesøk, til å finne haldeplassar og stader i nærleiken, og til å bekrefte posisjonen din når du brukar sparkesyklar. For å bruke presis posisjon må du endre innstillingane for appen.',
+            'Vi bruker presis posisjon til å vise din posisjon i kart og reisesøk, til å finne holdeplasser og steder i nærheten, og til å bekrefte din posisjon når du bruker delte kjøretøy. For å bruke presis posisjon må du endre innstillingene for appen.',
+            'We use precise location to show your location on the map and in travel search, to find stops and places nearby, and to confirm your location when using shared vehicles. To use precise location, you must change the app settings.',
+            'Vi brukar presis posisjon for å vise posisjonen din i kart og reisesøk, til å finne haldeplassar og stader i nærleiken, og til å bekrefte posisjonen din når du brukar delte køyretøy. For å bruke presis posisjon må du endre innstillingane for appen.',
           )
         : _(
-            'Vi bruker posisjon til å vise din posisjon i kart og reisesøk, til å finne holdeplasser og steder i nærheten, og til å bekrefte din posisjon når du bruker sparkesykler.',
-            'We use location to show your location on the map and in travel search, to find stops and places nearby, and to confirm your location when using scooters.',
-            'Vi brukar posisjon for å vise posisjonen din i kart og reisesøk, til å finne holdeplassar og stader i nærleiken, og til å bekrefte posisjonen din når du brukar sparkesyklar.',
+            'Vi bruker posisjon til å vise din posisjon i kart og reisesøk, til å finne holdeplasser og steder i nærheten, og til å bekrefte din posisjon når du bruker delte kjøretøy.',
+            'We use location to show your location on the map and in travel search, to find stops and places nearby, and to confirm your location when using shared vehicles.',
+            'Vi brukar posisjon for å vise posisjonen din i kart og reisesøk, til å finne holdeplassar og stader i nærleiken, og til å bekrefte posisjonen din når du brukar delte køyretøy.',
           ),
     goToSettings: _(
       'Gå til innstillinger',
