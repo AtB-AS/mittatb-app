@@ -3,7 +3,6 @@ import {NativeBorderlessButton} from '../native-button';
 import {ThemeText} from '../text';
 import {ThemeIcon} from '../theme-icon';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import BottomSheet, {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {BrandingImage} from '@atb/modules/mobility';
 import {Ref} from 'react';
 import {
@@ -17,7 +16,7 @@ type BottomSheetHeaderProps = {
   subText?: string;
   logoUrl?: string;
   logoIcon?: React.JSX.Element | null;
-  bottomSheetRef: React.RefObject<BottomSheetModal | BottomSheet | null>;
+  onClose: () => void;
   headerNode?: React.ReactNode;
   focusRef?: Ref<any>;
   testID?: string;
@@ -29,7 +28,7 @@ export const BottomSheetHeader = ({
   subText,
   logoUrl,
   logoIcon,
-  bottomSheetRef,
+  onClose,
   headerNode,
   focusRef,
   testID,
@@ -68,7 +67,7 @@ export const BottomSheetHeader = ({
                 style={styles.dismissButton}
                 testID="closeBottomSheet"
                 accessibilityRole="button"
-                onPress={() => bottomSheetRef.current?.close()}
+                onPress={onClose}
                 hitSlop={insets.all(theme.spacing.small)}
               >
                 {headerData?.text && (

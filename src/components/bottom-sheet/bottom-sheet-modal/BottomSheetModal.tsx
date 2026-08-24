@@ -8,7 +8,6 @@ import React, {
 } from 'react';
 import {
   BottomSheetModal as GorhomBottomSheetModal,
-  BottomSheetModalProps as GorhomBottomSheetModalProps,
   BottomSheetBackdrop,
   BottomSheetScrollView,
   BottomSheetFooter as GorhomBottomSheetFooter,
@@ -24,17 +23,15 @@ import {useBottomSheetContext} from '../BottomSheetContext';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {BottomSheetHeaderType} from '../use-bottom-sheet-header-type';
-import {
-  BottomSheetModalMethods,
-  SpringConfig,
-  TimingConfig,
-} from '@gorhom/bottom-sheet/lib/typescript/types';
+import {BottomSheetModalMethods as GorhomBottomSheetModalMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
 
-type BottomSheetModalChildren<T extends any> =
-  GorhomBottomSheetModalProps<T>['children'];
+export type BottomSheetModalMethods = {
+  dismiss: () => void;
+  present: () => void;
+};
 
-type BottomSheetModalProps<T extends any> = {
-  children: BottomSheetModalChildren<T>;
+type BottomSheetModalProps = {
+  children: React.ReactNode;
   bottomSheetModalRef: React.RefObject<BottomSheetModalMethods | null>;
   enablePanDownToClose?: boolean;
   heading?: string;
@@ -54,7 +51,7 @@ type BottomSheetModalProps<T extends any> = {
   bottomSheetHeaderType: BottomSheetHeaderType;
 };
 
-export const BottomSheetModal = <T extends any>({
+export const BottomSheetModal = ({
   children,
   bottomSheetModalRef,
   heading,
@@ -73,7 +70,7 @@ export const BottomSheetModal = <T extends any>({
   closeOnBackdropPress = true,
   overrideClose = () => false,
   bottomSheetHeaderType,
-}: BottomSheetModalProps<T>) => {
+}: BottomSheetModalProps) => {
   const styles = useBottomSheetStyles();
   const {height: screenHeight} = useWindowDimensions();
   const {top: safeAreaTop} = useSafeAreaInsets();
@@ -131,30 +128,6 @@ export const BottomSheetModal = <T extends any>({
     [Footer, theme.color.background.neutral, theme.spacing.large],
   );
 
-  const renderHandle = useCallback(
-    () => (
-      <BottomSheetHeader
-        focusRef={focusRef}
-        heading={heading}
-        subText={subText}
-        logoUrl={logoUrl}
-        bottomSheetRef={bottomSheetModalRef}
-        headerNode={headerNode}
-        testID={testID}
-        bottomSheetHeaderType={bottomSheetHeaderType}
-      />
-    ),
-    [
-      bottomSheetHeaderType,
-      bottomSheetModalRef,
-      headerNode,
-      heading,
-      logoUrl,
-      subText,
-      testID,
-    ],
-  );
-
   const canRunCallbacksRef = useRef<boolean>(isOpen);
 
   const onClose = useCallback(() => {
@@ -179,10 +152,34 @@ export const BottomSheetModal = <T extends any>({
     overrideClose,
   );
 
+  const renderHandle = useCallback(
+    () => (
+      <BottomSheetHeader
+        focusRef={focusRef}
+        heading={heading}
+        subText={subText}
+        logoUrl={logoUrl}
+        onClose={() => bottomSheetModalRef.current?.dismiss()}
+        headerNode={headerNode}
+        testID={testID}
+        bottomSheetHeaderType={bottomSheetHeaderType}
+      />
+    ),
+    [
+      bottomSheetHeaderType,
+      bottomSheetModalRef,
+      headerNode,
+      heading,
+      logoUrl,
+      subText,
+      testID,
+    ],
+  );
+
   const content = useBottomSheetContent(children, footerHeight);
 
   return (
-    <GorhomBottomSheetModal<T>
+    <GorhomBottomSheetModal
       ref={internalRef}
       accessibilityViewIsModal
       importantForAccessibility="yes"
@@ -215,8 +212,8 @@ export const BottomSheetModal = <T extends any>({
   );
 };
 
-const useBottomSheetContent = <T extends any>(
-  children: BottomSheetModalChildren<T>,
+const useBottomSheetContent = (
+  children: React.ReactNode,
   footerHeight: number,
 ) => {
   const {theme} = useThemeContext();
@@ -232,22 +229,8 @@ const useBottomSheetContent = <T extends any>(
     [safeAreaBottom, theme, footerHeight],
   );
 
-  return useMemo(() => {
-    if (typeof children === 'function') {
-      const ChildrenComponent = children;
-
-      return ({data}: {data?: T | undefined}) => (
-        <BottomSheetScrollView
-          keyboardShouldPersistTaps="handled"
-          alwaysBounceVertical={false}
-          contentContainerStyle={contentContainerStyle}
-        >
-          <ChildrenComponent data={data} />
-        </BottomSheetScrollView>
-      );
-    }
-
-    return (
+  return useMemo(
+    () => (
       <BottomSheetScrollView
         keyboardShouldPersistTaps="handled"
         alwaysBounceVertical={false}
@@ -255,52 +238,27 @@ const useBottomSheetContent = <T extends any>(
       >
         {children}
       </BottomSheetScrollView>
-    );
-  }, [children, contentContainerStyle]);
+    ),
+    [children, contentContainerStyle],
+  );
 };
 
-const useInternalBottomSheetModalRef = <T extends any>(
-  externalBottomSheetModalRef: React.RefObject<BottomSheetModalMethods<T> | null>,
+const useInternalBottomSheetModalRef = (
+  externalBottomSheetModalRef: React.RefObject<BottomSheetModalMethods | null>,
   onClose: () => void,
   onOpen: () => void,
   overrideClose: () => boolean,
 ) => {
-  const internalRef = useRef<BottomSheetModalMethods<T>>(null);
+  const internalRef = useRef<GorhomBottomSheetModalMethods>(null);
 
-  useImperativeHandle(externalBottomSheetModalRef, (): BottomSheetModalMethods<T> => {
+  useImperativeHandle(externalBottomSheetModalRef, (): BottomSheetModalMethods => {
     return {
-      present: (data?: T) => internalRef.current?.present(data) && onOpen(),
-      dismiss: (animationConfigs?: SpringConfig | TimingConfig | undefined) => {
+      present: () => internalRef.current?.present() && onOpen(),
+      dismiss: () => {
         if (overrideClose()) {
           return;
         }
-        return internalRef.current?.dismiss(animationConfigs) && onClose();
-      },
-      snapToIndex: (
-        index: number,
-        animationConfigs?: SpringConfig | TimingConfig | undefined,
-      ) => internalRef.current?.snapToIndex(index, animationConfigs),
-      snapToPosition: (
-        position: string | number,
-        animationConfigs?: SpringConfig | TimingConfig | undefined,
-      ) => internalRef.current?.snapToPosition(position, animationConfigs),
-      expand: (animationConfigs?: SpringConfig | TimingConfig | undefined) =>
-        internalRef.current?.expand(animationConfigs),
-      collapse: (animationConfigs?: SpringConfig | TimingConfig | undefined) =>
-        internalRef.current?.collapse(animationConfigs),
-      close: (animationConfigs?: SpringConfig | TimingConfig | undefined) => {
-        if (overrideClose()) {
-          return;
-        }
-        return internalRef.current?.close(animationConfigs) && onClose();
-      },
-      forceClose: (
-        animationConfigs?: SpringConfig | TimingConfig | undefined,
-      ) => {
-        if (overrideClose()) {
-          return;
-        }
-        return internalRef.current?.forceClose(animationConfigs) && onClose();
+        return internalRef.current?.dismiss() && onClose();
       },
     };
   }, [internalRef, onClose, onOpen, overrideClose]);
