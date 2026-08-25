@@ -27,7 +27,6 @@ import {
   OperatorBenefitIdType,
   FirestoreConfigStatus,
   NotificationConfigType,
-  BonusTextsType,
   ConsentLineType,
   CompiledKnownQrCodeUrl,
   RefundReasonType,
@@ -40,7 +39,6 @@ import {
   mapToHarborConnectionOverride,
   mapToMobilityOperators,
   mapToShmoFaqs,
-  mapToBonusTexts,
   mapToBenefitIdsRequiringValueCode,
   mapToNotificationConfig,
   mapToTransportModeFilterOptions,
@@ -85,7 +83,6 @@ type ConfigurationContextState = {
   bicycleFaqs: ShmoFaqType[] | undefined;
   scooterConsentLines: ConsentLineType[] | undefined;
   bicycleConsentLines: ConsentLineType[] | undefined;
-  bonusTexts: BonusTextsType | undefined;
   benefitIdsRequiringValueCode: OperatorBenefitIdType[] | undefined;
   harborConnectionOverrides: HarborConnectionOverrideType[] | undefined;
   firestoreConfigStatus: FirestoreConfigStatus;
@@ -139,7 +136,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
   const [bicycleConsentLines, setBicycleConsentLines] = useState<
     ConsentLineType[]
   >([]);
-  const [bonusTexts, setBonusTexts] = useState<BonusTextsType>();
   const [benefitIdsRequiringValueCode, setBenefitIdsRequiringValueCode] =
     useState<OperatorBenefitIdType[]>([]);
   const [harborConnectionOverrides, setHarborConnectionOverrides] = useState<
@@ -257,11 +253,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
             setBicycleConsentLines(bicycleConsentLines);
           }
 
-          const bonusTexts = getBonusTextsFromSnapshot(snapshot);
-          if (bonusTexts) {
-            setBonusTexts(bonusTexts);
-          }
-
           const benefitIdsRequiringValueCode =
             getBenefitIdsRequiringValueCodeFromSnapshot(snapshot);
           if (benefitIdsRequiringValueCode) {
@@ -353,7 +344,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
       bicycleFaqs,
       scooterConsentLines,
       bicycleConsentLines,
-      bonusTexts,
       benefitIdsRequiringValueCode,
       harborConnectionOverrides,
       notificationConfig,
@@ -381,7 +371,6 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
     bicycleFaqs,
     scooterConsentLines,
     bicycleConsentLines,
-    bonusTexts,
     benefitIdsRequiringValueCode,
     harborConnectionOverrides,
     notificationConfig,
@@ -715,13 +704,6 @@ function getBicycleConsentLinesFromSnapshot(
 ): ConsentLineType[] | undefined {
   const consentLines = snapshot.docs.find((doc) => doc.id == 'mobility');
   return mapToConsentLines(consentLines?.get('bicycleConsentLines'));
-}
-
-function getBonusTextsFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): BonusTextsType | undefined {
-  const texts = snapshot.docs.find((doc) => doc.id == 'mobility');
-  return mapToBonusTexts(texts?.get('bonusTexts'));
 }
 
 function getBenefitIdsRequiringValueCodeFromSnapshot(

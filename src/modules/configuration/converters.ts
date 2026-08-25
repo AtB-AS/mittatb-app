@@ -9,7 +9,6 @@ import {
   FareProductGroupType,
   OperatorBenefitId,
   ShmoFaq,
-  BonusTexts,
   ConsentLine,
 } from './types';
 import {LanguageAndTextType} from '@atb/translations/types';
@@ -211,16 +210,6 @@ export function mapToConsentLines(consentLines?: any) {
       return parseResult.data;
     })
     .filter(isDefined);
-}
-
-export function mapToBonusTexts(bonusTexts?: any) {
-  if (!bonusTexts) return;
-  const parseResult = BonusTexts.safeParse(bonusTexts);
-  if (!parseResult.success) {
-    console.warn(`mapToBonusTexts failed safeParsing:\n`, parseResult.error);
-    return;
-  }
-  return parseResult.data;
 }
 
 export function mapToBenefitIdsRequiringValueCode(
