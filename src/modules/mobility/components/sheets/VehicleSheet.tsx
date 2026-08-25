@@ -1,10 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {
-  MobilityTexts,
-  ScooterTexts,
-} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useMapVehicle} from '../../use-map-vehicle';
 import {Linking, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -242,7 +239,7 @@ export const VehicleSheet = ({
         <View style={styles.messageInfo}>
           <MessageInfoBox
             type="error"
-            message={t(ScooterTexts.loadingFailed)}
+            message={t(MobilityTexts.loadingFailed)}
           />
         </View>
       )}

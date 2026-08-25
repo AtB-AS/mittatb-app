@@ -148,6 +148,11 @@ export const MobilityTexts = {
       ),
     },
   },
+  loadingFailed: _(
+    'Vi fant ikke dette kjøretøyet',
+    "We couldn't find this vehicle",
+    'Vi fann ikkje dette køyretøyet',
+  ),
   loadingBookingFailed: _(
     'Ops! Vi kunne ikke hente informasjon om turen',
     "Ops! We couldn't fetch the trip information",
@@ -161,9 +166,9 @@ export const MobilityTexts = {
       'Ta eit bilde før du avsluttar',
     ),
     p1: _(
-      'Du kan få bot hvis sparkesykkelen meldes som feilparkert.',
-      'You may get a fine if the scooter is reported as incorrectly parked.',
-      'Du kan få bot viss sparkesykkelen vert meldt som feilparkert.',
+      'Du kan få bot hvis kjøretøyet meldes som feilparkert.',
+      'You may get a fine if the vehicle is reported as incorrectly parked.',
+      'Du kan få bot viss køyretøyet vert meldt som feilparkert.',
     ),
     p2: _(
       'Bilde kan brukes som bevis på at du har parkert riktig.',
@@ -219,9 +224,9 @@ export const MobilityTexts = {
     ),
     underAgeWarning: (legalAge: number) =>
       _(
-        `Du må være ${legalAge} år eller eldre for å bruke denne el-sparkesykkelen`,
-        `You must be ${legalAge} years or older to use this e-scooter`,
-        `Du må vere ${legalAge} år eller eldre for å bruke denne el-sparkesykkelen`,
+        `Du må være ${legalAge} år eller eldre for å bruke dette kjøretøyet`,
+        `You must be ${legalAge} years or older to use this vehicle`,
+        `Du må vere ${legalAge} år eller eldre for å bruke dette køyretøyet`,
       ),
     shmoBlockers: _('Fullfør steg', 'Complete steps', 'Fullfør steg'),
     shmoBlockersInfoMessage: (numberOfBlockers: number) =>
@@ -237,9 +242,9 @@ export const MobilityTexts = {
         'Vi treng posisjonen din',
       ),
       description: _(
-        'Du må gi tilgang til posisjonen din for å bruke en el-sparkesykkel',
-        'You need to give access to your location to use an electric scooter',
-        'Du må gi tilgang til posisjonen din for å bruke ein el-sparkesykkel',
+        'Du må gi tilgang til posisjonen din for å bruke et kjøretøy',
+        'You need to give access to your location to use a vehicle',
+        'Du må gi tilgang til posisjonen din for å bruke eit køyretøy',
       ),
       button: _('Del posisjon', 'Share location', 'Del posisjon'),
     },
@@ -250,9 +255,9 @@ export const MobilityTexts = {
         'Vi må sjekke alderen din',
       ),
       description: _(
-        'El-sparkesykler har en aldersgrense. Bekreft alderen din med Vipps.',
-        'E-scooters have an age limit. Verify your age with Vipps.',
-        'El-sparkesyklar har ein aldersgrense. Verifiser alderen din med Vipps.',
+        'Noen kjøretøy har en aldersgrense. Bekreft alderen din med Vipps.',
+        'Some vehicles have an age limit. Verify your age with Vipps.',
+        'Nokre køyretøy har ei aldersgrense. Verifiser alderen din med Vipps.',
       ),
       button: _(
         'Fortsett med Vipps',
@@ -267,9 +272,9 @@ export const MobilityTexts = {
         'Vi treng eit betalingskort',
       ),
       description: _(
-        'Du må legge til et betalingskort for å bruke en el-sparkesykkel',
-        'You need to add a payment card to use an electric scooter',
-        'Du må legge til et betalingskort for å bruke ein el-sparkesykkel',
+        'Du må legge til et betalingskort for å bruke et kjøretøy',
+        'You need to add a payment card to use a vehicle',
+        'Du må legge til eit betalingskort for å bruke eit køyretøy',
       ),
       button: _(
         'Legg til betalingskort',
@@ -465,11 +470,6 @@ export const ScooterTexts = {
           )
         : _('Gratis oppstart', 'Free to unlock', 'Gratis oppstart'),
   },
-  loadingFailed: _(
-    'Vi fant ikke denne sparkesykkelen',
-    "We couldn't find this scooter",
-    'Vi fann ikkje denne sparkesykkelen',
-  ),
   range: _('rekkevidde', 'range', 'rekkjevidde'),
   unlock: _('opplåsning', 'unlock', 'opplåsing'),
   freeMinutesDescription: (minutes: number) =>
@@ -622,11 +622,7 @@ export const ParkAndRideTexts = {
 export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
   allowed: {
     title: _('Tillatt sone', 'Allowed Area', 'Tillatt sone'),
-    description: _(
-      'Her kan du kjøre el-sparkesykkelen',
-      'You can ride the e-scooter here',
-      'Her kan du køyre el-sparkesykkelen',
-    ),
+    description: _('Du kan kjøre her', 'You can ride here', 'Du kan køyre her'),
   },
   slow: {
     title: _('Saktesone', 'Slow Zone', 'Saktesone'),
@@ -694,27 +690,27 @@ export const GeofencingZoneExtraExplanations = {
 };
 
 export const ShmoWarnings = {
-  scooterDisabled: _(
-    'Denne el-sparkesykkelen er ikke tilgjengelig akkurat nå ',
-    'This e-scooter is not available right now',
-    'Denne el-sparkesykkelen er ikkje tilgjengeleg akkurat no',
+  vehicleDisabled: _(
+    'Dette kjøretøyet er ikke tilgjengelig akkurat nå',
+    'This vehicle is not available right now',
+    'Dette køyretøyet er ikkje tilgjengeleg akkurat no',
   ),
-  scooterClosed: (start: string | undefined, end: string | undefined) =>
+  vehicleClosed: (start: string | undefined, end: string | undefined) =>
     start && end
       ? _(
-          `Elsparkesykkelen er kun tilgjengelig mellom ${start} og ${end}`,
-          `The E-scooter is only available between ${start} and ${end}`,
-          `Elsparkesykkelen er berre tilgjengeleg mellom ${start} og ${end}`,
+          `Kjøretøyet er kun tilgjengelig mellom ${start} og ${end}`,
+          `The vehicle is only available between ${start} and ${end}`,
+          `Køyretøyet er berre tilgjengeleg mellom ${start} og ${end}`,
         )
       : _(
-          'Elsparkesykkelen er utenfor åpningstiden',
-          'The E-scooter is outside opening hours',
-          'Elsparkesykkelen er utanfor opningstiden',
+          'Kjøretøyet er utenfor åpningstiden',
+          'The vehicle is outside opening hours',
+          'Køyretøyet er utanfor opningstida',
         ),
-  scooterNotNear: _(
-    'Du må være i nærheten av elsparkesykkelen for å starte en tur',
-    'You need to be near the e-scooter to start a ride.',
-    'Du må vere i nærleiken av elsparkesykkelen for å starte ein tur',
+  vehicleNotNear: _(
+    'Du må være i nærheten av kjøretøyet for å starte en tur',
+    'You need to be near the vehicle to start a ride.',
+    'Du må vere i nærleiken av køyretøyet for å starte ein tur',
   ),
   positionUnavailable: _(
     'Posisjon utilgjengelig. Det kan oppstå problemer med å avslutte turen.',
