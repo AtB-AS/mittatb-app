@@ -16,7 +16,7 @@ e2e$ curl -fsSL "https://get.maestro.mobile.dev" | bash
 Two alternatives.
 
 0) Pre-requisite: Android emulator with a ready to go AVD
-1) Start the app in developer mode with Metro. To avoid error messages, the `index.js` should be replaced
+1) Start the app in developer mode with Metro. To avoid error messages, the `index.js` should be replaced (see `e2e/index_noLogs/index.js`)
 ```bash
 ## remove error messages in the app
 $ ./e2e/scripts/removeLogsFromDevApp.sh
@@ -31,14 +31,14 @@ $ emulator -netdelay none -netspeed full -no-snapshot-load -avd Pixel_5_API_30
 $ pnpm android
 
 ## run tests
-e2e/maestro$ maestro -e APP_ID=no.mittatb.debug test tests/*
+e2e/maestro$ maestro test -e APP_ID=no.mittatb.debug -e PHONE_NUMBER=<phoneNumber> -e OTP=<otp> tests/run.yaml
 ```
 
 ## Errors and reporting
 
 Add outputs and debug
 ```bash
-e2e/maestro$ maestro test -e APP_ID=no.mittatb.debug --debug-output=results --format junit --output results/results.xml tests/*
+-e APP_ID=no.mittatb.debug --debug-output=results --format junit --output results/results.xml
 ```
 
 ## Resources

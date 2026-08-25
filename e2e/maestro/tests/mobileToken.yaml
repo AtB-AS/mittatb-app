@@ -1,5 +1,5 @@
 appId: ${APP_ID}
-name: 'Tickets with auth'
+name: 'Mobile token'
 tags:
   - smoke
 onFlowStart:
@@ -15,19 +15,18 @@ onFlowComplete:
 ---
 - runFlow:
     file: ../common/onboarding/loginPhone.yaml
+    env:
+      PHONE_NUMBER: ${PHONE_NUMBER}
+      OTP: ${OTP}
     label: 'Login through onboarding'
 
 - runFlow:
-    file: tickets/ticketPurchase.yaml
-    label: 'Ticket purchase'
+    file: mobileToken/mobileTokenInSettings.yaml
+    label: 'Mobile token in settings'
 
 - runFlow:
-    file: tickets/ticketInActiveTickets.yaml
-    label: 'Assert purchased ticket'
-
-- runFlow:
-    file: tickets/ticketOnFrontpage.yaml
-    label: 'Assert ticket on frontpage'
+    file: mobileToken/mobileTokenInDebug.yaml
+    label: 'Mobile token in debug'
 
 - runFlow:
     file: ../common/logout.yaml

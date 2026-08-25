@@ -157,7 +157,7 @@ jobs:
           emulator-build: 12414864
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          script: adb install ${{ github.workspace }}/e2e/apk/app-staging.apk && maestro test -e APP_ID=no.mittatb.staging --test-output-dir results --format junit --output results/results.xml tests/*
+          script: adb install ${{ github.workspace }}/e2e/apk/app-staging.apk && maestro test -e APP_ID=no.mittatb.staging --test-output-dir results --format junit --output results/results.xml tests/run.yaml
           working-directory: e2e/maestro
 
       # Slack

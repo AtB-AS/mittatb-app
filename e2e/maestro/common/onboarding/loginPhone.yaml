@@ -1,8 +1,6 @@
 appId: ${APP_ID}
-name: 'Onboarding'
+name: 'Login onboarding'
 ---
-- runScript: ../elements/onboarding.js
-
 - extendedWaitUntil:
     visible:
       id: ${output.onboarding.loading}
@@ -12,25 +10,14 @@ name: 'Onboarding'
     notVisible:
       id: ${output.onboarding.loading}
     timeout: 30000
-    label: 'Wait for loading screen to dismiss'
+    label: 'Wait for loading screen to disappear'
 
-- extendedWaitUntil:
-    visible:
-      id: ${output.onboarding.anonymousLogin}
-    timeout: 10000
-    label: 'Wait for anonymous login button'
-- tapOn:
-    id: ${output.onboarding.anonymousLogin}
-    label: 'Use app anonymously'
-
-- extendedWaitUntil:
-    visible:
-      id: ${output.onboarding.acceptLimitations}
-    timeout: 10000
-    label: 'Wait for accept limitations button'
-- tapOn:
-    id: ${output.onboarding.acceptLimitations}
-    label: 'Accept limitations'
+- runFlow:
+    file: ../login.yaml
+    env:
+        PHONE_NUMBER: ${PHONE_NUMBER}
+        OTP: ${OTP}
+    label: 'Login with phone'
 
 - extendedWaitUntil:
     visible:

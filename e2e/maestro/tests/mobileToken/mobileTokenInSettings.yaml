@@ -1,0 +1,30 @@
+appId: ${APP_ID}
+name: 'Mobile token in settings'
+---
+- tapOn:
+    id: ${output.nav.menu.profile}
+    label: 'Navigate to Profile tab'
+
+- tapOn:
+    id: ${output.profile.settings}
+    label: 'Navigate to settings'
+- tapOn:
+    id: ${output.profile.tokenToggle}
+    label: 'Navigate to token toggle'
+- assertVisible:
+    id: ${output.tokenToggle.thisDevice}
+    label: 'Verify token for this device'
+- assertVisible:
+    id: ${output.tokenToggle.toggleInfo}
+    label: 'Verify token toggle information exists'
+- assertVisible:
+    id: ${output.tokenToggle.toggleInfo}
+    text: '.*switches left.*'
+    label: 'Assert toggle info text'
+
+- tapOn:
+    id: ${output.nav.menu.profile}
+    label: 'Navigate to Profile'
+
+
+

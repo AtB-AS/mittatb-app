@@ -1,0 +1,11 @@
+appId: ${APP_ID}
+name: 'Remove all global messages'
+---
+- repeat:
+    while:
+      visible:
+        id: ${output.global.closeGlobalMessage}
+    commands:
+      - tapOn:
+          id: ${output.global.closeGlobalMessage}
+          label: 'Remove global message'

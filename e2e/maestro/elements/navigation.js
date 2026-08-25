@@ -6,5 +6,9 @@ output.nav = {
         tickets: 'ticketsTab',
         profile: 'profileTab',
     },
+    tickets : {
+        active: 'activeTicketsTab',
+        purchase: 'purchaseTab',
+    },
     back: 'lhb',
 }

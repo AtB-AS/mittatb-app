@@ -1,0 +1,40 @@
+appId: ${APP_ID}
+name: 'Mobile token in debug'
+---
+- tapOn:
+    id: ${output.nav.menu.profile}
+    label: 'Navigate to Profile tab'
+
+- scrollUntilVisible:
+    element:
+      id: ${output.profile.debugButton}
+    direction: DOWN
+    timeout: 10000
+    label: 'Scroll to debug button'
+- tapOn:
+    id: ${output.profile.debugButton}
+    label: 'Open debug menu'
+- scrollUntilVisible:
+    element:
+      id: ${output.debug.mobileToken.section}
+    direction: DOWN
+    timeout: 10000
+    label: 'Scroll to mobile token section'
+- tapOn:
+    id: ${output.debug.mobileToken.section}
+    label: 'Open mobile token debug section'
+
+# Scroll down to reveal token details
+- scroll
+
+- assertVisible:
+    id: ${output.debug.mobileToken.id}
+    label: 'Verify token ID is present'
+- assertVisible:
+    id: ${output.debug.mobileToken.status}
+    text: '.*success-and-inspectable.*'
+    label: 'Verify token status is success-and-inspectable'
+
+- tapOn:
+    id: ${output.nav.menu.profile}
+    label: 'Navigate to Profile tab'

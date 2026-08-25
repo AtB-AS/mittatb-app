@@ -13,11 +13,9 @@ onFlowStart:
 onFlowComplete:
   - stopApp
 ---
-# Onboarding
 - runFlow:
-    file: ../common/onboarding.yaml
+    file: ../common/onboarding/anonymous.yaml
     label: 'Onboarding'
-
 - extendedWaitUntil:
     visible:
       id: ${output.nav.menu.assistant}
@@ -29,14 +27,13 @@ onFlowComplete:
 
 # Search
 - runFlow:
-    file: ../common/location_search.yaml
+    file: ../common/locationSearch.yaml
     env:
       SEARCH_TYPE: 'from'
       SEARCH_TEXT: 'Prinsens gate'
     label: 'Search from'
-
 - runFlow:
-    file: ../common/location_search.yaml
+    file: ../common/locationSearch.yaml
     env:
       SEARCH_TYPE: 'to'
       SEARCH_TEXT: 'Melhus skysstasjon'
@@ -48,10 +45,6 @@ onFlowComplete:
       id: ${output.tripSearch.result(0)}
     timeout: 20000
     label: 'Wait for trip results'
-- takeScreenshot:
-    path: travelSearch
-    label: Take a screenshot
-
 - tapOn:
     id: ${output.tripSearch.firstResult}
     label: 'Open first trip result'
@@ -60,7 +53,6 @@ onFlowComplete:
       id: ${output.tripDetails.content}
     timeout: 10000
     label: 'Wait for trip details'
-
 - tapOn:
     id: ${output.nav.back}
     label: 'Go back'
