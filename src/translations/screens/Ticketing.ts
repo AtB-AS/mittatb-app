@@ -121,6 +121,12 @@ const TicketingTexts = {
       'When you buy a ticket, it will show up here. ',
       'Når du kjøper ein billett, vil han visast her. ',
     ),
+    newValidTicketAnnouncement: (productName: string) =>
+      _(
+        `${productName} er nå gyldig`,
+        `${productName} is now valid`,
+        `${productName} er no gyldig`,
+      ),
   },
   purchaseHistory: {
     title: _('Kjøpshistorikk', 'Purchase history', 'Kjøpshistorikk'),
