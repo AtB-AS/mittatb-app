@@ -39,7 +39,11 @@ export const useAnnounceNewValidFareContract = ({
 
     const newValid = validFcs.find((fc) => !previous.has(fc.id));
     if (newValid) {
-      AccessibilityInfo.announceForAccessibility(getMessage(newValid));
+      const message = getMessage(newValid);
+      // Wait 1s before queuing the announcement, so it isn't overridden by focus change events
+      setTimeout(() => {
+        AccessibilityInfo.announceForAccessibility(message);
+      }, 1000);
     }
   }, [fareContracts, now, isFocused, getMessage]);
 };
