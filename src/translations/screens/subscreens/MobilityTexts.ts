@@ -250,9 +250,9 @@ export const MobilityTexts = {
         'Vi må sjekke alderen din',
       ),
       description: _(
-        'El-sparkesykler har en aldersgrense. Bekreft alderen din med Vipps.',
-        'E-scooters have an age limit. Verify your age with Vipps.',
-        'El-sparkesyklar har ein aldersgrense. Verifiser alderen din med Vipps.',
+        'El-sparkesykler og bysykler har en aldersgrense. Bekreft alderen din med Vipps.',
+        'E-scooters and city bikes have an age limit. Verify your age with Vipps.',
+        'El-sparkesyklar og bysyklar har ein aldersgrense. Verifiser alderen din med Vipps.',
       ),
       button: _(
         'Fortsett med Vipps',
