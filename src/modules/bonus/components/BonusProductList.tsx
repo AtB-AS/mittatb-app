@@ -64,13 +64,17 @@ export const BonusProductList = ({
         const formFactors = getFormFactorsFromTransportMode(
           group.transportMode,
         );
-        const operatorNames = memberProducts
-          .map(
-            (bp) =>
-              mobilityOperators?.find((op) => op.id === bp.operatorId)?.name,
-          )
-          .filter(Boolean)
-          .join(', ');
+        const operatorNames = [
+          ...new Set(
+            memberProducts
+              .map(
+                (bp) =>
+                  mobilityOperators?.find((op) => op.id === bp.operatorId)
+                    ?.name,
+              )
+              .filter((name): name is string => !!name),
+          ),
+        ].join(', ');
         const showMapButton = !!onNavigateToMap && formFactors.length > 0;
 
         return (
