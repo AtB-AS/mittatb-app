@@ -454,6 +454,16 @@ const TripDetailsTexts = {
       'Rail replacement bus',
       'Buss for tog',
     ),
+    requestStopBoarding: _(
+      'Stopper kun ved behov. Stå synlig og rekk ut hånden så føreren ser deg.',
+      'Stops on request only. Stand visibly and raise your hand so the driver can see you.',
+      'Stoppar berre ved behov. Stå synleg og rekk ut handa så føraren ser deg.',
+    ),
+    requestStopAlighting: _(
+      'Stopper kun ved behov. Si ifra til føreren eller konduktøren på forhånd.',
+      'Stops on request only. Let the driver or conductor know in advance.',
+      'Stoppar berre ved behov. Sei ifrå til føraren eller konduktøren på førehand.',
+    ),
     interchangeMainText: _(
       'Korrespondanse',
       'Correspondence',

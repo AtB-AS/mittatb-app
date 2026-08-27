@@ -27,6 +27,7 @@ export type LegFragment = {
     expectedDepartureTime: any;
     stopPositionInPattern: number;
     cancellation: boolean;
+    requestStop: boolean;
     destinationDisplay?: {frontText?: string; via?: Array<string>};
     quay: {publicCode?: string; name: string};
     notices: Array<NoticeFragment>;
@@ -36,6 +37,7 @@ export type LegFragment = {
     actualArrivalTime?: any;
     stopPositionInPattern: number;
     cancellation: boolean;
+    requestStop: boolean;
     notices: Array<NoticeFragment>;
     situations: Array<SituationFragment>;
   };

@@ -5,6 +5,7 @@ import {
   ThemeText,
 } from '@atb/components/text';
 import {MessageInfoBox} from '@atb/components/message-info-box';
+import {MessageInfoText} from '@atb/components/message-info-text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {ServiceJourneyDeparture} from '../types';
@@ -262,6 +263,14 @@ export const LegacyTripSection: React.FC<TripSectionProps> = ({
             )}
           </TripRow>
         )}
+        {leg.fromEstimatedCall?.requestStop && (
+          <TripRow>
+            <MessageInfoText
+              type="info"
+              message={t(TripDetailsTexts.messages.requestStopBoarding)}
+            />
+          </TripRow>
+        )}
         {leg.fromEstimatedCall?.cancellation && (
           <TripRow>
             <CancelledDepartureMessage />
@@ -379,6 +388,14 @@ export const LegacyTripSection: React.FC<TripSectionProps> = ({
             <ThemeText testID={`${testID}ToPlaceName`}>
               {getPlaceName(leg.toPlace)}
             </ThemeText>
+          </TripRow>
+        )}
+        {leg.toEstimatedCall?.requestStop && (
+          <TripRow>
+            <MessageInfoText
+              type="info"
+              message={t(TripDetailsTexts.messages.requestStopAlighting)}
+            />
           </TripRow>
         )}
       </View>

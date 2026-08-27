@@ -87,6 +87,7 @@ describe('getMsgTypeForTravelCardLeg', () => {
           expectedDepartureTime: atSeconds(0),
           stopPositionInPattern: 0,
           cancellation: false,
+          requestStop: false,
           quay: {name: 'A'},
           notices: [{id: 'notice-1', text: 'Some notice'}],
           situations: [],
@@ -105,6 +106,22 @@ describe('getMsgTypeForTravelCardLeg', () => {
     it('returns warning for a leg with booking arrangements', () => {
       const leg = makeLeg({bookingArrangements: {}} as Partial<Leg>);
       expect(getMsgTypeForTravelCardLeg([leg], 0)).toBe('warning');
+    });
+
+    it('returns info for a leg with a request stop', () => {
+      const leg = makeLeg({
+        fromEstimatedCall: {
+          aimedDepartureTime: atSeconds(0),
+          expectedDepartureTime: atSeconds(0),
+          stopPositionInPattern: 0,
+          cancellation: false,
+          requestStop: true,
+          quay: {name: 'A'},
+          notices: [],
+          situations: [],
+        },
+      });
+      expect(getMsgTypeForTravelCardLeg([leg], 0)).toBe('info');
     });
   });
 
