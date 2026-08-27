@@ -249,7 +249,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
             )}
           />
         )}
-        <View style={style.legPath}>
+        <View
+          style={style.legPath}
+          collapsable={false}
+          collapsableChildren={false}
+        >
           <TripLegDecoration
             dimensionOverrides={NEW_TRIP_DIMENSIONS}
             color={legColor}
