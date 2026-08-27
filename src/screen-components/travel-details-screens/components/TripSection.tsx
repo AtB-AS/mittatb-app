@@ -129,6 +129,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const routeNotices = getNoticesForRoute(leg);
   const toEstimatedCallNotices = getNoticesForToEstimatedCall(leg);
 
+  const hasFromEstimatedCallInfo =
+    !!leg.fromEstimatedCall?.requestStop || fromEstimatedCallNotices.length > 0;
+  const hasToEstimatedCallInfo =
+    !!leg.toEstimatedCall?.requestStop || toEstimatedCallNotices.length > 0;
+
   const realtimeText = useRealtimeText(leg.serviceJourneyEstimatedCalls);
 
   const {data: serviceJourneyPolyline} = useServiceJourneyPolylineQuery(
@@ -302,16 +307,32 @@ export const TripSection: React.FC<TripSectionProps> = ({
               )}
             </TripRow>
           )}
-          {fromEstimatedCallNotices.map((notice, index) => (
-            <TripRow
-              dimensionOverrides={NEW_TRIP_DIMENSIONS}
-              key={notice.id}
-              accessible={false}
-              style={[style.notice, index === 0 && style.noticeFirst]}
-            >
-              <MessageInfoText type="info" message={notice.text} />
-            </TripRow>
-          ))}
+          {hasFromEstimatedCallInfo && (
+            <View style={style.estimatedCallInfoContainer}>
+              {fromEstimatedCallNotices.map((notice) => (
+                <TripRow
+                  dimensionOverrides={NEW_TRIP_DIMENSIONS}
+                  key={notice.id}
+                  accessible={false}
+                  style={style.notice}
+                >
+                  <MessageInfoText type="info" message={notice.text} />
+                </TripRow>
+              ))}
+              {leg.fromEstimatedCall?.requestStop && (
+                <TripRow
+                  dimensionOverrides={NEW_TRIP_DIMENSIONS}
+                  accessible={false}
+                  style={style.notice}
+                >
+                  <MessageInfoText
+                    type="info"
+                    message={t(TripDetailsTexts.messages.requestStopBoarding)}
+                  />
+                </TripRow>
+              )}
+            </View>
+          )}
           {isWalkSection ? (
             <View
               accessibilityElementsHidden={fromRowAbsorbsLegA11y}
@@ -556,16 +577,32 @@ export const TripSection: React.FC<TripSectionProps> = ({
             </TripRow>
           )}
         </View>
-        {toEstimatedCallNotices.map((notice, index) => (
-          <TripRow
-            dimensionOverrides={NEW_TRIP_DIMENSIONS}
-            key={notice.id}
-            accessible={false}
-            style={[style.notice, index === 0 && style.noticeFirst]}
-          >
-            <MessageInfoText type="info" message={notice.text} />
-          </TripRow>
-        ))}
+        {hasToEstimatedCallInfo && (
+          <View style={style.estimatedCallInfoContainer}>
+            {toEstimatedCallNotices.map((notice) => (
+              <TripRow
+                dimensionOverrides={NEW_TRIP_DIMENSIONS}
+                key={notice.id}
+                accessible={false}
+                style={style.notice}
+              >
+                <MessageInfoText type="info" message={notice.text} />
+              </TripRow>
+            ))}
+            {leg.toEstimatedCall?.requestStop && (
+              <TripRow
+                dimensionOverrides={NEW_TRIP_DIMENSIONS}
+                accessible={false}
+                style={style.notice}
+              >
+                <MessageInfoText
+                  type="info"
+                  message={t(TripDetailsTexts.messages.requestStopAlighting)}
+                />
+              </TripRow>
+            )}
+          </View>
+        )}
       </View>
       <FlexibleTransportBookingDetailsSheet
         leg={leg}
@@ -1025,7 +1062,7 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   notice: {
     paddingTop: 0,
   },
-  noticeFirst: {
+  estimatedCallInfoContainer: {
     marginTop: -theme.spacing.xSmall,
   },
   intermediateNotices: {

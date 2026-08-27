@@ -141,7 +141,8 @@ export const getSvgForMostCriticalSituationOrNotice = (
 
 /**
  * Get the most critical message type for a leg, considering situations, notices,
- * special transport submodes like RailReplacementBus, and booking requirements.
+ * special transport submodes like RailReplacementBus, booking requirements, and
+ * whether a stop request is necessary.
  */
 export const getMsgTypeForLeg = (
   leg: Leg,
@@ -158,10 +159,16 @@ export const getMsgTypeForLeg = (
       : undefined;
   const bookingMsgType: Exclude<Statuses, 'valid'> | undefined =
     leg.bookingArrangements ? 'warning' : undefined;
-  return [msgType, railReplacementBusMsgType, bookingMsgType].reduce(
-    toMostCriticalStatus,
-    undefined,
-  );
+  const requestStopMsgType: Exclude<Statuses, 'valid'> | undefined =
+    leg.fromEstimatedCall?.requestStop || leg.toEstimatedCall?.requestStop
+      ? 'info'
+      : undefined;
+  return [
+    msgType,
+    railReplacementBusMsgType,
+    bookingMsgType,
+    requestStopMsgType,
+  ].reduce(toMostCriticalStatus, undefined);
 };
 
 /**

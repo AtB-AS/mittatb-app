@@ -18,6 +18,7 @@ export type DeparturesQuery = {
       realtime: boolean;
       predictionInaccurate: boolean;
       cancellation: boolean;
+      requestStop: boolean;
       stopPositionInPattern: number;
       quay: {id: string};
       destinationDisplay?: {frontText?: string; via?: Array<string>};

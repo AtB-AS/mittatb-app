@@ -70,6 +70,7 @@ describe('getStatusTextConfig', () => {
           makeLeg({
             fromEstimatedCall: {
               cancellation: true,
+              requestStop: false,
               aimedDepartureTime: futureTime,
               expectedDepartureTime: futureTime,
               stopPositionInPattern: 0,
@@ -94,6 +95,7 @@ describe('getStatusTextConfig', () => {
           makeLeg({
             fromEstimatedCall: {
               cancellation: true,
+              requestStop: false,
               aimedDepartureTime: futureTime,
               expectedDepartureTime: futureTime,
               stopPositionInPattern: 0,
@@ -118,6 +120,7 @@ describe('getStatusTextConfig', () => {
           makeLeg({
             fromEstimatedCall: {
               cancellation: true,
+              requestStop: false,
               aimedDepartureTime: futureTime,
               expectedDepartureTime: futureTime,
               stopPositionInPattern: 0,
