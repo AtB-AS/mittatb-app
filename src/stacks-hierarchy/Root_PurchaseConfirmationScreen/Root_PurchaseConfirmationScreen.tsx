@@ -207,9 +207,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       paymentMethod?.paymentType,
       reserveMutation.data?.recurringPaymentId,
     );
-    // Save the trip the purchase originated from, so it shows up on the
-    // dashboard. `params.tripPattern` is only set when coming from travel
-    // search with an unedited selection.
     if (
       !hasSavedTripRef.current &&
       isSaveTripsEnabled &&
