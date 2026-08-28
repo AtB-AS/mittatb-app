@@ -6,7 +6,10 @@ import {
 } from '@atb/modules/ticketing';
 import React, {useCallback, useEffect, useState} from 'react';
 import {View} from 'react-native';
-import {FareContractAndReservationsList} from '@atb/modules/fare-contracts';
+import {
+  FareContractAndReservationsList,
+  useAnnounceNewValidFareContract,
+} from '@atb/modules/fare-contracts';
 import {useTranslation, TicketingTexts, dictionary} from '@atb/translations';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useTimeContext} from '@atb/modules/time';
@@ -53,6 +56,12 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
   const styles = useStyles();
   const {t} = useTranslation();
   const {scrollHandler} = useTabScrollHandler(1);
+
+  useAnnounceNewValidFareContract({
+    fareContracts: availableFareContracts,
+    now: serverNow,
+    isFocused: isFocused,
+  });
 
   const onPressChangeButton = () =>
     navigation.navigate('Root_SelectTravelTokenScreen');

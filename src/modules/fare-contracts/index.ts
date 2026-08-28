@@ -17,6 +17,7 @@ export type {
   SupplementProductWithCount,
 } from './types';
 export {FareContractOrReservation} from './FareContractOrReservation';
+export {useAnnounceNewValidFareContract} from './use-announce-new-valid-fare-contract';
 export {
   sortFcOrReservationByCreation,
   getSortedFareContractsAndReservations,

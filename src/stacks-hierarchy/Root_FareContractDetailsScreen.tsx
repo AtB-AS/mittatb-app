@@ -1,5 +1,8 @@
 import {useTicketInfo} from '@atb/components/screen-header';
-import {DetailsContent} from '@atb/modules/fare-contracts';
+import {
+  DetailsContent,
+  useAnnounceNewValidFareContract,
+} from '@atb/modules/fare-contracts';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   FareContractTexts,
@@ -43,6 +46,12 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const {fareContract, preassignedFareProduct} = useTicketInfo(
     route.params.fareContractId,
   );
+
+  useAnnounceNewValidFareContract({
+    fareContracts: fareContract ? [fareContract] : [],
+    now: serverNow,
+    isFocused,
+  });
 
   const isSentFareContract =
     fareContract?.customerAccountId !== fareContract?.purchasedBy &&
