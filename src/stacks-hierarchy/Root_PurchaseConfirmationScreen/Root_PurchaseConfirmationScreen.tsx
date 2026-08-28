@@ -106,9 +106,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const productAlternatives = useProductAlternatives(selection);
 
   const {isSaveTripsEnabled} = useFeatureTogglesContext();
-  const isAutoSaveTripsEnabled = useIsExperimentalEnabled(
-    'isAutoSaveTripsEnabled',
-  );
+  const isAutoSaveTripsEnabled = useIsExperimentalEnabled();
   const {addTripPattern, canAddTripPattern} = useStoredTripPatterns();
   // `onPaymentCompleted` can be triggered by more than one of its sources for
   // the same purchase, so keep the trip from being saved and logged twice.
