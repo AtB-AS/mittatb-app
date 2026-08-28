@@ -249,6 +249,15 @@ export const TripSection: React.FC<TripSectionProps> = ({
             )}
           />
         )}
+        {/*
+          Android flattens layout-only views and re-parents their children.
+          Positions stay correct, but a11y traversal follows native child index,
+          so re-parented rows can end up in the wrong reading order.
+          Without collapsableChildren the decoration and TripRow wrappers are
+          dropped and their content is appended straight onto this container;
+          without collapsable the container itself is dropped and everything
+          lands in the section above. Both scramble the focus order.
+        */}
         <View
           style={style.legPath}
           collapsable={false}
