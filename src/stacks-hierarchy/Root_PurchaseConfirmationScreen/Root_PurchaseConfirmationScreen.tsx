@@ -71,6 +71,9 @@ import {useParamAsState} from '@atb/utils/use-param-as-state';
 import {startApplePayPayment} from './start-apple-pay';
 import {Loading} from '@atb/components/loading';
 import type {TripAnalytics} from '@atb/screen-components/travel-details-screens';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useStoredTripPatterns} from '@atb/modules/experimental-store-trip-patterns';
+import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -101,6 +104,22 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const [bonusProductId, setBonusProductId] = useState<string | undefined>();
   const {recipient} = params;
   const productAlternatives = useProductAlternatives(selection);
+
+  const {isSaveTripsEnabled} = useFeatureTogglesContext();
+  const isAutoSaveTripsEnabled = useIsExperimentalEnabled();
+  const {addTripPattern, canAddTripPattern} = useStoredTripPatterns();
+  // `onPaymentCompleted` can be triggered by more than one of its sources for
+  // the same purchase, so keep the trip from being saved and logged twice.
+  const hasSavedTripRef = useRef(false);
+
+  const tripPatternToSave =
+    isSaveTripsEnabled &&
+    isAutoSaveTripsEnabled &&
+    !recipient &&
+    params.tripPattern &&
+    canAddTripPattern(params.tripPattern)
+      ? params.tripPattern
+      : undefined;
 
   const {
     offerSearchTime,
@@ -197,6 +216,13 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       paymentMethod?.paymentType,
       reserveMutation.data?.recurringPaymentId,
     );
+    if (tripPatternToSave && !hasSavedTripRef.current) {
+      hasSavedTripRef.current = true;
+      addTripPattern(tripPatternToSave);
+      analytics.logEvent('Ticketing', 'Trip saved after purchase', {
+        ...params.tripAnalytics,
+      });
+    }
     closeInAppBrowseriOS();
     navigation.popTo('Root_TabNavigatorStack', {
       screen: 'TabNav_TicketingStack',
@@ -213,6 +239,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     userId,
     paymentMethod?.paymentType,
     reserveMutation.data?.recurringPaymentId,
+    tripPatternToSave,
+    params.tripAnalytics,
+    addTripPattern,
+    analytics,
   ]);
 
   // Call reserve when payment data is received from the Apple Pay payment sheet

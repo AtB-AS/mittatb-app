@@ -7,8 +7,9 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {ScrollView, View} from 'react-native';
+import {isEqual, omit} from 'lodash';
 import {ProductSelection} from './components/ProductSelection';
 import {StartTimeSelection} from './components/StartTimeSelection';
 import {Summary} from './components/Summary';
@@ -33,6 +34,7 @@ import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
 import {
   type ForcedSelectionChange,
+  type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
 import {useBookingTrips} from '@atb/modules/booking';
@@ -42,6 +44,9 @@ import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 
 type PurchaseOverviewError = OfferError | {type: 'booking-error'};
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
+
+const sameTrip = (selection: PurchaseSelectionType) =>
+  omit(selection, ['userProfilesWithCount', 'supplementProductsWithCount']);
 
 export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   navigation,
@@ -55,6 +60,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const builder = usePurchaseSelectionBuilder();
   const [selection, setSelection] = useParamAsState(params.selection);
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
+
+  const initialSelectionRef = useRef(params.selection);
+  const isTripSelectionEdited = !isEqual(
+    sameTrip(selection),
+    sameTrip(initialSelectionRef.current),
+  );
 
   const isFree = params.selection.stopPlaces?.to?.isFree || false;
 
@@ -176,10 +187,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       );
       return;
     }
-    navigation.navigate(
-      'Root_PurchaseConfirmationScreen',
-      rootPurchaseConfirmationScreenParams,
-    );
+    const confirmationParams: Root_PurchaseConfirmationScreenParams = {
+      ...rootPurchaseConfirmationScreenParams,
+      tripPattern: isTripSelectionEdited ? undefined : params.tripPattern,
+    };
+    navigation.navigate('Root_PurchaseConfirmationScreen', confirmationParams);
   };
 
   const showForcedChangeSnackbar = (forcedChanges: ForcedSelectionChange[]) => {
