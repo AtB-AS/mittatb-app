@@ -112,6 +112,15 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   // the same purchase, so keep the trip from being saved and logged twice.
   const hasSavedTripRef = useRef(false);
 
+  const tripPatternToSave =
+    isSaveTripsEnabled &&
+    isAutoSaveTripsEnabled &&
+    !recipient &&
+    params.tripPattern &&
+    canAddTripPattern(params.tripPattern)
+      ? params.tripPattern
+      : undefined;
+
   const {
     offerSearchTime,
     isSearchingOffer,
@@ -207,16 +216,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       paymentMethod?.paymentType,
       reserveMutation.data?.recurringPaymentId,
     );
-    if (
-      !hasSavedTripRef.current &&
-      isSaveTripsEnabled &&
-      isAutoSaveTripsEnabled &&
-      !recipient &&
-      params.tripPattern &&
-      canAddTripPattern(params.tripPattern)
-    ) {
+    if (tripPatternToSave && !hasSavedTripRef.current) {
       hasSavedTripRef.current = true;
-      addTripPattern(params.tripPattern);
+      addTripPattern(tripPatternToSave);
       analytics.logEvent('Ticketing', 'Trip saved after purchase', {
         ...params.tripAnalytics,
       });
@@ -237,12 +239,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     userId,
     paymentMethod?.paymentType,
     reserveMutation.data?.recurringPaymentId,
-    isSaveTripsEnabled,
-    isAutoSaveTripsEnabled,
-    recipient,
-    params.tripPattern,
+    tripPatternToSave,
     params.tripAnalytics,
-    canAddTripPattern,
     addTripPattern,
     analytics,
   ]);
