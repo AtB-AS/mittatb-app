@@ -210,6 +210,17 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		22D476662F3CBAD6008B795E /* TurboModules */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = TurboModules;
+			sourceTree = "<group>";
+		};
 		2A9E4C1B7F03D5A6B8C2E401 /* liveActivity */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -220,17 +231,6 @@
 			explicitFolders = (
 			);
 			path = liveActivity;
-			sourceTree = "<group>";
-		};
-		22D476662F3CBAD6008B795E /* TurboModules */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = TurboModules;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -915,10 +915,10 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "$(IOS_APP_WIDGET_IDENTIFIER).liveactivity";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(IOS_APP_LIVEACTIVITY_IDENTIFIER)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "match Development $(IOS_APP_WIDGET_IDENTIFIER).liveactivity";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development $(IOS_APP_WIDGET_IDENTIFIER).liveactivity";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development $(IOS_APP_LIVEACTIVITY_IDENTIFIER)";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development $(IOS_APP_LIVEACTIVITY_IDENTIFIER)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1138,7 +1138,7 @@
 				);
 				MARKETING_VERSION = "$(APP_VERSION)";
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "$(IOS_APP_WIDGET_IDENTIFIER).liveactivity";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(IOS_APP_LIVEACTIVITY_IDENTIFIER)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
