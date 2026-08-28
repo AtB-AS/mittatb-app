@@ -40,15 +40,15 @@ la.build_configurations.each do |cfg|
   cfg.base_configuration_reference = config_xcconfig
 
   cfg.build_settings["INFOPLIST_FILE"] = "#{GROUP_PATH}/Info.plist"
-  cfg.build_settings["PRODUCT_BUNDLE_IDENTIFIER"] = "$(IOS_APP_WIDGET_IDENTIFIER).liveactivity"
+  cfg.build_settings["PRODUCT_BUNDLE_IDENTIFIER"] = "$(IOS_APP_LIVEACTIVITY_IDENTIFIER)"
   # Mirror departureWidget/AtbAppIntent: hardcode a Development profile only for
   # local Debug device builds; leave Release empty so Fastlane injects the
   # distribution profile at CI time.
   if cfg.name == "Debug"
     cfg.build_settings["PROVISIONING_PROFILE_SPECIFIER"] =
-      "match Development $(IOS_APP_WIDGET_IDENTIFIER).liveactivity"
+      "match Development $(IOS_APP_LIVEACTIVITY_IDENTIFIER)"
     cfg.build_settings["PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]"] =
-      "match Development $(IOS_APP_WIDGET_IDENTIFIER).liveactivity"
+      "match Development $(IOS_APP_LIVEACTIVITY_IDENTIFIER)"
   else
     cfg.build_settings["PROVISIONING_PROFILE_SPECIFIER"] = ""
     cfg.build_settings.delete("PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]")

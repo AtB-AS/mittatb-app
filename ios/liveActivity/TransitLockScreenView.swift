@@ -87,6 +87,11 @@ struct TransitLockScreenView: View {
           Text(state.subtitle)
             .font(BrandFont.body(15)).foregroundStyle(BrandColor.subtitle)
             .lineLimit(1).minimumScaleFactor(0.85)
+          if let pushMessage = state.pushMessage {
+            Text(pushMessage)
+              .font(BrandFont.body(13)).foregroundStyle(BrandColor.subtitle)
+              .lineLimit(1).minimumScaleFactor(0.85)
+          }
         }
         Spacer(minLength: 0)
       }

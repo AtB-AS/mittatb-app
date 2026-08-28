@@ -364,15 +364,17 @@ container (as `departureWidget` does) and read it in the extension.
 **The simulator PoC needs none of this** — simulators don't enforce signing. But
 the `liveActivity.appex` is embedded in the app, so the moment you build for a
 device or archive through Fastlane/CI, code signing for the new
-`$(IOS_APP_WIDGET_IDENTIFIER).liveactivity` bundle id must be wired up. Today it
+`$(IOS_APP_LIVEACTIVITY_IDENTIFIER)` bundle id must be wired up. Today it
 is **not**, so device/TestFlight/archive builds will fail signing.
 
 `fastlane/Fastfile` is hardcoded for exactly three identifiers
 (`IOS_BUNDLE_IDENTIFIER`, `IOS_APP_WIDGET_IDENTIFIER`, `IOS_APP_INTENT_IDENTIFIER`).
 Add the fourth everywhere they appear:
 
-1. Add an env var, e.g. `IOS_APP_LIVEACTIVITY_IDENTIFIER` =
-   `$(IOS_APP_WIDGET_IDENTIFIER).liveactivity` (and to each `ensure_env_vars`).
+1. `IOS_APP_LIVEACTIVITY_IDENTIFIER` must be set in **every** `env/*/*/.env` (it is
+   the extension's `PRODUCT_BUNDLE_IDENTIFIER`, with no fallback) — e.g.
+   `no.mittatb.debug.tripLiveActivity` for `env/atb/dev`. Add it to each
+   `ensure_env_vars`. It must be prefixed by that env's app bundle id.
 2. Add it to every `match(...)` `identifiers:` array (the arrays currently listing
    the three ids).
 3. Add an `update_project_provisioning` call with `target_filter: "liveActivity"`
@@ -380,18 +382,18 @@ Add the fourth everywhere they appear:
    calls) — plus a `liveact_cert_info` helper mirroring `widget_cert_info`.
 4. Add the id → profile mapping to `build_app` `export_options.provisioningProfiles`.
 5. Run Match (`update_devices` / cert generation) so it creates the
-   `…liveactivity` Development + distribution profiles in the Match git repo.
+   Live Activity Development + distribution profiles in the Match git repo.
 
 For local Debug **device** builds, the target references a
-`match Development …liveactivity` profile in its Debug config — create that via
-Match first. The Release config is left empty (like the other extensions) so
+`match Development $(IOS_APP_LIVEACTIVITY_IDENTIFIER)` profile in its Debug config
+— create that via Match first. The Release config is left empty (like the other extensions) so
 Fastlane injects the distribution profile at CI time.
 
 ### Whitelabel rollout (other flavors)
 
-Per non-AtB flavor (FRAM, Nfk, Troms, …): the bundle id
-`$(IOS_APP_WIDGET_IDENTIFIER).liveactivity` already parameterizes per flavor via
-xcconfig, but each flavor still needs its own Match profiles (step 5 above per
+Per non-AtB flavor (FRAM, Nfk, Troms, …): the bundle id comes from each flavor's
+`IOS_APP_LIVEACTIVITY_IDENTIFIER`, so every `env/*/*/.env` needs its own value,
+and each flavor still needs its own Match profiles (step 5 above per
 flavor) and per-brand colors in `TransitTheme.swift` (or generated tokens).
 
 ## Known limitations of the PoC

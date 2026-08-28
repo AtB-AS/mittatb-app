@@ -39,6 +39,10 @@ struct TransitActivityAttributes: ActivityAttributes {
     /// Row-2 secondary prefix, e.g. "Ankommer Nidarosdomen" (time is appended).
     var footnote: String
 
+    /// PoC: free-text line shown on the lock screen when present, used to verify
+    /// APNs push updates end-to-end. Optional, so payloads may omit it.
+    var pushMessage: String?
+
     /// The relevant time (arrival/departure) for the clock/countdown.
     var eventTime: Date
     /// true → render `eventTime` as a live countdown; false → absolute clock time.
