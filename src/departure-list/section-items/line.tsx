@@ -355,8 +355,14 @@ export const getSvgForDeparture = (
   );
   const msgTypeForBooking = bookingStatusToMsgType(bookingStatus);
 
-  const msgType = [msgTypeForSituationOrNotice, msgTypeForBooking].reduce<
-    Statuses | undefined
-  >(toMostCriticalStatus, undefined);
+  const msgTypeForRequestStop: Statuses | undefined = departure.requestStop
+    ? 'info'
+    : undefined;
+
+  const msgType = [
+    msgTypeForSituationOrNotice,
+    msgTypeForBooking,
+    msgTypeForRequestStop,
+  ].reduce<Statuses | undefined>(toMostCriticalStatus, undefined);
   return msgType && statusTypeToIcon(msgType, true, themeName);
 };

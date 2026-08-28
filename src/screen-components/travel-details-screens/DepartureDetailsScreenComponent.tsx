@@ -433,6 +433,14 @@ export const DepartureDetailsScreenComponent = ({
               ),
           )}
 
+          {fromCall?.requestStop && (
+            <MessageInfoBox
+              type="info"
+              message={t(TripDetailsTexts.messages.requestStopBoarding)}
+              style={styles.messageBox}
+            />
+          )}
+
           {isLoading && (
             <View>
               <Loading style={styles.spinner} animating={true} size="large" />
@@ -607,6 +615,7 @@ function EstimatedCallRow({
   const {group, isStartOfGroup, isEndOfGroup, isStartOfServiceJourney} =
     call.metadata;
   const isStartOfTripGroup = group === 'trip' && isStartOfGroup;
+  const isEndOfTripGroup = group === 'trip' && isEndOfGroup;
 
   const isBetween = !isStartOfGroup && !isEndOfGroup;
   const tripLegDecorationColor = useTransportColor(
@@ -698,6 +707,22 @@ function EstimatedCallRow({
               {t(dictionary.travel.noBoarding)}
             </AccessibleText>
           )}
+        {call.requestStop && (
+          <AccessibleText
+            typography="body__s"
+            type="secondary"
+            style={styles.boardingInfo}
+            pause="before"
+          >
+            {t(
+              isStartOfTripGroup
+                ? TripDetailsTexts.messages.requestStopBoarding
+                : isEndOfTripGroup
+                  ? TripDetailsTexts.messages.requestStopAlighting
+                  : TripDetailsTexts.messages.requestStop,
+            )}
+          </AccessibleText>
+        )}
       </TripRow>
       {situations.map((situation) => (
         <TripRow

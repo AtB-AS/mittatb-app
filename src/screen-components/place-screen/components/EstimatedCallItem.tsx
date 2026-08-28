@@ -174,10 +174,15 @@ export const getMsgTypeForEstimatedCall = (
   );
   const msgTypeForBooking = bookingStatusToMsgType(bookingStatus);
 
+  const msgTypeForRequestStop: Statuses | undefined = estimatedCall.requestStop
+    ? 'info'
+    : undefined;
+
   return [
     msgTypeForSituationOrNotice,
     msgTypeForBooking,
     msgTypeForRailReplacementBus,
+    msgTypeForRequestStop,
   ].reduce<Exclude<Statuses, 'valid'> | undefined>(
     toMostCriticalStatus,
     undefined,
