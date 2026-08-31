@@ -51,6 +51,7 @@ export {
   isActiveTripBooking,
   isBicycle,
   isBikeStation,
+  isCar,
   isCarStation,
   isScooter,
   isVirtualStation,

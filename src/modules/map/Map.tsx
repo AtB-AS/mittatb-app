@@ -151,13 +151,14 @@ export const Map = (props: MapProps) => {
   const isActiveBikeTrip = isActiveBikeTripBooking(activeShmoBooking);
 
   const showCityBikeStations = mapFilter?.mobility.BICYCLE?.showAll ?? false;
-  // Shared car stations are just noise during an active city bike trip. They are
+  // Shared cars are just noise during an active city bike trip. They are
   // not relevant for the trip, and are not interactive while a trip is in use.
-  const showSharedCarStations =
+  // The same filter covers both the stations and the free floating cars.
+  const showSharedCars =
     (mapFilter?.mobility.CAR?.showAll ?? false) && !isActiveBikeTrip;
-  const showStations = showCityBikeStations || showSharedCarStations;
+  const showStations = showCityBikeStations || showSharedCars;
   const shouldShowVehiclesAndStations =
-    isFocused && (showVehicles || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
+    isFocused && (showVehicles || showSharedCars || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&
@@ -544,8 +545,9 @@ export const Map = (props: MapProps) => {
               selectedFeatureId={activeFeatureId}
               onPress={onMapItemClick}
               showVehicles={showVehicles}
+              showCarVehicles={showSharedCars}
               showCityBikeStations={showCityBikeStations}
-              showSharedCarStations={showSharedCarStations}
+              showSharedCarStations={showSharedCars}
               showBikeStationParkingInfo={isActiveBikeTrip}
             />
           )}
@@ -589,9 +591,11 @@ export const Map = (props: MapProps) => {
           tabBarHeight={tabBarHeight}
           ref={mapStateRef}
         >
-          {!!showVehicles && (
+          {!!(showVehicles || showSharedCars) && (
             <VehiclesWithClusters
               selectedFeatureId={undefined}
+              showVehicles={showVehicles}
+              showCarVehicles={showSharedCars}
               hideSymbols={true}
             />
           )}
@@ -600,7 +604,7 @@ export const Map = (props: MapProps) => {
               selectedFeatureId={undefined}
               showNonVirtualStations={true}
               showCityBikeStations={showCityBikeStations}
-              showSharedCarStations={showSharedCarStations}
+              showSharedCarStations={showSharedCars}
               hideSymbols={true}
             />
           )}
