@@ -43,7 +43,9 @@ class LiveActivitiesImpl: NSObject {
       let attributes = try decode(TransitActivityAttributes.self, from: attributesJson)
       let state = try decode(TransitActivityAttributes.ContentState.self, from: contentStateJson)
       let content = ActivityContent(state: state, staleDate: nil)
-      let activity = try Activity.request(attributes: attributes, content: content, pushType: nil)
+      let activity = try Activity.request(
+        attributes: attributes, content: content, pushType: .token)
+      logPushToken(of: activity)
       resolve(activity.id)
     } catch {
       reject("E_LA_START", error.localizedDescription)
@@ -117,6 +119,24 @@ class LiveActivitiesImpl: NSObject {
         await activity.end(nil, dismissalPolicy: .immediate)
       }
       resolve(nil)
+    }
+  }
+
+  // MARK: Push token
+
+  /// PoC: log the per-activity APNs token so test pushes can be sent by hand.
+  /// The real implementation must send this — and every rotation — to a backend.
+  @available(iOS 16.2, *)
+  private func logPushToken(of activity: Activity<TransitActivityAttributes>) {
+    Task {
+      // Print if there is no token
+      if activity.pushToken == nil {
+        NSLog("[LiveActivity] nil push token")
+      }
+      for await tokenData in activity.pushTokenUpdates {
+        let hex = tokenData.map { String(format: "%02x", $0) }.joined()
+        NSLog("[LiveActivity] push token: %@", hex)
+      }
     }
   }
 
