@@ -45,7 +45,7 @@ class LiveActivitiesImpl: NSObject {
       let content = ActivityContent(state: state, staleDate: nil)
       let activity = try Activity.request(
         attributes: attributes, content: content, pushType: .token)
-      logPushToken(of: activity)
+      observe(activity)
       resolve(activity.id)
     } catch {
       reject("E_LA_START", error.localizedDescription)
@@ -122,12 +122,18 @@ class LiveActivitiesImpl: NSObject {
     }
   }
 
-  // MARK: Push token
+  // MARK: Debug observation
 
-  /// PoC: log the per-activity APNs token so test pushes can be sent by hand.
-  /// The real implementation must send this — and every rotation — to a backend.
+  /// PoC: log everything ActivityKit reports about this activity — push token (to
+  /// send test pushes by hand), each content-state it applies, and lifecycle
+  /// transitions. Only runs while the app process is alive; the widget extension
+  /// logs on every render, which is what covers pushes to a suspended app.
+  ///
+  /// The real implementation must send the token — and every rotation — to a backend.
   @available(iOS 16.2, *)
-  private func logPushToken(of activity: Activity<TransitActivityAttributes>) {
+  private func observe(_ activity: Activity<TransitActivityAttributes>) {
+    NSLog(
+      "[LiveActivity] started id=%@ state=%@", activity.id, activity.content.state.debugJson)
     Task {
       // Print if there is no token
       if activity.pushToken == nil {
@@ -138,40 +144,23 @@ class LiveActivitiesImpl: NSObject {
         NSLog("[LiveActivity] push token: %@", hex)
       }
     }
+    Task {
+      for await content in activity.contentUpdates {
+        NSLog("[LiveActivity] content update: %@", content.state.debugJson)
+      }
+    }
+    Task {
+      for await state in activity.activityStateUpdates {
+        NSLog("[LiveActivity] activity state: %@", String(describing: state))
+      }
+    }
   }
 
   // MARK: JSON decoding
 
-  private lazy var decoder: JSONDecoder = {
-    let d = JSONDecoder()
-    // JS sends `new Date().toISOString()` which includes fractional seconds;
-    // the default `.iso8601` strategy rejects those, so decode leniently.
-    d.dateDecodingStrategy = .custom { decoder in
-      let container = try decoder.singleValueContainer()
-      let raw = try container.decode(String.self)
-      if let date = LiveActivitiesImpl.iso8601WithFractional.date(from: raw)
-        ?? LiveActivitiesImpl.iso8601Plain.date(from: raw)
-      {
-        return date
-      }
-      throw DecodingError.dataCorruptedError(
-        in: container,
-        debugDescription: "Invalid ISO8601 date: \(raw)")
-    }
-    return d
-  }()
-
-  private static let iso8601WithFractional: ISO8601DateFormatter = {
-    let f = ISO8601DateFormatter()
-    f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-    return f
-  }()
-
-  private static let iso8601Plain: ISO8601DateFormatter = {
-    let f = ISO8601DateFormatter()
-    f.formatOptions = [.withInternetDateTime]
-    return f
-  }()
+  // `ContentState.init(from:)` parses `eventTime` itself (ISO-8601 string or
+  // reference-date seconds), so no `dateDecodingStrategy` is needed here.
+  private let decoder = JSONDecoder()
 
   private func decode<T: Decodable>(_ type: T.Type, from json: String) throws -> T {
     guard let data = json.data(using: .utf8) else {
