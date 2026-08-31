@@ -5,14 +5,13 @@
 
 set -euo pipefail
 
-REFERENCE_DATE_OFFSET=978307200 # 2001-01-01T00:00:00Z, in unix seconds
-EVENT_IN_SECONDS=600            # how far ahead eventTime should be
+EVENT_IN_SECONDS=600 # how far ahead eventTime should be
 
 message=${2:-Hello from push}
 message=${message//\"/\\\"}
 
 now=$(date +%s)
-event_time=$((now + EVENT_IN_SECONDS - REFERENCE_DATE_OFFSET))
+event_time=$((now + EVENT_IN_SECONDS))
 
 jq <<JSON
 {

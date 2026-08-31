@@ -158,8 +158,8 @@ class LiveActivitiesImpl: NSObject {
 
   // MARK: JSON decoding
 
-  // `ContentState.init(from:)` parses `eventTime` itself (ISO-8601 string or
-  // reference-date seconds), so no `dateDecodingStrategy` is needed here.
+  // `ContentState` has no `Date` fields (`eventTime` is unix seconds), so no
+  // `dateDecodingStrategy` is needed here.
   private let decoder = JSONDecoder()
 
   private func decode<T: Decodable>(_ type: T.Type, from json: String) throws -> T {
