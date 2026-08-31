@@ -92,8 +92,7 @@ automatically (no `.pbxproj` entry needed):
 
 **Shared model** — `ios/Shared/TransitActivityAttributes.swift`:
 
-- The ActivityKit model, plus the hand-written `ContentState.init(from:)` (see
-  [Data model](#data-model)) and `debugJson`. **Member of BOTH the `app` and
+- The ActivityKit model, plus `debugJson`. **Member of BOTH the `app` and
   `liveActivity` targets** (the same source compiled into both). This is mandatory:
   if it were only in the extension, `Activity.request` would succeed but nothing
   would render.
@@ -153,7 +152,7 @@ The lock screen is a **two-row light card** (matching the AtB reference design):
 | `title`                  | row-1 bold line, e.g. "6 stopp igjen"                                |
 | `subtitle`               | row-1 secondary, e.g. "Du skal av på Nidarosdomen"                   |
 | `footnote`               | row-2 secondary prefix, e.g. "Ankommer Nidarosdomen" (time appended) |
-| `eventTime`              | arrival/departure time for the clock/countdown (see below)           |
+| `eventTime`              | arrival/departure time for the clock/countdown, **unix seconds**     |
 | `eventIsCountdown`       | render `eventTime` as a live countdown vs absolute clock             |
 | `pushMessage` (optional) | PoC only: free text shown on the lock screen, to verify push         |
 
@@ -164,19 +163,6 @@ so the widget stays dumb. The row-1 illustration is a placeholder tile
 **Store an absolute `Date`, not a minute count.** The widget self-ticks with
 `Text(timerInterval:)` / `Text(date, style: .timer)`; widgets can't run timers, so
 never push per-minute integer updates.
-
-**`eventTime` is an ISO-8601 string everywhere** — JS, push payloads, and
-ActivityKit's own app→extension transfer — with fractional seconds optional on the
-way in and always written on the way out.
-
-That only holds because `ContentState` has a hand-written `init(from:)` **and**
-`encode(to:)` that read/write the string themselves. **Don't delete them and fall
-back on synthesized conformance.** `Date` is otherwise coded via the _coder's_
-`dateDecodingStrategy`, and two coders touch this type that we don't configure:
-ActivityKit's internal one, and the one decoding pushed `content-state`. Both
-default to numeric seconds since 2001-01-01, so with synthesized conformance an
-ISO string in a push is rejected and the Live Activity just greys out with a
-spinner — decoding fails before any of our code runs, so nothing is logged.
 
 ---
 
@@ -286,7 +272,7 @@ apns-expiration: 0
       "title": "2 stopp igjen",
       "subtitle": "Du skal av på Nidarosdomen",
       "footnote": "Ankommer Nidarosdomen",
-      "eventTime": "2026-08-31T09:41:00Z", // ISO-8601; see Data model
+      "eventTime": 1788169260, // unix seconds; see Data model
       "eventIsCountdown": false,
     },
     "stale-date": 1751443560, // grey out if no fresh update by then
@@ -297,10 +283,9 @@ apns-expiration: 0
 }
 ```
 
-- Every non-optional `ContentState` field must be present; one missing or misencoded
-  field drops the whole payload silently. Limit ~4 KB. `eventTime` is an ISO-8601
-  string, which works only because of the hand-written Codable conformance — see
-  [Data model](#data-model).
+- Every non-optional `ContentState` field must be present, with `eventTime` as unix
+  seconds (see [Data model](#data-model)); one missing or misencoded field drops the
+  whole payload silently. Limit ~4 KB.
 - `timestamp` must be current and increasing; older values are dropped as stale.
 
 **Responses to handle**

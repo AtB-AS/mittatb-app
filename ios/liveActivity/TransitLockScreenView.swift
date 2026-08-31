@@ -44,7 +44,7 @@ struct IllustrationIcon: View {
   }
 }
 
-/// Renders `eventTime` as a live countdown or an absolute clock time.
+/// Renders `eventDate` as a live countdown or an absolute clock time.
 struct TimeText: View {
   let state: TransitState
   var size: CGFloat = 15
@@ -54,10 +54,10 @@ struct TimeText: View {
     Group {
       if state.eventIsCountdown {
         Text(
-          timerInterval: Date()...max(state.eventTime, Date().addingTimeInterval(1)),
+          timerInterval: Date()...max(state.eventDate, Date().addingTimeInterval(1)),
           countsDown: true)
       } else {
-        Text(state.eventTime, style: .time)
+        Text(state.eventDate, style: .time)
       }
     }
     .font(BrandFont.bold(size))
@@ -124,6 +124,6 @@ struct TransitLockScreenView: View {
 
   /// Absolute clock time appended to the footnote, e.g. "08:30".
   private var timeSuffix: Text {
-    Text(state.eventTime, style: .time).monospacedDigit()
+    Text(state.eventDate, style: .time).monospacedDigit()
   }
 }

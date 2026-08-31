@@ -35,13 +35,12 @@ type TransitContentState = {
   subtitle: string;
   /** Row-2 secondary prefix; the time is appended, e.g. "Ankommer Nidarosdomen". */
   footnote: string;
-  /** ISO-8601 timestamp. */
-  eventTime: string;
+  /** Unix seconds. */
+  eventTime: number;
   eventIsCountdown: boolean;
 };
 
-const inMinutes = (m: number) =>
-  new Date(Date.now() + m * 60_000).toISOString();
+const inMinutes = (m: number) => Math.floor(Date.now() / 1000) + m * 60;
 
 const ATTRIBUTES: TransitAttributes = {
   toName: 'Nidarosdomen',
