@@ -10,9 +10,13 @@ name: 'Run tests'
     label: 'Travel Search'
 
 - runFlow:
-      file: mobileToken.yaml
-      label: 'Mobile Token'
+    file: mobileToken.yaml
+    label: 'Mobile Token'
 
 - runFlow:
-      file: tickets.yaml
-      label: 'Tickets'
+    file: tickets.yaml
+    label: 'Tickets'
+
+- runFlow:
+    file: visual.yaml
+    label: 'Visual tests'

@@ -2,6 +2,7 @@ appId: ${APP_ID}
 name: 'Remove all announcements'
 ---
 - repeat:
+    times: 10
     while:
       visible:
         id: ${output.frontpage.closeAnnouncement}

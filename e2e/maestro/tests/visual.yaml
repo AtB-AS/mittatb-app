@@ -1,0 +1,84 @@
+appId: ${APP_ID}
+name: 'Visual tests'
+env:
+  # take | assert
+  SCREENSHOT_MODE: 'take'
+onFlowStart:
+  - runFlow:
+      file: ../elements/loadElements.yaml
+      label: 'Load elements'
+  - launchApp:
+      clearState: true
+      permissions:
+        location: deny
+onFlowComplete:
+  - stopApp
+---
+- runFlow:
+    file: ../common/onboarding/loginPhone.yaml
+    label: 'Login through onboarding'
+- runFlow:
+    file: ../common/removeGlobalMessages.yaml
+    label: 'Remove all global messages'
+- runFlow:
+    file: ../common/removeAnnouncements.yaml
+    label: 'Remove all announcements'
+
+# Frontpage
+- runFlow:
+    file: ../common/screenshot.yaml
+    env:
+      FILE: tickets/frontpage
+      MODE: ${SCREENSHOT_MODE}
+    label: ${'Screenshot_' + SCREENSHOT_MODE}
+
+# Tickets
+- tapOn:
+    id: ${output.nav.menu.tickets}
+    label: 'Navigate to Tickets tab'
+- runFlow:
+    when:
+      notVisible:
+        id: ${output.tickets.fareProduct('single')}
+    commands:
+      - tapOn:
+          id: ${output.nav.tickets.purchase}
+          label: 'Navigate to the purchase tickets tab'
+- runFlow:
+    file: ../common/removeGlobalMessages.yaml
+    label: 'Remove all global messages'
+- assertVisible:
+    id: ${output.tickets.fareProduct('single')}
+    label: 'Verify that single ticket is shown'
+- runFlow:
+    file: ../common/screenshot.yaml
+    env:
+      FILE: tickets/purchasableTickets
+      MODE: ${SCREENSHOT_MODE}
+    label: ${'Screenshot_' + SCREENSHOT_MODE}
+- runFlow:
+    file: ../common/screenshot.yaml
+    env:
+      FILE: tickets/singleTicket
+      MODE: ${SCREENSHOT_MODE}
+      ID: ${output.tickets.fareProduct('single')}
+    label: ${'Screenshot_' + SCREENSHOT_MODE}
+
+# Single ticket
+- tapOn:
+    id: ${output.tickets.fareProduct('single')}
+    label: 'Choose single ticket'
+- assertVisible: '.*Single ticket.*'
+- runFlow:
+    file: ../common/screenshot.yaml
+    env:
+      FILE: tickets/purchaseOptions
+      MODE: ${SCREENSHOT_MODE}
+    label: ${'Screenshot_' + SCREENSHOT_MODE}
+- tapOn:
+    id: ${output.nav.back}
+    label: 'Navigate back'
+- assertVisible:
+    id: ${output.tickets.fareProduct('single')}
+    label: 'Verify that single ticket is shown'
+

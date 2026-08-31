@@ -2,6 +2,7 @@ appId: ${APP_ID}
 name: 'Remove all global messages'
 ---
 - repeat:
+    times: 10
     while:
       visible:
         id: ${output.global.closeGlobalMessage}
