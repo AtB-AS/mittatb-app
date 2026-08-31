@@ -11,12 +11,15 @@ next stop", "departs 09:53"). iOS 16.1+ (this PoC targets 16.2+).
 ## Scope of the PoC
 
 - **AtB flavor only.**
-- **Local updates only** — everything is driven from the app while it runs, via a
-  debug-menu interface. No push, no server, no real trip data yet.
+- Local updates driven from the app via a debug-menu interface. No server, no real
+  trip data yet.
+- **Push updates verified by hand** — the activity requests a push token, and
+  updates have been sent to it from Apple's Push Notifications Console. No backend.
+  See [Testing push updates by hand](#testing-push-updates-by-hand).
 - Real-brand SwiftUI design (three trip phases + Dynamic Island).
 
 Not in scope (see [Real implementation](#real-implementation-what-comes-next)):
-push updates, push-to-start, real data, other whitelabel flavors, Fastlane/Match
+a push backend, push-to-start, real data, other whitelabel flavors, Fastlane/Match
 provisioning for the new target.
 
 ## How to run it
@@ -83,16 +86,20 @@ _file-system-synchronized group_, so files there compile into the app
 automatically (no `.pbxproj` entry needed):
 
 - `LiveActivitiesImpl.swift` — ActivityKit logic (`Activity.request/update/end`,
-  authorization check, lenient ISO-8601 date decoding).
+  authorization check, and `observe(_:)`: push-token / content / lifecycle logging).
 - `RCTLiveActivities.h` / `.mm` — TurboModule bridge (mirrors `RCTApplePayHandler`).
 - `LiveActivitiesImplObjC.h` — ObjC-visible declaration of the Swift impl.
 
+**Shared model** — `ios/Shared/TransitActivityAttributes.swift`:
+
+- The ActivityKit model, plus the hand-written `ContentState.init(from:)` (see
+  [Data model](#data-model)) and `debugJson`. **Member of BOTH the `app` and
+  `liveActivity` targets** (the same source compiled into both). This is mandatory:
+  if it were only in the extension, `Activity.request` would succeed but nothing
+  would render.
+
 **Widget extension (`liveActivity` target)** — `ios/liveActivity/`:
 
-- `TransitActivityAttributes.swift` — the ActivityKit model. **Member of BOTH the
-  `app` and `liveActivity` targets** (the same source compiled into both). This is
-  mandatory: if it were only in the extension, `Activity.request` would succeed
-  but nothing would render.
 - `TransitLiveActivity.swift` — `Widget` with `ActivityConfiguration` + `DynamicIsland`.
 - `TransitLockScreenView.swift` — the two-row light card + shared subviews
   (`LineBadge`, `IllustrationIcon`, `TimeText`).
@@ -108,6 +115,8 @@ automatically (no `.pbxproj` entry needed):
 - `package.json` → `codegenConfig.ios.modulesProvider` maps
   `"LiveActivities": "RCTLiveActivities"`.
 - `ios/atb/Info.plist` → `NSSupportsLiveActivities = true` (required on the **app**).
+- `scripts/get-activity-payload.sh` — prints an APNs payload with a fresh
+  `timestamp`/`eventTime` for the Push Console.
 
 The `liveActivity` Xcode target was added by
 `scripts`-style Ruby using the `xcodeproj` gem, mirroring the existing
@@ -144,8 +153,9 @@ The lock screen is a **two-row light card** (matching the AtB reference design):
 | `title`                  | row-1 bold line, e.g. "6 stopp igjen"                                |
 | `subtitle`               | row-1 secondary, e.g. "Du skal av på Nidarosdomen"                   |
 | `footnote`               | row-2 secondary prefix, e.g. "Ankommer Nidarosdomen" (time appended) |
-| `eventTime` (ISO-8601)   | arrival/departure time for the clock/countdown                       |
+| `eventTime`              | arrival/departure time for the clock/countdown (see below)           |
 | `eventIsCountdown`       | render `eventTime` as a live countdown vs absolute clock             |
+| `pushMessage` (optional) | PoC only: free text shown on the lock screen, to verify push         |
 
 Text (`title`/`subtitle`/`footnote`) is passed **pre-formatted/localized from JS**,
 so the widget stays dumb. The row-1 illustration is a placeholder tile
@@ -154,6 +164,19 @@ so the widget stays dumb. The row-1 illustration is a placeholder tile
 **Store an absolute `Date`, not a minute count.** The widget self-ticks with
 `Text(timerInterval:)` / `Text(date, style: .timer)`; widgets can't run timers, so
 never push per-minute integer updates.
+
+**`eventTime` is an ISO-8601 string everywhere** — JS, push payloads, and
+ActivityKit's own app→extension transfer — with fractional seconds optional on the
+way in and always written on the way out.
+
+That only holds because `ContentState` has a hand-written `init(from:)` **and**
+`encode(to:)` that read/write the string themselves. **Don't delete them and fall
+back on synthesized conformance.** `Date` is otherwise coded via the _coder's_
+`dateDecodingStrategy`, and two coders touch this type that we don't configure:
+ActivityKit's internal one, and the one decoding pushed `content-state`. Both
+default to numeric seconds since 2001-01-01, so with synthesized conformance an
+ISO string in a push is rejected and the Live Activity just greys out with a
+spinner — decoding fails before any of our code runs, so nothing is logged.
 
 ---
 
@@ -263,7 +286,7 @@ apns-expiration: 0
       "title": "2 stopp igjen",
       "subtitle": "Du skal av på Nidarosdomen",
       "footnote": "Ankommer Nidarosdomen",
-      "eventTime": "2026-07-02T09:41:00.000Z", // ISO string — our decoder expects ISO8601
+      "eventTime": "2026-08-31T09:41:00Z", // ISO-8601; see Data model
       "eventIsCountdown": false,
     },
     "stale-date": 1751443560, // grey out if no fresh update by then
@@ -274,9 +297,11 @@ apns-expiration: 0
 }
 ```
 
-- `content-state` field names **and date encoding** must match the app's
-  `JSONDecoder`. `LiveActivitiesImpl.swift` decodes `eventTime` as ISO-8601, so the
-  backend sends an ISO string (not a unix number). Payload limit ~4 KB.
+- Every non-optional `ContentState` field must be present; one missing or misencoded
+  field drops the whole payload silently. Limit ~4 KB. `eventTime` is an ISO-8601
+  string, which works only because of the hand-written Codable conformance — see
+  [Data model](#data-model).
+- `timestamp` must be current and increasing; older values are dropped as stale.
 
 **Responses to handle**
 
@@ -330,6 +355,66 @@ app:  token rotates → re-POST the new token   (must be handled)
   set it so the UI never shows confidently-wrong times if updates stop.
 - `relevance-score`: when several Live Activities exist, higher scores win the
   Dynamic Island.
+
+### Testing push updates by hand
+
+No backend needed. Apple's [Push Notifications
+Console](https://icloud.developer.apple.com/dashboard/notifications) sends the
+push, so there is no `.p8`, JWT or script to set up.
+
+**A physical device is required** — the simulator never issues an ActivityKit push
+token (`pushTokenUpdates` simply never emits). That means the `liveActivity`
+target's signing must be sorted first, see
+[Device / CI signing](#device--ci-signing-required-before-any-device--testflight-build).
+
+1. Run the app from Xcode on a device, then **Profile → Debug info → Start**.
+2. Copy the token from the Xcode console:
+   `[LiveActivity] push token: …`. It is **much longer than a 64-char device
+   token** (100+ hex chars) — copying only the first line is an easy mistake, and
+   yields "discarded as application was not registered".
+3. Generate a payload with a fresh `timestamp` and `eventTime`:
+   ```
+   scripts/get-activity-payload.sh <push-token> | pbcopy
+   ```
+4. In the console: paste the token as recipient, set **Push Type =
+   `liveactivity`**, environment **Development** for Debug builds, paste the
+   payload, send. `apns-topic` is fixed to the app bundle id in the UI; the console
+   appends `.push-type.liveactivity` itself.
+
+Tokens are per-activity and per-install: they die when the activity ends, when
+End/End all is tapped, and on every reinstall. Re-copy after each Start.
+
+**Diagnosing a push that does nothing**
+
+| symptom                                                             | cause                                       |
+| ------------------------------------------------------------------- | ------------------------------------------- |
+| console delivery log: "discarded as application was not registered" | truncated/stale token, or wrong environment |
+| activity greys out with a spinner                                   | `content-state` failed to decode            |
+| nothing at all, activity unchanged                                  | stale `timestamp`, or the activity ended    |
+
+Logs, in two different processes:
+
+- **App target** — `[LiveActivity] started / push token / content update / activity
+state`, from `observe(_:)` in `LiveActivitiesImpl.swift`. Xcode console. Only fires
+  while the app process is alive.
+- **Widget extension** — `[LiveActivity] render:` (DEBUG only), from
+  `TransitLockScreenView`. **Not** in the Xcode console; use Console.app with the
+  device selected, or:
+  ```
+  log stream --device-name "<iPhone>" --predicate 'eventMessage CONTAINS "[LiveActivity]"'
+  ```
+  This is the one that proves a push landed while the app was suspended.
+
+Both log the _decoded_ `ContentState` — the raw APNs payload is never handed to the
+app. A payload ActivityKit rejects produces no log line at all; those errors appear
+only in the system log:
+
+```
+log stream --device-name "<iPhone>" --predicate 'process == "liveactivitiesd" OR process == "apsd"'
+```
+
+`apsd` silent means the push never reached the phone (token/topic/environment);
+`apsd` logging it but `liveactivitiesd` erroring means the payload is wrong.
 
 ### App Group / shared data
 
@@ -398,7 +483,11 @@ flavor) and per-brand colors in `TransitTheme.swift` (or generated tokens).
 
 ## Known limitations of the PoC
 
-- Local updates only; no push, no real data.
-- AtB flavor only; device signing not set up.
+- No backend and no real data; pushes are sent by hand from the Push Console, and
+  the push token is only logged, never uploaded.
+- `pushMessage` and the `[LiveActivity]` logging are debug scaffolding — drop them
+  when real data lands.
+- Push requires a device (no simulator tokens); AtB flavor only, device signing not
+  set up.
 - Colors/fonts hardcoded; strings pre-formatted in JS.
 - Dynamic Island expanded layout is tuned for the onboard/alight phases.

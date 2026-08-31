@@ -1,4 +1,5 @@
 import ActivityKit
+import Foundation
 import SwiftUI
 import WidgetKit
 
@@ -76,6 +77,10 @@ struct TransitLockScreenView: View {
   private var state: TransitState { context.state }
 
   var body: some View {
+    #if DEBUG
+      // PoC: proves a pushed state reached the extension, even with the app suspended.
+      let _ = NSLog("[LiveActivity] render: %@", state.debugJson)
+    #endif
     VStack(spacing: 12) {
       // Row 1 — illustration + status
       HStack(spacing: 12) {
