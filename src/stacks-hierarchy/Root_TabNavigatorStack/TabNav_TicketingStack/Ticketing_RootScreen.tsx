@@ -36,7 +36,10 @@ export const Ticketing_RootScreen = ({navigation}: Props) => {
           text={t(TicketingTexts.header.title)}
           isLarge={true}
         />
-        <BonusBalanceButton onPress={onNavigateToBonusScreen} />
+        <BonusBalanceButton
+          onPress={onNavigateToBonusScreen}
+          style={styles.bonusBalanceButton}
+        />
       </View>
       <Ticketing_TicketTabNavStack />
     </View>
@@ -49,9 +52,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   headingContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    rowGap: theme.spacing.small,
     paddingBottom: theme.spacing.medium,
     paddingHorizontal: theme.spacing.medium,
+  },
+  bonusBalanceButton: {
+    marginLeft: 'auto',
+    flexShrink: 1,
+    maxWidth: '100%',
   },
 }));
