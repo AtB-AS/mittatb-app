@@ -1,20 +1,23 @@
 import {Image, ImageStyle, View} from 'react-native';
 import React, {useState} from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {CarFill} from '@atb/assets/svg/mono-icons/transportation';
+import {getTransportModeSvg} from '@atb/components/icon-box';
 import {StyleSheet} from '@atb/theme';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {getTransportModeAndSubMode} from '../utils';
 
 type Props = {
   uri: string | null | undefined;
+  formFactor: FormFactor;
   size?: 'small' | 'large';
 };
 
-export const VehicleImage = ({uri, size = 'small'}: Props) => {
+export const VehicleImage = ({uri, formFactor, size = 'small'}: Props) => {
   const style = useSheetStyle();
   const [largeImageAspectRatio, setLargeImageAspectRatio] = useState(1);
 
   if (!uri) {
-    return <DefaultVehicleImage size={size} />;
+    return <DefaultVehicleImage formFactor={formFactor} size={size} />;
   }
 
   if (size === 'large') {
@@ -35,7 +38,13 @@ export const VehicleImage = ({uri, size = 'small'}: Props) => {
   return <Image style={style.smallImage as ImageStyle} source={{uri}} />;
 };
 
-const DefaultVehicleImage = ({size}: {size: 'small' | 'large'}) => {
+const DefaultVehicleImage = ({
+  formFactor,
+  size,
+}: {
+  formFactor: FormFactor;
+  size: 'small' | 'large';
+}) => {
   const style = useSheetStyle();
   return (
     <View
@@ -44,7 +53,13 @@ const DefaultVehicleImage = ({size}: {size: 'small' | 'large'}) => {
         style.defaultImage,
       ]}
     >
-      <ThemeIcon size="large" color="secondary" svg={CarFill} />
+      <ThemeIcon
+        size="large"
+        color="secondary"
+        svg={
+          getTransportModeSvg(getTransportModeAndSubMode(formFactor).mode).svg
+        }
+      />
     </View>
   );
 };
