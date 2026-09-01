@@ -17,77 +17,57 @@ import {NativeLiveActivities} from '@atb/modules/native';
  * is a later step — this only exercises the native module + widget.
  */
 
-type Mode = 'bus' | 'tram' | 'rail' | 'water' | 'walk';
-
-type TransitAttributes = {
-  toName: string;
-  brandLabel: string;
-  tripId: string;
-};
+type TransportMode = 'bus' | 'tram' | 'rail' | 'water' | 'walk';
 
 type TransitContentState = {
-  mode: Mode;
+  /** Badge icon + accent color. */
+  mode: TransportMode;
+  /** Badge number, e.g. "3". */
   lineNumber: string;
+  /** Headsign / destination, e.g. "Lohove". */
   lineName: string;
-  /** Row-1 bold line, e.g. "6 stopp igjen". */
+  /** The instruction line, e.g. "6 stopp igjen". */
   title: string;
-  /** Row-1 secondary line, e.g. "Du skal av på Nidarosdomen". */
-  subtitle: string;
-  /** Row-2 secondary prefix; the time is appended, e.g. "Ankommer Nidarosdomen". */
-  footnote: string;
-  /** Unix seconds. */
+  /** Arrival/departure time shown on the clock, unix seconds. */
   eventTime: number;
-  eventIsCountdown: boolean;
 };
 
 const inMinutes = (m: number) => Math.floor(Date.now() / 1000) + m * 60;
 
-const ATTRIBUTES: TransitAttributes = {
-  toName: 'Nidarosdomen',
-  brandLabel: 'AtB',
-  tripId: 'poc-trip-1',
-};
+/** No static per-trip data yet — `TransitActivityAttributes` has no fields. */
+const ATTRIBUTES = {};
 
 const BASE = {
-  mode: 'bus' as Mode,
+  mode: 'bus' as TransportMode,
   lineNumber: '3',
   lineName: 'Lohove',
-  footnote: 'Ankommer Nidarosdomen',
-  eventIsCountdown: false,
 };
 
 const SCENARIOS: Record<string, TransitContentState> = {
   getOff6: {
     ...BASE,
     title: '6 stopp igjen',
-    subtitle: 'Du skal av på Nidarosdomen',
     eventTime: inMinutes(18),
   },
   getOff2: {
     ...BASE,
     title: '2 stopp igjen',
-    subtitle: 'Du skal av på Nidarosdomen',
     eventTime: inMinutes(6),
   },
   getOffNow: {
     ...BASE,
     title: 'Neste stopp',
-    subtitle: 'Gå av på Nidarosdomen',
     eventTime: inMinutes(1),
   },
   walking: {
     ...BASE,
     mode: 'walk',
-    title: 'Gå til holdeplass',
-    subtitle: 'Prinsens gate',
-    footnote: 'Avgang Prinsens gate',
+    title: 'Gå til holdeplass Prinsens gate',
     eventTime: inMinutes(4),
   },
   departure: {
     ...BASE,
-    title: 'Neste avgang',
-    subtitle: 'Fra Prinsens gate',
-    footnote: 'Avgang',
+    title: 'Neste avgang fra Prinsens gate',
     eventTime: inMinutes(9),
   },
 };
@@ -175,7 +155,7 @@ export const DebugLiveActivities = () => {
             ? activityId
               ? `Active: ${activityId}`
               : 'No active activity'
-            : 'iOS 16.2+ only — unavailable on this platform'}
+            : 'iOS 18+ only — unavailable on this platform'}
         </ThemeText>
       </GenericSectionItem>
 
@@ -185,7 +165,7 @@ export const DebugLiveActivities = () => {
       {available && (
         <LinkSectionItem
           text="Start – Get off (6 stopp igjen)"
-          subtitle="Du skal av på Nidarosdomen · 3 Lohove"
+          subtitle="Bus · 3 Lohove"
           onPress={() => start('getOff6')}
         />
       )}
