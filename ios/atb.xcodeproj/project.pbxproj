@@ -53,8 +53,10 @@
 		6DB88ADA2A7A35A10060CC31 /* PassPresentationBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB88AD92A7A35A10060CC31 /* PassPresentationBridge.m */; };
 		6DB88ADC2A7A55570060CC31 /* PassPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */; };
 		74B7D5AB436802EA2A130B26 /* TransitActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1C7D575A683351D142AFAA /* TransitActivityAttributes.swift */; };
+		8C41F5D2A0B63E79D4128CF6 /* TransportMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2E4B18C9D7F3021A5E8B44 /* TransportMode.swift */; };
 		907FD69EA4A47F1355531234 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04C08586D4BB36C7BAE574A0 /* SwiftUI.framework */; };
 		B50A3C59C60DF4DA1F7F2AE0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CF208E6AFA036B6EF6CFA3F /* Foundation.framework */; };
+		B93D07A6E2145C8F70A3D51E /* TransportMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2E4B18C9D7F3021A5E8B44 /* TransportMode.swift */; };
 		C18256D729E9412DA315E055 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80CBD2ACDD97450583702DEF /* Colors.xcassets */; };
 		DDDF982FB606CFDA23A0EC47 /* liveActivity.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 63C02298678A71951B47FFE4 /* liveActivity.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FE09922928FFF47300E5046D /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE09922828FFF47300E5046D /* Storage.swift */; };
@@ -162,6 +164,7 @@
 		5CF208E6AFA036B6EF6CFA3F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		5F1C7D575A683351D142AFAA /* TransitActivityAttributes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransitActivityAttributes.swift; sourceTree = "<group>"; };
 		63C02298678A71951B47FFE4 /* liveActivity.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = liveActivity.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A2E4B18C9D7F3021A5E8B44 /* TransportMode.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransportMode.swift; sourceTree = "<group>"; };
 		6DAA1D092A77D3EC00CC8016 /* PassKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PassKit.framework; path = System/Library/Frameworks/PassKit.framework; sourceTree = SDKROOT; };
 		6DB88AD82A7A33EE0060CC31 /* PassPresentationBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PassPresentationBridge.h; sourceTree = "<group>"; };
 		6DB88AD92A7A35A10060CC31 /* PassPresentationBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PassPresentationBridge.m; sourceTree = "<group>"; };
@@ -444,6 +447,7 @@
 				5038614B28FD750A00E16E13 /* LocationChangeManager.swift */,
 				6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */,
 				5F1C7D575A683351D142AFAA /* TransitActivityAttributes.swift */,
+				6A2E4B18C9D7F3021A5E8B44 /* TransportMode.swift */,
 				FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */,
 			);
 			path = Shared;
@@ -754,6 +758,7 @@
 				FEBDDCDB29310DFE00C3755B /* WidgetUpdaterBridge.m in Sources */,
 				6DB88ADA2A7A35A10060CC31 /* PassPresentationBridge.m in Sources */,
 				74B7D5AB436802EA2A130B26 /* TransitActivityAttributes.swift in Sources */,
+				8C41F5D2A0B63E79D4128CF6 /* TransportMode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -786,6 +791,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3738C565048B749B1B16BF8C /* TransitActivityAttributes.swift in Sources */,
+				B93D07A6E2145C8F70A3D51E /* TransportMode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -905,7 +911,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "AtB Live Activity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need your location to show bus departures near you";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1130,7 +1136,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "AtB Live Activity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need your location to show bus departures near you";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

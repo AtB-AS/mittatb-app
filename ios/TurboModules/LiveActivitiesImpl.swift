@@ -10,6 +10,12 @@ import Foundation
 /// strings, which we decode into `TransitActivityAttributes` here. That keeps the
 /// TurboModule spec trivial (only strings/bools cross the bridge) and lets the
 /// real implementation evolve the payload shape without codegen churn.
+///
+/// Gated on **iOS 18**, not ActivityKit's own 16.2: the `liveActivity` extension
+/// that renders the activity deploys to 18.0 (it uses `activityFamily` /
+/// `supplementalActivityFamilies` for the watch Smart Stack). Below 18 the app
+/// still runs, it just has no Live Activity — starting one there would succeed
+/// and then render nothing.
 @objc(LiveActivitiesImpl)
 class LiveActivitiesImpl: NSObject {
   private static let errorDomain = "LiveActivitiesError"
@@ -17,7 +23,7 @@ class LiveActivitiesImpl: NSObject {
   // MARK: Public API
 
   @objc func areActivitiesEnabled() -> Bool {
-    if #available(iOS 16.2, *) {
+    if #available(iOS 18.0, *) {
       return ActivityAuthorizationInfo().areActivitiesEnabled
     }
     return false
@@ -29,8 +35,8 @@ class LiveActivitiesImpl: NSObject {
     resolve: @escaping (Any?) -> Void,
     reject: @escaping (String, String) -> Void
   ) {
-    guard #available(iOS 16.2, *) else {
-      reject("E_LA_UNSUPPORTED", "Live Activities require iOS 16.2 or newer.")
+    guard #available(iOS 18.0, *) else {
+      reject("E_LA_UNSUPPORTED", "Live Activities require iOS 18 or newer.")
       return
     }
     guard ActivityAuthorizationInfo().areActivitiesEnabled else {
@@ -58,8 +64,8 @@ class LiveActivitiesImpl: NSObject {
     resolve: @escaping (Any?) -> Void,
     reject: @escaping (String, String) -> Void
   ) {
-    guard #available(iOS 16.2, *) else {
-      reject("E_LA_UNSUPPORTED", "Live Activities require iOS 16.2 or newer.")
+    guard #available(iOS 18.0, *) else {
+      reject("E_LA_UNSUPPORTED", "Live Activities require iOS 18 or newer.")
       return
     }
     guard
@@ -86,8 +92,8 @@ class LiveActivitiesImpl: NSObject {
     resolve: @escaping (Any?) -> Void,
     reject: @escaping (String, String) -> Void
   ) {
-    guard #available(iOS 16.2, *) else {
-      reject("E_LA_UNSUPPORTED", "Live Activities require iOS 16.2 or newer.")
+    guard #available(iOS 18.0, *) else {
+      reject("E_LA_UNSUPPORTED", "Live Activities require iOS 18 or newer.")
       return
     }
     guard
@@ -110,8 +116,8 @@ class LiveActivitiesImpl: NSObject {
     _ resolve: @escaping (Any?) -> Void,
     reject: @escaping (String, String) -> Void
   ) {
-    guard #available(iOS 16.2, *) else {
-      reject("E_LA_UNSUPPORTED", "Live Activities require iOS 16.2 or newer.")
+    guard #available(iOS 18.0, *) else {
+      reject("E_LA_UNSUPPORTED", "Live Activities require iOS 18 or newer.")
       return
     }
     Task {
@@ -130,7 +136,7 @@ class LiveActivitiesImpl: NSObject {
   /// logs on every render, which is what covers pushes to a suspended app.
   ///
   /// The real implementation must send the token — and every rotation — to a backend.
-  @available(iOS 16.2, *)
+  @available(iOS 18.0, *)
   private func observe(_ activity: Activity<TransitActivityAttributes>) {
     NSLog(
       "[LiveActivity] started id=%@ state=%@", activity.id, activity.content.state.debugJson)

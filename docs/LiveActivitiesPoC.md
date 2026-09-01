@@ -4,9 +4,16 @@ This documents the Live Activities PoC: what was built, how to run it, and — m
 importantly for the real implementation — **how Live Activity updates actually
 work** (local and push).
 
-Live Activities show glanceable, live-updating trip info on the **lock screen**
-and in the **Dynamic Island** (e.g. "walk to stop X, take bus 42", "get off at
-next stop", "departs 09:53"). iOS 16.1+ (this PoC targets 16.2+).
+Live Activities show glanceable, live-updating trip info on the **lock screen**,
+in the **Dynamic Island** and in the **Apple Watch Smart Stack** (e.g. "walk to
+stop X, take bus 42", "get off at next stop", "departs 09:53").
+
+**Requires iOS 18.** ActivityKit itself is 16.2+, but the `liveActivity`
+extension deploys to 18.0 because the Smart Stack presentation needs
+`supplementalActivityFamilies` / `activityFamily` (iOS 18). The app stays at
+16.6 and runs normally below 18 — it just has no Live Activity there, and
+`LiveActivitiesImpl` rejects with `E_LA_UNSUPPORTED` rather than starting an
+activity that would render nothing.
 
 ## Scope of the PoC
 
@@ -16,7 +23,8 @@ next stop", "departs 09:53"). iOS 16.1+ (this PoC targets 16.2+).
 - **Push updates verified by hand** — the activity requests a push token, and
   updates have been sent to it from Apple's Push Notifications Console. No backend.
   See [Testing push updates by hand](#testing-push-updates-by-hand).
-- Real-brand SwiftUI design (three trip phases + Dynamic Island).
+- Real-brand SwiftUI design (lock screen, Dynamic Island, watch Smart Stack),
+  with AtB transport-mode icons from the extension's own asset catalog.
 
 Not in scope (see [Real implementation](#real-implementation-what-comes-next)):
 a push backend, push-to-start, real data, other whitelabel flavors, Fastlane/Match
@@ -25,7 +33,7 @@ provisioning for the new target.
 ## How to run it
 
 1. `cd ios && pod install` (regenerates TurboModule codegen for the new module).
-2. Open `ios/atb.xcworkspace`, build the **app** scheme on an **iOS 16.2+
+2. Open `ios/atb.xcworkspace`, build the **app** scheme on an **iOS 18+
    simulator** or device. (Simulators support Live Activities.)
 3. In the app: **Profile → Debug info** (the debug menu). The first section is
    **"Live Activities (PoC)"**.
@@ -41,11 +49,11 @@ provisioning for the new target.
 > without setup. For device/TestFlight, see
 > [Whitelabel & signing](#whitelabel--signing-rollout).
 
-### Dynamic Island — presentations & gotchas
+### Presentations & gotchas
 
-A Live Activity has **four presentations**, all implemented here. The _system_
-(not the app) chooses which to show, based on foreground state, how many
-activities are active, and user interaction:
+A Live Activity has **four iPhone presentations**, all implemented here, plus the
+watch Smart Stack. The _system_ (not the app) chooses which to show, based on
+foreground state, how many activities are active, and user interaction:
 
 | Presentation         | When it shows                                                                  | Code                                                      |
 | -------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------- |
@@ -53,6 +61,13 @@ activities are active, and user interaction:
 | Compact              | small bits hugging the pill — the idle island state with one activity          | `compactLeading` + `compactTrailing`                      |
 | Minimal              | tiny circle — when several activities are active, each collapses to this       | `minimal`                                                 |
 | Expanded             | the big full-width view — on long-press, and auto-pops briefly on start/update | `DynamicIslandExpandedRegion(.leading/.trailing/.bottom)` |
+| Smart Stack (watch)  | on a paired Apple Watch (watchOS 11+)                                          | `TransitSmartStackView`                                   |
+
+The Smart Stack variant is rendered on the watch **from this same iOS
+extension** — there is no watchOS target. `TransitActivityContent` picks between
+it and the lock screen by reading `@Environment(\.activityFamily)`, and
+`TransitLiveActivity` has to opt in with `.supplementalActivityFamilies([.small])`
+— without that the watch shows a system-generated fallback instead.
 
 Gotchas when testing (these are system behavior, not bugs):
 
@@ -75,8 +90,8 @@ JS (debug menu)
        └─ RCTLiveActivities (.h/.mm, ObjC++ TurboModule bridge)     ┐
             └─ LiveActivitiesImpl.swift (ActivityKit start/update/end) │ app target
                  └─ Activity<TransitActivityAttributes>               ┘
-                        ⇅  (shared attributes type, dual target membership)
-liveActivity widget extension (SwiftUI)  ── renders lock screen + Dynamic Island
+                        ⇅  (shared model types, dual target membership)
+liveActivity widget extension (SwiftUI)  ── lock screen + Dynamic Island + Smart Stack
 ```
 
 ### Files
@@ -90,19 +105,33 @@ automatically (no `.pbxproj` entry needed):
 - `RCTLiveActivities.h` / `.mm` — TurboModule bridge (mirrors `RCTApplePayHandler`).
 - `LiveActivitiesImplObjC.h` — ObjC-visible declaration of the Swift impl.
 
-**Shared model** — `ios/Shared/TransitActivityAttributes.swift`:
+**Shared model** — `ios/Shared/`, **members of BOTH the `app` and `liveActivity`
+targets** (the same sources compiled into both). This is mandatory: if they were
+only in the extension, `Activity.request` would succeed but nothing would render.
 
-- The ActivityKit model, plus `debugJson`. **Member of BOTH the `app` and
-  `liveActivity` targets** (the same source compiled into both). This is mandatory:
-  if it were only in the extension, `Activity.request` would succeed but nothing
-  would render.
+- `TransitActivityAttributes.swift` — the ActivityKit model, plus `debugJson`.
+- `TransportMode.swift` — the mode enum the content-state references. Model only;
+  its presentation lives in the extension (below), which is why the app target
+  can compile it without pulling in `TransitTheme`.
 
-**Widget extension (`liveActivity` target)** — `ios/liveActivity/`:
+**Widget extension (`liveActivity` target)** — `ios/liveActivity/`, an Xcode
+_file-system-synchronized group_ like `ios/TurboModules/`, so new files (and the
+asset catalog) are picked up without a `.pbxproj` entry:
 
-- `TransitLiveActivity.swift` — `Widget` with `ActivityConfiguration` + `DynamicIsland`.
-- `TransitLockScreenView.swift` — the two-row light card + shared subviews
-  (`LineBadge`, `IllustrationIcon`, `TimeText`).
-- `TransitTheme.swift` — AtB colors/fonts/icons (hardcoded for the PoC).
+- `TransitLiveActivity.swift` — `Widget` with `ActivityConfiguration` +
+  `DynamicIsland`, the `.supplementalActivityFamilies` opt-in, and
+  `TransitActivityContent`, which picks the view for the requested activity family.
+- `TransitLockScreenView.swift` — the lock-screen card, plus the shared `TimeText`
+  and the `TransitState` typealias.
+- `TransitDynamicIsland.swift` — the compact / minimal / expanded island regions.
+- `TransitSmartStackView.swift` — the watch Smart Stack row.
+- `TransportModeViews.swift` — per-mode accent color + icon asset, `ModeIcon`,
+  `LineBadge`.
+- `TransitTheme.swift` — AtB colors/fonts (hardcoded for the PoC) and
+  `RealtimeIndicator`.
+- `TransitLiveActivityPreviews.swift` — Xcode preview states (`#Preview(as: .content)`).
+- `Assets.xcassets` — AtB transport-mode icons (`TransportModes/*Fill`, template
+  rendering) and the light/dark `Realtime` dot.
 - `LiveActivityBundle.swift` — `@main WidgetBundle`.
 - `Info.plist`, `liveActivity.entitlements`, `liveActivityDebug.entitlements`.
 
@@ -114,7 +143,7 @@ automatically (no `.pbxproj` entry needed):
 - `package.json` → `codegenConfig.ios.modulesProvider` maps
   `"LiveActivities": "RCTLiveActivities"`.
 - `ios/atb/Info.plist` → `NSSupportsLiveActivities = true` (required on the **app**).
-- `scripts/get-activity-payload.sh` — prints an APNs payload with a fresh
+- `scripts/live-activity-payload.sh` — prints an APNs payload with a fresh
   `timestamp`/`eventTime` for the Push Console.
 
 The `liveActivity` Xcode target was added by
@@ -123,45 +152,34 @@ The `liveActivity` Xcode target was added by
 
 ### Data model
 
-The lock screen is a **two-row light card** (matching the AtB reference design):
+The lock screen is a **two-row card**: the instruction, then the line and the time.
 
 ```
 ┌────────────────────────────────────────────┐
-│ [illustration]  6 stopp igjen               │  row 1: title
-│                 Du skal av på Nidarosdomen   │          subtitle
-│ ──────────────────────────────────────────  │
-│ ( 🚌 3 )        3 Lohove                     │  row 2: "lineNumber lineName"
-│                 Ankommer Nidarosdomen 08:30  │          footnote + time
+│ 6 stopp igjen                               │  title
+│ ( 🚌 3 )  Lohove              ⟨realtime⟩ 08:30  │  badge + lineName + eventTime
 └────────────────────────────────────────────┘
 ```
 
-`TransitActivityAttributes` (static, fixed per activity):
-
-| field        | meaning                                |
-| ------------ | -------------------------------------- |
-| `toName`     | final destination, e.g. "Nidarosdomen" |
-| `brandLabel` | operator label, e.g. "AtB"             |
-| `tripId`     | stable trip id                         |
+`TransitActivityAttributes` (static, fixed per activity) is **empty** — there is
+no per-trip data that doesn't change during the trip yet. Anything static that
+shows up later (trip id, deep-link target) belongs here rather than in
+`ContentState`.
 
 `ContentState` (dynamic, updated as the trip progresses):
 
 | field                    | meaning                                                              |
 | ------------------------ | -------------------------------------------------------------------- |
 | `mode`                   | `bus` \| `tram` \| `rail` \| `water` \| `walk` — badge icon + accent |
-| `lineNumber`, `lineName` | badge number + row-2 title, e.g. "3" / "Lohove"                      |
-| `title`                  | row-1 bold line, e.g. "6 stopp igjen"                                |
-| `subtitle`               | row-1 secondary, e.g. "Du skal av på Nidarosdomen"                   |
-| `footnote`               | row-2 secondary prefix, e.g. "Ankommer Nidarosdomen" (time appended) |
-| `eventTime`              | arrival/departure time for the clock/countdown, **unix seconds**     |
-| `eventIsCountdown`       | render `eventTime` as a live countdown vs absolute clock             |
-| `pushMessage` (optional) | PoC only: free text shown on the lock screen, to verify push         |
+| `lineNumber`, `lineName` | badge number + headsign, e.g. "3" / "Lohove"                         |
+| `title`                  | the instruction line, e.g. "6 stopp igjen"                           |
+| `eventTime`              | arrival/departure time shown on the clock, **unix seconds**          |
 
-Text (`title`/`subtitle`/`footnote`) is passed **pre-formatted/localized from JS**,
-so the widget stays dumb. The row-1 illustration is a placeholder tile
-(`IllustrationIcon`) — drop a real artwork image into the extension and swap it.
+Every field is rendered by at least one of the three presentations. `title` is
+passed **pre-formatted/localized from JS**, so the widget stays dumb.
 
-**Store an absolute `Date`, not a minute count.** The widget self-ticks with
-`Text(timerInterval:)` / `Text(date, style: .timer)`; widgets can't run timers, so
+**Store an absolute time, not a minute count.** `eventTime` is unix seconds, and
+the widget self-ticks with `Text(date, style:)`; widgets can't run timers, so
 never push per-minute integer updates.
 
 ---
@@ -270,10 +288,7 @@ apns-expiration: 0
       "lineNumber": "3",
       "lineName": "Lohove",
       "title": "2 stopp igjen",
-      "subtitle": "Du skal av på Nidarosdomen",
-      "footnote": "Ankommer Nidarosdomen",
       "eventTime": 1788169260, // unix seconds; see Data model
-      "eventIsCountdown": false,
     },
     "stale-date": 1751443560, // grey out if no fresh update by then
     "relevance-score": 100, // Dynamic Island ordering when several exist
@@ -283,9 +298,9 @@ apns-expiration: 0
 }
 ```
 
-- Every non-optional `ContentState` field must be present, with `eventTime` as unix
-  seconds (see [Data model](#data-model)); one missing or misencoded field drops the
-  whole payload silently. Limit ~4 KB.
+- Every `ContentState` field must be present, with `eventTime` as unix seconds
+  (see [Data model](#data-model)); one missing or misencoded field drops the whole
+  payload silently. Limit ~4 KB.
 - `timestamp` must be current and increasing; older values are dropped as stale.
 
 **Responses to handle**
@@ -359,7 +374,7 @@ target's signing must be sorted first, see
    yields "discarded as application was not registered".
 3. Generate a payload with a fresh `timestamp` and `eventTime`:
    ```
-   scripts/get-activity-payload.sh <push-token> | pbcopy
+   scripts/live-activity-payload.sh | pbcopy          # or: … "2 stopp igjen" | pbcopy
    ```
 4. In the console: paste the token as recipient, set **Push Type =
    `liveactivity`**, environment **Development** for Debug builds, paste the
@@ -422,12 +437,12 @@ container (as `departureWidget` does) and read it in the extension.
    pushes on real-time events (SIRI/real-time feed). Add push-to-start tokens for
    remote start. This is where the bulk of the real work is — the app side is
    mostly done.
-3. **Localization.** `headline`/`secondaryText` are currently passed pre-formatted
-   from JS. Keep localizing on the JS side (reuse `@atb/translations`) so the
-   extension stays dumb, or move to string catalogs in the extension.
-4. **Theming from tokens.** Colors are hardcoded in `TransitTheme.swift`. Generate
-   them from `@atb-as/theme` (or an App Group / build-time export) so brand changes
-   don't drift.
+3. **Localization.** `title` is currently passed pre-formatted from JS. Keep
+   localizing on the JS side (reuse `@atb/translations`) so the extension stays
+   dumb, or move to string catalogs in the extension.
+4. **Theming from tokens.** Colors are hardcoded in `TransitTheme.swift` and
+   `TransportModeViews.swift`. Generate them from `@atb-as/theme` (or an App Group
+   / build-time export) so brand changes don't drift.
 
 ### Device / CI signing (required before any device / TestFlight build)
 
@@ -470,8 +485,9 @@ flavor) and per-brand colors in `TransitTheme.swift` (or generated tokens).
 
 - No backend and no real data; pushes are sent by hand from the Push Console, and
   the push token is only logged, never uploaded.
-- `pushMessage` and the `[LiveActivity]` logging are debug scaffolding — drop them
-  when real data lands.
+- The `[LiveActivity]` logging is debug scaffolding — drop it when real data lands.
+- **iOS 18+ only** (see the top of this doc); below that the app runs without any
+  Live Activity.
 - Push requires a device (no simulator tokens); AtB flavor only, device signing not
   set up.
 - Colors/fonts hardcoded; strings pre-formatted in JS.

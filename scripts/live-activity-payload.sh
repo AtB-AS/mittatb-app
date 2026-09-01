@@ -2,13 +2,15 @@
 
 # Prints a Live Activity APNs payload with a fresh timestamp and eventTime, for
 # pasting into Apple's Push Notifications Console.
+#
+# Usage: scripts/live-activity-payload.sh ["<title>"] | pbcopy
 
 set -euo pipefail
 
 EVENT_IN_SECONDS=600 # how far ahead eventTime should be
 
-message=${2:-Hello from push}
-message=${message//\"/\\\"}
+title=${1:-6 stopp igjen}
+title=${title//\"/\\\"}
 
 now=$(date +%s)
 event_time=$((now + EVENT_IN_SECONDS))
@@ -22,12 +24,8 @@ jq <<JSON
       "mode": "bus",
       "lineNumber": "3",
       "lineName": "Lohove",
-      "title": "6 stopp igjen",
-      "subtitle": "Du skal av på Nidarosdomen",
-      "footnote": "Ankommer Nidarosdomen",
-      "eventTime": $event_time,
-      "eventIsCountdown": false,
-      "pushMessage": "$message"
+      "title": "$title",
+      "eventTime": $event_time
     }
   }
 }
