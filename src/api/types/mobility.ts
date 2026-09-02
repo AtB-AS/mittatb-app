@@ -224,6 +224,7 @@ const VehicleTypeSchema = z.object({
   formFactor: z.enum(FormFactor),
   propulsionType: z.enum(PropulsionType),
   name: LocalizedStringSchema,
+  vehicleImage: z.string().nullable().optional(),
 });
 
 export type VehicleType = z.infer<typeof VehicleTypeSchema>;

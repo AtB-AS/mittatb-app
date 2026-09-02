@@ -53,6 +53,7 @@ import {
 } from '../../queries/use-vehicle-app-switch-mutation';
 import {showAppMissingAlert} from '../../show-app-missing-alert';
 import {useMapContext} from '@atb/modules/map';
+import {VehicleImage} from '../VehicleImage';
 
 type Props = {
   selectPaymentMethod: () => void;
@@ -106,6 +107,7 @@ export const VehicleSheet = ({
   const isElectric =
     propulsionType === PropulsionType.Electric ||
     propulsionType === PropulsionType.ElectricAssist;
+  const isCar = formFactor === FormFactor.Car;
 
   const operator = useOperators().byId(operatorId);
   const operatorLogo = operator?.brandAssets?.brandImageUrl;
@@ -197,7 +199,8 @@ export const VehicleSheet = ({
     appStoreUri,
   ]);
 
-  const showVehicleCard = !isBicycle || isElectric;
+  const showVehicleCard = !isCar && isElectric;
+
   const showParkingViolation =
     !isBicycle && isParkingViolationsReportingEnabled;
 
@@ -247,6 +250,13 @@ export const VehicleSheet = ({
       {!isLoading && !shmoReqIsLoading && !isError && vehicle && (
         <View style={styles.container}>
           <View style={styles.vehicleContent}>
+            {!!vehicle.vehicleType.vehicleImage && (
+              <VehicleImage
+                uri={vehicle.vehicleType.vehicleImage}
+                formFactor={formFactor}
+                size="large"
+              />
+            )}
             {showVehicleCard && (
               <VehicleCard
                 currentFuelPercent={vehicle.currentFuelPercent}

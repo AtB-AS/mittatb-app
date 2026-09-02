@@ -1,8 +1,9 @@
 import {StationVehicleTypeAvailability} from '@atb/api/types/mobility';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {View} from 'react-native';
-import {CarImage} from './CarImage';
+import {VehicleImage} from './VehicleImage';
 import {ThemeText} from '@atb/components/text';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type Props = {
   stationCapacity: number;
@@ -27,14 +28,20 @@ export const CarPreviews = ({
         i === stationCapacity - 1 ? style.carImageLast : {},
       ]}
     >
-      <CarImage uri={vehicle.vehicleType.vehicleImage} />
+      <VehicleImage
+        uri={vehicle.vehicleType.vehicleImage}
+        formFactor={FormFactor.Car}
+      />
       {previewArray.length === 1 && vehicle.count == 2 && (
         /**
          * show duplicate image if only 1 vehicle type is available
          * and there are more than 1 of that specific vehicle type.
          */
         <View style={style.duplicateImage}>
-          <CarImage uri={vehicle.vehicleType.vehicleImage} />
+          <VehicleImage
+            uri={vehicle.vehicleType.vehicleImage}
+            formFactor={FormFactor.Car}
+          />
         </View>
       )}
     </View>
