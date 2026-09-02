@@ -47,7 +47,7 @@ import {
   BottomSheetHeaderType,
   BottomSheetModal,
 } from '@atb/components/bottom-sheet';
-import {BottomSheetModalMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
+import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {Settings} from '@atb/assets/svg/mono-icons/profile';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 

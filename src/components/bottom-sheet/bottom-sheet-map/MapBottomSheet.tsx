@@ -151,7 +151,7 @@ export const MapBottomSheet = ({
           subText={subText}
           logoUrl={logoUrl}
           logoIcon={logoIcon}
-          bottomSheetRef={bottomSheetMapRef}
+          onClose={() => bottomSheetMapRef.current?.close()}
           headerNode={headerNode}
           bottomSheetHeaderType={bottomSheetHeaderType}
         />
