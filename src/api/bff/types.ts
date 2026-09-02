@@ -64,6 +64,7 @@ export type DepartureTime = {
   serviceDate: string;
   notices?: NoticeFragment[];
   cancellation?: boolean;
+  requestStop: boolean;
   bookingArrangements?: BookingArrangementFragment;
   stopPositionInPattern: number;
 };

@@ -464,6 +464,11 @@ const TripDetailsTexts = {
       'Stops on request only. Let the driver or conductor know in advance.',
       'Stoppar berre ved behov. Sei ifrå til føraren eller konduktøren på førehand.',
     ),
+    requestStop: _(
+      'Stopper kun ved behov',
+      'Stops on request only',
+      'Stoppar berre ved behov',
+    ),
     interchangeMainText: _(
       'Korrespondanse',
       'Correspondence',

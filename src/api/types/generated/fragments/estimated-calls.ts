@@ -14,6 +14,7 @@ export type EstimatedCallWithQuayFragment = {
   expectedArrivalTime: any;
   forAlighting: boolean;
   forBoarding: boolean;
+  requestStop: boolean;
   realtime: boolean;
   stopPositionInPattern: number;
   destinationDisplay?: {frontText?: string; via?: Array<string>};
