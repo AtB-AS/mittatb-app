@@ -30,9 +30,10 @@ struct TransitSmartStackView: View {
             TimeText(state: state, size: 14)
           }
         }
-        VStack(alignment: .leading, spacing: 1) {
-        }
       }
-    }.padding(16)
+    }
+    .padding(16)
+    .background(.black)
+    .preferredColorScheme(.dark)
   }
 }
