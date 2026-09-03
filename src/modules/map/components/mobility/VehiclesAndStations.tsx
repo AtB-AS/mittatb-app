@@ -27,8 +27,14 @@ const vehiclesAndStationsVectorSourceId =
 
 export const VehiclesWithClusters = ({
   selectedFeatureId,
+  showVehicles,
+  showCarVehicles,
   hideSymbols = false,
-}: SelectedFeatureIdProp & {hideSymbols?: boolean}) => {
+}: SelectedFeatureIdProp & {
+  showVehicles: boolean;
+  showCarVehicles: boolean;
+  hideSymbols?: boolean;
+}) => {
   const minZoomLevel = 14;
   const {isSelected, iconStyle, textStyle} = useMapSymbolStyles({
     selectedFeaturePropertyId: selectedFeatureId,
@@ -36,13 +42,29 @@ export const VehiclesWithClusters = ({
     reachFullScaleAtZoomLevel: minZoomLevel + scaleTransitionZoomRange + 0.3,
   });
 
-  const filter: {filter: FilterExpression} | undefined = useMemo(
-    () =>
-      hideSymbols
-        ? undefined
-        : {filter: ['all', ['!', isSelected], hideItemsInTheDistanceFilter]},
-    [isSelected, hideSymbols],
-  );
+  const filter: {filter: FilterExpression} | undefined = useMemo(() => {
+    // The tile layer carries cars, but they are toggled by their own map filter,
+    // separate from the one covering scooters and free floating bikes.
+    const isCar: Expression = [
+      '==',
+      ['get', 'vehicle_type_form_factor'],
+      'CAR',
+    ];
+    return hideSymbols
+      ? undefined
+      : {
+          filter: [
+            'all',
+            ['!', isSelected],
+            [
+              'any',
+              ['all', isCar, showCarVehicles],
+              ['all', ['!', isCar], showVehicles],
+            ],
+            hideItemsInTheDistanceFilter,
+          ],
+        };
+  }, [isSelected, hideSymbols, showVehicles, showCarVehicles]);
 
   const style = useMemo(
     () => ({
@@ -173,18 +195,21 @@ export const VehiclesAndStations = ({
   selectedFeatureId,
   onPress,
   showVehicles,
+  showCarVehicles,
   showCityBikeStations,
   showSharedCarStations,
   showBikeStationParkingInfo = false,
 }: SelectedFeatureIdProp & {
   onPress?: (e: OnPressEvent) => void;
   showVehicles: boolean;
+  showCarVehicles: boolean;
   showCityBikeStations: boolean;
   showSharedCarStations: boolean;
   showBikeStationParkingInfo?: boolean;
 }) => {
   const showStations = showCityBikeStations || showSharedCarStations;
-  if (!showVehicles && !showStations) return null;
+  const showAnyVehicles = showVehicles || showCarVehicles;
+  if (!showAnyVehicles && !showStations) return null;
 
   return (
     <MapboxGL.VectorSource
@@ -194,8 +219,12 @@ export const VehiclesAndStations = ({
       onPress={onPress}
     >
       <>
-        {!!showVehicles && (
-          <VehiclesWithClusters selectedFeatureId={selectedFeatureId} />
+        {!!showAnyVehicles && (
+          <VehiclesWithClusters
+            selectedFeatureId={selectedFeatureId}
+            showVehicles={showVehicles}
+            showCarVehicles={showCarVehicles}
+          />
         )}
         {!!showStations && (
           <StationsWithClusters
@@ -226,7 +255,7 @@ export const useVehiclesAndStationsVectorSource: () => {
   // Could consider adding the sources only if shown.
   // The reason not to, is to simplify potential cache tile hotloading on the server.
   const tileLayerNames: TileLayerName[] = [
-    'vehicles_clustered_v2',
+    'vehicles_clustered_v3',
     'stations_clustered_v2',
   ];
   const tileUrlTemplate = useTileUrlTemplate(tileLayerNames);

@@ -25,6 +25,7 @@ import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import distance from '@turf/distance';
 import {
   isBicycle,
+  isCar,
   isCarStation,
   isScooter,
   isStation,
@@ -319,6 +320,7 @@ export function getFeatureWeight(
       isVehicleCluster(feature) ||
       isScooter(feature) ||
       isBicycle(feature) ||
+      isCar(feature) ||
       isStation(feature) ||
       isVirtualStation(feature) ||
       isCarStation(feature) ||

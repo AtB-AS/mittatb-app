@@ -87,6 +87,15 @@ export const isBicycle = (
   isVehicle(feature) &&
   feature?.properties?.vehicle_type_form_factor === FormFactor.Bicycle;
 
+// A free floating car, as opposed to isCarStation, which is a car sharing station.
+export const isCar = (
+  feature: Feature<Point> | undefined,
+): feature is VehicleFeature & {
+  properties: {vehicle_type_form_factor: FormFactor.Car};
+} =>
+  isVehicle(feature) &&
+  feature?.properties?.vehicle_type_form_factor === FormFactor.Car;
+
 export const isClusteredStation = (
   feature: Feature<Point> | undefined,
 ): feature is StationsClusteredFeature =>
