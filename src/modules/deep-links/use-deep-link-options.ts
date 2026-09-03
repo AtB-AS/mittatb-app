@@ -1,5 +1,5 @@
 import {APP_SCHEME} from '@env';
-import {RootStackParamList} from './navigation-types';
+import {RootStackParamList} from '@atb/stacks-hierarchy';
 import type {NavigationState, PartialState} from '@react-navigation/routers';
 import {
   // eslint-disable-next-line rulesdir/navigation-only-in-screens
@@ -24,7 +24,7 @@ type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
 };
 
-export function useDeepLinking() {
+export function useDeepLinkOptions() {
   const {isBonusEnabled} = useFeatureTogglesContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {customerProfile} = useTicketingContext();

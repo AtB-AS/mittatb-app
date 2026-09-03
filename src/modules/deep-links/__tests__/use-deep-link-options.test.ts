@@ -1,6 +1,6 @@
 import {renderHook} from '@testing-library/react-native';
 import type {PreassignedFareProduct} from '@atb/modules/ticketing';
-import {useDeepLinking} from '../use-deep-link-options';
+import {useDeepLinkOptions} from '../use-deep-link-options';
 
 let mockIsBonusEnabled = false;
 let mockPreassignedFareProducts: PreassignedFareProduct[] = [];
@@ -43,7 +43,7 @@ const TEST_PRODUCT = {
 const toPath = (url: string) => url.replace(/^[a-z-]+:\/+/, '');
 
 const getStateFrom = (url: string) => {
-  const {result} = renderHook(() => useDeepLinking());
+  const {result} = renderHook(() => useDeepLinkOptions());
   const {getStateFromPath, config} = result.current;
   return getStateFromPath!(toPath(url), config);
 };
@@ -57,7 +57,7 @@ beforeEach(() => {
 
 describe('prefixes', () => {
   it('only handles the app scheme', () => {
-    const {result} = renderHook(() => useDeepLinking());
+    const {result} = renderHook(() => useDeepLinkOptions());
     expect(result.current.prefixes).toHaveLength(1);
     expect(result.current.prefixes![0]).toMatch(/^[a-z-]+:\/\/$/);
   });
