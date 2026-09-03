@@ -1,7 +1,5 @@
 appId: ${APP_ID}
-name: 'Travel Search'
-tags:
-  - smoke
+name: 'Travel search'
 onFlowStart:
   - runFlow:
       file: ../elements/loadElements.yaml
@@ -16,43 +14,11 @@ onFlowComplete:
 - runFlow:
     file: ../common/onboarding/anonymous.yaml
     label: 'Onboarding'
-- extendedWaitUntil:
-    visible:
-      id: ${output.nav.menu.assistant}
-    timeout: 10000
-    label: 'Wait for Assistant tab'
-- tapOn:
-    id: ${output.nav.menu.assistant}
-    label: 'Navigate to Assistant tab'
 
-# Search
 - runFlow:
-    file: ../common/locationSearch.yaml
-    env:
-      SEARCH_TYPE: 'from'
-      SEARCH_TEXT: 'Prinsens gate'
-    label: 'Search from'
-- runFlow:
-    file: ../common/locationSearch.yaml
-    env:
-      SEARCH_TYPE: 'to'
-      SEARCH_TEXT: 'Melhus skysstasjon'
-    label: 'Search to'
+    file: travelSearch/simpleTravelSearch.yaml
+    label: 'Simple travel search'
 
-# Search results
-- extendedWaitUntil:
-    visible:
-      id: ${output.tripSearch.result(0)}
-    timeout: 20000
-    label: 'Wait for trip results'
-- tapOn:
-    id: ${output.tripSearch.firstResult}
-    label: 'Open first trip result'
-- extendedWaitUntil:
-    visible:
-      id: ${output.tripDetails.content}
-    timeout: 10000
-    label: 'Wait for trip details'
-- tapOn:
-    id: ${output.nav.back}
-    label: 'Go back'
+- runFlow:
+    file: travelSearch/changeTimeForTravelSearch.yaml
+    label: 'Travel search with time change'
