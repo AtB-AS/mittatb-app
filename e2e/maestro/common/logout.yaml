@@ -1,0 +1,23 @@
+appId: ${APP_ID}
+name: 'Log out'
+---
+- tapOn:
+    id: ${output.nav.menu.profile}
+    label: 'Navigate to profile tab'
+- scrollUntilVisible:
+    element:
+      id: ${output.profile.logOut}
+    direction: DOWN
+    timeout: 10000
+    label: 'Scroll to debug button'
+- tapOn:
+    id: ${output.profile.logOut}
+    label: 'Open debug menu'
+- extendedWaitUntil:
+    visible:
+      text: 'Log out'
+    timeout: 5000
+    label: 'Wait for OS location dialog'
+- tapOn:
+    text: 'Log out'
+    label: 'Confirm log out'

@@ -1,0 +1,67 @@
+appId: ${APP_ID}
+name: 'Ticket purchase'
+---
+- tapOn:
+    id: ${output.nav.menu.tickets}
+    label: 'Navigate to Tickets tab'
+
+# Choose single ticket
+- runFlow:
+    when:
+      notVisible:
+        id: ${output.tickets.fareProduct('single')}
+    commands:
+      - tapOn:
+          id: ${output.nav.tickets.purchase}
+          label: 'Navigate to the purchase tickets tab'
+- assertVisible:
+    id: ${output.tickets.fareProduct('single')}
+    label: 'Verify that single ticket is shown'
+- tapOn:
+    id: ${output.tickets.fareProduct('single')}
+    label: 'Choose single ticket'
+- assertVisible: '.*Single ticket.*'
+- scrollUntilVisible:
+    element:
+      id: ${output.tickets.toPayment}
+    direction: DOWN
+    timeout: 10000
+    label: 'Scroll to payment button'
+- extendedWaitUntil:
+    visible:
+      id: ${output.tickets.offerPrice}
+    timeout: 10000
+    label: 'Wait for offer'
+- tapOn:
+    id: ${output.tickets.toPayment}
+    label: 'Navigate to purchase summary'
+- assertVisible: 'Ticket summary'
+- assertVisible: 'Valid in zone A'
+- assertVisible: '1 Adult'
+
+# Choose payment and purchase
+- tapOn:
+    id: ${output.tickets.summary.choosePayment}
+    label: 'Choose payment option'
+- tapOn:
+    id: ${output.tickets.summary.recurringPayment(0)}
+    label: 'Choose stored payment card'
+- tapOn:
+    id: ${output.tickets.summary.confirmPayment}
+    label: 'Confirm chosen payment'
+- assertVisible:
+    id: ${output.tickets.summary.selectedPayment}
+    label: 'Assert payment'
+- tapOn:
+    id: ${output.tickets.summary.confirmPurchase}
+    label: 'Confirm purchase'
+
+# Wait for ticket
+- extendedWaitUntil:
+    visible:
+      id: ${output.nav.tickets.active}
+    timeout: 20000
+    label: 'Wait for active tickets tab'
+- assertVisible:
+    id: ${output.tickets.ticket(0)}
+    label: 'Assert existing ticket'

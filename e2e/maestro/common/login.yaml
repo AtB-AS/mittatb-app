@@ -1,0 +1,42 @@
+appId: ${APP_ID}
+name: 'Phone login'
+---
+- extendedWaitUntil:
+    visible:
+      id: ${output.auth.phoneLogin}
+    timeout: 10000
+    label: 'Wait for phone login button'
+- tapOn:
+    id: ${output.auth.phoneLogin}
+    label: 'Choose phone login'
+- extendedWaitUntil:
+    visible:
+      id: ${output.auth.phone.phoneInput}
+    timeout: 10000
+    label: 'Wait for phone input'
+- tapOn:
+    id: ${output.auth.phone.phoneInput}
+    label: 'Select phone input'
+- inputText:
+    text: ${PHONE_NUMBER}
+    label: 'Enter phone number'
+
+- tapOn:
+    id: ${output.auth.phone.sendCode}
+    label: 'Send OTP code'
+
+- extendedWaitUntil:
+    visible:
+      id: ${output.auth.phone.codeInput}
+    timeout: 10000
+    label: 'Wait for OTP input'
+- tapOn:
+    id: ${output.auth.phone.codeInput}
+    label: 'Select OTP input'
+- inputText:
+    text: ${OTP}
+    label: 'Enter OTP'
+
+- tapOn:
+    id: ${output.auth.phone.submit}
+    label: 'Confirm login'

@@ -1,0 +1,24 @@
+appId: ${APP_ID}
+name: 'Departures'
+onFlowStart:
+  - runFlow:
+      file: ../elements/loadElements.yaml
+      label: 'Load elements'
+  - launchApp:
+      clearState: true
+      permissions:
+        location: deny
+onFlowComplete:
+  - stopApp
+---
+- runFlow:
+    file: ../common/onboarding/anonymous.yaml
+    label: 'Onboarding'
+
+- runFlow:
+    file: departures/searchForStopPlace.yaml
+    label: 'Show a stop place with departures'
+
+- runFlow:
+    file: departures/departureDetails.yaml
+    label: 'Departure details'

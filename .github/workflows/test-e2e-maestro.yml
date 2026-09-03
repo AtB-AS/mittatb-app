@@ -157,7 +157,7 @@ jobs:
           emulator-build: 12414864
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          script: adb install ${{ github.workspace }}/e2e/apk/app-staging.apk && maestro test -e APP_ID=no.mittatb.staging --test-output-dir results --format junit --output results/results.xml tests/*
+          script: adb install ${{ github.workspace }}/e2e/apk/app-staging.apk && maestro test -e APP_ID=no.mittatb.staging -e PHONE_NUMBER=${{ secrets.ATB_E2E_PHONE_NUMBER }} -e OTP=${{ secrets.ATB_E2E_OTP }} --test-output-dir results --format junit --output results/results.xml tests/run.yaml
           working-directory: e2e/maestro
 
       # Slack
@@ -215,4 +215,12 @@ jobs:
         with:
           name: test-screenshots
           path: ./e2e/maestro/results/**/*.png
+          retention-days: 3
+
+      - name: Upload diff screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-diff-screenshots
+          path: ./e2e/maestro/screenshots/**/*_diff.png
           retention-days: 3

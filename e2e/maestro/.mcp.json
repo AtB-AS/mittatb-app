@@ -3,9 +3,7 @@
     "maestro": {
       "type": "stdio",
       "command": "maestro",
-      "args": [
-        "mcp"
-      ],
+      "args": ["mcp"],
       "env": {}
     }
   }

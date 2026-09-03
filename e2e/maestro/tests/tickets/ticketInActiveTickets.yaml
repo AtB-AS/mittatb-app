@@ -1,0 +1,34 @@
+appId: ${APP_ID}
+name: 'Assert purchased ticket'
+---
+# Show active tickets
+- tapOn:
+    id: ${output.nav.menu.tickets}
+    label: 'Navigate to tickets tab'
+- tapOn:
+    id: ${output.nav.tickets.active}
+    label: 'Navigate to active tickets tab'
+- assertVisible: 'Tickets'
+
+# Assert active ticket
+- assertVisible:
+    id: ${output.tickets.ticket(0)}
+    label: 'Assert existing ticket'
+- assertVisible:
+    id: ${output.ticket.valid}
+    label: 'Assert valid ticket'
+- assertVisible:
+    id: ${output.ticket.productName}
+    index: 0
+    text: '.*Single ticket.*'
+    label: 'Assert product name'
+- tapOn:
+    id: ${output.ticket.details(0)}
+    label: 'Open ticket details'
+- assertVisible: 'Ticket details'
+- assertVisible:
+    id: ${output.ticket.mobileToken}
+    label: 'Assert the token'
+- tapOn:
+    id: ${output.nav.back}
+    label: 'Back'

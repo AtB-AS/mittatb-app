@@ -1,0 +1,40 @@
+appId: ${APP_ID}
+name: 'Assert ticket on frontpage'
+---
+# Show frontpage and clean up
+- tapOn:
+    id: ${output.nav.menu.assistant}
+    label: 'Navigate to frontpage'
+- assertVisible: 'Travel'
+- runFlow:
+    file: ../../common/removeGlobalMessages.yaml
+    label: 'Remove all global messages'
+- runFlow:
+    file: ../../common/removeAnnouncements.yaml
+    label: 'Remove all announcements'
+
+# Assert active ticket
+- assertVisible:
+    id: ${output.frontpage.ticket.fc(0)}
+    label: 'Assert existing ticket'
+- assertVisible:
+    id: ${output.frontpage.ticket.productName}
+    text: 'Single ticket'
+    label: 'Assert product name'
+    childOf:
+      id: ${output.frontpage.ticket.fc(0)}
+- assertVisible:
+    id: ${output.frontpage.ticket.isInspectable}
+    label: 'Assert is inspectable'
+    childOf:
+      id: ${output.frontpage.ticket.fc(0)}
+- tapOn:
+    id: ${output.frontpage.ticket.fc(0)}
+    label: 'Open ticket details'
+- assertVisible: 'Ticket details'
+- assertVisible:
+    id: ${output.ticket.mobileToken}
+    label: 'Assert the token'
+- tapOn:
+    id: ${output.nav.back}
+    label: 'Back'

@@ -1,0 +1,92 @@
+appId: ${APP_ID}
+name: 'Departure details'
+---
+- evalScript: ${output.myStopPlace = 'Prinsens gate'}
+
+- tapOn:
+    id: ${output.nav.menu.departures}
+    label: 'Navigate to Departures tab'
+
+# Search for a stop place
+- runFlow:
+    file: ../../common/locationSearch.yaml
+    env:
+      SEARCH_TYPE: 'from'
+      SEARCH_TEXT: ${output.myStopPlace}
+      ONLY_STOP_PLACE: 'true'
+    label: 'Search for stop place'
+- extendedWaitUntil:
+    visible:
+      id: ${output.departures.departure()}
+      index: 0
+    timeout: 10000
+    label: 'Verify first departure is shown'
+- assertVisible:
+    text: ${output.myStopPlace}
+    label: 'Verify stop place name is shown'
+
+# Copy text from an element
+- copyTextFrom:
+    id: ${output.departure.publicCode}
+    childOf:
+      id: ${output.departures.departure()}
+      index: 0
+    label: 'Get public code for asserting'
+- evalScript: ${output.myPublicCode = maestro.copiedText}
+- copyTextFrom:
+    id: ${output.departure.lineName}
+    childOf:
+      id: ${output.departures.departure()}
+      index: 0
+    label: 'Get line name for asserting'
+- evalScript: ${output.myLineName = maestro.copiedText}
+
+# Open departure details
+- tapOn:
+    id: ${output.departures.departure()}
+    index: 0
+    label: 'Open departure details'
+- extendedWaitUntil:
+    visible:
+      id: ${output.departure.view}
+      index: 0
+    timeout: 10000
+    label: 'Verify departure details is shown'
+- assertVisible:
+    id: ${output.departure.publicCode}
+    text: ${output.myPublicCode}
+    label: 'Verify public code'
+- assertVisible:
+    id: ${output.departure.lineName}
+    text: ${output.myLineName}
+    label: 'Verify line name'
+
+# Open a new stop place from the details
+- copyTextFrom:
+    id: ${output.departure.quayName}
+    childOf:
+      id: ${output.departure.leg}
+      index: 1
+- evalScript: ${output.myNextStopPlace = maestro.copiedText}
+- tapOn:
+    id: ${output.departure.quayName}
+    childOf:
+      id: ${output.departure.leg}
+      index: 1
+    label: 'Choose next stop place'
+- assertVisible:
+    text: ${output.myNextStopPlace}
+    label: 'Assert the next stop place'
+- tapOn:
+    id: ${output.nav.back}
+    label: 'Back'
+- assertVisible:
+    id: ${output.departure.lineName}
+    text: ${output.myLineName}
+    label: 'Verify line name'
+- tapOn:
+    id: ${output.nav.back}
+    label: 'Back'
+- assertVisible:
+    text: ${output.myStopPlace}
+    label: 'Verify stop place'

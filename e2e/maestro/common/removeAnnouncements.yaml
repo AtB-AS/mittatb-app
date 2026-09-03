@@ -1,0 +1,12 @@
+appId: ${APP_ID}
+name: 'Remove all announcements'
+---
+- repeat:
+    times: 10
+    while:
+      visible:
+        id: ${output.frontpage.closeAnnouncement}
+    commands:
+      - tapOn:
+          id: ${output.frontpage.closeAnnouncement}
+          label: 'Remove announcement'
