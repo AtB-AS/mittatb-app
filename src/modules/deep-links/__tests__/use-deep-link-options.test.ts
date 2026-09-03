@@ -33,19 +33,10 @@ const TEST_PRODUCT = {
   distributionChannel: ['app'],
 } as PreassignedFareProduct;
 
-/**
- * React Navigation strips the app scheme prefix before calling
- * `getStateFromPath`, so tests state the full deep link as it is sent from the
- * widget or a QR code, and hand the hook what the navigator would.
- *
- * See `extractPathFromURL` in @react-navigation/native.
- */
-const toPath = (url: string) => url.replace(/^[a-z-]+:\/+/, '');
-
 const getStateFrom = (url: string) => {
   const {result} = renderHook(() => useDeepLinkOptions());
   const {getStateFromPath, config} = result.current;
-  return getStateFromPath!(toPath(url), config);
+  return getStateFromPath!(url, config);
 };
 
 beforeEach(() => {
@@ -65,7 +56,7 @@ describe('prefixes', () => {
 
 describe('linking config', () => {
   it('opens the profile tab', () => {
-    expect(getStateFrom('atb://profile')).toEqual({
+    expect(getStateFrom('profile')).toEqual({
       routes: [
         {
           name: 'Root_TabNavigatorStack',
@@ -76,7 +67,7 @@ describe('linking config', () => {
   });
 
   it('opens valid fare contracts in the ticketing tab', () => {
-    expect(getStateFrom('atb://ticketing')).toEqual({
+    expect(getStateFrom('ticketing')).toEqual({
       routes: [
         {
           name: 'Root_TabNavigatorStack',
@@ -109,13 +100,13 @@ describe('linking config', () => {
 
   it('does not handle unknown paths', () => {
     // The purchase callback is handled by the in-app browser, not navigation
-    expect(getStateFrom('atb://purchase-callback')).toBeUndefined();
+    expect(getStateFrom('purchase-callback')).toBeUndefined();
   });
 });
 
 describe('privacy', () => {
   it('opens the privacy screen on top of the profile screen', () => {
-    expect(getStateFrom('atb://privacy')).toEqual({
+    expect(getStateFrom('privacy')).toEqual({
       routes: [
         {
           name: 'Root_TabNavigatorStack',
@@ -141,7 +132,7 @@ describe('privacy', () => {
 describe('points', () => {
   it('opens the bonus screen when bonus is enabled', () => {
     mockIsBonusEnabled = true;
-    expect(getStateFrom('atb://points')).toEqual({
+    expect(getStateFrom('points')).toEqual({
       routes: [
         {
           name: 'Root_TabNavigatorStack',
@@ -165,14 +156,14 @@ describe('points', () => {
 
   it('is not handled when bonus is disabled', () => {
     mockIsBonusEnabled = false;
-    expect(getStateFrom('atb://points')).toBeUndefined();
+    expect(getStateFrom('points')).toBeUndefined();
   });
 });
 
 describe('purchase-overview', () => {
   it('opens purchase overview for a product sellable in the app', () => {
     mockPreassignedFareProducts = [TEST_PRODUCT];
-    expect(getStateFrom('atb://purchase-overview?type=single')).toEqual({
+    expect(getStateFrom('purchase-overview?type=single')).toEqual({
       routes: [
         {
           name: 'Root_PurchaseOverviewScreen',
@@ -188,7 +179,7 @@ describe('purchase-overview', () => {
       {...TEST_PRODUCT, distributionChannel: ['debug-app']},
     ];
     mockCustomerProfile = {debug: true};
-    expect(getStateFrom('atb://purchase-overview?type=single')).toEqual({
+    expect(getStateFrom('purchase-overview?type=single')).toEqual({
       routes: [
         {
           name: 'Root_PurchaseOverviewScreen',
@@ -202,18 +193,18 @@ describe('purchase-overview', () => {
     mockPreassignedFareProducts = [
       {...TEST_PRODUCT, distributionChannel: ['web']},
     ];
-    expect(getStateFrom('atb://purchase-overview?type=single')).toBeUndefined();
+    expect(getStateFrom('purchase-overview?type=single')).toBeUndefined();
     expect(mockForType).not.toHaveBeenCalled();
   });
 
   it('is not handled for an unknown product type', () => {
     mockPreassignedFareProducts = [TEST_PRODUCT];
-    expect(getStateFrom('atb://purchase-overview?type=period')).toBeUndefined();
+    expect(getStateFrom('purchase-overview?type=fake')).toBeUndefined();
   });
 
   it('is not handled without a type', () => {
     mockPreassignedFareProducts = [TEST_PRODUCT];
-    expect(getStateFrom('atb://purchase-overview')).toBeUndefined();
+    expect(getStateFrom('purchase-overview')).toBeUndefined();
   });
 });
 
@@ -223,7 +214,7 @@ describe('widget', () => {
     'stopId=NSR:StopPlace:41613&stopName=Prinsens%20gate&quayId=NSR:Quay:71184&latitude=63.4326&longitude=10.3951';
 
   it('opens nearby stop places in favourite mode when there are no favourite departures', () => {
-    expect(getStateFrom('atb://widget/addFavoriteDeparture')).toEqual({
+    expect(getStateFrom('widget/addFavoriteDeparture')).toEqual({
       routes: [
         {
           name: 'Root_TabNavigatorStack',
@@ -249,7 +240,7 @@ describe('widget', () => {
   });
 
   it('opens the quay with only favourite departures', () => {
-    expect(getStateFrom(`atb://widget?${stopParams}`)).toEqual({
+    expect(getStateFrom(`widget?${stopParams}`)).toEqual({
       routes: [
         {
           name: 'Root_TabNavigatorStack',
@@ -285,7 +276,7 @@ describe('widget', () => {
 
   it('opens departure details on top of the quay', () => {
     const url =
-      `atb://widgetdetails?${stopParams}` +
+      `widgetdetails?${stopParams}` +
       '&serviceJourneyId=ATB:ServiceJourney:1_1&date=2026-09-03T07:45:00Z' +
       '&serviceDate=2026-09-03&fromStopPosition=13';
 
@@ -313,7 +304,7 @@ describe('widget', () => {
   it('falls back to now when the departure has no date', () => {
     jest.useFakeTimers().setSystemTime(new Date('2026-09-03T07:45:00Z'));
     const state = getStateFrom(
-      `atb://widgetdetails?${stopParams}&serviceJourneyId=ATB:ServiceJourney:1_1&serviceDate=2026-09-03&fromStopPosition=0`,
+      `widgetdetails?${stopParams}&serviceJourneyId=ATB:ServiceJourney:1_1&serviceDate=2026-09-03&fromStopPosition=0`,
     );
     jest.useRealTimers();
 
