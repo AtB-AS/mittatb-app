@@ -11,8 +11,6 @@ import {
 } from '@react-navigation/native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
-  CustomerProfile,
-  PreassignedFareProduct,
   useGetFareProductsQuery,
   useTicketingContext,
 } from '@atb/modules/ticketing';
@@ -21,7 +19,6 @@ import {parse} from 'search-params';
 import {parseParamAsInt} from './utils';
 import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
-import {PurchaseSelectionEmptyBuilder} from '@atb/modules/purchase-selection';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -163,14 +160,27 @@ export function useDeepLinking() {
         } as ResultState;
       }
 
-      const pathForPurchaseSelelection = getPathForPurchaseOverview(
-        path,
-        preassignedFareProducts,
-        customerProfile,
-        purchaseSelectionBuilder,
-      );
-      if (pathForPurchaseSelelection) {
-        return pathForPurchaseSelelection;
+      if (path.includes('purchase-overview')) {
+        const params = new URLSearchParams(path.split('?')[1]);
+        const type = params.get('type');
+        if (type) {
+          const isSellable = preassignedFareProducts.some(
+            (product) =>
+              type === product.type &&
+              isProductSellableInApp(product, customerProfile),
+          );
+          if (isSellable) {
+            const {selection} = purchaseSelectionBuilder.forType(type).build();
+            return {
+              routes: [
+                {
+                  name: 'Root_PurchaseOverviewScreen',
+                  params: {selection},
+                },
+              ],
+            } as ResultState;
+          }
+        }
       }
 
       // If the path is not from the widget, behave as usual
@@ -178,9 +188,30 @@ export function useDeepLinking() {
         return getStateFromPath(path, config);
       }
 
-      const pathForAddFavoriteDeparture = getPathForAddFavoriteDeparture(path);
-      if (pathForAddFavoriteDeparture) {
-        return pathForAddFavoriteDeparture;
+      if (path.includes('addFavoriteDeparture')) {
+        return {
+          routes: [
+            {
+              name: 'Root_TabNavigatorStack',
+              state: {
+                routes: [
+                  {
+                    name: 'TabNav_DashboardStack',
+                    state: {
+                      routes: [
+                        {name: 'Dashboard_RootScreen', index: 0},
+                        {
+                          name: 'Dashboard_NearbyStopPlacesScreen',
+                          params: {mode: 'Favourite'},
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        } as ResultState;
       }
 
       // Get redirected to the preferred departures view
@@ -188,68 +219,4 @@ export function useDeepLinking() {
     },
   };
   return linkingOptions;
-}
-
-/**
- * `atb://purchase-overview?type=period`
- */
-function getPathForPurchaseOverview(
-  path: string,
-  preassignedFareProducts: PreassignedFareProduct[],
-  customerProfile: CustomerProfile | undefined,
-  purchaseSelectionBuilder: PurchaseSelectionEmptyBuilder,
-): ResultState | undefined {
-  if (path.includes('purchase-overview')) {
-    const params = new URLSearchParams(path.split('?')[1]);
-    const type = params.get('type');
-    if (type) {
-      const isSellable = preassignedFareProducts.some(
-        (product) =>
-          type === product.type &&
-          isProductSellableInApp(product, customerProfile),
-      );
-      if (isSellable) {
-        const {selection} = purchaseSelectionBuilder.forType(type).build();
-        return {
-          routes: [
-            {
-              name: 'Root_PurchaseOverviewScreen',
-              params: {selection},
-            },
-          ],
-        } as ResultState;
-      }
-    }
-  }
-}
-
-/**
- * `://widget/addFavoriteDeparture`
- */
-function getPathForAddFavoriteDeparture(path: string): ResultState | undefined {
-  if (path.includes('addFavoriteDeparture')) {
-    return {
-      routes: [
-        {
-          name: 'Root_TabNavigatorStack',
-          state: {
-            routes: [
-              {
-                name: 'TabNav_DashboardStack',
-                state: {
-                  routes: [
-                    {name: 'Dashboard_RootScreen', index: 0},
-                    {
-                      name: 'Dashboard_NearbyStopPlacesScreen',
-                      params: {mode: 'Favourite'},
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-        },
-      ],
-    } as ResultState;
-  }
 }
