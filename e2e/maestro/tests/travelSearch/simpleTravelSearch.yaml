@@ -1,0 +1,53 @@
+appId: ${APP_ID}
+name: 'Simple travel search'
+---
+- evalScript: ${output.myFromPlace = 'Prinsens gate'}
+- evalScript: ${output.myToPlace = 'Melhus skysstasjon'}
+
+- tapOn:
+    id: ${output.nav.menu.assistant}
+    label: 'Navigate to Assistant tab'
+
+# Search
+- runFlow:
+    file: ../../common/locationSearch.yaml
+    env:
+      SEARCH_TYPE: 'from'
+      SEARCH_TEXT: ${output.myFromPlace}
+      ONLY_STOP_PLACE: 'true'
+    label: 'Search from'
+- runFlow:
+    file: ../../common/locationSearch.yaml
+    env:
+      SEARCH_TYPE: 'to'
+      SEARCH_TEXT: ${output.myToPlace}
+      ONLY_STOP_PLACE: 'true'
+    label: 'Search to'
+
+# Search results
+- extendedWaitUntil:
+    visible:
+      id: ${output.tripSearch.result(0)}
+    timeout: 20000
+    label: 'Wait for trip results'
+- tapOn:
+    id: ${output.tripSearch.firstResult}
+    label: 'Open first trip result'
+- extendedWaitUntil:
+    visible:
+      id: ${output.tripDetails.content}
+    timeout: 10000
+    label: 'Wait for trip details'
+- assertVisible:
+    text: ${'.*' + output.myFromPlace + '.*'}
+    label: 'Verify from name'
+- assertVisible:
+    text: ${'.*' + output.myToPlace + '.*'}
+    label: 'Verify to name'
+- tapOn:
+    id: ${output.nav.back}
+    label: 'Go back'
+
+- tapOn:
+    id: ${output.nav.menu.assistant}
+    label: 'Navigate to Assistant tab'

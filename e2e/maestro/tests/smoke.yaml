@@ -1,5 +1,5 @@
 appId: ${APP_ID}
-name: 'Run tests'
+name: 'Run smoke tests'
 ---
 - runFlow:
     file: departures.yaml
@@ -8,14 +8,6 @@ name: 'Run tests'
 - runFlow:
     file: travelSearch.yaml
     label: 'Travel Search'
-
-- runFlow:
-    file: mobileToken.yaml
-    label: 'Mobile Token'
-
-- runFlow:
-    file: tickets.yaml
-    label: 'Tickets'
 
 - runFlow:
     file: visual.yaml

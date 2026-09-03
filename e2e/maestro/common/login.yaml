@@ -2,13 +2,13 @@ appId: ${APP_ID}
 name: 'Phone login'
 ---
 - extendedWaitUntil:
-      visible:
-          id: ${output.auth.phoneLogin}
-      timeout: 10000
-      label: 'Wait for phone login button'
-- tapOn:
+    visible:
       id: ${output.auth.phoneLogin}
-      label: 'Choose phone login'
+    timeout: 10000
+    label: 'Wait for phone login button'
+- tapOn:
+    id: ${output.auth.phoneLogin}
+    label: 'Choose phone login'
 - extendedWaitUntil:
     visible:
       id: ${output.auth.phone.phoneInput}

@@ -47,3 +47,8 @@ name: 'Anonymous onboarding'
 - tapOn:
     text: 'Deny'
     label: 'Deny location permission'
+- extendedWaitUntil:
+    visible:
+      id: ${output.nav.menu.assistant}
+    timeout: 10000
+    label: 'Wait for Assistant tab'

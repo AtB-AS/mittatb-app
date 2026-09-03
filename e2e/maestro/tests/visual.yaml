@@ -2,7 +2,7 @@ appId: ${APP_ID}
 name: 'Visual tests'
 env:
   # take | assert
-  SCREENSHOT_MODE: 'take'
+  SCREENSHOT_MODE: 'assert'
 onFlowStart:
   - runFlow:
       file: ../elements/loadElements.yaml
@@ -15,8 +15,8 @@ onFlowComplete:
   - stopApp
 ---
 - runFlow:
-    file: ../common/onboarding/loginPhone.yaml
-    label: 'Login through onboarding'
+    file: ../common/onboarding/anonymous.yaml
+    label: 'Anonymous onboarding'
 - runFlow:
     file: ../common/removeGlobalMessages.yaml
     label: 'Remove all global messages'
@@ -81,4 +81,3 @@ onFlowComplete:
 - assertVisible:
     id: ${output.tickets.fareProduct('single')}
     label: 'Verify that single ticket is shown'
-

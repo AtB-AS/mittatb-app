@@ -1,4 +1,5 @@
 output.global = {
-    closeGlobalMessage: 'globalMessageClose',
-    checkbox: 'checkbox'
-}
+  closeGlobalMessage: 'globalMessageClose',
+  closeBottomSheet: 'closeBottomSheet',
+  checkbox: 'checkbox',
+};

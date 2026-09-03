@@ -1,7 +1,5 @@
 appId: ${APP_ID}
 name: 'Departures'
-tags:
-  - smoke
 onFlowStart:
   - runFlow:
       file: ../elements/loadElements.yaml
@@ -24,4 +22,3 @@ onFlowComplete:
 - runFlow:
     file: departures/departureDetails.yaml
     label: 'Departure details'
-

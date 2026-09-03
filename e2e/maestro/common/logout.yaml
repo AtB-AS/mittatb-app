@@ -2,8 +2,8 @@ appId: ${APP_ID}
 name: 'Log out'
 ---
 - tapOn:
-      id: ${output.nav.menu.profile}
-      label: 'Navigate to profile tab'
+    id: ${output.nav.menu.profile}
+    label: 'Navigate to profile tab'
 - scrollUntilVisible:
     element:
       id: ${output.profile.logOut}

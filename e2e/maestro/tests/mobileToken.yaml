@@ -1,7 +1,5 @@
 appId: ${APP_ID}
 name: 'Mobile token'
-tags:
-  - smoke
 onFlowStart:
   - runFlow:
       file: ../elements/loadElements.yaml

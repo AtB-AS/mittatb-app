@@ -15,8 +15,8 @@ name: 'Assert ticket on frontpage'
 
 # Assert active ticket
 - assertVisible:
-      id: ${output.frontpage.ticket.fc(0)}
-      label: 'Assert existing ticket'
+    id: ${output.frontpage.ticket.fc(0)}
+    label: 'Assert existing ticket'
 - assertVisible:
     id: ${output.frontpage.ticket.productName}
     text: 'Single ticket'

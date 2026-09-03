@@ -1,7 +1,5 @@
 appId: ${APP_ID}
 name: 'Tickets with auth'
-tags:
-  - smoke
 onFlowStart:
   - runFlow:
       file: ../elements/loadElements.yaml

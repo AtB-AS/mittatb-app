@@ -25,6 +25,3 @@ name: 'Mobile token in settings'
 - tapOn:
     id: ${output.nav.menu.profile}
     label: 'Navigate to Profile'
-
-
-

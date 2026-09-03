@@ -12,23 +12,23 @@ name: 'Assert purchased ticket'
 
 # Assert active ticket
 - assertVisible:
-      id: ${output.tickets.ticket(0)}
-      label: 'Assert existing ticket'
+    id: ${output.tickets.ticket(0)}
+    label: 'Assert existing ticket'
 - assertVisible:
-      id: ${output.ticket.valid}
-      label: 'Assert valid ticket'
+    id: ${output.ticket.valid}
+    label: 'Assert valid ticket'
 - assertVisible:
-      id: ${output.ticket.productName}
-      index: 0
-      text: '.*Single ticket.*'
-      label: 'Assert product name'
+    id: ${output.ticket.productName}
+    index: 0
+    text: '.*Single ticket.*'
+    label: 'Assert product name'
 - tapOn:
-      id: ${output.ticket.details(0)}
-      label: 'Open ticket details'
+    id: ${output.ticket.details(0)}
+    label: 'Open ticket details'
 - assertVisible: 'Ticket details'
 - assertVisible:
-      id: ${output.ticket.mobileToken}
-      label: 'Assert the token'
+    id: ${output.ticket.mobileToken}
+    label: 'Assert the token'
 - tapOn:
-      id: ${output.nav.back}
-      label: 'Back'
+    id: ${output.nav.back}
+    label: 'Back'
