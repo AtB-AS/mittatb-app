@@ -74,7 +74,7 @@ import {Root_TravelAidOnboardingScreen} from './Root_TravelAidOnboardingScreen';
 import {Root_ShmoHelpScreen} from './Root_ShmoHelp/Root_ShmoHelpScreen';
 import {Root_ShmoPricingDetailsScreen} from './Root_ShmoPricingDetailsScreen';
 import {useGlobalEventStreamListeners} from '@atb/modules/event-stream';
-import {useDeepLinkOptions} from '@atb/modules/deep-links';
+import {useDeepLinks} from '@atb/modules/deep-links';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -96,7 +96,7 @@ export const RootStack = () => {
     [setCurrentRouteName],
   );
 
-  const linkingOptions = useDeepLinkOptions();
+  const deepLinks = useDeepLinks();
 
   const {minimum_app_version} = useRemoteConfigContext();
 
@@ -143,7 +143,7 @@ export const RootStack = () => {
           ref={navRef}
           theme={ReactNavigationTheme}
           fallback={<LoadingScreen />}
-          linking={linkingOptions}
+          linking={deepLinks}
         >
           <AnalyticsContextProvider>
             <Stack.Navigator

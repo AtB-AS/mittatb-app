@@ -24,7 +24,7 @@ type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
 };
 
-export function useDeepLinkOptions() {
+export function useDeepLinks() {
   const {isBonusEnabled} = useFeatureTogglesContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {customerProfile} = useTicketingContext();

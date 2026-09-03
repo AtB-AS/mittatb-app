@@ -1,1 +1,1 @@
-export {useDeepLinkOptions} from './use-deep-link-options';
+export {useDeepLinks} from './use-deep-links';
