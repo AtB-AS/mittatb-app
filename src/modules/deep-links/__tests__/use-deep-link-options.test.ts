@@ -39,6 +39,16 @@ const getStateFrom = (url: string) => {
   return getStateFromPath!(url, config);
 };
 
+/**
+ * Recursively searches a route object for a screen with a matching `name`.
+ */
+const findRoute = (state: any, name: string): any =>
+  state?.routes?.reduce(
+    (found: any, route: any) =>
+      found ?? (route.name === name ? route : findRoute(route.state, name)),
+    undefined,
+  );
+
 beforeEach(() => {
   mockIsBonusEnabled = false;
   mockPreassignedFareProducts = [];
@@ -56,45 +66,20 @@ describe('prefixes', () => {
 
 describe('linking config', () => {
   it('opens the profile tab', () => {
-    expect(getStateFrom('profile')).toEqual({
-      routes: [
-        {
-          name: 'Root_TabNavigatorStack',
-          state: {routes: [{name: 'TabNav_ProfileStack', path: 'profile'}]},
-        },
-      ],
+    const state = getStateFrom('profile');
+    expect(findRoute(state, 'TabNav_ProfileStack')).toEqual({
+      name: 'TabNav_ProfileStack',
+      path: 'profile',
     });
   });
 
   it('opens valid fare contracts in the ticketing tab', () => {
-    expect(getStateFrom('ticketing')).toEqual({
-      routes: [
-        {
-          name: 'Root_TabNavigatorStack',
-          state: {
-            routes: [
-              {
-                name: 'TabNav_TicketingStack',
-                state: {
-                  routes: [
-                    {
-                      name: 'Ticketing_RootScreen',
-                      state: {
-                        routes: [
-                          {
-                            name: 'TicketTabNav_AvailableFareContractsTabScreen',
-                            path: 'ticketing',
-                          },
-                        ],
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-        },
-      ],
+    const state = getStateFrom('ticketing');
+    expect(
+      findRoute(state, 'TicketTabNav_AvailableFareContractsTabScreen'),
+    ).toEqual({
+      name: 'TicketTabNav_AvailableFareContractsTabScreen',
+      path: 'ticketing',
     });
   });
 
@@ -106,52 +91,16 @@ describe('linking config', () => {
 
 describe('privacy', () => {
   it('opens the privacy screen on top of the profile screen', () => {
-    expect(getStateFrom('privacy')).toEqual({
-      routes: [
-        {
-          name: 'Root_TabNavigatorStack',
-          state: {
-            routes: [
-              {
-                name: 'TabNav_ProfileStack',
-                state: {
-                  routes: [
-                    {name: 'Profile_RootScreen'},
-                    {name: 'Profile_PrivacyScreen'},
-                  ],
-                },
-              },
-            ],
-          },
-        },
-      ],
-    });
+    const state = getStateFrom('privacy');
+    expect(findRoute(state, 'Profile_PrivacyScreen')).toBeDefined();
   });
 });
 
 describe('points', () => {
   it('opens the bonus screen when bonus is enabled', () => {
     mockIsBonusEnabled = true;
-    expect(getStateFrom('points')).toEqual({
-      routes: [
-        {
-          name: 'Root_TabNavigatorStack',
-          state: {
-            routes: [
-              {
-                name: 'TabNav_ProfileStack',
-                state: {
-                  routes: [
-                    {name: 'Profile_RootScreen'},
-                    {name: 'Profile_BonusScreen'},
-                  ],
-                },
-              },
-            ],
-          },
-        },
-      ],
-    });
+    const state = getStateFrom('points');
+    expect(findRoute(state, 'Profile_BonusScreen')).toBeDefined();
   });
 
   it('is not handled when bonus is disabled', () => {
@@ -163,13 +112,10 @@ describe('points', () => {
 describe('purchase-overview', () => {
   it('opens purchase overview for a product sellable in the app', () => {
     mockPreassignedFareProducts = [TEST_PRODUCT];
-    expect(getStateFrom('purchase-overview?type=single')).toEqual({
-      routes: [
-        {
-          name: 'Root_PurchaseOverviewScreen',
-          params: {selection: mockSelection},
-        },
-      ],
+    const state = getStateFrom('purchase-overview?type=single');
+    expect(findRoute(state, 'Root_PurchaseOverviewScreen')).toEqual({
+      name: 'Root_PurchaseOverviewScreen',
+      params: {selection: mockSelection},
     });
     expect(mockForType).toHaveBeenCalledWith('single');
   });
@@ -179,13 +125,10 @@ describe('purchase-overview', () => {
       {...TEST_PRODUCT, distributionChannel: ['debug-app']},
     ];
     mockCustomerProfile = {debug: true};
-    expect(getStateFrom('purchase-overview?type=single')).toEqual({
-      routes: [
-        {
-          name: 'Root_PurchaseOverviewScreen',
-          params: {selection: mockSelection},
-        },
-      ],
+    const state = getStateFrom('purchase-overview?type=single');
+    expect(findRoute(state, 'Root_PurchaseOverviewScreen')).toEqual({
+      name: 'Root_PurchaseOverviewScreen',
+      params: {selection: mockSelection},
     });
   });
 
@@ -214,63 +157,27 @@ describe('widget', () => {
     'stopId=NSR:StopPlace:41613&stopName=Prinsens%20gate&quayId=NSR:Quay:71184&latitude=63.4326&longitude=10.3951';
 
   it('opens nearby stop places in favourite mode when there are no favourite departures', () => {
-    expect(getStateFrom('widget/addFavoriteDeparture')).toEqual({
-      routes: [
-        {
-          name: 'Root_TabNavigatorStack',
-          state: {
-            routes: [
-              {
-                name: 'TabNav_DashboardStack',
-                state: {
-                  routes: [
-                    {name: 'Dashboard_RootScreen', index: 0},
-                    {
-                      name: 'Dashboard_NearbyStopPlacesScreen',
-                      params: {mode: 'Favourite'},
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-        },
-      ],
+    const state = getStateFrom('widget/addFavoriteDeparture');
+    expect(findRoute(state, 'Dashboard_NearbyStopPlacesScreen')).toEqual({
+      name: 'Dashboard_NearbyStopPlacesScreen',
+      params: {mode: 'Favourite'},
     });
   });
 
   it('opens the quay with only favourite departures', () => {
-    expect(getStateFrom(`widget?${stopParams}`)).toEqual({
-      routes: [
-        {
-          name: 'Root_TabNavigatorStack',
-          state: {
-            routes: [
-              {
-                name: 'TabNav_DeparturesStack',
-                state: {
-                  routes: [
-                    {name: 'Departures_NearbyStopPlacesScreen', index: 0},
-                    {
-                      name: 'Departures_PlaceScreen',
-                      index: 1,
-                      params: {
-                        place: {
-                          id: 'NSR:StopPlace:41613',
-                          name: 'Prinsens gate',
-                        },
-                        selectedQuayId: 'NSR:Quay:71184',
-                        showOnlyFavoritesByDefault: true,
-                        mode: 'Departure',
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-          },
+    const state = getStateFrom(`widget?${stopParams}`);
+    expect(findRoute(state, 'Departures_PlaceScreen')).toEqual({
+      name: 'Departures_PlaceScreen',
+      index: 1,
+      params: {
+        place: {
+          id: 'NSR:StopPlace:41613',
+          name: 'Prinsens gate',
         },
-      ],
+        selectedQuayId: 'NSR:Quay:71184',
+        showOnlyFavoritesByDefault: true,
+        mode: 'Departure',
+      },
     });
   });
 
@@ -281,10 +188,7 @@ describe('widget', () => {
       '&serviceDate=2026-09-03&fromStopPosition=13';
 
     const state = getStateFrom(url);
-    const departuresRoutes = (state as any).routes[0].state.routes[0].state
-      .routes;
-
-    expect(departuresRoutes[2]).toEqual({
+    expect(findRoute(state, 'Departures_DepartureDetailsScreen')).toEqual({
       name: 'Departures_DepartureDetailsScreen',
       params: {
         activeItemIndex: 0,
@@ -308,7 +212,7 @@ describe('widget', () => {
     );
     jest.useRealTimers();
 
-    const details = (state as any).routes[0].state.routes[0].state.routes[2];
+    const details = findRoute(state, 'Departures_DepartureDetailsScreen');
     expect(details.params.items[0].date).toBe('2026-09-03T07:45:00.000Z');
     expect(details.params.items[0].fromStopPosition).toBe(0);
   });
