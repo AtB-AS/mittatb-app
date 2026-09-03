@@ -114,6 +114,8 @@ describe('Performance tests', () => {
         await NavigationHelper.tapMenu('tickets');
         await NavigationHelper.tapTicketTab('activeTickets');
         await AppHelper.pause(waitingTime);
+        await AppHelper.removeGlobalMessages();
+        await AppHelper.pause(1000);
 
         // Open expired tickets
         await TicketActivePage.openExpiredTickets();

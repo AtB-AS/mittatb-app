@@ -60,6 +60,7 @@ class TicketActivePage {
    * Open expired tickets
    */
   async openExpiredTickets() {
+    await AppHelper.scrollDown('availableFCScrollView');
     const reqId = `//*[@resource-id="historicTicketsButton"]`;
     await $(reqId).click();
     await AppHelper.pause();
