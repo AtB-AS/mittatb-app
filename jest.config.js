@@ -14,8 +14,8 @@ module.exports = {
       statements: 100,
     },
   },
-  // Added polylabel & tinyqueue to RN allowlist so Jest can transpile ESM packages.
+  // Added polylabel, tinyqueue & @react-navigation to RN allowlist so Jest can transpile ESM packages.
   transformIgnorePatterns: [
-    'node_modules/(?!(react-native|@react-native|@react-native-community|polylabel|tinyqueue)/)',
+    'node_modules/(?!(react-native|@react-native|@react-native-community|@react-navigation|polylabel|tinyqueue)/)',
   ],
 };
