@@ -19,6 +19,7 @@ import {
 import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 import {parse} from 'search-params';
 import {parseParamAsInt} from './utils';
+import {initialUrl} from './initial-url';
 import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import {PurchaseSelectionEmptyBuilder} from '@atb/modules/purchase-selection';
@@ -35,6 +36,7 @@ export function useDeepLinks() {
 
   const linkingOptions: LinkingOptions<RootStackParamList> = {
     prefixes: [`${APP_SCHEME}://`],
+    getInitialURL: () => initialUrl,
     config: {
       screens: {
         Root_TabNavigatorStack: {
