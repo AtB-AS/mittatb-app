@@ -11,6 +11,8 @@ import {
 } from '@react-navigation/native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
+  CustomerProfile,
+  PreassignedFareProduct,
   useGetFareProductsQuery,
   useTicketingContext,
 } from '@atb/modules/ticketing';
@@ -19,6 +21,7 @@ import {parse} from 'search-params';
 import {parseParamAsInt} from './utils';
 import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
+import {PurchaseSelectionEmptyBuilder} from '@atb/modules/purchase-selection';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -29,66 +32,6 @@ export function useDeepLinks() {
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {customerProfile} = useTicketingContext();
   const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
-
-  function getResultStateFromPath(path: string): ResultState {
-    const params = parse(path);
-    const destination: PartialRoute<any>[] = [
-      {
-        // Index is needed so that the user can go back after
-        // opening the app with the widget when it was not open previously
-        index: 0,
-        name: 'Departures_NearbyStopPlacesScreen',
-      },
-      {
-        name: 'Departures_PlaceScreen',
-        index: 1,
-        params: {
-          place: {
-            name: params.stopName,
-            id: params.stopId,
-          },
-          selectedQuayId: params.quayId,
-          showOnlyFavoritesByDefault: true,
-          mode: 'Departure',
-        },
-      },
-    ];
-
-    if (path.includes('details')) {
-      const item: ServiceJourneyDeparture = {
-        serviceJourneyId: params.serviceJourneyId as string,
-        date: (params.date as string) || new Date().toISOString(),
-        serviceDate: params.serviceDate as string,
-        fromStopPosition: parseParamAsInt(params.fromStopPosition) || 0,
-        toStopPosition: parseParamAsInt(params.toStopPosition),
-      };
-      destination.push({
-        name: 'Departures_DepartureDetailsScreen',
-        params: {
-          activeItemIndex: 0,
-          items: [item],
-        },
-      });
-    }
-
-    return {
-      routes: [
-        {
-          name: 'Root_TabNavigatorStack',
-          state: {
-            routes: [
-              {
-                name: 'TabNav_DeparturesStack',
-                state: {
-                  routes: destination as PartialRoute<Route<string>>[],
-                },
-              },
-            ],
-          },
-        },
-      ],
-    };
-  }
 
   const linkingOptions: LinkingOptions<RootStackParamList> = {
     prefixes: [`${APP_SCHEME}://`],
@@ -111,76 +54,24 @@ export function useDeepLinks() {
       },
     },
     getStateFromPath(path, config) {
-      if (path.includes('privacy')) {
-        return {
-          routes: [
-            {
-              name: 'Root_TabNavigatorStack',
-              state: {
-                routes: [
-                  {
-                    name: 'TabNav_ProfileStack',
-                    state: {
-                      routes: [
-                        {name: 'Profile_RootScreen'},
-                        {
-                          name: 'Profile_PrivacyScreen',
-                        },
-                      ],
-                    },
-                  },
-                ],
-              },
-            },
-          ],
-        } as ResultState;
-      }
-      if (path.includes('points') && isBonusEnabled) {
-        return {
-          routes: [
-            {
-              name: 'Root_TabNavigatorStack',
-              state: {
-                routes: [
-                  {
-                    name: 'TabNav_ProfileStack',
-                    state: {
-                      routes: [
-                        {name: 'Profile_RootScreen'},
-                        {
-                          name: 'Profile_BonusScreen',
-                        },
-                      ],
-                    },
-                  },
-                ],
-              },
-            },
-          ],
-        } as ResultState;
+      const stateForPrivacy = getStateForPrivacy(path);
+      if (stateForPrivacy) {
+        return stateForPrivacy;
       }
 
-      if (path.includes('purchase-overview')) {
-        const params = new URLSearchParams(path.split('?')[1]);
-        const type = params.get('type');
-        if (type) {
-          const isSellable = preassignedFareProducts.some(
-            (product) =>
-              type === product.type &&
-              isProductSellableInApp(product, customerProfile),
-          );
-          if (isSellable) {
-            const {selection} = purchaseSelectionBuilder.forType(type).build();
-            return {
-              routes: [
-                {
-                  name: 'Root_PurchaseOverviewScreen',
-                  params: {selection},
-                },
-              ],
-            } as ResultState;
-          }
-        }
+      const stateForBonus = getStateForBonus(path, isBonusEnabled);
+      if (stateForBonus) {
+        return stateForBonus;
+      }
+
+      const stateForPurchaseOverview = getStateForPurchaseOverview(
+        path,
+        preassignedFareProducts,
+        customerProfile,
+        purchaseSelectionBuilder,
+      );
+      if (stateForPurchaseOverview) {
+        return stateForPurchaseOverview;
       }
 
       // If the path is not from the widget, behave as usual
@@ -188,35 +79,209 @@ export function useDeepLinks() {
         return getStateFromPath(path, config);
       }
 
-      if (path.includes('addFavoriteDeparture')) {
+      const stateForAddFavoriteDeparture =
+        getStateForAddFavoriteDeparture(path);
+      if (stateForAddFavoriteDeparture) {
+        return stateForAddFavoriteDeparture;
+      }
+
+      // Get redirected to the preferred departures view
+      return getStateForDepartures(path);
+    },
+  };
+  return linkingOptions;
+}
+
+/**
+ * `atb://privacy`
+ */
+function getStateForPrivacy(path: string): ResultState | undefined {
+  if (path.includes('privacy')) {
+    return {
+      routes: [
+        {
+          name: 'Root_TabNavigatorStack',
+          state: {
+            routes: [
+              {
+                name: 'TabNav_ProfileStack',
+                state: {
+                  routes: [
+                    {name: 'Profile_RootScreen'},
+                    {
+                      name: 'Profile_PrivacyScreen',
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      ],
+    } as ResultState;
+  }
+}
+
+/**
+ * `atb://points`
+ */
+function getStateForBonus(
+  path: string,
+  isBonusEnabled: boolean,
+): ResultState | undefined {
+  if (path.includes('points') && isBonusEnabled) {
+    return {
+      routes: [
+        {
+          name: 'Root_TabNavigatorStack',
+          state: {
+            routes: [
+              {
+                name: 'TabNav_ProfileStack',
+                state: {
+                  routes: [
+                    {name: 'Profile_RootScreen'},
+                    {
+                      name: 'Profile_BonusScreen',
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      ],
+    } as ResultState;
+  }
+}
+
+/**
+ * `atb://purchase-overview?type=period`
+ */
+function getStateForPurchaseOverview(
+  path: string,
+  preassignedFareProducts: PreassignedFareProduct[],
+  customerProfile: CustomerProfile | undefined,
+  purchaseSelectionBuilder: PurchaseSelectionEmptyBuilder,
+): ResultState | undefined {
+  if (path.includes('purchase-overview')) {
+    const params = new URLSearchParams(path.split('?')[1]);
+    const type = params.get('type');
+    if (type) {
+      const isSellable = preassignedFareProducts.some(
+        (product) =>
+          type === product.type &&
+          isProductSellableInApp(product, customerProfile),
+      );
+      if (isSellable) {
+        const {selection} = purchaseSelectionBuilder.forType(type).build();
         return {
           routes: [
             {
-              name: 'Root_TabNavigatorStack',
-              state: {
-                routes: [
-                  {
-                    name: 'TabNav_DashboardStack',
-                    state: {
-                      routes: [
-                        {name: 'Dashboard_RootScreen', index: 0},
-                        {
-                          name: 'Dashboard_NearbyStopPlacesScreen',
-                          params: {mode: 'Favourite'},
-                        },
-                      ],
-                    },
-                  },
-                ],
-              },
+              name: 'Root_PurchaseOverviewScreen',
+              params: {selection},
             },
           ],
         } as ResultState;
       }
+    }
+  }
+}
 
-      // Get redirected to the preferred departures view
-      return getResultStateFromPath(path);
+/**
+ * `atb://widget/addFavoriteDeparture`
+ */
+function getStateForAddFavoriteDeparture(
+  path: string,
+): ResultState | undefined {
+  if (path.includes('addFavoriteDeparture')) {
+    return {
+      routes: [
+        {
+          name: 'Root_TabNavigatorStack',
+          state: {
+            routes: [
+              {
+                name: 'TabNav_DashboardStack',
+                state: {
+                  routes: [
+                    {name: 'Dashboard_RootScreen', index: 0},
+                    {
+                      name: 'Dashboard_NearbyStopPlacesScreen',
+                      params: {mode: 'Favourite'},
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      ],
+    } as ResultState;
+  }
+}
+
+/**
+ * `atb://widget?stopId=...&stopName=...&quayId=...`
+ *
+ * `atb://widgetdetails?...&serviceJourneyId=...&serviceDate=...`
+ */
+function getStateForDepartures(path: string): ResultState {
+  const params = parse(path);
+  const destination: PartialRoute<any>[] = [
+    {
+      // Index is needed so that the user can go back after
+      // opening the app with the widget when it was not open previously
+      index: 0,
+      name: 'Departures_NearbyStopPlacesScreen',
     },
+    {
+      name: 'Departures_PlaceScreen',
+      index: 1,
+      params: {
+        place: {
+          name: params.stopName,
+          id: params.stopId,
+        },
+        selectedQuayId: params.quayId,
+        showOnlyFavoritesByDefault: true,
+        mode: 'Departure',
+      },
+    },
+  ];
+
+  if (path.includes('details')) {
+    const item: ServiceJourneyDeparture = {
+      serviceJourneyId: params.serviceJourneyId as string,
+      date: (params.date as string) || new Date().toISOString(),
+      serviceDate: params.serviceDate as string,
+      fromStopPosition: parseParamAsInt(params.fromStopPosition) || 0,
+      toStopPosition: parseParamAsInt(params.toStopPosition),
+    };
+    destination.push({
+      name: 'Departures_DepartureDetailsScreen',
+      params: {
+        activeItemIndex: 0,
+        items: [item],
+      },
+    });
+  }
+
+  return {
+    routes: [
+      {
+        name: 'Root_TabNavigatorStack',
+        state: {
+          routes: [
+            {
+              name: 'TabNav_DeparturesStack',
+              state: {
+                routes: destination as PartialRoute<Route<string>>[],
+              },
+            },
+          ],
+        },
+      },
+    ],
   };
-  return linkingOptions;
 }
