@@ -213,7 +213,7 @@ export const formatMinuteBoundary = (
   minutes < 60
     ? `${minutes}`
     : t(
-        MobilityTexts.pricingDetails.minutesAsHoursAndMinutes(
+        MobilityTexts.pricingDetails.hoursAndMinutes(
           Math.floor(minutes / 60),
           minutes % 60,
         ),

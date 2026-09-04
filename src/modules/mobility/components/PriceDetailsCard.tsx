@@ -11,10 +11,7 @@ import {Unlock, PricePerTime} from '@atb/assets/svg/mono-icons/mobility';
 import {VehicleCardStat} from './VehicleCardStat';
 import {ThemeText} from '@atb/components/text';
 import {BenefitIllustration} from './BenefitIllustration';
-import {
-  MobilityTexts,
-  ScooterTexts,
-} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {
   computeFreeMinuteCount,
   formatMinuteBoundary,
@@ -67,15 +64,15 @@ export const PriceDetailsCard = ({
 
   const minutePriceDescription = hasFreeMinutes
     ? t(
-        ScooterTexts.freeMinutesDescription(
+        MobilityTexts.pricingDetails.freeMinutesDescription(
           `${formatMinuteBoundary(freeMinuteCount, t)}${freeMinuteCount < 60 ? ' min' : ''}`,
         ),
       )
     : ratePrUnit
       ? t(
           ratePrUnit.perUnit === 'min'
-            ? ScooterTexts.per.intervalMin(ratePrUnit.interval)
-            : ScooterTexts.per.intervalKm(ratePrUnit.interval),
+            ? MobilityTexts.pricingDetails.intervalMin(ratePrUnit.interval)
+            : MobilityTexts.pricingDetails.intervalKm(ratePrUnit.interval),
         )
       : '';
 
@@ -91,7 +88,7 @@ export const PriceDetailsCard = ({
             <VehicleCardStat
               icon={Unlock}
               stat={unlockStat}
-              description={t(ScooterTexts.unlock)}
+              description={t(MobilityTexts.pricingDetails.unlockDescription)}
               hasPriceAdjustment={!!freeUnlock}
             />
             {minutePriceStat && (

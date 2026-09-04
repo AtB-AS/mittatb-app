@@ -3,10 +3,7 @@ import {ScrollView, View} from 'react-native';
 import {RootStackScreenProps} from './navigation-types';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useTranslation} from '@atb/translations';
-import {
-  MobilityTexts,
-  ScooterTexts,
-} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -70,8 +67,8 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
   ): string => {
     const intervalPhrase = t(
       unit === 'min'
-        ? ScooterTexts.per.intervalMin(segment.interval)
-        : ScooterTexts.per.intervalKm(segment.interval),
+        ? MobilityTexts.pricingDetails.intervalMin(segment.interval)
+        : MobilityTexts.pricingDetails.intervalKm(segment.interval),
     );
     if (hasMultipleSegments || effectiveStart > 0) {
       if (segment.end != null) {
