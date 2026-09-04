@@ -15,7 +15,8 @@ import {
   PropulsionType,
 } from '@atb/api/types/generated/mobility-types_v2';
 import {AnyMode, AnySubMode} from '@atb/components/icon-box';
-import {dictionary, Language} from '@atb/translations';
+import {dictionary, Language, TranslateFunction} from '@atb/translations';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
 import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
@@ -205,6 +206,19 @@ export const hasMultiplePricingPlans = (plan: ShmoPricingPlan) =>
   (plan.perKmPricing && plan.perKmPricing.length > 1) ||
   (plan.perMinPricing && plan.perMinPricing.length > 1);
 
+export const formatMinuteBoundary = (
+  minutes: number,
+  t: TranslateFunction,
+): string =>
+  minutes < 60
+    ? `${minutes}`
+    : t(
+        MobilityTexts.pricingDetails.minutesAsHoursAndMinutes(
+          Math.floor(minutes / 60),
+          minutes % 60,
+        ),
+      );
+
 export const formatRange = (rangeInMeters: number, language: Language) => {
   const rangeInKm =
     rangeInMeters > 5000
@@ -251,12 +265,14 @@ export const formatRatePerUnit = (
       rate: perMinPrice.rate,
       formattedRate: `${formatNumberToString(perMinPrice.rate, language)} ${getCurrencySymbol(pricingPlan.currency)}`,
       perUnit: 'min',
+      interval: perMinPrice.interval,
     };
   } else if (perKmPrice) {
     return {
       rate: perKmPrice.rate,
       formattedRate: `${formatNumberToString(perKmPrice.rate, language)} ${getCurrencySymbol(pricingPlan.currency)}`,
       perUnit: 'km',
+      interval: perKmPrice.interval,
     };
   }
   return undefined;
@@ -300,9 +316,24 @@ export const computeFreeMinuteCount = (
       total += segLengthMin;
       continue;
     }
-    const minutes = Math.min(Math.floor(budget / segment.rate), segLengthMin);
+    if (segment.interval === 0) {
+      // Rate is charged once for the whole segment, not per minute.
+      if (budget < segment.rate) continue;
+      total += segLengthMin;
+      budget -= segment.rate;
+      continue;
+    }
+    const maxIntervalsInSegment =
+      segLengthMin === Infinity
+        ? Infinity
+        : Math.ceil(segLengthMin / segment.interval);
+    const intervals = Math.min(
+      Math.floor(budget / segment.rate),
+      maxIntervalsInSegment,
+    );
+    const minutes = Math.min(intervals * segment.interval, segLengthMin);
     total += minutes;
-    budget -= minutes * segment.rate;
+    budget -= intervals * segment.rate;
   }
   return Math.min(total, 180);
 };

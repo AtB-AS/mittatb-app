@@ -17,6 +17,7 @@ import {
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {
   computeFreeMinuteCount,
+  formatMinuteBoundary,
   formatRatePerUnit,
   getFreeMinutes,
   getFreeUnlock,
@@ -56,6 +57,10 @@ export const PriceDetailsCard = ({
 
   const hasFreeMinutes = !!(freeMinutes && pricingPlan.perMinPricing?.length);
 
+  const freeMinuteCount = hasFreeMinutes
+    ? computeFreeMinuteCount(freeMinutes!, pricingPlan.perMinPricing!)
+    : 0;
+
   const minutePriceStat = hasFreeMinutes
     ? zeroAmount
     : ratePrUnit?.formattedRate;
@@ -63,10 +68,16 @@ export const PriceDetailsCard = ({
   const minutePriceDescription = hasFreeMinutes
     ? t(
         ScooterTexts.freeMinutesDescription(
-          computeFreeMinuteCount(freeMinutes!, pricingPlan.perMinPricing!),
+          `${formatMinuteBoundary(freeMinuteCount, t)}${freeMinuteCount < 60 ? ' min' : ''}`,
         ),
       )
-    : t(ScooterTexts.per.unit(ratePrUnit?.perUnit ?? ''));
+    : ratePrUnit
+      ? t(
+          ratePrUnit.perUnit === 'min'
+            ? ScooterTexts.per.intervalMin(ratePrUnit.interval)
+            : ScooterTexts.per.intervalKm(ratePrUnit.interval),
+        )
+      : '';
 
   const benefitTitle = getTextForLanguage(benefit?.title, language);
   const benefitDescription = getTextForLanguage(benefit?.description, language);
