@@ -2,7 +2,7 @@ import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {RootStackScreenProps} from './navigation-types';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
@@ -74,8 +74,8 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
       if (segment.end != null) {
         const rangeText =
           unit === 'min'
-            ? `${formatMinuteBoundary(effectiveStart, t)}-${formatMinuteBoundary(segment.end, t)}${segment.end < 60 ? ' min' : ''}`
-            : `${effectiveStart}-${segment.end} km`;
+            ? `${formatMinuteBoundary(effectiveStart, t)}-${formatMinuteBoundary(segment.end, t)}${segment.end < 60 ? ` ${t(dictionary.date.units.short.minute)}` : ''}`
+            : `${effectiveStart}-${segment.end} ${t(dictionary.distance.km)}`;
         return t(
           MobilityTexts.pricingDetails.pricePerIntervalRange(
             intervalPhrase,
@@ -85,8 +85,8 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
       } else {
         const fromText =
           unit === 'min'
-            ? `${formatMinuteBoundary(effectiveStart, t)}${effectiveStart < 60 ? ' min' : ''}`
-            : `${effectiveStart} km`;
+            ? `${formatMinuteBoundary(effectiveStart, t)}${effectiveStart < 60 ? ` ${t(dictionary.date.units.short.minute)}` : ''}`
+            : `${effectiveStart} ${t(dictionary.distance.km)}`;
         return t(
           MobilityTexts.pricingDetails.pricePerIntervalFrom(
             intervalPhrase,
