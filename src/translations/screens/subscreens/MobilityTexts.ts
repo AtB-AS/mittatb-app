@@ -1,4 +1,4 @@
-import {translation as _, Language} from '../../commons';
+import {translation as _} from '../../commons';
 import {Platform} from 'react-native';
 import {
   FormFactor,
@@ -8,8 +8,6 @@ import {
   GeofencingZoneExplanationsType,
   ParkingVehicleTypes,
 } from '@atb/modules/map';
-import {formatNumberToString} from '@atb-as/utils';
-import {getCurrencySymbol} from '@atb/translations/currency';
 
 export const MobilityTexts = {
   vehicleName: (
@@ -83,24 +81,83 @@ export const MobilityTexts = {
   pricingDetails: {
     priceInfo: _('Prisinformasjon', 'Price information', 'Prisinformasjon'),
     unlock: _('Opplåsing', 'Unlock', 'Opplåsing'),
-    minutePrice: _('Minuttpris', 'Minute price', 'Minuttpris'),
-    minutePriceRange: (start: number, end: number) =>
+    unlockDescription: _('opplåsning', 'unlock', 'opplåsing'),
+    freeMinutesDescription: (durationText: string) =>
+      _(`i ${durationText}`, `for ${durationText}`, `i ${durationText}`),
+    pricePerInterval: (intervalPhrase: string) =>
       _(
-        `Minuttpris ${start}-${end} min`,
-        `Minute price ${start}-${end} min`,
-        `Minuttpris ${start}-${end} min`,
+        `Pris ${intervalPhrase}`,
+        `Price ${intervalPhrase}`,
+        `Pris ${intervalPhrase}`,
       ),
-    minutePriceFrom: (start: number) =>
+    pricePerIntervalRange: (intervalPhrase: string, rangeText: string) =>
       _(
-        `Minuttpris etter ${start} min`,
-        `Minute price after ${start} min`,
-        `Minuttpris etter ${start} min`,
+        `Pris ${intervalPhrase} fra ${rangeText}`,
+        `Price ${intervalPhrase} from ${rangeText}`,
+        `Pris ${intervalPhrase} frå ${rangeText}`,
       ),
-    maxRentalTime: _(
-      'Makstid for leie',
-      'Max rental time',
-      'Makstid for leige',
-    ),
+    pricePerIntervalFrom: (intervalPhrase: string, fromText: string) =>
+      _(
+        `Pris ${intervalPhrase} etter ${fromText}`,
+        `Price ${intervalPhrase} after ${fromText}`,
+        `Pris ${intervalPhrase} etter ${fromText}`,
+      ),
+    hoursAndMinutes: (hours: number, minutes: number) => {
+      const nb = hours === 1 ? '1 time' : `${hours} timer`;
+      const en = hours === 1 ? '1 hour' : `${hours} hours`;
+      const nn = hours === 1 ? '1 time' : `${hours} timar`;
+      return minutes === 0
+        ? _(nb, en, nn)
+        : _(
+            `${nb} ${minutes} min`,
+            `${en} ${minutes} min`,
+            `${nn} ${minutes} min`,
+          );
+    },
+    intervalMin(interval: number) {
+      if (interval === 0) {
+        return _('(engangsbeløp)', '(one-time fee)', '(eingongsbeløp)');
+      }
+      if (interval === 1) {
+        return _('per minutt', 'per minute', 'per minutt');
+      }
+      if (interval === 15) {
+        return _('per kvarter', 'per quarter hour', 'per kvarter');
+      }
+      if (interval === 30) {
+        return _('per halvtime', 'per half hour', 'per halvtime');
+      }
+      if (interval % 1440 === 0) {
+        const days = interval / 1440;
+        return days === 1
+          ? _('per døgn', 'per day', 'per døgn')
+          : _(`per ${days} døgn`, `per ${days} days`, `per ${days} døgn`);
+      }
+      if (interval % 60 === 0) {
+        const hours = interval / 60;
+        return hours === 1
+          ? _('per time', 'per hour', 'per time')
+          : _(`per ${hours} timer`, `per ${hours} hours`, `per ${hours} timar`);
+      }
+      return _(
+        `per ${interval} minutter`,
+        `per ${interval} min`,
+        `per ${interval} minuttar`,
+      );
+    },
+    intervalKm(interval: number) {
+      if (interval === 0) {
+        return _('(engangsbeløp)', '(one-time fee)', '(eingongsbeløp)');
+      }
+      if (interval === 1) {
+        return _('per kilometer', 'per kilometer', 'per kilometer');
+      }
+      return _(
+        `per ${interval} km`,
+        `per ${interval} km`,
+        `per ${interval} km`,
+      );
+    },
     campaignPrice: _('Kampanjepris', 'Campaign price', 'Kampanjepris'),
   },
   freeBikes: (amount: string) => {
@@ -365,6 +422,7 @@ export const MobilityTexts = {
       `approximately ${range} range`,
       `omlag ${range} rekkjevidde`,
     ),
+  rangeLabel: _('rekkevidde', 'range', 'rekkjevidde'),
   includedWithTheTicket: _(
     'Inkludert i billetten',
     'Included with the ticket',
@@ -450,63 +508,6 @@ export const MobilityTexts = {
           `Anna køyretøy frå ${operatorName}`,
         );
     }
-  },
-};
-
-export const ScooterTexts = {
-  seeAppForPrices: (operator: string) =>
-    _(
-      `Se ${operator}-appen for priser`,
-      `See ${operator} app for prices`,
-      `Sjå ${operator}-appen for prisar`,
-    ),
-  pricingPlan: {
-    price: (price: number, language: Language, currency?: string) =>
-      price > 0
-        ? _(
-            `+ ${formatNumberToString(price, language)} ${getCurrencySymbol(currency)} for oppstart`,
-            `+ ${formatNumberToString(price, language)} ${getCurrencySymbol(currency)} to unlock`,
-            `+ ${formatNumberToString(price, language)} ${getCurrencySymbol(currency)} for å låse opp`,
-          )
-        : _('Gratis oppstart', 'Free to unlock', 'Gratis oppstart'),
-  },
-  range: _('rekkevidde', 'range', 'rekkjevidde'),
-  unlock: _('opplåsning', 'unlock', 'opplåsing'),
-  freeMinutesDescription: (minutes: number) =>
-    _(`i ${minutes} min`, `for ${minutes} min`, `i ${minutes} min`),
-  per: {
-    unit(unit: string) {
-      switch (unit) {
-        case 'min':
-          return _('per minutt', 'per minute', 'per minutt');
-        case 'km':
-          return _('per kilometer', 'per kilometer', 'per kilometer');
-        default:
-          return _('per', 'per', 'per');
-      }
-    },
-    discount(unit: string, price: string, currency?: string) {
-      switch (unit) {
-        case 'min':
-          return _(
-            `så ${price}${getCurrencySymbol(currency)}/min`,
-            `then ${price}${getCurrencySymbol(currency)}/min`,
-            `så ${price}${getCurrencySymbol(currency)}/min`,
-          );
-        case 'km':
-          return _(
-            `så ${price}${getCurrencySymbol(currency)}/km`,
-            `then ${price}${getCurrencySymbol(currency)}/km`,
-            `så ${price}${getCurrencySymbol(currency)}/km`,
-          );
-        default:
-          return _(
-            `så ${price}${getCurrencySymbol(currency)}`,
-            `then ${price}${getCurrencySymbol(currency)}`,
-            `så ${price}${getCurrencySymbol(currency)}`,
-          );
-      }
-    },
   },
 };
 

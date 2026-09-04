@@ -11,12 +11,10 @@ import {Unlock, PricePerTime} from '@atb/assets/svg/mono-icons/mobility';
 import {VehicleCardStat} from './VehicleCardStat';
 import {ThemeText} from '@atb/components/text';
 import {BenefitIllustration} from './BenefitIllustration';
-import {
-  MobilityTexts,
-  ScooterTexts,
-} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {
   computeFreeMinuteCount,
+  formatMinuteBoundary,
   formatRatePerUnit,
   getFreeMinutes,
   getFreeUnlock,
@@ -56,17 +54,27 @@ export const PriceDetailsCard = ({
 
   const hasFreeMinutes = !!(freeMinutes && pricingPlan.perMinPricing?.length);
 
+  const freeMinuteCount = hasFreeMinutes
+    ? computeFreeMinuteCount(freeMinutes!, pricingPlan.perMinPricing!)
+    : 0;
+
   const minutePriceStat = hasFreeMinutes
     ? zeroAmount
     : ratePrUnit?.formattedRate;
 
   const minutePriceDescription = hasFreeMinutes
     ? t(
-        ScooterTexts.freeMinutesDescription(
-          computeFreeMinuteCount(freeMinutes!, pricingPlan.perMinPricing!),
+        MobilityTexts.pricingDetails.freeMinutesDescription(
+          `${formatMinuteBoundary(freeMinuteCount, t)}${freeMinuteCount < 60 ? ' min' : ''}`,
         ),
       )
-    : t(ScooterTexts.per.unit(ratePrUnit?.perUnit ?? ''));
+    : ratePrUnit
+      ? t(
+          ratePrUnit.perUnit === 'min'
+            ? MobilityTexts.pricingDetails.intervalMin(ratePrUnit.interval)
+            : MobilityTexts.pricingDetails.intervalKm(ratePrUnit.interval),
+        )
+      : '';
 
   const benefitTitle = getTextForLanguage(benefit?.title, language);
   const benefitDescription = getTextForLanguage(benefit?.description, language);
@@ -80,7 +88,7 @@ export const PriceDetailsCard = ({
             <VehicleCardStat
               icon={Unlock}
               stat={unlockStat}
-              description={t(ScooterTexts.unlock)}
+              description={t(MobilityTexts.pricingDetails.unlockDescription)}
               hasPriceAdjustment={!!freeUnlock}
             />
             {minutePriceStat && (

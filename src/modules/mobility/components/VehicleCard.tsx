@@ -5,7 +5,7 @@ import {GenericSectionItem, Section} from '@atb/components/sections';
 import {View} from 'react-native';
 import {BatteryHigh} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {VehicleCardStat} from './VehicleCardStat';
-import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {
   formatRange,
   getBatteryLevelIcon,
@@ -41,7 +41,7 @@ export const VehicleCard = ({
                 : BatteryHigh
             }
             stat={formatRange(currentRangeMeters, language)}
-            description={t(ScooterTexts.range)}
+            description={t(MobilityTexts.rangeLabel)}
           />
           {!!ThemedIllustration && (
             <ThemedIllustration width={50} height={50} />
