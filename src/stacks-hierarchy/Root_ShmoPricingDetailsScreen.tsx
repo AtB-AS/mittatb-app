@@ -59,6 +59,9 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
         )
       : 0;
 
+  const formatPrice = (amount: number): string =>
+    `${formatNumberToString(amount, language)} ${currency}`;
+
   const getSegmentLabel = (
     segment: ShmoPricingSegment,
     effectiveStart: number,
@@ -102,8 +105,8 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
     label: t(MobilityTexts.pricingDetails.unlock),
     value:
       hasCampaign && freeUnlockPriceAdjustment
-        ? `0 ${currency}`
-        : `${formatNumberToString(pricingPlan.price, language)} ${currency}`,
+        ? formatPrice(0)
+        : formatPrice(pricingPlan.price),
   });
 
   if (hasCampaign && freeMinutesPriceAdjustment && freeMinCount > 0) {
@@ -114,7 +117,7 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
         'min',
         true,
       ),
-      value: `0 ${currency}`,
+      value: formatPrice(0),
     });
   }
 
@@ -130,7 +133,7 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
           'min',
           hasMultiplePerMinPricingPlans,
         ),
-        value: `${formatNumberToString(seg.rate, language)} ${currency}`,
+        value: formatPrice(seg.rate),
       });
     });
 
@@ -142,7 +145,7 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
         'km',
         hasMultiplePerKmPricingPlans,
       ),
-      value: `${formatNumberToString(seg.rate, language)} ${currency}`,
+      value: formatPrice(seg.rate),
     });
   });
 
@@ -205,7 +208,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexShrink: 1,
   },
   value: {
-    flexShrink: 1,
+    flexShrink: 0,
     textAlign: 'right',
   },
   sectionLabel: {
