@@ -209,11 +209,13 @@ export const Map = (props: MapProps) => {
   const stablePreviousActiveShmoBooking =
     useStablePreviousValue(activeShmoBooking);
   const stableActiveShmoBooking = useStableValue(activeShmoBooking);
+
   useEffect(() => {
+    const wasInUse =
+      stablePreviousActiveShmoBooking?.state === ShmoBookingState.IN_USE;
     if (
-      !stablePreviousActiveShmoBooking &&
-      stableActiveShmoBooking &&
-      stableActiveShmoBooking.state === ShmoBookingState.IN_USE
+      !wasInUse &&
+      stableActiveShmoBooking?.state === ShmoBookingState.IN_USE
     ) {
       setFollowUserLocation(true);
     }
