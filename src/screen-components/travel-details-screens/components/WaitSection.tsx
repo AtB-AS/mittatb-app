@@ -1,6 +1,5 @@
 import {Time} from '@atb/assets/svg/mono-icons/time';
 import {Unknown, Warning} from '@atb/assets/svg/mono-icons/status';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -9,7 +8,8 @@ import {
   TripDetailsTexts,
   useTranslation,
 } from '@atb/translations';
-import {InterchangeRisk, isShortWaitTime} from '@atb/modules/trip-patterns';
+import {isShortWaitTime} from '@atb/modules/trip-patterns';
+import {TransferRisk} from '@atb-as/utils';
 import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
@@ -20,12 +20,12 @@ import {useTransportColor} from '@atb/utils/use-transport-color';
 export type WaitDetails = {
   mustWaitForNextLeg: boolean;
   waitTimeInSeconds: number;
-  interchangeRisk?: InterchangeRisk;
+  transferRisk?: TransferRisk;
 };
 
 /** Whether the wait between two legs has anything worth showing. */
 export function shouldShowWaitSection(wait: WaitDetails): boolean {
-  return !!wait.interchangeRisk || wait.mustWaitForNextLeg;
+  return !!wait.transferRisk || wait.mustWaitForNextLeg;
 }
 
 /** Where a trip row's content starts, which is what stop place names align to. */
@@ -75,11 +75,11 @@ function getWaitMessage(
 export const WaitSection: React.FC<WaitDetails> = (wait) => {
   const style = useSectionStyles();
   const {t, language} = useTranslation();
-  const interchange = getInterchangeMessage(wait.interchangeRisk, t);
+  const transfer = getTransferMessage(wait.transferRisk, t);
 
   return (
     <View style={style.section}>
-      {interchange && <WaitMessageRow {...interchange} />}
+      {transfer && <WaitMessageRow {...transfer} />}
       {wait.mustWaitForNextLeg && (
         <WaitMessageRow
           {...getWaitMessage(wait.waitTimeInSeconds, t, language)}
@@ -118,14 +118,14 @@ const WaitMessageRow = ({icon, title, message, emphasis}: WaitMessage) => {
       <View style={style.message}>
         {title && (
           <ThemeText
-            typography="body__s"
+            typography="body__m"
             type="secondary"
             color={emphasisColor}
           >
             {title}
           </ThemeText>
         )}
-        <ThemeText typography="body__s" type="secondary">
+        <ThemeText typography="body__m" type="secondary">
           {message}
         </ThemeText>
       </View>
@@ -133,23 +133,11 @@ const WaitMessageRow = ({icon, title, message, emphasis}: WaitMessage) => {
   );
 };
 
-function getInterchangeMessage(
-  interchangeRisk: InterchangeRisk | undefined,
+function getTransferMessage(
+  transferRisk: TransferRisk | undefined,
   t: TranslateFunction,
 ): WaitMessage | undefined {
-  if (interchangeRisk === 'impossible') {
-    return {
-      icon: Close,
-      emphasis: 'error',
-      title: t(
-        TripDetailsTexts.trip.leg.wait.messages.interchange.impossible.label,
-      ),
-      message: t(
-        TripDetailsTexts.trip.leg.wait.messages.interchange.impossible.message,
-      ),
-    };
-  }
-  if (interchangeRisk === 'uncertain') {
+  if (transferRisk === TransferRisk.Uncertain) {
     return {
       icon: Unknown,
       emphasis: 'error',

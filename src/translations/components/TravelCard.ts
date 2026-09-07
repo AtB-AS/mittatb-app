@@ -68,10 +68,10 @@ const TravelCardTexts = {
     },
     originalTime: _('Opprinnelig', 'Original', 'Opprinnelig'),
     pastTime: _('Avreise passert', 'Departure passed', 'Avreise passert'),
-    notPossible: _(
-      'Overgang ikke lenger mulig',
-      'Transfer no longer possible',
-      'Overgang ikkje lenger mogleg',
+    transferUncertain: _(
+      'Usikker overgang',
+      'Uncertain transfer',
+      'Usikker overgang',
     ),
     cancelled: _('Innstilt', 'Cancelled', 'Innstilt'),
     tripStarted: _('Reisen har begynt', 'Trip has started', 'Reisa har begynt'),

@@ -53,13 +53,35 @@ describe('getStatusTextConfig', () => {
     expect(getStatusTextConfig(makeTripPattern(), t, colors)).toBeUndefined();
   });
 
-  it('returns impossible when status is impossible', () => {
+  it('returns transferUncertain when the BFF reports an uncertain transfer', () => {
+    const result = getStatusTextConfig(
+      makeTripPattern({transferRisk: 'uncertain'}),
+      t,
+      colors,
+    );
+    expect(result?.type).toBe('transferUncertain');
+  });
+
+  it('ignores the legacy impossible status', () => {
     const result = getStatusTextConfig(
       makeTripPattern({status: 'impossible'}),
       t,
       colors,
     );
-    expect(result?.type).toBe('impossible');
+    expect(result).toBeUndefined();
+  });
+
+  it('ranks a transfer risk above started and ended', () => {
+    const started = getStatusTextConfig(
+      makeTripPattern({
+        transferRisk: 'uncertain',
+        expectedStartTime: pastTime,
+        expectedEndTime: futureTime,
+      }),
+      t,
+      colors,
+    );
+    expect(started?.type).toBe('transferUncertain');
   });
 
   it('returns cancelled when any leg has fromEstimatedCall.cancellation', () => {

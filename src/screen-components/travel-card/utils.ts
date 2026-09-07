@@ -12,6 +12,7 @@ import {
 // eslint-disable-next-line no-restricted-imports
 import {isShortWaitTime} from '@atb/modules/trip-patterns/utils';
 import {Statuses} from '@atb/theme';
+import {TransferRisk} from '@atb-as/utils';
 import type {StatusTextConfig, TripPatternStatus} from './types';
 import type {TranslateFunction} from '@atb/translations';
 import {TravelCardTexts} from '@atb/translations';
@@ -28,7 +29,8 @@ export function getTripPatternStatus(
 ): TripPatternStatus | undefined {
   if (tripPattern.legs.some((l) => l.fromEstimatedCall?.cancellation))
     return 'cancelled';
-  if (tripPattern.status === 'impossible') return 'impossible';
+  if (tripPattern.transferRisk === TransferRisk.Uncertain)
+    return 'transferUncertain';
   if (isInThePast(tripPattern.expectedEndTime)) return 'ended';
   if (isInThePast(tripPattern.expectedStartTime)) return 'started';
   if (tripPattern.legs.some((leg) => leg.bookingArrangements)) {
@@ -75,11 +77,11 @@ export function getStatusTextConfig(
         color: colors.error,
         text: t(TravelCardTexts.header.cancelled),
       };
-    case 'impossible':
+    case 'transferUncertain':
       return {
-        type: 'impossible',
-        color: 'error',
-        text: t(TravelCardTexts.header.notPossible),
+        type: 'transferUncertain',
+        color: colors.info,
+        text: t(TravelCardTexts.header.transferUncertain),
       };
     case 'ended':
       return {
