@@ -190,6 +190,7 @@ export function LocationSearchContent({
             }}
             color={getThemeColor(theme)}
             style={styles.onlyStopPlacesCheckbox}
+            testID="onlyStopPlacesCheckbox"
           />
         )}
       </View>

@@ -1,0 +1,46 @@
+appId: ${APP_ID}
+name: 'Screenshot'
+env:
+  THRESHOLD_PCT: 98
+  SCREENSHOT_PATH: './screenshots/'
+---
+# Take a screenshot or assert on a screenshot
+- runScript:
+    file: ../utils/screenshot.js
+    env:
+      MODE: ${MODE}
+      ID: ${ID}
+- runFlow:
+    when:
+      true: ${output.screenshot == 'take_id'}
+    commands:
+      - takeScreenshot:
+          path: ${SCREENSHOT_PATH + FILE}
+          cropOn:
+            id: ${ID}
+          label: 'Take screenshot'
+- runFlow:
+    when:
+      true: ${output.screenshot == 'take'}
+    commands:
+      - takeScreenshot:
+          path: ${SCREENSHOT_PATH + FILE}
+          label: 'Take screenshot'
+- runFlow:
+    when:
+      true: ${output.screenshot == 'assert_id'}
+    commands:
+      - assertScreenshot:
+          path: ${SCREENSHOT_PATH + FILE}
+          thresholdPercentage: ${THRESHOLD_PCT}
+          cropOn:
+            id: ${ID}
+          label: 'Assert screenshot'
+- runFlow:
+    when:
+      true: ${output.screenshot == 'assert'}
+    commands:
+      - assertScreenshot:
+          path: ${SCREENSHOT_PATH + FILE}
+          thresholdPercentage: ${THRESHOLD_PCT}
+          label: 'Assert screenshot'

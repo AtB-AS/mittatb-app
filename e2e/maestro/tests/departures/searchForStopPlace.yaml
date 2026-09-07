@@ -1,0 +1,66 @@
+appId: ${APP_ID}
+name: 'Show a stop place with departures'
+---
+- evalScript: ${output.myStopPlace = 'Prinsens gate'}
+- evalScript: ${output.myAddress = 'Prinsens gate 39'}
+
+- tapOn:
+    id: ${output.nav.menu.departures}
+    label: 'Navigate to Departures tab'
+
+# Search for a stop place
+- runFlow:
+    file: ../../common/locationSearch.yaml
+    env:
+      SEARCH_TYPE: 'from'
+      SEARCH_TEXT: ${output.myStopPlace}
+      ONLY_STOP_PLACE: 'true'
+    label: 'Search for stop place'
+- extendedWaitUntil:
+    visible:
+      id: ${output.departures.departure()}
+      index: 0
+    timeout: 10000
+    label: 'Verify first departure is shown'
+- assertVisible:
+    text: ${output.myStopPlace}
+    label: 'Verify stop place name is shown'
+- tapOn:
+    id: ${output.nav.back}
+    label: 'Back'
+
+# Search for an address
+- runFlow:
+    file: ../../common/locationSearch.yaml
+    env:
+      SEARCH_TYPE: 'from'
+      SEARCH_TEXT: ${output.myAddress}
+      ONLY_STOP_PLACE: 'false'
+    label: 'Search for stop place'
+- extendedWaitUntil:
+    visible:
+      id: ${output.nearby.stopPlace()}
+    timeout: 10000
+    label: 'Verify nearby stop place is shown'
+- assertVisible:
+    id: ${output.nearby.stopPlaceName()}
+    text: ${output.myStopPlace}
+    label: 'Verify nearby stop place'
+- assertVisible:
+    text: ${'Stops near ' + output.myAddress}
+    label: 'Verify nearby heading'
+- tapOn:
+    id: ${output.nearby.stopPlace()}
+    label: 'Open chosen stop place'
+- extendedWaitUntil:
+    visible:
+      id: ${output.departures.departure()}
+      index: 0
+    timeout: 10000
+    label: 'Verify first departure is shown'
+- assertVisible:
+    text: ${output.myStopPlace}
+    label: 'Verify stop place name is shown'
+- tapOn:
+    id: ${output.nav.back}
+    label: 'Back'

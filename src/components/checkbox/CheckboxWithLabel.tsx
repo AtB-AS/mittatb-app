@@ -13,12 +13,14 @@ export const CheckboxWithLabel = ({
   onPress,
   color,
   style,
+  testID,
 }: {
   label: string;
   checked: boolean;
   onPress: (v: boolean) => void;
   color: ContrastColor;
   style: StyleProp<ViewStyle>;
+  testID?: string;
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -34,6 +36,7 @@ export const CheckboxWithLabel = ({
       accessible={true}
       accessibilityLabel={a11yLabel}
       onPress={() => onPress(!checked)}
+      testID={testID ? testID : ''}
     >
       <Checkbox checked={checked} />
       <ThemeText color={color}>{label}</ThemeText>

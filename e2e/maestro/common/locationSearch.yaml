@@ -1,7 +1,7 @@
 appId: ${APP_ID}
 name: 'Location Search'
 ---
-- runScript: ../elements/search.js
+# Differentiate between from and to locations
 - runFlow:
     when:
       true: ${SEARCH_TYPE == 'from'}
@@ -14,7 +14,6 @@ name: 'Location Search'
       - tapOn:
           id: ${output.search.from}
           label: 'Open location search'
-
 - runFlow:
     when:
       true: ${SEARCH_TYPE == 'to'}
@@ -36,17 +35,46 @@ name: 'Location Search'
 - tapOn:
     id: ${output.search.input}
     label: 'Select search input'
+- eraseText
 - inputText:
     text: ${SEARCH_TEXT}
     label: 'Type search query'
 
+# Whether to check/uncheck the only stop place checkbox
+- runFlow:
+    when:
+      true: ${ONLY_STOP_PLACE == 'true'}
+      visible:
+        id: 'checkbox'
+        selected: false
+        childOf:
+          id: ${output.search.onlyStopPlaces}
+    commands:
+      - tapOn:
+          id: ${output.global.checkbox}
+          childOf:
+            id: ${output.search.onlyStopPlaces}
+          label: 'Ensure only stop places is checked'
+- runFlow:
+    when:
+      true: ${ONLY_STOP_PLACE == 'false'}
+      visible:
+        id: ${output.global.checkbox}
+        selected: true
+        childOf:
+          id: ${output.search.onlyStopPlaces}
+    commands:
+      - tapOn:
+          id: ${output.global.checkbox}
+          childOf:
+            id: ${output.search.onlyStopPlaces}
+          label: 'Ensure only stop places is NOT checked'
+
 - extendedWaitUntil:
     visible:
-      id: ${output.search.resultItem}
-      #index: 0
+      id: ${output.search.resultItem()}
     timeout: 10000
     label: 'Wait for search results'
 - tapOn:
-    id: ${output.search.resultItem}
-    #index: 0
+    id: ${output.search.resultItem()}
     label: 'Select first result'
