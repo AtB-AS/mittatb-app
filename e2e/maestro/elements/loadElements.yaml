@@ -1,7 +1,14 @@
 appId: ${APP_ID}
 ---
-- runScript: onboarding.js
+- runScript: auth.js
+- runScript: debug.js
+- runScript: departures.js
+- runScript: frontpage.js
+- runScript: globalElements.js
 - runScript: navigation.js
+- runScript: onboarding.js
+- runScript: profile.js
 - runScript: search.js
-- runScript: trips.js
 - runScript: tickets.js
+- runScript: token.js
+- runScript: trips.js

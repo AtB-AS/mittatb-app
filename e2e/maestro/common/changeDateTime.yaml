@@ -1,0 +1,103 @@
+appId: ${APP_ID}
+name: 'Change departure time'
+---
+# The native date/time picker (react-native-date-picker) renders without any
+# children in the accessibility tree (see https://github.com/henninghall/react-native-date-picker/issues/792).
+# Maestro therefor `swipe` based on raw screen coordinates rather than elements.
+
+# Assistant or departures
+- runFlow:
+    when:
+      true: ${MODE === 'assistant'}
+    commands:
+      - tapOn:
+          id: ${output.tripSearch.timePicker}
+          label: 'Open date/time picker'
+      - tapOn:
+          id: ${output.tripSearch.leaveAt}
+          label: 'Select "Leave at"'
+- runFlow:
+    when:
+      true: ${MODE === 'departure'}
+    commands:
+      - tapOn:
+          id: ${output.departures.nextDay}
+          label: 'Show next day'
+      - tapOn:
+          id: ${output.departures.timePicker}
+          label: 'Open date/time picker'
+
+# Compute swipe parameters based on target input
+- runScript:
+    file: ../utils/timePicker.js
+    env:
+      DAY: ${DAY}
+      HOUR: ${HOUR}
+      AM_PM: ${AM_PM}
+
+# Date column -> target weekday (swipe up)
+- repeat:
+    times: ${output.daysToTarget}
+    commands:
+      - swipe:
+          start: '20%, 92%'
+          end: '20%, 82%'
+          duration: 600
+          label: 'Advance date column by one day'
+
+# Hour column -> 02 (shortest direction around the 1-12 cycle)
+# Swipe up
+- runFlow:
+    when:
+      true: ${output.hourTicks > 0 && output.hourUp}
+    commands:
+      - repeat:
+          times: ${output.hourTicks}
+          commands:
+            - swipe:
+                start: '51%, 92%'
+                end: '51%, 82%'
+                duration: 600
+                label: 'Advance hour column by one tick'
+    label: 'Swipe hours'
+# Swipe down
+- runFlow:
+    when:
+      true: ${output.hourTicks > 0 && !output.hourUp}
+    commands:
+      - repeat:
+          times: ${output.hourTicks}
+          commands:
+            - swipe:
+                start: '51%, 82%'
+                end: '51%, 92%'
+                duration: 600
+                label: 'Decrease hour column by one tick'
+    label: 'Swipe hours'
+
+# AM/PM -> AM (02:00 in 24h format)
+- runFlow:
+    when:
+      true: ${output.ampmTicks > 0 && output.ampmToAM}
+    commands:
+      - swipe:
+          start: '75%, 82%'
+          end: '75%, 92%'
+          duration: 600
+    label: 'Switch PM -> AM'
+- runFlow:
+    when:
+      true: ${output.ampmTicks > 0 && !output.ampmToAM}
+    commands:
+      - swipe:
+          start: '75%, 92%'
+          end: '75%, 82%'
+          duration: 600
+    label: 'Switch AM -> PM'
+
+- tapOn:
+    id: ${output.global.closeBottomSheet}
+    label: 'Confirm new date/time'
+- assertVisible:
+    text: 'Leave at'
+    label: 'Verify departure time was changed from "Now" to "Leave at"'
