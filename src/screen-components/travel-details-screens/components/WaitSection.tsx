@@ -23,11 +23,6 @@ export type WaitDetails = {
   transferRisk?: TransferRisk;
 };
 
-/** Whether the wait between two legs has anything worth showing. */
-export function shouldShowWaitSection(wait: WaitDetails): boolean {
-  return !!wait.transferRisk || wait.mustWaitForNextLeg;
-}
-
 /** Where a trip row's content starts, which is what stop place names align to. */
 const TRIP_CONTENT_OFFSET =
   (NEW_TRIP_DIMENSIONS.labelWidth ?? 0) +
@@ -76,6 +71,10 @@ export const WaitSection: React.FC<WaitDetails> = (wait) => {
   const style = useSectionStyles();
   const {t, language} = useTranslation();
   const transfer = getTransferMessage(wait.transferRisk, t);
+
+  // The section carries its own bottom spacing, so rendering it with no rows
+  // leaves a gap. A risk with no message of its own lands here.
+  if (!transfer && !wait.mustWaitForNextLeg) return null;
 
   return (
     <View style={style.section}>

@@ -49,7 +49,7 @@ import {TripLegDecoration} from './TripLegDecoration';
 import {NEW_TRIP_DIMENSIONS, TripRow} from './TripRow';
 import {BookingInfoBox} from './BookingInfoBox';
 
-import {shouldShowWaitSection, WaitDetails, WaitSection} from './WaitSection';
+import {WaitDetails, WaitSection} from './WaitSection';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {TripProps} from './Trip';
@@ -627,7 +627,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   return (
     <>
       {sectionOutput}
-      {wait && shouldShowWaitSection(wait) && <WaitSection {...wait} />}
+      {wait && <WaitSection {...wait} />}
     </>
   );
 
