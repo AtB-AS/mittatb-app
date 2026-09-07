@@ -192,6 +192,34 @@ export function minutesBetween(
   return differenceInMinutes(parsedEnd, parsedStart);
 }
 
+/**
+ * Arrivals round up and departures round down, so a transfer of a few seconds
+ * within the same minute reads as the connection leaving before the arrival.
+ * Round the arrival down in that case, and both then show the same minute.
+ *
+ * Only when rounding is the whole problem. A genuinely missed connection keeps
+ * rounding up, so it still looks missed.
+ */
+export function arrivalRoundingMethod(
+  arrival: string | Date,
+  nextDeparture: string | Date | undefined,
+): RoundingMethod {
+  if (!nextDeparture) return 'ceil';
+
+  const arrivalTime = parseIfNeeded(arrival);
+  const departureTime = parseIfNeeded(nextDeparture);
+  if (arrivalTime > departureTime) return 'ceil';
+
+  // Rounded the way `formatToClock` will, so the decision matches the display.
+  const roundedArrival = roundToNearestMinutes(arrivalTime, {
+    roundingMethod: 'ceil',
+  });
+  const roundedDeparture = roundToNearestMinutes(departureTime, {
+    roundingMethod: 'floor',
+  });
+  return roundedArrival > roundedDeparture ? 'floor' : 'ceil';
+}
+
 export function formatToClock(
   isoDate: string | Date,
   language: Language,

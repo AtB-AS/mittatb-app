@@ -18,6 +18,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {
+  arrivalRoundingMethod,
   formatToClock,
   secondsToDuration,
   secondsToDurationShort,
@@ -85,6 +86,11 @@ type TripSectionProps = {
   isFirst?: boolean;
   step?: number;
   leg: Leg;
+  /**
+   * Next *displayed* departure, for `arrivalRoundingMethod`. A walk leg shows
+   * no departure row, so it is not it.
+   */
+  nextLegStartTime?: string;
   testID?: string;
   onPressShowLive?(serviceJourneyPolylines: ServiceJourneyPolylines): void;
   onPressDeparture: TripProps['onPressDeparture'];
@@ -97,6 +103,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   wait,
   step,
   leg,
+  nextLegStartTime,
   testID,
   onPressShowLive,
   onPressDeparture,
@@ -570,7 +577,10 @@ export const TripSection: React.FC<TripSectionProps> = ({
               rowLabel={
                 <Time
                   timeValues={endTimes}
-                  roundingMethod="ceil"
+                  roundingMethod={arrivalRoundingMethod(
+                    leg.expectedEndTime,
+                    nextLegStartTime,
+                  )}
                   timeIsApproximation={timesAreApproximations}
                 />
               }

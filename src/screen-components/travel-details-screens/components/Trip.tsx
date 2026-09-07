@@ -16,6 +16,7 @@ import {
   getShouldShowLiveVehicle,
   hasShortWaitTime,
   hasShortWaitTimeAndNotGuaranteedCorrespondence,
+  nextDisplayedDeparture,
   withinZoneIds,
 } from '../utils';
 import {
@@ -194,6 +195,7 @@ export const Trip: React.FC<TripProps> = ({
                 isLast={index == filteredLegs.length - 1}
                 step={index + 1}
                 leg={leg}
+                nextLegStartTime={nextDisplayedDeparture(filteredLegs, index)}
                 testID={'leg' + index}
                 onPressShowLive={
                   !isScreenReaderEnabled && legVehiclePosition
