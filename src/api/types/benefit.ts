@@ -18,8 +18,10 @@ export const PriceAdjustmentSchema = z
 // vehicle/system filtering all happen server-side), so the app only models the
 // display payload.
 export const BenefitSchema = z.object({
-  title: LanguageAndTextTypeArray.default([]),
-  description: LanguageAndTextTypeArray.default([]),
+  title: LanguageAndTextTypeArray.nullable().transform((v) => v ?? undefined),
+  description: LanguageAndTextTypeArray.nullable().transform(
+    (v) => v ?? undefined,
+  ),
   illustrationName: z.string().optional(),
   priceAdjustments: z.array(PriceAdjustmentSchema),
 });
