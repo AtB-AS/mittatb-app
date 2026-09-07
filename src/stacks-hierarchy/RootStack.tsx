@@ -293,6 +293,25 @@ export const RootStack = () => {
                   ],
                 } as ResultState;
               }
+              if (path.includes('map')) {
+                return {
+                  routes: [
+                    {
+                      name: 'Root_TabNavigatorStack',
+                      state: {
+                        routes: [
+                          {
+                            name: 'TabNav_MapStack',
+                            state: {
+                              routes: [{name: 'Map_RootScreen'}],
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                } as ResultState;
+              }
               if (path.includes('purchase-overview')) {
                 const params = new URLSearchParams(path.split('?')[1]);
                 const type = params.get('type');
