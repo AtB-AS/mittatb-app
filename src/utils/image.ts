@@ -1,5 +1,10 @@
-import ImageResizer from '@bam.tech/react-native-image-resizer';
-import {readFile} from '@dr.pogodin/react-native-fs';
+import {
+  ImageFormat,
+  Skia,
+  type SkData,
+  type SkImage,
+  type SkSurface,
+} from '@shopify/react-native-skia';
 import {z} from 'zod';
 import {notifyBugsnag} from './bugsnag-utils';
 
@@ -32,19 +37,46 @@ export async function compressImageToBase64(
   maxWidth: number,
   maxHeight: number,
 ): Promise<string> {
+  let data: SkData | undefined;
+  let source: SkImage | null | undefined;
+  let surface: SkSurface | null | undefined;
+  let snapshot: SkImage | undefined;
   try {
-    const compressed = await ImageResizer.createResizedImage(
-      path,
-      maxHeight,
-      maxWidth,
-      'JPEG',
-      70,
-    );
-    const base64 = await readFile(compressed.uri, 'base64');
-    return base64;
+    data = await Skia.Data.fromURI(path);
+    source = Skia.Image.MakeImageFromEncoded(data);
+    if (!source) return EMPTY_IMAGE_BASE64;
+
+    const srcW = source.width();
+    const srcH = source.height();
+    const scale = Math.min(maxWidth / srcW, maxHeight / srcH, 1);
+    const dstW = Math.max(1, Math.round(srcW * scale));
+    const dstH = Math.max(1, Math.round(srcH * scale));
+
+    surface = Skia.Surface.MakeOffscreen(dstW, dstH);
+    if (!surface) return EMPTY_IMAGE_BASE64;
+
+    const paint = Skia.Paint();
+    paint.setAntiAlias(true);
+    surface
+      .getCanvas()
+      .drawImageRect(
+        source,
+        {x: 0, y: 0, width: srcW, height: srcH},
+        {x: 0, y: 0, width: dstW, height: dstH},
+        paint,
+      );
+    surface.flush();
+
+    snapshot = surface.makeImageSnapshot();
+    return snapshot.encodeToBase64(ImageFormat.JPEG, 70);
   } catch (error) {
     notifyBugsnag('Image compression error', {metadata: {error}});
     //on error, return a 1x1 transparent png
     return EMPTY_IMAGE_BASE64;
+  } finally {
+    snapshot?.dispose();
+    surface?.dispose();
+    source?.dispose();
+    data?.dispose();
   }
 }
