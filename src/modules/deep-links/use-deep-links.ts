@@ -17,7 +17,7 @@ import {
   useTicketingContext,
 } from '@atb/modules/ticketing';
 import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
-import {parse} from 'search-params';
+import {DeepLink, parseDeepLink} from './parse-deep-link';
 import {parseParamAsInt} from './utils';
 import {initialUrl} from './initial-url';
 import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
@@ -55,7 +55,9 @@ export function useDeepLinks() {
         },
       },
     },
-    getStateFromPath(path, config) {
+    getStateFromPath(pathAndQuery, config) {
+      const {path, params} = parseDeepLink(pathAndQuery);
+
       const stateForPrivacy = getStateForPrivacy(path);
       if (stateForPrivacy) return stateForPrivacy;
 
@@ -64,6 +66,7 @@ export function useDeepLinks() {
 
       const stateForPurchaseOverview = getStateForPurchaseOverview(
         path,
+        params,
         preassignedFareProducts,
         customerProfile,
         purchaseSelectionBuilder,
@@ -74,10 +77,13 @@ export function useDeepLinks() {
         getStateForWidgetAddFavoriteDeparture(path);
       if (stateForAddFavoriteDeparture) return stateForAddFavoriteDeparture;
 
-      const stateForWidgetDepartures = getStateForWidgetDepartures(path);
+      const stateForWidgetDepartures = getStateForWidgetDepartures(
+        path,
+        params,
+      );
       if (stateForWidgetDepartures) return stateForWidgetDepartures;
 
-      return getStateFromPath(path, config);
+      return getStateFromPath(pathAndQuery, config);
     },
   };
   return linkingOptions;
@@ -87,7 +93,7 @@ export function useDeepLinks() {
  * `atb://privacy`
  */
 function getStateForPrivacy(path: string): ResultState | undefined {
-  if (path.startsWith('privacy')) {
+  if (path === 'privacy') {
     return {
       routes: [
         {
@@ -120,7 +126,7 @@ function getStateForBonus(
   path: string,
   isBonusEnabled: boolean,
 ): ResultState | undefined {
-  if (path.startsWith('points') && isBonusEnabled) {
+  if (path === 'points' && isBonusEnabled) {
     return {
       routes: [
         {
@@ -151,13 +157,13 @@ function getStateForBonus(
  */
 function getStateForPurchaseOverview(
   path: string,
+  params: DeepLink['params'],
   preassignedFareProducts: PreassignedFareProduct[],
   customerProfile: CustomerProfile | undefined,
   purchaseSelectionBuilder: PurchaseSelectionEmptyBuilder,
 ): ResultState | undefined {
-  if (path.startsWith('purchase-overview')) {
-    const params = new URLSearchParams(path.split('?')[1]);
-    const type = params.get('type');
+  if (path === 'purchase-overview') {
+    const type = params.type;
     if (type) {
       const isSellable = preassignedFareProducts.some(
         (product) =>
@@ -185,7 +191,7 @@ function getStateForPurchaseOverview(
 function getStateForWidgetAddFavoriteDeparture(
   path: string,
 ): ResultState | undefined {
-  if (path.startsWith('widget/addFavoriteDeparture')) {
+  if (path === 'widget/addFavoriteDeparture') {
     return {
       routes: [
         {
@@ -217,9 +223,11 @@ function getStateForWidgetAddFavoriteDeparture(
  *
  * `atb://widgetdetails?...&serviceJourneyId=...&serviceDate=...`
  */
-function getStateForWidgetDepartures(path: string): ResultState | undefined {
-  if (path.startsWith('widget')) {
-    const params = parse(path);
+function getStateForWidgetDepartures(
+  path: string,
+  params: DeepLink['params'],
+): ResultState | undefined {
+  if (path === 'widget' || path === 'widgetdetails') {
     const destination: PartialRoute<any>[] = [
       {
         // Index is needed so that the user can go back after
@@ -242,10 +250,10 @@ function getStateForWidgetDepartures(path: string): ResultState | undefined {
       },
     ];
 
-    if (path.startsWith('widgetdetails')) {
+    if (path === 'widgetdetails') {
       const item: ServiceJourneyDeparture = {
         serviceJourneyId: params.serviceJourneyId as string,
-        date: (params.date as string) || new Date().toISOString(),
+        date: params.date || new Date().toISOString(),
         serviceDate: params.serviceDate as string,
         fromStopPosition: parseParamAsInt(params.fromStopPosition) || 0,
         toStopPosition: parseParamAsInt(params.toStopPosition),
