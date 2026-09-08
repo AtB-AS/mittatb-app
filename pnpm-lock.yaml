@@ -31,8 +31,8 @@ importers:
         specifier: ^15.3.0
         version: 15.3.0
       '@atb-as/utils':
-        specifier: ^7.0.0
-        version: 7.0.0(zod@4.1.11)
+        specifier: ^8.0.1
+        version: 8.0.1(zod@4.1.11)
       '@babel/plugin-transform-export-namespace-from':
         specifier: ^7.27.1
         version: 7.27.1(@babel/core@7.29.0)
@@ -518,8 +518,8 @@ packages:
   '@atb-as/theme@15.3.0':
     resolution: {integrity: sha512-ZfXBn03SvJ8HAEOd3Ux1rM1OpwaHcJ/nOW8XJVJlEYiAE6lBIzMAcyhd97gEYB1YgywfDpJ6u4Z2rpNZj9N43g==}
 
-  '@atb-as/utils@7.0.0':
-    resolution: {integrity: sha512-1Unj1qtN7DgY0LZOPlIPHFfhjX04TC4mYSeiudSFbW7jqdPzl9z2z9MDwOOhcmiaZ+mymd/YJWQdfj56kBjhSw==}
+  '@atb-as/utils@8.0.1':
+    resolution: {integrity: sha512-3SsBVVpwSOHFFfFGMC7a2ufWzGd8IDx+Uz2SnPoKHr1FGncwGU/ul2P32V37/31pdqQWa33AAP7IIHApqYt/yg==}
     peerDependencies:
       zod: ^4.1.11
 
@@ -7370,7 +7370,7 @@ snapshots:
       hex-to-rgba: 2.0.1
       ts-deepmerge: 4.0.0
 
-  '@atb-as/utils@7.0.0(zod@4.1.11)':
+  '@atb-as/utils@8.0.1(zod@4.1.11)':
     dependencies:
       lodash: 4.18.1
       zod: 4.1.11

@@ -383,18 +383,6 @@ const TripDetailsTexts = {
                 'Det er ikkje sikkert du rekk denne overgangen',
               ),
             },
-            impossible: {
-              label: _(
-                'Overgang ikke lenger mulig',
-                'Transfer no longer possible',
-                'Overgang ikkje lenger mogleg',
-              ),
-              message: _(
-                'Du vil ikke rekke denne overgangen',
-                'You will not be able to catch the next vehicle',
-                'Du vil ikkje rekkje denne overgangen',
-              ),
-            },
           },
         },
       },

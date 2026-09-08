@@ -16,7 +16,6 @@ import {
   getShouldShowLiveVehicle,
   hasShortWaitTime,
   hasShortWaitTimeAndNotGuaranteedCorrespondence,
-  legInterchangeRisk,
   withinZoneIds,
 } from '../utils';
 import {
@@ -254,7 +253,10 @@ function legWaitDetails(index: number, legs: Leg[]): WaitDetails | undefined {
     return {
       mustWaitForNextLeg,
       waitTimeInSeconds,
-      interchangeRisk: legInterchangeRisk(index, legs, waitTimeInSeconds),
+      // The BFF stamps the risk on the leg you might miss, which is the one
+      // this wait leads into. Transit legs are never filtered out, so the
+      // warning survives `getFilteredLegsByWalkOrWaitTime`.
+      transferRisk: next.transferRisk,
     };
   }
 }
