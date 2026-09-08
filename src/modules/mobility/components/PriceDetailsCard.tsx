@@ -14,7 +14,7 @@ import {BenefitIllustration} from './BenefitIllustration';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {
   computeFreeMinuteCount,
-  formatMinuteBoundary,
+  formatMinuteBoundaryWithUnit,
   formatRatePerUnit,
   getFreeMinutes,
   getFreeUnlock,
@@ -65,7 +65,7 @@ export const PriceDetailsCard = ({
   const minutePriceDescription = hasFreeMinutes
     ? t(
         MobilityTexts.pricingDetails.freeMinutesDescription(
-          `${formatMinuteBoundary(freeMinuteCount, t)}${freeMinuteCount < 60 ? ' min' : ''}`,
+          formatMinuteBoundaryWithUnit(freeMinuteCount, t),
         ),
       )
     : ratePrUnit

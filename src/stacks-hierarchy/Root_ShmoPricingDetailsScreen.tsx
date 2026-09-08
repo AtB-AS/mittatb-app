@@ -16,7 +16,8 @@ import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
 import type {PriceAdjustmentType} from '@atb/api/types/benefit';
 import {
   computeFreeMinuteCount,
-  formatMinuteBoundary,
+  formatMinuteBoundaryWithUnit,
+  formatMinuteRange,
 } from '@atb/modules/mobility';
 
 type Props = RootStackScreenProps<'Root_ShmoPricingDetailsScreen'>;
@@ -74,7 +75,7 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
       if (segment.end != null) {
         const rangeText =
           unit === 'min'
-            ? `${formatMinuteBoundary(effectiveStart, t)}-${formatMinuteBoundary(segment.end, t)}${segment.end < 60 ? ` ${t(dictionary.date.units.short.minute)}` : ''}`
+            ? formatMinuteRange(effectiveStart, segment.end, t)
             : `${effectiveStart}-${segment.end} ${t(dictionary.distance.km)}`;
         return t(
           MobilityTexts.pricingDetails.pricePerIntervalRange(
@@ -85,7 +86,7 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
       } else {
         const fromText =
           unit === 'min'
-            ? `${formatMinuteBoundary(effectiveStart, t)}${effectiveStart < 60 ? ` ${t(dictionary.date.units.short.minute)}` : ''}`
+            ? formatMinuteBoundaryWithUnit(effectiveStart, t)
             : `${effectiveStart} ${t(dictionary.distance.km)}`;
         return t(
           MobilityTexts.pricingDetails.pricePerIntervalFrom(

@@ -206,18 +206,38 @@ export const hasMultiplePricingPlans = (plan: ShmoPricingPlan) =>
   (plan.perKmPricing && plan.perKmPricing.length > 1) ||
   (plan.perMinPricing && plan.perMinPricing.length > 1);
 
-export const formatMinuteBoundary = (
+export const formatMinuteBoundaryWithUnit = (
   minutes: number,
   t: TranslateFunction,
 ): string =>
   minutes < 60
-    ? `${minutes}`
+    ? `${minutes} ${t(dictionary.date.units.short.minute)}`
     : t(
         MobilityTexts.pricingDetails.hoursAndMinutes(
           Math.floor(minutes / 60),
           minutes % 60,
         ),
       );
+
+/**
+ * Formats a minute range for display, collapsing the unit to a single
+ * trailing occurrence when both boundaries share it (e.g. "0-45 min",
+ * "1-5 timer"), and spelling out both boundaries when they don't
+ * (e.g. "30 min-1 time").
+ */
+export const formatMinuteRange = (
+  start: number,
+  end: number,
+  t: TranslateFunction,
+): string => {
+  if (end < 60) {
+    return `${start}-${end} ${t(dictionary.date.units.short.minute)}`;
+  }
+  if (start >= 60 && start % 60 === 0 && end % 60 === 0) {
+    return `${start / 60}-${formatMinuteBoundaryWithUnit(end, t)}`;
+  }
+  return `${formatMinuteBoundaryWithUnit(start, t)}-${formatMinuteBoundaryWithUnit(end, t)}`;
+};
 
 export const formatRange = (rangeInMeters: number, language: Language) => {
   const rangeInKm =
