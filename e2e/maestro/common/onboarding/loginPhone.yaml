@@ -36,6 +36,26 @@ name: 'Login onboarding'
 - tapOn:
     text: 'Deny'
     label: 'Deny location permission'
+
+- extendedWaitUntil:
+    visible:
+      id: ${output.tokenToggle.infoBox}
+    timeout: 5000
+    optional: true
+    label: 'Wait for travel token box (if exists)'
+- runFlow:
+    when:
+      visible:
+        id: ${output.tokenToggle.infoBox}
+    commands:
+      - tapOn:
+          id: ${output.global.nextButton}
+          label: 'Accept inspection (if exists)'
+      - runFlow:
+          file: ../cleanUpMobileToken.yaml
+          label: 'Clean up all tokens'
+    label: 'Move inspection (if not this device)'
+
 - extendedWaitUntil:
     visible:
       id: ${output.nav.menu.assistant}

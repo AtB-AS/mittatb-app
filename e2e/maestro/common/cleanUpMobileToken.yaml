@@ -1,0 +1,75 @@
+appId: ${APP_ID}
+name: 'Clean up mobile token in debug'
+---
+- tapOn:
+    id: ${output.nav.menu.profile}
+    label: 'Navigate to Profile tab'
+
+- scrollUntilVisible:
+    element:
+      id: ${output.profile.debugButton}
+    direction: DOWN
+    timeout: 10000
+    label: 'Scroll to debug button'
+- tapOn:
+    id: ${output.profile.debugButton}
+    label: 'Open debug menu'
+- scrollUntilVisible:
+    element:
+      id: ${output.debug.mobileToken.section}
+    direction: DOWN
+    timeout: 10000
+    label: 'Scroll to mobile token section'
+- tapOn:
+    id: ${output.debug.mobileToken.section}
+    label: 'Open mobile token debug section'
+
+- scrollUntilVisible:
+    element:
+      id: ${output.debug.mobileToken.remote}
+    direction: DOWN
+    timeout: 10000
+    label: 'Scroll to remote tokens'
+- tapOn:
+    id: ${output.debug.mobileToken.remote}
+    label: 'Show remote tokens'
+
+# Remove tokens (assume not more than 3 remote tokens)
+- evalScript: ${output.index = 0}
+- repeat:
+    while:
+      true: ${output.index < 3}
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: ${output.debug.mobileToken.removeRemote + output.index}
+          direction: DOWN
+          timeout: 10000
+          optional: true
+          label: 'Find next remote token'
+      - runFlow:
+          when:
+            visible:
+              id: ${output.debug.mobileToken.removeRemote + output.index}
+          commands:
+            - tapOn:
+                id: ${output.debug.mobileToken.removeRemote + output.index}
+                label: 'Remove remote token'
+          label: 'Remove remote token (if exists)'
+      - evalScript: ${output.index++}
+    label: 'Remove all remote tokens'
+
+# Refresh token, i.e. create new token
+- scrollUntilVisible:
+    element:
+      text: 'Reload token(s)'
+    direction: UP
+    timeout: 10000
+    label: 'Scroll to reload tokens'
+- tapOn:
+    text: 'Reload token(s)'
+    label: 'Reload tokens'
+
+- tapOn:
+    id: ${output.nav.menu.profile}
+    label: 'Navigate to Profile tab'
