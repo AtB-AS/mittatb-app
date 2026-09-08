@@ -58,7 +58,6 @@ struct WidgetViewModel {
 
         var queryItems = [
             URLQueryItem(name: "stopId", value: stopPlace.id),
-            URLQueryItem(name: "stopName", value: stopPlace.name),
             URLQueryItem(name: "quayId", value: quay.id),
             URLQueryItem(name: "latitude", value: String(stopPlace.latitude)),
             URLQueryItem(name: "longitude", value: String(stopPlace.longitude)),

@@ -13,12 +13,20 @@ import type {DepartureSearchTime} from 'src/components/date-selection';
 import {useStopsDetailsDataQuery} from './hooks/use-stops-details-data-query';
 import {useScrollBorder} from '@atb/utils/use-scroll-border';
 import {FullScreenView} from '@atb/components/screen-view';
+import {Loading} from '@atb/components/loading';
 
 export type PlaceScreenParams = {
-  place: StopPlace;
+  /**
+   * Stop place with quay data, or let them be fetched by stop id.
+   */
+  place: StopPlace | {id: string};
   selectedQuayId?: string;
   showOnlyFavoritesByDefault?: boolean;
 };
+
+const hasLoadedQuays = (
+  place: PlaceScreenParams['place'],
+): place is StopPlace => 'quays' in place && place.quays !== undefined;
 
 type Props = PlaceScreenParams & {
   onPressQuay?: (quayId: string | undefined) => void;
@@ -31,7 +39,7 @@ type Props = PlaceScreenParams & {
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
 export const PlaceScreenComponent = ({
-  place,
+  place: placeParam,
   selectedQuayId,
   showOnlyFavoritesByDefault,
   onPressQuay,
@@ -50,23 +58,33 @@ export const PlaceScreenComponent = ({
   );
 
   const {data: stopsDetailsData, isError: isStopsDetailsError} =
-    useStopsDetailsDataQuery(place.quays === undefined ? [place.id] : []);
+    useStopsDetailsDataQuery(hasLoadedQuays(placeParam) ? [] : [placeParam.id]);
 
-  if (stopsDetailsData && place.quays === undefined) {
-    place = stopsDetailsData.stopPlaces[0];
-  }
+  const place = hasLoadedQuays(placeParam)
+    ? placeParam
+    : stopsDetailsData?.stopPlaces[0];
 
-  if (isStopsDetailsError) {
+  if (isStopsDetailsError || (stopsDetailsData && !place)) {
     return (
       <FullScreenView
         focusRef={undefined}
-        headerProps={{title: place.name, leftButton: {type: 'back'}}}
+        headerProps={{title: place?.name, leftButton: {type: 'back'}}}
       >
         <MessageInfoBox
           style={styles.messageBox}
           type="error"
           message={t(DeparturesTexts.message.resultNotFound)}
         />
+      </FullScreenView>
+    );
+  }
+  if (!place) {
+    return (
+      <FullScreenView
+        focusRef={undefined}
+        headerProps={{leftButton: {type: 'back'}}}
+      >
+        <Loading style={styles.loading} />
       </FullScreenView>
     );
   }
@@ -175,5 +193,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   quayData: {flex: 1},
   messageBox: {
     margin: theme.spacing.medium,
+  },
+  loading: {
+    alignSelf: 'center',
+    margin: theme.spacing.xLarge,
   },
 }));
