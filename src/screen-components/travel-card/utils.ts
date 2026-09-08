@@ -10,7 +10,10 @@ import {
   toMostCriticalStatus,
 } from '@atb/modules/situations/utils';
 // eslint-disable-next-line no-restricted-imports
-import {isShortWaitTime} from '@atb/modules/trip-patterns/utils';
+import {
+  isShortWaitTime,
+  isTransferInto,
+} from '@atb/modules/trip-patterns/utils';
 import {Statuses} from '@atb/theme';
 import {TransferRisk} from '@atb-as/utils';
 import type {StatusTextConfig, TripPatternStatus} from './types';
@@ -46,8 +49,8 @@ export function getTripPatternStatus(
 /**
  * Get the most critical message type for a leg in the travel card, considering
  * both leg-specific notifications (situations, notices, etc.) and short
- * transfer time from the previous leg. Transfer time is only considered for
- * transit legs.
+ * transfer time from the previous leg. Transfer time is only considered where
+ * the gap is a real transfer, so walking to the first stop never counts.
  */
 export function getMsgTypeForTravelCardLeg(
   legs: Leg[],
@@ -55,11 +58,13 @@ export function getMsgTypeForTravelCardLeg(
 ): Exclude<Statuses, 'valid'> | undefined {
   const leg = legs[index];
   const legMsgType = getMsgTypeForLeg(leg);
-  if (leg.mode === 'foot') return legMsgType;
-  const previousLeg = legs[index - 1];
-  const waitTimeInSeconds = previousLeg
-    ? secondsBetween(previousLeg.expectedEndTime, leg.expectedStartTime)
-    : 0;
+  if (!isTransferInto(legs, index)) return legMsgType;
+
+  // A transfer has a leg before it by definition, so there is a gap to measure.
+  const waitTimeInSeconds = secondsBetween(
+    legs[index - 1].expectedEndTime,
+    leg.expectedStartTime,
+  );
   const shortTransferMsgType: Exclude<Statuses, 'valid'> | undefined =
     isShortWaitTime(waitTimeInSeconds) ? 'info' : undefined;
   return toMostCriticalStatus(legMsgType, shortTransferMsgType);

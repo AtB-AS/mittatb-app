@@ -9,6 +9,7 @@ import {
 // eslint-disable-next-line no-restricted-imports
 import {
   isShortWaitTime,
+  isTransferInto,
   significantWaitTime,
 } from '@atb/modules/trip-patterns/utils';
 import {Leg, Line, TripPattern} from '@atb/api/types/trips';
@@ -162,14 +163,16 @@ export function getLineA11yLabel(
 }
 
 export function hasShortWaitTime(legs: Leg[]) {
-  return iterateWithNext(legs)
-    .map((pair) => {
-      return differenceInSeconds(
-        parseDateIfString(pair.next.expectedStartTime),
-        parseDateIfString(pair.current.expectedEndTime),
-      );
-    })
-    .some((waitTime) => isShortWaitTime(waitTime));
+  return iterateWithNext(legs).some((pair, index) => {
+    // `index` is the pair's first leg, so the leg being boarded is the next one.
+    if (!isTransferInto(legs, index + 1)) return false;
+
+    const waitTime = differenceInSeconds(
+      parseDateIfString(pair.next.expectedStartTime),
+      parseDateIfString(pair.current.expectedEndTime),
+    );
+    return isShortWaitTime(waitTime);
+  });
 }
 
 export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
