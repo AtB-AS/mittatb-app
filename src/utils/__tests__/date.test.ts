@@ -587,7 +587,7 @@ describe('arrivalRoundingMethod', () => {
     expect(arrivalRoundingMethod(at('10:10:11'), at('10:10:34'))).toBe('floor');
   });
 
-  it('rounds down across a whole-minute departure in the same minute', () => {
+  it('rounds down for a long wait inside one minute', () => {
     expect(arrivalRoundingMethod(at('10:10:10'), at('10:10:55'))).toBe('floor');
   });
 
@@ -601,6 +601,12 @@ describe('arrivalRoundingMethod', () => {
 
   it('rounds up on a genuinely missed connection, so it still looks missed', () => {
     expect(arrivalRoundingMethod(at('10:11:40'), at('10:10:30'))).toBe('ceil');
+  });
+
+  it('rounds up on a negative gap inside one minute', () => {
+    // Rounding alone would floor this to a matching 10:10/10:10 and hide a
+    // connection that really does leave first.
+    expect(arrivalRoundingMethod(at('10:10:40'), at('10:10:10'))).toBe('ceil');
   });
 
   it('rounds up when the arrival is already on a whole minute', () => {

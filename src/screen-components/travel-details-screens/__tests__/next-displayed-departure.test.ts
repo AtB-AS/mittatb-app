@@ -1,4 +1,5 @@
 import {Leg} from '@atb/api/types/trips';
+import {arrivalRoundingMethod} from '@atb/utils/date';
 import {nextDisplayedDeparture} from '../utils';
 
 describe('nextDisplayedDeparture', () => {
@@ -47,5 +48,65 @@ describe('nextDisplayedDeparture', () => {
 
   it('handles an empty trip', () => {
     expect(nextDisplayedDeparture([], 0)).toBeUndefined();
+  });
+});
+
+describe('arrival rounding over whole trips', () => {
+  const at = (time: string) => `2024-01-01T${time}.000Z`;
+  const withTimes = (mode: string, start: string, end: string) =>
+    ({mode, expectedStartTime: at(start), expectedEndTime: at(end)}) as Leg;
+  const transit = (start: string, end: string) => withTimes('bus', start, end);
+  const walking = (start: string, end: string) => withTimes('foot', start, end);
+
+  const roundingFor = (legs: Leg[], index: number) =>
+    arrivalRoundingMethod(
+      legs[index].expectedEndTime,
+      nextDisplayedDeparture(legs, index),
+    );
+
+  it('floors a same-minute transfer between transit legs', () => {
+    const legs = [
+      transit('10:00:00', '10:17:11'),
+      transit('10:17:34', '10:30:00'),
+    ];
+    expect(roundingFor(legs, 0)).toBe('floor');
+  });
+
+  it('floors across an intermediate walk when the connection is tight', () => {
+    // The walk shows no departure row, so the tight transit departure behind
+    // it is what the arrival has to agree with.
+    const legs = [
+      transit('10:00:00', '10:17:11'),
+      walking('10:17:11', '10:17:20'),
+      transit('10:17:34', '10:30:00'),
+    ];
+    expect(roundingFor(legs, 0)).toBe('floor');
+  });
+
+  it('does not floor when a walk absorbs the transfer', () => {
+    // The walk starts exactly at the arrival, so treating it as the next
+    // departure would compare the arrival against itself and floor wrongly.
+    const legs = [
+      transit('10:00:00', '10:17:11'),
+      walking('10:17:11', '10:19:00'),
+      transit('10:22:40', '10:40:00'),
+    ];
+    expect(roundingFor(legs, 0)).toBe('ceil');
+  });
+
+  it('does not floor before a trailing walk', () => {
+    const legs = [
+      transit('10:00:00', '10:17:11'),
+      walking('10:17:11', '10:25:00'),
+    ];
+    expect(roundingFor(legs, 0)).toBe('ceil');
+  });
+
+  it('does not floor the final arrival', () => {
+    const legs = [
+      transit('10:00:00', '10:17:11'),
+      transit('10:17:34', '10:30:00'),
+    ];
+    expect(roundingFor(legs, 1)).toBe('ceil');
   });
 });
