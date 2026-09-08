@@ -70,12 +70,7 @@
       "Edit(**/.env.*)",
       "Edit(**/secrets/**)",
       "Edit(**/credentials/**)",
-      "Edit(**/.ssh/**)",
-      "Write(**/.env)",
-      "Write(**/.env.*)",
-      "Write(**/secrets/**)",
-      "Write(**/credentials/**)",
-      "Write(**/.ssh/**)"
+      "Edit(**/.ssh/**)"
     ]
   },
   "enabledPlugins": {
