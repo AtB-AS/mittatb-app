@@ -6,8 +6,11 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import firestore, {
-  FirebaseFirestoreTypes,
+import {
+  collection,
+  getFirestore,
+  onSnapshot,
+  QuerySnapshot,
 } from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
 import {PaymentType} from '@atb/modules/ticketing';
@@ -155,141 +158,138 @@ export const FirestoreConfigurationContextProvider = ({children}: Props) => {
   const {resubscribe, resubscribeToggle} = useResubscribeToggle();
 
   const subscribeFirestore = useCallback(() => {
-    return firestore()
-      .collection('configuration')
-      .onSnapshot(
-        (snapshot) => {
-          const fareZones = getFareZonesFromSnapshot(snapshot);
-          if (fareZones) {
-            setFareZones(fareZones);
-          }
+    return onSnapshot(
+      collection(getFirestore(), 'configuration'),
+      (snapshot) => {
+        const fareZones = getFareZonesFromSnapshot(snapshot);
+        if (fareZones) {
+          setFareZones(fareZones);
+        }
 
-          const cityZones = getCityZonesFromSnapshot(snapshot);
-          if (cityZones) {
-            setCityZones(cityZones);
-          }
+        const cityZones = getCityZonesFromSnapshot(snapshot);
+        if (cityZones) {
+          setCityZones(cityZones);
+        }
 
-          const carPoolingZones = getCarPoolingZonesFromSnapshot(snapshot);
-          if (carPoolingZones) {
-            setCarPoolingZones(carPoolingZones);
-          }
+        const carPoolingZones = getCarPoolingZonesFromSnapshot(snapshot);
+        if (carPoolingZones) {
+          setCarPoolingZones(carPoolingZones);
+        }
 
-          const userProfiles = getUserProfilesFromSnapshot(snapshot);
-          if (userProfiles) {
-            setUserProfiles(userProfiles);
-          }
+        const userProfiles = getUserProfilesFromSnapshot(snapshot);
+        if (userProfiles) {
+          setUserProfiles(userProfiles);
+        }
 
-          const modesWeSellTicketsFor =
-            getModesWeSellTicketsForFromSnapshot(snapshot);
-          if (modesWeSellTicketsFor) {
-            setModesWeSellTicketsFor(modesWeSellTicketsFor);
-          }
+        const modesWeSellTicketsFor =
+          getModesWeSellTicketsForFromSnapshot(snapshot);
+        if (modesWeSellTicketsFor) {
+          setModesWeSellTicketsFor(modesWeSellTicketsFor);
+        }
 
-          const paymentTypes = getPaymentTypesFromSnapshot(snapshot);
-          if (paymentTypes) {
-            setPaymentTypes(paymentTypes);
-          }
+        const paymentTypes = getPaymentTypesFromSnapshot(snapshot);
+        if (paymentTypes) {
+          setPaymentTypes(paymentTypes);
+        }
 
-          const vatPercent = getVatPercentFromSnapshot(snapshot);
-          if (vatPercent) {
-            setVatPercent(vatPercent);
-          }
+        const vatPercent = getVatPercentFromSnapshot(snapshot);
+        if (vatPercent) {
+          setVatPercent(vatPercent);
+        }
 
-          const contactPhoneNumber =
-            getContactPhoneNumberFromSnapshot(snapshot);
-          setContactPhoneNumber(contactPhoneNumber);
+        const contactPhoneNumber = getContactPhoneNumberFromSnapshot(snapshot);
+        setContactPhoneNumber(contactPhoneNumber);
 
-          const fareProductTypeConfigs =
-            getFareProductTypeConfigsFromSnapshot(snapshot);
-          if (fareProductTypeConfigs) {
-            setFareProductTypeConfigs(fareProductTypeConfigs);
-          }
+        const fareProductTypeConfigs =
+          getFareProductTypeConfigsFromSnapshot(snapshot);
+        if (fareProductTypeConfigs) {
+          setFareProductTypeConfigs(fareProductTypeConfigs);
+        }
 
-          const fareProductGroups = getFareProductGroupsFromSnapshot(snapshot);
-          if (fareProductGroups) {
-            setFareProductGroups(fareProductGroups);
-          }
+        const fareProductGroups = getFareProductGroupsFromSnapshot(snapshot);
+        if (fareProductGroups) {
+          setFareProductGroups(fareProductGroups);
+        }
 
-          const travelSearchFilters =
-            getTravelSearchFiltersFromSnapshot(snapshot);
-          if (travelSearchFilters) {
-            setTravelSearchFilters(travelSearchFilters);
-          }
+        const travelSearchFilters =
+          getTravelSearchFiltersFromSnapshot(snapshot);
+        if (travelSearchFilters) {
+          setTravelSearchFilters(travelSearchFilters);
+        }
 
-          const appTexts = getAppTextsFromSnapshot(snapshot);
-          if (appTexts) {
-            setAppTexts(appTexts);
-          }
+        const appTexts = getAppTextsFromSnapshot(snapshot);
+        if (appTexts) {
+          setAppTexts(appTexts);
+        }
 
-          const configurableLinks = getConfigurableLinksFromSnapshot(snapshot);
-          if (configurableLinks) {
-            setConfigurableLinks(configurableLinks);
-          }
+        const configurableLinks = getConfigurableLinksFromSnapshot(snapshot);
+        if (configurableLinks) {
+          setConfigurableLinks(configurableLinks);
+        }
 
-          const mobilityOperators = getMobilityOperatorsFromSnapshot(snapshot);
-          if (mobilityOperators) {
-            setMobilityOperators(mobilityOperators);
-          }
+        const mobilityOperators = getMobilityOperatorsFromSnapshot(snapshot);
+        if (mobilityOperators) {
+          setMobilityOperators(mobilityOperators);
+        }
 
-          const scooterFaqs = getScooterFaqsFromSnapshot(snapshot);
-          if (scooterFaqs) {
-            setScooterFaqs(scooterFaqs);
-          }
+        const scooterFaqs = getScooterFaqsFromSnapshot(snapshot);
+        if (scooterFaqs) {
+          setScooterFaqs(scooterFaqs);
+        }
 
-          const bicycleFaqs = getBicycleFaqsFromSnapshot(snapshot);
-          if (bicycleFaqs) {
-            setBicycleFaqs(bicycleFaqs);
-          }
+        const bicycleFaqs = getBicycleFaqsFromSnapshot(snapshot);
+        if (bicycleFaqs) {
+          setBicycleFaqs(bicycleFaqs);
+        }
 
-          const scooterConsentLines =
-            getScooterConsentLinesFromSnapshot(snapshot);
-          if (scooterConsentLines) {
-            setScooterConsentLines(scooterConsentLines);
-          }
+        const scooterConsentLines =
+          getScooterConsentLinesFromSnapshot(snapshot);
+        if (scooterConsentLines) {
+          setScooterConsentLines(scooterConsentLines);
+        }
 
-          const bicycleConsentLines =
-            getBicycleConsentLinesFromSnapshot(snapshot);
-          if (bicycleConsentLines) {
-            setBicycleConsentLines(bicycleConsentLines);
-          }
+        const bicycleConsentLines =
+          getBicycleConsentLinesFromSnapshot(snapshot);
+        if (bicycleConsentLines) {
+          setBicycleConsentLines(bicycleConsentLines);
+        }
 
-          const benefitIdsRequiringValueCode =
-            getBenefitIdsRequiringValueCodeFromSnapshot(snapshot);
-          if (benefitIdsRequiringValueCode) {
-            setBenefitIdsRequiringValueCode(benefitIdsRequiringValueCode);
-          }
+        const benefitIdsRequiringValueCode =
+          getBenefitIdsRequiringValueCodeFromSnapshot(snapshot);
+        if (benefitIdsRequiringValueCode) {
+          setBenefitIdsRequiringValueCode(benefitIdsRequiringValueCode);
+        }
 
-          const harborConnectionOverrides =
-            getHarborConnectionOverridesFromSnapshot(snapshot);
-          if (harborConnectionOverrides) {
-            setHarborConnectionOverrides(harborConnectionOverrides);
-          }
+        const harborConnectionOverrides =
+          getHarborConnectionOverridesFromSnapshot(snapshot);
+        if (harborConnectionOverrides) {
+          setHarborConnectionOverrides(harborConnectionOverrides);
+        }
 
-          setFirestoreConfigStatus(!snapshot.empty ? 'success' : 'loading');
+        setFirestoreConfigStatus(!snapshot.empty ? 'success' : 'loading');
 
-          const notificationConfig =
-            getNotificationConfigFromSnapshot(snapshot);
-          if (notificationConfig) {
-            setNotificationConfig(notificationConfig);
-          }
+        const notificationConfig = getNotificationConfigFromSnapshot(snapshot);
+        if (notificationConfig) {
+          setNotificationConfig(notificationConfig);
+        }
 
-          const stopSignalButtonConfig =
-            getStopSignalButtonConfigFromSnapshot(snapshot);
-          setStopSignalButtonConfig(stopSignalButtonConfig);
+        const stopSignalButtonConfig =
+          getStopSignalButtonConfigFromSnapshot(snapshot);
+        setStopSignalButtonConfig(stopSignalButtonConfig);
 
-          const knownQrCodeUrls = getKnownQrCodeUrlsFromSnapshot(snapshot);
-          setKnownQrCodeUrls(knownQrCodeUrls);
+        const knownQrCodeUrls = getKnownQrCodeUrlsFromSnapshot(snapshot);
+        setKnownQrCodeUrls(knownQrCodeUrls);
 
-          const refundReasons = getRefundReasonsFromSnapshot(snapshot);
-          setRefundReasons(refundReasons);
-        },
-        (error) => {
-          Bugsnag.leaveBreadcrumb(
-            `Firebase Error when fetching Configuration from Firestore`,
-            error,
-          );
-        },
-      );
+        const refundReasons = getRefundReasonsFromSnapshot(snapshot);
+        setRefundReasons(refundReasons);
+      },
+      (error) => {
+        Bugsnag.leaveBreadcrumb(
+          `Firebase Error when fetching Configuration from Firestore`,
+          error,
+        );
+      },
+    );
   }, []);
 
   const clearState = () => {
@@ -403,11 +403,11 @@ export function useFirestoreConfigurationContext() {
 }
 
 function getFareZonesFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): FareZone[] | undefined {
   const fareZonesFromFirestore = snapshot.docs
     .find((doc) => doc.id == 'referenceData')
-    ?.get<string>('fareZones');
+    ?.get('fareZones') as string | undefined;
 
   try {
     if (fareZonesFromFirestore) {
@@ -420,11 +420,11 @@ function getFareZonesFromSnapshot(
 }
 
 function getCityZonesFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): CityZone[] | undefined {
   const cityZonesFromFirestore = snapshot.docs
     .find((doc) => doc.id == 'referenceData')
-    ?.get<string>('cityZones');
+    ?.get('cityZones') as string | undefined;
 
   try {
     if (cityZonesFromFirestore) {
@@ -438,11 +438,11 @@ function getCityZonesFromSnapshot(
 }
 
 function getCarPoolingZonesFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): CarPoolingZone[] | undefined {
   const carPoolingZonesFromFirestore = snapshot.docs
     .find((doc) => doc.id == 'referenceData')
-    ?.get<string>('carPoolingZones');
+    ?.get('carPoolingZones') as string | undefined;
 
   try {
     if (carPoolingZonesFromFirestore) {
@@ -455,11 +455,11 @@ function getCarPoolingZonesFromSnapshot(
 }
 
 function getUserProfilesFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): UserProfile[] | undefined {
   const userProfilesFromFirestore = snapshot.docs
     .find((doc) => doc.id == 'referenceData')
-    ?.get<string>('userProfiles');
+    ?.get('userProfiles') as string | undefined;
 
   try {
     if (userProfilesFromFirestore) {
@@ -472,35 +472,35 @@ function getUserProfilesFromSnapshot(
 }
 
 function getModesWeSellTicketsForFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): string[] | undefined {
   return snapshot.docs
     .find((doc) => doc.id == 'other')
-    ?.get<string[]>('modesWeSellTicketsFor');
+    ?.get('modesWeSellTicketsFor') as string[] | undefined;
 }
 
 function getVatPercentFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): number | undefined {
-  return snapshot.docs
-    .find((doc) => doc.id == 'other')
-    ?.get<number>('vatPercent');
+  return snapshot.docs.find((doc) => doc.id == 'other')?.get('vatPercent') as
+    | number
+    | undefined;
 }
 
 function getContactPhoneNumberFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): string | undefined {
   return snapshot.docs
     .find((doc) => doc.id == 'other')
-    ?.get<string>('contactPhoneNumber');
+    ?.get('contactPhoneNumber') as string | undefined;
 }
 
 function getPaymentTypesFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): PaymentType[] | undefined {
   const firestorePaymentTypes = snapshot.docs
     .find((doc) => doc.id == 'paymentTypes')
-    ?.get<FirestorePaymentType[]>('app');
+    ?.get('app') as FirestorePaymentType[] | undefined;
   if (firestorePaymentTypes != undefined) {
     return mapPaymentTypeStringsToEnums(firestorePaymentTypes);
   }
@@ -533,7 +533,7 @@ function mapPaymentTypeStringToEnum(
 }
 
 function getFareProductTypeConfigsFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): FareProductTypeConfig[] | undefined {
   const fareProductTypeConfigs = snapshot.docs
     .find((doc) => doc.id == 'fareProductTypeConfigs')
@@ -546,7 +546,7 @@ function getFareProductTypeConfigsFromSnapshot(
 }
 
 function getFareProductGroupsFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): FareProductGroupType[] | undefined {
   const fareProductGroups = snapshot.docs
     .find((doc) => doc.id == 'fareProductTypeConfigs')
@@ -559,7 +559,7 @@ function getFareProductGroupsFromSnapshot(
 }
 
 function getTravelSearchFiltersFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): TravelSearchFiltersType | undefined {
   const travelSearchFiltersDoc = snapshot.docs.find(
     (doc) => doc.id == 'travelSearchFilters',
@@ -593,7 +593,7 @@ function getTravelSearchFiltersFromSnapshot(
 }
 
 function getAppTextsFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): AppTexts | undefined {
   const appTextsRaw = snapshot.docs.find((doc) => doc.id == 'appTexts');
   if (!appTextsRaw) return undefined;
@@ -610,7 +610,7 @@ function getAppTextsFromSnapshot(
 }
 
 function getConfigurableLinksFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): ConfigurableLinks | undefined {
   const urls = snapshot.docs.find((doc) => doc.id == 'urls');
 
@@ -672,42 +672,42 @@ function getConfigurableLinksFromSnapshot(
 }
 
 function getMobilityOperatorsFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): MobilityOperatorType[] | undefined {
   const operators = snapshot.docs.find((doc) => doc.id == 'mobility');
   return mapToMobilityOperators(operators?.get('operators'));
 }
 
 function getScooterFaqsFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): ShmoFaqType[] | undefined {
   const faqs = snapshot.docs.find((doc) => doc.id == 'mobility');
   return mapToShmoFaqs(faqs?.get('scooterFaqs'));
 }
 
 function getBicycleFaqsFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): ShmoFaqType[] | undefined {
   const faqs = snapshot.docs.find((doc) => doc.id == 'mobility');
   return mapToShmoFaqs(faqs?.get('bicycleFaqs'));
 }
 
 function getScooterConsentLinesFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): ConsentLineType[] | undefined {
   const consentLines = snapshot.docs.find((doc) => doc.id == 'mobility');
   return mapToConsentLines(consentLines?.get('scooterConsentLines'));
 }
 
 function getBicycleConsentLinesFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): ConsentLineType[] | undefined {
   const consentLines = snapshot.docs.find((doc) => doc.id == 'mobility');
   return mapToConsentLines(consentLines?.get('bicycleConsentLines'));
 }
 
 function getBenefitIdsRequiringValueCodeFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): OperatorBenefitIdType[] | undefined {
   const mobilityConfiguration = snapshot.docs.find(
     (doc) => doc.id == 'mobility',
@@ -718,7 +718,7 @@ function getBenefitIdsRequiringValueCodeFromSnapshot(
 }
 
 function getHarborConnectionOverridesFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): HarborConnectionOverrideType[] | undefined {
   const overrides = snapshot.docs.find(
     (doc) => doc.id == 'harborConnectionOverrides',
@@ -727,7 +727,7 @@ function getHarborConnectionOverridesFromSnapshot(
 }
 
 function getNotificationConfigFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): NotificationConfigType | undefined {
   const notificationConfig = snapshot.docs.find(
     (doc) => doc.id == 'notificationConfig',
@@ -736,7 +736,7 @@ function getNotificationConfigFromSnapshot(
 }
 
 function getStopSignalButtonConfigFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): StopSignalButtonConfigType {
   const config = snapshot.docs.find(
     (doc) => doc.id == 'stopSignalButtonConfig',
@@ -745,14 +745,14 @@ function getStopSignalButtonConfigFromSnapshot(
 }
 
 function getKnownQrCodeUrlsFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): CompiledKnownQrCodeUrl[] {
   const config = snapshot.docs.find((doc) => doc.id == 'knownQrCodeUrls');
   return mapToKnownQrCodeUrls(config?.data());
 }
 
 function getRefundReasonsFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+  snapshot: QuerySnapshot,
 ): RefundReasonType[] | undefined {
   const refundReasonsDoc = snapshot.docs.find(
     (doc) => doc.id == 'refundReasons',

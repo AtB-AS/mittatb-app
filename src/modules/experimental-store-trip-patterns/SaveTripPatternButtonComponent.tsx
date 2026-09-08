@@ -5,7 +5,7 @@ import {useMemo} from 'react';
 import {useStoredTripPatterns} from './StoredTripPatternsContext';
 import {Button} from '@atb/components/button';
 import {Save, SaveFill} from '@atb/assets/svg/mono-icons/actions';
-import analytics from '@react-native-firebase/analytics';
+import {getAnalytics, logEvent} from '@react-native-firebase/analytics';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
@@ -61,7 +61,7 @@ export const SaveTripPatternButtonComponent: React.FC<
       }
       onPress={() => {
         if (isStored) {
-          analytics().logEvent('click_trip_remove_button');
+          logEvent(getAnalytics(), 'click_trip_remove_button');
           posthogAnalytics.logEvent(
             'Trip details',
             'Trip removed',
@@ -79,7 +79,7 @@ export const SaveTripPatternButtonComponent: React.FC<
             100,
           );
         } else {
-          analytics().logEvent('click_trip_save_button');
+          logEvent(getAnalytics(), 'click_trip_save_button');
           posthogAnalytics.logEvent(
             'Trip details',
             'Trip saved',

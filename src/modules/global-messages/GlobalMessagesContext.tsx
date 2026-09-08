@@ -5,7 +5,13 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import firestore from '@react-native-firebase/firestore';
+import {
+  collection,
+  getFirestore,
+  onSnapshot,
+  query,
+  where,
+} from '@react-native-firebase/firestore';
 import {mapToGlobalMessages} from './converters';
 import {
   addDismissedMessageInStore,
@@ -60,24 +66,25 @@ const GlobalMessagesContextProvider = ({children}: Props) => {
 
   useEffect(
     () =>
-      firestore()
-        .collection<any>('globalMessagesV2')
-        .where('active', '==', true)
-        .where(
-          'context',
-          'array-contains-any',
-          Object.values(GlobalMessageContextEnum),
-        )
-        .onSnapshot(
-          async (snapshot) => {
-            const newGlobalMessages = mapToGlobalMessages(snapshot.docs);
-            setGlobalMessages(newGlobalMessages);
-            await setLatestDismissedGlobalMessages(newGlobalMessages);
-          },
-          (err) => {
-            console.warn(err);
-          },
+      onSnapshot(
+        query(
+          collection(getFirestore(), 'globalMessagesV2'),
+          where('active', '==', true),
+          where(
+            'context',
+            'array-contains-any',
+            Object.values(GlobalMessageContextEnum),
+          ),
         ),
+        async (snapshot) => {
+          const newGlobalMessages = mapToGlobalMessages(snapshot.docs);
+          setGlobalMessages(newGlobalMessages);
+          await setLatestDismissedGlobalMessages(newGlobalMessages);
+        },
+        (err) => {
+          console.warn(err);
+        },
+      ),
     [setLatestDismissedGlobalMessages],
   );
 

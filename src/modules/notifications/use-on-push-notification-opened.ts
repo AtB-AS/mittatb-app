@@ -1,6 +1,8 @@
 import {
-  firebase,
-  FirebaseMessagingTypes,
+  getInitialNotification,
+  getMessaging,
+  onNotificationOpenedApp,
+  RemoteMessage,
 } from '@react-native-firebase/messaging';
 import {useCallback, useEffect} from 'react';
 import {PushNotificationPayloadType, PushNotificationData} from './types';
@@ -10,7 +12,7 @@ export function useOnPushNotificationOpened(
   navigateToAvailableFareContracts: () => void,
 ) {
   const onMessage = useCallback(
-    (message: FirebaseMessagingTypes.RemoteMessage) => {
+    (message: RemoteMessage) => {
       const payload = PushNotificationData.safeParse(message.data);
       if (!payload.success) {
         Bugsnag.leaveBreadcrumb(
@@ -31,13 +33,12 @@ export function useOnPushNotificationOpened(
 
   useEffect(() => {
     // Handle notifications that are clicked while the app is closed (cold start)
-    firebase
-      .messaging()
-      .getInitialNotification()
-      .then((m) => (m ? onMessage(m) : null));
+    getInitialNotification(getMessaging()).then((m) =>
+      m ? onMessage(m) : null,
+    );
 
     // Handle notifications that are clicked while the app is in the bacground
-    const unsubscribe = firebase.messaging().onNotificationOpenedApp(onMessage);
+    const unsubscribe = onNotificationOpenedApp(getMessaging(), onMessage);
     return unsubscribe;
   }, [onMessage]);
 }

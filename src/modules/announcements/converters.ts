@@ -1,4 +1,4 @@
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
+import {QueryDocumentSnapshot} from '@react-native-firebase/firestore';
 import {Announcement} from './types';
 import {isDefined} from '@atb/utils/presence';
 import {
@@ -7,7 +7,7 @@ import {
 } from '@atb/utils/firestore-utils';
 
 export const mapToAnnouncements = (
-  snapshots: FirebaseFirestoreTypes.QueryDocumentSnapshot[],
+  snapshots: QueryDocumentSnapshot[],
 ): Announcement[] => {
   if (!Array.isArray(snapshots)) return [];
 
@@ -29,7 +29,7 @@ export const mapToAnnouncements = (
 };
 
 export const mapToAnnouncement = (
-  snapshot: FirebaseFirestoreTypes.QueryDocumentSnapshot,
+  snapshot: QueryDocumentSnapshot,
 ): Announcement | undefined => {
   const data = snapshot.data();
   const parseResult = Announcement.safeParse({

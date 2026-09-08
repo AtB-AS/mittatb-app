@@ -5,7 +5,10 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import remoteConfig from '@react-native-firebase/remote-config';
+import {
+  fetchAndActivate,
+  getRemoteConfig,
+} from '@react-native-firebase/remote-config';
 import {defaultRemoteConfig, getConfig, RemoteConfig} from './remote-config';
 import Bugsnag from '@bugsnag/react-native';
 
@@ -68,7 +71,7 @@ export const RemoteConfigContextProvider = ({children}: Props) => {
 
   const fetchConfig = useCallback(async () => {
     try {
-      await remoteConfig().fetchAndActivate();
+      await fetchAndActivate(getRemoteConfig());
       const currentConfig = getConfig();
       setConfig(currentConfig);
       setFetchError(false);
@@ -89,9 +92,12 @@ export const RemoteConfigContextProvider = ({children}: Props) => {
 
   useEffect(() => {
     (async function setupRemoteConfig() {
-      const configApi = remoteConfig();
-      await configApi.setConfigSettings({minimumFetchIntervalMillis: 21600000}); // 6 hours
-      await configApi.setDefaults(defaultRemoteConfig);
+      const configApi = getRemoteConfig();
+      configApi.settings = {
+        ...configApi.settings,
+        minimumFetchIntervalMillis: 21600000, // 6 hours
+      };
+      configApi.defaultConfig = defaultRemoteConfig;
       await fetchConfig();
     })();
   }, [fetchConfig]);
@@ -107,11 +113,11 @@ export const RemoteConfigContextProvider = ({children}: Props) => {
   );
 
   const refresh = useCallback(async () => {
-    const configApi = remoteConfig();
+    const configApi = getRemoteConfig();
     const {minimumFetchIntervalMillis} = configApi.settings;
-    await configApi.setConfigSettings({minimumFetchIntervalMillis: 0});
+    configApi.settings = {...configApi.settings, minimumFetchIntervalMillis: 0};
     await fetchConfig();
-    await configApi.setConfigSettings({minimumFetchIntervalMillis});
+    configApi.settings = {...configApi.settings, minimumFetchIntervalMillis};
     console.warn('Force-refreshed Remote Config');
   }, [fetchConfig]);
 
