@@ -95,9 +95,12 @@ name: 'Change departure time'
           duration: 600
     label: 'Switch AM -> PM'
 
-- tapOn:
-    id: ${output.global.closeBottomSheet}
-    label: 'Confirm new date/time'
+- retry:
+    maxRetries: 3
+    commands:
+      - tapOn:
+          id: ${output.global.closeBottomSheet}
+          label: 'Confirm new date/time'
 - assertVisible:
     text: 'Leave at'
     label: 'Verify departure time was changed from "Now" to "Leave at"'
