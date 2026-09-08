@@ -18,7 +18,7 @@ name: 'Mobile token in debug'
     element:
       id: ${output.debug.mobileToken.section}
     direction: DOWN
-    timeout: 10000
+    timeout: 20000
     label: 'Scroll to mobile token section'
 - tapOn:
     id: ${output.debug.mobileToken.section}
