@@ -179,6 +179,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const bikeA11yLabel = useBikeA11yLabel(leg, walkBikeRounding);
   const isWalkOrBike = isWalkSection || isBikeSection;
 
+  const arrivalRounding = arrivalRoundingMethod(
+    leg.expectedEndTime,
+    nextLegStartTime,
+  );
+
   const warningCount =
     leg.situations.length +
     (leg.transportSubmode === TransportSubmode.RailReplacementBus ? 1 : 0);
@@ -215,7 +220,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
       t(
         TripDetailsTexts.trip.leg.transport.a11yLabel.arrival(
           getPlaceName(leg.toPlace),
-          formatToClock(leg.expectedEndTime, language, 'ceil'),
+          formatToClock(leg.expectedEndTime, language, arrivalRounding),
         ),
       ),
     );
@@ -561,7 +566,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                   formatToClock(
                     endTimes.expectedTime ?? endTimes.aimedTime,
                     language,
-                    'ceil',
+                    arrivalRounding,
                   ),
                 ),
               )}
@@ -577,10 +582,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               rowLabel={
                 <Time
                   timeValues={endTimes}
-                  roundingMethod={arrivalRoundingMethod(
-                    leg.expectedEndTime,
-                    nextLegStartTime,
-                  )}
+                  roundingMethod={arrivalRounding}
                   timeIsApproximation={timesAreApproximations}
                 />
               }
