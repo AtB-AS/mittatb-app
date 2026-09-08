@@ -1,4 +1,4 @@
-import remoteConfig from '@react-native-firebase/remote-config';
+import {getAll, getRemoteConfig} from '@react-native-firebase/remote-config';
 import {ENABLE_TICKETING, CUSTOMER_SERVICE_URL} from '@env';
 import {
   MAPBOX_API_TOKEN,
@@ -179,7 +179,7 @@ export const defaultRemoteConfig: RemoteConfig = {
 export type RemoteConfigKeys = keyof RemoteConfig;
 
 export function getConfig(): RemoteConfig {
-  const values = remoteConfig().getAll();
+  const values = getAll(getRemoteConfig());
 
   const customer_service_url =
     values['customer_service_url']?.asString() ??

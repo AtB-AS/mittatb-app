@@ -1,7 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {getTextForLanguage, Language, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
-import firestore from '@react-native-firebase/firestore';
+import {
+  collection,
+  CollectionReference,
+  DocumentData,
+  getFirestore,
+  onSnapshot,
+} from '@react-native-firebase/firestore';
 import {TipRaw, TipType} from './types';
 import {mapToTips} from './converters';
 import {ExpandableSectionItem, Section} from '@atb/components/sections';
@@ -14,16 +20,18 @@ export const TipsAndInformation = () => {
 
   useEffect(
     () =>
-      firestore()
-        .collection<TipRaw>('tipsAndInformation')
-        .onSnapshot(
-          (snapshot) => {
-            setTips(mapToTips(snapshot.docs));
-          },
-          (err) => {
-            console.warn(err);
-          },
-        ),
+      onSnapshot(
+        collection(getFirestore(), 'tipsAndInformation') as CollectionReference<
+          TipRaw,
+          DocumentData
+        >,
+        (snapshot) => {
+          setTips(mapToTips(snapshot.docs));
+        },
+        (err) => {
+          console.warn(err);
+        },
+      ),
     [],
   );
 

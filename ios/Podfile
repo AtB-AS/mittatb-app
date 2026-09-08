@@ -26,6 +26,7 @@ setup_permissions([
 
 use_frameworks! :linkage => :static
 $RNFirebaseAsStaticFramework = true
+$RNFirebaseDisableSPM = true
 
 production = ENV["PRODUCTION"] == "1"
 

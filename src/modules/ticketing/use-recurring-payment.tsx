@@ -12,8 +12,12 @@ import {useCallback, useEffect, useState} from 'react';
 import {useDeleteRecurringPaymentMutation} from './use-delete-recurring-payment-mutation';
 import {useCancelRecurringPaymentMutation} from './use-cancel-recurring-payment-mutation';
 import {useAuthContext} from '@atb/modules/auth';
-import firestore, {
-  FirebaseFirestoreTypes,
+import {
+  collection,
+  doc,
+  DocumentSnapshot,
+  getFirestore,
+  onSnapshot,
 } from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
 
@@ -107,9 +111,7 @@ const useOnRecurringPaymentReceived = ({
 }) => {
   const {userId} = useAuthContext();
 
-  const mapRecurringPaymentIds = (
-    d: FirebaseFirestoreTypes.DocumentSnapshot,
-  ): number => {
+  const mapRecurringPaymentIds = (d: DocumentSnapshot): number => {
     const recurringPayment = d.data();
     if (!recurringPayment) {
       throw new Error('No recurring payment data');
@@ -121,23 +123,23 @@ const useOnRecurringPaymentReceived = ({
   useEffect(() => {
     if (!recurringPaymentId) return;
 
-    const recurringPaymentsUnsub = firestore()
-      .collection('customers')
-      .doc(userId)
-      .collection('recurringPayments')
-      .onSnapshot(
-        (snapshot) => {
-          const recurringPaymentIds = snapshot.docs.map(mapRecurringPaymentIds);
-          if (recurringPaymentIds.some((id) => id === recurringPaymentId)) {
-            callback();
-          }
-        },
-        (err) => {
-          Bugsnag.notify(err, function (event) {
-            event.addMetadata('payment', {userId});
-          });
-        },
-      );
+    const recurringPaymentsUnsub = onSnapshot(
+      collection(
+        doc(collection(getFirestore(), 'customers'), userId),
+        'recurringPayments',
+      ),
+      (snapshot) => {
+        const recurringPaymentIds = snapshot.docs.map(mapRecurringPaymentIds);
+        if (recurringPaymentIds.some((id) => id === recurringPaymentId)) {
+          callback();
+        }
+      },
+      (err) => {
+        Bugsnag.notify(err, function (event) {
+          event.addMetadata('payment', {userId});
+        });
+      },
+    );
     return () => {
       recurringPaymentsUnsub();
     };

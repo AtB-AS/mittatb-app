@@ -5,7 +5,13 @@ import React, {
   useContext,
   useReducer,
 } from 'react';
-import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {
+  connectAuthEmulator,
+  getAuth,
+  IdTokenResult,
+  signInAnonymously,
+  User,
+} from '@react-native-firebase/auth';
 import {useSubscribeToAuthUserChange} from './use-subscribe-to-auth-user-change';
 import {
   AuthenticationType,
@@ -34,8 +40,8 @@ import {getServerNowGlobal} from '@atb/modules/time';
 
 export type AuthReducerState = {
   authStatus: AuthStatus;
-  user?: FirebaseAuthTypes.User;
-  idTokenResult?: FirebaseAuthTypes.IdTokenResult;
+  user?: User;
+  idTokenResult?: IdTokenResult;
   phoneNumberToBeVerified?: string;
 };
 
@@ -159,8 +165,8 @@ type AuthContextState = {
   ) => Promise<VippsSignInErrorCode | undefined>;
   retryAuth: () => void;
   debug: {
-    user?: FirebaseAuthTypes.User;
-    idTokenResult?: FirebaseAuthTypes.IdTokenResult;
+    user?: User;
+    idTokenResult?: IdTokenResult;
   };
 };
 
@@ -189,8 +195,12 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         authStatus: state.authStatus,
         userId: state.user?.uid,
         phoneNumber: state.user?.phoneNumber || undefined,
-        customerNumber: state.idTokenResult?.claims['customer_number'],
-        abtCustomerId: state.idTokenResult?.claims['abt_id'],
+        customerNumber: state.idTokenResult?.claims['customer_number'] as
+          | number
+          | undefined,
+        abtCustomerId: state.idTokenResult?.claims['abt_id'] as
+          | string
+          | undefined,
         signInWithPhoneNumber: useCallback(
           (phoneNumberWithPrefix: string) =>
             authSignInWithPhoneNumber(
@@ -206,7 +216,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
           [state.phoneNumberToBeVerified],
         ),
         signOut: useCallback(async () => {
-          await auth().signInAnonymously();
+          await signInAnonymously(getAuth());
         }, []),
         authenticationType: mapAuthenticationType(state.user),
         isLoggedIn: mapAuthenticationType(state.user) === 'phone',
@@ -239,7 +249,7 @@ async function tryUseAuthEmulator() {
   try {
     const isAlive = await fetch('http://localhost:9099');
     if (isAlive.ok) {
-      auth().useEmulator('http://localhost:9099');
+      connectAuthEmulator(getAuth(), 'http://localhost:9099');
       console.warn(
         'Running Firebase Auth on local emulator (found localhost:9099)',
       );

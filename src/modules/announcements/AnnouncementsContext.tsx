@@ -5,7 +5,13 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import firestore from '@react-native-firebase/firestore';
+import {
+  collection,
+  getFirestore,
+  onSnapshot,
+  query,
+  where,
+} from '@react-native-firebase/firestore';
 import {Announcement} from './types';
 import {mapToAnnouncements} from './converters';
 import {
@@ -36,21 +42,22 @@ const AnnouncementsContextProvider = ({children}: Props) => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
 
   useEffect(() => {
-    const unsubscribe = firestore()
-      .collection('announcementsV2')
-      .where('active', '==', true)
-      .onSnapshot(
-        async (snapshot) => {
-          const dismissedIds = await getDismissedAnnouncementsFromStore();
-          const allAnnouncements = mapToAnnouncements(snapshot.docs);
-          setAnnouncements(
-            allAnnouncements.filter((a) => !dismissedIds.includes(a.id)),
-          );
-        },
-        (err) => {
-          console.warn(err);
-        },
-      );
+    const unsubscribe = onSnapshot(
+      query(
+        collection(getFirestore(), 'announcementsV2'),
+        where('active', '==', true),
+      ),
+      async (snapshot) => {
+        const dismissedIds = await getDismissedAnnouncementsFromStore();
+        const allAnnouncements = mapToAnnouncements(snapshot.docs);
+        setAnnouncements(
+          allAnnouncements.filter((a) => !dismissedIds.includes(a.id)),
+        );
+      },
+      (err) => {
+        console.warn(err);
+      },
+    );
     return () => unsubscribe();
   }, []);
 

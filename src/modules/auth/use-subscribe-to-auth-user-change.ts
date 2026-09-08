@@ -1,5 +1,9 @@
 import {Dispatch, useEffect} from 'react';
-import auth from '@react-native-firebase/auth';
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInAnonymously,
+} from '@react-native-firebase/auth';
 import {AuthReducerAction, AuthStateChangeListenerCallback} from './types';
 import Bugsnag from '@bugsnag/react-native';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
@@ -12,7 +16,7 @@ export const useSubscribeToAuthUserChange = (
   useEffect(() => {
     Bugsnag.leaveBreadcrumb('Subscribing to auth user changes');
     let signInInitiated = false;
-    const unsubscribe = auth().onAuthStateChanged((user) => {
+    const unsubscribe = onAuthStateChanged(getAuth(), (user) => {
       if (user) {
         dispatch({type: 'SET_USER', user});
       } else if (!signInInitiated) {
@@ -22,11 +26,9 @@ export const useSubscribeToAuthUserChange = (
         previously signed in.
          */
         Bugsnag.leaveBreadcrumb('Signing-in anonymously');
-        auth()
-          .signInAnonymously()
-          .then(() => {
-            signInInitiated = true;
-          });
+        signInAnonymously(getAuth()).then(() => {
+          signInInitiated = true;
+        });
       }
     });
     return () => unsubscribe();
@@ -41,7 +43,7 @@ export const useOnAuthStateChanged = (
   callback: AuthStateChangeListenerCallback,
 ) => {
   useEffect(() => {
-    const unsubscribe = auth().onAuthStateChanged(callback);
+    const unsubscribe = onAuthStateChanged(getAuth(), callback);
     return () => unsubscribe();
   }, [callback]);
 };

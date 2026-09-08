@@ -27,7 +27,7 @@ import {
   type TripAnalytics,
 } from '../utils';
 import {formatToClock, secondsBetween} from '@atb/utils/date';
-import analytics from '@react-native-firebase/analytics';
+import {getAnalytics, logEvent} from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
 import React, {Ref, useCallback, useEffect, useState} from 'react';
 import {View} from 'react-native';
@@ -198,7 +198,7 @@ export const LegacyTripDetailsScreenComponent = ({
             accessibilityLabel={t(TripDetailsTexts.trip.buyTicket.a11yLabel)}
             accessible={true}
             onPress={() => {
-              analytics().logEvent('click_trip_purchase_button');
+              logEvent(getAnalytics(), 'click_trip_purchase_button');
               onPressBuyTicket(
                 {
                   selection: purchaseSelection,

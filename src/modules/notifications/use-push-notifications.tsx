@@ -1,8 +1,18 @@
 import {useLocaleContext} from '@atb/modules/locale';
 import Bugsnag from '@bugsnag/react-native';
-import messaging, {
-  FirebaseMessagingTypes,
+import {
+  AuthorizationStatus,
+  getAPNSToken,
+  getMessaging,
+  getToken,
+  hasPermission,
+  isDeviceRegisteredForRemoteMessages,
+  registerDeviceForRemoteMessages,
+  requestPermission,
 } from '@react-native-firebase/messaging';
+
+type AuthorizationStatusValue =
+  (typeof AuthorizationStatus)[keyof typeof AuthorizationStatus];
 import React, {
   createContext,
   useCallback,
@@ -63,19 +73,19 @@ export const NotificationContextProvider = ({children}: Props) => {
       // It should be automatically registered in our workflow
       // but if there are cases where it fails, this should safeguard it.
       // Safe to call on Android, no need to do a platform check.
-      if (!messaging().isDeviceRegisteredForRemoteMessages) {
-        await messaging().registerDeviceForRemoteMessages();
+      if (!isDeviceRegisteredForRemoteMessages(getMessaging())) {
+        await registerDeviceForRemoteMessages(getMessaging());
       }
 
       // On iOS, wait for the APNs token to be available before requesting
       // the FCM token. registerDeviceForRemoteMessages resolves before the
       // APNs token callback fires, so getToken() can fail without this.
       if (Platform.OS === 'ios') {
-        let apnsToken = await messaging().getAPNSToken();
+        let apnsToken = await getAPNSToken(getMessaging());
         if (!apnsToken) {
           for (let i = 0; i < 5; i++) {
             await new Promise((resolve) => setTimeout(resolve, 500));
-            apnsToken = await messaging().getAPNSToken();
+            apnsToken = await getAPNSToken(getMessaging());
             if (apnsToken) break;
           }
           if (!apnsToken) {
@@ -84,7 +94,7 @@ export const NotificationContextProvider = ({children}: Props) => {
         }
       }
 
-      const token = await messaging().getToken();
+      const token = await getToken(getMessaging());
       setFcmToken(token);
       return token;
     } catch (e) {
@@ -118,10 +128,9 @@ export const NotificationContextProvider = ({children}: Props) => {
   const checkPermissions = useCallback(() => {
     setStatus('loading');
     if (Platform.OS === 'ios') {
-      messaging()
-        .hasPermission()
-        .then((hasPermission) => {
-          const status = mapIosPermissionStatus(hasPermission);
+      hasPermission(getMessaging())
+        .then((permission) => {
+          const status = mapIosPermissionStatus(permission);
           setStatus(status);
           register(status === 'granted');
         })
@@ -200,7 +209,7 @@ export function useNotificationsContext() {
 
 async function requestUserPermission(): Promise<NotificationPermissionStatus> {
   if (Platform.OS === 'ios') {
-    const authStatus = await messaging().requestPermission();
+    const authStatus = await requestPermission(getMessaging());
     return mapIosPermissionStatus(authStatus);
   } else if (Platform.OS === 'android') {
     const permissionStatus = await PermissionsAndroid.request(
@@ -214,17 +223,15 @@ async function requestUserPermission(): Promise<NotificationPermissionStatus> {
   return 'undetermined';
 }
 
-function mapIosPermissionStatus(
-  authStatus: FirebaseMessagingTypes.AuthorizationStatus,
-) {
+function mapIosPermissionStatus(authStatus: AuthorizationStatusValue) {
   switch (authStatus) {
-    case messaging.AuthorizationStatus.AUTHORIZED:
-    case messaging.AuthorizationStatus.PROVISIONAL:
-    case messaging.AuthorizationStatus.EPHEMERAL:
+    case AuthorizationStatus.AUTHORIZED:
+    case AuthorizationStatus.PROVISIONAL:
+    case AuthorizationStatus.EPHEMERAL:
       return 'granted';
-    case messaging.AuthorizationStatus.DENIED:
+    case AuthorizationStatus.DENIED:
       return 'denied';
-    case messaging.AuthorizationStatus.NOT_DETERMINED:
+    case AuthorizationStatus.NOT_DETERMINED:
       return 'undetermined';
     default:
       return 'undetermined';

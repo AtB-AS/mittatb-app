@@ -1,4 +1,4 @@
-import auth from '@react-native-firebase/auth';
+import {getAuth, signOut} from '@react-native-firebase/auth';
 import Bugsnag from '@bugsnag/react-native';
 import {v4 as uuid} from 'uuid';
 
@@ -29,12 +29,12 @@ export async function ensureFirstTimeSetup() {
  * deleted (anonymous user) or logged out.
  */
 async function cleanUpAuthUser() {
-  const user = auth().currentUser;
+  const user = getAuth().currentUser;
   if (user) {
     if (user.isAnonymous) {
       await user.delete();
     } else {
-      await auth().signOut();
+      await signOut(getAuth());
     }
   }
 }

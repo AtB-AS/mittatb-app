@@ -7,7 +7,7 @@ import {
   logToBugsnag,
   notifyBugsnag,
 } from '@atb/utils/bugsnag-utils';
-import {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {IdTokenResult} from '@react-native-firebase/auth';
 
 /**
  * Variable signalling whether the next fetch id token request should be force
@@ -43,7 +43,7 @@ export const useFetchIdTokenWithCustomClaims = (
         }`,
       );
 
-      let idToken: FirebaseAuthTypes.IdTokenResult;
+      let idToken: IdTokenResult;
       try {
         idToken = await state.user!.getIdTokenResult(shouldForceRefresh); // Force refresh from server if retry
       } catch (err) {

@@ -1,4 +1,4 @@
-import {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {IdTokenResult, User} from '@react-native-firebase/auth';
 
 export type AuthenticationType = 'none' | 'anonymous' | 'phone';
 
@@ -10,8 +10,8 @@ export type AuthStatus =
 
 export type AuthReducerAction =
   | {type: 'SIGN_IN_INITIATED'; phoneNumber: string}
-  | {type: 'SET_USER'; user: FirebaseAuthTypes.User}
-  | {type: 'SET_ID_TOKEN'; idTokenResult: FirebaseAuthTypes.IdTokenResult}
+  | {type: 'SET_USER'; user: User}
+  | {type: 'SET_ID_TOKEN'; idTokenResult: IdTokenResult}
   | {type: 'SET_FETCH_ID_TOKEN_TIMEOUT'}
   | {type: 'RETRY_FETCH_ID_TOKEN'}
   | {type: 'RESET_AUTH_STATUS'};
@@ -30,6 +30,4 @@ export type VippsSignInErrorCode =
   | 'outdated_app_version'
   | 'unknown_error';
 
-export type AuthStateChangeListenerCallback = (
-  user: FirebaseAuthTypes.User | null,
-) => void;
+export type AuthStateChangeListenerCallback = (user: User | null) => void;

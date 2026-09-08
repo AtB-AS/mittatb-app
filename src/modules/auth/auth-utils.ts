@@ -1,5 +1,5 @@
 import {Dispatch} from 'react';
-import auth from '@react-native-firebase/auth';
+import {getAuth, signInWithCustomToken} from '@react-native-firebase/auth';
 import Bugsnag from '@bugsnag/react-native';
 import {AuthReducerAction, ConfirmationErrorCode} from './types';
 import {authenticateWithSms, verifySms} from '@atb/api/identity';
@@ -76,7 +76,7 @@ export const authConfirmCode = async (
 
 export const authSignInWithCustomToken = async (token: string) => {
   try {
-    await auth().signInWithCustomToken(token);
+    await signInWithCustomToken(getAuth(), token);
   } catch {
     return 'unknown_error';
   }
