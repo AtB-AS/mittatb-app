@@ -18,7 +18,7 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {MapPin} from '@atb/assets/svg/mono-icons/tab-bar';
-import {MapFilterType, useMapContext} from '@atb/modules/map';
+import {MapFilterType, useEnableFormFactorsInMapFilter} from '@atb/modules/map';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
 type Props = {
@@ -35,24 +35,17 @@ export const BonusProductList = ({
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {mobilityOperators} = useFirestoreConfigurationContext();
-  const {mapFilter, setMapFilter} = useMapContext();
+  const enableFormFactorsInMapFilter = useEnableFormFactorsInMapFilter();
   const analytics = useAnalyticsContext();
 
   const handleNavigateToMap = useCallback(
     (formFactors: FormFactor[]) => {
-      if (!onNavigateToMap || !mapFilter) return;
-      const updatedMobility = {...mapFilter.mobility};
-      formFactors.forEach((ff) => {
-        updatedMobility[ff] = {
-          operators: updatedMobility[ff]?.operators ?? [],
-          showAll: true,
-        };
-      });
-      const updatedFilter = {...mapFilter, mobility: updatedMobility};
-      setMapFilter(updatedFilter);
+      if (!onNavigateToMap) return;
+      const updatedFilter = enableFormFactorsInMapFilter(formFactors);
+      if (!updatedFilter) return;
       onNavigateToMap(updatedFilter);
     },
-    [onNavigateToMap, mapFilter, setMapFilter],
+    [onNavigateToMap, enableFormFactorsInMapFilter],
   );
 
   return (

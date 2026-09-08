@@ -68,7 +68,7 @@ import {Root_ShmoOnboardingScreen} from './Root_ShmoOnboardingScreen';
 import {Root_ContactShmoOperatorScreen} from './Root_ShmoHelp/Root_ContactShmoOperatorScreen';
 import {Root_ContactShmoOperatorConfirmationScreen} from './Root_ShmoHelp/Root_ContactShmoOperatorConfirmationScreen';
 import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
-import {parseParamAsInt} from './utils';
+import {parseParamAsFormFactors, parseParamAsInt} from './utils';
 import {AnalyticsContextProvider} from '@atb/modules/analytics';
 import {Root_ParkingPhotoScreen} from './Root_ParkingPhotoScreen';
 import {Root_TripSelectionScreen} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/Root_TripSelectionScreen';
@@ -89,6 +89,7 @@ import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 import {Root_ShmoHelpScreen} from './Root_ShmoHelp/Root_ShmoHelpScreen';
 import {Root_ShmoPricingDetailsScreen} from './Root_ShmoPricingDetailsScreen';
 import {useGlobalEventStreamListeners} from '@atb/modules/event-stream';
+import {useEnableFormFactorsInMapFilter} from '@atb/modules/map';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -119,6 +120,7 @@ export const RootStack = () => {
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {customerProfile} = useTicketingContext();
   const {isBonusEnabled} = useFeatureTogglesContext();
+  const enableFormFactorsInMapFilter = useEnableFormFactorsInMapFilter();
 
   useTestIds();
   useSetupReactQueryWindowFocus();
@@ -294,6 +296,12 @@ export const RootStack = () => {
                 } as ResultState;
               }
               if (path.includes('map')) {
+                const params = new URLSearchParams(path.split('?')[1]);
+                const formFactors = parseParamAsFormFactors(
+                  params.get('formFactor'),
+                );
+                const initialFilters =
+                  enableFormFactorsInMapFilter(formFactors);
                 return {
                   routes: [
                     {
@@ -303,7 +311,12 @@ export const RootStack = () => {
                           {
                             name: 'TabNav_MapStack',
                             state: {
-                              routes: [{name: 'Map_RootScreen'}],
+                              routes: [
+                                {
+                                  name: 'Map_RootScreen',
+                                  params: {initialFilters},
+                                },
+                              ],
                             },
                           },
                         ],
