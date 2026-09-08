@@ -8,8 +8,8 @@ import {RequestError, isErrorResponse} from '@atb/api/utils';
 const VoucherBenefit = z.object({
   operatorId: z.string(),
   benefitTypes: OperatorBenefitId.array(),
-  title: LanguageAndTextTypeArray.nullable().transform((v) => v ?? undefined),
-  description: LanguageAndTextTypeArray.nullable().transform(
+  title: LanguageAndTextTypeArray.nullish().transform((v) => v ?? undefined),
+  description: LanguageAndTextTypeArray.nullish().transform(
     (v) => v ?? undefined,
   ),
   illustrationName: z.string().optional(),
