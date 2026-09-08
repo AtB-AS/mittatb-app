@@ -58,7 +58,7 @@ function getWaitMessage(
     1,
     Math.ceil(waitTimeInSeconds / ONE_MINUTE_IN_SECONDS),
   );
-  
+
   return {
     icon: Warning,
     emphasis: 'info',
