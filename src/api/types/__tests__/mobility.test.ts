@@ -40,7 +40,7 @@ describe('VehicleSchema (shmo vehicle contract v2)', () => {
     }
   });
 
-  it('parses a benefit, defaults title/description, and ignores server-only fields', () => {
+  it('parses a benefit, handles undefined description, and ignores server-only fields', () => {
     const result = VehicleSchema.safeParse({
       ...baseVehicle,
       benefit: {
@@ -62,8 +62,8 @@ describe('VehicleSchema (shmo vehicle contract v2)', () => {
       expect(result.data.benefit?.title).toEqual([
         {language: 'en', value: 'Free unlock'},
       ]);
-      // description is optional on the wire and defaults to an empty array
-      expect(result.data.benefit?.description).toEqual([]);
+      // an undefined description on the wire is normalized to undefined
+      expect(result.data.benefit?.description).toBeUndefined();
       expect(result.data.benefit?.illustrationName).toBe('TicketValid');
       expect(result.data.benefit?.priceAdjustments[0]).toEqual({
         amount: 0,

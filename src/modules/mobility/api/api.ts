@@ -8,8 +8,10 @@ import {RequestError, isErrorResponse} from '@atb/api/utils';
 const VoucherBenefit = z.object({
   operatorId: z.string(),
   benefitTypes: OperatorBenefitId.array(),
-  title: LanguageAndTextTypeArray.default([]),
-  description: LanguageAndTextTypeArray.default([]),
+  title: LanguageAndTextTypeArray.nullish().transform((v) => v ?? undefined),
+  description: LanguageAndTextTypeArray.nullish().transform(
+    (v) => v ?? undefined,
+  ),
   illustrationName: z.string().optional(),
 });
 export type VoucherBenefitType = z.infer<typeof VoucherBenefit>;
