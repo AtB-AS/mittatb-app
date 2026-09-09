@@ -3,6 +3,7 @@ export type {
   FareContractStub,
   ForcedSelectionChange,
   PurchaseSelectionBuildResult,
+  PurchaseSelectionEmptyBuilder,
 } from './types';
 export {usePurchaseSelectionBuilder} from './use-purchase-selection-builder';
 export {useSelectableUserProfiles} from './use-selectable-user-profiles';

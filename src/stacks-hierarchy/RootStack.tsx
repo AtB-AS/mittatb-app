@@ -1,12 +1,9 @@
 import {trackNavigation} from '@atb/modules/diagnostics';
 import {useThemeContext} from '@atb/theme';
-import {APP_SCHEME, APP_VERSION} from '@env';
+import {APP_VERSION} from '@env';
 import {
   DefaultTheme,
-  getStateFromPath,
   NavigationContainer,
-  PartialRoute,
-  Route,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
@@ -15,11 +12,8 @@ import {StatusBar} from 'react-native';
 import {Root_TabNavigatorStack} from './Root_TabNavigatorStack';
 import {RootStackParamList} from './navigation-types';
 import {useTestIds} from './use-test-ids';
-import {parse} from 'search-params';
-
-import type {NavigationState, PartialState} from '@react-navigation/routers';
+import type {NavigationState} from '@react-navigation/routers';
 import {useLogger as useReactNavigationLogger} from '@react-navigation/devtools';
-
 import {Root_SelectTravelTokenScreen} from './Root_SelectTravelTokenScreen';
 import {Root_ConsiderTravelTokenChangeScreen} from '@atb/stacks-hierarchy/Root_ConsiderTravelTokenChangeScreen';
 import {Root_AddEditFavoritePlaceScreen} from './Root_AddEditFavoritePlaceScreen';
@@ -59,7 +53,6 @@ import {Root_TicketInformationScreen} from './Root_TicketInformationScreen/Root_
 import {Root_ChooseTicketRecipientScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingContext, useOnboardingFlow} from '@atb/modules/onboarding';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useRegisterIntercomUser} from '@atb/modules/chat';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {ForceUpdateScreen} from '@atb/screen-components/force-update-screen';
@@ -67,8 +60,6 @@ import {compareVersion} from '@atb/utils/compare-version';
 import {Root_ShmoOnboardingScreen} from './Root_ShmoOnboardingScreen';
 import {Root_ContactShmoOperatorScreen} from './Root_ShmoHelp/Root_ContactShmoOperatorScreen';
 import {Root_ContactShmoOperatorConfirmationScreen} from './Root_ShmoHelp/Root_ContactShmoOperatorConfirmationScreen';
-import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
-import {parseParamAsFormFactors, parseParamAsInt} from './utils';
 import {AnalyticsContextProvider} from '@atb/modules/analytics';
 import {Root_ParkingPhotoScreen} from './Root_ParkingPhotoScreen';
 import {Root_TripSelectionScreen} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/Root_TripSelectionScreen';
@@ -80,20 +71,10 @@ import {
 import {Root_OnboardingCarouselStack} from './Root_OnboardingCarouselStack';
 import {getActiveRouteName} from '@atb/utils/navigation';
 import {Root_TravelAidOnboardingScreen} from './Root_TravelAidOnboardingScreen';
-import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
-import {
-  useGetFareProductsQuery,
-  useTicketingContext,
-} from '@atb/modules/ticketing';
-import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 import {Root_ShmoHelpScreen} from './Root_ShmoHelp/Root_ShmoHelpScreen';
 import {Root_ShmoPricingDetailsScreen} from './Root_ShmoPricingDetailsScreen';
 import {useGlobalEventStreamListeners} from '@atb/modules/event-stream';
-import {useEnableFormFactorsInMapFilter} from '@atb/modules/map';
-
-type ResultState = PartialState<NavigationState> & {
-  state?: ResultState;
-};
+import {useDeepLinks} from '@atb/modules/deep-links';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -115,12 +96,9 @@ export const RootStack = () => {
     [setCurrentRouteName],
   );
 
+  const deepLinks = useDeepLinks();
+
   const {minimum_app_version} = useRemoteConfigContext();
-  const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
-  const {data: preassignedFareProducts} = useGetFareProductsQuery();
-  const {customerProfile} = useTicketingContext();
-  const {isBonusEnabled} = useFeatureTogglesContext();
-  const enableFormFactorsInMapFilter = useEnableFormFactorsInMapFilter();
 
   useTestIds();
   useSetupReactQueryWindowFocus();
@@ -144,66 +122,6 @@ export const RootStack = () => {
     },
   };
 
-  function getResultStateFromPath(path: string): ResultState {
-    const params = parse(path);
-    const destination: PartialRoute<any>[] = [
-      {
-        // Index is needed so that the user can go back after
-        // opening the app with the widget when it was not open previously
-        index: 0,
-        name: 'Departures_NearbyStopPlacesScreen',
-      },
-      {
-        name: 'Departures_PlaceScreen',
-        index: 1,
-        params: {
-          place: {
-            name: params.stopName,
-            id: params.stopId,
-          },
-          selectedQuayId: params.quayId,
-          showOnlyFavoritesByDefault: true,
-          mode: 'Departure',
-        },
-      },
-    ];
-
-    if (path.includes('details')) {
-      const item: ServiceJourneyDeparture = {
-        serviceJourneyId: params.serviceJourneyId as string,
-        date: (params.date as string) || new Date().toISOString(),
-        serviceDate: params.serviceDate as string,
-        fromStopPosition: parseParamAsInt(params.fromStopPosition) || 0,
-        toStopPosition: parseParamAsInt(params.toStopPosition),
-      };
-      destination.push({
-        name: 'Departures_DepartureDetailsScreen',
-        params: {
-          activeItemIndex: 0,
-          items: [item],
-        },
-      });
-    }
-
-    return {
-      routes: [
-        {
-          name: 'Root_TabNavigatorStack',
-          state: {
-            routes: [
-              {
-                name: 'TabNav_DeparturesStack',
-                state: {
-                  routes: destination as PartialRoute<Route<string>>[],
-                },
-              },
-            ],
-          },
-        },
-      ],
-    };
-  }
-
   const isCurrentAppVersionLowerThanMinVersion =
     APP_VERSION &&
     minimum_app_version &&
@@ -225,167 +143,7 @@ export const RootStack = () => {
           ref={navRef}
           theme={ReactNavigationTheme}
           fallback={<LoadingScreen />}
-          linking={{
-            prefixes: [`${APP_SCHEME}://`],
-            config: {
-              screens: {
-                Root_TabNavigatorStack: {
-                  screens: {
-                    TabNav_ProfileStack: 'profile',
-                    TabNav_TicketingStack: {
-                      screens: {
-                        Ticketing_RootScreen: {
-                          screens: {
-                            TicketTabNav_AvailableFareContractsTabScreen:
-                              'ticketing',
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-            getStateFromPath(path, config) {
-              if (path.includes('privacy')) {
-                return {
-                  routes: [
-                    {
-                      name: 'Root_TabNavigatorStack',
-                      state: {
-                        routes: [
-                          {
-                            name: 'TabNav_ProfileStack',
-                            state: {
-                              routes: [
-                                {name: 'Profile_RootScreen'},
-                                {
-                                  name: 'Profile_PrivacyScreen',
-                                },
-                              ],
-                            },
-                          },
-                        ],
-                      },
-                    },
-                  ],
-                } as ResultState;
-              }
-              if (path.includes('points') && isBonusEnabled) {
-                return {
-                  routes: [
-                    {
-                      name: 'Root_TabNavigatorStack',
-                      state: {
-                        routes: [
-                          {
-                            name: 'TabNav_ProfileStack',
-                            state: {
-                              routes: [
-                                {name: 'Profile_RootScreen'},
-                                {
-                                  name: 'Profile_BonusScreen',
-                                },
-                              ],
-                            },
-                          },
-                        ],
-                      },
-                    },
-                  ],
-                } as ResultState;
-              }
-              if (path.includes('map')) {
-                const params = new URLSearchParams(path.split('?')[1]);
-                const formFactors = parseParamAsFormFactors(
-                  params.get('formFactor'),
-                );
-                const initialFilters =
-                  enableFormFactorsInMapFilter(formFactors);
-                return {
-                  routes: [
-                    {
-                      name: 'Root_TabNavigatorStack',
-                      state: {
-                        routes: [
-                          {
-                            name: 'TabNav_MapStack',
-                            state: {
-                              routes: [
-                                {
-                                  name: 'Map_RootScreen',
-                                  params: {initialFilters},
-                                },
-                              ],
-                            },
-                          },
-                        ],
-                      },
-                    },
-                  ],
-                } as ResultState;
-              }
-              if (path.includes('purchase-overview')) {
-                const params = new URLSearchParams(path.split('?')[1]);
-                const type = params.get('type');
-                if (type) {
-                  const isSellable = preassignedFareProducts.some(
-                    (product) =>
-                      type === product.type &&
-                      isProductSellableInApp(product, customerProfile),
-                  );
-                  if (isSellable) {
-                    const {selection} = purchaseSelectionBuilder
-                      .forType(type)
-                      .build();
-                    return {
-                      routes: [
-                        {
-                          name: 'Root_PurchaseOverviewScreen',
-                          params: {selection},
-                        },
-                      ],
-                    } as ResultState;
-                  }
-                }
-              }
-
-              // If the path is not from the widget, behave as usual
-              if (!path.includes('widget')) {
-                return getStateFromPath(path, config);
-              }
-
-              // User get redirected to add new favorite departure
-              if (path.includes('addFavoriteDeparture')) {
-                return {
-                  routes: [
-                    {
-                      name: 'Root_TabNavigatorStack',
-                      state: {
-                        routes: [
-                          {
-                            name: 'TabNav_DashboardStack',
-                            state: {
-                              routes: [
-                                {name: 'Dashboard_RootScreen', index: 0},
-                                {
-                                  name: 'Dashboard_NearbyStopPlacesScreen',
-                                  params: {mode: 'Favourite'},
-                                },
-                              ],
-                            },
-                          },
-                        ],
-                      },
-                    },
-                  ],
-                } as ResultState;
-              }
-
-              // Get redirected to the preferred departures view
-              return getResultStateFromPath(path);
-            },
-          }}
+          linking={deepLinks}
         >
           <AnalyticsContextProvider>
             <Stack.Navigator
