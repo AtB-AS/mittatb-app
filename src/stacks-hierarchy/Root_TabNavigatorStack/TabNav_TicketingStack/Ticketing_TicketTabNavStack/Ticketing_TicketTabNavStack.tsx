@@ -19,6 +19,7 @@ import Animated, {
   useAnimatedStyle,
   useDerivedValue,
   SharedValue,
+  AnimatedStyle,
 } from 'react-native-reanimated';
 import {scheduleOnUI} from 'react-native-worklets';
 
@@ -155,7 +156,7 @@ const useInitialRoute = () => {
 
 const TabBar: React.FC<
   MaterialTopTabBarProps & {
-    borderStyle: ViewStyle;
+    borderStyle: AnimatedStyle<ViewStyle>;
     onTabSwitch: (targetIndex: number) => void;
   }
 > = ({state, descriptors, navigation, borderStyle, onTabSwitch}) => {
