@@ -14,6 +14,7 @@ export {
   getIconFeatureCollections,
 } from './geofencing-zone-utils';
 export {useControlPositionsStyle} from './hooks/use-control-styles';
+export {useEnableFormFactorsInMapFilter} from './hooks/use-enable-form-factors-in-map-filter';
 export {useGeofencingZoneContent} from './hooks/use-geofencing-zone-content.tsx';
 export {useMapSymbolStyles} from './hooks/use-map-symbol-styles';
 export {useMapViewConfig} from './hooks/use-map-view-config.ts';
