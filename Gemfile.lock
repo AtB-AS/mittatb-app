@@ -322,6 +322,7 @@ DEPENDENCIES
   fastlane-plugin-firebase_app_distribution
   logger
   mutex_m
+  nkf
   xcodeproj (~> 1.27.0)
 
 RUBY VERSION
