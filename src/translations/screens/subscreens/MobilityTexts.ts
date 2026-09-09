@@ -141,7 +141,7 @@ export const MobilityTexts = {
       }
       return _(
         `per ${interval} minutter`,
-        `per ${interval} min`,
+        `per ${interval} minutes`,
         `per ${interval} minuttar`,
       );
     },
