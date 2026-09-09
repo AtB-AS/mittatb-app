@@ -160,6 +160,7 @@ function routeForPurchaseOverview(
       const {selection} = purchaseSelectionBuilder.forType(params.type).build();
       return {
         routes: [
+          {name: 'Root_TabNavigatorStack'},
           {
             name: 'Root_PurchaseOverviewScreen',
             params: {selection},
