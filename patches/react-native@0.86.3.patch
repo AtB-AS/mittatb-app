@@ -1,5 +1,5 @@
 diff --git a/React/Fabric/Mounting/ComponentViews/ScrollView/RCTEnhancedScrollView.mm b/React/Fabric/Mounting/ComponentViews/ScrollView/RCTEnhancedScrollView.mm
-index 5720429..b3481c1 100644
+index 1b02e8b2d39672063551411d5c403a69b671a869..b3481c1b98b45dea769035140dc2fd8d9b088b24 100644
 --- a/React/Fabric/Mounting/ComponentViews/ScrollView/RCTEnhancedScrollView.mm
 +++ b/React/Fabric/Mounting/ComponentViews/ScrollView/RCTEnhancedScrollView.mm
 @@ -102,6 +102,20 @@ - (void)setContentOffset:(CGPoint)contentOffset
@@ -23,24 +23,11 @@ index 5720429..b3481c1 100644
  - (void)setFrame:(CGRect)frame
  {
    [super setFrame:frame];
-@@ -156,6 +170,12 @@ - (void)setDelegate:(id<UIScrollViewDelegate>)delegate
- 
- #pragma mark - UIScrollViewDelegate
- 
-+- (void)scrollViewDidScroll:(__unused UIScrollView *)scrollView
-+{
-+  // Empty implementation. This method exists to prevent crashes when the delegate splitter
-+  // forwards scrollViewDidScroll: messages to RCTEnhancedScrollView.
-+}
-+
- - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView
-                      withVelocity:(CGPoint)velocity
-               targetContentOffset:(inout CGPoint *)targetContentOffset
 diff --git a/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm b/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm
-index 15a5ab7..735aea6 100644
+index 9ab1db4e21e922f69c1ce17976eb1001f01b571a..a439fe9d8f551f32f4596cd3ff8f019350365c71 100644
 --- a/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm
 +++ b/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm
-@@ -394,11 +394,20 @@ - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &
+@@ -396,11 +396,20 @@ - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &
  
    MAP_SCROLL_VIEW_PROP(zoomScale);
  
@@ -63,7 +50,7 @@ index 15a5ab7..735aea6 100644
    if (oldScrollViewProps.contentOffset != newScrollViewProps.contentOffset) {
      _scrollView.contentOffset = RCTCGPointFromPoint(newScrollViewProps.contentOffset);
    }
-@@ -521,7 +530,7 @@ - (UIView *)betterHitTest:(CGPoint)point withEvent:(UIEvent *)event
+@@ -523,7 +532,7 @@ - (UIView *)betterHitTest:(CGPoint)point withEvent:(UIEvent *)event
      }
    }
  
@@ -72,13 +59,3 @@ index 15a5ab7..735aea6 100644
  }
  
  /*
-@@ -680,6 +689,9 @@ - (void)prepareForRecycle
- 
-   const auto &props = static_cast<const ScrollViewProps &>(*_props);
-   _scrollView.contentOffset = RCTCGPointFromPoint(props.contentOffset);
-+  _scrollView.contentInset = RCTUIEdgeInsetsFromEdgeInsets(props.contentInset);
-+  // Reset zoom scale to default
-+  _scrollView.zoomScale = 1.0;
-   // We set the default behavior to "never" so that iOS
-   // doesn't do weird things to UIScrollView insets automatically
-   // and keeps it as an opt-in behavior.

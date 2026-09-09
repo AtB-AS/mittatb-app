@@ -28,6 +28,13 @@ use_frameworks! :linkage => :static
 $RNFirebaseAsStaticFramework = true
 $RNFirebaseDisableSPM = true
 
+# Opt out of RN 0.86's default prebuilt React.xcframework.
+# Prebuilt collides with `use_frameworks! :linkage => :static` (duplicate
+# `React_RCTAppDelegate` module) and silently ignores our RN source patch in
+# patches/react-native@*.patch. Revisit when RN fixes the use_frameworks path
+# or the ScrollView patch is upstreamed.
+ENV['RCT_USE_PREBUILT_RNCORE'] = '0'
+
 production = ENV["PRODUCTION"] == "1"
 
 $RNMapboxMapsImpl = 'mapbox'
