@@ -183,7 +183,7 @@
     "jest-circus": "^29.7.0",
     "jest-junit": "^16.0.0",
     "prettier": "^3.6.2",
-    "react-dom": "^19.2.3",
+    "react-dom": "19.2.3",
     "react-native-dotenv": "^3.4.11",
     "react-test-renderer": "19.2.3",
     "storybook": "^10.3.5",
@@ -193,7 +193,7 @@
   },
   "packageManager": "pnpm@12.3.4+sha512.961aa41fb077da3a04a441d9f8e15ebc0c96da8ef710b2eb67bf9ee7cb0610eabd48f1fd85f51cffe73846785fa0f87c56a3a872a1d893f8446741b5cce45457",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.13.0"
   },
   "reanimated": {
     "staticFeatureFlags": {
