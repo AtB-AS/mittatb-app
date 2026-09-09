@@ -1,14 +1,39 @@
 appId: ${APP_ID}
 name: 'Run smoke tests'
+onFlowStart:
+  - runFlow:
+      file: ../elements/loadElements.yaml
+      label: 'Load elements'
+  - launchApp:
+      clearState: true
+      permissions:
+        location: deny
+onFlowComplete:
+  - stopApp
 ---
+# Login
 - runFlow:
-    file: departures.yaml
+    file: ../common/onboarding/loginPhone.yaml
+    env:
+      PHONE_NUMBER: ${PHONE_NUMBER}
+      OTP: ${OTP}
+    label: 'Login through onboarding'
+
+# Departures
+- runFlow:
+    file: departures/searchForStopPlace.yaml
     label: 'Departures'
 
+# Travel search
 - runFlow:
-    file: travelSearch.yaml
-    label: 'Travel Search'
+    file: travelSearch/simpleTravelSearch.yaml
+    label: 'Travel search'
+
+# Tickets
+- runFlow:
+    file: tickets/ticketPurchase.yaml
+    label: 'Ticket purchase'
 
 - runFlow:
-    file: visual.yaml
-    label: 'Visual tests'
+    file: ../common/logout.yaml
+    label: 'Log out'

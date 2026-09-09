@@ -2,12 +2,21 @@ name: E2E tests with Maestro
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        description: 'Define branch to test'
+      test:
+        description: 'Type of test'
         required: true
-        default: 'master'
+        default: 'smoke'
+        type: choice
+        options:
+          - 'smoke'
+          - 'runAll'
+          - 'departures'
+          - 'mobileToken'
+          - 'tickets'
+          - 'travelSearch'
+          - 'visual'
       buildId:
-        description: 'Specific build ID to test'
+        description: 'Specific build ID to test (default: latest)'
         required: false
         default: ''
   schedule:
@@ -31,8 +40,6 @@ jobs:
         run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
       - name: Checkout project
         uses: actions/checkout@v7
-        with:
-          ref: ${{ github.event.inputs.branch || 'master' }}
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
@@ -74,8 +81,6 @@ jobs:
         run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
       - name: Checkout project
         uses: actions/checkout@v7
-        with:
-          ref: ${{ github.event.inputs.branch || 'master' }}
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
@@ -157,7 +162,7 @@ jobs:
           emulator-build: 12414864
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          script: adb install ${{ github.workspace }}/e2e/apk/app-staging.apk && maestro test -e APP_ID=no.mittatb.staging -e PHONE_NUMBER=${{ secrets.ATB_E2E_PHONE_NUMBER }} -e OTP=${{ secrets.ATB_E2E_OTP }} --test-output-dir results --format junit --output results/results.xml tests/run.yaml
+          script: adb install ${{ github.workspace }}/e2e/apk/app-staging.apk && maestro test -e APP_ID=no.mittatb.staging -e PHONE_NUMBER=${{ secrets.ATB_E2E_PHONE_NUMBER }} -e OTP=${{ secrets.ATB_E2E_OTP }} --test-output-dir results --format junit --output results/results.xml tests/${{ github.event.inputs.test }}.yaml
           working-directory: e2e/maestro
 
       # Slack

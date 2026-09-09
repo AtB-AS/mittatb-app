@@ -40,8 +40,10 @@ $ emulator -netdelay none -netspeed full -no-snapshot-load -avd Pixel_5_API_30
 ## start app locally
 $ pnpm android
 
-## run tests
-e2e/maestro$ maestro test -e APP_ID=no.mittatb.debug -e PHONE_NUMBER=<phoneNumber> -e OTP=<otp> tests/run.yaml
+## run all tests
+e2e/maestro$ maestro test -e APP_ID=no.mittatb.debug -e PHONE_NUMBER=<phoneNumber> -e OTP=<otp> tests/runAll.yaml
+## run smoke tests
+e2e/maestro$ maestro test -e APP_ID=no.mittatb.debug -e PHONE_NUMBER=<phoneNumber> -e OTP=<otp> tests/smoke.yaml
 ```
 
 ## Errors and reporting
