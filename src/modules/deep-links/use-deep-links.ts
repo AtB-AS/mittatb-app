@@ -75,9 +75,10 @@ export function useDeepLinks() {
             customerProfile,
             purchaseSelectionBuilder,
           );
+        case 'departures':
         case 'widget':
         case 'widgetdetails':
-          return routeForWidgetDepartures(path, params);
+          return routeForDepartures(path, params);
         case 'widget/addFavoriteDeparture':
           return routeForWidgetAddFavoriteDeparture();
         default:
@@ -241,10 +242,11 @@ function routeForWidgetAddFavoriteDeparture(): ResultState | undefined {
 }
 
 /**
- * `atb://widget?stopId=...&stopName=...&quayId=...`
+ * `atb://departures?stopId=...&quayId=...`
+ * `atb://widget?stopId=...&quayId=...`
  * `atb://widgetdetails?...&serviceJourneyId=...&serviceDate=...`
  */
-function routeForWidgetDepartures(
+function routeForDepartures(
   path: string,
   params: DeepLink['params'],
 ): ResultState | undefined {
@@ -259,12 +261,9 @@ function routeForWidgetDepartures(
       name: 'Departures_PlaceScreen',
       index: 1,
       params: {
-        place: {
-          name: params.stopName,
-          id: params.stopId,
-        },
+        place: {id: params.stopId},
         selectedQuayId: params.quayId,
-        showOnlyFavoritesByDefault: true,
+        showOnlyFavoritesByDefault: path !== 'departures',
         mode: 'Departure',
       },
     },

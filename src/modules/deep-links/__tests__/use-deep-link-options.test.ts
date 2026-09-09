@@ -182,7 +182,7 @@ describe('map', () => {
 describe('widget', () => {
   // Links as built by `WidgetViewModel.deepLink` in ios/departureWidget
   const stopParams =
-    'stopId=NSR:StopPlace:41613&stopName=Prinsens%20gate&quayId=NSR:Quay:71184&latitude=63.4326&longitude=10.3951';
+    'stopId=NSR:StopPlace:41613&quayId=NSR:Quay:71184&latitude=63.4326&longitude=10.3951';
 
   it('opens nearby stop places in favourite mode when there are no favourite departures', () => {
     const state = getStateFrom('widget/addFavoriteDeparture');
@@ -198,10 +198,7 @@ describe('widget', () => {
       name: 'Departures_PlaceScreen',
       index: 1,
       params: {
-        place: {
-          id: 'NSR:StopPlace:41613',
-          name: 'Prinsens gate',
-        },
+        place: {id: 'NSR:StopPlace:41613'},
         selectedQuayId: 'NSR:Quay:71184',
         showOnlyFavoritesByDefault: true,
         mode: 'Departure',
