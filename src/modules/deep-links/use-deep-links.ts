@@ -18,11 +18,13 @@ import {
 } from '@atb/modules/ticketing';
 import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 import {DeepLink, parseDeepLink} from './parse-deep-link';
-import {parseParamAsInt} from './utils';
+import {parseParamAsFormFactors, parseParamAsInt} from './utils';
 import {initialUrl} from './initial-url';
 import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import {PurchaseSelectionEmptyBuilder} from '@atb/modules/purchase-selection';
+import {MapFilterType, useEnableFormFactorsInMapFilter} from '../map';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -33,6 +35,7 @@ export function useDeepLinks() {
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {customerProfile} = useTicketingContext();
   const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
+  const enableFormFactorsInMapFilter = useEnableFormFactorsInMapFilter();
 
   const linkingOptions: LinkingOptions<RootStackParamList> = {
     prefixes: [`${APP_SCHEME}://`],
@@ -59,6 +62,8 @@ export function useDeepLinks() {
       const {path, params} = parseDeepLink(pathAndQuery);
 
       switch (path) {
+        case 'map':
+          return routeForMap(params, enableFormFactorsInMapFilter);
         case 'points':
           return routeForBonus(isBonusEnabled);
         case 'privacy':
@@ -81,6 +86,41 @@ export function useDeepLinks() {
     },
   };
   return linkingOptions;
+}
+
+/**
+ * `atb://map?formFactor=scooter`
+ */
+function routeForMap(
+  params: DeepLink['params'],
+  enableFormFactorsInMapFilter: (
+    formFactors: FormFactor[],
+  ) => MapFilterType | undefined,
+): ResultState | undefined {
+  const formFactors = parseParamAsFormFactors(params.formFactor);
+  const initialFilters = enableFormFactorsInMapFilter(formFactors);
+  return {
+    routes: [
+      {
+        name: 'Root_TabNavigatorStack',
+        state: {
+          routes: [
+            {
+              name: 'TabNav_MapStack',
+              state: {
+                routes: [
+                  {
+                    name: 'Map_RootScreen',
+                    params: {initialFilters},
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    ],
+  } as ResultState;
 }
 
 /**

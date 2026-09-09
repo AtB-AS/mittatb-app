@@ -7,8 +7,6 @@ import {
   useFareZoneFromLocation,
 } from '@atb/modules/fare-zones-selector';
 import {useMemo} from 'react';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {FormFactorSchema} from '@atb/api/types/mobility';
 
 //Will be used for saved payment method notifications/card expiration messages after backend implementation
 export function getExpireDate(iso: string): string {
@@ -76,18 +74,6 @@ export const useFilterFareZone = (
     );
   }, [fareZones, allowedFareZoneRefs]);
 };
-
-/**
- * Parses a comma separated deeplink param as form factors, keeping only the
- * values which are valid form factors.
- */
-export const parseParamAsFormFactors = (
-  data: string | null | undefined,
-): FormFactor[] =>
-  data?.split(',').flatMap((value) => {
-    const result = FormFactorSchema.safeParse(value.trim().toUpperCase());
-    return result.success ? [result.data] : [];
-  }) ?? [];
 
 export function isValidKey<T extends object>(
   obj: T,

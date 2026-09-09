@@ -10,6 +10,9 @@ const mockSelection = {id: 'test-selection'};
 const mockForType = jest.fn((_type: string) => ({
   build: () => ({selection: mockSelection}),
 }));
+const mockEnableFormFactorsInMapFilter = jest.fn((formFactors: string[]) => ({
+  mobility: formFactors,
+}));
 
 jest.mock('@atb/modules/feature-toggles', () => ({
   useFeatureTogglesContext: () => ({isBonusEnabled: mockIsBonusEnabled}),
@@ -20,6 +23,9 @@ jest.mock('@atb/modules/ticketing', () => ({
 }));
 jest.mock('@atb/modules/purchase-selection', () => ({
   usePurchaseSelectionBuilder: () => ({forType: mockForType}),
+}));
+jest.mock('@atb/modules/map', () => ({
+  useEnableFormFactorsInMapFilter: () => mockEnableFormFactorsInMapFilter,
 }));
 // Unused by the hook, but imported by ./utils, and pulls in native modules
 jest.mock('@atb/modules/fare-zones-selector', () => ({}));
@@ -54,6 +60,7 @@ beforeEach(() => {
   mockPreassignedFareProducts = [];
   mockCustomerProfile = undefined;
   mockForType.mockClear();
+  mockEnableFormFactorsInMapFilter.mockClear();
 });
 
 describe('prefixes', () => {
@@ -148,6 +155,27 @@ describe('purchase-overview', () => {
   it('is not handled without a type', () => {
     mockPreassignedFareProducts = [TEST_PRODUCT];
     expect(getStateFrom('purchase-overview')).toBeUndefined();
+  });
+});
+
+describe('map', () => {
+  it('opens the map with the requested form factors filtered in', () => {
+    const state = getStateFrom('map?formFactor=scooter,bicycle');
+    expect(findRoute(state, 'Map_RootScreen')).toEqual({
+      name: 'Map_RootScreen',
+      params: {initialFilters: {mobility: ['SCOOTER', 'BICYCLE']}},
+    });
+  });
+
+  it('ignores invalid form factors', () => {
+    getStateFrom('map?formFactor=scooter,pogo_stick');
+    expect(mockEnableFormFactorsInMapFilter).toHaveBeenCalledWith(['SCOOTER']);
+  });
+
+  it('opens the map without form factors', () => {
+    const state = getStateFrom('map');
+    expect(findRoute(state, 'Map_RootScreen')).toBeDefined();
+    expect(mockEnableFormFactorsInMapFilter).toHaveBeenCalledWith([]);
   });
 });
 
