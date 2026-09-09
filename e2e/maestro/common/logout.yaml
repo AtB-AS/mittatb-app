@@ -9,10 +9,10 @@ name: 'Log out'
       id: ${output.profile.logOut}
     direction: DOWN
     timeout: 10000
-    label: 'Scroll to debug button'
+    label: 'Scroll to log out button'
 - tapOn:
     id: ${output.profile.logOut}
-    label: 'Open debug menu'
+    label: 'Log out'
 - extendedWaitUntil:
     visible:
       text: 'Log out'

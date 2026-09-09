@@ -4,5 +4,7 @@ output.debug = {
     id: 'tokenId',
     section: 'mobileTokenDebug',
     status: 'tokenStatus',
+    remote: 'remoteTokenExpandable',
+    removeRemote: 'removeRemoteToken',
   },
 };

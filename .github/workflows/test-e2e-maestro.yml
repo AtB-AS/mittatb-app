@@ -2,12 +2,21 @@ name: E2E tests with Maestro
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        description: 'Define branch to test'
+      test:
+        description: 'Type of test'
         required: true
-        default: 'master'
+        default: 'smoke'
+        type: choice
+        options:
+          - 'smoke'
+          - 'runAll'
+          - 'departures'
+          - 'mobileToken'
+          - 'tickets'
+          - 'travelSearch'
+          - 'visual'
       buildId:
-        description: 'Specific build ID to test'
+        description: 'Specific build ID to test (default: latest)'
         required: false
         default: ''
   schedule:
@@ -30,13 +39,11 @@ jobs:
       - name: Set env variables
         run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
       - name: Checkout project
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.inputs.branch || 'master' }}
+        uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
-          python-version: 3.12
+          python-version: '3.12'
           cache: 'pip'
           cache-dependency-path: '**/requirements.txt'
       - name: Install Python packages
@@ -73,13 +80,11 @@ jobs:
       - name: Set env variables
         run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
       - name: Checkout project
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.inputs.branch || 'master' }}
+        uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
-          python-version: 3.12
+          python-version: '3.12'
           cache: 'pip'
           cache-dependency-path: '**/requirements.txt'
       - name: Install Python packages
@@ -108,7 +113,7 @@ jobs:
         env:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
       - name: Install Maestro
         run: |
           curl -Ls "https://get.maestro.mobile.dev" | bash
@@ -117,10 +122,10 @@ jobs:
       # Emulator cache
       - name: Gradle cache
         if: env.ENV_SYSTEM_IMAGE == 'default'
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v6
       - name: AVD cache
         if: env.ENV_SYSTEM_IMAGE == 'default'
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         id: avd-cache
         with:
           path: |
@@ -157,7 +162,7 @@ jobs:
           emulator-build: 12414864
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          script: adb install ${{ github.workspace }}/e2e/apk/app-staging.apk && maestro test -e APP_ID=no.mittatb.staging -e PHONE_NUMBER=${{ secrets.ATB_E2E_PHONE_NUMBER }} -e OTP=${{ secrets.ATB_E2E_OTP }} --test-output-dir results --format junit --output results/results.xml tests/run.yaml
+          script: adb install ${{ github.workspace }}/e2e/apk/app-staging.apk && maestro test -e APP_ID=no.mittatb.staging -e PHONE_NUMBER=${{ secrets.ATB_E2E_PHONE_NUMBER }} -e OTP=${{ secrets.ATB_E2E_OTP }} --test-output-dir results --format junit --output results/results.xml tests/${{ github.event.inputs.test }}.yaml
           working-directory: e2e/maestro
 
       # Slack
@@ -202,7 +207,7 @@ jobs:
       # Upload results
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-results
           path: |
@@ -211,7 +216,7 @@ jobs:
 
       - name: Upload screenshots
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-screenshots
           path: ./e2e/maestro/results/**/*.png
@@ -219,7 +224,7 @@ jobs:
 
       - name: Upload diff screenshots
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-diff-screenshots
           path: ./e2e/maestro/screenshots/**/*_diff.png

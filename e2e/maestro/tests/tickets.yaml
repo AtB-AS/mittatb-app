@@ -13,6 +13,9 @@ onFlowComplete:
 ---
 - runFlow:
     file: ../common/onboarding/loginPhone.yaml
+    env:
+      PHONE_NUMBER: ${PHONE_NUMBER}
+      OTP: ${OTP}
     label: 'Login through onboarding'
 
 - runFlow:
