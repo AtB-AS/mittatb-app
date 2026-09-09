@@ -196,7 +196,6 @@ describe('widget', () => {
     const state = getStateFrom(`widget?${stopParams}`);
     expect(findRoute(state, 'Departures_PlaceScreen')).toEqual({
       name: 'Departures_PlaceScreen',
-      index: 1,
       params: {
         place: {id: 'NSR:StopPlace:41613'},
         selectedQuayId: 'NSR:Quay:71184',

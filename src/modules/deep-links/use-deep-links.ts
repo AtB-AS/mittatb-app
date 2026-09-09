@@ -252,14 +252,10 @@ function routeForDepartures(
 ): ResultState | undefined {
   const destination: PartialRoute<any>[] = [
     {
-      // Index is needed so that the user can go back after
-      // opening the app with the widget when it was not open previously
-      index: 0,
       name: 'Departures_NearbyStopPlacesScreen',
     },
     {
       name: 'Departures_PlaceScreen',
-      index: 1,
       params: {
         place: {id: params.stopId},
         selectedQuayId: params.quayId,
