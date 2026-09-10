@@ -1,11 +1,10 @@
 name: Performance tests on Android
 on:
   workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Define branch to test'
-        required: true
-        default: 'master'
+    buildId:
+      description: 'Specific build ID to test (default: latest)'
+      required: false
+      default: ''
   schedule:
     - cron: '0 4 * * 1-5'
 
@@ -27,8 +26,6 @@ jobs:
         run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
       - name: Checkout project
         uses: actions/checkout@v7
-        with:
-          ref: ${{ github.event.inputs.branch || 'master' }}
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
@@ -45,6 +42,7 @@ jobs:
         working-directory: e2e/firestore
         env:
           CREDENTIALS_APITESTER: ${{ secrets.CREDENTIALS_APITESTER }}
+          BUILD_ID: ${{ github.event.inputs.buildId || '' }}
           IS_GITHUB: 'True'
       - name: APK output
         id: check-output
@@ -69,8 +67,6 @@ jobs:
         run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
       - name: Checkout project
         uses: actions/checkout@v7
-        with:
-          ref: ${{ github.event.inputs.branch || 'master' }}
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
