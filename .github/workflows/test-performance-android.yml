@@ -157,7 +157,7 @@ jobs:
           emulator-boot-timeout: 900
           disable-spellchecker: true
           #disable-animations: true
-          script: ./scripts/run-flashlight-tests.sh 1 1
+          script: ./scripts/run-flashlight-tests.sh 1 1 ${{ secrets.ATB_E2E_PHONE_NUMBER }} ${{ secrets.ATB_E2E_OTP }}
           pre-emulator-launch-script: ./scripts/remove-navigation-bar.sh
           working-directory: e2e
         env:
