@@ -1,4 +1,5 @@
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {Coordinates} from '@atb/utils/coordinates';
 
 /**
  * Parses unknown param data as an integer, or falls back to undefined.
@@ -7,6 +8,22 @@ export const parseParamAsInt = (data: any): number | undefined => {
   if (typeof data === 'string') return parseInt(data) || undefined;
   if (typeof data === 'number') return Math.round(data);
   return undefined;
+};
+
+/**
+ * Parses a comma separated deeplink param as `latitude,longitude`, or falls
+ * back to undefined.
+ */
+export const parseParamAsCoordinates = (
+  data: string | undefined,
+): Coordinates | undefined => {
+  const parts = data?.split(',') ?? [];
+  if (parts.length !== 2 || parts.some((p) => p.trim() === ''))
+    return undefined;
+  const [latitude, longitude] = parts.map(Number);
+  if (!isFinite(latitude) || !isFinite(longitude)) return undefined;
+  if (Math.abs(latitude) > 90 || Math.abs(longitude) > 180) return undefined;
+  return {latitude, longitude};
 };
 
 /**
