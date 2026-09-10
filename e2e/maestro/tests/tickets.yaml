@@ -16,7 +16,12 @@ onFlowComplete:
     env:
       PHONE_NUMBER: ${PHONE_NUMBER}
       OTP: ${OTP}
+      INSPECTION: true
     label: 'Login through onboarding'
+
+- runFlow:
+    file: tickets/purchaseHistory.yaml
+    label: 'Purchase history'
 
 - runFlow:
     file: tickets/ticketPurchase.yaml

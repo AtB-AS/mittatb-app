@@ -52,6 +52,8 @@ name: 'Login onboarding'
           id: ${output.global.nextButton}
           label: 'Accept inspection (if exists)'
       - runFlow:
+          when:
+            true: ${INSPECTION == 'true'}
           file: ../cleanUpMobileToken.yaml
           label: 'Clean up all tokens'
     label: 'Move inspection (if not this device)'
