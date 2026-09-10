@@ -393,6 +393,7 @@ export const MobilityTexts = {
       end: _('Avslutt tur', 'End trip', 'Avslutt tur'),
       endLoading: _('Avslutter tur', 'Ending trip', 'Avsluttar tur'),
       finishTrip: _('Lukk', 'Close', 'Lukk'),
+      resume: _('Lås opp', 'Unlock', 'Lås opp'),
     },
     endAlert: {
       header: _(
@@ -690,6 +691,29 @@ export const GeofencingZoneExtraExplanations = {
 };
 
 export const ShmoWarnings = {
+  bookingPaused: (formFactor?: FormFactor) => {
+    switch (formFactor) {
+      case FormFactor.Scooter:
+      case FormFactor.ScooterStanding:
+        return _(
+          'Elsparkesykkelen har låst seg',
+          'The scooter has locked itself',
+          'Elsparkesykkelen har låst seg',
+        );
+      case FormFactor.Bicycle:
+        return _(
+          'Sykkelen har låst seg',
+          'The bike has locked itself',
+          'Sykkelen har låst seg',
+        );
+      default:
+        return _(
+          'Kjøretøyet har låst seg',
+          'The vehicle has locked itself',
+          'Køyretøyet har låst seg',
+        );
+    }
+  },
   vehicleDisabled: _(
     'Dette kjøretøyet er ikke tilgjengelig akkurat nå',
     'This vehicle is not available right now',

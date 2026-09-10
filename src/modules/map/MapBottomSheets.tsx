@@ -228,7 +228,8 @@ export const MapBottomSheets = ({
         />
       )}
 
-      {activeBooking?.state === ShmoBookingState.IN_USE && (
+      {(activeBooking?.state === ShmoBookingState.IN_USE ||
+        activeBooking?.state === ShmoBookingState.PAUSED) && (
         <ActiveShmoSheet
           mapViewRef={mapViewRef}
           onForceClose={handleCloseSheet}
