@@ -1,7 +1,6 @@
 import {screenReaderPause} from '@atb/components/text';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {ThemedMapImage} from '@atb/theme/ThemedAssets';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {Ref} from 'react';
 import {View} from 'react-native';
@@ -16,7 +15,6 @@ export const MapDisabledForScreenReader = ({focusRef}: Props) => {
   const {t} = useTranslation();
   return (
     <SafeAreaView style={styles.container}>
-      <ThemedMapImage width={150} height={150} />
       <View
         ref={focusRef}
         accessible={true}
@@ -26,7 +24,7 @@ export const MapDisabledForScreenReader = ({focusRef}: Props) => {
           t(MapTexts.disabledForScreenReader.description)
         }
       >
-        <ThemeText typography="body__m__strong" style={styles.header}>
+        <ThemeText typography="heading__2xl" style={styles.header}>
           {t(MapTexts.disabledForScreenReader.title)}
         </ThemeText>
         <ThemeText style={styles.description}>
