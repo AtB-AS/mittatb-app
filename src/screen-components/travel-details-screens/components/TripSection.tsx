@@ -18,6 +18,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {
+  arrivalRoundingMethod,
   formatToClock,
   secondsToDuration,
   secondsToDurationShort,
@@ -85,6 +86,11 @@ type TripSectionProps = {
   isFirst?: boolean;
   step?: number;
   leg: Leg;
+  /**
+   * Next *displayed* departure, for `arrivalRoundingMethod`. A walk leg shows
+   * no departure row, so it is not it.
+   */
+  nextLegStartTime?: string;
   testID?: string;
   onPressShowLive?(serviceJourneyPolylines: ServiceJourneyPolylines): void;
   onPressDeparture: TripProps['onPressDeparture'];
@@ -97,6 +103,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   wait,
   step,
   leg,
+  nextLegStartTime,
   testID,
   onPressShowLive,
   onPressDeparture,
@@ -172,6 +179,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const bikeA11yLabel = useBikeA11yLabel(leg, walkBikeRounding);
   const isWalkOrBike = isWalkSection || isBikeSection;
 
+  const arrivalRounding = arrivalRoundingMethod(
+    leg.expectedEndTime,
+    nextLegStartTime,
+  );
+
   const warningCount =
     leg.situations.length +
     (leg.transportSubmode === TransportSubmode.RailReplacementBus ? 1 : 0);
@@ -208,7 +220,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
       t(
         TripDetailsTexts.trip.leg.transport.a11yLabel.arrival(
           getPlaceName(leg.toPlace),
-          formatToClock(leg.expectedEndTime, language, 'ceil'),
+          formatToClock(leg.expectedEndTime, language, arrivalRounding),
         ),
       ),
     );
@@ -554,7 +566,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                   formatToClock(
                     endTimes.expectedTime ?? endTimes.aimedTime,
                     language,
-                    'ceil',
+                    arrivalRounding,
                   ),
                 ),
               )}
@@ -570,7 +582,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               rowLabel={
                 <Time
                   timeValues={endTimes}
-                  roundingMethod="ceil"
+                  roundingMethod={arrivalRounding}
                   timeIsApproximation={timesAreApproximations}
                 />
               }

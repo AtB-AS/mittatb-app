@@ -209,6 +209,19 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
   ).conclusion;
 }
 
+/**
+ * The next departure time actually shown after leg `index` arrives. A walk leg
+ * shows a departure only when it is first, so walks after `index` never are.
+ * Undefined when nothing following it shows one.
+ */
+export function nextDisplayedDeparture(
+  legs: Pick<Leg, 'mode' | 'expectedStartTime'>[],
+  index: number,
+): string | undefined {
+  return legs.slice(index + 1).find((leg) => leg.mode !== 'foot')
+    ?.expectedStartTime;
+}
+
 function parseDateIfString(date: any): Date {
   if (typeof date === 'string') {
     return parseISO(date);

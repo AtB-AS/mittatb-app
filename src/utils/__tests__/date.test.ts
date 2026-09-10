@@ -4,6 +4,7 @@
 import {Language} from '@atb/translations';
 import timeMocker from 'timezone-mock';
 import {
+  arrivalRoundingMethod,
   convertIsoStringFieldsToDate,
   dateWithReplacedTime,
   formatLocaleTime,
@@ -571,5 +572,50 @@ describe('isValidDateString', () => {
     expect(isValidDateTimeString('2024-09-01')).toBe(false);
     expect(isValidDateTimeString('12:00')).toBe(false);
     expect(isValidDateTimeString('41ABCD5E')).toBe(false);
+  });
+});
+
+describe('arrivalRoundingMethod', () => {
+  const at = (time: string) => `2024-01-01T${time}.000Z`;
+
+  it('rounds up when there is no next departure', () => {
+    expect(arrivalRoundingMethod(at('10:10:30'), undefined)).toBe('ceil');
+  });
+
+  it('rounds down when rounding up would invert the order', () => {
+    // 10:10:11 -> 10:11 and 10:10:34 -> 10:10 reads as leaving before arriving.
+    expect(arrivalRoundingMethod(at('10:10:11'), at('10:10:34'))).toBe('floor');
+  });
+
+  it('rounds down for a long wait inside one minute', () => {
+    expect(arrivalRoundingMethod(at('10:10:10'), at('10:10:55'))).toBe('floor');
+  });
+
+  it('rounds up when both already read as the same minute', () => {
+    expect(arrivalRoundingMethod(at('10:10:10'), at('10:11:40'))).toBe('ceil');
+  });
+
+  it('rounds up when there is plenty of time', () => {
+    expect(arrivalRoundingMethod(at('10:10:10'), at('10:13:10'))).toBe('ceil');
+  });
+
+  it('rounds up on a genuinely missed connection, so it still looks missed', () => {
+    expect(arrivalRoundingMethod(at('10:11:40'), at('10:10:30'))).toBe('ceil');
+  });
+
+  it('rounds up on a negative gap inside one minute', () => {
+    // Rounding alone would floor this to a matching 10:10/10:10 and hide a
+    // connection that really does leave first.
+    expect(arrivalRoundingMethod(at('10:10:40'), at('10:10:10'))).toBe('ceil');
+  });
+
+  it('rounds up when the arrival is already on a whole minute', () => {
+    expect(arrivalRoundingMethod(at('10:10:00'), at('10:10:30'))).toBe('ceil');
+  });
+
+  it('accepts Date as well as string', () => {
+    expect(
+      arrivalRoundingMethod(new Date(at('10:10:11')), new Date(at('10:10:34'))),
+    ).toBe('floor');
   });
 });
