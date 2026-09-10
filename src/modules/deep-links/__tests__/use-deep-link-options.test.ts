@@ -8,8 +8,7 @@ let mockIsBonusEnabled = false;
 let mockPreassignedFareProducts: PreassignedFareProduct[] = [];
 let mockCustomerProfile: {debug?: boolean} | undefined = undefined;
 
-const mockGetStopsDetails = jest.fn();
-const mockReverse = jest.fn();
+const mockPlaceV3 = jest.fn();
 const mockReverseV3 = jest.fn();
 
 const mockSelection = {id: 'test-selection'};
@@ -26,10 +25,8 @@ jest.mock('@atb/modules/feature-toggles', () => ({
   }),
 }));
 jest.mock('@atb/api', () => ({
+  placeV3: (...args: any[]) => mockPlaceV3(...args),
   reverseV3: (...args: any[]) => mockReverseV3(...args),
-}));
-jest.mock('@atb/api/bff/departures', () => ({
-  getStopsDetails: (...args: any[]) => mockGetStopsDetails(...args),
 }));
 jest.mock('@atb/modules/ticketing', () => ({
   useGetFareProductsQuery: () => ({data: mockPreassignedFareProducts}),
@@ -90,8 +87,7 @@ beforeEach(() => {
   mockCustomerProfile = undefined;
   mockForType.mockClear();
   mockEnableFormFactorsInMapFilter.mockClear();
-  mockGetStopsDetails.mockReset();
-  mockReverse.mockReset();
+  mockPlaceV3.mockReset();
   mockReverseV3.mockReset();
   jest
     .spyOn(Linking, 'addEventListener')
@@ -218,33 +214,30 @@ describe('map', () => {
 });
 
 describe('trip', () => {
-  const STOP_PLACES: Record<string, any> = {
+  // As mapped from the `/bff/v2/geocoder/place` response
+  const PLACES: Record<string, any> = {
     'NSR:StopPlace:337': {
       id: 'NSR:StopPlace:337',
-      name: 'Prinsens gate',
-      latitude: 63.4326,
-      longitude: 10.3951,
+      name: 'Oslo S',
+      label: 'Oslo S, Oslo',
+      layer: 'venue',
+      coordinates: {latitude: 59.910925, longitude: 10.753276},
+      locality: 'Oslo',
+      fare_zones: ['RUT:FareZone:4'],
+      category: ['railStation'],
+      resultType: 'search',
     },
-    'NSR:StopPlace:59872': {
-      id: 'NSR:StopPlace:59872',
-      name: 'Lade Alle',
-      latitude: 63.4402,
-      longitude: 10.4004,
+    'NSR:GroupOfStopPlaces:1': {
+      id: 'NSR:GroupOfStopPlaces:1',
+      name: 'Oslo',
+      label: 'Oslo, Oslo',
+      layer: 'address',
+      coordinates: {latitude: 59.911076, longitude: 10.748128},
+      locality: 'Oslo',
+      category: [],
+      resultType: 'search',
     },
   };
-
-  const stopPlaceLocation = (id: string) => ({
-    id,
-    name: STOP_PLACES[id].name,
-    label: STOP_PLACES[id].name,
-    layer: 'venue',
-    coordinates: {
-      latitude: STOP_PLACES[id].latitude,
-      longitude: STOP_PLACES[id].longitude,
-    },
-    category: [],
-    resultType: 'search',
-  });
 
   const ADDRESS = {
     id: 'NSR:Address:1',
@@ -256,23 +249,24 @@ describe('trip', () => {
   };
 
   beforeEach(() => {
-    mockGetStopsDetails.mockImplementation(({ids}: {ids: string[]}) =>
-      Promise.resolve({stopPlaces: ids.map((id) => STOP_PLACES[id])}),
+    mockPlaceV3.mockImplementation((ids: string[]) =>
+      Promise.resolve(ids.map((id) => PLACES[id]).filter(Boolean)),
     );
-    mockReverse.mockResolvedValue([ADDRESS]);
     mockReverseV3.mockResolvedValue([ADDRESS]);
   });
 
   const tripParams = (state: any) =>
     findRoute(state, 'Dashboard_TripSearchScreen').params;
 
-  it('looks up stop place ids', async () => {
+  it('looks up ids in the geocoder', async () => {
     const state = await getStateAfterLookupFrom(
-      'trip?fromId=NSR:StopPlace:337&toId=NSR:StopPlace:59872',
+      'trip?fromId=NSR:StopPlace:337&toId=NSR:GroupOfStopPlaces:1',
     );
+    expect(mockPlaceV3).toHaveBeenCalledWith(['NSR:StopPlace:337']);
+    expect(mockPlaceV3).toHaveBeenCalledWith(['NSR:GroupOfStopPlaces:1']);
     expect(tripParams(state)).toEqual({
-      fromLocation: stopPlaceLocation('NSR:StopPlace:337'),
-      toLocation: stopPlaceLocation('NSR:StopPlace:59872'),
+      fromLocation: PLACES['NSR:StopPlace:337'],
+      toLocation: PLACES['NSR:GroupOfStopPlaces:1'],
     });
   });
 
@@ -280,11 +274,11 @@ describe('trip', () => {
     const state = await getStateAfterLookupFrom(
       'trip?fromLatLng=63.4326,10.3951&toLatLng=63.4402,10.4004',
     );
-    expect(mockReverse).toHaveBeenCalledWith({
+    expect(mockReverseV3).toHaveBeenCalledWith({
       latitude: 63.4326,
       longitude: 10.3951,
     });
-    expect(mockReverse).toHaveBeenCalledWith({
+    expect(mockReverseV3).toHaveBeenCalledWith({
       latitude: 63.4402,
       longitude: 10.4004,
     });
@@ -294,24 +288,36 @@ describe('trip', () => {
     });
   });
 
-  it('uses the v3 geocoder when enabled', async () => {
-    await getStateAfterLookupFrom('trip?fromLatLng=63.4326,10.3951');
-    expect(mockReverseV3).toHaveBeenCalled();
-    expect(mockReverse).not.toHaveBeenCalled();
-  });
-
-  it('mixes stop place ids and coordinates', async () => {
+  it('mixes ids and coordinates', async () => {
     const state = await getStateAfterLookupFrom(
       'trip?fromId=NSR:StopPlace:337&toLatLng=63.4402,10.4004',
     );
     expect(tripParams(state)).toEqual({
-      fromLocation: stopPlaceLocation('NSR:StopPlace:337'),
+      fromLocation: PLACES['NSR:StopPlace:337'],
       toLocation: ADDRESS,
     });
   });
 
+  it('leaves out unknown ids', async () => {
+    const state = await getStateAfterLookupFrom(
+      'trip?fromId=NSR:StopPlace:99999999&toLatLng=63.4402,10.4004',
+    );
+    expect(tripParams(state)).toEqual({
+      fromLocation: undefined,
+      toLocation: ADDRESS,
+    });
+  });
+
+  it('ignores places which do not match the requested id', async () => {
+    mockPlaceV3.mockResolvedValue([PLACES['NSR:GroupOfStopPlaces:1']]);
+    const state = await getStateAfterLookupFrom(
+      'trip?fromId=NSR:StopPlace:337&toLatLng=63.4402,10.4004',
+    );
+    expect(tripParams(state).fromLocation).toBeUndefined();
+  });
+
   it('leaves out locations which can not be looked up', async () => {
-    mockGetStopsDetails.mockRejectedValue(new Error('nope'));
+    mockPlaceV3.mockRejectedValue(new Error('nope'));
     const state = await getStateAfterLookupFrom(
       'trip?fromId=NSR:StopPlace:337&toLatLng=63.4402,10.4004',
     );
@@ -325,7 +331,7 @@ describe('trip', () => {
     const state = await getStateAfterLookupFrom(
       'trip?fromLatLng=93.4326,10.3951&toLatLng=63.4402,10.4004',
     );
-    expect(mockReverse).toHaveBeenCalledTimes(1);
+    expect(mockReverseV3).toHaveBeenCalledTimes(1);
     expect(tripParams(state)).toEqual({
       fromLocation: undefined,
       toLocation: ADDRESS,
