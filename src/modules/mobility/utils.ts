@@ -15,7 +15,8 @@ import {
   PropulsionType,
 } from '@atb/api/types/generated/mobility-types_v2';
 import {AnyMode, AnySubMode} from '@atb/components/icon-box';
-import {dictionary, Language} from '@atb/translations';
+import {dictionary, Language, TranslateFunction} from '@atb/translations';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
 import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
@@ -214,6 +215,39 @@ export const hasMultiplePricingPlans = (plan: ShmoPricingPlan) =>
   (plan.perKmPricing && plan.perKmPricing.length > 1) ||
   (plan.perMinPricing && plan.perMinPricing.length > 1);
 
+export const formatMinuteBoundaryWithUnit = (
+  minutes: number,
+  t: TranslateFunction,
+): string =>
+  minutes < 60
+    ? `${minutes} ${t(dictionary.date.units.short.minute)}`
+    : t(
+        MobilityTexts.pricingDetails.hoursAndMinutes(
+          Math.floor(minutes / 60),
+          minutes % 60,
+        ),
+      );
+
+/**
+ * Formats a minute range for display, collapsing the unit to a single
+ * trailing occurrence when both boundaries share it (e.g. "0-45 min",
+ * "1-5 timer"), and spelling out both boundaries when they don't
+ * (e.g. "30 min-1 time").
+ */
+export const formatMinuteRange = (
+  start: number,
+  end: number,
+  t: TranslateFunction,
+): string => {
+  if (end < 60) {
+    return `${start}-${end} ${t(dictionary.date.units.short.minute)}`;
+  }
+  if (start >= 60 && start % 60 === 0 && end % 60 === 0) {
+    return `${start / 60}-${formatMinuteBoundaryWithUnit(end, t)}`;
+  }
+  return `${formatMinuteBoundaryWithUnit(start, t)}-${formatMinuteBoundaryWithUnit(end, t)}`;
+};
+
 export const formatRange = (rangeInMeters: number, language: Language) => {
   const rangeInKm =
     rangeInMeters > 5000
@@ -260,12 +294,14 @@ export const formatRatePerUnit = (
       rate: perMinPrice.rate,
       formattedRate: `${formatNumberToString(perMinPrice.rate, language)} ${getCurrencySymbol(pricingPlan.currency)}`,
       perUnit: 'min',
+      interval: perMinPrice.interval,
     };
   } else if (perKmPrice) {
     return {
       rate: perKmPrice.rate,
       formattedRate: `${formatNumberToString(perKmPrice.rate, language)} ${getCurrencySymbol(pricingPlan.currency)}`,
       perUnit: 'km',
+      interval: perKmPrice.interval,
     };
   }
   return undefined;
@@ -309,9 +345,24 @@ export const computeFreeMinuteCount = (
       total += segLengthMin;
       continue;
     }
-    const minutes = Math.min(Math.floor(budget / segment.rate), segLengthMin);
+    if (segment.interval === 0) {
+      // Rate is charged once for the whole segment, not per minute.
+      if (budget < segment.rate) continue;
+      total += segLengthMin;
+      budget -= segment.rate;
+      continue;
+    }
+    const maxIntervalsInSegment =
+      segLengthMin === Infinity
+        ? Infinity
+        : Math.ceil(segLengthMin / segment.interval);
+    const intervals = Math.min(
+      Math.floor(budget / segment.rate),
+      maxIntervalsInSegment,
+    );
+    const minutes = Math.min(intervals * segment.interval, segLengthMin);
     total += minutes;
-    budget -= minutes * segment.rate;
+    budget -= intervals * segment.rate;
   }
   return Math.min(total, 180);
 };

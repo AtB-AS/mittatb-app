@@ -89,25 +89,25 @@ const ShmoPricingSegmentSchema = z.object({
     .number()
     .int()
     .describe(
-      'The minute at which this segment rate starts being charged (inclusive)',
+      'The minute or km at which this segment rate starts being charged (inclusive)',
     ),
   end: z
     .number()
     .int()
     .nullish()
     .describe(
-      'The minute at which the rate will no longer apply (exclusive). If not provided, the rate applies until the trip ends.',
+      'The minute or km at which the rate will no longer apply (exclusive). If not provided, the rate applies until the trip ends.',
     ),
   interval: z
     .number()
     .int()
     .describe(
-      'Interval in minutes at which the rate of this segment is reapplied. An interval of 0 indicates the rate is only charged once.',
+      'Interval in minutes or kms at which the rate of this segment is reapplied. An interval of 0 indicates the rate is only charged once.',
     ),
   rate: z
     .number()
     .describe(
-      'Rate that is charged for each minute interval after the start. Can be a negative number, indicating a discount.',
+      'Rate that is charged for each minute or km interval after the start. Can be a negative number, indicating a discount.',
     ),
 });
 

@@ -14,7 +14,8 @@ export type ShmoRequirementType = {
 export type FormattedRatePerUnit = {
   formattedRate: string;
   rate: number;
-  perUnit: string;
+  perUnit: 'min' | 'km';
+  interval: number;
 };
 
 export type VehicleSortOptions = 'currentRangeMeters' | '-currentRangeMeters';
