@@ -846,6 +846,7 @@ const FavoriteButton = ({
   return (
     <>
       <Button
+        mode="secondary"
         type="small"
         expanded={false}
         leftIcon={{svg: getFavoriteIcon(existingFavorite)}}
